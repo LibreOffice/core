@@ -192,7 +192,7 @@ DataSourceTabPage::DataSourceTabPage(TabPageParent pParent, DialogModel & rDialo
     m_xFT_CAPTION->set_visible(!bHideDescription);
 
     m_aFixedTextRange = m_xFT_RANGE->get_label();
-    SetText( SchResId( STR_OBJECT_DATASERIES_PLURAL ) );
+    SetPageTitle(SchResId(STR_OBJECT_DATASERIES_PLURAL));
 
     // set handlers
     m_xLB_SERIES->connect_changed(LINK(this, DataSourceTabPage, SeriesSelectionChangedHdl));
@@ -237,9 +237,9 @@ DataSourceTabPage::~DataSourceTabPage()
 {
 }
 
-void DataSourceTabPage::ActivatePage()
+void DataSourceTabPage::Activate()
 {
-    OWizardPage::ActivatePage();
+    OWizardPage::Activate();
     updateControlsFromDialogModel();
     m_xLB_SERIES->grab_focus();
 }
@@ -248,10 +248,10 @@ void DataSourceTabPage::initializePage()
 {
 }
 
-void DataSourceTabPage::DeactivatePage()
+void DataSourceTabPage::Deactivate()
 {
     commitPage();
-    vcl::OWizardPage::DeactivatePage();
+    vcl::OWizardPage::Deactivate();
 }
 
 void DataSourceTabPage::commitPage()
@@ -699,8 +699,6 @@ void DataSourceTabPage::listeningFinished(
     m_rDialogModel.getRangeSelectionHelper()->stopRangeListening();
 
     // change edit field
-    ToTop();
-    GrabFocus();
     if( m_pCurrentRangeChoosingField )
     {
         m_pCurrentRangeChoosingField->set_text(aRange);

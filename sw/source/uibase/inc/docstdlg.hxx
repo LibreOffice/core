@@ -29,7 +29,7 @@ public:
     SwDocStatPage(TabPageParent pParent, const SfxItemSet &rSet);
     virtual ~SwDocStatPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
 
 private:
     virtual bool    FillItemSet(      SfxItemSet *rSet) override;

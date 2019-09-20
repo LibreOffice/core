@@ -182,7 +182,7 @@ public:
     SwFramePage(TabPageParent pParent, const SfxItemSet &rSet);
     virtual ~SwFramePage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;
@@ -239,7 +239,7 @@ class SwGrfExtPage : public SfxTabPage
 public:
     SwGrfExtPage(TabPageParent pParent, const SfxItemSet &rSet);
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;
     virtual void Reset(const SfxItemSet *rSet) override;
@@ -267,7 +267,7 @@ public:
     SwFrameURLPage(TabPageParent pParent, const SfxItemSet &rSet);
     virtual ~SwFrameURLPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;
     virtual void Reset(const SfxItemSet *rSet) override;
@@ -318,7 +318,7 @@ public:
     virtual ~SwFrameAddPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
     static const sal_uInt16*  GetRanges() { return aAddPgRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;

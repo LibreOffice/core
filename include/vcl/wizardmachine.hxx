@@ -21,8 +21,7 @@
 
 #include <memory>
 #include <vcl/dllapi.h>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/builderpage.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/tabpage.hxx>
 
@@ -31,7 +30,7 @@ namespace weld {
     class Container;
 }
 
-struct ImplWizPageData;
+struct WizPageData;
 struct ImplWizButtonData;
 
 // wizard states
@@ -79,11 +78,10 @@ namespace vcl
     };
 
     //= OWizardPage
-    class VCL_DLLPUBLIC OWizardPage : public TabPage, public IWizardPageController
+    class VCL_DLLPUBLIC OWizardPage : public BuilderPage, public IWizardPageController
     {
     public:
         OWizardPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID);
-        virtual void dispose() override;
         virtual ~OWizardPage() override;
 
         // IWizardPageController overridables
@@ -92,11 +90,8 @@ namespace vcl
         virtual bool        canAdvance() const override;
 
     protected:
-        std::unique_ptr<weld::Builder> m_xBuilder;
-        std::unique_ptr<weld::Container> m_xContainer;
-
-        // TabPage overridables
-        virtual void        ActivatePage() override;
+        // BuilderPage overridables
+        virtual void        Activate();
 
         /** updates the travel-related UI elements of the OWizardMachine we live in (if any)
 
@@ -126,10 +121,10 @@ namespace vcl
     class VCL_DLLPUBLIC WizardMachine : public weld::AssistantController
     {
     private:
-        VclPtr<TabPage> m_xCurTabPage;
+        BuilderPage* m_pCurTabPage;
 
         WizardTypes::WizardState m_nCurState;
-        ImplWizPageData* m_pFirstPage;
+        WizPageData* m_pFirstPage;
 
     protected:
         std::unique_ptr<weld::Button> m_xFinish;
@@ -152,10 +147,10 @@ namespace vcl
         bool ShowNextPage();
         bool ShowPrevPage();
 
-        void                AddPage( TabPage* pPage );
-        void                RemovePage( TabPage* pPage );
-        void                SetPage( WizardTypes::WizardState nLevel, TabPage* pPage );
-        TabPage*            GetPage( WizardTypes::WizardState eState ) const;
+        void                AddPage( std::unique_ptr<BuilderPage> xPage );
+        void                RemovePage( BuilderPage* pPage );
+        void                SetPage( WizardTypes::WizardState nLevel, std::unique_ptr<BuilderPage> xPage );
+        BuilderPage*        GetPage( WizardTypes::WizardState eState ) const;
 
         /// enable (or disable) buttons
         void                enableButtons(WizardButtonFlags _nWizardButtonFlags, bool _bEnable);
@@ -185,7 +180,7 @@ namespace vcl
         // our own overridables
 
         /// to override to create new pages
-        virtual VclPtr<TabPage> createPage(WizardTypes::WizardState _nState) = 0;
+        virtual std::unique_ptr<BuilderPage> createPage(WizardTypes::WizardState _nState) = 0;
 
         /// will be called when a new page is about to be displayed
         virtual void        enterState(WizardTypes::WizardState _nState);
@@ -303,8 +298,7 @@ namespace vcl
         */
         WizardTypes::WizardState getCurrentState() const { return m_nCurState; }
 
-        virtual IWizardPageController*
-                                getPageController( TabPage* _pCurrentPage ) const;
+        virtual IWizardPageController* getPageController(BuilderPage* pCurrentPage) const;
 
         /** retrieves a copy of the state history, i.e. all states we already visited
         */
@@ -323,7 +317,7 @@ namespace vcl
         bool                   isTravelingSuspended() const;
 
     protected:
-        TabPage* GetOrCreatePage(const WizardTypes::WizardState i_nState);
+        BuilderPage* GetOrCreatePage(const WizardTypes::WizardState i_nState);
 
     private:
         DECL_DLLPRIVATE_LINK(OnNextPage, weld::Button&, void);

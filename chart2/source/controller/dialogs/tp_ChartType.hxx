@@ -49,7 +49,6 @@ public:
                 , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
                 , bool bShowDescription = true );
     virtual ~ChartTypeTabPage() override;
-    virtual void        dispose() override;
 
     virtual void        initializePage() override;
     virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason eReason ) override;

@@ -78,7 +78,7 @@ public:
 
     virtual ~SwFieldPage() override;
 
-    virtual void        ActivatePage() override;
+    virtual void        Activate() override;
 
     SwFieldMgr&    GetFieldMgr()         { return m_aMgr; }
     void                SetWrtShell( SwWrtShell* m_pWrtShell );

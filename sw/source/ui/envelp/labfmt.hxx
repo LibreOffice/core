@@ -95,14 +95,11 @@ class SwLabFormatPage : public SfxTabPage
 
     void ChangeMinMax();
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 public:
     SwLabFormatPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwLabFormatPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;

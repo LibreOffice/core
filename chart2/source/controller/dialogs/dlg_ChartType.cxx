@@ -34,18 +34,17 @@ ChartTypeDialog::ChartTypeDialog(weld::Window* pParent,
     , m_xContentArea(m_xDialog->weld_content_area())
 {
     TabPageParent aParent(m_xContentArea.get(), this);
-    m_xChartTypeTabPage = VclPtr<ChartTypeTabPage>::Create(
+    m_xChartTypeTabPage = std::make_unique<ChartTypeTabPage>(
         aParent,
         uno::Reference<XChartDocument>::query(m_xChartModel),
         false/*don't show title description*/);
 
     m_xChartTypeTabPage->initializePage();
-    m_xChartTypeTabPage->Show();
- }
+}
 
 ChartTypeDialog::~ChartTypeDialog()
 {
-    m_xChartTypeTabPage.disposeAndClear();
+    m_xChartTypeTabPage.reset();
 }
 
 } //namespace chart

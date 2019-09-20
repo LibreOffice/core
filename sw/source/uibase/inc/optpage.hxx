@@ -62,7 +62,7 @@ public:
     SwContentOptPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwContentOptPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
@@ -106,7 +106,7 @@ public:
     SwAddPrinterTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwAddPrinterTabPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
@@ -117,7 +117,6 @@ public:
 
 class SwStdFontTabPage : public SfxTabPage
 {
-    friend class VclPtr<SwStdFontTabPage>;
     OUString m_sShellStd;
     OUString m_sShellTitle;
     OUString m_sShellList;
@@ -166,12 +165,10 @@ class SwStdFontTabPage : public SfxTabPage
     DECL_LINK(ModifyHdl, weld::ComboBox&, void );
     DECL_LINK(LoseFocusHdl, weld::Widget&, void );
 
-    SwStdFontTabPage(TabPageParent pParent, const SfxItemSet& rSet);
-    virtual ~SwStdFontTabPage() override;
-    virtual void dispose() override;
-
 public:
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    SwStdFontTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    virtual ~SwStdFontTabPage() override;
 
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
@@ -209,7 +206,7 @@ public:
     SwTableOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwTableOptionsTabPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
@@ -250,7 +247,7 @@ public:
     SwShdwCursorOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwShdwCursorOptionsTabPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;
@@ -322,9 +319,8 @@ class SwRedlineOptionsTabPage : public SfxTabPage
 public:
     SwRedlineOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwRedlineOptionsTabPage() override;
-    virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;
@@ -340,7 +336,7 @@ public:
     SwTestTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwTestTabPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;
@@ -381,7 +377,7 @@ public:
     SwCompareOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwCompareOptionsTabPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;

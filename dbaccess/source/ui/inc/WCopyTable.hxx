@@ -286,7 +286,7 @@ namespace dbaui
         // checks if the type is supported in the destination database
         bool supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDataType);
 
-        virtual VclPtr<TabPage> createPage(vcl::WizardTypes::WizardState /*nState*/) override
+        virtual std::unique_ptr<BuilderPage> createPage(vcl::WizardTypes::WizardState /*nState*/) override
         {
             assert(false);
             return nullptr;

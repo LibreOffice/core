@@ -97,14 +97,13 @@ public:
 
     SwNumPositionTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwNumPositionTabPage() override;
-    virtual void        dispose() override;
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
                                       const SfxItemSet* rAttrSet);
 
     void                SetOutlineTabDialog(SwOutlineTabDialog* pDlg){pOutlineDlg = pDlg;}
