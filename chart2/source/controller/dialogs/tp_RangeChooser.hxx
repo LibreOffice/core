@@ -46,7 +46,7 @@ public:
     virtual void listeningFinished( const OUString & rNewRange ) override;
     virtual void disposingRangeSelection() override;
 
-    virtual void ActivatePage() override;
+    virtual void Activate() override;
 
     void commitPage();
 
@@ -56,7 +56,7 @@ private:
     virtual bool commitPage( ::vcl::WizardTypes::CommitPageReason eReason ) override;
 
     //TabPage
-    virtual void DeactivatePage() override;
+    virtual void Deactivate() override;
 
     void initControlsFromModel();
     void changeDialogModelAccordingToControls();

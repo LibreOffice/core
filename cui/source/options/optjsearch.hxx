@@ -58,7 +58,7 @@ private:
 public:
     SvxJSearchOptionsPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxJSearchOptionsPage() override;
-    static VclPtr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

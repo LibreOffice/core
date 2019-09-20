@@ -21,9 +21,7 @@
 #define INCLUDED_SVTOOLS_SOURCE_UNO_WIZARD_WIZARDPAGECONTROLLER_HXX
 
 #include <vcl/wizardmachine.hxx>
-
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
-
 
 namespace svt { namespace uno
 {
@@ -38,7 +36,7 @@ namespace svt { namespace uno
     {
     public:
         WizardPageController(
-            TabPageParent aParent,
+            weld::Container* pParent,
             const css::uno::Reference< css::ui::dialogs::XWizardController >& i_rController,
             const sal_Int16 i_nPageId
         );
@@ -51,7 +49,6 @@ namespace svt { namespace uno
 
         const css::uno::Reference< css::ui::dialogs::XWizardPage >&
                             getWizardPage() const { return m_xWizardPage; }
-        TabPage*            getTabPage() const;
 
     private:
         const css::uno::Reference< css::ui::dialogs::XWizardController >  m_xController;

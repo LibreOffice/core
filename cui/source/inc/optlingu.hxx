@@ -79,7 +79,6 @@ public:
 
 class SvxLinguTabPage : public SfxTabPage
 {
-    friend class VclPtr<SvxLinguTabPage>;
 private:
     OUString            sCapitalWords;
     OUString            sWordsWithDigits;
@@ -119,8 +118,6 @@ private:
     std::unique_ptr<weld::Button> m_xLinguOptionsEditPB;
     std::unique_ptr<weld::LinkButton> m_xMoreDictsLink;
 
-    SvxLinguTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet);
-
     void    AddDicBoxEntry( const css::uno::Reference< css::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
     static sal_uInt32 GetDicUserData( const css::uno::Reference< css::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
 
@@ -136,9 +133,9 @@ private:
     void                UpdateDicBox_Impl();
 
 public:
-    virtual             ~SvxLinguTabPage() override;
-    virtual void        dispose() override;
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    SvxLinguTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet);
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    virtual ~SvxLinguTabPage() override;
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

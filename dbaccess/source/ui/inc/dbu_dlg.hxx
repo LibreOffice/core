@@ -19,13 +19,8 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DBU_DLG_HRC
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DBU_DLG_HRC
 
-#define PAGE_X              281
-#define PAGE_Y              215
-#define WIZARD_PAGE_X       225
-#define WIZARD_PAGE_Y       240
-
-//constants for the wizards
-#define INDENT_BELOW_RADIO   10
+#define WIZARD_PAGE_X       56
+#define WIZARD_PAGE_Y       30
 
 #endif
 

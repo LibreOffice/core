@@ -37,9 +37,9 @@ NumberFormatDialog::NumberFormatDialog(weld::Window* pParent, SfxItemSet& rSet)
     if (fnCreatePage)
     {
         TabPageParent pPageParent(get_content_area(), this);
-        VclPtr<SfxTabPage> xTabPage = (*fnCreatePage)(pPageParent, &rSet);
+        std::unique_ptr<SfxTabPage> xTabPage = (*fnCreatePage)(pPageParent, &rSet);
         xTabPage->PageCreated(rSet);
-        SetTabPage(xTabPage);
+        SetTabPage(std::move(xTabPage));
     }
 }
 

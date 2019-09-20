@@ -53,14 +53,13 @@ namespace svt { namespace uno
         virtual short   run() override;
 
         // OWizardMachine overridables
-        virtual VclPtr<TabPage> createPage( WizardState i_nState ) override;
+        virtual std::unique_ptr<BuilderPage> createPage( WizardState i_nState ) override;
         virtual void        enterState( WizardState i_nState ) override;
         virtual bool        leaveState( WizardState i_nState ) override;
         virtual OUString    getStateDisplayName( WizardState i_nState ) const override;
         virtual bool        canAdvance() const override;
         virtual bool        onFinish() override;
-        virtual vcl::IWizardPageController*
-                            getPageController( TabPage* _pCurrentPage ) const override;
+        virtual vcl::IWizardPageController* getPageController(BuilderPage* pCurrentPage) const override;
 
         static sal_Int16 convertCommitReasonToTravelType( const CommitPageReason i_eReason );
 
@@ -107,7 +106,7 @@ namespace svt { namespace uno
             return static_cast<WizardState>(i_nPageId - m_nFirstPageID);
         }
 
-        PWizardPageController impl_getController( TabPage* i_pPage ) const;
+        PWizardPageController impl_getController(BuilderPage* i_pPage) const;
 
         // prevent outside access to some base class members
         using WizardShell_Base::skip;
@@ -117,7 +116,7 @@ namespace svt { namespace uno
         using WizardShell_Base::activatePath;
 
     private:
-        typedef ::std::map< VclPtr<TabPage>, PWizardPageController > Page2ControllerMap;
+        typedef std::map<BuilderPage*, PWizardPageController> Page2ControllerMap;
 
         const css::uno::Reference< css::ui::dialogs::XWizardController >  m_xController;
         const sal_Int16                                                                             m_nFirstPageID;

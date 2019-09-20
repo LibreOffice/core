@@ -33,8 +33,8 @@ SvxDistributeDialog::SvxDistributeDialog(weld::Window* pParent,
                                    "DistributionDialog")
 {
     TabPageParent pPageParent(get_content_area(), this);
-    mpPage = VclPtr<SvxDistributePage>::Create(pPageParent, rInAttrs, eHor, eVer);
-    SetTabPage(mpPage);
+    SetTabPage(std::make_unique<SvxDistributePage>(pPageParent, rInAttrs, eHor, eVer));
+    mpPage = static_cast<SvxDistributePage*>(GetTabPage());
 }
 
 SvxDistributeDialog::~SvxDistributeDialog()

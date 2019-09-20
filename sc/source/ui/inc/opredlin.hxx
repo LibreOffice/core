@@ -31,11 +31,9 @@ class ScRedlineOptionsTabPage : public SfxTabPage
     std::unique_ptr<ColorListBox> m_xMoveColorLB;
 
 public:
-
     ScRedlineOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet );
+    static std::unique_ptr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
     virtual ~ScRedlineOptionsTabPage() override;
-    virtual void dispose() override;
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

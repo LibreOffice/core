@@ -30,7 +30,6 @@
 
 class SvxGeneralTabPage : public SfxTabPage
 {
-    using TabPage::DeactivatePage;
 private:
     // the "Use data for document properties" checkbox
     std::unique_ptr<weld::CheckButton> m_xUseDataCB;
@@ -64,7 +63,7 @@ public:
     SvxGeneralTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxGeneralTabPage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

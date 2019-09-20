@@ -40,7 +40,7 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
-        static VclPtr<OGenericAdministrationPage> CreateDocumentOrSpreadSheetTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> CreateDocumentOrSpreadSheetTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
         OSpreadSheetConnectionPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OSpreadSheetConnectionPageSetup() override;
 
@@ -56,9 +56,8 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
-        static VclPtr<OGenericAdministrationPage> CreateTextTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet );
+        static std::unique_ptr<OGenericAdministrationPage> CreateTextTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet );
         OTextConnectionPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
-        virtual void dispose() override;
         virtual ~OTextConnectionPageSetup() override;
     protected:
         virtual bool prepareLeave() override;
@@ -77,7 +76,7 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
-        static VclPtr<OGenericAdministrationPage> CreateLDAPTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet );
+        static std::unique_ptr<OGenericAdministrationPage> CreateLDAPTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet );
         OLDAPConnectionPageSetup( TabPageParent pParent, const SfxItemSet& _rCoreAttrs );
         virtual ~OLDAPConnectionPageSetup() override;
         virtual void callModifiedHdl(weld::Widget* pControl = nullptr) override;
@@ -109,10 +108,9 @@ namespace dbaui
 
     public:
         MySQLNativeSetupPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
-        virtual void dispose() override;
         virtual ~MySQLNativeSetupPage() override;
 
-        static VclPtr<OGenericAdministrationPage> Create(TabPageParent pParent, const SfxItemSet& rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> Create(TabPageParent pParent, const SfxItemSet& rAttrSet);
 
     protected:
         virtual void fillControls( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList ) override;
@@ -136,8 +134,8 @@ namespace dbaui
                                         , const char* pHeaderTextResId
                                         , const char* pDriverClassId );
     virtual ~OGeneralSpecialJDBCConnectionPageSetup() override;
-    static VclPtr<OGenericAdministrationPage> CreateMySQLJDBCTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet );
-    static VclPtr<OGenericAdministrationPage> CreateOracleJDBCTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet );
+    static std::unique_ptr<OGenericAdministrationPage> CreateMySQLJDBCTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet );
+    static std::unique_ptr<OGenericAdministrationPage> CreateOracleJDBCTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet );
 
     private:
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
@@ -172,7 +170,7 @@ namespace dbaui
     public:
         OJDBCConnectionPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OJDBCConnectionPageSetup() override;
-        static VclPtr<OGenericAdministrationPage> CreateJDBCTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> CreateJDBCTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
 
     private:
         virtual bool checkTestConnection() override;
@@ -203,7 +201,7 @@ namespace dbaui
         OMySQLIntroPageSetup(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
         virtual ~OMySQLIntroPageSetup() override;
 
-        static VclPtr<OMySQLIntroPageSetup> CreateMySQLIntroTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
+        static std::unique_ptr<OMySQLIntroPageSetup> CreateMySQLIntroTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
         ConnectionType      getMySQLMode() const;
         void                SetClickHdl( const Link<OMySQLIntroPageSetup *, void>& rLink ) { maClickHdl = rLink; }
 
@@ -227,7 +225,7 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
-        static VclPtr<OGenericAdministrationPage> CreateAuthentificationTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> CreateAuthentificationTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
         OAuthentificationPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OAuthentificationPageSetup() override;
 
@@ -248,7 +246,7 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
-        static VclPtr<OGenericAdministrationPage> CreateFinalDBTabPageSetup(TabPageParent pParent, const SfxItemSet& _rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> CreateFinalDBTabPageSetup(TabPageParent pParent, const SfxItemSet& _rAttrSet);
 
         OFinalDBPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OFinalDBPageSetup() override;

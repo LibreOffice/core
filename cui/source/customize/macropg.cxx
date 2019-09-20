@@ -84,13 +84,7 @@ SvxMacroTabPage_::SvxMacroTabPage_(TabPageParent pParent, const OUString& rUIXML
 
 SvxMacroTabPage_::~SvxMacroTabPage_()
 {
-    disposeOnce();
-}
-
-void SvxMacroTabPage_::dispose()
-{
     mpImpl.reset();
-    SfxTabPage::dispose();
 }
 
 void SvxMacroTabPage_::InitResources()
@@ -622,8 +616,7 @@ SvxMacroAssignDlg::SvxMacroAssignDlg(weld::Window* pParent, const Reference< fra
         : SvxMacroAssignSingleTabDialog(pParent, rSet)
 {
     TabPageParent pPageParent(get_content_area(), this);
-    auto pPage = VclPtr<SvxMacroTabPage>::Create(pPageParent, _rxDocumentFrame, rSet, xNameReplace, nSelectedIndex);
-    SetTabPage(pPage);
+    SetTabPage(std::make_unique<SvxMacroTabPage>(pPageParent, _rxDocumentFrame, rSet, xNameReplace, nSelectedIndex));
 }
 
 IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler, weld::Button&, void)

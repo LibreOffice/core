@@ -48,7 +48,7 @@ class OfaHtmlTabPage : public SfxTabPage
 public:
     OfaHtmlTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~OfaHtmlTabPage() override;
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
                                        const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

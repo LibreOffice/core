@@ -17,8 +17,6 @@
 
 class SvxPersonalizationTabPage : public SfxTabPage
 {
-    using SfxTabPage::DeactivatePage;
-
 private:
     std::unique_ptr<weld::RadioButton> m_xNoPersona; ///< Just the default look, without any bitmap
     std::unique_ptr<weld::RadioButton> m_xDefaultPersona; ///< Use the built-in bitmap
@@ -32,7 +30,7 @@ public:
     SvxPersonalizationTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxPersonalizationTabPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
 
     /// Apply the settings ([OK] button).
     virtual bool FillItemSet(SfxItemSet* rSet) override;

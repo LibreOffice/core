@@ -114,17 +114,11 @@ SvxGradientTabPage::SvxGradientTabPage(TabPageParent pParent, const SfxItemSet& 
 
 SvxGradientTabPage::~SvxGradientTabPage()
 {
-    disposeOnce();
-}
-
-void SvxGradientTabPage::dispose()
-{
     m_xCtlPreview.reset();
     m_xGradientLBWin.reset();
     m_xGradientLB.reset();
     m_xLbColorTo.reset();
     m_xLbColorFrom.reset();
-    SfxTabPage::dispose();
 }
 
 void SvxGradientTabPage::Construct()
@@ -233,10 +227,10 @@ void SvxGradientTabPage::Reset( const SfxItemSet* )
         m_xBtnModify->set_sensitive(false);
 }
 
-VclPtr<SfxTabPage> SvxGradientTabPage::Create( TabPageParent pWindow,
+std::unique_ptr<SfxTabPage> SvxGradientTabPage::Create( TabPageParent pWindow,
                                                const SfxItemSet* rOutAttrs )
 {
-    return VclPtr<SvxGradientTabPage>::Create(pWindow, *rOutAttrs);
+    return std::make_unique<SvxGradientTabPage>(pWindow, *rOutAttrs);
 }
 
 IMPL_LINK( SvxGradientTabPage, ModifiedListBoxHdl_Impl, weld::ComboBox&, rListBox, void )

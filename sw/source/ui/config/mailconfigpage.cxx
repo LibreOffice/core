@@ -47,7 +47,7 @@ class SwTestAccountSettingsDialog : public SfxDialogController
     OUString            m_sErrorServer;
     bool                m_bStop;
 
-    VclPtr<SwMailConfigPage>   m_pParent;
+    SwMailConfigPage*   m_pParent;
 
     std::unique_ptr<weld::Button> m_xStopPB;
     std::unique_ptr<weld::TextView> m_xErrorsED;
@@ -125,18 +125,12 @@ SwMailConfigPage::SwMailConfigPage(TabPageParent pParent, const SfxItemSet& rSet
 
 SwMailConfigPage::~SwMailConfigPage()
 {
-    disposeOnce();
-}
-
-void SwMailConfigPage::dispose()
-{
     m_pConfigItem.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwMailConfigPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SwMailConfigPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwMailConfigPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwMailConfigPage>(pParent, *rAttrSet);
 }
 
 bool SwMailConfigPage::FillItemSet( SfxItemSet* /*rSet*/ )
