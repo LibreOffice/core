@@ -607,6 +607,13 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 mbEncrypt = false;              // no encryption
                 xEnc.clear();
                 break;
+            case 3:
+                aContext.Version    = vcl::PDFWriter::PDFVersion::PDF_A_3;
+                mbUseTaggedPDF = true;          // force the tagged PDF as well
+                mbRemoveTransparencies = false; // does allow transparencies
+                mbEncrypt = false;              // no encryption
+                xEnc.clear();
+                break;
             case 16:
                 aContext.Version = vcl::PDFWriter::PDFVersion::PDF_1_6;
                 break;

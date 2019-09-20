@@ -2,6 +2,7 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="flt">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkSizeGroup"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">100</property>
@@ -517,17 +518,19 @@
                             <property name="row_spacing">6</property>
                             <property name="column_spacing">12</property>
                             <child>
-                              <object class="GtkLabel" id="label7">
+                              <object class="GtkCheckButton" id="allowdups">
+                                <property name="label" translatable="yes" context="pdfgeneralpage|allowdups">Allow duplicate field _names</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
                                 <property name="halign">start</property>
-                                <property name="label" translatable="yes" context="pdfgeneralpage|label7">Submit _format:</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">format</property>
+                                <property name="draw_indicator">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
+                                <property name="top_attach">1</property>
+                                <property name="width">2</property>
                               </packing>
                             </child>
                             <child>
@@ -547,19 +550,33 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkCheckButton" id="allowdups">
-                                <property name="label" translatable="yes" context="pdfgeneralpage|allowdups">Allow duplicate field _names</property>
+                              <object class="GtkBox" id="submitformatbox">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="halign">start</property>
-                                <property name="use_underline">True</property>
-                                <property name="draw_indicator">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkLabel" id="label7">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="valign">baseline</property>
+                                    <property name="margin_top">1</property>
+                                    <property name="vexpand">True</property>
+                                    <property name="label" translatable="yes" context="pdfgeneralpage|label7">Submit _format:</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">format</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
+                                    <property name="pack_type">end</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
-                                <property name="width">2</property>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                           </object>
@@ -602,31 +619,50 @@
                                 <property name="can_focus">False</property>
                                 <property name="column_spacing">14</property>
                                 <child>
-                                  <object class="GtkRadioButton" id="pdfa2">
-                                    <property name="label" context="pdfgeneralpage|pdfa">PDF/A-2b</property>
+                                  <object class="GtkComboBoxText" id="pdfaversion">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="active">True</property>
-                                    <property name="draw_indicator">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="active">3</property>
+                                    <items>
+                                      <item id="1" context="pdfgeneralpage|pdfaversion">PDF/A-1b</item>
+                                      <item id="2" context="pdfgeneralpage|pdfaversion">PDF/A-2b</item>
+                                      <item id="3" context="pdfgeneralpage|pdfaversion">PDF/A-3b</item>
+                                    </items>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="pdfaversionlabel"/>
+                                    </accessibility>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">0</property>
+                                    <property name="left_attach">1</property>
                                     <property name="top_attach">0</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkRadioButton" id="pdfa1">
-                                    <property name="label" context="pdfgeneralpage|pdfa">PDF/A-1b</property>
+                                  <object class="GtkBox" id="pdfabox">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="active">True</property>
-                                    <property name="draw_indicator">True</property>
-                                    <property name="group">pdfa2</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="orientation">vertical</property>
+                                    <child>
+                                      <object class="GtkLabel" id="pdfaversionlabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="vexpand">True</property>
+                                        <property name="label" translatable="yes" context="pdfgeneralpage|pdfaversion">PDF/A _version:</property>
+                                        <property name="use_underline">True</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="pdfaversion"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">1</property>
+                                    <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
                                   </packing>
                                 </child>
@@ -867,6 +903,18 @@
         <property name="top_attach">0</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="comboBoxSizegroup">
+    <widgets>
+      <widget name="format"/>
+      <widget name="pdfaversion"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="pdfSizeGroup">
+    <widgets>
+      <widget name="submitformatbox"/>
+      <widget name="pdfabox"/>
+    </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroupLabel">
     <widgets>
