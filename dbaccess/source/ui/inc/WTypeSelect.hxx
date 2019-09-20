@@ -37,7 +37,7 @@ namespace dbaui
     // OWizTypeSelectControl
     class OWizTypeSelectControl final : public OFieldDescControl
     {
-        VclPtr<OWizTypeSelect> m_xParentTabPage;
+        OWizTypeSelect* m_pParentTabPage;
         virtual void        ActivateAggregate( EControlType eType ) override;
         virtual void        DeactivateAggregate( EControlType eType ) override;
 
@@ -52,7 +52,6 @@ namespace dbaui
 
     public:
         OWizTypeSelectControl(TabPageParent pParent, OWizTypeSelect* pParentTabPage);
-        virtual void dispose() override;
         virtual ~OWizTypeSelectControl() override;
 
         virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() override;
@@ -72,14 +71,14 @@ namespace dbaui
 
         DECL_LINK(CommandHdl, const CommandEvent&, bool);
 
-        VclPtr<OWizTypeSelect> m_xParentTabPage;
+        OWizTypeSelect* m_pParentTabPage;
 
         Link<weld::TreeView&, void> m_aChangeHdl;
 
     public:
         OWizTypeSelectList(std::unique_ptr<weld::TreeView> xControl);
         void SetPKey(bool bPKey) { m_bPKey = bPKey; }
-        void SetParentTabPage(OWizTypeSelect* pParentTabPage) { m_xParentTabPage = pParentTabPage; }
+        void SetParentTabPage(OWizTypeSelect* pParentTabPage) { m_pParentTabPage = pParentTabPage; }
         weld::TreeView* GetWidget() { return m_xControl.get(); }
         OUString get_selected_id() const { return m_xControl->get_selected_id(); }
         void show() { m_xControl->show(); }
@@ -133,19 +132,18 @@ namespace dbaui
         void                    EnableAuto(bool bEnable);
     public:
         virtual void            Reset ( ) override;
-        virtual void            ActivatePage( ) override;
+        virtual void            Activate( ) override;
         virtual bool            LeavePage() override;
         virtual OUString        GetTitle() const override;
 
         OWizTypeSelect(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream* pStream = nullptr);
-        virtual void dispose() override;
         virtual ~OWizTypeSelect() override;
 
         void setDisplayRow(sal_Int32 _nRow) { m_nDisplayRow = _nRow - 1; }
         void setDuplicateName(bool _bDuplicateName) { m_bDuplicateName = _bDuplicateName; }
     };
 
-    typedef VclPtr<OWizTypeSelect> (*TypeSelectionPageFactory)(OCopyTableWizard*, TabPageParent, SvStream&);
+    typedef std::unique_ptr<OWizTypeSelect> (*TypeSelectionPageFactory)(OCopyTableWizard*, TabPageParent, SvStream&);
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WTYPESELECT_HXX
 

@@ -48,11 +48,9 @@ namespace dbaui
     public:
         virtual bool            FillItemSet(SfxItemSet* _rCoreAttrs) override;
         virtual DeactivateRC    DeactivatePage(SfxItemSet* _pSet) override;
-        using OGenericAdministrationPage::DeactivatePage;
 
         OTableSubscriptionPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs ,OTableSubscriptionDialog* _pTablesDlg);
         virtual ~OTableSubscriptionPage() override;
-        virtual void dispose() override;
 
     private:
         virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;

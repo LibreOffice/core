@@ -133,9 +133,9 @@ static bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
 
 // class SvxPageDescPage --------------------------------------------------
 
-VclPtr<SfxTabPage> SvxPageDescPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+std::unique_ptr<SfxTabPage> SvxPageDescPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SvxPageDescPage>::Create(pParent, *rSet);
+    return std::make_unique<SvxPageDescPage>(pParent, *rSet);
 }
 
 SvxPageDescPage::SvxPageDescPage(TabPageParent pParent, const SfxItemSet& rAttr)
@@ -287,17 +287,11 @@ SvxPageDescPage::SvxPageDescPage(TabPageParent pParent, const SfxItemSet& rAttr)
 
 SvxPageDescPage::~SvxPageDescPage()
 {
-    disposeOnce();
-}
-
-void SvxPageDescPage::dispose()
-{
     if(mbDelPrinter)
     {
         mpDefPrinter.disposeAndClear();
         mbDelPrinter = false;
     }
-    SfxTabPage::dispose();
 }
 
 void SvxPageDescPage::Init_Impl()

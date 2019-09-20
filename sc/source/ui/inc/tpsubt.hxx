@@ -75,45 +75,39 @@ private:
 
 class ScTpSubTotalGroup1 final : public ScTpSubTotalGroup
 {
-    friend class VclPtr<ScTpSubTotalGroup1>;
+public:
     ScTpSubTotalGroup1( TabPageParent pParent,
                         const SfxItemSet&    rArgSet );
-
-public:
+    static std::unique_ptr<SfxTabPage> Create      ( TabPageParent pParent,
+            const SfxItemSet*     rArgSet );
     virtual ~ScTpSubTotalGroup1() override;
 
-    static  VclPtr<SfxTabPage> Create      ( TabPageParent pParent,
-            const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 };
 
 class ScTpSubTotalGroup2 final : public ScTpSubTotalGroup
 {
-    friend class VclPtr<ScTpSubTotalGroup2>;
+public:
     ScTpSubTotalGroup2( TabPageParent pParent,
                         const SfxItemSet&    rArgSet );
-
-public:
+    static std::unique_ptr<SfxTabPage> Create      ( TabPageParent pParent,
+            const SfxItemSet*     rArgSet );
     virtual ~ScTpSubTotalGroup2() override;
 
-    static  VclPtr<SfxTabPage> Create      ( TabPageParent pParent,
-            const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 };
 
 class ScTpSubTotalGroup3 final : public ScTpSubTotalGroup
 {
-    friend class VclPtr<ScTpSubTotalGroup3>;
+public:
     ScTpSubTotalGroup3( TabPageParent pParent,
                         const SfxItemSet&    rArgSet );
-
-public:
+    static  std::unique_ptr<SfxTabPage> Create      ( TabPageParent pParent,
+            const SfxItemSet*     rArgSet );
     virtual ~ScTpSubTotalGroup3() override;
 
-    static  VclPtr<SfxTabPage> Create      ( TabPageParent pParent,
-            const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 };
@@ -121,16 +115,15 @@ public:
 class ScTpSubTotalOptions final : public SfxTabPage
 {
 public:
-    virtual ~ScTpSubTotalOptions() override;
-    static VclPtr<SfxTabPage>  Create      ( TabPageParent pParent,
+    ScTpSubTotalOptions(TabPageParent pParent, const SfxItemSet& rArgSet);
+    static std::unique_ptr<SfxTabPage>  Create      ( TabPageParent pParent,
             const SfxItemSet*     rArgSet );
+    virtual ~ScTpSubTotalOptions() override;
+
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 
 private:
-    friend class VclPtr<ScTpSubTotalOptions>;
-    ScTpSubTotalOptions(TabPageParent pParent, const SfxItemSet& rArgSet);
-
     void Init                   ();
     void FillUserSortListBox    ();
 

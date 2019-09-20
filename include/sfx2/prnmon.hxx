@@ -36,9 +36,9 @@ class SfxPrintOptionsDialog : public weld::GenericDialogController
 private:
     std::unique_ptr<SfxPrintOptDlg_Impl>   pDlgImpl;
     std::unique_ptr<SfxItemSet>            pOptions;
-    VclPtr<SfxTabPage>      pPage;
     std::unique_ptr<weld::Widget>    m_xHelpBtn;
     std::unique_ptr<weld::Container> m_xContainer;
+    std::unique_ptr<SfxTabPage> m_xPage;
 
     DECL_LINK(HelpRequestHdl, weld::Widget&, bool);
 public:

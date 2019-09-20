@@ -57,13 +57,7 @@ SwLabPrtPage::SwLabPrtPage(TabPageParent pParent, const SfxItemSet& rSet)
 
 SwLabPrtPage::~SwLabPrtPage()
 {
-    disposeOnce();
-}
-
-void SwLabPrtPage::dispose()
-{
     pPrinter.disposeAndClear();
-    SfxTabPage::dispose();
 }
 
 IMPL_LINK( SwLabPrtPage, CountHdl, weld::Button&, rButton, void )
@@ -74,7 +68,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, weld::Button&, rButton, void )
         if (!pPrinter)
             pPrinter = VclPtr<Printer>::Create();
 
-        PrinterSetupDialog aDlg(GetFrameWeld());
+        PrinterSetupDialog aDlg(GetDialogFrameWeld());
         aDlg.SetPrinter(pPrinter);
         aDlg.run();
         rButton.grab_focus();
@@ -92,9 +86,9 @@ IMPL_LINK( SwLabPrtPage, CountHdl, weld::Button&, rButton, void )
     }
 }
 
-VclPtr<SfxTabPage> SwLabPrtPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwLabPrtPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwLabPrtPage>::Create(pParent, *rSet );
+    return std::make_unique<SwLabPrtPage>(pParent, *rSet );
 }
 
 void SwLabPrtPage::ActivatePage( const SfxItemSet& rSet )

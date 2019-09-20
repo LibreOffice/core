@@ -24,13 +24,11 @@
 
 class ScDocStatPage: public SfxTabPage
 {
-    friend class VclPtr<ScDocStatPage>;
 public:
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
-    virtual         ~ScDocStatPage() override;
-
-private:
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
     ScDocStatPage(TabPageParent pParent, const SfxItemSet& rSet);
+    virtual ~ScDocStatPage() override;
+
 protected:
     virtual bool    FillItemSet( SfxItemSet* rSet ) override;
     virtual void    Reset      ( const SfxItemSet* rSet ) override;

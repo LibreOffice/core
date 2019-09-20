@@ -53,19 +53,11 @@ class SwEnvPrtPage : public SfxTabPage
 
     SwEnvDlg* GetParentSwEnvDlg() {return static_cast<SwEnvDlg*>(GetDialogController()); }
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 public:
     SwEnvPrtPage(TabPageParent pParent, const SfxItemSet& rSet);
-    virtual void dispose() override
-    {
-        m_xPrt.clear();
-        SfxTabPage::dispose();
-    }
     virtual ~SwEnvPrtPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;

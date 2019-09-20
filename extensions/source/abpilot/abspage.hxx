@@ -48,9 +48,9 @@ namespace abp
         AddressSettings&        getSettings();
         const AddressSettings&  getSettings() const;
 
-        // TabDialog overridables
-        virtual void        ActivatePage() override;
-        virtual void        DeactivatePage() override;
+        // BuilderPage overridables
+        virtual void        Activate() override;
+        virtual void        Deactivate() override;
     };
 }   // namespace abp
 

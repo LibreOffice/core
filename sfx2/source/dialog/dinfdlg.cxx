@@ -617,9 +617,9 @@ SfxDocumentDescPage::~SfxDocumentDescPage()
 {
 }
 
-VclPtr<SfxTabPage> SfxDocumentDescPage::Create(TabPageParent pParent, const SfxItemSet *rItemSet)
+std::unique_ptr<SfxTabPage> SfxDocumentDescPage::Create(TabPageParent pParent, const SfxItemSet *rItemSet)
 {
-     return VclPtr<SfxDocumentDescPage>::Create(pParent, *rItemSet);
+     return std::make_unique<SfxDocumentDescPage>(pParent, *rItemSet);
 }
 
 bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
@@ -743,7 +743,6 @@ SfxDocumentPage::SfxDocumentPage(TabPageParent pParent, const SfxItemSet& rItemS
 
 SfxDocumentPage::~SfxDocumentPage()
 {
-    disposeOnce();
 }
 
 IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl, weld::Button&, void)
@@ -768,7 +767,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, SignatureHdl, weld::Button&, void)
     SfxObjectShell* pDoc = SfxObjectShell::Current();
     if( pDoc )
     {
-        pDoc->SignDocumentContent(GetFrameWeld());
+        pDoc->SignDocumentContent(GetDialogFrameWeld());
 
         ImplUpdateSignatures();
     }
@@ -788,7 +787,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl, weld::Button&, void)
         if (!pFilter)
             break;
 
-        sfx2::RequestPassword(pFilter, OUString(), pMedSet, VCLUnoHelper::GetInterface(GetParentDialog()));
+        sfx2::RequestPassword(pFilter, OUString(), pMedSet, GetDialogFrameWeld()->GetXWindow());
         pShell->SetModified();
     }
     while (false);
@@ -857,9 +856,9 @@ void SfxDocumentPage::ImplCheckPasswordState()
     m_xChangePassBtn->set_sensitive(false);
 }
 
-VclPtr<SfxTabPage> SfxDocumentPage::Create( TabPageParent pParent, const SfxItemSet* rItemSet )
+std::unique_ptr<SfxTabPage> SfxDocumentPage::Create( TabPageParent pParent, const SfxItemSet* rItemSet )
 {
-     return VclPtr<SfxDocumentPage>::Create( pParent, *rItemSet );
+     return std::make_unique<SfxDocumentPage>(pParent, *rItemSet);
 }
 
 void SfxDocumentPage::EnableUseUserData()
@@ -1864,13 +1863,7 @@ SfxCustomPropertiesPage::SfxCustomPropertiesPage(TabPageParent pParent, const Sf
 
 SfxCustomPropertiesPage::~SfxCustomPropertiesPage()
 {
-    disposeOnce();
-}
-
-void SfxCustomPropertiesPage::dispose()
-{
     m_xPropertiesCtrl.reset();
-    SfxTabPage::dispose();
 }
 
 IMPL_LINK_NOARG(SfxCustomPropertiesPage, AddHdl, weld::Button&, void)
@@ -1953,9 +1946,9 @@ DeactivateRC SfxCustomPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
     return nRet;
 }
 
-VclPtr<SfxTabPage> SfxCustomPropertiesPage::Create( TabPageParent pParent, const SfxItemSet* rItemSet )
+std::unique_ptr<SfxTabPage> SfxCustomPropertiesPage::Create( TabPageParent pParent, const SfxItemSet* rItemSet )
 {
-    return VclPtr<SfxCustomPropertiesPage>::Create( pParent, *rItemSet );
+    return std::make_unique<SfxCustomPropertiesPage>(pParent, *rItemSet);
 }
 
 CmisValue::CmisValue(weld::Widget* pParent, const OUString& aStr)
@@ -2253,14 +2246,9 @@ SfxCmisPropertiesPage::SfxCmisPropertiesPage(TabPageParent pParent, const SfxIte
 
 }
 
-void SfxCmisPropertiesPage::dispose()
-{
-    m_xPropertiesCtrl.reset();
-    SfxTabPage::dispose();
-}
-
 SfxCmisPropertiesPage::~SfxCmisPropertiesPage()
 {
+    m_xPropertiesCtrl.reset();
 }
 
 bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet* rSet )
@@ -2351,9 +2339,9 @@ DeactivateRC SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SfxCmisPropertiesPage::Create( TabPageParent pParent, const SfxItemSet* rItemSet )
+std::unique_ptr<SfxTabPage> SfxCmisPropertiesPage::Create( TabPageParent pParent, const SfxItemSet* rItemSet )
 {
-    return VclPtr<SfxCmisPropertiesPage>::Create( pParent, *rItemSet );
+    return std::make_unique<SfxCmisPropertiesPage>(pParent, *rItemSet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

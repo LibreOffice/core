@@ -717,7 +717,6 @@ SwFramePage::SwFramePage(TabPageParent pParent, const SfxItemSet &rSet)
 
 SwFramePage::~SwFramePage()
 {
-    disposeOnce();
 }
 
 namespace
@@ -821,9 +820,9 @@ void SwFramePage::setOptimalRelWidth()
     m_xHoriRelationLB->clear();
 }
 
-VclPtr<SfxTabPage> SwFramePage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwFramePage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwFramePage>::Create(pParent, *rSet);
+    return std::make_unique<SwFramePage>(pParent, *rSet);
 }
 
 void SwFramePage::EnableGraficMode()
@@ -911,9 +910,9 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
         else
         {
             if ( m_bNew )
-                SetText(SwResId(STR_FRMUI_OLE_INSERT));
+                SetPageTitle(SwResId(STR_FRMUI_OLE_INSERT));
             else
-                SetText(SwResId(STR_FRMUI_OLE_EDIT));
+                SetPageTitle(SwResId(STR_FRMUI_OLE_EDIT));
         }
     }
     else
@@ -2319,20 +2318,14 @@ SwGrfExtPage::SwGrfExtPage(TabPageParent pParent, const SfxItemSet &rSet)
 
 SwGrfExtPage::~SwGrfExtPage()
 {
-    disposeOnce();
-}
-
-void SwGrfExtPage::dispose()
-{
     m_xBmpWin.reset();
     m_xCtlAngle.reset();
     m_xGrfDlg.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwGrfExtPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwGrfExtPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwGrfExtPage>::Create(pParent, *rSet);
+    return std::make_unique<SwGrfExtPage>(pParent, *rSet);
 }
 
 void SwGrfExtPage::Reset(const SfxItemSet *rSet)
@@ -2679,7 +2672,6 @@ SwFrameURLPage::SwFrameURLPage(TabPageParent pParent, const SfxItemSet &rSet)
 
 SwFrameURLPage::~SwFrameURLPage()
 {
-    disposeOnce();
 }
 
 void SwFrameURLPage::Reset( const SfxItemSet *rSet )
@@ -2755,15 +2747,15 @@ bool SwFrameURLPage::FillItemSet(SfxItemSet *rSet)
     return bModified;
 }
 
-VclPtr<SfxTabPage> SwFrameURLPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwFrameURLPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwFrameURLPage>::Create(pParent, *rSet);
+    return std::make_unique<SwFrameURLPage>(pParent, *rSet);
 }
 
 IMPL_LINK_NOARG(SwFrameURLPage, InsertFileHdl, weld::Button&, void)
 {
     FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-                                FileDialogFlags::NONE, GetFrameWeld());
+                                FileDialogFlags::NONE, GetDialogFrameWeld());
     uno::Reference < ui::dialogs::XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
     try
@@ -2819,18 +2811,12 @@ SwFrameAddPage::SwFrameAddPage(TabPageParent pParent, const SfxItemSet &rSet)
 
 SwFrameAddPage::~SwFrameAddPage()
 {
-    disposeOnce();
-}
-
-void SwFrameAddPage::dispose()
-{
     m_xTextFlowLB.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwFrameAddPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwFrameAddPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwFrameAddPage>::Create(pParent, *rSet);
+    return std::make_unique<SwFrameAddPage>(pParent, *rSet);
 }
 
 void SwFrameAddPage::Reset(const SfxItemSet *rSet )

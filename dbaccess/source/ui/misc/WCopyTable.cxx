@@ -566,16 +566,16 @@ OCopyTableWizard::OCopyTableWizard(weld::Window* pParent, const OUString& _rDefa
         m_sName = ::dbtools::composeTableName(m_xDestConnection->getMetaData(),sCatalog,sSchema,sTable,false,::dbtools::EComposeRule::InTableDefinitions);
     }
 
-    VclPtrInstance<OCopyTable> pPage1(this, CreatePageContainer());
-    pPage1->disallowUseHeaderLine();
+    std::unique_ptr<OCopyTable> xPage1(new OCopyTable(this, CreatePageContainer()));
+    xPage1->disallowUseHeaderLine();
     if ( !bAllowViews )
-        pPage1->disallowViews();
-    pPage1->setCreateStyleAction();
-    AddWizardPage(pPage1);
+        xPage1->disallowViews();
+    xPage1->setCreateStyleAction();
+    AddWizardPage(std::move(xPage1));
 
-    AddWizardPage( VclPtr<OWizNameMatching>::Create(this, CreatePageContainer() ) );
-    AddWizardPage( VclPtr<OWizColumnSelect>::Create(this, CreatePageContainer() ) );
-    AddWizardPage( VclPtr<OWizNormalExtend>::Create(this, CreatePageContainer() ) );
+    AddWizardPage( std::make_unique<OWizNameMatching>(this, CreatePageContainer() ) );
+    AddWizardPage( std::make_unique<OWizColumnSelect>(this, CreatePageContainer() ) );
+    AddWizardPage( std::make_unique<OWizNormalExtend>(this, CreatePageContainer() ) );
     ActivatePage();
 
     m_xAssistant->set_current_page(0);
@@ -620,13 +620,13 @@ OCopyTableWizard::OCopyTableWizard( weld::Window* pParent, const OUString& _rDef
 
     m_xInteractionHandler = InteractionHandler::createWithParent(m_xContext, nullptr);
 
-    VclPtrInstance<OCopyTable> pPage1( this, CreatePageContainer() );
-    pPage1->disallowViews();
-    pPage1->setCreateStyleAction();
-    AddWizardPage( pPage1 );
+    std::unique_ptr<OCopyTable> xPage1(new OCopyTable(this, CreatePageContainer()));
+    xPage1->disallowViews();
+    xPage1->setCreateStyleAction();
+    AddWizardPage(std::move(xPage1));
 
-    AddWizardPage( VclPtr<OWizNameMatching>::Create( this, CreatePageContainer() ) );
-    AddWizardPage( VclPtr<OWizColumnSelect>::Create( this, CreatePageContainer() ) );
+    AddWizardPage( std::make_unique<OWizNameMatching>( this, CreatePageContainer() ) );
+    AddWizardPage( std::make_unique<OWizColumnSelect>( this, CreatePageContainer() ) );
     AddWizardPage( (*_pTypeSelectionPageFactory)( this, CreatePageContainer(), _rTypeSelectionPageArg ) );
 
     ActivatePage();
@@ -951,9 +951,9 @@ bool OCopyTableWizard::DeactivatePage()
     return pPage && pPage->LeavePage();
 }
 
-void OCopyTableWizard::AddWizardPage(OWizardPage* pPage)
+void OCopyTableWizard::AddWizardPage(std::unique_ptr<OWizardPage> xPage)
 {
-    AddPage(pPage);
+    AddPage(std::move(xPage));
     ++m_nPageCount;
 }
 

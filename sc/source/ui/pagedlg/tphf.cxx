@@ -76,13 +76,7 @@ ScHFPage::ScHFPage(TabPageParent pParent, const SfxItemSet& rSet, sal_uInt16 nSe
 
 ScHFPage::~ScHFPage()
 {
-    disposeOnce();
-}
-
-void ScHFPage::dispose()
-{
     pStyleDlg = nullptr;
-    SvxHFPage::dispose();
 }
 
 void ScHFPage::Reset( const SfxItemSet* rSet )
@@ -132,14 +126,6 @@ DeactivateRC ScHFPage::DeactivatePage( SfxItemSet* pSetP )
             FillItemSet( pSetP );
 
     return DeactivateRC::LeavePage;
-}
-
-void ScHFPage::ActivatePage()
-{
-}
-
-void ScHFPage::DeactivatePage()
-{
 }
 
 // Handler:
@@ -236,9 +222,9 @@ ScHeaderPage::ScHeaderPage(TabPageParent pParent, const SfxItemSet& rSet)
 {
 }
 
-VclPtr<SfxTabPage> ScHeaderPage::Create(TabPageParent pParent, const SfxItemSet* rCoreSet)
+std::unique_ptr<SfxTabPage> ScHeaderPage::Create(TabPageParent pParent, const SfxItemSet* rCoreSet)
 {
-    return VclPtr<ScHeaderPage>::Create(pParent, *rCoreSet);
+    return std::make_unique<ScHeaderPage>(pParent, *rCoreSet);
 }
 
 const sal_uInt16* ScHeaderPage::GetRanges()
@@ -253,9 +239,9 @@ ScFooterPage::ScFooterPage(TabPageParent pParent, const SfxItemSet& rSet)
 {
 }
 
-VclPtr<SfxTabPage> ScFooterPage::Create(TabPageParent pParent, const SfxItemSet* rCoreSet)
+std::unique_ptr<SfxTabPage> ScFooterPage::Create(TabPageParent pParent, const SfxItemSet* rCoreSet)
 {
-    return VclPtr<ScFooterPage>::Create(pParent, *rCoreSet);
+    return std::make_unique<ScFooterPage>(pParent, *rCoreSet);
 }
 
 const sal_uInt16* ScFooterPage::GetRanges()

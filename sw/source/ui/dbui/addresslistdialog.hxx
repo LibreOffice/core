@@ -47,7 +47,7 @@ class SwAddressListDialog : public SfxDialogController
 
     bool            m_bInSelectHdl;
 
-    VclPtr<SwMailMergeAddressBlockPage> m_xAddressPage;
+    SwMailMergeAddressBlockPage* m_pAddressPage;
 
     css::uno::Reference< css::sdb::XDatabaseContext> m_xDBContext;
 

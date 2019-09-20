@@ -224,13 +224,12 @@ void SmModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     }
 }
 
-VclPtr<SfxTabPage> SmModule::CreateTabPage( sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet )
+std::unique_ptr<SfxTabPage> SmModule::CreateTabPage( sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet )
 {
-    VclPtr<SfxTabPage> pRet;
+    std::unique_ptr<SfxTabPage> xRet;
     if (nId == SID_SM_TP_PRINTOPTIONS)
-        pRet = SmPrintOptionsTabPage::Create(pParent, rSet);
-    return pRet;
-
+        xRet = SmPrintOptionsTabPage::Create(pParent, rSet);
+    return xRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

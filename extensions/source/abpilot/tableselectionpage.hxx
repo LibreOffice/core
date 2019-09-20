@@ -37,8 +37,8 @@ namespace abp
         virtual void        initializePage() override;
         virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
 
-        // TabDialog overridables
-        virtual void        ActivatePage() override;
+        // BuilderPage overridables
+        virtual void        Activate() override;
 
         // OImportPage overridables
         virtual bool        canAdvance() const override;

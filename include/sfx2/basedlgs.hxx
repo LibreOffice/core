@@ -182,7 +182,7 @@ public:
 
     virtual             ~SfxSingleTabDialogController() override;
 
-    void                SetTabPage(SfxTabPage* pTabPage);
+    void                SetTabPage(std::unique_ptr<SfxTabPage> xTabPage);
     SfxTabPage*         GetTabPage() const { return m_xSfxPage.get(); }
 
     virtual weld::Button& GetOKButton() const override { return *m_xOKBtn; }
@@ -192,7 +192,7 @@ public:
     const SfxItemSet*   GetInputItemSet() const { return m_pInputSet; }
 
 protected:
-    VclPtr<SfxTabPage> m_xSfxPage;
+    std::unique_ptr<SfxTabPage> m_xSfxPage;
     std::unique_ptr<weld::Container> m_xContainer;
     std::unique_ptr<weld::Button> m_xOKBtn;
     std::unique_ptr<weld::Button> m_xHelpBtn;

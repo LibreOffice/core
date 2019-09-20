@@ -58,7 +58,6 @@ private:
 public:
     SvxMenuConfigPage(TabPageParent pParent, const SfxItemSet& rItemSet, bool bIsMenuBar = true);
     virtual ~SvxMenuConfigPage() override;
-    virtual void dispose() override;
 
     SaveInData* CreateSaveInData(
         const css::uno::Reference <

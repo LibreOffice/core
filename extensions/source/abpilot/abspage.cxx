@@ -35,15 +35,15 @@ namespace abp
     {
     }
 
-    void AddressBookSourcePage::ActivatePage()
+    void AddressBookSourcePage::Activate()
     {
-        AddressBookSourcePage_Base::ActivatePage();
+        AddressBookSourcePage_Base::Activate();
         m_pDialog->updateTravelUI();
     }
 
-    void AddressBookSourcePage::DeactivatePage()
+    void AddressBookSourcePage::Deactivate()
     {
-        AddressBookSourcePage_Base::DeactivatePage();
+        AddressBookSourcePage_Base::Deactivate();
         m_pDialog->enableButtons(WizardButtonFlags::NEXT, true);
     }
 

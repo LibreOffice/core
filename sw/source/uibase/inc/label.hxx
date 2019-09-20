@@ -33,7 +33,7 @@ class SwLabDlg : public SfxTabDialogController
 {
     SwLabelConfig   aLabelsCfg;
     SwDBManager* const     pDBManager;
-    VclPtr<SwLabPrtPage>   pPrtPage;
+    SwLabPrtPage* m_pPrtPage;
 
     std::vector<sal_uInt16> aTypeIds;
     std::vector<OUString> aMakes;

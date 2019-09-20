@@ -88,11 +88,10 @@ public:
 
 protected:
     /// to override to create new pages
-    virtual VclPtr<TabPage> createPage(WizardState _nState) override;
+    virtual std::unique_ptr<BuilderPage> createPage(WizardState _nState) override;
     virtual WizardState determineNextState(WizardState _nCurrentState) const override;
     virtual bool        leaveState(WizardState _nState) override;
-    virtual ::vcl::IWizardPageController*
-                        getPageController( TabPage* _pCurrentPage ) const override;
+    virtual ::vcl::IWizardPageController* getPageController(BuilderPage* pCurrentPage) const override;
     virtual bool        onFinish() override;
 
 private:

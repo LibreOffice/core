@@ -478,7 +478,7 @@ namespace vcl
 
         // can we advance from the current page?
         bool bCurrentPageCanAdvance = true;
-        TabPage* pCurrentPage = GetPage( getCurrentState() );
+        BuilderPage* pCurrentPage = GetPage( getCurrentState() );
         if ( pCurrentPage )
         {
             const IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
