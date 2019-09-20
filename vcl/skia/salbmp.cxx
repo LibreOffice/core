@@ -24,6 +24,13 @@
 
 #include <salgdi.hxx>
 
+#include <SkCanvas.h>
+#include <SkImage.h>
+
+#ifdef DBG_UTIL
+#include <fstream>
+#endif
+
 SkiaSalBitmap::SkiaSalBitmap() {}
 
 SkiaSalBitmap::~SkiaSalBitmap() {}
@@ -49,6 +56,17 @@ static bool isValidBitCount(sal_uInt16 nBitCount)
            || (nBitCount == 32);
 }
 
+SkiaSalBitmap::SkiaSalBitmap(const SkImage& image)
+{
+    assert(image.colorType() == kN32_SkColorType);
+    if (Create(Size(image.width(), image.height()), 32, BitmapPalette()))
+    {
+        SkCanvas canvas(mBitmap);
+        // TODO makeNonTextureImage() ?
+        canvas.drawImage(&image, 0, 0);
+    }
+}
+
 bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal)
 {
     Destroy();
@@ -56,10 +74,9 @@ bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const Bitmap
         return false;
     if (nBitCount >= 8)
     {
-        // TODO SkSurface doesn't support unpremul alpha
         if (!mBitmap.tryAllocPixels(
                 SkImageInfo::Make(rSize.Width(), rSize.Height(), getSkColorType(nBitCount, rPal),
-                                  nBitCount == 32 ? kUnpremul_SkAlphaType : kOpaque_SkAlphaType)))
+                                  nBitCount == 32 ? kPremul_SkAlphaType : kOpaque_SkAlphaType)))
         {
             return false;
         }
@@ -117,6 +134,7 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
     if (!Create(src.mSize, src.mBitCount, src.mPalette))
         return false;
     // TODO copy data
+    abort();
     return true;
 }
 
@@ -182,9 +200,10 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
             buffer->mnFormat = ScanlineFormat::N24BitTcRgb | ScanlineFormat::TopDown;
             break;
         case 32:
+            // TODO are these correct?
             buffer->mnFormat = mBitmap.colorType() == kRGBA_8888_SkColorType
-                                   ? ScanlineFormat::N32BitTcArgb
-                                   : ScanlineFormat::N32BitTcBgra;
+                                   ? ScanlineFormat::N32BitTcBgra
+                                   : ScanlineFormat::N32BitTcArgb;
             buffer->mnFormat |= ScanlineFormat::TopDown;
             break;
         default:
@@ -229,5 +248,15 @@ bool SkiaSalBitmap::Replace(const Color& rSearchColor, const Color& rReplaceColo
 }
 
 bool SkiaSalBitmap::ConvertToGreyscale() { return false; }
+
+#ifdef DBG_UTIL
+void SkiaSalBitmap::dump(const char* file) const
+{
+    sk_sp<SkImage> image = SkImage::MakeFromBitmap(mBitmap);
+    sk_sp<SkData> data = image->encodeToData();
+    std::ofstream ostream(file, std::ios::binary);
+    ostream.write(static_cast<const char*>(data->data()), data->size());
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

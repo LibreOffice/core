@@ -22,8 +22,11 @@
 
 #include <vcl/dllapi.h>
 
-#include "salgdiimpl.hxx"
-#include "salgeom.hxx"
+#include <salgdiimpl.hxx>
+#include <salgeom.hxx>
+
+#include <SkPaint.h>
+#include <SkSurface.h>
 
 class VCL_DLLPUBLIC SkiaSalGraphicsImpl : public SalGraphicsImpl
 {
@@ -178,6 +181,39 @@ public:
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon,
                               const Gradient& rGradient) override;
+
+#ifdef DBG_UTIL
+    void dump(const char* file) const;
+#endif
+
+protected:
+    void setProvider(SalGeometryProvider* provider) { mProvider = provider; }
+
+private:
+    // get the width of the device
+    int GetWidth() const { return mProvider ? mProvider->GetWidth() : 1; }
+    // get the height of the device
+    int GetHeight() const { return mProvider ? mProvider->GetHeight() : 1; }
+    static SkColor toSkColor(Color color)
+    {
+        return SkColorSetARGB(255 - color.GetTransparency(), color.GetRed(), color.GetGreen(),
+                              color.GetBlue());
+    }
+    static Color fromSkColor(SkColor color)
+    {
+        return Color(255 - SkColorGetA(color), SkColorGetR(color), SkColorGetG(color),
+                     SkColorGetB(color));
+    }
+
+    SalGraphics& mParent;
+    /// Pointer to the SalFrame or SalVirtualDevice
+    SalGeometryProvider* mProvider;
+    // The Skia surface that is target of all the rendering.
+    sk_sp<SkSurface> mSurface;
+    SkPaint mPaint; // The current paint object (contains paint setup, such as color to use).
+    vcl::Region mClipRegion;
+    Color mLineColor;
+    Color mFillColor;
 };
 
 #endif
