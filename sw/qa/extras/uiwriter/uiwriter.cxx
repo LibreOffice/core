@@ -5052,12 +5052,12 @@ void SwUiWriterTest::testTdf98987()
     sal_Int32 nRectangle1 = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/bounds", "top").toInt32();
     assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/SdrObject", "name", "Rectangle 2");
     sal_Int32 nRectangle2 = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/bounds", "top").toInt32();
-    CPPUNIT_ASSERT(nRectangle1 < nRectangle2);
+    CPPUNIT_ASSERT_GREATER(nRectangle1, nRectangle2);
 
     assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[3]/SdrObject", "name", "Rectangle 3");
     sal_Int32 nRectangle3 = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[3]/bounds", "top").toInt32();
     // This failed: the 3rd rectangle had a smaller "top" value than the 2nd one, it even overlapped with the 1st one.
-    CPPUNIT_ASSERT(nRectangle2 < nRectangle3);
+    CPPUNIT_ASSERT_GREATER(nRectangle2, nRectangle3);
 }
 
 void SwUiWriterTest::testTdf99004()
