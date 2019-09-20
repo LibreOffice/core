@@ -178,7 +178,6 @@ protected:
     std::unique_ptr<weld::Container> m_xContainer;
 
 protected:
-    SfxTabPage(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet *rAttrSet);
     SfxTabPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet *rAttrSet);
 
     sal_uInt16          GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const
