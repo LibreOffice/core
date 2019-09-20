@@ -63,7 +63,6 @@ public:
 
     void                        ScriptChanged();
     virtual void                PageCreated (const SfxAllItemSet& aSet) override;
-    using TabPage::ActivatePage; // FIXME WTF is this nonsense?
     virtual void                ActivatePage( const SfxItemSet& ) override;
     void                        LaunchFillGroup();
 

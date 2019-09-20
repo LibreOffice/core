@@ -39,9 +39,9 @@ namespace abp
     {
     }
 
-    void TableSelectionPage::ActivatePage()
+    void TableSelectionPage::Activate()
     {
-        AddressBookSourcePage::ActivatePage();
+        AddressBookSourcePage::Activate();
 
         m_xTableList->grab_focus();
     }

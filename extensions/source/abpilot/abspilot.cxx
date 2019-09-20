@@ -366,31 +366,31 @@ namespace abp
         return m_aNewDataSource.connect(m_xAssistant.get());
     }
 
-    VclPtr<TabPage> OAddressBookSourcePilot::createPage(WizardState _nState)
+    std::unique_ptr<BuilderPage> OAddressBookSourcePilot::createPage(WizardState _nState)
     {
         OString sIdent(OString::number(_nState));
         weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
         // TODO eventually pass DialogController as distinct argument instead of bundling into TabPageParent
         TabPageParent aParent(pPageContainer, this);
 
-        VclPtr<vcl::OWizardPage> pRet;
+        std::unique_ptr<vcl::OWizardPage> xRet;
 
         switch (_nState)
         {
             case STATE_SELECT_ABTYPE:
-                pRet = VclPtr<TypeSelectionPage>::Create( this, aParent );
+                xRet = std::make_unique<TypeSelectionPage>( this, aParent );
                 break;
             case STATE_INVOKE_ADMIN_DIALOG:
-                pRet = VclPtr<AdminDialogInvokationPage>::Create( this, aParent );
+                xRet = std::make_unique<AdminDialogInvokationPage>( this, aParent );
                 break;
             case STATE_TABLE_SELECTION:
-                pRet = VclPtr<TableSelectionPage>::Create( this, aParent );
+                xRet = std::make_unique<TableSelectionPage>( this, aParent );
                 break;
             case STATE_MANUAL_FIELD_MAPPING:
-                pRet = VclPtr<FieldMappingPage>::Create( this, aParent );
+                xRet = std::make_unique<FieldMappingPage>( this, aParent );
                 break;
             case STATE_FINAL_CONFIRM:
-                pRet = VclPtr<FinalPage>::Create( this, aParent );
+                xRet = std::make_unique<FinalPage>( this, aParent );
                 break;
             default:
                 assert(false && "OAddressBookSourcePilot::createPage: invalid state!");
@@ -399,7 +399,7 @@ namespace abp
 
         m_xAssistant->set_page_title(sIdent, getStateDisplayName(_nState));
 
-        return pRet;
+        return xRet;
     }
 
     void OAddressBookSourcePilot::impl_updateRoadmap( AddressSourceType _eType )

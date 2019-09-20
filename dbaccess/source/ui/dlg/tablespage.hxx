@@ -52,7 +52,6 @@ namespace dbaui
 
         OTableSubscriptionPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs ,OTableSubscriptionDialog* _pTablesDlg);
         virtual ~OTableSubscriptionPage() override;
-        virtual void dispose() override;
 
     private:
         virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;

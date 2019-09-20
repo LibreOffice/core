@@ -54,15 +54,12 @@ class SwLabPage : public SfxTabPage
     void DisplayFormat  ();
     SwLabRec* GetSelectedEntryPos();
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 public:
     SwLabPage(TabPageParent pParent, const SfxItemSet& rSet);
 
     virtual ~SwLabPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
@@ -100,14 +97,11 @@ class SwPrivateDataPage : public SfxTabPage
     std::unique_ptr<weld::Entry> m_xHomePageED;
     std::unique_ptr<weld::Entry> m_xMailED;
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 public:
     SwPrivateDataPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwPrivateDataPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
@@ -132,14 +126,11 @@ class SwBusinessDataPage : public SfxTabPage
     std::unique_ptr<weld::Entry> m_xHomePageED;
     std::unique_ptr<weld::Entry> m_xMailED;
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 public:
     SwBusinessDataPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwBusinessDataPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;

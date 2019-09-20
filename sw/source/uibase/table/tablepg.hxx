@@ -73,9 +73,6 @@ class SwFormatTablePage : public SfxTabPage
     void RightModify();
     DECL_LINK(ValueChangedHdl, weld::MetricSpinButton&, void);
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 public:
     SwFormatTablePage(TabPageParent pParent, const SfxItemSet& rSet );
     virtual ~SwFormatTablePage() override;
@@ -124,12 +121,8 @@ class SwTableColumnPage : public SfxTabPage
     void        SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth);
     DECL_LINK(SizeHdl, void*, void);
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 public:
     SwTableColumnPage(TabPageParent pParent, const SfxItemSet& rSet);
-    virtual void dispose() override;
     virtual ~SwTableColumnPage() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet);

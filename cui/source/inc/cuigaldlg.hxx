@@ -50,7 +50,7 @@ class SearchThread: public salhelper::Thread
 private:
 
     SearchProgress* mpProgress;
-    VclPtr<TPGalleryThemeProperties>   mpBrowser;
+    TPGalleryThemeProperties*   mpBrowser;
     INetURLObject               maStartURL;
 
     void                        ImplSearch( const INetURLObject& rStartURL,
@@ -71,7 +71,7 @@ class SearchProgress : public weld::GenericDialogController
 {
 private:
     INetURLObject startUrl_;
-    VclPtr<TPGalleryThemeProperties> m_xTabPage;
+    TPGalleryThemeProperties* m_pTabPage;
     rtl::Reference< SearchThread > m_aSearchThread;
     std::unique_ptr<weld::Label> m_xFtSearchDir;
     std::unique_ptr<weld::Label> m_xFtSearchType;
@@ -95,7 +95,7 @@ class TakeThread: public salhelper::Thread
 private:
 
     TakeProgress* mpProgress;
-    VclPtr<TPGalleryThemeProperties>   mpBrowser;
+    TPGalleryThemeProperties*   mpBrowser;
     TokenList_impl&             mrTakenList;
 
     virtual                     ~TakeThread() override;
@@ -114,7 +114,7 @@ class TakeProgress : public weld::GenericDialogController
 {
 private:
     weld::Window* m_pParent;
-    VclPtr<TPGalleryThemeProperties> m_xTabPage;
+    TPGalleryThemeProperties* m_pTabPage;
     rtl::Reference< TakeThread > maTakeThread;
     TokenList_impl      maTakenList;
     std::unique_ptr<weld::Label> m_xFtTakeFile;
@@ -205,7 +205,7 @@ private:
 public:
     TPGalleryThemeGeneral(TabPageParent pParent, const SfxItemSet& rSet);
     void                SetXChgData( ExchangeData* pData );
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static std::unique_ptr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
 };
 
 class TPGalleryThemeProperties : public SfxTabPage
@@ -263,14 +263,13 @@ class TPGalleryThemeProperties : public SfxTabPage
 public:
     TPGalleryThemeProperties(TabPageParent pWindow, const SfxItemSet& rSet);
     virtual ~TPGalleryThemeProperties() override;
-    virtual void        dispose() override;
 
     void                SetXChgData( ExchangeData* pData );
     const ExchangeData* GetXChgData() const { return pData; }
 
     void                StartSearchFiles( const OUString& _rFolderURL, short _nDlgResult );
 
-    static VclPtr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rSet);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CUIGALDLG_HXX

@@ -32,7 +32,7 @@ class DataLabelsTabPage : public SfxTabPage
 public:
     DataLabelsTabPage(TabPageParent pWindow, const SfxItemSet& rInAttrs);
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pWindow, const SfxItemSet* rInAttrs);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pWindow, const SfxItemSet* rInAttrs);
 
     void SetNumberFormatter( SvNumberFormatter* pFormatter );
 

@@ -167,9 +167,9 @@ SwColumnDlg::SwColumnDlg(weld::Window* pParent, SwWrtShell& rSh)
     assert(pColPgSet);
 
     // create TabPage
-    m_pTabPage = static_cast<SwColumnPage*>(SwColumnPage::Create(TabPageParent(m_xContentArea.get(), this), pColPgSet).get());
-    m_pTabPage->GetApplyLabel()->show();
-    weld::ComboBox* pApplyToLB = m_pTabPage->GetApplyComboBox();
+    m_xTabPage = std::make_unique<SwColumnPage>(TabPageParent(m_xContentArea.get(), this), *pColPgSet);
+    m_xTabPage->GetApplyLabel()->show();
+    weld::ComboBox* pApplyToLB = m_xTabPage->GetApplyComboBox();
     pApplyToLB->show();
 
     if (pCurrSection && (!m_rWrtShell.HasSelection() || 0 != nFullSectCnt))
@@ -210,13 +210,12 @@ SwColumnDlg::SwColumnDlg(weld::Window* pParent, SwWrtShell& rSh)
     if (!pApplyToLB->get_count())
         m_xOkButton->set_sensitive(false);
     //#i97810# set focus to the TabPage
-    m_pTabPage->ActivateColumnControl();
-    m_pTabPage->Show();
+    m_xTabPage->ActivateColumnControl();
 }
 
 SwColumnDlg::~SwColumnDlg()
 {
-    m_pTabPage.disposeAndClear();
+    m_xTabPage.reset();
 }
 
 IMPL_LINK(SwColumnDlg, ObjectListBoxHdl, weld::ComboBox&, rBox, void)
@@ -230,9 +229,9 @@ void SwColumnDlg::ObjectHdl(const weld::ComboBox* pBox)
 
     if (pBox)
     {
-        m_pTabPage->FillItemSet(pSet);
+        m_xTabPage->FillItemSet(pSet);
     }
-    weld::ComboBox* pApplyToLB = m_pTabPage->GetApplyComboBox();
+    weld::ComboBox* pApplyToLB = m_xTabPage->GetApplyComboBox();
     m_nOldSelection = pApplyToLB->get_active_id().toInt32();
     long nWidth = m_nSelectionWidth;
     switch(m_nOldSelection)
@@ -258,19 +257,19 @@ void SwColumnDlg::ObjectHdl(const weld::ComboBox* pBox)
     }
 
     bool bIsSection = pSet == m_pSectionSet.get() || pSet == m_pSelectionSet.get();
-    m_pTabPage->ShowBalance(bIsSection);
-    m_pTabPage->SetInSection(bIsSection);
-    m_pTabPage->SetFrameMode(true);
-    m_pTabPage->SetPageWidth(nWidth);
+    m_xTabPage->ShowBalance(bIsSection);
+    m_xTabPage->SetInSection(bIsSection);
+    m_xTabPage->SetFrameMode(true);
+    m_xTabPage->SetPageWidth(nWidth);
     if( pSet )
-        m_pTabPage->Reset(pSet);
+        m_xTabPage->Reset(pSet);
 }
 
 IMPL_LINK_NOARG(SwColumnDlg, OkHdl, weld::Button&, void)
 {
     // evaluate current selection
     SfxItemSet* pSet = EvalCurrentSelection();
-    m_pTabPage->FillItemSet(pSet);
+    m_xTabPage->FillItemSet(pSet);
 
     if(m_pSelectionSet && SfxItemState::SET == m_pSelectionSet->GetItemState(RES_COL))
     {
@@ -511,11 +510,6 @@ SwColumnPage::SwColumnPage(TabPageParent pParent, const SfxItemSet &rSet)
 
 SwColumnPage::~SwColumnPage()
 {
-    disposeOnce();
-}
-
-void SwColumnPage::dispose()
-{
     m_xFrameExampleWN.reset();
     m_xPgeExampleWN.reset();
     m_xDefaultVS.reset();
@@ -605,9 +599,9 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
 }
 
 // create TabPage
-VclPtr<SfxTabPage> SwColumnPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwColumnPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwColumnPage>::Create(pParent, *rSet);
+    return std::make_unique<SwColumnPage>(pParent, *rSet);
 }
 
 // stuff attributes into the Set when OK

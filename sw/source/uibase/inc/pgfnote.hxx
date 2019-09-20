@@ -31,14 +31,13 @@ class SwFootNotePage: public SfxTabPage
     static const sal_uInt16 aPageRg[];
     SwFootNotePage(TabPageParent pParent, const SfxItemSet &rSet);
 public:
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;
     virtual void Reset(const SfxItemSet *rSet) override;
 
     virtual ~SwFootNotePage() override;
-    virtual void dispose() override;
 private:
 
     long            lMaxHeight;

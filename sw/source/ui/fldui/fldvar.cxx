@@ -84,7 +84,6 @@ SwFieldVarPage::SwFieldVarPage(TabPageParent pParent, const SfxItemSet *const pC
 
 SwFieldVarPage::~SwFieldVarPage()
 {
-    disposeOnce();
 }
 
 void SwFieldVarPage::Reset(const SfxItemSet* )
@@ -1204,10 +1203,10 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-VclPtr<SfxTabPage> SwFieldVarPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwFieldVarPage::Create( TabPageParent pParent,
                                          const SfxItemSet *const pAttrSet)
 {
-    return VclPtr<SwFieldVarPage>::Create( pParent, pAttrSet );
+    return std::make_unique<SwFieldVarPage>( pParent, pAttrSet );
 }
 
 sal_uInt16 SwFieldVarPage::GetGroup()

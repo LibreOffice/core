@@ -743,7 +743,6 @@ private:
 public:
     SvxColorTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxColorTabPage() override;
-    virtual void dispose() override;
 
     void    Construct();
 

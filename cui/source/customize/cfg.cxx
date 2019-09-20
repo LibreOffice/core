@@ -161,35 +161,35 @@ SvxConfigPage::CanConfig( const OUString& aModuleId )
     return !(aModuleId == "com.sun.star.script.BasicIDE" || aModuleId == "com.sun.star.frame.Bibliography");
 }
 
-static VclPtr<SfxTabPage> CreateSvxMenuConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
+static std::unique_ptr<SfxTabPage> CreateSvxMenuConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SvxMenuConfigPage>::Create(pParent, *rSet);
+    return std::make_unique<SvxMenuConfigPage>(pParent, *rSet);
 }
 
-static VclPtr<SfxTabPage> CreateSvxContextMenuConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
+static std::unique_ptr<SfxTabPage> CreateSvxContextMenuConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SvxMenuConfigPage>::Create(pParent, *rSet, false);
+    return std::make_unique<SvxMenuConfigPage>(pParent, *rSet, false);
 }
 
-static VclPtr<SfxTabPage> CreateKeyboardConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
+static std::unique_ptr<SfxTabPage> CreateKeyboardConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
 {
-       return VclPtr<SfxAcceleratorConfigPage>::Create(pParent, *rSet);
+       return std::make_unique<SfxAcceleratorConfigPage>(pParent, *rSet);
 }
 
-static VclPtr<SfxTabPage> CreateSvxNotebookbarConfigPage(TabPageParent pParent,
+static std::unique_ptr<SfxTabPage> CreateSvxNotebookbarConfigPage(TabPageParent pParent,
                                                          const SfxItemSet* rSet)
 {
-    return VclPtr<SvxNotebookbarConfigPage>::Create(pParent, *rSet);
+    return std::make_unique<SvxNotebookbarConfigPage>(pParent, *rSet);
 }
 
-static VclPtr<SfxTabPage> CreateSvxToolbarConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
+static std::unique_ptr<SfxTabPage> CreateSvxToolbarConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SvxToolbarConfigPage>::Create(pParent, *rSet);
+    return std::make_unique<SvxToolbarConfigPage>(pParent, *rSet);
 }
 
-static VclPtr<SfxTabPage> CreateSvxEventConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
+static std::unique_ptr<SfxTabPage> CreateSvxEventConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SvxEventConfigPage>::Create(pParent, *rSet, SvxEventConfigPage::EarlyInit());
+    return std::make_unique<SvxEventConfigPage>(pParent, *rSet, SvxEventConfigPage::EarlyInit());
 }
 
 /******************************************************************************
@@ -927,7 +927,7 @@ void SvxMenuEntriesListBox::CreateDropDown()
 SvxMenuEntriesListBox::SvxMenuEntriesListBox(std::unique_ptr<weld::TreeView> xControl, SvxConfigPage* pPg)
     : m_xControl(std::move(xControl))
     , m_xDropDown(m_xControl->create_virtual_device())
-    , pPage(pPg)
+    , m_pPage(pPg)
 {
     CreateDropDown();
     m_xControl->connect_key_press(LINK(this, SvxMenuEntriesListBox, KeyInputHdl));
@@ -944,16 +944,16 @@ IMPL_LINK(SvxMenuEntriesListBox, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
     // support DELETE for removing the current entry
     if ( keycode == KEY_DELETE )
     {
-        pPage->DeleteSelectedContent();
+        m_pPage->DeleteSelectedContent();
     }
     // support CTRL+UP and CTRL+DOWN for moving selected entries
     else if ( keycode.GetCode() == KEY_UP && keycode.IsMod1() )
     {
-        pPage->MoveEntry( true );
+        m_pPage->MoveEntry( true );
     }
     else if ( keycode.GetCode() == KEY_DOWN && keycode.IsMod1() )
     {
-        pPage->MoveEntry( false );
+        m_pPage->MoveEntry( false );
     }
     else
     {
@@ -1019,7 +1019,6 @@ IMPL_LINK_NOARG(SvxConfigPage, SelectElementHdl, weld::ComboBox&, void)
 
 SvxConfigPage::~SvxConfigPage()
 {
-    disposeOnce();
 }
 
 void SvxConfigPage::Reset( const SfxItemSet* )

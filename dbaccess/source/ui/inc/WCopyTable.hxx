@@ -286,7 +286,7 @@ namespace dbaui
         // checks if the type is supported in the destination database
         bool supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDataType);
 
-        virtual VclPtr<TabPage> createPage(vcl::WizardTypes::WizardState /*nState*/) override
+        virtual std::unique_ptr<BuilderPage> createPage(vcl::WizardTypes::WizardState /*nState*/) override
         {
             assert(false);
             return nullptr;
@@ -331,7 +331,7 @@ namespace dbaui
         weld::Button&       GetOKButton() { return *m_xFinish; }
         Wizard_Button_Style GetPressedButton() const { return m_ePressed; }
         void                EnableNextButton(bool bEnable);
-        void                AddWizardPage(OWizardPage* pPage); // delete page from OCopyTableWizard
+        void                AddWizardPage(std::unique_ptr<OWizardPage> xPage); // delete page from OCopyTableWizard
         void                CheckButtons(); // checks which button can be disabled, enabled
 
         // returns a vector where the position of a column and if the column is in the selection
