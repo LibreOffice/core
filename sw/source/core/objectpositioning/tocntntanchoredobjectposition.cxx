@@ -44,6 +44,7 @@
 #include <dflyobj.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <sortedobjs.hxx>
+#include <textboxhelper.hxx>
 
 using namespace objectpositioning;
 using namespace ::com::sun::star;
@@ -975,32 +976,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
 
         // If it was requested to not overlap with already formatted objects, take care of that
         // here.
-        bool bAllowOverlap = rFrameFormat.GetWrapInfluenceOnObjPos().GetAllowOverlap();
-        if (!bAllowOverlap)
-        {
-            // Get the list of objects.
-            const SwSortedObjs& rSortedObjs = *pAnchorFrameForVertPos->GetDrawObjs();
-            for (const auto& pAnchoredObj : rSortedObjs)
-            {
-                if (pAnchoredObj == &GetAnchoredObj())
-                {
-                    // We found ourselves, stop iterating.
-                    break;
-                }
-
-                if (!GetAnchoredObj().GetObjRect().IsOver(pAnchoredObj->GetObjRect()))
-                {
-                    // Found an already positioned object, but it doesn't overlap, ignore.
-                    continue;
-                }
-
-                // Already formatted, overlaps: resolve the conflict by shifting ourselves down.
-                SwTwips nYDiff
-                    = pAnchoredObj->GetObjRect().Bottom() - GetAnchoredObj().GetObjRect().Top();
-                aRelPos.setY(aRelPos.getY() + nYDiff + 1);
-                GetAnchoredObj().SetObjTop(nTopOfAnch + aRelPos.Y());
-            }
-        }
+        CalcOverlap(pAnchorFrameForVertPos, aRelPos, nTopOfAnch);
     }
 
     // determine 'horizontal' position
@@ -1095,6 +1071,70 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
 
     // set relative position at object
     GetAnchoredObj().SetCurrRelPos( aRelPos );
+}
+
+void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFrameForVertPos,
+                                                    Point& rRelPos, const SwTwips nTopOfAnch)
+{
+    const SwFrameFormat& rFrameFormat = GetFrameFormat();
+    bool bAllowOverlap = rFrameFormat.GetWrapInfluenceOnObjPos().GetAllowOverlap();
+    if (bAllowOverlap)
+    {
+        return;
+    }
+
+    if (SwTextBoxHelper::isTextBox(&rFrameFormat, RES_FLYFRMFMT))
+    {
+        // This is the frame part of a textbox, just take the offset from the textbox's shape part.
+        SwFrameFormat* pShapeOfTextBox
+            = SwTextBoxHelper::getOtherTextBoxFormat(&rFrameFormat, RES_FLYFRMFMT);
+        if (pShapeOfTextBox)
+        {
+            SwTwips nYDiff = pShapeOfTextBox->GetWrapInfluenceOnObjPos().GetOverlapVertOffset();
+            if (nYDiff > 0)
+            {
+                rRelPos.setY(rRelPos.getY() + nYDiff + 1);
+                GetAnchoredObj().SetObjTop(nTopOfAnch + rRelPos.Y());
+            }
+        }
+        return;
+    }
+
+    // Get the list of objects.
+    const SwSortedObjs& rSortedObjs = *pAnchorFrameForVertPos->GetDrawObjs();
+    for (const auto& pAnchoredObj : rSortedObjs)
+    {
+        if (pAnchoredObj == &GetAnchoredObj())
+        {
+            // We found ourselves, stop iterating.
+            break;
+        }
+
+        if (SwTextBoxHelper::isTextBox(&pAnchoredObj->GetFrameFormat(), RES_FLYFRMFMT))
+        {
+            // Overlapping with the frame of a textbox is fine.
+            continue;
+        }
+
+        if (!GetAnchoredObj().GetObjRect().IsOver(pAnchoredObj->GetObjRect()))
+        {
+            // Found an already positioned object, but it doesn't overlap, ignore.
+            continue;
+        }
+
+        // Already formatted, overlaps: resolve the conflict by shifting ourselves down.
+        SwTwips nYDiff = pAnchoredObj->GetObjRect().Bottom() - GetAnchoredObj().GetObjRect().Top();
+        rRelPos.setY(rRelPos.getY() + nYDiff + 1);
+        GetAnchoredObj().SetObjTop(nTopOfAnch + rRelPos.Y());
+
+        // Store our offset that avoids the overlap. If this is a shape of a textbox, then the frame
+        // of the textbox will use it.
+        SwFormatWrapInfluenceOnObjPos aInfluence(rFrameFormat.GetWrapInfluenceOnObjPos());
+        aInfluence.SetOverlapVertOffset(nYDiff);
+        const_cast<SwFrameFormat&>(rFrameFormat).LockModify();
+        const_cast<SwFrameFormat&>(rFrameFormat).SetFormatAttr(aInfluence);
+        const_cast<SwFrameFormat&>(rFrameFormat).UnlockModify();
+    }
 }
 
 /**

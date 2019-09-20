@@ -24,6 +24,7 @@
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <frmatr.hxx>
+#include <fmtwrapinfluenceonobjpos.hxx>
 #include "docxattributeoutput.hxx"
 #include "docxexportfilter.hxx"
 #include <comphelper/flagguard.hxx>
@@ -465,7 +466,8 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         attrList->add(XML_simplePos, "0");
         attrList->add(XML_locked, "0");
         attrList->add(XML_layoutInCell, "1");
-        attrList->add(XML_allowOverlap, "1"); // TODO
+        bool bAllowOverlap = pFrameFormat->GetWrapInfluenceOnObjPos().GetAllowOverlap();
+        attrList->add(XML_allowOverlap, bAllowOverlap ? "1" : "0");
         if (pObj != nullptr)
             // It seems 0 and 1 have special meaning: just start counting from 2 to avoid issues with that.
             attrList->add(XML_relativeHeight, OString::number(pObj->GetOrdNum() + 2));

@@ -21,6 +21,7 @@
 
 #include "hintids.hxx"
 #include "format.hxx"
+#include "swtypes.hxx"
 #include <svl/poolitem.hxx>
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
 
@@ -30,6 +31,8 @@ private:
     sal_Int16 mnWrapInfluenceOnPosition;
     /// Allow objects to overlap, permitted by default.
     bool mbAllowOverlap = true;
+    /// Vertical offset added during positioning to avoid an overlap.
+    SwTwips mnOverlapVertOffset = 0;
 
 public:
 
@@ -59,6 +62,8 @@ public:
 
     void SetAllowOverlap(bool bAllowOverlap);
     bool GetAllowOverlap() const;
+    void SetOverlapVertOffset(SwTwips nOverlapVertOffset);
+    SwTwips GetOverlapVertOffset() const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

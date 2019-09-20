@@ -43,7 +43,8 @@ bool SwFormatWrapInfluenceOnObjPos::operator==( const SfxPoolItem& rAttr ) const
     const SwFormatWrapInfluenceOnObjPos& rAttribute
         = static_cast<const SwFormatWrapInfluenceOnObjPos&>(rAttr);
     return (mnWrapInfluenceOnPosition == rAttribute.GetWrapInfluenceOnObjPos()
-            && mbAllowOverlap == rAttribute.mbAllowOverlap);
+            && mbAllowOverlap == rAttribute.mbAllowOverlap
+            && mnOverlapVertOffset == rAttribute.mnOverlapVertOffset);
 }
 
 SfxPoolItem* SwFormatWrapInfluenceOnObjPos::Clone( SfxItemPool * ) const
@@ -153,6 +154,13 @@ bool SwFormatWrapInfluenceOnObjPos::GetAllowOverlap() const
 {
     return mbAllowOverlap;
 }
+
+void SwFormatWrapInfluenceOnObjPos::SetOverlapVertOffset(SwTwips nOverlapVertOffset)
+{
+    mnOverlapVertOffset = nOverlapVertOffset;
+}
+
+SwTwips SwFormatWrapInfluenceOnObjPos::GetOverlapVertOffset() const { return mnOverlapVertOffset; }
 
 void SwFormatWrapInfluenceOnObjPos::dumpAsXml(xmlTextWriterPtr pWriter) const
 {

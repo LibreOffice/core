@@ -279,6 +279,15 @@ DECLARE_OOXMLEXPORT_TEST(tdf123912_protectedForm, "tdf123912_protectedForm.odt")
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Section1 is protected", false, getProperty<bool>(xSect, "IsProtected"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(tdf124600b, "tdf124600b.docx")
+{
+    // <wp:anchor allowOverlap="0"> was lost on roundtrip, we always wrote "1" on export.
+    bool bAllowOverlap1 = getProperty<bool>(getShape(1), "AllowOverlap");
+    CPPUNIT_ASSERT(!bAllowOverlap1);
+    bool bAllowOverlap2 = getProperty<bool>(getShape(2), "AllowOverlap");
+    CPPUNIT_ASSERT(!bAllowOverlap2);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testDateControl, "empty-date-control.odt")
 {
     // Check that we exported the empty date control correctly
