@@ -36,18 +36,12 @@ SchLayoutTabPage::SchLayoutTabPage(TabPageParent pParent, const SfxItemSet& rInA
 
 SchLayoutTabPage::~SchLayoutTabPage()
 {
-    disposeOnce();
-}
-
-void SchLayoutTabPage::dispose()
-{
     m_pGeometryResources.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SchLayoutTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+std::unique_ptr<SfxTabPage> SchLayoutTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<SchLayoutTabPage>::Create(pParent, *rOutAttrs);
+    return std::make_unique<SchLayoutTabPage>(pParent, *rOutAttrs);
 }
 
 bool SchLayoutTabPage::FillItemSet(SfxItemSet* rOutAttrs)

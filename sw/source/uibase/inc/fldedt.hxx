@@ -38,7 +38,7 @@ class SwFieldEditDlg : public SfxSingleTabDialogController
     DECL_LINK(NextPrevHdl, weld::Button&, void);
 
     void            Init();
-    VclPtr<SfxTabPage> CreatePage(sal_uInt16 nGroup);
+    SfxTabPage* CreatePage(sal_uInt16 nGroup);
 
     void EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr);
 public:

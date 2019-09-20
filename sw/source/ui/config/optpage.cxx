@@ -170,10 +170,10 @@ SwContentOptPage::~SwContentOptPage()
 {
 }
 
-VclPtr<SfxTabPage> SwContentOptPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwContentOptPage::Create( TabPageParent pParent,
                                              const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwContentOptPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwContentOptPage>(pParent, *rAttrSet);
 }
 
 static void lcl_SelectMetricLB(weld::ComboBox& rMetric, sal_uInt16 nSID, const SfxItemSet& rSet)
@@ -350,10 +350,10 @@ void SwAddPrinterTabPage::SetPreview(bool bPrev)
     m_xPagesFrame->set_sensitive(!bPreview);
 }
 
-VclPtr<SfxTabPage> SwAddPrinterTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwAddPrinterTabPage::Create( TabPageParent pParent,
                                                 const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwAddPrinterTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwAddPrinterTabPage>(pParent, *rAttrSet);
 }
 
 bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
@@ -544,11 +544,6 @@ SwStdFontTabPage::SwStdFontTabPage(TabPageParent pParent, const SfxItemSet& rSet
 
 SwStdFontTabPage::~SwStdFontTabPage()
 {
-    disposeOnce();
-}
-
-void SwStdFontTabPage::dispose()
-{
     m_xIndexHeightLB.reset();
     m_xLabelHeightLB.reset();
     m_xListHeightLB.reset();
@@ -559,13 +554,12 @@ void SwStdFontTabPage::dispose()
         m_pPrt.disposeAndClear();
     else
         m_pPrt.clear();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwStdFontTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwStdFontTabPage::Create( TabPageParent pParent,
                                              const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwStdFontTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwStdFontTabPage>(pParent, *rAttrSet);
 }
 
 static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
@@ -1031,10 +1025,10 @@ SwTableOptionsTabPage::~SwTableOptionsTabPage()
 {
 }
 
-VclPtr<SfxTabPage> SwTableOptionsTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwTableOptionsTabPage::Create( TabPageParent pParent,
                                                   const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwTableOptionsTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwTableOptionsTabPage>(pParent, *rAttrSet);
 }
 
 bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -1264,9 +1258,9 @@ SwShdwCursorOptionsTabPage::~SwShdwCursorOptionsTabPage()
 {
 }
 
-VclPtr<SfxTabPage> SwShdwCursorOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+std::unique_ptr<SfxTabPage> SwShdwCursorOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SwShdwCursorOptionsTabPage>::Create( pParent, *rSet );
+    return std::make_unique<SwShdwCursorOptionsTabPage>(pParent, *rSet );
 }
 
 void SwShdwCursorOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
@@ -1630,11 +1624,6 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage(TabPageParent pParent,
 
 SwRedlineOptionsTabPage::~SwRedlineOptionsTabPage()
 {
-    disposeOnce();
-}
-
-void SwRedlineOptionsTabPage::dispose()
-{
     m_xInsertColorLB.reset();
     m_xInsertedPreview.reset();
     m_xInsertedPreviewWN.reset();
@@ -1647,12 +1636,11 @@ void SwRedlineOptionsTabPage::dispose()
     m_xMarkColorLB.reset();
     m_xMarkPreview.reset();
     m_xMarkPreviewWN.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwRedlineOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwRedlineOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwRedlineOptionsTabPage>::Create( pParent, *rSet );
+    return std::make_unique<SwRedlineOptionsTabPage>(pParent, *rSet );
 }
 
 bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -2038,9 +2026,9 @@ SwCompareOptionsTabPage::~SwCompareOptionsTabPage()
 {
 }
 
-VclPtr<SfxTabPage> SwCompareOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SwCompareOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwCompareOptionsTabPage>::Create( pParent, *rAttrSet );
+    return std::make_unique<SwCompareOptionsTabPage>(pParent, *rAttrSet );
 }
 
 bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -2170,10 +2158,10 @@ SwTestTabPage::~SwTestTabPage()
 {
 }
 
-VclPtr<SfxTabPage> SwTestTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwTestTabPage::Create( TabPageParent pParent,
                                           const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwTestTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwTestTabPage>(pParent, *rAttrSet);
 }
 
 bool    SwTestTabPage::FillItemSet( SfxItemSet* rCoreSet )

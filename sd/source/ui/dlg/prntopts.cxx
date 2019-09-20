@@ -175,10 +175,10 @@ void SdPrintOptions::Reset( const SfxItemSet* rAttrs )
     updateControls();
 }
 
-VclPtr<SfxTabPage> SdPrintOptions::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SdPrintOptions::Create( TabPageParent pParent,
                                            const SfxItemSet* rOutAttrs )
 {
-    return VclPtr<SdPrintOptions>::Create( pParent, *rOutAttrs );
+    return std::make_unique<SdPrintOptions>( pParent, *rOutAttrs );
 }
 
 IMPL_LINK(SdPrintOptions, ClickCheckboxHdl, weld::ToggleButton&, rCbx, void)

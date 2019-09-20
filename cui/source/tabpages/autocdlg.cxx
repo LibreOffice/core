@@ -197,13 +197,12 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage(TabPageParent pParent, const SfxI
 
 OfaAutocorrOptionsPage::~OfaAutocorrOptionsPage()
 {
-    disposeOnce();
 }
 
-VclPtr<SfxTabPage> OfaAutocorrOptionsPage::Create(TabPageParent pParent,
-                                                  const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> OfaAutocorrOptionsPage::Create(TabPageParent pParent,
+                                                           const SfxItemSet* rSet)
 {
-    return VclPtr<OfaAutocorrOptionsPage>::Create(pParent, *rSet);
+    return std::make_unique<OfaAutocorrOptionsPage>(pParent, *rSet);
 }
 
 #define CBCOL_FIRST     0
@@ -393,13 +392,15 @@ void OfaSwAutoFmtOptionsPage::CreateEntry(const OUString& rTxt, sal_uInt16 nCol)
 
 OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
 {
-    disposeOnce();
+    delete reinterpret_cast<ImpUserData*>(m_xCheckLB->get_id(REPLACE_BULLETS).toInt64());
+    delete reinterpret_cast<ImpUserData*>(m_xCheckLB->get_id(APPLY_NUMBERING).toInt64());
+    delete reinterpret_cast<ImpUserData*>(m_xCheckLB->get_id(MERGE_SINGLE_LINE_PARA).toInt64());
 }
 
-VclPtr<SfxTabPage> OfaSwAutoFmtOptionsPage::Create(TabPageParent pParent,
-                                                   const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> OfaSwAutoFmtOptionsPage::Create(TabPageParent pParent,
+                                                            const SfxItemSet* rAttrSet)
 {
-    return VclPtr<OfaSwAutoFmtOptionsPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<OfaSwAutoFmtOptionsPage>(pParent, *rAttrSet);
 }
 
 bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
@@ -700,23 +701,16 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage(TabPageParent pParent,
 
 OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
 {
-    disposeOnce();
-}
-
-void OfaAutocorrReplacePage::dispose()
-{
     aDoubleStringTable.clear();
     aChangesTable.clear();
 
     pCompareClass.reset();
     pCharClass.reset();
-
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaAutocorrReplacePage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> OfaAutocorrReplacePage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<OfaAutocorrReplacePage>::Create(pParent, *rSet);
+    return std::make_unique<OfaAutocorrReplacePage>(pParent, *rSet);
 }
 
 void OfaAutocorrReplacePage::ActivatePage( const SfxItemSet& )
@@ -1221,20 +1215,14 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage(TabPageParent pParent, const SfxIte
 
 OfaAutocorrExceptPage::~OfaAutocorrExceptPage()
 {
-    disposeOnce();
-}
-
-void OfaAutocorrExceptPage::dispose()
-{
     aStringsTable.clear();
     pCompareClass.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaAutocorrExceptPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> OfaAutocorrExceptPage::Create(TabPageParent pParent,
                                                  const SfxItemSet* rSet)
 {
-    return VclPtr<OfaAutocorrExceptPage>::Create(pParent, *rSet);
+    return std::make_unique<OfaAutocorrExceptPage>(pParent, *rSet);
 }
 
 void    OfaAutocorrExceptPage::ActivatePage( const SfxItemSet& )
@@ -1595,13 +1583,12 @@ OfaQuoteTabPage::OfaQuoteTabPage(TabPageParent pParent, const SfxItemSet& rSet)
 
 OfaQuoteTabPage::~OfaQuoteTabPage()
 {
-    disposeOnce();
 }
 
-VclPtr<SfxTabPage> OfaQuoteTabPage::Create(TabPageParent pParent,
-                                           const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> OfaQuoteTabPage::Create(TabPageParent pParent,
+                                                    const SfxItemSet* rAttrSet)
 {
-    return VclPtr<OfaQuoteTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<OfaQuoteTabPage>(pParent, *rAttrSet);
 }
 
 bool OfaQuoteTabPage::FillItemSet( SfxItemSet*  )
@@ -1912,21 +1899,12 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(TabPageParent pParent,
 
 OfaAutoCompleteTabPage::~OfaAutoCompleteTabPage()
 {
-    disposeOnce();
 }
 
-void OfaSwAutoFmtOptionsPage::dispose()
-{
-    delete reinterpret_cast<ImpUserData*>(m_xCheckLB->get_id(REPLACE_BULLETS).toInt64());
-    delete reinterpret_cast<ImpUserData*>(m_xCheckLB->get_id(APPLY_NUMBERING).toInt64());
-    delete reinterpret_cast<ImpUserData*>(m_xCheckLB->get_id(MERGE_SINGLE_LINE_PARA).toInt64());
-    SfxTabPage::dispose();
-}
-
-VclPtr<SfxTabPage> OfaAutoCompleteTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> OfaAutoCompleteTabPage::Create(TabPageParent pParent,
                                                   const SfxItemSet* rSet)
 {
-    return VclPtr<OfaAutoCompleteTabPage>::Create(pParent, *rSet);
+    return std::make_unique<OfaAutoCompleteTabPage>(pParent, *rSet);
 }
 
 bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )
@@ -2137,12 +2115,11 @@ OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage(TabPageParent pParent,
 
 OfaSmartTagOptionsTabPage::~OfaSmartTagOptionsTabPage()
 {
-    disposeOnce();
 }
 
-VclPtr<SfxTabPage> OfaSmartTagOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> OfaSmartTagOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<OfaSmartTagOptionsTabPage>::Create(pParent, *rSet);
+    return std::make_unique<OfaSmartTagOptionsTabPage>(pParent, *rSet);
 }
 
 /** This struct is used to associate list box entries with smart tag data

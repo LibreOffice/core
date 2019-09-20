@@ -73,7 +73,7 @@ public:
     void                        RegisterChildWindow(std::unique_ptr<SfxChildWinFactory>);
     void                        RegisterStatusBarControl(const SfxStbCtrlFactory&);
 
-    virtual VclPtr<SfxTabPage>  CreateTabPage( sal_uInt16 nId,
+    virtual std::unique_ptr<SfxTabPage>  CreateTabPage( sal_uInt16 nId,
                                                TabPageParent pParent,
                                                const SfxItemSet& rSet );
     virtual void                Invalidate(sal_uInt16 nId = 0) override;

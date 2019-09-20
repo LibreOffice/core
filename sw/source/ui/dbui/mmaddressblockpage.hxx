@@ -77,14 +77,13 @@ class SwMailMergeAddressBlockPage : public vcl::OWizardPage
 
     void                EnableAddressBlock(bool bAll, bool bSelective);
 
-    virtual void        ActivatePage() override;
+    virtual void        Activate() override;
     virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
     virtual bool        canAdvance() const override;
 
 public:
     SwMailMergeAddressBlockPage(SwMailMergeWizard* pWizard, TabPageParent pParent);
     virtual ~SwMailMergeAddressBlockPage() override;
-    virtual void dispose() override;
     SwMailMergeWizard* GetWizard() { return m_pWizard; }
 };
 

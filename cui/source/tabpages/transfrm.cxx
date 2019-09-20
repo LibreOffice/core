@@ -301,9 +301,9 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
     m_xMtrPosY->save_value();
 }
 
-VclPtr<SfxTabPage> SvxAngleTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxAngleTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxAngleTabPage>::Create(pParent, *rSet);
+    return std::make_unique<SvxAngleTabPage>(pParent, *rSet);
 }
 
 void SvxAngleTabPage::ActivatePage(const SfxItemSet& rSet)
@@ -700,9 +700,9 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
     }
 }
 
-VclPtr<SfxTabPage> SvxSlantTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+std::unique_ptr<SfxTabPage> SvxSlantTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<SvxSlantTabPage>::Create(pParent, *rOutAttrs);
+    return std::make_unique<SvxSlantTabPage>(pParent, *rOutAttrs);
 }
 
 void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
@@ -1116,9 +1116,9 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
     ChangeSizeProtectHdl(*m_xTsbSizeProtect);
 }
 
-VclPtr<SfxTabPage> SvxPositionSizeTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+std::unique_ptr<SfxTabPage> SvxPositionSizeTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<SvxPositionSizeTabPage>::Create(pParent, *rOutAttrs);
+    return std::make_unique<SvxPositionSizeTabPage>(pParent, *rOutAttrs);
 }
 
 void SvxPositionSizeTabPage::ActivatePage( const SfxItemSet& rSet )

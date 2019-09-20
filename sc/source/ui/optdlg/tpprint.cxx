@@ -39,9 +39,9 @@ ScTpPrintOptions::~ScTpPrintOptions()
 {
 }
 
-VclPtr<SfxTabPage> ScTpPrintOptions::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> ScTpPrintOptions::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<ScTpPrintOptions>::Create(pParent, *rAttrSet);
+    return std::make_unique<ScTpPrintOptions>(pParent, *rAttrSet);
 }
 
 DeactivateRC ScTpPrintOptions::DeactivatePage( SfxItemSet* pSetP )

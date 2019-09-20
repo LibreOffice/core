@@ -137,14 +137,8 @@ SvxLineDefTabPage::SvxLineDefTabPage(TabPageParent pParent, const SfxItemSet& rI
 
 SvxLineDefTabPage::~SvxLineDefTabPage()
 {
-    disposeOnce();
-}
-
-void SvxLineDefTabPage::dispose()
-{
     m_xCtlPreview.reset();
     m_xLbLineStyles.reset();
-    SfxTabPage::dispose();
 }
 
 void SvxLineDefTabPage::Construct()
@@ -302,9 +296,9 @@ void SvxLineDefTabPage::Reset( const SfxItemSet* rAttrs )
     }
 }
 
-VclPtr<SfxTabPage> SvxLineDefTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs )
+std::unique_ptr<SfxTabPage> SvxLineDefTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs )
 {
-    return VclPtr<SvxLineDefTabPage>::Create(pParent, *rOutAttrs);
+    return std::make_unique<SvxLineDefTabPage>(pParent, *rOutAttrs);
 }
 
 IMPL_LINK(SvxLineDefTabPage, SelectLinestyleListBoxHdl_Impl, weld::ComboBox&, rListBox, void)
@@ -841,19 +835,6 @@ void SvxLineDefTabPage::FillDialog_Impl()
     m_xMtrLength2->save_value();
     m_xLbType2->save_value();
     m_xMtrDistance->save_value();
-}
-
-void SvxLineDefTabPage::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    SfxTabPage::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-    {
-        auto nOldSelect = m_xLbLineStyles->get_active();
-        m_xLbLineStyles->clear();
-        m_xLbLineStyles->Fill(pDashList);
-        m_xLbLineStyles->set_active(nOldSelect);
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

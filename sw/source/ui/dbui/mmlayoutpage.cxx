@@ -153,16 +153,10 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage(SwMailMergeWizard* pWizard, TabPage
 
 SwMailMergeLayoutPage::~SwMailMergeLayoutPage()
 {
-    disposeOnce();
-}
-
-void SwMailMergeLayoutPage::dispose()
-{
     File::remove( m_sExampleURL );
-    vcl::OWizardPage::dispose();
 }
 
-void SwMailMergeLayoutPage::ActivatePage()
+void SwMailMergeLayoutPage::Activate()
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     bool bGreetingLine = rConfigItem.IsGreetingLine(false) && !rConfigItem.IsGreetingInserted();
