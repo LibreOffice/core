@@ -375,17 +375,11 @@ ScTPValidationValue::ScTPValidationValue(TabPageParent pParent, const SfxItemSet
 
 ScTPValidationValue::~ScTPValidationValue()
 {
-    disposeOnce();
-}
-
-void ScTPValidationValue::dispose()
-{
     m_xEdMin.reset();
     m_xEdMin.reset();
     m_xEdMax.reset();
     m_xBtnRef.reset();
     m_xEdMax.reset();
-    SfxTabPage::dispose();
 }
 
 void ScTPValidationValue::Init()
@@ -408,9 +402,9 @@ void ScTPValidationValue::Init()
     CheckHdl( *m_xCbShow );
 }
 
-VclPtr<SfxTabPage> ScTPValidationValue::Create(TabPageParent pParent, const SfxItemSet* rArgSet)
+std::unique_ptr<SfxTabPage> ScTPValidationValue::Create(TabPageParent pParent, const SfxItemSet* rArgSet)
 {
-    return VclPtr<ScTPValidationValue>::Create(pParent, *rArgSet);
+    return std::make_unique<ScTPValidationValue>(pParent, *rArgSet);
 }
 
 void ScTPValidationValue::Reset( const SfxItemSet* rArgSet )
@@ -693,13 +687,12 @@ ScTPValidationHelp::ScTPValidationHelp(TabPageParent pParent, const SfxItemSet& 
 
 ScTPValidationHelp::~ScTPValidationHelp()
 {
-    disposeOnce();
 }
 
-VclPtr<SfxTabPage> ScTPValidationHelp::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ScTPValidationHelp::Create(TabPageParent pParent,
                                               const SfxItemSet* rArgSet)
 {
-    return VclPtr<ScTPValidationHelp>::Create(pParent, *rArgSet);
+    return std::make_unique<ScTPValidationHelp>(pParent, *rArgSet);
 }
 
 void ScTPValidationHelp::Reset( const SfxItemSet* rArgSet )
@@ -752,7 +745,6 @@ ScTPValidationError::ScTPValidationError(TabPageParent pParent,
 
 ScTPValidationError::~ScTPValidationError()
 {
-    disposeOnce();
 }
 
 void ScTPValidationError::Init()
@@ -765,10 +757,10 @@ void ScTPValidationError::Init()
     SelectActionHdl(*m_xLbAction);
 }
 
-VclPtr<SfxTabPage> ScTPValidationError::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ScTPValidationError::Create(TabPageParent pParent,
                                                const SfxItemSet* rArgSet)
 {
-    return VclPtr<ScTPValidationError>::Create(pParent, *rArgSet);
+    return std::make_unique<ScTPValidationError>(pParent, *rArgSet);
 }
 
 void ScTPValidationError::Reset( const SfxItemSet* rArgSet )

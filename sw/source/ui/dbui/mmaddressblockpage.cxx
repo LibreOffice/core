@@ -109,17 +109,10 @@ SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage(SwMailMergeWizard* pWiz
 
 SwMailMergeAddressBlockPage::~SwMailMergeAddressBlockPage()
 {
-    disposeOnce();
-}
-
-void SwMailMergeAddressBlockPage::dispose()
-{
     m_xPreviewWIN.reset();
     m_xSettingsWIN.reset();
     m_xPreview.reset();
     m_xSettings.reset();
-
-    vcl::OWizardPage::dispose();
 }
 
 bool SwMailMergeAddressBlockPage::canAdvance() const
@@ -127,7 +120,7 @@ bool SwMailMergeAddressBlockPage::canAdvance() const
     return m_pWizard->GetConfigItem().GetResultSet().is();
 }
 
-void SwMailMergeAddressBlockPage::ActivatePage()
+void SwMailMergeAddressBlockPage::Activate()
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     bool bIsLetter = rConfigItem.IsOutputToLetter();

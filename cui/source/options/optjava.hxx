@@ -108,7 +108,6 @@ private:
 public:
     SvxJavaOptionsPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxJavaOptionsPage() override;
-    virtual void            dispose() override;
 
     static VclPtr<SfxTabPage>      Create( TabPageParent pParent, const SfxItemSet* rSet );
 

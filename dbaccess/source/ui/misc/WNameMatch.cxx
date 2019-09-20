@@ -78,7 +78,7 @@ void OWizNameMatching::Reset()
     m_bFirstTime = false;
 }
 
-void OWizNameMatching::ActivatePage( )
+void OWizNameMatching::Activate( )
 {
     // set source table name
     OUString aName = m_sSourceText + m_pParent->m_sSourceName;

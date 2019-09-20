@@ -143,7 +143,7 @@ namespace svt { namespace uno
     }
 
 
-    PWizardPageController WizardShell::impl_getController( TabPage* i_pPage ) const
+    PWizardPageController WizardShell::impl_getController(BuilderPage* i_pPage) const
     {
         Page2ControllerMap::const_iterator pos = m_aPageControllers.find( i_pPage );
         ENSURE_OR_RETURN( pos != m_aPageControllers.end(), "WizardShell::impl_getController: no controller for this page!", PWizardPageController() );
@@ -161,14 +161,12 @@ namespace svt { namespace uno
         return pController->getWizardPage();
     }
 
-
     void WizardShell::enablePage( const sal_Int16 i_nPageID, const bool i_bEnable )
     {
         enableState( impl_pageIdToState( i_nPageID ), i_bEnable );
     }
 
-
-    VclPtr<TabPage> WizardShell::createPage( WizardState i_nState )
+    std::unique_ptr<BuilderPage> WizardShell::createPage( WizardState i_nState )
     {
         ENSURE_OR_RETURN( m_xController.is(), "WizardShell::createPage: no WizardController!", nullptr );
 
@@ -193,11 +191,10 @@ namespace svt { namespace uno
         return pPage;
     }
 
-    vcl::IWizardPageController* WizardShell::getPageController( TabPage* i_pCurrentPage ) const
+    vcl::IWizardPageController* WizardShell::getPageController(BuilderPage* i_pCurrentPage) const
     {
         return impl_getController( i_pCurrentPage ).get();
     }
-
 
     OUString WizardShell::getStateDisplayName( WizardState i_nState ) const
     {

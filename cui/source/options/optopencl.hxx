@@ -34,9 +34,8 @@ private:
 
 public:
     SvxOpenCLTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
     virtual ~SvxOpenCLTabPage() override;
-
-    static VclPtr<SfxTabPage>      Create( TabPageParent pParent, const SfxItemSet* rSet );
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
     virtual void            Reset( const SfxItemSet* rSet ) override;

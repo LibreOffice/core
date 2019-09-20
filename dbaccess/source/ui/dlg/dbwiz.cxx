@@ -219,10 +219,10 @@ void ODbTypeWizDialog::clearPassword()
     m_pImpl->clearPassword();
 }
 
-VclPtr<TabPage> ODbTypeWizDialog::createPage(WizardState _nState)
+std::unique_ptr<BuilderPage> ODbTypeWizDialog::createPage(WizardState _nState)
 {
     const char* pStringId = STR_PAGETITLE_ADVANCED;
-    VclPtr<TabPage> pPage;
+    std::unique_ptr<BuilderPage> xPage;
 
     OString sIdent(OString::number(_nState));
     weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
@@ -233,46 +233,46 @@ VclPtr<TabPage> ODbTypeWizDialog::createPage(WizardState _nState)
     {
         case START_PAGE: // start state
         {
-            pPage = VclPtr<OGeneralPageDialog>::Create(aParent, *m_pOutSet);
-            OGeneralPage* pGeneralPage = static_cast< OGeneralPage* >( pPage.get() );
+            xPage = std::make_unique<OGeneralPageDialog>(aParent, *m_pOutSet);
+            OGeneralPage* pGeneralPage = static_cast<OGeneralPage*>(xPage.get());
             pGeneralPage->SetTypeSelectHandler( LINK( this, ODbTypeWizDialog, OnTypeSelected));
             pStringId = STR_PAGETITLE_GENERAL;
         }
         break;
         case CONNECTION_PAGE:
-            pPage = OConnectionTabPage::Create(aParent, m_pOutSet.get());
+            xPage = OConnectionTabPage::Create(aParent, m_pOutSet.get());
             pStringId = STR_PAGETITLE_CONNECTION;
             break;
 
         case ADDITIONAL_PAGE_DBASE:
-            pPage = ODriversSettings::CreateDbase(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateDbase(aParent, m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_FLAT:
-            pPage = ODriversSettings::CreateText(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateText(aParent, m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_LDAP:
-            pPage = ODriversSettings::CreateLDAP(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateLDAP(aParent, m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_MYSQL_JDBC:
-            pPage = ODriversSettings::CreateMySQLJDBC(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateMySQLJDBC(aParent, m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_MYSQL_NATIVE:
-            pPage = ODriversSettings::CreateMySQLNATIVE(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateMySQLNATIVE(aParent, m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_MYSQL_ODBC:
-            pPage = ODriversSettings::CreateMySQLODBC(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateMySQLODBC(aParent, m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_ORACLE_JDBC:
-            pPage = ODriversSettings::CreateOracleJDBC(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateOracleJDBC(aParent, m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_ADO:
-            pPage = ODriversSettings::CreateAdo(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateAdo(aParent, m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_ODBC:
-            pPage = ODriversSettings::CreateODBC(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateODBC(aParent, m_pOutSet.get());
             break;
         case ADDITIONAL_USERDEFINED:
-            pPage = ODriversSettings::CreateUser(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateUser(aParent, m_pOutSet.get());
             break;
         default:
             OSL_FAIL("Wrong state!");
@@ -280,17 +280,15 @@ VclPtr<TabPage> ODbTypeWizDialog::createPage(WizardState _nState)
     }
 
     // register ourself as modified listener
-    if ( pPage )
+    if ( xPage )
     {
-        static_cast<OGenericAdministrationPage*>(pPage.get())->SetServiceFactory( m_pImpl->getORB() );
-        static_cast<OGenericAdministrationPage*>(pPage.get())->SetAdminDialog(this,this);
+        static_cast<OGenericAdministrationPage*>(xPage.get())->SetServiceFactory( m_pImpl->getORB() );
+        static_cast<OGenericAdministrationPage*>(xPage.get())->SetAdminDialog(this,this);
         m_xAssistant->set_page_title(sIdent, DBA_RES(pStringId));
         defaultButton( _nState == START_PAGE ? WizardButtonFlags::NEXT : WizardButtonFlags::FINISH );
         enableButtons( WizardButtonFlags::FINISH, _nState != START_PAGE);
-
-        pPage->Show();
     }
-    return pPage;
+    return xPage;
 }
 
 bool ODbTypeWizDialog::leaveState(WizardState _nState)
@@ -329,9 +327,9 @@ void ODbTypeWizDialog::saveDatasource()
     DataSourceInfoConverter::convert( getORB(), m_pCollection,sOldURL,m_eType,m_pImpl->getCurrentDataSource());
 }
 
-vcl::IWizardPageController* ODbTypeWizDialog::getPageController( TabPage* _pCurrentPage ) const
+vcl::IWizardPageController* ODbTypeWizDialog::getPageController(BuilderPage* pCurrentPage) const
 {
-    OGenericAdministrationPage* pPage = static_cast<OGenericAdministrationPage*>(_pCurrentPage);
+    OGenericAdministrationPage* pPage = static_cast<OGenericAdministrationPage*>(pCurrentPage);
     return pPage;
 }
 

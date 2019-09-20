@@ -247,17 +247,11 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* pWizard, T
 
 SwMailMergeGreetingsPage::~SwMailMergeGreetingsPage()
 {
-    disposeOnce();
-}
-
-void SwMailMergeGreetingsPage::dispose()
-{
     m_xPreviewWIN.reset();
     m_xPreview.reset();
-    vcl::OWizardPage::dispose();
 }
 
-void SwMailMergeGreetingsPage::ActivatePage()
+void SwMailMergeGreetingsPage::Activate()
 {
     //try to find the gender setting
     m_xFemaleColumnLB->clear();

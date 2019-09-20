@@ -355,13 +355,6 @@ DeactivateRC ScTablePage::DeactivatePage( SfxItemSet* pSetP )
     return DeactivateRC::LeavePage;
 }
 
-void ScTablePage::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-        ShowImage();
-    SfxTabPage::DataChanged( rDCEvt );
-}
-
 // Handler:
 
 IMPL_LINK_NOARG(ScTablePage, PageDirHdl, weld::ToggleButton&, void)

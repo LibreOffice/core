@@ -53,9 +53,9 @@ SvxCTLOptionsPage::~SvxCTLOptionsPage()
 {
 }
 
-VclPtr<SfxTabPage> SvxCTLOptionsPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SvxCTLOptionsPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxCTLOptionsPage>::Create( pParent, *rAttrSet );
+    return std::make_unique<SvxCTLOptionsPage>( pParent, *rAttrSet );
 }
 
 bool SvxCTLOptionsPage::FillItemSet( SfxItemSet* )

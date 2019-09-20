@@ -455,9 +455,9 @@ void SpellDialog::StartSpellOptDlg_Impl()
     SfxSingleTabDialogController aDlg(m_xDialog.get(), &aSet, "cui/ui/spelloptionsdialog.ui", "SpellOptionsDialog");
 
     TabPageParent aParent(aDlg.get_content_area(), &aDlg);
-    VclPtr<SfxTabPage> xPage = SvxLinguTabPage::Create(aParent, &aSet);
+    std::unique_ptr<SfxTabPage> xPage = SvxLinguTabPage::Create(aParent, &aSet);
     static_cast<SvxLinguTabPage*>(xPage.get())->HideGroups( GROUP_MODULES );
-    aDlg.SetTabPage(xPage);
+    aDlg.SetTabPage(std::move(xPage));
     if (RET_OK == aDlg.run())
     {
         InitUserDicts();

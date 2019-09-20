@@ -37,7 +37,7 @@ public:
 private:
     css::uno::Reference<css::frame::XModel> m_xChartModel;
     std::unique_ptr<weld::Container> m_xContentArea;
-    VclPtr<ChartTypeTabPage> m_xChartTypeTabPage;
+    std::unique_ptr<ChartTypeTabPage> m_xChartTypeTabPage;
 };
 
 } //namespace chart

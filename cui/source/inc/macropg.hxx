@@ -79,7 +79,6 @@ protected:
 public:
 
     virtual                     ~SvxMacroTabPage_() override;
-    virtual void                dispose() override;
     void                        InitResources();
 
     void                        InitAndSetHandler( const css::uno::Reference< css::container::XNameReplace >& xAppEvents, const css::uno::Reference< css::container::XNameReplace >& xDocEvents, const css::uno::Reference< css::util::XModifiable >& xModifiable );

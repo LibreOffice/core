@@ -77,9 +77,9 @@ void ScTpCalcOptions::Init()
     m_xBtnThread->connect_toggled( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
 }
 
-VclPtr<SfxTabPage> ScTpCalcOptions::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> ScTpCalcOptions::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<ScTpCalcOptions>::Create( pParent, *rAttrSet );
+    return std::make_unique<ScTpCalcOptions>( pParent, *rAttrSet );
 }
 
 void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )

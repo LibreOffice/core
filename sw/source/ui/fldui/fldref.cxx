@@ -110,7 +110,6 @@ SwFieldRefPage::SwFieldRefPage(TabPageParent pParent, const SfxItemSet *const pC
 
 SwFieldRefPage::~SwFieldRefPage()
 {
-    disposeOnce();
 }
 
 IMPL_LINK_NOARG(SwFieldRefPage, ModifyHdl_Impl, weld::Entry&, void)
@@ -1085,10 +1084,10 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-VclPtr<SfxTabPage> SwFieldRefPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwFieldRefPage::Create( TabPageParent pParent,
                                          const SfxItemSet *const pAttrSet)
 {
-    return VclPtr<SwFieldRefPage>::Create( pParent, pAttrSet );
+    return std::make_unique<SwFieldRefPage>(pParent, pAttrSet);
 }
 
 sal_uInt16 SwFieldRefPage::GetGroup()

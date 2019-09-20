@@ -83,9 +83,9 @@ namespace dbp
     {
     }
 
-    void OTableSelectionPage::ActivatePage()
+    void OTableSelectionPage::Activate()
     {
-        OControlWizardPage::ActivatePage();
+        OControlWizardPage::Activate();
         m_xDatasource->grab_focus();
     }
 
@@ -392,11 +392,11 @@ namespace dbp
         m_pList->set_sensitive(m_pYes->get_active());
     }
 
-    void OMaybeListSelectionPage::ActivatePage()
+    void OMaybeListSelectionPage::Activate()
     {
-        OControlWizardPage::ActivatePage();
+        OControlWizardPage::Activate();
 
-        DBG_ASSERT(m_pYes, "OMaybeListSelectionPage::ActivatePage: no controls announced!");
+        DBG_ASSERT(m_pYes, "OMaybeListSelectionPage::Activate: no controls announced!");
         if (m_pYes->get_active())
             m_pList->grab_focus();
         else
@@ -410,7 +410,7 @@ namespace dbp
         , m_xStoreNo(m_xBuilder->weld_radio_button("noRadiobutton"))
         , m_xStoreWhere(m_xBuilder->weld_combo_box("storeInFieldCombobox"))
     {
-        SetText(compmodule::ModuleRes(RID_STR_OPTION_DB_FIELD_TITLE));
+        SetPageTitle(compmodule::ModuleRes(RID_STR_OPTION_DB_FIELD_TITLE));
 
         announceControls(*m_xStoreYes, *m_xStoreNo, *m_xStoreWhere);
     }
@@ -428,7 +428,6 @@ namespace dbp
 
         implInitialize(getDBFieldSetting());
     }
-
 
     bool ODBFieldPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
     {

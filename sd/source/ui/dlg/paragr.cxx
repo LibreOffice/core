@@ -35,8 +35,8 @@ class SdParagraphNumTabPage : public SfxTabPage
 {
 public:
     SdParagraphNumTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
     static const sal_uInt16*  GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -62,9 +62,9 @@ SdParagraphNumTabPage::SdParagraphNumTabPage(TabPageParent pParent, const SfxIte
     m_xNewStartNumberCB->connect_clicked(LINK(this, SdParagraphNumTabPage, ImplNewStartHdl));
 }
 
-VclPtr<SfxTabPage> SdParagraphNumTabPage::Create(TabPageParent pParent, const SfxItemSet * rAttrSet)
+std::unique_ptr<SfxTabPage> SdParagraphNumTabPage::Create(TabPageParent pParent, const SfxItemSet * rAttrSet)
 {
-    return VclPtr<SdParagraphNumTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SdParagraphNumTabPage>(pParent, *rAttrSet);
 }
 
 const sal_uInt16* SdParagraphNumTabPage::GetRanges()

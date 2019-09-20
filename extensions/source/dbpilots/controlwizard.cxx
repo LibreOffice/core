@@ -77,8 +77,10 @@ namespace dbp
         : OControlWizardPage_Base(pPageParent, rUIXMLDescription, rID)
         , m_pDialog(pDialog)
     {
+#if 0
         ::Size aPageSize(LogicToPixel(::Size(WINDOW_SIZE_X, WINDOW_SIZE_Y), MapMode(MapUnit::MapAppFont)));
         m_xContainer->set_size_request(aPageSize.Width(), aPageSize.Height());
+#endif
     }
 
     OControlWizardPage::~OControlWizardPage()

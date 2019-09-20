@@ -128,9 +128,9 @@ void ScTpUserLists::Init()
 
 }
 
-VclPtr<SfxTabPage> ScTpUserLists::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> ScTpUserLists::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<ScTpUserLists>::Create(pParent, *rAttrSet);
+    return std::make_unique<ScTpUserLists>(pParent, *rAttrSet);
 }
 
 void ScTpUserLists::Reset( const SfxItemSet* rCoreAttrs )
