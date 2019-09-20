@@ -67,6 +67,7 @@
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svl/itemprop.hxx>
+#include <svl/listener.hxx>
 
 using namespace ::com::sun::star;
 
@@ -288,8 +289,7 @@ lcl_TypeToPropertyMap_Index(const TOXTypes eType)
     }
 }
 
-class SwXDocumentIndex::Impl
-    : public SvtListener
+class SwXDocumentIndex::Impl final: public SvtListener
 {
 private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
@@ -1489,8 +1489,7 @@ lcl_TypeToPropertyMap_Mark(const TOXTypes eType)
     }
 }
 
-class SwXDocumentIndexMark::Impl
-    : public SwClient
+class SwXDocumentIndexMark::Impl final: public SvtListener
 {
 private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
@@ -1504,7 +1503,6 @@ public:
     const TOXTypes m_eTOXType;
     ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
     bool m_bIsDescriptor;
-    sw::WriterMultiListener m_aListener;
     const SwTOXType* m_pTOXType;
     const SwTOXMark* m_pTOXMark;
     SwDoc* m_pDoc;
@@ -1524,24 +1522,25 @@ public:
     Impl(SwXDocumentIndexMark& rThis,
             SwDoc* const pDoc,
             const enum TOXTypes eType,
-            SwTOXType* const pType, SwTOXMark const*const pMark)
-        : SwClient()
-        , m_rThis(rThis)
+            SwTOXType* const pType,
+            SwTOXMark const*const pMark)
+        : m_rThis(rThis)
         , m_bInReplaceMark(false)
         , m_rPropSet(
             *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Mark(eType)))
         , m_eTOXType(eType)
         , m_EventListeners(m_Mutex)
         , m_bIsDescriptor(nullptr == pMark)
-        , m_aListener(*this)
         , m_pTOXType(pType)
         , m_pTOXMark(pMark)
         , m_pDoc(pDoc)
         , m_bMainEntry(false)
         , m_nLevel(0)
     {
-        m_aListener.StartListening(const_cast<SwTOXMark*>(pMark));
-        m_aListener.StartListening(pType);
+        if(m_pTOXMark)
+            StartListening(const_cast<SwTOXMark*>(m_pTOXMark)->GetNotifier());
+        if(m_pTOXType)
+            StartListening(const_cast<SwTOXType*>(m_pTOXType)->GetNotifier());
     }
 
     SwTOXType* GetTOXType() const {
@@ -1573,9 +1572,7 @@ public:
     }
 
     void    Invalidate();
-protected:
-    // SwClient
-    virtual void SwClientNotify(const SwModify&, const SfxHint& ) override;
+    virtual void Notify(const SfxHint&) override;
 };
 
 void SwXDocumentIndexMark::Impl::Invalidate()
@@ -1590,21 +1587,20 @@ void SwXDocumentIndexMark::Impl::Invalidate()
             m_EventListeners.disposeAndClear(ev);
         }
     }
-    m_aListener.EndListeningAll();
+    EndListeningAll();
     m_pDoc = nullptr;
     m_pTOXMark = nullptr;
     m_pTOXType = nullptr;
 }
 
-void SwXDocumentIndexMark::Impl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+void SwXDocumentIndexMark::Impl::Notify(const SfxHint& rHint)
 {
-    assert(!GetRegisteredIn()); // we should only listen with the WriterMultiListener from now on
     if(auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
     {
-        if(pModifyChangedHint->m_pNew == nullptr || &rModify == m_pTOXMark)
+        if(auto pNewType = dynamic_cast<const SwTOXType*>(pModifyChangedHint->m_pNew))
+            m_pTOXType = const_cast<SwTOXType*>(pNewType);
+        else
             Invalidate();
-        else if(&rModify == m_pTOXType)
-            m_pTOXType = dynamic_cast<const SwTOXType*>(pModifyChangedHint->m_pNew);
     }
 }
 
@@ -1941,9 +1937,9 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     m_pDoc = pDoc;
     m_pTOXMark = &pNewTextAttr->GetTOXMark();
     m_pTOXType = &rTOXType;
-    m_aListener.EndListeningAll();
-    m_aListener.StartListening(const_cast<SwTOXMark*>(m_pTOXMark));
-    m_aListener.StartListening(const_cast<SwTOXType*>(m_pTOXType));
+    EndListeningAll();
+    StartListening(const_cast<SwTOXMark*>(m_pTOXMark)->GetNotifier());
+    StartListening(const_cast<SwTOXType*>(m_pTOXType)->GetNotifier());
 }
 
 uno::Reference< text::XTextRange > SAL_CALL

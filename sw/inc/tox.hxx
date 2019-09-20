@@ -53,7 +53,7 @@ extern const OUString S_PAGE_DELI;
 
 class SW_DLLPUBLIC SwTOXMark
     : public SfxPoolItem
-    , public SwModify
+    , public sw::BroadcastingModify
 {
     friend void InitCore();
     friend class SwTextTOXMark;
@@ -146,7 +146,7 @@ public:
 };
 
 // index types
-class SwTOXType : public SwModify
+class SwTOXType final: public sw::BroadcastingModify
 {
 public:
     SwTOXType(TOXTypes eTyp, const OUString& aName);
