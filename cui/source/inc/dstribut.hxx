@@ -54,7 +54,7 @@ public:
 
 class SvxDistributeDialog : public SfxSingleTabDialogController
 {
-    VclPtr<SvxDistributePage> mpPage;
+    SvxDistributePage* mpPage;
 
 public:
     SvxDistributeDialog(weld::Window* pParent, const SfxItemSet& rAttr,

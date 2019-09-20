@@ -366,9 +366,9 @@ void  SwFormatTablePage::ModifyHdl(const weld::MetricSpinButton& rEdit)
     bModified = true;
 }
 
-VclPtr<SfxTabPage> SwFormatTablePage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SwFormatTablePage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwFormatTablePage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwFormatTablePage>(pParent, *rAttrSet);
 }
 
 bool  SwFormatTablePage::FillItemSet( SfxItemSet* rCoreSet )
@@ -767,22 +767,16 @@ IMPL_LINK_NOARG(SwTableColumnPage, SizeHdl, void*, void)
 
 SwTableColumnPage::~SwTableColumnPage()
 {
-    disposeOnce();
-}
-
-void SwTableColumnPage::dispose()
-{
     if (m_pSizeHdlEvent)
     {
         Application::RemoveUserEvent(m_pSizeHdlEvent);
         m_pSizeHdlEvent = nullptr;
     }
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwTableColumnPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SwTableColumnPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwTableColumnPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwTableColumnPage>(pParent, *rAttrSet);
 }
 
 void  SwTableColumnPage::Reset( const SfxItemSet* )
@@ -1286,10 +1280,10 @@ SwTextFlowPage::~SwTextFlowPage()
 {
 }
 
-VclPtr<SfxTabPage> SwTextFlowPage::Create( TabPageParent pParent,
-                                           const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SwTextFlowPage::Create(TabPageParent pParent,
+                                                   const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwTextFlowPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwTextFlowPage>(pParent, *rAttrSet);
 }
 
 bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )

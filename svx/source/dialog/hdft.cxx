@@ -108,14 +108,14 @@ namespace svx {
     }
 }
 
-VclPtr<SfxTabPage> SvxHeaderPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+std::unique_ptr<SfxTabPage> SvxHeaderPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SvxHeaderPage>::Create( pParent, *rSet );
+    return std::make_unique<SvxHeaderPage>( pParent, *rSet );
 }
 
-VclPtr<SfxTabPage> SvxFooterPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+std::unique_ptr<SfxTabPage> SvxFooterPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SvxFooterPage>::Create( pParent, *rSet );
+    return std::make_unique<SvxFooterPage>( pParent, *rSet );
 }
 
 SvxHeaderPage::SvxHeaderPage(TabPageParent pParent, const SfxItemSet& rAttr)
@@ -493,12 +493,12 @@ void SvxHFPage::TurnOn(const weld::ToggleButton* pBox)
             short nResult;
             if (nId == SID_ATTR_PAGE_HEADERSET)
             {
-                DeleteHeaderDialog aDlg(GetFrameWeld());
+                DeleteHeaderDialog aDlg(GetDialogFrameWeld());
                 nResult = aDlg.run();
             }
             else
             {
-                DeleteFooterDialog aDlg(GetFrameWeld());
+                DeleteFooterDialog aDlg(GetDialogFrameWeld());
                 nResult = aDlg.run();
             }
             bDelete = nResult == RET_YES;

@@ -97,7 +97,7 @@ void SwFieldPage::Init()
 }
 
 // newly initialise page
-void SwFieldPage::ActivatePage()
+void SwFieldPage::Activate()
 {
     EnableInsert(m_bInsert);
 }

@@ -37,7 +37,7 @@ namespace dbaui
         {
         }
 
-        static VclPtr<OWizTypeSelect> Create(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream& rInput ) { return VclPtr<OWizHTMLExtend>::Create(pWizard, pParent, rInput); }
+        static std::unique_ptr<OWizTypeSelect> Create(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream& rInput ) { return std::make_unique<OWizHTMLExtend>(pWizard, pParent, rInput); }
     };
     // Wizard Page: OWizRTFExtend
     class OWizRTFExtend : public OWizTypeSelect
@@ -50,7 +50,7 @@ namespace dbaui
         {
         }
 
-        static VclPtr<OWizTypeSelect> Create(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream& rInput) { return VclPtr<OWizRTFExtend>::Create(pWizard, pParent, rInput); }
+        static std::unique_ptr<OWizTypeSelect> Create(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream& rInput) { return std::make_unique<OWizRTFExtend>(pWizard, pParent, rInput); }
     };
 
     // Wizard Page: OWizNormalExtend

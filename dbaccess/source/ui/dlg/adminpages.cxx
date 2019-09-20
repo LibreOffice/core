@@ -62,8 +62,8 @@ namespace dbaui
     {
         SetExchangeSupport();
 
-        Size aSize(LogicToPixel(::Size(WIZARD_PAGE_X, WIZARD_PAGE_Y), MapMode(MapUnit::MapAppFont)));
-        m_xContainer->set_size_request(aSize.Width(), aSize.Height());
+        m_xContainer->set_size_request(m_xContainer->get_approximate_digit_width() * WIZARD_PAGE_X,
+                                       m_xContainer->get_text_height() * WIZARD_PAGE_Y);
     }
 
     DeactivateRC OGenericAdministrationPage::DeactivatePage(SfxItemSet* _pSet)
@@ -82,13 +82,15 @@ namespace dbaui
     {
         implInitControls(*_rCoreAttrs, false);
     }
-    void OGenericAdministrationPage::ActivatePage()
+
+    void OGenericAdministrationPage::Activate()
     {
-        TabPage::ActivatePage();
+        BuilderPage::Activate();
         OSL_ENSURE(m_pItemSetHelper,"NO ItemSetHelper set!");
         if ( m_pItemSetHelper )
             ActivatePage(*m_pItemSetHelper->getOutputSet());
     }
+
     void OGenericAdministrationPage::ActivatePage(const SfxItemSet& _rSet)
     {
         implInitControls(_rSet, true);
@@ -132,7 +134,7 @@ namespace dbaui
             // show an error message
             OUString sError(DBA_RES(STR_COULD_NOT_LOAD_ODBC_LIB));
             sError = sError.replaceFirst("#lib#", aEnumeration.getLibraryName());
-            std::unique_ptr<weld::MessageDialog> xDialog(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xDialog(Application::CreateMessageDialog(GetDialogFrameWeld(),
                                                          VclMessageType::Warning, VclButtonsType::Ok,
                                                          sError));
             xDialog->run();
@@ -142,7 +144,7 @@ namespace dbaui
         {
             aEnumeration.getDatasourceNames(aOdbcDatasources);
             // execute the select dialog
-            ODatasourceSelectDialog aSelector(GetFrameWeld(), aOdbcDatasources);
+            ODatasourceSelectDialog aSelector(GetDialogFrameWeld(), aOdbcDatasources);
             if (!_sCurr.isEmpty())
                 aSelector.Select(_sCurr);
             if (RET_OK == aSelector.run())
@@ -270,7 +272,7 @@ namespace dbaui
                     eImage = MessageType::Error;
                     aMessage = DBA_RES(STR_CONNECTION_NO_SUCCESS);
                 }
-                OSQLMessageBox aMsg(GetFrameWeld(), sTitle, aMessage, MessBoxStyle::Ok, eImage);
+                OSQLMessageBox aMsg(GetDialogFrameWeld(), sTitle, aMessage, MessBoxStyle::Ok, eImage);
                 aMsg.run();
             }
             if ( !bSuccess )

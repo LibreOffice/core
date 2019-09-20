@@ -58,7 +58,6 @@ SchOptionTabPage::SchOptionTabPage(TabPageParent pWindow,const SfxItemSet& rInAt
 
 SchOptionTabPage::~SchOptionTabPage()
 {
-    disposeOnce();
 }
 
 IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl, weld::ToggleButton&, void)
@@ -69,10 +68,10 @@ IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl, weld::ToggleButton&, void)
         m_xCBAxisSideBySide->set_sensitive( m_xRbtAxis1->get_active());
 }
 
-VclPtr<SfxTabPage> SchOptionTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SchOptionTabPage::Create(TabPageParent pParent,
                                             const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<SchOptionTabPage>::Create(pParent, *rOutAttrs);
+    return std::make_unique<SchOptionTabPage>(pParent, *rOutAttrs);
 }
 
 bool SchOptionTabPage::FillItemSet(SfxItemSet* rOutAttrs)

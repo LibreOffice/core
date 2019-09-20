@@ -65,10 +65,10 @@ IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl, weld::Button&, 
     m_xEBasicExectblCB->set_sensitive(m_xEBasicCodeCB->get_active());
 }
 
-VclPtr<SfxTabPage> OfaMSFilterTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> OfaMSFilterTabPage::Create( TabPageParent pParent,
                                                const SfxItemSet* rAttrSet )
 {
-    return VclPtr<OfaMSFilterTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<OfaMSFilterTabPage>(pParent, *rAttrSet);
 }
 
 bool OfaMSFilterTabPage::FillItemSet( SfxItemSet* )
@@ -147,10 +147,10 @@ OfaMSFilterTabPage2::~OfaMSFilterTabPage2()
 {
 }
 
-VclPtr<SfxTabPage> OfaMSFilterTabPage2::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> OfaMSFilterTabPage2::Create( TabPageParent pParent,
                                                 const SfxItemSet* rAttrSet )
 {
-    return VclPtr<OfaMSFilterTabPage2>::Create( pParent, *rAttrSet );
+    return std::make_unique<OfaMSFilterTabPage2>( pParent, *rAttrSet );
 }
 
 bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )

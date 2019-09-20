@@ -24,6 +24,7 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/basedlgs.hxx>
 #include <sal/types.h>
+#include <vcl/builderpage.hxx>
 #include <vcl/tabpage.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
@@ -31,7 +32,7 @@
 
 class SfxTabPage;
 
-typedef VclPtr<SfxTabPage> (*CreateTabPage)(TabPageParent pParent, const SfxItemSet *rAttrSet);
+typedef std::unique_ptr<SfxTabPage> (*CreateTabPage)(TabPageParent pParent, const SfxItemSet *rAttrSet);
 typedef const sal_uInt16*     (*GetTabPageRanges)(); // provides international Which-value
 struct TabPageImpl;
 
@@ -162,7 +163,7 @@ namespace o3tl {
     template<> struct typed_flags<DeactivateRC> : is_typed_flags<DeactivateRC, 0x03> {};
 }
 
-class SFX2_DLLPUBLIC SfxTabPage: public TabPage
+class SFX2_DLLPUBLIC SfxTabPage : public BuilderPage
 {
 friend class SfxTabDialog;
 friend class SfxTabDialogController;
@@ -172,10 +173,6 @@ private:
     OUString            aUserString;
     bool                bHasExchangeSupport;
     std::unique_ptr< TabPageImpl >        pImpl;
-
-protected:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Container> m_xContainer;
 
 protected:
     SfxTabPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet *rAttrSet);
@@ -193,12 +190,10 @@ public:
     void                SetDialogController(SfxOkDialogController* pDialog);
 public:
     virtual             ~SfxTabPage() override;
-    virtual void        dispose() override;
 
     void set_visible(bool bVisible)
     {
         m_xContainer->set_visible(bVisible);
-        Show(bVisible);
     }
 
     const SfxItemSet&   GetItemSet() const { return *pSet; }
@@ -211,8 +206,6 @@ public:
     void                SetExchangeSupport()
                             { bHasExchangeSupport = true; }
 
-        using TabPage::ActivatePage;
-        using TabPage::DeactivatePage;
     virtual void            ActivatePage( const SfxItemSet& );
     virtual DeactivateRC    DeactivatePage( SfxItemSet* pSet );
     void                    SetUserData(const OUString& rString)
@@ -233,7 +226,9 @@ public:
 
     const SfxItemSet* GetDialogExampleSet() const;
 
-    OString         GetConfigId() const;
+    OString         GetHelpId() const;
+    OString         GetConfigId() const { return GetHelpId(); }
+    bool            IsVisible() const { return m_xContainer->get_visible(); }
 
     //TODO rename to GetFrameWeld when SfxTabPage doesn't inherit from anything
     weld::Window*   GetDialogFrameWeld() const;

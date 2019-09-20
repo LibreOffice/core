@@ -55,12 +55,11 @@ ScTabPageProtection::ScTabPageProtection(TabPageParent pParent, const SfxItemSet
 
 ScTabPageProtection::~ScTabPageProtection()
 {
-    disposeOnce();
 }
 
-VclPtr<SfxTabPage> ScTabPageProtection::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> ScTabPageProtection::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<ScTabPageProtection>::Create(pParent, *rAttrSet);
+    return std::make_unique<ScTabPageProtection>(pParent, *rAttrSet);
 }
 
 void ScTabPageProtection::Reset( const SfxItemSet* rCoreAttrs )

@@ -157,15 +157,9 @@ SvxShadowTabPage::SvxShadowTabPage(TabPageParent pParent, const SfxItemSet& rInA
 
 SvxShadowTabPage::~SvxShadowTabPage()
 {
-    disposeOnce();
-}
-
-void SvxShadowTabPage::dispose()
-{
     m_xCtlXRectPreview.reset();
     m_xLbShadowColor.reset();
     m_xCtlPosition.reset();
-    SvxTabPage::dispose();
 }
 
 void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
@@ -418,10 +412,10 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
     ModifyShadowHdl_Impl(*m_xMtrTransparent);
 }
 
-VclPtr<SfxTabPage> SvxShadowTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxShadowTabPage::Create( TabPageParent pParent,
                                              const SfxItemSet* rAttrs )
 {
-    return VclPtr<SvxShadowTabPage>::Create( pParent, *rAttrs );
+    return std::make_unique<SvxShadowTabPage>(pParent, *rAttrs);
 }
 
 IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl, weld::ToggleButton&, void)

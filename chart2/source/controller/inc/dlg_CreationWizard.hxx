@@ -50,8 +50,8 @@ public:
     virtual ~CreationWizard() override;
 
     // TabPageNotifiable
-    virtual void setInvalidPage(TabPage * pTabPage) override;
-    virtual void setValidPage(TabPage * pTabPage) override;
+    virtual void setInvalidPage(BuilderPage * pTabPage) override;
+    virtual void setValidPage(BuilderPage * pTabPage) override;
 
 protected:
     virtual bool leaveState( WizardState _nState ) override;
@@ -61,7 +61,7 @@ protected:
     virtual OUString getStateDisplayName(WizardState nState) const override;
 
 private:
-    virtual VclPtr<TabPage> createPage(WizardState nState) override;
+    virtual std::unique_ptr<BuilderPage> createPage(WizardState nState) override;
 
     css::uno::Reference<css::chart2::XChartDocument> m_xChartModel;
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;

@@ -46,25 +46,20 @@ namespace svx {
 
 class AlignmentTabPage : public SfxTabPage
 {
-    using TabPage::DeactivatePage;
-    friend class VclPtr<AlignmentTabPage>;
     static const sal_uInt16 s_pRanges[];
 
 public:
     virtual             ~AlignmentTabPage() override;
-    virtual void        dispose() override;
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    explicit            AlignmentTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet);
 
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
     static const sal_uInt16*  GetRanges() { return s_pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 private:
-    explicit            AlignmentTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet);
-
     void                InitVsRefEgde();
     void                UpdateEnableControls();
 

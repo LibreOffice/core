@@ -57,7 +57,6 @@ namespace abp
     public:
         explicit TypeSelectionPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent);
         virtual ~TypeSelectionPage() override;
-        virtual void        dispose() override;
 
         // retrieves the currently selected type
         AddressSourceType   getSelectedType() const;
@@ -67,9 +66,9 @@ namespace abp
         virtual void        initializePage() override;
         virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
 
-        // TabDialog overridables
-        virtual void        ActivatePage() override;
-        virtual void        DeactivatePage() override;
+        // BuilderPage overridables
+        virtual void        Activate() override;
+        virtual void        Deactivate() override;
 
         // OImportPage overridables
         virtual bool        canAdvance() const override;

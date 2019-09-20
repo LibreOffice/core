@@ -59,10 +59,8 @@ private:
 
 public:
     SvxPathTabPage( TabPageParent pParent, const SfxItemSet& rSet );
-    virtual void dispose() override;
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
     virtual ~SvxPathTabPage() override;
-
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

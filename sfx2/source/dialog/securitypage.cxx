@@ -320,7 +320,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl, weld::ToggleButt
     bool bAlreadyDone = false;
     if (!m_bEndRedliningWarningDone)
     {
-        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_rMyTabPage.GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_rMyTabPage.GetDialogFrameWeld(),
                                                    VclMessageType::Warning, VclButtonsType::YesNo,
                                                    m_aEndRedliningWarning));
         xWarn->set_default_response(RET_NO);
@@ -337,7 +337,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl, weld::ToggleButt
         OUString aPasswordText;
 
         // dialog canceled or no password provided
-        if (!lcl_GetPassword( m_rMyTabPage.GetFrameWeld(), false, aPasswordText ))
+        if (!lcl_GetPassword( m_rMyTabPage.GetDialogFrameWeld(), false, aPasswordText ))
             bAlreadyDone = true;
 
         // ask for password and if dialog is canceled or no password provided return
@@ -375,7 +375,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl, weld::Button&, void
     if (bNeedPassword)
     {
         // ask for password and if dialog is canceled or no password provided return
-        if (!lcl_GetPassword(m_rMyTabPage.GetFrameWeld(), bNewProtection, aPasswordText))
+        if (!lcl_GetPassword(m_rMyTabPage.GetDialogFrameWeld(), bNewProtection, aPasswordText))
             return;
 
         // provided password still needs to be checked?
@@ -400,9 +400,9 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl, weld::Button&, void
     m_xProtectPB->set_visible(!bNewProtection);
 }
 
-VclPtr<SfxTabPage> SfxSecurityPage::Create(TabPageParent pParent, const SfxItemSet * rItemSet)
+std::unique_ptr<SfxTabPage> SfxSecurityPage::Create(TabPageParent pParent, const SfxItemSet * rItemSet)
 {
-    return VclPtr<SfxSecurityPage>::Create(pParent, *rItemSet);
+    return std::make_unique<SfxSecurityPage>(pParent, *rItemSet);
 }
 
 SfxSecurityPage::SfxSecurityPage(TabPageParent pParent, const SfxItemSet& rItemSet)

@@ -38,7 +38,7 @@ private:
 public:
     SvxCTLOptionsPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxCTLOptionsPage() override;
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };

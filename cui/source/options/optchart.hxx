@@ -67,11 +67,10 @@ private:
 public:
     SvxDefaultColorOptPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxDefaultColorOptPage() override;
-    virtual void dispose() override;
 
     void    Construct();
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rInAttrs );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rInAttrs );
     virtual bool        FillItemSet( SfxItemSet* rOutAttrs ) override;
     virtual void        Reset( const SfxItemSet* rInAttrs ) override;
 

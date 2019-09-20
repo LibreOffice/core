@@ -57,13 +57,11 @@ public:
     );
 
     virtual                     ~SfxMacroTabPage() override;
-    virtual void                dispose() override;
 
     void                        AddEvent( const OUString & rEventName, SvMacroItemId nEventId );
 
     void                        ScriptChanged();
     virtual void                PageCreated (const SfxAllItemSet& aSet) override;
-    using TabPage::ActivatePage; // FIXME WTF is this nonsense?
     virtual void                ActivatePage( const SfxItemSet& ) override;
     void                        LaunchFillGroup();
 
@@ -74,7 +72,7 @@ public:
     bool                        IsReadOnly() const override;
 
     // --------- inherit from the base -------------
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 };
 
 class SfxMacroAssignDlg : public SfxSingleTabDialogController

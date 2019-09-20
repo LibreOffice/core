@@ -68,7 +68,7 @@ private:
 public:
     SvxProxyTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxProxyTabPage() override;
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
@@ -79,9 +79,6 @@ class SvtSecurityOptions;
 class CertPathDialog;
 class SvxSecurityTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-    friend class VclPtr<SvxSecurityTabPage>;
 private:
     std::unique_ptr<SvtSecurityOptions>         mpSecOptions;
     std::unique_ptr<svx::SecurityOptionsDialog> m_xSecOptDlg;
@@ -121,15 +118,14 @@ private:
 
     void                InitControls();
 
-    SvxSecurityTabPage(TabPageParent pParent, const SfxItemSet& rSet);
-    virtual ~SvxSecurityTabPage() override;
-
 protected:
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    SvxSecurityTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    virtual ~SvxSecurityTabPage() override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
@@ -156,7 +152,7 @@ public:
     SvxEMailTabPage(TabPageParent pParent, const SfxItemSet& rSet );
     virtual ~SvxEMailTabPage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

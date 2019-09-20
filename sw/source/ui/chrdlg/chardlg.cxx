@@ -190,13 +190,7 @@ SwCharURLPage::SwCharURLPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
 
 SwCharURLPage::~SwCharURLPage()
 {
-    disposeOnce();
-}
-
-void SwCharURLPage::dispose()
-{
     pINetItem.reset();
-    SfxTabPage::dispose();
 }
 
 void SwCharURLPage::Reset(const SfxItemSet* rSet)
@@ -290,15 +284,15 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
     return bModified;
 }
 
-VclPtr<SfxTabPage> SwCharURLPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SwCharURLPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwCharURLPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwCharURLPage>(pParent, *rAttrSet);
 }
 
 IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl, weld::Button&, void)
 {
     FileDialogHelper aDlgHelper(TemplateDescription::FILEOPEN_SIMPLE,
-                                FileDialogFlags::NONE, GetFrameWeld());
+                                FileDialogFlags::NONE, GetDialogFrameWeld());
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
         const Reference<XFilePicker3>& xFP = aDlgHelper.GetFilePicker();

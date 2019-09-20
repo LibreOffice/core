@@ -129,18 +129,12 @@ SvxJavaOptionsPage::SvxJavaOptionsPage(TabPageParent pParent, const SfxItemSet& 
 
 SvxJavaOptionsPage::~SvxJavaOptionsPage()
 {
-    disposeOnce();
-}
-
-void SvxJavaOptionsPage::dispose()
-{
     ClearJavaInfo();
 #if HAVE_FEATURE_JAVA
     m_aAddedInfos.clear();
 
     jfw_unlock();
 #endif
-    SfxTabPage::dispose();
 }
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl, weld::Button&, void)
@@ -321,7 +315,6 @@ void SvxJavaOptionsPage::ClearJavaInfo()
 #endif
 }
 
-
 void SvxJavaOptionsPage::ClearJavaList()
 {
     m_xJavaList->clear();
@@ -476,9 +469,9 @@ void SvxJavaOptionsPage::RequestRestart(svtools::RestartReason eReason)
         pParentDlg->SetNeedsRestart(eReason);
 }
 
-VclPtr<SfxTabPage> SvxJavaOptionsPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SvxJavaOptionsPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxJavaOptionsPage>::Create( pParent, *rAttrSet );
+    return std::make_unique<SvxJavaOptionsPage>(pParent, *rAttrSet);
 }
 
 bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
