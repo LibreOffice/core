@@ -55,7 +55,7 @@ namespace dbaui
 
     public:
         virtual void            Reset() override;
-        virtual void            ActivatePage() override;
+        virtual void            Activate() override;
         virtual bool            LeavePage() override;
         virtual OUString        GetTitle() const override ;
 

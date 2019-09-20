@@ -2721,8 +2721,7 @@ namespace pcr
                 throw RuntimeException();   // caught below
 
             TabPageParent aParent(aDialog.get_content_area(), &aDialog);
-            VclPtr<SfxTabPage> xPage = (*fnCreatePage)(aParent, &aCoreSet);
-            aDialog.SetTabPage(xPage);
+            aDialog.SetTabPage((*fnCreatePage)(aParent, &aCoreSet));
 
             _rClearBeforeDialog.clear();
             if ( RET_OK == aDialog.run() )

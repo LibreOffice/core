@@ -2319,20 +2319,14 @@ SwGrfExtPage::SwGrfExtPage(TabPageParent pParent, const SfxItemSet &rSet)
 
 SwGrfExtPage::~SwGrfExtPage()
 {
-    disposeOnce();
-}
-
-void SwGrfExtPage::dispose()
-{
     m_xBmpWin.reset();
     m_xCtlAngle.reset();
     m_xGrfDlg.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwGrfExtPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwGrfExtPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwGrfExtPage>::Create(pParent, *rSet);
+    return std::make_unique<SwGrfExtPage>(pParent, *rSet);
 }
 
 void SwGrfExtPage::Reset(const SfxItemSet *rSet)

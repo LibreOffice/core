@@ -454,9 +454,9 @@ SwDropCapsDlg::SwDropCapsDlg(weld::Window *pParent, const SfxItemSet &rSet)
     : SfxSingleTabDialogController(pParent, &rSet)
 {
     TabPageParent pPageParent(get_content_area(), this);
-    VclPtr<SwDropCapsPage> xNewPage(static_cast<SwDropCapsPage*>(SwDropCapsPage::Create(pPageParent, &rSet).get()));
-    xNewPage->SetFormat(false);
-    SetTabPage(xNewPage);
+    auto xNewPage(SwDropCapsPage::Create(pPageParent, &rSet));
+    static_cast<SwDropCapsPage*>(xNewPage.get())->SetFormat(false);
+    SetTabPage(std::move(xNewPage));
 }
 
 SwDropCapsPage::SwDropCapsPage(TabPageParent pParent, const SfxItemSet &rSet)
@@ -520,10 +520,9 @@ DeactivateRC SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwDropCapsPage::Create(TabPageParent pParent,
-                                          const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwDropCapsPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwDropCapsPage>::Create(pParent, *rSet);
+    return std::make_unique<SwDropCapsPage>(pParent, *rSet);
 }
 
 bool  SwDropCapsPage::FillItemSet(SfxItemSet *rSet)

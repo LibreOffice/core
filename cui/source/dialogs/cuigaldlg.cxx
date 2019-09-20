@@ -574,9 +574,9 @@ bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet* /*rSet*/ )
     return true;
 }
 
-VclPtr<SfxTabPage> TPGalleryThemeGeneral::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> TPGalleryThemeGeneral::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<TPGalleryThemeGeneral>::Create(pParent, *rSet);
+    return std::make_unique<TPGalleryThemeGeneral>(pParent, *rSet);
 }
 
 TPGalleryThemeProperties::TPGalleryThemeProperties(TabPageParent pWindow, const SfxItemSet& rSet)
@@ -636,20 +636,14 @@ void TPGalleryThemeProperties::StartSearchFiles( const OUString& _rFolderURL, sh
 
 TPGalleryThemeProperties::~TPGalleryThemeProperties()
 {
-    disposeOnce();
-}
-
-void TPGalleryThemeProperties::dispose()
-{
     xMediaPlayer.clear();
     xDialogListener.clear();
     aFilterEntryList.clear();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> TPGalleryThemeProperties::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> TPGalleryThemeProperties::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<TPGalleryThemeProperties>::Create(pParent, *rSet);
+    return std::make_unique<TPGalleryThemeProperties>(pParent, *rSet);
 }
 
 OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, const OUString& _rExtension )

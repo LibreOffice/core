@@ -80,7 +80,7 @@ public:
     virtual ~SwTextGridPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges();
 
     virtual bool    FillItemSet(SfxItemSet *rSet) override;

@@ -47,7 +47,7 @@ namespace dbp
 
     private:
         // OWizardMachine overridables
-        virtual VclPtr<TabPage>     createPage( WizardState _nState ) override;
+        virtual std::unique_ptr<BuilderPage> createPage( WizardState _nState ) override;
         virtual WizardState         determineNextState( WizardState _nCurrentState ) const override;
         virtual void                enterState( WizardState _nState ) override;
         virtual bool                leaveState( WizardState _nState ) override;
@@ -83,8 +83,8 @@ namespace dbp
         virtual ~OGridFieldsSelection() override;
 
     private:
-        // TabPage overridables
-        virtual void ActivatePage() override;
+        // BuilderPage overridables
+        virtual void Activate() override;
 
         // OWizardPage overridables
         virtual void        initializePage() override;

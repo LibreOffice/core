@@ -87,7 +87,7 @@ RangeChooserTabPage::RangeChooserTabPage(TabPageParent pParent, DialogModel & rD
 {
     m_xFT_Caption->set_visible(!bHideDescription);
 
-    SetText(m_xFTTitle->get_label());// OH:remove later with dialog
+    SetPageTitle(m_xFTTitle->get_label());// OH:remove later with dialog
 
     // set defaults as long as DetectArguments does not work
     m_xRB_Columns->set_active(true);
@@ -126,9 +126,9 @@ RangeChooserTabPage::~RangeChooserTabPage()
 {
 }
 
-void RangeChooserTabPage::ActivatePage()
+void RangeChooserTabPage::Activate()
 {
-    OWizardPage::ActivatePage();
+    OWizardPage::Activate();
     initControlsFromModel();
     m_xED_Range->grab_focus();
 }
@@ -163,10 +163,10 @@ void RangeChooserTabPage::initControlsFromModel()
     m_nChangingControlCalls--;
 }
 
-void RangeChooserTabPage::DeactivatePage()
+void RangeChooserTabPage::Deactivate()
 {
     commitPage();
-    vcl::OWizardPage::DeactivatePage();
+    vcl::OWizardPage::Deactivate();
 }
 
 void RangeChooserTabPage::commitPage()
@@ -357,8 +357,6 @@ void RangeChooserTabPage::listeningFinished( const OUString & rNewRange )
     m_rDialogModel.getRangeSelectionHelper()->stopRangeListening();
 
     //update dialog state
-    ToTop();
-    GrabFocus();
     m_xED_Range->set_text(aRange);
     m_xED_Range->grab_focus();
 
@@ -368,6 +366,7 @@ void RangeChooserTabPage::listeningFinished( const OUString & rNewRange )
 
     lcl_enableRangeChoosing( false, m_pParentController );
 }
+
 void RangeChooserTabPage::disposingRangeSelection()
 {
     m_rDialogModel.getRangeSelectionHelper()->stopRangeListening( false );
