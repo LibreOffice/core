@@ -170,6 +170,9 @@ private:
     // Cache for the UNO numbering rules
     css::uno::Reference< css::container::XIndexReplace > m_xNumRules;
 
+    /// mapped list style name
+    OUString m_StyleName;
+
 public:
     typedef tools::SvRef< ListDef > Pointer;
 
@@ -181,7 +184,9 @@ public:
     const AbstractListDef::Pointer& GetAbstractDefinition( ) { return m_pAbstractDef; };
 
     // Mapping functions
-    static OUString GetStyleName( sal_Int32 nId );
+    OUString GetStyleName(sal_Int32 nId,
+            css::uno::Reference<css::container::XNameContainer> const& xStyles
+                = css::uno::Reference<css::container::XNameContainer>());
 
     css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetMergedPropertyValues();
 

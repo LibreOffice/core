@@ -447,12 +447,27 @@ ListDef::~ListDef( )
 {
 }
 
-OUString ListDef::GetStyleName( sal_Int32 nId )
+OUString ListDef::GetStyleName(sal_Int32 const nId,
+    uno::Reference<container::XNameContainer> const& xStyles)
 {
-    OUString sStyleName( "WWNum" );
-    sStyleName += OUString::number( nId );
+    if (xStyles.is())
+    {
+        OUString sStyleName( "WWNum" );
+        sStyleName += OUString::number( nId );
 
-    return sStyleName;
+        while (xStyles.is() && xStyles->hasByName(sStyleName)) // unique
+        {
+            sStyleName += "a";
+        }
+
+        m_StyleName = sStyleName;
+    }
+    else
+    {
+// fails in rtftok test        assert(!m_StyleName.isEmpty()); // must be inited first
+    }
+
+    return m_StyleName;
 }
 
 uno::Sequence<uno::Sequence<beans::PropertyValue>> ListDef::GetMergedPropertyValues()
@@ -519,7 +534,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 xFactory->createInstance("com.sun.star.style.NumberingStyle"),
                 uno::UNO_QUERY_THROW );
 
-            OUString sStyleName = GetStyleName( GetId( ) );
+            OUString sStyleName = GetStyleName(GetId(), xStyles);
 
             xStyles->insertByName( sStyleName, makeAny( xStyle ) );
 
