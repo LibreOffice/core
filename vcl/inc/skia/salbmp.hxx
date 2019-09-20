@@ -32,27 +32,30 @@ public:
 
 public:
     // SalBitmap methods
-    bool Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal) override;
-    bool Create(const SalBitmap& rSalBmp) override;
-    bool Create(const SalBitmap& rSalBmp, SalGraphics* pGraphics) override;
-    bool Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount) override;
-    bool Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& rBitmapCanvas,
-                Size& rSize, bool bMask = false) override;
+    virtual bool Create(const Size& rSize, sal_uInt16 nBitCount,
+                        const BitmapPalette& rPal) override;
+    virtual bool Create(const SalBitmap& rSalBmp) override;
+    virtual bool Create(const SalBitmap& rSalBmp, SalGraphics* pGraphics) override;
+    virtual bool Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount) override;
+    virtual bool Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& rBitmapCanvas,
+                        Size& rSize, bool bMask = false) override;
 
-    void Destroy() final override;
+    virtual void Destroy() final override;
 
-    Size GetSize() const override;
-    sal_uInt16 GetBitCount() const override;
+    virtual Size GetSize() const override;
+    virtual sal_uInt16 GetBitCount() const override;
 
-    BitmapBuffer* AcquireBuffer(BitmapAccessMode nMode) override;
-    void ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode) override;
+    virtual BitmapBuffer* AcquireBuffer(BitmapAccessMode nMode) override;
+    virtual void ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode) override;
 
-    bool GetSystemData(BitmapSystemData& rData) override;
+    virtual bool GetSystemData(BitmapSystemData& rData) override;
 
-    bool ScalingSupported() const override;
-    bool Scale(const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag) override;
-    bool Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol) override;
-    bool ConvertToGreyscale() override;
+    virtual bool ScalingSupported() const override;
+    virtual bool Scale(const double& rScaleX, const double& rScaleY,
+                       BmpScaleFlag nScaleFlag) override;
+    virtual bool Replace(const Color& rSearchColor, const Color& rReplaceColor,
+                         sal_uInt8 nTol) override;
+    virtual bool ConvertToGreyscale() override;
 
 private:
     SkBitmap mBitmap;
