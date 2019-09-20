@@ -538,12 +538,14 @@ IMPL_LINK_NOARG(UpdateCheckUI, ClickHdl, MenuBar::MenuBarButtonCallbackArg&, boo
 
     if ( mrJob.is() )
     {
+        weld::Window* pDialogParent = mpIconSysWin ? mpIconSysWin->GetFrameWeld() : nullptr;
+
         try {
             uno::Sequence<beans::NamedValue> aEmpty;
             mrJob->execute( aEmpty );
         }
         catch(const uno::Exception&) {
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(nullptr,
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pDialogParent,
                                                            VclMessageType::Warning, VclButtonsType::Ok,
                                                            Translate::get(STR_NO_WEBBROWSER_FOUND, maSfxLocale)));
             xErrorBox->run();
