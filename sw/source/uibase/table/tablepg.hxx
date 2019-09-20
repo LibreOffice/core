@@ -73,14 +73,11 @@ class SwFormatTablePage : public SfxTabPage
     void RightModify();
     DECL_LINK(ValueChangedHdl, weld::MetricSpinButton&, void);
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 public:
     SwFormatTablePage(TabPageParent pParent, const SfxItemSet& rSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
     virtual ~SwFormatTablePage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
@@ -124,15 +121,11 @@ class SwTableColumnPage : public SfxTabPage
     void        SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth);
     DECL_LINK(SizeHdl, void*, void);
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 public:
     SwTableColumnPage(TabPageParent pParent, const SfxItemSet& rSet);
-    virtual void dispose() override;
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
     virtual ~SwTableColumnPage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
@@ -174,8 +167,8 @@ class SwTextFlowPage : public SfxTabPage
 
 public:
     SwTextFlowPage(TabPageParent pParent, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
     virtual ~SwTextFlowPage() override;
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 

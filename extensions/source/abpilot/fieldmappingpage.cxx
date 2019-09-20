@@ -37,9 +37,9 @@ namespace abp
     {
     }
 
-    void FieldMappingPage::ActivatePage()
+    void FieldMappingPage::Activate()
     {
-        AddressBookSourcePage::ActivatePage();
+        AddressBookSourcePage::Activate();
         m_xInvokeDialog->grab_focus();
     }
 

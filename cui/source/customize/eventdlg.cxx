@@ -74,7 +74,6 @@ void SvxEventConfigPage::LateInit( const uno::Reference< frame::XFrame >& _rxFra
 
 SvxEventConfigPage::~SvxEventConfigPage()
 {
-    disposeOnce();
 }
 
 void SvxEventConfigPage::ImplInitDocument()

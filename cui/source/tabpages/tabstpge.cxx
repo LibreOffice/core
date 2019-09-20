@@ -142,11 +142,6 @@ SvxTabulatorTabPage::SvxTabulatorTabPage(TabPageParent pParent, const SfxItemSet
 
 SvxTabulatorTabPage::~SvxTabulatorTabPage()
 {
-    disposeOnce();
-}
-
-void SvxTabulatorTabPage::dispose()
-{
     m_xDezWin.reset();
     m_xCenterWin.reset();
     m_xRightWin.reset();
@@ -154,7 +149,6 @@ void SvxTabulatorTabPage::dispose()
     m_xFillChar.reset();
     m_xDezChar.reset();
     m_xTabBox.reset();
-    SfxTabPage::dispose();
 }
 
 bool SvxTabulatorTabPage::FillItemSet(SfxItemSet* rSet)
@@ -214,9 +208,9 @@ bool SvxTabulatorTabPage::FillItemSet(SfxItemSet* rSet)
     return bModified;
 }
 
-VclPtr<SfxTabPage> SvxTabulatorTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxTabulatorTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxTabulatorTabPage>::Create(pParent, *rSet);
+    return std::make_unique<SvxTabulatorTabPage>(pParent, *rSet);
 }
 
 void SvxTabulatorTabPage::Reset(const SfxItemSet* rSet)

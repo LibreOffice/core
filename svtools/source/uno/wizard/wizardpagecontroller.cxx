@@ -45,7 +45,7 @@ namespace svt { namespace uno
     //= WizardPageController
 
 
-    WizardPageController::WizardPageController( TabPageParent aParent, const Reference< XWizardController >& i_rController,
+    WizardPageController::WizardPageController(weld::Container* pParent, const Reference< XWizardController >& i_rController,
             const sal_Int16 i_nPageId )
         :m_xController( i_rController )
         ,m_xWizardPage()
@@ -54,21 +54,16 @@ namespace svt { namespace uno
         try
         {
             // Plug a toplevel SalFrame into the native page which can host our awt widgetry
-            m_xWizardPage.set(m_xController->createPage(aParent.pPage->CreateChildFrame(), i_nPageId), UNO_SET_THROW);
+            m_xWizardPage.set(m_xController->createPage(pParent->CreateChildFrame(), i_nPageId), UNO_SET_THROW);
 
-            Reference< XWindow > xPageWindow( m_xWizardPage->getWindow(), UNO_SET_THROW );
+            Reference< XWindow > xPageWindow(m_xWizardPage->getWindow(), UNO_SET_THROW);
             xPageWindow->setVisible( true );
-
-            TabPage* pTabPage( getTabPage() );
-            if ( pTabPage )
-                pTabPage->SetStyle( pTabPage->GetStyle() | WB_CHILDDLGCTRL | WB_DIALOGCONTROL );
         }
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION("svtools.uno");
         }
     }
-
 
     WizardPageController::~WizardPageController()
     {
@@ -82,34 +77,6 @@ namespace svt { namespace uno
             DBG_UNHANDLED_EXCEPTION("svtools.uno");
         }
     }
-
-
-    TabPage* WizardPageController::getTabPage() const
-    {
-        ENSURE_OR_RETURN( m_xWizardPage.is(), "WizardPageController::getTabPage: no external wizard page!", nullptr );
-        try
-        {
-            Reference< XWindow > xPageWindow( m_xWizardPage->getWindow(), UNO_SET_THROW );
-            VclPtr<vcl::Window> pPageWindow = VCLUnoHelper::GetWindow( xPageWindow );
-            if ( pPageWindow )
-            {
-                // windows created via the XContainerWindowProvider might be controls, not real windows, so resolve
-                // that one indirection
-                const Reference< XControl > xPageControl( m_xWizardPage->getWindow(), UNO_QUERY_THROW );
-                xPageWindow.set( xPageControl->getPeer(), UNO_QUERY_THROW );
-                pPageWindow = VCLUnoHelper::GetWindow( xPageWindow );
-            }
-
-            OSL_ENSURE( pPageWindow, "WizardPageController::getTabPage: unable to find the Window implementation for the page's window!" );
-            return dynamic_cast< TabPage* >( pPageWindow.get() );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("svtools.uno");
-        }
-        return nullptr;
-    }
-
 
     void WizardPageController::initializePage()
     {

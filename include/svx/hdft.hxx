@@ -36,9 +36,6 @@ namespace svx
 
 class SVX_DLLPUBLIC SvxHFPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 public:
 
     virtual bool    FillItemSet( SfxItemSet* rOutSet ) override;
@@ -98,7 +95,7 @@ private:
 class SVX_DLLPUBLIC SvxHeaderPage : public SvxHFPage
 {
 public:
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
     // returns the Which values to the range
     static const sal_uInt16*  GetRanges() { return pRanges; }
     SVX_DLLPRIVATE SvxHeaderPage(TabPageParent pParent, const SfxItemSet& rSet);
@@ -107,7 +104,7 @@ public:
 class SVX_DLLPUBLIC SvxFooterPage : public SvxHFPage
 {
 public:
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
     static const sal_uInt16*  GetRanges() { return pRanges; }
     SVX_DLLPRIVATE SvxFooterPage(TabPageParent pParent, const SfxItemSet& rSet);
 };

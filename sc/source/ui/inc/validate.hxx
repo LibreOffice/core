@@ -76,9 +76,9 @@ class ScTPValidationValue : public ScRefHandlerCaller, public SfxTabPage
     static const sal_uInt16 pValueRanges[];
 public:
     explicit                    ScTPValidationValue(TabPageParent pParent, const SfxItemSet& rArgSet);
-    virtual void                dispose() override;
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rArgSet );
     virtual                     ~ScTPValidationValue() override;
-    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rArgSet );
+
     static const sal_uInt16*    GetRanges() { return pValueRanges; }
 
     virtual bool                FillItemSet( SfxItemSet* rArgSet ) override;
@@ -236,9 +236,9 @@ private:
 
 public:
     ScTPValidationHelp(TabPageParent pParent, const SfxItemSet& rArgSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rArgSet);
     virtual ~ScTPValidationHelp() override;
 
-    static  VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rArgSet);
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 };
@@ -261,9 +261,9 @@ private:
 
 public:
     ScTPValidationError(TabPageParent pParent, const SfxItemSet& rArgSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rArgSet);
     virtual ~ScTPValidationError() override;
 
-    static  VclPtr<SfxTabPage> Create      ( TabPageParent pParent, const SfxItemSet* rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 };

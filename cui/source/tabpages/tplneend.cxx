@@ -91,14 +91,8 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage(TabPageParent pParent, const SfxItemS
 
 SvxLineEndDefTabPage::~SvxLineEndDefTabPage()
 {
-    disposeOnce();
-}
-
-void SvxLineEndDefTabPage::dispose()
-{
     m_xCtlPreview.reset();
     m_xLbLineEnds.reset();
-    SfxTabPage::dispose();
 }
 
 void SvxLineEndDefTabPage::Construct()
@@ -237,9 +231,9 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet* )
     }
 }
 
-VclPtr<SfxTabPage> SvxLineEndDefTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxLineEndDefTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxLineEndDefTabPage>::Create(pParent, *rSet );
+    return std::make_unique<SvxLineEndDefTabPage>(pParent, *rSet );
 }
 
 void SvxLineEndDefTabPage::SelectLineEndHdl_Impl()
@@ -610,19 +604,6 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl, weld::Button&, void)
             std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("NoSaveFileDialog"));
             xBox->run();
         }
-    }
-}
-
-void SvxLineEndDefTabPage::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    SfxTabPage::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-    {
-        auto nOldSelect = m_xLbLineEnds->get_active();
-        m_xLbLineEnds->clear();
-        m_xLbLineEnds->Fill(pLineEndList);
-        m_xLbLineEnds->set_active(nOldSelect);
     }
 }
 

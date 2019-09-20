@@ -515,7 +515,7 @@ namespace dbaui
         bool bValid, bReadonly;
         getFlags( _rSet, bValid, bReadonly );
 
-        SetText( OUString() );
+        SetPageTitle(OUString());
 
         if ( !bValid || bReadonly )
         {

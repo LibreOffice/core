@@ -55,7 +55,7 @@ public:
     SwFieldDokInfPage(TabPageParent pWindow, const SfxItemSet* pSet);
     virtual ~SwFieldDokInfPage() override;
 
-    static VclPtr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

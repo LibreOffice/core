@@ -340,9 +340,9 @@ void SwCompatibilityOptPage::WriteOptions()
         m_aConfigItem.AppendItem(rItem);
 }
 
-VclPtr<SfxTabPage> SwCompatibilityOptPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SwCompatibilityOptPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwCompatibilityOptPage>::Create( pParent, *rAttrSet );
+    return std::make_unique<SwCompatibilityOptPage>(pParent, *rAttrSet);
 }
 
 bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
