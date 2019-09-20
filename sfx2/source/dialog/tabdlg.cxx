@@ -139,14 +139,6 @@ css::uno::Reference< css::frame::XFrame > SfxTabPage::GetFrame() const
     return css::uno::Reference< css::frame::XFrame >();
 }
 
-SfxTabPage::SfxTabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet *rAttrSet)
-    : TabPage(pParent, rID, rUIXMLDescription)
-    , pSet                ( rAttrSet )
-    , bHasExchangeSupport ( false )
-    , pImpl               ( new TabPageImpl )
-{
-}
-
 SfxTabPage::SfxTabPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet *rAttrSet)
     : TabPage(pParent.pPage ? Application::GetDefDialogParent() : pParent.pParent.get()) //just drag this along hidden in this scenario
     , pSet                ( rAttrSet )
