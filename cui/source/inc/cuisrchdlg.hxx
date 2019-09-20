@@ -26,7 +26,7 @@ class SvxJSearchOptionsPage;
 
 class SvxJSearchOptionsDialog : public SfxSingleTabDialogController
 {
-    VclPtr<SvxJSearchOptionsPage> m_xPage;
+    SvxJSearchOptionsPage* m_pPage;
 
     SvxJSearchOptionsDialog( const SvxJSearchOptionsDialog & ) = delete;
     SvxJSearchOptionsDialog & operator == ( const SvxJSearchOptionsDialog & ) = delete;

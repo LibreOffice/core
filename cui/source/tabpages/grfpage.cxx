@@ -103,18 +103,12 @@ SvxGrfCropPage::SvxGrfCropPage(TabPageParent pParent, const SfxItemSet &rSet)
 
 SvxGrfCropPage::~SvxGrfCropPage()
 {
-    disposeOnce();
-}
-
-void SvxGrfCropPage::dispose()
-{
     m_xExampleWN.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxGrfCropPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SvxGrfCropPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SvxGrfCropPage>::Create(pParent, *rSet);
+    return std::make_unique<SvxGrfCropPage>(pParent, *rSet);
 }
 
 void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
@@ -671,7 +665,7 @@ Size SvxGrfCropPage::GetGrfOrigSize( const Graphic& rGrf ) const
     const MapMode aMapTwip( MapUnit::MapTwip );
     Size aSize( rGrf.GetPrefSize() );
     if( MapUnit::MapPixel == rGrf.GetPrefMapMode().GetMapUnit() )
-        aSize = PixelToLogic( aSize, aMapTwip );
+        aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMapTwip);
     else
         aSize = OutputDevice::LogicToLogic( aSize,
                                         rGrf.GetPrefMapMode(), aMapTwip );

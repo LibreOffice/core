@@ -253,15 +253,9 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(TabPageParent pParent, const Sf
 
 SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
 {
-    disposeOnce();
-}
-
-void SfxManageStyleSheetPage::dispose()
-{
     pFamilies.reset();
     pItem = nullptr;
     pStyle = nullptr;
-    SfxTabPage::dispose();
 }
 
 void SfxManageStyleSheetPage::UpdateName_Impl( weld::ComboBox* pBox,
@@ -532,10 +526,10 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet* /*rAttrSet*/ )
     }
 }
 
-VclPtr<SfxTabPage> SfxManageStyleSheetPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SfxManageStyleSheetPage::Create( TabPageParent pParent,
                                                     const SfxItemSet *rAttrSet )
 {
-    return VclPtr<SfxManageStyleSheetPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SfxManageStyleSheetPage>(pParent, *rAttrSet);
 }
 
 void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
@@ -595,7 +589,7 @@ DeactivateRC SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 
         if (!pStyle->SetName(comphelper::string::stripStart(m_xName->get_text(), ' ')))
         {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
                                                                      VclMessageType::Info, VclButtonsType::Ok,
                                                                      SfxResId(STR_TABPAGE_INVALIDNAME)));
             xBox->run();
@@ -614,7 +608,7 @@ DeactivateRC SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
         {
             if ( !pStyle->SetFollow( aFollowEntry ) )
             {
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
                                                                          VclMessageType::Info, VclButtonsType::Ok,
                                                                          SfxResId(STR_TABPAGE_INVALIDSTYLE)));
                 xBox->run();
@@ -636,7 +630,7 @@ DeactivateRC SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
         {
             if ( !pStyle->SetParent( aParentEntry ) )
             {
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
                                                                          VclMessageType::Info, VclButtonsType::Ok,
                                                                          SfxResId(STR_TABPAGE_INVALIDPARENT)));
                 xBox->run();

@@ -30,9 +30,9 @@ class SdTpOptionsSnap : public SvxGridTabPage
 {
 public:
     SdTpOptionsSnap(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual ~SdTpOptionsSnap() override;
 
-    static  VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 };
@@ -50,9 +50,9 @@ private:
 
 public:
     SdTpOptionsContents(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    static  std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual ~SdTpOptionsContents() override;
 
-    static  VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 };
@@ -123,9 +123,9 @@ protected:
 
 public:
     SdTpOptionsMisc(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual ~SdTpOptionsMisc() override;
 
-    static  VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 
@@ -141,11 +141,6 @@ public:
     */
     void SetImpressMode();
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
-
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-    using OutputDevice::SetDrawMode;
-
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_TPOPTION_HXX

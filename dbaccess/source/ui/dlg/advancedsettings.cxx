@@ -151,7 +151,6 @@ namespace dbaui
 
     SpecialSettingsPage::~SpecialSettingsPage()
     {
-        disposeOnce();
     }
 
     void SpecialSettingsPage::fillWindows( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList )
@@ -307,7 +306,6 @@ namespace dbaui
 
     GeneratedValuesPage::~GeneratedValuesPage()
     {
-        disposeOnce();
     }
 
     void GeneratedValuesPage::fillWindows( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList )

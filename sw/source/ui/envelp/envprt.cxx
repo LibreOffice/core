@@ -76,7 +76,7 @@ SwEnvPrtPage::SwEnvPrtPage(TabPageParent pParent, const SfxItemSet& rSet)
 
 SwEnvPrtPage::~SwEnvPrtPage()
 {
-    disposeOnce();
+    m_xPrt.clear();
 }
 
 IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl, weld::ToggleButton&, void)
@@ -127,9 +127,9 @@ IMPL_LINK(SwEnvPrtPage, ButtonHdl, weld::Button&, rBtn, void)
     }
 }
 
-VclPtr<SfxTabPage> SwEnvPrtPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwEnvPrtPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwEnvPrtPage>::Create(pParent, *rSet);
+    return std::make_unique<SwEnvPrtPage>(pParent, *rSet);
 }
 
 void SwEnvPrtPage::ActivatePage(const SfxItemSet&)

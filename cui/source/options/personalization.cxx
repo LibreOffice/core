@@ -47,9 +47,10 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage(TabPageParent pParent, cons
 
 SvxPersonalizationTabPage::~SvxPersonalizationTabPage() {}
 
-VclPtr<SfxTabPage> SvxPersonalizationTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxPersonalizationTabPage::Create(TabPageParent pParent,
+                                                              const SfxItemSet* rSet)
 {
-    return VclPtr<SvxPersonalizationTabPage>::Create(pParent, *rSet);
+    return std::make_unique<SvxPersonalizationTabPage>(pParent, *rSet);
 }
 
 bool SvxPersonalizationTabPage::FillItemSet(SfxItemSet*)

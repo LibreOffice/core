@@ -24,23 +24,20 @@
 
 class ScTabPageProtection : public SfxTabPage
 {
-    friend class VclPtr<ScTabPageProtection>;
     static const sal_uInt16 pProtectionRanges[];
 public:
-    static  VclPtr<SfxTabPage> Create          ( TabPageParent               pParent,
-                                          const SfxItemSet*     rAttrSet );
+    ScTabPageProtection(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent,
+                                              const SfxItemSet* rAttrSet);
+    virtual ~ScTabPageProtection() override;
+
     static  const sal_uInt16* GetRanges () { return pProtectionRanges; }
     virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) override;
     virtual void        Reset           ( const SfxItemSet* ) override;
 
-    virtual ~ScTabPageProtection() override;
-
 protected:
-    using SfxTabPage::DeactivatePage;
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;
 
-private:
-    ScTabPageProtection(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
 private:
                                         // current status:
     bool            bTriEnabled;        //  if before - DontCare

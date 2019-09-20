@@ -70,10 +70,8 @@ protected:
 
 public:
     SwFieldVarPage(TabPageParent pParent, const SfxItemSet* pSet);
-
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
     virtual ~SwFieldVarPage() override;
-
-    static VclPtr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

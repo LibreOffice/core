@@ -74,13 +74,13 @@ SdActionDlg::SdActionDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::V
     , rOutAttrs(*pAttr)
 {
     TabPageParent aParent(get_content_area(), this);
-    VclPtr<SfxTabPage> xNewPage = SdTPAction::Create(aParent, rOutAttrs);
+    std::unique_ptr<SfxTabPage> xNewPage = SdTPAction::Create(aParent, rOutAttrs);
 
     // formerly in PageCreated
     static_cast<SdTPAction*>( xNewPage.get() )->SetView( pView );
     static_cast<SdTPAction*>( xNewPage.get() )->Construct();
 
-    SetTabPage(xNewPage);
+    SetTabPage(std::move(xNewPage));
 }
 
 /**
@@ -128,7 +128,6 @@ SdTPAction::SdTPAction(TabPageParent pWindow, const SfxItemSet& rInAttrs)
 
 SdTPAction::~SdTPAction()
 {
-    disposeOnce();
 }
 
 void SdTPAction::SetView( const ::sd::View* pSdView )
@@ -344,10 +343,9 @@ DeactivateRC SdTPAction::DeactivatePage( SfxItemSet* pPageSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SdTPAction::Create( TabPageParent pParent,
-                                       const SfxItemSet& rAttrs )
+std::unique_ptr<SfxTabPage> SdTPAction::Create(TabPageParent pParent, const SfxItemSet& rAttrs)
 {
-    return VclPtr<SdTPAction>::Create( pParent, rAttrs );
+    return std::make_unique<SdTPAction>( pParent, rAttrs );
 }
 
 void SdTPAction::UpdateTree()

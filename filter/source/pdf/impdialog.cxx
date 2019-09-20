@@ -683,10 +683,10 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* pParent )
     pParent->mbAllowDuplicateFieldNames = mxCbAllowDuplicateFieldNames->get_active();
 }
 
-VclPtr<SfxTabPage> ImpPDFTabGeneralPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ImpPDFTabGeneralPage::Create( TabPageParent pParent,
                                                  const SfxItemSet* rAttrSet)
 {
-    return VclPtr<ImpPDFTabGeneralPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<ImpPDFTabGeneralPage>(pParent, *rAttrSet);
 }
 
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAllHdl, weld::ToggleButton&, void)
@@ -841,9 +841,9 @@ ImpPDFTabOpnFtrPage::~ImpPDFTabOpnFtrPage()
 {
 }
 
-VclPtr<SfxTabPage> ImpPDFTabOpnFtrPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> ImpPDFTabOpnFtrPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<ImpPDFTabOpnFtrPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<ImpPDFTabOpnFtrPage>(pParent, *rAttrSet);
 }
 
 void ImpPDFTabOpnFtrPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )
@@ -996,10 +996,10 @@ IMPL_LINK_NOARG( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, weld::ToggleButton&,
     m_xNumBookmarkLevels->set_sensitive(m_xRbVisibleBookmarkLevels->get_active());
 }
 
-VclPtr<SfxTabPage> ImpPDFTabViewerPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ImpPDFTabViewerPage::Create( TabPageParent pParent,
                                                 const SfxItemSet* rAttrSet)
 {
-    return VclPtr<ImpPDFTabViewerPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<ImpPDFTabViewerPage>(pParent, *rAttrSet);
 }
 
 void ImpPDFTabViewerPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )
@@ -1079,9 +1079,9 @@ ImpPDFTabSecurityPage::~ImpPDFTabSecurityPage()
 {
 }
 
-VclPtr<SfxTabPage> ImpPDFTabSecurityPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> ImpPDFTabSecurityPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<ImpPDFTabSecurityPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<ImpPDFTabSecurityPage>(pParent, *rAttrSet);
 }
 
 void ImpPDFTabSecurityPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )
@@ -1290,9 +1290,9 @@ ImpPDFTabLinksPage::~ImpPDFTabLinksPage()
 {
 }
 
-VclPtr<SfxTabPage> ImpPDFTabLinksPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> ImpPDFTabLinksPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<ImpPDFTabLinksPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<ImpPDFTabLinksPage>(pParent, *rAttrSet);
 }
 
 void ImpPDFTabLinksPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )
@@ -1528,10 +1528,10 @@ IMPL_LINK_NOARG(ImpPDFTabSigningPage, ClickmaPbSignCertClear, weld::Button&, voi
     mxLBSignTSA->set_sensitive(false);
 }
 
-VclPtr<SfxTabPage> ImpPDFTabSigningPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ImpPDFTabSigningPage::Create( TabPageParent pParent,
                                                  const SfxItemSet* rAttrSet)
 {
-    return VclPtr<ImpPDFTabSigningPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<ImpPDFTabSigningPage>(pParent, *rAttrSet);
 }
 
 void ImpPDFTabSigningPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )

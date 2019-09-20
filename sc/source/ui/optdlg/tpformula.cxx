@@ -203,9 +203,9 @@ IMPL_LINK( ScTpFormulaOptions, SepEditOnFocusHdl, weld::Widget&, rControl, void 
     OnFocusSeparatorInput(dynamic_cast<weld::Entry*>(&rControl));
 }
 
-VclPtr<SfxTabPage> ScTpFormulaOptions::Create(TabPageParent pParent, const SfxItemSet* rCoreSet)
+std::unique_ptr<SfxTabPage> ScTpFormulaOptions::Create(TabPageParent pParent, const SfxItemSet* rCoreSet)
 {
-    return VclPtr<ScTpFormulaOptions>::Create(pParent, *rCoreSet);
+    return std::make_unique<ScTpFormulaOptions>(pParent, *rCoreSet);
 }
 
 bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)

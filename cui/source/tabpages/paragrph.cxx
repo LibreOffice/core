@@ -205,9 +205,9 @@ IMPL_LINK_NOARG(SvxStdParagraphTabPage, ELRLoseFocusHdl, weld::MetricSpinButton&
     ELRLoseFocus();
 }
 
-VclPtr<SfxTabPage> SvxStdParagraphTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxStdParagraphTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxStdParagraphTabPage>::Create(pParent, *rSet);
+    return std::make_unique<SvxStdParagraphTabPage>(pParent, *rSet);
 }
 
 bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
@@ -1059,9 +1059,9 @@ DeactivateRC SvxParaAlignTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SvxParaAlignTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxParaAlignTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxParaAlignTabPage>::Create(pParent, *rSet);
+    return std::make_unique<SvxParaAlignTabPage>(pParent, *rSet);
 }
 
 bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
@@ -1356,9 +1356,9 @@ void SvxParaAlignTabPage::PageCreated (const SfxAllItemSet& aSet)
         EnableJustifyExt();
 }
 
-VclPtr<SfxTabPage> SvxExtParagraphTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxExtParagraphTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxExtParagraphTabPage>::Create(pParent, *rSet);
+    return std::make_unique<SvxExtParagraphTabPage>(pParent, *rSet);
 }
 
 bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
@@ -2221,9 +2221,9 @@ SvxAsianTabPage::~SvxAsianTabPage()
 {
 }
 
-VclPtr<SfxTabPage> SvxAsianTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxAsianTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxAsianTabPage>::Create(pParent, *rSet);
+    return std::make_unique<SvxAsianTabPage>(pParent, *rSet);
 }
 
 const sal_uInt16*     SvxAsianTabPage::GetRanges()

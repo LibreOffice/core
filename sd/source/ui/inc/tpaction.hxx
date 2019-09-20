@@ -90,7 +90,7 @@ public:
     SdTPAction(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SdTPAction() override;
 
-    static  VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet& );
+    static  std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet& );
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
@@ -101,9 +101,6 @@ public:
     void    Construct();
 
     void    SetView( const ::sd::View* pSdView );
-
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_TPACTION_HXX

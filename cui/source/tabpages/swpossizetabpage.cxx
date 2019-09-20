@@ -597,16 +597,10 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(TabPageParent pParent, const SfxItemSet
 
 SvxSwPosSizeTabPage::~SvxSwPosSizeTabPage()
 {
-    disposeOnce();
-}
-
-void SvxSwPosSizeTabPage::dispose()
-{
     m_xWidthMF.reset();
     m_xHeightMF.reset();
     m_xHoriByMF.reset();
     m_xVertByMF.reset();
-    SfxTabPage::dispose();
 }
 
 namespace
@@ -708,9 +702,9 @@ void SvxSwPosSizeTabPage::setOptimalRelWidth()
     m_xHoriLB->clear();
 }
 
-VclPtr<SfxTabPage> SvxSwPosSizeTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxSwPosSizeTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxSwPosSizeTabPage>::Create(pParent, *rSet);
+    return std::make_unique<SvxSwPosSizeTabPage>(pParent, *rSet);
 }
 
 const sal_uInt16* SvxSwPosSizeTabPage::GetRanges()
