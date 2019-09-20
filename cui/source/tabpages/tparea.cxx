@@ -117,34 +117,34 @@ void SvxAreaTabPage::SetOptimalSize(weld::DialogController* pController)
         aFillTab.pParent = GetParentDialog();
 
     // Calculate optimal size of all pages...
-    m_pFillTabPage.disposeAndReset(SvxColorTabPage::Create(aFillTab, &m_rXFSet));
+    m_xFillTabPage = SvxColorTabPage::Create(aFillTab, &m_rXFSet);
     Size aSize(m_xFillTab->get_preferred_size());
 
     if (m_xBtnGradient->get_visible())
     {
-        m_pFillTabPage.disposeAndReset(SvxGradientTabPage::Create(aFillTab, &m_rXFSet));
+        m_xFillTabPage = SvxGradientTabPage::Create(aFillTab, &m_rXFSet);
         Size aGradientSize = m_xFillTab->get_preferred_size();
         lclExtendSize(aSize, aGradientSize);
     }
     if (m_xBtnBitmap->get_visible())
     {
-        m_pFillTabPage.disposeAndReset(SvxBitmapTabPage::Create(aFillTab, &m_rXFSet));
+        m_xFillTabPage = vxBitmapTabPage::Create(aFillTab, &m_rXFSet);
         Size aBitmapSize = m_xFillTab->get_preferred_size();
         lclExtendSize(aSize, aBitmapSize);
     }
     if (m_xBtnHatch->get_visible())
     {
-        m_pFillTabPage.disposeAndReset(SvxHatchTabPage::Create(aFillTab, &m_rXFSet));
+        m_xFillTabPage = SvxHatchTabPage::Create(aFillTab, &m_rXFSet);
         Size aHatchSize = m_xFillTab->get_preferred_size();
         lclExtendSize(aSize, aHatchSize);
     }
     if (m_xBtnPattern->get_visible())
     {
-        m_pFillTabPage.disposeAndReset(SvxPatternTabPage::Create(aFillTab, &m_rXFSet));
+        m_xFillTabPage = SvxPatternTabPage::Create(aFillTab, &m_rXFSet);
         Size aPatternSize = m_xFillTab->get_preferred_size();
         lclExtendSize(aSize, aPatternSize);
     }
-    m_pFillTabPage.disposeAndClear();
+    m_xFillTabPage.reset();
 
     aSize.extendBy(10, 10); // apply a bit of margin
 
@@ -153,13 +153,7 @@ void SvxAreaTabPage::SetOptimalSize(weld::DialogController* pController)
 
 SvxAreaTabPage::~SvxAreaTabPage()
 {
-    disposeOnce();
-}
-
-void SvxAreaTabPage::dispose()
-{
-    m_pFillTabPage.disposeAndClear();
-    SfxTabPage::dispose();
+    m_xFillTabPage.reset();
 }
 
 void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
@@ -218,7 +212,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
 template< typename TTabPage >
 DeactivateRC SvxAreaTabPage::DeactivatePage_Impl( SfxItemSet* _pSet )
 {
-    return static_cast<TTabPage&>(*m_pFillTabPage).DeactivatePage(_pSet);
+    return static_cast<TTabPage&>(*m_xFillTabPage).DeactivatePage(_pSet);
 }
 
 DeactivateRC SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
@@ -256,7 +250,7 @@ DeactivateRC SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
 template< typename TTabPage >
 bool SvxAreaTabPage::FillItemSet_Impl( SfxItemSet* rAttrs)
 {
-    return static_cast<TTabPage&>( *m_pFillTabPage ).FillItemSet( rAttrs );
+    return static_cast<TTabPage&>( *m_xFillTabPage ).FillItemSet( rAttrs );
 }
 
 bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
@@ -297,7 +291,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
 template< typename TTabPage >
 void SvxAreaTabPage::Reset_Impl( const SfxItemSet* rAttrs )
 {
-    static_cast<TTabPage&>( *m_pFillTabPage ).Reset( rAttrs );
+    static_cast<TTabPage&>( *m_xFillTabPage ).Reset( rAttrs );
 }
 
 void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
@@ -384,10 +378,10 @@ void SvxAreaTabPage::SelectFillType(weld::ToggleButton& rButton, const SfxItemSe
         maBox.SelectButton(&rButton);
         FillType eFillType = static_cast<FillType>(maBox.GetCurrentButtonPos());
         TabPageParent aFillTab(m_xFillTab.get(), GetDialogController());
-        m_pFillTabPage.disposeAndReset(lcl_CreateFillStyleTabPage(eFillType, aFillTab, m_rXFSet));
-        if (m_pFillTabPage)
-            m_pFillTabPage->SetDialogController(GetDialogController());
-        CreatePage( eFillType , m_pFillTabPage);
+        m_xFillTabPage = lcl_CreateFillStyleTabPage(eFillType, aFillTab, m_rXFSet);
+        if (m_xFillTabPage)
+            m_xFillTabPage->SetDialogController(GetDialogController());
+        CreatePage(eFillType, m_xFillTabPage.get());
     }
 }
 

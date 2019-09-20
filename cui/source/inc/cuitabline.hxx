@@ -87,8 +87,6 @@ struct SvxBmpItemInfo
 
 class SvxLineTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pLineRanges[];
 private:
     //#58425# symbols on a line (e. g. StarChart) ->
@@ -204,11 +202,10 @@ public:
 
     SvxLineTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxLineTabPage() override;
-    virtual void dispose() override;
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pLineRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
@@ -233,15 +230,12 @@ public:
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
 
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
 /*************************************************************************/
 
 class SvxLineDefTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
 private:
     const SfxItemSet&   rOutAttrs;
     XDash               aDash;
@@ -299,11 +293,10 @@ private:
 public:
     SvxLineDefTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxLineDefTabPage() override;
-    virtual void dispose() override;
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 
@@ -317,17 +310,12 @@ public:
     void    SetPosDashLb( sal_Int32* pInPos ) { pPosDashLb = pInPos; }
 
     void    SetDashChgd( ChangeType* pIn ) { pnDashListState = pIn; }
-
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
 /*************************************************************************/
 
 class SvxLineEndDefTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 private:
     const SfxItemSet&   rOutAttrs;
     const SdrObject*    pPolyObj;
@@ -365,11 +353,10 @@ private:
 public:
     SvxLineEndDefTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxLineEndDefTabPage() override;
-    virtual void dispose() override;
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 
@@ -385,7 +372,6 @@ public:
 
     void    SetLineEndChgd( ChangeType* pIn ) { pnLineEndListState = pIn; }
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void Resize() override;
 };
 

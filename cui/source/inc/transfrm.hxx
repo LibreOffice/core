@@ -61,8 +61,6 @@ public:
 
 class SvxPositionSizeTabPage : public SvxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pPosSizeRanges[];
 
 private:
@@ -134,7 +132,7 @@ public:
     SvxPositionSizeTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxPositionSizeTabPage() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     static const sal_uInt16* GetRanges() {  return pPosSizeRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
@@ -163,8 +161,6 @@ public:
 \************************************************************************/
 class SvxAngleTabPage : public SvxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pAngleRanges[];
 
 private:
@@ -193,7 +189,7 @@ public:
     SvxAngleTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxAngleTabPage() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     static const sal_uInt16*  GetRanges() { return pAngleRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
@@ -215,8 +211,6 @@ public:
 \************************************************************************/
 class SvxSlantTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pSlantRanges[];
 
 private:
@@ -241,7 +235,7 @@ public:
     SvxSlantTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxSlantTabPage() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     static const sal_uInt16* GetRanges() {  return pSlantRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;

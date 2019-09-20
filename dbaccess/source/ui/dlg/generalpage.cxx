@@ -504,6 +504,7 @@ namespace dbaui
         return eOpenExisting;
     }
 
+#if 0
     void OGeneralPageWizard::GetFocus()
     {
         OGeneralPage::GetFocus();
@@ -512,6 +513,7 @@ namespace dbaui
         else if ( m_xDatasourceType && m_xDatasourceType->get_sensitive() )
             m_xDatasourceType->grab_focus();
     }
+#endif
 
     void OGeneralPageWizard::implInitControls( const SfxItemSet& _rSet, bool _bSaveValue )
     {
@@ -524,7 +526,7 @@ namespace dbaui
         bool bValid, bReadonly;
         getFlags( _rSet, bValid, bReadonly );
 
-        SetText( OUString() );
+        SetPageTitle(OUString());
 
         if ( !bValid || bReadonly )
         {

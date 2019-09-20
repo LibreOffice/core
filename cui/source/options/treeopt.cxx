@@ -268,7 +268,7 @@ void MailMergeCfg_Impl::Notify( const css::uno::Sequence< OUString >& )
 }
 
 //typedef SfxTabPage* (*FNCreateTabPage)(TabPageParent pParent, const SfxItemSet &rAttrSet);
-static VclPtr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet)
+static std::unique_ptr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet)
 {
     CreateTabPage fnCreate = nullptr;
     switch(nId)

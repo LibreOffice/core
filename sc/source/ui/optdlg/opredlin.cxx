@@ -43,21 +43,15 @@ ScRedlineOptionsTabPage::ScRedlineOptionsTabPage(TabPageParent pParent, const Sf
 
 ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
 {
-    disposeOnce();
-}
-
-void ScRedlineOptionsTabPage::dispose()
-{
     m_xContentColorLB.reset();
     m_xRemoveColorLB.reset();
     m_xInsertColorLB.reset();
     m_xMoveColorLB.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> ScRedlineOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+std::unique_ptr<SfxTabPage> ScRedlineOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<ScRedlineOptionsTabPage>::Create( pParent, *rSet );
+    return std::make_unique<ScRedlineOptionsTabPage>( pParent, *rSet );
 }
 
 bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet* /* rSet */ )

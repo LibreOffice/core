@@ -105,7 +105,6 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(TabPageParent pParent, bool bEN,
 
 SwEndNoteOptionPage::~SwEndNoteOptionPage()
 {
-    disposeOnce();
 }
 
 void SwEndNoteOptionPage::Reset( const SfxItemSet* )
@@ -210,9 +209,9 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
     m_xPageTemplBox->set_active_text(pInf->GetPageDesc(*pSh->GetDoc())->GetName());
 }
 
-VclPtr<SfxTabPage> SwEndNoteOptionPage::Create( TabPageParent pParent, const SfxItemSet *rSet )
+std::unique_ptr<SfxTabPage> SwEndNoteOptionPage::Create( TabPageParent pParent, const SfxItemSet *rSet )
 {
-    return VclPtr<SwEndNoteOptionPage>::Create(pParent, true, *rSet);
+    return std::make_unique<SwEndNoteOptionPage>(pParent, true, *rSet);
 }
 
 // Different kinds of numbering; because the Listbox has varying numbers of
@@ -379,9 +378,9 @@ SwFootNoteOptionPage::~SwFootNoteOptionPage()
 {
 }
 
-VclPtr<SfxTabPage> SwFootNoteOptionPage::Create(TabPageParent pParent, const SfxItemSet *rSet )
+std::unique_ptr<SfxTabPage> SwFootNoteOptionPage::Create(TabPageParent pParent, const SfxItemSet *rSet )
 {
-    return VclPtr<SwFootNoteOptionPage>::Create(pParent, *rSet);
+    return std::make_unique<SwFootNoteOptionPage>(pParent, *rSet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

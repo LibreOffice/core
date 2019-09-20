@@ -28,8 +28,6 @@ namespace offapp
 {
     class ConnectionPoolOptionsPage final : public SfxTabPage
     {
-        using TabPage::ActivatePage;
-
         OUString m_sYes;
         OUString m_sNo;
         DriverPoolingSettings m_aSettings;
@@ -47,7 +45,7 @@ namespace offapp
     public:
         ConnectionPoolOptionsPage(TabPageParent _pParent, const SfxItemSet& _rAttrSet);
         virtual ~ConnectionPoolOptionsPage() override;
-        static VclPtr<SfxTabPage>  Create(TabPageParent _pParent, const SfxItemSet* _rAttrSet);
+        static std::unique_ptr<SfxTabPage> Create(TabPageParent _pParent, const SfxItemSet* _rAttrSet);
 
     private:
         virtual bool        FillItemSet(SfxItemSet* _rSet) override;

@@ -42,8 +42,6 @@ class SvxLineSpacingItem;
 class SvxStdParagraphTabPage: public SfxTabPage
 {
     friend class VclPtr<SvxStdParagraphTabPage>;
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pStdRanges[];
 
 private:
@@ -107,7 +105,7 @@ public:
 
     DECL_LINK(ELRLoseFocusHdl, weld::MetricSpinButton&, void);
 
-    static VclPtr<SfxTabPage>      Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pStdRanges; }
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
@@ -128,8 +126,6 @@ public:
 class SvxParaAlignTabPage : public SfxTabPage
 {
     friend class VclPtr<SvxParaAlignTabPage>;
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pAlignRanges[];
 
     SvxParaPrevWindow m_aExampleWin;
@@ -172,7 +168,7 @@ protected:
 public:
     virtual ~SvxParaAlignTabPage() override;
 
-    static VclPtr<SfxTabPage>      Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pAlignRanges; }
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
@@ -200,13 +196,12 @@ public:
 class SvxExtParagraphTabPage: public SfxTabPage
 {
     friend class VclPtr<SvxExtParagraphTabPage>;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pExtRanges[];
 
 public:
     virtual ~SvxExtParagraphTabPage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
                                 const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pExtRanges; }
 
@@ -303,7 +298,7 @@ class SvxAsianTabPage : public SfxTabPage
 public:
     virtual ~SvxAsianTabPage() override;
 
-    static VclPtr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
     static const sal_uInt16*      GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

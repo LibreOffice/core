@@ -58,14 +58,12 @@ public:
 class SvxNumberFormatTabPage : public SfxTabPage
 {
     friend class VclPtr<SvxNumberFormatTabPage>;
-    using SfxTabPage::DeactivatePage;
     static const sal_uInt16 pRanges[];
 
 public:
     virtual ~SvxNumberFormatTabPage() override;
-    virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>      Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
                                     const SfxItemSet* rAttrSet );
     // Returns area information.
     static const sal_uInt16* GetRanges() { return pRanges; }

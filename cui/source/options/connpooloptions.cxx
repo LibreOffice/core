@@ -125,9 +125,9 @@ namespace offapp
     {
     }
 
-    VclPtr<SfxTabPage> ConnectionPoolOptionsPage::Create(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    std::unique_ptr<SfxTabPage> ConnectionPoolOptionsPage::Create(TabPageParent pParent, const SfxItemSet* _rAttrSet)
     {
-        return VclPtr<ConnectionPoolOptionsPage>::Create(pParent, *_rAttrSet);
+        return std::make_unique<ConnectionPoolOptionsPage>(pParent, *_rAttrSet);
     }
 
     void ConnectionPoolOptionsPage::implInitControls(const SfxItemSet& _rSet)

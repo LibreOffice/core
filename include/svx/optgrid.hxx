@@ -88,14 +88,11 @@ public:
 
 class SVX_DLLPUBLIC SvxGridTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 public:
     SvxGridTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxGridTabPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet& rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet& rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

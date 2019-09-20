@@ -283,9 +283,9 @@ OfaMiscTabPage::~OfaMiscTabPage()
 {
 }
 
-VclPtr<SfxTabPage> OfaMiscTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> OfaMiscTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<OfaMiscTabPage>::Create( pParent, *rAttrSet );
+    return std::make_unique<OfaMiscTabPage>( pParent, *rAttrSet );
 }
 
 bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
@@ -704,9 +704,9 @@ IMPL_LINK_NOARG(OfaViewTabPage, OnForceOpenGLToggled, weld::ToggleButton&, void)
     }
 }
 
-VclPtr<SfxTabPage> OfaViewTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> OfaViewTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<OfaViewTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<OfaViewTabPage>(pParent, *rAttrSet);
 }
 
 bool OfaViewTabPage::FillItemSet( SfxItemSet* )
@@ -1238,9 +1238,9 @@ OfaLanguagesTabPage::~OfaLanguagesTabPage()
 {
 }
 
-VclPtr<SfxTabPage> OfaLanguagesTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> OfaLanguagesTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<OfaLanguagesTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<OfaLanguagesTabPage>(pParent, *rAttrSet);
 }
 
 static void lcl_Update(std::unique_ptr<SfxVoidItem> pInvalidItems[], std::unique_ptr<SfxBoolItem> pBoolItems[], sal_uInt16 nCount)

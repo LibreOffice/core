@@ -128,8 +128,6 @@ public:
 
 class SvxTransparenceTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pTransparenceRanges[];
 
     const SfxItemSet&   rOutAttrs;
@@ -191,7 +189,7 @@ public:
     SvxTransparenceTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxTransparenceTabPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent, const SfxItemSet*);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent, const SfxItemSet*);
     static const sal_uInt16* GetRanges() { return pTransparenceRanges; }
 
     virtual bool FillItemSet(SfxItemSet*) override;
@@ -211,7 +209,7 @@ class SvxAreaTabPage : public SfxTabPage
 {
     static const sal_uInt16 pAreaRanges[];
 private:
-    ScopedVclPtr<SfxTabPage>   m_pFillTabPage;
+    std::unique_ptr<SfxTabPage> m_xFillTabPage;
     ButtonBox                  maBox;
 
     XColorListRef         m_pColorList;
@@ -249,7 +247,7 @@ protected:
     void SetOptimalSize(weld::DialogController* pController);
 
     void SelectFillType( weld::ToggleButton& rButton, const SfxItemSet* _pSet = nullptr );
-    SfxTabPage* GetFillTabPage() { return m_pFillTabPage; }
+    SfxTabPage* GetFillTabPage() { return m_xFillTabPage.get(); }
 
     bool IsBtnClicked() const { return m_bBtnClicked; }
 
@@ -264,14 +262,10 @@ private:
     DeactivateRC DeactivatePage_Impl( SfxItemSet* pSet );
 
 public:
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
     SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxAreaTabPage() override;
-    virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pAreaRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
@@ -298,8 +292,6 @@ public:
 
 class SvxShadowTabPage : public SvxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pShadowRanges[];
 
 private:
@@ -331,9 +323,8 @@ private:
 public:
     SvxShadowTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxShadowTabPage() override;
-    virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pShadowRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
@@ -353,9 +344,6 @@ public:
 
 class SvxGradientTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 private:
     const SfxItemSet&   m_rOutAttrs;
 
@@ -410,11 +398,10 @@ private:
 public:
     SvxGradientTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxGradientTabPage() override;
-    virtual void dispose() override;
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 
@@ -432,9 +419,6 @@ public:
 
 class SvxHatchTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 private:
     const SfxItemSet&   m_rOutAttrs;
 
@@ -482,11 +466,10 @@ private:
 public:
     SvxHatchTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxHatchTabPage() override;
-    virtual void dispose() override;
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 
@@ -499,16 +482,12 @@ public:
 
     void    SetHtchChgd( ChangeType* pIn ) { m_pnHatchingListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
-
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
 /************************************************************************/
 
 class SvxBitmapTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pBitmapRanges[];
 private:
 
@@ -567,11 +546,10 @@ private:
 public:
     SvxBitmapTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxBitmapTabPage() override;
-    virtual void dispose() override;
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
@@ -586,9 +564,6 @@ public:
 
 class SvxPatternTabPage : public SvxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 private:
     const SfxItemSet&   m_rOutAttrs;
 
@@ -625,11 +600,10 @@ private:
 public:
     SvxPatternTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxPatternTabPage() override;
-    virtual void dispose() override;
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 
@@ -655,9 +629,6 @@ enum class ColorModel
 
 class SvxColorTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 private:
     const SfxItemSet&   rOutAttrs;
 
@@ -743,11 +714,10 @@ private:
 public:
     SvxColorTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxColorTabPage() override;
-    virtual void dispose() override;
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 

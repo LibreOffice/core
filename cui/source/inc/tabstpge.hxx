@@ -60,13 +60,11 @@ public:
 class SvxTabulatorTabPage : public SfxTabPage
 {
     friend class VclPtr<SvxTabulatorTabPage>;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pRanges[];
 
 public:
     virtual ~SvxTabulatorTabPage() override;
-    virtual void dispose() override;
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

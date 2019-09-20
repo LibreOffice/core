@@ -57,7 +57,7 @@ public:
                                bool bHideDescription = false);
     virtual ~DataSourceTabPage() override;
 
-    virtual void ActivatePage() override;
+    virtual void Activate() override;
 
     void commitPage();
 
@@ -66,7 +66,7 @@ private:
     virtual bool commitPage( ::vcl::WizardTypes::CommitPageReason eReason ) override;
 
     //TabPage
-    virtual void DeactivatePage() override;
+    virtual void Deactivate() override;
 
     virtual void        initializePage() override;
 

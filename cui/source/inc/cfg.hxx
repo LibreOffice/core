@@ -318,7 +318,7 @@ class SvxMenuEntriesListBox
 protected:
     std::unique_ptr<weld::TreeView> m_xControl;
     ScopedVclPtr<VirtualDevice> m_xDropDown;
-    VclPtr<SvxConfigPage> pPage;
+    SvxConfigPage* m_pPage;
 
 public:
     SvxMenuEntriesListBox(std::unique_ptr<weld::TreeView> xControl, SvxConfigPage* pPage);
