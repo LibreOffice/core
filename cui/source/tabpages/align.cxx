@@ -155,20 +155,14 @@ AlignmentTabPage::AlignmentTabPage(TabPageParent pParent, const SfxItemSet& rCor
 
 AlignmentTabPage::~AlignmentTabPage()
 {
-    disposeOnce();
-}
-
-void AlignmentTabPage::dispose()
-{
     m_xCtrlDial.reset();
     m_xVsRefEdge.reset();
     m_xLbFrameDir.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> AlignmentTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> AlignmentTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<AlignmentTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<AlignmentTabPage>(pParent, *rAttrSet);
 }
 
 bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
@@ -582,15 +576,6 @@ DeactivateRC AlignmentTabPage::DeactivatePage( SfxItemSet* _pSet )
     if( _pSet )
         FillItemSet( _pSet );
     return DeactivateRC::LeavePage;
-}
-
-void AlignmentTabPage::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    SfxTabPage::DataChanged( rDCEvt );
-    if( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-    {
-        InitVsRefEgde();
-    }
 }
 
 void AlignmentTabPage::InitVsRefEgde()

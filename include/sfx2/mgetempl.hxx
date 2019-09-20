@@ -62,7 +62,7 @@ class SfxManageStyleSheetPage final : public SfxTabPage
     std::unique_ptr<weld::Label> m_xDescFt;
     std::unique_ptr<weld::Label> m_xNameFt;
 
-friend class SfxStyleDialogController;
+    friend class SfxStyleDialogController;
 
     DECL_LINK(GetFocusHdl, weld::Widget&, void);
     DECL_LINK(LoseFocusHdl, weld::Widget&, void);
@@ -74,22 +74,19 @@ friend class SfxStyleDialogController;
     void    UpdateName_Impl(weld::ComboBox*, const OUString &rNew);
     void    SetDescriptionText_Impl();
 
-    virtual ~SfxManageStyleSheetPage() override;
-    virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
 
     virtual bool        FillItemSet(SfxItemSet *) override;
     virtual void        Reset(const SfxItemSet *) override;
 
     static bool    Execute_Impl( sal_uInt16 nId, const OUString& rStr, sal_uInt16 nFamily );
-    using TabPage::ActivatePage;
     virtual void        ActivatePage(const SfxItemSet &) override;
-    using TabPage::DeactivatePage;
     virtual DeactivateRC DeactivatePage(SfxItemSet *) override;
 
 public:
     SfxManageStyleSheetPage(TabPageParent pParent, const SfxItemSet &rAttrSet);
+    virtual ~SfxManageStyleSheetPage() override;
 };
 
 #endif

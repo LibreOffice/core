@@ -403,9 +403,9 @@ void SwLabFormatPage::ChangeMinMax()
     m_xPHeightField->set_range(long(100) * lMinPHeight, long(100) * lMax, FieldUnit::TWIP);
 }
 
-VclPtr<SfxTabPage> SwLabFormatPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwLabFormatPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwLabFormatPage>::Create(pParent, *rSet);
+    return std::make_unique<SwLabFormatPage>(pParent, *rSet);
 }
 
 void SwLabFormatPage::ActivatePage(const SfxItemSet& rSet)

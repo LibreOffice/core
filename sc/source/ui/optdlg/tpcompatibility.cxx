@@ -25,9 +25,9 @@ ScTpCompatOptions::~ScTpCompatOptions()
 {
 }
 
-VclPtr<SfxTabPage> ScTpCompatOptions::Create(TabPageParent pParent, const SfxItemSet *rCoreAttrs)
+std::unique_ptr<SfxTabPage> ScTpCompatOptions::Create(TabPageParent pParent, const SfxItemSet *rCoreAttrs)
 {
-    return VclPtr<ScTpCompatOptions>::Create(pParent, *rCoreAttrs);
+    return std::make_unique<ScTpCompatOptions>(pParent, *rCoreAttrs);
 }
 
 bool ScTpCompatOptions::FillItemSet(SfxItemSet *rCoreAttrs)

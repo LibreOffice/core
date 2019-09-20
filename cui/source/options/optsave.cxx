@@ -179,10 +179,10 @@ SvxSaveTabPage::~SvxSaveTabPage()
 {
 }
 
-VclPtr<SfxTabPage> SvxSaveTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxSaveTabPage::Create(TabPageParent pParent,
                                           const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxSaveTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxSaveTabPage>(pParent, *rAttrSet);
 }
 
 void SvxSaveTabPage::DetectHiddenControls()

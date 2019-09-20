@@ -87,19 +87,13 @@ ScTpContentOptions::ScTpContentOptions(TabPageParent pParent, const SfxItemSet& 
 
 ScTpContentOptions::~ScTpContentOptions()
 {
-    disposeOnce();
-}
-
-void ScTpContentOptions::dispose()
-{
     m_xColorLB.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> ScTpContentOptions::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ScTpContentOptions::Create( TabPageParent pParent,
                                                const SfxItemSet*     rCoreSet )
 {
-    return VclPtr<ScTpContentOptions>::Create(pParent, *rCoreSet);
+    return std::make_unique<ScTpContentOptions>(pParent, *rCoreSet);
 }
 
 bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
@@ -359,15 +353,15 @@ ScTpLayoutOptions::~ScTpLayoutOptions()
 {
 }
 
-VclPtr<SfxTabPage> ScTpLayoutOptions::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ScTpLayoutOptions::Create( TabPageParent pParent,
                                               const SfxItemSet*   rCoreSet )
 {
-    VclPtrInstance<ScTpLayoutOptions> pNew( pParent, *rCoreSet );
-    ScDocShell* pDocSh = dynamic_cast< ScDocShell *>( SfxObjectShell::Current() );
+    auto xNew = std::make_unique<ScTpLayoutOptions>(pParent, *rCoreSet);
 
-    if(pDocSh!=nullptr)
-        pNew->pDoc = &pDocSh->GetDocument();
-    return pNew;
+    ScDocShell* pDocSh = dynamic_cast< ScDocShell *>( SfxObjectShell::Current() );
+    if (pDocSh!=nullptr)
+        xNew->pDoc = &pDocSh->GetDocument();
+    return xNew;
 }
 
 bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )

@@ -74,7 +74,7 @@ class SvxPixelCtlAccessible;
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRectCtl : public weld::CustomWidgetController
 {
 private:
-    VclPtr<SvxTabPage> m_pPage;
+    SvxTabPage* m_pPage;
 
     SVX_DLLPRIVATE static void      InitSettings(vcl::RenderContext& rRenderContext);
     SVX_DLLPRIVATE void             InitRectBitmap();
@@ -148,7 +148,7 @@ private:
     static sal_uInt16 constexpr nLines = 8;
     static sal_uInt16 constexpr nSquares = nLines * nLines;
 
-    VclPtr<SvxTabPage> m_pPage;
+    SvxTabPage* m_pPage;
 
     Color       aPixelColor;
     Color       aBackgroundColor;

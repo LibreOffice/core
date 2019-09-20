@@ -134,14 +134,8 @@ SvxCaptionTabPage::SvxCaptionTabPage(TabPageParent pParent, const SfxItemSet& rI
 
 SvxCaptionTabPage::~SvxCaptionTabPage()
 {
-    disposeOnce();
-}
-
-void SvxCaptionTabPage::dispose()
-{
     m_xCT_CAPTTYPEWin.reset();
     m_xCT_CAPTTYPE.reset();
-    SfxTabPage::dispose();
 }
 
 void SvxCaptionTabPage::Construct()
@@ -338,10 +332,10 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     SetupType_Impl( nCaptionType );
 }
 
-VclPtr<SfxTabPage> SvxCaptionTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxCaptionTabPage::Create(TabPageParent pParent,
                                              const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<SvxCaptionTabPage>::Create(pParent, *rOutAttrs);
+    return std::make_unique<SvxCaptionTabPage>(pParent, *rOutAttrs);
 }
 
 void SvxCaptionTabPage::SetupExtension_Impl( sal_uInt16 nType )
@@ -457,13 +451,6 @@ void SvxCaptionTabPage::SetupType_Impl( SdrCaptionType nType )
     }
 }
 
-void SvxCaptionTabPage::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    SfxTabPage::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-            FillValueSet();
-}
 void SvxCaptionTabPage::FillValueSet()
 {
     m_xCT_CAPTTYPE->SetItemImage(BMP_CAPTTYPE_1, m_aBmpCapTypes[0] );

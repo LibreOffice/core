@@ -69,7 +69,6 @@ namespace dbaui
     protected:
 
         virtual ~OCommonBehaviourTabPage() override;
-        virtual void dispose() override;
 
         // subclasses must override this, but it isn't pure virtual
         virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
@@ -190,7 +189,6 @@ namespace dbaui
     {
     public:
         MySQLNativePage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
-        virtual void dispose() override;
         virtual ~MySQLNativePage() override;
 
     private:
@@ -238,10 +236,9 @@ namespace dbaui
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
 
         OTextDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
+        virtual ~OTextDetailsPage() override;
 
     protected:
-        virtual ~OTextDetailsPage() override;
-        virtual void dispose() override;
         virtual bool prepareLeave() override;
 
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;

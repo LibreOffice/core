@@ -82,9 +82,9 @@ private:
     OUString                m_sRM_FinalText;
     INetURLObject           m_aDocURL;
     OUString                m_sWorkPath;
-    VclPtr<OGeneralPageWizard>     m_pGeneralPage;
-    VclPtr<OMySQLIntroPageSetup>   m_pMySQLIntroPage;
-    VclPtr<OFinalDBPageSetup>      m_pFinalPage;
+    OGeneralPageWizard*     m_pGeneralPage;
+    OMySQLIntroPageSetup*   m_pMySQLIntroPage;
+    OFinalDBPageSetup*      m_pFinalPage;
 
     ::dbaccess::ODsnTypeCollection*
                             m_pCollection;  /// the DSN type collection instance
@@ -124,10 +124,10 @@ public:
 
 private:
     /// to override to create new pages
-    virtual VclPtr<TabPage> createPage(WizardState _nState) override;
+    virtual std::unique_ptr<BuilderPage> createPage(WizardState _nState) override;
     virtual bool        leaveState(WizardState _nState) override;
     virtual void        enterState(WizardState _nState) override;
-    virtual ::vcl::IWizardPageController* getPageController( TabPage* _pCurrentPage ) const override;
+    virtual ::vcl::IWizardPageController* getPageController(BuilderPage* pCurrentPage) const override;
     virtual bool        onFinish() override;
 
     void resetPages(const css::uno::Reference< css::beans::XPropertySet >& _rxDatasource);

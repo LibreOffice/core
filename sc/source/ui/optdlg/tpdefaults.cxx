@@ -28,9 +28,9 @@ ScTpDefaultsOptions::~ScTpDefaultsOptions()
 {
 }
 
-VclPtr<SfxTabPage> ScTpDefaultsOptions::Create(TabPageParent pParent, const SfxItemSet *rCoreAttrs)
+std::unique_ptr<SfxTabPage> ScTpDefaultsOptions::Create(TabPageParent pParent, const SfxItemSet *rCoreAttrs)
 {
-    return VclPtr<ScTpDefaultsOptions>::Create(pParent, *rCoreAttrs);
+    return std::make_unique<ScTpDefaultsOptions>(pParent, *rCoreAttrs);
 }
 
 bool ScTpDefaultsOptions::FillItemSet(SfxItemSet *rCoreSet)

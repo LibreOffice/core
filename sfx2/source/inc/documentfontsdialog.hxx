@@ -29,7 +29,7 @@ class SfxDocumentFontsPage: public SfxTabPage
 public:
     SfxDocumentFontsPage(TabPageParent parent, const SfxItemSet& set);
     virtual ~SfxDocumentFontsPage() override;
-    static VclPtr<SfxTabPage> Create(TabPageParent parent, const SfxItemSet* set);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent parent, const SfxItemSet* set);
 protected:
     virtual bool FillItemSet( SfxItemSet* set ) override;
     virtual void Reset( const SfxItemSet* set ) override;

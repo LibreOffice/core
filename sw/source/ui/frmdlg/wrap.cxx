@@ -59,10 +59,11 @@ SwWrapDlg::SwWrapDlg(weld::Window* pParent, SfxItemSet& rSet, SwWrtShell* pWrtSh
 {
     // create TabPage
     TabPageParent pPageParent(get_content_area(), this);
-    VclPtr<SwWrapTabPage> xNewPage = static_cast<SwWrapTabPage*>(SwWrapTabPage::Create(pPageParent, &rSet).get());
-    xNewPage->SetFormatUsed(false, bDrawMode);
-    xNewPage->SetShell(pWrtShell);
-    SetTabPage(xNewPage);
+    auto xNewPage = SwWrapTabPage::Create(pPageParent, &rSet);
+    SwWrapTabPage* pWrapPage = static_cast<SwWrapTabPage*>(xNewPage.get());
+    pWrapPage->SetFormatUsed(false, bDrawMode);
+    pWrapPage->SetShell(pWrtShell);
+    SetTabPage(std::move(xNewPage));
 }
 
 SwWrapTabPage::SwWrapTabPage(TabPageParent pParent, const SfxItemSet &rSet)
@@ -114,9 +115,9 @@ SwWrapTabPage::~SwWrapTabPage()
 {
 }
 
-VclPtr<SfxTabPage> SwWrapTabPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwWrapTabPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwWrapTabPage>::Create(pParent, *rSet);
+    return std::make_unique<SwWrapTabPage>(pParent, *rSet);
 }
 
 void SwWrapTabPage::Reset(const SfxItemSet *rSet)

@@ -28,9 +28,9 @@
 
 // Dokumentinfo-Tabpage:
 
-VclPtr<SfxTabPage> ScDocStatPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+std::unique_ptr<SfxTabPage> ScDocStatPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<ScDocStatPage>::Create( pParent, *rSet );
+    return std::make_unique<ScDocStatPage>( pParent, *rSet );
 }
 
 ScDocStatPage::ScDocStatPage(TabPageParent pParent, const SfxItemSet& rSet)

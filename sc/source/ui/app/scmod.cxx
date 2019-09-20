@@ -2025,9 +2025,9 @@ void ScModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     }
 }
 
-VclPtr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet )
+std::unique_ptr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet )
 {
-    VclPtr<SfxTabPage> pRet;
+    std::unique_ptr<SfxTabPage> xRet;
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     switch(nId)
     {
@@ -2035,73 +2035,73 @@ VclPtr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, TabPageParent pParen
         {
             ::CreateTabPage ScTpLayoutOptionsCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_LAYOUT);
             if (ScTpLayoutOptionsCreate)
-                pRet = (*ScTpLayoutOptionsCreate)(pParent, &rSet);
+                xRet = (*ScTpLayoutOptionsCreate)(pParent, &rSet);
             break;
         }
         case SID_SC_TP_CONTENT:
         {
             ::CreateTabPage ScTpContentOptionsCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_CONTENT);
             if (ScTpContentOptionsCreate)
-                pRet = (*ScTpContentOptionsCreate)(pParent, &rSet);
+                xRet = (*ScTpContentOptionsCreate)(pParent, &rSet);
             break;
         }
         case SID_SC_TP_GRID:
-            pRet = SvxGridTabPage::Create(pParent, rSet);
+            xRet = SvxGridTabPage::Create(pParent, rSet);
             break;
         case SID_SC_TP_USERLISTS:
         {
             ::CreateTabPage ScTpUserListsCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_USERLISTS);
             if (ScTpUserListsCreate)
-                pRet = (*ScTpUserListsCreate)(pParent, &rSet);
+                xRet = (*ScTpUserListsCreate)(pParent, &rSet);
             break;
         }
         case SID_SC_TP_CALC:
         {
             ::CreateTabPage ScTpCalcOptionsCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_CALC);
             if (ScTpCalcOptionsCreate)
-                pRet = (*ScTpCalcOptionsCreate)(pParent, &rSet);
+                xRet = (*ScTpCalcOptionsCreate)(pParent, &rSet);
             break;
         }
         case SID_SC_TP_FORMULA:
         {
             ::CreateTabPage ScTpFormulaOptionsCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_FORMULA);
             if (ScTpFormulaOptionsCreate)
-                pRet = (*ScTpFormulaOptionsCreate)(pParent, &rSet);
+                xRet = (*ScTpFormulaOptionsCreate)(pParent, &rSet);
             break;
         }
         case SID_SC_TP_COMPATIBILITY:
         {
             ::CreateTabPage ScTpCompatOptionsCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_COMPATIBILITY);
             if (ScTpCompatOptionsCreate)
-                pRet = (*ScTpCompatOptionsCreate)(pParent, &rSet);
+                xRet = (*ScTpCompatOptionsCreate)(pParent, &rSet);
             break;
         }
         case SID_SC_TP_CHANGES:
         {
             ::CreateTabPage ScRedlineOptionsTabPageCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_CHANGES);
             if (ScRedlineOptionsTabPageCreate)
-                pRet =(*ScRedlineOptionsTabPageCreate)(pParent, &rSet);
+                xRet =(*ScRedlineOptionsTabPageCreate)(pParent, &rSet);
             break;
         }
         case RID_SC_TP_PRINT:
         {
             ::CreateTabPage ScTpPrintOptionsCreate = pFact->GetTabPageCreatorFunc(RID_SC_TP_PRINT);
             if (ScTpPrintOptionsCreate)
-                pRet = (*ScTpPrintOptionsCreate)(pParent, &rSet);
+                xRet = (*ScTpPrintOptionsCreate)(pParent, &rSet);
             break;
         }
         case RID_SC_TP_DEFAULTS:
         {
             ::CreateTabPage ScTpDefaultsOptionsCreate = pFact->GetTabPageCreatorFunc(RID_SC_TP_DEFAULTS);
             if (ScTpDefaultsOptionsCreate)
-                pRet = (*ScTpDefaultsOptionsCreate)(pParent, &rSet);
+                xRet = (*ScTpDefaultsOptionsCreate)(pParent, &rSet);
             break;
         }
     }
 
-    OSL_ENSURE( pRet, "ScModule::CreateTabPage(): no valid ID for TabPage!" );
+    OSL_ENSURE( xRet, "ScModule::CreateTabPage(): no valid ID for TabPage!" );
 
-    return pRet;
+    return xRet;
 }
 
 IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void )

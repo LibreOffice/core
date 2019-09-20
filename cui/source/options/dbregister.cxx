@@ -113,20 +113,14 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage(TabPageParent pParent, cons
 
 DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
 {
-    disposeOnce();
-}
-
-void DbRegistrationOptionsPage::dispose()
-{
     for (int i = 0, nCount = m_xPathBox->n_children(); i < nCount; ++i )
         delete reinterpret_cast<DatabaseRegistration*>(m_xPathBox->get_id(i).toInt64());
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> DbRegistrationOptionsPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> DbRegistrationOptionsPage::Create( TabPageParent pParent,
                                     const SfxItemSet* rAttrSet )
 {
-    return VclPtr<DbRegistrationOptionsPage>::Create( pParent, *rAttrSet );
+    return std::make_unique<DbRegistrationOptionsPage>(pParent, *rAttrSet);
 }
 
 bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet* rCoreSet )

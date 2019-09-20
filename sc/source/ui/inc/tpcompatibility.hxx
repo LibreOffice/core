@@ -14,19 +14,15 @@
 
 class ScTpCompatOptions : public SfxTabPage
 {
-    friend class VclPtr<ScTpCompatOptions>;
 public:
-    using SfxTabPage::DeactivatePage;
-
-    static  VclPtr<SfxTabPage> Create (TabPageParent pParent, const SfxItemSet* rCoreAttrs);
+    explicit ScTpCompatOptions(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rCoreAttrs);
+    virtual ~ScTpCompatOptions() override;
 
     virtual bool FillItemSet(SfxItemSet* rCoreAttrs) override;
     virtual void Reset(const SfxItemSet* rCoreAttrs) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet ) override;
 
-    virtual ~ScTpCompatOptions() override;
-private:
-    explicit ScTpCompatOptions(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
 private:
     std::unique_ptr<weld::ComboBox> m_xLbKeyBindings;
 };

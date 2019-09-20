@@ -76,9 +76,9 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-    VclPtr<SfxTabPage> OConnectionTabPage::Create(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    std::unique_ptr<SfxTabPage> OConnectionTabPage::Create(TabPageParent pParent, const SfxItemSet* _rAttrSet)
     {
-        return VclPtr<OConnectionTabPage>::Create(pParent, *_rAttrSet);
+        return std::make_unique<OConnectionTabPage>(pParent, *_rAttrSet);
     }
 
     // OConnectionTabPage
@@ -105,7 +105,6 @@ namespace dbaui
 
     OConnectionTabPage::~OConnectionTabPage()
     {
-        disposeOnce();
     }
 
     void OConnectionTabPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
@@ -285,7 +284,7 @@ namespace dbaui
 
         const char* pMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const MessageType mt = bSuccess ? MessageType::Info : MessageType::Error;
-        OSQLMessageBox aMsg(GetFrameWeld(), DBA_RES(pMessage), OUString(), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, mt);
+        OSQLMessageBox aMsg(GetDialogFrameWeld(), DBA_RES(pMessage), OUString(), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, mt);
         aMsg.run();
     }
     bool OConnectionTabPage::checkTestConnection()

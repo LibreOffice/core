@@ -42,10 +42,12 @@
 #include "dsselect.hxx"
 #include <svl/filenotation.hxx>
 #include <stringconstants.hxx>
+#include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/mozilla/MozillaBootstrap.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
@@ -57,6 +59,7 @@
 #include <connectivity/CommonTools.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
+#include <rtl/process.h>
 #include <sfx2/docfilt.hxx>
 
 #if defined _WIN32
@@ -106,12 +109,7 @@ namespace dbaui
 
     OConnectionHelper::~OConnectionHelper()
     {
-    }
-
-    void OConnectionHelper::dispose()
-    {
         m_xConnectionURL.reset();
-        OGenericAdministrationPage::dispose();
     }
 
     void OConnectionHelper::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
@@ -215,7 +213,7 @@ namespace dbaui
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                     FileDialogFlags::NONE,
                     aModule.GetFactoryEmptyDocumentURL(SvtModuleOptions::EFactory::CALC)
-                    ,SfxFilterFlags::IMPORT, SfxFilterFlags::NONE, GetFrameWeld());
+                    ,SfxFilterFlags::IMPORT, SfxFilterFlags::NONE, GetDialogFrameWeld());
                 askForFileName(aFileDlg);
             }
             break;
@@ -226,7 +224,7 @@ namespace dbaui
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                     FileDialogFlags::NONE,
                     aModule.GetFactoryEmptyDocumentURL(SvtModuleOptions::EFactory::WRITER),
-                    SfxFilterFlags::IMPORT, SfxFilterFlags::NONE, GetFrameWeld());
+                    SfxFilterFlags::IMPORT, SfxFilterFlags::NONE, GetDialogFrameWeld());
                 askForFileName(aFileDlg);
             }
             break;
@@ -236,7 +234,7 @@ namespace dbaui
                 OUString sFilterName(DBA_RES (STR_MSACCESS_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                    FileDialogFlags::NONE, GetFrameWeld());
+                    FileDialogFlags::NONE, GetDialogFrameWeld());
                 aFileDlg.AddFilter(sFilterName,sExt);
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);
@@ -248,7 +246,7 @@ namespace dbaui
                 OUString sFilterName2(DBA_RES (STR_MSACCESS_2007_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                    FileDialogFlags::NONE, GetFrameWeld());
+                    FileDialogFlags::NONE, GetDialogFrameWeld());
                 aFileDlg.AddFilter(sFilterName2,sAccdb);
                 aFileDlg.SetCurrentFilter(sFilterName2);
                 askForFileName(aFileDlg);
@@ -275,7 +273,20 @@ namespace dbaui
             {
                 OUString sOldDataSource=getURLNoPrefix();
                 OUString sNewDataSource;
-                HWND hWnd = GetParent()->GetSystemData()->hWnd;
+                HWND hWnd = 0;
+
+                weld::Window* pDialog = GetDialogFrameWeld();
+                css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(pDialog->GetXWindow(), css::uno::UNO_QUERY);
+                if (xSysDepWin.is())
+                {
+                    css::uno::Sequence<sal_Int8> aProcessIdent(16);
+                    rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
+                    css::uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent, css::lang::SystemDependent::SYSTEM_WIN32);
+                    sal_Int64 tmp(0);
+                    aAny >>= tmp;
+                    hWnd = reinterpret_cast<HWND>(tmp);
+                }
+
                 sNewDataSource = getAdoDatalink(reinterpret_cast<LONG_PTR>(hWnd),sOldDataSource);
                 if ( !sNewDataSource.isEmpty() )
                 {
@@ -283,8 +294,6 @@ namespace dbaui
                     SetRoadmapStateValue(true);
                     callModifiedHdl();
                 }
-                else
-                    return;
             }
             break;
 #endif
@@ -311,7 +320,7 @@ namespace dbaui
                     aProfiles.insert(pArray[index]);
 
                 // execute the select dialog
-                ODatasourceSelectDialog aSelector(GetFrameWeld(), aProfiles);
+                ODatasourceSelectDialog aSelector(GetDialogFrameWeld(), aProfiles);
                 OUString sOldProfile=getURLNoPrefix();
 
                 if (!sOldProfile.isEmpty())
@@ -329,7 +338,7 @@ namespace dbaui
                 OUString sFilterName(DBA_RES (STR_FIREBIRD_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-                    FileDialogFlags::NONE, GetFrameWeld());
+                    FileDialogFlags::NONE, GetDialogFrameWeld());
                 aFileDlg.AddFilter(sFilterName,sExt);
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);
@@ -354,7 +363,7 @@ namespace dbaui
                 OUString sFilterName(DBA_RES (STR_FIREBIRD_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
-                    FileDialogFlags::NONE, GetFrameWeld());
+                    FileDialogFlags::NONE, GetDialogFrameWeld());
                 aFileDlg.AddFilter(sFilterName,sExt);
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);
@@ -470,8 +479,7 @@ namespace dbaui
             sQuery = sQuery.replaceFirst("$path$", aTransformer.get(OFileNotation::N_SYSTEM));
 
             m_bUserGrabFocus = false;
-            vcl::Window* pWin = GetParent();
-            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
                                                            VclMessageType::Question, VclButtonsType::YesNo,
                                                            sQuery));
             xQueryBox->set_default_response(RET_YES);
@@ -492,7 +500,7 @@ namespace dbaui
 
                             m_bUserGrabFocus = false;
 
-                            std::unique_ptr<weld::MessageDialog> xWhatToDo(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                            std::unique_ptr<weld::MessageDialog> xWhatToDo(Application::CreateMessageDialog(GetDialogFrameWeld(),
                                                                            VclMessageType::Question, VclButtonsType::NONE,
                                                                            sQuery));
                             xWhatToDo->add_button(GetStandardText(StandardButtonType::Retry), RET_RETRY);
@@ -680,7 +688,7 @@ namespace dbaui
                     {
                         OUString sFile = DBA_RES( STR_FILE_DOES_NOT_EXIST );
                         sFile = sFile.replaceFirst("$file$", aTransformer.get(OFileNotation::N_SYSTEM));
-                        OSQLWarningBox aWarning(GetFrameWeld(), sFile);
+                        OSQLWarningBox aWarning(GetDialogFrameWeld(), sFile);
                         aWarning.run();
                         setURLNoPrefix(sOldPath);
                         SetRoadmapStateValue(false);
