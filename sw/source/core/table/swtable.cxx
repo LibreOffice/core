@@ -2518,7 +2518,7 @@ sal_uLong SwTableBox::IsValidNumTextNd( bool bCheckAttr ) const
                                 // should not turn cell into text cell
                                 const SwField* pField = pAttr->GetFormatField().GetField();
                                 if (pField &&
-                                    (pField->GetTypeId() == TYP_SETFLD) &&
+                                    (pField->GetTypeId() == SwFieldTypesEnum::Set) &&
                                     (0 != (static_cast<SwSetExpField const*>
                                            (pField)->GetSubType() &
                                         nsSwExtendedSubType::SUB_INVISIBLE)))

@@ -63,7 +63,7 @@ class SwFieldVarPage : public SwFieldPage
     void SubTypeHdl(const weld::TreeView*);
 
     void                UpdateSubType();
-    void                FillFormatLB(sal_uInt16 nTypeId);
+    void                FillFormatLB(SwFieldTypesEnum nTypeId);
 
 protected:
     virtual sal_uInt16      GetGroup() override;

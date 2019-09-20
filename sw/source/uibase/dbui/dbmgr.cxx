@@ -2206,7 +2206,7 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
 
         // add the "record number" variable, as SwCalc::VarLook would.
         rCalc.VarChange( GetAppCharClass().lowercase(
-            SwFieldType::GetTypeStr(TYP_DBSETNUMBERFLD) ), GetSelectedRecordId() );
+            SwFieldType::GetTypeStr(SwFieldTypesEnum::DatabaseSetNumber) ), GetSelectedRecordId() );
 
         for( const OUString& rColName : aColNames )
         {

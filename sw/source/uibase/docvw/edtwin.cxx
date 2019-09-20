@@ -3324,26 +3324,26 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 GetView().GetViewFrame()->GetBindings().Execute( FN_EDIT_FOOTNOTE );
                             else
                             {
-                                sal_uInt16 nTypeId = pField->GetTypeId();
+                                SwFieldTypesEnum nTypeId = pField->GetTypeId();
                                 SfxViewFrame* pVFrame = GetView().GetViewFrame();
                                 switch( nTypeId )
                                 {
-                                case TYP_POSTITFLD:
-                                case TYP_SCRIPTFLD:
+                                case SwFieldTypesEnum::Postit:
+                                case SwFieldTypesEnum::Script:
                                 {
                                     // if it's a Readonly region, status has to be enabled
-                                    sal_uInt16 nSlot = TYP_POSTITFLD == nTypeId ? FN_POSTIT : FN_JAVAEDIT;
+                                    sal_uInt16 nSlot = SwFieldTypesEnum::Postit == nTypeId ? FN_POSTIT : FN_JAVAEDIT;
                                     SfxBoolItem aItem(nSlot, true);
                                     pVFrame->GetBindings().SetState(aItem);
                                     pVFrame->GetBindings().Execute(nSlot);
                                     break;
                                 }
-                                case TYP_AUTHORITY :
+                                case SwFieldTypesEnum::Authority :
                                     pVFrame->GetBindings().Execute(FN_EDIT_AUTH_ENTRY_DLG);
                                 break;
-                                case TYP_INPUTFLD:
-                                case TYP_DROPDOWN:
-                                case TYP_SETINPFLD:
+                                case SwFieldTypesEnum::Input:
+                                case SwFieldTypesEnum::Dropdown:
+                                case SwFieldTypesEnum::SetInput:
                                     pVFrame->GetBindings().Execute(FN_UPDATE_INPUTFIELDS);
                                     break;
                                 default:

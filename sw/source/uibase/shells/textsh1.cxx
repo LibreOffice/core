@@ -804,7 +804,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_GOTO_REFERENCE:
         {
             SwField *pField = rWrtSh.GetCurField();
-            if(pField && pField->GetTypeId() == TYP_GETREFFLD)
+            if(pField && pField->GetTypeId() == SwFieldTypesEnum::GetRef)
             {
                 rWrtSh.StartAllAction();
                 rWrtSh.SwCursorShell::GotoRefMark( static_cast<SwGetRefField*>(pField)->GetSetRefName(),
@@ -842,7 +842,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rWrtSh.EnterStdMode();
                 }
 
-                if( !bDelSel && aFieldMgr.GetCurField() && TYP_FORMELFLD == aFieldMgr.GetCurTypeId() )
+                if( !bDelSel && aFieldMgr.GetCurField() && SwFieldTypesEnum::Formel == aFieldMgr.GetCurTypeId() )
                     aFieldMgr.UpdateCurField( aFieldMgr.GetCurField()->GetFormat(), OUString(), sFormula );
                 else if( !sFormula.isEmpty() )
                 {
@@ -857,7 +857,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     {
                         SvNumberFormatter* pFormatter = rWrtSh.GetNumberFormatter();
                         const sal_uInt32 nSysNumFormat = pFormatter->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM);
-                        SwInsertField_Data aData(TYP_FORMELFLD, nsSwGetSetExpType::GSE_FORMULA, OUString(), sFormula, nSysNumFormat);
+                        SwInsertField_Data aData(SwFieldTypesEnum::Formel, nsSwGetSetExpType::GSE_FORMULA, OUString(), sFormula, nSysNumFormat);
                         aFieldMgr.InsertField(aData);
                     }
                 }
@@ -1563,7 +1563,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case FN_GOTO_REFERENCE:
             {
                 SwField *pField = rSh.GetCurField();
-                if ( !pField || (pField->GetTypeId() != TYP_GETREFFLD) )
+                if ( !pField || (pField->GetTypeId() != SwFieldTypesEnum::GetRef) )
                     rSet.DisableItem(nWhich);
             }
             break;
