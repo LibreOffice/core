@@ -24,13 +24,15 @@
 
 #include <SkBitmap.h>
 
+class SkImage;
+
 class VCL_PLUGIN_PUBLIC SkiaSalBitmap : public SalBitmap
 {
 public:
     SkiaSalBitmap();
+    SkiaSalBitmap(const SkImage& image);
     virtual ~SkiaSalBitmap() override;
 
-public:
     // SalBitmap methods
     virtual bool Create(const Size& rSize, sal_uInt16 nBitCount,
                         const BitmapPalette& rPal) override;
@@ -56,6 +58,10 @@ public:
     virtual bool Replace(const Color& rSearchColor, const Color& rReplaceColor,
                          sal_uInt8 nTol) override;
     virtual bool ConvertToGreyscale() override;
+
+#ifdef DBG_UTIL
+    void dump(const char* file) const;
+#endif
 
 private:
     SkBitmap mBitmap;
