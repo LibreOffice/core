@@ -99,7 +99,7 @@ private:
 
     friend class CheckListBox;
 
-    sal_uInt16 insertItem(UpdateDialog::Index *pIndex, bool bEnableCheckBox);
+    void insertItem(UpdateDialog::Index *pIndex, bool bEnableCheckBox);
     void addAdditional(UpdateDialog::Index *pIndex, bool bEnableCheckBox);
     bool isIgnoredUpdate( UpdateDialog::Index *pIndex );
 
