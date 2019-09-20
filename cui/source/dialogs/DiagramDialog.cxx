@@ -20,10 +20,12 @@ DiagramDialog::DiagramDialog(weld::Window* pWindow,
     , mpBtnOk(m_xBuilder->weld_button("btnOk"))
     , mpBtnCancel(m_xBuilder->weld_button("btnCancel"))
     , mpBtnAdd(m_xBuilder->weld_button("btnAdd"))
+    , mpBtnRemove(m_xBuilder->weld_button("btnRemove"))
     , mpTreeDiagram(m_xBuilder->weld_tree_view("treeDiagram"))
     , mpTextAdd(m_xBuilder->weld_text_view("textAdd"))
 {
     mpBtnAdd->connect_clicked(LINK(this, DiagramDialog, OnAddClick));
+    mpBtnRemove->connect_clicked(LINK(this, DiagramDialog, OnRemoveClick));
 
     populateTree(nullptr, OUString());
 
@@ -40,12 +42,25 @@ IMPL_LINK_NOARG(DiagramDialog, OnAddClick, weld::Button&, void)
     OUString sText = mpTextAdd->get_text();
     if (!sText.isEmpty())
     {
+        OUString sNodeId = mpDiagramData->addNode(sText);
         std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());
-        mpTreeDiagram->insert(nullptr, -1, &sText, nullptr, nullptr, nullptr, nullptr, false,
+        mpTreeDiagram->insert(nullptr, -1, &sText, &sNodeId, nullptr, nullptr, nullptr, false,
                               pEntry.get());
         mpTreeDiagram->select(*pEntry);
-        mpDiagramData->addNode(sText);
         comphelper::dispatchCommand(".uno:RegenerateDiagram", {});
+    }
+}
+
+IMPL_LINK_NOARG(DiagramDialog, OnRemoveClick, weld::Button&, void)
+{
+    std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());
+    if (mpTreeDiagram->get_selected(pEntry.get()))
+    {
+        if (mpDiagramData->removeNode(mpTreeDiagram->get_id(*pEntry)))
+        {
+            mpTreeDiagram->remove(*pEntry);
+            comphelper::dispatchCommand(".uno:RegenerateDiagram", {});
+        }
     }
 }
 

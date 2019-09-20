@@ -29,6 +29,7 @@
 #include <svx/DiagramDataInterface.hxx>
 #include <comphelper/xmltools.hxx>
 
+#include <unordered_set>
 #include <iostream>
 #include <fstream>
 
@@ -137,6 +138,12 @@ std::vector<std::pair<OUString, OUString>> DiagramData::getChildren(const OUStri
                     pChild->second->msModelId,
                     pChild->second->mpShape->getTextBody()->getParagraphs().front()->getRuns().front()->getText());
         }
+
+    // HACK: empty items shouldn't appear there
+    aChildren.erase(std::remove_if(aChildren.begin(), aChildren.end(),
+                                   [](const std::pair<OUString, OUString>& aItem) { return aItem.first.isEmpty(); }),
+                    aChildren.end());
+
     return aChildren;
 }
 
@@ -154,7 +161,7 @@ void DiagramData::addConnection(sal_Int32 nType, const OUString& sSourceId, cons
     rCxn.mnSourceOrder = nMaxOrd + 1;
 }
 
-void DiagramData::addNode(const OUString& rText)
+OUString DiagramData::addNode(const OUString& rText)
 {
     const dgm::Point& rDataRoot = *getRootPoint();
     OUString sPresRoot;
@@ -163,11 +170,13 @@ void DiagramData::addNode(const OUString& rText)
             sPresRoot = aCxn.msDestId;
 
     if (sPresRoot.isEmpty())
-        return;
+        return OUString();
+
+    OUString sNewNodeId = OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_UTF8);
 
     dgm::Point aDataPoint;
     aDataPoint.mnType = XML_node;
-    aDataPoint.msModelId = OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_UTF8);
+    aDataPoint.msModelId = sNewNodeId;
     aDataPoint.mpShape.reset(new Shape());
     aDataPoint.mpShape->setTextBody(std::make_shared<TextBody>());
     TextRunPtr pTextRun(new TextRun());
@@ -208,6 +217,59 @@ void DiagramData::addNode(const OUString& rText)
     maPoints.push_back(aPresPoint);
 
     build();
+    return sNewNodeId;
+}
+
+bool DiagramData::removeNode(const OUString& rNodeId)
+{
+    // check if it doesn't have children
+    for (const auto& aCxn : maConnections)
+        if (aCxn.mnType == XML_parOf && aCxn.msSourceId == rNodeId)
+        {
+            SAL_WARN("oox.drawingml", "Node has children - can't be removed");
+            return false;
+        }
+
+    dgm::Connection aParCxn;
+    for (const auto& aCxn : maConnections)
+        if (aCxn.mnType == XML_parOf && aCxn.msDestId == rNodeId)
+            aParCxn = aCxn;
+
+    std::unordered_set<OUString> aIdsToRemove;
+    aIdsToRemove.insert(rNodeId);
+    if (!aParCxn.msParTransId.isEmpty())
+        aIdsToRemove.insert(aParCxn.msParTransId);
+    if (!aParCxn.msSibTransId.isEmpty())
+        aIdsToRemove.insert(aParCxn.msSibTransId);
+
+    for (const dgm::Point& rPoint : maPoints)
+        if (aIdsToRemove.count(rPoint.msPresentationAssociationId))
+            aIdsToRemove.insert(rPoint.msModelId);
+
+    // instert also transition nodes
+    for (const auto& aCxn : maConnections)
+        if (aIdsToRemove.count(aCxn.msSourceId) || aIdsToRemove.count(aCxn.msDestId))
+            if (!aCxn.msPresId.isEmpty())
+                aIdsToRemove.insert(aCxn.msPresId);
+
+    // remove connections
+    maConnections.erase(std::remove_if(maConnections.begin(), maConnections.end(),
+                                       [aIdsToRemove](const dgm::Connection& rCxn) {
+                                           return aIdsToRemove.count(rCxn.msSourceId) || aIdsToRemove.count(rCxn.msDestId);
+                                       }),
+                        maConnections.end());
+
+    // remove data and presentation nodes
+    maPoints.erase(std::remove_if(maPoints.begin(), maPoints.end(),
+                                  [aIdsToRemove](const dgm::Point& rPoint) {
+                                      return aIdsToRemove.count(rPoint.msModelId);
+                                  }),
+                   maPoints.end());
+
+    // TODO: fix source/dest order
+
+    build();
+    return true;
 }
 
 #ifdef DEBUG_OOX_DIAGRAM

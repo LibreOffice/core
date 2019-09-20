@@ -27,10 +27,12 @@ private:
     std::unique_ptr<weld::Button> mpBtnOk;
     std::unique_ptr<weld::Button> mpBtnCancel;
     std::unique_ptr<weld::Button> mpBtnAdd;
+    std::unique_ptr<weld::Button> mpBtnRemove;
     std::unique_ptr<weld::TreeView> mpTreeDiagram;
     std::unique_ptr<weld::TextView> mpTextAdd;
 
     DECL_LINK(OnAddClick, weld::Button&, void);
+    DECL_LINK(OnRemoveClick, weld::Button&, void);
 
     void populateTree(const weld::TreeIter* pParent, const OUString& rParentId);
 };
