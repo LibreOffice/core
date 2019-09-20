@@ -191,9 +191,8 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> mxCbReduceImageResolution;
     std::unique_ptr<weld::ComboBox> mxCoReduceImageResolution;
     std::unique_ptr<weld::CheckButton> mxCbPDFA;
-    std::unique_ptr<weld::RadioButton> mxRbPDFA1b;
-    std::unique_ptr<weld::RadioButton> mxRbPDFA2b;
     std::unique_ptr<weld::CheckButton> mxCbPDFUA;
+    std::unique_ptr<weld::ComboBox> mxRbPDFAVersion;
     std::unique_ptr<weld::CheckButton> mxCbTaggedPDF;
     std::unique_ptr<weld::CheckButton> mxCbExportFormFields;
     std::unique_ptr<weld::Widget> mxFormsFrame;

@@ -976,6 +976,8 @@ i12626
     /* PDF/UA support enabled */
     bool m_bIsPDF_UA;
 
+    bool            m_bIsPDF_A3;
+
     PDFWriter&      m_rOuterFace;
 
     /*
