@@ -12885,6 +12885,9 @@ fi
 
 AC_SUBST(LO_PATH)
 
+# TODO SKIA
+AC_DEFINE(HAVE_FEATURE_SKIA,1)
+
 libo_FUZZ_SUMMARY
 
 # Generate a configuration sha256 we can use for deps

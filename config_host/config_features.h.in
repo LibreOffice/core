@@ -139,6 +139,11 @@
 #define HAVE_FEATURE_OPENGL 0
 
 /*
+ *  Whether Skia is enabled
+ */
+#define HAVE_FEATURE_SKIA 0
+
+/*
  * Whether User Interface is available
  */
 #define HAVE_FEATURE_UI 1
