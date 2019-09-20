@@ -45,8 +45,8 @@
 #include <salvd.hxx>
 #include "gdiimpl.hxx"
 #include <opengl/x11/gdiimpl.hxx>
-#include "x11cairotextrender.hxx"
-#include "openglx11cairotextrender.hxx"
+#include <unx/x11/x11cairotextrender.hxx>
+#include <opengl/x11/cairotextrender.hxx>
 
 #include <unx/x11/xrender_peer.hxx>
 #include "cairo_xlib_cairo.hxx"
