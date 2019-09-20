@@ -1086,18 +1086,18 @@ cmd/sc_switchcontroldesignmode.png cmd/sc_editdoc.png
 
 # Quit
 cmd/32/closewin.png cmd/32/closepreview.png
+cmd/32/exitsearch.png cmd/32/closepreview.png
 cmd/lc_closewin.png cmd/lc_closepreview.png
+cmd/lc_exitsearch.png cmd/lc_closepreview.png
 cmd/sc_closewin.png cmd/sc_closepreview.png
+cmd/sc_exitsearch.png cmd/sc_closepreview.png
 
 # Close
 cmd/32/closedocs.png cmd/32/closedoc.png
-cmd/32/exitsearch.png cmd/32/closedoc.png
 
 cmd/lc_closedocs.png cmd/lc_closedoc.png
-cmd/lc_exitsearch.png cmd/lc_closedoc.png
 
 cmd/sc_closedocs.png cmd/sc_closedoc.png
-cmd/sc_exitsearch.png cmd/sc_closedoc.png
 
 # Cancel
 cmd/32/no.png cmd/32/cancel.png
