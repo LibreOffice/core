@@ -684,6 +684,29 @@ OUString UIPages2PhyPages(const OUString& rUIPageRange, const std::map< sal_Int3
 }
 }
 
+// tdf#52316 remove blank pages from page count and actual page number
+void SwDoc::CalculateNonBlankPages(
+    const SwRootFrame& rLayout,
+    sal_uInt16& nDocPageCount,
+    sal_uInt16& nActualPage)
+{
+    sal_uInt16 nDocPageCountWithBlank = nDocPageCount;
+    sal_uInt16 nActualPageWithBlank = nActualPage;
+    sal_uInt16 nPageNum = 1;
+    const SwPageFrame *pStPage = dynamic_cast<const SwPageFrame*>( rLayout.Lower() );
+    while (pStPage && nPageNum <= nDocPageCountWithBlank)
+    {
+        if ( pStPage->getFrameArea().Height() == 0 )
+        {
+            --nDocPageCount;
+            if (nPageNum <= nActualPageWithBlank)
+                --nActualPage;
+        }
+        ++nPageNum;
+        pStPage = static_cast<const SwPageFrame*>(pStPage->GetNext());
+    }
+}
+
 void SwDoc::CalculatePagesForPrinting(
     const SwRootFrame& rLayout,
     /* out */ SwRenderData &rData,

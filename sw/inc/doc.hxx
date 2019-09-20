@@ -870,6 +870,7 @@ public:
             sal_Int32 nDocPageCount );
     static void CalculatePagePairsForProspectPrinting( const SwRootFrame& rLayout, SwRenderData &rData, const SwPrintUIOptions &rOptions,
             sal_Int32 nDocPageCount );
+    static void CalculateNonBlankPages( const SwRootFrame& rLayout, sal_uInt16& nDocPageCount, sal_uInt16& nActualPage );
 
     // PageDescriptor interface.
     size_t GetPageDescCnt() const { return m_PageDescs.size(); }

@@ -1231,6 +1231,7 @@
 #define STR_PAGE                                NC_("STR_PAGE", "Page ")
 #define STR_PAGE_COUNT                          NC_("STR_PAGE_COUNT", "Page %1 of %2")
 #define STR_PAGE_COUNT_CUSTOM                   NC_("STR_PAGE_COUNT_CUSTOM", "Page %1 of %2 (Page %3)")
+#define STR_PAGE_COUNT_PRINTED                  NC_("STR_PAGE_COUNT_PRINTED", "Page %1 of %2 (Page %3 of %4 to print)")
 //Strings for gallery/background
 #define STR_SWBG_PARAGRAPH                      NC_("STR_SWBG_PARAGRAPH", "Paragraph")
 #define STR_SWBG_GRAPHIC                        NC_("STR_SWBG_GRAPHIC", "Image")
