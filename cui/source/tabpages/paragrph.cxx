@@ -1874,8 +1874,8 @@ void SvxExtParagraphTabPage::ChangesApplied()
     m_xKeepParaBox->save_state();
     m_xWidowBox->save_state();
     m_xOrphanBox->save_state();
-    m_xOrphanRowNo->set_value(m_xOrphanRowNo->get_value());
-    m_xWidowRowNo->set_value(m_xWidowRowNo->get_value());
+    m_xOrphanRowNo->save_value();
+    m_xWidowRowNo->save_value();
 }
 
 DeactivateRC SvxExtParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
