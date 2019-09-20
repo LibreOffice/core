@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <openglgdiimpl.hxx>
+#include <opengl/gdiimpl.hxx>
 #include <opengl/framebuffer.hxx>
 
 #include <vcl/gradient.hxx>
