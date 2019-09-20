@@ -182,7 +182,8 @@ public:
     void dump() const;
     OUString getString() const override;
     std::vector<std::pair<OUString, OUString>> getChildren(const OUString& rParentId) const override;
-    void addNode(const OUString& rText) override;
+    OUString addNode(const OUString& rText) override;
+    bool removeNode(const OUString& rNodeId) override;
 
 private:
     void getChildrenString(OUStringBuffer& rBuf, const dgm::Point* pPoint, sal_Int32 nLevel) const;
