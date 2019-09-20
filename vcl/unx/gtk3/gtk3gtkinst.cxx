@@ -2733,6 +2733,7 @@ public:
         gtk_container_child_set(m_pContainer, pWindow, "expand", true, "fill", true, nullptr);
         gtk_widget_set_hexpand(pWindow, true);
         gtk_widget_set_vexpand(pWindow, true);
+        gtk_widget_realize(pWindow);
         g_object_unref(pWindow);
 
         xEmbedWindow->Show();
