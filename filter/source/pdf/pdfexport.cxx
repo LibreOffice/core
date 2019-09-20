@@ -239,7 +239,8 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
                             try
                             {
                                 Graphic aGraph(aMtf);
-                                BitmapEx bmp = aGraph.GetBitmapEx();
+                                // use antialiasing to improve how graphic objects look
+                                BitmapEx bmp = aGraph.GetBitmapEx(GraphicConversionParameters(Size(0, 0), false, true, false));
                                 Graphic bgraph(bmp);
                                 aMtf = bgraph.GetGDIMetaFile();
                             }
