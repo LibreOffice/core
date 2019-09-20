@@ -36,7 +36,6 @@ public:
     virtual ~ScTabPageProtection() override;
 
 protected:
-    using SfxTabPage::DeactivatePage;
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;
 
 private:

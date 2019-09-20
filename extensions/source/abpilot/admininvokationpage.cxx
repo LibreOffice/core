@@ -35,9 +35,9 @@ namespace abp
     {
     }
 
-    void AdminDialogInvokationPage::ActivatePage()
+    void AdminDialogInvokationPage::Activate()
     {
-        AddressBookSourcePage::ActivatePage();
+        AddressBookSourcePage::Activate();
         m_xInvokeAdminDialog->grab_focus();
     }
 

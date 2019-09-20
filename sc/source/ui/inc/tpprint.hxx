@@ -35,7 +35,6 @@ public:
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rCoreSet );
     virtual bool        FillItemSet( SfxItemSet* rCoreSet ) override;
     virtual void        Reset( const SfxItemSet* rCoreSet ) override;
-    using SfxTabPage::DeactivatePage;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 };
 

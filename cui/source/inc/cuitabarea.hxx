@@ -128,8 +128,6 @@ public:
 
 class SvxTransparenceTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pTransparenceRanges[];
 
     const SfxItemSet&   rOutAttrs;
@@ -264,9 +262,6 @@ private:
     DeactivateRC DeactivatePage_Impl( SfxItemSet* pSet );
 
 public:
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
     SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxAreaTabPage() override;
     virtual void dispose() override;
@@ -298,8 +293,6 @@ public:
 
 class SvxShadowTabPage : public SvxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pShadowRanges[];
 
 private:
@@ -353,9 +346,6 @@ public:
 
 class SvxGradientTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 private:
     const SfxItemSet&   m_rOutAttrs;
 
@@ -432,9 +422,6 @@ public:
 
 class SvxHatchTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 private:
     const SfxItemSet&   m_rOutAttrs;
 
@@ -507,8 +494,6 @@ public:
 
 class SvxBitmapTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pBitmapRanges[];
 private:
 
@@ -586,9 +571,6 @@ public:
 
 class SvxPatternTabPage : public SvxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 private:
     const SfxItemSet&   m_rOutAttrs;
 
@@ -655,9 +637,6 @@ enum class ColorModel
 
 class SvxColorTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 private:
     const SfxItemSet&   rOutAttrs;
 
@@ -743,7 +722,6 @@ private:
 public:
     SvxColorTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxColorTabPage() override;
-    virtual void dispose() override;
 
     void    Construct();
 

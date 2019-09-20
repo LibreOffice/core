@@ -83,7 +83,7 @@ namespace dbp
         return false;
     }
 
-    VclPtr<TabPage> OListComboWizard::createPage(WizardState _nState)
+    std::unique_ptr<BuilderPage> OListComboWizard::createPage(WizardState _nState)
     {
         OString sIdent(OString::number(_nState));
         weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
@@ -93,18 +93,18 @@ namespace dbp
         switch (_nState)
         {
             case LCW_STATE_DATASOURCE_SELECTION:
-                return VclPtr<OTableSelectionPage>::Create(this, aParent);
+                return std::make_unique<OTableSelectionPage>(this, aParent);
             case LCW_STATE_TABLESELECTION:
-                return VclPtr<OContentTableSelection>::Create(this, aParent);
+                return std::make_unique<OContentTableSelection>(this, aParent);
             case LCW_STATE_FIELDSELECTION:
-                return VclPtr<OContentFieldSelection>::Create(this, aParent);
+                return std::make_unique<OContentFieldSelection>(this, aParent);
             case LCW_STATE_FIELDLINK:
-                return VclPtr<OLinkFieldsPage>::Create(this, aParent);
+                return std::make_unique<OLinkFieldsPage>(this, aParent);
             case LCW_STATE_COMBODBFIELD:
-                return VclPtr<OComboDBFieldPage>::Create(this, aParent);
+                return std::make_unique<OComboDBFieldPage>(this, aParent);
         }
 
-        return VclPtr<TabPage>();
+        return nullptr;
     }
 
     vcl::WizardTypes::WizardState OListComboWizard::determineNextState( WizardState _nCurrentState ) const
@@ -276,9 +276,9 @@ namespace dbp
     {
     }
 
-    void OContentTableSelection::ActivatePage()
+    void OContentTableSelection::Activate()
     {
-        OLCPage::ActivatePage();
+        OLCPage::Activate();
         m_xSelectTable->grab_focus();
     }
 
@@ -407,9 +407,9 @@ namespace dbp
     {
     }
 
-    void OLinkFieldsPage::ActivatePage()
+    void OLinkFieldsPage::Activate()
     {
-        OLCPage::ActivatePage();
+        OLCPage::Activate();
         m_xValueListField->grab_focus();
     }
 
@@ -469,9 +469,9 @@ namespace dbp
         return static_cast<OListComboWizard*>(getDialog())->getSettings().sLinkedFormField;
     }
 
-    void OComboDBFieldPage::ActivatePage()
+    void OComboDBFieldPage::Activate()
     {
-        ODBFieldPage::ActivatePage();
+        ODBFieldPage::Activate();
         getDialog()->enableButtons(WizardButtonFlags::FINISH, true);
     }
 

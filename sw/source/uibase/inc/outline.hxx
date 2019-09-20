@@ -98,9 +98,6 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     void    SetModified() { m_aPreviewWIN.Invalidate(); }
     void    CheckForStartValue_Impl(sal_uInt16 nNumberingType);
 
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
-
 public:
     SwOutlineSettingsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwOutlineSettingsTabPage() override;

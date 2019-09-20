@@ -42,8 +42,6 @@ class SvxLineSpacingItem;
 class SvxStdParagraphTabPage: public SfxTabPage
 {
     friend class VclPtr<SvxStdParagraphTabPage>;
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pStdRanges[];
 
 private:
@@ -128,8 +126,6 @@ public:
 class SvxParaAlignTabPage : public SfxTabPage
 {
     friend class VclPtr<SvxParaAlignTabPage>;
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pAlignRanges[];
 
     SvxParaPrevWindow m_aExampleWin;
@@ -200,7 +196,6 @@ public:
 class SvxExtParagraphTabPage: public SfxTabPage
 {
     friend class VclPtr<SvxExtParagraphTabPage>;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pExtRanges[];
 
 public:

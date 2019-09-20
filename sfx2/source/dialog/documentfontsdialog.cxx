@@ -26,9 +26,9 @@
 
 using namespace ::com::sun::star;
 
-VclPtr<SfxTabPage> SfxDocumentFontsPage::Create(TabPageParent pParent, const SfxItemSet* set)
+std::unique_ptr<SfxTabPage> SfxDocumentFontsPage::Create(TabPageParent pParent, const SfxItemSet* set)
 {
-    return VclPtr<SfxDocumentFontsPage>::Create(pParent, *set);
+    return std::make_unique<SfxDocumentFontsPage>(pParent, *set);
 }
 
 SfxDocumentFontsPage::SfxDocumentFontsPage(TabPageParent parent, const SfxItemSet& set)

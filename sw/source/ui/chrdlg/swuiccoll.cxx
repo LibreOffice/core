@@ -101,7 +101,6 @@ SwCondCollPage::SwCondCollPage(TabPageParent pParent, const SfxItemSet &rSet)
 
 SwCondCollPage::~SwCondCollPage()
 {
-    disposeOnce();
 }
 
 DeactivateRC SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
@@ -112,9 +111,9 @@ DeactivateRC SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwCondCollPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwCondCollPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwCondCollPage>::Create(pParent, *rSet);
+    return std::make_unique<SwCondCollPage>(pParent, *rSet);
 }
 
 bool SwCondCollPage::FillItemSet(SfxItemSet *rSet)

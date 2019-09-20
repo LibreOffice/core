@@ -42,7 +42,6 @@ class SvxBrushItem;
 
 class SvxBackgroundTabPage : public SvxTabPage
 {
-    using TabPage::DeactivatePage;
     friend class VclPtr<SvxBackgroundTabPage>;
     static const sal_uInt16 pPageRanges[];
 public:
@@ -166,9 +165,6 @@ class SvxBkgTabPage : public SvxAreaTabPage
 
     DECL_LINK(TblDestinationHdl_Impl, weld::ComboBox&, void);
 public:
-    using SvxAreaTabPage::ActivatePage;
-    using SvxAreaTabPage::DeactivatePage;
-
     SvxBkgTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxBkgTabPage() override;
     virtual void dispose() override;

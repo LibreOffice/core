@@ -16,8 +16,6 @@ class ScTpCompatOptions : public SfxTabPage
 {
     friend class VclPtr<ScTpCompatOptions>;
 public:
-    using SfxTabPage::DeactivatePage;
-
     static  VclPtr<SfxTabPage> Create (TabPageParent pParent, const SfxItemSet* rCoreAttrs);
 
     virtual bool FillItemSet(SfxItemSet* rCoreAttrs) override;

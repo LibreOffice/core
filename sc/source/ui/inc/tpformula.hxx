@@ -29,8 +29,6 @@ class ScTpFormulaOptions : public SfxTabPage
 {
     friend class VclPtr<ScTpFormulaOptions>;
 public:
-    using SfxTabPage::DeactivatePage;
-
     static  VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rCoreSet);
 
     virtual bool FillItemSet(SfxItemSet* rCoreSet) override;

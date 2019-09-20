@@ -54,7 +54,6 @@ TitlesAndObjectsTabPage::TitlesAndObjectsTabPage(TabPageParent pParent,
 
 TitlesAndObjectsTabPage::~TitlesAndObjectsTabPage()
 {
-    disposeOnce();
 }
 
 void TitlesAndObjectsTabPage::initializePage()

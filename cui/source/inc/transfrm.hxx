@@ -61,8 +61,6 @@ public:
 
 class SvxPositionSizeTabPage : public SvxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pPosSizeRanges[];
 
 private:
@@ -163,8 +161,6 @@ public:
 \************************************************************************/
 class SvxAngleTabPage : public SvxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pAngleRanges[];
 
 private:
@@ -215,8 +211,6 @@ public:
 \************************************************************************/
 class SvxSlantTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pSlantRanges[];
 
 private:

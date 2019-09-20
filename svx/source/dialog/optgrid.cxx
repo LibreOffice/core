@@ -144,12 +144,11 @@ SvxGridTabPage::SvxGridTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet
 
 SvxGridTabPage::~SvxGridTabPage()
 {
-    disposeOnce();
 }
 
-VclPtr<SfxTabPage> SvxGridTabPage::Create(TabPageParent pParent, const SfxItemSet& rAttrSet)
+std::unique_ptr<SfxTabPage> SvxGridTabPage::Create(TabPageParent pParent, const SfxItemSet& rAttrSet)
 {
-    return VclPtr<SvxGridTabPage>::Create(pParent, rAttrSet);
+    return std::make_unique<SvxGridTabPage>(pParent, rAttrSet);
 }
 
 bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )

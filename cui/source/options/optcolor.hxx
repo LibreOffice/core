@@ -26,8 +26,6 @@ class ColorConfigCtrl_Impl;
 class AbstractSvxNameDialog;
 class SvxColorOptionsTabPage : public SfxTabPage
 {
-    using SfxTabPage::DeactivatePage;
-
     bool bFillItemSetCalled;
 
     std::unique_ptr<weld::ComboBox> m_xColorSchemeLB;

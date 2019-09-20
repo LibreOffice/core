@@ -174,7 +174,7 @@ namespace
 
 // TabPage for application-specific print options
 
-VclPtr<SfxTabPage> SwView::CreatePrintOptionsPage(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwView::CreatePrintOptionsPage(TabPageParent pParent,
                                                   const SfxItemSet& rSet)
 {
     return ::CreatePrintOptionsPage(pParent, rSet, false);
@@ -307,7 +307,7 @@ void SwView::NotifyCursor(SfxViewShell* pViewShell) const
 
 // Create page printer/additions for SwView and SwPagePreview
 
-VclPtr<SfxTabPage> CreatePrintOptionsPage(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> CreatePrintOptionsPage(TabPageParent pParent,
                                           const SfxItemSet &rOptions,
                                           bool bPreview)
 {
@@ -318,16 +318,16 @@ VclPtr<SfxTabPage> CreatePrintOptionsPage(TabPageParent pParent,
     if (!fnCreatePage)
         return nullptr;
 
-    VclPtr<SfxTabPage> pSfxPage = fnCreatePage(pParent, &rOptions);
-    OSL_ENSURE(pSfxPage, "No page");
-    if (!pSfxPage)
+    std::unique_ptr<SfxTabPage> xSfxPage = fnCreatePage(pParent, &rOptions);
+    OSL_ENSURE(xSfxPage, "No page");
+    if (!xSfxPage)
         return nullptr;
 
     SfxAllItemSet aSet(*(rOptions.GetPool()));
     aSet.Put(SfxBoolItem(SID_PREVIEWFLAG_TYPE, bPreview));
     aSet.Put(SfxBoolItem(SID_FAX_LIST, true));
-    pSfxPage->PageCreated(aSet);
-    return pSfxPage;
+    xSfxPage->PageCreated(aSet);
+    return xSfxPage;
 }
 
 void SetAppPrintOptions( SwViewShell* pSh, bool bWeb )

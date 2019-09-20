@@ -87,8 +87,6 @@ struct SvxBmpItemInfo
 
 class SvxLineTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pLineRanges[];
 private:
     //#58425# symbols on a line (e. g. StarChart) ->
@@ -240,8 +238,6 @@ public:
 
 class SvxLineDefTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
 private:
     const SfxItemSet&   rOutAttrs;
     XDash               aDash;
@@ -325,9 +321,6 @@ public:
 
 class SvxLineEndDefTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 private:
     const SfxItemSet&   rOutAttrs;
     const SdrObject*    pPolyObj;

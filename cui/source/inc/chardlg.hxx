@@ -52,11 +52,7 @@ protected:
 public:
     virtual ~SvxCharBasePage() override;
 
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
-
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
-
 };
 
 // class SvxCharNamePage -------------------------------------------------
@@ -142,9 +138,6 @@ private:
     void FontModifyHdl_Impl(const weld::Widget&);
 
 public:
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
-
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
@@ -227,7 +220,6 @@ public:
     virtual ~SvxCharEffectsPage() override;
     virtual void dispose() override;
 
-    using SfxTabPage::DeactivatePage;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
@@ -302,8 +294,6 @@ private:
 public:
     virtual ~SvxCharPositionPage() override;
 
-    using SfxTabPage::DeactivatePage;
-
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
@@ -344,9 +334,6 @@ private:
 
 public:
     virtual ~SvxCharTwoLinesPage() override;
-
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
 
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;

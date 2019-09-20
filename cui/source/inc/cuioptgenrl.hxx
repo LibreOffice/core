@@ -30,7 +30,6 @@
 
 class SvxGeneralTabPage : public SfxTabPage
 {
-    using TabPage::DeactivatePage;
 private:
     // the "Use data for document properties" checkbox
     std::unique_ptr<weld::CheckButton> m_xUseDataCB;

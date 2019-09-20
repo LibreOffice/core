@@ -2319,20 +2319,14 @@ SwGrfExtPage::SwGrfExtPage(TabPageParent pParent, const SfxItemSet &rSet)
 
 SwGrfExtPage::~SwGrfExtPage()
 {
-    disposeOnce();
-}
-
-void SwGrfExtPage::dispose()
-{
     m_xBmpWin.reset();
     m_xCtlAngle.reset();
     m_xGrfDlg.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwGrfExtPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwGrfExtPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwGrfExtPage>::Create(pParent, *rSet);
+    return std::make_unique<SwGrfExtPage>(pParent, *rSet);
 }
 
 void SwGrfExtPage::Reset(const SfxItemSet *rSet)
@@ -2819,18 +2813,12 @@ SwFrameAddPage::SwFrameAddPage(TabPageParent pParent, const SfxItemSet &rSet)
 
 SwFrameAddPage::~SwFrameAddPage()
 {
-    disposeOnce();
-}
-
-void SwFrameAddPage::dispose()
-{
     m_xTextFlowLB.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwFrameAddPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwFrameAddPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwFrameAddPage>::Create(pParent, *rSet);
+    return std::make_unique<SwFrameAddPage>(pParent, *rSet);
 }
 
 void SwFrameAddPage::Reset(const SfxItemSet *rSet )

@@ -141,11 +141,6 @@ public:
     */
     void SetImpressMode();
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
-
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-    using OutputDevice::SetDrawMode;
-
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_TPOPTION_HXX

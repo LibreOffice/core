@@ -57,9 +57,6 @@ typedef std::vector<std::unique_ptr<SvxNumSettings_Impl> > SvxNumSettingsArr_Imp
 
 class SvxSingleNumPickTabPage final : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
     SvxNumSettingsArr_Impl  aNumSettingsArr;
     std::unique_ptr<SvxNumRule> pActNum;
     std::unique_ptr<SvxNumRule> pSaveNum;
@@ -91,9 +88,6 @@ public:
 
 class SvxBulletPickTabPage final : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
     std::unique_ptr<SvxNumRule> pActNum;
     std::unique_ptr<SvxNumRule> pSaveNum;
     sal_uInt16          nActNumLvl;
@@ -129,9 +123,6 @@ public:
 /// TabPage for complete numeration
 class SvxNumPickTabPage final : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
     OUString            sNumCharFmtName;
     OUString            sBulletCharFormatName;
 
@@ -171,9 +162,6 @@ public:
 
 class SvxBitmapPickTabPage final : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
     std::vector<OUString> aGrfNames;
 
     std::unique_ptr<SvxNumRule> pActNum;
@@ -209,9 +197,6 @@ public:
 
 class SvxNumOptionsTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
     OUString        m_sNumCharFmtName;
     OUString        m_sBulletCharFormatName;
 
@@ -324,9 +309,6 @@ public:
 
 class SvxNumPositionTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
     std::unique_ptr<SvxNumRule> pActNum;
     std::unique_ptr<SvxNumRule> pSaveNum;
 

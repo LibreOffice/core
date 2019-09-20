@@ -79,8 +79,6 @@ class SvtSecurityOptions;
 class CertPathDialog;
 class SvxSecurityTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     friend class VclPtr<SvxSecurityTabPage>;
 private:
     std::unique_ptr<SvtSecurityOptions>         mpSecOptions;

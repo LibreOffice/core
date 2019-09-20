@@ -70,15 +70,13 @@ protected:
                                     sal_Unicode cDelim = ' ',
                                     bool bIsAutomaticLanguage = true);
 
-    using SfxTabPage::ActivatePage;
-
 public:
     SwFieldPage(TabPageParent pParent, const OUString& rUIXMLDescription,
         const OString& rID, const SfxItemSet *pAttrSet);
 
     virtual ~SwFieldPage() override;
 
-    virtual void        ActivatePage() override;
+    virtual void        Activate() override;
 
     SwFieldMgr&    GetFieldMgr()         { return m_aMgr; }
     void                SetWrtShell( SwWrtShell* m_pWrtShell );

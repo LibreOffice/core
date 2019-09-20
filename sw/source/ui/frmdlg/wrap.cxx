@@ -112,9 +112,9 @@ SwWrapTabPage::~SwWrapTabPage()
 {
 }
 
-VclPtr<SfxTabPage> SwWrapTabPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwWrapTabPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwWrapTabPage>::Create(pParent, *rSet);
+    return std::make_unique<SwWrapTabPage>(pParent, *rSet);
 }
 
 void SwWrapTabPage::Reset(const SfxItemSet *rSet)

@@ -17,8 +17,6 @@
 
 class SvxPersonalizationTabPage : public SfxTabPage
 {
-    using SfxTabPage::DeactivatePage;
-
 private:
     std::unique_ptr<weld::RadioButton> m_xNoPersona; ///< Just the default look, without any bitmap
     std::unique_ptr<weld::RadioButton> m_xDefaultPersona; ///< Use the built-in bitmap

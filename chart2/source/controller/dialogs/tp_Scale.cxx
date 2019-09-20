@@ -111,7 +111,6 @@ ScaleTabPage::ScaleTabPage(TabPageParent pWindow,const SfxItemSet& rInAttrs)
 
 ScaleTabPage::~ScaleTabPage()
 {
-    disposeOnce();
 }
 
 void ScaleTabPage::EnableControls()
@@ -214,9 +213,9 @@ IMPL_LINK_NOARG(ScaleTabPage, SelectAxisTypeHdl, weld::ComboBox&, void)
     SetNumFormat();
 }
 
-VclPtr<SfxTabPage> ScaleTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+std::unique_ptr<SfxTabPage> ScaleTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<ScaleTabPage>::Create(pParent, *rOutAttrs);
+    return std::make_unique<ScaleTabPage>(pParent, *rOutAttrs);
 }
 
 bool ScaleTabPage::FillItemSet(SfxItemSet* rOutAttrs)
@@ -559,7 +558,7 @@ bool ScaleTabPage::ShowWarning(const char* pResIdMessage, weld::Widget* pControl
     if (pResIdMessage == nullptr)
         return false;
 
-    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetDialogFrameWeld(),
                                                VclMessageType::Warning, VclButtonsType::Ok,
                                                SchResId(pResIdMessage)));
     xWarn->run();

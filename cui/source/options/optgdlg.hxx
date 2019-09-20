@@ -35,7 +35,6 @@ namespace svt {
 
 class OfaMiscTabPage : public SfxTabPage
 {
-    using TabPage::DeactivatePage;
 private:
     OUString             m_aStrDateInfo;
 

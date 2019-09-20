@@ -28,8 +28,6 @@ namespace offapp
 {
     class ConnectionPoolOptionsPage final : public SfxTabPage
     {
-        using TabPage::ActivatePage;
-
         OUString m_sYes;
         OUString m_sNo;
         DriverPoolingSettings m_aSettings;

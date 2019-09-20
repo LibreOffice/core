@@ -51,8 +51,6 @@ public:
 
 class OfaAutocorrOptionsPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-
 private:
     OUString m_sInput;
     OUString m_sDoubleCaps;
@@ -85,7 +83,6 @@ public:
 class OfaSwAutoFmtOptionsPage : public SfxTabPage
 {
     friend class VclPtr<OfaSwAutoFmtOptionsPage>;
-    using TabPage::ActivatePage;
 
     OUString        sDeleteEmptyPara;
     OUString        sUseReplaceTbl;
@@ -156,9 +153,6 @@ typedef std::map<LanguageType, StringChangeList> StringChangeTable;
 
 class OfaAutocorrReplacePage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 private:
 
     StringChangeTable aChangesTable;
@@ -228,9 +222,6 @@ typedef std::map<LanguageType, StringsArrays> StringsTable;
 
 class OfaAutocorrExceptPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 private:
     StringsTable    aStringsTable;
     std::unique_ptr<CollatorWrapper> pCompareClass;
@@ -278,7 +269,6 @@ public:
 class OfaQuoteTabPage : public SfxTabPage
 {
     friend class VclPtr<OfaQuoteTabPage>;
-    using TabPage::ActivatePage;
 
 private:
     OUString        sNonBrkSpace;
@@ -335,7 +325,6 @@ class OfaAutoCompleteTabPage : public SfxTabPage
 {
     friend class VclPtr<OfaAutoCompleteTabPage>;
 private:
-    using TabPage::ActivatePage;
     editeng::SortedAutoCompleteStrings* m_pAutoCompleteList;
     sal_uInt16      m_nAutoCmpltListCnt;
 
@@ -377,8 +366,6 @@ public:
 */
 class OfaSmartTagOptionsTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-
 private:
 
     // controls

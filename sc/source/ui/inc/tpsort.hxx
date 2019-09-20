@@ -52,8 +52,6 @@ public:
 
 protected:
     virtual void        ActivatePage    ( const SfxItemSet& rSet ) override;
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;
 
 private:
@@ -105,8 +103,6 @@ public:
 
 protected:
     virtual void        ActivatePage    ( const SfxItemSet& rSet ) override;
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;
 
 private:

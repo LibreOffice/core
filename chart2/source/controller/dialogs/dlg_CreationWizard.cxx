@@ -84,9 +84,9 @@ CreationWizard::CreationWizard(weld::Window* pParent, const uno::Reference<frame
 
 CreationWizard::~CreationWizard() = default;
 
-VclPtr<TabPage> CreationWizard::createPage(WizardState nState)
+std::unique_ptr<BuilderPage> CreationWizard::createPage(WizardState nState)
 {
-    VclPtr<vcl::OWizardPage> pRet;
+    std::unique_ptr<vcl::OWizardPage> xRet;
 
     OString sIdent(OString::number(nState));
     weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
@@ -95,42 +95,41 @@ VclPtr<TabPage> CreationWizard::createPage(WizardState nState)
 
     switch( nState )
     {
-    case STATE_CHARTTYPE:
+        case STATE_CHARTTYPE:
         {
-        m_aTimerTriggeredControllerLock.startTimer();
-        VclPtrInstance<ChartTypeTabPage> pChartTypeTabPage(aParent, m_xChartModel);
-        pRet  = pChartTypeTabPage;
-        m_pTemplateProvider = pChartTypeTabPage;
-        if (m_pDialogModel)
-            m_pDialogModel->setTemplate( m_pTemplateProvider->getCurrentTemplate());
+            m_aTimerTriggeredControllerLock.startTimer();
+            xRet = std::make_unique<ChartTypeTabPage>(aParent, m_xChartModel);
+            m_pTemplateProvider = static_cast<ChartTypeTabPage*>(xRet.get());
+            if (m_pDialogModel)
+                m_pDialogModel->setTemplate( m_pTemplateProvider->getCurrentTemplate());
+            break;
         }
-        break;
-    case STATE_SIMPLE_RANGE:
+        case STATE_SIMPLE_RANGE:
         {
-        m_aTimerTriggeredControllerLock.startTimer();
-        pRet = VclPtr<RangeChooserTabPage>::Create(aParent, *m_pDialogModel, m_pTemplateProvider, this);
+            m_aTimerTriggeredControllerLock.startTimer();
+            xRet = std::make_unique<RangeChooserTabPage>(aParent, *m_pDialogModel, m_pTemplateProvider, this);
+            break;
         }
-        break;
-    case STATE_DATA_SERIES:
+        case STATE_DATA_SERIES:
         {
-        m_aTimerTriggeredControllerLock.startTimer();
-        pRet = VclPtr<DataSourceTabPage>::Create(aParent, *m_pDialogModel, m_pTemplateProvider, this);
+            m_aTimerTriggeredControllerLock.startTimer();
+            xRet = std::make_unique<DataSourceTabPage>(aParent, *m_pDialogModel, m_pTemplateProvider, this);
+            break;
         }
-        break;
-    case STATE_OBJECTS:
+        case STATE_OBJECTS:
         {
-        pRet  = VclPtr<TitlesAndObjectsTabPage>::Create(aParent, m_xChartModel, m_xComponentContext);
-        m_aTimerTriggeredControllerLock.startTimer();
+            xRet = std::make_unique<TitlesAndObjectsTabPage>(aParent, m_xChartModel, m_xComponentContext);
+            m_aTimerTriggeredControllerLock.startTimer();
+            break;
         }
-        break;
-    default:
-        break;
+        default:
+            break;
     }
 
-    if (pRet)
-        pRet->SetText(OUString()); //remove title of pages to not get them in the wizard title
+    if (xRet)
+        xRet->SetPageTitle(OUString()); //remove title of pages to not get them in the wizard title
 
-    return pRet;
+    return xRet;
 }
 
 bool CreationWizard::leaveState( WizardState /*_nState*/ )
@@ -159,12 +158,12 @@ void CreationWizard::enterState(WizardState nState)
         vcl::RoadmapWizardMachine::enterState(nState);
 }
 
-void CreationWizard::setInvalidPage( TabPage * /* pTabPage */ )
+void CreationWizard::setInvalidPage( BuilderPage * /* pTabPage */ )
 {
     m_bCanTravel = false;
 }
 
-void CreationWizard::setValidPage( TabPage * /* pTabPage */ )
+void CreationWizard::setValidPage( BuilderPage * /* pTabPage */ )
 {
     m_bCanTravel = true;
 }

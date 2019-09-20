@@ -31,8 +31,6 @@ enum class SvxAnchorIds;
 
 class SvxSwPosSizeTabPage : public SfxTabPage
 {
-    using TabPage::DeactivatePage;
-
     Link<SvxSwFrameValidation&,void> m_aValidateLink;
 
     ::tools::Rectangle           m_aRect; //size of all selected objects
