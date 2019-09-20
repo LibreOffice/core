@@ -390,10 +390,9 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 
     // always write the user selection, never the overridden value
     const bool bIsPDFUA = mbPDFUACompliance;
-    const bool bIsPDFA = (1 == mnPDFTypeSelection) || (2 == mnPDFTypeSelection);
+    const bool bIsPDFA = (1 == mnPDFTypeSelection) || (2 == mnPDFTypeSelection) || (3 == mnPDFTypeSelection);
     const bool bUserSelectionTags = bIsPDFA || bIsPDFUA;
     maConfigItem.WriteBool("UseTaggedPDF", bUserSelectionTags ? mbUseTaggedPDFUserSelection : mbUseTaggedPDF);
-
     maConfigItem.WriteInt32("SelectPdfVersion", mnPDFTypeSelection );
     maConfigItem.WriteBool("PDFUACompliance", mbPDFUACompliance);
 
@@ -493,9 +492,8 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(weld::Container* pPage, weld::DialogC
     , mxCbReduceImageResolution(m_xBuilder->weld_check_button("reduceresolution"))
     , mxCoReduceImageResolution(m_xBuilder->weld_combo_box("resolution"))
     , mxCbPDFA(m_xBuilder->weld_check_button("pdfa"))
-    , mxRbPDFA1b(m_xBuilder->weld_radio_button("pdfa1"))
-    , mxRbPDFA2b(m_xBuilder->weld_radio_button("pdfa2"))
     , mxCbPDFUA(m_xBuilder->weld_check_button("pdfua"))
+    , mxRbPDFAVersion(m_xBuilder->weld_combo_box("pdfaversion"))
     , mxCbTaggedPDF(m_xBuilder->weld_check_button("tagged"))
     , mxCbExportFormFields(m_xBuilder->weld_check_button("forms"))
     , mxFormsFrame(m_xBuilder->weld_widget("formsframe"))
@@ -567,18 +565,19 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     mxEdWatermark->set_sensitive( false );
     mxCbPDFA->connect_toggled(LINK(this, ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHandle));
 
-    const bool bIsPDFA = (1 == pParent->mnPDFTypeSelection) || (2 == pParent->mnPDFTypeSelection);
+    const bool bIsPDFA = (pParent->mnPDFTypeSelection>=1) && (pParent->mnPDFTypeSelection <= 3);
     mxCbPDFA->set_active(bIsPDFA);
     switch( pParent->mnPDFTypeSelection )
     {
     case 1: // PDF/A-1
-        mxRbPDFA1b->set_active(true);
-        mxRbPDFA2b->set_active(false);
+        mxRbPDFAVersion->set_active_id("1");
         break;
     case 2: // PDF/A-2
+        mxRbPDFAVersion->set_active_id("2");
+        break;
+    case 3: // PDF/A-3
     default: // PDF 1.x
-        mxRbPDFA1b->set_active(false);
-        mxRbPDFA2b->set_active(true);
+        mxRbPDFAVersion->set_active_id("3");
         break;
     }
 
@@ -709,9 +708,12 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* pParent )
 
     if (bIsPDFA)
     {
-        pParent->mnPDFTypeSelection = 2;
-        if( mxRbPDFA1b->get_active() )
+        pParent->mnPDFTypeSelection = 3;
+        OUString currentPDFAMode = mxRbPDFAVersion->get_active_id();
+        if( currentPDFAMode == "1" )
             pParent->mnPDFTypeSelection = 1;
+        else if(currentPDFAMode == "2")
+            pParent->mnPDFTypeSelection = 2;
     }
 
     pParent->mbPDFUACompliance = bIsPDFUA;
@@ -831,8 +833,7 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHa
         pSecPage->ImplPDFASecurityControl(!bIsPDFA);
 
     mxCbTaggedPDF->set_sensitive(!bIsPDFA && !bIsPDFUA);
-    mxRbPDFA1b->set_sensitive(bIsPDFA);
-    mxRbPDFA2b->set_sensitive(bIsPDFA);
+    mxRbPDFAVersion->set_sensitive(bIsPDFA);
 
     if (bIsPDFA || bIsPDFUA)
     {
