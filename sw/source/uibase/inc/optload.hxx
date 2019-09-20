@@ -185,7 +185,6 @@ private:
 public:
     SwCaptionOptPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwCaptionOptPage() override;
-    virtual void        dispose() override;
 
     static VclPtr<SfxTabPage> Create(TabPageParent pParent,
                                      const SfxItemSet* rAttrSet);

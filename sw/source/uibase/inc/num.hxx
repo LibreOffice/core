@@ -97,7 +97,6 @@ public:
 
     SwNumPositionTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwNumPositionTabPage() override;
-    virtual void        dispose() override;
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;

@@ -62,7 +62,6 @@ public:
     SwCharURLPage(TabPageParent pParent, const SfxItemSet& rSet);
 
     virtual ~SwCharURLPage() override;
-    virtual void dispose() override;
     static VclPtr<SfxTabPage> Create(TabPageParent pParent,
                                      const SfxItemSet* rAttrSet);
 

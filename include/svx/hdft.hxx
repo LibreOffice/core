@@ -36,9 +36,6 @@ namespace svx
 
 class SVX_DLLPUBLIC SvxHFPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 public:
 
     virtual bool    FillItemSet( SfxItemSet* rOutSet ) override;

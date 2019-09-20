@@ -188,9 +188,9 @@ SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
     return pImpl->pFactArr.get();
 }
 
-VclPtr<SfxTabPage> SfxModule::CreateTabPage(sal_uInt16, TabPageParent, const SfxItemSet&)
+std::unique_ptr<SfxTabPage> SfxModule::CreateTabPage(sal_uInt16, TabPageParent, const SfxItemSet&)
 {
-    return VclPtr<SfxTabPage>();
+    return nullptr;
 }
 
 void SfxModule::Invalidate( sal_uInt16 nId )

@@ -503,7 +503,6 @@ SfxSingleTabDialogController::SfxSingleTabDialogController(weld::Widget *pParent
 
 SfxSingleTabDialogController::~SfxSingleTabDialogController()
 {
-    m_xSfxPage.disposeAndClear();
 }
 
 /*  [Description]
@@ -512,11 +511,9 @@ SfxSingleTabDialogController::~SfxSingleTabDialogController()
     The passed on page is initialized with the initially given Itemset
     through calling Reset().
 */
-void SfxSingleTabDialogController::SetTabPage(SfxTabPage* pTabPage)
+void SfxSingleTabDialogController::SetTabPage(std::unique_ptr<SfxTabPage> xTabPage)
 {
-    m_xSfxPage.disposeAndClear();
-    m_xSfxPage = pTabPage;
-
+    m_xSfxPage = std::move(xTabPage);
     if (!m_xSfxPage)
         return;
 
@@ -532,7 +529,7 @@ void SfxSingleTabDialogController::SetTabPage(SfxTabPage* pTabPage)
     m_xHelpBtn->set_visible(Help::IsContextHelpEnabled());
 
     // Set TabPage text in the Dialog if there is any
-    OUString sTitle(m_xSfxPage->GetText());
+    OUString sTitle(m_xSfxPage->GetPageTitle());
     if (!sTitle.isEmpty())
         m_xDialog->set_title(sTitle);
 

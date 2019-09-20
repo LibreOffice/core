@@ -520,10 +520,9 @@ DeactivateRC SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwDropCapsPage::Create(TabPageParent pParent,
-                                          const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwDropCapsPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwDropCapsPage>::Create(pParent, *rSet);
+    return std::make_unique<SwDropCapsPage>::Create(pParent, *rSet);
 }
 
 bool  SwDropCapsPage::FillItemSet(SfxItemSet *rSet)

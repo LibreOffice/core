@@ -53,8 +53,8 @@ public:
     virtual ~SchAlignmentTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rInAttrs);
-    static VclPtr<SfxTabPage> CreateWithoutRotation(TabPageParent pParent, const SfxItemSet* rInAttrs);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rInAttrs);
+    static std::unique_ptr<SfxTabPage> CreateWithoutRotation(TabPageParent pParent, const SfxItemSet* rInAttrs);
     virtual bool FillItemSet(SfxItemSet* rOutAttrs) override;
     virtual void Reset(const SfxItemSet* rInAttrs) override;
 };

@@ -173,9 +173,8 @@ class SwColumnPage : public SfxTabPage
 public:
     SwColumnPage(TabPageParent pParent, const SfxItemSet &rSet);
     virtual ~SwColumnPage() override;
-    virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
     virtual bool    FillItemSet(SfxItemSet *rSet) override;

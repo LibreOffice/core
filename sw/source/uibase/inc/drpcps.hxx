@@ -38,7 +38,7 @@ class SwDropCapsPage;
 
 class SwDropCapsPict : public weld::CustomWidgetController
 {
-    VclPtr<SwDropCapsPage> mpPage;
+    SwDropCapsPage* mpPage;
     OUString        maText;
     OUString        maScriptText;
     Color           maBackColor;
