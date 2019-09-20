@@ -609,6 +609,14 @@ void SwAnnotationWin::CheckMetaText()
 
 void SwAnnotationWin::Rescale()
 {
+    // On Android, this method leads to invoke ImpEditEngine::UpdateViews
+    // which hides the text cursor. Moreover it causes sudden document scroll
+    // when modifying a commented text. Not clear the root cause,
+    // anyway skipping this method fixes the problem, and there should be
+    // no side effect, since the client has disabled annotations rendering.
+    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
+        return;
+
     MapMode aMode = GetParent()->GetMapMode();
     aMode.SetOrigin( Point() );
     mpOutliner->SetRefMapMode( aMode );
