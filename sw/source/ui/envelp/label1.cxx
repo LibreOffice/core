@@ -89,14 +89,14 @@ void SwLabDlg::PageCreated(const OString &rId, SfxTabPage &rPage)
             static_cast<SwLabPage*>(&rPage)->SetToBusinessCard();
     }
     else if (rId == "options")
-        pPrtPage = static_cast<SwLabPrtPage*>(&rPage);
+        m_pPrtPage = static_cast<SwLabPrtPage*>(&rPage);
 }
 
 SwLabDlg::SwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
                                 SwDBManager* pDBManager_, bool bLabel)
     : SfxTabDialogController(pParent, "modules/swriter/ui/labeldialog.ui", "LabelDialog", &rSet)
     , pDBManager(pDBManager_)
-    , pPrtPage(nullptr)
+    , m_pPrtPage(nullptr)
     , aTypeIds(50, 10)
     , m_pRecs(new SwLabRecs)
     , m_bLabel(bLabel)
@@ -213,8 +213,8 @@ SwLabRec* SwLabDlg::GetRecord(const OUString &rRecName, bool bCont)
 
 Printer *SwLabDlg::GetPrt()
 {
-    if (pPrtPage)
-        return pPrtPage->GetPrt();
+    if (m_pPrtPage)
+        return m_pPrtPage->GetPrt();
     else
         return nullptr;
 }
@@ -445,9 +445,9 @@ void SwLabPage::InitDatabaseBox()
     }
 }
 
-VclPtr<SfxTabPage> SwLabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwLabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwLabPage>::Create(pParent, *rSet);
+    return std::make_unique<SwLabPage>(pParent, *rSet);
 }
 
 void SwLabPage::ActivatePage(const SfxItemSet& rSet)
@@ -573,7 +573,7 @@ SwPrivateDataPage::~SwPrivateDataPage()
 {
 }
 
-VclPtr<SfxTabPage> SwPrivateDataPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwPrivateDataPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SwPrivateDataPage>::Create(pParent, *rSet);
 }
@@ -666,7 +666,7 @@ SwBusinessDataPage::~SwBusinessDataPage()
 {
 }
 
-VclPtr<SfxTabPage> SwBusinessDataPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwBusinessDataPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
     return VclPtr<SwBusinessDataPage>::Create(pParent, *rSet);
 }

@@ -161,12 +161,10 @@ namespace svt { namespace uno
         return pController->getWizardPage();
     }
 
-
     void WizardShell::enablePage( const sal_Int16 i_nPageID, const bool i_bEnable )
     {
         enableState( impl_pageIdToState( i_nPageID ), i_bEnable );
     }
-
 
     VclPtr<TabPage> WizardShell::createPage( WizardState i_nState )
     {
@@ -197,7 +195,6 @@ namespace svt { namespace uno
     {
         return impl_getController( i_pCurrentPage ).get();
     }
-
 
     OUString WizardShell::getStateDisplayName( WizardState i_nState ) const
     {

@@ -155,8 +155,8 @@ namespace dbaui
         /// default implementation: call implInitControls with the given item set and _bSaveValue = sal_True
         virtual void ActivatePage(const SfxItemSet& _rSet) override;
 
-        // TabPage overridables
-        virtual void    ActivatePage() override;
+        // BuilderPage overridables
+        virtual void    Activate() override;
 
     protected:
         virtual void callModifiedHdl(weld::Widget* /*pControl*/ = nullptr) { m_aModifiedHandler.Call(this); }

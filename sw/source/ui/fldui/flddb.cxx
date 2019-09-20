@@ -55,7 +55,8 @@ SwFieldDBPage::SwFieldDBPage(TabPageParent pParent, const SfxItemSet *const pCor
     m_xTypeLB->make_sorted();
     m_xFormatLB->make_sorted();
 
-    auto nWidth = LogicToPixel(Size(FIELD_COLUMN_WIDTH, 0), MapMode(MapUnit::MapAppFont)).Width();
+//TODO    auto nWidth = LogicToPixel(Size(FIELD_COLUMN_WIDTH, 0), MapMode(MapUnit::MapAppFont)).Width();
+    auto nWidth = 0;
     auto nHeight = m_xTypeLB->get_height_rows(14);
     m_xTypeLB->set_size_request(nWidth, nHeight);
     m_xDatabaseTLB->set_size_request(nWidth*2, nHeight);
@@ -70,11 +71,6 @@ SwFieldDBPage::SwFieldDBPage(TabPageParent pParent, const SfxItemSet *const pCor
 
 SwFieldDBPage::~SwFieldDBPage()
 {
-    disposeOnce();
-}
-
-void SwFieldDBPage::dispose()
-{
     SwWrtShell* pSh = GetWrtShell();
     if (!pSh)
         pSh = ::GetActiveWrtShell();
@@ -82,8 +78,6 @@ void SwFieldDBPage::dispose()
     SwDBManager* pDbManager = pSh->GetDoc()->GetDBManager();
     if (pDbManager)
         pDbManager->RevokeLastRegistrations();
-
-    SwFieldPage::dispose();
 }
 
 // initialise TabPage
@@ -262,10 +256,10 @@ bool SwFieldDBPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-VclPtr<SfxTabPage> SwFieldDBPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwFieldDBPage::Create( TabPageParent pParent,
                                         const SfxItemSet *const pAttrSet )
 {
-    return VclPtr<SwFieldDBPage>::Create( pParent, pAttrSet );
+    return std::make_unique<SwFieldDBPage>( pParent, pAttrSet );
 }
 
 sal_uInt16 SwFieldDBPage::GetGroup()

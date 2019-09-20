@@ -36,8 +36,8 @@ namespace abp
         // OWizardPage overridables
         virtual void        initializePage() override;
 
-        // TabDialog overridables
-        virtual void        ActivatePage() override;
+        // BuilderPage overridables
+        virtual void        Activate() override;
 
         DECL_LINK(OnInvokeDialog, weld::Button&, void);
 

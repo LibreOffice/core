@@ -209,7 +209,6 @@ class SwTOXSelectTabPage : public SfxTabPage
 public:
     SwTOXSelectTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXSelectTabPage() override;
-    virtual void        dispose() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
@@ -217,7 +216,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet);
 
     void                SelectType(TOXTypes eSet);  //preset TOXType, GlobalDoc
@@ -242,7 +241,7 @@ class SwTokenWindow
 
     Idle            m_aAdjustPositionsIdle;
 
-    VclPtr<SwTOXEntryTabPage>  m_pParent;
+    SwTOXEntryTabPage*  m_pParent;
     std::unique_ptr<weld::Container> m_xParentWidget;
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;
@@ -391,20 +390,19 @@ class SwTOXEntryTabPage : public SfxTabPage
 public:
     SwTOXEntryTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXEntryTabPage() override;
-    virtual void dispose() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
                                        const SfxItemSet* rAttrSet);
     void                SetWrtShell(SwWrtShell& rSh);
 
     void                PreTokenButtonRemoved(const SwFormToken& rToken);
     void SetFocus2theAllBtn();
-    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
+//TODO    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 };
 
 class SwTOXStylesTabPage : public SfxTabPage
@@ -443,7 +441,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
                                        const SfxItemSet* rAttrSet);
 
 };

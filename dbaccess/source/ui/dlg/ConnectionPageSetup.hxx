@@ -36,8 +36,6 @@ namespace dbaui
     */
     class OConnectionTabPageSetup : public OConnectionHelper
     {
-        friend class VclPtr<OConnectionTabPageSetup>;
-
         std::unique_ptr<weld::Label> m_xHelpText;
         std::unique_ptr<weld::Label> m_xHeaderText;
 
@@ -45,12 +43,14 @@ namespace dbaui
         DECL_LINK(OnEditModified, weld::Entry&, void);
 
     public:
+        OConnectionTabPageSetup(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId);
         virtual ~OConnectionTabPageSetup() override;
-        static  VclPtr<OGenericAdministrationPage> CreateDbaseTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
-        static  VclPtr<OGenericAdministrationPage> CreateMSAccessTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
-        static  VclPtr<OGenericAdministrationPage> CreateADOTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
-        static  VclPtr<OGenericAdministrationPage> CreateODBCTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
-        static  VclPtr<OGenericAdministrationPage> CreateUserDefinedTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
+
+        static std::unique_ptr<OGenericAdministrationPage> CreateDbaseTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> CreateMSAccessTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> CreateADOTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> CreateODBCTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> CreateUserDefinedTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
 
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 
@@ -58,9 +58,7 @@ namespace dbaui
         virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
 
     protected:
-        OConnectionTabPageSetup(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId);
         virtual bool checkTestConnection() override;
-            // nControlFlags is a combination of the CBTP_xxx-constants
     };
 
 
