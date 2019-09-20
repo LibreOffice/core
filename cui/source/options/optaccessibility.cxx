@@ -43,9 +43,9 @@ SvxAccessibilityOptionsTabPage::~SvxAccessibilityOptionsTabPage()
 {
 }
 
-VclPtr<SfxTabPage> SvxAccessibilityOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SvxAccessibilityOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxAccessibilityOptionsTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxAccessibilityOptionsTabPage>(pParent, *rAttrSet);
 }
 
 bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )

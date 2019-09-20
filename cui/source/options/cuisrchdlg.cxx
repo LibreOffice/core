@@ -33,22 +33,19 @@ SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(weld::Window *pParent,
     // m_xPage will be implicitly destroyed by the
     // SfxSingleTabDialog destructor
     TabPageParent pPageParent(get_content_area(), this);
-    m_xPage.reset(static_cast<SvxJSearchOptionsPage*>(
-                        SvxJSearchOptionsPage::Create(
-                                pPageParent, &rOptionsSet).get()));
-    SetTabPage(m_xPage); //! implicitly calls m_xPage->Reset(...)!
-    m_xPage->EnableSaveOptions(false);
-    m_xPage->SetTransliterationFlags(nInitialFlags);
+    SetTabPage(SvxJSearchOptionsPage::Create(pPageParent, &rOptionsSet)); //! implicitly calls m_xPage->Reset(...)!
+    m_pPage = static_cast<SvxJSearchOptionsPage*>(GetTabPage());
+    m_pPage->EnableSaveOptions(false);
+    m_pPage->SetTransliterationFlags(nInitialFlags);
 }
 
 SvxJSearchOptionsDialog::~SvxJSearchOptionsDialog()
 {
-    m_xPage.clear();
 }
 
 TransliterationFlags SvxJSearchOptionsDialog::GetTransliterationFlags() const
 {
-    return m_xPage->GetTransliterationFlags();
+    return m_pPage->GetTransliterationFlags();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

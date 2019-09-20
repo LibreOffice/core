@@ -34,8 +34,10 @@ namespace abp
         explicit AdminDialogInvokationPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent);
         virtual ~AdminDialogInvokationPage() override;
     private:
-        // TabDialog overridables
-        virtual void        ActivatePage() override;
+        // BuilderPage overridables
+        virtual void        Activate() override;
+
+        // OWizard overridables
         virtual void        initializePage() override;
 
         // OImportPage overridables

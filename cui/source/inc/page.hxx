@@ -64,10 +64,6 @@ typedef sal_uInt16 MarginPosition;
 
 class SvxPageDescPage : public SfxTabPage
 {
-    friend class VclPtr<SvxPageDescPage>;
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
     static const sal_uInt16 pRanges[];
 private:
     OUString            sStandardRegister;
@@ -160,23 +156,21 @@ private:
     void                CheckMarginEdits( bool _bClear );
     bool                IsMarginOutOfRange() const;
 
-    SvxPageDescPage(TabPageParent pParent, const SfxItemSet& rSet);
-
 protected:
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    SvxPageDescPage(TabPageParent pParent, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    virtual ~SvxPageDescPage() override;
+
     // returns the range of the Which values
     static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rOutSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual void        FillUserData() override;
-
-    virtual ~SvxPageDescPage() override;
-    virtual void        dispose() override;
 
     void                SetPaperFormatRanges( Paper eStart )
                             { ePaperStart = eStart; }

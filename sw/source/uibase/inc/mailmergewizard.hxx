@@ -54,7 +54,7 @@ class SwMailMergeWizard : public ::vcl::RoadmapWizardMachine
     using vcl::WizardMachine::skipUntil;
 
 protected:
-    virtual VclPtr<TabPage>         createPage( WizardState _nState ) override;
+    virtual std::unique_ptr<BuilderPage> createPage( WizardState _nState ) override;
     virtual void                    enterState( WizardState _nState ) override;
 
     virtual OUString                getStateDisplayName( WizardState _nState ) const override;

@@ -69,19 +69,11 @@ SchAxisLabelTabPage::SchAxisLabelTabPage(TabPageParent pParent, const SfxItemSet
 
 SchAxisLabelTabPage::~SchAxisLabelTabPage()
 {
-    disposeOnce();
 }
 
-void SchAxisLabelTabPage::dispose()
+std::unique_ptr<SfxTabPage> SchAxisLabelTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrs)
 {
-    m_xCtrlDial.reset();
-    m_xLbTextDirection.reset();
-    SfxTabPage::dispose();
-}
-
-VclPtr<SfxTabPage> SchAxisLabelTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrs)
-{
-    return VclPtr<SchAxisLabelTabPage>::Create(pParent, *rAttrs);
+    return std::make_unique<SchAxisLabelTabPage>(pParent, *rAttrs);
 }
 
 bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )

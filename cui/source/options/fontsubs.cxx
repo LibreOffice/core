@@ -140,10 +140,10 @@ SvxFontSubstTabPage::~SvxFontSubstTabPage()
 {
 }
 
-VclPtr<SfxTabPage> SvxFontSubstTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxFontSubstTabPage::Create( TabPageParent pParent,
                                                 const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxFontSubstTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxFontSubstTabPage>(pParent, *rAttrSet);
 }
 
 bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet* )

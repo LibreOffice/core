@@ -126,18 +126,12 @@ SwTextGridPage::SwTextGridPage(TabPageParent pParent, const SfxItemSet &rSet)
 
 SwTextGridPage::~SwTextGridPage()
 {
-    disposeOnce();
-}
-
-void SwTextGridPage::dispose()
-{
     m_xColorLB.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwTextGridPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwTextGridPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwTextGridPage>::Create(pParent, *rSet);
+    return std::make_unique<SwTextGridPage>(pParent, *rSet);
 }
 
 bool SwTextGridPage::FillItemSet(SfxItemSet *rSet)

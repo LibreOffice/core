@@ -35,7 +35,6 @@ namespace svt {
 
 class OfaMiscTabPage : public SfxTabPage
 {
-    using TabPage::DeactivatePage;
 private:
     OUString             m_aStrDateInfo;
 
@@ -64,7 +63,7 @@ public:
     OfaMiscTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~OfaMiscTabPage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -122,7 +121,7 @@ public:
     OfaViewTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~OfaViewTabPage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -168,7 +167,7 @@ public:
     OfaLanguagesTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~OfaLanguagesTabPage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

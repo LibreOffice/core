@@ -377,9 +377,9 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
 |*
 \************************************************************************/
 
-VclPtr<SfxTabPage> SvxTextAnimationPage::Create(TabPageParent pParent, const SfxItemSet* rAttrs)
+std::unique_ptr<SfxTabPage> SvxTextAnimationPage::Create(TabPageParent pParent, const SfxItemSet* rAttrs)
 {
-    return VclPtr<SvxTextAnimationPage>::Create(pParent, *rAttrs);
+    return std::make_unique<SvxTextAnimationPage>(pParent, *rAttrs);
 }
 
 IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl, weld::ComboBox&, void)

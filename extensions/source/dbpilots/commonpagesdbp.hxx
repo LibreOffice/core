@@ -42,8 +42,8 @@ namespace dbp
         virtual ~OTableSelectionPage() override;
 
     private:
-        // TabPage overridables
-        void ActivatePage() override;
+        // BuilderPage overridables
+        void Activate() override;
 
         // OWizardPage overridables
         virtual void        initializePage() override;
@@ -73,8 +73,8 @@ namespace dbp
     protected:
         DECL_LINK( OnRadioSelected, weld::Button&, void );
 
-        // TabPage overridables
-        void ActivatePage() override;
+        // BuilderPage overridables
+        void Activate() override;
 
         // own helper
         void    announceControls(

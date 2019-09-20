@@ -90,21 +90,17 @@ class SwNumPositionTabPage : public SfxTabPage
     DECL_LINK(AlignAtHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(IndentAtHdl_Impl, weld::MetricSpinButton&, void);
 
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
-
 public:
 
     SwNumPositionTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwNumPositionTabPage() override;
-    virtual void        dispose() override;
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
                                       const SfxItemSet* rAttrSet);
 
     void                SetOutlineTabDialog(SwOutlineTabDialog* pDlg){pOutlineDlg = pDlg;}

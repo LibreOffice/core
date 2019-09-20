@@ -118,9 +118,9 @@ void SvxBasicIDEOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
     m_xUseExtendedTypesChk->save_state();
 }
 
-VclPtr<SfxTabPage> SvxBasicIDEOptionsPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SvxBasicIDEOptionsPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxBasicIDEOptionsPage>::Create( pParent, *rAttrSet );
+    return std::make_unique<SvxBasicIDEOptionsPage>( pParent, *rAttrSet );
 }
 
 void SvxBasicIDEOptionsPage::FillUserData()

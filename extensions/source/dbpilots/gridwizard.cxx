@@ -216,7 +216,7 @@ namespace dbp
         }
     }
 
-    VclPtr<TabPage> OGridWizard::createPage(WizardState _nState)
+    std::unique_ptr<BuilderPage> OGridWizard::createPage(WizardState _nState)
     {
         OString sIdent(OString::number(_nState));
         weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
@@ -226,12 +226,12 @@ namespace dbp
         switch (_nState)
         {
             case GW_STATE_DATASOURCE_SELECTION:
-                return VclPtr<OTableSelectionPage>::Create(this, aParent);
+                return std::make_unique<OTableSelectionPage>(this, aParent);
             case GW_STATE_FIELDSELECTION:
-                return VclPtr<OGridFieldsSelection>::Create(this, aParent);
+                return std::make_unique<OGridFieldsSelection>(this, aParent);
         }
 
-        return VclPtr<TabPage>();
+        return nullptr;
     }
 
     vcl::WizardTypes::WizardState OGridWizard::determineNextState( WizardState _nCurrentState ) const
@@ -309,9 +309,9 @@ namespace dbp
     {
     }
 
-    void OGridFieldsSelection::ActivatePage()
+    void OGridFieldsSelection::Activate()
     {
-        OGridPage::ActivatePage();
+        OGridPage::Activate();
         m_xExistFields->grab_focus();
     }
 
