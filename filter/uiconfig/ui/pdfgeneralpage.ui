@@ -589,31 +589,35 @@
                                 <property name="can_focus">False</property>
                                 <property name="column_spacing">14</property>
                                 <child>
-                                  <object class="GtkRadioButton" id="pdfa2">
-                                    <property name="label" context="pdfgeneralpage|pdfa">PDF/A-2b</property>
+                                  <object class="GtkComboBoxText" id="pdfaversion">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="active">True</property>
-                                    <property name="draw_indicator">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="active">3</property>
+                                    <items>
+                                      <item id="1" context="pdfgeneralpage|pdfaversion">PDF/A-1b</item>
+                                      <item id="2" context="pdfgeneralpage|pdfaversion">PDF/A-2b</item>
+                                      <item id="3" context="pdfgeneralpage|pdfaversion">PDF/A-3b</item>
+                                    </items>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="pdfaversionlabel"/>
+                                    </accessibility>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">0</property>
+                                    <property name="left_attach">1</property>
                                     <property name="top_attach">0</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkRadioButton" id="pdfa1">
-                                    <property name="label" context="pdfgeneralpage|pdfa">PDF/A-1b</property>
+                                  <object class="GtkLabel" id="pdfaversionlabel">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="active">True</property>
-                                    <property name="draw_indicator">True</property>
-                                    <property name="group">pdfa2</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes" context="pdfgeneralpage|pdfaversion">PDF/A version :</property>
+                                    <accessibility>
+                                      <relation type="label-for" target="pdfaversion"/>
+                                    </accessibility>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">1</property>
+                                    <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
                                   </packing>
                                 </child>
