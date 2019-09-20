@@ -19,41 +19,55 @@
 
 #include <skia/gdiimpl.hxx>
 
+#include <skia/salbmp.hxx>
+
+#include <SkCanvas.h>
+
+#ifdef DBG_UTIL
+#include <fstream>
+#endif
+
 SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvider* pProvider)
+    : mParent(rParent)
+    , mProvider(pProvider)
+    , mLineColor(SALCOLOR_NONE)
+    , mFillColor(SALCOLOR_NONE)
 {
-    (void)rParent;
-    (void)pProvider;
 }
 
 SkiaSalGraphicsImpl::~SkiaSalGraphicsImpl() {}
 
-void SkiaSalGraphicsImpl::Init() {}
+void SkiaSalGraphicsImpl::Init()
+{
+    // TODO
+    mSurface = SkSurface::MakeRasterN32Premul(GetWidth(), GetHeight());
+}
 
-void SkiaSalGraphicsImpl::DeInit() {}
+void SkiaSalGraphicsImpl::DeInit() { mSurface.reset(); }
 
 void SkiaSalGraphicsImpl::freeResources() {}
 
-const vcl::Region& SkiaSalGraphicsImpl::getClipRegion() const
+const vcl::Region& SkiaSalGraphicsImpl::getClipRegion() const { return mClipRegion; }
+
+bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
 {
-    static const vcl::Region reg;
-    return reg;
+    mClipRegion = region;
+    return true;
 }
 
-bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region&) { return false; }
+sal_uInt16 SkiaSalGraphicsImpl::GetBitCount() const { return 32; }
 
-sal_uInt16 SkiaSalGraphicsImpl::GetBitCount() const { return 0; }
+long SkiaSalGraphicsImpl::GetGraphicsWidth() const { return GetWidth(); }
 
-long SkiaSalGraphicsImpl::GetGraphicsWidth() const { return 0; }
+void SkiaSalGraphicsImpl::ResetClipRegion() { mClipRegion.SetEmpty(); }
 
-void SkiaSalGraphicsImpl::ResetClipRegion() {}
+void SkiaSalGraphicsImpl::SetLineColor() { mLineColor = SALCOLOR_NONE; }
 
-void SkiaSalGraphicsImpl::SetLineColor() {}
+void SkiaSalGraphicsImpl::SetLineColor(Color nColor) { mLineColor = nColor; }
 
-void SkiaSalGraphicsImpl::SetLineColor(Color nColor) { (void)nColor; }
+void SkiaSalGraphicsImpl::SetFillColor() { mFillColor = SALCOLOR_NONE; }
 
-void SkiaSalGraphicsImpl::SetFillColor() {}
-
-void SkiaSalGraphicsImpl::SetFillColor(Color nColor) { (void)nColor; }
+void SkiaSalGraphicsImpl::SetFillColor(Color nColor) { mFillColor = nColor; }
 
 void SkiaSalGraphicsImpl::SetXORMode(bool bSet, bool bInvertOnly)
 {
@@ -67,43 +81,56 @@ void SkiaSalGraphicsImpl::SetROPFillColor(SalROPColor nROPColor) { (void)nROPCol
 
 void SkiaSalGraphicsImpl::drawPixel(long nX, long nY)
 {
-    (void)nX;
-    (void)nY;
+    SkCanvas* canvas = mSurface->getCanvas();
+    canvas->drawPoint(nX, nY, mPaint);
 }
 
 void SkiaSalGraphicsImpl::drawPixel(long nX, long nY, Color nColor)
 {
-    (void)nX;
-    (void)nY;
-    (void)nColor;
+    SkCanvas* canvas = mSurface->getCanvas();
+    SkPaint paint(mPaint);
+    paint.setColor(toSkColor(nColor));
+    canvas->drawPoint(nX, nY, paint);
 }
 
 void SkiaSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
 {
-    (void)nX1;
-    (void)nY1;
-    (void)nX2;
-    (void)nY2;
+    SkCanvas* canvas = mSurface->getCanvas();
+    canvas->drawLine(nX1, nY1, nX2, nY2, mPaint);
 }
 
 void SkiaSalGraphicsImpl::drawRect(long nX, long nY, long nWidth, long nHeight)
 {
-    (void)nX;
-    (void)nY;
-    (void)nWidth;
-    (void)nHeight;
+    SkCanvas* canvas = mSurface->getCanvas();
+    SkPaint paint(mPaint);
+    paint.setStrokeWidth(0); // smallest possible
+    if (mFillColor != SALCOLOR_NONE)
+    {
+        paint.setColor(toSkColor(mFillColor));
+        paint.setStyle(SkPaint::kFill_Style);
+        canvas->drawIRect(SkIRect::MakeXYWH(nX, nY, nWidth, nHeight), paint);
+    }
+    if (mLineColor != SALCOLOR_NONE)
+    {
+        SkPaint paint(mPaint);
+        paint.setColor(toSkColor(mLineColor));
+        paint.setStyle(SkPaint::kStroke_Style);
+        canvas->drawIRect(SkIRect::MakeXYWH(nX, nY, nWidth - 1, nHeight - 1), paint);
+    }
 }
 
 void SkiaSalGraphicsImpl::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
 {
     (void)nPoints;
     (void)pPtAry;
+    abort();
 }
 
 void SkiaSalGraphicsImpl::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
 {
     (void)nPoints;
     (void)pPtAry;
+    abort();
 }
 
 void SkiaSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints,
@@ -112,6 +139,7 @@ void SkiaSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pP
     (void)nPoly;
     (void)pPoints;
     (void)pPtAry;
+    abort();
 }
 
 bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
@@ -175,6 +203,7 @@ void SkiaSalGraphicsImpl::copyArea(long nDestX, long nDestY, long nSrcX, long nS
     (void)nSrcWidth;
     (void)nSrcHeight;
     (void)bWindowInvalidate;
+    abort();
 }
 
 bool SkiaSalGraphicsImpl::blendBitmap(const SalTwoRect&, const SalBitmap& rBitmap)
@@ -197,6 +226,7 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap&
 {
     (void)rPosAry;
     (void)rSalBitmap;
+    abort();
 }
 
 void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
@@ -205,6 +235,7 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap&
     (void)rPosAry;
     (void)rSalBitmap;
     (void)rMaskBitmap;
+    abort();
 }
 
 void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
@@ -213,23 +244,21 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& r
     (void)rPosAry;
     (void)rSalBitmap;
     (void)nMaskColor;
+    abort();
 }
 
 std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long nWidth,
                                                           long nHeight)
 {
-    (void)nX;
-    (void)nY;
-    (void)nWidth;
-    (void)nHeight;
-    return nullptr;
+    sk_sp<SkImage> image = mSurface->makeImageSnapshot(SkIRect::MakeXYWH(nX, nY, nWidth, nHeight));
+    return std::make_shared<SkiaSalBitmap>(*image);
 }
 
 Color SkiaSalGraphicsImpl::getPixel(long nX, long nY)
 {
     (void)nX;
     (void)nY;
-    return COL_BLACK;
+    abort();
 }
 
 void SkiaSalGraphicsImpl::invert(long nX, long nY, long nWidth, long nHeight, SalInvert nFlags)
@@ -239,6 +268,7 @@ void SkiaSalGraphicsImpl::invert(long nX, long nY, long nWidth, long nHeight, Sa
     (void)nWidth;
     (void)nHeight;
     (void)nFlags;
+    abort();
 }
 
 void SkiaSalGraphicsImpl::invert(sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags)
@@ -246,6 +276,7 @@ void SkiaSalGraphicsImpl::invert(sal_uInt32 nPoints, const SalPoint* pPtAry, Sal
     (void)nPoints;
     (void)pPtAry;
     (void)nFlags;
+    abort();
 }
 
 bool SkiaSalGraphicsImpl::drawEPS(long nX, long nY, long nWidth, long nHeight, void* pPtr,
@@ -300,5 +331,15 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolygon,
     (void)rGradient;
     return false;
 }
+
+#ifdef DBG_UTIL
+void SkiaSalGraphicsImpl::dump(const char* file) const
+{
+    sk_sp<SkImage> image = mSurface->makeImageSnapshot();
+    sk_sp<SkData> data = image->encodeToData();
+    std::ofstream ostream(file, std::ios::binary);
+    ostream.write(static_cast<const char*>(data->data()), data->size());
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
