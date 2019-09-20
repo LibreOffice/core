@@ -23,6 +23,7 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
 #endif
+#include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/BitmapMonochromeFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>
@@ -358,8 +359,9 @@ void BitmapTest::testConvert()
 #else
 #if HAVE_FEATURE_OPENGL
         if (!OpenGLHelper::isVCLOpenGLEnabled())
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(12), pReadAccess->GetScanlineSize());
 #endif
+            if (!SkiaHelper::isVCLSkiaEnabled())
+                CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(12), pReadAccess->GetScanlineSize());
 #endif
         CPPUNIT_ASSERT(pReadAccess->HasPalette());
         const BitmapColor& rColor = pReadAccess->GetPaletteColor(pReadAccess->GetPixelIndex(1, 1));
@@ -382,6 +384,9 @@ void BitmapTest::testConvert()
             CPPUNIT_ASSERT_EQUAL(sal_uInt32(30), pReadAccess->GetScanlineSize());
         else
 #endif
+            if (SkiaHelper::isVCLSkiaEnabled())
+            CPPUNIT_ASSERT_EQUAL(sal_uInt32(40), pReadAccess->GetScanlineSize());
+        else
             CPPUNIT_ASSERT_EQUAL(sal_uInt32(32), pReadAccess->GetScanlineSize());
 #else
 #if defined(_WIN32)
