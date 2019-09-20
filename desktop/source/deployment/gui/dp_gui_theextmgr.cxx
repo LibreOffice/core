@@ -59,7 +59,8 @@ TheExtensionManager::TheExtensionManager( const uno::Reference< awt::XWindow > &
                                           const uno::Reference< uno::XComponentContext > &xContext ) :
     m_xContext( xContext ),
     m_xParent( xParent ),
-    m_bModified(false)
+    m_bModified(false),
+    m_bExtMgrDialogExecuting(false)
 {
     m_xExtensionManager = deployment::ExtensionManager::get( xContext );
     m_xExtensionManager->addModifyListener( this );
@@ -106,7 +107,15 @@ TheExtensionManager::~TheExtensionManager()
         m_xUpdReqDialog->response(RET_CANCEL);
     assert(!m_xUpdReqDialog);
     if (m_xExtMgrDialog)
-        m_xExtMgrDialog->response(RET_CANCEL);
+    {
+        if (m_bExtMgrDialogExecuting)
+            m_xExtMgrDialog->response(RET_CANCEL);
+        else
+        {
+            m_xExtMgrDialog->Close();
+            m_xExtMgrDialog.reset();
+        }
+    }
     assert(!m_xExtMgrDialog);
 }
 
@@ -136,7 +145,10 @@ void TheExtensionManager::Show()
 {
     const SolarMutexGuard guard;
 
+    m_bExtMgrDialogExecuting = true;
+
     weld::DialogController::runAsync(m_xExtMgrDialog, [this](sal_Int32 /*nResult*/) {
+        m_bExtMgrDialogExecuting = false;
         auto xExtMgrDialog = m_xExtMgrDialog;
         m_xExtMgrDialog.reset();
         xExtMgrDialog->Close();
@@ -158,16 +170,18 @@ void TheExtensionManager::ToTop()
     getDialog()->present();
 }
 
-
-bool TheExtensionManager::Close()
+void TheExtensionManager::Close()
 {
     if (m_xExtMgrDialog)
-        m_xExtMgrDialog->response(RET_CANCEL);
+    {
+        if (m_bExtMgrDialogExecuting)
+            m_xExtMgrDialog->response(RET_CANCEL);
+        else
+            m_xExtMgrDialog->Close();
+    }
     else if (m_xUpdReqDialog)
         m_xUpdReqDialog->response(RET_CANCEL);
-    return true;
 }
-
 
 sal_Int16 TheExtensionManager::execute()
 {
@@ -255,7 +269,15 @@ void TheExtensionManager::terminateDialog()
     {
         const SolarMutexGuard guard;
         if (m_xExtMgrDialog)
-            m_xExtMgrDialog->response(RET_CANCEL);
+        {
+            if (m_bExtMgrDialogExecuting)
+                m_xExtMgrDialog->response(RET_CANCEL);
+            else
+            {
+                m_xExtMgrDialog->Close();
+                m_xExtMgrDialog.reset();
+            }
+        }
         assert(!m_xExtMgrDialog);
         if (m_xUpdReqDialog)
             m_xUpdReqDialog->response(RET_CANCEL);
@@ -423,7 +445,15 @@ void TheExtensionManager::disposing( lang::EventObject const & rEvt )
         {
             const SolarMutexGuard guard;
             if (m_xExtMgrDialog)
-                m_xExtMgrDialog->response(RET_CANCEL);
+            {
+                if (m_bExtMgrDialogExecuting)
+                    m_xExtMgrDialog->response(RET_CANCEL);
+                else
+                {
+                    m_xExtMgrDialog->Close();
+                    m_xExtMgrDialog.reset();
+                }
+            }
             assert(!m_xExtMgrDialog);
             if (m_xUpdReqDialog)
                 m_xUpdReqDialog->response(RET_CANCEL);
@@ -449,7 +479,15 @@ void TheExtensionManager::queryTermination( ::lang::EventObject const & )
     {
         clearModified();
         if (m_xExtMgrDialog)
-            m_xExtMgrDialog->response(RET_CANCEL);
+        {
+            if (m_bExtMgrDialogExecuting)
+                m_xExtMgrDialog->response(RET_CANCEL);
+            else
+            {
+                m_xExtMgrDialog->Close();
+                m_xExtMgrDialog.reset();
+            }
+        }
         if (m_xUpdReqDialog)
             m_xUpdReqDialog->response(RET_CANCEL);
     }
