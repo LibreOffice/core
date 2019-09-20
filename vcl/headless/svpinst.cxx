@@ -295,9 +295,7 @@ void SvpSalInstance::ProcessEvent( SalUserEvent aEvent )
 
 SvpSalYieldMutex::SvpSalYieldMutex()
 {
-#ifndef IOS
     m_FeedbackFDs[0] = m_FeedbackFDs[1] = -1;
-#endif
 }
 
 SvpSalYieldMutex::~SvpSalYieldMutex()
