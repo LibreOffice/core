@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <sal/log.hxx>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <sal/types.h>

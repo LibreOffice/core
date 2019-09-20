@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <sal/log.hxx>
 #include "DataFlavorMapping.hxx"
 #include "HtmlFmtFlt.hxx"
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
