@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "openglx11cairotextrender.hxx"
+#include <opengl/x11/cairotextrender.hxx>
 
-#include <openglgdiimpl.hxx>
+#include <opengl/gdiimpl.hxx>
 
 #include <cairo.h>
 
