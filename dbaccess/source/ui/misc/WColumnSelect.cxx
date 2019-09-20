@@ -44,10 +44,7 @@ namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOper
 OUString OWizColumnSelect::GetTitle() const { return DBA_RES(STR_WIZ_COLUMN_SELECT_TITEL); }
 
 OWizardPage::OWizardPage(OCopyTableWizard* pWizard, TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID)
-    : TabPage(pParent.pPage ? Application::GetDefDialogParent() : pParent.pParent.get()) //just drag this along hidden in this scenario
-    , m_xBuilder(pParent.pPage ? Application::CreateBuilder(pParent.pPage, rUIXMLDescription)
-                               : Application::CreateInterimBuilder(this, rUIXMLDescription))
-    , m_xContainer(m_xBuilder->weld_container(rID))
+    : ::vcl::OWizardPage(pParent, rUIXMLDescription, rID)
     , m_pParent(pWizard)
     , m_bFirstTime(true)
 {
@@ -81,17 +78,11 @@ OWizColumnSelect::OWizColumnSelect(OCopyTableWizard* pWizard, TabPageParent pPar
 
 OWizColumnSelect::~OWizColumnSelect()
 {
-    disposeOnce();
-}
-
-void OWizColumnSelect::dispose()
-{
     while (m_xNewColumnNames->n_children())
     {
         delete reinterpret_cast<OFieldDescription*>(m_xNewColumnNames->get_id(0).toInt64());
         m_xNewColumnNames->remove(0);
     }
-    OWizardPage::dispose();
 }
 
 void OWizColumnSelect::Reset()
@@ -116,7 +107,7 @@ void OWizColumnSelect::Reset()
     m_bFirstTime = false;
 }
 
-void OWizColumnSelect::ActivatePage( )
+void OWizColumnSelect::Activate( )
 {
     // if there are no dest columns reset the left side with the original columns
     if(m_pParent->getDestColumns().empty())

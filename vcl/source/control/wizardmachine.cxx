@@ -39,38 +39,28 @@ namespace vcl
 {
     //= WizardPageImplData
     OWizardPage::OWizardPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID)
-        : TabPage(pParent.pPage ? Application::GetDefDialogParent() : pParent.pParent.get()) //just drag this along hidden in this scenario
-        , m_xBuilder(pParent.pPage ? Application::CreateBuilder(pParent.pPage, rUIXMLDescription)
-                                   : Application::CreateInterimBuilder(this, rUIXMLDescription))
-        , m_xContainer(m_xBuilder->weld_container(rID))
+        : BuilderPage(pParent.pPage, pParent.pController, rUIXMLDescription, rID)
     {
     }
 
     OWizardPage::~OWizardPage()
     {
-        disposeOnce();
-    }
-
-    void OWizardPage::dispose()
-    {
-        m_xBuilder.reset();
-        TabPage::dispose();
     }
 
     void OWizardPage::initializePage()
     {
     }
 
-    void OWizardPage::ActivatePage()
+    void OWizardPage::Activate()
     {
-        TabPage::ActivatePage();
+        BuilderPage::Activate();
         updateDialogTravelUI();
     }
 
     void OWizardPage::updateDialogTravelUI()
     {
-        RoadmapWizard* pWizardMachine = dynamic_cast<RoadmapWizard*>(GetParent());
-        if ( pWizardMachine )
+        auto pWizardMachine = dynamic_cast<RoadmapWizardMachine*>(m_pDialogController);
+        if (pWizardMachine)
             pWizardMachine->updateTravelUI();
     }
 
@@ -1089,6 +1079,7 @@ namespace vcl
 
     WizardMachine::WizardMachine(weld::Window* pParent, WizardButtonFlags nButtonFlags)
         : AssistantController(pParent, "vcl/ui/wizard.ui", "Wizard")
+        , m_pCurTabPage(nullptr)
         , m_nCurState(0)
         , m_pFirstPage(nullptr)
         , m_xFinish(m_xAssistant->weld_widget_for_response(RET_OK))
@@ -1159,13 +1150,7 @@ namespace vcl
         if (m_pImpl)
         {
             while (m_pFirstPage)
-            {
-                VclPtr<TabPage> pPage = m_pFirstPage->mpPage;
-                RemovePage(m_pFirstPage->mpPage);
-                if (pPage)
-                    pPage.disposeAndClear();
-            }
-
+                RemovePage(m_pFirstPage->mxPage.get());
             m_pImpl.reset();
         }
     }
@@ -1175,10 +1160,10 @@ namespace vcl
         OUString sCompleteTitle(m_pImpl->sTitleBase);
 
         // append the page title
-        TabPage* pCurrentPage = GetPage(getCurrentState());
-        if ( pCurrentPage && !pCurrentPage->GetText().isEmpty() )
+        BuilderPage* pCurrentPage = GetPage(getCurrentState());
+        if ( pCurrentPage && !pCurrentPage->GetPageTitle().isEmpty() )
         {
-            sCompleteTitle += " - " + pCurrentPage->GetText();
+            sCompleteTitle += " - " + pCurrentPage->GetPageTitle();
         }
 
         m_xAssistant->set_title(sCompleteTitle);
@@ -1190,12 +1175,12 @@ namespace vcl
         implUpdateTitle();
     }
 
-    TabPage* WizardMachine::GetOrCreatePage( const WizardTypes::WizardState i_nState )
+    BuilderPage* WizardMachine::GetOrCreatePage( const WizardTypes::WizardState i_nState )
     {
         if ( nullptr == GetPage( i_nState ) )
         {
-            VclPtr<TabPage> pNewPage = createPage( i_nState );
-            DBG_ASSERT( pNewPage, "WizardMachine::GetOrCreatePage: invalid new page (NULL)!" );
+            std::unique_ptr<BuilderPage> xNewPage = createPage( i_nState );
+            DBG_ASSERT( xNewPage, "WizardMachine::GetOrCreatePage: invalid new page (NULL)!" );
 
             // fill up the page sequence of our base class (with dummies)
             while ( m_pImpl->nFirstUnknownPage < i_nState )
@@ -1207,12 +1192,12 @@ namespace vcl
             if ( m_pImpl->nFirstUnknownPage == i_nState )
             {
                 // encountered this page number the first time
-                AddPage( pNewPage );
+                AddPage(std::move(xNewPage));
                 ++m_pImpl->nFirstUnknownPage;
             }
             else
                 // already had this page - just change it
-                SetPage( i_nState, pNewPage );
+                SetPage(i_nState, std::move(xNewPage));
         }
         return GetPage( i_nState );
     }
@@ -1463,18 +1448,18 @@ namespace vcl
     {
         if (DeactivatePage())
         {
-            TabPage* pOldTabPage = m_xCurTabPage;
+            BuilderPage* pOldTabPage = m_pCurTabPage;
 
             m_nCurState = nState;
             ActivatePage();
 
             if (pOldTabPage)
-                pOldTabPage->DeactivatePage();
+                pOldTabPage->Deactivate();
 
             m_xAssistant->set_current_page(OString::number(nState));
 
-            m_xCurTabPage = GetPage(m_nCurState);
-            m_xCurTabPage->ActivatePage();
+            m_pCurTabPage = GetPage(m_nCurState);
+            m_pCurTabPage->Activate();
 
             return true;
         }
@@ -1566,9 +1551,9 @@ namespace vcl
         travelNext();
     }
 
-    IWizardPageController* WizardMachine::getPageController( TabPage* _pCurrentPage ) const
+    IWizardPageController* WizardMachine::getPageController(BuilderPage* pCurrentPage) const
     {
-        IWizardPageController* pController = dynamic_cast< IWizardPageController* >( _pCurrentPage );
+        IWizardPageController* pController = dynamic_cast<IWizardPageController*>(pCurrentPage);
         return pController;
     }
 
@@ -1619,8 +1604,8 @@ namespace vcl
     {
         if ( DeactivatePage() )
         {
-            if (m_xCurTabPage)
-                m_xCurTabPage->DeactivatePage();
+            if (m_pCurTabPage)
+                m_pCurTabPage->Deactivate();
 
             m_xAssistant->response(nResult);
             return true;
@@ -1629,37 +1614,37 @@ namespace vcl
             return false;
     }
 
-    void WizardMachine::AddPage( TabPage* pPage )
+    void WizardMachine::AddPage(std::unique_ptr<BuilderPage> xPage)
     {
-        ImplWizPageData* pNewPageData = new ImplWizPageData;
-        pNewPageData->mpNext    = nullptr;
-        pNewPageData->mpPage    = pPage;
+        WizPageData* pNewPageData = new WizPageData;
+        pNewPageData->mpNext = nullptr;
+        pNewPageData->mxPage = std::move(xPage);
 
         if ( !m_pFirstPage )
             m_pFirstPage = pNewPageData;
         else
         {
-            ImplWizPageData* pPageData = m_pFirstPage;
+            WizPageData* pPageData = m_pFirstPage;
             while ( pPageData->mpNext )
                 pPageData = pPageData->mpNext;
             pPageData->mpNext = pNewPageData;
         }
     }
 
-    void WizardMachine::RemovePage( TabPage* pPage )
+    void WizardMachine::RemovePage(BuilderPage* pPage)
     {
-        ImplWizPageData*  pPrevPageData = nullptr;
-        ImplWizPageData*  pPageData = m_pFirstPage;
+        WizPageData* pPrevPageData = nullptr;
+        WizPageData* pPageData = m_pFirstPage;
         while ( pPageData )
         {
-            if ( pPageData->mpPage == pPage )
+            if (pPageData->mxPage.get() == pPage)
             {
                 if (pPrevPageData)
                     pPrevPageData->mpNext = pPageData->mpNext;
                 else
                     m_pFirstPage = pPageData->mpNext;
-                if (pPage == m_xCurTabPage)
-                    m_xCurTabPage.clear();
+                if (pPage == m_pCurTabPage)
+                    m_pCurTabPage = nullptr;
                 delete pPageData;
                 return;
             }
@@ -1671,10 +1656,10 @@ namespace vcl
         OSL_FAIL( "WizardMachine::RemovePage() - Page not in list" );
     }
 
-    void WizardMachine::SetPage(WizardTypes::WizardState nLevel, TabPage* pPage)
+    void WizardMachine::SetPage(WizardTypes::WizardState nLevel, std::unique_ptr<BuilderPage> xPage)
     {
         sal_uInt16              nTempLevel = 0;
-        ImplWizPageData*    pPageData = m_pFirstPage;
+        WizPageData*    pPageData = m_pFirstPage;
         while ( pPageData )
         {
             if ( (nTempLevel == nLevel) || !pPageData->mpNext )
@@ -1686,21 +1671,21 @@ namespace vcl
 
         if ( pPageData )
         {
-            if ( pPageData->mpPage == m_xCurTabPage )
-                m_xCurTabPage = nullptr;
-            pPageData->mpPage = pPage;
+            if (pPageData->mxPage.get() == m_pCurTabPage)
+                m_pCurTabPage = nullptr;
+            pPageData->mxPage = std::move(xPage);
         }
     }
 
-    TabPage* WizardMachine::GetPage(WizardTypes::WizardState nLevel) const
+    BuilderPage* WizardMachine::GetPage(WizardTypes::WizardState nLevel) const
     {
         sal_uInt16 nTempLevel = 0;
 
-        for (ImplWizPageData* pPageData = m_pFirstPage; pPageData;
+        for (WizPageData* pPageData = m_pFirstPage; pPageData;
              pPageData = pPageData->mpNext)
         {
             if ( nTempLevel == nLevel )
-                return pPageData->mpPage;
+                return pPageData->mxPage.get();
             nTempLevel++;
         }
 

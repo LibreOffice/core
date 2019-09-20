@@ -70,13 +70,7 @@ namespace abp
 
     FinalPage::~FinalPage()
     {
-        disposeOnce();
-    }
-
-    void FinalPage::dispose()
-    {
         m_xLocationController.reset();
-        AddressBookSourcePage::dispose();
     }
 
     bool FinalPage::isValidName() const
@@ -156,9 +150,9 @@ namespace abp
         return true;
     }
 
-    void FinalPage::ActivatePage()
+    void FinalPage::Activate()
     {
-        AddressBookSourcePage::ActivatePage();
+        AddressBookSourcePage::Activate();
 
         // get the names of all data sources
         ODataSourceContext aContext( getORB() );
@@ -173,9 +167,9 @@ namespace abp
         OnEmbed(*m_xEmbed);
     }
 
-    void FinalPage::DeactivatePage()
+    void FinalPage::Deactivate()
     {
-        AddressBookSourcePage::DeactivatePage();
+        AddressBookSourcePage::Deactivate();
 
         // default the "next" button, again
         getDialog()->defaultButton( WizardButtonFlags::NEXT );

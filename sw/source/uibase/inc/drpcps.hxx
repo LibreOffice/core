@@ -38,7 +38,7 @@ class SwDropCapsPage;
 
 class SwDropCapsPict : public weld::CustomWidgetController
 {
-    VclPtr<SwDropCapsPage> mpPage;
+    SwDropCapsPage* mpPage;
     OUString        maText;
     OUString        maScriptText;
     Color           maBackColor;
@@ -144,16 +144,13 @@ friend class SwDropCapsPict;
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(WholeWordHdl, weld::ToggleButton&, void);
 
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
-
     static const sal_uInt16 aPageRg[];
 
 public:
     SwDropCapsPage(TabPageParent pParent, const SfxItemSet &rSet);
     virtual ~SwDropCapsPage() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
 

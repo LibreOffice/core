@@ -31,8 +31,6 @@ enum class SvxAnchorIds;
 
 class SvxSwPosSizeTabPage : public SfxTabPage
 {
-    using TabPage::DeactivatePage;
-
     Link<SvxSwFrameValidation&,void> m_aValidateLink;
 
     ::tools::Rectangle           m_aRect; //size of all selected objects
@@ -112,10 +110,9 @@ class SvxSwPosSizeTabPage : public SfxTabPage
 
 public:
     SvxSwPosSizeTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
-    virtual void dispose() override;
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual ~SvxSwPosSizeTabPage() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     static const sal_uInt16*     GetRanges();
 
     virtual bool FillItemSet( SfxItemSet* ) override;

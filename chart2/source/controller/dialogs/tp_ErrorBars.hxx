@@ -36,11 +36,9 @@ public:
     void SetChartDocumentForRangeChoosing(
         const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument );
 
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rInAttrs );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rInAttrs );
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) override;
     virtual void Reset( const SfxItemSet* rInAttrs ) override;
-
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 private:
     ErrorBarResources   m_aErrorBarResources;

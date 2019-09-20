@@ -40,18 +40,12 @@ PolarOptionsTabPage::PolarOptionsTabPage(TabPageParent pWindow, const SfxItemSet
 
 PolarOptionsTabPage::~PolarOptionsTabPage()
 {
-    disposeOnce();
-}
-
-void PolarOptionsTabPage::dispose()
-{
     m_xAngleDial.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> PolarOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+std::unique_ptr<SfxTabPage> PolarOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<PolarOptionsTabPage>::Create(pParent, *rOutAttrs);
+    return std::make_unique<PolarOptionsTabPage>(pParent, *rOutAttrs);
 }
 
 bool PolarOptionsTabPage::FillItemSet( SfxItemSet* rOutAttrs )

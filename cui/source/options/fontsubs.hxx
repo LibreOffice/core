@@ -49,11 +49,10 @@ class SvxFontSubstTabPage : public SfxTabPage
     void            CheckEnable();
     void            setColSizes();
 
-    virtual ~SvxFontSubstTabPage() override;
-
 public:
     SvxFontSubstTabPage(TabPageParent pParent, const SfxItemSet& rSet);
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
+    virtual ~SvxFontSubstTabPage() override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };

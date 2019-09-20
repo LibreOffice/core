@@ -15,20 +15,16 @@
 
 class ScTpDefaultsOptions : public SfxTabPage
 {
-    friend class VclPtr<ScTpDefaultsOptions>;
 public:
-    using SfxTabPage::DeactivatePage;
-
-    static  VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rCoreSet);
+    explicit ScTpDefaultsOptions(TabPageParent pParent, const SfxItemSet& rCoreSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rCoreSet);
+    virtual ~ScTpDefaultsOptions() override;
 
     virtual bool FillItemSet(SfxItemSet* rCoreSet) override;
     virtual void Reset(const SfxItemSet* rCoreSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
 
 private:
-    explicit ScTpDefaultsOptions(TabPageParent pParent, const SfxItemSet& rCoreSet);
-    virtual ~ScTpDefaultsOptions() override;
-
     void CheckNumSheets();
     void CheckPrefix();
     void OnFocusPrefixInput();

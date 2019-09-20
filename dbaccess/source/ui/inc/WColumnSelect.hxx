@@ -74,13 +74,12 @@ namespace dbaui
 
     public:
         virtual void            Reset ( ) override;
-        virtual void            ActivatePage() override;
+        virtual void            Activate() override;
         virtual bool            LeavePage() override;
         virtual OUString        GetTitle() const override ;
 
         OWizColumnSelect(OCopyTableWizard* pWizard, TabPageParent pParent);
         virtual ~OWizColumnSelect() override;
-        virtual void dispose() override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WCOLUMNSELECT_HXX

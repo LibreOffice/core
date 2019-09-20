@@ -27,19 +27,16 @@
 
 class ScTpFormulaOptions : public SfxTabPage
 {
-    friend class VclPtr<ScTpFormulaOptions>;
 public:
-    using SfxTabPage::DeactivatePage;
-
-    static  VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rCoreSet);
+    explicit ScTpFormulaOptions(TabPageParent pParent, const SfxItemSet& rCoreSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rCoreSet);
+    virtual ~ScTpFormulaOptions() override;
 
     virtual bool FillItemSet(SfxItemSet* rCoreSet) override;
     virtual void Reset( const SfxItemSet* rCoreSet ) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet ) override;
 
 private:
-    explicit ScTpFormulaOptions(TabPageParent pParent, const SfxItemSet& rCoreSet);
-    virtual ~ScTpFormulaOptions() override;
     void ResetSeparators();
     void OnFocusSeparatorInput(weld::Entry* pEdit);
     void UpdateCustomCalcRadioButtons(bool bDefault);

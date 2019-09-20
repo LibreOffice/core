@@ -29,7 +29,7 @@ namespace com { namespace sun { namespace star { namespace uno { class XComponen
 
 #include <memory>
 
-class TabPage;
+class BuilderPage;
 
 namespace chart
 {
@@ -54,8 +54,8 @@ public:
     virtual short run() override;
 
     // TabPageNotifiable
-    virtual void setInvalidPage( TabPage * pTabPage ) override;
-    virtual void setValidPage( TabPage * pTabPage ) override;
+    virtual void setInvalidPage( BuilderPage * pTabPage ) override;
+    virtual void setValidPage( BuilderPage * pTabPage ) override;
 
 private:
     void DisableTabToggling();
@@ -67,8 +67,8 @@ private:
     std::unique_ptr< ChartTypeTemplateProvider >  m_apDocTemplateProvider;
     std::unique_ptr< DialogModel >                m_apDialogModel;
 
-    VclPtr<RangeChooserTabPage> m_pRangeChooserTabPage;
-    VclPtr<DataSourceTabPage>   m_pDataSourceTabPage;
+    std::unique_ptr<RangeChooserTabPage> m_xRangeChooserTabPage;
+    std::unique_ptr<DataSourceTabPage> m_xDataSourceTabPage;
     bool                  m_bRangeChooserTabIsValid;
     bool                  m_bDataSourceTabIsValid;
     bool                  m_bTogglingEnabled;

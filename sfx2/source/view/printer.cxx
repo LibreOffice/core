@@ -171,34 +171,31 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog(weld::Window *pParent,
     , pOptions(pSet->Clone())
     , m_xHelpBtn(m_xBuilder->weld_widget("help"))
     , m_xContainer(m_xDialog->weld_content_area())
+    , m_xPage(pViewShell->CreatePrintOptionsPage(TabPageParent(m_xContainer.get(), this), *pOptions)) // Insert TabPage
 {
-    // Insert TabPage
-    pPage.reset(pViewShell->CreatePrintOptionsPage(TabPageParent(m_xContainer.get(), this), *pOptions));
-    DBG_ASSERT( pPage, "CreatePrintOptions != SFX_VIEW_HAS_PRINTOPTIONS" );
-    if( pPage )
+    DBG_ASSERT( m_xPage, "CreatePrintOptions != SFX_VIEW_HAS_PRINTOPTIONS" );
+    if (m_xPage)
     {
-        pPage->Reset( pOptions.get() );
-        m_xDialog->set_help_id(pPage->GetHelpId());
+        m_xPage->Reset( pOptions.get() );
+        m_xDialog->set_help_id(m_xPage->GetHelpId());
     }
 }
 
-
 SfxPrintOptionsDialog::~SfxPrintOptionsDialog()
 {
-    pPage.disposeAndClear();
 }
 
 short SfxPrintOptionsDialog::run()
 {
-    if (!pPage)
+    if (!m_xPage)
         return RET_CANCEL;
 
     short nRet = GenericDialogController::run();
 
     if (nRet == RET_OK)
-        pPage->FillItemSet( pOptions.get() );
+        m_xPage->FillItemSet( pOptions.get() );
     else
-        pPage->Reset( pOptions.get() );
+        m_xPage->Reset( pOptions.get() );
     return nRet;
 }
 

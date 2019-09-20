@@ -38,7 +38,7 @@ public:
     OfaMSFilterTabPage(TabPageParent pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -62,8 +62,6 @@ class OfaMSFilterTabPage2 : public SfxTabPage
     std::unique_ptr<weld::RadioButton> m_xShadingRB;
     std::unique_ptr<weld::CheckButton> m_xMSOLockFileCB;
 
-    virtual ~OfaMSFilterTabPage2() override;
-
     void                InsertEntry( const OUString& _rTxt, MSFltrPg2_CheckBoxEntries _nType );
     void                InsertEntry( const OUString& _rTxt, MSFltrPg2_CheckBoxEntries _nType,
                                      bool saveEnabled );
@@ -71,7 +69,8 @@ class OfaMSFilterTabPage2 : public SfxTabPage
 
 public:
     OfaMSFilterTabPage2(TabPageParent pParent, const SfxItemSet& rSet);
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    virtual ~OfaMSFilterTabPage2() override;
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

@@ -110,22 +110,16 @@ SvxHatchTabPage::SvxHatchTabPage(TabPageParent pParent, const SfxItemSet& rInAtt
     m_xBtnAdd->connect_clicked( LINK( this, SvxHatchTabPage, ClickAddHdl_Impl ) );
     m_xBtnModify->connect_clicked( LINK( this, SvxHatchTabPage, ClickModifyHdl_Impl ) );
 
-    m_aCtlPreview.SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+    m_aCtlPreview.SetDrawMode(Application::GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR);
 }
 
 SvxHatchTabPage::~SvxHatchTabPage()
-{
-    disposeOnce();
-}
-
-void SvxHatchTabPage::dispose()
 {
     m_xCtlPreview.reset();
     m_xHatchLBWin.reset();
     m_xHatchLB.reset();
     m_xLbBackgroundColor.reset();
     m_xLbLineColor.reset();
-    SfxTabPage::dispose();
 }
 
 void SvxHatchTabPage::Construct()
@@ -272,10 +266,10 @@ void SvxHatchTabPage::Reset( const SfxItemSet* rSet )
     m_aCtlPreview.Invalidate();
 }
 
-VclPtr<SfxTabPage> SvxHatchTabPage::Create( TabPageParent pWindow,
+std::unique_ptr<SfxTabPage> SvxHatchTabPage::Create( TabPageParent pWindow,
                                             const SfxItemSet* rSet )
 {
-    return VclPtr<SvxHatchTabPage>::Create(pWindow, *rSet);
+    return std::make_unique<SvxHatchTabPage>(pWindow, *rSet);
 }
 
 IMPL_LINK( SvxHatchTabPage, ModifiedListBoxHdl_Impl, weld::ComboBox&, rListBox, void )
@@ -560,14 +554,6 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
         }
     }
 
-}
-
-void SvxHatchTabPage::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
-        m_aCtlPreview.SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
-
-    SfxTabPage::DataChanged( rDCEvt );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -48,16 +48,15 @@ namespace abp
     public:
         explicit FinalPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent);
         virtual ~FinalPage() override;
-        virtual void dispose() override;
 
     private:
         // OWizardPage overridables
         virtual void        initializePage() override;
         virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
 
-        // TabDialog overridables
-        virtual void        ActivatePage() override;
-        virtual void        DeactivatePage() override;
+        // BuilderPage overridables
+        virtual void        Activate() override;
+        virtual void        Deactivate() override;
 
         // OImportPage overridables
         virtual bool        canAdvance() const override;

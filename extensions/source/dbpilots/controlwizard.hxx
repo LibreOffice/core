@@ -140,9 +140,6 @@ namespace dbp
         void implDetermineForm();
         void implDeterminePage();
         void implDetermineShape();
-
-        // made private. Not to be used by derived (or external) classes
-        using OControlWizard_Base::ActivatePage;
     };
 
 

@@ -37,7 +37,6 @@ namespace dbaui
 
 class OUserAdmin final : public OGenericAdministrationPage
 {
-    friend class VclPtr<OUserAdmin>;
     std::unique_ptr<weld::ComboBox> m_xUSER;
     std::unique_ptr<weld::Button> m_xNEWUSER;
     std::unique_ptr<weld::Button> m_xCHANGEPWD;
@@ -58,12 +57,11 @@ class OUserAdmin final : public OGenericAdministrationPage
 
     void        FillUserNames();
 
-    OUserAdmin(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
 public:
-    static  VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* _rAttrSet);
-
+    OUserAdmin(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
     virtual ~OUserAdmin() override;
-    virtual void dispose() override;
+
     OUString GetUser() const;
 
     // subclasses must override this, but it isn't pure virtual
