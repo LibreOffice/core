@@ -295,7 +295,7 @@ class SW_DLLPUBLIC SwHiddenTextField : public SwField
     OUString m_aContent; ///< Evaluated DB-text.
 
     OUString m_aCond; ///< Condition.
-    sal_uInt16 m_nSubType;
+    SwFieldTypesEnum m_nSubType;
 
     bool m_bCanToggle : 1; ///< Can field be toggled alone?
     bool m_bIsHidden : 1; ///< Is it not visible?
@@ -310,13 +310,13 @@ public:
                      const OUString& rCond,
                      const OUString& rText,
                      bool   bHidden,
-                     sal_uInt16 nSubType = TYP_HIDDENTXTFLD);
+                     SwFieldTypesEnum nSubType = SwFieldTypesEnum::HiddenText);
 
     SwHiddenTextField( SwHiddenTextFieldType*,
                       const OUString& rCond,
                       const OUString& rTrue,
                       const OUString& rFalse,
-                      sal_uInt16 nSubType = TYP_HIDDENTXTFLD);
+                      SwFieldTypesEnum nSubType = SwFieldTypesEnum::HiddenText);
 
     virtual OUString    GetFieldName() const override;
 

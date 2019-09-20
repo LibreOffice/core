@@ -356,7 +356,7 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
                     if( !rExcludeCountry.isEmpty() )
                     {
                         const OUString sExpression("[" + sDatabaseConditionPrefix + sCountryColumn + "]");
-                        SwInsertField_Data aData(TYP_CONDTXTFLD, 0,
+                        SwInsertField_Data aData(SwFieldTypesEnum::ConditionalText, 0,
                                                sExpression + " != \"" + rExcludeCountry + "\"",
                                                sExpression,
                                                0, &rShell );
@@ -364,13 +364,13 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
                     }
                     else
                     {
-                        SwInsertField_Data aData(TYP_HIDDENPARAFLD, 0, "", "", 0, &rShell );
+                        SwInsertField_Data aData(SwFieldTypesEnum::HiddenParagraph, 0, "", "", 0, &rShell );
                         aFieldMgr.InsertField( aData );
                     }
                 }
                 else
                 {
-                    SwInsertField_Data aData(TYP_DBFLD, 0, sDB, OUString(), 0, &rShell);
+                    SwInsertField_Data aData(SwFieldTypesEnum::Database, 0, sDB, OUString(), 0, &rShell);
                     aFieldMgr.InsertField( aData );
                 }
             }
@@ -382,7 +382,7 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
             {
                 if(bHideEmptyParagraphs)
                 {
-                    SwInsertField_Data aData(TYP_HIDDENPARAFLD, 0, sHideParagraphsExpression, OUString(), 0, &rShell);
+                    SwInsertField_Data aData(SwFieldTypesEnum::HiddenParagraph, 0, sHideParagraphsExpression, OUString(), 0, &rShell);
                     aFieldMgr.InsertField( aData );
                 }
                 sHideParagraphsExpression.clear();
@@ -392,7 +392,7 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
         }
         if(bHideEmptyParagraphs && !sHideParagraphsExpression.isEmpty())
         {
-            SwInsertField_Data aData(TYP_HIDDENPARAFLD, 0, sHideParagraphsExpression, OUString(), 0, &rShell);
+            SwInsertField_Data aData(SwFieldTypesEnum::HiddenParagraph, 0, sHideParagraphsExpression, OUString(), 0, &rShell);
             aFieldMgr.InsertField( aData );
         }
     }
@@ -532,12 +532,12 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                     if(bHideEmptyParagraphs && !sHideParagraphsExpression.isEmpty())
                     {
                         OUString sComplete = "(" + sCondition + ") OR (" + sHideParagraphsExpression + ")";
-                        SwInsertField_Data aData(TYP_HIDDENPARAFLD, 0, sComplete, OUString(), 0, &rShell);
+                        SwInsertField_Data aData(SwFieldTypesEnum::HiddenParagraph, 0, sComplete, OUString(), 0, &rShell);
                         aFieldMgr.InsertField( aData );
                     }
                     else
                     {
-                        SwInsertField_Data aData(TYP_HIDDENPARAFLD, 0, sCondition, OUString(), 0, &rShell);
+                        SwInsertField_Data aData(SwFieldTypesEnum::HiddenParagraph, 0, sCondition, OUString(), 0, &rShell);
                         aFieldMgr.InsertField( aData );
                     }
                     //now the text has to be inserted
@@ -563,7 +563,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                                     break;
                                 }
                             }
-                            SwInsertField_Data aData(TYP_DBFLD, 0,
+                            SwInsertField_Data aData(SwFieldTypesEnum::Database, 0,
                                 sDBName + sConvertedColumn,
                                 OUString(), 0, &rShell);
                             aFieldMgr.InsertField( aData );

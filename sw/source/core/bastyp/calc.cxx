@@ -496,7 +496,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
             OUString sColumnName( GetColumnName( sTmpName ));
             OSL_ENSURE(!sColumnName.isEmpty(), "Missing DB column name");
 
-            OUString sDBNum( SwFieldType::GetTypeStr(TYP_DBSETNUMBERFLD) );
+            OUString sDBNum( SwFieldType::GetTypeStr(SwFieldTypesEnum::DatabaseSetNumber) );
             sDBNum = m_pCharClass->lowercase(sDBNum);
 
             // Initialize again because this doesn't happen in docfld anymore for
@@ -543,7 +543,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
     OUString sColumnName( GetColumnName( sTmpName ));
     OSL_ENSURE( !sColumnName.isEmpty(), "Missing DB column name" );
     if( sColumnName.equalsIgnoreAsciiCase(
-                            SwFieldType::GetTypeStr( TYP_DBSETNUMBERFLD ) ))
+                            SwFieldType::GetTypeStr( SwFieldTypesEnum::DatabaseSetNumber ) ))
     {
 #if HAVE_FEATURE_DBCONNECTIVITY
         SwDBManager *pMgr = m_rDoc.GetDBManager();

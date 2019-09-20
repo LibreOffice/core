@@ -104,14 +104,14 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
 
         for(sal_uInt16 i = rRg.nStart; i < rRg.nEnd; ++i)
         {
-            const sal_uInt16 nTypeId = SwFieldMgr::GetTypeId(i);
-            m_xTypeLB->append(OUString::number(nTypeId), SwFieldMgr::GetTypeStr(i));
+            const SwFieldTypesEnum nTypeId = SwFieldMgr::GetTypeId(i);
+            m_xTypeLB->append(OUString::number(static_cast<sal_uInt16>(nTypeId)), SwFieldMgr::GetTypeStr(i));
         }
     }
     else
     {
-        const sal_uInt16 nTypeId = GetCurField()->GetTypeId();
-        m_xTypeLB->append(OUString::number(nTypeId),
+        const SwFieldTypesEnum nTypeId = GetCurField()->GetTypeId();
+        m_xTypeLB->append(OUString::number(static_cast<sal_uInt16>(nTypeId)),
                           SwFieldMgr::GetTypeStr(SwFieldMgr::GetPos(nTypeId)));
     }
 
@@ -123,12 +123,12 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
 
     m_xFormatLB->clear();
 
-    const sal_uInt16 nSize = GetFieldMgr().GetFormatCount(TYP_DBSETNUMBERFLD, IsFieldDlgHtmlMode());
+    const sal_uInt16 nSize = GetFieldMgr().GetFormatCount(SwFieldTypesEnum::DatabaseSetNumber, IsFieldDlgHtmlMode());
     for( sal_uInt16 i = 0; i < nSize; ++i )
     {
-        const sal_uInt16 nFormatId = GetFieldMgr().GetFormatId( TYP_DBSETNUMBERFLD, i );
+        const sal_uInt16 nFormatId = GetFieldMgr().GetFormatId( SwFieldTypesEnum::DatabaseSetNumber, i );
         OUString sId(OUString::number(nFormatId));
-        m_xFormatLB->append(sId, GetFieldMgr().GetFormatStr(TYP_DBSETNUMBERFLD, i));
+        m_xFormatLB->append(sId, GetFieldMgr().GetFormatStr(SwFieldTypesEnum::DatabaseSetNumber, i));
         if (SVX_NUM_ARABIC == nFormatId)
             m_xFormatLB->set_active_id(sId);
     }
@@ -212,7 +212,7 @@ bool SwFieldDBPage::FillItemSet(SfxItemSet* )
 
     if(!aData.sDataSource.isEmpty())       // without database no new field command
     {
-        const sal_uInt16 nTypeId = m_xTypeLB->get_id(GetTypeSel()).toUInt32();
+        const SwFieldTypesEnum nTypeId = static_cast<SwFieldTypesEnum>(m_xTypeLB->get_id(GetTypeSel()).toUInt32());
         sal_uLong nFormat = 0;
         sal_uInt16 nSubType = 0;
 
@@ -230,14 +230,14 @@ bool SwFieldDBPage::FillItemSet(SfxItemSet* )
 
         switch (nTypeId)
         {
-        case TYP_DBFLD:
+        case SwFieldTypesEnum::Database:
             nFormat = m_xNumFormatLB->GetFormat();
             if (m_xNewFormatRB->get_sensitive() && m_xNewFormatRB->get_active())
                 nSubType = nsSwExtendedSubType::SUB_OWN_FMT;
             aName = sDBName;
             break;
 
-        case TYP_DBSETNUMBERFLD:
+        case SwFieldTypesEnum::DatabaseSetNumber:
             nFormat = m_xFormatLB->get_active_id().toUInt32();
             break;
         }
@@ -298,15 +298,15 @@ void SwFieldDBPage::TypeHdl(const weld::TreeView* pBox)
     if(!pSh)
         pSh = ::GetActiveWrtShell();
     bool bCond = false, bSetNo = false, bFormat = false, bDBFormat = false;
-    const sal_uInt16 nTypeId = m_xTypeLB->get_id(GetTypeSel()).toUInt32();
+    const SwFieldTypesEnum nTypeId = static_cast<SwFieldTypesEnum>(m_xTypeLB->get_id(GetTypeSel()).toUInt32());
 
-    m_xDatabaseTLB->ShowColumns(nTypeId == TYP_DBFLD);
+    m_xDatabaseTLB->ShowColumns(nTypeId == SwFieldTypesEnum::Database);
 
     if (IsFieldEdit())
     {
         SwDBData aData;
         OUString sColumnName;
-        if (nTypeId == TYP_DBFLD)
+        if (nTypeId == SwFieldTypesEnum::Database)
         {
             aData = static_cast<SwDBField*>(GetCurField())->GetDBData();
             sColumnName = static_cast<SwDBFieldType*>(GetCurField()->GetTyp())->GetColumnName();
@@ -320,7 +320,7 @@ void SwFieldDBPage::TypeHdl(const weld::TreeView* pBox)
 
     switch (nTypeId)
     {
-        case TYP_DBFLD:
+        case SwFieldTypesEnum::Database:
         {
             bFormat = true;
             bDBFormat = true;
@@ -347,10 +347,10 @@ void SwFieldDBPage::TypeHdl(const weld::TreeView* pBox)
             }
             break;
         }
-        case TYP_DBNUMSETFLD:
+        case SwFieldTypesEnum::DatabaseNumberSet:
             bSetNo = true;
             [[fallthrough]];
-        case TYP_DBNEXTSETFLD:
+        case SwFieldTypesEnum::DatabaseNextSet:
             bCond = true;
             if (IsFieldEdit())
             {
@@ -359,10 +359,10 @@ void SwFieldDBPage::TypeHdl(const weld::TreeView* pBox)
             }
             break;
 
-        case TYP_DBNAMEFLD:
+        case SwFieldTypesEnum::DatabaseName:
             break;
 
-        case TYP_DBSETNUMBERFLD:
+        case SwFieldTypesEnum::DatabaseSetNumber:
         {
             bFormat = true;
             m_xNewFormatRB->set_active(true);
@@ -391,7 +391,7 @@ void SwFieldDBPage::TypeHdl(const weld::TreeView* pBox)
 
     m_xCondition->set_sensitive(bCond);
     m_xValue->set_sensitive(bSetNo);
-    if (nTypeId != TYP_DBFLD)
+    if (nTypeId != SwFieldTypesEnum::Database)
     {
         m_xDBFormatRB->set_sensitive(bDBFormat);
         m_xNewFormatRB->set_sensitive(bDBFormat || bFormat);
@@ -421,14 +421,14 @@ IMPL_LINK_NOARG(SwFieldDBPage, NumSelectHdl, weld::ComboBox&, void)
 void SwFieldDBPage::CheckInsert()
 {
     bool bInsert = true;
-    const sal_uInt16 nTypeId = m_xTypeLB->get_id(GetTypeSel()).toUInt32();
+    const SwFieldTypesEnum nTypeId = static_cast<SwFieldTypesEnum>(m_xTypeLB->get_id(GetTypeSel()).toUInt32());
 
     std::unique_ptr<weld::TreeIter> xIter(m_xDatabaseTLB->make_iterator());
     if (m_xDatabaseTLB->get_selected(xIter.get()))
     {
         bool bEntry = m_xDatabaseTLB->iter_parent(*xIter);
 
-        if (nTypeId == TYP_DBFLD && bEntry)
+        if (nTypeId == SwFieldTypesEnum::Database && bEntry)
             bEntry = m_xDatabaseTLB->iter_parent(*xIter);
 
         bInsert &= bEntry;
@@ -436,7 +436,7 @@ void SwFieldDBPage::CheckInsert()
     else
         bInsert = false;
 
-    if (nTypeId == TYP_DBNUMSETFLD)
+    if (nTypeId == SwFieldTypesEnum::DatabaseNumberSet)
     {
         bool bHasValue = !m_xValueED->get_text().isEmpty();
 
@@ -451,16 +451,16 @@ IMPL_LINK(SwFieldDBPage, TreeSelectHdl, weld::TreeView&, rBox, void)
     std::unique_ptr<weld::TreeIter> xIter(rBox.make_iterator());
     if (rBox.get_selected(xIter.get()))
     {
-        const sal_uInt16 nTypeId = m_xTypeLB->get_id(GetTypeSel()).toUInt32();
+        const SwFieldTypesEnum nTypeId = static_cast<SwFieldTypesEnum>(m_xTypeLB->get_id(GetTypeSel()).toUInt32());
 
         bool bEntry = m_xDatabaseTLB->iter_parent(*xIter);
 
-        if (nTypeId == TYP_DBFLD && bEntry)
+        if (nTypeId == SwFieldTypesEnum::Database && bEntry)
             bEntry = m_xDatabaseTLB->iter_parent(*xIter);
 
         CheckInsert();
 
-        if (nTypeId == TYP_DBFLD)
+        if (nTypeId == SwFieldTypesEnum::Database)
         {
             bool bNumFormat = false;
 
@@ -516,7 +516,7 @@ void    SwFieldDBPage::FillUserData()
 
 void SwFieldDBPage::ActivateMailMergeAddress()
 {
-    m_xTypeLB->select_id(OUString::number(TYP_DBFLD));
+    m_xTypeLB->select_id(OUString::number(static_cast<sal_uInt16>(SwFieldTypesEnum::Database)));
     TypeListBoxHdl(*m_xTypeLB);
     const SwDBData& rData = SW_MOD()->GetDBConfig()->GetAddressSource();
     m_xDatabaseTLB->Select(rData.sDataSource, rData.sCommand, OUString());

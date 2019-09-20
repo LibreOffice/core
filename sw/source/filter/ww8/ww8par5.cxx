@@ -610,7 +610,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                     paramCondition,
                     paramTrue,
                     paramFalse,
-                    static_cast<sal_uInt16>(TYP_CONDTXTFLD));
+                    SwFieldTypesEnum::ConditionalText);
 
                 // insert new field into document
                 m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aHTField));

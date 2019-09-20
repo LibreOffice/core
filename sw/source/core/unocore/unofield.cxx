@@ -245,7 +245,7 @@ static SwServiceType lcl_GetServiceForField( const SwField& rField )
         break;
 
     case SwFieldIds::HiddenText:
-        nSrvId = TYP_CONDTXTFLD == rField.GetSubType()
+        nSrvId = SwFieldTypesEnum::ConditionalText == static_cast<SwFieldTypesEnum>(rField.GetSubType())
                         ? SwServiceType::FieldTypeConditionedText
                         : SwServiceType::FieldTypeHiddenText;
         break;
@@ -1534,8 +1534,8 @@ void SAL_CALL SwXTextField::attach(
                         static_cast<SwHiddenTextFieldType*>(pFieldType),
                         m_pImpl->m_pProps->sPar1,
                         m_pImpl->m_pProps->sPar2, m_pImpl->m_pProps->sPar3,
-                        static_cast<sal_uInt16>(SwServiceType::FieldTypeHiddenText == m_pImpl->m_nServiceId ?
-                             TYP_HIDDENTXTFLD : TYP_CONDTXTFLD));
+                        SwServiceType::FieldTypeHiddenText == m_pImpl->m_nServiceId ?
+                             SwFieldTypesEnum::HiddenText : SwFieldTypesEnum::ConditionalText);
                 xField.reset(pHTField);
                 pHTField->SetValue(m_pImpl->m_pProps->bBool1);
                 uno::Any aVal;

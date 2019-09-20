@@ -161,7 +161,7 @@ void SwFieldEditDlg::Init()
             rMgr.GoNext();
         m_xPrevBT->set_sensitive( bMove );
 
-        if (pCurField->GetTypeId() == TYP_EXTUSERFLD)
+        if (pCurField->GetTypeId() == SwFieldTypesEnum::ExtendedUser)
             m_xAddressBT->set_sensitive(true);
         else
             m_xAddressBT->set_sensitive(false);
@@ -284,7 +284,7 @@ IMPL_LINK(SwFieldEditDlg, NextPrevHdl, weld::Button&, rButton, void)
 
     SwFieldMgr& rMgr = pTabPage->GetFieldMgr();
     SwField *pCurField = rMgr.GetCurField();
-    if (pCurField->GetTypeId() == TYP_DBFLD)
+    if (pCurField->GetTypeId() == SwFieldTypesEnum::Database)
         pOldTyp = pCurField->GetTyp();
 
     rMgr.GoNextPrev( bNext, pOldTyp );

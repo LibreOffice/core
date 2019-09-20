@@ -1932,7 +1932,7 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, SfxRequest& rReq)
         // --> suggestion has to be removed before
         GetView().GetEditWin().StopQuickHelp();
 
-        SwInsertField_Data aData(TYP_POSTITFLD, 0, sAuthor, sText, 0);
+        SwInsertField_Data aData(SwFieldTypesEnum::Postit, 0, sAuthor, sText, 0);
 
         if (IsSelFrameMode())
         {

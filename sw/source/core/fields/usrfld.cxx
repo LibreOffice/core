@@ -79,7 +79,7 @@ std::unique_ptr<SwField> SwUserField::Copy() const
 
 OUString SwUserField::GetFieldName() const
 {
-    return SwFieldType::GetTypeStr(TYP_USERFLD) +
+    return SwFieldType::GetTypeStr(SwFieldTypesEnum::User) +
         " " + GetTyp()->GetName() + " = " +
         static_cast<SwUserFieldType*>(GetTyp())->GetContent();
 }

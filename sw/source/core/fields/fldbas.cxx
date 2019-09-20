@@ -80,59 +80,57 @@ namespace
 {
 
     const o3tl::enumarray<SwFieldIds,SwFieldTypesEnum> aTypeTab {
-    /* SwFieldIds::Database      */      TYP_DBFLD,
-    /* SwFieldIds::User          */      TYP_USERFLD,
-    /* SwFieldIds::Filename      */      TYP_FILENAMEFLD,
-    /* SwFieldIds::DatabaseName  */      TYP_DBNAMEFLD,
-    /* SwFieldIds::Date          */      TYP_DATEFLD,
-    /* SwFieldIds::Time          */      TYP_TIMEFLD,
-    /* SwFieldIds::PageNumber    */      TYP_PAGENUMBERFLD,  // dynamic
-    /* SwFieldIds::Author        */      TYP_AUTHORFLD,
-    /* SwFieldIds::Chapter       */      TYP_CHAPTERFLD,
-    /* SwFieldIds::DocStat       */      TYP_DOCSTATFLD,
-    /* SwFieldIds::GetExp        */      TYP_GETFLD,         // dynamic
-    /* SwFieldIds::SetExp        */      TYP_SETFLD,         // dynamic
-    /* SwFieldIds::GetRef        */      TYP_GETREFFLD,
-    /* SwFieldIds::HiddenText    */      TYP_HIDDENTXTFLD,
-    /* SwFieldIds::Postit        */      TYP_POSTITFLD,
-    /* SwFieldIds::FixDate       */      TYP_FIXDATEFLD,
-    /* SwFieldIds::FixTime       */      TYP_FIXTIMEFLD,
-    /* SwFieldIds::Reg           */      TYP_BEGIN,         // old (no change since 2000)
-    /* SwFieldIds::VarReg        */      TYP_BEGIN,         // old (no change since 2000)
-    /* SwFieldIds::SetRef        */      TYP_SETREFFLD,
-    /* SwFieldIds::Input         */      TYP_INPUTFLD,
-    /* SwFieldIds::Macro         */      TYP_MACROFLD,
-    /* SwFieldIds::Dde           */      TYP_DDEFLD,
-    /* SwFieldIds::Table         */      TYP_FORMELFLD,
-    /* SwFieldIds::HiddenPara    */      TYP_HIDDENPARAFLD,
-    /* SwFieldIds::DocInfo       */      TYP_DOCINFOFLD,
-    /* SwFieldIds::TemplateName  */      TYP_TEMPLNAMEFLD,
-    /* SwFieldIds::DbNextSet     */      TYP_DBNEXTSETFLD,
-    /* SwFieldIds::DbNumSet      */      TYP_DBNUMSETFLD,
-    /* SwFieldIds::DbSetNumber   */      TYP_DBSETNUMBERFLD,
-    /* SwFieldIds::ExtUser       */      TYP_EXTUSERFLD,
-    /* SwFieldIds::RefPageSet    */      TYP_SETREFPAGEFLD,
-    /* SwFieldIds::RefPageGet    */      TYP_GETREFPAGEFLD,
-    /* SwFieldIds::Internet      */      TYP_INTERNETFLD,
-    /* SwFieldIds::JumpEdit      */      TYP_JUMPEDITFLD,
-    /* SwFieldIds::Script        */      TYP_SCRIPTFLD,
-    /* SwFieldIds::DateTime      */      TYP_BEGIN,         // dynamic
-    /* SwFieldIds::TableOfAuthorities*/  TYP_AUTHORITY,
-    /* SwFieldIds::CombinedChars */      TYP_COMBINED_CHARS,
-    /* SwFieldIds::Dropdown      */      TYP_DROPDOWN,
-    /* SwFieldIds::ParagraphSignature */ TYP_PARAGRAPHSIGFLD
+    /* SwFieldIds::Database      */      SwFieldTypesEnum::Database,
+    /* SwFieldIds::User          */      SwFieldTypesEnum::User,
+    /* SwFieldIds::Filename      */      SwFieldTypesEnum::Filename,
+    /* SwFieldIds::DatabaseName  */      SwFieldTypesEnum::DatabaseName,
+    /* SwFieldIds::Date          */      SwFieldTypesEnum::Date,
+    /* SwFieldIds::Time          */      SwFieldTypesEnum::Time,
+    /* SwFieldIds::PageNumber    */      SwFieldTypesEnum::PageNumber,  // dynamic
+    /* SwFieldIds::Author        */      SwFieldTypesEnum::Author,
+    /* SwFieldIds::Chapter       */      SwFieldTypesEnum::Chapter,
+    /* SwFieldIds::DocStat       */      SwFieldTypesEnum::DocumentStatistics,
+    /* SwFieldIds::GetExp        */      SwFieldTypesEnum::Get,         // dynamic
+    /* SwFieldIds::SetExp        */      SwFieldTypesEnum::Set,         // dynamic
+    /* SwFieldIds::GetRef        */      SwFieldTypesEnum::GetRef,
+    /* SwFieldIds::HiddenText    */      SwFieldTypesEnum::HiddenText,
+    /* SwFieldIds::Postit        */      SwFieldTypesEnum::Postit,
+    /* SwFieldIds::FixDate       */      SwFieldTypesEnum::FixedDate,
+    /* SwFieldIds::FixTime       */      SwFieldTypesEnum::FixedTime,
+    /* SwFieldIds::Reg           */      SwFieldTypesEnum::Begin,         // old (no change since 2000)
+    /* SwFieldIds::VarReg        */      SwFieldTypesEnum::Begin,         // old (no change since 2000)
+    /* SwFieldIds::SetRef        */      SwFieldTypesEnum::SetRef,
+    /* SwFieldIds::Input         */      SwFieldTypesEnum::Input,
+    /* SwFieldIds::Macro         */      SwFieldTypesEnum::Macro,
+    /* SwFieldIds::Dde           */      SwFieldTypesEnum::DDE,
+    /* SwFieldIds::Table         */      SwFieldTypesEnum::Formel,
+    /* SwFieldIds::HiddenPara    */      SwFieldTypesEnum::HiddenParagraph,
+    /* SwFieldIds::DocInfo       */      SwFieldTypesEnum::DocumentInfo,
+    /* SwFieldIds::TemplateName  */      SwFieldTypesEnum::TemplateName,
+    /* SwFieldIds::DbNextSet     */      SwFieldTypesEnum::DatabaseNextSet,
+    /* SwFieldIds::DbNumSet      */      SwFieldTypesEnum::DatabaseNumberSet,
+    /* SwFieldIds::DbSetNumber   */      SwFieldTypesEnum::DatabaseSetNumber,
+    /* SwFieldIds::ExtUser       */      SwFieldTypesEnum::ExtendedUser,
+    /* SwFieldIds::RefPageSet    */      SwFieldTypesEnum::SetRefPage,
+    /* SwFieldIds::RefPageGet    */      SwFieldTypesEnum::GetRefPage,
+    /* SwFieldIds::Internet      */      SwFieldTypesEnum::Internet,
+    /* SwFieldIds::JumpEdit      */      SwFieldTypesEnum::JumpEdit,
+    /* SwFieldIds::Script        */      SwFieldTypesEnum::Script,
+    /* SwFieldIds::DateTime      */      SwFieldTypesEnum::Begin,         // dynamic
+    /* SwFieldIds::TableOfAuthorities*/  SwFieldTypesEnum::Authority,
+    /* SwFieldIds::CombinedChars */      SwFieldTypesEnum::CombinedChars,
+    /* SwFieldIds::Dropdown      */      SwFieldTypesEnum::Dropdown,
+    /* SwFieldIds::ParagraphSignature */ SwFieldTypesEnum::ParagraphSignature
     };
 
 }
 
-OUString SwFieldType::GetTypeStr(sal_uInt16 nTypeId)
+OUString SwFieldType::GetTypeStr(SwFieldTypesEnum nTypeId)
 {
     if (!s_pFieldNames)
         GetFieldName_();
 
-    if (nTypeId < SwFieldType::s_pFieldNames->size())
-        return (*SwFieldType::s_pFieldNames)[nTypeId];
-    return OUString();
+    return (*SwFieldType::s_pFieldNames)[static_cast<int>(nTypeId)];
 }
 
 // each field references a field type that is unique for each document
@@ -206,43 +204,45 @@ SwFieldIds SwField::Which() const
 }
 #endif
 
-sal_uInt16 SwField::GetTypeId() const
+SwFieldTypesEnum SwField::GetTypeId() const
 {
 
-    sal_uInt16 nRet;
+    SwFieldTypesEnum nRet;
     switch (m_pType->Which())
     {
     case SwFieldIds::DateTime:
         if (GetSubType() & FIXEDFLD)
-            nRet = static_cast<sal_uInt16>(GetSubType() & DATEFLD ? TYP_FIXDATEFLD : TYP_FIXTIMEFLD);
+            nRet = GetSubType() & DATEFLD ? SwFieldTypesEnum::FixedDate : SwFieldTypesEnum::FixedTime;
         else
-            nRet = static_cast<sal_uInt16>(GetSubType() & DATEFLD ? TYP_DATEFLD : TYP_TIMEFLD);
+            nRet = GetSubType() & DATEFLD ? SwFieldTypesEnum::Date : SwFieldTypesEnum::Time;
         break;
     case SwFieldIds::GetExp:
-        nRet = static_cast<sal_uInt16>(nsSwGetSetExpType::GSE_FORMULA & GetSubType() ? TYP_FORMELFLD : TYP_GETFLD);
+        nRet = nsSwGetSetExpType::GSE_FORMULA & GetSubType() ? SwFieldTypesEnum::Formel : SwFieldTypesEnum::Get;
         break;
 
     case SwFieldIds::HiddenText:
-        nRet = GetSubType();
+        nRet = static_cast<SwFieldTypesEnum>(GetSubType());
         break;
 
     case SwFieldIds::SetExp:
         if( nsSwGetSetExpType::GSE_SEQ & GetSubType() )
-            nRet = TYP_SEQFLD;
+            nRet = SwFieldTypesEnum::Sequence;
         else if( static_cast<const SwSetExpField*>(this)->GetInputFlag() )
-            nRet = TYP_SETINPFLD;
+            nRet = SwFieldTypesEnum::SetInput;
         else
-            nRet = TYP_SETFLD;
+            nRet = SwFieldTypesEnum::Set;
         break;
 
     case SwFieldIds::PageNumber:
-        nRet = GetSubType();
-        if( PG_NEXT == nRet )
-            nRet = TYP_NEXTPAGEFLD;
-        else if( PG_PREV == nRet )
-            nRet = TYP_PREVPAGEFLD;
-        else
-            nRet = TYP_PAGENUMBERFLD;
+        {
+            auto nSubType = GetSubType();
+            if( PG_NEXT == nSubType )
+                nRet = SwFieldTypesEnum::NextPage;
+            else if( PG_PREV == nSubType )
+                nRet = SwFieldTypesEnum::PreviousPage;
+            else
+                nRet = SwFieldTypesEnum::PageNumber;
+        }
         break;
 
     default:
@@ -254,11 +254,11 @@ sal_uInt16 SwField::GetTypeId() const
 /// get name or content
 OUString SwField::GetFieldName() const
 {
-    sal_uInt16 nTypeId = GetTypeId();
+    SwFieldTypesEnum nTypeId = GetTypeId();
     if (SwFieldIds::DateTime == GetTyp()->Which())
     {
-        nTypeId = static_cast<sal_uInt16>(
-            ((GetSubType() & DATEFLD) != 0) ? TYP_DATEFLD : TYP_TIMEFLD);
+        nTypeId =
+            ((GetSubType() & DATEFLD) != 0) ? SwFieldTypesEnum::Date : SwFieldTypesEnum::Time;
     }
     OUString sRet = SwFieldType::GetTypeStr( nTypeId );
     if (IsFixed())
@@ -415,7 +415,7 @@ SwField::ExpandField(bool const bCached, SwRootFrame const*const pLayout) const
     {
         if (!bCached) // #i85766# do not expand fields in clipboard documents
         {
-            if (GetTypeId() == TYP_AUTHORITY)
+            if (GetTypeId() == SwFieldTypesEnum::Authority)
             {
                 const SwAuthorityField* pAuthorityField = static_cast<const SwAuthorityField*>(this);
                 m_Cache = pAuthorityField->ConditionalExpandAuthIdentifier(pLayout);

@@ -315,10 +315,10 @@ OUString SwGetExpField::ExpandImpl(SwRootFrame const*const pLayout) const
 
 OUString SwGetExpField::GetFieldName() const
 {
-    const sal_uInt16 nType = static_cast<sal_uInt16>(
+    const SwFieldTypesEnum nType =
         (nsSwGetSetExpType::GSE_FORMULA & m_nSubType)
-        ? TYP_FORMELFLD
-        : TYP_GETFLD);
+        ? SwFieldTypesEnum::Formel
+        : SwFieldTypesEnum::Get;
 
     return SwFieldType::GetTypeStr(nType) + " " + GetFormula();
 }
@@ -855,18 +855,18 @@ OUString SwSetExpField::ExpandImpl(SwRootFrame const*const pLayout) const
 OUString SwSetExpField::GetFieldName() const
 {
     SwFieldTypesEnum const nStrType( (IsSequenceField())
-                            ? TYP_SEQFLD
+                            ? SwFieldTypesEnum::Sequence
                             : mbInput
-                                ? TYP_SETINPFLD
-                                : TYP_SETFLD   );
+                                ? SwFieldTypesEnum::SetInput
+                                : SwFieldTypesEnum::Set   );
 
     OUString aStr(
-        SwFieldType::GetTypeStr( static_cast<sal_uInt16>(nStrType) )
+        SwFieldType::GetTypeStr( nStrType )
         + " "
         + GetTyp()->GetName() );
 
     // Sequence: without formula
-    if (TYP_SEQFLD != nStrType)
+    if (SwFieldTypesEnum::Sequence != nStrType)
     {
         aStr += " = " + GetFormula();
     }

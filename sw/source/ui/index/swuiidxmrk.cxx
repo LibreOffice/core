@@ -1232,7 +1232,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl, weld::Button&, void)
                     xNewData->SetAuthorField(static_cast<ToxAuthorityField>(i), m_sFields[i]);
                 pSh->ChangeAuthorityData(xNewData.get());
             }
-            SwInsertField_Data aData(TYP_AUTHORITY, 0, sFields.makeStringAndClear(), OUString(), 0 );
+            SwInsertField_Data aData(SwFieldTypesEnum::Authority, 0, sFields.makeStringAndClear(), OUString(), 0 );
             aMgr.InsertField( aData );
         }
         else if(aMgr.GetCurField())

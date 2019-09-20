@@ -90,7 +90,7 @@ namespace
             sDBNumNm = aDBData.sDataSource + OUStringLiteral1(DB_DELIM)
                 + aDBData.sCommand + OUStringLiteral1(DB_DELIM);
         }
-        sDBNumNm += SwFieldType::GetTypeStr(TYP_DBSETNUMBERFLD);
+        sDBNumNm += SwFieldType::GetTypeStr(SwFieldTypesEnum::DatabaseSetNumber);
 
         return sDBNumNm;
     }
@@ -981,7 +981,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
     SwCalc aCalc( m_rDoc );
 
 #if HAVE_FEATURE_DBCONNECTIVITY
-    OUString sDBNumNm( SwFieldType::GetTypeStr( TYP_DBSETNUMBERFLD ) );
+    OUString sDBNumNm( SwFieldType::GetTypeStr( SwFieldTypesEnum::DatabaseSetNumber ) );
 
     // already set the current record number
     SwDBManager* pMgr = m_rDoc.GetDBManager();

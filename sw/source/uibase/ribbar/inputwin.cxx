@@ -219,7 +219,7 @@ void SwInputWindow::ShowWin()
 
         // Form should always begin with "=" , so set here
         OUString sEdit('=');
-        if( pMgr->GetCurField() && TYP_FORMELFLD == pMgr->GetCurTypeId() )
+        if( pMgr->GetCurField() && SwFieldTypesEnum::Formel == pMgr->GetCurTypeId() )
         {
             sEdit += pMgr->GetCurFieldPar2();
         }
