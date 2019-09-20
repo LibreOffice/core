@@ -100,15 +100,9 @@ ScTabPageSortFields::ScTabPageSortFields(TabPageParent pParent, const SfxItemSet
 
 ScTabPageSortFields::~ScTabPageSortFields()
 {
-    disposeOnce();
-}
-
-void ScTabPageSortFields::dispose()
-{
     m_aSortWin.m_aSortKeyItems.clear();
     m_xBox.reset();
     m_xScrolledWindow.reset();
-    SfxTabPage::dispose();
 }
 
 void ScTabPageSortFields::Init()
@@ -129,9 +123,9 @@ void ScTabPageSortFields::Init()
     }
 }
 
-VclPtr<SfxTabPage> ScTabPageSortFields::Create(TabPageParent pParent, const SfxItemSet* pArgSet)
+std::unique_ptr<SfxTabPage> ScTabPageSortFields::Create(TabPageParent pParent, const SfxItemSet* pArgSet)
 {
-    return VclPtr<ScTabPageSortFields>::Create(pParent, *pArgSet);
+    return std::make_unique<ScTabPageSortFields>(pParent, *pArgSet);
 }
 
 void ScTabPageSortFields::Reset( const SfxItemSet* /* rArgSet */ )
@@ -580,9 +574,9 @@ void ScTabPageSortOptions::Init()
     m_xLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
 }
 
-VclPtr<SfxTabPage> ScTabPageSortOptions::Create(TabPageParent pParent, const SfxItemSet* rArgSet)
+std::unique_ptr<SfxTabPage> ScTabPageSortOptions::Create(TabPageParent pParent, const SfxItemSet* rArgSet)
 {
-    return VclPtr<ScTabPageSortOptions>::Create(pParent, *rArgSet);
+    return std::make_unique<ScTabPageSortOptions>(pParent, *rArgSet);
 }
 
 void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )

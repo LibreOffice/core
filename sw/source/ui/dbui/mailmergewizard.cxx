@@ -88,18 +88,18 @@ SwMailMergeWizard::~SwMailMergeWizard()
 {
 }
 
-VclPtr<TabPage> SwMailMergeWizard::createPage(WizardState _nState)
+std::unique_ptr<BuilderPage> SwMailMergeWizard::createPage(WizardState _nState)
 {
     OString sIdent(OString::number(_nState));
     weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
     // TODO eventually pass DialogController as distinct argument instead of bundling into TabPageParent
     TabPageParent aParent(pPageContainer, this);
 
-    VclPtr<vcl::OWizardPage> pRet;
+    std::unique_ptr<vcl::OWizardPage> xRet;
     switch(_nState)
     {
         case MM_DOCUMENTSELECTPAGE :
-            pRet = VclPtr<SwMailMergeDocSelectPage>::Create(this, aParent);
+            xRet = std::make_unique<SwMailMergeDocSelectPage>(this, aParent);
 
             /* tdf#52986 Set help ID using SetRoadmapHelpId for all pages
             so that when by default the focus is on the left side pane of
@@ -108,28 +108,27 @@ VclPtr<TabPage> SwMailMergeWizard::createPage(WizardState _nState)
             SetRoadmapHelpId("modules/swriter/ui/mmselectpage/MMSelectPage");
         break;
         case MM_OUTPUTTYPETPAGE    :
-            pRet = VclPtr<SwMailMergeOutputTypePage>::Create(this, aParent);
+            xRet = std::make_unique<SwMailMergeOutputTypePage>(this, aParent);
             SetRoadmapHelpId("modules/swriter/ui/mmoutputtypepage/MMOutputTypePage");
         break;
         case MM_ADDRESSBLOCKPAGE   :
-            pRet = VclPtr<SwMailMergeAddressBlockPage>::Create(this, aParent);
+            xRet = std::make_unique<SwMailMergeAddressBlockPage>(this, aParent);
             SetRoadmapHelpId("modules/swriter/ui/mmaddressblockpage/MMAddressBlockPage");
         break;
         case MM_GREETINGSPAGE      :
-            pRet = VclPtr<SwMailMergeGreetingsPage>::Create(this, aParent);
+            xRet = std::make_unique<SwMailMergeGreetingsPage>(this, aParent);
             SetRoadmapHelpId("modules/swriter/ui/mmsalutationpage/MMSalutationPage");
         break;
         case MM_LAYOUTPAGE         :
-            pRet = VclPtr<SwMailMergeLayoutPage>::Create(this, aParent);
+            xRet = std::make_unique<SwMailMergeLayoutPage>(this, aParent);
             SetRoadmapHelpId("modules/swriter/ui/mmlayoutpage/MMLayoutPage");
         break;
     }
 
     m_xAssistant->set_page_title(sIdent, getStateDisplayName(_nState));
 
-
-    OSL_ENSURE(pRet, "no page created in ::createPage");
-    return pRet;
+    OSL_ENSURE(xRet, "no page created in ::createPage");
+    return xRet;
 }
 
 void SwMailMergeWizard::enterState( WizardState _nState )
@@ -199,7 +198,7 @@ void SwMailMergeWizard::UpdateRoadmap()
 
     // enableState( <page id>, false );
     const sal_uInt16 nCurPage = m_xAssistant->get_current_page();
-    TabPage* pCurPage = GetPage( nCurPage );
+    BuilderPage* pCurPage = GetPage( nCurPage );
     if(!pCurPage)
         return;
     bool bAddressFieldsConfigured = !m_xConfigItem->IsOutputToLetter() ||

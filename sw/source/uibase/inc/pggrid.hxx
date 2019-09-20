@@ -72,15 +72,11 @@ class SwTextGridPage: public SfxTabPage
     DECL_LINK(GridModifyClickHdl, weld::ToggleButton&, void);
     DECL_LINK(DisplayGridHdl, weld::ToggleButton&, void);
 
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
-
 public:
     SwTextGridPage(TabPageParent pParent, const SfxItemSet &rSet);
     virtual ~SwTextGridPage() override;
-    virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges();
 
     virtual bool    FillItemSet(SfxItemSet *rSet) override;

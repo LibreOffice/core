@@ -201,20 +201,14 @@ SvxPathTabPage::SvxPathTabPage(TabPageParent pParent, const SfxItemSet& rSet)
 
 SvxPathTabPage::~SvxPathTabPage()
 {
-    disposeOnce();
-}
-
-void SvxPathTabPage::dispose()
-{
     for (int i = 0, nEntryCount = m_xPathBox->n_children(); i < nEntryCount; ++i)
         delete reinterpret_cast<PathUserData_Impl*>(m_xPathBox->get_id(i).toInt64());
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxPathTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxPathTabPage::Create( TabPageParent pParent,
                                            const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxPathTabPage>::Create( pParent, *rAttrSet );
+    return std::make_unique<SvxPathTabPage>( pParent, *rAttrSet );
 }
 
 bool SvxPathTabPage::FillItemSet( SfxItemSet* )

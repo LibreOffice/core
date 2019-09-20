@@ -395,6 +395,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/unohelp2 \
     vcl/source/app/unohelp \
     vcl/source/app/vclevent \
+    vcl/source/app/weldutils \
     vcl/source/app/winscheduler \
     vcl/source/components/dtranscomp \
     vcl/source/components/factory \

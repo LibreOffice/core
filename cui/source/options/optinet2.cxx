@@ -185,9 +185,9 @@ SvxProxyTabPage::~SvxProxyTabPage()
 {
 }
 
-VclPtr<SfxTabPage> SvxProxyTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SvxProxyTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxProxyTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxProxyTabPage>(pParent, *rAttrSet);
 }
 
 void SvxProxyTabPage::ReadConfigData_Impl()
@@ -786,9 +786,9 @@ void SvxSecurityTabPage::InitControls()
     }
 }
 
-VclPtr<SfxTabPage> SvxSecurityTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SvxSecurityTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxSecurityTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxSecurityTabPage>(pParent, *rAttrSet);
 }
 
 void SvxSecurityTabPage::ActivatePage( const SfxItemSet& )
@@ -888,9 +888,9 @@ SvxEMailTabPage::~SvxEMailTabPage()
 
 /* -------------------------------------------------------------------------*/
 
-VclPtr<SfxTabPage>  SvxEMailTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SvxEMailTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxEMailTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxEMailTabPage>(pParent, *rAttrSet);
 }
 
 /* -------------------------------------------------------------------------*/

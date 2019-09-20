@@ -27,7 +27,6 @@ class ScViewOptions;
 
 class ScTpContentOptions : public SfxTabPage
 {
-    friend class VclPtr<ScTpContentOptions>;
     std::unique_ptr<ScViewOptions> m_xLocalOptions;
 
     std::unique_ptr<weld::ComboBox> m_xGridLB;
@@ -62,17 +61,12 @@ class ScTpContentOptions : public SfxTabPage
     DECL_LINK( SelLbObjHdl, weld::ComboBox&, void );
     DECL_LINK( CBHdl, weld::ToggleButton&, void );
 
-    ScTpContentOptions(TabPageParent pParent, const SfxItemSet& rArgSet);
-    virtual void dispose() override;
-    virtual ~ScTpContentOptions() override;
-
 public:
-    static  VclPtr<SfxTabPage> Create          ( TabPageParent pParent,
-                                          const SfxItemSet*     rCoreSet );
+    ScTpContentOptions(TabPageParent pParent, const SfxItemSet& rArgSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rCoreSet);
+    virtual ~ScTpContentOptions() override;
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) override;
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
@@ -81,7 +75,6 @@ public:
 class ScDocument;
 class ScTpLayoutOptions : public SfxTabPage
 {
-    friend class VclPtrInstance<ScTpLayoutOptions>;
     ScDocument *pDoc;
 
     std::unique_ptr<weld::ComboBox> m_xUnitLB;
@@ -106,15 +99,13 @@ class ScTpLayoutOptions : public SfxTabPage
     DECL_LINK( AlignHdl, weld::ToggleButton&, void );
 
 
-    ScTpLayoutOptions(TabPageParent pParent, const SfxItemSet&  rArgSet );
 public:
+    ScTpLayoutOptions(TabPageParent pParent, const SfxItemSet&  rArgSet );
+    static  std::unique_ptr<SfxTabPage> Create(TabPageParent pParent,
+                                          const SfxItemSet* rCoreSet);
     virtual ~ScTpLayoutOptions() override;
-    static  VclPtr<SfxTabPage> Create          ( TabPageParent pParent,
-                                          const SfxItemSet*     rCoreSet );
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) override;
-    using SfxTabPage::ActivatePage;
-    using SfxTabPage::DeactivatePage;
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 };

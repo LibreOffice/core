@@ -24,21 +24,18 @@
 
 class ScTablePage : public SfxTabPage
 {
-    friend class VclPtr<ScTablePage>;
     static const sal_uInt16 pPageTableRanges[];
 public:
-    static  VclPtr<SfxTabPage> Create          ( TabPageParent pParent,
-                                          const SfxItemSet* rCoreSet );
+    ScTablePage(TabPageParent pParent, const SfxItemSet& rCoreSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rCoreSet);
+    virtual         ~ScTablePage() override;
+
     static  const sal_uInt16* GetRanges () { return pPageTableRanges; }
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) override;
-    using SfxTabPage::DeactivatePage;
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;
-    virtual void        DataChanged     ( const DataChangedEvent& rDCEvt ) override;
 
-    virtual         ~ScTablePage() override;
 private:
-    ScTablePage(TabPageParent pParent, const SfxItemSet& rCoreSet);
     void            ShowImage();
 
 private:

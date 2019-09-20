@@ -187,7 +187,6 @@ void SwEnvFormatPage::Init(SwEnvDlg* pDialog)
 
 SwEnvFormatPage::~SwEnvFormatPage()
 {
-    disposeOnce();
 }
 
 IMPL_LINK( SwEnvFormatPage, ModifyHdl, weld::MetricSpinButton&, rEdit, void )
@@ -413,9 +412,9 @@ void SwEnvFormatPage::SetMinMax()
                                100 * (getfieldval(*m_xAddrTopField ) - 2 * 566), FieldUnit::TWIP);
 }
 
-VclPtr<SfxTabPage> SwEnvFormatPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwEnvFormatPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwEnvFormatPage>::Create(pParent, *rSet);
+    return std::make_unique<SwEnvFormatPage>(pParent, *rSet);
 }
 
 void SwEnvFormatPage::ActivatePage(const SfxItemSet& rSet)

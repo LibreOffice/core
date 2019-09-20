@@ -102,18 +102,12 @@ SvxGrfCropPage::SvxGrfCropPage(TabPageParent pParent, const SfxItemSet &rSet)
 
 SvxGrfCropPage::~SvxGrfCropPage()
 {
-    disposeOnce();
-}
-
-void SvxGrfCropPage::dispose()
-{
     m_xExampleWN.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxGrfCropPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SvxGrfCropPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SvxGrfCropPage>::Create(pParent, *rSet);
+    return std::make_unique<SvxGrfCropPage>(pParent, *rSet);
 }
 
 void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
@@ -631,7 +625,8 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
         // display original size
         const FieldUnit eMetric = GetModuleFieldUnit( GetItemSet() );
 
-        ScopedVclPtrInstance< MetricField > aFld(this, WB_HIDE);
+//TODO        ScopedVclPtrInstance< MetricField > aFld(this, WB_HIDE);
+        ScopedVclPtrInstance< MetricField > aFld(nullptr, WB_HIDE);
         SetFieldUnit( *aFld, eMetric );
         aFld->SetDecimalDigits(m_xWidthMF->get_digits());
         aFld->SetMax( LONG_MAX - 1 );

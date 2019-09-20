@@ -112,11 +112,6 @@ SvxPatternTabPage::SvxPatternTabPage(TabPageParent pParent, const SfxItemSet& rI
 
 SvxPatternTabPage::~SvxPatternTabPage()
 {
-    disposeOnce();
-}
-
-void SvxPatternTabPage::dispose()
-{
     m_xPatternLBWin.reset();
     m_xCtlPreview.reset();
     m_xCtlPixelWin.reset();
@@ -124,7 +119,6 @@ void SvxPatternTabPage::dispose()
     m_xLbBackgroundColor.reset();
     m_xLbColor.reset();
     m_xCtlPixel.reset();
-    SvxTabPage::dispose();
 }
 
 void SvxPatternTabPage::Construct()
@@ -239,13 +233,11 @@ void SvxPatternTabPage::Reset( const SfxItemSet*  )
     }
 }
 
-
-VclPtr<SfxTabPage> SvxPatternTabPage::Create( TabPageParent pWindow,
+std::unique_ptr<SfxTabPage> SvxPatternTabPage::Create( TabPageParent pWindow,
                                              const SfxItemSet* rSet )
 {
-    return VclPtr<SvxPatternTabPage>::Create(pWindow, *rSet);
+    return std::make_unique<SvxPatternTabPage>(pWindow, *rSet);
 }
-
 
 IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, SvtValueSet*, void)
 {

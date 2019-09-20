@@ -137,15 +137,9 @@ SvxBitmapTabPage::SvxBitmapTabPage(TabPageParent pParent, const SfxItemSet& rInA
 
 SvxBitmapTabPage::~SvxBitmapTabPage()
 {
-    disposeOnce();
-}
-
-void SvxBitmapTabPage::dispose()
-{
     m_xBitmapLBWin.reset();
     m_xBitmapLB.reset();
     m_xCtlBitmapPreview.reset();
-    SfxTabPage::dispose();
 }
 
 void SvxBitmapTabPage::Construct()
@@ -422,9 +416,9 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     ClickBitmapHdl_Impl();
 }
 
-VclPtr<SfxTabPage> SvxBitmapTabPage::Create(TabPageParent pWindow, const SfxItemSet* rAttrs)
+std::unique_ptr<SfxTabPage> SvxBitmapTabPage::Create(TabPageParent pWindow, const SfxItemSet* rAttrs)
 {
-    return VclPtr<SvxBitmapTabPage>::Create(pWindow, *rAttrs);
+    return std::make_unique<SvxBitmapTabPage>(pWindow, *rAttrs);
 }
 
 void SvxBitmapTabPage::ClickBitmapHdl_Impl()
@@ -717,7 +711,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyTileOffsetHdl, weld::MetricSpinButton&, 
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
 {
-    SvxOpenGraphicDialog aDlg(CuiResId(RID_SVXSTR_ADD_IMAGE), GetDialogFrameWeld());
+    weld::Window* pDialogFrameWeld = GetDialogFrameWeld();
+
+    SvxOpenGraphicDialog aDlg(CuiResId(RID_SVXSTR_ADD_IMAGE), pDialogFrameWeld);
     aDlg.EnableLink(false);
     long nCount = m_pBitmapList->Count();
 
@@ -725,9 +721,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
     {
         Graphic         aGraphic;
 
-        EnterWait();
+        std::unique_ptr<weld::WaitObject> xWait(new weld::WaitObject(pDialogFrameWeld));
         ErrCode nError = aDlg.GetGraphic( aGraphic );
-        LeaveWait();
+        xWait.reset();
 
         if( !nError )
         {
@@ -738,7 +734,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
             INetURLObject   aURL( aDlg.GetPath() );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(
-                GetDialogFrameWeld(), aURL.GetLastName().getToken(0, '.'), aDesc));
+                pDialogFrameWeld, aURL.GetLastName().getToken(0, '.'), aDesc));
             nError = ErrCode(1);
 
             while( pDlg->Execute() == RET_OK )
@@ -756,7 +752,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
                     break;
                 }
 
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDialogFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDialogFrameWeld, "cui/ui/queryduplicatedialog.ui"));
                 std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
                 if (xBox->run() != RET_OK)
                     break;
@@ -781,7 +777,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
         else
         {
             // graphic couldn't be loaded
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDialogFrameWeld(), "cui/ui/querynoloadedfiledialog.ui"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDialogFrameWeld, "cui/ui/querynoloadedfiledialog.ui"));
             std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("NoLoadedFileDialog"));
             xBox->run();
         }

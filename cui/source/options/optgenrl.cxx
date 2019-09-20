@@ -228,7 +228,6 @@ SvxGeneralTabPage::SvxGeneralTabPage(TabPageParent pParent, const SfxItemSet& rC
 
 SvxGeneralTabPage::~SvxGeneralTabPage()
 {
-    disposeOnce();
 }
 
 // Initializes the titles and the edit boxes,
@@ -337,9 +336,9 @@ void SvxGeneralTabPage::SetLinks ()
 }
 
 
-VclPtr<SfxTabPage> SvxGeneralTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SvxGeneralTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxGeneralTabPage>::Create( pParent, *rAttrSet );
+    return std::make_unique<SvxGeneralTabPage>( pParent, *rAttrSet );
 }
 
 bool SvxGeneralTabPage::FillItemSet( SfxItemSet* )

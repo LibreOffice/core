@@ -131,9 +131,9 @@ SvxAsianLayoutPage::~SvxAsianLayoutPage()
 {
 }
 
-VclPtr<SfxTabPage> SvxAsianLayoutPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SvxAsianLayoutPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxAsianLayoutPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SvxAsianLayoutPage>(pParent, *rAttrSet);
 }
 
 bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )

@@ -156,11 +156,6 @@ IMPL_LINK_NOARG(SvxToolbarConfigPage, ListModifiedHdl, weld::TreeView&, void)
 
 SvxToolbarConfigPage::~SvxToolbarConfigPage()
 {
-    disposeOnce();
-}
-
-void SvxToolbarConfigPage::dispose()
-{
     for (int i = 0, nCount = m_xSaveInListBox->get_count(); i < nCount; ++i)
     {
         ToolbarSaveInData* pData =
@@ -168,8 +163,6 @@ void SvxToolbarConfigPage::dispose()
         delete pData;
     }
     m_xSaveInListBox->clear();
-
-    SvxConfigPage::dispose();
 }
 
 void SvxToolbarConfigPage::DeleteSelectedTopLevel()
@@ -860,10 +853,10 @@ void SvxToolbarEntriesListBox::ChangedVisibility(int nRow)
     {
         pEntryData->SetVisible(m_xControl->get_toggle(nRow, 0) == TRISTATE_TRUE);
 
-        SvxConfigEntry* pToolbar = pPage->GetTopLevelSelection();
+        SvxConfigEntry* pToolbar = m_pPage->GetTopLevelSelection();
 
         ToolbarSaveInData* pToolbarSaveInData = static_cast<ToolbarSaveInData*>(
-            pPage->GetSaveInData() );
+            m_pPage->GetSaveInData() );
 
         pToolbarSaveInData->ApplyToolbar( pToolbar );
     }

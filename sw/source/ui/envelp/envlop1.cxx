@@ -226,7 +226,6 @@ void SwEnvPage::Init(SwEnvDlg* pDialog)
 
 SwEnvPage::~SwEnvPage()
 {
-    disposeOnce();
 }
 
 IMPL_LINK( SwEnvPage, DatabaseHdl, weld::ComboBox&, rListBox, void )
@@ -298,9 +297,9 @@ void SwEnvPage::InitDatabaseBox()
     }
 }
 
-VclPtr<SfxTabPage> SwEnvPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwEnvPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwEnvPage>::Create(pParent, *rSet);
+    return std::make_unique<SwEnvPage>(pParent, *rSet);
 }
 
 void SwEnvPage::ActivatePage(const SfxItemSet& rSet)

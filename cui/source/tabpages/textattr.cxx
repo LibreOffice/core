@@ -474,9 +474,9 @@ void SvxTextAttrPage::Construct()
     m_xTsbWordWrapText->set_visible( bWordWrapTextEnabled );
 }
 
-VclPtr<SfxTabPage> SvxTextAttrPage::Create(TabPageParent pWindow, const SfxItemSet* rAttrs)
+std::unique_ptr<SfxTabPage> SvxTextAttrPage::Create(TabPageParent pWindow, const SfxItemSet* rAttrs)
 {
-    return VclPtr<SvxTextAttrPage>::Create(pWindow, *rAttrs);
+    return std::make_unique<SvxTextAttrPage>(pWindow, *rAttrs);
 }
 
 /** Check whether we have to uncheck the "Full width" check box.

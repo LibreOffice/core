@@ -66,7 +66,6 @@ ScTpSubTotalGroup::ScTpSubTotalGroup(TabPageParent pParent, const SfxItemSet& rA
 
 ScTpSubTotalGroup::~ScTpSubTotalGroup()
 {
-    disposeOnce();
 }
 
 void ScTpSubTotalGroup::Init()
@@ -373,22 +372,22 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, const row_col&, rRowCol, void )
 
 // Derived Group TabPages:
 
-VclPtr<SfxTabPage> ScTpSubTotalGroup1::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ScTpSubTotalGroup1::Create( TabPageParent pParent,
                                                  const SfxItemSet*  rArgSet )
 {
-    return VclPtr<ScTpSubTotalGroup1>::Create( pParent, *rArgSet );
+    return std::make_unique<ScTpSubTotalGroup1>( pParent, *rArgSet );
 }
 
-VclPtr<SfxTabPage> ScTpSubTotalGroup2::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ScTpSubTotalGroup2::Create( TabPageParent pParent,
                                        const SfxItemSet*    rArgSet )
 {
-    return VclPtr<ScTpSubTotalGroup2>::Create( pParent, *rArgSet );
+    return std::make_unique<ScTpSubTotalGroup2>( pParent, *rArgSet );
 }
 
-VclPtr<SfxTabPage> ScTpSubTotalGroup3::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ScTpSubTotalGroup3::Create( TabPageParent pParent,
                                        const SfxItemSet*    rArgSet )
 {
-    return VclPtr<ScTpSubTotalGroup3>::Create( pParent, *rArgSet );
+    return std::make_unique<ScTpSubTotalGroup3>( pParent, *rArgSet );
 }
 
 ScTpSubTotalGroup1::ScTpSubTotalGroup1( TabPageParent pParent, const SfxItemSet& rArgSet ) :
@@ -443,7 +442,6 @@ ScTpSubTotalOptions::ScTpSubTotalOptions(TabPageParent pParent, const SfxItemSet
 
 ScTpSubTotalOptions::~ScTpSubTotalOptions()
 {
-    disposeOnce();
 }
 
 void ScTpSubTotalOptions::Init()
@@ -462,10 +460,10 @@ void ScTpSubTotalOptions::Init()
     FillUserSortListBox();
 }
 
-VclPtr<SfxTabPage> ScTpSubTotalOptions::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ScTpSubTotalOptions::Create(TabPageParent pParent,
                                                const SfxItemSet* rArgSet)
 {
-    return VclPtr<ScTpSubTotalOptions>::Create(pParent, *rArgSet);
+    return std::make_unique<ScTpSubTotalOptions>(pParent, *rArgSet);
 }
 
 void ScTpSubTotalOptions::Reset( const SfxItemSet* /* rArgSet */ )

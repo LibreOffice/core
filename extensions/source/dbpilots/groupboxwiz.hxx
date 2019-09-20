@@ -55,7 +55,7 @@ namespace dbp
 
     private:
         // OWizardMachine overridables
-        virtual VclPtr<TabPage>     createPage( WizardState _nState ) override;
+        virtual std::unique_ptr<BuilderPage> createPage( WizardState _nState ) override;
         virtual WizardState         determineNextState( WizardState _nCurrentState ) const override;
         virtual void                enterState( WizardState _nState ) override;
         virtual bool                onFinish() override;
@@ -87,8 +87,8 @@ namespace dbp
         virtual ~ORadioSelectionPage() override;
 
     private:
-        // TabPage overridables
-        void ActivatePage() override;
+        // BuilderPage overridables
+        void Activate() override;
 
         // OWizardPage overridables
         virtual void        initializePage() override;
@@ -134,8 +134,8 @@ namespace dbp
         virtual ~OOptionValuesPage() override;
 
     private:
-        // TabPage overridables
-        void ActivatePage() override;
+        // BuilderPage overridables
+        void Activate() override;
 
         // OWizardPage overridables
         virtual void        initializePage() override;
@@ -165,8 +165,8 @@ namespace dbp
         virtual ~OFinalizeGBWPage() override;
 
     private:
-        // TabPage overridables
-        void ActivatePage() override;
+        // BuilderPage overridables
+        void Activate() override;
 
         // OWizardPage overridables
         virtual void        initializePage() override;

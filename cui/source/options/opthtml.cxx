@@ -64,10 +64,10 @@ OfaHtmlTabPage::~OfaHtmlTabPage()
 {
 }
 
-VclPtr<SfxTabPage> OfaHtmlTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> OfaHtmlTabPage::Create( TabPageParent pParent,
                                            const SfxItemSet* rAttrSet )
 {
-    return VclPtr<OfaHtmlTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<OfaHtmlTabPage>(pParent, *rAttrSet);
 }
 
 bool OfaHtmlTabPage::FillItemSet( SfxItemSet* )
