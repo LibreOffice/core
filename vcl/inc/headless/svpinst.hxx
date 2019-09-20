@@ -73,9 +73,7 @@ private:
     // at least one subclass of SvpSalInstance (GTK3) that doesn't use them.
     friend class SvpSalInstance;
     // members for communication from main thread to non-main thread
-#ifndef IOS
     int                     m_FeedbackFDs[2];
-#endif
     osl::Condition          m_NonMainWaitingYieldCond;
     // members for communication from non-main thread to main thread
     bool                    m_bNoYieldLock = false; // accessed only on main thread
