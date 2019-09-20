@@ -11,13 +11,18 @@
 
 X11SkiaSalGraphicsImpl::X11SkiaSalGraphicsImpl(X11SalGraphics& rParent)
     : SkiaSalGraphicsImpl(rParent, rParent.GetGeometryProvider())
-// , mrX11Parent(rParent) TODO SKIA
+    , mrX11Parent(rParent)
 {
 }
 
 X11SkiaSalGraphicsImpl::~X11SkiaSalGraphicsImpl() {}
 
-void X11SkiaSalGraphicsImpl::Init() {}
+void X11SkiaSalGraphicsImpl::Init()
+{
+    // The m_pFrame and m_pVDev pointers are updated late in X11
+    setProvider(mrX11Parent.GetGeometryProvider());
+    SkiaSalGraphicsImpl::Init();
+}
 
 void X11SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics)
 {

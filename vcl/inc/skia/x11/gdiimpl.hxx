@@ -19,7 +19,7 @@
 class VCL_PLUGIN_PUBLIC X11SkiaSalGraphicsImpl : public SkiaSalGraphicsImpl, public X11GraphicsImpl
 {
 private:
-    // X11SalGraphics& mrX11Parent; TODO SKIA
+    X11SalGraphics& mrX11Parent;
 
 public:
     X11SkiaSalGraphicsImpl(X11SalGraphics& rParent);
