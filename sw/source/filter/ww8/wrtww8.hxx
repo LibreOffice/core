@@ -464,6 +464,9 @@ public:
     std::map<size_t, std::pair<size_t, size_t>> m_OverridingNums;
     /// same in reverse
     std::map<std::pair<size_t, size_t>, size_t> m_OverridingNumsR;
+    /// list-id -> abstractnumdef index
+    std::map<OUString, size_t> m_Lists;
+
     const SwTextNode *m_pTopNodeOfHdFtPage; ///< Top node of host page when in hd/ft
     std::map< sal_uInt16, sal_uInt16 > m_aRuleDuplicates; //map to Duplicated numrules
     std::stack< sal_Int32 > m_aCurrentCharPropStarts; ///< To remember the position in a run.
@@ -653,10 +656,17 @@ public:
     /// completely new list based on this one and export that instead,
     /// which duplicates words behaviour in this respect.
     sal_uInt16 DuplicateNumRule( const SwNumRule *pRule, sal_uInt8 nLevel, sal_uInt16 nVal );
+    SwNumRule * DuplicateNumRuleImpl(const SwNumRule *pRule);
+
+    /// check if a new abstractNum is needed for this list
+    sal_uInt16 DuplicateAbsNum(OUString const& rListId,
+                               SwNumRule const& rAbstractRule);
+
 
     /// Create a overriding numbering definition (if it does not yet exist)
     /// @return index of the overriding numbering definition
     sal_uInt16 OverrideNumRule(SwNumRule const& rExistingRule,
+                               OUString const& rListId,
                                SwNumRule const& rAbstractRule);
 
     /// Access to the attribute output class.

@@ -3562,6 +3562,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
                             // tdf#95848 find the abstract list definition
                             OUString const listId(pTextNd->GetListId());
                             if (!listId.isEmpty()
+                                // default list id uses the 1:1 mapping
                                 && listId != pRule->GetDefaultListId())
                             {
                                 SwList const*const pList(
@@ -3572,8 +3573,16 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
                                         GetExport().m_pDoc->FindNumRulePtr(
                                             pList->GetDefaultListStyleName()));
                                     assert(pAbstractRule);
-                                    nNumId = GetExport().OverrideNumRule(
-                                            *pRule, *pAbstractRule);
+                                    if (pAbstractRule == pRule)
+                                    {
+                                        // different list, but no override
+                                        nNumId = GetExport().DuplicateAbsNum(listId, *pAbstractRule);
+                                    }
+                                    else
+                                    {
+                                        nNumId = GetExport().OverrideNumRule(
+                                                *pRule, listId, *pAbstractRule);
+                                    }
                                     assert(nNumId != USHRT_MAX);
                                     ++nNumId;
                                 }

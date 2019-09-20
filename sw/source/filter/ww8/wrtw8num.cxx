@@ -45,9 +45,8 @@ using namespace ::com::sun::star;
 using namespace sw::types;
 using namespace sw::util;
 
-sal_uInt16 MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, sal_uInt8 nLevel, sal_uInt16 nVal )
+SwNumRule* MSWordExportBase::DuplicateNumRuleImpl(const SwNumRule *pRule)
 {
-    sal_uInt16 nNumId = USHRT_MAX;
     const OUString sPrefix("WW8TempExport" + OUString::number( m_nUniqueList++ ));
     SwNumRule* pMyNumRule =
             new SwNumRule( m_pDoc->GetUniqueNumRuleName( &sPrefix ),
@@ -59,6 +58,14 @@ sal_uInt16 MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, sal_uInt8
         const SwNumFormat& rSubRule = pRule->Get(i);
         pMyNumRule->Set( i, rSubRule );
     }
+    return pMyNumRule;
+}
+
+sal_uInt16 MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, sal_uInt8 nLevel, sal_uInt16 nVal )
+{
+    sal_uInt16 nNumId = USHRT_MAX;
+
+    SwNumRule *const pMyNumRule = DuplicateNumRuleImpl(pRule);
 
     SwNumFormat aNumFormat( pMyNumRule->Get( nLevel ) );
     aNumFormat.SetStart( nVal );
@@ -72,6 +79,26 @@ sal_uInt16 MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, sal_uInt8
     return nNumId;
 }
 
+// multiple SwList can be based on the same SwNumRule; ensure one w:abstractNum
+// per SwList
+sal_uInt16 MSWordExportBase::DuplicateAbsNum(OUString const& rListId,
+        SwNumRule const& rAbstractRule)
+{
+    auto const it(m_Lists.find(rListId));
+    if (it != m_Lists.end())
+    {
+        return it->second;
+    }
+    else
+    {
+        auto const pNewAbstractRule = DuplicateNumRuleImpl(&rAbstractRule);
+        assert(GetNumberingId(*pNewAbstractRule) == m_pUsedNumTable->size() - 1);
+        (void) pNewAbstractRule;
+        m_Lists.insert(std::make_pair(rListId, m_pUsedNumTable->size() - 1));
+        return m_pUsedNumTable->size() - 1;
+    }
+}
+
 // Ideally we want to map SwList to w:abstractNum and SwNumRule to w:num
 // The current approach is to keep exporting every SwNumRule to
 // 1 w:abstractNum and 1 w:num, and then add extra w:num via this function
@@ -79,11 +106,14 @@ sal_uInt16 MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, sal_uInt8
 // of course this will end up exporting some w:num that aren't actually used.
 sal_uInt16 MSWordExportBase::OverrideNumRule(
         SwNumRule const& rExistingRule,
+        OUString const& rListId,
         SwNumRule const& rAbstractRule)
 {
     assert(&rExistingRule != &rAbstractRule);
     auto const numdef = GetNumberingId(rExistingRule);
-    auto const absnumdef = GetNumberingId(rAbstractRule);
+    auto const absnumdef = rListId == rAbstractRule.GetDefaultListId()
+        ? GetNumberingId(rAbstractRule)
+        : DuplicateAbsNum(rListId, rAbstractRule);
     auto const mapping = std::make_pair(numdef, absnumdef);
 
     auto it = m_OverridingNumsR.find(mapping);
@@ -91,6 +121,7 @@ sal_uInt16 MSWordExportBase::OverrideNumRule(
     {
         it = m_OverridingNumsR.insert(std::make_pair(mapping, m_pUsedNumTable->size())).first;
         m_OverridingNums.insert(std::make_pair(m_pUsedNumTable->size(), mapping));
+
         m_pUsedNumTable->push_back(nullptr); // dummy, it's unique_ptr...
         ++m_nUniqueList; // counter for DuplicateNumRule...
     }
