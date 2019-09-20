@@ -60,9 +60,9 @@ namespace dbaui
 {
 using namespace ::com::sun::star;
 
-    VclPtr<OGenericAdministrationPage> OTextConnectionPageSetup::CreateTextTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OTextConnectionPageSetup::CreateTextTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
     {
-        return VclPtr<OTextConnectionPageSetup>::Create(pParent, _rAttrSet);
+        return std::make_unique<OTextConnectionPageSetup>(pParent, _rAttrSet);
     }
 
     // OTextConnectionPageSetup
@@ -75,15 +75,8 @@ using namespace ::com::sun::star;
         m_xTextConnectionHelper->SetClickHandler(LINK( this, OTextConnectionPageSetup, ImplGetExtensionHdl ) );
     }
 
-    void OTextConnectionPageSetup::dispose()
-    {
-        m_xTextConnectionHelper.reset();
-        OConnectionTabPageSetup::dispose();
-    }
-
     OTextConnectionPageSetup::~OTextConnectionPageSetup()
     {
-        disposeOnce();
     }
 
     IMPL_LINK_NOARG(OTextConnectionPageSetup, ImplGetExtensionHdl, OTextConnectionHelper*, void)
@@ -132,9 +125,9 @@ using namespace ::com::sun::star;
         return m_xTextConnectionHelper->prepareLeave();
     }
 
-    VclPtr<OGenericAdministrationPage> OLDAPConnectionPageSetup::CreateLDAPTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet )
+    std::unique_ptr<OGenericAdministrationPage> OLDAPConnectionPageSetup::CreateLDAPTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet )
     {
-        return VclPtr<OLDAPConnectionPageSetup>::Create( pParent, _rAttrSet );
+        return std::make_unique<OLDAPConnectionPageSetup>(pParent, _rAttrSet);
     }
 
     // OLDAPPageSetup
@@ -225,9 +218,9 @@ using namespace ::com::sun::star;
         OGenericAdministrationPage::callModifiedHdl();
     }
 
-    VclPtr<OMySQLIntroPageSetup> OMySQLIntroPageSetup::CreateMySQLIntroTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
+    std::unique_ptr<OMySQLIntroPageSetup> OMySQLIntroPageSetup::CreateMySQLIntroTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
     {
-        return VclPtr<OMySQLIntroPageSetup>::Create(pParent, rAttrSet);
+        return std::make_unique<OMySQLIntroPageSetup>(pParent, rAttrSet);
     }
 
     OMySQLIntroPageSetup::OMySQLIntroPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)
@@ -305,18 +298,11 @@ using namespace ::com::sun::star;
 
     MySQLNativeSetupPage::~MySQLNativeSetupPage()
     {
-        disposeOnce();
     }
 
-    void MySQLNativeSetupPage::dispose()
+    std::unique_ptr<OGenericAdministrationPage> MySQLNativeSetupPage::Create(TabPageParent pParent, const SfxItemSet& rAttrSet)
     {
-        m_xMySQLSettings.reset();
-        OGenericAdministrationPage::dispose();
-     }
-
-    VclPtr<OGenericAdministrationPage> MySQLNativeSetupPage::Create(TabPageParent pParent, const SfxItemSet& rAttrSet)
-    {
-        return VclPtr<MySQLNativeSetupPage>::Create(pParent, rAttrSet);
+        return std::make_unique<MySQLNativeSetupPage>(pParent, rAttrSet);
     }
 
     void MySQLNativeSetupPage::fillControls( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList )
@@ -398,9 +384,9 @@ using namespace ::com::sun::star;
     {
     }
 
-    VclPtr<OGenericAdministrationPage> OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet )
+    std::unique_ptr<OGenericAdministrationPage> OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet )
     {
-        return VclPtr<OGeneralSpecialJDBCConnectionPageSetup>::Create( pParent,
+        return std::make_unique<OGeneralSpecialJDBCConnectionPageSetup>(pParent,
                                                          _rAttrSet,
                                                          DSID_MYSQL_PORTNUMBER ,
                                                          STR_MYSQL_DEFAULT,
@@ -409,9 +395,9 @@ using namespace ::com::sun::star;
                                                          STR_MYSQL_DRIVERCLASSTEXT);
     }
 
-    VclPtr<OGenericAdministrationPage> OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet )
+    std::unique_ptr<OGenericAdministrationPage> OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet )
     {
-        return VclPtr<OGeneralSpecialJDBCConnectionPageSetup>::Create( pParent,
+        return std::make_unique<OGeneralSpecialJDBCConnectionPageSetup>(pParent,
                                                           _rAttrSet,
                                                           DSID_ORACLE_PORTNUMBER,
                                                           STR_ORACLE_DEFAULT,
@@ -427,6 +413,7 @@ using namespace ::com::sun::star;
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xETHostname.get()));
         _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::SpinButton>(m_xNFPortNumber.get()));
     }
+
     void OGeneralSpecialJDBCConnectionPageSetup::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTHelpText.get()));
@@ -508,7 +495,7 @@ using namespace ::com::sun::star;
 #endif
         const char *pMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const MessageType mt = bSuccess ? MessageType::Info : MessageType::Error;
-        OSQLMessageBox aMsg(GetFrameWeld(), DBA_RES(pMessage), OUString(), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, mt);
+        OSQLMessageBox aMsg(GetDialogFrameWeld(), DBA_RES(pMessage), OUString(), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, mt);
         aMsg.run();
     }
 
@@ -521,9 +508,9 @@ using namespace ::com::sun::star;
         OGenericAdministrationPage::callModifiedHdl();
     }
 
-    VclPtr<OGenericAdministrationPage> OJDBCConnectionPageSetup::CreateJDBCTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OJDBCConnectionPageSetup::CreateJDBCTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
     {
-        return VclPtr<OJDBCConnectionPageSetup>::Create(pParent, _rAttrSet);
+        return std::make_unique<OJDBCConnectionPageSetup>(pParent, _rAttrSet);
     }
 
     // OMySQLJDBCConnectionPageSetup
@@ -540,7 +527,6 @@ using namespace ::com::sun::star;
 
     OJDBCConnectionPageSetup::~OJDBCConnectionPageSetup()
     {
-        disposeOnce();
     }
 
     void OJDBCConnectionPageSetup::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
@@ -621,7 +607,7 @@ using namespace ::com::sun::star;
 #endif
         const char* pMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const MessageType mt = bSuccess ? MessageType::Info : MessageType::Error;
-        OSQLMessageBox aMsg(GetFrameWeld(), DBA_RES(pMessage), OUString(), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, mt);
+        OSQLMessageBox aMsg(GetDialogFrameWeld(), DBA_RES(pMessage), OUString(), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, mt);
         aMsg.run();
     }
 
@@ -634,9 +620,9 @@ using namespace ::com::sun::star;
         callModifiedHdl();
     }
 
-    VclPtr<OGenericAdministrationPage> OSpreadSheetConnectionPageSetup::CreateDocumentOrSpreadSheetTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OSpreadSheetConnectionPageSetup::CreateDocumentOrSpreadSheetTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
     {
-        return VclPtr<OSpreadSheetConnectionPageSetup>::Create( pParent, _rAttrSet );
+        return std::make_unique<OSpreadSheetConnectionPageSetup>(pParent, _rAttrSet);
     }
 
     OSpreadSheetConnectionPageSetup::OSpreadSheetConnectionPageSetup(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
@@ -649,7 +635,6 @@ using namespace ::com::sun::star;
 
     OSpreadSheetConnectionPageSetup::~OSpreadSheetConnectionPageSetup()
     {
-        disposeOnce();
     }
 
     void OSpreadSheetConnectionPageSetup::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& /*_rControlList*/)
@@ -670,9 +655,9 @@ using namespace ::com::sun::star;
         return bChangedSomething;
     }
 
-    VclPtr<OGenericAdministrationPage> OAuthentificationPageSetup::CreateAuthentificationTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OAuthentificationPageSetup::CreateAuthentificationTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
     {
-        return VclPtr<OAuthentificationPageSetup>::Create( pParent, _rAttrSet);
+        return std::make_unique<OAuthentificationPageSetup>(pParent, _rAttrSet);
     }
 
     OAuthentificationPageSetup::OAuthentificationPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)
@@ -733,9 +718,9 @@ using namespace ::com::sun::star;
         return bChangedSomething;
     }
 
-    VclPtr<OGenericAdministrationPage> OFinalDBPageSetup::CreateFinalDBTabPageSetup(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OFinalDBPageSetup::CreateFinalDBTabPageSetup(TabPageParent pParent, const SfxItemSet& _rAttrSet)
     {
-        return VclPtr<OFinalDBPageSetup>::Create( pParent, _rAttrSet);
+        return std::make_unique<OFinalDBPageSetup>(pParent, _rAttrSet);
     }
 
     OFinalDBPageSetup::OFinalDBPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)

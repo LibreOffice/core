@@ -28,9 +28,9 @@ DataLabelsTabPage::DataLabelsTabPage(TabPageParent pWindow, const SfxItemSet& rI
 {
 }
 
-VclPtr<SfxTabPage> DataLabelsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+std::unique_ptr<SfxTabPage> DataLabelsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<DataLabelsTabPage>::Create(pParent, *rOutAttrs);
+    return std::make_unique<DataLabelsTabPage>(pParent, *rOutAttrs);
 }
 
 bool DataLabelsTabPage::FillItemSet(SfxItemSet* rOutAttrs)

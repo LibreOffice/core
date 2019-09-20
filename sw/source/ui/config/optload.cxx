@@ -145,10 +145,10 @@ SwLoadOptPage::~SwLoadOptPage()
 {
 }
 
-VclPtr<SfxTabPage> SwLoadOptPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwLoadOptPage::Create( TabPageParent pParent,
                                           const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwLoadOptPage>::Create(pParent, *rAttrSet );
+    return std::make_unique<SwLoadOptPage>(pParent, *rAttrSet );
 }
 
 IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl, weld::Button&, void)
@@ -540,21 +540,13 @@ SwCaptionOptPage::SwCaptionOptPage(TabPageParent pParent, const SfxItemSet& rSet
 
 SwCaptionOptPage::~SwCaptionOptPage()
 {
-    disposeOnce();
-}
-
-void SwCaptionOptPage::dispose()
-{
     DelUserData();
-    pMgr.reset();
-    m_xPreview.reset();
-    SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwCaptionOptPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwCaptionOptPage::Create(TabPageParent pParent,
                                             const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwCaptionOptPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwCaptionOptPage>(pParent, *rAttrSet);
 }
 
 bool SwCaptionOptPage::FillItemSet( SfxItemSet* )

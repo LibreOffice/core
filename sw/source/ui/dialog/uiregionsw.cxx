@@ -1513,7 +1513,6 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(TabPageParent pParent, const SfxI
 
 SwInsertSectionTabPage::~SwInsertSectionTabPage()
 {
-    disposeOnce();
 }
 
 void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
@@ -1616,10 +1615,10 @@ void SwInsertSectionTabPage::Reset( const SfxItemSet* )
 {
 }
 
-VclPtr<SfxTabPage> SwInsertSectionTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwInsertSectionTabPage::Create(TabPageParent pParent,
                                                   const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwInsertSectionTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwInsertSectionTabPage>(pParent, *rAttrSet);
 }
 
 IMPL_LINK(SwInsertSectionTabPage, ChangeHideHdl, weld::ToggleButton&, rBox, void)
@@ -1954,10 +1953,10 @@ void SwSectionFootnoteEndTabPage::Reset( const SfxItemSet* rSet )
     ResetState( false, rSet->Get( RES_END_AT_TXTEND, false ));
 }
 
-VclPtr<SfxTabPage> SwSectionFootnoteEndTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwSectionFootnoteEndTabPage::Create( TabPageParent pParent,
                                                    const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwSectionFootnoteEndTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwSectionFootnoteEndTabPage>(pParent, *rAttrSet);
 }
 
 IMPL_LINK( SwSectionFootnoteEndTabPage, FootEndHdl, weld::ToggleButton&, rBox, void )
@@ -2112,9 +2111,9 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
     IndentModifyHdl(*m_xBeforeMF);
 }
 
-VclPtr<SfxTabPage> SwSectionIndentTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SwSectionIndentTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwSectionIndentTabPage>::Create(pParent, *rAttrSet);
+    return std::make_unique<SwSectionIndentTabPage>(pParent, *rAttrSet);
 }
 
 void SwSectionIndentTabPage::SetWrtShell(SwWrtShell const & rSh)

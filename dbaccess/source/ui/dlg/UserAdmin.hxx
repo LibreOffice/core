@@ -60,10 +60,9 @@ class OUserAdmin final : public OGenericAdministrationPage
 
     OUserAdmin(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
 public:
-    static  VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* _rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     virtual ~OUserAdmin() override;
-    virtual void dispose() override;
     OUString GetUser() const;
 
     // subclasses must override this, but it isn't pure virtual

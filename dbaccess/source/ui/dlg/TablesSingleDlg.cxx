@@ -49,9 +49,9 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(weld::Window* pParent
     SetInputSet(m_pOutSet.get());
 
     TabPageParent pPageParent(get_content_area(), this);
-    auto pTabPage = VclPtrInstance<OTableSubscriptionPage>(pPageParent, *m_pOutSet, this);
-    pTabPage->SetServiceFactory(_rxORB);
-    SetTabPage(pTabPage);
+    auto xTabPage = std::make_unique<OTableSubscriptionPage>(pPageParent, *m_pOutSet, this);
+    xTabPage->SetServiceFactory(_rxORB);
+    SetTabPage(std::move(xTabPage));
 }
 
 OTableSubscriptionDialog::~OTableSubscriptionDialog()

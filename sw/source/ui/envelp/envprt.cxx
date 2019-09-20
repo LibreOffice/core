@@ -76,7 +76,7 @@ SwEnvPrtPage::SwEnvPrtPage(TabPageParent pParent, const SfxItemSet& rSet)
 
 SwEnvPrtPage::~SwEnvPrtPage()
 {
-    disposeOnce();
+    m_xPrt.clear();
 }
 
 IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl, weld::ToggleButton&, void)
