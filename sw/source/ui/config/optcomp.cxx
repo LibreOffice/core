@@ -449,7 +449,7 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
             if (svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
                                               GetDialogFrameWeld(), svtools::RESTART_REASON_MSCOMPATIBLE_FORMS_MENU))
             {
-                GetParentDialog()->EndDialog(RET_OK);
+                GetDialogController()->response(RET_OK);
             }
         }
     }
