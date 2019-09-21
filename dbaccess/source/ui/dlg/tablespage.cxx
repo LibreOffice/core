@@ -260,8 +260,7 @@ namespace dbaui
             if (aErrorInfo.isValid())
             {
                 // establishing the connection failed. Show an error window and exit.
-                vcl::Window *pParent = GetParentDialog();
-                OSQLMessageBox aMessageBox(pParent ? pParent->GetFrameWeld() : nullptr, aErrorInfo);
+                OSQLMessageBox aMessageBox(GetDialogFrameWeld(), aErrorInfo);
                 aMessageBox.run();
                 m_xTables->set_sensitive(false);
                 m_xTablesList->GetWidget().clear();
