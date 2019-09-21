@@ -1203,6 +1203,7 @@ uno::Sequence< OUString > SwXFrame::getSupportedServiceNames()
 
 SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDoc)
     : m_pImpl(new Impl)
+    , m_pFrameFormat(nullptr)
     , m_pPropSet(pSet)
     , m_pDoc(pDoc)
     , eType(eSet)
@@ -1212,7 +1213,7 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
     , m_nVisibleAreaHeight(0)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
-    pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    StartListening(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
     // get the property set for the default style data
     // First get the model
     uno::Reference < XModel > xModel = pDoc->GetDocShell()->GetBaseModel();
@@ -1256,8 +1257,8 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
 }
 
 SwXFrame::SwXFrame(SwFrameFormat& rFrameFormat, FlyCntType eSet, const ::SfxItemPropertySet* pSet)
-    : SwClient(&rFrameFormat)
-    , m_pImpl(new Impl)
+    : m_pImpl(new Impl)
+    , m_pFrameFormat(&rFrameFormat)
     , m_pPropSet(pSet)
     , m_pDoc(nullptr)
     , eType(eSet)
@@ -1266,6 +1267,7 @@ SwXFrame::SwXFrame(SwFrameFormat& rFrameFormat, FlyCntType eSet, const ::SfxItem
     , m_nVisibleAreaWidth(0)
     , m_nVisibleAreaHeight(0)
 {
+    StartListening(rFrameFormat.GetNotifier());
 }
 
 SwXFrame::~SwXFrame()
@@ -2595,13 +2597,8 @@ void SAL_CALL SwXFrame::removeEventListener(
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
-void SwXFrame::Modify(const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXFrame::DisposeInternal()
 {
-    ClientModify(this, pOld, pNew);
-    if (GetRegisteredIn())
-    {
-        return; // core object still alive
-    }
     mxStyleData.clear();
     mxStyleFamily.clear();
     m_pDoc = nullptr;
@@ -2612,14 +2609,22 @@ void SwXFrame::Modify(const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     }
     lang::EventObject const ev(xThis);
     m_pImpl->m_EventListeners.disposeAndClear(ev);
+    m_pFrameFormat = nullptr;
+    EndListeningAll();
+}
+void SwXFrame::Notify(const SfxHint& rHint)
+{
+    if(rHint.GetId() == SfxHintId::Dying)
+        DisposeInternal();
 }
 
 void SwXFrame::dispose()
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = GetFrameFormat();
-    if ( pFormat )
+    if (pFormat)
     {
+        DisposeInternal();
         SdrObject* pObj = pFormat->FindSdrObject();
         // OD 11.09.2003 #112039# - add condition to perform delete of
         // format/anchor sign, not only if the object is inserted, but also
@@ -2797,7 +2802,9 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         }
         if(pFormat)
         {
-            pFormat->Add(this);
+            EndListeningAll();
+            m_pFrameFormat = pFormat;
+            StartListening(pFormat->GetNotifier());
             if(!m_sName.isEmpty())
                 pDoc->SetFlyName(*pFormat, m_sName);
         }
@@ -2849,7 +2856,9 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                                         ->GetIndex()+1 ]->GetGrfNode();
             if (pGrfNd)
                 pGrfNd->SetChgTwipSize( !bSizeFound );
-            pFormat->Add(this);
+            m_pFrameFormat = pFormat;
+            EndListeningAll();
+            StartListening(m_pFrameFormat->GetNotifier());
             if(!m_sName.isEmpty())
                 pDoc->SetFlyName(*pFormat, m_sName);
 
@@ -2975,7 +2984,9 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 assert(pFormat2 && "Doc->Insert(notxt) failed.");
 
                 pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
-                pFormat2->Add(this);
+                m_pFrameFormat = pFormat2;
+                EndListeningAll();
+                StartListening(m_pFrameFormat->GetNotifier());
                 if(!m_sName.isEmpty())
                     pDoc->SetFlyName(*pFormat2, m_sName);
             }
@@ -3010,7 +3021,9 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             }
 
             pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
-            pFrameFormat->Add(this);
+            m_pFrameFormat = pFrameFormat;
+            EndListeningAll();
+            StartListening(m_pFrameFormat->GetNotifier());
             if(!m_sName.isEmpty())
                 pDoc->SetFlyName(*pFrameFormat, m_sName);
         }
@@ -3036,7 +3049,9 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             SwFlyFrameFormat* pFrameFormat
                 = pDoc->getIDocumentContentOperations().InsertEmbObject(aPam, xObj, &aFrameSet);
             pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
-            pFrameFormat->Add(this);
+            m_pFrameFormat = pFrameFormat;
+            EndListeningAll();
+            StartListening(m_pFrameFormat->GetNotifier());
             if(!m_sName.isEmpty())
                 pDoc->SetFlyName(*pFrameFormat, m_sName);
         }
