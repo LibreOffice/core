@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_f1505fd7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-09-21T01:34:27Z",
+      "side": 1,
+      "message": "not sure that explains anything (also, can\u0027t guarantee both commits are consecutive)..",
+      "revId": "e08c50a34d75ae756e79d645efc0e101670cca4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_915fabe4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-09-21T01:34:27Z",
+      "side": 1,
+      "message": "Better have an upstream bug with the feature description of the dump ini stuff.\n\nAnd then a detailed description of what the rework does is needed - or perhaps split the change into smaller parts (there\u0027s at least 3 different topics in this patch)",
+      "revId": "e08c50a34d75ae756e79d645efc0e101670cca4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_9136cbb4",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2069,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-09-21T01:34:27Z",
+      "side": 1,
+      "message": "That should probably stay inside FEATURE_BREAKPAD, no?",
+      "revId": "e08c50a34d75ae756e79d645efc0e101670cca4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_b13bc79a",
+        "filename": "desktop/source/app/crashreport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-09-21T01:34:27Z",
+      "side": 1,
+      "message": "Hmm - this gets called quite often now. Can we cache the status here somehow?",
+      "revId": "e08c50a34d75ae756e79d645efc0e101670cca4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_71452f17",
+        "filename": "desktop/source/minidump/minidump.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-09-21T01:34:27Z",
+      "side": 1,
+      "message": "That\u0027s probably the right change - but as it\u0027s not equivalent to the code before (it\u0027s more a !fail()) - would be better as a separate commit with an explanatory commit message.",
+      "revId": "e08c50a34d75ae756e79d645efc0e101670cca4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_114abb26",
+        "filename": "desktop/source/minidump/minidump.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-09-21T01:34:27Z",
+      "side": 1,
+      "message": "comment better placed in the header?",
+      "revId": "e08c50a34d75ae756e79d645efc0e101670cca4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_3147b720",
+        "filename": "include/desktop/crashreport.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-09-21T01:34:27Z",
+      "side": 1,
+      "message": "All new and renamed functions - should be lower case camel",
+      "revId": "e08c50a34d75ae756e79d645efc0e101670cca4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_d153e3e1",
+        "filename": "include/desktop/minidump.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-09-21T01:34:27Z",
+      "side": 1,
+      "message": "needs doxygen style parameter description here",
+      "revId": "e08c50a34d75ae756e79d645efc0e101670cca4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
