@@ -1505,13 +1505,8 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach sdi,$(2),$(call gb_SdiTa
 
 endef
 
-# call gb_LinkTarget__set_precompiled_header_impl,linktarget,pchcxxfile,pchtarget,linktargetmakefilename
-define gb_LinkTarget__set_precompiled_header_impl
-$(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_PrecompiledHeader_get_clean_target,$(3))
-$(call gb_PrecompiledHeader_get_target,$(3),$(4)) : $(call gb_CxxObject_get_source,$(SRCDIR),$(2))
-
-$(call gb_PrecompiledHeader_get_target,$(3),$(4)) : $(call gb_LinkTarget_get_headers_target,$(1))
-
+# call gb_LinkTarget__set_precompiled_header_variables,linktarget,pchcxxfile,pchtarget,linktargetmakefilename
+define gb_LinkTarget__set_precompiled_header_variables
 $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME := $(3)
 $(call gb_LinkTarget_get_target,$(1)) : PCH_LINKTARGETMAKEFILENAME := $(4)
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJEX = $(call gb_PrecompiledHeader_get_objectfile, $(call gb_PrecompiledHeader_get_target,$(3),$(4)))
@@ -1523,9 +1518,20 @@ $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(T_CXXFLAGS) $(call gb
 $(call gb_LinkTarget_get_target,$(1)) : DEFS += -DPCH_LEVEL=$(gb_ENABLE_PCH)
 $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS += -DPCH_LEVEL=$(gb_ENABLE_PCH)
 
+endef
+
+# call gb_LinkTarget__set_precompiled_header_impl,linktarget,pchcxxfile,pchtarget,linktargetmakefilename
+define gb_LinkTarget__set_precompiled_header_impl
+$(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_PrecompiledHeader_get_clean_target,$(3))
+$(call gb_PrecompiledHeader_get_target,$(3),$(4)) : $(call gb_CxxObject_get_source,$(SRCDIR),$(2))
+
+$(call gb_PrecompiledHeader_get_target,$(3),$(4)) : $(call gb_LinkTarget_get_headers_target,$(1))
+
 $(call gb_PrecompiledHeader_get_target,$(3),$(4)) : VISIBILITY :=
 
 $(call gb_LinkTarget_get_pch_timestamp,$(4)) : $(call gb_PrecompiledHeader_get_target,$(3),$(4))
+
+$(call gb_LinkTarget__set_precompiled_header_variables,$(1),$(2),$(3),$(4))
 
 ifeq ($(gb_FULLDEPS),$(true))
 -include $(call gb_PrecompiledHeader_get_dep_target,$(3),$(4))
@@ -1538,6 +1544,27 @@ define gb_LinkTarget_set_precompiled_header
 ifneq ($(gb_ENABLE_PCH),)
 $(call gb_LinkTarget__set_precompiled_header_impl,$(1),$(2),$(notdir $(2)),$(4))
 $(call gb_PrecompiledHeader_generate_rules,$(notdir $(2)),$(4))
+endif
+
+endef
+
+# call gb_LinkTarget__reuse_precompiled_header_impl,linktarget,pchcxxfile,pchtarget,linktargetmakefilename
+# Use the PCH as if it was LinkTarget's own, but do nothing with the PCH itself, just depend on it.
+define gb_LinkTarget__reuse_precompiled_header_impl
+$(call gb_LinkTarget__set_precompiled_header_variables,$(1),$(2),$(3),$(4))
+
+$(call gb_LinkTarget_get_pch_timestamp,$(4)) : $(call gb_LinkTarget_get_pch_reuse_timestamp,$(4))
+
+$(call gb_LinkTarget_get_pch_reuse_timestamp,$(4)) : $(call gb_PrecompiledHeader_get_target,$(3),$(4))
+	$(call gb_PrecompiledHeader_check_flags,$(4),$(2),\
+		$(call gb_PrecompiledHeader_get_target,$(3),$(4)),$$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS))
+
+endef
+
+# call gb_LinkTarget_reuse_precompiled_header,linktarget,pchcxxfile,,linktargetmakefilename
+define gb_LinkTarget_reuse_precompiled_header
+ifneq ($(gb_ENABLE_PCH),)
+$(call gb_LinkTarget__reuse_precompiled_header_impl,$(1),$(2),$(notdir $(2)),$(4))
 endif
 
 endef

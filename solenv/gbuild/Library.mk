@@ -226,6 +226,7 @@ gb_Library_use_packages = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2
 gb_Library_use_unpacked = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_add_sdi_headers = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_set_precompiled_header = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_Library_reuse_precompiled_header = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_export_objects_list = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_add_nativeres = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_set_nativeres = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))

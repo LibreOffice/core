@@ -122,6 +122,7 @@ gb_LinkTarget_get_clean_target = \
  $(WORKDIR)/Clean/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1))
 gb_LinkTarget_get_target = $(lastword $(subst <>,  ,$(1)))
 gb_LinkTarget_get_pch_timestamp = $(WORKDIR)/PrecompiledHeader/$(call gb_PrecompiledHeader__get_debugdir,$(1))/Timestamps/$(1)
+gb_LinkTarget_get_pch_reuse_timestamp = $(WORKDIR)/PrecompiledHeader/$(call gb_PrecompiledHeader__get_debugdir,$(1))/Timestamps/$(1)_reuse
 gb_Module_get_nonl10n_target = $(WORKDIR)/Module/nonl10n/$(1)
 gb_Module_get_l10n_target = $(WORKDIR)/Module/l10n/$(1)
 gb_Module_get_check_target = $(WORKDIR)/Module/check/$(1)

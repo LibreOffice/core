@@ -43,6 +43,7 @@ $(call gb_PrecompiledHeader_get_target,$(1),$(2)) :
 	rm -f $$@
 	$$(call gb_PrecompiledHeader__command,$$@,$(1),$$<,$$(PCH_DEFS),$$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS),$$(INCLUDE),$(2))
 	$$(call gb_PrecompiledHeader__sum_command,$$@,$(1),$$<,$$(PCH_DEFS),$$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS),$$(INCLUDE),$(2))
+	echo $$(sort $$(PCH_DEFS) $$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS)) > $$(call gb_PrecompiledHeader_get_target,$(1),$(2)).flags
 ifeq ($(gb_FULLDEPS),$(true))
 	$$(call gb_Helper_abbreviate_dirs,\
 		RESPONSEFILE=$$(call var2file,$$(shell $$(gb_MKTEMP)),200,$$(call gb_PrecompiledHeader_get_dep_target_tmp,$(1),$(2))) && \
@@ -59,6 +60,7 @@ $(call gb_PrecompiledHeader_get_clean_target,$(1)) :
 			$$(call gb_PrecompiledHeader_get_target,$(1),$(2)).obj \
 			$$(call gb_PrecompiledHeader_get_target,$(1),$(2)).pdb \
 			$$(call gb_PrecompiledHeader_get_target,$(1),$(2)).sum \
+			$$(call gb_PrecompiledHeader_get_target,$(1),$(2)).flags \
 			$$(call gb_PrecompiledHeader_get_dep_target,$(1),$(2)))
 
 endef
@@ -69,6 +71,25 @@ endif
 define gb_PrecompiledHeader_generate_timestamp_rule
 $(call gb_LinkTarget_get_pch_timestamp,$(1)) :
 	mkdir -p $$(dir $$@) && touch $$@
+
+endef
+
+# $(call gb_PrecompiledHeader_check_saved_flags_command_pattern,linktargetmakefilename,pchcxxfile,pchfile,flags)
+# When creating a PCH, the PCH's CXXFLAGS are saved to a matching .flags file. When reusing the PCH
+# from another linktarget, use the file to check that the linktarget uses the same CXXFLAGS as the PCH.
+# This complements the check in gb_CxxObject__set_pchflags.
+define gb_PrecompiledHeader_check_flags
+$$(call gb_Helper_abbreviate_dirs,\
+	grep -q -x -F -- "$$(sort $(4))" $(3).flags || ( \
+		echo Error reusing $(2) by $(1). >&2 && \
+		echo -n " precompiled header flags : ">&2 && \
+		cat $(3).flags >&2 && \
+		echo    "            object flags  : "$$(sort $(4)) >&2 && \
+		echo Incorrect precompiled header setup or internal gbuild error. >&2 ; \
+		exit 1) && \
+	mkdir -p $$(dir $$@) && touch $$@ \
+)
+
 endef
 
 # vim: set noet sw=4:
