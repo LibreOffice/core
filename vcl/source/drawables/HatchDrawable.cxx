@@ -27,7 +27,7 @@ bool HatchDrawable::DrawCommand(OutputDevice* pRenderContext) const
     if (mbScaffolding)
         return Draw(pRenderContext, maPolyPolygon, maHatch);
     else
-        return Draw2(pRenderContext, maPolyPolygon, maHatch);
+        return DrawDecomposedHatchLines(pRenderContext, maPolyPolygon, maHatch);
 }
 
 bool HatchDrawable::Draw(OutputDevice* pRenderContext, tools::PolyPolygon const& rPolyPolygon,
@@ -96,8 +96,9 @@ bool HatchDrawable::Draw(OutputDevice* pRenderContext, tools::PolyPolygon const&
     return true;
 }
 
-bool HatchDrawable::Draw2(OutputDevice* pRenderContext, tools::PolyPolygon const& rPolyPolygon,
-                          Hatch const& rHatch) const
+bool HatchDrawable::DrawDecomposedHatchLines(OutputDevice* pRenderContext,
+                                             tools::PolyPolygon const& rPolyPolygon,
+                                             Hatch const& rHatch) const
 {
     if (rPolyPolygon.Count())
     {
@@ -110,7 +111,7 @@ bool HatchDrawable::Draw2(OutputDevice* pRenderContext, tools::PolyPolygon const
             tools::PolyPolygon aPolyPoly;
 
             rPolyPolygon.AdaptiveSubdivide(aPolyPoly);
-            Draw2(pRenderContext, aPolyPoly, rHatch);
+            DrawDecomposedHatchLines(pRenderContext, aPolyPoly, rHatch);
         }
         else
         {

@@ -49,8 +49,9 @@ private:
     bool Draw(OutputDevice* pRenderContext, tools::PolyPolygon const& rPolyPolygon,
               Hatch const& rHatch) const;
 
-    bool Draw2(OutputDevice* pRenderContext, tools::PolyPolygon const& rPolyPolygon,
-               Hatch const& rHatch) const;
+    bool DrawDecomposedHatchLines(OutputDevice* pRenderContext,
+                                  tools::PolyPolygon const& rPolyPolygon,
+                                  Hatch const& rHatch) const;
 
     void DrawHatchLines(OutputDevice* pRenderContext, tools::PolyPolygon const& rPolyPolygon,
                         tools::Rectangle const& rRect, long nDist, sal_uInt16 nAngle) const;
