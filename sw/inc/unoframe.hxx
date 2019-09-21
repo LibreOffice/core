@@ -54,11 +54,12 @@ class SwXFrame : public cppu::WeakImplHelper
     css::container::XNamed,
     css::text::XTextContent
 >,
-    public SwClient
+    public SvtListener
 {
 private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
+    SwFrameFormat* m_pFrameFormat;
 
     const SfxItemPropertySet*       m_pPropSet;
     SwDoc*                          m_pDoc;
@@ -76,11 +77,12 @@ private:
     sal_Int64                       m_nVisibleAreaWidth;
     sal_Int64                       m_nVisibleAreaHeight;
     css::uno::Reference<css::text::XText> m_xParentText;
+    void DisposeInternal();
 
 protected:
     css::uno::Reference< css::beans::XPropertySet > mxStyleData;
     css::uno::Reference< css::container::XNameAccess >  mxStyleFamily;
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void Notify(const SfxHint&) override;
 
     virtual ~SwXFrame() override;
 
@@ -149,13 +151,10 @@ public:
     void attachToRange(const css::uno::Reference< css::text::XTextRange > & xTextRange);
 
     const SwFrameFormat* GetFrameFormat() const
-    {
-        return dynamic_cast<const SwFrameFormat*>( GetRegisteredIn()  );
-    }
+        { return m_pFrameFormat; }
     SwFrameFormat* GetFrameFormat()
-    {
-        return dynamic_cast< SwFrameFormat*>( GetRegisteredIn() );
-    }
+        { return m_pFrameFormat; }
+
     FlyCntType      GetFlyCntType()const {return eType;}
 
     bool IsDescriptor() const {return bIsDescriptor;}
