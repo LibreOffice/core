@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_715e8fe7",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-09-21T01:44:15Z",
+      "side": 1,
+      "message": "Is that really needed? Looks a bit gratuitous, adding configure complexity...",
+      "revId": "6c0bcb3a768ca37de0528927be2cf3a6eff7937c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_11739b82",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 9573,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-09-21T01:44:15Z",
+      "side": 1,
+      "message": "That name is not really descriptive - how about ENABLE_CRASHDUMP_DEFAULT or something?",
+      "revId": "6c0bcb3a768ca37de0528927be2cf3a6eff7937c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_31701773",
+        "filename": "include/desktop/crashreport.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-09-21T01:44:15Z",
+      "side": 1,
+      "message": "IsDumpFileEnabled() or something?",
+      "revId": "6c0bcb3a768ca37de0528927be2cf3a6eff7937c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_d16c439e",
+        "filename": "instsetoo_native/CustomTarget_setup.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-09-21T01:44:15Z",
+      "side": 1,
+      "message": "Same here - CrashDumpEnabled perhaps?",
+      "revId": "6c0bcb3a768ca37de0528927be2cf3a6eff7937c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
