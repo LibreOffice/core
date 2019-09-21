@@ -108,25 +108,22 @@ IMPL_LINK(OPasswordDialog, ModifiedHdl, weld::Entry&, rEdit, void)
 }
 
 // OUserAdmin
-OUserAdmin::OUserAdmin(vcl::Window* pParent,const SfxItemSet& _rAttrSet)
-    : OGenericAdministrationPage( pParent, "UserAdminPage", "dbaccess/ui/useradminpage.ui", _rAttrSet)
-    , m_pUSER(nullptr)
-    , m_pNEWUSER(nullptr)
-    , m_pCHANGEPWD(nullptr)
-    , m_pDELETEUSER(nullptr)
-    ,m_TableCtrl(VclPtr<OTableGrantControl>::Create(get<VclAlignment>("table"), WB_TABSTOP))
+OUserAdmin::OUserAdmin(TabPageParent pParent,const SfxItemSet& _rAttrSet)
+    : OGenericAdministrationPage(pParent, "dbaccess/ui/useradminpage.ui", "UserAdminPage", _rAttrSet)
+    , m_xUSER(m_xBuilder->weld_combo_box("user"))
+    , m_xNEWUSER(m_xBuilder->weld_button("add"))
+    , m_xCHANGEPWD(m_xBuilder->weld_button("changepass"))
+    , m_xDELETEUSER(m_xBuilder->weld_button("delete"))
+    , m_xTable(m_xBuilder->weld_container("table"))
+    , m_xTableCtrlParent(m_xTable->CreateChildFrame())
+    , m_xTableCtrl(VclPtr<OTableGrantControl>::Create(m_xTableCtrlParent))
 {
-    m_TableCtrl->Show();
-    get(m_pUSER, "user");
-    get(m_pNEWUSER, "add");
-    get(m_pCHANGEPWD, "changepass");
-    get(m_pDELETEUSER, "delete");
+    m_xTableCtrl->Show();
 
-    m_pUSER->SetSelectHdl(LINK(this, OUserAdmin, ListDblClickHdl));
-
-    m_pNEWUSER->SetClickHdl(LINK(this, OUserAdmin, UserHdl));
-    m_pCHANGEPWD->SetClickHdl(LINK(this, OUserAdmin, UserHdl));
-    m_pDELETEUSER->SetClickHdl(LINK(this, OUserAdmin, UserHdl));
+    m_xUSER->connect_changed(LINK(this, OUserAdmin, ListDblClickHdl));
+    m_xNEWUSER->connect_clicked(LINK(this, OUserAdmin, UserHdl));
+    m_xCHANGEPWD->connect_clicked(LINK(this, OUserAdmin, UserHdl));
+    m_xDELETEUSER->connect_clicked(LINK(this, OUserAdmin, UserHdl));
 }
 
 OUserAdmin::~OUserAdmin()
@@ -137,11 +134,9 @@ OUserAdmin::~OUserAdmin()
 void OUserAdmin::dispose()
 {
     m_xConnection = nullptr;
-    m_TableCtrl.disposeAndClear();
-    m_pUSER.clear();
-    m_pNEWUSER.clear();
-    m_pCHANGEPWD.clear();
-    m_pDELETEUSER.clear();
+    m_xTableCtrl.disposeAndClear();
+    m_xTableCtrlParent->dispose();
+    m_xTableCtrlParent.clear();
     OGenericAdministrationPage::dispose();
 }
 
@@ -149,7 +144,7 @@ void OUserAdmin::FillUserNames()
 {
     if(m_xConnection.is())
     {
-        m_pUSER->Clear();
+        m_xUSER->clear();
 
         Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
 
@@ -160,50 +155,49 @@ void OUserAdmin::FillUserNames()
             // first we need the users
             if ( m_xUsers.is() )
             {
-                m_pUSER->Clear();
+                m_xUSER->clear();
 
                 m_aUserNames = m_xUsers->getElementNames();
                 const OUString* pBegin = m_aUserNames.getConstArray();
                 const OUString* pEnd   = pBegin + m_aUserNames.getLength();
                 for(;pBegin != pEnd;++pBegin)
-                    m_pUSER->InsertEntry(*pBegin);
+                    m_xUSER->append_text(*pBegin);
 
-                m_pUSER->SelectEntryPos(0);
+                m_xUSER->set_active(0);
                 if(m_xUsers->hasByName(m_UserName))
                 {
                     Reference<XAuthorizable> xAuth;
                     m_xUsers->getByName(m_UserName) >>= xAuth;
-                    m_TableCtrl->setGrantUser(xAuth);
+                    m_xTableCtrl->setGrantUser(xAuth);
                 }
 
-                m_TableCtrl->setUserName(GetUser());
-                m_TableCtrl->Init();
+                m_xTableCtrl->setUserName(GetUser());
+                m_xTableCtrl->Init();
             }
         }
     }
 
     Reference<XAppend> xAppend(m_xUsers,UNO_QUERY);
-    m_pNEWUSER->Enable(xAppend.is());
+    m_xNEWUSER->set_sensitive(xAppend.is());
     Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
-    m_pDELETEUSER->Enable(xDrop.is());
+    m_xDELETEUSER->set_sensitive(xDrop.is());
 
-    m_pCHANGEPWD->Enable(m_xUsers.is());
-    m_TableCtrl->Enable(m_xUsers.is());
-
+    m_xCHANGEPWD->set_sensitive(m_xUsers.is());
+    m_xTableCtrl->Enable(m_xUsers.is());
 }
 
 VclPtr<SfxTabPage> OUserAdmin::Create( TabPageParent pParent, const SfxItemSet* _rAttrSet )
 {
-    return VclPtr<OUserAdmin>::Create( pParent.pParent, *_rAttrSet );
+    return VclPtr<OUserAdmin>::Create( pParent, *_rAttrSet );
 }
 
-IMPL_LINK( OUserAdmin, UserHdl, Button *, pButton, void )
+IMPL_LINK(OUserAdmin, UserHdl, weld::Button&, rButton, void)
 {
     try
     {
-        if(pButton == m_pNEWUSER)
+        if (&rButton == m_xNEWUSER.get())
         {
-            SfxPasswordDialog aPwdDlg(GetFrameWeld());
+            SfxPasswordDialog aPwdDlg(GetDialogFrameWeld());
             aPwdDlg.ShowExtras(SfxShowExtras::ALL);
             if (aPwdDlg.run())
             {
@@ -219,7 +213,7 @@ IMPL_LINK( OUserAdmin, UserHdl, Button *, pButton, void )
                 }
             }
         }
-        else if(pButton == m_pCHANGEPWD)
+        else if (&rButton == m_xCHANGEPWD.get())
         {
             OUString sName = GetUser();
 
@@ -249,7 +243,7 @@ IMPL_LINK( OUserAdmin, UserHdl, Button *, pButton, void )
                 Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
                 if(xDrop.is())
                 {
-                    std::unique_ptr<weld::MessageDialog> xQry(Application::CreateMessageDialog(GetFrameWeld(),
+                    std::unique_ptr<weld::MessageDialog> xQry(Application::CreateMessageDialog(GetDialogFrameWeld(),
                                                               VclMessageType::Question, VclButtonsType::YesNo,
                                                               DBA_RES(STR_QUERY_USERADMIN_DELETE_USER)));
                     if (xQry->run() == RET_YES)
@@ -268,17 +262,17 @@ IMPL_LINK( OUserAdmin, UserHdl, Button *, pButton, void )
     }
 }
 
-IMPL_LINK_NOARG( OUserAdmin, ListDblClickHdl, ListBox&, void )
+IMPL_LINK_NOARG(OUserAdmin, ListDblClickHdl, weld::ComboBox&, void)
 {
-    m_TableCtrl->setUserName(GetUser());
-    m_TableCtrl->UpdateTables();
-    m_TableCtrl->DeactivateCell();
-    m_TableCtrl->ActivateCell(m_TableCtrl->GetCurRow(),m_TableCtrl->GetCurColumnId());
+    m_xTableCtrl->setUserName(GetUser());
+    m_xTableCtrl->UpdateTables();
+    m_xTableCtrl->DeactivateCell();
+    m_xTableCtrl->ActivateCell(m_xTableCtrl->GetCurRow(),m_xTableCtrl->GetCurColumnId());
 }
 
 OUString OUserAdmin::GetUser() const
 {
-    return m_pUSER->GetSelectedEntry();
+    return m_xUSER->get_active_text();
 }
 
 void OUserAdmin::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& /*_rControlList*/)
@@ -291,7 +285,7 @@ void OUserAdmin::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& 
 
 void OUserAdmin::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
 {
-    m_TableCtrl->setComponentContext(m_xORB);
+    m_xTableCtrl->setComponentContext(m_xORB);
     try
     {
         if ( !m_xConnection.is() && m_pAdminDialog )
@@ -310,7 +304,7 @@ void OUserAdmin::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
             }
             if ( xUsersSup.is() )
             {
-                m_TableCtrl->setTablesSupplier(xTablesSup);
+                m_xTableCtrl->setTablesSupplier(xTablesSup);
                 m_xUsers = xUsersSup->getUsers();
             }
         }
