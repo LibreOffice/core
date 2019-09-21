@@ -301,8 +301,7 @@ $(dir $(call gb_CxxObject_get_dep_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_CxxObject_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@,\
-	  $(eval $(gb_CxxObject__set_pchflags)))
+	$(if $(wildcard $@),touch $@)
 
 endif
 
@@ -347,8 +346,7 @@ $(dir $(call gb_GenCxxObject_get_dep_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_GenCxxObject_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@,\
-	  $(eval $(gb_CxxObject__set_pchflags)))
+	$(if $(wildcard $@),touch $@)
 
 endif
 
