@@ -445,6 +445,7 @@ gb_CppunitTest_add_asmobjects = $(call gb_CppunitTest__forward_to_Linktarget,$(0
 gb_CppunitTest_use_package = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_CppunitTest_use_packages = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_CppunitTest_set_precompiled_header = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_CppunitTest_reuse_precompiled_header = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_CppunitTest_add_sdi_headers = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_CppunitTest_add_cflags = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_CppunitTest_set_cflags = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
