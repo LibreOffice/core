@@ -121,6 +121,7 @@ gb_LinkTarget_get_dep_target = \
 gb_LinkTarget_get_clean_target = \
  $(WORKDIR)/Clean/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1))
 gb_LinkTarget_get_target = $(lastword $(subst <>,  ,$(1)))
+gb_LinkTarget_get_pch_timestamp = $(WORKDIR)/PrecompiledHeader/$(call gb_PrecompiledHeader__get_debugdir,$(1))/Timestamps/$(1)
 gb_Module_get_nonl10n_target = $(WORKDIR)/Module/nonl10n/$(1)
 gb_Module_get_l10n_target = $(WORKDIR)/Module/l10n/$(1)
 gb_Module_get_check_target = $(WORKDIR)/Module/check/$(1)
@@ -149,7 +150,6 @@ gb_Postprocess_get_target = $(WORKDIR)/Postprocess/$(1)
 gb_PrecompiledHeader_get_dep_target = $(WORKDIR)/Dep/PrecompiledHeader/$(call gb_PrecompiledHeader__get_debugdir,$(2))/$(1).hxx$(gb_PrecompiledHeader_EXT).d
 gb_PrecompiledHeader_get_dep_target_tmp = $(call gb_PrecompiledHeader_get_dep_target,$(1),$(2)).tmp
 gb_PrecompiledHeader_get_target = $(WORKDIR)/PrecompiledHeader/$(call gb_PrecompiledHeader__get_debugdir,$(2))/$(1).hxx$(gb_PrecompiledHeader_EXT)
-gb_PrecompiledHeader_get_timestamp = $(WORKDIR)/PrecompiledHeader/$(call gb_PrecompiledHeader__get_debugdir,$(1))/Timestamps/$(1)
 gb_PropertiesTranslateTarget_get_target = $(WORKDIR)/PropertiesTranslateTarget/$(1).properties
 gb_Pyuno_get_final_target = $(WORKDIR)/Pyuno/$(1).final
 gb_Pyuno_get_target = $(WORKDIR)/Pyuno/$(1).done
