@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_311ed70c",
+        "filename": "sw/uiconfig/swriter/ui/converttexttable.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-21T08:16:38Z",
+      "side": 1,
+      "message": "Copypasted from sw/uiconfig/swriter/ui/inserttable.ui - pay attention at the naming. The context in *this* file is different.\n\nBy the way, the other places here (see lines 404, 423) also refer to \"insert\", while this dialog is about conversion. Naming is hard, but important.",
+      "range": {
+        "startLine": 462,
+        "startChar": 71,
+        "endLine": 462,
+        "endChar": 82
+      },
+      "revId": "26542609296abb61fe62e2ef70ceef3d996a14fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
