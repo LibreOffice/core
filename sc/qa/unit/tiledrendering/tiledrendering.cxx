@@ -1809,9 +1809,8 @@ void ScTiledRenderingTest::testJumpHorizontallyInvalidation()
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD2);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidations.size());
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(26775, 0, 39525, 13005), aView1.m_aInvalidations[1]);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(26775, 0, 39525, 13005), aView1.m_aInvalidations[0]);
 }
 
 void ScTiledRenderingTest::testJumpToLastRowInvalidation()
@@ -1833,9 +1832,8 @@ void ScTiledRenderingTest::testJumpToLastRowInvalidation()
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidations.size());
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 13005, 26775, 127500255), aView1.m_aInvalidations[1]);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 13005, 26775, 127500255), aView1.m_aInvalidations[0]);
 }
 
 }
