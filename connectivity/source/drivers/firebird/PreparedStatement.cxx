@@ -229,6 +229,12 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
         assert( pVar->sqlsubtype == static_cast<short>(BlobSubtype::Clob) );
         setClob(nParameterIndex, sInput );
         break;
+    case SQL_SHORT:
+    {
+        sal_Int32 int32Value = sInput.toInt32();
+        setShort(nParameterIndex, (int32Value > std::numeric_limits<sal_Int16>::max())?std::numeric_limits<sal_Int16>::max():int32Value);
+        break;
+    }
     default:
         ::dbtools::throwSQLException(
             "Incorrect type for setString",
