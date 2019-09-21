@@ -38,11 +38,13 @@ namespace dbaui
 class OUserAdmin final : public OGenericAdministrationPage
 {
     friend class VclPtr<OUserAdmin>;
-    VclPtr<ListBox>             m_pUSER;
-    VclPtr<PushButton>          m_pNEWUSER;
-    VclPtr<PushButton>          m_pCHANGEPWD;
-    VclPtr<PushButton>          m_pDELETEUSER;
-    VclPtr<OTableGrantControl>  m_TableCtrl; // show the grant rights of one user
+    std::unique_ptr<weld::ComboBox> m_xUSER;
+    std::unique_ptr<weld::Button> m_xNEWUSER;
+    std::unique_ptr<weld::Button> m_xCHANGEPWD;
+    std::unique_ptr<weld::Button> m_xDELETEUSER;
+    std::unique_ptr<weld::Container> m_xTable;
+    css::uno::Reference<css::awt::XWindow> m_xTableCtrlParent;
+    VclPtr<OTableGrantControl> m_xTableCtrl; // show the grant rights of one user
 
     css::uno::Reference< css::sdbc::XConnection>          m_xConnection;
     css::uno::Reference< css::container::XNameAccess >    m_xUsers;
@@ -51,14 +53,14 @@ class OUserAdmin final : public OGenericAdministrationPage
     OUString            m_UserName;
 
     // methods
-    DECL_LINK( ListDblClickHdl, ListBox&, void );
-    DECL_LINK( UserHdl,   Button *, void );
+    DECL_LINK(ListDblClickHdl, weld::ComboBox&, void);
+    DECL_LINK(UserHdl, weld::Button&, void);
 
     void        FillUserNames();
 
-    OUserAdmin( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
+    OUserAdmin(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
 public:
-    static  VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* _rAttrSet );
+    static  VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* _rAttrSet);
 
     virtual ~OUserAdmin() override;
     virtual void dispose() override;
@@ -73,6 +75,7 @@ public:
     // <method>OGenericAdministrationPage::fillWindows</method>
     virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
 };
+
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_USERADMIN_HXX
 

@@ -24,6 +24,7 @@
 #include <map>
 
 #include <svtools/editbrowsebox.hxx>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -57,7 +58,7 @@ class OTableGrantControl : public ::svt::EditBrowseBox
     ImplSVEvent *               m_nDeactivateEvent;
 
 public:
-    OTableGrantControl( vcl::Window* pParent, WinBits nBits);
+    OTableGrantControl(const css::uno::Reference<css::awt::XWindow> &rParent);
     virtual ~OTableGrantControl() override;
     virtual void dispose() override;
     void UpdateTables();
