@@ -59,7 +59,6 @@ $(call gb_PrecompiledHeader_get_clean_target,$(1)) :
 			$$(call gb_PrecompiledHeader_get_target,$(1),$(2)).obj \
 			$$(call gb_PrecompiledHeader_get_target,$(1),$(2)).pdb \
 			$$(call gb_PrecompiledHeader_get_target,$(1),$(2)).sum \
-			$$(call gb_PrecompiledHeader_get_timestamp,$(2)) \
 			$$(call gb_PrecompiledHeader_get_dep_target,$(1),$(2)))
 
 endef
@@ -68,7 +67,7 @@ endif
 
 # $(call gb_PrecompiledHeader_generate_timestamp_rule,linktargetmakefilename)
 define gb_PrecompiledHeader_generate_timestamp_rule
-$(call gb_PrecompiledHeader_get_timestamp,$(1)) :
+$(call gb_LinkTarget_get_pch_timestamp,$(1)) :
 	mkdir -p $$(dir $$@) && touch $$@
 endef
 

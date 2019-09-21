@@ -537,7 +537,7 @@ gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
 
 .PHONY : $(WORKDIR)/Clean/LinkTarget/%
 $(WORKDIR)/Clean/LinkTarget/% :
-	$(call gb_Output_announce,$*,$(false),LNK,4)
+	$(call gb_Output_announce,$(LINKTARGETMAKEFILENAME),$(false),LNK,4)
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_dep_target,$(object))) \
@@ -570,6 +570,7 @@ $(WORKDIR)/Clean/LinkTarget/% :
 		$(call gb_LinkTarget_get_dep_target,$(LINKTARGET)) \
 		$(call gb_LinkTarget_get_headers_target,$(LINKTARGET)) \
 		$(call gb_LinkTarget_get_objects_list,$(LINKTARGET)) \
+		$(call gb_LinkTarget_get_pch_timestamp,$(LINKTARGETMAKEFILENAME)) \
 		$(ILIBTARGET) \
 		$(AUXTARGETS)) && \
 		cat $${RESPONSEFILE} /dev/null | $(if $(filter WNT,$(OS)),env -i PATH="$$PATH") xargs -n 200 rm -fr && \
@@ -724,6 +725,7 @@ $(WORKDIR)/Headers/% :
 # call gb_LinkTarget_LinkTarget,linktarget,linktargetmakefilename,layer
 define gb_LinkTarget_LinkTarget
 $(call gb_LinkTarget_get_clean_target,$(1)) : LINKTARGET := $(1)
+$(call gb_LinkTarget_get_clean_target,$(1)) : LINKTARGETMAKEFILENAME := $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_LinkTarget_get_headers_target,$(1)) : SELF := $(call gb_LinkTarget__get_workdir_linktargetname,$(1))
 $(call gb_LinkTarget_get_headers_target,$(1)) : \
@@ -1124,7 +1126,7 @@ $(call gb_CxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
 $(call gb_CxxObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 ifneq ($(gb_ENABLE_PCH),)
-$(call gb_CxxObject_get_target,$(2)) : $(call gb_PrecompiledHeader_get_timestamp,$(4))
+$(call gb_CxxObject_get_target,$(2)) : $(call gb_LinkTarget_get_pch_timestamp,$(4))
 endif
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -1261,7 +1263,7 @@ $(call gb_GenCxxObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 $(call gb_GenCxxObject_get_target,$(2)) : GEN_CXX_SOURCE := $(call gb_GenCxxObject_get_source,$(2),$(1))
 ifneq ($(gb_ENABLE_PCH),)
-$(call gb_GenCxxObject_get_target,$(2)) : $(call gb_PrecompiledHeader_get_timestamp,$(4))
+$(call gb_GenCxxObject_get_target,$(2)) : $(call gb_LinkTarget_get_pch_timestamp,$(4))
 endif
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -1523,7 +1525,7 @@ $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS += -DPCH_LEVEL=$(gb_ENABLE_PCH)
 
 $(call gb_PrecompiledHeader_get_target,$(3),$(4)) : VISIBILITY :=
 
-$(call gb_PrecompiledHeader_get_timestamp,$(4)) : $(call gb_PrecompiledHeader_get_target,$(3),$(4))
+$(call gb_LinkTarget_get_pch_timestamp,$(4)) : $(call gb_PrecompiledHeader_get_target,$(3),$(4))
 
 ifeq ($(gb_FULLDEPS),$(true))
 -include $(call gb_PrecompiledHeader_get_dep_target,$(3),$(4))
