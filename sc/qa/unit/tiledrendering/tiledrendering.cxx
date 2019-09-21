@@ -103,6 +103,7 @@ public:
     void testSheetChangeInvalidation();
     void testInsertDeletePageInvalidation();
     void testGetRowColumnHeadersInvalidation();
+    void testJumpHorizontallyInvalidation();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -141,6 +142,7 @@ public:
     CPPUNIT_TEST(testSheetChangeInvalidation);
     CPPUNIT_TEST(testInsertDeletePageInvalidation);
     CPPUNIT_TEST(testGetRowColumnHeadersInvalidation);
+    CPPUNIT_TEST(testJumpHorizontallyInvalidation);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1781,6 +1783,33 @@ void ScTiledRenderingTest::testGetRowColumnHeadersInvalidation()
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(49725, 0, 75225, 19380), aView1.m_aInvalidations[0]);
+}
+
+void ScTiledRenderingTest::testJumpHorizontallyInvalidation()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1;
+    CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
+
+    SfxLokHelper::setView(nView1);
+    aView1.m_bInvalidateTiles = false;
+    aView1.m_aInvalidations.clear();
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD2);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD2);
+    Scheduler::ProcessEventsToIdle();
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD2);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD2);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(26775, 0, 39525, 13005), aView1.m_aInvalidations[1]);
 }
 
 }
