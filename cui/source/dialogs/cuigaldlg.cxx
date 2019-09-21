@@ -898,9 +898,8 @@ void TPGalleryThemeProperties::DoPreview()
 
         if (!m_aWndPreview.SetGraphic(_aURL))
         {
-            GetParent()->LeaveWait();
+            weld::WaitObject aWaitObject(GetDialogFrameWeld());
             ErrorHandler::HandleError(ERRCODE_IO_NOTEXISTSPATH, GetDialogFrameWeld());
-            GetParent()->EnterWait();
         }
 #if HAVE_FEATURE_AVMEDIA
         else if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), "" ) )
