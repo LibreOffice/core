@@ -102,6 +102,7 @@ public:
     void testPageDownInvalidation();
     void testSheetChangeInvalidation();
     void testInsertDeletePageInvalidation();
+    void testGetRowColumnHeadersInvalidation();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -139,6 +140,7 @@ public:
     CPPUNIT_TEST(testPageDownInvalidation);
     CPPUNIT_TEST(testSheetChangeInvalidation);
     CPPUNIT_TEST(testInsertDeletePageInvalidation);
+    CPPUNIT_TEST(testGetRowColumnHeadersInvalidation);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1739,6 +1741,49 @@ void ScTiledRenderingTest::testInsertDeletePageInvalidation()
     CPPUNIT_ASSERT_EQUAL(size_t(5), aView1.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
     CPPUNIT_ASSERT_EQUAL(1, pModelObj->getParts());
+}
+
+void ScTiledRenderingTest::testGetRowColumnHeadersInvalidation()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1;
+    CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
+
+    SfxLokHelper::setView(nView1);
+    aView1.m_bInvalidateTiles = false;
+    aView1.m_aInvalidations.clear();
+    pModelObj->getRowColumnHeaders(tools::Rectangle(0, 15, 19650, 5400));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(26775, 0, 49725, 13005), aView1.m_aInvalidations[1]);
+
+    // Extend area top-to-bottom
+    aView1.m_bInvalidateTiles = false;
+    aView1.m_aInvalidations.clear();
+    pModelObj->getRowColumnHeaders(tools::Rectangle(0, 5400, 19650, 9800));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 13005, 49725, 19380), aView1.m_aInvalidations[1]);
+
+    // Extend area left-to-right
+    aView1.m_bInvalidateTiles = false;
+    aView1.m_aInvalidations.clear();
+    pModelObj->getRowColumnHeaders(tools::Rectangle(5400, 5400, 25050, 9800));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(49725, 0, 75225, 19380), aView1.m_aInvalidations[1]);
 }
 
 }
