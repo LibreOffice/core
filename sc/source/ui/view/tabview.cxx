@@ -2555,14 +2555,6 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         SAL_INFO("sc.lok.header", "Row Header: a new height: " << aNewSize.Height());
         if (pDocSh)
         {
-            // Provide size in the payload, so clients don't have to
-            // call lok::Document::getDocumentSize().
-            std::stringstream ss;
-            ss << aNewSize.Width() << ", " << aNewSize.Height();
-            OString sSize = ss.str().c_str();
-            ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(aViewData.GetViewShell()->GetCurrentDocument());
-            SfxLokHelper::notifyDocumentSizeChanged(aViewData.GetViewShell(), sSize, pModel);
-
             // New area extended to the bottom of the sheet after last row
             // excluding overlapping area with aNewColArea
             tools::Rectangle aNewRowArea(0, aOldSize.getHeight(), aOldSize.getWidth(), aNewSize.getHeight());
@@ -2573,6 +2565,14 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
                 UpdateSelectionOverlay();
                 SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), aNewRowArea.toString());
             }
+
+            // Provide size in the payload, so clients don't have to
+            // call lok::Document::getDocumentSize().
+            std::stringstream ss;
+            ss << aNewSize.Width() << ", " << aNewSize.Height();
+            OString sSize = ss.str().c_str();
+            ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(aViewData.GetViewShell()->GetCurrentDocument());
+            SfxLokHelper::notifyDocumentSizeChanged(aViewData.GetViewShell(), sSize, pModel, false);
         }
     }
 
@@ -2697,17 +2697,6 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 
         if (pDocSh)
         {
-            if (aOldSize != aNewSize)
-            {
-                // Provide size in the payload, so clients don't have to
-                // call lok::Document::getDocumentSize().
-                std::stringstream ss;
-                ss << aNewSize.Width() << ", " << aNewSize.Height();
-                OString sSize = ss.str().c_str();
-                ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(aViewData.GetViewShell()->GetCurrentDocument());
-                SfxLokHelper::notifyDocumentSizeChanged(aViewData.GetViewShell(), sSize, pModel);
-            }
-
             // New area extended to the right of the sheet after last column
             // including overlapping area with aNewRowArea
             tools::Rectangle aNewColArea(aOldSize.getWidth(), 0, aNewSize.getWidth(), aNewSize.getHeight());
@@ -2717,6 +2706,17 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
             {
                 UpdateSelectionOverlay();
                 SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), aNewColArea.toString());
+            }
+
+            if (aOldSize != aNewSize)
+            {
+                // Provide size in the payload, so clients don't have to
+                // call lok::Document::getDocumentSize().
+                std::stringstream ss;
+                ss << aNewSize.Width() << ", " << aNewSize.Height();
+                OString sSize = ss.str().c_str();
+                ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(aViewData.GetViewShell()->GetCurrentDocument());
+                SfxLokHelper::notifyDocumentSizeChanged(aViewData.GetViewShell(), sSize, pModel, false);
             }
         }
     }
