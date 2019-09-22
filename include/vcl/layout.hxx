@@ -322,6 +322,7 @@ private:
     Size calculateRequisitionForSpacings(sal_Int32 nRowSpacing, sal_Int32 nColSpacing) const;
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 public:
     VclGrid(vcl::Window *pParent)
         : VclContainer(pParent)

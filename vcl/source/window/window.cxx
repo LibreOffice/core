@@ -3350,13 +3350,15 @@ boost::property_tree::ptree Window::DumpAsPropertyTree()
     aTree.put("id", get_id());  // TODO could be missing - sort out
     aTree.put("type", windowTypeName(GetType()));
     aTree.put("text", GetText());
+    aTree.put("enabled", IsEnabled());
 
     boost::property_tree::ptree aChildren;
     if (vcl::Window* pChild = mpWindowImpl->mpFirstChild)
     {
         while (pChild)
         {
-            aChildren.push_back(std::make_pair("", pChild->DumpAsPropertyTree()));
+            if (pChild->IsVisible())
+                aChildren.push_back(std::make_pair("", pChild->DumpAsPropertyTree()));
             pChild = pChild->mpWindowImpl->mpNext;
         }
         aTree.add_child("children", aChildren);
