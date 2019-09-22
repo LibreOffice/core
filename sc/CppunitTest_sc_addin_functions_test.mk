@@ -9,6 +9,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_addin_functions_test))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_addin_functions_test))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_addin_functions_test, \
     sc/qa/unit/functions_addin \
 ))

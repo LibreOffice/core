@@ -104,7 +104,7 @@ endef
 # Specifically, there are 3 kinds:
 # - -DXXX_DLLIMPLEMENTATION - they are used only in our headers, should not affect system headers.
 # - -DSYSTEM_XXX - they are used only by our code (if at all), should not affect system headers
-# - various configuration defines - they again should only be used by our code and not system headers
+# - various LO configuration defines - they again should only be used by our code and not system headers
 # Technically, different compilers handle additional defines like this:
 # - GCC
 #   * It is explicitly allowed to have different macros, as long as they do not affect the PCH.
@@ -126,11 +126,14 @@ endef
 # So while this is officially tricky, in practice it seems to work to allow PCH reuse if the linktarget
 # has more defines than the PCH was built with, as long as the defines do not affect the PCH.
 gb_PrecompiledHeader_ignore_flags_system := \
--DSAX_DLLIMPLEMENTATION \
 -DFASTSAX_DLLIMPLEMENTATION \
+-DSAX_DLLIMPLEMENTATION \
+-DSCQAHELPER_DLLIMPLEMENTATION \
 -DSYSTEM_EXPAT \
 -DSYSTEM_LIBXML \
 -DSYSTEM_ZLIB \
+-DDISABLE_CVE_TESTS \
+-DCPPUNIT_PLUGIN_EXPORT='extern "C" SAL_DLLPUBLIC_EXPORT' \
 -include $(SRCDIR)/pch/inc/clangfix.hxx \
 
 # Probably also update pch/inc/clangfix.hxx if you extend the list.

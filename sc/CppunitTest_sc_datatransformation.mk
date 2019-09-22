@@ -9,6 +9,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_datatransformation))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_datatransformation))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_datatransformation, \
     sc/qa/unit/datatransformation_test \
 ))

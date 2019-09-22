@@ -13,6 +13,8 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_recordchanges))
 
 $(eval $(call gb_CppunitTest_use_external,sc_recordchanges,boost_headers))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_recordchanges))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_recordchanges, \
 	sc/qa/extras/recordchanges-test \
 ))

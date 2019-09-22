@@ -13,6 +13,8 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_indexenumeration_scenariosenumeratio
 
 $(eval $(call gb_CppunitTest_use_external,sc_indexenumeration_scenariosenumeration,boost_headers))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_indexenumeration_scenariosenumeration))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_indexenumeration_scenariosenumeration, \
 	sc/qa/extras/scindexenumeration_scenariosenumeration \
 ))

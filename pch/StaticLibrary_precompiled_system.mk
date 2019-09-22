@@ -17,4 +17,12 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,precompiled_system,\
 	pch/system_empty \
 ))
 
+# We use this to disable a weird "auto-link" feature of boost.
+# Define it for the PCH, so that it's set in all cases,
+# and gb_LinkTarget_reuse_precompiled_header enforces it for any uses.
+$(eval $(call gb_StaticLibrary_add_defs,precompiled_system, \
+	-DBOOST_ALL_NO_LIB \
+))
+
+
 # vim: set noet sw=4 ts=4:

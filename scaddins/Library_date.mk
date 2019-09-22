@@ -28,6 +28,8 @@ $(eval $(call gb_Library_set_include,date,\
 
 $(eval $(call gb_Library_use_external,date,boost_headers))
 
+$(eval $(call gb_Library_use_common_precompiled_header,date))
+
 $(eval $(call gb_Library_use_internal_comprehensive_api,date,\
 	offapi \
 	scaddins \

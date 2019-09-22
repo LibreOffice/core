@@ -28,6 +28,8 @@ $(eval $(call gb_Library_set_include,analysis,\
 
 $(eval $(call gb_Library_use_external,analysis,boost_headers))
 
+$(eval $(call gb_Library_use_common_precompiled_header,analysis))
+
 $(eval $(call gb_Library_use_internal_comprehensive_api,analysis,\
 	offapi \
 	scaddins \

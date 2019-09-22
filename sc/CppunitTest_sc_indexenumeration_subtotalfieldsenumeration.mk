@@ -13,6 +13,8 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_indexenumeration_subtotalfieldsenume
 
 $(eval $(call gb_CppunitTest_use_external,sc_indexenumeration_subtotalfieldsenumeration,boost_headers))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_indexenumeration_subtotalfieldsenumeration))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_indexenumeration_subtotalfieldsenumeration, \
 	sc/qa/extras/scindexenumeration_subtotalfieldsenumeration \
 ))

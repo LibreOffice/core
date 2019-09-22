@@ -13,9 +13,11 @@
 // And many of these macros are not actually used. So use them here to silence the warnings.
 // See gb_PrecompiledHeader_ignore_flags_system in solenv/gbuild/PrecompiledHeaders.mk .
 
+#ifdef FASTSAX_DLLIMPLEMENTATION
+#endif
 #ifdef SAX_DLLIMPLEMENTATION
 #endif
-#ifdef FASTSAX_DLLIMPLEMENTATION
+#ifdef SCQAHELPER_DLLIMPLEMENTATION
 #endif
 #ifdef SYSTEM_EXPAT
 #endif

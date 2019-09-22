@@ -9,6 +9,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_pdf_export))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_pdf_export))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_pdf_export, \
     sc/qa/extras/scpdfexport \
 ))

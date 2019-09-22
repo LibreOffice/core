@@ -13,6 +13,8 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_viewpaneobj))
 
 $(eval $(call gb_CppunitTest_use_external,sc_viewpaneobj,boost_headers))
 
+$(eval $(call gb_Library_use_common_precompiled_header,sc_viewpaneobj))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_viewpaneobj, \
     sc/qa/extras/scviewpaneobj \
 ))

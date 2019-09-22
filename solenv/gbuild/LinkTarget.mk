@@ -1586,13 +1586,30 @@ $(call gb_LinkTarget_get_pch_reuse_timestamp,$(4)) : $(call gb_PrecompiledHeader
 
 endef
 
-# call gb_LinkTarget_reuse_precompiled_header,linktarget,pchcxxfile,,linktargetmakefilename
-define gb_LinkTarget_reuse_precompiled_header
-ifneq ($(gb_ENABLE_PCH),)
-$(call gb_LinkTarget__reuse_precompiled_header_impl,$(1),$(2),$(notdir $(2)),$(4))
+
+# call gb_LinkTarget__reuse_precompiled_header_workarounds,linktarget,pchcxxfile,pchtarget,linktargetmakefilename
+define gb_LinkTarget__reuse_precompiled_header_workarounds
 ifeq ($(COM_IS_CLANG),TRUE)
 $(call gb_LinkTarget_add_defs,$(1),-include $(SRCDIR)/pch/inc/clangfix.hxx)
 endif
+$(if $(filter precompiled_system,$(3)), $(call gb_LinkTarget_add_defs,$(1),-DBOOST_ALL_NO_LIB))
+endef
+
+# call gb_LinkTarget_reuse_precompiled_header,linktarget,pchcxxfile,,linktargetmakefilename
+define gb_LinkTarget_reuse_precompiled_header
+ifneq ($(gb_ENABLE_PCH),)
+ifneq ($(gb_DISABLE_PCH_REUSE),)
+$(call gb_LinkTarget__reuse_precompiled_header_impl,$(1),$(2),$(notdir $(2)),$(4))
+$(call gb_LinkTarget__reuse_precompiled_header_workarounds,$(1),$(2),$(notdir $(2)),$(4))
+endif
+endif
+
+endef
+
+# call gb_LinkTarget_use_common_precompiled_header,linktarget,,,
+define gb_LinkTarget_use_common_precompiled_header
+ifneq ($(gb_ENABLE_PCH),)
+$(call gb_LinkTarget_reuse_precompiled_header,$(1),pch/inc/pch/precompiled_system,,$(4))
 endif
 
 endef
