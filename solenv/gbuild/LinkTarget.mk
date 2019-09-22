@@ -574,6 +574,7 @@ $(WORKDIR)/Clean/LinkTarget/% :
 		$(call gb_LinkTarget_get_headers_target,$(LINKTARGET)) \
 		$(call gb_LinkTarget_get_objects_list,$(LINKTARGET)) \
 		$(call gb_LinkTarget_get_pch_timestamp,$(LINKTARGETMAKEFILENAME)) \
+		$(call gb_LinkTarget_get_pch_reuse_timestamp,$(LINKTARGETMAKEFILENAME)) \
 		$(ILIBTARGET) \
 		$(AUXTARGETS)) && \
 		cat $${RESPONSEFILE} /dev/null | $(if $(filter WNT,$(OS)),env -i PATH="$$PATH") xargs -n 200 rm -fr && \
@@ -1563,7 +1564,7 @@ endef
 define gb_LinkTarget_set_precompiled_header
 ifneq ($(gb_ENABLE_PCH),)
 $(call gb_LinkTarget__set_precompiled_header_impl,$(1),$(2),$(notdir $(2)),$(4))
-$(call gb_PrecompiledHeader_generate_rules,$(notdir $(2)),$(4))
+$(call gb_PrecompiledHeader_generate_rules,$(notdir $(2)),$(1),$(4))
 endif
 
 endef
@@ -1575,9 +1576,13 @@ $(call gb_LinkTarget__set_precompiled_header_variables,$(1),$(2),$(3),$(4))
 
 $(call gb_LinkTarget_get_pch_timestamp,$(4)) : $(call gb_LinkTarget_get_pch_reuse_timestamp,$(4))
 
-$(call gb_LinkTarget_get_pch_reuse_timestamp,$(4)) : $(call gb_PrecompiledHeader_get_target,$(3),$(4))
+# We need to depend on a special for_reuse target that depends on the linktarget that owns the PCH.
+# Depending directly on the PCH could cause that PCH to be built with this linktarget's flags.
+$(call gb_LinkTarget_get_pch_reuse_timestamp,$(4)) : $(call gb_PrecompiledHeader_get_for_reuse_target,$(3),$(4))
 	$(call gb_PrecompiledHeader_check_flags,$(4),$(2),\
 		$(call gb_PrecompiledHeader_get_target,$(3),$(4)),$$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS))
+	$$(call gb_PrecompiledHeader__copy_reuse_files,$(1),$(3),$(4))
+	mkdir -p $$(dir $$@) && touch $$@
 
 endef
 
@@ -1585,6 +1590,9 @@ endef
 define gb_LinkTarget_reuse_precompiled_header
 ifneq ($(gb_ENABLE_PCH),)
 $(call gb_LinkTarget__reuse_precompiled_header_impl,$(1),$(2),$(notdir $(2)),$(4))
+ifeq ($(COM_IS_CLANG),TRUE)
+$(call gb_LinkTarget_add_defs,$(1),-include $(SRCDIR)/pch/inc/clangfix.hxx)
+endif
 endif
 
 endef

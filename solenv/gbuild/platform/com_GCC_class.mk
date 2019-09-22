@@ -139,6 +139,9 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 endif
 
+# not needed
+gb_PrecompiledHeader__create_reuse_files =
+gb_PrecompiledHeader__copy_reuse_files =
 
 # YaccTarget class
 

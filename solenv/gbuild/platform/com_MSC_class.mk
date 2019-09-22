@@ -110,6 +110,19 @@ endef
 define gb_PrecompiledHeader__sum_command
 endef
 
+# When building a PCH, MSVC also creates a .pdb file with debug info. So for reuse
+# add the .pdb to the PCH's files and then use the .pdb also for linktargets that reuse the PCH.
+# call gb_PrecompiledHeader__create_reuse_files,linktarget,pchtarget,linktargetmakefilename
+define gb_PrecompiledHeader__create_reuse_files
+cp $(call gb_LinkTarget_get_pdbfile_in,$(1)) $(call gb_PrecompiledHeader_get_target,$(2),$(3)).pdb
+endef
+
+# call gb_PrecompiledHeader__copy_reuse_files,linktarget,pchtarget,linktargetmakefilename
+define gb_PrecompiledHeader__copy_reuse_files
+rm -f $(call gb_LinkTarget_get_pdbfile_in,$(1))
+cp $(call gb_PrecompiledHeader_get_target,$(2),$(3)).pdb $(call gb_LinkTarget_get_pdbfile_in,$(1))
+endef
+
 # AsmObject class
 
 gb_AsmObject_get_source = $(1)/$(2).asm

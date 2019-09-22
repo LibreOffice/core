@@ -16,6 +16,8 @@ $(eval $(call gb_Library_set_include,expwrap,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_reuse_precompiled_header,expwrap,pch/inc/pch/precompiled_system))
+
 $(eval $(call gb_Library_add_defs,expwrap,\
 	-DFASTSAX_DLLIMPLEMENTATION \
 ))
