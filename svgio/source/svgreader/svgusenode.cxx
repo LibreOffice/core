@@ -28,7 +28,7 @@ namespace svgio
         SvgUseNode::SvgUseNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenG, rDocument, pParent),
+        :   SvgNode(SVGTokenUse, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maX(),
             maY(),
