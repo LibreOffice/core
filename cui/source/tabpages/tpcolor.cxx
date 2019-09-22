@@ -57,7 +57,6 @@ using namespace com::sun::star;
 
 SvxColorTabPage::SvxColorTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "cui/ui/colorpage.ui", "ColorPage", &rInAttrs)
-    , mpTopDlg( GetParentDialog() )
     , rOutAttrs           ( rInAttrs )
     // All the horrific pointers we store and should not
     , pnColorListState( nullptr )
@@ -166,7 +165,6 @@ SvxColorTabPage::~SvxColorTabPage()
 
 void SvxColorTabPage::dispose()
 {
-    mpTopDlg.clear();
     m_xValSetRecentListWin.reset();
     m_xValSetRecentList.reset();
     m_xValSetColorListWin.reset();
@@ -463,8 +461,9 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, weld::ComboBox&, void)
         pList->SetName(maPaletteManager.GetPaletteName());
         if(pList->Load())
         {
-            SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( mpTopDlg.get() );
-            SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( mpTopDlg.get() );
+            SfxOkDialogController* pController = GetDialogController();
+            SvxAreaTabDialog* pArea = dynamic_cast<SvxAreaTabDialog*>(pController);
+            SvxLineTabDialog* pLine = dynamic_cast<SvxLineTabDialog*>(pController);
             pColorList = pList;
             if( pArea )
                 pArea->SetNewColorList(pList);
