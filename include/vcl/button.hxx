@@ -97,6 +97,8 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
 
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+
 protected:
 
     /// Handler for click, in case we want the button to handle uno commands (.uno:Something).
