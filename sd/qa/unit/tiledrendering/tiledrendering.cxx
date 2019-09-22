@@ -115,6 +115,7 @@ public:
     void testTdf115873();
     void testTdf115873Group();
     void testCutSelectionChange();
+    void testInsertDeletePageInvalidation();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -161,6 +162,7 @@ public:
     CPPUNIT_TEST(testTdf115873);
     CPPUNIT_TEST(testTdf115873Group);
     CPPUNIT_TEST(testCutSelectionChange);
+    CPPUNIT_TEST(testInsertDeletePageInvalidation);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -964,6 +966,7 @@ public:
     bool m_bCursorVisibleChanged;
     bool m_bViewLock;
     bool m_bTilesInvalidated;
+    std::vector<tools::Rectangle> m_aInvalidations;
     std::map<int, bool> m_aViewCursorInvalidations;
     std::map<int, bool> m_aViewCursorVisibilities;
     bool m_bViewSelectionSet;
@@ -992,6 +995,18 @@ public:
         case LOK_CALLBACK_INVALIDATE_TILES:
         {
             m_bTilesInvalidated = true;
+            OString text(pPayload);
+            if (!text.startsWith("EMPTY"))
+            {
+                uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
+                CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
+                tools::Rectangle aInvalidationRect;
+                aInvalidationRect.setX(aSeq[0].toInt32());
+                aInvalidationRect.setY(aSeq[1].toInt32());
+                aInvalidationRect.setWidth(aSeq[2].toInt32());
+                aInvalidationRect.setHeight(aSeq[3].toInt32());
+                m_aInvalidations.push_back(aInvalidationRect);
+            }
         }
         break;
         case LOK_CALLBACK_GRAPHIC_SELECTION:
@@ -2235,6 +2250,35 @@ void SdTiledRenderingTest::testCutSelectionChange()
 
     // Selection is removed
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), m_aSelection.size());
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testInsertDeletePageInvalidation()
+{
+    // Load the document.
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    CPPUNIT_ASSERT_EQUAL(8, pXImpressDocument->getParts());
+
+    // Insert slide
+    aView1.m_bTilesInvalidated = false;
+    aView1.m_aInvalidations.clear();
+    comphelper::dispatchCommand(".uno:InsertPage", uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
+    CPPUNIT_ASSERT_EQUAL(9, pXImpressDocument->getParts());
+    CPPUNIT_ASSERT_EQUAL(size_t(9), aView1.m_aInvalidations.size());
+
+    // Delete slide
+    aView1.m_bTilesInvalidated = false;
+    aView1.m_aInvalidations.clear();
+    comphelper::dispatchCommand(".uno:DeletePage", uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
+    CPPUNIT_ASSERT_EQUAL(8, pXImpressDocument->getParts());
+    CPPUNIT_ASSERT_EQUAL(size_t(8), aView1.m_aInvalidations.size());
     comphelper::LibreOfficeKit::setActive(false);
 }
 
