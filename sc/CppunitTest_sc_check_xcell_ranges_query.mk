@@ -11,6 +11,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_check_xcell_ranges_query))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_check_xcell_ranges_query))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_check_xcell_ranges_query, \
 	sc/qa/extras/check_xcell_ranges_query \
 ))

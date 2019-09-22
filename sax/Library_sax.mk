@@ -16,7 +16,7 @@ $(eval $(call gb_Library_set_include,sax,\
 
 $(eval $(call gb_Library_use_external,sax,boost_headers))
 
-$(eval $(call gb_Library_reuse_precompiled_header,sax,pch/inc/pch/precompiled_system))
+$(eval $(call gb_Library_use_common_precompiled_header,sax))
 
 $(eval $(call gb_Library_use_sdk_api,sax))
 

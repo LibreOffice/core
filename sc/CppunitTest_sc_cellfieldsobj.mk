@@ -13,6 +13,8 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_cellfieldsobj))
 
 $(eval $(call gb_CppunitTest_use_external,sc_cellfieldsobj,boost_headers))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_cellfieldsobj))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_cellfieldsobj, \
     sc/qa/extras/sccellfieldsobj \
 ))

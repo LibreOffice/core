@@ -1575,6 +1575,14 @@ endif
 
 endef
 
+# call gb_LinkTarget_use_common_precompiled_header,linktarget,,,
+define gb_LinkTarget_use_common_precompiled_header
+ifneq ($(gb_ENABLE_PCH),)
+$(call gb_LinkTarget_reuse_precompiled_header,$(1),pch/inc/pch/precompiled_system,,$(4))
+endif
+
+endef
+
 # use a header package, possibly from another module
 # call gb_LinkTarget_use_package,linktarget,package
 define gb_LinkTarget_use_package

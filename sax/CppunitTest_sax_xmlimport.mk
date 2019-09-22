@@ -9,6 +9,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sax_xmlimport))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sax_xmlimport))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sax_xmlimport, \
 sax/qa/cppunit/xmlimport \
 ))

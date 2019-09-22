@@ -125,11 +125,13 @@ endef
 # So while this is officially tricky, in practice it seems to work to allow PCH reuse if the linktarget
 # has more defines than the PCH was built with, as long as the defines do not affect the PCH.
 gb_PrecompiledHeader_ignore_flags_system := \
--DSAX_DLLIMPLEMENTATION \
 -DFASTSAX_DLLIMPLEMENTATION \
+-DSAX_DLLIMPLEMENTATION \
+-DSCQAHELPER_DLLIMPLEMENTATION \
 -DSYSTEM_EXPAT \
 -DSYSTEM_LIBXML \
 -DSYSTEM_ZLIB \
+-DCPPUNIT_PLUGIN_EXPORT='extern "C" SAL_DLLPUBLIC_EXPORT' \
 -include $(SRCDIR)/pch/inc/clangfix.hxx \
 
 # Probably also update pch/inc/clangfix.hxx if you extend the list.

@@ -13,6 +13,8 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_tablesheetobj))
 
 $(eval $(call gb_CppunitTest_use_external,sc_tablesheetobj,boost_headers))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_tablesheetobj))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_tablesheetobj, \
     sc/qa/extras/sctablesheetobj \
 ))

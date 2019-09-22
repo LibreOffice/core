@@ -11,6 +11,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_new_cond_format_api))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_new_cond_format_api))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_new_cond_format_api, \
 	sc/qa/extras/new_cond_format \
 ))

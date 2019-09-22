@@ -18,6 +18,8 @@ $(eval $(call gb_CppunitTest_use_externals,sc_mark_test, \
 	mdds_headers \
 ))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_mark_test))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_mark_test, \
     sc/qa/unit/mark_test \
 ))
