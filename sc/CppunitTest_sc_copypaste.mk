@@ -9,6 +9,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_copypaste))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_copypaste))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_copypaste, \
     sc/qa/unit/copy_paste_test \
 ))

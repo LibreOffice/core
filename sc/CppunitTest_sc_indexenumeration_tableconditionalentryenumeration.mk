@@ -13,6 +13,8 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_indexenumeration_tableconditionalent
 
 $(eval $(call gb_CppunitTest_use_external,sc_indexenumeration_tableconditionalentryenumeration,boost_headers))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_indexenumeration_tableconditionalentryenumeration))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_indexenumeration_tableconditionalentryenumeration, \
 	sc/qa/extras/scindexenumeration_tableconditionalentryenumeration \
 ))

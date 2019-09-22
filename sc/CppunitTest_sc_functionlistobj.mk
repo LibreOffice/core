@@ -13,6 +13,8 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_functionlistobj))
 
 $(eval $(call gb_CppunitTest_use_external,sc_functionlistobj,boost_headers))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_functionlistobj))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_functionlistobj, \
 	sc/qa/extras/scfunctionlistobj \
 ))
