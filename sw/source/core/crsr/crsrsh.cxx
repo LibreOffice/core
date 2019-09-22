@@ -208,24 +208,22 @@ SwPaM* SwCursorShell::GetCursor( bool bMakeTableCursor ) const
     return m_pCurrentCursor;
 }
 
-void SwCursorShell::StartAction()
+void SwCursorShell::ImplStartAction()
 {
-    if( !ActionPend() )
-    {
-        // save for update of the ribbon bar
-        const SwNode& rNd = m_pCurrentCursor->GetPoint()->nNode.GetNode();
-        m_nCurrentNode = rNd.GetIndex();
-        m_nCurrentContent = m_pCurrentCursor->GetPoint()->nContent.GetIndex();
-        m_nCurrentNdTyp = rNd.GetNodeType();
-        if( rNd.IsTextNode() )
-            m_nLeftFramePos = SwCallLink::getLayoutFrame( GetLayout(), *rNd.GetTextNode(), m_nCurrentContent, true );
-        else
-            m_nLeftFramePos = 0;
-    }
-    SwViewShell::StartAction(); // to the SwViewShell
+    // save for update of the ribbon bar
+    const SwNode& rNd = m_pCurrentCursor->GetPoint()->nNode.GetNode();
+    m_nCurrentNode = rNd.GetIndex();
+    m_nCurrentContent = m_pCurrentCursor->GetPoint()->nContent.GetIndex();
+    m_nCurrentNdTyp = rNd.GetNodeType();
+    if( rNd.IsTextNode() )
+        m_nLeftFramePos = SwCallLink::getLayoutFrame( GetLayout(), *rNd.GetTextNode(), m_nCurrentContent, true );
+    else
+        m_nLeftFramePos = 0;
+
+    SwViewShell::ImplStartAction(); // to the SwViewShell
 }
 
-void SwCursorShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
+void SwCursorShell::ImplEndAction(const bool bIdleEnd, const bool DoSetPosX)
 {
     comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll());
     bool bVis = m_bSVCursorVis;
@@ -250,7 +248,7 @@ void SwCursorShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
     bool bSavSVCursorVis = m_bSVCursorVis;
     m_bSVCursorVis = false;
 
-    SwViewShell::EndAction( bIdleEnd );   // have SwViewShell go first
+    SwViewShell::ImplEndAction(bIdleEnd, DoSetPosX);   // have SwViewShell go first
 
     m_bSVCursorVis = bSavSVCursorVis;
 

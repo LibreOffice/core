@@ -296,6 +296,11 @@ protected:
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
+    // start parenthesing, hide SV-Cursor and selected areas
+    void ImplStartAction() override;
+    // end parenthesing, show SV-Cursor and selected areas
+    void ImplEndAction(bool bIdleEnd, bool DoSetPosX) override;
+
 public:
     SwCursorShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt );
     // disguised copy constructor
@@ -340,11 +345,6 @@ public:
     // return the current cursor stack
     // (required in EditShell when deleting contents)
     inline SwPaM* GetStackCursor() const;
-
-    // start parenthesing, hide SV-Cursor and selected areas
-    void StartAction();
-    // end parenthesing, show SV-Cursor and selected areas
-    void EndAction( const bool bIdleEnd = false, const bool DoSetPosX = false );
 
     // basic cursor travelling
     long GetUpDownX() const             { return m_nUpDownX; }

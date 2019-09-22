@@ -1868,10 +1868,7 @@ void SwRootFrame::StartAllAction()
     if ( GetCurrShell() )
         for(SwViewShell& rSh : GetCurrShell()->GetRingContainer())
         {
-            if ( dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr )
-                static_cast<SwCursorShell*>(&rSh)->StartAction();
-            else
-                rSh.StartAction();
+            rSh.StartAction();
         }
 }
 
@@ -1882,15 +1879,13 @@ void SwRootFrame::EndAllAction( bool bVirDev )
         {
             const bool bOldEndActionByVirDev = rSh.IsEndActionByVirDev();
             rSh.SetEndActionByVirDev( bVirDev );
-            if ( dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr )
+            rSh.EndAction();
+            if (auto pCurSh = dynamic_cast<SwCursorShell*>(&rSh))
             {
-                static_cast<SwCursorShell*>(&rSh)->EndAction();
-                static_cast<SwCursorShell*>(&rSh)->CallChgLnk();
-                if ( dynamic_cast<const SwFEShell*>( &rSh) !=  nullptr )
-                    static_cast<SwFEShell*>(&rSh)->SetChainMarker();
+                pCurSh->CallChgLnk();
+                if (auto pFESh = dynamic_cast<SwFEShell*>(&rSh))
+                    pFESh->SetChainMarker();
             }
-            else
-                rSh.EndAction();
             rSh.SetEndActionByVirDev( bOldEndActionByVirDev );
         }
 }
@@ -1906,20 +1901,18 @@ void SwRootFrame::UnoRemoveAllActions()
             if ( !rSh.IsInEndAction() )
             {
                 OSL_ENSURE(!rSh.GetRestoreActions(), "Restore action count is already set!");
-                bool bCursor = dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr;
-                bool bFE = dynamic_cast<const SwFEShell*>( &rSh) !=  nullptr;
+                auto pCurSh = dynamic_cast<SwCursorShell*>(&rSh);
+                auto pFESh = pCurSh ? dynamic_cast<SwFEShell*>(&rSh) : nullptr;
                 sal_uInt16 nRestore = 0;
                 while( rSh.ActionCount() )
                 {
-                    if( bCursor )
+                    rSh.EndAction();
+                    if(pCurSh)
                     {
-                        static_cast<SwCursorShell*>(&rSh)->EndAction();
-                        static_cast<SwCursorShell*>(&rSh)->CallChgLnk();
-                        if ( bFE )
-                            static_cast<SwFEShell*>(&rSh)->SetChainMarker();
+                        pCurSh->CallChgLnk();
+                        if (pFESh)
+                            pFESh->SetChainMarker();
                     }
-                    else
-                        rSh.EndAction();
                     nRestore++;
                 }
                 rSh.SetRestoreActions(nRestore);
@@ -1936,10 +1929,7 @@ void SwRootFrame::UnoRestoreAllActions()
             sal_uInt16 nActions = rSh.GetRestoreActions();
             while( nActions-- )
             {
-                if ( dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr )
-                    static_cast<SwCursorShell*>(&rSh)->StartAction();
-                else
-                    rSh.StartAction();
+                rSh.StartAction();
             }
             rSh.SetRestoreActions(0);
             rSh.LockView(false);

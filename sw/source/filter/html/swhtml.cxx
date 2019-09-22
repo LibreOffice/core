@@ -2602,10 +2602,7 @@ SwViewShell *SwHTMLParser::CallStartAction( SwViewShell *pVSh, bool bChkPtr )
 
     if( m_pActionViewShell )
     {
-        if( dynamic_cast< const SwEditShell *>( m_pActionViewShell ) !=  nullptr )
-            static_cast<SwEditShell*>(m_pActionViewShell)->StartAction();
-        else
-            m_pActionViewShell->StartAction();
+        m_pActionViewShell->StartAction();
     }
 
     return m_pActionViewShell;
@@ -2636,7 +2633,7 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
         m_pActionViewShell->LockView( true );
         const bool bOldEndActionByVirDev = m_pActionViewShell->IsEndActionByVirDev();
         m_pActionViewShell->SetEndActionByVirDev( true );
-        static_cast<SwEditShell*>(m_pActionViewShell)->EndAction();
+        m_pActionViewShell->EndAction();
         m_pActionViewShell->SetEndActionByVirDev( bOldEndActionByVirDev );
         m_pActionViewShell->LockView( bOldLock );
 

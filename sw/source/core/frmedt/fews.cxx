@@ -72,13 +72,11 @@ void SwFEShell::EndAllActionAndCall()
 {
     for(SwViewShell& rCurrentShell : GetRingContainer())
     {
-        if( dynamic_cast<const SwCursorShell*>( &rCurrentShell) !=  nullptr )
+        rCurrentShell.EndAction();
+        if (auto pCurSh = dynamic_cast<SwCursorShell*>(&rCurrentShell))
         {
-            static_cast<SwFEShell*>(&rCurrentShell)->EndAction();
-            static_cast<SwFEShell*>(&rCurrentShell)->CallChgLnk();
+            pCurSh->CallChgLnk();
         }
-        else
-            rCurrentShell.EndAction();
     }
 }
 

@@ -180,6 +180,9 @@ protected:
     /// The virtual device we paint to will end up on the screen.
     bool mbOutputToWindow;
 
+    virtual void ImplStartAction();
+    virtual void ImplEndAction(bool bIdleEnd, bool DoSetPosX);
+
 public:
 
           SwViewShellImp *Imp() { return mpImp.get(); }
@@ -192,9 +195,7 @@ public:
 
     // Bracketing of actions belonging together.
     inline void StartAction();
-           void ImplStartAction();
-    inline void EndAction( const bool bIdleEnd = false );
-           void ImplEndAction( const bool bIdleEnd );
+    inline void EndAction(bool bIdleEnd = false, bool DoSetPosX = false);
     sal_uInt16 ActionCount() const { return mnStartAction; }
     bool ActionPend() const { return mnStartAction != 0; }
     bool IsInEndAction() const { return mbInEndAction; }
@@ -594,10 +595,11 @@ inline void SwViewShell::StartAction()
     if ( !mnStartAction++ )
         ImplStartAction();
 }
-inline void SwViewShell::EndAction( const bool bIdleEnd )
+
+inline void SwViewShell::EndAction(const bool bIdleEnd, const bool DoSetPosX)
 {
     if( 0 == (mnStartAction - 1) )
-        ImplEndAction( bIdleEnd );
+        ImplEndAction(bIdleEnd, DoSetPosX);
     --mnStartAction;
 }
 

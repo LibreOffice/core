@@ -1054,9 +1054,9 @@ void SwEditShell::CountWords( SwDocStat& rStat ) const
 
 void SwEditShell::ApplyViewOptions( const SwViewOption &rOpt )
 {
-    SwCursorShell::StartAction();
+    StartAction();
     SwViewShell::ApplyViewOptions( rOpt );
-    SwEditShell::EndAction();
+    EndAction();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
