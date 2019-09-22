@@ -820,13 +820,11 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
                                      sal_Int32& nResult,
                                      Reference< XInterface > const & xLastResult)
 {
-    Reference< XUnoTunnel > xDescTunnel(xDesc, UNO_QUERY);
-    if(!IsValid() || !xDescTunnel.is() || !xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()))
+    const auto pSearch = comphelper::getUnoTunnelImplementation<SwXTextSearch>(xDesc);
+    if(!IsValid() || !pSearch)
         return nullptr;
 
     auto pUnoCursor(CreateCursorForSearch(xCursor));
-    const SwXTextSearch* pSearch = reinterpret_cast<const SwXTextSearch*>(
-        xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()));
 
     bool bParentInExtra = false;
     if(xLastResult.is())

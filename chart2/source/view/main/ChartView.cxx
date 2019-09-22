@@ -1747,18 +1747,11 @@ bool ChartView::getExplicitValuesForAxis(
 
 SdrPage* ChartView::getSdrPage()
 {
-    SdrPage* pPage=nullptr;
-    Reference< lang::XUnoTunnel> xUnoTunnel(m_xDrawPage,uno::UNO_QUERY);
-    if(xUnoTunnel.is())
-    {
-        SvxDrawPage* pSvxDrawPage = reinterpret_cast<SvxDrawPage*>(xUnoTunnel->getSomething(
-            SvxDrawPage::getUnoTunnelId() ));
-        if(pSvxDrawPage)
-        {
-            pPage = pSvxDrawPage->GetSdrPage();
-        }
-    }
-    return pPage;
+    auto pSvxDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>(m_xDrawPage);
+    if(pSvxDrawPage)
+        return pSvxDrawPage->GetSdrPage();
+
+    return nullptr;
 }
 
 uno::Reference< drawing::XShape > ChartView::getShapeForCID( const OUString& rObjectCID )

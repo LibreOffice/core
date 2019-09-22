@@ -21,6 +21,7 @@
 #include <mysql/YCatalog.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>
@@ -265,16 +266,11 @@ Reference<XConnection> SAL_CALL ODriverDelegator::connect(const OUString& url,
             xConnection = xDriver->connect(sCuttedUrl, aConvertedProperties);
             if (xConnection.is())
             {
-                OMetaConnection* pMetaConnection = nullptr;
                 // now we have to set the URL to get the correct answer for metadata()->getURL()
-                Reference<XUnoTunnel> xTunnel(xConnection, UNO_QUERY);
-                if (xTunnel.is())
-                {
-                    pMetaConnection = reinterpret_cast<OMetaConnection*>(
-                        xTunnel->getSomething(OMetaConnection::getUnoTunnelId()));
-                    if (pMetaConnection)
-                        pMetaConnection->setURL(url);
-                }
+                auto pMetaConnection
+                    = comphelper::getUnoTunnelImplementation<OMetaConnection>(xConnection);
+                if (pMetaConnection)
+                    pMetaConnection->setURL(url);
                 m_aConnections.push_back(
                     TWeakPair(WeakReferenceHelper(xConnection),
                               TWeakConnectionPair(WeakReferenceHelper(), pMetaConnection)));
@@ -340,29 +336,24 @@ ODriverDelegator::getDataDefinitionByConnection(const Reference<XConnection>& co
     checkDisposed(ODriverDelegator_BASE::rBHelper.bDisposed);
 
     Reference<XTablesSupplier> xTab;
-    Reference<XUnoTunnel> xTunnel(connection, UNO_QUERY);
-    if (xTunnel.is())
+    auto pConnection = comphelper::getUnoTunnelImplementation<OMetaConnection>(connection);
+    if (pConnection)
     {
-        OMetaConnection* pConnection = reinterpret_cast<OMetaConnection*>(
-            xTunnel->getSomething(OMetaConnection::getUnoTunnelId()));
-        if (pConnection)
+        TWeakPairVector::iterator i
+            = std::find_if(m_aConnections.begin(), m_aConnections.end(),
+                           [&pConnection](const TWeakPairVector::value_type& rConnection) {
+                               return rConnection.second.second == pConnection;
+                           });
+        if (i != m_aConnections.end())
         {
-            TWeakPairVector::iterator i
-                = std::find_if(m_aConnections.begin(), m_aConnections.end(),
-                               [&pConnection](const TWeakPairVector::value_type& rConnection) {
-                                   return rConnection.second.second == pConnection;
-                               });
-            if (i != m_aConnections.end())
+            xTab.set(i->second.first.get(), UNO_QUERY);
+            if (!xTab.is())
             {
-                xTab.set(i->second.first.get(), UNO_QUERY);
-                if (!xTab.is())
-                {
-                    xTab = new OMySQLCatalog(connection);
-                    i->second.first = WeakReferenceHelper(xTab);
-                }
+                xTab = new OMySQLCatalog(connection);
+                i->second.first = WeakReferenceHelper(xTab);
             }
         }
-    } // if ( xTunnel.is() )
+    } // if (pConnection)
     if (!xTab.is())
     {
         TWeakPairVector::iterator i

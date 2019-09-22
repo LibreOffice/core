@@ -898,11 +898,7 @@ SwXShape::SwXShape(
         xShapeAgg->setDelegator( static_cast<cppu::OWeakObject*>(this) );
     osl_atomic_decrement(&m_refCount);
 
-    uno::Reference< lang::XUnoTunnel > xShapeTunnel(xShapeAgg, uno::UNO_QUERY);
-    SvxShape* pShape = nullptr;
-    if(xShapeTunnel.is())
-        pShape = reinterpret_cast< SvxShape * >(
-                sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
+    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>(xShapeAgg);
 
     SdrObject* pObj = pShape ? pShape->GetSdrObject() : nullptr;
     if(pObj)
@@ -927,11 +923,7 @@ void SwXShape::AddExistingShapeToFormat( SdrObject const & _rObj )
         if ( !pCurrent )
             continue;
 
-        SwXShape* pSwShape = nullptr;
-        uno::Reference< lang::XUnoTunnel > xShapeTunnel( pCurrent->getWeakUnoShape(), uno::UNO_QUERY );
-        if ( xShapeTunnel.is() )
-            pSwShape = reinterpret_cast< SwXShape * >(
-                    sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething( SwXShape::getUnoTunnelId() ) ) );
+        auto pSwShape = comphelper::getUnoTunnelImplementation<SwXShape>(pCurrent->getWeakUnoShape());
         if ( pSwShape )
         {
             if ( pSwShape->m_bDescriptor )
@@ -1051,11 +1043,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     uno::Reference<text::XTextFrame> xFrame;
                     if(aValue >>= xFrame)
                     {
-                        uno::Reference<lang::XUnoTunnel> xTunnel(xFrame, uno::UNO_QUERY);
-                        SwXFrame* pFrame = xTunnel.is() ?
-                                reinterpret_cast< SwXFrame * >(
-                                    sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXFrame::getUnoTunnelId()) ))
-                                : nullptr;
+                        SwXFrame* pFrame = comphelper::getUnoTunnelImplementation<SwXFrame>(xFrame);
                         if(pFrame && pFrame->GetFrameFormat() &&
                             pFrame->GetFrameFormat()->GetDoc() == pDoc)
                         {
@@ -2165,15 +2153,9 @@ uno::Sequence< OUString > SwXShape::getSupportedServiceNames()
 
 SvxShape*   SwXShape::GetSvxShape()
 {
-    SvxShape* pSvxShape = nullptr;
     if(xShapeAgg.is())
-    {
-        uno::Reference< lang::XUnoTunnel > xShapeTunnel(xShapeAgg, uno::UNO_QUERY);
-        if(xShapeTunnel.is())
-            pSvxShape = reinterpret_cast< SvxShape * >(
-                    sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
-    }
-    return pSvxShape;
+        return comphelper::getUnoTunnelImplementation<SvxShape>(xShapeAgg);
+    return nullptr;
 }
 
 // #i31698#
@@ -2288,11 +2270,7 @@ void SAL_CALL SwXShape::setPosition( const awt::Point& aPosition )
             // #i34750#
             // use method <SvxShape->getPosition()> to get the correct
             // 'Drawing layer' position of the top group shape.
-            uno::Reference< lang::XUnoTunnel > xGrpShapeTunnel(
-                                                    pTopGroupObj->getUnoShape(),
-                                                    uno::UNO_QUERY );
-            SvxShape* pSvxGroupShape = reinterpret_cast< SvxShape * >(
-                    sal::static_int_cast< sal_IntPtr >( xGrpShapeTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
+            auto pSvxGroupShape = comphelper::getUnoTunnelImplementation<SvxShape>(pTopGroupObj->getUnoShape());
             const awt::Point aGroupPos = pSvxGroupShape->getPosition();
             aNewPos.X = o3tl::saturating_add(aNewPos.X, aGroupPos.X);
             aNewPos.Y = o3tl::saturating_add(aNewPos.Y, aGroupPos.Y);

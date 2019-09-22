@@ -204,11 +204,10 @@ void VDiagram::createShapes_2d()
 static E3dScene* lcl_getE3dScene( const uno::Reference< drawing::XShape >& xShape )
 {
     E3dScene* pRet=nullptr;
-    uno::Reference< lang::XUnoTunnel > xUnoTunnel( xShape, uno::UNO_QUERY );
     uno::Reference< lang::XTypeProvider > xTypeProvider( xShape, uno::UNO_QUERY );
-    if(xUnoTunnel.is()&&xTypeProvider.is())
+    if(xTypeProvider.is())
     {
-        SvxShape* pSvxShape = reinterpret_cast<SvxShape*>(xUnoTunnel->getSomething( SvxShape::getUnoTunnelId() ));
+        SvxShape* pSvxShape = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
         if(pSvxShape)
         {
             SdrObject* pObj = pSvxShape->GetSdrObject();

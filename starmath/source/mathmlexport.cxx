@@ -98,9 +98,7 @@ bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
     uno::Reference< lang::XComponent > xModelComp = xModel;
 
     bool bEmbedded = false;
-    uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);
-    SmModel *pModel = reinterpret_cast<SmModel *>
-        (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+    SmModel *pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
 
     SmDocShell *pDocShell = pModel ?
             static_cast<SmDocShell*>(pModel->GetObjectShell()) : nullptr;
@@ -285,10 +283,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(
     uno::Sequence< PropertyValue > aProps(0);
     xFilter->filter( aProps );
 
-    uno::Reference<lang::XUnoTunnel> xFilterTunnel( xFilter, uno::UNO_QUERY );
-    SmXMLExport *pFilter = reinterpret_cast< SmXMLExport * >(
-                sal::static_int_cast< sal_uIntPtr >(
-                xFilterTunnel->getSomething( SmXMLExport::getUnoTunnelId() )));
+    auto pFilter = comphelper::getUnoTunnelImplementation<SmXMLExport>(xFilter);
     return pFilter == nullptr || pFilter->GetSuccess();
 }
 
@@ -413,9 +408,7 @@ ErrCode SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
     else
     {
         uno::Reference <frame::XModel> xModel = GetModel();
-        uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);
-        SmModel *pModel = reinterpret_cast<SmModel *>
-            (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+        SmModel *pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
 
         if (pModel)
         {
@@ -451,9 +444,7 @@ ErrCode SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
 void SmXMLExport::ExportContent_()
 {
     uno::Reference <frame::XModel> xModel = GetModel();
-    uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);
-    SmModel *pModel = reinterpret_cast<SmModel *>
-        (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+    SmModel *pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
     SmDocShell *pDocShell = pModel ?
         static_cast<SmDocShell*>(pModel->GetObjectShell()) : nullptr;
     OSL_ENSURE( pDocShell, "doc shell missing" );
@@ -504,9 +495,7 @@ void SmXMLExport::GetViewSettings( Sequence < PropertyValue >& aProps)
     if ( !xModel.is() )
         return;
 
-    uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);
-    SmModel *pModel = reinterpret_cast<SmModel *>
-        (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+    SmModel *pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
 
     if ( !pModel )
         return;

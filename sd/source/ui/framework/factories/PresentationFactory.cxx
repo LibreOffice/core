@@ -22,6 +22,7 @@
 #include <DrawController.hxx>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <tools/diagnose_ex.h>
 #include <slideshow.hxx>
@@ -121,17 +122,12 @@ void SAL_CALL PresentationFactory::releaseResource (
 {
     ThrowIfDisposed();
 
-    Reference<lang::XUnoTunnel> xTunnel (mxController, UNO_QUERY);
-    if (xTunnel.is())
+    auto pController = comphelper::getUnoTunnelImplementation<sd::DrawController>(mxController);
+    if (pController != nullptr)
     {
-        ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
-            xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
-        if (pController != nullptr)
-        {
-            ViewShellBase* pBase = pController->GetViewShellBase();
-            if (pBase != nullptr)
-                SlideShow::Stop( *pBase );
-        }
+        ViewShellBase* pBase = pController->GetViewShellBase();
+        if (pBase != nullptr)
+            SlideShow::Stop( *pBase );
     }
 }
 

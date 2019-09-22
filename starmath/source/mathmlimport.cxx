@@ -107,9 +107,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium &rMedium)
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
 
     bool bEmbedded = false;
-    uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);
-    SmModel *pModel = reinterpret_cast<SmModel *>
-        (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+    SmModel *pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
 
     SmDocShell *pDocShell = pModel ?
             static_cast<SmDocShell*>(pModel->GetObjectShell()) : nullptr;
@@ -298,10 +296,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(
         else
             xParser->parseStream( aParserInput );
 
-        uno::Reference<lang::XUnoTunnel> xFilterTunnel( xFilter, uno::UNO_QUERY );
-        SmXMLImport *pFilter = reinterpret_cast< SmXMLImport * >(
-                sal::static_int_cast< sal_uIntPtr >(
-                xFilterTunnel->getSomething( SmXMLImport::getUnoTunnelId() )));
+        auto pFilter = comphelper::getUnoTunnelImplementation<SmXMLImport>(xFilter);
         if ( pFilter && pFilter->GetSuccess() )
             nError = ERRCODE_NONE;
     }
@@ -471,9 +466,7 @@ void SmXMLImport::endDocument()
     if (pTree && pTree->GetType() == SmNodeType::Table)
     {
         uno::Reference <frame::XModel> xModel = GetModel();
-        uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);
-        SmModel *pModel = reinterpret_cast<SmModel *>
-            (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+        SmModel *pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
 
         if (pModel)
         {
@@ -3063,9 +3056,7 @@ void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
     if ( !xModel.is() )
         return;
 
-    uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);
-    SmModel *pModel = reinterpret_cast<SmModel *>
-        (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+    SmModel *pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
 
     if ( !pModel )
         return;

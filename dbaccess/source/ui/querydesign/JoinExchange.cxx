@@ -68,13 +68,9 @@ namespace dbaui
     OJoinExchangeData OJoinExchObj::GetSourceDescription(const Reference< XTransferable >& _rxObject)
     {
         OJoinExchangeData aReturn;
-        Reference< XUnoTunnel > xTunnel(_rxObject, UNO_QUERY);
-        if (xTunnel.is())
-        {
-            OJoinExchObj* pImplementation = reinterpret_cast<OJoinExchObj*>(xTunnel->getSomething(getUnoTunnelId()));
-            if (pImplementation)
-                aReturn = pImplementation->m_jxdSourceDescription;
-        }
+        auto pImplementation = comphelper::getUnoTunnelImplementation<OJoinExchObj>(_rxObject);
+        if (pImplementation)
+            aReturn = pImplementation->m_jxdSourceDescription;
         return aReturn;
     }
 

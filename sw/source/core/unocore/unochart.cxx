@@ -1602,37 +1602,30 @@ void SwChartDataProvider::AddRowCols(
                     const sal_Int32 nLen = xRef->getTextualData().getLength();
                     if (nLen > 1) // value data-sequence ?
                     {
-                        uno::Reference< lang::XUnoTunnel > xTunnel( xRef, uno::UNO_QUERY );
-                        if(xTunnel.is())
+                        auto pDataSeq = comphelper::getUnoTunnelImplementation<SwChartDataSequence>(xRef);
+                        if (pDataSeq)
                         {
-                            SwChartDataSequence *pDataSeq = reinterpret_cast< SwChartDataSequence * >(
-                                    sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething( SwChartDataSequence::getUnoTunnelId() )));
+                            SwRangeDescriptor aDesc;
+                            pDataSeq->FillRangeDesc( aDesc );
 
-                            if (pDataSeq)
+                            chart::ChartDataRowSource eDRSource = chart::ChartDataRowSource_COLUMNS;
+                            if (aDesc.nTop == aDesc.nBottom && aDesc.nLeft != aDesc.nRight)
+                                eDRSource = chart::ChartDataRowSource_ROWS;
+
+                            if (!bAddCols && eDRSource == chart::ChartDataRowSource_COLUMNS)
                             {
-                                SwRangeDescriptor aDesc;
-                                pDataSeq->FillRangeDesc( aDesc );
-
-                                chart::ChartDataRowSource eDRSource = chart::ChartDataRowSource_COLUMNS;
-                                if (aDesc.nTop == aDesc.nBottom && aDesc.nLeft != aDesc.nRight)
-                                    eDRSource = chart::ChartDataRowSource_ROWS;
-
-                                if (!bAddCols && eDRSource == chart::ChartDataRowSource_COLUMNS)
-                                {
-                                    // add rows: extend affected columns by newly added row cells
-                                    pDataSeq->ExtendTo( true, nFirstNewRow, nLines );
-                                }
-                                else if (bAddCols && eDRSource == chart::ChartDataRowSource_ROWS)
-                                {
-                                    // add cols: extend affected rows by newly added column cells
-                                    pDataSeq->ExtendTo( false, nFirstNewCol, nLines );
-                                }
+                                // add rows: extend affected columns by newly added row cells
+                                pDataSeq->ExtendTo( true, nFirstNewRow, nLines );
+                            }
+                            else if (bAddCols && eDRSource == chart::ChartDataRowSource_ROWS)
+                            {
+                                // add cols: extend affected rows by newly added column cells
+                                pDataSeq->ExtendTo( false, nFirstNewCol, nLines );
                             }
                         }
                     }
                 }
             }
-
         }
     }
 }

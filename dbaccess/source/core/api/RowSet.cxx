@@ -2144,13 +2144,9 @@ void ORowSet::notifyRowSetAndClonesRowDelete( const Any& _rBookmark )
     // notify the clones
     for (auto const& elem : m_aClones)
     {
-        Reference< XUnoTunnel > xTunnel(elem.get(),UNO_QUERY);
-        if(xTunnel.is())
-        {
-            ORowSetClone* pClone = reinterpret_cast<ORowSetClone*>(xTunnel->getSomething(ORowSetClone::getUnoTunnelId()));
-            if(pClone)
-                pClone->onDeleteRow( _rBookmark );
-        }
+        auto pClone = comphelper::getUnoTunnelImplementation<ORowSetClone>(elem.get());
+        if(pClone)
+            pClone->onDeleteRow( _rBookmark );
     }
 }
 
@@ -2161,13 +2157,9 @@ void ORowSet::notifyRowSetAndClonesRowDeleted( const Any& _rBookmark, sal_Int32 
     // notify the clones
     for (auto const& clone : m_aClones)
     {
-        Reference< XUnoTunnel > xTunnel(clone.get(),UNO_QUERY);
-        if(xTunnel.is())
-        {
-            ORowSetClone* pClone = reinterpret_cast<ORowSetClone*>(xTunnel->getSomething(ORowSetClone::getUnoTunnelId()));
-            if(pClone)
-                pClone->onDeletedRow( _rBookmark, _nPos );
-        }
+        auto pClone = comphelper::getUnoTunnelImplementation<ORowSetClone>(clone.get());
+        if(pClone)
+            pClone->onDeletedRow( _rBookmark, _nPos );
     }
 }
 

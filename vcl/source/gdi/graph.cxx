@@ -24,6 +24,7 @@
 #include <impgraph.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <graphic/UnoGraphic.hxx>
 #include <vcl/GraphicExternalLink.hxx>
@@ -228,10 +229,7 @@ Graphic::Graphic(const GDIMetaFile& rMtf)
 
 Graphic::Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic )
 {
-    uno::Reference< lang::XUnoTunnel >      xTunnel( rxGraphic, uno::UNO_QUERY );
-    const ::Graphic*                        pGraphic = ( xTunnel.is() ?
-                                                         reinterpret_cast< ::Graphic* >( xTunnel->getSomething( getUnoTunnelId() ) ) :
-                                                          nullptr );
+    const ::Graphic* pGraphic = comphelper::getUnoTunnelImplementation<::Graphic>(rxGraphic);
 
     if( pGraphic )
     {

@@ -151,13 +151,8 @@ static bool LoadFromURL_impl(
 
     // try to get the DocShell
     SwDocShell *pTmpDocShell = nullptr;
-    Reference < XUnoTunnel > xTunnel( xTmpModel, UNO_QUERY );
-    if (xTunnel.is())
-    {
-        SwXTextDocument* pTextDoc = reinterpret_cast<SwXTextDocument *>(
-                xTunnel->getSomething( SwXTextDocument::getUnoTunnelId() ));
-        pTmpDocShell = pTextDoc ? pTextDoc->GetDocShell() : nullptr;
-    }
+    if (auto pTextDoc = comphelper::getUnoTunnelImplementation<SwXTextDocument>(xTmpModel); pTextDoc)
+        pTmpDocShell = pTextDoc->GetDocShell();
 
     bool bRes = false;
     if (xTmpModel.is() && pTmpDocShell)    // everything available?

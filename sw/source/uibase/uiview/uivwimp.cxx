@@ -25,6 +25,7 @@
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -66,15 +67,9 @@ SwView_Impl::SwView_Impl(SwView* pShell)
 
 SwView_Impl::~SwView_Impl()
 {
-    Reference<XUnoTunnel> xDispTunnel(xDisProvInterceptor, UNO_QUERY);
-    SwXDispatchProviderInterceptor* pInterceptor = nullptr;
-    if(xDispTunnel.is() &&
-        nullptr != (pInterceptor = reinterpret_cast< SwXDispatchProviderInterceptor * >(
-                    sal::static_int_cast< sal_IntPtr >(
-                    xDispTunnel->getSomething(SwXDispatchProviderInterceptor::getUnoTunnelId())))))
-    {
+    auto pInterceptor = comphelper::getUnoTunnelImplementation<SwXDispatchProviderInterceptor>(xDisProvInterceptor);
+    if(pInterceptor)
         pInterceptor->Invalidate();
-    }
     view::XSelectionSupplier* pTextView = mxXTextView.get();
     static_cast<SwXTextView*>(pTextView)->Invalidate();
     mxXTextView.clear();
@@ -223,16 +218,9 @@ void SwView_Impl::Invalidate()
     GetUNOObject_Impl()->Invalidate();
     for (const auto& xTransferable: mxTransferables)
     {
-        Reference< XUnoTunnel > xTunnel(xTransferable.get(), UNO_QUERY);
-        if(xTunnel.is())
-
-        {
-            SwTransferable* pTransferable = reinterpret_cast< SwTransferable * >(
-                    sal::static_int_cast< sal_IntPtr >(
-                    xTunnel->getSomething(SwTransferable::getUnoTunnelId())));
-            if(pTransferable)
-                pTransferable->Invalidate();
-        }
+        auto pTransferable = comphelper::getUnoTunnelImplementation<SwTransferable>(xTransferable.get());
+        if(pTransferable)
+            pTransferable->Invalidate();
     }
 }
 

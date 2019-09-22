@@ -27,6 +27,7 @@
 #include <ViewShellManager.hxx>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -51,14 +52,9 @@ CenterViewFocusModule::CenterViewFocusModule (Reference<frame::XController> cons
         mxConfigurationController = xControllerManager->getConfigurationController();
 
         // Tunnel through the controller to obtain a ViewShellBase.
-        Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY);
-        if (xTunnel.is())
-        {
-            ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
-                xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
-            if (pController != nullptr)
-                mpBase = pController->GetViewShellBase();
-        }
+        auto pController = comphelper::getUnoTunnelImplementation<sd::DrawController>(rxController);
+        if (pController != nullptr)
+            mpBase = pController->GetViewShellBase();
 
         // Check, if all required objects do exist.
         if (mxConfigurationController.is() && mpBase!=nullptr)
@@ -128,11 +124,9 @@ void CenterViewFocusModule::HandleNewView (
     Reference<XView> xView;
     if (xViewIds.hasElements())
         xView.set( mxConfigurationController->getResource(xViewIds[0]),UNO_QUERY);
-    Reference<lang::XUnoTunnel> xTunnel (xView, UNO_QUERY);
-    if (xTunnel.is() && mpBase!=nullptr)
+    if (mpBase!=nullptr)
     {
-        ViewShellWrapper* pViewShellWrapper = reinterpret_cast<ViewShellWrapper*>(
-            xTunnel->getSomething(ViewShellWrapper::getUnoTunnelId()));
+        auto pViewShellWrapper = comphelper::getUnoTunnelImplementation<ViewShellWrapper>(xView);
         if (pViewShellWrapper != nullptr)
         {
             std::shared_ptr<ViewShell> pViewShell = pViewShellWrapper->GetViewShell();

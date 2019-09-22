@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XChild.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <i18nutil/unicode.hxx>
@@ -1446,15 +1447,9 @@ void SmViewShell::Execute(SfxRequest& rReq)
             Reference< datatransfer::XTransferable > xTrans( GetDoc()->GetModel(), uno::UNO_QUERY );
             if( xTrans.is() )
             {
-                Reference< lang::XUnoTunnel> xTnnl( xTrans, uno::UNO_QUERY);
-                if( xTnnl.is() )
-                {
-                    TransferableHelper* pTrans = reinterpret_cast< TransferableHelper * >(
-                            sal::static_int_cast< sal_uIntPtr >(
-                            xTnnl->getSomething( TransferableHelper::getUnoTunnelId() )));
-                    if( pTrans )
-                        pTrans->CopyToClipboard(GetEditWindow());
-                }
+                auto pTrans = comphelper::getUnoTunnelImplementation<TransferableHelper>(xTrans);
+                if( pTrans )
+                    pTrans->CopyToClipboard(GetEditWindow());
             }
         }
         break;

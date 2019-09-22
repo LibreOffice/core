@@ -3908,18 +3908,7 @@ sal_Int64 SwTransferable::getSomething( const Sequence< sal_Int8 >& rId )
 
 SwTransferable* SwTransferable::GetSwTransferable( const TransferableDataHelper& rData )
 {
-    SwTransferable* pSwTransferable = nullptr;
-
-    uno::Reference<XUnoTunnel> xTunnel( rData.GetTransferable(), UNO_QUERY );
-    if ( xTunnel.is() )
-    {
-        sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
-        if ( nHandle )
-            pSwTransferable = reinterpret_cast<SwTransferable*>( static_cast<sal_IntPtr>(nHandle) );
-    }
-
-    return pSwTransferable;
-
+    return comphelper::getUnoTunnelImplementation<SwTransferable>(rData.GetTransferable());
 }
 
 SwTransferDdeLink::SwTransferDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )

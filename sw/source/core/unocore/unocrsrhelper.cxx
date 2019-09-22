@@ -772,15 +772,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
     uno::Reference<XIndexReplace> xIndexReplace;
     if(rValue >>= xIndexReplace)
     {
-        SwXNumberingRules* pSwNum = nullptr;
-
-        uno::Reference<XUnoTunnel> xNumTunnel(xIndexReplace, UNO_QUERY);
-        if(xNumTunnel.is())
-        {
-            pSwNum = reinterpret_cast< SwXNumberingRules * >(
-                sal::static_int_cast< sal_IntPtr >( xNumTunnel->getSomething( SwXNumberingRules::getUnoTunnelId() )));
-        }
-
+        auto pSwNum = comphelper::getUnoTunnelImplementation<SwXNumberingRules>(xIndexReplace);
         if(pSwNum)
         {
             SwDoc* pDoc = rPam.GetDoc();

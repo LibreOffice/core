@@ -914,11 +914,7 @@ SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const css::uno::Reference<
 {
     SfxUnoStyleSheet* pRet = dynamic_cast< SfxUnoStyleSheet* >( xStyle.get() );
     if( !pRet )
-    {
-        css::uno::Reference< css::lang::XUnoTunnel > xUT( xStyle, css::uno::UNO_QUERY );
-        if( xUT.is() )
-            pRet = reinterpret_cast<SfxUnoStyleSheet*>(sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( SfxUnoStyleSheet::getUnoTunnelId())));
-    }
+        pRet = comphelper::getUnoTunnelImplementation<SfxUnoStyleSheet>(xStyle);
     return pRet;
 }
 

@@ -1080,8 +1080,7 @@ void setEvalDateFormatForFormatter(Reference< css::util::XNumberFormatter > cons
     {
         Reference< css::util::XNumberFormatsSupplier >  xSupplier = _rxFormatter->getNumberFormatsSupplier();
 
-        Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
-        SvNumberFormatsSupplierObj* pSupplierImpl = reinterpret_cast<SvNumberFormatsSupplierObj*>(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
+        auto pSupplierImpl = comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>(xSupplier);
         OSL_ENSURE(pSupplierImpl,"No Supplier!");
 
         if ( pSupplierImpl )

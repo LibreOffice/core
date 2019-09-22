@@ -1025,13 +1025,9 @@ void XStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement
         uno::Reference<style::XStyle> xStyle = FindStyle(pBase->GetName());
         if(xStyle.is())
         {
-            uno::Reference<lang::XUnoTunnel> xTunnel( xStyle, uno::UNO_QUERY);
-            if(xTunnel.is())
-            {
-                SwXStyle* pStyle = reinterpret_cast< SwXStyle * >(
-                        sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething( SwXStyle::getUnoTunnelId()) ));
+            SwXStyle* pStyle = comphelper::getUnoTunnelImplementation<SwXStyle>(xStyle);
+            if(pStyle)
                 pStyle->Invalidate();
-            }
         }
         m_pBasePool->Remove(pBase);
         insertByName(rName, rElement);
@@ -1195,9 +1191,7 @@ const uno::Sequence<sal_Int8>& SwXStyle::getUnoTunnelId()
 
 sal_Int64 SAL_CALL SwXStyle::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    if(rId.getLength() != 16)
-        return 0;
-    if(0 == memcmp(getUnoTunnelId().getConstArray(), rId.getConstArray(), 16))
+    if(isUnoTunnelId<SwXStyle>(rId))
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }

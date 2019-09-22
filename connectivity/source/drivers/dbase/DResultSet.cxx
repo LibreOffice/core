@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <dbase/DIndex.hxx>
 #include <dbase/DIndexIter.hxx>
@@ -155,25 +156,21 @@ Sequence< sal_Int32 > SAL_CALL ODbaseResultSet::deleteRows( const  Sequence<  An
 
 bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xIndex)
 {
-    Reference<XUnoTunnel> xTunnel(_xIndex,UNO_QUERY);
-    if(xTunnel.is())
+    auto pIndex = comphelper::getUnoTunnelImplementation<dbase::ODbaseIndex>(_xIndex);
+    if(pIndex)
     {
-        dbase::ODbaseIndex* pIndex = reinterpret_cast< dbase::ODbaseIndex* >( xTunnel->getSomething(dbase::ODbaseIndex::getUnoTunnelId()) );
-        if(pIndex)
-        {
-            std::unique_ptr<dbase::OIndexIterator> pIter = pIndex->createIterator();
+        std::unique_ptr<dbase::OIndexIterator> pIter = pIndex->createIterator();
 
-            if (pIter)
+        if (pIter)
+        {
+            sal_uInt32 nRec = pIter->First();
+            while (nRec != NODE_NOTFOUND)
             {
-                sal_uInt32 nRec = pIter->First();
-                while (nRec != NODE_NOTFOUND)
-                {
-                    m_pFileSet->get().push_back(nRec);
-                    nRec = pIter->Next();
-                }
-                m_pFileSet->setFrozen();
-                return true;
+                m_pFileSet->get().push_back(nRec);
+                nRec = pIter->Next();
             }
+            m_pFileSet->setFrozen();
+            return true;
         }
     }
     return false;

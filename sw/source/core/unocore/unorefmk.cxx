@@ -710,9 +710,8 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
     {
         if (pPortions) // set cache in the XMeta to the given portions
         {
-            const uno::Reference<lang::XUnoTunnel> xUT(xMeta, uno::UNO_QUERY);
             SwXMeta *const pXMeta(
-                ::sw::UnoTunnelGetImplementation<SwXMeta>(xUT));
+                comphelper::getUnoTunnelImplementation<SwXMeta>(xMeta));
             assert(pXMeta);
             // NB: the meta must always be created with the complete content
             // if SwXTextPortionEnumeration is created for a selection,

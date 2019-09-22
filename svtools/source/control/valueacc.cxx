@@ -144,8 +144,7 @@ ValueSetAcc* ValueSetAcc::getImplementation( const uno::Reference< uno::XInterfa
 {
     try
     {
-        uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
-        return( xUnoTunnel.is() ? reinterpret_cast<ValueSetAcc*>(sal::static_int_cast<sal_IntPtr>(xUnoTunnel->getSomething( ValueSetAcc::getUnoTunnelId() ))) : nullptr );
+        return comphelper::getUnoTunnelImplementation<ValueSetAcc>(rxData);
     }
     catch(const css::uno::Exception&)
     {
@@ -747,8 +746,7 @@ ValueItemAcc* ValueItemAcc::getImplementation( const uno::Reference< uno::XInter
 {
     try
     {
-        uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
-        return( xUnoTunnel.is() ? reinterpret_cast<ValueItemAcc*>(sal::static_int_cast<sal_IntPtr>(xUnoTunnel->getSomething( ValueItemAcc::getUnoTunnelId() ))) : nullptr );
+        return comphelper::getUnoTunnelImplementation<ValueItemAcc>(rxData);
     }
     catch(const css::uno::Exception&)
     {
@@ -1096,8 +1094,7 @@ SvtValueItemAcc* SvtValueItemAcc::getImplementation( const uno::Reference< uno::
 {
     try
     {
-        uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
-        return( xUnoTunnel.is() ? reinterpret_cast<SvtValueItemAcc*>(sal::static_int_cast<sal_IntPtr>(xUnoTunnel->getSomething( SvtValueItemAcc::getUnoTunnelId() ))) : nullptr );
+        return comphelper::getUnoTunnelImplementation<SvtValueItemAcc>(rxData);
     }
     catch(const css::uno::Exception&)
     {
@@ -1486,8 +1483,7 @@ SvtValueSetAcc* SvtValueSetAcc::getImplementation( const uno::Reference< uno::XI
 {
     try
     {
-        uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
-        return( xUnoTunnel.is() ? reinterpret_cast<SvtValueSetAcc*>(sal::static_int_cast<sal_IntPtr>(xUnoTunnel->getSomething( SvtValueSetAcc::getUnoTunnelId() ))) : nullptr );
+        return comphelper::getUnoTunnelImplementation<SvtValueSetAcc>(rxData);
     }
     catch(const css::uno::Exception&)
     {
