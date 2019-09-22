@@ -634,10 +634,8 @@ SwXText::insertTextContentBefore(
         throw aRuntime;
     }
 
-    const uno::Reference<lang::XUnoTunnel> xParaTunnel(xNewContent,
-            uno::UNO_QUERY);
     SwXParagraph *const pPara =
-            ::sw::UnoTunnelGetImplementation<SwXParagraph>(xParaTunnel);
+            comphelper::getUnoTunnelImplementation<SwXParagraph>(xNewContent);
     if (!pPara || !pPara->IsDescriptor() || !xSuccessor.is())
     {
         throw lang::IllegalArgumentException();
@@ -692,10 +690,8 @@ SwXText::insertTextContentAfter(
         throw uno::RuntimeException();
     }
 
-    const uno::Reference<lang::XUnoTunnel> xParaTunnel(xNewContent,
-            uno::UNO_QUERY);
     SwXParagraph *const pPara =
-            ::sw::UnoTunnelGetImplementation<SwXParagraph>(xParaTunnel);
+            comphelper::getUnoTunnelImplementation<SwXParagraph>(xNewContent);
     if(!pPara || !pPara->IsDescriptor() || !xPredecessor.is())
     {
         throw lang::IllegalArgumentException();
@@ -986,9 +982,8 @@ bool SwXText::Impl::CheckForOwnMember(
 {
     const uno::Reference<text::XTextCursor> xOwnCursor(m_rThis.CreateCursor());
 
-    const uno::Reference<lang::XUnoTunnel> xTunnel(xOwnCursor, uno::UNO_QUERY);
     OTextCursorHelper *const pOwnCursor =
-            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xTunnel);
+            comphelper::getUnoTunnelImplementation<OTextCursorHelper>(xOwnCursor);
     OSL_ENSURE(pOwnCursor, "OTextCursorHelper::getUnoTunnelId() ??? ");
     const SwStartNode* pOwnStartNode =
         pOwnCursor->GetPaM()->GetNode().StartOfSectionNode();
@@ -1522,14 +1517,10 @@ SwXText::convertToTextFrame(
         throw lang::IllegalArgumentException();
     }
 
-    const uno::Reference<lang::XUnoTunnel> xStartRangeTunnel(xStart,
-            uno::UNO_QUERY);
     SwXTextRange *const pStartRange =
-        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xStartRangeTunnel);
-    const uno::Reference<lang::XUnoTunnel> xEndRangeTunnel(xEnd,
-            uno::UNO_QUERY);
+        comphelper::getUnoTunnelImplementation<SwXTextRange>(xStart);
     SwXTextRange *const pEndRange   =
-        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xEndRangeTunnel);
+        comphelper::getUnoTunnelImplementation<SwXTextRange>(xEnd);
     // bookmarks have to be removed before the referenced text node
     // is deleted in DelFullPara
     if (pStartRange)
@@ -1735,10 +1726,8 @@ SwXText::convertToTextFrame(
     {
         const uno::Reference<text::XTextCursor> xFrameTextCursor =
             rNewFrame.createTextCursor();
-        const uno::Reference<XUnoTunnel> xTunnel(xFrameTextCursor,
-                uno::UNO_QUERY);
         SwXTextCursor *const pFrameCursor =
-            ::sw::UnoTunnelGetImplementation<SwXTextCursor>(xTunnel);
+            comphelper::getUnoTunnelImplementation<SwXTextCursor>(xFrameTextCursor);
         if (bParaBeforeInserted)
         {
             // todo: remove paragraph before frame

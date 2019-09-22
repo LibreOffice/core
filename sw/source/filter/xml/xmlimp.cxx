@@ -1710,9 +1710,7 @@ void SwXMLImport::initialize(
 
 SwDoc* SwImport::GetDocFromXMLImport( SvXMLImport const & rImport )
 {
-    uno::Reference<lang::XUnoTunnel> xModelTunnel( rImport.GetModel(), uno::UNO_QUERY );
-    SwXTextDocument *pTextDoc = reinterpret_cast< SwXTextDocument *>(
-            sal::static_int_cast< sal_IntPtr >(  xModelTunnel->getSomething(SwXTextDocument::getUnoTunnelId() )));
+    auto pTextDoc = comphelper::getUnoTunnelImplementation<SwXTextDocument>(rImport.GetModel());
     assert( pTextDoc );
     assert( pTextDoc->GetDocShell() );
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -1723,11 +1721,7 @@ SwDoc* SwImport::GetDocFromXMLImport( SvXMLImport const & rImport )
 void SwXMLImport::initXForms()
 {
     // obtain SwDoc
-    Reference<XUnoTunnel> xDocTunnel( GetModel(), UNO_QUERY );
-    if( ! xDocTunnel.is() )
-        return;
-    SwXTextDocument* pXTextDocument = reinterpret_cast<SwXTextDocument*>(
-        xDocTunnel->getSomething( SwXTextDocument::getUnoTunnelId() ) );
+    auto pXTextDocument = comphelper::getUnoTunnelImplementation<SwXTextDocument>(GetModel());
     if( pXTextDocument == nullptr )
         return;
 

@@ -496,11 +496,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
         // To get to the SwXShape* we need an interface that is implemented by SwXShape
 
         uno::Reference< beans::XPropertySet > xPropSet( xShape, UNO_QUERY );
-        uno::Reference< XUnoTunnel> xTunnel( xPropSet, UNO_QUERY );
-        SwXShape *pSwShape = xTunnel.is() ?
-                    reinterpret_cast< SwXShape * >( sal::static_int_cast< sal_IntPtr>(
-                    xTunnel->getSomething(SwXShape::getUnoTunnelId()) ))
-                : nullptr;
+        SwXShape *pSwShape = comphelper::getUnoTunnelImplementation<SwXShape>(xPropSet);
 
         OSL_ENSURE( pSwShape, "Where is SW-Shape?" );
         if( pSwShape )
@@ -650,11 +646,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
         }
     }
 
-    uno::Reference< XUnoTunnel> xTunnel( xPropSet, UNO_QUERY );
-    SwXShape *pSwShape = xTunnel.is() ?
-        reinterpret_cast< SwXShape *>( sal::static_int_cast< sal_IntPtr >(
-            xTunnel->getSomething(SwXShape::getUnoTunnelId()) ))
-        : nullptr;
+    SwXShape *pSwShape = comphelper::getUnoTunnelImplementation<SwXShape>(xPropSet);
 
     OSL_ENSURE( pSwShape, "Where is SW-Shape?" );
 

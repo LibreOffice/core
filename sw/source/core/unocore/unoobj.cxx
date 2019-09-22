@@ -2921,13 +2921,7 @@ SwXTextCursor::createEnumeration()
 
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    const uno::Reference<lang::XUnoTunnel> xTunnel(
-            m_pImpl->m_xParentText, uno::UNO_QUERY);
-    SwXText* pParentText = nullptr;
-    if (xTunnel.is())
-    {
-        pParentText = ::sw::UnoTunnelGetImplementation<SwXText>(xTunnel);
-    }
+    SwXText* pParentText = comphelper::getUnoTunnelImplementation<SwXText>(m_pImpl->m_xParentText);
     OSL_ENSURE(pParentText, "parent is not a SwXText");
     if (!pParentText)
     {

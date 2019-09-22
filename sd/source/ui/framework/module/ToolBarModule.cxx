@@ -20,6 +20,7 @@
 #include "ToolBarModule.hxx"
 #include <ViewShellBase.hxx>
 #include <DrawController.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <framework/FrameworkHelper.hxx>
 
 using namespace ::com::sun::star;
@@ -48,14 +49,9 @@ ToolBarModule::ToolBarModule (
       mbMainViewSwitchUpdatePending(false)
 {
     // Tunnel through the controller to obtain a ViewShellBase.
-    Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY);
-    if (xTunnel.is())
-    {
-        ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
-            xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
-        if (pController != nullptr)
-            mpBase = pController->GetViewShellBase();
-    }
+    auto pController = comphelper::getUnoTunnelImplementation<sd::DrawController>(rxController);
+    if (pController != nullptr)
+        mpBase = pController->GetViewShellBase();
 
     Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);
     if (!xControllerManager.is())

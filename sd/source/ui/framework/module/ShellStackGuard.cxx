@@ -27,6 +27,7 @@
 #include <sfx2/printer.hxx>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -51,14 +52,9 @@ ShellStackGuard::ShellStackGuard (Reference<frame::XController> const & rxContro
         mxConfigurationController = xControllerManager->getConfigurationController();
 
         // Tunnel through the controller to obtain a ViewShellBase.
-        Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY);
-        if (xTunnel.is())
-        {
-            ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
-                xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
-            if (pController != nullptr)
-                mpBase = pController->GetViewShellBase();
-        }
+        auto pController = comphelper::getUnoTunnelImplementation<sd::DrawController>(rxController);
+        if (pController != nullptr)
+            mpBase = pController->GetViewShellBase();
     }
 
     if (mxConfigurationController.is())

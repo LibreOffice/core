@@ -2675,13 +2675,9 @@ SdPage* SdPage::getImplementation( const css::uno::Reference< css::drawing::XDra
 {
     try
     {
-        css::uno::Reference< css::lang::XUnoTunnel > xUnoTunnel( xPage, css::uno::UNO_QUERY );
-        if( xUnoTunnel.is() )
-        {
-            SvxDrawPage* pUnoPage = reinterpret_cast<SvxDrawPage*>(sal::static_int_cast<sal_uIntPtr>(xUnoTunnel->getSomething( SvxDrawPage::getUnoTunnelId()) ) );
-            if( pUnoPage )
-                return static_cast< SdPage* >( pUnoPage->GetSdrPage() );
-        }
+        auto pUnoPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>(xPage);
+        if( pUnoPage )
+            return static_cast< SdPage* >( pUnoPage->GetSdrPage() );
     }
     catch( css::uno::Exception& )
     {

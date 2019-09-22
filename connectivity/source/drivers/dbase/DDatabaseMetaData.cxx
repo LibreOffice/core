@@ -31,6 +31,7 @@
 #include <dbase/DIndex.hxx>
 #include <connectivity/FValue.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <ucbhelper/content.hxx>
 
@@ -296,15 +297,11 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
         aRow[4] = new ORowSetValueDecorator(getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))));
         aRow[6] = new ORowSetValueDecorator(*pBegin);
 
-        Reference< XUnoTunnel> xTunnel(xIndex,UNO_QUERY);
-        if(xTunnel.is())
+        auto pIndex = comphelper::getUnoTunnelImplementation<ODbaseIndex>(xIndex);
+        if(pIndex)
         {
-            ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelId()) );
-            if(pIndex)
-            {
-                aRow[11] = new ORowSetValueDecorator(static_cast<sal_Int32>(pIndex->getHeader().db_maxkeys));
-                aRow[12] = new ORowSetValueDecorator(static_cast<sal_Int32>(pIndex->getHeader().db_pagecount));
-            }
+            aRow[11] = new ORowSetValueDecorator(static_cast<sal_Int32>(pIndex->getHeader().db_maxkeys));
+            aRow[12] = new ORowSetValueDecorator(static_cast<sal_Int32>(pIndex->getHeader().db_pagecount));
         }
 
         Reference<XColumnsSupplier> xColumnsSup(xIndex,UNO_QUERY);

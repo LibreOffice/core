@@ -47,6 +47,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <vcl/settings.hxx>
 
 #include <com/sun/star/drawing/ShapeCollection.hpp>
@@ -1026,15 +1027,10 @@ namespace {
 
 uno::Reference< lang::XMultiServiceFactory > getShapeFactory(const uno::Reference<uno::XInterface>& xChartView)
 {
-    Reference< lang::XUnoTunnel> xUnoTunnel(xChartView,uno::UNO_QUERY);
-    if(xUnoTunnel.is())
-    {
-        ExplicitValueProvider* pProvider = reinterpret_cast<ExplicitValueProvider*>(xUnoTunnel->getSomething(
-                    ExplicitValueProvider::getUnoTunnelId() ));
-        if( pProvider )
-            return pProvider->getDrawModelWrapper()->getShapeFactory();
+    auto pProvider = comphelper::getUnoTunnelImplementation<ExplicitValueProvider>(xChartView);
+    if( pProvider )
+        return pProvider->getDrawModelWrapper()->getShapeFactory();
 
-    }
     return uno::Reference< lang::XMultiServiceFactory >();
 }
 

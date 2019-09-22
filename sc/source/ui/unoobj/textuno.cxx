@@ -157,11 +157,7 @@ const uno::Sequence<sal_Int8>& ScHeaderFooterContentObj::getUnoTunnelId()
 rtl::Reference<ScHeaderFooterContentObj> ScHeaderFooterContentObj::getImplementation(
                                 const uno::Reference<sheet::XHeaderFooterContent>& rObj)
 {
-    rtl::Reference<ScHeaderFooterContentObj> pRet;
-    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
-    if (xUT.is())
-        pRet = reinterpret_cast<ScHeaderFooterContentObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
-    return pRet;
+    return comphelper::getUnoTunnelImplementation<ScHeaderFooterContentObj>(rObj);
 }
 
 void ScHeaderFooterContentObj::Init( const EditTextObject* pLeft,

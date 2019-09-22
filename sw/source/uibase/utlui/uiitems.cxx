@@ -248,9 +248,7 @@ bool SwUINumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
     uno::Reference< container::XIndexReplace> xRulesRef;
     if(rVal >>= xRulesRef)
     {
-        uno::Reference< lang::XUnoTunnel > xTunnel(xRulesRef, uno::UNO_QUERY);
-        SwXNumberingRules* pSwXRules = xTunnel.is() ? reinterpret_cast<SwXNumberingRules*>(
-                    xTunnel->getSomething(SwXNumberingRules::getUnoTunnelId())) : nullptr;
+        auto pSwXRules = comphelper::getUnoTunnelImplementation<SwXNumberingRules>(xRulesRef);
         if(pSwXRules)
         {
             *pRule = *pSwXRules->GetNumRule();

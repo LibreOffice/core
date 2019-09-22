@@ -47,6 +47,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/types.hxx>
 #include <unotools/confignode.hxx>
@@ -342,13 +343,9 @@ namespace connectivity
                 if ( xOrig.is() )
                 {
                     // now we have to set the URL to get the correct answer for metadata()->getURL()
-                    Reference< XUnoTunnel> xTunnel(xOrig,UNO_QUERY);
-                    if ( xTunnel.is() )
-                    {
-                        OMetaConnection* pMetaConnection = reinterpret_cast<OMetaConnection*>(xTunnel->getSomething( OMetaConnection::getUnoTunnelId() ));
-                        if ( pMetaConnection )
-                            pMetaConnection->setURL(url);
-                    }
+                    auto pMetaConnection = comphelper::getUnoTunnelImplementation<OMetaConnection>(xOrig);
+                    if ( pMetaConnection )
+                        pMetaConnection->setURL(url);
 
                     Reference<XComponent> xComp(xOrig,UNO_QUERY);
                     if ( xComp.is() )

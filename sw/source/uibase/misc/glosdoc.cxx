@@ -20,6 +20,7 @@
 #include <algorithm>
 
 #include <com/sun/star/container/XNamed.hpp>
+#include <comphelper/servicehelper.hxx>
 
 #include <unotools/transliterationwrapper.hxx>
 
@@ -457,13 +458,7 @@ void SwGlossaries::RemoveFileFromList( const OUString& rGroup )
                         aLoop != m_aGlossaryEntries.end();
                     )
                 {
-                    Reference< lang::XUnoTunnel > xEntryTunnel( aLoop->get(), UNO_QUERY );
-
-                    SwXAutoTextEntry* pEntry = nullptr;
-                    if ( xEntryTunnel.is() )
-                        pEntry = reinterpret_cast< SwXAutoTextEntry* >(
-                            xEntryTunnel->getSomething( SwXAutoTextEntry::getUnoTunnelId() ) );
-
+                    auto pEntry = comphelper::getUnoTunnelImplementation<SwXAutoTextEntry>(aLoop->get());
                     if ( pEntry && ( pEntry->GetGroupName() == rGroup ) )
                     {
                         pEntry->Invalidate();
@@ -518,12 +513,7 @@ void SwGlossaries::InvalidateUNOOjects()
     // invalidate all the AutoTextEntry-objects
     for (const auto& rEntry : m_aGlossaryEntries)
     {
-        Reference< lang::XUnoTunnel > xEntryTunnel( rEntry.get(), UNO_QUERY );
-        SwXAutoTextEntry* pEntry = nullptr;
-        if ( xEntryTunnel.is() )
-            pEntry = reinterpret_cast< SwXAutoTextEntry* >(
-                xEntryTunnel->getSomething( SwXAutoTextEntry::getUnoTunnelId() ) );
-
+        auto pEntry = comphelper::getUnoTunnelImplementation<SwXAutoTextEntry>(rEntry.get());
         if ( pEntry )
             pEntry->Invalidate();
     }
@@ -543,12 +533,7 @@ Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const OUString
     UnoAutoTextGroups::iterator aSearch = m_aGlossaryGroups.begin();
     for ( ; aSearch != m_aGlossaryGroups.end(); )
     {
-        Reference< lang::XUnoTunnel > xGroupTunnel( aSearch->get(), UNO_QUERY );
-
-        SwXAutoTextGroup* pSwGroup = nullptr;
-        if ( xGroupTunnel.is() )
-            pSwGroup = reinterpret_cast< SwXAutoTextGroup* >( xGroupTunnel->getSomething( SwXAutoTextGroup::getUnoTunnelId() ) );
-
+        auto pSwGroup = comphelper::getUnoTunnelImplementation<SwXAutoTextGroup>(aSearch->get());
         if ( !pSwGroup )
         {
             // the object is dead in the meantime -> remove from cache

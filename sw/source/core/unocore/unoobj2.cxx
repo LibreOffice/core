@@ -1035,10 +1035,8 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
     {
         xTextCursor.set( pText->CreateCursor() );
         xTextCursor->gotoEnd(true);
-        const uno::Reference<lang::XUnoTunnel> xCursorTunnel(
-                xTextCursor, uno::UNO_QUERY);
         pCursor =
-            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xCursorTunnel);
+            comphelper::getUnoTunnelImplementation<OTextCursorHelper>(xTextCursor);
     }
     if(pRange && &pRange->GetDoc() == rToFill.GetDoc())
     {

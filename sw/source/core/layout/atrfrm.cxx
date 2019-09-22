@@ -1102,14 +1102,7 @@ bool SwFormatCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             m_nWidth = nWidthSum;
             m_bOrtho = false;
 
-            uno::Reference<lang::XUnoTunnel> xNumTunnel(xCols, uno::UNO_QUERY);
-            SwXTextColumns* pSwColums = nullptr;
-            if(xNumTunnel.is())
-            {
-                pSwColums = reinterpret_cast< SwXTextColumns * >(
-                    sal::static_int_cast< sal_IntPtr >(
-                    xNumTunnel->getSomething( SwXTextColumns::getUnoTunnelId() )));
-            }
+            auto pSwColums = comphelper::getUnoTunnelImplementation<SwXTextColumns>(xCols);
             if(pSwColums)
             {
                 m_bOrtho = pSwColums->IsAutomaticWidth();

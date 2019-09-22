@@ -80,14 +80,10 @@ sal_Int16 SwXFilterOptions::execute()
     if ( xInputStream.is() )
         pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
 
-    uno::Reference< XUnoTunnel > xTunnel(xModel, uno::UNO_QUERY);
     SwDocShell* pDocShell = nullptr;
-    if(xTunnel.is())
-    {
-        SwXTextDocument* pXDoc = reinterpret_cast< SwXTextDocument * >(
-                sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(SwXTextDocument::getUnoTunnelId())));
-        pDocShell = pXDoc ? pXDoc->GetDocShell() : nullptr;
-    }
+    if (auto pXDoc = comphelper::getUnoTunnelImplementation<SwXTextDocument>(xModel); pXDoc)
+        pDocShell = pXDoc->GetDocShell();
+
     if(pDocShell)
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

@@ -19,6 +19,7 @@
 
 #include <dbase/DIndexes.hxx>
 #include <dbase/DIndex.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <connectivity/dbexception.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <strings.hrc>
@@ -106,14 +107,9 @@ sdbcx::ObjectType ODbaseIndexes::appendObject( const OUString& _rForName, const 
 // XDrop
 void ODbaseIndexes::dropObject(sal_Int32 _nPos, const OUString& /*_sElementName*/)
 {
-    Reference< XUnoTunnel> xTunnel(getObject(_nPos),UNO_QUERY);
-    if ( xTunnel.is() )
-    {
-        ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelId()) );
-        if ( pIndex )
-            pIndex->DropImpl();
-    }
-
+    auto pIndex = comphelper::getUnoTunnelImplementation<ODbaseIndex>(getObject(_nPos));
+    if ( pIndex )
+        pIndex->DropImpl();
 }
 
 

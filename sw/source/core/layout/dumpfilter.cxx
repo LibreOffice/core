@@ -87,8 +87,7 @@ namespace sw
                 uno::Reference< io::XOutputStream >() );
 
         // Actually get the SwRootFrame to call dumpAsXml
-        uno::Reference< lang::XUnoTunnel > xDocTunnel( m_xSrcDoc, uno::UNO_QUERY );
-        SwXTextDocument* pXDoc = UnoTunnelGetImplementation< SwXTextDocument >( xDocTunnel );
+        auto pXDoc = comphelper::getUnoTunnelImplementation<SwXTextDocument>(m_xSrcDoc);
         if ( pXDoc )
         {
             SwRootFrame* pLayout = pXDoc->GetDocShell()->GetWrtShell()->GetLayout();

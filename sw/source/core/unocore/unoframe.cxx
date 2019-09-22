@@ -1727,10 +1727,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             uno::Reference<text::XTextFrame> xFrame;
             if(aValue >>= xFrame)
             {
-                uno::Reference<lang::XUnoTunnel> xTunnel(xFrame, uno::UNO_QUERY);
-                SwXFrame* pFrame = xTunnel.is() ?
-                        reinterpret_cast< SwXFrame * >( sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXFrame::getUnoTunnelId()) ))
-                        : nullptr;
+                SwXFrame* pFrame = comphelper::getUnoTunnelImplementation<SwXFrame>(xFrame);
                 if(pFrame && this != pFrame && pFrame->GetFrameFormat() && pFrame->GetFrameFormat()->GetDoc() == pDoc)
                 {
                     SfxItemSet aSet( pDoc->GetAttrPool(),

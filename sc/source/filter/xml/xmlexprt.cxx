@@ -5244,8 +5244,7 @@ ErrCode ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
             uno::Reference< frame::XModel > xModel = GetModel();
             if ( xModel.is() )
             {
-                uno::Reference< lang::XUnoTunnel >  xObjShellTunnel( xModel, uno::UNO_QUERY );
-                SfxObjectShell* pFoundShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel.is() ? xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()) : 0 );
+                auto pFoundShell = comphelper::getUnoTunnelImplementation<SfxObjectShell>(xModel);
                 if ( pFoundShell && ooo::vba::isAlienExcelDoc( *pFoundShell ) )
                 {
                     xRowStylesPropertySetMapper = new XMLPropertySetMapper(aXMLScFromXLSRowStylesProperties, xScPropHdlFactory, true);

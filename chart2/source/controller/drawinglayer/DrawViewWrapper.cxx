@@ -371,11 +371,10 @@ SdrObject* DrawViewWrapper::getSdrObject( const uno::Reference<
                     drawing::XShape >& xShape )
 {
     SdrObject* pRet = nullptr;
-    uno::Reference< lang::XUnoTunnel > xUnoTunnel( xShape, uno::UNO_QUERY );
     uno::Reference< lang::XTypeProvider > xTypeProvider( xShape, uno::UNO_QUERY );
-    if(xUnoTunnel.is()&&xTypeProvider.is())
+    if(xTypeProvider.is())
     {
-        SvxShape* pSvxShape = reinterpret_cast<SvxShape*>(xUnoTunnel->getSomething( SvxShape::getUnoTunnelId() ));
+        SvxShape* pSvxShape = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
         if(pSvxShape)
             pRet = pSvxShape->GetSdrObject();
     }

@@ -46,6 +46,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <shellio.hxx>
@@ -153,14 +154,7 @@ void SwOneExampleFrame::Paint(vcl::RenderContext& rRenderContext, const tools::R
     Color aBgColor = SW_MOD()->GetColorConfig().GetColorValue(::svtools::DOCCOLOR).nColor;
     m_xVirDev->DrawWallpaper(tools::Rectangle(Point(), aSize), aBgColor);
 
-    OTextCursorHelper* pCursor = nullptr;
-    uno::Reference<lang::XUnoTunnel> xTunnel(m_xCursor, uno::UNO_QUERY);
-    if (xTunnel.is())
-    {
-        pCursor = reinterpret_cast<OTextCursorHelper*>(xTunnel->getSomething(
-                                    OTextCursorHelper::getUnoTunnelId()));
-    }
-
+    auto pCursor = comphelper::getUnoTunnelImplementation<OTextCursorHelper>(m_xCursor);
     if (pCursor)
     {
         uno::Reference<view::XViewSettingsSupplier> xSettings(m_xController, uno::UNO_QUERY);
@@ -307,13 +301,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
         //From here, a cursor is defined, which goes through the template,
         //and overwrites the template words where it is necessary.
 
-        OTextCursorHelper* pCursor = nullptr;
-        uno::Reference< lang::XUnoTunnel> xTunnel( m_xCursor, uno::UNO_QUERY);
-        if (xTunnel.is())
-        {
-            pCursor = reinterpret_cast<OTextCursorHelper*>(xTunnel->getSomething(
-                                        OTextCursorHelper::getUnoTunnelId()));
-        }
+        auto pCursor = comphelper::getUnoTunnelImplementation<OTextCursorHelper>(m_xCursor);
 
         SwDoc *pDoc = pCursor ? pCursor->GetDoc() : nullptr;
         if (pDoc)

@@ -33,6 +33,7 @@
 
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -82,14 +83,9 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 
     // Tunnel through the controller to obtain a ViewShellBase.
     ViewShellBase* pBase = nullptr;
-    Reference<lang::XUnoTunnel> xTunnel (xFrame->getController(), UNO_QUERY);
-    if (xTunnel.is())
-    {
-        ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
-            xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
-        if (pController != nullptr)
-            pBase = pController->GetViewShellBase();
-    }
+    auto pController = comphelper::getUnoTunnelImplementation<sd::DrawController>(xFrame->getController());
+    if (pController != nullptr)
+        pBase = pController->GetViewShellBase();
     if (pBase == nullptr)
         throw RuntimeException("can not get ViewShellBase for frame");
 

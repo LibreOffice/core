@@ -674,8 +674,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case FN_REPAGINATE:
             {
                 Reference < XModel > xModel = GetView().GetDocShell()->GetModel();
-                Reference < XUnoTunnel > xDocTunnel ( xModel, UNO_QUERY );
-                SwXTextDocument *pDoc = reinterpret_cast < SwXTextDocument * > ( xDocTunnel->getSomething ( SwXTextDocument::getUnoTunnelId() ) );
+                auto pDoc = comphelper::getUnoTunnelImplementation<SwXTextDocument>(xModel);
                 pDoc->NotifyRefreshListeners();
                 rSh.CalcLayout();
             }
