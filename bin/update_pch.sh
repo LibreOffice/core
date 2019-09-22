@@ -42,8 +42,12 @@ for x in $headers; do
         fi
     else
         header=$x
-        echo updating `echo $header | sed -e s%$root/%%`
+        local update_msg=`echo $header | sed -e s%$root/%%`
         module=`readlink -f $header | sed -e s%$root/%% -e s%/.*%%`
+        if [ "$module" = "pch" ]; then
+            continue # PCH's in pch/inc/pch/ are handled manually
+        fi
+        echo updating $update_msg
         if [ "$module" = "external" ]; then
             module=external/`readlink -f $header | sed -e s%$root/external/%% -e s%/.*%%`
         fi

@@ -97,6 +97,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	oox \
 	$(call gb_Helper_optional,OPENCL,opencl) \
 	package \
+	pch \
 	postprocess \
 	$(call gb_Helper_optional,PYUNO,pyuno) \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
