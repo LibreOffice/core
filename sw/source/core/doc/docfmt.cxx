@@ -333,20 +333,10 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             pStt, pEnd, pHst, nullptr, pLayout);
 
     // mst: not including META here; it seems attrs with CH_TXTATR are omitted
-    sal_uInt16 const aResetableSetRange[] {
-        RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-        RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-        RES_PARATR_BEGIN, RES_PARATR_END-1,
-        RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
-        RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-        RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
-        RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
-        RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
-        RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-        0
-    };
-
-    SfxItemSet aDelSet( GetAttrPool(), aResetableSetRange );
+    SfxItemSet aDelSet(GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
+                                                 RES_TXTATR_INETFMT, RES_TXTATR_UNKNOWN_CONTAINER,
+                                                 RES_PARATR_BEGIN, RES_FRMATR_END - 1,
+                                                 RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>{});
     if( !rAttrs.empty() )
     {
         for( std::set<sal_uInt16>::const_reverse_iterator it = rAttrs.rbegin(); it != rAttrs.rend(); ++it )
