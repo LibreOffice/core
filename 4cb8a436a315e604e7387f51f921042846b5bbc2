@@ -22,6 +22,30 @@
       "revId": "4cb8a436a315e604e7387f51f921042846b5bbc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_6c5eb4e7",
+        "filename": "i18npool/source/transliteration/transliteration_body.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-09-22T15:40:47Z",
+      "side": 1,
+      "message": "I don\u0027t know how to do that. Could give an advice?",
+      "parentUuid": "7f7f9b97_45af1494",
+      "range": {
+        "startLine": 104,
+        "startChar": 4,
+        "endLine": 104,
+        "endChar": 40
+      },
+      "revId": "4cb8a436a315e604e7387f51f921042846b5bbc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
