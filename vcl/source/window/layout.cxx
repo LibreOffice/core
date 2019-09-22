@@ -1431,6 +1431,17 @@ void VclGrid::setAllocation(const Size& rAllocation)
     }
 }
 
+boost::property_tree::ptree VclGrid::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(VclContainer::DumpAsPropertyTree());
+    array_type A = assembleGrid(*this);
+    sal_Int32 nMaxX = A.shape()[0];
+    sal_Int32 nMaxY = A.shape()[1];
+    aTree.put("cols", nMaxX);
+    aTree.put("rows", nMaxY);
+    return aTree;
+}
+
 bool toBool(const OUString &rValue)
 {
     return (!rValue.isEmpty() && (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1'));

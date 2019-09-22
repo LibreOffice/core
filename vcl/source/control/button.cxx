@@ -578,6 +578,13 @@ FactoryFunction Button::GetUITestFactory() const
     return ButtonUIObject::create;
 }
 
+boost::property_tree::ptree Button::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(Control::DumpAsPropertyTree());
+    aTree.put("text", GetText());
+    return aTree;
+}
+
 IMPL_STATIC_LINK( Button, dispatchCommandHandler, Button*, pButton, void )
 {
     if (pButton == nullptr)
