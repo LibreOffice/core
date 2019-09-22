@@ -9,6 +9,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_cond_format_merge))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_cond_format_merge))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_cond_format_merge, \
     sc/qa/unit/cond_format_merge \
 ))

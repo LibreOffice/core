@@ -11,6 +11,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_arealinksobj))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_arealinksobj))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_arealinksobj, \
 	sc/qa/extras/scarealinksobj \
 ))

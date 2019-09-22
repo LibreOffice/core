@@ -13,6 +13,8 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_annotationsobj))
 
 $(eval $(call gb_CppunitTest_use_external,sc_annotationsobj,boost_headers))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_annotationsobj))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_annotationsobj, \
 	sc/qa/extras/scannotationsobj \
 ))

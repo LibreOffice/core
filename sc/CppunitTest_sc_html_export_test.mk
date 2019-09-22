@@ -9,6 +9,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_html_export_test))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_html_export_test))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_html_export_test, \
     sc/qa/extras/htmlexporttest \
 ))

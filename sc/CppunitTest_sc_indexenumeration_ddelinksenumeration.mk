@@ -13,6 +13,8 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_indexenumeration_ddelinksenumeration
 
 $(eval $(call gb_CppunitTest_use_external,sc_indexenumeration_ddelinksenumeration,boost_headers))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_indexenumeration_ddelinksenumeration))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_indexenumeration_ddelinksenumeration, \
 	sc/qa/extras/scindexenumeration_ddelinksenumeration \
 ))

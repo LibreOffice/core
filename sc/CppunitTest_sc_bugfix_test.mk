@@ -9,6 +9,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_bugfix_test))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_bugfix_test))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_bugfix_test, \
     sc/qa/unit/bugfix-test \
 ))

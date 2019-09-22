@@ -13,6 +13,8 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_datapilotfieldsobj))
 
 $(eval $(call gb_CppunitTest_use_external,sc_datapilotfieldsobj,boost_headers))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_datapilotfieldsobj))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_datapilotfieldsobj, \
 	sc/qa/extras/scdatapilotfieldsobj \
 ))

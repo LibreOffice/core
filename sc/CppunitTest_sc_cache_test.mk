@@ -18,6 +18,8 @@ $(eval $(call gb_CppunitTest_use_externals,sc_cache_test, \
 	mdds_headers \
 ))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_cache_test))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_cache_test, \
     sc/qa/unit/datacache \
 ))
