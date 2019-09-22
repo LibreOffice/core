@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_ccefc8e7",
+        "filename": "sw/source/core/frmedt/fews.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-09-22T16:53:00Z",
+      "side": 1,
+      "message": "perhaps return a bool from EndAction to indicate whether anything useful happended, could avoid dynamic_cast here",
+      "revId": "f24dbde0f9a62d5ff1400cb83201721c782e1dc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
