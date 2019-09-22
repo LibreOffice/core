@@ -242,6 +242,19 @@ void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, cons
     pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, rPayload.getStr());
 }
 
+void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pDoc, bInvalidateAll);
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisView, const OString& rRectangle)
 {
     OString sPayload;

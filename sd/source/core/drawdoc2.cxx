@@ -398,13 +398,8 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 
     if (comphelper::LibreOfficeKit::isActive() && static_cast<SdPage*>(pPage)->GetPageKind() == PageKind::Standard)
     {
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-        while (pViewShell)
-        {
-            SdXImpressDocument* pModel = comphelper::getUnoTunnelImplementation<SdXImpressDocument>(this->getUnoModel());
-            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pModel);
-            pViewShell = SfxViewShell::GetNext(*pViewShell);
-        }
+        SdXImpressDocument* pDoc = comphelper::getUnoTunnelImplementation<SdXImpressDocument>(this->getUnoModel());
+        SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
     }
 }
 
@@ -432,13 +427,8 @@ SdrPage* SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
 
     if (comphelper::LibreOfficeKit::isActive() && static_cast<SdPage*>(pPage)->GetPageKind() == PageKind::Standard)
     {
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-        while (pViewShell)
-        {
-            SdXImpressDocument* pModel = comphelper::getUnoTunnelImplementation<SdXImpressDocument>(this->getUnoModel());
-            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pModel);
-            pViewShell = SfxViewShell::GetNext(*pViewShell);
-        }
+        SdXImpressDocument* pDoc = comphelper::getUnoTunnelImplementation<SdXImpressDocument>(this->getUnoModel());
+        SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
     }
 
     return pPage;

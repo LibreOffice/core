@@ -584,13 +584,8 @@ bool ScDocument::InsertTab(
 
         if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
         {
-            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-            while (pViewShell)
-            {
-                ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(pViewShell->GetCurrentDocument());
-                SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pModel);
-                pViewShell = SfxViewShell::GetNext(*pViewShell);
-            }
+            ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(this->GetDocumentShell()->GetModel());
+            SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
         }
     }
 
@@ -755,13 +750,8 @@ bool ScDocument::DeleteTab( SCTAB nTab )
 
                 if (comphelper::LibreOfficeKit::isActive())
                 {
-                    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-                    while (pViewShell)
-                    {
-                        ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(pViewShell->GetCurrentDocument());
-                        SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pModel);
-                        pViewShell = SfxViewShell::GetNext(*pViewShell);
-                    }
+                    ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(this->GetDocumentShell()->GetModel());
+                    SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
                 }
 
                 bValid = true;
@@ -852,13 +842,8 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
 
                 if (comphelper::LibreOfficeKit::isActive())
                 {
-                    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-                    while (pViewShell)
-                    {
-                        ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(pViewShell->GetCurrentDocument());
-                        SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pModel);
-                        pViewShell = SfxViewShell::GetNext(*pViewShell);
-                    }
+                    ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(this->GetDocumentShell()->GetModel());
+                    SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
                 }
 
                 bValid = true;
@@ -904,13 +889,8 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
 
                 if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
                 {
-                    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-                    while (pViewShell)
-                    {
-                        ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(pViewShell->GetCurrentDocument());
-                        SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pModel);
-                        pViewShell = SfxViewShell::GetNext(*pViewShell);
-                    }
+                    ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(this->GetDocumentShell()->GetModel());
+                    SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
                 }
             }
         }
