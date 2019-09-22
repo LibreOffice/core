@@ -648,8 +648,7 @@ void SwUndoResetAttr::RepeatImpl(::sw::RepeatContext & rContext)
 
 void SwUndoResetAttr::SetAttrs( const std::set<sal_uInt16> &rAttrs )
 {
-    m_Ids.clear();
-    m_Ids.insert( rAttrs.begin(), rAttrs.end() );
+    m_Ids = rAttrs;
 }
 
 SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
