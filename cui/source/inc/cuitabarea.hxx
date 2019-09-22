@@ -659,8 +659,6 @@ class SvxColorTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    VclPtr<Window>             mpTopDlg;
-
     const SfxItemSet&   rOutAttrs;
 
     XColorListRef         pColorList;
