@@ -1979,6 +1979,18 @@ AC_ARG_WITH(help,
     ],
 ,)
 
+AC_ARG_WITH(omindex,
+   AS_HELP_STRING([--with-omindex],
+	[Enable the build of xapian-omega index for online help.])
+   [
+                         Usage: --with-omindex=local prepare the online help pages for
+			        omindex and and build the xapian-omega locally
+				--with-omindex=server prepare the pages for omindex
+				but let xapian-omega be built in server.
+				--with-omindex=noxap do not prepare online pages for xapian-omega
+  ],
+,)
+
 libo_FUZZ_ARG_WITH(java,
     AS_HELP_STRING([--with-java=<java command>],
         [Specify the name of the Java interpreter command. Typically "java"
@@ -5028,6 +5040,47 @@ else
 fi
 AC_SUBST([ENABLE_HTMLHELP])
 AC_SUBST([HELP_ONLINE])
+
+AC_MSG_CHECKING([whether to build xapian-omega index for help])
+if test -n "$with_omindex" -a "$with_omindex" != "no" -a $_os != iOS -a $_os != Android; then
+    BUILD_TYPE="$BUILD_TYPE HELP"
+    GIT_NEEDED_SUBMODULES="helpcontent2 $GIT_NEEDED_SUBMODULES"
+    case "$with_omindex" in
+    "local")
+        ENABLE_HTMLHELP=TRUE
+        HELP_ONLINE=TRUE
+        HELP_OMINDEX_BUILD=TRUE
+        HELP_OMINDEX_PAGE=TRUE
+        AC_MSG_RESULT([LOCAL])
+        ;;
+    "server")
+        ENABLE_HTMLHELP=TRUE
+        HELP_ONLINE=TRUE
+        HELP_OMINDEX_BUILD=FALSE
+        HELP_OMINDEX_PAGE=TRUE
+        AC_MSG_RESULT([SERVER])
+        ;;
+    "noxap")
+        ENABLE_HTMLHELP=TRUE
+        HELP_ONLINE=TRUE
+        HELP_OMINDEX_BUILD=FALSE
+        HELP_OMINDEX_PAGE=FALSE
+        AC_MSG_RESULT([NOXAP])
+        ;;
+    *)
+        AC_MSG_ERROR([Unknown --with-omindex=$with_omindex])
+        ;;
+    esac
+else
+    HELP_OMINDEX_BUILD=FALSE
+    HELP_OMINDEX_PAGE=FALSE
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST([ENABLE_HTMLHELP])
+AC_SUBST([HELP_OMINDEX_BUILD])
+AC_SUBST([HELP_OMINDEX_PAGE])
+AC_SUBST([HELP_ONLINE])
+
 
 dnl Test whether to include MySpell dictionaries
 dnl ===================================================================
