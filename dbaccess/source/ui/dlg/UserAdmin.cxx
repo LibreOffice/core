@@ -255,7 +255,7 @@ IMPL_LINK(OUserAdmin, UserHdl, weld::Button&, rButton, void)
     }
     catch(const SQLException& e)
     {
-        ::dbtools::showError(::dbtools::SQLExceptionInfo(e), VCLUnoHelper::GetInterface(this), m_xORB);
+        ::dbtools::showError(::dbtools::SQLExceptionInfo(e), GetDialogController()->getDialog()->GetXWindow(), m_xORB);
     }
     catch(Exception& )
     {
