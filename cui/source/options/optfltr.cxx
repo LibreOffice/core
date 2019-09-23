@@ -137,9 +137,6 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2(TabPageParent pParent, const SfxItemSet
     , m_xShadingRB(m_xBuilder->weld_radio_button("shading"))
     , m_xMSOLockFileCB(m_xBuilder->weld_check_button("mso_lockfile"))
 {
-    Size aControlSize(248, 55);
-    aControlSize = LogicToPixel(aControlSize, MapMode(MapUnit::MapAppFont));
-
     std::vector<int> aWidths;
     aWidths.push_back(m_xCheckLB->get_checkbox_column_width());
     aWidths.push_back(m_xCheckLB->get_checkbox_column_width());
