@@ -212,10 +212,10 @@ void SwWrtShell::Insert( const OUString &rStr )
          bCallIns = m_bIns /*|| bHasSel*/;
     bool bDeleted = false;
 
-    SfxItemSet aCharAttrSet(
-        GetAttrPool(),
-        svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
-                   RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT>{});
+    typedef svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_RSID - 1,
+                       RES_CHRATR_RSID + 1, RES_CHRATR_END - 1,
+                       RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT> CharItems;
+    SfxItemSet aCharAttrSet(GetAttrPool(), CharItems{});
 
     if( bHasSel || ( !m_bIns && SelectHiddenRange() ) )
     {
@@ -240,7 +240,6 @@ void SwWrtShell::Insert( const OUString &rStr )
         const SwPosition *pStart = GetCursor()->Start();
         SwPaM aPaM(pStart->nNode.GetNode(), pStart->nContent.GetIndex(),
                    pStart->nNode.GetNode(), pStart->nContent.GetIndex() + 1);
-        aCharAttrSet.ClearItem(RES_CHRATR_RSID);
         GetPaMAttr(&aPaM, aCharAttrSet);
 
         StartUndo(SwUndoId::REPLACE, &aRewriter);
