@@ -215,12 +215,13 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
 void SkiaSalBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
 {
     mPalette = pBuffer->maPalette;
-    (void)nMode; // TODO?
     // Are there any more ground movements underneath us ?
     assert(pBuffer->mnWidth == mSize.Width());
     assert(pBuffer->mnHeight == mSize.Height());
     assert(pBuffer->mnBitCount == mBitCount);
     delete pBuffer;
+    if (nMode == BitmapAccessMode::Write) // TODO something more?
+        ResetCachedBitmap();
 }
 
 bool SkiaSalBitmap::GetSystemData(BitmapSystemData& rData)
@@ -249,10 +250,34 @@ bool SkiaSalBitmap::Replace(const Color& rSearchColor, const Color& rReplaceColo
 
 bool SkiaSalBitmap::ConvertToGreyscale() { return false; }
 
+const SkBitmap& SkiaSalBitmap::GetSkBitmap() const
+{
+    if (mBuffer && mBitmap.drawsNothing())
+    {
+        assert(mBitCount == 1 || mBitCount == 2 || mBitCount == 4);
+        std::unique_ptr<sal_uInt8[]> data = convertDataTo32Bpp(
+            mBuffer.get(), mSize.Width(), mSize.Height(), mBitCount, mScanlineSize, mPalette,
+            kN32_SkColorType == kBGRA_8888_SkColorType); // TODO
+        if (!const_cast<SkBitmap&>(mBitmap).installPixels(
+                SkImageInfo::MakeS32(mSize.Width(), mSize.Height(), kOpaque_SkAlphaType),
+                data.release(), mSize.Width() * 4,
+                [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
+            abort();
+    }
+    return mBitmap;
+}
+
+// Reset the cached bitmap allocatd in GetSkBitmap().
+void SkiaSalBitmap::ResetCachedBitmap()
+{
+    if (mBuffer)
+        mBitmap.reset();
+}
+
 #ifdef DBG_UTIL
 void SkiaSalBitmap::dump(const char* file) const
 {
-    sk_sp<SkImage> image = SkImage::MakeFromBitmap(mBitmap);
+    sk_sp<SkImage> image = SkImage::MakeFromBitmap(GetSkBitmap());
     sk_sp<SkData> data = image->encodeToData();
     std::ofstream ostream(file, std::ios::binary);
     ostream.write(static_cast<const char*>(data->data()), data->size());
