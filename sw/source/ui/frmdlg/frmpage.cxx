@@ -2512,7 +2512,7 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl, weld::Button&, void)
     {
         m_xGrfDlg.reset(new FileDialogHelper(
                 ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
-                FileDialogFlags::Graphic, GetFrameWeld()));
+                FileDialogFlags::Graphic, GetDialogFrameWeld()));
         m_xGrfDlg->SetTitle(m_xLinkFrame->get_label());
     }
     m_xGrfDlg->SetDisplayDirectory(m_xConnectED->get_text());
