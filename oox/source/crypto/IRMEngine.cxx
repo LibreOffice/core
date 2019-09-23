@@ -29,6 +29,7 @@
 
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/io/SequenceInputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
@@ -49,7 +50,10 @@ namespace oox
 {
 namespace core
 {
-IRMEngine::IRMEngine() {}
+IRMEngine::IRMEngine(const Reference<XComponentContext>& rxContext)
+    : mxContext(rxContext)
+{
+}
 
 bool IRMEngine::checkDataIntegrity() { return true; }
 
@@ -133,11 +137,29 @@ void IRMEngine::createEncryptionData(comphelper::SequenceAsHashMap& aEncryptionD
     aEncryptionData["license"] <<= seq;
 }
 
-bool IRMEngine::readEncryptionInfo(oox::ole::OleStorage& rOleStorage)
+uno::Reference<io::XInputStream> IRMEngine::getStream(Sequence<NamedValue>& rStreams,
+                                                      const OUString sStreamName)
+{
+    for (const auto& aStream : rStreams)
+    {
+        if (aStream.Name == sStreamName)
+        {
+            css::uno::Sequence<sal_Int8> aSeq;
+            aStream.Value >>= aSeq;
+            Reference<XInputStream> aStream(
+                io::SequenceInputStream::createStreamFromSequence(mxContext, aSeq),
+                UNO_QUERY_THROW);
+            return aStream;
+        }
+    }
+    return nullptr;
+}
+
+bool IRMEngine::readEncryptionInfo(uno::Sequence<beans::NamedValue> aStreams)
 {
     // Read TransformInfo storage for IRM ECMA documents (MS-OFFCRYPTO 2.2.4)
-    uno::Reference<io::XInputStream> xTransformInfoStream = rOleStorage.openInputStream(
-        "\006DataSpaces/TransformInfo/DRMEncryptedTransform/\006Primary");
+    uno::Reference<io::XInputStream> xTransformInfoStream
+        = getStream(aStreams, "\006DataSpaces/TransformInfo/DRMEncryptedTransform/\006Primary");
     SAL_WARN_IF(!xTransformInfoStream.is(), "oox", "TransormInfo stream is missing!");
     BinaryXInputStream aBinaryStream(xTransformInfoStream, true);
 

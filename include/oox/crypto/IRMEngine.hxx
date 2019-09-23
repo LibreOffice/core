@@ -36,11 +36,15 @@ struct OOX_DLLPUBLIC IRMEncryptionInfo
 class OOX_DLLPUBLIC IRMEngine : public CryptoEngine
 {
     IRMEncryptionInfo mInfo;
+    css::uno::Reference<css::uno::XComponentContext> mxContext;
+
+    css::uno::Reference<css::io::XInputStream>
+    getStream(css::uno::Sequence<css::beans::NamedValue>& rStreams, const OUString sStreamName);
 
 public:
-    IRMEngine();
+    IRMEngine(const css::uno::Reference<css::uno::XComponentContext>& rxContext);
 
-    bool readEncryptionInfo(oox::ole::OleStorage& rOleStorage) override;
+    bool readEncryptionInfo(css::uno::Sequence<css::beans::NamedValue> aStreams) override;
 
     virtual bool generateEncryptionKey(OUString const& rPassword) override;
 
