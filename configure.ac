@@ -2749,7 +2749,7 @@ dnl ===================================================================
 dnl Check macOS SDK and compiler
 dnl ===================================================================
 
-if test $_os = Darwin -o $_os = iOS; then
+if test $_os = Darwin; then
 
     # If no --with-macosx-sdk option is given, look for one
 
@@ -2777,16 +2777,7 @@ if test $_os = Darwin -o $_os = iOS; then
         AC_MSG_ERROR([Could not find an appropriate macOS SDK])
     fi
 
-    if test $_os = iOS; then
-        if test "$enable_ios_simulator" = "yes"; then
-            useos=iphonesimulator
-        else
-            useos=iphoneos
-        fi
-        MACOSX_SDK_PATH=`xcrun --sdk ${useos} --show-sdk-path 2> /dev/null`
-    fi
     AC_MSG_RESULT([SDK $with_macosx_sdk at $MACOSX_SDK_PATH])
-
 
     case $with_macosx_sdk in
     10.12)
