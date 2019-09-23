@@ -1305,10 +1305,12 @@ static void lcl_SetNumUsedBit(std::vector<sal_uInt8>& rSetFlags, size_t nFormatS
     // contents for name collision check
     if (rObj.IsGroupObject())
     {
-        const SdrObjGroup &rGroupObj = static_cast<const SdrObjGroup&>(rObj);
-        for (size_t i = 0, nCount = rGroupObj.GetObjCount(); i < nCount; ++i)
+        const SdrObjList* pSub(rObj.GetSubList());
+        assert(pSub && "IsGroupObject is implented as GetSubList != nullptr");
+        const size_t nCount = pSub->GetObjCount();
+        for (size_t i = 0; i < nCount; ++i)
         {
-            SdrObject* pObj = rGroupObj.GetObj(i);
+            SdrObject* pObj = pSub->GetObj(i);
             if (!pObj)
                 continue;
             lcl_SetNumUsedBit(rSetFlags, nFormatSize, nNmLen, *pObj, rCmpName);
