@@ -355,6 +355,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/BitmapTools \
     vcl/source/bitmap/checksum \
     vcl/source/bitmap/Octree \
+    vcl/source/bitmap/salbmp \
     vcl/source/image/Image \
     vcl/source/image/ImageTree \
     vcl/source/image/ImageRepository \

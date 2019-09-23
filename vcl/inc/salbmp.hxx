@@ -101,29 +101,7 @@ protected:
     bool           mbChecksumValid;
 
 protected:
-    virtual void updateChecksum() const
-    {
-        if (mbChecksumValid)
-            return;
-
-        BitmapChecksum nCrc = 0;
-        SalBitmap* pThis = const_cast<SalBitmap*>(this);
-        BitmapBuffer* pBuf = pThis->AcquireBuffer(BitmapAccessMode::Read);
-        if (pBuf)
-        {
-            nCrc = pBuf->maPalette.GetChecksum();
-            nCrc = vcl_get_checksum(nCrc, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
-            pThis->ReleaseBuffer(pBuf, BitmapAccessMode::Read);
-            pThis->mnChecksum = nCrc;
-            pThis->mbChecksumValid = true;
-        }
-        else
-        {
-            pThis->mbChecksumValid = false;
-        }
-    }
-
-
+    virtual void updateChecksum() const;
 };
 
 #endif
