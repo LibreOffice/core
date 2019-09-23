@@ -1865,7 +1865,8 @@ static void lcl_ModifyOfst(SwTextFrame & rFrame,
     assert(nLen != TextFrameIndex(COMPLETE_STRING));
     if (rFrame.IsFollow() && nPos < rFrame.GetOfst())
     {
-        rFrame.ManipOfst( std::max(TextFrameIndex(0), op(rFrame.GetOfst(), nLen)) );
+        rFrame.ManipOfst( std::max(nPos, op(rFrame.GetOfst(), nLen)) );
+        assert(sal_Int32(rFrame.GetOfst()) <= rFrame.GetText().getLength());
     }
 }
 
