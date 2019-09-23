@@ -418,8 +418,8 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
         else if ( _rSelection.size() > 1 )
         {
             // no form component and (no form or no name) -> Multiselection
-            sTitle = SvxResId(RID_STR_PROPERTIES_CONTROL);
-            sTitle += SvxResId(RID_STR_PROPTITLE_MULTISELECT);
+            sTitle = SvxResId(RID_STR_PROPERTIES_CONTROL) +
+                SvxResId(RID_STR_PROPTITLE_MULTISELECT);
         }
         else
         {
@@ -429,8 +429,8 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
                 sal_Int16 nClassID = FormComponentType::CONTROL;
                 xSingleSelection->getPropertyValue( FM_PROP_CLASSID ) >>= nClassID;
 
-                sTitle = SvxResId(RID_STR_PROPERTIES_CONTROL);
-                sTitle += GetUIHeadlineName(nClassID, makeAny(xSingleSelection));
+                sTitle = SvxResId(RID_STR_PROPERTIES_CONTROL) +
+                    GetUIHeadlineName(nClassID, makeAny(xSingleSelection));
             }
             else if ( Reference< XForm >( xSingleSelection, UNO_QUERY ).is() )
                 sTitle = SvxResId(RID_STR_PROPERTIES_FORM);

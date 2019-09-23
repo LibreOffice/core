@@ -897,9 +897,7 @@ cssu::Reference< cssxs::XDocumentHandler > SAL_CALL SAXEventKeeperImpl::setNextH
 
 OUString SAL_CALL SAXEventKeeperImpl::printBufferNodeTree()
 {
-    OUString rc;
-
-    rc += "ElementMarkBuffers: size = "
+    OUString rc = "ElementMarkBuffers: size = "
         + OUString::number(m_vElementMarkBuffers.size())
         + "\nCurrentBufferNode: "
         + m_xXMLDocument->getNodeName(m_pCurrentBufferNode->getXMLElement())

@@ -1499,8 +1499,7 @@ void SwCSS1Parser::FillDropCap( SwFormatDrop& rDrop,
         OUString aName;
         if( pName )
         {
-            aName = *pName;
-            aName += ".FL";   // first letter
+            aName = *pName + ".FL";   // first letter
             pCFormat = m_pDoc->FindCharFormatByName( aName );
         }
         else

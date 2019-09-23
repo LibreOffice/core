@@ -217,8 +217,7 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl, void*, void)
         SvxNumType eNumType = aDataSet.Get(ATTR_PAGE).GetNumType();
         static_cast<ScHFEditPage*>(aDlg.GetTabPage())->SetNumType(eNumType);
 
-        aText += " (" + ScResId( STR_PAGESTYLE );
-        aText += ": " + aStrPageStyle + ")";
+        aText += " (" + ScResId( STR_PAGESTYLE ) + ": " + aStrPageStyle + ")";
 
         aDlg.set_title(aText);
 

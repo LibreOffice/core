@@ -1170,9 +1170,8 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
     while(lnCount)
     {
         OUString tempstr = watermark;
-        watermark = watermark.copy(0, lnIndex);
-        watermark += "\n";
-        watermark += tempstr.copy(lnIndex);
+        watermark = watermark.copy(0, lnIndex) +
+            "\n" + tempstr.copy(lnIndex);
         lnIndex += lineLength;
         lnCount--;
     }

@@ -158,11 +158,11 @@ static void lcl_PrintHeader( vcl::RenderContext &rOutDev, sal_Int32 nPages, sal_
     {
         aFont.SetWeight( WEIGHT_NORMAL );
         rOutDev.SetFont( aFont );
-        OUString aPageStr( " [" );
-        aPageStr += SwResId( STR_PAGE );
-        aPageStr += " ";
-        aPageStr += OUString::number( nCurPage );
-        aPageStr += "]";
+        OUString aPageStr = " [" +
+            SwResId( STR_PAGE ) +
+            " " +
+            OUString::number( nCurPage ) +
+            "]";
         aPos.AdjustX(rOutDev.GetTextWidth( rTitle ) );
         rOutDev.DrawText( aPos, aPageStr );
     }
@@ -447,12 +447,12 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             break;
             case SID_TABLE_CELL:
             {
-                OUString aPos( SwResId(STR_SRCVIEW_ROW) );
                 TextSelection aSel = pTextView->GetSelection();
-                aPos += OUString::number( aSel.GetEnd().GetPara()+1 );
-                aPos += " : ";
-                aPos += SwResId(STR_SRCVIEW_COL);
-                aPos += OUString::number( aSel.GetEnd().GetIndex()+1 );
+                OUString aPos = SwResId(STR_SRCVIEW_ROW) +
+                    OUString::number( aSel.GetEnd().GetPara()+1 ) +
+                    " : " +
+                    SwResId(STR_SRCVIEW_COL) +
+                    OUString::number( aSel.GetEnd().GetIndex()+1 );
                 SfxStringItem aItem( nWhich, aPos );
                 rSet.Put( aItem );
             }
@@ -501,8 +501,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                     nCount = rMgr.GetUndoActionCount();
                     if(nCount)
                     {
-                        OUString aStr(SvtResId( STR_UNDO));
-                        aStr += rMgr.GetUndoActionComment(--nCount);
+                        OUString aStr = SvtResId( STR_UNDO) + rMgr.GetUndoActionComment(--nCount);
                         rSet.Put(SfxStringItem(nWhich, aStr));
                     }
                     else
@@ -513,8 +512,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                     nCount = rMgr.GetRedoActionCount();
                     if(nCount)
                     {
-                        OUString aStr(SvtResId( STR_REDO));
-                        aStr += rMgr.GetRedoActionComment(--nCount);
+                        OUString aStr = SvtResId(STR_REDO) + rMgr.GetRedoActionComment(--nCount);
                         rSet.Put(SfxStringItem(nWhich,aStr));
                     }
                     else

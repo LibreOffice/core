@@ -215,8 +215,7 @@ void ScMoveTableDlg::InitDocListBox()
             if ( pScSh == SfxObjectShell::Current() )
             {
                 mnCurrentDocPos = nSelPos = i;
-                aEntryName += " ";
-                aEntryName += msCurrentDoc;
+                aEntryName += " " + msCurrentDoc;
             }
 
             OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(&pScSh->GetDocument())));

@@ -3145,10 +3145,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testShapeAllowOverlap)
     // <bounds left="1984" top="1984" width="1137" height="1137"/>
     // <bounds left="2551" top="2551" width="1137" height="1137"/>
     // so there was a clear vertical overlap. (Allow for 1px tolerance.)
-    OString aMessage("Unexpected overlap: first shape's bottom is ");
-    aMessage += OString::number(pFirst->GetObjRect().Bottom());
-    aMessage += ", second shape's top is ";
-    aMessage += OString::number(pSecond->GetObjRect().Top());
+    OString aMessage = "Unexpected overlap: first shape's bottom is "
+                       + OString::number(pFirst->GetObjRect().Bottom()) + ", second shape's top is "
+                       + OString::number(pSecond->GetObjRect().Top());
     CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(),
                            std::abs(pFirst->GetObjRect().Bottom() - pSecond->GetObjRect().Top())
                                < 15);

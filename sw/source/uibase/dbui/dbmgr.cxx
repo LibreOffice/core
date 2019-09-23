@@ -273,9 +273,9 @@ void SAL_CALL SwDataSourceRemovedListener::revokedDatabaseLocation(const sdb::Da
         return;
 
     OUString aOwnURL = pDocShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
-    OUString sTmpName = "vnd.sun.star.pkg://";
-    sTmpName += INetURLObject::encode(aOwnURL, INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All);
-    sTmpName += "/" + m_pDBManager->getEmbeddedName();
+    OUString sTmpName = "vnd.sun.star.pkg://" +
+        INetURLObject::encode(aOwnURL, INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All) +
+        "/" + m_pDBManager->getEmbeddedName();
 
     if (sTmpName != rEvent.OldLocation)
         return;
@@ -1181,8 +1181,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             xMailDispatcher->addListener( xMailListener );
             if(!rMergeDescriptor.bSendAsAttachment && rMergeDescriptor.bSendAsHTML)
             {
-                sMailBodyMimeType = "text/html; charset=";
-                sMailBodyMimeType += OUString::createFromAscii(
+                sMailBodyMimeType = "text/html; charset=" +
+                    OUString::createFromAscii(
                                     rtl_getBestMimeCharsetFromTextEncoding( sMailEncoding ));
                 SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
                 sMailEncoding = rHtmlOptions.GetTextEncoding();
@@ -1391,8 +1391,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         PrintMonitor *pPrintMonDlg = static_cast<PrintMonitor*>(xProgressDlg.get());
                         pPrintMonDlg->m_xPrinter->set_label(bNeedsTempFiles
                             ? aTempFileURL->GetBase() : pSourceDocSh->GetTitle( 2));
-                        OUString sStat( SwResId(STR_STATSTR_LETTER) );
-                        sStat += " " + OUString::number( nDocNo );
+                        OUString sStat = SwResId(STR_STATSTR_LETTER) + " " + OUString::number( nDocNo );
                         pPrintMonDlg->m_xPrintInfo->set_label(sStat);
                     }
                     //TODO xProgressDlg->queue_draw();
@@ -2368,10 +2367,8 @@ bool SwDBManager::OpenDataSource(const OUString& rDataSource, const OUString& rT
             pFound->xStatement = pFound->xConnection->createStatement();
             OUString aQuoteChar = xMetaData->getIdentifierQuoteString();
             OUString sStatement("SELECT * FROM ");
-            sStatement = "SELECT * FROM ";
-            sStatement += aQuoteChar;
-            sStatement += rTableOrQuery;
-            sStatement += aQuoteChar;
+            sStatement = "SELECT * FROM " +
+                aQuoteChar + rTableOrQuery + aQuoteChar;
             pFound->xResultSet = pFound->xStatement->executeQuery( sStatement );
 
             //after executeQuery the cursor must be positioned
@@ -2632,15 +2629,15 @@ uno::Any GetDBunoURI(const INetURLObject &rURL, DBConnURIType& rType)
         break;
     case DBConnURIType::CALC:
     {
-        OUString sDBURL("sdbc:calc:");
-        sDBURL += rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        OUString sDBURL = "sdbc:calc:" +
+            rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         aURLAny <<= sDBURL;
     }
     break;
     case DBConnURIType::WRITER:
     {
-        OUString sDBURL("sdbc:writer:");
-        sDBURL += rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        OUString sDBURL = "sdbc:writer:" +
+            rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         aURLAny <<= sDBURL;
     }
     break;
@@ -2649,8 +2646,8 @@ uno::Any GetDBunoURI(const INetURLObject &rURL, DBConnURIType& rType)
         INetURLObject aUrlTmp(rURL);
         aUrlTmp.removeSegment();
         aUrlTmp.removeFinalSlash();
-        OUString sDBURL("sdbc:dbase:");
-        sDBURL += aUrlTmp.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        OUString sDBURL = "sdbc:dbase:" +
+            aUrlTmp.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         aURLAny <<= sDBURL;
     }
     break;
@@ -2659,9 +2656,9 @@ uno::Any GetDBunoURI(const INetURLObject &rURL, DBConnURIType& rType)
         INetURLObject aUrlTmp(rURL);
         aUrlTmp.removeSegment();
         aUrlTmp.removeFinalSlash();
-        OUString sDBURL("sdbc:flat:");
-        //only the 'path' has to be added
-        sDBURL += aUrlTmp.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        OUString sDBURL = "sdbc:flat:" +
+            //only the 'path' has to be added
+            aUrlTmp.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         aURLAny <<= sDBURL;
     }
     break;

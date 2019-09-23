@@ -276,9 +276,9 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             case IsAttrAtPos::RefMark:
                 if(aContentAtPos.aFnd.pAttr)
                 {
-                    sText = SwResId(STR_CONTENT_TYPE_SINGLE_REFERENCE);
-                    sText += ": ";
-                    sText += static_cast<const SwFormatRefMark*>(aContentAtPos.aFnd.pAttr)->GetRefName();
+                    sText = SwResId(STR_CONTENT_TYPE_SINGLE_REFERENCE) +
+                        ": " +
+                        static_cast<const SwFormatRefMark*>(aContentAtPos.aFnd.pAttr)->GetRefName();
                 }
             break;
 

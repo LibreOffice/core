@@ -686,8 +686,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                 try
                 {
                     OUString aOldValuesKey
-                        = makeHierarchalNameSegment( rOldKey );
-                    aOldValuesKey += "/Values";
+                        = makeHierarchalNameSegment( rOldKey ) + "/Values";
 
                     Reference< XNameAccess > xOldNameAccess;
                     xRootHierNameAccess->getByHierarchicalName(
@@ -706,8 +705,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                     if ( aElems.hasElements() )
                     {
                         OUString aNewValuesKey
-                            = makeHierarchalNameSegment( rNewKey );
-                        aNewValuesKey += "/Values";
+                            = makeHierarchalNameSegment( rNewKey ) + "/Values";
 
                         Reference< XSingleServiceFactory > xNewFac;
                         xRootHierNameAccess->getByHierarchicalName(
@@ -752,8 +750,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                             // Fill new item...
 
                             // Set Values
-                            OUString aKey = aOldValuesKey;
-                            aKey += makeHierarchalNameSegment( rPropName );
+                            OUString aKey = aOldValuesKey + makeHierarchalNameSegment( rPropName );
 
                             // ... handle
                             OUString aNewKey1 = aKey + aHandleKey;
@@ -1193,9 +1190,8 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
                 m_pImpl->m_pCreator->getRootConfigReadAccess(), UNO_QUERY );
     if ( xRootHierNameAccess.is() )
     {
-        OUString aFullPropName( getFullKey() );
-        aFullPropName += "/";
-        aFullPropName += makeHierarchalNameSegment( aPropertyName );
+        OUString aFullPropName = getFullKey() +
+            "/" + makeHierarchalNameSegment( aPropertyName );
 
         // Does property exist?
         if ( xRootHierNameAccess->hasByHierarchicalName( aFullPropName ) )
@@ -1212,8 +1208,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
                 try
                 {
                     // Obtain old value
-                    OUString aValueName = aFullPropName;
-                    aValueName += "/Value";
+                    OUString aValueName = aFullPropName + "/Value";
                     Any aOldValue
                         = xRootHierNameAccess->getByHierarchicalName(
                                                                 aValueName );
@@ -1241,8 +1236,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
                     if ( m_pImpl->m_pPropertyChangeListeners )
                     {
                         // Obtain handle
-                        aValueName = aFullPropName;
-                        aValueName += "/Handle";
+                        aValueName = aFullPropName + "/Handle";
                         sal_Int32 nHandle = -1;
                         xRootHierNameAccess->getByHierarchicalName( aValueName )
                             >>= nHandle;
@@ -1294,10 +1288,9 @@ Any SAL_CALL PersistentPropertySet::getPropertyValue(
                 m_pImpl->m_pCreator->getRootConfigReadAccess(), UNO_QUERY );
     if ( xNameAccess.is() )
     {
-        OUString aFullPropName( getFullKey() );
-        aFullPropName += "/";
-        aFullPropName += makeHierarchalNameSegment( PropertyName );
-        aFullPropName += "/Value";
+        OUString aFullPropName = getFullKey() +
+            "/" + makeHierarchalNameSegment( PropertyName ) +
+            "/Value";
         try
         {
             return xNameAccess->getByHierarchicalName( aFullPropName );
@@ -1427,9 +1420,8 @@ void SAL_CALL PersistentPropertySet::addProperty(
     if ( xRootHierNameAccess.is() )
     {
         aFullValuesName = getFullKey();
-        OUString aFullPropName = aFullValuesName;
-        aFullPropName += "/";
-        aFullPropName += makeHierarchalNameSegment( Name );
+        OUString aFullPropName = aFullValuesName +
+            "/" + makeHierarchalNameSegment( Name );
 
         if ( xRootHierNameAccess->hasByHierarchicalName( aFullPropName ) )
         {
@@ -1575,9 +1567,8 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
     if ( xRootHierNameAccess.is() )
     {
         aFullValuesName = getFullKey();
-        aFullPropName   = aFullValuesName;
-        aFullPropName   += "/";
-        aFullPropName   += makeHierarchalNameSegment( Name );
+        aFullPropName   = aFullValuesName +
+            "/" + makeHierarchalNameSegment( Name );
 
         // Property in set?
         if ( !xRootHierNameAccess->hasByHierarchicalName( aFullPropName ) )
@@ -1586,8 +1577,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
         // Property removable?
         try
         {
-            OUString aFullAttrName = aFullPropName;
-            aFullAttrName += "/Attributes";
+            OUString aFullAttrName = aFullPropName + "/Attributes";
 
             sal_Int32 nAttribs = 0;
             if ( xRootHierNameAccess->getByHierarchicalName( aFullAttrName )
@@ -1643,9 +1633,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
 
                     try
                     {
-                        OUString aFullHandleName = aFullPropName;
-                        aFullHandleName
-                                += "/Handle";
+                        OUString aFullHandleName = aFullPropName + "/Handle";
 
                         if ( ! ( xRootHierNameAccess->getByHierarchicalName(
                                         aFullHandleName ) >>= nHandle ) )
@@ -1786,8 +1774,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                             try
                             {
                                 // Obtain and set property handle
-                                OUString aHierName = aXMLName;
-                                aHierName += aHandleName;
+                                OUString aHierName = aXMLName + aHandleName;
                                 Any aKeyValue
                                     = xHierNameAccess->getByHierarchicalName(
                                         aHierName );
@@ -1807,8 +1794,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                             try
                             {
                                 // Obtain and set property value
-                                OUString aHierName = aXMLName;
-                                aHierName += aValueName;
+                                OUString aHierName = aXMLName + aValueName;
                                 rValue.Value
                                     = xHierNameAccess->getByHierarchicalName(
                                         aHierName );
@@ -1828,8 +1814,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                             try
                             {
                                 // Obtain and set property state
-                                OUString aHierName = aXMLName;
-                                aHierName += aStateName;
+                                OUString aHierName = aXMLName + aStateName;
                                 Any aKeyValue
                                     = xHierNameAccess->getByHierarchicalName(
                                         aHierName );
@@ -1880,16 +1865,14 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
     {
         std::vector< PropertyChangeEvent > aEvents;
 
-        OUString aFullPropNamePrefix( getFullKey() );
-        aFullPropNamePrefix += "/";
+        OUString aFullPropNamePrefix = getFullKey() + "/";
 
         // Iterate over given property value sequence.
         for ( const PropertyValue& rNewValue : aProps )
         {
             const OUString& rName = rNewValue.Name;
 
-            OUString aFullPropName = aFullPropNamePrefix;
-            aFullPropName += makeHierarchalNameSegment( rName );
+            OUString aFullPropName = aFullPropNamePrefix + makeHierarchalNameSegment( rName );
 
             // Does property exist?
             if ( xRootHierNameAccess->hasByHierarchicalName( aFullPropName ) )
@@ -1911,8 +1894,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                                     makeAny( rNewValue.Handle ) );
 
                         // Save old value
-                        OUString aValueName = aFullPropName;
-                        aValueName += "/Value";
+                        OUString aValueName = aFullPropName + "/Value";
                         Any aOldValue
                             = xRootHierNameAccess->getByHierarchicalName(
                                                                 aValueName );
@@ -2134,8 +2116,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                 try
                                 {
                                     // Obtain and set property handle
-                                    OUString aHierName = aXMLName;
-                                    aHierName += aHandleName;
+                                    OUString aHierName = aXMLName + aHandleName;
                                     Any aKeyValue
                                         = xHierNameAccess->getByHierarchicalName(
                                             aHierName );
@@ -2155,8 +2136,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                 try
                                 {
                                     // Obtain and set property type
-                                    OUString aHierName = aXMLName;
-                                    aHierName += aValueName;
+                                    OUString aHierName = aXMLName + aValueName;
                                     Any aKeyValue
                                         = xHierNameAccess->getByHierarchicalName(
                                             aHierName );
@@ -2178,8 +2158,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                 try
                                 {
                                     // Obtain and set property attributes
-                                    OUString aHierName = aXMLName;
-                                    aHierName += aAttrName;
+                                    OUString aHierName = aXMLName + aAttrName;
                                     Any aKeyValue
                                         = xHierNameAccess->getByHierarchicalName(
                                             aHierName );
@@ -2231,9 +2210,8 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
             UNO_QUERY );
     if ( xRootHierNameAccess.is() )
     {
-        OUString aFullPropName( m_pOwner->getFullKey() );
-        aFullPropName += "/";
-        aFullPropName += makeHierarchalNameSegment( aName );
+        OUString aFullPropName = m_pOwner->getFullKey() +
+            "/" + makeHierarchalNameSegment( aName );
 
         // Does property exist?
         if ( !xRootHierNameAccess->hasByHierarchicalName( aFullPropName ) )
@@ -2244,8 +2222,7 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
             Property aProp;
 
             // Obtain handle.
-            OUString aKey = aFullPropName;
-            aKey += "/Handle";
+            OUString aKey = aFullPropName + "/Handle";
 
             if ( !( xRootHierNameAccess->getByHierarchicalName( aKey )
                     >>= aProp.Handle ) )
@@ -2256,8 +2233,7 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
             }
 
             // Obtain Value and extract type.
-            aKey = aFullPropName;
-            aKey += "/Value";
+            aKey = aFullPropName + "/Value";
 
             Any aValue = xRootHierNameAccess->getByHierarchicalName( aKey );
             if ( !aValue.hasValue() )
@@ -2270,8 +2246,7 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
             aProp.Type = aValue.getValueType();
 
             // Obtain Attributes.
-            aKey = aFullPropName;
-            aKey += "/Attributes";
+            aKey = aFullPropName + "/Attributes";
 
             sal_Int32 nAttribs = 0;
             if ( xRootHierNameAccess->getByHierarchicalName( aKey )
@@ -2314,9 +2289,8 @@ sal_Bool SAL_CALL PropertySetInfo_Impl::hasPropertyByName(
             UNO_QUERY );
     if ( xRootHierNameAccess.is() )
     {
-        OUString aFullPropName( m_pOwner->getFullKey() );
-        aFullPropName += "/";
-        aFullPropName += makeHierarchalNameSegment( Name );
+        OUString aFullPropName = m_pOwner->getFullKey() +
+            "/" + makeHierarchalNameSegment( Name );
 
         return xRootHierNameAccess->hasByHierarchicalName( aFullPropName );
     }

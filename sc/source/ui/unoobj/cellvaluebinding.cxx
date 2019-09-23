@@ -405,9 +405,9 @@ namespace calc
         OCellValueBinding* pNonConstThis = const_cast< OCellValueBinding* >( this );
         if ( !pNonConstThis->supportsType( _rType ) )
         {
-            OUString sMessage( "The given type (" );
-            sMessage += _rType.getTypeName();
-            sMessage += ") is not supported by this binding.";
+            OUString sMessage = "The given type (" +
+                _rType.getTypeName() +
+                ") is not supported by this binding.";
                 // TODO: localize this error message
 
             throw IncompatibleTypesException( sMessage, *pNonConstThis );

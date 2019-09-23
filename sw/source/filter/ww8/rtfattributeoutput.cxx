@@ -506,28 +506,17 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 nPos,
                                    const SwFormatRuby& rRuby)
 {
     WW8Ruby aWW8Ruby(rNode, rRuby, GetExport());
-    OUString aStr(FieldString(ww::eEQ));
-    aStr += "\\* jc";
-    aStr += OUString::number(aWW8Ruby.GetJC());
-
-    aStr += " \\* \"Font:";
-    aStr += aWW8Ruby.GetFontFamily();
-    aStr += "\" \\* hps";
-    aStr += OUString::number((aWW8Ruby.GetRubyHeight() + 5) / 10);
-    aStr += " \\o";
+    OUString aStr = FieldString(ww::eEQ) + "\\* jc" + OUString::number(aWW8Ruby.GetJC())
+                    + " \\* \"Font:" + aWW8Ruby.GetFontFamily() + "\" \\* hps"
+                    + OUString::number((aWW8Ruby.GetRubyHeight() + 5) / 10) + " \\o";
     if (aWW8Ruby.GetDirective())
     {
         aStr += "\\a" + OUString(aWW8Ruby.GetDirective());
     }
-    aStr += "(\\s\\up ";
-
-    aStr += OUString::number((aWW8Ruby.GetBaseHeight() + 10) / 20 - 1);
-    aStr += "(";
+    aStr += "(\\s\\up " + OUString::number((aWW8Ruby.GetBaseHeight() + 10) / 20 - 1) + "(";
     EndRun(&rNode, nPos);
     m_rExport.OutputField(nullptr, ww::eEQ, aStr, FieldFlags::Start | FieldFlags::CmdStart);
-    aStr = rRuby.GetText();
-    aStr += ")";
-    aStr += ",";
+    aStr = rRuby.GetText() + "),";
     m_rExport.OutputField(nullptr, ww::eEQ, aStr, FieldFlags::NONE);
 }
 

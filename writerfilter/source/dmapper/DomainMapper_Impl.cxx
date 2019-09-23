@@ -4367,8 +4367,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                     }
                     else
                     {
-                        sServiceName += "TextField.";
-                        sServiceName += OUString::createFromAscii(aIt->second.cFieldServiceName );
+                        sServiceName += "TextField." +
+                            OUString::createFromAscii(aIt->second.cFieldServiceName );
                     }
 
 #ifdef DBG_UTIL

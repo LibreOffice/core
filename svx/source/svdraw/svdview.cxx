@@ -1262,8 +1262,7 @@ OUString SdrView::GetStatusText()
         aStr = aStr.replaceFirst("%3", OUString::number(nCol + 1));
 
 #ifdef DBG_UTIL
-        aStr +=  ", Level " ;
-        aStr += OUString::number( pTextEditOutliner->GetDepth( aSel.nEndPara ) );
+        aStr +=  ", Level " + OUString::number( pTextEditOutliner->GetDepth( aSel.nEndPara ) );
 #endif
     }
 

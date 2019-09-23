@@ -1372,8 +1372,7 @@ ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             // office:mimetype = ... (only for stream containing the content)
             if( eClass != XML_TOKEN_INVALID )
             {
-                OUString aTmp( "application/vnd.oasis.opendocument." );
-                aTmp += GetXMLToken( eClass );
+                OUString aTmp = "application/vnd.oasis.opendocument." + GetXMLToken( eClass );
                 AddAttribute( XML_NAMESPACE_OFFICE, XML_MIMETYPE, aTmp );
             }
         }
@@ -1479,8 +1478,7 @@ void SvXMLExport::ExportScripts_()
     // export Basic macros (only for FlatXML)
     if ( mnExportFlags & SvXMLExportFlags::EMBEDDED )
     {
-        OUString aValue( GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) );
-        aValue += ":Basic";
+        OUString aValue = GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) + ":Basic";
         AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE, aValue );
 
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SCRIPT, true, true );

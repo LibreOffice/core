@@ -432,9 +432,9 @@ void  SwSendMailDialog::IterateMails()
             Image aInsertImg(StockImage::Yes, RID_BMP_FORMULA_CANCEL);
 
             OUString sMessage = m_sSendingTo;
-            OUString sTmp(pCurrentMailDescriptor->sEMail);
-            sTmp += "\t";
-            sTmp += m_sFailed;
+            OUString sTmp = pCurrentMailDescriptor->sEMail +
+                "\t" +
+                m_sFailed;
             m_pStatus->InsertEntry( sMessage.replaceFirst("%1", sTmp), aInsertImg, aInsertImg);
             ++m_nSendCount;
             ++m_nErrorCount;
@@ -518,9 +518,9 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const &
     Image aInsertImg(StockImage::Yes, bResult ? OUString(RID_BMP_FORMULA_APPLY) : OUString(RID_BMP_FORMULA_CANCEL));
 
     OUString sMessage = m_sSendingTo;
-    OUString sTmp(xMessage->getRecipients()[0]);
-    sTmp += "\t";
-    sTmp += bResult ? m_sCompleted : m_sFailed;
+    OUString sTmp = xMessage->getRecipients()[0] +
+        "\t" +
+        (bResult ? m_sCompleted : m_sFailed);
     m_pStatus->InsertEntry( sMessage.replaceFirst("%1", sTmp), aInsertImg, aInsertImg);
     ++m_nSendCount;
     if(!bResult)

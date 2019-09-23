@@ -287,8 +287,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs)
         {
           return badOption("invalid", option);
         }
-        OString param("-D");
-        param += OString((*first).c_str(), (*first).size());
+        OString param = "-D" + OString((*first).c_str(), (*first).size());
         if (m_options.count("-D") > 0)
         {
           OStringBuffer buffer(m_options["-D"]);
@@ -371,43 +370,41 @@ bool Options::initOptions(std::vector< std::string > & rArgs)
 
 OString Options::prepareHelp() const
 {
-    OString help("\nusing: ");
-    help += m_program + " [-options] <file_1> ... <file_n> | @<filename> | -stdin\n";
-    help += "    <file_n>    = file_n specifies one or more idl files.\n";
-    help += "                  Only files with the extension '.idl' are valid.\n";
-    help += "    @<filename> = filename specifies the name of a command file.\n";
-    help += "    -stdin      = read idl file from standard input.\n";
-    help += "  Options:\n";
-    help += "    -O<path>    = path specifies the output directory.\n";
-    help += "                  The generated output is a registry file with\n";
-    help += "                  the same name as the idl input file (or 'stdin'\n";
-    help += "                  for -stdin).\n";
-    help += "    -M<path>    = path specifies the output directory for deps.\n";
-    help += "                  Generate GNU make dependency files with the\n";
-    help += "                  same name as the idl input file.\n";
-    help += "    -I<path>    = path specifies a directory where include\n";
-    help += "                  files will be searched by the preprocessor.\n";
-    help += "                  Multiple directories can be combined with ';'.\n";
-    help += "    -D<name>    = name defines a macro for the preprocessor.\n";
-    help += "    -C          = generate complete type information, including\n";
-    help += "                  documentation.\n";
-    help += "    -cid        = check if identifiers fulfill the UNO naming\n";
-    help += "                  requirements.\n";
-    help += "    -quiet      = no output.\n";
-    help += "    -verbose    = verbose output.\n";
-    help += "    -w          = display warning messages.\n";
-    help += "    -we         = treat warnings as errors.\n";
-    help += "    -h|-?       = print this help message and exit.\n\n";
-    help += prepareVersion();
+    OString help = "\nusing: " +
+        m_program + " [-options] <file_1> ... <file_n> | @<filename> | -stdin\n"
+        "    <file_n>    = file_n specifies one or more idl files.\n"
+        "                  Only files with the extension '.idl' are valid.\n"
+        "    @<filename> = filename specifies the name of a command file.\n"
+        "    -stdin      = read idl file from standard input.\n"
+        "  Options:\n"
+        "    -O<path>    = path specifies the output directory.\n"
+        "                  The generated output is a registry file with\n"
+        "                  the same name as the idl input file (or 'stdin'\n"
+        "                  for -stdin).\n"
+        "    -M<path>    = path specifies the output directory for deps.\n"
+        "                  Generate GNU make dependency files with the\n"
+        "                  same name as the idl input file.\n"
+        "    -I<path>    = path specifies a directory where include\n"
+        "                  files will be searched by the preprocessor.\n"
+        "                  Multiple directories can be combined with ';'.\n"
+        "    -D<name>    = name defines a macro for the preprocessor.\n"
+        "    -C          = generate complete type information, including\n"
+        "                  documentation.\n"
+        "    -cid        = check if identifiers fulfill the UNO naming\n"
+        "                  requirements.\n"
+        "    -quiet      = no output.\n"
+        "    -verbose    = verbose output.\n"
+        "    -w          = display warning messages.\n"
+        "    -we         = treat warnings as errors.\n"
+        "    -h|-?       = print this help message and exit.\n\n" +
+        prepareVersion();
 
     return help;
 }
 
 OString Options::prepareVersion() const
 {
-    OString version(m_program);
-    version += " Version 1.1\n\n";
-    return version;
+    return m_program + " Version 1.1\n\n";
 }
 
 

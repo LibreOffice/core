@@ -1216,8 +1216,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
                         EquationHashMap::iterator aHashIter( pH->find( aEquationName ) );
                         if ( aHashIter != pH->end() )
                             nIndex = (*aHashIter).second;
-                        aNew += OUString::number( nIndex );
-                        aNew += rEquation.copy( nIndexOf + aEquationName.getLength() + 1 );
+                        aNew += OUString::number( nIndex ) + rEquation.copy( nIndexOf + aEquationName.getLength() + 1 );
                         rEquation = aNew;
                     }
                     nIndexOf++;

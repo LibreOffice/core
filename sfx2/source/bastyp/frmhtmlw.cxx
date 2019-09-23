@@ -149,8 +149,8 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
         const OUString &rReloadURL = i_xDocProps->getAutoloadURL();
         if( !rReloadURL.isEmpty() )
         {
-            sContent += ";URL=";
-            sContent += URIHelper::simpleNormalizedMakeRelative(
+            sContent += ";URL=" +
+                URIHelper::simpleNormalizedMakeRelative(
                           rBaseURL, rReloadURL);
         }
 

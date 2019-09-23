@@ -289,8 +289,7 @@ void SdDrawDocument::UpdatePageRelativeURLs(const OUString& rOldName, const OUSt
                 {
                     if (aURL.getLength() == rOldName.getLength() + 1) // standard page name
                     {
-                        aURL = aURL.replaceAt(1, aURL.getLength() - 1, "");
-                        aURL += rNewName;
+                        aURL = aURL.replaceAt(1, aURL.getLength() - 1, "") + rNewName;
                         pURLField->SetURL(aURL);
                     }
                     else
@@ -299,8 +298,7 @@ void SdDrawDocument::UpdatePageRelativeURLs(const OUString& rOldName, const OUSt
                         if (aURL.getLength() == rOldName.getLength() + 2 + sNotes.getLength()
                             && aURL.indexOf(sNotes, rOldName.getLength() + 2) == rOldName.getLength() + 2)
                         {
-                            aURL = aURL.replaceAt(1, aURL.getLength() - 1, "");
-                            aURL += rNewName + " " + sNotes;
+                            aURL = aURL.replaceAt(1, aURL.getLength() - 1, "") + rNewName + " " + sNotes;
                             pURLField->SetURL(aURL);
                         }
                     }
@@ -329,8 +327,7 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPo
 
                 if (!aURL.isEmpty() && (aURL[0] == 35))
                 {
-                    OUString aHashSlide("#");
-                    aHashSlide += SdResId(STR_PAGE);
+                    OUString aHashSlide = "#" + SdResId(STR_PAGE);
 
                     if (aURL.startsWith(aHashSlide))
                     {
@@ -355,8 +352,8 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPo
                         {
                             // update link page number
                             number += nIncrement;
-                            aURL = aURL.replaceAt(aHashSlide.getLength() + 1, aURL.getLength() - aHashSlide.getLength() - 1, "");
-                            aURL += OUString::number(number);
+                            aURL = aURL.replaceAt(aHashSlide.getLength() + 1, aURL.getLength() - aHashSlide.getLength() - 1, "") +
+                                OUString::number(number);
                             if (bNotes)
                             {
                                 aURL += " " + sNotes;

@@ -128,8 +128,7 @@ CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Referen
     try
     {
         uno::Reference< ui::XUIConfigurationManager > xCfgManager( getCfgManager() );
-        OUString sMenuBar("private:resource/menubar/");
-        sMenuBar += rName;
+        OUString sMenuBar = "private:resource/menubar/" + rName;
         uno::Reference< container::XIndexContainer > xPopup( xCfgManager->createSettings(), uno::UNO_SET_THROW );
         uno::Reference< beans::XPropertySet > xProps( xPopup, uno::UNO_QUERY_THROW );
         // set name for menubar

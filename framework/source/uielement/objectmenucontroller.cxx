@@ -109,8 +109,7 @@ void ObjectMenuController::fillPopupMenu( const Sequence< css::embed::VerbDescri
                 m_xPopupMenu->insertItem( i+1, rVerb.VerbName, 0, i );
                 // use VCL popup menu pointer to set vital information that are not part of the awt implementation
 
-                OUString aCommand( aVerbCommand );
-                aCommand += OUString::number( rVerb.VerbID );
+                OUString aCommand = aVerbCommand + OUString::number( rVerb.VerbID );
                 pVCLPopupMenu->SetItemCommand( i+1, aCommand ); // Store verb command
             }
         }

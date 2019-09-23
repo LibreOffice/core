@@ -345,10 +345,10 @@ namespace
             nDec = 3;
         }
 
-        OUString aSizeStr( ::rtl::math::doubleToUString( fSize,
+        OUString aSizeStr = ::rtl::math::doubleToUString( fSize,
                     rtl_math_StringFormat_F, nDec,
-                    SvtSysLocale().GetLocaleData().getNumDecimalSep()[0]) );
-        aSizeStr += aUnitStr;
+                    SvtSysLocale().GetLocaleData().getNumDecimalSep()[0]) +
+            aUnitStr;
 
         return aSizeStr;
     }
@@ -1196,8 +1196,7 @@ OUString SvtFileView::GetConfigString() const
     sRet += OUString::number( mpImpl->mnSortColumn ) + ";";
     HeaderBarItemBits nBits = pBar->GetItemBits( mpImpl->mnSortColumn );
     bool bUp = ( ( nBits & HeaderBarItemBits::UPARROW ) == HeaderBarItemBits::UPARROW );
-    sRet += bUp ? OUString("1") : OUString("0");
-    sRet += ";";
+    sRet += (bUp ? OUString("1") : OUString("0")) + ";";
 
     sal_uInt16 nCount = pBar->GetItemCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
@@ -1863,9 +1862,8 @@ OUString SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString&
     // title, type, size, date
     aValue = pData->GetTitle();
     ReplaceTabWithString( aValue );
-    aValue += aTab + pData->maType + aTab;
     // folders don't have a size
-    aValue += aTab;
+    aValue += aTab + pData->maType + aTab + aTab;
     // set the date
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();

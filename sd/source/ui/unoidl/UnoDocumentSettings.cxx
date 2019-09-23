@@ -366,8 +366,7 @@ uno::Sequence<beans::PropertyValue>
                     OUString aResult;
                     if( pList->SaveTo( xSubStorage, aName.makeStringAndClear(), &aResult ) )
                     {
-                        OUString aRealPath( "Settings/" );
-                        aRealPath += aResult;
+                        OUString aRealPath = "Settings/" + aResult;
                         aRet[i].Value <<= aRealPath;
                     }
                 }

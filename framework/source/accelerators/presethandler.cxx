@@ -479,11 +479,9 @@ void PresetHandler::copyPresetToTarget(const OUString& sPreset,
        return;
     }
 
-    OUString sPresetFile(sPreset);
-    sPresetFile += ".xml";
+    OUString sPresetFile = sPreset + ".xml";
 
-    OUString sTargetFile(sTarget);
-    sTargetFile += ".xml";
+    OUString sTargetFile = sTarget + ".xml";
 
     // remove existing elements before you try to copy the preset to that location ...
     // Otherwise w will get an ElementExistException inside copyElementTo()!
@@ -510,8 +508,7 @@ css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString
     if (!xFolder.is())
        return css::uno::Reference< css::io::XStream >();
 
-    OUString sFile(sPreset);
-    sFile += ".xml";
+    OUString sFile = sPreset + ".xml";
 
     // inform user about errors (use original exceptions!)
     css::uno::Reference< css::io::XStream > xStream = xFolder->openStreamElement(sFile, css::embed::ElementModes::READ);

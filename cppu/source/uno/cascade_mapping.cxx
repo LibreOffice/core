@@ -231,8 +231,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
     {
         OUString purpose = getPrefix(from_envPurpose, to_envPurpose);
 
-        OUString uno_envDcp = uno_envType;
-        uno_envDcp += purpose;
+        OUString uno_envDcp = uno_envType + purpose;
 
         // direct mapping possible?
         // uno:bla-->uno:bla:blubb
@@ -268,17 +267,13 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
     else if (from_envType != uno_envType && to_envType == uno_envType) // <ANY> -> UNO ?
         // mediate via uno:purpose(fromEnv)
     {
-        OUString     envDcp = uno_envType;
-
-        envDcp += from_envPurpose;
+        OUString     envDcp = uno_envType + from_envPurpose;
         uno_getEnvironment(&pInterm, envDcp.pData, nullptr);
     }
     else if (from_envType == uno_envType && to_envType != uno_envType) // UNO -> <ANY>?
         // mediate via uno(context)
     {
-        OUString     envDcp = uno_envType;
-
-        envDcp += to_envPurpose;
+        OUString     envDcp = uno_envType + to_envPurpose;
         uno_getEnvironment(&pInterm, envDcp.pData, nullptr);
     }
     else // everything else
@@ -286,8 +281,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
     {
         OUString purpose = getPrefix(from_envPurpose, to_envPurpose);
 
-        OUString uno_envDcp = uno_envType;
-        uno_envDcp += purpose;
+        OUString uno_envDcp = uno_envType + purpose;
 
         uno_getEnvironment(&pInterm, uno_envDcp.pData, nullptr);
     }

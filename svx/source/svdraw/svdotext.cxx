@@ -965,18 +965,14 @@ OUString SdrTextObj::TakeObjNameSingul() const
         if(!aStr2.isEmpty() && aStr2.indexOf(u'\x00FF') == -1)
         {
             // space between ResStr and content text
-            aStr += " ";
-
-            aStr += "\'";
+            aStr += " \'";
 
             if(aStr2.getLength() > 10)
             {
-                aStr2 = aStr2.copy(0, 8);
-                aStr2 += "...";
+                aStr2 = aStr2.copy(0, 8) + "...";
             }
 
-            aStr += aStr2;
-            aStr += "\'";
+            aStr += aStr2 + "\'";
         }
     }
 

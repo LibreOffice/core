@@ -1728,8 +1728,8 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
 
         if ( !sFilter.isEmpty() && !aSQL.isEmpty() )
         {
-            OUString sTemp(L_BRACKET + sFilter + R_BRACKET);
-            sTemp += andCriteria ? OUString(STR_AND) : OUString(STR_OR);
+            OUString sTemp = L_BRACKET + sFilter + R_BRACKET +
+                (andCriteria ? OUString(STR_AND) : OUString(STR_OR));
             sFilter = sTemp;
         }
         sFilter += aSQL;

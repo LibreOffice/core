@@ -102,8 +102,7 @@ namespace {
 
 OUString CreateSizeText( sal_Int64 nSize )
 {
-    OUString aUnitStr(" ");
-    aUnitStr += SfxResId(STR_BYTES);
+    OUString aUnitStr = " " + SfxResId(STR_BYTES);
     sal_Int64 nSize1 = nSize;
     sal_Int64 nSize2 = nSize1;
     sal_Int64 nMega = 1024 * 1024;
@@ -114,31 +113,27 @@ OUString CreateSizeText( sal_Int64 nSize )
     if ( nSize1 >= 10000 && nSize1 < nMega )
     {
         nSize1 /= 1024;
-        aUnitStr = " ";
-        aUnitStr += SfxResId(STR_KB);
+        aUnitStr = " " + SfxResId(STR_KB);
         fSize /= 1024;
         nDec = 0;
     }
     else if ( nSize1 >= nMega && nSize1 < nGiga )
     {
         nSize1 /= nMega;
-        aUnitStr = " ";
-        aUnitStr += SfxResId(STR_MB);
+        aUnitStr = " " + SfxResId(STR_MB);
         fSize /= nMega;
         nDec = 2;
     }
     else if ( nSize1 >= nGiga )
     {
         nSize1 /= nGiga;
-        aUnitStr = " ";
-        aUnitStr += SfxResId(STR_GB);
+        aUnitStr = " " + SfxResId(STR_GB);
         fSize /= nGiga;
         nDec = 3;
     }
     const SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
-    OUString aSizeStr( rLocaleWrapper.getNum( nSize1, 0 ) );
-    aSizeStr += aUnitStr;
+    OUString aSizeStr = rLocaleWrapper.getNum( nSize1, 0 ) + aUnitStr;
     if ( nSize1 < nSize2 )
     {
         aSizeStr = ::rtl::math::doubleToUString( fSize,
@@ -166,8 +161,7 @@ OUString ConvertDateTime_Impl( const OUString& rName,
      OUString aAuthor = comphelper::string::stripStart(rName, ' ');
      if (!aAuthor.isEmpty())
      {
-        aStr += aDelim;
-        aStr += aAuthor;
+        aStr += aDelim + aAuthor;
      }
      return aStr;
 }
@@ -824,9 +818,8 @@ void SfxDocumentPage::ImplUpdateSignatures()
     else if ( aInfos.getLength() == 1 )
     {
         const security::DocumentSignatureInformation& rInfo = aInfos[ 0 ];
-        s = utl::GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime );
-        s += ", ";
-        s += comphelper::xmlsec::GetContentPart(rInfo.Signer->getSubjectName());
+        s = utl::GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime ) +
+            ", " + comphelper::xmlsec::GetContentPart(rInfo.Signer->getSubjectName());
     }
     m_xSignedValFt->set_label(s);
 }
@@ -1230,8 +1223,8 @@ void CustomPropertiesDurationField::set_visible(bool bVisible)
 void CustomPropertiesDurationField::SetDuration( const util::Duration& rDuration )
 {
     m_aDuration = rDuration;
-    OUString sText(rDuration.Negative ? OUString('-') : OUString('+'));
-    sText += SfxResId(SFX_ST_DURATION_FORMAT);
+    OUString sText = (rDuration.Negative ? OUString('-') : OUString('+')) +
+        SfxResId(SFX_ST_DURATION_FORMAT);
     sText = sText.replaceFirst( "%1", OUString::number( rDuration.Years ) );
     sText = sText.replaceFirst( "%2", OUString::number( rDuration.Months ) );
     sText = sText.replaceFirst( "%3", OUString::number( rDuration.Days   ) );

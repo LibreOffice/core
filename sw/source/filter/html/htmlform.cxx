@@ -799,8 +799,7 @@ static bool lcl_html_setEvents(
 
         if(!rUnoMacroParamTable.empty())
         {
-            OUString sSearch( sListener );
-            sSearch += "-" +sMethod + "-";
+            OUString sSearch = sListener + "-" +sMethod + "-";
             sal_Int32 nLen = sSearch.getLength();
             for(const auto & rParam : rUnoMacroParamTable)
             {
@@ -822,14 +821,14 @@ static void lcl_html_getEvents( const OUString& rOption, const OUString& rValue,
 {
     if( rOption.startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_sdevent ) )
     {
-        OUString aEvent( rOption.copy( strlen( OOO_STRING_SVTOOLS_HTML_O_sdevent ) ) );
-        aEvent += "-" + rValue;
+        OUString aEvent = rOption.copy( strlen( OOO_STRING_SVTOOLS_HTML_O_sdevent ) ) +
+            "-" + rValue;
         rUnoMacroTable.push_back(aEvent);
     }
     else if( rOption.startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_sdaddparam ) )
     {
-        OUString aParam( rOption.copy( strlen( OOO_STRING_SVTOOLS_HTML_O_sdaddparam ) ) );
-        aParam += "-" + rValue;
+        OUString aParam = rOption.copy( strlen( OOO_STRING_SVTOOLS_HTML_O_sdaddparam ) ) +
+            "-" + rValue;
         rUnoMacroParamTable.push_back(aParam);
     }
 }
@@ -1595,8 +1594,7 @@ void SwHTMLParser::InsertInput()
     if( !rServiceFactory.is() )
         return;
 
-    OUString sServiceName("com.sun.star.form.component.");
-    sServiceName += OUString::createFromAscii(pType);
+    OUString sServiceName = "com.sun.star.form.component." + OUString::createFromAscii(pType);
     uno::Reference< XInterface > xInt =
         rServiceFactory->createInstance( sServiceName );
     if( !xInt.is() )

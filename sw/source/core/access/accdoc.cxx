@@ -541,12 +541,9 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 
         sValue = sAttrName + sDisplay ;
         sAttrName = ";page-number:";
-        sValue += sAttrName;
-        sValue += OUString::number( nPage ) ;
+        sValue += sAttrName + OUString::number( nPage ) ;
         sAttrName = ";total-pages:";
-        sValue += sAttrName;
-        sValue += OUString::number( pCursorShell->GetPageCnt() ) ;
-        sValue += ";";
+        sValue += sAttrName + OUString::number( pCursorShell->GetPageCnt() ) + ";";
 
         sAttrName = "line-number:";
 
@@ -641,10 +638,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
             }
         }
 
-        sValue += sAttrName;
-        sValue += OUString::number( nLineNum ) ;
-
-        sValue += ";";
+        sValue += sAttrName + OUString::number( nLineNum ) + ";";
 
         SwFrame* pCurrCol=static_cast<SwFrame*>(pCurrFrame)->FindColFrame();
 
@@ -673,18 +667,14 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                 }
             }
         }
-        sValue += OUString::number( nCurrCol ) ;
-        sValue += ";";
+        sValue += OUString::number( nCurrCol ) + ";";
 
         sAttrName = "total-columns:";
 
         const SwFormatCol &rFormatCol=pCurrPage->GetAttrSet()->GetCol();
         sal_uInt16 nColCount=rFormatCol.GetNumCols();
         nColCount = nColCount>0?nColCount:1;
-        sValue += sAttrName;
-        sValue += OUString::number( nColCount ) ;
-
-        sValue += ";";
+        sValue += sAttrName + OUString::number( nColCount ) + ";";
 
         SwSectionFrame* pCurrSctFrame=static_cast<SwFrame*>(pCurrFrame)->FindSctFrame();
         if(pCurrSctFrame!=nullptr && pCurrSctFrame->GetSection()!=nullptr )
@@ -700,9 +690,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
             sectionName = sectionName.replaceFirst( "," , "\\," );
             sectionName = sectionName.replaceFirst( ":" , "\\:" );
 
-            sValue += sectionName;
-
-            sValue += ";";
+            sValue += sectionName + ";";
 
             //section-columns-number
             sAttrName = "section-columns-number:";
@@ -722,19 +710,14 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                     }
                 }
             }
-            sValue += sAttrName;
-            sValue += OUString::number( nCurrCol ) ;
-            sValue += ";";
+            sValue += sAttrName + OUString::number( nCurrCol ) + ";";
 
             //section-total-columns
             sAttrName = "section-total-columns:";
             const SwFormatCol &rFormatSctCol=pCurrSctFrame->GetAttrSet()->GetCol();
             sal_uInt16 nSctColCount=rFormatSctCol.GetNumCols();
             nSctColCount = nSctColCount>0?nSctColCount:1;
-            sValue += sAttrName;
-            sValue += OUString::number( nSctColCount ) ;
-
-            sValue += ";";
+            sValue += sAttrName + OUString::number( nSctColCount ) + ";";
         }
 
         anyAtrribute <<= sValue;

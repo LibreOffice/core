@@ -1562,9 +1562,8 @@ static void ImplPDFExportComments( const uno::Reference< drawing::XDrawPage >& x
                                 *(SD_MOD()->GetNumberFormatter()), eLanguage );
 
             vcl::PDFNote aNote;
-            OUString sTitle( xAnnotation->getAuthor() );
-            sTitle += ", ";
-            sTitle += aStr;
+            OUString sTitle = xAnnotation->getAuthor() +
+                ", " + aStr;
             aNote.Title = sTitle;
             aNote.Contents = xText->getString();
             rPDFExtOutDevData.CreateNote( ::tools::Rectangle( Point( static_cast< long >( aRealPoint2D.X * 100 ),
@@ -2271,15 +2270,15 @@ OUString SdXImpressDocument::getPartInfo(int nPart)
     if (!pViewSh)
         return OUString();
 
-    OUString aPartInfo;
     const bool bIsVisible = pViewSh->IsVisible(nPart);
     const bool bIsSelected = pViewSh->IsSelected(nPart);
 
-    aPartInfo += "{ \"visible\": \"";
-    aPartInfo += OUString::number(static_cast<unsigned int>(bIsVisible));
-    aPartInfo += "\", \"selected\": \"";
-    aPartInfo += OUString::number(static_cast<unsigned int>(bIsSelected));
-    aPartInfo += "\" }";
+    OUString aPartInfo =
+        "{ \"visible\": \"" +
+        OUString::number(static_cast<unsigned int>(bIsVisible)) +
+        "\", \"selected\": \"" +
+        OUString::number(static_cast<unsigned int>(bIsSelected)) +
+        "\" }";
     return aPartInfo;
 }
 
@@ -3121,9 +3120,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
             bUnique = std::find(aPageNames.begin(), aPageNames.end(), aPrefix) == aPageNames.end();
         }
 
-        OUString aLayoutName( aPrefix );
-        aLayoutName += SD_LT_SEPARATOR;
-        aLayoutName += STR_LAYOUT_OUTLINE;
+        OUString aLayoutName = aPrefix + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
 
         // create styles
         static_cast<SdStyleSheetPool*>(pDoc->GetStyleSheetPool())->CreateLayoutStyleSheets( aPrefix );

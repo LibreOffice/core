@@ -4057,8 +4057,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                     else
                         nRefs--;
                 }
-                aSymbol = aSym.makeStringAndClear();
-                aSymbol += aTmp1;
+                aSymbol = aSym.makeStringAndClear() + aTmp1;
             }
             else
                 bColons = false;

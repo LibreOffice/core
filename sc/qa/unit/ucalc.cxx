@@ -1619,8 +1619,7 @@ void Test::testInsertNameList()
         ScAddress aExprPos = aPos;
         aExprPos.IncCol();
         OUString aExpr = m_pDoc->GetString(aExprPos);
-        OUString aExpected = "=";
-        aExpected += OUString::createFromAscii(aNames[i].mpExpr);
+        OUString aExpected = "=" + OUString::createFromAscii(aNames[i].mpExpr);
         CPPUNIT_ASSERT_EQUAL(aExpected, aExpr);
     }
 
@@ -6793,9 +6792,9 @@ void Test::checkPrecisionAsShown( OUString& rCode, double fValue, double fExpect
         CPPUNIT_ASSERT_EQUAL( sal_Int32(0), nCheckPos );
     }
     double fRoundValue = m_pDoc->RoundValueAsShown( fValue, nFormat );
-    OString aMessage = "Format \"";
-    aMessage += OUStringToOString( rCode, RTL_TEXTENCODING_ASCII_US );
-    aMessage += "\" is not correctly rounded";
+    OString aMessage = "Format \"" +
+        OUStringToOString( rCode, RTL_TEXTENCODING_ASCII_US ) +
+        "\" is not correctly rounded";
     CPPUNIT_ASSERT_EQUAL_MESSAGE( aMessage.getStr(), fExpectedRoundVal, fRoundValue );
 }
 

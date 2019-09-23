@@ -460,9 +460,8 @@ IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl, weld::Button&, void)
 
         if ((pInfo->GetId() == nId) && (pInfo->GetThemeName() != m_pThm->GetName()))
         {
-            OUString aStr( CuiResId( RID_SVXSTR_GALLERY_ID_EXISTS ) );
-
-            aStr += " (" + pInfo->GetThemeName() + ")";
+            OUString aStr = CuiResId( RID_SVXSTR_GALLERY_ID_EXISTS ) +
+                " (" + pInfo->GetThemeName() + ")";
 
             std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                           VclMessageType::Info, VclButtonsType::Ok,

@@ -370,8 +370,8 @@ void BackendImpl::implProcessHelp(
                 OUString aExpandedHelpURL = dp_misc::expandUnoRcUrl( aHelpURL );
                 if( !xSFA->isFolder( aExpandedHelpURL ) )
                 {
-                    OUString aErrStr = DpResId( RID_STR_HELPPROCESSING_GENERAL_ERROR );
-                    aErrStr += "No help folder";
+                    OUString aErrStr = DpResId( RID_STR_HELPPROCESSING_GENERAL_ERROR ) +
+                        "No help folder";
                     OWeakObject* oWeakThis = static_cast<OWeakObject *>(this);
                     throw deployment::DeploymentException( OUString(), oWeakThis,
                                                            makeAny( uno::Exception( aErrStr, oWeakThis ) ) );
@@ -414,9 +414,8 @@ void BackendImpl::implProcessHelp(
                             aJarFile, rtl_UriCharClassPchar,
                             rtl_UriEncodeIgnoreEscapes,
                             RTL_TEXTENCODING_UTF8 );
-                        OUString aDestBasePath = "vnd.sun.star.zip://";
-                        aDestBasePath += aEncodedJarFilePath;
-                        aDestBasePath += "/" ;
+                        OUString aDestBasePath = "vnd.sun.star.zip://" +
+                            aEncodedJarFilePath + "/" ;
 
                         sal_Int32 nLenLangFolderURL = aLangURL.getLength() + 1;
 
@@ -515,8 +514,7 @@ void BackendImpl::implProcessHelp(
                                     aErrStr += aDecodedFile;
                                     if( aErrorInfo.m_nXMLParsingLine != -1 )
                                     {
-                                        aErrStr += ", line ";
-                                        aErrStr += OUString::number( aErrorInfo.m_nXMLParsingLine );
+                                        aErrStr += ", line " + OUString::number( aErrorInfo.m_nXMLParsingLine );
                                     }
                                 }
                             }

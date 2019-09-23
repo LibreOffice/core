@@ -651,8 +651,7 @@ OUString SAL_CALL ToolbarMenuEntryAcc::getAccessibleName()
 
         if( aRet.isEmpty() )
         {
-            aRet = "Item ";
-            aRet += OUString::number( mpParent->mnEntryId );
+            aRet = "Item " + OUString::number( mpParent->mnEntryId );
         }
     }
 

@@ -109,8 +109,7 @@ sal_uInt16 SwHTMLWriter::GetDefListLvl( const OUString& rNm, sal_uInt16 nPoolId 
         return 1 | HTML_DLCOLL_DT;
     }
 
-    OUString sDTDD( OOO_STRING_SVTOOLS_HTML_dt );
-    sDTDD += " ";
+    OUString sDTDD = OOO_STRING_SVTOOLS_HTML_dt " ";
     if( rNm.startsWith(sDTDD) )
         // DefinitionList - term
         return static_cast<sal_uInt16>(rNm.copy( sDTDD.getLength() ).toInt32()) | HTML_DLCOLL_DT;

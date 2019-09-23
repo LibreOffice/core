@@ -237,9 +237,9 @@ OUString resolveNamespace( const OUString& aName )
     {
         if ( aName.getLength() > index + 1 )
         {
-            OUString aAttributeName = getNamespaceValue( aName.copy( 0, index ) );
-            aAttributeName += ":";
-            aAttributeName += aName.copy( index + 1 );
+            OUString aAttributeName = getNamespaceValue( aName.copy( 0, index ) ) +
+                ":" +
+                aName.copy( index + 1 );
             return aAttributeName;
         }
     }

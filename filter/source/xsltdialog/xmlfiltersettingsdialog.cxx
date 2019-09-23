@@ -449,8 +449,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             INetURLObject aSourceURL( pFilterEntry->maImportTemplate );
             if (!aSourceURL.GetLastName().isEmpty())
             {
-                OUString aDestURL( m_sTemplatePath );
-                aDestURL += pFilterEntry->maFilterName + "/";
+                OUString aDestURL = m_sTemplatePath + pFilterEntry->maFilterName + "/";
                 if( createDirectory( aDestURL ) )
                 {
                     aDestURL += aSourceURL.GetLastName();
@@ -851,8 +850,7 @@ void XMLFilterSettingsDialog::onSave()
         FileDialogFlags::NONE, m_xDialog.get());
 
     OUString aExtensions( "*.jar" );
-    OUString aFilterName(XsltResId(STR_FILTER_PACKAGE));
-    aFilterName += " (" + aExtensions + ")";
+    OUString aFilterName = XsltResId(STR_FILTER_PACKAGE) + " (" + aExtensions + ")";
 
     aDlg.AddFilter( aFilterName, aExtensions );
 
@@ -896,8 +894,7 @@ void XMLFilterSettingsDialog::onOpen()
     FileDialogFlags::NONE, m_xDialog.get());
 
     OUString aExtensions( "*.jar" );
-    OUString aFilterName(XsltResId(STR_FILTER_PACKAGE));
-    aFilterName += " (" + aExtensions + ")";
+    OUString aFilterName = XsltResId(STR_FILTER_PACKAGE) + " (" + aExtensions + ")";
 
     aDlg.AddFilter( aFilterName, aExtensions );
 

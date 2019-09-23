@@ -231,15 +231,12 @@ void ArgInput::Show()
 
 void ArgInput::UpdateAccessibleNames()
 {
-    OUString aArgName(":");
-    aArgName += pFtArg->get_label();
+    OUString aArgName = ":" + pFtArg->get_label();
 
-    OUString aName = pBtnFx->get_tooltip_text();
-    aName += aArgName;
+    OUString aName = pBtnFx->get_tooltip_text() + aArgName;
     pBtnFx->set_accessible_name(aName);
 
-    aName = pRefBtn->GetWidget()->get_tooltip_text();
-    aName += aArgName;
+    aName = pRefBtn->GetWidget()->get_tooltip_text() + aArgName;
     pRefBtn->GetWidget()->set_accessible_name(aName);
 }
 

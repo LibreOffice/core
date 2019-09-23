@@ -878,8 +878,8 @@ void StringResourcePersistenceImpl::implStoreAtStorage
         {
             if( pLocaleItem )
             {
-                OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem.get(), m_aNameBase );
-                aStreamName += ".properties";
+                OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem.get(), m_aNameBase ) +
+                    ".properties";
 
                 try
                 {
@@ -899,8 +899,8 @@ void StringResourcePersistenceImpl::implStoreAtStorage
         if( pLocaleItem != nullptr && (bStoreAll || pLocaleItem->m_bModified) &&
             loadLocale( pLocaleItem.get() ) )
         {
-            OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem.get(), aNameBase );
-            aStreamName += ".properties";
+            OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem.get(), aNameBase ) +
+                ".properties";
 
             Reference< io::XStream > xElementStream =
                     Storage->openStreamElement( aStreamName, ElementModes::READWRITE );
@@ -932,8 +932,8 @@ void StringResourcePersistenceImpl::implStoreAtStorage
     {
         for( auto& pLocaleItem : m_aChangedDefaultLocaleVector )
         {
-            OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem.get(), m_aNameBase );
-            aStreamName += ".default";
+            OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem.get(), m_aNameBase ) +
+                ".default";
 
             try
             {
@@ -950,8 +950,8 @@ void StringResourcePersistenceImpl::implStoreAtStorage
     // Default locale
     if( m_pDefaultLocaleItem != nullptr && (bStoreAll || m_bDefaultModified) )
     {
-        OUString aStreamName = implGetFileNameForLocaleItem( m_pDefaultLocaleItem, aNameBase );
-        aStreamName += ".default";
+        OUString aStreamName = implGetFileNameForLocaleItem( m_pDefaultLocaleItem, aNameBase ) +
+            ".default";
 
         Reference< io::XStream > xElementStream =
                 Storage->openStreamElement( aStreamName, ElementModes::READWRITE );
@@ -1628,21 +1628,18 @@ static OUString implGetNameScemeForLocaleItem( const LocaleItem* pLocaleItem )
         "StringResourcePersistenceImpl::implGetNameScemeForLocaleItem(): pLocaleItem == NULL" );
     Locale aLocale = pLocaleItem->m_locale;
 
-    OUString aRetStr = aUnder;
-    aRetStr += aLocale.Language;
+    OUString aRetStr = aUnder + aLocale.Language;
 
     OUString aCountry  = aLocale.Country;
     if( !aCountry.isEmpty() )
     {
-        aRetStr += aUnder;
-        aRetStr += aCountry;
+        aRetStr += aUnder + aCountry;
     }
 
     OUString aVariant  = aLocale.Variant;
     if( !aVariant.isEmpty() )
     {
-        aRetStr += aUnder;
-        aRetStr += aVariant;
+        aRetStr += aUnder + aVariant;
     }
     return aRetStr;
 }
@@ -2316,8 +2313,8 @@ bool StringResourceWithStorageImpl::implLoadLocale( LocaleItem* pLocaleItem )
     bool bSuccess = false;
     try
     {
-        OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, m_aNameBase );
-        aStreamName += ".properties";
+        OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, m_aNameBase ) +
+            ".properties";
 
         Reference< io::XStream > xElementStream =
             m_xStorage->openStreamElement( aStreamName, ElementModes::READ );

@@ -748,8 +748,8 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                                      INetURLObject::DecodeMechanism::WithCharset);
     else if (pIMapObj)
     {
-        aURL = pIMapObj->GetAltText();
-        aURL += " ("
+        aURL = pIMapObj->GetAltText() +
+                " ("
                 + INetURLObject::decode(pIMapObj->GetURL(),
                                         INetURLObject::DecodeMechanism::WithCharset)
                 + ")";

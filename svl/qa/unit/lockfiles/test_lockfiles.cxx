@@ -126,9 +126,7 @@ void LockfileTest::testLOLockFileContent()
     // User name
     sal_Int32 nFirstChar = 0;
     sal_Int32 nNextComma = sLockFileContent.indexOf(',', nFirstChar);
-    OUString sUserName;
-    sUserName += aUserOpt.GetFirstName() + " ";
-    sUserName += aUserOpt.GetLastName();
+    OUString sUserName = aUserOpt.GetFirstName() + " " + aUserOpt.GetLastName();
     CPPUNIT_ASSERT_EQUAL(sUserName, sLockFileContent.copy(nFirstChar, nNextComma - nFirstChar));
 
     // System user name
@@ -400,9 +398,7 @@ void LockfileTest::testWordLockFileContent()
     aLockFile.RemoveFileDirectly();
 
     // First character is the size of the user name
-    OUString sUserName;
-    sUserName += aUserOpt.GetFirstName() + " ";
-    sUserName += aUserOpt.GetLastName();
+    OUString sUserName = aUserOpt.GetFirstName() + " " + aUserOpt.GetLastName();
     int nIndex = 0;
     CPPUNIT_ASSERT_EQUAL(sUserName.getLength(), static_cast<sal_Int32>(sLockFileContent[nIndex]));
 
@@ -454,9 +450,7 @@ void LockfileTest::testExcelLockFileContent()
     aLockFile.RemoveFileDirectly();
 
     // First character is the size of the user name
-    OUString sUserName;
-    sUserName += aUserOpt.GetFirstName() + " ";
-    sUserName += aUserOpt.GetLastName();
+    OUString sUserName = aUserOpt.GetFirstName() + " " + aUserOpt.GetLastName();
     int nIndex = 0;
     CPPUNIT_ASSERT_EQUAL(sUserName.getLength(), static_cast<sal_Int32>(sLockFileContent[nIndex]));
 
@@ -513,9 +507,7 @@ void LockfileTest::testPowerPointLockFileContent()
     aLockFile.RemoveFileDirectly();
 
     // First character is the size of the user name
-    OUString sUserName;
-    sUserName += aUserOpt.GetFirstName() + " ";
-    sUserName += aUserOpt.GetLastName();
+    OUString sUserName = aUserOpt.GetFirstName() + " " + aUserOpt.GetLastName();
     int nIndex = 0;
     CPPUNIT_ASSERT_EQUAL(sUserName.getLength(), static_cast<sal_Int32>(sLockFileContent[nIndex]));
 

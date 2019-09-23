@@ -733,10 +733,10 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
         {
             if ( TRISTATE_FALSE != *n )
             {
-                sOptions += " " OOO_STRING_SVTOOLS_HTML_O_checked;
-                sOptions += "=\"";
-                sOptions += OString(OOO_STRING_SVTOOLS_HTML_O_checked);
-                sOptions += "\"";
+                sOptions += " " OOO_STRING_SVTOOLS_HTML_O_checked
+                    "=\""
+                    OOO_STRING_SVTOOLS_HTML_O_checked
+                    "\"";
             }
         }
 

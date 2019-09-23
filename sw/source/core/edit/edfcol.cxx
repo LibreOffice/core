@@ -411,10 +411,10 @@ std::pair<bool, OUString> lcl_MakeParagraphSignatureFieldText(const SignatureDes
             valid = valid
                     && aInfo.nStatus == xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
 
-            msg = SwResId(STR_SIGNED_BY) + ": " + aInfo.ouSubject + ", ";
-            msg += aDescr.msDate;
-            msg += (!aDescr.msUsage.isEmpty() ? (" (" + aDescr.msUsage + "): ") : OUString(": "));
-            msg += (valid ? SwResId(STR_VALID) : SwResId(STR_INVALID));
+            msg = SwResId(STR_SIGNED_BY) + ": " + aInfo.ouSubject + ", " +
+                aDescr.msDate +
+                (!aDescr.msUsage.isEmpty() ? (" (" + aDescr.msUsage + "): ") : OUString(": ")) +
+                (valid ? SwResId(STR_VALID) : SwResId(STR_INVALID));
         }
     }
 

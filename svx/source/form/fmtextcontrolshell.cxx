@@ -434,8 +434,7 @@ namespace svx
 
             if ( pAsciiUnoName )
             {
-                sSlotUnoName = ".uno:";
-                sSlotUnoName += OUString::createFromAscii( pAsciiUnoName );
+                sSlotUnoName = ".uno:" + OUString::createFromAscii( pAsciiUnoName );
             }
             else
             {
@@ -567,9 +566,9 @@ namespace svx
                 sUnoSlotName = lcl_getUnoSlotName( nSlotId );
             else
                 sUnoSlotName = "<unknown>";
-            OString sUnoSlotNameAscii( "\"" );
-            sUnoSlotNameAscii += OString( sUnoSlotName.getStr(), sUnoSlotName.getLength(), RTL_TEXTENCODING_ASCII_US );
-            sUnoSlotNameAscii += "\"";
+            OString sUnoSlotNameAscii = "\"" +
+                OString( sUnoSlotName.getStr(), sUnoSlotName.getLength(), RTL_TEXTENCODING_ASCII_US ) +
+                "\"";
 #endif
 
             if ( _bTranslateLatin )

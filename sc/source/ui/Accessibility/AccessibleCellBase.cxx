@@ -401,18 +401,11 @@ OUString ScAccessibleCellBase::getShadowAttrs()
         return sShadowAttrs;
     }
     //else return all the shadow properties
-    sShadowAttrs += "Location=";
-    sShadowAttrs += OUString::number( nLocationVal );
-    sShadowAttrs += sInnerSplit;
-    sShadowAttrs += "ShadowWidth=";
-    sShadowAttrs += OUString::number( static_cast<sal_Int32>(aShadowFmt.ShadowWidth) ) ;
-    sShadowAttrs += sInnerSplit;
-    sShadowAttrs += "IsTransparent=";
-    sShadowAttrs += OUString::number( static_cast<int>(aShadowFmt.IsTransparent) ) ;
-    sShadowAttrs += sInnerSplit;
-    sShadowAttrs += "Color=";
-    sShadowAttrs += OUString::number( static_cast<sal_Int32>(aShadowFmt.Color) );
-    sShadowAttrs += sOuterSplit;
+    sShadowAttrs += "Location=" + OUString::number( nLocationVal ) +
+        sInnerSplit + "ShadowWidth=" + OUString::number( static_cast<sal_Int32>(aShadowFmt.ShadowWidth) ) +
+        sInnerSplit + "IsTransparent=" + OUString::number( static_cast<int>(aShadowFmt.IsTransparent) ) +
+        sInnerSplit + "Color=" + OUString::number( static_cast<sal_Int32>(aShadowFmt.Color) ) +
+        sOuterSplit;
     return sShadowAttrs;
 }
 
@@ -488,18 +481,11 @@ OUString ScAccessibleCellBase::getBorderAttrs()
     }
     else//add all the border properties to the return string.
     {
-        sBorderAttrs += "TopBorder:Color=";
-        sBorderAttrs += OUString::number( static_cast<sal_Int32>(aTopBorder.Color) );
-        sBorderAttrs += sInnerSplit;
-        sBorderAttrs += "InnerLineWidth=";
-        sBorderAttrs += OUString::number( static_cast<sal_Int32>(aTopBorder.InnerLineWidth) );
-        sBorderAttrs += sInnerSplit;
-        sBorderAttrs += "OuterLineWidth=";
-        sBorderAttrs += OUString::number( static_cast<sal_Int32>(aTopBorder.OuterLineWidth) );
-        sBorderAttrs += sInnerSplit;
-        sBorderAttrs += "LineDistance=";
-        sBorderAttrs += OUString::number( static_cast<sal_Int32>(aTopBorder.LineDistance) );
-        sBorderAttrs += sOuterSplit;
+        sBorderAttrs += "TopBorder:Color=" + OUString::number( static_cast<sal_Int32>(aTopBorder.Color) ) +
+            sInnerSplit + "InnerLineWidth=" + OUString::number( static_cast<sal_Int32>(aTopBorder.InnerLineWidth) ) +
+            sInnerSplit + "OuterLineWidth=" + OUString::number( static_cast<sal_Int32>(aTopBorder.OuterLineWidth) ) +
+            sInnerSplit + "LineDistance=" + OUString::number( static_cast<sal_Int32>(aTopBorder.LineDistance) ) +
+            sOuterSplit;
     }
     //bottom border
     if ( aBottomBorder.InnerLineWidth == 0 && aBottomBorder.OuterLineWidth == 0 )
@@ -508,18 +494,11 @@ OUString ScAccessibleCellBase::getBorderAttrs()
     }
     else
     {
-        sBorderAttrs += "BottomBorder:Color=";
-        sBorderAttrs += OUString::number( static_cast<sal_Int32>(aBottomBorder.Color) );
-        sBorderAttrs += sInnerSplit;
-        sBorderAttrs += "InnerLineWidth=";
-        sBorderAttrs += OUString::number( static_cast<sal_Int32>(aBottomBorder.InnerLineWidth) );
-        sBorderAttrs += sInnerSplit;
-        sBorderAttrs += "OuterLineWidth=";
-        sBorderAttrs += OUString::number( static_cast<sal_Int32>(aBottomBorder.OuterLineWidth) );
-        sBorderAttrs += sInnerSplit;
-        sBorderAttrs += "LineDistance=";
-        sBorderAttrs += OUString::number( static_cast<sal_Int32>(aBottomBorder.LineDistance) );
-        sBorderAttrs += sOuterSplit;
+        sBorderAttrs += "BottomBorder:Color=" + OUString::number( static_cast<sal_Int32>(aBottomBorder.Color) ) +
+            sInnerSplit + "InnerLineWidth=" + OUString::number( static_cast<sal_Int32>(aBottomBorder.InnerLineWidth) ) +
+            sInnerSplit + "OuterLineWidth=" + OUString::number( static_cast<sal_Int32>(aBottomBorder.OuterLineWidth) ) +
+            sInnerSplit + "LineDistance=" + OUString::number( static_cast<sal_Int32>(aBottomBorder.LineDistance) ) +
+            sOuterSplit;
     }
     //left border
     if ( aLeftBorder.InnerLineWidth == 0 && aLeftBorder.OuterLineWidth == 0 )
@@ -528,18 +507,11 @@ OUString ScAccessibleCellBase::getBorderAttrs()
     }
     else
     {
-        sBorderAttrs += "LeftBorder:Color=";
-        sBorderAttrs += OUString::number( static_cast<sal_Int32>(aLeftBorder.Color) );
-        sBorderAttrs += sInnerSplit;
-        sBorderAttrs += "InnerLineWidth=";
-        sBorderAttrs += OUString::number( static_cast<sal_Int32>(aLeftBorder.InnerLineWidth) );
-        sBorderAttrs += sInnerSplit;
-        sBorderAttrs += "OuterLineWidth=";
-        sBorderAttrs += OUString::number( static_cast<sal_Int32>(aLeftBorder.OuterLineWidth) );
-        sBorderAttrs += sInnerSplit;
-        sBorderAttrs += "LineDistance=";
-        sBorderAttrs += OUString::number( static_cast<sal_Int32>(aLeftBorder.LineDistance) );
-        sBorderAttrs += sOuterSplit;
+        sBorderAttrs += "LeftBorder:Color=" + OUString::number( static_cast<sal_Int32>(aLeftBorder.Color) ) +
+            sInnerSplit + "InnerLineWidth=" + OUString::number( static_cast<sal_Int32>(aLeftBorder.InnerLineWidth) ) +
+            sInnerSplit + "OuterLineWidth=" + OUString::number( static_cast<sal_Int32>(aLeftBorder.OuterLineWidth) ) +
+            sInnerSplit + "LineDistance=" + OUString::number( static_cast<sal_Int32>(aLeftBorder.LineDistance) ) +
+            sOuterSplit;
     }
     //right border
     if ( aRightBorder.InnerLineWidth == 0 && aRightBorder.OuterLineWidth == 0 )
@@ -548,18 +520,11 @@ OUString ScAccessibleCellBase::getBorderAttrs()
     }
     else
     {
-        sBorderAttrs += "RightBorder:Color=";
-        sBorderAttrs += OUString::number( static_cast<sal_Int32>(aRightBorder.Color) );
-        sBorderAttrs += sInnerSplit;
-        sBorderAttrs += "InnerLineWidth=";
-        sBorderAttrs += OUString::number( static_cast<sal_Int32>(aRightBorder.InnerLineWidth) );
-        sBorderAttrs += sInnerSplit;
-        sBorderAttrs += "OuterLineWidth=";
-        sBorderAttrs += OUString::number( static_cast<sal_Int32>(aRightBorder.OuterLineWidth) );
-        sBorderAttrs += sInnerSplit;
-        sBorderAttrs += "LineDistance=";
-        sBorderAttrs += OUString::number( static_cast<sal_Int32>(aRightBorder.LineDistance) );
-        sBorderAttrs += sOuterSplit;
+        sBorderAttrs += "RightBorder:Color=" + OUString::number( static_cast<sal_Int32>(aRightBorder.Color) ) +
+            sInnerSplit + "InnerLineWidth=" + OUString::number( static_cast<sal_Int32>(aRightBorder.InnerLineWidth) ) +
+            sInnerSplit + "OuterLineWidth=" + OUString::number( static_cast<sal_Int32>(aRightBorder.OuterLineWidth) ) +
+            sInnerSplit + "LineDistance=" + OUString::number( static_cast<sal_Int32>(aRightBorder.LineDistance) ) +
+            sOuterSplit;
     }
     return sBorderAttrs;
 }

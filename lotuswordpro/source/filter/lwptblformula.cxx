@@ -101,10 +101,8 @@ void LwpFormulaInfo::ReadText()
     std::vector<char> aBuf(nStrLen + 1);
     m_pObjStrm->QuickRead(aBuf.data(), nStrLen);
     aBuf[nStrLen]= '\0';
-    OUString aText;
-    aText += "\"";
-    aText += OUString(aBuf.data(), nStrLen, osl_getThreadTextEncoding());
-    aText += "\"";
+    OUString aText = "\"" +
+        OUString(aBuf.data(), nStrLen, osl_getThreadTextEncoding()) + "\"";
 
     m_aStack.push_back(std::make_unique<LwpFormulaText>(aText));
 }
@@ -462,9 +460,7 @@ OUString LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
         aFormula += m_aArgs[1]->ToArgString(pCellsMap) + " ";
         OUString aFuncName = LwpFormulaTools::GetName(m_nTokenType);
 
-        aFormula += aFuncName + " ";
-
-        aFormula += m_aArgs[0]->ToArgString(pCellsMap);
+        aFormula += aFuncName + " " + m_aArgs[0]->ToArgString(pCellsMap);
     }
     else
     {
@@ -482,8 +478,7 @@ OUString LwpFormulaUnaryOp::ToString(LwpTableLayout* pCellsMap)
     if (1==m_aArgs.size())
     {
         OUString aFuncName = LwpFormulaTools::GetName(m_nTokenType);
-        aFormula += aFuncName;
-        aFormula += m_aArgs[0]->ToArgString(pCellsMap);
+        aFormula += aFuncName + m_aArgs[0]->ToArgString(pCellsMap);
     }
     else
     {

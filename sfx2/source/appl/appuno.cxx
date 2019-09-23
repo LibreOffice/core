@@ -1264,9 +1264,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                         nSubId |= CONVERT_TWIPS;
 
                     DBG_ASSERT(( pType->aAttrib[n-1].nAID ) <= 127, "Member ID out of range" );
-                    OUString aName( OUString::createFromAscii( pSlot->pUnoName ) ) ;
-                    aName += ".";
-                    aName += OUString::createFromAscii( pType->aAttrib[n-1].pName ) ;
+                    OUString aName = OUString::createFromAscii( pSlot->pUnoName ) +
+                        "." + OUString::createFromAscii( pType->aAttrib[n-1].pName ) ;
                     pValue[nActProp].Name = aName;
                     if ( !pItem->QueryValue( pValue[nActProp++].Value, nSubId ) )
                     {
@@ -1310,9 +1309,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                         nSubId |= CONVERT_TWIPS;
 
                     DBG_ASSERT((rArg.pType->aAttrib[n-1].nAID) <= 127, "Member ID out of range" );
-                    OUString aName( OUString::createFromAscii( rArg.pName ) ) ;
-                    aName += ".";
-                    aName += OUString::createFromAscii( rArg.pType->aAttrib[n-1].pName ) ;
+                    OUString aName = OUString::createFromAscii( rArg.pName ) +
+                        "." + OUString::createFromAscii( rArg.pType->aAttrib[n-1].pName ) ;
                     pValue[nActProp].Name = aName;
                     if ( !pItem->QueryValue( pValue[nActProp++].Value, nSubId ) )
                     {

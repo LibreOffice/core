@@ -339,8 +339,7 @@ Any OO3ExtensionMigration::execute( const Sequence< beans::NamedValue >& )
     if ( aStatus == ::utl::Bootstrap::PATH_EXISTS )
     {
         // copy all extensions
-        OUString sSourceDir( m_sSourceDir );
-        sSourceDir += "/user/uno_packages/cache/uno_packages";
+        OUString sSourceDir = m_sSourceDir + "/user/uno_packages/cache/uno_packages";
         TStringVector aExtensionToMigrate;
         scanUserExtensions( sSourceDir, aExtensionToMigrate );
         for (auto const& extensionToMigrate : aExtensionToMigrate)

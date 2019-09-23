@@ -101,9 +101,7 @@ namespace abp
         INetURLObject aURL( rSettings.sDataSourceName );
         if( aURL.GetProtocol() == INetProtocol::NotValid )
         {
-            OUString sPath = SvtPathOptions().GetWorkPath();
-            sPath += "/";
-            sPath += rSettings.sDataSourceName;
+            OUString sPath = SvtPathOptions().GetWorkPath() + "/" + rSettings.sDataSourceName;
 
             std::shared_ptr<const SfxFilter> pFilter = lcl_getBaseFilter();
             if ( pFilter )

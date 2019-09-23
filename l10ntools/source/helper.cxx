@@ -121,12 +121,9 @@ OString UnQuotHTML( const OString& rString )
 bool isWellFormedXML( OString const & text )
 {
     xmlDocPtr doc;
-    OString content;
     bool result = true;
 
-    content = "<root>";
-    content += text;
-    content += "</root>";
+    OString content = "<root>" + text + "</root>";
     doc = xmlParseMemory(content.getStr(),static_cast<int>(content.getLength()));
     if (doc == nullptr) {
         result = false;

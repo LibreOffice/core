@@ -687,8 +687,8 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
         }
         if( rAV.cbTextAfter )
         {
-            OUString sP( rNum.GetSuffix() );
-            sP += sText.copy( rAV.cbTextBefore, rAV.cbTextAfter).makeStringAndClear();
+            OUString sP = rNum.GetSuffix() +
+                sText.copy( rAV.cbTextBefore, rAV.cbTextAfter).makeStringAndClear();
             rNum.SetSuffix( sP );
         }
 // The characters before and after multiple digits do not apply because

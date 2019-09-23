@@ -86,11 +86,7 @@ static OString errorToString(const osl::FileBase::RC _nError)
 
 static OString errorToStr(osl::FileBase::RC const& nError)
 {
-    OString suBuf;
-    suBuf += "The returned error is: " ;
-    suBuf += errorToString(nError);
-    suBuf += "!\n";
-    return suBuf;
+    return "The returned error is: " + errorToString(nError) + "!\n";
 }
 
 /** compare two TimeValue, unit is "ms", since Windows time precision is better than UNX.
@@ -263,8 +259,8 @@ static void deleteTestDirectory(const OUString& dirname)
 
     nError = Directory::remove(aPathURL);
 
-    OString strError ("In deleteTestDirectory function: remove Directory ");
-    strError += OUStringToOString(aPathURL, RTL_TEXTENCODING_ASCII_US);
+    OString strError = "In deleteTestDirectory function: remove Directory " +
+                        OUStringToOString(aPathURL, RTL_TEXTENCODING_ASCII_US);
     CPPUNIT_ASSERT_MESSAGE(strError.getStr(), (osl::FileBase::E_None == nError) || (nError == osl::FileBase::E_NOENT));
 }
 
@@ -368,17 +364,12 @@ static bool checkDirectory(const OUString& str, oslCheckMode nCheckMode)
 */
 static OString outputError(const OString & returnVal, const OString & rightVal, const sal_Char * msg = "")
 {
-    OString aString;
     if (returnVal == rightVal)
-        return aString;
+        return OString();
 
-    aString += msg;
-    aString += ": the returned value is '";
-    aString += returnVal;
-    aString += "', but the value should be '";
-    aString += rightVal;
-    aString += "'.";
-    return aString;
+    return OString(msg) +
+        ": the returned value is '" + returnVal +
+        "', but the value should be '" + rightVal + "'.";
 }
 
 /** Change file mode, two version in UNIX and Windows;.
@@ -969,11 +960,11 @@ namespace osl_FileBase
 
         bool bOk = compareFileName(aUStr, aUResultURL);
 
-        OString sError("test for getSystemPathFromFileURL(' ");
-        sError += OUStringToOString(aUNormalURL, RTL_TEXTENCODING_ASCII_US);
-        sError += " ') function:use an absolute file URL, ";
-        sError += outputError(OUStringToOString(aUStr, RTL_TEXTENCODING_ASCII_US),
-                            OUStringToOString(aUResultURL, RTL_TEXTENCODING_ASCII_US));
+        OString sError = "test for getSystemPathFromFileURL(' " +
+            OUStringToOString(aUNormalURL, RTL_TEXTENCODING_ASCII_US) +
+            " ') function:use an absolute file URL, " +
+            outputError(OUStringToOString(aUStr, RTL_TEXTENCODING_ASCII_US),
+                        OUStringToOString(aUResultURL, RTL_TEXTENCODING_ASCII_US));
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sError.getStr(), osl::FileBase::E_None, nError);
         CPPUNIT_ASSERT_MESSAGE(sError.getStr(), bOk);
@@ -992,11 +983,11 @@ namespace osl_FileBase
 
         bool bOk = compareFileName(aUStr, aUResultURL);
 
-        OString sError("test for getSystemPathFromFileURL(' ");
-        sError += OUStringToOString(aUNormalURL, RTL_TEXTENCODING_ASCII_US);
-        sError += " ') function:use a CJK coded absolute URL, ";
-        sError += outputError(OUStringToOString(aUStr, RTL_TEXTENCODING_ASCII_US),
-                            OUStringToOString(aUResultURL, RTL_TEXTENCODING_ASCII_US));
+        OString sError = "test for getSystemPathFromFileURL(' " +
+            OUStringToOString(aUNormalURL, RTL_TEXTENCODING_ASCII_US) +
+            " ') function:use a CJK coded absolute URL, " +
+            outputError(OUStringToOString(aUStr, RTL_TEXTENCODING_ASCII_US),
+                        OUStringToOString(aUResultURL, RTL_TEXTENCODING_ASCII_US));
         deleteTestDirectory(aTmpName10);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sError.getStr(), osl::FileBase::E_None, nError);
@@ -4773,9 +4764,9 @@ namespace osl_Directory
             CPPUNIT_ASSERT_EQUAL_MESSAGE("temp File removal failed", osl::FileBase::E_None, nError1);
 
             nError1 = Directory::create(aTmpDir);
-            OString sError("test for create function: create a directory '");
-            sError += OUStringToOString(aTmpDir, RTL_TEXTENCODING_ASCII_US);
-            sError += "' and check its existence.";
+            OString sError = "test for create function: create a directory '" +
+                            OUStringToOString(aTmpDir, RTL_TEXTENCODING_ASCII_US) +
+                            "' and check its existence.";
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sError.getStr(), osl::FileBase::E_None, nError1);
             osl_setFileAttributes(aTmpDir.pData, 0); // no access allowed now
 
@@ -4789,9 +4780,9 @@ namespace osl_Directory
                 osl_File_Attribute_OwnWrite |
                 osl_File_Attribute_OwnExe);
             deleteTestDirectory(aTmpDir);
-            sError = OString("test for create function: create a directory under '");
-            sError += OUStringToOString(aTmpDir, RTL_TEXTENCODING_ASCII_US);
-            sError += "' for access test.";
+            sError = OString("test for create function: create a directory under '") +
+                OUStringToOString(aTmpDir, RTL_TEXTENCODING_ASCII_US) +
+                "' for access test.";
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sError.getStr(), osl::FileBase::E_ACCES, nError1);
 #endif
         }
@@ -4888,8 +4879,8 @@ namespace osl_Directory
             nError1 = Directory::remove(aTmpName3);
             deleteTestFile(aTmpName4);
             deleteTestDirectory(aTmpName3);
-            OString sError = "test for remove function: try to remove a directory that is not empty.";
-            sError += errorToStr(nError1).getStr();
+            OString sError = "test for remove function: try to remove a directory that is not empty." +
+                              errorToStr(nError1);
 #if defined(__sun)
             // on UNX, the implementation uses rmdir(), which EEXIST is thrown on Solaris when the directory is not empty, refer to: 'man -s 2 rmdir', while on linux, ENOTEMPTY is thrown.
             // EEXIST The directory contains entries other than those for "." and "..".
@@ -4954,11 +4945,12 @@ namespace osl_Directory
             (
              "mkdtemp call failed",
              out != nullptr
-          );
+            );
 
-            tmp_x += OString('/');
+            tmp_x += "/" TEST_PATH_POSTFIX;
+#else
+            tmp_x += TEST_PATH_POSTFIX;
 #endif
-            tmp_x += OString(TEST_PATH_POSTFIX);
 
             OUString tmpTestPath;
             rc = osl::FileBase::getFileURLFromSystemPath(OStringToOUString(tmp_x, RTL_TEXTENCODING_UTF8), tmpTestPath);

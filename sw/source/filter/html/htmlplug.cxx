@@ -151,11 +151,9 @@ OUString lcl_CalculateFileName(const OUString* pOrigFileName, const Graphic& rGr
     if (pOrigFileName)
         aFileName = *pOrigFileName;
     INetURLObject aURL(aFileName);
-    OUString aName(aURL.getBase());
-    aName += "_";
-    aName += aURL.getExtension();
-    aName += "_";
-    aName += OUString::number(rGraphic.GetChecksum(), 16);
+    OUString aName = aURL.getBase() +
+        "_" + aURL.getExtension() +
+        "_" + OUString::number(rGraphic.GetChecksum(), 16);
     aURL.setBase(aName);
     aURL.setExtension(rExtension);
     aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);

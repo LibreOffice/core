@@ -295,10 +295,7 @@ Sequence< OUString > SvtCompatibilityOptions_Impl::impl_GetPropertyNames( Sequen
     // Copy entries to destination and expand every item with 2 supported sub properties.
     for ( const auto& rItem : std::as_const(rItems) )
     {
-        OUString sFixPath = SETNODE_ALLFILEFORMATS;
-        sFixPath += PATHDELIMITER;
-        sFixPath += rItem;
-        sFixPath += PATHDELIMITER;
+        OUString sFixPath = SETNODE_ALLFILEFORMATS PATHDELIMITER + rItem + PATHDELIMITER;
         for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Module); i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
         {
             lProperties[ nDestStep ] = sFixPath + SvtCompatibilityEntry::getName( SvtCompatibilityEntry::Index(i) );

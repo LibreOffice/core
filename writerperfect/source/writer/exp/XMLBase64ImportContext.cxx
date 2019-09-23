@@ -43,8 +43,7 @@ void XMLBase64ImportContext::characters(const OUString& rChars)
         OUString aChars;
         if (!m_aBase64CharsLeft.isEmpty())
         {
-            aChars = m_aBase64CharsLeft;
-            aChars += aTrimmedChars;
+            aChars = m_aBase64CharsLeft + aTrimmedChars;
             m_aBase64CharsLeft.clear();
         }
         else

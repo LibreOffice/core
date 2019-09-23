@@ -119,20 +119,13 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
                 pAttrList->AddAttribute( sName, sCdataAttribute, filter->maType );
                 xHandler->ignorableWhitespace ( sWhiteSpace );
                 xHandler->startElement( sNode, xAttrList );
-                OUString sValue("0");
-                sValue += sComma;
-                sValue += sComma;
+                OUString sValue = "0" + sComma + sComma;
                 if( !filter->maDocType.isEmpty() )
                 {
-                    sValue += sDocTypePrefix;
-                    sValue += filter->maDocType;
+                    sValue += sDocTypePrefix + filter->maDocType;
                 }
-                sValue += sComma;
-                sValue += sComma;
-                sValue += filter->maExtension;
-                sValue += sComma;
-                sValue += OUString::number( filter->mnDocumentIconID );
-                sValue += sComma;
+                sValue += sComma + sComma + filter->maExtension + sComma +
+                    OUString::number( filter->mnDocumentIconID ) + sComma;
 
                 addProperty( xHandler, sData, sValue );
                 addLocaleProperty( xHandler, sUIName, filter->maInterfaceName );
@@ -159,38 +152,24 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
                 xHandler->startElement( sNode, xAttrList );
                 addLocaleProperty( xHandler, sUIName, filter->maInterfaceName );
 
-                OUString sValue("0");
-                sValue += sComma;
-                sValue += filter->maType;
-                sValue += sComma;
-                sValue += filter->maDocumentService;
-                sValue += sComma;
-                sValue += sFilterAdaptorService;
-                sValue += sComma;
-                sValue += OUString::number( filter->maFlags );
-                sValue += sComma;
-                sValue += sXSLTFilterService;
-                sValue += sDelim;
-                sValue += OUString::boolean( filter->mbNeedsXSLT2 );
-                sValue += sDelim;
+                OUString sValue = "0" +
+                    sComma + filter->maType +
+                    sComma + filter->maDocumentService +
+                    sComma + sFilterAdaptorService +
+                    sComma + OUString::number( filter->maFlags ) +
+                    sComma + sXSLTFilterService +
+                    sDelim + OUString::boolean( filter->mbNeedsXSLT2 ) +
+                    sDelim;
 
                 const application_info_impl* pAppInfo = getApplicationInfo( filter->maExportService );
-                sValue += pAppInfo->maXMLImporter;
-                sValue += sDelim;
-                sValue += pAppInfo->maXMLExporter;
-                sValue += sDelim;
-
-                sValue += createRelativeURL( filter->maFilterName, filter->maImportXSLT );
-                sValue += sDelim;
-                sValue += createRelativeURL( filter->maFilterName, filter->maExportXSLT );
-                sValue += sDelim;
+                sValue += pAppInfo->maXMLImporter +
+                    sDelim + pAppInfo->maXMLExporter +
+                    sDelim + createRelativeURL( filter->maFilterName, filter->maImportXSLT ) +
+                    sDelim + createRelativeURL( filter->maFilterName, filter->maExportXSLT ) +
                 // entry DTD obsolete and removed, but delimiter kept
-                sValue += sDelim;
-                sValue += filter->maComment;
-                sValue += sComma;
-                sValue += "0";
-                sValue += sComma;
-                sValue += createRelativeURL( filter->maFilterName, filter->maImportTemplate );
+                    sDelim + sDelim + filter->maComment +
+                    sComma + "0" +
+                    sComma + createRelativeURL( filter->maFilterName, filter->maImportTemplate );
                 addProperty( xHandler, sData, sValue );
                 xHandler->ignorableWhitespace ( sWhiteSpace );
                 xHandler->endElement( sNode );

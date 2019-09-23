@@ -965,8 +965,7 @@ void SwNavigationPI::UpdateListBox()
         // #i53333# don't show help pages here
         if ( !pDoc->IsHelpDocument() )
         {
-            OUString sEntry = pDoc->GetTitle();
-            sEntry += " (";
+            OUString sEntry = pDoc->GetTitle() + " (";
             if (pView == pActView)
             {
                 nAct = nCount;
@@ -990,10 +989,10 @@ void SwNavigationPI::UpdateListBox()
     if(m_aContentTree->GetHiddenWrtShell())
     {
         OUString sEntry = m_aContentTree->GetHiddenWrtShell()->GetView().
-                                        GetDocShell()->GetTitle();
-        sEntry += " (";
-        sEntry += m_aStatusArr[IDX_STR_HIDDEN];
-        sEntry += ")";
+                                        GetDocShell()->GetTitle() +
+            " (" +
+            m_aStatusArr[IDX_STR_HIDDEN] +
+            ")";
         m_aDocListBox->InsertEntry(sEntry);
         bDisable = false;
     }

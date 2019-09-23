@@ -257,8 +257,7 @@ ErrCode ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL )
         const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
         if( pCharSet )
         {
-            OUString aContentType = "text/html; charset=";
-            aContentType += OUString::createFromAscii( pCharSet );
+            OUString aContentType = "text/html; charset=" + OUString::createFromAscii( pCharSet );
 
             xValues = new SvKeyValueIterator;
             xValues->Append( SvKeyValue( OOO_STRING_SVTOOLS_HTML_META_content_type, aContentType ) );
@@ -2772,8 +2771,7 @@ ErrCode ScHTMLQueryParser::Read( SvStream& rStrm, const OUString& rBaseURL  )
         const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
         if( pCharSet )
         {
-            OUString aContentType = "text/html; charset=";
-            aContentType += OUString::createFromAscii( pCharSet );
+            OUString aContentType = "text/html; charset=" + OUString::createFromAscii( pCharSet );
 
             xValues = new SvKeyValueIterator;
             xValues->Append( SvKeyValue( OOO_STRING_SVTOOLS_HTML_META_content_type, aContentType ) );

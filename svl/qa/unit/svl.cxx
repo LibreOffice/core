@@ -410,13 +410,13 @@ void Test::checkPreviewString(SvNumberFormatter& aFormatter,
     Color** ppColor = &pColor;
     if (!aFormatter.GetPreviewString(sCode, fPreviewNumber, sStr, ppColor, eLang))
     {
-        OString aMessage = "GetPreviewString( \"";
-        aMessage += OUStringToOString( sCode, RTL_TEXTENCODING_ASCII_US );
-        aMessage += "\", ";
-        aMessage += OString::number( fPreviewNumber );
-        aMessage += ", sStr, ppColor, ";
-        aMessage += OString::number( static_cast<sal_uInt16>(eLang) );
-        aMessage += " ) failed";
+        OString aMessage = "GetPreviewString( \"" +
+            OUStringToOString( sCode, RTL_TEXTENCODING_ASCII_US ) +
+            "\", " +
+            OString::number( fPreviewNumber ) +
+            ", sStr, ppColor, " +
+            OString::number( static_cast<sal_uInt16>(eLang) ) +
+            " ) failed";
         CPPUNIT_FAIL( aMessage.getStr() );
     }
     CPPUNIT_ASSERT_EQUAL(sExpected, sStr);

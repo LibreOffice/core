@@ -293,14 +293,12 @@ void TableWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     if (!nCol || !nLine)
         return;
 
-    OUString aText;
-    aText += OUString::number( nCol );
-    aText += " x ";
-    aText += OUString::number( nLine );
+    OUString aText = OUString::number( nCol ) +
+        " x " +
+        OUString::number( nLine );
     if(GetId() == FN_SHOW_MULTIPLE_PAGES)
     {
-        aText += " ";
-        aText += SvxResId(RID_SVXSTR_PAGES);
+        aText += " " + SvxResId(RID_SVXSTR_PAGES);
     }
 
     Size aTextSize(rRenderContext.GetTextWidth(aText), rRenderContext.GetTextHeight());

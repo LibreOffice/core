@@ -529,16 +529,12 @@ static OUString lcl_CellText(const SwCellFrame* pFrame)
             result += "Para:";
             rtl_str_valueOfInt64(sz, n, 10);
             OUString s = OUString::createFromAscii(sz);
-            result += s;
-            result += " ";
-            result += pNode->GetTextNode()->GetText();
+            result += s + " " + pNode->GetTextNode()->GetText();
         }
     }
 
     rtl_str_valueOfInt64(sz, n, 10);
-    OUString s = OUString::createFromAscii(sz);
-    s += " para(s):";
-    s += result;
+    OUString s = OUString::createFromAscii(sz) + " para(s):" + result;
 
     return s;
 }

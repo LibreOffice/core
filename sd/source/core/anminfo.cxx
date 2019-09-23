@@ -96,8 +96,7 @@ void SdAnimationInfo::SetBookmark( const OUString& rBookmark )
 {
     if( meClickAction == css::presentation::ClickAction_BOOKMARK )
     {
-        OUString sURL("#");
-        sURL += rBookmark;
+        OUString sURL = "#" + rBookmark;
         SvxFieldItem aURLItem( SvxURLField( sURL, sURL ), EE_FEATURE_FIELD );
         mrObject.SetMergedItem( aURLItem );
     }

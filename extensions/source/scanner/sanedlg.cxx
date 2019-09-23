@@ -1007,9 +1007,8 @@ void SaneDlg::EstablishQuantumRange()
             mxQuantumRangeBox->set_active_text( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
         }
         mxQuantumRangeBox->show();
-        OUString aText( mrSane.GetOptionName( mnCurrentOption ) );
-        aText += " ";
-        aText += mrSane.GetOptionUnitName( mnCurrentOption );
+        OUString aText = mrSane.GetOptionName( mnCurrentOption ) +
+            " " + mrSane.GetOptionUnitName( mnCurrentOption );
         mxOptionDescTxt->set_label(aText);
         mxOptionDescTxt->show();
     }
@@ -1025,9 +1024,8 @@ void SaneDlg::EstablishNumericOption()
         return;
 
     char pBuf[256];
-    OUString aText( mrSane.GetOptionName( mnCurrentOption ) );
-    aText += " ";
-    aText += mrSane.GetOptionUnitName( mnCurrentOption );
+    OUString aText = mrSane.GetOptionName( mnCurrentOption ) +
+        " " + mrSane.GetOptionUnitName( mnCurrentOption );
     if( mfMin != mfMax )
     {
         sprintf( pBuf, " < %g ; %g >", mfMin, mfMax );
@@ -1263,7 +1261,9 @@ bool SaneDlg::LoadState()
         return false;
 
     const char* pEnv = getenv("HOME");
-    OUString aFileName = pEnv ? OUString(pEnv, strlen(pEnv), osl_getThreadTextEncoding() ) : OUString();
+    OUString aFileName;
+    if (pEnv)
+        aFileName += OUString(pEnv, strlen(pEnv), osl_getThreadTextEncoding() );
     aFileName += "/.so_sane_state";
     Config aConfig( aFileName );
     if( ! aConfig.HasGroup( "SANE" ) )

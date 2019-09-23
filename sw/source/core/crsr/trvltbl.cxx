@@ -762,8 +762,7 @@ OUString SwCursorShell::GetBoxNms() const
         if( !pFrame )
             return sNm;
 
-        sNm = static_cast<SwCellFrame*>(pFrame)->GetTabBox()->GetName();
-        sNm += ":";
+        sNm = static_cast<SwCellFrame*>(pFrame)->GetTabBox()->GetName() + ":";
         pPos = m_pTableCursor->End();
     }
     else

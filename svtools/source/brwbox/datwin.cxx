@@ -667,8 +667,7 @@ void BrowserScrollBar::Tracking( const TrackingEvent& rTEvt )
     sal_uLong nPos = GetThumbPos();
     if ( nPos != _nLastPos )
     {
-        OUString aTip( OUString::number(nPos) );
-        aTip += "/";
+        OUString aTip = OUString::number(nPos) + "/";
         if ( !_pDataWin->GetRealRowCount().isEmpty() )
             aTip += _pDataWin->GetRealRowCount();
         else

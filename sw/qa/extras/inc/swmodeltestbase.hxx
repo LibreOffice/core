@@ -848,11 +848,11 @@ protected:
             }
             else
             {
-                OString aMessage("validation requested, but don't know how to validate ");
-                aMessage += filename;
-                aMessage += " (";
-                aMessage += OUStringToOString(aFilterName, RTL_TEXTENCODING_UTF8);
-                aMessage += ")";
+                OString aMessage = OString("validation requested, but don't know how to validate ") +
+                    filename +
+                    " (" +
+                    OUStringToOString(aFilterName, RTL_TEXTENCODING_UTF8) +
+                    ")";
                 CPPUNIT_FAIL(aMessage.getStr());
             }
         }
