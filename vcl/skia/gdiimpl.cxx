@@ -112,7 +112,6 @@ void SkiaSalGraphicsImpl::drawRect(long nX, long nY, long nWidth, long nHeight)
     }
     if (mLineColor != SALCOLOR_NONE)
     {
-        SkPaint paint(mPaint);
         paint.setColor(toSkColor(mLineColor));
         paint.setStyle(SkPaint::kStroke_Style);
         canvas->drawIRect(SkIRect::MakeXYWH(nX, nY, nWidth - 1, nHeight - 1), paint);
@@ -224,9 +223,16 @@ bool SkiaSalGraphicsImpl::blendAlphaBitmap(const SalTwoRect&, const SalBitmap& r
 
 void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
-    (void)rPosAry;
-    (void)rSalBitmap;
-    abort();
+    if (rPosAry.mnSrcWidth <= 0 || rPosAry.mnSrcHeight <= 0 || rPosAry.mnDestWidth <= 0
+        || rPosAry.mnDestHeight <= 0)
+        return;
+    assert(dynamic_cast<const SkiaSalBitmap*>(&rSalBitmap));
+    mSurface->getCanvas()->drawBitmapRect(
+        static_cast<const SkiaSalBitmap&>(rSalBitmap).mBitmap,
+        SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
+        SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
+                         rPosAry.mnDestHeight),
+        nullptr);
 }
 
 void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
@@ -256,9 +262,13 @@ std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long
 
 Color SkiaSalGraphicsImpl::getPixel(long nX, long nY)
 {
-    (void)nX;
-    (void)nY;
-    abort();
+    // TODO this is presumably slow, and possibly won't work with GPU surfaces
+    SkBitmap bitmap;
+    if (!bitmap.tryAllocN32Pixels(GetWidth(), GetHeight()))
+        abort();
+    if (!mSurface->readPixels(bitmap, 0, 0))
+        abort();
+    return fromSkColor(bitmap.getColor(nX, nY));
 }
 
 void SkiaSalGraphicsImpl::invert(long nX, long nY, long nWidth, long nHeight, SalInvert nFlags)
@@ -291,12 +301,31 @@ bool SkiaSalGraphicsImpl::drawEPS(long nX, long nY, long nWidth, long nHeight, v
     return false;
 }
 
-bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect&, const SalBitmap& rSourceBitmap,
+bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap,
                                           const SalBitmap& rAlphaBitmap)
 {
-    (void)rSourceBitmap;
-    (void)rAlphaBitmap;
-    return false;
+    assert(dynamic_cast<const SkiaSalBitmap*>(&rSourceBitmap));
+    assert(dynamic_cast<const SkiaSalBitmap*>(&rAlphaBitmap));
+    SkBitmap tmpBitmap;
+    if (!tmpBitmap.tryAllocPixels(SkImageInfo::Make(rSourceBitmap.GetSize().Width(),
+                                                    rSourceBitmap.GetSize().Height(),
+                                                    kN32_SkColorType, kUnpremul_SkAlphaType)))
+        return false;
+    SkCanvas canvas(tmpBitmap);
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kDst);
+    canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rSourceBitmap).mBitmap, 0, 0,
+                      &paint); // TODO bpp < 8?
+    paint.setBlendMode(SkBlendMode::kSrcIn);
+    canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rAlphaBitmap).mBitmap, 0, 0,
+                      &paint); // TODO bpp < 8?
+    mSurface->getCanvas()->drawBitmapRect(
+        tmpBitmap,
+        SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
+        SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
+                         rPosAry.mnDestHeight),
+        nullptr);
+    return true;
 }
 
 bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
