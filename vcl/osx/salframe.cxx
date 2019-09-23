@@ -97,7 +97,7 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
 AquaSalFrame::~AquaSalFrame()
 {
     if (mbFullScreen)
-        ShowFullScreen(false, maGeometry.nDisplayScreenNumber);
+        doShowFullScreen(false, maGeometry.nDisplayScreenNumber);
 
     assert( GetSalData()->mpInstance->IsMainThread() );
 
@@ -107,7 +107,7 @@ AquaSalFrame::~AquaSalFrame()
         AquaSalMenu::setDefaultMenu();
 
     // cleanup clipping stuff
-    ResetClipRegion();
+    doResetClipRegion();
 
     [SalFrameView unsetMouseFrame: this];
 
@@ -751,6 +751,11 @@ void AquaSalFrame::SetApplicationID( const OUString &/*rApplicationID*/ )
 }
 
 void AquaSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
+{
+    doShowFullScreen(bFullScreen, nDisplay);
+}
+
+void AquaSalFrame::doShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
 {
     if (!mpNSWindow)
     {
@@ -1705,6 +1710,11 @@ void AquaSalFrame::CaptureMouse( bool bCapture )
 }
 
 void AquaSalFrame::ResetClipRegion()
+{
+    doResetClipRegion();
+}
+
+void AquaSalFrame::doResetClipRegion()
 {
     if ( !mpNSWindow )
         return;
