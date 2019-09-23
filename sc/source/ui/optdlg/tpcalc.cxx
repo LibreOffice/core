@@ -182,7 +182,7 @@ bool ScTpCalcOptions::FillItemSet( SfxItemSet* rCoreAttrs )
         xBatch->commit();
         SolarMutexGuard aGuard;
         if (svtools::executeRestartDialog(
-                     comphelper::getProcessComponentContext(), GetFrameWeld(),
+                     comphelper::getProcessComponentContext(), GetDialogFrameWeld(),
                      svtools::RESTART_REASON_THREADING))
             GetDialogController()->response(RET_OK);
     }
@@ -208,7 +208,7 @@ DeactivateRC ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 
     if ( nReturn == DeactivateRC::KeepPage )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning,
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetDialogFrameWeld(), VclMessageType::Warning,
                     VclButtonsType::Ok, ScResId(STR_INVALID_EPS)));
         xBox->run();
 

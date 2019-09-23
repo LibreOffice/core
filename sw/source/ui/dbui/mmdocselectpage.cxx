@@ -101,7 +101,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, weld::Button&, rButton, void)
     if(bTemplate)
     {
         m_xLoadTemplateRB->set_active(true);
-        SfxNewFileDialog aNewFileDlg(GetFrameWeld(), SfxNewFileDialogMode::NONE);
+        SfxNewFileDialog aNewFileDlg(m_pWizard->getDialog(), SfxNewFileDialogMode::NONE);
         sal_uInt16 nRet = aNewFileDlg.run();
         if(RET_TEMPLATE_LOAD == nRet)
             bTemplate = false;
@@ -114,7 +114,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, weld::Button&, rButton, void)
     if(!bTemplate)
     {
         sfx2::FileDialogHelper aDlgHelper(TemplateDescription::FILEOPEN_SIMPLE,
-                                          FileDialogFlags::NONE, GetFrameWeld());
+                                          FileDialogFlags::NONE, m_pWizard->getDialog());
         Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
         xFP->setDisplayDirectory( SvtPathOptions().GetWorkPath() );

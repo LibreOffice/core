@@ -95,7 +95,7 @@ private:
     DECL_LINK(StartFolderPickerHdl, void *, void);
     DECL_LINK(DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void);
 
-    DECL_LINK(ExpertConfigHdl_Impl, weld::Button&, void);
+    DECL_STATIC_LINK(SvxJavaOptionsPage, ExpertConfigHdl_Impl, weld::Button&, void);
 
     void                    ClearJavaInfo();
     void                    ClearJavaList();
