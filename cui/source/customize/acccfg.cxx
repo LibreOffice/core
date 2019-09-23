@@ -839,13 +839,17 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(TabPageParent pParent, const 
     , m_xSaveButton(m_xBuilder->weld_button("save"))
     , m_xResetButton(m_xBuilder->weld_button("reset"))
 {
-    Size aSize(LogicToPixel(Size(174, 100), MapMode(MapUnit::MapAppFont)));
+    Size aSize(m_xEntriesBox->get_approximate_digit_width() * 40,
+               m_xEntriesBox->get_height_rows(12));
     m_xEntriesBox->set_size_request(aSize.Width(), aSize.Height());
-    aSize = LogicToPixel(Size(78 , 91), MapMode(MapUnit::MapAppFont));
+    aSize = Size(m_xEntriesBox->get_approximate_digit_width() * 19,
+                 m_xEntriesBox->get_height_rows(10));
     m_xGroupLBox->set_size_request(aSize.Width(), aSize.Height());
-    aSize = LogicToPixel(Size(88, 91), MapMode(MapUnit::MapAppFont));
+    aSize = Size(m_xEntriesBox->get_approximate_digit_width() * 21,
+                 m_xEntriesBox->get_height_rows(10));
     m_xFunctionBox->set_size_request(aSize.Width(), aSize.Height());
-    aSize = LogicToPixel(Size(80, 91), MapMode(MapUnit::MapAppFont));
+    aSize = Size(m_xEntriesBox->get_approximate_digit_width() * 20,
+                 m_xEntriesBox->get_height_rows(10));
     m_xKeyBox->set_size_request(aSize.Width(), aSize.Height());
 
     // install handler functions

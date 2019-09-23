@@ -55,7 +55,7 @@ SwFieldDokPage::SwFieldDokPage(TabPageParent pParent, const SfxItemSet *const pC
     m_xTypeLB->make_sorted();
     m_xFormatLB->make_sorted();
 
-    auto nWidth = LogicToPixel(Size(FIELD_COLUMN_WIDTH, 0), MapMode(MapUnit::MapAppFont)).Width();
+    auto nWidth = m_xTypeLB->get_approximate_digit_width() * FIELD_COLUMN_WIDTH;
     auto nHeight = m_xTypeLB->get_height_rows(20);
 
     m_xTypeLB->set_size_request(nWidth, nHeight);

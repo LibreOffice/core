@@ -84,7 +84,7 @@ SwFieldRefPage::SwFieldRefPage(TabPageParent pParent, const SfxItemSet *const pC
     sNumItemText = m_xTypeLB->get_text(4);
 
     auto nHeight = m_xTypeLB->get_height_rows(8);
-    auto nWidth = LogicToPixel(Size(FIELD_COLUMN_WIDTH, 0), MapMode(MapUnit::MapAppFont)).Width();
+    auto nWidth = m_xTypeLB->get_approximate_digit_width() * FIELD_COLUMN_WIDTH;
     m_xTypeLB->set_size_request(nWidth, nHeight);
     m_xFormatLB->set_size_request(nWidth, nHeight);
     m_xSelection->set_size_request(nWidth * 2, nHeight);

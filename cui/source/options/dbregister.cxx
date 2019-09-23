@@ -32,8 +32,6 @@
 #include "dbregisterednamesconfig.hxx"
 #include <svx/databaseregistrationui.hxx>
 
-#define TAB_WIDTH1      80
-
 #define COL_TYPE       0
 
 namespace svx
@@ -92,12 +90,12 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage(TabPageParent pParent, cons
     , m_xPathBox(m_xBuilder->weld_tree_view("pathctrl"))
     , m_xIter(m_xPathBox->make_iterator())
 {
-    Size aControlSize(248, 147);
-    aControlSize = LogicToPixel(aControlSize, MapMode(MapUnit::MapAppFont));
+    Size aControlSize(m_xPathBox->get_approximate_digit_width() * 60,
+                      m_xPathBox->get_height_rows(35));
     m_xPathBox->set_size_request(aControlSize.Width(), aControlSize.Height());
 
     std::vector<int> aWidths;
-    aWidths.push_back(LogicToPixel(Size(TAB_WIDTH1, 0), MapMode(MapUnit::MapAppFont)).Width());
+    aWidths.push_back(m_xPathBox->get_approximate_digit_width() * 20);
     m_xPathBox->set_column_fixed_widths(aWidths);
 
     m_xNew->connect_clicked( LINK( this, DbRegistrationOptionsPage, NewHdl ) );
