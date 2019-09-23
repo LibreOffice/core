@@ -18,6 +18,7 @@
 #include <wrtsh.hxx>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/style/BreakType.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -242,6 +243,18 @@ DECLARE_OOXMLIMPORT_TEST(testTdf124398, "tdf124398.docx")
 
     uno::Reference<drawing::XShapeDescriptor> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.OLE2Shape"), xShape->getShapeType());
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf104167, "tdf104167.docx")
+{
+    // Make sure that heading 1 paragraphs start on a new page.
+    uno::Any xStyle = getStyles("ParagraphStyles")->getByName("Heading 1");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4
+    // - Actual  : 0
+    // i.e. the <w:pageBreakBefore/> was lost on import.
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE,
+                         getProperty<style::BreakType>(xStyle, "BreakType"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf113946, "tdf113946.docx")
