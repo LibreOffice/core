@@ -17708,6 +17708,7 @@ vcl/source/bitmap/BitmapTools.cxx
 vcl/source/bitmap/bitmap.cxx
 vcl/source/bitmap/bitmapfilter.cxx
 vcl/source/bitmap/checksum.cxx
+vcl/source/bitmap/salbmp.cxx
 vcl/source/components/dtranscomp.cxx
 vcl/source/components/factory.cxx
 vcl/source/components/fontident.cxx
