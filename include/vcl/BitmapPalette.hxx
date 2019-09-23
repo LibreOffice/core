@@ -72,7 +72,7 @@ public:
         return !( *this == rBitmapPalette );
     }
 
-    bool operator!()
+    bool operator!() const
     {
         return maBitmapColor.empty();
     }
