@@ -676,8 +676,8 @@ void FTPURL::mkdir(bool ReplaceExisting) const
         // will give an error
         title = OString("/");
 
-    OString aDel("del "); aDel += title;
-    OString mkd("mkd "); mkd += title;
+    OString aDel = "del " + title;
+    OString mkd = "mkd " + title;
 
     struct curl_slist *slist = nullptr;
 
@@ -723,8 +723,7 @@ OUString FTPURL::ren(const OUString& NewTitle)
                      OldTitle.getLength(),
                      RTL_TEXTENCODING_UTF8);
 
-    OString renameto("RNTO ");
-    renameto +=
+    OString renameto = "RNTO " +
         OString(NewTitle.getStr(),
                      NewTitle.getLength(),
                      RTL_TEXTENCODING_UTF8);

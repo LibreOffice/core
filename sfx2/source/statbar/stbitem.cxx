@@ -119,8 +119,7 @@ svt::StatusbarController* SfxStatusBarControllerFactory(
         sal_uInt16 nSlotId = pSlot->GetSlotId();
         if ( nSlotId > 0 )
         {
-            OString aCmd(".uno:");
-            aCmd += pSlot->GetUnoName();
+            OString aCmd = OString(".uno:") + pSlot->GetUnoName();
             pStatusBar->SetHelpId( nSlotId, aCmd );
             return SfxStatusBarControl::CreateControl( nSlotId, nID, pStatusBar, pModule );
         }

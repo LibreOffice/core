@@ -2655,8 +2655,7 @@ void HtmlExport::CreateBitmaps()
         if(!mbImpress && (nButton == BTN_TEXT || nButton == BTN_MORE || nButton == BTN_LESS ))
             continue;
 
-        OUString aFull(maExportPath);
-        aFull += GetButtonName(nButton);
+        OUString aFull = maExportPath + GetButtonName(nButton);
         mpButtonSet->exportButton( mnButtonThema, aFull, GetButtonName(nButton) );
     }
 }
@@ -3031,8 +3030,7 @@ bool HtmlExport::checkFileExists( Reference< css::ucb::XSimpleFileAccess3 > cons
 {
     try
     {
-        OUString url( maExportPath );
-        url += aFileName;
+        OUString url = maExportPath + aFileName;
         return xFileAccess->exists( url );
     }
     catch( css::uno::Exception& )

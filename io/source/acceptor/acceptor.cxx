@@ -93,8 +93,7 @@ namespace io_acceptor
             {
                   if( *m_pFlag )
                   {
-                      OUString sMessage( "AlreadyAcceptingException :" );
-                      sMessage += sConnectionDescription;
+                      OUString sMessage = "AlreadyAcceptingException :" + sConnectionDescription;
                       throw AlreadyAcceptingException( sMessage );
                   }
                   *m_pFlag = true;
@@ -187,9 +186,7 @@ namespace io_acceptor
 
                     if(!_xAcceptor.is())
                     {
-                        OUString message("Acceptor: unknown delegatee ");
-                        message += delegatee;
-
+                        OUString message = "Acceptor: unknown delegatee " + delegatee;
                         throw ConnectionSetupException(message);
                     }
                 }

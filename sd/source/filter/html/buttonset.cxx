@@ -155,12 +155,10 @@ ButtonSetImpl::ButtonSetImpl()
 {
     const OUString sSubPath( "/wizard/web/buttons"  );
 
-    OUString sSharePath( SvtPathOptions().GetConfigPath() );
-    sSharePath += sSubPath;
+    OUString sSharePath = SvtPathOptions().GetConfigPath() + sSubPath;
     scanForButtonSets( sSharePath );
 
-    OUString sUserPath( SvtPathOptions().GetUserConfigPath() );
-    sUserPath += sSubPath;
+    OUString sUserPath = SvtPathOptions().GetUserConfigPath() + sSubPath;
     scanForButtonSets( sUserPath );
 }
 

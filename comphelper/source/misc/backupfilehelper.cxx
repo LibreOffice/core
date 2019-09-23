@@ -187,14 +187,11 @@ namespace
 
         if (!rURL.isEmpty() && !rName.isEmpty())
         {
-            aRetval = rURL;
-            aRetval += "/";
-            aRetval += rName;
+            aRetval = rURL + "/" + rName;
 
             if (!rExt.isEmpty())
             {
-                aRetval += ".";
-                aRetval += rExt;
+                aRetval += "." + rExt;
             }
         }
 
@@ -207,10 +204,7 @@ namespace
 
         if (!rURL.isEmpty() && !rName.isEmpty())
         {
-            aRetval = rURL;
-            aRetval += "/";
-            aRetval += rName;
-            aRetval += ".pack";
+            aRetval = rURL + "/" + rName + ".pack";
         }
 
         return aRetval;
@@ -309,8 +303,7 @@ namespace
 
             if (!file.second.isEmpty())
             {
-                aNewFileURL += ".";
-                aNewFileURL += file.second;
+                aNewFileURL += "." + file.second;
             }
 
             bError |= (osl::FileBase::E_None != osl::File::remove(aNewFileURL));
@@ -368,8 +361,7 @@ namespace
 
             if (!file.second.isEmpty())
             {
-                aSourceFileURL += ".";
-                aSourceFileURL += file.second;
+                aSourceFileURL += "." + file.second;
             }
 
             if (fileExists(aSourceFileURL))
@@ -378,8 +370,7 @@ namespace
 
                 if (!file.second.isEmpty())
                 {
-                    aTargetFileURL += ".";
-                    aTargetFileURL += file.second;
+                    aTargetFileURL += "." + file.second;
                 }
 
                 if (fileExists(aTargetFileURL))
@@ -1711,8 +1702,7 @@ namespace comphelper
             if (mbSafeModeDirExists)
             {
                 // adapt work URL to do all repair op's in the correct directory
-                maUserConfigWorkURL += "/";
-                maUserConfigWorkURL += getSafeModeName();
+                maUserConfigWorkURL += "/" + getSafeModeName();
             }
         }
 

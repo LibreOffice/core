@@ -3747,9 +3747,9 @@ void SvxCurrencyToolBoxControl::GetCurrencySymbols( std::vector<OUString>& rList
 
     sal_uInt16 nStart = 1;
 
-    OUString aString( ApplyLreOrRleEmbedding( rCurrencyTable[0].GetSymbol() ) );
-    aString += " ";
-    aString += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString(
+    OUString aString = ApplyLreOrRleEmbedding( rCurrencyTable[0].GetSymbol() ) +
+        " " +
+        ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString(
                                        rCurrencyTable[0].GetLanguage() ) );
 
     rList.push_back( aString );
@@ -3769,11 +3769,11 @@ void SvxCurrencyToolBoxControl::GetCurrencySymbols( std::vector<OUString>& rList
 
     for( sal_uInt16 i = 1; i < nCount; ++i )
     {
-        OUString aStr( ApplyLreOrRleEmbedding( rCurrencyTable[i].GetBankSymbol() ) );
-        aStr += aTwoSpace;
-        aStr += ApplyLreOrRleEmbedding( rCurrencyTable[i].GetSymbol() );
-        aStr += aTwoSpace;
-        aStr += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString(
+        OUString aStr = ApplyLreOrRleEmbedding( rCurrencyTable[i].GetBankSymbol() ) +
+            aTwoSpace +
+            ApplyLreOrRleEmbedding( rCurrencyTable[i].GetSymbol() ) +
+            aTwoSpace +
+            ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString(
                                         rCurrencyTable[i].GetLanguage() ) );
 
         std::vector<OUString>::size_type j = nStart;

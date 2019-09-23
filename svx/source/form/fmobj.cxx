@@ -418,8 +418,7 @@ namespace
             OUString sCurrentIndex = OUString::number(nPos);
             if (!sReturn.isEmpty())
             {
-                sCurrentIndex += "\\";
-                sCurrentIndex += sReturn;
+                sCurrentIndex += "\\" + sReturn;
             }
 
             sReturn = sCurrentIndex;

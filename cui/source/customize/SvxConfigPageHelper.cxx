@@ -196,11 +196,9 @@ sal_uInt32 SvxConfigPageHelper::generateRandomValue()
 
 OUString SvxConfigPageHelper::generateCustomURL( SvxEntries* entries )
 {
-    OUString url = ITEM_TOOLBAR_URL;
-    url += CUSTOM_TOOLBAR_STR;
-
-    // use a random number to minimize possible clash with existing custom toolbars
-    url += OUString::number( generateRandomValue(), 16 );
+    OUString url = ITEM_TOOLBAR_URL + OUString(CUSTOM_TOOLBAR_STR) +
+        // use a random number to minimize possible clash with existing custom toolbars
+        OUString::number( generateRandomValue(), 16 );
 
     // now check is there is an already existing entry with this url
     bool bFoundEntry = false;

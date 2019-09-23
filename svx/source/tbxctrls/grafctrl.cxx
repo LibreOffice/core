@@ -561,8 +561,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
     if( bUndo )
     {
-        aUndoStr = rView.GetDescriptionOfMarkedObjects();
-        aUndoStr += " ";
+        aUndoStr = rView.GetDescriptionOfMarkedObjects() + " ";
     }
 
     const SfxItemSet*   pArgs = rReq.GetArgs();

@@ -298,12 +298,11 @@ sal_Int32 compileFile(const OString * pathname)
     }
 
     sal_Int32 idx= cpp.lastIndexOf("idlc");
-    cpp = cpp.copy(0, idx);
 
 #if defined(_WIN32)
-    cpp += "ucpp.exe";
+    cpp = cpp.copy(0, idx) + "ucpp.exe";
 #else
-    cpp += "ucpp";
+    cpp = cpp.copy(0, idx) + "ucpp";
 #endif
 #else // SYSTEM_UCPP
     cpp = OUString(UCPP);

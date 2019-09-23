@@ -2233,12 +2233,9 @@ uno::Any SAL_CALL ScAccessibleDocument::getExtendedAttributes()
     sName = "page-name:";
     sValue = sName + sSheetName ;
     sName = ";page-number:";
-    sValue += sName;
-    sValue += OUString::number(sheetIndex+1) ;
+    sValue += sName + OUString::number(sheetIndex+1) ;
     sName = ";total-pages:";
-    sValue += sName;
-    sValue += OUString::number(GetDocument()->GetTableCount());
-    sValue += ";";
+    sValue += sName + OUString::number(GetDocument()->GetTableCount()) + ";";
     anyAtrribute <<= sValue;
     return anyAtrribute;
 }

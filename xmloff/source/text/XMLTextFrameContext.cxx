@@ -464,8 +464,7 @@ void XMLTextFrameContext_Impl::Create()
             }
             else
             {
-                OUString sURL( "vnd.sun.star.ServiceName:" );
-                sURL += sFilterService;
+                OUString sURL = "vnd.sun.star.ServiceName:" + sFilterService;
                 xPropSet = GetImport().GetTextImport()
                             ->createAndInsertOLEObject( GetImport(), sURL,
                                                         sStyleName,
@@ -1227,8 +1226,7 @@ void XMLTextFrameContext_Impl::Characters( const OUString& rChars )
                 OUString sChars;
                 if( !sBase64CharsLeft.isEmpty() )
                 {
-                    sChars = sBase64CharsLeft;
-                    sChars += sTrimmedChars;
+                    sChars = sBase64CharsLeft + sTrimmedChars;
                     sBase64CharsLeft.clear();
                 }
                 else

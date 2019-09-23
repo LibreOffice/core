@@ -47,8 +47,7 @@ ScDocStatPage::ScDocStatPage(TabPageParent pParent, const SfxItemSet& rSet)
     if ( pDocSh )
         pDocSh->GetDocStat( aDocStat );
 
-    OUString aInfo = m_xFrame->get_label();
-    aInfo += aDocStat.aDocName;
+    OUString aInfo = m_xFrame->get_label() + aDocStat.aDocName;
     m_xFrame->set_label(aInfo);
     m_xFtTables->set_label( OUString::number( aDocStat.nTableCount ) );
     m_xFtCells->set_label( OUString::number( aDocStat.nCellCount ) );

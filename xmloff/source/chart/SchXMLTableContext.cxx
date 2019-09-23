@@ -919,8 +919,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                 }
                 else if( ! lcl_tableOfRangeMatches( aRange, rTable.aTableNameOfFile ))
                 {
-                    OUString aRep("label ");
-                    aRep += OUString::number( rLSeq.first.first );
+                    OUString aRep = "label " + OUString::number( rLSeq.first.first );
 
                     Reference< chart2::data::XDataSequence > xNewSeq(
                         xDataProv->createDataSequenceByRangeRepresentation( aRep ));

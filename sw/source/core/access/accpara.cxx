@@ -1235,8 +1235,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                         sEntry = aMgr.GetFormatStr( pField->GetTypeId(), pField->GetFormat() );
                         if (sEntry.getLength() > 0)
                         {
-                            strTypeName += "-";
-                            strTypeName += sEntry;
+                            strTypeName += "-" + sEntry;
                         }
                     }
                 }
@@ -1253,8 +1252,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                         sEntry = aMgr.GetFormatStr(pField->GetTypeId(), nFormat);
                         if (sEntry.getLength() > 0)
                         {
-                            strTypeName += "-";
-                            strTypeName += sEntry;
+                            strTypeName += "-" + sEntry;
                         }
                     }
                 }
@@ -1268,8 +1266,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                     sEntry = pField->GetTyp()->GetName();
                     if (sEntry.getLength() > 0)
                     {
-                        strTypeName += "-";
-                        strTypeName += sEntry;
+                        strTypeName += "-" + sEntry;
                     }
                 }
                 break;
@@ -1290,8 +1287,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                 break;
             case SwFieldIds::Author:
                 {
-                    strTypeName += "-";
-                    strTypeName += aMgr.GetFormatStr(pField->GetTypeId(), pField->GetFormat() & 0xff);
+                    strTypeName += "-" + aMgr.GetFormatStr(pField->GetTypeId(), pField->GetFormat() & 0xff);
                 }
                 break;
             default: break;
@@ -1319,8 +1315,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                     }
                     else
                     {
-                        strTypeName += "-";
-                        strTypeName += sEntry;
+                        strTypeName += "-" + sEntry;
                     }
                 }
             }
@@ -3474,9 +3469,8 @@ uno::Any SAL_CALL SwAccessibleParagraph::getExtendedAttributes()
     OUString strHeading("heading-level:");
     if( m_nHeadingLevel >= 0 )
         strHeading += OUString::number(m_nHeadingLevel);
-    strHeading += ";";
-
-    strHeading += strHeading.copy(8); // tdf#84102: expose the same attribute with the name "level"
+    strHeading += ";" +
+        strHeading.copy(8); // tdf#84102: expose the same attribute with the name "level"
 
     Ret <<= strHeading;
 

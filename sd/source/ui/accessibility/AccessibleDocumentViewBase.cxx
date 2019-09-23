@@ -691,8 +691,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
                     if (!layerAltText.isEmpty())
                     {
                         sName = " ";
-                        sDisplay = sDisplay + sName;
-                        sDisplay += layerAltText;
+                        sDisplay = sDisplay + sName + layerAltText;
                     }
                 }
             }

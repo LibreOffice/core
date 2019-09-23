@@ -198,9 +198,8 @@ void ScSolverOptionsDialog::FillListBox()
                 if (aValue >>= fDoubleValue)
                     m_aOptions.back()->SetDoubleValue(fDoubleValue);
 
-                OUString sTxt(aVisName);
-                sTxt += ": ";
-                sTxt += rtl::math::doubleToUString(fDoubleValue,
+                OUString sTxt = aVisName + ": " +
+                    rtl::math::doubleToUString(fDoubleValue,
                     rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
                     ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true );
 
@@ -212,9 +211,8 @@ void ScSolverOptionsDialog::FillListBox()
                 if (aValue >>= nIntValue)
                     m_aOptions.back()->SetIntValue(nIntValue);
 
-                OUString sTxt(aVisName);
-                sTxt += ": ";
-                sTxt += OUString::number(nIntValue);
+                OUString sTxt = aVisName +
+                    ": " + OUString::number(nIntValue);
 
                 m_xLbSettings->set_text(nPos, sTxt, 1);
             }
@@ -248,9 +246,8 @@ void ScSolverOptionsDialog::EditOption()
         {
             pStringItem->SetDoubleValue( aValDialog.GetValue() );
 
-            OUString sTxt(pStringItem->GetText());
-            sTxt += ": ";
-            sTxt += rtl::math::doubleToUString(pStringItem->GetDoubleValue(),
+            OUString sTxt = pStringItem->GetText() +
+                ": " + rtl::math::doubleToUString(pStringItem->GetDoubleValue(),
                 rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
                 ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true );
 
@@ -266,9 +263,8 @@ void ScSolverOptionsDialog::EditOption()
         {
             pStringItem->SetIntValue(aIntDialog.GetValue());
 
-            OUString sTxt(pStringItem->GetText());
-            sTxt += ": ";
-            sTxt += OUString::number(pStringItem->GetIntValue());
+            OUString sTxt = pStringItem->GetText() +
+                ": " + OUString::number(pStringItem->GetIntValue());
 
             m_xLbSettings->set_text(nEntry, sTxt, 1);
         }

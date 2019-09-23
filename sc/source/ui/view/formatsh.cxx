@@ -2550,14 +2550,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                         const OUString sPrecision = OUString::number(nPrecision);
                         const OUString sLeadZeroes = OUString::number(nLeadZeroes);
 
-                        aFormat += sThousand;
-                        aFormat += sBreak;
-                        aFormat += sNegRed;
-                        aFormat += sBreak;
-                        aFormat += sPrecision;
-                        aFormat += sBreak;
-                        aFormat += sLeadZeroes;
-                        aFormat += sBreak;
+                        aFormat += sThousand + sBreak + sNegRed + sBreak + sPrecision + sBreak + sLeadZeroes + sBreak;
 
                         rSet.Put(SfxStringItem(nWhich, aFormat));
                     }

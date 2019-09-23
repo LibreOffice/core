@@ -890,8 +890,7 @@ uno::Reference<XAccessible> AccessibleDrawDocumentView::GetSelAccContextInTable(
 
 void AccessibleDrawDocumentView::UpdateAccessibleName()
 {
-    OUString sNewName (CreateAccessibleName());
-    sNewName += ": ";
+    OUString sNewName = CreateAccessibleName() + ": ";
 
     // Add the number of the current slide.
     uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
@@ -919,8 +918,7 @@ void AccessibleDrawDocumentView::UpdateAccessibleName()
         Reference<container::XIndexAccess> xPages = xPagesSupplier->getDrawPages();
         if (xPages.is())
         {
-            sNewName += " / ";
-            sNewName += OUString::number(xPages->getCount());
+            sNewName += " / " + OUString::number(xPages->getCount());
         }
     }
 

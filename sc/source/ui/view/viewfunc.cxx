@@ -451,8 +451,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                     nResult = RET_NO;   // empty formula, just '='
                 else
                 {
-                    OUString aMessage( ScResId( SCSTR_FORMULA_AUTOCORRECTION ) );
-                    aMessage += aCorrectedFormula;
+                    OUString aMessage = ScResId( SCSTR_FORMULA_AUTOCORRECTION ) +
+                        aCorrectedFormula;
 
                     std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetViewData().GetDialogParent(),
                                                                    VclMessageType::Question, VclButtonsType::YesNo,

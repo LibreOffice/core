@@ -207,8 +207,7 @@ void SAL_CALL OMySQLTable::alterColumnByName(const OUString& colName,
                 {
                     if (sTypeName.indexOf(s_sAutoIncrement) == -1)
                     {
-                        sTypeName += " ";
-                        sTypeName += s_sAutoIncrement;
+                        sTypeName += " auto_increment";
                     }
                 }
                 else

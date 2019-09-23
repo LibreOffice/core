@@ -112,10 +112,8 @@ namespace stoc_connector
                 SocketAddr AddrTarget( aHost.pData, nPort );
                 if(pConn->m_socket.connect(AddrTarget) != osl_Socket_Ok)
                 {
-                    OUString sMessage("Connector : couldn't connect to socket (");
-                    OUString sError = pConn->m_socket.getErrorAsString();
-                    sMessage += sError;
-                    sMessage += ")";
+                    OUString sMessage = "Connector : couldn't connect to socket (" +
+                        pConn->m_socket.getErrorAsString() + ")";
                     throw NoConnectException( sMessage );
                 }
                 // we enable tcpNoDelay for loopback connections because
@@ -138,9 +136,7 @@ namespace stoc_connector
 
                 if(!xConnector.is())
                 {
-                    OUString message("Connector: unknown delegatee ");
-                    message += delegatee;
-
+                    OUString message = "Connector: unknown delegatee " + delegatee;
                     throw ConnectionSetupException(message);
                 }
 

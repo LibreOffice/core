@@ -190,8 +190,7 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
                         {
                             // cntrl modifier is explicit ( but could be cntrl+shift ), parseKeyEvent
                             // will handle and uppercase letter appropriately
-                            OUString sApiKey = "^";
-                            sApiKey += sKey;
+                            OUString sApiKey = "^" + sKey;
                             try
                             {
                                 KeyEvent aKeyEvent = ooo::vba::parseKeyEvent( sApiKey );

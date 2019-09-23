@@ -179,9 +179,7 @@ std::vector<std::unique_ptr<PrintFontManager::PrintFont>> PrintFontManager::anal
 
     OString aDir( getDirectory( nDirID ) );
 
-    OString aFullPath( aDir );
-    aFullPath += "/";
-    aFullPath += rFontFile;
+    OString aFullPath = aDir + "/" + rFontFile;
 
     // #i1872# reject unreadable files
     if( access( aFullPath.getStr(), R_OK ) )
@@ -912,9 +910,7 @@ OString PrintFontManager::getFontFile(const PrintFont* pFont) const
     if (pFont)
     {
         std::unordered_map< int, OString >::const_iterator it = m_aAtomToDir.find(pFont->m_nDirectory);
-        aPath = it->second;
-        aPath += "/";
-        aPath += pFont->m_aFontFile;
+        aPath = it->second + "/" + pFont->m_aFontFile;
     }
     return aPath;
 }

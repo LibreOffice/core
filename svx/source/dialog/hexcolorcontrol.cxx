@@ -70,8 +70,7 @@ Color HexColorControl::GetColor() const
 {
     sal_Int32 nColor = -1;
 
-    OUString aStr("#");
-    aStr += m_xEntry->get_text();
+    OUString aStr = "#" + m_xEntry->get_text();
     sal_Int32 nLen = aStr.getLength();
 
     if (nLen < 7)

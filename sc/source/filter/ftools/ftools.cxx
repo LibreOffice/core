@@ -312,9 +312,7 @@ OUString ScfTools::GetNameFromHTMLIndex( sal_uInt32 nIndex )
 
 OUString ScfTools::GetNameFromHTMLName( const OUString& rTabName )
 {
-    OUString aName( GetHTMLNamePrefix() );
-    aName += rTabName;
-    return aName;
+    return GetHTMLNamePrefix() + rTabName;
 }
 
 bool ScfTools::IsHTMLDocName( const OUString& rSource )

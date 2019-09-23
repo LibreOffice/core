@@ -449,8 +449,7 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
         }
 
         ImplReadObject( aContainerStorageName, aObjectStorageName, pClassId, pOut ? pOut->GetStream() : nullptr );
-        sRetURL = XML_EMBEDDEDOBJECT_URL_BASE;
-        sRetURL += aObjectStorageName;
+        sRetURL = XML_EMBEDDEDOBJECT_URL_BASE + aObjectStorageName;
 
         if( pOut )
         {
@@ -463,8 +462,7 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
         sRetURL = "./";
         if( !aContainerStorageName.isEmpty() )
         {
-            sRetURL += aContainerStorageName;
-            sRetURL +=  "/";
+            sRetURL += aContainerStorageName + "/";
         }
         sRetURL += aObjectStorageName;
     }

@@ -963,13 +963,13 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 
                                                     aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM));
 
-                                                    OString sSVGElem(R"elem(<svg version=\"1.2\" width=\")elem");
-                                                    sSVGElem += OString::number(aSelection.GetWidth() / 100.0);
-                                                    sSVGElem += R"elem(mm\" height=\")elem";
-                                                    sSVGElem += OString::number(aSelection.GetHeight() / 100.0);
-                                                    sSVGElem += R"elem(mm\" viewBox=\")elem";
-                                                    sSVGElem += aSelection.toString();
-                                                    sSVGElem += R"elem(\" preserveAspectRatio=\"xMidYMid\" xmlns=\"http://www.w3.org/2000/svg\">)elem";
+                                                    OString sSVGElem = R"elem(<svg version=\"1.2\" width=\")elem" +
+                                                        OString::number(aSelection.GetWidth() / 100.0) +
+                                                        R"elem(mm\" height=\")elem" +
+                                                        OString::number(aSelection.GetHeight() / 100.0) +
+                                                        R"elem(mm\" viewBox=\")elem" +
+                                                        aSelection.toString() +
+                                                        R"elem(\" preserveAspectRatio=\"xMidYMid\" xmlns=\"http://www.w3.org/2000/svg\">)elem";
 
                                                     aExtraInfo.append(", \"svg\": \"");
                                                     aExtraInfo.append(sSVGElem);
@@ -988,12 +988,10 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                         }
                     }
                 }
-                sSelectionText = aSelection.toString();
-                sSelectionText += OString(", ") + OString::number(nRotAngle);
+                sSelectionText = aSelection.toString() + ", " + OString::number(nRotAngle);
                 if (!aExtraInfo.isEmpty())
                 {
-                    sSelectionText += ", ";
-                    sSelectionText += aExtraInfo.makeStringAndClear();
+                    sSelectionText += ", " + aExtraInfo.makeStringAndClear();
                 }
             }
 

@@ -1480,9 +1480,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             {
                 aTargetNewLayoutName = createNewMasterPageLayoutName(*this);
 
-                OUString aTemp(aTargetNewLayoutName);
-                aTemp += SD_LT_SEPARATOR;
-                aTemp += STR_LAYOUT_OUTLINE;
+                OUString aTemp = aTargetNewLayoutName + SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE;
 
                 pMaster->SetName(aTargetNewLayoutName);
                 pMaster->SetLayoutName(aTemp);

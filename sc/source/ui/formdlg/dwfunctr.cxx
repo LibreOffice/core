@@ -285,8 +285,7 @@ void ScFunctionWin::DoEnter()
             // the above call can result in us being disposed
             if (OutputDevice::isDisposed())
                 return;
-            aString = "=";
-            aString += aFuncList->GetSelectedEntry();
+            aString = "=" + aFuncList->GetSelectedEntry();
             if (pHdl)
                 pHdl->ClearText();
         }
@@ -331,8 +330,7 @@ void ScFunctionWin::DoEnter()
         {
             if (pHdl->GetEditString().isEmpty())
             {
-                aString = "=";
-                aString += aFuncList->GetSelectedEntry();
+                aString = "=" + aFuncList->GetSelectedEntry();
             }
             EditView *pEdView=pHdl->GetActiveView();
             if(pEdView!=nullptr) // @ needed because of crash during setting a name

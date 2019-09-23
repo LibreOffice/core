@@ -1137,8 +1137,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
 
     // Now set the layout name of the drawing and the notes page, as well as
     // their master pages.
-    OUString aPageLayoutName(rNewName);
-    aPageLayoutName += aSep + STR_LAYOUT_OUTLINE;
+    OUString aPageLayoutName = rNewName + aSep + STR_LAYOUT_OUTLINE;
 
     // Inform all text objects on pages that use the renamed layout and set the
     // new name.

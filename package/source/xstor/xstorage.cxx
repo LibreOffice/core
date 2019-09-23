@@ -1591,8 +1591,7 @@ void OStorage_Impl::RemoveStreamRelInfo( const OUString& aOriginalName )
 
     if ( m_nStorageType == embed::StorageFormats::OFOPXML && m_xRelStorage.is() )
     {
-        OUString aRelStreamName = aOriginalName;
-        aRelStreamName += ".rels";
+        OUString aRelStreamName = aOriginalName + ".rels";
 
         if ( m_xRelStorage->hasByName( aRelStreamName ) )
             m_xRelStorage->removeElement( aRelStreamName );
@@ -1654,8 +1653,7 @@ uno::Reference< io::XInputStream > OStorage_Impl::GetRelInfoStreamForName( const
         ReadContents();
         if ( m_xRelStorage.is() )
         {
-            OUString aRelStreamName = aName;
-            aRelStreamName += ".rels";
+            OUString aRelStreamName = aName + ".rels";
             if ( m_xRelStorage->hasByName( aRelStreamName ) )
             {
                 uno::Reference< io::XStream > xStream = m_xRelStorage->openStreamElement( aRelStreamName, embed::ElementModes::READ );

@@ -397,9 +397,7 @@ sal_Bool SAL_CALL ScTableConditionalFormat::hasElements()
 
 static OUString lcl_GetEntryNameFromIndex( sal_Int32 nIndex )
 {
-    OUString aRet( "Entry" );
-    aRet += OUString::number( nIndex );
-    return aRet;
+    return "Entry" + OUString::number( nIndex );
 }
 
 uno::Any SAL_CALL ScTableConditionalFormat::getByName( const OUString& aName )

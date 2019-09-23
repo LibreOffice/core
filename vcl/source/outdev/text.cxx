@@ -1984,8 +1984,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
                 nLastContent--;
 
             OUString aLastStr = aStr.copy(nLastContent);
-            OUString aTempLastStr1( "..." );
-            aTempLastStr1 += aLastStr;
+            OUString aTempLastStr1 = "..." + aLastStr;
             if ( _rLayout.GetTextWidth( aTempLastStr1, 0, aTempLastStr1.getLength() ) > nMaxWidth )
                 aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );
             else
@@ -2007,8 +2006,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
                 {
                     if ( nFirstContent > 4 )
                         nFirstContent = 4;
-                    OUString aFirstStr = aStr.copy( 0, nFirstContent );
-                    aFirstStr += "...";
+                    OUString aFirstStr = aStr.copy( 0, nFirstContent ) + "...";
                     OUString aTempStr = aFirstStr + aLastStr;
                     if ( _rLayout.GetTextWidth( aTempStr, 0, aTempStr.getLength() ) > nMaxWidth )
                         aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );

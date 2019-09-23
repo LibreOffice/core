@@ -151,8 +151,7 @@ OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText 
 
     if (bAppendIndex)
     {
-        aDescription += " ";
-        aDescription += OUString::number(getShapeIndex(xShape));
+        aDescription += " " + OUString::number(getShapeIndex(xShape));
     }
 
     if( bWithText )
@@ -915,9 +914,8 @@ void CustomAnimationList::update()
             {
                 SvTreeListEntry* pLBoxEntry = new CustomAnimationListEntry;
                 pLBoxEntry->AddItem(std::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
-                OUString aDescription = SdResId(STR_CUSTOMANIMATION_TRIGGER);
-                aDescription += ": ";
-                aDescription += getShapeDescription( xShape, false );
+                OUString aDescription = SdResId(STR_CUSTOMANIMATION_TRIGGER) +
+                    ": " + getShapeDescription( xShape, false );
                 pLBoxEntry->AddItem(std::make_unique<CustomAnimationTriggerEntryItem>(aDescription));
                 Insert( pLBoxEntry );
                 SvViewDataEntry* pViewData = GetViewData( pLBoxEntry );

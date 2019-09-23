@@ -387,11 +387,9 @@ bool URLParameter::scheme()
             m_aExpr.copy(sal::static_int_cast<sal_uInt32>(nLen) - 6);
         if( aLastStr == "DbPAR=" )
         {
-            OUString aNewExpr = m_aExpr.copy( 0, 20 );
             OUString aSharedStr("shared");
-            aNewExpr += aSharedStr;
-            aNewExpr += m_aExpr.copy( 20 );
-            aNewExpr += aSharedStr;
+            OUString aNewExpr = m_aExpr.copy( 0, 20 ) +
+                aSharedStr + m_aExpr.copy( 20 ) + aSharedStr;
             m_aExpr = aNewExpr;
         }
     }
@@ -830,11 +828,10 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 
         OUString xslURL = pDatabases->getInstallPathAsURL();
 
-        OString xslURLascii(
+        OString xslURLascii = OString(
             xslURL.getStr(),
             xslURL.getLength(),
-            RTL_TEXTENCODING_UTF8);
-        xslURLascii += "main_transform.xsl";
+            RTL_TEXTENCODING_UTF8) + "main_transform.xsl";
 
         ugblData = &userData;
 

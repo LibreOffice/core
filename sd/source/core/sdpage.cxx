@@ -691,8 +691,7 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
     aStyleName += OUString::createFromAscii(pNameId);
     if (bOutline)
     {
-        aStyleName += " ";
-        aStyleName += OUString::number( sal_Int32( nHelpId - HID_PSEUDOSHEET_OUTLINE ));
+        aStyleName += " " + OUString::number( sal_Int32( nHelpId - HID_PSEUDOSHEET_OUTLINE ));
     }
 
     SfxStyleSheetBasePool* pStShPool = getSdrModelFromSdrPage().GetStyleSheetPool();
@@ -1936,8 +1935,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
                         }
                         else if (pObj == GetPresObj(PRESOBJ_OUTLINE, 0))
                         {
-                            OUString aName(GetLayoutName());
-                            aName += " ";
+                            OUString aName = GetLayoutName() + " ";
 
                             for (sal_Int32 i=1; i<=9; i++)
                             {
@@ -2400,29 +2398,17 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
         {
             pOutl->Init( OutlinerMode::OutlineObject );
 
-            aString += "\t";
-            aString += rString;
+            aString += "\t" + rString;
 
             if (mbMaster)
             {
                 pOutl->SetStyleSheet( 0, GetStyleSheetForPresObj(eObjKind) );
-                aString += "\n\t\t";
-                aString += SdResId(STR_PRESOBJ_MPOUTLLAYER2);
-
-                aString += "\n\t\t\t";
-                aString += SdResId(STR_PRESOBJ_MPOUTLLAYER3);
-
-                aString += "\n\t\t\t\t";
-                aString += SdResId(STR_PRESOBJ_MPOUTLLAYER4);
-
-                aString += "\n\t\t\t\t\t";
-                aString += SdResId(STR_PRESOBJ_MPOUTLLAYER5);
-
-                aString += "\n\t\t\t\t\t\t";
-                aString += SdResId(STR_PRESOBJ_MPOUTLLAYER6);
-
-                aString += "\n\t\t\t\t\t\t\t";
-                aString += SdResId(STR_PRESOBJ_MPOUTLLAYER7);
+                aString += "\n\t\t" + SdResId(STR_PRESOBJ_MPOUTLLAYER2) +
+                    "\n\t\t\t" + SdResId(STR_PRESOBJ_MPOUTLLAYER3) +
+                    "\n\t\t\t\t" + SdResId(STR_PRESOBJ_MPOUTLLAYER4) +
+                    "\n\t\t\t\t\t" + SdResId(STR_PRESOBJ_MPOUTLLAYER5) +
+                    "\n\t\t\t\t\t\t" + SdResId(STR_PRESOBJ_MPOUTLLAYER6) +
+                    "\n\t\t\t\t\t\t\t" + SdResId(STR_PRESOBJ_MPOUTLLAYER7);
 
             }
         }
@@ -2526,8 +2512,7 @@ const OUString& SdPage::GetName() const
             // default name for handout pages
             sal_uInt16  nNum = (GetPageNum() + 1) / 2;
 
-            aCreatedPageName = SdResId(STR_PAGE);
-            aCreatedPageName += " ";
+            aCreatedPageName = SdResId(STR_PAGE) + " ";
             if( getSdrModelFromSdrPage().GetPageNumType() == css::style::NumberingType::NUMBER_NONE )
             {
                 // if the document has number none as a formatting
@@ -2555,14 +2540,11 @@ const OUString& SdPage::GetName() const
 
     if (mePageKind == PageKind::Notes)
     {
-        aCreatedPageName += " ";
-        aCreatedPageName += SdResId(STR_NOTES);
+        aCreatedPageName += " " + SdResId(STR_NOTES);
     }
     else if (mePageKind == PageKind::Handout && mbMaster)
     {
-        aCreatedPageName += " (";
-        aCreatedPageName += SdResId(STR_HANDOUT);
-        aCreatedPageName += ")";
+        aCreatedPageName += " (" + SdResId(STR_HANDOUT) + ")";
     }
 
     const_cast< SdPage* >(this)->maCreatedPageName = aCreatedPageName;

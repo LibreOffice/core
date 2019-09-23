@@ -364,11 +364,8 @@ void ScColRowNameRangesDlg::UpdateNames()
     OUString rString;
     const ScAddress::Details aDetails(pDoc->GetAddressConvention());
 
-    OUString aString;
     OUString strDelim(" --- ");
-    aString = strDelim;
-    aString += ScResId( STR_COLUMN );
-    aString += strDelim;
+    OUString aString = strDelim + ScResId( STR_COLUMN ) + strDelim;
     m_xLbRange->append(OUString::number(nEntryDataDelim), aString);
     if ( (nCount = xColNameRanges->size()) > 0 )
     {
@@ -407,9 +404,7 @@ void ScColRowNameRangesDlg::UpdateNames()
             m_xLbRange->append(OUString::number(nEntryDataDelim), aInsStr);
         }
     }
-    aString = strDelim;
-    aString += ScResId( STR_ROW );
-    aString += strDelim;
+    aString = strDelim + ScResId( STR_ROW ) + strDelim;
     m_xLbRange->append(OUString::number(nEntryDataDelim), aString);
     if ( (nCount = xRowNameRanges->size()) > 0 )
     {

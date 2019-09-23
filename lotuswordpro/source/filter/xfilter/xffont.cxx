@@ -209,20 +209,17 @@ void XFFont::ToXml(IXFStream *pStrm)
     //font size:
     if( (m_nFlag & XFFONT_FLAG_SIZE) && m_nFontSize != 0 )
     {
-        OUString strSize = OUString::number(m_nFontSize);
-        strSize += "pt";
+        OUString strSize = OUString::number(m_nFontSize) + "pt";
         pAttrList->AddAttribute("fo:font-size",strSize);
     }
     if( (m_nFlag & XFFONT_FLAG_SIZE_ASIA) && m_nFontSizeAsia )
     {
-        OUString strSize = OUString::number(m_nFontSizeAsia);
-        strSize += "pt";
+        OUString strSize = OUString::number(m_nFontSizeAsia) + "pt";
         pAttrList->AddAttribute("style:font-size-asian",strSize);
     }
     if( (m_nFlag & XFFONT_FLAG_SIZE_COMPLEX) && m_nFontSizeComplex )
     {
-        OUString strSize = OUString::number(m_nFontSizeComplex);
-        strSize += "pt";
+        OUString strSize = OUString::number(m_nFontSizeComplex) + "pt";
         pAttrList->AddAttribute("style:font-size-complex",strSize);
     }
 

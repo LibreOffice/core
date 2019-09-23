@@ -135,9 +135,7 @@ SfxStyleSheetBase* SdStyleSheetPool::Create(const OUString& rName, SfxStyleFamil
 
 SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const OUString& rLayoutName)
 {
-    OUString aName(rLayoutName);
-    aName += SD_LT_SEPARATOR;
-    aName += STR_LAYOUT_TITLE;
+    OUString aName = rLayoutName + SD_LT_SEPARATOR + STR_LAYOUT_TITLE;
     SfxStyleSheetBase* pResult = Find(aName, SfxStyleFamily::Page);
     return pResult;
 }
@@ -151,9 +149,7 @@ SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const OUString& rLayoutName)
 
 void SdStyleSheetPool::CreateOutlineSheetList (const OUString& rLayoutName, std::vector<SfxStyleSheetBase*> &rOutlineStyles)
 {
-    OUString aName(rLayoutName);
-    aName += SD_LT_SEPARATOR;
-    aName += STR_LAYOUT_OUTLINE;
+    OUString aName = rLayoutName + SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE;
 
     for (sal_Int32 nSheet = 1; nSheet < 10; nSheet++)
     {

@@ -106,8 +106,7 @@ namespace
     */
     OUString SetQuotation(const OUString& rValue, const OUString& rQuot, const OUString& rQuotToReplace)
     {
-        OUString rNewValue = rQuot;
-        rNewValue += rValue;
+        OUString rNewValue = rQuot + rValue;
         sal_Int32 nIndex = sal_Int32(-1);   // Replace quotes with double quotes or the parser gets into problems
 
         if (!rQuot.isEmpty())

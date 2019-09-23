@@ -8298,9 +8298,9 @@ void ScInterpreter::ScAddressFunc()
             ScCompiler::CheckTabQuotes( sTabStr, eConv);
         if (!aDoc.isEmpty())
             sTabStr = aDoc + sTabStr;
-        sTabStr += (eConv == FormulaGrammar::CONV_XL_R1C1 || eConv == FormulaGrammar::CONV_XL_A1) ?
-            OUString("!") : OUString(".");
-        sTabStr += aRefStr;
+        sTabStr += ((eConv == FormulaGrammar::CONV_XL_R1C1 || eConv == FormulaGrammar::CONV_XL_A1) ?
+                    OUString("!") : OUString(".")) +
+            aRefStr;
         PushString( sTabStr );
     }
     else

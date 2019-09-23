@@ -188,8 +188,7 @@ void ScShareDocumentDlg::UpdateView()
             // unknown user name
             aUser = m_aStrUnknownUser;
         }
-        aUser += " ";
-        aUser += m_aStrExclusiveAccess;
+        aUser += " " + m_aStrExclusiveAccess;
 
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(mpDocShell->GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
@@ -197,9 +196,8 @@ void ScShareDocumentDlg::UpdateView()
         util::DateTime uDT(xDocProps->getModificationDate());
         DateTime aDateTime(uDT);
 
-        OUString aString = formatTime(aDateTime, *ScGlobal::pLocaleData);
-        aString += " ";
-        aString += ScGlobal::pLocaleData->getTime( aDateTime, false );
+        OUString aString = formatTime(aDateTime, *ScGlobal::pLocaleData) +
+            " " + ScGlobal::pLocaleData->getTime( aDateTime, false );
 
         m_xLbUsers->append_text(aUser);
         m_xLbUsers->set_text(m_xLbUsers->n_children() - 1, aString, 1);

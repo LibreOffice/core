@@ -407,9 +407,9 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
         pDev->DrawImage( aPnt, pImpl->aPosImage );
         aPnt.AdjustX(pImpl->aPosImage.GetSizePixel().Width() );
         aPnt.AdjustX(PAINT_OFFSET );
-        OUString aStr = GetMetricStr_Impl( pImpl->aPos.X());
-        aStr += " / ";
-        aStr += GetMetricStr_Impl( pImpl->aPos.Y());
+        OUString aStr = GetMetricStr_Impl( pImpl->aPos.X()) +
+            " / " +
+            GetMetricStr_Impl( pImpl->aPos.Y());
         tools::Rectangle aRect(aPnt, Point(nSizePosX, rRect.Bottom()));
         pDev->DrawRect(aRect);
         vcl::Region aOrigRegion(pDev->GetClipRegion());
@@ -426,9 +426,9 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
             aPnt.AdjustX(pImpl->aSizeImage.GetSizePixel().Width() );
             Point aDrwPnt = aPnt;
             aPnt.AdjustX(PAINT_OFFSET );
-            aStr = GetMetricStr_Impl( pImpl->aSize.Width() );
-            aStr += " x ";
-            aStr += GetMetricStr_Impl( pImpl->aSize.Height() );
+            aStr = GetMetricStr_Impl( pImpl->aSize.Width() ) +
+                " x " +
+                GetMetricStr_Impl( pImpl->aSize.Height() );
             aRect = tools::Rectangle(aDrwPnt, rRect.BottomRight());
             pDev->DrawRect(aRect);
             aOrigRegion = pDev->GetClipRegion();
@@ -464,15 +464,15 @@ void SvxPosSizeStatusBarControl::ImplUpdateItemText()
     OUString aText;
     if ( pImpl->bPos || pImpl->bSize )
     {
-        aText = GetMetricStr_Impl( pImpl->aPos.X());
-        aText += " / ";
-        aText += GetMetricStr_Impl( pImpl->aPos.Y());
+        aText = GetMetricStr_Impl( pImpl->aPos.X()) +
+            " / " +
+            GetMetricStr_Impl( pImpl->aPos.Y());
         if ( pImpl->bSize )
         {
-            aText += " ";
-            aText += GetMetricStr_Impl( pImpl->aSize.Width() );
-            aText += " x ";
-            aText += GetMetricStr_Impl( pImpl->aSize.Height() );
+            aText += " " +
+                GetMetricStr_Impl( pImpl->aSize.Width() ) +
+                " x " +
+                GetMetricStr_Impl( pImpl->aSize.Height() );
         }
     }
     else if ( pImpl->bTable )

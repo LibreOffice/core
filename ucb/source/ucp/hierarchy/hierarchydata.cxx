@@ -164,8 +164,7 @@ bool HierarchyEntry::getData( HierarchyEntryData& rData )
 
         if ( xRootReadAccess.is() )
         {
-            OUString aTitlePath = m_aPath;
-            aTitlePath += "/Title";
+            OUString aTitlePath = m_aPath + "/Title";
 
             // Note: Avoid NoSuchElementExceptions, because exceptions are
             //       relatively 'expensive'. Checking for availability of
@@ -188,8 +187,7 @@ bool HierarchyEntry::getData( HierarchyEntryData& rData )
             rData.setTitle( aValue );
 
             // Get TargetURL value.
-            OUString aTargetURLPath = m_aPath;
-            aTargetURLPath += "/TargetURL";
+            OUString aTargetURLPath = m_aPath + "/TargetURL";
             if ( !( xRootReadAccess->getByHierarchicalName( aTargetURLPath )
                     >>= aValue ) )
             {
@@ -207,8 +205,7 @@ bool HierarchyEntry::getData( HierarchyEntryData& rData )
                 aValue = m_xOfficeInstDirs->makeAbsoluteURL( aValue );
             rData.setTargetURL( aValue );
 
-            OUString aTypePath = m_aPath;
-            aTypePath += "/Type";
+            OUString aTypePath = m_aPath + "/Type";
             if ( xRootReadAccess->hasByHierarchicalName( aTypePath ) )
             {
                 // Might not be present since it was introduced long after
@@ -884,8 +881,7 @@ bool HierarchyEntry::first( iterator const & it )
 
                 if ( !m_aPath.isEmpty() )
                 {
-                    OUString aPath = m_aPath;
-                    aPath += "/Children";
+                    OUString aPath = m_aPath + "/Children";
 
                     xRootHierNameAccess->getByHierarchicalName( aPath )
                         >>= xNameAccess;

@@ -183,8 +183,8 @@ void LineWidthPopup::SetWidthSelect(long lValue, bool bValuable, MapUnit eMapUni
         m_xVSWidth->SetImage(m_aIMGCus);
         m_xVSWidth->SetCusEnable(true);
 
-        OUString aStrTip( OUString::number( static_cast<double>(m_nCustomWidth) / 10));
-        aStrTip += m_sPt;
+        OUString aStrTip = OUString::number( static_cast<double>(m_nCustomWidth) / 10) +
+            m_sPt;
         m_xVSWidth->SetItemText(9, aStrTip);
     }
     else

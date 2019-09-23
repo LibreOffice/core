@@ -262,8 +262,7 @@ INetContentType INetContentTypes::GetContentType(OUString const & rTypeName)
     OUString aSubType;
     if (parse(rTypeName, aType, aSubType))
     {
-        aType += "/";
-        aType += aSubType;
+        aType += "/" + aSubType;
         MediaTypeEntry const * pEntry = seekEntry(aType, aStaticTypeNameMap,
                                                   CONTENT_TYPE_LAST + 1);
         return pEntry ? pEntry->m_eTypeID : CONTENT_TYPE_UNKNOWN;

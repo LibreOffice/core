@@ -1493,9 +1493,8 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
     if ( m_bIsRoot )
     {
         // create the special package URL for the package content
-        OUString aTemp = "vnd.sun.star.pkg://";
-        aTemp += INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All );
-        m_aURL = aTemp;
+        m_aURL = "vnd.sun.star.pkg://" +
+            INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All );
 
         if ( m_nMode & StreamMode::WRITE )
         {
@@ -1534,9 +1533,8 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, bool 
     // UCBStorages work on a content, so a temporary file for a content must be created, even if the stream is only
     // accessed readonly
     // the root storage opens the package; create the special package URL for the package content
-    OUString aTemp = "vnd.sun.star.pkg://";
-    aTemp += INetURLObject::encode( m_pTempFile->GetURL(), INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All );
-    m_aURL = aTemp;
+    m_aURL = "vnd.sun.star.pkg://" +
+        INetURLObject::encode( m_pTempFile->GetURL(), INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All );
 
     // copy data into the temporary file
     std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), StreamMode::STD_READWRITE, true /* bFileExists */ ));
@@ -1861,8 +1859,7 @@ void UCBStorage_Impl::SetProps( const Sequence < Sequence < PropertyValue > >& r
             pElement->m_xStorage->SetProps( rSequence, aPath );
         else
         {
-            OUString aElementPath( aPath );
-            aElementPath += pElement->m_aName;
+            OUString aElementPath = aPath + pElement->m_aName;
             pElement->SetContentType( Find_Impl( rSequence, aElementPath ) );
         }
     }
@@ -1914,8 +1911,7 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
         else
         {
             // properties of streams
-            OUString aElementPath( aPath );
-            aElementPath += pElement->m_aName;
+            OUString aElementPath = aPath + pElement->m_aName;
             aProps[0].Name = "MediaType";
             aProps[0].Value <<= pElement->GetContentType();
             aProps[1].Name = "FullPath";
@@ -2011,9 +2007,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                 if ( !pContent && pElement->IsModified() )
                 {
                     // if the element has never been opened, no content has been created until now
-                    OUString aName( m_aURL );
-                    aName += "/";
-                    aName += pElement->m_aOriginalName;
+                    OUString aName = m_aURL + "/" + pElement->m_aOriginalName;
                     pContent = new ::ucbhelper::Content( aName, Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                     xDeleteContent.reset(pContent);  // delete it later on exit scope
                 }
@@ -2538,9 +2532,7 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
         if( nMode & StreamMode::NOCREATE )
         {
             SetError( ( nMode & StreamMode::WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
-            OUString aName( pImp->m_aURL );
-            aName += "/";
-            aName += rEleName;
+            OUString aName = pImp->m_aURL + "/" + rEleName;
             UCBStorageStream* pStream = new UCBStorageStream( aName, nMode, bDirect, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
             pStream->SetError( GetError() );
             pStream->pImp->m_aName = rEleName;
@@ -2593,9 +2585,7 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
 
 void UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pElement, StreamMode nMode, bool bDirect )
 {
-    OUString aName( m_aURL );
-    aName += "/";
-    aName += pElement->m_aOriginalName;
+    OUString aName = m_aURL + "/" + pElement->m_aOriginalName;
     pElement->m_xStream = new UCBStorageStream_Impl( aName, nMode, nullptr, bDirect, m_bRepairPackage, m_xProgressHandler );
 }
 
@@ -2633,9 +2623,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
         if( nMode & StreamMode::NOCREATE )
         {
             SetError( ( nMode & StreamMode::WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
-            OUString aName( pImp->m_aURL );
-            aName += "/";
-            aName += rEleName;  //  ???
+            OUString aName = pImp->m_aURL + "/" + rEleName;  //  ???
             UCBStorage *pStorage = new UCBStorage( aName, nMode, bDirect, false, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
             pStorage->pImp->m_bIsRoot = false;
             pStorage->pImp->m_bListCreated = true; // the storage is pretty new, nothing to read
@@ -2695,9 +2683,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
             bool bIsWritable = bool( pElement->m_xStorage->m_nMode & StreamMode::WRITE );
             if ( !bIsWritable && ( nMode & StreamMode::WRITE ) )
             {
-                OUString aName( pImp->m_aURL );
-                aName += "/";
-                aName += pElement->m_aOriginalName;
+                OUString aName = pImp->m_aURL + "/" + pElement->m_aOriginalName;
                 UCBStorage* pStorage = new UCBStorage( aName, nMode, bDirect, false, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
                 pElement->m_xStorage = pStorage->pImp;
                 return pStorage;
@@ -2744,9 +2730,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
 UCBStorage_Impl* UCBStorage_Impl::OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, bool bDirect )
 {
     UCBStorage_Impl* pRet = nullptr;
-    OUString aName( m_aURL );
-    aName += "/";
-    aName += pElement->m_aOriginalName;  //  ???
+    OUString aName = m_aURL + "/" + pElement->m_aOriginalName;  //  ???
 
     pElement->m_bIsStorage = pElement->m_bIsFolder = true;
 

@@ -236,8 +236,7 @@ OUString SAL_CALL ScaDateAddIn::getDisplayFunctionName( const OUString& aProgram
     }
     else
     {
-        aRet = "UNKNOWNFUNC_";
-        aRet += aProgrammaticName;
+        aRet = "UNKNOWNFUNC_" + aProgrammaticName;
     }
 
     return aRet;

@@ -315,8 +315,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         sal_Int32 nStartLevel = std::min(static_cast<sal_Int32>(aParentNumberings[i]), i);
                         for(sal_Int32 nParentLevel = i - nStartLevel; nParentLevel < i; nParentLevel++)
                         {
-                            OUString sTmp(sLevelTexts[nParentLevel]);
-                            sTmp += ".";
+                            OUString sTmp = sLevelTexts[nParentLevel] + ".";
                             lcl_PaintLevel(pVDev,
                                     aNumberingTypes[nParentLevel],
                                     sBulletChars[nParentLevel],
@@ -690,8 +689,7 @@ void NumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         sal_Int32 nStartLevel = std::min(static_cast<sal_Int32>(aParentNumberings[i]), i);
                         for(sal_Int32 nParentLevel = i - nStartLevel; nParentLevel < i; nParentLevel++)
                         {
-                            OUString sTmp(sLevelTexts[nParentLevel]);
-                            sTmp += ".";
+                            OUString sTmp = sLevelTexts[nParentLevel] + ".";
                             lcl_PaintLevel(pVDev,
                                     aNumberingTypes[nParentLevel],
                                     sBulletChars[nParentLevel],
