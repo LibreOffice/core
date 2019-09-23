@@ -58,6 +58,11 @@ namespace connectivity
             css::uno::Reference< css::sdbcx::XTablesSupplier>
                                                     m_xCatalog;     // needed for the SQL interpreter
 
+        private:
+            bool doIsClosed();
+
+            void doClose();
+
         public:
             /// @throws css::sdbc::SQLException
             virtual void construct( const OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info);
