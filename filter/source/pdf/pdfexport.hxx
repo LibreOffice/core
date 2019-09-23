@@ -51,6 +51,7 @@ private:
     bool                mbUseTransitionEffects;
     bool                mbExportBookmarks;
     bool                mbExportHiddenSlides;
+    bool                mbSinglePageSheets;
     sal_Int32           mnOpenBookmarkLevels;
 
     bool                mbUseLosslessCompression;
