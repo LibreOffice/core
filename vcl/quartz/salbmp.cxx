@@ -70,7 +70,7 @@ QuartzSalBitmap::QuartzSalBitmap()
 
 QuartzSalBitmap::~QuartzSalBitmap()
 {
-    Destroy();
+    doDestroy();
 }
 
 bool QuartzSalBitmap::Create(CGLayerHolder const & rLayerHolder, int nBitmapBits, int nX, int nY, int nWidth, int nHeight, bool bFlipped)
@@ -175,6 +175,11 @@ bool QuartzSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmap
 }
 
 void QuartzSalBitmap::Destroy()
+{
+    doDestroy();
+}
+
+void QuartzSalBitmap::doDestroy()
 {
     DestroyContext();
     m_pUserBuffer.reset();
