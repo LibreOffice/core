@@ -184,7 +184,7 @@ bool ScTpCalcOptions::FillItemSet( SfxItemSet* rCoreAttrs )
         if (svtools::executeRestartDialog(
                      comphelper::getProcessComponentContext(), GetFrameWeld(),
                      svtools::RESTART_REASON_THREADING))
-            GetParentDialog()->EndDialog(RET_OK);
+            GetDialogController()->response(RET_OK);
     }
     if ( *pLocalOptions != *pOldOptions )
     {
