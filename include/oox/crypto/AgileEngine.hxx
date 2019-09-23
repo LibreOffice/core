@@ -96,30 +96,43 @@ private:
 
     static Crypto::CryptoType cryptoType(const AgileEncryptionInfo& rInfo);
 
-public:
-    AgileEngine();
+    // Decryption
 
-    AgileEncryptionInfo& getInfo() { return mInfo;}
+    bool decryptHmacKey();
+    bool decryptHmacValue();
+
+    AgileEncryptionInfo& getInfo() { return mInfo; }
 
     void setPreset(AgileEncryptionPreset ePreset)
     {
         meEncryptionPreset = ePreset;
     }
 
-    // Decryption
-
     void decryptEncryptionKey(OUString const & rPassword);
     bool decryptAndCheckVerifierHash(OUString const & rPassword);
 
+    // Encryption
+
+    bool encryptHmacKey();
+    bool encryptHmacValue();
+
+    bool generateAndEncryptVerifierHash(OUString const & rPassword);
+
+    bool encryptEncryptionKey(OUString const & rPassword);
+    void setupEncryptionParameters(AgileEncryptionParameters const & rAgileEncryptionParameters);
+    bool setupEncryptionKey(OUString const & rPassword);
+
+public:
+    AgileEngine();
+
+    // Decryption
+
     bool generateEncryptionKey(OUString const & rPassword) override;
-    bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) override;
+    bool readEncryptionInfo(oox::ole::OleStorage& rOleStorage) override;
     bool decrypt(BinaryXInputStream& aInputStream,
                  BinaryXOutputStream& aOutputStream) override;
 
     bool checkDataIntegrity() override;
-
-    bool decryptHmacKey();
-    bool decryptHmacValue();
 
     // Encryption
 
@@ -132,15 +145,6 @@ public:
     bool setupEncryption(css::uno::Sequence<css::beans::NamedValue>& rMediaEncData) override;
 
     virtual void createEncryptionData(comphelper::SequenceAsHashMap & aEncryptionData, const OUString rPassword) override;
-
-    bool generateAndEncryptVerifierHash(OUString const & rPassword);
-
-    bool encryptHmacKey();
-    bool encryptHmacValue();
-
-    bool encryptEncryptionKey(OUString const & rPassword);
-    void setupEncryptionParameters(AgileEncryptionParameters const & rAgileEncryptionParameters);
-    bool setupEncryptionKey(OUString const & rPassword);
 };
 
 } // namespace core

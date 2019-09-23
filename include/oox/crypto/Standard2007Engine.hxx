@@ -35,7 +35,7 @@ class OOX_DLLPUBLIC Standard2007Engine final : public CryptoEngine
 public:
     Standard2007Engine() = default;
 
-    bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) override;
+    bool readEncryptionInfo(oox::ole::OleStorage& rOleStorage) override;
 
     virtual bool generateEncryptionKey(OUString const & rPassword) override;
 
