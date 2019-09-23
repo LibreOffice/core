@@ -59,18 +59,26 @@ public:
                          sal_uInt8 nTol) override;
     virtual bool ConvertToGreyscale() override;
 
+    // Accesses the internal SkBitmap. If the bit count is one that Skia does
+    // not support natively, data from the internal buffer is converted
+    // to a 32bpp SkBitmap.
+    const SkBitmap& GetSkBitmap() const;
+
 #ifdef DBG_UTIL
     void dump(const char* file) const;
 #endif
 
 private:
+    void ResetCachedBitmap();
+
     SkBitmap mBitmap;
     BitmapPalette mPalette;
     int mBitCount; // bpp
     Size mSize;
-    std::unique_ptr<sal_uInt8[]> mBuffer; // for 1bpp and 4bpp, Skia doesn't support those
+    // Skia does not natively support 1bpp and 4bpp, so such bitmaps are stored
+    // in a buffer (and converted to 32bpp SkBitmap on-demand using GetSkBitmap()).
+    std::unique_ptr<sal_uInt8[]> mBuffer;
     int mScanlineSize; // size of one row in mBuffer
-    friend class SkiaSalGraphicsImpl; // TODO
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_SALBMP_H
