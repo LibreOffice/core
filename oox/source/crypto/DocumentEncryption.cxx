@@ -27,10 +27,12 @@ namespace core {
 using namespace css::io;
 using namespace css::uno;
 
-DocumentEncryption::DocumentEncryption(Reference<XStream> const & xDocumentStream,
+DocumentEncryption::DocumentEncryption(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                       Reference<XStream> const & xDocumentStream,
                                        oox::ole::OleStorage& rOleStorage,
                                        Sequence<css::beans::NamedValue>& rMediaEncData)
-    : mxDocumentStream(xDocumentStream)
+    : mxContext(rxContext)
+    , mxDocumentStream(xDocumentStream)
     , mrOleStorage(rOleStorage)
     , mMediaEncData(rMediaEncData)
 {
@@ -43,11 +45,11 @@ DocumentEncryption::DocumentEncryption(Reference<XStream> const & xDocumentStrea
             rMediaEncData[i].Value >>= sCryptoType;
             if (sCryptoType == "IRM")
             {
-                mEngine.reset(new IRMEngine);
+                mEngine.reset(new IRMEngine(mxContext));
             }
             else if (sCryptoType == "Standard" || sCryptoType == "Agile")
             {
-                mEngine.reset(new Standard2007Engine);
+                mEngine.reset(new Standard2007Engine(mxContext));
             }
             else
             {

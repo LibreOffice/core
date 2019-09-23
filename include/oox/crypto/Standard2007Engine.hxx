@@ -28,14 +28,18 @@ namespace core {
 class OOX_DLLPUBLIC Standard2007Engine final : public CryptoEngine
 {
     msfilter::StandardEncryptionInfo mInfo;
+    std::vector<sal_uInt8> mKey;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
 
     bool generateVerifier();
     bool calculateEncryptionKey(const OUString& rPassword);
 
-public:
-    Standard2007Engine() = default;
+    css::uno::Reference<css::io::XInputStream> getStream(css::uno::Sequence<css::beans::NamedValue> & rStreams, const OUString sStreamName);
 
-    bool readEncryptionInfo(oox::ole::OleStorage& rOleStorage) override;
+public:
+    Standard2007Engine(const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+
+    bool readEncryptionInfo(css::uno::Sequence<css::beans::NamedValue> aStreams) override;
 
     virtual bool generateEncryptionKey(OUString const & rPassword) override;
 

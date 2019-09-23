@@ -35,14 +35,16 @@ namespace core {
 class OOX_DLLPUBLIC DocumentDecryption
 {
 private:
-    oox::ole::OleStorage&           mrOleStorage;
-    std::unique_ptr<CryptoEngine>   mEngine;
-    OUString                        msEngineName;
+    oox::ole::OleStorage&                      mrOleStorage;
+    css::uno::Sequence<css::beans::NamedValue> maStreamsSequence;
+    std::unique_ptr<CryptoEngine>              mEngine;
+    OUString                                   msEngineName;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
 
     void readStrongEncryptionInfo();
 
 public:
-    DocumentDecryption(oox::ole::OleStorage& rOleStorage);
+    DocumentDecryption(const css::uno::Reference< css::uno::XComponentContext >& rxContext, oox::ole::OleStorage& rOleStorage);
 
     bool decrypt(const css::uno::Reference< css::io::XStream >& xDocumentStream);
     bool readEncryptionInfo();
