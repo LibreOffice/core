@@ -22,7 +22,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <fldmgr.hxx>
 
-#define FIELD_COLUMN_WIDTH 76
+#define FIELD_COLUMN_WIDTH 19
 
 const int coLBCount = 3;
 

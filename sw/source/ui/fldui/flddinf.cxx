@@ -65,7 +65,7 @@ SwFieldDokInfPage::SwFieldDokInfPage(TabPageParent pParent, const SfxItemSet *co
     m_xTypeTLB->make_sorted();
     FillFieldSelect(*m_xSelectionLB);
 
-    auto nWidth = LogicToPixel(Size(FIELD_COLUMN_WIDTH, 0), MapMode(MapUnit::MapAppFont)).Width();
+    auto nWidth = m_xTypeTLB->get_approximate_digit_width() * FIELD_COLUMN_WIDTH;
     auto nHeight = m_xTypeTLB->get_height_rows(20);
     m_xTypeTLB->set_size_request(nWidth, nHeight);
     m_xFormatLB->get_widget().set_size_request(nWidth, nHeight);
