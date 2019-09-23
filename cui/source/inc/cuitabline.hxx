@@ -386,7 +386,6 @@ public:
     void    SetLineEndChgd( ChangeType* pIn ) { pnLineEndListState = pIn; }
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual void Resize() override;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CUITABLINE_HXX
