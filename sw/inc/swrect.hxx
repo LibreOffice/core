@@ -335,10 +335,9 @@ inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const SwRect& rectangle )
 {
     if (rectangle.IsEmpty())
-        return stream << "EMPTY";
-    else
-        return stream << rectangle.SSize()
-                      << "@(" << rectangle.Pos() << ")";
+        stream << "EMPTY:";
+    return stream << rectangle.SSize()
+                  << "@(" << rectangle.Pos() << ")";
 }
 
 #endif // INCLUDED_SW_INC_SWRECT_HXX
