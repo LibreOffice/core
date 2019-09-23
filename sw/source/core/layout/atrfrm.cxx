@@ -1164,16 +1164,16 @@ void SwFormatCol::dumpAsXml(xmlTextWriterPtr pWriter) const
 SwFormatSurround::SwFormatSurround( css::text::WrapTextMode eFly ) :
     SfxEnumItem( RES_SURROUND, eFly )
 {
-    bAnchorOnly = bContour = bOutside = false;
+    m_bAnchorOnly = m_bContour = m_bOutside = false;
 }
 
 bool SwFormatSurround::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
     return ( GetValue() == static_cast<const SwFormatSurround&>(rAttr).GetValue() &&
-             bAnchorOnly== static_cast<const SwFormatSurround&>(rAttr).bAnchorOnly &&
-             bContour== static_cast<const SwFormatSurround&>(rAttr).bContour &&
-             bOutside== static_cast<const SwFormatSurround&>(rAttr).bOutside );
+             m_bAnchorOnly== static_cast<const SwFormatSurround&>(rAttr).m_bAnchorOnly &&
+             m_bContour== static_cast<const SwFormatSurround&>(rAttr).m_bContour &&
+             m_bOutside== static_cast<const SwFormatSurround&>(rAttr).m_bOutside );
 }
 
 SfxPoolItem*  SwFormatSurround::Clone( SfxItemPool* ) const
@@ -1258,9 +1258,9 @@ void SwFormatSurround::dumpAsXml(xmlTextWriterPtr pWriter) const
     GetPresentation(SfxItemPresentation::Nameless, MapUnit::Map100thMM, MapUnit::Map100thMM, aPresentation, aIntlWrapper);
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(aPresentation.toUtf8().getStr()));
 
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bAnchorOnly"), BAD_CAST(OString::boolean(bAnchorOnly).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bContour"), BAD_CAST(OString::boolean(bContour).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bOutside"), BAD_CAST(OString::boolean(bOutside).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bAnchorOnly"), BAD_CAST(OString::boolean(m_bAnchorOnly).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bContour"), BAD_CAST(OString::boolean(m_bContour).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bOutside"), BAD_CAST(OString::boolean(m_bOutside).getStr()));
 
     xmlTextWriterEndElement(pWriter);
 }
@@ -2073,8 +2073,8 @@ bool SwFormatChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 SwFormatLineNumber::SwFormatLineNumber() :
     SfxPoolItem( RES_LINENUMBER )
 {
-    nStartValue = 0;
-    bCountLines = true;
+    m_nStartValue = 0;
+    m_bCountLines = true;
 }
 
 SwFormatLineNumber::~SwFormatLineNumber()
@@ -2085,8 +2085,8 @@ bool SwFormatLineNumber::operator==( const SfxPoolItem &rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
 
-    return nStartValue  == static_cast<const SwFormatLineNumber&>(rAttr).GetStartValue() &&
-           bCountLines  == static_cast<const SwFormatLineNumber&>(rAttr).IsCount();
+    return m_nStartValue  == static_cast<const SwFormatLineNumber&>(rAttr).GetStartValue() &&
+           m_bCountLines  == static_cast<const SwFormatLineNumber&>(rAttr).IsCount();
 }
 
 SfxPoolItem* SwFormatLineNumber::Clone( SfxItemPool* ) const
