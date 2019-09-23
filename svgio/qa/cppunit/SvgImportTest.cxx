@@ -54,6 +54,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testTdf97543();
     void testRGBColor();
     void testRGBAColor();
+    void testNoneColor();
     void testTdf97936();
     void testClipPathAndParentStyle();
     void testClipPathAndStyle();
@@ -88,6 +89,7 @@ public:
     CPPUNIT_TEST(testTdf97543);
     CPPUNIT_TEST(testRGBColor);
     CPPUNIT_TEST(testRGBAColor);
+    CPPUNIT_TEST(testNoneColor);
     CPPUNIT_TEST(testTdf97936);
     CPPUNIT_TEST(testClipPathAndParentStyle);
     CPPUNIT_TEST(testClipPathAndStyle);
@@ -463,6 +465,22 @@ void Test::testRGBAColor()
     CPPUNIT_ASSERT (pDocument);
 
     assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence", "transparence", "0.5");
+}
+
+void Test::testNoneColor()
+{
+    Primitive2DSequence aSequenceRGBAColor = parseSvg("/svgio/qa/cppunit/data/noneColor.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceRGBAColor.getLength()));
+
+    drawinglayer::tools::Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceRGBAColor));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    //No polypolygoncolor exists
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygoncolor", 0);
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygonstroke/line", "color", "#000000");
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygonstroke/line", "width", "3");
 }
 
 void Test::testTdf97936()
