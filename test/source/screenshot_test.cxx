@@ -194,6 +194,7 @@ void ScreenshotTest::dumpDialogToPath(const OString& rUIXMLDescription)
             bool bLegacy;
             bLegacy = rUIXMLDescription != "cui/ui/textanimtabpage.ui" &&
                       rUIXMLDescription != "cui/ui/areatabpage.ui" &&
+                      rUIXMLDescription != "cui/ui/personalization_tab.ui" &&
                       rUIXMLDescription != "modules/schart/ui/tp_3D_SceneIllumination.ui";
             std::unique_ptr<VclBuilder> xBuilder(new VclBuilder(pDialog, VclBuilderContainer::getUIRootDir(), OStringToOUString(rUIXMLDescription, RTL_TEXTENCODING_UTF8), OString(), css::uno::Reference<css::frame::XFrame>(), bLegacy));
             vcl::Window *pRoot = xBuilder->get_widget_root();
