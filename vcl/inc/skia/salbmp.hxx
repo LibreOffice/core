@@ -70,6 +70,7 @@ private:
     Size mSize;
     std::unique_ptr<sal_uInt8[]> mBuffer; // for 1bpp and 4bpp, Skia doesn't support those
     int mScanlineSize; // size of one row in mBuffer
+    friend class SkiaSalGraphicsImpl; // TODO
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_SALBMP_H
