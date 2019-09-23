@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_427dbf6c",
+        "filename": "sw/source/core/graphic/ndgrf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-09-23T11:54:21Z",
+      "side": 1,
+      "message": "Could you please explain why this is needed? Ideally today the swap in/out is no longer needed manually, you can just call e.g. Graphic::GetBitmapEx() and it\u0027ll ensure that the image is available.",
+      "revId": "902756869866d9cbcae8869ecfc916cfe96c8579",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_62823b52",
+        "filename": "sw/source/core/inc/rootfrm.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-09-23T11:54:21Z",
+      "side": 1,
+      "message": "Hmm, what is the purpose of this? Calling a non-const function on a const pointer can be problematic, but not the other way around.",
+      "revId": "902756869866d9cbcae8869ecfc916cfe96c8579",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
