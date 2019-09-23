@@ -115,6 +115,7 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
         aCfgItem.ReadBool(  "ExportBookmarks", true );
         aCfgItem.ReadBool(  "ExportHiddenSlides", false );
+        aCfgItem.ReadBool(  "SinglePageSheets", false );
         aCfgItem.ReadInt32( "OpenBookmarkLevels", -1 );
 
         aCfgItem.ReadBool( "IsRedactMode", false);

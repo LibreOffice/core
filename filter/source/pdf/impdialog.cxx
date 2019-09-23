@@ -87,7 +87,8 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, Sequence< PropertyValue 
     mbExportFormFields( true ),
     mbAllowDuplicateFieldNames( false ),
     mbExportBookmarks( true ),
-    mbExportHiddenSlides ( false),
+    mbExportHiddenSlides ( false ),
+    mbSinglePageSheets ( false ),
     mnOpenBookmarkLevels( -1 ),
 
     mbHideViewerToolbar( false ),
@@ -201,6 +202,8 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, Sequence< PropertyValue 
     mbExportBookmarks = maConfigItem.ReadBool( "ExportBookmarks", true );
     if ( mbIsPresentation )
         mbExportHiddenSlides = maConfigItem.ReadBool( "ExportHiddenSlides", false );
+    if ( mbIsSpreadsheet )
+        mbSinglePageSheets = maConfigItem.ReadBool( "SinglePageSheets", false );
     mnOpenBookmarkLevels = maConfigItem.ReadInt32( "OpenBookmarkLevels", -1 );
     mbUseTransitionEffects = maConfigItem.ReadBool( "UseTransitionEffects", true );
     mbIsSkipEmptyPages = maConfigItem.ReadBool( "IsSkipEmptyPages", false );
@@ -386,6 +389,8 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteBool( "ExportBookmarks", mbExportBookmarks );
     if ( mbIsPresentation )
         maConfigItem.WriteBool( "ExportHiddenSlides", mbExportHiddenSlides );
+    if ( mbIsSpreadsheet )
+        maConfigItem.WriteBool( "SinglePageSheets", mbSinglePageSheets );
     maConfigItem.WriteBool( "UseTransitionEffects", mbUseTransitionEffects );
     maConfigItem.WriteBool( "IsSkipEmptyPages", mbIsSkipEmptyPages );
     maConfigItem.WriteBool( "ExportPlaceholders", mbIsExportPlaceholders );
@@ -478,6 +483,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(weld::Container* pPage, weld::DialogC
     , mxCbAllowDuplicateFieldNames(m_xBuilder->weld_check_button("allowdups"))
     , mxCbExportBookmarks(m_xBuilder->weld_check_button("bookmarks"))
     , mxCbExportHiddenSlides(m_xBuilder->weld_check_button("hiddenpages"))
+    , mxCbSinglePageSheets(m_xBuilder->weld_check_button("singlepagesheets"))
     , mxCbExportNotes(m_xBuilder->weld_check_button("comments"))
     , mxCbViewPDF(m_xBuilder->weld_check_button("viewpdf"))
     , mxCbUseReferenceXObject(m_xBuilder->weld_check_button("usereferencexobject"))
@@ -602,6 +608,14 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
         mxRbSelection->set_label(mxSheetsFt->get_label());
         // tdf#105965 Make Selection/Selected sheets the default PDF export range setting for spreadsheets
         mxRbSelection->set_active(true);
+
+        mxCbSinglePageSheets->show();
+        mxCbSinglePageSheets->set_active(pParent->mbSinglePageSheets);
+    }
+    else
+    {
+        mxCbSinglePageSheets->hide();
+        mxCbSinglePageSheets->set_active(false);
     }
 
     mxCbExportPlaceholders->set_visible(mbIsWriter);
@@ -642,6 +656,9 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* pParent )
     pParent->mbExportBookmarks = mxCbExportBookmarks->get_active();
     if ( mbIsPresentation )
         pParent->mbExportHiddenSlides = mxCbExportHiddenSlides->get_active();
+
+    if (mbIsSpreadsheet)
+        pParent->mbSinglePageSheets = mxCbSinglePageSheets->get_active();
 
     pParent->mbIsSkipEmptyPages = !mxCbExportEmptyPages->get_active();
     pParent->mbIsExportPlaceholders = mxCbExportPlaceholders->get_active();

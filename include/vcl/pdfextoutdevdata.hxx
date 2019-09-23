@@ -80,6 +80,7 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
     bool                        mbExportFormFields;
     bool                        mbExportBookmarks;
     bool                        mbExportHiddenSlides;
+    bool                        mbSinglePageSheets;
     bool                        mbExportNDests; //i56629
     sal_Int32                   mnPage;
     sal_Int32                   mnCompressionQuality;
@@ -121,6 +122,9 @@ public:
 
     bool    GetIsExportHiddenSlides() const { return mbExportHiddenSlides;}
     void        SetIsExportHiddenSlides( const bool bExportHiddenSlides );
+
+    bool    GetIsSinglePageSheets() const { return mbSinglePageSheets;}
+    void        SetIsSinglePageSheets( const bool bSinglePageSheets );
 
     bool    GetIsExportNamedDestinations() const { return mbExportNDests;} //i56629
     void        SetIsExportNamedDestinations( const bool bExportNDests ); //i56629
