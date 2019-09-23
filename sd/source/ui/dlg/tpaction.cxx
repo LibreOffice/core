@@ -630,7 +630,7 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl, weld::Widget&, void)
 
         if( aMedium.IsStorage() )
         {
-            WaitObject aWait( GetParentDialog() );
+            weld::WaitObject aWait(GetDialogFrameWeld());
 
             // is it a draw file?
             // open with READ, otherwise the Storages might write into the file!
