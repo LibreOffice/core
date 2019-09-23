@@ -1395,6 +1395,12 @@ callback (gpointer pData)
         // TODO: Implement me
         break;
     }
+    default:
+    {
+        g_error("Unknown callback type: %d", pCallback->m_nType);
+        g_assert(false);
+        break;
+    }
     }
     delete pCallback;
 
