@@ -337,16 +337,13 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
                                                  RES_TXTATR_INETFMT, RES_TXTATR_UNKNOWN_CONTAINER,
                                                  RES_PARATR_BEGIN, RES_FRMATR_END - 1,
                                                  RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>{});
-    if( !rAttrs.empty() )
+    for( std::set<sal_uInt16>::const_reverse_iterator it = rAttrs.rbegin(); it != rAttrs.rend(); ++it )
     {
-        for( std::set<sal_uInt16>::const_reverse_iterator it = rAttrs.rbegin(); it != rAttrs.rend(); ++it )
-        {
-            if( POOLATTR_END > *it )
-                aDelSet.Put( *GetDfltAttr( *it ));
-        }
-        if( aDelSet.Count() )
-            aPara.pDelSet = &aDelSet;
+        if( POOLATTR_END > *it )
+            aDelSet.Put( *GetDfltAttr( *it ));
     }
+    if( aDelSet.Count() )
+        aPara.pDelSet = &aDelSet;
 
     bool bAdd = true;
     SwNodeIndex aTmpStt( pStt->nNode );
