@@ -120,9 +120,9 @@ static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet> const & xSou
 }
 
 SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
-    : SfxDialogController(pParent->GetFrameWeld(), "modules/swriter/ui/selectaddressdialog.ui", "SelectAddressDialog")
+    : SfxDialogController(pParent->GetWizard()->getDialog(), "modules/swriter/ui/selectaddressdialog.ui", "SelectAddressDialog")
     , m_bInSelectHdl(false)
-    , m_xAddressPage(pParent)
+    , m_pAddressPage(pParent)
     , m_xDescriptionFI(m_xBuilder->weld_label("desc"))
     , m_xConnecting(m_xBuilder->weld_label("connecting"))
     , m_xListLB(m_xBuilder->weld_tree_view("sources"))
@@ -161,7 +161,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
     uno::Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
     m_xDBContext = DatabaseContext::create(xContext);
 
-    SwMailMergeConfigItem& rConfigItem = m_xAddressPage->GetWizard()->GetConfigItem();
+    SwMailMergeConfigItem& rConfigItem = m_pAddressPage->GetWizard()->GetConfigItem();
     const SwDBData& rCurrentData = rConfigItem.GetCurrentDBData();
 
     bool bEnableEdit = false;
@@ -276,7 +276,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl, weld::Button&, void)
 {
-    SwView* pView = m_xAddressPage->GetWizard()->GetSwView();
+    SwView* pView = m_pAddressPage->GetWizard()->GetSwView();
 
     const OUString sNewSource = SwDBManager::LoadAndRegisterDataSource(m_xDialog.get(), pView ? pView->GetDocShell() : nullptr);
     if(!sNewSource.isEmpty())
@@ -320,7 +320,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, RemoveHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwAddressListDialog, CreateHdl_Impl, weld::Button&, void)
 {
-    SwCreateAddressListDialog aDlg(m_xDialog.get(), /*sInputURL*/OUString(), m_xAddressPage->GetWizard()->GetConfigItem());
+    SwCreateAddressListDialog aDlg(m_xDialog.get(), /*sInputURL*/OUString(), m_pAddressPage->GetWizard()->GetConfigItem());
     if (RET_OK == aDlg.run())
     {
         //register the URL a new datasource
@@ -400,7 +400,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, EditHdl_Impl, weld::Button&, void)
     {
         if(pUserData->xResultSet.is())
         {
-            SwMailMergeConfigItem& rConfigItem = m_xAddressPage->GetWizard()->GetConfigItem();
+            SwMailMergeConfigItem& rConfigItem = m_pAddressPage->GetWizard()->GetConfigItem();
             if(rConfigItem.GetResultSet() != pUserData->xResultSet)
                 ::comphelper::disposeComponent( pUserData->xResultSet );
             pUserData->xResultSet = nullptr;
@@ -412,7 +412,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, EditHdl_Impl, weld::Button&, void)
         pUserData->xConnection.clear();
             // will automatically close if it was the las reference
         SwCreateAddressListDialog aDlg(m_xDialog.get(), pUserData->sURL,
-                                       m_xAddressPage->GetWizard()->GetConfigItem());
+                                       m_pAddressPage->GetWizard()->GetConfigItem());
         aDlg.run();
     }
 };
