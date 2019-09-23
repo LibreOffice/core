@@ -333,7 +333,7 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolygon,
 }
 
 #ifdef DBG_UTIL
-void SkiaSalGraphicsImpl::dump(const char* file)
+void SkiaSalGraphicsImpl::dump(const char* file) const
 {
     sk_sp<SkImage> image = mSurface->makeImageSnapshot();
     sk_sp<SkData> data = image->encodeToData();

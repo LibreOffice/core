@@ -260,7 +260,7 @@ bool SkiaSalBitmap::Replace(const Color& rSearchColor, const Color& rReplaceColo
 bool SkiaSalBitmap::ConvertToGreyscale() { return false; }
 
 #ifdef DBG_UTIL
-void SkiaSalBitmap::dump(const char* file)
+void SkiaSalBitmap::dump(const char* file) const
 {
     sk_sp<SkImage> image = SkImage::MakeFromBitmap(mBitmap);
     sk_sp<SkData> data = image->encodeToData();

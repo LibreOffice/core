@@ -60,7 +60,7 @@ public:
     virtual bool ConvertToGreyscale() override;
 
 #ifdef DBG_UTIL
-    void dump(const char* file);
+    void dump(const char* file) const;
 #endif
 
 private:
