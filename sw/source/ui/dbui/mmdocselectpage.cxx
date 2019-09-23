@@ -80,10 +80,6 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(SwMailMergeWizard* pWizard, T
     {
         m_xRecentDocRB->set_sensitive(false);
     }
-
-    //Temp hack until all pages are converted to .ui and wizard
-    //base class adapted
-    SetSizePixel(LogicToPixel(Size(260 , 250), MapMode(MapUnit::MapAppFont)));
 }
 
 SwMailMergeDocSelectPage::~SwMailMergeDocSelectPage()
