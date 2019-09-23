@@ -1188,7 +1188,7 @@ IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, weld::Button&, void)
             ErrorHandler::GetErrorString(ERRCODE_IO_NOTSUPPORTED, msg); //TODO: handle failure
             std::unique_ptr<weld::MessageDialog>(
                 Application::CreateMessageDialog(
-                    GetFrameWeld(), VclMessageType::Error, VclButtonsType::Ok, msg))
+                    GetDialogFrameWeld(), VclMessageType::Error, VclButtonsType::Ok, msg))
                 ->run();
             return;
         }

@@ -300,7 +300,8 @@ IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt, void )
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, ExpertConfigHdl_Impl, weld::Button&, void)
 {
-    ScopedVclPtrInstance<CuiAboutConfigTabPage> pExpertConfigDlg(GetParentDialog());
+    //TODO weld this one too
+    ScopedVclPtrInstance<CuiAboutConfigTabPage> pExpertConfigDlg(nullptr);
     pExpertConfigDlg->Reset();//initialize and reset function
 
     if( RET_OK == pExpertConfigDlg->Execute() )

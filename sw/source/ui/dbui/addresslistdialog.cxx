@@ -120,7 +120,7 @@ static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet> const & xSou
 }
 
 SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
-    : SfxDialogController(pParent->GetFrameWeld(), "modules/swriter/ui/selectaddressdialog.ui", "SelectAddressDialog")
+    : SfxDialogController(pParent->GetWizard()->getDialog(), "modules/swriter/ui/selectaddressdialog.ui", "SelectAddressDialog")
     , m_bInSelectHdl(false)
     , m_xAddressPage(pParent)
     , m_xDescriptionFI(m_xBuilder->weld_label("desc"))
