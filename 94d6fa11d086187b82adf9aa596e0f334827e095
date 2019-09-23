@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_07dcb972",
+        "filename": "cui/uiconfig/ui/personalization_tab.ui",
+        "patchSetId": 20
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-09-23T07:09:34Z",
+      "side": 1,
+      "message": "looks like this broke `make screenshot` at \u003chttps://ci.libreoffice.org/job/lo_ubsan/1394/consoleFull#1533786069d893063f-7f3d-4b7e-b56f-4e0f225817cd\u003e (\"cppunittester: /home/tdf/lode/jenkins/workspace/lo_ubsan/vcl/source/window/builder.cxx:1850: VclPtr\u003cvcl::Window\u003e VclBuilder::makeObject(vcl::Window *, const rtl::OString \u0026, const rtl::OString \u0026, VclBuilder::stringmap \u0026): Assertion `sMenu.getLength() \u0026\u0026 \"not implemented yet\"\u0027 failed.\")",
+      "range": {
+        "startLine": 75,
+        "startChar": 40,
+        "endLine": 75,
+        "endChar": 46
+      },
+      "revId": "94d6fa11d086187b82adf9aa596e0f334827e095",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
