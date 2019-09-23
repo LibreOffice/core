@@ -409,6 +409,7 @@ public:
     virtual const vcl::Window *get_child() const override;
     vcl::Window *get_label_widget();
     const vcl::Window *get_label_widget() const;
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 protected:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;

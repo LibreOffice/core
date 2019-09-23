@@ -1635,6 +1635,13 @@ OUString VclFrame::getDefaultAccessibleName() const
     return VclBin::getDefaultAccessibleName();
 }
 
+boost::property_tree::ptree VclFrame::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(VclBin::DumpAsPropertyTree());
+    aTree.put("type", "frame");
+    return aTree;
+}
+
 Size VclAlignment::calculateRequisition() const
 {
     Size aRet(m_nLeftPadding + m_nRightPadding,
