@@ -75,6 +75,15 @@ bool IRMEngine::decrypt(BinaryXInputStream& aInputStream, BinaryXOutputStream& a
         // TODO: some reaction?
     }
 
+    // Read rights
+    BOOL value;
+    hr = IpcAccessCheck(key, IPC_GENERIC_READ, &value);
+    if (FAILED(hr))
+    {
+        // TODO: some reaction?
+    }
+    mInfo.bCanRead = value;
+
     // Get size of decrypt block
     DWORD* blockSize;
     hr = IpcGetKeyProperty(key, IPC_KI_BLOCK_SIZE, nullptr, (LPVOID*)&blockSize);
@@ -124,11 +133,36 @@ void IRMEngine::createEncryptionData(comphelper::SequenceAsHashMap& aEncryptionD
     aEncryptionData["license"] <<= seq;
 }
 
-bool IRMEngine::readEncryptionInfo(uno::Reference<io::XInputStream>& rxInputStream)
+bool IRMEngine::readEncryptionInfo(oox::ole::OleStorage& rOleStorage)
 {
-    // MS-OFFCRYPTO 2.2.6: XrMLLicense
-    BinaryXInputStream aBinaryStream(rxInputStream, true);
+    // Read TransformInfo storage for IRM ECMA documents (MS-OFFCRYPTO 2.2.4)
+    uno::Reference<io::XInputStream> xTransformInfoStream = rOleStorage.openInputStream(
+        "\006DataSpaces/TransformInfo/DRMEncryptedTransform/\006Primary");
+    SAL_WARN_IF(!xTransformInfoStream.is(), "oox", "TransormInfo stream is missing!");
+    BinaryXInputStream aBinaryStream(xTransformInfoStream, true);
+
+    // MS-OFFCRYPTO 2.1.8: TransformInfoHeader
+    aBinaryStream.readuInt32(); // TransformLength
+    aBinaryStream.readuInt32(); // TransformType
+    // TransformId
     sal_uInt32 aStringLength = aBinaryStream.readuInt32();
+    OUString sTransformId = aBinaryStream.readUnicodeArray(aStringLength / 2);
+    aBinaryStream.skip((4 - (aStringLength & 3)) & 3); // Skip padding
+
+    // TransformName
+    aStringLength = aBinaryStream.readuInt32();
+    OUString sTransformName = aBinaryStream.readUnicodeArray(aStringLength / 2);
+    aBinaryStream.skip((4 - (aStringLength & 3)) & 3); // Skip padding
+
+    aBinaryStream.readuInt32(); // ReaderVersion
+    aBinaryStream.readuInt32(); // UpdaterVersion
+    aBinaryStream.readuInt32(); // WriterVersion
+
+    // MS-OFFCRYPTO 2.2.5: ExtensibilityHeader
+    aBinaryStream.readuInt32(); // ExtensibilityHeader
+
+    // MS-OFFCRYPTO 2.2.6: XrMLLicense
+    aStringLength = aBinaryStream.readuInt32();
     mInfo.license = aBinaryStream.readCharArray(aStringLength);
 
     if (mInfo.license.getLength()
