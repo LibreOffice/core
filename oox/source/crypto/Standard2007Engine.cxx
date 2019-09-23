@@ -215,7 +215,7 @@ bool Standard2007Engine::setupEncryption(css::uno::Sequence<css::beans::NamedVal
     OUString sPassword;
     for (int i = 0; i < rMediaEncData.getLength(); i++)
     {
-        if (rMediaEncData[i].Name == "Password")
+        if (rMediaEncData[i].Name == "OOXPassword")
         {
             OUString sCryptoType;
             rMediaEncData[i].Value >>= sPassword;
@@ -289,9 +289,11 @@ void Standard2007Engine::encrypt(css::uno::Reference<css::io::XInputStream> &  r
     }
 }
 
-bool Standard2007Engine::readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream)
+bool Standard2007Engine::readEncryptionInfo(oox::ole::OleStorage& rOleStorage)
 {
+    Reference<css::io::XInputStream> rxInputStream = rOleStorage.openInputStream("EncryptionInfo");
     BinaryXInputStream aBinaryStream(rxInputStream, false);
+    aBinaryStream.readuInt32();    // Version
 
     mInfo.header.flags = aBinaryStream.readuInt32();
     if (getFlag(mInfo.header.flags, msfilter::ENCRYPTINFO_EXTERNAL))
