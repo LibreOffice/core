@@ -72,6 +72,7 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,sw_uiwriter, \
 ))
 
 $(eval $(call gb_CppunitTest_use_packages,sw_uiwriter, \
+    oox_customshapes \
     sfx2_classification \
 ))
 
