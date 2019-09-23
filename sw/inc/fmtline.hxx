@@ -29,8 +29,8 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFormatLineNumber: public SfxPoolItem
 {
-    sal_uLong nStartValue   :24; ///< Starting value for the paragraph. 0 == no starting value.
-    bool      bCountLines   :1;  ///< Also count lines of paragraph.
+    sal_uLong m_nStartValue   :24; ///< Starting value for the paragraph. 0 == no starting value.
+    bool      m_bCountLines   :1;  ///< Also count lines of paragraph.
 
 public:
     SwFormatLineNumber();
@@ -54,11 +54,11 @@ public:
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    sal_uLong GetStartValue() const { return nStartValue; }
-    bool  IsCount()           const { return bCountLines; }
+    sal_uLong GetStartValue() const { return m_nStartValue; }
+    bool  IsCount()           const { return m_bCountLines; }
 
-    void SetStartValue( sal_uLong nNew ) { nStartValue = nNew; }
-    void SetCountLines( bool b )     { bCountLines = b;    }
+    void SetStartValue( sal_uLong nNew ) { m_nStartValue = nNew; }
+    void SetCountLines( bool b )     { m_bCountLines = b;    }
 };
 
 inline const SwFormatLineNumber &SwAttrSet::GetLineNumber(bool bInP) const

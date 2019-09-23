@@ -30,9 +30,9 @@ class IntlWrapper;
 // SwFormatSurround: How document content under the frame shall behave.
 class SW_DLLPUBLIC SwFormatSurround: public SfxEnumItem<css::text::WrapTextMode>
 {
-    bool    bAnchorOnly :1;
-    bool    bContour    :1;
-    bool    bOutside    :1;
+    bool    m_bAnchorOnly :1;
+    bool    m_bContour    :1;
+    bool    m_bOutside    :1;
 public:
     SwFormatSurround( css::text::WrapTextMode eNew = css::text::WrapTextMode_PARALLEL );
 
@@ -49,13 +49,13 @@ public:
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     css::text::WrapTextMode GetSurround() const { return GetValue(); }
-    bool    IsAnchorOnly()  const { return bAnchorOnly; }
-    bool    IsContour()     const { return bContour; }
-    bool    IsOutside()     const { return bOutside; }
+    bool    IsAnchorOnly()  const { return m_bAnchorOnly; }
+    bool    IsContour()     const { return m_bContour; }
+    bool    IsOutside()     const { return m_bOutside; }
     void    SetSurround  ( css::text::WrapTextMode eNew ) { SetValue( eNew ); }
-    void    SetAnchorOnly( bool bNew )      { bAnchorOnly = bNew; }
-    void    SetContour( bool bNew )         { bContour = bNew; }
-    void    SetOutside( bool bNew )         { bOutside = bNew; }
+    void    SetAnchorOnly( bool bNew )      { m_bAnchorOnly = bNew; }
+    void    SetContour( bool bNew )         { m_bContour = bNew; }
+    void    SetOutside( bool bNew )         { m_bOutside = bNew; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
