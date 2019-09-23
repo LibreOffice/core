@@ -2735,6 +2735,7 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
                 {
                     ::comphelper::SequenceAsHashMap aHashData;
                     aHashData[ OUString( "OOXPassword"  ) ] <<= pPasswordRequest->getPassword();
+                    aHashData[ OUString( "CryptoType" ) ] <<= OUString( "Standard" );
                     pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aHashData.getAsConstNamedValueList() ) ) );
                 }
                 else
