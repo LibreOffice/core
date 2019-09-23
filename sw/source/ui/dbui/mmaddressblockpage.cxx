@@ -74,10 +74,10 @@ SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage(SwMailMergeWizard* pWiz
     , m_xSettingsWIN(new weld::CustomWeld(*m_xBuilder, "settingspreview", *m_xSettings))
     , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, "addresspreview", *m_xPreview))
 {
-    Size aSize(LogicToPixel(Size(164 , 45), MapMode(MapUnit::MapAppFont)));
-    m_xSettingsWIN->set_size_request(aSize.Width(), aSize.Height());
-    aSize = LogicToPixel(Size(176, 46), MapMode(MapUnit::MapAppFont));
-    m_xPreviewWIN->set_size_request(aSize.Width(), aSize.Height());
+    m_xSettingsWIN->set_size_request(m_xDifferentlist->get_approximate_digit_width() * 40,
+                                     m_xDifferentlist->get_text_height() * 6);
+    m_xPreviewWIN->set_size_request(m_xDifferentlist->get_approximate_digit_width() * 44,
+                                    m_xDifferentlist->get_text_height() * 6);
     m_sChangeAddress = m_xDifferentlist->get_label();
     m_sDocument = m_xDocumentIndexFI->get_label();
 
