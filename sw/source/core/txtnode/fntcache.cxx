@@ -1202,28 +1202,20 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     }
                     else
                     {
-                        Point aTmpPos( aTextOriginPos );
                         sal_Int32 i;
-                        sal_Int32 j = 0;
                         long nSpaceSum = 0;
-                        for (i = 0; i < sal_Int32(rInf.GetLen()); i++ )
+                        for (i = 0; i < sal_Int32(rInf.GetLen()); i++)
                         {
-                            if( CH_BLANK == rInf.GetText()[ sal_Int32(rInf.GetIdx()) + i ] )
-                            {
-                                nSpaceSum += nSpaceAdd;
-                                if( j < i)
-                                    rInf.GetOut().DrawTextArray( aTmpPos, rInf.GetText(),
-                                    pKernArray.get() + j,
-                                    sal_Int32(rInf.GetIdx()) + j, i - j );
-                                j = i + 1;
-                                pKernArray[i] = pKernArray[i] + nSpaceSum;
-                                aTmpPos.setX( aTextOriginPos.X() + pKernArray[ i ] + nKernSum );
-                            }
+                            if(CH_BLANK == rInf.GetText()[sal_Int32(rInf.GetIdx()) + i])
+                                nSpaceSum += nSpaceAdd + nKernSum;
+
+                            pKernArray[i] += nSpaceSum;
                         }
-                        if( j < i )
-                            rInf.GetOut().DrawTextArray( aTmpPos, rInf.GetText(),
-                                pKernArray.get() + j,
-                                sal_Int32(rInf.GetIdx()) + j, i - j );
+
+                        rInf.GetOut().DrawTextArray(aTextOriginPos,
+                                rInf.GetText(), pKernArray.get(),
+                                sal_Int32(rInf.GetIdx()),
+                                sal_Int32(rInf.GetLen()));
                     }
                 }
             }
