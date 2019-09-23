@@ -191,11 +191,11 @@ void ScreenshotTest::dumpDialogToPath(const OString& rUIXMLDescription)
         {
             VclPtr<vcl::Window> aOwnedToplevel;
 
-            bool bLegacy;
-            bLegacy = rUIXMLDescription != "cui/ui/textanimtabpage.ui" &&
-                      rUIXMLDescription != "cui/ui/areatabpage.ui" &&
-                      rUIXMLDescription != "cui/ui/personalization_tab.ui" &&
-                      rUIXMLDescription != "modules/schart/ui/tp_3D_SceneIllumination.ui";
+            bool bLegacy = rUIXMLDescription == "fps/ui/remotefilesdialog.ui" ||
+                           rUIXMLDescription == "modules/swriter/ui/sidebarstylepresets.ui" ||
+                           rUIXMLDescription == "modules/swriter/ui/sidebartheme.ui" ||
+                           rUIXMLDescription == "sfx/ui/startcenter.ui" ||
+                           rUIXMLDescription == "svx/ui/datanavigator.ui";
             std::unique_ptr<VclBuilder> xBuilder(new VclBuilder(pDialog, VclBuilderContainer::getUIRootDir(), OStringToOUString(rUIXMLDescription, RTL_TEXTENCODING_UTF8), OString(), css::uno::Reference<css::frame::XFrame>(), bLegacy));
             vcl::Window *pRoot = xBuilder->get_widget_root();
             Dialog *pRealDialog = dynamic_cast<Dialog*>(pRoot);
