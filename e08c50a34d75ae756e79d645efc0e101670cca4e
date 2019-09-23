@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_e75f3d0c",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2069,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2019-09-23T06:43:46Z",
+      "side": 1,
+      "message": "That was the only one place with the switch FEATURE_BREAKPAD all other are without switches, made no sence for me, therefore this change.\nThis part of handling (without switch) have not change look\ninclude/desktop/crashreport.hxx#67",
+      "parentUuid": "7f7f9b97_9136cbb4",
+      "revId": "e08c50a34d75ae756e79d645efc0e101670cca4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_b13bc79a",
         "filename": "desktop/source/app/crashreport.cxx",
         "patchSetId": 2
@@ -87,6 +105,24 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_c7b7a13a",
+        "filename": "desktop/source/minidump/minidump.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2019-09-23T06:43:46Z",
+      "side": 1,
+      "message": "The Test-Code was double look here /desktop/source/app/app.cxx#897\nThis belongs to the improvement of this class, without that change LO hangs!?\nBefore was not a problem, it was tested with the other (double) function \nBut I don\u0027t know what comment for the obvious, need help",
+      "parentUuid": "7f7f9b97_71452f17",
+      "revId": "e08c50a34d75ae756e79d645efc0e101670cca4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_114abb26",
         "filename": "desktop/source/minidump/minidump.cxx",
         "patchSetId": 2
@@ -115,6 +151,24 @@
       "writtenOn": "2019-09-21T01:34:27Z",
       "side": 1,
       "message": "All new and renamed functions - should be lower case camel",
+      "revId": "e08c50a34d75ae756e79d645efc0e101670cca4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_47a4f108",
+        "filename": "include/desktop/crashreport.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2019-09-23T06:43:46Z",
+      "side": 1,
+      "message": "Okay, change all methode to lower case (the old methode too, is that okay?)",
+      "parentUuid": "7f7f9b97_3147b720",
       "revId": "e08c50a34d75ae756e79d645efc0e101670cca4e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
