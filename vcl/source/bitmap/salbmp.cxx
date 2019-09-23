@@ -184,4 +184,47 @@ std::unique_ptr< sal_uInt8[] > SalBitmap::convertDataTo24Bpp( const sal_uInt8* s
     return data;
 }
 
+std::unique_ptr< sal_uInt8[] > SalBitmap::convertDataTo32Bpp( const sal_uInt8* src,
+    int width, int height, int bitCount, int bytesPerRow, const BitmapPalette& palette, bool toBgra )
+{
+    std::unique_ptr< sal_uInt8[] > data( new sal_uInt8[width * height * 4] );
+    std::unique_ptr<ImplPixelFormat> pSrcFormat(ImplPixelFormat::GetFormat(bitCount, palette));
+
+    const sal_uInt8* pSrcData = src;
+    sal_uInt8* pDstData = data.get();
+
+    sal_uInt32 nY = height;
+    while( nY-- )
+    {
+        pSrcFormat->StartLine( pSrcData );
+
+        sal_uInt32 nX = width;
+        if (toBgra)
+        {
+            while( nX-- )
+            {
+                const BitmapColor& c = pSrcFormat->ReadPixel();
+                *pDstData++ = c.GetBlue();
+                *pDstData++ = c.GetGreen();
+                *pDstData++ = c.GetRed();
+                *pDstData++ = 0xff;
+            }
+        }
+        else // RGBA
+        {
+            while( nX-- )
+            {
+                const BitmapColor& c = pSrcFormat->ReadPixel();
+                *pDstData++ = c.GetRed();
+                *pDstData++ = c.GetGreen();
+                *pDstData++ = c.GetBlue();
+                *pDstData++ = 0xff;
+            }
+        }
+
+        pSrcData += bytesPerRow;
+    }
+    return data;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
