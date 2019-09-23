@@ -72,7 +72,6 @@ SwXTextPortion::SwXTextPortion(
             ?  PROPERTY_MAP_REDLINE_PORTION
             :  PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
     , m_xParentText(rParent)
-    , m_aDepends(*this)
     , m_pFrameFormat(nullptr)
     , m_ePortionType(eType)
     , m_bIsCollapsed(false)
@@ -87,12 +86,11 @@ SwXTextPortion::SwXTextPortion(
     : m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
     , m_xParentText(rParent)
-    , m_aDepends(*this)
     , m_pFrameFormat(&rFormat)
     , m_ePortionType(PORTION_FRAME)
     , m_bIsCollapsed(false)
 {
-    m_aDepends.StartListening(&rFormat);
+    StartListening(rFormat.GetNotifier());
     init( pPortionCursor);
 }
 
@@ -109,7 +107,6 @@ SwXTextPortion::SwXTextPortion(
     , m_pRubyAdjust ( bIsEnd ? nullptr : new uno::Any )
     , m_pRubyIsAbove( bIsEnd ? nullptr : new uno::Any )
     , m_pRubyPosition( bIsEnd ? nullptr : new uno::Any )
-    , m_aDepends(*this)
     , m_pFrameFormat(nullptr)
     , m_ePortionType( bIsEnd ? PORTION_RUBY_END : PORTION_RUBY_START )
     , m_bIsCollapsed(false)
@@ -131,7 +128,7 @@ SwXTextPortion::~SwXTextPortion()
 {
     SolarMutexGuard aGuard;
     m_pUnoCursor.reset(nullptr);
-    m_aDepends.EndListeningAll();
+    EndListeningAll();
 }
 
 uno::Reference< text::XText >  SwXTextPortion::getText()
@@ -820,14 +817,10 @@ uno::Sequence< OUString > SwXTextPortion::getSupportedServiceNames()
             "com.sun.star.style.ParagraphPropertiesComplex" };
 }
 
-void SwXTextPortion::SwClientNotify(const SwModify&, const SfxHint& rHint)
+void SwXTextPortion::Notify(const SfxHint& rHint)
 {
-    if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
-    {
-        ClientModify(this, pLegacyHint->m_pOld, pLegacyHint->m_pNew);
-        if(!m_aDepends.IsListeningTo(m_pFrameFormat))
-            m_pFrameFormat = nullptr;
-    }
+    if(rHint.GetId() == SfxHintId::Dying)
+        m_pFrameFormat = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

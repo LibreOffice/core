@@ -293,25 +293,6 @@ UnoActionRemoveContext::~UnoActionRemoveContext() COVERITY_NOEXCEPT_FALSE
     }
 }
 
-void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem *pNew)
-{
-    switch( pOld ? pOld->Which() : 0 )
-    {
-    case RES_REMOVE_UNO_OBJECT:
-    case RES_OBJECTDYING:
-        if( static_cast<void*>(pClient->GetRegisteredIn()) == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
-            pClient->EndListeningAll();
-        break;
-
-    case RES_FMT_CHG:
-        // Is the move to the new one finished and will the old one be deleted?
-        if( static_cast<const SwFormatChg*>(pNew)->pChangedFormat == pClient->GetRegisteredIn() &&
-            static_cast<const SwFormatChg*>(pOld)->pChangedFormat->IsFormatInDTOR() )
-            pClient->EndListeningAll();
-        break;
-    }
-}
-
 void SwUnoCursorHelper::SetCursorAttr(SwPaM & rPam,
         const SfxItemSet& rSet,
         const SetAttrMode nAttrMode, const bool bTableMode)

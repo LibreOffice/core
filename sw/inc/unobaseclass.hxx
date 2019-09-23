@@ -29,7 +29,6 @@
 #include <vcl/svapp.hxx>
 
 class SfxPoolItem;
-class SwClient;
 class SwDoc;
 class SwUnoTableCursor;
 
@@ -83,9 +82,6 @@ public:
     UnoActionRemoveContext(SwUnoTableCursor const& rCursor);
     ~UnoActionRemoveContext() COVERITY_NOEXCEPT_FALSE;
 };
-
-/// helper function for implementing SwClient::Modify
-void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 namespace sw {
     template<typename T>
