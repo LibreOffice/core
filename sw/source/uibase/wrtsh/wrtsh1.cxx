@@ -270,8 +270,8 @@ void SwWrtShell::Insert( const OUString &rStr )
 
     if( bStarted )
     {
-        EndAllAction();
         EndUndo();
+        EndAllAction();
     }
 }
 
