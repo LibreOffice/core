@@ -46,8 +46,8 @@ MacabConnection::MacabConnection(MacabDriver*   _pDriver)
 
 MacabConnection::~MacabConnection()
 {
-    if (!isClosed())
-        close();
+    if (!doIsClosed())
+        doClose();
 
     m_pDriver->release();
     m_pDriver = nullptr;
@@ -139,6 +139,11 @@ void SAL_CALL MacabConnection::rollback(  )
 }
 
 sal_Bool SAL_CALL MacabConnection::isClosed(  )
+{
+    return doIsClosed();
+}
+
+bool MacabConnection::doIsClosed()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -234,6 +239,11 @@ void SAL_CALL MacabConnection::setTypeMap( const Reference< css::container::XNam
 
 // XCloseable
 void SAL_CALL MacabConnection::close(  )
+{
+    doClose();
+}
+
+void MacabConnection::doClose()
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
