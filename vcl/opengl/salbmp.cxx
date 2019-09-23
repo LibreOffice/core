@@ -307,103 +307,6 @@ void OpenGLSalBitmap::DeallocateUserData()
 
 namespace {
 
-class ImplPixelFormat
-{
-protected:
-    sal_uInt8* mpData;
-public:
-    static ImplPixelFormat* GetFormat( sal_uInt16 nBits, const BitmapPalette& rPalette );
-
-    virtual void StartLine( sal_uInt8* pLine ) { mpData = pLine; }
-    virtual const BitmapColor& ReadPixel() = 0;
-    virtual ~ImplPixelFormat() { }
-};
-
-class ImplPixelFormat8 : public ImplPixelFormat
-{
-private:
-    const BitmapPalette& mrPalette;
-
-public:
-    explicit ImplPixelFormat8( const BitmapPalette& rPalette )
-    : mrPalette( rPalette )
-    {
-    }
-    virtual const BitmapColor& ReadPixel() override
-    {
-        assert( mrPalette.GetEntryCount() > *mpData );
-        return mrPalette[ *mpData++ ];
-    }
-};
-
-class ImplPixelFormat4 : public ImplPixelFormat
-{
-private:
-    const BitmapPalette& mrPalette;
-    sal_uInt32 mnX;
-    sal_uInt32 mnShift;
-
-public:
-    explicit ImplPixelFormat4( const BitmapPalette& rPalette )
-        : mrPalette( rPalette )
-        , mnX(0)
-        , mnShift(4)
-    {
-    }
-    virtual void StartLine( sal_uInt8* pLine ) override
-    {
-        mpData = pLine;
-        mnX = 0;
-        mnShift = 4;
-    }
-    virtual const BitmapColor& ReadPixel() override
-    {
-        sal_uInt32 nIdx = ( mpData[mnX >> 1] >> mnShift) & 0x0f;
-        assert( mrPalette.GetEntryCount() > nIdx );
-        const BitmapColor& rColor = mrPalette[nIdx];
-        mnX++;
-        mnShift ^= 4;
-        return rColor;
-    }
-};
-
-class ImplPixelFormat1 : public ImplPixelFormat
-{
-private:
-    const BitmapPalette& mrPalette;
-    sal_uInt32 mnX;
-
-public:
-    explicit ImplPixelFormat1( const BitmapPalette& rPalette )
-        : mrPalette(rPalette)
-        , mnX(0)
-    {
-    }
-    virtual void StartLine( sal_uInt8* pLine ) override
-    {
-        mpData = pLine;
-        mnX = 0;
-    }
-    virtual const BitmapColor& ReadPixel() override
-    {
-        const BitmapColor& rColor = mrPalette[ (mpData[mnX >> 3 ] >> ( 7 - ( mnX & 7 ) )) & 1];
-        mnX++;
-        return rColor;
-    }
-};
-
-ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalette& rPalette )
-{
-    switch( nBits )
-    {
-    case 1: return new ImplPixelFormat1( rPalette );
-    case 4: return new ImplPixelFormat4( rPalette );
-    case 8: return new ImplPixelFormat8( rPalette );
-    }
-
-    return nullptr;
-}
-
 void lclInstantiateTexture(OpenGLTexture& rTexture, const int nWidth, const int nHeight,
                            const GLenum nFormat, const GLenum nType, sal_uInt8 const * pData)
 {
@@ -498,46 +401,11 @@ GLuint OpenGLSalBitmap::CreateTexture()
         else
         {
             VCL_GL_INFO( "::CreateTexture - convert from " << mnBits << " to 24 bits" );
-
             // convert to 24 bits RGB using palette
-            pData = new sal_uInt8[mnHeight * mnWidth * 3];
-            bAllocated = true;
             determineTextureFormat(24, nFormat, nType);
-
-            std::unique_ptr<ImplPixelFormat> pSrcFormat(ImplPixelFormat::GetFormat(mnBits, maPalette));
-
-            sal_uInt8* pSrcData = mpUserBuffer.get();
-            sal_uInt8* pDstData = pData;
-
-            sal_uInt32 nY = mnHeight;
-            while( nY-- )
-            {
-                pSrcFormat->StartLine( pSrcData );
-
-                sal_uInt32 nX = mnWidth;
-                if (nFormat == GL_BGR)
-                {
-                    while( nX-- )
-                    {
-                        const BitmapColor& c = pSrcFormat->ReadPixel();
-                        *pDstData++ = c.GetBlue();
-                        *pDstData++ = c.GetGreen();
-                        *pDstData++ = c.GetRed();
-                    }
-                }
-                else // RGB
-                {
-                    while( nX-- )
-                    {
-                        const BitmapColor& c = pSrcFormat->ReadPixel();
-                        *pDstData++ = c.GetRed();
-                        *pDstData++ = c.GetGreen();
-                        *pDstData++ = c.GetBlue();
-                    }
-                }
-
-                pSrcData += mnBytesPerRow;
-            }
+            pData = convertDataTo24Bpp( mpUserBuffer.get(), mnWidth, mnHeight,
+                mnBits, mnBytesPerRow, maPalette, nFormat == GL_BGR ).release();
+            bAllocated = true;
         }
     }
 

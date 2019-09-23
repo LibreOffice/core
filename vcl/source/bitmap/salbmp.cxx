@@ -41,4 +41,147 @@ void SalBitmap::updateChecksum() const
     }
 }
 
+namespace
+{
+
+class ImplPixelFormat
+{
+protected:
+    const sal_uInt8* mpData;
+public:
+    static ImplPixelFormat* GetFormat( sal_uInt16 nBits, const BitmapPalette& rPalette );
+
+    virtual void StartLine( const sal_uInt8* pLine ) { mpData = pLine; }
+    virtual const BitmapColor& ReadPixel() = 0;
+    virtual ~ImplPixelFormat() { }
+};
+
+class ImplPixelFormat8 : public ImplPixelFormat
+{
+private:
+    const BitmapPalette& mrPalette;
+
+public:
+    explicit ImplPixelFormat8( const BitmapPalette& rPalette )
+    : mrPalette( rPalette )
+    {
+    }
+    virtual const BitmapColor& ReadPixel() override
+    {
+        assert( mrPalette.GetEntryCount() > *mpData );
+        return mrPalette[ *mpData++ ];
+    }
+};
+
+class ImplPixelFormat4 : public ImplPixelFormat
+{
+private:
+    const BitmapPalette& mrPalette;
+    sal_uInt32 mnX;
+    sal_uInt32 mnShift;
+
+public:
+    explicit ImplPixelFormat4( const BitmapPalette& rPalette )
+        : mrPalette( rPalette )
+        , mnX(0)
+        , mnShift(4)
+    {
+    }
+    virtual void StartLine( const sal_uInt8* pLine ) override
+    {
+        mpData = pLine;
+        mnX = 0;
+        mnShift = 4;
+    }
+    virtual const BitmapColor& ReadPixel() override
+    {
+        sal_uInt32 nIdx = ( mpData[mnX >> 1] >> mnShift) & 0x0f;
+        assert( mrPalette.GetEntryCount() > nIdx );
+        const BitmapColor& rColor = mrPalette[nIdx];
+        mnX++;
+        mnShift ^= 4;
+        return rColor;
+    }
+};
+
+class ImplPixelFormat1 : public ImplPixelFormat
+{
+private:
+    const BitmapPalette& mrPalette;
+    sal_uInt32 mnX;
+
+public:
+    explicit ImplPixelFormat1( const BitmapPalette& rPalette )
+        : mrPalette(rPalette)
+        , mnX(0)
+    {
+    }
+    virtual void StartLine( const sal_uInt8* pLine ) override
+    {
+        mpData = pLine;
+        mnX = 0;
+    }
+    virtual const BitmapColor& ReadPixel() override
+    {
+        const BitmapColor& rColor = mrPalette[ (mpData[mnX >> 3 ] >> ( 7 - ( mnX & 7 ) )) & 1];
+        mnX++;
+        return rColor;
+    }
+};
+
+ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalette& rPalette )
+{
+    switch( nBits )
+    {
+    case 1: return new ImplPixelFormat1( rPalette );
+    case 4: return new ImplPixelFormat4( rPalette );
+    case 8: return new ImplPixelFormat8( rPalette );
+    }
+
+    return nullptr;
+}
+
+} // namespace
+
+std::unique_ptr< sal_uInt8[] > SalBitmap::convertDataTo24Bpp( const sal_uInt8* src,
+    int width, int height, int bitCount, int bytesPerRow, const BitmapPalette& palette, bool toBgr )
+{
+    std::unique_ptr< sal_uInt8[] > data( new sal_uInt8[width * height * 3] );
+    std::unique_ptr<ImplPixelFormat> pSrcFormat(ImplPixelFormat::GetFormat(bitCount, palette));
+
+    const sal_uInt8* pSrcData = src;
+    sal_uInt8* pDstData = data.get();
+
+    sal_uInt32 nY = height;
+    while( nY-- )
+    {
+        pSrcFormat->StartLine( pSrcData );
+
+        sal_uInt32 nX = width;
+        if (toBgr)
+        {
+            while( nX-- )
+            {
+                const BitmapColor& c = pSrcFormat->ReadPixel();
+                *pDstData++ = c.GetBlue();
+                *pDstData++ = c.GetGreen();
+                *pDstData++ = c.GetRed();
+            }
+        }
+        else // RGB
+        {
+            while( nX-- )
+            {
+                const BitmapColor& c = pSrcFormat->ReadPixel();
+                *pDstData++ = c.GetRed();
+                *pDstData++ = c.GetGreen();
+                *pDstData++ = c.GetBlue();
+            }
+        }
+
+        pSrcData += bytesPerRow;
+    }
+    return data;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
