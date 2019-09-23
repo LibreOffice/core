@@ -347,7 +347,7 @@ static std::vector<sal_uInt16> lcl_RangesToVector(const sal_uInt16 * pRanges)
     {
         OSL_ENSURE(pRanges[i+1] != 0, "malformed ranges");
 
-        for (sal_uInt16 j = pRanges[i]; j < pRanges[i+1]; j++)
+        for (sal_uInt16 j = pRanges[i]; j <= pRanges[i+1]; j++)
             aResult.push_back(j);
 
         i += 2;
