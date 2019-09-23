@@ -70,7 +70,7 @@ bool SvxOpenCLTabPage::FillItemSet( SfxItemSet* )
         SolarMutexGuard aGuard;
         if (svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr,
                                       svtools::RESTART_REASON_OPENCL))
-            GetParentDialog()->EndDialog(RET_OK);
+            GetDialogController()->response(RET_OK);
     }
 
     return bModified;
