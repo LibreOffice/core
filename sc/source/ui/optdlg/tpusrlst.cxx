@@ -336,7 +336,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
     if ( (nStartCol != nEndCol) && (nStartRow != nEndRow) )
     {
-        ScColOrRowDlg aDialog(GetFrameWeld(), aStrCopyList, aStrCopyFrom);
+        ScColOrRowDlg aDialog(GetDialogFrameWeld(), aStrCopyList, aStrCopyFrom);
         nCellDir = aDialog.run();
     }
     else if ( nStartCol != nEndCol )
@@ -397,7 +397,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
         if ( bValueIgnored )
         {
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           aStrCopyErr));
             xInfoBox->run();
@@ -594,7 +594,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, weld::Button&, rBtn, void )
                           + mxLbLists->get_text( nRemovePos )
                           + aStrQueryRemove.getToken( 1, '#' );
 
-            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
                                                            VclMessageType::Question, VclButtonsType::YesNo,
                                                            aMsg));
             xQueryBox->set_default_response(RET_YES);
@@ -675,7 +675,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, weld::Button&, rBtn, void )
         }
         else
         {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
                         VclMessageType::Warning, VclButtonsType::Ok,
                         ScResId(STR_INVALID_TABREF)));
 

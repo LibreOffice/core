@@ -183,7 +183,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl, weld::Button&,
     catch (const uno::Exception& e)
     {
         TOOLS_WARN_EXCEPTION("sw", "");
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_pWizard->getDialog(),
                                                   VclMessageType::Warning, VclButtonsType::Ok, e.Message));
         xBox->run();
     }
@@ -191,7 +191,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl, weld::Button&,
 
 IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, SettingsHdl_Impl, weld::Button&, void)
 {
-    SwSelectAddressBlockDialog aDlg(GetFrameWeld(), m_pWizard->GetConfigItem());
+    SwSelectAddressBlockDialog aDlg(m_pWizard->getDialog(), m_pWizard->GetConfigItem());
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
     aDlg.SetAddressBlocks(rConfig.GetAddressBlocks(), m_xSettings->GetSelectedAddress());
     aDlg.SetSettings(rConfig.IsIncludeCountry(), rConfig.GetExcludeCountry());

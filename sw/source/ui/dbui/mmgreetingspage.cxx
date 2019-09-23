@@ -108,7 +108,7 @@ void SwGreetingsHandler::UpdatePreview()
 IMPL_LINK_NOARG(SwMailMergeGreetingsPage, AssignHdl_Impl, weld::Button&, void)
 {
     const OUString sPreview(m_xFemaleLB->get_active_text() + "\n" + m_xMaleLB->get_active_text());
-    SwAssignFieldsDialog aDlg(GetFrameWeld(), m_rConfigItem, sPreview, false);
+    SwAssignFieldsDialog aDlg(m_pWizard->getDialog(), m_rConfigItem, sPreview, false);
     if (RET_OK == aDlg.run())
     {
         UpdatePreview();

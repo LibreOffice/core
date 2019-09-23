@@ -562,7 +562,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl, weld::Button&, void)
             xMasterPasswd->removeMasterPassword();
 
             uno::Reference<task::XInteractionHandler> xTmpHandler(task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(),
-                                                                  VCLUnoHelper::GetInterface(GetParentDialog())));
+                                                                  GetDialogController()->getDialog()->GetXWindow()));
 
             if ( xMasterPasswd->changeMasterPassword(xTmpHandler) )
             {
@@ -580,7 +580,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl, weld::Button&, void)
         }
         else
         {
-            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
                                                            VclMessageType::Question, VclButtonsType::YesNo,
                                                            m_sPasswordStoringDeactivateStr));
             xQueryBox->set_default_response(RET_NO);
@@ -620,7 +620,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordHdl, weld::Button&, void)
         if ( xMasterPasswd->isPersistentStoringAllowed() )
         {
             uno::Reference<task::XInteractionHandler> xTmpHandler(task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(),
-                                                                  VCLUnoHelper::GetInterface(GetParentDialog())));
+                                                                  GetDialogController()->getDialog()->GetXWindow()));
             xMasterPasswd->changeMasterPassword(xTmpHandler);
         }
     }
@@ -636,7 +636,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl, weld::Button&, void)
             task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
         uno::Reference<task::XInteractionHandler> xTmpHandler(task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(),
-                                                              VCLUnoHelper::GetInterface(GetParentDialog())));
+                                                              GetDialogController()->getDialog()->GetXWindow()));
 
         if ( m_xMasterPasswordCB->get_active() )
         {
@@ -681,7 +681,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl, weld::Button&, void)
             task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
         uno::Reference<task::XInteractionHandler> xTmpHandler(task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(),
-                                                              VCLUnoHelper::GetInterface(GetParentDialog())));
+                                                              GetDialogController()->getDialog()->GetXWindow()));
 
         if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->authorizateWithMasterPassword(xTmpHandler) )
         {
@@ -723,7 +723,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl, weld::Button&, void)
     {
         Reference< security::XDocumentDigitalSignatures > xD(
             security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext() ) );
-        xD->setParentWindow(VCLUnoHelper::GetInterface(GetParentDialog()));
+        xD->setParentWindow(GetDialogController()->getDialog()->GetXWindow());
         xD->manageTrustedSources();
     }
     catch (const Exception&)
@@ -945,7 +945,7 @@ IMPL_LINK_NOARG(SvxEMailTabPage, FileDialogHdl_Impl, weld::Button&, void)
 {
     if (!pImpl->bROProgram)
     {
-        FileDialogHelper aHelper(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, GetFrameWeld());
+        FileDialogHelper aHelper(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, GetDialogFrameWeld());
         OUString sPath = m_xMailerURLED->get_text();
         if ( sPath.isEmpty() )
             sPath = "/usr/bin";
