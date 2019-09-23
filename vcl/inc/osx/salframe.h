@@ -200,6 +200,10 @@ private: // methods
 
     void initWindowAndView();
 
+    void doShowFullScreen( bool bFullScreen, sal_Int32 nDisplay );
+
+    void doResetClipRegion();
+
 private: // data
     static AquaSalFrame*       s_pCaptureFrame;
 
