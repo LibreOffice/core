@@ -523,6 +523,7 @@ PDFExtOutDevData::PDFExtOutDevData( const OutputDevice& rOutDev ) :
     mbExportFormFields      ( false ),
     mbExportBookmarks       ( false ),
     mbExportHiddenSlides    ( false ),
+    mbSinglePageSheets      ( false ),
     mbExportNDests          ( false ),
     mnPage                  ( -1 ),
     mnCompressionQuality    ( 90 ),
@@ -589,6 +590,10 @@ void PDFExtOutDevData::SetIsExportBookmarks( const bool bExportBookmarks )
 void PDFExtOutDevData::SetIsExportHiddenSlides( const bool bExportHiddenSlides )
 {
     mbExportHiddenSlides = bExportHiddenSlides;
+}
+void PDFExtOutDevData::SetIsSinglePageSheets( const bool bSinglePageSheets )
+{
+    mbSinglePageSheets = bSinglePageSheets;
 }
 void PDFExtOutDevData::SetIsExportNamedDestinations( const bool bExportNDests )
 {

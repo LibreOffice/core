@@ -4970,6 +4970,13 @@
             </info>
             <value>false</value>
           </prop>
+          <prop oor:name="SinglePageSheets" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Specifies if each sheet is exported to PDF as a single page.
+              (Available in Calc documents only).</desc>
+            </info>
+            <value>false</value>
+          </prop>
           <prop oor:name="ExportFormFields" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies whether form fields are exported as widgets or

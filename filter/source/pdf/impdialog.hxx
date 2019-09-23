@@ -89,6 +89,7 @@ class ImpPDFTabDialog final : public SfxTabDialogController
     bool                        mbAllowDuplicateFieldNames;
     bool                        mbExportBookmarks;
     bool                        mbExportHiddenSlides;
+    bool                        mbSinglePageSheets;
     sal_Int32                   mnOpenBookmarkLevels;
 
     bool                        mbHideViewerToolbar;
@@ -192,6 +193,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> mxCbAllowDuplicateFieldNames;
     std::unique_ptr<weld::CheckButton> mxCbExportBookmarks;
     std::unique_ptr<weld::CheckButton> mxCbExportHiddenSlides;
+    std::unique_ptr<weld::CheckButton> mxCbSinglePageSheets;
     std::unique_ptr<weld::CheckButton> mxCbExportNotes;
     std::unique_ptr<weld::CheckButton> mxCbViewPDF;
     std::unique_ptr<weld::CheckButton> mxCbUseReferenceXObject;

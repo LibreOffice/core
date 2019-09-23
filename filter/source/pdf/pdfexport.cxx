@@ -105,6 +105,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mbUseTransitionEffects      ( true ),
     mbExportBookmarks           ( true ),
     mbExportHiddenSlides        ( false ),
+    mbSinglePageSheets          ( false ),
     mnOpenBookmarkLevels        ( -1 ),
     mbUseLosslessCompression    ( false ),
     mbReduceImageResolution     ( true ),
@@ -566,6 +567,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rFilterData[ nData ].Value >>= mbExportBookmarks;
                 else if ( rFilterData[ nData ].Name == "ExportHiddenSlides" )
                     rFilterData[ nData ].Value >>= mbExportHiddenSlides;
+                else if ( rFilterData[ nData ].Name == "SinglePageSheets" )
+                    rFilterData[ nData ].Value >>= mbSinglePageSheets;
                 else if ( rFilterData[ nData ].Name == "OpenBookmarkLevels" )
                     rFilterData[ nData ].Value >>= mnOpenBookmarkLevels;
                 else if ( rFilterData[ nData ].Name == "SignPDF" )
@@ -851,6 +854,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 pPDFExtOutDevData->SetIsExportFormFields( mbExportFormFields );
                 pPDFExtOutDevData->SetIsExportBookmarks( mbExportBookmarks );
                 pPDFExtOutDevData->SetIsExportHiddenSlides( mbExportHiddenSlides );
+                pPDFExtOutDevData->SetIsSinglePageSheets( mbSinglePageSheets );
                 pPDFExtOutDevData->SetIsLosslessCompression( mbUseLosslessCompression );
                 pPDFExtOutDevData->SetCompressionQuality( mnQuality );
                 pPDFExtOutDevData->SetIsReduceImageResolution( mbReduceImageResolution );
