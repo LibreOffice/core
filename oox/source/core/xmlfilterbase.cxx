@@ -915,7 +915,7 @@ bool XmlFilterBase::implFinalizeExport( MediaDescriptor& rMediaDescriptor )
 
         Reference< XStream> xDocumentStream (FilterBase::implGetOutputStream(rMediaDescriptor));
         oox::ole::OleStorage aOleStorage( getComponentContext(), xDocumentStream, true );
-        DocumentEncryption encryptor(getMainDocumentStream(), aOleStorage, aMediaEncData);
+        DocumentEncryption encryptor( getComponentContext(), getMainDocumentStream(), aOleStorage, aMediaEncData );
         bRet = encryptor.encrypt();
         if (bRet)
             aOleStorage.commit();

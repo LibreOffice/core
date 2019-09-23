@@ -23,14 +23,61 @@
 #include <oox/helper/binaryoutputstream.hxx>
 #include <oox/ole/olestorage.hxx>
 
+namespace {
+
+void lcl_getListOfStreams(oox::StorageBase* pStorage, std::vector<OUString>& rElementNames)
+{
+    std::vector< OUString > oElementNames;
+    pStorage->getElementNames(oElementNames);
+    for (const auto & sName : oElementNames)
+    {
+        oox::StorageRef rSubStorage = pStorage->openSubStorage(sName, false);
+        if (rSubStorage && rSubStorage->isStorage())
+        {
+            lcl_getListOfStreams(rSubStorage.get(), rElementNames);
+        }
+        else
+        {
+            if (pStorage->isRootStorage())
+                rElementNames.push_back(sName);
+            else
+                rElementNames.push_back(pStorage->getPath() + "/" + sName);
+        }
+    }
+}
+
+}
+
 namespace oox {
 namespace core {
 
 using namespace css;
 
-DocumentDecryption::DocumentDecryption(oox::ole::OleStorage& rOleStorage) :
+DocumentDecryption::DocumentDecryption(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    oox::ole::OleStorage& rOleStorage) :
+    mxContext(rxContext),
     mrOleStorage(rOleStorage)
-{}
+{
+    // Get OLE streams into sequences for later use in CryptoEngine
+    std::vector< OUString > aStreamNames;
+    lcl_getListOfStreams(&mrOleStorage, aStreamNames);
+
+    comphelper::SequenceAsHashMap aStreamsData;
+    for (const auto & sStreamName : aStreamNames)
+    {
+        uno::Reference<io::XInputStream> xStream = mrOleStorage.openInputStream(sStreamName);
+        assert(xStream.is());
+        BinaryXInputStream aBinaryInputStream(xStream, true);
+
+        css::uno::Sequence< sal_Int8 > oData;
+        sal_Int32 nStreamSize = aBinaryInputStream.size();
+        sal_Int32 nReadBytes = aBinaryInputStream.readData(oData, nStreamSize);
+
+        assert(nStreamSize == nReadBytes);
+        aStreamsData[sStreamName] <<= oData;
+    }
+    maStreamsSequence = aStreamsData.getAsConstNamedValueList();
+}
 
 bool DocumentDecryption::generateEncryptionKey(const OUString& rPassword)
 {
@@ -51,11 +98,11 @@ void DocumentDecryption::readStrongEncryptionInfo()
     case msfilter::VERSION_INFO_2007_FORMAT:
     case msfilter::VERSION_INFO_2007_FORMAT_SP2:
         msEngineName = "Standard"; // Set encryption info format
-        mEngine.reset(new Standard2007Engine);
+        mEngine.reset(new Standard2007Engine(mxContext));
         break;
     case msfilter::VERSION_INFO_AGILE:
         msEngineName = "Agile"; // Set encryption info format
-        mEngine.reset(new AgileEngine);
+        mEngine.reset(new AgileEngine(mxContext));
         break;
     default:
         break;
@@ -102,7 +149,7 @@ bool DocumentDecryption::readEncryptionInfo()
         if (sDataSpaceName == "DRMEncryptedDataSpace")
         {
             msEngineName = "IRM"; // Set encryption info format
-            mEngine.reset(new IRMEngine);
+            mEngine.reset(new IRMEngine(mxContext));
         }
         else if (sDataSpaceName == "\011DRMDataSpace") // 0x09DRMDataSpace
         {
@@ -128,7 +175,7 @@ bool DocumentDecryption::readEncryptionInfo()
     if (!mEngine)
         return false;
 
-    return mEngine->readEncryptionInfo(mrOleStorage);
+    return mEngine->readEncryptionInfo(maStreamsSequence);
 }
 
 uno::Sequence<beans::NamedValue> DocumentDecryption::createEncryptionData(const OUString& rPassword)

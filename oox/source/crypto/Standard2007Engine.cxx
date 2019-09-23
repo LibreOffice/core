@@ -11,6 +11,7 @@
 #include <oox/crypto/Standard2007Engine.hxx>
 
 #include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/io/SequenceInputStream.hpp>
 #include <oox/crypto/CryptTools.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/binaryoutputstream.hxx>
@@ -43,6 +44,12 @@ static const OUString lclCspName = "Microsoft Enhanced RSA and AES Cryptographic
 constexpr const sal_uInt32 AES128Size = 16;
 
 } // end anonymous namespace
+
+Standard2007Engine::Standard2007Engine(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+ : mxContext(rxContext)
+{
+
+}
 
 bool Standard2007Engine::generateVerifier()
 {
@@ -289,9 +296,24 @@ void Standard2007Engine::encrypt(css::uno::Reference<css::io::XInputStream> &  r
     }
 }
 
-bool Standard2007Engine::readEncryptionInfo(oox::ole::OleStorage& rOleStorage)
+css::uno::Reference<css::io::XInputStream> Standard2007Engine::getStream(css::uno::Sequence<css::beans::NamedValue> & rStreams, const OUString sStreamName)
 {
-    Reference<css::io::XInputStream> rxInputStream = rOleStorage.openInputStream("EncryptionInfo");
+    for (const auto & aStream : rStreams)
+    {
+        if (aStream.Name == sStreamName)
+        {
+            css::uno::Sequence<sal_Int8> aSeq;
+            aStream.Value >>= aSeq;
+            Reference<XInputStream> aStream(css::io::SequenceInputStream::createStreamFromSequence(mxContext, aSeq), UNO_QUERY_THROW);
+            return aStream;
+        }
+    }
+    return nullptr;
+}
+
+bool Standard2007Engine::readEncryptionInfo(css::uno::Sequence<css::beans::NamedValue> aStreams)
+{
+    Reference<css::io::XInputStream> rxInputStream = getStream(aStreams, "EncryptionInfo");
     BinaryXInputStream aBinaryStream(rxInputStream, false);
     aBinaryStream.readuInt32();    // Version
 

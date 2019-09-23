@@ -30,9 +30,6 @@ namespace core {
 
 class CryptoEngine
 {
-protected:
-    std::vector<sal_uInt8> mKey;
-
 public:
     CryptoEngine()
     {}
@@ -41,7 +38,7 @@ public:
     {}
 
     // Decryption
-    virtual bool readEncryptionInfo(oox::ole::OleStorage& rOleStorage) = 0;
+    virtual bool readEncryptionInfo(css::uno::Sequence<css::beans::NamedValue> aStreams) = 0;
 
     virtual bool generateEncryptionKey(const OUString& rPassword) = 0;
 
