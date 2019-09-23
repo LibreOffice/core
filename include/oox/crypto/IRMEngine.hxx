@@ -30,6 +30,7 @@ namespace core
 struct OOX_DLLPUBLIC IRMEncryptionInfo
 {
     OString license;
+    bool bCanRead;
 };
 
 class OOX_DLLPUBLIC IRMEngine : public CryptoEngine
@@ -39,7 +40,7 @@ class OOX_DLLPUBLIC IRMEngine : public CryptoEngine
 public:
     IRMEngine();
 
-    bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream>& rxInputStream) override;
+    bool readEncryptionInfo(oox::ole::OleStorage& rOleStorage) override;
 
     virtual bool generateEncryptionKey(OUString const& rPassword) override;
 

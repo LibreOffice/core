@@ -485,14 +485,19 @@ bool AgileEngine::decrypt(BinaryXInputStream& aInputStream,
     return true;
 }
 
-bool AgileEngine::readEncryptionInfo(uno::Reference<io::XInputStream> & rxInputStream)
+bool AgileEngine::readEncryptionInfo(oox::ole::OleStorage& rOleStorage)
 {
+    uno::Reference<io::XInputStream> xEncryptionInfo = rOleStorage.openInputStream("EncryptionInfo");
+
+    BinaryXInputStream aBinaryInputStream(xEncryptionInfo, true);
+    aBinaryInputStream.readuInt32();    // Version
+
     // Check reserved value
     std::vector<sal_uInt8> aExpectedReservedBytes(sizeof(sal_uInt32));
     ByteOrderConverter::writeLittleEndian(aExpectedReservedBytes.data(), msfilter::AGILE_ENCRYPTION_RESERVED);
 
     uno::Sequence<sal_Int8> aReadReservedBytes(sizeof(sal_uInt32));
-    rxInputStream->readBytes(aReadReservedBytes, aReadReservedBytes.getLength());
+    xEncryptionInfo->readBytes(aReadReservedBytes, aReadReservedBytes.getLength());
 
     if (!std::equal(aReadReservedBytes.begin(), aReadReservedBytes.end(), aExpectedReservedBytes.begin()))
         return false;
@@ -512,7 +517,7 @@ bool AgileEngine::readEncryptionInfo(uno::Reference<io::XInputStream> & rxInputS
     xParser->setTokenHandler(xFastTokenHandler);
 
     InputSource aInputSource;
-    aInputSource.aInputStream = rxInputStream;
+    aInputSource.aInputStream = xEncryptionInfo;
     xParser->parseStream(aInputSource);
 
     // CHECK info data

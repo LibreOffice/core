@@ -39,8 +39,7 @@ private:
     std::unique_ptr<CryptoEngine>   mEngine;
     OUString                        msEngineName;
 
-    bool readStrongEncryptionInfo();
-    bool readIRMEncryptionInfo();
+    void readStrongEncryptionInfo();
 
 public:
     DocumentDecryption(oox::ole::OleStorage& rOleStorage);

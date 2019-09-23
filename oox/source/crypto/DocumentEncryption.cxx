@@ -45,9 +45,13 @@ DocumentEncryption::DocumentEncryption(Reference<XStream> const & xDocumentStrea
             {
                 mEngine.reset(new IRMEngine);
             }
-            else
+            else if (sCryptoType == "Standard" || sCryptoType == "Agile")
             {
                 mEngine.reset(new Standard2007Engine);
+            }
+            else
+            {
+                SAL_WARN("oox", "Requested encryption method \"" << sCryptoType << "\" is not supported");
             }
         }
     }
@@ -55,6 +59,9 @@ DocumentEncryption::DocumentEncryption(Reference<XStream> const & xDocumentStrea
 
 bool DocumentEncryption::encrypt()
 {
+    if (!mEngine)
+        return false;
+
     Reference<XInputStream> xInputStream (mxDocumentStream->getInputStream(), UNO_SET_THROW);
     Reference<XSeekable> xSeekable(xInputStream, UNO_QUERY);
 
