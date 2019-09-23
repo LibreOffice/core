@@ -349,7 +349,7 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
                     shift
                     ;;
                 --attach)
-                    ATTACH="${ATTACH:-}${ATTACH:+ }$2"
+                    ATTACH=${ATTACH:-}${ATTACH:+,}$(echo "file://$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
