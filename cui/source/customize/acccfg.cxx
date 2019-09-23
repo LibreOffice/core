@@ -1169,8 +1169,6 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl, weld::Button&, void)
 
 IMPL_LINK(SfxAcceleratorConfigPage, SelectHdl, weld::TreeView&, rListBox, void)
 {
-    // disable help
-    Help::ShowBalloon( this, Point(), ::tools::Rectangle(), OUString() );
     if (&rListBox == m_xEntriesBox.get())
     {
         TAccInfo* pEntry = reinterpret_cast<TAccInfo*>(m_xEntriesBox->get_selected_id().toInt64());
