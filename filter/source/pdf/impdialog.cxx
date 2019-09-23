@@ -1220,7 +1220,7 @@ void ImpPDFTabSecurityPage::enablePermissionControls()
     }
     else
     {
-        if (mbHaveUserPassword && IsEnabled())
+        if (mbHaveUserPassword && m_xContainer->get_sensitive())
         {
             mxUserPwdSet->show();
             mxUserPwdUnset->hide();
@@ -1234,7 +1234,7 @@ void ImpPDFTabSecurityPage::enablePermissionControls()
         }
     }
 
-    bool bLocalEnable = mbHaveOwnerPassword && IsEnabled();
+    bool bLocalEnable = mbHaveOwnerPassword && m_xContainer->get_sensitive();
     if (bIsPDFASel)
     {
         mxOwnerPwdPdfa->show();
@@ -1264,16 +1264,10 @@ void ImpPDFTabSecurityPage::enablePermissionControls()
 
 // This tab page is under control of the PDF/A-1a checkbox:
 // TODO: implement a method to do it.
-void    ImpPDFTabSecurityPage::ImplPDFASecurityControl( bool bEnableSecurity )
+void ImpPDFTabSecurityPage::ImplPDFASecurityControl( bool bEnableSecurity )
 {
-    if( bEnableSecurity )
-    {
-        Enable();
+    m_xContainer->set_sensitive(bEnableSecurity);
     // after enable, check the status of control as if the dialog was initialized
-    }
-    else
-        Enable( false );
-
     enablePermissionControls();
 }
 
