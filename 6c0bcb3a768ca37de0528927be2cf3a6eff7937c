@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_6787add9",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2019-09-23T09:26:10Z",
+      "side": 1,
+      "message": "Give me a hint how doit better",
+      "parentUuid": "7f7f9b97_715e8fe7",
+      "revId": "6c0bcb3a768ca37de0528927be2cf3a6eff7937c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_11739b82",
         "filename": "configure.ac",
         "patchSetId": 2
