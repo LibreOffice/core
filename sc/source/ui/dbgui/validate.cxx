@@ -354,7 +354,9 @@ ScTPValidationValue::ScTPValidationValue(TabPageParent pParent, const SfxItemSet
     , m_pBtnRefParent(m_xRefGrid.get())
 {
     m_xEdMin->SetReferences(nullptr, m_xFtMin.get());
-    Size aSize(LogicToPixel(Size(174, 105), MapMode(MapUnit::MapAppFont)));
+
+    Size aSize(m_xEdList->get_approximate_digit_width() * 40,
+               m_xEdList->get_height_rows(25));
     m_xEdList->set_size_request(aSize.Width(), aSize.Height());
     m_xEdMax->SetReferences(nullptr, m_xFtMax.get());
 
