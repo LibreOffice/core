@@ -1762,16 +1762,16 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         }
 
         MultiSelection aPage;
-        if ( nContent == 2 || nContent == 3 ) // even pages or odd pages
-        {
-            aPage.SetTotalRange( Range(0,RANGE_MAX) );
-            aPage.Select( maValidPages.at( nRenderer ) );
-        }
+        aPage.SetTotalRange( Range(0,RANGE_MAX) );
+
+        bool bOddOrEven = nContent == 2 || nContent == 3; // even pages or odd pages
+        // tdf#127682 when odd/even allow nRenderer of 0 even when maValidPages is empty
+        // to allow PrinterController::abortJob to spool an empty page as part of
+        // its abort procedure
+        if (bOddOrEven && !maValidPages.empty())
+            aPage.Select( maValidPages.at(nRenderer) );
         else
-        {
-            aPage.SetTotalRange( Range(0,RANGE_MAX) );
             aPage.Select( nRenderer+1 );
-        }
 
         long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
         long nTabStart = pPrintFuncCache->GetTabStart( nTab );
@@ -1946,16 +1946,16 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     }
 
     MultiSelection aPage;
-    if ( nContent == 2 || nContent == 3 ) // even pages or odd pages
-    {
-        aPage.SetTotalRange( Range(0,RANGE_MAX) );
+    aPage.SetTotalRange( Range(0,RANGE_MAX) );
+
+    bool bOddOrEven = nContent == 2 || nContent == 3; // even pages or odd pages
+    // tdf#127682 when odd/even allow nRenderer of 0 even when maValidPages is empty
+    // to allow PrinterController::abortJob to spool an empty page as part of
+    // its abort procedure
+    if (bOddOrEven && !maValidPages.empty())
         aPage.Select( maValidPages.at( nRenderer ) );
-    }
     else
-    {
-        aPage.SetTotalRange( Range(0,RANGE_MAX) );
         aPage.Select( nRenderer+1 );
-    }
 
     long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
     long nTabStart = pPrintFuncCache->GetTabStart( nTab );
