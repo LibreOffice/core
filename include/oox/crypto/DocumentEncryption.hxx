@@ -16,6 +16,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <oox/crypto/CryptoEngine.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -34,9 +35,10 @@ private:
     oox::ole::OleStorage& mrOleStorage;
     std::unique_ptr<CryptoEngine>   mEngine;
     css::uno::Sequence< css::beans::NamedValue >& mMediaEncData;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
 
 public:
-    DocumentEncryption(
+    DocumentEncryption(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         css::uno::Reference< css::io::XStream > const & xDocumentStream,
         oox::ole::OleStorage& rOleStorage,
         css::uno::Sequence< css::beans::NamedValue >& rMediaEncData);
