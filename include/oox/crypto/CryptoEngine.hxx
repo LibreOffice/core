@@ -41,7 +41,7 @@ public:
     {}
 
     // Decryption
-    virtual bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) = 0;
+    virtual bool readEncryptionInfo(oox::ole::OleStorage& rOleStorage) = 0;
 
     virtual bool generateEncryptionKey(const OUString& rPassword) = 0;
 
