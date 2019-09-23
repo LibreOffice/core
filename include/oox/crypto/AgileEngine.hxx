@@ -77,8 +77,12 @@ enum class AgileEncryptionPreset
 class OOX_DLLPUBLIC AgileEngine final : public CryptoEngine
 {
 private:
+    std::vector<sal_uInt8> mKey;
     AgileEncryptionInfo mInfo;
     AgileEncryptionPreset meEncryptionPreset;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
+
+    css::uno::Reference<css::io::XInputStream> getStream(css::uno::Sequence<css::beans::NamedValue> & rStreams, const OUString sStreamName);
 
     void calculateHashFinal(const OUString& rPassword, std::vector<sal_uInt8>& aHashFinal);
 
@@ -123,12 +127,12 @@ private:
     bool setupEncryptionKey(OUString const & rPassword);
 
 public:
-    AgileEngine();
+    AgileEngine(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
     // Decryption
 
     bool generateEncryptionKey(OUString const & rPassword) override;
-    bool readEncryptionInfo(oox::ole::OleStorage& rOleStorage) override;
+    bool readEncryptionInfo(css::uno::Sequence<css::beans::NamedValue> aStreams) override;
     bool decrypt(BinaryXInputStream& aInputStream,
                  BinaryXOutputStream& aOutputStream) override;
 

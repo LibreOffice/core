@@ -29,6 +29,7 @@
 
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/io/SequenceInputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
@@ -220,8 +221,9 @@ CryptoHashType cryptoHashTypeFromString(OUString const & sAlgorithm)
 
 } // namespace
 
-AgileEngine::AgileEngine()
-    : meEncryptionPreset(AgileEncryptionPreset::AES_256_SHA512)
+AgileEngine::AgileEngine(const Reference< XComponentContext >& rxContext) :
+    meEncryptionPreset(AgileEncryptionPreset::AES_256_SHA512),
+    mxContext(rxContext)
 {}
 
 Crypto::CryptoType AgileEngine::cryptoType(const AgileEncryptionInfo& rInfo)
@@ -485,9 +487,24 @@ bool AgileEngine::decrypt(BinaryXInputStream& aInputStream,
     return true;
 }
 
-bool AgileEngine::readEncryptionInfo(oox::ole::OleStorage& rOleStorage)
+uno::Reference<io::XInputStream> AgileEngine::getStream(Sequence<NamedValue> & rStreams, const OUString sStreamName)
 {
-    uno::Reference<io::XInputStream> xEncryptionInfo = rOleStorage.openInputStream("EncryptionInfo");
+    for (const auto & aStream : rStreams)
+    {
+        if (aStream.Name == sStreamName)
+        {
+            css::uno::Sequence<sal_Int8> aSeq;
+            aStream.Value >>= aSeq;
+            Reference<XInputStream> aStream(io::SequenceInputStream::createStreamFromSequence(mxContext, aSeq), UNO_QUERY_THROW);
+            return aStream;
+        }
+    }
+    return nullptr;
+}
+
+bool AgileEngine::readEncryptionInfo(Sequence<NamedValue> aStreams)
+{
+    uno::Reference<io::XInputStream> xEncryptionInfo = getStream(aStreams, "EncryptionInfo");
 
     BinaryXInputStream aBinaryInputStream(xEncryptionInfo, true);
     aBinaryInputStream.readuInt32();    // Version
