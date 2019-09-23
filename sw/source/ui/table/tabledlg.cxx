@@ -590,7 +590,7 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
     OUString sTableName = m_xNameED->get_text();
     if(sTableName.indexOf(' ') != -1)
     {
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       SwResId(STR_WRONG_TABLENAME)));
         xInfoBox->run();

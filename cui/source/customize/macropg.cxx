@@ -451,7 +451,7 @@ void SvxMacroTabPage_::GenericHandler_Impl(SvxMacroTabPage_* pThis, const weld::
                 )
             )
     {
-        AssignComponentDialog aAssignDlg(pThis->GetFrameWeld(), sEventURL);
+        AssignComponentDialog aAssignDlg(pThis->GetDialogFrameWeld(), sEventURL);
 
         short ret = aAssignDlg.run();
         if( ret )
