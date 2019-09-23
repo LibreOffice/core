@@ -35,9 +35,9 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <svl/itemprop.hxx>
+#include <svl/listener.hxx>
 
 #include <unocrsr.hxx>
-#include <calbck.hxx>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::text { class XTextField; }
@@ -87,7 +87,7 @@ class SwXTextPortion : public cppu::WeakImplHelper
     css::lang::XUnoTunnel,
     css::lang::XServiceInfo
 >,
-    public SwClient
+    public SvtListener
 {
 private:
 
@@ -113,7 +113,6 @@ private:
     std::unique_ptr< css::uno::Any > m_pRubyPosition;
     sw::UnoCursorPointer m_pUnoCursor;
 
-    sw::WriterMultiListener m_aDepends;
     SwFrameFormat*                  m_pFrameFormat;
     const SwTextPortionType     m_ePortionType;
 
@@ -145,8 +144,7 @@ protected:
 
     virtual ~SwXTextPortion() override;
 
-    //SwClient
-    virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
+    virtual void Notify(const SfxHint& rHint) override;
 
 public:
     SwXTextPortion(const SwUnoCursor* pPortionCursor, css::uno::Reference< css::text::XText > const& rParent, SwTextPortionType   eType   );
