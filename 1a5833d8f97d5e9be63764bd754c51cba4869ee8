@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_e7c5fd5c",
+        "filename": "vcl/unx/gtk3/gtk3salnativewidgets-gtk.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2431,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-09-23T08:36:46Z",
+      "side": 1,
+      "message": "Was GTK_STATE_FLAG_ACTIVE always wrong here and it should always have been GTK_STATE_FLAG_CHECKED ?\n\nOr is this one of those things that seemed to change in 3.20.0 like the ACTIVE_TAB thing ?",
+      "revId": "1a5833d8f97d5e9be63764bd754c51cba4869ee8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
