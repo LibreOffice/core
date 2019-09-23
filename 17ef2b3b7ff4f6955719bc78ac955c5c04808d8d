@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "7f7f9b97_42137f67",
+        "filename": "include/svx/sdtaitm.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-09-23T14:26:03Z",
+      "side": 1,
+      "message": "is this used somewhere?",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 98
+      },
+      "revId": "17ef2b3b7ff4f6955719bc78ac955c5c04808d8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_6218fb80",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 4490,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-09-23T14:26:03Z",
+      "side": 1,
+      "message": "add this file to the comment, too:\n\ngit add sc/qa/extras/ooxmlexport/data/tdf117287_comment.xlsx\ngit commit --amend",
+      "range": {
+        "startLine": 4490,
+        "startChar": 36,
+        "endLine": 4490,
+        "endChar": 53
+      },
+      "revId": "17ef2b3b7ff4f6955719bc78ac955c5c04808d8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_e22acb8e",
         "filename": "sc/source/filter/oox/commentsbuffer.cxx",
         "patchSetId": 14
@@ -18,6 +64,29 @@
         "startChar": 1,
         "endLine": 58,
         "endChar": 42
+      },
+      "revId": "17ef2b3b7ff4f6955719bc78ac955c5c04808d8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_020d873d",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-09-23T14:26:03Z",
+      "side": 1,
+      "message": "if I right understand, we have to handle 1) the previous import, 2) and the recent settings? But if the import is correct, it\u0027s enough to handle only the EE_PARA_JUST, isn\u0027t it?",
+      "range": {
+        "startLine": 628,
+        "startChar": 0,
+        "endLine": 648,
+        "endChar": 21
       },
       "revId": "17ef2b3b7ff4f6955719bc78ac955c5c04808d8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
