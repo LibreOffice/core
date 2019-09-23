@@ -2020,7 +2020,7 @@ namespace svgio
                     }
                 }
             }
-            else if (!mpSvgGradientNodeFill && !mpSvgPatternNodeFill)
+            else if (maNodeFillURL.isEmpty())
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
@@ -2065,7 +2065,7 @@ namespace svgio
                     return &maStroke.getBColor();
                 }
             }
-            else if (!mpSvgGradientNodeStroke && !mpSvgPatternNodeStroke)
+            else if (maNodeStrokeURL.isEmpty())
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
