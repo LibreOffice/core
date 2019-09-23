@@ -228,7 +228,7 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap&
         return;
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSalBitmap));
     mSurface->getCanvas()->drawBitmapRect(
-        static_cast<const SkiaSalBitmap&>(rSalBitmap).mBitmap,
+        static_cast<const SkiaSalBitmap&>(rSalBitmap).GetSkBitmap(),
         SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
         SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                          rPosAry.mnDestHeight),
@@ -314,11 +314,9 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
     SkCanvas canvas(tmpBitmap);
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kDst);
-    canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rSourceBitmap).mBitmap, 0, 0,
-                      &paint); // TODO bpp < 8?
+    canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rSourceBitmap).GetSkBitmap(), 0, 0, &paint);
     paint.setBlendMode(SkBlendMode::kSrcIn);
-    canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rAlphaBitmap).mBitmap, 0, 0,
-                      &paint); // TODO bpp < 8?
+    canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rAlphaBitmap).GetSkBitmap(), 0, 0, &paint);
     mSurface->getCanvas()->drawBitmapRect(
         tmpBitmap,
         SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
