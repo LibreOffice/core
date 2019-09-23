@@ -705,7 +705,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl, weld::Button&, void)
     {
         SolarMutexGuard aGuard;
         if (svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_ADDING_PATH))
-            GetParentDialog()->EndDialog(RET_OK);
+            GetDialogController()->response(RET_OK);
     }
 }
 

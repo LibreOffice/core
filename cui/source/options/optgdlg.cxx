@@ -912,7 +912,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         if( svtools::executeRestartDialog(
                 comphelper::getProcessComponentContext(), nullptr,
                 svtools::RESTART_REASON_OPENGL))
-            GetParentDialog()->EndDialog(RET_OK);
+            GetDialogController()->response(RET_OK);
     }
 
     return bModified;
