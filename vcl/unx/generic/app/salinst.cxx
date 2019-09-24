@@ -40,6 +40,9 @@
 #include <salwtype.hxx>
 #include <sal/macros.h>
 
+#include <config_features.h>
+#include <vcl/skia/SkiaHelper.hxx>
+
 // plugin factory function
 extern "C"
 {
@@ -219,6 +222,16 @@ void X11SalInstance::PostPrintersChanged()
 GenPspGraphics *X11SalInstance::CreatePrintGraphics()
 {
     return new GenPspGraphics();
+}
+
+std::shared_ptr<vcl::BackendCapabilities> X11SalInstance::GetBackendCapabilities()
+{
+    auto pBackendCapabilities = SalInstance::GetBackendCapabilities();
+#if HAVE_FEATURE_SKIA
+    if( SkiaHelper::isVCLSkiaEnabled())
+        pBackendCapabilities->mbSupportsBitmap32 = true;
+#endif
+    return pBackendCapabilities;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
