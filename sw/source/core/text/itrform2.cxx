@@ -2312,6 +2312,14 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     if ( m_pFrame->IsVertical() )
         m_pFrame->SwitchVerticalToHorizontal( aInter );
 
+    if (!aInter.IsEmpty() && aInter.Bottom() < nTop)
+    {
+        // Intersects with the frame area (with upper margin), but not with the print area (without
+        // upper margin). Don't reserve space for the fly portion in this case, text is allowed to
+        // folow there.
+        aInter.Height(0);
+    }
+
     if( !aInter.IsOver( aLine ) )
         return;
 

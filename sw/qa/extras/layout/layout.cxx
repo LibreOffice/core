@@ -3154,6 +3154,19 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testShapeAllowOverlap)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124600)
+{
+    createDoc("tdf124600.docx");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the last line in the body text had 2 lines, while it should have 1, as Word does (as the
+    // fly frame does not intersect with the print area of the paragraph.)
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/LineBreak", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
