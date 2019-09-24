@@ -22,6 +22,7 @@
 #include <skia/salbmp.hxx>
 
 #include <SkCanvas.h>
+#include <SkPath.h>
 
 #ifdef DBG_UTIL
 #include <fstream>
@@ -122,25 +123,45 @@ void SkiaSalGraphicsImpl::drawRect(long nX, long nY, long nWidth, long nHeight)
 
 void SkiaSalGraphicsImpl::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
 {
-    (void)nPoints;
-    (void)pPtAry;
-    abort();
+    std::vector<SkPoint> pointVector;
+    pointVector.reserve(nPoints);
+    for (sal_uInt32 i = 0; i < nPoints; ++i)
+        pointVector.emplace_back(SkPoint::Make(pPtAry[i].mnX, pPtAry[i].mnY));
+    mSurface->getCanvas()->drawPoints(SkCanvas::kLines_PointMode, nPoints, pointVector.data(),
+                                      mPaint);
 }
 
 void SkiaSalGraphicsImpl::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
 {
-    (void)nPoints;
-    (void)pPtAry;
-    abort();
+    std::vector<SkPoint> pointVector;
+    pointVector.reserve(nPoints);
+    for (sal_uInt32 i = 0; i < nPoints; ++i)
+        pointVector.emplace_back(SkPoint::Make(pPtAry[i].mnX, pPtAry[i].mnY));
+    SkPath path;
+    path.addPoly(pointVector.data(), nPoints, true);
+    mSurface->getCanvas()->drawPath(path, mPaint);
 }
 
 void SkiaSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                           PCONSTSALPOINT* pPtAry)
 {
-    (void)nPoly;
-    (void)pPoints;
-    (void)pPtAry;
-    abort();
+    if (SALCOLOR_NONE == mFillColor && SALCOLOR_NONE == mLineColor)
+        return;
+    std::vector<SkPoint> pointVector;
+    SkPath path;
+    for (sal_uInt32 poly = 0; poly < nPoly; ++poly)
+    {
+        const sal_uInt32 points = pPoints[poly];
+        if (points > 1)
+        {
+            pointVector.reserve(points);
+            const SalPoint* p = pPtAry[poly];
+            for (sal_uInt32 i = 0; i < points; ++i)
+                pointVector.emplace_back(SkPoint::Make(p->mnX, p->mnY));
+            path.addPoly(pointVector.data(), points, true);
+        }
+    }
+    mSurface->getCanvas()->drawPath(path, mPaint);
 }
 
 bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
@@ -195,16 +216,14 @@ bool SkiaSalGraphicsImpl::drawPolyPolygonBezier(sal_uInt32 nPoly, const sal_uInt
 }
 
 void SkiaSalGraphicsImpl::copyArea(long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
-                                   long nSrcHeight, bool bWindowInvalidate)
+                                   long nSrcHeight, bool /*bWindowInvalidate*/)
 {
-    (void)nDestX;
-    (void)nDestY;
-    (void)nSrcX;
-    (void)nSrcY;
-    (void)nSrcWidth;
-    (void)nSrcHeight;
-    (void)bWindowInvalidate;
-    abort();
+    if (nDestX == nSrcX && nDestY == nSrcY)
+        return;
+    sk_sp<SkImage> image
+        = mSurface->makeImageSnapshot(SkIRect::MakeXYWH(nSrcX, nSrcY, nSrcWidth, nSrcHeight));
+    // TODO makeNonTextureImage() ?
+    mSurface->getCanvas()->drawImage(image, nDestX, nDestY);
 }
 
 bool SkiaSalGraphicsImpl::blendBitmap(const SalTwoRect&, const SalBitmap& rBitmap)
@@ -249,10 +268,21 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap&
 void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
                                    Color nMaskColor)
 {
-    (void)rPosAry;
-    (void)rSalBitmap;
-    (void)nMaskColor;
-    abort();
+    assert(dynamic_cast<const SkiaSalBitmap*>(&rSalBitmap));
+    SkBitmap tmpBitmap;
+    if (!tmpBitmap.tryAllocN32Pixels(rSalBitmap.GetSize().Width(), rSalBitmap.GetSize().Height()))
+        abort();
+    SkCanvas canvas(tmpBitmap);
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc);
+    canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rSalBitmap).GetSkBitmap(), 0, 0, &paint);
+    tmpBitmap.eraseColor(toSkColor(nMaskColor));
+    mSurface->getCanvas()->drawBitmapRect(
+        tmpBitmap,
+        SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
+        SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
+                         rPosAry.mnDestHeight),
+        nullptr);
 }
 
 std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long nWidth,
