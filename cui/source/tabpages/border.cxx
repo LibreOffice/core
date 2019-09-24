@@ -31,6 +31,7 @@
 #include <sfx2/htmlmode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <svx/flagsdef.hxx>
 #include <svl/grabbagitem.hxx>
 #include <svl/intitem.hxx>
@@ -758,7 +759,8 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
             aColor = COL_BLACK;
 
         m_xLbLineColor->SelectEntry(aColor);
-        m_xLbLineStyle->SetColor(GetTextColor());
+        auto nTextColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+        m_xLbLineStyle->SetColor(nTextColor);
 
         // Select all visible lines, if they are all equal.
         if( bWidthEq && bColorEq )
