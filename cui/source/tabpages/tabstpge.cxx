@@ -195,7 +195,7 @@ bool SvxTabulatorTabPage::FillItemSet(SfxItemSet* rSet)
         for (sal_uInt16 i = 0; i < aNewTabs->Count(); ++i)
         {
             SvxTabStop aTmpStop = (*aNewTabs)[i];
-            aTmpStop.GetTabPos() = LogicToLogic(aTmpStop.GetTabPos(), MapUnit::Map100thMM, eUnit);
+            aTmpStop.GetTabPos() = OutputDevice::LogicToLogic(aTmpStop.GetTabPos(), MapUnit::Map100thMM, eUnit);
             aTmp->Insert(aTmpStop);
         }
 
@@ -237,7 +237,7 @@ void SvxTabulatorTabPage::Reset(const SfxItemSet* rSet)
             for (sal_uInt16 i = 0; i < aTmp->Count(); ++i)
             {
                 SvxTabStop aTmpStop = (*aTmp)[i];
-                aTmpStop.GetTabPos() = LogicToLogic(aTmpStop.GetTabPos(), eUnit, MapUnit::Map100thMM);
+                aTmpStop.GetTabPos() = OutputDevice::LogicToLogic(aTmpStop.GetTabPos(), eUnit, MapUnit::Map100thMM);
                 aNewTabs->Insert(aTmpStop);
             }
         }
@@ -256,7 +256,7 @@ void SvxTabulatorTabPage::Reset(const SfxItemSet* rSet)
     pItem = GetItem(*rSet, SID_ATTR_TABSTOP_DEFAULTS);
 
     if (pItem)
-        nDefDist = LogicToLogic(long(static_cast<const SfxUInt16Item*>(pItem)->GetValue()), eUnit, MapUnit::Map100thMM);
+        nDefDist = OutputDevice::LogicToLogic(long(static_cast<const SfxUInt16Item*>(pItem)->GetValue()), eUnit, MapUnit::Map100thMM);
 
     // Tab pos currently selected
     sal_uInt16 nTabPos = 0;
