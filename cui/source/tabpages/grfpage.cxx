@@ -631,7 +631,7 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
         // display original size
         const FieldUnit eMetric = GetModuleFieldUnit( GetItemSet() );
 
-        ScopedVclPtrInstance< MetricField > aFld(this, WB_HIDE);
+        ScopedVclPtrInstance< MetricField > aFld(Application::GetDefDialogParent(), WB_HIDE);
         SetFieldUnit( *aFld, eMetric );
         aFld->SetDecimalDigits(m_xWidthMF->get_digits());
         aFld->SetMax( LONG_MAX - 1 );
