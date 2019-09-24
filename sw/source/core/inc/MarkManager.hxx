@@ -83,6 +83,7 @@ namespace sw {
             virtual const_iterator_t findFirstBookmarkStartsAfter(const SwPosition& rPos) const override;
 
             // Fieldmarks
+            virtual ::sw::mark::IFieldmark* getFieldmarkAt(const SwPosition& rPos) const override;
             virtual ::sw::mark::IFieldmark* getFieldmarkFor(const SwPosition& rPos) const override;
             virtual ::sw::mark::IFieldmark* getFieldmarkBefore(const SwPosition& rPos) const override;
             virtual ::sw::mark::IFieldmark* getFieldmarkAfter(const SwPosition& rPos) const override;
