@@ -38,6 +38,8 @@
 #include <vcl/IDialogRenderable.hxx>
 #include <tools/svborder.hxx>
 #include <sal/log.hxx>
+#include <boost/property_tree/json_parser.hpp>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace css;
 using namespace css::uno;
@@ -201,6 +203,17 @@ void Deck::Resize()
         aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
         aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
         pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
+
+        try
+        {
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, DumpAsPropertyTree());
+            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aStream.str().c_str());
+        }
+        catch(boost::property_tree::json_parser::json_parser_error& rError)
+        {
+            SAL_WARN("sfx.sidebar", rError.message());
+        }
     }
 }
 
