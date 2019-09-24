@@ -143,10 +143,12 @@ ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalet
 
 } // namespace
 
-std::unique_ptr< sal_uInt8[] > SalBitmap::convertDataTo24Bpp( const sal_uInt8* src,
-    int width, int height, int bitCount, int bytesPerRow, const BitmapPalette& palette, bool toBgr )
+std::unique_ptr< sal_uInt8[] > SalBitmap::convertDataBitCount( const sal_uInt8* src,
+    int width, int height, int bitCount, int bytesPerRow, const BitmapPalette& palette, BitConvert type )
 {
-    std::unique_ptr< sal_uInt8[] > data( new sal_uInt8[width * height * 3] );
+    assert( bitCount == 1 || bitCount == 4 || bitCount == 8 );
+    static const int bpp[] = { 1, 3, 3, 4, 4 };
+    std::unique_ptr< sal_uInt8[] > data( new sal_uInt8[width * height * bpp[ (int)type ]] );
     std::unique_ptr<ImplPixelFormat> pSrcFormat(ImplPixelFormat::GetFormat(bitCount, palette));
 
     const sal_uInt8* pSrcData = src;
@@ -158,68 +160,53 @@ std::unique_ptr< sal_uInt8[] > SalBitmap::convertDataTo24Bpp( const sal_uInt8* s
         pSrcFormat->StartLine( pSrcData );
 
         sal_uInt32 nX = width;
-        if (toBgr)
+        switch( type )
         {
-            while( nX-- )
-            {
-                const BitmapColor& c = pSrcFormat->ReadPixel();
-                *pDstData++ = c.GetBlue();
-                *pDstData++ = c.GetGreen();
-                *pDstData++ = c.GetRed();
-            }
-        }
-        else // RGB
-        {
-            while( nX-- )
-            {
-                const BitmapColor& c = pSrcFormat->ReadPixel();
-                *pDstData++ = c.GetRed();
-                *pDstData++ = c.GetGreen();
-                *pDstData++ = c.GetBlue();
-            }
-        }
-
-        pSrcData += bytesPerRow;
-    }
-    return data;
-}
-
-std::unique_ptr< sal_uInt8[] > SalBitmap::convertDataTo32Bpp( const sal_uInt8* src,
-    int width, int height, int bitCount, int bytesPerRow, const BitmapPalette& palette, bool toBgra )
-{
-    std::unique_ptr< sal_uInt8[] > data( new sal_uInt8[width * height * 4] );
-    std::unique_ptr<ImplPixelFormat> pSrcFormat(ImplPixelFormat::GetFormat(bitCount, palette));
-
-    const sal_uInt8* pSrcData = src;
-    sal_uInt8* pDstData = data.get();
-
-    sal_uInt32 nY = height;
-    while( nY-- )
-    {
-        pSrcFormat->StartLine( pSrcData );
-
-        sal_uInt32 nX = width;
-        if (toBgra)
-        {
-            while( nX-- )
-            {
-                const BitmapColor& c = pSrcFormat->ReadPixel();
-                *pDstData++ = c.GetBlue();
-                *pDstData++ = c.GetGreen();
-                *pDstData++ = c.GetRed();
-                *pDstData++ = 0xff;
-            }
-        }
-        else // RGBA
-        {
-            while( nX-- )
-            {
-                const BitmapColor& c = pSrcFormat->ReadPixel();
-                *pDstData++ = c.GetRed();
-                *pDstData++ = c.GetGreen();
-                *pDstData++ = c.GetBlue();
-                *pDstData++ = 0xff;
-            }
+            case BitConvert::A8 :
+                while( nX-- )
+                {
+                    const BitmapColor& c = pSrcFormat->ReadPixel();
+                    *pDstData++ = 0xff - c.GetBlue();
+                }
+                break;
+            case BitConvert::BGR :
+                while( nX-- )
+                {
+                    const BitmapColor& c = pSrcFormat->ReadPixel();
+                    *pDstData++ = c.GetBlue();
+                    *pDstData++ = c.GetGreen();
+                    *pDstData++ = c.GetRed();
+                }
+                break;
+            case BitConvert::RGB :
+                while( nX-- )
+                {
+                    const BitmapColor& c = pSrcFormat->ReadPixel();
+                    *pDstData++ = c.GetRed();
+                    *pDstData++ = c.GetGreen();
+                    *pDstData++ = c.GetBlue();
+                }
+                break;
+            case BitConvert::BGRA :
+                while( nX-- )
+                {
+                    const BitmapColor& c = pSrcFormat->ReadPixel();
+                    *pDstData++ = c.GetBlue();
+                    *pDstData++ = c.GetGreen();
+                    *pDstData++ = c.GetRed();
+                    *pDstData++ = 0xff;
+                }
+                break;
+            case BitConvert::RGBA :
+                while( nX-- )
+                {
+                    const BitmapColor& c = pSrcFormat->ReadPixel();
+                    *pDstData++ = c.GetRed();
+                    *pDstData++ = c.GetGreen();
+                    *pDstData++ = c.GetBlue();
+                    *pDstData++ = 0xff;
+                }
+                break;
         }
 
         pSrcData += bytesPerRow;
