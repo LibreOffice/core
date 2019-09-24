@@ -175,21 +175,19 @@ void SwFieldEditDlg::Init()
 
 SfxTabPage* SwFieldEditDlg::CreatePage(sal_uInt16 nGroup)
 {
-    TabPageParent pPageParent(get_content_area(), this);
-
     // create TabPage
     std::unique_ptr<SfxTabPage> xTabPage;
 
     switch (nGroup)
     {
         case GRP_DOC:
-            xTabPage = SwFieldDokPage::Create(pPageParent, nullptr);
+            xTabPage = SwFieldDokPage::Create(get_content_area(), this, nullptr);
             break;
         case GRP_FKT:
-            xTabPage = SwFieldFuncPage::Create(pPageParent, nullptr);
+            xTabPage = SwFieldFuncPage::Create(get_content_area(), this, nullptr);
             break;
         case GRP_REF:
-            xTabPage = SwFieldRefPage::Create(pPageParent, nullptr);
+            xTabPage = SwFieldRefPage::Create(get_content_area(), this, nullptr);
             break;
         case GRP_REG:
             {
@@ -204,17 +202,17 @@ SfxTabPage* SwFieldEditDlg::CreatePage(sal_uInt16 nGroup)
                     xDocProps->getUserDefinedProperties(),
                     uno::UNO_QUERY_THROW);
                 pSet->Put( SfxUnoAnyItem( SID_DOCINFO, uno::makeAny(xUDProps) ) );
-                xTabPage = SwFieldDokInfPage::Create(pPageParent, pSet);
+                xTabPage = SwFieldDokInfPage::Create(get_content_area(), this, pSet);
                 break;
             }
 #if HAVE_FEATURE_DBCONNECTIVITY
         case GRP_DB:
-            xTabPage = SwFieldDBPage::Create(pPageParent, nullptr);
+            xTabPage = SwFieldDBPage::Create(get_content_area(), this, nullptr);
             static_cast<SwFieldDBPage*>(xTabPage.get())->SetWrtShell(*pSh);
             break;
 #endif
         case GRP_VAR:
-            xTabPage = SwFieldVarPage::Create(pPageParent, nullptr);
+            xTabPage = SwFieldVarPage::Create(get_content_area(), this, nullptr);
             break;
 
     }

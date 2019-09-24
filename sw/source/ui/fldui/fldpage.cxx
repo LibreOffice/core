@@ -42,9 +42,9 @@
 using namespace ::com::sun::star;
 
 // note: pAttrSet may be null if the dialog is restored on startup
-SwFieldPage::SwFieldPage(TabPageParent pParent, const OUString& rUIXMLDescription,
+SwFieldPage::SwFieldPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription,
         const OString& rID, const SfxItemSet *pAttrSet)
-    : SfxTabPage(pParent, rUIXMLDescription, rID, pAttrSet)
+    : SfxTabPage(pPage, pController, rUIXMLDescription, rID, pAttrSet)
     , m_pCurField(nullptr)
     , m_pWrtShell(nullptr)
     , m_nTypeSel(-1)

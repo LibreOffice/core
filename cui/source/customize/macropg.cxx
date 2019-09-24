@@ -72,9 +72,9 @@ void SvxMacroTabPage_::EnableButtons()
     }
 }
 
-SvxMacroTabPage_::SvxMacroTabPage_(TabPageParent pParent, const OUString& rUIXMLDescription,
+SvxMacroTabPage_::SvxMacroTabPage_(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription,
     const OString& rID, const SfxItemSet& rAttrSet)
-    : SfxTabPage(pParent, rUIXMLDescription, rID, &rAttrSet)
+    : SfxTabPage(pPage, pController, rUIXMLDescription, rID, &rAttrSet)
     , bDocModified(false)
     , bAppEvents(false)
     , bInitialized(false)
@@ -582,12 +582,12 @@ std::pair< OUString, OUString  > SvxMacroTabPage_::GetPairFromAny( const Any& aA
     return std::make_pair( type, url );
 }
 
-SvxMacroTabPage::SvxMacroTabPage(TabPageParent pParent,
+SvxMacroTabPage::SvxMacroTabPage(weld::Container* pPage, weld::DialogController* pController,
     const Reference< frame::XFrame >& _rxDocumentFrame,
     const SfxItemSet& rSet,
     Reference< container::XNameReplace > const & xNameReplace,
     sal_uInt16 nSelectedIndex)
-    : SvxMacroTabPage_(pParent, "cui/ui/macroassignpage.ui", "MacroAssignPage", rSet)
+    : SvxMacroTabPage_(pPage, pController, "cui/ui/macroassignpage.ui", "MacroAssignPage", rSet)
 {
     mpImpl->xEventLB = m_xBuilder->weld_tree_view("assignments");
     mpImpl->xEventLB->set_size_request(mpImpl->xEventLB->get_approximate_digit_width() * 70,
@@ -615,8 +615,7 @@ SvxMacroAssignDlg::SvxMacroAssignDlg(weld::Window* pParent, const Reference< fra
     const Reference< container::XNameReplace >& xNameReplace, sal_uInt16 nSelectedIndex)
         : SvxMacroAssignSingleTabDialog(pParent, rSet)
 {
-    TabPageParent pPageParent(get_content_area(), this);
-    SetTabPage(std::make_unique<SvxMacroTabPage>(pPageParent, _rxDocumentFrame, rSet, xNameReplace, nSelectedIndex));
+    SetTabPage(std::make_unique<SvxMacroTabPage>(get_content_area(), this, _rxDocumentFrame, rSet, xNameReplace, nSelectedIndex));
 }
 
 IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler, weld::Button&, void)

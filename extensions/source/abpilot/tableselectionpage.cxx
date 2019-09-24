@@ -27,8 +27,8 @@
 namespace abp
 {
 
-    TableSelectionPage::TableSelectionPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent)
-        : AddressBookSourcePage(pDialog, pPageParent, "modules/sabpilot/ui/selecttablepage.ui", "SelectTablePage")
+    TableSelectionPage::TableSelectionPage(weld::Container* pPage, OAddressBookSourcePilot* pController)
+        : AddressBookSourcePage(pPage, pController, "modules/sabpilot/ui/selecttablepage.ui", "SelectTablePage")
         , m_xTableList(m_xBuilder->weld_tree_view("table"))
     {
         m_xTableList->connect_changed( LINK( this, TableSelectionPage, OnTableSelected ) );

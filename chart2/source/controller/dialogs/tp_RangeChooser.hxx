@@ -37,7 +37,7 @@ class RangeChooserTabPage final : public vcl::OWizardPage, public RangeSelection
 {
 public:
 
-    RangeChooserTabPage(TabPageParent pParent, DialogModel & rDialogModel,
+    RangeChooserTabPage(weld::Container* pPage, weld::DialogController* pController, DialogModel & rDialogModel,
                         ChartTypeTemplateProvider* pTemplateProvider,
                         bool bHideDescription = false);
     virtual ~RangeChooserTabPage() override;
@@ -77,7 +77,6 @@ private:
     ChartTypeTemplateProvider*                              m_pTemplateProvider;
 
     DialogModel &                                           m_rDialogModel;
-    weld::DialogController*                                 m_pParentController;
     TabPageNotifiable *                                     m_pTabPageNotifiable;
 
     std::unique_ptr<weld::Label> m_xFT_Caption;

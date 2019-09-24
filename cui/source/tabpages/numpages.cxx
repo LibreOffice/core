@@ -159,8 +159,8 @@ static const vcl::Font& lcl_GetDefaultBulletFont()
     return aDefBulletFont;
 }
 
-SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/picknumberingpage.ui", "PickNumberingPage", &rSet)
+SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/picknumberingpage.ui", "PickNumberingPage", &rSet)
     , nActNumLvl(SAL_MAX_UINT16)
     , bModified(false)
     , bPreset(false)
@@ -207,10 +207,10 @@ SvxSingleNumPickTabPage::~SvxSingleNumPickTabPage()
     m_xExamplesVS.reset();
 }
 
-std::unique_ptr<SfxTabPage> SvxSingleNumPickTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxSingleNumPickTabPage::Create(weld::Container* pPage, weld::DialogController* pController,
                                                    const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SvxSingleNumPickTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxSingleNumPickTabPage>(pPage, pController, *rAttrSet);
 }
 
 bool  SvxSingleNumPickTabPage::FillItemSet( SfxItemSet* rSet )
@@ -338,8 +338,8 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, DoubleClickHdl_Impl, SvtValueSet*, void
     rOk.clicked();
 }
 
-SvxBulletPickTabPage::SvxBulletPickTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/pickbulletpage.ui", "PickBulletPage", &rSet)
+SvxBulletPickTabPage::SvxBulletPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/pickbulletpage.ui", "PickBulletPage", &rSet)
     , nActNumLvl(SAL_MAX_UINT16)
     , bModified(false)
     , bPreset(false)
@@ -359,10 +359,10 @@ SvxBulletPickTabPage::~SvxBulletPickTabPage()
     m_xExamplesVS.reset();
 }
 
-std::unique_ptr<SfxTabPage> SvxBulletPickTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxBulletPickTabPage::Create(weld::Container* pPage, weld::DialogController* pController,
                                                 const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SvxBulletPickTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxBulletPickTabPage>(pPage, pController, *rAttrSet);
 }
 
 bool  SvxBulletPickTabPage::FillItemSet( SfxItemSet* rSet )
@@ -487,8 +487,8 @@ void SvxBulletPickTabPage::PageCreated(const SfxAllItemSet& aSet)
         sBulletCharFormatName = pBulletCharFmt->GetValue();
 }
 
-SvxNumPickTabPage::SvxNumPickTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/pickoutlinepage.ui", "PickOutlinePage", &rSet)
+SvxNumPickTabPage::SvxNumPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/pickoutlinepage.ui", "PickOutlinePage", &rSet)
     , nActNumLvl(SAL_MAX_UINT16)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , bModified(false)
@@ -542,10 +542,10 @@ SvxNumPickTabPage::~SvxNumPickTabPage()
     m_xExamplesVS.reset();
 }
 
-std::unique_ptr<SfxTabPage> SvxNumPickTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxNumPickTabPage::Create(weld::Container* pPage, weld::DialogController* pController,
                                              const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SvxNumPickTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxNumPickTabPage>(pPage, pController, *rAttrSet);
 }
 
 bool  SvxNumPickTabPage::FillItemSet( SfxItemSet* rSet )
@@ -726,8 +726,8 @@ void SvxNumPickTabPage::PageCreated(const SfxAllItemSet& aSet)
         SetCharFormatNames( pNumCharFmt->GetValue(),pBulletCharFmt->GetValue());
 }
 
-SvxBitmapPickTabPage::SvxBitmapPickTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/pickgraphicpage.ui", "PickGraphicPage", &rSet)
+SvxBitmapPickTabPage::SvxBitmapPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/pickgraphicpage.ui", "PickGraphicPage", &rSet)
     , nActNumLvl(SAL_MAX_UINT16)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , bModified(false)
@@ -780,10 +780,10 @@ SvxBitmapPickTabPage::~SvxBitmapPickTabPage()
     m_xExamplesVS.reset();
 }
 
-std::unique_ptr<SfxTabPage> SvxBitmapPickTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxBitmapPickTabPage::Create(weld::Container* pPage, weld::DialogController* pController,
                                                 const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SvxBitmapPickTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxBitmapPickTabPage>(pPage, pController, *rAttrSet);
 }
 
 void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
@@ -1011,9 +1011,9 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, voi
 }
 
 // tabpage numbering options
-SvxNumOptionsTabPage::SvxNumOptionsTabPage(TabPageParent pParent,
+SvxNumOptionsTabPage::SvxNumOptionsTabPage(weld::Container* pPage, weld::DialogController* pController,
                                const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/numberingoptionspage.ui", "NumberingOptionsPage", &rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/numberingoptionspage.ui", "NumberingOptionsPage", &rSet)
     , bLastWidthModified(false)
     , bModified(false)
     , bPreset(false)
@@ -1033,7 +1033,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(TabPageParent pParent,
     , m_xCharFmtFT(m_xBuilder->weld_label("charstyleft"))
     , m_xCharFmtLB(m_xBuilder->weld_combo_box("charstyle"))
     , m_xBulColorFT(m_xBuilder->weld_label("colorft"))
-    , m_xBulColLB(new ColorListBox(m_xBuilder->weld_menu_button("color"), pParent.GetFrameWeld()))
+    , m_xBulColLB(new ColorListBox(m_xBuilder->weld_menu_button("color"), pController->getDialog()))
     , m_xBulRelSizeFT(m_xBuilder->weld_label("relsizeft"))
     , m_xBulRelSizeMF(m_xBuilder->weld_metric_spin_button("relsize", FieldUnit::PERCENT))
     , m_xAllLevelFT(m_xBuilder->weld_label("sublevelsft"))
@@ -1123,10 +1123,10 @@ void SvxNumOptionsTabPage::SetMetric(FieldUnit eMetric)
     m_xHeightMF->set_unit(eMetric);
 }
 
-std::unique_ptr<SfxTabPage> SvxNumOptionsTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxNumOptionsTabPage::Create(weld::Container* pPage, weld::DialogController* pController,
                                                 const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SvxNumOptionsTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxNumOptionsTabPage>(pPage, pController, *rAttrSet);
 };
 
 void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
@@ -2453,8 +2453,8 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
 //dialog to this one, except with a different preview window impl.
 //TODO, determine if SwNumPositionTabPage and SvxNumPositionTabPage can be
 //merged
-SvxNumPositionTabPage::SvxNumPositionTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/numberingpositionpage.ui", "NumberingPositionPage", &rSet)
+SvxNumPositionTabPage::SvxNumPositionTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/numberingpositionpage.ui", "NumberingPositionPage", &rSet)
     , m_pLevelHdlEvent(nullptr)
     , nActNumLvl(1)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
@@ -2916,10 +2916,10 @@ void SvxNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
     m_xIndentAtMF->set_visible( bLabelAlignmentPosAndSpaceModeActive );
 }
 
-std::unique_ptr<SfxTabPage> SvxNumPositionTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxNumPositionTabPage::Create(weld::Container* pPage, weld::DialogController* pController,
                                                  const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SvxNumPositionTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxNumPositionTabPage>(pPage, pController, *rAttrSet);
 }
 
 void SvxNumPositionTabPage::SetMetric(FieldUnit eMetric)

@@ -28,8 +28,8 @@
 namespace chart
 {
 
-SchLayoutTabPage::SchLayoutTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-     : SfxTabPage(pParent, "modules/schart/ui/tp_ChartType.ui", "tp_ChartType", &rInAttrs)
+SchLayoutTabPage::SchLayoutTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+     : SfxTabPage(pPage, pController, "modules/schart/ui/tp_ChartType.ui", "tp_ChartType", &rInAttrs)
 {
     m_pGeometryResources.reset(new BarGeometryResources(m_xBuilder.get()));
 }
@@ -39,9 +39,9 @@ SchLayoutTabPage::~SchLayoutTabPage()
     m_pGeometryResources.reset();
 }
 
-std::unique_ptr<SfxTabPage> SchLayoutTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+std::unique_ptr<SfxTabPage> SchLayoutTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rOutAttrs)
 {
-    return std::make_unique<SchLayoutTabPage>(pParent, *rOutAttrs);
+    return std::make_unique<SchLayoutTabPage>(pPage, pController, *rOutAttrs);
 }
 
 bool SchLayoutTabPage::FillItemSet(SfxItemSet* rOutAttrs)

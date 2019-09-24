@@ -87,10 +87,10 @@ private:
     static const char*      GetClickActionSdResId(css::presentation::ClickAction eCA);
 
 public:
-    SdTPAction(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SdTPAction(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
     virtual ~SdTPAction() override;
 
-    static  std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet& );
+    static  std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& );
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;

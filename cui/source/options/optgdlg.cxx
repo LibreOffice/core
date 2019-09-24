@@ -226,8 +226,8 @@ bool lcl_HasSystemFilePicker()
 }
 }
 
-OfaMiscTabPage::OfaMiscTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/optgeneralpage.ui", "OptGeneralPage", &rSet)
+OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optgeneralpage.ui", "OptGeneralPage", &rSet)
     , m_xExtHelpCB(m_xBuilder->weld_check_button("exthelp"))
     , m_xPopUpNoHelpCB(m_xBuilder->weld_check_button("popupnohelp"))
     , m_xShowTipOfTheDay(m_xBuilder->weld_check_button("cbShowTipOfTheDay"))
@@ -283,9 +283,9 @@ OfaMiscTabPage::~OfaMiscTabPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> OfaMiscTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> OfaMiscTabPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<OfaMiscTabPage>( pParent, *rAttrSet );
+    return std::make_unique<OfaMiscTabPage>( pPage, pController, *rAttrSet );
 }
 
 bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
@@ -599,8 +599,8 @@ static bool DisplayNameCompareLessThan(const vcl::IconThemeInfo& rInfo1, const v
     return rInfo1.GetDisplayName().compareTo(rInfo2.GetDisplayName()) < 0;
 }
 
-OfaViewTabPage::OfaViewTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/optviewpage.ui", "OptViewPage", &rSet)
+OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optviewpage.ui", "OptViewPage", &rSet)
     , nSizeLB_InitialSelection(0)
     , nSidebarSizeLB_InitialSelection(0)
     , nNotebookbarSizeLB_InitialSelection(0)
@@ -704,9 +704,9 @@ IMPL_LINK_NOARG(OfaViewTabPage, OnForceOpenGLToggled, weld::ToggleButton&, void)
     }
 }
 
-std::unique_ptr<SfxTabPage> OfaViewTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> OfaViewTabPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<OfaViewTabPage>(pParent, *rAttrSet);
+    return std::make_unique<OfaViewTabPage>(pPage, pController, *rAttrSet);
 }
 
 bool OfaViewTabPage::FillItemSet( SfxItemSet* )
@@ -1092,8 +1092,8 @@ namespace
     }
 }
 
-OfaLanguagesTabPage::OfaLanguagesTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/optlanguagespage.ui", "OptLanguagesPage", &rSet)
+OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optlanguagespage.ui", "OptLanguagesPage", &rSet)
     , pLangConfig(new LanguageConfig_Impl)
     , m_bDatePatternsValid(false)
     , m_xUserInterfaceLB(m_xBuilder->weld_combo_box("userinterface"))
@@ -1238,9 +1238,9 @@ OfaLanguagesTabPage::~OfaLanguagesTabPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> OfaLanguagesTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> OfaLanguagesTabPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<OfaLanguagesTabPage>(pParent, *rAttrSet);
+    return std::make_unique<OfaLanguagesTabPage>(pPage, pController, *rAttrSet);
 }
 
 static void lcl_Update(std::unique_ptr<SfxVoidItem> pInvalidItems[], std::unique_ptr<SfxBoolItem> pBoolItems[], sal_uInt16 nCount)

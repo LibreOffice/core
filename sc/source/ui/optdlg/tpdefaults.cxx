@@ -14,8 +14,8 @@
 #include <defaultsoptions.hxx>
 #include <document.hxx>
 
-ScTpDefaultsOptions::ScTpDefaultsOptions(TabPageParent pParent, const SfxItemSet &rCoreSet)
-    : SfxTabPage(pParent, "modules/scalc/ui/optdefaultpage.ui", "OptDefaultPage", &rCoreSet)
+ScTpDefaultsOptions::ScTpDefaultsOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rCoreSet)
+    : SfxTabPage(pPage, pController, "modules/scalc/ui/optdefaultpage.ui", "OptDefaultPage", &rCoreSet)
     , m_xEdNSheets(m_xBuilder->weld_spin_button("sheetsnumber"))
     , m_xEdSheetPrefix(m_xBuilder->weld_entry("sheetprefix"))
 {
@@ -28,9 +28,9 @@ ScTpDefaultsOptions::~ScTpDefaultsOptions()
 {
 }
 
-std::unique_ptr<SfxTabPage> ScTpDefaultsOptions::Create(TabPageParent pParent, const SfxItemSet *rCoreAttrs)
+std::unique_ptr<SfxTabPage> ScTpDefaultsOptions::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rCoreAttrs)
 {
-    return std::make_unique<ScTpDefaultsOptions>(pParent, *rCoreAttrs);
+    return std::make_unique<ScTpDefaultsOptions>(pPage, pController, *rCoreAttrs);
 }
 
 bool ScTpDefaultsOptions::FillItemSet(SfxItemSet *rCoreSet)

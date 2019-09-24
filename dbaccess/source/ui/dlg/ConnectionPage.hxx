@@ -55,8 +55,8 @@ namespace dbaui
         DECL_LINK(OnEditModified, weld::Entry&, void);
 
     public:
-        OConnectionTabPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
-        static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* _rAttrSet);
+        OConnectionTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs);
+        static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet);
         virtual ~OConnectionTabPage() override;
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 

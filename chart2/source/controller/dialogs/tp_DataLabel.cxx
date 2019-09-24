@@ -22,15 +22,15 @@
 namespace chart
 {
 
-DataLabelsTabPage::DataLabelsTabPage(TabPageParent pWindow, const SfxItemSet& rInAttrs)
-        : SfxTabPage(pWindow , "modules/schart/ui/tp_DataLabel.ui", "tp_DataLabel", &rInAttrs)
-        , m_aDataLabelResources(m_xBuilder.get(), pWindow.GetFrameWeld(), rInAttrs)
+DataLabelsTabPage::DataLabelsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "modules/schart/ui/tp_DataLabel.ui", "tp_DataLabel", &rInAttrs)
+    , m_aDataLabelResources(m_xBuilder.get(), pController->getDialog(), rInAttrs)
 {
 }
 
-std::unique_ptr<SfxTabPage> DataLabelsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+std::unique_ptr<SfxTabPage> DataLabelsTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rOutAttrs)
 {
-    return std::make_unique<DataLabelsTabPage>(pParent, *rOutAttrs);
+    return std::make_unique<DataLabelsTabPage>(pPage, pController, *rOutAttrs);
 }
 
 bool DataLabelsTabPage::FillItemSet(SfxItemSet* rOutAttrs)

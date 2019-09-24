@@ -137,8 +137,8 @@ css::uno::Reference< css::frame::XFrame > SfxTabPage::GetFrame() const
     return css::uno::Reference< css::frame::XFrame >();
 }
 
-SfxTabPage::SfxTabPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet *rAttrSet)
-    : BuilderPage(pParent.pPage, pParent.pController, rUIXMLDescription, rID)
+SfxTabPage::SfxTabPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet *rAttrSet)
+    : BuilderPage(pPage, pController, rUIXMLDescription, rID)
     , pSet                ( rAttrSet )
     , bHasExchangeSupport ( false )
     , pImpl               ( new TabPageImpl )
@@ -900,13 +900,10 @@ void SfxTabDialogController::CreatePages()
         if (pDataObject->xTabPage)
            continue;
         weld::Container* pPage = m_xTabCtrl->get_page(pDataObject->sId);
-        // TODO eventually pass DialogController as distinct argument instead of bundling into TabPageParent
-
-        TabPageParent aParent(pPage, this);
         if (m_pSet)
-            pDataObject->xTabPage = (pDataObject->fnCreatePage)(aParent, m_pSet.get());
+            pDataObject->xTabPage = (pDataObject->fnCreatePage)(pPage, this, m_pSet.get());
         else
-            pDataObject->xTabPage = (pDataObject->fnCreatePage)(aParent, CreateInputItemSet(pDataObject->sId));
+            pDataObject->xTabPage = (pDataObject->fnCreatePage)(pPage, this, CreateInputItemSet(pDataObject->sId));
         pDataObject->xTabPage->SetDialogController(this);
         OUString sConfigId = OStringToOUString(pDataObject->xTabPage->GetConfigId(), RTL_TEXTENCODING_UTF8);
         SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);

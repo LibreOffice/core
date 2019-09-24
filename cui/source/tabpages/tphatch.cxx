@@ -43,8 +43,8 @@
 
 using namespace com::sun::star;
 
-SvxHatchTabPage::SvxHatchTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "cui/ui/hatchpage.ui", "HatchPage", &rInAttrs)
+SvxHatchTabPage::SvxHatchTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/hatchpage.ui", "HatchPage", &rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnHatchingListState(nullptr)
     , m_pnColorListState(nullptr)
@@ -54,9 +54,9 @@ SvxHatchTabPage::SvxHatchTabPage(TabPageParent pParent, const SfxItemSet& rInAtt
     , m_xMtrAngle(m_xBuilder->weld_metric_spin_button("anglemtr", FieldUnit::DEGREE))
     , m_xSliderAngle(m_xBuilder->weld_scale("angleslider"))
     , m_xLbLineType(m_xBuilder->weld_combo_box("linetypelb"))
-    , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"), pParent.GetFrameWeld()))
+    , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"), pController->getDialog()))
     , m_xCbBackgroundColor(m_xBuilder->weld_check_button("backgroundcolor"))
-    , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button("backgroundcolorlb"), pParent.GetFrameWeld()))
+    , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button("backgroundcolorlb"), pController->getDialog()))
     , m_xHatchLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("hatchpresetlistwin")))
     , m_xBtnAdd(m_xBuilder->weld_button("add"))
     , m_xBtnModify(m_xBuilder->weld_button("modify"))
@@ -266,10 +266,10 @@ void SvxHatchTabPage::Reset( const SfxItemSet* rSet )
     m_aCtlPreview.Invalidate();
 }
 
-std::unique_ptr<SfxTabPage> SvxHatchTabPage::Create( TabPageParent pWindow,
+std::unique_ptr<SfxTabPage> SvxHatchTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                             const SfxItemSet* rSet )
 {
-    return std::make_unique<SvxHatchTabPage>(pWindow, *rSet);
+    return std::make_unique<SvxHatchTabPage>(pPage, pController, *rSet);
 }
 
 IMPL_LINK( SvxHatchTabPage, ModifiedListBoxHdl_Impl, weld::ComboBox&, rListBox, void )

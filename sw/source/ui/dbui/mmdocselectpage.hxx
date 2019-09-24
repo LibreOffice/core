@@ -46,7 +46,7 @@ class SwMailMergeDocSelectPage : public vcl::OWizardPage
     virtual bool    commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
 
 public:
-    SwMailMergeDocSelectPage(SwMailMergeWizard* pWizard, TabPageParent pParent);
+    SwMailMergeDocSelectPage(weld::Container* pPage, SwMailMergeWizard* pWizard);
     virtual ~SwMailMergeDocSelectPage() override;
 };
 

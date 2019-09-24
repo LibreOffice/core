@@ -30,8 +30,8 @@
 namespace chart
 {
 
-SchOptionTabPage::SchOptionTabPage(TabPageParent pWindow,const SfxItemSet& rInAttrs)
-    : SfxTabPage(pWindow, "modules/schart/ui/tp_SeriesToAxis.ui", "TP_OPTIONS", &rInAttrs)
+SchOptionTabPage::SchOptionTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "modules/schart/ui/tp_SeriesToAxis.ui", "TP_OPTIONS", &rInAttrs)
     , m_nAllSeriesAxisIndex(0)
     , m_bProvidesSecondaryYAxis(true)
     , m_bProvidesOverlapAndGapWidth(false)
@@ -68,10 +68,10 @@ IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl, weld::ToggleButton&, void)
         m_xCBAxisSideBySide->set_sensitive( m_xRbtAxis1->get_active());
 }
 
-std::unique_ptr<SfxTabPage> SchOptionTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SchOptionTabPage::Create(weld::Container* pPage, weld::DialogController* pController,
                                             const SfxItemSet* rOutAttrs)
 {
-    return std::make_unique<SchOptionTabPage>(pParent, *rOutAttrs);
+    return std::make_unique<SchOptionTabPage>(pPage, pController, *rOutAttrs);
 }
 
 bool SchOptionTabPage::FillItemSet(SfxItemSet* rOutAttrs)

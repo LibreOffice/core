@@ -178,8 +178,8 @@ static bool IsMultiPath_Impl( const sal_uInt16 nIndex )
 
 // class SvxPathTabPage --------------------------------------------------
 
-SvxPathTabPage::SvxPathTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage( pParent, "cui/ui/optpathspage.ui", "OptPathsPage", &rSet)
+SvxPathTabPage::SvxPathTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage( pPage, pController, "cui/ui/optpathspage.ui", "OptPathsPage", &rSet)
     , pImpl(new OptPath_Impl)
     , xDialogListener ( new ::svt::DialogClosedListener() )
     , m_xStandardBtn(m_xBuilder->weld_button("default"))
@@ -205,10 +205,10 @@ SvxPathTabPage::~SvxPathTabPage()
         delete reinterpret_cast<PathUserData_Impl*>(m_xPathBox->get_id(i).toInt64());
 }
 
-std::unique_ptr<SfxTabPage> SvxPathTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxPathTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                            const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<SvxPathTabPage>( pParent, *rAttrSet );
+    return std::make_unique<SvxPathTabPage>( pPage, pController, *rAttrSet );
 }
 
 bool SvxPathTabPage::FillItemSet( SfxItemSet* )

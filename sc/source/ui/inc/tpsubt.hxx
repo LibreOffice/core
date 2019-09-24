@@ -33,7 +33,7 @@ struct ScSubTotalParam;
 class ScTpSubTotalGroup : public SfxTabPage
 {
 protected:
-    ScTpSubTotalGroup(TabPageParent pParent, const SfxItemSet& rArgSet);
+    ScTpSubTotalGroup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet);
 
 public:
     virtual ~ScTpSubTotalGroup() override;
@@ -76,9 +76,9 @@ private:
 class ScTpSubTotalGroup1 final : public ScTpSubTotalGroup
 {
 public:
-    ScTpSubTotalGroup1( TabPageParent pParent,
+    ScTpSubTotalGroup1( weld::Container* pPage, weld::DialogController* pController,
                         const SfxItemSet&    rArgSet );
-    static std::unique_ptr<SfxTabPage> Create      ( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create      ( weld::Container* pPage, weld::DialogController* pController,
             const SfxItemSet*     rArgSet );
     virtual ~ScTpSubTotalGroup1() override;
 
@@ -89,9 +89,9 @@ public:
 class ScTpSubTotalGroup2 final : public ScTpSubTotalGroup
 {
 public:
-    ScTpSubTotalGroup2( TabPageParent pParent,
+    ScTpSubTotalGroup2( weld::Container* pPage, weld::DialogController* pController,
                         const SfxItemSet&    rArgSet );
-    static std::unique_ptr<SfxTabPage> Create      ( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create      ( weld::Container* pPage, weld::DialogController* pController,
             const SfxItemSet*     rArgSet );
     virtual ~ScTpSubTotalGroup2() override;
 
@@ -102,9 +102,9 @@ public:
 class ScTpSubTotalGroup3 final : public ScTpSubTotalGroup
 {
 public:
-    ScTpSubTotalGroup3( TabPageParent pParent,
+    ScTpSubTotalGroup3( weld::Container* pPage, weld::DialogController* pController,
                         const SfxItemSet&    rArgSet );
-    static  std::unique_ptr<SfxTabPage> Create      ( TabPageParent pParent,
+    static  std::unique_ptr<SfxTabPage> Create      ( weld::Container* pPage, weld::DialogController* pController,
             const SfxItemSet*     rArgSet );
     virtual ~ScTpSubTotalGroup3() override;
 
@@ -115,8 +115,8 @@ public:
 class ScTpSubTotalOptions final : public SfxTabPage
 {
 public:
-    ScTpSubTotalOptions(TabPageParent pParent, const SfxItemSet& rArgSet);
-    static std::unique_ptr<SfxTabPage>  Create      ( TabPageParent pParent,
+    ScTpSubTotalOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet);
+    static std::unique_ptr<SfxTabPage>  Create      ( weld::Container* pPage, weld::DialogController* pController,
             const SfxItemSet*     rArgSet );
     virtual ~ScTpSubTotalOptions() override;
 

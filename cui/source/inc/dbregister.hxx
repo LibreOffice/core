@@ -68,10 +68,10 @@ namespace svx
         void openLinkDialog(const OUString& sOldName, const OUString& sOldLocation, int nEntry = -1);
 
     public:
-        DbRegistrationOptionsPage(TabPageParent pParent, const SfxItemSet& rSet);
+        DbRegistrationOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
         virtual ~DbRegistrationOptionsPage() override;
 
-        static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+        static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
 
         virtual bool        FillItemSet( SfxItemSet* rSet ) override;
         virtual void        Reset( const SfxItemSet* rSet ) override;

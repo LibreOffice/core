@@ -36,8 +36,8 @@ enum class MSFltrPg2_CheckBoxEntries {
 };
 
 
-OfaMSFilterTabPage::OfaMSFilterTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/optfltrpage.ui", "OptFltrPage", &rSet)
+OfaMSFilterTabPage::OfaMSFilterTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optfltrpage.ui", "OptFltrPage", &rSet)
     , m_xWBasicCodeCB(m_xBuilder->weld_check_button("wo_basic"))
     , m_xWBasicWbctblCB(m_xBuilder->weld_check_button("wo_exec"))
     , m_xWBasicStgCB(m_xBuilder->weld_check_button("wo_saveorig"))
@@ -65,10 +65,10 @@ IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl, weld::Button&, 
     m_xEBasicExectblCB->set_sensitive(m_xEBasicCodeCB->get_active());
 }
 
-std::unique_ptr<SfxTabPage> OfaMSFilterTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> OfaMSFilterTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                                const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<OfaMSFilterTabPage>(pParent, *rAttrSet);
+    return std::make_unique<OfaMSFilterTabPage>(pPage, pController, *rAttrSet);
 }
 
 bool OfaMSFilterTabPage::FillItemSet( SfxItemSet* )
@@ -123,8 +123,8 @@ void OfaMSFilterTabPage::Reset( const SfxItemSet* )
     m_xPBasicStgCB->save_state();
 }
 
-OfaMSFilterTabPage2::OfaMSFilterTabPage2(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/optfltrembedpage.ui", "OptFilterPage", &rSet)
+OfaMSFilterTabPage2::OfaMSFilterTabPage2(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optfltrembedpage.ui", "OptFilterPage", &rSet)
     , sChgToFromMath(CuiResId(RID_SVXSTR_CHG_MATH))
     , sChgToFromWriter(CuiResId(RID_SVXSTR_CHG_WRITER))
     , sChgToFromCalc(CuiResId(RID_SVXSTR_CHG_CALC))
@@ -147,10 +147,10 @@ OfaMSFilterTabPage2::~OfaMSFilterTabPage2()
 {
 }
 
-std::unique_ptr<SfxTabPage> OfaMSFilterTabPage2::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> OfaMSFilterTabPage2::Create( weld::Container* pPage, weld::DialogController* pController,
                                                 const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<OfaMSFilterTabPage2>( pParent, *rAttrSet );
+    return std::make_unique<OfaMSFilterTabPage2>( pPage, pController, *rAttrSet );
 }
 
 bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )

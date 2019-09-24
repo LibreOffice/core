@@ -89,10 +89,10 @@ public:
 class SVX_DLLPUBLIC SvxGridTabPage : public SfxTabPage
 {
 public:
-    SvxGridTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxGridTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SvxGridTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet& rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

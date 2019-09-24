@@ -81,10 +81,10 @@ private:
     DECL_LINK(StandardizedPageCountCheckHdl, weld::Button&, void);
 
 public:
-    SwLoadOptPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwLoadOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwLoadOptPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                       const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -183,10 +183,10 @@ private:
     void InvalidatePreview();
 
 public:
-    SwCaptionOptPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwCaptionOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwCaptionOptPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController,
                                      const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

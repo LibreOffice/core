@@ -53,10 +53,10 @@ private:
     void updateControls();
 
 public:
-    SdPrintOptions(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SdPrintOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
     virtual ~SdPrintOptions() override;
 
-    static  std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static  std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;

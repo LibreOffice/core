@@ -59,10 +59,10 @@ class SwContentOptPage : public SfxTabPage
 
     DECL_LINK(VertRulerHdl, weld::ToggleButton&, void);
 public:
-    SwContentOptPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwContentOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwContentOptPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
@@ -103,10 +103,10 @@ class SwAddPrinterTabPage : public SfxTabPage
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
 
 public:
-    SwAddPrinterTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwAddPrinterTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwAddPrinterTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
@@ -166,8 +166,8 @@ class SwStdFontTabPage : public SfxTabPage
     DECL_LINK(LoseFocusHdl, weld::Widget&, void );
 
 public:
-    SwStdFontTabPage(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    SwStdFontTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet);
     virtual ~SwStdFontTabPage() override;
 
     virtual bool FillItemSet(SfxItemSet* rSet) override;
@@ -203,10 +203,10 @@ class SwTableOptionsTabPage : public SfxTabPage
     DECL_LINK(CheckBoxHdl, weld::Button&, void);
 
 public:
-    SwTableOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwTableOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwTableOptionsTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
@@ -244,10 +244,10 @@ class SwShdwCursorOptionsTabPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xMathBaselineAlignmentCB;
 
 public:
-    SwShdwCursorOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwShdwCursorOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwShdwCursorOptionsTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;
@@ -317,10 +317,10 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     static void InitFontStyle(FontPrevWindow& rExampleWin, const OUString& rText);
 
 public:
-    SwRedlineOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwRedlineOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwRedlineOptionsTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;
@@ -333,10 +333,10 @@ public:
 class SwTestTabPage : public SfxTabPage
 {
 public:
-    SwTestTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwTestTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwTestTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;
@@ -374,10 +374,10 @@ class SwCompareOptionsTabPage : public SfxTabPage
     DECL_LINK(IgnoreHdl, weld::Button&, void);
 
 public:
-    SwCompareOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwCompareOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwCompareOptionsTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet );
 
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;

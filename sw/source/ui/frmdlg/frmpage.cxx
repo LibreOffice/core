@@ -608,8 +608,8 @@ namespace
     }
 }
 
-SwFramePage::SwFramePage(TabPageParent pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/frmtypepage.ui", "FrameTypePage", &rSet)
+SwFramePage::SwFramePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/frmtypepage.ui", "FrameTypePage", &rSet)
     , m_bAtHorzPosModified(false)
     , m_bAtVertPosModified(false)
     , m_bFormat(false)
@@ -820,9 +820,9 @@ void SwFramePage::setOptimalRelWidth()
     m_xHoriRelationLB->clear();
 }
 
-std::unique_ptr<SfxTabPage> SwFramePage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwFramePage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet)
 {
-    return std::make_unique<SwFramePage>(pParent, *rSet);
+    return std::make_unique<SwFramePage>(pPage, pController, *rSet);
 }
 
 void SwFramePage::EnableGraficMode()
@@ -2288,8 +2288,8 @@ void SwFramePage::EnableVerticalPositioning( bool bEnable )
     m_xVertRelationLB->set_sensitive( bEnable );
 }
 
-SwGrfExtPage::SwGrfExtPage(TabPageParent pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/picturepage.ui", "PicturePage", &rSet)
+SwGrfExtPage::SwGrfExtPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/picturepage.ui", "PicturePage", &rSet)
     , m_bHtmlMode(false)
     , m_xMirror(m_xBuilder->weld_widget("flipframe"))
     , m_xMirrorVertBox(m_xBuilder->weld_check_button("vert"))
@@ -2323,9 +2323,9 @@ SwGrfExtPage::~SwGrfExtPage()
     m_xGrfDlg.reset();
 }
 
-std::unique_ptr<SfxTabPage> SwGrfExtPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwGrfExtPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet)
 {
-    return std::make_unique<SwGrfExtPage>(pParent, *rSet);
+    return std::make_unique<SwGrfExtPage>(pPage, pController, *rSet);
 }
 
 void SwGrfExtPage::Reset(const SfxItemSet *rSet)
@@ -2658,8 +2658,8 @@ void BmpWindow::SetBitmapEx(const BitmapEx& rBmp)
 }
 
 // set URL and ImageMap at frames
-SwFrameURLPage::SwFrameURLPage(TabPageParent pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/frmurlpage.ui", "FrameURLPage", &rSet)
+SwFrameURLPage::SwFrameURLPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/frmurlpage.ui", "FrameURLPage", &rSet)
     , m_xURLED(m_xBuilder->weld_entry("url"))
     , m_xSearchPB(m_xBuilder->weld_button("search"))
     , m_xNameED(m_xBuilder->weld_entry("name"))
@@ -2747,9 +2747,9 @@ bool SwFrameURLPage::FillItemSet(SfxItemSet *rSet)
     return bModified;
 }
 
-std::unique_ptr<SfxTabPage> SwFrameURLPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwFrameURLPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet)
 {
-    return std::make_unique<SwFrameURLPage>(pParent, *rSet);
+    return std::make_unique<SwFrameURLPage>(pPage, pController, *rSet);
 }
 
 IMPL_LINK_NOARG(SwFrameURLPage, InsertFileHdl, weld::Button&, void)
@@ -2771,8 +2771,8 @@ IMPL_LINK_NOARG(SwFrameURLPage, InsertFileHdl, weld::Button&, void)
     }
 }
 
-SwFrameAddPage::SwFrameAddPage(TabPageParent pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/frmaddpage.ui", "FrameAddPage", &rSet)
+SwFrameAddPage::SwFrameAddPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/frmaddpage.ui", "FrameAddPage", &rSet)
     , m_pWrtSh(nullptr)
     , m_bHtmlMode(false)
     , m_bFormat(false)
@@ -2814,9 +2814,9 @@ SwFrameAddPage::~SwFrameAddPage()
     m_xTextFlowLB.reset();
 }
 
-std::unique_ptr<SfxTabPage> SwFrameAddPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwFrameAddPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet)
 {
-    return std::make_unique<SwFrameAddPage>(pParent, *rSet);
+    return std::make_unique<SwFrameAddPage>(pPage, pController, *rSet);
 }
 
 void SwFrameAddPage::Reset(const SfxItemSet *rSet )

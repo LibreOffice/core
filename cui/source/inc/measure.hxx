@@ -67,10 +67,10 @@ private:
 
 public:
 
-    SvxMeasurePage(TabPageParent pWindow, const SfxItemSet& rInAttrs);
+    SvxMeasurePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
     virtual ~SvxMeasurePage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) override;

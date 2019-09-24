@@ -37,7 +37,7 @@ namespace abp
         OAddressBookSourcePilot* m_pDialog;
 
     protected:
-        AddressBookSourcePage(OAddressBookSourcePilot *pParent, TabPageParent pPageParent, const OUString& rUIXMLDescription, const OString& rID);
+        AddressBookSourcePage(weld::Container* pPage, OAddressBookSourcePilot* pController, const OUString& rUIXMLDescription, const OString& rID);
 
     protected:
         // helper

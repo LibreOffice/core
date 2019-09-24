@@ -36,9 +36,9 @@
 using namespace ::com::sun::star;
 
 
-SvxEventConfigPage::SvxEventConfigPage(TabPageParent pParent, const SfxItemSet& rSet,
+SvxEventConfigPage::SvxEventConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet,
     SvxEventConfigPage::EarlyInit)
-    : SvxMacroTabPage_(pParent, "cui/ui/eventsconfigpage.ui", "EventsConfigPage", rSet)
+    : SvxMacroTabPage_(pPage, pController, "cui/ui/eventsconfigpage.ui", "EventsConfigPage", rSet)
     , m_xSaveInListBox(m_xBuilder->weld_combo_box("savein"))
 {
     mpImpl->xEventLB = m_xBuilder->weld_tree_view("events");

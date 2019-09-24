@@ -227,8 +227,8 @@ void MarginControlsWrapper::SetControlDontKnow()
     mrBottomWrp.set_text(sEmpty);
 }
 
-SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-    : SfxTabPage(pParent, "cui/ui/borderpage.ui", "BorderPage", &rCoreAttrs)
+SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/borderpage.ui", "BorderPage", &rCoreAttrs)
     , nMinValue(0)
     , nSWMode(SwBorderModes::NONE)
     , mnBoxSlot(SID_ATTR_BORDER_OUTER)
@@ -250,7 +250,7 @@ SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCor
     , m_xUserDefFT(m_xBuilder->weld_label("userdefft"))
     , m_xFrameSelWin(new weld::CustomWeld(*m_xBuilder, "framesel", m_aFrameSel))
     , m_xLbLineStyle(new SvtLineListBox(m_xBuilder->weld_menu_button("linestylelb")))
-    , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"), pParent.GetFrameWeld()))
+    , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"), pController->getDialog()))
     , m_xLineWidthMF(m_xBuilder->weld_metric_spin_button("linewidthmf", FieldUnit::POINT))
     , m_xSpacingFrame(m_xBuilder->weld_container("spacing"))
     , m_xLeftFT(m_xBuilder->weld_label("leftft"))
@@ -268,7 +268,7 @@ SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCor
     , m_xFtShadowSize(m_xBuilder->weld_label("distanceft"))
     , m_xEdShadowSize(m_xBuilder->weld_metric_spin_button("distancemf", FieldUnit::MM))
     , m_xFtShadowColor(m_xBuilder->weld_label("shadowcolorft"))
-    , m_xLbShadowColor(new ColorListBox(m_xBuilder->weld_menu_button("shadowcolorlb"), pParent.GetFrameWeld()))
+    , m_xLbShadowColor(new ColorListBox(m_xBuilder->weld_menu_button("shadowcolorlb"), pController->getDialog()))
     , m_xPropertiesFrame(m_xBuilder->weld_container("properties"))
     , m_xMergeWithNextCB(m_xBuilder->weld_check_button("mergewithnext"))
     , m_xMergeAdjacentBordersCB(m_xBuilder->weld_check_button("mergeadjacent"))
@@ -544,10 +544,10 @@ SvxBorderTabPage::~SvxBorderTabPage()
     m_xWndPresets.reset();
 }
 
-std::unique_ptr<SfxTabPage> SvxBorderTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxBorderTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                              const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<SvxBorderTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxBorderTabPage>(pPage, pController, *rAttrSet);
 }
 
 void SvxBorderTabPage::ResetFrameLine_Impl( svx::FrameBorderType eBorder, const SvxBorderLine* pCoreLine, bool bValid )

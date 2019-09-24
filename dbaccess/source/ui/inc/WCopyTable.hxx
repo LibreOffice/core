@@ -296,7 +296,7 @@ namespace dbaui
 
         sal_uInt16 GetCurLevel() const { return getCurrentState(); }
 
-        TabPageParent CreatePageContainer();
+        weld::Container* CreatePageContainer();
 
     public:
         // used for copy tables or queries

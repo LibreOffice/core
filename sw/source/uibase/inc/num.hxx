@@ -92,7 +92,7 @@ class SwNumPositionTabPage : public SfxTabPage
 
 public:
 
-    SwNumPositionTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwNumPositionTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwNumPositionTabPage() override;
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -100,7 +100,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                       const SfxItemSet* rAttrSet);
 
     void                SetOutlineTabDialog(SwOutlineTabDialog* pDlg){pOutlineDlg = pDlg;}

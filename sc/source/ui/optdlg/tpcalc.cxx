@@ -32,8 +32,8 @@
 
 #include <tpcalc.hxx>
 
-ScTpCalcOptions::ScTpCalcOptions(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-    : SfxTabPage(pParent, "modules/scalc/ui/optcalculatepage.ui", "OptCalculatePage", &rCoreAttrs)
+ScTpCalcOptions::ScTpCalcOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+    : SfxTabPage(pPage, pController, "modules/scalc/ui/optcalculatepage.ui", "OptCalculatePage", &rCoreAttrs)
     , pOldOptions(new ScDocOptions(
         static_cast<const ScTpCalcItem&>(rCoreAttrs.Get(
             GetWhich(SID_SCDOCOPTIONS))).GetDocOptions()))
@@ -77,9 +77,9 @@ void ScTpCalcOptions::Init()
     m_xBtnThread->connect_toggled( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
 }
 
-std::unique_ptr<SfxTabPage> ScTpCalcOptions::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> ScTpCalcOptions::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<ScTpCalcOptions>( pParent, *rAttrSet );
+    return std::make_unique<ScTpCalcOptions>( pPage, pController, *rAttrSet );
 }
 
 void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )

@@ -32,8 +32,8 @@
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
-SwFieldDokPage::SwFieldDokPage(TabPageParent pParent, const SfxItemSet *const pCoreSet)
-    : SwFieldPage(pParent, "modules/swriter/ui/flddocumentpage.ui",
+SwFieldDokPage::SwFieldDokPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *const pCoreSet)
+    : SwFieldPage(pPage, pController, "modules/swriter/ui/flddocumentpage.ui",
                   "FieldDocumentPage", pCoreSet)
     , nOldSel(0)
     , nOldFormat(0)
@@ -608,10 +608,10 @@ bool SwFieldDokPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-std::unique_ptr<SfxTabPage> SwFieldDokPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwFieldDokPage::Create(weld::Container* pPage, weld::DialogController* pController,
                                           const SfxItemSet *const pAttrSet)
 {
-    return std::make_unique<SwFieldDokPage>(pParent, pAttrSet);
+    return std::make_unique<SwFieldDokPage>(pPage, pController, pAttrSet);
 }
 
 sal_uInt16 SwFieldDokPage::GetGroup()

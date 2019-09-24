@@ -41,7 +41,11 @@ class SfxBaseController;
 class Size;
 class Point;
 class Fraction;
-namespace weld { class Window; }
+namespace weld {
+    class Container;
+    class DialogController;
+    class Window;
+}
 class KeyEvent;
 class SvBorder;
 class SdrView;
@@ -237,7 +241,7 @@ public:
     virtual SfxPrinter*         GetPrinter( bool bCreate = false );
     virtual sal_uInt16          SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL );
     virtual bool                HasPrintOptionsPage() const;
-    virtual std::unique_ptr<SfxTabPage>  CreatePrintOptionsPage(TabPageParent pParent, const SfxItemSet &rOptions);
+    virtual std::unique_ptr<SfxTabPage>  CreatePrintOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rOptions);
     Printer*                    GetActivePrinter() const;
 
     // Working set

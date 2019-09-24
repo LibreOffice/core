@@ -36,48 +36,48 @@ namespace dbaui
 
         /** Creates the detail page for ado
         */
-        static std::unique_ptr<SfxTabPage> CreateDbase( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateDbase( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for ado
         */
-        static std::unique_ptr<SfxTabPage> CreateAdo( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateAdo( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for ODBC
         */
-        static std::unique_ptr<SfxTabPage> CreateODBC( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateODBC( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for user
         */
-        static std::unique_ptr<SfxTabPage> CreateUser( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateUser( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for MySQLODBC
         */
-        static std::unique_ptr<SfxTabPage> CreateMySQLODBC( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateMySQLODBC( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for MySQLJDBC
         */
-        static std::unique_ptr<SfxTabPage> CreateMySQLJDBC( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateMySQLJDBC( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for MySQLNATIVE
         */
-        static std::unique_ptr<SfxTabPage> CreateMySQLNATIVE( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateMySQLNATIVE( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for Oracle JDBC
         */
-        static std::unique_ptr<SfxTabPage> CreateOracleJDBC( TabPageParent pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateOracleJDBC( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for LDAP
         */
-        static std::unique_ptr<SfxTabPage> CreateLDAP( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateLDAP( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet );
 
         /// Creates the detail page for Text
-        static std::unique_ptr<SfxTabPage> CreateText( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateText( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet );
 
         /// creates the GeneratedValues page
-        static std::unique_ptr<SfxTabPage> CreateGeneratedValuesPage( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateGeneratedValuesPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet );
 
         /// creates the "Special Settings" page of the "Advanced Settings" dialog
-        static std::unique_ptr<SfxTabPage> CreateSpecialSettingsPage( TabPageParent _pParent, const SfxItemSet* _rAttrSet );
+        static std::unique_ptr<SfxTabPage> CreateSpecialSettingsPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet );
     };
 }
 

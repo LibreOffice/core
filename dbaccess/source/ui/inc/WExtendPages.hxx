@@ -32,12 +32,12 @@ namespace dbaui
     protected:
         virtual void createReaderAndCallParser(sal_Int32 _nRows) override;
     public:
-        OWizHTMLExtend(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream& rStream)
-            : OWizTypeSelect(pWizard, pParent, &rStream)
+        OWizHTMLExtend(weld::Container* pPage, OCopyTableWizard* pWizard, SvStream& rStream)
+            : OWizTypeSelect(pPage, pWizard, &rStream)
         {
         }
 
-        static std::unique_ptr<OWizTypeSelect> Create(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream& rInput ) { return std::make_unique<OWizHTMLExtend>(pWizard, pParent, rInput); }
+        static std::unique_ptr<OWizTypeSelect> Create(weld::Container* pPage, OCopyTableWizard* pWizard, SvStream& rInput ) { return std::make_unique<OWizHTMLExtend>(pPage, pWizard, rInput); }
     };
     // Wizard Page: OWizRTFExtend
     class OWizRTFExtend : public OWizTypeSelect
@@ -45,12 +45,12 @@ namespace dbaui
     protected:
         virtual void createReaderAndCallParser(sal_Int32 _nRows) override;
     public:
-        OWizRTFExtend(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream& rStream)
-            : OWizTypeSelect(pWizard, pParent, &rStream)
+        OWizRTFExtend(weld::Container* pPage, OCopyTableWizard* pWizard, SvStream& rStream)
+            : OWizTypeSelect(pPage, pWizard, &rStream)
         {
         }
 
-        static std::unique_ptr<OWizTypeSelect> Create(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream& rInput) { return std::make_unique<OWizRTFExtend>(pWizard, pParent, rInput); }
+        static std::unique_ptr<OWizTypeSelect> Create(weld::Container* pPage, OCopyTableWizard* pWizard, SvStream& rInput) { return std::make_unique<OWizRTFExtend>(pPage, pWizard, rInput); }
     };
 
     // Wizard Page: OWizNormalExtend
@@ -59,8 +59,8 @@ namespace dbaui
     protected:
         virtual void createReaderAndCallParser(sal_Int32 _nRows) override;
     public:
-        OWizNormalExtend(OCopyTableWizard* pWizard, TabPageParent pParent)
-            : OWizTypeSelect(pWizard, pParent)
+        OWizNormalExtend(weld::Container* pPage, OCopyTableWizard* pWizard)
+            : OWizTypeSelect(pPage, pWizard)
         {
             EnableAuto(false);
         }

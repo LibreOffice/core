@@ -38,8 +38,8 @@
 
 using namespace ::com::sun::star;
 
-SwFieldFuncPage::SwFieldFuncPage(TabPageParent pParent, const SfxItemSet *const pCoreSet)
-    : SwFieldPage(pParent, "modules/swriter/ui/fldfuncpage.ui", "FieldFuncPage", pCoreSet)
+SwFieldFuncPage::SwFieldFuncPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *const pCoreSet)
+    : SwFieldPage(pPage, pController, "modules/swriter/ui/fldfuncpage.ui", "FieldFuncPage", pCoreSet)
     , nOldFormat(0)
     , bDropDownLBChanged(false)
     , m_xTypeLB(m_xBuilder->weld_tree_view("type"))
@@ -575,10 +575,10 @@ bool SwFieldFuncPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-std::unique_ptr<SfxTabPage> SwFieldFuncPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwFieldFuncPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                           const SfxItemSet *const pAttrSet)
 {
-    return std::make_unique<SwFieldFuncPage>(pParent, pAttrSet);
+    return std::make_unique<SwFieldFuncPage>(pPage, pController, pAttrSet);
 }
 
 sal_uInt16 SwFieldFuncPage::GetGroup()

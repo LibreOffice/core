@@ -54,10 +54,10 @@ namespace dbaui
     using namespace ::com::sun::star::container;
     using namespace ::dbtools;
 
-    OCommonBehaviourTabPage::OCommonBehaviourTabPage(TabPageParent pParent,
+    OCommonBehaviourTabPage::OCommonBehaviourTabPage(weld::Container* pPage, weld::DialogController* pController,
         const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& rCoreAttrs,
         OCommonBehaviourTabPageFlags nControlFlags)
-        : OGenericAdministrationPage(pParent, rUIXMLDescription, rId, rCoreAttrs)
+        : OGenericAdministrationPage(pPage, pController, rUIXMLDescription, rId, rCoreAttrs)
         , m_nControlFlags(nControlFlags)
     {
         if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
@@ -159,8 +159,8 @@ namespace dbaui
     }
 
     // ODbaseDetailsPage
-    ODbaseDetailsPage::ODbaseDetailsPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)
-        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/dbasepage.ui", "DbasePage",
+    ODbaseDetailsPage::ODbaseDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs)
+        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/dbasepage.ui", "DbasePage",
                                     _rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
         , m_xShowDeleted(m_xBuilder->weld_check_button("showDelRowsCheckbutton"))
         , m_xFT_Message(m_xBuilder->weld_label("specMessageLabel"))
@@ -174,9 +174,9 @@ namespace dbaui
     {
     }
 
-    std::unique_ptr<SfxTabPage> ODriversSettings::CreateDbase(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateDbase(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet)
     {
-        return std::make_unique<ODbaseDetailsPage>(pParent, *_rAttrSet);
+        return std::make_unique<ODbaseDetailsPage>(pPage, pController, *_rAttrSet);
     }
 
     void ODbaseDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
@@ -228,21 +228,21 @@ namespace dbaui
     }
 
     // OAdoDetailsPage
-    OAdoDetailsPage::OAdoDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/autocharsetpage.ui", "AutoCharset",
+    OAdoDetailsPage::OAdoDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/autocharsetpage.ui", "AutoCharset",
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset )
     {
 
     }
 
-    std::unique_ptr<SfxTabPage> ODriversSettings::CreateAdo(TabPageParent pParent, const SfxItemSet* rAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateAdo(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
     {
-        return std::make_unique<OAdoDetailsPage>(pParent, *rAttrSet);
+        return std::make_unique<OAdoDetailsPage>(pPage, pController, *rAttrSet);
     }
 
     // OOdbcDetailsPage
-    OOdbcDetailsPage::OOdbcDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/odbcpage.ui", "ODBC", rCoreAttrs,
+    OOdbcDetailsPage::OOdbcDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/odbcpage.ui", "ODBC", rCoreAttrs,
                                     OCommonBehaviourTabPageFlags::UseCharset | OCommonBehaviourTabPageFlags::UseOptions)
         , m_xUseCatalog(m_xBuilder->weld_check_button("useCatalogCheckbutton"))
     {
@@ -253,9 +253,9 @@ namespace dbaui
     {
     }
 
-    std::unique_ptr<SfxTabPage> ODriversSettings::CreateODBC(TabPageParent pParent, const SfxItemSet* pAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateODBC(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* pAttrSet)
     {
-        return std::make_unique<OOdbcDetailsPage>(pParent, *pAttrSet);
+        return std::make_unique<OOdbcDetailsPage>(pPage, pController, *pAttrSet);
     }
 
     bool OOdbcDetailsPage::FillItemSet( SfxItemSet* _rSet )
@@ -278,8 +278,8 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
     // OOdbcDetailsPage
-    OUserDriverDetailsPage::OUserDriverDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/userdetailspage.ui", "UserDetailsPage",
+    OUserDriverDetailsPage::OUserDriverDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/userdetailspage.ui", "UserDetailsPage",
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset | OCommonBehaviourTabPageFlags::UseOptions)
         , m_xFTHostname(m_xBuilder->weld_label("hostnameft"))
         , m_xEDHostname(m_xBuilder->weld_entry("hostname"))
@@ -294,9 +294,9 @@ namespace dbaui
     {
     }
 
-    std::unique_ptr<SfxTabPage> ODriversSettings::CreateUser(TabPageParent pParent, const SfxItemSet* pAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateUser(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* pAttrSet)
     {
-        return std::make_unique<OUserDriverDetailsPage>(pParent, *pAttrSet);
+        return std::make_unique<OUserDriverDetailsPage>(pPage, pController, *pAttrSet);
     }
 
     bool OUserDriverDetailsPage::FillItemSet( SfxItemSet* _rSet )
@@ -346,20 +346,20 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
     // OMySQLODBCDetailsPage
-    OMySQLODBCDetailsPage::OMySQLODBCDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/autocharsetpage.ui", "AutoCharset",
+    OMySQLODBCDetailsPage::OMySQLODBCDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/autocharsetpage.ui", "AutoCharset",
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset )
     {
     }
 
-    std::unique_ptr<SfxTabPage> ODriversSettings::CreateMySQLODBC(TabPageParent pParent, const SfxItemSet* pAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateMySQLODBC(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* pAttrSet)
     {
-        return std::make_unique<OMySQLODBCDetailsPage>(pParent, *pAttrSet);
+        return std::make_unique<OMySQLODBCDetailsPage>(pPage, pController, *pAttrSet);
     }
 
     // OMySQLJDBCDetailsPage
-    OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs ,sal_uInt16 _nPortId, bool bShowSocket)
-        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/generalspecialjdbcdetailspage.ui", "GeneralSpecialJDBCDetails",
+    OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs ,sal_uInt16 _nPortId, bool bShowSocket)
+        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/generalspecialjdbcdetailspage.ui", "GeneralSpecialJDBCDetails",
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
         , m_nPortId(_nPortId)
         , m_bUseClass(true)
@@ -489,8 +489,8 @@ namespace dbaui
     }
 
     // MySQLNativePage
-    MySQLNativePage::MySQLNativePage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/mysqlnativepage.ui", "MysqlNativePage", rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
+    MySQLNativePage::MySQLNativePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/mysqlnativepage.ui", "MysqlNativePage", rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
         , m_xMySQLSettingsContainer(m_xBuilder->weld_widget("MySQLSettingsContainer"))
         , m_xMySQLSettings(new MySQLNativeSettings(m_xMySQLSettingsContainer.get(), LINK(this,OGenericAdministrationPage,OnControlModified)))
         , m_xSeparator1(m_xBuilder->weld_label("connectionheader"))
@@ -563,24 +563,24 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    std::unique_ptr<SfxTabPage> ODriversSettings::CreateMySQLJDBC( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateMySQLJDBC( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet )
     {
-        return std::make_unique<OGeneralSpecialJDBCDetailsPage>(pParent, *_rAttrSet,DSID_MYSQL_PORTNUMBER);
+        return std::make_unique<OGeneralSpecialJDBCDetailsPage>(pPage, pController, *_rAttrSet,DSID_MYSQL_PORTNUMBER);
     }
 
-    std::unique_ptr<SfxTabPage> ODriversSettings::CreateMySQLNATIVE(TabPageParent pParent, const SfxItemSet* pAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateMySQLNATIVE(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* pAttrSet)
     {
-        return std::make_unique<MySQLNativePage>(pParent, *pAttrSet);
+        return std::make_unique<MySQLNativePage>(pPage, pController, *pAttrSet);
     }
 
-    std::unique_ptr<SfxTabPage> ODriversSettings::CreateOracleJDBC(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateOracleJDBC(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet)
     {
-        return std::make_unique<OGeneralSpecialJDBCDetailsPage>(pParent, *_rAttrSet,DSID_ORACLE_PORTNUMBER, false);
+        return std::make_unique<OGeneralSpecialJDBCDetailsPage>(pPage, pController, *_rAttrSet,DSID_ORACLE_PORTNUMBER, false);
     }
 
     // OLDAPDetailsPage
-    OLDAPDetailsPage::OLDAPDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/ldappage.ui", "LDAP",
+    OLDAPDetailsPage::OLDAPDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/ldappage.ui", "LDAP",
                                     rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
         , m_xETBaseDN(m_xBuilder->weld_entry("baseDNEntry"))
         , m_xCBUseSSL(m_xBuilder->weld_check_button("useSSLCheckbutton"))
@@ -600,9 +600,9 @@ namespace dbaui
     {
     }
 
-    std::unique_ptr<SfxTabPage> ODriversSettings::CreateLDAP(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateLDAP(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet)
     {
-        return std::make_unique<OLDAPDetailsPage>(pParent, *_rAttrSet);
+        return std::make_unique<OLDAPDetailsPage>(pPage, pController, *_rAttrSet);
     }
 
     bool OLDAPDetailsPage::FillItemSet( SfxItemSet* _rSet )
@@ -655,8 +655,8 @@ namespace dbaui
     }
 
     // OTextDetailsPage
-    OTextDetailsPage::OTextDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : OCommonBehaviourTabPage(pParent, "dbaccess/ui/emptypage.ui", "EmptyPage", rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
+    OTextDetailsPage::OTextDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OCommonBehaviourTabPage(pPage, pController, "dbaccess/ui/emptypage.ui", "EmptyPage", rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
         , m_xTextConnectionHelper(new OTextConnectionHelper(m_xContainer.get(), TC_EXTENSION | TC_HEADER | TC_SEPARATORS | TC_CHARSET))
     {
     }
@@ -666,9 +666,9 @@ namespace dbaui
         m_xTextConnectionHelper.reset();
     }
 
-    std::unique_ptr<SfxTabPage> ODriversSettings::CreateText(TabPageParent pParent,  const SfxItemSet* pAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateText(weld::Container* pPage, weld::DialogController* pController,  const SfxItemSet* pAttrSet)
     {
-        return std::make_unique<OTextDetailsPage>(pParent, *pAttrSet);
+        return std::make_unique<OTextDetailsPage>(pPage, pController, *pAttrSet);
     }
 
     void OTextDetailsPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
@@ -705,16 +705,16 @@ namespace dbaui
         return m_xTextConnectionHelper->prepareLeave();
     }
 
-    std::unique_ptr<SfxTabPage> ODriversSettings::CreateGeneratedValuesPage(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateGeneratedValuesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet)
     {
-        return std::make_unique<GeneratedValuesPage>(pParent, *_rAttrSet);
+        return std::make_unique<GeneratedValuesPage>(pPage, pController, *_rAttrSet);
     }
 
-    std::unique_ptr<SfxTabPage> ODriversSettings::CreateSpecialSettingsPage(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateSpecialSettingsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet)
     {
         OUString eType = ODbDataSourceAdministrationHelper::getDatasourceType( *_rAttrSet );
         DataSourceMetaData aMetaData( eType );
-        return std::make_unique<SpecialSettingsPage>(pParent, *_rAttrSet, aMetaData);
+        return std::make_unique<SpecialSettingsPage>(pPage, pController, *_rAttrSet, aMetaData);
     }
 }   // namespace dbaui
 

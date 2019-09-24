@@ -109,8 +109,8 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     void setOptimalRelWidth();
 
 public:
-    SvxSwPosSizeTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    SvxSwPosSizeTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
     virtual ~SvxSwPosSizeTabPage() override;
 
     static const sal_uInt16*     GetRanges();

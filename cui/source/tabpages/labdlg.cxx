@@ -66,8 +66,8 @@ const sal_uInt16 SvxCaptionTabPage::pCaptionRanges[] =
     0
 };
 
-SvxCaptionTabPage::SvxCaptionTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "cui/ui/calloutpage.ui", "CalloutPage", &rInAttrs)
+SvxCaptionTabPage::SvxCaptionTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/calloutpage.ui", "CalloutPage", &rInAttrs)
     , nCaptionType(SdrCaptionType::Type1)
     , nGap(0)
     , nEscDir(SdrCaptionEscDir::Horizontal)
@@ -332,10 +332,10 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     SetupType_Impl( nCaptionType );
 }
 
-std::unique_ptr<SfxTabPage> SvxCaptionTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxCaptionTabPage::Create(weld::Container* pPage, weld::DialogController* pController,
                                              const SfxItemSet* rOutAttrs)
 {
-    return std::make_unique<SvxCaptionTabPage>(pParent, *rOutAttrs);
+    return std::make_unique<SvxCaptionTabPage>(pPage, pController, *rOutAttrs);
 }
 
 void SvxCaptionTabPage::SetupExtension_Impl( sal_uInt16 nType )

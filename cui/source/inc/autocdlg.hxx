@@ -66,10 +66,10 @@ private:
     void InsertEntry(const OUString& rTxt);
 
 public:
-    OfaAutocorrOptionsPage(TabPageParent pParent, const SfxItemSet& rSet);
+    OfaAutocorrOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~OfaAutocorrOptionsPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -119,8 +119,8 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     void CreateEntry(const OUString& rTxt, sal_uInt16 nCol);
 
 public:
-    OfaSwAutoFmtOptionsPage(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    OfaSwAutoFmtOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                             const SfxItemSet* rAttrSet);
     virtual ~OfaSwAutoFmtOptionsPage() override;
 
@@ -190,10 +190,10 @@ private:
                             LanguageType eNewLanguage);
 
 public:
-    OfaAutocorrReplacePage(TabPageParent pParent, const SfxItemSet& rSet);
+    OfaAutocorrReplacePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~OfaAutocorrReplacePage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -245,10 +245,10 @@ private:
                                         LanguageType eOldLanguage,
                                         LanguageType eNewLanguage);
 public:
-    OfaAutocorrExceptPage(TabPageParent pParent, const SfxItemSet& rSet);
+    OfaAutocorrExceptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~OfaAutocorrExceptPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -301,8 +301,8 @@ private:
                             sal_uInt16 nCol, sal_uInt16 nTextCol);
 
 public:
-    OfaQuoteTabPage(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent,
+    OfaQuoteTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController,
                                      const SfxItemSet* rAttrSet);
     virtual ~OfaQuoteTabPage() override;
 
@@ -336,8 +336,8 @@ private:
     DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
 
 public:
-    OfaAutoCompleteTabPage(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent,
+    OfaAutoCompleteTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController,
                                      const SfxItemSet* rAttrSet);
     virtual ~OfaAutoCompleteTabPage() override;
 
@@ -398,10 +398,10 @@ private:
 
 public:
     /// construction via Create()
-    OfaSmartTagOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    OfaSmartTagOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~OfaSmartTagOptionsTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

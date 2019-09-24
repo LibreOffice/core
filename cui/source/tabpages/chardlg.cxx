@@ -157,8 +157,8 @@ inline SvxFont& SvxCharBasePage::GetPreviewCTLFont()
     return m_aPreviewWin.GetCTLFont();
 }
 
-SvxCharBasePage::SvxCharBasePage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rItemset)
-    : SfxTabPage(pParent, rUIXMLDescription, rID, &rItemset)
+SvxCharBasePage::SvxCharBasePage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rItemset)
+    : SfxTabPage(pPage, pController, rUIXMLDescription, rID, &rItemset)
     , m_bPreviewBackgroundToCharacter( false )
 {
 }
@@ -212,8 +212,8 @@ struct SvxCharNamePage_Impl
 
 // class SvxCharNamePage -------------------------------------------------
 
-SvxCharNamePage::SvxCharNamePage(TabPageParent pParent, const SfxItemSet& rInSet)
-    : SvxCharBasePage(pParent, "cui/ui/charnamepage.ui", "CharNamePage", rInSet)
+SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInSet)
+    : SvxCharBasePage(pPage, pController, "cui/ui/charnamepage.ui", "CharNamePage", rInSet)
     , m_pImpl(new SvxCharNamePage_Impl)
     , m_xEastFrame(m_xBuilder->weld_widget("asian"))
     , m_xEastFontNameFT(m_xBuilder->weld_label("eastfontnameft"))
@@ -1190,9 +1190,9 @@ DeactivateRC SvxCharNamePage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-std::unique_ptr<SfxTabPage> SvxCharNamePage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxCharNamePage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<SvxCharNamePage>(pParent, *rSet );
+    return std::make_unique<SvxCharNamePage>(pPage, pController, *rSet );
 }
 
 void SvxCharNamePage::Reset( const SfxItemSet* rSet )
@@ -1311,14 +1311,14 @@ void SvxCharNamePage::PageCreated(const SfxAllItemSet& aSet)
 }
 // class SvxCharEffectsPage ----------------------------------------------
 
-SvxCharEffectsPage::SvxCharEffectsPage(TabPageParent pParent, const SfxItemSet& rInSet)
-    : SvxCharBasePage(pParent, "cui/ui/effectspage.ui", "EffectsPage", rInSet)
+SvxCharEffectsPage::SvxCharEffectsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInSet)
+    : SvxCharBasePage(pPage, pController, "cui/ui/effectspage.ui", "EffectsPage", rInSet)
     , m_bOrigFontColor(false)
     , m_bNewFontColor(false)
     , m_bEnableNoneFontColor(false)
     , m_bUnderlineColorDisabled(false)
     , m_xFontColorFT(m_xBuilder->weld_label("fontcolorft"))
-    , m_xFontColorLB(new ColorListBox(m_xBuilder->weld_menu_button("fontcolorlb"), pParent.GetFrameWeld()))
+    , m_xFontColorLB(new ColorListBox(m_xBuilder->weld_menu_button("fontcolorlb"), pController->getDialog()))
     , m_xEffectsFT(m_xBuilder->weld_label("effectsft"))
     , m_xEffectsLB(m_xBuilder->weld_combo_box("effectslb"))
     , m_xReliefFT(m_xBuilder->weld_label("reliefft"))
@@ -1329,11 +1329,11 @@ SvxCharEffectsPage::SvxCharEffectsPage(TabPageParent pParent, const SfxItemSet& 
     , m_xHiddenBtn(m_xBuilder->weld_check_button("hiddencb"))
     , m_xOverlineLB(m_xBuilder->weld_combo_box("overlinelb"))
     , m_xOverlineColorFT(m_xBuilder->weld_label("overlinecolorft"))
-    , m_xOverlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button("overlinecolorlb"), pParent.GetFrameWeld()))
+    , m_xOverlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button("overlinecolorlb"), pController->getDialog()))
     , m_xStrikeoutLB(m_xBuilder->weld_combo_box("strikeoutlb"))
     , m_xUnderlineLB(m_xBuilder->weld_combo_box("underlinelb"))
     , m_xUnderlineColorFT(m_xBuilder->weld_label("underlinecolorft"))
-    , m_xUnderlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button("underlinecolorlb"), pParent.GetFrameWeld()))
+    , m_xUnderlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button("underlinecolorlb"), pController->getDialog()))
     , m_xIndividualWordsBtn(m_xBuilder->weld_check_button("individualwordscb"))
     , m_xEmphasisFT(m_xBuilder->weld_label("emphasisft"))
     , m_xEmphasisLB(m_xBuilder->weld_combo_box("emphasislb"))
@@ -1669,9 +1669,9 @@ DeactivateRC SvxCharEffectsPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-std::unique_ptr<SfxTabPage> SvxCharEffectsPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+std::unique_ptr<SfxTabPage> SvxCharEffectsPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet )
 {
-    return std::make_unique<SvxCharEffectsPage>( pParent, *rSet );
+    return std::make_unique<SvxCharEffectsPage>( pPage, pController, *rSet );
 }
 
 void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
@@ -2432,8 +2432,8 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
 
 // class SvxCharPositionPage ---------------------------------------------
 
-SvxCharPositionPage::SvxCharPositionPage(TabPageParent pParent, const SfxItemSet& rInSet)
-    : SvxCharBasePage(pParent, "cui/ui/positionpage.ui", "PositionPage", rInSet)
+SvxCharPositionPage::SvxCharPositionPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInSet)
+    : SvxCharBasePage(pPage, pController, "cui/ui/positionpage.ui", "PositionPage", rInSet)
     , m_nSuperEsc(short(DFLT_ESC_SUPER))
     , m_nSubEsc(short(DFLT_ESC_SUB))
     , m_nScaleWidthItemSetVal(100)
@@ -2660,9 +2660,9 @@ DeactivateRC SvxCharPositionPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-std::unique_ptr<SfxTabPage> SvxCharPositionPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxCharPositionPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<SvxCharPositionPage>(pParent, *rSet);
+    return std::make_unique<SvxCharPositionPage>(pPage, pController, *rSet);
 }
 
 void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
@@ -3045,8 +3045,8 @@ void SvxCharPositionPage::PageCreated(const SfxAllItemSet& aSet)
 }
 // class SvxCharTwoLinesPage ------------------------------------------------
 
-SvxCharTwoLinesPage::SvxCharTwoLinesPage(TabPageParent pParent, const SfxItemSet& rInSet)
-    : SvxCharBasePage(pParent, "cui/ui/twolinespage.ui", "TwoLinesPage", rInSet)
+SvxCharTwoLinesPage::SvxCharTwoLinesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInSet)
+    : SvxCharBasePage(pPage, pController, "cui/ui/twolinespage.ui", "TwoLinesPage", rInSet)
     , m_nStartBracketPosition( 0 )
     , m_nEndBracketPosition( 0 )
     , m_xTwoLinesBtn(m_xBuilder->weld_check_button("twolines"))
@@ -3179,9 +3179,9 @@ DeactivateRC SvxCharTwoLinesPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-std::unique_ptr<SfxTabPage> SvxCharTwoLinesPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxCharTwoLinesPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<SvxCharTwoLinesPage>(pParent, *rSet);
+    return std::make_unique<SvxCharTwoLinesPage>(pPage, pController, *rSet);
 }
 
 void SvxCharTwoLinesPage::Reset( const SfxItemSet* rSet )

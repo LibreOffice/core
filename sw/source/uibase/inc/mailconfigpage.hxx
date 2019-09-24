@@ -48,10 +48,10 @@ class SwMailConfigPage : public SfxTabPage
     DECL_LINK(SecureHdl, weld::ToggleButton&, void);
 
 public:
-    SwMailConfigPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwMailConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwMailConfigPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController,
                                      const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

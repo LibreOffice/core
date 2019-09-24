@@ -37,7 +37,7 @@ namespace chart
 class TitlesAndObjectsTabPage final : public vcl::OWizardPage
 {
 public:
-    TitlesAndObjectsTabPage(TabPageParent pParent,
+    TitlesAndObjectsTabPage(weld::Container* pPage, weld::DialogController* pController,
                             const css::uno::Reference< css::chart2::XChartDocument >& xChartModel,
                             const css::uno::Reference< css::uno::XComponentContext >& xContext);
     virtual ~TitlesAndObjectsTabPage() override;

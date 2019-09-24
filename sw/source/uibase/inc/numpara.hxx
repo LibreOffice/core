@@ -62,10 +62,10 @@ class SwParagraphNumTabPage final : public SfxTabPage
                           SfxStyleFamily nFamily );
 
 public:
-    SwParagraphNumTabPage(TabPageParent pParent, const SfxItemSet& rSet );
+    SwParagraphNumTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet );
     virtual ~SwParagraphNumTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                       const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
