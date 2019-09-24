@@ -56,7 +56,7 @@ static const unsigned long k32BitBlueColorMask  = 0x000000ff;
 static bool isValidBitCount( sal_uInt16 nBitCount )
 {
     return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) ||
-        (nBitCount == 16) || (nBitCount == 24) || (nBitCount == 32);
+        (nBitCount == 24) || (nBitCount == 32);
 }
 
 QuartzSalBitmap::QuartzSalBitmap()
@@ -279,11 +279,10 @@ bool QuartzSalBitmap::AllocateUserData()
         case 1:     mnBytesPerRow = (mnWidth + 7) >> 3; break;
         case 4:     mnBytesPerRow = (mnWidth + 1) >> 1; break;
         case 8:     mnBytesPerRow = mnWidth; break;
-        case 16:    mnBytesPerRow = mnWidth << 1; break;
         case 24:    mnBytesPerRow = (mnWidth << 1) + mnWidth; break;
         case 32:    mnBytesPerRow = mnWidth << 2; break;
         default:
-            OSL_FAIL("vcl::QuartzSalBitmap::AllocateUserData(), illegal bitcount!");
+            assert(false && "vcl::QuartzSalBitmap::AllocateUserData(), illegal bitcount!");
         }
     }
 
@@ -368,34 +367,6 @@ public:
         *pData++ = nColor.GetBlue();
         *pData++ = nColor.GetGreen();
         *pData++ = nColor.GetRed();
-    }
-};
-
-class ImplPixelFormat16 : public ImplPixelFormat
-// currently R5G6B5-format for 16bit depth
-{
-    sal_uInt16* pData;
-public:
-
-    virtual void StartLine( sal_uInt8* pLine ) override
-    {
-        pData = reinterpret_cast<sal_uInt16*>(pLine);
-    }
-    virtual void SkipPixel( sal_uInt32 nPixel ) override
-    {
-        pData += nPixel;
-    }
-    virtual Color ReadPixel() override
-    {
-        const Color c( (*pData & 0xf800) >> 8, (*pData & 0x07e0) >> 3 , (*pData & 0x001f) << 3 );
-        pData++;
-        return c;
-    }
-    virtual void WritePixel( Color nColor ) override
-    {
-        *pData++ =  (( nColor.GetRed() & 0xf8 ) << 8 ) |
-                    (( nColor.GetGreen() & 0xfc ) << 3 ) |
-                    (( nColor.GetBlue() & 0xf8 ) >> 3 );
     }
 };
 
@@ -544,7 +515,6 @@ std::unique_ptr<ImplPixelFormat> ImplPixelFormat::GetFormat( sal_uInt16 nBits, c
     case 1: return std::make_unique<ImplPixelFormat1>( rPalette );
     case 4: return std::make_unique<ImplPixelFormat4>( rPalette );
     case 8: return std::make_unique<ImplPixelFormat8>( rPalette );
-    case 16: return std::make_unique<ImplPixelFormat16>();
     case 24: return std::make_unique<ImplPixelFormat24>();
     case 32: return std::make_unique<ImplPixelFormat32>();
     default:
@@ -745,18 +715,6 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
         case 8:
             pBuffer->mnFormat = ScanlineFormat::N8BitPal;
             break;
-        case 16:
-        {
-            pBuffer->mnFormat = ScanlineFormat::N16BitTcMsbMask;
-            ColorMaskElement aRedMask(k16BitRedColorMask);
-            aRedMask.CalcMaskShift();
-            ColorMaskElement aGreenMask(k16BitGreenColorMask);
-            aGreenMask.CalcMaskShift();
-            ColorMaskElement aBlueMask(k16BitBlueColorMask);
-            aBlueMask.CalcMaskShift();
-            pBuffer->maColorMask  = ColorMask(aRedMask, aGreenMask, aBlueMask);
-            break;
-        }
         case 24:
             pBuffer->mnFormat = ScanlineFormat::N24BitTcBgr;
             break;
@@ -772,6 +730,7 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
             pBuffer->maColorMask  = ColorMask(aRedMask, aGreenMask, aBlueMask);
             break;
         }
+        default: assert(false);
     }
 
     // some BitmapBuffer users depend on a complete palette

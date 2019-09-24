@@ -173,46 +173,6 @@ public:
 };
 
 template <>
-class TrueColorPixelPtr<ScanlineFormat::N16BitTcMsbMask> : public BasePixelPtr
-{
-public:
-    void    operator++()            { mpPixel += 2; }
-
-    // TODO: non565-RGB
-    PIXBYTE GetRed() const          { return (mpPixel[0] & 0xF8U); }
-    PIXBYTE GetGreen() const        { return (mpPixel[0]<<5U) | ((mpPixel[1]>>3U)&28U); }
-    PIXBYTE GetBlue() const         { return (mpPixel[1]<<3U); }
-    static PIXBYTE GetAlpha()       { return 0; }
-    static void SetAlpha( PIXBYTE ) {}
-
-    void SetColor( PIXBYTE r, PIXBYTE g, PIXBYTE b ) const
-    {
-        mpPixel[0] = ((g >> 5U) & 7U) | (r & 0xF8U);
-        mpPixel[1] = ((g & 28U)<< 3U) | (b >> 3U);
-    }
-};
-
-template <>
-class TrueColorPixelPtr<ScanlineFormat::N16BitTcLsbMask> : public BasePixelPtr
-{
-public:
-    void    operator++()            { mpPixel += 2; }
-
-    // TODO: non565-RGB
-    PIXBYTE GetRed() const          { return (mpPixel[1] & 0xF8U); }
-    PIXBYTE GetGreen() const        { return (mpPixel[1]<<5U) | ((mpPixel[0]>>3U)&28U); }
-    PIXBYTE GetBlue() const         { return (mpPixel[0]<<3U); }
-    static PIXBYTE GetAlpha()       { return 0; }
-    static void SetAlpha( PIXBYTE ) {}
-
-    void SetColor( PIXBYTE r, PIXBYTE g, PIXBYTE b ) const
-    {
-        mpPixel[0] = ((g & 28U)<< 3U) | (b >> 3U);
-        mpPixel[1] = ((g >> 5U) & 7U) | (r & 0xF8U);
-    }
-};
-
-template <>
 class TrueColorPixelPtr<ScanlineFormat::N8BitTcMask> : public BasePixelPtr
 {
 public:
@@ -235,18 +195,6 @@ static void ImplConvertPixel( const TrueColorPixelPtr<DSTFMT>& rDst,
 {
     rDst.SetColor( rSrc.GetRed(), rSrc.GetGreen(), rSrc.GetBlue() );
     rDst.SetAlpha( rSrc.GetAlpha() );
-}
-
-template <>
-void ImplConvertPixel<ScanlineFormat::N16BitTcLsbMask, ScanlineFormat::N16BitTcMsbMask> (
-    const TrueColorPixelPtr<ScanlineFormat::N16BitTcMsbMask>& rDst,
-    const TrueColorPixelPtr<ScanlineFormat::N16BitTcLsbMask>& rSrc )
-{
-    // byte swapping
-    const PIXBYTE* pSrc = rSrc.GetRawPtr();
-    PIXBYTE* pDst = rDst.GetRawPtr();
-    pDst[1] = pSrc[0];
-    pDst[0] = pSrc[1];
 }
 
 template <ScanlineFormat SRCFMT, ScanlineFormat DSTFMT>
@@ -394,11 +342,6 @@ static bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
 //            return ImplConvertToBitmap<ScanlineFormat::N32BitTcMask>( aSrcType, rDst, rSrc );
             break;
 
-        case ScanlineFormat::N16BitTcMsbMask:
-            return ImplConvertToBitmap<ScanlineFormat::N16BitTcMsbMask>( aSrcType, rDst, rSrc );
-        case ScanlineFormat::N16BitTcLsbMask:
-            return ImplConvertToBitmap<ScanlineFormat::N16BitTcLsbMask>( aSrcType, rDst, rSrc );
-
         case ScanlineFormat::N24BitTcBgr:
             return ImplConvertToBitmap<ScanlineFormat::N24BitTcBgr>( aSrcType, rDst, rSrc );
         case ScanlineFormat::N24BitTcRgb:
@@ -463,18 +406,6 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     const ScanlineFormat nSrcFormat = RemoveScanline(rSrc.mnFormat);
     const ScanlineFormat nDstFormat = RemoveScanline(rDst.mnFormat);
 
-    // TODO: also implement conversions for 16bit colormasks with non-565 format
-    if( nSrcFormat & (ScanlineFormat::N16BitTcLsbMask | ScanlineFormat::N16BitTcMsbMask) )
-        if( rSrc.maColorMask.GetRedMask()  != 0xF800
-        ||  rSrc.maColorMask.GetGreenMask()!= 0x07E0
-        ||  rSrc.maColorMask.GetBlueMask() != 0x001F )
-            return false;
-    if( nDstFormat & (ScanlineFormat::N16BitTcLsbMask | ScanlineFormat::N16BitTcMsbMask) )
-        if( rDst.maColorMask.GetRedMask()  != 0xF800
-        ||  rDst.maColorMask.GetGreenMask()!= 0x07E0
-        ||  rDst.maColorMask.GetBlueMask() != 0x001F )
-            return false;
-
     // special handling of trivial cases
     if( nSrcFormat == nDstFormat )
     {
@@ -499,11 +430,6 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
         case ScanlineFormat::N32BitTcMask:
 //            return ImplConvertFromBitmap<ScanlineFormat::N32BitTcMask>( rDst, rSrc );
             break;
-
-        case ScanlineFormat::N16BitTcMsbMask:
-            return ImplConvertFromBitmap<ScanlineFormat::N16BitTcMsbMask>( rDst, rSrc );
-        case ScanlineFormat::N16BitTcLsbMask:
-            return ImplConvertFromBitmap<ScanlineFormat::N16BitTcLsbMask>( rDst, rSrc );
 
         case ScanlineFormat::N24BitTcBgr:
             return ImplConvertFromBitmap<ScanlineFormat::N24BitTcBgr>( rDst, rSrc );
@@ -625,11 +551,6 @@ static bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, c
 //            return ImplBlendToBitmap<ScanlineFormat::N32BitTcMask>( aSrcType, rDst, rSrc, rMsk );
             break;
 
-        case ScanlineFormat::N16BitTcMsbMask:
-            return ImplBlendToBitmap<ScanlineFormat::N16BitTcMsbMask>( aSrcType, rDst, rSrc, rMsk );
-        case ScanlineFormat::N16BitTcLsbMask:
-            return ImplBlendToBitmap<ScanlineFormat::N16BitTcLsbMask>( aSrcType, rDst, rSrc, rMsk );
-
         case ScanlineFormat::N24BitTcBgr:
             return ImplBlendToBitmap<ScanlineFormat::N24BitTcBgr>( aSrcType, rDst, rSrc, rMsk );
         case ScanlineFormat::N24BitTcRgb:
@@ -708,19 +629,6 @@ bool ImplFastBitmapBlending( BitmapWriteAccess const & rDstWA,
     const BitmapBuffer& rMsk = *rMskRA.ImplGetBitmapBuffer();
 
     const ScanlineFormat nSrcFormat = RemoveScanline(rSrc.mnFormat);
-    const ScanlineFormat nDstFormat = RemoveScanline(rDst.mnFormat);
-
-    // accelerated conversions for 16bit colormasks with non-565 format are not yet implemented
-    if( nSrcFormat & (ScanlineFormat::N16BitTcLsbMask | ScanlineFormat::N16BitTcMsbMask) )
-        if( rSrc.maColorMask.GetRedMask()  != 0xF800
-        ||  rSrc.maColorMask.GetGreenMask()!= 0x07E0
-        ||  rSrc.maColorMask.GetBlueMask() != 0x001F)
-            return false;
-    if( nDstFormat & (ScanlineFormat::N16BitTcLsbMask | ScanlineFormat::N16BitTcMsbMask) )
-        if( rDst.maColorMask.GetRedMask()  != 0xF800
-        ||  rDst.maColorMask.GetGreenMask()!= 0x07E0
-        ||  rDst.maColorMask.GetBlueMask() != 0x001F)
-            return false;
 
     // select the matching instantiation for the source's bitmap format
     switch( nSrcFormat )
@@ -737,11 +645,6 @@ bool ImplFastBitmapBlending( BitmapWriteAccess const & rDstWA,
         case ScanlineFormat::N32BitTcMask:
 //            return ImplBlendFromBitmap<ScanlineFormat::N32BitTcMask>( rDst, rSrc );
             break;
-
-        case ScanlineFormat::N16BitTcMsbMask:
-            return ImplBlendFromBitmap<ScanlineFormat::N16BitTcMsbMask>( rDst, rSrc, rMsk );
-        case ScanlineFormat::N16BitTcLsbMask:
-            return ImplBlendFromBitmap<ScanlineFormat::N16BitTcLsbMask>( rDst, rSrc, rMsk );
 
         case ScanlineFormat::N24BitTcBgr:
             return ImplBlendFromBitmap<ScanlineFormat::N24BitTcBgr>( rDst, rSrc, rMsk );
@@ -818,8 +721,6 @@ bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
     switch( nDstFormat )
     {
         case ScanlineFormat::N32BitTcMask:
-        case ScanlineFormat::N16BitTcMsbMask:
-        case ScanlineFormat::N16BitTcLsbMask:
 
         case ScanlineFormat::N24BitTcBgr:
         case ScanlineFormat::N24BitTcRgb:

@@ -119,8 +119,8 @@ bool Qt5Bitmap::Create(const SalBitmap& rSalBmp, SalGraphics* pSalGraphics)
 
 bool Qt5Bitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
 {
-    assert((nNewBitCount == 1 || nNewBitCount == 4 || nNewBitCount == 8 || nNewBitCount == 16
-            || nNewBitCount == 24 || nNewBitCount == 32)
+    assert((nNewBitCount == 1 || nNewBitCount == 4 || nNewBitCount == 8 || nNewBitCount == 24
+            || nNewBitCount == 32)
            && "Unsupported BitCount!");
 
     const Qt5Bitmap* pBitmap = static_cast<const Qt5Bitmap*>(&rSalBmp);
@@ -244,23 +244,6 @@ BitmapBuffer* Qt5Bitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
             pBuffer->mnFormat = ScanlineFormat::N8BitPal | ScanlineFormat::TopDown;
             pBuffer->maPalette = m_aPalette;
             break;
-        case 16:
-        {
-#ifdef OSL_BIGENDIAN
-            pBuffer->mnFormat = ScanlineFormat::N16BitTcMsbMask | ScanlineFormat::TopDown;
-#else
-            pBuffer->mnFormat = ScanlineFormat::N16BitTcLsbMask | ScanlineFormat::TopDown;
-#endif
-            ColorMaskElement aRedMask(0xf800); // 5
-            aRedMask.CalcMaskShift();
-            ColorMaskElement aGreenMask(0x07e0); // 6
-            aGreenMask.CalcMaskShift();
-            ColorMaskElement aBlueMask(0x001f); // 5
-            aBlueMask.CalcMaskShift();
-            pBuffer->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
-            pBuffer->maPalette = aEmptyPalette;
-            break;
-        }
         case 24:
             pBuffer->mnFormat = ScanlineFormat::N24BitTcRgb | ScanlineFormat::TopDown;
             pBuffer->maPalette = aEmptyPalette;
@@ -275,6 +258,8 @@ BitmapBuffer* Qt5Bitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
             pBuffer->maPalette = aEmptyPalette;
             break;
         }
+        default:
+            assert(false);
     }
 
     return pBuffer;

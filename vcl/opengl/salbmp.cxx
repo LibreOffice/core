@@ -77,7 +77,7 @@ bool determineTextureFormat(sal_uInt16 nBits, GLenum& nFormat, GLenum& nType)
 
 bool isValidBitCount( sal_uInt16 nBitCount )
 {
-    return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 16) || (nBitCount == 24) || (nBitCount == 32);
+    return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 24) || (nBitCount == 32);
 }
 
 sal_uInt32 lclBytesPerRow(sal_uInt16 nBits, int nWidth)
@@ -87,7 +87,6 @@ sal_uInt32 lclBytesPerRow(sal_uInt16 nBits, int nWidth)
     case 1:  return (nWidth + 7) >> 3;
     case 4:  return (nWidth + 1) >> 1;
     case 8:  return  nWidth;
-    case 16: return  nWidth * 2;
     case 24: return  nWidth * 3;
     case 32: return  nWidth * 4;
     default:
@@ -579,7 +578,7 @@ bool OpenGLSalBitmap::ReadTexture()
     xContext->state().scissor().disable();
     xContext->state().stencil().disable();
 
-    if ((mnBits == 8 && maPalette.IsGreyPalette()) || mnBits == 16 || mnBits == 24 || mnBits == 32)
+    if ((mnBits == 8 && maPalette.IsGreyPalette()) || mnBits == 24 || mnBits == 32)
     {
         determineTextureFormat(mnBits, nFormat, nType);
 
@@ -803,18 +802,6 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
         case 8:
             pBuffer->mnFormat = ScanlineFormat::N8BitPal;
             break;
-        case 16:
-        {
-            pBuffer->mnFormat = ScanlineFormat::N16BitTcMsbMask;
-            ColorMaskElement aRedMask(0x0000f800);
-            aRedMask.CalcMaskShift();
-            ColorMaskElement aGreenMask(0x000007e0);
-            aGreenMask.CalcMaskShift();
-            ColorMaskElement aBlueMask(0x0000001f);
-            aBlueMask.CalcMaskShift();
-            pBuffer->maColorMask  = ColorMask(aRedMask, aGreenMask, aBlueMask);
-            break;
-        }
         case 24:
         {
             pBuffer->mnFormat = ScanlineFormat::N24BitTcRgb;
@@ -832,6 +819,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
             pBuffer->maColorMask  = ColorMask(aRedMask, aGreenMask, aBlueMask);
             break;
         }
+        default: assert(false);
     }
 
     return pBuffer;
