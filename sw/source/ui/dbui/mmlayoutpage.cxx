@@ -75,8 +75,8 @@ using namespace ::com::sun::star::view;
 #define DEFAULT_ADDRESS_WIDTH  (MM50*15)// 7,5 cm
 #define DEFAULT_ADDRESS_HEIGHT (MM50*7) // 3,5cm
 
-SwMailMergeLayoutPage::SwMailMergeLayoutPage(SwMailMergeWizard* pWizard, TabPageParent pParent)
-    : vcl::OWizardPage(pParent, "modules/swriter/ui/mmlayoutpage.ui", "MMLayoutPage")
+SwMailMergeLayoutPage::SwMailMergeLayoutPage(weld::Container* pPage, SwMailMergeWizard* pWizard)
+    : vcl::OWizardPage(pPage, pWizard, "modules/swriter/ui/mmlayoutpage.ui", "MMLayoutPage")
     , m_pExampleWrtShell(nullptr)
     , m_pAddressBlockFormat(nullptr)
     , m_bIsGreetingInserted(false)

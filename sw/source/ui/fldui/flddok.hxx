@@ -55,11 +55,11 @@ protected:
     virtual sal_uInt16      GetGroup() override;
 
 public:
-    SwFieldDokPage(TabPageParent pWindow, const SfxItemSet * pSet);
+    SwFieldDokPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet * pSet);
 
     virtual ~SwFieldDokPage() override;
 
-    static std::unique_ptr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage>  Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

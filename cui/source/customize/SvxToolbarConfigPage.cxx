@@ -43,8 +43,8 @@
 
 #include <dlgname.hxx>
 
-SvxToolbarConfigPage::SvxToolbarConfigPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SvxConfigPage(pParent, rSet)
+SvxToolbarConfigPage::SvxToolbarConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SvxConfigPage(pPage, pController, rSet)
 {
     m_xGearBtn = m_xBuilder->weld_menu_button("toolbargearbtn");
     m_xGearBtn->show();

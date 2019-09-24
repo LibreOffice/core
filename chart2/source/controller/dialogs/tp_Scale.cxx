@@ -50,8 +50,8 @@ void lcl_setValue(weld::FormattedSpinButton& rFmtField, double fValue)
 
 }
 
-ScaleTabPage::ScaleTabPage(TabPageParent pWindow,const SfxItemSet& rInAttrs)
-    : SfxTabPage(pWindow, "modules/schart/ui/tp_Scale.ui", "tp_Scale", &rInAttrs)
+ScaleTabPage::ScaleTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "modules/schart/ui/tp_Scale.ui", "tp_Scale", &rInAttrs)
     , fMin(0.0)
     , fMax(0.0)
     , fStepMain(0.0)
@@ -213,9 +213,9 @@ IMPL_LINK_NOARG(ScaleTabPage, SelectAxisTypeHdl, weld::ComboBox&, void)
     SetNumFormat();
 }
 
-std::unique_ptr<SfxTabPage> ScaleTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+std::unique_ptr<SfxTabPage> ScaleTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rOutAttrs)
 {
-    return std::make_unique<ScaleTabPage>(pParent, *rOutAttrs);
+    return std::make_unique<ScaleTabPage>(pPage, pController, *rOutAttrs);
 }
 
 bool ScaleTabPage::FillItemSet(SfxItemSet* rOutAttrs)

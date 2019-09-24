@@ -40,7 +40,7 @@ protected:
 
     bool                m_bPreviewBackgroundToCharacter;
 
-    SvxCharBasePage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rAttrSet);
+    SvxCharBasePage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rAttrSet);
 
     void SetPrevFontWidthScale( const SfxItemSet& rSet );
     void SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
@@ -138,8 +138,8 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    SvxCharNamePage(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    SvxCharNamePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     virtual ~SvxCharNamePage() override;
 
     static const sal_uInt16* GetRanges() { return pNameRanges; }
@@ -209,8 +209,8 @@ private:
     DECL_LINK(ColorBoxSelectHdl_Impl, ColorListBox&, void);
 
 public:
-    SvxCharEffectsPage(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    SvxCharEffectsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     virtual ~SvxCharEffectsPage() override;
 
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
@@ -279,8 +279,8 @@ private:
     void FontModifyHdl_Impl();
 
 public:
-    SvxCharPositionPage(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    SvxCharPositionPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     virtual ~SvxCharPositionPage() override;
 
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
@@ -318,8 +318,8 @@ private:
     DECL_LINK(CharacterMapHdl_Impl, weld::TreeView&, void);
 
 public:
-    SvxCharTwoLinesPage(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    SvxCharTwoLinesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     virtual ~SvxCharTwoLinesPage() override;
 
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;

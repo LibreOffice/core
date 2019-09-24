@@ -29,14 +29,14 @@ namespace chart
 class ErrorBarsTabPage : public SfxTabPage
 {
 public:
-    ErrorBarsTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    ErrorBarsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
     void SetErrorBarType( ErrorBarResources::tErrorBarType eNewType );
     void SetChartDocumentForRangeChoosing(
         const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument );
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rInAttrs );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rInAttrs );
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) override;
     virtual void Reset( const SfxItemSet* rInAttrs ) override;
 

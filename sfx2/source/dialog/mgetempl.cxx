@@ -47,9 +47,9 @@
  *
  *  initializes the list box with the templates
  */
-SfxManageStyleSheetPage::SfxManageStyleSheetPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
-    : SfxTabPage(pParent, "sfx/ui/managestylepage.ui", "ManageStylePage", &rAttrSet)
-    , pStyle(&static_cast<SfxStyleDialogController*>(pParent.pController)->GetStyleSheet())
+SfxManageStyleSheetPage::SfxManageStyleSheetPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet)
+    : SfxTabPage(pPage, pController, "sfx/ui/managestylepage.ui", "ManageStylePage", &rAttrSet)
+    , pStyle(&static_cast<SfxStyleDialogController*>(pController)->GetStyleSheet())
     , pItem(nullptr)
     , bModified(false)
     , aName(pStyle->GetName())
@@ -526,10 +526,10 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet* /*rAttrSet*/ )
     }
 }
 
-std::unique_ptr<SfxTabPage> SfxManageStyleSheetPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SfxManageStyleSheetPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                                     const SfxItemSet *rAttrSet )
 {
-    return std::make_unique<SfxManageStyleSheetPage>(pParent, *rAttrSet);
+    return std::make_unique<SfxManageStyleSheetPage>(pPage, pController, *rAttrSet);
 }
 
 void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)

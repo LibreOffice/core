@@ -98,8 +98,8 @@ protected:
 
 
 public:
-    SvxStdParagraphTabPage(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    SvxStdParagraphTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     virtual ~SvxStdParagraphTabPage() override;
 
     DECL_LINK(ELRLoseFocusHdl, weld::MetricSpinButton&, void);
@@ -161,8 +161,8 @@ protected:
     virtual DeactivateRC    DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    SvxParaAlignTabPage(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    SvxParaAlignTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     virtual ~SvxParaAlignTabPage() override;
 
     static const sal_uInt16* GetRanges() { return pAlignRanges; }
@@ -194,8 +194,8 @@ class SvxExtParagraphTabPage: public SfxTabPage
     static const sal_uInt16 pExtRanges[];
 
 public:
-    SvxExtParagraphTabPage(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    SvxExtParagraphTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                 const SfxItemSet* rSet );
     virtual ~SvxExtParagraphTabPage() override;
 
@@ -286,8 +286,8 @@ class SvxAsianTabPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xScriptSpaceCB;
 
 public:
-    SvxAsianTabPage(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
+    SvxAsianTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
     virtual ~SvxAsianTabPage() override;
 
     static const sal_uInt16*      GetRanges();

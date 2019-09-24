@@ -61,8 +61,8 @@ namespace dbp
     class OGridPage : public OControlWizardPage
     {
     public:
-        OGridPage(OGridWizard* pParent, TabPageParent pPageParent, const OUString& rUIXMLDescription, const OString& rID)
-            : OControlWizardPage(pParent, pPageParent, rUIXMLDescription, rID)
+        OGridPage(weld::Container* pPage, OGridWizard* pWizard, const OUString& rUIXMLDescription, const OString& rID)
+            : OControlWizardPage(pPage, pWizard, rUIXMLDescription, rID)
         {
         }
     protected:
@@ -79,7 +79,7 @@ namespace dbp
         std::unique_ptr<weld::TreeView> m_xSelFields;
 
     public:
-        explicit OGridFieldsSelection(OGridWizard* pParent, TabPageParent pPageParent);
+        explicit OGridFieldsSelection(weld::Container* pPage, OGridWizard* pWizard);
         virtual ~OGridFieldsSelection() override;
 
     private:

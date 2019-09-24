@@ -23,8 +23,8 @@
 
 namespace abp
 {
-    AdminDialogInvokationPage::AdminDialogInvokationPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent)
-        : AddressBookSourcePage(pDialog, pPageParent, "modules/sabpilot/ui/invokeadminpage.ui", "InvokeAdminPage")
+    AdminDialogInvokationPage::AdminDialogInvokationPage(weld::Container* pPage, OAddressBookSourcePilot* pController)
+        : AddressBookSourcePage(pPage, pController, "modules/sabpilot/ui/invokeadminpage.ui", "InvokeAdminPage")
         , m_xInvokeAdminDialog(m_xBuilder->weld_button("settings"))
         , m_xErrorMessage(m_xBuilder->weld_label("warning"))
     {

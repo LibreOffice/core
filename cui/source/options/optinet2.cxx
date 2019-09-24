@@ -128,8 +128,8 @@ IMPL_STATIC_LINK(SvxProxyTabPage, NoSpaceTextFilterHdl, OUString&, rTest, bool)
 /*  SvxProxyTabPage                                                 */
 /*                                                                  */
 /********************************************************************/
-SvxProxyTabPage::SvxProxyTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/optproxypage.ui", "OptProxyPage", &rSet)
+SvxProxyTabPage::SvxProxyTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optproxypage.ui", "OptProxyPage", &rSet)
     , m_xProxyModeLB(m_xBuilder->weld_combo_box("proxymode"))
     , m_xHttpProxyFT(m_xBuilder->weld_label("httpft"))
     , m_xHttpProxyED(m_xBuilder->weld_entry("http"))
@@ -185,9 +185,9 @@ SvxProxyTabPage::~SvxProxyTabPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SvxProxyTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SvxProxyTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<SvxProxyTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxProxyTabPage>(pPage, pController, *rAttrSet);
 }
 
 void SvxProxyTabPage::ReadConfigData_Impl()
@@ -495,8 +495,8 @@ IMPL_STATIC_LINK(SvxProxyTabPage, LoseFocusHdl_Impl, weld::Widget&, rControl, vo
 /*  SvxSecurityTabPage                                             */
 /*                                                                  */
 /********************************************************************/
-SvxSecurityTabPage::SvxSecurityTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/optsecuritypage.ui", "OptSecurityPage", &rSet)
+SvxSecurityTabPage::SvxSecurityTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optsecuritypage.ui", "OptSecurityPage", &rSet)
     , mpSecOptions(new SvtSecurityOptions)
     , m_xSecurityOptionsPB(m_xBuilder->weld_button("options"))
     , m_xSavePasswordsCB(m_xBuilder->weld_check_button("savepassword"))
@@ -786,9 +786,9 @@ void SvxSecurityTabPage::InitControls()
     }
 }
 
-std::unique_ptr<SfxTabPage> SvxSecurityTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SvxSecurityTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<SvxSecurityTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxSecurityTabPage>(pPage, pController, *rAttrSet);
 }
 
 void SvxSecurityTabPage::ActivatePage( const SfxItemSet& )
@@ -864,8 +864,8 @@ struct SvxEMailTabPage_Impl
     bool bROHideContent;
 };
 
-SvxEMailTabPage::SvxEMailTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage( pParent, "cui/ui/optemailpage.ui", "OptEmailPage", &rSet)
+SvxEMailTabPage::SvxEMailTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage( pPage, pController, "cui/ui/optemailpage.ui", "OptEmailPage", &rSet)
     , pImpl(new SvxEMailTabPage_Impl)
     , m_xMailContainer(m_xBuilder->weld_container("program"))
     , m_xMailerURLFI(m_xBuilder->weld_image("lockemail"))
@@ -888,9 +888,9 @@ SvxEMailTabPage::~SvxEMailTabPage()
 
 /* -------------------------------------------------------------------------*/
 
-std::unique_ptr<SfxTabPage> SvxEMailTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SvxEMailTabPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<SvxEMailTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxEMailTabPage>(pPage, pController, *rAttrSet);
 }
 
 /* -------------------------------------------------------------------------*/

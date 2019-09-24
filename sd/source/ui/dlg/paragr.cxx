@@ -34,8 +34,8 @@
 class SdParagraphNumTabPage : public SfxTabPage
 {
 public:
-    SdParagraphNumTabPage(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    SdParagraphNumTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
 
     static const sal_uInt16*  GetRanges();
 
@@ -51,8 +51,8 @@ private:
     DECL_LINK( ImplNewStartHdl, weld::Button&, void );
 };
 
-SdParagraphNumTabPage::SdParagraphNumTabPage(TabPageParent pParent, const SfxItemSet& rAttr)
-    : SfxTabPage(pParent, "modules/sdraw/ui/paranumberingtab.ui", "DrawParaNumbering", &rAttr)
+SdParagraphNumTabPage::SdParagraphNumTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttr)
+    : SfxTabPage(pPage, pController, "modules/sdraw/ui/paranumberingtab.ui", "DrawParaNumbering", &rAttr)
     , mbModified(false)
     , m_xNewStartCB(m_xBuilder->weld_check_button("checkbuttonCB_NEW_START"))
     , m_xNewStartNumberCB(m_xBuilder->weld_check_button("checkbuttonCB_NUMBER_NEW_START"))
@@ -62,9 +62,9 @@ SdParagraphNumTabPage::SdParagraphNumTabPage(TabPageParent pParent, const SfxIte
     m_xNewStartNumberCB->connect_clicked(LINK(this, SdParagraphNumTabPage, ImplNewStartHdl));
 }
 
-std::unique_ptr<SfxTabPage> SdParagraphNumTabPage::Create(TabPageParent pParent, const SfxItemSet * rAttrSet)
+std::unique_ptr<SfxTabPage> SdParagraphNumTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet * rAttrSet)
 {
-    return std::make_unique<SdParagraphNumTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SdParagraphNumTabPage>(pPage, pController, *rAttrSet);
 }
 
 const sal_uInt16* SdParagraphNumTabPage::GetRanges()

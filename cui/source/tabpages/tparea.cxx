@@ -70,8 +70,8 @@ void lclExtendSize(Size& rSize, const Size& rInputSize)
 |*
 \************************************************************************/
 
-SvxAreaTabPage::SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "cui/ui/areatabpage.ui", "AreaTabPage", &rInAttrs)
+SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/areatabpage.ui", "AreaTabPage", &rInAttrs)
     // local fixed not o be changed values for local pointers
     , maFixed_ChangeType(ChangeType::NONE)
     // init with pointers to fixed ChangeType
@@ -111,33 +111,31 @@ void SvxAreaTabPage::SetOptimalSize(weld::DialogController* pController)
 {
     m_xFillTab->set_size_request(-1, -1);
 
-    TabPageParent aFillTab(m_xFillTab.get(), pController);
-
     // Calculate optimal size of all pages...
-    m_xFillTabPage = SvxColorTabPage::Create(aFillTab, &m_rXFSet);
+    m_xFillTabPage = SvxColorTabPage::Create(m_xFillTab.get(), pController, &m_rXFSet);
     Size aSize(m_xFillTab->get_preferred_size());
 
     if (m_xBtnGradient->get_visible())
     {
-        m_xFillTabPage = SvxGradientTabPage::Create(aFillTab, &m_rXFSet);
+        m_xFillTabPage = SvxGradientTabPage::Create(m_xFillTab.get(), pController, &m_rXFSet);
         Size aGradientSize = m_xFillTab->get_preferred_size();
         lclExtendSize(aSize, aGradientSize);
     }
     if (m_xBtnBitmap->get_visible())
     {
-        m_xFillTabPage = SvxBitmapTabPage::Create(aFillTab, &m_rXFSet);
+        m_xFillTabPage = SvxBitmapTabPage::Create(m_xFillTab.get(), pController, &m_rXFSet);
         Size aBitmapSize = m_xFillTab->get_preferred_size();
         lclExtendSize(aSize, aBitmapSize);
     }
     if (m_xBtnHatch->get_visible())
     {
-        m_xFillTabPage = SvxHatchTabPage::Create(aFillTab, &m_rXFSet);
+        m_xFillTabPage = SvxHatchTabPage::Create(m_xFillTab.get(), pController, &m_rXFSet);
         Size aHatchSize = m_xFillTab->get_preferred_size();
         lclExtendSize(aSize, aHatchSize);
     }
     if (m_xBtnPattern->get_visible())
     {
-        m_xFillTabPage = SvxPatternTabPage::Create(aFillTab, &m_rXFSet);
+        m_xFillTabPage = SvxPatternTabPage::Create(m_xFillTab.get(), pController, &m_rXFSet);
         Size aPatternSize = m_xFillTab->get_preferred_size();
         lclExtendSize(aSize, aPatternSize);
     }
@@ -327,16 +325,16 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
     }
 }
 
-std::unique_ptr<SfxTabPage> SvxAreaTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrs)
+std::unique_ptr<SfxTabPage> SvxAreaTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrs)
 {
-    auto xRet = std::make_unique<SvxAreaTabPage>(pParent, *rAttrs);
-    xRet->SetOptimalSize(pParent.pController);
+    auto xRet = std::make_unique<SvxAreaTabPage>(pPage, pController, *rAttrs);
+    xRet->SetOptimalSize(pController);
     return xRet;
 }
 
 namespace {
 
-std::unique_ptr<SfxTabPage> lcl_CreateFillStyleTabPage(sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet)
+std::unique_ptr<SfxTabPage> lcl_CreateFillStyleTabPage(sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
 {
     CreateTabPage fnCreate = nullptr;
     switch(nId)
@@ -348,7 +346,7 @@ std::unique_ptr<SfxTabPage> lcl_CreateFillStyleTabPage(sal_uInt16 nId, TabPagePa
         case BITMAP: fnCreate = &SvxBitmapTabPage::Create; break;
         case PATTERN: fnCreate = &SvxPatternTabPage::Create; break;
     }
-    return fnCreate ? (*fnCreate)( pParent, &rSet ) : nullptr;
+    return fnCreate ? (*fnCreate)( pPage, pController, &rSet ) : nullptr;
 }
 
 }
@@ -373,8 +371,7 @@ void SvxAreaTabPage::SelectFillType(weld::ToggleButton& rButton, const SfxItemSe
     {
         maBox.SelectButton(&rButton);
         FillType eFillType = static_cast<FillType>(maBox.GetCurrentButtonPos());
-        TabPageParent aFillTab(m_xFillTab.get(), GetDialogController());
-        m_xFillTabPage = lcl_CreateFillStyleTabPage(eFillType, aFillTab, m_rXFSet);
+        m_xFillTabPage = lcl_CreateFillStyleTabPage(eFillType, m_xFillTab.get(), GetDialogController(), m_rXFSet);
         if (m_xFillTabPage)
             m_xFillTabPage->SetDialogController(GetDialogController());
         CreatePage(eFillType, m_xFillTabPage.get());

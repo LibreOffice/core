@@ -32,10 +32,10 @@ class SvxAccessibilityOptionsTabPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xPagePreviews;
 
 public:
-    SvxAccessibilityOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxAccessibilityOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SvxAccessibilityOptionsTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };

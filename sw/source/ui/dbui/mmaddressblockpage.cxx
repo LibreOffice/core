@@ -52,8 +52,8 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 
-SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage(SwMailMergeWizard* pWizard, TabPageParent pParent)
-    : vcl::OWizardPage(pParent, "modules/swriter/ui/mmaddressblockpage.ui", "MMAddressBlockPage")
+SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage(weld::Container* pPage, SwMailMergeWizard* pWizard)
+    : vcl::OWizardPage(pPage, pWizard, "modules/swriter/ui/mmaddressblockpage.ui", "MMAddressBlockPage")
     , m_pWizard(pWizard)
     , m_xAddressListPB(m_xBuilder->weld_button("addresslist"))
     , m_xCurrentAddressFI(m_xBuilder->weld_label("currentaddress"))

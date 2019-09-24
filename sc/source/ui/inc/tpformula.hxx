@@ -28,8 +28,8 @@
 class ScTpFormulaOptions : public SfxTabPage
 {
 public:
-    explicit ScTpFormulaOptions(TabPageParent pParent, const SfxItemSet& rCoreSet);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rCoreSet);
+    explicit ScTpFormulaOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet);
     virtual ~ScTpFormulaOptions() override;
 
     virtual bool FillItemSet(SfxItemSet* rCoreSet) override;

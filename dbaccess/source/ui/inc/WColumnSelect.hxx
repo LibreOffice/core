@@ -78,7 +78,7 @@ namespace dbaui
         virtual bool            LeavePage() override;
         virtual OUString        GetTitle() const override ;
 
-        OWizColumnSelect(OCopyTableWizard* pWizard, TabPageParent pParent);
+        OWizColumnSelect(weld::Container* pParent, OCopyTableWizard* pWizard);
         virtual ~OWizColumnSelect() override;
     };
 }

@@ -30,8 +30,8 @@
 namespace chart
 {
 
-SchAxisLabelTabPage::SchAxisLabelTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "modules/schart/ui/tp_axisLabel.ui", "AxisLabelTabPage", &rInAttrs)
+SchAxisLabelTabPage::SchAxisLabelTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "modules/schart/ui/tp_axisLabel.ui", "AxisLabelTabPage", &rInAttrs)
     , m_bShowStaggeringControls( true )
     , m_nInitialDegrees( 0 )
     , m_bHasInitialDegrees( true )
@@ -73,9 +73,9 @@ SchAxisLabelTabPage::~SchAxisLabelTabPage()
     m_xLbTextDirection.reset();
 }
 
-std::unique_ptr<SfxTabPage> SchAxisLabelTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrs)
+std::unique_ptr<SfxTabPage> SchAxisLabelTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrs)
 {
-    return std::make_unique<SchAxisLabelTabPage>(pParent, *rAttrs);
+    return std::make_unique<SchAxisLabelTabPage>(pPage, pController, *rAttrs);
 }
 
 bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )

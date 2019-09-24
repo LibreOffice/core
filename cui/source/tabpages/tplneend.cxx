@@ -49,8 +49,8 @@
 
 #define XOUT_WIDTH    150
 
-SvxLineEndDefTabPage::SvxLineEndDefTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent , "cui/ui/lineendstabpage.ui", "LineEndPage", &rInAttrs)
+SvxLineEndDefTabPage::SvxLineEndDefTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/lineendstabpage.ui", "LineEndPage", &rInAttrs)
     , rOutAttrs(rInAttrs)
     , pPolyObj(nullptr)
     , aXLineAttr(rInAttrs.GetPool())
@@ -231,9 +231,9 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet* )
     }
 }
 
-std::unique_ptr<SfxTabPage> SvxLineEndDefTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxLineEndDefTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<SvxLineEndDefTabPage>(pParent, *rSet );
+    return std::make_unique<SvxLineEndDefTabPage>(pPage, pController, *rSet );
 }
 
 void SvxLineEndDefTabPage::SelectLineEndHdl_Impl()

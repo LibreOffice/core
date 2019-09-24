@@ -404,7 +404,7 @@ protected:
     std::unique_ptr<weld::Button>              m_xRemoveCommandButton;
 
 
-    SvxConfigPage(TabPageParent, const SfxItemSet&);
+    SvxConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&);
 
     DECL_LINK(MoveHdl, weld::Button&, void);
     DECL_LINK(SelectFunctionHdl, weld::TreeView&, void);

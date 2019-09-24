@@ -186,9 +186,9 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
 
 #define HDL(hdl) LINK( this, SvxNumberFormatTabPage, hdl )
 
-SvxNumberFormatTabPage::SvxNumberFormatTabPage(TabPageParent pParent,
+SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::DialogController* pController,
     const SfxItemSet& rCoreAttrs)
-    : SfxTabPage(pParent, "cui/ui/numberingformatpage.ui", "NumberingFormatPage", &rCoreAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/numberingformatpage.ui", "NumberingFormatPage", &rCoreAttrs)
     , nInitFormat(ULONG_MAX)
     , bLegacyAutomaticCurrency(false)
     , sAutomaticLangEntry(CuiResId(RID_SVXSTR_AUTO_ENTRY))
@@ -307,10 +307,10 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_xLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
 }
 
-std::unique_ptr<SfxTabPage> SvxNumberFormatTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxNumberFormatTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                                    const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<SvxNumberFormatTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxNumberFormatTabPage>(pPage, pController, *rAttrSet);
 }
 
 

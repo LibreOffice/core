@@ -206,9 +206,8 @@ public:
     }
 };
 
-
-SvxGeneralTabPage::SvxGeneralTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "cui/ui/optuserpage.ui", "OptUserPage", &rCoreSet)
+SvxGeneralTabPage::SvxGeneralTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optuserpage.ui", "OptUserPage", &rCoreSet)
     , m_xUseDataCB(m_xBuilder->weld_check_button("usefordocprop"))
     , m_xCryptoFrame(m_xBuilder->weld_widget( "cryptography"))
     , m_xSigningKeyLB(m_xBuilder->weld_combo_box("signingkey"))
@@ -336,9 +335,9 @@ void SvxGeneralTabPage::SetLinks ()
 }
 
 
-std::unique_ptr<SfxTabPage> SvxGeneralTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SvxGeneralTabPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<SvxGeneralTabPage>( pParent, *rAttrSet );
+    return std::make_unique<SvxGeneralTabPage>( pPage, pController, *rAttrSet );
 }
 
 bool SvxGeneralTabPage::FillItemSet( SfxItemSet* )

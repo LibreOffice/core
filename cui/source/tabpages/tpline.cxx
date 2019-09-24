@@ -80,8 +80,8 @@ const sal_uInt16 SvxLineTabPage::pLineRanges[] =
     0
 };
 
-SvxLineTabPage::SvxLineTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "cui/ui/linetabpage.ui", "LineTabPage", &rInAttrs)
+SvxLineTabPage::SvxLineTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/linetabpage.ui", "LineTabPage", &rInAttrs)
     , m_pSymbolList(nullptr)
     , m_bNewSize(false)
     , m_nSymbolType(SVX_SYMBOLTYPE_UNKNOWN) // unknown respectively unchanged
@@ -102,7 +102,7 @@ SvxLineTabPage::SvxLineTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs
     , m_pPosLineEndLb(nullptr)
     , m_xBoxColor(m_xBuilder->weld_widget("boxCOLOR"))
     , m_xLbLineStyle(new SvxLineLB(m_xBuilder->weld_combo_box("LB_LINE_STYLE")))
-    , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_COLOR"), pParent.GetFrameWeld()))
+    , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_COLOR"), pController->getDialog()))
     , m_xBoxWidth(m_xBuilder->weld_widget("boxWIDTH"))
     , m_xMtrLineWidth(m_xBuilder->weld_metric_spin_button("MTR_FLD_LINE_WIDTH", FieldUnit::CM))
     , m_xBoxTransparency(m_xBuilder->weld_widget("boxTRANSPARENCY"))
@@ -1176,10 +1176,10 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     ChangePreviewHdl_Impl( nullptr );
 }
 
-std::unique_ptr<SfxTabPage> SvxLineTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxLineTabPage::Create(weld::Container* pPage, weld::DialogController* pController,
                                           const SfxItemSet* rAttrs)
 {
-    return std::make_unique<SvxLineTabPage>(pParent, *rAttrs);
+    return std::make_unique<SvxLineTabPage>(pPage, pController, *rAttrs);
 }
 
 IMPL_LINK_NOARG(SvxLineTabPage, ChangePreviewListBoxHdl_Impl, ColorListBox&, void)

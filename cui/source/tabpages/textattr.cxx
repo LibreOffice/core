@@ -48,8 +48,8 @@ const sal_uInt16 SvxTextAttrPage::pRanges[] =
 |* dialog (page) for copying objects
 |*
 \************************************************************************/
-SvxTextAttrPage::SvxTextAttrPage(TabPageParent pPage, const SfxItemSet& rInAttrs)
-    : SvxTabPage(pPage, "cui/ui/textattrtabpage.ui", "TextAttributesPage", rInAttrs)
+SvxTextAttrPage::SvxTextAttrPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SvxTabPage(pPage, pController, "cui/ui/textattrtabpage.ui", "TextAttributesPage", rInAttrs)
     , rOutAttrs(rInAttrs)
     , m_eObjKind(OBJ_NONE)
     , bAutoGrowSizeEnabled(false)
@@ -474,9 +474,9 @@ void SvxTextAttrPage::Construct()
     m_xTsbWordWrapText->set_visible( bWordWrapTextEnabled );
 }
 
-std::unique_ptr<SfxTabPage> SvxTextAttrPage::Create(TabPageParent pWindow, const SfxItemSet* rAttrs)
+std::unique_ptr<SfxTabPage> SvxTextAttrPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrs)
 {
-    return std::make_unique<SvxTextAttrPage>(pWindow, *rAttrs);
+    return std::make_unique<SvxTextAttrPage>(pPage, pController, *rAttrs);
 }
 
 /** Check whether we have to uncheck the "Full width" check box.

@@ -27,10 +27,12 @@ private:
     std::vector<OUString> m_vDefaultPersonaSettings;
 
 public:
-    SvxPersonalizationTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxPersonalizationTabPage(weld::Container* pPage, weld::DialogController* pController,
+                              const SfxItemSet& rSet);
     virtual ~SvxPersonalizationTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage>
+    Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 
     /// Apply the settings ([OK] button).
     virtual bool FillItemSet(SfxItemSet* rSet) override;

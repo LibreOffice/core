@@ -44,6 +44,10 @@ namespace com { namespace sun { namespace star { namespace frame {
     class XFrame;
 } } } }
 
+namespace weld {
+    class Container;
+    class DialogController;
+}
 
 class SFX2_DLLPUBLIC SfxModule : public SfxShell
 {
@@ -74,7 +78,7 @@ public:
     void                        RegisterStatusBarControl(const SfxStbCtrlFactory&);
 
     virtual std::unique_ptr<SfxTabPage>  CreateTabPage( sal_uInt16 nId,
-                                               TabPageParent pParent,
+                                               weld::Container* pPage, weld::DialogController* pController,
                                                const SfxItemSet& rSet );
     virtual void                Invalidate(sal_uInt16 nId = 0) override;
 

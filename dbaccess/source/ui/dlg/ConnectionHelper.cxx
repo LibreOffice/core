@@ -85,8 +85,8 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-    OConnectionHelper::OConnectionHelper(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs)
-        : OGenericAdministrationPage(pParent, _rUIXMLDescription, _rId, _rCoreAttrs)
+    OConnectionHelper::OConnectionHelper(weld::Container* pPage, weld::DialogController* pController, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs)
+        : OGenericAdministrationPage(pPage, pController, _rUIXMLDescription, _rId, _rCoreAttrs)
         , m_bUserGrabFocus(false)
         , m_pCollection(nullptr)
         , m_xFT_Connection(m_xBuilder->weld_label("browseurllabel"))

@@ -139,7 +139,7 @@ private:
     void                        ResetConfig();
 
 public:
-                                SfxAcceleratorConfigPage(TabPageParent pParent, const SfxItemSet& rItemSet);
+                                SfxAcceleratorConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rItemSet);
     virtual                     ~SfxAcceleratorConfigPage() override;
 
     virtual bool                FillItemSet( SfxItemSet* ) override;

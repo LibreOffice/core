@@ -26,10 +26,10 @@
 class SwDocStatPage final : public SfxTabPage
 {
 public:
-    SwDocStatPage(TabPageParent pParent, const SfxItemSet &rSet);
+    SwDocStatPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet);
     virtual ~SwDocStatPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet);
 
 private:
     virtual bool    FillItemSet(      SfxItemSet *rSet) override;

@@ -68,8 +68,8 @@ using namespace com::sun::star;
 
 // Sort Criteria Tab page
 
-ScTabPageSortFields::ScTabPageSortFields(TabPageParent pParent, const SfxItemSet& rArgSet)
-    : SfxTabPage(pParent, "modules/scalc/ui/sortcriteriapage.ui", "SortCriteriaPage", &rArgSet)
+ScTabPageSortFields::ScTabPageSortFields(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet)
+    : SfxTabPage(pPage, pController, "modules/scalc/ui/sortcriteriapage.ui", "SortCriteriaPage", &rArgSet)
     ,
 
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
@@ -123,9 +123,9 @@ void ScTabPageSortFields::Init()
     }
 }
 
-std::unique_ptr<SfxTabPage> ScTabPageSortFields::Create(TabPageParent pParent, const SfxItemSet* pArgSet)
+std::unique_ptr<SfxTabPage> ScTabPageSortFields::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* pArgSet)
 {
-    return std::make_unique<ScTabPageSortFields>(pParent, *pArgSet);
+    return std::make_unique<ScTabPageSortFields>(pPage, pController, *pArgSet);
 }
 
 void ScTabPageSortFields::Reset( const SfxItemSet* /* rArgSet */ )
@@ -473,8 +473,8 @@ void ScTabPageSortFields::AddSortKey( sal_uInt16 nItem )
 
 // Sort option Tab Page:
 
-ScTabPageSortOptions::ScTabPageSortOptions(TabPageParent pParent, const SfxItemSet& rArgSet)
-    : SfxTabPage(pParent, "modules/scalc/ui/sortoptionspage.ui", "SortOptionsPage", &rArgSet)
+ScTabPageSortOptions::ScTabPageSortOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet)
+    : SfxTabPage(pPage, pController, "modules/scalc/ui/sortoptionspage.ui", "SortOptionsPage", &rArgSet)
     , aStrRowLabel(ScResId(SCSTR_ROW_LABEL))
     , aStrColLabel(ScResId(SCSTR_COL_LABEL))
     , aStrUndefined(ScResId(SCSTR_UNDEFINED))
@@ -574,9 +574,9 @@ void ScTabPageSortOptions::Init()
     m_xLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
 }
 
-std::unique_ptr<SfxTabPage> ScTabPageSortOptions::Create(TabPageParent pParent, const SfxItemSet* rArgSet)
+std::unique_ptr<SfxTabPage> ScTabPageSortOptions::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rArgSet)
 {
-    return std::make_unique<ScTabPageSortOptions>(pParent, *rArgSet);
+    return std::make_unique<ScTabPageSortOptions>(pPage, pController, *rArgSet);
 }
 
 void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )

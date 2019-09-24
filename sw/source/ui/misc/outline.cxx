@@ -383,9 +383,9 @@ short SwOutlineTabDialog::Ok()
     return RET_OK;
 }
 
-SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(TabPageParent pPage,
+SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(weld::Container* pPage, weld::DialogController* pController,
     const SfxItemSet& rSet)
-    : SfxTabPage(pPage, "modules/swriter/ui/outlinenumberingpage.ui", "OutlineNumberingPage", &rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/outlinenumberingpage.ui", "OutlineNumberingPage", &rSet)
     , aNoFormatName(SwResId(SW_STR_NONE))
     , pSh(nullptr)
     , pNumRule(nullptr)
@@ -801,10 +801,10 @@ void SwOutlineSettingsTabPage::Reset( const SfxItemSet* rSet )
     ActivatePage(*rSet);
 }
 
-std::unique_ptr<SfxTabPage> SwOutlineSettingsTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwOutlineSettingsTabPage::Create(weld::Container* pPage, weld::DialogController* pController,
                                                     const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SwOutlineSettingsTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SwOutlineSettingsTabPage>(pPage, pController, *rAttrSet);
 }
 
 void SwOutlineSettingsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType)

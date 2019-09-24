@@ -51,7 +51,7 @@ class SfxMacroTabPage final : public SfxTabPage
 
 public:
     SfxMacroTabPage(
-        TabPageParent pParent,
+        weld::Container* pPage, weld::DialogController* pController,
         const css::uno::Reference< css::frame::XFrame >& rxDocumentFrame,
         const SfxItemSet& rSet
     );
@@ -72,7 +72,7 @@ public:
     bool                        IsReadOnly() const override;
 
     // --------- inherit from the base -------------
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet );
 };
 
 class SfxMacroAssignDlg : public SfxSingleTabDialogController

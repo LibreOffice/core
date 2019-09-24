@@ -42,8 +42,8 @@
 #include <swmodule.hxx>
 #include <view.hxx>
 
-SwTextGridPage::SwTextGridPage(TabPageParent pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/textgridpage.ui", "TextGridPage", &rSet)
+SwTextGridPage::SwTextGridPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/textgridpage.ui", "TextGridPage", &rSet)
     , m_nRubyUserValue(0)
     , m_bRubyUserValue(false)
     , m_aPageSize(MM50, MM50)
@@ -71,7 +71,7 @@ SwTextGridPage::SwTextGridPage(TabPageParent pParent, const SfxItemSet &rSet)
     , m_xDisplayFL(m_xBuilder->weld_widget("frameFL_DISPLAY"))
     , m_xDisplayCB(m_xBuilder->weld_check_button("checkCB_DISPLAY"))
     , m_xPrintCB(m_xBuilder->weld_check_button("checkCB_PRINT"))
-    , m_xColorLB(new ColorListBox(m_xBuilder->weld_menu_button("listLB_COLOR"), pParent.GetFrameWeld()))
+    , m_xColorLB(new ColorListBox(m_xBuilder->weld_menu_button("listLB_COLOR"), pController->getDialog()))
 {
     Link<weld::SpinButton&,void> aLink = LINK(this, SwTextGridPage, CharorLineChangedHdl);
     m_xCharsPerLineNF->connect_value_changed(aLink);
@@ -129,9 +129,9 @@ SwTextGridPage::~SwTextGridPage()
     m_xColorLB.reset();
 }
 
-std::unique_ptr<SfxTabPage> SwTextGridPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwTextGridPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet)
 {
-    return std::make_unique<SwTextGridPage>(pParent, *rSet);
+    return std::make_unique<SwTextGridPage>(pPage, pController, *rSet);
 }
 
 bool SwTextGridPage::FillItemSet(SfxItemSet *rSet)

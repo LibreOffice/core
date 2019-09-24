@@ -22,8 +22,8 @@
 #include "opthtml.hxx"
 
 
-OfaHtmlTabPage::OfaHtmlTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/opthtmlpage.ui", "OptHtmlPage", &rSet)
+OfaHtmlTabPage::OfaHtmlTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/opthtmlpage.ui", "OptHtmlPage", &rSet)
     , m_xSize1NF(m_xBuilder->weld_spin_button("size1"))
     , m_xSize2NF(m_xBuilder->weld_spin_button("size2"))
     , m_xSize3NF(m_xBuilder->weld_spin_button("size3"))
@@ -64,10 +64,10 @@ OfaHtmlTabPage::~OfaHtmlTabPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> OfaHtmlTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> OfaHtmlTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                            const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<OfaHtmlTabPage>(pParent, *rAttrSet);
+    return std::make_unique<OfaHtmlTabPage>(pPage, pController, *rAttrSet);
 }
 
 bool OfaHtmlTabPage::FillItemSet( SfxItemSet* )

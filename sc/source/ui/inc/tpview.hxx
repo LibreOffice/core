@@ -62,8 +62,8 @@ class ScTpContentOptions : public SfxTabPage
     DECL_LINK( CBHdl, weld::ToggleButton&, void );
 
 public:
-    ScTpContentOptions(TabPageParent pParent, const SfxItemSet& rArgSet);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rCoreSet);
+    ScTpContentOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet);
     virtual ~ScTpContentOptions() override;
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) override;
@@ -100,8 +100,8 @@ class ScTpLayoutOptions : public SfxTabPage
 
 
 public:
-    ScTpLayoutOptions(TabPageParent pParent, const SfxItemSet&  rArgSet );
-    static  std::unique_ptr<SfxTabPage> Create(TabPageParent pParent,
+    ScTpLayoutOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&  rArgSet );
+    static  std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController,
                                           const SfxItemSet* rCoreSet);
     virtual ~ScTpLayoutOptions() override;
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;

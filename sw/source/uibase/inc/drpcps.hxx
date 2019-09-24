@@ -147,10 +147,10 @@ friend class SwDropCapsPict;
     static const sal_uInt16 aPageRg[];
 
 public:
-    SwDropCapsPage(TabPageParent pParent, const SfxItemSet &rSet);
+    SwDropCapsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet);
     virtual ~SwDropCapsPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
 

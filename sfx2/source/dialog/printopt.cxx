@@ -34,8 +34,8 @@ static bool     bOutputForPrinter = true;
 
 #define DPI_COUNT SAL_N_ELEMENTS(aDPIArray)
 
-SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "sfx/ui/optprintpage.ui", "OptPrintPage", &rSet)
+SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "sfx/ui/optprintpage.ui", "OptPrintPage", &rSet)
     , m_xPrinterOutputRB(m_xBuilder->weld_radio_button("printer"))
     , m_xPrintFileOutputRB(m_xBuilder->weld_radio_button("file"))
     , m_xReduceTransparencyCB(m_xBuilder->weld_check_button("reducetrans"))
@@ -86,9 +86,9 @@ SfxCommonPrintOptionsTabPage::~SfxCommonPrintOptionsTabPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SfxCommonPrintOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SfxCommonPrintOptionsTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SfxCommonPrintOptionsTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SfxCommonPrintOptionsTabPage>(pPage, pController, *rAttrSet);
 }
 
 bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet* /*rSet*/ )

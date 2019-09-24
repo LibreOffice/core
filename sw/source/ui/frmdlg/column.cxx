@@ -167,7 +167,7 @@ SwColumnDlg::SwColumnDlg(weld::Window* pParent, SwWrtShell& rSh)
     assert(pColPgSet);
 
     // create TabPage
-    m_xTabPage = std::make_unique<SwColumnPage>(TabPageParent(m_xContentArea.get(), this), *pColPgSet);
+    m_xTabPage = std::make_unique<SwColumnPage>(m_xContentArea.get(), this, *pColPgSet);
     m_xTabPage->GetApplyLabel()->show();
     weld::ComboBox* pApplyToLB = m_xTabPage->GetApplyComboBox();
     pApplyToLB->show();
@@ -382,8 +382,8 @@ void SwColumnPage::ResetColWidth()
 constexpr sal_uInt16 g_nMinWidth(MINLAY);
 
 // Now as TabPage
-SwColumnPage::SwColumnPage(TabPageParent pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/columnpage.ui", "ColumnPage", &rSet)
+SwColumnPage::SwColumnPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/columnpage.ui", "ColumnPage", &rSet)
     , m_nFirstVis(0)
     , m_pModifiedField(nullptr)
     , m_bFormat(false)
@@ -408,7 +408,7 @@ SwColumnPage::SwColumnPage(TabPageParent pParent, const SfxItemSet &rSet)
     , m_xLinePosDLB(m_xBuilder->weld_combo_box("lineposlb"))
     , m_xTextDirectionFT(m_xBuilder->weld_label("textdirectionft"))
     , m_xTextDirectionLB(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box("textdirectionlb")))
-    , m_xLineColorDLB(new ColorListBox(m_xBuilder->weld_menu_button("colorlb"), pParent.GetFrameWeld()))
+    , m_xLineColorDLB(new ColorListBox(m_xBuilder->weld_menu_button("colorlb"), pController->getDialog()))
     , m_xLineTypeDLB(new SvtLineListBox(m_xBuilder->weld_menu_button("linestylelb")))
     , m_xEd1(new SwPercentField(m_xBuilder->weld_metric_spin_button("width1mf", FieldUnit::CM)))
     , m_xEd2(new SwPercentField(m_xBuilder->weld_metric_spin_button("width2mf", FieldUnit::CM)))
@@ -598,9 +598,9 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
 }
 
 // create TabPage
-std::unique_ptr<SfxTabPage> SwColumnPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwColumnPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet)
 {
-    return std::make_unique<SwColumnPage>(pParent, *rSet);
+    return std::make_unique<SwColumnPage>(pPage, pController, *rSet);
 }
 
 // stuff attributes into the Set when OK

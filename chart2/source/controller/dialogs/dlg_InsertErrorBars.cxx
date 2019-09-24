@@ -42,7 +42,7 @@ InsertErrorBarsDialog::InsertErrorBarsDialog(
     ErrorBarResources::tErrorBarType eType /* = ErrorBarResources::ERROR_BAR_Y */ )
         : GenericDialogController(pParent, "modules/schart/ui/dlg_InsertErrorBars.ui", "dlg_InsertErrorBars")
         , m_apErrorBarResources( new ErrorBarResources(
-                                   m_xBuilder.get(), TabPageParent(m_xDialog.get(), nullptr), rMyAttrs,
+                                   m_xBuilder.get(), this, rMyAttrs,
                                    /* bNoneAvailable = */ true, eType ))
 {
     ObjectType objType = eType == ErrorBarResources::ERROR_BAR_Y ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X;

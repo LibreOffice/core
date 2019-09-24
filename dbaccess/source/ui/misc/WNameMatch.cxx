@@ -33,8 +33,8 @@
 using namespace ::dbaui;
 
 // OWizColumnSelect
-OWizNameMatching::OWizNameMatching(OCopyTableWizard* pWizard, TabPageParent pParent)
-    : OWizardPage(pWizard, pParent, "dbaccess/ui/namematchingpage.ui", "NameMatching")
+OWizNameMatching::OWizNameMatching(weld::Container* pPage, OCopyTableWizard* pWizard)
+    : OWizardPage(pPage, pWizard, "dbaccess/ui/namematchingpage.ui", "NameMatching")
     , m_xTABLE_LEFT(m_xBuilder->weld_label("leftlabel"))
     , m_xTABLE_RIGHT(m_xBuilder->weld_label("rightlabel"))
     , m_xCTRL_LEFT(m_xBuilder->weld_tree_view("left"))

@@ -26,8 +26,8 @@
 /**
  *  dialog to adjust print options
  */
-SdPrintOptions::SdPrintOptions(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "modules/simpress/ui/prntopts.ui", "prntopts", &rInAttrs)
+SdPrintOptions::SdPrintOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "modules/simpress/ui/prntopts.ui", "prntopts", &rInAttrs)
     , m_xFrmContent(m_xBuilder->weld_frame("contentframe"))
     , m_xCbxDraw(m_xBuilder->weld_check_button("drawingcb"))
     , m_xCbxNotes(m_xBuilder->weld_check_button("notecb"))
@@ -175,10 +175,10 @@ void SdPrintOptions::Reset( const SfxItemSet* rAttrs )
     updateControls();
 }
 
-std::unique_ptr<SfxTabPage> SdPrintOptions::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SdPrintOptions::Create( weld::Container* pPage, weld::DialogController* pController,
                                            const SfxItemSet* rOutAttrs )
 {
-    return std::make_unique<SdPrintOptions>( pParent, *rOutAttrs );
+    return std::make_unique<SdPrintOptions>( pPage, pController, *rOutAttrs );
 }
 
 IMPL_LINK(SdPrintOptions, ClickCheckboxHdl, weld::ToggleButton&, rCbx, void)
