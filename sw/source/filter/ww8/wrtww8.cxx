@@ -3066,14 +3066,13 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
         return;
 
     sCmp = sCmp.toAsciiLowerCase();
-    OUString aName;
     sal_uLong nIdx = 0;
     bool noBookmark = false;
 
     if( sCmp == "outline" )
     {
-        SwPosition aPos( *m_pCurPam->GetPoint() );
-        aName = BookmarkToWriter(aURL.copy(0, nPos));
+        SwPosition aPos(*m_pCurPam->GetPoint());
+        OUString aName(BookmarkToWriter(aURL.copy(0, nPos)));
         // If we can find the outline this bookmark refers to
         // save the name of the bookmark and the
         // node index number of where it points to
@@ -3086,7 +3085,7 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
     else if( sCmp == "graphic" )
     {
         SwNodeIndex* pIdx;
-        aName = BookmarkToWriter(aURL.copy( 0, nPos ));
+        OUString aName(BookmarkToWriter(aURL.copy(0, nPos)));
         const SwFlyFrameFormat* pFormat = m_pDoc->FindFlyByName(aName, SwNodeType::Grf);
         if (pFormat && nullptr != (pIdx = const_cast<SwNodeIndex*>(pFormat->GetContent().GetContentIdx())))
         {
@@ -3094,10 +3093,21 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
             noBookmark = true;
         }
     }
+    else if( sCmp == "frame" )
+    {
+        SwNodeIndex* pIdx;
+        OUString aName(BookmarkToWriter(aURL.copy(0, nPos)));
+        const SwFlyFrameFormat* pFormat = m_pDoc->FindFlyByName(aName, SwNodeType::Text);
+        if (pFormat && nullptr != (pIdx = const_cast<SwNodeIndex*>(pFormat->GetContent().GetContentIdx())))
+        {
+            nIdx = pIdx->GetIndex() + 1;
+            noBookmark = true;
+        }
+    }
     if (noBookmark)
     {
         aBookmarkPair aImplicitBookmark;
-        aImplicitBookmark.first = aName;
+        aImplicitBookmark.first = aURL;
         aImplicitBookmark.second = nIdx;
         m_aImplicitBookmarks.push_back(aImplicitBookmark);
     }
