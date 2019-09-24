@@ -49,7 +49,6 @@ static std::unique_ptr<BitmapBuffer> ImplCreateDIB(
         || nBitCount ==  1
         || nBitCount ==  4
         || nBitCount ==  8
-        || nBitCount == 16
         || nBitCount == 24
         || nBitCount == 32)
         && "Unsupported BitCount!");
@@ -81,22 +80,6 @@ static std::unique_ptr<BitmapBuffer> ImplCreateDIB(
         case 8:
             pDIB->mnFormat = ScanlineFormat::N8BitPal;
             break;
-        case 16:
-        {
-#ifdef OSL_BIGENDIAN
-            pDIB->mnFormat= ScanlineFormat::N16BitTcMsbMask;
-#else
-            pDIB->mnFormat= ScanlineFormat::N16BitTcLsbMask;
-#endif
-            ColorMaskElement aRedMask(0xf800);
-            aRedMask.CalcMaskShift();
-            ColorMaskElement aGreenMask(0x07e0);
-            aGreenMask.CalcMaskShift();
-            ColorMaskElement aBlueMask(0x001f);
-            aBlueMask.CalcMaskShift();
-            pDIB->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
-            break;
-        }
         case 24:
             pDIB->mnFormat = SVP_24BIT_FORMAT;
             break;

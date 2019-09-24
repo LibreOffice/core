@@ -145,7 +145,7 @@ sal_uInt16 discretizeBitcount( sal_uInt16 nInputCount )
 
 bool isBitfieldCompression( ScanlineFormat nScanlineFormat )
 {
-    return (ScanlineFormat::N16BitTcLsbMask == nScanlineFormat) || (ScanlineFormat::N32BitTcMask == nScanlineFormat);
+    return ScanlineFormat::N32BitTcMask == nScanlineFormat;
 }
 
 bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown, bool bMSOFormat)
@@ -1457,7 +1457,7 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess c
 
     if(!pAccAlpha && isBitfieldCompression(rAcc.GetScanlineFormat()))
     {
-        aHeader.nBitCount = (ScanlineFormat::N16BitTcLsbMask == rAcc.GetScanlineFormat()) ? 16 : 32;
+        aHeader.nBitCount = 32;
         aHeader.nSizeImage = rAcc.Height() * rAcc.GetScanlineSize();
         nCompression = BITFIELDS;
     }
