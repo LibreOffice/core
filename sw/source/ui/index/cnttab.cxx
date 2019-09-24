@@ -2182,25 +2182,6 @@ void SwTOXEntryTabPage::SetFocus2theAllBtn()
     m_xAllLevelsPB->grab_focus();
 }
 
-bool SwTOXEntryTabPage::EventNotify( NotifyEvent& rNEvt )
-{
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
-        vcl::KeyCode aCode = rKEvt.GetKeyCode();
-        if ( (aCode.GetCode() == KEY_F4) && aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() )
-        {
-            if (SwTOXWidget* pActiveControl = m_xTokenWIN->GetActiveControl())
-            {
-                pActiveControl->GrabFocus();
-            }
-        }
-
-    }
-
-    return SfxTabPage::EventNotify(rNEvt);
-}
-
 // This function initializes the default value in the Token
 // put here the UI dependent initializations
 IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, weld::Button&, rBtn, void)
