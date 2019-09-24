@@ -404,7 +404,6 @@ public:
 
     void                PreTokenButtonRemoved(const SwFormToken& rToken);
     void SetFocus2theAllBtn();
-    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 };
 
 class SwTOXStylesTabPage : public SfxTabPage
