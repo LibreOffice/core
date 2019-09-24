@@ -1255,6 +1255,22 @@ namespace sw { namespace mark
             CompareIMarkStartsAfter());
     }
 
+    IFieldmark* MarkManager::getFieldmarkAt(const SwPosition& rPos) const
+    {
+        auto const pFieldmark = find_if(
+            m_vFieldmarks.begin(),
+            m_vFieldmarks.end(),
+            [&rPos] (::sw::mark::MarkBase const*const pMark) {
+                    return pMark->GetMarkStart() == rPos
+                            // end position includes the CH_TXT_ATR_FIELDEND
+                        || (pMark->GetMarkEnd().nContent.GetIndex() == rPos.nContent.GetIndex() + 1
+                            && pMark->GetMarkEnd().nNode == rPos.nNode);
+                } );
+        return (pFieldmark == m_vFieldmarks.end())
+            ? nullptr
+            : dynamic_cast<IFieldmark*>(*pFieldmark);
+    }
+
     IFieldmark* MarkManager::getFieldmarkFor(const SwPosition& rPos) const
     {
         auto const pFieldmark = find_if(
@@ -1377,7 +1393,7 @@ namespace sw { namespace mark
 
     IFieldmark* MarkManager::getDropDownFor(const SwPosition& rPos) const
     {
-        IFieldmark *pMark = getFieldmarkFor(rPos);
+        IFieldmark *pMark = getFieldmarkAt(rPos);
         if (!pMark || pMark->GetFieldname() != ODF_FORMDROPDOWN)
             return nullptr;
         return pMark;

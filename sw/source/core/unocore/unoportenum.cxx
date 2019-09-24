@@ -432,7 +432,7 @@ lcl_ExportFieldMark(
         if (pDoc)
         {
             pFieldmark = pDoc->getIDocumentMarkAccess()->
-                getFieldmarkFor(*pUnoCursor->GetMark());
+                getFieldmarkAt(*pUnoCursor->GetMark());
         }
         SwXTextPortion* pPortion = new SwXTextPortion(
             pUnoCursor, i_xParentText, PORTION_FIELD_START);
@@ -449,7 +449,7 @@ lcl_ExportFieldMark(
         if (pDoc)
         {
             pFieldmark = pDoc->getIDocumentMarkAccess()->
-                getFieldmarkFor(*pUnoCursor->GetMark());
+                getFieldmarkAt(*pUnoCursor->GetMark());
         }
         SwXTextPortion* pPortion = new SwXTextPortion(
             pUnoCursor, i_xParentText, PORTION_FIELD_END);
@@ -465,7 +465,7 @@ lcl_ExportFieldMark(
         ::sw::mark::IFieldmark* pFieldmark = nullptr;
         if (pDoc)
         {
-            pFieldmark = pDoc->getIDocumentMarkAccess()->getFieldmarkFor(*pUnoCursor->GetMark());
+            pFieldmark = pDoc->getIDocumentMarkAccess()->getFieldmarkAt(*pUnoCursor->GetMark());
         }
         SwXTextPortion* pPortion = new SwXTextPortion(
             pUnoCursor, i_xParentText, PORTION_FIELD_START_END);

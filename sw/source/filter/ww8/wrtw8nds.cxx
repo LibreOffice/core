@@ -2314,7 +2314,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 if ( ch == CH_TXT_ATR_FIELDSTART )
                 {
                     SwPosition aPosition( rNode, SwIndex( &rNode, nCurrentPos ) );
-                    ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
+                    ::sw::mark::IFieldmark const*const pFieldmark = pMarkAccess->getFieldmarkAt(aPosition);
                     OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
                     // Date field is exported as content control, not as a simple field
@@ -2381,7 +2381,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 else if ( ch == CH_TXT_ATR_FIELDEND )
                 {
                     SwPosition aPosition( rNode, SwIndex( &rNode, nCurrentPos ) );
-                    ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
+                    ::sw::mark::IFieldmark const*const pFieldmark = pMarkAccess->getFieldmarkAt(aPosition);
 
                     OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDEND??" );
 
@@ -2418,7 +2418,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 else if ( ch == CH_TXT_ATR_FORMELEMENT )
                 {
                     SwPosition aPosition( rNode, SwIndex( &rNode, nCurrentPos ) );
-                    ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
+                    ::sw::mark::IFieldmark const*const pFieldmark = pMarkAccess->getFieldmarkAt(aPosition);
 
                     bool isDropdownOrCheckbox = pFieldmark && (pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN ||
                                                                 pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX );

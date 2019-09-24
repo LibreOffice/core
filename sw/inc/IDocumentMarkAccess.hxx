@@ -307,6 +307,8 @@ class IDocumentMarkAccess
 
 
         // Fieldmarks
+        /// get Fieldmark for CH_TXT_ATR_FIELDSTART/CH_TXT_ATR_FIELDEND at rPos
+        virtual ::sw::mark::IFieldmark* getFieldmarkAt(const SwPosition& rPos) const =0;
         virtual ::sw::mark::IFieldmark* getFieldmarkFor(const SwPosition& pos) const =0;
         virtual ::sw::mark::IFieldmark* getFieldmarkBefore(const SwPosition& pos) const =0;
         virtual ::sw::mark::IFieldmark* getFieldmarkAfter(const SwPosition& pos) const =0;
