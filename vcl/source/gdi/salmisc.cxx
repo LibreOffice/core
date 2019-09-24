@@ -279,8 +279,6 @@ std::unique_ptr<BitmapBuffer> StretchAndConvert(
         IMPL_CASE_GET_FORMAT( N4BitLsnPal );
         IMPL_CASE_GET_FORMAT( N8BitPal );
         IMPL_CASE_GET_FORMAT( N8BitTcMask );
-        IMPL_CASE_GET_FORMAT( N16BitTcMsbMask );
-        IMPL_CASE_GET_FORMAT( N16BitTcLsbMask );
         IMPL_CASE_GET_FORMAT( N24BitTcBgr );
         IMPL_CASE_GET_FORMAT( N24BitTcRgb );
         IMPL_CASE_GET_FORMAT( N32BitTcAbgr );
@@ -308,8 +306,6 @@ std::unique_ptr<BitmapBuffer> StretchAndConvert(
         IMPL_CASE_SET_FORMAT( N4BitLsnPal, 4 );
         IMPL_CASE_SET_FORMAT( N8BitPal, 8 );
         IMPL_CASE_SET_FORMAT( N8BitTcMask, 8 );
-        IMPL_CASE_SET_FORMAT( N16BitTcMsbMask, 16 );
-        IMPL_CASE_SET_FORMAT( N16BitTcLsbMask, 16 );
         IMPL_CASE_SET_FORMAT( N24BitTcBgr, 24 );
         IMPL_CASE_SET_FORMAT( N24BitTcRgb, 24 );
         IMPL_CASE_SET_FORMAT( N32BitTcAbgr, 32 );
@@ -373,8 +369,6 @@ std::unique_ptr<BitmapBuffer> StretchAndConvert(
         pDstBuffer->maPalette = *pDstPal;
     }
     else if( ( nDstScanlineFormat == ScanlineFormat::N8BitTcMask ) ||
-             ( nDstScanlineFormat == ScanlineFormat::N16BitTcMsbMask ) ||
-             ( nDstScanlineFormat == ScanlineFormat::N16BitTcLsbMask ) ||
              ( nDstScanlineFormat == ScanlineFormat::N32BitTcMask ) )
     {
         assert(pDstMask && "destination buffer requires color mask");

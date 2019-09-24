@@ -96,8 +96,6 @@ inline QImage::Format getBitFormat(sal_uInt16 nBitCount)
             return QImage::Format_Mono;
         case 8:
             return QImage::Format_Indexed8;
-        case 16:
-            return QImage::Format_RGB16;
         case 24:
             return QImage::Format_RGB888;
         case 32:
@@ -117,8 +115,6 @@ inline sal_uInt16 getFormatBits(QImage::Format eFormat)
             return 1;
         case QImage::Format_Indexed8:
             return 8;
-        case QImage::Format_RGB16:
-            return 16;
         case QImage::Format_RGB888:
             return 24;
         case Qt5_DefaultFormat32:

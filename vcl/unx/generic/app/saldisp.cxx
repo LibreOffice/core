@@ -2630,24 +2630,6 @@ SalColormap::SalColormap( sal_uInt16 nDepth )
                 aVI.green_mask      = 0x00FF00;
                 aVI.blue_mask       = 0x0000FF;
             }
-            else if( 16 == nDepth ) // 565
-            {
-                aVI.red_mask        = 0x00F800;
-                aVI.green_mask      = 0x0007E0;
-                aVI.blue_mask       = 0x00001F;
-            }
-            else if( 15 == nDepth ) // 555
-            {
-                aVI.red_mask        = 0x007C00;
-                aVI.green_mask      = 0x0003E0;
-                aVI.blue_mask       = 0x00001F;
-            }
-            else if( 12 == nDepth ) // 444
-            {
-                aVI.red_mask        = 0x000F00;
-                aVI.green_mask      = 0x0000F0;
-                aVI.blue_mask       = 0x00000F;
-            }
             else if( 8 == nDepth ) // 332
             {
                 aVI.red_mask        = 0x0000E0;

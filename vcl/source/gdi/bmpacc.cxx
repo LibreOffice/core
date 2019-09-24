@@ -161,18 +161,6 @@ bool BitmapReadAccess::ImplSetAccessPointers( ScanlineFormat nFormat )
             mFncSetPixel = SetPixelForN8BitTcMask;
         }
         break;
-        case ScanlineFormat::N16BitTcMsbMask:
-        {
-            mFncGetPixel = GetPixelForN16BitTcMsbMask;
-            mFncSetPixel = SetPixelForN16BitTcMsbMask;
-        }
-        break;
-        case ScanlineFormat::N16BitTcLsbMask:
-        {
-            mFncGetPixel = GetPixelForN16BitTcLsbMask;
-            mFncSetPixel = SetPixelForN16BitTcLsbMask;
-        }
-        break;
         case ScanlineFormat::N24BitTcBgr:
         {
             mFncGetPixel = GetPixelForN24BitTcBgr;
@@ -412,7 +400,6 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
         else
         {
             DBG_ASSERT( nFormat != ScanlineFormat::N8BitTcMask &&
-                        nFormat != ScanlineFormat::N16BitTcMsbMask && nFormat != ScanlineFormat::N16BitTcLsbMask &&
                         nFormat != ScanlineFormat::N32BitTcMask,
                         "No support for pixel formats with color masks yet!" );
 
@@ -427,8 +414,6 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
                 case ScanlineFormat::N4BitLsnPal:    pFncGetPixel = GetPixelForN4BitLsnPal; break;
                 case ScanlineFormat::N8BitPal:        pFncGetPixel = GetPixelForN8BitPal; break;
                 case ScanlineFormat::N8BitTcMask:    pFncGetPixel = GetPixelForN8BitTcMask; break;
-                case ScanlineFormat::N16BitTcMsbMask:   pFncGetPixel = GetPixelForN16BitTcMsbMask; break;
-                case ScanlineFormat::N16BitTcLsbMask:   pFncGetPixel = GetPixelForN16BitTcLsbMask; break;
                 case ScanlineFormat::N24BitTcBgr:    pFncGetPixel = GetPixelForN24BitTcBgr; break;
                 case ScanlineFormat::N24BitTcRgb:    pFncGetPixel = GetPixelForN24BitTcRgb; break;
                 case ScanlineFormat::N32BitTcAbgr:
@@ -455,9 +440,12 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
                     else
                         pFncGetPixel = GetPixelForN32BitTcRgbx;
                     break;
-                case ScanlineFormat::N32BitTcMask:   pFncGetPixel = GetPixelForN32BitTcMask; break;
+                case ScanlineFormat::N32BitTcMask:
+                    pFncGetPixel = GetPixelForN32BitTcMask;
+                    break;
 
                 default:
+                    assert(false);
                     pFncGetPixel = nullptr;
                 break;
             }
