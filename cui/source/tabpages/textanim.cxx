@@ -75,15 +75,13 @@ void SvxTextTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
     }
 }
 
-
 /*************************************************************************
 |*
 |* Page
 |*
 \************************************************************************/
-
-SvxTextAnimationPage::SvxTextAnimationPage(TabPageParent pPage, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, "cui/ui/textanimtabpage.ui", "TextAnimation", &rInAttrs)
+SvxTextAnimationPage::SvxTextAnimationPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/textanimtabpage.ui", "TextAnimation", &rInAttrs)
     , rOutAttrs(rInAttrs)
     , eAniKind(SdrTextAniKind::NONE)
     , m_aUpState(TRISTATE_INDET)
@@ -377,9 +375,9 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
 |*
 \************************************************************************/
 
-std::unique_ptr<SfxTabPage> SvxTextAnimationPage::Create(TabPageParent pParent, const SfxItemSet* rAttrs)
+std::unique_ptr<SfxTabPage> SvxTextAnimationPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrs)
 {
-    return std::make_unique<SvxTextAnimationPage>(pParent, *rAttrs);
+    return std::make_unique<SvxTextAnimationPage>(pPage, pController, *rAttrs);
 }
 
 IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl, weld::ComboBox&, void)

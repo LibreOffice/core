@@ -38,8 +38,8 @@
 
 #include <dlgname.hxx>
 
-SvxMenuConfigPage::SvxMenuConfigPage(TabPageParent pParent, const SfxItemSet& rSet, bool bIsMenuBar)
-    : SvxConfigPage(pParent, rSet)
+SvxMenuConfigPage::SvxMenuConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet, bool bIsMenuBar)
+    : SvxConfigPage(pPage, pController, rSet)
     , m_bIsMenuBar(bIsMenuBar)
 {
     m_xGearBtn = m_xBuilder->weld_menu_button("menugearbtn");

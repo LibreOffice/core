@@ -51,8 +51,8 @@ void FillFieldSelect(weld::TreeView& rListBox)
         rListBox.append_text(SwResId(FLD_SELECT[i]));
 }
 
-SwFieldDokInfPage::SwFieldDokInfPage(TabPageParent pParent, const SfxItemSet *const pCoreSet)
-    :  SwFieldPage(pParent, "modules/swriter/ui/flddocinfopage.ui", "FieldDocInfoPage", pCoreSet)
+SwFieldDokInfPage::SwFieldDokInfPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *const pCoreSet)
+    :  SwFieldPage(pPage, pController, "modules/swriter/ui/flddocinfopage.ui", "FieldDocInfoPage", pCoreSet)
     , nOldSel(0)
     , nOldFormat(0)
     , m_xTypeTLB(m_xBuilder->weld_tree_view("type"))
@@ -443,10 +443,10 @@ bool SwFieldDokInfPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-std::unique_ptr<SfxTabPage> SwFieldDokInfPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwFieldDokInfPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                             const SfxItemSet *const pAttrSet)
 {
-    return std::make_unique<SwFieldDokInfPage>(pParent, pAttrSet);
+    return std::make_unique<SwFieldDokInfPage>(pPage, pController, pAttrSet);
 }
 
 sal_uInt16 SwFieldDokInfPage::GetGroup()

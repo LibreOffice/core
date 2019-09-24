@@ -53,8 +53,8 @@ namespace dbaui
     using namespace ::com::sun::star::container;
 
     // OGeneralPage
-    OGeneralPage::OGeneralPage(TabPageParent pParent, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems)
-        : OGenericAdministrationPage(pParent, _rUIXMLDescription, "PageGeneral", _rItems)
+    OGeneralPage::OGeneralPage(weld::Container* pPage, weld::DialogController* pController, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems)
+        : OGenericAdministrationPage(pPage, pController, _rUIXMLDescription, "PageGeneral", _rItems)
         , m_xSpecialMessage(m_xBuilder->weld_label("specialMessage"))
         , m_eLastMessage(smNone)
         , m_bInitTypeList(true)
@@ -401,8 +401,8 @@ namespace dbaui
     }
 
     // OGeneralPageDialog
-    OGeneralPageDialog::OGeneralPageDialog(TabPageParent pParent, const SfxItemSet& _rItems)
-        : OGeneralPage(pParent, "dbaccess/ui/generalpagedialog.ui", _rItems)
+    OGeneralPageDialog::OGeneralPageDialog(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rItems)
+        : OGeneralPage(pPage, pController, "dbaccess/ui/generalpagedialog.ui", _rItems)
     {
     }
 
@@ -444,8 +444,8 @@ namespace dbaui
     }
 
     // OGeneralPageWizard
-    OGeneralPageWizard::OGeneralPageWizard(TabPageParent pParent, const SfxItemSet& _rItems)
-        : OGeneralPage( pParent, "dbaccess/ui/generalpagewizard.ui", _rItems )
+    OGeneralPageWizard::OGeneralPageWizard(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rItems)
+        : OGeneralPage( pPage, pController, "dbaccess/ui/generalpagewizard.ui", _rItems )
         , m_xRB_CreateDatabase(m_xBuilder->weld_radio_button("createDatabase"))
         , m_xRB_OpenExistingDatabase(m_xBuilder->weld_radio_button("openExistingDatabase"))
         , m_xRB_ConnectDatabase(m_xBuilder->weld_radio_button("connectDatabase"))

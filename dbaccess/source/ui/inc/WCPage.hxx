@@ -59,7 +59,7 @@ namespace dbaui
         virtual bool            LeavePage() override;
         virtual OUString        GetTitle() const override ;
 
-        OCopyTable(OCopyTableWizard* pWizard, TabPageParent pParent);
+        OCopyTable(weld::Container* pParent, OCopyTableWizard* pWizard);
         virtual ~OCopyTable() override;
 
         bool IsOptionDefData() const { return m_xRB_DefData->get_active(); }

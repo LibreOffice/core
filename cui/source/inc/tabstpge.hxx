@@ -62,8 +62,8 @@ class SvxTabulatorTabPage : public SfxTabPage
     static const sal_uInt16 pRanges[];
 
 public:
-    SvxTabulatorTabPage(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    SvxTabulatorTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     virtual ~SvxTabulatorTabPage() override;
 
     static const sal_uInt16* GetRanges() { return pRanges; }

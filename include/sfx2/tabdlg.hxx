@@ -32,7 +32,7 @@
 
 class SfxTabPage;
 
-typedef std::unique_ptr<SfxTabPage> (*CreateTabPage)(TabPageParent pParent, const SfxItemSet *rAttrSet);
+typedef std::unique_ptr<SfxTabPage> (*CreateTabPage)(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rAttrSet);
 typedef const sal_uInt16*     (*GetTabPageRanges)(); // provides international Which-value
 struct TabPageImpl;
 
@@ -175,7 +175,7 @@ private:
     std::unique_ptr< TabPageImpl >        pImpl;
 
 protected:
-    SfxTabPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet *rAttrSet);
+    SfxTabPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet *rAttrSet);
 
     sal_uInt16          GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const
                             { return pSet->GetPool()->GetWhich( nSlot, bDeep ); }

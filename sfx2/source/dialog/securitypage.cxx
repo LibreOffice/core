@@ -400,13 +400,13 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl, weld::Button&, void
     m_xProtectPB->set_visible(!bNewProtection);
 }
 
-std::unique_ptr<SfxTabPage> SfxSecurityPage::Create(TabPageParent pParent, const SfxItemSet * rItemSet)
+std::unique_ptr<SfxTabPage> SfxSecurityPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet * rItemSet)
 {
-    return std::make_unique<SfxSecurityPage>(pParent, *rItemSet);
+    return std::make_unique<SfxSecurityPage>(pPage, pController, *rItemSet);
 }
 
-SfxSecurityPage::SfxSecurityPage(TabPageParent pParent, const SfxItemSet& rItemSet)
-    : SfxTabPage(pParent, "sfx/ui/securityinfopage.ui", "SecurityInfoPage", &rItemSet)
+SfxSecurityPage::SfxSecurityPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rItemSet)
+    : SfxTabPage(pPage, pController, "sfx/ui/securityinfopage.ui", "SecurityInfoPage", &rItemSet)
 {
     m_pImpl.reset(new SfxSecurityPage_Impl( *this ));
 }

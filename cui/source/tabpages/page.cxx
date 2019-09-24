@@ -133,13 +133,13 @@ static bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
 
 // class SvxPageDescPage --------------------------------------------------
 
-std::unique_ptr<SfxTabPage> SvxPageDescPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+std::unique_ptr<SfxTabPage> SvxPageDescPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet )
 {
-    return std::make_unique<SvxPageDescPage>(pParent, *rSet);
+    return std::make_unique<SvxPageDescPage>(pPage, pController, *rSet);
 }
 
-SvxPageDescPage::SvxPageDescPage(TabPageParent pParent, const SfxItemSet& rAttr)
-    : SfxTabPage(pParent, "cui/ui/pageformatpage.ui", "PageFormatPage", &rAttr)
+SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttr)
+    : SfxTabPage(pPage, pController, "cui/ui/pageformatpage.ui", "PageFormatPage", &rAttr)
     , bLandscape(false)
     , eMode(SVX_PAGE_MODE_STANDARD)
     , ePaperStart(PAPER_A3)

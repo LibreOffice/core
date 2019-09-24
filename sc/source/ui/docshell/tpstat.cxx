@@ -28,13 +28,13 @@
 
 // Dokumentinfo-Tabpage:
 
-std::unique_ptr<SfxTabPage> ScDocStatPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+std::unique_ptr<SfxTabPage> ScDocStatPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet )
 {
-    return std::make_unique<ScDocStatPage>( pParent, *rSet );
+    return std::make_unique<ScDocStatPage>( pPage, pController, *rSet );
 }
 
-ScDocStatPage::ScDocStatPage(TabPageParent pParent, const SfxItemSet& rSet)
-    :   SfxTabPage(pParent, "modules/scalc/ui/statisticsinfopage.ui", "StatisticsInfoPage", &rSet)
+ScDocStatPage::ScDocStatPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/scalc/ui/statisticsinfopage.ui", "StatisticsInfoPage", &rSet)
     , m_xFtTables(m_xBuilder->weld_label("nosheets"))
     , m_xFtCells(m_xBuilder->weld_label("nocells"))
     , m_xFtPages(m_xBuilder->weld_label("nopages"))

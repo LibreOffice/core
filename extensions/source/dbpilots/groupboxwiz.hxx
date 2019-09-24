@@ -66,8 +66,8 @@ namespace dbp
     class OGBWPage : public OControlWizardPage
     {
     public:
-        OGBWPage(OControlWizard* pParent, TabPageParent pPageParent, const OUString& rUIXMLDescription, const OString& rID)
-            : OControlWizardPage(pParent, pPageParent, rUIXMLDescription, rID)
+        OGBWPage(weld::Container* pPage, OControlWizard* pWizard, const OUString& rUIXMLDescription, const OString& rID)
+            : OControlWizardPage(pPage, pWizard, rUIXMLDescription, rID)
     {
     }
 
@@ -83,7 +83,7 @@ namespace dbp
         std::unique_ptr<weld::TreeView> m_xExistingRadios;
 
     public:
-        explicit ORadioSelectionPage(OControlWizard* pParent, TabPageParent pPageParent);
+        explicit ORadioSelectionPage(weld::Container* pPage, OControlWizard* pWizard);
         virtual ~ORadioSelectionPage() override;
 
     private:
@@ -109,7 +109,7 @@ namespace dbp
         std::unique_ptr<weld::ComboBox> m_xDefSelection;
 
     public:
-        explicit ODefaultFieldSelectionPage(OControlWizard* pParent, TabPageParent pPageParent);
+        explicit ODefaultFieldSelectionPage(weld::Container* pPage, OControlWizard* pWizard);
         virtual ~ODefaultFieldSelectionPage() override;
 
     private:
@@ -130,7 +130,7 @@ namespace dbp
                         m_nLastSelection;
 
     public:
-        explicit OOptionValuesPage(OControlWizard* pParent, TabPageParent pPageParent);
+        explicit OOptionValuesPage(weld::Container* pPage, OControlWizard* pWizard);
         virtual ~OOptionValuesPage() override;
 
     private:
@@ -149,7 +149,7 @@ namespace dbp
     class OOptionDBFieldPage : public ODBFieldPage
     {
     public:
-        explicit OOptionDBFieldPage(OControlWizard* pParent, TabPageParent pPageParent);
+        explicit OOptionDBFieldPage(weld::Container* pPage, OControlWizard* pWizard);
 
     protected:
         // ODBFieldPage overridables
@@ -161,7 +161,7 @@ namespace dbp
         std::unique_ptr<weld::Entry> m_xName;
 
     public:
-        explicit OFinalizeGBWPage(OControlWizard* pParent, TabPageParent pPageParent);
+        explicit OFinalizeGBWPage(weld::Container* pPage, OControlWizard* pWizard);
         virtual ~OFinalizeGBWPage() override;
 
     private:

@@ -58,8 +58,8 @@ private:
     void                    UpdateUserAgent();
 
 public:
-    SvxOnlineUpdateTabPage(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    SvxOnlineUpdateTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     virtual ~SvxOnlineUpdateTabPage() override;
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;

@@ -40,8 +40,8 @@
 
 using namespace com::sun::star;
 
-SvxGradientTabPage::SvxGradientTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "cui/ui/gradientpage.ui", "GradientPage", &rInAttrs)
+SvxGradientTabPage::SvxGradientTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/gradientpage.ui", "GradientPage", &rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnGradientListState(nullptr)
     , m_pnColorListState(nullptr)
@@ -56,9 +56,9 @@ SvxGradientTabPage::SvxGradientTabPage(TabPageParent pParent, const SfxItemSet& 
     , m_xSliderAngle(m_xBuilder->weld_scale("angleslider"))
     , m_xMtrBorder(m_xBuilder->weld_metric_spin_button("bordermtr", FieldUnit::PERCENT))
     , m_xSliderBorder(m_xBuilder->weld_scale("borderslider"))
-    , m_xLbColorFrom(new ColorListBox(m_xBuilder->weld_menu_button("colorfromlb"), pParent.GetFrameWeld()))
+    , m_xLbColorFrom(new ColorListBox(m_xBuilder->weld_menu_button("colorfromlb"), pController->getDialog()))
     , m_xMtrColorFrom(m_xBuilder->weld_metric_spin_button("colorfrommtr", FieldUnit::PERCENT))
-    , m_xLbColorTo(new ColorListBox(m_xBuilder->weld_menu_button("colortolb"), pParent.GetFrameWeld()))
+    , m_xLbColorTo(new ColorListBox(m_xBuilder->weld_menu_button("colortolb"), pController->getDialog()))
     , m_xMtrColorTo(m_xBuilder->weld_metric_spin_button("colortomtr", FieldUnit::PERCENT))
     , m_xGradientLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("gradientpresetlistwin")))
     , m_xMtrIncrement(m_xBuilder->weld_spin_button("incrementmtr"))
@@ -227,10 +227,10 @@ void SvxGradientTabPage::Reset( const SfxItemSet* )
         m_xBtnModify->set_sensitive(false);
 }
 
-std::unique_ptr<SfxTabPage> SvxGradientTabPage::Create( TabPageParent pWindow,
+std::unique_ptr<SfxTabPage> SvxGradientTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                                const SfxItemSet* rOutAttrs )
 {
-    return std::make_unique<SvxGradientTabPage>(pWindow, *rOutAttrs);
+    return std::make_unique<SvxGradientTabPage>(pPage, pController, *rOutAttrs);
 }
 
 IMPL_LINK( SvxGradientTabPage, ModifiedListBoxHdl_Impl, weld::ComboBox&, rListBox, void )

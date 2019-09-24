@@ -50,8 +50,8 @@
 using namespace com::sun::star;
 
 
-SvxLineDefTabPage::SvxLineDefTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "cui/ui/linestyletabpage.ui", "LineStylePage", &rInAttrs)
+SvxLineDefTabPage::SvxLineDefTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/linestyletabpage.ui", "LineStylePage", &rInAttrs)
     , rOutAttrs(rInAttrs)
     , aXLineAttr(rInAttrs.GetPool())
     , rXLSet(aXLineAttr.GetItemSet())
@@ -296,9 +296,9 @@ void SvxLineDefTabPage::Reset( const SfxItemSet* rAttrs )
     }
 }
 
-std::unique_ptr<SfxTabPage> SvxLineDefTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs )
+std::unique_ptr<SfxTabPage> SvxLineDefTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rOutAttrs )
 {
-    return std::make_unique<SvxLineDefTabPage>(pParent, *rOutAttrs);
+    return std::make_unique<SvxLineDefTabPage>(pPage, pController, *rOutAttrs);
 }
 
 IMPL_LINK(SvxLineDefTabPage, SelectLinestyleListBoxHdl_Impl, weld::ComboBox&, rListBox, void)

@@ -168,10 +168,10 @@ class SwColumnPage : public SfxTabPage
     static const sal_uInt16 aPageRg[];
 
 public:
-    SwColumnPage(TabPageParent pParent, const SfxItemSet &rSet);
+    SwColumnPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet);
     virtual ~SwColumnPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return aPageRg; }
 
     virtual bool    FillItemSet(SfxItemSet *rSet) override;

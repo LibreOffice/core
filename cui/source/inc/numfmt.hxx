@@ -60,8 +60,8 @@ class SvxNumberFormatTabPage : public SfxTabPage
     static const sal_uInt16 pRanges[];
 
 public:
-    SvxNumberFormatTabPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    SvxNumberFormatTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                     const SfxItemSet* rAttrSet );
     virtual ~SvxNumberFormatTabPage() override;
     // Returns area information.

@@ -37,8 +37,8 @@
 
 // Subtotals group tabpage:
 
-ScTpSubTotalGroup::ScTpSubTotalGroup(TabPageParent pParent, const SfxItemSet& rArgSet)
-    : SfxTabPage(pParent, "modules/scalc/ui/subtotalgrppage.ui", "SubTotalGrpPage", &rArgSet)
+ScTpSubTotalGroup::ScTpSubTotalGroup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet)
+    : SfxTabPage(pPage, pController, "modules/scalc/ui/subtotalgrppage.ui", "SubTotalGrpPage", &rArgSet)
     , aStrNone(ScResId(SCSTR_NONE))
     , aStrColumn(ScResId(SCSTR_COLUMN))
     , pViewData(nullptr)
@@ -372,34 +372,34 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, const row_col&, rRowCol, void )
 
 // Derived Group TabPages:
 
-std::unique_ptr<SfxTabPage> ScTpSubTotalGroup1::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ScTpSubTotalGroup1::Create( weld::Container* pPage, weld::DialogController* pController,
                                                  const SfxItemSet*  rArgSet )
 {
-    return std::make_unique<ScTpSubTotalGroup1>( pParent, *rArgSet );
+    return std::make_unique<ScTpSubTotalGroup1>( pPage, pController, *rArgSet );
 }
 
-std::unique_ptr<SfxTabPage> ScTpSubTotalGroup2::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ScTpSubTotalGroup2::Create( weld::Container* pPage, weld::DialogController* pController,
                                        const SfxItemSet*    rArgSet )
 {
-    return std::make_unique<ScTpSubTotalGroup2>( pParent, *rArgSet );
+    return std::make_unique<ScTpSubTotalGroup2>( pPage, pController, *rArgSet );
 }
 
-std::unique_ptr<SfxTabPage> ScTpSubTotalGroup3::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ScTpSubTotalGroup3::Create( weld::Container* pPage, weld::DialogController* pController,
                                        const SfxItemSet*    rArgSet )
 {
-    return std::make_unique<ScTpSubTotalGroup3>( pParent, *rArgSet );
+    return std::make_unique<ScTpSubTotalGroup3>( pPage, pController, *rArgSet );
 }
 
-ScTpSubTotalGroup1::ScTpSubTotalGroup1( TabPageParent pParent, const SfxItemSet& rArgSet ) :
-    ScTpSubTotalGroup( pParent, rArgSet )
+ScTpSubTotalGroup1::ScTpSubTotalGroup1( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet ) :
+    ScTpSubTotalGroup( pPage, pController, rArgSet )
 {}
 
-ScTpSubTotalGroup2::ScTpSubTotalGroup2( TabPageParent pParent, const SfxItemSet& rArgSet ) :
-    ScTpSubTotalGroup( pParent, rArgSet )
+ScTpSubTotalGroup2::ScTpSubTotalGroup2( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet ) :
+    ScTpSubTotalGroup( pPage, pController, rArgSet )
 {}
 
-ScTpSubTotalGroup3::ScTpSubTotalGroup3( TabPageParent pParent, const SfxItemSet& rArgSet ) :
-    ScTpSubTotalGroup( pParent, rArgSet )
+ScTpSubTotalGroup3::ScTpSubTotalGroup3( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet ) :
+    ScTpSubTotalGroup( pPage, pController, rArgSet )
 {}
 
 #define RESET(i) (ScTpSubTotalGroup::DoReset( (i), *rArgSet ))
@@ -416,9 +416,9 @@ bool ScTpSubTotalGroup3::FillItemSet( SfxItemSet* rArgSet ) { return FILLSET(3);
 
 // options tab page:
 
-ScTpSubTotalOptions::ScTpSubTotalOptions(TabPageParent pParent, const SfxItemSet& rArgSet)
+ScTpSubTotalOptions::ScTpSubTotalOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet)
 
-        :   SfxTabPage      ( pParent,
+        :   SfxTabPage      ( pPage, pController,
                               "modules/scalc/ui/subtotaloptionspage.ui", "SubTotalOptionsPage",
                               &rArgSet ),
             pViewData       ( nullptr ),
@@ -460,10 +460,10 @@ void ScTpSubTotalOptions::Init()
     FillUserSortListBox();
 }
 
-std::unique_ptr<SfxTabPage> ScTpSubTotalOptions::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ScTpSubTotalOptions::Create(weld::Container* pPage, weld::DialogController* pController,
                                                const SfxItemSet* rArgSet)
 {
-    return std::make_unique<ScTpSubTotalOptions>(pParent, *rArgSet);
+    return std::make_unique<ScTpSubTotalOptions>(pPage, pController, *rArgSet);
 }
 
 void ScTpSubTotalOptions::Reset( const SfxItemSet* /* rArgSet */ )

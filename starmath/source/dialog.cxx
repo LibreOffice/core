@@ -160,8 +160,8 @@ IMPL_LINK_NOARG(SmPrintOptionsTabPage, SizeButtonClickHdl, weld::ToggleButton&, 
     m_xZoom->set_sensitive(m_xSizeZoomed->get_active());
 }
 
-SmPrintOptionsTabPage::SmPrintOptionsTabPage(TabPageParent pPage, const SfxItemSet& rOptions)
-    : SfxTabPage(pPage, "modules/smath/ui/smathsettings.ui", "SmathSettings", &rOptions)
+SmPrintOptionsTabPage::SmPrintOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rOptions)
+    : SfxTabPage(pPage, pController, "modules/smath/ui/smathsettings.ui", "SmathSettings", &rOptions)
     , m_xTitle(m_xBuilder->weld_check_button("title"))
     , m_xText(m_xBuilder->weld_check_button("text"))
     , m_xFrame(m_xBuilder->weld_check_button("frame"))
@@ -224,9 +224,9 @@ void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
     m_xAutoCloseBrackets->set_active(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_AUTO_CLOSE_BRACKETS))).GetValue());
 }
 
-std::unique_ptr<SfxTabPage> SmPrintOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet& rSet)
+std::unique_ptr<SfxTabPage> SmPrintOptionsTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
 {
-    return std::make_unique<SmPrintOptionsTabPage>(pParent, rSet);
+    return std::make_unique<SmPrintOptionsTabPage>(pPage, pController, rSet);
 }
 
 void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)

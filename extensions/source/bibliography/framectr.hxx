@@ -27,6 +27,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
+#include <tools/link.hxx>
 #include <vector>
 #include <memory>
 

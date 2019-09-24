@@ -51,6 +51,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/IDialogRenderable.hxx>

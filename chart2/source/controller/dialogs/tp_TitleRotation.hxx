@@ -49,11 +49,11 @@ private:
     DECL_LINK(StackedToggleHdl, weld::ToggleButton&, void);
 
 public:
-    SchAlignmentTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs, bool bWithRotation = true);
+    SchAlignmentTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs, bool bWithRotation = true);
     virtual ~SchAlignmentTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rInAttrs);
-    static std::unique_ptr<SfxTabPage> CreateWithoutRotation(TabPageParent pParent, const SfxItemSet* rInAttrs);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rInAttrs);
+    static std::unique_ptr<SfxTabPage> CreateWithoutRotation(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rInAttrs);
     virtual bool FillItemSet(SfxItemSet* rOutAttrs) override;
     virtual void Reset(const SfxItemSet* rInAttrs) override;
 };

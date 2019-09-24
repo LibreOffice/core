@@ -89,8 +89,8 @@ bool  SvxGridItem::GetPresentation
 }
 
 // TabPage Screen Settings
-SvxGridTabPage::SvxGridTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "svx/ui/optgridpage.ui", "OptGridPage", &rCoreSet)
+SvxGridTabPage::SvxGridTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pPage, pController, "svx/ui/optgridpage.ui", "OptGridPage", &rCoreSet)
     , bAttrModified(false)
     , m_xCbxUseGridsnap(m_xBuilder->weld_check_button("usegridsnap"))
     , m_xCbxGridVisible(m_xBuilder->weld_check_button("gridvisible"))
@@ -146,9 +146,9 @@ SvxGridTabPage::~SvxGridTabPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SvxGridTabPage::Create(TabPageParent pParent, const SfxItemSet& rAttrSet)
+std::unique_ptr<SfxTabPage> SvxGridTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet)
 {
-    return std::make_unique<SvxGridTabPage>(pParent, rAttrSet);
+    return std::make_unique<SvxGridTabPage>(pPage, pController, rAttrSet);
 }
 
 bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )

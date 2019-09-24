@@ -28,8 +28,8 @@ class ScDocOptions;
 class ScTpCalcOptions : public SfxTabPage
 {
 public:
-    ScTpCalcOptions(TabPageParent pParent, const SfxItemSet&  rCoreSet);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rCoreSet);
+    ScTpCalcOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&  rCoreSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet);
     virtual ~ScTpCalcOptions() override;
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) override;

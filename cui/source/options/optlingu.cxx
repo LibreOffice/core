@@ -811,8 +811,8 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, bool bEnable 
 
 // class SvxLinguTabPage -------------------------------------------------
 
-SvxLinguTabPage::SvxLinguTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/optlingupage.ui", "OptLinguPage", &rSet)
+SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optlingupage.ui", "OptLinguPage", &rSet)
     , sCapitalWords   (CuiResId(RID_SVXSTR_CAPITAL_WORDS))
     , sWordsWithDigits(CuiResId(RID_SVXSTR_WORDS_WITH_DIGITS))
     , sSpellSpecial   (CuiResId(RID_SVXSTR_SPELL_SPECIAL))
@@ -896,10 +896,10 @@ SvxLinguTabPage::~SvxLinguTabPage()
     pLinguData.reset();
 }
 
-std::unique_ptr<SfxTabPage> SvxLinguTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxLinguTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                             const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<SvxLinguTabPage>( pParent, *rAttrSet );
+    return std::make_unique<SvxLinguTabPage>( pPage, pController, *rAttrSet );
 }
 
 bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )

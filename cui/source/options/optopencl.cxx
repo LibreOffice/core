@@ -26,8 +26,8 @@
 
 #include "optopencl.hxx"
 
-SvxOpenCLTabPage::SvxOpenCLTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/optopenclpage.ui", "OptOpenCLPage", &rSet)
+SvxOpenCLTabPage::SvxOpenCLTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optopenclpage.ui", "OptOpenCLPage", &rSet)
     , maConfig(OpenCLConfig::get())
     , mxUseOpenCL(m_xBuilder->weld_check_button("useopencl"))
     , mxOclUsed(m_xBuilder->weld_label("openclused"))
@@ -45,9 +45,9 @@ SvxOpenCLTabPage::~SvxOpenCLTabPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SvxOpenCLTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SvxOpenCLTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SvxOpenCLTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxOpenCLTabPage>(pPage, pController, *rAttrSet);
 }
 
 bool SvxOpenCLTabPage::FillItemSet( SfxItemSet* )

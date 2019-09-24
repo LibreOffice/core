@@ -325,8 +325,8 @@ bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaSt
 
 } // namespace
 
-ScTPValidationValue::ScTPValidationValue(TabPageParent pParent, const SfxItemSet& rArgSet)
-    : SfxTabPage(pParent, "modules/scalc/ui/validationcriteriapage.ui",
+ScTPValidationValue::ScTPValidationValue(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet)
+    : SfxTabPage(pPage, pController, "modules/scalc/ui/validationcriteriapage.ui",
                  "ValidationCriteriaPage", &rArgSet)
     , maStrMin(ScResId(SCSTR_VALID_MINIMUM))
     , maStrMax(ScResId(SCSTR_VALID_MAXIMUM))
@@ -404,9 +404,9 @@ void ScTPValidationValue::Init()
     CheckHdl( *m_xCbShow );
 }
 
-std::unique_ptr<SfxTabPage> ScTPValidationValue::Create(TabPageParent pParent, const SfxItemSet* rArgSet)
+std::unique_ptr<SfxTabPage> ScTPValidationValue::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rArgSet)
 {
-    return std::make_unique<ScTPValidationValue>(pParent, *rArgSet);
+    return std::make_unique<ScTPValidationValue>(pPage, pController, *rArgSet);
 }
 
 void ScTPValidationValue::Reset( const SfxItemSet* rArgSet )
@@ -678,8 +678,8 @@ IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl, weld::Button&, void)
 
 // Input Help Page
 
-ScTPValidationHelp::ScTPValidationHelp(TabPageParent pParent, const SfxItemSet& rArgSet)
-    : SfxTabPage(pParent, "modules/scalc/ui/validationhelptabpage.ui", "ValidationHelpTabPage", &rArgSet)
+ScTPValidationHelp::ScTPValidationHelp(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet)
+    : SfxTabPage(pPage, pController, "modules/scalc/ui/validationhelptabpage.ui", "ValidationHelpTabPage", &rArgSet)
     , m_xTsbHelp(m_xBuilder->weld_check_button("tsbhelp"))
     , m_xEdtTitle(m_xBuilder->weld_entry("title"))
     , m_xEdInputHelp(m_xBuilder->weld_text_view("inputhelp"))
@@ -691,10 +691,10 @@ ScTPValidationHelp::~ScTPValidationHelp()
 {
 }
 
-std::unique_ptr<SfxTabPage> ScTPValidationHelp::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ScTPValidationHelp::Create(weld::Container* pPage, weld::DialogController* pController,
                                               const SfxItemSet* rArgSet)
 {
-    return std::make_unique<ScTPValidationHelp>(pParent, *rArgSet);
+    return std::make_unique<ScTPValidationHelp>(pPage, pController, *rArgSet);
 }
 
 void ScTPValidationHelp::Reset( const SfxItemSet* rArgSet )
@@ -728,10 +728,10 @@ bool ScTPValidationHelp::FillItemSet( SfxItemSet* rArgSet )
 
 // Error Alert Page
 
-ScTPValidationError::ScTPValidationError(TabPageParent pParent,
+ScTPValidationError::ScTPValidationError(weld::Container* pPage, weld::DialogController* pController,
                                          const SfxItemSet& rArgSet)
 
-    :   SfxTabPage      ( pParent,
+    :   SfxTabPage      ( pPage, pController,
                           "modules/scalc/ui/erroralerttabpage.ui", "ErrorAlertTabPage",
                           &rArgSet )
     , m_xTsbShow(m_xBuilder->weld_check_button("tsbshow"))
@@ -759,10 +759,10 @@ void ScTPValidationError::Init()
     SelectActionHdl(*m_xLbAction);
 }
 
-std::unique_ptr<SfxTabPage> ScTPValidationError::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ScTPValidationError::Create(weld::Container* pPage, weld::DialogController* pController,
                                                const SfxItemSet* rArgSet)
 {
-    return std::make_unique<ScTPValidationError>(pParent, *rArgSet);
+    return std::make_unique<ScTPValidationError>(pPage, pController, *rArgSet);
 }
 
 void ScTPValidationError::Reset( const SfxItemSet* rArgSet )

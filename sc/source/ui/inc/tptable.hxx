@@ -26,8 +26,8 @@ class ScTablePage : public SfxTabPage
 {
     static const sal_uInt16 pPageTableRanges[];
 public:
-    ScTablePage(TabPageParent pParent, const SfxItemSet& rCoreSet);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rCoreSet);
+    ScTablePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet);
     virtual         ~ScTablePage() override;
 
     static  const sal_uInt16* GetRanges () { return pPageTableRanges; }

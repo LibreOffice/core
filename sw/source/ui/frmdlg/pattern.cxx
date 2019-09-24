@@ -31,10 +31,7 @@ SwBackgroundDlg::SwBackgroundDlg(weld::Window* pParent, const SfxItemSet& rSet)
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND );
     if ( fnCreatePage )
-    {
-        TabPageParent pPageParent(get_content_area(), this);
-        SetTabPage((*fnCreatePage)(pPageParent, &rSet));
-    }
+        SetTabPage((*fnCreatePage)(get_content_area(), this, &rSet));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -601,9 +601,9 @@ bool SfxDocumentInfoItem::PutValue( const Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-SfxDocumentDescPage::SfxDocumentDescPage(TabPageParent pParent, const SfxItemSet& rItemSet)
-    : SfxTabPage(pParent, "sfx/ui/descriptioninfopage.ui", "DescriptionInfoPage", &rItemSet)
-    , m_pInfoItem( nullptr)
+SfxDocumentDescPage::SfxDocumentDescPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rItemSet)
+    : SfxTabPage(pPage, pController, "sfx/ui/descriptioninfopage.ui", "DescriptionInfoPage", &rItemSet)
+    , m_pInfoItem(nullptr)
     , m_xTitleEd(m_xBuilder->weld_entry("title"))
     , m_xThemaEd(m_xBuilder->weld_entry("subject"))
     , m_xKeywordsEd(m_xBuilder->weld_entry("keywords"))
@@ -617,9 +617,9 @@ SfxDocumentDescPage::~SfxDocumentDescPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SfxDocumentDescPage::Create(TabPageParent pParent, const SfxItemSet *rItemSet)
+std::unique_ptr<SfxTabPage> SfxDocumentDescPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rItemSet)
 {
-     return std::make_unique<SfxDocumentDescPage>(pParent, *rItemSet);
+     return std::make_unique<SfxDocumentDescPage>(pPage, pController, *rItemSet);
 }
 
 bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
@@ -699,8 +699,8 @@ void SfxDocumentDescPage::Reset(const SfxItemSet *rSet)
     }
 }
 
-SfxDocumentPage::SfxDocumentPage(TabPageParent pParent, const SfxItemSet& rItemSet)
-    : SfxTabPage(pParent, "sfx/ui/documentinfopage.ui", "DocumentInfoPage", &rItemSet)
+SfxDocumentPage::SfxDocumentPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rItemSet)
+    : SfxTabPage(pPage, pController, "sfx/ui/documentinfopage.ui", "DocumentInfoPage", &rItemSet)
     , bEnableUseUserData( false )
     , bHandleDelete( false )
     , m_xBmp(m_xBuilder->weld_image("icon"))
@@ -856,9 +856,9 @@ void SfxDocumentPage::ImplCheckPasswordState()
     m_xChangePassBtn->set_sensitive(false);
 }
 
-std::unique_ptr<SfxTabPage> SfxDocumentPage::Create( TabPageParent pParent, const SfxItemSet* rItemSet )
+std::unique_ptr<SfxTabPage> SfxDocumentPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rItemSet)
 {
-     return std::make_unique<SfxDocumentPage>(pParent, *rItemSet);
+     return std::make_unique<SfxDocumentPage>(pPage, pController, *rItemSet);
 }
 
 void SfxDocumentPage::EnableUseUserData()
@@ -1852,8 +1852,8 @@ void CustomPropertiesControl::SetCustomProperties(std::vector< std::unique_ptr<C
 }
 
 // class SfxCustomPropertiesPage -----------------------------------------
-SfxCustomPropertiesPage::SfxCustomPropertiesPage(TabPageParent pParent, const SfxItemSet& rItemSet )
-    : SfxTabPage(pParent, "sfx/ui/custominfopage.ui", "CustomInfoPage", &rItemSet)
+SfxCustomPropertiesPage::SfxCustomPropertiesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rItemSet )
+    : SfxTabPage(pPage, pController, "sfx/ui/custominfopage.ui", "CustomInfoPage", &rItemSet)
     , m_xPropertiesCtrl(new CustomPropertiesControl)
     , m_xAdd(m_xBuilder->weld_button("add"))
 {
@@ -1946,9 +1946,9 @@ DeactivateRC SfxCustomPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
     return nRet;
 }
 
-std::unique_ptr<SfxTabPage> SfxCustomPropertiesPage::Create( TabPageParent pParent, const SfxItemSet* rItemSet )
+std::unique_ptr<SfxTabPage> SfxCustomPropertiesPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rItemSet)
 {
-    return std::make_unique<SfxCustomPropertiesPage>(pParent, *rItemSet);
+    return std::make_unique<SfxCustomPropertiesPage>(pPage, pController, *rItemSet);
 }
 
 CmisValue::CmisValue(weld::Widget* pParent, const OUString& aStr)
@@ -2239,11 +2239,10 @@ void CmisPropertiesControl::AddLine( const OUString& sId, const OUString& sName,
 }
 
 // class SfxCmisPropertiesPage -----------------------------------------
-SfxCmisPropertiesPage::SfxCmisPropertiesPage(TabPageParent pParent, const SfxItemSet& rItemSet)
-    : SfxTabPage(pParent, "sfx/ui/cmisinfopage.ui", "CmisInfoPage", &rItemSet)
+SfxCmisPropertiesPage::SfxCmisPropertiesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rItemSet)
+    : SfxTabPage(pPage, pController, "sfx/ui/cmisinfopage.ui", "CmisInfoPage", &rItemSet)
     , m_xPropertiesCtrl(new CmisPropertiesControl(*m_xBuilder))
 {
-
 }
 
 SfxCmisPropertiesPage::~SfxCmisPropertiesPage()
@@ -2339,9 +2338,9 @@ DeactivateRC SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
     return DeactivateRC::LeavePage;
 }
 
-std::unique_ptr<SfxTabPage> SfxCmisPropertiesPage::Create( TabPageParent pParent, const SfxItemSet* rItemSet )
+std::unique_ptr<SfxTabPage> SfxCmisPropertiesPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rItemSet)
 {
-    return std::make_unique<SfxCmisPropertiesPage>(pParent, *rItemSet);
+    return std::make_unique<SfxCmisPropertiesPage>(pPage, pController, *rItemSet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

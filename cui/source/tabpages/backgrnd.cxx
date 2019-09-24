@@ -254,8 +254,8 @@ void BackgroundPreviewImpl::Paint(vcl::RenderContext& rRenderContext, const ::to
 
 #define HDL(hdl) LINK(this,SvxBackgroundTabPage,hdl)
 
-SvxBackgroundTabPage::SvxBackgroundTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
-    : SvxTabPage(pParent, "cui/ui/backgroundpage.ui", "BackgroundPage", rCoreSet)
+SvxBackgroundTabPage::SvxBackgroundTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
+    : SvxTabPage(pPage, pController, "cui/ui/backgroundpage.ui", "BackgroundPage", rCoreSet)
     , nHtmlMode(0)
     , bAllowShowSelector(true)
     , bIsGraphicValid(false)
@@ -330,9 +330,9 @@ SvxBackgroundTabPage::~SvxBackgroundTabPage()
     m_xWndPosition.reset();
 }
 
-std::unique_ptr<SfxTabPage> SvxBackgroundTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SvxBackgroundTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SvxBackgroundTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxBackgroundTabPage>(pPage, pController, *rAttrSet);
 }
 
 void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
@@ -1357,8 +1357,8 @@ static sal_uInt16 lcl_GetTableDestSlot(sal_Int32 nTblDest)
     }
 }
 
-SvxBkgTabPage::SvxBkgTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SvxAreaTabPage(pParent, rInAttrs),
+SvxBkgTabPage::SvxBkgTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SvxAreaTabPage(pPage, pController, rInAttrs),
     bHighlighting(false),
     bCharBackColor(false),
     maSet(rInAttrs)
@@ -1526,10 +1526,10 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
     return true;
 }
 
-std::unique_ptr<SfxTabPage> SvxBkgTabPage::Create(TabPageParent pWindow, const SfxItemSet* rAttrs)
+std::unique_ptr<SfxTabPage> SvxBkgTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrs)
 {
-    auto xRet = std::make_unique<SvxBkgTabPage>(pWindow, *rAttrs);
-    xRet->SetOptimalSize(pWindow.pController);
+    auto xRet = std::make_unique<SvxBkgTabPage>(pPage, pController, *rAttrs);
+    xRet->SetOptimalSize(pController);
     return xRet;
 }
 

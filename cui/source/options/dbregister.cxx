@@ -61,8 +61,7 @@ DatabaseRegistrationDialog::DatabaseRegistrationDialog(weld::Window* pParent, co
     : RegistrationItemSetHolder(rInAttrs)
     , SfxSingleTabDialogController(pParent, &getRegistrationItems())
 {
-    TabPageParent aParent(get_content_area(), this);
-    SetTabPage(DbRegistrationOptionsPage::Create(aParent, &getRegistrationItems()));
+    SetTabPage(DbRegistrationOptionsPage::Create(get_content_area(), this, &getRegistrationItems()));
     m_xDialog->set_title(CuiResId(RID_SVXSTR_REGISTERED_DATABASES));
 }
 
@@ -80,8 +79,8 @@ short DatabaseRegistrationDialog::run()
 
 // class DbRegistrationOptionsPage --------------------------------------------------
 
-DbRegistrationOptionsPage::DbRegistrationOptionsPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/dbregisterpage.ui", "DbRegisterPage", &rSet)
+DbRegistrationOptionsPage::DbRegistrationOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/dbregisterpage.ui", "DbRegisterPage", &rSet)
     , m_nOldCount(0)
     , m_bModified(false)
     , m_xNew(m_xBuilder->weld_button("new"))
@@ -117,10 +116,10 @@ DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
         delete reinterpret_cast<DatabaseRegistration*>(m_xPathBox->get_id(i).toInt64());
 }
 
-std::unique_ptr<SfxTabPage> DbRegistrationOptionsPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> DbRegistrationOptionsPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                     const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<DbRegistrationOptionsPage>(pParent, *rAttrSet);
+    return std::make_unique<DbRegistrationOptionsPage>(pPage, pController, *rAttrSet);
 }
 
 bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet* rCoreSet )

@@ -23,7 +23,7 @@
 #include <helpids.h>
 #include <chartview/ChartSfxItemIds.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
@@ -40,19 +40,11 @@ using namespace ::com::sun::star;
 
 namespace
 {
-void lcl_enableRangeChoosing(bool bEnable, TabPageParent pParent)
+void lcl_enableRangeChoosing(bool bEnable, weld::DialogController* pController)
 {
-    if (weld::DialogController* pController = pParent.pController)
-    {
-        weld::Window* pWeldDialog = pController->getDialog();
-        pWeldDialog->set_modal(!bEnable);
-        pWeldDialog->set_visible(!bEnable);
-    }
-    else if (::Dialog* pVCLDialog = pParent.pParent ? pParent.pParent->GetParentDialog() : nullptr)
-    {
-        pVCLDialog->Show(!bEnable);
-        pVCLDialog->SetModalInputMode(!bEnable);
-    }
+    weld::Window* pWeldDialog = pController->getDialog();
+    pWeldDialog->set_modal(!bEnable);
+    pWeldDialog->set_visible(!bEnable);
 }
 
 sal_uInt16 lcl_getLbEntryPosByErrorKind( SvxChartKindError eErrorKind )
@@ -87,7 +79,7 @@ sal_uInt16 lcl_getLbEntryPosByErrorKind( SvxChartKindError eErrorKind )
 namespace chart
 {
 
-ErrorBarResources::ErrorBarResources(weld::Builder* pParent, TabPageParent pParentDialog,
+ErrorBarResources::ErrorBarResources(weld::Builder* pParent, weld::DialogController* pController,
                                      const SfxItemSet& rInAttrs, bool bNoneAvailable,
                                      tErrorBarType eType /* = ERROR_BAR_Y */ )
     : m_eErrorKind( SvxChartKindError::NONE )
@@ -101,7 +93,7 @@ ErrorBarResources::ErrorBarResources(weld::Builder* pParent, TabPageParent pPare
     , m_nConstSpinSize( 1 )
     , m_fPlusValue(0.0)
     , m_fMinusValue(0.0)
-    , m_pParentDialog( pParentDialog )
+    , m_pController(pController)
     , m_pCurrentRangeChoosingField( nullptr )
     , m_bHasInternalDataProvider( true )
     , m_bEnableDataTableDialog( true )
@@ -456,7 +448,7 @@ IMPL_LINK(ErrorBarResources, ChooseRange, weld::Button&, rButton, void)
         aUIString = m_xUIStringNeg->get_label();
     }
 
-    lcl_enableRangeChoosing( true, m_pParentDialog );
+    lcl_enableRangeChoosing(true, m_pController);
     m_apRangeSelectionHelper->chooseRange(
         m_pCurrentRangeChoosingField->get_text(),
         aUIString, *this );
@@ -695,7 +687,7 @@ void ErrorBarResources::listeningFinished(
     m_pCurrentRangeChoosingField = nullptr;
 
     UpdateControlStates();
-    lcl_enableRangeChoosing( false, m_pParentDialog );
+    lcl_enableRangeChoosing(false, m_pController);
 }
 
 void ErrorBarResources::disposingRangeSelection()

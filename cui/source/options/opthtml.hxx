@@ -46,9 +46,9 @@ class OfaHtmlTabPage : public SfxTabPage
     DECL_LINK(CheckBoxHdl_Impl, weld::ToggleButton&, void);
 
 public:
-    OfaHtmlTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    OfaHtmlTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~OfaHtmlTabPage() override;
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                        const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

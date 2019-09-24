@@ -90,15 +90,13 @@ std::unique_ptr<BuilderPage> CreationWizard::createPage(WizardState nState)
 
     OString sIdent(OString::number(nState));
     weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
-    // TODO eventually pass DialogController as distinct argument instead of bundling into TabPageParent
-    TabPageParent aParent(pPageContainer, this);
 
     switch( nState )
     {
         case STATE_CHARTTYPE:
         {
             m_aTimerTriggeredControllerLock.startTimer();
-            xRet = std::make_unique<ChartTypeTabPage>(aParent, m_xChartModel);
+            xRet = std::make_unique<ChartTypeTabPage>(pPageContainer, this, m_xChartModel);
             m_pTemplateProvider = static_cast<ChartTypeTabPage*>(xRet.get());
             if (m_pDialogModel)
                 m_pDialogModel->setTemplate( m_pTemplateProvider->getCurrentTemplate());
@@ -107,18 +105,18 @@ std::unique_ptr<BuilderPage> CreationWizard::createPage(WizardState nState)
         case STATE_SIMPLE_RANGE:
         {
             m_aTimerTriggeredControllerLock.startTimer();
-            xRet = std::make_unique<RangeChooserTabPage>(aParent, *m_pDialogModel, m_pTemplateProvider, this);
+            xRet = std::make_unique<RangeChooserTabPage>(pPageContainer, this, *m_pDialogModel, m_pTemplateProvider);
             break;
         }
         case STATE_DATA_SERIES:
         {
             m_aTimerTriggeredControllerLock.startTimer();
-            xRet = std::make_unique<DataSourceTabPage>(aParent, *m_pDialogModel, m_pTemplateProvider, this);
+            xRet = std::make_unique<DataSourceTabPage>(pPageContainer, this, *m_pDialogModel, m_pTemplateProvider);
             break;
         }
         case STATE_OBJECTS:
         {
-            xRet = std::make_unique<TitlesAndObjectsTabPage>(aParent, m_xChartModel, m_xComponentContext);
+            xRet = std::make_unique<TitlesAndObjectsTabPage>(pPageContainer, this, m_xChartModel, m_xComponentContext);
             m_aTimerTriggeredControllerLock.startTimer();
             break;
         }

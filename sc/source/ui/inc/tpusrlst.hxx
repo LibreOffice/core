@@ -33,8 +33,8 @@ class ScRefAddress;
 class ScTpUserLists : public SfxTabPage
 {
 public:
-    ScTpUserLists(TabPageParent pParent, const SfxItemSet& rArgSet);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent,
+    ScTpUserLists(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController,
                                           const SfxItemSet* rAttrSet);
     virtual ~ScTpUserLists() override;
     virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) override;

@@ -52,8 +52,8 @@ const sal_uInt16 SvxShadowTabPage::pShadowRanges[] =
     0
 };
 
-SvxShadowTabPage::SvxShadowTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SvxTabPage(pParent, "cui/ui/shadowtabpage.ui", "ShadowTabPage", rInAttrs)
+SvxShadowTabPage::SvxShadowTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SvxTabPage(pPage, pController, "cui/ui/shadowtabpage.ui", "ShadowTabPage", rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnColorListState(nullptr)
     , m_nPageType(PageType::Area)
@@ -64,7 +64,7 @@ SvxShadowTabPage::SvxShadowTabPage(TabPageParent pParent, const SfxItemSet& rInA
     , m_xTsbShowShadow(m_xBuilder->weld_check_button("TSB_SHOW_SHADOW"))
     , m_xGridShadow(m_xBuilder->weld_widget("gridSHADOW"))
     , m_xMtrDistance(m_xBuilder->weld_metric_spin_button("MTR_FLD_DISTANCE", FieldUnit::CM))
-    , m_xLbShadowColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_SHADOW_COLOR"), pParent.GetFrameWeld()))
+    , m_xLbShadowColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_SHADOW_COLOR"), pController->getDialog()))
     , m_xMtrTransparent(m_xBuilder->weld_metric_spin_button("MTR_SHADOW_TRANSPARENT", FieldUnit::PERCENT))
     , m_xCtlPosition(new weld::CustomWeld(*m_xBuilder, "CTL_POSITION", m_aCtlPosition))
     , m_xCtlXRectPreview(new weld::CustomWeld(*m_xBuilder, "CTL_COLOR_PREVIEW", m_aCtlXRectPreview))
@@ -412,10 +412,10 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
     ModifyShadowHdl_Impl(*m_xMtrTransparent);
 }
 
-std::unique_ptr<SfxTabPage> SvxShadowTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxShadowTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                              const SfxItemSet* rAttrs )
 {
-    return std::make_unique<SvxShadowTabPage>(pParent, *rAttrs);
+    return std::make_unique<SvxShadowTabPage>(pPage, pController, *rAttrs);
 }
 
 IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl, weld::ToggleButton&, void)
