@@ -1307,7 +1307,7 @@ static void lcl_SetNumUsedBit(std::vector<sal_uInt8>& rSetFlags, size_t nFormatS
     if (rObj.IsGroupObject())
     {
         const SdrObjList* pSub(rObj.GetSubList());
-        assert(pSub && "IsGroupObject is implented as GetSubList != nullptr");
+        assert(pSub && "IsGroupObject is implemented as GetSubList != nullptr");
         const size_t nCount = pSub->GetObjCount();
         for (size_t i = 0; i < nCount; ++i)
         {
