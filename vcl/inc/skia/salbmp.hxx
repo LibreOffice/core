@@ -64,14 +64,22 @@ public:
     // to a 32bpp SkBitmap.
     const SkBitmap& GetSkBitmap() const;
 
+    const SkBitmap& GetAlphaSkBitmap() const;
+
 #ifdef DBG_UTIL
     void dump(const char* file) const;
 #endif
 
 private:
     void ResetCachedBitmap();
+#ifdef DBG_UTIL
+    void verify() const;
+#else
+    void verify() const {};
+#endif
 
     SkBitmap mBitmap;
+    SkBitmap mAlphaBitmap; // TODO for use as an alpha channel or mask
     BitmapPalette mPalette;
     int mBitCount; // bpp
     Size mSize;
