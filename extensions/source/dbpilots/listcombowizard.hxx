@@ -51,7 +51,7 @@ namespace dbp
 
     public:
         OListComboWizard(
-            weld::Window* _pParent,
+            weld::Window* pParent,
             const css::uno::Reference< css::beans::XPropertySet >& _rxObjectModel,
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
@@ -78,8 +78,8 @@ namespace dbp
     class OLCPage : public OControlWizardPage
     {
     public:
-        OLCPage(OListComboWizard* pParent, TabPageParent pPageParent, const OUString& rUIXMLDescription, const OString& rID)
-            : OControlWizardPage(pParent, pPageParent, rUIXMLDescription, rID)
+        OLCPage(weld::Container* pPage, OListComboWizard* pWizard, const OUString& rUIXMLDescription, const OString& rID)
+            : OControlWizardPage(pPage, pWizard, rUIXMLDescription, rID)
     {
     }
 
@@ -97,7 +97,7 @@ namespace dbp
         std::unique_ptr<weld::TreeView> m_xSelectTable;
 
     public:
-        explicit OContentTableSelection(OListComboWizard* pParent, TabPageParent pPageParent);
+        explicit OContentTableSelection(weld::Container* pPage, OListComboWizard* pWizard);
         virtual ~OContentTableSelection() override;
 
     private:
@@ -120,7 +120,7 @@ namespace dbp
         std::unique_ptr<weld::Label> m_xInfo;
 
     public:
-        explicit OContentFieldSelection(OListComboWizard* pParent, TabPageParent pPageParent);
+        explicit OContentFieldSelection(weld::Container* pPage, OListComboWizard* pWizard);
         virtual ~OContentFieldSelection() override;
 
     private:
@@ -139,7 +139,7 @@ namespace dbp
         std::unique_ptr<weld::ComboBox> m_xTableField;
 
     public:
-        explicit OLinkFieldsPage(OListComboWizard* pParent, TabPageParent pPageParent);
+        explicit OLinkFieldsPage(weld::Container* pPage, OListComboWizard* pWizard);
         virtual ~OLinkFieldsPage() override;
 
     private:
@@ -159,7 +159,7 @@ namespace dbp
     class OComboDBFieldPage : public ODBFieldPage
     {
     public:
-        explicit OComboDBFieldPage(OControlWizard* pParent, TabPageParent pPageParent);
+        explicit OComboDBFieldPage(weld::Container* pPage, OListComboWizard* pWizard);
 
     protected:
         // BuilderPage overridables

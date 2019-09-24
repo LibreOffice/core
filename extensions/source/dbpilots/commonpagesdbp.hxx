@@ -38,7 +38,7 @@ namespace dbp
                                 m_xDSContext;
 
     public:
-        explicit OTableSelectionPage(OControlWizard* pParent, TabPageParent pPageParent);
+        explicit OTableSelectionPage(weld::Container* pPage, OControlWizard* pParent);
         virtual ~OTableSelectionPage() override;
 
     private:
@@ -67,7 +67,7 @@ namespace dbp
         weld::ComboBox* m_pList;
 
     public:
-        OMaybeListSelectionPage(OControlWizard* pParent, TabPageParent pPageParent, const OUString& rUIXMLDescription, const OString& rID);
+        OMaybeListSelectionPage(weld::Container* pPage, OControlWizard* pWizard, const OUString& rUIXMLDescription, const OString& rID);
         virtual ~OMaybeListSelectionPage() override;
 
     protected:
@@ -97,7 +97,7 @@ namespace dbp
         std::unique_ptr<weld::ComboBox> m_xStoreWhere;
 
     public:
-        explicit ODBFieldPage(OControlWizard* pParent, TabPageParent pPageParent);
+        explicit ODBFieldPage(weld::Container* pPage, OControlWizard* pWizard);
         virtual ~ODBFieldPage() override;
 
     protected:

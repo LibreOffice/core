@@ -51,7 +51,7 @@ namespace dbaui
         virtual OUString            getAutoIncrementValue() const override;
 
     public:
-        OWizTypeSelectControl(TabPageParent pParent, OWizTypeSelect* pParentTabPage);
+        OWizTypeSelectControl(weld::Container* pPage, weld::DialogController* pController, OWizTypeSelect* pParentTabPage);
         virtual ~OWizTypeSelectControl() override;
 
         virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() override;
@@ -136,14 +136,14 @@ namespace dbaui
         virtual bool            LeavePage() override;
         virtual OUString        GetTitle() const override;
 
-        OWizTypeSelect(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream* pStream = nullptr);
+        OWizTypeSelect(weld::Container* pParent, OCopyTableWizard* pWizard, SvStream* pStream = nullptr);
         virtual ~OWizTypeSelect() override;
 
         void setDisplayRow(sal_Int32 _nRow) { m_nDisplayRow = _nRow - 1; }
         void setDuplicateName(bool _bDuplicateName) { m_bDuplicateName = _bDuplicateName; }
     };
 
-    typedef std::unique_ptr<OWizTypeSelect> (*TypeSelectionPageFactory)(OCopyTableWizard*, TabPageParent, SvStream&);
+    typedef std::unique_ptr<OWizTypeSelect> (*TypeSelectionPageFactory)(weld::Container*, OCopyTableWizard, SvStream&);
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WTYPESELECT_HXX
 

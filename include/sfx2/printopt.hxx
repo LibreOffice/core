@@ -76,12 +76,12 @@ protected:
 
 public:
 
-                        SfxCommonPrintOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SfxCommonPrintOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual             ~SfxCommonPrintOptionsTabPage() override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet*);
 };
 
 #endif // INCLUDED_SFX2_PRINTOPT_HXX

@@ -180,8 +180,8 @@ short SwEnvDlg::Ok()
     return nRet;
 }
 
-SwEnvPage::SwEnvPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/envaddresspage.ui", "EnvAddressPage", &rSet)
+SwEnvPage::SwEnvPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/envaddresspage.ui", "EnvAddressPage", &rSet)
     , m_pDialog(nullptr)
     , m_pSh(nullptr)
     , m_xAddrEdit(m_xBuilder->weld_text_view("addredit"))
@@ -297,9 +297,9 @@ void SwEnvPage::InitDatabaseBox()
     }
 }
 
-std::unique_ptr<SfxTabPage> SwEnvPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwEnvPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<SwEnvPage>(pParent, *rSet);
+    return std::make_unique<SwEnvPage>(pPage, pController, *rSet);
 }
 
 void SwEnvPage::ActivatePage(const SfxItemSet& rSet)

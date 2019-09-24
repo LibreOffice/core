@@ -190,7 +190,7 @@ namespace svt { namespace uno
         OString sIdent(OString::number(nPageId));
         weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
 
-        auto xPage = std::make_unique<EmptyPage>(pPageContainer);
+        auto xPage = std::make_unique<EmptyPage>(pPageContainer, this);
         std::shared_ptr< WizardPageController > pController(new WizardPageController(xPage->GetContainer(), m_xController, nPageId));
 
         m_aPageControllers[xPage.get()] = pController;

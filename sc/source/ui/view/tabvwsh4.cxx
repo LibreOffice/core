@@ -1031,12 +1031,12 @@ bool ScTabViewShell::HasPrintOptionsPage() const
     return true;
 }
 
-std::unique_ptr<SfxTabPage> ScTabViewShell::CreatePrintOptionsPage(TabPageParent pParent, const SfxItemSet &rOptions )
+std::unique_ptr<SfxTabPage> ScTabViewShell::CreatePrintOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rOptions )
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     ::CreateTabPage ScTpPrintOptionsCreate = pFact->GetTabPageCreatorFunc(RID_SC_TP_PRINT);
     if ( ScTpPrintOptionsCreate )
-        return ScTpPrintOptionsCreate(pParent, &rOptions);
+        return ScTpPrintOptionsCreate(pPage, pController, &rOptions);
     return nullptr;
 }
 

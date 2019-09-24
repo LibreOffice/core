@@ -87,21 +87,19 @@ namespace dbp
     {
         OString sIdent(OString::number(_nState));
         weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
-        // TODO eventually pass DialogController as distinct argument instead of bundling into TabPageParent
-        TabPageParent aParent(pPageContainer, this);
 
         switch (_nState)
         {
             case LCW_STATE_DATASOURCE_SELECTION:
-                return std::make_unique<OTableSelectionPage>(this, aParent);
+                return std::make_unique<OTableSelectionPage>(pPageContainer, this);
             case LCW_STATE_TABLESELECTION:
-                return std::make_unique<OContentTableSelection>(this, aParent);
+                return std::make_unique<OContentTableSelection>(pPageContainer, this);
             case LCW_STATE_FIELDSELECTION:
-                return std::make_unique<OContentFieldSelection>(this, aParent);
+                return std::make_unique<OContentFieldSelection>(pPageContainer, this);
             case LCW_STATE_FIELDLINK:
-                return std::make_unique<OLinkFieldsPage>(this, aParent);
+                return std::make_unique<OLinkFieldsPage>(pPageContainer, this);
             case LCW_STATE_COMBODBFIELD:
-                return std::make_unique<OComboDBFieldPage>(this, aParent);
+                return std::make_unique<OComboDBFieldPage>(pPageContainer, this);
         }
 
         return nullptr;
@@ -262,8 +260,8 @@ namespace dbp
         return aColumnNames;
     }
 
-    OContentTableSelection::OContentTableSelection(OListComboWizard* pParent, TabPageParent pPageParent)
-        : OLCPage(pParent, pPageParent, "modules/sabpilot/ui/contenttablepage.ui", "TableSelectionPage")
+    OContentTableSelection::OContentTableSelection(weld::Container* pPage, OListComboWizard* pWizard)
+        : OLCPage(pPage, pWizard, "modules/sabpilot/ui/contenttablepage.ui", "TableSelectionPage")
         , m_xSelectTable(m_xBuilder->weld_tree_view("table"))
     {
         enableFormDatasourceDisplay();
@@ -338,8 +336,8 @@ namespace dbp
         return true;
     }
 
-    OContentFieldSelection::OContentFieldSelection(OListComboWizard* pParent, TabPageParent pPageParent)
-        : OLCPage(pParent, pPageParent, "modules/sabpilot/ui/contentfieldpage.ui", "FieldSelectionPage")
+    OContentFieldSelection::OContentFieldSelection(weld::Container* pPage, OListComboWizard* pWizard)
+        : OLCPage(pPage, pWizard, "modules/sabpilot/ui/contentfieldpage.ui", "FieldSelectionPage")
         , m_xSelectTableField(m_xBuilder->weld_tree_view("selectfield"))
         , m_xDisplayedField(m_xBuilder->weld_entry("displayfield"))
         , m_xInfo(m_xBuilder->weld_label("info"))
@@ -394,8 +392,8 @@ namespace dbp
         return true;
     }
 
-    OLinkFieldsPage::OLinkFieldsPage(OListComboWizard* pParent, TabPageParent pPageParent)
-        : OLCPage(pParent, pPageParent, "modules/sabpilot/ui/fieldlinkpage.ui", "FieldLinkPage")
+    OLinkFieldsPage::OLinkFieldsPage(weld::Controller* pPage, OListComboWizard* pWizard)
+        : OLCPage(pPage, pWizard, "modules/sabpilot/ui/fieldlinkpage.ui", "FieldLinkPage")
         , m_xValueListField(m_xBuilder->weld_combo_box("valuefield"))
         , m_xTableField(m_xBuilder->weld_combo_box("listtable"))
     {
@@ -458,8 +456,8 @@ namespace dbp
         return true;
     }
 
-    OComboDBFieldPage::OComboDBFieldPage(OControlWizard* pParent, TabPageParent pPageParent)
-        : ODBFieldPage(pParent, pPageParent)
+    OComboDBFieldPage::OComboDBFieldPage(weld::Container* pPage, OControlWizard* pWizard)
+        : ODBFieldPage(pPage, pWizard)
     {
         setDescriptionText(compmodule::ModuleRes(RID_STR_COMBOWIZ_DBFIELD));
     }

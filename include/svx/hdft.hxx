@@ -55,7 +55,7 @@ protected:
     virtual void    ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
-    SvxHFPage(TabPageParent pParent, const SfxItemSet& rSet, sal_uInt16 nSetId);
+    SvxHFPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet, sal_uInt16 nSetId);
 
     sal_uInt16 const       nId;
     std::unique_ptr<SfxItemSet> pBBSet;
@@ -95,18 +95,18 @@ private:
 class SVX_DLLPUBLIC SvxHeaderPage : public SvxHFPage
 {
 public:
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     // returns the Which values to the range
     static const sal_uInt16*  GetRanges() { return pRanges; }
-    SVX_DLLPRIVATE SvxHeaderPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SVX_DLLPRIVATE SvxHeaderPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
 };
 
 class SVX_DLLPUBLIC SvxFooterPage : public SvxHFPage
 {
 public:
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     static const sal_uInt16*  GetRanges() { return pRanges; }
-    SVX_DLLPRIVATE SvxFooterPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SVX_DLLPRIVATE SvxFooterPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
 };
 
 class SVX_DLLPUBLIC DeleteHeaderDialog : public weld::MessageDialogController
