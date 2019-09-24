@@ -504,15 +504,6 @@ namespace dbaui
         return eOpenExisting;
     }
 
-    void OGeneralPageWizard::GetFocus()
-    {
-        OGeneralPage::GetFocus();
-        if ( m_xLB_DocumentList && m_xLB_DocumentList->get_sensitive() )
-            m_xLB_DocumentList->grab_focus();
-        else if ( m_xDatasourceType && m_xDatasourceType->get_sensitive() )
-            m_xDatasourceType->grab_focus();
-    }
-
     void OGeneralPageWizard::implInitControls( const SfxItemSet& _rSet, bool _bSaveValue )
     {
         OGeneralPage::implInitControls( _rSet, _bSaveValue );
