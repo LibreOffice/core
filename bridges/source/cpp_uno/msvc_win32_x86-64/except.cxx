@@ -240,7 +240,7 @@ void
 
 #include <malloc.h>
 #include <new.h>
-#include <typeinfo.h>
+#include <typeinfo>
 #include <signal.h>
 
 #include <rtl/alloc.h>
