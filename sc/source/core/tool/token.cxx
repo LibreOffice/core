@@ -61,6 +61,7 @@ using ::std::vector;
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/NameToken.hpp>
 #include <utility>
+#include <o3tl/sorted_vector.hxx>
 
 using namespace formula;
 using namespace com::sun::star;
@@ -1276,7 +1277,7 @@ bool ScTokenArray::AddFormulaToken(
 
 void ScTokenArray::CheckForThreading( const FormulaToken& r )
 {
-    static const std::set<OpCode> aThreadedCalcBlackList({
+    static const o3tl::sorted_vector<OpCode> aThreadedCalcBlackList({
         ocIndirect,
         ocMacro,
         ocOffset,
@@ -1319,7 +1320,7 @@ void ScTokenArray::CheckForThreading( const FormulaToken& r )
 
     OpCode eOp = r.GetOpCode();
 
-    if (aThreadedCalcBlackList.count(eOp))
+    if (aThreadedCalcBlackList.find(eOp) != aThreadedCalcBlackList.end())
     {
         SAL_INFO("sc.core.formulagroup", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp)
             << "(" << int(eOp) << ") disables threaded calculation of formula group");
