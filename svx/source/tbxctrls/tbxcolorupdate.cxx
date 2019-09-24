@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/tbxcolorupdate.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xdef.hxx>
@@ -89,7 +88,19 @@ namespace svx
     {
         Image aImage(mpTbx->GetItemImage(mnBtnId));
         Size aItemSize(mbWideButton ? mpTbx->GetItemContentSize(mnBtnId) : aImage.GetSizePixel());
-
+#ifdef IOS // tdf#126966
+        // Oddly enough, it is in the "not wide button" case that we want the larger ones, hmm.
+        if (!mbWideButton)
+        {
+            // usually the normal size is 16
+            const long nIOSSize = 40;
+            if (aItemSize.getWidth() < nIOSSize)
+            {
+                aItemSize.setWidth(nIOSSize);
+                aItemSize.setHeight(nIOSSize);
+            }
+        }
+#endif
         const bool bSizeChanged = (maBmpSize != aItemSize);
         const bool bDisplayModeChanged = (mbWasHiContrastMode != mpTbx->GetSettings().GetStyleSettings().GetHighContrastMode());
         Color aColor(rColor);
@@ -100,6 +111,7 @@ namespace svx
 
         if ((maCurColor == aColor) && !bSizeChanged && !bDisplayModeChanged && !bForceUpdate)
             return;
+
         if (!aItemSize.Width() || !aItemSize.Height())
             return;
 
