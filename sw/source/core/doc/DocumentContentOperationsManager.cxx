@@ -480,37 +480,113 @@ namespace
 namespace
 {
     void
-    lcl_CalcBreaks( std::vector<sal_Int32> & rBreaks, SwPaM const & rPam )
+    lcl_CalcBreaks(std::vector<std::pair<sal_uLong, sal_Int32>> & rBreaks, SwPaM const & rPam)
     {
-        SwTextNode const * const pTextNode(
-                rPam.End()->nNode.GetNode().GetTextNode() );
-        if (!pTextNode)
-            return; // left-overlap only possible at end of selection...
+        sal_uLong const nStartNode(rPam.Start()->nNode.GetIndex());
+        sal_uLong const nEndNode(rPam.End()->nNode.GetIndex());
+        SwNodes const& rNodes(rPam.GetPoint()->nNode.GetNodes());
+        IDocumentMarkAccess const& rIDMA(*rPam.GetDoc()->getIDocumentMarkAccess());
 
-        const sal_Int32 nStart(rPam.Start()->nContent.GetIndex());
-        const sal_Int32 nEnd  (rPam.End  ()->nContent.GetIndex());
-        if (nEnd == pTextNode->Len())
-            return; // paragraph selected until the end
+        std::stack<sw::mark::IFieldmark const*> startedFields;
 
-        for (sal_Int32 i = nStart; i < nEnd; ++i)
+        for (sal_uLong n = nStartNode; n <= nEndNode; ++n)
         {
-            const sal_Unicode c(pTextNode->GetText()[i]);
-            if ((CH_TXTATR_INWORD == c) || (CH_TXTATR_BREAKWORD == c))
+            SwNode *const pNode(rNodes[n]);
+            if (pNode->IsTextNode())
             {
-                SwTextAttr const * const pAttr( pTextNode->GetTextAttrForCharAt(i) );
-                if (pAttr && pAttr->End() && (*pAttr->End() > nEnd))
+                SwTextNode & rTextNode(*pNode->GetTextNode());
+                sal_Int32 const nStart(n == nStartNode
+                        ? rPam.Start()->nContent.GetIndex()
+                        : 0);
+                sal_Int32 const nEnd(n == nEndNode
+                        ? rPam.End()->nContent.GetIndex()
+                        : rTextNode.Len());
+                for (sal_Int32 i = nStart; i < nEnd; ++i)
                 {
-                    OSL_ENSURE(pAttr->HasDummyChar(), "GetTextAttrForCharAt broken?");
-                    rBreaks.push_back(i);
+                    const sal_Unicode c(rTextNode.GetText()[i]);
+                    switch (c)
+                    {
+                        // note: CH_TXT_ATR_FORMELEMENT does not need handling
+                        // not sure how CH_TXT_ATR_INPUTFIELDSTART/END are currently handled
+                        case CH_TXTATR_INWORD:
+                        case CH_TXTATR_BREAKWORD:
+                        {
+                            // META hints only have dummy char at the start, not
+                            // at the end, so no need to check in nStartNode
+                            if (n == nEndNode)
+                            {
+                                SwTextAttr const*const pAttr(rTextNode.GetTextAttrForCharAt(i));
+                                if (pAttr && pAttr->End() && (nEnd  < *pAttr->End()))
+                                {
+                                    assert(pAttr->HasDummyChar());
+                                    rBreaks.emplace_back(n, i);
+                                }
+                            }
+                            break;
+                        }
+                        case CH_TXT_ATR_FIELDSTART:
+                        {
+                            auto const pFieldMark(rIDMA.getFieldmarkAt(SwPosition(rTextNode, i)));
+                            startedFields.push(pFieldMark);
+                            break;
+                        }
+                        case CH_TXT_ATR_FIELDSEP:
+                        {
+                            if (startedFields.empty())
+                            {
+                                rBreaks.emplace_back(n, i);
+                            }
+                            else
+                            {   // no way to find the field via MarkManager...
+                                assert(startedFields.top()->IsCoveringPosition(SwPosition(rTextNode, i)));
+                            }
+                            break;
+                        }
+                        case CH_TXT_ATR_FIELDEND:
+                        {
+                            if (startedFields.empty())
+                            {
+                                rBreaks.emplace_back(n, i);
+                            }
+                            else
+                            {   // fieldmarks must not overlap => stack
+                                assert(startedFields.top() == rIDMA.getFieldmarkAt(SwPosition(rTextNode, i)));
+                                startedFields.pop();
+                            }
+                            break;
+                        }
+                    }
                 }
             }
+            else if (pNode->IsStartNode())
+            {
+                if (pNode->EndOfSectionIndex() <= nEndNode)
+                {   // fieldmark cannot overlap node section
+                    n = pNode->EndOfSectionIndex();
+                }
+            }
+            else
+            {   // EndNode can actually happen with sections :(
+                assert(pNode->IsEndNode() || pNode->IsNoTextNode());
+            }
+        }
+        while (!startedFields.empty())
+        {
+            auto const& pField(startedFields.top());
+            startedFields.pop();
+            SwPosition const& rStart(pField->GetMarkStart());
+            std::pair<sal_uLong, sal_Int32> const pos(
+                    rStart.nNode.GetIndex(), rStart.nContent.GetIndex());
+            auto it = std::lower_bound(rBreaks.begin(), rBreaks.end(), pos);
+            assert(it == rBreaks.end() || *it != pos);
+            rBreaks.insert(it, pos);
         }
     }
 
     bool lcl_DoWithBreaks(::sw::DocumentContentOperationsManager & rDocumentContentOperations, SwPaM & rPam,
             bool (::sw::DocumentContentOperationsManager::*pFunc)(SwPaM&, bool), const bool bForceJoinNext = false)
     {
-        std::vector<sal_Int32> Breaks;
+        std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
 
         lcl_CalcBreaks(Breaks, rPam);
 
@@ -528,24 +604,27 @@ namespace
 
         bool bRet( true );
         // iterate from end to start, to avoid invalidating the offsets!
-        std::vector<sal_Int32>::reverse_iterator iter( Breaks.rbegin() );
+        auto iter( Breaks.rbegin() );
+        sal_uLong nOffset(0);
+        SwNodes const& rNodes(rPam.GetPoint()->nNode.GetNodes());
         SwPaM aPam( rSelectionEnd, rSelectionEnd ); // end node!
         SwPosition & rEnd( *aPam.End() );
         SwPosition & rStart( *aPam.Start() );
 
         while (iter != Breaks.rend())
         {
-            rStart.nContent = *iter + 1;
-            if (rEnd.nContent > rStart.nContent) // check if part is empty
+            rStart = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second + 1);
+            if (rStart < rEnd) // check if part is empty
             {
                 bRet &= (rDocumentContentOperations.*pFunc)(aPam, bForceJoinNext);
+                nOffset = iter->first - rStart.nNode.GetIndex(); // deleted fly nodes...
             }
-            rEnd.nContent = *iter;
+            rEnd = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second);
             ++iter;
         }
 
         rStart = *rPam.Start(); // set to original start
-        if (rEnd.nContent > rStart.nContent) // check if part is empty
+        if (rStart < rEnd) // check if part is empty
         {
             bRet &= (rDocumentContentOperations.*pFunc)(aPam, bForceJoinNext);
         }
@@ -957,6 +1036,7 @@ namespace
             case CH_TXT_ATR_INPUTFIELDSTART:
             case CH_TXT_ATR_INPUTFIELDEND:
             case CH_TXT_ATR_FIELDSTART:
+            case CH_TXT_ATR_FIELDSEP:
             case CH_TXT_ATR_FIELDEND:
             case CH_TXT_ATR_FORMELEMENT:
                 return false;
@@ -3055,7 +3135,7 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
     // unfortunately replace works slightly differently from delete,
     // so we cannot use lcl_DoWithBreaks here...
 
-    std::vector<sal_Int32> Breaks;
+    std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
 
     SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
     aPam.Normalize(false);
@@ -3068,7 +3148,8 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
     lcl_CalcBreaks(Breaks, aPam);
 
     while (!Breaks.empty() // skip over prefix of dummy chars
-            && (aPam.GetMark()->nContent.GetIndex() == *Breaks.begin()) )
+            && (aPam.GetMark()->nNode.GetIndex() == Breaks.begin()->first)
+            && (aPam.GetMark()->nContent.GetIndex() == Breaks.begin()->second))
     {
         // skip!
         ++aPam.GetMark()->nContent; // always in bounds if Breaks valid
@@ -3091,7 +3172,9 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
 
     bool bRet( true );
     // iterate from end to start, to avoid invalidating the offsets!
-    std::vector<sal_Int32>::reverse_iterator iter( Breaks.rbegin() );
+    auto iter( Breaks.rbegin() );
+    sal_uLong nOffset(0);
+    SwNodes const& rNodes(rPam.GetPoint()->nNode.GetNodes());
     OSL_ENSURE(aPam.GetPoint() == aPam.End(), "wrong!");
     SwPosition & rEnd( *aPam.End() );
     SwPosition & rStart( *aPam.Start() );
@@ -3102,20 +3185,21 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
 
     while (iter != Breaks.rend())
     {
-        rStart.nContent = *iter + 1;
-        if (rEnd.nContent != rStart.nContent) // check if part is empty
+        rStart = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second + 1);
+        if (rStart < rEnd) // check if part is empty
         {
             bRet &= (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
                 ? DeleteAndJoinWithRedlineImpl(aPam)
                 : DeleteAndJoinImpl(aPam, false);
+            nOffset = iter->first - rStart.nNode.GetIndex(); // deleted fly nodes...
         }
-        rEnd.nContent = *iter;
+        rEnd = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second);
         ++iter;
     }
 
     rStart = *rPam.Start(); // set to original start
-    OSL_ENSURE(rEnd.nContent > rStart.nContent, "replace part empty!");
-    if (rEnd.nContent > rStart.nContent) // check if part is empty
+    assert(rStart < rEnd && "replace part empty!");
+    if (rStart < rEnd) // check if part is empty
     {
         bRet &= ReplaceRangeImpl(aPam, rStr, bRegExReplace);
     }
