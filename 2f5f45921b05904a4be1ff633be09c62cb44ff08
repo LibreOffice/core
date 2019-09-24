@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_47ab8ed5",
+        "filename": "xmloff/source/style/xmlnumfi.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1477,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-24T11:14:03Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be redundant since there\u0027s a dedicated string buffer append() overload?",
+      "range": {
+        "startLine": 1477,
+        "startChar": 31,
+        "endLine": 1477,
+        "endChar": 39
+      },
+      "revId": "2f5f45921b05904a4be1ff633be09c62cb44ff08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
