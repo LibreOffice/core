@@ -19,7 +19,6 @@ class ScanlineToolsTest : public CppUnit::TestFixture
 {
     void ScanlineTransformer_32_ARGB();
     void ScanlineTransformer_24_BGR();
-    void ScanlineTransformer_16_RGB565();
     void ScanlineTransformer_8bit_Palette();
     void ScanlineTransformer_4bit_Palette();
     void ScanlineTransformer_1bit_Palette();
@@ -27,7 +26,6 @@ class ScanlineToolsTest : public CppUnit::TestFixture
     CPPUNIT_TEST_SUITE(ScanlineToolsTest);
     CPPUNIT_TEST(ScanlineTransformer_32_ARGB);
     CPPUNIT_TEST(ScanlineTransformer_24_BGR);
-    CPPUNIT_TEST(ScanlineTransformer_16_RGB565);
     CPPUNIT_TEST(ScanlineTransformer_8bit_Palette);
     CPPUNIT_TEST(ScanlineTransformer_4bit_Palette);
     CPPUNIT_TEST(ScanlineTransformer_1bit_Palette);
@@ -87,47 +85,6 @@ void ScanlineToolsTest::ScanlineTransformer_24_BGR()
     for (size_t i = 0; i < aScanLine.size(); ++i)
     {
         CPPUNIT_ASSERT_EQUAL(int(aExpectedBytes[i]), int(aScanLine[i]));
-    }
-}
-
-void ScanlineToolsTest::ScanlineTransformer_16_RGB565()
-
-{
-    BitmapPalette aPalette;
-    std::unique_ptr<vcl::bitmap::ScanlineTransformer> pScanlineTransformer
-        = vcl::bitmap::getScanlineTransformer(16, aPalette);
-
-    std::vector<sal_uInt8> aScanLine(5 * 2, 0); // 5 * 2 BytesPerPixel
-    pScanlineTransformer->startLine(aScanLine.data());
-
-    std::vector<Color> aColors{
-        Color(0, 10, 250, 120),  Color(50, 30, 230, 110), Color(100, 50, 210, 100),
-        Color(150, 70, 190, 90), Color(200, 90, 170, 80),
-    };
-
-    for (Color const& aColor : aColors)
-    {
-        pScanlineTransformer->writePixel(aColor);
-    }
-
-    std::vector<sal_uInt8> aExpectedBytes{ 207, 15, 45, 31, 140, 54, 235, 69, 74, 93 };
-
-    for (size_t i = 0; i < aScanLine.size(); ++i)
-    {
-        CPPUNIT_ASSERT_EQUAL(int(aExpectedBytes[i]), int(aScanLine[i]));
-    }
-
-    pScanlineTransformer->startLine(aScanLine.data());
-
-    std::vector<Color> aExpectedColors{
-        Color(8, 248, 120), Color(24, 228, 104), Color(48, 208, 96),
-        Color(64, 188, 88), Color(88, 168, 80),
-    };
-
-    for (size_t i = 0; i < aExpectedColors.size(); ++i)
-    {
-        Color aColor = pScanlineTransformer->readPixel();
-        CPPUNIT_ASSERT_EQUAL(aExpectedColors[i], aColor);
     }
 }
 

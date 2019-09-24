@@ -118,10 +118,6 @@ SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer)
             mpFncGetPixel = BitmapReadAccess::GetPixelForN8BitPal;      break;
         case ScanlineFormat::N8BitTcMask:
             mpFncGetPixel = BitmapReadAccess::GetPixelForN8BitTcMask;  break;
-        case ScanlineFormat::N16BitTcMsbMask:
-            mpFncGetPixel = BitmapReadAccess::GetPixelForN16BitTcMsbMask; break;
-        case ScanlineFormat::N16BitTcLsbMask:
-            mpFncGetPixel = BitmapReadAccess::GetPixelForN16BitTcLsbMask; break;
         case ScanlineFormat::N24BitTcBgr:
             mpFncGetPixel = BitmapReadAccess::GetPixelForN24BitTcBgr;  break;
         case ScanlineFormat::N24BitTcRgb:
@@ -175,7 +171,6 @@ SalPrinterBmp::GetDepth () const
             nDepth = 8;
             break;
 
-        case 16:
         case 24:
         case 32:
             nDepth = 24;
@@ -183,7 +178,7 @@ SalPrinterBmp::GetDepth () const
 
         default:
             nDepth = 1;
-            OSL_FAIL("Error: unsupported bitmap depth in SalPrinterBmp::GetDepth()");
+            assert(false && "Error: unsupported bitmap depth in SalPrinterBmp::GetDepth()");
             break;
     }
 
