@@ -79,6 +79,13 @@ void Panel::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
 }
 
+boost::property_tree::ptree Panel::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(vcl::Window::DumpAsPropertyTree());
+    aTree.put("type", "panel");
+    return aTree;
+}
+
 void Panel::dispose()
 {
     mxPanelComponent = nullptr;
