@@ -1068,7 +1068,7 @@ callback (gpointer pData)
         return G_SOURCE_REMOVE;
     }
 
-    switch (pCallback->m_nType)
+    switch (static_cast<LibreOfficeKitCallbackType>(pCallback->m_nType))
     {
     case LOK_CALLBACK_INVALIDATE_TILES:
     {
@@ -1257,11 +1257,6 @@ callback (gpointer pData)
         reportError(pDocView, pCallback->m_aPayload);
     }
     break;
-    case LOK_CALLBACK_CONTEXT_MENU:
-    {
-        // TODO: Implement me
-        break;
-    }
     case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
     {
         std::stringstream aStream(pCallback->m_aPayload);
@@ -1356,12 +1351,25 @@ callback (gpointer pData)
     case LOK_CALLBACK_INVALIDATE_HEADER:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[INVALIDATE_HEADER], 0, pCallback->m_aPayload.c_str());
         break;
+
+    case LOK_CALLBACK_STATUS_INDICATOR_START:
+    case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
+    case LOK_CALLBACK_STATUS_INDICATOR_FINISH:
+    case LOK_CALLBACK_DOCUMENT_PASSWORD:
+    case LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY:
+    case LOK_CALLBACK_VALIDITY_LIST_BUTTON:
+    case LOK_CALLBACK_SIGNATURE_STATUS:
+    case LOK_CALLBACK_CONTEXT_MENU:
+    case LOK_CALLBACK_PROFILE_FRAME:
     case LOK_CALLBACK_CLIPBOARD_CHANGED:
     case LOK_CALLBACK_CONTEXT_CHANGED:
-        break; // TODO
-    default:
-        g_assert(false);
+    case LOK_CALLBACK_CELL_SELECTION_AREA:
+    case LOK_CALLBACK_CELL_AUTO_FILL_AREA:
+    case LOK_CALLBACK_TABLE_SELECTED:
+    {
+        // TODO: Implement me
         break;
+    }
     }
     delete pCallback;
 
