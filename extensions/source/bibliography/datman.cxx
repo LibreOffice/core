@@ -51,6 +51,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <svl/urihelper.hxx>
 #include <tools/debug.hxx>
+#include <vcl/weld.hxx>
 #include "datman.hxx"
 #include "bibresid.hxx"
 #include "bibmod.hxx"
@@ -62,6 +63,7 @@
 #include "general.hxx"
 #include <strings.hrc>
 #include <helpids.h>
+#include <connectivity/dbtools.hxx>
 #include <connectivity/dbtools.hxx>
 #include <memory>
 

@@ -33,8 +33,8 @@
 #define USER_DATA_VERSION_1     "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
-SwFieldDBPage::SwFieldDBPage(TabPageParent pParent, const SfxItemSet *const pCoreSet)
-    : SwFieldPage(pParent, "modules/swriter/ui/flddbpage.ui", "FieldDbPage", pCoreSet)
+SwFieldDBPage::SwFieldDBPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *const pCoreSet)
+    : SwFieldPage(pPage, pController, "modules/swriter/ui/flddbpage.ui", "FieldDbPage", pCoreSet)
     , m_nOldFormat(0)
     , m_nOldSubType(0)
     , m_xTypeLB(m_xBuilder->weld_tree_view("type"))
@@ -255,10 +255,10 @@ bool SwFieldDBPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-std::unique_ptr<SfxTabPage> SwFieldDBPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwFieldDBPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                         const SfxItemSet *const pAttrSet )
 {
-    return std::make_unique<SwFieldDBPage>( pParent, pAttrSet );
+    return std::make_unique<SwFieldDBPage>( pPage, pController, pAttrSet );
 }
 
 sal_uInt16 SwFieldDBPage::GetGroup()

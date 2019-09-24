@@ -71,7 +71,7 @@ protected:
                                     bool bIsAutomaticLanguage = true);
 
 public:
-    SwFieldPage(TabPageParent pParent, const OUString& rUIXMLDescription,
+    SwFieldPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription,
         const OString& rID, const SfxItemSet *pAttrSet);
 
     virtual ~SwFieldPage() override;

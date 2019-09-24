@@ -73,9 +73,9 @@ namespace dbp
         OAccessRegulator() { }
     };
 
-    OControlWizardPage::OControlWizardPage(OControlWizard* pDialog, TabPageParent pPageParent, const OUString& rUIXMLDescription, const OString& rID)
-        : OControlWizardPage_Base(pPageParent, rUIXMLDescription, rID)
-        , m_pDialog(pDialog)
+    OControlWizardPage::OControlWizardPage(weld::Container* pPage, OControlWizard* pWizard, const OUString& rUIXMLDescription, const OString& rID)
+        : OControlWizardPage_Base(pPage, pWizard, rUIXMLDescription, rID)
+        , m_pDialog(pWizard)
     {
         m_xContainer->set_size_request(m_xContainer->get_approximate_digit_width() * WIZARD_SIZE_X,
                                        m_xContainer->get_text_height() * WIZARD_SIZE_Y);

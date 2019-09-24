@@ -220,8 +220,8 @@ Printer *SwLabDlg::GetPrt()
         return nullptr;
 }
 
-SwLabPage::SwLabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/cardmediumpage.ui", "CardMediumPage", &rSet)
+SwLabPage::SwLabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/cardmediumpage.ui", "CardMediumPage", &rSet)
     , pDBManager(nullptr)
     , aItem(static_cast<const SwLabItem&>(rSet.Get(FN_LABEL)))
     , m_xAddressFrame(m_xBuilder->weld_widget("addressframe"))
@@ -238,7 +238,7 @@ SwLabPage::SwLabPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_xHiddenSortTypeBox(m_xBuilder->weld_combo_box("hiddentype"))
     , m_xFormatInfo(m_xBuilder->weld_label("formatinfo"))
 {
-    WaitObject aWait(pParent.pParent);
+    weld::WaitObject aWait(GetDialogFrameWeld());
 
     m_xWritingEdit->set_size_request(m_xWritingEdit->get_approximate_digit_width() * 30,
                                      m_xWritingEdit->get_height_rows(10));
@@ -446,9 +446,9 @@ void SwLabPage::InitDatabaseBox()
     }
 }
 
-std::unique_ptr<SfxTabPage> SwLabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwLabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<SwLabPage>(pParent, *rSet);
+    return std::make_unique<SwLabPage>(pPage, pController, *rSet);
 }
 
 void SwLabPage::ActivatePage(const SfxItemSet& rSet)
@@ -546,8 +546,8 @@ void SwLabPage::Reset(const SfxItemSet* rSet)
         m_xSheetButton->set_active(true);
 }
 
-SwPrivateDataPage::SwPrivateDataPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/privateuserpage.ui", "PrivateUserPage", &rSet)
+SwPrivateDataPage::SwPrivateDataPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/privateuserpage.ui", "PrivateUserPage", &rSet)
     , m_xFirstNameED(m_xBuilder->weld_entry("firstname"))
     , m_xNameED(m_xBuilder->weld_entry("lastname"))
     , m_xShortCutED(m_xBuilder->weld_entry("shortname"))
@@ -574,9 +574,9 @@ SwPrivateDataPage::~SwPrivateDataPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SwPrivateDataPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwPrivateDataPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<SwPrivateDataPage>(pParent, *rSet);
+    return std::make_unique<SwPrivateDataPage>(pPage, pController, *rSet);
 }
 
 void SwPrivateDataPage::ActivatePage(const SfxItemSet& rSet)
@@ -643,8 +643,8 @@ void SwPrivateDataPage::Reset(const SfxItemSet* rSet)
     m_xMailED->set_text(aItem.m_aPrivMail);
 }
 
-SwBusinessDataPage::SwBusinessDataPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/businessdatapage.ui", "BusinessDataPage", &rSet)
+SwBusinessDataPage::SwBusinessDataPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/businessdatapage.ui", "BusinessDataPage", &rSet)
     , m_xCompanyED(m_xBuilder->weld_entry("company"))
     , m_xCompanyExtED(m_xBuilder->weld_entry("company2"))
     , m_xSloganED(m_xBuilder->weld_entry("slogan"))
@@ -667,9 +667,9 @@ SwBusinessDataPage::~SwBusinessDataPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SwBusinessDataPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwBusinessDataPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<SwBusinessDataPage>(pParent, *rSet);
+    return std::make_unique<SwBusinessDataPage>(pPage, pController, *rSet);
 }
 
 void SwBusinessDataPage::ActivatePage(const SfxItemSet& rSet)

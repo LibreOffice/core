@@ -25,8 +25,8 @@
 using namespace com::sun::star::i18n;
 
 
-SvxJSearchOptionsPage::SvxJSearchOptionsPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/optjsearchpage.ui", "OptJSearchPage", &rSet)
+SvxJSearchOptionsPage::SvxJSearchOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optjsearchpage.ui", "OptJSearchPage", &rSet)
     , m_xMatchCase(m_xBuilder->weld_check_button("matchcase"))
     , m_xMatchFullHalfWidth(m_xBuilder->weld_check_button("matchfullhalfwidth"))
     , m_xMatchHiraganaKatakana(m_xBuilder->weld_check_button("matchhiraganakatakana"))
@@ -55,9 +55,9 @@ SvxJSearchOptionsPage::~SvxJSearchOptionsPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SvxJSearchOptionsPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxJSearchOptionsPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<SvxJSearchOptionsPage>(pParent, *rSet);
+    return std::make_unique<SvxJSearchOptionsPage>(pPage, pController, *rSet);
 }
 
 void SvxJSearchOptionsPage::SetTransliterationFlags( TransliterationFlags nSettings )

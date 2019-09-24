@@ -57,9 +57,9 @@ class SmPrintOptionsTabPage : public SfxTabPage
     virtual void    Reset(const SfxItemSet* rSet) override;
 
 public:
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pWindow, const SfxItemSet &rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet);
 
-    SmPrintOptionsTabPage(TabPageParent pPage, const SfxItemSet &rOptions);
+    SmPrintOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rOptions);
     virtual ~SmPrintOptionsTabPage() override;
 };
 

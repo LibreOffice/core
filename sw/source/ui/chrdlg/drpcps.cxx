@@ -453,14 +453,13 @@ void SwDropCapsPict::InitPrinter_()
 SwDropCapsDlg::SwDropCapsDlg(weld::Window *pParent, const SfxItemSet &rSet)
     : SfxSingleTabDialogController(pParent, &rSet)
 {
-    TabPageParent pPageParent(get_content_area(), this);
-    auto xNewPage(SwDropCapsPage::Create(pPageParent, &rSet));
+    auto xNewPage(SwDropCapsPage::Create(get_content_area(), this, &rSet));
     static_cast<SwDropCapsPage*>(xNewPage.get())->SetFormat(false);
     SetTabPage(std::move(xNewPage));
 }
 
-SwDropCapsPage::SwDropCapsPage(TabPageParent pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/dropcapspage.ui", "DropCapPage", &rSet)
+SwDropCapsPage::SwDropCapsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/dropcapspage.ui", "DropCapPage", &rSet)
     , bModified(false)
     , bFormat(true)
     , rSh(::GetActiveView()->GetWrtShell())
@@ -520,9 +519,9 @@ DeactivateRC SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
     return DeactivateRC::LeavePage;
 }
 
-std::unique_ptr<SfxTabPage> SwDropCapsPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwDropCapsPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet)
 {
-    return std::make_unique<SwDropCapsPage>(pParent, *rSet);
+    return std::make_unique<SwDropCapsPage>(pPage, pController, *rSet);
 }
 
 bool  SwDropCapsPage::FillItemSet(SfxItemSet *rSet)

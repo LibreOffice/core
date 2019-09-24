@@ -116,8 +116,8 @@ namespace {
 static long lUserW = 5669; // 10 cm
 static long lUserH = 5669; // 10 cm
 
-SwEnvFormatPage::SwEnvFormatPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/envformatpage.ui", "EnvFormatPage", &rSet)
+SwEnvFormatPage::SwEnvFormatPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/envformatpage.ui", "EnvFormatPage", &rSet)
     , m_pDialog(nullptr)
     , m_xAddrLeftField(m_xBuilder->weld_metric_spin_button("leftaddr", FieldUnit::CM))
     , m_xAddrTopField(m_xBuilder->weld_metric_spin_button("topaddr", FieldUnit::CM))
@@ -412,9 +412,9 @@ void SwEnvFormatPage::SetMinMax()
                                100 * (getfieldval(*m_xAddrTopField ) - 2 * 566), FieldUnit::TWIP);
 }
 
-std::unique_ptr<SfxTabPage> SwEnvFormatPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwEnvFormatPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<SwEnvFormatPage>(pParent, *rSet);
+    return std::make_unique<SwEnvFormatPage>(pPage, pController, *rSet);
 }
 
 void SwEnvFormatPage::ActivatePage(const SfxItemSet& rSet)

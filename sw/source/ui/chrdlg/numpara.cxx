@@ -42,8 +42,8 @@ const sal_uInt16 SwParagraphNumTabPage::aPageRg[] = {
     0
 };
 
-SwParagraphNumTabPage::SwParagraphNumTabPage(TabPageParent pParent, const SfxItemSet& rAttr)
-    : SfxTabPage(pParent, "modules/swriter/ui/numparapage.ui", "NumParaPage", &rAttr)
+SwParagraphNumTabPage::SwParagraphNumTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttr)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/numparapage.ui", "NumParaPage", &rAttr)
     , msOutlineNumbering(SwResId(STR_OUTLINE_NUMBERING ))
     , bModified(false)
     , bCurNumrule(false)
@@ -98,9 +98,9 @@ SwParagraphNumTabPage::~SwParagraphNumTabPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SwParagraphNumTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwParagraphNumTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<SwParagraphNumTabPage>(pParent, *rSet);
+    return std::make_unique<SwParagraphNumTabPage>(pPage, pController, *rSet);
 }
 
 bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )

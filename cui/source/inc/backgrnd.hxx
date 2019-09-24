@@ -44,8 +44,8 @@ class SvxBackgroundTabPage : public SvxTabPage
 {
     static const sal_uInt16 pPageRanges[];
 public:
-    SvxBackgroundTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    SvxBackgroundTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet );
     virtual ~SvxBackgroundTabPage() override;
 
     // returns the area of the which-values
@@ -163,10 +163,10 @@ class SvxBkgTabPage : public SvxAreaTabPage
 
     DECL_LINK(TblDestinationHdl_Impl, weld::ComboBox&, void);
 public:
-    SvxBkgTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxBkgTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
     virtual ~SvxBkgTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;

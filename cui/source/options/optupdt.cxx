@@ -43,8 +43,8 @@
 
 using namespace ::css;
 
-SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/optonlineupdatepage.ui", "OptOnlineUpdatePage", &rSet)
+SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optonlineupdatepage.ui", "OptOnlineUpdatePage", &rSet)
     , m_xNeverChecked(m_xBuilder->weld_label("neverchecked"))
     , m_xAutoCheckCheckBox(m_xBuilder->weld_check_button("autocheck"))
     , m_xEveryDayButton(m_xBuilder->weld_radio_button("everyday"))
@@ -175,9 +175,9 @@ void SvxOnlineUpdateTabPage::UpdateUserAgent()
     }
 }
 
-std::unique_ptr<SfxTabPage> SvxOnlineUpdateTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SvxOnlineUpdateTabPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<SvxOnlineUpdateTabPage>( pParent, *rAttrSet );
+    return std::make_unique<SvxOnlineUpdateTabPage>( pPage, pController, *rAttrSet );
 }
 
 bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet* )

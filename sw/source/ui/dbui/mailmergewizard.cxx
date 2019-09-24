@@ -92,14 +92,12 @@ std::unique_ptr<BuilderPage> SwMailMergeWizard::createPage(WizardState _nState)
 {
     OString sIdent(OString::number(_nState));
     weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
-    // TODO eventually pass DialogController as distinct argument instead of bundling into TabPageParent
-    TabPageParent aParent(pPageContainer, this);
 
     std::unique_ptr<vcl::OWizardPage> xRet;
     switch(_nState)
     {
         case MM_DOCUMENTSELECTPAGE :
-            xRet = std::make_unique<SwMailMergeDocSelectPage>(this, aParent);
+            xRet = std::make_unique<SwMailMergeDocSelectPage>(pPageContainer, this);
 
             /* tdf#52986 Set help ID using SetRoadmapHelpId for all pages
             so that when by default the focus is on the left side pane of
@@ -108,19 +106,19 @@ std::unique_ptr<BuilderPage> SwMailMergeWizard::createPage(WizardState _nState)
             SetRoadmapHelpId("modules/swriter/ui/mmselectpage/MMSelectPage");
         break;
         case MM_OUTPUTTYPETPAGE    :
-            xRet = std::make_unique<SwMailMergeOutputTypePage>(this, aParent);
+            xRet = std::make_unique<SwMailMergeOutputTypePage>(pPageContainer, this);
             SetRoadmapHelpId("modules/swriter/ui/mmoutputtypepage/MMOutputTypePage");
         break;
         case MM_ADDRESSBLOCKPAGE   :
-            xRet = std::make_unique<SwMailMergeAddressBlockPage>(this, aParent);
+            xRet = std::make_unique<SwMailMergeAddressBlockPage>(pPageContainer, this);
             SetRoadmapHelpId("modules/swriter/ui/mmaddressblockpage/MMAddressBlockPage");
         break;
         case MM_GREETINGSPAGE      :
-            xRet = std::make_unique<SwMailMergeGreetingsPage>(this, aParent);
+            xRet = std::make_unique<SwMailMergeGreetingsPage>(pPageContainer, this);
             SetRoadmapHelpId("modules/swriter/ui/mmsalutationpage/MMSalutationPage");
         break;
         case MM_LAYOUTPAGE         :
-            xRet = std::make_unique<SwMailMergeLayoutPage>(this, aParent);
+            xRet = std::make_unique<SwMailMergeLayoutPage>(pPageContainer, this);
             SetRoadmapHelpId("modules/swriter/ui/mmlayoutpage/MMLayoutPage");
         break;
     }

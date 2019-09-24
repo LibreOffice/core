@@ -42,8 +42,8 @@ class ScViewData;
 class ScTabPageSortFields : public SfxTabPage
 {
 public:
-    ScTabPageSortFields(TabPageParent pParent, const SfxItemSet& rArgSet);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rArgSet);
+    ScTabPageSortFields(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rArgSet);
     virtual ~ScTabPageSortFields() override;
 
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
@@ -94,8 +94,8 @@ class ScDocument;
 class ScTabPageSortOptions : public SfxTabPage
 {
 public:
-    ScTabPageSortOptions(TabPageParent pParent, const SfxItemSet& rArgSet);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* pArgSet);
+    ScTabPageSortOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* pArgSet);
 
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;

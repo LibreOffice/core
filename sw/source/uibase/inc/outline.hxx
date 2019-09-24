@@ -99,8 +99,8 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     void    CheckForStartValue_Impl(sal_uInt16 nNumberingType);
 
 public:
-    SwOutlineSettingsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage>  Create( TabPageParent pParent,
+    SwOutlineSettingsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage>  Create( weld::Container* pPage, weld::DialogController* pController,
                                        const SfxItemSet* rAttrSet);
     virtual ~SwOutlineSettingsTabPage() override;
 

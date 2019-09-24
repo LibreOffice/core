@@ -46,8 +46,8 @@ namespace offapp
         return false;
     }
 
-    ConnectionPoolOptionsPage::ConnectionPoolOptionsPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
-        : SfxTabPage(pParent, "cui/ui/connpooloptions.ui", "ConnPoolPage", &_rAttrSet)
+    ConnectionPoolOptionsPage::ConnectionPoolOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
+        : SfxTabPage(pPage, pController, "cui/ui/connpooloptions.ui", "ConnPoolPage", &_rAttrSet)
         , m_sYes(CuiResId(RID_SVXSTR_YES))
         , m_sNo(CuiResId(RID_SVXSTR_NO))
         , m_xEnablePooling(m_xBuilder->weld_check_button("connectionpooling"))
@@ -125,9 +125,9 @@ namespace offapp
     {
     }
 
-    std::unique_ptr<SfxTabPage> ConnectionPoolOptionsPage::Create(TabPageParent pParent, const SfxItemSet* _rAttrSet)
+    std::unique_ptr<SfxTabPage> ConnectionPoolOptionsPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet)
     {
-        return std::make_unique<ConnectionPoolOptionsPage>(pParent, *_rAttrSet);
+        return std::make_unique<ConnectionPoolOptionsPage>(pPage, pController, *_rAttrSet);
     }
 
     void ConnectionPoolOptionsPage::implInitControls(const SfxItemSet& _rSet)

@@ -39,8 +39,8 @@
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
-SwFieldVarPage::SwFieldVarPage(TabPageParent pParent, const SfxItemSet *const pCoreSet )
-    : SwFieldPage(pParent, "modules/swriter/ui/fldvarpage.ui", "FieldVarPage", pCoreSet)
+SwFieldVarPage::SwFieldVarPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *const pCoreSet )
+    : SwFieldPage(pPage, pController, "modules/swriter/ui/fldvarpage.ui", "FieldVarPage", pCoreSet)
     , m_xTypeLB(m_xBuilder->weld_tree_view("type"))
     , m_xSelection(m_xBuilder->weld_widget("selectframe"))
     , m_xSelectionLB(m_xBuilder->weld_tree_view("select"))
@@ -1203,10 +1203,10 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-std::unique_ptr<SfxTabPage> SwFieldVarPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwFieldVarPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                          const SfxItemSet *const pAttrSet)
 {
-    return std::make_unique<SwFieldVarPage>( pParent, pAttrSet );
+    return std::make_unique<SwFieldVarPage>( pPage, pController, pAttrSet );
 }
 
 sal_uInt16 SwFieldVarPage::GetGroup()

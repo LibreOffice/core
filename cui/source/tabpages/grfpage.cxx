@@ -49,8 +49,8 @@ static int lcl_GetValue(const weld::MetricSpinButton& rMetric, FieldUnit eUnit)
     description: crop graphic
  --------------------------------------------------------------------*/
 
-SvxGrfCropPage::SvxGrfCropPage(TabPageParent pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "cui/ui/croppage.ui", "CropPage", &rSet)
+SvxGrfCropPage::SvxGrfCropPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/croppage.ui", "CropPage", &rSet)
     , nOldWidth(0)
     , nOldHeight(0)
     , bSetOrigSize(false)
@@ -106,9 +106,9 @@ SvxGrfCropPage::~SvxGrfCropPage()
     m_xExampleWN.reset();
 }
 
-std::unique_ptr<SfxTabPage> SvxGrfCropPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SvxGrfCropPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet)
 {
-    return std::make_unique<SvxGrfCropPage>(pParent, *rSet);
+    return std::make_unique<SvxGrfCropPage>(pPage, pController, *rSet);
 }
 
 void SvxGrfCropPage::Reset( const SfxItemSet *rSet )

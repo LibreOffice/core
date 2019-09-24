@@ -15,8 +15,8 @@
 class ScTpCompatOptions : public SfxTabPage
 {
 public:
-    explicit ScTpCompatOptions(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rCoreAttrs);
+    explicit ScTpCompatOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreAttrs);
     virtual ~ScTpCompatOptions() override;
 
     virtual bool FillItemSet(SfxItemSet* rCoreAttrs) override;

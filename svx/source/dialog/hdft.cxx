@@ -108,28 +108,28 @@ namespace svx {
     }
 }
 
-std::unique_ptr<SfxTabPage> SvxHeaderPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+std::unique_ptr<SfxTabPage> SvxHeaderPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet )
 {
-    return std::make_unique<SvxHeaderPage>( pParent, *rSet );
+    return std::make_unique<SvxHeaderPage>( pPage, pController, *rSet );
 }
 
-std::unique_ptr<SfxTabPage> SvxFooterPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+std::unique_ptr<SfxTabPage> SvxFooterPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet )
 {
-    return std::make_unique<SvxFooterPage>( pParent, *rSet );
+    return std::make_unique<SvxFooterPage>( pPage, pController, *rSet );
 }
 
-SvxHeaderPage::SvxHeaderPage(TabPageParent pParent, const SfxItemSet& rAttr)
-    : SvxHFPage( pParent, rAttr, SID_ATTR_PAGE_HEADERSET )
-{
-}
-
-SvxFooterPage::SvxFooterPage(TabPageParent pParent, const SfxItemSet& rAttr)
-    : SvxHFPage( pParent, rAttr, SID_ATTR_PAGE_FOOTERSET )
+SvxHeaderPage::SvxHeaderPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttr)
+    : SvxHFPage( pPage, pController, rAttr, SID_ATTR_PAGE_HEADERSET )
 {
 }
 
-SvxHFPage::SvxHFPage(TabPageParent pParent, const SfxItemSet& rSet, sal_uInt16 nSetId)
-    : SfxTabPage(pParent, "svx/ui/headfootformatpage.ui", "HFFormatPage", &rSet)
+SvxFooterPage::SvxFooterPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttr)
+    : SvxHFPage( pPage, pController, rAttr, SID_ATTR_PAGE_FOOTERSET )
+{
+}
+
+SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet, sal_uInt16 nSetId)
+    : SfxTabPage(pPage, pController, "svx/ui/headfootformatpage.ui", "HFFormatPage", &rSet)
     , nId(nSetId)
     , mbDisableQueryBox(false)
     , mbEnableDrawingLayerFillStyles(false)

@@ -73,10 +73,10 @@ class SvxSingleNumPickTabPage final : public SfxTabPage
     DECL_LINK(DoubleClickHdl_Impl, SvtValueSet*, void);
 
 public:
-    SvxSingleNumPickTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxSingleNumPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SvxSingleNumPickTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -102,10 +102,10 @@ class SvxBulletPickTabPage final : public SfxTabPage
     DECL_LINK(NumSelectHdl_Impl, SvtValueSet*, void);
     DECL_LINK(DoubleClickHdl_Impl, SvtValueSet*, void);
 public:
-    SvxBulletPickTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxBulletPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SvxBulletPickTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -140,10 +140,10 @@ class SvxNumPickTabPage final : public SfxTabPage
     DECL_LINK(DoubleClickHdl_Impl, SvtValueSet*, void);
 
 public:
-    SvxNumPickTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxNumPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SvxNumPickTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -179,10 +179,10 @@ class SvxBitmapPickTabPage final : public SfxTabPage
     DECL_LINK(ClickAddBrowseHdl_Impl, weld::Button&, void);
 
 public:
-    SvxBitmapPickTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxBitmapPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SvxBitmapPickTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController,
                                       const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -279,10 +279,10 @@ class SvxNumOptionsTabPage : public SfxTabPage
     void EditModifyHdl_Impl(const weld::Entry*);
 
 public:
-    SvxNumOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxNumOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SvxNumOptionsTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -364,7 +364,7 @@ class SvxNumPositionTabPage : public SfxTabPage
     DECL_LINK(IndentAtHdl_Impl, weld::MetricSpinButton&, void);
 
 public:
-    SvxNumPositionTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxNumPositionTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SvxNumPositionTabPage() override;
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -372,7 +372,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                 const SfxItemSet* rAttrSet);
 
     void                SetMetric(FieldUnit eSet);

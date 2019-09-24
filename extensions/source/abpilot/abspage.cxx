@@ -20,18 +20,15 @@
 #include "abspage.hxx"
 #include "abspilot.hxx"
 
-
 namespace abp
 {
-
-
     using namespace ::svt;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    AddressBookSourcePage::AddressBookSourcePage(OAddressBookSourcePilot* pParent, TabPageParent pPageParent, const OUString& rUIXMLDescription, const OString& rID)
-        : AddressBookSourcePage_Base(pPageParent, rUIXMLDescription, rID)
-        , m_pDialog(pParent)
+    AddressBookSourcePage::AddressBookSourcePage(weld::Container* pPage, OAddressBookSourcePilot* pDialog, const OUString& rUIXMLDescription, const OString& rID)
+        : AddressBookSourcePage_Base(pPage, pDialog, rUIXMLDescription, rID)
+        , m_pDialog(pDialog)
     {
     }
 

@@ -693,13 +693,13 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, weld::Widget&, rCtrl, void)
 }
 
 // SvxColorOptionsTabPage
-SvxColorOptionsTabPage::SvxColorOptionsTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "cui/ui/optappearancepage.ui", "OptAppearancePage", &rCoreSet)
+SvxColorOptionsTabPage::SvxColorOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optappearancepage.ui", "OptAppearancePage", &rCoreSet)
     , bFillItemSetCalled(false)
     , m_xColorSchemeLB(m_xBuilder->weld_combo_box("colorschemelb"))
     , m_xSaveSchemePB(m_xBuilder->weld_button("save"))
     , m_xDeleteSchemePB(m_xBuilder->weld_button("delete"))
-    , m_xColorConfigCT(new ColorConfigCtrl_Impl(pParent.GetFrameWeld(), *m_xBuilder))
+    , m_xColorConfigCT(new ColorConfigCtrl_Impl(pController->getDialog(), *m_xBuilder))
     , m_xTable(m_xBuilder->weld_widget("table"))
     , m_xOnFT(m_xBuilder->weld_label("on"))
     , m_xElementFT(m_xBuilder->weld_label("uielements"))
@@ -743,9 +743,9 @@ SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
     m_xColorConfigCT.reset();
 }
 
-std::unique_ptr<SfxTabPage> SvxColorOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SvxColorOptionsTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SvxColorOptionsTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxColorOptionsTabPage>(pPage, pController, *rAttrSet);
 }
 
 bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet*  )

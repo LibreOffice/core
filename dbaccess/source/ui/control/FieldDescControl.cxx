@@ -77,10 +77,10 @@ namespace
 }
 
 // class OFieldDescControl
-OFieldDescControl::OFieldDescControl(TabPageParent pParent, OTableDesignHelpBar* pHelpBar)
-    :TabPage(pParent.pPage ? Application::GetDefDialogParent() : pParent.pParent.get(), WB_3DLOOK | WB_DIALOGCONTROL)
-    ,m_xBuilder(pParent.pPage ? Application::CreateBuilder(pParent.pPage, "dbaccess/ui/fielddescpage.ui")
-                              : Application::CreateInterimBuilder(this, "dbaccess/ui/fielddescpage.ui"))
+OFieldDescControl::OFieldDescControl(weld::Container* pPage, vcl::Window* pParent, OTableDesignHelpBar* pHelpBar)
+    :TabPage(pPage ? Application::GetDefDialogParent() : pParent, WB_3DLOOK | WB_DIALOGCONTROL)
+    ,m_xBuilder(pPage ? Application::CreateBuilder(pPage, "dbaccess/ui/fielddescpage.ui")
+                      : Application::CreateInterimBuilder(this, "dbaccess/ui/fielddescpage.ui"))
     ,m_xContainer(m_xBuilder->weld_container("FieldDescPage"))
     ,pHelp( pHelpBar )
     ,m_pLastFocusWindow(nullptr)

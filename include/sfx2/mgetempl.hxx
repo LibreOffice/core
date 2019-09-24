@@ -75,7 +75,7 @@ class SfxManageStyleSheetPage final : public SfxTabPage
     void    SetDescriptionText_Impl();
 
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
 
     virtual bool        FillItemSet(SfxItemSet *) override;
     virtual void        Reset(const SfxItemSet *) override;
@@ -85,7 +85,7 @@ class SfxManageStyleSheetPage final : public SfxTabPage
     virtual DeactivateRC DeactivatePage(SfxItemSet *) override;
 
 public:
-    SfxManageStyleSheetPage(TabPageParent pParent, const SfxItemSet &rAttrSet);
+    SfxManageStyleSheetPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rAttrSet);
     virtual ~SfxManageStyleSheetPage() override;
 };
 

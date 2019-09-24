@@ -96,8 +96,8 @@ void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, sal_uInt16 nWhichJM, const 
 
 }//namespace
 
-AlignmentTabPage::AlignmentTabPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-    : SfxTabPage(pParent, "cui/ui/cellalignment.ui", "CellAlignPage", &rCoreAttrs)
+AlignmentTabPage::AlignmentTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/cellalignment.ui", "CellAlignPage", &rCoreAttrs)
     , m_aVsRefEdge(nullptr)
     // text alignment
     , m_xLbHorAlign(m_xBuilder->weld_combo_box("comboboxHorzAlign"))
@@ -160,9 +160,9 @@ AlignmentTabPage::~AlignmentTabPage()
     m_xLbFrameDir.reset();
 }
 
-std::unique_ptr<SfxTabPage> AlignmentTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> AlignmentTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<AlignmentTabPage>(pParent, *rAttrSet);
+    return std::make_unique<AlignmentTabPage>(pPage, pController, *rAttrSet);
 }
 
 bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )

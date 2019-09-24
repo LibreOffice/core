@@ -24,6 +24,7 @@
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
 #include <Window.hxx>
+#include <vcl/vclevent.hxx>
 #include <svx/fmshell.hxx>
 
 namespace sd {

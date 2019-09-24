@@ -1473,8 +1473,8 @@ short SwInsertSectionTabDialog::Ok()
     return nRet;
 }
 
-SwInsertSectionTabPage::SwInsertSectionTabPage(TabPageParent pParent, const SfxItemSet &rAttrSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/sectionpage.ui", "SectionPage", &rAttrSet)
+SwInsertSectionTabPage::SwInsertSectionTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rAttrSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/sectionpage.ui", "SectionPage", &rAttrSet)
     , m_pWrtSh(nullptr)
     , m_xCurName(m_xBuilder->weld_entry_tree_view("sectionnames", "sectionnames-entry",
                                                   "sectionnames-list"))
@@ -1615,10 +1615,10 @@ void SwInsertSectionTabPage::Reset( const SfxItemSet* )
 {
 }
 
-std::unique_ptr<SfxTabPage> SwInsertSectionTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwInsertSectionTabPage::Create(weld::Container* pPage, weld::DialogController* pController,
                                                   const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SwInsertSectionTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SwInsertSectionTabPage>(pPage, pController, *rAttrSet);
 }
 
 IMPL_LINK(SwInsertSectionTabPage, ChangeHideHdl, weld::ToggleButton&, rBox, void)
@@ -1776,8 +1776,8 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
     }
 }
 
-SwSectionFootnoteEndTabPage::SwSectionFootnoteEndTabPage(TabPageParent pParent, const SfxItemSet &rAttrSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/footnotesendnotestabpage.ui", "FootnotesEndnotesTabPage", &rAttrSet)
+SwSectionFootnoteEndTabPage::SwSectionFootnoteEndTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rAttrSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/footnotesendnotestabpage.ui", "FootnotesEndnotesTabPage", &rAttrSet)
     , m_xFootnoteNtAtTextEndCB(m_xBuilder->weld_check_button("ftnntattextend"))
     , m_xFootnoteNtNumCB(m_xBuilder->weld_check_button("ftnntnum"))
     , m_xFootnoteOffsetLbl(m_xBuilder->weld_label("ftnoffset_label"))
@@ -1953,10 +1953,10 @@ void SwSectionFootnoteEndTabPage::Reset( const SfxItemSet* rSet )
     ResetState( false, rSet->Get( RES_END_AT_TXTEND, false ));
 }
 
-std::unique_ptr<SfxTabPage> SwSectionFootnoteEndTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwSectionFootnoteEndTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                                    const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SwSectionFootnoteEndTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SwSectionFootnoteEndTabPage>(pPage, pController, *rAttrSet);
 }
 
 IMPL_LINK( SwSectionFootnoteEndTabPage, FootEndHdl, weld::ToggleButton&, rBox, void )
@@ -2058,8 +2058,8 @@ void SwSectionPropertyTabDialog::PageCreated(const OString& rId, SfxTabPage &rPa
         static_cast<SwSectionIndentTabPage&>(rPage).SetWrtShell(rWrtSh);
 }
 
-SwSectionIndentTabPage::SwSectionIndentTabPage(TabPageParent pParent, const SfxItemSet &rAttrSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/indentpage.ui", "IndentPage", &rAttrSet)
+SwSectionIndentTabPage::SwSectionIndentTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rAttrSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/indentpage.ui", "IndentPage", &rAttrSet)
     , m_xBeforeMF(m_xBuilder->weld_metric_spin_button("before", FieldUnit::CM))
     , m_xAfterMF(m_xBuilder->weld_metric_spin_button("after", FieldUnit::CM))
     , m_xPreviewWin(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin))
@@ -2111,9 +2111,9 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
     IndentModifyHdl(*m_xBeforeMF);
 }
 
-std::unique_ptr<SfxTabPage> SwSectionIndentTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SwSectionIndentTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SwSectionIndentTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SwSectionIndentTabPage>(pPage, pController, *rAttrSet);
 }
 
 void SwSectionIndentTabPage::SetWrtShell(SwWrtShell const & rSh)

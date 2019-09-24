@@ -36,7 +36,7 @@ public:
     void            SetStyleDlg ( ScStyleDlg* pDlg ) { pStyleDlg = pDlg; }
 
 protected:
-    ScHFPage(TabPageParent pParent, const SfxItemSet& rSet, sal_uInt16 nSetId);
+    ScHFPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet, sal_uInt16 nSetId);
 
     virtual void    ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
@@ -56,16 +56,16 @@ private:
 class ScHeaderPage : public ScHFPage
 {
 public:
-    static std::unique_ptr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
-    ScHeaderPage(TabPageParent pParent, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage>  Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
+    ScHeaderPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     static const sal_uInt16*      GetRanges();
 };
 
 class ScFooterPage : public ScHFPage
 {
 public:
-    static std::unique_ptr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
-    ScFooterPage(TabPageParent pParent, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage>  Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
+    ScFooterPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     static const sal_uInt16*      GetRanges();
 };
 

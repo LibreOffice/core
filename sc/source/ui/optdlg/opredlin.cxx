@@ -28,12 +28,12 @@
 
 #include <opredlin.hxx>
 
-ScRedlineOptionsTabPage::ScRedlineOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/scalc/ui/optchangespage.ui", "OptChangesPage", &rSet)
-    , m_xContentColorLB(new ColorListBox(m_xBuilder->weld_menu_button("changes"), pParent.GetFrameWeld()))
-    , m_xRemoveColorLB(new ColorListBox(m_xBuilder->weld_menu_button("deletions"), pParent.GetFrameWeld()))
-    , m_xInsertColorLB(new ColorListBox(m_xBuilder->weld_menu_button("entries"), pParent.GetFrameWeld()))
-    , m_xMoveColorLB(new ColorListBox(m_xBuilder->weld_menu_button("insertions"), pParent.GetFrameWeld()))
+ScRedlineOptionsTabPage::ScRedlineOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/scalc/ui/optchangespage.ui", "OptChangesPage", &rSet)
+    , m_xContentColorLB(new ColorListBox(m_xBuilder->weld_menu_button("changes"), pController->getDialog()))
+    , m_xRemoveColorLB(new ColorListBox(m_xBuilder->weld_menu_button("deletions"), pController->getDialog()))
+    , m_xInsertColorLB(new ColorListBox(m_xBuilder->weld_menu_button("entries"), pController->getDialog()))
+    , m_xMoveColorLB(new ColorListBox(m_xBuilder->weld_menu_button("insertions"), pController->getDialog()))
 {
     m_xContentColorLB->SetSlotId(SID_AUTHOR_COLOR);
     m_xRemoveColorLB->SetSlotId(SID_AUTHOR_COLOR);
@@ -49,9 +49,9 @@ ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
     m_xMoveColorLB.reset();
 }
 
-std::unique_ptr<SfxTabPage> ScRedlineOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+std::unique_ptr<SfxTabPage> ScRedlineOptionsTabPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet )
 {
-    return std::make_unique<ScRedlineOptionsTabPage>( pParent, *rSet );
+    return std::make_unique<ScRedlineOptionsTabPage>( pPage, pController, *rSet );
 }
 
 bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet* /* rSet */ )

@@ -191,8 +191,8 @@ void SvxTransparenceTabPage::SetControlState_Impl(css::awt::GradientStyle eXGS)
     }
 }
 
-SvxTransparenceTabPage::SvxTransparenceTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "cui/ui/transparencytabpage.ui", "TransparencyTabPage", &rInAttrs)
+SvxTransparenceTabPage::SvxTransparenceTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/transparencytabpage.ui", "TransparencyTabPage", &rInAttrs)
     , rOutAttrs(rInAttrs)
     , nPageType(PageType::Area)
     , nDlgType(0)
@@ -244,9 +244,9 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(TabPageParent pParent, const SfxI
     SetExchangeSupport();
 }
 
-std::unique_ptr<SfxTabPage> SvxTransparenceTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrs)
+std::unique_ptr<SfxTabPage> SvxTransparenceTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrs)
 {
-    return std::make_unique<SvxTransparenceTabPage>(pParent, *rAttrs);
+    return std::make_unique<SvxTransparenceTabPage>(pPage, pController, *rAttrs);
 }
 
 bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)

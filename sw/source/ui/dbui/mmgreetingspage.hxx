@@ -106,7 +106,7 @@ class SwMailMergeGreetingsPage : public vcl::OWizardPage
     virtual void        Activate() override;
     virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
 public:
-    SwMailMergeGreetingsPage(SwMailMergeWizard* pWizard, TabPageParent pParent);
+    SwMailMergeGreetingsPage(weld::Container* pPage, SwMailMergeWizard* pWizard);
     virtual ~SwMailMergeGreetingsPage() override;
 };
 

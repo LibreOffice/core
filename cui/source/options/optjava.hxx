@@ -106,10 +106,10 @@ private:
     void                    RequestRestart( svtools::RestartReason eReason );
 
 public:
-    SvxJavaOptionsPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxJavaOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SvxJavaOptionsPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
     virtual void            Reset( const SfxItemSet* rSet ) override;

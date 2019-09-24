@@ -158,16 +158,16 @@ Reference< chart2::data::XLabeledDataSequence > lcl_findLSequenceWithOnlyLabel(
 namespace chart
 {
 
-DataSourceTabPage::DataSourceTabPage(TabPageParent pParent, DialogModel & rDialogModel,
+DataSourceTabPage::DataSourceTabPage(weld::Container* pPage, weld::DialogController* pController,
+                                     DialogModel & rDialogModel,
                                      ChartTypeTemplateProvider* pTemplateProvider,
                                      bool bHideDescription /* = false */)
-    : ::vcl::OWizardPage(pParent, "modules/schart/ui/tp_DataSource.ui", "tp_DataSource")
+    : ::vcl::OWizardPage(pPage, pController, "modules/schart/ui/tp_DataSource.ui", "tp_DataSource")
     , m_pTemplateProvider(pTemplateProvider)
     , m_rDialogModel(rDialogModel)
     , m_pCurrentRangeChoosingField( nullptr )
     , m_bIsDirty( false )
-    , m_pParentController(pParent.pController)
-    , m_pTabPageNotifiable(dynamic_cast<TabPageNotifiable*>(m_pParentController))
+    , m_pTabPageNotifiable(dynamic_cast<TabPageNotifiable*>(pController))
     , m_xFT_CAPTION(m_xBuilder->weld_label("FT_CAPTION_FOR_WIZARD"))
     , m_xFT_SERIES(m_xBuilder->weld_label("FT_SERIES"))
     , m_xLB_SERIES(m_xBuilder->weld_tree_view("LB_SERIES"))
@@ -529,7 +529,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl, weld::Button&, voi
                                       m_xLB_SERIES->get_text(nEntry));
         }
 
-        lcl_enableRangeChoosing( true, m_pParentController );
+        lcl_enableRangeChoosing(true, m_pDialogController);
         m_rDialogModel.getRangeSelectionHelper()->chooseRange( aSelectedRolesRange, aUIStr, *this );
     }
     else
@@ -545,7 +545,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, CategoriesRangeButtonClickedHdl, weld::Button
         return;
 
     OUString aStr(SchResId(m_xFT_CATEGORIES->get_visible() ? STR_DATA_SELECT_RANGE_FOR_CATEGORIES : STR_DATA_SELECT_RANGE_FOR_DATALABELS));
-    lcl_enableRangeChoosing(true, m_pParentController);
+    lcl_enableRangeChoosing(true, m_pDialogController);
     m_rDialogModel.getRangeSelectionHelper()->chooseRange(
         m_rDialogModel.getCategoriesRange(), aStr, *this );
 }
@@ -723,7 +723,7 @@ void DataSourceTabPage::listeningFinished(
     m_pCurrentRangeChoosingField = nullptr;
 
     updateControlState();
-    lcl_enableRangeChoosing(false, m_pParentController);
+    lcl_enableRangeChoosing(false, m_pDialogController);
 }
 
 void DataSourceTabPage::disposingRangeSelection()

@@ -37,8 +37,8 @@ IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl, weld::Button&, void)
     }
 }
 
-SvxCTLOptionsPage::SvxCTLOptionsPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/optctlpage.ui", "OptCTLPage", &rSet)
+SvxCTLOptionsPage::SvxCTLOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optctlpage.ui", "OptCTLPage", &rSet)
     , m_xSequenceCheckingCB(m_xBuilder->weld_check_button("sequencechecking"))
     , m_xRestrictedCB(m_xBuilder->weld_check_button("restricted"))
     , m_xTypeReplaceCB(m_xBuilder->weld_check_button("typeandreplace"))
@@ -53,9 +53,9 @@ SvxCTLOptionsPage::~SvxCTLOptionsPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SvxCTLOptionsPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SvxCTLOptionsPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<SvxCTLOptionsPage>( pParent, *rAttrSet );
+    return std::make_unique<SvxCTLOptionsPage>( pPage, pController, *rAttrSet );
 }
 
 bool SvxCTLOptionsPage::FillItemSet( SfxItemSet* )

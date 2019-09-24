@@ -450,8 +450,8 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 }
 
 
-ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "filter/ui/pdfgeneralpage.ui", "PdfGeneralPage", &rCoreSet)
+ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pPage, pController, "filter/ui/pdfgeneralpage.ui", "PdfGeneralPage", &rCoreSet)
     , mbUseTaggedPDFUserSelection(false)
     , mbIsPresentation(false)
     , mbIsSpreadsheet(false)
@@ -683,10 +683,10 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* pParent )
     pParent->mbAllowDuplicateFieldNames = mxCbAllowDuplicateFieldNames->get_active();
 }
 
-std::unique_ptr<SfxTabPage> ImpPDFTabGeneralPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ImpPDFTabGeneralPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                                  const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<ImpPDFTabGeneralPage>(pParent, *rAttrSet);
+    return std::make_unique<ImpPDFTabGeneralPage>(pPage, pController, *rAttrSet);
 }
 
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAllHdl, weld::ToggleButton&, void)
@@ -811,8 +811,8 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, weld::ToggleButton&, 
 }
 
 /// The option features tab page
-ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "filter/ui/pdfviewpage.ui", "PdfViewPage", &rCoreSet)
+ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pPage, pController, "filter/ui/pdfviewpage.ui", "PdfViewPage", &rCoreSet)
     , mbUseCTLFont(false)
     , mxRbOpnPageOnly(m_xBuilder->weld_radio_button("pageonly"))
     , mxRbOpnOutline(m_xBuilder->weld_radio_button("outline"))
@@ -841,9 +841,9 @@ ImpPDFTabOpnFtrPage::~ImpPDFTabOpnFtrPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> ImpPDFTabOpnFtrPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> ImpPDFTabOpnFtrPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<ImpPDFTabOpnFtrPage>(pParent, *rAttrSet);
+    return std::make_unique<ImpPDFTabOpnFtrPage>(pPage, pController, *rAttrSet);
 }
 
 void ImpPDFTabOpnFtrPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )
@@ -968,8 +968,8 @@ IMPL_LINK_NOARG( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, weld::ToggleButton&, void
 }
 
 /// The Viewer preferences tab page
-ImpPDFTabViewerPage::ImpPDFTabViewerPage(TabPageParent pParent, const SfxItemSet& rCoreSet )
-    : SfxTabPage(pParent, "filter/ui/pdfuserinterfacepage.ui", "PdfUserInterfacePage", &rCoreSet)
+ImpPDFTabViewerPage::ImpPDFTabViewerPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet )
+    : SfxTabPage(pPage, pController, "filter/ui/pdfuserinterfacepage.ui", "PdfUserInterfacePage", &rCoreSet)
     , mbIsPresentation(false)
     , m_xCbResWinInit(m_xBuilder->weld_check_button("resize"))
     , m_xCbCenterWindow(m_xBuilder->weld_check_button("center"))
@@ -996,10 +996,10 @@ IMPL_LINK_NOARG( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, weld::ToggleButton&,
     m_xNumBookmarkLevels->set_sensitive(m_xRbVisibleBookmarkLevels->get_active());
 }
 
-std::unique_ptr<SfxTabPage> ImpPDFTabViewerPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ImpPDFTabViewerPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                                 const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<ImpPDFTabViewerPage>(pParent, *rAttrSet);
+    return std::make_unique<ImpPDFTabViewerPage>(pPage, pController, *rAttrSet);
 }
 
 void ImpPDFTabViewerPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )
@@ -1043,8 +1043,8 @@ void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* pParent )
 }
 
 /// The Security preferences tab page
-ImpPDFTabSecurityPage::ImpPDFTabSecurityPage(TabPageParent i_pParent, const SfxItemSet& i_rCoreSet)
-    : SfxTabPage(i_pParent, "filter/ui/pdfsecuritypage.ui", "PdfSecurityPage", &i_rCoreSet)
+ImpPDFTabSecurityPage::ImpPDFTabSecurityPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& i_rCoreSet)
+    : SfxTabPage(pPage, pController, "filter/ui/pdfsecuritypage.ui", "PdfSecurityPage", &i_rCoreSet)
     , msUserPwdTitle( PDFFilterResId( STR_PDF_EXPORT_UDPWD ) )
     , mbHaveOwnerPassword( false )
     , mbHaveUserPassword( false )
@@ -1079,9 +1079,9 @@ ImpPDFTabSecurityPage::~ImpPDFTabSecurityPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> ImpPDFTabSecurityPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> ImpPDFTabSecurityPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<ImpPDFTabSecurityPage>(pParent, *rAttrSet);
+    return std::make_unique<ImpPDFTabSecurityPage>(pPage, pController, *rAttrSet);
 }
 
 void ImpPDFTabSecurityPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )
@@ -1272,8 +1272,8 @@ void ImpPDFTabSecurityPage::ImplPDFASecurityControl( bool bEnableSecurity )
 }
 
 /// The link preferences tab page (relative and other stuff)
-ImpPDFTabLinksPage::ImpPDFTabLinksPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "filter/ui/pdflinkspage.ui", "PdfLinksPage", &rCoreSet)
+ImpPDFTabLinksPage::ImpPDFTabLinksPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pPage, pController, "filter/ui/pdflinkspage.ui", "PdfLinksPage", &rCoreSet)
     , mbOpnLnksDefaultUserState(false)
     , mbOpnLnksLaunchUserState(false)
     , mbOpnLnksBrowserUserState(false)
@@ -1290,9 +1290,9 @@ ImpPDFTabLinksPage::~ImpPDFTabLinksPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> ImpPDFTabLinksPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> ImpPDFTabLinksPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<ImpPDFTabLinksPage>(pParent, *rAttrSet);
+    return std::make_unique<ImpPDFTabLinksPage>(pPage, pController, *rAttrSet);
 }
 
 void ImpPDFTabLinksPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )
@@ -1451,8 +1451,8 @@ IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl, weld::TreeView&, void)
 }
 
 /// The digital signatures tab page
-ImpPDFTabSigningPage::ImpPDFTabSigningPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "filter/ui/pdfsignpage.ui", "PdfSignPage", &rCoreSet)
+ImpPDFTabSigningPage::ImpPDFTabSigningPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pPage, pController, "filter/ui/pdfsignpage.ui", "PdfSignPage", &rCoreSet)
     , maSignCertificate()
     , mxEdSignCert(m_xBuilder->weld_entry("cert"))
     , mxPbSignCertSelect(m_xBuilder->weld_button("select"))
@@ -1528,10 +1528,10 @@ IMPL_LINK_NOARG(ImpPDFTabSigningPage, ClickmaPbSignCertClear, weld::Button&, voi
     mxLBSignTSA->set_sensitive(false);
 }
 
-std::unique_ptr<SfxTabPage> ImpPDFTabSigningPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ImpPDFTabSigningPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                                  const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<ImpPDFTabSigningPage>(pParent, *rAttrSet);
+    return std::make_unique<ImpPDFTabSigningPage>(pPage, pController, *rAttrSet);
 }
 
 void ImpPDFTabSigningPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )

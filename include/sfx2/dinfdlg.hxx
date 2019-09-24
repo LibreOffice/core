@@ -204,8 +204,8 @@ protected:
     virtual void        Reset( const SfxItemSet* ) override;
 
 public:
-    SfxDocumentPage(TabPageParent pParent, const SfxItemSet&);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
+    SfxDocumentPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
     virtual ~SfxDocumentPage() override;
 
     void                EnableUseUserData();
@@ -227,9 +227,9 @@ protected:
     virtual void            Reset( const SfxItemSet* ) override;
 
 public:
-    SfxDocumentDescPage(TabPageParent pParent, const SfxItemSet&);
+    SfxDocumentDescPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&);
     virtual ~SfxDocumentDescPage() override;
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
 };
 
 // class SfxDocumentInfoDialog -------------------------------------------
@@ -454,8 +454,8 @@ protected:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    SfxCustomPropertiesPage(TabPageParent pParent, const SfxItemSet&);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
+    SfxCustomPropertiesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
     virtual ~SfxCustomPropertiesPage() override;
 };
 
@@ -570,9 +570,9 @@ protected:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    SfxCmisPropertiesPage(TabPageParent pParent, const SfxItemSet&);
+    SfxCmisPropertiesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&);
     virtual ~SfxCmisPropertiesPage() override;
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet*);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet*);
 };
 
 #endif // #ifndef _ INCLUDED_SFX2_DINFDLG_HXX

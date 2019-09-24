@@ -29,8 +29,11 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
 // persona
-SvxPersonalizationTabPage::SvxPersonalizationTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/personalization_tab.ui", "PersonalizationTabPage", &rSet)
+SvxPersonalizationTabPage::SvxPersonalizationTabPage(weld::Container* pPage,
+                                                     weld::DialogController* pController,
+                                                     const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/personalization_tab.ui", "PersonalizationTabPage",
+                 &rSet)
     , m_xNoPersona(m_xBuilder->weld_radio_button("no_persona"))
     , m_xDefaultPersona(m_xBuilder->weld_radio_button("default_persona"))
 {
@@ -47,10 +50,11 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage(TabPageParent pParent, cons
 
 SvxPersonalizationTabPage::~SvxPersonalizationTabPage() {}
 
-std::unique_ptr<SfxTabPage> SvxPersonalizationTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxPersonalizationTabPage::Create(weld::Container* pPage,
+                                                              weld::DialogController* pController,
                                                               const SfxItemSet* rSet)
 {
-    return std::make_unique<SvxPersonalizationTabPage>(pParent, *rSet);
+    return std::make_unique<SvxPersonalizationTabPage>(pPage, pController, *rSet);
 }
 
 bool SvxPersonalizationTabPage::FillItemSet(SfxItemSet*)

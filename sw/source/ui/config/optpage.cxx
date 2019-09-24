@@ -94,8 +94,8 @@ void drawRect(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect,
 
 // Tools->Options->Writer->View
 // Tools->Options->Writer/Web->View
-SwContentOptPage::SwContentOptPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/viewoptionspage.ui", "ViewOptionsPage", &rCoreSet)
+SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/viewoptionspage.ui", "ViewOptionsPage", &rCoreSet)
     , m_xCrossCB(m_xBuilder->weld_check_button("helplines"))
     , m_xHMetric(m_xBuilder->weld_combo_box("hrulercombobox"))
     , m_xVRulerCBox(m_xBuilder->weld_check_button("vruler"))
@@ -170,10 +170,10 @@ SwContentOptPage::~SwContentOptPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SwContentOptPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwContentOptPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                              const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SwContentOptPage>(pParent, *rAttrSet);
+    return std::make_unique<SwContentOptPage>(pPage, pController, *rAttrSet);
 }
 
 static void lcl_SelectMetricLB(weld::ComboBox& rMetric, sal_uInt16 nSID, const SfxItemSet& rSet)
@@ -277,9 +277,9 @@ IMPL_LINK(SwContentOptPage, VertRulerHdl, weld::ToggleButton&, rBox, void)
 }
 
 // TabPage Printer additional settings
-SwAddPrinterTabPage::SwAddPrinterTabPage(TabPageParent pParent,
+SwAddPrinterTabPage::SwAddPrinterTabPage(weld::Container* pPage, weld::DialogController* pController,
     const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/printoptionspage.ui", "PrintOptionsPage", &rCoreSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/printoptionspage.ui", "PrintOptionsPage", &rCoreSet)
     , sNone(SwResId(SW_STR_NONE))
     , bAttrModified(false)
     , bPreview(false)
@@ -350,10 +350,10 @@ void SwAddPrinterTabPage::SetPreview(bool bPrev)
     m_xPagesFrame->set_sensitive(!bPreview);
 }
 
-std::unique_ptr<SfxTabPage> SwAddPrinterTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwAddPrinterTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                                 const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<SwAddPrinterTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SwAddPrinterTabPage>(pPage, pController, *rAttrSet);
 }
 
 bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
@@ -490,8 +490,8 @@ void SwAddPrinterTabPage::PageCreated( const SfxAllItemSet& aSet)
 }
 
 // Tabpage Standardfonts
-SwStdFontTabPage::SwStdFontTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/optfonttabpage.ui", "OptFontTabPage", &rSet)
+SwStdFontTabPage::SwStdFontTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/optfonttabpage.ui", "OptFontTabPage", &rSet)
     , m_pPrt(nullptr)
     , m_pFontConfig(nullptr)
     , m_pWrtShell(nullptr)
@@ -556,10 +556,10 @@ SwStdFontTabPage::~SwStdFontTabPage()
         m_pPrt.clear();
 }
 
-std::unique_ptr<SfxTabPage> SwStdFontTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwStdFontTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                              const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<SwStdFontTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SwStdFontTabPage>(pPage, pController, *rAttrSet);
 }
 
 static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
@@ -996,8 +996,8 @@ void SwStdFontTabPage::PageCreated( const SfxAllItemSet& aSet)
         m_nFontGroup = sal::static_int_cast< sal_uInt8, sal_uInt16>( pFlagItem->GetValue() );
 }
 
-SwTableOptionsTabPage::SwTableOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/opttablepage.ui", "OptTablePage", &rSet)
+SwTableOptionsTabPage::SwTableOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/opttablepage.ui", "OptTablePage", &rSet)
     , m_pWrtShell(nullptr)
     , m_bHTMLMode(false)
     , m_xHeaderCB(m_xBuilder->weld_check_button("header"))
@@ -1025,10 +1025,10 @@ SwTableOptionsTabPage::~SwTableOptionsTabPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SwTableOptionsTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwTableOptionsTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                                   const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<SwTableOptionsTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SwTableOptionsTabPage>(pPage, pController, *rAttrSet);
 }
 
 bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -1196,8 +1196,8 @@ void SwTableOptionsTabPage::PageCreated( const SfxAllItemSet& aSet)
         m_pWrtShell = pWrtSh->GetValue();
 }
 
-SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/optformataidspage.ui", "OptFormatAidsPage", &rSet)
+SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/optformataidspage.ui", "OptFormatAidsPage", &rSet)
     , m_pWrtShell(nullptr)
     , m_xParaCB(m_xBuilder->weld_check_button("paragraph"))
     , m_xSHyphCB(m_xBuilder->weld_check_button("hyphens"))
@@ -1258,9 +1258,9 @@ SwShdwCursorOptionsTabPage::~SwShdwCursorOptionsTabPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SwShdwCursorOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
+std::unique_ptr<SfxTabPage> SwShdwCursorOptionsTabPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet )
 {
-    return std::make_unique<SwShdwCursorOptionsTabPage>(pParent, *rSet );
+    return std::make_unique<SwShdwCursorOptionsTabPage>(pPage, pController, *rSet);
 }
 
 void SwShdwCursorOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
@@ -1563,23 +1563,23 @@ namespace
     }
 }
 
-SwRedlineOptionsTabPage::SwRedlineOptionsTabPage(TabPageParent pParent,
+SwRedlineOptionsTabPage::SwRedlineOptionsTabPage(weld::Container* pPage, weld::DialogController* pController,
                                                  const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/optredlinepage.ui", "OptRedLinePage", &rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/optredlinepage.ui", "OptRedLinePage", &rSet)
     , m_xInsertLB(m_xBuilder->weld_combo_box("insert"))
-    , m_xInsertColorLB(new ColorListBox(m_xBuilder->weld_menu_button("insertcolor"), pParent.GetFrameWeld()))
+    , m_xInsertColorLB(new ColorListBox(m_xBuilder->weld_menu_button("insertcolor"), pController->getDialog()))
     , m_xInsertedPreviewWN(new FontPrevWindow)
     , m_xInsertedPreview(new weld::CustomWeld(*m_xBuilder, "insertedpreview", *m_xInsertedPreviewWN))
     , m_xDeletedLB(m_xBuilder->weld_combo_box("deleted"))
-    , m_xDeletedColorLB(new ColorListBox(m_xBuilder->weld_menu_button("deletedcolor"), pParent.GetFrameWeld()))
+    , m_xDeletedColorLB(new ColorListBox(m_xBuilder->weld_menu_button("deletedcolor"), pController->getDialog()))
     , m_xDeletedPreviewWN(new FontPrevWindow)
     , m_xDeletedPreview(new weld::CustomWeld(*m_xBuilder, "deletedpreview", *m_xDeletedPreviewWN))
     , m_xChangedLB(m_xBuilder->weld_combo_box("changed"))
-    , m_xChangedColorLB(new ColorListBox(m_xBuilder->weld_menu_button("changedcolor"), pParent.GetFrameWeld()))
+    , m_xChangedColorLB(new ColorListBox(m_xBuilder->weld_menu_button("changedcolor"), pController->getDialog()))
     , m_xChangedPreviewWN(new FontPrevWindow)
     , m_xChangedPreview(new weld::CustomWeld(*m_xBuilder, "changedpreview", *m_xChangedPreviewWN))
     , m_xMarkPosLB(m_xBuilder->weld_combo_box("markpos"))
-    , m_xMarkColorLB(new ColorListBox(m_xBuilder->weld_menu_button("markcolor"), pParent.GetFrameWeld()))
+    , m_xMarkColorLB(new ColorListBox(m_xBuilder->weld_menu_button("markcolor"), pController->getDialog()))
     , m_xMarkPreviewWN(new SwMarkPreview)
     , m_xMarkPreview(new weld::CustomWeld(*m_xBuilder, "markpreview", *m_xMarkPreviewWN))
 {
@@ -1638,9 +1638,9 @@ SwRedlineOptionsTabPage::~SwRedlineOptionsTabPage()
     m_xMarkPreviewWN.reset();
 }
 
-std::unique_ptr<SfxTabPage> SwRedlineOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwRedlineOptionsTabPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<SwRedlineOptionsTabPage>(pParent, *rSet );
+    return std::make_unique<SwRedlineOptionsTabPage>(pPage, pController, *rSet);
 }
 
 bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -2004,8 +2004,8 @@ void SwRedlineOptionsTabPage::InitFontStyle(FontPrevWindow& rExampleWin, const O
     rExampleWin.SetBackColor(aBackCol);
 }
 
-SwCompareOptionsTabPage::SwCompareOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/optcomparison.ui", "OptComparison", &rSet)
+SwCompareOptionsTabPage::SwCompareOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/optcomparison.ui", "OptComparison", &rSet)
     , m_xAutoRB(m_xBuilder->weld_radio_button("auto"))
     , m_xWordRB(m_xBuilder->weld_radio_button("byword"))
     , m_xCharRB(m_xBuilder->weld_radio_button("bycharacter"))
@@ -2026,9 +2026,9 @@ SwCompareOptionsTabPage::~SwCompareOptionsTabPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SwCompareOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SwCompareOptionsTabPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<SwCompareOptionsTabPage>(pParent, *rAttrSet );
+    return std::make_unique<SwCompareOptionsTabPage>(pPage, pController, *rAttrSet);
 }
 
 bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -2137,8 +2137,8 @@ IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl, weld::Button&, void)
 
 #ifdef DBG_UTIL
 
-SwTestTabPage::SwTestTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage( pParent, "modules/swriter/ui/opttestpage.ui", "OptTestPage", &rCoreSet)
+SwTestTabPage::SwTestTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/opttestpage.ui", "OptTestPage", &rCoreSet)
     , bAttrModified( false )
     , m_xTest1CBox(m_xBuilder->weld_check_button("unused"))
     , m_xTest2CBox(m_xBuilder->weld_check_button("dynamic"))
@@ -2158,10 +2158,10 @@ SwTestTabPage::~SwTestTabPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SwTestTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwTestTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                           const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<SwTestTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SwTestTabPage>(pPage, pController, *rAttrSet);
 }
 
 bool    SwTestTabPage::FillItemSet( SfxItemSet* rCoreSet )

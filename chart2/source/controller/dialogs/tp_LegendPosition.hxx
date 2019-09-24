@@ -36,10 +36,10 @@ private:
     std::unique_ptr<TextDirectionListBox> m_xLbTextDirection;
 
 public:
-    SchLegendPosTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SchLegendPosTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
     virtual ~SchLegendPosTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rInAttrs);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rInAttrs);
     virtual bool FillItemSet(SfxItemSet* rOutAttrs) override;
     virtual void Reset(const SfxItemSet* rInAttrs) override;
 };

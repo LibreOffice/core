@@ -52,8 +52,8 @@ struct SwCompatibilityOptPage_Impl
     std::vector< SvtCompatibilityEntry > m_aList;
 };
 
-SwCompatibilityOptPage::SwCompatibilityOptPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/optcompatpage.ui", "OptCompatPage", &rSet)
+SwCompatibilityOptPage::SwCompatibilityOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/optcompatpage.ui", "OptCompatPage", &rSet)
     , m_pWrtShell(nullptr)
     , m_pImpl(new SwCompatibilityOptPage_Impl)
     , m_nSavedOptions(0)
@@ -340,9 +340,9 @@ void SwCompatibilityOptPage::WriteOptions()
         m_aConfigItem.AppendItem(rItem);
 }
 
-std::unique_ptr<SfxTabPage> SwCompatibilityOptPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SwCompatibilityOptPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SwCompatibilityOptPage>(pParent, *rAttrSet);
+    return std::make_unique<SwCompatibilityOptPage>(pPage, pController, *rAttrSet);
 }
 
 bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )

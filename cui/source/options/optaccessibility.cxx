@@ -22,9 +22,9 @@
 #include <vcl/svapp.hxx>
 #include <officecfg/Office/Common.hxx>
 
-SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(TabPageParent pParent,
+SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(weld::Container* pPage, weld::DialogController* pController,
     const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/optaccessibilitypage.ui", "OptAccessibilityPage", &rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optaccessibilitypage.ui", "OptAccessibilityPage", &rSet)
     , m_xAccessibilityTool(m_xBuilder->weld_check_button("acctool"))
     , m_xTextSelectionInReadonly(m_xBuilder->weld_check_button("textselinreadonly"))
     , m_xAnimatedGraphics(m_xBuilder->weld_check_button("animatedgraphics"))
@@ -43,9 +43,9 @@ SvxAccessibilityOptionsTabPage::~SvxAccessibilityOptionsTabPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SvxAccessibilityOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SvxAccessibilityOptionsTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SvxAccessibilityOptionsTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxAccessibilityOptionsTabPage>(pPage, pController, *rAttrSet);
 }
 
 bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )

@@ -62,7 +62,7 @@ namespace dbp
         css::uno::Reference< css::sdbc::XConnection >
                                         getFormConnection() const;
     public:
-        OControlWizardPage(OControlWizard* pDialog, TabPageParent pPageParent, const OUString& rUIXMLDescription, const OString& rID);
+        OControlWizardPage(weld::Container* pPage, OControlWizard* pWizard, const OUString& rUIXMLDescription, const OString& rID);
         virtual ~OControlWizardPage() override;
 
     protected:

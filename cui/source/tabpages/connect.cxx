@@ -48,8 +48,7 @@ const sal_uInt16 SvxConnectionPage::pRanges[] =
 SvxConnectionDialog::SvxConnectionDialog(weld::Window* pParent, const SfxItemSet& rInAttrs, const SdrView* pSdrView)
     : SfxSingleTabDialogController(pParent, &rInAttrs)
 {
-    TabPageParent pPageParent(get_content_area(), this);
-    auto xPage = std::make_unique<SvxConnectionPage>(pPageParent, rInAttrs);
+    auto xPage = std::make_unique<SvxConnectionPage>(get_content_area(), this, rInAttrs);
 
     xPage->SetView(pSdrView);
     xPage->Construct();
@@ -64,8 +63,8 @@ SvxConnectionDialog::SvxConnectionDialog(weld::Window* pParent, const SfxItemSet
 |*
 \************************************************************************/
 
-SvxConnectionPage::SvxConnectionPage(TabPageParent pWindow, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pWindow, "cui/ui/connectortabpage.ui", "ConnectorTabPage", &rInAttrs)
+SvxConnectionPage::SvxConnectionPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/connectortabpage.ui", "ConnectorTabPage", &rInAttrs)
     , rOutAttrs(rInAttrs)
     , aAttrSet(*rInAttrs.GetPool())
     , pView(nullptr)
@@ -304,10 +303,10 @@ void SvxConnectionPage::Construct()
 |* creates the page
 |*
 \************************************************************************/
-std::unique_ptr<SfxTabPage> SvxConnectionPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxConnectionPage::Create(weld::Container* pPage, weld::DialogController* pController,
                                              const SfxItemSet* rAttrs)
 {
-    return std::make_unique<SvxConnectionPage>(pParent, *rAttrs);
+    return std::make_unique<SvxConnectionPage>(pPage, pController, *rAttrs);
 }
 
 IMPL_LINK_NOARG(SvxConnectionPage, ChangeAttrListBoxHdl_Impl, weld::ComboBox&, void)

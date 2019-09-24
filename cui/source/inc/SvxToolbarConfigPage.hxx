@@ -55,7 +55,7 @@ private:
     virtual void    SelectElement() override;
 
 public:
-    SvxToolbarConfigPage(TabPageParent pParent, const SfxItemSet& rItemSet);
+    SvxToolbarConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rItemSet);
     virtual ~SvxToolbarConfigPage() override;
 
     void            AddFunction(int nTarget = -1);

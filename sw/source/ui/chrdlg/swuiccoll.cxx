@@ -43,8 +43,8 @@ const sal_uInt16 SwCondCollPage::m_aPageRg[] = {
     0
 };
 
-SwCondCollPage::SwCondCollPage(TabPageParent pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/conditionpage.ui", "ConditionPage", &rSet)
+SwCondCollPage::SwCondCollPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/conditionpage.ui", "ConditionPage", &rSet)
     , m_rSh(::GetActiveView()->GetWrtShell())
     , m_pCmds(SwCondCollItem::GetCmds())
     , m_pFormat(nullptr)
@@ -111,9 +111,9 @@ DeactivateRC SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
     return DeactivateRC::LeavePage;
 }
 
-std::unique_ptr<SfxTabPage> SwCondCollPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwCondCollPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet)
 {
-    return std::make_unique<SwCondCollPage>(pParent, *rSet);
+    return std::make_unique<SwCondCollPage>(pPage, pController, *rSet);
 }
 
 bool SwCondCollPage::FillItemSet(SfxItemSet *rSet)

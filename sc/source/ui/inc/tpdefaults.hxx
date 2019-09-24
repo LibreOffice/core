@@ -16,8 +16,8 @@
 class ScTpDefaultsOptions : public SfxTabPage
 {
 public:
-    explicit ScTpDefaultsOptions(TabPageParent pParent, const SfxItemSet& rCoreSet);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rCoreSet);
+    explicit ScTpDefaultsOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet);
     virtual ~ScTpDefaultsOptions() override;
 
     virtual bool FillItemSet(SfxItemSet* rCoreSet) override;
