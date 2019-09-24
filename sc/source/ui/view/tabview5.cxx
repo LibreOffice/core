@@ -327,8 +327,14 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
             ss << aDocSize.Width() << ", " << aDocSize.Height();
             OString sRect = ss.str().c_str();
             ScTabViewShell* pViewShell = aViewData.GetViewShell();
+
+            // Invalidate first
+            tools::Rectangle aRectangle(0, 0, 1000000000, 1000000000);
+            OString sPayload = aRectangle.toString() + OString(", ") + OString::number(aViewData.GetTabNo());
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sPayload.getStr());
+
             ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(pViewShell->GetCurrentDocument());
-            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, sRect, pModel);
+            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, sRect, pModel, false);
         }
     }
 }

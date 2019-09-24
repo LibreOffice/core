@@ -453,6 +453,7 @@ public:
     bool m_bFullInvalidateTiles;
     bool m_bInvalidateTiles;
     std::vector<tools::Rectangle> m_aInvalidations;
+    std::vector<int> m_aInvalidationsParts;
     bool m_bViewLock;
     OString m_sCellFormula;
     boost::property_tree::ptree m_aCommentCallbackResult;
@@ -542,6 +543,8 @@ public:
                 aInvalidationRect.setWidth(aSeq[2].toInt32());
                 aInvalidationRect.setHeight(aSeq[3].toInt32());
                 m_aInvalidations.push_back(aInvalidationRect);
+                if (aSeq.getLength() == 5)
+                    m_aInvalidationsParts.push_back(aSeq[4].toInt32());
                 m_bInvalidateTiles = true;
             }
         }
@@ -1696,12 +1699,16 @@ void ScTiledRenderingTest::testSheetChangeInvalidation()
     SfxLokHelper::setView(nView1);
     aView1.m_bInvalidateTiles = false;
     aView1.m_aInvalidations.clear();
+    aView1.m_aInvalidationsParts.clear();
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(size_t(3), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1310720, 268435456), aView1.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[1]);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidationsParts.size());
+    CPPUNIT_ASSERT_EQUAL(pModelObj->getPart(), aView1.m_aInvalidationsParts[0]);
 }
 
 void ScTiledRenderingTest::testInsertDeletePageInvalidation()
@@ -1729,7 +1736,7 @@ void ScTiledRenderingTest::testInsertDeletePageInvalidation()
     comphelper::dispatchCommand(".uno:Insert", aArgs);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(size_t(8), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(6), aView1.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
     CPPUNIT_ASSERT_EQUAL(2, pModelObj->getParts());
 
