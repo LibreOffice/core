@@ -162,8 +162,6 @@ namespace dbaui
     private:
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
 
-        virtual void GetFocus() override;
-
         virtual void implInitControls( const SfxItemSet& _rSet, bool _bSaveValue ) override;
         virtual OUString getDatasourceName( const SfxItemSet& _rSet ) override;
         virtual bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName ) override;
