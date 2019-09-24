@@ -59,8 +59,8 @@ void TabWin_Impl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
     Ruler::DrawTab(rRenderContext, rRenderContext.GetSettings().GetStyleSettings().GetFontColor(), aPoint, nTabStyle);
 }
 
-SvxTabulatorTabPage::SvxTabulatorTabPage(TabPageParent pParent, const SfxItemSet& rAttr)
-    : SfxTabPage(pParent, "cui/ui/paratabspage.ui", "ParagraphTabsPage", &rAttr)
+SvxTabulatorTabPage::SvxTabulatorTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttr)
+    : SfxTabPage(pPage, pController, "cui/ui/paratabspage.ui", "ParagraphTabsPage", &rAttr)
     , aCurrentTab(0)
     , aNewTabs(std::make_unique<SvxTabStopItem>(0, 0, SvxTabAdjust::Left, GetWhich(SID_ATTR_TABSTOP)))
     , nDefDist(0)
@@ -208,9 +208,9 @@ bool SvxTabulatorTabPage::FillItemSet(SfxItemSet* rSet)
     return bModified;
 }
 
-std::unique_ptr<SfxTabPage> SvxTabulatorTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxTabulatorTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<SvxTabulatorTabPage>(pParent, *rSet);
+    return std::make_unique<SvxTabulatorTabPage>(pPage, pController, *rSet);
 }
 
 void SvxTabulatorTabPage::Reset(const SfxItemSet* rSet)

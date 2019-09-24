@@ -66,9 +66,9 @@ private:
     DECL_STATIC_LINK(SvxProxyTabPage, LoseFocusHdl_Impl, weld::Widget&, void);
 
 public:
-    SvxProxyTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxProxyTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SvxProxyTabPage() override;
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
@@ -123,8 +123,8 @@ protected:
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    SvxSecurityTabPage(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    SvxSecurityTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet );
     virtual ~SvxSecurityTabPage() override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -149,10 +149,10 @@ class SvxEMailTabPage : public SfxTabPage
     DECL_LINK(FileDialogHdl_Impl, weld::Button&, void);
 
 public:
-    SvxEMailTabPage(TabPageParent pParent, const SfxItemSet& rSet );
+    SvxEMailTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet );
     virtual ~SvxEMailTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

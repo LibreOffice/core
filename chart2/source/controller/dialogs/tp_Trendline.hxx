@@ -29,9 +29,9 @@ namespace chart
 class TrendlineTabPage : public SfxTabPage
 {
 public:
-    TrendlineTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    TrendlineTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rInAttrs );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rInAttrs );
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) override;
     virtual void Reset( const SfxItemSet* rInAttrs ) override;
 

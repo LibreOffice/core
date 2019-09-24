@@ -55,11 +55,11 @@ class SwLabPage : public SfxTabPage
     SwLabRec* GetSelectedEntryPos();
 
 public:
-    SwLabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwLabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
 
     virtual ~SwLabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
@@ -98,10 +98,10 @@ class SwPrivateDataPage : public SfxTabPage
     std::unique_ptr<weld::Entry> m_xMailED;
 
 public:
-    SwPrivateDataPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwPrivateDataPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwPrivateDataPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
@@ -127,10 +127,10 @@ class SwBusinessDataPage : public SfxTabPage
     std::unique_ptr<weld::Entry> m_xMailED;
 
 public:
-    SwBusinessDataPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwBusinessDataPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwBusinessDataPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;

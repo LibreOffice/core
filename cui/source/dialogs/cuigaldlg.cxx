@@ -504,8 +504,8 @@ void GalleryThemeProperties::PageCreated(const OString& rId, SfxTabPage &rPage)
         static_cast<TPGalleryThemeProperties&>( rPage ).SetXChgData( pData );
 }
 
-TPGalleryThemeGeneral::TPGalleryThemeGeneral(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/gallerygeneralpage.ui", "GalleryGeneralPage", &rSet)
+TPGalleryThemeGeneral::TPGalleryThemeGeneral(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/gallerygeneralpage.ui", "GalleryGeneralPage", &rSet)
     , pData(nullptr)
     , m_xFiMSImage(m_xBuilder->weld_image("image"))
     , m_xEdtMSName(m_xBuilder->weld_entry("name"))
@@ -574,9 +574,9 @@ bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet* /*rSet*/ )
     return true;
 }
 
-std::unique_ptr<SfxTabPage> TPGalleryThemeGeneral::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> TPGalleryThemeGeneral::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<TPGalleryThemeGeneral>(pParent, *rSet);
+    return std::make_unique<TPGalleryThemeGeneral>(pPage, pController, *rSet);
 }
 
 TPGalleryThemeProperties::TPGalleryThemeProperties(TabPageParent pWindow, const SfxItemSet& rSet)
@@ -641,9 +641,9 @@ TPGalleryThemeProperties::~TPGalleryThemeProperties()
     aFilterEntryList.clear();
 }
 
-std::unique_ptr<SfxTabPage> TPGalleryThemeProperties::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> TPGalleryThemeProperties::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<TPGalleryThemeProperties>(pParent, *rSet);
+    return std::make_unique<TPGalleryThemeProperties>(pPage, pController, *rSet);
 }
 
 OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, const OUString& _rExtension )

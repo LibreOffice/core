@@ -45,8 +45,8 @@ class SAL_WARN_UNUSED SvxTabPage : public SfxTabPage
 {
 
 public:
-    SvxTabPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet &rAttrSet)
-        : SfxTabPage(pParent, rUIXMLDescription, rID, &rAttrSet)
+    SvxTabPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet &rAttrSet)
+        : SfxTabPage(pPage, pController, rUIXMLDescription, rID, &rAttrSet)
     {
     }
     virtual void PointChanged(weld::DrawingArea* pArea, RectPoint eRP) = 0;

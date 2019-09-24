@@ -65,12 +65,12 @@ private:
     void FillBoxChartColorLB();
 
 public:
-    SvxDefaultColorOptPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxDefaultColorOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
     virtual ~SvxDefaultColorOptPage() override;
 
     void    Construct();
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rInAttrs );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rInAttrs );
     virtual bool        FillItemSet( SfxItemSet* rOutAttrs ) override;
     virtual void        Reset( const SfxItemSet* rInAttrs ) override;
 

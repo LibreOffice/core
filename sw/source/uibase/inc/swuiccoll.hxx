@@ -56,10 +56,10 @@ class SwCondCollPage : public SfxTabPage
     static const sal_uInt16 m_aPageRg[];
 
 public:
-    SwCondCollPage(TabPageParent pParent, const SfxItemSet &rSet);
+    SwCondCollPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet);
     virtual ~SwCondCollPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges() { return m_aPageRg; }
 
     virtual bool FillItemSet(      SfxItemSet *rSet) override;

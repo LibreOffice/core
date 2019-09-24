@@ -75,8 +75,8 @@ class ScTPValidationValue : public ScRefHandlerCaller, public SfxTabPage
 {
     static const sal_uInt16 pValueRanges[];
 public:
-    explicit                    ScTPValidationValue(TabPageParent pParent, const SfxItemSet& rArgSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rArgSet );
+    explicit                    ScTPValidationValue(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rArgSet );
     virtual                     ~ScTPValidationValue() override;
 
     static const sal_uInt16*    GetRanges() { return pValueRanges; }
@@ -235,8 +235,8 @@ private:
     std::unique_ptr<weld::TextView> m_xEdInputHelp;
 
 public:
-    ScTPValidationHelp(TabPageParent pParent, const SfxItemSet& rArgSet);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rArgSet);
+    ScTPValidationHelp(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rArgSet);
     virtual ~ScTPValidationHelp() override;
 
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
@@ -260,8 +260,8 @@ private:
     DECL_LINK(ClickSearchHdl, weld::Button&, void);
 
 public:
-    ScTPValidationError(TabPageParent pParent, const SfxItemSet& rArgSet);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rArgSet);
+    ScTPValidationError(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rArgSet);
     virtual ~ScTPValidationError() override;
 
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;

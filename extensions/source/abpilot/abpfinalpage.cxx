@@ -42,8 +42,8 @@ namespace abp
         return pFilter;
     }
 
-    FinalPage::FinalPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent)
-        : AddressBookSourcePage(pDialog, pPageParent, "modules/sabpilot/ui/datasourcepage.ui",
+    FinalPage::FinalPage(weld::Container* pPage, OAddressBookSourcePilot* pWizard)
+        : AddressBookSourcePage(pPage, pWizard, "modules/sabpilot/ui/datasourcepage.ui",
                                 "DataSourcePage")
         , m_xLocation(new URLBox(m_xBuilder->weld_combo_box("location")))
         , m_xBrowse(m_xBuilder->weld_button("browse"))
@@ -57,8 +57,8 @@ namespace abp
         m_xLocation->SetSmartProtocol(INetProtocol::File);
         m_xLocation->DisableHistory();
 
-        m_xLocationController.reset( new svx::DatabaseLocationInputController(pDialog->getORB(),
-            *m_xLocation, *m_xBrowse, *pPageParent.GetFrameWeld()) );
+        m_xLocationController.reset( new svx::DatabaseLocationInputController(pWizard->getORB(),
+            *m_xLocation, *m_xBrowse, *pWizard->getDialog()) );
 
         m_xName->connect_changed( LINK(this, FinalPage, OnEntryNameModified) );
         m_xLocation->connect_changed( LINK(this, FinalPage, OnComboNameModified) );

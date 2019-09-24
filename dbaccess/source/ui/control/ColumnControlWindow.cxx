@@ -38,7 +38,7 @@ using namespace ::com::sun::star::lang;
 // OColumnControlWindow
 OColumnControlWindow::OColumnControlWindow(vcl::Window* pParent
                                            ,const Reference<XComponentContext>& _rxContext)
-            : OFieldDescControl(pParent,nullptr)
+            : OFieldDescControl(nullptr, pParent, nullptr)
             , m_xContext(_rxContext)
             , m_sTypeNames(DBA_RES(STR_TABLEDESIGN_DBFIELDTYPES))
             , m_bAutoIncrementEnabled(true)

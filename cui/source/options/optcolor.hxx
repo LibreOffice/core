@@ -49,10 +49,10 @@ class SvxColorOptionsTabPage : public SfxTabPage
     void UpdateColorConfig();
 
 public:
-    SvxColorOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxColorOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SvxColorOptionsTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

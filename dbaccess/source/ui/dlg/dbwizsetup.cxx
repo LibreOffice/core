@@ -452,13 +452,11 @@ std::unique_ptr<BuilderPage> ODbTypeWizDialogSetup::createPage(WizardState _nSta
 
     OString sIdent(OString::number(_nState));
     weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
-    // TODO eventually pass DialogController as distinct argument instead of bundling into TabPageParent
-    TabPageParent aParent(pPageContainer, this);
 
     switch(_nState)
     {
         case PAGE_DBSETUPWIZARD_INTRO:
-            xPage = std::make_unique<OGeneralPageWizard>(aParent,*m_pOutSet);
+            xPage = std::make_unique<OGeneralPageWizard>(pPageContainer,this,*m_pOutSet);
             m_pGeneralPage = static_cast<OGeneralPageWizard*>(xPage.get());
             m_pGeneralPage->SetTypeSelectHandler(LINK(this, ODbTypeWizDialogSetup, OnTypeSelected));
             m_pGeneralPage->SetCreationModeHandler(LINK( this, ODbTypeWizDialogSetup, OnChangeCreationMode ) );
@@ -467,70 +465,70 @@ std::unique_ptr<BuilderPage> ODbTypeWizDialogSetup::createPage(WizardState _nSta
             break;
 
         case PAGE_DBSETUPWIZARD_DBASE:
-            xPage = OConnectionTabPageSetup::CreateDbaseTabPage(aParent, *m_pOutSet);
+            xPage = OConnectionTabPageSetup::CreateDbaseTabPage(pPageContainer, this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_ADO:
-            xPage = OConnectionTabPageSetup::CreateADOTabPage(aParent, *m_pOutSet);
+            xPage = OConnectionTabPageSetup::CreateADOTabPage(pPageContainer, this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_TEXT:
-            xPage = OTextConnectionPageSetup::CreateTextTabPage(aParent, *m_pOutSet);
+            xPage = OTextConnectionPageSetup::CreateTextTabPage(pPageContainer, this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_ODBC:
-            xPage = OConnectionTabPageSetup::CreateODBCTabPage(aParent, *m_pOutSet);
+            xPage = OConnectionTabPageSetup::CreateODBCTabPage(pPageContainer, this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_JDBC:
-            xPage = OJDBCConnectionPageSetup::CreateJDBCTabPage(aParent, *m_pOutSet);
+            xPage = OJDBCConnectionPageSetup::CreateJDBCTabPage(pPageContainer, this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_MYSQL_ODBC:
             m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix("sdbc:mysql:odbc:")));
-            xPage = OConnectionTabPageSetup::CreateODBCTabPage(aParent, *m_pOutSet);
+            xPage = OConnectionTabPageSetup::CreateODBCTabPage(pPageContainer, this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_MYSQL_JDBC:
             m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix("sdbc:mysql:jdbc:")));
-            xPage = OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage(aParent, *m_pOutSet);
+            xPage = OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage(pPageContainer, this, *m_pOutSet);
             break;
         case PAGE_DBSETUPWIZARD_MYSQL_NATIVE:
             m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix("sdbc:mysql:mysqlc:")));
-            xPage = MySQLNativeSetupPage::Create(aParent, *m_pOutSet);
+            xPage = MySQLNativeSetupPage::Create(pPageContainer, this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_ORACLE:
-            xPage = OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage(aParent, *m_pOutSet);
+            xPage = OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage(pPageContainer, this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_LDAP:
-            xPage = OLDAPConnectionPageSetup::CreateLDAPTabPage(aParent, *m_pOutSet);
+            xPage = OLDAPConnectionPageSetup::CreateLDAPTabPage(pPageContainer, this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_DOCUMENT_OR_SPREADSHEET:
-            xPage = OSpreadSheetConnectionPageSetup::CreateDocumentOrSpreadSheetTabPage(aParent, *m_pOutSet);
+            xPage = OSpreadSheetConnectionPageSetup::CreateDocumentOrSpreadSheetTabPage(pPageContainer, this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_MSACCESS:
-            xPage  = OConnectionTabPageSetup::CreateMSAccessTabPage(aParent, *m_pOutSet);
+            xPage  = OConnectionTabPageSetup::CreateMSAccessTabPage(pPageContainer, this, *m_pOutSet);
             break;
         case PAGE_DBSETUPWIZARD_MYSQL_INTRO:
-            xPage = OMySQLIntroPageSetup::CreateMySQLIntroTabPage(aParent, *m_pOutSet);
+            xPage = OMySQLIntroPageSetup::CreateMySQLIntroTabPage(pPageContainer, this, *m_pOutSet);
             m_pMySQLIntroPage = static_cast<OMySQLIntroPageSetup*>(xPage.get());
             m_pMySQLIntroPage->SetClickHdl(LINK( this, ODbTypeWizDialogSetup, ImplClickHdl ) );
             break;
 
         case PAGE_DBSETUPWIZARD_AUTHENTIFICATION:
-            xPage = OAuthentificationPageSetup::CreateAuthentificationTabPage(aParent, *m_pOutSet);
+            xPage = OAuthentificationPageSetup::CreateAuthentificationTabPage(pPageContainer, this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_USERDEFINED:
-            xPage = OConnectionTabPageSetup::CreateUserDefinedTabPage(aParent, *m_pOutSet);
+            xPage = OConnectionTabPageSetup::CreateUserDefinedTabPage(pPageContainer, this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_FINAL:
-            xPage = OFinalDBPageSetup::CreateFinalDBTabPageSetup(aParent, *m_pOutSet);
+            xPage = OFinalDBPageSetup::CreateFinalDBTabPageSetup(pPageContainer, this, *m_pOutSet);
             m_pFinalPage = static_cast<OFinalDBPageSetup*>(xPage.get());
             break;
     }

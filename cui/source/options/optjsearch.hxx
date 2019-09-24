@@ -56,9 +56,9 @@ private:
     TransliterationFlags GetTransliterationFlags_Impl();
 
 public:
-    SvxJSearchOptionsPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SvxJSearchOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SvxJSearchOptionsPage() override;
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

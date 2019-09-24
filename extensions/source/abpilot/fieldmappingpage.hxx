@@ -30,7 +30,7 @@ namespace abp
         std::unique_ptr<weld::Button> m_xInvokeDialog;
         std::unique_ptr<weld::Label> m_xHint;
     public:
-        explicit FieldMappingPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent);
+        explicit FieldMappingPage(weld::Container* pPage, OAddressBookSourcePilot* pController);
         virtual ~FieldMappingPage() override;
     private:
         // OWizardPage overridables

@@ -35,7 +35,7 @@ class SwMailMergeOutputTypePage : public vcl::OWizardPage
     DECL_LINK(TypeHdl_Impl, weld::ToggleButton&, void);
 
 public:
-    SwMailMergeOutputTypePage(SwMailMergeWizard* pWizard, TabPageParent pParent);
+    SwMailMergeOutputTypePage(weld::Container* pPage, SwMailMergeWizard* pWizard);
     virtual ~SwMailMergeOutputTypePage() override;
 };
 #endif

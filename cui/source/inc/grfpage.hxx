@@ -95,8 +95,8 @@ class SvxGrfCropPage : public SfxTabPage
 
     static Size     GetGrfOrigSize( const Graphic& ) const;
 public:
-    SvxGrfCropPage(TabPageParent pParent, const SfxItemSet &rSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet *rSet );
+    SvxGrfCropPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet );
     virtual ~SvxGrfCropPage() override;
 
     virtual bool FillItemSet( SfxItemSet *rSet ) override;

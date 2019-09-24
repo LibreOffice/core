@@ -54,8 +54,8 @@ namespace dbaui
     {
     }
 
-    OGenericAdministrationPage::OGenericAdministrationPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& rAttrSet)
-        : SfxTabPage(pParent, rUIXMLDescription, rId, &rAttrSet)
+    OGenericAdministrationPage::OGenericAdministrationPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& rAttrSet)
+        : SfxTabPage(pPage, pController, rUIXMLDescription, rId, &rAttrSet)
         , m_abEnableRoadmap(false)
         , m_pAdminDialog(nullptr)
         , m_pItemSetHelper(nullptr)

@@ -50,8 +50,8 @@ class AlignmentTabPage : public SfxTabPage
 
 public:
     virtual             ~AlignmentTabPage() override;
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
-    explicit            AlignmentTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet );
+    explicit            AlignmentTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet);
 
     static const sal_uInt16*  GetRanges() { return s_pRanges; }
 

@@ -43,9 +43,9 @@ namespace offapp
         std::unique_ptr<weld::SpinButton> m_xTimeout;
 
     public:
-        ConnectionPoolOptionsPage(TabPageParent _pParent, const SfxItemSet& _rAttrSet);
+        ConnectionPoolOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet);
         virtual ~ConnectionPoolOptionsPage() override;
-        static std::unique_ptr<SfxTabPage> Create(TabPageParent _pParent, const SfxItemSet* _rAttrSet);
+        static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet);
 
     private:
         virtual bool        FillItemSet(SfxItemSet* _rSet) override;

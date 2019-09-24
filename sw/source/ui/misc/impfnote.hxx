@@ -61,10 +61,10 @@ class SwEndNoteOptionPage : public SfxTabPage
     DECL_LINK(NumCountHdl, weld::ComboBox&, void);
 
 public:
-    SwEndNoteOptionPage(TabPageParent pParent, bool bEndNote, const SfxItemSet &rSet);
+    SwEndNoteOptionPage(weld::Container* pPage, weld::DialogController* pController, bool bEndNote, const SfxItemSet &rSet);
     virtual ~SwEndNoteOptionPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet);
     virtual bool FillItemSet(SfxItemSet *rSet) override;
     virtual void Reset( const SfxItemSet* ) override;
 
@@ -74,8 +74,8 @@ public:
 class SwFootNoteOptionPage : public SwEndNoteOptionPage
 {
 public:
-    SwFootNoteOptionPage(TabPageParent pParent, const SfxItemSet &rSet );
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    SwFootNoteOptionPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet );
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet);
     virtual ~SwFootNoteOptionPage() override;
 };
 
