@@ -505,7 +505,14 @@ OUString SwAuthorityField::ConditionalExpandAuthIdentifier(
     {
         //TODO: Expand to: identifier, number sequence, ...
         if(m_xAuthEntry)
-            sRet += m_xAuthEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER);
+        {
+            OUString sIdentifier(m_xAuthEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER));
+            // tdf#107784 Use title if it's a ooxml citation
+            if (sIdentifier.trim().startsWith("CITATION"))
+                return m_xAuthEntry->GetAuthorField(AUTH_FIELD_TITLE);
+            else
+                sRet += sIdentifier;
+        }
     }
     if(pAuthType->GetSuffix())
         sRet += OUStringLiteral1(pAuthType->GetSuffix());
