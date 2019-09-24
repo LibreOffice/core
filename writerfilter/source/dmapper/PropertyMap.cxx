@@ -55,7 +55,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <tools/diagnose_ex.h>
 #include "PropertyMapHelper.hxx"
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 
 using namespace com::sun::star;
 
@@ -1571,7 +1571,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 uno::Reference< beans::XPropertySetInfo > pagePropertiesInfo( pageProperties->getPropertySetInfo() );
                 const uno::Sequence< beans::Property > propertyList( pagePropertiesInfo->getProperties() );
                 // Ignore write-only properties.
-                static const std::set<OUString> aBlacklist
+                static const o3tl::sorted_vector<OUString> aBlacklist
                     = { "FooterBackGraphicURL", "BackGraphicURL", "HeaderBackGraphicURL" };
                 for ( const auto& rProperty : propertyList )
                 {
