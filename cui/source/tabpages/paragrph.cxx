@@ -22,6 +22,7 @@
 #include <svl/style.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/settings.hxx>
 #include <svx/flagsdef.hxx>
 #include <svx/svxids.hrc>
 
@@ -1307,7 +1308,7 @@ void SvxParaAlignTabPage::UpdateExample_Impl()
         {
             case SvxFrameDirection::Environment :
                 if ( !m_xRight->get_active() )
-                    m_aExampleWin.EnableRTL( IsRTLEnabled() /*false*/ );
+                    m_aExampleWin.EnableRTL( AllSettings::GetLayoutRTL() );
                 break;
             case SvxFrameDirection::Horizontal_RL_TB :
                 if ( !m_xLeft->get_active() )
