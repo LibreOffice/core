@@ -954,6 +954,8 @@ namespace
             case CH_TXTATR_BREAKWORD:
             case CH_TXTATR_INWORD:
                 return !pNode->GetTextAttrForCharAt(nPos);// how could there be none?
+            case CH_TXT_ATR_INPUTFIELDSTART:
+            case CH_TXT_ATR_INPUTFIELDEND:
             case CH_TXT_ATR_FIELDSTART:
             case CH_TXT_ATR_FIELDEND:
             case CH_TXT_ATR_FORMELEMENT:
