@@ -46,6 +46,30 @@
       "revId": "4cb8a436a315e604e7387f51f921042846b5bbc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_247d301c",
+        "filename": "i18npool/source/transliteration/transliteration_body.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-24T06:22:02Z",
+      "side": 1,
+      "message": "The code is in the i18npool/. I have grepped the i18npool/qa for \"transliter\", and found that there are entries in i18npool/qa/cppunit/test_textsearch.cxx. Then, I have put this to Transliteration_body::transliterateImpl (after the definition of \u0027in\u0027):\n\n    if (in)\n        assert(false);\n\n... and run \u0027make CppunitTest_i18npool_test_textsearch\u0027. It threw the assert in TestTextSearch::testICU, so I know that the code is being called in the test.\n\nNow it is possible to debug to find the backtrace, and modify the test or one of the methods in the call chain, to run the changed code (method) in a loop, and return the elapsed time, and compare the timings for the two implementations.\n\nHTH.",
+      "parentUuid": "7f7f9b97_6c5eb4e7",
+      "range": {
+        "startLine": 104,
+        "startChar": 4,
+        "endLine": 104,
+        "endChar": 40
+      },
+      "revId": "4cb8a436a315e604e7387f51f921042846b5bbc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
