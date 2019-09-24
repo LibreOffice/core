@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_074cb6c5",
+        "filename": "offapi/com/sun/star/document/XShapeEventBroadcaster.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-09-24T15:30:28Z",
+      "side": 1,
+      "message": "I think you mean \"@param Shape\" ?\nand similarly below",
+      "revId": "33835940bbf5d4f8547a7e2185b7eb7d7f6a2c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
