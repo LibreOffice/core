@@ -81,8 +81,8 @@ FieldUnit SwFieldUnitTable::GetValue(sal_uInt32 nPos)
     return FieldUnit::NONE;
 }
 
-SwLoadOptPage::SwLoadOptPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/optgeneralpage.ui", "OptGeneralPage", &rSet)
+SwLoadOptPage::SwLoadOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/optgeneralpage.ui", "OptGeneralPage", &rSet)
     , m_pWrtShell(nullptr)
     , m_nLastTab(0)
     , m_nOldLinkMode(MANUAL)
@@ -145,10 +145,10 @@ SwLoadOptPage::~SwLoadOptPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SwLoadOptPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwLoadOptPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                           const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<SwLoadOptPage>(pParent, *rAttrSet );
+    return std::make_unique<SwLoadOptPage>(pPage, pController, *rAttrSet );
 }
 
 IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl, weld::Button&, void)
@@ -375,8 +375,7 @@ SwCaptionOptDlg::SwCaptionOptDlg(weld::Window* pParent, const SfxItemSet& rSet)
                                    "CaptionDialog")
 {
     // create TabPage
-    TabPageParent aParent(get_content_area(), this);
-    SetTabPage(SwCaptionOptPage::Create(aParent, &rSet));
+    SetTabPage(SwCaptionOptPage::Create(get_content_area(), this, &rSet));
 }
 
 SwCaptionPreview::SwCaptionPreview()
@@ -430,8 +429,8 @@ IMPL_LINK(SwCaptionOptPage, TextFilterHdl, OUString&, rTest, bool)
     return true;
 }
 
-SwCaptionOptPage::SwCaptionOptPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/optcaptionpage.ui", "OptCaptionPage", &rSet)
+SwCaptionOptPage::SwCaptionOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/optcaptionpage.ui", "OptCaptionPage", &rSet)
     , m_sSWTable(SwResId(STR_CAPTION_TABLE))
     , m_sSWFrame(SwResId(STR_CAPTION_FRAME))
     , m_sSWGraphic(SwResId(STR_CAPTION_GRAPHIC))
@@ -545,10 +544,10 @@ SwCaptionOptPage::~SwCaptionOptPage()
     m_xPreview.reset();
 }
 
-std::unique_ptr<SfxTabPage> SwCaptionOptPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwCaptionOptPage::Create(weld::Container* pPage, weld::DialogController* pController,
                                             const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SwCaptionOptPage>(pParent, *rAttrSet);
+    return std::make_unique<SwCaptionOptPage>(pPage, pController, *rAttrSet);
 }
 
 bool SwCaptionOptPage::FillItemSet( SfxItemSet* )

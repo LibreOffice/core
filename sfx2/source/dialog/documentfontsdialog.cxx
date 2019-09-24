@@ -26,13 +26,13 @@
 
 using namespace ::com::sun::star;
 
-std::unique_ptr<SfxTabPage> SfxDocumentFontsPage::Create(TabPageParent pParent, const SfxItemSet* set)
+std::unique_ptr<SfxTabPage> SfxDocumentFontsPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* set)
 {
-    return std::make_unique<SfxDocumentFontsPage>(pParent, *set);
+    return std::make_unique<SfxDocumentFontsPage>(pPage, pController, *set);
 }
 
-SfxDocumentFontsPage::SfxDocumentFontsPage(TabPageParent parent, const SfxItemSet& set)
-    : SfxTabPage(parent, "sfx/ui/documentfontspage.ui", "DocumentFontsPage", &set)
+SfxDocumentFontsPage::SfxDocumentFontsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& set)
+    : SfxTabPage(pPage, pController, "sfx/ui/documentfontspage.ui", "DocumentFontsPage", &set)
     , embedFontsCheckbox(m_xBuilder->weld_check_button("embedFonts"))
     , embedUsedFontsCheckbox(m_xBuilder->weld_check_button("embedUsedFonts"))
     , embedLatinScriptFontsCheckbox(m_xBuilder->weld_check_button("embedLatinScriptFonts"))

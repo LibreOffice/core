@@ -40,8 +40,8 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
-        static std::unique_ptr<OGenericAdministrationPage> CreateDocumentOrSpreadSheetTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
-        OSpreadSheetConnectionPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
+        static std::unique_ptr<OGenericAdministrationPage> CreateDocumentOrSpreadSheetTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet);
+        OSpreadSheetConnectionPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs);
         virtual ~OSpreadSheetConnectionPageSetup() override;
 
     private:
@@ -56,8 +56,8 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
-        static std::unique_ptr<OGenericAdministrationPage> CreateTextTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet );
-        OTextConnectionPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
+        static std::unique_ptr<OGenericAdministrationPage> CreateTextTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet );
+        OTextConnectionPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs);
         virtual ~OTextConnectionPageSetup() override;
     protected:
         virtual bool prepareLeave() override;
@@ -76,8 +76,8 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
-        static std::unique_ptr<OGenericAdministrationPage> CreateLDAPTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet );
-        OLDAPConnectionPageSetup( TabPageParent pParent, const SfxItemSet& _rCoreAttrs );
+        static std::unique_ptr<OGenericAdministrationPage> CreateLDAPTabPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet );
+        OLDAPConnectionPageSetup( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs );
         virtual ~OLDAPConnectionPageSetup() override;
         virtual void callModifiedHdl(weld::Widget* pControl = nullptr) override;
 
@@ -107,10 +107,10 @@ namespace dbaui
         std::unique_ptr<MySQLNativeSettings> m_xMySQLSettings;
 
     public:
-        MySQLNativeSetupPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
+        MySQLNativeSetupPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs);
         virtual ~MySQLNativeSetupPage() override;
 
-        static std::unique_ptr<OGenericAdministrationPage> Create(TabPageParent pParent, const SfxItemSet& rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet);
 
     protected:
         virtual void fillControls( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList ) override;
@@ -126,7 +126,7 @@ namespace dbaui
     class OGeneralSpecialJDBCConnectionPageSetup final : public OGenericAdministrationPage
     {
     public:
-        OGeneralSpecialJDBCConnectionPageSetup(TabPageParent pParent
+        OGeneralSpecialJDBCConnectionPageSetup(weld::Container* pPage, weld::DialogController* pController
                                         , const SfxItemSet& _rCoreAttrs
                                         , sal_uInt16 _nPortId
                                         , const char* pDefaultPortResId
@@ -134,8 +134,8 @@ namespace dbaui
                                         , const char* pHeaderTextResId
                                         , const char* pDriverClassId );
     virtual ~OGeneralSpecialJDBCConnectionPageSetup() override;
-    static std::unique_ptr<OGenericAdministrationPage> CreateMySQLJDBCTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet );
-    static std::unique_ptr<OGenericAdministrationPage> CreateOracleJDBCTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet );
+    static std::unique_ptr<OGenericAdministrationPage> CreateMySQLJDBCTabPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet );
+    static std::unique_ptr<OGenericAdministrationPage> CreateOracleJDBCTabPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet );
 
     private:
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
@@ -168,9 +168,9 @@ namespace dbaui
     class OJDBCConnectionPageSetup final : public OConnectionTabPageSetup
     {
     public:
-        OJDBCConnectionPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
+        OJDBCConnectionPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs);
         virtual ~OJDBCConnectionPageSetup() override;
-        static std::unique_ptr<OGenericAdministrationPage> CreateJDBCTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> CreateJDBCTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet);
 
     private:
         virtual bool checkTestConnection() override;
@@ -198,10 +198,10 @@ namespace dbaui
             VIA_NATIVE
         };
 
-        OMySQLIntroPageSetup(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
+        OMySQLIntroPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs);
         virtual ~OMySQLIntroPageSetup() override;
 
-        static std::unique_ptr<OMySQLIntroPageSetup> CreateMySQLIntroTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
+        static std::unique_ptr<OMySQLIntroPageSetup> CreateMySQLIntroTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet);
         ConnectionType      getMySQLMode() const;
         void                SetClickHdl( const Link<OMySQLIntroPageSetup *, void>& rLink ) { maClickHdl = rLink; }
 
@@ -225,8 +225,8 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
-        static std::unique_ptr<OGenericAdministrationPage> CreateAuthentificationTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
-        OAuthentificationPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
+        static std::unique_ptr<OGenericAdministrationPage> CreateAuthentificationTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet);
+        OAuthentificationPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs);
         virtual ~OAuthentificationPageSetup() override;
 
     private:
@@ -246,9 +246,9 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
-        static std::unique_ptr<OGenericAdministrationPage> CreateFinalDBTabPageSetup(TabPageParent pParent, const SfxItemSet& _rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> CreateFinalDBTabPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet);
 
-        OFinalDBPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
+        OFinalDBPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs);
         virtual ~OFinalDBPageSetup() override;
         bool IsDatabaseDocumentToBeRegistered() const;
         bool IsDatabaseDocumentToBeOpened() const;

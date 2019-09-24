@@ -35,13 +35,13 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
-std::unique_ptr<SfxTabPage> SwDocStatPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwDocStatPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet)
 {
-    return std::make_unique<SwDocStatPage>(pParent, *rSet);
+    return std::make_unique<SwDocStatPage>(pPage, pController, *rSet);
 }
 
-SwDocStatPage::SwDocStatPage(TabPageParent pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/statisticsinfopage.ui", "StatisticsInfoPage", &rSet)
+SwDocStatPage::SwDocStatPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/statisticsinfopage.ui", "StatisticsInfoPage", &rSet)
     , m_xPageNo(m_xBuilder->weld_label("nopages"))
     , m_xTableNo(m_xBuilder->weld_label("notables"))
     , m_xGrfNo(m_xBuilder->weld_label("nogrfs"))

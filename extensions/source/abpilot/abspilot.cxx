@@ -370,27 +370,25 @@ namespace abp
     {
         OString sIdent(OString::number(_nState));
         weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
-        // TODO eventually pass DialogController as distinct argument instead of bundling into TabPageParent
-        TabPageParent aParent(pPageContainer, this);
 
         std::unique_ptr<vcl::OWizardPage> xRet;
 
         switch (_nState)
         {
             case STATE_SELECT_ABTYPE:
-                xRet = std::make_unique<TypeSelectionPage>( this, aParent );
+                xRet = std::make_unique<TypeSelectionPage>(pPageContainer, this);
                 break;
             case STATE_INVOKE_ADMIN_DIALOG:
-                xRet = std::make_unique<AdminDialogInvokationPage>( this, aParent );
+                xRet = std::make_unique<AdminDialogInvokationPage>(pPageContainer, this);
                 break;
             case STATE_TABLE_SELECTION:
-                xRet = std::make_unique<TableSelectionPage>( this, aParent );
+                xRet = std::make_unique<TableSelectionPage>(pPageContainer, this);
                 break;
             case STATE_MANUAL_FIELD_MAPPING:
-                xRet = std::make_unique<FieldMappingPage>( this, aParent );
+                xRet = std::make_unique<FieldMappingPage>(pPageContainer, this);
                 break;
             case STATE_FINAL_CONFIRM:
-                xRet = std::make_unique<FinalPage>( this, aParent );
+                xRet = std::make_unique<FinalPage>(pPageContainer, this);
                 break;
             default:
                 assert(false && "OAddressBookSourcePilot::createPage: invalid state!");

@@ -220,15 +220,13 @@ namespace dbp
     {
         OString sIdent(OString::number(_nState));
         weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
-        // TODO eventually pass DialogController as distinct argument instead of bundling into TabPageParent
-        TabPageParent aParent(pPageContainer, this);
 
         switch (_nState)
         {
             case GW_STATE_DATASOURCE_SELECTION:
-                return std::make_unique<OTableSelectionPage>(this, aParent);
+                return std::make_unique<OTableSelectionPage>(pPageContainer, this);
             case GW_STATE_FIELDSELECTION:
-                return std::make_unique<OGridFieldsSelection>(this, aParent);
+                return std::make_unique<OGridFieldsSelection>(pPageContainer, this);
         }
 
         return nullptr;
@@ -283,8 +281,8 @@ namespace dbp
         return true;
     }
 
-    OGridFieldsSelection::OGridFieldsSelection(OGridWizard* pParent, TabPageParent pPageParent)
-        : OGridPage(pParent, pPageParent, "modules/sabpilot/ui/gridfieldsselectionpage.ui", "GridFieldsSelection")
+    OGridFieldsSelection::OGridFieldsSelection(weld::Container* pPage, OGridWizard* pWizard)
+        : OGridPage(pPage, pWizard, "modules/sabpilot/ui/gridfieldsselectionpage.ui", "GridFieldsSelection")
         , m_xExistFields(m_xBuilder->weld_tree_view("existingfields"))
         , m_xSelectOne(m_xBuilder->weld_button("fieldright"))
         , m_xSelectAll(m_xBuilder->weld_button("allfieldsright"))

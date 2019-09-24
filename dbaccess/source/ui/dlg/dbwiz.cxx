@@ -226,53 +226,51 @@ std::unique_ptr<BuilderPage> ODbTypeWizDialog::createPage(WizardState _nState)
 
     OString sIdent(OString::number(_nState));
     weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
-    // TODO eventually pass DialogController as distinct argument instead of bundling into TabPageParent
-    TabPageParent aParent(pPageContainer, this);
 
     switch(_nState)
     {
         case START_PAGE: // start state
         {
-            xPage = std::make_unique<OGeneralPageDialog>(aParent, *m_pOutSet);
+            xPage = std::make_unique<OGeneralPageDialog>(pPageContainer, this, *m_pOutSet);
             OGeneralPage* pGeneralPage = static_cast<OGeneralPage*>(xPage.get());
             pGeneralPage->SetTypeSelectHandler( LINK( this, ODbTypeWizDialog, OnTypeSelected));
             pStringId = STR_PAGETITLE_GENERAL;
         }
         break;
         case CONNECTION_PAGE:
-            xPage = OConnectionTabPage::Create(aParent, m_pOutSet.get());
+            xPage = OConnectionTabPage::Create(pPageContainer, this, m_pOutSet.get());
             pStringId = STR_PAGETITLE_CONNECTION;
             break;
 
         case ADDITIONAL_PAGE_DBASE:
-            xPage = ODriversSettings::CreateDbase(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateDbase(pPageContainer, this, m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_FLAT:
-            xPage = ODriversSettings::CreateText(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateText(pPageContainer, this, m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_LDAP:
-            xPage = ODriversSettings::CreateLDAP(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateLDAP(pPageContainer, this, m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_MYSQL_JDBC:
-            xPage = ODriversSettings::CreateMySQLJDBC(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateMySQLJDBC(pPageContainer, this, m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_MYSQL_NATIVE:
-            xPage = ODriversSettings::CreateMySQLNATIVE(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateMySQLNATIVE(pPageContainer, this, m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_MYSQL_ODBC:
-            xPage = ODriversSettings::CreateMySQLODBC(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateMySQLODBC(pPageContainer, this, m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_ORACLE_JDBC:
-            xPage = ODriversSettings::CreateOracleJDBC(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateOracleJDBC(pPageContainer, this, m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_ADO:
-            xPage = ODriversSettings::CreateAdo(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateAdo(pPageContainer, this, m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_ODBC:
-            xPage = ODriversSettings::CreateODBC(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateODBC(pPageContainer, this, m_pOutSet.get());
             break;
         case ADDITIONAL_USERDEFINED:
-            xPage = ODriversSettings::CreateUser(aParent, m_pOutSet.get());
+            xPage = ODriversSettings::CreateUser(pPageContainer, this, m_pOutSet.get());
             break;
         default:
             OSL_FAIL("Wrong state!");

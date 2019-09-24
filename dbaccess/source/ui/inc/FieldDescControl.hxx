@@ -164,7 +164,7 @@ namespace dbaui
         void    implFocusLost(weld::Widget* _pWhich);
 
     public:
-        OFieldDescControl(TabPageParent pParent, OTableDesignHelpBar* pHelpBar);
+        OFieldDescControl(weld::Container* pPage, vcl::Window* pParent, OTableDesignHelpBar* pHelpBar);
         virtual ~OFieldDescControl() override;
         virtual void        dispose() override;
 

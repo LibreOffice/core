@@ -26,8 +26,8 @@ class ScTabPageProtection : public SfxTabPage
 {
     static const sal_uInt16 pProtectionRanges[];
 public:
-    ScTabPageProtection(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent,
+    ScTabPageProtection(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController,
                                               const SfxItemSet* rAttrSet);
     virtual ~ScTabPageProtection() override;
 

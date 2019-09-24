@@ -2720,8 +2720,7 @@ namespace pcr
             if ( !fnCreatePage )
                 throw RuntimeException();   // caught below
 
-            TabPageParent aParent(aDialog.get_content_area(), &aDialog);
-            aDialog.SetTabPage((*fnCreatePage)(aParent, &aCoreSet));
+            aDialog.SetTabPage((*fnCreatePage)(aDialog.get_content_area(), &aDialog, &aCoreSet));
 
             _rClearBeforeDialog.clear();
             if ( RET_OK == aDialog.run() )
