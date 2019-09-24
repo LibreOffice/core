@@ -2255,4 +2255,40 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf105330)
         pWrtShell->GetVisibleCursor()->GetTextCursor().GetSize().getHeight());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf118311)
+{
+    load(DATA_DIRECTORY, "tdf118311.fodt");
+
+    SwXTextDocument* pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDoc);
+
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    CPPUNIT_ASSERT(pDocShell);
+
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // Jump to the first cell, selecting its content
+    uno::Sequence<beans::PropertyValue> aSearch(comphelper::InitPropertySequence({
+        { "SearchItem.SearchString", uno::makeAny(OUString("a")) },
+        { "SearchItem.Backward", uno::makeAny(false) },
+    }));
+    lcl_dispatchCommand(mxComponent, ".uno:ExecuteSearch", aSearch);
+    lcl_dispatchCommand(mxComponent, ".uno:ExecuteSearch", aSearch);
+
+    //  .uno:Cut doesn't remove the table, only the selected content of the first cell
+    lcl_dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+
+    // .uno:SelectAll selects the whole table, and UNO command Cut cuts it
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab", 0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
