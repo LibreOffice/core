@@ -16,6 +16,24 @@
       "revId": "f24dbde0f9a62d5ff1400cb83201721c782e1dc7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_e476583f",
+        "filename": "sw/source/core/frmedt/fews.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-24T06:31:28Z",
+      "side": 1,
+      "message": "Thanks for the advise!\n\nThe lok seems to depend on calling the parent method, not the overridden (if I read the failure correctly). It would need to make the StartAction/EndAction themselves virtual, instead of their impls; and that would move the currently inline check if the call is needed into the virtual function, which could impair performance in more places ... so I suppose I should abandon this.",
+      "parentUuid": "7f7f9b97_ccefc8e7",
+      "revId": "f24dbde0f9a62d5ff1400cb83201721c782e1dc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
