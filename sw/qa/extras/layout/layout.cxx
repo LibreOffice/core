@@ -12,6 +12,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <comphelper/scopeguard.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -3152,6 +3153,55 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testShapeAllowOverlap)
                            std::abs(pFirst->GetObjRect().Bottom() - pSecond->GetObjRect().Top())
                                < 15);
 #endif
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testShapeAllowOverlapWrap)
+{
+    // Create an empty document with two, intentionally overlapping shapes.
+    // Set their AllowOverlap property to false and their wrap to through.
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
+    awt::Point aPoint(1000, 1000);
+    awt::Size aSize(2000, 2000);
+    uno::Reference<drawing::XShape> xShape(
+        xDocument->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setPosition(aPoint);
+    xShape->setSize(aSize);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xDocument, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+    xShapeProperties->setPropertyValue("AllowOverlap", uno::makeAny(false));
+    xShapeProperties->setPropertyValue("AnchorType",
+                                       uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+    xShapeProperties->setPropertyValue("Surround", uno::makeAny(text::WrapTextMode_THROUGH));
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+
+    aPoint = awt::Point(2000, 2000);
+    xShape.set(xDocument->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setPosition(aPoint);
+    xShape->setSize(aSize);
+    xShapeProperties.set(xShape, uno::UNO_QUERY);
+    xShapeProperties->setPropertyValue("AllowOverlap", uno::makeAny(false));
+    xShapeProperties->setPropertyValue("AnchorType",
+                                       uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+    xShapeProperties->setPropertyValue("Surround", uno::makeAny(text::WrapTextMode_THROUGH));
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+
+    // Now verify that the rectangle of the anchored objects do overlap.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPageFrame = pLayout->GetLower();
+    SwFrame* pBodyFrame = pPageFrame->GetLower();
+    SwFrame* pTextFrame = pBodyFrame->GetLower();
+    CPPUNIT_ASSERT(pTextFrame->GetDrawObjs());
+    SwSortedObjs& rObjs = *pTextFrame->GetDrawObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rObjs.size());
+    SwAnchoredObject* pFirst = rObjs[0];
+    SwAnchoredObject* pSecond = rObjs[1];
+    // Without the accompanying fix in place, this test would have failed: AllowOverlap=no had
+    // priority over Surround=through (which is bad for Word compat).
+    CPPUNIT_ASSERT(pSecond->GetObjRect().IsOver(pFirst->GetObjRect()));
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124600)

@@ -1083,6 +1083,12 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
         return;
     }
 
+    if (rFrameFormat.GetSurround().GetSurround() == css::text::WrapTextMode_THROUGH)
+    {
+        // This is explicit wrap through: allowed to overlap.
+        return;
+    }
+
     if (SwTextBoxHelper::isTextBox(&rFrameFormat, RES_FLYFRMFMT))
     {
         // This is the frame part of a textbox, just take the offset from the textbox's shape part.
@@ -1113,6 +1119,13 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
         if (SwTextBoxHelper::isTextBox(&pAnchoredObj->GetFrameFormat(), RES_FLYFRMFMT))
         {
             // Overlapping with the frame of a textbox is fine.
+            continue;
+        }
+
+        css::text::WrapTextMode eWrap = pAnchoredObj->GetFrameFormat().GetSurround().GetSurround();
+        if (eWrap == css::text::WrapTextMode_THROUGH)
+        {
+            // The other object is wrap through: allowed to overlap.
             continue;
         }
 
