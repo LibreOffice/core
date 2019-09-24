@@ -2088,7 +2088,7 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
 #endif
         }
         pCntnr->CopyByteString( SotClipboardFormatId::STRING, sData.makeStringAndClear() );
-        pCntnr->CopyToClipboard( static_cast<vcl::Window*>(const_cast<OfaAutoCompleteTabPage *>(this)) );
+        pCntnr->CopyToClipboard(GetSystemClipboard());
     }
 }
 
