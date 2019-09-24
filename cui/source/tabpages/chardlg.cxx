@@ -2623,7 +2623,7 @@ IMPL_LINK_NOARG(SvxCharPositionPage, FitToLineHdl_Impl, weld::ToggleButton&, voi
 IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl, weld::MetricSpinButton&, void)
 {
     long nVal = static_cast<long>(m_xKerningMF->get_value(FieldUnit::POINT));
-    nVal = LogicToLogic( nVal, MapUnit::MapPoint, MapUnit::MapTwip );
+    nVal = OutputDevice::LogicToLogic( nVal, MapUnit::MapPoint, MapUnit::MapTwip );
     long nKern = static_cast<short>(m_xKerningMF->denormalize(nVal));
 
     SvxFont& rFont = GetPreviewFont();
@@ -2802,10 +2802,10 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
         const SvxKerningItem& rItem = static_cast<const SvxKerningItem&>(rSet->Get( nWhich ));
         MapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
         long nBig = static_cast<long>(m_xKerningMF->normalize( static_cast<long>(rItem.GetValue()) ));
-        long nKerning = LogicToLogic( nBig, eUnit, MapUnit::MapPoint );
+        long nKerning = OutputDevice::LogicToLogic(nBig, eUnit, MapUnit::MapPoint);
 
         // set Kerning at the Font, convert into Twips before
-        long nKern = LogicToLogic( rItem.GetValue(), eUnit, MapUnit::MapTwip );
+        long nKern = OutputDevice::LogicToLogic(rItem.GetValue(), eUnit, MapUnit::MapTwip);
         rFont.SetFixKerning( static_cast<short>(nKern) );
         rCJKFont.SetFixKerning( static_cast<short>(nKern) );
         rCTLFont.SetFixKerning( static_cast<short>(nKern) );
@@ -2970,7 +2970,7 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
     MapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
 
     long nTmp = static_cast<long>(m_xKerningMF->get_value(FieldUnit::POINT));
-    long nVal = LogicToLogic( nTmp, MapUnit::MapPoint, eUnit );
+    long nVal = OutputDevice::LogicToLogic(nTmp, MapUnit::MapPoint, eUnit);
     nKerning = static_cast<short>(m_xKerningMF->denormalize( nVal ));
 
     SfxItemState eOldKernState = rOldSet.GetItemState( nWhich, false );
