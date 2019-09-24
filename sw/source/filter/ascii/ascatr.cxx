@@ -348,6 +348,7 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
                     CH_TXT_ATR_INPUTFIELDEND,
                     CH_TXT_ATR_FORMELEMENT,
                     CH_TXT_ATR_FIELDSTART,
+                    CH_TXT_ATR_FIELDSEP,
                     CH_TXT_ATR_FIELDEND,
                     0
                 };

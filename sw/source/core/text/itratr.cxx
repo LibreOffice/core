@@ -707,16 +707,18 @@ static sal_Int32 GetNextAttrImpl(SwTextNode const*const pTextNode,
     while (p < l)
     {
         sal_Unicode aChar = pStr[p];
-        if (aChar < CH_TXT_ATR_FORMELEMENT
-            || aChar > CH_TXT_ATR_FIELDEND)
+        switch (aChar)
         {
-            ++p;
-        }
-        else
-        {
-            break;
+            case CH_TXT_ATR_FORMELEMENT:
+            case CH_TXT_ATR_FIELDSTART:
+            case CH_TXT_ATR_FIELDSEP:
+            case CH_TXT_ATR_FIELDEND:
+                goto break_; // sigh...
+            default:
+                ++p;
         }
     }
+break_:
     assert(p <= nNext);
     if (p < l)
     {

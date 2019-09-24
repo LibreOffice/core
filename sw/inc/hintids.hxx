@@ -50,6 +50,7 @@ class SvxLRSpaceItem;
 #define CH_TXT_ATR_FORMELEMENT u'\x0006'
 
 #define CH_TXT_ATR_FIELDSTART u'\x0007'
+#define CH_TXT_ATR_FIELDSEP u'\x0003'
 #define CH_TXT_ATR_FIELDEND u'\x0008'
 #define CH_TXT_ATR_SUBST_FIELDSTART ("[")
 #define CH_TXT_ATR_SUBST_FIELDEND ("]")

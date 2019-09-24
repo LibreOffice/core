@@ -3577,6 +3577,7 @@ bool SwTextNode::CopyExpandText(SwTextNode& rDestNd, const SwIndex* pDestIdx,
         sal_Unicode const cur(rDestNd.GetText()[aDestIdx.GetIndex()]);
         if (   (cChar == cur) // filter substituted hidden text
             || (CH_TXT_ATR_FIELDSTART  == cur) // filter all fieldmarks
+            || (CH_TXT_ATR_FIELDSEP    == cur)
             || (CH_TXT_ATR_FIELDEND    == cur)
             || (CH_TXT_ATR_FORMELEMENT == cur))
         {
