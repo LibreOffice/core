@@ -102,11 +102,18 @@ protected:
 
 protected:
     virtual void updateChecksum() const;
-    // helper function to convert data in 1,2,4 bpp formats to a 24bpp format
-    static std::unique_ptr< sal_uInt8[] > convertDataTo24Bpp( const sal_uInt8* src,
-        int width, int height, int bitCount, int bytesPerRow, const BitmapPalette& palette, bool toBgr );
-    static std::unique_ptr< sal_uInt8[] > convertDataTo32Bpp( const sal_uInt8* src,
-        int width, int height, int bitCount, int bytesPerRow, const BitmapPalette& palette, bool toBgra );
+    // helper function to convert data in 1,2,4 bpp formats to a 8/24/32bpp format
+    enum class BitConvert
+    {
+        A8,
+        RGB,
+        BGR,
+        RGBA,
+        BGRA
+    };
+    static std::unique_ptr< sal_uInt8[] > convertDataBitCount( const sal_uInt8* src,
+        int width, int height, int bitCount, int bytesPerRow, const BitmapPalette& palette,
+        BitConvert type );
 };
 
 #endif
