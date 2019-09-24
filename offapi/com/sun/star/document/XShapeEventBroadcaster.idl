@@ -33,14 +33,16 @@ module com {   module sun {   module star {   module document {
 interface XShapeEventBroadcaster : com::sun::star::document::XEventBroadcaster
 {
     /** registers the given listener
-
+        @param Listener
+            the shape to be listened
         @param Listener
             listener which is interested on such events
      */
     void addShapeEventListener( [in] com::sun::star::drawing::XShape Shape, [in] XShapeEventListener Listener );
 
     /** unregisters the given listener
-
+        @param Listener
+            the shape with the listener to be removed
         @param Listener
             listener which isn't interested on such events any longer
      */
