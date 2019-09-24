@@ -30,9 +30,9 @@ namespace chart
 class DataLabelsTabPage : public SfxTabPage
 {
 public:
-    DataLabelsTabPage(TabPageParent pWindow, const SfxItemSet& rInAttrs);
+    DataLabelsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pWindow, const SfxItemSet* rInAttrs);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rInAttrs);
 
     void SetNumberFormatter( SvNumberFormatter* pFormatter );
 

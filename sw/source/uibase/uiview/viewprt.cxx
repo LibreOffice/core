@@ -174,10 +174,10 @@ namespace
 
 // TabPage for application-specific print options
 
-std::unique_ptr<SfxTabPage> SwView::CreatePrintOptionsPage(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwView::CreatePrintOptionsPage(weld::Container* pPage, weld::DialogController* pController,
                                                   const SfxItemSet& rSet)
 {
-    return ::CreatePrintOptionsPage(pParent, rSet, false);
+    return ::CreatePrintOptionsPage(pPage, pController, rSet, false);
 }
 
 // Print dispatcher
@@ -307,7 +307,7 @@ void SwView::NotifyCursor(SfxViewShell* pViewShell) const
 
 // Create page printer/additions for SwView and SwPagePreview
 
-std::unique_ptr<SfxTabPage> CreatePrintOptionsPage(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> CreatePrintOptionsPage(weld::Container* pPage, weld::DialogController* pController,
                                           const SfxItemSet &rOptions,
                                           bool bPreview)
 {
@@ -318,7 +318,7 @@ std::unique_ptr<SfxTabPage> CreatePrintOptionsPage(TabPageParent pParent,
     if (!fnCreatePage)
         return nullptr;
 
-    std::unique_ptr<SfxTabPage> xSfxPage = fnCreatePage(pParent, &rOptions);
+    std::unique_ptr<SfxTabPage> xSfxPage = fnCreatePage(pPage, pController, &rOptions);
     OSL_ENSURE(xSfxPage, "No page");
     if (!xSfxPage)
         return nullptr;

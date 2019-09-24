@@ -21,8 +21,8 @@
 #include <basic/codecompletecache.hxx>
 #include <officecfg/Office/BasicIDE.hxx>
 
-SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/optbasicidepage.ui", "OptBasicIDEPage", &rSet)
+SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optbasicidepage.ui", "OptBasicIDEPage", &rSet)
     , m_xCodeCompleteChk(m_xBuilder->weld_check_button("codecomplete_enable"))
     , m_xAutocloseProcChk(m_xBuilder->weld_check_button("autoclose_proc"))
     , m_xAutocloseParenChk(m_xBuilder->weld_check_button("autoclose_paren"))
@@ -118,9 +118,9 @@ void SvxBasicIDEOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
     m_xUseExtendedTypesChk->save_state();
 }
 
-std::unique_ptr<SfxTabPage> SvxBasicIDEOptionsPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> SvxBasicIDEOptionsPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<SvxBasicIDEOptionsPage>( pParent, *rAttrSet );
+    return std::make_unique<SvxBasicIDEOptionsPage>(pPage, pController, *rAttrSet);
 }
 
 void SvxBasicIDEOptionsPage::FillUserData()

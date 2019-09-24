@@ -404,7 +404,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     ApplyUsrPref( aViewOpt, pAppView, bTextDialog? SvViewOpt::DestText : SvViewOpt::DestWeb);
 }
 
-std::unique_ptr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet )
+std::unique_ptr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet )
 {
     std::unique_ptr<SfxTabPage> xRet;
     SfxAllItemSet aSet(*(rSet.GetPool()));
@@ -415,12 +415,12 @@ std::unique_ptr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, TabPagePare
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
-            xRet = (*fnCreatePage)( pParent, &rSet );
+            xRet = (*fnCreatePage)( pPage, pController, &rSet );
             break;
         }
         case RID_SW_TP_HTML_OPTGRID_PAGE:
         case RID_SVXPAGE_GRID:
-            xRet = SvxGridTabPage::Create(pParent, rSet);
+            xRet = SvxGridTabPage::Create(pPage, pController, rSet);
         break;
 
         case RID_SW_TP_STD_FONT:
@@ -429,7 +429,7 @@ std::unique_ptr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, TabPagePare
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
-            xRet = (*fnCreatePage)( pParent, &rSet );
+            xRet = (*fnCreatePage)( pPage, pController, &rSet );
             if(RID_SW_TP_STD_FONT != nId)
             {
                 aSet.Put (SfxUInt16Item(SID_FONTMODE_TYPE, RID_SW_TP_STD_FONT_CJK == nId ? FONT_GROUP_CJK : FONT_GROUP_CTL));
@@ -442,7 +442,7 @@ std::unique_ptr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, TabPagePare
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
-            xRet = (*fnCreatePage)( pParent, &rSet );
+            xRet = (*fnCreatePage)( pPage, pController, &rSet );
             aSet.Put (SfxBoolItem(SID_FAX_LIST, true));
             xRet->PageCreated(aSet);
         }
@@ -452,7 +452,7 @@ std::unique_ptr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, TabPagePare
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
-            xRet = (*fnCreatePage)( pParent, &rSet );
+            xRet = (*fnCreatePage)( pPage, pController, &rSet );
             SwView* pCurrView = GetView();
             if(pCurrView)
             {
@@ -477,7 +477,7 @@ std::unique_ptr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, TabPagePare
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
-            xRet = (*fnCreatePage)( pParent, &rSet );
+            xRet = (*fnCreatePage)( pPage, pController, &rSet );
             if (nId == RID_SW_TP_OPTSHDWCRSR || nId == RID_SW_TP_HTML_OPTSHDWCRSR)
             {
                 SwView* pCurrView = GetView();
@@ -493,21 +493,21 @@ std::unique_ptr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, TabPagePare
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
-            xRet = (*fnCreatePage)( pParent, &rSet );
+            xRet = (*fnCreatePage)( pPage, pController, &rSet );
             break;
         }
         case  RID_SW_TP_BACKGROUND:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND );
-            xRet = (*fnCreatePage)( pParent, &rSet );
+            xRet = (*fnCreatePage)( pPage, pController, &rSet );
             break;
         }
         case RID_SW_TP_OPTCAPTION_PAGE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SW_TP_OPTCAPTION_PAGE );
-            xRet = (*fnCreatePage)( pParent, &rSet );
+            xRet = (*fnCreatePage)( pPage, pController, &rSet );
         }
         break;
     }

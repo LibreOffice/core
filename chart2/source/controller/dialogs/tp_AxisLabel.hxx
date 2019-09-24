@@ -69,10 +69,10 @@ private:
     DECL_LINK(ToggleShowLabel, weld::ToggleButton&, void);
 
 public:
-    SchAxisLabelTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SchAxisLabelTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
     virtual ~SchAxisLabelTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rInAttrs );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rInAttrs );
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) override;
     virtual void Reset( const SfxItemSet* rInAttrs ) override;
 

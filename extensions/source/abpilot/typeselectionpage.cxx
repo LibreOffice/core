@@ -31,8 +31,8 @@ namespace abp
     using namespace ::com::sun::star::sdbc;
 
     // TypeSelectionPage
-    TypeSelectionPage::TypeSelectionPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent)
-      : AddressBookSourcePage(pDialog, pPageParent, "modules/sabpilot/ui/selecttypepage.ui", "SelectTypePage")
+    TypeSelectionPage::TypeSelectionPage(weld::Container* pPage, OAddressBookSourcePilot* pDialog)
+      : AddressBookSourcePage(pPage, pDialog, "modules/sabpilot/ui/selecttypepage.ui", "SelectTypePage")
       , m_xEvolution(m_xBuilder->weld_radio_button("evolution"))
       , m_xEvolutionGroupwise(m_xBuilder->weld_radio_button("groupwise"))
       , m_xEvolutionLdap(m_xBuilder->weld_radio_button("evoldap"))

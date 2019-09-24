@@ -55,6 +55,7 @@
 #include <brdwin.hxx>
 #include <helpwin.hxx>
 
+#include <com/sun/star/accessibility/AccessibleRelation.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>

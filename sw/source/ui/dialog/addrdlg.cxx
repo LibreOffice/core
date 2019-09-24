@@ -29,8 +29,7 @@ SwAddrDlg::SwAddrDlg(weld::Window* pParent, const SfxItemSet& rSet)
     if ( fnCreatePage )
     {
         // create TabPage
-        TabPageParent aParent(get_content_area(), this);
-        SetTabPage(fnCreatePage(aParent, &rSet));
+        SetTabPage(fnCreatePage(get_content_area(), this, &rSet));
     }
 }
 

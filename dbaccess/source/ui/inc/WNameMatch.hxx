@@ -59,7 +59,7 @@ namespace dbaui
         virtual bool            LeavePage() override;
         virtual OUString        GetTitle() const override ;
 
-        OWizNameMatching(OCopyTableWizard* pWizard, TabPageParent pParent);
+        OWizNameMatching(weld::Container* pPage, OCopyTableWizard* pWizard);
         virtual ~OWizNameMatching() override;
     };
 }

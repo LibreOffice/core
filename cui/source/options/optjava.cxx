@@ -65,8 +65,8 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
 // class SvxJavaOptionsPage ----------------------------------------------
-SvxJavaOptionsPage::SvxJavaOptionsPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/optadvancedpage.ui", "OptAdvancedPage", &rSet)
+SvxJavaOptionsPage::SvxJavaOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optadvancedpage.ui", "OptAdvancedPage", &rSet)
     , m_aResetIdle("cui options SvxJavaOptionsPage Reset")
     , xDialogListener(new ::svt::DialogClosedListener())
     , m_xJavaEnableCB(m_xBuilder->weld_check_button("javaenabled"))
@@ -469,9 +469,9 @@ void SvxJavaOptionsPage::RequestRestart(svtools::RestartReason eReason)
         pParentDlg->SetNeedsRestart(eReason);
 }
 
-std::unique_ptr<SfxTabPage> SvxJavaOptionsPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SvxJavaOptionsPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SvxJavaOptionsPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxJavaOptionsPage>(pPage, pController, *rAttrSet);
 }
 
 bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )

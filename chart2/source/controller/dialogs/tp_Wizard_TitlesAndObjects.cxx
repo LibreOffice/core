@@ -30,10 +30,10 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-TitlesAndObjectsTabPage::TitlesAndObjectsTabPage(TabPageParent pParent,
+TitlesAndObjectsTabPage::TitlesAndObjectsTabPage(weld::Container* pPage, weld::DialogController* pController,
                                                  const uno::Reference< XChartDocument >& xChartModel,
                                                  const uno::Reference< uno::XComponentContext >& xContext )
-    : OWizardPage(pParent, "modules/schart/ui/wizelementspage.ui", "WizElementsPage")
+    : OWizardPage(pPage, pController, "modules/schart/ui/wizelementspage.ui", "WizElementsPage")
     , m_xTitleResources(new TitleResources(*m_xBuilder, false))
     , m_xLegendPositionResources(new LegendPositionResources(*m_xBuilder, xContext))
     , m_xChartModel(xChartModel)

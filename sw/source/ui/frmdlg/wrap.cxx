@@ -57,16 +57,15 @@ SwWrapDlg::SwWrapDlg(weld::Window* pParent, SfxItemSet& rSet, SwWrtShell* pWrtSh
     : SfxSingleTabDialogController(pParent, &rSet, "modules/swriter/ui/wrapdialog.ui", "WrapDialog")
 {
     // create TabPage
-    TabPageParent pPageParent(get_content_area(), this);
-    auto xNewPage = SwWrapTabPage::Create(pPageParent, &rSet);
+    auto xNewPage = SwWrapTabPage::Create(get_content_area(), this, &rSet);
     SwWrapTabPage* pWrapPage = static_cast<SwWrapTabPage*>(xNewPage.get());
     pWrapPage->SetFormatUsed(false, bDrawMode);
     pWrapPage->SetShell(pWrtShell);
     SetTabPage(std::move(xNewPage));
 }
 
-SwWrapTabPage::SwWrapTabPage(TabPageParent pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/wrappage.ui", "WrapPage", &rSet)
+SwWrapTabPage::SwWrapTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/wrappage.ui", "WrapPage", &rSet)
     , m_nAnchorId(RndStdIds::FLY_AT_PARA)
     , m_nHtmlMode(0)
     , m_pWrtSh(nullptr)
@@ -113,9 +112,9 @@ SwWrapTabPage::~SwWrapTabPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SwWrapTabPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwWrapTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet)
 {
-    return std::make_unique<SwWrapTabPage>(pParent, *rSet);
+    return std::make_unique<SwWrapTabPage>(pPage, pController, *rSet);
 }
 
 void SwWrapTabPage::Reset(const SfxItemSet *rSet)

@@ -43,14 +43,14 @@ namespace dbaui
         DECL_LINK(OnEditModified, weld::Entry&, void);
 
     public:
-        OConnectionTabPageSetup(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId);
+        OConnectionTabPageSetup(weld::Container* pPage, weld::DialogController* pController, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId);
         virtual ~OConnectionTabPageSetup() override;
 
-        static std::unique_ptr<OGenericAdministrationPage> CreateDbaseTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
-        static std::unique_ptr<OGenericAdministrationPage> CreateMSAccessTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
-        static std::unique_ptr<OGenericAdministrationPage> CreateADOTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
-        static std::unique_ptr<OGenericAdministrationPage> CreateODBCTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
-        static std::unique_ptr<OGenericAdministrationPage> CreateUserDefinedTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> CreateDbaseTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> CreateMSAccessTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> CreateADOTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> CreateODBCTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> CreateUserDefinedTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet);
 
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 

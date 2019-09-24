@@ -133,8 +133,8 @@ private:
     void                UpdateDicBox_Impl();
 
 public:
-    SvxLinguTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    SvxLinguTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     virtual ~SvxLinguTabPage() override;
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

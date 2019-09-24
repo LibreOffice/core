@@ -900,7 +900,7 @@ sal_uInt16 SfxViewShell::SetPrinter( SfxPrinter* /*pNewPrinter*/, SfxPrinterChan
     return 0;
 }
 
-std::unique_ptr<SfxTabPage> SfxViewShell::CreatePrintOptionsPage(TabPageParent /*pParent*/, const SfxItemSet& /*rOptions*/)
+std::unique_ptr<SfxTabPage> SfxViewShell::CreatePrintOptionsPage(weld::Container*, weld::DialogController*, const SfxItemSet&)
 {
     return nullptr;
 }

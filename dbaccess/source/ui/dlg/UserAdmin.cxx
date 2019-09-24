@@ -108,8 +108,8 @@ IMPL_LINK(OPasswordDialog, ModifiedHdl, weld::Entry&, rEdit, void)
 }
 
 // OUserAdmin
-OUserAdmin::OUserAdmin(TabPageParent pParent,const SfxItemSet& _rAttrSet)
-    : OGenericAdministrationPage(pParent, "dbaccess/ui/useradminpage.ui", "UserAdminPage", _rAttrSet)
+OUserAdmin::OUserAdmin(weld::Container* pPage, weld::DialogController* pController,const SfxItemSet& _rAttrSet)
+    : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/useradminpage.ui", "UserAdminPage", _rAttrSet)
     , m_xUSER(m_xBuilder->weld_combo_box("user"))
     , m_xNEWUSER(m_xBuilder->weld_button("add"))
     , m_xCHANGEPWD(m_xBuilder->weld_button("changepass"))
@@ -180,9 +180,9 @@ void OUserAdmin::FillUserNames()
     m_xTableCtrl->Enable(m_xUsers.is());
 }
 
-std::unique_ptr<SfxTabPage> OUserAdmin::Create( TabPageParent pParent, const SfxItemSet* _rAttrSet )
+std::unique_ptr<SfxTabPage> OUserAdmin::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet )
 {
-    return std::make_unique<OUserAdmin>( pParent, *_rAttrSet );
+    return std::make_unique<OUserAdmin>( pPage, pController, *_rAttrSet );
 }
 
 IMPL_LINK(OUserAdmin, UserHdl, weld::Button&, rButton, void)

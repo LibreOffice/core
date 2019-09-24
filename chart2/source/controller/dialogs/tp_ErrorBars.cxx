@@ -26,15 +26,15 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-ErrorBarsTabPage::ErrorBarsTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "modules/schart/ui/tp_ErrorBars.ui", "tp_ErrorBars", &rInAttrs)
-    , m_aErrorBarResources(m_xBuilder.get(), pParent, rInAttrs, /* bNoneAvailable = */ false)
+ErrorBarsTabPage::ErrorBarsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "modules/schart/ui/tp_ErrorBars.ui", "tp_ErrorBars", &rInAttrs)
+    , m_aErrorBarResources(m_xBuilder.get(), pController, rInAttrs, /* bNoneAvailable = */ false)
 {
 }
 
-std::unique_ptr<SfxTabPage> ErrorBarsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+std::unique_ptr<SfxTabPage> ErrorBarsTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rOutAttrs)
 {
-    return std::make_unique<ErrorBarsTabPage>(pParent, *rOutAttrs);
+    return std::make_unique<ErrorBarsTabPage>(pPage, pController, *rOutAttrs);
 }
 
 bool ErrorBarsTabPage::FillItemSet( SfxItemSet* rOutAttrs )

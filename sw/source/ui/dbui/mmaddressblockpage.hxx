@@ -82,7 +82,7 @@ class SwMailMergeAddressBlockPage : public vcl::OWizardPage
     virtual bool        canAdvance() const override;
 
 public:
-    SwMailMergeAddressBlockPage(SwMailMergeWizard* pWizard, TabPageParent pParent);
+    SwMailMergeAddressBlockPage(weld::Container* pPage, SwMailMergeWizard* pWizard);
     virtual ~SwMailMergeAddressBlockPage() override;
     SwMailMergeWizard* GetWizard() { return m_pWizard; }
 };

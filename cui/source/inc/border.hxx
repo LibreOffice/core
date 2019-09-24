@@ -79,9 +79,9 @@ class SvxBorderTabPage : public SfxTabPage
     static const sal_uInt16 pRanges[];
 
 public:
-    SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
+    SvxBorderTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs);
     virtual ~SvxBorderTabPage() override;
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                 const SfxItemSet* rAttrSet);
     static const sal_uInt16*      GetRanges() { return pRanges; }
 

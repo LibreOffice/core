@@ -25,8 +25,8 @@
 
 namespace abp
 {
-    FieldMappingPage::FieldMappingPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent)
-        : AddressBookSourcePage(pDialog, pPageParent, "modules/sabpilot/ui/fieldassignpage.ui", "FieldAssignPage")
+    FieldMappingPage::FieldMappingPage(weld::Container* pPage, OAddressBookSourcePilot* pController)
+        : AddressBookSourcePage(pPage, pController, "modules/sabpilot/ui/fieldassignpage.ui", "FieldAssignPage")
         , m_xInvokeDialog(m_xBuilder->weld_button("assign"))
         , m_xHint(m_xBuilder->weld_label("hint"))
     {

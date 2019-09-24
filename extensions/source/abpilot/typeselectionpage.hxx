@@ -55,7 +55,7 @@ namespace abp
         std::vector< ButtonItem > m_aAllTypes;
 
     public:
-        explicit TypeSelectionPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent);
+        explicit TypeSelectionPage(weld::Container* pPage, OAddressBookSourcePilot* pController);
         virtual ~TypeSelectionPage() override;
 
         // retrieves the currently selected type

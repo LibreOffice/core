@@ -224,11 +224,11 @@ void SmModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     }
 }
 
-std::unique_ptr<SfxTabPage> SmModule::CreateTabPage( sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet )
+std::unique_ptr<SfxTabPage> SmModule::CreateTabPage( sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet )
 {
     std::unique_ptr<SfxTabPage> xRet;
     if (nId == SID_SM_TP_PRINTOPTIONS)
-        xRet = SmPrintOptionsTabPage::Create(pParent, rSet);
+        xRet = SmPrintOptionsTabPage::Create(pPage, pController, rSet);
     return xRet;
 }
 

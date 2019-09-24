@@ -65,11 +65,10 @@ namespace dbaui
     using namespace ::comphelper;
 
     // OTableSubscriptionPage
-    OTableSubscriptionPage::OTableSubscriptionPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs,
-        OTableSubscriptionDialog* _pTablesDlg)
-        : OGenericAdministrationPage(pParent, "dbaccess/ui/tablesfilterpage.ui", "TablesFilterPage", _rCoreAttrs)
+    OTableSubscriptionPage::OTableSubscriptionPage(weld::Container* pPage, OTableSubscriptionDialog* pTablesDlg, const SfxItemSet& _rCoreAttrs)
+        : OGenericAdministrationPage(pPage, pTablesDlg, "dbaccess/ui/tablesfilterpage.ui", "TablesFilterPage", _rCoreAttrs)
         , m_bCatalogAtStart(true)
-        , m_pTablesDlg(_pTablesDlg)
+        , m_pTablesDlg(pTablesDlg)
         , m_xTables(m_xBuilder->weld_widget("TablesFilterPage"))
         , m_xTablesList(new TableTreeListBox(m_xBuilder->weld_tree_view("treeview")))
     {

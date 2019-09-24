@@ -29,8 +29,8 @@ class SwFootNotePage: public SfxTabPage
 {
     static const sal_uInt16 aPageRg[];
 public:
-    SwFootNotePage(TabPageParent pParent, const SfxItemSet &rSet);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    SwFootNotePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet);
     virtual ~SwFootNotePage() override;
 
     static const sal_uInt16* GetRanges() { return aPageRg; }

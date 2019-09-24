@@ -47,10 +47,10 @@ class SvxAsianLayoutPage : public SfxTabPage
     DECL_LINK(ModifyHdl, weld::Entry&, void);
 
 public:
-    SvxAsianLayoutPage(TabPageParent pParent, const SfxItemSet& rSet );
+    SvxAsianLayoutPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet );
     virtual ~SvxAsianLayoutPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet );
     static const sal_uInt16*  GetRanges();
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

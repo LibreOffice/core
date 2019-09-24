@@ -66,8 +66,8 @@ SvxSaveTabPage_Impl::SvxSaveTabPage_Impl() : bInitialized( false )
 
 // class SvxSaveTabPage --------------------------------------------------
 
-SvxSaveTabPage::SvxSaveTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage( pParent, "cui/ui/optsavepage.ui", "OptSavePage", &rCoreSet )
+SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
+    : SfxTabPage( pPage, pController, "cui/ui/optsavepage.ui", "OptSavePage", &rCoreSet )
     , pImpl(new SvxSaveTabPage_Impl)
     , m_xLoadUserSettingsCB(m_xBuilder->weld_check_button("load_settings"))
     , m_xLoadDocPrinterCB(m_xBuilder->weld_check_button("load_docprinter"))
@@ -179,10 +179,10 @@ SvxSaveTabPage::~SvxSaveTabPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SvxSaveTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxSaveTabPage::Create(weld::Container* pPage, weld::DialogController* pController,
                                           const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SvxSaveTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxSaveTabPage>(pPage, pController, *rAttrSet);
 }
 
 void SvxSaveTabPage::DetectHiddenControls()

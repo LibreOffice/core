@@ -30,8 +30,8 @@
 
 #include <unotools/localedatawrapper.hxx>
 
-ScTpFormulaOptions::ScTpFormulaOptions(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-    : SfxTabPage(pParent, "modules/scalc/ui/optformula.ui", "OptFormula", &rCoreAttrs)
+ScTpFormulaOptions::ScTpFormulaOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+    : SfxTabPage(pPage, pController, "modules/scalc/ui/optformula.ui", "OptFormula", &rCoreAttrs)
     , mnDecSep(0)
     , mxLbFormulaSyntax(m_xBuilder->weld_combo_box("formulasyntax"))
     , mxCbEnglishFuncName(m_xBuilder->weld_check_button("englishfuncname"))
@@ -203,9 +203,9 @@ IMPL_LINK( ScTpFormulaOptions, SepEditOnFocusHdl, weld::Widget&, rControl, void 
     OnFocusSeparatorInput(dynamic_cast<weld::Entry*>(&rControl));
 }
 
-std::unique_ptr<SfxTabPage> ScTpFormulaOptions::Create(TabPageParent pParent, const SfxItemSet* rCoreSet)
+std::unique_ptr<SfxTabPage> ScTpFormulaOptions::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet)
 {
-    return std::make_unique<ScTpFormulaOptions>(pParent, *rCoreSet);
+    return std::make_unique<ScTpFormulaOptions>(pPage, pController, *rCoreSet);
 }
 
 bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)

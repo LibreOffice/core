@@ -55,11 +55,11 @@ class SwEnvFormatPage : public SfxTabPage
     SwEnvDlg    *GetParentSwEnvDlg() { return m_pDialog; }
 
 public:
-    SwEnvFormatPage(TabPageParent pParent, const SfxItemSet& rSet);
+    SwEnvFormatPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     void Init(SwEnvDlg* pDialog);
     virtual ~SwEnvFormatPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;

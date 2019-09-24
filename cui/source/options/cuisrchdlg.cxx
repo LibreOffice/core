@@ -32,8 +32,7 @@ SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(weld::Window *pParent,
 {
     // m_xPage will be implicitly destroyed by the
     // SfxSingleTabDialog destructor
-    TabPageParent pPageParent(get_content_area(), this);
-    SetTabPage(SvxJSearchOptionsPage::Create(pPageParent, &rOptionsSet)); //! implicitly calls m_xPage->Reset(...)!
+    SetTabPage(SvxJSearchOptionsPage::Create(get_content_area(), this, &rOptionsSet)); //! implicitly calls m_xPage->Reset(...)!
     m_pPage = static_cast<SvxJSearchOptionsPage*>(GetTabPage());
     m_pPage->EnableSaveOptions(false);
     m_pPage->SetTransliterationFlags(nInitialFlags);

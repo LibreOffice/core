@@ -61,33 +61,33 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-    std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateDbaseTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateDbaseTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
     {
-        return std::make_unique<OConnectionTabPageSetup>( pParent, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, STR_DBASE_HELPTEXT, STR_DBASE_HEADERTEXT, STR_DBASE_PATH_OR_FILE );
+        return std::make_unique<OConnectionTabPageSetup>( pPage, pController, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, STR_DBASE_HELPTEXT, STR_DBASE_HEADERTEXT, STR_DBASE_PATH_OR_FILE );
     }
 
-    std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateMSAccessTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateMSAccessTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
     {
-        return std::make_unique<OConnectionTabPageSetup>( pParent, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, STR_MSACCESS_HELPTEXT, STR_MSACCESS_HEADERTEXT, STR_MSACCESS_MDB_FILE );
+        return std::make_unique<OConnectionTabPageSetup>( pPage, pController, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, STR_MSACCESS_HELPTEXT, STR_MSACCESS_HEADERTEXT, STR_MSACCESS_MDB_FILE );
     }
 
-    std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateADOTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateADOTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
     {
-        return std::make_unique<OConnectionTabPageSetup>( pParent, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, STR_ADO_HELPTEXT, STR_ADO_HEADERTEXT, STR_COMMONURL );
+        return std::make_unique<OConnectionTabPageSetup>( pPage, pController, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, STR_ADO_HELPTEXT, STR_ADO_HEADERTEXT, STR_COMMONURL );
     }
 
-    std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateODBCTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateODBCTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
     {
-        return std::make_unique<OConnectionTabPageSetup>( pParent, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, STR_ODBC_HELPTEXT, STR_ODBC_HEADERTEXT, STR_NAME_OF_ODBC_DATASOURCE );
+        return std::make_unique<OConnectionTabPageSetup>( pPage, pController, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, STR_ODBC_HELPTEXT, STR_ODBC_HEADERTEXT, STR_NAME_OF_ODBC_DATASOURCE );
     }
 
-    std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateUserDefinedTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateUserDefinedTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
     {
-        return std::make_unique<OConnectionTabPageSetup>(pParent, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, nullptr, nullptr, STR_COMMONURL);
+        return std::make_unique<OConnectionTabPageSetup>(pPage, pController, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, nullptr, nullptr, STR_COMMONURL);
     }
 
-    OConnectionTabPageSetup::OConnectionTabPageSetup(TabPageParent pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId)
-        : OConnectionHelper(pParent, _rUIXMLDescription, _rId, _rCoreAttrs)
+    OConnectionTabPageSetup::OConnectionTabPageSetup(weld::Container* pPage, weld::DialogController* pController, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId)
+        : OConnectionHelper(pPage, pController, _rUIXMLDescription, _rId, _rCoreAttrs)
         , m_xHelpText(m_xBuilder->weld_label("helptext"))
         , m_xHeaderText(m_xBuilder->weld_label("header"))
     {

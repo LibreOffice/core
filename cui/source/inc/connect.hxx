@@ -58,10 +58,10 @@ private:
 
 public:
 
-    SvxConnectionPage(TabPageParent pWindow, const SfxItemSet& rInAttrs);
+    SvxConnectionPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
     virtual ~SvxConnectionPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) override;

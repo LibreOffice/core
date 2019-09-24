@@ -39,8 +39,7 @@ SwBorderDlg::SwBorderDlg(weld::Window* pParent, SfxItemSet& rSet, SwBorderModes 
 
     if (fnCreatePage)
     {
-        TabPageParent pPageParent(get_content_area(), this);
-        std::unique_ptr<SfxTabPage> xNewPage = (*fnCreatePage)(pPageParent, &rSet);
+        std::unique_ptr<SfxTabPage> xNewPage = (*fnCreatePage)(get_content_area(), this, &rSet);
         SfxAllItemSet aSet(*(rSet.GetPool()));
         aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE, static_cast<sal_uInt16>(nType)));
         if(SwBorderModes::TABLE == nType)

@@ -28,8 +28,10 @@
 #include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
 #include <svx/fmshell.hxx>
+#include <vcl/vclevent.hxx>
 
 #include <iterator>
+#include <list>
 #include <unordered_map>
 
 namespace sd {
