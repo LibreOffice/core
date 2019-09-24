@@ -79,9 +79,11 @@ SvxColorTabPage::SvxColorTabPage(TabPageParent pParent, const SfxItemSet& rInAtt
     , m_xValSetColorListWin(new weld::CustomWeld(*m_xBuilder, "colorset", *m_xValSetColorList))
     , m_xValSetRecentListWin(new weld::CustomWeld(*m_xBuilder, "recentcolorset", *m_xValSetRecentList))
 {
-    Size aSize = LogicToPixel(Size(100 , 80), MapMode(MapUnit::MapAppFont));
+    Size aSize(m_xBtnWorkOn->get_approximate_digit_width() * 25,
+               m_xBtnWorkOn->get_text_height() * 10);
     m_xValSetColorList->set_size_request(aSize.Width(), aSize.Height());
-    aSize = LogicToPixel(Size(34 , 25), MapMode(MapUnit::MapAppFont));
+    aSize = Size(m_xBtnWorkOn->get_approximate_digit_width() * 8,
+                 m_xBtnWorkOn->get_text_height() * 3);
     m_aCtlPreviewOld.set_size_request(aSize.Width(), aSize.Height());
     m_aCtlPreviewNew.set_size_request(aSize.Width(), aSize.Height());
     // this page needs ExchangeSupport
