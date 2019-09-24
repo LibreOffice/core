@@ -1776,68 +1776,8 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
     }
     else
     {
-        // Copy the area in itself
-        // Special case for handling an area with several nodes,
-        // or a single node that is not a TextNode
-        OSL_ENSURE( &m_rDoc == pDoc, " invalid copy branch!" );
+        // Copy the range in itself
         assert(!"mst: this is assumed to be dead code");
-        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
-
-        // Then copy the area to the underlying document area
-        // (with start/end nodes clamped) and move them to
-        // the desired position.
-
-        std::unique_ptr<SwUndoCpyDoc> pUndo;
-        // Save the Undo area
-        SwPaM aPam( rPos );
-        if (pDoc->GetIDocumentUndoRedo().DoesUndo())
-        {
-            pDoc->GetIDocumentUndoRedo().ClearRedo();
-            pUndo.reset(new SwUndoCpyDoc( aPam ));
-        }
-
-        {
-            ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-            SwStartNode* pSttNd = SwNodes::MakeEmptySection(
-                                SwNodeIndex( m_rDoc.GetNodes().GetEndOfAutotext() ));
-            aPam.GetPoint()->nNode = *pSttNd->EndOfSectionNode();
-            // copy without Frames
-            pDoc->GetDocumentContentOperationsManager().CopyImpl( rPam, *aPam.GetPoint(), false, bCopyAll, nullptr );
-
-            aPam.GetPoint()->nNode = pDoc->GetNodes().GetEndOfAutotext();
-            aPam.SetMark();
-            SwContentNode* pNode = SwNodes::GoPrevious( &aPam.GetMark()->nNode );
-            pNode->MakeEndIndex( &aPam.GetMark()->nContent );
-
-            aPam.GetPoint()->nNode = *aPam.GetNode().StartOfSectionNode();
-            pNode = pDoc->GetNodes().GoNext( &aPam.GetPoint()->nNode );
-            pNode->MakeStartIndex( &aPam.GetPoint()->nContent );
-            // move to desired position
-            pDoc->getIDocumentContentOperations().MoveRange( aPam, rPos, SwMoveFlags::DEFAULT );
-
-            pNode = aPam.GetContentNode();
-            *aPam.GetPoint() = rPos;      // Move the cursor for Undo
-            aPam.SetMark();               // also move the Mark
-            aPam.DeleteMark();            // But don't mark any area
-            pDoc->getIDocumentContentOperations().DeleteSection( pNode ); // Delete the area again
-        }
-
-        // if Undo is enabled, store the insertion range
-        if (pDoc->GetIDocumentUndoRedo().DoesUndo())
-        {
-            pUndo->SetInsertRange( aPam );
-            pDoc->GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
-        }
-
-        if( pRedlineRange )
-        {
-            pRedlineRange->SetMark();
-            *pRedlineRange->GetPoint() = *aPam.GetPoint();
-            *pRedlineRange->GetMark() = *aPam.GetMark();
-        }
-
-        pDoc->getIDocumentState().SetModified();
-        bRet = true;
     }
 
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
@@ -2205,79 +2145,27 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
 
     rPaM.SetMark();         // create a Sel. around the new range
     pTNd = aSavePam.GetNode().GetTextNode();
-    if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
+    assert(!m_rDoc.GetIDocumentUndoRedo().DoesUndo());
+    bool bRemove = true;
+    // Do two Nodes have to be joined at the SavePam?
+    if (bSplit && pTNd)
     {
-        assert(!"mst: this is assumed to be dead code");
-
-        // correct the SavePam's Content first
-        if( bNullContent )
+        if (pTNd->CanJoinNext())
         {
-            aSavePam.GetPoint()->nContent = 0;
-        }
-
-        // The method SwEditShell::Move() merges the TextNode after the Move,
-        // where the rPaM is located.
-        // If the Content was moved to the back and the SavePam's SPoint is
-        // in the next Node, we have to deal with this when saving the Undo object!
-        SwTextNode * pPamTextNd = nullptr;
-
-        // Is passed to SwUndoMove, which happens when subsequently calling Undo JoinNext.
-        // If it's not possible to call Undo JoinNext here.
-        bool bJoin = bSplit && pTNd;
-        if( bCorrSavePam )
-        {
-            pPamTextNd = rPaM.GetNode().GetTextNode();
-            bCorrSavePam = (pPamTextNd != nullptr)
-                            && pPamTextNd->CanJoinNext()
-                            && (*rPaM.GetPoint() <= *aSavePam.GetPoint());
-        }
-
-        // Do two Nodes have to be joined at the SavePam?
-        if( bJoin && pTNd->CanJoinNext() )
-        {
+            // Always join next, because <pTNd> has to stay as it is.
+            // A join previous from its next would more or less delete <pTNd>
             pTNd->JoinNext();
-            // No temporary Index when using &&.
-            // We probably only want to compare the indices.
-            if( bCorrSavePam && rPaM.GetPoint()->nNode.GetIndex()+1 ==
-                                aSavePam.GetPoint()->nNode.GetIndex() )
-            {
-                aSavePam.GetPoint()->nContent += pPamTextNd->Len();
-            }
-            bJoin = false;
+            bRemove = false;
         }
-        else if ( !aSavePam.Move( fnMoveForward, GoInContent ) )
-        {
-            aSavePam.GetPoint()->nNode++;
-        }
-
-        // The newly inserted range is now inbetween SPoint and GetMark.
-        pUndoMove->SetDestRange( aSavePam, *rPaM.GetPoint(),
-                                    bJoin, bCorrSavePam );
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::move(pUndoMove) );
     }
-    else
+    if (bNullContent)
     {
-        bool bRemove = true;
-        // Do two Nodes have to be joined at the SavePam?
-        if( bSplit && pTNd )
-        {
-            if( pTNd->CanJoinNext())
-            {
-                // Always join next, because <pTNd> has to stay as it is.
-                // A join previous from its next would more or less delete <pTNd>
-                pTNd->JoinNext();
-                bRemove = false;
-            }
-        }
-        if( bNullContent )
-        {
-            aSavePam.GetPoint()->nNode++;
-            aSavePam.GetPoint()->nContent.Assign( aSavePam.GetContentNode(), 0 );
-        }
-        else if( bRemove ) // No move forward after joining with next paragraph
-        {
-            aSavePam.Move( fnMoveForward, GoInContent );
-        }
+        aSavePam.GetPoint()->nNode++;
+        aSavePam.GetPoint()->nContent.Assign( aSavePam.GetContentNode(), 0 );
+    }
+    else if (bRemove) // No move forward after joining with next paragraph
+    {
+        aSavePam.Move( fnMoveForward, GoInContent );
     }
 
     // Insert the Bookmarks back into the Document.
