@@ -2356,6 +2356,7 @@ shrink-to-fit
 wrap-influence-on-position
 once-successive
 once-concurrent
+allow-overlap
 N_OFFICE_OOO_DUMMY
 N_META_OOO_DUMMY
 N_STYLE_OOO_DUMMY

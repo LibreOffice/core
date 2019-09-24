@@ -2494,6 +2494,7 @@ namespace xmloff { namespace token {
         // Tokens have been renamed and <XML_ITERATIVE> has been added (#i35017#)
         XML_ONCE_SUCCESSIVE,
         XML_ONCE_CONCURRENT,
+        XML_ALLOW_OVERLAP,
 
         // Names for OOo format only
         XML_N_OFFICE_OOO,

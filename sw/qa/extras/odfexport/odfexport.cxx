@@ -2093,6 +2093,17 @@ DECLARE_ODFEXPORT_TEST(testRubyPosition, "ruby-position.odt")
     }
 }
 
+DECLARE_ODFEXPORT_TEST(testAllowOverlap, "allow-overlap.odt")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expression: !getProperty<bool>(xShape, "AllowOverlap")
+    // i.e. the custom AllowOverlap=false shape property was lost on import/export.
+    CPPUNIT_ASSERT(!getProperty<bool>(xShape, "AllowOverlap"));
+    xShape = getShape(2);
+    CPPUNIT_ASSERT(!getProperty<bool>(xShape, "AllowOverlap"));
+}
+
 DECLARE_ODFEXPORT_TEST(testSignatureLineProperties, "signatureline-properties.fodt")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);

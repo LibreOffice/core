@@ -2494,6 +2494,7 @@ namespace xmloff { namespace token {
         // Tokens have been renamed and <XML_ITERATIVE> has been added (#i35017#)
         TOKEN( "once-successive",                       XML_ONCE_SUCCESSIVE ),
         TOKEN( "once-concurrent",                       XML_ONCE_CONCURRENT ),
+        TOKEN( "allow-overlap",                         XML_ALLOW_OVERLAP ),
 
         // Names for OOo format only
         TOKEN( "http://openoffice.org/2000/office",     XML_N_OFFICE_OOO ),
