@@ -914,6 +914,12 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
             <rng:ref name="nonNegativeInteger"/>
           </rng:attribute>
         </rng:optional>
+        <!-- TODO no proposal -->
+        <rng:optional>
+          <rng:attribute name="loext:allow-overlap">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
       </rng:interleave>
     </rng:define>
 
