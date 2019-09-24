@@ -51,6 +51,8 @@ interface XCalendar4 : com::sun::star::i18n::XCalendar3
 
     /** Load the default calendar for the given locale with a given time zone.
 
+        @param  rLocale
+                the locale for the calendar
         @param  TimeZone
                 If empty, the system's time zone is used.
                 Else specified as "Region/City" name like "Europe/Berlin",
@@ -62,6 +64,14 @@ interface XCalendar4 : com::sun::star::i18n::XCalendar3
 
     /** Load a specific calendar for the given locale with a given time zone.
 
+        @param  uniqueID
+                the uniqueID for the calendar.
+                As of 2019-09-25, we can specify ROC, dangi, buddhist, gengou,
+                gregorian, hanja, hanja_yoil, hijri, jewish.
+                If the calendar for the specified uniqueID is not found,
+                gregorian is used.
+        @param  rLocale
+                the locale for the calendar
         @param  TimeZone
                 If empty, the system's time zone is used.
                 Else specified as "Region/City" name like "Europe/Berlin",
