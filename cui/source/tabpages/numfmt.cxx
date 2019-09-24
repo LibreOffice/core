@@ -222,7 +222,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(TabPageParent pParent,
     for (size_t i = 0; i < SAL_N_ELEMENTS(NUM_CATEGORIES); ++i)
         m_xLbCategory->append_text(CuiResId(NUM_CATEGORIES[i]));
 
-    auto nWidth = approximate_char_width() * 26;
+    auto nWidth = m_xLbCategory->get_approximate_digit_width() * 22;
     m_xLbCategory->set_size_request(nWidth, m_xLbCategory->get_height_rows(7));
     m_xLbFormat->set_size_request(nWidth, m_xLbFormat->get_height_rows(5));
     m_xLbCurrency->set_size_request(nWidth, -1);  // force using (narrower) width of its LbFormat sibling
