@@ -184,6 +184,7 @@ public:
 
 #ifdef DBG_UTIL
     void dump(const char* file) const;
+    void dump(const SkBitmap& bitmap, const char* file) const;
 #endif
 
 protected:

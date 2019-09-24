@@ -90,6 +90,8 @@ void SkiaSalGraphicsImpl::drawPixel(long nX, long nY, Color nColor)
     SkCanvas* canvas = mSurface->getCanvas();
     SkPaint paint(mPaint);
     paint.setColor(toSkColor(nColor));
+    // Apparently drawPixel() is actually expected to set the pixel and not draw it.
+    paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
     canvas->drawPoint(nX, nY, paint);
 }
 
@@ -307,16 +309,16 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSourceBitmap));
     assert(dynamic_cast<const SkiaSalBitmap*>(&rAlphaBitmap));
     SkBitmap tmpBitmap;
-    if (!tmpBitmap.tryAllocPixels(SkImageInfo::Make(rSourceBitmap.GetSize().Width(),
-                                                    rSourceBitmap.GetSize().Height(),
-                                                    kN32_SkColorType, kUnpremul_SkAlphaType)))
+    if (!tmpBitmap.tryAllocN32Pixels(rSourceBitmap.GetSize().Width(),
+                                     rSourceBitmap.GetSize().Height()))
         return false;
     SkCanvas canvas(tmpBitmap);
     SkPaint paint;
-    paint.setBlendMode(SkBlendMode::kDst);
-    canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rSourceBitmap).GetSkBitmap(), 0, 0, &paint);
+    paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
+    canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rAlphaBitmap).GetAlphaSkBitmap(), 0, 0,
+                      &paint);
     paint.setBlendMode(SkBlendMode::kSrcIn);
-    canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rAlphaBitmap).GetSkBitmap(), 0, 0, &paint);
+    canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rSourceBitmap).GetSkBitmap(), 0, 0, &paint);
     mSurface->getCanvas()->drawBitmapRect(
         tmpBitmap,
         SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
@@ -363,6 +365,14 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolygon,
 void SkiaSalGraphicsImpl::dump(const char* file) const
 {
     sk_sp<SkImage> image = mSurface->makeImageSnapshot();
+    sk_sp<SkData> data = image->encodeToData();
+    std::ofstream ostream(file, std::ios::binary);
+    ostream.write(static_cast<const char*>(data->data()), data->size());
+}
+
+void SkiaSalGraphicsImpl::dump(const SkBitmap& bitmap, const char* file) const
+{
+    sk_sp<SkImage> image = SkImage::MakeFromBitmap(bitmap);
     sk_sp<SkData> data = image->encodeToData();
     std::ofstream ostream(file, std::ios::binary);
     ostream.write(static_cast<const char*>(data->data()), data->size());
