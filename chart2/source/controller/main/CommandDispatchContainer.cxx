@@ -28,6 +28,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
+#include <o3tl/sorted_vector.hxx>
+
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
@@ -67,7 +69,7 @@ void CommandDispatchContainer::setChartDispatch(
 Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
     const util::URL & rURL )
 {
-    static const std::set< OUString >  s_aContainerDocumentCommands {
+    static const o3tl::sorted_vector< OUString >  s_aContainerDocumentCommands {
         "AddDirect",    "NewDoc",             "Open",
         "Save",         "SaveAs",             "SendMail",
         "EditDoc",      "ExportDirectToPDF",  "PrintDefault"};
