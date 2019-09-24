@@ -139,21 +139,6 @@ void BitmapTest::testCreation()
     }
 
     {
-        Bitmap aBmp(Size(10, 10), 16);
-        Size aSize = aBmp.GetSizePixel();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<long>(10), aSize.Width());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<long>(10), aSize.Height());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
-        CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(24),
-                                     aBmp.GetBitCount());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", sal_Int64(16777216),
-                                     aBmp.GetColorCount());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(300),
-                                     aBmp.GetSizeBytes());
-    }
-
-    {
         Bitmap aBmp(Size(10, 10), 24);
         Size aSize = aBmp.GetSizePixel();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<long>(10), aSize.Width());
