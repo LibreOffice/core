@@ -687,6 +687,23 @@ DECLARE_OOXMLIMPORT_TEST(testTdf105975formula, "tdf105975.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("25"), xEnumerationAccess->getPresentation(false).trim());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf107784, "tdf107784.docx")
+{
+    // Make sure the field displays the citation's title and not the identifier
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    if( !xFields->hasMoreElements() ) {
+        CPPUNIT_ASSERT(false);
+        return;
+    }
+
+    uno::Reference<text::XTextField> xEnumerationAccess(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Bibliography entry"), xEnumerationAccess->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("(Smith, 1950)"), xEnumerationAccess->getPresentation(false).trim());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf115883, "tdf115883.docx")
 {
     // Import failed due to an unhandled exception when getting the Surround
