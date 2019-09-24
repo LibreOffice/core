@@ -70,7 +70,7 @@ protected:
     bool bDocModified, bAppEvents, bInitialized;
     EventDisplayNames aDisplayNames;
 
-    SvxMacroTabPage_(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rItemSet);
+    SvxMacroTabPage_(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rItemSet);
 
     void                        EnableButtons();
     static css::uno::Any  GetPropsByName( const OUString& eventName, EventsHash& eventsHash );
@@ -95,7 +95,7 @@ class SvxMacroTabPage : public SvxMacroTabPage_
 {
 public:
     SvxMacroTabPage(
-        TabPageParent pParent,
+        weld::Container* pPage, weld::DialogController* pController,
         const css::uno::Reference< css::frame::XFrame >& _rxDocumentFrame,
         const SfxItemSet& rSet,
         css::uno::Reference< css::container::XNameReplace > const & xNameReplace,

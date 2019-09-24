@@ -58,8 +58,8 @@ class OUserAdmin final : public OGenericAdministrationPage
     void        FillUserNames();
 
 public:
-    OUserAdmin(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    OUserAdmin(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet);
     virtual ~OUserAdmin() override;
 
     OUString GetUser() const;

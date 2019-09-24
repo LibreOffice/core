@@ -25,8 +25,8 @@
 class ScDocStatPage: public SfxTabPage
 {
 public:
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
-    ScDocStatPage(TabPageParent pParent, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
+    ScDocStatPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~ScDocStatPage() override;
 
 protected:

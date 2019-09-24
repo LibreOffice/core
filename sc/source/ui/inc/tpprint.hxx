@@ -29,8 +29,8 @@ class ScTpPrintOptions : public SfxTabPage
     std::unique_ptr<weld::CheckButton>       m_xForceBreaksCB;
 
 public:
-    ScTpPrintOptions(TabPageParent pPage, const SfxItemSet& rCoreSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rCoreSet );
+    ScTpPrintOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet );
     virtual ~ScTpPrintOptions() override;
 
     virtual bool        FillItemSet( SfxItemSet* rCoreSet ) override;

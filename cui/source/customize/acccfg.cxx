@@ -814,8 +814,8 @@ IMPL_LINK(SfxAcceleratorConfigPage, KeyInputHdl, const KeyEvent&, rKey, bool)
     return false;
 }
 
-SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(TabPageParent pParent, const SfxItemSet& aSet )
-    : SfxTabPage(pParent, "cui/ui/accelconfigpage.ui", "AccelConfigPage", &aSet)
+SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& aSet )
+    : SfxTabPage(pPage, pController, "cui/ui/accelconfigpage.ui", "AccelConfigPage", &aSet)
     , m_pMacroInfoItem()
     , aLoadAccelConfigStr(CuiResId(RID_SVXSTR_LOADACCELCONFIG))
     , aSaveAccelConfigStr(CuiResId(RID_SVXSTR_SAVEACCELCONFIG))

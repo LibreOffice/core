@@ -32,11 +32,11 @@
 #include <svx/colorbox.hxx>
 #include <svtools/unitconv.hxx>
 
-ScTpContentOptions::ScTpContentOptions(TabPageParent pParent, const SfxItemSet&  rArgSet)
-    : SfxTabPage(pParent, "modules/scalc/ui/tpviewpage.ui", "TpViewPage", &rArgSet)
+ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&  rArgSet)
+    : SfxTabPage(pPage, pController, "modules/scalc/ui/tpviewpage.ui", "TpViewPage", &rArgSet)
     , m_xGridLB(m_xBuilder->weld_combo_box("grid"))
     , m_xColorFT(m_xBuilder->weld_label("color_label"))
-    , m_xColorLB(new ColorListBox(m_xBuilder->weld_menu_button("color"), pParent.GetFrameWeld()))
+    , m_xColorLB(new ColorListBox(m_xBuilder->weld_menu_button("color"), pController->getDialog()))
     , m_xBreakCB(m_xBuilder->weld_check_button("break"))
     , m_xGuideLineCB(m_xBuilder->weld_check_button("guideline"))
     , m_xFormulaCB(m_xBuilder->weld_check_button("formula"))
@@ -90,10 +90,10 @@ ScTpContentOptions::~ScTpContentOptions()
     m_xColorLB.reset();
 }
 
-std::unique_ptr<SfxTabPage> ScTpContentOptions::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ScTpContentOptions::Create( weld::Container* pPage, weld::DialogController* pController,
                                                const SfxItemSet*     rCoreSet )
 {
-    return std::make_unique<ScTpContentOptions>(pParent, *rCoreSet);
+    return std::make_unique<ScTpContentOptions>(pPage, pController, *rCoreSet);
 }
 
 bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
@@ -300,8 +300,8 @@ IMPL_LINK( ScTpContentOptions, GridHdl, weld::ComboBox&, rLb, void )
     m_xLocalOptions->SetOption( VOPT_GRID_ONTOP, bGridOnTop );
 }
 
-ScTpLayoutOptions::ScTpLayoutOptions(TabPageParent pParent, const SfxItemSet& rArgSet)
-    : SfxTabPage(pParent, "modules/scalc/ui/scgeneralpage.ui", "ScGeneralPage", &rArgSet)
+ScTpLayoutOptions::ScTpLayoutOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet)
+    : SfxTabPage(pPage, pController, "modules/scalc/ui/scgeneralpage.ui", "ScGeneralPage", &rArgSet)
     , pDoc(nullptr)
     , m_xUnitLB(m_xBuilder->weld_combo_box("unitlb"))
     , m_xTabMF(m_xBuilder->weld_metric_spin_button("tabmf", FieldUnit::CM))
@@ -353,10 +353,10 @@ ScTpLayoutOptions::~ScTpLayoutOptions()
 {
 }
 
-std::unique_ptr<SfxTabPage> ScTpLayoutOptions::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> ScTpLayoutOptions::Create( weld::Container* pPage, weld::DialogController* pController,
                                               const SfxItemSet*   rCoreSet )
 {
-    auto xNew = std::make_unique<ScTpLayoutOptions>(pParent, *rCoreSet);
+    auto xNew = std::make_unique<ScTpLayoutOptions>(pPage, pController, *rCoreSet);
 
     ScDocShell* pDocSh = dynamic_cast< ScDocShell *>( SfxObjectShell::Current() );
     if (pDocSh!=nullptr)

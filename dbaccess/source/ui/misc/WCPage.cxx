@@ -48,8 +48,8 @@ using namespace ::com::sun::star::sdbcx;
 
 namespace CopyTableOperation = css::sdb::application::CopyTableOperation;
 
-OCopyTable::OCopyTable(OCopyTableWizard* pWizard, TabPageParent pParent)
-    : OWizardPage(pWizard, pParent, "dbaccess/ui/copytablepage.ui", "CopyTablePage")
+OCopyTable::OCopyTable(weld::Container* pPage, OCopyTableWizard* pWizard)
+    : OWizardPage(pPage, pWizard, "dbaccess/ui/copytablepage.ui", "CopyTablePage")
     , m_bPKeyAllowed(false)
     , m_bUseHeaderAllowed(true)
     , m_nOldOperation(0)

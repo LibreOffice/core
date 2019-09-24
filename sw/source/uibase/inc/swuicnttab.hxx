@@ -204,7 +204,7 @@ class SwTOXSelectTabPage : public SfxTabPage
     void FillTOXDescription();
 
 public:
-    SwTOXSelectTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
+    SwTOXSelectTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet);
     virtual ~SwTOXSelectTabPage() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
@@ -213,7 +213,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                 const SfxItemSet* rAttrSet);
 
     void                SelectType(TOXTypes eSet);  //preset TOXType, GlobalDoc
@@ -382,7 +382,7 @@ class SwTOXEntryTabPage : public SfxTabPage
     DECL_LINK(ModifyClickHdl, weld::ToggleButton&, void);
 
 public:
-    SwTOXEntryTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
+    SwTOXEntryTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet);
     virtual ~SwTOXEntryTabPage() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
@@ -390,7 +390,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                        const SfxItemSet* rAttrSet);
     void                SetWrtShell(SwWrtShell& rSh);
 
@@ -422,7 +422,7 @@ class SwTOXStylesTabPage : public SfxTabPage
     }
 
 public:
-    SwTOXStylesTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
+    SwTOXStylesTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet);
     virtual ~SwTOXStylesTabPage() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
@@ -431,7 +431,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                        const SfxItemSet* rAttrSet);
 
 };

@@ -43,8 +43,8 @@ namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOper
 
 OUString OWizColumnSelect::GetTitle() const { return DBA_RES(STR_WIZ_COLUMN_SELECT_TITEL); }
 
-OWizardPage::OWizardPage(OCopyTableWizard* pWizard, TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID)
-    : ::vcl::OWizardPage(pParent, rUIXMLDescription, rID)
+OWizardPage::OWizardPage(weld::Container* pPage, OCopyTableWizard* pWizard, const OUString& rUIXMLDescription, const OString& rID)
+    : ::vcl::OWizardPage(pPage, pWizard, rUIXMLDescription, rID)
     , m_pParent(pWizard)
     , m_bFirstTime(true)
 {
@@ -55,8 +55,8 @@ OWizardPage::~OWizardPage()
 }
 
 // OWizColumnSelect
-OWizColumnSelect::OWizColumnSelect(OCopyTableWizard* pWizard, TabPageParent pParent)
-    : OWizardPage(pWizard, pParent, "dbaccess/ui/applycolpage.ui", "ApplyColPage")
+OWizColumnSelect::OWizColumnSelect(weld::Container* pPage, OCopyTableWizard* pWizard)
+    : OWizardPage(pPage, pWizard, "dbaccess/ui/applycolpage.ui", "ApplyColPage")
     , m_xOrgColumnNames(m_xBuilder->weld_tree_view("from"))
     , m_xColumn_RH(m_xBuilder->weld_button("colrh"))
     , m_xColumns_RH(m_xBuilder->weld_button("colsrh"))

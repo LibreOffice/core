@@ -39,7 +39,7 @@ ScTpPrintOptions::~ScTpPrintOptions()
 {
 }
 
-std::unique_ptr<SfxTabPage> ScTpPrintOptions::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> ScTpPrintOptions::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
     return std::make_unique<ScTpPrintOptions>(pParent, *rAttrSet);
 }

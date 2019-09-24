@@ -29,8 +29,8 @@
 class SdTpOptionsSnap : public SvxGridTabPage
 {
 public:
-    SdTpOptionsSnap(TabPageParent pParent, const SfxItemSet& rInAttrs);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    SdTpOptionsSnap(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
     virtual ~SdTpOptionsSnap() override;
 
     virtual bool FillItemSet( SfxItemSet* ) override;
@@ -49,8 +49,8 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbxMoveOutline;
 
 public:
-    SdTpOptionsContents(TabPageParent pParent, const SfxItemSet& rInAttrs);
-    static  std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    SdTpOptionsContents(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
+    static  std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
     virtual ~SdTpOptionsContents() override;
 
     virtual bool FillItemSet( SfxItemSet* ) override;
@@ -122,7 +122,7 @@ protected:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    SdTpOptionsMisc(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SdTpOptionsMisc(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
     static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual ~SdTpOptionsMisc() override;
 

@@ -157,7 +157,7 @@ class SwInsertSectionTabPage : public SfxTabPage
     DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper*, void );
 
 public:
-    SwInsertSectionTabPage(TabPageParent pParent, const SfxItemSet &rAttrSet);
+    SwInsertSectionTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rAttrSet);
     virtual ~SwInsertSectionTabPage() override;
 
     void    SetWrtShell(SwWrtShell& rSh);
@@ -165,7 +165,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                 const SfxItemSet* rAttrSet);
 };
 
@@ -196,13 +196,13 @@ class SwSectionFootnoteEndTabPage : public SfxTabPage
     void ResetState( bool bFootnote, const SwFormatFootnoteEndAtTextEnd& );
 
 public:
-    SwSectionFootnoteEndTabPage(TabPageParent pParent, const SfxItemSet &rAttrSet);
+    SwSectionFootnoteEndTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rAttrSet);
     virtual ~SwSectionFootnoteEndTabPage() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                 const SfxItemSet* rAttrSet);
 };
 
@@ -215,13 +215,13 @@ class SwSectionIndentTabPage : public SfxTabPage
 
     DECL_LINK(IndentModifyHdl, weld::MetricSpinButton&, void);
 public:
-    SwSectionIndentTabPage(TabPageParent pParent, const SfxItemSet &rAttrSet);
+    SwSectionIndentTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rAttrSet);
     virtual ~SwSectionIndentTabPage() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
 
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet);
 
     void    SetWrtShell(SwWrtShell const & rSh);
 };

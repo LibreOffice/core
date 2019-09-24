@@ -32,7 +32,7 @@ namespace dbaui
         OCopyTableWizard*       m_pParent;
         bool                    m_bFirstTime;   // Page is called the first time; should be set in the reset method
 
-        OWizardPage(OCopyTableWizard* pWizard, TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID);
+        OWizardPage(weld::Container* pPage, OCopyTableWizard* pWizard, const OUString& rUIXMLDescription, const OString& rID);
 
     public:
         virtual ~OWizardPage() override;

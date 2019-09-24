@@ -45,7 +45,7 @@ class SortByXValuesResourceGroup;
 class ChartTypeTabPage final : public ResourceChangeListener, public vcl::OWizardPage, public ChartTypeTemplateProvider
 {
 public:
-    ChartTypeTabPage( TabPageParent pParent
+    ChartTypeTabPage( weld::Container* pPage, weld::DialogController* pController
                 , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
                 , bool bShowDescription = true );
     virtual ~ChartTypeTabPage() override;

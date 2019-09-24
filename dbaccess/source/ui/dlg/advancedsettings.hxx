@@ -72,7 +72,7 @@ namespace dbaui
 
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
 
-        SpecialSettingsPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta);
+        SpecialSettingsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta);
         virtual ~SpecialSettingsPage() override;
 
     private:
@@ -101,7 +101,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 
-        GeneratedValuesPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
+        GeneratedValuesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs);
         virtual ~GeneratedValuesPage() override;
 
     private:

@@ -356,9 +356,8 @@ void SwTestAccountSettingsDialog::Test()
 SwMailConfigDlg::SwMailConfigDlg(weld::Window* pParent, SfxItemSet& rSet)
     : SfxSingleTabDialogController(pParent, &rSet)
 {
-    TabPageParent pPageParent(get_content_area(), this);
     // create TabPage
-    SetTabPage(SwMailConfigPage::Create(pPageParent, &rSet));
+    SetTabPage(SwMailConfigPage::Create(get_content_area(), this, &rSet));
     m_xDialog->set_title(SwResId(STR_MAILCONFIG_DLG_TITLE));
 }
 

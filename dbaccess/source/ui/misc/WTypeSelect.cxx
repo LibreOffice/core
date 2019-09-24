@@ -44,8 +44,8 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
 
 // OWizTypeSelectControl
-OWizTypeSelectControl::OWizTypeSelectControl(TabPageParent pParent, OWizTypeSelect* pParentTabPage)
-    : OFieldDescControl(pParent, nullptr)
+OWizTypeSelectControl::OWizTypeSelectControl(weld::Container* pPage, OWizTypeSelect* pParentTabPage)
+    : OFieldDescControl(pPage, nullptr, nullptr)
     , m_pParentTabPage(pParentTabPage)
 {
 }
@@ -207,12 +207,12 @@ OUString OWizTypeSelectControl::getAutoIncrementValue() const
     return m_pParentTabPage->m_sAutoIncrementValue;
 }
 
-OWizTypeSelect::OWizTypeSelect(OCopyTableWizard* pWizard, TabPageParent pParent, SvStream* pStream)
-    : OWizardPage(pWizard, pParent, "dbaccess/ui/typeselectpage.ui", "TypeSelect")
+OWizTypeSelect::OWizTypeSelect(weld::Container* pPage, OCopyTableWizard* pWizard, SvStream* pStream)
+    : OWizardPage(pPage, pWizard, "dbaccess/ui/typeselectpage.ui", "TypeSelect")
     , m_xColumnNames(new OWizTypeSelectList(m_xBuilder->weld_tree_view("columnnames")))
     , m_xColumns(m_xBuilder->weld_label("columns"))
     , m_xControlContainer(m_xBuilder->weld_container("control_container"))
-    , m_xTypeControl(VclPtr<OWizTypeSelectControl>::Create(TabPageParent(m_xControlContainer.get(), pWizard), this))
+    , m_xTypeControl(VclPtr<OWizTypeSelectControl>::Create(m_xControlContainer.get(), this))
     , m_xAutoType(m_xBuilder->weld_label("autotype"))
     , m_xAutoFt(m_xBuilder->weld_label("autolabel"))
     , m_xAutoEt(m_xBuilder->weld_spin_button("auto"))

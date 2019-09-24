@@ -35,6 +35,7 @@
 
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld.hxx>
 #include <osl/diagnose.h>
 
 class ImpVclMEdit : public SfxListener

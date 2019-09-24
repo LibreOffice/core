@@ -51,7 +51,7 @@ class DataSourceTabPage final :
         public RangeSelectionListenerParent
 {
 public:
-    explicit DataSourceTabPage(TabPageParent pParent,
+    explicit DataSourceTabPage(weld::Container* pPage, weld::DialogController* pController,
                                DialogModel & rDialogModel,
                                ChartTypeTemplateProvider* pTemplateProvider,
                                bool bHideDescription = false);
@@ -121,7 +121,6 @@ private:
     weld::Entry*                m_pCurrentRangeChoosingField;
     bool                        m_bIsDirty;
 
-    weld::DialogController*     m_pParentController;
     TabPageNotifiable *         m_pTabPageNotifiable;
 
     std::unique_ptr<weld::Label> m_xFT_CAPTION;

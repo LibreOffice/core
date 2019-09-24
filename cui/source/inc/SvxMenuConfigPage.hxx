@@ -56,7 +56,7 @@ private:
     virtual void    SelectElement() override;
 
 public:
-    SvxMenuConfigPage(TabPageParent pParent, const SfxItemSet& rItemSet, bool bIsMenuBar = true);
+    SvxMenuConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rItemSet, bool bIsMenuBar = true);
     virtual ~SvxMenuConfigPage() override;
 
     SaveInData* CreateSaveInData(

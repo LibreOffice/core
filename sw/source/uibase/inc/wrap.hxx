@@ -78,8 +78,8 @@ class SwWrapTabPage: public SfxTabPage
     static const sal_uInt16 m_aWrapPageRg[];
 
 public:
-    SwWrapTabPage(TabPageParent pParent, const SfxItemSet &rSet);
-    static std::unique_ptr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
+    SwWrapTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet);
     virtual ~SwWrapTabPage() override;
 
     virtual bool    FillItemSet(SfxItemSet *rSet) override;

@@ -29,7 +29,7 @@ namespace dbaui
     class OGeneralPage : public OGenericAdministrationPage
     {
     protected:
-        OGeneralPage(TabPageParent pParent, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems);
+        OGeneralPage(weld::Container* pPage, weld::DialogController* pController, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems);
 
         OUString            m_eCurrentSelection;    /// currently selected type
 
@@ -101,7 +101,7 @@ namespace dbaui
     class OGeneralPageDialog : public OGeneralPage
     {
     public:
-        OGeneralPageDialog(TabPageParent pParent, const SfxItemSet& _rItems);
+        OGeneralPageDialog(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rItems);
 
     protected:
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
@@ -114,7 +114,7 @@ namespace dbaui
     class OGeneralPageWizard final : public OGeneralPage
     {
     public:
-        OGeneralPageWizard( TabPageParent pParent, const SfxItemSet& _rItems );
+        OGeneralPageWizard( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rItems );
         virtual ~OGeneralPageWizard() override;
 
         enum CreationMode

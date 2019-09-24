@@ -188,7 +188,7 @@ SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
     return pImpl->pFactArr.get();
 }
 
-std::unique_ptr<SfxTabPage> SfxModule::CreateTabPage(sal_uInt16, TabPageParent, const SfxItemSet&)
+std::unique_ptr<SfxTabPage> SfxModule::CreateTabPage(sal_uInt16, weld::Container*, weld::DialogController*, const SfxItemSet&)
 {
     return nullptr;
 }

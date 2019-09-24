@@ -98,8 +98,8 @@ void SfxMacroTabPage::EnableButtons()
         mpImpl->m_xAssignPB->set_sensitive(false);
 }
 
-SfxMacroTabPage::SfxMacroTabPage(TabPageParent pParent, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rAttrSet )
-    : SfxTabPage(pParent, "cui/ui/eventassignpage.ui", "EventAssignPage", &rAttrSet)
+SfxMacroTabPage::SfxMacroTabPage(weld::Container* pPage, weld::DialogController* pController, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rAttrSet )
+    : SfxTabPage(pPage, pController, "cui/ui/eventassignpage.ui", "EventAssignPage", &rAttrSet)
 {
     mpImpl.reset(new SfxMacroTabPage_Impl);
 
@@ -363,15 +363,15 @@ void SfxMacroTabPage::FillEvents()
 
 namespace
 {
-    std::unique_ptr<SfxMacroTabPage> CreateSfxMacroTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
+    std::unique_ptr<SfxMacroTabPage> CreateSfxMacroTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet)
     {
-        return std::make_unique<SfxMacroTabPage>( pParent, nullptr, rAttrSet );
+        return std::make_unique<SfxMacroTabPage>( pPage, pController, nullptr, rAttrSet );
     }
 }
 
-std::unique_ptr<SfxTabPage> SfxMacroTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SfxMacroTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return CreateSfxMacroTabPage(pParent, *rAttrSet);
+    return CreateSfxMacroTabPage(pPage, pController, *rAttrSet);
 }
 
 SfxMacroAssignDlg::SfxMacroAssignDlg(weld::Widget* pParent,

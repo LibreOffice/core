@@ -44,9 +44,9 @@ static const sal_Unicode cDelimiter = ',';
 
 // Benutzerdefinierte Listen:
 
-ScTpUserLists::ScTpUserLists( TabPageParent pParent,
+ScTpUserLists::ScTpUserLists( weld::Container* pPage, weld::DialogController* pController,
                               const SfxItemSet&     rCoreAttrs )
-    : SfxTabPage(pParent, "modules/scalc/ui/optsortlists.ui", "OptSortLists",
+    : SfxTabPage(pPage, pController, "modules/scalc/ui/optsortlists.ui", "OptSortLists",
                           &rCoreAttrs )
     , mxFtLists(m_xBuilder->weld_label("listslabel"))
     , mxLbLists(m_xBuilder->weld_tree_view("lists"))
@@ -128,9 +128,9 @@ void ScTpUserLists::Init()
 
 }
 
-std::unique_ptr<SfxTabPage> ScTpUserLists::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+std::unique_ptr<SfxTabPage> ScTpUserLists::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
 {
-    return std::make_unique<ScTpUserLists>(pParent, *rAttrSet);
+    return std::make_unique<ScTpUserLists>(pPage, pController, *rAttrSet);
 }
 
 void ScTpUserLists::Reset( const SfxItemSet* rCoreAttrs )

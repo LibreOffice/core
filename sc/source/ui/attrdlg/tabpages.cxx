@@ -34,8 +34,8 @@ const sal_uInt16 ScTabPageProtection::pProtectionRanges[] =
 
 // Zellschutz-Tabpage:
 
-ScTabPageProtection::ScTabPageProtection(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-    : SfxTabPage(pParent, "modules/scalc/ui/cellprotectionpage.ui", "CellProtectionPage", &rCoreAttrs)
+ScTabPageProtection::ScTabPageProtection(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+    : SfxTabPage(pPage, pController, "modules/scalc/ui/cellprotectionpage.ui", "CellProtectionPage", &rCoreAttrs)
     , m_xBtnHideCell(m_xBuilder->weld_check_button("checkHideAll"))
     , m_xBtnProtect(m_xBuilder->weld_check_button("checkProtected"))
     , m_xBtnHideFormula(m_xBuilder->weld_check_button("checkHideFormula"))
@@ -57,9 +57,9 @@ ScTabPageProtection::~ScTabPageProtection()
 {
 }
 
-std::unique_ptr<SfxTabPage> ScTabPageProtection::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> ScTabPageProtection::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<ScTabPageProtection>(pParent, *rAttrSet);
+    return std::make_unique<ScTabPageProtection>(pPage, pController, *rAttrSet);
 }
 
 void ScTabPageProtection::Reset( const SfxItemSet* rCoreAttrs )

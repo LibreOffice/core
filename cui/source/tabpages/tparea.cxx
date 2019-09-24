@@ -70,8 +70,8 @@ void lclExtendSize(Size& rSize, const Size& rInputSize)
 |*
 \************************************************************************/
 
-SvxAreaTabPage::SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "cui/ui/areatabpage.ui", "AreaTabPage", &rInAttrs)
+SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/areatabpage.ui", "AreaTabPage", &rInAttrs)
     // local fixed not o be changed values for local pointers
     , maFixed_ChangeType(ChangeType::NONE)
     // init with pointers to fixed ChangeType
@@ -327,16 +327,16 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
     }
 }
 
-std::unique_ptr<SfxTabPage> SvxAreaTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrs)
+std::unique_ptr<SfxTabPage> SvxAreaTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrs)
 {
-    auto xRet = std::make_unique<SvxAreaTabPage>(pParent, *rAttrs);
-    xRet->SetOptimalSize(pParent.pController);
+    auto xRet = std::make_unique<SvxAreaTabPage>(pPage, pController, *rAttrs);
+    xRet->SetOptimalSize(pController);
     return xRet;
 }
 
 namespace {
 
-std::unique_ptr<SfxTabPage> lcl_CreateFillStyleTabPage(sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet)
+std::unique_ptr<SfxTabPage> lcl_CreateFillStyleTabPage(sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
 {
     CreateTabPage fnCreate = nullptr;
     switch(nId)
@@ -348,7 +348,7 @@ std::unique_ptr<SfxTabPage> lcl_CreateFillStyleTabPage(sal_uInt16 nId, TabPagePa
         case BITMAP: fnCreate = &SvxBitmapTabPage::Create; break;
         case PATTERN: fnCreate = &SvxPatternTabPage::Create; break;
     }
-    return fnCreate ? (*fnCreate)( pParent, &rSet ) : nullptr;
+    return fnCreate ? (*fnCreate)( pPage, pController, &rSet ) : nullptr;
 }
 
 }

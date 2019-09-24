@@ -37,8 +37,8 @@
 
 using namespace com::sun::star;
 
-SvxColorTabPage::SvxColorTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "cui/ui/colorpage.ui", "ColorPage", &rInAttrs)
+SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/colorpage.ui", "ColorPage", &rInAttrs)
     , rOutAttrs           ( rInAttrs )
     // All the horrific pointers we store and should not
     , pnColorListState( nullptr )
@@ -262,9 +262,9 @@ void SvxColorTabPage::Reset( const SfxItemSet* rSet )
     UpdateModified();
 }
 
-std::unique_ptr<SfxTabPage> SvxColorTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+std::unique_ptr<SfxTabPage> SvxColorTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rOutAttrs)
 {
-    return std::make_unique<SvxColorTabPage>(pParent, *rOutAttrs);
+    return std::make_unique<SvxColorTabPage>(pPage, pController, *rOutAttrs);
 }
 
 // is called when the content of the MtrFields is changed for color values

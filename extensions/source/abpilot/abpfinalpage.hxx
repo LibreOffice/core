@@ -46,7 +46,7 @@ namespace abp
         StringBag       m_aInvalidDataSourceNames;
 
     public:
-        explicit FinalPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent);
+        explicit FinalPage(weld::Container* pPage, OAddressBookSourcePilot* pController);
         virtual ~FinalPage() override;
 
     private:

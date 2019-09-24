@@ -40,11 +40,11 @@
 
 // class ScHFEditPage
 
-ScHFEditPage::ScHFEditPage(TabPageParent pParent,
+ScHFEditPage::ScHFEditPage(weld::Container* pPage, weld::DialogController* pController,
                            const SfxItemSet& rCoreAttrs,
                            sal_uInt16 nWhichId,
                            bool bHeader)
-    : SfxTabPage(pParent, "modules/scalc/ui/headerfootercontent.ui", "HeaderFooterContent", &rCoreAttrs)
+    : SfxTabPage(pPage, pController, "modules/scalc/ui/headerfootercontent.ui", "HeaderFooterContent", &rCoreAttrs)
     , nWhich( nWhichId )
     , m_bDropDownActive(false)
     , m_nTimeToggled(-1)
@@ -67,9 +67,9 @@ ScHFEditPage::ScHFEditPage(TabPageParent pParent,
     , m_xFtCustomized(m_xBuilder->weld_label("labelSTR_HF_CUSTOMIZED"))
     , m_xLeft(m_xBuilder->weld_widget("labelFT_LEFT"))
     , m_xRight(m_xBuilder->weld_widget("labelFT_RIGHT"))
-    , m_xWndLeft(new ScEditWindow(Left, pParent.GetFrameWeld()))
-    , m_xWndCenter(new ScEditWindow(Center, pParent.GetFrameWeld()))
-    , m_xWndRight(new ScEditWindow(Right, pParent.GetFrameWeld()))
+    , m_xWndLeft(new ScEditWindow(Left, pController->getDialog()))
+    , m_xWndCenter(new ScEditWindow(Center, pController->getDialog()))
+    , m_xWndRight(new ScEditWindow(Right, pController->getDialog()))
     , m_xWndLeftWnd(new weld::CustomWeld(*m_xBuilder, "textviewWND_LEFT", *m_xWndLeft))
     , m_xWndCenterWnd(new weld::CustomWeld(*m_xBuilder, "textviewWND_CENTER", *m_xWndCenter))
     , m_xWndRightWnd(new weld::CustomWeld(*m_xBuilder, "textviewWND_RIGHT", *m_xWndRight))
@@ -781,58 +781,58 @@ IMPL_LINK(ScHFEditPage, MenuHdl, const OString&, rSelectedId, void)
 
 // class ScRightHeaderEditPage
 
-ScRightHeaderEditPage::ScRightHeaderEditPage( TabPageParent pParent, const SfxItemSet& rCoreSet )
-    : ScHFEditPage( pParent,
+ScRightHeaderEditPage::ScRightHeaderEditPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet )
+    : ScHFEditPage( pPage, pController,
                     rCoreSet,
                     rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_HEADERRIGHT ),
                     true )
     {}
 
-std::unique_ptr<SfxTabPage> ScRightHeaderEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
+std::unique_ptr<SfxTabPage> ScRightHeaderEditPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet )
 {
-    return std::make_unique<ScRightHeaderEditPage>( pParent, *rCoreSet );
+    return std::make_unique<ScRightHeaderEditPage>( pPage, pController, *rCoreSet );
 }
 
 // class ScLeftHeaderEditPage
 
-ScLeftHeaderEditPage::ScLeftHeaderEditPage( TabPageParent pParent, const SfxItemSet& rCoreSet )
-    : ScHFEditPage( pParent,
+ScLeftHeaderEditPage::ScLeftHeaderEditPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet )
+    : ScHFEditPage( pPage, pController,
                     rCoreSet,
                     rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_HEADERLEFT ),
                     true )
     {}
 
-std::unique_ptr<SfxTabPage> ScLeftHeaderEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
+std::unique_ptr<SfxTabPage> ScLeftHeaderEditPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet )
 {
-    return std::make_unique<ScLeftHeaderEditPage>( pParent, *rCoreSet );
+    return std::make_unique<ScLeftHeaderEditPage>( pPage, pController, *rCoreSet );
 }
 
 // class ScRightFooterEditPage
 
-ScRightFooterEditPage::ScRightFooterEditPage( TabPageParent pParent, const SfxItemSet& rCoreSet )
-    : ScHFEditPage( pParent,
+ScRightFooterEditPage::ScRightFooterEditPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet )
+    : ScHFEditPage( pPage, pController,
                     rCoreSet,
                     rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_FOOTERRIGHT ),
                     false )
     {}
 
-std::unique_ptr<SfxTabPage> ScRightFooterEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
+std::unique_ptr<SfxTabPage> ScRightFooterEditPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet )
 {
-    return std::make_unique<ScRightFooterEditPage>( pParent, *rCoreSet );
+    return std::make_unique<ScRightFooterEditPage>( pPage, pController, *rCoreSet );
 }
 
 // class ScLeftFooterEditPage
 
-ScLeftFooterEditPage::ScLeftFooterEditPage( TabPageParent pParent, const SfxItemSet& rCoreSet )
-    : ScHFEditPage( pParent,
+ScLeftFooterEditPage::ScLeftFooterEditPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet )
+    : ScHFEditPage( pPage, pController,
                     rCoreSet,
                     rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_FOOTERLEFT ),
                     false )
     {}
 
-std::unique_ptr<SfxTabPage> ScLeftFooterEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
+std::unique_ptr<SfxTabPage> ScLeftFooterEditPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet )
 {
-    return std::make_unique<ScLeftFooterEditPage>( pParent, *rCoreSet );
+    return std::make_unique<ScLeftFooterEditPage>( pPage, pController, *rCoreSet );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

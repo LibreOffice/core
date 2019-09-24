@@ -73,8 +73,7 @@ SdActionDlg::SdActionDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::V
                                    "InteractionDialog")
     , rOutAttrs(*pAttr)
 {
-    TabPageParent aParent(get_content_area(), this);
-    std::unique_ptr<SfxTabPage> xNewPage = SdTPAction::Create(aParent, rOutAttrs);
+    std::unique_ptr<SfxTabPage> xNewPage = SdTPAction::Create(get_content_area(), this, rOutAttrs);
 
     // formerly in PageCreated
     static_cast<SdTPAction*>( xNewPage.get() )->SetView( pView );
@@ -343,9 +342,9 @@ DeactivateRC SdTPAction::DeactivatePage( SfxItemSet* pPageSet )
     return DeactivateRC::LeavePage;
 }
 
-std::unique_ptr<SfxTabPage> SdTPAction::Create(TabPageParent pParent, const SfxItemSet& rAttrs)
+std::unique_ptr<SfxTabPage> SdTPAction::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrs)
 {
-    return std::make_unique<SdTPAction>( pParent, rAttrs );
+    return std::make_unique<SdTPAction>( pPage, pController, rAttrs );
 }
 
 void SdTPAction::UpdateTree()

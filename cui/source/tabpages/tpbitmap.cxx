@@ -68,8 +68,8 @@ const sal_uInt16 SvxBitmapTabPage::pBitmapRanges[] =
     0
 };
 
-SvxBitmapTabPage::SvxBitmapTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "cui/ui/bitmaptabpage.ui", "BitmapTabPage", &rInAttrs)
+SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/bitmaptabpage.ui", "BitmapTabPage", &rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnBitmapListState(nullptr)
     , m_fObjectWidth(0.0)

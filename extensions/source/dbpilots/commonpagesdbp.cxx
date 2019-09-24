@@ -54,8 +54,8 @@ namespace dbp
     using namespace ::com::sun::star::task;
     using namespace ::comphelper;
 
-    OTableSelectionPage::OTableSelectionPage(OControlWizard* pParent, TabPageParent pPageParent)
-        : OControlWizardPage(pParent, pPageParent, "modules/sabpilot/ui/tableselectionpage.ui", "TableSelectionPage")
+    OTableSelectionPage::OTableSelectionPage(weld::Container* pPage, OControlWizard* pWizard)
+        : OControlWizardPage(pPage, pWizard, "modules/sabpilot/ui/tableselectionpage.ui", "TableSelectionPage")
         , m_xTable(m_xBuilder->weld_tree_view("table"))
         , m_xDatasource(m_xBuilder->weld_tree_view("datasource"))
         , m_xDatasourceLabel(m_xBuilder->weld_label("datasourcelabel"))
@@ -343,8 +343,8 @@ namespace dbp
         lcl_fillEntries(*m_xTable, aQueryNames, BMP_QUERY, CommandType::QUERY);
     }
 
-    OMaybeListSelectionPage::OMaybeListSelectionPage(OControlWizard* pParent, TabPageParent pPageParent, const OUString& rUIXMLDescription, const OString& rID)
-        : OControlWizardPage(pParent, pPageParent, rUIXMLDescription, rID)
+    OMaybeListSelectionPage::OMaybeListSelectionPage(weld::Container* pPage, OControlWizard* pWizard, const OUString& rUIXMLDescription, const OString& rID)
+        : OControlWizardPage(pPage, pWizard, rUIXMLDescription, rID)
         , m_pYes(nullptr)
         , m_pNo(nullptr)
         , m_pList(nullptr)
@@ -403,8 +403,8 @@ namespace dbp
             m_pNo->grab_focus();
     }
 
-    ODBFieldPage::ODBFieldPage(OControlWizard* pParent, TabPageParent pPageParent)
-        : OMaybeListSelectionPage(pParent, pPageParent, "modules/sabpilot/ui/optiondbfieldpage.ui", "OptionDBField")
+    ODBFieldPage::ODBFieldPage(weld::Container* pPage, OControlWizard* pWizard)
+        : OMaybeListSelectionPage(pPage, pWizard, "modules/sabpilot/ui/optiondbfieldpage.ui", "OptionDBField")
         , m_xDescription(m_xBuilder->weld_label("explLabel"))
         , m_xStoreYes(m_xBuilder->weld_radio_button("yesRadiobutton"))
         , m_xStoreNo(m_xBuilder->weld_radio_button("noRadiobutton"))
