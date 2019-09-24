@@ -1366,6 +1366,9 @@ bool ToolBox::ImplCalcItem()
     long            nMinWidth   = 6;
     long            nMinHeight  = 6;
     long            nDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
+#ifdef IOS
+    nDropDownArrowWidth *= 3;
+#endif
 
     // set defaults if image or text is needed but empty
     nDefWidth  = GetDefaultImageSize().Width();
