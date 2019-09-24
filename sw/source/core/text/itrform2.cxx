@@ -889,10 +889,14 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
             {
                 if (ch == CH_TXT_ATR_FIELDSTART)
                     pPor = new SwFieldFormDatePortion(pBM, true);
+                else if (ch == CH_TXT_ATR_FIELDSEP)
+                    pPor = new SwFieldMarkPortion(); // it's added in DateFieldmark?
                 else if (ch == CH_TXT_ATR_FIELDEND)
                     pPor = new SwFieldFormDatePortion(pBM, false);
             }
             else if (ch == CH_TXT_ATR_FIELDSTART)
+                pPor = new SwFieldMarkPortion();
+            else if (ch == CH_TXT_ATR_FIELDSEP)
                 pPor = new SwFieldMarkPortion();
             else if (ch == CH_TXT_ATR_FIELDEND)
                 pPor = new SwFieldMarkPortion();

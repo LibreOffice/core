@@ -641,6 +641,7 @@ static bool lcl_IsSpecialCharacter(sal_Unicode nChar)
     case CH_TXT_ATR_INPUTFIELDEND:
     case CH_TXT_ATR_FORMELEMENT:
     case CH_TXT_ATR_FIELDSTART:
+    case CH_TXT_ATR_FIELDSEP:
     case CH_TXT_ATR_FIELDEND:
         return true;
 
@@ -681,6 +682,7 @@ static OUString lcl_DenotedPortion(const OUString& rStr, sal_Int32 nStart, sal_I
             case CH_TXT_ATR_INPUTFIELDEND:
             case CH_TXT_ATR_FORMELEMENT:
             case CH_TXT_ATR_FIELDSTART:
+            case CH_TXT_ATR_FIELDSEP:
             case CH_TXT_ATR_FIELDEND:
                 break; // nothing?
 
