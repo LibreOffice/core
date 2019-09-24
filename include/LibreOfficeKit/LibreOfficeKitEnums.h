@@ -703,6 +703,12 @@ typedef enum
      * }
      */
     LOK_CALLBACK_REFERENCE_MARKS = 45,
+
+    /**
+     * Callback related to native dialogs generated in JavaScript from
+     * the description.
+     */
+    LOK_CALLBACK_JSDIALOG = 46,
 }
 LibreOfficeKitCallbackType;
 
@@ -823,6 +829,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_TABLE_SELECTED";
     case LOK_CALLBACK_REFERENCE_MARKS:
         return "LOK_CALLBACK_REFERENCE_MARKS";
+    case LOK_CALLBACK_JSDIALOG:
+        return "LOK_CALLBACK_JSDIALOG";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");
