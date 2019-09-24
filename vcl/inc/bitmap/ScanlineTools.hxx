@@ -78,33 +78,6 @@ public:
     }
 };
 
-class ScanlineTransformer_RGB565 : public ScanlineTransformer
-{
-private:
-    sal_uInt16* pData;
-
-public:
-    virtual void startLine(sal_uInt8* pLine) override
-    {
-        pData = reinterpret_cast<sal_uInt16*>(pLine);
-    }
-
-    virtual void skipPixel(sal_uInt32 nPixel) override { pData += nPixel; }
-
-    virtual Color readPixel() override
-    {
-        const Color nColor((*pData & 0xf800) >> 8, (*pData & 0x07e0) >> 3, (*pData & 0x001f) << 3);
-        pData++;
-        return nColor;
-    }
-
-    virtual void writePixel(Color nColor) override
-    {
-        *pData++ = ((nColor.GetRed() & 0xf8) << 8) | ((nColor.GetGreen() & 0xfc) << 3)
-                   | ((nColor.GetBlue() & 0xf8) >> 3);
-    }
-};
-
 class ScanlineTransformer_8BitPalette : public ScanlineTransformer
 {
 private:
@@ -246,13 +219,12 @@ std::unique_ptr<ScanlineTransformer> getScanlineTransformer(sal_uInt16 nBits,
             return std::make_unique<ScanlineTransformer_4BitPalette>(rPalette);
         case 8:
             return std::make_unique<ScanlineTransformer_8BitPalette>(rPalette);
-        case 16:
-            return std::make_unique<ScanlineTransformer_RGB565>();
         case 24:
             return std::make_unique<ScanlineTransformer_BGR>();
         case 32:
             return std::make_unique<ScanlineTransformer_ARGB>();
         default:
+            assert(false);
             break;
     }
     return nullptr;

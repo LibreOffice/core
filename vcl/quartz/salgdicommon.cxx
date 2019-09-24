@@ -1846,7 +1846,7 @@ void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
     {
         nBitDepth = 32;
     }
-    int nBytesPerRow = (nBitDepth == 16) ? 2 : 4;
+    int nBytesPerRow = 4;
     const size_t nBitsPerComponent = (nBitDepth == 16) ? 5 : 8;
     if( nBitDepth <= 8 )
     {
