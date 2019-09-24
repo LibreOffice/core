@@ -34,8 +34,8 @@ namespace vcl
 {
 /// Fills the rBitmaps vector with rendered pages.
 VCL_DLLPUBLIC size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBitmaps,
-                                      const size_t nFirstPage = 0, int nPages = 1,
-                                      const double fResolutionDPI = 96.);
+                                      size_t nFirstPage = 0, int nPages = 1,
+                                      double fResolutionDPI = 96.);
 
 /// Imports a PDF stream into rGraphic as a GDIMetaFile.
 VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Bitmap& rBitmap, size_t nPageIndex,
@@ -46,7 +46,7 @@ VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Bitmap& rBitmap, size_t nPageInd
 VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic, double fResolutionDPI = 96.);
 
 VCL_DLLPUBLIC size_t ImportPDF(const OUString& rURL, std::vector<Bitmap>& rBitmaps,
-                               std::vector<sal_Int8>& rPdfData, const double fResolutionDPI = 96.);
+                               std::vector<sal_Int8>& rPdfData, double fResolutionDPI = 96.);
 
 /// Import PDF as Graphic images (1 per page), all unloaded.
 /// Since Graphic is unloaded, we need to return the page size (in pixels) separately.
@@ -54,7 +54,7 @@ VCL_DLLPUBLIC size_t ImportPDF(const OUString& rURL, std::vector<Bitmap>& rBitma
 /// Returns the number of pages read.
 VCL_DLLPUBLIC size_t ImportPDFUnloaded(const OUString& rURL,
                                        std::vector<std::pair<Graphic, Size>>& rGraphics,
-                                       const double fResolutionDPI = 96.);
+                                       double fResolutionDPI = 96.);
 }
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_IPDF_PDFREAD_HXX
