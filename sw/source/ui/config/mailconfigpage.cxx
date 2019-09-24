@@ -103,8 +103,8 @@ public:
     SwAuthenticationSettingsDialog(weld::Window* pParent, SwMailMergeConfigItem& rItem);
 };
 
-SwMailConfigPage::SwMailConfigPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/mailconfigpage.ui", "MailConfigPage", &rSet)
+SwMailConfigPage::SwMailConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/mailconfigpage.ui", "MailConfigPage", &rSet)
     , m_pConfigItem(new SwMailMergeConfigItem)
     , m_xDisplayNameED(m_xBuilder->weld_entry("displayname"))
     , m_xAddressED(m_xBuilder->weld_entry("address"))
@@ -128,9 +128,9 @@ SwMailConfigPage::~SwMailConfigPage()
     m_pConfigItem.reset();
 }
 
-std::unique_ptr<SfxTabPage> SwMailConfigPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SwMailConfigPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SwMailConfigPage>(pParent, *rAttrSet);
+    return std::make_unique<SwMailConfigPage>(pPage, pController, *rAttrSet);
 }
 
 bool SwMailConfigPage::FillItemSet( SfxItemSet* /*rSet*/ )
@@ -356,9 +356,8 @@ void SwTestAccountSettingsDialog::Test()
 SwMailConfigDlg::SwMailConfigDlg(weld::Window* pParent, SfxItemSet& rSet)
     : SfxSingleTabDialogController(pParent, &rSet)
 {
-    TabPageParent pPageParent(get_content_area(), this);
     // create TabPage
-    SetTabPage(SwMailConfigPage::Create(pPageParent, &rSet));
+    SetTabPage(SwMailConfigPage::Create(get_content_area(), this, &rSet));
     m_xDialog->set_title(SwResId(STR_MAILCONFIG_DLG_TITLE));
 }
 

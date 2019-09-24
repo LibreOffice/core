@@ -69,16 +69,16 @@ public:
     void SetBackgroundColor( Color aColor ) { aBackgroundColor = aColor; }
 };
 
-SvxPatternTabPage::SvxPatternTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SvxTabPage(pParent, "cui/ui/patterntabpage.ui", "PatternTabPage", rInAttrs)
+SvxPatternTabPage::SvxPatternTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SvxTabPage(pPage, pController, "cui/ui/patterntabpage.ui", "PatternTabPage", rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnPatternListState(nullptr)
     , m_pnColorListState(nullptr)
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
     , m_xCtlPixel(new SvxPixelCtl(this))
-    , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_COLOR"), pParent.GetFrameWeld()))
-    , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_BACKGROUND_COLOR"), pParent.GetFrameWeld()))
+    , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_COLOR"), pController->getDialog()))
+    , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_BACKGROUND_COLOR"), pController->getDialog()))
     , m_xPatternLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("patternpresetlistwin")))
     , m_xBtnAdd(m_xBuilder->weld_button("BTN_ADD"))
     , m_xBtnModify(m_xBuilder->weld_button("BTN_MODIFY"))
@@ -233,10 +233,10 @@ void SvxPatternTabPage::Reset( const SfxItemSet*  )
     }
 }
 
-std::unique_ptr<SfxTabPage> SvxPatternTabPage::Create( TabPageParent pWindow,
+std::unique_ptr<SfxTabPage> SvxPatternTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                              const SfxItemSet* rSet )
 {
-    return std::make_unique<SvxPatternTabPage>(pWindow, *rSet);
+    return std::make_unique<SvxPatternTabPage>(pPage, pController, *rSet);
 }
 
 IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, SvtValueSet*, void)

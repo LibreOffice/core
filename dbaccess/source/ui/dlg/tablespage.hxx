@@ -49,7 +49,7 @@ namespace dbaui
         virtual bool            FillItemSet(SfxItemSet* _rCoreAttrs) override;
         virtual DeactivateRC    DeactivatePage(SfxItemSet* _pSet) override;
 
-        OTableSubscriptionPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs ,OTableSubscriptionDialog* _pTablesDlg);
+        OTableSubscriptionPage(weld::Container* pPage, OTableSubscriptionDialog* pController, const SfxItemSet& _rCoreAttrs);
         virtual ~OTableSubscriptionPage() override;
 
     private:

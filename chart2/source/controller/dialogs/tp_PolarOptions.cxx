@@ -26,8 +26,8 @@
 namespace chart
 {
 
-PolarOptionsTabPage::PolarOptionsTabPage(TabPageParent pWindow, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pWindow, "modules/schart/ui/tp_PolarOptions.ui", "tp_PolarOptions", &rInAttrs)
+PolarOptionsTabPage::PolarOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "modules/schart/ui/tp_PolarOptions.ui", "tp_PolarOptions", &rInAttrs)
     , m_xCB_Clockwise(m_xBuilder->weld_check_button("CB_CLOCKWISE"))
     , m_xFL_StartingAngle(m_xBuilder->weld_frame("frameANGLE"))
     , m_xNF_StartingAngle(m_xBuilder->weld_spin_button("NF_STARTING_ANGLE"))
@@ -43,9 +43,9 @@ PolarOptionsTabPage::~PolarOptionsTabPage()
     m_xAngleDial.reset();
 }
 
-std::unique_ptr<SfxTabPage> PolarOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
+std::unique_ptr<SfxTabPage> PolarOptionsTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rOutAttrs)
 {
-    return std::make_unique<PolarOptionsTabPage>(pParent, *rOutAttrs);
+    return std::make_unique<PolarOptionsTabPage>(pPage, pController, *rOutAttrs);
 }
 
 bool PolarOptionsTabPage::FillItemSet( SfxItemSet* rOutAttrs )

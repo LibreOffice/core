@@ -32,8 +32,8 @@
 /*                                                                   */
 /*********************************************************************/
 
-SvxFontSubstTabPage::SvxFontSubstTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/optfontspage.ui", "OptFontsPage", &rSet)
+SvxFontSubstTabPage::SvxFontSubstTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optfontspage.ui", "OptFontsPage", &rSet)
     , m_xConfig(new SvtFontSubstConfig)
     , m_bSorted(false)
     , m_xUseTableCB(m_xBuilder->weld_check_button("usetable"))
@@ -140,10 +140,10 @@ SvxFontSubstTabPage::~SvxFontSubstTabPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SvxFontSubstTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SvxFontSubstTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                                 const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SvxFontSubstTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxFontSubstTabPage>(pPage, pController, *rAttrSet);
 }
 
 bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet* )

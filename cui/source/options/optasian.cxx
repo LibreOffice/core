@@ -100,8 +100,8 @@ void SvxAsianLayoutPage_Impl::addForbiddenCharacters(
 
 static LanguageType eLastUsedLanguageTypeForForbiddenCharacters(USHRT_MAX);
 
-SvxAsianLayoutPage::SvxAsianLayoutPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/optasianpage.ui", "OptAsianPage", &rSet)
+SvxAsianLayoutPage::SvxAsianLayoutPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/optasianpage.ui", "OptAsianPage", &rSet)
     , pImpl(new SvxAsianLayoutPage_Impl)
     , m_xCharKerningRB(m_xBuilder->weld_radio_button("charkerning"))
     , m_xCharPunctKerningRB(m_xBuilder->weld_radio_button("charpunctkerning"))
@@ -131,9 +131,9 @@ SvxAsianLayoutPage::~SvxAsianLayoutPage()
 {
 }
 
-std::unique_ptr<SfxTabPage> SvxAsianLayoutPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SvxAsianLayoutPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SvxAsianLayoutPage>(pParent, *rAttrSet);
+    return std::make_unique<SvxAsianLayoutPage>(pPage, pController, *rAttrSet);
 }
 
 bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )

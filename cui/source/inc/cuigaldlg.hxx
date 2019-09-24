@@ -203,9 +203,9 @@ private:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
 
 public:
-    TPGalleryThemeGeneral(TabPageParent pParent, const SfxItemSet& rSet);
+    TPGalleryThemeGeneral(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     void                SetXChgData( ExchangeData* pData );
-    static std::unique_ptr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static std::unique_ptr<SfxTabPage>  Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
 };
 
 class TPGalleryThemeProperties : public SfxTabPage
@@ -261,7 +261,7 @@ class TPGalleryThemeProperties : public SfxTabPage
     DECL_LINK(DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void);
 
 public:
-    TPGalleryThemeProperties(TabPageParent pWindow, const SfxItemSet& rSet);
+    TPGalleryThemeProperties(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~TPGalleryThemeProperties() override;
 
     void                SetXChgData( ExchangeData* pData );
@@ -269,7 +269,7 @@ public:
 
     void                StartSearchFiles( const OUString& _rFolderURL, short _nDlgResult );
 
-    static std::unique_ptr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage>  Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CUIGALDLG_HXX

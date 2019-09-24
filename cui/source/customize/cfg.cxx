@@ -161,35 +161,35 @@ SvxConfigPage::CanConfig( const OUString& aModuleId )
     return !(aModuleId == "com.sun.star.script.BasicIDE" || aModuleId == "com.sun.star.frame.Bibliography");
 }
 
-static std::unique_ptr<SfxTabPage> CreateSvxMenuConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
+static std::unique_ptr<SfxTabPage> CreateSvxMenuConfigPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet )
 {
-    return std::make_unique<SvxMenuConfigPage>(pParent, *rSet);
+    return std::make_unique<SvxMenuConfigPage>(pPage, pController, *rSet);
 }
 
-static std::unique_ptr<SfxTabPage> CreateSvxContextMenuConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
+static std::unique_ptr<SfxTabPage> CreateSvxContextMenuConfigPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet )
 {
-    return std::make_unique<SvxMenuConfigPage>(pParent, *rSet, false);
+    return std::make_unique<SvxMenuConfigPage>(pPage, pController, *rSet, false);
 }
 
-static std::unique_ptr<SfxTabPage> CreateKeyboardConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
+static std::unique_ptr<SfxTabPage> CreateKeyboardConfigPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet )
 {
-       return std::make_unique<SfxAcceleratorConfigPage>(pParent, *rSet);
+       return std::make_unique<SfxAcceleratorConfigPage>(pPage, pController, *rSet);
 }
 
-static std::unique_ptr<SfxTabPage> CreateSvxNotebookbarConfigPage(TabPageParent pParent,
+static std::unique_ptr<SfxTabPage> CreateSvxNotebookbarConfigPage(weld::Container* pPage, weld::DialogController* pController,
                                                          const SfxItemSet* rSet)
 {
-    return std::make_unique<SvxNotebookbarConfigPage>(pParent, *rSet);
+    return std::make_unique<SvxNotebookbarConfigPage>(pPage, pController, *rSet);
 }
 
-static std::unique_ptr<SfxTabPage> CreateSvxToolbarConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
+static std::unique_ptr<SfxTabPage> CreateSvxToolbarConfigPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet )
 {
-    return std::make_unique<SvxToolbarConfigPage>(pParent, *rSet);
+    return std::make_unique<SvxToolbarConfigPage>(pPage, pController, *rSet);
 }
 
-static std::unique_ptr<SfxTabPage> CreateSvxEventConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
+static std::unique_ptr<SfxTabPage> CreateSvxEventConfigPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet )
 {
-    return std::make_unique<SvxEventConfigPage>(pParent, *rSet, SvxEventConfigPage::EarlyInit());
+    return std::make_unique<SvxEventConfigPage>(pPage, pController, *rSet, SvxEventConfigPage::EarlyInit());
 }
 
 /******************************************************************************
@@ -969,8 +969,8 @@ IMPL_LINK(SvxMenuEntriesListBox, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
  * both tabpages to add, delete, move and rename items etc.
  *
  *****************************************************************************/
-SvxConfigPage::SvxConfigPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "cui/ui/menuassignpage.ui", "MenuAssignPage", &rSet)
+SvxConfigPage::SvxConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "cui/ui/menuassignpage.ui", "MenuAssignPage", &rSet)
     , m_aUpdateDataTimer("UpdateDataTimer")
     , bInitialised(false)
     , pCurrentSaveInData(nullptr)

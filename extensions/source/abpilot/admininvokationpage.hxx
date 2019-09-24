@@ -31,7 +31,7 @@ namespace abp
         std::unique_ptr<weld::Label> m_xErrorMessage;
 
     public:
-        explicit AdminDialogInvokationPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent);
+        explicit AdminDialogInvokationPage(weld::Container* pPage, OAddressBookSourcePilot* pDialog);
         virtual ~AdminDialogInvokationPage() override;
     private:
         // BuilderPage overridables

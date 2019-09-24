@@ -64,25 +64,23 @@ namespace dbp
     {
         OString sIdent(OString::number(_nState));
         weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
-        // TODO eventually pass DialogController as distinct argument instead of bundling into TabPageParent
-        TabPageParent aParent(pPageContainer, this);
 
         switch (_nState)
         {
             case GBW_STATE_OPTIONLIST:
-                return std::make_unique<ORadioSelectionPage>(this, aParent);
+                return std::make_unique<ORadioSelectionPage>(pPageContainer, this);
 
             case GBW_STATE_DEFAULTOPTION:
-                return std::make_unique<ODefaultFieldSelectionPage>(this, aParent);
+                return std::make_unique<ODefaultFieldSelectionPage>(pPageContainer, this);
 
             case GBW_STATE_OPTIONVALUES:
-                return std::make_unique<OOptionValuesPage>(this, aParent);
+                return std::make_unique<OOptionValuesPage>(pPageContainer, this);
 
             case GBW_STATE_DBFIELD:
-                return std::make_unique<OOptionDBFieldPage>(this, aParent);
+                return std::make_unique<OOptionDBFieldPage>(pPageContainer, this);
 
             case GBW_STATE_FINALIZE:
-                return std::make_unique<OFinalizeGBWPage>(this, aParent);
+                return std::make_unique<OFinalizeGBWPage>(pPageContainer, this);
         }
 
         return nullptr;
@@ -169,8 +167,8 @@ namespace dbp
         return OControlWizard::onFinish();
     }
 
-    ORadioSelectionPage::ORadioSelectionPage(OControlWizard* pParent, TabPageParent pPageParent)
-        : OGBWPage(pParent, pPageParent, "modules/sabpilot/ui/groupradioselectionpage.ui", "GroupRadioSelectionPage")
+    ORadioSelectionPage::ORadioSelectionPage(weld::Container* pPage, OControlWizard* pWizard)
+        : OGBWPage(pPage, pWizard, "modules/sabpilot/ui/groupradioselectionpage.ui", "GroupRadioSelectionPage")
         , m_xRadioName(m_xBuilder->weld_entry("radiolabels"))
         , m_xMoveRight(m_xBuilder->weld_button("toright"))
         , m_xMoveLeft(m_xBuilder->weld_button("toleft"))
@@ -297,8 +295,8 @@ namespace dbp
         }
     }
 
-    ODefaultFieldSelectionPage::ODefaultFieldSelectionPage(OControlWizard* pParent, TabPageParent pPageParent)
-        : OMaybeListSelectionPage(pParent, pPageParent, "modules/sabpilot/ui/defaultfieldselectionpage.ui", "DefaultFieldSelectionPage")
+    ODefaultFieldSelectionPage::ODefaultFieldSelectionPage(weld::Container* pPage, OControlWizard* pWizard)
+        : OMaybeListSelectionPage(pPage, pWizard, "modules/sabpilot/ui/defaultfieldselectionpage.ui", "DefaultFieldSelectionPage")
         , m_xDefSelYes(m_xBuilder->weld_radio_button("defaultselectionyes"))
         , m_xDefSelNo(m_xBuilder->weld_radio_button("defaultselectionno"))
         , m_xDefSelection(m_xBuilder->weld_combo_box("defselectionfield"))
@@ -335,8 +333,8 @@ namespace dbp
         return true;
     }
 
-    OOptionValuesPage::OOptionValuesPage(OControlWizard* pParent, TabPageParent pPageParent)
-        : OGBWPage(pParent, pPageParent, "modules/sabpilot/ui/optionvaluespage.ui", "OptionValuesPage")
+    OOptionValuesPage::OOptionValuesPage(weld::Container* pPage, OControlWizard* pWizard)
+        : OGBWPage(pPage, pWizard, "modules/sabpilot/ui/optionvaluespage.ui", "OptionValuesPage")
         , m_xValue(m_xBuilder->weld_entry("optionvalue"))
         , m_xOptions(m_xBuilder->weld_tree_view("radiobuttons"))
         , m_nLastSelection(::vcl::WizardTypes::WizardState(-1))
@@ -411,8 +409,8 @@ namespace dbp
         return true;
     }
 
-    OOptionDBFieldPage::OOptionDBFieldPage(OControlWizard* pParent, TabPageParent pPageParent)
-        : ODBFieldPage(pParent, pPageParent)
+    OOptionDBFieldPage::OOptionDBFieldPage(weld::Container* pPage, OControlWizard* pWizard)
+        : ODBFieldPage(pPage, pWizard)
     {
         setDescriptionText(compmodule::ModuleRes(RID_STR_GROUPWIZ_DBFIELD));
     }
@@ -422,8 +420,8 @@ namespace dbp
         return static_cast<OGroupBoxWizard*>(getDialog())->getSettings().sDBField;
     }
 
-    OFinalizeGBWPage::OFinalizeGBWPage(OControlWizard* pParent, TabPageParent pPageParent)
-        : OGBWPage(pParent, pPageParent, "modules/sabpilot/ui/optionsfinalpage.ui", "OptionsFinalPage")
+    OFinalizeGBWPage::OFinalizeGBWPage(weld::Container* pPage, OControlWizard* pWizard)
+        : OGBWPage(pPage, pWizard, "modules/sabpilot/ui/optionsfinalpage.ui", "OptionsFinalPage")
         , m_xName(m_xBuilder->weld_entry("nameit"))
     {
     }

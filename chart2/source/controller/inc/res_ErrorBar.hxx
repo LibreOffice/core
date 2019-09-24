@@ -31,6 +31,7 @@ namespace weld { class Builder; }
 namespace weld { class Button; }
 namespace weld { class CheckButton; }
 namespace weld { class ComboBox; }
+namespace weld { class DialogController; }
 namespace weld { class Entry; }
 namespace weld { class Frame; }
 namespace weld { class Image; }
@@ -55,7 +56,7 @@ public:
     };
 
     ErrorBarResources(
-        weld::Builder* pParent, TabPageParent pParentDialog, const SfxItemSet& rInAttrs, bool bNoneAvailable, chart::ErrorBarResources::tErrorBarType eType = ERROR_BAR_Y );
+        weld::Builder* pParent, weld::DialogController* pControllerDialog, const SfxItemSet& rInAttrs, bool bNoneAvailable, chart::ErrorBarResources::tErrorBarType eType = ERROR_BAR_Y);
     virtual ~ErrorBarResources();
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
@@ -86,7 +87,7 @@ private:
     double               m_fPlusValue;
     double               m_fMinusValue;
 
-    TabPageParent        m_pParentDialog;
+    weld::DialogController* m_pController;
     std::unique_ptr< RangeSelectionHelper >  m_apRangeSelectionHelper;
     weld::Entry*         m_pCurrentRangeChoosingField;
     bool                 m_bHasInternalDataProvider;

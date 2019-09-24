@@ -699,8 +699,8 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, weld::Button&, rBtn, void)
     }
 }
 
-SwTOXSelectTabPage::SwTOXSelectTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/tocindexpage.ui", "TocIndexPage", &rAttrSet)
+SwTOXSelectTabPage::SwTOXSelectTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/tocindexpage.ui", "TocIndexPage", &rAttrSet)
     , sAutoMarkType(SwResId(STR_AUTOMARK_TYPE))
     , m_bWaitingInitialSettings(true)
     , m_xTitleED(m_xBuilder->weld_entry("title"))
@@ -1173,9 +1173,9 @@ DeactivateRC SwTOXSelectTabPage::DeactivatePage(SfxItemSet* _pSet)
     return DeactivateRC::LeavePage;
 }
 
-std::unique_ptr<SfxTabPage> SwTOXSelectTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SwTOXSelectTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SwTOXSelectTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SwTOXSelectTabPage>(pPage, pController, *rAttrSet);
 }
 
 IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl, weld::ComboBox&, rBox, void)
@@ -1770,8 +1770,8 @@ namespace
     };
 }
 
-SwTOXEntryTabPage::SwTOXEntryTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/tocentriespage.ui", "TocEntriesPage", &rAttrSet)
+SwTOXEntryTabPage::SwTOXEntryTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/tocentriespage.ui", "TocEntriesPage", &rAttrSet)
     , sDelimStr(SwResId(STR_DELIM))
     , sNoCharStyle(SwResId(STR_NO_CHAR_STYLE))
     , m_pCurrentForm(nullptr)
@@ -2112,9 +2112,9 @@ DeactivateRC SwTOXEntryTabPage::DeactivatePage( SfxItemSet* /*pSet*/)
     return DeactivateRC::LeavePage;
 }
 
-std::unique_ptr<SfxTabPage> SwTOXEntryTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SwTOXEntryTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SwTOXEntryTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SwTOXEntryTabPage>(pPage, pController, *rAttrSet);
 }
 
 IMPL_LINK_NOARG(SwTOXEntryTabPage, EditStyleHdl, weld::Button&, void)
@@ -3348,8 +3348,8 @@ sal_uInt32 SwTokenWindow::GetControlIndex(FormTokenType eType) const
     return nIndex;
 }
 
-SwTOXStylesTabPage::SwTOXStylesTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/tocstylespage.ui", "TocStylesPage", &rAttrSet)
+SwTOXStylesTabPage::SwTOXStylesTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/tocstylespage.ui", "TocStylesPage", &rAttrSet)
     , m_xLevelLB(m_xBuilder->weld_tree_view("levels"))
     , m_xAssignBT(m_xBuilder->weld_button("assign"))
     , m_xParaLayLB(m_xBuilder->weld_tree_view("styles"))
@@ -3459,10 +3459,10 @@ DeactivateRC SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
     return DeactivateRC::LeavePage;
 }
 
-std::unique_ptr<SfxTabPage> SwTOXStylesTabPage::Create(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwTOXStylesTabPage::Create(weld::Container* pPage, weld::DialogController* pController,
                                               const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SwTOXStylesTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SwTOXStylesTabPage>(pPage, pController, *rAttrSet);
 }
 
 IMPL_LINK_NOARG(SwTOXStylesTabPage, EditStyleHdl, weld::Button&, void)

@@ -267,8 +267,8 @@ void MailMergeCfg_Impl::Notify( const css::uno::Sequence< OUString >& )
 {
 }
 
-//typedef SfxTabPage* (*FNCreateTabPage)(TabPageParent pParent, const SfxItemSet &rAttrSet);
-static std::unique_ptr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet)
+//typedef SfxTabPage* (*FNCreateTabPage)(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rAttrSet);
+static std::unique_ptr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
 {
     CreateTabPage fnCreate = nullptr;
     switch(nId)
@@ -309,7 +309,7 @@ static std::unique_ptr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, TabPageP
 #endif
     }
 
-    return fnCreate ? (*fnCreate)( pParent, &rSet ) : nullptr;
+    return fnCreate ? (*fnCreate)( pPage, pController, &rSet ) : nullptr;
 }
 
 struct OptionsMapping_Impl
@@ -901,12 +901,10 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
                 *pGroupInfo->m_pInItemSet->GetPool(),
                 pGroupInfo->m_pInItemSet->GetRanges());
 
-        TabPageParent pPageParent(xTabBox.get(), this);
-
-        pPageInfo->m_xPage = ::CreateGeneralTabPage(pPageInfo->m_nPageId, pPageParent, *pGroupInfo->m_pInItemSet);
+        pPageInfo->m_xPage = ::CreateGeneralTabPage(pPageInfo->m_nPageId, xTabBox.get(), this, *pGroupInfo->m_pInItemSet);
 
         if(!pPageInfo->m_xPage && pGroupInfo->m_pModule)
-            pPageInfo->m_xPage = pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, pPageParent, *pGroupInfo->m_pInItemSet);
+            pPageInfo->m_xPage = pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, xTabBox.get(), this, *pGroupInfo->m_pInItemSet);
 
         DBG_ASSERT( pPageInfo->m_xPage, "tabpage could not created");
         if ( pPageInfo->m_xPage )

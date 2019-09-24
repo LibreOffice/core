@@ -712,8 +712,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_GRFCROP );
-                    TabPageParent pPageParent(aCropDialog.get_content_area(), &aCropDialog);
-                    std::unique_ptr<SfxTabPage> xTabPage = (*fnCreatePage)(pPageParent, &aCropDlgAttr);
+                    std::unique_ptr<SfxTabPage> xTabPage = (*fnCreatePage)(aCropDialog.get_content_area(), &aCropDialog, &aCropDlgAttr);
                     xTabPage->SetPageTitle(aCropStr);
                     aCropDialog.SetTabPage(std::move(xTabPage));
 

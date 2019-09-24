@@ -51,8 +51,8 @@ static sal_uInt16 nFieldDlgFormatSel = 0;
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
-SwFieldRefPage::SwFieldRefPage(TabPageParent pParent, const SfxItemSet *const pCoreSet )
-    : SwFieldPage(pParent, "modules/swriter/ui/fldrefpage.ui", "FieldRefPage", pCoreSet)
+SwFieldRefPage::SwFieldRefPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *const pCoreSet )
+    : SwFieldPage(pPage, pController, "modules/swriter/ui/fldrefpage.ui", "FieldRefPage", pCoreSet)
     , maOutlineNodes()
     , maNumItems()
     , mpSavedSelectedTextNode(nullptr)
@@ -1084,10 +1084,10 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-std::unique_ptr<SfxTabPage> SwFieldRefPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwFieldRefPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                          const SfxItemSet *const pAttrSet)
 {
-    return std::make_unique<SwFieldRefPage>(pParent, pAttrSet);
+    return std::make_unique<SwFieldRefPage>(pPage, pController, pAttrSet);
 }
 
 sal_uInt16 SwFieldRefPage::GetGroup()

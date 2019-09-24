@@ -88,8 +88,8 @@ void SvxDefaultColorOptPage::FillBoxChartColorLB()
     m_xLbChartColors->thaw();
 }
 
-SvxDefaultColorOptPage::SvxDefaultColorOptPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "cui/ui/optchartcolorspage.ui", "OptChartColorsPage", &rInAttrs)
+SvxDefaultColorOptPage::SvxDefaultColorOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/optchartcolorspage.ui", "OptChartColorsPage", &rInAttrs)
     , m_xLbChartColors(m_xBuilder->weld_tree_view("colors"))
     , m_xLbPaletteSelector(m_xBuilder->weld_combo_box("paletteselector"))
     , m_xPBDefault(m_xBuilder->weld_button("default"))
@@ -141,9 +141,9 @@ void SvxDefaultColorOptPage::Construct()
     m_xLbChartColors->select( 0 );
 }
 
-std::unique_ptr<SfxTabPage> SvxDefaultColorOptPage::Create( TabPageParent pParent, const SfxItemSet* rAttrs )
+std::unique_ptr<SfxTabPage> SvxDefaultColorOptPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrs )
 {
-    return std::make_unique<SvxDefaultColorOptPage>( pParent, *rAttrs );
+    return std::make_unique<SvxDefaultColorOptPage>( pPage, pController, *rAttrs );
 }
 
 bool SvxDefaultColorOptPage::FillItemSet( SfxItemSet* rOutAttrs )

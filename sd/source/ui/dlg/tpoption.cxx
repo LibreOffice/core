@@ -41,8 +41,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-SdTpOptionsSnap::SdTpOptionsSnap(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SvxGridTabPage(pParent, rInAttrs)
+SdTpOptionsSnap::SdTpOptionsSnap(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SvxGridTabPage(pPage, pController, rInAttrs)
 {
     m_xSnapFrames->show();
 }
@@ -95,10 +95,10 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
     ClickRotateHdl_Impl(*m_xCbxRotate);
 }
 
-std::unique_ptr<SfxTabPage> SdTpOptionsSnap::Create( TabPageParent pWindow,
+std::unique_ptr<SfxTabPage> SdTpOptionsSnap::Create( weld::Container* pPage, weld::DialogController* pController,
                                             const SfxItemSet* rAttrs )
 {
-    return std::make_unique<SdTpOptionsSnap>(pWindow, *rAttrs);
+    return std::make_unique<SdTpOptionsSnap>(pPage, pController, *rAttrs);
 }
 
 /*************************************************************************
@@ -106,8 +106,8 @@ std::unique_ptr<SfxTabPage> SdTpOptionsSnap::Create( TabPageParent pWindow,
 |*  TabPage to adjust the content options
 |*
 \************************************************************************/
-SdTpOptionsContents::SdTpOptionsContents(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "modules/simpress/ui/sdviewpage.ui", "SdViewPage", &rInAttrs)
+SdTpOptionsContents::SdTpOptionsContents(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "modules/simpress/ui/sdviewpage.ui", "SdViewPage", &rInAttrs)
     , m_xCbxRuler(m_xBuilder->weld_check_button("ruler"))
     , m_xCbxDragStripes(m_xBuilder->weld_check_button("dragstripes"))
     , m_xCbxHandlesBezier(m_xBuilder->weld_check_button("handlesbezier"))
@@ -157,10 +157,10 @@ void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
     m_xCbxHandlesBezier->save_state();
 }
 
-std::unique_ptr<SfxTabPage> SdTpOptionsContents::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SdTpOptionsContents::Create( weld::Container* pPage, weld::DialogController* pController,
                                                 const SfxItemSet* rAttrs )
 {
-    return std::make_unique<SdTpOptionsContents>(pParent, *rAttrs);
+    return std::make_unique<SdTpOptionsContents>(pPage, pController, *rAttrs);
 }
 
 /*************************************************************************
@@ -171,8 +171,8 @@ std::unique_ptr<SfxTabPage> SdTpOptionsContents::Create( TabPageParent pParent,
 #define TABLE_COUNT 12
 #define TOKEN ':'
 
-SdTpOptionsMisc::SdTpOptionsMisc(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "modules/simpress/ui/optimpressgeneralpage.ui", "OptSavePage", &rInAttrs)
+SdTpOptionsMisc::SdTpOptionsMisc(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "modules/simpress/ui/optimpressgeneralpage.ui", "OptSavePage", &rInAttrs)
     , nWidth(0)
     , nHeight(0)
     , m_xCbxQuickEdit(m_xBuilder->weld_check_button("qickedit"))
@@ -473,10 +473,10 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     UpdateCompatibilityControls ();
 }
 
-std::unique_ptr<SfxTabPage> SdTpOptionsMisc::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SdTpOptionsMisc::Create( weld::Container* pPage, weld::DialogController* pController,
                                             const SfxItemSet* rAttrs )
 {
-    return std::make_unique<SdTpOptionsMisc>( pParent, *rAttrs );
+    return std::make_unique<SdTpOptionsMisc>( pPage, pController, *rAttrs );
 }
 
 IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl, weld::ComboBox&, void)

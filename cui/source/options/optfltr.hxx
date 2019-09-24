@@ -35,10 +35,10 @@ class OfaMSFilterTabPage : public SfxTabPage
     DECL_LINK(LoadWordBasicCheckHdl_Impl, weld::Button&, void);
     DECL_LINK(LoadExcelBasicCheckHdl_Impl, weld::Button&, void);
 public:
-    OfaMSFilterTabPage(TabPageParent pParent, const SfxItemSet& rSet );
+    OfaMSFilterTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent,
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                 const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -68,8 +68,8 @@ class OfaMSFilterTabPage2 : public SfxTabPage
     int                 GetEntry4Type( MSFltrPg2_CheckBoxEntries _nType ) const;
 
 public:
-    OfaMSFilterTabPage2(TabPageParent pParent, const SfxItemSet& rSet);
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
+    OfaMSFilterTabPage2(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet );
     virtual ~OfaMSFilterTabPage2() override;
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

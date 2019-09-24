@@ -2025,7 +2025,7 @@ void ScModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     }
 }
 
-std::unique_ptr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet )
+std::unique_ptr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet )
 {
     std::unique_ptr<SfxTabPage> xRet;
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
@@ -2035,66 +2035,66 @@ std::unique_ptr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, TabPagePare
         {
             ::CreateTabPage ScTpLayoutOptionsCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_LAYOUT);
             if (ScTpLayoutOptionsCreate)
-                xRet = (*ScTpLayoutOptionsCreate)(pParent, &rSet);
+                xRet = (*ScTpLayoutOptionsCreate)(pPage, pController, &rSet);
             break;
         }
         case SID_SC_TP_CONTENT:
         {
             ::CreateTabPage ScTpContentOptionsCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_CONTENT);
             if (ScTpContentOptionsCreate)
-                xRet = (*ScTpContentOptionsCreate)(pParent, &rSet);
+                xRet = (*ScTpContentOptionsCreate)(pPage, pController, &rSet);
             break;
         }
         case SID_SC_TP_GRID:
-            xRet = SvxGridTabPage::Create(pParent, rSet);
+            xRet = SvxGridTabPage::Create(pPage, pController, rSet);
             break;
         case SID_SC_TP_USERLISTS:
         {
             ::CreateTabPage ScTpUserListsCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_USERLISTS);
             if (ScTpUserListsCreate)
-                xRet = (*ScTpUserListsCreate)(pParent, &rSet);
+                xRet = (*ScTpUserListsCreate)(pPage, pController, &rSet);
             break;
         }
         case SID_SC_TP_CALC:
         {
             ::CreateTabPage ScTpCalcOptionsCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_CALC);
             if (ScTpCalcOptionsCreate)
-                xRet = (*ScTpCalcOptionsCreate)(pParent, &rSet);
+                xRet = (*ScTpCalcOptionsCreate)(pPage, pController, &rSet);
             break;
         }
         case SID_SC_TP_FORMULA:
         {
             ::CreateTabPage ScTpFormulaOptionsCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_FORMULA);
             if (ScTpFormulaOptionsCreate)
-                xRet = (*ScTpFormulaOptionsCreate)(pParent, &rSet);
+                xRet = (*ScTpFormulaOptionsCreate)(pPage, pController, &rSet);
             break;
         }
         case SID_SC_TP_COMPATIBILITY:
         {
             ::CreateTabPage ScTpCompatOptionsCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_COMPATIBILITY);
             if (ScTpCompatOptionsCreate)
-                xRet = (*ScTpCompatOptionsCreate)(pParent, &rSet);
+                xRet = (*ScTpCompatOptionsCreate)(pPage, pController, &rSet);
             break;
         }
         case SID_SC_TP_CHANGES:
         {
             ::CreateTabPage ScRedlineOptionsTabPageCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_CHANGES);
             if (ScRedlineOptionsTabPageCreate)
-                xRet =(*ScRedlineOptionsTabPageCreate)(pParent, &rSet);
+                xRet =(*ScRedlineOptionsTabPageCreate)(pPage, pController, &rSet);
             break;
         }
         case RID_SC_TP_PRINT:
         {
             ::CreateTabPage ScTpPrintOptionsCreate = pFact->GetTabPageCreatorFunc(RID_SC_TP_PRINT);
             if (ScTpPrintOptionsCreate)
-                xRet = (*ScTpPrintOptionsCreate)(pParent, &rSet);
+                xRet = (*ScTpPrintOptionsCreate)(pPage, pController, &rSet);
             break;
         }
         case RID_SC_TP_DEFAULTS:
         {
             ::CreateTabPage ScTpDefaultsOptionsCreate = pFact->GetTabPageCreatorFunc(RID_SC_TP_DEFAULTS);
             if (ScTpDefaultsOptionsCreate)
-                xRet = (*ScTpDefaultsOptionsCreate)(pParent, &rSet);
+                xRet = (*ScTpDefaultsOptionsCreate)(pPage, pController, &rSet);
             break;
         }
     }

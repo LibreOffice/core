@@ -511,8 +511,8 @@ static LB lcl_GetLBRelationsForStrID(const FrmMap* _pMap,
     return nLBRelations;
 }
 
-SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "cui/ui/swpossizepage.ui", "SwPosSizePage", &rInAttrs)
+SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/swpossizepage.ui", "SwPosSizePage", &rInAttrs)
     , m_pVMap(nullptr)
     , m_pHMap(nullptr)
     , m_pSdrView(nullptr)
@@ -702,9 +702,9 @@ void SvxSwPosSizeTabPage::setOptimalRelWidth()
     m_xHoriLB->clear();
 }
 
-std::unique_ptr<SfxTabPage> SvxSwPosSizeTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SvxSwPosSizeTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<SvxSwPosSizeTabPage>(pParent, *rSet);
+    return std::make_unique<SvxSwPosSizeTabPage>(pPage, pController, *rSet);
 }
 
 const sal_uInt16* SvxSwPosSizeTabPage::GetRanges()

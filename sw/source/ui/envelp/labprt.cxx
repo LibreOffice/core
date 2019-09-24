@@ -27,8 +27,8 @@
 
 #include <cmdid.h>
 
-SwLabPrtPage::SwLabPrtPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/labeloptionspage.ui", "LabelOptionsPage", &rSet)
+SwLabPrtPage::SwLabPrtPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/labeloptionspage.ui", "LabelOptionsPage", &rSet)
     , pPrinter(nullptr)
     , m_xPageButton(m_xBuilder->weld_radio_button("entirepage"))
     , m_xSingleButton(m_xBuilder->weld_radio_button("singlelabel"))
@@ -86,9 +86,9 @@ IMPL_LINK( SwLabPrtPage, CountHdl, weld::Button&, rButton, void )
     }
 }
 
-std::unique_ptr<SfxTabPage> SwLabPrtPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwLabPrtPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<SwLabPrtPage>(pParent, *rSet );
+    return std::make_unique<SwLabPrtPage>(pPage, pController, *rSet );
 }
 
 void SwLabPrtPage::ActivatePage( const SfxItemSet& rSet )

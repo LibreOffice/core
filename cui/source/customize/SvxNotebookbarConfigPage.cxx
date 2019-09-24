@@ -99,8 +99,10 @@ static OUString getModuleId(const OUString& sModuleName)
         return "None";
 }
 
-SvxNotebookbarConfigPage::SvxNotebookbarConfigPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SvxConfigPage(pParent, rSet)
+SvxNotebookbarConfigPage::SvxNotebookbarConfigPage(weld::Container* pPage,
+                                                   weld::DialogController* pController,
+                                                   const SfxItemSet& rSet)
+    : SvxConfigPage(pPage, pController, rSet)
 {
     m_xDescriptionFieldLb->set_visible(false);
     m_xSearchEdit->set_visible(false);

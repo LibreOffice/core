@@ -1266,10 +1266,10 @@ bool SmViewShell::HasPrintOptionsPage() const
     return true;
 }
 
-std::unique_ptr<SfxTabPage> SmViewShell::CreatePrintOptionsPage(TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SmViewShell::CreatePrintOptionsPage(weld::Container* pPage, weld::DialogController* pController,
                                                        const SfxItemSet &rOptions)
 {
-    return SmPrintOptionsTabPage::Create(pParent, rOptions);
+    return SmPrintOptionsTabPage::Create(pPage, pController, rOptions);
 }
 
 SmEditWindow *SmViewShell::GetEditWindow()

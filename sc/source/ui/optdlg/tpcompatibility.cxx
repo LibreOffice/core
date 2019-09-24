@@ -15,8 +15,8 @@
 #include <sc.hrc>
 #include <optutil.hxx>
 
-ScTpCompatOptions::ScTpCompatOptions(TabPageParent pParent, const SfxItemSet &rCoreAttrs)
-    : SfxTabPage(pParent, "modules/scalc/ui/optcompatibilitypage.ui", "OptCompatibilityPage", &rCoreAttrs)
+ScTpCompatOptions::ScTpCompatOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rCoreAttrs)
+    : SfxTabPage(pPage, pController, "modules/scalc/ui/optcompatibilitypage.ui", "OptCompatibilityPage", &rCoreAttrs)
     , m_xLbKeyBindings(m_xBuilder->weld_combo_box("keybindings"))
 {
 }
@@ -25,9 +25,9 @@ ScTpCompatOptions::~ScTpCompatOptions()
 {
 }
 
-std::unique_ptr<SfxTabPage> ScTpCompatOptions::Create(TabPageParent pParent, const SfxItemSet *rCoreAttrs)
+std::unique_ptr<SfxTabPage> ScTpCompatOptions::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rCoreAttrs)
 {
-    return std::make_unique<ScTpCompatOptions>(pParent, *rCoreAttrs);
+    return std::make_unique<ScTpCompatOptions>(pPage, pController, *rCoreAttrs);
 }
 
 bool ScTpCompatOptions::FillItemSet(SfxItemSet *rCoreAttrs)

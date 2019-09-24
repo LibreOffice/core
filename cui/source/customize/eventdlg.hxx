@@ -41,7 +41,7 @@ public:
 
     /// this is only to let callers know that there is a LateInit which *must* be called
     struct EarlyInit { };
-    SvxEventConfigPage(TabPageParent pParent, const SfxItemSet& rSet, EarlyInit);
+    SvxEventConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet, EarlyInit);
     virtual ~SvxEventConfigPage() override;
 
     void            LateInit( const css::uno::Reference< css::frame::XFrame >& _rxFrame );

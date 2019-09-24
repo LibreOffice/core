@@ -40,8 +40,8 @@
 
 using namespace ::com::sun::star;
 
-SwMailMergeOutputTypePage::SwMailMergeOutputTypePage(SwMailMergeWizard* pWizard, TabPageParent pParent)
-    : vcl::OWizardPage(pParent, "modules/swriter/ui/mmoutputtypepage.ui", "MMOutputTypePage")
+SwMailMergeOutputTypePage::SwMailMergeOutputTypePage(weld::Container* pPage, SwMailMergeWizard* pWizard)
+    : vcl::OWizardPage(pPage, pWizard, "modules/swriter/ui/mmoutputtypepage.ui", "MMOutputTypePage")
     , m_pWizard(pWizard)
     , m_xLetterRB(m_xBuilder->weld_radio_button("letter"))
     , m_xMailRB(m_xBuilder->weld_radio_button("email"))

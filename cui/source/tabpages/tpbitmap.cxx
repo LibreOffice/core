@@ -68,8 +68,8 @@ const sal_uInt16 SvxBitmapTabPage::pBitmapRanges[] =
     0
 };
 
-SvxBitmapTabPage::SvxBitmapTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "cui/ui/bitmaptabpage.ui", "BitmapTabPage", &rInAttrs)
+SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/bitmaptabpage.ui", "BitmapTabPage", &rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnBitmapListState(nullptr)
     , m_fObjectWidth(0.0)
@@ -416,9 +416,9 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     ClickBitmapHdl_Impl();
 }
 
-std::unique_ptr<SfxTabPage> SvxBitmapTabPage::Create(TabPageParent pWindow, const SfxItemSet* rAttrs)
+std::unique_ptr<SfxTabPage> SvxBitmapTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrs)
 {
-    return std::make_unique<SvxBitmapTabPage>(pWindow, *rAttrs);
+    return std::make_unique<SvxBitmapTabPage>(pPage, pController, *rAttrs);
 }
 
 void SvxBitmapTabPage::ClickBitmapHdl_Impl()

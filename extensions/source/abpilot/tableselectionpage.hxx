@@ -30,7 +30,7 @@ namespace abp
         std::unique_ptr<weld::TreeView> m_xTableList;
 
     public:
-        explicit TableSelectionPage(OAddressBookSourcePilot* pDialog, TabPageParent pPageParent);
+        explicit TableSelectionPage(weld::Container* pPage, OAddressBookSourcePilot* pController);
         virtual ~TableSelectionPage() override;
     private:
         // OWizardPage overridables

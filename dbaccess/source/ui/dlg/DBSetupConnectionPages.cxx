@@ -60,14 +60,14 @@ namespace dbaui
 {
 using namespace ::com::sun::star;
 
-    std::unique_ptr<OGenericAdministrationPage> OTextConnectionPageSetup::CreateTextTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OTextConnectionPageSetup::CreateTextTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
     {
-        return std::make_unique<OTextConnectionPageSetup>(pParent, _rAttrSet);
+        return std::make_unique<OTextConnectionPageSetup>(pPage, pController, _rAttrSet);
     }
 
     // OTextConnectionPageSetup
-    OTextConnectionPageSetup::OTextConnectionPageSetup(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : OConnectionTabPageSetup(pParent, "dbaccess/ui/dbwiztextpage.ui", "DBWizTextPage",
+    OTextConnectionPageSetup::OTextConnectionPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OConnectionTabPageSetup(pPage, pController, "dbaccess/ui/dbwiztextpage.ui", "DBWizTextPage",
                                   rCoreAttrs, STR_TEXT_HELPTEXT, STR_TEXT_HEADERTEXT, STR_TEXT_PATH_OR_FILE)
         , m_xSubContainer(m_xBuilder->weld_widget("TextPageContainer"))
         , m_xTextConnectionHelper(new OTextConnectionHelper(m_xSubContainer.get(), TC_EXTENSION | TC_SEPARATORS))
@@ -126,14 +126,14 @@ using namespace ::com::sun::star;
         return m_xTextConnectionHelper->prepareLeave();
     }
 
-    std::unique_ptr<OGenericAdministrationPage> OLDAPConnectionPageSetup::CreateLDAPTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet )
+    std::unique_ptr<OGenericAdministrationPage> OLDAPConnectionPageSetup::CreateLDAPTabPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet )
     {
-        return std::make_unique<OLDAPConnectionPageSetup>(pParent, _rAttrSet);
+        return std::make_unique<OLDAPConnectionPageSetup>(pPage, pController, _rAttrSet);
     }
 
     // OLDAPPageSetup
-    OLDAPConnectionPageSetup::OLDAPConnectionPageSetup( TabPageParent pParent, const SfxItemSet& _rCoreAttrs )
-        : OGenericAdministrationPage(pParent, "dbaccess/ui/ldapconnectionpage.ui", "LDAPConnectionPage", _rCoreAttrs)
+    OLDAPConnectionPageSetup::OLDAPConnectionPageSetup( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs )
+        : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/ldapconnectionpage.ui", "LDAPConnectionPage", _rCoreAttrs)
         , m_xFTHelpText(m_xBuilder->weld_label("helpLabel"))
         , m_xFTHostServer(m_xBuilder->weld_label("hostNameLabel"))
         , m_xETHostServer(m_xBuilder->weld_entry("hostNameEntry"))
@@ -219,13 +219,13 @@ using namespace ::com::sun::star;
         OGenericAdministrationPage::callModifiedHdl();
     }
 
-    std::unique_ptr<OMySQLIntroPageSetup> OMySQLIntroPageSetup::CreateMySQLIntroTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
+    std::unique_ptr<OMySQLIntroPageSetup> OMySQLIntroPageSetup::CreateMySQLIntroTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet)
     {
-        return std::make_unique<OMySQLIntroPageSetup>(pParent, rAttrSet);
+        return std::make_unique<OMySQLIntroPageSetup>(pPage, pController, rAttrSet);
     }
 
-    OMySQLIntroPageSetup::OMySQLIntroPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)
-        : OGenericAdministrationPage(pParent, "dbaccess/ui/dbwizmysqlintropage.ui", "DBWizMysqlIntroPage", _rCoreAttrs)
+    OMySQLIntroPageSetup::OMySQLIntroPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs)
+        : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/dbwizmysqlintropage.ui", "DBWizMysqlIntroPage", _rCoreAttrs)
         , m_xODBCDatabase(m_xBuilder->weld_radio_button("odbc"))
         , m_xJDBCDatabase(m_xBuilder->weld_radio_button("jdbc"))
         , m_xNATIVEDatabase(m_xBuilder->weld_radio_button("directly"))
@@ -288,8 +288,8 @@ using namespace ::com::sun::star;
     }
 
     // MySQLNativeSetupPage
-    MySQLNativeSetupPage::MySQLNativeSetupPage( TabPageParent pParent, const SfxItemSet& rCoreAttrs )
-        : OGenericAdministrationPage(pParent, "dbaccess/ui/dbwizmysqlnativepage.ui", "DBWizMysqlNativePage", rCoreAttrs)
+    MySQLNativeSetupPage::MySQLNativeSetupPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs )
+        : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/dbwizmysqlnativepage.ui", "DBWizMysqlNativePage", rCoreAttrs)
         , m_xHelpText(m_xBuilder->weld_label("helptext"))
         , m_xSettingsContainer(m_xBuilder->weld_container("MySQLSettingsContainer"))
         , m_xMySQLSettings(new MySQLNativeSettings(m_xSettingsContainer.get(), LINK(this, OGenericAdministrationPage, OnControlModified)))
@@ -302,9 +302,9 @@ using namespace ::com::sun::star;
         m_xMySQLSettings.reset();
     }
 
-    std::unique_ptr<OGenericAdministrationPage> MySQLNativeSetupPage::Create(TabPageParent pParent, const SfxItemSet& rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> MySQLNativeSetupPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet)
     {
-        return std::make_unique<MySQLNativeSetupPage>(pParent, rAttrSet);
+        return std::make_unique<MySQLNativeSetupPage>(pPage, pController, rAttrSet);
     }
 
     void MySQLNativeSetupPage::fillControls( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList )
@@ -340,8 +340,8 @@ using namespace ::com::sun::star;
     }
 
     // OMySQLJDBCConnectionPageSetup
-    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( TabPageParent pParent, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId, const char* pDefaultPortResId, const char* pHelpTextResId, const char* pHeaderTextResId, const char* pDriverClassId)
-        : OGenericAdministrationPage(pParent, "dbaccess/ui/specialjdbcconnectionpage.ui", "SpecialJDBCConnectionPage", _rCoreAttrs)
+    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId, const char* pDefaultPortResId, const char* pHelpTextResId, const char* pHeaderTextResId, const char* pDriverClassId)
+        : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/specialjdbcconnectionpage.ui", "SpecialJDBCConnectionPage", _rCoreAttrs)
         , m_nPortId(_nPortId)
         , m_xHeaderText(m_xBuilder->weld_label("header"))
         , m_xFTHelpText(m_xBuilder->weld_label("helpLabel"))
@@ -386,9 +386,9 @@ using namespace ::com::sun::star;
     {
     }
 
-    std::unique_ptr<OGenericAdministrationPage> OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet )
+    std::unique_ptr<OGenericAdministrationPage> OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet )
     {
-        return std::make_unique<OGeneralSpecialJDBCConnectionPageSetup>(pParent,
+        return std::make_unique<OGeneralSpecialJDBCConnectionPageSetup>(pPage, pController,
                                                          _rAttrSet,
                                                          DSID_MYSQL_PORTNUMBER ,
                                                          STR_MYSQL_DEFAULT,
@@ -397,9 +397,9 @@ using namespace ::com::sun::star;
                                                          STR_MYSQL_DRIVERCLASSTEXT);
     }
 
-    std::unique_ptr<OGenericAdministrationPage> OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage( TabPageParent pParent, const SfxItemSet& _rAttrSet )
+    std::unique_ptr<OGenericAdministrationPage> OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet )
     {
-        return std::make_unique<OGeneralSpecialJDBCConnectionPageSetup>(pParent,
+        return std::make_unique<OGeneralSpecialJDBCConnectionPageSetup>(pPage, pController,
                                                           _rAttrSet,
                                                           DSID_ORACLE_PORTNUMBER,
                                                           STR_ORACLE_DEFAULT,
@@ -510,14 +510,14 @@ using namespace ::com::sun::star;
         OGenericAdministrationPage::callModifiedHdl();
     }
 
-    std::unique_ptr<OGenericAdministrationPage> OJDBCConnectionPageSetup::CreateJDBCTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OJDBCConnectionPageSetup::CreateJDBCTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
     {
-        return std::make_unique<OJDBCConnectionPageSetup>(pParent, _rAttrSet);
+        return std::make_unique<OJDBCConnectionPageSetup>(pPage, pController, _rAttrSet);
     }
 
     // OMySQLJDBCConnectionPageSetup
-    OJDBCConnectionPageSetup::OJDBCConnectionPageSetup(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : OConnectionTabPageSetup(pParent, "dbaccess/ui/jdbcconnectionpage.ui", "JDBCConnectionPage", rCoreAttrs,
+    OJDBCConnectionPageSetup::OJDBCConnectionPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OConnectionTabPageSetup(pPage, pController, "dbaccess/ui/jdbcconnectionpage.ui", "JDBCConnectionPage", rCoreAttrs,
                                 STR_JDBC_HELPTEXT, STR_JDBC_HEADERTEXT, STR_COMMONURL)
         , m_xFTDriverClass(m_xBuilder->weld_label("jdbcLabel"))
         , m_xETDriverClass(m_xBuilder->weld_entry("jdbcEntry"))
@@ -622,13 +622,13 @@ using namespace ::com::sun::star;
         callModifiedHdl();
     }
 
-    std::unique_ptr<OGenericAdministrationPage> OSpreadSheetConnectionPageSetup::CreateDocumentOrSpreadSheetTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OSpreadSheetConnectionPageSetup::CreateDocumentOrSpreadSheetTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
     {
-        return std::make_unique<OSpreadSheetConnectionPageSetup>(pParent, _rAttrSet);
+        return std::make_unique<OSpreadSheetConnectionPageSetup>(pPage, pController, _rAttrSet);
     }
 
-    OSpreadSheetConnectionPageSetup::OSpreadSheetConnectionPageSetup(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
-        : OConnectionTabPageSetup(pParent, "dbaccess/ui/dbwizspreadsheetpage.ui", "DBWizSpreadsheetPage",
+    OSpreadSheetConnectionPageSetup::OSpreadSheetConnectionPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OConnectionTabPageSetup(pPage, pController, "dbaccess/ui/dbwizspreadsheetpage.ui", "DBWizSpreadsheetPage",
                                  rCoreAttrs, STR_SPREADSHEET_HELPTEXT, STR_SPREADSHEET_HEADERTEXT, STR_SPREADSHEETPATH)
         , m_xPasswordrequired(m_xBuilder->weld_check_button("passwordrequired"))
     {
@@ -657,13 +657,13 @@ using namespace ::com::sun::star;
         return bChangedSomething;
     }
 
-    std::unique_ptr<OGenericAdministrationPage> OAuthentificationPageSetup::CreateAuthentificationTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OAuthentificationPageSetup::CreateAuthentificationTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
     {
-        return std::make_unique<OAuthentificationPageSetup>(pParent, _rAttrSet);
+        return std::make_unique<OAuthentificationPageSetup>(pPage, pController, _rAttrSet);
     }
 
-    OAuthentificationPageSetup::OAuthentificationPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)
-        : OGenericAdministrationPage(pParent, "dbaccess/ui/authentificationpage.ui", "AuthentificationPage", _rCoreAttrs)
+    OAuthentificationPageSetup::OAuthentificationPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs)
+        : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/authentificationpage.ui", "AuthentificationPage", _rCoreAttrs)
         , m_xFTHelpText(m_xBuilder->weld_label("helptext"))
         , m_xFTUserName(m_xBuilder->weld_label("generalUserNameLabel"))
         , m_xETUserName(m_xBuilder->weld_entry("generalUserNameEntry"))
@@ -720,13 +720,13 @@ using namespace ::com::sun::star;
         return bChangedSomething;
     }
 
-    std::unique_ptr<OGenericAdministrationPage> OFinalDBPageSetup::CreateFinalDBTabPageSetup(TabPageParent pParent, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OFinalDBPageSetup::CreateFinalDBTabPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
     {
-        return std::make_unique<OFinalDBPageSetup>(pParent, _rAttrSet);
+        return std::make_unique<OFinalDBPageSetup>(pPage, pController, _rAttrSet);
     }
 
-    OFinalDBPageSetup::OFinalDBPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)
-        : OGenericAdministrationPage(pParent, "dbaccess/ui/finalpagewizard.ui", "PageFinal", _rCoreAttrs)
+    OFinalDBPageSetup::OFinalDBPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs)
+        : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/finalpagewizard.ui", "PageFinal", _rCoreAttrs)
         , m_xFTFinalHeader(m_xBuilder->weld_label("headerText"))
         , m_xFTFinalHelpText(m_xBuilder->weld_label("helpText"))
         , m_xRBRegisterDataSource(m_xBuilder->weld_radio_button("yesregister"))

@@ -200,12 +200,12 @@ public:
 
     void ShowSymbolControls(bool bOn);
 
-    SvxLineTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxLineTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
     virtual ~SvxLineTabPage() override;
 
     void    Construct();
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pLineRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
@@ -291,12 +291,12 @@ private:
     void CheckChanges_Impl();
 
 public:
-    SvxLineDefTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxLineDefTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
     virtual ~SvxLineDefTabPage() override;
 
     void    Construct();
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 
@@ -351,12 +351,12 @@ private:
     void CheckChanges_Impl();
 
 public:
-    SvxLineEndDefTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    SvxLineEndDefTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
     virtual ~SvxLineEndDefTabPage() override;
 
     void    Construct();
 
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 

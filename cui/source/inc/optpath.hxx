@@ -58,8 +58,8 @@ private:
                              const OUString& _rUserPath, const OUString& _rWritablePath );
 
 public:
-    SvxPathTabPage( TabPageParent pParent, const SfxItemSet& rSet );
-    static std::unique_ptr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rSet );
+    SvxPathTabPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet );
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     virtual ~SvxPathTabPage() override;
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

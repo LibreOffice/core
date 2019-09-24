@@ -55,8 +55,8 @@ static bool bLastRelative = false;
 //dialog to this one, except with a different preview window impl.
 //TODO, determine if SwNumPositionTabPage and SvxNumPositionTabPage can be
 //merged
-SwNumPositionTabPage::SwNumPositionTabPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/outlinepositionpage.ui", "OutlinePositionPage", &rSet)
+SwNumPositionTabPage::SwNumPositionTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/outlinepositionpage.ui", "OutlinePositionPage", &rSet)
     , pSaveNum(nullptr)
     , pWrtSh(nullptr)
     , pOutlineDlg(nullptr)
@@ -491,10 +491,10 @@ void SwNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
     m_xIndentAtMF->set_visible( bLabelAlignmentPosAndSpaceModeActive );
 }
 
-std::unique_ptr<SfxTabPage> SwNumPositionTabPage::Create( TabPageParent pParent,
+std::unique_ptr<SfxTabPage> SwNumPositionTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
                                                  const SfxItemSet* rAttrSet)
 {
-    return std::make_unique<SwNumPositionTabPage>(pParent, *rAttrSet);
+    return std::make_unique<SwNumPositionTabPage>(pPage, pController, *rAttrSet);
 }
 
 void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)

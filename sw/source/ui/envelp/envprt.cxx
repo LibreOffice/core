@@ -29,8 +29,8 @@
 
 #include <bitmaps.hlst>
 
-SwEnvPrtPage::SwEnvPrtPage(TabPageParent pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/envprinterpage.ui", "EnvPrinterPage", &rSet)
+SwEnvPrtPage::SwEnvPrtPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/envprinterpage.ui", "EnvPrinterPage", &rSet)
     , m_xUpper(m_xBuilder->weld_widget("upper"))
     , m_xLower(m_xBuilder->weld_widget("lower"))
     , m_xTopButton(m_xBuilder->weld_radio_button("top"))
@@ -127,9 +127,9 @@ IMPL_LINK(SwEnvPrtPage, ButtonHdl, weld::Button&, rBtn, void)
     }
 }
 
-std::unique_ptr<SfxTabPage> SwEnvPrtPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
+std::unique_ptr<SfxTabPage> SwEnvPrtPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
-    return std::make_unique<SwEnvPrtPage>(pParent, *rSet);
+    return std::make_unique<SwEnvPrtPage>(pPage, pController, *rSet);
 }
 
 void SwEnvPrtPage::ActivatePage(const SfxItemSet&)

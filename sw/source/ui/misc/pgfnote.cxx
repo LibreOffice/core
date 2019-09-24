@@ -105,8 +105,8 @@ IMPL_LINK(SwFootNotePage, LineColorSelected_Impl, ColorListBox&, rColorBox, void
     m_xLineTypeBox->SetColor(rColorBox.GetSelectEntryColor());
 }
 
-SwFootNotePage::SwFootNotePage(TabPageParent pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "modules/swriter/ui/footnoteareapage.ui", "FootnoteAreaPage", &rSet)
+SwFootNotePage::SwFootNotePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
+    : SfxTabPage(pPage, pController, "modules/swriter/ui/footnoteareapage.ui", "FootnoteAreaPage", &rSet)
     , lMaxHeight(0)
     , m_xMaxHeightPageBtn(m_xBuilder->weld_radio_button("maxheightpage"))
     , m_xMaxHeightBtn(m_xBuilder->weld_radio_button("maxheight"))
@@ -115,7 +115,7 @@ SwFootNotePage::SwFootNotePage(TabPageParent pParent, const SfxItemSet &rSet)
     , m_xLinePosBox(m_xBuilder->weld_combo_box("position"))
     , m_xLineTypeBox(new SvtLineListBox(m_xBuilder->weld_menu_button("style")))
     , m_xLineWidthEdit(m_xBuilder->weld_metric_spin_button("thickness", FieldUnit::POINT))
-    , m_xLineColorBox(new ColorListBox(m_xBuilder->weld_menu_button("color"), pParent.GetFrameWeld()))
+    , m_xLineColorBox(new ColorListBox(m_xBuilder->weld_menu_button("color"), pController->getDialog()))
     , m_xLineLengthEdit(m_xBuilder->weld_metric_spin_button("length", FieldUnit::PERCENT))
     , m_xLineDistEdit(m_xBuilder->weld_metric_spin_button("spacingtocontents", FieldUnit::CM))
 {
@@ -135,9 +135,9 @@ SwFootNotePage::~SwFootNotePage()
     m_xLineTypeBox.reset();
 }
 
-std::unique_ptr<SfxTabPage> SwFootNotePage::Create(TabPageParent pParent, const SfxItemSet *rSet)
+std::unique_ptr<SfxTabPage> SwFootNotePage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet)
 {
-    return std::make_unique<SwFootNotePage>(pParent, *rSet);
+    return std::make_unique<SwFootNotePage>(pPage, pController, *rSet);
 }
 
 void SwFootNotePage::Reset(const SfxItemSet *rSet)
