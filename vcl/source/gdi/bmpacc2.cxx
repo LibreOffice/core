@@ -115,30 +115,6 @@ void BitmapReadAccess::SetPixelForN8BitTcMask(Scanline pScanline, long nX, const
 }
 
 
-BitmapColor BitmapReadAccess::GetPixelForN16BitTcMsbMask(ConstScanline pScanline, long nX, const ColorMask& rMask)
-{
-    BitmapColor aColor;
-    rMask.GetColorFor16BitMSB( aColor, pScanline + ( nX << 1 ) );
-    return aColor;
-}
-
-void BitmapReadAccess::SetPixelForN16BitTcMsbMask(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask)
-{
-    rMask.SetColorFor16BitMSB( rBitmapColor, pScanline + ( nX << 1 ) );
-}
-
-BitmapColor BitmapReadAccess::GetPixelForN16BitTcLsbMask(ConstScanline pScanline, long nX, const ColorMask& rMask)
-{
-    BitmapColor aColor;
-    rMask.GetColorFor16BitLSB( aColor, pScanline + ( nX << 1 ) );
-    return aColor;
-}
-
-void BitmapReadAccess::SetPixelForN16BitTcLsbMask(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask)
-{
-    rMask.SetColorFor16BitLSB( rBitmapColor, pScanline + ( nX << 1 ) );
-}
-
 BitmapColor BitmapReadAccess::GetPixelForN24BitTcBgr(ConstScanline pScanline, long nX, const ColorMask&)
 {
     BitmapColor aBitmapColor;
