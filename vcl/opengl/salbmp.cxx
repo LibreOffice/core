@@ -403,8 +403,9 @@ GLuint OpenGLSalBitmap::CreateTexture()
             VCL_GL_INFO( "::CreateTexture - convert from " << mnBits << " to 24 bits" );
             // convert to 24 bits RGB using palette
             determineTextureFormat(24, nFormat, nType);
-            pData = convertDataTo24Bpp( mpUserBuffer.get(), mnWidth, mnHeight,
-                mnBits, mnBytesPerRow, maPalette, nFormat == GL_BGR ).release();
+            pData = convertDataBitCount( mpUserBuffer.get(), mnWidth, mnHeight,
+                mnBits, mnBytesPerRow, maPalette,
+                nFormat == GL_BGR ? BitConvert::BGR : BitConvert::RGB ).release();
             bAllocated = true;
         }
     }
