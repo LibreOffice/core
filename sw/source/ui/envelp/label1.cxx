@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -393,7 +394,7 @@ IMPL_LINK_NOARG(SwLabPage, TypeHdl, weld::ComboBox&, void)
 
 void SwLabPage::DisplayFormat()
 {
-    ScopedVclPtrInstance< MetricField > aField(this, WinBits(0));
+    ScopedVclPtrInstance< MetricField > aField(Application::GetDefDialogParent(), WinBits(0));
     FieldUnit aMetric = ::GetDfltMetric(false);
     SetMetric(*aField, aMetric);
     aField->SetDecimalDigits(2);
