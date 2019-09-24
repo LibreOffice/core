@@ -418,7 +418,7 @@ SwField::ExpandField(bool const bCached, SwRootFrame const*const pLayout) const
             if (GetTypeId() == SwFieldTypesEnum::Authority)
             {
                 const SwAuthorityField* pAuthorityField = static_cast<const SwAuthorityField*>(this);
-                m_Cache = pAuthorityField->ConditionalExpandAuthIdentifier(pLayout);
+                m_Cache = pAuthorityField->ExpandCitation(AUTH_FIELD_TITLE, pLayout);
             }
             else
                 m_Cache = ExpandImpl(pLayout);
