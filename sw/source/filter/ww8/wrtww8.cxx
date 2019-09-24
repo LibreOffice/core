@@ -3104,6 +3104,17 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
             noBookmark = true;
         }
     }
+    else if( sCmp == "ole" )
+    {
+        SwNodeIndex* pIdx;
+        OUString aName(BookmarkToWriter(aURL.copy(0, nPos)));
+        const SwFlyFrameFormat* pFormat = m_pDoc->FindFlyByName(aName, SwNodeType::Ole);
+        if (pFormat && nullptr != (pIdx = const_cast<SwNodeIndex*>(pFormat->GetContent().GetContentIdx())))
+        {
+            nIdx = pIdx->GetNext()->GetIndex();
+            noBookmark = true;
+        }
+    }
     if (noBookmark)
     {
         aBookmarkPair aImplicitBookmark;
