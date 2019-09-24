@@ -141,7 +141,7 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet& rSet )
             *m_pnColorListState & ChangeType::MODIFIED )
         {
             SvxAreaTabDialog* pArea = (*m_pnColorListState & ChangeType::CHANGED) ?
-                dynamic_cast<SvxAreaTabDialog*>(GetParentDialog()) : nullptr;
+                dynamic_cast<SvxAreaTabDialog*>(GetDialogController()) : nullptr;
             if (pArea)
                 m_pColorList = pArea->GetNewColorList();
         }

@@ -184,14 +184,14 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
             {
                 if( *m_pnColorListState & ChangeType::CHANGED )
                 {
-                    SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( GetParentDialog() );
+                    SvxAreaTabDialog* pArea = dynamic_cast<SvxAreaTabDialog*>(GetDialogController());
                     if( pArea )
                     {
                         m_pColorList = pArea->GetNewColorList();
                     }
                     else
                     {
-                        SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( GetParentDialog() );
+                        SvxLineTabDialog* pLine = dynamic_cast<SvxLineTabDialog*>(GetDialogController());
                         if( pLine )
                             m_pColorList = pLine->GetNewColorList();
                     }
