@@ -916,17 +916,10 @@ void TransferableHelper::PrepareOLE( const TransferableObjectDescriptor& rObjDes
         AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
 }
 
-
-void TransferableHelper::CopyToClipboard( vcl::Window *pWindow ) const
+void TransferableHelper::CopyToClipboard(const Reference<XClipboard>& rClipboard) const
 {
-    DBG_ASSERT( pWindow, "Window pointer is NULL" );
-    Reference< XClipboard > xClipboard;
-
-    if( pWindow )
-        xClipboard = pWindow->GetClipboard();
-
-    if( xClipboard.is() )
-        mxClipboard = xClipboard;
+    if( rClipboard.is() )
+        mxClipboard = rClipboard;
 
     if( !(mxClipboard.is() && !mxTerminateListener.is()) )
         return;
@@ -945,16 +938,20 @@ void TransferableHelper::CopyToClipboard( vcl::Window *pWindow ) const
     }
 }
 
-
-void TransferableHelper::CopyToSelection( vcl::Window *pWindow ) const
+void TransferableHelper::CopyToClipboard( vcl::Window *pWindow ) const
 {
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
-    Reference< XClipboard > xSelection;
+    Reference< XClipboard > xClipboard;
 
     if( pWindow )
-        xSelection = pWindow->GetPrimarySelection();
+        xClipboard = pWindow->GetClipboard();
 
-    if( !(xSelection.is() && !mxTerminateListener.is()) )
+    CopyToClipboard(xClipboard);
+}
+
+void TransferableHelper::CopyToSelection(const Reference<XClipboard>& rSelection) const
+{
+    if( !(rSelection.is() && !mxTerminateListener.is()) )
         return;
 
     try
@@ -964,13 +961,23 @@ void TransferableHelper::CopyToSelection( vcl::Window *pWindow ) const
         Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
         xDesktop->addTerminateListener( pThis->mxTerminateListener );
 
-        xSelection->setContents( pThis, pThis );
+        rSelection->setContents( pThis, pThis );
     }
     catch( const css::uno::Exception& )
     {
     }
 }
 
+void TransferableHelper::CopyToSelection( vcl::Window *pWindow ) const
+{
+    DBG_ASSERT( pWindow, "Window pointer is NULL" );
+    Reference< XClipboard > xSelection;
+
+    if( pWindow )
+        xSelection = pWindow->GetPrimarySelection();
+
+    CopyToSelection(xSelection);
+}
 
 void TransferableHelper::StartDrag( vcl::Window* pWindow, sal_Int8 nDnDSourceActions )
 
