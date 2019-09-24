@@ -16,6 +16,24 @@
       "revId": "1a5833d8f97d5e9be63764bd754c51cba4869ee8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_a21e136e",
+        "filename": "vcl/unx/gtk3/gtk3salnativewidgets-gtk.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2431,
+      "author": {
+        "id": 1002231
+      },
+      "writtenOn": "2019-09-24T09:41:26Z",
+      "side": 1,
+      "message": "I can see the line using it in Gtk+ being last changed in 3.13 and it seems that it was still _CHECKED so we can assume that it\u0027s since always :)",
+      "parentUuid": "7f7f9b97_e7c5fd5c",
+      "revId": "1a5833d8f97d5e9be63764bd754c51cba4869ee8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
