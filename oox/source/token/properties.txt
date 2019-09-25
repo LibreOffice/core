@@ -107,6 +107,7 @@ CopyStyles
 CornerRadius
 CrossoverPosition
 CrossoverValue
+CrossBetween
 CursorPositionX
 CursorPositionY
 CurveName
