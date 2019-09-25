@@ -397,7 +397,7 @@ void ScXMLSourceDlg::SelectAllChildEntries(weld::TreeIter& rEntry)
     } while (mxLbTree->iter_next_sibling(*xChild));
 }
 
-bool ScXMLSourceDlg::IsParentDirty(weld::TreeIter* pEntry) const
+bool ScXMLSourceDlg::IsParentDirty(const weld::TreeIter* pEntry) const
 {
     std::unique_ptr<weld::TreeIter> xParent(mxLbTree->make_iterator(pEntry));
     if (!mxLbTree->iter_parent(*xParent))
@@ -416,7 +416,7 @@ bool ScXMLSourceDlg::IsParentDirty(weld::TreeIter* pEntry) const
     return false;
 }
 
-bool ScXMLSourceDlg::IsChildrenDirty(weld::TreeIter* pEntry) const
+bool ScXMLSourceDlg::IsChildrenDirty(const weld::TreeIter* pEntry) const
 {
     std::unique_ptr<weld::TreeIter> xChild(mxLbTree->make_iterator(pEntry));
     if (!mxLbTree->iter_children(*xChild))

@@ -73,7 +73,7 @@ public:
     const ScRange&   GetRange() const { return aRange; }
     void         IncRef() { ++nRefCount; }
     sal_uLong        DecRef() { return nRefCount ? --nRefCount : 0; }
-    sal_uLong        GetRef() { return nRefCount; }
+    sal_uLong        GetRef() const { return nRefCount; }
     ScBroadcastArea* GetUpdateChainNext() const { return pUpdateChainNext; }
     void         SetUpdateChainNext( ScBroadcastArea* p ) { pUpdateChainNext = p; }
     bool         IsInUpdateChain() const { return mbInUpdateChain; }

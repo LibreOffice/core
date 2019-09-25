@@ -160,7 +160,7 @@ class ScValidationDlg
 public:
     explicit ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSet, ScTabViewShell* pTabViewSh);
     virtual ~ScValidationDlg() override;
-    static std::shared_ptr<SfxDialogController> Find1AliveObject(weld::Window *pAncestor)
+    static std::shared_ptr<SfxDialogController> Find1AliveObject(const weld::Window *pAncestor)
     {
         return SC_MOD()->Find1RefWindow(SLOTID, pAncestor);
     }
@@ -186,7 +186,7 @@ public:
             (m_pHandler->*m_pSetActiveHdl)();
     }
 
-    bool IsRefInputting(){  return m_bRefInputting; }
+    bool IsRefInputting() const {  return m_bRefInputting; }
     weld::Container* get_refinput_shrink_parent() { return m_xHBox.get(); }
 
     virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) override
@@ -212,7 +212,7 @@ public:
             (m_pHandler->*m_pRefInputDonePostHdl)();
     }
 
-    bool IsChildFocus();
+    bool IsChildFocus() const;
 
     enum { SLOTID = SID_VALIDITY_REFERENCE };
 

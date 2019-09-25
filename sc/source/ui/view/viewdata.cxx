@@ -1206,7 +1206,7 @@ bool ScViewData::SimpleRowMarked()
     return false;
 }
 
-bool ScViewData::IsMultiMarked()
+bool ScViewData::IsMultiMarked() const
 {
     // Test for "real" multi selection, calling MarkToSimple on a local copy,
     // and taking filtered in simple area marks into account.
@@ -2705,7 +2705,7 @@ ScDrawView* ScViewData::GetScDrawView()
     return pView->GetScDrawView();
 }
 
-bool ScViewData::IsMinimized()
+bool ScViewData::IsMinimized() const
 {
     assert(pView && "IsMinimized() without View");
     return pView->IsMinimized();
@@ -3515,7 +3515,7 @@ void ScViewData::UpdateInputHandler( bool bForce )
         pViewShell->UpdateInputHandler( bForce );
 }
 
-bool ScViewData::IsOle()
+bool ScViewData::IsOle() const
 {
     return pDocShell && pDocShell->IsOle();
 }

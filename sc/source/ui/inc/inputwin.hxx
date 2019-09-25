@@ -93,11 +93,11 @@ public:
     virtual void            Resize() override;
 
     long GetPixelHeightForLines(long nLines);
-    long GetEditEngTxtHeight();
+    long GetEditEngTxtHeight() const;
 
-    long GetNumLines() { return mnLines; }
+    long GetNumLines() const { return mnLines; }
     void SetNumLines(long nLines);
-    long GetLastNumExpandedLines() { return mnLastExpandedLines; }
+    long GetLastNumExpandedLines() const { return mnLastExpandedLines; }
 
     void DoScroll();
 
@@ -190,8 +190,8 @@ public:
 
     virtual void            InsertAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
     virtual EditView*       GetEditView() override;
-    long                    GetLastNumExpandedLines();
-    long                    GetNumLines();
+    long                    GetLastNumExpandedLines() const;
+    long                    GetNumLines() const;
     long                    GetPixelHeightForLines(long nLines);
     ScrollBar&              GetScrollBar();
     virtual const OUString& GetTextString() const override;
@@ -236,8 +236,8 @@ public:
     bool                    IsInputActive() override;
     void                    IncrementVerticalSize();
     void                    DecrementVerticalSize();
-    long                    GetNumLines() { return maTextWndGroup->GetNumLines(); }
-    long                    GetVertOffset() { return  mnVertOffset; }
+    long                    GetNumLines() const { return maTextWndGroup->GetNumLines(); }
+    long                    GetVertOffset() const { return  mnVertOffset; }
 
 private:
     void            TriggerToolboxLayout();

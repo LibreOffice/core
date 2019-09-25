@@ -95,7 +95,7 @@ public:
     virtual void SAL_CALL initialize( const css::uno::Sequence < css::uno::Any > & args ) override;
 
     // returns context string for this provider, eg
-    const OUString& getContextString() { return m_sCtxString; }
+    const OUString& getContextString() const { return m_sCtxString; }
 
 private:
     static OUString parseLocationName( const OUString& location );

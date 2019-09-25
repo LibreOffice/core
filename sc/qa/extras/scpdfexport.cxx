@@ -42,7 +42,7 @@ public:
 
     // helpers
 private:
-    std::shared_ptr<utl::TempFile> exportToPDF(uno::Reference<frame::XModel>& xModel,
+    std::shared_ptr<utl::TempFile> exportToPDF(const uno::Reference<frame::XModel>& xModel,
                                                const ScRange& range);
 
     static bool hasTextInPdf(const std::shared_ptr<utl::TempFile>& pPDFFile, const char* sText,
@@ -142,8 +142,8 @@ bool ScPDFExportTest::hasTextInPdf(const std::shared_ptr<utl::TempFile>& pPDFFil
     return (nRead == nFileSize);
 }
 
-std::shared_ptr<utl::TempFile> ScPDFExportTest::exportToPDF(uno::Reference<frame::XModel>& xModel,
-                                                            const ScRange& range)
+std::shared_ptr<utl::TempFile>
+ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, const ScRange& range)
 {
     // create temp file name
     std::shared_ptr<utl::TempFile> pTempFile(new utl::TempFile());
