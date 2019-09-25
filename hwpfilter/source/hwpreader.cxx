@@ -2656,11 +2656,11 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
     else if( fstyle->boxtype == 'G' )
     {
         if( fstyle->margin[1][0] || fstyle->margin[1][1] || fstyle->margin[1][2] || fstyle->margin[1][3] ){
-             OUString clip = "rect(";
-             clip += Double2Str(WTMM(-fstyle->margin[1][0]) ) + "mm ";
-             clip += Double2Str(WTMM(-fstyle->margin[1][1]) ) + "mm ";
-             clip += Double2Str(WTMM(-fstyle->margin[1][2]) ) + "mm ";
-             clip += Double2Str(WTMM(-fstyle->margin[1][3]) ) + "mm)";
+             OUString clip = "rect(" +
+                Double2Str(WTMM(-fstyle->margin[1][0]) ) + "mm " +
+                Double2Str(WTMM(-fstyle->margin[1][1]) ) + "mm " +
+                Double2Str(WTMM(-fstyle->margin[1][2]) ) + "mm " +
+                Double2Str(WTMM(-fstyle->margin[1][3]) ) + "mm)";
              padd("style:mirror", sXML_CDATA, "none");
              padd("fo:clip", sXML_CDATA, clip);
         }
