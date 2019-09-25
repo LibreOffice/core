@@ -23,7 +23,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/builderpage.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/tabpage.hxx>
 
 namespace weld {
     class Builder;

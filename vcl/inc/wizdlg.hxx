@@ -24,6 +24,7 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/roadmapwizard.hxx>
+#include <vcl/tabpage.hxx>
 
 struct ImplWizPageData
 {
