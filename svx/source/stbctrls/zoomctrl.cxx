@@ -141,8 +141,12 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
 
 void SvxZoomStatusBarControl::ImplUpdateItemText()
 {
-    OUString aStr(unicode::formatPercent(nZoom, Application::GetSettings().GetUILanguageTag()));
-    GetStatusBar().SetItemText( GetId(), aStr );
+    // workaround - don't bother updating when we don't have a real zoom value
+    if (nZoom)
+    {
+        OUString aStr(unicode::formatPercent(nZoom, Application::GetSettings().GetUILanguageTag()));
+        GetStatusBar().SetItemText( GetId(), aStr );
+    }
 }
 
 void SvxZoomStatusBarControl::Paint( const UserDrawEvent& )
