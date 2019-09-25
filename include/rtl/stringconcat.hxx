@@ -322,25 +322,14 @@ template< typename T >
 struct OStringNumber;
 
 template<>
-struct OStringNumber< int >
-{
-    OStringNumber( int i, sal_Int16 radix )
-        : length( rtl_str_valueOfInt32( buf, i, radix ))
-    {}
-    // OString::number(value).getStr() is very common (writing xml code, ...),
-    // so implement that one also here, to avoid having to explicitly to convert
-    // to OString in all such places
-    const char * getStr() const SAL_RETURNS_NONNULL { return buf; }
-    char buf[RTL_STR_MAX_VALUEOFINT32];
-    const sal_Int32 length;
-};
-
-template<>
 struct OStringNumber< long long >
 {
     OStringNumber( long long ll, sal_Int16 radix )
         : length( rtl_str_valueOfInt64( buf, ll, radix ))
     {}
+    // OString::number(value).getStr() is very common (writing xml code, ...),
+    // so implement that one also here, to avoid having to explicitly to convert
+    // to OString in all such places
     const char * getStr() const SAL_RETURNS_NONNULL { return buf; }
     char buf[RTL_STR_MAX_VALUEOFINT64];
     const sal_Int32 length;
@@ -399,16 +388,6 @@ OUString::number() to OUString.
 */
 template< typename T >
 struct OUStringNumber;
-
-template<>
-struct OUStringNumber< int >
-{
-    OUStringNumber( int i, sal_Int16 radix )
-        : length( rtl_ustr_valueOfInt32( buf, i, radix ))
-    {}
-    sal_Unicode buf[RTL_USTR_MAX_VALUEOFINT32];
-    const sal_Int32 length;
-};
 
 template<>
 struct OUStringNumber< long long >

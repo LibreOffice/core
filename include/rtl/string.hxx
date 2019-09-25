@@ -1632,9 +1632,9 @@ public:
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 
-    static OStringNumber< int > number( int i, sal_Int16 radix = 10 )
+    static OStringNumber< long long > number( int i, sal_Int16 radix = 10 )
     {
-        return OStringNumber< int >( i, radix );
+        return number( static_cast< long long >( i ), radix );
     }
     static OStringNumber< long long > number( long long ll, sal_Int16 radix = 10 )
     {
