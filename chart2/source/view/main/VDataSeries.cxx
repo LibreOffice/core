@@ -357,17 +357,17 @@ void VDataSeries::setParticle( const OUString& rSeriesParticle )
 }
 OUString VDataSeries::getErrorBarsCID(bool bYError) const
 {
-    OUString aChildParticle( ObjectIdentifier::getStringForType(
-                                      bYError ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X ) );
-    aChildParticle += "=";
+    OUString aChildParticle = ObjectIdentifier::getStringForType(
+                                      bYError ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X ) +
+        "=";
 
     return ObjectIdentifier::createClassifiedIdentifierForParticles(
             m_aSeriesParticle, aChildParticle );
 }
 OUString VDataSeries::getLabelsCID() const
 {
-    OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) );
-    aChildParticle += "=";
+    OUString aChildParticle = ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) +
+        "=";
 
     return ObjectIdentifier::createClassifiedIdentifierForParticles(
             m_aSeriesParticle, aChildParticle );

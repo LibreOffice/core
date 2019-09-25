@@ -256,9 +256,7 @@ Reference<XConnection> SAL_CALL ODriverDelegator::connect(const OUString& url,
                             sCuttedUrl += "?";
                         else
                             sCuttedUrl += "&";
-                        sCuttedUrl += sAdd;
-                        sCuttedUrl += "characterEncoding=";
-                        sCuttedUrl += sIanaName;
+                        sCuttedUrl += sAdd + "characterEncoding=" + sIanaName;
                     }
                 }
             } // if ( !bIsODBC )

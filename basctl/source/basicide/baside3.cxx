@@ -694,8 +694,7 @@ void DialogWindow::SaveDialog()
                 {
                     Sequence< OUString > aContentSeq = xSFI->getFolderContents( aURL, false );
 
-                    OUString aDialogName_( aDialogName );
-                    aDialogName_ += "_" ;
+                    OUString aDialogName_ = aDialogName + "_";
                     sal_Int32 nCount = aContentSeq.getLength();
                     const OUString* pFiles = aContentSeq.getConstArray();
                     for( int i = 0 ; i < nCount ; i++ )

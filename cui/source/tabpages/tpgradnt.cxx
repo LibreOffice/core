@@ -150,8 +150,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet& rSet )
 
         // determining (and possibly cutting) the name and
         // displaying it in the GroupBox
-        OUString        aString( CuiResId( RID_SVXSTR_TABLE ) );
-        aString         += ": ";
+        OUString        aString = CuiResId( RID_SVXSTR_TABLE ) + ": ";
         INetURLObject   aURL( m_pGradientList->GetPath() );
 
         aURL.Append( m_pGradientList->GetName() );

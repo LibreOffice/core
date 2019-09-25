@@ -118,9 +118,8 @@ void OViews::createView(const Reference<XPropertySet>& descriptor)
     OUString sCommand;
 
     aSql += ::dbtools::composeTableName(m_xMetaData, descriptor,
-                                        ::dbtools::EComposeRule::InTableDefinitions, true);
-
-    aSql += " AS ";
+                                        ::dbtools::EComposeRule::InTableDefinitions, true)
+            + " AS ";
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND))
         >>= sCommand;
     aSql += sCommand;
