@@ -480,7 +480,7 @@ namespace
 namespace
 {
     void
-    lcl_CalcBreaks(std::vector<std::pair<sal_uLong, sal_Int32>> & rBreaks, SwPaM const & rPam)
+    lcl_CalcBreaks(std::vector<std::pair<sal_uLong, sal_Int32>> & rBreaks, SwPaM const & rPam, bool const isOnlyFieldmarks = false)
     {
         sal_uLong const nStartNode(rPam.Start()->nNode.GetIndex());
         sal_uLong const nEndNode(rPam.End()->nNode.GetIndex());
@@ -513,7 +513,7 @@ namespace
                         {
                             // META hints only have dummy char at the start, not
                             // at the end, so no need to check in nStartNode
-                            if (n == nEndNode)
+                            if (n == nEndNode && !isOnlyFieldmarks)
                             {
                                 SwTextAttr const*const pAttr(rTextNode.GetTextAttrForCharAt(i));
                                 if (pAttr && pAttr->End() && (nEnd  < *pAttr->End()))
@@ -4420,7 +4420,74 @@ static void lcl_PopNumruleState(
     }
 }
 
-bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
+bool DocumentContentOperationsManager::CopyImpl(SwPaM& rPam, SwPosition& rPos,
+        const bool bMakeNewFrames, const bool bCopyAll,
+        SwPaM *const pCopyRange) const
+{
+    std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
+
+    lcl_CalcBreaks(Breaks, rPam, true);
+
+    if (Breaks.empty())
+    {
+        return CopyImplImpl(rPam, rPos, bMakeNewFrames, bCopyAll, pCopyRange);
+    }
+
+    SwPosition const & rSelectionEnd( *rPam.End() );
+
+    bool bRet(true);
+    bool bFirst(true);
+    // iterate from end to start, ... don't think it's necessary here?
+    auto iter( Breaks.rbegin() );
+    sal_uLong nOffset(0);
+    SwNodes const& rNodes(rPam.GetPoint()->nNode.GetNodes());
+    SwPaM aPam( rSelectionEnd, rSelectionEnd ); // end node!
+    SwPosition & rEnd( *aPam.End() );
+    SwPosition & rStart( *aPam.Start() );
+    SwPaM copyRange(rPos, rPos);
+
+    while (iter != Breaks.rend())
+    {
+        rStart = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second + 1);
+        if (rStart < rEnd) // check if part is empty
+        {
+            // pass in copyRange member as rPos; should work ...
+            bRet &= CopyImplImpl(aPam, *copyRange.Start(), bMakeNewFrames, bCopyAll, &copyRange);
+            nOffset = iter->first - rStart.nNode.GetIndex(); // fly nodes...
+            if (pCopyRange)
+            {
+                if (bFirst)
+                {
+                    pCopyRange->SetMark();
+                    *pCopyRange->GetMark() = *copyRange.End();
+                }
+                *pCopyRange->GetPoint() = *copyRange.Start();
+            }
+            bFirst = false;
+        }
+        rEnd = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second);
+        ++iter;
+    }
+
+    rStart = *rPam.Start(); // set to original start
+    if (rStart < rEnd) // check if part is empty
+    {
+        bRet &= CopyImplImpl(aPam, *copyRange.Start(), bMakeNewFrames, bCopyAll, &copyRange);
+        if (pCopyRange)
+        {
+            if (bFirst)
+            {
+                pCopyRange->SetMark();
+                *pCopyRange->GetMark() = *copyRange.End();
+            }
+            *pCopyRange->GetPoint() = *copyRange.Start();
+        }
+    }
+
+    return bRet;
+}
+
+bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPos,
         const bool bMakeNewFrames, const bool bCopyAll,
         SwPaM *const pCpyRange ) const
 {
