@@ -1023,12 +1023,13 @@ SwEndNode::SwEndNode( SwNodes& rNds, sal_uLong nPos, SwStartNode& rSttNd )
 
 SwContentNode::SwContentNode( const SwNodeIndex &rWhere, const SwNodeType nNdType,
                             SwFormatColl *pColl )
-    : SwModify( pColl ),     // CursorsShell, FrameFormat,
-    SwNode( rWhere, nNdType ),
-    m_aCondCollListener( *this ),
-    m_pCondColl( nullptr ),
-    mbSetModifyAtAttr( false )
+    : SwNode( rWhere, nNdType )
+    , m_aCondCollListener( *this )
+    , m_pCondColl( nullptr )
+    , mbSetModifyAtAttr( false )
 {
+    if(pColl)
+        pColl->Add(this);
 }
 
 SwContentNode::~SwContentNode()

@@ -33,7 +33,6 @@ class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase,
 {
     friend class SwAccessibleNoTextHyperlink;
     css::uno::Reference< css::accessibility::XAccessibleHyperlink > m_xHyperlink;
-    sw::WriterMultiListener        m_aListener;
     OUString msTitle;
     OUString msDesc;
 
@@ -42,7 +41,7 @@ protected:
 
     const SwNoTextNode *GetNoTextNode() const;
 
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void Notify(const SfxHint&) override;
 
 public:
     SwAccessibleNoTextFrame( std::shared_ptr<SwAccessibleMap> const& pInitMap,

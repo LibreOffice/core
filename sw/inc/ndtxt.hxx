@@ -79,7 +79,6 @@ typedef std::set< sal_Int32 > SwSoftPageBreakList;
 class SW_DLLPUBLIC SwTextNode
     : public SwContentNode
     , public ::sfx2::Metadatable
-    , public sw::BroadcasterMixin
 {
     friend class SwContentNode;
     /// For creating the first TextNode.

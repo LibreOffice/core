@@ -349,7 +349,7 @@ private:
 
 // SwContentNode
 
-class SW_DLLPUBLIC SwContentNode: public SwModify, public SwNode, public SwIndexReg
+class SW_DLLPUBLIC SwContentNode: public sw::BroadcastingModify, public SwNode, public SwIndexReg
 {
 
     sw::WriterMultiListener m_aCondCollListener;

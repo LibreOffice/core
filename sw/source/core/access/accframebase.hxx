@@ -21,13 +21,12 @@
 #define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRAMEBASE_HXX
 
 #include "acccontext.hxx"
-#include <calbck.hxx>
+#include <svl/listener.hxx>
 #include <ndtyp.hxx>
 
 class SwFlyFrame;
 
-class SwAccessibleFrameBase : public SwAccessibleContext,
-                              public SwClient
+class SwAccessibleFrameBase : public SwAccessibleContext, public SvtListener
 {
     bool    m_bIsSelected;    // protected by base class mutex
     bool    IsSelected();
@@ -45,7 +44,7 @@ protected:
     virtual void InvalidateFocus_() override;
 
     virtual ~SwAccessibleFrameBase() override;
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void Notify(const SfxHint&) override;
 
 public:
     SwAccessibleFrameBase(std::shared_ptr<SwAccessibleMap> const& pInitMap,

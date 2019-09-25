@@ -59,12 +59,11 @@ SwAccessibleNoTextFrame::SwAccessibleNoTextFrame(
         sal_Int16 nInitRole,
         const SwFlyFrame* pFlyFrame  ) :
     SwAccessibleFrameBase( pInitMap, nInitRole, pFlyFrame ),
-    m_aListener(*this),
     msTitle(),
     msDesc()
 {
     const SwNoTextNode* pNd = GetNoTextNode();
-    m_aListener.StartListening(const_cast<SwNoTextNode*>(pNd));
+    StartListening(const_cast<SwNoTextNode*>(pNd)->GetNotifier());
     // #i73249#
     // consider new attributes Title and Description
     if( pNd )
@@ -84,86 +83,70 @@ SwAccessibleNoTextFrame::~SwAccessibleNoTextFrame()
 {
 }
 
-void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwAccessibleNoTextFrame::Notify(const SfxHint& rHint)
 {
-    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
-    // #i73249#
-    // suppress handling of RES_NAME_CHANGED in case that attribute Title is
-    // used as the accessible name.
-    if ( nWhich != RES_NAME_CHANGED ||
-         msTitle.isEmpty() )
+    if(rHint.GetId() == SfxHintId::Dying)
+        EndListeningAll();
+    else if(auto pLegacyModifyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        SwAccessibleFrameBase::Modify( pOld, pNew );
-        if (!GetRegisteredIn())
-            return; // probably was deleted - avoid doing anything
-    }
-
-    if (nWhich != RES_TITLE_CHANGED && nWhich != RES_DESCRIPTION_CHANGED)
-        return;
-
-    const SwNoTextNode *pNd = GetNoTextNode();
-    assert( m_aListener.IsListeningTo(pNd) && "invalid frame" );
-    switch( nWhich )
-    {
-        // #i73249#
-        case RES_TITLE_CHANGED:
+        const sal_uInt16 nWhich = pLegacyModifyHint->m_pOld ? pLegacyModifyHint->m_pOld->Which() : pLegacyModifyHint->m_pNew ? pLegacyModifyHint->m_pNew->Which() : 0;
+        if (nWhich != RES_TITLE_CHANGED && nWhich != RES_DESCRIPTION_CHANGED)
+            return;
+        const SwNoTextNode* pNd = GetNoTextNode();
+        switch(nWhich)
         {
-            OUString sOldTitle, sNewTitle;
-            const SwStringMsgPoolItem* pOldItem = dynamic_cast<const SwStringMsgPoolItem*>(pOld);
-            if (pOldItem)
-                sOldTitle = pOldItem->GetString();
-            const SwStringMsgPoolItem* pNewItem = dynamic_cast<const SwStringMsgPoolItem*>(pNew);
-            if (pNewItem)
-                sNewTitle = pNewItem->GetString();
-            if ( sOldTitle == sNewTitle )
+            // #i73249#
+            case RES_TITLE_CHANGED:
             {
-                break;
+                OUString sOldTitle, sNewTitle;
+                const SwStringMsgPoolItem* pOldItem = dynamic_cast<const SwStringMsgPoolItem*>(pLegacyModifyHint->m_pOld);
+                if(pOldItem)
+                    sOldTitle = pOldItem->GetString();
+                const SwStringMsgPoolItem* pNewItem = dynamic_cast<const SwStringMsgPoolItem*>(pLegacyModifyHint->m_pNew);
+                if(pNewItem)
+                    sNewTitle = pNewItem->GetString();
+                if(sOldTitle == sNewTitle)
+                    break;
+                msTitle = sNewTitle;
+                AccessibleEventObject aEvent;
+                aEvent.EventId = AccessibleEventId::NAME_CHANGED;
+                aEvent.OldValue <<= sOldTitle;
+                aEvent.NewValue <<= msTitle;
+                FireAccessibleEvent(aEvent);
+
+                if(!pNd->GetDescription().isEmpty())
+                    break;
+                [[fallthrough]];
             }
-            msTitle = sNewTitle;
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::NAME_CHANGED;
-            aEvent.OldValue <<= sOldTitle;
-            aEvent.NewValue <<= msTitle;
-            FireAccessibleEvent( aEvent );
-
-            if ( !pNd->GetDescription().isEmpty() )
+            case RES_DESCRIPTION_CHANGED:
             {
-                break;
-            }
-            [[fallthrough]];
-        }
-        case RES_DESCRIPTION_CHANGED:
-        {
-            if ( pNd && GetFrame() )
-            {
-                const OUString sOldDesc( msDesc );
-
-                const OUString& rDesc = pNd->GetDescription();
-                msDesc = rDesc;
-                if ( msDesc.isEmpty() &&
-                     msTitle != GetName() )
+                if(pNd && GetFrame())
                 {
-                    msDesc = msTitle;
-                }
+                    const OUString sOldDesc(msDesc);
 
-                if ( msDesc != sOldDesc )
-                {
-                    AccessibleEventObject aEvent;
-                    aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
-                    aEvent.OldValue <<= sOldDesc;
-                    aEvent.NewValue <<= msDesc;
-                    FireAccessibleEvent( aEvent );
+                    const OUString& rDesc = pNd->GetDescription();
+                    msDesc = rDesc;
+                    if(msDesc.isEmpty() && msTitle != GetName())
+                        msDesc = msTitle;
+
+                    if(msDesc != sOldDesc)
+                    {
+                        AccessibleEventObject aEvent;
+                        aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
+                        aEvent.OldValue <<= sOldDesc;
+                        aEvent.NewValue <<= msDesc;
+                        FireAccessibleEvent(aEvent);
+                    }
                 }
             }
         }
-        break;
     }
 }
 
 void SwAccessibleNoTextFrame::Dispose(bool bRecursive, bool bCanSkipInvisible)
 {
     SolarMutexGuard aGuard;
-    m_aListener.EndListeningAll();
+    EndListeningAll();
     SwAccessibleFrameBase::Dispose(bRecursive, bCanSkipInvisible);
 }
 
