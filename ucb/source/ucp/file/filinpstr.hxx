@@ -20,10 +20,9 @@
 #define INCLUDED_UCB_SOURCE_UCP_FILE_FILINPSTR_HXX
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ucbhelper/macros.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
@@ -35,10 +34,7 @@ namespace fileaccess {
     class TaskManager;
 
     class XInputStream_impl final
-        : public cppu::OWeakObject,
-          public css::lang::XTypeProvider,
-          public css::io::XInputStream,
-          public css::io::XSeekable
+        : public cppu::WeakImplHelper<css::io::XInputStream, css::io::XSeekable>
     {
     public:
 
@@ -52,23 +48,6 @@ namespace fileaccess {
 
         sal_Int32 CtorSuccess() { return m_nErrorCode;}
         sal_Int32 getMinorError() { return m_nMinorErrorCode;}
-
-
-        // XTypeProvider
-
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-
-        virtual css::uno::Any SAL_CALL
-        queryInterface( const css::uno::Type& rType ) override;
-
-        virtual void SAL_CALL
-        acquire()
-            throw() override;
-
-        virtual void SAL_CALL
-        release()
-            throw() override;
 
         virtual sal_Int32 SAL_CALL
         readBytes(
