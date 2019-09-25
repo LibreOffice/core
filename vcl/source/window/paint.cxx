@@ -727,7 +727,7 @@ void Window::ImplInvalidateFrameRegion( const vcl::Region* pRegion, InvalidateFl
         }
     }
 
-    if ( !mpWindowImpl->mpFrameData->maPaintIdle.IsActive() )
+    if ( !comphelper::LibreOfficeKit::isActive() && !mpWindowImpl->mpFrameData->maPaintIdle.IsActive() )
         mpWindowImpl->mpFrameData->maPaintIdle.Start();
 }
 
