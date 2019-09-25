@@ -3375,9 +3375,9 @@ public:
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 
-    static OUStringNumber< int > number( int i, sal_Int16 radix = 10 )
+    static OUStringNumber< long long > number( int i, sal_Int16 radix = 10 )
     {
-        return OUStringNumber< int >( i, radix );
+        return number( static_cast< long long >( i ), radix );
     }
     static OUStringNumber< long long > number( long long ll, sal_Int16 radix = 10 )
     {
@@ -3420,10 +3420,7 @@ public:
     */
     static OUString number( int i, sal_Int16 radix = 10 )
     {
-        sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT32];
-        rtl_uString* pNewData = NULL;
-        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt32( aBuf, i, radix ) );
-        return OUString( pNewData, SAL_NO_ACQUIRE );
+        return number( static_cast< long long >( i ), radix );
     }
     /// @overload
     /// @since LibreOffice 4.1
