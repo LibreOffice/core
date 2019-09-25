@@ -191,7 +191,7 @@ IMPL_LINK(OUserAdmin, UserHdl, weld::Button&, rButton, void)
     {
         if (&rButton == m_xNEWUSER.get())
         {
-            SfxPasswordDialog aPwdDlg(GetDialogFrameWeld());
+            SfxPasswordDialog aPwdDlg(GetFrameWeld());
             aPwdDlg.ShowExtras(SfxShowExtras::ALL);
             if (aPwdDlg.run())
             {
@@ -218,7 +218,7 @@ IMPL_LINK(OUserAdmin, UserHdl, weld::Button&, rButton, void)
                 if(xUser.is())
                 {
                     OUString sNewPassword,sOldPassword;
-                    OPasswordDialog aDlg(GetDialogFrameWeld(), sName);
+                    OPasswordDialog aDlg(GetFrameWeld(), sName);
                     if (aDlg.run() == RET_OK)
                     {
                         sNewPassword = aDlg.GetNewPassword();
@@ -237,7 +237,7 @@ IMPL_LINK(OUserAdmin, UserHdl, weld::Button&, rButton, void)
                 Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
                 if(xDrop.is())
                 {
-                    std::unique_ptr<weld::MessageDialog> xQry(Application::CreateMessageDialog(GetDialogFrameWeld(),
+                    std::unique_ptr<weld::MessageDialog> xQry(Application::CreateMessageDialog(GetFrameWeld(),
                                                               VclMessageType::Question, VclButtonsType::YesNo,
                                                               DBA_RES(STR_QUERY_USERADMIN_DELETE_USER)));
                     if (xQry->run() == RET_YES)

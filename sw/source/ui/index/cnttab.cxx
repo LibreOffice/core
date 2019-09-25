@@ -1341,7 +1341,7 @@ void SwTOXSelectTabPage::LanguageHdl(const weld::ComboBox* pBox)
 
 IMPL_LINK_NOARG(SwTOXSelectTabPage, AddStylesHdl, weld::Button&, void)
 {
-    SwAddStylesDlg_Impl aDlg(GetDialogFrameWeld(), static_cast<SwMultiTOXTabDialog*>(GetDialogController())->GetWrtShell(),
+    SwAddStylesDlg_Impl aDlg(GetFrameWeld(), static_cast<SwMultiTOXTabDialog*>(GetDialogController())->GetWrtShell(),
         aStyleArr);
     aDlg.run();
     ModifyHdl();
@@ -1358,7 +1358,7 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, const OString&, rIdent, void)
 
     if (rIdent == "open")
     {
-        sAutoMarkURL = lcl_CreateAutoMarkFileDlg(GetDialogFrameWeld(),
+        sAutoMarkURL = lcl_CreateAutoMarkFileDlg(GetFrameWeld(),
                                 sAutoMarkURL, sAutoMarkType, true);
     }
     else if (rIdent == "new" || rIdent == "edit")
@@ -1366,13 +1366,13 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, const OString&, rIdent, void)
         bool bNew = (rIdent == "new");
         if (bNew)
         {
-            sAutoMarkURL = lcl_CreateAutoMarkFileDlg(GetDialogFrameWeld(),
+            sAutoMarkURL = lcl_CreateAutoMarkFileDlg(GetFrameWeld(),
                                     sAutoMarkURL, sAutoMarkType, false);
             if (sAutoMarkURL.isEmpty())
                 return;
         }
 
-        SwAutoMarkDlg_Impl aAutoMarkDlg(GetDialogFrameWeld(), sAutoMarkURL, bNew);
+        SwAutoMarkDlg_Impl aAutoMarkDlg(GetFrameWeld(), sAutoMarkURL, bNew);
         if (RET_OK != aAutoMarkDlg.run() && bNew)
             sAutoMarkURL = sSaveAutoMarkURL;
     }

@@ -168,7 +168,7 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl, void*, void)
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
         VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScHFEditDlg(
-            GetDialogFrameWeld(), aDataSet, aStrPageStyle, nResId));
+            GetFrameWeld(), aDataSet, aStrPageStyle, nResId));
         pDlg->StartExecuteAsync([this, pDlg](sal_Int32 nResult){
             if ( nResult == RET_OK )
             {
@@ -179,7 +179,7 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl, void*, void)
     else
     {
         OUString  aText;
-        SfxSingleTabDialogController aDlg(GetDialogFrameWeld(), &aDataSet);
+        SfxSingleTabDialogController aDlg(GetFrameWeld(), &aDataSet);
         bool bRightPage = m_xCntSharedBox->get_active() || (SvxPageUsage::Left != nPageUsage);
 
         if ( nId == SID_ATTR_PAGE_HEADERSET )

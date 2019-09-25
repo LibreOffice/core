@@ -229,8 +229,7 @@ public:
     OString         GetConfigId() const { return GetHelpId(); }
     bool            IsVisible() const { return m_xContainer->get_visible(); }
 
-    //TODO rename to GetFrameWeld when SfxTabPage doesn't inherit from anything
-    weld::Window*   GetDialogFrameWeld() const;
+    weld::Window*   GetFrameWeld() const;
 };
 
 #endif

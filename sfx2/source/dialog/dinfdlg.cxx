@@ -767,7 +767,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, SignatureHdl, weld::Button&, void)
     SfxObjectShell* pDoc = SfxObjectShell::Current();
     if( pDoc )
     {
-        pDoc->SignDocumentContent(GetDialogFrameWeld());
+        pDoc->SignDocumentContent(GetFrameWeld());
 
         ImplUpdateSignatures();
     }
@@ -787,7 +787,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl, weld::Button&, void)
         if (!pFilter)
             break;
 
-        sfx2::RequestPassword(pFilter, OUString(), pMedSet, GetDialogFrameWeld()->GetXWindow());
+        sfx2::RequestPassword(pFilter, OUString(), pMedSet, GetFrameWeld()->GetXWindow());
         pShell->SetModified();
     }
     while (false);

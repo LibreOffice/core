@@ -192,7 +192,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl, weld::Button&, void)
     int nEntry = m_xPathBox->get_selected_index();
     if (nEntry != -1)
     {
-        std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(GetDialogFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(GetFrameWeld(),
                                                     VclMessageType::Question, VclButtonsType::YesNo, CuiResId(RID_SVXSTR_QUERY_DELETE_CONFIRM)));
         if (xQuery->run() == RET_YES)
             m_xPathBox->remove(nEntry);
@@ -265,7 +265,7 @@ void DbRegistrationOptionsPage::insertNewEntry(const OUString& _sName,const OUSt
 
 void DbRegistrationOptionsPage::openLinkDialog(const OUString& sOldName, const OUString& sOldLocation, int nEntry)
 {
-    ODocumentLinkDialog aDlg(GetDialogFrameWeld(), nEntry == -1);
+    ODocumentLinkDialog aDlg(GetFrameWeld(), nEntry == -1);
 
     aDlg.setLink(sOldName, sOldLocation);
     aDlg.setNameValidator(LINK( this, DbRegistrationOptionsPage, NameValidator ) );

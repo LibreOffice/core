@@ -1642,7 +1642,7 @@ void SwInsertSectionTabPage::ChangePasswd(bool bChange)
     {
         if(!m_aNewPasswd.hasElements() || bChange)
         {
-            SfxPasswordDialog aPasswdDlg(GetDialogFrameWeld());
+            SfxPasswordDialog aPasswdDlg(GetFrameWeld());
             aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
             if (RET_OK == aPasswdDlg.run())
             {
@@ -1653,7 +1653,7 @@ void SwInsertSectionTabPage::ChangePasswd(bool bChange)
                 }
                 else
                 {
-                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
+                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                                   VclMessageType::Info, VclButtonsType::Ok,
                                                                   SwResId(STR_WRONG_PASSWD_REPEAT)));
                     xInfoBox->run();
@@ -1691,7 +1691,7 @@ IMPL_LINK(SwInsertSectionTabPage, UseFileHdl, weld::ToggleButton&, rButton, void
     {
         if (m_pWrtSh->HasSelection())
         {
-            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                            VclMessageType::Question, VclButtonsType::YesNo,
                                                            SwResId(STR_QUERY_CONNECT)));
             if (RET_NO == xQueryBox->run())
@@ -1722,7 +1722,7 @@ IMPL_LINK(SwInsertSectionTabPage, UseFileHdl, weld::ToggleButton&, rButton, void
 
 IMPL_LINK_NOARG(SwInsertSectionTabPage, FileSearchHdl, weld::Button&, void)
 {
-    m_pDocInserter.reset(new ::sfx2::DocumentInserter(GetDialogFrameWeld(), "swriter"));
+    m_pDocInserter.reset(new ::sfx2::DocumentInserter(GetFrameWeld(), "swriter"));
     m_pDocInserter->StartExecuteModal( LINK( this, SwInsertSectionTabPage, DlgClosedHdl ) );
 }
 

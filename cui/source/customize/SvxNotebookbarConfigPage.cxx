@@ -202,7 +202,7 @@ short SvxNotebookbarConfigPage::QueryReset()
     OUString label = SvxConfigPageHelper::replaceSaveInName(msg, saveInName);
 
     std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(
-        GetDialogFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo, label));
+        GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo, label));
     int nValue = xQueryBox->run();
     if (nValue == RET_YES)
     {
