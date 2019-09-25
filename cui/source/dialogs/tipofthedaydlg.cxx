@@ -28,6 +28,8 @@
 #include <vcl/help.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <unotools/configmgr.hxx>
 
 TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/tipofthedaydialog.ui", "TipOfTheDayDialog")
@@ -86,7 +88,18 @@ void TipOfTheDayDialog::UpdateTip()
     }
     else if (aLink.startsWith("http"))
     {
-        m_pLink->set_uri(CuiResId(aLink.toUtf8().getStr()));
+        aText = CuiResId(aLink.toUtf8().getStr());
+
+        sal_Int32 aPos = aText.indexOf("%LANGUAGENAME");
+        if (aPos != -1)
+        {
+            OUString aLang = LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
+            if (aLang == "en" || aLang == "pt" || aLang == "zh") //en-US/GB, pt-BR, zh-CH/TW
+                aLang = LanguageTag(utl::ConfigManager::getUILocale()).getBcp47();
+            aText = aText.replaceAt(aPos, 13, aLang);
+        }
+
+        m_pLink->set_uri(aText);
         m_pLink->set_label(CuiResId(STR_MORE_LINK));
         m_pLink->set_visible(true);
         m_pLink->connect_clicked(Link<weld::LinkButton&, void>());
@@ -99,7 +112,6 @@ void TipOfTheDayDialog::UpdateTip()
         //converts aLink into the proper offline/online hyperlink
         m_pLink->connect_clicked(LINK(this, TipOfTheDayDialog, OnLinkClick));
     }
-
     // image
     OUString aURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/tipoftheday/");
     rtl::Bootstrap::expandMacros(aURL);
