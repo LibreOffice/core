@@ -243,7 +243,7 @@ GlobalSettings::~GlobalSettings()
 }
 
 // settings access
-bool GlobalSettings::HasToolbarStatesInfo()
+bool GlobalSettings::HasToolbarStatesInfo() const
 {
     GlobalSettings_Access* pSettings( GetGlobalSettings( m_xContext ));
 

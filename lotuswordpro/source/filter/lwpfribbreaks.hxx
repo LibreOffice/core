@@ -75,7 +75,7 @@ public:
     void RegisterBreakStyle(LwpPara* pPara);
     void ParseLayout();
     LwpObjectID& GetLayout() { return m_Layout;}
-    bool IsLastFrib(){return m_bLastFrib;}
+    bool IsLastFrib() const {return m_bLastFrib;}
 
 private:
     LwpObjectID m_Layout;

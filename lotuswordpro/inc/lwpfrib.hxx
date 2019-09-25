@@ -93,7 +93,7 @@ public:
     virtual void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
     LwpFrib* GetNext(){return m_pNext;}
     void SetNext(LwpFrib* next){m_pNext = next;}
-    sal_uInt8 GetType() { return m_nFribType;}
+    sal_uInt8 GetType() const { return m_nFribType;}
     OUString GetEditor();
     XFColor GetHighlightColor();
 protected:
@@ -105,17 +105,17 @@ protected:
     OUString m_StyleName;
 public:
     bool m_ModFlag;
-    const OUString& GetStyleName(){return m_StyleName;}
+    const OUString& GetStyleName() const {return m_StyleName;}
     void SetModifiers(ModifierInfo* pModifiers);
     ModifierInfo* GetModifiers(){return m_pModifiers.get();}
     virtual void RegisterStyle(LwpFoundry* pFoundry);
     bool HasNextFrib();
     void ConvertChars(XFContentContainer* pXFPara,const OUString& text);
-    void ConvertHyperLink(XFContentContainer* pXFPara,LwpHyperlinkMgr* pHyperlink,const OUString& text);
+    void ConvertHyperLink(XFContentContainer* pXFPara, const LwpHyperlinkMgr* pHyperlink,const OUString& text);
     rtl::Reference<XFFont> GetFont();
 
-    sal_uInt8 GetRevisionType(){return m_nRevisionType;}
-    bool GetRevisionFlag(){return m_bRevisionFlag;}
+    sal_uInt8 GetRevisionType() const {return m_nRevisionType;}
+    bool GetRevisionFlag() const {return m_bRevisionFlag;}
     enum{
         REV_INSERT =0,
         REV_DELETE = 1,

@@ -79,7 +79,7 @@ public:
     virtual ~XFParagraph() override;
 
 public:
-    bool    HasContents();
+    bool    HasContents() const;
 
     virtual enumXFContent   GetContentType() override;
 

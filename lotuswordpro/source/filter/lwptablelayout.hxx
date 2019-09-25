@@ -131,10 +131,10 @@ public:
     void XFConvert(XFContentContainer* pCont) override;
     void ConvertTable(rtl::Reference<XFTable> const & pXFTable, sal_uInt16 nStartRow,
                 sal_uInt16 nEndRow,sal_uInt8 nStartCol,sal_uInt8 nEndCol);
-    const OUString& GetDefaultRowStyleName(){return m_DefaultRowStyleName;}
+    const OUString& GetDefaultRowStyleName() const {return m_DefaultRowStyleName;}
     void SetCellsMap(sal_uInt16 nRow,sal_uInt8 nCol,XFCell* pXFCell);
     XFCell* GetCellsMap(sal_uInt16 nRow,sal_uInt8 nCol);
-   const  std::map<sal_uInt16,LwpRowLayout*>& GetRowsMap(){return m_RowsMap;}
+   const  std::map<sal_uInt16,LwpRowLayout*>& GetRowsMap() const {return m_RowsMap;}
     LwpRowLayout* GetRowLayout(sal_uInt16 nRow);
 private:
     void ConvertDefaultRow(rtl::Reference<XFTable> const & pXFTable, sal_uInt8 nStartCol,
@@ -196,11 +196,11 @@ public:
     LwpColumnLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpColumnLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_COLUMN_LAYOUT;}
-    sal_uInt32 GetColumnID(){return ccolid;}
+    sal_uInt32 GetColumnID() const {return ccolid;}
     double GetWidth() override {return LwpTools::ConvertFromUnitsToMetric(cwidth);}
     using LwpVirtualLayout::RegisterStyle;
     void RegisterStyle(double dCalculatedWidth);
-    bool IsJustifiable(){return (( m_nAttributes2 & STYLE2_JUSTIFIABLE) != 0);}
+    bool IsJustifiable() const {return (( m_nAttributes2 & STYLE2_JUSTIFIABLE) != 0);}
 protected:
     void Read() override;
 private:
