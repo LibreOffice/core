@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="ChartDataDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="chartdatadialog|ChartDataDialog">Data Table</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -17,24 +21,8 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="ok">
-                <property name="label">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="cancel">
-                <property name="label">gtk-cancel</property>
+              <object class="GtkButton" id="close">
+                <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -84,7 +72,6 @@
                   <object class="GtkToolButton" id="InsertRow">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">InsertRow</property>
                     <property name="label" translatable="yes" context="chartdatadialog|InsertRow">Insert Row</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon01.png</property>
@@ -98,7 +85,6 @@
                   <object class="GtkToolButton" id="InsertColumn">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">InsertColumn</property>
                     <property name="label" translatable="yes" context="chartdatadialog|InsertColumn">Insert Series</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon02.png</property>
@@ -112,7 +98,6 @@
                   <object class="GtkToolButton" id="InsertTextColumn">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">InsertTextColumn</property>
                     <property name="label" translatable="yes" context="chartdatadialog|InsertTextColumn">Insert Text Column</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon07.png</property>
@@ -126,7 +111,6 @@
                   <object class="GtkToolButton" id="RemoveRow">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">RemoveRow</property>
                     <property name="label" translatable="yes" context="chartdatadialog|RemoveRow">Delete Row</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon03.png</property>
@@ -140,7 +124,6 @@
                   <object class="GtkToolButton" id="RemoveColumn">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">RemoveColumn</property>
                     <property name="label" translatable="yes" context="chartdatadialog|RemoveColumn">Delete Series</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon04.png</property>
@@ -162,9 +145,8 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="MoveLeftColumn">
-                      <property name="visible">True</property>
+                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">MoveLeftColumn</property>
                     <property name="label" translatable="yes" context="chartdatadialog|MoveLeftColumn">Move Series Left</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon08.png</property>
@@ -178,7 +160,6 @@
                   <object class="GtkToolButton" id="MoveRightColumn">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">MoveRightColumn</property>
                     <property name="label" translatable="yes" context="chartdatadialog|MoveRightColumn">Move Series Right</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon05.png</property>
@@ -192,7 +173,6 @@
                   <object class="GtkToolButton" id="MoveUpRow">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">MoveUpRow</property>
                     <property name="label" translatable="yes" context="chartdatadialog|MoveUpRow">Move Row Up</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon09.png</property>
@@ -206,20 +186,9 @@
                   <object class="GtkToolButton" id="MoveDownRow">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">MoveDownRow</property>
                     <property name="label" translatable="yes" context="chartdatadialog|MoveDownRow">Move Row Down</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon06.png</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSeparatorToolItem" id="toolbutton2">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -315,8 +284,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-5">ok</action-widget>
-      <action-widget response="-6">cancel</action-widget>
+      <action-widget response="-7">close</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>
