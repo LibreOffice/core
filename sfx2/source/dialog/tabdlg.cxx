@@ -289,7 +289,7 @@ OString SfxTabPage::GetHelpId() const
     return OString();
 }
 
-weld::Window* SfxTabPage::GetDialogFrameWeld() const
+weld::Window* SfxTabPage::GetFrameWeld() const
 {
     if (m_pDialogController)
         return m_pDialogController->getDialog();

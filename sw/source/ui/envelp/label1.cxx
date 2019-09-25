@@ -238,7 +238,7 @@ SwLabPage::SwLabPage(weld::Container* pPage, weld::DialogController* pController
     , m_xHiddenSortTypeBox(m_xBuilder->weld_combo_box("hiddentype"))
     , m_xFormatInfo(m_xBuilder->weld_label("formatinfo"))
 {
-    weld::WaitObject aWait(GetDialogFrameWeld());
+    weld::WaitObject aWait(GetFrameWeld());
 
     m_xWritingEdit->set_size_request(m_xWritingEdit->get_approximate_digit_width() * 30,
                                      m_xWritingEdit->get_height_rows(10));

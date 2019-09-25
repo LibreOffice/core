@@ -377,7 +377,7 @@ void SdTPAction::OpenFileDialog()
 
         if (bSound)
         {
-            SdOpenSoundFileDialog aFileDialog(GetDialogFrameWeld());
+            SdOpenSoundFileDialog aFileDialog(GetFrameWeld());
 
             if( !aFile.isEmpty() )
                 aFileDialog.SetPath( aFile );
@@ -391,7 +391,7 @@ void SdTPAction::OpenFileDialog()
         else if (bMacro)
         {
             // choose macro dialog
-            OUString aScriptURL = SfxApplication::ChooseScript(GetDialogFrameWeld());
+            OUString aScriptURL = SfxApplication::ChooseScript(GetFrameWeld());
 
             if ( !aScriptURL.isEmpty() )
             {
@@ -402,7 +402,7 @@ void SdTPAction::OpenFileDialog()
         {
             sfx2::FileDialogHelper aFileDialog(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                FileDialogFlags::NONE, GetDialogFrameWeld());
+                FileDialogFlags::NONE, GetFrameWeld());
 
             if (bDocument && aFile.isEmpty())
                 aFile = SvtPathOptions().GetWorkPath();
@@ -627,7 +627,7 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl, weld::Widget&, void)
 
         if( aMedium.IsStorage() )
         {
-            weld::WaitObject aWait(GetDialogFrameWeld());
+            weld::WaitObject aWait(GetFrameWeld());
 
             // is it a draw file?
             // open with READ, otherwise the Storages might write into the file!
