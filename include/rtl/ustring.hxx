@@ -3420,10 +3420,7 @@ public:
     */
     static OUString number( int i, sal_Int16 radix = 10 )
     {
-        sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT32];
-        rtl_uString* pNewData = NULL;
-        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt32( aBuf, i, radix ) );
-        return OUString( pNewData, SAL_NO_ACQUIRE );
+        return number( static_cast< long long >( i ), radix );
     }
     /// @overload
     /// @since LibreOffice 4.1
@@ -3448,18 +3445,14 @@ public:
     static OUString number( long long ll, sal_Int16 radix = 10 )
     {
         sal_Unicode aBuf[RTL_STR_MAX_VALUEOFINT64];
-        rtl_uString* pNewData = NULL;
-        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt64( aBuf, ll, radix ) );
-        return OUString( pNewData, SAL_NO_ACQUIRE );
+        return OUString(aBuf, rtl_ustr_valueOfInt64(aBuf, ll, radix));
     }
     /// @overload
     /// @since LibreOffice 4.1
     static OUString number( unsigned long long ll, sal_Int16 radix = 10 )
     {
         sal_Unicode aBuf[RTL_STR_MAX_VALUEOFUINT64];
-        rtl_uString* pNewData = NULL;
-        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfUInt64( aBuf, ll, radix ) );
-        return OUString( pNewData, SAL_NO_ACQUIRE );
+        return OUString(aBuf, rtl_ustr_valueOfUInt64(aBuf, ll, radix));
     }
 
     /**
@@ -3474,9 +3467,7 @@ public:
     static OUString number( float f )
     {
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFFLOAT];
-        rtl_uString* pNewData = NULL;
-        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfFloat( aBuf, f ) );
-        return OUString( pNewData, SAL_NO_ACQUIRE );
+        return OUString(aBuf, rtl_ustr_valueOfFloat(aBuf, f));
     }
 
     /**
@@ -3491,9 +3482,7 @@ public:
     static OUString number( double d )
     {
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFDOUBLE];
-        rtl_uString* pNewData = NULL;
-        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfDouble( aBuf, d ) );
-        return OUString( pNewData, SAL_NO_ACQUIRE );
+        return OUString(aBuf, rtl_ustr_valueOfDouble(aBuf, d));
     }
 #endif
 

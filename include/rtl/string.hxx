@@ -1702,18 +1702,14 @@ public:
     static OString number( long long ll, sal_Int16 radix = 10 )
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFINT64];
-        rtl_String* pNewData = NULL;
-        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfInt64( aBuf, ll, radix ) );
-        return OString( pNewData, SAL_NO_ACQUIRE );
+        return OString(aBuf, rtl_str_valueOfInt64(aBuf, ll, radix));
     }
     /// @overload
     /// @since LibreOffice 4.1
     static OString number( unsigned long long ll, sal_Int16 radix = 10 )
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFUINT64];
-        rtl_String* pNewData = NULL;
-        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfUInt64( aBuf, ll, radix ) );
-        return OString( pNewData, SAL_NO_ACQUIRE );
+        return OString(aBuf, rtl_str_valueOfUInt64(aBuf, ll, radix));
     }
 
     /**
@@ -1728,9 +1724,7 @@ public:
     static OString number( float f )
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFFLOAT];
-        rtl_String* pNewData = NULL;
-        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfFloat( aBuf, f ) );
-        return OString( pNewData, SAL_NO_ACQUIRE );
+        return OString(aBuf, rtl_str_valueOfFloat(aBuf, f));
     }
 
     /**
@@ -1745,9 +1739,7 @@ public:
     static OString number( double d )
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFDOUBLE];
-        rtl_String* pNewData = NULL;
-        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfDouble( aBuf, d ) );
-        return OString( pNewData, SAL_NO_ACQUIRE );
+        return OString(aBuf, rtl_str_valueOfDouble(aBuf, d));
     }
 #endif
 
