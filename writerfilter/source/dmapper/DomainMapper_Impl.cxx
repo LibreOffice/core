@@ -1527,7 +1527,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     xTextRange = xTextAppend->finishParagraph( comphelper::containerToSequence(aProperties) );
                     m_xPreviousParagraph.set(xTextRange, uno::UNO_QUERY);
 
-                    if (isNumberingViaStyle || itNumberingRules != aProperties.end())
+                    if (m_xPreviousParagraph.is() && // null for SvxUnoTextBase
+                        (isNumberingViaStyle || itNumberingRules != aProperties.end()))
                     {
                         assert(dynamic_cast<ParagraphPropertyMap*>(pPropertyMap.get()));
                         sal_Int32 const nListId( isNumberingViaStyle
@@ -1535,8 +1536,11 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             : static_cast<ParagraphPropertyMap*>(pPropertyMap.get())->GetListId());
                         if (ListDef::Pointer const& pList = m_pListTable->GetList(nListId))
                         {   // styles could refer to non-existing lists...
-                            if (AbstractListDef::Pointer const& pAbsList =
-                                    pList->GetAbstractDefinition())
+                            AbstractListDef::Pointer const& pAbsList =
+                                    pList->GetAbstractDefinition();
+                            if (pAbsList &&
+                                // SvxUnoTextRange doesn't have ListId
+                                m_xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("ListId"))
                             {
                                 OUString paraId;
                                 m_xPreviousParagraph->getPropertyValue("ListId") >>= paraId;
