@@ -14,7 +14,6 @@
 
 #include <rtl/bootstrap.hxx>
 #include <desktop/crashreport.hxx>
-#include <desktop/minidump.hxx>
 #include <sfx2/safemode.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
@@ -77,10 +76,8 @@ IMPL_LINK(CrashReportDialog, BtnHdl, Button*, pBtn, void)
 {
     if (pBtn == mpBtnSend.get())
     {
-        std::string ini_path = CrashReporter::getIniFileName();
-
         std::string response;
-        bool bSuccess = crashreport::readConfig(ini_path, response);
+        bool bSuccess = CrashReporter::readSendConfig(response);
 
         OUString aCrashID = OUString::createFromAscii(response.c_str());
 

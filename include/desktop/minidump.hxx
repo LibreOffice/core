@@ -16,7 +16,18 @@
 
 namespace crashreport {
 
-CRASHREPORT_DLLPUBLIC bool readConfig(const std::string& iniPath, std::string& response);
+// when response = nullptr only make test
+/** Read+Send, Test and send info from the Dump.ini .
+
+        @param [in] iniPath Path-file to the read/test ini-file
+        @param [in] response=nullptr in this case made the Test only
+        @param [in] response!=nullptr in this case made the Read+Send
+
+        @retval true       Read+Send, Test was okay
+        @retval false      Read+Send, Test is a error
+*/
+
+CRASHREPORT_DLLPUBLIC bool readConfig(const std::string& iniPath, std::string * response);
 
 }
 
