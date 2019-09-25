@@ -25,7 +25,6 @@
 #include <sfx2/basedlgs.hxx>
 #include <sal/types.h>
 #include <vcl/builderpage.hxx>
-#include <vcl/tabpage.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <o3tl/typed_flags_set.hxx>

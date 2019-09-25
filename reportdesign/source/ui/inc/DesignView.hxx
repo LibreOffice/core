@@ -35,7 +35,6 @@
 #include "ReportDefines.hxx"
 #include <svtools/colorcfg.hxx>
 #include <svx/svdedtv.hxx>
-#include <vcl/tabpage.hxx>
 #include <vcl/splitwin.hxx>
 #include "MarkedSection.hxx"
 #include "ScrollHelper.hxx"

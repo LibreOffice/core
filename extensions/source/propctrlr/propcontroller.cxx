@@ -46,7 +46,6 @@
 #include <comphelper/property.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/tabpage.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/component_context.hxx>

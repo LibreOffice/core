@@ -119,7 +119,7 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
             sal_Int64 nAspect(embed::Aspects::MSOLE_CONTENT);
             MapUnit aMapUnit(VCLUnoHelper::UnoEmbed2VCLMapUnit(xObject->getMapUnit(nAspect)));
             Size aSize(aInsRect.GetSize());
-            aSize = vcl::Window::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(aMapUnit));
+            aSize = OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(aMapUnit));
             awt::Size aAwtSize;
             aAwtSize.Width = aSize.Width();
             aAwtSize.Height = aSize.Height();

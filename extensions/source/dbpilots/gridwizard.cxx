@@ -47,7 +47,6 @@ namespace dbp
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::awt;
-    using namespace ::svt;
 
     OGridWizard::OGridWizard(weld::Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
