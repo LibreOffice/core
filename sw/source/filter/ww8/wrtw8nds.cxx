@@ -917,7 +917,8 @@ bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rT
                                 OUString());
 
         // #i21465# Only interested in outline references
-        if ( !sRefType.isEmpty() && (sRefType == "outline" || sRefType == "graphic" || sRefType == "frame" || sRefType == "ole" || sRefType == "region") )
+        if ( !sRefType.isEmpty() &&
+            (sRefType == "outline" || sRefType == "graphic" || sRefType == "frame" || sRefType == "ole" || sRefType == "region" || sRefType == "table") )
         {
             for ( const auto& rBookmarkPair : GetExport().m_aImplicitBookmarks )
             {

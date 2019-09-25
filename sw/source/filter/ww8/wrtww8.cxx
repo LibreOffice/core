@@ -3130,6 +3130,20 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
             }
         }
     }
+    else if( sCmp == "table" )
+    {
+        OUString aName(BookmarkToWriter(aURL.copy(0, nPos)));
+        const SwTable* pTable = SwTable::FindTable(m_pDoc->FindTableFormatByName(aName));
+        if (pTable)
+        {
+            SwTableNode* pTableNode = const_cast<SwTableNode*>(pTable->GetTabSortBoxes()[1]->GetSttNd()->FindTableNode());
+            if (pTableNode)
+            {
+                nIdx = pTableNode->GetIndex() + 2;
+                noBookmark = true;
+            }
+        }
+    }
     if (noBookmark)
     {
         aBookmarkPair aImplicitBookmark;

@@ -2914,11 +2914,8 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
                     }
                 }
             }
-            if (sMark.indexOf(' ') != -1 && !sMark.endsWith("|table"))
-            {
-                // Spaces are prohibited in bookmark name.
-                sMark = sMark.replace(' ', '_');
-            }
+            // Spaces are prohibited in bookmark name.
+            sMark = sMark.replace(' ', '_');
             m_pHyperlinkAttrList->add( FSNS( XML_w, XML_anchor ),
                     OUStringToOString( sMark, RTL_TEXTENCODING_UTF8 ).getStr( ) );
         }
