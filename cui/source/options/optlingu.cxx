@@ -1316,7 +1316,7 @@ IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
             pLinguData.reset( new SvxLinguData_Impl );
 
         SvxLinguData_Impl   aOldLinguData( *pLinguData );
-        SvxEditModulesDlg aDlg(GetDialogFrameWeld(), *pLinguData);
+        SvxEditModulesDlg aDlg(GetFrameWeld(), *pLinguData);
         if (aDlg.run() != RET_OK)
             *pLinguData = aOldLinguData;
 
@@ -1345,7 +1345,7 @@ IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
     else if (m_xLinguDicsNewPB.get() == &rBtn)
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNewDictionaryDialog> aDlg(pFact->CreateSvxNewDictionaryDialog(GetDialogFrameWeld()));
+        ScopedVclPtr<AbstractSvxNewDictionaryDialog> aDlg(pFact->CreateSvxNewDictionaryDialog(GetFrameWeld()));
         uno::Reference< XDictionary >  xNewDic;
         if ( aDlg->Execute() == RET_OK )
             xNewDic = aDlg->GetNewDictionary();
@@ -1374,7 +1374,7 @@ IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
                 if (xDic.is())
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    ScopedVclPtr<VclAbstractDialog> aDlg(pFact->CreateSvxEditDictionaryDialog(GetDialogFrameWeld(), xDic->getName()));
+                    ScopedVclPtr<VclAbstractDialog> aDlg(pFact->CreateSvxEditDictionaryDialog(GetFrameWeld(), xDic->getName()));
                     aDlg->Execute();
                 }
             }
@@ -1382,7 +1382,7 @@ IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
     }
     else if (m_xLinguDicsDelPB.get() == &rBtn)
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDialogFrameWeld(), "cui/ui/querydeletedictionarydialog.ui"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletedictionarydialog.ui"));
         std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryDeleteDictionaryDialog"));
         if (RET_NO == xQuery->run())
             return;
@@ -1448,7 +1448,7 @@ IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
             if (aData.HasNumericValue())
             {
                 sal_uInt16 nRID = aData.GetEntryId();
-                OptionsBreakSet aDlg(GetDialogFrameWeld(), nRID);
+                OptionsBreakSet aDlg(GetFrameWeld(), nRID);
                 aDlg.GetNumericFld().set_value(aData.GetNumericValue());
                 if (RET_OK == aDlg.run())
                 {

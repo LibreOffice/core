@@ -89,7 +89,7 @@ IMPL_LINK(SvxProxyTabPage, PortChangedHdl, weld::Entry&, rEdit, void)
 {
     if (!isValidPort(rEdit.get_text()))
     {
-        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                        VclMessageType::Warning, VclButtonsType::Ok,
                                                        CuiResId( RID_SVXSTR_OPT_PROXYPORTS)));
         xErrorBox->run();
@@ -545,7 +545,7 @@ SvxSecurityTabPage::~SvxSecurityTabPage()
 IMPL_LINK_NOARG(SvxSecurityTabPage, SecurityOptionsHdl, weld::Button&, void)
 {
     if (!m_xSecOptDlg)
-        m_xSecOptDlg.reset(new svx::SecurityOptionsDialog(GetDialogFrameWeld(), mpSecOptions.get()));
+        m_xSecOptDlg.reset(new svx::SecurityOptionsDialog(GetFrameWeld(), mpSecOptions.get()));
     m_xSecOptDlg->run();
 }
 
@@ -580,7 +580,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl, weld::Button&, void)
         }
         else
         {
-            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                            VclMessageType::Question, VclButtonsType::YesNo,
                                                            m_sPasswordStoringDeactivateStr));
             xQueryBox->set_default_response(RET_NO);
@@ -685,7 +685,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl, weld::Button&, void)
 
         if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->authorizateWithMasterPassword(xTmpHandler) )
         {
-            svx::WebConnectionInfoDialog aDlg(GetDialogFrameWeld());
+            svx::WebConnectionInfoDialog aDlg(GetFrameWeld());
             aDlg.run();
         }
     }
@@ -696,7 +696,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl, weld::Button&, void)
 IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl, weld::Button&, void)
 {
     if (!mpCertPathDlg)
-        mpCertPathDlg.reset(new CertPathDialog(GetDialogFrameWeld()));
+        mpCertPathDlg.reset(new CertPathDialog(GetFrameWeld()));
 
     OUString sOrig = mpCertPathDlg->getDirectory();
     short nRet = mpCertPathDlg->run();
@@ -713,7 +713,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, TSAURLsPBHdl, weld::Button&, void)
 {
     // Unlike the mpCertPathDlg, we *don't* keep the same dialog object around between
     // invocations. Seems clearer to my little brain that way.
-    TSAURLsDialog aTSAURLsDlg(GetDialogFrameWeld());
+    TSAURLsDialog aTSAURLsDlg(GetFrameWeld());
     aTSAURLsDlg.run();
 }
 
@@ -945,7 +945,7 @@ IMPL_LINK_NOARG(SvxEMailTabPage, FileDialogHdl_Impl, weld::Button&, void)
 {
     if (!pImpl->bROProgram)
     {
-        FileDialogHelper aHelper(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, GetDialogFrameWeld());
+        FileDialogHelper aHelper(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, GetFrameWeld());
         OUString sPath = m_xMailerURLED->get_text();
         if ( sPath.isEmpty() )
             sPath = "/usr/bin";

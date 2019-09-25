@@ -1188,7 +1188,7 @@ IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, weld::Button&, void)
             ErrorHandler::GetErrorString(ERRCODE_IO_NOTSUPPORTED, msg); //TODO: handle failure
             std::unique_ptr<weld::MessageDialog>(
                 Application::CreateMessageDialog(
-                    GetDialogFrameWeld(), VclMessageType::Error, VclButtonsType::Ok, msg))
+                    GetFrameWeld(), VclMessageType::Error, VclButtonsType::Ok, msg))
                 ->run();
             return;
         }
@@ -1477,7 +1477,7 @@ IMPL_LINK_NOARG(ImpPDFTabSigningPage, ClickmaPbSignCertSelect, weld::Button&, vo
     Reference< security::XDocumentDigitalSignatures > xSigner(
         security::DocumentDigitalSignatures::createWithVersion(
             comphelper::getProcessComponentContext(), "1.2" ) );
-    xSigner->setParentWindow(GetDialogFrameWeld()->GetXWindow());
+    xSigner->setParentWindow(GetFrameWeld()->GetXWindow());
 
     // The use may provide a description while choosing a certificate.
     OUString aDescription;

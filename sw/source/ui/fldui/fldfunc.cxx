@@ -508,7 +508,7 @@ void SwFieldFuncPage::UpdateSubType()
 // call MacroBrowser, fill Listbox with Macros
 IMPL_LINK_NOARG( SwFieldFuncPage, MacroHdl, weld::Button&, void)
 {
-    if (GetFieldMgr().ChooseMacro(GetDialogFrameWeld()))
+    if (GetFieldMgr().ChooseMacro(GetFrameWeld()))
         UpdateSubType();
 }
 

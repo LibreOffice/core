@@ -305,7 +305,7 @@ void SfxMacroTabPage::AssignDeleteHdl(const weld::Widget* pBtn)
 IMPL_LINK( SfxMacroTabPage, TimeOut_Impl, Timer*,, void )
 {
     // FillMacroList() can take a long time -> show wait cursor and disable input
-    weld::Window* pDialog = GetDialogFrameWeld();
+    weld::Window* pDialog = GetFrameWeld();
     // perhaps the tabpage is part of a SingleTabDialog then pDialog == nullptr
     std::unique_ptr<weld::WaitObject> xWait(pDialog ? new weld::WaitObject(pDialog) : nullptr);
     // fill macro list

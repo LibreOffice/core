@@ -134,7 +134,7 @@ namespace dbaui
             // show an error message
             OUString sError(DBA_RES(STR_COULD_NOT_LOAD_ODBC_LIB));
             sError = sError.replaceFirst("#lib#", aEnumeration.getLibraryName());
-            std::unique_ptr<weld::MessageDialog> xDialog(Application::CreateMessageDialog(GetDialogFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xDialog(Application::CreateMessageDialog(GetFrameWeld(),
                                                          VclMessageType::Warning, VclButtonsType::Ok,
                                                          sError));
             xDialog->run();
@@ -144,7 +144,7 @@ namespace dbaui
         {
             aEnumeration.getDatasourceNames(aOdbcDatasources);
             // execute the select dialog
-            ODatasourceSelectDialog aSelector(GetDialogFrameWeld(), aOdbcDatasources);
+            ODatasourceSelectDialog aSelector(GetFrameWeld(), aOdbcDatasources);
             if (!_sCurr.isEmpty())
                 aSelector.Select(_sCurr);
             if (RET_OK == aSelector.run())
@@ -272,7 +272,7 @@ namespace dbaui
                     eImage = MessageType::Error;
                     aMessage = DBA_RES(STR_CONNECTION_NO_SUCCESS);
                 }
-                OSQLMessageBox aMsg(GetDialogFrameWeld(), sTitle, aMessage, MessBoxStyle::Ok, eImage);
+                OSQLMessageBox aMsg(GetFrameWeld(), sTitle, aMessage, MessBoxStyle::Ok, eImage);
                 aMsg.run();
             }
             if ( !bSuccess )

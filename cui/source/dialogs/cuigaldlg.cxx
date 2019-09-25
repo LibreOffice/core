@@ -786,7 +786,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl, weld::ComboBox&, vo
     {
         aLastFilterName = aText;
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDialogFrameWeld(), "cui/ui/queryupdategalleryfilelistdialog.ui"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryupdategalleryfilelistdialog.ui"));
         std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryUpdateFileListDialog"));
         if (xQuery->run() == RET_YES)
             SearchFiles();
@@ -795,7 +795,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl, weld::ComboBox&, vo
 
 void TPGalleryThemeProperties::SearchFiles()
 {
-    std::shared_ptr<SearchProgress> xProgress(new SearchProgress(GetDialogFrameWeld(), this, aURL));
+    std::shared_ptr<SearchProgress> xProgress(new SearchProgress(GetFrameWeld(), this, aURL));
 
     aFoundList.clear();
     m_xLbxFound->clear();
@@ -848,7 +848,7 @@ void TPGalleryThemeProperties::TakeFiles()
 {
     if (m_xLbxFound->count_selected_rows() || (bTakeAll && bEntriesFound))
     {
-        std::shared_ptr<TakeProgress> xTakeProgress(new TakeProgress(GetDialogFrameWeld(), this));
+        std::shared_ptr<TakeProgress> xTakeProgress(new TakeProgress(GetFrameWeld(), this));
         xTakeProgress->LaunchThread();
         weld::DialogController::runAsync(xTakeProgress, [=](sal_Int32 /*nResult*/) {
             /* no postprocessing needed, pTakeProgress
@@ -888,8 +888,8 @@ void TPGalleryThemeProperties::DoPreview()
 
         if (!m_aWndPreview.SetGraphic(_aURL))
         {
-            weld::WaitObject aWaitObject(GetDialogFrameWeld());
-            ErrorHandler::HandleError(ERRCODE_IO_NOTEXISTSPATH, GetDialogFrameWeld());
+            weld::WaitObject aWaitObject(GetFrameWeld());
+            ErrorHandler::HandleError(ERRCODE_IO_NOTEXISTSPATH, GetFrameWeld());
         }
 #if HAVE_FEATURE_AVMEDIA
         else if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), "" ) )
@@ -912,7 +912,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl, weld::Button&, void)
 
         if (!m_xLbxFound->count_selected_rows() || !bEntriesFound)
         {
-            SvxOpenGraphicDialog aDlg(CuiResId(RID_SVXSTR_KEY_GALLERY_DIR), GetDialogFrameWeld());
+            SvxOpenGraphicDialog aDlg(CuiResId(RID_SVXSTR_KEY_GALLERY_DIR), GetFrameWeld());
             aDlg.EnableLink(false);
             aDlg.AsLink(false);
 

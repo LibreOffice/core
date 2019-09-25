@@ -482,7 +482,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, weld::Button&, void)
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         ScopedVclPtr<AbstractSvxMultiPathDialog> pMultiDlg(
-            pFact->CreateSvxMultiPathDialog(GetDialogFrameWeld()));
+            pFact->CreateSvxMultiPathDialog(GetFrameWeld()));
 
         OUString sPath( sUser );
         if ( !sPath.isEmpty() )
