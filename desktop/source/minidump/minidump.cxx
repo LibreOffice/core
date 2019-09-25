@@ -23,7 +23,9 @@ static std::map<std::string, std::string> readStrings(std::istream& file)
 {
     std::map<std::string, std::string> parameters;
 
-    while (!file.eof())
+    // when file is not readable, the status eof would not be set
+    // better test of state is okay
+    while (file)
     {
         std::string line;
         std::getline(file, line);
