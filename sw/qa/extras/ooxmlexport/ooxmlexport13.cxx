@@ -786,6 +786,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127733, "internal_hyperlink_ole.odt")
     CPPUNIT_ASSERT_EQUAL(anchor, bookmarkName);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf127734, "internal_hyperlink_region.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:bookmarkStart", "name");
+    OUString anchor = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink", "anchor");
+    CPPUNIT_ASSERT_EQUAL(anchor, bookmarkName);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

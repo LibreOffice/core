@@ -3115,6 +3115,21 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
             noBookmark = true;
         }
     }
+    else if( sCmp == "region" )
+    {
+        SwNodeIndex* pIdx;
+        OUString aName(BookmarkToWriter(aURL.copy(0, nPos)));
+        for (const SwSectionFormat* pFormat : m_pDoc->GetSections())
+        {
+            if (aName == pFormat->GetSection()->GetSectionName()
+                && nullptr != (pIdx = const_cast<SwNodeIndex*>(pFormat->GetContent().GetContentIdx())))
+            {
+                nIdx = pIdx->GetIndex() + 1;
+                noBookmark = true;
+                break;
+            }
+        }
+    }
     if (noBookmark)
     {
         aBookmarkPair aImplicitBookmark;
