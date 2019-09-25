@@ -20,6 +20,7 @@
 
 #include <memory>
 #include <sal/macros.h>
+#include <vcl/builder.hxx>
 #include <vcl/image.hxx>
 
 #include <com/sun/star/i18n/WordType.hpp>

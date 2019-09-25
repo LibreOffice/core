@@ -25,6 +25,7 @@
 #include <svx/unoapi.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
+#include <sal/log.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/strings.hrc>

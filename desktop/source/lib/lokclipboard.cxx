@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <vcl/lazydelete.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <sal/log.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace css;
