@@ -121,7 +121,7 @@ public:
         mbDragEnable = false;
     }
 
-    bool IsDragEnabled()
+    bool IsDragEnabled() const
     {
         return mbDragEnable;
     }
