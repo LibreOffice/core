@@ -21,6 +21,7 @@
 
 #include <sal/log.hxx>
 #include <svl/style.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/help.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
