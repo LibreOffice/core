@@ -31,6 +31,7 @@
 #include <config_lgpl.h>
 #include <vector>
 #include <rtl/ref.hxx>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include "DAVAuthListener.hxx"
 
 namespace webdav_ucp

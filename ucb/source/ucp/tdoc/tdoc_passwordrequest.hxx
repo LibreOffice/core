@@ -21,7 +21,6 @@
 #define INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_PASSWORDREQUEST_HXX
 
 #include <com/sun/star/task/PasswordRequestMode.hpp>
-#include <com/sun/star/task/XInteractionPassword.hpp>
 
 #include <ucbhelper/interactionrequest.hxx>
 

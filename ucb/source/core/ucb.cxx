@@ -25,6 +25,7 @@
  *************************************************************************/
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -45,6 +46,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/getcomponentcontext.hxx>
+#include <ucbhelper/macros.hxx>
 #include "identify.hxx"
 #include "ucbcmds.hxx"
 

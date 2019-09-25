@@ -27,6 +27,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace tdoc_ucp {
 

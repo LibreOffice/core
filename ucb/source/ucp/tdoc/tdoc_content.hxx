@@ -21,9 +21,7 @@
 #define INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_CONTENT_HXX
 
 #include <ucbhelper/contenthelper.hxx>
-#include <com/sun/star/task/DocumentPasswordRequest.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
-#include <com/sun/star/ucb/CommandFailedException.hpp>
 #include "tdoc_provider.hxx"
 
 namespace com { namespace sun { namespace star {

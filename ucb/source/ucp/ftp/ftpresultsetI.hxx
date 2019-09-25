@@ -19,10 +19,8 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPRESULTSETI_HXX
 #define INCLUDED_UCB_SOURCE_UCP_FTP_FTPRESULTSETI_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include "ftpresultsetbase.hxx"
 #include "ftpdirp.hxx"
 

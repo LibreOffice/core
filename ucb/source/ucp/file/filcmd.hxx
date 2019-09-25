@@ -21,9 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
 
 
 namespace fileaccess {

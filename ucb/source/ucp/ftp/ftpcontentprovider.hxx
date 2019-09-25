@@ -23,10 +23,9 @@
 #include <vector>
 #include <ucbhelper/proxydecider.hxx>
 #include <ucbhelper/providerhelper.hxx>
-#include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include "ftpurl.hxx"
+#include "curl.hxx"
 
 // UNO service name for the provider. This name will be used by the UCB to
 // create instances of the provider.

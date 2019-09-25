@@ -48,6 +48,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <ucbhelper/getcomponentcontext.hxx>
+#include <ucbhelper/macros.hxx>
 #include <tools/diagnose_ex.h>
 #include "ucbstore.hxx"
 

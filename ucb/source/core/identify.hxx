@@ -21,7 +21,6 @@
 #define INCLUDED_UCB_SOURCE_CORE_IDENTIFY_HXX
 
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
-#include <rtl/ustrbuf.hxx>
 #include <cppuhelper/implbase.hxx>
 
 

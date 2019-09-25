@@ -31,7 +31,6 @@
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <ucbhelper/proxydecider.hxx>
-#include "DAVException.hxx"
 
 using namespace com::sun::star;
 

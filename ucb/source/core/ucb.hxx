@@ -23,24 +23,20 @@
 
 #include <com/sun/star/ucb/CheckinArgument.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
-#include <com/sun/star/container/XContainer.hpp>
 
-#include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
-#include <osl/interlck.h>
-#include <ucbhelper/macros.hxx>
 #include "providermap.hxx"
 #include <ucbhelper/registerucb.hxx>
 
 #include <memory>
-#include <vector>
 
 
 #define UCB_SERVICE_NAME "com.sun.star.ucb.UniversalContentBroker"

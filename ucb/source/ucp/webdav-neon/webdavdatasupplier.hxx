@@ -31,7 +31,6 @@
 
 #include <config_lgpl.h>
 #include <memory>
-#include <vector>
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
 
