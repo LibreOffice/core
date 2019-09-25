@@ -38,15 +38,14 @@ namespace chart
 void ChartController::executeDispatch_EditData()
 {
     Reference< chart2::XChartDocument > xChartDoc( getModel(), uno::UNO_QUERY );
-    if( xChartDoc.is())
+    if (xChartDoc.is())
     {
         SolarMutexGuard aSolarGuard;
         UndoLiveUpdateGuardWithData aUndoGuard(
             SchResId( STR_ACTION_EDIT_CHART_DATA ),
             m_xUndoManager );
-        ScopedVclPtrInstance<DataEditor> aDataEditorDialog( GetChartWindow().get(), xChartDoc, m_xCC );
-        if (aDataEditorDialog->Execute() == RET_OK)
-            aDataEditorDialog->ApplyChangesToModel();
+        DataEditor aDataEditorDialog(GetChartFrame(), xChartDoc, m_xCC);
+        aDataEditorDialog.run();
         aUndoGuard.commit();
     }
 }

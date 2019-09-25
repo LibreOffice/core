@@ -22,11 +22,15 @@
 
 #include <svtools/editbrowsebox.hxx>
 #include <vcl/fmtfield.hxx>
+#include <vcl/weld.hxx>
 
 #include <memory>
 #include <vector>
 
 namespace com { namespace sun { namespace star {
+    namespace awt {
+        class XWindow;
+    }
     namespace chart2 {
         class XChartDocument;
     }
@@ -66,7 +70,9 @@ protected:
     virtual void MouseButtonDown( const BrowserMouseEvent& rEvt ) override;
 
 public:
-    DataBrowser( vcl::Window* pParent, WinBits nStyle, bool bLiveUpdate );
+    DataBrowser(const css::uno::Reference<css::awt::XWindow> &rParent,
+                weld::Container* pColumns, weld::Container* pColors);
+
     virtual ~DataBrowser() override;
     virtual void dispose() override;
 
@@ -157,6 +163,8 @@ private:
 
     VclPtr<FormattedField>      m_aNumberEditField;
     VclPtr<Edit>                m_aTextEditField;
+    weld::Container*            m_pColumnsWin;
+    weld::Container*            m_pColorsWin;
 
     /// note: m_aNumberEditField must precede this member!
     ::svt::CellControllerRef    m_rNumberEditController;
@@ -171,8 +179,8 @@ private:
 
     OUString GetColString( sal_Int32 nColumnId ) const;
 
-    DECL_LINK( SeriesHeaderGotFocus, Control&, void );
-    DECL_LINK( SeriesHeaderChanged,  impl::SeriesHeaderEdit*, void );
+    DECL_LINK( SeriesHeaderGotFocus, impl::SeriesHeaderEdit&, void );
+    DECL_LINK( SeriesHeaderChanged,  impl::SeriesHeaderEdit&, void );
 
     DataBrowser( const DataBrowser & ) = delete;
 };

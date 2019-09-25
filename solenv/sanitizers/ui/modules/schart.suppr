@@ -1,3 +1,4 @@
+chart2/uiconfig/ui/columnfragment.ui://GtkEntry[@id='entry'] no-labelled-by
 chart2/uiconfig/ui/dlg_DataLabel.ui://GtkLabel[@id='CT_LABEL_DIAL'] orphan-label
 chart2/uiconfig/ui/dlg_DataLabel.ui://GtkLabel[@id='STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE'] orphan-label
 chart2/uiconfig/ui/dlg_DataLabel.ui://GtkSpinButton[@id='NF_LABEL_DEGREES'] no-labelled-by
