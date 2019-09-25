@@ -282,8 +282,8 @@ bool X11OpenGLDeviceInfo::isDeviceBlocked()
     if (mnGLMajorVersion == 1)
         return true;
 
-    CrashReporter::addKeyValue("AdapterVendorId", rtl::OStringToOUString(maVendor, RTL_TEXTENCODING_UTF8));
-    CrashReporter::addKeyValue("AdapterDeviceId", rtl::OStringToOUString(maRenderer, RTL_TEXTENCODING_UTF8));
+    CrashReporter::addKeyValue("AdapterVendorId", rtl::OStringToOUString(maVendor, RTL_TEXTENCODING_UTF8), CrashReporter::AddItem);
+    CrashReporter::addKeyValue("AdapterDeviceId", rtl::OStringToOUString(maRenderer, RTL_TEXTENCODING_UTF8), CrashReporter::Write);
 
     SAL_INFO("vcl.opengl", "Vendor: " << maVendor);
     SAL_INFO("vcl.opengl", "Renderer: " << maRenderer);

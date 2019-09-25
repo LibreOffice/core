@@ -122,10 +122,6 @@
 
 #include "langselect.hxx"
 
-#if HAVE_FEATURE_BREAKPAD
-#include <fstream>
-#endif
-
 #if defined MACOSX
 #include <errno.h>
 #include <sys/wait.h>
@@ -889,26 +885,6 @@ void Desktop::HandleBootstrapErrors(
 
 namespace {
 
-bool crashReportInfoExists()
-{
-#if HAVE_FEATURE_BREAKPAD
-    std::string path = CrashReporter::getIniFileName();
-    std::ifstream aFile(path);
-    while (aFile.good())
-    {
-        std::string line;
-        std::getline(aFile, line);
-        int sep = line.find('=');
-        if (sep >= 0)
-        {
-            std::string key = line.substr(0, sep);
-            if (key == "DumpFile")
-                return true;
-        }
-    }
-#endif
-    return false;
-}
 
 #if HAVE_FEATURE_BREAKPAD
 void handleCrashReport()
@@ -967,7 +943,12 @@ void impl_checkRecoveryState(bool& bCrashed           ,
                              bool& bRecoveryDataExists,
                              bool& bSessionDataExists )
 {
-    bCrashed = officecfg::Office::Recovery::RecoveryInfo::Crashed::get() || crashReportInfoExists();
+    bCrashed = officecfg::Office::Recovery::RecoveryInfo::Crashed::get()
+#if HAVE_FEATURE_BREAKPAD
+        || CrashReporter::crashReportInfoExists();
+#else
+        ;
+#endif
     bool elements = officecfg::Office::Recovery::RecoveryList::get()->
         hasElements();
     bool session
@@ -2025,7 +2006,7 @@ void Desktop::OpenClients()
 #endif
 
 #if HAVE_FEATURE_BREAKPAD
-    if (officecfg::Office::Common::Misc::CrashReport::get() && crashReportInfoExists())
+    if (officecfg::Office::Common::Misc::CrashReport::get() && CrashReporter::crashReportInfoExists())
         handleCrashReport();
 #endif
 
@@ -2103,11 +2084,9 @@ void Desktop::OpenClients()
             }
         }
     }
-#if HAVE_FEATURE_BREAKPAD
-    CrashReporter::writeCommonInfo();
+
     // write this information here to avoid depending on vcl in the crash reporter lib
-    CrashReporter::addKeyValue("Language", Application::GetSettings().GetLanguageTag().getBcp47());
-#endif
+    CrashReporter::addKeyValue("Language", Application::GetSettings().GetLanguageTag().getBcp47(), CrashReporter::Create);
 
     RequestHandler::EnableRequests();
 

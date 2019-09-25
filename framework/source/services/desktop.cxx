@@ -314,7 +314,7 @@ sal_Bool SAL_CALL Desktop::terminate()
         // see dispose() for further information.
         /* SAFE AREA --------------------------------------------------------------------------------------- */
         SolarMutexClearableGuard aWriteLock;
-        CrashReporter::addKeyValue("ShutDown", OUString::boolean(true));
+        CrashReporter::addKeyValue("ShutDown", OUString::boolean(true), CrashReporter::Write);
         m_bIsTerminated = true;
         aWriteLock.clear();
         /* UNSAFE AREA ------------------------------------------------------------------------------------- */
