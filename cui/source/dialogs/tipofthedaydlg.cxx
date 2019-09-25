@@ -28,6 +28,8 @@
 #include <vcl/help.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <unotools/configmgr.hxx>
 
 TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/tipofthedaydialog.ui", "TipOfTheDayDialog")
@@ -80,13 +82,17 @@ void TipOfTheDayDialog::UpdateTip()
 
     // hyperlink
     aLink = std::get<1>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);
-    if (aLink.isEmpty())
+        if (aLink.isEmpty())
     {
         m_pLink->set_visible(false);
     }
     else if (aLink.startsWith("http"))
     {
-        m_pLink->set_uri(CuiResId(aLink.toUtf8().getStr()));
+        aText = CuiResId(aLink.toUtf8().getStr());
+        sal_Int32 aPos = aText.indexOf( "%LANGUAGENAME" );
+        if (aPos != -1) aText = aText.replaceAt(aPos, 13, LanguageTag(utl::ConfigManager::getUILocale()).getBcp47() );
+
+        m_pLink->set_uri( aText );
         m_pLink->set_label(CuiResId(STR_MORE_LINK));
         m_pLink->set_visible(true);
         m_pLink->connect_clicked(Link<weld::LinkButton&, void>());
@@ -99,7 +105,6 @@ void TipOfTheDayDialog::UpdateTip()
         //converts aLink into the proper offline/online hyperlink
         m_pLink->connect_clicked(LINK(this, TipOfTheDayDialog, OnLinkClick));
     }
-
     // image
     OUString aURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/tipoftheday/");
     rtl::Bootstrap::expandMacros(aURL);
