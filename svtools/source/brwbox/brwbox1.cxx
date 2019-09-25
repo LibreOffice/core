@@ -1866,6 +1866,9 @@ void BrowseBox::MakeFieldVisible
 */
 
 {
+    if (!pDataWin)
+        return;
+
     Size aTestSize = pDataWin->GetSizePixel();
 
     if ( !bBootstrapped ||
