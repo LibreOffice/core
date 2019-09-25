@@ -24,7 +24,7 @@
 
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 #include <vcl/tabctrl.hxx>
-#include <vcl/vclptr.hxx>
+#include <vcl/tabpage.hxx>
 #include <map>
 
 namespace pcr

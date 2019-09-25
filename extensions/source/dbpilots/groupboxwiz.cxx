@@ -38,7 +38,6 @@ namespace dbp
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::form;
-    using namespace ::svt;
 
     OGroupBoxWizard::OGroupBoxWizard(weld::Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/svapp.hxx>
 #include <scitems.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -34,8 +33,10 @@
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <vcl/keycodes.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/securityoptions.hxx>
 #include <osl/diagnose.h>

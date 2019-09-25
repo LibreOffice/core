@@ -31,8 +31,6 @@
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <tools/link.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/vclptr.hxx>
 #include <vcl/weld.hxx>
 
 namespace com :: sun :: star :: awt { class XWindow; }
