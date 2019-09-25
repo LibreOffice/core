@@ -122,6 +122,8 @@ public:
     void testCombinedChartSecondaryAxisODS();
     void testAxisTitleRotationXLSX();
     void testAxisCrossBetweenXSLX();
+    void testAxisCrossBetweenPPTX();
+    void testAxisCrossMidCatPPTX();
     void testPieChartDataPointExplosionXLSX();
     void testCustomDataLabel();
     void testCustomDataLabelMultipleSeries();
@@ -225,6 +227,8 @@ public:
     CPPUNIT_TEST(testCombinedChartSecondaryAxisODS);
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
     CPPUNIT_TEST(testAxisCrossBetweenXSLX);
+    CPPUNIT_TEST(testAxisCrossBetweenPPTX);
+    CPPUNIT_TEST(testAxisCrossMidCatPPTX);
     CPPUNIT_TEST(testPieChartDataPointExplosionXLSX);
     CPPUNIT_TEST(testCustomDataLabel);
     CPPUNIT_TEST(testCustomDataLabelMultipleSeries);
@@ -1915,6 +1919,22 @@ void Chart2ExportTest::testAxisCrossBetweenXSLX()
     load("/chart2/qa/extras/data/odt/", "axis-position.odt");
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     assertXPath(pXmlDoc, "(//c:crossBetween)[1]", "val", "midCat");
+}
+
+void Chart2ExportTest::testAxisCrossBetweenPPTX()
+{
+    load("/chart2/qa/extras/data/pptx/", "testAxisCrossBetween.pptx");
+    xmlDocPtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:crossBetween", "val", "between");
+}
+
+void Chart2ExportTest::testAxisCrossMidCatPPTX()
+{
+    load("/chart2/qa/extras/data/pptx/", "testAxisCrossMidCat.pptx");
+    xmlDocPtr pXmlDoc2 = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc2);
+    assertXPath(pXmlDoc2, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:crossBetween", "val", "midCat");
 }
 
 void Chart2ExportTest::testPieChartDataPointExplosionXLSX()

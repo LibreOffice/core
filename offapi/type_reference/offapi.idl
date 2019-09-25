@@ -3048,6 +3048,7 @@ module com {
      [property, optional] boolean ReverseDirection;
      [property, optional] ::com::sun::star::chart::ChartAxisPosition CrossoverPosition;
      [property, optional] double CrossoverValue;
+     [property, optional] boolean CrossBetween;
      [property, optional] double Origin;
      [property, optional] boolean AutoOrigin;
      [property] long Marks;

@@ -160,6 +160,12 @@ published service ChartAxis
     [optional, property] double CrossoverValue;
 
 
+    /** Determines if certain labels are between two tickmark, or
+        below a tickmark, the value of this property must be set to `FALSE`.
+     */
+    [optional, property] boolean CrossBetween;
+
+
     /** Indicates the reference value where bars or areas have their grounding.
         This property has only an effect when the used ODF file format does not allow for
         further axis positioning or the axis is a secondary y-axis.

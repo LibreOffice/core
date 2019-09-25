@@ -65,6 +65,10 @@ service Axis
      */
     [optional, property] double CrossoverValue;
 
+    /** Determines if certain labels are between two tickmark, or not.
+     */
+    [optional, property] boolean CrossBetween;
+
     /** Determines whether to display text at the axis or not.
      */
     [property]      boolean   DisplayLabels;
