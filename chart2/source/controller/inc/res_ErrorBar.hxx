@@ -23,7 +23,6 @@
 #include <tools/link.hxx>
 #include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
-#include <vcl/tabpage.hxx>
 #include "RangeSelectionListener.hxx"
 
 namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }

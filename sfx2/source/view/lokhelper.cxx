@@ -15,6 +15,7 @@
 #include <vcl/lok.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
+#include <sal/log.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/request.hxx>
