@@ -212,7 +212,7 @@ protected:
                             ) override;
 
 protected:
-    PickerFlags         getPickerFlags();
+    PickerFlags         getPickerFlags() const;
     virtual void        notify( sal_Int16 _nEventId, sal_Int16 _nControlId ) override;
 
     bool                FilterNameExists( const OUString& rTitle );

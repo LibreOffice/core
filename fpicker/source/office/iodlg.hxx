@@ -215,7 +215,7 @@ public:
     sal_Int32                   getAvailableHeight() override;
     void                        setImage( sal_Int16 aImageFormat, const css::uno::Any& rImage ) override;
     bool                        getShowState() override;
-    bool                        isAutoExtensionEnabled();
+    bool                        isAutoExtensionEnabled() const;
 
     OUString                    getCurrentFileText( ) const override;
     void                        setCurrentFileText( const OUString& _rText, bool _bSelectAll = false ) override;
