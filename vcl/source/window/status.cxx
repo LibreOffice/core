@@ -387,37 +387,40 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
         rRenderContext.SetClipRegion(aRegion);
     }
 
-    SalLayout* pLayoutCache = pItem->mxLayoutCache.get();
-
-    if(!pLayoutCache)
+    // if the framework code is drawing status, let it do all the work
+    if (!(pItem->mnBits & StatusBarItemBits::UserDraw))
     {
-        // update cache
-        pItem->mxLayoutCache = rRenderContext.ImplLayout(pItem->maText, 0, -1);
-        pLayoutCache = pItem->mxLayoutCache.get();
-    }
+        SalLayout* pLayoutCache = pItem->mxLayoutCache.get();
 
-    const SalLayoutGlyphs* pGlyphs = pLayoutCache ? pLayoutCache->GetGlyphs() : nullptr;
-    Size aTextSize(rRenderContext.GetTextWidth(pItem->maText,0,-1,nullptr,pGlyphs), rRenderContext.GetTextHeight());
+        if(!pLayoutCache)
+        {
+            // update cache
+            pItem->mxLayoutCache = rRenderContext.ImplLayout(pItem->maText, 0, -1);
+            pLayoutCache = pItem->mxLayoutCache.get();
+        }
 
-    Point aTextPos = ImplGetItemTextPos(aTextRectSize, aTextSize, pItem->mnBits);
+        const SalLayoutGlyphs* pGlyphs = pLayoutCache ? pLayoutCache->GetGlyphs() : nullptr;
+        Size aTextSize(rRenderContext.GetTextWidth(pItem->maText,0,-1,nullptr,pGlyphs), rRenderContext.GetTextHeight());
+        Point aTextPos = ImplGetItemTextPos(aTextRectSize, aTextSize, pItem->mnBits);
 
-    if (bOffScreen)
-    {
-        mpImplData->mpVirDev->DrawText(
-                    aTextPos,
-                    pItem->maText,
-                    0, -1, nullptr, nullptr,
-                    pGlyphs );
-    }
-    else
-    {
-        aTextPos.AdjustX(aTextRect.Left() );
-        aTextPos.AdjustY(aTextRect.Top() );
-        rRenderContext.DrawText(
-                    aTextPos,
-                    pItem->maText,
-                    0, -1, nullptr, nullptr,
-                    pGlyphs );
+        if (bOffScreen)
+        {
+            mpImplData->mpVirDev->DrawText(
+                        aTextPos,
+                        pItem->maText,
+                        0, -1, nullptr, nullptr,
+                        pGlyphs );
+        }
+        else
+        {
+            aTextPos.AdjustX(aTextRect.Left() );
+            aTextPos.AdjustY(aTextRect.Top() );
+            rRenderContext.DrawText(
+                        aTextPos,
+                        pItem->maText,
+                        0, -1, nullptr, nullptr,
+                        pGlyphs );
+        }
     }
 
     // call DrawItem if necessary
