@@ -1294,11 +1294,7 @@ void VclGrid::setAllocation(const Size& rAllocation)
 boost::property_tree::ptree VclGrid::DumpAsPropertyTree()
 {
     boost::property_tree::ptree aTree(VclContainer::DumpAsPropertyTree());
-    array_type A = assembleGrid(*this);
-    sal_Int32 nMaxX = A.shape()[0];
-    sal_Int32 nMaxY = A.shape()[1];
-    aTree.put("cols", nMaxX);
-    aTree.put("rows", nMaxY);
+    aTree.put("type", "grid");
     return aTree;
 }
 
