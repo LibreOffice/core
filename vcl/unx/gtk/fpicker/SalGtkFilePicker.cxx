@@ -1789,7 +1789,7 @@ void SalGtkFilePicker::SetCurFilter( const OUString& rFilter )
     for( GSList *iter = filters; !bFound && iter; iter = iter->next )
     {
         GtkFileFilter* pFilter = static_cast<GtkFileFilter *>( iter->data );
-        G_CONST_RETURN gchar * filtername = gtk_file_filter_get_name( pFilter );
+        const gchar * filtername = gtk_file_filter_get_name( pFilter );
         OUString sFilterName( filtername, strlen( filtername ), RTL_TEXTENCODING_UTF8 );
 
         OUString aShrunkName = shrinkFilterName( rFilter );
