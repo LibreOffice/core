@@ -31,6 +31,7 @@
 
 #include <config_lgpl.h>
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star { namespace util {
     struct DateTime;

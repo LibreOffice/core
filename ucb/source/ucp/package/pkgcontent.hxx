@@ -23,7 +23,6 @@
 #include <vector>
 #include <rtl/ref.hxx>
 
-#include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
 #include <ucbhelper/contenthelper.hxx>
 #include "pkguri.hxx"

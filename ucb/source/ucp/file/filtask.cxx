@@ -36,12 +36,14 @@
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
+#include <com/sun/star/ucb/DuplicateCommandIdentifierException.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument.hpp>
 #include <com/sun/star/ucb/Store.hpp>
+#include <com/sun/star/ucb/TransferInfo.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/uri.hxx>

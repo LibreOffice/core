@@ -21,11 +21,8 @@
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <ucbhelper/macros.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
 
 #include "filrec.hxx"
 

@@ -25,6 +25,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/getcomponentcontext.hxx>
+#include <ucbhelper/macros.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;

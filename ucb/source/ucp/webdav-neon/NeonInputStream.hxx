@@ -30,7 +30,6 @@
 
 #include <config_lgpl.h>
 #include <sal/types.h>
-#include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>

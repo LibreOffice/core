@@ -26,6 +26,7 @@
 #define INCLUDED_UCB_SOURCE_UCP_FTP_FTPRESULTSETFACTORY_HXX
 
 #include "ftpresultsetbase.hxx"
+#include "ftpdirp.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <vector>

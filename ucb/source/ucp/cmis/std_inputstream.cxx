@@ -12,6 +12,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <sal/log.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 #include "std_inputstream.hxx"
 

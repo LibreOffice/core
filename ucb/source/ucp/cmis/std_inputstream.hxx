@@ -13,10 +13,8 @@
 #include <boost/shared_ptr.hpp>
 #include <istream>
 
-#include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 

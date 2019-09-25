@@ -23,10 +23,8 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <rtl/ref.hxx>
 #include <ucbhelper/contenthelper.hxx>
 
-#include <list>
 #include <boost/optional.hpp>
 
 

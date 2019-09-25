@@ -23,7 +23,6 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
-#include <ucbhelper/macros.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -31,11 +30,9 @@
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/beans/XPropertiesChangeNotifier.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
@@ -46,9 +43,8 @@
 #include <com/sun/star/beans/XPropertySetInfoChangeListener.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
-#include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
+#include <com/sun/star/ucb/TransferInfo.hpp>
 #include "filtask.hxx"
 
 

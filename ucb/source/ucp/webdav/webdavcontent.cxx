@@ -82,6 +82,7 @@
 #include "SerfUri.hxx"
 #include "UCBDeadPropertyValue.hxx"
 #include "DAVException.hxx"
+#include "DAVProperties.hxx"
 
 using namespace com::sun::star;
 using namespace http_dav_ucp;

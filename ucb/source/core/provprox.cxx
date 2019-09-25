@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <cppuhelper/queryinterface.hxx>
+#include <ucbhelper/macros.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;

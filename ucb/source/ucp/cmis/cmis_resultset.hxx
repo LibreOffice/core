@@ -11,6 +11,7 @@
 #define INCLUDED_UCB_SOURCE_UCP_CMIS_CMIS_RESULTSET_HXX
 
 #include <ucbhelper/resultsethelper.hxx>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
 #include "children_provider.hxx"
 

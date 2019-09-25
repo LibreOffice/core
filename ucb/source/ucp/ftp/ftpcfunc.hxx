@@ -25,7 +25,7 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPCFUNC_HXX
 #define INCLUDED_UCB_SOURCE_UCP_FTP_FTPCFUNC_HXX
 
-#include <rtl/ustring.hxx>
+#include <stddef.h>
 
 
 extern "C" {

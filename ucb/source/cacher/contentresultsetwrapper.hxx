@@ -22,7 +22,6 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
-#include <ucbhelper/macros.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -32,8 +31,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer.h>
 #include <comphelper/interfacecontainer2.hxx>
 #include <memory>
 

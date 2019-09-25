@@ -26,6 +26,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/getcomponentcontext.hxx>
+#include <ucbhelper/macros.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
 using namespace com::sun::star::lang;

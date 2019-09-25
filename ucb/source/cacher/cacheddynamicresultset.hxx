@@ -21,6 +21,10 @@
 #define INCLUDED_UCB_SOURCE_CACHER_CACHEDDYNAMICRESULTSET_HXX
 
 #include "dynamicresultsetwrapper.hxx"
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/ucb/XContentIdentifierMapping.hpp>
 #include <com/sun/star/ucb/XCachedDynamicResultSetFactory.hpp>
 

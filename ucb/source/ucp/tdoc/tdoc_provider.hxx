@@ -23,7 +23,6 @@
 #include <rtl/ref.hxx>
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentIdentifierFactory.hpp>
-#include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <ucbhelper/providerhelper.hxx>

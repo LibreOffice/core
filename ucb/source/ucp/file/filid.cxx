@@ -21,6 +21,7 @@
 #include "filtask.hxx"
 
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/typeprovider.hxx>
 
 using namespace fileaccess;
 using namespace com::sun::star;

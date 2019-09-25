@@ -19,6 +19,7 @@
 
 #include <config_oauth2.h>
 #include <rtl/uri.hxx>
+#include <tools/urlobj.hxx>
 
 #include "cmis_url.hxx"
 

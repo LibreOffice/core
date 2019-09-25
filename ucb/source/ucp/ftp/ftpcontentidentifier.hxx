@@ -25,16 +25,9 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTENTIDENTIFIER_HXX
 #define INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTENTIDENTIFIER_HXX
 
-#include <vector>
-#include "curl.hxx"
-#include <curl/easy.h>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-
-#include "ftpdirp.hxx"
-#include "ftpurl.hxx"
 
 
 namespace ftp {

@@ -32,9 +32,6 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ustring.hxx>
 
-#include <com/sun/star/uno/XReference.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-
 namespace webdav_ucp
 {
 

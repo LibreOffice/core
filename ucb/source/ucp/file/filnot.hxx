@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
-#include "filglob.hxx"
+#include <com/sun/star/ucb/XContent.hpp>
 #include <memory>
 #include <unordered_map>
 #include <vector>

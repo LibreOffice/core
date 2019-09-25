@@ -20,7 +20,6 @@
 #define INCLUDED_UCB_SOURCE_UCP_FILE_FILPRP_HXX
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
 #include <cppuhelper/implbase.hxx>
 
 

@@ -24,7 +24,6 @@
 #include <sal/config.h>
 
 #include <memory>
-#include <vector>
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
 
