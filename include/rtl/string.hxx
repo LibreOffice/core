@@ -1677,7 +1677,8 @@ public:
     */
     static OString number( int i, sal_Int16 radix = 10 )
     {
-        return number( static_cast< long long >( i ), radix );
+        sal_Char aBuf[RTL_STR_MAX_VALUEOFINT32];
+        return OString(aBuf, rtl_str_valueOfInt32(aBuf, i, radix));
     }
     /// @overload
     /// @since LibreOffice 4.1
@@ -1702,18 +1703,14 @@ public:
     static OString number( long long ll, sal_Int16 radix = 10 )
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFINT64];
-        rtl_String* pNewData = NULL;
-        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfInt64( aBuf, ll, radix ) );
-        return OString( pNewData, SAL_NO_ACQUIRE );
+        return OString(aBuf, rtl_str_valueOfInt64(aBuf, ll, radix));
     }
     /// @overload
     /// @since LibreOffice 4.1
     static OString number( unsigned long long ll, sal_Int16 radix = 10 )
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFUINT64];
-        rtl_String* pNewData = NULL;
-        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfUInt64( aBuf, ll, radix ) );
-        return OString( pNewData, SAL_NO_ACQUIRE );
+        return OString(aBuf, rtl_str_valueOfUInt64(aBuf, ll, radix));
     }
 
     /**
@@ -1722,15 +1719,13 @@ public:
       This function can't be used for language specific conversion.
 
       @param    f           a float.
-      @return   a string with the string representation of the argument.
+      @return   a string with the decimal representation of the argument.
       @since LibreOffice 4.1
     */
     static OString number( float f )
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFFLOAT];
-        rtl_String* pNewData = NULL;
-        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfFloat( aBuf, f ) );
-        return OString( pNewData, SAL_NO_ACQUIRE );
+        return OString(aBuf, rtl_str_valueOfFloat(aBuf, f));
     }
 
     /**
@@ -1739,15 +1734,13 @@ public:
       This function can't be used for language specific conversion.
 
       @param    d           a double.
-      @return   a string with the string representation of the argument.
+      @return   a string with the decimal representation of the argument.
       @since LibreOffice 4.1
     */
     static OString number( double d )
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFDOUBLE];
-        rtl_String* pNewData = NULL;
-        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfDouble( aBuf, d ) );
-        return OString( pNewData, SAL_NO_ACQUIRE );
+        return OString(aBuf, rtl_str_valueOfDouble(aBuf, d));
     }
 #endif
 
