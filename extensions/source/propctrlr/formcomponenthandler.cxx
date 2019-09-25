@@ -384,8 +384,7 @@ namespace pcr
                         for ( i = 0; i < nNewCount; ++i )
                         {
                             sal_Int32 nUniqueId = xStringResourceManager->getUniqueNumericId();
-                            OUString aPureIdStr = OUString::number( nUniqueId );
-                            aPureIdStr += aIdStrBase;
+                            OUString aPureIdStr = OUString::number( nUniqueId ) + aIdStrBase;
                             pNewPureIds[i] = aPureIdStr;
                             // Force usage of next Unique Id
                             xStringResourceManager->setString( aPureIdStr, OUString() );
@@ -2153,8 +2152,8 @@ namespace pcr
 
                 for ( sal_Int32 i = 0; i < nKnownControlTypes; ++i )
                 {
-                    OUString sServiceName(  "com.sun.star.awt."  );
-                    sServiceName += OUString::createFromAscii( aControlModelServiceNames[ i ] );
+                    OUString sServiceName = "com.sun.star.awt." +
+                        OUString::createFromAscii( aControlModelServiceNames[ i ] );
 
                     if ( xServiceInfo->supportsService( sServiceName ) )
                     {

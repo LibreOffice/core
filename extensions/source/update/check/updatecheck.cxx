@@ -118,8 +118,7 @@ OUString getImageFromFileName(const OUString& aFile)
         sal_uInt32 lastIndex = aUnpackPath.lastIndexOf('/');
         if ( lastIndex > 0 )
         {
-            aUnpackPath = aUnpackPath.copy( 0, lastIndex+1 );
-            aUnpackPath  += "unpack_update";
+            aUnpackPath = aUnpackPath.copy( 0, lastIndex+1 ) + "unpack_update";
         }
 
         oslFileHandle hOut = nullptr;

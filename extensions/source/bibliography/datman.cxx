@@ -846,13 +846,9 @@ void BibDataManager::startQueryWith(const OUString& rQuery)
     OUString aQueryString;
     if(!rQuery.isEmpty())
     {
-        aQueryString=aQuoteChar;
-        aQueryString+=getQueryField();
-        aQueryString+=aQuoteChar;
-        aQueryString+=" like '";
         OUString sQuery = rQuery.replaceAll("?","_").replaceAll("*","%");
-        aQueryString += sQuery;
-        aQueryString+="%'";
+        aQueryString = aQuoteChar + getQueryField() + aQuoteChar
+            + " like '" + sQuery + "%'";
     }
     setFilter(aQueryString);
 }
@@ -1172,8 +1168,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
                     const OUString& rName, bool bForceListBox)
 {
     Reference< awt::XControlModel > xModel;
-    OUString aName("View_");
-    aName += rName;
+    OUString aName = "View_" + rName;
 
     try
     {
