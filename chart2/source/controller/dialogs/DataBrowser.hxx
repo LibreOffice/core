@@ -27,6 +27,9 @@
 #include <vector>
 
 namespace com { namespace sun { namespace star {
+    namespace awt {
+        class XWindow;
+    }
     namespace chart2 {
         class XChartDocument;
     }
@@ -66,7 +69,10 @@ protected:
     virtual void MouseButtonDown( const BrowserMouseEvent& rEvt ) override;
 
 public:
-    DataBrowser( vcl::Window* pParent, WinBits nStyle, bool bLiveUpdate );
+    DataBrowser(const css::uno::Reference<css::awt::XWindow> &rParent,
+                const css::uno::Reference<css::awt::XWindow> &rColumns,
+                const css::uno::Reference<css::awt::XWindow> &rColors);
+
     virtual ~DataBrowser() override;
     virtual void dispose() override;
 
@@ -157,6 +163,8 @@ private:
 
     VclPtr<FormattedField>      m_aNumberEditField;
     VclPtr<Edit>                m_aTextEditField;
+    VclPtr<vcl::Window>         m_xColumnsWin;
+    VclPtr<vcl::Window>         m_xColorsWin;
 
     /// note: m_aNumberEditField must precede this member!
     ::svt::CellControllerRef    m_rNumberEditController;

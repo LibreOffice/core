@@ -39,11 +39,11 @@
 #include <vcl/settings.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
-
 #include <com/sun/star/container/XIndexReplace.hpp>
 
 #include <algorithm>
@@ -437,14 +437,20 @@ sal_Int32 lcl_getColumnInDataOrHeader(
 
 } // anonymous namespace
 
-DataBrowser::DataBrowser( vcl::Window* pParent, WinBits nStyle, bool bLiveUpdate ) :
-    ::svt::EditBrowseBox( pParent, EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::HANDLE_COLUMN_TEXT, nStyle, BrowserStdFlags ),
+DataBrowser::DataBrowser(const css::uno::Reference<css::awt::XWindow> &rParent,
+                         const css::uno::Reference<css::awt::XWindow> &rColumns,
+                         const css::uno::Reference<css::awt::XWindow> &rColors) :
+    ::svt::EditBrowseBox(VCLUnoHelper::GetWindow(rParent),
+            EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::HANDLE_COLUMN_TEXT,
+            WB_BORDER | WB_TABSTOP, BrowserStdFlags ),
     m_nSeekRow( 0 ),
     m_bIsReadOnly( false ),
-    m_bLiveUpdate( bLiveUpdate ),
+    m_bLiveUpdate( true ),
     m_bDataValid( true ),
     m_aNumberEditField( VclPtr<FormattedField>::Create( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
     m_aTextEditField( VclPtr<Edit>::Create( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
+    m_xColumnsWin(VCLUnoHelper::GetWindow(rColumns)),
+    m_xColorsWin(VCLUnoHelper::GetWindow(rColors)),
     m_rNumberEditController( new ::svt::FormattedFieldCellController( m_aNumberEditField.get() )),
     m_rTextEditController( new ::svt::EditCellController( m_aTextEditField.get() ))
 {
@@ -464,6 +470,8 @@ void DataBrowser::dispose()
 {
     m_aNumberEditField.disposeAndClear();
     m_aTextEditField.disposeAndClear();
+    m_xColumnsWin.clear();
+    m_xColorsWin.clear();
     ::svt::EditBrowseBox::dispose();
 }
 
@@ -593,10 +601,6 @@ void DataBrowser::RenewTable()
     GoToRow( std::min( nOldRow, GetRowCount() - 1 ));
     GoToColumnId( std::min( nOldColId, static_cast< sal_uInt16 >( ColCount() - 1 )));
 
-    Dialog* pDialog = GetParentDialog();
-    vcl::Window* pWin = pDialog->get<VclContainer>("columns");
-    vcl::Window* pColorWin = pDialog->get<VclContainer>("colorcolumns");
-
     // fill series headers
     clearHeaders();
     const DataBrowserModel::tDataHeaderVector& aHeaders( m_apDataBrowserModel->getDataHeaders());
@@ -605,7 +609,7 @@ void DataBrowser::RenewTable()
 
     for (auto const& elemHeader : aHeaders)
     {
-        std::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( pWin, pColorWin ));
+        std::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( m_xColumnsWin, m_xColorsWin ));
         Reference< beans::XPropertySet > xSeriesProp( elemHeader.m_xDataSeries, uno::UNO_QUERY );
         sal_Int32 nColor = 0;
         // @todo: Set "DraftColor", i.e. interpolated colors for gradients, bitmaps, etc.
@@ -1242,10 +1246,6 @@ void DataBrowser::EndScroll()
 
 void DataBrowser::RenewSeriesHeaders()
 {
-    Dialog* pDialog = GetParentDialog();
-    vcl::Window* pWin = pDialog->get<VclContainer>("columns");
-    vcl::Window* pColorWin = pDialog->get<VclContainer>("colorcolumns");
-
     clearHeaders();
     DataBrowserModel::tDataHeaderVector aHeaders( m_apDataBrowserModel->getDataHeaders());
     Link<Control&,void> aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
@@ -1253,7 +1253,7 @@ void DataBrowser::RenewSeriesHeaders()
 
     for (auto const& elemHeader : aHeaders)
     {
-        std::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( pWin, pColorWin ));
+        std::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( m_xColumnsWin, m_xColorsWin ));
         Reference< beans::XPropertySet > xSeriesProp(elemHeader.m_xDataSeries, uno::UNO_QUERY);
         sal_Int32 nColor = 0;
         if( xSeriesProp.is() &&
@@ -1285,9 +1285,8 @@ void DataBrowser::ImplAdjustHeaderControls()
     // width of header column
     nCurrentPos +=  GetColumnWidth( 0 );
 
-    Dialog* pDialog = GetParentDialog();
-    vcl::Window* pWin = pDialog->get<VclContainer>("columns");
-    vcl::Window* pColorWin = pDialog->get<VclContainer>("colorcolumns");
+    vcl::Window* pWin = m_xColumnsWin;
+    vcl::Window* pColorWin = m_xColorsWin;
     pWin->set_margin_left(nCurrentPos);
     pColorWin->set_margin_left(nCurrentPos);
 
