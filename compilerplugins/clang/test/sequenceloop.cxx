@@ -15,7 +15,7 @@ namespace test1
 {
 void foo(css::uno::Sequence<css::uno::Reference<css::uno::XInterface>>& aSeq)
 {
-    // expected-error@+1 {{use std::as_const, or make range var const, to avoid creating a copy of the Sequence [loplugin:sequenceloop]}}
+    // expected-error@+1 {{use std::as_const, or otherwise make the for-range-initializer expression const, to avoid creating a copy of the Sequence [loplugin:sequenceloop]}}
     for (const auto& x : aSeq)
         x.get();
     // no warning expected
