@@ -20,8 +20,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATAEDITOR_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATAEDITOR_HXX
 
-#include <vcl/toolbox.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 namespace comphelper { template <class Tp, class Arg> class mem_fun1_t; }
@@ -37,62 +36,37 @@ namespace chart
 
 class DataBrowser;
 
-class DataEditor : public ModalDialog
+class DataEditor : public weld::GenericDialogController
 {
 public:
-    DataEditor( vcl::Window* pParent,
-                const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc,
-                const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    DataEditor(weld::Window* pParent,
+               const css::uno::Reference<css::chart2::XChartDocument> & xChartDoc,
+               const css::uno::Reference<css::uno::XComponentContext> & xContext);
     virtual ~DataEditor() override;
-    virtual void dispose() override;
 
-    // Dialog
-    virtual bool Close() override;
+    DECL_LINK(CloseHdl, weld::Button&, void);
 
     void SetReadOnly( bool bReadOnly );
     bool ApplyChangesToModel();
 
 private:
-    sal_uInt16 TBI_DATA_INSERT_ROW;
-    sal_uInt16 TBI_DATA_INSERT_COL;
-    sal_uInt16 TBI_DATA_INSERT_TEXT_COL;
-    sal_uInt16 TBI_DATA_DELETE_ROW;
-    sal_uInt16 TBI_DATA_DELETE_COL;
-    sal_uInt16 TBI_DATA_MOVE_LEFT_COL;
-    sal_uInt16 TBI_DATA_MOVE_RIGHT_COL;
-    sal_uInt16 TBI_DATA_MOVE_UP_ROW;
-    sal_uInt16 TBI_DATA_MOVE_DOWN_ROW;
-
     bool                           m_bReadOnly;
-    VclPtr<DataBrowser>            m_xBrwData;
-    VclPtr<ToolBox>                m_pTbxData;
-    css::uno::Reference< css::chart2::XChartDocument > m_xChartDoc;
-    css::uno::Reference< css::uno::XComponentContext >
-        m_xContext;
+
+    css::uno::Reference<css::chart2::XChartDocument> m_xChartDoc;
+    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+
+    std::unique_ptr<weld::Toolbar> m_xTbxData;
+    std::unique_ptr<weld::Button> m_xCloseBtn;
+    std::unique_ptr<weld::Container> m_xTable;
+    std::unique_ptr<weld::Container> m_xColumns;
+    std::unique_ptr<weld::Container> m_xColors;
+    css::uno::Reference<css::awt::XWindow> m_xTableCtrlParent;
+    VclPtr<DataBrowser> m_xBrwData;
 
     /// handles actions of the toolbox
-    DECL_LINK( ToolboxHdl, ToolBox*, void );
+    DECL_LINK( ToolboxHdl, const OString&, void );
     /// is called, if the cursor of the table has moved
     DECL_LINK( BrowserCursorMovedHdl, DataBrowser*, void);
-    /// this is called if MiscOptions change, esp. High-Contrast mode
-    DECL_LINK( MiscHdl, LinkParamNone*, void );
-
-    /** notifySystemWindow adds or remove the given window pToRegister at the Systemwindow found when search pWindow.
-        @param  pWindow
-            The window which is used to search for the SystemWindow.
-        @param  pToRegister
-            The window which should be added or removed on the TaskPaneList.
-        @param  rMemFunc
-            The member function which should be called at the SystemWindow when found.
-            Possible values are:
-            ::comphelper::mem_fun(&TaskPaneList::AddWindow)
-            ::comphelper::mem_fun(&TaskPaneList::RemoveWindow)
-
-        @note this code is taken from dbaccess/source/ui/inc/UITools.hxx
-    */
-    static void notifySystemWindow(vcl::Window const * pWindow,
-                            vcl::Window* pToRegister,
-                            const ::comphelper::mem_fun1_t<TaskPaneList, vcl::Window*>& rMemFunc);
 };
 
 } // namespace chart

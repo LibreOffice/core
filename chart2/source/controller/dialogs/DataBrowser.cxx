@@ -39,11 +39,11 @@
 #include <vcl/settings.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
-
 #include <com/sun/star/container/XIndexReplace.hpp>
 
 #include <algorithm>
@@ -90,27 +90,56 @@ namespace chart
 namespace impl
 {
 
-class SeriesHeaderEdit : public Edit
+class SeriesHeaderEdit
 {
 public:
-    explicit SeriesHeaderEdit( vcl::Window * pParent );
+    explicit SeriesHeaderEdit(std::unique_ptr<weld::Entry> xControl);
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
     void setStartColumn( sal_Int32 nStartColumn );
     sal_Int32 getStartColumn() const { return m_nStartColumn;}
     void SetShowWarningBox( bool bShowWarning );
 
+    OUString GetText() const { return m_xControl->get_text(); }
+    void SetText(const OUString& rText) { m_xControl->set_text(rText); }
+
+    bool HasFocus() const { return m_xControl->has_focus(); }
+
+    void Hide() { m_xControl->hide(); }
+    void Show() { m_xControl->show(); }
+
+    void set_size_request(int nWidth, int nHeight) { m_xControl->set_size_request(nWidth, nHeight); }
+    void set_margin_left(int nLeft) { m_xControl->set_margin_left(nLeft); }
+
+    void SetModifyHdl(const Link<SeriesHeaderEdit&,void>& rLink) { m_aModifyHdl = rLink; }
+    void SetGetFocusHdl(const Link<SeriesHeaderEdit&,void>& rLink) { m_aFocusInHdl = rLink; }
+
 private:
+    std::unique_ptr<weld::Entry> m_xControl;
+    Link<SeriesHeaderEdit&,void> m_aModifyHdl;
+    Link<SeriesHeaderEdit&,void> m_aFocusInHdl;
     sal_Int32 m_nStartColumn;
     bool m_bShowWarningBox;
 };
 
-SeriesHeaderEdit::SeriesHeaderEdit( vcl::Window * pParent ) :
-        Edit( pParent ),
-        m_nStartColumn( 0 ),
-        m_bShowWarningBox( false )
+SeriesHeaderEdit::SeriesHeaderEdit(std::unique_ptr<weld::Entry> xControl)
+    : m_xControl(std::move(xControl))
+    , m_nStartColumn(0)
+    , m_bShowWarningBox(false)
 {
-    SetHelpId(HID_SCH_DATA_SERIES_LABEL);
+    m_xControl->set_help_id(HID_SCH_DATA_SERIES_LABEL);
+    m_xControl->connect_changed(LINK(this, SeriesHeaderEdit, SeriesNameEdited));
+    m_xControl->connect_focus_in(LINK(this, SeriesHeaderEdit, SeriesNameFocusIn));
+}
+
+IMPL_LINK_NOARG(SeriesHeaderEdit, SeriesNameEdited, weld::Entry&, void)
+{
+    m_aModifyHdl.Call(*this);
+}
+
+IMPL_LINK_NOARG(SeriesHeaderEdit, SeriesNameFocusIn, weld::Widget&, void)
+{
+    m_aFocusInHdl.Call(*this);
 }
 
 void SeriesHeaderEdit::setStartColumn( sal_Int32 nStartColumn )
@@ -129,7 +158,7 @@ void SeriesHeaderEdit::MouseButtonDown( const MouseEvent& rMEvt )
 
     if( m_bShowWarningBox )
     {
-        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_xControl.get(),
                                                    VclMessageType::Warning, VclButtonsType::Ok,
                                                    SchResId(STR_INVALID_NUMBER)));
         xWarn->run();
@@ -139,7 +168,7 @@ void SeriesHeaderEdit::MouseButtonDown( const MouseEvent& rMEvt )
 class SeriesHeader
 {
 public:
-    explicit SeriesHeader(vcl::Window * pParent, vcl::Window *pColorParent);
+    explicit SeriesHeader(weld::Container* pParent, weld::Container* pColorParent);
             ~SeriesHeader();
 
     void SetColor( const Color & rCol );
@@ -168,24 +197,29 @@ public:
      */
     void applyChanges();
 
-    void SetGetFocusHdl( const Link<Control&,void>& rLink );
+    void SetGetFocusHdl( const Link<weld::Widget&,void>& rLink );
 
-    void SetEditChangedHdl( const Link<SeriesHeaderEdit*,void> & rLink );
+    void SetEditChangedHdl( const Link<SeriesHeaderEdit&,void> & rLink );
 
     bool HasFocus() const;
 
 private:
-    VclPtr< FixedImage >        m_spSymbol;
-    VclPtr< SeriesHeaderEdit >  m_spSeriesName;
-    VclPtr< FixedText >         m_spColorBar;
-    VclPtr< OutputDevice>       m_pDevice;
-    Link<SeriesHeaderEdit*,void> m_aChangeLink;
+    std::unique_ptr<weld::Builder> m_xBuilder1;
+    std::unique_ptr<weld::Builder> m_xBuilder2;
+
+    std::unique_ptr<weld::Container> m_xContainer1;
+    std::unique_ptr<weld::Container> m_xContainer2;
+    std::unique_ptr<weld::Image> m_spSymbol;
+    std::unique_ptr<SeriesHeaderEdit> m_spSeriesName;
+    std::unique_ptr<weld::Label> m_spColorBar;
+    VclPtr< OutputDevice> m_xDevice;
+    Link<SeriesHeaderEdit&,void> m_aChangeLink;
 
     void notifyChanges();
     DECL_LINK( SeriesNameChanged, Edit&, void );
-    DECL_LINK( SeriesNameEdited, Edit&, void );
+    DECL_LINK( SeriesNameEdited, SeriesHeaderEdit&, void );
 
-    static Image GetChartTypeImage(
+    static OUString GetChartTypeImage(
         const Reference< chart2::XChartType > & xChartType,
         bool bSwapXAndYAxis
         );
@@ -196,33 +230,37 @@ private:
     bool      m_bSeriesNameChangePending;
 };
 
-SeriesHeader::SeriesHeader( vcl::Window * pParent, vcl::Window *pColorParent ) :
-        m_spSymbol( VclPtr<FixedImage>::Create( pParent, WB_NOBORDER )),
-        m_spSeriesName( VclPtr<SeriesHeaderEdit>::Create( pParent )),
-        m_spColorBar( VclPtr<FixedText>::Create( pColorParent, WB_NOBORDER )),
-        m_pDevice( pParent ),
-        m_nStartCol( 0 ),
-        m_nEndCol( 0 ),
-        m_nWidth( 42 ),
-        m_aPos( 0, 22 ),
-        m_bSeriesNameChangePending( false )
+SeriesHeader::SeriesHeader(weld::Container* pParent, weld::Container* pColorParent)
+    : m_xBuilder1(Application::CreateBuilder(pParent, "modules/schart/ui/tp_3D_SceneAppearance.ui"))
+    , m_xBuilder2(Application::CreateBuilder(pColorParent, "modules/schart/ui/tp_3D_SceneAppearance.ui"))
+    , m_xContainer1(m_xBuilder1->weld_container("container"))
+    , m_xContainer2(m_xBuilder2->weld_container("container"))
+    , m_spSymbol(m_xBuilder1->weld_image("image"))
+    , m_spSeriesName(new SeriesHeaderEdit(m_xBuilder1->weld_entry("entry")))
+    , m_spColorBar(m_xBuilder2->weld_label("label"))
+    , m_xDevice(Application::GetDefaultDevice())
+    , m_nStartCol( 0 )
+    , m_nEndCol( 0 )
+    , m_nWidth( 42 )
+    , m_aPos( 0, 22 )
+    , m_bSeriesNameChangePending( false )
 {
-    m_spSeriesName->EnableUpdateData( 4 * EDIT_UPDATEDATA_TIMEOUT ); // define is in vcl/edit.hxx
-    m_spSeriesName->SetUpdateDataHdl( LINK( this, SeriesHeader, SeriesNameChanged ));
-    m_spSeriesName->SetModifyHdl( LINK( this, SeriesHeader, SeriesNameEdited ));
+//TODO    m_spSeriesName->EnableUpdateData( 4 * EDIT_UPDATEDATA_TIMEOUT ); // define is in vcl/edit.hxx
+//TODO    m_spSeriesName->SetUpdateDataHdl( LINK( this, SeriesHeader, SeriesNameChanged ));
+    m_spSeriesName->SetModifyHdl(LINK(this, SeriesHeader, SeriesNameEdited));
     Show();
 }
 
 SeriesHeader::~SeriesHeader()
 {
-    m_spSymbol.disposeAndClear();
-    m_spSeriesName.disposeAndClear();
-    m_spColorBar.disposeAndClear();
+    m_xDevice.clear();
+    m_xBuilder2.reset();
+    m_xBuilder1.reset();
 }
 
 void SeriesHeader::notifyChanges()
 {
-    m_aChangeLink.Call( m_spSeriesName.get());
+    m_aChangeLink.Call(*m_spSeriesName);
     m_bSeriesNameChangePending = false;
 }
 
@@ -236,7 +274,7 @@ void SeriesHeader::applyChanges()
 
 void SeriesHeader::SetColor( const Color & rCol )
 {
-    m_spColorBar->SetControlBackground( rCol );
+//TODO    m_spColorBar->SetControlBackground( rCol );
 }
 
 void SeriesHeader::SetPos( const Point & rPos )
@@ -245,31 +283,28 @@ void SeriesHeader::SetPos( const Point & rPos )
 
     // chart type symbol
     Size aSize( nSymbolHeight, nSymbolHeight );
-    aSize = m_pDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
-    m_spSymbol->set_width_request(aSize.Width());
-    m_spSymbol->set_height_request(aSize.Height());
+    aSize = m_xDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
+    m_spSymbol->set_size_request(aSize.Width(), aSize.Height());
 
     // series name edit field
     aSize.setWidth(nSymbolDistance);
-    aSize = m_pDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
+    aSize = m_xDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
     m_spSeriesName->set_margin_left(aSize.Width() + 2);
     aSize.setWidth( m_nWidth - nSymbolHeight - nSymbolDistance );
     sal_Int32 nHeight = 12;
     aSize.setHeight( nHeight );
-    aSize = m_pDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
-    m_spSeriesName->set_width_request(aSize.Width());
-    m_spSeriesName->set_height_request(aSize.Height());
+    aSize = m_xDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
+    m_spSeriesName->set_size_request(aSize.Width(), aSize.Height());
 
     // color bar
     aSize.setWidth(1);
-    aSize = m_pDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
+    aSize = m_xDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
     m_spColorBar->set_margin_left(aSize.Width() + 2);
     nHeight = 3;
     aSize.setWidth( m_nWidth - 1 );
     aSize.setHeight( nHeight );
-    aSize = m_pDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
-    m_spColorBar->set_width_request(aSize.Width());
-    m_spColorBar->set_height_request(aSize.Height());
+    aSize = m_xDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
+    m_spColorBar->set_size_request(aSize.Width(), aSize.Height());
 }
 
 void SeriesHeader::SetWidth( sal_Int32 nWidth )
@@ -280,7 +315,7 @@ void SeriesHeader::SetWidth( sal_Int32 nWidth )
 
 void SeriesHeader::SetPixelWidth( sal_Int32 nWidth )
 {
-    SetWidth( m_pDevice->PixelToLogic(Size(nWidth, 0), MapMode(MapUnit::MapAppFont)).getWidth());
+    SetWidth( m_xDevice->PixelToLogic(Size(nWidth, 0), MapMode(MapUnit::MapAppFont)).getWidth());
 }
 
 void SeriesHeader::SetChartType(
@@ -288,12 +323,12 @@ void SeriesHeader::SetChartType(
     bool bSwapXAndYAxis
 )
 {
-    m_spSymbol->SetImage( GetChartTypeImage( xChartType, bSwapXAndYAxis ) );
+    m_spSymbol->set_from_icon_name( GetChartTypeImage( xChartType, bSwapXAndYAxis ) );
 }
 
 void SeriesHeader::SetSeriesName( const OUString & rName )
 {
-    m_spSeriesName->SetText( rName );
+    m_spSeriesName->SetText(rName);
 }
 
 void SeriesHeader::SetRange( sal_Int32 nStartCol, sal_Int32 nEndCol )
@@ -305,19 +340,19 @@ void SeriesHeader::SetRange( sal_Int32 nStartCol, sal_Int32 nEndCol )
 
 void SeriesHeader::Show()
 {
-    m_spSymbol->Show();
+    m_spSymbol->show();
     m_spSeriesName->Show();
-    m_spColorBar->Show();
+    m_spColorBar->show();
 }
 
 void SeriesHeader::Hide()
 {
-    m_spSymbol->Hide();
+    m_spSymbol->hide();
     m_spSeriesName->Hide();
-    m_spColorBar->Hide();
+    m_spColorBar->hide();
 }
 
-void SeriesHeader::SetEditChangedHdl( const Link<SeriesHeaderEdit*,void> & rLink )
+void SeriesHeader::SetEditChangedHdl( const Link<SeriesHeaderEdit&,void> & rLink )
 {
     m_aChangeLink = rLink;
 }
@@ -327,12 +362,12 @@ IMPL_LINK_NOARG(SeriesHeader, SeriesNameChanged, Edit&, void)
     notifyChanges();
 }
 
-IMPL_LINK_NOARG(SeriesHeader, SeriesNameEdited, Edit&, void)
+IMPL_LINK_NOARG(SeriesHeader, SeriesNameEdited, SeriesHeaderEdit&, void)
 {
     m_bSeriesNameChangePending = true;
 }
 
-void SeriesHeader::SetGetFocusHdl( const Link<Control&,void>& rLink )
+void SeriesHeader::SetGetFocusHdl( const Link<weld::Widget&,void>& rLink )
 {
     m_spSeriesName->SetGetFocusHdl( rLink );
 }
@@ -342,52 +377,52 @@ bool SeriesHeader::HasFocus() const
     return m_spSeriesName->HasFocus();
 }
 
-Image SeriesHeader::GetChartTypeImage(
+OUString SeriesHeader::GetChartTypeImage(
     const Reference< chart2::XChartType > & xChartType,
     bool bSwapXAndYAxis
 )
 {
-    Image aResult;
+    OUString aResult;
     if( !xChartType.is())
         return aResult;
     OUString aChartTypeName( xChartType->getChartType());
 
     if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_AREA )
     {
-        aResult = Image(StockImage::Yes, BMP_TYPE_AREA);
+        aResult = BMP_TYPE_AREA;
     }
     else if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_COLUMN )
     {
         if( bSwapXAndYAxis )
-            aResult = Image(StockImage::Yes, BMP_TYPE_BAR);
+            aResult = BMP_TYPE_BAR;
         else
-            aResult = Image(StockImage::Yes, BMP_TYPE_COLUMN);
+            aResult = BMP_TYPE_COLUMN;
     }
     else if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_LINE )
     {
-        aResult = Image(StockImage::Yes, BMP_TYPE_LINE);
+        aResult = BMP_TYPE_LINE;
     }
     else if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_SCATTER )
     {
-        aResult = Image(StockImage::Yes, BMP_TYPE_XY);
+        aResult = BMP_TYPE_XY;
     }
     else if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_PIE )
     {
-        aResult = Image(StockImage::Yes, BMP_TYPE_PIE);
+        aResult = BMP_TYPE_PIE;
     }
     else if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_NET
           || aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET )
     {
-        aResult = Image(StockImage::Yes, BMP_TYPE_NET);
+        aResult = BMP_TYPE_NET;
     }
     else if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
     {
         // @todo: correct image for candle-stick type
-        aResult = Image(StockImage::Yes, BMP_TYPE_STOCK);
+        aResult = BMP_TYPE_STOCK;
     }
     else if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE )
     {
-        aResult = Image(StockImage::Yes, BMP_TYPE_BUBBLE);
+        aResult = BMP_TYPE_BUBBLE;
     }
 
     return aResult;
@@ -437,14 +472,19 @@ sal_Int32 lcl_getColumnInDataOrHeader(
 
 } // anonymous namespace
 
-DataBrowser::DataBrowser( vcl::Window* pParent, WinBits nStyle, bool bLiveUpdate ) :
-    ::svt::EditBrowseBox( pParent, EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::HANDLE_COLUMN_TEXT, nStyle, BrowserStdFlags ),
+DataBrowser::DataBrowser(const css::uno::Reference<css::awt::XWindow> &rParent,
+                         weld::Container* pColumns, weld::Container* pColors) :
+    ::svt::EditBrowseBox(VCLUnoHelper::GetWindow(rParent),
+            EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::HANDLE_COLUMN_TEXT,
+            WB_BORDER | WB_TABSTOP, BrowserStdFlags ),
     m_nSeekRow( 0 ),
     m_bIsReadOnly( false ),
-    m_bLiveUpdate( bLiveUpdate ),
+    m_bLiveUpdate( true ),
     m_bDataValid( true ),
     m_aNumberEditField( VclPtr<FormattedField>::Create( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
     m_aTextEditField( VclPtr<Edit>::Create( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
+    m_pColumnsWin(pColumns),
+    m_pColorsWin(pColors),
     m_rNumberEditController( new ::svt::FormattedFieldCellController( m_aNumberEditField.get() )),
     m_rTextEditController( new ::svt::EditCellController( m_aTextEditField.get() ))
 {
@@ -593,19 +633,15 @@ void DataBrowser::RenewTable()
     GoToRow( std::min( nOldRow, GetRowCount() - 1 ));
     GoToColumnId( std::min( nOldColId, static_cast< sal_uInt16 >( ColCount() - 1 )));
 
-    Dialog* pDialog = GetParentDialog();
-    vcl::Window* pWin = pDialog->get<VclContainer>("columns");
-    vcl::Window* pColorWin = pDialog->get<VclContainer>("colorcolumns");
-
     // fill series headers
     clearHeaders();
     const DataBrowserModel::tDataHeaderVector& aHeaders( m_apDataBrowserModel->getDataHeaders());
-    Link<Control&,void> aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
-    Link<impl::SeriesHeaderEdit*,void> aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
+    Link<impl::SeriesHeaderEdit&,void> aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
+    Link<impl::SeriesHeaderEdit&,void> aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
 
     for (auto const& elemHeader : aHeaders)
     {
-        std::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( pWin, pColorWin ));
+        std::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( m_pColumnsWin, m_pColorsWin ));
         Reference< beans::XPropertySet > xSeriesProp( elemHeader.m_xDataSeries, uno::UNO_QUERY );
         sal_Int32 nColor = 0;
         // @todo: Set "DraftColor", i.e. interpolated colors for gradients, bitmaps, etc.
@@ -1242,18 +1278,14 @@ void DataBrowser::EndScroll()
 
 void DataBrowser::RenewSeriesHeaders()
 {
-    Dialog* pDialog = GetParentDialog();
-    vcl::Window* pWin = pDialog->get<VclContainer>("columns");
-    vcl::Window* pColorWin = pDialog->get<VclContainer>("colorcolumns");
-
     clearHeaders();
     DataBrowserModel::tDataHeaderVector aHeaders( m_apDataBrowserModel->getDataHeaders());
-    Link<Control&,void> aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
-    Link<impl::SeriesHeaderEdit*,void> aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
+    Link<impl::SeriesHeaderEdit&,void> aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
+    Link<impl::SeriesHeaderEdit&,void> aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
 
     for (auto const& elemHeader : aHeaders)
     {
-        std::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( pWin, pColorWin ));
+        std::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( m_pColumnsWin, m_pColorsWin ));
         Reference< beans::XPropertySet > xSeriesProp(elemHeader.m_xDataSeries, uno::UNO_QUERY);
         sal_Int32 nColor = 0;
         if( xSeriesProp.is() &&
@@ -1285,9 +1317,8 @@ void DataBrowser::ImplAdjustHeaderControls()
     // width of header column
     nCurrentPos +=  GetColumnWidth( 0 );
 
-    Dialog* pDialog = GetParentDialog();
-    vcl::Window* pWin = pDialog->get<VclContainer>("columns");
-    vcl::Window* pColorWin = pDialog->get<VclContainer>("colorcolumns");
+    weld::Container* pWin = m_pColumnsWin;
+    weld::Container* pColorWin = m_pColorsWin;
     pWin->set_margin_left(nCurrentPos);
     pColorWin->set_margin_left(nCurrentPos);
 
@@ -1327,43 +1358,39 @@ void DataBrowser::ImplAdjustHeaderControls()
     }
 }
 
-IMPL_LINK( DataBrowser, SeriesHeaderGotFocus, Control&, rControl, void )
+IMPL_LINK( DataBrowser, SeriesHeaderGotFocus, impl::SeriesHeaderEdit&, rEdit, void )
 {
-    impl::SeriesHeaderEdit* pEdit = static_cast<impl::SeriesHeaderEdit*>(&rControl);
-    pEdit->SetShowWarningBox( !m_bDataValid );
+    rEdit.SetShowWarningBox( !m_bDataValid );
 
     if( !m_bDataValid )
         GoToCell( 0, 0 );
     else
     {
-        MakeFieldVisible( GetCurRow(), static_cast< sal_uInt16 >( pEdit->getStartColumn()) );
+        MakeFieldVisible( GetCurRow(), static_cast< sal_uInt16 >( rEdit.getStartColumn()) );
         ActivateCell();
         m_aCursorMovedHdlLink.Call( this );
     }
 }
 
-IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit*, pEdit, void )
+IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit&, rEdit, void )
 {
-    if( pEdit )
+    Reference< chart2::XDataSeries > xSeries(
+        m_apDataBrowserModel->getDataSeriesByColumn( rEdit.getStartColumn() - 1 ));
+    Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
+    if( xSource.is())
     {
-        Reference< chart2::XDataSeries > xSeries(
-            m_apDataBrowserModel->getDataSeriesByColumn( pEdit->getStartColumn() - 1 ));
-        Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
-        if( xSource.is())
+        Reference< chart2::XChartType > xChartType(
+            m_apDataBrowserModel->getHeaderForSeries( xSeries ).m_xChartType );
+        if( xChartType.is())
         {
-            Reference< chart2::XChartType > xChartType(
-                m_apDataBrowserModel->getHeaderForSeries( xSeries ).m_xChartType );
-            if( xChartType.is())
+            Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
+                DataSeriesHelper::getDataSequenceByRole( xSource, xChartType->getRoleOfSequenceForSeriesLabel()));
+            if( xLabeledSeq.is())
             {
-                Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
-                    DataSeriesHelper::getDataSequenceByRole( xSource, xChartType->getRoleOfSequenceForSeriesLabel()));
-                if( xLabeledSeq.is())
-                {
-                    Reference< container::XIndexReplace > xIndexReplace( xLabeledSeq->getLabel(), uno::UNO_QUERY );
-                    if( xIndexReplace.is())
-                        xIndexReplace->replaceByIndex(
-                            0, uno::Any( pEdit->GetText()));
-                }
+                Reference< container::XIndexReplace > xIndexReplace( xLabeledSeq->getLabel(), uno::UNO_QUERY );
+                if( xIndexReplace.is())
+                    xIndexReplace->replaceByIndex(
+                        0, uno::Any( rEdit.GetText()));
             }
         }
     }
