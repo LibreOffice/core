@@ -1,0 +1,303 @@
+basctl/source/inc/bastypes.hxx:191
+    _Bool basctl::BaseWindow::CanClose()
+    1
+basic/source/comp/codegen.cxx:464
+    void OffSetAccumulator::start(const unsigned char *,)
+    empty
+basic/source/comp/codegen.cxx:476
+    _Bool OffSetAccumulator::processParams()
+    0
+basic/source/comp/codegen.cxx:526
+    _Bool BufferTransformer::processParams()
+    1
+chart2/source/controller/dialogs/ChartTypeDialogController.hxx:99
+    _Bool chart::ChartTypeDialogController::shouldShow_DeepStackingControl()const
+    0
+chart2/source/controller/sidebar/ChartSidebarSelectionListener.hxx:30
+    void chart::sidebar::ChartSidebarSelectionListenerParent::SelectionInvalid()
+    empty
+dbaccess/source/ui/inc/IUpdateHelper.hxx:38
+    void dbaui::IUpdateHelper::moveToInsertRow()
+    empty
+desktop/source/deployment/registry/inc/dp_backenddb.hxx:119
+    class rtl::OUString dp_registry::backend::BackendDb::getDbNSName()
+    "http://openoffi
+extensions/source/bibliography/loadlisteneradapter.hxx:111
+    void bib::OLoadListener::_unloaded(const struct com::sun::star::lang::EventObject &,)
+    empty
+extensions/source/propctrlr/commoncontrol.hxx:127
+    short pcr::CommonBehaviourControl::getControlType()
+    unknown2
+extensions/source/propctrlr/commoncontrol.hxx:129
+    class com::sun::star::uno::Reference<class com::sun::star::inspection::XPropertyControlContext> pcr::CommonBehaviourControl::getControlContext()
+    unknown2
+extensions/source/propctrlr/commoncontrol.hxx:133
+    class com::sun::star::uno::Reference<class com::sun::star::awt::XWindow> pcr::CommonBehaviourControl::getControlWindow()
+    unknown2
+extensions/source/propctrlr/commoncontrol.hxx:135
+    unsigned char pcr::CommonBehaviourControl::isModified()
+    unknown2
+forms/source/xforms/datatypes.hxx:237
+    class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySetInfo> xforms::ODerivedDataType::getPropertySetInfo()
+    unknown2
+forms/source/xforms/namedcollection.hxx:80
+    class com::sun::star::uno::Type NamedCollection::getElementType()
+    unknown2
+forms/source/xforms/namedcollection.hxx:85
+    unsigned char NamedCollection::hasElements()
+    unknown2
+forms/source/xforms/namedcollection.hxx:99
+    class com::sun::star::uno::Sequence<class rtl::OUString> NamedCollection::getElementNames()
+    unknown2
+forms/source/xforms/namedcollection.hxx:104
+    unsigned char NamedCollection::hasByName(const class rtl::OUString &,)
+    unknown2
+Gui/qaccessible.h:465
+    class QObject * QAccessibleInterface::object()const
+    0
+Gui/qaccessible.h:466
+    class QWindow * QAccessibleInterface::window()const
+    0
+Gui/qaccessible.h:478
+    int QAccessibleInterface::indexOfChild(const class QAccessibleInterface *,)const
+    0
+Gui/qaccessible.h:482
+    void QAccessibleInterface::setText(enum QAccessible::Text,const class QString &,)
+    empty
+Gui/qaccessible.h:612
+    _Bool QAccessibleTableInterface::isColumnSelected(int,)const
+    1
+Gui/qaccessible.h:613
+    _Bool QAccessibleTableInterface::isRowSelected(int,)const
+    1
+Gui/qaccessible.h:619
+    void QAccessibleTableInterface::modelChange(class QAccessibleTableModelChangeEvent *,)
+    empty
+include/basegfx/utils/systemdependentdata.hxx:122
+    unsigned int basegfx::SystemDependentData::getHoldCyclesInSeconds()const
+    60
+include/basegfx/utils/unopolypolygon.hxx:97
+    void basegfx::unotools::UnoPolyPolygon::modifying()const
+    empty
+include/canvas/base/bitmapcanvasbase.hxx:80
+    unsigned char canvas::BitmapCanvasBase::hasAlpha()
+    1
+include/canvas/base/bufferedgraphicdevicebase.hxx:95
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBufferController> canvas::BufferedGraphicDeviceBase::getBufferController()
+    unknown2
+include/canvas/base/bufferedgraphicdevicebase.hxx:108
+    void canvas::BufferedGraphicDeviceBase::destroyBuffers()
+    empty
+include/canvas/base/graphicdevicebase.hxx:230
+    class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> canvas::GraphicDeviceBase::getParametricPolyPolygonFactory()
+    unknown2
+include/canvas/base/graphicdevicebase.hxx:235
+    unsigned char canvas::GraphicDeviceBase::hasFullScreenMode()
+    0
+include/canvas/base/graphicdevicebase.hxx:240
+    unsigned char canvas::GraphicDeviceBase::enterFullScreenMode(unsigned char,)
+    0
+include/canvas/base/graphicdevicebase.hxx:246
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstance(const class rtl::OUString &,)
+    unknown2
+include/canvas/base/graphicdevicebase.hxx:254
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstanceWithArguments(const class rtl::OUString &,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,)
+    unknown2
+include/canvas/base/graphicdevicebase.hxx:306
+    void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
+    empty
+include/canvas/base/graphicdevicebase.hxx:319
+    void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
+    empty
+include/comphelper/servicedecl.hxx:164
+    class rtl::OUString comphelper::service_decl::detail::OwnServiceImpl::getImplementationName()
+    unknown2
+include/comphelper/servicedecl.hxx:167
+    unsigned char comphelper::service_decl::detail::OwnServiceImpl::supportsService(const class rtl::OUString &,)
+    unknown2
+include/comphelper/servicedecl.hxx:171
+    class com::sun::star::uno::Sequence<class rtl::OUString> comphelper::service_decl::detail::OwnServiceImpl::getSupportedServiceNames()
+    unknown2
+include/connectivity/sdbcx/IRefreshable.hxx:31
+    void connectivity::sdbcx::IRefreshableGroups::refreshGroups()
+    empty
+include/editeng/splwrap.hxx:105
+    _Bool SvxSpellWrapper::HasOtherCnt()
+    0
+include/filter/msfilter/msdffimp.hxx:546
+    _Bool SvxMSDffManager::ShapeHasText(unsigned long,unsigned long,)const
+    1
+include/svl/svdde.hxx:237
+    class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
+    0
+include/svl/svdde.hxx:238
+    _Bool DdeTopic::Put(const class DdeData *,)
+    0
+include/svl/svdde.hxx:239
+    _Bool DdeTopic::Execute(const class rtl::OUString *,)
+    0
+include/svl/svdde.hxx:241
+    _Bool DdeTopic::MakeItem(const class rtl::OUString &,)
+    0
+include/svl/svdde.hxx:244
+    _Bool DdeTopic::StartAdviseLoop()
+    0
+include/svl/undo.hxx:168
+    void SfxUndoListener::undoManagerDying()
+    empty
+include/svtools/unoevent.hxx:199
+    unsigned short SvEventDescriptor::getMacroItemWhich()const
+    108
+include/svx/selectioncontroller.hxx:68
+    _Bool sdr::SelectionController::TakeFormatPaintBrush(class std::shared_ptr<class SfxItemSet> &,)
+    0
+include/svx/svdobj.hxx:711
+    _Bool SdrObject::IsNode()const
+    1
+include/test/text/xtextcontent.hxx:29
+    _Bool apitest::XTextContent::isAttachSupported()
+    1
+include/ucbhelper/resultset.hxx:425
+    void ucbhelper::ResultSetDataSupplier::close()
+    empty
+include/unotools/desktopterminationobserver.hxx:35
+    _Bool utl::ITerminationListener::queryTermination()const
+    1
+include/vbahelper/vbacollectionimpl.hxx:290
+    int ScVbaCollectionBase::getCount()
+    unknown2
+include/vbahelper/vbacollectionimpl.hxx:324
+    unsigned char ScVbaCollectionBase::hasElements()
+    unknown2
+include/vbahelper/vbahelperinterface.hxx:77
+    int InheritedHelperInterfaceImpl::getCreator()
+    1400204879
+include/vbahelper/vbahelperinterface.hxx:81
+    class com::sun::star::uno::Reference<class ooo::vba::XHelperInterface> InheritedHelperInterfaceImpl::getParent()
+    unknown2
+include/vbahelper/vbahelperinterface.hxx:91
+    class rtl::OUString InheritedHelperInterfaceImpl::getImplementationName()
+    unknown2
+include/vbahelper/vbareturntypes.hxx:41
+    type-parameter-?-? ooo::vba::DefaultReturnHelper::getValue()
+    unknown2
+include/vcl/accessibletable.hxx:94
+    class rtl::OUString vcl::table::IAccessibleTable::GetRowDescription(int,)const
+    "row description"
+include/vcl/accessibletable.hxx:96
+    class rtl::OUString vcl::table::IAccessibleTable::GetColumnDescription(unsigned short,)const
+    "col description"
+sc/source/core/opencl/formulagroupcl.cxx:1059
+    void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
+    empty
+sc/source/core/opencl/opbase.hxx:203
+    _Bool sc::opencl::OpBase::takeNumeric()const
+    1
+sc/source/ui/vba/vbacondition.hxx:41
+    class rtl::OUString ScVbaCondition::Formula1()
+    unknown2
+sc/source/ui/vba/vbacondition.hxx:42
+    class rtl::OUString ScVbaCondition::Formula2()
+    unknown2
+sc/source/ui/vba/vbasheetobject.hxx:117
+    class rtl::OUString ScVbaSheetObjectBase::implGetBaseName()const
+    "Button"
+sc/source/ui/vba/vbasheetobjects.cxx:141
+    class rtl::OUString ScVbaObjectContainer::implGetShapeServiceName()const
+    "com.sun.star.drawing.ControlShape"
+sd/source/ui/inc/smarttag.hxx:59
+    _Bool sd::SmartTag::RequestHelp(const class HelpEvent &,)
+    0
+sd/source/ui/inc/smarttag.hxx:171
+    _Bool sd::SmartHdl::isMarkable()const
+    0
+slideshow/source/engine/animationfactory.cxx:443
+    void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
+    empty
+slideshow/source/inc/slide.hxx:118
+    void slideshow::internal::Slide::disablePaintOverlay()
+    empty
+svx/source/inc/docrecovery.hxx:162
+    void svx::DocRecovery::IRecoveryUpdateListener::start()
+    empty
+sw/inc/IDocumentState.hxx:48
+    void IDocumentState::SetLoaded()
+    empty
+sw/source/core/inc/swblocks.hxx:81
+    enum SwImpBlocks::FileType SwImpBlocks::GetFileType()const
+    3
+sw/source/uibase/inc/imaildsplistener.hxx:43
+    void IMailDispatcherListener::started(class rtl::Reference<class MailDispatcher>,)
+    empty
+sw/source/uibase/inc/imaildsplistener.hxx:48
+    void IMailDispatcherListener::stopped(class rtl::Reference<class MailDispatcher>,)
+    empty
+vcl/inc/salframe.hxx:145
+    void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
+    empty
+vcl/inc/salframe.hxx:147
+    void SalFrame::DrawMenuBar()
+    empty
+vcl/inc/salframe.hxx:201
+    _Bool SalFrame::MapUnicodeToKeyCode(char16_t,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,class vcl::KeyCode &,)
+    0
+vcl/inc/salgdiimpl.hxx:115
+    _Bool SalGraphicsImpl::drawPolyLineBezier(unsigned int,const struct SalPoint *,const enum PolyFlags *,)
+    0
+vcl/inc/salgdiimpl.hxx:120
+    _Bool SalGraphicsImpl::drawPolygonBezier(unsigned int,const struct SalPoint *,const enum PolyFlags *,)
+    0
+vcl/inc/salgdiimpl.hxx:125
+    _Bool SalGraphicsImpl::drawPolyPolygonBezier(unsigned int,const unsigned int *,const struct SalPoint *const *,const enum PolyFlags *const *,)
+    0
+vcl/inc/salgdiimpl.hxx:166
+    _Bool SalGraphicsImpl::drawEPS(long,long,long,long,void *,unsigned int,)
+    0
+vcl/inc/salinst.hxx:92
+    _Bool SalInstance::SVMainHook(int *,)
+    0
+vcl/inc/salmenu.hxx:77
+    void SalMenu::GetSystemMenuData(struct SystemMenuData *,)
+    empty
+vcl/inc/salmenu.hxx:80
+    _Bool SalMenu::AddMenuBarButton(const struct SalMenuButtonItem &,)
+    0
+vcl/inc/salmenu.hxx:81
+    void SalMenu::RemoveMenuBarButton(unsigned short,)
+    empty
+vcl/inc/salobj.hxx:49
+    void SalObject::Enable(_Bool,)
+    empty
+vcl/inc/salprn.hxx:85
+    int SalInfoPrinter::GetLandscapeAngle(const class ImplJobSetup *,)
+    900
+vcl/inc/salprn.hxx:116
+    enum SalPrinterError SalPrinter::GetErrorCode()
+    0
+vcl/inc/unx/saldata.hxx:54
+    void X11SalData::initNWF()
+    empty
+vcl/inc/unx/saldata.hxx:55
+    void X11SalData::deInitNWF()
+    empty
+vcl/inc/wizdlg.hxx:214
+    _Bool vcl::RoadmapWizard::leaveState(short,)
+    1
+writerfilter/inc/ooxml/OOXMLDocument.hxx:216
+    void writerfilter::ooxml::OOXMLDocument::setXNoteType(unsigned int,)
+    empty
+writerfilter/source/dmapper/LoggedResources.hxx:93
+    void writerfilter::LoggedStream::lcl_info(const class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > &,)
+    empty
+writerfilter/source/ooxml/OOXMLFactory.hxx:72
+    void writerfilter::ooxml::OOXMLFactory_ns::startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
+    empty
+writerfilter/source/ooxml/OOXMLFactory.hxx:73
+    void writerfilter::ooxml::OOXMLFactory_ns::charactersAction(class writerfilter::ooxml::OOXMLFastContextHandler *,const class rtl::OUString &,)
+    empty
+writerfilter/source/ooxml/OOXMLFactory.hxx:74
+    void writerfilter::ooxml::OOXMLFactory_ns::endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
+    empty
+writerfilter/source/ooxml/OOXMLFactory.hxx:75
+    void writerfilter::ooxml::OOXMLFactory_ns::attributeAction(class writerfilter::ooxml::OOXMLFastContextHandler *,int,const class tools::SvRef<class writerfilter::ooxml::OOXMLValue> &,)
+    empty
