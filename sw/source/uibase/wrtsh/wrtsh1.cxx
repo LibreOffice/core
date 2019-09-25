@@ -581,7 +581,14 @@ void SwWrtShell::LaunchOLEObj( long nVerb )
     {
         svt::EmbeddedObjectRef& xRef = GetOLEObject();
         OSL_ENSURE( xRef.is(), "OLE not found" );
-        SfxInPlaceClient* pCli=nullptr;
+
+        // LOK: we don't want to handle any other embedded objects than
+        // charts, there are too many problems with eg. embedded spreadsheets
+        // (like it creates a separate view for the calc sheet)
+        if (comphelper::LibreOfficeKit::isActive() && !SotExchange::IsChart(xRef->getClassID()))
+            return;
+
+        SfxInPlaceClient* pCli = nullptr;
 
         pCli = GetView().FindIPClient( xRef.GetObject(), &GetView().GetEditWin() );
         if ( !pCli )
