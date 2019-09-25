@@ -60,6 +60,7 @@ void CrashReporter::addKeyValue(const OUString& rKey, const OUString& rValue)
         std::string ini_path = getIniFileName();
         std::ofstream ini_file(ini_path, std::ios_base::app);
         writeToStream(ini_file, rKey, rValue);
+        ini_file.close();
     }
     else
     {
