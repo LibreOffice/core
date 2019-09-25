@@ -817,8 +817,8 @@ namespace frm
                     aStatement += quoteName(aQuote,aFieldName);
                     if (!aBoundFieldName.isEmpty())
                     {
-                        aStatement += ", ";
-                        aStatement += quoteName(aQuote, aBoundFieldName);
+                        aStatement += ", " +
+                            quoteName(aQuote, aBoundFieldName);
                     }
                     aStatement += " FROM ";
 

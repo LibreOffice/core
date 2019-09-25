@@ -103,8 +103,7 @@ void CommandImageResolver::registerCommands(Sequence<OUString>& aCommandSequence
 
         // Image names are not case-dependent. Always use lower case characters to
         // reflect this.
-        aImageName = aImageName.toAsciiLowerCase();
-        aImageName += ".png";
+        aImageName = aImageName.toAsciiLowerCase() + ".png";
 
         m_aImageNameVector[i] = aImageName;
         m_aCommandToImageNameMap[aCommandName] = aImageName;

@@ -1171,8 +1171,7 @@ bool SVGTextWriter::nextTextPortion()
                                     if( ( xTextFieldPropSet->getPropertyValue( sFieldName ) ) >>= sURL )
                                     {
 #if OSL_DEBUG_LEVEL > 0
-                                        sInfo += "url: ";
-                                        sInfo += mrExport.GetRelativeReference( sURL );
+                                        sInfo += "url: " + mrExport.GetRelativeReference( sURL );
 #endif
                                         msUrl = mrExport.GetRelativeReference( sURL );
                                         if( !msUrl.isEmpty() )

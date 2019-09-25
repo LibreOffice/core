@@ -6897,8 +6897,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             OUString aTarget( rHyperlink.aTarget );
                                                             if ( !rHyperlink.aConvSubString.isEmpty() )
                                                             {
-                                                                aTarget += "#";
-                                                                aTarget += rHyperlink.aConvSubString;
+                                                                aTarget += "#" + rHyperlink.aConvSubString;
                                                             }
                                                             xEntry->xField1.reset(new SvxFieldItem( SvxURLField( aTarget, OUString(), SvxURLFormat::Repr ), EE_FEATURE_FIELD ));
                                                         }
