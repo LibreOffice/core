@@ -200,7 +200,7 @@ namespace vcl
             @return
                 <TRUE/> if and only if the page is allowed to be left
         */
-        virtual bool        prepareLeaveCurrentState( WizardTypes::CommitPageReason eReason );
+        bool                prepareLeaveCurrentState( WizardTypes::CommitPageReason eReason );
 
         /** will be called when the given state is left
 
