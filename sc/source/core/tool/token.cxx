@@ -1277,6 +1277,9 @@ bool ScTokenArray::AddFormulaToken(
 
 void ScTokenArray::CheckForThreading( const FormulaToken& r )
 {
+#if HAVE_CPP_CONSTINIT_SORTED_VECTOR
+    constinit
+#endif
     static const o3tl::sorted_vector<OpCode> aThreadedCalcBlackList({
         ocIndirect,
         ocMacro,
