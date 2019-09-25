@@ -66,6 +66,7 @@ class SwWrapTabPage: public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xWrapTransparentCB;
     std::unique_ptr<weld::CheckButton> m_xWrapOutlineCB;
     std::unique_ptr<weld::CheckButton> m_xWrapOutsideCB;
+    std::unique_ptr<weld::CheckButton> m_xAllowOverlapCB;
 
     virtual ~SwWrapTabPage() override;
 
