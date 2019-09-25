@@ -6618,6 +6618,28 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
+AC_MSG_CHECKING([whether $CXX_BASE supports C++2a constinit sorted vectors])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+        #include <algorithm>
+        #include <initializer_list>
+        #include <vector>
+        template<typename T> class S {
+        private:
+            std::vector<T> v_;
+        public:
+            constexpr S(std::initializer_list<T> i): v_(i) { std::sort(v_.begin(), v_.end()); }
+        };
+        constinit S<int> s{3, 2, 1};
+    ])], [
+        AC_DEFINE([HAVE_CPP_CONSTINIT_SORTED_VECTOR],[1])
+        AC_MSG_RESULT([yes])
+    ], [AC_MSG_RESULT([no])])
+CXXFLAGS=$save_CXXFLAGS
+AC_LANG_POP([C++])
+
 AC_MSG_CHECKING([whether $CXX_BASE has GCC bug 87150])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
