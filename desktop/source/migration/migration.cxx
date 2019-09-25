@@ -688,8 +688,7 @@ void MigrationImpl::copyConfig()
 
     // check if the shared registrymodifications.xcu file exists
     bool bRegistryModificationsXcuExists = false;
-    OUString regFilePath(m_aInfo.userdata);
-    regFilePath += "/user/registrymodifications.xcu";
+    OUString regFilePath = m_aInfo.userdata + "/user/registrymodifications.xcu";
     File regFile(regFilePath);
     ::osl::FileBase::RC nError = regFile.open(osl_File_OpenFlag_Read);
     if ( nError == ::osl::FileBase::E_None ) {

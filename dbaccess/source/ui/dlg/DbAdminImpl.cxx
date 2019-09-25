@@ -1017,8 +1017,7 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
         }
         else
         {
-            OUString sNewUrl = pCollection->getPrefix(eType);
-            sNewUrl += sUrlPart;
+            OUString sNewUrl = pCollection->getPrefix(eType) + sUrlPart;
             _rDest.Put( SfxStringItem( DSID_CONNECTURL, sNewUrl ) );
         }
     }
