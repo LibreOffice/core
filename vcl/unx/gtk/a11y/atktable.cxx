@@ -36,7 +36,7 @@ atk_object_wrapper_conditional_ref( const uno::Reference< accessibility::XAccess
 /*****************************************************************************/
 
 // FIXME
-static G_CONST_RETURN gchar *
+static const gchar *
 getAsConst( const OUString& rString )
 {
     static const int nMax = 10;
@@ -244,7 +244,7 @@ table_wrapper_get_caption( AtkTable *table )
 
 /*****************************************************************************/
 
-static G_CONST_RETURN gchar *
+static const gchar *
 table_wrapper_get_row_description( AtkTable *table,
                                    gint      row )
 {
@@ -263,7 +263,7 @@ table_wrapper_get_row_description( AtkTable *table,
 
 /*****************************************************************************/
 
-static G_CONST_RETURN gchar *
+static const gchar *
 table_wrapper_get_column_description( AtkTable *table,
                                       gint      column )
 {

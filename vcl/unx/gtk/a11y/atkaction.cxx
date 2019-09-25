@@ -32,7 +32,7 @@
 using namespace ::com::sun::star;
 
 // FIXME
-static G_CONST_RETURN gchar *
+static const gchar *
 getAsConst( const OString& rString )
 {
     static const int nMax = 10;
@@ -97,7 +97,7 @@ action_wrapper_get_n_actions (AtkAction *action)
     return 0;
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 action_wrapper_get_description (AtkAction *, gint)
 {
     // GAIL implement this only for cells
@@ -105,7 +105,7 @@ action_wrapper_get_description (AtkAction *, gint)
     return "";
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 action_wrapper_get_localized_name (AtkAction *, gint)
 {
     // GAIL doesn't implement this as well
@@ -116,7 +116,7 @@ action_wrapper_get_localized_name (AtkAction *, gint)
 #define ACTION_NAME_PAIR( OOoName, AtkName ) \
     std::pair< const OUString, const gchar * > ( OUString( OOoName ), AtkName )
 
-static G_CONST_RETURN gchar *
+static const gchar *
 action_wrapper_get_name (AtkAction *action,
                          gint       i)
 {
@@ -214,7 +214,7 @@ appendKeyStrokes(OStringBuffer& rBuffer, const uno::Sequence< awt::KeyStroke >& 
     }
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 action_wrapper_get_keybinding (AtkAction *action,
                                gint       i)
 {
