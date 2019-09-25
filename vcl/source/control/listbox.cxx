@@ -1451,6 +1451,18 @@ boost::property_tree::ptree ListBox::DumpAsPropertyTree()
 
     aTree.add_child("entries", aEntries);
 
+    boost::property_tree::ptree aSelected;
+
+    for (int i = 0; i < GetSelectedEntryCount(); ++i)
+    {
+        boost::property_tree::ptree aEntry;
+        aEntry.put("", GetSelectedEntryPos(i));
+        aSelected.push_back(std::make_pair("", aEntry));
+    }
+
+    aTree.put("selectedCount", GetSelectedEntryCount());
+    aTree.add_child("selectedEntries", aSelected);
+
     return aTree;
 }
 
