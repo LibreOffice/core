@@ -33,7 +33,7 @@ class ScVbaNames final : public ScVbaNames_BASE
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::sheet::XNamedRanges > mxNames;
 
-    const css::uno::Reference< css::frame::XModel >&  getModel() { return mxModel; }
+    const css::uno::Reference< css::frame::XModel >&  getModel() const { return mxModel; }
 
 public:
     ScVbaNames( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XNamedRanges >& xNames , const css::uno::Reference< css::frame::XModel >& xModel );

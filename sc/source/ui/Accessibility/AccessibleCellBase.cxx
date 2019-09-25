@@ -290,7 +290,7 @@ bool ScAccessibleCellBase::IsEditable(
     return bEditable;
 }
 
-OUString ScAccessibleCellBase::GetNote()
+OUString ScAccessibleCellBase::GetNote() const
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -336,7 +336,7 @@ OUString ScAccessibleCellBase::GetNote()
     return sNote;
 }
 
-OUString ScAccessibleCellBase::getShadowAttrs()
+OUString ScAccessibleCellBase::getShadowAttrs() const
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -565,7 +565,7 @@ OUString ScAccessibleCellBase::getBorderAttrs()
 }
 //end of cell attributes
 
-OUString ScAccessibleCellBase::GetAllDisplayNote()
+OUString ScAccessibleCellBase::GetAllDisplayNote() const
 {
     OUString strNote;
     OUString strTrackText;

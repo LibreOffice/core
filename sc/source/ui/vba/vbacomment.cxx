@@ -65,7 +65,7 @@ ScVbaComment::getAnnotation()
 }
 
 uno::Reference< sheet::XSheetAnnotations >
-ScVbaComment::getAnnotations()
+ScVbaComment::getAnnotations() const
 {
     uno::Reference< sheet::XSheetCellRange > xSheetCellRange(mxRange, ::uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XSpreadsheet > xSheet = xSheetCellRange->getSpreadsheet();

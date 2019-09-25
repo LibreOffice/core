@@ -1371,7 +1371,7 @@ void ExtCfDataBarRule::importCfvo( const AttributeList& rAttribs )
 }
 
 ExtCfCondFormat::ExtCfCondFormat(const ScRangeList& rRange, std::vector< std::unique_ptr<ScFormatEntry> >& rEntries,
-                                 std::vector<sal_Int32>* pPriorities):
+                                 const std::vector<sal_Int32>* pPriorities):
     maRange(rRange)
 {
     maEntries.swap(rEntries);
@@ -1385,12 +1385,12 @@ ExtCfCondFormat::~ExtCfCondFormat()
 {
 }
 
-const ScRangeList& ExtCfCondFormat::getRange()
+const ScRangeList& ExtCfCondFormat::getRange() const
 {
     return maRange;
 }
 
-const std::vector< std::unique_ptr<ScFormatEntry> >& ExtCfCondFormat::getEntries()
+const std::vector< std::unique_ptr<ScFormatEntry> >& ExtCfCondFormat::getEntries() const
 {
     return maEntries;
 }
