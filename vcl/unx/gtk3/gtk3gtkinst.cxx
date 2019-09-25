@@ -2734,6 +2734,7 @@ public:
         gtk_widget_set_hexpand(pWindow, true);
         gtk_widget_set_vexpand(pWindow, true);
         gtk_widget_realize(pWindow);
+        gtk_widget_set_can_focus(pWindow, true);
         g_object_unref(pWindow);
 
         xEmbedWindow->Show();
