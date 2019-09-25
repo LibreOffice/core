@@ -1068,6 +1068,9 @@ static SfxObjectShell* lcl_CreateWorkingDocument(
     // import print settings
     const SwPrintData &rPrintData = pSourceDoc->getIDocumentDeviceAccess().getPrintData();
     pWorkDoc->getIDocumentDeviceAccess().setPrintData(rPrintData);
+    const JobSetup *pJobSetup = pSourceDoc->getIDocumentDeviceAccess().getJobsetup();
+    if (pJobSetup)
+        pWorkDoc->getIDocumentDeviceAccess().setJobsetup(*pJobSetup);
 
     if( aType == WorkingDocType::TARGET )
     {
