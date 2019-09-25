@@ -2919,7 +2919,7 @@ FormulaError ScFormulaCell::GetErrCode()
     return aResult.GetResultError();
 }
 
-FormulaError ScFormulaCell::GetRawError()
+FormulaError ScFormulaCell::GetRawError() const
 {
     FormulaError nErr =  pCode->GetCodeError();
     if (nErr != FormulaError::NONE)

@@ -109,7 +109,7 @@ public:
     void            AddAccessibilityObject( SfxListener& rObject );
     void            RemoveAccessibilityObject( SfxListener& rObject );
     void            BroadcastAccessibility( const SfxHint &rHint );
-    bool            HasAccessibilityObjects();
+    bool            HasAccessibilityObjects() const;
 
     const ScPreviewLocationData& GetLocationData();
     ScDocument&     GetDocument();

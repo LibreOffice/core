@@ -1594,8 +1594,8 @@ public:
             bool& rbRowSourceAmbiguous ) const;
     bool inSameSingleRow( const RangeAnalyzer& rOther );
     bool inSameSingleColumn( const RangeAnalyzer& rOther );
-    SCROW getRowCount() { return mnRowCount; }
-    SCCOL getColumnCount() { return mnColumnCount; }
+    SCROW getRowCount() const { return mnRowCount; }
+    SCCOL getColumnCount() const { return mnColumnCount; }
 
 private:
     bool mbEmpty;

@@ -152,7 +152,7 @@ public:
     void                    SetOrientation(long nColumn, css::sheet::DataPilotFieldOrientation nNew);
     long                    GetPosition(long nColumn);
 
-    long                    GetDataDimensionCount();
+    long                    GetDataDimensionCount() const;
     ScDPDimension*          GetDataDimension(long nIndex);
     OUString GetDataDimName(long nIndex);
     const ScDPCache* GetCache();

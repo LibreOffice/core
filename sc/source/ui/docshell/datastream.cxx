@@ -157,7 +157,7 @@ public:
             maCondReadStream.set(); // start producer again
     }
 
-    bool hasNewLines()
+    bool hasNewLines() const
     {
         return !maPendingLines.empty();
     }

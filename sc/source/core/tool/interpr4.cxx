@@ -1929,7 +1929,7 @@ void ScInterpreter::PushNoValue()
     PushError( FormulaError::NoValue);
 }
 
-bool ScInterpreter::IsMissing()
+bool ScInterpreter::IsMissing() const
 {
     return sp && pStack[sp - 1]->GetType() == svMissing;
 }

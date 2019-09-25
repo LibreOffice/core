@@ -300,7 +300,7 @@ private:
 
         virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType) override;
         void addFileId(sal_uInt16 nFileId);
-        const std::unordered_set<sal_uInt16>& getAllFileIds() { return maFileIds;}
+        const std::unordered_set<sal_uInt16>& getAllFileIds() const { return maFileIds;}
 
     private:
         ScChart2DataSequence&       mrParent;

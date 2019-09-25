@@ -241,7 +241,7 @@ DataCellIterator::DataCellIterator(const ScRange& aInputRange, bool aByColumn)
 DataCellIterator::~DataCellIterator()
 {}
 
-bool DataCellIterator::hasNext()
+bool DataCellIterator::hasNext() const
 {
     if(mByColumn)
         return mCol <= mInputRange.aEnd.Col();

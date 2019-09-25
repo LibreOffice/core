@@ -545,7 +545,7 @@ public:
                             SCCOL nDestCol, SCROW nDestRow, SCTAB nDestTab );
 
     void        CopyScenarioFrom( const ScTable* pSrcTab );
-    void        CopyScenarioTo( ScTable* pDestTab ) const;
+    void        CopyScenarioTo( const ScTable* pDestTab ) const;
     bool        TestCopyScenarioTo( const ScTable* pDestTab ) const;
     void        MarkScenarioIn(ScMarkData& rMark, ScScenarioFlags nNeededBits) const;
     bool        HasScenarioRange( const ScRange& rRange ) const;

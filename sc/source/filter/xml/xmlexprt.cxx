@@ -203,7 +203,7 @@ OUString lcl_RangeSequenceToString(
     return aResult.makeStringAndClear();
 }
 
-OUString lcl_GetFormattedString(ScDocument* pDoc, ScRefCellValue& rCell, const ScAddress& rAddr)
+OUString lcl_GetFormattedString(ScDocument* pDoc, const ScRefCellValue& rCell, const ScAddress& rAddr)
 {
     // return text/edit cell string content, with line feeds in edit cells
 
@@ -3710,7 +3710,7 @@ bool ScXMLExport::IsEditCell(const ScMyCell& rCell)
     return rCell.maBaseCell.meType == CELLTYPE_EDIT;
 }
 
-bool ScXMLExport::IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2)
+bool ScXMLExport::IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell2)
 {
     bool bIsEqual = false;
     if( !aCell1.bIsMergedBase && !aCell2.bIsMergedBase &&
