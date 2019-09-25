@@ -22,6 +22,7 @@
 #define INCLUDED_UCB_SOURCE_UCP_WEBDAV_DATETIMEHELPER_HXX
 
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star { namespace util {
     struct DateTime;

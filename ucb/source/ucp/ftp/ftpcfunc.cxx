@@ -25,6 +25,7 @@
  *************************************************************************/
 #include <osl/file.h>
 #include "ftpcontentidentifier.hxx"
+#include "ftpfunc.hxx"
 
 using namespace ftp;
 using namespace com::sun::star::uno;

@@ -9,11 +9,7 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_CMIS_CMIS_URL_HXX
 #define INCLUDED_UCB_SOURCE_UCP_CMIS_CMIS_URL_HXX
 
-#include <map>
-#include <string>
-
 #include <rtl/ustring.hxx>
-#include <tools/urlobj.hxx>
 
 namespace cmis
 {

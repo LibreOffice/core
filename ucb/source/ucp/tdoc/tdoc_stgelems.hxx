@@ -33,6 +33,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/uno/XAggregation.hpp>
 
 #include "tdoc_storage.hxx"
 

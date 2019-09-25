@@ -27,15 +27,12 @@
 #define INCLUDED_UCB_SOURCE_UCP_FTP_FTPURL_HXX
 
 #include "curl.hxx"
-#include <curl/easy.h>
-#include <com/sun/star/io/XOutputStream.hpp>
 
 #include <rtl/ustring.hxx>
 #include <osl/file.h>
 #include <vector>
 
 #include "ftpdirp.hxx"
-#include "ftpcfunc.hxx"
 
 namespace ftp {
 

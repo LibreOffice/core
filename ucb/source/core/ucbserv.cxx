@@ -19,6 +19,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <cppuhelper/factory.hxx>
 #include "ucb.hxx"
 #include "ucbstore.hxx"
 #include "ucbprops.hxx"

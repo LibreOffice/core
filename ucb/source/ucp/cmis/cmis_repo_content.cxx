@@ -26,6 +26,7 @@
 #include <config_oauth2.h>
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
+#include <tools/urlobj.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/contentidentifier.hxx>

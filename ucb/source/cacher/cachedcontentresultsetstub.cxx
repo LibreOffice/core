@@ -24,6 +24,7 @@
 #include <com/sun/star/ucb/FetchError.hpp>
 #include <osl/diagnose.h>
 #include <cppuhelper/queryinterface.hxx>
+#include <ucbhelper/macros.hxx>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;

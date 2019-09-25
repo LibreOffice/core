@@ -24,9 +24,6 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ustring.hxx>
 
-#include <com/sun/star/uno/XReference.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-
 namespace http_dav_ucp
 {
 

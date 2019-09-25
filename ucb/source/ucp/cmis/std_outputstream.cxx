@@ -11,6 +11,7 @@
 
 #include <com/sun/star/io/IOException.hpp>
 #include <sal/log.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 #include "std_outputstream.hxx"
 

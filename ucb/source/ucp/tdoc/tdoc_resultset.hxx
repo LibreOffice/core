@@ -22,6 +22,7 @@
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultsethelper.hxx>
+#include "tdoc_content.hxx"
 
 namespace tdoc_ucp {
 

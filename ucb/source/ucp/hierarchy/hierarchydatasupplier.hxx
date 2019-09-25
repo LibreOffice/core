@@ -21,7 +21,6 @@
 #define INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYDATASUPPLIER_HXX
 
 #include <rtl/ref.hxx>
-#include <com/sun/star/ucb/OpenMode.hpp>
 #include <ucbhelper/resultset.hxx>
 #include <memory>
 
