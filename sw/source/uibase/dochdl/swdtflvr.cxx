@@ -3611,6 +3611,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     bool bSttWrd = false;
     bool bSttPara = false;
     bool bTableSel = false;
+    bool bTableWholeSel = false;
     bool bFrameSel = false;
 
     SwWrtShell& rSrcSh = *GetShell();
@@ -3674,7 +3675,11 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         return false;
 
     if( rSrcSh.IsTableMode() )
+    {
         bTableSel = true;
+        if ( rSrcSh.HasWholeTabSelection() )
+            bTableWholeSel = true;
+    }
     else if( rSrcSh.IsSelFrameMode() || rSrcSh.IsObjSelected() )
     {
         // don't move position-protected objects!
@@ -3846,6 +3851,11 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                 rSh.EndSelect();
             }
         }
+    }
+    else if ( bRet && bTableWholeSel )
+    {
+        SfxDispatcher* pDispatch = rSrcSh.GetView().GetViewFrame()->GetDispatcher();
+        pDispatch->Execute(FN_TABLE_DELETE_TABLE, SfxCallMode::SYNCHRON);
     }
 
     if( bRet && bMove && bFrameSel )
