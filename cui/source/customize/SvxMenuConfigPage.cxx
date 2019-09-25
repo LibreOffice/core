@@ -257,7 +257,7 @@ short SvxMenuConfigPage::QueryReset()
 
     OUString label = SvxConfigPageHelper::replaceSaveInName( msg, saveInName );
 
-    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                    VclMessageType::Question, VclButtonsType::YesNo,
                                                    label));
     return xQueryBox->run();
@@ -290,7 +290,7 @@ IMPL_LINK(SvxMenuConfigPage, GearHdl, const OString&, rIdent, void)
 {
     if (rIdent == "menu_gear_add")
     {
-        SvxMainMenuOrganizerDialog aDialog(GetDialogFrameWeld(),
+        SvxMainMenuOrganizerDialog aDialog(GetFrameWeld(),
             GetSaveInData()->GetEntries(), nullptr, true );
 
         if (aDialog.run() == RET_OK)
@@ -311,7 +311,7 @@ IMPL_LINK(SvxMenuConfigPage, GearHdl, const OString&, rIdent, void)
         OUString sCurrentName( SvxConfigPageHelper::stripHotKey( pMenuData->GetName() ) );
         OUString sDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
 
-        SvxNameDialog aNameDialog(GetDialogFrameWeld(), sCurrentName, sDesc);
+        SvxNameDialog aNameDialog(GetFrameWeld(), sCurrentName, sDesc);
         aNameDialog.set_help_id(HID_SVX_CONFIG_RENAME_MENU);
         aNameDialog.set_title(CuiResId(RID_SVXSTR_RENAME_MENU));
 
@@ -333,7 +333,7 @@ IMPL_LINK(SvxMenuConfigPage, GearHdl, const OString&, rIdent, void)
     {
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
-        SvxMainMenuOrganizerDialog aDialog(GetDialogFrameWeld(), GetSaveInData()->GetEntries(),
+        SvxMainMenuOrganizerDialog aDialog(GetFrameWeld(), GetSaveInData()->GetEntries(),
                 pMenuData, false );
         if (aDialog.run() == RET_OK)
         {
@@ -394,7 +394,7 @@ IMPL_LINK(SvxMenuConfigPage, InsertHdl, const OString&, rIdent, void)
         OUString aNewName;
         OUString aDesc = CuiResId( RID_SVXSTR_SUBMENU_NAME );
 
-        SvxNameDialog aNameDialog(GetDialogFrameWeld(), aNewName, aDesc);
+        SvxNameDialog aNameDialog(GetFrameWeld(), aNewName, aDesc);
         aNameDialog.set_help_id(HID_SVX_CONFIG_NAME_SUBMENU);
         aNameDialog.set_title(CuiResId( RID_SVXSTR_ADD_SUBMENU));
 
@@ -443,7 +443,7 @@ IMPL_LINK(SvxMenuConfigPage, ModifyItemHdl, const OString&, rIdent, void)
         OUString aNewName( SvxConfigPageHelper::stripHotKey( pEntry->GetName() ) );
         OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
 
-        SvxNameDialog aNameDialog(GetDialogFrameWeld(), aNewName, aDesc);
+        SvxNameDialog aNameDialog(GetFrameWeld(), aNewName, aDesc);
         aNameDialog.set_help_id(HID_SVX_CONFIG_RENAME_MENU_ITEM);
         aNameDialog.set_title(CuiResId(RID_SVXSTR_RENAME_MENU));
 
@@ -481,7 +481,7 @@ IMPL_LINK_NOARG(SvxMenuConfigPage, ResetMenuHdl, weld::Button&, void)
         return;
     }
 
-    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                    VclMessageType::Question, VclButtonsType::YesNo,
                                                    CuiResId(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT_MENU)));
 

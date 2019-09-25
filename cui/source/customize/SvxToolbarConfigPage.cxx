@@ -226,7 +226,7 @@ void SvxToolbarConfigPage::DeleteSelectedContent()
         if ( m_xContentsListBox->n_children() == 0 &&
              GetTopLevelSelection()->IsDeletable() )
         {
-            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                            VclMessageType::Question, VclButtonsType::YesNo,
                                                            CuiResId(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR)));
             if (xQueryBox->run() == RET_YES)
@@ -324,7 +324,7 @@ IMPL_LINK( SvxToolbarConfigPage, GearHdl, const OString&, rIdent, void )
         OUString aNewURL =
             SvxConfigPageHelper::generateCustomURL( GetSaveInData()->GetEntries() );
 
-        SvxNewToolbarDialog aNameDialog(GetDialogFrameWeld(), aNewName);
+        SvxNewToolbarDialog aNameDialog(GetFrameWeld(), aNewName);
 
         // Reflect the actual m_xSaveInListBox into the new toolbar dialog
         for (int i = 0, nCount = m_xSaveInListBox->get_count(); i < nCount; ++i)
@@ -384,7 +384,7 @@ IMPL_LINK( SvxToolbarConfigPage, GearHdl, const OString&, rIdent, void )
         OUString sCurrentName( SvxConfigPageHelper::stripHotKey( pToolbar->GetName() ) );
         OUString sDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
 
-        SvxNameDialog aNameDialog(GetDialogFrameWeld(), sCurrentName, sDesc);
+        SvxNameDialog aNameDialog(GetFrameWeld(), sCurrentName, sDesc);
         aNameDialog.set_help_id(HID_SVX_CONFIG_RENAME_TOOLBAR);
         aNameDialog.set_title(CuiResId(RID_SVXSTR_RENAME_TOOLBAR));
 
@@ -500,7 +500,7 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
         OUString aNewName( SvxConfigPageHelper::stripHotKey( pEntry->GetName() ) );
         OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
 
-        SvxNameDialog aNameDialog(GetDialogFrameWeld(), aNewName, aDesc);
+        SvxNameDialog aNameDialog(GetFrameWeld(), aNewName, aDesc);
         aNameDialog.set_help_id(HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM);
         aNameDialog.set_title(CuiResId(RID_SVXSTR_RENAME_TOOLBAR));
 
@@ -523,7 +523,7 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
         SvxConfigEntry* pEntry =
             reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry).toInt64());
 
-        SvxIconSelectorDialog aIconDialog(GetDialogFrameWeld(),
+        SvxIconSelectorDialog aIconDialog(GetFrameWeld(),
                 GetSaveInData()->GetImageManager(),
                 GetSaveInData()->GetParentImageManager());
 
@@ -692,7 +692,7 @@ IMPL_LINK_NOARG(SvxToolbarConfigPage, ResetToolbarHdl, weld::Button&, void)
     SvxConfigEntry* pToolbar =
         reinterpret_cast<SvxConfigEntry*>(m_xTopLevelListBox->get_id(nSelectionPos).toInt64());
 
-    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                    VclMessageType::Question, VclButtonsType::YesNo,
                                                    CuiResId(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT)));
     if (xQueryBox->run() == RET_YES)
@@ -737,7 +737,7 @@ short SvxToolbarConfigPage::QueryReset()
 
     OUString label = SvxConfigPageHelper::replaceSaveInName( msg, saveInName );
 
-    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                    VclMessageType::Question, VclButtonsType::YesNo,
                                                    label));
     return xQueryBox->run();

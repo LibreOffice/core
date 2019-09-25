@@ -320,7 +320,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl, weld::ToggleButt
     bool bAlreadyDone = false;
     if (!m_bEndRedliningWarningDone)
     {
-        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_rMyTabPage.GetDialogFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_rMyTabPage.GetFrameWeld(),
                                                    VclMessageType::Warning, VclButtonsType::YesNo,
                                                    m_aEndRedliningWarning));
         xWarn->set_default_response(RET_NO);
@@ -337,7 +337,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl, weld::ToggleButt
         OUString aPasswordText;
 
         // dialog canceled or no password provided
-        if (!lcl_GetPassword( m_rMyTabPage.GetDialogFrameWeld(), false, aPasswordText ))
+        if (!lcl_GetPassword( m_rMyTabPage.GetFrameWeld(), false, aPasswordText ))
             bAlreadyDone = true;
 
         // ask for password and if dialog is canceled or no password provided return
@@ -375,7 +375,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl, weld::Button&, void
     if (bNeedPassword)
     {
         // ask for password and if dialog is canceled or no password provided return
-        if (!lcl_GetPassword(m_rMyTabPage.GetDialogFrameWeld(), bNewProtection, aPasswordText))
+        if (!lcl_GetPassword(m_rMyTabPage.GetFrameWeld(), bNewProtection, aPasswordText))
             return;
 
         // provided password still needs to be checked?

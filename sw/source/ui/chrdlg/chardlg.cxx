@@ -292,7 +292,7 @@ std::unique_ptr<SfxTabPage> SwCharURLPage::Create(weld::Container* pPage, weld::
 IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl, weld::Button&, void)
 {
     FileDialogHelper aDlgHelper(TemplateDescription::FILEOPEN_SIMPLE,
-                                FileDialogFlags::NONE, GetDialogFrameWeld());
+                                FileDialogFlags::NONE, GetFrameWeld());
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
         const Reference<XFilePicker3>& xFP = aDlgHelper.GetFilePicker();
@@ -302,7 +302,7 @@ IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwCharURLPage, EventHdl, weld::Button&, void)
 {
-    bModified |= SwMacroAssignDlg::INetFormatDlg(GetDialogFrameWeld(),
+    bModified |= SwMacroAssignDlg::INetFormatDlg(GetFrameWeld(),
                     ::GetActiveView()->GetWrtShell(), pINetItem);
 }
 

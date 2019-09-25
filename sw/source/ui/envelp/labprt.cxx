@@ -68,7 +68,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, weld::Button&, rButton, void )
         if (!pPrinter)
             pPrinter = VclPtr<Printer>::Create();
 
-        PrinterSetupDialog aDlg(GetDialogFrameWeld());
+        PrinterSetupDialog aDlg(GetFrameWeld());
         aDlg.SetPrinter(pPrinter);
         aDlg.run();
         rButton.grab_focus();

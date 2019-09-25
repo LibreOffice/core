@@ -1281,7 +1281,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, TimeOut_Impl, Timer*, void)
 {
     // activating the selection, typically "all commands", can take a long time
     // -> show wait cursor and disable input
-    weld::WaitObject aWaitObject(GetDialogFrameWeld());
+    weld::WaitObject aWaitObject(GetFrameWeld());
 
     weld::TreeView& rTreeView = m_xGroupLBox->get_widget();
     SelectHdl(rTreeView);
@@ -1298,7 +1298,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, void
     if ( sCfgName.isEmpty() )
         return;
 
-    weld::WaitObject aWaitObject(GetDialogFrameWeld());
+    weld::WaitObject aWaitObject(GetFrameWeld());
 
     uno::Reference<ui::XUIConfigurationManager> xCfgMgr;
     uno::Reference<embed::XStorage> xRootStorage; // we must hold the root storage alive, if xCfgMgr is used!
@@ -1366,7 +1366,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void
     if ( sCfgName.isEmpty() )
         return;
 
-    weld::WaitObject aWaitObject(GetDialogFrameWeld());
+    weld::WaitObject aWaitObject(GetFrameWeld());
 
     uno::Reference<embed::XStorage> xRootStorage;
 
@@ -1436,7 +1436,7 @@ void SfxAcceleratorConfigPage::StartFileDialog( StartFileDialogType nType, const
     bool bSave = nType == StartFileDialogType::SaveAs;
     short nDialogType = bSave ? ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION
                               : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
-    m_pFileDlg.reset(new sfx2::FileDialogHelper(nDialogType, FileDialogFlags::NONE, GetDialogFrameWeld()));
+    m_pFileDlg.reset(new sfx2::FileDialogHelper(nDialogType, FileDialogFlags::NONE, GetFrameWeld()));
 
     m_pFileDlg->SetTitle( rTitle );
     m_pFileDlg->AddFilter( aFilterAllStr, FILEDIALOG_FILTER_ALL );

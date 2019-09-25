@@ -1373,7 +1373,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::ToggleButton&, void)
     if (!m_xGalleryMenu)
     {
         m_xGalleryMenu = m_xBuilder->weld_menu("gallerysubmenu");
-        weld::WaitObject aWait(GetDialogFrameWeld());
+        weld::WaitObject aWait(GetFrameWeld());
         // Get gallery entries
         GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, m_aGrfNames);
 
@@ -1543,7 +1543,7 @@ IMPL_LINK(SvxLineTabPage, GraphicHdl_Impl, const OString&, rIdent, void)
     }
     else if (rIdent == "file")
     {
-        SvxOpenGraphicDialog aGrfDlg(CuiResId(RID_SVXSTR_EDIT_GRAPHIC), GetDialogFrameWeld());
+        SvxOpenGraphicDialog aGrfDlg(CuiResId(RID_SVXSTR_EDIT_GRAPHIC), GetFrameWeld());
         aGrfDlg.EnableLink(false);
         aGrfDlg.AsLink(false);
         if( !aGrfDlg.Execute() )

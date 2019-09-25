@@ -317,7 +317,7 @@ DeactivateRC SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
         return DeactivateRC::LeavePage;
     }
 
-    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetDialogFrameWeld(),
+    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
                                                VclMessageType::Warning, VclButtonsType::YesNo,
                                                SdResId(STR_WARN_SCALE_FAIL)));
     if (xWarn->run() == RET_YES)

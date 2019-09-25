@@ -488,7 +488,7 @@ IMPL_LINK_NOARG(SwFieldDBPage, AddDBHdl, weld::Button&, void)
         pSh = ::GetActiveWrtShell();
 
     OUString sNewDB
-        = SwDBManager::LoadAndRegisterDataSource(GetDialogFrameWeld(), pSh->GetDoc()->GetDocShell());
+        = SwDBManager::LoadAndRegisterDataSource(GetFrameWeld(), pSh->GetDoc()->GetDocShell());
     if(!sNewDB.isEmpty())
     {
         m_xDatabaseTLB->AddDataSource(sNewDB);

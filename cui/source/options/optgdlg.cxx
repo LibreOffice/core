@@ -1317,7 +1317,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             // display info
             SolarMutexGuard aGuard;
             if (svtools::executeRestartDialog(
-                    comphelper::getProcessComponentContext(), GetDialogFrameWeld(),
+                    comphelper::getProcessComponentContext(), GetFrameWeld(),
                     svtools::RESTART_REASON_LANGUAGE_CHANGE))
                 GetDialogController()->response(RET_OK);
 

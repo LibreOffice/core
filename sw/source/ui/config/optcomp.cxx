@@ -273,7 +273,7 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, SelectHdl, weld::ComboBox&, void)
 
 IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl, weld::Button&, void)
 {
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDialogFrameWeld(), "modules/swriter/ui/querydefaultcompatdialog.ui"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/querydefaultcompatdialog.ui"));
     std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryDefaultCompatDialog"));
     if (xQueryBox->run() == RET_YES)
     {
@@ -447,7 +447,7 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
         {
             SolarMutexGuard aGuard;
             if (svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
-                                              GetDialogFrameWeld(), svtools::RESTART_REASON_MSCOMPATIBLE_FORMS_MENU))
+                                              GetFrameWeld(), svtools::RESTART_REASON_MSCOMPATIBLE_FORMS_MENU))
             {
                 GetDialogController()->response(RET_OK);
             }

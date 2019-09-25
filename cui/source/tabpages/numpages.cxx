@@ -915,7 +915,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl, SvtValueSet*, void)
 
 IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, void)
 {
-    sfx2::FileDialogHelper aFileDialog(0, FileDialogFlags::NONE, GetDialogFrameWeld());
+    sfx2::FileDialogHelper aFileDialog(0, FileDialogFlags::NONE, GetFrameWeld());
     aFileDialog.SetTitle(CuiResId(RID_SVXSTR_ADD_IMAGE));
     if ( aFileDialog.Execute() != ERRCODE_NONE )
         return;
@@ -1784,7 +1784,7 @@ IMPL_LINK(SvxNumOptionsTabPage, GraphicHdl_Impl, const OString&, rIdent, void)
     OUString                aGrfName;
     Size                    aSize;
     bool                bSucc(false);
-    SvxOpenGraphicDialog aGrfDlg(CuiResId(RID_SVXSTR_EDIT_GRAPHIC), GetDialogFrameWeld());
+    SvxOpenGraphicDialog aGrfDlg(CuiResId(RID_SVXSTR_EDIT_GRAPHIC), GetFrameWeld());
 
     OString sNumber;
     if (rIdent.startsWith("gallery", &sNumber))
@@ -1862,7 +1862,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, weld::ToggleButton&
     if (!m_xGalleryMenu)
     {
         m_xGalleryMenu = m_xBuilder->weld_menu("gallerysubmenu");
-        weld::WaitObject aWait(GetDialogFrameWeld());
+        weld::WaitObject aWait(GetFrameWeld());
 
         if (GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames))
         {
@@ -1909,7 +1909,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, weld::ToggleButton&
 
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, weld::Button&, void)
 {
-    SvxCharacterMap aMap(GetDialogFrameWeld(), nullptr, nullptr);
+    SvxCharacterMap aMap(GetFrameWeld(), nullptr, nullptr);
 
     sal_uInt16 nMask = 1;
     const vcl::Font* pFmtFont = nullptr;

@@ -188,7 +188,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl, weld::Button&, void)
     std::vector< OUString > aParameterList;
     if (!m_xParamDlg)
     {
-        m_xParamDlg.reset(new SvxJavaParameterDlg(GetDialogFrameWeld()));
+        m_xParamDlg.reset(new SvxJavaParameterDlg(GetFrameWeld()));
         javaFrameworkError eErr = jfw_getVMParameters( &m_parParameters );
         if ( JFW_E_NONE == eErr && !m_parParameters.empty() )
         {
@@ -228,7 +228,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl, weld::Button&, void)
 
     if ( !m_xPathDlg )
     {
-        m_xPathDlg.reset(new SvxJavaClassPathDlg(GetDialogFrameWeld()));
+        m_xPathDlg.reset(new SvxJavaClassPathDlg(GetFrameWeld()));
         javaFrameworkError eErr = jfw_getUserClassPath( &m_pClassPath );
         if ( JFW_E_NONE == eErr )
         {
@@ -324,7 +324,7 @@ void SvxJavaOptionsPage::ClearJavaList()
 void SvxJavaOptionsPage::LoadJREs()
 {
 #if HAVE_FEATURE_JAVA
-    weld::WaitObject aWaitObj(GetDialogFrameWeld());
+    weld::WaitObject aWaitObj(GetFrameWeld());
     javaFrameworkError eErr = jfw_findAllJREs( &m_parJavaInfo );
     if ( JFW_E_NONE == eErr )
     {
@@ -438,14 +438,14 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
     }
     else if ( JFW_E_NOT_RECOGNIZED == eErr )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                   VclMessageType::Warning, VclButtonsType::Ok,
                                                   CuiResId(RID_SVXSTR_JRE_NOT_RECOGNIZED)));
         xBox->run();
     }
     else if ( JFW_E_FAILED_VERSION == eErr )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                   VclMessageType::Warning, VclButtonsType::Ok,
                                                   CuiResId(RID_SVXSTR_JRE_FAILED_VERSION)));
         xBox->run();

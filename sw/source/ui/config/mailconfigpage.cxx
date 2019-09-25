@@ -187,7 +187,7 @@ IMPL_LINK_NOARG(SwMailConfigPage, AuthenticationHdl, weld::Button&, void)
 {
     m_pConfigItem->SetMailAddress(m_xAddressED->get_text());
 
-    SwAuthenticationSettingsDialog aDlg(GetDialogFrameWeld(), *m_pConfigItem);
+    SwAuthenticationSettingsDialog aDlg(GetFrameWeld(), *m_pConfigItem);
     aDlg.run();
 }
 
@@ -206,7 +206,7 @@ IMPL_LINK(SwMailConfigPage, SecureHdl, weld::ToggleButton&, rBox, void)
 }
 
 SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent)
-    : SfxDialogController(pParent->GetDialogFrameWeld(), "modules/swriter/ui/testmailsettings.ui", "TestMailSettings")
+    : SfxDialogController(pParent->GetFrameWeld(), "modules/swriter/ui/testmailsettings.ui", "TestMailSettings")
     , m_bStop(false)
     , m_pParent(pParent)
     , m_xStopPB(m_xBuilder->weld_button("stop"))

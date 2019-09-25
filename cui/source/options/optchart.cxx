@@ -229,7 +229,7 @@ IMPL_LINK_NOARG( SvxDefaultColorOptPage, RemoveChartColor, weld::Button&, void )
     {
         OSL_ENSURE(m_SvxChartColorTableUniquePtr->size() > 1, "don't delete the last chart color");
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDialogFrameWeld(), "cui/ui/querydeletechartcolordialog.ui"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletechartcolordialog.ui"));
         std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryDeleteChartColorDialog"));
 
         if (RET_YES == xQuery->run())

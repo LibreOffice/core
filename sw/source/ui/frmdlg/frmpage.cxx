@@ -2505,7 +2505,7 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl, weld::Button&, void)
     {
         m_xGrfDlg.reset(new FileDialogHelper(
                 ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
-                FileDialogFlags::Graphic, GetDialogFrameWeld()));
+                FileDialogFlags::Graphic, GetFrameWeld()));
         m_xGrfDlg->SetTitle(m_xLinkFrame->get_label());
     }
     m_xGrfDlg->SetDisplayDirectory(m_xConnectED->get_text());
@@ -2755,7 +2755,7 @@ std::unique_ptr<SfxTabPage> SwFrameURLPage::Create(weld::Container* pPage, weld:
 IMPL_LINK_NOARG(SwFrameURLPage, InsertFileHdl, weld::Button&, void)
 {
     FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-                                FileDialogFlags::NONE, GetDialogFrameWeld());
+                                FileDialogFlags::NONE, GetFrameWeld());
     uno::Reference < ui::dialogs::XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
     try

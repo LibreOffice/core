@@ -558,7 +558,7 @@ bool ScaleTabPage::ShowWarning(const char* pResIdMessage, weld::Widget* pControl
     if (pResIdMessage == nullptr)
         return false;
 
-    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetDialogFrameWeld(),
+    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
                                                VclMessageType::Warning, VclButtonsType::Ok,
                                                SchResId(pResIdMessage)));
     xWarn->run();

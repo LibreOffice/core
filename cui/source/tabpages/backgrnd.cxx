@@ -774,7 +774,7 @@ void SvxBackgroundTabPage::RaiseLoadError_Impl()
 {
     SfxErrorContext aContext( ERRCTX_SVX_BACKGROUND,
                               OUString(),
-                              GetDialogFrameWeld(),
+                              GetFrameWeld(),
                               RID_SVXERRCTX,
                               SvxResLocale() );
 
@@ -1027,7 +1027,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl, weld::Button&, void)
     bool bHtml = 0 != ( nHtmlMode & HTMLMODE_ON );
 
     OUString aStrBrowse(m_xFindGraphicsFt->get_label());
-    pImportDlg.reset(new SvxOpenGraphicDialog(aStrBrowse, GetDialogFrameWeld()));
+    pImportDlg.reset(new SvxOpenGraphicDialog(aStrBrowse, GetFrameWeld()));
     if ( bHtml )
         pImportDlg->EnableLink(false);
     pImportDlg->SetPath(aBgdGraphicPath, m_xBtnLink->get_active());

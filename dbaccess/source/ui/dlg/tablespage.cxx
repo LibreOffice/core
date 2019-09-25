@@ -211,7 +211,7 @@ namespace dbaui
 
             try
             {
-                weld::WaitObject aWaitCursor(GetDialogFrameWeld());
+                weld::WaitObject aWaitCursor(GetFrameWeld());
 
                 Reference<XPropertySet> xProp = m_pTablesDlg->getCurrentDataSource();
                 OSL_ENSURE(xProp.is(),"No data source set!");
@@ -253,7 +253,7 @@ namespace dbaui
             if (aErrorInfo.isValid())
             {
                 // establishing the connection failed. Show an error window and exit.
-                OSQLMessageBox aMessageBox(GetDialogFrameWeld(), aErrorInfo);
+                OSQLMessageBox aMessageBox(GetFrameWeld(), aErrorInfo);
                 aMessageBox.run();
                 m_xTables->set_sensitive(false);
                 m_xTablesList->GetWidget().clear();
