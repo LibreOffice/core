@@ -43,6 +43,7 @@
 #include <com/sun/star/ucb/OpenCommandArgument.hpp>
 #include <com/sun/star/ucb/Store.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/uri.hxx>
 
 #include "filtask.hxx"
@@ -716,7 +717,7 @@ TaskManager::open( sal_Int32 CommandId,
              const OUString& aUnqPath,
              bool bLock )
 {
-    std::unique_ptr<XInputStream_impl> pInputStream(new XInputStream_impl( aUnqPath, bLock )); // from filinpstr.hxx
+    rtl::Reference<XInputStream_impl> pInputStream(new XInputStream_impl( aUnqPath, bLock )); // from filinpstr.hxx
 
     sal_Int32 ErrorCode = pInputStream->CtorSuccess();
 
@@ -726,10 +727,10 @@ TaskManager::open( sal_Int32 CommandId,
                       ErrorCode,
                       pInputStream->getMinorError() );
 
-        pInputStream.reset();
+        pInputStream.clear();
     }
 
-    return uno::Reference< io::XInputStream >( pInputStream.release() );
+    return uno::Reference< io::XInputStream >( pInputStream.get() );
 }
 
 
@@ -748,7 +749,7 @@ TaskManager::open_rw( sal_Int32 CommandId,
                 const OUString& aUnqPath,
                 bool bLock )
 {
-    std::unique_ptr<XStream_impl> pStream(new XStream_impl( aUnqPath, bLock ));  // from filstr.hxx
+    rtl::Reference<XStream_impl> pStream(new XStream_impl( aUnqPath, bLock ));  // from filstr.hxx
 
     sal_Int32 ErrorCode = pStream->CtorSuccess();
 
@@ -758,9 +759,9 @@ TaskManager::open_rw( sal_Int32 CommandId,
                       ErrorCode,
                       pStream->getMinorError() );
 
-        pStream.reset();
+        pStream.clear();
     }
-    return uno::Reference< io::XStream >( pStream.release() );
+    return uno::Reference< io::XStream >( pStream.get() );
 }
 
 
@@ -781,7 +782,7 @@ TaskManager::ls( sal_Int32 CommandId,
            const uno::Sequence< beans::Property >& seq,
            const uno::Sequence< NumberedSortingInfo >& seqSort )
 {
-    std::unique_ptr<XResultSet_impl> p(new XResultSet_impl( this,aUnqPath,OpenMode,seq,seqSort ));
+    rtl::Reference<XResultSet_impl> p(new XResultSet_impl( this,aUnqPath,OpenMode,seq,seqSort ));
 
     sal_Int32 ErrorCode = p->CtorSuccess();
 
@@ -791,10 +792,10 @@ TaskManager::ls( sal_Int32 CommandId,
                       ErrorCode,
                       p->getMinorError() );
 
-        p.reset();
+        p.clear();
     }
 
-    return uno::Reference< XDynamicResultSet > ( p.release() );
+    return uno::Reference< XDynamicResultSet > ( p.get() );
 }
 
 
