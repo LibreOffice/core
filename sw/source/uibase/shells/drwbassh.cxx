@@ -129,6 +129,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                                 RES_LR_SPACE, RES_UL_SPACE,
                                 RES_SURROUND, RES_SURROUND,
                                 RES_ANCHOR, RES_ANCHOR,
+                                RES_WRAP_INFLUENCE_ON_OBJPOS, RES_WRAP_INFLUENCE_ON_OBJPOS,
                                 SID_HTML_MODE, SID_HTML_MODE,
                                 FN_DRAW_WRAP_DLG, FN_DRAW_WRAP_DLG>{});
 

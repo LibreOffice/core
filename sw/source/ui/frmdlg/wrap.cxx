@@ -43,6 +43,7 @@
 #include <globals.hrc>
 #include <wrap.hxx>
 #include <bitmaps.hlst>
+#include <fmtwrapinfluenceonobjpos.hxx>
 
 using namespace ::com::sun::star;
 
@@ -88,6 +89,7 @@ SwWrapTabPage::SwWrapTabPage(TabPageParent pParent, const SfxItemSet &rSet)
     , m_xWrapTransparentCB(m_xBuilder->weld_check_button("transparent"))
     , m_xWrapOutlineCB(m_xBuilder->weld_check_button("outline"))
     , m_xWrapOutsideCB(m_xBuilder->weld_check_button("outside"))
+    , m_xAllowOverlapCB(m_xBuilder->weld_check_button("allowoverlap"))
 {
     SetExchangeSupport();
 
@@ -248,6 +250,10 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
     m_xBottomMarginED->save_value();
 
     ContourHdl(*m_xWrapOutlineCB);
+
+    const SwFormatWrapInfluenceOnObjPos& rInfluence = rSet->Get(RES_WRAP_INFLUENCE_ON_OBJPOS);
+    m_xAllowOverlapCB->set_active(rInfluence.GetAllowOverlap());
+
     ActivatePage( *rSet );
 }
 
@@ -347,6 +353,18 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
         bool bChecked = m_xWrapTransparentCB->get_active() && m_xWrapTransparentCB->get_sensitive();
         if ((m_xWrapTransparentCB->get_saved_state() == TRISTATE_TRUE) != bChecked)
             bModified |= nullptr != rSet->Put(SfxInt16Item(FN_DRAW_WRAP_DLG, bChecked ? 0 : 1));
+    }
+
+    const SwFormatWrapInfluenceOnObjPos& rOldInfluence
+        = GetItemSet().Get(RES_WRAP_INFLUENCE_ON_OBJPOS);
+    SwFormatWrapInfluenceOnObjPos aInfluence(rOldInfluence);
+    aInfluence.SetAllowOverlap(m_xAllowOverlapCB->get_active());
+
+    pOldItem = GetOldItem(*rSet, RES_WRAP_INFLUENCE_ON_OBJPOS);
+    if (!pOldItem || aInfluence != *pOldItem)
+    {
+        rSet->Put(aInfluence);
+        bModified = true;
     }
 
     return bModified;
