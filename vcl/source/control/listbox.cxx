@@ -1437,6 +1437,23 @@ FactoryFunction ListBox::GetUITestFactory() const
     return ListBoxUIObject::create;
 }
 
+boost::property_tree::ptree ListBox::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(Control::DumpAsPropertyTree());
+    boost::property_tree::ptree aEntries;
+
+    for (int i = 0; i < GetEntryCount(); ++i)
+    {
+        boost::property_tree::ptree aEntry;
+        aEntry.put("", GetEntry(i));
+        aEntries.push_back(std::make_pair("", aEntry));
+    }
+
+    aTree.add_child("entries", aEntries);
+
+    return aTree;
+}
+
 MultiListBox::MultiListBox( vcl::Window* pParent, WinBits nStyle ) :
     ListBox( WindowType::MULTILISTBOX )
 {
