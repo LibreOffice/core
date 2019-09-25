@@ -534,7 +534,7 @@ void LwpFribPtr::RegisterStyle()
     }
 }
 
-void LwpFribPtr::ProcessDropcap(LwpStory* pStory,LwpFrib* pFrib,sal_uInt32 nLen)
+void LwpFribPtr::ProcessDropcap(LwpStory* pStory, const LwpFrib* pFrib,sal_uInt32 nLen)
 {
     if (pStory && pStory->GetDropcapFlag())
     {

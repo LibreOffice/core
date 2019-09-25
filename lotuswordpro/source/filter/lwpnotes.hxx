@@ -91,7 +91,7 @@ public:
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_NOTE_LAYOUT;}
     virtual void RegisterStyle() override;
     virtual void XFConvert(XFContentContainer* pCont) override;
-    sal_uInt32 GetTime(){ return m_nTime;}
+    sal_uInt32 GetTime() const { return m_nTime;}
     OUString GetAuthor();
 
 private:

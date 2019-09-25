@@ -131,7 +131,7 @@ public:
 
     inline sal_uInt16 GetHideLevels() const;
 
-    bool IsHighlight();
+    bool IsHighlight() const;
 
 private:
     LwpTextAttributeOverride(LwpTextAttributeOverride const& rOther);
@@ -178,12 +178,12 @@ public:
 
     void Override(LwpBulletOverride* pOther);
 
-    inline bool IsSilverBulletOverridden();
-    inline bool IsSkipOverridden();
-    inline bool IsRightAlignedOverridden();
-    inline bool IsSkip();
-    inline bool IsRightAligned();
-    inline bool IsEditable();
+    inline bool IsSilverBulletOverridden() const;
+    inline bool IsSkipOverridden() const;
+    inline bool IsRightAlignedOverridden() const;
+    inline bool IsSkip() const;
+    inline bool IsRightAligned() const;
+    inline bool IsEditable() const;
 
     void OverrideSilverBullet(LwpObjectID aID);
     void OverrideSkip(bool bOver);
@@ -193,7 +193,7 @@ public:
     inline void RevertSkip();
     inline void RevertRightAligned();
 
-    bool IsInValid(){return m_bIsNull;}
+    bool IsInValid() const {return m_bIsNull;}
 
 private:
     LwpBulletOverride(LwpBulletOverride const& rOther);
@@ -217,32 +217,32 @@ inline const LwpObjectID& LwpBulletOverride::GetSilverBullet() const
     return m_SilverBullet;
 }
 
-inline bool LwpBulletOverride::IsSilverBulletOverridden()
+inline bool LwpBulletOverride::IsSilverBulletOverridden() const
 {
     return ((m_nOverride & BO_SILVERBULLET) != 0);
 }
 
-inline bool LwpBulletOverride::IsSkipOverridden()
+inline bool LwpBulletOverride::IsSkipOverridden() const
 {
     return ((m_nOverride & BO_SKIP) != 0);
 }
 
-inline bool LwpBulletOverride::IsRightAlignedOverridden()
+inline bool LwpBulletOverride::IsRightAlignedOverridden() const
 {
     return ((m_nOverride & BO_RIGHTALIGN) != 0);
 }
 
-inline bool LwpBulletOverride::IsSkip()
+inline bool LwpBulletOverride::IsSkip() const
 {
     return ((m_nValues & BO_SKIP) != 0);
 }
 
-inline bool LwpBulletOverride::IsEditable()
+inline bool LwpBulletOverride::IsEditable() const
 {
     return ((m_nValues & BO_EDITABLE) != 0);
 }
 
-inline bool LwpBulletOverride::IsRightAligned()
+inline bool LwpBulletOverride::IsRightAligned() const
 {
     return ((m_nValues & BO_RIGHTALIGN) != 0);
 }
@@ -283,7 +283,7 @@ public:
         ALIGN_SQUEEZE       = 7
     };
 
-    AlignType GetAlignType(){ return m_nAlignType; }
+    AlignType GetAlignType() const { return m_nAlignType; }
     void Override(LwpAlignmentOverride* other);
     void OverrideAlignment(AlignType val);
 
@@ -389,8 +389,8 @@ public:
     inline double GetLeft() const;
     inline double GetRight() const;
 
-    sal_uInt16 GetRelative();
-    bool IsUseRelative();
+    sal_uInt16 GetRelative() const;
+    bool IsUseRelative() const;
     void Override(LwpIndentOverride* other);
     void OverrideIndentAll(sal_Int32 val);
     void OverrideIndentFirst(sal_Int32 val);

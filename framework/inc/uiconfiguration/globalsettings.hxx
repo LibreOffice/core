@@ -49,7 +49,7 @@ class GlobalSettings
         };
 
         // settings access
-        bool HasToolbarStatesInfo();
+        bool HasToolbarStatesInfo() const;
         bool GetToolbarStateInfo( StateInfo eStateInfo, css::uno::Any& aValue );
 
     private:

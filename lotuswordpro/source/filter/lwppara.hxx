@@ -164,7 +164,7 @@ public:
 
     void GetParaNumber(sal_uInt16 nPosition, ParaNumbering* pParaNumbering);
     LwpFribPtr& GetFribs();
-    double GetBelowSpacing();
+    double GetBelowSpacing() const;
     LwpParaProperty* GetProperty(sal_uInt32 nPropType);
     void GatherDropcapInfo();
     const OUString& GetBulletStyleName() const;
@@ -351,7 +351,7 @@ inline void LwpPara::SetDropcapLayout(LwpDropcapLayout* pLayout)
 {
     m_pDropcapLayout = pLayout;
 }
-inline double LwpPara::GetBelowSpacing()
+inline double LwpPara::GetBelowSpacing() const
 {
     return m_BelowSpacing;
 }
