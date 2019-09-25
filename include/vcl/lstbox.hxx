@@ -282,6 +282,8 @@ public:
     static sal_Int32 NaturalSortCompare(const OUString &rA, const OUString &rB);
 
     virtual FactoryFunction GetUITestFactory() const override;
+
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 class VCL_DLLPUBLIC MultiListBox : public ListBox
