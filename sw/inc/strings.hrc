@@ -1365,6 +1365,16 @@
 #define STR_OPT_PREVIEW_DELETED                 NC_("optredlinepage|deletedpreview", "Delete")
 #define STR_OPT_PREVIEW_CHANGED                 NC_("optredlinepage|changedpreview", "Attributes")
 
+#define STR_AUTOMARK_SEARCHTERM                 NC_("createautomarkdialog|searchterm", "Search term")
+#define STR_AUTOMARK_ALTERNATIVE                NC_("createautomarkdialog|alternative", "Alternative entry")
+#define STR_AUTOMARK_KEY1                       NC_("createautomarkdialog|key1", "1st key")
+#define STR_AUTOMARK_KEY2                       NC_("createautomarkdialog|key2", "2nd key")
+#define STR_AUTOMARK_COMMENT                    NC_("createautomarkdialog|comment", "Comment")
+#define STR_AUTOMARK_CASESENSITIVE              NC_("createautomarkdialog|casesensitive", "Match case")
+#define STR_AUTOMARK_WORDONLY                   NC_("createautomarkdialog|wordonly", "Word only")
+#define STR_AUTOMARK_YES                        NC_("createautomarkdialog|yes", "Yes")
+#define STR_AUTOMARK_NO                         NC_("createautomarkdialog|no", "No")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
