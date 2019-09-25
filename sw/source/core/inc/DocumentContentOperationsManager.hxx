@@ -168,7 +168,10 @@ private:
                                 SwFrameFormat* );
     /* Copy a range within the same or to another document.
      Position may not lie within range! */
-    bool CopyImpl( SwPaM&, SwPosition&, bool bCopyAll, SwPaM *const pCpyRng /*= 0*/ ) const;
+    bool CopyImpl( SwPaM&, SwPosition&,
+            const bool bCopyAll, SwPaM *const pCpyRng /*= 0*/ ) const;
+    bool CopyImplImpl(SwPaM&, SwPosition&,
+            const bool bCopyAll, SwPaM *const pCpyRng /*= 0*/) const;
 
     DocumentContentOperationsManager(DocumentContentOperationsManager const&) = delete;
     DocumentContentOperationsManager& operator=(DocumentContentOperationsManager const&) = delete;
