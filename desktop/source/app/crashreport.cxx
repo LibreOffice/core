@@ -52,7 +52,7 @@ void writeToStream(std::ofstream& strm, const OUString& rKey, const OUString& rV
 
 }
 
-void CrashReporter::AddKeyValue(const OUString& rKey, const OUString& rValue)
+void CrashReporter::addKeyValue(const OUString& rKey, const OUString& rValue)
 {
     osl::MutexGuard aGuard(maMutex);
     if (mbInit)
