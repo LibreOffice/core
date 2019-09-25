@@ -122,6 +122,8 @@ public:
     void testCombinedChartSecondaryAxisODS();
     void testAxisTitleRotationXLSX();
     void testAxisCrossBetweenXSLX();
+    void testAxisCrossBetweenPPTX();
+    void testAxisCrossMidCatPPTX();
     void testPieChartDataPointExplosionXLSX();
     void testCustomDataLabel();
     void testCustomDataLabelMultipleSeries();
@@ -225,6 +227,8 @@ public:
     CPPUNIT_TEST(testCombinedChartSecondaryAxisODS);
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
     CPPUNIT_TEST(testAxisCrossBetweenXSLX);
+    CPPUNIT_TEST(testAxisCrossBetweenPPTX);
+    CPPUNIT_TEST(testAxisCrossMidCatPPTX);
     CPPUNIT_TEST(testPieChartDataPointExplosionXLSX);
     CPPUNIT_TEST(testCustomDataLabel);
     CPPUNIT_TEST(testCustomDataLabelMultipleSeries);
@@ -1917,6 +1921,22 @@ void Chart2ExportTest::testAxisCrossBetweenXSLX()
     assertXPath(pXmlDoc, "(//c:crossBetween)[1]", "val", "midCat");
 }
 
+void Chart2ExportTest::testAxisCrossBetweenPPTX()
+{
+    load("/chart2/qa/extras/data/pptx/", "testAxisCrossBetween.pptx");
+    xmlDocPtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:crossBetween", "val", "between");
+}
+
+void Chart2ExportTest::testAxisCrossMidCatPPTX()
+{
+    load("/chart2/qa/extras/data/pptx/", "testAxisCrossMidCat.pptx");
+    xmlDocPtr pXmlDoc2 = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc2);
+    assertXPath(pXmlDoc2, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:crossBetween", "val", "midCat");
+}
+
 void Chart2ExportTest::testPieChartDataPointExplosionXLSX()
 {
     load("/chart2/qa/extras/data/xlsx/", "pie_chart_datapoint_explosion.xlsx");
@@ -1929,7 +1949,7 @@ void Chart2ExportTest::testPieChartDataPointExplosionXLSX()
 void Chart2ExportTest::testCustomDataLabel()
 {
     load("/chart2/qa/extras/data/pptx/", "tdf115107.pptx");
-    xmlDocPtr pXmlDoc = parseExport("ppt/charts/chart1", "Impress MS PowerPoint 2007 XML");
+    xmlDocPtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
     CPPUNIT_ASSERT(pXmlDoc);
     // Check the data labels font color for the complete data series
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:txPr/a:p/a:pPr/a:defRPr/a:solidFill/a:srgbClr", "val", "404040");
@@ -2027,7 +2047,7 @@ void Chart2ExportTest::testCustomDataLabel()
 void Chart2ExportTest::testCustomDataLabelMultipleSeries()
 {
     load("/chart2/qa/extras/data/pptx/", "tdf115107-2.pptx");
-    xmlDocPtr pXmlDoc = parseExport("ppt/charts/chart2", "Impress MS PowerPoint 2007 XML");
+    xmlDocPtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
     CPPUNIT_ASSERT(pXmlDoc);
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);

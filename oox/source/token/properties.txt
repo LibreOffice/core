@@ -105,6 +105,7 @@ CopyFormulas
 CopyOutputData
 CopyStyles
 CornerRadius
+CrossBetween
 CrossoverPosition
 CrossoverValue
 CursorPositionX

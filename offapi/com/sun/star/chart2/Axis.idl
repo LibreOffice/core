@@ -141,6 +141,12 @@ service Axis
      */
     [optional, property] boolean TryStaggeringFirst;
 
+    /** Determines if certain labels are between two tickmark, or below a tickmark
+
+        @since LibreOffice 6.4
+     */
+    [optional, property] boolean CrossBetween;
+
 };
 
 } ; // chart2
