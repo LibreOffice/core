@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_381eb30c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-09-25T13:21:31Z",
+      "side": 1,
+      "message": "Michael, in case you have any thoughts on this.",
+      "range": {
+        "startLine": 23,
+        "startChar": 14,
+        "endLine": 26,
+        "endChar": 51
+      },
+      "revId": "23d3b573c042b6a3e6be9b9cdfd39c4db4d547b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
