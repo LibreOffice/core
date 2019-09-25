@@ -234,7 +234,7 @@ void ScTransferObj::AddSupportedFormats()
     }
 }
 
-static ScRange lcl_reduceBlock(ScDocumentUniquePtr &pDoc, ScRange aReducedBlock, bool bIncludeVisual = false)
+static ScRange lcl_reduceBlock(const ScDocumentUniquePtr &pDoc, ScRange aReducedBlock, bool bIncludeVisual = false)
 {
     if ((aReducedBlock.aEnd.Col() == MAXCOL || aReducedBlock.aEnd.Row() == MAXROW) &&
         aReducedBlock.aStart.Tab() == aReducedBlock.aEnd.Tab())
@@ -644,7 +644,7 @@ ScDocShell* ScTransferObj::GetSourceDocShell()
     return nullptr;    // none set
 }
 
-ScMarkData ScTransferObj::GetSourceMarkData()
+ScMarkData ScTransferObj::GetSourceMarkData() const
 {
     ScMarkData aMarkData;
     ScCellRangesBase* pRangesObj = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( m_xDragSourceRanges );

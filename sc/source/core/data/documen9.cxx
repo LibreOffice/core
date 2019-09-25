@@ -608,7 +608,7 @@ void ScDocument::SetImportingXML( bool bVal )
     SetLoadingMedium(bVal);
 }
 
-const std::shared_ptr<SvxForbiddenCharactersTable>& ScDocument::GetForbiddenCharacters()
+const std::shared_ptr<SvxForbiddenCharactersTable>& ScDocument::GetForbiddenCharacters() const
 {
     return xForbiddenCharacters;
 }

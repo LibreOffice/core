@@ -108,7 +108,7 @@ public:
 
     void            Output();           //! Refresh?
     ScRange GetOutputRange( sal_Int32 nRegionType = css::sheet::DataPilotOutputRangeType::WHOLE );
-    long            GetHeaderRows();
+    long            GetHeaderRows() const;
     bool            HasError();         // range overflow or exception from source
 
     void            GetPositionData(const ScAddress& rPos, css::sheet::DataPilotTablePositionData& rPosData);

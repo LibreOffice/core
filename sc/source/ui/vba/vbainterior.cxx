@@ -124,7 +124,7 @@ ScVbaInterior::SetMixedColor()
 }
 
 uno::Reference< container::XIndexAccess >
-ScVbaInterior::getPalette()
+ScVbaInterior::getPalette() const
 {
     if ( !m_pScDoc )
         throw uno::RuntimeException();

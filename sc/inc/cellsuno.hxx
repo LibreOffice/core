@@ -660,7 +660,7 @@ private:
     double      GetValue_Impl() const;
     void        SetValue_Impl(double fValue);
     css::table::CellContentType GetContentType_Impl();
-    sal_Int32 GetResultType_Impl();
+    sal_Int32 GetResultType_Impl() const;
 
 protected:
     virtual const SfxItemPropertyMap& GetItemPropertyMap() override;

@@ -109,7 +109,7 @@ SvtScriptType ScDocument::GetStringScriptType( const OUString& rString )
 }
 
 SvtScriptType ScDocument::GetCellScriptType( const ScAddress& rPos, sal_uInt32 nNumberFormat,
-                                             ScRefCellValue* pCell )
+                                             const ScRefCellValue* pCell )
 {
     SvtScriptType nStored = GetScriptType(rPos);
     if ( nStored != SvtScriptType::UNKNOWN )         // stored value valid?
@@ -129,7 +129,7 @@ SvtScriptType ScDocument::GetCellScriptType( const ScAddress& rPos, sal_uInt32 n
     return nRet;
 }
 
-SvtScriptType ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab, ScRefCellValue* pCell )
+SvtScriptType ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScRefCellValue* pCell )
 {
     // if script type is set, don't have to get number formats
 

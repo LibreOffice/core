@@ -6303,7 +6303,7 @@ table::CellContentType SAL_CALL ScCellObj::getType()
     return eRet;
 }
 
-sal_Int32 ScCellObj::GetResultType_Impl()
+sal_Int32 ScCellObj::GetResultType_Impl() const
 {
     SolarMutexGuard aGuard;
     sal_Int32 eRet = sheet::FormulaResult::STRING;

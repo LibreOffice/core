@@ -281,7 +281,7 @@ void ScLinkedAreaDlg::UpdateEnable()
     m_xFtSeconds->set_sensitive(bReload);
 }
 
-OUString ScLinkedAreaDlg::GetURL()
+OUString ScLinkedAreaDlg::GetURL() const
 {
     if (m_pSourceShell)
     {
@@ -291,7 +291,7 @@ OUString ScLinkedAreaDlg::GetURL()
     return EMPTY_OUSTRING;
 }
 
-OUString ScLinkedAreaDlg::GetFilter()
+OUString ScLinkedAreaDlg::GetFilter() const
 {
     if (m_pSourceShell)
     {
@@ -301,7 +301,7 @@ OUString ScLinkedAreaDlg::GetFilter()
     return OUString();
 }
 
-OUString ScLinkedAreaDlg::GetOptions()
+OUString ScLinkedAreaDlg::GetOptions() const
 {
     if (m_pSourceShell)
     {
@@ -311,7 +311,7 @@ OUString ScLinkedAreaDlg::GetOptions()
     return OUString();
 }
 
-OUString ScLinkedAreaDlg::GetSource()
+OUString ScLinkedAreaDlg::GetSource() const
 {
     OUStringBuffer aBuf;
     std::vector<OUString> aSelection = m_xLbRanges->get_selected_rows_text();
@@ -324,7 +324,7 @@ OUString ScLinkedAreaDlg::GetSource()
     return aBuf.makeStringAndClear();
 }
 
-sal_uLong ScLinkedAreaDlg::GetRefresh()
+sal_uLong ScLinkedAreaDlg::GetRefresh() const
 {
     if (m_xBtnReload->get_active())
         return sal::static_int_cast<sal_uLong>(m_xNfDelay->get_value());

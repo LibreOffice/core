@@ -35,7 +35,7 @@ void ScRangeManagerTable::DeleteSelectedEntries()
         m_xTreeView->remove(*it);
 }
 
-bool ScRangeManagerTable::IsMultiSelection()
+bool ScRangeManagerTable::IsMultiSelection() const
 {
     return m_xTreeView->count_selected_rows() > 1;
 }
@@ -126,7 +126,7 @@ void ScRangeManagerTable::addEntry(const ScRangeNameLine& rLine, bool bSetCurEnt
         m_xTreeView->set_cursor(nRow);
 }
 
-void ScRangeManagerTable::GetLine(ScRangeNameLine& rLine, weld::TreeIter& rEntry)
+void ScRangeManagerTable::GetLine(ScRangeNameLine& rLine, const weld::TreeIter& rEntry)
 {
     rLine.aName = m_xTreeView->get_text(rEntry, 0);
     rLine.aExpression = m_xTreeView->get_text(rEntry, 1);

@@ -240,12 +240,12 @@ uno::Reference< drawing::XShapes > const & ScMyTables::GetCurrentXShapes()
     return xShapes;
 }
 
-bool ScMyTables::HasDrawPage()
+bool ScMyTables::HasDrawPage() const
 {
     return (maCurrentCellPos.Tab() == nCurrentDrawPage) && xDrawPage.is();
 }
 
-bool ScMyTables::HasXShapes()
+bool ScMyTables::HasXShapes() const
 {
     return (maCurrentCellPos.Tab() == nCurrentXShapes) && xShapes.is();
 }

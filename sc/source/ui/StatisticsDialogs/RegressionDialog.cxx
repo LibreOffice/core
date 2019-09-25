@@ -280,7 +280,7 @@ bool ScRegressionDialog::InputRangesValid()
     return true;
 }
 
-size_t ScRegressionDialog::GetRegressionTypeIndex()
+size_t ScRegressionDialog::GetRegressionTypeIndex() const
 {
     if (mxLinearRadioButton->get_active())
         return 0;
