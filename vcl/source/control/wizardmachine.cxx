@@ -588,12 +588,6 @@ namespace vcl
         enterState( nCurrentLevel );
     }
 
-    bool RoadmapWizard::DeactivatePage()
-    {
-        WizardTypes::WizardState nCurrentState = getCurrentState();
-        return leaveState(nCurrentState);
-    }
-
     void RoadmapWizard::defaultButton(WizardButtonFlags _nWizardButtonFlags)
     {
         // the new default button
@@ -629,32 +623,22 @@ namespace vcl
 
     bool RoadmapWizard::ShowPage( sal_uInt16 nLevel )
     {
-        if ( DeactivatePage() )
-        {
-            mnCurLevel = nLevel;
-            ActivatePage();
-            ImplShowTabPage( ImplGetPage( mnCurLevel ) );
-            return true;
-        }
-        else
-            return false;
+        mnCurLevel = nLevel;
+        ActivatePage();
+        ImplShowTabPage( ImplGetPage( mnCurLevel ) );
+        return true;
     }
 
     bool RoadmapWizard::Finish( long nResult )
     {
-        if ( DeactivatePage() )
-        {
-            if ( mpCurTabPage )
-                mpCurTabPage->DeactivatePage();
+        if ( mpCurTabPage )
+            mpCurTabPage->DeactivatePage();
 
-            if ( IsInExecute() )
-                EndDialog( nResult );
-            else if ( GetStyle() & WB_CLOSEABLE )
-                Close();
-            return true;
-        }
-        else
-            return false;
+        if ( IsInExecute() )
+            EndDialog( nResult );
+        else if ( GetStyle() & WB_CLOSEABLE )
+            Close();
+        return true;
     }
 
     void RoadmapWizard::AddPage( TabPage* pPage )
@@ -827,15 +811,6 @@ namespace vcl
             m_pHelp->Enable(_bEnable);
         if (m_pCancel && (_nWizardButtonFlags & WizardButtonFlags::CANCEL))
             m_pCancel->Enable(_bEnable);
-    }
-
-    bool RoadmapWizard::leaveState(WizardTypes::WizardState)
-    {
-        // no need to ask the page here.
-        // If we reach this point, we already gave the current page the chance to commit it's data,
-        // and it was allowed to commit it's data
-
-        return true;
     }
 
     bool RoadmapWizard::onFinish()
@@ -1054,7 +1029,7 @@ namespace vcl
         travelNext();
     }
 
-    IWizardPageController* RoadmapWizard::getPageController( TabPage* _pCurrentPage ) const
+    IWizardPageController* RoadmapWizard::getPageController( TabPage* _pCurrentPage )
     {
         IWizardPageController* pController = dynamic_cast< IWizardPageController* >( _pCurrentPage );
         return pController;

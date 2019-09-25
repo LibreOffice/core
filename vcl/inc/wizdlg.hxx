@@ -114,8 +114,7 @@ namespace vcl
         virtual void        StateChanged( StateChangedType nStateChange ) override;
         virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
 
-        virtual void        ActivatePage();
-        virtual bool        DeactivatePage();
+        void                ActivatePage();
 
         virtual void        queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 
@@ -155,7 +154,7 @@ namespace vcl
         void                setTitleBase(const OUString& _rTitleBase);
 
         /// determines whether there is a next state to which we can advance
-        virtual bool        canAdvance() const;
+        bool            canAdvance() const;
 
         /** updates the user interface which deals with traveling in the wizard
 
@@ -163,7 +162,7 @@ namespace vcl
             itself allow to advance to the next state (<code>canAdvance</code>), and enables the "Next"
             button if and only if this is the case.
         */
-        virtual void        updateTravelUI();
+        void            updateTravelUI();
 
         void            SetRoadmapHelpId( const OString& _rId );
 
@@ -182,10 +181,10 @@ namespace vcl
     protected:
 
         /// to override to create new pages
-        virtual VclPtr<TabPage> createPage(WizardTypes::WizardState nState);
+        VclPtr<TabPage>     createPage(WizardTypes::WizardState nState);
 
         /// will be called when a new page is about to be displayed
-        virtual void        enterState(WizardTypes::WizardState _nState);
+        void                enterState(WizardTypes::WizardState _nState);
 
         /** will be called when the current state is about to be left for the given reason
 
@@ -197,21 +196,7 @@ namespace vcl
             @return
                 <TRUE/> if and only if the page is allowed to be left
         */
-        virtual bool        prepareLeaveCurrentState( WizardTypes::CommitPageReason eReason );
-
-        /** will be called when the given state is left
-
-            This is the very last possibility for derived classes to veto the deactivation
-            of a page.
-
-            @todo Normally, we would not need the return value here - derived classes now have
-            the possibility to veto page deactivations in <member>prepareLeaveCurrentState</member>. However,
-            changing this return type is too incompatible at the moment ...
-
-            @return
-                <TRUE/> if and only if the page is allowed to be left
-        */
-        virtual bool        leaveState(WizardTypes::WizardState _nState);
+        bool                prepareLeaveCurrentState( WizardTypes::CommitPageReason eReason );
 
         /** determine the next state to travel from the given one
 
@@ -221,12 +206,12 @@ namespace vcl
 
             @see activatePath
         */
-        virtual WizardTypes::WizardState determineNextState(WizardTypes::WizardState nCurrentState) const;
+        WizardTypes::WizardState determineNextState(WizardTypes::WizardState nCurrentState) const;
 
         /** called when the finish button is pressed
             <p>By default, only the base class' Finish method (which is not virtual) is called</p>
         */
-        virtual bool        onFinish();
+        bool                onFinish();
 
         /// travel to the next state
         bool                travelNext();
@@ -302,8 +287,7 @@ namespace vcl
         */
         WizardTypes::WizardState getCurrentState() const { return GetCurLevel(); }
 
-        virtual IWizardPageController*
-                                getPageController( TabPage* _pCurrentPage ) const;
+        static IWizardPageController*  getPageController( TabPage* _pCurrentPage );
 
         /** retrieves a copy of the state history, i.e. all states we already visited
         */
