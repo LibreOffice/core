@@ -39,7 +39,6 @@
 #include <svl/stritem.hxx>
 #include <svx/svxids.hrc>
 #include <comphelper/lok.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <txtfrm.hxx>
 #include <redline.hxx>
 #include <view.hxx>

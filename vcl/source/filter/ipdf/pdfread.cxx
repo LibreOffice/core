@@ -17,8 +17,6 @@
 #include <fpdf_save.h>
 #endif
 
-#include <impgraph.hxx>
-
 #include <vcl/graph.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <unotools/ucbstreamhelper.hxx>
