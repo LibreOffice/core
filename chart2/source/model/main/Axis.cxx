@@ -57,6 +57,7 @@ enum
     PROP_AXIS_SHOW,
     PROP_AXIS_CROSSOVER_POSITION,
     PROP_AXIS_CROSSOVER_VALUE,
+    PROP_AXIS_CROSS_BETWEEN,
     PROP_AXIS_DISPLAY_LABELS,
     PROP_AXIS_NUMBERFORMAT,
     PROP_AXIS_LINK_NUMBERFORMAT_TO_SOURCE,
@@ -96,6 +97,12 @@ void lcl_AddPropertiesToVector(
                   PROP_AXIS_CROSSOVER_VALUE,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "CrossBetween",
+                  PROP_AXIS_CROSS_BETWEEN,
+                  cppu::UnoType<bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
     rOutProperties.emplace_back( "DisplayLabels",
                   PROP_AXIS_DISPLAY_LABELS,
@@ -211,6 +218,7 @@ private:
 
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_SHOW, true );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_CROSSOVER_POSITION, css::chart::ChartAxisPosition_ZERO );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_CROSS_BETWEEN, false );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_DISPLAY_LABELS, true );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_LINK_NUMBERFORMAT_TO_SOURCE, true );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_LABEL_POSITION, css::chart::ChartAxisLabelPosition_NEAR_AXIS );

@@ -355,6 +355,8 @@ void AxisConverter::convertFromModel(
         bool bCrossingLogScale = pCrossingAxis && lclIsLogarithmicScale( *pCrossingAxis );
         double fCrossingPos = bManualCrossing ? mrModel.mofCrossesAt.get() : (bCrossingLogScale ? 1.0 : 0.0);
         aAxisProp.setProperty( PROP_CrossoverValue, fCrossingPos );
+        if( mrModel.mnCrossBetween != -1 )
+            aAxisProp.setProperty(PROP_CrossBetween, mrModel.mnCrossBetween == XML_between);
 
         // axis title ---------------------------------------------------------
 
