@@ -46,8 +46,8 @@ private:
 public:
     CLibxml2XFormsExtension() {}
 
-    const css::uno::Reference< css::xforms::XModel >& getModel() { return m_aModel;}
-    const css::uno::Reference< css::xml::dom::XNode >& getContextNode() { return m_aContextNode;}
+    const css::uno::Reference< css::xforms::XModel >& getModel() const { return m_aModel;}
+    const css::uno::Reference< css::xml::dom::XNode >& getContextNode() const { return m_aContextNode;}
 
     virtual css::xml::xpath::Libxml2ExtensionHandle SAL_CALL getLibxml2ExtensionHandle() override;
     virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& aSequence) override;

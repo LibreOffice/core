@@ -185,10 +185,10 @@ public:
     virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& _rEvent) override;
 
 // Other functions
-    sal_Int32 getGroupCount();
+    sal_Int32 getGroupCount() const;
     void getGroup(sal_Int32 nGroup, css::uno::Sequence< css::uno::Reference< css::awt::XControlModel> >& _rGroup, OUString& Name);
     void getGroupByName(const OUString& Name, css::uno::Sequence< css::uno::Reference< css::awt::XControlModel> >& _rGroup);
-    css::uno::Sequence< css::uno::Reference< css::awt::XControlModel> > getControlModels();
+    css::uno::Sequence< css::uno::Reference< css::awt::XControlModel> > getControlModels() const;
 
     static OUString GetGroupName( const css::uno::Reference< css::beans::XPropertySet>& xComponent );
 };

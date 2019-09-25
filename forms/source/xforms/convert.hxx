@@ -60,7 +60,7 @@ public:
     bool hasType( const css::uno::Type& );
 
     /// get list of convertible types
-    css::uno::Sequence<css::uno::Type> getTypes();
+    css::uno::Sequence<css::uno::Type> getTypes() const;
 
     /// convert any to XML representation
     OUString toXSD( const css::uno::Any& rAny );
