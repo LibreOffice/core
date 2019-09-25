@@ -590,7 +590,7 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
     OUString sTableName = m_xNameED->get_text();
     if(sTableName.indexOf(' ') != -1)
     {
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       SwResId(STR_WRONG_TABLENAME)));
         xInfoBox->run();
@@ -744,7 +744,7 @@ IMPL_LINK_NOARG(SwTableColumnPage, SizeHdl, void*, void)
 
     //tdf#120420 keeping showing column width fields unless
     //the dialog begins to grow, then stop adding them
-    weld::Window* pTopLevel = GetDialogFrameWeld();
+    weld::Window* pTopLevel = GetFrameWeld();
     Size aOrigSize = pTopLevel->get_preferred_size();
     for (sal_uInt16 i = 0; i < MET_FIELDS; ++i)
     {

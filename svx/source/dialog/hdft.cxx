@@ -493,12 +493,12 @@ void SvxHFPage::TurnOn(const weld::ToggleButton* pBox)
             short nResult;
             if (nId == SID_ATTR_PAGE_HEADERSET)
             {
-                DeleteHeaderDialog aDlg(GetDialogFrameWeld());
+                DeleteHeaderDialog aDlg(GetFrameWeld());
                 nResult = aDlg.run();
             }
             else
             {
-                DeleteFooterDialog aDlg(GetDialogFrameWeld());
+                DeleteFooterDialog aDlg(GetFrameWeld());
                 nResult = aDlg.run();
             }
             bDelete = nResult == RET_YES;
@@ -620,7 +620,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
 
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg(
-        GetDialogFrameWeld(),
+        GetFrameWeld(),
         *pBBSet,
         mbEnableDrawingLayerFillStyles));
 

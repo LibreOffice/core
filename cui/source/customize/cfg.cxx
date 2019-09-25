@@ -1438,7 +1438,7 @@ int SvxConfigPage::AddFunction(int nTarget, bool bAllowDuplicates)
         {
             if ( entry->GetCommand() == pNewEntryData->GetCommand() )
             {
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                           VclMessageType::Info, VclButtonsType::Ok, CuiResId(RID_SVXSTR_MNUCFG_ALREADY_INCLUDED)));
                 xBox->run();
                 delete pNewEntryData;

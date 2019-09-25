@@ -114,7 +114,7 @@ void ScTpFormulaOptions::UpdateCustomCalcRadioButtons(bool bDefault)
 
 void ScTpFormulaOptions::LaunchCustomCalcSettings()
 {
-    ScCalcOptionsDialog aDlg(GetDialogFrameWeld(), maCurrentConfig, maCurrentDocOptions.IsWriteCalcConfig());
+    ScCalcOptionsDialog aDlg(GetFrameWeld(), maCurrentConfig, maCurrentDocOptions.IsWriteCalcConfig());
     if (aDlg.run() == RET_OK)
     {
         maCurrentConfig = aDlg.GetConfig();

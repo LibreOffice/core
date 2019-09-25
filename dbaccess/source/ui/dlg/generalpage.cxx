@@ -649,7 +649,7 @@ namespace dbaui
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                FileDialogFlags::NONE, "sdatabase", SfxFilterFlags::NONE, SfxFilterFlags::NONE, GetDialogFrameWeld());
+                FileDialogFlags::NONE, "sdatabase", SfxFilterFlags::NONE, SfxFilterFlags::NONE, GetFrameWeld());
         std::shared_ptr<const SfxFilter> pFilter = getStandardDatabaseFilter();
         if ( pFilter )
         {
@@ -664,7 +664,7 @@ namespace dbaui
             if ( !pFilter->GetWildcard().Matches(sPath) )
             {
                 OUString sMessage(DBA_RES(STR_ERR_USE_CONNECT_TO));
-                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                               VclMessageType::Info, VclButtonsType::Ok,
                                                               sMessage));
                 xInfoBox->run();
