@@ -26,8 +26,7 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
 #include <svl/poolitem.hxx>
-
-#include <calbck.hxx>
+#include <svl/listener.hxx>
 
 #include "acccontext.hxx"
 
@@ -45,7 +44,7 @@ class SwAccessibleTable :
         public css::accessibility::XAccessibleTable,
         public css::accessibility::XAccessibleSelection,
         public css::accessibility::XAccessibleTableSelection,
-        public SwClient
+        public SvtListener
 {
     std::unique_ptr<SwAccessibleTableData_Impl> mpTableData;    // the table's data, protected by SolarMutex
     OUString m_sDesc;
@@ -87,7 +86,7 @@ protected:
     // Is table data evailable?
     bool HasTableData() const { return (mpTableData != nullptr); }
 
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void Notify(const SfxHint&) override;
 
 public:
     SwAccessibleTable(std::shared_ptr<SwAccessibleMap> const& pInitMap,
@@ -239,7 +238,7 @@ protected:
     {}
 
     virtual std::unique_ptr<SwAccessibleTableData_Impl> CreateNewTableData() override;
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void Notify(const SfxHint&) override;
 
 public:
     SwAccessibleTableColHeaders(std::shared_ptr<SwAccessibleMap> const& pMap,

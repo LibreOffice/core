@@ -671,8 +671,9 @@ SwAccessibleTable::SwAccessibleTable(
         const SwTabFrame* pTabFrame  ) :
     SwAccessibleContext( pInitMap, AccessibleRole::TABLE, pTabFrame )
 {
-    const SwFrameFormat *pFrameFormat = pTabFrame->GetFormat();
-    const_cast< SwFrameFormat * >( pFrameFormat )->Add( this );
+    const SwFrameFormat* pFrameFormat = pTabFrame->GetFormat();
+    if(pFrameFormat)
+        StartListening(const_cast<SwFrameFormat*>(pFrameFormat)->GetNotifier());
 
     SetName( pFrameFormat->GetName() + "-" + OUString::number( pTabFrame->GetPhyPageNum() ) );
 
@@ -690,17 +691,19 @@ SwAccessibleTable::~SwAccessibleTable()
     mpTableData.reset();
 }
 
-void SwAccessibleTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwAccessibleTable::Notify(const SfxHint& rHint)
 {
-    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
-    const SwTabFrame *pTabFrame = static_cast< const SwTabFrame * >( GetFrame() );
-    switch( nWhich )
+    if(rHint.GetId() == SfxHintId::Dying)
     {
-    case RES_NAME_CHANGED:
-        if( pTabFrame )
+        EndListeningAll();
+    }
+    else if(auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    {
+        sal_uInt16 nWhich = pLegacyHint->m_pOld ? pLegacyHint->m_pOld->Which() : pLegacyHint->m_pNew ? pLegacyHint->m_pNew->Which() : 0;
+        const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>(GetFrame());
+        if(nWhich == RES_NAME_CHANGED && pTabFrame)
         {
             const SwFrameFormat *pFrameFormat = pTabFrame->GetFormat();
-            OSL_ENSURE( pFrameFormat == GetRegisteredIn(), "invalid frame" );
 
             const OUString sOldName( GetName() );
             const OUString sNewTabName = pFrameFormat->GetName();
@@ -729,17 +732,6 @@ void SwAccessibleTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew
                 FireAccessibleEvent( aEvent );
             }
         }
-        break;
-
-    case RES_OBJECTDYING:
-        // mba: it seems that this class intentionally does not call code in base class SwClient
-        if( pOld && ( GetRegisteredIn() == static_cast< SwModify *>( static_cast< const SwPtrMsgPoolItem * >( pOld )->pObject ) ) )
-            EndListeningAll();
-        break;
-
-    default:
-        // mba: former call to base class method removed as it is meant to handle only RES_OBJECTDYING
-        break;
     }
 }
 
@@ -1703,8 +1695,9 @@ SwAccessibleTableColHeaders::SwAccessibleTableColHeaders(
 {
     SolarMutexGuard aGuard;
 
-    const SwFrameFormat *pFrameFormat = pTabFrame->GetFormat();
-    const_cast< SwFrameFormat * >( pFrameFormat )->Add( this );
+    const SwFrameFormat* pFrameFormat = pTabFrame->GetFormat();
+    if(pFrameFormat)
+        StartListening(const_cast<SwFrameFormat*>(pFrameFormat)->GetNotifier());
     const OUString aName = pFrameFormat->GetName() + "-ColumnHeaders";
 
     SetName( aName + "-" + OUString::number( pTabFrame->GetPhyPageNum() ) );
@@ -1722,7 +1715,7 @@ std::unique_ptr<SwAccessibleTableData_Impl> SwAccessibleTableColHeaders::CreateN
     return std::unique_ptr<SwAccessibleTableData_Impl>(new SwAccessibleTableData_Impl( *(GetMap()), pTabFrame, IsInPagePreview(), true ));
 }
 
-void SwAccessibleTableColHeaders::Modify( const SfxPoolItem * /*pOld*/, const SfxPoolItem * /*pNew*/ )
+void SwAccessibleTableColHeaders::Notify(const SfxHint& )
 {
 }
 
