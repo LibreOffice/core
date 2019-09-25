@@ -1766,4 +1766,28 @@ void ToolBox::WillUsePopupMode( bool b )
     mpData->mbWillUsePopupMode = b;
 }
 
+boost::property_tree::ptree ToolBox::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(DockingWindow::DumpAsPropertyTree());
+    boost::property_tree::ptree aChildren;
+
+    for (unsigned long i = 0; i < GetItemCount(); ++i)
+    {
+        ToolBoxItemType type = GetItemType(i);
+        if (type == ToolBoxItemType::BUTTON)
+        {
+            boost::property_tree::ptree aEntry;
+            int nId = GetItemId(i);
+            aEntry.put("type", "toolitem");
+            aEntry.put("text", GetItemText(nId));
+            aEntry.put("command", GetItemCommand(nId));
+            aChildren.push_back(std::make_pair("", aEntry));
+        }
+    }
+
+    aTree.add_child("children", aChildren);
+
+    return aTree;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

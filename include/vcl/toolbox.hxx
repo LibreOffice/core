@@ -521,6 +521,8 @@ public:
     void SetToolBoxTextPosition( ToolBoxTextPosition ePosition );
 
     void SetLineSpacing(bool b) { mbLineSpacing = b; }
+
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 inline void ToolBox::CheckItem( sal_uInt16 nItemId, bool bCheck )
