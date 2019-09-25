@@ -39,7 +39,6 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 #include <unotools/streamwrap.hxx>
 
