@@ -542,9 +542,7 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
             aLeft = rOrigWord.copy( 0, nPos );
             aRight = rOrigWord.copy( nPos ); // FIXME: changes at the right side
 
-            aOrigHyphenatedWord =  aLeft;
-            aOrigHyphenatedWord += aRplc;
-            aOrigHyphenatedWord += aRight;
+            aOrigHyphenatedWord = aLeft + aRplc + aRight;
 
             nOrigHyphenPos      = sal::static_int_cast< sal_Int16 >(aLeft.getLength() +
                                   rxHyphWord->getHyphenPos() - nChgPos);
