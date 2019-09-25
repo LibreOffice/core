@@ -22,7 +22,6 @@
 
 namespace abp
 {
-    using namespace ::svt;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 

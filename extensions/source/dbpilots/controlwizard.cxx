@@ -61,7 +61,6 @@ namespace dbp
     using namespace ::com::sun::star::sheet;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::task;
-    using namespace ::svt;
     using namespace ::comphelper;
     using namespace ::dbtools;
 

@@ -22,7 +22,6 @@
 
 #include <vcl/window.hxx>
 #include <vcl/splitwin.hxx>
-#include <vcl/tabpage.hxx>
 
 // additional classes to handle shortcuts
 // code in bibcont.cxx

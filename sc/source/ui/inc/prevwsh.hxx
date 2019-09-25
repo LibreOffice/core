@@ -25,6 +25,7 @@
 
 #include <sfx2/viewsh.hxx>
 #include <sfx2/zoomitem.hxx>
+#include <vcl/syswin.hxx>
 
 #include <shellids.hxx>
 

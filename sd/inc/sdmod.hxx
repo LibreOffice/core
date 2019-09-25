@@ -42,6 +42,7 @@ class SvNumberFormatter;
 class SfxErrorHandler;
 class SfxFrame;
 struct SfxItemPropertyMapEntry;
+class VclSimpleEvent;
 namespace svtools { class ColorConfig; }
 
 namespace com { namespace sun { namespace star { namespace frame {

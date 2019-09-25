@@ -26,8 +26,6 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <svtools/restartdialog.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/treelistbox.hxx>
 
 class SfxModule;
 class SfxShell;
