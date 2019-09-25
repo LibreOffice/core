@@ -25,8 +25,6 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include "DAVException.hxx"
-#include "DAVProperties.hxx"
 #include "DAVResource.hxx"
 #include "DAVSessionFactory.hxx"
 #include "DAVTypes.hxx"

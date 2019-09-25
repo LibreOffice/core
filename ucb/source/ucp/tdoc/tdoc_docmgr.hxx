@@ -32,6 +32,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/frame/XGlobalEventBroadcaster.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 
 namespace tdoc_ucp {

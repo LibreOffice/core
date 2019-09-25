@@ -35,6 +35,7 @@
 #include <com/sun/star/ucb/LockEntry.hpp>
 #include "webdavcontent.hxx"
 #include "webdavprovider.hxx"
+#include "DAVProperties.hxx"
 #include "DAVSession.hxx"
 #include "ContentProperties.hxx"
 

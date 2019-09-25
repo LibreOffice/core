@@ -22,7 +22,6 @@
 #define INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFINPUTSTREAM_HXX
 
 #include <sal/types.h>
-#include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>

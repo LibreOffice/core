@@ -22,17 +22,12 @@
 
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
-#include <ucbhelper/macros.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/ucb/XDynamicResultSetListener.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ref.hxx>
 
 #include <memory>

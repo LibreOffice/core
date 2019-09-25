@@ -21,11 +21,9 @@
 #define INCLUDED_UCB_SOURCE_CORE_UCBPROPS_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <cppuhelper/weak.hxx>
-#include <ucbhelper/macros.hxx>
 #include <cppuhelper/implbase.hxx>
 
 

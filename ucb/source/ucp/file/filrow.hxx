@@ -21,7 +21,6 @@
 
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
 #include <cppuhelper/implbase.hxx>
 
 namespace fileaccess {

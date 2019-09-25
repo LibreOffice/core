@@ -34,6 +34,7 @@
 #include <com/sun/star/ucb/SynchronizePolicy.hpp>
 #include <com/sun/star/ucb/VerificationMode.hpp>
 #include <com/sun/star/ucb/XDataContainer.hpp>
+#include <ucbhelper/macros.hxx>
 
 #include "ucbprops.hxx"
 

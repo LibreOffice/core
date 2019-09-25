@@ -30,11 +30,9 @@
 #include <com/sun/star/ucb/XDynamicResultSetListener.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include "filrow.hxx"
-#include "filnot.hxx"
 #include <cppuhelper/implbase.hxx>
 
 namespace fileaccess {
