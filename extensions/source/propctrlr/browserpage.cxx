@@ -61,7 +61,7 @@ namespace pcr
             m_aListBox->ActivateListBox(IsVisible());
     }
 
-    sal_Int32 OBrowserPage::getMinimumWidth()
+    sal_Int32 OBrowserPage::getMinimumWidth() const
     {
         return m_aListBox->GetMinimumWidth() + LAYOUT_BORDER_LEFT + LAYOUT_BORDER_RIGHT;
     }

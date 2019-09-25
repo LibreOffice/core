@@ -92,7 +92,7 @@ namespace pcr
         void                SetPosSizePixel(Point aPos,Size aSize);
         void                Show(bool bFlag=true);
         void                Hide();
-        bool                IsVisible();
+        bool                IsVisible() const;
 
         vcl::Window*        GetRefWindow();
         void                SetTabOrder(vcl::Window* pRefWindow, ZOrderFlags nFlags );

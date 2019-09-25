@@ -110,7 +110,7 @@ namespace dbp
         m_pDialog->setFormConnection( OAccessRegulator(), _rxConn, _bAutoDispose );
     }
 
-    const OControlWizardContext& OControlWizardPage::getContext()
+    const OControlWizardContext& OControlWizardPage::getContext() const
     {
         return m_pDialog->getContext();
     }

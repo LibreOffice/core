@@ -33,7 +33,7 @@ class BibModul
                                 BibModul();
                                 ~BibModul();
 
-        const std::locale&      GetResLocale() { return m_aResLocale; }
+        const std::locale&      GetResLocale() const { return m_aResLocale; }
         static BibConfig*       GetConfig();
 
         static BibDataManager*  createDataManager();
