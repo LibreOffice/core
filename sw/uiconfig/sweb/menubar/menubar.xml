@@ -592,6 +592,7 @@
           <menu:menuitem menu:id=".uno:OnlineAutoFormat"/>
           <menu:menuitem menu:id=".uno:AutoFormatApply"/>
           <menu:menuitem menu:id=".uno:AutoFormatRedlineApply"/>
+          <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
         </menu:menupopup>
       </menu:menu>
