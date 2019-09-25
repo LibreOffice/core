@@ -36,7 +36,7 @@ private:
 
 protected:
     virtual ~SwAccessibleTextFrame() override;
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void Notify(const SfxHint&) override;
 
 public:
     SwAccessibleTextFrame(std::shared_ptr<SwAccessibleMap> const& pInitMap,
