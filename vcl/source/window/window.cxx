@@ -3350,8 +3350,17 @@ boost::property_tree::ptree Window::DumpAsPropertyTree()
     {
         while (pChild)
         {
-            if (pChild->IsVisible())
-                aChildren.push_back(std::make_pair("", pChild->DumpAsPropertyTree()));
+            if (pChild->IsVisible()) {
+                boost::property_tree::ptree aSubTree = pChild->DumpAsPropertyTree();
+                int nLeft = pChild->get_grid_left_attach();
+                int nTop = pChild->get_grid_top_attach();
+                if (nLeft != -1 && nTop != -1)
+                {
+                    aSubTree.put("left", OUString::number(nLeft));
+                    aSubTree.put("top", OUString::number(nTop));
+                }
+                aChildren.push_back(std::make_pair("", aSubTree));
+            }
             pChild = pChild->mpWindowImpl->mpNext;
         }
         aTree.add_child("children", aChildren);
