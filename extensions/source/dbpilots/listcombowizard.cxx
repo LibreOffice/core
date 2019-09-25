@@ -43,7 +43,6 @@ namespace dbp
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::form;
-    using namespace ::svt;
     using namespace ::dbtools;
 
     OListComboWizard::OListComboWizard(weld::Window* _pParent,
