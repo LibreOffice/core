@@ -246,7 +246,7 @@ bool DiagramData::removeNode(const OUString& rNodeId)
         if (aIdsToRemove.count(rPoint.msPresentationAssociationId))
             aIdsToRemove.insert(rPoint.msModelId);
 
-    // instert also transition nodes
+    // insert also transition nodes
     for (const auto& aCxn : maConnections)
         if (aIdsToRemove.count(aCxn.msSourceId) || aIdsToRemove.count(aCxn.msDestId))
             if (!aCxn.msPresId.isEmpty())
