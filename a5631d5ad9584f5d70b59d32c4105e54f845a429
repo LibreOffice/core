@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_8deea786",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-09-25T10:25:57Z",
+      "side": 1,
+      "message": "but there\u0027s a second \"x\" here? probably one of them should be renamed to something other than \"x\"?",
+      "revId": "a5631d5ad9584f5d70b59d32c4105e54f845a429",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
