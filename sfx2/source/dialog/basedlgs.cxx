@@ -80,65 +80,6 @@ void SfxFloatingWindow_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-
-void SfxModalDialog::SetDialogData_Impl()
-{
-    // save settings (position and user data)
-    OUString sConfigId = OStringToOUString(GetHelpId(),RTL_TEXTENCODING_UTF8);
-    SvtViewOptions aDlgOpt(EViewType::Dialog, sConfigId);
-    aDlgOpt.SetWindowState(OStringToOUString(
-        GetWindowState(WindowStateMask::Pos), RTL_TEXTENCODING_ASCII_US));
-    if ( !aExtraData.isEmpty() )
-        aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( aExtraData ) );
-}
-
-
-void SfxModalDialog::GetDialogData_Impl()
-
-/*  [Description]
-
-    Helper function, reads the dialogue position from the ini file and
-    puts them on the transferred window.
-*/
-
-{
-    OUString sConfigId = OStringToOUString(GetHelpId(),RTL_TEXTENCODING_UTF8);
-    SvtViewOptions aDlgOpt(EViewType::Dialog, sConfigId);
-    if ( aDlgOpt.Exists() )
-    {
-        // load settings
-        SetWindowState( OUStringToOString( aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US ) );
-        Any aUserItem = aDlgOpt.GetUserItem( USERITEM_NAME );
-        OUString aTemp;
-        if ( aUserItem >>= aTemp )
-            aExtraData = aTemp;
-    }
-}
-
-SfxModalDialog::SfxModalDialog(vcl::Window *pParent, const OUString& rID, const OUString& rUIXMLDescription )
-:   ModalDialog(pParent, rID, rUIXMLDescription)
-{
-    SetInstallLOKNotifierHdl(LINK(this, SfxModalDialog, InstallLOKNotifierHdl));
-    GetDialogData_Impl();
-}
-
-IMPL_STATIC_LINK_NOARG(SfxModalDialog, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
-{
-    return SfxViewShell::Current();
-}
-
-SfxModalDialog::~SfxModalDialog()
-{
-    disposeOnce();
-}
-
-void SfxModalDialog::dispose()
-{
-    SetDialogData_Impl();
-
-    ModalDialog::dispose();
-}
-
 void SfxModelessDialogController::Initialize(SfxChildWinInfo const *pInfo)
 
 /*  [Description]

@@ -21,6 +21,7 @@
 
 #include <vcl/wizardmachine.hxx>
 #include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/basedlgs.hxx>

@@ -23,7 +23,6 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <vcl/dialog.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/weld.hxx>
 
@@ -32,33 +31,7 @@ class SfxBindings;
 class SfxChildWindow;
 struct SfxChildWinInfo;
 class SfxItemSet;
-class OKButton;
-class CancelButton;
-class HelpButton;
-class Button;
 class Timer;
-
-// class SfxModalDialog --------------------------------------------------
-
-class SFX2_DLLPUBLIC SfxModalDialog: public ModalDialog
-{
-    OUString                aExtraData;
-
-private:
-    SfxModalDialog(SfxModalDialog const &) = delete;
-    SfxModalDialog& operator =(SfxModalDialog const &) = delete;
-
-    SAL_DLLPRIVATE void SetDialogData_Impl();
-    SAL_DLLPRIVATE void GetDialogData_Impl();
-    DECL_DLLPRIVATE_STATIC_LINK(SfxModalDialog, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
-
-protected:
-    SfxModalDialog(vcl::Window *pParent, const OUString& rID, const OUString& rUIXMLDescription);
-
-public:
-    virtual ~SfxModalDialog() override;
-    virtual void dispose() override;
-};
 
 class SFX2_DLLPUBLIC SfxDialogController : public weld::GenericDialogController
 {

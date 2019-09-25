@@ -69,6 +69,7 @@
 #include <unotools/securityoptions.hxx>
 #include <rtl/uri.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/waitobj.hxx>
