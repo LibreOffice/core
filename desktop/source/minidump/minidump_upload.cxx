@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 
     std::string iniPath(argv[1]);
     std::string response;
-    if (!crashreport::readConfig(iniPath, response))
+    if (!crashreport::readConfig(iniPath, &response))
         return EXIT_FAILURE;
 
     std::cout << "Response: " << response << std::endl;

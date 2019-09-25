@@ -79,7 +79,7 @@ void SalAbort( const OUString& rErrorText, bool )
     }
     else
     {
-        CrashReporter::addKeyValue("AbortMessage", rErrorText);
+        CrashReporter::addKeyValue("AbortMessage", rErrorText, CrashReporter::Write);
         // make sure crash reporter is triggered
         RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, nullptr );
         FatalAppExitW( 0, o3tl::toW(rErrorText.getStr()) );
