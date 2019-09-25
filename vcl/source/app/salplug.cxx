@@ -296,7 +296,7 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
         std::fprintf( stderr, "Application Error\n" );
     else
     {
-        CrashReporter::addKeyValue("AbortMessage", rErrorText);
+        CrashReporter::addKeyValue("AbortMessage", rErrorText, CrashReporter::Write);
         std::fprintf( stderr, "%s\n", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
     }
     if( bDumpCore )
