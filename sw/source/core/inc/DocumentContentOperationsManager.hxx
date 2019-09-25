@@ -101,6 +101,8 @@ public:
 
     //Non-Interface methods
 
+    void DeleteDummyChar(SwPosition const& rPos, sal_Unicode cDummy);
+
     void CopyWithFlyInFly( const SwNodeRange& rRg,
                             const SwNodeIndex& rInsPos,
                             const std::pair<const SwPaM&, const SwPosition&> * pCopiedPaM = nullptr,

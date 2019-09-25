@@ -122,27 +122,19 @@ namespace
         assert(pStartTextNode);
         if (aEndMark != CH_TXT_ATR_FORMELEMENT)
         {
-            (void) aStartMark;
             (void) pStartTextNode;
-            assert(pStartTextNode->GetText()[rStart.nContent.GetIndex()] == aStartMark);
-            SwPaM aStart(rStart, rStart);
-            ++aStart.End()->nContent;
-            io_pDoc->getIDocumentContentOperations().DeleteRange(aStart);
+            io_pDoc->GetDocumentContentOperationsManager().DeleteDummyChar(rStart, aStartMark);
         }
 
         const SwPosition& rEnd = pField->GetMarkEnd();
-        SwTextNode const*const pEndTextNode = rEnd.nNode.GetNode().GetTextNode();
+        SwTextNode *const pEndTextNode = rEnd.nNode.GetNode().GetTextNode();
         assert(pEndTextNode);
         const sal_Int32 nEndPos = (rEnd == rStart)
                                    ? rEnd.nContent.GetIndex()
                                    : rEnd.nContent.GetIndex() - 1;
         assert(pEndTextNode->GetText()[nEndPos] == aEndMark);
-        (void) pEndTextNode;
-        (void) nEndPos;
-        SwPaM aEnd(rEnd, rEnd);
-        if (aEnd.Start()->nContent > 0)
-            --aEnd.Start()->nContent;
-        io_pDoc->getIDocumentContentOperations().DeleteRange(aEnd);
+        SwPosition const aEnd(*pEndTextNode, nEndPos);
+        io_pDoc->GetDocumentContentOperationsManager().DeleteDummyChar(aEnd, aEndMark);
 
         io_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::UI_REPLACE, nullptr);
     };

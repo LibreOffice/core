@@ -1817,6 +1817,23 @@ void DocumentContentOperationsManager::DeleteSection( SwNode *pNode )
     m_rDoc.GetNodes().DelNodes( aSttIdx, aEndIdx.GetIndex() - aSttIdx.GetIndex() + 1 );
 }
 
+void DocumentContentOperationsManager::DeleteDummyChar(
+        SwPosition const& rPos, sal_Unicode const cDummy)
+{
+    SwPaM aPam(rPos, rPos);
+    ++aPam.GetPoint()->nContent;
+    assert(aPam.GetText().getLength() == 1 && aPam.GetText()[0] == cDummy);
+    (void) cDummy;
+
+    DeleteRangeImpl(aPam);
+
+    if (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline()
+        && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
+    {
+        m_rDoc.getIDocumentRedlineAccess().CompressRedlines();
+    }
+}
+
 void DocumentContentOperationsManager::DeleteRange( SwPaM & rPam )
 {
     lcl_DoWithBreaks( *this, rPam, &DocumentContentOperationsManager::DeleteRangeImpl );
