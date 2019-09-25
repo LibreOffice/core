@@ -1940,6 +1940,16 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
         return false;
     }
 
+    {
+        std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
+        lcl_CalcBreaks(Breaks, rPam);
+        if (!Breaks.empty())
+        {   // a bit of a problem: we want to completely remove the nodes
+            // but then how can the CH_TXT_ATR survive?
+            return false;
+        }
+    }
+
     // Move hard page brakes to the following Node.
     bool bSavePageBreak = false, bSavePageDesc = false;
 
@@ -2083,6 +2093,14 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     const SwPosition *pStt = rPaM.Start(), *pEnd = rPaM.End();
     if( !rPaM.HasMark() || *pStt >= *pEnd || (*pStt <= rPos && rPos < *pEnd))
         return false;
+
+#ifndef NDEBUG
+    {
+        std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
+        lcl_CalcBreaks(Breaks, rPaM);
+        assert(Breaks.empty()); // probably an invalid redline was created?
+    }
+#endif
 
     // Save the paragraph anchored Flys, so that they can be moved.
     SaveFlyArr aSaveFlyArr;
