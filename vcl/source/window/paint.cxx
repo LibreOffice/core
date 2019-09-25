@@ -654,6 +654,9 @@ IMPL_LINK_NOARG(Window, ImplHandlePaintHdl, Timer *, void)
     else if ( mpWindowImpl->mbReallyVisible )
     {
         ImplCallOverlapPaint();
+        if (comphelper::LibreOfficeKit::isActive() &&
+            mpWindowImpl->mpFrameData->maPaintIdle.IsActive())
+            mpWindowImpl->mpFrameData->maPaintIdle.Stop();
     }
 }
 
