@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 #include <sal/log.hxx>
-#include <cppuhelper/queryinterface.hxx>
 
 #include <com/sun/star/io/IOException.hpp>
 
@@ -76,43 +75,6 @@ XInputStream_impl::~XInputStream_impl()
         OSL_FAIL("unexpected situation");
     }
 }
-
-
-//  XTypeProvider
-
-
-XTYPEPROVIDER_IMPL_3( XInputStream_impl,
-                      lang::XTypeProvider,
-                      io::XSeekable,
-                      io::XInputStream )
-
-
-uno::Any SAL_CALL
-XInputStream_impl::queryInterface( const uno::Type& rType )
-{
-    uno::Any aRet = cppu::queryInterface( rType,
-                                          static_cast< io::XInputStream* >(this),
-                                          static_cast< lang::XTypeProvider* >(this),
-                                          static_cast< io::XSeekable* >(this) );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-
-void SAL_CALL
-XInputStream_impl::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-
-void SAL_CALL
-XInputStream_impl::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
 
 sal_Int32 SAL_CALL
 XInputStream_impl::readBytes(
