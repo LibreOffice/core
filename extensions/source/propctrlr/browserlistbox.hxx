@@ -135,7 +135,7 @@ namespace pcr
         void                        EnablePropertyControls( const OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable );
         void                        EnablePropertyLine( const OUString& _rEntryName, bool _bEnable );
 
-        sal_Int32                   GetMinimumWidth();
+        sal_Int32                   GetMinimumWidth() const;
         sal_Int32                   GetMinimumHeight();
 
 

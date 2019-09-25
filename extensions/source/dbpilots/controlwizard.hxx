@@ -56,7 +56,7 @@ namespace dbp
     protected:
         OControlWizard*                 getDialog();
         const OControlWizard*           getDialog() const;
-        const OControlWizardContext&    getContext();
+        const OControlWizardContext&    getContext() const;
         bool                        updateContext();
         void                            setFormConnection(const css::uno::Reference< css::sdbc::XConnection >& _rxConn, bool _bAutoDispose = true );
         css::uno::Reference< css::sdbc::XConnection >

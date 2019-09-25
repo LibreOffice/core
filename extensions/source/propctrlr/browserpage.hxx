@@ -41,7 +41,7 @@ namespace pcr
         virtual ~OBrowserPage() override;
         virtual void dispose() override;
 
-        sal_Int32 getMinimumWidth();
+        sal_Int32 getMinimumWidth() const;
         sal_Int32 getMinimumHeight();
 
               OBrowserListBox& getListBox() { return *m_aListBox.get(); }
