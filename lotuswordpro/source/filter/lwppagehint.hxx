@@ -99,9 +99,9 @@ public:
     LwpPageHint(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     void Read() override;
     void Parse(IXFStream* pOutputStream) override;
-    sal_uInt16 GetPageNumber(){return m_nPageNumber;}
+    sal_uInt16 GetPageNumber() const {return m_nPageNumber;}
     LwpObjectID& GetPageLayoutID(){ return m_PageLayout;}
-    sal_uInt16 GetLayoutPageNumber(){ return m_nLayoutPageNumber;}
+    sal_uInt16 GetLayoutPageNumber() const { return m_nLayoutPageNumber;}
 private:
     virtual ~LwpPageHint() override {}
 

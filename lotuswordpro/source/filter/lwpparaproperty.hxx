@@ -118,13 +118,13 @@ public:
         virtual ~LwpParaIndentProperty() override;
         LwpIndentOverride* GetIndent();
         sal_uInt32 GetType() override;
-        inline const LwpObjectID& GetIndentID();
+        inline const LwpObjectID& GetIndentID() const;
 
 private:
         LwpObjectID m_aIndentID;
         LwpIndentOverride* m_pIndent;
 };
-inline const LwpObjectID& LwpParaIndentProperty::GetIndentID()
+inline const LwpObjectID& LwpParaIndentProperty::GetIndentID() const
 {
     return m_aIndentID;
 }

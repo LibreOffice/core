@@ -73,12 +73,12 @@ public:
     LwpColor():m_nRed(0), m_nGreen(0), m_nBlue(0), m_nExtra(0){}
 public:
     void Read(LwpObjectStream *pStrm);
-    sal_uInt16 GetRed();
-    sal_uInt16 GetGreen();
-    sal_uInt16 GetBlue();
-    bool IsValidColor();
+    sal_uInt16 GetRed() const;
+    sal_uInt16 GetGreen() const;
+    sal_uInt16 GetBlue() const;
+    bool IsValidColor() const;
     sal_uInt32 To24Color();
-    bool IsTransparent();
+    bool IsTransparent() const;
 private:
     sal_uInt16 m_nRed;          // When extra is AGLRGB_INDEX, m_nRed holds the
     sal_uInt16 m_nGreen;        // hi 16 bits and m_nGreen holds the lo 16 bits of
@@ -99,23 +99,23 @@ private:
           AGLRGB_TRANSPARENT = 100
     };
 };
-inline sal_uInt16 LwpColor::GetRed()
+inline sal_uInt16 LwpColor::GetRed() const
 {
     return m_nRed;
 }
-inline sal_uInt16 LwpColor::GetGreen()
+inline sal_uInt16 LwpColor::GetGreen() const
 {
     return m_nGreen;
 }
-inline sal_uInt16 LwpColor::GetBlue()
+inline sal_uInt16 LwpColor::GetBlue() const
 {
     return m_nBlue;
 }
-inline bool LwpColor::IsValidColor()
+inline bool LwpColor::IsValidColor() const
 {
     return ((m_nExtra!=AGLRGB_INVALID) && (m_nExtra!=AGLRGB_TRANSPARENT));
 }
-inline bool LwpColor::IsTransparent()
+inline bool LwpColor::IsTransparent() const
 {
     return (m_nExtra==AGLRGB_TRANSPARENT);
 }

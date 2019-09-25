@@ -80,7 +80,7 @@ class LwpBulletStyleMgr final
 public:
     LwpBulletStyleMgr();
     ~LwpBulletStyleMgr();
-    OUString RegisterBulletStyle(LwpPara* pPara, LwpBulletOverride* pBullOver,
+    OUString RegisterBulletStyle(LwpPara* pPara, const LwpBulletOverride* pBullOver,
         LwpIndentOverride const * pIndent);
     inline void SetFoundry(LwpFoundry* pFoundry);
     inline void SetContinueFlag(bool bFlag);

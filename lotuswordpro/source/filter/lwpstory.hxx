@@ -108,13 +108,13 @@ public:
      XFContentContainer* GetXFContent();
     void AddXFContent(XFContent* pContent);
 
-    bool GetDropcapFlag() { return m_bDropcap; }
+    bool GetDropcapFlag() const { return m_bDropcap; }
     LwpPageLayout* GetCurrentLayout() { return m_pCurrentLayout; }
     inline LwpMiddleLayout* GetTabLayout();//for register tab style
-    const OUString& GetSectionName() { return m_CurrSectionName; }
+    const OUString& GetSectionName() const { return m_CurrSectionName; }
     LwpHyperlinkMgr* GetHyperlinkMgr() { return m_pHyperlinkMgr.get(); }
 
-    bool IsPMModified() { return m_bPMModified; }
+    bool IsPMModified() const { return m_bPMModified; }
     inline void SetPMModified(bool bPMModified);
     inline void SetDropcapFlag(bool bFlag);
     inline void SetTabLayout(LwpLayout* pLayout);

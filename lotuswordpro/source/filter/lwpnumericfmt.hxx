@@ -76,11 +76,11 @@ class LwpNumericFormatSubset final
 public:
     LwpNumericFormatSubset();
     void QuickRead(LwpObjectStream* pStrm);
-    OUString const & GetPrefix(){ return cPrefix.str();}
-    OUString const & GetSuffix(){ return cSuffix.str();}
-    bool IsDefaultPrefix(){ return !(cSubFlags&SF_OVER_PREFIX); }
-    bool IsDefaultSuffix(){ return !(cSubFlags&SF_OVER_SUFFIX); }
-    LwpColor GetColor();
+    OUString const & GetPrefix() const { return cPrefix.str();}
+    OUString const & GetSuffix() const { return cSuffix.str();}
+    bool IsDefaultPrefix() const { return !(cSubFlags&SF_OVER_PREFIX); }
+    bool IsDefaultSuffix() const { return !(cSubFlags&SF_OVER_SUFFIX); }
+    LwpColor GetColor() const;
 
 private:
     LwpColor cColor;
@@ -248,8 +248,8 @@ public:
     void Read();
     static bool IsCurrencyFormat(sal_uInt16 Format);
     sal_uInt16 GetDecimalPlaces();
-    bool IsDecimalPlacesOverridden();
-    bool IsNegativeOverridden();
+    bool IsDecimalPlacesOverridden() const;
+    bool IsNegativeOverridden() const;
     XFStyle* Convert();
 
 private:
@@ -280,13 +280,13 @@ private:
 };
 
 inline bool
-LwpNumericFormat::IsDecimalPlacesOverridden()
+LwpNumericFormat::IsDecimalPlacesOverridden() const
 {
     return (cFlags & NF_OVER_DECIMAL_PLACES) != 0;
 }
 
 inline bool
-LwpNumericFormat::IsNegativeOverridden()
+LwpNumericFormat::IsNegativeOverridden() const
 {
     return (cFlags & NF_OVER_NEGATIVE) != 0;
 }

@@ -224,7 +224,7 @@ void ToolBarMerger::ConvertSequenceToValues(
      position of the reference point and the toolbar used.
 */
 ReferenceToolbarPathInfo ToolBarMerger::FindReferencePoint(
-    ToolBox*               pToolbar,
+    const ToolBox*   pToolbar,
     const OUString& rReferencePoint )
 {
     ReferenceToolbarPathInfo aResult;

@@ -82,7 +82,7 @@ public:
 
     void    SetOwnerTable(XFTable *pTable);
 
-    sal_Int32   GetRow();
+    sal_Int32   GetRow() const;
 
     sal_Int32   GetCellCount() const;
 
@@ -116,7 +116,7 @@ inline void XFRow::SetOwnerTable(XFTable *pTable)
     m_pOwnerTable = pTable;
 }
 
-inline sal_Int32 XFRow::GetRow()
+inline sal_Int32 XFRow::GetRow() const
 {
     return m_nRow;
 }

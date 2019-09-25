@@ -127,7 +127,7 @@ void LwpTable::Read()
     m_pObjStrm->SkipExtra();
 }
 
-bool LwpTable::IsNumberDown()
+bool LwpTable::IsNumberDown() const
 {
     return (m_nAttributes & NUMBER_DOWN) != 0;
 }
@@ -186,7 +186,7 @@ LwpGlossary::LwpGlossary(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpP
 LwpGlossary::~LwpGlossary()
 {
 }
-sal_uInt16 LwpGlossary::GetNumIndexRows()
+sal_uInt16 LwpGlossary::GetNumIndexRows() const
 {
     if (GetRow() > 0 && GetRow() <= MAX_NUM_ROWS)
         return GetRow() - 1;    // Minus one row for repeated heading.
