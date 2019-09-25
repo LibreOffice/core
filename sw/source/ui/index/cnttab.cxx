@@ -41,6 +41,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <svtools/indexentryres.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <editeng/unolingu.hxx>
 #include <column.hxx>
 #include <fmtfsize.hxx>
@@ -172,7 +173,7 @@ protected:
     std::vector<long>               GetOptimalColWidths() const;
 
 public:
-    SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pBuilder);
+    SwEntryBrowseBox(const css::uno::Reference<css::awt::XWindow> &rParent);
     virtual ~SwEntryBrowseBox() override;
     virtual void                    dispose() override;
     void                            ReadEntries(SvStream& rInStr);
@@ -185,23 +186,21 @@ public:
     virtual Size                    GetOptimalSize() const override;
 };
 
-class SwAutoMarkDlg_Impl : public ModalDialog
+class SwAutoMarkDlg_Impl : public weld::GenericDialogController
 {
-    VclPtr<OKButton>           m_pOKPB;
-
-    VclPtr<SwEntryBrowseBox>   m_pEntriesBB;
-
     OUString            sAutoMarkURL;
-
     bool                bCreateMode;
 
-    DECL_LINK(OkHdl, Button*, void);
+    std::unique_ptr<weld::Button> m_xOKPB;
+    std::unique_ptr<weld::Container> m_xTable;
+    css::uno::Reference<css::awt::XWindow> m_xTableCtrlParent;
+    VclPtr<SwEntryBrowseBox> m_xEntriesBB;
+
+    DECL_LINK(OkHdl, weld::Button&, void);
 public:
-    SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAutoMarkURL,
+    SwAutoMarkDlg_Impl(weld::Window* pParent, const OUString& rAutoMarkURL,
                        bool bCreate);
     virtual ~SwAutoMarkDlg_Impl() override;
-    virtual void dispose() override;
-
 };
 
 sal_uInt16 CurTOXType::GetFlatIndex() const
@@ -1373,9 +1372,8 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, const OString&, rIdent, void)
                 return;
         }
 
-        VclPtrInstance<SwAutoMarkDlg_Impl> pAutoMarkDlg(nullptr, sAutoMarkURL, bNew);
-
-        if( RET_OK != pAutoMarkDlg->Execute() && bNew )
+        SwAutoMarkDlg_Impl aAutoMarkDlg(GetDialogFrameWeld(), sAutoMarkURL, bNew);
+        if (RET_OK != aAutoMarkDlg.run() && bNew)
             sAutoMarkURL = sSaveAutoMarkURL;
     }
 }
@@ -3555,8 +3553,8 @@ void SwTOXStylesTabPage::Modify()
 #define ITEM_CASE           6
 #define ITEM_WORDONLY       7
 
-SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pBuilder)
-    : SwEntryBrowseBox_Base( pParent, EditBrowseBoxFlags::NONE, WB_TABSTOP | WB_BORDER,
+SwEntryBrowseBox::SwEntryBrowseBox(const css::uno::Reference<css::awt::XWindow> &rParent)
+    : SwEntryBrowseBox_Base(VCLUnoHelper::GetWindow(rParent), EditBrowseBoxFlags::NONE, WB_TABSTOP | WB_BORDER,
                            BrowserMode::KEEPHIGHLIGHT |
                            BrowserMode::COLUMNSELECTION |
                            BrowserMode::MULTISELECTION |
@@ -3570,15 +3568,15 @@ SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pB
     , m_nCurrentRow(0)
     , m_bModified(false)
 {
-    m_sSearch = pBuilder->get<vcl::Window>("searchterm")->GetText();
-    m_sAlternative = pBuilder->get<vcl::Window>("alternative")->GetText();
-    m_sPrimKey = pBuilder->get<vcl::Window>("key1")->GetText();
-    m_sSecKey = pBuilder->get<vcl::Window>("key2")->GetText();
-    m_sComment = pBuilder->get<vcl::Window>("comment")->GetText();
-    m_sCaseSensitive = pBuilder->get<vcl::Window>("casesensitive")->GetText();
-    m_sWordOnly = pBuilder->get<vcl::Window>("wordonly")->GetText();
-    m_sYes = pBuilder->get<vcl::Window>("yes")->GetText();
-    m_sNo = pBuilder->get<vcl::Window>("no")->GetText();
+    m_sSearch = SwResId(STR_AUTOMARK_SEARCHTERM);
+    m_sAlternative = SwResId(STR_AUTOMARK_ALTERNATIVE);
+    m_sPrimKey = SwResId(STR_AUTOMARK_KEY1);
+    m_sSecKey = SwResId(STR_AUTOMARK_KEY2);
+    m_sComment = SwResId(STR_AUTOMARK_COMMENT);
+    m_sCaseSensitive = SwResId(STR_AUTOMARK_CASESENSITIVE);
+    m_sWordOnly = SwResId(STR_AUTOMARK_WORDONLY);
+    m_sYes = SwResId(STR_AUTOMARK_YES);
+    m_sNo = SwResId(STR_AUTOMARK_NO);
 
     m_aCellCheckBox->GetBox().EnableTriState(false);
     m_xController = new ::svt::EditCellController(m_aCellEdit.get());
@@ -3882,52 +3880,48 @@ bool SwEntryBrowseBox::IsModified()const
     return pController->IsModified();
 }
 
-SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAutoMarkURL,
+SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(weld::Window* pParent, const OUString& rAutoMarkURL,
         bool bCreate)
-    : ModalDialog(pParent, "CreateAutomarkDialog",
-        "modules/swriter/ui/createautomarkdialog.ui")
+    : GenericDialogController(pParent, "modules/swriter/ui/createautomarkdialog.ui", "CreateAutomarkDialog")
     , sAutoMarkURL(rAutoMarkURL)
     , bCreateMode(bCreate)
+    , m_xOKPB(m_xBuilder->weld_button("ok"))
+    , m_xTable(m_xBuilder->weld_container("area"))
+    , m_xTableCtrlParent(m_xTable->CreateChildFrame())
+    , m_xEntriesBB(VclPtr<SwEntryBrowseBox>::Create(m_xTableCtrlParent))
 {
-    get(m_pOKPB, "ok");
-    m_pEntriesBB = VclPtr<SwEntryBrowseBox>::Create(get<VclContainer>("area"), this);
-    m_pEntriesBB->set_expand(true);
-    m_pEntriesBB->Show();
-    m_pOKPB->SetClickHdl(LINK(this, SwAutoMarkDlg_Impl, OkHdl));
+    m_xEntriesBB->Show();
+    m_xOKPB->connect_clicked(LINK(this, SwAutoMarkDlg_Impl, OkHdl));
 
-    SetText(GetText() + ": " + sAutoMarkURL);
+    m_xDialog->set_title(m_xDialog->get_title() + ": " + sAutoMarkURL);
     bool bError = false;
     if( bCreateMode )
-        m_pEntriesBB->RowInserted(0);
+        m_xEntriesBB->RowInserted(0);
     else
     {
         SfxMedium aMed( sAutoMarkURL, StreamMode::STD_READ );
         if( aMed.GetInStream() && !aMed.GetInStream()->GetError() )
-            m_pEntriesBB->ReadEntries( *aMed.GetInStream() );
+            m_xEntriesBB->ReadEntries( *aMed.GetInStream() );
         else
             bError = true;
     }
 
-    if(bError)
-        EndDialog();
+    Size aPrefSize = m_xEntriesBB->GetOptimalSize();
+    m_xTable->set_size_request(aPrefSize.Width(), aPrefSize.Height());
+
+    if (bError)
+        m_xDialog->response(RET_CANCEL);
 }
 
 SwAutoMarkDlg_Impl::~SwAutoMarkDlg_Impl()
 {
-    disposeOnce();
+    m_xEntriesBB.disposeAndClear();
 }
 
-void SwAutoMarkDlg_Impl::dispose()
-{
-    m_pEntriesBB.disposeAndClear();
-    m_pOKPB.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK_NOARG(SwAutoMarkDlg_Impl, OkHdl, Button*, void)
+IMPL_LINK_NOARG(SwAutoMarkDlg_Impl, OkHdl, weld::Button&, void)
 {
     bool bError = false;
-    if(m_pEntriesBB->IsModified() || bCreateMode)
+    if (m_xEntriesBB->IsModified() || bCreateMode)
     {
         SfxMedium aMed( sAutoMarkURL,
                         bCreateMode ? StreamMode::WRITE
@@ -3936,14 +3930,14 @@ IMPL_LINK_NOARG(SwAutoMarkDlg_Impl, OkHdl, Button*, void)
         pStrm->SetStreamCharSet( RTL_TEXTENCODING_MS_1253 );
         if( !pStrm->GetError() )
         {
-            m_pEntriesBB->WriteEntries( *pStrm );
+            m_xEntriesBB->WriteEntries( *pStrm );
             aMed.Commit();
         }
         else
             bError = true;
     }
-    if( !bError )
-        EndDialog(RET_OK);
+    if (!bError)
+        m_xDialog->response(RET_OK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
