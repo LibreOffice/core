@@ -169,6 +169,13 @@ DECLARE_WW8EXPORT_TEST(testTdf120225_textControlCrossRef, "tdf120225_textControl
     CPPUNIT_ASSERT_EQUAL(OUString("Text1"), sTextFieldName);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf127316_autoEscapement, "tdf127316_autoEscapement.odt")
+{
+    uno::Reference<text::XTextRange> xPara = getParagraph(2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1), "CharEscapement"), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-33.f, getProperty<float>(getRun(xPara, 2), "CharEscapement"), 3);
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf121111_fillStyleNone, "tdf121111_fillStyleNone.docx")
 {
     uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Numbering - First level"),
