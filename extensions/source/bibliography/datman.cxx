@@ -64,7 +64,6 @@
 #include <strings.hrc>
 #include <helpids.h>
 #include <connectivity/dbtools.hxx>
-#include <connectivity/dbtools.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;
