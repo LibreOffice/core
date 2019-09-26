@@ -36,6 +36,8 @@ for callInfo, callValues in callDict.iteritems():
     callValue = next(iter(callValues))
     if "unknown-stmt" in callValue:
         continue
+    if "unknown2" in callValue:
+        continue
     if "unknown3" in callValue:
         continue
     if "unknown4" in callValue:
