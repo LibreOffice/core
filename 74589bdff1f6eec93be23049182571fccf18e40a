@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_b31e646e",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-09-26T07:40:41Z",
+      "side": 1,
+      "message": "Instead of adding code to count the input length ignoring leading zeroes, it would look more natural to do the special \"treat as signed 16-bit value\" treatment based on the value of lu (i.e., convert to two\u0027s-complement if lu is in the range 0x8000..0xFFFF, inclusive).",
+      "revId": "74589bdff1f6eec93be23049182571fccf18e40a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
