@@ -220,8 +220,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
 
 void ORelationTableView::ConnDoubleClicked(VclPtr<OTableConnection>& rConnection)
 {
-    ScopedVclPtrInstance< ORelationDialog > aRelDlg( this, rConnection->GetData() );
-    switch (aRelDlg->Execute())
+    ORelationDialog aRelDlg(this, rConnection->GetData());
+    switch (aRelDlg.run())
     {
         case RET_OK:
             // successfully updated
@@ -248,9 +248,9 @@ void ORelationTableView::AddNewRelation()
 {
 
     TTableConnectionData::value_type pNewConnData( new ORelationTableConnectionData() );
-    ScopedVclPtrInstance< ORelationDialog > aRelDlg(this, pNewConnData, true);
+    ORelationDialog aRelDlg(this, pNewConnData, true);
 
-    bool bSuccess = (aRelDlg->Execute() == RET_OK);
+    bool bSuccess = (aRelDlg.run() == RET_OK);
     if (bSuccess)
     {
         // already updated by the dialog
@@ -362,8 +362,8 @@ void ORelationTableView::lookForUiActivities()
     }
     if(m_pCurrentlyTabConnData)
     {
-        ScopedVclPtrInstance< ORelationDialog > aRelDlg( this, m_pCurrentlyTabConnData );
-        if (aRelDlg->Execute() == RET_OK)
+        ORelationDialog aRelDlg(this, m_pCurrentlyTabConnData);
+        if (aRelDlg.run() == RET_OK)
         {
             // already updated by the dialog
             addConnection( VclPtr<ORelationTableConnection>::Create( this, m_pCurrentlyTabConnData ) );

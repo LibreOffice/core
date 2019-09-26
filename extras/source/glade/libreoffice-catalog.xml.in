@@ -200,10 +200,6 @@
                         generic-name="Same Content Preset ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
 
-    <glade-widget-class title="Relation Control" name="dbulo-ORelationControl"
-                        generic-name="Relation Control" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
-
     <glade-widget-class title="Sidebar ToolBox" name="sfxlo-SidebarToolBox"
                         generic-name="Sidebar ToolBox" parent="GtkToolbar"
                         icon-name="widget-gtk-toolbar">
