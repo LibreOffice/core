@@ -160,10 +160,8 @@ namespace bib
     }
 
 
-    void SAL_CALL OLoadListenerAdapter::unloaded( const EventObject& _rEvent )
+    void SAL_CALL OLoadListenerAdapter::unloaded( const EventObject& )
     {
-        if ( getLoadListener( ) )
-            getLoadListener( )->_unloaded( _rEvent );
     }
 
 
