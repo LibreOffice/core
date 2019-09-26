@@ -1474,7 +1474,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
         {
             aFormatCode.append( "][$-" );
             // language code in upper hex:
-            aFormatCode.append(OUString(OUString::number(static_cast<sal_uInt16>(eLang), 16)).toAsciiUpperCase());
+            aFormatCode.append(OUString::number(static_cast<sal_uInt16>(eLang), 16).toAsciiUpperCase());
         }
         aFormatCode.append( ']' );
     }
