@@ -156,19 +156,7 @@ void OHTMLReader::NextToken( HtmlTokenId nToken )
                 }
                 break;
             case HtmlTokenId::TABLEROW_ON:
-                if ( m_pUpdateHelper.get() )
-                {
-                    try
-                    {
-                        m_pUpdateHelper->moveToInsertRow(); // otherwise append new line
-                    }
-                    catch(SQLException& e)
-                    // handling update failure
-                    {
-                        showErrorDialog(e);
-                    }
-                }
-                else
+                if ( !m_pUpdateHelper.get() )
                     m_bError = true;
                 break;
             case HtmlTokenId::TEXTTOKEN:

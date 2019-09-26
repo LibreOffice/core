@@ -147,18 +147,6 @@ void ORTFReader::NextToken( int nToken )
                             rInput.ResetError();
                         }
                     }
-                    if ( bInsertRow && !m_bError)
-                    {
-                        try
-                        {
-                            m_pUpdateHelper->moveToInsertRow(); // otherwise append new line
-                        }
-                        catch(SQLException& e)
-                        // handling update failure
-                        {
-                            showErrorDialog(e);
-                        }
-                    }
                 }
                 break;
             case RTF_INTBL:
