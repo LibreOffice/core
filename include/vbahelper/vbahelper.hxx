@@ -147,7 +147,7 @@ public:
     Millimeter(double mm);
 
     void setInPoints(double points) ;
-    double getInHundredthsOfOneMillimeter();
+    double getInHundredthsOfOneMillimeter() const;
     static sal_Int32 getInHundredthsOfOneMillimeter(double points);
     static double getInPoints(int _hmm);
 };
