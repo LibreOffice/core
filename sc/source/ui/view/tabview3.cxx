@@ -405,14 +405,6 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 
                 if (pDocSh)
                 {
-                    // Provide size in the payload, so clients don't have to
-                    // call lok::Document::getDocumentSize().
-                    std::stringstream ss;
-                    ss << aNewSize.Width() << ", " << aNewSize.Height();
-                    OString sSize = ss.str().c_str();
-                    ScModelObj* pModel = ScModelObj::getImplementation(aViewData.GetViewShell()->GetCurrentDocument());
-                    SfxLokHelper::notifyDocumentSizeChanged(aViewData.GetViewShell(), sSize, pModel);
-
                     // New area extended to the right of the sheet after last column
                     // including overlapping area with aNewRowArea
                     tools::Rectangle aNewColArea(aOldSize.getWidth(), 0, aNewSize.getWidth(), aNewSize.getHeight());
@@ -431,6 +423,14 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
                     {
                         SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), aNewRowArea.toString());
                     }
+
+                    // Provide size in the payload, so clients don't have to
+                    // call lok::Document::getDocumentSize().
+                    std::stringstream ss;
+                    ss << aNewSize.Width() << ", " << aNewSize.Height();
+                    OString sSize = ss.str().c_str();
+                    ScModelObj* pModel = ScModelObj::getImplementation(aViewData.GetViewShell()->GetCurrentDocument());
+                    SfxLokHelper::notifyDocumentSizeChanged(aViewData.GetViewShell(), sSize, pModel, false);
                 }
             }
         }
