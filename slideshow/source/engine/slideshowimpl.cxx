@@ -1543,8 +1543,6 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
             // disable user paint
             maUserPaintColor.reset();
             maEventMultiplexer.notifyUserPaintDisabled();
-            if( mpCurrentSlide )
-                mpCurrentSlide->disablePaintOverlay();
         }
 
         resetCursor();
