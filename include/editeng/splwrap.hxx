@@ -102,7 +102,6 @@ protected:
     void             SetLast(const css::uno::Reference< css::uno::XInterface >  &xNewLast)
                             { xLast = xNewLast; }
     virtual bool SpellMore();               // examine further documents?
-    virtual bool HasOtherCnt();             // Are there any special areas?
     virtual void SpellStart( SvxSpellArea eSpell ); // Preparing the area
     virtual void SpellContinue();     // Check Areas
                                           // Result available through GetLast

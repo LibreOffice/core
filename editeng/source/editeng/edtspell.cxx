@@ -108,11 +108,6 @@ void EditSpellWrapper::SpellContinue()
     SetLast( pEditView->GetImpEditEngine()->ImpSpell( pEditView ) );
 }
 
-bool EditSpellWrapper::HasOtherCnt()
-{
-    return false;
-}
-
 bool EditSpellWrapper::SpellMore()
 {
     EditEngine* pEE = pEditView->GetEditEngine();
