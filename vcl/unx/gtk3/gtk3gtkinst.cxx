@@ -1260,15 +1260,16 @@ protected:
     GtkInstanceBuilder* m_pBuilder;
 
     DECL_LINK(async_signal_focus_in, void*, void);
+    DECL_LINK(async_signal_focus_out, void*, void);
 
     void launch_signal_focus_in()
     {
         // in e.g. function wizard RefEdits we want to select all when we get focus
         // but there are pending gtk handlers which change selection after our handler
         // post our focus in event to happen after those finish
-        if (m_pFocusEvent)
-            Application::RemoveUserEvent(m_pFocusEvent);
-        m_pFocusEvent = Application::PostUserEvent(LINK(this, GtkInstanceWidget, async_signal_focus_in));
+        if (m_pFocusInEvent)
+            Application::RemoveUserEvent(m_pFocusInEvent);
+        m_pFocusInEvent = Application::PostUserEvent(LINK(this, GtkInstanceWidget, async_signal_focus_in));
     }
 
     static gboolean signalFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
@@ -1295,11 +1296,20 @@ protected:
         return m_aMnemonicActivateHdl.Call(*this);
     }
 
+    void launch_signal_focus_out()
+    {
+        // tdf#127262 because focus in is async, focus out must not appear out
+        // of sequence to focus in
+        if (m_pFocusOutEvent)
+            Application::RemoveUserEvent(m_pFocusOutEvent);
+        m_pFocusOutEvent = Application::PostUserEvent(LINK(this, GtkInstanceWidget, async_signal_focus_out));
+    }
+
     static gboolean signalFocusOut(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         SolarMutexGuard aGuard;
-        pThis->signal_focus_out();
+        pThis->launch_signal_focus_out();
         return false;
     }
 
@@ -1390,7 +1400,8 @@ private:
     bool m_bDraggedOver;
     sal_uInt16 m_nLastMouseButton;
     sal_uInt16 m_nLastMouseClicks;
-    ImplSVEvent* m_pFocusEvent;
+    ImplSVEvent* m_pFocusInEvent;
+    ImplSVEvent* m_pFocusOutEvent;
     GtkCssProvider* m_pBgCssProvider;
     gulong m_nFocusInSignalId;
     gulong m_nMnemonicActivateSignalId;
@@ -1613,7 +1624,8 @@ public:
         , m_bDraggedOver(false)
         , m_nLastMouseButton(0)
         , m_nLastMouseClicks(0)
-        , m_pFocusEvent(nullptr)
+        , m_pFocusInEvent(nullptr)
+        , m_pFocusOutEvent(nullptr)
         , m_pBgCssProvider(nullptr)
         , m_nFocusInSignalId(0)
         , m_nMnemonicActivateSignalId(0)
@@ -2154,8 +2166,10 @@ public:
 
     virtual ~GtkInstanceWidget() override
     {
-        if (m_pFocusEvent)
-            Application::RemoveUserEvent(m_pFocusEvent);
+        if (m_pFocusInEvent)
+            Application::RemoveUserEvent(m_pFocusInEvent);
+        if (m_pFocusOutEvent)
+            Application::RemoveUserEvent(m_pFocusOutEvent);
         if (m_nDragMotionSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nDragMotionSignalId);
         if (m_nDragDropSignalId)
@@ -2245,8 +2259,14 @@ public:
 
 IMPL_LINK_NOARG(GtkInstanceWidget, async_signal_focus_in, void*, void)
 {
-    m_pFocusEvent = nullptr;
+    m_pFocusInEvent = nullptr;
     signal_focus_in();
+}
+
+IMPL_LINK_NOARG(GtkInstanceWidget, async_signal_focus_out, void*, void)
+{
+    m_pFocusOutEvent = nullptr;
+    signal_focus_out();
 }
 
 namespace
