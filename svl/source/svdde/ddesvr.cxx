@@ -267,33 +267,6 @@ found:
 
     case XTYP_ADVSTART:
         {
-            // Is the Item turning into a HotLink for the first time?
-            if( !pItem->pImpData && pTopic->StartAdviseLoop() )
-            {
-                // Then the Item has been exchanged
-                std::vector<DdeItem*>::iterator it(std::find(pTopic->aItems.begin(),
-                                                             pTopic->aItems.end(),
-                                                             pItem));
-                if (it != pTopic->aItems.end())
-                    pTopic->aItems.erase(it);
-
-                std::vector<DdeItem*>::iterator iter;
-                iter = std::find_if(pTopic->aItems.begin(), pTopic->aItems.end(),
-                    [&hText2](const DdeItem* pDdeItem) { return *pDdeItem->pName == hText2; });
-                if (iter != pTopic->aItems.end())
-                {
-                    // It was exchanged indeed
-                    delete pItem;
-                    pItem = nullptr;
-                }
-
-                if( pItem )
-                    // It was not exchange, so back in
-                    pTopic->aItems.push_back(pItem);
-                else
-                    pItem = iter != pTopic->aItems.end() ? *iter : nullptr;
-            }
-
             if (pItem)
             {
                 IncMonitor(pItem, hConv);
@@ -608,11 +581,6 @@ bool DdeTopic::Put( const DdeData* )
 }
 
 bool DdeTopic::Execute( const OUString* )
-{
-    return false;
-}
-
-bool DdeTopic::StartAdviseLoop()
 {
     return false;
 }

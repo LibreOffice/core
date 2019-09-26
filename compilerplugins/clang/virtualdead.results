@@ -91,12 +91,6 @@ include/svl/svdde.hxx:239
 include/svl/svdde.hxx:241
     _Bool DdeTopic::MakeItem(const class rtl::OUString &,)
     0
-include/svl/svdde.hxx:244
-    _Bool DdeTopic::StartAdviseLoop()
-    0
-include/svl/undo.hxx:168
-    void SfxUndoListener::undoManagerDying()
-    empty
 include/svtools/unoevent.hxx:199
     unsigned short SvEventDescriptor::getMacroItemWhich()const
     108

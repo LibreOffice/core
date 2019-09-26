@@ -182,11 +182,6 @@ bool DdeTopic::MakeItem( SAL_UNUSED_PARAMETER const OUString& )
     return false;
 }
 
-bool DdeTopic::StartAdviseLoop()
-{
-    return false;
-}
-
 bool DdeTopic::Execute( SAL_UNUSED_PARAMETER const OUString* )
 {
     return false;
