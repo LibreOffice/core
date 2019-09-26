@@ -114,10 +114,6 @@ namespace bib
         implSetDesignMode( true );
     }
 
-    void FormControlContainer::_unloaded( const css::lang::EventObject& /*_rEvent*/ )
-    {
-    }
-
     void FormControlContainer::_reloading( const css::lang::EventObject& /*_rEvent*/ )
     {
         implSetDesignMode( true );
