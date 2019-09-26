@@ -318,65 +318,105 @@ Objects returned by OString::number(), instead of OString. These objects keep a 
 If you get a build error related to this class, you most probably need to explicitly convert the result of calling
 OString::number() to OString.
 */
+
+// Defines a functor used to initialize O(U)StringNumberBase using rtl_(u)str_valueOf* functions.
+// The resulting class name (passed as the template parameter) is named "InitStringNumber_foo",
+// where "foo" is the name of the function passed to the macro.
+// Its use allows to optimize away any function call indirection, and avoid repetitive definitions.
+#define INITSTRINGNUMBER(f) \
+struct InitStringNumber_ ## f \
+{ \
+    template <typename... Params> \
+    auto operator()(Params... params) \
+    { \
+        return f(std::forward<Params>(params)...); \
+    } \
+}
+
 template< typename T >
 struct OStringNumber;
 
-template<>
-struct OStringNumber< int >
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wuninitialized"
+#endif
+
+// InitFunc must be previously defined using INITSTRINGNUMBER macro
+template <class Derived, int nBufSize, class InitFunc> struct OStringNumberBase
 {
-    OStringNumber( int i, sal_Int16 radix )
-        : length( rtl_str_valueOfInt32( buf, i, radix ))
-    {}
+    template <typename... Params>
+    OStringNumberBase(Params... params)
+        : length(InitFunc()(buf, std::forward<Params>(params)...)){};
     // OString::number(value).getStr() is very common (writing xml code, ...),
     // so implement that one also here, to avoid having to explicitly to convert
     // to OString in all such places
     const char * getStr() const SAL_RETURNS_NONNULL { return buf; }
-    char buf[RTL_STR_MAX_VALUEOFINT32];
+    Derived&& toAsciiUpperCase()
+    {
+        rtl_str_toAsciiUpperCase_WithLength(buf, length);
+        return std::move(*static_cast<Derived*>(this));
+    }
+    char buf[nBufSize];
     const sal_Int32 length;
 };
 
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
+
+INITSTRINGNUMBER(rtl_str_valueOfInt32);
+template<>
+struct OStringNumber< int >
+    : public OStringNumberBase<OStringNumber<int>, RTL_STR_MAX_VALUEOFINT32,
+                               InitStringNumber_rtl_str_valueOfInt32>
+{
+    OStringNumber( int i, sal_Int16 radix )
+        : OStringNumberBase(i, radix)
+    {}
+};
+
+INITSTRINGNUMBER(rtl_str_valueOfInt64);
 template<>
 struct OStringNumber< long long >
+    : public OStringNumberBase<OStringNumber<long long>, RTL_STR_MAX_VALUEOFINT64,
+                               InitStringNumber_rtl_str_valueOfInt64>
 {
     OStringNumber( long long ll, sal_Int16 radix )
-        : length( rtl_str_valueOfInt64( buf, ll, radix ))
+        : OStringNumberBase(ll, radix)
     {}
-    const char * getStr() const SAL_RETURNS_NONNULL { return buf; }
-    char buf[RTL_STR_MAX_VALUEOFINT64];
-    const sal_Int32 length;
 };
 
+INITSTRINGNUMBER(rtl_str_valueOfUInt64);
 template<>
 struct OStringNumber< unsigned long long >
+    : public OStringNumberBase<OStringNumber<unsigned long long>, RTL_STR_MAX_VALUEOFUINT64,
+                               InitStringNumber_rtl_str_valueOfUInt64>
 {
     OStringNumber( unsigned long long ll, sal_Int16 radix )
-        : length( rtl_str_valueOfUInt64( buf, ll, radix ))
+        : OStringNumberBase(ll, radix)
     {}
-    const char * getStr() const SAL_RETURNS_NONNULL { return buf; }
-    char buf[RTL_STR_MAX_VALUEOFUINT64];
-    const sal_Int32 length;
 };
 
+INITSTRINGNUMBER(rtl_str_valueOfFloat);
 template<>
 struct OStringNumber< float >
+    : public OStringNumberBase<OStringNumber<float>, RTL_STR_MAX_VALUEOFFLOAT,
+                               InitStringNumber_rtl_str_valueOfFloat>
 {
     OStringNumber( float f )
-        : length( rtl_str_valueOfFloat( buf, f ))
+        : OStringNumberBase(f)
     {}
-    const char * getStr() const SAL_RETURNS_NONNULL { return buf; }
-    char buf[RTL_STR_MAX_VALUEOFFLOAT];
-    const sal_Int32 length;
 };
 
+INITSTRINGNUMBER(rtl_str_valueOfDouble);
 template<>
 struct OStringNumber< double >
+    : public OStringNumberBase<OStringNumber<double>, RTL_STR_MAX_VALUEOFDOUBLE,
+                               InitStringNumber_rtl_str_valueOfDouble>
 {
     OStringNumber( double d )
-        : length( rtl_str_valueOfDouble( buf, d ))
+        : OStringNumberBase(d)
     {}
-    const char * getStr() const SAL_RETURNS_NONNULL { return buf; }
-    char buf[RTL_STR_MAX_VALUEOFDOUBLE];
-    const sal_Int32 length;
 };
 
 template< typename T >
@@ -400,54 +440,83 @@ OUString::number() to OUString.
 template< typename T >
 struct OUStringNumber;
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wuninitialized"
+#endif
+
+// InitFunc must be previously defined using INITSTRINGNUMBER macro
+template <class Derived, int nBufSize, class InitFunc> struct OUStringNumberBase
+{
+    template <typename... Params>
+    OUStringNumberBase(Params... params)
+        : length(InitFunc()(buf, std::forward<Params>(params)...)){};
+    Derived&& toAsciiUpperCase()
+    {
+        rtl_ustr_toAsciiUpperCase_WithLength(buf, length);
+        return std::move(*static_cast<Derived*>(this));
+    }
+    sal_Unicode buf[nBufSize];
+    const sal_Int32 length;
+};
+
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
+
+INITSTRINGNUMBER(rtl_ustr_valueOfInt32);
 template<>
 struct OUStringNumber< int >
+    : public OUStringNumberBase<OUStringNumber<int>, RTL_USTR_MAX_VALUEOFINT32,
+                                InitStringNumber_rtl_ustr_valueOfInt32>
 {
     OUStringNumber( int i, sal_Int16 radix )
-        : length( rtl_ustr_valueOfInt32( buf, i, radix ))
+        : OUStringNumberBase(i, radix)
     {}
-    sal_Unicode buf[RTL_USTR_MAX_VALUEOFINT32];
-    const sal_Int32 length;
 };
 
+INITSTRINGNUMBER(rtl_ustr_valueOfInt64);
 template<>
 struct OUStringNumber< long long >
+    : public OUStringNumberBase<OUStringNumber<long long>, RTL_USTR_MAX_VALUEOFINT64,
+                                InitStringNumber_rtl_ustr_valueOfInt64>
 {
     OUStringNumber( long long ll, sal_Int16 radix )
-        : length( rtl_ustr_valueOfInt64( buf, ll, radix ))
+        : OUStringNumberBase(ll, radix)
     {}
-    sal_Unicode buf[RTL_USTR_MAX_VALUEOFINT64];
-    const sal_Int32 length;
 };
 
+INITSTRINGNUMBER(rtl_ustr_valueOfUInt64);
 template<>
 struct OUStringNumber< unsigned long long >
+    : public OUStringNumberBase<OUStringNumber<unsigned long long>, RTL_USTR_MAX_VALUEOFUINT64,
+                                InitStringNumber_rtl_ustr_valueOfUInt64>
 {
     OUStringNumber( unsigned long long ll, sal_Int16 radix )
-        : length( rtl_ustr_valueOfUInt64( buf, ll, radix ))
+        : OUStringNumberBase(ll, radix)
     {}
-    sal_Unicode buf[RTL_USTR_MAX_VALUEOFUINT64];
-    const sal_Int32 length;
 };
 
+INITSTRINGNUMBER(rtl_ustr_valueOfFloat);
 template<>
 struct OUStringNumber< float >
+    : public OUStringNumberBase<OUStringNumber<float>, RTL_USTR_MAX_VALUEOFFLOAT,
+                                InitStringNumber_rtl_ustr_valueOfFloat>
 {
     OUStringNumber( float f )
-        : length( rtl_ustr_valueOfFloat( buf, f ))
+        : OUStringNumberBase(f)
     {}
-    sal_Unicode buf[RTL_USTR_MAX_VALUEOFFLOAT];
-    const sal_Int32 length;
 };
 
+INITSTRINGNUMBER(rtl_ustr_valueOfDouble);
 template<>
 struct OUStringNumber< double >
+    : public OUStringNumberBase<OUStringNumber<double>, RTL_USTR_MAX_VALUEOFDOUBLE,
+                                InitStringNumber_rtl_ustr_valueOfDouble>
 {
     OUStringNumber( double d )
-        : length( rtl_ustr_valueOfDouble( buf, d ))
+        : OUStringNumberBase(d)
     {}
-    sal_Unicode buf[RTL_USTR_MAX_VALUEOFDOUBLE];
-    const sal_Int32 length;
 };
 
 template< typename T >
