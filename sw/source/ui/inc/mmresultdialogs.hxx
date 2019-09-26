@@ -20,13 +20,8 @@
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMOUTPUTPAGE_HXX
 
 #include <vcl/wizardmachine.hxx>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/prgsbar.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <svtools/simptabl.hxx>
-#include <vcl/headbar.hxx>
 #include <mailmergehelper.hxx>
 
 class SwMailMergeWizard;

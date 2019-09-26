@@ -880,6 +880,9 @@ public:
         m_aEditingDoneHdl = rLink;
     }
 
+    virtual void start_editing(const weld::TreeIter& rEntry) = 0;
+    virtual void end_editing() = 0;
+
     virtual void connect_visible_range_changed(const Link<TreeView&, void>& rLink)
     {
         assert(!m_aVisibleRangeChangedHdl.IsSet() || !rLink.IsSet());

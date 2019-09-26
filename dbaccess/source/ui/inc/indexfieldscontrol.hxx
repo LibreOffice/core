@@ -22,6 +22,7 @@
 
 #include <svtools/editbrowsebox.hxx>
 #include "indexcollection.hxx"
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 namespace dbaui
@@ -48,7 +49,7 @@ namespace dbaui
         bool                        m_bAddIndexAppendix;
 
     public:
-        IndexFieldsControl( vcl::Window* _pParent, WinBits nWinStyle);
+        IndexFieldsControl(const css::uno::Reference<css::awt::XWindow> &rParent);
         virtual ~IndexFieldsControl() override;
         virtual void dispose() override;
 
