@@ -345,14 +345,6 @@ SfxUndoManager::SfxUndoManager( size_t nMaxUndoActionCount )
 
 SfxUndoManager::~SfxUndoManager()
 {
-    UndoListeners aListenersCopy;
-    {
-        UndoManagerGuard aGuard( *m_xData );
-        aListenersCopy = m_xData->aListeners;
-    }
-
-    ::std::for_each( aListenersCopy.begin(), aListenersCopy.end(),
-        NotifyUndoListener( &SfxUndoListener::undoManagerDying ) );
 }
 
 
