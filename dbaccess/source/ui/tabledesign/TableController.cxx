@@ -474,8 +474,8 @@ void OTableController::doEditIndexes()
     if (!xIndexes.is())
         return;
 
-    ScopedVclPtrInstance< DbaIndexDialog > aDialog(getView(), aFieldNames, xIndexes, getConnection(), getORB());
-    if (RET_OK != aDialog->Execute())
+    DbaIndexDialog aDialog(getFrameWeld(), aFieldNames, xIndexes, getConnection(), getORB());
+    if (RET_OK != aDialog.run())
         return;
 
 }

@@ -20,132 +20,71 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXDIALOG_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXDIALOG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <vcl/toolbox.hxx>
-#include <vcl/treelistbox.hxx>
 #include <unotools/viewoptions.hxx>
+#include <vcl/weld.hxx>
 #include "indexes.hxx"
-#include <dbaccess/ToolBoxHelper.hxx>
 
 namespace dbaui
 {
-
-    // DbaIndexList
-    class DbaIndexList final : public SvTreeListBox
-    {
-        css::uno::Reference< css::sdbc::XConnection > m_xConnection;
-        Link<DbaIndexList&,void>                      m_aSelectHdl;
-        Link<SvTreeListEntry*,bool>                   m_aEndEditHdl;
-        bool                                          m_bSuspendSelectHdl;
-
-    public:
-        DbaIndexList(vcl::Window* _pParent, WinBits nWinBits);
-
-        void SetSelectHdl(const Link<DbaIndexList&,void>& _rHdl) { m_aSelectHdl = _rHdl; }
-
-        void SetEndEditHdl(const Link<SvTreeListEntry*,bool>& _rHdl) { m_aEndEditHdl = _rHdl; }
-
-        virtual bool Select(SvTreeListEntry* pEntry, bool bSelect = true) override;
-
-        void enableSelectHandler();
-        void disableSelectHandler();
-
-        void SelectNoHandlerCall( SvTreeListEntry* pEntry );
-
-        void setConnection(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection)
-        {
-             m_xConnection = _rxConnection;
-        }
-
-    private:
-        virtual bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;
-
-        using SvTreeListBox::Select;
-    };
-
     // DbaIndexDialog
     class IndexFieldsControl;
     class OIndexCollection;
-    class DbaIndexDialog final : public ModalDialog,
-                                public OToolBoxHelper
+    class DbaIndexDialog final : public weld::GenericDialogController
     {
         css::uno::Reference< css::sdbc::XConnection > m_xConnection;
 
-        VclPtr<ToolBox>                 m_pActions;
-        VclPtr<DbaIndexList>            m_pIndexList;
-        VclPtr<FixedText>               m_pIndexDetails;
-        VclPtr<FixedText>               m_pDescriptionLabel;
-        VclPtr<FixedText>               m_pDescription;
-        VclPtr<CheckBox>                m_pUnique;
-        VclPtr<FixedText>               m_pFieldsLabel;
-        VclPtr<IndexFieldsControl>      m_pFields;
-        VclPtr<PushButton>              m_pClose;
-
-        std::unique_ptr<OIndexCollection> m_pIndexes;
-        SvTreeListEntry*                m_pPreviousSelection;
+        std::unique_ptr<OIndexCollection> m_xIndexes;
+        std::unique_ptr<weld::TreeIter> m_xPreviousSelection;
+        bool                            m_bEditingActive;
         bool                            m_bEditAgain;
+        bool                            m_bNoHandlerCall;
 
         css::uno::Reference< css::uno::XComponentContext >
                                         m_xContext;
+
+        std::unique_ptr<weld::Toolbar> m_xActions;
+        std::unique_ptr<weld::TreeView> m_xIndexList;
+        std::unique_ptr<weld::Label> m_xIndexDetails;
+        std::unique_ptr<weld::Label> m_xDescriptionLabel;
+        std::unique_ptr<weld::Label> m_xDescription;
+        std::unique_ptr<weld::CheckButton> m_xUnique;
+        std::unique_ptr<weld::Label> m_xFieldsLabel;
+        std::unique_ptr<weld::Button> m_xClose;
+        std::unique_ptr<weld::Container> m_xTable;
+        css::uno::Reference<css::awt::XWindow> m_xTableCtrlParent;
+        VclPtr<IndexFieldsControl> m_xFields;
+
     public:
         DbaIndexDialog(
-            vcl::Window* _pParent,
+            weld::Window* _pParent,
             const css::uno::Sequence< OUString >& _rFieldNames,
             const css::uno::Reference< css::container::XNameAccess >& _rxIndexes,
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
-            );
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
         virtual ~DbaIndexDialog() override;
-        virtual void dispose() override;
 
-        virtual void StateChanged( StateChangedType nStateChange ) override;
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-        //TO-DO, remove when all other OToolBoxHelper are converted to .ui
-        virtual void resizeControls(const Size&) override;
-
-        /** will be called when the id of the image list needs to change
-            @param  _eBitmapSet
-                <svtools/imgdef.hxx>
-        */
-        virtual void setImageList(sal_Int16 _eBitmapSet) override;
+        typedef std::pair<const weld::TreeIter&, OUString> IterString;
     private:
         void fillIndexList();
         void updateToolbox();
-        void updateControls(const SvTreeListEntry* _pEntry);
+        void updateControls(const weld::TreeIter* pEntry);
 
-        DECL_LINK( OnIndexSelected, DbaIndexList&, void );
-        DECL_LINK( OnIndexAction, ToolBox*, void );
-        DECL_LINK( OnEntryEdited, SvTreeListEntry*, bool );
-        DECL_LINK( OnModifiedClick, Button*, void );
+        void IndexSelected();
+
+        DECL_LINK( OnIndexSelected, weld::TreeView&, void );
+        DECL_LINK( OnIndexAction, const OString&, void );
+        DECL_LINK( OnEntryEditing, const weld::TreeIter&, bool );
+        DECL_LINK( OnEntryEdited, const IterString&, bool );
+        DECL_LINK( OnModifiedClick, weld::Button&, void );
         DECL_LINK( OnModified, IndexFieldsControl&, void );
-        DECL_LINK( OnCloseDialog, Button*, void );
+        DECL_LINK( OnCloseDialog, weld::Button&, void );
 
         DECL_LINK( OnEditIndexAgain, void*, void );
-
-        sal_uInt16 mnNewCmdId;
-        sal_uInt16 mnDropCmdId;
-        sal_uInt16 mnRenameCmdId;
-        sal_uInt16 mnSaveCmdId;
-        sal_uInt16 mnResetCmdId;
-
-        Image maScNewCmdImg;
-        Image maScDropCmdImg;
-        Image maScRenameCmdImg;
-        Image maScSaveCmdImg;
-        Image maScResetCmdImg;
-        Image maLcNewCmdImg;
-        Image maLcDropCmdImg;
-        Image maLcRenameCmdImg;
-        Image maLcSaveCmdImg;
-        Image maLcResetCmdImg;
 
         void OnNewIndex();
         void OnDropIndex(bool _bConfirm = true);
@@ -153,11 +92,11 @@ namespace dbaui
         void OnSaveIndex();
         void OnResetIndex();
 
-        bool implCommit(SvTreeListEntry const * _pEntry);
+        bool implCommit(const weld::TreeIter* pEntry);
         bool implSaveModified(bool _bPlausibility = true);
         bool implCommitPreviouslySelected();
 
-        bool implDropIndex(SvTreeListEntry const * _pEntry, bool _bRemoveFromCollection);
+        bool implDropIndex(const weld::TreeIter* pEntry, bool _bRemoveFromCollection);
 
         bool implCheckPlausibility(const Indexes::const_iterator& _rPos);
     };
