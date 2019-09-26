@@ -240,9 +240,6 @@ public:
     // Eventually create a new item. return 0 -> Item creation failed
     virtual bool MakeItem( const OUString& rItem );
 
-    // A Warm-/Hot-Link is created. Return true if successful
-    virtual bool    StartAdviseLoop();
-
 private:
     friend class    DdeInternal;
     friend class    DdeService;
