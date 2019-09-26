@@ -685,7 +685,7 @@ void SAL_CALL ContentResultSetWrapper::removeVetoableChangeListener( const OUStr
         if( !rPropertyName.isEmpty() )
         {
             if( !getPropertySetInfo().is() )
-                throw UnknownPropertyException();
+                throw UnknownPropertyException(rPropertyName);
 
             m_xPropertySetInfo->getPropertyByName( rPropertyName );
             //throws UnknownPropertyException, if so

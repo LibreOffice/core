@@ -377,7 +377,7 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName,
     else if ( aPropertyName == "Size" )
         aValue >>= aEntry.nSize;
     else
-        throw UnknownPropertyException(THROW_WHERE );
+        throw UnknownPropertyException(aPropertyName);
 }
 uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
 {
@@ -394,7 +394,7 @@ uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyNa
     else if ( PropertyName == "Size" )
         return uno::makeAny ( aEntry.nSize );
     else
-        throw UnknownPropertyException(THROW_WHERE );
+        throw UnknownPropertyException(PropertyName);
 }
 
 void ZipPackageFolder::doInsertByName ( ZipPackageEntry *pEntry, bool bSetParent )

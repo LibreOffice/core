@@ -509,7 +509,7 @@ void SAL_CALL OInputCompStream::setPropertyValue( const OUString& aPropertyName,
             [&aPropertyName](const beans::PropertyValue& rProp) { return rProp.Name == aPropertyName; }))
         throw beans::PropertyVetoException(); // TODO
 
-    throw beans::UnknownPropertyException(); // TODO
+    throw beans::UnknownPropertyException(aPropertyName); // TODO
 }
 
 uno::Any SAL_CALL OInputCompStream::getPropertyValue( const OUString& aProp )
@@ -529,7 +529,7 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const OUString& aProp )
         aPropertyName = aProp;
 
     if ( aPropertyName == "RelationsInfo" )
-        throw beans::UnknownPropertyException(); // TODO
+        throw beans::UnknownPropertyException(aPropertyName); // TODO
 
     // all the provided properties are accessible
     auto pProp = std::find_if(std::cbegin(m_aProperties), std::cend(m_aProperties),
@@ -537,7 +537,7 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const OUString& aProp )
     if (pProp != std::cend(m_aProperties))
         return pProp->Value;
 
-    throw beans::UnknownPropertyException(); // TODO
+    throw beans::UnknownPropertyException(aPropertyName); // TODO
 }
 
 void SAL_CALL OInputCompStream::addPropertyChangeListener(

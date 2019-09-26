@@ -351,7 +351,7 @@ XPropertySetInfoImpl2::getPropertyByName( const OUString& aName )
     if (pProp != m_seq.end())
         return *pProp;
 
-    throw UnknownPropertyException( THROW_WHERE );
+    throw UnknownPropertyException( aName );
 }
 
 
@@ -416,7 +416,7 @@ FileProvider::setPropertyValue( const OUString& aPropertyName,
     if( !(aPropertyName == "FileSystemNotation" ||
         aPropertyName == "HomeDirectory"      ||
         aPropertyName == "HostName") )
-        throw UnknownPropertyException( THROW_WHERE );
+        throw UnknownPropertyException( aPropertyName );
 }
 
 
@@ -438,7 +438,7 @@ FileProvider::getPropertyValue(
         return Any(m_HostName);
     }
     else
-        throw UnknownPropertyException( THROW_WHERE );
+        throw UnknownPropertyException( aPropertyName );
 }
 
 

@@ -2772,13 +2772,13 @@ void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
             throw lang::IllegalArgumentException( "Property 'SdrViewIsInEditMode' requires value of type sal_Bool", nullptr, 0 );
     }
     else
-        throw beans::UnknownPropertyException( "unknown property was tried to set to chart wizard", nullptr );
+        throw beans::UnknownPropertyException( "unknown property was tried to set to chart wizard " + rPropertyName, nullptr );
 }
 
 Any SAL_CALL ChartView::getPropertyValue( const OUString& rPropertyName )
 {
     if( rPropertyName != "Resolution" )
-        throw beans::UnknownPropertyException( "unknown property was tried to get from chart wizard", nullptr );
+        throw beans::UnknownPropertyException( "unknown property was tried to get from chart wizard " + rPropertyName, nullptr );
 
     return Any(m_aPageResolution);
 }

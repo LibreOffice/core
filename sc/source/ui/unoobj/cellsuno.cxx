@@ -2219,7 +2219,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValue(
     const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
     const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 
     SetOnePropertyValue( pEntry, aValue );
 }
@@ -2431,7 +2431,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyValue( const OUString& aPropertyN
     const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
     const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 
     uno::Any aAny;
     GetOnePropertyValue( pEntry, aAny );

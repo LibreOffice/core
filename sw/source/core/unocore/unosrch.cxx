@@ -83,7 +83,7 @@ void SwSearchProperties_Impl::SetProperties(const uno::Sequence< beans::Property
         auto aIt = std::find_if(aPropertyEntries.begin(), aPropertyEntries.end(),
             [&sName](const SfxItemPropertyNamedEntry& rProp) { return rProp.sName == sName; });
         if( aIt == aPropertyEntries.end() )
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(sName);
         auto nIndex = static_cast<sal_uInt32>(std::distance(aPropertyEntries.begin(), aIt));
         pValueArr[nIndex].reset( new beans::PropertyValue(rSearchAttrib) );
     }

@@ -220,7 +220,7 @@ Any SAL_CALL ConstItemContainer::getPropertyValue( const OUString& PropertyName 
     if ( PropertyName == PROPNAME_UINAME )
         return makeAny( m_aUIName );
 
-    throw UnknownPropertyException();
+    throw UnknownPropertyException(PropertyName);
 }
 
 void SAL_CALL ConstItemContainer::addPropertyChangeListener( const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener >& )
@@ -252,7 +252,7 @@ Any SAL_CALL ConstItemContainer::getFastPropertyValue( sal_Int32 nHandle )
     if ( nHandle == PROPHANDLE_UINAME )
         return makeAny( m_aUIName );
 
-    throw UnknownPropertyException();
+    throw UnknownPropertyException(OUString::number(nHandle));
 }
 
 ::cppu::IPropertyArrayHelper& ConstItemContainer::getInfoHelper()

@@ -1466,7 +1466,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName )
         }
         return eState;
     }
-    throw UnknownPropertyException();
+    throw UnknownPropertyException(PropertyName);
 }
 
 

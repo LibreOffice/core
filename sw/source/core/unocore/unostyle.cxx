@@ -4497,7 +4497,7 @@ css::uno::Any SAL_CALL SwXTextTableStyle::getPropertyValue(const OUString& rProp
     else if (rPropertyName == UNO_NAME_DISPLAY_NAME)
         return uno::makeAny(m_pTableAutoFormat->GetName());
     else
-        throw css::beans::UnknownPropertyException();
+        throw css::beans::UnknownPropertyException(rPropertyName);
 
     return uno::makeAny(bIsRow ? OUString("row") : OUString("column"));
 }
@@ -5020,7 +5020,7 @@ void SAL_CALL SwXTextCellStyle::setPropertyValue(const OUString& rPropertyName, 
         }
     }
 
-    throw css::beans::UnknownPropertyException();
+    throw css::beans::UnknownPropertyException(rPropertyName);
 }
 
 css::uno::Any SAL_CALL SwXTextCellStyle::getPropertyValue(const OUString& rPropertyName)
@@ -5184,7 +5184,7 @@ css::uno::Any SAL_CALL SwXTextCellStyle::getPropertyValue(const OUString& rPrope
         }
     }
 
-    throw css::beans::UnknownPropertyException();
+    throw css::beans::UnknownPropertyException(rPropertyName);
 }
 
 void SAL_CALL SwXTextCellStyle::addPropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ )
@@ -5360,7 +5360,7 @@ css::uno::Sequence<css::beans::PropertyState> SAL_CALL SwXTextCellStyle::getProp
         else
         {
             SAL_WARN("sw.uno", "SwXTextCellStyle unknown property:" + sPropName);
-            throw css::beans::UnknownPropertyException();
+            throw css::beans::UnknownPropertyException(sPropName);
         }
     }
     return aRet;

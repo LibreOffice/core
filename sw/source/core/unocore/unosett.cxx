@@ -2139,7 +2139,7 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
         throw IllegalArgumentException();
     }
     else
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rPropertyName);
 
     if(pDocRule)
     {
@@ -2189,7 +2189,7 @@ Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
         aRet <<= pRule->GetDefaultListId();
     }
     else
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rPropertyName);
     return aRet;
 }
 

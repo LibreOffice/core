@@ -983,7 +983,7 @@ void Content::removeProperty( const OUString& Name,
                     {
                     case UNKNOWN:
                     case DAV:
-                        throw beans::UnknownPropertyException();
+                        throw beans::UnknownPropertyException(Name);
 
                     case NON_DAV:
                         // Try to remove property from local store.

@@ -246,7 +246,7 @@ void SAL_CALL ScFunctionAccess::setPropertyValue(
 
         bool bDone = ScDocOptionsHelper::setPropertyValue( *pOptions, aPropertyMap, aPropertyName, aValue );
         if (!bDone)
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(aPropertyName);
     }
 }
 

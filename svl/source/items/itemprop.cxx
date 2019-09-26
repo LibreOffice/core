@@ -107,7 +107,7 @@ beans::Property SfxItemPropertyMap::getPropertyByName( const OUString & rName ) 
 {
     SfxItemPropertyHashMap_t::const_iterator aIter = m_pImpl->find(rName);
     if( aIter == m_pImpl->end() )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rName);
     const SfxItemPropertySimpleEntry* pEntry = &aIter->second;
     beans::Property aProp;
     aProp.Name = rName;
@@ -191,7 +191,7 @@ void SfxItemPropertySet::getPropertyValue( const OUString &rName,
     // detect which-id
     const SfxItemPropertySimpleEntry* pEntry = m_aMap.getByName( rName );
     if ( !pEntry )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rName);
     getPropertyValue( *pEntry,rSet, rAny );
 }
 
@@ -235,7 +235,7 @@ void SfxItemPropertySet::setPropertyValue( const OUString &rName,
     const SfxItemPropertySimpleEntry* pEntry = m_aMap.getByName( rName );
     if ( !pEntry )
     {
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rName);
     }
     setPropertyValue(*pEntry, aVal, rSet);
 }
@@ -264,7 +264,7 @@ PropertyState   SfxItemPropertySet::getPropertyState(const OUString& rName, cons
     const SfxItemPropertySimpleEntry* pEntry = m_aMap.getByName( rName );
     if( !pEntry || !pEntry->nWID )
     {
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rName);
     }
     sal_uInt16 nWhich = pEntry->nWID;
 

@@ -853,7 +853,7 @@ uno::Reference< beans::XPropertySetInfo> SAL_CALL
 void SAL_CALL PivotTableDataProvider::setPropertyValue(const OUString& rPropertyName, const uno::Any& rValue)
 {
     if (rPropertyName != SC_UNONAME_INCLUDEHIDDENCELLS)
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rPropertyName);
 
     if (!(rValue >>= m_bIncludeHiddenCells))
         throw lang::IllegalArgumentException();
@@ -870,7 +870,7 @@ uno::Any SAL_CALL PivotTableDataProvider::getPropertyValue(const OUString& rProp
         aRet <<= m_pDocument->PastingDrawFromOtherDoc();
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rPropertyName);
     return aRet;
 }
 

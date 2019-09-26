@@ -702,7 +702,7 @@ void SAL_CALL ShutdownIcon::setFastPropertyValue(       ::sal_Int32             
              break;
 
         default :
-            throw css::beans::UnknownPropertyException();
+            throw css::beans::UnknownPropertyException(OUString::number(nHandle));
     }
 }
 
@@ -720,7 +720,7 @@ css::uno::Any SAL_CALL ShutdownIcon::getFastPropertyValue( ::sal_Int32 nHandle )
              break;
 
         default :
-            throw css::beans::UnknownPropertyException();
+            throw css::beans::UnknownPropertyException(OUString::number(nHandle));
     }
 
     return aValue;

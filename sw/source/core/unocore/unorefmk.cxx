@@ -459,7 +459,7 @@ SwXReferenceMark::getPropertyValue(const OUString& rPropertyName)
     uno::Any aRet;
     if (! ::sw::GetDefaultTextContentValue(aRet, rPropertyName))
     {
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rPropertyName);
     }
     return aRet;
 }
@@ -1359,7 +1359,7 @@ SwXMetaField::setPropertyValue(
     }
     else
     {
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rPropertyName);
     }
 }
 
@@ -1385,7 +1385,7 @@ SwXMetaField::getPropertyValue(const OUString& rPropertyName)
     }
     else
     {
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rPropertyName);
     }
 
     return any;

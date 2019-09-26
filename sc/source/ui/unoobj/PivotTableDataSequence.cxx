@@ -220,7 +220,7 @@ void SAL_CALL PivotTableDataSequence::setPropertyValue(const OUString& rProperty
           || rPropertyName == SC_UNONAME_HAS_STRING_LABEL)
     {}
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rPropertyName);
 }
 
 uno::Any SAL_CALL PivotTableDataSequence::getPropertyValue(const OUString& rPropertyName)
@@ -244,7 +244,7 @@ uno::Any SAL_CALL PivotTableDataSequence::getPropertyValue(const OUString& rProp
         aReturn <<= false;
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rPropertyName);
     return aReturn;
 }
 

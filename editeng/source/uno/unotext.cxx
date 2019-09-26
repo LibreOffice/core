@@ -476,7 +476,7 @@ void SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyName, const
         }
     }
 
-    throw beans::UnknownPropertyException();
+    throw beans::UnknownPropertyException(PropertyName);
 }
 
 void SvxUnoTextRangeBase::setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const uno::Any& rValue, const ESelection& rSelection, const SfxItemSet& rOldSet, SfxItemSet& rNewSet )
@@ -618,7 +618,7 @@ uno::Any SvxUnoTextRangeBase::_getPropertyValue(const OUString& PropertyName, sa
         }
     }
 
-    throw beans::UnknownPropertyException();
+    throw beans::UnknownPropertyException(PropertyName);
 }
 
 void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pMap, uno::Any& rAny, const SfxItemSet& rSet )
@@ -1056,7 +1056,7 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
             const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry( rName );
             if( !_getOnePropertyStates(pSet.get(), pMap, *pState++) )
             {
-                throw beans::UnknownPropertyException();
+                throw beans::UnknownPropertyException(rName);
             }
         }
     }
@@ -1172,7 +1172,7 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sa
         }
     }
 
-    throw beans::UnknownPropertyException();
+    throw beans::UnknownPropertyException(PropertyName);
 }
 
 void SvxUnoTextRangeBase::_setPropertyToDefault(SvxTextForwarder* pForwarder, const SfxItemPropertySimpleEntry* pMap, sal_Int32 nPara )
@@ -1258,7 +1258,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
             }
         }
     }
-    throw beans::UnknownPropertyException();
+    throw beans::UnknownPropertyException(aPropertyName);
 }
 
 // beans::XMultiPropertyStates

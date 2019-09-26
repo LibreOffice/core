@@ -1729,7 +1729,7 @@ uno::Reference< XPropertySetInfo > SAL_CALL ZipPackage::getPropertySetInfo()
 void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
 {
     if ( m_nFormat != embed::StorageFormats::PACKAGE )
-        throw UnknownPropertyException(THROW_WHERE );
+        throw UnknownPropertyException(aPropertyName);
 
     if (aPropertyName == HAS_ENCRYPTED_ENTRIES_PROPERTY
       ||aPropertyName == HAS_NONENCRYPTED_ENTRIES_PROPERTY
@@ -1833,7 +1833,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         m_nChecksumDigestID = xml::crypto::DigestID::SHA512_1K;
     }
     else
-        throw UnknownPropertyException(THROW_WHERE );
+        throw UnknownPropertyException(aPropertyName);
 }
 
 Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
@@ -1878,7 +1878,7 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
     {
         return Any(m_bMediaTypeFallbackUsed);
     }
-    throw UnknownPropertyException(THROW_WHERE );
+    throw UnknownPropertyException(PropertyName);
 }
 void SAL_CALL ZipPackage::addPropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference< XPropertyChangeListener >& /*xListener*/ )
 {

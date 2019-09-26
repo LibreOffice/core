@@ -2878,7 +2878,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
         aValue >>= m_pImpl->m_nRelId;
     }
     else
-        throw beans::UnknownPropertyException(); // TODO
+        throw beans::UnknownPropertyException(aPropertyName); // TODO
 
     m_pImpl->m_bHasDataToFlush = true;
     ModifyParentUnlockMutex_Impl( aGuard );
@@ -2937,7 +2937,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
         return uno::makeAny( m_xSeekable->getLength() );
     }
 
-    throw beans::UnknownPropertyException(); // TODO
+    throw beans::UnknownPropertyException(aPropertyName); // TODO
 }
 
 void SAL_CALL OWriteStream::addPropertyChangeListener(

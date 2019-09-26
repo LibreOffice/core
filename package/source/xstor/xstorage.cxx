@@ -4367,7 +4367,7 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
         throw uno::RuntimeException( THROW_WHERE ); // TODO: Access denied
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::ZIP )
-        throw beans::UnknownPropertyException( THROW_WHERE );
+        throw beans::UnknownPropertyException( aPropertyName );
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         if ( aPropertyName == "MediaType" )
@@ -4400,7 +4400,7 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
            || aPropertyName == MEDIATYPE_FALLBACK_USED_PROPERTY )
             throw beans::PropertyVetoException( THROW_WHERE );
         else
-            throw beans::UnknownPropertyException( THROW_WHERE );
+            throw beans::UnknownPropertyException( aPropertyName );
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
     {
@@ -4439,10 +4439,10 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
                  || aPropertyName == "IsRoot" )
             throw beans::PropertyVetoException( THROW_WHERE );
         else
-            throw beans::UnknownPropertyException( THROW_WHERE );
+            throw beans::UnknownPropertyException( aPropertyName );
     }
     else
-        throw beans::UnknownPropertyException( THROW_WHERE );
+        throw beans::UnknownPropertyException( aPropertyName );
 
     BroadcastModifiedIfNecessary();
 }
@@ -4538,7 +4538,7 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
         }
     }
 
-    throw beans::UnknownPropertyException( THROW_WHERE );
+    throw beans::UnknownPropertyException(aPropertyName);
 }
 
 void SAL_CALL OStorage::addPropertyChangeListener(

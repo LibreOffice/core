@@ -730,7 +730,7 @@ void SAL_CALL SwXTextView::setPropertyValue(
     SolarMutexGuard aGuard;
     const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pEntry)
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rPropertyName);
     else if (pEntry->nFlags & PropertyAttribute::READONLY)
         throw PropertyVetoException();
     else
@@ -767,7 +767,7 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
 
     const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pEntry)
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rPropertyName);
 
     sal_Int16 nWID = pEntry->nWID;
     switch (nWID)

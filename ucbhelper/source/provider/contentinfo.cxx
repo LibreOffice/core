@@ -156,7 +156,7 @@ beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
     if ( queryProperty( aName, aProp ) )
         return aProp;
 
-    throw beans::UnknownPropertyException();
+    throw beans::UnknownPropertyException(aName);
 }
 
 

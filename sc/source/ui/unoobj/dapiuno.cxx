@@ -866,7 +866,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
                 }
             }
             else
-                throw UnknownPropertyException();
+                throw UnknownPropertyException(aPropertyName);
 
             pDPObject->SetSaveData( aNewData );
         }
@@ -973,7 +973,7 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
                 }
             }
             else
-                throw UnknownPropertyException();
+                throw UnknownPropertyException(aPropertyName);
         }
     }
 

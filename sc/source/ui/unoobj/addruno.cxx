@@ -204,7 +204,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
         }
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 
     if ( !bSuccess )
         throw lang::IllegalArgumentException();
@@ -270,7 +270,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
         aRet <<= aFormatStr;
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 
     return aRet;
 }

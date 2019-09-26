@@ -619,7 +619,7 @@ Any BibliographyLoader::getPropertyValue(const OUString& rPropertyName)
         ISBN_POS                    //BibliographyDataField_ISBN
     };
     if(rPropertyName != "BibliographyDataFieldNames")
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rPropertyName);
     Sequence<PropertyValue> aSeq(COLUMN_COUNT);
     PropertyValue* pArray = aSeq.getArray();
     BibConfig* pConfig = BibModul::GetConfig();

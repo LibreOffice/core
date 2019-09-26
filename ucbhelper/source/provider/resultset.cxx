@@ -1245,9 +1245,6 @@ ResultSet::getPropertySetInfo()
 void SAL_CALL ResultSet::setPropertyValue( const OUString& aPropertyName,
                                            const uno::Any& )
 {
-    if ( aPropertyName.isEmpty() )
-        throw beans::UnknownPropertyException();
-
     if ( aPropertyName == "RowCount" )
     {
         // property is read-only.
@@ -1260,7 +1257,7 @@ void SAL_CALL ResultSet::setPropertyValue( const OUString& aPropertyName,
     }
     else
     {
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
     }
 }
 
@@ -1269,9 +1266,6 @@ void SAL_CALL ResultSet::setPropertyValue( const OUString& aPropertyName,
 uno::Any SAL_CALL ResultSet::getPropertyValue(
         const OUString& PropertyName )
 {
-    if ( PropertyName.isEmpty() )
-        throw beans::UnknownPropertyException();
-
     uno::Any aValue;
 
     if ( PropertyName == "RowCount" )
@@ -1284,7 +1278,7 @@ uno::Any SAL_CALL ResultSet::getPropertyValue(
     }
     else
     {
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(PropertyName);
     }
 
     return aValue;
@@ -1303,7 +1297,7 @@ void SAL_CALL ResultSet::addPropertyChangeListener(
     if ( !aPropertyName.isEmpty() &&
          aPropertyName != "RowCount" &&
          aPropertyName != "IsRowCountFinal" )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 
     if ( !m_pImpl->m_pPropertyChangeListeners )
         m_pImpl->m_pPropertyChangeListeners.reset(
@@ -1324,7 +1318,7 @@ void SAL_CALL ResultSet::removePropertyChangeListener(
     if ( !aPropertyName.isEmpty() &&
          aPropertyName != "RowCount" &&
          aPropertyName != "IsRowCountFinal" )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 
     if ( m_pImpl->m_pPropertyChangeListeners )
         m_pImpl->m_pPropertyChangeListeners->removeInterface(
@@ -1515,7 +1509,7 @@ beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
     if ( queryProperty( aName, aProp ) )
         return aProp;
 
-    throw beans::UnknownPropertyException();
+    throw beans::UnknownPropertyException(aName);
 }
 
 

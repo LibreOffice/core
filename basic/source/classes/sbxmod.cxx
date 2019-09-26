@@ -293,7 +293,7 @@ DocObjectWrapper::setValue( const OUString& aPropertyName, const Any& aValue )
 
     SbPropertyRef pProperty = getProperty( aPropertyName );
     if ( !pProperty.is() )
-       throw UnknownPropertyException();
+       throw UnknownPropertyException(aPropertyName);
     unoToSbxValue( pProperty.get(), aValue );
 }
 
@@ -305,7 +305,7 @@ DocObjectWrapper::getValue( const OUString& aPropertyName )
 
     SbPropertyRef pProperty = getProperty( aPropertyName );
     if ( !pProperty.is() )
-       throw UnknownPropertyException();
+       throw UnknownPropertyException(aPropertyName);
 
     SbxVariable* pProp = pProperty.get();
     if ( pProp->GetType() == SbxEMPTY )
