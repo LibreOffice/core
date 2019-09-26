@@ -22,6 +22,30 @@
       "revId": "23d3b573c042b6a3e6be9b9cdfd39c4db4d547b9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_1e215f4e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-09-26T09:18:49Z",
+      "side": 1,
+      "message": "i\u0027m not sure if this needs stable_sort but SwpHintsArray is always created empty so even if it needs stable_sort the constructor doesn\u0027t matter.",
+      "parentUuid": "7f7f9b97_381eb30c",
+      "range": {
+        "startLine": 23,
+        "startChar": 14,
+        "endLine": 26,
+        "endChar": 51
+      },
+      "revId": "23d3b573c042b6a3e6be9b9cdfd39c4db4d547b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
