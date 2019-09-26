@@ -213,6 +213,16 @@ namespace dmapper {
                     pManager->SetLayoutType(static_cast<sal_uInt32>(nIntValue));
             }
             break;
+            case NS_ooxml::LN_CT_TrPrBase_tblHeader:
+            {
+                if (m_pCurrentInteropGrabBag)
+                {
+                    beans::PropertyValue aValue;
+                    aValue.Name = "tblHeader";
+                    m_pCurrentInteropGrabBag->push_back(aValue);
+                }
+            }
+            break;
             case NS_ooxml::LN_CT_TcPrBase_tcBorders ://cell borders
             //contains CT_TcBorders_left, right, top, bottom
             {
