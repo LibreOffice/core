@@ -151,7 +151,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(const std::shared_ptr<weld::Window>& rPar
     , m_bOnlyFormatedRedlines(false)
     , m_bRedlnAutoFormat(bAutoFormat)
     , m_bInhibitActivate(false)
-    , m_xTabPagesCTRL(new SvxAcceptChgCtr(pContentArea, pBuilder))
+    , m_xTabPagesCTRL(new SvxAcceptChgCtr(pContentArea, m_xParentDlg.get(), pBuilder))
     , m_xPopup(pBuilder->weld_menu("writermenu"))
 {
     m_xTabPagesCTRL->set_help_id(HID_REDLINE_CTRL);

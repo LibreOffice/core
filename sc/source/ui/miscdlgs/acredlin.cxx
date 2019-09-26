@@ -101,7 +101,7 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     , m_xContentArea(m_xDialog->weld_content_area())
     , m_xPopup(m_xBuilder->weld_menu("calcmenu"))
 {
-    m_xAcceptChgCtr.reset(new SvxAcceptChgCtr(m_xContentArea.get(), m_xBuilder.get()));
+    m_xAcceptChgCtr.reset(new SvxAcceptChgCtr(m_xContentArea.get(), m_xDialog.get(), m_xBuilder.get()));
     nAcceptCount=0;
     nRejectCount=0;
     aReOpenIdle.SetInvokeHandler(LINK( this, ScAcceptChgDlg, ReOpenTimerHdl ));

@@ -269,6 +269,7 @@ private:
     bool bEnableRejectAll;
     bool bEnableUndo;
 
+    weld::Window* m_pDialog;
     std::unique_ptr<weld::Button> m_xAccept;
     std::unique_ptr<weld::Button> m_xReject;
     std::unique_ptr<weld::Button> m_xAcceptAll;
@@ -279,7 +280,7 @@ private:
     DECL_LINK( PbClickHdl, weld::Button&, void );
 
 public:
-    SvxTPView(weld::Container* pParent, weld::Builder* pTopLevel);
+    SvxTPView(weld::Container* pParent, weld::Window* pDialog, weld::Builder* pTopLevel);
     virtual ~SvxTPView() override;
 
     SvxRedlinTable* GetTableControl() { return m_xViewData.get(); }
@@ -288,7 +289,7 @@ public:
     void            EnableAcceptAll(bool bFlag);
     void            EnableReject(bool bFlag);
     void            EnableRejectAll(bool bFlag);
-    static void     EnableClearFormatButton(weld::Button&, bool bFlag);
+    void            EnableClearFormatButton(weld::Button&, bool bFlag);
     void            EnableClearFormat(bool bFlag);
     void            EnableClearFormatAll(bool bFlag);
     void            EnableUndo(bool bFlag=true);
@@ -323,7 +324,7 @@ private:
     DECL_DLLPRIVATE_LINK(DeactivatePageHdl, const OString&, bool);
 
 public:
-    SvxAcceptChgCtr(weld::Container* pParent, weld::Builder* pTopLevel);
+    SvxAcceptChgCtr(weld::Container* pParent, weld::Window* pDialog, weld::Builder* pTopLevel);
     ~SvxAcceptChgCtr();
 
     void            ShowFilterPage();
