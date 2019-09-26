@@ -32,11 +32,10 @@
 #include <helpids.h>
 
 #include <vcl/fixed.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/image.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
