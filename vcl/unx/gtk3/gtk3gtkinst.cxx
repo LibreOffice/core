@@ -1259,15 +1259,16 @@ protected:
     GtkInstanceBuilder* m_pBuilder;
 
     DECL_LINK(async_signal_focus_in, void*, void);
+    DECL_LINK(async_signal_focus_out, void*, void);
 
     void launch_signal_focus_in()
     {
         // in e.g. function wizard RefEdits we want to select all when we get focus
         // but there are pending gtk handlers which change selection after our handler
         // post our focus in event to happen after those finish
-        if (m_pFocusEvent)
-            Application::RemoveUserEvent(m_pFocusEvent);
-        m_pFocusEvent = Application::PostUserEvent(LINK(this, GtkInstanceWidget, async_signal_focus_in));
+        if (m_pFocusInEvent)
+            Application::RemoveUserEvent(m_pFocusInEvent);
+        m_pFocusInEvent = Application::PostUserEvent(LINK(this, GtkInstanceWidget, async_signal_focus_in));
     }
 
     static gboolean signalFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
@@ -1294,11 +1295,20 @@ protected:
         return m_aMnemonicActivateHdl.Call(*this);
     }
 
+    void launch_signal_focus_out()
+    {
+        // tdf#127262 because focus in is async, focus out must not appear out
+        // of sequence to focus in
+        if (m_pFocusOutEvent)
+            Application::RemoveUserEvent(m_pFocusOutEvent);
+        m_pFocusOutEvent = Application::PostUserEvent(LINK(this, GtkInstanceWidget, async_signal_focus_out));
+    }
+
     static gboolean signalFocusOut(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         SolarMutexGuard aGuard;
-        pThis->signal_focus_out();
+        pThis->launch_signal_focus_out();
         return false;
     }
 
@@ -1389,7 +1399,8 @@ private:
     bool m_bDraggedOver;
     sal_uInt16 m_nLastMouseButton;
     sal_uInt16 m_nLastMouseClicks;
-    ImplSVEvent* m_pFocusEvent;
+    ImplSVEvent* m_pFocusInEvent;
+    ImplSVEvent* m_pFocusOutEvent;
     gulong m_nFocusInSignalId;
     gulong m_nMnemonicActivateSignalId;
     gulong m_nFocusOutSignalId;
@@ -1591,7 +1602,8 @@ public:
         , m_bDraggedOver(false)
         , m_nLastMouseButton(0)
         , m_nLastMouseClicks(0)
-        , m_pFocusEvent(nullptr)
+        , m_pFocusInEvent(nullptr)
+        , m_pFocusOutEvent(nullptr)
         , m_nFocusInSignalId(0)
         , m_nMnemonicActivateSignalId(0)
         , m_nFocusOutSignalId(0)
@@ -2095,8 +2107,10 @@ public:
 
     virtual ~GtkInstanceWidget() override
     {
-        if (m_pFocusEvent)
-            Application::RemoveUserEvent(m_pFocusEvent);
+        if (m_pFocusInEvent)
+            Application::RemoveUserEvent(m_pFocusInEvent);
+        if (m_pFocusOutEvent)
+            Application::RemoveUserEvent(m_pFocusOutEvent);
         if (m_nDragMotionSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nDragMotionSignalId);
         if (m_nDragDropSignalId)
@@ -2184,8 +2198,14 @@ public:
 
 IMPL_LINK_NOARG(GtkInstanceWidget, async_signal_focus_in, void*, void)
 {
-    m_pFocusEvent = nullptr;
+    m_pFocusInEvent = nullptr;
     signal_focus_in();
+}
+
+IMPL_LINK_NOARG(GtkInstanceWidget, async_signal_focus_out, void*, void)
+{
+    m_pFocusOutEvent = nullptr;
+    signal_focus_out();
 }
 
 namespace
@@ -2983,8 +3003,9 @@ struct DialogRunner
         if (m_xFrameWindow)
         {
             m_xFrameWindow->IncModalCount();
+            if (m_nModalDepth == 0)
+                m_xFrameWindow->ImplGetFrame()->NotifyModalHierarchy(true);
             ++m_nModalDepth;
-            m_xFrameWindow->ImplGetFrame()->NotifyModalHierarchy(true);
         }
     }
 
@@ -2994,7 +3015,8 @@ struct DialogRunner
         {
             m_xFrameWindow->DecModalCount();
             --m_nModalDepth;
-            m_xFrameWindow->ImplGetFrame()->NotifyModalHierarchy(false);
+            if (m_nModalDepth == 0)
+                m_xFrameWindow->ImplGetFrame()->NotifyModalHierarchy(false);
         }
     }
 
@@ -3050,13 +3072,8 @@ struct DialogRunner
             // if, like the calc validation dialog does, the modality was
             // toggled off during execution ensure that on cleanup the parent
             // is left in the state it was found
-            SalFrame* pFrame = m_xFrameWindow->ImplGetFrame();
-            do
-            {
+            while (m_nModalDepth++ < 0)
                 m_xFrameWindow->IncModalCount();
-                pFrame->NotifyModalHierarchy(true);
-            }
-            while (++m_nModalDepth < 0);
         }
     }
 };
