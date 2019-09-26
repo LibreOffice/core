@@ -43,9 +43,6 @@ public:
     virtual bool KeyInput( const KeyEvent& rKEvt ) override;
 
     /// @return true if the SmartTag consumes this event.
-    virtual bool RequestHelp( const HelpEvent& rHEvt ) override;
-
-    /// @return true if the SmartTag consumes this event.
     virtual bool Command( const CommandEvent& rCEvt ) override;
 
     // callbacks from sdr view

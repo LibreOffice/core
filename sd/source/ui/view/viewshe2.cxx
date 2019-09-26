@@ -592,10 +592,7 @@ bool ViewShell::RequestHelp(const HelpEvent& rHEvt)
 
     if (bool(rHEvt.GetMode()))
     {
-        if( GetView() )
-            bReturn = GetView()->getSmartTags().RequestHelp(rHEvt);
-
-        if(!bReturn && HasCurrentFunction())
+        if(HasCurrentFunction())
         {
             bReturn = GetCurrentFunction()->RequestHelp(rHEvt);
         }

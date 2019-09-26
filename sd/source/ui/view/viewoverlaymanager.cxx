@@ -137,7 +137,6 @@ public:
     virtual void CreateB2dIAObject() override;
     virtual bool IsFocusHdl() const override;
     virtual PointerStyle GetPointer() const override;
-    virtual bool isMarkable() const override;
 
     virtual void onMouseEnter(const MouseEvent& rMEvt) override;
     virtual void onHelpRequest(const HelpEvent& rHEvt) override;
@@ -284,11 +283,6 @@ void ImageButtonHdl::CreateB2dIAObject()
 }
 
 bool ImageButtonHdl::IsFocusHdl() const
-{
-    return false;
-}
-
-bool ImageButtonHdl::isMarkable() const
 {
     return false;
 }
