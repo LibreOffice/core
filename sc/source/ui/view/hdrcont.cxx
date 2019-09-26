@@ -200,43 +200,6 @@ long ScHeaderControl::GetScrPos( SCCOLROW nEntryNo ) const
     return nScrPos;
 }
 
-// draw a rectangle across the window's width/height, with the outer part in a lighter color
-
-void ScHeaderControl::DrawShadedRect( long nStart, long nEnd, const Color& rBaseColor )
-{
-    Color aWhite( COL_WHITE );
-
-    Color aInner( rBaseColor );             // highlight color, unchanged
-    Color aCenter( rBaseColor );
-    aCenter.Merge( aWhite, 0xd0 );          // lighten up a bit
-    Color aOuter( rBaseColor );
-    aOuter.Merge( aWhite, 0xa0 );           // lighten up more
-
-    if ( IsMirrored() )
-        std::swap( aInner, aOuter );        // just swap colors instead of positions
-
-    Size aWinSize = GetSizePixel();
-    long nBarSize = bVertical ? aWinSize.Width() : aWinSize.Height();
-    long nCenterPos = (nBarSize / 2) - 1;
-
-    SetLineColor();
-    SetFillColor( aOuter );
-    if (bVertical)
-        DrawRect( tools::Rectangle( 0, nStart, nCenterPos-1, nEnd ) );
-    else
-        DrawRect( tools::Rectangle( nStart, 0, nEnd, nCenterPos-1 ) );
-    SetFillColor( aCenter );
-    if (bVertical)
-        DrawRect( tools::Rectangle( nCenterPos, nStart, nCenterPos, nEnd ) );
-    else
-        DrawRect( tools::Rectangle( nStart, nCenterPos, nEnd, nCenterPos ) );
-    SetFillColor( aInner );
-    if (bVertical)
-        DrawRect( tools::Rectangle( nCenterPos+1, nStart, nBarSize-1, nEnd ) );
-    else
-        DrawRect( tools::Rectangle( nStart, nCenterPos+1, nEnd, nBarSize-1 ) );
-}
-
 void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect )
 {
     // It is important for VCL to have few calls, that is why the outer lines are
@@ -338,21 +301,12 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 
     if ( nLineEnd * nLayoutSign >= nInitScrPos * nLayoutSign )
     {
-        if ( bHighContrast )
-        {
-            // high contrast: single-color background
-            SetFillColor( rStyleSettings.GetFaceColor() );
-            if ( bVertical )
-                aFillRect = tools::Rectangle( 0, nInitScrPos, nBarSize-1, nLineEnd );
-            else
-                aFillRect = tools::Rectangle( nInitScrPos, 0, nLineEnd, nBarSize-1 );
-            DrawRect( aFillRect );
-        }
+        SetFillColor( rStyleSettings.GetFaceColor() );
+        if ( bVertical )
+            aFillRect = tools::Rectangle( 0, nInitScrPos, nBarSize-1, nLineEnd );
         else
-        {
-            // normal: 3-part background
-            DrawShadedRect( nInitScrPos, nLineEnd, rStyleSettings.GetFaceColor() );
-        }
+            aFillRect = tools::Rectangle( nInitScrPos, 0, nLineEnd, nBarSize-1 );
+        DrawRect( aFillRect );
     }
 
     if ( nLineEnd * nLayoutSign < nPEnd * nLayoutSign )
@@ -369,25 +323,27 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     {
         if ( nTransEnd * nLayoutSign >= nTransStart * nLayoutSign )
         {
+            if (bVertical)
+                aFillRect = tools::Rectangle( 0, nTransStart, nBarSize-1, nTransEnd );
+            else
+                aFillRect = tools::Rectangle( nTransStart, 0, nTransEnd, nBarSize-1 );
+
             if ( bHighContrast )
             {
                 if ( bDark )
                 {
                     //  solid grey background for dark face color is drawn before lines
-
                     SetLineColor();
                     SetFillColor( COL_LIGHTGRAY );
-                    if (bVertical)
-                        DrawRect( tools::Rectangle( 0, nTransStart, nBarSize-1, nTransEnd ) );
-                    else
-                        DrawRect( tools::Rectangle( nTransStart, 0, nTransEnd, nBarSize-1 ) );
+                    DrawRect( aFillRect );
                 }
             }
             else
             {
                 // background for selection
-
-                DrawShadedRect( nTransStart, nTransEnd, rStyleSettings.GetHighlightColor() );
+                SetLineColor();
+                SetFillColor( rStyleSettings.GetHighlightColor() );
+                DrawRect( aFillRect );
             }
         }
 
