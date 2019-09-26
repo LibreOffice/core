@@ -56,9 +56,6 @@ public:
     virtual bool KeyInput( const KeyEvent& rKEvt );
 
     /** returns true if the SmartTag consumes this event. */
-    virtual bool RequestHelp( const HelpEvent& rHEvt );
-
-    /** returns true if the SmartTag consumes this event. */
     virtual bool Command( const CommandEvent& rCEvt );
 
     /** returns true if this smart tag is currently selected */
@@ -114,9 +111,6 @@ public:
     bool KeyInput( const KeyEvent& rKEvt );
 
     /** returns true if a SmartTag consumes this event. */
-    bool RequestHelp( const HelpEvent& rHEvt );
-
-    /** returns true if a SmartTag consumes this event. */
     bool Command( const CommandEvent& rCEvt );
 
     /** disposes all smart tags and clears the set */
@@ -134,7 +128,6 @@ public:
     sal_uLong GetMarkablePointCount() const;
     bool HasMarkedPoints() const;
     sal_uLong GetMarkedPointCount() const;
-    static bool IsPointMarkable(const SdrHdl& rHdl);
     bool MarkPoint(SdrHdl& rHdl, bool bUnmark);
     bool MarkPoints(const ::tools::Rectangle* pRect, bool bUnmark);
 
@@ -167,8 +160,6 @@ public:
     SmartHdl( const SmartTagReference& xTag, const Point& rPnt, SdrHdlKind eNewKind );
 
     const SmartTagReference& getTag() const { return mxSmartTag; }
-
-    virtual bool isMarkable() const;
 private:
     SmartTagReference const mxSmartTag;
 };
