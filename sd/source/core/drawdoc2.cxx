@@ -413,13 +413,8 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 
     if (comphelper::LibreOfficeKit::isActive() && static_cast<SdPage*>(pPage)->GetPageKind() == PageKind::Standard)
     {
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-        while (pViewShell)
-        {
-            SdXImpressDocument* pModel = SdXImpressDocument::getImplementation(this->getUnoModel());
-            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pModel);
-            pViewShell = SfxViewShell::GetNext(*pViewShell);
-        }
+        SdXImpressDocument* pModel = SdXImpressDocument::getImplementation(this->getUnoModel());
+        SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
     }
 }
 
@@ -447,13 +442,8 @@ SdrPage* SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
 
     if (comphelper::LibreOfficeKit::isActive() && static_cast<SdPage*>(pPage)->GetPageKind() == PageKind::Standard)
     {
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-        while (pViewShell)
-        {
-            SdXImpressDocument* pModel = SdXImpressDocument::getImplementation(this->getUnoModel());
-            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pModel);
-            pViewShell = SfxViewShell::GetNext(*pViewShell);
-        }
+        SdXImpressDocument* pModel = SdXImpressDocument::getImplementation(this->getUnoModel());
+        SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
     }
 
     return pPage;
