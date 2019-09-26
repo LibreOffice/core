@@ -237,10 +237,6 @@ sal_Int32 OOXMLDocumentImpl::getXNoteId() const
     return mnXNoteId;
 }
 
-void OOXMLDocumentImpl::setXNoteType(Id /*nId*/)
-{
-}
-
 const OUString & OOXMLDocumentImpl::getTarget() const
 {
     return mpStream->getTarget();
@@ -262,7 +258,7 @@ OOXMLDocumentImpl::getSubStream(const OUString & rId)
 }
 
 writerfilter::Reference<Stream>::Pointer_t
-OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, Id aType,
+OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, Id /*aType*/,
                                   const sal_Int32 nId)
 {
     OOXMLStream::Pointer_t pStream =
@@ -270,7 +266,6 @@ OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, Id aType,
     // See above, no status indicator for the note stream, either.
     OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages, maMediaDescriptor);
     pDocument->setXNoteId(nId);
-    pDocument->setXNoteType(aType);
     pDocument->setModel(getModel());
     pDocument->setDrawPage(getDrawPage());
 
