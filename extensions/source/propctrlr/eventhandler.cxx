@@ -996,7 +996,7 @@ namespace pcr
     {
         EventMap::const_iterator pos = m_aEvents.find( _rPropertyName );
         if ( pos == m_aEvents.end() )
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(_rPropertyName);
         return pos->second;
     }
 

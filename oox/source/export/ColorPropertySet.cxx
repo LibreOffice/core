@@ -125,7 +125,7 @@ uno::Any SAL_CALL ColorPropertySet::getPropertyValue( const OUString& aPropertyN
     else if (aPropertyName == m_aColorPropName)
         return uno::makeAny( m_nColor );
 
-    throw UnknownPropertyException();
+    throw UnknownPropertyException(aPropertyName);
 }
 
 void SAL_CALL ColorPropertySet::addPropertyChangeListener( const OUString& /* aPropertyName */, const Reference< XPropertyChangeListener >& /* xListener */ )

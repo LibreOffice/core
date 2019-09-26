@@ -231,7 +231,7 @@ Property SAL_CALL UcbPropertiesManager::getPropertyByName( const OUString& aName
     if ( queryProperty( aName, aProp ) )
         return aProp;
 
-    throw UnknownPropertyException();
+    throw UnknownPropertyException(aName);
 }
 
 

@@ -30,12 +30,6 @@ using namespace com::sun::star::ucb;
 
 #include "filinl.hxx"
 
-#if OSL_DEBUG_LEVEL > 0
-#define THROW_WHERE SAL_WHERE
-#else
-#define THROW_WHERE ""
-#endif
-
 XPropertySetInfo_impl::XPropertySetInfo_impl( TaskManager* pMyShell,const OUString& aUnqPath )
     : m_pMyShell( pMyShell ),
       m_seq( 0 )
@@ -81,7 +75,7 @@ XPropertySetInfo_impl::getPropertyByName( const OUString& aName )
     if (pProp != m_seq.end())
         return *pProp;
 
-    throw beans::UnknownPropertyException( THROW_WHERE );
+    throw beans::UnknownPropertyException( aName );
 }
 
 

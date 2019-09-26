@@ -653,7 +653,7 @@ void ScEditFieldObj::setPropertyValueURL(const OUString& rName, const css::uno::
                 pURL->SetTargetFrame(aStrVal);
         }
         else
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(rName);
 
         pEditEngine->QuickInsertField( SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection );
         mpEditSource->UpdateData();
@@ -678,7 +678,7 @@ void ScEditFieldObj::setPropertyValueURL(const OUString& rName, const css::uno::
             rData.SetTargetFrame(aStrVal);
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rName);
 }
 
 uno::Any ScEditFieldObj::getPropertyValueURL(const OUString& rName)
@@ -712,7 +712,7 @@ uno::Any ScEditFieldObj::getPropertyValueURL(const OUString& rName)
         else if (rName == SC_UNONAME_TARGET)
             aRet <<= pURL->GetTargetFrame();
         else
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(rName);
     }
     else        // not inserted yet
     {
@@ -725,7 +725,7 @@ uno::Any ScEditFieldObj::getPropertyValueURL(const OUString& rName)
         else if (rName == SC_UNONAME_TARGET)
             aRet <<= rURL.GetTargetFrame();
         else
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(rName);
     }
     return aRet;
 }
@@ -733,7 +733,7 @@ uno::Any ScEditFieldObj::getPropertyValueURL(const OUString& rName)
 void ScEditFieldObj::setPropertyValueFile(const OUString& rName, const uno::Any& rVal)
 {
     if (rName != SC_UNONAME_FILEFORM)
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rName);
 
     sal_Int16 nIntVal = 0;
     if (rVal >>= nIntVal)
@@ -767,7 +767,7 @@ uno::Any ScEditFieldObj::getPropertyValueFile(const OUString& rName)
 {
     uno::Any aRet;
     if (rName != SC_UNONAME_FILEFORM)
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rName);
 
     SvxFileFormat eFormat = SvxFileFormat::NameAndExt;
     const SvxFieldData* pField = nullptr;
@@ -830,7 +830,7 @@ void ScEditFieldObj::setPropertyValueDateTime(const OUString& rName, const uno::
                     p->SetFormat(static_cast<SvxDateFormat>(mnNumFormat));
                 }
                 else
-                    throw beans::UnknownPropertyException();
+                    throw beans::UnknownPropertyException(rName);
             }
             break;
             case text::textfield::Type::TIME:
@@ -838,7 +838,7 @@ void ScEditFieldObj::setPropertyValueDateTime(const OUString& rName, const uno::
                 // SvxTimeField doesn't have any attributes.
                 if (rName != SC_UNONAME_ISDATE && rName != SC_UNONAME_ISFIXED &&
                     rName != SC_UNONAME_DATETIME && rName != SC_UNONAME_NUMFMT)
-                    throw beans::UnknownPropertyException();
+                    throw beans::UnknownPropertyException(rName);
             }
             break;
             case text::textfield::Type::EXTENDED_TIME:
@@ -865,11 +865,11 @@ void ScEditFieldObj::setPropertyValueDateTime(const OUString& rName, const uno::
                     p->SetFormat(static_cast<SvxTimeFormat>(mnNumFormat));
                 }
                 else
-                    throw beans::UnknownPropertyException();
+                    throw beans::UnknownPropertyException(rName);
             }
             break;
             default:
-                throw beans::UnknownPropertyException();
+                throw beans::UnknownPropertyException(rName);
         }
     }
     else
@@ -883,7 +883,7 @@ void ScEditFieldObj::setPropertyValueDateTime(const OUString& rName, const uno::
         else if (rName == SC_UNONAME_NUMFMT)
             mnNumFormat = rVal.get<sal_Int32>();
         else
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(rName);
     }
 }
 
@@ -989,7 +989,7 @@ uno::Any ScEditFieldObj::getPropertyValueDateTime(const OUString& rName)
             return uno::makeAny(mnNumFormat);
     }
 
-    throw beans::UnknownPropertyException();
+    throw beans::UnknownPropertyException(rName);
 }
 
 void ScEditFieldObj::setPropertyValueSheet(const OUString& rName, const uno::Any& rVal)
@@ -1014,7 +1014,7 @@ void ScEditFieldObj::setPropertyValueSheet(const OUString& rName, const uno::Any
         SvxTableField* p = static_cast<SvxTableField*>(pField);
 
         if (rName != SC_UNONAME_TABLEPOS)
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(rName);
 
         sal_Int32 nTab = rVal.get<sal_Int32>();
         p->SetTab(nTab);
@@ -1028,7 +1028,7 @@ void ScEditFieldObj::setPropertyValueSheet(const OUString& rName, const uno::Any
     // Edit engine instance not yet present.  Store the item data for later use.
     SvxTableField& r = static_cast<SvxTableField&>(getData());
     if (rName != SC_UNONAME_TABLEPOS)
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rName);
 
     sal_Int32 nTab = rVal.get<sal_Int32>();
     r.SetTab(nTab);
@@ -1226,7 +1226,7 @@ void SAL_CALL ScEditFieldObj::setPropertyValue(
         break;
         case text::textfield::Type::DOCINFO_TITLE:
         default:
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(OUString::number(meType));
     }
 }
 
@@ -1272,7 +1272,7 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const OUString& aPropertyNam
             return getPropertyValueDateTime(aPropertyName);
         case text::textfield::Type::DOCINFO_TITLE:
         default:
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(OUString::number(meType));
     }
 }
 

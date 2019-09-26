@@ -290,7 +290,7 @@ namespace pcr
             FindPropertyByName( _rPropertyName )
         );
         if ( pFound == m_aSupportedProperties.end() )
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(_rPropertyName);
 
         return *pFound;
     }
@@ -319,7 +319,7 @@ namespace pcr
     {
         PropertyId nPropId = m_pInfoService->getPropertyId( _rPropertyName );
         if ( nPropId == -1 )
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(_rPropertyName);
         return nPropId;
     }
 

@@ -407,7 +407,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         else if ( aPropertyName == SC_UNO_RASTERSYNC )
             aGridOpt.SetSynchronize( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         else
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(aPropertyName);
         aViewOpt.SetGridOptions(aGridOpt);
     }
     rDoc.SetViewOptions(aViewOpt);
@@ -608,7 +608,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
         else if ( aPropertyName == SC_UNO_RASTERSYNC )
             aRet <<= aGridOpt.GetSynchronize();
         else
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(aPropertyName);
     }
 
 

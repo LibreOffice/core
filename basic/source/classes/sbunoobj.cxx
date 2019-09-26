@@ -4204,7 +4204,7 @@ void SAL_CALL ModuleInvocationProxy::setValue(const OUString& rProperty, const A
     {
         // TODO: Check vba behavior concerning missing function
         //StarBASIC::Error( ERRCODE_BASIC_NO_METHOD, aFunctionName );
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(aPropertyFunctionName);
     }
 
     // Setup parameter
@@ -4242,7 +4242,7 @@ Any SAL_CALL ModuleInvocationProxy::getValue(const OUString& rProperty)
     {
         // TODO: Check vba behavior concerning missing function
         //StarBASIC::Error( ERRCODE_BASIC_NO_METHOD, aFunctionName );
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(aPropertyFunctionName);
     }
 
     // Call method

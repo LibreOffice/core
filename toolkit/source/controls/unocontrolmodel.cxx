@@ -1246,7 +1246,7 @@ void UnoControlModel::setPropertyValue( const OUString& rPropertyName, const css
         DBG_ASSERT( nPropId, "Invalid ID in UnoControlModel::setPropertyValue" );
     }
     if( !nPropId )
-        throw css::beans::UnknownPropertyException();
+        throw css::beans::UnknownPropertyException(rPropertyName);
 
     setFastPropertyValue( nPropId, rValue );
 

@@ -533,14 +533,11 @@ Sequence< Property > SAL_CALL CCRS_PropertySetInfo
 Property SAL_CALL CCRS_PropertySetInfo
     ::getPropertyByName( const OUString& aName )
 {
-    if ( aName.isEmpty() )
-        throw UnknownPropertyException();
-
     Property aProp;
     if ( impl_queryProperty( aName, aProp ) )
         return aProp;
 
-    throw UnknownPropertyException();
+    throw UnknownPropertyException(aName);
 }
 
 //virtual

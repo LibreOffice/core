@@ -1003,7 +1003,7 @@ void SAL_CALL FSStorage::setPropertyValue( const OUString& aPropertyName, const 
     if ( aPropertyName == "URL" || aPropertyName == "OpenMode" )
         throw beans::PropertyVetoException(); // TODO
     else
-        throw beans::UnknownPropertyException(); // TODO
+        throw beans::UnknownPropertyException(aPropertyName); // TODO
 }
 
 
@@ -1019,7 +1019,7 @@ uno::Any SAL_CALL FSStorage::getPropertyValue( const OUString& aPropertyName )
     else if ( aPropertyName == "OpenMode" )
         return uno::makeAny( m_pImpl->m_nMode );
 
-    throw beans::UnknownPropertyException(); // TODO
+    throw beans::UnknownPropertyException(aPropertyName); // TODO
 }
 
 

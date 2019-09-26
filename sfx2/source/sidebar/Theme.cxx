@@ -425,11 +425,11 @@ Any SAL_CALL Theme::getPropertyValue (
 {
     PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
     if (iId == maPropertyNameToIdMap.end())
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rsPropertyName);
 
     const PropertyType eType (GetPropertyType(iId->second));
     if (eType == PT_Invalid)
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rsPropertyName);
 
     const ThemeItem eItem (iId->second);
 
@@ -445,11 +445,11 @@ void SAL_CALL Theme::addPropertyChangeListener(
     {
         PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
         if (iId == maPropertyNameToIdMap.end())
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(rsPropertyName);
 
         const PropertyType eType (GetPropertyType(iId->second));
         if (eType == PT_Invalid)
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(rsPropertyName);
 
         eItem = iId->second;
     }
@@ -467,11 +467,11 @@ void SAL_CALL Theme::removePropertyChangeListener(
     {
         PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
         if (iId == maPropertyNameToIdMap.end())
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(rsPropertyName);
 
         const PropertyType eType (GetPropertyType(iId->second));
         if (eType == PT_Invalid)
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(rsPropertyName);
 
         eItem = iId->second;
     }
@@ -499,11 +499,11 @@ void SAL_CALL Theme::addVetoableChangeListener(
     {
         PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
         if (iId == maPropertyNameToIdMap.end())
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(rsPropertyName);
 
         const PropertyType eType (GetPropertyType(iId->second));
         if (eType == PT_Invalid)
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(rsPropertyName);
 
         eItem = iId->second;
     }
@@ -521,11 +521,11 @@ void SAL_CALL Theme::removeVetoableChangeListener(
     {
         PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
         if (iId == maPropertyNameToIdMap.end())
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(rsPropertyName);
 
         const PropertyType eType (GetPropertyType(iId->second));
         if (eType == PT_Invalid)
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException(rsPropertyName);
 
         eItem = iId->second;
     }
@@ -572,11 +572,11 @@ beans::Property SAL_CALL Theme::getPropertyByName (const OUString& rsPropertyNam
 {
     PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
     if (iId == maPropertyNameToIdMap.end())
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rsPropertyName);
 
     const PropertyType eType (GetPropertyType(iId->second));
     if (eType == PT_Invalid)
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rsPropertyName);
 
     const ThemeItem eItem (iId->second);
 

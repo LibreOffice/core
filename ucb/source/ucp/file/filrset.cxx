@@ -641,7 +641,7 @@ void SAL_CALL XResultSet_impl::setPropertyValue(
     if( aPropertyName == "IsRowCountFinal" ||
         aPropertyName == "RowCount" )
         return;
-    throw beans::UnknownPropertyException( THROW_WHERE );
+    throw beans::UnknownPropertyException( aPropertyName );
 }
 
 
@@ -658,7 +658,7 @@ uno::Any SAL_CALL XResultSet_impl::getPropertyValue(
         return uno::Any(count);
     }
     else
-        throw beans::UnknownPropertyException( THROW_WHERE );
+        throw beans::UnknownPropertyException( PropertyName );
 }
 
 
@@ -684,7 +684,7 @@ void SAL_CALL XResultSet_impl::addPropertyChangeListener(
         m_pRowCountListeners->addInterface( xListener );
     }
     else
-        throw beans::UnknownPropertyException( THROW_WHERE );
+        throw beans::UnknownPropertyException( aPropertyName );
 }
 
 
@@ -706,7 +706,7 @@ void SAL_CALL XResultSet_impl::removePropertyChangeListener(
         m_pRowCountListeners->removeInterface( aListener );
     }
     else
-        throw beans::UnknownPropertyException( THROW_WHERE );
+        throw beans::UnknownPropertyException( aPropertyName );
 }
 
 void SAL_CALL XResultSet_impl::addVetoableChangeListener(

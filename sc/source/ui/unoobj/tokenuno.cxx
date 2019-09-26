@@ -227,7 +227,7 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
             throw lang::IllegalArgumentException();
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 }
 
 uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const OUString& aPropertyName )
@@ -259,7 +259,7 @@ uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const OUString& aPropert
         aRet <<= maExternalLinks;
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
     return aRet;
 }
 

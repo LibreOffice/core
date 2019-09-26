@@ -1009,7 +1009,7 @@ void Content::removeProperty( const OUString& Name,
                     {
                         case UNKNOWN:
                         case DAV:
-                            throw beans::UnknownPropertyException();
+                            throw beans::UnknownPropertyException(Name);
 
                         case FTP:
                         case NON_DAV:

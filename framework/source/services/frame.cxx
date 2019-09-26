@@ -1869,7 +1869,7 @@ void SAL_CALL XFrameImpl::setPropertyValue(const OUString& sProperty,
 
     TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
-        throw css::beans::UnknownPropertyException();
+        throw css::beans::UnknownPropertyException(sProperty);
 
     css::beans::Property aPropInfo = pIt->second;
 
@@ -1904,7 +1904,7 @@ css::uno::Any SAL_CALL XFrameImpl::getPropertyValue(const OUString& sProperty)
 
     TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
-        throw css::beans::UnknownPropertyException();
+        throw css::beans::UnknownPropertyException(sProperty);
 
     css::beans::Property aPropInfo = pIt->second;
 
@@ -1923,7 +1923,7 @@ void SAL_CALL XFrameImpl::addPropertyChangeListener(
 
         TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
         if (pIt == m_lProps.end())
-            throw css::beans::UnknownPropertyException();
+            throw css::beans::UnknownPropertyException(sProperty);
     }
     // <- SAFE
 
@@ -1940,7 +1940,7 @@ void SAL_CALL XFrameImpl::removePropertyChangeListener(
 
         TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
         if (pIt == m_lProps.end())
-            throw css::beans::UnknownPropertyException();
+            throw css::beans::UnknownPropertyException(sProperty);
     }
     // <- SAFE
 
@@ -1959,7 +1959,7 @@ void SAL_CALL XFrameImpl::addVetoableChangeListener(
 
         TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
         if (pIt == m_lProps.end())
-            throw css::beans::UnknownPropertyException();
+            throw css::beans::UnknownPropertyException(sProperty);
     }
     // <- SAFE
 
@@ -1976,7 +1976,7 @@ void SAL_CALL XFrameImpl::removeVetoableChangeListener(
 
         TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
         if (pIt == m_lProps.end())
-            throw css::beans::UnknownPropertyException();
+            throw css::beans::UnknownPropertyException(sProperty);
     }
     // <- SAFE
 
@@ -2008,7 +2008,7 @@ css::beans::Property SAL_CALL XFrameImpl::getPropertyByName(const OUString& sNam
 
     TPropInfoHash::const_iterator pIt = m_lProps.find(sName);
     if (pIt == m_lProps.end())
-        throw css::beans::UnknownPropertyException();
+        throw css::beans::UnknownPropertyException(sName);
 
     return pIt->second;
 }

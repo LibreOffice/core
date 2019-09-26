@@ -139,7 +139,7 @@ Any SAL_CALL GenericPropertySet::getPropertyValue( const OUString& rPropertyName
 {
     PropertyNameMap::iterator aIt = maPropMap.find( rPropertyName );
     if( aIt == maPropMap.end() )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rPropertyName);
     return aIt->second;
 }
 
@@ -169,7 +169,7 @@ Property SAL_CALL GenericPropertySet::getPropertyByName( const OUString& rProper
 {
     PropertyNameMap::iterator aIt = maPropMap.find( rPropertyName );
     if( aIt == maPropMap.end() )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rPropertyName);
     Property aProperty;
     aProperty.Name = aIt->first;
     aProperty.Handle = 0;

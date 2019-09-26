@@ -112,7 +112,7 @@ public:
             m_pImpl->SetParentWindow(xWindow);
             return;
         }
-        throw css::beans::UnknownPropertyException();
+        throw css::beans::UnknownPropertyException(rPropertyName);
     }
 
     virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& rPropertyName) override
@@ -121,7 +121,7 @@ public:
         {
             return uno::Any(m_pImpl->GetParentWindow());
         }
-        throw css::beans::UnknownPropertyException();
+        throw css::beans::UnknownPropertyException(rPropertyName);
     }
 };
 

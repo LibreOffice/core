@@ -1271,7 +1271,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
         m_bCompressedIsSetFromOutside = true;
     }
     else
-        throw beans::UnknownPropertyException(THROW_WHERE );
+        throw beans::UnknownPropertyException(aPropertyName);
 }
 
 Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
@@ -1305,7 +1305,7 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
         return Any(m_aStorageEncryptionKeys);
     }
     else
-        throw beans::UnknownPropertyException(THROW_WHERE );
+        throw beans::UnknownPropertyException(PropertyName);
 }
 
 void ZipPackageStream::setSize ( const sal_Int64 nNewSize )

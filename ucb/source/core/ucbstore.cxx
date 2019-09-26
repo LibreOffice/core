@@ -1184,9 +1184,6 @@ Reference< XPropertySetInfo > SAL_CALL PersistentPropertySet::getPropertySetInfo
 void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aPropertyName,
                                                        const Any& aValue )
 {
-    if ( aPropertyName.isEmpty() )
-        throw UnknownPropertyException();
-
     osl::ClearableGuard< osl::Mutex > aCGuard( m_pImpl->m_aMutex );
 
     Reference< XHierarchicalNameAccess > xRootHierNameAccess(
@@ -1277,7 +1274,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
         }
     }
 
-    throw UnknownPropertyException();
+    throw UnknownPropertyException(aPropertyName);
 }
 
 
@@ -1285,9 +1282,6 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
 Any SAL_CALL PersistentPropertySet::getPropertyValue(
                                             const OUString& PropertyName )
 {
-    if ( PropertyName.isEmpty() )
-        throw UnknownPropertyException();
-
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     Reference< XHierarchicalNameAccess > xNameAccess(
@@ -1304,11 +1298,11 @@ Any SAL_CALL PersistentPropertySet::getPropertyValue(
         }
         catch (const NoSuchElementException&)
         {
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(aFullPropName);
         }
     }
 
-    throw UnknownPropertyException();
+    throw UnknownPropertyException(PropertyName);
 }
 
 
@@ -1581,7 +1575,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
 
         // Property in set?
         if ( !xRootHierNameAccess->hasByHierarchicalName( aFullPropName ) )
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(aFullPropName);
 
         // Property removable?
         try
@@ -2237,7 +2231,7 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
 
         // Does property exist?
         if ( !xRootHierNameAccess->hasByHierarchicalName( aFullPropName ) )
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(aFullPropName);
 
         try
         {

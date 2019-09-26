@@ -869,7 +869,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
 
     const SfxItemPropertySimpleEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pCur)
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rPropertyName);
     else if (pCur->nFlags & PropertyAttribute::READONLY)
         throw PropertyVetoException();
     else
@@ -1024,7 +1024,7 @@ uno::Any SAL_CALL SwXMailMerge::getPropertyValue(
 
     const SfxItemPropertySimpleEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pCur)
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rPropertyName);
 
     switch (pCur->nWID)
     {
@@ -1075,7 +1075,7 @@ void SAL_CALL SwXMailMerge::addPropertyChangeListener(
     {
         const SfxItemPropertySimpleEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
         if (!pCur)
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(rPropertyName);
         m_aPropListeners.addInterface( pCur->nWID, rListener );
     }
 }
@@ -1089,7 +1089,7 @@ void SAL_CALL SwXMailMerge::removePropertyChangeListener(
     {
         const SfxItemPropertySimpleEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
         if (!pCur)
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(rPropertyName);
         m_aPropListeners.removeInterface( pCur->nWID, rListener );
     }
 }

@@ -109,7 +109,7 @@ Property OPropertySetHelperInfo_Impl::getPropertyByName( const OUString & Proper
                               sizeof( Property ),
                               compare_OUString_Property_Impl ));
     if( !pR ) {
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(PropertyName);
     }
 
     return *pR;
@@ -295,7 +295,7 @@ void OPropertySetHelper::addPropertyChangeListener(
             sal_Int32 nHandle = rPH.getHandleByName( rPropertyName );
             if( nHandle == -1 ) {
                 // property not known throw exception
-                throw  UnknownPropertyException() ;
+                throw  UnknownPropertyException(rPropertyName);
             }
 
             sal_Int16 nAttributes;
@@ -338,7 +338,7 @@ void OPropertySetHelper::removePropertyChangeListener(
             sal_Int32 nHandle = rPH.getHandleByName( rPropertyName );
             if( nHandle == -1 )
                 // property not known throw exception
-                throw UnknownPropertyException();
+                throw UnknownPropertyException(rPropertyName);
             aBoundLC.removeInterface( nHandle, rxListener );
         }
         else {
@@ -371,7 +371,7 @@ void OPropertySetHelper::addVetoableChangeListener(
             sal_Int32 nHandle = rPH.getHandleByName( rPropertyName );
             if( nHandle == -1 ) {
                 // property not known throw exception
-                throw UnknownPropertyException();
+                throw UnknownPropertyException(rPropertyName);
             }
 
             sal_Int16 nAttributes;
@@ -412,7 +412,7 @@ void OPropertySetHelper::removeVetoableChangeListener(
             sal_Int32 nHandle = rPH.getHandleByName( rPropertyName );
             if( nHandle == -1 ) {
                 // property not known throw exception
-                throw UnknownPropertyException();
+                throw UnknownPropertyException(rPropertyName);
             }
             // remove the vetoable listener to the helper container
             aVetoableLC.removeInterface( nHandle, rxListener );
@@ -435,7 +435,7 @@ void OPropertySetHelper::setDependentFastPropertyValue( sal_Int32 i_handle, cons
     IPropertyArrayHelper& rInfo = getInfoHelper();
     if ( !rInfo.fillPropertyMembersByHandle( nullptr, &nAttributes, i_handle ) )
         // unknown property
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(OUString::number(i_handle));
 
     // no need to check for READONLY-ness of the property. The method is intended to be called internally, which
     // implies it might be invoked for properties which are read-only to the instance's clients, but well allowed
@@ -486,7 +486,7 @@ void OPropertySetHelper::setFastPropertyValue( sal_Int32 nHandle, const Any& rVa
     sal_Int16 nAttributes;
     if( !rInfo.fillPropertyMembersByHandle( nullptr, &nAttributes, nHandle ) ) {
         // unknown property
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(OUString::number(nHandle));
     }
     if( nAttributes & PropertyAttribute::READONLY )
         throw PropertyVetoException();
@@ -548,7 +548,7 @@ Any OPropertySetHelper::getFastPropertyValue( sal_Int32 nHandle )
     IPropertyArrayHelper & rInfo = getInfoHelper();
     if( !rInfo.fillPropertyMembersByHandle( nullptr, nullptr, nHandle ) )
         // unknown property
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(OUString::number(nHandle));
 
     Any aRet;
     MutexGuard aGuard( rBHelper.rMutex );
@@ -1073,7 +1073,7 @@ Property OPropertyArrayHelper::getPropertyByName(const OUString& aPropertyName)
                               sizeof( Property ),
                               compare_OUString_Property_Impl ));
     if( !pR ) {
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(aPropertyName);
     }
     return *pR;
 }

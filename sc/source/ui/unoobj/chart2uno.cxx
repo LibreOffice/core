@@ -2229,7 +2229,7 @@ void SAL_CALL ScChart2DataProvider::setPropertyValue(
         const OUString& rPropertyName, const uno::Any& rValue)
 {
     if ( rPropertyName != SC_UNONAME_INCLUDEHIDDENCELLS )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rPropertyName);
 
     if ( !(rValue >>= m_bIncludeHiddenCells))
         throw lang::IllegalArgumentException();
@@ -2248,7 +2248,7 @@ uno::Any SAL_CALL ScChart2DataProvider::getPropertyValue(
         aRet <<= m_pDocument->PastingDrawFromOtherDoc();
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rPropertyName);
     return aRet;
 }
 
@@ -3272,7 +3272,7 @@ void SAL_CALL ScChart2DataSequence::setPropertyValue(
         mbTimeBased = bTimeBased;
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rPropertyName);
     // TODO: support optional properties
 }
 
@@ -3307,7 +3307,7 @@ uno::Any SAL_CALL ScChart2DataSequence::getPropertyValue(const OUString& rProper
         aRet <<= bHasStringLabel;
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rPropertyName);
     // TODO: support optional properties
     return aRet;
 }

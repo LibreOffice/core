@@ -93,7 +93,7 @@ void OPropertyContainerHelper::revokeProperty( sal_Int32 _nHandle )
 {
     PropertiesIterator aPos = searchHandle( _nHandle );
     if ( aPos == m_aProperties.end() )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(OUString::number(_nHandle));
     m_aProperties.erase( aPos );
 }
 

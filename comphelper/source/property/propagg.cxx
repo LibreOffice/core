@@ -143,7 +143,7 @@ Property OPropertyArrayAggregationHelper::getPropertyByName( const OUString& _rP
     const Property* pProperty = findPropertyByName( _rPropertyName );
 
     if ( !pProperty )
-        throw  UnknownPropertyException();
+        throw  UnknownPropertyException(_rPropertyName);
 
     return *pProperty;
 }
@@ -739,7 +739,7 @@ css::beans::PropertyState SAL_CALL OPropertySetAggregationHelper::getPropertySta
 
     if (nHandle == -1)
     {
-        throw css::beans::UnknownPropertyException();
+        throw css::beans::UnknownPropertyException(_rPropertyName);
     }
 
     OUString aPropName;
@@ -762,7 +762,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyToDefault(const OUString
     sal_Int32 nHandle = rPH.getHandleByName(_rPropertyName);
     if (nHandle == -1)
     {
-        throw css::beans::UnknownPropertyException();
+        throw css::beans::UnknownPropertyException(_rPropertyName);
     }
 
     OUString aPropName;
@@ -794,7 +794,7 @@ css::uno::Any SAL_CALL OPropertySetAggregationHelper::getPropertyDefault(const O
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );
 
     if ( nHandle == -1 )
-        throw css::beans::UnknownPropertyException();
+        throw css::beans::UnknownPropertyException(aPropertyName);
 
     OUString aPropName;
     sal_Int32   nOriginalHandle = -1;

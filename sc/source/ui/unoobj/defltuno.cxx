@@ -124,7 +124,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
 
     const SfxItemPropertySimpleEntry* pEntry = aPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
     if(!pEntry->nWID)
     {
         if(aPropertyName ==SC_UNO_STANDARDDEC)
@@ -206,7 +206,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aPropertyN
     uno::Any aRet;
     const SfxItemPropertySimpleEntry* pEntry = aPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 
     if (!pEntry->nWID)
     {
@@ -251,7 +251,7 @@ beans::PropertyState SAL_CALL ScDocDefaultsObj::getPropertyState( const OUString
 
     const SfxItemPropertySimpleEntry* pEntry = aPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 
     beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
 
@@ -296,7 +296,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyToDefault( const OUString& aPropertyN
 
     const SfxItemPropertySimpleEntry* pEntry = aPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 
     if (pEntry->nWID)
     {
@@ -318,7 +318,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const OUString& aPropert
 
     const SfxItemPropertySimpleEntry* pEntry = aPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 
     uno::Any aRet;
     if (pEntry->nWID)

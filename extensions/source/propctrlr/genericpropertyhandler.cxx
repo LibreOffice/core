@@ -338,7 +338,7 @@ namespace pcr
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xComponent.is() )
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(_rPropertyName);
 
         return m_xComponent->getPropertyValue( _rPropertyName );
     }
@@ -347,7 +347,7 @@ namespace pcr
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xComponent.is() )
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(_rPropertyName);
 
         m_xComponent->setPropertyValue( _rPropertyName, _rValue );
     }
@@ -367,7 +367,7 @@ namespace pcr
 
         PropertyMap::const_iterator pos = m_aProperties.find( _rPropertyName );
         if ( pos == m_aProperties.end() )
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(_rPropertyName);
 
         Any aPropertyValue;
         if ( !_rControlValue.hasValue() )
@@ -393,7 +393,7 @@ namespace pcr
 
         PropertyMap::const_iterator pos = m_aProperties.find( _rPropertyName );
         if ( pos == m_aProperties.end() )
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(_rPropertyName);
 
         Any aControlValue;
         if ( !_rPropertyValue.hasValue() )
@@ -553,7 +553,7 @@ namespace pcr
 
         PropertyMap::const_iterator pos = m_aProperties.find( _rPropertyName );
         if ( pos == m_aProperties.end() )
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(_rPropertyName);
 
         LineDescriptor aDescriptor;
         aDescriptor.DisplayName = _rPropertyName;

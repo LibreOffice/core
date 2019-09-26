@@ -242,7 +242,7 @@ void SAL_CALL IFrameObject::setPropertyValue(const OUString& aPropertyName, cons
 {
     const SfxItemPropertySimpleEntry*  pEntry = maPropMap.getByName( aPropertyName );
     if( !pEntry )
-         throw beans::UnknownPropertyException();
+         throw beans::UnknownPropertyException(aPropertyName);
     switch( pEntry->nWID )
     {
     case WID_FRAME_URL:
@@ -322,7 +322,7 @@ uno::Any SAL_CALL IFrameObject::getPropertyValue(const OUString& aPropertyName)
 {
     const SfxItemPropertySimpleEntry*  pEntry = maPropMap.getByName( aPropertyName );
     if( !pEntry )
-         throw beans::UnknownPropertyException();
+         throw beans::UnknownPropertyException(aPropertyName);
     uno::Any aAny;
     switch( pEntry->nWID )
     {

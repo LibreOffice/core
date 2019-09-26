@@ -926,7 +926,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         }
         break;
         default:
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
 }
 
@@ -1382,7 +1382,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         }
         break;
         default:
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
 }
 

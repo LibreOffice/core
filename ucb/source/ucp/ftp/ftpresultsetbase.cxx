@@ -380,7 +380,7 @@ public:
             [&aName](const beans::Property& rProp) { return aName == rProp.Name; });
         if (pProp != m_aSeq.end())
             return *pProp;
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aName);
     }
 
     sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override
@@ -423,7 +423,7 @@ void SAL_CALL ResultSetBase::setPropertyValue(
         aPropertyName == "RowCount" )
         return;
 
-    throw beans::UnknownPropertyException();
+    throw beans::UnknownPropertyException(aPropertyName);
 }
 
 
@@ -440,7 +440,7 @@ uno::Any SAL_CALL ResultSetBase::getPropertyValue(
         return uno::Any(count);
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(PropertyName);
 }
 
 
@@ -466,7 +466,7 @@ void SAL_CALL ResultSetBase::addPropertyChangeListener(
         m_pRowCountListeners->addInterface( xListener );
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 }
 
 
@@ -487,7 +487,7 @@ void SAL_CALL ResultSetBase::removePropertyChangeListener(
         m_pRowCountListeners->removeInterface( aListener );
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 }
 
 

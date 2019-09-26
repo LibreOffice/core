@@ -590,7 +590,7 @@ TaskManager::deassociate( const OUString& aUnqPath,
 
     it1 = properties.find( oldProperty );
     if( it1 == properties.end() )
-        throw beans::UnknownPropertyException( THROW_WHERE );
+        throw beans::UnknownPropertyException( PropertyName );
 
     properties.erase( it1 );
 

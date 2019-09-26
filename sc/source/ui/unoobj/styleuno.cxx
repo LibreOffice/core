@@ -1201,7 +1201,7 @@ void SAL_CALL ScStyleObj::setPropertyToDefault( const OUString& aPropertyName )
 
     const SfxItemPropertySimpleEntry* pEntry = pPropSet->getPropertyMap().getByName( aPropertyName );
     if ( !pEntry )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 
     setPropertyValue_Impl( aPropertyName, pEntry, nullptr );
 }
@@ -1438,7 +1438,7 @@ void SAL_CALL ScStyleObj::setPropertyValue( const OUString& aPropertyName, const
 
     const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( aPropertyName );
     if ( !pEntry )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 
     setPropertyValue_Impl( aPropertyName, pEntry, &aValue );
 }

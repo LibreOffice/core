@@ -1840,7 +1840,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
     const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
 
     if(!pEntry)
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rPropertyName);
     if(pEntry->nFlags & PropertyAttribute::READONLY)
         throw PropertyVetoException();
     switch(pEntry->nWID)
@@ -2016,7 +2016,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
     const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
 
     if(!pEntry)
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rPropertyName);
     Any aAny;
     switch(pEntry->nWID)
     {
@@ -2261,7 +2261,7 @@ PropertyState SAL_CALL SwXTextDocument::getPropertyState( const OUString& rPrope
 
     const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
     if(!pEntry)
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rPropertyName);
     return PropertyState_DIRECT_VALUE;
 }
 
@@ -2284,7 +2284,7 @@ void SAL_CALL SwXTextDocument::setPropertyToDefault( const OUString& rPropertyNa
 
     const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
     if(!pEntry)
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rPropertyName);
     switch(pEntry->nWID)
     {
         case 0:default:break;
@@ -2299,7 +2299,7 @@ Any SAL_CALL SwXTextDocument::getPropertyDefault( const OUString& rPropertyName 
 
     const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
     if(!pEntry)
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rPropertyName);
     Any aAny;
     switch(pEntry->nWID)
     {
@@ -4135,9 +4135,9 @@ Reference< XPropertySetInfo >  SwXLinkNameAccessWrapper::getPropertySetInfo()
 }
 
 void SwXLinkNameAccessWrapper::setPropertyValue(
-    const OUString& , const Any& )
+    const OUString& rPropName, const Any& )
 {
-    throw UnknownPropertyException();
+    throw UnknownPropertyException(rPropName);
 }
 
 static Any lcl_GetDisplayBitmap(const OUString& _sLinkSuffix)
@@ -4182,7 +4182,7 @@ Any SwXLinkNameAccessWrapper::getPropertyValue(const OUString& rPropertyName)
         aRet = lcl_GetDisplayBitmap(sLinkSuffix);
     }
     else
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rPropertyName);
     return aRet;
 }
 
@@ -4240,15 +4240,15 @@ Reference< XPropertySetInfo >  SwXOutlineTarget::getPropertySetInfo()
 }
 
 void SwXOutlineTarget::setPropertyValue(
-    const OUString& /*PropertyName*/, const Any& /*aValue*/)
+    const OUString& rPropertyName, const Any& /*aValue*/)
 {
-    throw UnknownPropertyException();
+    throw UnknownPropertyException(rPropertyName);
 }
 
 Any SwXOutlineTarget::getPropertyValue(const OUString& rPropertyName)
 {
     if(rPropertyName != UNO_LINK_DISPLAY_NAME)
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(rPropertyName);
 
     return Any(sOutlineText);
 }

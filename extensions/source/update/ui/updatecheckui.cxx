@@ -406,7 +406,7 @@ void UpdateCheckUI::setPropertyValue(const OUString& rPropertyName,
         }
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rPropertyName);
 
     if ( mbBubbleChanged && mpBubbleWin )
         mpBubbleWin->Show( false );
@@ -432,7 +432,7 @@ uno::Any UpdateCheckUI::getPropertyValue(const OUString& rPropertyName)
     else if( rPropertyName == PROPERTY_SHOW_MENUICON )
         aRet <<= mbShowMenuIcon;
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(rPropertyName);
 
     return aRet;
 }

@@ -80,7 +80,7 @@ namespace comphelper
         sal_Int32 nHandle = rPH.getHandleByName(_rsName);
 
         if (nHandle == -1)
-            throw  css::beans::UnknownPropertyException();
+            throw  css::beans::UnknownPropertyException(_rsName);
 
         return getPropertyStateByHandle(nHandle);
     }
@@ -92,7 +92,7 @@ namespace comphelper
         sal_Int32 nHandle = rPH.getHandleByName(_rsName);
 
         if (nHandle == -1)
-            throw css::beans::UnknownPropertyException();
+            throw css::beans::UnknownPropertyException(_rsName);
 
         setPropertyToDefaultByHandle(nHandle);
     }
@@ -104,7 +104,7 @@ namespace comphelper
         sal_Int32 nHandle = rPH.getHandleByName(_rsName);
 
         if (nHandle == -1)
-            throw css::beans::UnknownPropertyException();
+            throw css::beans::UnknownPropertyException(_rsName);
 
         return getPropertyDefaultByHandle(nHandle);
     }

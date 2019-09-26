@@ -537,7 +537,7 @@ BaseContent::removeProperty( const OUString& Name )
 {
 
     if( m_nState & Deleted )
-        throw beans::UnknownPropertyException( THROW_WHERE );
+        throw beans::UnknownPropertyException( Name );
 
     m_pMyShell->deassociate( m_aUncPath, Name );
 }

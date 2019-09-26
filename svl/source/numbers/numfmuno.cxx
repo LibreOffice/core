@@ -694,7 +694,7 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
             aRet <<= OUString();
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 
     return aRet;
 }
@@ -847,7 +847,7 @@ void SAL_CALL SvNumberFormatSettingsObj::setPropertyValue( const OUString& aProp
             pFormatter->SetYear2000( nInt16 );
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 
 }
 
@@ -874,7 +874,7 @@ uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const OUString& a
     else if (aPropertyName == PROPERTYNAME_TWODIGIT)
         aRet <<= static_cast<sal_Int16>( pFormatter->GetYear2000() );
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException(aPropertyName);
 
     return aRet;
 }
