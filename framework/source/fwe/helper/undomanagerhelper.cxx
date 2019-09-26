@@ -248,7 +248,6 @@ namespace framework
         virtual void listActionEntered( const OUString& i_comment ) override;
         virtual void listActionLeft( const OUString& i_comment ) override;
         virtual void listActionCancelled() override;
-        virtual void undoManagerDying() override;
 
         // public operations
         void disposing();
@@ -824,11 +823,6 @@ namespace framework
             return;
 
         notify( OUString(), &XUndoManagerListener::cancelledContext );
-    }
-
-    void UndoManagerHelper_Impl::undoManagerDying()
-    {
-        // TODO: do we need to care? Or is this the responsibility of our owner?
     }
 
     //= UndoManagerHelper
