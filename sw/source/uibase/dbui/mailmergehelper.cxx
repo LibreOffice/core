@@ -36,7 +36,6 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 
 #include <sfx2/passwd.hxx>

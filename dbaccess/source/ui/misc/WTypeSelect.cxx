@@ -27,12 +27,11 @@
 #include <strings.hrc>
 #include <tools/stream.hxx>
 #include <svtools/svparser.hxx>
+#include <vcl/commandevent.hxx>
 #include <UITools.hxx>
 #include <core_resource.hxx>
 #include <sqlmessage.hxx>
 #include <FieldControls.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/builderfactory.hxx>
 
 #include <dbaccess_slotid.hrc>
 
