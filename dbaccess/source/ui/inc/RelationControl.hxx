@@ -19,9 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONCONTROL_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONCONTROL_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/builder.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include "JoinTableView.hxx"
 
 namespace dbaui
@@ -32,16 +30,19 @@ namespace dbaui
 
     class OTableListBoxControl final
     {
-        VclPtr<ListBox>                                m_pLeftTable;
-        VclPtr<ListBox>                                m_pRightTable;
-        VclPtr<ORelationControl>                       m_pRC_Tables;
+        std::unique_ptr<weld::ComboBox> m_xLeftTable;
+        std::unique_ptr<weld::ComboBox> m_xRightTable;
+        std::unique_ptr<weld::Container> m_xTable;
+        css::uno::Reference<css::awt::XWindow> m_xTableCtrlParent;
+        VclPtr<ORelationControl> m_xRC_Tables;
+
         const OJoinTableView::OTableWindowMap*  m_pTableMap;
         IRelationControlInterface*              m_pParentDialog;
         OUString                                m_strCurrentLeft;
         OUString                                m_strCurrentRight;
-        DECL_LINK( OnTableChanged, ListBox&, void );
+        DECL_LINK( OnTableChanged, weld::ComboBox&, void );
     public:
-        OTableListBoxControl(VclBuilderContainer* _pParent,
+        OTableListBoxControl(weld::Builder* _pParent,
                              const OJoinTableView::OTableWindowMap* _pTableMap,
                              IRelationControlInterface* _pParentDialog);
         ~OTableListBoxControl();

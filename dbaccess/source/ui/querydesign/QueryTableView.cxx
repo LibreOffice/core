@@ -84,11 +84,11 @@ namespace
     {
         OQueryTableConnectionData* pData = static_cast< OQueryTableConnectionData*>(_pConnectionData.get());
 
-        ScopedVclPtrInstance< DlgQryJoin > aDlg(_pView,_pConnectionData,&_pView->GetTabWinMap(),_pView->getDesignView()->getController().getConnection(),_bSelectableTables);
-        bool bOk = aDlg->Execute() == RET_OK;
+        DlgQryJoin aDlg(_pView,_pConnectionData,&_pView->GetTabWinMap(),_pView->getDesignView()->getController().getConnection(),_bSelectableTables);
+        bool bOk = aDlg.run() == RET_OK;
         if( bOk )
         {
-            pData->SetJoinType(aDlg->GetJoinType());
+            pData->SetJoinType(aDlg.GetJoinType());
             _pView->getDesignView()->getController().setModified(true);
         }
 

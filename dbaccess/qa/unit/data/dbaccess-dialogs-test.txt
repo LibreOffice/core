@@ -34,7 +34,7 @@
 # This is typically a hint that these should be hard-coded in the
 # test case since they need some document and model data to work
 # dbaccess/ui/joindialog.ui <- not calling ORelationControl::lateInit for
-#   DlgQryJoin::m_pTableControl member OTableListBoxControl::m_pRC_Tables leaves its
+#   DlgQryJoin::m_xTableControl member OTableListBoxControl::m_pRC_Tables leaves its
 #   BrowseBox::mvCols empty, causing "implicit conversion from type 'int' of value -1 (32-bit,
 #   signed) to type 'sal_uInt16' (aka 'unsigned short') changed the value to 65535 (16-bit,
 #   unsigned)" when calling

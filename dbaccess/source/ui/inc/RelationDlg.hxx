@@ -20,9 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDLG_HXX
 
 #include <memory>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 #include "JoinTableView.hxx"
 #include "RelControliFace.hxx"
 #include "RelationControl.hxx"
@@ -30,35 +28,33 @@
 namespace dbaui
 {
     class OJoinTableView;
-    class ORelationDialog final : public ModalDialog
-                            ,public IRelationControlInterface
+    class ORelationDialog final : public weld::GenericDialogController
+                                , public IRelationControlInterface
     {
+        VclPtr<OJoinTableView> m_pParent;
+        TTableConnectionData::value_type m_pConnData;
+        TTableConnectionData::value_type m_pOrigConnData;
+        bool m_bTriedOneUpdate;
+
+        std::unique_ptr<weld::RadioButton> m_xRB_NoCascUpd;
+        std::unique_ptr<weld::RadioButton> m_xRB_CascUpd;
+        std::unique_ptr<weld::RadioButton> m_xRB_CascUpdNull;
+        std::unique_ptr<weld::RadioButton> m_xRB_CascUpdDefault;
+        std::unique_ptr<weld::RadioButton> m_xRB_NoCascDel;
+        std::unique_ptr<weld::RadioButton> m_xRB_CascDel;
+        std::unique_ptr<weld::RadioButton> m_xRB_CascDelNull;
+        std::unique_ptr<weld::RadioButton> m_xRB_CascDelDefault;
+        std::unique_ptr<weld::Button> m_xPB_OK;
+
         std::unique_ptr<OTableListBoxControl> m_xTableControl;
-
-        VclPtr<RadioButton> m_pRB_NoCascUpd;
-        VclPtr<RadioButton> m_pRB_CascUpd;
-        VclPtr<RadioButton> m_pRB_CascUpdNull;
-        VclPtr<RadioButton> m_pRB_CascUpdDefault;
-        VclPtr<RadioButton> m_pRB_NoCascDel;
-        VclPtr<RadioButton> m_pRB_CascDel;
-        VclPtr<RadioButton> m_pRB_CascDelNull;
-        VclPtr<RadioButton> m_pRB_CascDelDefault;
-
-        VclPtr<OKButton>    m_pPB_OK;
-
-        TTableConnectionData::value_type                 m_pConnData;
-        TTableConnectionData::value_type                 m_pOrigConnData;
-
-        bool                                             m_bTriedOneUpdate;
 
     public:
         ORelationDialog(OJoinTableView* pParent,
                         const TTableConnectionData::value_type& pConnectionData,
                         bool bAllowTableSelect = false );
         virtual ~ORelationDialog() override;
-        virtual void dispose() override;
 
-        virtual short Execute() override;
+        virtual short run() override;
 
         /** setValid set the valid inside, can be used for OK buttons
             @param  _bValid true when the using control allows an update
@@ -72,7 +68,7 @@ namespace dbaui
     private:
         void Init(const TTableConnectionData::value_type& _pConnectionData);
 
-        DECL_LINK( OKClickHdl, Button*, void );
+        DECL_LINK(OKClickHdl, weld::Button&, void);
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDLG_HXX
