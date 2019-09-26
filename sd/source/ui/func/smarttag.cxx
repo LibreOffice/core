@@ -51,12 +51,6 @@ bool SmartTag::KeyInput( const KeyEvent& /*rKEvt*/ )
 }
 
 /** returns true if the SmartTag consumes this event. */
-bool SmartTag::RequestHelp( const HelpEvent& /*rHEvt*/ )
-{
-    return false;
-}
-
-/** returns true if the SmartTag consumes this event. */
 bool SmartTag::Command( const CommandEvent& /*rCEvt*/ )
 {
     return false;
@@ -228,25 +222,6 @@ bool SmartTagSet::KeyInput( const KeyEvent& rKEvt )
     return false;
 }
 
-bool SmartTagSet::RequestHelp( const HelpEvent& rHEvt )
-{
-    Point aMDPos( mrView.GetViewShell()->GetActiveWindow()->PixelToLogic( rHEvt.GetMousePosPixel() ) );
-    SdrHdl* pHdl = mrView.PickHandle(aMDPos);
-
-    if( pHdl )
-    {
-        // if a smart tag handle is hit, forward event to its smart tag
-        SmartHdl* pSmartHdl = dynamic_cast< SmartHdl* >( pHdl );
-        if(pSmartHdl && pSmartHdl->getTag().is() )
-        {
-            const SmartTagReference& xTag( pSmartHdl->getTag() );
-            return xTag->RequestHelp( rHEvt );
-        }
-    }
-
-    return false;
-}
-
 /** returns true if the SmartTag consumes this event. */
 bool SmartTagSet::Command( const CommandEvent& rCEvt )
 {
@@ -319,13 +294,6 @@ sal_uLong SmartTagSet::GetMarkedPointCount() const
         return 0;
 }
 
-bool SmartTagSet::IsPointMarkable(const SdrHdl& rHdl)
-{
-    const SmartHdl* pSmartHdl = dynamic_cast< const SmartHdl* >( &rHdl );
-
-    return pSmartHdl && pSmartHdl->isMarkable();
-}
-
 bool SmartTagSet::MarkPoint(SdrHdl& rHdl, bool bUnmark )
 {
     if( mxSelectedTag.is() )
@@ -358,11 +326,6 @@ SmartHdl::SmartHdl( const SmartTagReference& xTag, const Point& rPnt, SdrHdlKind
 : SdrHdl( rPnt, eNewKind )
 , mxSmartTag( xTag )
 {
-}
-
-bool SmartHdl::isMarkable() const
-{
-    return false;
 }
 
 } // end of namespace sd
