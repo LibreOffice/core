@@ -47,32 +47,6 @@ RedlinData::~RedlinData()
 {
 }
 
-SvLBoxColorString::SvLBoxColorString()
-: SvLBoxString()
-{
-}
-
-SvLBoxColorString::~SvLBoxColorString()
-{
-}
-
-std::unique_ptr<SvLBoxItem> SvLBoxColorString::Clone(SvLBoxItem const *) const
-{
-    return std::unique_ptr<SvLBoxItem>(new SvLBoxColorString);
-}
-
-void SvLBoxColorString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                              const SvViewDataEntry* pView, const SvTreeListEntry& rEntry)
-{
-    Color aColor = rRenderContext.GetTextColor();
-    if (!pView->IsSelected())
-    {
-        rRenderContext.SetTextColor(Color());
-    }
-    SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, rEntry);
-    rRenderContext.SetTextColor(aColor);
-}
-
 SvxRedlinTable::SvxRedlinTable(std::unique_ptr<weld::TreeView> xWriterControl,
                                std::unique_ptr<weld::TreeView> xCalcControl)
     : xSorter(new comphelper::string::NaturalStringSorter(::comphelper::getProcessComponentContext(),

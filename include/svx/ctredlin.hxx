@@ -58,23 +58,6 @@ public:
     void*           pData;
 };
 
-/// Class for the representation of Strings depending on the font.
-class SAL_WARN_UNUSED SvLBoxColorString : public SvLBoxString
-{
-public:
-                    SvLBoxColorString();
-                    virtual ~SvLBoxColorString() override;
-
-    /** Paint function of the SvLBoxColorString class.
-
-        The relevant text with the selected color is drawn in the output device.
-    */
-    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
-
-    virtual std::unique_ptr<SvLBoxItem> Clone(SvLBoxItem const * pSource) const override;
-};
-
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRedlinTable
 {
 private:
