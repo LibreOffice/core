@@ -13,9 +13,6 @@ chart2/source/controller/dialogs/ChartTypeDialogController.hxx:99
 chart2/source/controller/sidebar/ChartSidebarSelectionListener.hxx:30
     void chart::sidebar::ChartSidebarSelectionListenerParent::SelectionInvalid()
     empty
-dbaccess/source/ui/inc/IUpdateHelper.hxx:38
-    void dbaui::IUpdateHelper::moveToInsertRow()
-    empty
 desktop/source/deployment/registry/inc/dp_backenddb.hxx:119
     class rtl::OUString dp_registry::backend::BackendDb::getDbNSName()
     "http://openoffi
