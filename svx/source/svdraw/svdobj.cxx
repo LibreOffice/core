@@ -2182,11 +2182,6 @@ void SdrObject::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemove
 // Broadcasting while setting attributes is managed by the AttrObj.
 
 
-bool SdrObject::IsNode() const
-{
-    return true;
-}
-
 SdrGluePoint SdrObject::GetVertexGluePoint(sal_uInt16 nPosNum) const
 {
     // #i41936# Use SnapRect for default GluePoints

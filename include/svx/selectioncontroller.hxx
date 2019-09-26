@@ -64,9 +64,6 @@ public:
     virtual SdrObject* GetMarkedSdrObjClone( SdrModel& rTargetModel );
     virtual bool PasteObjModel( const SdrModel& rModel );
 
-    /** returns a format paint brush set from the current selection */
-    virtual bool TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& rFormatSet  );
-
     /** applies a format paint brush set from the current selection.
         if bNoCharacterFormats is true, no character attributes are changed.
         if bNoParagraphFormats is true, no paragraph attributes are changed.

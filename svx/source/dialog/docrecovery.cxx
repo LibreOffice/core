@@ -352,8 +352,6 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
     //    FeatureDescriptor = "start" || "stop"
     if (aEvent.FeatureDescriptor == RECOVERY_OPERATIONSTATE_START)
     {
-        if (m_pListener)
-            m_pListener->start();
         return;
     }
 
@@ -632,10 +630,6 @@ void SaveProgressDialog::stepNext(TURLInfo* )
     */
 }
 
-void SaveProgressDialog::start()
-{
-}
-
 void SaveProgressDialog::end()
 {
     m_xDialog->response(DLG_RET_OK);
@@ -875,10 +869,6 @@ short RecoveryDialog::execute()
     // should never be reached .-)
     OSL_FAIL("Should never be reached!");
     return DLG_RET_OK;
-}
-
-void RecoveryDialog::start()
-{
 }
 
 void RecoveryDialog::updateItems()
