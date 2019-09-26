@@ -20,6 +20,7 @@
 
 #include <tools/urlobj.hxx>
 #include <tools/fract.hxx>
+#include <tools/GenericTypeSerializer.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mapmod.hxx>
@@ -162,7 +163,8 @@ void IMapRectangleObject::ImpConstruct( const tools::Rectangle& rRect, bool bPix
 
 void IMapRectangleObject::WriteIMapObject( SvStream& rOStm ) const
 {
-    WriteRectangle( rOStm, aRect );
+    tools::GenericTypeSerializer aSerializer(rOStm);
+    aSerializer.writeRectangle(aRect);
 }
 
 
@@ -174,7 +176,8 @@ void IMapRectangleObject::WriteIMapObject( SvStream& rOStm ) const
 
 void IMapRectangleObject::ReadIMapObject( SvStream& rIStm )
 {
-    ReadRectangle( rIStm, aRect );
+    tools::GenericTypeSerializer aSerializer(rIStm);
+    aSerializer.readRectangle(aRect);
 }
 
 
@@ -271,8 +274,8 @@ void IMapCircleObject::ImpConstruct( const Point& rCenter, sal_uLong nRad, bool 
 void IMapCircleObject::WriteIMapObject( SvStream& rOStm ) const
 {
     sal_uInt32 nTmp = nRadius;
-
-    WritePair( rOStm, aCenter );
+    tools::GenericTypeSerializer aSerializer(rOStm);
+    aSerializer.writePoint(aCenter);
     rOStm.WriteUInt32( nTmp );
 }
 
@@ -287,7 +290,8 @@ void IMapCircleObject::ReadIMapObject( SvStream& rIStm )
 {
     sal_uInt32 nTmp;
 
-    ReadPair( rIStm, aCenter );
+    tools::GenericTypeSerializer aSerializer(rIStm);
+    aSerializer.readPoint(aCenter);
     rIStm.ReadUInt32( nTmp );
 
     nRadius = nTmp;
@@ -406,9 +410,11 @@ void IMapPolygonObject::ImpConstruct( const tools::Polygon& rPoly, bool bPixel )
 
 void IMapPolygonObject::WriteIMapObject( SvStream& rOStm ) const
 {
+    tools::GenericTypeSerializer aSerializer(rOStm);
     WritePolygon( rOStm, aPoly );
-    rOStm.WriteBool( bEllipse );  // >= Version 2
-    WriteRectangle( rOStm, aEllipse );  // >= Version 2
+    // Version 2
+    rOStm.WriteBool( bEllipse );
+    aSerializer.writeRectangle(aEllipse);
 }
 
 
@@ -426,7 +432,8 @@ void IMapPolygonObject::ReadIMapObject( SvStream& rIStm )
     if ( nReadVersion >= 2 )
     {
         rIStm.ReadCharAsBool( bEllipse );
-        ReadRectangle( rIStm, aEllipse );
+        tools::GenericTypeSerializer aSerializer(rIStm);
+        aSerializer.readRectangle(aEllipse);
     }
 }
 

@@ -48,8 +48,6 @@ public:
     long&               B() { return nB; }
 
     TOOLS_DLLPUBLIC rtl::OString        toString() const;
-    TOOLS_DLLPUBLIC friend SvStream&    ReadPair( SvStream& rIStream, Pair& rPair );
-    TOOLS_DLLPUBLIC friend SvStream&    WritePair( SvStream& rOStream, const Pair& rPair );
 
 protected:
     long                nA;
@@ -448,9 +446,6 @@ public:
     friend inline tools::Rectangle operator + ( const tools::Rectangle& rRect, const Point& rPt );
     friend inline tools::Rectangle operator - ( const tools::Rectangle& rRect, const Point& rPt );
 
-    TOOLS_DLLPUBLIC friend SvStream&    ReadRectangle( SvStream& rIStream, tools::Rectangle& rRect );
-    TOOLS_DLLPUBLIC friend SvStream&    WriteRectangle( SvStream& rOStream, const tools::Rectangle& rRect );
-
     // ONE
     long                getX() const { return nLeft; }
     long                getY() const { return nTop; }
@@ -732,11 +727,6 @@ inline std::basic_ostream<charT, traits> & operator <<(
         return stream << rectangle.getWidth() << 'x' << rectangle.getHeight()
                       << "@(" << rectangle.getX() << ',' << rectangle.getY() << ")";
 }
-
-inline SvStream& ReadPair( SvStream& rIStream, Point& v ) { return ReadPair(rIStream, v.toPair()); }
-inline SvStream& WritePair( SvStream& rOStream, const Point& v ) { return WritePair(rOStream, v.toPair()); }
-inline SvStream& ReadPair( SvStream& rIStream, Size& v ) { return ReadPair(rIStream, v.toPair()); }
-inline SvStream& WritePair( SvStream& rOStream, const Size& v ) { return WritePair(rOStream, v.toPair()); }
 
 #endif
 

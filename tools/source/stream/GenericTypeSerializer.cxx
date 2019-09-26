@@ -26,6 +26,8 @@ namespace tools
 {
 constexpr sal_uInt16 COL_NAME_USER = 0x8000;
 
+constexpr sal_Int32 RECT_EMPTY_VALUE_RIGHT_BOTTOM = -32767;
+
 void GenericTypeSerializer::readColor(Color& rColor)
 {
     sal_uInt16 nColorNameID(0);
@@ -98,6 +100,85 @@ void GenericTypeSerializer::writeColor(const Color& rColor)
     mrStream.WriteUInt16((nR << 8) + nR);
     mrStream.WriteUInt16((nG << 8) + nG);
     mrStream.WriteUInt16((nB << 8) + nB);
+}
+
+void GenericTypeSerializer::readPoint(Point& rPoint)
+{
+    sal_Int32 nX(0);
+    sal_Int32 nY(0);
+
+    mrStream.ReadInt32(nX);
+    mrStream.ReadInt32(nY);
+
+    rPoint.setX(nX);
+    rPoint.setY(nY);
+}
+
+void GenericTypeSerializer::writePoint(const Point& rPoint)
+{
+    mrStream.WriteInt32(rPoint.getX());
+    mrStream.WriteInt32(rPoint.getY());
+}
+
+void GenericTypeSerializer::readSize(Size& rSize)
+{
+    sal_Int32 nWidth(0);
+    sal_Int32 nHeight(0);
+
+    mrStream.ReadInt32(nWidth);
+    mrStream.ReadInt32(nHeight);
+
+    rSize.setWidth(nWidth);
+    rSize.setHeight(nHeight);
+}
+
+void GenericTypeSerializer::writeSize(const Size& rSize)
+{
+    mrStream.WriteInt32(rSize.getWidth());
+    mrStream.WriteInt32(rSize.getHeight());
+}
+
+void GenericTypeSerializer::readRectangle(Rectangle& rRectangle)
+{
+    sal_Int32 nLeft(0);
+    sal_Int32 nTop(0);
+    sal_Int32 nRight(0);
+    sal_Int32 nBottom(0);
+
+    mrStream.ReadInt32(nLeft);
+    mrStream.ReadInt32(nTop);
+    mrStream.ReadInt32(nRight);
+    mrStream.ReadInt32(nBottom);
+
+    if (nRight == RECT_EMPTY_VALUE_RIGHT_BOTTOM || nBottom == RECT_EMPTY_VALUE_RIGHT_BOTTOM)
+    {
+        rRectangle.SetEmpty();
+    }
+    else
+    {
+        rRectangle.SetLeft(nLeft);
+        rRectangle.SetTop(nTop);
+        rRectangle.SetRight(nRight);
+        rRectangle.SetBottom(nBottom);
+    }
+}
+
+void GenericTypeSerializer::writeRectangle(const Rectangle& rRectangle)
+{
+    if (rRectangle.IsEmpty())
+    {
+        mrStream.WriteInt32(0);
+        mrStream.WriteInt32(0);
+        mrStream.WriteInt32(RECT_EMPTY_VALUE_RIGHT_BOTTOM);
+        mrStream.WriteInt32(RECT_EMPTY_VALUE_RIGHT_BOTTOM);
+    }
+    else
+    {
+        mrStream.WriteInt32(rRectangle.Left());
+        mrStream.WriteInt32(rRectangle.Top());
+        mrStream.WriteInt32(rRectangle.Right());
+        mrStream.WriteInt32(rRectangle.Bottom());
+    }
 }
 
 } // end namespace tools

@@ -22,7 +22,6 @@
 #include <osl/thread.h>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
-#include <tools/GenericTypeSerializer.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/lineinfo.hxx>
@@ -41,14 +40,17 @@ static void ImplReadRect( SvStream& rIStm, tools::Rectangle& rRect )
     Point aTL;
     Point aBR;
 
-    ReadPair( rIStm, aTL );
-    ReadPair( rIStm, aBR );
+    TypeSerializer aSerializer(rIStm);
+    aSerializer.readPoint(aTL);
+    aSerializer.readPoint(aBR);
 
     rRect = tools::Rectangle( aTL, aBR );
 }
 
 static bool ImplReadPoly(SvStream& rIStm, tools::Polygon& rPoly)
 {
+    TypeSerializer aSerializer(rIStm);
+
     sal_Int32 nSize32(0);
     rIStm.ReadInt32(nSize32);
     sal_uInt16 nSize = nSize32;
@@ -63,8 +65,9 @@ static bool ImplReadPoly(SvStream& rIStm, tools::Polygon& rPoly)
     rPoly = tools::Polygon(nSize);
 
     for (sal_uInt16 i = 0; i < nSize && rIStm.good(); ++i)
-        ReadPair(rIStm, rPoly[i]);
-
+    {
+        aSerializer.readPoint(rPoly[i]);
+    }
     return rIStm.good();
 }
 
@@ -105,7 +108,8 @@ static bool ImplReadMapMode(SvStream& rIStm, MapMode& rMapMode)
     rIStm.ReadInt16(nUnit);
 
     Point aOrg;
-    ReadPair(rIStm, aOrg);
+    TypeSerializer aSerializer(rIStm);
+    aSerializer.readPoint(aOrg);
 
     sal_Int32 nXNum(0), nXDenom(0), nYNum(0), nYDenom(0);
     rIStm.ReadInt32(nXNum).ReadInt32(nXDenom).ReadInt32(nYNum).ReadInt32(nYDenom);
@@ -163,6 +167,8 @@ static void ImplSkipActions(SvStream& rIStm, sal_uLong nSkipCount)
 
 static void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, tools::PolyPolygon& rPolyPoly)
 {
+    TypeSerializer aSerializer(rIStm);
+
     rPolyPoly.Clear();
     sal_uInt16 nPolygonCount(0);
     rIStm.ReadUInt16( nPolygonCount );
@@ -199,7 +205,7 @@ static void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, tools::PolyPolygo
         {
             for(sal_uInt16 b(0); b < nPointCount; b++)
             {
-                ReadPair( rIStm , aCandidate[b] );
+                aSerializer.readPoint(aCandidate[b]);
             }
 
             sal_uInt8 bHasFlags(int(false));
@@ -332,6 +338,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
     size_t nLastPolygonAction(0);
 
+    TypeSerializer aSerializer(rIStm);
+
     for (sal_Int32 i = 0; i < nActions && rIStm.good(); ++i)
     {
         sal_Int16 nType(0);
@@ -346,7 +354,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
         {
             case GDI_PIXEL_ACTION:
             {
-                ReadPair( rIStm, aPt );
+                aSerializer.readPoint(aPt);
                 ImplReadColor( rIStm, aActionColor );
                 rMtf.AddAction( new MetaPixelAction( aPt, aActionColor ) );
             }
@@ -354,15 +362,15 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
             case GDI_POINT_ACTION:
             {
-                ReadPair( rIStm, aPt );
+                aSerializer.readPoint(aPt);
                 rMtf.AddAction( new MetaPointAction( aPt ) );
             }
             break;
 
             case GDI_LINE_ACTION:
             {
-                ReadPair( rIStm, aPt );
-                ReadPair( rIStm, aPt1 );
+                aSerializer.readPoint(aPt);
+                aSerializer.readPoint(aPt1);
                 rMtf.AddAction( new MetaLineAction( aPt, aPt1, aLineInfo ) );
             }
             break;
@@ -505,8 +513,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             case GDI_ARC_ACTION:
             {
                 ImplReadRect( rIStm, aRect );
-                ReadPair( rIStm, aPt );
-                ReadPair( rIStm, aPt1 );
+                aSerializer.readPoint(aPt);
+                aSerializer.readPoint(aPt1);
 
                 if( bFatLine )
                 {
@@ -526,8 +534,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             case GDI_PIE_ACTION:
             {
                 ImplReadRect( rIStm, aRect );
-                ReadPair( rIStm, aPt );
-                ReadPair( rIStm, aPt1 );
+                aSerializer.readPoint(aPt);
+                aSerializer.readPoint(aPt1);
 
                 if( bFatLine )
                 {
@@ -667,8 +675,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             case GDI_TEXT_ACTION:
             {
                 sal_Int32 nIndex(0), nLen(0), nTmp(0);
-
-                ReadPair( rIStm, aPt ).ReadInt32( nIndex ).ReadInt32( nLen ).ReadInt32( nTmp );
+                aSerializer.readPoint(aPt);
+                rIStm.ReadInt32( nIndex ).ReadInt32( nLen ).ReadInt32( nTmp );
                 if (nTmp > 0)
                 {
                     OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
@@ -692,8 +700,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             case GDI_TEXTARRAY_ACTION:
             {
                 sal_Int32 nIndex(0), nLen(0), nAryLen(0), nTmp(0);
-
-                ReadPair( rIStm, aPt ).ReadInt32( nIndex ).ReadInt32( nLen ).ReadInt32( nTmp ).ReadInt32( nAryLen );
+                aSerializer.readPoint(aPt);
+                rIStm.ReadInt32( nIndex ).ReadInt32( nLen ).ReadInt32( nTmp ).ReadInt32( nAryLen );
                 if (nTmp > 0)
                 {
                     OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
@@ -783,7 +791,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             {
                 sal_Int32 nIndex(0), nLen(0), nWidth(0), nTmp(0);
 
-                ReadPair( rIStm, aPt ).ReadInt32( nIndex ).ReadInt32( nLen ).ReadInt32( nTmp ).ReadInt32( nWidth );
+                aSerializer.readPoint(aPt);
+                rIStm.ReadInt32( nIndex ).ReadInt32( nLen ).ReadInt32( nTmp ).ReadInt32( nWidth );
                 if (nTmp > 0)
                 {
                     OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
@@ -808,7 +817,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             {
                 Bitmap aBmp;
 
-                ReadPair( rIStm, aPt );
+                aSerializer.readPoint(aPt);
                 ReadDIB(aBmp, rIStm, true);
                 rMtf.AddAction( new MetaBmpAction( aPt, aBmp ) );
             }
@@ -818,8 +827,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             {
                 Bitmap aBmp;
 
-                ReadPair( rIStm, aPt );
-                ReadPair( rIStm, aSz );
+                aSerializer.readPoint(aPt);
+                aSerializer.readSize(aSz);
                 ReadDIB(aBmp, rIStm, true);
                 rMtf.AddAction( new MetaBmpScaleAction( aPt, aSz, aBmp ) );
             }
@@ -830,10 +839,10 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 Bitmap  aBmp;
                 Size    aSz2;
 
-                ReadPair( rIStm, aPt );
-                ReadPair( rIStm, aSz );
-                ReadPair( rIStm, aPt1 );
-                ReadPair( rIStm, aSz2 );
+                aSerializer.readPoint(aPt);
+                aSerializer.readSize(aSz);
+                aSerializer.readPoint(aPt1);
+                aSerializer.readSize(aSz2);
                 ReadDIB(aBmp, rIStm, true);
                 rMtf.AddAction( new MetaBmpScalePartAction( aPt, aSz, aPt1, aSz2, aBmp ) );
             }
@@ -1079,9 +1088,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 sal_Int32   nFollowingActionCount(0);
 
                 ReadGDIMetaFile( rIStm, aMtf );
-                ReadPair( rIStm, aPos );
-                ReadPair( rIStm, aSize );
-                TypeSerializer aSerializer(rIStm);
+                aSerializer.readPoint(aPos);
+                aSerializer.readSize(aSize);
                 aSerializer.readGradient(aGradient);
                 rIStm.ReadInt32( nFollowingActionCount );
                 ImplSkipActions( rIStm, nFollowingActionCount );
@@ -1113,7 +1121,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 bool    bSet;
                 sal_Int32 nFollowingActionCount(0);
 
-                ReadPair( rIStm, aRefPoint );
+                aSerializer.readPoint(aRefPoint);
                 rIStm.ReadCharAsBool( bSet ).ReadInt32( nFollowingActionCount );
                 ImplSkipActions( rIStm, nFollowingActionCount );
                 rMtf.AddAction( new MetaRefPointAction( aRefPoint, bSet ) );
@@ -1134,7 +1142,6 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 bool    bSet;
                 sal_Int32 nFollowingActionCount(0);
 
-                tools::GenericTypeSerializer aSerializer(rIStm);
                 aSerializer.readColor(aColor);
                 rIStm.ReadCharAsBool( bSet ).ReadInt32( nFollowingActionCount );
                 ImplSkipActions( rIStm, nFollowingActionCount );
@@ -1152,7 +1159,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 sal_uInt32 nUnderline(0);
                 sal_Int32  nFollowingActionCount(0);
 
-                ReadPair( rIStm, aStartPt );
+                aSerializer.readPoint(aStartPt);
                 rIStm.ReadInt32(nWidth ).ReadUInt32(nStrikeout).ReadUInt32(nUnderline).ReadInt32(nFollowingActionCount);
                 ImplSkipActions(rIStm, nFollowingActionCount);
                 rMtf.AddAction( new MetaTextLineAction( aStartPt, nWidth,
@@ -1171,7 +1178,6 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 sal_Int32 nFollowingActionCount(0);
 
                 ReadPolyPolygon( rIStm, aPolyPoly );
-                TypeSerializer aSerializer(rIStm);
                 aSerializer.readGradient(aGradient);
                 rIStm.ReadInt32( nFollowingActionCount );
                 ImplSkipActions( rIStm, nFollowingActionCount );

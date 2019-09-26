@@ -39,6 +39,7 @@
 #include <vcl/mtfxmldump.hxx>
 
 #include <svmconverter.hxx>
+#include <TypeSerializer.hxx>
 
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/rendering/MtfRenderer.hpp>
@@ -2646,7 +2647,8 @@ SvStream& ReadGDIMetaFile(SvStream& rIStm, GDIMetaFile& rGDIMetaFile, ImplMetaRe
 
             rIStm.ReadUInt32( nStmCompressMode );
             ReadMapMode( rIStm, rGDIMetaFile.m_aPrefMapMode );
-            ReadPair( rIStm, rGDIMetaFile.m_aPrefSize );
+            TypeSerializer aSerializer(rIStm);
+            aSerializer.readSize(rGDIMetaFile.m_aPrefSize);
             rIStm.ReadUInt32( nCount );
 
             pCompat.reset(); // destructor writes stuff into the header
@@ -2730,7 +2732,8 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
 
     rOStm.WriteUInt32( static_cast<sal_uInt32>(nStmCompressMode) );
     WriteMapMode( rOStm, m_aPrefMapMode );
-    WritePair( rOStm, m_aPrefSize );
+    TypeSerializer aSerializer(rOStm);
+    aSerializer.writeSize(m_aPrefSize);
     rOStm.WriteUInt32( GetActionSize() );
 
     delete pCompat;
