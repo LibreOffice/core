@@ -65,7 +65,6 @@ public:
     virtual ErrCode PutText( const OUString&, const OUString&, const OUString& ) override;
     virtual ErrCode MakeBlockList() override;
 
-    virtual FileType GetFileType() const override;
     virtual ErrCode OpenFile( bool bReadOnly = true ) override;
     virtual void  CloseFile() override;
 

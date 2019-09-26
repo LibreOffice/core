@@ -78,7 +78,6 @@ protected:
         XML      // XML Block List
     };
     static FileType GetFileType( const OUString& );
-    virtual FileType GetFileType() const = 0;
 
     virtual void   ClearDoc();          // Delete Doc content
     std::unique_ptr<SwPaM> MakePaM();   // Span PaM over Doc
