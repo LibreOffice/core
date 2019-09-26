@@ -26,8 +26,6 @@
 #include <bitmaps.hlst>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/builderfactory.hxx>
-#include <vcl/treelistentry.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 
 using namespace ::dbaui;
