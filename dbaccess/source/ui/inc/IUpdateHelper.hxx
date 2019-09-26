@@ -35,7 +35,6 @@ namespace dbaui
         virtual void updateDate(sal_Int32 _nPos,const css::util::Date& _nValue) = 0;
         virtual void updateTime(sal_Int32 _nPos,const css::util::Time& _nValue) = 0;
         virtual void updateTimestamp(sal_Int32 _nPos,const css::util::DateTime& _nValue) = 0;
-        virtual void moveToInsertRow() = 0;
         virtual void insertRow() = 0;
 
     protected:

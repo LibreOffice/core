@@ -134,29 +134,15 @@ void ORTFReader::NextToken( int nToken )
 
             case RTF_TROWD:
                 {
-                    bool bInsertRow = true;
                     if ( !m_xTable.is() ) // use first line as header
                     {
                         sal_uInt64 const nTell = rInput.Tell(); // perhaps alters position of the stream
 
                         m_bError = !CreateTable(nToken);
-                        bInsertRow = m_bAppendFirstLine;
                         if ( m_bAppendFirstLine )
                         {
                             rInput.Seek(nTell);
                             rInput.ResetError();
-                        }
-                    }
-                    if ( bInsertRow && !m_bError)
-                    {
-                        try
-                        {
-                            m_pUpdateHelper->moveToInsertRow(); // otherwise append new line
-                        }
-                        catch(SQLException& e)
-                        // handling update failure
-                        {
-                            showErrorDialog(e);
                         }
                     }
                 }

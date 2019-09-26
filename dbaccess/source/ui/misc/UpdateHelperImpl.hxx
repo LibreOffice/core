@@ -69,9 +69,6 @@ namespace dbaui
         {
             m_xParameters->setNull(_nPos,sqlType);
         }
-        virtual void moveToInsertRow() override
-        {
-        }
         virtual void insertRow() override
         {
             m_xPrepared->executeUpdate();
