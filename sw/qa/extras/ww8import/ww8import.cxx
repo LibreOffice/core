@@ -86,6 +86,14 @@ DECLARE_WW8IMPORT_TEST(testTdf107773, "tdf107773.doc")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
 }
 
+DECLARE_WW8IMPORT_TEST(testTdf124601, "tdf124601.doc")
+{
+    // Without the accompanying fix in place, this test would have failed, as the importer lost the
+    // fLayoutInCell shape property for wrap-though shapes.
+    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName("Grafik 18"), "IsFollowingTextFlow"));
+    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName("Grafik 19"), "IsFollowingTextFlow"));
+}
+
 DECLARE_WW8IMPORT_TEST(testTdf112535, "tdf112535.doc")
 {
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());

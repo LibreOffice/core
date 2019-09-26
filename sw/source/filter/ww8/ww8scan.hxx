@@ -1239,6 +1239,8 @@ public:
     sal_Int32  m_fcIslandFirst = 0;   // ?
     sal_Int32  m_fcIslandLim = 0;     // ?
     sal_uInt16 m_cfclcb = 0; // Number of fields in the array of FC/LCB pairs.
+    /// Specifies the count of 16-bit values corresponding to fibRgCswNew that follow.
+    sal_uInt16 m_cswNew = 0;
 
     // end of WW8 section
 

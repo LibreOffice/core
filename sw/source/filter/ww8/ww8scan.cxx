@@ -5778,6 +5778,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset):
         // in C++20 with P06831R1 "Default member initializers for bit-fields (revision 1)", the
         // above bit-field member initializations can be moved to the class definition
 {
+    // See [MS-DOC] 2.5.15 "How to read the FIB".
     sal_uInt8 aBits1;
     sal_uInt8 aBits2;
     sal_uInt8 aVer8Bits1;    // only used starting with WinWord 8
@@ -5928,6 +5929,15 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset):
         rSt.ReadInt32( m_fcIslandFirst );
         rSt.ReadInt32( m_fcIslandLim );
         rSt.ReadUInt16( m_cfclcb );
+
+        // Read cswNew to find out if nFib should be ignored.
+        sal_uInt32 nPos = rSt.Tell();
+        rSt.SeekRel(m_cfclcb * 8);
+        if (rSt.good())
+        {
+            rSt.ReadUInt16(m_cswNew);
+        }
+        rSt.Seek(nPos);
     }
 
 // end of the insertion for WW8
