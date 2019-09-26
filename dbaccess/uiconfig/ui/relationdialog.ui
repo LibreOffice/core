@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="dba">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="RelationDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="relationdialog|RelationDialog">Relations</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -154,14 +159,11 @@
                     <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="dbulo-ORelationControl" id="relations">
+                      <object class="GtkBox" id="relations">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="Relation Control-selection1"/>
-                        </child>
                       </object>
                     </child>
                   </object>
@@ -216,7 +218,6 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">addcascade</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -232,7 +233,7 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">addnull</property>
+                                <property name="group">addaction</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -248,7 +249,7 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">adddefault</property>
+                                <property name="group">addaction</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -335,6 +336,7 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <property name="group">delaction</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -350,6 +352,7 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <property name="group">delaction</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -365,6 +368,7 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <property name="group">delaction</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>

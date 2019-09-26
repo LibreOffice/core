@@ -18,12 +18,8 @@
  */
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYDLG_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYDLG_HXX
-#include <vcl/dialog.hxx>
 
-#include <vcl/button.hxx>
-
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <QEnumTypes.hxx>
 
@@ -35,25 +31,23 @@ namespace dbaui
 {
     class OTableListBoxControl;
     class OQueryTableView;
-    class DlgQryJoin final :  public ModalDialog
-                        ,public IRelationControlInterface
+    class DlgQryJoin final : public weld::GenericDialogController
+                           , public IRelationControlInterface
     {
-        VclPtr<FixedText>              m_pML_HelpText;
-        VclPtr<OKButton>               m_pPB_OK;
-        VclPtr<ListBox>                m_pLB_JoinType;
-        VclPtr<CheckBox>               m_pCBNatural;
-
-        std::unique_ptr<OTableListBoxControl> m_pTableControl;
-
         EJoinType                           eJoinType;
         TTableConnectionData::value_type    m_pConnData; // contains left and right table
         TTableConnectionData::value_type    m_pOrigConnData;
         css::uno::Reference< css::sdbc::XConnection > m_xConnection;
 
+        std::unique_ptr<weld::Label> m_xML_HelpText;
+        std::unique_ptr<weld::Button> m_xPB_OK;
+        std::unique_ptr<weld::ComboBox> m_xLB_JoinType;
+        std::unique_ptr<weld::CheckButton> m_xCBNatural;
+        std::unique_ptr<OTableListBoxControl> m_xTableControl;
 
-        DECL_LINK( OKClickHdl, Button*, void );
-        DECL_LINK( LBChangeHdl, ListBox&, void );
-        DECL_LINK( NaturalToggleHdl, CheckBox&, void );
+        DECL_LINK(OKClickHdl, weld::Button&, void);
+        DECL_LINK(LBChangeHdl, weld::ComboBox&, void);
+        DECL_LINK(NaturalToggleHdl, weld::ToggleButton&, void);
 
         /** setJoinType enables and set the new join type
             @param  _eNewJoinType   the new jointype
@@ -66,7 +60,6 @@ namespace dbaui
                     const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
                     bool _bAllowTableSelect);
         virtual ~DlgQryJoin() override;
-        virtual void dispose() override;
         EJoinType GetJoinType() const { return eJoinType; };
 
         /** setValid set the valid inside, can be used for OK buttons
