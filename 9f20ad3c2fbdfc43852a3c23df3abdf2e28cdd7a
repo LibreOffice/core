@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_d3aa0018",
+        "filename": "sc/source/ui/inc/hdrcont.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-26T07:10:33Z",
+      "side": 1,
+      "message": "const-qualification of by-value parameters is unnecessary in *declarations* (they are fine in definitions of the functions), and Miklos is busy removing such qualifications from the codebase :-)\n\nCurrently, this param will only get one value passed (true), so it will be detected by one of Noel\u0027s plugins and removed. So this should not be pushed until you also create a configuration, so that the value could be made variable.",
+      "range": {
+        "startLine": 72,
+        "startChar": 85,
+        "endLine": 72,
+        "endChar": 90
+      },
+      "revId": "9f20ad3c2fbdfc43852a3c23df3abdf2e28cdd7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
