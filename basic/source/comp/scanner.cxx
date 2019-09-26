@@ -487,7 +487,10 @@ bool SbiScanner::NextSym()
             ++nLineIdx;
             ++nCol;
         }
-        sal_Int32 ls = static_cast<sal_Int32>(lu);
+        // tdf#62326 - If the value of the hex string is within the range of 0x8000 (SbxMAXINT + 1)
+        // and 0xFFFF (SbxMAXUINT) inclusive, cast the value to 16 bit in order to get
+        // signed integers, e.g., SbxMININT through SbxMAXINT
+        sal_Int32 ls = (lu > SbxMAXINT && lu <= SbxMAXUINT) ? static_cast<sal_Int16>(lu) : static_cast<sal_Int32>(lu);
         nVal = static_cast<double>(ls);
         eScanType = ( ls >= SbxMININT && ls <= SbxMAXINT ) ? SbxINTEGER : SbxLONG;
         if( bOverflow )
