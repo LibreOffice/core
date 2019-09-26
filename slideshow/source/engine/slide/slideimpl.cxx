@@ -119,7 +119,6 @@ public:
     virtual void drawPolygons() const override;
     virtual bool isPaintOverlayActive() const override;
     virtual void enablePaintOverlay() override;
-    virtual void disablePaintOverlay() override;
     virtual void update_settings( bool bUserPaintEnabled, RGBColor const& aUserPaintColor, double dUserPaintStrokeWidth ) override;
 
 
@@ -793,10 +792,6 @@ void SlideImpl::enablePaintOverlay()
         mbUserPaintOverlayEnabled = true;
         activatePaintOverlay();
     }
-}
-
-void SlideImpl::disablePaintOverlay()
-{
 }
 
 void SlideImpl::activatePaintOverlay()
