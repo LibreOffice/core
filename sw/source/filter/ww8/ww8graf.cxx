@@ -2464,7 +2464,17 @@ bool SwWW8ImplReader::IsObjectLayoutInTableCell( const sal_uInt32 nLayoutInTable
 
     if ( m_bVer8 )
     {
-        const sal_uInt16 nWWVersion = m_xWwFib->m_nProduct & 0xE000;
+        sal_uInt16 nWWVersion = m_xWwFib->m_nProduct & 0xE000;
+        if (nWWVersion == 0)
+        {
+            // 0 nProduct can happen for Word >97 as well, check cswNew in this case instead.
+            if (m_xWwFib->m_cswNew > 0)
+            {
+                // This is Word >=2000.
+                nWWVersion = 0x2000;
+            }
+        }
+
         switch ( nWWVersion )
         {
             case 0x0000: // version 8 aka Microsoft Word 97
@@ -2492,7 +2502,10 @@ bool SwWW8ImplReader::IsObjectLayoutInTableCell( const sal_uInt32 nLayoutInTable
                 }
                 else
                 {
-                    bIsObjectLayoutInTableCell = false;
+                    // Documented in [MS-ODRAW], 2.3.4.44 "Group Shape Boolean Properties".
+                    bool fUsefLayoutInCell = (nLayoutInTableCell & 0x80000000) >> 31;
+                    bool fLayoutInCell = (nLayoutInTableCell & 0x8000) >> 15;
+                    bIsObjectLayoutInTableCell = fUsefLayoutInCell && fLayoutInCell;
                 }
             }
             break;
@@ -2693,8 +2706,8 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         m_nInTable && IsObjectLayoutInTableCell( pRecord->nLayoutInTableCell );
 
     // #i18732# - Switch on 'follow text flow', if object is laid out
-    // inside table cell and its wrapping isn't 'SURROUND_THROUGH'
-    if (bLayoutInTableCell && eSurround != css::text::WrapTextMode_THROUGH)
+    // inside table cell
+    if (bLayoutInTableCell)
     {
         SwFormatFollowTextFlow aFollowTextFlow( true );
         aFlySet.Put( aFollowTextFlow );
