@@ -640,13 +640,22 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
                 res = sal::static_int_cast< short >(-(i+1)); // negative
                 break;  // for
             }
-            else if ( i == 8 && pUpperAbbrevMonthText[i] == "SEPT" &&
-                    StringContainsWord( "SEP", rString, nPos ) )
-            {   // #102136# The correct English form of month September abbreviated is
-                // SEPT, but almost every data contains SEP instead.
-                nPos = nPos + 3;
-                res = sal::static_int_cast< short >(-(i+1)); // negative
-                break;  // for
+            else if (i == 8)
+            {
+                // This assumes the weirdness is applicable to all locales.
+                if (pUpperAbbrevMonthText[i] == "SEPT" && StringContainsWord( "SEP", rString, nPos))
+                {   // #102136# The correct English form of month September abbreviated is
+                    // SEPT, but almost every data contains SEP instead.
+                    nPos = nPos + 3;
+                    res = sal::static_int_cast< short >(-(i+1)); // negative
+                    break;  // for
+                }
+                else if (pUpperAbbrevMonthText[i] == "SEP" && StringContainsWord( "SEPT", rString, nPos))
+                {   // And vice versa, accept SEPT for SEP
+                    nPos = nPos + 4;
+                    res = sal::static_int_cast< short >(-(i+1)); // negative
+                    break;  // for
+                }
             }
         }
         if (!res)
