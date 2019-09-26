@@ -87,14 +87,37 @@ using namespace ::com::sun::star::accessibility;
 
 struct ScAccessibleShapeData
 {
-    ScAccessibleShapeData() : bSelected(false), bSelectable(true) {}
+    ScAccessibleShapeData(css::uno::Reference< css::drawing::XShape > xShape_);
     ~ScAccessibleShapeData();
     mutable rtl::Reference< ::accessibility::AccessibleShape > pAccShape;
     mutable boost::optional<ScAddress> xRelationCell; // if it is NULL this shape is anchored on the table
     css::uno::Reference< css::drawing::XShape > xShape;
     mutable bool            bSelected;
     bool                    bSelectable;
+    // cache these to make the sorting cheaper
+    boost::optional<sal_Int16> mxLayerID;
+    boost::optional<sal_Int32> mxZOrder;
 };
+
+ScAccessibleShapeData::ScAccessibleShapeData(css::uno::Reference< css::drawing::XShape > xShape_)
+    : xShape(xShape_),
+    bSelected(false), bSelectable(true)
+{
+    static constexpr OUStringLiteral gsLayerId = "LayerID";
+    static constexpr OUStringLiteral gsZOrder = "ZOrder";
+    uno::Reference< beans::XPropertySet> xProps(xShape, uno::UNO_QUERY);
+    if (xProps.is())
+    {
+        uno::Any aAny = xProps->getPropertyValue(gsLayerId);
+        sal_Int16 nLayerID;
+        if (aAny >>= nLayerID)
+            mxLayerID = nLayerID;
+        sal_Int32 nZOrder;
+        aAny = xProps->getPropertyValue(gsZOrder);
+        if (aAny >>= nZOrder)
+            mxZOrder = nZOrder;
+    }
+}
 
 ScAccessibleShapeData::~ScAccessibleShapeData()
 {
@@ -106,9 +129,6 @@ ScAccessibleShapeData::~ScAccessibleShapeData()
 
 struct ScShapeDataLess
 {
-    static constexpr OUStringLiteral gsLayerId = "LayerID";
-    static constexpr OUStringLiteral gsZOrder = "ZOrder";
-
     static void ConvertLayerId(sal_Int16& rLayerID) // changes the number of the LayerId so it the accessibility order
     {
         // note: MSVC 2017 ICE's if this is written as "switch" so use "if"
@@ -133,15 +153,10 @@ struct ScShapeDataLess
     {
         bool bResult(false);
         uno::Reference< beans::XPropertySet> xProps(pData->xShape, uno::UNO_QUERY);
-        if (xProps.is())
+        if (pData->mxLayerID)
         {
-            uno::Any aPropAny = xProps->getPropertyValue(gsLayerId);
-            sal_Int16 nLayerID = 0;
-            if( aPropAny >>= nLayerID )
-            {
-                if (SdrLayerID(nLayerID) == SC_LAYER_BACK)
-                    bResult = true;
-            }
+            if (SdrLayerID(*pData->mxLayerID) == SC_LAYER_BACK)
+                bResult = true;
         }
         return bResult;
     }
@@ -150,31 +165,20 @@ struct ScShapeDataLess
         bool bResult(false);
         if (pData1 && pData2)
         {
-            uno::Reference< beans::XPropertySet> xProps1(pData1->xShape, uno::UNO_QUERY);
-            uno::Reference< beans::XPropertySet> xProps2(pData2->xShape, uno::UNO_QUERY);
-            if (xProps1.is() && xProps2.is())
+            if( pData1->mxLayerID && pData2->mxLayerID )
             {
-                uno::Any aPropAny1 = xProps1->getPropertyValue(gsLayerId);
-                uno::Any aPropAny2 = xProps2->getPropertyValue(gsLayerId);
-                sal_Int16 nLayerID1(0);
-                sal_Int16 nLayerID2(0);
-                if( (aPropAny1 >>= nLayerID1) && (aPropAny2 >>= nLayerID2) )
+                sal_Int16 nLayerID1 = *pData1->mxLayerID;
+                sal_Int16 nLayerID2 = *pData2->mxLayerID;
+                if (nLayerID1 == nLayerID2)
                 {
-                    if (nLayerID1 == nLayerID2)
-                    {
-                        uno::Any aAny1 = xProps1->getPropertyValue(gsZOrder);
-                        sal_Int32 nZOrder1 = 0;
-                        uno::Any aAny2 = xProps2->getPropertyValue(gsZOrder);
-                        sal_Int32 nZOrder2 = 0;
-                        if ( (aAny1 >>= nZOrder1) && (aAny2 >>= nZOrder2) )
-                            bResult = (nZOrder1 < nZOrder2);
-                    }
-                    else
-                    {
-                        ConvertLayerId(nLayerID1);
-                        ConvertLayerId(nLayerID2);
-                        bResult = (nLayerID1 < nLayerID2);
-                    }
+                    if ( pData1->mxZOrder && pData2->mxZOrder )
+                        bResult = (*pData1->mxZOrder < *pData2->mxZOrder);
+                }
+                else
+                {
+                    ConvertLayerId(nLayerID1);
+                    ConvertLayerId(nLayerID2);
+                    bResult = (nLayerID1 < nLayerID2);
                 }
             }
         }
@@ -911,8 +915,7 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
             xShapes->getByIndex(i) >>= xShape;
             if (xShape.is())
             {
-                ScAccessibleShapeData* pShapeData = new ScAccessibleShapeData();
-                pShapeData->xShape = xShape;
+                ScAccessibleShapeData* pShapeData = new ScAccessibleShapeData(xShape);
                 aShapesList.push_back(pShapeData);
             }
         }
@@ -1173,70 +1176,59 @@ void ScChildrenShapes::SetAnchor(const uno::Reference<drawing::XShape>& xShape, 
 
 void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, bool bCommitChange) const
 {
-    if (mbShapesNeedSorting)
-    {
-        std::sort(maZOrderedShapes.begin(), maZOrderedShapes.end(), ScShapeDataLess());
-        mbShapesNeedSorting = false;
-    }
-    SortedShapes::iterator aFindItr;
-    if (!FindShape(xShape, aFindItr))
-    {
-        ScAccessibleShapeData* pShape = new ScAccessibleShapeData();
-        pShape->xShape = xShape;
-        SortedShapes::iterator aNewItr = maZOrderedShapes.insert(aFindItr, pShape);
-        maShapesMap[xShape] = pShape;
-        SetAnchor(xShape, pShape);
+    assert( maShapesMap.find(xShape) == maShapesMap.end());
 
-        uno::Reference< beans::XPropertySet > xShapeProp(xShape, uno::UNO_QUERY);
-        if (xShapeProp.is())
+    ScAccessibleShapeData* pShape = new ScAccessibleShapeData(xShape);
+    maZOrderedShapes.push_back(pShape);
+    mbShapesNeedSorting = true;
+    maShapesMap[xShape] = pShape;
+    SetAnchor(xShape, pShape);
+
+    uno::Reference< beans::XPropertySet > xShapeProp(xShape, uno::UNO_QUERY);
+    if (xShapeProp.is())
+    {
+        uno::Any aPropAny = xShapeProp->getPropertyValue("LayerID");
+        sal_Int16 nLayerID = 0;
+        if( aPropAny >>= nLayerID )
         {
-            uno::Any aPropAny = xShapeProp->getPropertyValue("LayerID");
-            sal_Int16 nLayerID = 0;
-            if( aPropAny >>= nLayerID )
-            {
-                if( (SdrLayerID(nLayerID) == SC_LAYER_INTERN) || (SdrLayerID(nLayerID) == SC_LAYER_HIDDEN) )
-                    pShape->bSelectable = false;
-                else
-                    pShape->bSelectable = true;
-            }
+            if( (SdrLayerID(nLayerID) == SC_LAYER_INTERN) || (SdrLayerID(nLayerID) == SC_LAYER_HIDDEN) )
+                pShape->bSelectable = false;
+            else
+                pShape->bSelectable = true;
         }
+    }
 
-        if (!xSelectionSupplier.is())
-            throw uno::RuntimeException();
+    if (!xSelectionSupplier.is())
+        throw uno::RuntimeException();
 
-        uno::Reference<drawing::XShapes> xShapes(mpViewShell->getSelectedXShapes());
-        uno::Reference<container::XEnumerationAccess> xEnumAcc(xShapes, uno::UNO_QUERY);
-        if (xEnumAcc.is())
+    uno::Reference<drawing::XShapes> xShapes(mpViewShell->getSelectedXShapes());
+    uno::Reference<container::XEnumerationAccess> xEnumAcc(xShapes, uno::UNO_QUERY);
+    if (xEnumAcc.is())
+    {
+        uno::Reference<container::XEnumeration> xEnum = xEnumAcc->createEnumeration();
+        if (xEnum.is())
         {
-            uno::Reference<container::XEnumeration> xEnum = xEnumAcc->createEnumeration();
-            if (xEnum.is())
+            uno::Reference<drawing::XShape> xSelectedShape;
+            bool bFound(false);
+            while (!bFound && xEnum->hasMoreElements())
             {
-                uno::Reference<drawing::XShape> xSelectedShape;
-                bool bFound(false);
-                while (!bFound && xEnum->hasMoreElements())
+                xEnum->nextElement() >>= xSelectedShape;
+                if (xShape.is() && (xShape.get() == xSelectedShape.get()))
                 {
-                    xEnum->nextElement() >>= xSelectedShape;
-                    if (xShape.is() && (xShape.get() == xSelectedShape.get()))
-                    {
-                        pShape->bSelected = true;
-                        bFound = true;
-                    }
+                    pShape->bSelected = true;
+                    bFound = true;
                 }
             }
         }
-        if (mpAccessibleDocument && bCommitChange)
-        {
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::CHILD;
-            aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
-            aEvent.NewValue <<= Get(*aNewItr);
-
-            mpAccessibleDocument->CommitChange(aEvent); // new child - event
-        }
     }
-    else
+    if (mpAccessibleDocument && bCommitChange)
     {
-        OSL_FAIL("shape is always in the list");
+        AccessibleEventObject aEvent;
+        aEvent.EventId = AccessibleEventId::CHILD;
+        aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
+        aEvent.NewValue <<= Get(pShape);
+
+        mpAccessibleDocument->CommitChange(aEvent); // new child - event
     }
 }
 
@@ -1286,8 +1278,7 @@ bool ScChildrenShapes::FindShape(const uno::Reference<drawing::XShape>& xShape, 
         mbShapesNeedSorting = false;
     }
     bool bResult(false);
-    ScAccessibleShapeData aShape;
-    aShape.xShape = xShape;
+    ScAccessibleShapeData aShape(xShape);
     rItr = std::lower_bound(maZOrderedShapes.begin(), maZOrderedShapes.end(), &aShape, ScShapeDataLess());
     if ((rItr != maZOrderedShapes.end()) && (*rItr != nullptr) && ((*rItr)->xShape.get() == xShape.get()))
         bResult = true; // if the shape is found
