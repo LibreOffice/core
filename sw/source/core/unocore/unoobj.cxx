@@ -1840,6 +1840,19 @@ void SwUnoCursorHelper::SetPropertyValues(
             aPropertyVetoExMsg += "Property is read-only: '" + rPropertyName + "' ";
             continue;
         }
+        // recursive call hack: for some reason, setting CharStyle along with other
+        // properties messes up direct formatting. Even treating it as
+        // "bPropertyCausesSideEffectsInNodes doesn't work. But setting it here first
+        // (out of order - does that matter at all?) works for me. tdf#127616
+        if ( pEntry->nWID == RES_TXTATR_CHARFMT && rPropertyValues.size() > 1 )
+        {
+            uno::Sequence< beans::PropertyValue > aValues( 1 );
+            aValues[0].Name = rPropertyName;
+            aValues[0].Value = rPropVal.Value;
+
+            SwUnoCursorHelper::SetPropertyValues(rPaM, rPropSet, aValues, nAttrMode);
+            continue;
+        }
         aItemSet.MergeRange(pEntry->nWID, pEntry->nWID);
         aEntries.emplace_back(pEntry, rPropVal.Value);
     }
