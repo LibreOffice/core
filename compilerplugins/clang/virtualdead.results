@@ -1,6 +1,3 @@
-basctl/source/inc/bastypes.hxx:191
-    _Bool basctl::BaseWindow::CanClose()
-    1
 basic/source/comp/codegen.cxx:464
     void OffSetAccumulator::start(const unsigned char *,)
     empty

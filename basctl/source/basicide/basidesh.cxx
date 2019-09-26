@@ -397,24 +397,8 @@ bool Shell::PrepareClose( bool bUI )
     }
     else
     {
-        bool bCanClose = true;
-        for (auto const& window : aWindowTable)
-        {
-            BaseWindow* pWin = window.second;
-            if ( !pWin->CanClose() )
-            {
-                if ( !m_aCurLibName.isEmpty() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )
-                    SetCurLib( ScriptDocument::getApplicationScriptDocument(), OUString(), false );
-                SetCurWindow( pWin, true );
-                bCanClose = false;
-                break;
-            }
-        }
-
-        if ( bCanClose )
-            StoreAllWindowData( false );    // don't write on the disk, that will be done later automatically
-
-        return bCanClose;
+        StoreAllWindowData( false );    // don't write on the disk, that will be done later automatically
+        return true;
     }
 }
 

@@ -759,11 +759,6 @@ void ModulWindow::StoreData()
     GetEditorWindow().SetSourceInBasic();
 }
 
-bool ModulWindow::CanClose()
-{
-    return true;
-}
-
 bool ModulWindow::AllowUndo()
 {
     return GetEditorWindow().CanModify();
