@@ -22,9 +22,6 @@ dbaccess/source/ui/inc/IUpdateHelper.hxx:38
 desktop/source/deployment/registry/inc/dp_backenddb.hxx:119
     class rtl::OUString dp_registry::backend::BackendDb::getDbNSName()
     "http://openoffi
-extensions/source/bibliography/loadlisteneradapter.hxx:111
-    void bib::OLoadListener::_unloaded(const struct com::sun::star::lang::EventObject &,)
-    empty
 Gui/qaccessible.h:465
     class QObject * QAccessibleInterface::object()const
     0
