@@ -52,7 +52,8 @@
   <implementation name="SchXMLImport.Styles">
     <service name="com.sun.star.comp.Chart.XMLOasisStylesImporter"/>
   </implementation>
-  <implementation name="XMLDrawContentExportOOO">
+  <implementation name="XMLDrawContentExportOOO"
+    constructor="com_sun_star_comp_Draw_XMLContentExporter_get_implementation">
     <service name="com.sun.star.comp.Draw.XMLContentExporter"/>
   </implementation>
   <implementation name="XMLDrawContentExportOasis">

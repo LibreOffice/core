@@ -59,11 +59,6 @@ css::uno::Reference<css::uno::XInterface> XMLDrawSettingsExportOasis_createInsta
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // draw OOo export
-OUString XMLDrawContentExportOOO_getImplementationName() throw();
-css::uno::Sequence<OUString> XMLDrawContentExportOOO_getSupportedServiceNames() throw();
-/// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> XMLDrawContentExportOOO_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 OUString XMLDrawMetaExportOOO_getImplementationName() throw();
 css::uno::Sequence<OUString> XMLDrawMetaExportOOO_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
