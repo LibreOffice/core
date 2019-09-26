@@ -2678,9 +2678,6 @@ static const sal_uInt16* GetFormatRangeImpl(bool bTextOnly)
 
 void SdrObjEditView::TakeFormatPaintBrush(std::shared_ptr<SfxItemSet>& rFormatSet)
 {
-    if (mxSelectionController.is() && mxSelectionController->TakeFormatPaintBrush(rFormatSet))
-        return;
-
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     if (rMarkList.GetMarkCount() > 0)
     {

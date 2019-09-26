@@ -707,9 +707,6 @@ public:
     // This is also true for SetGluePoint()... on the node.
     // On the other hand, moving/resizing an edge breaks the connection.
 
-    // is object a node?
-    virtual bool IsNode() const;
-
     // automatic glue points:
     // a node object must provide four vertex and corner positions
     // usually 0: top, 1: right, 2: bottom, 3: left

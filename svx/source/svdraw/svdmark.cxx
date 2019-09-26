@@ -745,43 +745,40 @@ namespace sdr
                     // build transitive hull
                     ImplCollectCompleteSelection(pCandidate);
 
-                    if(pCandidate->IsNode())
+                    // travel over broadcaster/listener to access edges connected to the selected object
+                    const SfxBroadcaster* pBC = pCandidate->GetBroadcaster();
+
+                    if(pBC)
                     {
-                        // travel over broadcaster/listener to access edges connected to the selected object
-                        const SfxBroadcaster* pBC = pCandidate->GetBroadcaster();
+                        const size_t nLstCnt(pBC->GetSizeOfVector());
 
-                        if(pBC)
+                        for(size_t nl=0; nl < nLstCnt; ++nl)
                         {
-                            const size_t nLstCnt(pBC->GetSizeOfVector());
+                            SfxListener* pLst = pBC->GetListener(nl);
+                            SdrEdgeObj* pEdge = dynamic_cast<SdrEdgeObj*>( pLst );
 
-                            for(size_t nl=0; nl < nLstCnt; ++nl)
+                            if(pEdge && pEdge->IsInserted() && pEdge->getSdrPageFromSdrObject() == pCandidate->getSdrPageFromSdrObject())
                             {
-                                SfxListener* pLst = pBC->GetListener(nl);
-                                SdrEdgeObj* pEdge = dynamic_cast<SdrEdgeObj*>( pLst );
+                                SdrMark aM(pEdge, maMarkedObjectList.GetMark(a)->GetPageView());
 
-                                if(pEdge && pEdge->IsInserted() && pEdge->getSdrPageFromSdrObject() == pCandidate->getSdrPageFromSdrObject())
+                                if(pEdge->GetConnectedNode(true) == pCandidate)
                                 {
-                                    SdrMark aM(pEdge, maMarkedObjectList.GetMark(a)->GetPageView());
+                                    aM.SetCon1(true);
+                                }
 
-                                    if(pEdge->GetConnectedNode(true) == pCandidate)
-                                    {
-                                        aM.SetCon1(true);
-                                    }
+                                if(pEdge->GetConnectedNode(false) == pCandidate)
+                                {
+                                    aM.SetCon2(true);
+                                }
 
-                                    if(pEdge->GetConnectedNode(false) == pCandidate)
-                                    {
-                                        aM.SetCon2(true);
-                                    }
-
-                                    if(SAL_MAX_SIZE == maMarkedObjectList.FindObject(pEdge))
-                                    {
-                                        // check if it itself is selected
-                                        maEdgesOfMarkedNodes.InsertEntry(aM);
-                                    }
-                                    else
-                                    {
-                                        maMarkedEdgesOfMarkedNodes.InsertEntry(aM);
-                                    }
+                                if(SAL_MAX_SIZE == maMarkedObjectList.FindObject(pEdge))
+                                {
+                                    // check if it itself is selected
+                                    maEdgesOfMarkedNodes.InsertEntry(aM);
+                                }
+                                else
+                                {
+                                    maMarkedEdgesOfMarkedNodes.InsertEntry(aM);
                                 }
                             }
                         }

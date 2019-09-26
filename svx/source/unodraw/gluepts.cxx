@@ -259,7 +259,7 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier )
 // XIdentifierReplace
 void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, const uno::Any& aElement )
 {
-    if( mpObject.is() && mpObject->IsNode() )
+    if( mpObject.is() )
     {
         struct drawing::GluePoint2 aGluePoint;
         if( (Identifier < NON_USER_DEFINED_GLUE_POINTS) || !(aElement >>= aGluePoint))
@@ -293,7 +293,7 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, c
 // XIdentifierAccess
 uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
 {
-    if( mpObject.is() && mpObject->IsNode() )
+    if( mpObject.is() )
     {
         struct drawing::GluePoint2 aGluePoint;
 
@@ -447,14 +447,11 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::getCount()
     {
         // each node has a default of 4 glue points
         // and any number of user defined glue points
-        if( mpObject->IsNode() )
-        {
-            nCount += 4;
+        nCount += 4;
 
-            const SdrGluePointList* pList = mpObject->GetGluePointList();
-            if( pList )
-                nCount += pList->GetCount();
-        }
+        const SdrGluePointList* pList = mpObject->GetGluePointList();
+        if( pList )
+            nCount += pList->GetCount();
     }
 
     return nCount;
@@ -462,7 +459,7 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::getCount()
 
 uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
 {
-    if( Index >= 0 && mpObject.is() && mpObject->IsNode() )
+    if( Index >= 0 && mpObject.is() )
     {
         struct drawing::GluePoint2 aGluePoint;
 
@@ -498,7 +495,7 @@ uno::Type SAL_CALL SvxUnoGluePointAccess::getElementType()
 
 sal_Bool SAL_CALL SvxUnoGluePointAccess::hasElements()
 {
-    return mpObject.is() && mpObject->IsNode();
+    return mpObject.is();
 }
 
 /**

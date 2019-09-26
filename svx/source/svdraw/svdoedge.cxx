@@ -408,11 +408,6 @@ void SdrEdgeObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
     rRect=GetSnapRect();
 }
 
-bool SdrEdgeObj::IsNode() const
-{
-    return true;
-}
-
 SdrGluePoint SdrEdgeObj::GetVertexGluePoint(sal_uInt16 nNum) const
 {
     Point aPt;
@@ -2164,8 +2159,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
         no--;
         SdrObject* pObj=pOL->GetObj(no);
         if (rVisLayer.IsSet(pObj->GetLayer()) && pObj->IsVisible() &&      // only visible objects
-            (pThis==nullptr || pObj!=static_cast<SdrObject const *>(pThis)) && // don't connect it to itself
-            pObj->IsNode())
+            (pThis==nullptr || pObj!=static_cast<SdrObject const *>(pThis))) // don't connect it to itself
         {
             tools::Rectangle aObjBound(pObj->GetCurrentBoundRect());
             if (aObjBound.IsOver(aMouseRect)) {
