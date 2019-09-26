@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-09-25 10:58:48 using:
+ Generated on 2019-09-26 09:12:06 using:
  ./bin/update_pch sd sdui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -91,7 +91,6 @@
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/Scanline.hxx>
-#include <vcl/abstdlg.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
@@ -103,7 +102,6 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/devicecoordinate.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/dockwin.hxx>
