@@ -1073,17 +1073,18 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         updateWMClass();
     }
 
-    if( m_pParent && m_pParent->m_pWindow && ! isChild() )
-        gtk_window_set_screen( GTK_WINDOW(m_pWindow), gtk_window_get_screen( GTK_WINDOW(m_pParent->m_pWindow) ) );
-
     if (GTK_IS_WINDOW(m_pWindow))
     {
         if (m_pParent)
         {
+            GtkWidget* pTopLevel = gtk_widget_get_toplevel(m_pParent->m_pWindow);
+            if (!isChild())
+                gtk_window_set_screen(GTK_WINDOW(m_pWindow), gtk_window_get_screen(GTK_WINDOW(pTopLevel)));
+
             if (!(m_pParent->m_nStyle & SalFrameStyleFlags::PLUG))
-                gtk_window_set_transient_for( GTK_WINDOW(m_pWindow), GTK_WINDOW(m_pParent->m_pWindow) );
+                gtk_window_set_transient_for(GTK_WINDOW(m_pWindow), GTK_WINDOW(pTopLevel));
             m_pParent->m_aChildren.push_back( this );
-            gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(m_pParent->m_pWindow)), GTK_WINDOW(m_pWindow));
+            gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(pTopLevel)), GTK_WINDOW(m_pWindow));
         }
         else
         {
