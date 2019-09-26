@@ -90,11 +90,6 @@ bool SelectionController::PasteObjModel( const SdrModel& /*rModel*/ )
     return false;
 }
 
-bool SelectionController::TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& /*rFormatSet*/  )
-{
-    return false;
-}
-
 bool SelectionController::ApplyFormatPaintBrush( SfxItemSet& /*rFormatSet*/, bool /*bNoCharacterFormats*/, bool /*bNoParagraphFormats*/ )
 {
     return false;

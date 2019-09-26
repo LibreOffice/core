@@ -158,9 +158,6 @@ class IRecoveryUpdateListener
         // inform listener about changed items, which should be refreshed
         virtual void updateItems() = 0;
 
-        // inform listener about starting of the asynchronous recovery operation
-        virtual void start() = 0;
-
         // inform listener about ending of the asynchronous recovery operation
         virtual void end() = 0;
 
@@ -378,7 +375,6 @@ class SaveProgressDialog : public weld::GenericDialogController
         // IRecoveryUpdateListener
         virtual void updateItems() override;
         virtual void stepNext(TURLInfo* pItem) override;
-        virtual void start() override;
         virtual void end() override;
 };
 
@@ -431,7 +427,6 @@ class RecoveryDialog : public weld::GenericDialogController
         // IRecoveryUpdateListener
         virtual void updateItems() override;
         virtual void stepNext(TURLInfo* pItem) override;
-        virtual void start() override;
         virtual void end() override;
 
         short execute();

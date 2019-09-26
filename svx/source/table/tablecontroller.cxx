@@ -2816,12 +2816,6 @@ bool SvxTableController::PasteObject( SdrTableObj const * pPasteTableObj )
     return true;
 }
 
-bool SvxTableController::TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& /*rFormatSet*/  )
-{
-    // SdrView::TakeFormatPaintBrush() is enough
-    return false;
-}
-
 bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats )
 {
     if(!mbCellSelectionMode)

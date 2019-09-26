@@ -100,12 +100,6 @@ include/svl/undo.hxx:168
 include/svtools/unoevent.hxx:199
     unsigned short SvEventDescriptor::getMacroItemWhich()const
     108
-include/svx/selectioncontroller.hxx:68
-    _Bool sdr::SelectionController::TakeFormatPaintBrush(class std::shared_ptr<class SfxItemSet> &,)
-    0
-include/svx/svdobj.hxx:711
-    _Bool SdrObject::IsNode()const
-    1
 include/test/text/xtextcontent.hxx:29
     _Bool apitest::XTextContent::isAttachSupported()
     1
@@ -142,9 +136,6 @@ slideshow/source/engine/animationfactory.cxx:443
     empty
 slideshow/source/inc/slide.hxx:118
     void slideshow::internal::Slide::disablePaintOverlay()
-    empty
-svx/source/inc/docrecovery.hxx:162
-    void svx::DocRecovery::IRecoveryUpdateListener::start()
     empty
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)

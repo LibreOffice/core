@@ -199,7 +199,6 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
     virtual const tools::Rectangle& GetSnapRect() const override;
-    virtual bool IsNode() const override;
     virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const override;
     virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const override;
     virtual const SdrGluePointList* GetGluePointList() const override;
