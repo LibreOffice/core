@@ -44,7 +44,7 @@
 #include <map>
 #include <memory>
 #include <vcl/gdimetafiletools.hxx>
-
+#include <TypeSerializer.hxx>
 #include <vcl/pdfread.hxx>
 
 #define GRAPHIC_MTFTOBMP_MAXEXT     2048
@@ -1263,7 +1263,8 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
         rIStm.ReadInt32( nType );
         sal_Int32 nLen;
         rIStm.ReadInt32( nLen );
-        ReadPair( rIStm, aSize );
+        TypeSerializer aSerializer(rIStm);
+        aSerializer.readSize(aSize);
         ReadMapMode( rIStm, aMapMode );
     }
     else
@@ -1403,7 +1404,9 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
             nDataFieldPos = rOStm.Tell();
             rOStm.WriteInt32( 0 );
 
-            WritePair( rOStm, aSize );
+            TypeSerializer aSerializer(rOStm);
+            aSerializer.writeSize(aSize);
+
             WriteMapMode( rOStm, aMapMode );
         }
         else

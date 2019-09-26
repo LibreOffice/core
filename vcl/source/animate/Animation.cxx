@@ -21,6 +21,7 @@
 #include <sal/config.h>
 
 #include <tools/stream.hxx>
+#include <tools/GenericTypeSerializer.hxx>
 #include <sal/log.hxx>
 
 #include <vcl/animate/Animation.hxx>
@@ -591,9 +592,10 @@ SvStream& WriteAnimation(SvStream& rOStm, const Animation& rAnimation)
 
             // Write AnimationBitmap
             WriteDIBBitmapEx(rAnimationBitmap.maBitmapEx, rOStm);
-            WritePair(rOStm, rAnimationBitmap.maPositionPixel);
-            WritePair(rOStm, rAnimationBitmap.maSizePixel);
-            WritePair(rOStm, rAnimation.maGlobalSize);
+            tools::GenericTypeSerializer aSerializer(rOStm);
+            aSerializer.writePoint(rAnimationBitmap.maPositionPixel);
+            aSerializer.writeSize(rAnimationBitmap.maSizePixel);
+            aSerializer.writeSize(rAnimation.maGlobalSize);
             rOStm.WriteUInt16((ANIMATION_TIMEOUT_ON_CLICK == rAnimationBitmap.mnWait)
                                   ? 65535
                                   : rAnimationBitmap.mnWait);
@@ -653,9 +655,10 @@ SvStream& ReadAnimation(SvStream& rIStm, Animation& rAnimation)
         do
         {
             ReadDIBBitmapEx(aAnimationBitmap.maBitmapEx, rIStm);
-            ReadPair(rIStm, aAnimationBitmap.maPositionPixel);
-            ReadPair(rIStm, aAnimationBitmap.maSizePixel);
-            ReadPair(rIStm, rAnimation.maGlobalSize);
+            tools::GenericTypeSerializer aSerializer(rIStm);
+            aSerializer.readPoint(aAnimationBitmap.maPositionPixel);
+            aSerializer.readSize(aAnimationBitmap.maSizePixel);
+            aSerializer.readSize(rAnimation.maGlobalSize);
             rIStm.ReadUInt16(nTmp16);
             aAnimationBitmap.mnWait = ((65535 == nTmp16) ? ANIMATION_TIMEOUT_ON_CLICK : nTmp16);
             rIStm.ReadUInt16(nTmp16);

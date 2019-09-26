@@ -21,6 +21,7 @@
 
 #include <tools/toolsdllapi.h>
 #include <tools/color.hxx>
+#include <tools/gen.hxx>
 #include <tools/stream.hxx>
 
 namespace tools
@@ -37,6 +38,15 @@ public:
 
     void readColor(Color& rColor);
     void writeColor(const Color& rColor);
+
+    void readPoint(Point& rPoint);
+    void writePoint(const Point& rPoint);
+
+    void readSize(Size& rSize);
+    void writeSize(const Size& rSize);
+
+    void readRectangle(Rectangle& rRectangle);
+    void writeRectangle(const Rectangle& rRectangle);
 };
 
 } // end namespace tools

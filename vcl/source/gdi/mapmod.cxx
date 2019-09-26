@@ -24,6 +24,7 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <rtl/instance.hxx>
+#include <TypeSerializer.hxx>
 
 struct MapMode::ImplMapMode
 {
@@ -137,8 +138,10 @@ SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode )
     VersionCompat aCompat( rIStm, StreamMode::READ );
     sal_uInt16    nTmp16;
 
+    TypeSerializer aSerializer(rIStm);
+
     rIStm.ReadUInt16( nTmp16 ); rMapMode.mpImplMapMode->meUnit = static_cast<MapUnit>(nTmp16);
-    ReadPair( rIStm, rMapMode.mpImplMapMode->maOrigin );
+    aSerializer.readPoint(rMapMode.mpImplMapMode->maOrigin);
     ReadFraction( rIStm, rMapMode.mpImplMapMode->maScaleX );
     ReadFraction( rIStm, rMapMode.mpImplMapMode->maScaleY );
     rIStm.ReadCharAsBool( rMapMode.mpImplMapMode->mbSimple );
@@ -150,8 +153,10 @@ SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode )
 {
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
+    TypeSerializer aSerializer(rOStm);
+
     rOStm.WriteUInt16( static_cast<sal_uInt16>(rMapMode.mpImplMapMode->meUnit) );
-    WritePair( rOStm, rMapMode.mpImplMapMode->maOrigin );
+    aSerializer.writePoint(rMapMode.mpImplMapMode->maOrigin);
     WriteFraction( rOStm, rMapMode.mpImplMapMode->maScaleX );
     WriteFraction( rOStm, rMapMode.mpImplMapMode->maScaleY );
     rOStm.WriteBool( rMapMode.mpImplMapMode->mbSimple );

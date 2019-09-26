@@ -21,6 +21,7 @@
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>
 #include <tools/urlobj.hxx>
+#include <TypeSerializer.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -1025,7 +1026,8 @@ bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
 
                     rStm.SeekRel( 0x06 );
                     ReadMapMode( rStm, aMapMode );
-                    ReadPair( rStm, aLogSize );
+                    TypeSerializer aSerializer(rStm);
+                    aSerializer.readSize(aLogSize);
                     aLogSize = OutputDevice::LogicToLogic( aLogSize, aMapMode, MapMode( MapUnit::Map100thMM ) );
                 }
             }

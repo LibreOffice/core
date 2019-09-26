@@ -80,7 +80,7 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
         if( bRect )
         {
             rImplWallpaper.mpRect = tools::Rectangle();
-            ReadRectangle( rIStm, *rImplWallpaper.mpRect );
+            aSerializer.readRectangle(*rImplWallpaper.mpRect);
         }
 
         if( bGrad )
@@ -123,7 +123,9 @@ SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpap
     rOStm.WriteBool( bRect ).WriteBool( bGrad ).WriteBool( bBmp ).WriteBool( bDummy ).WriteBool( bDummy ).WriteBool( bDummy );
 
     if( bRect )
-        WriteRectangle( rOStm, *rImplWallpaper.mpRect );
+    {
+        aSerializer.writeRectangle(*rImplWallpaper.mpRect);
+    }
 
     if (bGrad)
     {
