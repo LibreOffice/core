@@ -69,7 +69,7 @@ private:
 
     void            DoPaint( SCCOLROW nStart, SCCOLROW nEnd );
 
-    void            DrawShadedRect( long nStart, long nEnd, const Color& rBaseColor );
+    void            DrawShadedRect( long nStart, long nEnd, const Color& rBaseColor, const bool bFlat );
 
 protected:
     ScTabView*      pTabView;

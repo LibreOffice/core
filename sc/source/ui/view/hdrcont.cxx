@@ -202,15 +202,15 @@ long ScHeaderControl::GetScrPos( SCCOLROW nEntryNo ) const
 
 // draw a rectangle across the window's width/height, with the outer part in a lighter color
 
-void ScHeaderControl::DrawShadedRect( long nStart, long nEnd, const Color& rBaseColor )
+void ScHeaderControl::DrawShadedRect( long nStart, long nEnd, const Color& rBaseColor, const bool bFlat )
 {
     Color aWhite( COL_WHITE );
 
     Color aInner( rBaseColor );             // highlight color, unchanged
     Color aCenter( rBaseColor );
-    aCenter.Merge( aWhite, 0xd0 );          // lighten up a bit
+    if (!bFlat) aCenter.Merge( aWhite, 0xd0 );          // lighten up a bit
     Color aOuter( rBaseColor );
-    aOuter.Merge( aWhite, 0xa0 );           // lighten up more
+    if (!bFlat) aOuter.Merge( aWhite, 0xa0 );           // lighten up more
 
     if ( IsMirrored() )
         std::swap( aInner, aOuter );        // just swap colors instead of positions
@@ -351,7 +351,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
         else
         {
             // normal: 3-part background
-            DrawShadedRect( nInitScrPos, nLineEnd, rStyleSettings.GetFaceColor() );
+            DrawShadedRect( nInitScrPos, nLineEnd, rStyleSettings.GetFaceColor(), true );
         }
     }
 
@@ -387,7 +387,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
             {
                 // background for selection
 
-                DrawShadedRect( nTransStart, nTransEnd, rStyleSettings.GetHighlightColor() );
+                DrawShadedRect( nTransStart, nTransEnd, rStyleSettings.GetHighlightColor(), true );
             }
         }
 
