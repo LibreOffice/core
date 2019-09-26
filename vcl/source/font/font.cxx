@@ -32,6 +32,7 @@
 #include <algorithm>
 
 #include <rtl/instance.hxx>
+#include <TypeSerializer.hxx>
 
 using namespace vcl;
 
@@ -365,7 +366,8 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
 
     rImplFont.SetFamilyName( rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet()) );
     rImplFont.maStyleName = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
-    ReadPair( rIStm, rImplFont.maAverageFontSize );
+    TypeSerializer aSerializer(rIStm);
+    aSerializer.readSize(rImplFont.maAverageFontSize);
 
     rIStm.ReadUInt16( nTmp16 ); rImplFont.SetCharSet( static_cast<rtl_TextEncoding>(nTmp16) );
     rIStm.ReadUInt16( nTmp16 ); rImplFont.SetFamilyType( static_cast<FontFamily>(nTmp16) );
@@ -406,9 +408,10 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
 SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont )
 {
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 3 );
+    TypeSerializer aSerializer(rOStm);
     rOStm.WriteUniOrByteString( rImplFont.GetFamilyName(), rOStm.GetStreamCharSet() );
     rOStm.WriteUniOrByteString( rImplFont.GetStyleName(), rOStm.GetStreamCharSet() );
-    WritePair( rOStm, rImplFont.maAverageFontSize );
+    aSerializer.writeSize(rImplFont.maAverageFontSize);
 
     rOStm.WriteUInt16( GetStoreCharSet( rImplFont.GetCharSet() ) );
     rOStm.WriteUInt16( rImplFont.GetFamilyTypeNoAsk() );

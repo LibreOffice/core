@@ -233,9 +233,9 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
         ReadFont( rStream, *pBulletFont );
     }
     else pBulletFont = nullptr;
-    ReadPair( rStream, aGraphicSize );
 
     tools::GenericTypeSerializer aSerializer(rStream);
+    aSerializer.readSize(aGraphicSize);
     aSerializer.readColor(nBulletColor);
 
     rStream.ReadUInt16( nBulletRelSize );
@@ -260,6 +260,8 @@ void SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverte
         OUString sFontName = GetFontToSubsFontName(pConverter);
         pBulletFont->SetFamilyName(sFontName);
     }
+
+    tools::GenericTypeSerializer aSerializer(rStream);
 
     rStream.WriteUInt16( NUMITEM_VERSION_04 );
 
@@ -307,13 +309,13 @@ void SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverte
     }
     else
         rStream.WriteUInt16( 0 );
-    WritePair( rStream, aGraphicSize );
+
+    aSerializer.writeSize(aGraphicSize);
 
     Color nTempColor = nBulletColor;
     if(COL_AUTO == nBulletColor)
         nTempColor = COL_BLACK;
 
-    tools::GenericTypeSerializer aSerializer(rStream);
     aSerializer.writeColor(nTempColor);
     rStream.WriteUInt16( nBulletRelSize );
     rStream.WriteUInt16( sal_uInt16(IsShowSymbol()) );

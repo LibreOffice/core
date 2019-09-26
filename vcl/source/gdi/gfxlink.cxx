@@ -24,6 +24,8 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <memory>
+#include <TypeSerializer.hxx>
+
 
 GfxLink::GfxLink()
     : meType(GfxLinkType::NONE)
@@ -148,12 +150,13 @@ bool GfxLink::ExportNative( SvStream& rOStream ) const
 SvStream& WriteGfxLink( SvStream& rOStream, const GfxLink& rGfxLink )
 {
     std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rOStream, StreamMode::WRITE, 2 ));
+    TypeSerializer aSerializer(rOStream);
 
     // Version 1
     rOStream.WriteUInt16( static_cast<sal_uInt16>(rGfxLink.GetType()) ).WriteUInt32( rGfxLink.GetDataSize() ).WriteUInt32( rGfxLink.GetUserId() );
 
     // Version 2
-    WritePair( rOStream, rGfxLink.GetPrefSize() );
+    aSerializer.writeSize(rGfxLink.GetPrefSize());
     WriteMapMode( rOStream, rGfxLink.GetPrefMapMode() );
 
     pCompat.reset(); // destructor writes stuff into the header
@@ -175,6 +178,8 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
     bool            bMapAndSizeValid( false );
     std::unique_ptr<VersionCompat>  pCompat(new VersionCompat( rIStream, StreamMode::READ ));
 
+    TypeSerializer aSerializer(rIStream);
+
     // Version 1
     sal_uInt16 nType(0);
     sal_uInt32 nSize(0), nUserId(0);
@@ -182,7 +187,7 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
 
     if( pCompat->GetVersion() >= 2 )
     {
-        ReadPair( rIStream, aSize );
+        aSerializer.readSize(aSize);
         ReadMapMode( rIStream, aMapMode );
         bMapAndSizeValid = true;
     }

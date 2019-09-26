@@ -27,23 +27,6 @@
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
 
-SvStream& ReadPair( SvStream& rIStream, Pair& rPair )
-{
-    sal_Int32 nTmpA(0), nTmpB(0);
-    rIStream.ReadInt32( nTmpA ).ReadInt32( nTmpB );
-    rPair.nA = nTmpA;
-    rPair.nB = nTmpB;
-
-    return rIStream;
-}
-
-SvStream& WritePair( SvStream& rOStream, const Pair& rPair )
-{
-    rOStream.WriteInt32( rPair.nA ).WriteInt32( rPair.nB );
-
-    return rOStream;
-}
-
 OString Pair::toString() const
 {
     std::stringstream ss;
@@ -198,33 +181,6 @@ bool tools::Rectangle::IsOver( const tools::Rectangle& rRect ) const
 {
     // If there's no intersection, they don't overlap
     return !GetIntersection( rRect ).IsEmpty();
-}
-
-namespace tools
-{
-SvStream& ReadRectangle( SvStream& rIStream, tools::Rectangle& rRect )
-{
-    sal_Int32 nTmpL(0), nTmpT(0), nTmpR(0), nTmpB(0);
-
-    rIStream.ReadInt32( nTmpL ).ReadInt32( nTmpT ).ReadInt32( nTmpR ).ReadInt32( nTmpB );
-
-    rRect.nLeft = nTmpL;
-    rRect.nTop = nTmpT;
-    rRect.nRight = nTmpR;
-    rRect.nBottom = nTmpB;
-
-    return rIStream;
-}
-
-SvStream& WriteRectangle( SvStream& rOStream, const tools::Rectangle& rRect )
-{
-    rOStream.WriteInt32( rRect.nLeft )
-            .WriteInt32( rRect.nTop )
-            .WriteInt32( rRect.nRight )
-            .WriteInt32( rRect.nBottom );
-
-    return rOStream;
-}
 }
 
 OString tools::Rectangle::toString() const
