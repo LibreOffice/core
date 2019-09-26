@@ -70,9 +70,6 @@ include/canvas/base/graphicdevicebase.hxx:319
 include/connectivity/sdbcx/IRefreshable.hxx:31
     void connectivity::sdbcx::IRefreshableGroups::refreshGroups()
     empty
-include/editeng/splwrap.hxx:105
-    _Bool SvxSpellWrapper::HasOtherCnt()
-    0
 include/filter/msfilter/msdffimp.hxx:546
     _Bool SvxMSDffManager::ShapeHasText(unsigned long,unsigned long,)const
     1

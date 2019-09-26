@@ -230,12 +230,6 @@ void SvxSpellWrapper::SpellStart( SvxSpellArea /*eSpell*/ )
 } // given area.
 
 
-bool SvxSpellWrapper::HasOtherCnt()
-{
-    return false; // Is there a special area?
-}
-
-
 bool SvxSpellWrapper::SpellMore()
 {
     return false; // Should additional documents be examined?
@@ -343,14 +337,7 @@ bool SvxSpellWrapper::SpellNext( )
     }
     else if ( bStartDone && bEndDone )
     {
-        bool bIsSpellSpecial = xProp.is() && xProp->getIsSpellSpecial();
-        // Body area done, ask for special area
-        if( !IsHyphen() && bIsSpellSpecial && HasOtherCnt() )
-        {
-            SpellStart( SvxSpellArea::Other );
-            bOtherCntnt = bGoOn = true;
-        }
-        else if ( SpellMore() )  // check another document?
+        if ( SpellMore() )  // check another document?
         {
             bOtherCntnt = false;
             bStartDone = !bReverse;
