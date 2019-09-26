@@ -137,6 +137,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
             bool bGrabBag = rSprm.getId() == NS_ooxml::LN_CT_PPrBase ||
                 rSprm.getId() == NS_ooxml::LN_EG_RPrBase ||
                 rSprm.getId() == NS_ooxml::LN_CT_TblPrBase ||
+                rSprm.getId() == NS_ooxml::LN_CT_TrPrBase ||
                 rSprm.getId() == NS_ooxml::LN_CT_TcPrBase;
             if (bGrabBag)
             {
@@ -151,12 +152,22 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
                     aSavedGrabBag.push_back(getInteropGrabBag("rPr"));
                 else if (rSprm.getId() == NS_ooxml::LN_CT_TblPrBase)
                     aSavedGrabBag.push_back(getInteropGrabBag("tblPr"));
+                else if (rSprm.getId() == NS_ooxml::LN_CT_TrPrBase)
+                    aSavedGrabBag.push_back(getInteropGrabBag("trPr"));
                 else if (rSprm.getId() == NS_ooxml::LN_CT_TcPrBase)
                     aSavedGrabBag.push_back(getInteropGrabBag("tcPr"));
                 std::swap(m_aInteropGrabBag, aSavedGrabBag);
             }
         }
             break;
+        case NS_ooxml::LN_CT_TrPrBase_tblHeader:
+        {
+            beans::PropertyValue aValue;
+            aValue.Name = "tblHeader";
+            aValue.Value <<= true;
+            m_aInteropGrabBag.push_back(aValue);
+        }
+        break;
         default:
             // Tables specific properties have to handled here
             m_pTablePropsHandler->SetProperties( m_pProperties );
