@@ -642,7 +642,7 @@ Dim i as Integer
 End Function
 
 
-Function GetLastUsedRow(oSheet as Object) as Integer
+Function GetLastUsedRow(oSheet as Object) as Long
 Dim oCell As Object
 Dim oCursor As Object
 Dim aAddress As Variant

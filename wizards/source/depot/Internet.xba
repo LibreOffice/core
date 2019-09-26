@@ -172,17 +172,17 @@ Sub UpdateValue(ByVal sName As String, fDate As Double, fValue As Double )
 Dim oSheet As Object
 Dim iColumn As Long
 Dim iRow As Long
-Dim i as Integer
+Dim i as Long
 Dim oCell As Object
 Dim LastDate as Date
 Dim bLeaveLoop as Boolean
-Dim RemoveCount as Integer
-Dim iLastRow as Integer
-Dim iLastLinkRow as Integer
+Dim RemoveCount as Long
+Dim iLastRow as Long
+Dim iLastLinkRow as Long
 Dim dDate as Date
 Dim CurDate as Date
 Dim oLinkSheet as Object
-Dim StartIndex as Integer
+Dim StartIndex as Long
 Dim iCellValue as Long
 	&apos; Insert Sheet with Company - Chart
 	sName = CheckNewSheetname(oSheets, sName)
