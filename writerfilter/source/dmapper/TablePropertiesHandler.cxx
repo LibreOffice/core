@@ -213,6 +213,20 @@ namespace dmapper {
                     pManager->SetLayoutType(static_cast<sal_uInt32>(nIntValue));
             }
             break;
+            case NS_ooxml::LN_CT_TrPrBase_tblHeader:
+            {
+                if (m_pCurrentInteropGrabBag)
+                {
+                    beans::PropertyValue aValue;
+                    aValue.Name = "tblHeader";
+                    aValue.Value = uno::makeAny( bool(
+                    m_pCurrentInteropGrabBag->push_back(aValue);
+                }
+                else
+                    // Not handled here, give the next handler a chance.
+                    bRet = false;
+            }
+            break;
             case NS_ooxml::LN_CT_TcPrBase_tcBorders ://cell borders
             //contains CT_TcBorders_left, right, top, bottom
             {
@@ -355,7 +369,7 @@ namespace dmapper {
                     {
                         beans::PropertyValue aValue;
                         aValue.Name = (nSprmId == NS_ooxml::LN_CT_TblPrBase_tblStyleRowBandSize ? OUString("tblStyleRowBandSize") : OUString("tblStyleColBandSize"));
-                        aValue.Value <<= nIntValue;
+                        aValue.Value = uno::makeAny(bool(nIntValue));
                         m_pCurrentInteropGrabBag->push_back(aValue);
                     }
                     break;
