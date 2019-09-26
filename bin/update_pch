@@ -437,6 +437,12 @@ def filter_ignore(line, module):
         ignore_list += [
             'skcms_internal.h',
             'zlib.h', # causes crc32 conflict
+            'dirent.h', # unix-specific
+            'pthread.h',
+            'unistd.h',
+            'ft2build.h',
+            'fontconfig/fontconfig.h',
+            'GL/glx.h'
             ]
 
     for i in ignore_list:

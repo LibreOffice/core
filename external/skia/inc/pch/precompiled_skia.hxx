@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-09-19 15:53:06 using:
+ Generated on 2019-09-26 11:31:14 using:
  ./bin/update_pch external/skia skia --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -35,10 +35,8 @@
 #include <cstring>
 #include <ctype.h>
 #include <deque>
-#include <dirent.h>
 #include <errno.h>
 #include <float.h>
-#include <ft2build.h>
 #include <functional>
 #include <initializer_list>
 #include <inttypes.h>
@@ -49,7 +47,6 @@
 #include <memory>
 #include <new>
 #include <png.h>
-#include <pthread.h>
 #include <queue>
 #include <set>
 #include <skcms.h>
@@ -63,7 +60,6 @@
 #include <thread>
 #include <tuple>
 #include <type_traits>
-#include <unistd.h>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -74,8 +70,6 @@
 #include <sal/log.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
-#include <GL/glx.h>
-#include <fontconfig/fontconfig.h>
 #include <include/c/sk_canvas.h>
 #include <include/c/sk_colorspace.h>
 #include <include/c/sk_data.h>
@@ -233,10 +227,7 @@
 #include <include/gpu/mock/GrMockTypes.h>
 #include <include/gpu/vk/GrVkBackendContext.h>
 #include <include/gpu/vk/GrVkExtensions.h>
-#include <include/gpu/vk/GrVkMemoryAllocator.h>
 #include <include/gpu/vk/GrVkTypes.h>
-#include <include/pathops/SkPathOps.h>
-#include <include/ports/SkFontMgr_fontconfig.h>
 #include <include/ports/SkFontMgr_indirect.h>
 #include <include/ports/SkRemotableFontMgr.h>
 #include <include/private/GrContext_Base.h>
@@ -292,9 +283,6 @@
 #include <include/utils/SkRandom.h>
 #include <include/utils/SkShadowUtils.h>
 #include <include/utils/SkTextUtils.h>
-#include <src/Transform_inl.h>
-#include <src/c/sk_c_from_to.h>
-#include <src/c/sk_types_priv.h>
 #include <src/codec/SkAndroidCodecAdapter.h>
 #include <src/codec/SkBmpBaseCodec.h>
 #include <src/codec/SkBmpCodec.h>
@@ -339,7 +327,6 @@
 #include <src/core/SkBitmapProcState.h>
 #include <src/core/SkBitmapProvider.h>
 #include <src/core/SkBlendModePriv.h>
-#include <src/core/SkBlitBWMaskTemplate.h>
 #include <src/core/SkBlitRow.h>
 #include <src/core/SkBlitter.h>
 #include <src/core/SkBlurMask.h>
@@ -359,7 +346,6 @@
 #include <src/core/SkCoverageModePriv.h>
 #include <src/core/SkCpu.h>
 #include <src/core/SkCubicClipper.h>
-#include <src/core/SkCubicSolver.h>
 #include <src/core/SkDescriptor.h>
 #include <src/core/SkDevice.h>
 #include <src/core/SkDiscardableMemory.h>
@@ -608,7 +594,6 @@
 #include <src/gpu/GrTextureRenderTargetProxy.h>
 #include <src/gpu/GrTracing.h>
 #include <src/gpu/GrUserStencilSettings.h>
-#include <src/gpu/GrUtil.h>
 #include <src/gpu/GrVertexWriter.h>
 #include <src/gpu/GrWindowRectangles.h>
 #include <src/gpu/GrXferProcessor.h>
@@ -769,7 +754,6 @@
 #include <src/gpu/text/GrTextBlobCache.h>
 #include <src/gpu/text/GrTextContext.h>
 #include <src/gpu/text/GrTextTarget.h>
-#include <src/gpu/vk/GrVkAMDMemoryAllocator.h>
 #include <src/gpu/vk/GrVkBuffer.h>
 #include <src/gpu/vk/GrVkBufferView.h>
 #include <src/gpu/vk/GrVkCaps.h>
@@ -819,14 +803,6 @@
 #include <src/images/SkImageEncoderPriv.h>
 #include <src/images/SkJPEGWriteUtility.h>
 #include <src/lazy/SkDiscardableMemoryPool.h>
-#include <src/opts/SkBitmapProcState_opts.h>
-#include <src/opts/SkBlitMask_opts.h>
-#include <src/opts/SkBlitRow_opts.h>
-#include <src/opts/SkChecksum_opts.h>
-#include <src/opts/SkRasterPipeline_opts.h>
-#include <src/opts/SkSwizzler_opts.h>
-#include <src/opts/SkUtils_opts.h>
-#include <src/opts/SkXfermode_opts.h>
 #include <src/pathops/SkAddIntersections.h>
 #include <src/pathops/SkIntersectionHelper.h>
 #include <src/pathops/SkIntersections.h>
@@ -882,7 +858,6 @@
 #include <src/sfnt/SkOTTable_head.h>
 #include <src/sfnt/SkOTTable_name.h>
 #include <src/sfnt/SkOTUtils.h>
-#include <src/sfnt/SkSFNTHeader.h>
 #include <src/shaders/SkBitmapProcShader.h>
 #include <src/shaders/SkColorFilterShader.h>
 #include <src/shaders/SkColorShader.h>
@@ -907,7 +882,6 @@
 #include <src/sksl/SkSLByteCode.h>
 #include <src/sksl/SkSLByteCodeGenerator.h>
 #include <src/sksl/SkSLCFGGenerator.h>
-#include <src/sksl/SkSLCPP.h>
 #include <src/sksl/SkSLCPPCodeGenerator.h>
 #include <src/sksl/SkSLCPPUniformCTypes.h>
 #include <src/sksl/SkSLCompiler.h>
@@ -989,9 +963,6 @@
 #include <src/utils/SkShadowTessellator.h>
 #include <src/utils/SkShaperJSONWriter.h>
 #include <src/utils/SkUTF.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <third_party/gif/SkGifImageReader.h>
 #include <vulkan/vulkan_core.h>
 #endif // PCH_LEVEL >= 3
