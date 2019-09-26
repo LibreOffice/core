@@ -503,10 +503,6 @@ void ChartAreaPanel::selectionChanged(bool bCorrectType)
         updateData();
 }
 
-void ChartAreaPanel::SelectionInvalid()
-{
-}
-
 void ChartAreaPanel::updateModel(
         css::uno::Reference<css::frame::XModel> xModel)
 {

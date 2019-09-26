@@ -442,10 +442,6 @@ void ChartSeriesPanel::selectionChanged(bool bCorrectType)
         updateData();
 }
 
-void ChartSeriesPanel::SelectionInvalid()
-{
-}
-
 IMPL_LINK(ChartSeriesPanel, CheckBoxHdl, Button*, pButton, void)
 {
     CheckBox* pCheckBox = static_cast<CheckBox*>(pButton);

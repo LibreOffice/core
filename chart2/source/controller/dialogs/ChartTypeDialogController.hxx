@@ -96,7 +96,6 @@ public:
 
     virtual bool    shouldShow_3DLookControl() const;
     virtual bool    shouldShow_StackingControl() const;
-    virtual bool    shouldShow_DeepStackingControl() const;
     virtual bool    shouldShow_SplineControl() const;
     virtual bool    shouldShow_GeometryControl() const;
     virtual bool    shouldShow_SortByXValuesResourceGroup() const;
@@ -192,7 +191,6 @@ public:
     virtual void adjustParameterToMainType( ChartTypeParameter& rParameter ) override;
 
     virtual bool    shouldShow_StackingControl() const override;
-    virtual bool    shouldShow_DeepStackingControl() const override;
     virtual bool    shouldShow_SplineControl() const override;
 };
 

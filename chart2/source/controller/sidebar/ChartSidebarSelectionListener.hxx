@@ -26,8 +26,6 @@ public:
     virtual ~ChartSidebarSelectionListenerParent();
 
     virtual void selectionChanged(bool bSelected) = 0;
-
-    virtual void SelectionInvalid() = 0;
 };
 
 class ChartSidebarSelectionListener : public cppu::WeakImplHelper<css::view::XSelectionChangeListener>
