@@ -146,9 +146,7 @@ namespace svt { namespace table
         virtual tools::Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
         virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
         virtual void FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const override;
-        virtual OUString GetRowDescription( sal_Int32 _nRow ) const override;
         virtual OUString GetRowName(sal_Int32 _nIndex) const override;
-        virtual OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const override;
         virtual OUString GetColumnName( sal_Int32 _nIndex ) const override;
         virtual bool HasRowHeader() override;
         virtual bool HasColHeader() override;

@@ -91,9 +91,7 @@ public:
     virtual tools::Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)= 0;
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)= 0;
     virtual void FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const= 0;
-    virtual OUString GetRowDescription( sal_Int32 _nRow ) const = 0;
     virtual OUString GetRowName(sal_Int32 _nIndex) const = 0;
-    virtual OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const = 0;
     virtual OUString GetColumnName( sal_Int32 _nIndex ) const = 0;
     virtual OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const = 0;
 
