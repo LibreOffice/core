@@ -568,6 +568,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_autoRedefine:
         m_pImpl->m_pCurrentEntry->bAutoRedefine = nIntValue;
         break;
+        case NS_ooxml::LN_CT_Style_trPr:
         case NS_ooxml::LN_CT_Style_tcPr:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -577,14 +578,12 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 pProperties->resolve(*pTblStylePrHandler);
                 StyleSheetEntry* pEntry = m_pImpl->m_pCurrentEntry.get();
                 TableStyleSheetEntry& rTableEntry = dynamic_cast<TableStyleSheetEntry&>(*pEntry);
-                rTableEntry.AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag("tcPr"));
+                rTableEntry.AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag((nSprmId == NS_ooxml::LN_CT_Style_tcPr) ? OUString("tcPr") : OUString("trPr")));
 
                 // This is a <w:tcPr> directly under <w:style>, so it affects the whole table.
                 rTableEntry.pProperties->InsertProps(pTblStylePrHandler->getProperties());
             }
         }
-        break;
-        case NS_ooxml::LN_CT_Style_trPr:
         break;
         case NS_ooxml::LN_CT_Style_rsid:
         case NS_ooxml::LN_CT_Style_qFormat:
