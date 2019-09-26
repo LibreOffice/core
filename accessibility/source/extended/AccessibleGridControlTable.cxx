@@ -111,7 +111,7 @@ OUString SAL_CALL AccessibleGridControlTable::getAccessibleRowDescription( sal_I
 
     ensureIsAlive();
     ensureIsValidRow( nRow );
-    return m_aTable.GetRowDescription( nRow );
+    return "row description";
 }
 
 OUString SAL_CALL AccessibleGridControlTable::getAccessibleColumnDescription( sal_Int32 nColumn )
@@ -120,7 +120,7 @@ OUString SAL_CALL AccessibleGridControlTable::getAccessibleColumnDescription( sa
 
     ensureIsAlive();
     ensureIsValidColumn( nColumn );
-    return m_aTable.GetColumnDescription( static_cast<sal_uInt16>(nColumn) );
+    return "col description";
 }
 
 Reference< XAccessibleTable > SAL_CALL AccessibleGridControlTable::getAccessibleRowHeaders()

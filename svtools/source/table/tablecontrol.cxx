@@ -379,23 +379,11 @@ namespace svt { namespace table
     }
 
 
-    OUString TableControl::GetRowDescription( sal_Int32) const
-    {
-        return "row description";
-    }
-
-
     OUString TableControl::GetRowName( sal_Int32 _nIndex) const
     {
         OUString sRowName;
         GetModel()->getRowHeading( _nIndex ) >>= sRowName;
         return sRowName;
-    }
-
-
-    OUString TableControl::GetColumnDescription( sal_uInt16) const
-    {
-        return "col description";
     }
 
 
