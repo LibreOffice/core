@@ -460,7 +460,10 @@ bool SbiScanner::NextSym()
         // Hex literals are signed Integers ( as defined by basic
         // e.g. -2,147,483,648 through 2,147,483,647 (signed)
         sal_uInt64 lu = 0;
+        short nHexStringLength = 0;
         bool bOverflow = false;
+        // Skip leading zeros
+        while (nCol < aLine.getLength() && aLine[nCol] == '0') nCol++;
         while(nCol < aLine.getLength() && BasicCharClass::isAlphaNumeric(aLine[nCol], false))
         {
             sal_Unicode ch = rtl::toAsciiUpperCase(aLine[nCol]);
@@ -468,6 +471,7 @@ bool SbiScanner::NextSym()
             if( ((base == 16 ) && rtl::isAsciiHexDigit( ch ) ) ||
                      ((base == 8) && rtl::isAsciiOctalDigit( ch )))
             {
+                ++nHexStringLength;
                 int i = ch  - '0';
                 if( i > 9 ) i -= 7;
                 lu = ( lu * base ) + i;
@@ -487,7 +491,9 @@ bool SbiScanner::NextSym()
             ++nLineIdx;
             ++nCol;
         }
-        sal_Int32 ls = static_cast<sal_Int32>(lu);
+        // tdf#62326 - If the length of the hex string is smaller than 4 digits cast the result to 16 bit
+        // in order to get signed integers, e.g., SbxMININT through SbxMAXINT
+        sal_Int32 ls = nHexStringLength <= 4 ? static_cast<sal_Int16>(lu) : static_cast<sal_Int32>(lu);
         nVal = static_cast<double>(ls);
         eScanType = ( ls >= SbxMININT && ls <= SbxMAXINT ) ? SbxINTEGER : SbxLONG;
         if( bOverflow )
