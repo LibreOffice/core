@@ -31,12 +31,6 @@ Gui/qaccessible.h:613
 Gui/qaccessible.h:619
     void QAccessibleTableInterface::modelChange(class QAccessibleTableModelChangeEvent *,)
     empty
-include/basegfx/utils/systemdependentdata.hxx:122
-    unsigned int basegfx::SystemDependentData::getHoldCyclesInSeconds()const
-    60
-include/basegfx/utils/unopolypolygon.hxx:97
-    void basegfx::unotools::UnoPolyPolygon::modifying()const
-    empty
 include/canvas/base/bitmapcanvasbase.hxx:80
     unsigned char canvas::BitmapCanvasBase::hasAlpha()
     1

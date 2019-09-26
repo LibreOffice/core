@@ -115,12 +115,6 @@ namespace basegfx
         // mnCalculatedCycles
         sal_uInt32 calculateCombinedHoldCyclesInSeconds() const;
 
-        // Number of cycles a SystemDependentDataManager should/might
-        // hold this instance in seconds - does not have to be used,
-        // but should be. Default implementation returns 60(s). Override to
-        // offer useful data if you want to have better caching.
-        virtual sal_uInt32 getHoldCyclesInSeconds() const;
-
         // Size estimation of the entry in bytes - does not have to
         // be used, but should be. Default returns zero what
         // means there is no size estimation available. Override to
