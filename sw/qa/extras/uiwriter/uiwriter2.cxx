@@ -2247,10 +2247,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf105330)
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     rUndoManager.Undo();
 
-    //  Without the accompanying fix in place, height was only 1 twips (practically invisible), with
-    // the fix in place it is seen to be either 271 or 276 for different builds:
+    // Without the accompanying fix in place, height was only 1 twips (practically invisible).
+    // Require at least 12pt height (font size under the cursor), in twips.
     CPPUNIT_ASSERT_GREATEREQUAL(
-        static_cast<long>(271),
+        static_cast<long>(240),
         pWrtShell->GetVisibleCursor()->GetTextCursor().GetSize().getHeight());
 }
 
