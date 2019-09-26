@@ -461,11 +461,6 @@ bool SwXMLTextBlocks::IsFileUCBStorage( const OUString & rFileName)
     return bRet;
 }
 
-SwImpBlocks::FileType SwXMLTextBlocks::GetFileType() const
-{
-    return FileType::XML;
-}
-
 OUString SwXMLTextBlocks::GeneratePackageName ( const OUString& rShort )
 {
     OString sByte(OUStringToOString(rShort, RTL_TEXTENCODING_UTF7));
