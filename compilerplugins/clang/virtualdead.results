@@ -181,12 +181,6 @@ include/vbahelper/vbahelperinterface.hxx:91
 include/vbahelper/vbareturntypes.hxx:41
     type-parameter-?-? ooo::vba::DefaultReturnHelper::getValue()
     unknown2
-include/vcl/accessibletable.hxx:94
-    class rtl::OUString vcl::table::IAccessibleTable::GetRowDescription(int,)const
-    "row description"
-include/vcl/accessibletable.hxx:96
-    class rtl::OUString vcl::table::IAccessibleTable::GetColumnDescription(unsigned short,)const
-    "col description"
 sc/source/core/opencl/formulagroupcl.cxx:1059
     void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
     empty
@@ -262,15 +256,6 @@ vcl/inc/salprn.hxx:85
 vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
     0
-vcl/inc/unx/saldata.hxx:54
-    void X11SalData::initNWF()
-    empty
-vcl/inc/unx/saldata.hxx:55
-    void X11SalData::deInitNWF()
-    empty
-vcl/inc/wizdlg.hxx:214
-    _Bool vcl::RoadmapWizard::leaveState(short,)
-    1
 writerfilter/inc/ooxml/OOXMLDocument.hxx:216
     void writerfilter::ooxml::OOXMLDocument::setXNoteType(unsigned int,)
     empty

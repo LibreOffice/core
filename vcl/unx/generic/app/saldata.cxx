@@ -254,7 +254,6 @@ X11SalData::~X11SalData()
 
 void X11SalData::Dispose()
 {
-    deInitNWF();
     delete GetDisplay();
     SetSalData( nullptr );
 }
@@ -270,14 +269,6 @@ void X11SalData::Init()
 {
     pXLib_.reset(new SalXLib());
     pXLib_->Init();
-}
-
-void X11SalData::initNWF()
-{
-}
-
-void X11SalData::deInitNWF()
-{
 }
 
 void X11SalData::ErrorTrapPush()

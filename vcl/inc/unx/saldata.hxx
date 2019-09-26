@@ -51,9 +51,6 @@ public:
     virtual void            Init();
     virtual void            Dispose() override;
 
-    virtual void            initNWF();
-    virtual void            deInitNWF();
-
     void                    DeleteDisplay(); // for shutdown
 
     SalXLib*                GetLib() const { return pXLib_.get(); }
