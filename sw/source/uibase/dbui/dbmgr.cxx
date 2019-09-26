@@ -1080,8 +1080,6 @@ public:
     explicit MailDispatcherListener_Impl( SwDBManager &rDBManager )
         : m_rDBManager( rDBManager ) {}
 
-    virtual void started( ::rtl::Reference<MailDispatcher> ) override {};
-    virtual void stopped( ::rtl::Reference<MailDispatcher> ) override {};
     virtual void idle( ::rtl::Reference<MailDispatcher> ) override {};
 
     virtual void mailDelivered( ::rtl::Reference<MailDispatcher>,
