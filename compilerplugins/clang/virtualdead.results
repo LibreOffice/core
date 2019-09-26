@@ -7,12 +7,6 @@ basic/source/comp/codegen.cxx:476
 basic/source/comp/codegen.cxx:526
     _Bool BufferTransformer::processParams()
     1
-chart2/source/controller/dialogs/ChartTypeDialogController.hxx:99
-    _Bool chart::ChartTypeDialogController::shouldShow_DeepStackingControl()const
-    0
-chart2/source/controller/sidebar/ChartSidebarSelectionListener.hxx:30
-    void chart::sidebar::ChartSidebarSelectionListenerParent::SelectionInvalid()
-    empty
 desktop/source/deployment/registry/inc/dp_backenddb.hxx:119
     class rtl::OUString dp_registry::backend::BackendDb::getDbNSName()
     "http://openoffi
