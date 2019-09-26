@@ -25,8 +25,6 @@
 #include <sfx2/module.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <unotools/textsearch.hxx>
-#include <vcl/svlbitm.hxx>
-#include <vcl/viewdataentry.hxx>
 #include <unotools/charclass.hxx>
 
 #include <editeng/unolingu.hxx>
@@ -311,13 +309,14 @@ void SvxTPage::DeactivatePage()
 {
 }
 
-SvxTPView::SvxTPView(weld::Container* pParent, weld::Builder* pTopLevel)
+SvxTPView::SvxTPView(weld::Container* pParent, weld::Window* pDialog, weld::Builder* pTopLevel)
     : SvxTPage(pParent, "svx/ui/redlineviewpage.ui", "RedlineViewPage")
     , bEnableAccept(true)
     , bEnableAcceptAll(true)
     , bEnableReject(true)
     , bEnableRejectAll(true)
     , bEnableUndo(true)
+    , m_pDialog(pDialog)
     , m_xAccept(pTopLevel->weld_button("accept"))
     , m_xReject(pTopLevel->weld_button("reject"))
     , m_xAcceptAll(pTopLevel->weld_button("acceptall"))
@@ -442,6 +441,12 @@ void SvxTPView::EnableClearFormatButton(weld::Button& rButton, bool bFlag)
         {
             rButton.set_label(sText.copy(0, nPos - 1));
         }
+    }
+
+    if (m_pDialog)
+    {
+        // tdf#127218 allow dialog to shrink
+        m_pDialog->resize_to_request();
     }
 }
 
@@ -985,7 +990,7 @@ IMPL_LINK_NOARG(SvxTPFilter, RefHandle, weld::Button&, void)
     aRefLink.Call(this);
 }
 
-SvxAcceptChgCtr::SvxAcceptChgCtr(weld::Container* pParent, weld::Builder* pTopLevel)
+SvxAcceptChgCtr::SvxAcceptChgCtr(weld::Container* pParent, weld::Window* pDialog, weld::Builder* pTopLevel)
     : m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/redlinecontrol.ui"))
     , m_xTabCtrl(m_xBuilder->weld_notebook("RedlineControl"))
 {
@@ -993,7 +998,7 @@ SvxAcceptChgCtr::SvxAcceptChgCtr(weld::Container* pParent, weld::Builder* pTopLe
     m_xTabCtrl->connect_leave_page(LINK(this, SvxAcceptChgCtr, DeactivatePageHdl));
 
     m_xTPFilter.reset(new SvxTPFilter(m_xTabCtrl->get_page("filter")));
-    m_xTPView.reset(new SvxTPView(m_xTabCtrl->get_page("view"), pTopLevel));
+    m_xTPView.reset(new SvxTPView(m_xTabCtrl->get_page("view"), pDialog, pTopLevel));
     m_xTPFilter->SetRedlinTable(m_xTPView->GetTableControl());
     m_xTabCtrl->set_current_page("view");
     m_xTabCtrl->show();
