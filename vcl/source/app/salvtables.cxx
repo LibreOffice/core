@@ -3717,6 +3717,17 @@ public:
         weld::TreeView::connect_editing_done(rLink);
     }
 
+    virtual void start_editing(const weld::TreeIter& rIter) override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        m_xTreeView->EditEntry(rVclIter.iter);
+    }
+
+    virtual void end_editing() override
+    {
+        m_xTreeView->EndEditing();
+    }
+
     void set_image(SvTreeListEntry* pEntry, const Image& rImage, int col)
     {
         if (col == -1)

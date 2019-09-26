@@ -8648,6 +8648,29 @@ public:
         return ret;
     }
 
+    virtual void start_editing(const weld::TreeIter& rIter) override
+    {
+        int col = get_view_col(m_nTextCol);
+        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, col));
+        assert(pColumn && "wrong column");
+
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+
+        gtk_tree_view_set_cursor(m_pTreeView, path, pColumn, true);
+
+        gtk_tree_path_free(path);
+    }
+
+    virtual void end_editing() override
+    {
+        GtkTreeViewColumn *focus_column = nullptr;
+        gtk_tree_view_get_cursor(m_pTreeView, nullptr, &focus_column);
+        if (focus_column)
+            gtk_cell_area_stop_editing(gtk_cell_layout_get_area(GTK_CELL_LAYOUT(focus_column)), true);
+    }
+
     virtual TreeView* get_drag_source() const override
     {
         return g_DragSource;
@@ -8720,10 +8743,7 @@ IMPL_LINK_NOARG(GtkInstanceTreeView, async_signal_changed, void*, void)
 
 IMPL_LINK_NOARG(GtkInstanceTreeView, async_stop_cell_editing, void*, void)
 {
-    GtkTreeViewColumn *focus_column = nullptr;
-    gtk_tree_view_get_cursor(m_pTreeView, nullptr, &focus_column);
-    if (focus_column)
-        gtk_cell_area_stop_editing(gtk_cell_layout_get_area(GTK_CELL_LAYOUT(focus_column)), true);
+    end_editing();
 }
 
 class GtkInstanceSpinButton : public GtkInstanceEntry, public virtual weld::SpinButton

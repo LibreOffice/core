@@ -28,7 +28,6 @@
 #include <bitmaps.hlst>
 #include <indexfieldscontrol.hxx>
 #include <indexcollection.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -67,146 +66,54 @@ namespace dbaui
         return !(_rLHS == _rRHS);
     }
 
-    // DbaIndexList
-    DbaIndexList::DbaIndexList(vcl::Window* _pParent, WinBits nWinBits)
-        :SvTreeListBox(_pParent, nWinBits)
-        ,m_bSuspendSelectHdl(false)
-    {
-    }
-
-    bool DbaIndexList::EditedEntry( SvTreeListEntry* _pEntry, const OUString& _rNewText )
-    {
-        // first check if this is valid SQL92 name
-        if ( isSQL92CheckEnabled(m_xConnection) )
-        {
-            Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
-            if ( xMeta.is() )
-            {
-                OUString sAlias = ::dbtools::convertName2SQLName(_rNewText, xMeta->getExtraNameCharacters());
-                if ( ( xMeta->supportsMixedCaseQuotedIdentifiers() )
-                        ?
-                        sAlias != _rNewText
-                        :
-                !_rNewText.equalsIgnoreAsciiCase(sAlias))
-                    return false;
-            }
-        }
-
-        if (!SvTreeListBox::EditedEntry(_pEntry, _rNewText))
-            return false;
-
-        OUString sOldText = GetEntryText(_pEntry);
-        SvTreeListBox::SetEntryText(_pEntry, _rNewText);
-
-        bool bValid = true;
-        if (m_aEndEditHdl.IsSet())
-            bValid = m_aEndEditHdl.Call(_pEntry);
-
-        if (bValid)
-            return true;
-
-        SvTreeListBox::SetEntryText(_pEntry, sOldText);
-
-        return false;
-    }
-
-    void DbaIndexList::enableSelectHandler()
-    {
-        OSL_ENSURE(m_bSuspendSelectHdl, "DbaIndexList::enableSelectHandler: invalid call (this is not cumulative)!");
-        m_bSuspendSelectHdl = false;
-    }
-
-    void DbaIndexList::disableSelectHandler()
-    {
-        OSL_ENSURE(!m_bSuspendSelectHdl, "DbaIndexList::enableSelectHandler: invalid call (this is not cumulative)!");
-        m_bSuspendSelectHdl = true;
-    }
-
-    void DbaIndexList::SelectNoHandlerCall( SvTreeListEntry* _pEntry )
-    {
-        disableSelectHandler();
-        Select(_pEntry );
-        enableSelectHandler();
-    }
-
-    bool DbaIndexList::Select(SvTreeListEntry* pEntry, bool _bSelect)
-    {
-        bool bReturn = SvTreeListBox::Select(pEntry, _bSelect);
-
-        if (!m_bSuspendSelectHdl && _bSelect)
-            m_aSelectHdl.Call(*this);
-
-        return bReturn;
-    }
-
-    VCL_BUILDER_FACTORY_ARGS(DbaIndexList, WB_BORDER)
-
     // DbaIndexDialog
-    DbaIndexDialog::DbaIndexDialog( vcl::Window* _pParent, const Sequence< OUString >& _rFieldNames,
-                                    const Reference< XNameAccess >& _rxIndexes,
-                                    const Reference< XConnection >& _rxConnection,
-                                    const Reference< XComponentContext >& _rxContext)
-        :ModalDialog( _pParent, "IndexDesignDialog", "dbaccess/ui/indexdesigndialog.ui")
-        ,m_xConnection(_rxConnection)
-        ,m_pPreviousSelection(nullptr)
-        ,m_bEditAgain(false)
-        ,m_xContext(_rxContext)
+    DbaIndexDialog::DbaIndexDialog(weld::Window* pParent, const Sequence< OUString >& _rFieldNames,
+                                   const Reference< XNameAccess >& _rxIndexes,
+                                   const Reference< XConnection >& _rxConnection,
+                                   const Reference< XComponentContext >& _rxContext)
+        : GenericDialogController(pParent, "dbaccess/ui/indexdesigndialog.ui", "IndexDesignDialog")
+        , m_xConnection(_rxConnection)
+        , m_bEditingActive(false)
+        , m_bEditAgain(false)
+        , m_bNoHandlerCall(false)
+        , m_xContext(_rxContext)
+        , m_xActions(m_xBuilder->weld_toolbar("ACTIONS"))
+        , m_xIndexList(m_xBuilder->weld_tree_view("INDEX_LIST"))
+        , m_xIndexDetails(m_xBuilder->weld_label("INDEX_DETAILS"))
+        , m_xDescriptionLabel(m_xBuilder->weld_label("DESC_LABEL"))
+        , m_xDescription(m_xBuilder->weld_label("DESCRIPTION"))
+        , m_xUnique(m_xBuilder->weld_check_button("UNIQUE"))
+        , m_xFieldsLabel(m_xBuilder->weld_label("FIELDS_LABEL"))
+        , m_xClose(m_xBuilder->weld_button("close"))
+        , m_xTable(m_xBuilder->weld_container("FIELDS"))
+        , m_xTableCtrlParent(m_xTable->CreateChildFrame())
+        , m_xFields(VclPtr<IndexFieldsControl>::Create(m_xTableCtrlParent))
     {
-        get(m_pActions, "ACTIONS");
+        m_xIndexList->set_size_request(m_xIndexList->get_approximate_digit_width() * 17,
+                                       m_xIndexList->get_height_rows(12));
 
-        mnNewCmdId = m_pActions->GetItemId(".index:createNew");
-        mnDropCmdId = m_pActions->GetItemId(".index:dropCurrent");
-        mnRenameCmdId = m_pActions->GetItemId(".index:renameCurrent");
-        mnSaveCmdId = m_pActions->GetItemId(".index:saveCurrent");
-        mnResetCmdId = m_pActions->GetItemId(".index:resetCurrent");
+        int nWidth = m_xIndexList->get_approximate_digit_width() * 60;
+        int nHeight = m_xIndexList->get_height_rows(8);
+        m_xTable->set_size_request(nWidth, nHeight);
 
-        maScNewCmdImg = m_pActions->GetItemImage(mnNewCmdId);
-        maScDropCmdImg = m_pActions->GetItemImage(mnDropCmdId);
-        maScRenameCmdImg = m_pActions->GetItemImage(mnRenameCmdId);
-        maScSaveCmdImg = m_pActions->GetItemImage(mnSaveCmdId);
-        maScResetCmdImg = m_pActions->GetItemImage(mnResetCmdId);
-        maLcNewCmdImg = get<FixedImage>("image1")->GetImage();
-        maLcDropCmdImg = get<FixedImage>("image2")->GetImage();
-        maLcRenameCmdImg = get<FixedImage>("image3")->GetImage();
-        maLcSaveCmdImg = get<FixedImage>("image4")->GetImage();
-        maLcResetCmdImg = get<FixedImage>("image5")->GetImage();
+        m_xActions->connect_clicked(LINK(this, DbaIndexDialog, OnIndexAction));
 
-        get(m_pIndexList, "INDEX_LIST");
-        Size aSize(LogicToPixel(Size(70, 97), MapMode(MapUnit::MapAppFont)));
-        m_pIndexList->set_width_request(aSize.Width());
-        m_pIndexList->set_height_request(aSize.Height());
-        get(m_pIndexDetails, "INDEX_DETAILS");
-        get(m_pDescriptionLabel, "DESC_LABEL");
-        get(m_pDescription, "DESCRIPTION");
-        get(m_pUnique, "UNIQUE");
-        get(m_pFieldsLabel, "FIELDS_LABEL");
-        get(m_pFields, "FIELDS");
-        aSize = LogicToPixel(Size(128, 61), MapMode(MapUnit::MapAppFont));
-        m_pFields->set_width_request(aSize.Width());
-        m_pFields->set_height_request(aSize.Height());
-        get(m_pClose, "close");
+        m_xIndexList->connect_changed(LINK(this, DbaIndexDialog, OnIndexSelected));
+        m_xIndexList->connect_editing_started(LINK(this, DbaIndexDialog, OnEntryEditing));
+        m_xIndexList->connect_editing_done(LINK(this, DbaIndexDialog, OnEntryEdited));
 
-        m_pActions->SetSelectHdl(LINK(this, DbaIndexDialog, OnIndexAction));
+        m_xFields->SetSizePixel(Size(nWidth, 100));
+        m_xFields->Init(_rFieldNames, ::dbtools::getBooleanDataSourceSetting( m_xConnection, "AddIndexAppendix" ));
+        m_xFields->Show();
 
-        m_pIndexList->SetSelectHdl(LINK(this, DbaIndexDialog, OnIndexSelected));
-        m_pIndexList->SetEndEditHdl(LINK(this, DbaIndexDialog, OnEntryEdited));
-        m_pIndexList->SetSelectionMode(SelectionMode::Single);
-        m_pIndexList->SetHighlightRange();
-        m_pIndexList->setConnection(m_xConnection);
-
-        m_pFields->SetSizePixel(Size(300, 100));
-        m_pFields->Init(_rFieldNames, ::dbtools::getBooleanDataSourceSetting( m_xConnection, "AddIndexAppendix" ));
-
-        setToolBox(m_pActions);
-
-        m_pIndexes.reset(new OIndexCollection());
+        m_xIndexes.reset(new OIndexCollection());
         try
         {
-            m_pIndexes->attach(_rxIndexes);
+            m_xIndexes->attach(_rxIndexes);
         }
         catch(SQLException& e)
         {
-            ::dbtools::showError(SQLExceptionInfo(e),VCLUnoHelper::GetInterface(_pParent),_rxContext);
+            ::dbtools::showError(SQLExceptionInfo(e), pParent->GetXWindow(), _rxContext);
         }
         catch(Exception&)
         {
@@ -215,14 +122,14 @@ namespace dbaui
 
         fillIndexList();
 
-        m_pUnique->SetClickHdl(LINK(this, DbaIndexDialog, OnModifiedClick));
-        m_pFields->SetModifyHdl(LINK(this, DbaIndexDialog, OnModified));
+        m_xUnique->connect_clicked(LINK(this, DbaIndexDialog, OnModifiedClick));
+        m_xFields->SetModifyHdl(LINK(this, DbaIndexDialog, OnModified));
 
-        m_pClose->SetClickHdl(LINK(this, DbaIndexDialog, OnCloseDialog));
+        m_xClose->connect_clicked(LINK(this, DbaIndexDialog, OnCloseDialog));
 
         // if all of the indexes have an empty description, we're not interested in displaying it
         bool bFound = false;
-        for (auto const& check : *m_pIndexes)
+        for (auto const& check : *m_xIndexes)
         {
             if (!check.sDescription.isEmpty())
             {
@@ -233,94 +140,79 @@ namespace dbaui
         if (!bFound)
         {
             // hide the controls which are necessary for the description
-            m_pDescription->Hide();
-            m_pDescriptionLabel->Hide();
+            m_xDescription->hide();
+            m_xDescriptionLabel->hide();
         }
     }
 
     void DbaIndexDialog::updateToolbox()
     {
-        m_pActions->EnableItem(mnNewCmdId, !m_pIndexList->IsEditingActive());
+        m_xActions->set_item_sensitive("ID_INDEX_NEW", !m_bEditingActive);
 
-        SvTreeListEntry* pSelected = m_pIndexList->FirstSelected();
-        bool bSelectedAnything = nullptr != pSelected;
-
-        if (pSelected)
+        int nSelected = m_xIndexList->get_selected_index();
+        bool bSelectedAnything = nSelected != -1;
+        if (bSelectedAnything)
         {
             // is the current entry modified?
-            Indexes::const_iterator aSelectedPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(pSelected->GetUserData());
-            m_pActions->EnableItem(mnSaveCmdId, aSelectedPos->isModified() || aSelectedPos->isNew());
-            m_pActions->EnableItem(mnResetCmdId, aSelectedPos->isModified() || aSelectedPos->isNew());
-            bSelectedAnything = bSelectedAnything && !aSelectedPos->bPrimaryKey;
+            Indexes::const_iterator aSelectedPos = m_xIndexes->begin() + m_xIndexList->get_id(nSelected).toUInt32();
+            m_xActions->set_item_sensitive("ID_INDEX_SAVE", aSelectedPos->isModified() || aSelectedPos->isNew());
+            m_xActions->set_item_sensitive("ID_INDEX_RESET", aSelectedPos->isModified() || aSelectedPos->isNew());
+            bSelectedAnything = !aSelectedPos->bPrimaryKey;
         }
         else
         {
-            m_pActions->EnableItem(mnSaveCmdId, false);
-            m_pActions->EnableItem(mnResetCmdId, false);
+            m_xActions->set_item_sensitive("ID_INDEX_SAVE", false);
+            m_xActions->set_item_sensitive("ID_INDEX_RESET", false);
         }
-        m_pActions->EnableItem(mnDropCmdId, bSelectedAnything);
-        m_pActions->EnableItem(mnRenameCmdId, bSelectedAnything);
+        m_xActions->set_item_sensitive("ID_INDEX_DROP", bSelectedAnything);
+        m_xActions->set_item_sensitive("ID_INDEX_RENAME", bSelectedAnything);
     }
 
     void DbaIndexDialog::fillIndexList()
     {
-        Image aPKeyIcon(StockImage::Yes, BMP_PKEYICON);
+        OUString aPKeyIcon(BMP_PKEYICON);
         // fill the list with the index names
-        m_pIndexList->Clear();
-        sal_Int32 nPos = 0;
-        for (auto const& indexLoop : *m_pIndexes)
+        m_xIndexList->clear();
+        sal_uInt32 nPos = 0;
+        for (auto const& indexLoop : *m_xIndexes)
         {
-            SvTreeListEntry* pNewEntry = nullptr;
+            m_xIndexList->append(OUString::number(nPos), indexLoop.sName);
             if (indexLoop.bPrimaryKey)
-                pNewEntry = m_pIndexList->InsertEntry(indexLoop.sName, aPKeyIcon, aPKeyIcon);
-            else
-                pNewEntry = m_pIndexList->InsertEntry(indexLoop.sName);
-
-            pNewEntry->SetUserData(reinterpret_cast< void* >(nPos));
+                m_xIndexList->set_image(nPos, aPKeyIcon);
             ++nPos;
         }
 
-        OnIndexSelected(*m_pIndexList);
+        if (nPos)
+            m_xIndexList->select(0);
+
+        IndexSelected();
     }
 
     DbaIndexDialog::~DbaIndexDialog( )
     {
-        disposeOnce();
+        m_xIndexes.reset();
+        m_xFields.disposeAndClear();
+        m_xTableCtrlParent->dispose();
+        m_xTableCtrlParent.clear();
     }
 
-    void DbaIndexDialog::dispose()
+    bool DbaIndexDialog::implCommit(const weld::TreeIter* pEntry)
     {
-        setToolBox(nullptr);
-        m_pIndexes.reset();
-        m_pActions.clear();
-        m_pIndexList.clear();
-        m_pIndexDetails.clear();
-        m_pDescriptionLabel.clear();
-        m_pDescription.clear();
-        m_pUnique.clear();
-        m_pFieldsLabel.clear();
-        m_pFields.clear();
-        m_pClose.clear();
-        ModalDialog::dispose();
-    }
+        assert(pEntry && "DbaIndexDialog::implCommit: invalid entry!");
 
-    bool DbaIndexDialog::implCommit(SvTreeListEntry const * _pEntry)
-    {
-        OSL_ENSURE(_pEntry, "DbaIndexDialog::implCommit: invalid entry!");
-
-        Indexes::iterator aCommitPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
+        Indexes::iterator aCommitPos = m_xIndexes->begin() + m_xIndexList->get_id(*pEntry).toUInt32();
 
         // if it's not a new index, remove it
         // (we can't modify indexes, only drop'n'insert)
         if (!aCommitPos->isNew())
-            if (!implDropIndex(_pEntry, false))
+            if (!implDropIndex(pEntry, false))
                 return false;
 
         // create the new index
         SQLExceptionInfo aExceptionInfo;
         try
         {
-            m_pIndexes->commitNewIndex(aCommitPos);
+            m_xIndexes->commitNewIndex(aCommitPos);
         }
         catch(SQLContext& e) { aExceptionInfo = SQLExceptionInfo(e); }
         catch(SQLWarning& e) { aExceptionInfo = SQLExceptionInfo(e); }
@@ -330,11 +222,11 @@ namespace dbaui
         updateToolbox();
 
         if (aExceptionInfo.isValid())
-            showError(aExceptionInfo, VCLUnoHelper::GetInterface(this), m_xContext);
+            showError(aExceptionInfo, m_xDialog->GetXWindow(), m_xContext);
         else
         {
-            m_pUnique->SaveValue();
-            m_pFields->SaveValue();
+            m_xUnique->save_state();
+            m_xFields->SaveValue();
         }
 
         return !aExceptionInfo.isValid();
@@ -354,7 +246,7 @@ namespace dbaui
         for ( i = 1; i < 0x7FFFFFFF; ++i )
         {
             sNewIndexName = sNewIndexNameBase + OUString::number(i);
-            if (m_pIndexes->end() == m_pIndexes->find(sNewIndexName))
+            if (m_xIndexes->end() == m_xIndexes->find(sNewIndexName))
                 break;
         }
         if (i == 0x7FFFFFFF)
@@ -364,38 +256,41 @@ namespace dbaui
             return;
         }
 
-        SvTreeListEntry* pNewEntry = m_pIndexList->InsertEntry(sNewIndexName);
-        m_pIndexes->insert(sNewIndexName);
+        std::unique_ptr<weld::TreeIter> xNewEntry(m_xIndexList->make_iterator());
+        m_xIndexList->insert(nullptr, -1, &sNewIndexName, nullptr, nullptr, nullptr, nullptr, false, xNewEntry.get());
+        m_xIndexes->insert(sNewIndexName);
 
         // update the user data on the entries in the list box:
         // they're iterators of the index collection, and thus they have changed when removing the index
-        for (SvTreeListEntry* pAdjust = m_pIndexList->First(); pAdjust; pAdjust = m_pIndexList->Next(pAdjust))
-        {
-            Indexes::const_iterator aAfterInsertPos = m_pIndexes->find(m_pIndexList->GetEntryText(pAdjust));
-            OSL_ENSURE(aAfterInsertPos != m_pIndexes->end(), "DbaIndexDialog::OnNewIndex: problems with one of the entries!");
-            pAdjust->SetUserData(reinterpret_cast< void* >(sal_Int32(aAfterInsertPos - m_pIndexes->begin())));
-        }
+        m_xIndexList->all_foreach([this](weld::TreeIter& rEntry){
+            Indexes::const_iterator aAfterInsertPos = m_xIndexes->find(m_xIndexList->get_text(rEntry));
+            OSL_ENSURE(aAfterInsertPos != m_xIndexes->end(), "DbaIndexDialog::OnNewIndex: problems with one of the entries!");
+            m_xIndexList->set_id(rEntry, OUString::number(aAfterInsertPos - m_xIndexes->begin()));
+            return false;
+        });
 
         // select the entry and start in-place editing
-        m_pIndexList->SelectNoHandlerCall(pNewEntry);
-        OnIndexSelected(*m_pIndexList);
-        m_pIndexList->EditEntry(pNewEntry);
+        m_bNoHandlerCall = true;
+        m_xIndexList->select(*xNewEntry);
+        m_bNoHandlerCall = false;
+        IndexSelected();
+        m_xIndexList->grab_focus();
+        m_xIndexList->start_editing(*xNewEntry);
         updateToolbox();
     }
 
     void DbaIndexDialog::OnDropIndex(bool _bConfirm)
     {
+        std::unique_ptr<weld::TreeIter> xSelected(m_xIndexList->make_iterator());
         // the selected index
-        SvTreeListEntry* pSelected = m_pIndexList->FirstSelected();
-        OSL_ENSURE(pSelected, "DbaIndexDialog::OnDropIndex: invalid call!");
-        if (pSelected)
+        if (m_xIndexList->get_selected(xSelected.get()))
         {
             // let the user confirm the drop
             if (_bConfirm)
             {
                 OUString sConfirm(DBA_RES(STR_CONFIRM_DROP_INDEX));
-                sConfirm = sConfirm.replaceFirst("$name$", m_pIndexList->GetEntryText(pSelected));
-                std::unique_ptr<weld::MessageDialog> xConfirm(Application::CreateMessageDialog(GetFrameWeld(),
+                sConfirm = sConfirm.replaceFirst("$name$", m_xIndexList->get_text(*xSelected));
+                std::unique_ptr<weld::MessageDialog> xConfirm(Application::CreateMessageDialog(m_xDialog.get(),
                                                               VclMessageType::Question, VclButtonsType::YesNo,
                                                               sConfirm));
                 if (RET_YES != xConfirm->run())
@@ -403,58 +298,57 @@ namespace dbaui
             }
 
             // do the drop
-            implDropIndex(pSelected, true);
+            implDropIndex(xSelected.get(), true);
 
             // reflect the new selection in the toolbox
             updateToolbox();
         }
     }
 
-    bool DbaIndexDialog::implDropIndex(SvTreeListEntry const * _pEntry, bool _bRemoveFromCollection)
+    bool DbaIndexDialog::implDropIndex(const weld::TreeIter* pEntry, bool _bRemoveFromCollection)
     {
         // do the drop
-        Indexes::iterator aDropPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
-        OSL_ENSURE(aDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: did not find the index in my collection!");
+        Indexes::iterator aDropPos = m_xIndexes->begin() + m_xIndexList->get_id(*pEntry).toUInt32();
+        OSL_ENSURE(aDropPos != m_xIndexes->end(), "DbaIndexDialog::OnDropIndex: did not find the index in my collection!");
 
         SQLExceptionInfo aExceptionInfo;
         bool bSuccess = false;
         try
         {
             if (_bRemoveFromCollection)
-                bSuccess = m_pIndexes->drop(aDropPos);
+                bSuccess = m_xIndexes->drop(aDropPos);
             else
-                bSuccess = m_pIndexes->dropNoRemove(aDropPos);
+                bSuccess = m_xIndexes->dropNoRemove(aDropPos);
         }
         catch(SQLContext& e) { aExceptionInfo = SQLExceptionInfo(e); }
         catch(SQLWarning& e) { aExceptionInfo = SQLExceptionInfo(e); }
         catch(SQLException& e) { aExceptionInfo = SQLExceptionInfo(e); }
 
         if (aExceptionInfo.isValid())
-            showError(aExceptionInfo, VCLUnoHelper::GetInterface(this), m_xContext);
+            showError(aExceptionInfo, m_xDialog->GetXWindow(), m_xContext);
         else if (bSuccess && _bRemoveFromCollection)
         {
-            SvTreeList* pModel = m_pIndexList->GetModel();
+            m_bNoHandlerCall = true;
 
-            m_pIndexList->disableSelectHandler();
-            pModel->Remove(_pEntry);
-            m_pIndexList->enableSelectHandler();
+            // if the entry to remove is the selected on...
+            if (m_xPreviousSelection && m_xPreviousSelection->equal(*pEntry))
+                m_xPreviousSelection.reset();
+            m_xIndexList->remove(*pEntry);
+
+            m_bNoHandlerCall = false;
 
             // update the user data on the entries in the list box:
             // they're iterators of the index collection, and thus they have changed when removing the index
-            for (SvTreeListEntry* pAdjust = m_pIndexList->First(); pAdjust; pAdjust = m_pIndexList->Next(pAdjust))
-            {
-                Indexes::const_iterator aAfterDropPos = m_pIndexes->find(m_pIndexList->GetEntryText(pAdjust));
-                OSL_ENSURE(aAfterDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: problems with one of the remaining entries!");
-                pAdjust->SetUserData(reinterpret_cast< void* >(sal_Int32(aAfterDropPos - m_pIndexes->begin())));
-            }
-
-            // if the removed entry was the selected on...
-            if (m_pPreviousSelection == _pEntry)
-                m_pPreviousSelection = nullptr;
+            m_xIndexList->all_foreach([this](weld::TreeIter& rEntry){
+                Indexes::const_iterator aAfterDropPos = m_xIndexes->find(m_xIndexList->get_text(rEntry));
+                OSL_ENSURE(aAfterDropPos != m_xIndexes->end(), "DbaIndexDialog::OnDropIndex: problems with one of the remaining entries!");
+                m_xIndexList->set_id(rEntry, OUString::number(aAfterDropPos - m_xIndexes->begin()));
+                return false;
+            });
 
             // the Remove automatically selected another entry (if possible), but we disabled the calling of the handler
             // to prevent that we missed something... call the handler directly
-            OnIndexSelected(*m_pIndexList);
+            IndexSelected();
         }
 
         return !aExceptionInfo.isValid();
@@ -463,26 +357,23 @@ namespace dbaui
     void DbaIndexDialog::OnRenameIndex()
     {
         // the selected index
-        SvTreeListEntry* pSelected = m_pIndexList->FirstSelected();
-        OSL_ENSURE(pSelected, "DbaIndexDialog::OnRenameIndex: invalid call!");
+        std::unique_ptr<weld::TreeIter> xSelected(m_xIndexList->make_iterator());
+        // the selected index
+        m_xIndexList->get_selected(xSelected.get());
 
         // save the changes made 'til here
         // Upon leaving the edit mode, the control will be re-initialized with the
         // settings from the current entry
         implSaveModified(false);
 
-        m_pIndexList->EditEntry(pSelected);
+        m_xIndexList->grab_focus();
+        m_xIndexList->start_editing(*xSelected);
         updateToolbox();
     }
 
     void DbaIndexDialog::OnSaveIndex()
     {
         // the selected index
-#if OSL_DEBUG_LEVEL > 0
-        SvTreeListEntry* pSelected = m_pIndexList->FirstSelected();
-        OSL_ENSURE( pSelected, "DbaIndexDialog::OnSaveIndex: invalid call!" );
-#endif
-
         implCommitPreviouslySelected();
         updateToolbox();
     }
@@ -490,10 +381,12 @@ namespace dbaui
     void DbaIndexDialog::OnResetIndex()
     {
         // the selected index
-        SvTreeListEntry* pSelected = m_pIndexList->FirstSelected();
-        OSL_ENSURE(pSelected, "DbaIndexDialog::OnResetIndex: invalid call!");
+        std::unique_ptr<weld::TreeIter> xSelected(m_xIndexList->make_iterator());
+        // the selected index
+        m_xIndexList->get_selected(xSelected.get());
+        OSL_ENSURE(xSelected, "DbaIndexDialog::OnResetIndex: invalid call!");
 
-        Indexes::iterator aResetPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(pSelected->GetUserData());
+        Indexes::iterator aResetPos = m_xIndexes->begin() + m_xIndexList->get_id(*xSelected).toUInt32();
 
         if (aResetPos->isNew())
         {
@@ -504,62 +397,64 @@ namespace dbaui
         SQLExceptionInfo aExceptionInfo;
         try
         {
-            m_pIndexes->resetIndex(aResetPos);
+            m_xIndexes->resetIndex(aResetPos);
         }
         catch(SQLContext& e) { aExceptionInfo = SQLExceptionInfo(e); }
         catch(SQLWarning& e) { aExceptionInfo = SQLExceptionInfo(e); }
         catch(SQLException& e) { aExceptionInfo = SQLExceptionInfo(e); }
 
         if (aExceptionInfo.isValid())
-            showError(aExceptionInfo, VCLUnoHelper::GetInterface(this), m_xContext);
+            showError(aExceptionInfo, m_xDialog->GetXWindow(), m_xContext);
         else
-            m_pIndexList->SetEntryText(pSelected, aResetPos->sName);
+            m_xIndexList->set_text(*xSelected, aResetPos->sName);
 
-        updateControls(pSelected);
+        updateControls(xSelected.get());
         updateToolbox();
     }
 
-    IMPL_LINK_NOARG( DbaIndexDialog, OnIndexAction, ToolBox*, void )
+    IMPL_LINK(DbaIndexDialog, OnIndexAction, const OString&, rClicked, void)
     {
-        sal_uInt16 nClicked = m_pActions->GetCurItemId();
-        if (nClicked == mnNewCmdId)
+        if (rClicked == "ID_INDEX_NEW")
             OnNewIndex();
-        else if (nClicked == mnDropCmdId)
+        else if (rClicked == "ID_INDEX_DROP")
             OnDropIndex();
-        else if (nClicked == mnRenameCmdId)
+        else if (rClicked == "ID_INDEX_RENAME")
             OnRenameIndex();
-        else if (nClicked == mnSaveCmdId)
+        else if (rClicked == "ID_INDEX_SAVE")
             OnSaveIndex();
-        else if (nClicked == mnResetCmdId)
+        else if (rClicked == "ID_INDEX_RESET")
             OnResetIndex();
     }
 
-    IMPL_LINK_NOARG( DbaIndexDialog, OnCloseDialog, Button*, void )
+    IMPL_LINK_NOARG(DbaIndexDialog, OnCloseDialog, weld::Button&, void)
     {
-        if (m_pIndexList->IsEditingActive())
+        if (m_bEditingActive)
         {
             OSL_ENSURE(!m_bEditAgain, "DbaIndexDialog::OnCloseDialog: somebody was faster than hell!");
                 // this means somebody entered a new name, which was invalid, which cause us to posted us an event,
                 // and before the event arrived the user clicked onto "close". VERY fast, this user...
-            m_pIndexList->EndEditing();
+            m_xIndexList->end_editing();
             if (m_bEditAgain)
                 // could not commit the new name (started a new - asynchronous - edit trial)
                 return;
         }
 
         // the currently selected entry
-        const SvTreeListEntry* pSelected = m_pIndexList->FirstSelected();
-        OSL_ENSURE(pSelected == m_pPreviousSelection, "DbaIndexDialog::OnCloseDialog: inconsistence!");
+        std::unique_ptr<weld::TreeIter> xSelected(m_xIndexList->make_iterator());
+        // the selected index
+        if (!m_xIndexList->get_selected(xSelected.get()))
+            xSelected.reset();
+
+        OSL_ENSURE(xSelected && m_xPreviousSelection && xSelected->equal(*m_xPreviousSelection), "DbaIndexDialog::OnCloseDialog: inconsistence!");
 
         sal_Int32 nResponse = RET_NO;
-        if (pSelected)
+        if (xSelected)
         {
             // the descriptor
-            Indexes::const_iterator aSelected = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(pSelected->GetUserData());
-
+            Indexes::const_iterator aSelected = m_xIndexes->begin() + m_xIndexList->get_id(*xSelected).toUInt32();
             if (aSelected->isModified() || aSelected->isNew())
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "dbaccess/ui/saveindexdialog.ui"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xDialog.get(), "dbaccess/ui/saveindexdialog.ui"));
                 std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("SaveIndexDialog"));
                 nResponse = xQuery->run();
             }
@@ -577,38 +472,47 @@ namespace dbaui
                 return;
         }
 
-        EndDialog(RET_OK);
+        m_xDialog->response(RET_OK);
     }
 
-    IMPL_LINK( DbaIndexDialog, OnEditIndexAgain, void*, p, void )
+    IMPL_LINK(DbaIndexDialog, OnEditIndexAgain, void*, p, void)
     {
-        SvTreeListEntry* _pEntry = static_cast<SvTreeListEntry*>(p);
+        weld::TreeIter* pEntry = static_cast<weld::TreeIter*>(p);
         m_bEditAgain = false;
-        m_pIndexList->EditEntry(_pEntry);
+        m_xIndexList->grab_focus();
+        m_xIndexList->start_editing(*pEntry);
+        delete pEntry;
     }
 
-    IMPL_LINK( DbaIndexDialog, OnEntryEdited, SvTreeListEntry*, _pEntry, bool )
+    IMPL_STATIC_LINK_NOARG(DbaIndexDialog, OnEntryEditing, const weld::TreeIter&, bool)
     {
-        Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
+        return true;
+    }
 
-        OSL_ENSURE(aPosition >= m_pIndexes->begin() && aPosition < m_pIndexes->end(),
+    IMPL_LINK(DbaIndexDialog, OnEntryEdited, const IterString&, rIterString, bool)
+    {
+        const weld::TreeIter& rEntry = rIterString.first;
+        OUString sNewName = rIterString.second;
+
+        Indexes::iterator aPosition = m_xIndexes->begin() + m_xIndexList->get_id(rEntry).toUInt32();
+
+        OSL_ENSURE(aPosition >= m_xIndexes->begin() && aPosition < m_xIndexes->end(),
             "DbaIndexDialog::OnEntryEdited: invalid entry!");
 
-        OUString sNewName = m_pIndexList->GetEntryText(_pEntry);
-
-        Indexes::const_iterator aSameName = m_pIndexes->find(sNewName);
-        if ((aSameName != aPosition) && (m_pIndexes->end() != aSameName))
+        Indexes::const_iterator aSameName = m_xIndexes->find(sNewName);
+        if (aSameName != aPosition && m_xIndexes->end() != aSameName)
         {
             OUString sError(DBA_RES(STR_INDEX_NAME_ALREADY_USED));
             sError = sError.replaceFirst("$name$", sNewName);
-            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(m_xDialog.get(),
                                                         VclMessageType::Warning, VclButtonsType::Ok,
                                                         sError));
             xError->run();
 
             updateToolbox();
             m_bEditAgain = true;
-            PostUserEvent(LINK(this, DbaIndexDialog, OnEditIndexAgain), _pEntry, true);
+            std::unique_ptr<weld::TreeIter> xEntry(m_xIndexList->make_iterator(&rEntry));
+            Application::PostUserEvent(LINK(this, DbaIndexDialog, OnEditIndexAgain), xEntry.release());
             return false;
         }
 
@@ -633,22 +537,22 @@ namespace dbaui
 
     bool DbaIndexDialog::implSaveModified(bool _bPlausibility)
     {
-        if (m_pPreviousSelection)
+        if (m_xPreviousSelection)
         {
             // try to commit the previously selected index
-            if (m_pFields->IsModified() && !m_pFields->SaveModified())
+            if (m_xFields->IsModified() && !m_xFields->SaveModified())
                 return false;
 
-            Indexes::iterator aPreviouslySelected = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());
+            Indexes::iterator aPreviouslySelected = m_xIndexes->begin() + m_xIndexList->get_id(*m_xPreviousSelection).toUInt32();
 
             // the unique flag
-            aPreviouslySelected->bUnique = m_pUnique->IsChecked();
-            if (m_pUnique->GetSavedValue() != m_pUnique->GetState())
+            aPreviouslySelected->bUnique = m_xUnique->get_active();
+            if (m_xUnique->get_state_changed_from_saved())
                 aPreviouslySelected->setModified(true);
 
             // the fields
-            m_pFields->commitTo(aPreviouslySelected->aFields);
-            if (m_pFields->GetSavedValue() != aPreviouslySelected->aFields)
+            m_xFields->commitTo(aPreviouslySelected->aFields);
+            if (m_xFields->GetSavedValue() != aPreviouslySelected->aFields)
                 aPreviouslySelected->setModified(true);
 
             // plausibility checks
@@ -664,11 +568,11 @@ namespace dbaui
         // need at least one field
         if (_rPos->aFields.empty())
         {
-            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(m_xDialog.get(),
                                                         VclMessageType::Warning, VclButtonsType::Ok,
                                                         DBA_RES(STR_NEED_INDEX_FIELDS)));
             xError->run();
-            m_pFields->GrabFocus();
+            m_xFields->GrabFocus();
             return false;
         }
 
@@ -681,11 +585,11 @@ namespace dbaui
                 // a column is specified twice ... won't work anyway, so prevent this here and now
                 OUString sMessage(DBA_RES(STR_INDEXDESIGN_DOUBLE_COLUMN_NAME));
                 sMessage = sMessage.replaceFirst("$name$", fieldCheck.sFieldName);
-                std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(GetFrameWeld(),
+                std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(m_xDialog.get(),
                                                             VclMessageType::Warning, VclButtonsType::Ok,
                                                             sMessage));
                 xError->run();
-                m_pFields->GrabFocus();
+                m_xFields->GrabFocus();
                 return false;
             }
             aExistentFields.insert(fieldCheck.sFieldName);
@@ -696,152 +600,110 @@ namespace dbaui
 
     bool DbaIndexDialog::implCommitPreviouslySelected()
     {
-        if (m_pPreviousSelection)
+        if (m_xPreviousSelection)
         {
-            Indexes::const_iterator aPreviouslySelected = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());
+            Indexes::const_iterator aPreviouslySelected = m_xIndexes->begin() + m_xIndexList->get_id(*m_xPreviousSelection).toUInt32();
 
             if (!implSaveModified())
                 return false;
 
             // commit the index (if necessary)
-            if (aPreviouslySelected->isModified() && !implCommit(m_pPreviousSelection))
+            if (aPreviouslySelected->isModified() && !implCommit(m_xPreviousSelection.get()))
                 return false;
         }
 
         return true;
     }
 
-    IMPL_LINK_NOARG( DbaIndexDialog, OnModifiedClick, Button*, void )
+    IMPL_LINK_NOARG(DbaIndexDialog, OnModifiedClick, weld::Button&, void)
     {
-        OnModified(*m_pFields);
+        OnModified(*m_xFields);
     }
+
     IMPL_LINK_NOARG( DbaIndexDialog, OnModified, IndexFieldsControl&, void )
     {
-        OSL_ENSURE(m_pPreviousSelection, "DbaIndexDialog, OnModified: invalid call!");
-        Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());
+        assert(m_xPreviousSelection && "DbaIndexDialog, OnModified: invalid call!");
+        Indexes::iterator aPosition = m_xIndexes->begin() + m_xIndexList->get_id(*m_xPreviousSelection).toUInt32();
 
         aPosition->setModified(true);
         updateToolbox();
     }
 
-    void DbaIndexDialog::updateControls(const SvTreeListEntry* _pEntry)
+    void DbaIndexDialog::updateControls(const weld::TreeIter* pEntry)
     {
-        if (_pEntry)
+        if (pEntry)
         {
             // the descriptor of the selected index
-            Indexes::const_iterator aSelectedIndex = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
+            Indexes::const_iterator aSelectedIndex = m_xIndexes->begin() + m_xIndexList->get_id(*pEntry).toUInt32();
 
             // fill the controls
-            m_pUnique->Check(aSelectedIndex->bUnique);
-            m_pUnique->Enable(!aSelectedIndex->bPrimaryKey);
-            m_pUnique->SaveValue();
+            m_xUnique->set_active(aSelectedIndex->bUnique);
+            m_xUnique->set_sensitive(!aSelectedIndex->bPrimaryKey);
+            m_xUnique->save_state();
 
-            m_pFields->initializeFrom(aSelectedIndex->aFields);
-            m_pFields->Enable(!aSelectedIndex->bPrimaryKey);
-            m_pFields->SaveValue();
+            m_xFields->initializeFrom(aSelectedIndex->aFields);
+            m_xFields->Enable(!aSelectedIndex->bPrimaryKey);
+            m_xFields->SaveValue();
 
-            m_pDescription->SetText(aSelectedIndex->sDescription);
-            m_pDescription->Enable(!aSelectedIndex->bPrimaryKey);
+            m_xDescription->set_label(aSelectedIndex->sDescription);
+            m_xDescription->set_sensitive(!aSelectedIndex->bPrimaryKey);
 
-            m_pDescriptionLabel->Enable(!aSelectedIndex->bPrimaryKey);
+            m_xDescriptionLabel->set_sensitive(!aSelectedIndex->bPrimaryKey);
         }
         else
         {
-            m_pUnique->Check(false);
-            m_pFields->initializeFrom(IndexFields());
-            m_pDescription->SetText(OUString());
+            m_xUnique->set_active(false);
+            m_xFields->initializeFrom(IndexFields());
+            m_xDescription->set_label(OUString());
         }
     }
 
-    IMPL_LINK_NOARG( DbaIndexDialog, OnIndexSelected, DbaIndexList&, void )
+    void DbaIndexDialog::IndexSelected()
     {
-        m_pIndexList->EndSelection();
+//TODO        m_xIndexList->EndSelection();
 
-        if (m_pIndexList->IsEditingActive())
-            m_pIndexList->EndEditing();
+        if (m_bEditingActive)
+            m_xIndexList->end_editing();
+
+        std::unique_ptr<weld::TreeIter> xSelected(m_xIndexList->make_iterator());
+        if (!m_xIndexList->get_selected(xSelected.get()))
+            xSelected.reset();
 
         // commit the old data
-        if (m_pIndexList->FirstSelected() != m_pPreviousSelection)
-        {   // (this call may happen in case somebody ended an in-place edit with 'return', so we need to check this before committing)
+        if (m_xPreviousSelection && (!xSelected || !m_xPreviousSelection->equal(*xSelected)))
+        {
+            // (this call may happen in case somebody ended an in-place edit with 'return', so we need to check this before committing)
             if (!implCommitPreviouslySelected())
             {
-                m_pIndexList->SelectNoHandlerCall(m_pPreviousSelection);
+                m_bNoHandlerCall = true;
+                m_xIndexList->select(*m_xPreviousSelection);
+                m_bNoHandlerCall = false;
                 return;
             }
         }
 
-        bool bHaveSelection = (nullptr != m_pIndexList->FirstSelected());
-
         // disable/enable the detail controls
-        m_pIndexDetails->Enable(bHaveSelection);
-        m_pUnique->Enable(bHaveSelection);
-        m_pDescriptionLabel->Enable(bHaveSelection);
-        m_pFieldsLabel->Enable(bHaveSelection);
-        m_pFields->Enable(bHaveSelection);
+        m_xIndexDetails->set_sensitive(xSelected != nullptr);
+        m_xUnique->set_sensitive(xSelected != nullptr);
+        m_xDescriptionLabel->set_sensitive(xSelected != nullptr);
+        m_xFieldsLabel->set_sensitive(xSelected != nullptr);
+        m_xFields->Enable(xSelected != nullptr);
 
-        SvTreeListEntry* pNewSelection = m_pIndexList->FirstSelected();
-        updateControls(pNewSelection);
-        if (bHaveSelection)
-            m_pIndexList->GrabFocus();
+        updateControls(xSelected.get());
+        if (xSelected)
+            m_xIndexList->grab_focus();
 
-        m_pPreviousSelection = pNewSelection;
+        m_xPreviousSelection = std::move(xSelected);
 
         updateToolbox();
     }
-    void DbaIndexDialog::StateChanged( StateChangedType nType )
+
+    IMPL_LINK_NOARG(DbaIndexDialog, OnIndexSelected, weld::TreeView&, void)
     {
-        ModalDialog::StateChanged( nType );
-
-        if ( nType == StateChangedType::ControlBackground )
-        {
-            // Check if we need to get new images for normal/high contrast mode
-            checkImageList();
-        }
-        else if ( nType == StateChangedType::Text )
-        {
-            // The physical toolbar changed its outlook and shows another logical toolbar!
-            // We have to set the correct high contrast mode on the new tbx manager.
-            //  pMgr->SetHiContrast( IsHiContrastMode() );
-            checkImageList();
-        }
+        if (m_bNoHandlerCall)
+            return;
+        IndexSelected();
     }
-    void DbaIndexDialog::DataChanged( const DataChangedEvent& rDCEvt )
-    {
-        ModalDialog::DataChanged( rDCEvt );
-
-        if ((( rDCEvt.GetType() == DataChangedEventType::SETTINGS )   ||
-            ( rDCEvt.GetType() == DataChangedEventType::DISPLAY   ))  &&
-            ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE        ))
-        {
-            // Check if we need to get new images for normal/high contrast mode
-            checkImageList();
-        }
-    }
-
-    void DbaIndexDialog::setImageList(sal_Int16 _eBitmapSet)
-    {
-        if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
-        {
-            m_pActions->SetItemImage(mnNewCmdId, maLcNewCmdImg);
-            m_pActions->SetItemImage(mnDropCmdId, maLcDropCmdImg);
-            m_pActions->SetItemImage(mnRenameCmdId, maLcRenameCmdImg);
-            m_pActions->SetItemImage(mnSaveCmdId, maLcSaveCmdImg);
-            m_pActions->SetItemImage(mnResetCmdId, maLcResetCmdImg);
-        }
-        else
-        {
-            m_pActions->SetItemImage(mnNewCmdId, maScNewCmdImg);
-            m_pActions->SetItemImage(mnDropCmdId, maScDropCmdImg);
-            m_pActions->SetItemImage(mnRenameCmdId, maScRenameCmdImg);
-            m_pActions->SetItemImage(mnSaveCmdId, maScSaveCmdImg);
-            m_pActions->SetItemImage(mnResetCmdId, maScResetCmdImg);
-        }
-    }
-
-    void DbaIndexDialog::resizeControls(const Size&)
-    {
-    }
-
 }   // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
