@@ -148,11 +148,6 @@ void BaseWindow::StoreData()
 {
 }
 
-bool BaseWindow::CanClose()
-{
-    return true;
-}
-
 bool BaseWindow::AllowUndo()
 {
     return true;
