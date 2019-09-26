@@ -1279,10 +1279,12 @@ private:
     std::unique_ptr<weld::Label> mxFtEntry;
     std::unique_ptr<weld::Entry> mxEdEntry;
     std::unique_ptr<weld::ComboBox> mxLbEntryType;
+    weld::Container* mpContainer;
 
 public:
     ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconSetType eType, ScDocument* pDoc,
             sal_Int32 i, const ScColorScaleEntry* pEntry = nullptr);
+    ~ScIconSetFrmtDataEntry();
     void Show() { mxGrid->show(); }
     void Hide() { mxGrid->hide(); }
     void set_grid_top_attach(int nTop)
@@ -1303,6 +1305,7 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconS
     , mxFtEntry(mxBuilder->weld_label("label"))
     , mxEdEntry(mxBuilder->weld_entry("entry"))
     , mxLbEntryType(mxBuilder->weld_combo_box("listbox"))
+    , mpContainer(pParent)
 {
     mxImgIcon->set_from_icon_name(ScIconSetFormat::getIconName(eType, i));
     if(pEntry)
@@ -1333,6 +1336,11 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconS
     {
         mxLbEntryType->set_active(1);
     }
+}
+
+ScIconSetFrmtDataEntry::~ScIconSetFrmtDataEntry()
+{
+    mpContainer->move(mxGrid.get(), nullptr);
 }
 
 ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const
