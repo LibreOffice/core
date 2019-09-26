@@ -61,6 +61,8 @@ public:
     void tableStylePSpacing(uno::Sequence<beans::PropertyValue>& rSpacing);
     /// Export of w:tblPr.
     void tableStyleTablePr(uno::Sequence<beans::PropertyValue>& rTablePr);
+    /// Export of w:trPr.
+    void tableStyleTrPr(const uno::Sequence<beans::PropertyValue>& rTrPr);
     /// Export of w:tcPr.
     void tableStyleTcPr(uno::Sequence<beans::PropertyValue>& rTcPr);
     /// Export of w:tcBorders (and w:tblBorders).
@@ -552,6 +554,22 @@ void DocxTableStyleExport::Impl::tableStyleTablePr(uno::Sequence<beans::Property
     m_pSerializer->endElementNS(XML_w, XML_tblPr);
 }
 
+void DocxTableStyleExport::Impl::tableStyleTrPr(const uno::Sequence<beans::PropertyValue>& rTrPr)
+{
+    if (!rTrPr.hasElements())
+        return;
+
+    m_pSerializer->startElementNS(XML_w, XML_trPr, FSEND);
+
+    for (const auto& rProp : rTrPr)
+    {
+        if (rProp.Name == "tblHeader")
+            m_pSerializer->singleElementNS(XML_w, XML_tblHeader, FSEND);
+    }
+
+    m_pSerializer->endElementNS(XML_w, XML_trPr);
+}
+
 void DocxTableStyleExport::Impl::tableStyleTcPr(uno::Sequence<beans::PropertyValue>& rTcPr)
 {
     if (!rTcPr.hasElements())
@@ -589,7 +607,7 @@ void DocxTableStyleExport::Impl::tableStyleTableStylePr(
         return;
 
     OUString aType;
-    uno::Sequence<beans::PropertyValue> aPPr, aRPr, aTablePr, aTcPr;
+    uno::Sequence<beans::PropertyValue> aPPr, aRPr, aTablePr, aTrPr, aTcPr;
     for (sal_Int32 i = 0; i < rTableStylePr.getLength(); ++i)
     {
         if (rTableStylePr[i].Name == "type")
@@ -600,6 +618,8 @@ void DocxTableStyleExport::Impl::tableStyleTableStylePr(
             aRPr = rTableStylePr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
         else if (rTableStylePr[i].Name == "tblPr")
             aTablePr = rTableStylePr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rTableStylePr[i].Name == "trPr")
+            aTrPr = rTableStylePr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
         else if (rTableStylePr[i].Name == "tcPr")
             aTcPr = rTableStylePr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
     }
@@ -616,6 +636,7 @@ void DocxTableStyleExport::Impl::tableStyleTableStylePr(
         // Even if we have an empty container, write it out, as Word does.
         m_pSerializer->singleElementNS(XML_w, XML_tblPr, FSEND);
     }
+    tableStyleTrPr(aTrPr);
     tableStyleTcPr(aTcPr);
 
     m_pSerializer->endElementNS(XML_w, XML_tblStylePr);
