@@ -115,7 +115,6 @@ namespace slideshow
             virtual bool isPaintOverlayActive() const = 0;
 
             virtual void enablePaintOverlay() = 0;
-            virtual void disablePaintOverlay() = 0;
 
             virtual void update_settings( bool bUserPaintEnabled, RGBColor const& aUserPaintColor, double dUserPaintStrokeWidth ) = 0;
 

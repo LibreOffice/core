@@ -128,9 +128,6 @@ sd/source/ui/inc/smarttag.hxx:171
 slideshow/source/engine/animationfactory.cxx:443
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
     empty
-slideshow/source/inc/slide.hxx:118
-    void slideshow::internal::Slide::disablePaintOverlay()
-    empty
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
     empty
