@@ -145,17 +145,17 @@ VbaWindowBase::getServiceNames()
     return aServiceNames;
 }
 
-uno::Reference< frame::XController > VbaWindowBase::getController()
+uno::Reference< frame::XController > VbaWindowBase::getController() const
 {
     return uno::Reference< frame::XController >( m_xController, uno::UNO_SET_THROW );
 }
 
-uno::Reference< awt::XWindow > VbaWindowBase::getWindow()
+uno::Reference< awt::XWindow > VbaWindowBase::getWindow() const
 {
     return uno::Reference< awt::XWindow >( m_xWindow, uno::UNO_SET_THROW );
 }
 
-uno::Reference< awt::XWindow2 > VbaWindowBase::getWindow2()
+uno::Reference< awt::XWindow2 > VbaWindowBase::getWindow2() const
 {
     return uno::Reference< awt::XWindow2 >( getWindow(), uno::UNO_QUERY_THROW );
 }
