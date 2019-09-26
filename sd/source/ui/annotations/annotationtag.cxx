@@ -154,7 +154,6 @@ public:
 
     virtual void CreateB2dIAObject() override;
     virtual bool IsFocusHdl() const override;
-    virtual bool isMarkable() const override;
 
 private:
     Reference< XAnnotation > mxAnnotation;
@@ -236,11 +235,6 @@ void AnnotationHdl::CreateB2dIAObject()
 bool AnnotationHdl::IsFocusHdl() const
 {
     return true;
-}
-
-bool AnnotationHdl::isMarkable() const
-{
-    return false;
 }
 
 AnnotationTag::AnnotationTag( AnnotationManagerImpl& rManager, ::sd::View& rView, const Reference< XAnnotation >& xAnnotation, Color const & rColor, int nIndex, const vcl::Font& rFont )
@@ -333,13 +327,6 @@ bool AnnotationTag::KeyInput( const KeyEvent& rKEvt )
     default:
         return false;
     }
-}
-
-/** returns true if the SmartTag consumes this event. */
-bool AnnotationTag::RequestHelp( const HelpEvent& /*rHEvt*/ )
-{
-
-   return false;
 }
 
 /** returns true if the SmartTag consumes this event. */

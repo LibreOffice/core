@@ -119,12 +119,6 @@ sc/source/ui/vba/vbasheetobject.hxx:117
 sc/source/ui/vba/vbasheetobjects.cxx:141
     class rtl::OUString ScVbaObjectContainer::implGetShapeServiceName()const
     "com.sun.star.drawing.ControlShape"
-sd/source/ui/inc/smarttag.hxx:59
-    _Bool sd::SmartTag::RequestHelp(const class HelpEvent &,)
-    0
-sd/source/ui/inc/smarttag.hxx:171
-    _Bool sd::SmartHdl::isMarkable()const
-    0
 slideshow/source/engine/animationfactory.cxx:443
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
     empty

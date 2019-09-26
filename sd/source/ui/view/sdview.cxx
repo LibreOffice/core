@@ -1116,14 +1116,6 @@ bool View::HasMarkedPoints() const
         return FmFormView::HasMarkedPoints();
 }
 
-bool View::IsPointMarkable(const SdrHdl& rHdl) const
-{
-    if( SmartTagSet::IsPointMarkable( rHdl ) )
-        return true;
-    else
-        return FmFormView::IsPointMarkable( rHdl );
-}
-
 bool View::MarkPoint(SdrHdl& rHdl, bool bUnmark )
 {
     if( maSmartTags.MarkPoint( rHdl, bUnmark ) )

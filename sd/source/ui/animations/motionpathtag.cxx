@@ -248,7 +248,6 @@ public:
 
     virtual void CreateB2dIAObject() override;
     virtual bool IsFocusHdl() const override;
-    virtual bool isMarkable() const override;
 
 private:
     SdrPathObj* const mpPathObj;
@@ -302,11 +301,6 @@ void SdPathHdl::CreateB2dIAObject()
 }
 
 bool SdPathHdl::IsFocusHdl() const
-{
-    return false;
-}
-
-bool SdPathHdl::isMarkable() const
 {
     return false;
 }
