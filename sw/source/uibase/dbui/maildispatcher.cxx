@@ -152,10 +152,6 @@ void MailDispatcher::start()
         m_bActive = true;
         m_aWakeupCondition.set();
         thread_status_guard.clear();
-
-        MailDispatcherListenerContainer_t aClonedListenerVector(cloneListener());
-        std::for_each( aClonedListenerVector.begin(), aClonedListenerVector.end(),
-                       GenericEventNotifier(&IMailDispatcherListener::started, this) );
     }
 }
 
@@ -172,10 +168,6 @@ void MailDispatcher::stop()
         m_bActive = false;
         m_aWakeupCondition.reset();
         thread_status_guard.clear();
-
-        MailDispatcherListenerContainer_t aClonedListenerVector(cloneListener());
-        std::for_each( aClonedListenerVector.begin(), aClonedListenerVector.end(),
-                       GenericEventNotifier(&IMailDispatcherListener::stopped, this) );
     }
 }
 

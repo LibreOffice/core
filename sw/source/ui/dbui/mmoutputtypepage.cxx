@@ -122,8 +122,6 @@ class SwMailDispatcherListener_Impl : public IMailDispatcherListener
 public:
     explicit SwMailDispatcherListener_Impl(SwSendMailDialog& rParentDlg);
 
-    virtual void started(::rtl::Reference<MailDispatcher> xMailDispatcher) override;
-    virtual void stopped(::rtl::Reference<MailDispatcher> xMailDispatcher) override;
     virtual void idle(::rtl::Reference<MailDispatcher> xMailDispatcher) override;
     virtual void mailDelivered(::rtl::Reference<MailDispatcher> xMailDispatcher,
                 uno::Reference< mail::XMailMessage> xMailMessage) override;
@@ -135,15 +133,6 @@ public:
 
 SwMailDispatcherListener_Impl::SwMailDispatcherListener_Impl(SwSendMailDialog& rParentDlg) :
     m_pSendMailDialog(&rParentDlg)
-{
-}
-
-void SwMailDispatcherListener_Impl::started(::rtl::Reference<MailDispatcher> /*xMailDispatcher*/)
-{
-}
-
-void SwMailDispatcherListener_Impl::stopped(
-                        ::rtl::Reference<MailDispatcher> /*xMailDispatcher*/)
 {
 }
 

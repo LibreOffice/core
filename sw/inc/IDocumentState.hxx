@@ -45,8 +45,6 @@ public:
 
     virtual void SetUpdateExpFieldStat(bool b) = 0;
 
-    virtual void SetLoaded() = 0;
-
     virtual bool IsEnableSetModified() const = 0;
     virtual void SetEnableSetModified(bool bEnableSetModified) = 0;
 

@@ -346,7 +346,6 @@ ErrCode SwReader::Read( const Reader& rOptions )
     mxDoc->UpdateNumRule();
     mxDoc->ChkCondColls();
     mxDoc->SetAllUniqueFlyNames();
-    mxDoc->getIDocumentState().SetLoaded();
     // Clear unassigned cell styles, because they aren't needed anymore.
     mxDoc->GetCellStyles().clear();
 

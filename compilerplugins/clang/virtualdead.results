@@ -214,18 +214,9 @@ slideshow/source/inc/slide.hxx:118
 svx/source/inc/docrecovery.hxx:162
     void svx::DocRecovery::IRecoveryUpdateListener::start()
     empty
-sw/inc/IDocumentState.hxx:48
-    void IDocumentState::SetLoaded()
-    empty
 sw/source/core/inc/swblocks.hxx:81
     enum SwImpBlocks::FileType SwImpBlocks::GetFileType()const
     3
-sw/source/uibase/inc/imaildsplistener.hxx:43
-    void IMailDispatcherListener::started(class rtl::Reference<class MailDispatcher>,)
-    empty
-sw/source/uibase/inc/imaildsplistener.hxx:48
-    void IMailDispatcherListener::stopped(class rtl::Reference<class MailDispatcher>,)
-    empty
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
     empty

@@ -38,16 +38,6 @@ class IMailDispatcherListener : public salhelper::SimpleReferenceObject
 {
 public:
     /**
-        Called when the MailDispatcher is started.
-    */
-    virtual void started(::rtl::Reference<MailDispatcher> xMailDispatcher) = 0;
-
-    /**
-        Called when the MailDispatcher is stopped.
-    */
-    virtual void stopped(::rtl::Reference<MailDispatcher> xMailDispatcher) = 0;
-
-    /**
         Called when there are no more mail messages
         to deliver.
     */
