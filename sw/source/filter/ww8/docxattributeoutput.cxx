@@ -6831,6 +6831,10 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
         else if ( DFLT_ESC_SUPER == nEsc || DFLT_ESC_AUTO_SUPER == nEsc )
             sIss = OString( "superscript" );
     }
+    else if ( DFLT_ESC_AUTO_SUPER == nEsc )
+        nEsc = DFLT_ESC_SUPER;
+    else if ( DFLT_ESC_AUTO_SUB == nEsc )
+        nEsc = DFLT_ESC_SUB;
 
     if ( !sIss.isEmpty() )
         m_pSerializer->singleElementNS(XML_w, XML_vertAlign, FSNS(XML_w, XML_val), sIss);
