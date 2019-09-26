@@ -66,6 +66,8 @@ public:
     void tableStylePSpacing(const uno::Sequence<beans::PropertyValue>& rSpacing);
     /// Export of w:tblPr.
     void tableStyleTablePr(const uno::Sequence<beans::PropertyValue>& rTablePr);
+    /// Export of w:trPr.
+    void tableStyleTrPr(const uno::Sequence<beans::PropertyValue>& rTrPr);
     /// Export of w:tcPr.
     void tableStyleTcPr(const uno::Sequence<beans::PropertyValue>& rTcPr);
     /// Export of w:tcBorders (and w:tblBorders).
@@ -551,6 +553,22 @@ void DocxTableStyleExport::Impl::tableStyleTablePr(
     m_pSerializer->endElementNS(XML_w, XML_tblPr);
 }
 
+void DocxTableStyleExport::Impl::tableStyleTrPr(const uno::Sequence<beans::PropertyValue>& rTrPr)
+{
+    if (!rTrPr.hasElements())
+        return;
+
+    m_pSerializer->startElementNS(XML_w, XML_trPr);
+
+    for (const auto& rProp : rTrPr)
+    {
+        if (rProp.Name == "tblHeader")
+            m_pSerializer->singleElementNS(XML_w, XML_tblHeader);
+    }
+
+    m_pSerializer->endElementNS(XML_w, XML_trPr);
+}
+
 void DocxTableStyleExport::Impl::tableStyleTcPr(const uno::Sequence<beans::PropertyValue>& rTcPr)
 {
     if (!rTcPr.hasElements())
@@ -592,6 +610,7 @@ void DocxTableStyleExport::Impl::tableStyleTableStylePr(
     uno::Sequence<beans::PropertyValue> aPPr;
     uno::Sequence<beans::PropertyValue> aRPr;
     uno::Sequence<beans::PropertyValue> aTablePr;
+    uno::Sequence<beans::PropertyValue> aTrPr;
     uno::Sequence<beans::PropertyValue> aTcPr;
     for (const auto& rProp : rTableStylePr)
     {
@@ -603,6 +622,8 @@ void DocxTableStyleExport::Impl::tableStyleTableStylePr(
             aRPr = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
         else if (rProp.Name == "tblPr")
             aTablePr = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "trPr")
+            aTrPr = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
         else if (rProp.Name == "tcPr")
             aTcPr = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
     }
@@ -618,6 +639,7 @@ void DocxTableStyleExport::Impl::tableStyleTableStylePr(
         // Even if we have an empty container, write it out, as Word does.
         m_pSerializer->singleElementNS(XML_w, XML_tblPr);
     }
+    tableStyleTrPr(aTrPr);
     tableStyleTcPr(aTcPr);
 
     m_pSerializer->endElementNS(XML_w, XML_tblStylePr);
