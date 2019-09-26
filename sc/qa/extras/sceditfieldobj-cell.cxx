@@ -47,7 +47,6 @@ public:
     virtual uno::Reference<uno::XInterface> init() override;
     virtual uno::Reference<text::XTextContent> getTextContent() override;
     virtual uno::Reference<text::XTextRange> getTextRange() override;
-    virtual bool isAttachSupported() override { return true; }
 
     void testEditFieldProperties();
 

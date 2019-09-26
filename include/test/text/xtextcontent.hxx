@@ -26,7 +26,6 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > init() = 0;
     virtual css::uno::Reference< css::text::XTextRange > getTextRange() = 0;
     virtual css::uno::Reference< css::text::XTextContent > getTextContent() = 0;
-    virtual bool isAttachSupported() = 0;
 
     void testGetAnchor();
     void testAttach();

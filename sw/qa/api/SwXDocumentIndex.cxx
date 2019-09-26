@@ -59,7 +59,6 @@ public:
     uno::Reference<uno::XInterface> init() override;
     uno::Reference<text::XTextRange> getTextRange() override;
     uno::Reference<text::XTextContent> getTextContent() override;
-    bool isAttachSupported() override { return true; }
     uno::Reference<text::XTextDocument> getTextDocument() override { return mxTextDocument; }
     void triggerDesktopTerminate() override {}
 

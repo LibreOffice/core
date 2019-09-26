@@ -41,15 +41,11 @@ void XTextContent::testAttach()
     }
     catch (const lang::IllegalArgumentException&)
     {
-        bool bAttachSupported = isAttachSupported();
-        if (bAttachSupported)
-            CPPUNIT_ASSERT(false);
+        CPPUNIT_ASSERT(false);
     }
     catch (const RuntimeException&)
     {
-        bool bAttachSupported = isAttachSupported();
-        if (bAttachSupported)
-            CPPUNIT_ASSERT(false);
+        CPPUNIT_ASSERT(false);
     }
 }
 
