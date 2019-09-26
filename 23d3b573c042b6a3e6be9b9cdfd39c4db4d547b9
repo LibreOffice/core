@@ -46,6 +46,30 @@
       "revId": "23d3b573c042b6a3e6be9b9cdfd39c4db4d547b9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_5edcb745",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-09-26T09:27:20Z",
+      "side": 1,
+      "message": "\"SwpHintsArray is always created empty so even if it needs stable_sort the constructor doesn\u0027t matter\":  Sorry for being unclear.  What I thought about was to use sort instead of stable_sort in Resort, and keep the ctor calling Resort.",
+      "parentUuid": "7f7f9b97_1e215f4e",
+      "range": {
+        "startLine": 23,
+        "startChar": 14,
+        "endLine": 26,
+        "endChar": 51
+      },
+      "revId": "23d3b573c042b6a3e6be9b9cdfd39c4db4d547b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
