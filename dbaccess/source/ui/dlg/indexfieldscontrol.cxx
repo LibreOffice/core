@@ -23,8 +23,8 @@
 #include <strings.hrc>
 #include <osl/diagnose.h>
 #include <helpids.h>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 
 namespace dbaui
@@ -70,20 +70,13 @@ static constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | Br
     }
 
     // IndexFieldsControl
-    IndexFieldsControl::IndexFieldsControl( vcl::Window* _pParent, WinBits nWinStyle)
-        : EditBrowseBox(_pParent, EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::ACTIVATE_ON_BUTTONDOWN, nWinStyle, BROWSER_STANDARD_FLAGS)
+    IndexFieldsControl::IndexFieldsControl(const css::uno::Reference<css::awt::XWindow> &rParent)
+        : EditBrowseBox(VCLUnoHelper::GetWindow(rParent), EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::ACTIVATE_ON_BUTTONDOWN, WB_TABSTOP | WB_BORDER, BROWSER_STANDARD_FLAGS)
         , m_aSeekRow(m_aFields.end())
         , m_pSortingCell(nullptr)
         , m_pFieldNameCell(nullptr)
         , m_bAddIndexAppendix(false)
     {
-    }
-
-    extern "C" SAL_DLLPUBLIC_EXPORT void makeDbaIndexFieldsControl(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
-    {
-        static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
-                                     decltype(makeDbaIndexFieldsControl)>);
-        rRet = VclPtr<IndexFieldsControl>::Create(pParent, WB_BORDER | WB_NOTABSTOP);
     }
 
     IndexFieldsControl::~IndexFieldsControl()
