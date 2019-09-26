@@ -339,10 +339,6 @@ bool ChartTypeDialogController::shouldShow_StackingControl() const
 {
     return false;
 }
-bool ChartTypeDialogController::shouldShow_DeepStackingControl() const
-{
-    return false;
-}
 bool ChartTypeDialogController::shouldShow_SplineControl() const
 {
     return false;
@@ -713,10 +709,6 @@ void LineChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, cons
 bool LineChartDialogController::shouldShow_StackingControl() const
 {
     return true;
-}
-bool LineChartDialogController::shouldShow_DeepStackingControl() const
-{
-    return false;
 }
 bool LineChartDialogController::shouldShow_SplineControl() const
 {

@@ -55,7 +55,6 @@ public:
     virtual void modelInvalid() override;
 
     virtual void selectionChanged(bool bCorrectType) override;
-    virtual void SelectionInvalid() override;
 
     virtual void dispose() override;
 

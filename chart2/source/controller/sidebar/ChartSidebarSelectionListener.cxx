@@ -66,7 +66,6 @@ void ChartSidebarSelectionListener::selectionChanged(const css::lang::EventObjec
 
 void ChartSidebarSelectionListener::disposing(const css::lang::EventObject& /*rEvent*/)
 {
-    mpParent->SelectionInvalid();
 }
 
 void ChartSidebarSelectionListener::setAcceptedTypes(const std::vector<ObjectType>& aTypes)

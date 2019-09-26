@@ -348,10 +348,6 @@ void ChartAxisPanel::selectionChanged(bool bCorrectType)
         updateData();
 }
 
-void ChartAxisPanel::SelectionInvalid()
-{
-}
-
 IMPL_LINK(ChartAxisPanel, CheckBoxHdl, Button*, pButton, void)
 {
     CheckBox* pCheckbox = static_cast<CheckBox*>(pButton);

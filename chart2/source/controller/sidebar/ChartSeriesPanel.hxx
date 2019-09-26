@@ -76,7 +76,6 @@ public:
     virtual void modelInvalid() override;
 
     virtual void selectionChanged(bool bCorrectType) override;
-    virtual void SelectionInvalid() override;
 
     virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) override;
 

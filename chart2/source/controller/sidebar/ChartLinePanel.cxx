@@ -223,10 +223,6 @@ void ChartLinePanel::selectionChanged(bool bCorrectType)
         updateData();
 }
 
-void ChartLinePanel::SelectionInvalid()
-{
-}
-
 void ChartLinePanel::updateModel(
         css::uno::Reference<css::frame::XModel> xModel)
 {
