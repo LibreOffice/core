@@ -323,7 +323,6 @@ public:
     virtual void    GetState( SfxItemSet& ) override;
     virtual void    StoreData() override;
     virtual void    UpdateData() override;
-    virtual bool    CanClose() override;
     // return number of pages to be printed
     virtual sal_Int32 countPages( Printer* pPrinter ) override;
     // print page

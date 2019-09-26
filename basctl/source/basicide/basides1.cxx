@@ -1380,20 +1380,6 @@ void Shell::Deactivate( bool bMDI )
             if( pXDlgWin->IsModified() )
                 MarkDocumentModified( pXDlgWin->GetDocument() );
         }
-
-        // test CanClose to also test during deactivating the BasicIDE whether
-        // the sourcecode is too large in one of the modules...
-        for (auto const& window : aWindowTable)
-        {
-            BaseWindow* pWin = window.second;
-            if ( /* !pWin->IsSuspended() && */ !pWin->CanClose() )
-            {
-                if ( !m_aCurLibName.isEmpty() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )
-                    SetCurLib( ScriptDocument::getApplicationScriptDocument(), OUString(), false );
-                SetCurWindow( pWin, true );
-                break;
-            }
-        }
     }
 }
 

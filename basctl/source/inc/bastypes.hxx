@@ -188,7 +188,6 @@ public:
 
     virtual void    StoreData();
     virtual void    UpdateData();
-    virtual bool    CanClose();
 
     // return number of pages to be printed
     virtual sal_Int32 countPages( Printer* pPrinter ) = 0;
