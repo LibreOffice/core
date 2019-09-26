@@ -260,17 +260,6 @@ void SwTextBlocks::SetName( const OUString& r )
         pImp->SetName( r );
 }
 
-bool SwTextBlocks::IsOld() const
-{
-    if (pImp)
-    {
-        SwImpBlocks::FileType nType = pImp->GetFileType();
-        if (SwImpBlocks::FileType::SW3 == nType)
-            return true;
-    }
-    return false;
-}
-
 sal_uInt16 SwTextBlocks::GetCount() const
 {
     return pImp ? pImp->GetCount() : 0;
@@ -563,7 +552,7 @@ bool SwTextBlocks::SetMacroTable( sal_uInt16 nIdx, const SvxMacroTableDtor& rMac
 bool SwTextBlocks::StartPutMuchBlockEntries()
 {
     bool bRet = false;
-    if( !IsOld() && pImp )
+    if( pImp )
         bRet = pImp->PutMuchEntries( true );
     return bRet;
 }

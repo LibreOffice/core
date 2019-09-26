@@ -648,12 +648,9 @@ bool SwGlossaryHdl::IsReadOnly( const OUString* pGrpNm ) const
 
 bool SwGlossaryHdl::IsOld() const
 {
-    SwTextBlocks *pGlossary = pCurGrp ? pCurGrp.get()
-                                      : rStatGlossaries.GetGroupDoc(aCurGrp).release();
-    bool bRet = pGlossary && pGlossary->IsOld();
     if( !pCurGrp )
-        delete pGlossary;
-    return bRet;
+        rStatGlossaries.GetGroupDoc(aCurGrp).reset();
+    return false;
 }
 
 // find group without path index

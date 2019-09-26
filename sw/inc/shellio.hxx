@@ -319,8 +319,6 @@ public:
     OUString GetBaseURL() const;
     void   SetBaseURL( const OUString& rURL );
 
-    bool   IsOld() const;
-
     sal_uInt16 GetCount() const;                        // Get count text modules.
     sal_uInt16 GetIndex( const OUString& ) const;       // Get index of short names.
     sal_uInt16 GetLongIndex( const OUString& ) const;   // Get index of long names.
