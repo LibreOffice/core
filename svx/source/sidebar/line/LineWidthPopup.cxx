@@ -47,6 +47,11 @@ LineWidthPopup::LineWidthPopup(LinePropertyPanelBase& rParent)
 
     m_xVSWidth = VclPtr<LineWidthValueSet>::Create(m_xBox);
 
+    // Avoid flicker when hovering over the menu items.
+    if (!IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
+        // If NWF renders the focus rects itself, that breaks double-buffering.
+        m_xMFWidth->RequestDoubleBuffering(true);
+
     m_xVSWidth->SetStyle(m_xVSWidth->GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT);
 
     maStrUnits[0] = "0.5";
