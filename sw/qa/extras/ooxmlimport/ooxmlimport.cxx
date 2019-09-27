@@ -836,7 +836,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf99135, "tdf99135.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testTdf85523, "tdf85523.docx")
 {
-    auto xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 6), "TextField");
+    auto xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 7), "TextField");
     auto xText = getProperty< uno::Reference<text::XText> >(xTextField, "TextRange");
     // This was "commentX": an unexpected extra char was added at the comment end.
     getParagraphOfText(1, xText, "comment");

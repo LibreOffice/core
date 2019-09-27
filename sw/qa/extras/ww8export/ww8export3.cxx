@@ -121,7 +121,7 @@ DECLARE_WW8EXPORT_TEST(testTdf79435_legacyInputFields, "tdf79435_legacyInputFiel
     xParameters->getByName("Type") >>= sTmp;
     CPPUNIT_ASSERT_EQUAL(OUString("currentDate"), sTmp);
 
-    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(7), 6), "Bookmark");
+    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(7), 7), "Bookmark");
     xParameters.set(xFormField->getParameters());
     xParameters->getByName("Type") >>= sTmp;
     CPPUNIT_ASSERT_EQUAL(OUString("currentTime"), sTmp);
@@ -131,7 +131,7 @@ DECLARE_WW8EXPORT_TEST(testTdf79435_legacyInputFields, "tdf79435_legacyInputFiel
     xParameters->getByName("Type") >>= sTmp;
     CPPUNIT_ASSERT_EQUAL(OUString("number"), sTmp);
 
-    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(8), 6), "Bookmark");
+    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(8), 7), "Bookmark");
     xParameters.set(xFormField->getParameters());
     xParameters->getByName("Type") >>= sTmp;
     CPPUNIT_ASSERT_EQUAL(OUString("date"), sTmp);
