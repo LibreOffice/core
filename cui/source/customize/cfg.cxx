@@ -994,7 +994,7 @@ SvxConfigPage::SvxConfigPage(weld::Container* pPage, weld::DialogController* pCo
     , m_xAddCommandButton(m_xBuilder->weld_button("add"))
     , m_xRemoveCommandButton(m_xBuilder->weld_button("remove"))
 {
-    m_xTopLevelListBox->connect_changed(LINK(this, SvxMenuConfigPage, SelectElementHdl));
+    m_xTopLevelListBox->connect_changed(LINK(this, SvxConfigPage, SelectElementHdl));
 
     weld::TreeView& rTreeView = m_xFunctions->get_widget();
     Size aSize(rTreeView.get_approximate_digit_width() * 40, rTreeView.get_height_rows(8));
