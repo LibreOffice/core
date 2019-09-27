@@ -7344,58 +7344,6 @@ if test -n "$ENABLE_JAVA" -a -z "$JAVAINC"; then
 fi
 SOLARINC="$SOLARINC $JAVAINC"
 
-if test "$ENABLE_JAVA" != "" -a "x" != "x$JAVACOMPILER"; then
-    url_check_unknown=0
-    java_base="testurlcheck"
-    java_src="${java_base}.java"
-    java_cls="${java_base}.class"
-    cat > "${java_src}" <<_ACEOF
-[import jdk.internal.loader.URLClassPath;
-import java.lang.reflect.Field;
-import java.net.URL;
-
-class ${java_base}
-{
-    public static void main(String args[])
-    {
-        try {
-            URLClassPath cp = new URLClassPath(new URL[0], null);
-            Field field = cp.getClass().getDeclaredField("DISABLE_CP_URL_CHECK");
-            field.setAccessible(true);
-            System.out.println(field.get(cp).toString());
-        } catch(Exception e) {
-            System.out.println("unknown");
-        }
-    }
-}]
-_ACEOF
-    AC_MSG_CHECKING([if jdk.net.URLClassPath.ClassPathURLCheck is disabled])
-    java_cmd="$JAVACOMPILER --add-exports java.base/jdk.internal.loader=ALL-UNNAMED ${java_src} 1>&2"
-    AC_TRY_EVAL(java_cmd)
-    if test $? = 0 -a -f "./${java_cls}"; then
-        java_res=`$JAVAINTERPRETER --add-opens java.base/jdk.internal.loader=ALL-UNNAMED ${java_base} 2>/dev/null`
-        if test $? = 0; then
-            case "${java_res}" in
-            true) AC_MSG_RESULT([yes]) ;;
-            false)
-                rm -f "./${java_src}" "./${java_cls}"
-                AC_MSG_ERROR([no - Java unit tests will break!])
-                ;;
-            *) url_check_unknown=1 ;;
-            esac
-        else
-            url_check_unknown=1
-        fi
-    else
-        url_check_unknown=1
-    fi
-    if test $url_check_unknown -eq 1; then
-        AC_MSG_RESULT([unknown - assuming yes])
-        add_warning "Unable to find the default value for jdk.net.URLClassPath.ClassPathURLCheck - java tests might fail!"
-    fi
-    rm -f "./${java_src}" "./${java_cls}"
-fi
-
 AC_SUBST(JAVACOMPILER)
 AC_SUBST(JAVADOC)
 AC_SUBST(JAVAINTERPRETER)
