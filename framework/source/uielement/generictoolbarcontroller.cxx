@@ -182,6 +182,7 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
         OUString        aStrValue;
         ItemStatus      aItemState;
         Visibility      aItemVisibility;
+        ControlCommand  aControlCommand;
 
         if (( Event.State >>= bValue ) && !m_bEnumCommand )
         {
@@ -243,6 +244,24 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
         {
             m_pToolbar->ShowItem( m_nID, aItemVisibility.bVisible );
             m_bMadeInvisible = !aItemVisibility.bVisible;
+        }
+        else if ( Event.State >>= aControlCommand )
+        {
+            if (aControlCommand.Command == "SetQuickHelpText")
+            {
+                for (sal_Int32 i = 0; i < aControlCommand.Arguments.getLength(); i++)
+                {
+                    if (aControlCommand.Arguments[i].Name == "HelpText")
+                    {
+                        OUString aHelpText;
+                        aControlCommand.Arguments[i].Value >>= aHelpText;
+                        m_pToolbar->SetQuickHelpText(m_nID, aHelpText);
+                        break;
+                    }
+                }
+            }
+            if ( m_bMadeInvisible )
+                m_pToolbar->ShowItem( m_nID );
         }
         else if ( m_bMadeInvisible )
             m_pToolbar->ShowItem( m_nID );
