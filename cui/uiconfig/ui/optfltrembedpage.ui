@@ -78,7 +78,7 @@
                           <object class="GtkTreeViewColumn" id="treeviewcolumn4">
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
-                            <property name="title" translatable="yes" context="optfltrembedpage|column1">[L]</property>
+                            <property name="title" translatable="yes" context="optfltrembedpage|column1" comments="A column title, short for Load. This string is repeated as a prefix to an explanatory note under the widget">[L]</property>
                             <property name="alignment">0.5</property>
                             <child>
                               <object class="GtkCellRendererToggle" id="cellrenderer5"/>
@@ -93,7 +93,7 @@
                           <object class="GtkTreeViewColumn" id="treeviewcolumn7">
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
-                            <property name="title" translatable="yes" context="optfltrembedpage|column1">[S]</property>
+                            <property name="title" translatable="yes" context="optfltrembedpage|column2" comments="A column title, short for Save. This string is repeated as a prefix to an explanatory note under the widget">[S]</property>
                             <property name="alignment">0.5</property>
                             <child>
                               <object class="GtkCellRendererToggle" id="cellrenderer7"/>
@@ -129,7 +129,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="optfltrembedpage|label2">[L]: Load and convert the object</property>
+                    <property name="label" translatable="yes" context="optfltrembedpage|label2" comments="The [L] here is repeated as the column title for the &quot;Load&quot; column of this options page">[L]: Load and convert the object</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -142,7 +142,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="optfltrembedpage|label3">[S]: Convert and save the object</property>
+                    <property name="label" translatable="yes" context="optfltrembedpage|label3" comments="The [S] here is repeated as the column title for the &quot;Save&quot; column of this options page">[S]: Convert and save the object</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
