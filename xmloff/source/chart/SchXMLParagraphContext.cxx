@@ -18,12 +18,14 @@
  */
 
 
-#include <SchXMLImport.hxx>
 #include "SchXMLParagraphContext.hxx"
 
+#include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
+
+#include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;

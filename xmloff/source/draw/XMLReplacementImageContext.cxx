@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <osl/diagnose.h>
 #include <xmloff/xmlimp.hxx>

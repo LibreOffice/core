@@ -8,12 +8,10 @@
  */
 
 #include "SchXMLPropertyMappingContext.hxx"
-#include "PropertyMap.hxx"
 #include "SchXMLTools.hxx"
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/SchXMLSeriesHelper.hxx>
 #include <SchXMLImport.hxx>
 
 #include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>

@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sax/tools/converter.hxx>
-
 #include "SchXMLPlotAreaContext.hxx"
-#include "SchXMLRegressionCurveObjectContext.hxx"
 #include <SchXMLImport.hxx>
 #include "SchXMLAxisContext.hxx"
 #include "SchXMLSeries2Context.hxx"
@@ -30,35 +27,26 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmlement.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlstyle.hxx>
-#include <xexptran.hxx>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <com/sun/star/chart/ChartErrorCategory.hpp>
-#include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/X3DDisplay.hpp>
 #include <com/sun/star/chart/XStatisticDisplay.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
-#include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/util/XStringMapping.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 using namespace com::sun::star;

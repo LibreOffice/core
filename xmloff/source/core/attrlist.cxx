@@ -18,7 +18,6 @@
  */
 
 
-#include <string.h>
 #include <vector>
 #include <osl/diagnose.h>
 #include <xmloff/xmltoken.hxx>

@@ -28,7 +28,6 @@
 #include <sax/tools/converter.hxx>
 #include <osl/diagnose.h>
 
-#include <list>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnmspe.hxx>

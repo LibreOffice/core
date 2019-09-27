@@ -18,7 +18,6 @@
  */
 
 #include <memory>
-#include <string.h>
 
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
@@ -51,7 +50,6 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
-#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>

@@ -21,21 +21,19 @@
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/PositionLayoutDir.hpp>
-#include <com/sun/star/chart/XChartDocument.hpp>
 
 #include <utility>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 
-#include <list>
-
 #include <xmloff/shapeimport.hxx>
+#include <xmloff/xmlstyle.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/table/XMLTableImport.hxx>
 #include <xmloff/attrlist.hxx>
-#include "ximpstyl.hxx"
 #include "ximpshap.hxx"
 #include "sdpropls.hxx"
 #include <xmloff/xmlprmap.hxx>

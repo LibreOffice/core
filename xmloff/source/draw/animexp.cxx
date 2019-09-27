@@ -34,9 +34,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlexp.hxx>
-#include <xmloff/xmlement.hxx>
-#include <xmloff/nmspmap.hxx>
-#include <xmloff/shapeexport.hxx>
 #include <anim.hxx>
 
 

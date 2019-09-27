@@ -25,7 +25,6 @@
 #include "SchXMLCalculationSettingsContext.hxx"
 
 #include "contexts.hxx"
-#include "SchXMLChartContext.hxx"
 
 #include <sal/log.hxx>
 

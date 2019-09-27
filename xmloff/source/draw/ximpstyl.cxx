@@ -18,8 +18,10 @@
  */
 
 #include "ximpstyl.hxx"
+#include <xmloff/maptype.hxx>
 #include <xmloff/XMLShapeStyleContext.hxx>
 #include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "ximpnote.hxx"
@@ -29,7 +31,6 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/style/XStyle.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
@@ -43,8 +44,6 @@
 #include <xmloff/families.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <svl/zforlist.hxx>
-#include <PropertySetMerger.hxx>
-#include "sdpropls.hxx"
 #include "layerimp.hxx"
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 #include <XMLNumberStylesImport.hxx>

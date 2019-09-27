@@ -10,7 +10,6 @@
 #include "SvXMLAttrCollection.hxx"
 #include <limits.h>
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 
 bool SvXMLAttrCollection::operator ==( const SvXMLAttrCollection& rCmp ) const
 {

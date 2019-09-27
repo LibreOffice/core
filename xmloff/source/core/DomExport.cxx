@@ -26,12 +26,8 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/dom/XAttr.hpp>
-#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XElement.hpp>
-#include <com/sun/star/xml/dom/XEntity.hpp>
-#include <com/sun/star/xml/dom/XNotation.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 

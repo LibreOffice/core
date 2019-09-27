@@ -22,16 +22,11 @@
 #include <osl/diagnose.h>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <xmloff/xmlexp.hxx>
-#include <xmloff/xmlimp.hxx>
-#include <tools/helpers.hxx>
-#include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b3dhommatrixtools.hxx>
 
 using namespace ::com::sun::star;

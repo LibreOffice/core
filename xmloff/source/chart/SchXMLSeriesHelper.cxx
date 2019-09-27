@@ -25,11 +25,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <rtl/ustring.h>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
-
-#include <typeinfo>
 
 using namespace ::com::sun::star;
 

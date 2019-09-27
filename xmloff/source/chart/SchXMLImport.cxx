@@ -20,11 +20,9 @@
 #include <SchXMLImport.hxx>
 #include "SchXMLChartContext.hxx"
 #include "contexts.hxx"
-#include <XMLChartPropertySetMapper.hxx>
 #include "SchXMLTools.hxx"
 #include <facreg.hxx>
 
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -34,24 +32,19 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlstyle.hxx>
-#include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
-#include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 
-#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <tools/diagnose_ex.h>
-#include <typeinfo>
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;

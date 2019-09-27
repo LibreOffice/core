@@ -25,7 +25,6 @@
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmlimppr.hxx>
 
-#include <sal/log.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/diagnose_ex.h>
 

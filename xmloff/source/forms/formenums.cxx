@@ -26,7 +26,6 @@
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
-#include <com/sun/star/awt/FontWidth.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>

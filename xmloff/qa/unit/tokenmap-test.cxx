@@ -11,7 +11,6 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 #include <xmloff/fasttokenhandler.hxx>
 #include <xmloff/token/tokens.hxx>

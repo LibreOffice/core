@@ -21,7 +21,6 @@
 
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
-#include <com/sun/star/awt/FontWidth.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 
 #include <sax/tools/converter.hxx>
@@ -32,7 +31,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "callbacks.hxx"
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 
 namespace xmloff

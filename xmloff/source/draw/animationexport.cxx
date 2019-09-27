@@ -51,7 +51,6 @@
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
 #include <o3tl/any.hxx>
 #include <sax/tools/converter.hxx>
 #include <sal/log.hxx>
@@ -59,7 +58,6 @@
 #include <tools/diagnose_ex.h>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
-#include "sdxmlexp_impl.hxx"
 #include "sdpropls.hxx"
 #include <xmlsdtypes.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -67,8 +65,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlement.hxx>
-#include <xmloff/nmspmap.hxx>
-#include <xmloff/shapeexport.hxx>
 #include <xmloff/xmlprhdl.hxx>
 
 #include <animations.hxx>

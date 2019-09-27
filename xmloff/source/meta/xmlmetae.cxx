@@ -31,15 +31,12 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Duration.hpp>
-#include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 
 #include <sax/tools/converter.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <unotools/docinfohelper.hxx>
-
-#include <string.h>
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;

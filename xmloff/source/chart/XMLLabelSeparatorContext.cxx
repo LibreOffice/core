@@ -21,10 +21,7 @@
 
 #include "SchXMLParagraphContext.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmltkmap.hxx>
-#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/nmspmap.hxx>
 
 
 using namespace ::com::sun::star;

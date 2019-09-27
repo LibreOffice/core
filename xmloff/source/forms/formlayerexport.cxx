@@ -18,14 +18,9 @@
  */
 
 #include <xmloff/formlayerexport.hxx>
-#include "strings.hxx"
-#include "elementexport.hxx"
-#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlexp.hxx>
 #include "layerexport.hxx"
-#include "propertyexport.hxx"
 #include <osl/diagnose.h>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include "officeforms.hxx"
 
 namespace xmloff

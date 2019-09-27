@@ -19,7 +19,6 @@
 
 #include "XMLSymbolTypePropertyHdl.hxx"
 #include <xmloff/xmluconv.hxx>
-#include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
 #include <rtl/ustrbuf.hxx>
 
 using namespace ::xmloff::token;

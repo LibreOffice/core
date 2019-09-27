@@ -25,12 +25,10 @@
 #include "strings.hxx"
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <xmloff/families.hxx>
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <sax/tools/converter.hxx>
 #include <osl/diagnose.h>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -38,7 +36,6 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <comphelper/extract.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include "callbacks.hxx"
 #include <unotools/datetime.hxx>

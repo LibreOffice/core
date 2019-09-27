@@ -19,7 +19,6 @@
 
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
@@ -27,7 +26,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlerror.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/XMLFilterServiceNames.h>
 #include <XMLEmbeddedObjectImportContext.hxx>

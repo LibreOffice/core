@@ -30,3 +30,12 @@ blacklist:
     xmloff/source/xforms/XFormsModelExport.hxx:
     # Needed for css shortcut
     - sal/types.h
+    xmloff/source/core/fasttokenhandler.cxx:
+    # Needed for special array initialization
+    - tokennames.inc
+    xmloff/source/draw/sdpropls.cxx:
+    # Needed for extern type definitions at linking time
+    - enummaps.hxx
+    xmloff/source/meta/MetaExportComponent.cxx:
+    # Needed for direct member access
+    - com/sun/star/frame/XModel.hpp

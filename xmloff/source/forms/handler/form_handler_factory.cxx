@@ -21,7 +21,6 @@
 #include "vcl_date_handler.hxx"
 #include "vcl_time_handler.hxx"
 #include <osl/diagnose.h>
-#include <osl/mutex.hxx>
 
 namespace xmloff
 {

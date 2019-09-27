@@ -37,31 +37,23 @@
 #include <propimp0.hxx>
 
 #include <xmloff/EnumPropertyHdl.hxx>
-#include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/shapeimport.hxx>
-#include <xmloff/NamedBoolPropertyHdl.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/prhdlfac.hxx>
 
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/chart/ChartAxisMarks.hpp>
 #include <com/sun/star/chart/ChartDataCaption.hpp>
-#include <com/sun/star/chart/ChartSymbolType.hpp>
-#include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <rtl/ustrbuf.hxx>
-#include <rtl/math.hxx>
 
 #define SCH_XML_SETFLAG( status, flag )     (status)|= (flag)
 #define SCH_XML_UNSETFLAG( status, flag )   (status) = ((status) | (flag)) - (flag)

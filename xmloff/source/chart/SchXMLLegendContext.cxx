@@ -22,14 +22,11 @@
 
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmlement.hxx>
-#include <xmloff/prstylei.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 
 #include <sal/log.hxx>
 
-#include <com/sun/star/chart/ChartLegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>

@@ -18,7 +18,6 @@
  */
 
 #include <xmloff/ProgressBarHelper.hxx>
-#include <xmloff/xmltoken.hxx>
 
 #include <osl/diagnose.h>
 

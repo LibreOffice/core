@@ -25,16 +25,13 @@
 #include <comphelper/sequence.hxx>
 
 #include <com/sun/star/rdf/URI.hpp>
-#include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 #include <com/sun/star/rdf/XDocumentRepository.hpp>
+#include <com/sun/star/rdf/XRepositorySupplier.hpp>
 
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
 #include <map>
-#include <iterator>
-#include <functional>
-#include <algorithm>
 
 using namespace ::com::sun::star;
 

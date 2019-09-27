@@ -18,7 +18,6 @@
  */
 
 #include "ximpbody.hxx"
-#include <xmloff/prstylei.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include "ximpnote.hxx"
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -31,14 +30,10 @@
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
-#include <xmloff/xmluconv.hxx>
-#include <xmloff/xmlprmap.hxx>
 #include <xmloff/families.hxx>
 #include "ximpshow.hxx"
 #include "layerimp.hxx"
-#include <PropertySetMerger.hxx>
 #include <animationimport.hxx>
-#include <osl/diagnose.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;

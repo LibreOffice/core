@@ -23,7 +23,6 @@
 #include <comphelper/sequence.hxx>
 
 #include <xmloff/xmlscripti.hxx>
-#include <facreg.hxx>
 #include "sdxmlimp_impl.hxx"
 #include "ximpbody.hxx"
 
@@ -31,20 +30,15 @@
 #include "ximpstyl.hxx"
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
+#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include "sdpropls.hxx"
-#include <xmloff/xmlexppr.hxx>
-#include <xmloff/xmlerror.hxx>
 #include <xmloff/settingsstore.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
-#include <com/sun/star/style/XStyle.hpp>
 
 #include <xmloff/XMLFontStylesContext.hxx>
 

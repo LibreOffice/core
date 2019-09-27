@@ -20,10 +20,8 @@
 #include <SchXMLAutoStylePoolP.hxx>
 #include "PropertyMap.hxx"
 #include <SchXMLExport.hxx>
-#include <XMLChartPropertySetMapper.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmltoken.hxx>
 
 
 SchXMLAutoStylePoolP::SchXMLAutoStylePoolP( SchXMLExport& rSchXMLExport ) :

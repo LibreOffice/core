@@ -20,8 +20,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlmetai.hxx>
-#include <xmloff/nmspmap.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>

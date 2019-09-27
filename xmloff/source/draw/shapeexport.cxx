@@ -18,9 +18,7 @@
  */
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
-#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -31,11 +29,9 @@
 
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
-#include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIdentifierAccess.hpp>
-#include <com/sun/star/container/XIdentifierContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/drawing/Alignment.hpp>
@@ -43,7 +39,6 @@
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
-#include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/EscapeDirection.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
@@ -67,11 +62,13 @@
 #include <com/sun/star/drawing/QRCode.hpp>
 #include <com/sun/star/drawing/QRCodeErrorCorrection.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XSeekableInputStream.hpp>
+#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/media/ZoomLevel.hpp>
@@ -81,7 +78,6 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/document/XStorageBasedDocument.hpp>
 
 #include <comphelper/classids.hxx>
 #include <comphelper/processfactory.hxx>
@@ -93,7 +89,6 @@
 
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
@@ -102,7 +97,6 @@
 #include <tools/debug.hxx>
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
-#include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <xmloff/contextid.hxx>
@@ -119,16 +113,12 @@
 
 #include <anim.hxx>
 #include <EnhancedCustomShapeToken.hxx>
-#include <PropertySetMerger.hxx>
 #include "sdpropls.hxx"
-#include "sdxmlexp_impl.hxx"
 #include <xexptran.hxx>
 #include "ximpshap.hxx"
 #include <XMLBase64Export.hxx>
 #include <XMLImageMapExport.hxx>
 #include <memory>
-
-#include <config_features.h>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::EnhancedCustomShapeToken;
