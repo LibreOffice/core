@@ -462,6 +462,7 @@ void inflate_rc_template_to_file(
                 // a particular language that others
                 // don't have in order to keep the
                 // build
+                // coverity[tainted_data] - trusted data source
                 if (is_placeholder(token))
                     token = make_winrc_unicode_string(token);
 
