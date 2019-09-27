@@ -14,14 +14,12 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <oox/crypto/AgileEngine.hxx>
-#include <oox/crypto/Standard2007Engine.hxx>
-#include <oox/crypto/IRMEngine.hxx>
-#include <oox/helper/binaryinputstream.hxx>
-#include <oox/helper/binaryoutputstream.hxx>
+#include <com/sun/star/packages/XPackageEncryption.hpp>
 #include <oox/ole/olestorage.hxx>
+#include <filter/msfilter/mscodec.hxx>
 
 namespace {
 
@@ -81,8 +79,8 @@ DocumentDecryption::DocumentDecryption(const css::uno::Reference< css::uno::XCom
 
 bool DocumentDecryption::generateEncryptionKey(const OUString& rPassword)
 {
-    if (mEngine)
-        return mEngine->generateEncryptionKey(rPassword);
+    if (mxPackageEncryption.is())
+        return mxPackageEncryption->generateEncryptionKey(rPassword);
     return false;
 }
 
@@ -93,16 +91,20 @@ void DocumentDecryption::readStrongEncryptionInfo()
     BinaryXInputStream aBinaryInputStream(xEncryptionInfo, true);
     sal_uInt32 aVersion = aBinaryInputStream.readuInt32();
 
+    uno::Sequence< uno::Any > aArguments;
+
     switch (aVersion)
     {
     case msfilter::VERSION_INFO_2007_FORMAT:
     case msfilter::VERSION_INFO_2007_FORMAT_SP2:
-        msEngineName = "Standard"; // Set encryption info format
-        mEngine.reset(new Standard2007Engine(mxContext));
+        mxPackageEncryption.set(
+            mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                "com.sun.star.comp.oox.crypto.Standard2007Engine", aArguments, mxContext), css::uno::UNO_QUERY);
         break;
     case msfilter::VERSION_INFO_AGILE:
-        msEngineName = "Agile"; // Set encryption info format
-        mEngine.reset(new AgileEngine(mxContext));
+        mxPackageEncryption.set(
+            mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                "com.sun.star.comp.oox.crypto.AgileEngine", aArguments, mxContext), css::uno::UNO_QUERY);
         break;
     default:
         break;
@@ -146,22 +148,14 @@ bool DocumentDecryption::readEncryptionInfo()
             aDataSpaceStream.skip((4 - (aDataSpaceNameLength & 3)) & 3);  // Skip padding
         }
 
-        if (sDataSpaceName == "DRMEncryptedDataSpace")
-        {
-            msEngineName = "IRM"; // Set encryption info format
-            mEngine.reset(new IRMEngine(mxContext));
-        }
-        else if (sDataSpaceName == "\011DRMDataSpace") // 0x09DRMDataSpace
-        {
-            // TODO: IRM binary file
-        }
-        else if (sDataSpaceName == "StrongEncryptionDataSpace")
+        uno::Sequence< uno::Any > aArguments;
+        mxPackageEncryption.set(
+            mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                "com.sun.star.comp.oox.crypto." + sDataSpaceName, aArguments, mxContext), css::uno::UNO_QUERY);
+
+        if (!mxPackageEncryption.is() && sDataSpaceName == "StrongEncryptionDataSpace")
         {
             readStrongEncryptionInfo();
-        }
-        else
-        {
-            SAL_WARN("oox", "Unknown dataspace - document will be not decrypted!");
         }
     }
     else
@@ -172,20 +166,21 @@ bool DocumentDecryption::readEncryptionInfo()
         readStrongEncryptionInfo();
     }
 
-    if (!mEngine)
+    if (!mxPackageEncryption.is())
+    {
+        // we do not know how to decrypt this document
         return false;
+    }
 
-    return mEngine->readEncryptionInfo(maStreamsSequence);
+    return mxPackageEncryption->readEncryptionInfo(maStreamsSequence);
 }
 
 uno::Sequence<beans::NamedValue> DocumentDecryption::createEncryptionData(const OUString& rPassword)
 {
-    comphelper::SequenceAsHashMap aEncryptionData;
+    if (!mxPackageEncryption.is())
+        return uno::Sequence<beans::NamedValue>();
 
-    aEncryptionData["CryptoType"] <<= msEngineName;
-    mEngine->createEncryptionData(aEncryptionData, rPassword);
-
-    return aEncryptionData.getAsConstNamedValueList();
+    return mxPackageEncryption->createEncryptionData(rPassword);
 }
 
 bool DocumentDecryption::decrypt(const uno::Reference<io::XStream>& xDocumentStream)
@@ -195,21 +190,22 @@ bool DocumentDecryption::decrypt(const uno::Reference<io::XStream>& xDocumentStr
     if (!mrOleStorage.isStorage())
         return false;
 
+    if (!mxPackageEncryption.is())
+        return false;
+
     // open the required input streams in the encrypted package
     uno::Reference<io::XInputStream> xEncryptedPackage = mrOleStorage.openInputStream("EncryptedPackage");
 
     // create temporary file for unencrypted package
     uno::Reference<io::XOutputStream> xDecryptedPackage = xDocumentStream->getOutputStream();
-    BinaryXOutputStream aDecryptedPackage(xDecryptedPackage, true);
-    BinaryXInputStream aEncryptedPackage(xEncryptedPackage, true);
 
-    bResult = mEngine->decrypt(aEncryptedPackage, aDecryptedPackage);
+    bResult = mxPackageEncryption->decrypt(xEncryptedPackage, xDecryptedPackage);
 
-    xDecryptedPackage->flush();
-    aDecryptedPackage.seekToStart();
+    css::uno::Reference<io::XSeekable> xSeekable(xDecryptedPackage, css::uno::UNO_QUERY);
+    xSeekable->seek(0);
 
     if (bResult)
-        return mEngine->checkDataIntegrity();
+        return mxPackageEncryption->checkDataIntegrity();
 
     return bResult;
 }
