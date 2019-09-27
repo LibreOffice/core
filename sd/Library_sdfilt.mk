@@ -55,6 +55,8 @@ $(eval $(call gb_Library_use_libraries,sdfilt,\
 
 $(eval $(call gb_Library_set_componentfile,sdfilt,sd/util/sdfilt))
 
+$(eval $(call gb_Library_use_common_precompiled_header,sdfilt))
+
 $(eval $(call gb_Library_add_exception_objects,sdfilt,\
     sd/source/filter/eppt/eppt \
     sd/source/filter/eppt/epptso \

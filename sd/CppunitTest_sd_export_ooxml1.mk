@@ -16,6 +16,8 @@ $(eval $(call gb_CppunitTest_use_externals,sd_export_ooxml1,\
 	libxml2 \
 ))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sd_export_ooxml1))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_export_ooxml1, \
 	sd/qa/unit/export-tests-ooxml1 \
 ))

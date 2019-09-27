@@ -16,6 +16,8 @@ $(eval $(call gb_CppunitTest_use_externals,sd_uiimpress,\
 	libxml2 \
 ))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sd_uiimpress))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_uiimpress, \
     sd/qa/unit/uiimpress \
 ))

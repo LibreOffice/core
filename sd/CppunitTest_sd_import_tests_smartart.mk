@@ -16,6 +16,8 @@ $(eval $(call gb_CppunitTest_use_externals,sd_import_tests_smartart,\
 	libxml2 \
 ))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sd_import_tests_smartart))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_import_tests_smartart, \
     sd/qa/unit/import-tests-smartart \
 ))

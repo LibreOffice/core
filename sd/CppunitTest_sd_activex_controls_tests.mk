@@ -14,6 +14,8 @@ $(eval $(call gb_CppunitTest_use_externals,sd_activex_controls_tests,\
     libxml2 \
 ))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sd_activex_controls_tests))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_activex_controls_tests, \
     sd/qa/unit/activex-controls-tests \
 ))
