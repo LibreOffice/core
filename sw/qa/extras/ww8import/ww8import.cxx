@@ -308,6 +308,17 @@ DECLARE_WW8IMPORT_TEST(testTdf122425_1, "tdf122425_1.doc")
     }
 }
 
+DECLARE_WW8IMPORT_TEST(testTdf79639, "tdf79639.doc")
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // as the floating table in the header wasn't converted to a TextFrame.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDrawPage->getCount());
+}
+
 DECLARE_WW8IMPORT_TEST(testTdf122425_2, "tdf122425_2.doc")
 {
     // This is for graphic objects in headers/footers

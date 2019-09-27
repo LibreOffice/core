@@ -2547,6 +2547,13 @@ bool SwWW8ImplReader::FloatingTableConversion(WW8PLCFx_Cp_FKP* pPap)
     // table that is floating and can span over multiple pages at the same
     // time.
 
+    // If the floating table is in a header or footer, then it won't be a
+    // multi-page one, so can always do the conversion.
+    if (m_bIsHeader || m_bIsFooter)
+    {
+        return true;
+    }
+
     bool bResult = true;
 
     SprmResult aRes = pPap->HasSprm(NS_sprm::sprmTDefTable);
