@@ -175,7 +175,23 @@ void ComplexToolbarController::statusChanged( const FeatureStateEvent& Event )
         }
         else if ( Event.State >>= aControlCommand )
         {
-            executeControlCommand( aControlCommand );
+            if (aControlCommand.Command == "SetQuickHelpText")
+            {
+                for (sal_Int32 i = 0; i < aControlCommand.Arguments.getLength(); i++)
+                {
+                    if (aControlCommand.Arguments[i].Name == "HelpText")
+                    {
+                        OUString aHelpText;
+                        aControlCommand.Arguments[i].Value >>= aHelpText;
+                        m_pToolbar->SetQuickHelpText(m_nID, aHelpText);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                executeControlCommand( aControlCommand );
+            }
             if ( m_bMadeInvisible )
                 m_pToolbar->ShowItem( m_nID );
         }
