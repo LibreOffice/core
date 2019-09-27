@@ -11,6 +11,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sw_ooxmlfieldexport))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_ooxmlfieldexport))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_ooxmlfieldexport, \
     sw/qa/extras/ooxmlexport/ooxmlfieldexport \
 ))

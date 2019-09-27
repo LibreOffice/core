@@ -40,6 +40,8 @@ $(eval $(call gb_Library_use_libraries,swd,\
     utl \
 ))
 
+$(eval $(call gb_Library_use_common_precompiled_header,swd))
+
 $(eval $(call gb_Library_add_exception_objects,swd,\
     sw/source/ui/uno/swdetect \
 ))

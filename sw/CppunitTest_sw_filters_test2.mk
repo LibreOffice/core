@@ -16,6 +16,8 @@ $(eval $(call gb_CppunitTest_use_externals,sw_filters_test2,\
 	libxml2 \
 ))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_filters_test2))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_filters_test2, \
     sw/qa/core/filters-test2 \
 ))

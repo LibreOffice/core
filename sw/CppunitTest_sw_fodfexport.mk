@@ -11,6 +11,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sw_fodfexport))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_fodfexport))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_fodfexport, \
 	sw/qa/extras/fodfexport/fodfexport \
 ))
