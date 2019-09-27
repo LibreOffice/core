@@ -575,15 +575,14 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
 OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(
     sal_uInt16 nId, const OUString& rPageName, sal_uInt16 nGroup )
 {
-    OptionsPageInfo* pPageInfo = new OptionsPageInfo( nId );
-
     std::unique_ptr<weld::TreeIter> xParent = xTreeLB->make_iterator();
-    xTreeLB->get_iter_first(*xParent);
+    if (!xTreeLB->get_iter_first(*xParent))
+        return nullptr;
     xTreeLB->iter_nth_sibling(*xParent, nGroup);
 
+    OptionsPageInfo* pPageInfo = new OptionsPageInfo( nId );
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pPageInfo)));;
     xTreeLB->insert(xParent.get(), -1, &rPageName, &sId, nullptr, nullptr, nullptr, false, nullptr);
-
     return pPageInfo;
 }
 
