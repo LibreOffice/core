@@ -1820,9 +1820,8 @@ void ScTiledRenderingTest::testGetRowColumnHeadersInvalidation()
     pModelObj->getRowColumnHeaders(tools::Rectangle(0, 15, 19650, 5400));
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidations.size());
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(26775, 0, 49725, 13005), aView1.m_aInvalidations[1]);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(26775, 0, 49725, 13005), aView1.m_aInvalidations[0]);
 
     // Extend area top-to-bottom
     aView1.m_bInvalidateTiles = false;
@@ -1830,9 +1829,8 @@ void ScTiledRenderingTest::testGetRowColumnHeadersInvalidation()
     pModelObj->getRowColumnHeaders(tools::Rectangle(0, 5400, 19650, 9800));
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidations.size());
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 13005, 49725, 19380), aView1.m_aInvalidations[1]);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 13005, 49725, 19380), aView1.m_aInvalidations[0]);
 
     // Extend area left-to-right
     aView1.m_bInvalidateTiles = false;
@@ -1840,9 +1838,8 @@ void ScTiledRenderingTest::testGetRowColumnHeadersInvalidation()
     pModelObj->getRowColumnHeaders(tools::Rectangle(5400, 5400, 25050, 9800));
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidations.size());
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(49725, 0, 75225, 19380), aView1.m_aInvalidations[1]);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(49725, 0, 75225, 19380), aView1.m_aInvalidations[0]);
 
     mxComponent->dispose();
     mxComponent.clear();
