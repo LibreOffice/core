@@ -2741,6 +2741,7 @@ public:
         auto xEmbedWindow = VclPtr<ChildFrame>::Create(ImplGetDefaultWindow(), WB_SYSTEMCHILDWINDOW | WB_DIALOGCONTROL | WB_CHILDDLGCTRL);
         SalFrame* pFrame = xEmbedWindow->ImplGetFrame();
         GtkSalFrame* pGtkFrame = dynamic_cast<GtkSalFrame*>(pFrame);
+        assert(pGtkFrame);
 
         // relocate that toplevel GtkEventBox into this widget
         GtkWidget* pWindow = pGtkFrame->getWindow();
