@@ -275,16 +275,16 @@ SwXDocumentSettings::~SwXDocumentSettings()
 
 Any SAL_CALL SwXDocumentSettings::queryInterface( const Type& rType )
 {
-        return ::cppu::queryInterface ( rType,
-                                        // OWeakObject interfaces
-                                        dynamic_cast< XInterface* > ( dynamic_cast< OWeakObject*  >(this) ),
-                                        dynamic_cast< XWeak* > ( this ),
-                                        // my own interfaces
-                                        dynamic_cast< XPropertySet*  > ( this ),
-                                        dynamic_cast< XPropertyState* > ( this ),
-                                        dynamic_cast< XMultiPropertySet* > ( this ),
-                                        dynamic_cast< XServiceInfo* > ( this ),
-                                        dynamic_cast< XTypeProvider* > ( this ) );
+        return ::cppu::queryInterface(rType,
+                                      // OWeakObject interfaces
+                                      &dynamic_cast<XInterface&>(dynamic_cast<OWeakObject&>(*this)),
+                                      &dynamic_cast<XWeak&>(*this),
+                                      // my own interfaces
+                                      &dynamic_cast<XPropertySet&>(*this),
+                                      &dynamic_cast<XPropertyState&>(*this),
+                                      &dynamic_cast<XMultiPropertySet&>(*this),
+                                      &dynamic_cast<XServiceInfo&>(*this),
+                                      &dynamic_cast<XTypeProvider&>(*this));
 }
 void SwXDocumentSettings::acquire ()
     throw ()
