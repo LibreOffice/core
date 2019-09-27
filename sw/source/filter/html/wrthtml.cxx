@@ -1182,21 +1182,21 @@ void SwHTMLWriter::OutPointFieldmarks( const SwPosition& rPos )
 
         if (pCheckBox)
         {
-            OString aOut("<");
-            aOut += OOO_STRING_SVTOOLS_HTML_input;
-            aOut += " ";
-            aOut += OOO_STRING_SVTOOLS_HTML_O_type;
-            aOut += "=\"";
-            aOut += OOO_STRING_SVTOOLS_HTML_IT_checkbox;
-            aOut += "\"";
+            OString aOut("<"
+                OOO_STRING_SVTOOLS_HTML_input
+                " "
+                OOO_STRING_SVTOOLS_HTML_O_type
+                "=\""
+                OOO_STRING_SVTOOLS_HTML_IT_checkbox
+                "\"");
 
             if (pCheckBox->IsChecked())
             {
-                aOut += " ";
-                aOut += OOO_STRING_SVTOOLS_HTML_O_checked;
-                aOut += "=\"";
-                aOut += OOO_STRING_SVTOOLS_HTML_O_checked;
-                aOut += "\"";
+                aOut += " "
+                    OOO_STRING_SVTOOLS_HTML_O_checked
+                    "=\""
+                    OOO_STRING_SVTOOLS_HTML_O_checked
+                    "\"";
             }
 
             aOut += "/>";

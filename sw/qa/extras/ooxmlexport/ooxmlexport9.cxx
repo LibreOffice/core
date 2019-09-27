@@ -1235,9 +1235,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103090, "tdf103090.odt")
     OUString fieldName = getXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText");
 
     // Ensure that PAGEREF field refers exactly our bookmark
-    OUString expectedFieldName(" PAGEREF ");
-    expectedFieldName += bookmarkName;
-    expectedFieldName += " \\h ";
+    OUString expectedFieldName = " PAGEREF " + bookmarkName + " \\h ";
     CPPUNIT_ASSERT_EQUAL(expectedFieldName, fieldName);
 }
 

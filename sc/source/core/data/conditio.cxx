@@ -1253,9 +1253,7 @@ OUString ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 n
         }
         else if (bIsStr1)
         {
-            aRet = "\"";
-            aRet += aStrVal1;
-            aRet += "\"";
+            aRet = "\"" + aStrVal1 + "\"";
         }
         else
             mpDoc->GetFormatTable()->GetInputLineString(nVal1, nNumFmt, aRet);
@@ -1271,9 +1269,7 @@ OUString ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 n
         }
         else if (bIsStr2)
         {
-            aRet = "\"";
-            aRet += aStrVal2;
-            aRet += "\"";
+            aRet = "\"" + aStrVal2 + "\"";
         }
         else
             mpDoc->GetFormatTable()->GetInputLineString(nVal2, nNumFmt, aRet);

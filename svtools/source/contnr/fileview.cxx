@@ -1863,9 +1863,9 @@ OUString SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString&
     // title, type, size, date
     aValue = pData->GetTitle();
     ReplaceTabWithString( aValue );
-    aValue += aTab + pData->maType + aTab;
-    // folders don't have a size
-    aValue += aTab;
+    aValue += aTab + pData->maType + aTab +
+        // folders don't have a size
+        aTab;
     // set the date
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();

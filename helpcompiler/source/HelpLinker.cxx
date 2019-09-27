@@ -737,8 +737,7 @@ void HelpLinker::main( std::vector<std::string> &args,
     {
         //This part is used when compileExtensionHelp is called from the extensions manager.
         //If extension help is compiled using helplinker in the build process
-        OUString aIdxCaptionPathFileURL( *pOfficeHelpPath );
-        aIdxCaptionPathFileURL += "/idxcaption.xsl";
+        OUString aIdxCaptionPathFileURL = *pOfficeHelpPath + "/idxcaption.xsl";
 
         OString aOStr_IdxCaptionPathFileURL( OUStringToOString
             ( aIdxCaptionPathFileURL, fs::getThreadTextEncoding() ) );
@@ -762,8 +761,7 @@ void HelpLinker::main( std::vector<std::string> &args,
         //If extension help is compiled using helplinker in the build process
         //then  -idxcontent must be supplied
         //This part is used when compileExtensionHelp is called from the extensions manager.
-        OUString aIdxContentPathFileURL( *pOfficeHelpPath );
-        aIdxContentPathFileURL += "/idxcontent.xsl";
+        OUString aIdxContentPathFileURL = *pOfficeHelpPath + "/idxcontent.xsl";
 
         OString aOStr_IdxContentPathFileURL( OUStringToOString
             ( aIdxContentPathFileURL, fs::getThreadTextEncoding() ) );

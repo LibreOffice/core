@@ -1176,8 +1176,8 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
             while ( *_pControlId )
             {
                 DBG_ASSERT( INetURLObject( OStringToOUString( *_pHelpId, RTL_TEXTENCODING_UTF8 ) ).GetProtocol() == INetProtocol::NotValid, "Wrong HelpId!" );
-                OUString sId( sHelpIdPrefix );
-                sId += OUString( *_pHelpId, strlen( *_pHelpId ), RTL_TEXTENCODING_UTF8 );
+                OUString sId = sHelpIdPrefix +
+                    OUString( *_pHelpId, strlen( *_pHelpId ), RTL_TEXTENCODING_UTF8 );
                 xControlAccess->setValue( *_pControlId, ControlActions::SET_HELP_URL, makeAny( sId ) );
 
                 ++_pControlId; ++_pHelpId;

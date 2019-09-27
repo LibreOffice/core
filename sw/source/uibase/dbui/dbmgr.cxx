@@ -1392,8 +1392,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         PrintMonitor *pPrintMonDlg = static_cast<PrintMonitor*>(xProgressDlg.get());
                         pPrintMonDlg->m_xPrinter->set_label(bNeedsTempFiles
                             ? aTempFileURL->GetBase() : pSourceDocSh->GetTitle( 2));
-                        OUString sStat( SwResId(STR_STATSTR_LETTER) );
-                        sStat += " " + OUString::number( nDocNo );
+                        OUString sStat = SwResId(STR_STATSTR_LETTER) + " " + OUString::number( nDocNo );
                         pPrintMonDlg->m_xPrintInfo->set_label(sStat);
                     }
                     //TODO xProgressDlg->queue_draw();
@@ -2368,11 +2367,7 @@ bool SwDBManager::OpenDataSource(const OUString& rDataSource, const OUString& rT
             }
             pFound->xStatement = pFound->xConnection->createStatement();
             OUString aQuoteChar = xMetaData->getIdentifierQuoteString();
-            OUString sStatement("SELECT * FROM ");
-            sStatement = "SELECT * FROM ";
-            sStatement += aQuoteChar;
-            sStatement += rTableOrQuery;
-            sStatement += aQuoteChar;
+            OUString sStatement = "SELECT * FROM " + aQuoteChar + rTableOrQuery + aQuoteChar;
             pFound->xResultSet = pFound->xStatement->executeQuery( sStatement );
 
             //after executeQuery the cursor must be positioned

@@ -72,9 +72,7 @@ sdbcx::ObjectType OUsers::appendObject(const OUString& _rForName,
         >>= sPassword;
     if (!sPassword.isEmpty())
     {
-        aSql += " IDENTIFIED BY '";
-        aSql += sPassword;
-        aSql += "'";
+        aSql += " IDENTIFIED BY '" + sPassword + "'";
     }
 
     Reference<XStatement> xStmt = m_xConnection->createStatement();

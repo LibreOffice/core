@@ -83,8 +83,7 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
         sal_uInt32 nCount = GetIndexedStyleSheets().GetNumberOfStyleSheets();
         for ( sal_uInt32 nAdd = 1; nAdd <= nCount; nAdd++ )
         {
-            OUString aNewName = ScResId(STR_STYLENAME_STANDARD);
-            aNewName += OUString::number( nAdd );
+            OUString aNewName = ScResId(STR_STYLENAME_STANDARD) + OUString::number( nAdd );
             if ( Find( aNewName, eFam ) == nullptr )
                 return SfxStyleSheetPool::Make(aNewName, eFam, mask);
         }

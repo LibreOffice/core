@@ -115,8 +115,7 @@ bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
 
     if ( -1 == aTempAreaStr.indexOf(':') )
     {
-        aTempAreaStr += ":";
-        aTempAreaStr += rAreaStr;
+        aTempAreaStr += ":" + rAreaStr;
     }
 
     sal_Int32   nColonPos = aTempAreaStr.indexOf(':');

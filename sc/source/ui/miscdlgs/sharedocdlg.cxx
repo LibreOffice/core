@@ -188,8 +188,7 @@ void ScShareDocumentDlg::UpdateView()
             // unknown user name
             aUser = m_aStrUnknownUser;
         }
-        aUser += " ";
-        aUser += m_aStrExclusiveAccess;
+        aUser += " " + m_aStrExclusiveAccess;
 
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(mpDocShell->GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();

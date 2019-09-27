@@ -1510,11 +1510,8 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
         if ( m_nRelInfoStatus == RELINFO_BROKEN || m_nRelInfoStatus == RELINFO_CHANGED_BROKEN )
             throw io::IOException(); // TODO:
 
-        OUString aOrigRelStreamName = aOrigStreamName;
-        aOrigRelStreamName += ".rels";
-
-        OUString aNewRelStreamName = aNewStreamName;
-        aNewRelStreamName += ".rels";
+        OUString aOrigRelStreamName = aOrigStreamName + ".rels";
+        OUString aNewRelStreamName = aNewStreamName + ".rels";
 
         bool bRenamed = aOrigRelStreamName != aNewRelStreamName;
         if ( m_nRelInfoStatus == RELINFO_CHANGED

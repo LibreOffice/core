@@ -142,8 +142,7 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet& rSet )
 
         // determining (possibly cutting) the name and
         // displaying it in the GroupBox
-        OUString        aString( CuiResId( RID_SVXSTR_TABLE ) );
-        aString         += ": ";
+        OUString        aString = CuiResId( RID_SVXSTR_TABLE ) + ": ";
         INetURLObject   aURL( m_pPatternList->GetPath() );
 
         aURL.Append( m_pPatternList->GetName() );

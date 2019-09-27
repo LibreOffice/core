@@ -3029,8 +3029,7 @@ bool HtmlExport::checkFileExists( Reference< css::ucb::XSimpleFileAccess3 > cons
 {
     try
     {
-        OUString url( maExportPath );
-        url += aFileName;
+        OUString url = maExportPath + aFileName;
         return xFileAccess->exists( url );
     }
     catch( css::uno::Exception& )

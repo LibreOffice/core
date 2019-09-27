@@ -2138,16 +2138,16 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
 
         if ( bExact )
         {
-            aMsgStr += ScResId( STR_MSSG_SOLVE_0 );
-            aMsgStr += aResStr;
-            aMsgStr += ScResId( STR_MSSG_SOLVE_1 );
+            aMsgStr += ScResId( STR_MSSG_SOLVE_0 ) +
+                aResStr +
+                ScResId( STR_MSSG_SOLVE_1 );
         }
         else
         {
-            aMsgStr  = ScResId( STR_MSSG_SOLVE_2 );
-            aMsgStr += ScResId( STR_MSSG_SOLVE_3 );
-            aMsgStr += aResStr ;
-            aMsgStr += ScResId( STR_MSSG_SOLVE_4 );
+            aMsgStr  = ScResId( STR_MSSG_SOLVE_2 ) +
+                ScResId( STR_MSSG_SOLVE_3 ) +
+                aResStr +
+                ScResId( STR_MSSG_SOLVE_4 );
         }
 
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetViewData().GetDialogParent(),

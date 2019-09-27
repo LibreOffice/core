@@ -1000,9 +1000,8 @@ void handleNameClashRename(
     {
         nTry++;
 
-        OUString aNewTitle = aOldTitlePre;
-        aNewTitle += OUString::number( nTry );
-        aNewTitle += aOldTitlePost;
+        OUString aNewTitle = aOldTitlePre + OUString::number( nTry ) +
+            aOldTitlePost;
 
         // Set new title
         setTitle( xCommandProcessorN, rContext.xEnv, aNewTitle );

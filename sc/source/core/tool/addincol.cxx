@@ -405,10 +405,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                 // get direct information on the function
 
-                OUString aFuncPropPath = aFunctionsPath;
-                aFuncPropPath += sSlash;
-                aFuncPropPath += pFuncNameArray[nFuncPos];
-                aFuncPropPath += sSlash;
+                OUString aFuncPropPath = aFunctionsPath + sSlash + pFuncNameArray[nFuncPos] + sSlash;
 
                 uno::Sequence<OUString> aFuncPropNames{
                     (aFuncPropPath + CFGSTR_DISPLAYNAME), // CFG_FUNCPROP_DISPLAYNAME
@@ -470,10 +467,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                     sal_Int32 nIndex = 0;
                     for ( const OUString& rArgName : aArgumentNames )
                     {
-                        OUString aOneArgPath = aArgumentsPath;
-                        aOneArgPath += sSlash;
-                        aOneArgPath += rArgName;
-                        aOneArgPath += sSlash;
+                        OUString aOneArgPath = aArgumentsPath + sSlash + rArgName + sSlash;
 
                         pPropNameArray[nIndex++] = aOneArgPath
                             + CFGSTR_DISPLAYNAME;
@@ -1229,8 +1223,7 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
             // no empty names...
             if ( rDesc.maDefArgNames[nArg].isEmpty() )
             {
-                OUString aDefName("arg");
-                aDefName += OUString::number( nArg+1 );
+                OUString aDefName = "arg" + OUString::number( nArg+1 );
                 rDesc.maDefArgNames[nArg] = aDefName;
             }
 

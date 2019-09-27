@@ -306,9 +306,7 @@ static bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHo
                 }
                 else
                 {
-                    aMessage += ":error code = ";
-                    aMessage += OString::number( nError );
-                    aMessage += " !";
+                    aMessage += ":error code = " + OString::number( nError ) + " !";
                 }
             }
             if ( !ret )

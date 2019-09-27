@@ -493,8 +493,8 @@ uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
         OUString strFor = mpViewShell->GetFormula(maCellAddress) ;
         strFor = strFor.replaceAt(0,1,"");
         strFor = ReplaceFourChar(strFor);
-        strFor = "Formula:" + strFor;
-        strFor += ";Note:";
+        strFor = "Formula:" + strFor +
+            ";Note:";
         strFor += ReplaceFourChar(GetAllDisplayNote());
         strFor += ";";
         strFor += getShadowAttrs();//the string returned contains the spliter ";"

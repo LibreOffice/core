@@ -241,8 +241,7 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
         {
             if( ! (pBegin->Value >>= aSysDrvSettings) )
                 SAL_WARN("connectivity.odbc", "Construct: unable to get property SystemDriverSettings");
-            aDSN += ";";
-            aDSN += aSysDrvSettings;
+            aDSN += ";" + aSysDrvSettings;
         }
         else if( pBegin->Name == "CharSet")
         {

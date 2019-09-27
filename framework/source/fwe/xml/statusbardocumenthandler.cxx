@@ -156,15 +156,13 @@ OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
     {
         if ( StatusBarEntries[i].nNamespace == SB_NS_STATUSBAR )
         {
-            OUString temp( XMLNS_STATUSBAR );
-            temp += XMLNS_FILTER_SEPARATOR;
+            OUString temp = XMLNS_STATUSBAR XMLNS_FILTER_SEPARATOR;
             temp += OUString::createFromAscii( StatusBarEntries[i].aEntryName );
             m_aStatusBarMap.emplace( temp, static_cast<StatusBar_XML_Entry>(i) );
         }
         else
         {
-            OUString temp( XMLNS_XLINK );
-            temp += XMLNS_FILTER_SEPARATOR;
+            OUString temp = XMLNS_XLINK XMLNS_FILTER_SEPARATOR;
             temp += OUString::createFromAscii( StatusBarEntries[i].aEntryName );
             m_aStatusBarMap.emplace( temp, static_cast<StatusBar_XML_Entry>(i) );
         }
