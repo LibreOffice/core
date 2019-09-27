@@ -252,11 +252,12 @@ private:
 
     mutable css::lang::Locale               maLocale;
     mutable OUString                        maBcp47;
-    mutable OUString                        maCachedLanguage;   ///< cache getLanguage()
-    mutable OUString                        maCachedScript;     ///< cache getScript()
-    mutable OUString                        maCachedCountry;    ///< cache getCountry()
-    mutable OUString                        maCachedVariants;   ///< cache getVariants()
-    mutable lt_tag_t*                       mpImplLangtag;      ///< liblangtag pointer
+    mutable OUString                        maCachedLanguage;    ///< cache getLanguage()
+    mutable OUString                        maCachedScript;      ///< cache getScript()
+    mutable OUString                        maCachedCountry;     ///< cache getCountry()
+    mutable OUString                        maCachedVariants;    ///< cache getVariants()
+    mutable OUString                        maCachedGlibcString; ///< cache getGlibcLocaleString()
+    mutable lt_tag_t*                       mpImplLangtag;       ///< liblangtag pointer
     mutable LanguageType                    mnLangID;
     mutable LanguageTag::ScriptType         meScriptType;
     mutable Decision                        meIsValid;
@@ -271,6 +272,7 @@ private:
     mutable bool                            mbCachedScript      : 1;
     mutable bool                            mbCachedCountry     : 1;
     mutable bool                            mbCachedVariants    : 1;
+    mutable bool                            mbCachedGlibcString : 1;
 
     OUString const &    getBcp47() const;
     OUString const &    getLanguage() const;
@@ -384,7 +386,8 @@ LanguageTagImpl::LanguageTagImpl( const LanguageTag & rLanguageTag )
         mbCachedLanguage( false),
         mbCachedScript( false),
         mbCachedCountry( false),
-        mbCachedVariants( false)
+        mbCachedVariants( false),
+        mbCachedGlibcString( false)
 {
 }
 
@@ -397,6 +400,7 @@ LanguageTagImpl::LanguageTagImpl( const LanguageTagImpl & rLanguageTagImpl )
         maCachedScript( rLanguageTagImpl.maCachedScript),
         maCachedCountry( rLanguageTagImpl.maCachedCountry),
         maCachedVariants( rLanguageTagImpl.maCachedVariants),
+        maCachedGlibcString( rLanguageTagImpl.maCachedGlibcString),
         mpImplLangtag( rLanguageTagImpl.mpImplLangtag ?
                 lt_tag_copy( rLanguageTagImpl.mpImplLangtag) : nullptr),
         mnLangID( rLanguageTagImpl.mnLangID),
@@ -412,7 +416,8 @@ LanguageTagImpl::LanguageTagImpl( const LanguageTagImpl & rLanguageTagImpl )
         mbCachedLanguage( rLanguageTagImpl.mbCachedLanguage),
         mbCachedScript( rLanguageTagImpl.mbCachedScript),
         mbCachedCountry( rLanguageTagImpl.mbCachedCountry),
-        mbCachedVariants( rLanguageTagImpl.mbCachedVariants)
+        mbCachedVariants( rLanguageTagImpl.mbCachedVariants),
+        mbCachedGlibcString( rLanguageTagImpl.mbCachedGlibcString)
 {
     if (mpImplLangtag)
         theDataRef::get().init();
@@ -430,6 +435,7 @@ LanguageTagImpl& LanguageTagImpl::operator=( const LanguageTagImpl & rLanguageTa
     maCachedScript      = rLanguageTagImpl.maCachedScript;
     maCachedCountry     = rLanguageTagImpl.maCachedCountry;
     maCachedVariants    = rLanguageTagImpl.maCachedVariants;
+    maCachedGlibcString = rLanguageTagImpl.maCachedGlibcString;
     lt_tag_t * oldTag = mpImplLangtag;
     mpImplLangtag       = rLanguageTagImpl.mpImplLangtag ?
                             lt_tag_copy( rLanguageTagImpl.mpImplLangtag) : nullptr;
@@ -448,6 +454,7 @@ LanguageTagImpl& LanguageTagImpl::operator=( const LanguageTagImpl & rLanguageTa
     mbCachedScript      = rLanguageTagImpl.mbCachedScript;
     mbCachedCountry     = rLanguageTagImpl.mbCachedCountry;
     mbCachedVariants    = rLanguageTagImpl.mbCachedVariants;
+    mbCachedGlibcString = rLanguageTagImpl.mbCachedGlibcString;
     if (mpImplLangtag && !oldTag)
         theDataRef::get().init();
     return *this;
@@ -1902,7 +1909,9 @@ OUString LanguageTag::getVariants() const
 
 OUString LanguageTagImpl::getGlibcLocaleString() const
 {
-    OUString sLocale;
+    if (mbCachedGlibcString)
+        return maCachedGlibcString;
+
     if (!mpImplLangtag)
     {
         meIsLiblangtagNeeded = DECISION_YES;
@@ -1913,11 +1922,12 @@ OUString LanguageTagImpl::getGlibcLocaleString() const
         char* pLang = lt_tag_convert_to_locale(mpImplLangtag, nullptr);
         if (pLang)
         {
-            sLocale = OUString::createFromAscii( pLang);
+            maCachedGlibcString = OUString::createFromAscii( pLang);
+            mbCachedGlibcString = true;
             free(pLang);
         }
     }
-    return sLocale;
+    return maCachedGlibcString;
 }
 
 OUString LanguageTag::getGlibcLocaleString( const OUString & rEncoding ) const
