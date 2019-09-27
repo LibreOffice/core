@@ -15,6 +15,7 @@
 #include "rtl/ustring.h"
 
 #include <cstddef>
+#include <string_view>
 #include <utility>
 
 #include <string.h>
@@ -334,6 +335,7 @@ template <class Derived, int nBufSize> struct OStringNumberBase
         rtl_str_toAsciiUpperCase_WithLength(buf, length);
         return std::move(*static_cast<Derived*>(this));
     }
+    operator std::string_view() const { return std::string_view(buf, length); }
     char buf[nBufSize];
     sal_Int32 length;
 };
@@ -402,6 +404,7 @@ template <class Derived, int nBufSize> struct OUStringNumberBase
         rtl_ustr_toAsciiUpperCase_WithLength(buf, length);
         return std::move(*static_cast<Derived*>(this));
     }
+    operator std::u16string_view() const { return std::u16string_view(buf, length); }
     sal_Unicode buf[nBufSize];
     sal_Int32 length;
 };
