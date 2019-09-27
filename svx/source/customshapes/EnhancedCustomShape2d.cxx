@@ -1101,17 +1101,17 @@ tools::Rectangle EnhancedCustomShape2d::GetTextRect() const
     sal_Int32 nIndex = 0;
     Point aTopLeft( GetPoint( seqTextFrames[ nIndex ].TopLeft, !bOOXMLShape, true ) );
     Point aBottomRight( GetPoint( seqTextFrames[ nIndex ].BottomRight, !bOOXMLShape, true ) );
+    tools::Rectangle aRect( aTopLeft, aBottomRight );
     if ( bFlipH )
     {
-        aTopLeft.setX( aLogicRect.GetWidth() - aTopLeft.X() );
-        aBottomRight.setX( aLogicRect.GetWidth() - aBottomRight.X() );
+        aRect.SetLeft(aLogicRect.GetWidth() - 1 - aBottomRight.X());
+        aRect.SetRight( aLogicRect.GetWidth() - 1 - aTopLeft.X());
     }
     if ( bFlipV )
     {
-        aTopLeft.setY( aLogicRect.GetHeight() - aTopLeft.Y() );
-        aBottomRight.setY( aLogicRect.GetHeight() - aBottomRight.Y() );
+        aRect.SetTop(aLogicRect.GetHeight() - 1 - aBottomRight.Y());
+        aRect.SetBottom(aLogicRect.GetHeight() - 1 - aTopLeft.Y());
     }
-    tools::Rectangle aRect( aTopLeft, aBottomRight );
     SAL_INFO("svx", aRect.GetWidth() << " x " << aRect.GetHeight());
     if( aRect.GetWidth() <= 1 || aRect.GetHeight() <= 1 )
         return aLogicRect;
