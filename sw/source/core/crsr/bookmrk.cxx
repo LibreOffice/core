@@ -44,6 +44,74 @@ using namespace ::sw::mark;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+namespace sw { namespace mark
+{
+
+    SwPosition FindFieldSep(IFieldmark const& rMark)
+    {
+        SwPosition const& rStartPos(rMark.GetMarkStart());
+        SwPosition const& rEndPos(rMark.GetMarkEnd());
+        SwNodes const& rNodes(rStartPos.nNode.GetNodes());
+        sal_uLong const nStartNode(rStartPos.nNode.GetIndex());
+        sal_uLong const nEndNode(rEndPos.nNode.GetIndex());
+        int nFields(0);
+        boost::optional<SwPosition> ret;
+        for (sal_uLong n = nEndNode; nStartNode <= n; --n)
+        {
+            SwNode *const pNode(rNodes[n]);
+            if (pNode->IsTextNode())
+            {
+                SwTextNode & rTextNode(*pNode->GetTextNode());
+                sal_Int32 const nStart(n == nStartNode
+                        ? rStartPos.nContent.GetIndex() + 1
+                        : 0);
+                sal_Int32 const nEnd(n == nEndNode
+                        // subtract 1 to ignore the end char
+                        ? rEndPos.nContent.GetIndex() - 1
+                        : rTextNode.Len());
+                for (sal_Int32 i = nEnd; nStart < i; --i)
+                {
+                    const sal_Unicode c(rTextNode.GetText()[i - 1]);
+                    switch (c)
+                    {
+                        case CH_TXT_ATR_FIELDSTART:
+                            --nFields;
+                            assert(0 <= nFields);
+                            break;
+                        case CH_TXT_ATR_FIELDEND:
+                            ++nFields;
+                            // fields in field result could happen by manual
+                            // editing, although the field update deletes them
+                            break;
+                        case CH_TXT_ATR_FIELDSEP:
+                            if (nFields == 0)
+                            {
+                                assert(!ret); // one per field
+                                ret = SwPosition(rTextNode, i - 1);
+#ifndef DBG_UTIL
+                                return *ret;
+#endif
+                            }
+                            break;
+                    }
+                }
+            }
+            else if (pNode->IsEndNode())
+            {
+                assert(nStartNode <= pNode->StartOfSectionIndex());
+                // fieldmark cannot overlap node section
+                n = pNode->StartOfSectionIndex();
+            }
+            else
+            {
+                assert(pNode->IsNoTextNode());
+            }
+        }
+        assert(ret); // must have found it
+        return *ret;
+    }
+} } // namespace sw::mark
+
 namespace
 {
     void lcl_FixPosition(SwPosition& rPos)
@@ -76,6 +144,8 @@ namespace
         {
             SwPosition const& rStart(pField->GetMarkStart());
             assert(rStart.nNode.GetNode().GetTextNode()->GetText()[rStart.nContent.GetIndex()] == aStartMark); (void) rStart; (void) aStartMark;
+            SwPosition const sepPos(sw::mark::FindFieldSep(*pField));
+            assert(sepPos.nNode.GetNode().GetTextNode()->GetText()[sepPos.nContent.GetIndex()] == CH_TXT_ATR_FIELDSEP); (void) sepPos;
         }
         SwPosition const& rEnd(pField->GetMarkEnd());
         assert(rEnd.nNode.GetNode().GetTextNode()->GetText()[rEnd.nContent.GetIndex() - 1] == aEndMark); (void) rEnd;
@@ -97,6 +167,11 @@ namespace
             // do not manipulate via reference directly but call SetMarkStartPos
             // which works even if start and end pos were the same
             pField->SetMarkStartPos( start );
+            SwPosition& rEnd = pField->GetMarkEnd(); // note: retrieve after
+            // setting start, because if start==end it can go stale, see SetMarkPos()
+            *aStartPaM.GetPoint() = rEnd;
+            io_pDoc->getIDocumentContentOperations().InsertString(aStartPaM, OUString(CH_TXT_ATR_FIELDSEP));
+            ++rEnd.nContent;
         }
 
         SwPosition& rEnd = pField->GetMarkEnd();
@@ -106,6 +181,7 @@ namespace
             io_pDoc->getIDocumentContentOperations().InsertString(aEndPaM, OUString(aEndMark));
             ++rEnd.nContent;
         }
+        lcl_AssertFieldMarksSet(pField, aStartMark, aEndMark);
 
         io_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::UI_REPLACE, nullptr);
     };
@@ -123,7 +199,10 @@ namespace
         if (aEndMark != CH_TXT_ATR_FORMELEMENT)
         {
             (void) pStartTextNode;
+            // check this before start / end because of the +1 / -1 ...
+            SwPosition const sepPos(sw::mark::FindFieldSep(*pField));
             io_pDoc->GetDocumentContentOperationsManager().DeleteDummyChar(rStart, aStartMark);
+            io_pDoc->GetDocumentContentOperationsManager().DeleteDummyChar(sepPos, CH_TXT_ATR_FIELDSEP);
         }
 
         const SwPosition& rEnd = pField->GetMarkEnd();
@@ -609,8 +688,14 @@ namespace sw { namespace mark
     OUString DateFieldmark::GetContent() const
     {
         const SwTextNode* const pTextNode = GetMarkEnd().nNode.GetNode().GetTextNode();
-        const sal_Int32 nStart(GetMarkStart().nContent.GetIndex());
+        SwPosition const sepPos(sw::mark::FindFieldSep(*this));
+#if 0
+        const sal_Int32 nStart(sepPos.nContent.GetIndex());
         const sal_Int32 nEnd  (GetMarkEnd().nContent.GetIndex());
+#else
+        const sal_Int32 nStart(GetMarkStart().nContent.GetIndex());
+        const sal_Int32 nEnd  (sepPos.nContent.GetIndex() + 1);
+#endif
 
         OUString sContent;
         if(nStart + 1 < pTextNode->GetText().getLength() && nEnd <= pTextNode->GetText().getLength() &&
@@ -625,8 +710,14 @@ namespace sw { namespace mark
             return;
 
         const SwTextNode* const pTextNode = GetMarkEnd().nNode.GetNode().GetTextNode();
-        const sal_Int32 nStart(GetMarkStart().nContent.GetIndex());
+        SwPosition const sepPos(sw::mark::FindFieldSep(*this));
+#if 0
+        const sal_Int32 nStart(sepPos.nContent.GetIndex());
         const sal_Int32 nEnd  (GetMarkEnd().nContent.GetIndex());
+#else
+        const sal_Int32 nStart(GetMarkStart().nContent.GetIndex());
+        const sal_Int32 nEnd  (sepPos.nContent.GetIndex() + 1);
+#endif
 
         if(nStart + 1 < pTextNode->GetText().getLength() && nEnd <= pTextNode->GetText().getLength() &&
            nEnd > nStart + 2)

@@ -336,6 +336,9 @@ namespace sw {
             SwRect m_aPaintAreaStart;
             SwRect m_aPaintAreaEnd;
         };
+
+        /// return position of the CH_TXT_ATR_FIELDSEP for rMark
+        SwPosition FindFieldSep(IFieldmark const& rMark);
     }
 }
 #endif
