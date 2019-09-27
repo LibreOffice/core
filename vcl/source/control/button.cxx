@@ -1691,13 +1691,14 @@ void OKButton::Click()
         {
             if ( pParent->IsDialog() )
             {
-                if ( static_cast<Dialog*>(pParent)->IsInExecute() )
-                    static_cast<Dialog*>(pParent)->EndDialog( RET_OK );
+                VclPtr<Dialog> xParent( static_cast<Dialog*>(pParent) );
+                if ( xParent->IsInExecute() )
+                    xParent->EndDialog( RET_OK );
                 // prevent recursive calls
-                else if ( !static_cast<Dialog*>(pParent)->IsInClose() )
+                else if ( !xParent->IsInClose() )
                 {
                     if ( pParent->GetStyle() & WB_CLOSEABLE )
-                        static_cast<Dialog*>(pParent)->Close();
+                        xParent->Close();
                 }
             }
             else
