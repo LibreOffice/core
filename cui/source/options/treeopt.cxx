@@ -96,8 +96,7 @@
 #include <unotools/optionsdlg.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/help.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/treelistentry.hxx>
+#include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
