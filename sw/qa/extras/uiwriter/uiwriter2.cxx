@@ -1800,11 +1800,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageComment)
     {
         const boost::property_tree::ptree& rComment = rValue.second;
         OString aAnchorPos(rComment.get<std::string>("anchorPos").c_str());
-        OString aExpected;
-        aExpected += OString::number(nFrameLeft);
-        aExpected += ", ";
-        aExpected += OString::number(nFrameTop);
-        aExpected += ", 0, 0";
+        OString aExpected
+            = OString::number(nFrameLeft) + ", " + OString::number(nFrameTop) + ", 0, 0";
         CPPUNIT_ASSERT_EQUAL(aExpected, aAnchorPos);
     }
 

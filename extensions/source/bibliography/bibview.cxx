@@ -148,8 +148,7 @@ namespace bib
             }
             else if(bExecute)
             {
-                sErrorString += "\n";
-                sErrorString += BibResId(RID_MAP_QUESTION);
+                sErrorString += "\n" + BibResId(RID_MAP_QUESTION);
 
                 MessageWithCheck aQueryBox(GetFrameWeld());
                 aQueryBox.set_primary_text(sErrorString);

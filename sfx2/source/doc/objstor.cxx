@@ -2967,27 +2967,23 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation(HiddenWarningFact eFact, weld::
 
         if ( nStates & HiddenInformation::RECORDEDCHANGES )
         {
-            sMessage += SfxResId(STR_HIDDENINFO_RECORDCHANGES);
-            sMessage += "\n";
+            sMessage += SfxResId(STR_HIDDENINFO_RECORDCHANGES) + "\n";
             bWarning = true;
         }
         if ( nStates & HiddenInformation::NOTES )
         {
-            sMessage += SfxResId(STR_HIDDENINFO_NOTES);
-            sMessage += "\n";
+            sMessage += SfxResId(STR_HIDDENINFO_NOTES) + "\n";
             bWarning = true;
         }
         if ( nStates & HiddenInformation::DOCUMENTVERSIONS )
         {
-            sMessage += SfxResId(STR_HIDDENINFO_DOCVERSIONS);
-            sMessage += "\n";
+            sMessage += SfxResId(STR_HIDDENINFO_DOCVERSIONS) + "\n";
             bWarning = true;
         }
 
         if ( bWarning )
         {
-            sMessage += "\n";
-            sMessage += SfxResId(pResId);
+            sMessage += "\n" + SfxResId(pResId);
             std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pParent,
                                                        VclMessageType::Warning, VclButtonsType::YesNo, sMessage));
             xWarn->set_default_response(RET_NO);

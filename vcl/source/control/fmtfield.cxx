@@ -251,9 +251,7 @@ namespace validation
             return true;
 
         // normalize the string
-        OUString sNormalized( "_" );
-        sNormalized += _rText;
-        sNormalized += "_";
+        OUString sNormalized = "_" + _rText + "_";
 
         return implValidateNormalized( sNormalized );
     }

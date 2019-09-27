@@ -621,14 +621,12 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* p
     // add some debug information?
     if ( bIsDebug )
     {
-        sHelpText += "\n-------------\n";
-        sHelpText += sModuleName;
-        sHelpText += ": ";
-        sHelpText += aCommandURL;
+        sHelpText += "\n-------------\n" +
+            sModuleName + ": " + aCommandURL;
         if ( !aNewHelpId.isEmpty() )
         {
-            sHelpText += " - ";
-            sHelpText += OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8);
+            sHelpText += " - " +
+                OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8);
         }
     }
 
@@ -664,14 +662,12 @@ OUString SfxHelp::GetHelpText(const OUString& aCommandURL, const weld::Widget* p
     // add some debug information?
     if ( bIsDebug )
     {
-        sHelpText += "\n-------------\n";
-        sHelpText += sModuleName;
-        sHelpText += ": ";
-        sHelpText += aCommandURL;
+        sHelpText += "\n-------------\n" +
+            sModuleName + ": " + aCommandURL;
         if ( !aNewHelpId.isEmpty() )
         {
-            sHelpText += " - ";
-            sHelpText += OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8);
+            sHelpText += " - " +
+                OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8);
         }
     }
 
@@ -956,9 +952,9 @@ static bool impl_showOfflineHelp( const OUString& rURL )
     SvStream* pStream = aTempFile.GetStream(StreamMode::WRITE);
     pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
 
-    OUString aTempStr(SHTML1 SHTML2);
-    aTempStr += aHelpLink + SHTML3;
-    aTempStr += aHelpLink + SHTML4;
+    OUString aTempStr = SHTML1 SHTML2 +
+        aHelpLink + SHTML3 +
+        aHelpLink + SHTML4;
 
     pStream->WriteUnicodeOrByteText(aTempStr);
 

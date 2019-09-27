@@ -511,9 +511,7 @@ void PrinterInfoManager::initialize()
     }
     for (auto const& printQueue : m_aSystemPrintQueues)
     {
-        OUString aPrinterName( "<" );
-        aPrinterName += printQueue.m_aQueue;
-        aPrinterName += ">";
+        OUString aPrinterName = "<" + printQueue.m_aQueue + ">";
 
         if( m_aPrinters.find( aPrinterName ) != m_aPrinters.end() )
             // probably user made this one permanent
@@ -570,8 +568,8 @@ FILE* PrinterInfoManager::startSpool( const OUString& rPrintername, bool bQuickC
     const PrinterInfo&   rPrinterInfo   = getPrinterInfo (rPrintername);
     const OUString& rCommand       = (bQuickCommand && !rPrinterInfo.m_aQuickCommand.isEmpty() ) ?
                                           rPrinterInfo.m_aQuickCommand : rPrinterInfo.m_aCommand;
-    OString aShellCommand  = OUStringToOString (rCommand, RTL_TEXTENCODING_ISO_8859_1);
-    aShellCommand += " 2>/dev/null";
+    OString aShellCommand  = OUStringToOString (rCommand, RTL_TEXTENCODING_ISO_8859_1) +
+        " 2>/dev/null";
 
     return popen (aShellCommand.getStr(), "w");
 }

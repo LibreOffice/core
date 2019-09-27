@@ -613,9 +613,7 @@ namespace dlgprov
 
             OUString aOUFinal;
             aOUFinal += aRes.copy( 0, nIndex );
-            aOUFinal += aQuoteChar;
-            aOUFinal += aMethodName;
-            aOUFinal += aQuoteChar;
+            aOUFinal += aQuoteChar + aMethodName + aQuoteChar;
             aOUFinal += aRes.copy( nIndex + 2 );
 
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,

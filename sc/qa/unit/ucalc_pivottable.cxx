@@ -2111,9 +2111,7 @@ void Test::testFuncGETPIVOTDATA()
     sc::AutoCalcSwitch aSwitch(*m_pDoc, true); // turn autocalc on.
 
     // First, get the grand total.
-    OUString aFormula("=GETPIVOTDATA(\"Value\";");
-    aFormula += aPivotPosStr;
-    aFormula += ")";
+    OUString aFormula = "=GETPIVOTDATA(\"Value\";" + aPivotPosStr + ")";
     m_pDoc->SetString(aPos, aFormula);
     double fVal = m_pDoc->GetValue(aPos);
     CPPUNIT_ASSERT_EQUAL(21.0, fVal);

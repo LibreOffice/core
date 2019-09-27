@@ -325,9 +325,7 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
 
 void SwTextGridPage::SetLinesOrCharsRanges(weld::Label& rField, const sal_Int32 nValue )
 {
-    OUString aFieldStr("( 1 -");
-    aFieldStr += OUString::number(nValue);
-    aFieldStr += " )";
+    OUString aFieldStr = "( 1 -" + OUString::number(nValue) + " )";
     rField.set_label(aFieldStr);
 }
 

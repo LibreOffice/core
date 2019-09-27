@@ -984,8 +984,8 @@ void SVGFilter::implExportDocumentHeaderWriterOrCalc(sal_Int32 nDocX, sal_Int32 
     aAttr = OUString::number( nDocHeight * 0.01 ) + "mm";
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", aAttr );
 
-    aAttr = OUString::number(nDocX) + " " + OUString::number(nDocY) + " ";
-    aAttr += OUString::number(nDocWidth) + " " + OUString::number(nDocHeight);
+    aAttr = OUString::number(nDocX) + " " + OUString::number(nDocY) + " " +
+        OUString::number(nDocWidth) + " " + OUString::number(nDocHeight);
 
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "viewBox", aAttr );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "preserveAspectRatio", "xMidYMid" );
@@ -1651,8 +1651,7 @@ void SVGFilter::implExportDrawPages( const std::vector< Reference< css::drawing:
                     // inserted before or after a slide: that is used for some
                     // when switching from the last to the first slide.
                     const OUString & sPageId = implGetValidIDFromInterface( rxPages[i] );
-                    OUString sContainerId = "container-";
-                    sContainerId += sPageId;
+                    OUString sContainerId = "container-" + sPageId;
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sContainerId );
                     SvXMLElementExport aContainerExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
 
@@ -1725,8 +1724,7 @@ bool SVGFilter::implExportPage( const OUString & sPageId,
             if( rMtf.GetActionSize() )
             {
                 // background id = "bg-" + page id
-                OUString sBackgroundId = "bg-";
-                sBackgroundId += sPageId;
+                OUString sBackgroundId = "bg-" + sPageId;
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sBackgroundId );
 
                 // At present (LibreOffice 3.4.0) the 'IsBackgroundVisible' property is not handled
@@ -1760,8 +1758,7 @@ bool SVGFilter::implExportPage( const OUString & sPageId,
         if( bMaster )
         {
             // background objects id = "bo-" + page id
-            OUString sBackgroundObjectsId = "bo-";
-            sBackgroundObjectsId += sPageId;
+            OUString sBackgroundObjectsId = "bo-" + sPageId;
             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sBackgroundObjectsId );
             if( !mbPresentation )
             {
@@ -2473,12 +2470,10 @@ void SVGExport::writeMtf( const GDIMetaFile& rMtf )
     if( xExtDocHandler.is() && IsUseDTDString() )
         xExtDocHandler->unknown( SVG_DTD_STRING );
 
-    aAttr = OUString::number( aSize.Width() );
-    aAttr += "mm";
+    aAttr = OUString::number( aSize.Width() ) + "mm";
     AddAttribute( XML_NAMESPACE_NONE, "width", aAttr );
 
-    aAttr = OUString::number( aSize.Height() );
-    aAttr += "mm";
+    aAttr = OUString::number( aSize.Height() ) + "mm";
     AddAttribute( XML_NAMESPACE_NONE, "height", aAttr );
 
     aAttr = "0 0 ";

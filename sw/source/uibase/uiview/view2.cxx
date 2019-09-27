@@ -1580,8 +1580,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         }
                         if (!sStr.isEmpty())
                             sStr += sStatusDelim;
-                        sStr += SwResId(STR_NUM_LEVEL);
-                        sStr += OUString::number( nNumLevel + 1 );
+                        sStr += SwResId(STR_NUM_LEVEL) + OUString::number( nNumLevel + 1 );
 
                     }
                 }
@@ -1592,9 +1591,8 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         sStr += " , ";
                     if( bOutlineNum )
                     {
-                        sStr += SwResId(STR_OUTLINE_NUMBERING);
-                        sStr += sStatusDelim;
-                        sStr += SwResId(STR_NUM_LEVEL);
+                        sStr += SwResId(STR_OUTLINE_NUMBERING) +
+                            sStatusDelim + SwResId(STR_NUM_LEVEL);
                     }
                     else
                         sStr += SwResId(STR_NUM_OUTLINE);

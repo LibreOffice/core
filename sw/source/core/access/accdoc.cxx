@@ -529,7 +529,6 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
     SwFEShell* pFEShell = dynamic_cast<const SwFEShell*>( pCursorShell) !=  nullptr
                                 ? static_cast<SwFEShell*>( pCursorShell )
                             : nullptr;
-    OUString sAttrName;
     OUString sValue;
     sal_uInt16 nPage, nLogPage;
     OUString sDisplay;
@@ -537,18 +536,13 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
     if( pFEShell )
     {
         pFEShell->GetPageNumber(-1,true,nPage,nLogPage,sDisplay);
-        sAttrName = "page-name:";
 
-        sValue = sAttrName + sDisplay ;
-        sAttrName = ";page-number:";
-        sValue += sAttrName;
-        sValue += OUString::number( nPage ) ;
-        sAttrName = ";total-pages:";
-        sValue += sAttrName;
+        sValue = "page-name:" + sDisplay +
+            ";page-number:" +
+            OUString::number( nPage ) +
+            ";total-pages:";
         sValue += OUString::number( pCursorShell->GetPageCnt() ) ;
         sValue += ";";
-
-        sAttrName = "line-number:";
 
         SwContentFrame* pCurrFrame = pCursorShell->GetCurrFrame();
         SwPageFrame* pCurrPage=static_cast<SwFrame*>(pCurrFrame)->FindPageFrame();
@@ -641,15 +635,11 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
             }
         }
 
-        sValue += sAttrName;
-        sValue += OUString::number( nLineNum ) ;
-
-        sValue += ";";
+        sValue += "line-number:" + OUString::number( nLineNum ) + ";";
 
         SwFrame* pCurrCol=static_cast<SwFrame*>(pCurrFrame)->FindColFrame();
 
-        sAttrName = "column-number:";
-        sValue += sAttrName;
+        sValue += "column-number:";
 
         int nCurrCol = 1;
         if(pCurrCol!=nullptr)
@@ -673,25 +663,16 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                 }
             }
         }
-        sValue += OUString::number( nCurrCol ) ;
-        sValue += ";";
-
-        sAttrName = "total-columns:";
+        sValue += OUString::number( nCurrCol ) + ";";
 
         const SwFormatCol &rFormatCol=pCurrPage->GetAttrSet()->GetCol();
         sal_uInt16 nColCount=rFormatCol.GetNumCols();
         nColCount = nColCount>0?nColCount:1;
-        sValue += sAttrName;
-        sValue += OUString::number( nColCount ) ;
-
-        sValue += ";";
+        sValue += "total-columns:" + OUString::number( nColCount ) + ";";
 
         SwSectionFrame* pCurrSctFrame=static_cast<SwFrame*>(pCurrFrame)->FindSctFrame();
         if(pCurrSctFrame!=nullptr && pCurrSctFrame->GetSection()!=nullptr )
         {
-            sAttrName = "section-name:";
-
-            sValue += sAttrName;
             OUString sectionName = pCurrSctFrame->GetSection()->GetSectionName();
 
             sectionName = sectionName.replaceFirst( "\\" , "\\\\" );
@@ -700,12 +681,9 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
             sectionName = sectionName.replaceFirst( "," , "\\," );
             sectionName = sectionName.replaceFirst( ":" , "\\:" );
 
-            sValue += sectionName;
-
-            sValue += ";";
+            sValue += "section-name:" + sectionName + ";";
 
             //section-columns-number
-            sAttrName = "section-columns-number:";
 
             nCurrCol = 1;
 
@@ -722,19 +700,15 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                     }
                 }
             }
-            sValue += sAttrName;
-            sValue += OUString::number( nCurrCol ) ;
-            sValue += ";";
+            sValue += "section-columns-number:" +
+                OUString::number( nCurrCol ) + ";";
 
             //section-total-columns
-            sAttrName = "section-total-columns:";
             const SwFormatCol &rFormatSctCol=pCurrSctFrame->GetAttrSet()->GetCol();
             sal_uInt16 nSctColCount=rFormatSctCol.GetNumCols();
             nSctColCount = nSctColCount>0?nSctColCount:1;
-            sValue += sAttrName;
-            sValue += OUString::number( nSctColCount ) ;
-
-            sValue += ";";
+            sValue += "section-total-columns:" +
+                OUString::number( nSctColCount ) + ";";
         }
 
         anyAtrribute <<= sValue;

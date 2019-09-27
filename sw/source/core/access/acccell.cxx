@@ -394,9 +394,7 @@ css::uno::Any SAL_CALL SwAccessibleCell::getExtendedAttributes()
     const SwTableBoxFormula& tbl_formula = pFrameFormat->GetTableBoxFormula();
 
     OUString strFormula = ReplaceFourChar(tbl_formula.GetFormula());
-    OUString strFor("Formula:");
-    strFor += strFormula;
-    strFor += ";" ;
+    OUString strFor = "Formula:" + strFormula + ";";
     strRet <<= strFor;
 
     return strRet;

@@ -924,8 +924,7 @@ static OUString lcl_FindUniqueName(SwWrtShell* pTargetShell, const OUString& rSt
 {
     do
     {
-        OUString sTest = rStartingPageDesc;
-        sTest += OUString::number( nDocNo );
+        OUString sTest = rStartingPageDesc + OUString::number( nDocNo );
         if( !pTargetShell->FindPageDescByName( sTest ) )
             return sTest;
         ++nDocNo;

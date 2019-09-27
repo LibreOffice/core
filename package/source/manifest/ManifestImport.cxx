@@ -581,8 +581,7 @@ OUString ManifestImport::ConvertNameWithNamespace( const OUString& aName, const 
     if ( aIter != aNamespaces.end()
          && ( aIter->second == MANIFEST_NAMESPACE || aIter->second == MANIFEST_OASIS_NAMESPACE ) ) {
         // no check for manifest.xml consistency currently since the old versions have supported inconsistent documents as well
-        aResult = MANIFEST_NSPREFIX;
-        aResult += aPureName;
+        aResult = MANIFEST_NSPREFIX + aPureName;
     }
 
     return aResult;

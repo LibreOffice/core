@@ -1376,9 +1376,7 @@ DECLARE_RTFIMPORT_TEST(testTdf108947, "tdf108947.rtf")
 
     //Document is very fragile, hence we need this guard.
 #if HAVE_MORE_FONTS
-    OUString aExpected = SAL_NEWLINE_STRING;
-    aExpected += SAL_NEWLINE_STRING;
-    aExpected += "Header Page 2 ?";
+    OUString aExpected = SAL_NEWLINE_STRING SAL_NEWLINE_STRING "Header Page 2 ?";
     uno::Reference<text::XText> xHeaderTextLeft = getProperty<uno::Reference<text::XText>>(
         getStyles("PageStyles")->getByName("Default Style"), "HeaderTextLeft");
     aActual = xHeaderTextLeft->getString();

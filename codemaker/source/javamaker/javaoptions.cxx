@@ -223,18 +223,18 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
 
 OString JavaOptions::prepareHelp()
 {
-    OString help("\nusing: ");
-    help += m_program + " [-options] file_1 ... file_n -Xfile_n+1 -Xfile_n+2\nOptions:\n"
-          "    -O<path>   = path describes the root directory for the generated output.\n"
-          "                 The output directory tree is generated under this directory.\n"
-          "    -T<name>   = name specifies a type or a list of types. The output for this\n"
-          "      [t1;...]   type and all dependent types are generated. If no '-T' option is\n"
-          "                 specified, then output for all types is generated.\n"
-          "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n"
-          "    -nD        = no dependent types are generated.\n"
-          "    -G         = generate only target files which does not exists.\n"
-          "    -Gc        = generate only target files which content will be changed.\n"
-          "    -X<file>   = extra types which will not be taken into account for generation.\n\n";
+    OString help = "\nusing: " +
+        m_program + " [-options] file_1 ... file_n -Xfile_n+1 -Xfile_n+2\nOptions:\n"
+        "    -O<path>   = path describes the root directory for the generated output.\n"
+        "                 The output directory tree is generated under this directory.\n"
+        "    -T<name>   = name specifies a type or a list of types. The output for this\n"
+        "      [t1;...]   type and all dependent types are generated. If no '-T' option is\n"
+        "                 specified, then output for all types is generated.\n"
+        "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n"
+        "    -nD        = no dependent types are generated.\n"
+        "    -G         = generate only target files which does not exists.\n"
+        "    -Gc        = generate only target files which content will be changed.\n"
+        "    -X<file>   = extra types which will not be taken into account for generation.\n\n";
     help += prepareVersion();
 
     return help;
@@ -242,9 +242,7 @@ OString JavaOptions::prepareHelp()
 
 OString JavaOptions::prepareVersion() const
 {
-    OString version(m_program);
-    version += " Version 2.0\n\n";
-    return version;
+    return m_program + " Version 2.0\n\n";
 }
 
 

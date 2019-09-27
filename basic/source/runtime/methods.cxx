@@ -3518,8 +3518,7 @@ void SbRtl_Shell(StarBASIC *, SbxArray & rPar, bool)
             OUString tmp = rPar.Get(3)->GetOUString().trim();
             if (!tmp.isEmpty())
             {
-                aCmdLine += " ";
-                aCmdLine += tmp;
+                aCmdLine += " " + tmp;
             }
         }
         else if( aCmdLine.isEmpty() )

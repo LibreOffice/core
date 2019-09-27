@@ -101,8 +101,7 @@ void LwpFormulaInfo::ReadText()
     std::vector<char> aBuf(nStrLen + 1);
     m_pObjStrm->QuickRead(aBuf.data(), nStrLen);
     aBuf[nStrLen]= '\0';
-    OUString aText;
-    aText += "\"";
+    OUString aText = "\"";
     aText += OUString(aBuf.data(), nStrLen, osl_getThreadTextEncoding());
     aText += "\"";
 

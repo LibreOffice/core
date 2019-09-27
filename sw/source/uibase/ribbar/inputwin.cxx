@@ -480,8 +480,7 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
     OUString aPrefix = rName;
     if(!rName.isEmpty())
         aPrefix += ".";
-    OUString aBoxes = aPrefix;
-    aBoxes += rBoxes;
+    OUString aBoxes = aPrefix + rBoxes;
     Selection aSelection(GetSelection());
     sal_uInt16 nSel = static_cast<sal_uInt16>(aSelection.Len());
     // OS: The following expression ensures that in the overwrite mode,
