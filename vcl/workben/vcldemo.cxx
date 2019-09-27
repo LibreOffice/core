@@ -1382,7 +1382,7 @@ public:
                 LoadAllImages();
 
                 Point aLocation(0,maIcons[0].GetSizePixel().Height() + 8);
-                for (size_t i = 0; i < 100; i++)
+                for (size_t i = 0; i < maIcons.size(); i++)
                 {
                     BitmapEx aSrc = maIcons[i];
 
