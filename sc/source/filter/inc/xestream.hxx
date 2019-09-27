@@ -290,9 +290,11 @@ public:
     void WriteAttributes(sal_Int32 nAttribute, Str&& value, Args&&... rest)
     {
         WriteAttribute(nAttribute, std::forward<Str>(value));
-        // coverity[stray_semicolon : FALSE] - coverity parse error
         if constexpr(sizeof...(rest) > 0)
+        {
+            // coverity[stray_semicolon : FALSE] - coverity parse error
             WriteAttributes(std::forward<Args>(rest)...);
+        }
     }
 
     sax_fastparser::FSHelperPtr     CreateOutputStream (
