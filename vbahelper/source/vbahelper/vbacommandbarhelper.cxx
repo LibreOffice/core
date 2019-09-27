@@ -238,9 +238,7 @@ sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css
 
 OUString VbaCommandBarHelper::generateCustomURL()
 {
-    OUString url( ITEM_TOOLBAR_URL );
-    url += CUSTOM_TOOLBAR_STR;
-
+    OUString url = OUStringLiteral(ITEM_TOOLBAR_URL) + CUSTOM_TOOLBAR_STR;
     // use a random number to minimize possible clash with existing custom toolbars
     url += OUString::number(comphelper::rng::uniform_int_distribution(0, std::numeric_limits<int>::max()), 16);
     return url;

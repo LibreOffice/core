@@ -1,0 +1,150 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <rtl/ustring.hxx>
+#include <rtl/string.hxx>
+
+namespace test1
+{
+static const char XXX1[] = "xxx";
+static const char XXX2[] = "xxx";
+void f(OUString s1, int i, OString o)
+{
+    OUString s2 = s1;
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2 += "xxx";
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2 += "xxx";
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2 += s1;
+    s2 = s1 + "xxx";
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2 += s1;
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2 += OUString::number(i);
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2 += XXX1;
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2 += OUStringLiteral(XXX1) + XXX2;
+
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2 += OStringToOUString(o, RTL_TEXTENCODING_UTF8);
+}
+void g(OString s1, int i, OUString u)
+{
+    OString s2 = s1;
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2 += "xxx";
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2 += "xxx";
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2 += s1;
+    s2 = s1 + "xxx";
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2 += s1;
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2 += OString::number(i);
+
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2 += OUStringToOString(u, RTL_TEXTENCODING_ASCII_US);
+}
+}
+
+namespace test2
+{
+void f(OUString s3)
+{
+    s3 += "xxx";
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s3 += "xxx";
+}
+void g(OString s3)
+{
+    s3 += "xxx";
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s3 += "xxx";
+}
+}
+
+namespace test3
+{
+struct Bar
+{
+    OUString m_field;
+};
+void f(Bar b1, Bar& b2, Bar* b3)
+{
+    OUString s3 = "xxx";
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s3 += b1.m_field;
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s3 += b2.m_field;
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s3 += b3->m_field;
+}
+}
+
+// no warning expected
+namespace test4
+{
+void f()
+{
+    OUString sRet = "xxx";
+#if OSL_DEBUG_LEVEL > 0
+    sRet += ";";
+#endif
+}
+}
+
+// no warning expected
+namespace test5
+{
+OUString side_effect();
+int side_effect2();
+void f()
+{
+    OUString sRet = "xxx";
+    sRet += side_effect();
+    sRet += OUString::number(side_effect2());
+}
+void g()
+{
+    OUString sRet = side_effect();
+    sRet += "xxx";
+}
+}
+
+namespace test6
+{
+void f(OUString sComma, OUString maExtension, int mnDocumentIconID)
+{
+    OUString sValue;
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    sValue += sComma + sComma + maExtension + sComma;
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    sValue += OUString::number(mnDocumentIconID) + sComma;
+}
+struct Foo
+{
+    OUString sFormula1;
+};
+void g(int x, const Foo& aValidation)
+{
+    OUString sCondition;
+    switch (x)
+    {
+        case 1:
+            sCondition += "cell-content-is-in-list(";
+            // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+            sCondition += aValidation.sFormula1 + ")";
+    }
+}
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
