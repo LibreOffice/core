@@ -32,6 +32,7 @@ public:
 
     ~OpenCLZone()
     {
+        // coverity[assert_side_effect]
         assert(gnEnterCount > 0);
         gnEnterCount = gnEnterCount - 1;
         if (!isInZone())
