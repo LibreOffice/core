@@ -90,7 +90,7 @@ static void dumpTile(const char *pNameStem,
         << nHeight << "\n"
         << 255 << "\n" ;
 
-    bool dumpText = false;
+    const bool dumpText = false;
 
     if (dumpText)
         fprintf(stderr, "Stream %s - %dx%d:\n", pNameStem, nWidth, nHeight);
