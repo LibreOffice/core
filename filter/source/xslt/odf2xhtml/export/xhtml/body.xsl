@@ -1401,9 +1401,10 @@
         <xsl:param name="currentoutlineLevel"/>
         <xsl:param name="i" select="1"/>
 
-        <xsl:variable name="precedingoutlineLevel" select="preceding-sibling::text:h[$i]/@text:outline-level"/>
+        <xsl:variable name="precedingHeading" select="preceding-sibling::text:h[@text:outline-level &lt;= $currentoutlineLevel][$i]"/>
+        <xsl:variable name="precedingoutlineLevel" select="$precedingHeading/@text:outline-level"/>
         <!-- tdf#107696: if text:h has attribute "is-list-header" with "true" value, it mustn't be counted for numbering -->
-        <xsl:variable name="precedingoutlineLevel-is-list-header" select="preceding-sibling::text:h[$i][@text:is-list-header='true']/@text:outline-level"/>
+        <xsl:variable name="precedingoutlineLevel-is-list-header" select="$precedingHeading[@text:is-list-header='true']/@text:outline-level"/>
         <xsl:choose>
             <xsl:when test="($currentoutlineLevel = $precedingoutlineLevel) and (not($precedingoutlineLevel-is-list-header)) ">
                 <xsl:call-template name="calc-heading-digit">
@@ -1421,11 +1422,7 @@
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$currentoutlineLevel &lt; $precedingoutlineLevel">
-                <xsl:call-template name="calc-heading-digit">
-                    <xsl:with-param name="value" select="$value"/>
-                    <xsl:with-param name="currentoutlineLevel" select="$currentoutlineLevel"/>
-                    <xsl:with-param name="i" select="$i + 1"/>
-                </xsl:call-template>
+                <xsl:message terminate="yes">this should not happen</xsl:message>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="$value"/>
