@@ -11,7 +11,9 @@
 #include <oox/crypto/Standard2007Engine.hxx>
 
 #include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/SequenceInputStream.hpp>
+#include <com/sun/star/io/XSequenceOutputStream.hpp>
 #include <oox/crypto/CryptTools.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/binaryoutputstream.hxx>
@@ -26,6 +28,13 @@ using namespace css::uno;
 
 namespace oox {
 namespace core {
+
+extern "C" SAL_DLLPUBLIC_EXPORT XInterface*
+    com_sun_star_comp_oox_crypto_Standard2007_get_implementation(
+        XComponentContext* pCtx, Sequence<Any> const& /*arguments*/)
+{
+    return cppu::acquire(new Standard2007Engine(pCtx/*, arguments*/));
+}
 
 /* =========================================================================== */
 /*  Kudos to Caolan McNamara who provided the core decryption implementations. */
@@ -129,7 +138,7 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
     return true;
 }
 
-bool Standard2007Engine::generateEncryptionKey(const OUString& password)
+sal_Bool Standard2007Engine::generateEncryptionKey(const OUString& password)
 {
     mKey.clear();
     /*
@@ -171,9 +180,12 @@ bool Standard2007Engine::generateEncryptionKey(const OUString& password)
     return std::equal(hash.begin(), hash.end(), verifierHash.begin());
 }
 
-bool Standard2007Engine::decrypt(BinaryXInputStream& aInputStream,
-                                 BinaryXOutputStream& aOutputStream)
+sal_Bool Standard2007Engine::decrypt(const css::uno::Reference<css::io::XInputStream>& rxInputStream,
+    css::uno::Reference<css::io::XOutputStream>& rxOutputStream)
 {
+    BinaryXInputStream aInputStream(rxInputStream, true);
+    BinaryXOutputStream aOutputStream(rxOutputStream, true);
+
     sal_uInt32 totalSize = aInputStream.readuInt32(); // Document unencrypted size - 4 bytes
     aInputStream.skip(4); // Reserved 4 Bytes
 
@@ -192,20 +204,27 @@ bool Standard2007Engine::decrypt(BinaryXInputStream& aInputStream,
         aOutputStream.writeMemory(outputBuffer.data(), writeLength);
         remaining -= outputLength;
     }
+
+    rxOutputStream->flush();
+
     return true;
 }
 
-bool Standard2007Engine::checkDataIntegrity()
+sal_Bool Standard2007Engine::checkDataIntegrity()
 {
     return true;
 }
 
-void Standard2007Engine::createEncryptionData(comphelper::SequenceAsHashMap & aEncryptionData, const OUString rPassword)
+css::uno::Sequence<css::beans::NamedValue> Standard2007Engine::createEncryptionData(const OUString& rPassword)
 {
+    comphelper::SequenceAsHashMap aEncryptionData;
     aEncryptionData["OOXPassword"] <<= rPassword;
+    aEncryptionData["CryptoType"] <<= OUString("Standard2007Engine");
+
+    return aEncryptionData.getAsConstNamedValueList();
 }
 
-bool Standard2007Engine::setupEncryption(css::uno::Sequence<css::beans::NamedValue>& rMediaEncData)
+sal_Bool Standard2007Engine::setupEncryption(const css::uno::Sequence<css::beans::NamedValue>& rMediaEncData)
 {
     mInfo.header.flags        = msfilter::ENCRYPTINFO_AES | msfilter::ENCRYPTINFO_CRYPTOAPI;
     mInfo.header.algId        = msfilter::ENCRYPT_ALGO_AES128;
@@ -238,10 +257,12 @@ bool Standard2007Engine::setupEncryption(css::uno::Sequence<css::beans::NamedVal
     return true;
 }
 
-void Standard2007Engine::writeEncryptionInfo(oox::ole::OleStorage& rOleStorage)
+css::uno::Sequence<css::beans::NamedValue> Standard2007Engine::writeEncryptionInfo()
 {
-    Reference<XOutputStream> xEncryptionInfo(rOleStorage.openOutputStream("EncryptionInfo"), UNO_SET_THROW);
-    BinaryXOutputStream rStream(xEncryptionInfo, false);
+    Reference<XOutputStream> aEncryptionInfoStream(
+        mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.io.SequenceOutputStream", mxContext),
+        UNO_QUERY);
+    BinaryXOutputStream rStream(aEncryptionInfoStream, false);
 
     rStream.WriteUInt32(msfilter::VERSION_INFO_2007_FORMAT);
 
@@ -260,21 +281,27 @@ void Standard2007Engine::writeEncryptionInfo(oox::ole::OleStorage& rOleStorage)
     rStream.writeMemory(&mInfo.verifier, sizeof(msfilter::EncryptionVerifierAES));
 
     rStream.close();
-    xEncryptionInfo->flush();
-    xEncryptionInfo->closeOutput();
+    aEncryptionInfoStream->flush();
+
+    // Store all streams into sequence and return back
+    comphelper::SequenceAsHashMap aStreams;
+
+    Reference<XSequenceOutputStream> aEncryptionInfoSequenceStream(aEncryptionInfoStream, UNO_QUERY);
+    aStreams["EncryptionInfo"] <<= aEncryptionInfoSequenceStream->getWrittenBytes();
+    return aStreams.getAsConstNamedValueList();
 }
 
-void Standard2007Engine::encrypt(css::uno::Reference<css::io::XInputStream> &  rxInputStream,
-                                 css::uno::Reference<css::io::XOutputStream> & rxOutputStream,
-                                 sal_uInt32 nSize)
+void Standard2007Engine::encrypt(const css::uno::Reference<css::io::XInputStream> &  rxInputStream,
+                                 css::uno::Reference<css::io::XOutputStream> & rxOutputStream)
 {
     if (mKey.empty())
         return;
 
     BinaryXOutputStream aBinaryOutputStream(rxOutputStream, false);
     BinaryXInputStream aBinaryInputStream(rxInputStream, false);
+    Reference<XSeekable> xSeekable(rxInputStream, UNO_QUERY);
 
-    aBinaryOutputStream.WriteUInt32(nSize); // size
+    aBinaryOutputStream.WriteUInt32(xSeekable->getLength()); // size
     aBinaryOutputStream.WriteUInt32(0U);    // reserved
 
     std::vector<sal_uInt8> inputBuffer(1024);
@@ -296,7 +323,7 @@ void Standard2007Engine::encrypt(css::uno::Reference<css::io::XInputStream> &  r
     }
 }
 
-css::uno::Reference<css::io::XInputStream> Standard2007Engine::getStream(css::uno::Sequence<css::beans::NamedValue> & rStreams, const OUString sStreamName)
+css::uno::Reference<css::io::XInputStream> Standard2007Engine::getStream(const css::uno::Sequence<css::beans::NamedValue> & rStreams, const OUString sStreamName)
 {
     for (const auto & aStream : rStreams)
     {
@@ -311,7 +338,7 @@ css::uno::Reference<css::io::XInputStream> Standard2007Engine::getStream(css::un
     return nullptr;
 }
 
-bool Standard2007Engine::readEncryptionInfo(css::uno::Sequence<css::beans::NamedValue> aStreams)
+sal_Bool Standard2007Engine::readEncryptionInfo(const css::uno::Sequence<css::beans::NamedValue>& aStreams)
 {
     Reference<css::io::XInputStream> rxInputStream = getStream(aStreams, "EncryptionInfo");
     BinaryXInputStream aBinaryStream(rxInputStream, false);

@@ -15,11 +15,11 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <oox/crypto/CryptoEngine.hxx>
 #include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace io { class XStream; }
+    namespace packages { class XPackageEncryption; }
 } } }
 
 namespace oox { namespace ole { class OleStorage; } }
@@ -32,7 +32,7 @@ class OOX_DLLPUBLIC DocumentEncryption
 private:
     css::uno::Reference< css::io::XStream > mxDocumentStream;
     oox::ole::OleStorage& mrOleStorage;
-    std::unique_ptr<CryptoEngine>   mEngine;
+    css::uno::Reference< css::packages::XPackageEncryption > mxPackageEncryption;
     css::uno::Sequence< css::beans::NamedValue >& mMediaEncData;
     css::uno::Reference< css::uno::XComponentContext > mxContext;
 
