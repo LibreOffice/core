@@ -566,8 +566,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
                     aStack << aPool.Store( nRngIndex );
                 else
             {
-                    OUString  aText( "NRREF ");
-                    aText += aTmp;
+                    OUString aText = "NRREF " + aTmp;
                     aStack << aPool.Store( aText );
             }
             }
@@ -579,8 +578,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
                     aStack << aPool.Store( nRngIndex );
                 else
                 {
-                    OUString  aText( "ABSNREF " );
-                    aText += aTmp;
+                    OUString aText = "ABSNREF " + aTmp;
                     aStack << aPool.Store( aText );
                 }
             }

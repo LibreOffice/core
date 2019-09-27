@@ -2130,8 +2130,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
         }
         else if ( aPersona == "default" )
         {
-            gallery = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER;
-            gallery += "/gallery/personas/";
+            gallery = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/gallery/personas/";
         }
         rHeaderFooterBitmap = readBitmapEx( gallery + aName );
 

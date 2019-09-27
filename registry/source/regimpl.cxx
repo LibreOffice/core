@@ -796,8 +796,7 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
         return _ret;
     }
 
-    OUString tmpName(sRelativKey);
-    tmpName += ROOT;
+    OUString tmpName = sRelativKey + ROOT;
 
     OStoreFile sFile(pKey->getStoreFile());
     if (sFile.isValid() && sFile.remove(sFullPath, tmpName))
@@ -1198,8 +1197,7 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
     if (sRelPath.getLength() > 1 || sFullPath.isEmpty())
         sFullPath += ROOT;
 
-    OUString sFullKeyName = sFullPath;
-    sFullKeyName += keyName;
+    OUString sFullKeyName = sFullPath + keyName;
 
     OStoreDirectory rStoreDir;
     if (rStoreDir.create(pTargetKey->getStoreFile(), sFullPath, keyName, storeAccessMode::Create))

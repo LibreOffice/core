@@ -204,8 +204,7 @@ void LiblangtagDataRef::setupDataPath()
 
     // Check if data is in our own installation, else assume system
     // installation.
-    OUString aData( aURL);
-    aData += "/language-subtag-registry.xml";
+    OUString aData = aURL + "/language-subtag-registry.xml";
     osl::DirectoryItem aDirItem;
     if (osl::DirectoryItem::get( aData, aDirItem) == osl::DirectoryItem::E_None)
     {

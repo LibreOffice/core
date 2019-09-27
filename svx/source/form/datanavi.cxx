@@ -726,8 +726,7 @@ namespace svxform
                             {
                                 OUString sTemp;
                                 pNode->m_xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
-                                sNewName += sTemp;
-                                sNewName += ": ";
+                                sNewName += sTemp + ": ";
                                 pNode->m_xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                                 sNewName += sTemp;
                             }
@@ -811,8 +810,7 @@ namespace svxform
                 pEntry = m_pItemList->InsertEntry( sTemp, aImage, aImage, nullptr, false, TREELIST_APPEND, pNode );
                 // Action
                 _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
-                OUString sEntry = SvxResId( RID_STR_DATANAV_SUBM_ACTION );
-                sEntry += sTemp;
+                OUString sEntry = SvxResId( RID_STR_DATANAV_SUBM_ACTION ) + sTemp;
                 m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Method
                 _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
@@ -821,13 +819,11 @@ namespace svxform
                 m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Ref
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
-                sEntry = SvxResId( RID_STR_DATANAV_SUBM_REF );
-                sEntry += sTemp;
+                sEntry = SvxResId( RID_STR_DATANAV_SUBM_REF ) + sTemp;
                 m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Bind
                 _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
-                sEntry = SvxResId( RID_STR_DATANAV_SUBM_BIND );
-                sEntry += sTemp;
+                sEntry = SvxResId( RID_STR_DATANAV_SUBM_BIND ) + sTemp;
                 m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Replace
                 _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
@@ -846,8 +842,7 @@ namespace svxform
             {
                 OUString sName;
                 _rEntry->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
-                sName += sTemp;
-                sName += ": ";
+                sName += sTemp + ": ";
                 _rEntry->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                 sName += sTemp;
                 pEntry = m_pItemList->InsertEntry(
@@ -885,19 +880,16 @@ namespace svxform
                 m_pItemList->SetEntryText( pEntry, sTemp );
 
                 _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
-                OUString sEntry = SvxResId( RID_STR_DATANAV_SUBM_BIND );
-                sEntry += sTemp;
+                OUString sEntry = SvxResId( RID_STR_DATANAV_SUBM_BIND ) + sTemp;
                 sal_uIntPtr nPos = 0;
                 SvTreeListEntry* pChild = m_pItemList->GetEntry( pEntry, nPos++ );
                 m_pItemList->SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
-                sEntry = SvxResId( RID_STR_DATANAV_SUBM_REF );
-                sEntry += sTemp;
+                sEntry = SvxResId( RID_STR_DATANAV_SUBM_REF ) + sTemp;
                 pChild = m_pItemList->GetEntry( pEntry, nPos++ );
                 m_pItemList->SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
-                sEntry = SvxResId( RID_STR_DATANAV_SUBM_ACTION );
-                sEntry += sTemp;
+                sEntry = SvxResId( RID_STR_DATANAV_SUBM_ACTION ) + sTemp;
                 pChild = m_pItemList->GetEntry( pEntry, nPos++ );
                 m_pItemList->SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
@@ -1158,8 +1150,7 @@ namespace svxform
                                     OUString sEntry;
                                     OUString sTemp;
                                     xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
-                                    sEntry += sTemp;
-                                    sEntry += ": ";
+                                    sEntry += sTemp + ": ";
                                     xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                                     sEntry += sTemp;
 
@@ -2006,9 +1997,7 @@ namespace svxform
         if ( sInstName.isEmpty() )
         {
             SAL_WARN( "svx.form", "DataNavigatorWindow::CreateInstancePage(): instance without name" );
-            OUString sTemp("untitled");
-            sTemp += OUString::number( nPageId );
-            sInstName = sTemp;
+            sInstName = "untitled" + OUString::number( nPageId );
         }
         m_pTabCtrl->InsertPage( nPageId, sInstName, m_pTabCtrl->GetPageCount() - 2 );
     }
@@ -3094,8 +3083,7 @@ namespace svxform
                                 OUString sEntry;
                                 OUString sTemp;
                                 xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
-                                sEntry += sTemp;
-                                sEntry += ": ";
+                                sEntry += sTemp + ": ";
                                 xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                                 sEntry += sTemp;
                                 m_xBindLB->append_text(sEntry);

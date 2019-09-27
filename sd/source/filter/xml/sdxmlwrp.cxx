@@ -253,9 +253,8 @@ ErrCode ReadThroughComponent(
 
         SAL_WARN( "sd.filter", "SAX parse exception caught while importing: " << exceptionToString(ex));
 
-        OUString sErr( OUString::number( r.LineNumber ));
-        sErr += ",";
-        sErr += OUString::number( r.ColumnNumber );
+        OUString sErr =  OUString::number( r.LineNumber ) +
+            "," + OUString::number( r.ColumnNumber );
 
         if (!rStreamName.isEmpty())
         {

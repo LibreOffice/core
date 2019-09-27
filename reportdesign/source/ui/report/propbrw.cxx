@@ -389,8 +389,8 @@ OUString PropBrw::GetHeadlineName( const uno::Sequence< Reference<uno::XInterfac
     }
     else    // multiselection
     {
-        aName = RptResId(RID_STR_BRWTITLE_PROPERTIES);
-        aName += RptResId(RID_STR_BRWTITLE_MULTISELECT);
+        aName = RptResId(RID_STR_BRWTITLE_PROPERTIES)
+            + RptResId(RID_STR_BRWTITLE_MULTISELECT);
     }
 
     return aName;

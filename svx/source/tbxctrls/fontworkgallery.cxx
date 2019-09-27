@@ -160,9 +160,7 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
 
     for( size_t nFavorite = 1; nFavorite <= nFavCount; nFavorite++ )
     {
-        OUString aStr(SvxResId(RID_SVXFLOAT3D_FAVORITE));
-        aStr += " ";
-        aStr += OUString::number(nFavorite);
+        OUString aStr = SvxResId(RID_SVXFLOAT3D_FAVORITE) + " " + OUString::number(nFavorite);
         Image aThumbImage( maFavoritesHorizontal[nFavorite-1] );
         maCtlFavorites.InsertItem( static_cast<sal_uInt16>(nFavorite), aThumbImage, aStr );
     }

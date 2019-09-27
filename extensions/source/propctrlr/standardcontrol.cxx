@@ -1168,10 +1168,8 @@ namespace pcr
 
             if (!aInput.isEmpty())
             {
-                aOutput += "\"";
+                aOutput += "\"" + aInput + "\"";
                 nDiff++;
-                aOutput += aInput;
-                aOutput += "\"";
             }
 
             if (nSinglePos <= aOutput.getLength())
@@ -1185,11 +1183,8 @@ namespace pcr
                     aInput=aStr.getToken(0, '\n', nIdx);
                     if (!aInput.isEmpty())
                     {
-                        aOutput += ";";
-                        aOutput += "\"";
+                        aOutput += ";\"" + aInput + "\"";
                         nDiff += 2;
-                        aOutput += aInput;
-                        aOutput += "\"";
 
                         if (nSinglePos <= aOutput.getLength())
                         {

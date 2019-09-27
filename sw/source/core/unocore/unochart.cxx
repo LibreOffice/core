@@ -261,19 +261,15 @@ static OUString GetRangeRepFromTableAndCells( const OUString &rTableName,
 {
     OSL_ENSURE( !rTableName.isEmpty(), "table name missing" );
     OSL_ENSURE( !rStartCell.isEmpty(), "cell name missing" );
-    OUString aRes( rTableName );
-    aRes += ".";
-    aRes += rStartCell;
+    OUString aRes = rTableName + "." + rStartCell;
 
     if (!rEndCell.isEmpty())
     {
-        aRes += ":";
-        aRes += rEndCell;
+        aRes += ":" + rEndCell;
     }
     else if (bForceEndCellName)
     {
-        aRes += ":";
-        aRes += rStartCell;
+        aRes += ":" + rStartCell;
     }
 
     return aRes;

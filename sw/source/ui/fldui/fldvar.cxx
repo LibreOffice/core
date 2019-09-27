@@ -1216,8 +1216,7 @@ sal_uInt16 SwFieldVarPage::GetGroup()
 
 void SwFieldVarPage::FillUserData()
 {
-    OUString sData(USER_DATA_VERSION);
-    sData += ";";
+    OUString sData = USER_DATA_VERSION ";";
     sal_Int32 nTypeSel = m_xTypeLB->get_selected_index();
     if( -1 == nTypeSel )
         nTypeSel = USHRT_MAX;

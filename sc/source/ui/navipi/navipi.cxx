@@ -981,8 +981,7 @@ void ScNavigatorDlg::GetDocNames( const OUString* pManualSel )
     OUString aHidden =  aLbEntries->GetHiddenTitle();
     if (!aHidden.isEmpty())
     {
-        OUString aEntry = aHidden;
-        aEntry += aStrHidden;
+        OUString aEntry = aHidden + aStrHidden;
         aLbDocuments->InsertEntry( aEntry );
 
         if ( pManualSel && aHidden == *pManualSel )

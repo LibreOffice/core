@@ -61,11 +61,11 @@ SfxPoolItem *SfxMacroInfoItem::Clone( SfxItemPool *) const
 
 OUString SfxMacroInfoItem::GetQualifiedName() const
 {
-    OUString aMacroName = aLibName;
-    aMacroName += ".";
-    aMacroName += aModuleName;
-    aMacroName += ".";
-    aMacroName += aMethodName;
+    OUString aMacroName = aLibName +
+        "." +
+        aModuleName +
+        "." +
+        aMethodName;
     return aMacroName;
 }
 

@@ -497,8 +497,7 @@ bool SdrItemBrowserControl::BeginChangeEntry(std::size_t nPos)
         pEditControl->SetSelection(Selection(SELECTION_MIN,SELECTION_MAX));
         vcl::Window* pParent=GetParent();
         aWNameMemorized=pParent->GetText();
-        OUString aNewName(aWNameMemorized);
-        aNewName += " ";
+        OUString aNewName = aWNameMemorized + " ";
         aNewName += pEntry->GetItemTypeStr();
         if (pEntry->bCanNum) {
             aNewName += ": ";

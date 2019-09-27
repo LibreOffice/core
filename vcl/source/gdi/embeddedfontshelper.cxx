@@ -218,8 +218,8 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
     path += "/user/temp/embeddedfonts/fromsystem/";
     osl::Directory::createPath( path );
     OUString filename = familyName + "_" + OUString::number( family ) + "_" + OUString::number( italic )
-        + "_" + OUString::number( weight ) + "_" + OUString::number( pitch );
-    filename += ".ttf"; // TODO is it always ttf?
+        + "_" + OUString::number( weight ) + "_" + OUString::number( pitch )
+        + ".ttf"; // TODO is it always ttf?
     OUString url = path + filename;
     if( osl::File( url ).open( osl_File_OpenFlag_Read ) == osl::File::E_None ) // = exists()
     {

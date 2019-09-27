@@ -655,9 +655,8 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             aRewriter.AddRule(UndoArg1, m_pSh->GetCursorDescr());
             aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
 
-            OUString aTmpStr( SwResId(STR_START_QUOTE) );
-            aTmpStr += aTmp;
-            aTmpStr += SwResId(STR_END_QUOTE);
+            OUString aTmpStr = SwResId(STR_START_QUOTE) +
+                aTmp + SwResId(STR_END_QUOTE);
             aRewriter.AddRule(UndoArg3, aTmpStr);
 
             m_pSh->StartUndo(SwUndoId::UI_REPLACE, &aRewriter);

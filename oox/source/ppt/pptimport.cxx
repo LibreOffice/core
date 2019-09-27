@@ -155,8 +155,7 @@ bool PowerPointImport::importDocument()
         SfxErrorContext aContext(ERRCTX_SFX_OPENDOC, aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset), nullptr, RID_ERRCTX);
         OUString aWarning;
         aContext.GetString(ERRCODE_NONE.MakeWarning(), aWarning);
-        aWarning += ":\n";
-        aWarning += SvxResId(RID_SVXSTR_WARN_MISSING_SMARTART);
+        aWarning += ":\n" + SvxResId(RID_SVXSTR_WARN_MISSING_SMARTART);
 
         // Show it.
         std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(nullptr,

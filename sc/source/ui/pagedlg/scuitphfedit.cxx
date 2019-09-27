@@ -226,8 +226,8 @@ void ScHFEditPage::InitPreDefinedList()
     OUString aUserNameEntry(aUserOpt.GetFirstName() + " " + aUserOpt.GetLastName() + ", " + aPageEntry + ", " + aDateFieldValue);
     m_xLbDefined->append_text( aUserNameEntry);
 
-    OUString aCreatedByEntry( m_xFtCreatedBy->get_label() + " " + aUserOpt.GetFirstName() + " " + aUserOpt.GetLastName() + ", ");
-    aCreatedByEntry += aDateFieldValue + ", " + aPageEntry;
+    OUString aCreatedByEntry = m_xFtCreatedBy->get_label() + " " + aUserOpt.GetFirstName() + " " + aUserOpt.GetLastName() + ", " +
+        aDateFieldValue + ", " + aPageEntry;
     m_xLbDefined->append_text( aCreatedByEntry);
 }
 

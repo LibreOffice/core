@@ -3019,8 +3019,7 @@ public:
             {
                 if ( meOrigin != chart2::data::LabelOrigin_LONG_SIDE)
                 {
-                    OUString aString = ScResId(STR_COLUMN);
-                    aString += " ";
+                    OUString aString = ScResId(STR_COLUMN) + " ";
                     ScAddress aPos( nCol, 0, 0 );
                     OUString aColStr(aPos.Format(ScRefFlags::COL_VALID));
                     aString += aColStr;

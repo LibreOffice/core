@@ -455,9 +455,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     // count an extra hairspace (U+200A) left and right
     const OUString sevenDigits(m_aAbsolute->CreateFieldText(6000000));
     const OUString hairSpace(u'\x200A');
-    OUString textPattern(hairSpace);
-    textPattern += sevenDigits;
-    textPattern += hairSpace;
+    OUString textPattern = hairSpace + sevenDigits + hairSpace;
     nTextWidth = m_aAbsolute->GetTextWidth(textPattern);
     m_aAbsolute->SetPosPixel(Point(nX,nY));
     m_aAbsolute->SetSizePixel(Size(nTextWidth, nH));
@@ -741,8 +739,8 @@ void DbGridControl::NavigationBar::SetState(DbGridControlNavigationBarState nWhi
             // add the number of selected rows, if applicable
             if (pParent->GetSelectRowCount())
             {
-                OUString aExtendedInfo(aText);
-                aExtendedInfo += " (";
+                OUString aExtendedInfo = aText +
+                    " (";
                 aExtendedInfo += m_aAbsolute->CreateFieldText(pParent->GetSelectRowCount());
                 aExtendedInfo += ")";
                 pWnd->SetText(aExtendedInfo);

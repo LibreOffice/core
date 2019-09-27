@@ -1082,14 +1082,11 @@ void ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinit
                             sExpression = sExpression.replaceAt(nIndex, 1, "\"\"");
                             nIndex = sExpression.indexOf('"',nIndex+2);
                         }
-                        OUString sFormula("rpt:HASCHANGED(\"");
 
                         TGroupFunctionMap::const_iterator aGroupFind = m_aGroupFunctionMap.find(xGroup);
                         if ( aGroupFind != m_aGroupFunctionMap.end() )
                             sExpression = aGroupFind->second->getName();
-                        sFormula += sExpression;
-                        sFormula += "\")";
-                        sExpression = sFormula;
+                        sExpression = "rpt:HASCHANGED(\"" + sExpression + "\")";
                     }
                     AddAttribute(XML_NAMESPACE_REPORT, XML_SORT_EXPRESSION, sField);
                     AddAttribute(XML_NAMESPACE_REPORT, XML_GROUP_EXPRESSION,sExpression);
@@ -1556,10 +1553,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                     xFunction->setName(sFunctionName);
                     if ( !sInitialFormula.isEmpty() )
                         xFunction->setInitialFormula(beans::Optional< OUString>(true, sInitialFormula));
-                    sFunction = "rpt:" + sFunction;
-                    sFunction += "([";
-                    sFunction += sExpression;
-                    sFunction += "]";
+                    sFunction = "rpt:" + sFunction + "([" + sExpression + "]";
 
                     if ( !sPrefix.isEmpty() )
                         sFunction += sPrefix;

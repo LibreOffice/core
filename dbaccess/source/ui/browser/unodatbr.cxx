@@ -3605,8 +3605,7 @@ OUString SbaTableQueryBrowser::getPrivateTitle() const
             sTitle = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DecodeMechanism::WithCharset);
         if ( !sName.isEmpty() )
         {
-            sName += " - ";
-            sName += sTitle;
+            sName += " - " + sTitle;
             sTitle = sName;
         }
     }

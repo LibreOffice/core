@@ -343,9 +343,8 @@ FormulaLogger::GroupScope FormulaLogger::enterGroup(
     if (aName.isEmpty())
         aName = "-"; // unsaved document.
 
-    OUString aGroupPrefix = aName;
-
-    aGroupPrefix += ": formula-group: ";
+    OUString aGroupPrefix = aName +
+        ": formula-group: ";
     aGroupPrefix += rCell.aPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDoc, rDoc.GetAddressConvention());
     aGroupPrefix += ": ";
 

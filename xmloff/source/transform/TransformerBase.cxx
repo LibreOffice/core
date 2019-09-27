@@ -840,8 +840,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     break;
                 case XML_ATACTION_SHAPEID:
                 {
-                    OUString sNewValue( "shape"  );
-                    sNewValue += rAttrValue;
+                    OUString sNewValue = "shape" + rAttrValue;
                     pMutableAttrList->SetValueByIndex( i, sNewValue );
                     break;
                 }
@@ -1276,9 +1275,7 @@ bool XMLTransformerBase::ConvertURIToOASIS( OUString& rURI,
 
         if( bRel )
         {
-            OUString sTmp( m_aExtPathPrefix );
-            sTmp += rURI;
-            rURI = sTmp;
+            rURI = m_aExtPathPrefix + rURI;
             bRet = true;
         }
     }

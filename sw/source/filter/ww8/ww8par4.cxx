@@ -344,9 +344,8 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     long nX=0, nY=0;                // nX, nY is graphic size
     bool bOleOk = true;
 
-    OUString aSrcStgName('_');
     // results in the name "_4711"
-    aSrcStgName += OUString::number( m_nObjLocFc );
+    OUString aSrcStgName = "_" + OUString::number( m_nObjLocFc );
 
     tools::SvRef<SotStorage> xSrc0 = m_pStg->OpenSotStorage(SL::aObjectPool);
     tools::SvRef<SotStorage> xSrc1 = xSrc0->OpenSotStorage( aSrcStgName );

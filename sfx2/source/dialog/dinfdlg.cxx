@@ -102,8 +102,7 @@ namespace {
 
 OUString CreateSizeText( sal_Int64 nSize )
 {
-    OUString aUnitStr(" ");
-    aUnitStr += SfxResId(STR_BYTES);
+    OUString aUnitStr = " " + SfxResId(STR_BYTES);
     sal_Int64 nSize1 = nSize;
     sal_Int64 nSize2 = nSize1;
     sal_Int64 nMega = 1024 * 1024;
@@ -114,24 +113,21 @@ OUString CreateSizeText( sal_Int64 nSize )
     if ( nSize1 >= 10000 && nSize1 < nMega )
     {
         nSize1 /= 1024;
-        aUnitStr = " ";
-        aUnitStr += SfxResId(STR_KB);
+        aUnitStr = " " + SfxResId(STR_KB);
         fSize /= 1024;
         nDec = 0;
     }
     else if ( nSize1 >= nMega && nSize1 < nGiga )
     {
         nSize1 /= nMega;
-        aUnitStr = " ";
-        aUnitStr += SfxResId(STR_MB);
+        aUnitStr = " " + SfxResId(STR_MB);
         fSize /= nMega;
         nDec = 2;
     }
     else if ( nSize1 >= nGiga )
     {
         nSize1 /= nGiga;
-        aUnitStr = " ";
-        aUnitStr += SfxResId(STR_GB);
+        aUnitStr = " " + SfxResId(STR_GB);
         fSize /= nGiga;
         nDec = 3;
     }
@@ -166,8 +162,7 @@ OUString ConvertDateTime_Impl( const OUString& rName,
      OUString aAuthor = comphelper::string::stripStart(rName, ' ');
      if (!aAuthor.isEmpty())
      {
-        aStr += aDelim;
-        aStr += aAuthor;
+        aStr += aDelim + aAuthor;
      }
      return aStr;
 }

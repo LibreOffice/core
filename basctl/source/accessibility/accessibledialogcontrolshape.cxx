@@ -79,6 +79,7 @@ bool AccessibleDialogControlShape::IsFocused() const
     if ( m_pDialogWindow )
     {
         SdrView& rView = m_pDialogWindow->GetView();
+
         if (rView.IsObjMarked(m_pDlgEdObj) && rView.GetMarkedObjectList().GetMarkCount() == 1)
             bFocused = true;
     }

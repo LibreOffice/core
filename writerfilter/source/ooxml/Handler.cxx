@@ -329,12 +329,7 @@ OOXMLHyperlinkHandler::~OOXMLHyperlinkHandler()
 
 void OOXMLHyperlinkHandler::writetext()
 {
-    OUString sReturn(" HYPERLINK \"");
-
-    sReturn += mURL;
-    sReturn += "\"";
-    sReturn += mFieldCode;
-
+    OUString sReturn = " HYPERLINK \"" + mURL + "\"" + mFieldCode;
     mpFastContext->text(sReturn);
 }
 
