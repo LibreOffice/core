@@ -30,6 +30,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/SequenceInputStream.hpp>
+#include <com/sun/star/io/XSequenceOutputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
@@ -50,15 +51,26 @@ namespace oox
 {
 namespace core
 {
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_oox_crypto_DRMEncryptedDataSpace_get_implementation(
+    XComponentContext* pCtx, Sequence<Any> const& /*arguments*/)
+{
+    return cppu::acquire(new IRMEngine(pCtx /*, arguments*/));
+}
+
 IRMEngine::IRMEngine(const Reference<XComponentContext>& rxContext)
     : mxContext(rxContext)
 {
 }
 
-bool IRMEngine::checkDataIntegrity() { return true; }
+sal_Bool IRMEngine::checkDataIntegrity() { return true; }
 
-bool IRMEngine::decrypt(BinaryXInputStream& aInputStream, BinaryXOutputStream& aOutputStream)
+sal_Bool IRMEngine::decrypt(const Reference<XInputStream>& rxInputStream,
+                            Reference<XOutputStream>& rxOutputStream)
 {
+    BinaryXInputStream aInputStream(rxInputStream, true);
+    BinaryXOutputStream aOutputStream(rxOutputStream, true);
+
     aInputStream.readInt64(); // Skip stream size
 
     HRESULT hr = IpcInitialize();
@@ -66,6 +78,7 @@ bool IRMEngine::decrypt(BinaryXInputStream& aInputStream, BinaryXOutputStream& a
     {
         // ERROR_ALREADY_INITIALIZED not an error
         // TODO: some reaction?
+        return false;
     }
 
     // Get decryption key
@@ -77,6 +90,7 @@ bool IRMEngine::decrypt(BinaryXInputStream& aInputStream, BinaryXOutputStream& a
     if (FAILED(hr))
     {
         // TODO: some reaction?
+        return false;
     }
 
     // Read rights
@@ -85,6 +99,7 @@ bool IRMEngine::decrypt(BinaryXInputStream& aInputStream, BinaryXOutputStream& a
     if (FAILED(hr))
     {
         // TODO: some reaction?
+        return false;
     }
     mInfo.bCanRead = value;
 
@@ -94,6 +109,7 @@ bool IRMEngine::decrypt(BinaryXInputStream& aInputStream, BinaryXOutputStream& a
     if (FAILED(hr))
     {
         // TODO: some reaction?
+        return false;
     }
 
     char* pEncryptedBuffer = new char[*blockSize];
@@ -112,6 +128,7 @@ bool IRMEngine::decrypt(BinaryXInputStream& aInputStream, BinaryXOutputStream& a
         if (FAILED(hr))
         {
             // TODO: some reaction?
+            return false;
         }
 
         aOutputStream.writeArray(pDecryptedBuffer, bytes);
@@ -122,22 +139,26 @@ bool IRMEngine::decrypt(BinaryXInputStream& aInputStream, BinaryXOutputStream& a
     delete[] pEncryptedBuffer;
     delete[] pDecryptedBuffer;
 
+    rxOutputStream->flush();
+
     return true;
 }
 
-void IRMEngine::createEncryptionData(comphelper::SequenceAsHashMap& aEncryptionData,
-                                     const OUString rPassword)
+uno::Sequence<beans::NamedValue> IRMEngine::createEncryptionData(const OUString& /*rPassword*/)
 {
-    aEncryptionData["OOXPassword"] <<= rPassword;
-
     css::uno::Sequence<sal_uInt8> seq;
     seq.realloc(mInfo.license.getLength());
     memcpy(seq.getArray(), mInfo.license.getStr(), mInfo.license.getLength());
 
-    aEncryptionData["license"] <<= seq;
+    comphelper::SequenceAsHashMap aEncryptionData;
+    aEncryptionData["LicenseKey"] <<= seq;
+    aEncryptionData["CryptoType"] <<= OUString("DRMEncryptedDataSpace");
+    aEncryptionData["OOXPassword"] <<= OUString("1");
+
+    return aEncryptionData.getAsConstNamedValueList();
 }
 
-uno::Reference<io::XInputStream> IRMEngine::getStream(Sequence<NamedValue>& rStreams,
+uno::Reference<io::XInputStream> IRMEngine::getStream(const Sequence<NamedValue>& rStreams,
                                                       const OUString sStreamName)
 {
     for (const auto& aStream : rStreams)
@@ -155,7 +176,7 @@ uno::Reference<io::XInputStream> IRMEngine::getStream(Sequence<NamedValue>& rStr
     return nullptr;
 }
 
-bool IRMEngine::readEncryptionInfo(uno::Sequence<beans::NamedValue> aStreams)
+sal_Bool IRMEngine::readEncryptionInfo(const uno::Sequence<beans::NamedValue>& aStreams)
 {
     // Read TransformInfo storage for IRM ECMA documents (MS-OFFCRYPTO 2.2.4)
     uno::Reference<io::XInputStream> xTransformInfoStream
@@ -198,11 +219,11 @@ bool IRMEngine::readEncryptionInfo(uno::Sequence<beans::NamedValue> aStreams)
     return true;
 }
 
-bool IRMEngine::setupEncryption(css::uno::Sequence<css::beans::NamedValue>& rMediaEncData)
+sal_Bool IRMEngine::setupEncryption(const Sequence<NamedValue>& rMediaEncData)
 {
     for (int i = 0; i < rMediaEncData.getLength(); i++)
     {
-        if (rMediaEncData[i].Name == "license")
+        if (rMediaEncData[i].Name == "LicenseKey")
         {
             css::uno::Sequence<sal_uInt8> seq;
             rMediaEncData[i].Value >>= seq;
@@ -213,11 +234,13 @@ bool IRMEngine::setupEncryption(css::uno::Sequence<css::beans::NamedValue>& rMed
     return true;
 }
 
-void IRMEngine::writeEncryptionInfo(oox::ole::OleStorage& rOleStorage)
+Sequence<NamedValue> IRMEngine::writeEncryptionInfo()
 {
     // Write 0x6DataSpaces/DataSpaceMap
     Reference<XOutputStream> xDataSpaceMap(
-        rOleStorage.openOutputStream("\006DataSpaces/DataSpaceMap"), UNO_SET_THROW);
+        mxContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.io.SequenceOutputStream", mxContext),
+        UNO_QUERY);
     BinaryXOutputStream aDataSpaceMapStream(xDataSpaceMap, false);
 
     aDataSpaceMapStream.WriteInt32(8); // Header length
@@ -227,42 +250,37 @@ void IRMEngine::writeEncryptionInfo(oox::ole::OleStorage& rOleStorage)
     OUString sDataSpaceName("DRMEncryptedDataSpace");
     OUString sReferenceComponent("EncryptedPackage");
 
-    aDataSpaceMapStream.WriteInt32(0x58); // Length
+    aDataSpaceMapStream.WriteInt32(0x60); // Length
     aDataSpaceMapStream.WriteInt32(1); // References count
     aDataSpaceMapStream.WriteInt32(0); // References component type
 
     aDataSpaceMapStream.WriteInt32(sReferenceComponent.getLength() * 2);
     aDataSpaceMapStream.writeUnicodeArray(sReferenceComponent);
-    while (aDataSpaceMapStream.tell() % 4) // Padding
+    for (int i = 0; i < sReferenceComponent.getLength() * 2 % 4; i++) // Padding
     {
         aDataSpaceMapStream.writeValue<sal_Char>(0);
     }
 
     aDataSpaceMapStream.WriteInt32(sDataSpaceName.getLength() * 2);
     aDataSpaceMapStream.writeUnicodeArray(sDataSpaceName);
-    while (aDataSpaceMapStream.tell() % 4) // Padding
+    for (int i = 0; i < sDataSpaceName.getLength() * 2 % 4; i++) // Padding
     {
         aDataSpaceMapStream.writeValue<sal_Char>(0);
     }
 
-    // Write length
-    sal_uInt32 nLength = aDataSpaceMapStream.tell() - 8;
-    aDataSpaceMapStream.seek(8);
-    aDataSpaceMapStream.WriteInt32(nLength);
-
     aDataSpaceMapStream.close();
     xDataSpaceMap->flush();
-    xDataSpaceMap->closeOutput();
 
     // Write 0x6DataSpaces/Version
-    Reference<XOutputStream> xVersion(rOleStorage.openOutputStream("\006DataSpaces/Version"),
-                                      UNO_SET_THROW);
+    Reference<XOutputStream> xVersion(mxContext->getServiceManager()->createInstanceWithContext(
+                                          "com.sun.star.io.SequenceOutputStream", mxContext),
+                                      UNO_QUERY);
     BinaryXOutputStream aVersionStream(xVersion, false);
 
     OUString sFeatureIdentifier("Microsoft.Container.DataSpaces");
     aVersionStream.WriteInt32(sFeatureIdentifier.getLength() * 2);
     aVersionStream.writeUnicodeArray(sFeatureIdentifier);
-    while (aVersionStream.tell() % 4) // Padding
+    for (int i = 0; i < sFeatureIdentifier.getLength() * 2 % 4; i++) // Padding
     {
         aVersionStream.writeValue<sal_Char>(0);
     }
@@ -273,59 +291,55 @@ void IRMEngine::writeEncryptionInfo(oox::ole::OleStorage& rOleStorage)
 
     aVersionStream.close();
     xVersion->flush();
-    xVersion->closeOutput();
 
     // Write 0x6DataSpaces/DataSpaceInfo/[dataspacename]
-    OUString sStreamName = "\006DataSpaces/DataSpaceInfo/" + sDataSpaceName;
-    Reference<XOutputStream> xDataSpaceInfo(rOleStorage.openOutputStream(sStreamName),
-                                            UNO_SET_THROW);
+    Reference<XOutputStream> xDataSpaceInfo(
+        mxContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.io.SequenceOutputStream", mxContext),
+        UNO_QUERY);
     BinaryXOutputStream aDataSpaceInfoStream(xDataSpaceInfo, false);
 
-    aDataSpaceInfoStream.WriteInt32(8); // Header length
+    aDataSpaceInfoStream.WriteInt32(0x08); // Header length
     aDataSpaceInfoStream.WriteInt32(1); // Entries count
 
     OUString sTransformName("DRMEncryptedTransform");
     aDataSpaceInfoStream.WriteInt32(sTransformName.getLength() * 2);
     aDataSpaceInfoStream.writeUnicodeArray(sTransformName);
-    while (aDataSpaceInfoStream.tell() % 4) // Padding
+    for (int i = 0; i < sTransformName.getLength() * 2 % 4; i++) // Padding
     {
         aDataSpaceInfoStream.writeValue<sal_Char>(0);
     }
 
     aDataSpaceInfoStream.close();
     xDataSpaceInfo->flush();
-    xDataSpaceInfo->closeOutput();
 
     // Write 0x6DataSpaces/TransformInfo/[transformname]
-    sStreamName = "\006DataSpaces/TransformInfo/" + sTransformName + "/\006Primary";
-    Reference<XOutputStream> xTransformInfo(rOleStorage.openOutputStream(sStreamName),
-                                            UNO_SET_THROW);
+    Reference<XOutputStream> xTransformInfo(
+        mxContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.io.SequenceOutputStream", mxContext),
+        UNO_QUERY);
     BinaryXOutputStream aTransformInfoStream(xTransformInfo, false);
+    OUString sTransformId("{C73DFACD-061F-43B0-8B64-0C620D2A8B50}");
 
     // MS-OFFCRYPTO 2.1.8: TransformInfoHeader
-    aTransformInfoStream.WriteInt32(0); // TransformLength, will be written later
+    sal_uInt32 nLength
+        = sTransformId.getLength() * 2 + ((4 - (sTransformId.getLength() & 3)) & 3) + 10;
+    aTransformInfoStream.WriteInt32(nLength); // TransformLength, will be written later
     aTransformInfoStream.WriteInt32(1); // TransformType
 
     // TransformId
-    OUString sTransformId("{C73DFACD-061F-43B0-8B64-0C620D2A8B50}");
     aTransformInfoStream.WriteInt32(sTransformId.getLength() * 2);
     aTransformInfoStream.writeUnicodeArray(sTransformId);
-    while (aTransformInfoStream.tell() % 4) // Padding
+    for (int i = 0; i < sTransformId.getLength() * 2 % 4; i++) // Padding
     {
         aTransformInfoStream.writeValue<sal_Char>(0);
     }
-
-    // Calculate length and write it into beginning
-    nLength = aTransformInfoStream.tell();
-    aTransformInfoStream.seek(0);
-    aTransformInfoStream.WriteInt32(nLength);
-    aTransformInfoStream.seek(nLength);
 
     // TransformName
     OUString sTransformInfoName("Microsoft.Metadata.DRMTransform");
     aTransformInfoStream.WriteInt32(sTransformInfoName.getLength() * 2);
     aTransformInfoStream.writeUnicodeArray(sTransformInfoName);
-    while (aTransformInfoStream.tell() % 4) // Padding
+    for (int i = 0; i < sTransformInfoName.getLength() * 2 % 4; i++) // Padding
     {
         aTransformInfoStream.writeValue<sal_Char>(0);
     }
@@ -336,19 +350,36 @@ void IRMEngine::writeEncryptionInfo(oox::ole::OleStorage& rOleStorage)
 
     aTransformInfoStream.WriteInt32(4); // Extensibility Header
 
-    aTransformInfoStream.WriteInt32(mInfo.license.getLength() - 3); // LicenseLength
+    aTransformInfoStream.WriteInt32(mInfo.license.getLength() - 3); // LicenseLength - BOM
     aTransformInfoStream.writeArray<sal_Char>(mInfo.license.getStr() + 3,
                                               mInfo.license.getLength() - 3);
     aTransformInfoStream.writeValue<sal_Char>(0);
 
     aTransformInfoStream.close();
     xTransformInfo->flush();
-    xTransformInfo->closeOutput();
+
+    // Store all streams into sequence and return back
+    comphelper::SequenceAsHashMap aStreams;
+
+    Reference<XSequenceOutputStream> xDataSpaceMapSequence(xDataSpaceMap, UNO_QUERY);
+    aStreams["\006DataSpaces/DataSpaceMap"] <<= xDataSpaceMapSequence->getWrittenBytes();
+
+    Reference<XSequenceOutputStream> xVersionSequence(xVersion, UNO_QUERY);
+    aStreams["\006DataSpaces/Version"] <<= xVersionSequence->getWrittenBytes();
+
+    OUString sStreamName = "\006DataSpaces/DataSpaceInfo/" + sDataSpaceName;
+    Reference<XSequenceOutputStream> xDataSpaceInfoSequence(xDataSpaceInfo, UNO_QUERY);
+    aStreams[sStreamName] <<= xDataSpaceInfoSequence->getWrittenBytes();
+
+    sStreamName = "\006DataSpaces/TransformInfo/" + sTransformName + "/\006Primary";
+    Reference<XSequenceOutputStream> xTransformInfoSequence(xTransformInfo, UNO_QUERY);
+    aStreams[sStreamName] <<= xTransformInfoSequence->getWrittenBytes();
+
+    return aStreams.getAsConstNamedValueList();
 }
 
-void IRMEngine::encrypt(css::uno::Reference<css::io::XInputStream>& rxInputStream,
-                        css::uno::Reference<css::io::XOutputStream>& rxOutputStream,
-                        sal_uInt32 /*nSize*/)
+void IRMEngine::encrypt(const Reference<XInputStream>& rxInputStream,
+                        Reference<XOutputStream>& rxOutputStream)
 {
     HRESULT hr = IpcInitialize();
 
@@ -408,7 +439,7 @@ void IRMEngine::encrypt(css::uno::Reference<css::io::XInputStream>& rxInputStrea
     delete[] pDecryptedBuffer;
 }
 
-bool IRMEngine::generateEncryptionKey(const OUString& /*password*/) { return true; }
+sal_Bool IRMEngine::generateEncryptionKey(const OUString& /*password*/) { return true; }
 
 } // namespace core
 } // namespace oox
