@@ -9,7 +9,6 @@
 
 #include "QRCodeContext.hxx"
 
-#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -18,18 +17,12 @@
 #include <com/sun/star/drawing/QRCodeErrorCorrection.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
-#include <sal/log.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/storagehelper.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <sax/tools/converter.hxx>
 
-#include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 
 using namespace css;

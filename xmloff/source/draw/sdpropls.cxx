@@ -62,8 +62,6 @@
 #include <sax/tools/converter.hxx>
 #include <xmlsdtypes.hxx>
 
-#include "sdxmlexp_impl.hxx"
-
 using ::com::sun::star::uno::Any;
 
 using namespace ::com::sun::star;

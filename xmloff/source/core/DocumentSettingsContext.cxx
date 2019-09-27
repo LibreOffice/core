@@ -29,7 +29,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <comphelper/base64.hxx>
 
 #include <vector>
@@ -43,7 +42,6 @@
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>

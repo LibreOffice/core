@@ -22,7 +22,6 @@
 #include <sal/log.hxx>
 
 #include <stack>
-#include <string.h>
 
 #include <officecfg/Office/Common.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
@@ -51,13 +50,11 @@
 #include <xmloff/xmlnumfe.hxx>
 #include <xmloff/xmlmetae.hxx>
 #include <xmloff/XMLSettingsExportContext.hxx>
-#include <xmloff/families.hxx>
 #include <xmloff/XMLEventExport.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <XMLStarBasicExportHandler.hxx>
 #include <XMLScriptExportHandler.hxx>
 #include <xmloff/SettingsExportHelper.hxx>
-#include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -83,12 +80,7 @@
 #include <comphelper/extract.hxx>
 #include <PropertySetMerger.hxx>
 
-#include <svl/urihelper.hxx>
-#include <xmloff/xformsexport.hxx>
-
 #include <unotools/docinfohelper.hxx>
-#include <unotools/bootstrap.hxx>
-#include <unotools/configmgr.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XMLOasisBasicExporter.hpp>

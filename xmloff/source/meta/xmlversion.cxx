@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <unotools/streamwrap.hxx>
 #include <xmlversion.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlmetae.hxx>
@@ -28,7 +27,6 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>

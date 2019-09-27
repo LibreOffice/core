@@ -20,13 +20,12 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <propimp0.hxx>
-#include "sdxmlexp_impl.hxx"
-#include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
 #include <sax/tools/converter.hxx>
 
+#include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlimp.hxx>
 

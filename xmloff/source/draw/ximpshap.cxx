@@ -19,7 +19,6 @@
 
 #include <cassert>
 
-#include <tools/debug.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -28,7 +27,6 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
-#include <com/sun/star/container/XIdentifierAccess.hpp>
 #include <com/sun/star/drawing/GluePoint2.hpp>
 #include <com/sun/star/drawing/Alignment.hpp>
 #include <com/sun/star/drawing/EscapeDirection.hpp>
@@ -61,9 +59,7 @@
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <PropertySetMerger.hxx>
 #include <xmloff/families.hxx>
-#include "ximpstyl.hxx"
 #include<xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <EnhancedCustomShapeToken.hxx>
@@ -92,8 +88,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <o3tl/safeint.hxx>
-
-#include <config_features.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

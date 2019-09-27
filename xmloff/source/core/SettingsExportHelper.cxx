@@ -21,7 +21,6 @@
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/SettingsExportHelper.hxx>
-#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
@@ -37,7 +36,6 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>

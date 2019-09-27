@@ -26,7 +26,7 @@
 
 #include <sax/tools/converter.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <tools/date.hxx>
 
 namespace xmloff

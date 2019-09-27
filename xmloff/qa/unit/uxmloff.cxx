@@ -16,6 +16,7 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 
+#include <xmloff/maptype.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlexp.hxx>
@@ -23,9 +24,7 @@
 #include <xmloff/xmlaustp.hxx>
 #include <SchXMLExport.hxx>
 #include <XMLChartPropertySetMapper.hxx>
-#include <impastpl.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/util/MeasureUnit.hpp>
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;

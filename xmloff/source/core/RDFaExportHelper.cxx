@@ -30,8 +30,6 @@
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/rdf/Statement.hpp>
-#include <com/sun/star/rdf/URIs.hpp>
-#include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/XLiteral.hpp>
 #include <com/sun/star/rdf/XRepositorySupplier.hpp>
 #include <com/sun/star/rdf/XDocumentRepository.hpp>
@@ -39,7 +37,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
-#include <functional>
 #include <algorithm>
 
 using namespace ::com::sun::star;

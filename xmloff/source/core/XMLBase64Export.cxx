@@ -22,7 +22,6 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 
-#include <sax/tools/converter.hxx>
 #include <comphelper/base64.hxx>
 
 #include <xmloff/xmlexp.hxx>

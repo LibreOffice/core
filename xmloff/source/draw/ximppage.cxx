@@ -29,7 +29,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include "ximppage.hxx"
-#include "ximpshap.hxx"
 #include <animimp.hxx>
 #include <XMLStringBufferImportContext.hxx>
 #include <xmloff/xmlictxt.hxx>

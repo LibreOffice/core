@@ -39,12 +39,10 @@
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <comphelper/processfactory.hxx>

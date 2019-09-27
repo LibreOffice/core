@@ -20,8 +20,8 @@
 #define INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLPLOTAREACONTEXT_HXX
 
 #include "SchXMLChartContext.hxx"
-#include <xmloff/txtimp.hxx>
 #include <xmloff/xmlictxt.hxx>
+#include <xmloff/prstylei.hxx>
 #include <xmloff/shapeimport.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>

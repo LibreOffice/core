@@ -43,19 +43,15 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <xmloff/xmlmetae.hxx>
 #include <xmloff/SchXMLSeriesHelper.hxx>
-#include <xexptran.hxx>
 #include <rtl/math.hxx>
 
 #include <vector>
-#include <typeinfo>
 #include <algorithm>
 #include <queue>
 #include <iterator>
 #include <numeric>
 
-#include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -66,18 +62,14 @@
 #include <com/sun/star/chart/XAxis.hpp>
 #include <com/sun/star/chart/XAxisSupplier.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
-#include <com/sun/star/chart/ChartLegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
-#include <com/sun/star/chart/ChartAxisType.hpp>
 #include <com/sun/star/chart/TimeIncrement.hpp>
 #include <com/sun/star/chart/TimeInterval.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
-#include <com/sun/star/chart/ChartSeriesAddress.hpp>
 #include <com/sun/star/chart/X3DDisplay.hpp>
 #include <com/sun/star/chart/XStatisticDisplay.hpp>
-#include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
 
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
@@ -91,7 +83,6 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
-#include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
@@ -100,8 +91,6 @@
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 
 #include <com/sun/star/util/MeasureUnit.hpp>
-#include <com/sun/star/util/XStringMapping.hpp>
-#include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/embed/Aspects.hpp>

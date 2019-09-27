@@ -19,11 +19,8 @@
 
 #include "formattributes.hxx"
 
-#include <sax/tools/converter.hxx>
-
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
 

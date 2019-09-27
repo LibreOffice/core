@@ -18,18 +18,10 @@
  */
 
 #include "ximp3dobject.hxx"
-#include <xmloff/XMLShapeStyleContext.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#include <com/sun/star/drawing/PointSequence.hpp>
 #include <xexptran.hxx>
-#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
-#include <xmloff/families.hxx>
-#include "ximpstyl.hxx"
-#include <xmloff/xmltoken.hxx>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
-#include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <osl/diagnose.h>

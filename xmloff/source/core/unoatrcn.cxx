@@ -18,7 +18,6 @@
  */
 
 #include <memory>
-#include <string.h>
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <o3tl/any.hxx>
 #include <rtl/ustrbuf.hxx>

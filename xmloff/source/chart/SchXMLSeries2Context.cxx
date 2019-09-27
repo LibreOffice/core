@@ -22,31 +22,25 @@
 #include "SchXMLRegressionCurveObjectContext.hxx"
 #include "SchXMLPropertyMappingContext.hxx"
 #include "SchXMLTools.hxx"
-#include "PropertyMap.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
-#include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
 #include <com/sun/star/chart/ChartSymbolType.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/processfactory.hxx>
 
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -54,10 +48,7 @@
 #include <xmloff/SchXMLSeriesHelper.hxx>
 #include <SchXMLImport.hxx>
 #include <xmloff/prstylei.hxx>
-#include <xmloff/xmlprmap.hxx>
 #include <tools/diagnose_ex.h>
-
-#include <typeinfo>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;

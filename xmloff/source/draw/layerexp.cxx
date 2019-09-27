@@ -24,8 +24,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlexp.hxx>
-#include <xmloff/xmlement.hxx>
-#include <xmloff/nmspmap.hxx>
 #include "layerexp.hxx"
 #include <osl/diagnose.h>
 

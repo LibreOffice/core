@@ -32,7 +32,6 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <comphelper/extract.hxx>
-#include "callbacks.hxx"
 #include <xmloff/xmlnmspe.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -41,10 +40,6 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <unotools/datetime.hxx>
 #include <rtl/strbuf.hxx>
-
-#if OSL_DEBUG_LEVEL > 0
-    #include <osl/thread.h>
-#endif
 
 namespace xmloff
 {

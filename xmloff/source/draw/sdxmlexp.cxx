@@ -23,15 +23,11 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlmetae.hxx>
-#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
-#include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include "sdxmlexp_impl.hxx"
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -40,13 +36,11 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/style/XStyle.hpp>
 
 #include <com/sun/star/form/XFormsSupplier2.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/Duration.hpp>
@@ -64,12 +58,9 @@
 #include <xmloff/ProgressBarHelper.hxx>
 #include "sdpropls.hxx"
 #include <xmloff/xmlexppr.hxx>
-#include <com/sun/star/beans/XPropertyState.hpp>
 #include <facreg.hxx>
-#include <xexptran.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <PropertySetMerger.hxx>
 #include "layerexp.hxx"
 

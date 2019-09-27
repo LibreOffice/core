@@ -30,12 +30,10 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/mediadescriptor.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmlement.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlstyle.hxx>
-#include <xmloff/prstylei.hxx>
 #include <xmloff/SchXMLSeriesHelper.hxx>
 
 #include <vector>
@@ -43,12 +41,9 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagram.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/util/XStringMapping.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <com/sun/star/chart/ChartSeriesAddress.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 

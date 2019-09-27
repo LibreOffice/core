@@ -27,8 +27,6 @@
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 
-#include "sdpropls.hxx"
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
