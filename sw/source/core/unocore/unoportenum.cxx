@@ -396,7 +396,7 @@ lcl_FillFieldMarkArray(std::deque<sal_Int32> & rFieldMarks, SwUnoCursor const & 
     if (!pTextNode) return;
 
     const sal_Unicode fld[] = {
-        CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND, CH_TXT_ATR_FORMELEMENT, 0 };
+        CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDSEP, CH_TXT_ATR_FIELDEND, CH_TXT_ATR_FORMELEMENT, 0 };
     sal_Int32 pos = std::max(static_cast<sal_Int32>(0), i_nStartPos);
     while ((pos = ::comphelper::string::indexOfAny(pTextNode->GetText(), fld, pos)) != -1)
     {
@@ -442,6 +442,13 @@ lcl_ExportFieldMark(
             pPortion->SetBookmark(
                 SwXFieldmark::CreateXFieldmark(*pDoc, pFieldmark));
         }
+    }
+    else if (CH_TXT_ATR_FIELDSEP == Char)
+    {
+        // TODO how to get the field?
+        SwXTextPortion* pPortion = new SwXTextPortion(
+            pUnoCursor, i_xParentText, PORTION_FIELD_SEP);
+        xRef = pPortion;
     }
     else if (CH_TXT_ATR_FIELDEND == Char)
     {

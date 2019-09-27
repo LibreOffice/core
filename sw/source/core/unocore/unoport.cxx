@@ -247,6 +247,7 @@ void SwXTextPortion::GetPropertyValue(
             case PORTION_SOFT_PAGEBREAK:pRet = "SoftPageBreak";break;
             case PORTION_META:          pRet = UNO_NAME_META; break;
             case PORTION_FIELD_START:pRet = "TextFieldStart";break;
+            case PORTION_FIELD_SEP:     pRet = "TextFieldSeparator";break;
             case PORTION_FIELD_END:pRet = "TextFieldEnd";break;
             case PORTION_FIELD_START_END:pRet = "TextFieldStartEnd";break;
             case PORTION_ANNOTATION:
@@ -300,6 +301,7 @@ void SwXTextPortion::GetPropertyValue(
                 case PORTION_RUBY_START:
                 case PORTION_RUBY_END:
                 case PORTION_FIELD_START:
+                case PORTION_FIELD_SEP:
                 case PORTION_FIELD_END:
                     rVal <<= m_bIsCollapsed;
                 break;
@@ -326,6 +328,7 @@ void SwXTextPortion::GetPropertyValue(
                 case PORTION_BOOKMARK_END:
                 case PORTION_REDLINE_END:
                 case PORTION_RUBY_END:
+                case PORTION_FIELD_SEP:
                 case PORTION_FIELD_END:
                     bStart = false;
                 break;
