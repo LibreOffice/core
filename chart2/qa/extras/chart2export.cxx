@@ -120,6 +120,7 @@ public:
     void testSetSeriesToSecondaryAxisXLSX();
     void testCombinedChartSecondaryAxisXLSX();
     void testCombinedChartSecondaryAxisODS();
+    void testCrossBetweenXLSX();
     void testAxisTitleRotationXLSX();
     void testAxisCrossBetweenXSLX();
     void testPieChartDataPointExplosionXLSX();
@@ -223,6 +224,7 @@ public:
     CPPUNIT_TEST(testSetSeriesToSecondaryAxisXLSX);
     CPPUNIT_TEST(testCombinedChartSecondaryAxisXLSX);
     CPPUNIT_TEST(testCombinedChartSecondaryAxisODS);
+    CPPUNIT_TEST(testCrossBetweenXLSX);
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
     CPPUNIT_TEST(testAxisCrossBetweenXSLX);
     CPPUNIT_TEST(testPieChartDataPointExplosionXLSX);
@@ -1899,6 +1901,15 @@ void Chart2ExportTest::testCombinedChartSecondaryAxisODS()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[2]/c:axId", "val", YValueIdOfBarchart);
     // do not need CT_crosses tag if the actual axis is deleted, so we need to make sure it is not saved
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx[2]/c:crosses", 0);
+}
+
+void Chart2ExportTest::testCrossBetweenXLSX()
+{
+    // Original file was created with MS Office
+    load("/chart2/qa/extras/data/xlsx/", "tdf127777.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:crossBetween", "val", "between");
 }
 
 void Chart2ExportTest::testAxisTitleRotationXLSX()
