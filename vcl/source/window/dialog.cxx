@@ -1179,13 +1179,13 @@ void Dialog::EndDialog( long nResult )
     if ( mpDialogImpl->mbStartedModal )
         ImplEndExecuteModal();
 
-    if (mpDialogImpl->maEndCtx.isSet())
+    if ( mpDialogImpl && mpDialogImpl->maEndCtx.isSet() )
     {
-        mpDialogImpl->maEndCtx.maEndDialogFn(nResult);
-        mpDialogImpl->maEndCtx.maEndDialogFn = nullptr;
+        auto fn = std::move(mpDialogImpl->maEndCtx.maEndDialogFn);
+        fn(nResult);
     }
 
-    if ( mpDialogImpl->mbStartedModal )
+    if ( mpDialogImpl && mpDialogImpl->mbStartedModal )
     {
         mpDialogImpl->mbStartedModal = false;
         mpDialogImpl->mnResult = -1;
@@ -1193,10 +1193,13 @@ void Dialog::EndDialog( long nResult )
 
     mbInExecute = false;
 
-    // Destroy ourselves (if we have a context with VclPtr owner)
-    std::shared_ptr<weld::DialogController> xOwnerDialog = std::move(mpDialogImpl->maEndCtx.mxOwnerDialog);
-    mpDialogImpl->maEndCtx.mxOwner.disposeAndClear();
-    xOwnerDialog.reset();
+    if ( mpDialogImpl )
+    {
+        // Destroy ourselves (if we have a context with VclPtr owner)
+        std::shared_ptr<weld::DialogController> xOwnerDialog = std::move(mpDialogImpl->maEndCtx.mxOwnerDialog);
+        mpDialogImpl->maEndCtx.mxOwner.disposeAndClear();
+        xOwnerDialog.reset();
+    }
 }
 
 void Dialog::EndAllDialogs( vcl::Window const * pParent )
