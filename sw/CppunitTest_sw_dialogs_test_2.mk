@@ -11,6 +11,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitScreenShot,sw_dialogs_test2))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_dialogs_test_2))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_dialogs_test2, \
     sw/qa/unit/sw-dialogs-test_2 \
 ))

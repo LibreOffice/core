@@ -11,6 +11,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sw_ww8import))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_ww8import))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_ww8import, \
     sw/qa/extras/ww8import/ww8import \
 ))

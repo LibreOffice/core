@@ -11,6 +11,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sw_accessible_relation_set))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_accessible_relation_set))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_accessible_relation_set, \
     sw/qa/extras/accessibility/accessible_relation_set \
 ))

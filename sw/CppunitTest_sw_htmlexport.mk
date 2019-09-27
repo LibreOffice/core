@@ -11,6 +11,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sw_htmlexport))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_htmlexport))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_htmlexport, \
     sw/qa/extras/htmlexport/htmlexport \
 ))

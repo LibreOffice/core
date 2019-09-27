@@ -31,6 +31,8 @@ define sw_ooxmlexport_test
 
 $(eval $(call gb_CppunitTest_CppunitTest,sw_ooxmlexport$(1)))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_ooxmlexport$(1)))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_ooxmlexport$(1), \
     sw/qa/extras/ooxmlexport/ooxmlexport$(1) \
 ))

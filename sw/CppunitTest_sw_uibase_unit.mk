@@ -13,6 +13,8 @@ $(eval $(call gb_CppunitTest_use_external,sw_uibase_unit,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,sw_uibase_unit))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_uibase_unit))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_uibase_unit, \
     sw/qa/unit/uibase \
 ))

@@ -11,6 +11,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sw_rtfexport2))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_rtfexport2))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_rtfexport2, \
     sw/qa/extras/rtfexport/rtfexport2 \
 ))

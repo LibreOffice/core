@@ -9,6 +9,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sw_mailmerge))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_mailmerge))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_mailmerge, \
     sw/qa/extras/mailmerge/mailmerge \
 ))
