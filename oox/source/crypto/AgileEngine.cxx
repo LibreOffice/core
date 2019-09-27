@@ -30,6 +30,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/SequenceInputStream.hpp>
+#include <com/sun/star/io/XSequenceOutputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
@@ -46,6 +47,14 @@ using namespace css::xml;
 
 namespace oox {
 namespace core {
+
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+    com_sun_star_comp_oox_crypto_Agile_get_implementation(
+        XComponentContext* pCtx, Sequence<Any> const& /*arguments*/)
+{
+    return cppu::acquire(new AgileEngine(pCtx/*, arguments*/));
+}
+
 
 namespace {
 
@@ -350,7 +359,7 @@ void AgileEngine::decryptEncryptionKey(OUString const & rPassword)
 }
 
 // TODO: Rename
-bool AgileEngine::generateEncryptionKey(OUString const & rPassword)
+sal_Bool AgileEngine::generateEncryptionKey(OUString const & rPassword)
 {
     bool bResult = decryptAndCheckVerifierHash(rPassword);
 
@@ -414,7 +423,7 @@ bool AgileEngine::decryptHmacValue()
     return true;
 }
 
-bool AgileEngine::checkDataIntegrity()
+sal_Bool AgileEngine::checkDataIntegrity()
 {
     bool bResult = (mInfo.hmacHash.size() == mInfo.hmacCalculatedHash.size() &&
                std::equal(mInfo.hmacHash.begin(), mInfo.hmacHash.end(), mInfo.hmacCalculatedHash.begin()));
@@ -422,10 +431,13 @@ bool AgileEngine::checkDataIntegrity()
     return bResult;
 }
 
-bool AgileEngine::decrypt(BinaryXInputStream& aInputStream,
-                          BinaryXOutputStream& aOutputStream)
+sal_Bool AgileEngine::decrypt(const css::uno::Reference<css::io::XInputStream>&  rxInputStream,
+    css::uno::Reference<css::io::XOutputStream>& rxOutputStream)
 {
     CryptoHash aCryptoHash(mInfo.hmacKey, cryptoHashTypeFromString(mInfo.hashAlgorithm));
+
+    BinaryXInputStream aInputStream(rxInputStream, true);
+    BinaryXOutputStream aOutputStream(rxOutputStream, true);
 
     sal_uInt32 totalSize = aInputStream.readuInt32(); // Document unencrypted size - 4 bytes
     // account for size in HMAC
@@ -484,10 +496,12 @@ bool AgileEngine::decrypt(BinaryXInputStream& aInputStream,
 
     mInfo.hmacCalculatedHash = aCryptoHash.finalize();
 
+    rxOutputStream->flush();
+
     return true;
 }
 
-uno::Reference<io::XInputStream> AgileEngine::getStream(Sequence<NamedValue> & rStreams, const OUString sStreamName)
+uno::Reference<io::XInputStream> AgileEngine::getStream(const Sequence<NamedValue> & rStreams, const OUString sStreamName)
 {
     for (const auto & aStream : rStreams)
     {
@@ -502,7 +516,7 @@ uno::Reference<io::XInputStream> AgileEngine::getStream(Sequence<NamedValue> & r
     return nullptr;
 }
 
-bool AgileEngine::readEncryptionInfo(Sequence<NamedValue> aStreams)
+sal_Bool AgileEngine::readEncryptionInfo(const Sequence<NamedValue>& aStreams)
 {
     uno::Reference<io::XInputStream> xEncryptionInfo = getStream(aStreams, "EncryptionInfo");
 
@@ -682,7 +696,7 @@ bool AgileEngine::encryptEncryptionKey(OUString const & rPassword)
     return true;
 }
 
-bool AgileEngine::setupEncryption(css::uno::Sequence<css::beans::NamedValue>& rMediaEncData)
+sal_Bool AgileEngine::setupEncryption(const css::uno::Sequence<css::beans::NamedValue>& rMediaEncData)
 {
     if (meEncryptionPreset == AgileEncryptionPreset::AES_128_SHA1)
         setupEncryptionParameters({ 100000, 16, 128, 20, 16, OUString("AES"), OUString("ChainingModeCBC"), OUString("SHA1") });
@@ -692,7 +706,7 @@ bool AgileEngine::setupEncryption(css::uno::Sequence<css::beans::NamedValue>& rM
     OUString sPassword;
     for (int i = 0; i < rMediaEncData.getLength(); i++)
     {
-        if (rMediaEncData[i].Name == "Password")
+        if (rMediaEncData[i].Name == "OOXPassword")
         {
             OUString sCryptoType;
             rMediaEncData[i].Value >>= sPassword;
@@ -702,9 +716,13 @@ bool AgileEngine::setupEncryption(css::uno::Sequence<css::beans::NamedValue>& rM
     return setupEncryptionKey(sPassword);
 }
 
-void AgileEngine::createEncryptionData(comphelper::SequenceAsHashMap & aEncryptionData, const OUString rPassword)
+uno::Sequence<beans::NamedValue> AgileEngine::createEncryptionData(const OUString & rPassword)
 {
+    comphelper::SequenceAsHashMap aEncryptionData;
     aEncryptionData["OOXPassword"] <<= rPassword;
+    aEncryptionData["CryptoType"] <<= OUString("AgileEngine");
+
+    return aEncryptionData.getAsConstNamedValueList();
 }
 
 void AgileEngine::setupEncryptionParameters(AgileEncryptionParameters const & rAgileEncryptionParameters)
@@ -738,10 +756,12 @@ bool AgileEngine::setupEncryptionKey(OUString const & rPassword)
     return true;
 }
 
-void AgileEngine::writeEncryptionInfo(oox::ole::OleStorage& rOleStorage)
+css::uno::Sequence<css::beans::NamedValue> AgileEngine::writeEncryptionInfo()
 {
-    Reference<XOutputStream> xEncryptionInfo(rOleStorage.openOutputStream("EncryptionInfo"), UNO_SET_THROW);
-    BinaryXOutputStream rStream(xEncryptionInfo, false);
+    Reference<XOutputStream> aEncryptionInfoStream(
+        mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.io.SequenceOutputStream", mxContext),
+        UNO_QUERY);
+    BinaryXOutputStream rStream(aEncryptionInfoStream, false);
 
     rStream.WriteUInt32(msfilter::VERSION_INFO_AGILE);
     rStream.WriteUInt32(msfilter::AGILE_ENCRYPTION_RESERVED);
@@ -798,21 +818,28 @@ void AgileEngine::writeEncryptionInfo(oox::ole::OleStorage& rOleStorage)
     rStream.writeMemory(aMemStream.GetData(), aMemStream.GetSize());
 
     rStream.close();
-    xEncryptionInfo->flush();
-    xEncryptionInfo->closeOutput();
+    aEncryptionInfoStream->flush();
+
+    // Store all streams into sequence and return back
+    comphelper::SequenceAsHashMap aStreams;
+
+    Reference<XSequenceOutputStream> aEncryptionInfoSequenceStream(aEncryptionInfoStream, UNO_QUERY);
+    aStreams["EncryptionInfo"] <<= aEncryptionInfoSequenceStream->getWrittenBytes();
+    return aStreams.getAsConstNamedValueList();
 }
 
-void AgileEngine::encrypt(css::uno::Reference<css::io::XInputStream> &  rxInputStream,
-                          css::uno::Reference<css::io::XOutputStream> & rxOutputStream,
-                          sal_uInt32 nSize)
+void AgileEngine::encrypt(const css::uno::Reference<css::io::XInputStream> &  rxInputStream,
+                          css::uno::Reference<css::io::XOutputStream> & rxOutputStream)
 {
     CryptoHash aCryptoHash(mInfo.hmacKey, cryptoHashTypeFromString(mInfo.hashAlgorithm));
 
     BinaryXOutputStream aBinaryOutputStream(rxOutputStream, false);
     BinaryXInputStream aBinaryInputStream(rxInputStream, false);
+    Reference<XSeekable> xSeekable(rxInputStream, UNO_QUERY);
+    sal_uInt32 nLength = xSeekable->getLength();
 
     std::vector<sal_uInt8> aSizeBytes(sizeof(sal_uInt32));
-    ByteOrderConverter::writeLittleEndian(aSizeBytes.data(), nSize);
+    ByteOrderConverter::writeLittleEndian(aSizeBytes.data(), nLength);
     aBinaryOutputStream.writeMemory(aSizeBytes.data(), aSizeBytes.size()); // size
     aCryptoHash.update(aSizeBytes, aSizeBytes.size());
 

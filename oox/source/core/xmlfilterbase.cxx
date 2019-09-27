@@ -912,6 +912,11 @@ bool XmlFilterBase::implFinalizeExport( MediaDescriptor& rMediaDescriptor )
                                         MediaDescriptor::PROP_ENCRYPTIONDATA(),
                                         Sequence< NamedValue >() );
 
+    /*comphelper::SequenceAsHashMap aEncryptionData;
+    aEncryptionData["LicenseKey"] <<= OUString("DRMasdasd");
+    aEncryptionData["CryptoType"] <<= OUString("DRMEncryptedDataSpace");
+    aMediaEncData = aEncryptionData.getAsConstNamedValueList();*/
+
     if (aMediaEncData.getLength())
     {
         commitStorage();
