@@ -460,6 +460,51 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126512_OOXML_handle_in_ODP)
     }
     CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
 }
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Mirror)
+{
+    // The document contains two shapes, one with horizontal flip, the other with vertical
+    // flip. They are diamonds, so their text frame is symmetric to the center of the shape.
+    // The shapes have not stroke and no fill, so that the bounding box sourrounds the text
+    // and therefore equals approximately the text frame.
+    // Error was, that because of wrong calculation, the flipped shapes do not use the
+    // text frame but the frame rectangle for their text.
+    const OUString sFileName("tdf127785_Mirror.odp");
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+    OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
+
+    uno::Reference<drawing::XShape> xShapeV(getShape(0));
+    uno::Reference<beans::XPropertySet> xShapeVProps(xShapeV, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeVProps.is());
+    awt::Rectangle aBoundRectV;
+    xShapeVProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectV;
+    const sal_Int32 nHeightV = aBoundRectV.Height;
+    const sal_Int32 nWidthV = aBoundRectV.Width;
+    const sal_Int32 nLeftV = aBoundRectV.X;
+    const sal_Int32 nTopV = aBoundRectV.Y;
+    if (abs(nHeightV - 4149) > 5 || abs(nWidthV - 3819) > 5)
+        sErrors += "Flip vertical wrong size.";
+    if (abs(nLeftV - 3155) > 5 || abs(nTopV - 3736) > 5)
+        sErrors += " Flip vertical wrong position.";
+
+    uno::Reference<drawing::XShape> xShapeH(getShape(1));
+    uno::Reference<beans::XPropertySet> xShapeHProps(xShapeH, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeHProps.is());
+    awt::Rectangle aBoundRectH;
+    xShapeHProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectH;
+    const sal_Int32 nHeightH = aBoundRectH.Height;
+    const sal_Int32 nWidthH = aBoundRectH.Width;
+    const sal_Int32 nLeftH = aBoundRectH.X;
+    const sal_Int32 nTopH = aBoundRectH.Y;
+    if (abs(nHeightH - 4149) > 5 || abs(nWidthH - 3819) > 5)
+        sErrors += " Flip horizontal wrong size.";
+    if (abs(nLeftH - 15026) > 5 || abs(nTopH - 4115) > 5)
+        sErrors += " Flip horizontal wrong position.";
+
+    CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
