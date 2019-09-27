@@ -177,7 +177,6 @@ public:
     void Update(EditableColorConfig const*, EditableExtendedColorConfig const*);
     void ClickHdl(EditableColorConfig*, weld::ToggleButton&);
     void ColorHdl(EditableColorConfig*, EditableExtendedColorConfig*, ColorListBox*);
-    void Init(weld::ScrolledWindow* pVScroll);
 
     weld::Widget& GetWidget1()
     {
@@ -240,7 +239,6 @@ private:
 
 private:
     weld::Window* m_pTopLevel;
-    weld::ScrolledWindow* m_pVScroll;
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xGrid;
     std::unique_ptr<weld::Widget> m_xWidget1;
@@ -459,11 +457,6 @@ void ColorConfigWindow_Impl::AdjustExtraWidths(int nTextWidth)
         vEntries[i]->set_width_request(nTextWidth);
 }
 
-void ColorConfigWindow_Impl::Init(weld::ScrolledWindow* pVScroll)
-{
-    m_pVScroll = pVScroll;
-}
-
 // SetLinks()
 void ColorConfigWindow_Impl::SetLinks(Link<weld::ToggleButton&,void> const& aCheckLink,
                                       Link<ColorListBox&,void> const& aColorLink,
@@ -626,7 +619,6 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(weld::Window* pTopLevel, weld::Builde
     , pColorConfig(nullptr)
     , pExtColorConfig(nullptr)
 {
-    m_xScrollWindow->Init(m_xVScroll.get());
     m_xBody->set_stack_background();
 
     Link<weld::ToggleButton&,void> aCheckLink = LINK(this, ColorConfigCtrl_Impl, ClickHdl);
