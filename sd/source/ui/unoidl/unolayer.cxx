@@ -264,6 +264,15 @@ bool SdLayer::get( LayerAttribute what ) throw()
                 case LOCKED:    return pFrameView->GetLockedLayers().IsSet(pLayer->GetID());
                 }
         }
+
+        // no view at all, e.g. Draw embedded as OLE in text document, ODF default values
+        switch(what)
+        {
+            case VISIBLE:   return true;
+            case PRINTABLE: return true;
+            case LOCKED:    return false;
+        }
+
     }
     return false; //TODO: uno::Exception?
 }
