@@ -39,9 +39,9 @@ void RemoveFootnotesForNode(
 
 }
 
-// There exists a special section on a page for footnotes. It's called
+// There exists a special container frame on a page for footnotes. It's called
 // SwFootnoteContFrame. Each footnote is separated by a SwFootnoteFrame which contains
-// the paragraphs of a footnote. SwFootnoteFrame can be split and will then
+// the text frames of a footnote. SwFootnoteFrame can be split and will then
 // continue on another page.
 class SwFootnoteContFrame: public SwLayoutFrame
 {
