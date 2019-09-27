@@ -13,6 +13,8 @@ $(eval $(call gb_CppunitTest_CppunitTest,sd_filters_test))
 
 $(eval $(call gb_CppunitTest_use_external,sd_filters_test,boost_headers))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sd_filters_test))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_filters_test, \
     sd/qa/unit/filters-test \
 ))
