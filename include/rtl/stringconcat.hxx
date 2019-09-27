@@ -15,6 +15,8 @@
 #include "rtl/ustring.h"
 
 #include <cstddef>
+#include <utility>
+
 #include <string.h>
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
