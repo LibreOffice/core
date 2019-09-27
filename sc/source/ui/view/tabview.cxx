@@ -2569,7 +2569,8 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
             std::stringstream ss;
             ss << aNewSize.Width() << ", " << aNewSize.Height();
             OString sSize = ss.str().c_str();
-            aViewData.GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sSize.getStr());
+            ScModelObj* pModel = ScModelObj::getImplementation(aViewData.GetViewShell()->GetCurrentDocument());
+            SfxLokHelper::notifyDocumentSizeChanged(aViewData.GetViewShell(), sSize, pModel);
 
             // New area extended to the bottom of the sheet after last row
             // excluding overlapping area with aNewColArea
@@ -2704,12 +2705,16 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 
         if (pDocSh)
         {
-            // Provide size in the payload, so clients don't have to
-            // call lok::Document::getDocumentSize().
-            std::stringstream ss;
-            ss << aNewSize.Width() << ", " << aNewSize.Height();
-            OString sSize = ss.str().c_str();
-            aViewData.GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sSize.getStr());
+            if (aOldSize != aNewSize)
+            {
+                // Provide size in the payload, so clients don't have to
+                // call lok::Document::getDocumentSize().
+                std::stringstream ss;
+                ss << aNewSize.Width() << ", " << aNewSize.Height();
+                OString sSize = ss.str().c_str();
+                ScModelObj* pModel = ScModelObj::getImplementation(aViewData.GetViewShell()->GetCurrentDocument());
+                SfxLokHelper::notifyDocumentSizeChanged(aViewData.GetViewShell(), sSize, pModel);
+            }
 
             // New area extended to the right of the sheet after last column
             // including overlapping area with aNewRowArea
