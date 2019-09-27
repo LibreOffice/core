@@ -17,7 +17,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <oox/crypto/CryptoEngine.hxx>
 #include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -25,6 +24,7 @@ namespace com { namespace sun { namespace star {
     namespace io { class XInputStream; }
     namespace io { class XStream; }
     namespace uno { class XComponentContext; }
+    namespace packages { class XPackageEncryption; }
 } } }
 
 namespace oox { namespace ole { class OleStorage; } }
@@ -37,8 +37,7 @@ class OOX_DLLPUBLIC DocumentDecryption
 private:
     oox::ole::OleStorage&                      mrOleStorage;
     css::uno::Sequence<css::beans::NamedValue> maStreamsSequence;
-    std::unique_ptr<CryptoEngine>              mEngine;
-    OUString                                   msEngineName;
+    css::uno::Reference< css::packages::XPackageEncryption > mxPackageEncryption;
     css::uno::Reference< css::uno::XComponentContext > mxContext;
 
     void readStrongEncryptionInfo();
