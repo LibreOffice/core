@@ -62,7 +62,7 @@ public:
     void enableInteropGrabBag(const OUString& aName);
     css::beans::PropertyValue getInteropGrabBag();
     void disableInteropGrabBag();
-    bool isInteropGrabBagEnabled();
+    bool isInteropGrabBagEnabled() const;
 };
 }}
 

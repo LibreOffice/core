@@ -71,7 +71,7 @@ public:
 
     void AppendInteropGrabBag(const css::beans::PropertyValue& rValue);
     css::beans::PropertyValue GetInteropGrabBag(); ///< Used for table styles, has a name.
-    css::beans::PropertyValues GetInteropGrabBagSeq(); ///< Used for existing styles, just a list of properties.
+    css::beans::PropertyValues GetInteropGrabBagSeq() const; ///< Used for existing styles, just a list of properties.
 
     // Get all properties, merged with the all of the parent's properties
     PropertyMapPtr GetMergedInheritedProperties(const StyleSheetTablePtr& pStyleSheetTable);
@@ -102,11 +102,11 @@ public:
 
     OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
 
-    PropertyMapPtr const & GetDefaultParaProps();
+    PropertyMapPtr const & GetDefaultParaProps() const;
     /// Returns the default character properties.
-    PropertyMapPtr const & GetDefaultCharProps();
+    PropertyMapPtr const & GetDefaultCharProps() const;
 
-    const StyleSheetEntryPtr & GetCurrentEntry();
+    const StyleSheetEntryPtr & GetCurrentEntry() const;
 
 private:
     // Properties

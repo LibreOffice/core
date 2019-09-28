@@ -428,7 +428,7 @@ uno::Sequence<uno::Sequence<beans::PropertyValue>> AbstractListDef::GetPropertyV
     return result;
 }
 
-OUString AbstractListDef::MapListId(OUString const& rId)
+const OUString& AbstractListDef::MapListId(OUString const& rId)
 {
     if (!m_oListId)
     {
