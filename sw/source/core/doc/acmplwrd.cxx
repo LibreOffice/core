@@ -55,7 +55,7 @@ public:
 
     SwAutoCompleteClient& operator=(const SwAutoCompleteClient& rClient);
 
-    const SwDoc& GetDoc(){return *pDoc;}
+    const SwDoc& GetDoc() const {return *pDoc;}
 #if OSL_DEBUG_LEVEL > 0
     static sal_uLong GetElementCount() {return nSwAutoCompleteClientCount;}
 #endif

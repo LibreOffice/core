@@ -51,7 +51,7 @@ class ThreadManager final
         explicit ThreadManager( css::uno::Reference< css::util::XJobManager > const & rThreadJoiner );
         ~ThreadManager();
 
-        std::weak_ptr< IFinishedThreadListener > GetThreadListenerWeakRef();
+        std::weak_ptr< IFinishedThreadListener > GetThreadListenerWeakRef() const;
         void NotifyAboutFinishedThread( const oslInterlockedCount nThreadID );
 
         /** initialization

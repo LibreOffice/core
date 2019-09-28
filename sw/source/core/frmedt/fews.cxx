@@ -333,7 +333,7 @@ void SwFEShell::ShellLoseFocus()
     }
 }
 
-sal_uInt16 SwFEShell::GetPhyPageNum()
+sal_uInt16 SwFEShell::GetPhyPageNum() const
 {
     SwFrame *pFrame = GetCurrFrame();
     if ( pFrame )
@@ -341,7 +341,7 @@ sal_uInt16 SwFEShell::GetPhyPageNum()
     return 0;
 }
 
-sal_uInt16 SwFEShell::GetVirtPageNum()
+sal_uInt16 SwFEShell::GetVirtPageNum() const
 {
     SwFrame *pFrame = GetCurrFrame();
     if ( pFrame )

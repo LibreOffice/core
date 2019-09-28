@@ -55,7 +55,7 @@ public:
     void        RenameGroup(const OUString& rOld, OUString& rNew, const OUString& rNewTitle);
     void        SetCurGroup(const OUString &aGrp, bool bApi = false, bool bAlwaysCreateNew = false);
 
-    sal_uInt16  GetGlossaryCnt();
+    sal_uInt16  GetGlossaryCnt() const;
     OUString    GetGlossaryName(sal_uInt16);
     OUString    GetGlossaryShortName(const OUString &rName);
     OUString    GetGlossaryShortName(sal_uInt16);

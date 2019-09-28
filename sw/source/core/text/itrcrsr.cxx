@@ -1260,7 +1260,7 @@ void SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
  * Determines if SwTextCursor::GetCursorOfst() should consider the next portion when calculating the
  * doc model position from a Point.
  */
-static bool ConsiderNextPortionForCursorOffset(SwLinePortion* pPor, sal_uInt16 nWidth30, sal_uInt16 nX)
+static bool ConsiderNextPortionForCursorOffset(const SwLinePortion* pPor, sal_uInt16 nWidth30, sal_uInt16 nX)
 {
     if (!pPor->GetNextPortion())
     {

@@ -53,7 +53,7 @@ public:
     SwXTextFrame()
         : apitest::XServiceInfo("SwXTextFrame", "com.sun.star.text.TextFrame"){};
     uno::Reference<uno::XInterface> init() override;
-    uno::Reference<text::XTextDocument> getTextDocument() { return mxTextDocument; }
+    const uno::Reference<text::XTextDocument>& getTextDocument() const { return mxTextDocument; }
     void triggerDesktopTerminate() override { mxDesktop->terminate(); }
 
     CPPUNIT_TEST_SUITE(SwXTextFrame);

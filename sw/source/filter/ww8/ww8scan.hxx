@@ -479,7 +479,7 @@ public:
         const WW8ScannerBase *pSBase);
     WW8PLCFpcd_Iter* GetPLCFIter() { return pPcdI.get(); }
     void SetClipStart(WW8_CP nIn) { nClipStart = nIn; }
-    WW8_CP GetClipStart() { return nClipStart; }
+    WW8_CP GetClipStart() const { return nClipStart; }
 
     static sal_Int32 TransformPieceAddress(long nfc, bool& bIsUnicodeAddress)
     {

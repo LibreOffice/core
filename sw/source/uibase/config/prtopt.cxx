@@ -29,7 +29,7 @@ using namespace utl;
 using namespace com::sun::star::uno;
 
 // Ctor
-Sequence<OUString> SwPrintOptions::GetPropertyNames()
+Sequence<OUString> SwPrintOptions::GetPropertyNames() const
 {
     static const char* aPropNames[] =
     {

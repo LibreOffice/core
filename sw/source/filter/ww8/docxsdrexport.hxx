@@ -60,9 +60,9 @@ public:
 
     void setSerializer(const sax_fastparser::FSHelperPtr& pSerializer);
     /// When exporting fly frames, this holds the real size of the frame.
-    const Size* getFlyFrameSize();
-    bool getTextFrameSyntax();
-    bool getDMLTextFrameSyntax();
+    const Size* getFlyFrameSize() const;
+    bool getTextFrameSyntax() const;
+    bool getDMLTextFrameSyntax() const;
     rtl::Reference<sax_fastparser::FastAttributeList>& getFlyAttrList();
     /// Attributes of the next v:textbox element.
     rtl::Reference<sax_fastparser::FastAttributeList>& getTextboxAttrList();
@@ -71,9 +71,9 @@ public:
     /// Set if paragraph sdt open in the current drawing.
     void setParagraphSdtOpen(bool bParagraphSdtOpen);
 
-    bool IsDrawingOpen();
-    bool IsDMLAndVMLDrawingOpen();
-    bool IsParagraphHasDrawing();
+    bool IsDrawingOpen() const;
+    bool IsDMLAndVMLDrawingOpen() const;
+    bool IsParagraphHasDrawing() const;
     void setParagraphHasDrawing(bool bParagraphHasDrawing);
     rtl::Reference<sax_fastparser::FastAttributeList>& getFlyFillAttrList();
     sax_fastparser::FastAttributeList* getFlyWrapAttrList();

@@ -523,7 +523,7 @@ void SwDrawBase::CreateDefaultObject()
     m_pSh->CreateDefaultShape( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), aRect, m_nSlotId);
 }
 
-Point  SwDrawBase::GetDefaultCenterPos()
+Point  SwDrawBase::GetDefaultCenterPos() const
 {
     Size aDocSz(m_pSh->GetDocSize());
 

@@ -179,7 +179,7 @@ SwFrameMenuButtonBase::SwFrameMenuButtonBase( SwEditWin* pEditWin, const SwFrame
 {
 }
 
-const SwPageFrame* SwFrameMenuButtonBase::GetPageFrame()
+const SwPageFrame* SwFrameMenuButtonBase::GetPageFrame() const
 {
     if (m_pFrame->IsPageFrame())
         return static_cast<const SwPageFrame*>( m_pFrame );

@@ -1522,8 +1522,8 @@ public:
     Impl(SwXDocumentIndexMark& rThis,
             SwDoc* const pDoc,
             const enum TOXTypes eType,
-            SwTOXType* const pType,
-            SwTOXMark const*const pMark)
+            const SwTOXType* pType,
+            SwTOXMark const* pMark)
         : m_rThis(rThis)
         , m_bInReplaceMark(false)
         , m_rPropSet(

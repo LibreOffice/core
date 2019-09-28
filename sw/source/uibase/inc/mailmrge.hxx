@@ -126,7 +126,7 @@ public:
         css::uno::Sequence< css::uno::Any > const * pSelection);
     virtual ~SwMailMergeDlg() override;
 
-    DBManagerOptions GetMergeType() { return nMergeType; }
+    DBManagerOptions GetMergeType() const { return nMergeType; }
 
     bool IsSaveSingleDoc() const { return m_xSaveSingleDocRB->get_active(); }
     bool IsGenerateFromDataBase() const { return m_xGenerateFromDataBaseCB->get_active(); }

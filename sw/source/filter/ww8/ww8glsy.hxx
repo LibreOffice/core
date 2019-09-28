@@ -40,7 +40,7 @@ public:
     WW8GlossaryFib( SvStream& rStrm, sal_uInt8 nWantedVersion, const WW8Fib &rFib)
         : WW8Fib(rStrm, nWantedVersion, FindGlossaryFibOffset(rFib)) {}
     // fGlsy will indicate whether this has AutoText or not
-    bool IsGlossaryFib() {
+    bool IsGlossaryFib() const {
         return m_fGlsy;
     }
 private:

@@ -328,7 +328,7 @@ public:
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) override;
     virtual void Do() override;
 
-    TextFrameIndex GetCursor(){ return nCursor; }
+    TextFrameIndex GetCursor() const { return nCursor; }
 };
 
 void SwDoCapitalCursorOfst::Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont )
