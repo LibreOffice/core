@@ -45,7 +45,7 @@ private:
 
     void ReinitializeActionGroup(unsigned nPos);
     void ResetAllActionGroups();
-    void UpdateActionGroupItem(Qt5MenuItem* pSalMenuItem);
+    void UpdateActionGroupItem(const Qt5MenuItem* pSalMenuItem);
 
 public:
     Qt5Menu(bool bMenuBar);
@@ -74,7 +74,7 @@ public:
 
     void SetMenu(Menu* pMenu) { mpVCLMenu = pMenu; }
     Menu* GetMenu() { return mpVCLMenu; }
-    unsigned GetItemCount() { return maItems.size(); }
+    unsigned GetItemCount() const { return maItems.size(); }
     Qt5MenuItem* GetItemAtPos(unsigned nPos) { return maItems[nPos]; }
 
 private slots:

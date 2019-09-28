@@ -147,7 +147,7 @@ namespace vcl
         bool ShowPrevPage();
 
         void                AddPage( std::unique_ptr<BuilderPage> xPage );
-        void                RemovePage( BuilderPage* pPage );
+        void                RemovePage( const BuilderPage* pPage );
         void                SetPage( WizardTypes::WizardState nLevel, std::unique_ptr<BuilderPage> xPage );
         BuilderPage*        GetPage( WizardTypes::WizardState eState ) const;
 

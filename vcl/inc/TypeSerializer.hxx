@@ -30,7 +30,7 @@ public:
     TypeSerializer(SvStream& rStream);
 
     void readGradient(Gradient& rGradient);
-    void writeGradient(Gradient& rGradient);
+    void writeGradient(const Gradient& rGradient);
 };
 
 #endif

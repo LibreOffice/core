@@ -1606,7 +1606,7 @@ namespace vcl
         }
     }
 
-    void WizardMachine::RemovePage(BuilderPage* pPage)
+    void WizardMachine::RemovePage(const BuilderPage* pPage)
     {
         WizPageData* pPrevPageData = nullptr;
         WizPageData* pPageData = m_pFirstPage;

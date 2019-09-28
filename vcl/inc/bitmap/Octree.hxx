@@ -41,7 +41,7 @@ class VCL_PLUGIN_PUBLIC Octree
 {
 private:
     void CreatePalette(OctreeNode* pNode);
-    void GetPalIndex(OctreeNode* pNode);
+    void GetPalIndex(const OctreeNode* pNode);
 
     SAL_DLLPRIVATE void add(std::unique_ptr<OctreeNode>& rpNode);
     SAL_DLLPRIVATE void reduce();
