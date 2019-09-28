@@ -184,7 +184,7 @@ void Octree::CreatePalette(OctreeNode* pNode)
     }
 }
 
-void Octree::GetPalIndex(OctreeNode* pNode)
+void Octree::GetPalIndex(const OctreeNode* pNode)
 {
     if (pNode->bLeaf)
         mnPalIndex = pNode->nPalIndex;

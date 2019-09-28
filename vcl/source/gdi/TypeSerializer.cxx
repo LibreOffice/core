@@ -63,7 +63,7 @@ void TypeSerializer::readGradient(Gradient& rGradient)
     rGradient.SetSteps(nStepCount);
 }
 
-void TypeSerializer::writeGradient(Gradient& rGradient)
+void TypeSerializer::writeGradient(const Gradient& rGradient)
 {
     VersionCompat aCompat(mrStream, StreamMode::WRITE, 1);
 
