@@ -116,16 +116,16 @@ public:
     /// Get the security environment.
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getSecurityEnvironment();
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getGpgSecurityEnvironment();
-    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const& getSecurityContext();
-    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const& getGpgSecurityContext();
+    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const& getSecurityContext() const;
+    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const& getGpgSecurityContext() const;
     void setStore(const css::uno::Reference<css::embed::XStorage>& xStore) { mxStore = xStore; }
     XMLSignatureHelper& getSignatureHelper() { return maSignatureHelper; }
-    bool hasPDFSignatureHelper() { return mpPDFSignatureHelper.get(); }
+    bool hasPDFSignatureHelper() const { return mpPDFSignatureHelper.get(); }
     void setSignatureStream(const css::uno::Reference<css::io::XStream>& xSignatureStream)
     {
         mxSignatureStream = xSignatureStream;
     }
-    const css::uno::Reference<css::embed::XStorage>& getStore() { return mxStore; }
+    const css::uno::Reference<css::embed::XStorage>& getStore() const { return mxStore; }
     DocumentSignatureMode getSignatureMode() const { return meSignatureMode; }
     SignatureInformations& getCurrentSignatureInformations()
     {
