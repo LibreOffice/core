@@ -711,9 +711,9 @@ public class ParcelContainer implements XNameAccess {
         // parse location
         parsedUri.location = sfUri.getParameter("location");
 
-        // TODO basic sanity check on language, location, functioname, parcel
-        // should be correct e.g. verified  by MSP and LangProvider by the
-        // time its got to here
+        // TODO basic sanity check on language, location, function name, parcel
+        // should be correct e.g. verified by MSP and LangProvider by the
+        // time it's got to here
 
         LogUtils.DEBUG("** location = " + parsedUri.location +
                        "\nfunction = " + parsedUri.function +

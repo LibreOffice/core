@@ -1167,7 +1167,7 @@ void SdXMLStylesContext::ImpSetCellStyles() const
 
 //Resolves: fdo#34987 if the style's auto height before and after is the same
 //then don't reset it back to the underlying default of true for the small
-//period before its going to be reset to false again. Doing this avoids the
+//period before it's going to be reset to false again. Doing this avoids the
 //master page shapes from resizing themselves due to autoheight becoming
 //enabled before having autoheight turned off again and getting stuck on that
 //autosized height
