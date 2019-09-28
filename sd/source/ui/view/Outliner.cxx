@@ -1427,7 +1427,7 @@ void SdOutliner::EnterEditMode (bool bGrabFocus)
     mbFoundObject = true;
 }
 
-ESelection SdOutliner::GetSearchStartPosition()
+ESelection SdOutliner::GetSearchStartPosition() const
 {
     ESelection aPosition;
     if (mbDirectionIsForward)

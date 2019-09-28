@@ -85,7 +85,7 @@ public:
             The returned value may be empty when the internal state of this
             view is not valid (like during destruction.)
     */
-    css::uno::Reference< css::drawing::XLayer> getActiveLayer();
+    css::uno::Reference< css::drawing::XLayer> getActiveLayer() const;
 
 private:
     bool getMasterPageMode() const throw();

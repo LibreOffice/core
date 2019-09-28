@@ -45,7 +45,7 @@ public:
     virtual void SelectionHasChanged() override;
 
     void    SetEditMode(sal_uInt16 nMode);
-    sal_uInt16  GetEditMode() { return nEditMode; }
+    sal_uInt16  GetEditMode() const { return nEditMode; }
 
     /**
      * set attribute for the object to be created

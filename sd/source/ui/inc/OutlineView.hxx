@@ -105,7 +105,7 @@ public:
     DECL_LINK( EndDropHdl, EditView*, void );
     DECL_LINK( PaintingFirstLineHdl, PaintFirstLineInfo*, void );
 
-    sal_uLong         GetPaperWidth() { return mnPaperWidth;}
+    sal_uLong         GetPaperWidth() const { return mnPaperWidth;}
 
     void              PrepareClose();
 
