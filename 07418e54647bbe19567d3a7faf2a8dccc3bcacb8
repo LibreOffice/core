@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_a445b519",
+        "filename": "vcl/unx/gtk3_kde5/kde5_filepicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-09-28T08:59:29Z",
+      "side": 1,
+      "message": "wouldn\u0027t that have to be around the call to setMainWindow() below?",
+      "range": {
+        "startLine": 273,
+        "startChar": 8,
+        "endLine": 273,
+        "endChar": 43
+      },
+      "revId": "07418e54647bbe19567d3a7faf2a8dccc3bcacb8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
