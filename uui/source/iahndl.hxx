@@ -90,7 +90,7 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & rxContext);
 
     css::uno::Reference<css::awt::XWindow> GetParentWindow() const { return m_xWindowParam; }
-    void SetParentWindow(css::uno::Reference<css::awt::XWindow>& rWindow) { m_xWindowParam = rWindow; }
+    void SetParentWindow(const css::uno::Reference<css::awt::XWindow>& rWindow) { m_xWindowParam = rWindow; }
 
     ~UUIInteractionHelper();
 
@@ -129,7 +129,7 @@ private:
     getParentXWindow() const;
 
     css::uno::Reference< css::task::XInteractionHandler2 >
-    getInteractionHandler();
+    getInteractionHandler() const;
 
     bool    handleTypedHandlerImplementations(
                 css::uno::Reference< css::task::XInteractionRequest > const &  rRequest

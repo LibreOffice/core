@@ -53,7 +53,7 @@ namespace ftp {
         void SetSec(sal_uInt16 seconds) { Seconds = seconds; }
         void SetNanoSec(sal_uInt32 nanoSec) { NanoSeconds = nanoSec; }
 
-        sal_uInt16 GetMonth() { return Month; }
+        sal_uInt16 GetMonth() const { return Month; }
     };
 
 
