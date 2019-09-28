@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_44e62119",
+        "filename": "sw/qa/api/SwXTextFrame.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-28T09:40:57Z",
+      "side": 1,
+      "message": "I don\u0027t know if it\u0027s relevant here, so please excuse me if it\u0027s a stupid question:\n\nI seem to remember that there\u0027s an advice *somewhere* (so can\u0027t link to a source, sorry) to not care about returning by reference vs by value, because of optimizations in modern compilers ... so my question is: can\u0027t this change be depressing some in-built optimizations?",
+      "range": {
+        "startLine": 56,
+        "startChar": 45,
+        "endLine": 56,
+        "endChar": 46
+      },
+      "revId": "6c6c1eea82b259c7aec1e0ed5ff86bfd2eb0243f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
