@@ -224,7 +224,7 @@ protected:
     void startAction();
     void endAction();
 
-    const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() { return m_xContext;}
+    const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() const { return m_xContext;}
 
     bool inPositionV;
     OOXMLValue::Pointer_t mpGridAfter;
@@ -458,7 +458,7 @@ public:
     virtual ResourceEnum_t getResource() const override { return SHAPE; }
 
     void sendShape( Token_t Element );
-    bool isShapeSent( ) { return m_bShapeSent; }
+    bool isShapeSent( ) const { return m_bShapeSent; }
 
 protected:
     virtual void lcl_startFastElement(Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;

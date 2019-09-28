@@ -709,7 +709,7 @@ public:
 
     Stream& Mapper() { return *m_pMapperStream; }
     void setSuperstream(RTFDocumentImpl* pSuperstream);
-    const css::uno::Reference<css::lang::XMultiServiceFactory>& getModelFactory()
+    const css::uno::Reference<css::lang::XMultiServiceFactory>& getModelFactory() const
     {
         return m_xModelFactory;
     }
@@ -723,7 +723,7 @@ public:
     /// Send NS_ooxml::LN_settings_settings to dmapper.
     void outputSettingsTable();
     /// If the initial paragraph is started.
-    bool getFirstRun() { return m_bFirstRun; }
+    bool getFirstRun() const { return m_bFirstRun; }
     /// If we need to add a dummy paragraph before a section break.
     void setNeedPar(bool bNeedPar);
     /// Return the dmapper index of an RTF index for fonts.

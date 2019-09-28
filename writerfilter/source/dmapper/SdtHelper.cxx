@@ -197,9 +197,9 @@ uno::Sequence<beans::PropertyValue> SdtHelper::getInteropGrabBagAndClear()
     return aRet;
 }
 
-bool SdtHelper::isInteropGrabBagEmpty() { return m_aGrabBag.empty(); }
+bool SdtHelper::isInteropGrabBagEmpty() const { return m_aGrabBag.empty(); }
 
-sal_Int32 SdtHelper::getInteropGrabBagSize() { return m_aGrabBag.size(); }
+sal_Int32 SdtHelper::getInteropGrabBagSize() const { return m_aGrabBag.size(); }
 
 bool SdtHelper::containedInInteropGrabBag(const OUString& rValueName)
 {
