@@ -180,8 +180,8 @@ public:
 
     SmNodeStack & GetNodeStack()    { return aNodeStack; }
 
-    bool GetSuccess()              { return bSuccess; }
-    [[nodiscard]] const OUString& GetText() { return aText; }
+    bool GetSuccess() const              { return bSuccess; }
+    [[nodiscard]] const OUString& GetText() const { return aText; }
     void SetText(const OUString &rStr) { aText = rStr; }
 
     virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;

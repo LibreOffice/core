@@ -157,7 +157,7 @@ public:
     //Access for the View. This access is not for the OLE-case!
     //and for the communication with the SFX!
     //All internal printer uses should work with the SmPrinterAccess only
-    bool        HasPrinter()    { return mpPrinter != nullptr; }
+    bool        HasPrinter() const { return mpPrinter != nullptr; }
     SfxPrinter *GetPrinter()    { GetPrt(); return mpPrinter; }
     void        SetPrinter( SfxPrinter * );
 
@@ -168,9 +168,9 @@ public:
 
     void        UpdateText();
     void        SetText(const OUString& rBuffer);
-    const OUString&  GetText() { return maText; }
+    const OUString&  GetText() const { return maText; }
     void        SetFormat(SmFormat const & rFormat);
-    const SmFormat&  GetFormat() { return maFormat; }
+    const SmFormat&  GetFormat() const { return maFormat; }
 
     void            Parse();
     SmParser &      GetParser() { return maParser; }
@@ -205,7 +205,7 @@ public:
     /** True, if cursor have previously been requested and thus
      * has some sort of position.
      */
-    bool        HasCursor();
+    bool        HasCursor() const;
 
     void writeFormulaOoxml(const ::sax_fastparser::FSHelperPtr& pSerializer,
             oox::core::OoxmlVersion version,
