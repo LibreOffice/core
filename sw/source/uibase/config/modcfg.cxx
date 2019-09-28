@@ -1291,10 +1291,10 @@ void SwCompareConfig::ImplCommit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    pValues[0] <<= static_cast<sal_Int32>(m_eCmpMode);
+    pValues[0] <<= static_cast<sal_Int16>(m_eCmpMode);
     pValues[1] <<= m_bUseRsid;
     pValues[2] <<= m_bIgnorePieces;
-    pValues[3] <<= static_cast<sal_Int32>(m_nPieceLen);
+    pValues[3] <<= static_cast<sal_Int16>(m_nPieceLen);
     pValues[4] <<= m_bStoreRsid;
 
     PutProperties(aNames, aValues);
