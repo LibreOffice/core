@@ -26,7 +26,7 @@
 #include <docary.hxx>
 
 SwUndoFormatColl::SwUndoFormatColl( const SwPaM& rRange,
-                              SwFormatColl* pColl,
+                              const SwFormatColl* pColl,
                               const bool bReset,
                               const bool bResetListAttrs )
     : SwUndo( SwUndoId::SETFMTCOLL, rRange.GetDoc() ),

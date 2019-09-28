@@ -113,7 +113,7 @@ using namespace sw::types;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;
 
-bool SwBasicEscherEx::IsRelUrl()
+bool SwBasicEscherEx::IsRelUrl() const
 {
     SvtSaveOptions aSaveOpt;
     bool bRelUrl = false;
@@ -123,7 +123,7 @@ bool SwBasicEscherEx::IsRelUrl()
     return bRelUrl;
 }
 
-OUString SwBasicEscherEx::GetBasePath()
+OUString SwBasicEscherEx::GetBasePath() const
 {
     OUString sDocUrl;
     SfxMedium * pMedium = rWrt.GetWriter().GetMedia();

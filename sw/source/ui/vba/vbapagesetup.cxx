@@ -201,7 +201,7 @@ void SAL_CALL SwVbaPageSetup::setDifferentFirstPageHeaderFooter( sal_Bool status
     xFirstPageProps->setPropertyValue("RightMargin", uno::makeAny( nRightMargin ) );
 }
 
-OUString SwVbaPageSetup::getStyleOfFirstPage()
+OUString SwVbaPageSetup::getStyleOfFirstPage() const
 {
     OUString styleFirstPage;
     uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( mxModel ), uno::UNO_QUERY_THROW );

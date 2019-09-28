@@ -1380,7 +1380,7 @@ static sal_Int16 lcl_GetAngle(const drawing::HomogenMatrix3& rMatrix)
     return nDeg < 0 ? round(nDeg) * -1 : round(360.0 - nDeg);
 }
 
-SfxWatermarkItem SwEditShell::GetWatermark()
+SfxWatermarkItem SwEditShell::GetWatermark() const
 {
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
     if (!pDocShell)

@@ -2451,7 +2451,7 @@ void SwPostItMgr::ShowHideResolvedNotes(bool visible) {
     LayoutPostIts();
 }
 
-void SwPostItMgr::UpdateResolvedStatus(sw::annotation::SwAnnotationWin* topNote) {
+void SwPostItMgr::UpdateResolvedStatus(const sw::annotation::SwAnnotationWin* topNote) {
     // Given the topmost note as an argument, scans over all notes and sets the
     // 'resolved' state of each descendant of the top notes to the resolved state
     // of the top note.

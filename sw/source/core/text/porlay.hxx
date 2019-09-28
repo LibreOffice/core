@@ -162,7 +162,7 @@ public:
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 
     // Stuff for justified alignment
-    bool IsSpaceAdd() { return m_pLLSpaceAdd != nullptr; }
+    bool IsSpaceAdd() const { return m_pLLSpaceAdd != nullptr; }
     void InitSpaceAdd();     // Creates pLLSpaceAdd if necessary
     void CreateSpaceAdd( const long nInit = 0 );
     void FinishSpaceAdd() { m_pLLSpaceAdd.reset(); }

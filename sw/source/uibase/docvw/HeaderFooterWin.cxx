@@ -389,7 +389,7 @@ void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const ::tools:
     pProcessor->process(aGhostedSeq);
 }
 
-bool SwHeaderFooterWin::IsEmptyHeaderFooter( )
+bool SwHeaderFooterWin::IsEmptyHeaderFooter( ) const
 {
     bool bResult = true;
 

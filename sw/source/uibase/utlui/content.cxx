@@ -3619,7 +3619,7 @@ void SwContentTree::EditEntry(SvTreeListEntry const * pEntry, EditEntryMode nMod
     }
 }
 
-void SwContentTree::GotoContent(SwContent* pCnt)
+void SwContentTree::GotoContent(const SwContent* pCnt)
 {
     m_pActiveShell->EnterStdMode();
 
@@ -3628,7 +3628,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
     {
         case ContentTypeId::OUTLINE   :
         {
-            m_pActiveShell->GotoOutline(static_cast<SwOutlineContent*>(pCnt)->GetOutlinePos());
+            m_pActiveShell->GotoOutline(static_cast<const SwOutlineContent*>(pCnt)->GetOutlinePos());
         }
         break;
         case ContentTypeId::TABLE     :
@@ -3657,7 +3657,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
         case ContentTypeId::URLFIELD:
         {
             if(m_pActiveShell->GotoINetAttr(
-                            *static_cast<SwURLFieldContent*>(pCnt)->GetINetAttr() ))
+                            *static_cast<const SwURLFieldContent*>(pCnt)->GetINetAttr() ))
             {
                 m_pActiveShell->Right( CRSR_SKIP_CHARS, true, 1, false);
                 m_pActiveShell->SwCursorShell::SelectTextAttr( RES_TXTATR_INETFMT, true );
@@ -3679,7 +3679,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
         break;
         case ContentTypeId::POSTIT:
             m_pActiveShell->GetView().GetPostItMgr()->AssureStdModeAtShell();
-            m_pActiveShell->GotoFormatField(*static_cast<SwPostItContent*>(pCnt)->GetPostIt());
+            m_pActiveShell->GotoFormatField(*static_cast<const SwPostItContent*>(pCnt)->GetPostIt());
         break;
         case ContentTypeId::DRAWOBJECT:
         {

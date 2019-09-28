@@ -44,7 +44,7 @@ public:
     void                SetText( OutlinerParaObject const & rText );
     void                SetString( const OUString& rText );
     std::unique_ptr<OutlinerParaObject> CreateText();
-    OUString            GetText();
+    OUString            GetText() const;
 };
 
 class SwTextAPIObject : public SvxUnoText
@@ -57,7 +57,7 @@ public:
     std::unique_ptr<OutlinerParaObject> CreateText() { return pSource->CreateText(); }
     void                SetString( const OUString& rText ) { pSource->SetString( rText ); }
     void                SetText( OutlinerParaObject const & rText ) { pSource->SetText( rText ); }
-    OUString            GetText() { return pSource->GetText(); }
+    OUString            GetText() const { return pSource->GetText(); }
 };
 
 #endif

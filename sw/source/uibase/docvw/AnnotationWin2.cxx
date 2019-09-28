@@ -1352,12 +1352,12 @@ void SwAnnotationWin::ResetAttributes()
     mpOutlinerView->SetAttribs(DefaultItem());
 }
 
-sal_Int32 SwAnnotationWin::GetScrollbarWidth()
+sal_Int32 SwAnnotationWin::GetScrollbarWidth() const
 {
     return mrView.GetWrtShell().GetViewOptions()->GetZoom() / 10;
 }
 
-sal_Int32 SwAnnotationWin::GetMetaButtonAreaWidth()
+sal_Int32 SwAnnotationWin::GetMetaButtonAreaWidth() const
 {
     const Fraction& f( GetMapMode().GetScaleX() );
     return long(METABUTTON_AREA_WIDTH * f);
@@ -1375,12 +1375,12 @@ sal_Int32 SwAnnotationWin::GetNumFields()
     return IsThreadResolved() ? 3 : 2;
 }
 
-sal_Int32 SwAnnotationWin::GetMinimumSizeWithMeta()
+sal_Int32 SwAnnotationWin::GetMinimumSizeWithMeta() const
 {
     return mrMgr.GetMinimumSizeWithMeta();
 }
 
-sal_Int32 SwAnnotationWin::GetMinimumSizeWithoutMeta()
+sal_Int32 SwAnnotationWin::GetMinimumSizeWithoutMeta() const
 {
     const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
     return long(POSTIT_MINIMUMSIZE_WITHOUT_META * f);

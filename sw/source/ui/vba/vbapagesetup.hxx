@@ -32,7 +32,7 @@ class SwVbaPageSetup :  public SwVbaPageSetup_BASE
 {
 private:
     /// @throws css::uno::RuntimeException
-    OUString getStyleOfFirstPage();
+    OUString getStyleOfFirstPage() const;
 
 public:
     /// @throws css::uno::RuntimeException

@@ -396,7 +396,7 @@ protected:
     }
 
     /// Get the length of the whole document.
-    int getLength()
+    int getLength() const
     {
         uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
@@ -887,7 +887,7 @@ protected:
     }
 
     /// Get page count.
-    int getPages()
+    int getPages() const
     {
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
         uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);

@@ -183,7 +183,7 @@ std::unique_ptr<OutlinerParaObject> SwTextAPIEditSource::CreateText()
         return nullptr;
 }
 
-OUString SwTextAPIEditSource::GetText()
+OUString SwTextAPIEditSource::GetText() const
 {
     if ( pImpl->mpPool && pImpl->mpOutliner )
         return pImpl->mpOutliner->GetEditEngine().GetText();
