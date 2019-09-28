@@ -107,7 +107,7 @@ public:
     virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
     virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
 
-    bool GetSuccess() {return bSuccess;}
+    bool GetSuccess() const {return bSuccess;}
 };
 
 
