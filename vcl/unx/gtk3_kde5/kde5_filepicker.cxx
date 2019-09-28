@@ -268,7 +268,14 @@ bool KDE5FilePicker::eventFilter(QObject* o, QEvent* e)
         auto* w = static_cast<QWidget*>(o);
         if (!w->parentWidget() && w->isModal())
         {
+            /*
+             To replace when baseline will include kwindowsystem >= 5.62 with:
+             w->setAttribute(Qt::WA_NativeWindow, true);
+             KWindowSystem::setMainWindow(w->windowHandle(), _winId);
+            */
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             KWindowSystem::setMainWindow(w, _winId);
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             if (auto* fileWidget = w->findChild<KFileWidget*>({}, Qt::FindDirectChildrenOnly))
             {
                 fileWidget->setCustomWidget(_extraControls);
