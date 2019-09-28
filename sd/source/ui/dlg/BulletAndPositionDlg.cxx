@@ -74,7 +74,7 @@ static const vcl::Font& lcl_GetDefaultBulletFont()
 class SdDrawDocument;
 
 SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const SfxItemSet& rSet,
-                                                 ::sd::View* pView)
+                                                 const ::sd::View* pView)
     : GenericDialogController(pWindow, "cui/ui/bulletandposition.ui", "BulletAndPosition")
     , rFirstStateSet(rSet)
     , bLastWidthModified(false)
@@ -278,8 +278,8 @@ SfxItemSet* SvxBulletAndPositionDlg::GetOutputItemSet(SfxItemSet* pSet)
     return pSet;
 };
 
-bool SvxBulletAndPositionDlg::IsApplyToMaster() { return bApplyToMaster; }
-bool SvxBulletAndPositionDlg::IsSlideScope() { return m_xSlideRB->get_active(); }
+bool SvxBulletAndPositionDlg::IsApplyToMaster() const { return bApplyToMaster; }
+bool SvxBulletAndPositionDlg::IsSlideScope() const { return m_xSlideRB->get_active(); }
 
 void SvxBulletAndPositionDlg::Reset(const SfxItemSet* rSet)
 {
