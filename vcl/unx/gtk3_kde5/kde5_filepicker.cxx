@@ -268,8 +268,7 @@ bool KDE5FilePicker::eventFilter(QObject* o, QEvent* e)
         auto* w = static_cast<QWidget*>(o);
         if (!w->parentWidget() && w->isModal())
         {
-            w->setAttribute(Qt::WA_NativeWindow, true);
-            KWindowSystem::setMainWindow(w->windowHandle(), _winId);
+            KWindowSystem::setMainWindow(w, _winId);
             if (auto* fileWidget = w->findChild<KFileWidget*>({}, Qt::FindDirectChildrenOnly))
             {
                 fileWidget->setCustomWidget(_extraControls);
