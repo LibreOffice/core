@@ -304,7 +304,7 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, weld::TreeView&, void)
 
             m_xDateFT->show();
 
-            m_xDateOffsetED->set_range(-31, 31);    // one month
+            m_xDateOffsetED->set_range(INT_MIN, INT_MAX);    // no limit
 
             if (IsFieldEdit())
                 m_xDateOffsetED->set_value( static_cast<SwDateTimeField*>(GetCurField())->GetOffset() / 24 / 60);
