@@ -573,7 +573,7 @@ struct Cond
 
     Cond(const Any& rAny, bool bIsMainSeqChild);
 
-    bool isValid() { return msDelay.getLength() || mpEvent; }
+    bool isValid() const { return msDelay.getLength() || mpEvent; }
     const char* getDelay() const { return msDelay.getLength() ? msDelay.getStr() : nullptr; }
 };
 
@@ -627,8 +627,8 @@ class PPTXAnimationExport
     void WriteAnimationTarget(const Any& rTarget);
     void WriteAnimationCondList(const Any& rAny, sal_Int32 nToken);
     void WriteAnimationCond(const Cond& rCond);
-    bool isMainSeqChild();
-    const Reference<XAnimationNode>& getCurrentNode();
+    bool isMainSeqChild() const;
+    const Reference<XAnimationNode>& getCurrentNode() const;
 
     PowerPointExport& mrPowerPointExport;
     const FSHelperPtr& mpFS;
@@ -664,13 +664,13 @@ PPTXAnimationExport::PPTXAnimationExport(PowerPointExport& rExport, const FSHelp
 {
 }
 
-bool PPTXAnimationExport::isMainSeqChild()
+bool PPTXAnimationExport::isMainSeqChild() const
 {
     assert(mpContext);
     return mpContext->isMainSeqChild();
 }
 
-const Reference<XAnimationNode>& PPTXAnimationExport::getCurrentNode()
+const Reference<XAnimationNode>& PPTXAnimationExport::getCurrentNode() const
 {
     assert(mpContext);
     return mpContext->getNode();

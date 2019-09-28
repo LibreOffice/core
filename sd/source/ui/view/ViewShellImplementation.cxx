@@ -273,7 +273,7 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest const & rRequest, Page
     ProcessModifyPageSlot( aRequest, pPage, pPage->GetPageKind());
 }
 
-SfxInterfaceId ViewShell::Implementation::GetViewId()
+SfxInterfaceId ViewShell::Implementation::GetViewId() const
 {
     switch (mrViewShell.GetShellType())
     {

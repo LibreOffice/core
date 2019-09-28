@@ -115,7 +115,7 @@ void ConfigurationUpdater::RequestUpdate (
     }
 }
 
-bool ConfigurationUpdater::IsUpdatePossible()
+bool ConfigurationUpdater::IsUpdatePossible() const
 {
     return ! mbUpdateBeingProcessed
         && mxControllerManager.is()
