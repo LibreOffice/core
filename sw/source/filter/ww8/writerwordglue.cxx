@@ -296,7 +296,7 @@ namespace myImplHelpers
         {
             //If the style collides first stick WW- in front of it, unless
             //it already has it and then successively add a larger and
-            //larger number after it, its got to work at some stage!
+            //larger number after it, it's got to work at some stage!
             if (!aName.startsWith("WW-"))
                 aName = "WW-" + aName;
 

@@ -1964,7 +1964,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             /*
             If you have a paragraph in word with left and/or hanging indent
             and remove its numbering, then the indentation appears to get
-            reset, but not back to the base style, instead its goes to a blank
+            reset, but not back to the base style, instead it goes to a blank
             setting.
             Unless it's a broken ww6 list in 97 in which case more hackery is
             required, some more details about broken ww6 list in

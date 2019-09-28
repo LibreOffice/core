@@ -534,7 +534,7 @@ PlcDrawObj::~PlcDrawObj()
 {
 }
 
-//Its irritating to have to change the RTL frames position into LTR ones
+//It's irritating to have to change the RTL frames position into LTR ones
 //so that word will have to place them in the right place. Doubly so that
 //the SO drawings and writer frames have different ideas themselves as to
 //how to be positioned when in RTL mode!
