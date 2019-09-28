@@ -51,7 +51,7 @@ public:
 
     std::vector<OUString> GetList ( const sal_uInt16 nType ) ;
 
-    bool        IsLink();
+    bool        IsLink() const;
     bool        IsRemoveUnnessesaryMasterPages() const;
 };
 

@@ -181,7 +181,7 @@ private:
         executed, the lock count, and whether the configuration controller
         is still valid.
     */
-    bool IsUpdatePossible();
+    bool IsUpdatePossible() const;
 
     /** Lock updates of the current configuration.  For intermediate requests
         for updates mbUpdatePending is set to <TRUE/>.

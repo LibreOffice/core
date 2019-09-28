@@ -60,7 +60,7 @@ public:
     void Invalidate() { mbPageListValid = false; }
     SdPage* GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum);
     sal_uInt32 GetSdPageCount(PageKind ePgKind);
-    sal_uInt32 GetVisibleSdPageCount();
+    sal_uInt32 GetVisibleSdPageCount() const;
 };
 
 class ImpDrawPageListWatcher : public ImpPageListWatcher
