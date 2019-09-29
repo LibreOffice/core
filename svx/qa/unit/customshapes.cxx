@@ -465,7 +465,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Mirror)
 {
     // The document contains two shapes, one with horizontal flip, the other with vertical
     // flip. They are diamonds, so their text frame is symmetric to the center of the shape.
-    // The shapes have not stroke and no fill, so that the bounding box sourrounds the text
+    // The shapes have not stroke and no fill, so that the bounding box surrounds the text
     // and therefore equals approximately the text frame.
     // Error was, that because of wrong calculation, the flipped shapes do not use the
     // text frame but the frame rectangle for their text.
