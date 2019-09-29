@@ -13,8 +13,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <i18nutil/searchopt.hxx>
-#include <svtools/simptabl.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/weld.hxx>
 
 #include <vector>
@@ -24,43 +22,55 @@ class CuiAboutConfigValueDialog;
 struct Prop_Impl;
 struct UserData;
 
-class CuiAboutConfigTabPage : public ModalDialog
+struct prefBoxEntry
+{
+    OUString sProp;
+    OUString sStatus;
+    OUString sType;
+    OUString sValue;
+    UserData* pUserData;
+};
+
+class CuiAboutConfigTabPage : public weld::GenericDialogController
 {
 private:
-    VclPtr<SvSimpleTableContainer> m_pPrefCtrl;
-    VclPtr<PushButton> m_pResetBtn;
-    VclPtr<PushButton> m_pEditBtn;
-    VclPtr<PushButton> m_pSearchBtn;
-    VclPtr<Edit> m_pSearchEdit;
+    std::unique_ptr<weld::Button> m_xResetBtn;
+    std::unique_ptr<weld::Button> m_xEditBtn;
+    std::unique_ptr<weld::Button> m_xSearchBtn;
+    std::unique_ptr<weld::Entry> m_xSearchEdit;
+    std::unique_ptr<weld::TreeView> m_xPrefBox;
+    std::unique_ptr<weld::TreeIter> m_xScratchIter;
+
     std::vector < std::unique_ptr<UserData> > m_vectorUserData;
 
-    SvTreeListEntries m_modifiedPrefBoxEntries;
+    std::vector<prefBoxEntry> m_modifiedPrefBoxEntries;
     std::vector< std::shared_ptr< Prop_Impl > > m_vectorOfModified;
-    VclPtr< SvSimpleTable > m_pPrefBox;
 
      //for search
     i18nutil::SearchOptions2 m_options;
-    SvTreeListEntries m_prefBoxEntries;
+    std::vector<prefBoxEntry> m_prefBoxEntries;
+
+    bool m_bSorted;
 
     void AddToModifiedVector( const std::shared_ptr< Prop_Impl >& rProp );
     static std::vector< OUString > commaStringToSequence( const OUString& rCommaSepString );
-    void InsertEntry( SvTreeListEntry *pEntry);
+    void InsertEntry(const prefBoxEntry& rEntry);
 
-    DECL_LINK( StandardHdl_Impl, Button*, void );
-    DECL_LINK( DoubleClickHdl_Impl, SvTreeListBox*, bool );
-    DECL_LINK( ResetBtnHdl_Impl, Button*, void );
-    DECL_LINK( SearchHdl_Impl, Button*, void );
-    DECL_LINK( ExpandingHdl_Impl, SvTreeListBox*, bool );
+    DECL_LINK(StandardHdl_Impl, weld::Button&, void);
+    DECL_LINK(DoubleClickHdl_Impl, weld::TreeView&, void);
+    DECL_LINK(ResetBtnHdl_Impl, weld::Button&, void);
+    DECL_LINK(SearchHdl_Impl, weld::Button&, void);
+    DECL_LINK(ExpandingHdl_Impl, const weld::TreeIter&, bool);
+    DECL_LINK(HeaderBarClick, int, void);
 
 public:
-   explicit CuiAboutConfigTabPage(vcl::Window* pParent);
+   explicit CuiAboutConfigTabPage(weld::Window* pParent);
    virtual ~CuiAboutConfigTabPage() override;
-   virtual void dispose() override;
    void     InsertEntry(const OUString &rPropertyPath, const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue,
-                        SvTreeListEntry *pParentEntry, bool bInsertToPrefBox);
+                        const weld::TreeIter* pParentEntry, bool bInsertToPrefBox);
    void     Reset();
    void     FillItems(const css::uno::Reference<css::container::XNameAccess>& xNameAccess,
-                      SvTreeListEntry *pParentEntry = nullptr, int lineage = 0, bool bLoadAll = false);
+                      const weld::TreeIter* pParentEntry = nullptr, int lineage = 0, bool bLoadAll = false);
    static css::uno::Reference< css::container::XNameAccess > getConfigAccess( const OUString& sNodePath, bool bUpdate );
    void FillItemSet();
 };

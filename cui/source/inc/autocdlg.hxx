@@ -177,6 +177,7 @@ private:
     std::unique_ptr<weld::Button> m_xNewReplacePB;
     std::unique_ptr<weld::Button> m_xReplacePB;
     std::unique_ptr<weld::Button> m_xDeleteReplacePB;
+    std::unique_ptr<weld::Container> m_xButtonBox;
 
     DECL_LINK(SelectHdl, weld::TreeView&, void);
     DECL_LINK(NewDelButtonHdl, weld::Button&, void);
