@@ -534,6 +534,7 @@ namespace xmloff { namespace token {
         TOKEN( "custom-iconset",                  XML_CUSTOM_ICONSET ),
         TOKEN( "custom-iconset-index",            XML_CUSTOM_ICONSET_INDEX ),
         TOKEN( "custom-iconset-name",             XML_CUSTOM_ICONSET_NAME ),
+        TOKEN( "custom-label-text",               XML_CUSTOM_LABEL_TEXT ),
         TOKEN( "cut",                             XML_CUT ),
         TOKEN( "cut-offs",                        XML_CUT_OFFS ),
         TOKEN( "cx",                              XML_CX ),

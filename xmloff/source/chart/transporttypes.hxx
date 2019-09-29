@@ -61,6 +61,7 @@ struct SchXMLTable
     OUString aTableNameOfFile;                   /// the table name read at the table:table element
 
     ::std::vector< sal_Int32 > aHiddenColumns;
+    ::std::map<sal_Int32, OUString> aCustomLabelTexts;
 
     bool bProtected;
 

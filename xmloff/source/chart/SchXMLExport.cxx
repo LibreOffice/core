@@ -78,6 +78,7 @@
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -114,10 +115,21 @@ using ::std::vector;
 class SchXMLExportHelper_Impl
 {
 public:
-    // first: data sequence for label, second: data sequence for values.
-    typedef ::std::pair< css::uno::Reference< css::chart2::data::XDataSequence >,
-            css::uno::Reference< css::chart2::data::XDataSequence > > tLabelValuesDataPair;
-    typedef ::std::vector< tLabelValuesDataPair > tDataSequenceCont;
+    struct LabelValues
+    {
+        uno::Reference< chart2::data::XDataSequence > xLabel;
+        uno::Reference< chart2::data::XDataSequence > xValue;
+        ::std::vector<Any> aCustomLabelTexts;
+
+        LabelValues() = default;
+        LabelValues(const uno::Reference< chart2::data::XDataSequence >& xLabel,
+                const uno::Reference< chart2::data::XDataSequence >& xValue,
+                const std::vector<Any> & customtexts = std::vector<Any>()):
+                xLabel(xLabel),
+                xValue(xValue),
+                aCustomLabelTexts(customtexts){}
+    };
+    typedef ::std::vector< LabelValues > tDataSequenceCont;
 
 public:
     SchXMLExportHelper_Impl( SvXMLExport& rExport,
@@ -538,9 +550,9 @@ sal_Int32 lcl_getMaxSequenceLength(
     sal_Int32 nResult = 0;
     for( const auto& rDataSequence : rContainer )
     {
-        if( rDataSequence.second.is())
+        if( rDataSequence.xValue.is())
         {
-            sal_Int32 nSeqLength = rDataSequence.second->getData().getLength();
+            sal_Int32 nSeqLength = rDataSequence.xValue->getData().getLength();
             if( nSeqLength > nResult )
                 nResult = nSeqLength;
         }
@@ -666,22 +678,22 @@ struct lcl_TableData
     ::std::vector< sal_Int32 > aHiddenColumns;
 };
 
-typedef ::std::map< sal_Int32, SchXMLExportHelper_Impl::tLabelValuesDataPair >
+typedef ::std::map< sal_Int32, SchXMLExportHelper_Impl::LabelValues >
     lcl_DataSequenceMap;
 
 struct lcl_SequenceToMapElement
 {
-    std::pair<const sal_Int32, SchXMLExportHelper_Impl::tLabelValuesDataPair>
-        operator() (const SchXMLExportHelper_Impl::tLabelValuesDataPair& rContent)
+    std::pair<const sal_Int32, SchXMLExportHelper_Impl::LabelValues>
+        operator() (const SchXMLExportHelper_Impl::LabelValues& rContent)
     {
         sal_Int32 nIndex = -1;
-        if( rContent.second.is()) //has values
+        if( rContent.xValue.is())
         {
-            OUString aRangeRep( rContent.second->getSourceRangeRepresentation());
+            OUString aRangeRep( rContent.xValue->getSourceRangeRepresentation());
             nIndex = aRangeRep.toInt32();
         }
-        else if( rContent.first.is()) //has labels
-            nIndex = rContent.first->getSourceRangeRepresentation().copy( sizeof("label ")).toInt32();
+        else if( rContent.xLabel.is())
+            nIndex = rContent.xLabel->getSourceRangeRepresentation().copy( sizeof("label ")).toInt32();
         return std::make_pair(nIndex, rContent);
     }
 };
@@ -720,10 +732,9 @@ lcl_TableData lcl_getDataForLocalTable(
     const Reference< chart2::XAnyDescriptionAccess >& xAnyDescriptionAccess,
     const OUString& rCategoriesRange,
     bool bSeriesFromColumns,
-    const Reference< chart2::data::XRangeXMLConversion > & xRangeConversion )
+    const Reference< chart2::data::XRangeXMLConversion > & xRangeConversion)
 {
     lcl_TableData aResult;
-
     try
     {
         Sequence< OUString > aSimpleCategories;
@@ -788,26 +799,26 @@ lcl_TableData lcl_getDataForLocalTable(
         {
             OUString aRange;
             Sequence< OUString >& rCurrentComplexLabel = aComplexLabels[nSeqIdx];
-            if( rDataSequence.first.is())
+            if( rDataSequence.xLabel.is())
             {
-                lcl_getLabelStringSequence( rCurrentComplexLabel, rDataSequence.first );
+                lcl_getLabelStringSequence( rCurrentComplexLabel, rDataSequence.xLabel );
                 rLabels[nSeqIdx] = lcl_flattenStringSequence( rCurrentComplexLabel );
-                aRange = rDataSequence.first->getSourceRangeRepresentation();
+                aRange = rDataSequence.xLabel->getSourceRangeRepresentation();
                 if( xRangeConversion.is())
                     aRange = xRangeConversion->convertRangeToXML( aRange );
             }
-            else if( rDataSequence.second.is())
+            else if( rDataSequence.xValue.is())
             {
                 rCurrentComplexLabel.realloc(1);
                 rLabels[nSeqIdx] = rCurrentComplexLabel[0] = lcl_flattenStringSequence(
-                    rDataSequence.second->generateLabel( chart2::data::LabelOrigin_SHORT_SIDE ));
+                    rDataSequence.xValue->generateLabel( chart2::data::LabelOrigin_SHORT_SIDE ));
             }
             if( bSeriesFromColumns )
                 aResult.aColumnDescriptions_Ranges.push_back( aRange );
             else
                 aResult.aRowDescriptions_Ranges.push_back( aRange );
 
-            ::std::vector< double > aNumbers( lcl_getAllValuesFromSequence( rDataSequence.second ));
+            ::std::vector< double > aNumbers( lcl_getAllValuesFromSequence( rDataSequence.xValue ));
             if( bSeriesFromColumns )
             {
                 const sal_Int32 nSize( static_cast< sal_Int32 >( aNumbers.size()));
@@ -817,16 +828,16 @@ lcl_TableData lcl_getDataForLocalTable(
             else
                 aResult.aDataInRows[nSeqIdx] = aNumbers;
 
-            if( rDataSequence.second.is())
+            if( rDataSequence.xValue.is())
             {
-                aRange =  rDataSequence.second->getSourceRangeRepresentation();
+                aRange =  rDataSequence.xValue->getSourceRangeRepresentation();
                 if( xRangeConversion.is())
                     aRange = xRangeConversion->convertRangeToXML( aRange );
             }
             aResult.aDataRangeRepresentations.push_back( aRange );
 
             //is column hidden?
-            if( !lcl_SequenceHasUnhiddenData(rDataSequence.first) && !lcl_SequenceHasUnhiddenData(rDataSequence.second) )
+            if( !lcl_SequenceHasUnhiddenData(rDataSequence.xLabel) && !lcl_SequenceHasUnhiddenData(rDataSequence.xValue) )
                 aResult.aHiddenColumns.push_back(nSeqIdx);
 
             ++nSeqIdx;
@@ -1638,6 +1649,7 @@ void SchXMLExportHelper_Impl::exportTable()
 
     // export value rows
     {
+
         SvXMLElementExport aRows( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROWS, true, true );
         tStringVector::const_iterator aRowDescriptionsIter( aData.aRowDescriptions.begin());
         const Sequence< Sequence< uno::Any > >& rComplexRowDescriptions = aData.aComplexRowDescriptions;
@@ -1647,6 +1659,17 @@ void SchXMLExportHelper_Impl::exportTable()
         for( const auto& rRow : aData.aDataInRows )
         {
             SvXMLElementExport aRow( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, true, true );
+            // TODO series?
+            auto& rLabelTexts = m_aDataSequencesToExport.at(0).aCustomLabelTexts;
+
+            Sequence<Reference<chart2::XDataPointCustomLabelField> > fields;
+            Any aAny = rLabelTexts[nC];
+            if(aAny.hasValue())
+                aAny >>= fields;
+
+            // TODO export formatted string, not just the string itself.
+            if(fields.getLength() > 0)
+                mrExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CUSTOM_LABEL_TEXT, fields[0]->getString());
 
             //export row descriptions
             {
@@ -2521,7 +2544,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                     sal_Int32 nAttachedAxis = chart::ChartAxisAssign::PRIMARY_Y;
                     bool bHasMeanValueLine = false;
                     Reference< beans::XPropertySet > xPropSet;
-                    tLabelValuesDataPair aSeriesLabelValuesPair;
+                    LabelValues aSeriesLabelValuesPair;
 
                     // search for main sequence and create a series element
                     {
@@ -2656,8 +2679,29 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     }
                                 }
 
+                                // collect custom label text
+                                std::vector<Any> customTexts;
+                                for(sal_Int32 i=0; i< xValuesSeq->getData().getLength(); ++i)
+                                {
+                                    const uno::Reference< css::beans::XPropertySet >& xPropertySet(aSeriesSeq[nSeriesIdx]->getDataPointByIndex(i));
+                                    if(xPropertySet.is())
+                                    {
+                                        Any aAny = xPropertySet->getPropertyValue("CustomLabelFields");
+                                        if( aAny.hasValue() )
+                                        {
+                                            if(aAny.hasValue())
+                                            {
+                                                customTexts.push_back(aAny);
+                                                continue;
+                                            }
+                                        }
+                                    }
+                                    customTexts.push_back(Any());
+                                }
                                 if( xLabelSeq.is() || xValuesSeq.is() )
-                                    aSeriesLabelValuesPair = tLabelValuesDataPair( xLabelSeq, xValuesSeq );
+                                {
+                                    aSeriesLabelValuesPair = LabelValues{ xLabelSeq, xValuesSeq, std::move(customTexts) };
+                                }
 
                                 // chart-type for mixed types
                                 enum XMLTokenEnum eCTToken(
@@ -2729,7 +2773,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                     // add sequences for main sequence after domain sequences,
                     // so that the export of the local table has the correct order
                     if( bExportContent &&
-                        (aSeriesLabelValuesPair.first.is() || aSeriesLabelValuesPair.second.is()))
+                        (aSeriesLabelValuesPair.xLabel.is() || aSeriesLabelValuesPair.xValue.is()))
                         m_aDataSequencesToExport.push_back( aSeriesLabelValuesPair );
 
                     // statistical objects:
