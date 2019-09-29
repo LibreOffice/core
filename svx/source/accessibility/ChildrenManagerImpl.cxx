@@ -723,15 +723,6 @@ bool ChildrenManagerImpl::ReplaceChild (
     const long /*_nIndex*/,
     const AccessibleShapeTreeInfo& _rShapeTreeInfo)
 {
-    AccessibleShapeInfo aShapeInfo( _rxShape, pCurrentChild->getAccessibleParent(), this );
-    // create the new child
-    rtl::Reference<AccessibleShape> pNewChild(ShapeTypeHandler::Instance().CreateAccessibleObject (
-        aShapeInfo,
-        _rShapeTreeInfo
-    ));
-    if ( pNewChild.is() )
-        pNewChild->Init();
-
     // Iterate over the visible children.  If one of them has an already
     // created accessible object that matches pCurrentChild then replace
     // it.  Otherwise the child to replace is either not in the list or has
@@ -751,6 +742,15 @@ bool ChildrenManagerImpl::ReplaceChild (
 
         // Replace with replacement and send an event about existence
         // of the new child.
+        AccessibleShapeInfo aShapeInfo( _rxShape, pCurrentChild->getAccessibleParent(), this );
+        // create the new child
+        rtl::Reference<AccessibleShape> pNewChild(ShapeTypeHandler::Instance().CreateAccessibleObject (
+            aShapeInfo,
+            _rShapeTreeInfo
+        ));
+        if ( pNewChild.is() )
+            pNewChild->Init();
+
         I->mxAccessibleShape = pNewChild.get();
         mrContext.CommitChange (
             AccessibleEventId::CHILD,
