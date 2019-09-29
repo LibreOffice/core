@@ -2054,6 +2054,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             if (!sBorder.isEmpty())
                 nWinStyle |= WB_BORDER;
         }
+        else
+        {
+            nWinStyle |= WB_HASBUTTONS | WB_HASBUTTONSATROOT;
+        }
         //ListBox/SvHeaderTabListBox manages its own scrolling,
         vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
         if (pRealParent != pParent)
