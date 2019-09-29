@@ -70,6 +70,30 @@
       "revId": "4cb8a436a315e604e7387f51f921042846b5bbc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_1fe39635",
+        "filename": "i18npool/source/transliteration/transliteration_body.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-09-29T12:10:42Z",
+      "side": 1,
+      "message": "It\u0027s weird but I don\u0027t get assert throw though I compiled i18npool using --enable-debug or --enable-dbgutil or `make i18npool debug\u003dt`.\n\nDidn\u0027t throw even if I put assert() directly in TestTextSearch::testICU() while CPPUNIT_ASSERT(false) works.",
+      "parentUuid": "7f7f9b97_247d301c",
+      "range": {
+        "startLine": 104,
+        "startChar": 4,
+        "endLine": 104,
+        "endChar": 40
+      },
+      "revId": "4cb8a436a315e604e7387f51f921042846b5bbc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
