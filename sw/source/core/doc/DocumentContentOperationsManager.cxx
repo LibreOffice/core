@@ -1620,10 +1620,6 @@ namespace //local functions originally from docfmt.cxx
             pDoc->GetNodes().ForEach( aSt, aEnd, ::sw::DocumentContentOperationsManager::lcl_RstTextAttr, &aPara );
         }
 
-        bool bCreateSwpHints = pCharSet && (
-            SfxItemState::SET == pCharSet->GetItemState( RES_TXTATR_CHARFMT, false ) ||
-            SfxItemState::SET == pCharSet->GetItemState( RES_TXTATR_INETFMT, false ) );
-
         for (SwNodeIndex current = aSt; current < aEnd; ++current)
         {
             SwTextNode *const pTNd = current.GetNode().GetTextNode();
@@ -1638,24 +1634,16 @@ namespace //local functions originally from docfmt.cxx
 
             if( pHistory )
             {
-                SwRegHistory aRegH( pTNd, *pTNd, pHistory );
-
                 if (pCharSet && pCharSet->Count())
                 {
-                    SwpHints *pSwpHints = bCreateSwpHints ? &pTNd->GetOrCreateSwpHints()
-                                                : pTNd->GetpSwpHints();
-                    if( pSwpHints )
-                        pSwpHints->Register( &aRegH );
-
-                    pTNd->SetAttr(*pCharSet, 0, pTNd->GetText().getLength(), nFlags);
-                    if( pSwpHints )
-                        pSwpHints->DeRegister();
+                    SwRegHistory aRegH( pTNd, *pTNd, pHistory );
+                    aRegH.InsertItems(*pCharSet, 0, pTNd->GetText().getLength(), SetAttrMode::NOFORMATATTR, nullptr);
                 }
             }
             else
             {
                 if (pCharSet && pCharSet->Count())
-                    pTNd->SetAttr(*pCharSet, 0, pTNd->GetText().getLength(), nFlags);
+                    pTNd->SetAttr(*pCharSet, 0, pTNd->GetText().getLength(), SetAttrMode::NOFORMATATTR);
             }
             ++nNodes;
         }
