@@ -36,6 +36,7 @@
 
 #include <strings.hrc>
 #include <vcl/svapp.hxx>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/pathoptions.hxx>
@@ -292,18 +293,15 @@ IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt, void )
     }
 }
 
-IMPL_STATIC_LINK_NOARG(SvxJavaOptionsPage, ExpertConfigHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(SvxJavaOptionsPage, ExpertConfigHdl_Impl, weld::Button&, void)
 {
-    //TODO weld this one too
-    ScopedVclPtrInstance<CuiAboutConfigTabPage> pExpertConfigDlg(nullptr);
-    pExpertConfigDlg->Reset();//initialize and reset function
+    CuiAboutConfigTabPage aExpertConfigDlg(GetFrameWeld());
+    aExpertConfigDlg.Reset();//initialize and reset function
 
-    if( RET_OK == pExpertConfigDlg->Execute() )
+    if (RET_OK == aExpertConfigDlg.run())
     {
-        pExpertConfigDlg->FillItemSet();//save changes if there are any
+        aExpertConfigDlg.FillItemSet();//save changes if there are any
     }
-
-    pExpertConfigDlg.disposeAndClear();
 }
 
 void SvxJavaOptionsPage::ClearJavaInfo()
