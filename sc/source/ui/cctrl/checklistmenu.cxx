@@ -1343,12 +1343,7 @@ bool ScCheckListMenuWindow::EventNotify(NotifyEvent& rNEvt)
         const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
         const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
         const sal_uInt16 nCode = rCode.GetCode();
-        if (rCode.IsMod2()) // Hack to prevent tdf#122772
-        {
-            if (nCode == KEY_DOWN || nCode == KEY_RIGHT)
-                return true;
-        }
-        else
+        if (nCode != KEY_RETURN)
         {
             bool bShift = rCode.IsShift();
             if (nCode == KEY_TAB)
