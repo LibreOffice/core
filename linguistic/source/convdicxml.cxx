@@ -82,10 +82,8 @@ class ConvDicXMLImportContext :
     public SvXMLImportContext
 {
 public:
-    ConvDicXMLImportContext(
-            ConvDicXMLImport &rImport,
-            sal_uInt16 nPrfx, const OUString& rLName ) :
-        SvXMLImportContext( rImport, nPrfx, rLName )
+    ConvDicXMLImportContext( ConvDicXMLImport &rImport ) :
+        SvXMLImportContext( rImport )
     {
     }
 
@@ -96,7 +94,8 @@ public:
 
     // SvXMLImportContext
     virtual void Characters( const OUString &rChars ) override;
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList) override;
+    virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
+        sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
 
 
@@ -107,17 +106,17 @@ class ConvDicXMLDictionaryContext_Impl :
     sal_Int16    nConversionType;
 
 public:
-    ConvDicXMLDictionaryContext_Impl( ConvDicXMLImport &rImport,
-            sal_uInt16 nPrefix, const OUString& rLName) :
-        ConvDicXMLImportContext( rImport, nPrefix, rLName )
+    ConvDicXMLDictionaryContext_Impl( ConvDicXMLImport &rImport ) :
+        ConvDicXMLImportContext( rImport )
     {
         nLanguage = LANGUAGE_NONE;
         nConversionType = -1;
     }
 
     // SvXMLImportContext
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+    virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
+        sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
 
 
@@ -127,16 +126,15 @@ class ConvDicXMLEntryTextContext_Impl :
     OUString    aLeftText;
 
 public:
-    ConvDicXMLEntryTextContext_Impl(
-            ConvDicXMLImport &rImport,
-            sal_uInt16 nPrefix, const OUString& rLName ) :
-        ConvDicXMLImportContext( rImport, nPrefix, rLName )
+    ConvDicXMLEntryTextContext_Impl( ConvDicXMLImport &rImport ) :
+        ConvDicXMLImportContext( rImport )
     {
     }
 
     // SvXMLImportContext
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+    virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
+        sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
     const OUString &    GetLeftText() const { return aLeftText; }
 };
@@ -151,16 +149,14 @@ class ConvDicXMLRightTextContext_Impl :
 public:
     ConvDicXMLRightTextContext_Impl(
             ConvDicXMLImport &rImport,
-            sal_uInt16 nPrefix, const OUString& rLName,
             ConvDicXMLEntryTextContext_Impl &rParentContext ) :
-        ConvDicXMLImportContext( rImport, nPrefix, rLName ),
+        ConvDicXMLImportContext( rImport ),
         rEntryContext( rParentContext )
     {
     }
 
     // SvXMLImportContext
-    virtual void EndElement() override;
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList ) override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
     virtual void Characters( const OUString &rChars ) override;
 
     const OUString &    GetRightText() const    { return aRightText; }
@@ -180,99 +176,95 @@ void ConvDicXMLImportContext::Characters(const OUString & /*rChars*/)
 
 }
 
-SvXMLImportContextRef ConvDicXMLImportContext::CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
+css::uno::Reference<XFastContextHandler> ConvDicXMLImportContext::createFastChildContext(
+        sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
-    SvXMLImportContext *pContext = nullptr;
-    if ( nPrefix == XML_NAMESPACE_TCD && rLocalName == "text-conversion-dictionary" )
-        pContext = new ConvDicXMLDictionaryContext_Impl( GetConvDicImport(), nPrefix, rLocalName );
+    if ( Element == ConvDicXMLToken::TEXT_CONVERSION_DICTIONARY )
+        return new ConvDicXMLDictionaryContext_Impl( GetConvDicImport() );
     else
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    return pContext;
+        return new SvXMLImportContext( GetImport() );
 }
 
 
-void ConvDicXMLDictionaryContext_Impl::StartElement(
-    const uno::Reference< xml::sax::XAttributeList > &rxAttrList )
+void ConvDicXMLDictionaryContext_Impl::startFastElement( sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttrList )
 {
-    sal_Int16 nAttrCount = rxAttrList.is() ? rxAttrList->getLength() : 0;
-    for (sal_Int16 i = 0;  i < nAttrCount;  ++i)
+    if ( rxAttrList.is() )
     {
-        OUString aAttrName = rxAttrList->getNameByIndex(i);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                                    GetKeyByAttrName( aAttrName, &aLocalName );
-        OUString aValue = rxAttrList->getValueByIndex(i);
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( rxAttrList );
 
-        if ( nPrefix == XML_NAMESPACE_TCD && aLocalName == "lang" )
-            nLanguage = LanguageTag::convertToLanguageType( aValue );
-        else if ( nPrefix == XML_NAMESPACE_TCD && aLocalName == "conversion-type" )
-            nConversionType = GetConversionTypeFromText( aValue );
+        for (auto &aIter : *pAttribList)
+        {
+            switch (aIter.getToken())
+            {
+                case XML_NAMESPACE_TCD | XML_LANG:
+                    nLanguage = LanguageTag::convertToLanguageType( aIter.toString() );
+                break;
+                case XML_NAMESPACE_TCD | XML_CONVERSION_TYPE:
+                    nConversionType = GetConversionTypeFromText( aIter.toString() );
+                break;
+                default:
+                    ;
+            }
+        }
     }
     GetConvDicImport().SetLanguage( nLanguage );
     GetConvDicImport().SetConversionType( nConversionType );
 
 }
 
-SvXMLImportContextRef ConvDicXMLDictionaryContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
+css::uno::Reference<XFastContextHandler> ConvDicXMLDictionaryContext_Impl::createFastChildContext(
+        sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
-    SvXMLImportContext *pContext = nullptr;
-    if ( nPrefix == XML_NAMESPACE_TCD && rLocalName == "entry" )
-        pContext = new ConvDicXMLEntryTextContext_Impl( GetConvDicImport(), nPrefix, rLocalName );
+    if ( Element == ConvDicXMLToken::ENTRY )
+        return new ConvDicXMLEntryTextContext_Impl( GetConvDicImport() );
     else
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    return pContext;
+        return new SvXMLImportContext(GetImport());
 }
 
-
-SvXMLImportContextRef ConvDicXMLEntryTextContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
+css::uno::Reference<XFastContextHandler> ConvDicXMLEntryTextContext_Impl::createFastChildContext(
+        sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
-    SvXMLImportContext *pContext = nullptr;
-    if ( nPrefix == XML_NAMESPACE_TCD && rLocalName == "right-text" )
-        pContext = new ConvDicXMLRightTextContext_Impl( GetConvDicImport(), nPrefix, rLocalName, *this );
+    if ( Element == ConvDicXMLToken::RIGHT_TEXT )
+        return new ConvDicXMLRightTextContext_Impl( GetConvDicImport(), *this );
     else
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    return pContext;
+        return new SvXMLImportContext(GetImport());
 }
 
-void ConvDicXMLEntryTextContext_Impl::StartElement(
-        const uno::Reference< xml::sax::XAttributeList >& rxAttrList )
+void ConvDicXMLEntryTextContext_Impl::startFastElement(
+    sal_Int32 /*Element*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttrList )
 {
-    sal_Int16 nAttrCount = rxAttrList.is() ? rxAttrList->getLength() : 0;
-    for (sal_Int16 i = 0;  i < nAttrCount;  ++i)
+    if ( rxAttrList.is() )
     {
-        OUString aAttrName = rxAttrList->getNameByIndex(i);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                                    GetKeyByAttrName( aAttrName, &aLocalName );
-        OUString aValue = rxAttrList->getValueByIndex(i);
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( rxAttrList );
 
-        if ( nPrefix == XML_NAMESPACE_TCD && aLocalName == "left-text" )
-            aLeftText = aValue;
+        for (auto &aIter : *pAttribList)
+        {
+            switch (aIter.getToken())
+            {
+                case XML_NAMESPACE_TCD | XML_LEFT_TEXT:
+                    aLeftText = aIter.toString();
+                    break;
+                default:
+                    ;
+            }
+        }
     }
 }
 
-
-SvXMLImportContextRef ConvDicXMLRightTextContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
-{
-    // leaf: return default (empty) context
-    SvXMLImportContext *pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    return pContext;
-}
 
 void ConvDicXMLRightTextContext_Impl::Characters( const OUString &rChars )
 {
     aRightText += rChars;
 }
 
-void ConvDicXMLRightTextContext_Impl::EndElement()
+void ConvDicXMLRightTextContext_Impl::endFastElement( sal_Int32 /*nElement*/ )
 {
     ConvDic *pDic = GetConvDicImport().GetDic();
     if (pDic)
@@ -359,25 +351,24 @@ void ConvDicXMLExport::ExportContent_()
     }
 }
 
-void SAL_CALL ConvDicXMLImport::startDocument()
+    //!!  see comment for pDic member
+ConvDicXMLImport::ConvDicXMLImport( ConvDic *pConvDic ) :
+    SvXMLImport ( comphelper::getProcessComponentContext(), "com.sun.star.lingu2.ConvDicXMLImport", SvXMLImportFlags::ALL ),
+    pDic        ( pConvDic )
 {
-    // register namespace at first possible opportunity
-    GetNamespaceMap().Add( "tcd",
-            XML_NAMESPACE_TCD_STRING, XML_NAMESPACE_TCD );
-    SvXMLImport::startDocument();
+    nLanguage       = LANGUAGE_NONE;
+    nConversionType = -1;
+    GetNamespaceMap().Add( GetXMLToken(XML_NP_TCD), GetXMLToken(XML_N_TCD), XML_NAMESPACE_TCD);
 }
 
-SvXMLImportContext * ConvDicXMLImport::CreateDocumentContext(
-        sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const uno::Reference < xml::sax::XAttributeList > & /*rxAttrList*/ )
+SvXMLImportContext * ConvDicXMLImport::CreateFastContext(
+        sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
-    if ( nPrefix == XML_NAMESPACE_TCD && rLocalName == "text-conversion-dictionary" )
-        pContext = new ConvDicXMLDictionaryContext_Impl( *this, nPrefix, rLocalName );
+    if( Element == ConvDicXMLToken::TEXT_CONVERSION_DICTIONARY )
+        return new ConvDicXMLDictionaryContext_Impl( *this );
     else
-        pContext = new SvXMLImportContext( *this, nPrefix, rLocalName );
-    return pContext;
+        return SvXMLImport::CreateFastContext( Element, xAttrList );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
