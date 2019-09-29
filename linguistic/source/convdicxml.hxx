@@ -24,9 +24,12 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <comphelper/processfactory.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
+#include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <rtl/ustring.hxx>
 #include <linguistic/misc.hxx>
@@ -34,6 +37,8 @@
 
 
 class ConvDic;
+using namespace css::xml::sax;
+using namespace ::xmloff::token;
 
 
 class ConvDicXMLExport : public SvXMLExport
@@ -62,6 +67,29 @@ public:
 };
 
 
+enum ConvDicXMLToken : sal_Int32
+{
+    TEXT_CONVERSION_DICTIONARY = FastToken::NAMESPACE | XML_NAMESPACE_TCD | XML_BLOCK_LIST,
+    RIGHT_TEXT = FastToken::NAMESPACE | XML_NAMESPACE_TCD | XML_RIGHT_TEXT,
+    ENTRY = FastToken::NAMESPACE | XML_NAMESPACE_TCD | XML_ENTRY,
+};
+
+class ConvDicXMLTokenHandler : public
+        cppu::WeakImplHelper< css::xml::sax::XFastTokenHandler >,
+        public sax_fastparser::FastTokenHandlerBase
+{
+public:
+    explicit ConvDicXMLTokenHandler();
+    virtual ~ConvDicXMLTokenHandler() override;
+
+    //XFastTokenHandler
+    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 Token ) override;
+
+    // Much faster direct C++ shortcut to the method that matters
+    virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const override;
+};
+
 class ConvDicXMLImport : public SvXMLImport
 {
     ConvDic        *pDic;       // conversion dictionary to be used
@@ -77,19 +105,7 @@ class ConvDicXMLImport : public SvXMLImport
 public:
 
     //!!  see comment for pDic member
-    explicit ConvDicXMLImport( ConvDic *pConvDic ) :
-        SvXMLImport ( comphelper::getProcessComponentContext(), "com.sun.star.lingu2.ConvDicXMLImport", SvXMLImportFlags::ALL ),
-        pDic        ( pConvDic )
-    {
-        nLanguage       = LANGUAGE_NONE;
-        nConversionType = -1;
-    }
-
-    virtual void SAL_CALL startDocument() override;
-
-    virtual SvXMLImportContext * CreateDocumentContext(
-        sal_uInt16 nPrefix, const OUString &rLocalName,
-        const css::uno::Reference < css::xml::sax::XAttributeList > &rxAttrList ) override;
+    explicit ConvDicXMLImport( ConvDic *pConvDic );
 
     ConvDic *    GetDic()                    { return pDic; }
     LanguageType GetLanguage() const         { return nLanguage; }
@@ -97,6 +113,10 @@ public:
 
     void         SetLanguage( LanguageType nLang )              { nLanguage = nLang; }
     void         SetConversionType( sal_Int16 nType )    { nConversionType = nType; }
+
+private:
+    virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
 
 
