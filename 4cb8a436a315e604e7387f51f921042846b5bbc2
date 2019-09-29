@@ -94,6 +94,30 @@
       "revId": "4cb8a436a315e604e7387f51f921042846b5bbc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_3f945244",
+        "filename": "i18npool/source/transliteration/transliteration_body.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-29T19:38:18Z",
+      "side": 1,
+      "message": "Well - I don\u0027t know why is the difference; yet, as you say:\n\n \u003e ... CPPUNIT_ASSERT(false) works\n\nso it looks like you can still use (modify) the unit test to check the performance, right?\n\nI have no idea how intensive the usage of the code in LO is; the optimization consideration in the original code hints that it might be important in some cases. So IMO it makes sense to test this; see the performance regression addressed in 24c7c12224f1c1d66f335f6fe085595352137646 .",
+      "parentUuid": "7f7f9b97_1fe39635",
+      "range": {
+        "startLine": 104,
+        "startChar": 4,
+        "endLine": 104,
+        "endChar": 40
+      },
+      "revId": "4cb8a436a315e604e7387f51f921042846b5bbc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
