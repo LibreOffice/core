@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_libraries,lng,\
 	cppuhelper \
 	i18nlangtag \
 	sal \
+	sax \
 	svl \
 	tl \
 	ucbhelper \
