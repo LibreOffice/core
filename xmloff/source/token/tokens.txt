@@ -52,6 +52,8 @@ NP_FORM_DUMMY
 N_FORM_DUMMY
 NP_SCRIPT_DUMMY
 N_SCRIPT_DUMMY
+tcd
+N_TCD_DUMMY
 xforms
 N_XFORMS_1_0_DUMMY
 xsd
@@ -410,6 +412,7 @@ contour-polygon
 contrast
 control
 conversion-mode
+conversion-type
 copy-back
 copy-formulas
 copy-outline-levels
@@ -640,6 +643,7 @@ endnote-citation
 endnote-ref
 endnotes-configuration
 engraved
+entry
 eq
 equal-author
 equal-comment
@@ -1015,6 +1019,7 @@ label-stroke-opacity
 label-stroke-width
 lambda
 landscape
+lang
 language
 language-asian
 language-complex
@@ -1027,6 +1032,7 @@ layer-set
 leader-char
 left
 left-outside
+left-text
 left-top-position
 left-arc
 left-circle
@@ -1477,6 +1483,7 @@ revision
 ridge
 right
 right-outside
+right-text
 right-arc
 right-circle
 ring
@@ -1789,6 +1796,7 @@ text-combine
 text-combine-end-char
 text-combine-start-char
 text-content
+text-conversion-dictionary
 text-crossing-out
 text-emphasize
 text-global
