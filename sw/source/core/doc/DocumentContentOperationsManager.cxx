@@ -1522,14 +1522,14 @@ namespace //local functions originally from docfmt.cxx
             if( pStt->nNode != pEnd->nNode )
                 aCntEnd.Assign( pNode, nLen );
 
-            if( pStt->nContent.GetIndex() != 0 || aCntEnd.GetIndex() != nLen )
+
             {
                 // the SwRegHistory inserts the attribute into the TextNode!
                 if( pNode->IsTextNode() && pCharSet && pCharSet->Count() )
                 {
                     SwRegHistory history( pNode, *pNode, pHistory );
                     bRet = history.InsertItems(*pCharSet,
-                            pStt->nContent.GetIndex(), aCntEnd.GetIndex(), nFlags, /*ppNewTextAttr*/nullptr)
+                            pStt->nContent.GetIndex(), aCntEnd.GetIndex(), nFlags | SetAttrMode::NOFORMATATTR, /*ppNewTextAttr*/nullptr)
                         || bRet;
                 }
 
@@ -1565,8 +1565,6 @@ namespace //local functions originally from docfmt.cxx
                 ++nNodes;
                 aSt.Assign( pStt->nNode.GetNode(), +1 );
             }
-            else
-                aSt = pStt->nNode;
             aCntEnd = pEnd->nContent; // aEnd was changed!
         }
         else
