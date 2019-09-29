@@ -31,12 +31,16 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
+#include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
+#include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
+#include <com/sun/star/chart2/DataPointCustomLabelField.hpp>
 #include <com/sun/star/chart/ChartSeriesAddress.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -547,8 +551,20 @@ SchXMLTableRowContext::~SchXMLTableRowContext()
 SvXMLImportContextRef SchXMLTableRowContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& )
+    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
+    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
+    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    {
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        if(nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken(aLocalName, XML_CUSTOM_LABEL_TEXT))
+        {
+            OUString sCustomLabel = xAttrList->getValueByIndex( i );
+            mrTable.aCustomLabelTexts[mrTable.nRowIndex - 1] = sCustomLabel;
+        }
+    }
     SvXMLImportContext* pContext = nullptr;
 
     // <table:table-cell> element
@@ -800,6 +816,45 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
         xDataAccess->setAnyRowDescriptions( aComplexRowDescriptions );
     if( rTable.bHasHeaderRow )
         xDataAccess->setAnyColumnDescriptions( aComplexColumnDescriptions );
+
+    // apply custom text
+    try {
+            Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xChartDoc->getFirstDiagram(), uno::UNO_QUERY_THROW );
+            const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
+            for( const auto& rCooSys : aCooSysSeq )
+            {
+                Reference< chart2::XChartTypeContainer > xCooSysContainer( rCooSys, uno::UNO_QUERY_THROW );
+                const Sequence< Reference< chart2::XChartType > > aChartTypeSeq( xCooSysContainer->getChartTypes());
+                for( const auto& rChartType : aChartTypeSeq )
+                {
+                    Reference< chart2::XDataSeriesContainer > xSeriesContainer( rChartType, uno::UNO_QUERY );
+                    if(!xSeriesContainer.is())
+                        continue;
+                    const Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesContainer->getDataSeries() );
+                    std::vector< Reference< chart2::XDataSeries > > aRemainingSeries;
+
+                    for( const auto& rSeries : aSeriesSeq )
+                    {
+                        for(const std::pair<sal_Int32, OUString>& element : rTable.aCustomLabelTexts)
+                        {
+                           Reference<beans::XPropertySet> xProp = rSeries->getDataPointByIndex(element.first);
+                           if(xProp.is())
+                           {
+                                Sequence< Reference<chart2::XDataPointCustomLabelField>> xLabels(1);
+                                Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+                                Reference< chart2::XDataPointCustomLabelField > xCustomLabel = chart2::DataPointCustomLabelField::create(xContext);
+                                xLabels[0] = xCustomLabel;
+                                xCustomLabel->setString(element.second);
+                                xCustomLabel->setFieldType(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT);
+                                xProp->setPropertyValue("CustomLabelFields", makeAny(xLabels));
+                           }
+                        }
+                    }
+                }
+            }
+        }catch( const uno::Exception & )
+        {
+        }
 
     if ( rTable.bProtected )
     {
