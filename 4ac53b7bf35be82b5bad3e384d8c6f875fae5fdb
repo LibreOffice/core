@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_9f13260e",
+        "filename": "sw/source/core/access/accmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-09-29T15:09:38Z",
+      "side": 1,
+      "message": "in general, it is OK to close(), remove() things more than once - we are typically tolerant of this kind of problem in large applications because it can often be hard for client code to only close()/remove() things once in their failure paths, and it is better that they remove() twice, rather than not removing at all",
+      "revId": "4ac53b7bf35be82b5bad3e384d8c6f875fae5fdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
