@@ -191,6 +191,8 @@ void SAL_CALL SwDrawModellListener_Impl::removeShapeEventListener(
         (void)xListener;
         maShapeListeners.erase(it);
     }
+    else
+        assert(false);
 }
 
 void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
