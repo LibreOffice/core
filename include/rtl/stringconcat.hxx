@@ -324,16 +324,17 @@ OString::number() to OString.
 template< typename T >
 struct OStringNumber;
 
-template <class Derived, int nBufSize> struct OStringNumberBase
+template <typename Number, int nBufSize> struct OStringNumberBase
 {
+    using number_t = Number;
     // OString::number(value).getStr() is very common (writing xml code, ...),
     // so implement that one also here, to avoid having to explicitly to convert
     // to OString in all such places
     const char * getStr() const SAL_RETURNS_NONNULL { return buf; }
-    Derived&& toAsciiUpperCase()
+    OStringNumber<number_t>&& toAsciiUpperCase()
     {
         rtl_str_toAsciiUpperCase_WithLength(buf, length);
-        return std::move(*static_cast<Derived*>(this));
+        return std::move(*static_cast<OStringNumber<number_t>*>(this));
     }
     operator std::string_view() const { return std::string_view(buf, length); }
     char buf[nBufSize];
@@ -342,38 +343,37 @@ template <class Derived, int nBufSize> struct OStringNumberBase
 
 template<>
 struct OStringNumber< int >
-    : public OStringNumberBase<OStringNumber<int>, RTL_STR_MAX_VALUEOFINT32>
+    : public OStringNumberBase<int, RTL_STR_MAX_VALUEOFINT32>
 {
-    OStringNumber(int i, sal_Int16 radix) { length = rtl_str_valueOfInt32(buf, i, radix); }
+    OStringNumber(number_t i, sal_Int16 radix) { length = rtl_str_valueOfInt32(buf, i, radix); }
 };
 
 template<>
 struct OStringNumber< long long >
-    : public OStringNumberBase<OStringNumber<long long>, RTL_STR_MAX_VALUEOFINT64>
+    : public OStringNumberBase<long long, RTL_STR_MAX_VALUEOFINT64>
 {
-    OStringNumber(long long ll, sal_Int16 radix) { length = rtl_str_valueOfInt64(buf, ll, radix); }
+    OStringNumber(number_t i, sal_Int16 radix) { length = rtl_str_valueOfInt64(buf, i, radix); }
 };
 
 template<>
 struct OStringNumber< unsigned long long >
-    : public OStringNumberBase<OStringNumber<unsigned long long>, RTL_STR_MAX_VALUEOFUINT64>
+    : public OStringNumberBase<unsigned long long, RTL_STR_MAX_VALUEOFUINT64>
 {
-    OStringNumber( unsigned long long ll, sal_Int16 radix )
-    { length = rtl_str_valueOfUInt64(buf, ll, radix); }
+    OStringNumber(number_t i, sal_Int16 radix) { length = rtl_str_valueOfUInt64(buf, i, radix); }
 };
 
 template<>
 struct OStringNumber< float >
-    : public OStringNumberBase<OStringNumber<float>, RTL_STR_MAX_VALUEOFFLOAT>
+    : public OStringNumberBase<float, RTL_STR_MAX_VALUEOFFLOAT>
 {
-    OStringNumber(float f) { length = rtl_str_valueOfFloat(buf, f); }
+    OStringNumber(number_t f) { length = rtl_str_valueOfFloat(buf, f); }
 };
 
 template<>
 struct OStringNumber< double >
-    : public OStringNumberBase<OStringNumber<double>, RTL_STR_MAX_VALUEOFDOUBLE>
+    : public OStringNumberBase<double, RTL_STR_MAX_VALUEOFDOUBLE>
 {
-    OStringNumber(double d) { length = rtl_str_valueOfDouble(buf, d); }
+    OStringNumber(number_t d) { length = rtl_str_valueOfDouble(buf, d); }
 };
 
 template< typename T >
@@ -397,12 +397,13 @@ OUString::number() to OUString.
 template< typename T >
 struct OUStringNumber;
 
-template <class Derived, int nBufSize> struct OUStringNumberBase
+template <typename Number, int nBufSize> struct OUStringNumberBase
 {
-    Derived&& toAsciiUpperCase()
+    using number_t = Number;
+    OUStringNumber<number_t>&& toAsciiUpperCase()
     {
         rtl_ustr_toAsciiUpperCase_WithLength(buf, length);
-        return std::move(*static_cast<Derived*>(this));
+        return std::move(*static_cast<OUStringNumber<number_t>*>(this));
     }
     operator std::u16string_view() const { return std::u16string_view(buf, length); }
     sal_Unicode buf[nBufSize];
@@ -411,39 +412,37 @@ template <class Derived, int nBufSize> struct OUStringNumberBase
 
 template<>
 struct OUStringNumber< int >
-    : public OUStringNumberBase<OUStringNumber<int>, RTL_USTR_MAX_VALUEOFINT32>
+    : public OUStringNumberBase<int, RTL_USTR_MAX_VALUEOFINT32>
 {
-    OUStringNumber(int i, sal_Int16 radix) { length = rtl_ustr_valueOfInt32(buf, i, radix); }
+    OUStringNumber(number_t i, sal_Int16 radix) { length = rtl_ustr_valueOfInt32(buf, i, radix); }
 };
 
 template<>
 struct OUStringNumber< long long >
-    : public OUStringNumberBase<OUStringNumber<long long>, RTL_USTR_MAX_VALUEOFINT64>
+    : public OUStringNumberBase<long long, RTL_USTR_MAX_VALUEOFINT64>
 {
-    OUStringNumber( long long ll, sal_Int16 radix )
-    { length = rtl_ustr_valueOfInt64(buf, ll, radix); }
+    OUStringNumber(number_t i, sal_Int16 radix) { length = rtl_ustr_valueOfInt64(buf, i, radix); }
 };
 
 template<>
 struct OUStringNumber< unsigned long long >
-    : public OUStringNumberBase<OUStringNumber<unsigned long long>, RTL_USTR_MAX_VALUEOFUINT64>
+    : public OUStringNumberBase<unsigned long long, RTL_USTR_MAX_VALUEOFUINT64>
 {
-    OUStringNumber( unsigned long long ll, sal_Int16 radix )
-    { length = rtl_ustr_valueOfUInt64(buf, ll, radix); }
+    OUStringNumber(number_t i, sal_Int16 radix) { length = rtl_ustr_valueOfUInt64(buf, i, radix); }
 };
 
 template<>
 struct OUStringNumber< float >
-    : public OUStringNumberBase<OUStringNumber<float>, RTL_USTR_MAX_VALUEOFFLOAT>
+    : public OUStringNumberBase<float, RTL_USTR_MAX_VALUEOFFLOAT>
 {
-    OUStringNumber(float f) { length = rtl_ustr_valueOfFloat(buf, f); }
+    OUStringNumber(number_t f) { length = rtl_ustr_valueOfFloat(buf, f); }
 };
 
 template<>
 struct OUStringNumber< double >
-    : public OUStringNumberBase<OUStringNumber<double>, RTL_USTR_MAX_VALUEOFDOUBLE>
+    : public OUStringNumberBase<double, RTL_USTR_MAX_VALUEOFDOUBLE>
 {
-    OUStringNumber(double d) { length = rtl_ustr_valueOfDouble(buf, d); }
+    OUStringNumber(number_t d) { length = rtl_ustr_valueOfDouble(buf, d); }
 };
 
 template< typename T >
