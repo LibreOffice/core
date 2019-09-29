@@ -303,7 +303,7 @@ namespace pcr
     {
     private:
         typedef std::unordered_map< OUString, ScriptEventDescriptor >  EventMap;
-        typedef std::map< EventId, EventMap::iterator >                                       EventMapIndexAccess;
+        typedef std::map< EventId, OUString >                          EventMapIndexAccess;
 
         EventMap            m_aEventNameAccess;
         EventMapIndexAccess m_aEventIndexAccess;
@@ -349,7 +349,7 @@ namespace pcr
         std::pair< EventMap::iterator, bool > insertionResult =
             m_aEventNameAccess.emplace( _rEventName, _rScriptEvent );
         OSL_ENSURE( insertionResult.second, "EventHolder::addEvent: there already was a MacroURL for this event!" );
-        m_aEventIndexAccess[ _nId ] = insertionResult.first;
+        m_aEventIndexAccess[ _nId ] = _rEventName;
     }
 
     ScriptEventDescriptor EventHolder::getNormalizedDescriptorByName( const OUString& _rEventName ) const
@@ -409,7 +409,7 @@ namespace pcr
         // appear in the property browser UI.
         for (auto const& elem : m_aEventIndexAccess)
         {
-            *pReturn = elem.second->first;
+            *pReturn = elem.second;
             ++pReturn;
         }
         return aReturn;
