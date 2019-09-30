@@ -124,7 +124,7 @@ private:
             const SetAttrMode nMode );
     bool MergePortions( SwTextNode& rNode );
 
-    void Insert( const SwTextAttr *pHt );
+    void Insert(SwTextAttr* pHt);
     SW_DLLPUBLIC void Resort() const;
     SW_DLLPUBLIC void ResortStartMap() const;
     SW_DLLPUBLIC void ResortEndMap() const;

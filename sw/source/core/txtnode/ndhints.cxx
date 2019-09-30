@@ -144,12 +144,12 @@ bool CompareSwpHtEnd::operator()( const SwTextAttr* lhs, const SwTextAttr* rhs )
     return ( nHt1 < nHt2 );
 }
 
-void SwpHints::Insert( const SwTextAttr *pHt )
+void SwpHints::Insert(SwTextAttr* pHt)
 {
-    assert(std::find(m_HintsByStart.begin(), m_HintsByStart.end(), const_cast<SwTextAttr*>(pHt))
+    assert(std::find(m_HintsByStart.begin(), m_HintsByStart.end(), pHt)
             == m_HintsByStart.end()); // "Insert: hint already in HtStart"
     assert( pHt->m_pHints == nullptr );
-    const_cast<SwTextAttr*>(pHt)->m_pHints = this;
+    pHt->m_pHints = this;
 
     if (m_bStartMapNeedsSorting)
         ResortStartMap();
@@ -158,14 +158,14 @@ void SwpHints::Insert( const SwTextAttr *pHt )
     if (m_bWhichMapNeedsSorting)
         ResortWhichMap();
 
-    auto it1 = std::lower_bound(m_HintsByStart.begin(), m_HintsByStart.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtStart);
-    m_HintsByStart.insert(it1, const_cast<SwTextAttr*>(pHt));
+    auto it1 = std::lower_bound(m_HintsByStart.begin(), m_HintsByStart.end(), pHt, CompareSwpHtStart);
+    m_HintsByStart.insert(it1, pHt);
 
-    auto it2 = std::lower_bound(m_HintsByEnd.begin(), m_HintsByEnd.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtEnd());
-    m_HintsByEnd.insert(it2, const_cast<SwTextAttr*>(pHt));
+    auto it2 = std::lower_bound(m_HintsByEnd.begin(), m_HintsByEnd.end(), pHt, CompareSwpHtEnd());
+    m_HintsByEnd.insert(it2, pHt);
 
-    auto it3 = std::lower_bound(m_HintsByWhichAndStart.begin(), m_HintsByWhichAndStart.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtWhichStart());
-    m_HintsByWhichAndStart.insert(it3, const_cast<SwTextAttr*>(pHt));
+    auto it3 = std::lower_bound(m_HintsByWhichAndStart.begin(), m_HintsByWhichAndStart.end(), pHt, CompareSwpHtWhichStart());
+    m_HintsByWhichAndStart.insert(it3, pHt);
 }
 
 bool SwpHints::Contains( const SwTextAttr *pHt ) const
