@@ -21,12 +21,11 @@
     <property name="row_spacing">6</property>
     <property name="column_spacing">12</property>
     <child>
-      <object class="GtkButtonBox" id="buttonbox1">
+      <object class="GtkBox" id="buttonbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
-        <property name="layout_style">start</property>
         <child>
           <object class="GtkButton" id="new">
             <property name="label">gtk-new</property>
@@ -45,6 +44,7 @@
         <child>
           <object class="GtkButton" id="replace">
             <property name="label" translatable="yes" context="acorreplacepage|replace">_Replace</property>
+            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="no_show_all">True</property>
@@ -232,12 +232,5 @@
     <child>
       <placeholder/>
     </child>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
-    <widgets>
-      <widget name="new"/>
-      <widget name="replace"/>
-      <widget name="delete"/>
-    </widgets>
   </object>
 </interface>
