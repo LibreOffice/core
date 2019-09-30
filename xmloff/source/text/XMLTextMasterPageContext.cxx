@@ -19,20 +19,18 @@
 
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
+#include <xmloff/prstylei.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLTextMasterPageContext.hxx>
 #include <XMLTextHeaderFooterContext.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <PageMasterImportContext.hxx>
 
 
 using namespace ::com::sun::star;

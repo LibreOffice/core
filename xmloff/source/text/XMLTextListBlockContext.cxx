@@ -17,14 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/xmlnumi.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "XMLTextListItemContext.hxx"
 #include "XMLTextListBlockContext.hxx"

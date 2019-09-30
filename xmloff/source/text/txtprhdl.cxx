@@ -23,7 +23,6 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <tools/fontenum.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
@@ -56,8 +55,6 @@
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <XMLFillBitmapSizePropertyHandler.hxx>
 #include <XMLBitmapLogicalSizePropertyHandler.hxx>
-#include <com/sun/star/drawing/RectanglePoint.hpp>
-#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <XMLBitmapRepeatOffsetPropertyHandler.hxx>
 #include <vcl/graph.hxx>
 

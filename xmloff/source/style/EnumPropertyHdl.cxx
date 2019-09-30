@@ -22,7 +22,6 @@
 #include <comphelper/extract.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 
 using namespace ::com::sun::star::uno;

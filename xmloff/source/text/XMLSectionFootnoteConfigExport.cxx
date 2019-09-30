@@ -21,15 +21,12 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
-#include <sax/tools/converter.hxx>
 #include <xmloff/maptype.hxx>
 
 #include <xmloff/txtprmap.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnume.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>

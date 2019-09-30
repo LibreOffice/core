@@ -23,7 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <tools/debug.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>

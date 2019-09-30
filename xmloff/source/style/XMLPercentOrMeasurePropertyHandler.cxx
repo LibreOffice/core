@@ -24,8 +24,6 @@
 
 #include <com/sun/star/uno/Any.hxx>
 
-#include <sax/tools/converter.hxx>
-
 #include <xmloff/xmluconv.hxx>
 
 using namespace ::com::sun::star;

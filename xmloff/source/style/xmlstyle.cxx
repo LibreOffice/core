@@ -17,20 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/xml/sax/SAXParseException.hpp>
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/SAXException.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XAutoStylesSupplier.hpp>
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
 #include "PageMasterPropMapper.hxx"
 #include <sal/log.hxx>
-#include <svl/itemset.hxx>
 #include <svl/style.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -42,7 +35,6 @@
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/txtstyli.hxx>
-#include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlnumfi.hxx>
 #include <XMLChartStyleContext.hxx>
 #include <XMLChartPropertySetMapper.hxx>

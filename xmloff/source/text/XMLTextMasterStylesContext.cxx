@@ -20,7 +20,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/nmspmap.hxx>
 
 #include <xmloff/XMLTextMasterPageContext.hxx>
 #include <xmloff/XMLTextMasterStylesContext.hxx>
