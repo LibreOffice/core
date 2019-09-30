@@ -169,7 +169,7 @@ sal_Int16 SwRotationGrf::checkAndCorrectValue(sal_Int16 nValue)
 SwRotationGrf::SwRotationGrf( sal_Int16 nVal, const Size& rSz )
     // tdf#115529 check and evtl. correct value
 :   SfxUInt16Item( RES_GRFATR_ROTATION, checkAndCorrectValue(nVal) ),
-    aUnrotatedSize( rSz )
+    m_aUnrotatedSize( rSz )
 {
 }
 
@@ -246,18 +246,18 @@ SfxPoolItem* SwGammaGrf::Clone( SfxItemPool * ) const
 bool SwGammaGrf::operator==( const SfxPoolItem& rCmp ) const
 {
     return SfxPoolItem::operator==( rCmp ) &&
-        nValue == static_cast<const SwGammaGrf&>(rCmp).GetValue();
+        m_nValue == static_cast<const SwGammaGrf&>(rCmp).GetValue();
 }
 
 bool SwGammaGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
-    rVal <<= nValue;
+    rVal <<= m_nValue;
     return true;
 }
 
 bool SwGammaGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
-    return rVal >>= nValue;
+    return rVal >>= m_nValue;
 }
 
 // Sw___Grf::Clone(..) cont'd
