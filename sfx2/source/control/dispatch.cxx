@@ -1255,7 +1255,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
     }
 
     Update_Impl_( bUIActive, !bIsIPActive, bIsIPActive, pWorkWin );
-    if (bUIActive || bIsActive)
+    if ( (bUIActive || bIsActive) && !comphelper::LibreOfficeKit::isActive() )
         pWorkWin->UpdateObjectBars_Impl();
 
     if ( pBindings )
