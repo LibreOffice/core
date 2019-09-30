@@ -15,6 +15,11 @@ import unittest
 
 class CalcChartUIDemo(UITestCase):
 
+    def create_insert_chart_dialog(self):
+        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
+        # time.sleep(1) # ideally wait for a creation event
+        return self.xUITest.getTopFocusWindow()
+
     def fill_spreadsheet(self):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         xGridWindow = xCalcDoc.getChild("grid_window")
@@ -34,9 +39,7 @@ class CalcChartUIDemo(UITestCase):
 
         self.fill_spreadsheet()
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
-
-        xChartDlg = self.xUITest.getTopFocusWindow()
+        xChartDlg = self.create_insert_chart_dialog();
 
         xCancelBtn = xChartDlg.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCancelBtn)
@@ -49,9 +52,7 @@ class CalcChartUIDemo(UITestCase):
 
         self.fill_spreadsheet()
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
-
-        xChartDlg = self.xUITest.getTopFocusWindow()
+        xChartDlg = self.create_insert_chart_dialog();
 
         xOkBtn = xChartDlg.getChild("finish")
         self.ui_test.close_dialog_through_button(xOkBtn)
@@ -64,9 +65,7 @@ class CalcChartUIDemo(UITestCase):
 
         self.fill_spreadsheet()
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
-
-        xChartDlg = self.xUITest.getTopFocusWindow()
+        xChartDlg = self.create_insert_chart_dialog();
 
         xNextBtn = xChartDlg.getChild("next")
         xNextBtn.executeAction("CLICK", tuple())
@@ -90,9 +89,7 @@ class CalcChartUIDemo(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         xGridWindow = xCalcDoc.getChild("grid_window")
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
-
-        xChartDlg = self.xUITest.getTopFocusWindow()
+        xChartDlg = self.create_insert_chart_dialog();
 
         xNextBtn = xChartDlg.getChild("finish")
         self.ui_test.close_dialog_through_button(xNextBtn)
@@ -112,9 +109,7 @@ class CalcChartUIDemo(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         xGridWindow = xCalcDoc.getChild("grid_window")
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
-
-        xChartDlg = self.xUITest.getTopFocusWindow()
+        xChartDlg = self.create_insert_chart_dialog();
 
         xNextBtn = xChartDlg.getChild("finish")
         self.ui_test.close_dialog_through_button(xNextBtn)
@@ -137,9 +132,7 @@ class CalcChartUIDemo(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         xGridWindow = xCalcDoc.getChild("grid_window")
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
-
-        xChartDlg = self.xUITest.getTopFocusWindow()
+        xChartDlg = self.create_insert_chart_dialog();
 
         xNextBtn = xChartDlg.getChild("finish")
         self.ui_test.close_dialog_through_button(xNextBtn)
