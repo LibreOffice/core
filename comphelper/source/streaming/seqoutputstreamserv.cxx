@@ -95,7 +95,6 @@ void SAL_CALL SequenceOutputStreamService::writeBytes( const uno::Sequence< ::sa
         throw io::NotConnectedException();
 
     m_xOutputStream->writeBytes( aData );
-    m_aSequence = aData;
 }
 
 void SAL_CALL SequenceOutputStreamService::flush()
