@@ -114,8 +114,7 @@ namespace stoc_connector
                 {
                     OUString sMessage("Connector : couldn't connect to socket (");
                     OUString sError = pConn->m_socket.getErrorAsString();
-                    sMessage += sError;
-                    sMessage += ")";
+                    sMessage += sError + ")";
                     throw NoConnectException( sMessage );
                 }
                 // we enable tcpNoDelay for loopback connections because
@@ -137,12 +136,7 @@ namespace stoc_connector
                     _xSMgr->createInstanceWithContext(delegatee, _xCtx), UNO_QUERY );
 
                 if(!xConnector.is())
-                {
-                    OUString message("Connector: unknown delegatee ");
-                    message += delegatee;
-
-                    throw ConnectionSetupException(message);
-                }
+                    throw ConnectionSetupException("Connector: unknown delegatee " + delegatee);
 
                 sal_Int32 index = sConnectionDescription.indexOf(',');
 

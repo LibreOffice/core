@@ -92,11 +92,7 @@ namespace io_acceptor
             : m_pFlag( pFlag )
             {
                   if( *m_pFlag )
-                  {
-                      OUString sMessage( "AlreadyAcceptingException :" );
-                      sMessage += sConnectionDescription;
-                      throw AlreadyAcceptingException( sMessage );
-                  }
+                      throw AlreadyAcceptingException( "AlreadyAcceptingException :" + sConnectionDescription );
                   *m_pFlag = true;
             }
         ~BeingInAccept()
@@ -186,12 +182,7 @@ namespace io_acceptor
                     _xAcceptor.set(_xSMgr->createInstanceWithContext(delegatee, _xCtx), UNO_QUERY);
 
                     if(!_xAcceptor.is())
-                    {
-                        OUString message("Acceptor: unknown delegatee ");
-                        message += delegatee;
-
-                        throw ConnectionSetupException(message);
-                    }
+                        throw ConnectionSetupException("Acceptor: unknown delegatee " + delegatee);
                 }
             }
             catch (const rtl::MalformedUriException & rEx)

@@ -461,8 +461,7 @@ OString makeClassPathOption(OUString const & sUserClassPath)
     sPaths = OUStringToOString(
         sBufCP.makeStringAndClear(), osl_getThreadTextEncoding());
 
-    OString sOptionClassPath("-Djava.class.path=");
-    sOptionClassPath += sPaths;
+    OString sOptionClassPath = "-Djava.class.path=" + sPaths;
     return sOptionClassPath;
 }
 
