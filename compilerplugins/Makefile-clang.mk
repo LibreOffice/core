@@ -204,8 +204,7 @@ $(CLANGINDIR)/sharedvisitor/sharedvisitor.cxx: $(CLANGOUTDIR)/sharedvisitor/gene
         $(shell grep -l "LO_CLANG_SHARED_PLUGINS" $(CLANGINDIR)/*.cxx) \
         > $(CLANGINDIR)/sharedvisitor/sharedvisitor.cxx
 
-CLANGTOOLLIBS = -lclangTooling -lclangDriver -lclangFrontend -lclangParse -lclangSema -lclangEdit -lclangAnalysis \
-        -lclangAST -lclangLex -lclangSerialization -lclangBasic $(shell $(LLVMCONFIG) --ldflags --libs --system-libs)
+CLANGTOOLLIBS = -lclang-cpp $(shell $(LLVMCONFIG) --ldflags --libs --system-libs)
 # Path to the clang system headers (no idea if there's a better way to get it).
 CLANGTOOLDEFS = -DCLANGSYSINCLUDE=$(shell $(LLVMCONFIG) --libdir)/clang/$(shell $(LLVMCONFIG) --version | sed 's/svn//')/include
 ifneq ($(filter-out MACOSX WNT,$(OS)),)
