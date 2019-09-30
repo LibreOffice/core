@@ -1319,7 +1319,7 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>*
                 if (m_rExport.CollapseScriptsforWordOk(nScript,nWhich))
                     m_rExport.AttrOutput().OutputItem(*pI);
             }
-        } while( !aIter.IsAtEnd() && nullptr != ( pItem = aIter.NextItem() ) );
+        } while ((pItem = aIter.NextItem()));
         m_rExport.SetCurItemSet( pOldSet );
     }
 }

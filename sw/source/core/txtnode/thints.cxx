@@ -774,18 +774,15 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                         aCharAutoFormatSetRange);
                     SfxItemIter aItemIter( *pOldStyle );
                     const SfxPoolItem* pItem = aItemIter.GetCurItem();
-                    while( true )
+                    do
                     {
                         if ( !CharFormat::IsItemIncluded( pItem->Which(), &rNewHint ) )
                         {
                             aNewSet.Put( *pItem );
                         }
 
-                        if( aItemIter.IsAtEnd() )
-                            break;
-
                         pItem = aItemIter.NextItem();
-                    }
+                    } while (pItem);
 
                     // Remove old hint
                     Delete( pOther );
@@ -859,7 +856,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                                 aNewSet.ClearItem( pItem->Which() );
                         }
                     }
-                    while (!aIter2.IsAtEnd() && nullptr != (pItem = aIter2.NextItem()));
+                    while ((pItem = aIter2.NextItem()));
                 }
 
                 // Remove old hint
@@ -901,7 +898,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                             }
                         }
                     }
-                    while (!aIter2.IsAtEnd() && nullptr != (pItem = aIter2.NextItem()));
+                    while ((pItem = aIter2.NextItem()));
 
                     if ( pNewSet )
                     {
@@ -1903,7 +1900,7 @@ bool SwTextNode::SetAttr(
 
     do
     {
-        if ( pItem && !IsInvalidItem(pItem) )
+        if (!IsInvalidItem(pItem))
         {
             const sal_uInt16 nWhich = pItem->Which();
             OSL_ENSURE( isCHRATR(nWhich) || isTXTATR(nWhich),
@@ -1949,10 +1946,8 @@ bool SwTextNode::SetAttr(
                 }
             }
         }
-        if ( aIter.IsAtEnd() )
-            break;
         pItem = aIter.NextItem();
-    } while( true );
+    } while(pItem);
 
     if ( aCharSet.Count() )
     {
@@ -2181,7 +2176,7 @@ bool SwTextNode::GetParaAttr(SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
 
                     const sal_Int32 nHintEnd = *pAttrEnd;
 
-                    while ( pItem )
+                    for (; pItem; pItem = pItemIter ? pItemIter->NextItem() : nullptr)
                     {
                         const sal_uInt16 nHintWhich = pItem->Which();
                         OSL_ENSURE(!isUNKNOWNATR(nHintWhich),
@@ -2237,9 +2232,6 @@ bool SwTextNode::GetParaAttr(SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                                 }
                             }
                         }
-
-                        pItem = ( pItemIter.get() && !pItemIter->IsAtEnd() )
-                                    ? pItemIter->NextItem() : nullptr;
                     } // end while
                 }
             }
@@ -2319,20 +2311,13 @@ struct RemovePresentAttrs
 
         const SwTextAttr* const pAutoStyle(i_rAttrSpan.second);
         SfxItemIter aIter(m_rAttrSet);
-        const SfxPoolItem* pItem(aIter.GetCurItem());
-        while (pItem)
+        for (const SfxPoolItem* pItem(aIter.GetCurItem()); pItem; pItem = aIter.NextItem())
         {
             const sal_uInt16 nWhich(pItem->Which());
             if (CharFormat::IsItemIncluded(nWhich, pAutoStyle))
             {
                 m_rAttrSet.ClearItem(nWhich);
             }
-
-            if (aIter.IsAtEnd())
-            {
-                break;
-            }
-            pItem = aIter.NextItem();
         }
     }
 
@@ -2384,16 +2369,9 @@ lcl_FillWhichIds(const SfxItemSet& i_rAttrSet, std::vector<sal_uInt16>& o_rClear
 {
     o_rClearIds.reserve(i_rAttrSet.Count());
     SfxItemIter aIter(i_rAttrSet);
-    const SfxPoolItem* pItem(aIter.GetCurItem());
-    while (pItem)
+    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
         o_rClearIds.push_back(pItem->Which());
-
-        if (aIter.IsAtEnd())
-        {
-            break;
-        }
-        pItem = aIter.NextItem();
     }
 }
 
@@ -2516,7 +2494,7 @@ void SwTextNode::FormatToTextAttr( SwTextNode* pNd )
             SfxItemSet aConvertSet( GetDoc()->GetAttrPool(), aCharFormatSetRange );
             std::vector<sal_uInt16> aClearWhichIds;
 
-            while( true )
+            do
             {
                 if( SfxItemState::SET == aNdSet.GetItemState( pItem->Which(), false, &pNdItem ) )
                 {
@@ -2535,10 +2513,8 @@ void SwTextNode::FormatToTextAttr( SwTextNode* pNd )
                     aConvertSet.Put(*pItem);
                 }
 
-                if( aIter.IsAtEnd() )
-                    break;
                 pItem = aIter.NextItem();
-            }
+            } while (pItem);
 
             // 4/ clear items of this that are set with the same value on pNd
             ClearItemsFromAttrSet( aClearWhichIds );

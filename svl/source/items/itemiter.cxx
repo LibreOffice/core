@@ -50,17 +50,14 @@ SfxItemIter::~SfxItemIter()
 {
 }
 
-const SfxPoolItem* SfxItemIter::NextItem()
+// Precondition : m_nCurrent < m_nEnd
+const SfxPoolItem* SfxItemIter::ImplNextItem()
 {
-    if (m_nCurrent < m_nEnd)
-    {
-        SfxPoolItem const** ppFnd = m_rSet.m_pItems.get();
-        do {
-            m_nCurrent++;
-        } while (m_nCurrent < m_nEnd && !*(ppFnd + m_nCurrent ));
-        return *(ppFnd+m_nCurrent);
-    }
-    return nullptr;
+    SfxPoolItem const** ppFnd = m_rSet.m_pItems.get();
+    do {
+        m_nCurrent++;
+    } while (m_nCurrent < m_nEnd && !*(ppFnd + m_nCurrent ));
+    return *(ppFnd+m_nCurrent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -448,9 +448,9 @@ lcl_SetFlyFrameAttr(SwDoc & rDoc,
     const SfxPoolItem* pItem;
     SfxItemIter aIter( rSet );
     SfxItemSet aTmpSet( rDoc.GetAttrPool(), aFrameFormatSetRange );
-    sal_uInt16 nWhich = aIter.GetCurItem()->Which();
+    const SfxPoolItem* pItemIter = aIter.GetCurItem();
     do {
-        switch( nWhich )
+        switch(pItemIter->Which())
         {
         case RES_FILL_ORDER:
         case RES_BREAK:
@@ -460,24 +460,23 @@ lcl_SetFlyFrameAttr(SwDoc & rDoc,
             OSL_FAIL( "Unknown Fly attribute." );
             [[fallthrough]];
         case RES_CHAIN:
-            rSet.ClearItem( nWhich );
+            rSet.ClearItem(pItemIter->Which());
             break;
         case RES_ANCHOR:
             if( DONTMAKEFRMS != nMakeFrames )
                 break;
             [[fallthrough]];
         default:
-            if( !IsInvalidItem( aIter.GetCurItem() ) && ( SfxItemState::SET !=
-                rFlyFormat.GetAttrSet().GetItemState( nWhich, true, &pItem ) ||
-                *pItem != *aIter.GetCurItem() ))
-                aTmpSet.Put( *aIter.GetCurItem() );
+            if( !IsInvalidItem(pItemIter) && ( SfxItemState::SET !=
+                rFlyFormat.GetAttrSet().GetItemState(pItemIter->Which(), true, &pItem ) ||
+                *pItem != *pItemIter))
+                aTmpSet.Put(*pItemIter);
             break;
         }
 
-        if( aIter.IsAtEnd() )
-            break;
+        pItemIter = aIter.NextItem();
 
-    } while( 0 != ( nWhich = aIter.NextItem()->Which() ) );
+    } while (pItemIter && (0 != pItemIter->Which()));
 
     if( aTmpSet.Count() )
         rFlyFormat.SetFormatAttr( aTmpSet );

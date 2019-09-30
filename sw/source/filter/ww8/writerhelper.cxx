@@ -410,7 +410,7 @@ namespace sw
                 {
                     do
                         rItems[pItem->Which()] = pItem;
-                    while (!aIter.IsAtEnd() && nullptr != (pItem = aIter.NextItem()));
+                    while ((pItem = aIter.NextItem()));
                 }
             }
         }
@@ -434,7 +434,7 @@ namespace sw
                     const SfxPoolItem *pItem = aIter.GetCurItem();
                     do
                         rSet.ClearItem(pItem->Which());
-                    while (!aIter.IsAtEnd() && nullptr != (pItem = aIter.NextItem()));
+                    while ((pItem = aIter.NextItem()));
                 }
             }
         }

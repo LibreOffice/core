@@ -195,8 +195,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                 OSL_ENSURE( !bKeepAttributes,
                         "<lcl_RstAttr(..)> - certain attributes are kept, but not needed." );
                 SfxItemIter aIter( *pPara->pDelSet );
-                pItem = aIter.FirstItem();
-                while(pItem)
+                for (pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
                 {
                     if ( ( pItem->Which() != RES_PAGEDESC &&
                            pItem->Which() != RES_BREAK &&
@@ -205,9 +204,6 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                     {
                         pNode->ResetAttr( pItem->Which() );
                     }
-                    if (aIter.IsAtEnd())
-                        break;
-                    pItem = aIter.NextItem();
                 }
             }
             else if( pPara->bResetAll )
@@ -559,7 +555,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     SfxItemIter aIter( rSet );
     const SfxPoolItem* pItem = aIter.GetCurItem();
     SfxItemPool* pSdrPool = GetAttrPool().GetSecondaryPool();
-    while( true )
+    do
     {
         bool bCheckSdrDflt = false;
         const sal_uInt16 nWhich = pItem->Which();
@@ -609,10 +605,8 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             }
         }
 
-        if( aIter.IsAtEnd() )
-            break;
         pItem = aIter.NextItem();
-    }
+    } while (pItem);
 
     if( aNew.Count() && aCallMod.HasWriterListeners() )
     {

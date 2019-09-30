@@ -700,17 +700,15 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
             {
                 SfxItemIter aIter( pOld->aAttrSet );
                 const SfxPoolItem* pItem = aIter.GetCurItem(), *pGet;
-                while( true )
+                do
                 {
                     if( SfxItemState::SET == pCurrent->aAttrSet.GetItemState(
                         pItem->Which(), false, &pGet ) &&
                         *pItem == *pGet )
                         pOld->aAttrSet.ClearItem( pItem->Which() );
 
-                    if( aIter.IsAtEnd() )
-                        break;
                     pItem = aIter.NextItem();
-                }
+                } while (pItem);
 
                 if (!pOld->aAttrSet.Count() && !pOld->m_pChildList &&
                     !pOld->nStyleNo )
@@ -1064,16 +1062,15 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
             // Search for all which are set over the whole area
             SfxItemIter aIter( aMrgSet );
             const SfxPoolItem* pItem;
+            const SfxPoolItem* pIterItem = aIter.GetCurItem();
             do {
-                sal_uInt16 nWhich = aIter.GetCurItem()->Which();
+                sal_uInt16 nWhich = pIterItem->Which();
                 if( SfxItemState::SET != pTmp->aAttrSet.GetItemState( nWhich,
-                      false, &pItem ) || *pItem != *aIter.GetCurItem() )
+                      false, &pItem ) || *pItem != *pIterItem)
                     aMrgSet.ClearItem( nWhich );
 
-                if( aIter.IsAtEnd() )
-                    break;
-                aIter.NextItem();
-            } while( true );
+                pIterItem = aIter.NextItem();
+            } while(pIterItem);
 
             if( !aMrgSet.Count() )
                 return;
@@ -1110,15 +1107,14 @@ void SvxRTFItemStackType::SetRTFDefaults( const SfxItemSet& rDefaults )
     if( rDefaults.Count() )
     {
         SfxItemIter aIter( rDefaults );
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         do {
-            sal_uInt16 nWhich = aIter.GetCurItem()->Which();
+            sal_uInt16 nWhich = pItem->Which();
             if( SfxItemState::SET != aAttrSet.GetItemState( nWhich, false ))
-                aAttrSet.Put( *aIter.GetCurItem() );
+                aAttrSet.Put(*pItem);
 
-            if( aIter.IsAtEnd() )
-                break;
-            aIter.NextItem();
-        } while( true );
+            pItem = aIter.NextItem();
+        } while(pItem);
     }
 }
 
