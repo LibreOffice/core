@@ -1786,7 +1786,7 @@ static bool lcl_IsIgnoredCharFormatForBullets(const sal_uInt16 nWhich)
 void SwTextNode::TryCharSetExpandToNum(const SfxItemSet& aCharSet)
 {
     SfxItemIter aIter( aCharSet );
-    const SfxPoolItem* pItem = aIter.FirstItem();
+    const SfxPoolItem* pItem = aIter.GetCurItem();
     if (!pItem)
         return;
     const sal_uInt16 nWhich = pItem->Which();
@@ -2766,8 +2766,8 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
                         SfxItemIter iter2(set2);
                         if (set1.Count() == set2.Count())
                         {
-                            for (SfxPoolItem const* pItem1 = iter1.FirstItem(),
-                                                  * pItem2 = iter2.FirstItem();
+                            for (SfxPoolItem const* pItem1 = iter1.GetCurItem(),
+                                                  * pItem2 = iter2.GetCurItem();
                                  pItem1 && pItem2;
                                  pItem1 = iter1.NextItem(),
                                  pItem2 = iter2.NextItem())

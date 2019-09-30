@@ -4240,9 +4240,8 @@ uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties()
 
     SfxItemSet& rSet = *mpSet;
     SfxItemIter aIter(rSet);
-    const SfxPoolItem* pItem = aIter.FirstItem();
 
-    while ( pItem )
+    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
         const sal_uInt16 nWID = pItem->Which();
 
@@ -4258,7 +4257,6 @@ uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties()
                 aPropertyVector.push_back( aPropertyValue );
             }
         }
-        pItem = aIter.NextItem();
     }
 
     const sal_Int32 nCount = aPropertyVector.size();

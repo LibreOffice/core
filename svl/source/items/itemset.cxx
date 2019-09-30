@@ -1497,7 +1497,7 @@ void SfxItemSet::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SfxItemSet"));
     SfxItemIter aIter(*this);
-    for (const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem())
+    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
          pItem->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 }

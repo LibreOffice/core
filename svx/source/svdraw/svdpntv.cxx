@@ -967,7 +967,7 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll)
     {
         bool bHasEEFeatureItems=false;
         SfxItemIter aIter(rAttr);
-        const SfxPoolItem* pItem=aIter.FirstItem();
+        const SfxPoolItem* pItem=aIter.GetCurItem();
         while (!bHasEEFeatureItems && pItem!=nullptr) {
             if (!IsInvalidItem(pItem)) {
                 sal_uInt16 nW=pItem->Which();

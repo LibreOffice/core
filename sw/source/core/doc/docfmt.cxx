@@ -1831,8 +1831,7 @@ void SwDoc::SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& rSet
     const sal_Int32 nEnd(rPam.End()->nContent.GetIndex());
     std::vector<sal_uInt16> whichIds;
     SfxItemIter iter(rSet);
-    for (SfxPoolItem const* pItem = iter.FirstItem();
-            pItem; pItem = iter.NextItem())
+    for (SfxPoolItem const* pItem = iter.GetCurItem(); pItem; pItem = iter.NextItem())
     {
         whichIds.push_back(pItem->Which());
         whichIds.push_back(pItem->Which());
@@ -1875,12 +1874,9 @@ void SwDoc::ChgFormat(SwFormat & rFormat, const SfxItemSet & rSet)
         {
             SfxItemIter aIter(aSet);
 
-            const SfxPoolItem * pItem = aIter.FirstItem();
-            while (pItem != nullptr)
+            for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
             {
                 aOldSet.InvalidateItem(pItem->Which());
-
-                pItem = aIter.NextItem();
             }
         }
 

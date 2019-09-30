@@ -94,7 +94,7 @@ namespace svx {
         if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
         {
             SfxItemIter aIter( *pDlg->GetOutputItemSet() );
-            const SfxPoolItem* pItem = aIter.FirstItem();
+            const SfxPoolItem* pItem = aIter.GetCurItem();
 
             while ( pItem )
             {
@@ -627,7 +627,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
     if(RET_OK == pDlg->Execute() && pDlg->GetOutputItemSet())
     {
         SfxItemIter aIter(*pDlg->GetOutputItemSet());
-        const SfxPoolItem* pItem = aIter.FirstItem();
+        const SfxPoolItem* pItem = aIter.GetCurItem();
 
         while(pItem)
         {

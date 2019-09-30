@@ -937,7 +937,7 @@ std::vector<sal_uInt16> GetAllCharPropIds(const SfxItemSet& rSet)
     std::vector<sal_uInt16> aCharWhichIds;
     {
         SfxItemIter aIter(rSet);
-        const SfxPoolItem* pItem=aIter.FirstItem();
+        const SfxPoolItem* pItem=aIter.GetCurItem();
         while (pItem!=nullptr)
         {
             if (!IsInvalidItem(pItem))
@@ -961,7 +961,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
     {
         bool bHasEEFeatureItems=false;
         SfxItemIter aIter(rAttr);
-        const SfxPoolItem* pItem=aIter.FirstItem();
+        const SfxPoolItem* pItem=aIter.GetCurItem();
         while (!bHasEEFeatureItems && pItem!=nullptr) {
             if (!IsInvalidItem(pItem)) {
                 sal_uInt16 nW=pItem->Which();

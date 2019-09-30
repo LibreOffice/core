@@ -255,7 +255,7 @@ static OUString lcl_dbg_out(const SfxItemSet & rSet)
     bool bFirst = true;
     OUStringBuffer aStr = "[ ";
 
-    pItem = aIter.FirstItem();
+    pItem = aIter.GetCurItem();
 
     while (pItem )
     {

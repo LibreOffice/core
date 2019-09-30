@@ -2241,8 +2241,7 @@ void SwHTMLParser::InsertParaAttrs( const SfxItemSet& rItemSet )
 {
     SfxItemIter aIter( rItemSet );
 
-    const SfxPoolItem *pItem = aIter.FirstItem();
-    while( pItem )
+    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
         // search for the table entry of the item...
         sal_uInt16 nWhich = pItem->Which();
@@ -2258,8 +2257,6 @@ void SwHTMLParser::InsertParaAttrs( const SfxItemSet& rItemSet )
             if (!bSuccess)
                 m_aParaAttrs.pop_back();
         }
-
-        pItem = aIter.NextItem();
     }
 }
 

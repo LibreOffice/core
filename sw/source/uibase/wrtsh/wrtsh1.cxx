@@ -1600,8 +1600,7 @@ void SwWrtShell::AutoUpdatePara(SwTextFormatColl* pColl, const SfxItemSet& rStyl
     GetPaMAttr( pCursor, aCoreSet );
     bool bReset = false;
     SfxItemIter aParaIter( aCoreSet );
-    const SfxPoolItem* pParaItem = aParaIter.FirstItem();
-    while( pParaItem )
+    for (auto pParaItem = aParaIter.GetCurItem(); pParaItem; pParaItem = aParaIter.NextItem())
     {
         if(!IsInvalidItem(pParaItem))
         {
@@ -1613,7 +1612,6 @@ void SwWrtShell::AutoUpdatePara(SwTextFormatColl* pColl, const SfxItemSet& rStyl
                 bReset = true;
             }
         }
-        pParaItem = aParaIter.NextItem();
     }
     StartAction();
     if(bReset)

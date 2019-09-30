@@ -320,7 +320,7 @@ namespace sdr
                                     // which occur in StyleSheet, take care of
                                     // parents (!)
                                     SfxItemIter aIter(pNewStyleSheet->GetItemSet());
-                                    const SfxPoolItem* pItem = aIter.FirstItem();
+                                    const SfxPoolItem* pItem = aIter.GetCurItem();
 
                                     while(pItem)
                                     {

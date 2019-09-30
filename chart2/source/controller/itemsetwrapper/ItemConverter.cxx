@@ -154,7 +154,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 
     bool bItemsChanged = false;
     SfxItemIter aIter( rItemSet );
-    const SfxPoolItem * pItem = aIter.FirstItem();
+    const SfxPoolItem * pItem = aIter.GetCurItem();
     tPropertyNameWithMemberId aProperty;
     uno::Any aValue;
 

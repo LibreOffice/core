@@ -2168,7 +2168,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
         {
             bool bHasEEFeatureItems = false;
             SfxItemIter aIter(rSet);
-            const SfxPoolItem* pItem = aIter.FirstItem();
+            const SfxPoolItem* pItem = aIter.GetCurItem();
             while (!bHasEEFeatureItems && pItem != nullptr)
             {
                 if (!IsInvalidItem(pItem))

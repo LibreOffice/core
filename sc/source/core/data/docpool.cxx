@@ -400,7 +400,7 @@ static bool lcl_HFPresentation
     }
 
     SfxItemIter aIter( rSet );
-    pItem = aIter.FirstItem();
+    pItem = aIter.GetCurItem();
 
     while( pItem )
     {

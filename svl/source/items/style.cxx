@@ -327,7 +327,7 @@ OUString SfxStyleSheetBase::GetDescription( MapUnit eMetric )
 {
     SfxItemIter aIter( GetItemSet() );
     OUStringBuffer aDesc;
-    const SfxPoolItem* pItem = aIter.FirstItem();
+    const SfxPoolItem* pItem = aIter.GetCurItem();
 
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
     while ( pItem )
