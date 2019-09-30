@@ -886,9 +886,7 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(const OUString& sCategory)
 
     sFilterExt += "*.vor";
 
-    sFilterName += " (";
-    sFilterName += sFilterExt;
-    sFilterName += ")";
+    sFilterName += " (" + sFilterExt + ")";
 
     aFileDlg.AddFilter( sFilterName, sFilterExt );
     aFileDlg.SetCurrentFilter( sFilterName );

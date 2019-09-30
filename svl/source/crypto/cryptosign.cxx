@@ -370,9 +370,7 @@ OUString PKIStatusToString(int n)
 
 OUString PKIStatusInfoToString(const PKIStatusInfo& rStatusInfo)
 {
-    OUString result;
-
-    result += "{status=";
+    OUString result = "{status=";
     if (rStatusInfo.status.len == 1)
         result += PKIStatusToString(rStatusInfo.status.data[0]);
     else
