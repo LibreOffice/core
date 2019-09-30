@@ -2087,13 +2087,23 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
         // have to have a result != 0
         SwFrame* pRef = nullptr;
         const bool bEndnote = pFootnote->GetAttr()->GetFootnote().IsEndNote();
+        const IDocumentSettingAccess& rSettings
+            = pFootnote->GetAttrSet()->GetDoc()->getIDocumentSettingAccess();
         if( bEndnote && pFootnote->IsInSct() )
         {
             SwSectionFrame* pSect = pFootnote->FindSctFrame();
             if( pSect->IsEndnAtEnd() )
+                // Endnotes at the end of the section.
                 pRef = pSect->FindLastContent( SwFindMode::LastCnt );
         }
+        else if (bEndnote && rSettings.get(DocumentSettingId::CONTINUOUS_ENDNOTES))
+        {
+            // Endnotes at the end of the document.
+            SwPageFrame* pPage = m_rThis.getRootFrame()->GetLastPage();
+            pRef = pPage->FindLastBodyContent();
+        }
         if( !pRef )
+            // Endnotes on a separate page.
             pRef = pFootnote->GetRef();
 
         OSL_ENSURE( pRef, "MoveBwd: Endnote for an empty section?" );

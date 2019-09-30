@@ -3217,6 +3217,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124600)
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/LineBreak", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124601)
+{
+    // This is a testcase for the ContinuousEndnotes compat flag.
+    // The document has 2 pages, the endnote anchor is on the first page.
+    // The endnote should be on the 2nd page together with the last page content.
+    createDoc("tdf124601.doc");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 3
+    // i.e. there was a separate endnote page, even when the ContinuousEndnotes compat option was
+    // on.
+    assertXPath(pXmlDoc, "/root/page", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/ftncont", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -102,6 +102,7 @@ enum class DocumentSettingId
     EMBED_COMPLEX_SCRIPT_FONTS,
     EMBED_SYSTEM_FONTS,
     APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING,
+    CONTINUOUS_ENDNOTES,
 };
 
  /** Provides access to settings of a document

@@ -216,6 +216,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING: return mApplyParagraphMarkFormatToNumbering;
         case DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING: return mbDisableOffPagePositioning;
         case DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA: return mbEmptyDbFieldHidesPara;
+        case DocumentSettingId::CONTINUOUS_ENDNOTES:
+            return mbContinuousEndnotes;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -447,6 +449,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
             break;
         case DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA:
             mbEmptyDbFieldHidesPara = value;
+            break;
+        case DocumentSettingId::CONTINUOUS_ENDNOTES:
+            mbContinuousEndnotes = value;
             break;
         default:
             OSL_FAIL("Invalid setting id");
