@@ -66,7 +66,7 @@ class OfficeConnection:
         argv = [soffice, "--accept=" + socket + ";urp",
                 "-env:UserInstallation=" + userdir,
                 "--quickstart=no", "--nofirststartwizard",
-                "--norestore", "--nologo"]
+                "--norestore", "--nologo", "--dont-survive-parent"]
         if "--valgrind" in self.args:
             argv.append("--valgrind")
 
