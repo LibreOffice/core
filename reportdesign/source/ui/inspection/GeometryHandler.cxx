@@ -2157,8 +2157,7 @@ void GeometryHandler::impl_setCounterFunction_throw()
 {
     OUString sNamePostfix;
     fillScope_throw(sNamePostfix);
-    OUString sFunctionName = m_aCounterFunction.m_sName;
-    sFunctionName += sNamePostfix;
+    OUString sFunctionName = m_aCounterFunction.m_sName + sNamePostfix;
     const OUString sQuotedFunctionName = lcl_getQuotedFunctionName(sFunctionName);
     OUString sScope;
     if ( !(!sFunctionName.isEmpty() && m_aFunctionNames.find(sQuotedFunctionName) != m_aFunctionNames.end() && impl_isCounterFunction_throw(sQuotedFunctionName,sScope)) )
