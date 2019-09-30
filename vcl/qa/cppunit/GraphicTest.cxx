@@ -27,10 +27,12 @@ class GraphicTest : public CppUnit::TestFixture
 {
     void testUnloadedGraphic();
     void testUnloadedGraphicLoading();
+    void testUnloadedGraphicWmf();
 
     CPPUNIT_TEST_SUITE(GraphicTest);
     CPPUNIT_TEST(testUnloadedGraphic);
     CPPUNIT_TEST(testUnloadedGraphicLoading);
+    CPPUNIT_TEST(testUnloadedGraphicWmf);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -128,6 +130,31 @@ void GraphicTest::testUnloadedGraphicLoading()
             }
         }
     }
+}
+
+void GraphicTest::testUnloadedGraphicWmf()
+{
+    // Create some in-memory WMF data, set its own preferred size to 99x99.
+    BitmapEx aBitmapEx = createBitmap();
+    SvMemoryStream aStream;
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    sal_uInt16 nFilterFormat = rGraphicFilter.GetExportFormatNumberForShortName("wmf");
+    Graphic aGraphic(aBitmapEx);
+    aGraphic.SetPrefSize(Size(99, 99));
+    aGraphic.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+    rGraphicFilter.ExportGraphic(aGraphic, "none", aStream, nFilterFormat);
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    // Now lazy-load this WMF data, with a custom preferred size of 42x42.
+    Size aMtfSize100(42, 42);
+    aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream, 0, &aMtfSize100);
+    aGraphic.makeAvailable();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 42x42
+    // - Actual  : 99x99
+    // i.e. we the custom preferred size was lost after lazy-load.
+    CPPUNIT_ASSERT_EQUAL(Size(42, 42), aGraphic.GetPrefSize());
 }
 
 } // namespace
