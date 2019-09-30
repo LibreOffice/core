@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_b5d2c133",
+        "filename": "sc/source/core/data/bcaslot.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-09-30T17:30:01Z",
+      "side": 1,
+      "message": "A nitpick: Original (since c++11) version of static_assert required second argument (message) - messageless version only was added with c++17, so no need in (test \u0026\u0026 message) pattern :-)",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 13
+      },
+      "revId": "c561d7289b23507f810f8a4fc9c16a314f7fb0a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
