@@ -1502,8 +1502,7 @@ OUString ScAccessibleDocumentPagePreview::getAccessibleName()
 
     if (!aFileName.isEmpty())
     {
-        aName = aFileName + " - " + aName;
-        aName += ScResId(STR_ACC_DOC_PREVIEW_SUFFIX);
+        aName = aFileName + " - " + aName + ScResId(STR_ACC_DOC_PREVIEW_SUFFIX);
 
     }
 

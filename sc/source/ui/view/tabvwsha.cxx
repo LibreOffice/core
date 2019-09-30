@@ -111,8 +111,7 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
             SCROW       nPosY       = rViewData.GetCurY();
             SCTAB       nTab        = rViewData.GetTabNo();
 
-            OUString aStr = ScResId(pGlobStrId);
-            aStr += ": ";
+            OUString aStr = ScResId(pGlobStrId) + ": ";
 
             ScAddress aCursor( nPosX, nPosY, nTab );
             double nVal;

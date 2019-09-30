@@ -198,8 +198,7 @@ void ScSolverOptionsDialog::FillListBox()
                 if (aValue >>= fDoubleValue)
                     m_aOptions.back()->SetDoubleValue(fDoubleValue);
 
-                OUString sTxt(aVisName);
-                sTxt += ": ";
+                OUString sTxt = aVisName + ": ";
                 sTxt += rtl::math::doubleToUString(fDoubleValue,
                     rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
                     ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true );
@@ -212,9 +211,7 @@ void ScSolverOptionsDialog::FillListBox()
                 if (aValue >>= nIntValue)
                     m_aOptions.back()->SetIntValue(nIntValue);
 
-                OUString sTxt(aVisName);
-                sTxt += ": ";
-                sTxt += OUString::number(nIntValue);
+                OUString sTxt = aVisName + ": " + OUString::number(nIntValue);
 
                 m_xLbSettings->set_text(nPos, sTxt, 1);
             }
