@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_b52de147",
+        "filename": "vcl/qa/cppunit/BitmapTest.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-09-30T17:21:05Z",
+      "side": 0,
+      "message": "Instead of removing the test you could change the test so the behavior is known if you try to allocate a 16 bit Bitmap from now on. This has become an edge case now and should be still covered by the tests.",
+      "revId": "3a7d479c4c852499e8e4e2bc4273f02aec5051be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
