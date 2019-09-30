@@ -48,6 +48,8 @@ $(eval $(call gb_CppunitTest_use_components,vcl_graphic_test,\
     i18npool/util/i18npool \
     ucb/source/core/ucb1 \
     unotools/util/utl \
+    emfio/emfio \
+    drawinglayer/drawinglayer \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_graphic_test))
