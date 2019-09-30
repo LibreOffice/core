@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_fa0108b1",
+        "filename": "basctl/source/accessibility/accessibledialogcontrolshape.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-09-30T10:48:18Z",
+      "side": 1,
+      "message": "spurious leftover from reverted change?",
+      "revId": "f9c2bc659784f9c60f8f3f8cfd2c26589d87899c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
