@@ -2876,17 +2876,12 @@ void SwWW8ImplReader::PostProcessAttrs()
     {
         SfxItemIter aIter(m_pPostProcessAttrsInfo->mItemSet);
 
-        const SfxPoolItem * pItem = aIter.GetCurItem();
-        if (pItem != nullptr)
+        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
         {
-            do
-            {
-                m_xCtrlStck->NewAttr(*m_pPostProcessAttrsInfo->mPaM.GetPoint(),
-                                   *pItem);
-                m_xCtrlStck->SetAttr(*m_pPostProcessAttrsInfo->mPaM.GetMark(),
-                                   pItem->Which());
-            }
-            while (!aIter.IsAtEnd() && nullptr != (pItem = aIter.NextItem()));
+            m_xCtrlStck->NewAttr(*m_pPostProcessAttrsInfo->mPaM.GetPoint(),
+                               *pItem);
+            m_xCtrlStck->SetAttr(*m_pPostProcessAttrsInfo->mPaM.GetMark(),
+                               pItem->Which());
         }
 
         m_pPostProcessAttrsInfo.reset();

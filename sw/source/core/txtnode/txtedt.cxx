@@ -314,7 +314,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
     {
         SfxItemIter aIter( *pSet1 );
         const SfxPoolItem* pItem = aIter.GetCurItem();
-        while( true )
+        do
         {
             if ( SfxItemState::SET == rSet2.GetItemState( pItem->Which(), false ) )
             {
@@ -323,11 +323,8 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
                 pNewSet->ClearItem( pItem->Which() );
             }
 
-            if( aIter.IsAtEnd() )
-                break;
-
             pItem = aIter.NextItem();
-        }
+        } while (pItem);
     }
 
     if ( pNewSet )

@@ -507,18 +507,16 @@ void SwPageFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     {
         SfxItemIter aNIter( *static_cast<const SwAttrSetChg*>(pNew)->GetChgSet() );
         SfxItemIter aOIter( *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
+        const SfxPoolItem* pNItem = aNIter.GetCurItem();
+        const SfxPoolItem* pOItem = aOIter.GetCurItem();
         SwAttrSetChg aOldSet( *static_cast<const SwAttrSetChg*>(pOld) );
         SwAttrSetChg aNewSet( *static_cast<const SwAttrSetChg*>(pNew) );
-        while( true )
+        do
         {
-            UpdateAttr_( aOIter.GetCurItem(),
-                         aNIter.GetCurItem(), nInvFlags,
-                         &aOldSet, &aNewSet );
-            if( aNIter.IsAtEnd() )
-                break;
-            aNIter.NextItem();
-            aOIter.NextItem();
-        }
+            UpdateAttr_(pOItem, pNItem, nInvFlags, &aOldSet, &aNewSet);
+            pNItem = aNIter.NextItem();
+            pOItem = aOIter.NextItem();
+        } while (pNItem);
         if ( aOldSet.Count() || aNewSet.Count() )
             SwLayoutFrame::Modify( &aOldSet, &aNewSet );
     }

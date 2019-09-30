@@ -198,13 +198,11 @@ SwNumRulesWithName::SwNumFormatGlobal::SwNumFormatGlobal( const SwNumFormat& rFo
         {
             SfxItemIter aIter( pFormat->GetAttrSet() );
             const SfxPoolItem *pCurr = aIter.GetCurItem();
-            while( true )
+            do
             {
                 m_Items.push_back(std::unique_ptr<SfxPoolItem>(pCurr->Clone()));
-                if( aIter.IsAtEnd() )
-                    break;
                 pCurr = aIter.NextItem();
-            }
+            } while (pCurr);
         }
 
         aFormat.SetCharFormat( nullptr );

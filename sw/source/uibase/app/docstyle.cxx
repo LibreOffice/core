@@ -1663,7 +1663,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
     {
         SfxItemIter aIter( rSet );
         const SfxPoolItem* pItem = aIter.GetCurItem();
-        while( true )
+        do
         {
             if( IsInvalidItem( pItem ) )            // Clear
             {
@@ -1673,10 +1673,8 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                                         *pFormat );
             }
 
-            if( aIter.IsAtEnd() )
-                break;
             pItem = aIter.NextItem();
-        }
+        } while (pItem);
         SfxItemSet aSet(rSet);
         aSet.ClearInvalidItems();
 
