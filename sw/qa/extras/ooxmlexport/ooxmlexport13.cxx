@@ -815,6 +815,20 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127735, "internal_hyperlink_table.odt")
     CPPUNIT_ASSERT_EQUAL(anchor, bookmarkName);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf123628, "tdf123628.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    if (!pXmlStyles)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink/w:r/w:rPr/w:rStyle", "val", "InternetLink");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='InternetLink']/w:name", "val", "Hyperlink");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
