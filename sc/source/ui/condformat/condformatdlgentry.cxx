@@ -39,6 +39,10 @@
 
 #include <set>
 
+// set the widget width to something to override their auto-width calc and
+// force them to take a 1/3 of the available space
+#define CommonWidgetWidth 10
+
 ScCondFrmtEntry::ScCondFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, const ScAddress& rPos)
     : mpParent(pParent)
     , mxBuilder(Application::CreateBuilder(pParent->GetContainer(), "modules/scalc/ui/conditionalentry.ui"))
@@ -52,6 +56,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, co
     , mpDoc(pDoc)
     , maPos(rPos)
 {
+    mxLbType->set_size_request(CommonWidgetWidth, -1);
     mxLbType->connect_changed(LINK(pParent, ScCondFormatList, TypeListHdl));
     mxGrid->connect_mouse_press(LINK(this, ScCondFrmtEntry, EntrySelectHdl));
     maClickHdl = LINK( pParent, ScCondFormatList, EntrySelectHdl );
@@ -152,6 +157,8 @@ ScConditionFrmtEntry::ScConditionFrmtEntry(ScCondFormatList* pParent, ScDocument
     , mxWdPreview(new weld::CustomWeld(*mxBuilder, "preview", maWdPreview))
     , mbIsInStyleCreate(false)
 {
+    mxLbCondType->set_size_request(CommonWidgetWidth, -1);
+    mxLbType->set_size_request(CommonWidgetWidth, -1);
     mxWdPreview->set_size_request(-1, mxLbStyle->get_preferred_size().Height());
 
     mxLbType->set_active(1);
@@ -491,6 +498,7 @@ ScFormulaFrmtEntry::ScFormulaFrmtEntry(ScCondFormatList* pParent, ScDocument* pD
     , mxWdPreview(new weld::CustomWeld(*mxBuilder, "preview", maWdPreview))
     , mxEdFormula(new formula::RefEdit(mxBuilder->weld_entry("formula")))
 {
+    mxLbType->set_size_request(CommonWidgetWidth, -1);
     mxWdPreview->set_size_request(-1, mxLbStyle->get_preferred_size().Height());
 
     Init(pDialogParent);
@@ -720,6 +728,10 @@ ScColorScale2FrmtEntry::ScColorScale2FrmtEntry(ScCondFormatList* pParent, ScDocu
     , mxFtMin(mxBuilder->weld_label("Label_minimum"))
     , mxFtMax(mxBuilder->weld_label("Label_maximum"))
 {
+    mxLbColorFormat->set_size_request(CommonWidgetWidth, -1);
+    mxLbEntryTypeMin->set_size_request(CommonWidgetWidth, -1);
+    mxLbEntryTypeMax->set_size_request(CommonWidgetWidth, -1);
+
     mxFtMin->show();
     mxFtMax->show();
 
@@ -852,6 +864,10 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry(ScCondFormatList* pParent, ScDocu
     , mxFtMin(mxBuilder->weld_label("Label_minimum"))
     , mxFtMax(mxBuilder->weld_label("Label_maximum"))
 {
+    mxLbColorFormat->set_size_request(CommonWidgetWidth, -1);
+    mxLbEntryTypeMin->set_size_request(CommonWidgetWidth, -1);
+    mxLbEntryTypeMiddle->set_size_request(CommonWidgetWidth, -1);
+    mxLbEntryTypeMax->set_size_request(CommonWidgetWidth, -1);
     mxFtMin->show();
     mxFtMax->show();
 
@@ -1054,6 +1070,10 @@ ScDataBarFrmtEntry::ScDataBarFrmtEntry(ScCondFormatList* pParent, ScDocument* pD
     , mxFtMin(mxBuilder->weld_label("Label_minimum"))
     , mxFtMax(mxBuilder->weld_label("Label_maximum"))
 {
+    mxLbColorFormat->set_size_request(CommonWidgetWidth, -1);
+    mxLbDataBarMinType->set_size_request(CommonWidgetWidth, -1);
+    mxLbDataBarMaxType->set_size_request(CommonWidgetWidth, -1);
+
     // "min" selector doesn't need "max" entry, and vice versa
     removeType(*mxLbDataBarMinType, COLORSCALE_MAX);
     removeType(*mxLbDataBarMaxType, COLORSCALE_MIN);
@@ -1188,6 +1208,9 @@ ScDateFrmtEntry::ScDateFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, co
     , mxWdPreview(new weld::CustomWeld(*mxBuilder, "preview", maWdPreview))
     , mbIsInStyleCreate(false)
 {
+    mxLbDateEntry->set_size_request(CommonWidgetWidth, -1);
+    mxLbStyle->set_size_request(CommonWidgetWidth, -1);
+
     mxWdPreview->set_size_request(mxLbStyle->get_preferred_size().Height(), -1);
 
     Init();
@@ -1304,6 +1327,8 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconS
     , mxEdEntry(mxBuilder->weld_entry("entry"))
     , mxLbEntryType(mxBuilder->weld_combo_box("listbox"))
 {
+    mxLbEntryType->set_size_request(CommonWidgetWidth, -1);
+
     mxImgIcon->set_from_icon_name(ScIconSetFormat::getIconName(eType, i));
     if(pEntry)
     {
@@ -1384,6 +1409,9 @@ ScIconSetFrmtEntry::ScIconSetFrmtEntry(ScCondFormatList* pParent, ScDocument* pD
     , mxLbIconSetType(mxBuilder->weld_combo_box("iconsettype"))
     , mxIconParent(mxBuilder->weld_container("iconparent"))
 {
+    mxLbColorFormat->set_size_request(CommonWidgetWidth, -1);
+    mxLbIconSetType->set_size_request(CommonWidgetWidth, -1);
+
     Init();
     mxLbColorFormat->connect_changed(LINK(pParent, ScCondFormatList, ColFormatTypeHdl));
 
