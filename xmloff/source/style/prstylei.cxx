@@ -35,7 +35,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/prstylei.hxx>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/maptype.hxx>

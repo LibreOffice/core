@@ -20,18 +20,13 @@
 #include <sal/config.h>
 
 #include <o3tl/any.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <xmloff/attrlist.hxx>
-#include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexppr.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyle.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>

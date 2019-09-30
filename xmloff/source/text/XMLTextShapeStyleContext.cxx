@@ -22,7 +22,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "XMLTextPropertySetContext.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
 #include <XMLShapePropertySetContext.hxx>

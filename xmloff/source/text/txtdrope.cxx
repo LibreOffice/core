@@ -19,7 +19,6 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/style/DropCapFormat.hpp>
-#include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>

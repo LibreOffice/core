@@ -53,7 +53,6 @@
 #include "XMLTextFrameHyperlinkContext.hxx"
 #include "XMLSectionImportContext.hxx"
 #include "XMLIndexTOCContext.hxx"
-#include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
 #include "XMLTrackedChangesImportContext.hxx"
 #include "XMLChangeImportContext.hxx"

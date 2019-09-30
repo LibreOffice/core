@@ -19,7 +19,6 @@
 
 
 #include "XFormsModelContext.hxx"
-#include <vector>
 #include <utility>
 #include <xmloff/xformsimport.hxx>
 #include <com/sun/star/uno/Reference.hxx>

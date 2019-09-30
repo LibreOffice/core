@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
@@ -30,7 +29,6 @@
 #include "PropType.hxx"
 #include "DeepTContext.hxx"
 #include "RenameElemTContext.hxx"
-#include "ProcAttrTContext.hxx"
 #include "ActionMapTypesOOo.hxx"
 #include "MutableAttrList.hxx"
 #include "TransformerActions.hxx"
@@ -40,7 +38,6 @@
 #include "StyleOOoTContext.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <array>

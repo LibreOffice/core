@@ -25,11 +25,8 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
-#include <xmloff/xmluconv.hxx>
 
 #include <osl/diagnose.h>
-
-#include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
 
 using com::sun::star::uno::Reference;
 using com::sun::star::xml::sax::XAttributeList;

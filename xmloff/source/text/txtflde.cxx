@@ -29,8 +29,6 @@
 #include <xmloff/numehelp.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmlexp.hxx>
-#include <xmloff/xmlnume.hxx>
-#include <xmloff/xmlnumfe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/maptype.hxx>
@@ -39,7 +37,6 @@
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/UserDataPart.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
@@ -59,7 +56,6 @@
 #include <com/sun/star/text/TemplateDisplayFormat.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/text/BibliographyDataType.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>

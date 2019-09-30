@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-
-#include <xmloff/xmltoken.hxx>
 #include <xmloff/attrlist.hxx>
 #include <comphelper/servicehelper.hxx>
 #include "MutableAttrList.hxx"

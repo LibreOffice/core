@@ -24,9 +24,7 @@
 #include <sal/log.hxx>
 #include <tools/solar.h>
 #include <xmloff/PageMasterStyleMap.hxx>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/families.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlexppr.hxx>

@@ -31,7 +31,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/maptype.hxx>
-#include <xmloff/xmlnumi.hxx>
 #include <xmloff/txtprmap.hxx>
 
 #include <vector>

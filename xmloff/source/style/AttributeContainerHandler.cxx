@@ -20,8 +20,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <com/sun/star/text/GraphicCrop.hpp>
 
 #include <AttributeContainerHandler.hxx>
 

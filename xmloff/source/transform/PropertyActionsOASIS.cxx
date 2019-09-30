@@ -18,7 +18,6 @@
  */
 
 #include <xmloff/xmlnmspe.hxx>
-#include "PropType.hxx"
 #include "FamilyType.hxx"
 #include "PropertyActionsOASIS.hxx"
 

@@ -19,22 +19,16 @@
 
 #include <xmloff/table/XMLTableExport.hxx>
 
-#include <xmloff/dllapi.h>
-
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
-#include <com/sun/star/table/CellContentType.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -19,10 +19,8 @@
 
 #include "XMLSectionSourceDDEImportContext.hxx"
 #include "XMLSectionImportContext.hxx"
-#include <com/sun/star/text/SectionFileLink.hpp>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>

@@ -23,10 +23,8 @@
 #include "xformsapi.hxx"
 
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/xmlerror.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmltkmap.hxx>
-#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 
 #include <sax/tools/converter.hxx>

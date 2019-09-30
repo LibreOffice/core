@@ -20,14 +20,12 @@
 #include <memory>
 #include <xmloff/MarkerStyle.hxx>
 #include <xexptran.hxx>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

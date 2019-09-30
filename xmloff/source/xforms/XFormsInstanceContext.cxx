@@ -21,7 +21,6 @@
 #include "XFormsInstanceContext.hxx"
 
 #include <DomBuilderContext.hxx>
-#include "xformsapi.hxx"
 
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -31,7 +30,6 @@
 #include <com/sun/star/xforms/XModel2.hpp>
 #include <osl/diagnose.h>
 
-#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlerror.hxx>

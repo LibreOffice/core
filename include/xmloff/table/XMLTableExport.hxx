@@ -36,7 +36,7 @@
 
 #include <xmloff/dllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <xmloff/xmlprmap.hxx>
+#include <xmloff/prhdlfac.hxx>
 #include <xmloff/xmlexppr.hxx>
 
 class SvXMLExport;

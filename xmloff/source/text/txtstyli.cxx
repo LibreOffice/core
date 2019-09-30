@@ -21,12 +21,10 @@
 #include "XMLTextPropertySetContext.hxx"
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/txtstyli.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/maptype.hxx>
@@ -34,7 +32,6 @@
 #include <xmloff/xmlement.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -49,9 +46,6 @@
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 
-#include <algorithm>
-#include <functional>
-#include <utility>
 #include <vector>
 
 #include <xmlsdtypes.hxx>

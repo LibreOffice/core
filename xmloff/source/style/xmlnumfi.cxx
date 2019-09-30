@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <unotools/syslocale.hxx>
-
 #include <svl/zforlist.hxx>
 
 #include <svl/zformat.hxx>
 #include <svl/numuno.hxx>
-#include <rtl/math.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/color.hxx>
 #include <osl/diagnose.h>

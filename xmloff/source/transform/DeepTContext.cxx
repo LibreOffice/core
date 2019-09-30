@@ -18,8 +18,6 @@
  */
 
 #include "DeepTContext.hxx"
-#include "FlatTContext.hxx"
-#include "EventOOoTContext.hxx"
 #include "TransformerActions.hxx"
 #include "ElemTransformerAction.hxx"
 #include "PersMixedContentTContext.hxx"

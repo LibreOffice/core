@@ -20,7 +20,6 @@
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/txtprmap.hxx>
 
 using namespace ::xmloff::token;
 

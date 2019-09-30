@@ -23,13 +23,9 @@
 #include "SchemaSimpleTypeContext.hxx"
 
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
-#include <xmloff/xmluconv.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
 
 using com::sun::star::uno::Reference;

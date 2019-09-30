@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/uno/Any.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <XMLIsPercentagePropertyHandler.hxx>
 

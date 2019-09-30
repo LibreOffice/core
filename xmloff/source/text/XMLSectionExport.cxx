@@ -23,15 +23,12 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
-#include <vector>
-
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
-#include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/text/SectionFileLink.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -42,7 +39,6 @@
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp>
 
-#include <sax/tools/converter.hxx>
 #include <comphelper/base64.hxx>
 
 #include <xmloff/xmltoken.hxx>
@@ -51,7 +47,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlexp.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlement.hxx>
 #include <txtflde.hxx>
 

@@ -31,8 +31,6 @@
 #include <tools/diagnose_ex.h>
 
 #include <xmloff/table/XMLTableImport.hxx>
-#include <xmloff/xmltkmap.hxx>
-#include <xmloff/maptype.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmlimp.hxx>

@@ -31,10 +31,8 @@
 #include <com/sun/star/text/TextGridMode.hpp>
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <osl/diagnose.h>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <XMLFillBitmapSizePropertyHandler.hxx>
 #include <XMLBitmapLogicalSizePropertyHandler.hxx>
-#include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <XMLBitmapRepeatOffsetPropertyHandler.hxx>
 
