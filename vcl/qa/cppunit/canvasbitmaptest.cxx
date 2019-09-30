@@ -84,10 +84,13 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     BitmapEx aContainedBmpEx( xBmp->getBitmapEx() );
     Bitmap   aContainedBmp( aContainedBmpEx.GetBitmap() );
     int      nDepth = nOriginalDepth;
+    int      extraBpp = 0;
 
     {
         Bitmap::ScopedReadAccess pAcc( aContainedBmp );
         nDepth = pAcc->GetBitCount();
+        if( pAcc->GetScanlineFormat() == ScanlineFormat::N32BitTcMask )
+            extraBpp = 8; // the format has 8 unused bits
     }
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Original bitmap size not (200,200)",
@@ -106,7 +109,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     uno::Sequence<sal_Int8> aPixelData = xBmp->getData(aLayout, geometry::IntegerRectangle2D(0,0,1,1));
 
     const sal_Int32 nExpectedBitsPerPixel(
-        aContainedBmpEx.IsTransparent() ? std::max(8,nDepth)+8 : nDepth);
+        (aContainedBmpEx.IsTransparent() ? std::max(8,nDepth)+8 : nDepth) + extraBpp);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "# scanlines not 1",
                             static_cast<sal_Int32>(1), aLayout.ScanLines);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "# scanline bytes mismatch",
