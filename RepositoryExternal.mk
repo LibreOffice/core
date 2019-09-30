@@ -3589,7 +3589,11 @@ gb_LinkTarget__use_libgpg-error :=
 endif # ENABLE_GPGMEPP
 
 define gb_LinkTarget__use_dconf
-$(call gb_LinkTarget_add_defs,$(1),$(DCONF_CFLAGS))
+$(call gb_LinkTarget_set_include,$(1),\
+		$$(INCLUDE) \
+		$(DCONF_CFLAGS) \
+)
+
 $(call gb_LinkTarget_add_libs,$(1),$(DCONF_LIBS))
 endef
 
