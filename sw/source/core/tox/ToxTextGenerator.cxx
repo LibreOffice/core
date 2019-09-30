@@ -287,7 +287,8 @@ ToxTextGenerator::CollectAttributesForTox(const SwTextAttr& hint, SwAttrPool& po
     const SwFormatAutoFormat& afmt = hint.GetAutoFormat();
     SfxItemIter aIter( *afmt.GetStyleHandle());
     const SfxPoolItem* pItem = aIter.GetCurItem();
-    while (true) {
+    do
+    {
         if (pItem->Which() == RES_CHRATR_ESCAPEMENT ||
             pItem->Which() == RES_CHRATR_POSTURE ||
             pItem->Which() == RES_CHRATR_CJK_POSTURE ||
@@ -295,11 +296,8 @@ ToxTextGenerator::CollectAttributesForTox(const SwTextAttr& hint, SwAttrPool& po
         {
             retval->Put(std::unique_ptr<SfxPoolItem>(pItem->Clone()));
         }
-        if (aIter.IsAtEnd()) {
-            break;
-        }
         pItem = aIter.NextItem();
-    }
+    } while (pItem);
     return retval;
 }
 
