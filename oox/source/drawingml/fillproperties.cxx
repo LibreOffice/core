@@ -758,8 +758,12 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         xGraphic = lclCheckAndApplyDuotoneTransform(maBlipProps, xGraphic, rGraphicHelper, API_RGB_TRANSPARENT);
 
         if (eColorMode == ColorMode_STANDARD && nBrightness == 70 && nContrast == -70)
+        {
             // map MSO 'washout' to our Watermark colormode
             eColorMode = ColorMode_WATERMARK;
+            nBrightness = 0;
+            nContrast = 0;
+        }
         else if( nBrightness != 0 && nContrast != 0 )
         {
             // MSO uses a different algorithm for contrast+brightness, LO applies contrast before brightness,
