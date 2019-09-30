@@ -1450,8 +1450,6 @@ void SwRegHistory::MakeSetWhichIds()
             {
                 sal_uInt16 nW = pItem->Which();
                 m_WhichIdSet.insert( nW );
-                if( aIter.IsAtEnd() )
-                    break;
                 pItem = aIter.NextItem();
             }
         }

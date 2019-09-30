@@ -52,10 +52,9 @@ SfxItemIter::~SfxItemIter()
 
 const SfxPoolItem* SfxItemIter::NextItem()
 {
-    SfxPoolItem const** ppFnd = m_rSet.m_pItems.get();
-
     if (m_nCurrent < m_nEnd)
     {
+        SfxPoolItem const** ppFnd = m_rSet.m_pItems.get();
         do {
             m_nCurrent++;
         } while (m_nCurrent < m_nEnd && !*(ppFnd + m_nCurrent ));
