@@ -21,7 +21,6 @@
 #include <xmloff/xformsexport.hxx>
 
 #include "XFormsModelExport.hxx"
-#include "xformsapi.hxx"
 
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -33,7 +32,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -42,7 +40,6 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
-#include <com/sun/star/form/binding/XListEntrySource.hpp>
 #include <com/sun/star/form/submission/XSubmissionSupplier.hpp>
 #include <com/sun/star/xforms/XModel.hpp>
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>

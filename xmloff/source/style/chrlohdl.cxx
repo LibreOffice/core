@@ -22,7 +22,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <unotools/saveopt.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/Locale.hpp>

@@ -20,10 +20,7 @@
 #include "ControlOOoTContext.hxx"
 #include "IgnoreTContext.hxx"
 #include "MutableAttrList.hxx"
-#include <xmloff/xmlnmspe.hxx>
 #include "ActionMapTypesOOo.hxx"
-#include "ElemTransformerAction.hxx"
-#include "TransformerActions.hxx"
 #include "TransformerBase.hxx"
 
 

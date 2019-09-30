@@ -21,7 +21,6 @@
 #include "MutableAttrList.hxx"
 #include "TransformerBase.hxx"
 #include "TransformerActions.hxx"
-#include "AttrTransformerAction.hxx"
 #include "ElemTransformerAction.hxx"
 #include "IgnoreTContext.hxx"
 #include <xmloff/xmlnmspe.hxx>

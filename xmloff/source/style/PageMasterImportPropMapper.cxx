@@ -19,12 +19,12 @@
 
 
 #include "PageMasterImportPropMapper.hxx"
-#include "PageMasterPropMapper.hxx"
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <xmloff/maptype.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <xmloff/xmlimp.hxx>
+#include <xmloff/xmlprmap.hxx>
 #include <memory>
 
 #define XML_LINE_LEFT 0

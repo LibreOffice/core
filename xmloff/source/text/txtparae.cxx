@@ -21,7 +21,6 @@
 
 #include <o3tl/any.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/types.h>
 #include <sal/log.hxx>
@@ -34,7 +33,6 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -45,7 +43,6 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextField.hpp>
-#include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
@@ -61,17 +58,12 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
-#include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
-#include <com/sun/star/text/SectionFileLink.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/text/XTextShapesSupplier.hpp>
 #include <com/sun/star/style/XAutoStylesSupplier.hpp>
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#include <com/sun/star/text/XFootnotesSupplier.hpp>
-#include <com/sun/star/text/XEndnotesSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 
@@ -81,8 +73,6 @@
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/families.hxx>
 #include "txtexppr.hxx"
-#include <xmloff/xmlnumfe.hxx>
-#include <xmloff/xmlnume.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "XMLAnchorTypePropHdl.hxx"
 #include <xexptran.hxx>

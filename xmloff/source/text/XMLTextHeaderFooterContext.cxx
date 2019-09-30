@@ -19,13 +19,9 @@
 
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XParagraphAppend.hpp>
-#include <com/sun/star/text/XRelativeTextContentRemove.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <o3tl/any.hxx>
-#include <xmloff/nmspmap.hxx>
-#include <xmloff/xmlnmspe.hxx>
 #include <XMLTextHeaderFooterContext.hxx>
-#include <xmloff/XMLTextTableContext.hxx>
 #include <xmloff/xmlimp.hxx>
 
 

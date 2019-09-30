@@ -21,7 +21,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <comphelper/extract.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
 using namespace ::com::sun::star::uno;

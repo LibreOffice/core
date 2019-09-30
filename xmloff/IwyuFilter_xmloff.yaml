@@ -39,3 +39,6 @@ blacklist:
     xmloff/source/meta/MetaExportComponent.cxx:
     # Needed for direct member access
     - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/txtprmap.cxx:
+    # Needed for constructors parameter
+    - rtl/ref.hxx

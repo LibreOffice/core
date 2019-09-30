@@ -34,7 +34,6 @@
 
 #include <osl/diagnose.h>
 
-#include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>
 
