@@ -901,7 +901,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode nCall,
         if ( pArgs )
         {
             SfxItemIter aIter(*pArgs);
-            for ( const SfxPoolItem *pArg = aIter.FirstItem();
+            for ( const SfxPoolItem *pArg = aIter.GetCurItem();
                 pArg;
                 pArg = aIter.NextItem() )
                 MappedPut_Impl( aSet, *pArg );
@@ -991,7 +991,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
     {
         SfxAllItemSet aSet( pShell->GetPool() );
         SfxItemIter aIter(rArgs);
-        for ( const SfxPoolItem *pArg = aIter.FirstItem();
+        for ( const SfxPoolItem *pArg = aIter.GetCurItem();
               pArg;
               pArg = aIter.NextItem() )
             MappedPut_Impl( aSet, *pArg );
@@ -1765,7 +1765,7 @@ bool SfxDispatcher::FillState_(const SfxSlotServer& rSvr, SfxItemSet& rState,
         {
             SfxInterface *pIF = pSh->GetInterface();
             SfxItemIter aIter( rState );
-            for ( const SfxPoolItem *pItem = aIter.FirstItem();
+            for ( const SfxPoolItem *pItem = aIter.GetCurItem();
                   pItem;
                   pItem = aIter.NextItem() )
             {

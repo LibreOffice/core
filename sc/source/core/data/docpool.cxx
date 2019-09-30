@@ -400,9 +400,8 @@ static bool lcl_HFPresentation
     }
 
     SfxItemIter aIter( rSet );
-    pItem = aIter.FirstItem();
 
-    while( pItem )
+    for (pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
         sal_uInt16 nWhich = pItem->Which();
 
@@ -466,8 +465,6 @@ static bool lcl_HFPresentation
         {
             rText = rText + aText + " + ";
         }
-
-        pItem = aIter.NextItem();
     }
 
     rText = comphelper::string::stripEnd(rText, ' ');

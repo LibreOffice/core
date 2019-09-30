@@ -327,10 +327,9 @@ OUString SfxStyleSheetBase::GetDescription( MapUnit eMetric )
 {
     SfxItemIter aIter( GetItemSet() );
     OUStringBuffer aDesc;
-    const SfxPoolItem* pItem = aIter.FirstItem();
 
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
-    while ( pItem )
+    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
         OUString aItemPresentation;
 
@@ -343,7 +342,6 @@ OUString SfxStyleSheetBase::GetDescription( MapUnit eMetric )
             if ( !aItemPresentation.isEmpty() )
                 aDesc.append(aItemPresentation);
         }
-        pItem = aIter.NextItem();
     }
     return aDesc.makeStringAndClear();
 }

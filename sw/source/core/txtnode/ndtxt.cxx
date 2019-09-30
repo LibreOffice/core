@@ -5288,7 +5288,7 @@ void SwTextNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
             {
                 SfxItemIter aIter(*static_cast<const SwAttrSetChg*>(pNewValue)->GetChgSet());
 
-                for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem && !bReset; pItem = aIter.NextItem())
+                for(const SfxPoolItem* pItem = aIter.GetCurItem(); pItem && !bReset; pItem = aIter.NextItem())
                 {
                     bReset = !IsInvalidItem(pItem) && pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST;
                 }

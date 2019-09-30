@@ -154,11 +154,10 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 
     bool bItemsChanged = false;
     SfxItemIter aIter( rItemSet );
-    const SfxPoolItem * pItem = aIter.FirstItem();
     tPropertyNameWithMemberId aProperty;
     uno::Any aValue;
 
-    while( pItem )
+    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
         if( rItemSet.GetItemState( pItem->Which(), false ) == SfxItemState::SET )
         {
@@ -188,7 +187,6 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                 bItemsChanged = ApplySpecialItem( pItem->Which(), rItemSet ) || bItemsChanged;
             }
         }
-        pItem = aIter.NextItem();
     }
 
     return bItemsChanged;

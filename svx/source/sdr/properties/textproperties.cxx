@@ -320,9 +320,9 @@ namespace sdr
                                     // which occur in StyleSheet, take care of
                                     // parents (!)
                                     SfxItemIter aIter(pNewStyleSheet->GetItemSet());
-                                    const SfxPoolItem* pItem = aIter.FirstItem();
 
-                                    while(pItem)
+                                    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem;
+                                         pItem = aIter.NextItem())
                                     {
                                         if(!IsInvalidItem(pItem))
                                         {
@@ -333,7 +333,6 @@ namespace sdr
                                                 rOutliner.RemoveCharAttribs(nPara, nW);
                                             }
                                         }
-                                        pItem = aIter.NextItem();
                                     }
                                 }
                             }

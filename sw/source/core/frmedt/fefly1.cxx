@@ -1157,8 +1157,7 @@ void SwFEShell::ResetFlyFrameAttr( const SfxItemSet* pSet )
         StartAllAction();
 
         SfxItemIter aIter( *pSet );
-        const SfxPoolItem* pItem = aIter.FirstItem();
-        while( pItem )
+        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
         {
             if( !IsInvalidItem( pItem ) )
             {
@@ -1166,7 +1165,6 @@ void SwFEShell::ResetFlyFrameAttr( const SfxItemSet* pSet )
                 if( RES_ANCHOR != nWhich && RES_CHAIN != nWhich && RES_CNTNT != nWhich )
                     pFly->GetFormat()->ResetFormatAttr( nWhich );
             }
-            pItem = aIter.NextItem();
         }
 
         EndAllActionAndCall();
