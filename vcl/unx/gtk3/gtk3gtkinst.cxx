@@ -8624,12 +8624,15 @@ public:
             rGtkIter.iter = tmp;
             return true;
         }
-        if (!gtk_tree_model_iter_parent(pModel, &tmp, &iter))
-            return false;
-        if (gtk_tree_model_iter_next(pModel, &tmp))
+        // Move up level(s) until we find the level where the next sibling exists.
+        while (gtk_tree_model_iter_parent(pModel, &tmp, &iter))
         {
-            rGtkIter.iter = tmp;
-            return true;
+            iter = tmp;
+            if (gtk_tree_model_iter_next(pModel, &tmp))
+            {
+                rGtkIter.iter = tmp;
+                return true;
+            }
         }
         return false;
     }
