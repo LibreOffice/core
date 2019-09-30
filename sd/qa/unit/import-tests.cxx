@@ -49,6 +49,7 @@
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -167,6 +168,7 @@ public:
     void testTdf103567();
     void testTdf103792();
     void testTdf103876();
+    void testTdf79007();
     void testTdf104015();
     void testTdf104201();
     void testTdf103477();
@@ -263,6 +265,7 @@ public:
     CPPUNIT_TEST(testTdf103567);
     CPPUNIT_TEST(testTdf103792);
     CPPUNIT_TEST(testTdf103876);
+    CPPUNIT_TEST(testTdf79007);
     CPPUNIT_TEST(testTdf104015);
     CPPUNIT_TEST(testTdf104201);
     CPPUNIT_TEST(testTdf103477);
@@ -1741,6 +1744,61 @@ void SdImportTest::testTdf103876()
     sal_Int32 nCharColor;
     xShape->getPropertyValue( "CharColor" ) >>= nCharColor;
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0xFF0000), nCharColor );
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf79007()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf79007.pptx"), PPTX);
+
+    uno::Reference<beans::XPropertySet> xShape1(getShapeFromPage(0, 0, xDocShRef));
+    CPPUNIT_ASSERT_MESSAGE("Not a shape", xShape1.is());
+
+    // Check we map mso washout to our watermark
+    drawing::ColorMode aColorMode1;
+    xShape1->getPropertyValue("GraphicColorMode") >>= aColorMode1;
+    CPPUNIT_ASSERT_EQUAL(drawing::ColorMode_WATERMARK, aColorMode1);
+
+    sal_Int16 nContrast1;
+    xShape1->getPropertyValue("AdjustContrast") >>= nContrast1;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), nContrast1);
+
+    sal_Int16 nLuminance1;
+    xShape1->getPropertyValue("AdjustLuminance") >>= nLuminance1;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), nLuminance1);
+
+    uno::Reference<beans::XPropertySet> xShape2(getShapeFromPage(1, 0, xDocShRef));
+    CPPUNIT_ASSERT_MESSAGE("Not a shape", xShape2.is());
+
+    // Check we map mso grayscale to our grayscale
+    drawing::ColorMode aColorMode2;
+    xShape2->getPropertyValue("GraphicColorMode") >>= aColorMode2;
+    CPPUNIT_ASSERT_EQUAL(drawing::ColorMode_GREYS, aColorMode2);
+
+    sal_Int16 nContrast2;
+    xShape2->getPropertyValue("AdjustContrast") >>= nContrast2;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), nContrast2);
+
+    sal_Int16 nLuminance2;
+    xShape2->getPropertyValue("AdjustLuminance") >>= nLuminance2;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), nLuminance2);
+
+    uno::Reference<beans::XPropertySet> xShape3(getShapeFromPage(2, 0, xDocShRef));
+    CPPUNIT_ASSERT_MESSAGE("Not a shape", xShape3.is());
+
+    // Check we map mso black/white to our black/white
+    drawing::ColorMode aColorMode3;
+    xShape3->getPropertyValue("GraphicColorMode") >>= aColorMode3;
+    CPPUNIT_ASSERT_EQUAL(drawing::ColorMode_MONO, aColorMode3);
+
+    sal_Int16 nContrast3;
+    xShape3->getPropertyValue("AdjustContrast") >>= nContrast3;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), nContrast3);
+
+    sal_Int16 nLuminance3;
+    xShape3->getPropertyValue("AdjustLuminance") >>= nLuminance3;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), nLuminance3);
 
     xDocShRef->DoClose();
 }
