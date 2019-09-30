@@ -834,13 +834,9 @@ void SwRedlineExtraData_FormatColl::SetItemSet( const SfxItemSet& rSet )
 SwRedlineExtraData_Format::SwRedlineExtraData_Format( const SfxItemSet& rSet )
 {
     SfxItemIter aIter( rSet );
-    const SfxPoolItem* pItem = aIter.FirstItem();
-    while(pItem)
+    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
         m_aWhichIds.push_back( pItem->Which() );
-        if( aIter.IsAtEnd() )
-            break;
-        pItem = aIter.NextItem();
     }
 }
 

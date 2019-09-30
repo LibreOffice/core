@@ -620,19 +620,17 @@ void SwDoc::UpdateSection( size_t const nPos, SwSectionData & rNewData,
         if( pAttr && pAttr->Count() )
         {
             SfxItemIter aIter( *pAttr );
-            sal_uInt16 nWhich = aIter.GetCurItem()->Which();
-            while( true )
+            const SfxPoolItem* pItem = aIter.GetCurItem();
+            do
             {
-                if( pFormat->GetFormatAttr( nWhich ) != *aIter.GetCurItem() )
+                if (pFormat->GetFormatAttr(pItem->Which()) != *pItem)
                 {
                     bOnlyAttrChg = true;
                     break;
                 }
 
-                if( aIter.IsAtEnd() )
-                    break;
-                nWhich = aIter.NextItem()->Which();
-            }
+                pItem = aIter.NextItem();
+            } while (pItem);
         }
 
         if( bOnlyAttrChg )

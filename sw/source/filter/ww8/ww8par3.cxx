@@ -1017,24 +1017,22 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
                 && (pLowerLevelItemSet->Count() == pThisLevelItemSet->Count()) )
             {
                 nIdenticalItemSetLevel = nLowerLevel;
-                sal_uInt16 nWhich = aIter.GetCurItem()->Which();
-                while (true)
+                const SfxPoolItem* pItemIter = aIter.GetCurItem();
+                do
                 {
                     if(  // search for appropriate pItem in pLowerLevelItemSet
                          (SfxItemState::SET != pLowerLevelItemSet->GetItemState(
-                                            nWhich, false, &pItem ) )
+                                            pItemIter->Which(), false, &pItem ) )
                         || // use virtual "!=" Operator
-                         (*pItem != *aIter.GetCurItem() ) )
+                         (*pItem != *pItemIter) )
                     // if no Item with equal nWhich was found or Item value was not equal
                     // store inequality and break!
                     {
                         nIdenticalItemSetLevel = nMaxLevel;
                         break;
                     }
-                    if( aIter.IsAtEnd() )
-                        break;
-                    nWhich = aIter.NextItem()->Which();
-                }
+                    pItemIter = aIter.NextItem();
+                } while (pItemIter);
 
                 if( nIdenticalItemSetLevel != nMaxLevel )
                     break;

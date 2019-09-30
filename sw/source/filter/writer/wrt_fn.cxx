@@ -80,7 +80,7 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
             {
                 bFillItemUsed = true;
             }
-        } while( !aIter.IsAtEnd() && nullptr != ( pItem = aIter.NextItem() ) );
+        } while ((pItem = aIter.NextItem()));
     }
     else
     {

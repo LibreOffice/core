@@ -5429,12 +5429,12 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, bool bTest
     const SfxPoolItem* pItem;
     if ( !pSet->GetParent() )
     {
-        OSL_ENSURE( rSet.Count(), "Was already handled or?" );
+        assert(rSet.Count() && "Was already handled or?");
         SfxItemIter aIter( *pSet );
         pItem = aIter.GetCurItem();
         do {
             OutputItem( *pItem );
-        } while ( !aIter.IsAtEnd() && nullptr != ( pItem = aIter.NextItem() ) );
+        } while ((pItem = aIter.NextItem()));
     }
     else
     {

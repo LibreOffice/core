@@ -1806,7 +1806,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     SfxItemIter aIter( aSet );
                     const SfxPoolItem* pItem = aIter.FirstItem();
                     const IntlWrapper aInt(SvtSysLocale().GetUILanguageTag());
-                    while( true )
+                    do
                     {
                         if( !IsInvalidItem( pItem ))
                         {
@@ -1817,10 +1817,8 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                                 sAttrs.append(", ");
                             sAttrs.append(aStr);
                         }
-                        if( aIter.IsAtEnd() )
-                            break;
                         pItem = aIter.NextItem();
-                    }
+                    } while (pItem);
                     if (!sAttrs.isEmpty())
                     {
                         if( !rContentAtPos.sStr.isEmpty() )

@@ -1191,27 +1191,17 @@ void SwHistory::CopyFormatAttr(
     if(rSet.Count())
     {
         SfxItemIter aIter(rSet);
-
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         do
         {
-            if(!IsInvalidItem(aIter.GetCurItem()))
+            if(!IsInvalidItem(pItem))
             {
-                const SfxPoolItem* pNew = aIter.GetCurItem();
-
-                Add(
-                    pNew,
-                    pNew,
-                    nNodeIdx);
+                Add(pItem, pItem, nNodeIdx);
             }
 
-            if(aIter.IsAtEnd())
-            {
-                break;
-            }
+            pItem = aIter.NextItem();
 
-            aIter.NextItem();
-
-        } while(true);
+        } while(pItem);
     }
 }
 

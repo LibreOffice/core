@@ -73,19 +73,16 @@ void SwAttrSet::GetPresentation(
     if( Count() )
     {
         SfxItemIter aIter( *this );
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         const IntlWrapper aInt(SvtSysLocale().GetUILanguageTag());
-        while( true )
+        do
         {
-            aIter.GetCurItem()->GetPresentation( ePres, eCoreMetric,
-                                                 ePresMetric, aStr,
-                                                 aInt );
+            pItem->GetPresentation(ePres, eCoreMetric, ePresMetric, aStr, aInt);
             if( rText.getLength() && aStr.getLength() )
                 rText += ", ";
             rText += aStr;
-            if( aIter.IsAtEnd() )
-                break;
-            aIter.NextItem();
-        }
+            pItem = aIter.NextItem();
+        } while (pItem);
     }
 }
 

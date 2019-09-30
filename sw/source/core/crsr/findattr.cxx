@@ -283,7 +283,7 @@ void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
     const SfxPoolItem* pFndItem;
     sal_uInt16 nWhich;
 
-    while( true )
+    do
     {
         if( IsInvalidItem( pItem ) )
         {
@@ -312,10 +312,8 @@ void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
             }
         }
 
-        if( aIter.IsAtEnd() )
-            break;
         pItem = aIter.NextItem();
-    }
+    } while (pItem);
 }
 
 static bool
@@ -860,7 +858,7 @@ static bool lcl_Search( const SwContentNode& rCNd, const SfxItemSet& rCmpSet, bo
     const SfxPoolItem* pNdItem;
     sal_uInt16 nWhich;
 
-    while( true )
+    do
     {
         if( IsInvalidItem( pItem ))
         {
@@ -877,10 +875,8 @@ static bool lcl_Search( const SwContentNode& rCNd, const SfxItemSet& rCmpSet, bo
                 return false;
         }
 
-        if( aIter.IsAtEnd() )
-            break;
         pItem = aIter.NextItem();
-    }
+    } while (pItem);
     return true; // found
 }
 
@@ -1348,17 +1344,15 @@ int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
 
             SfxItemIter aIter( *pSet );
             const SfxPoolItem* pItem = aIter.GetCurItem();
-            while( true )
+            do
             {
                 // reset all that are not set with pool defaults
                 if( !IsInvalidItem( pItem ) && SfxItemState::SET !=
                     pReplSet->GetItemState( pItem->Which(), false ))
                     aSet.Put( pPool->GetDefaultItem( pItem->Which() ));
 
-                if( aIter.IsAtEnd() )
-                    break;
                 pItem = aIter.NextItem();
-            }
+            } while (pItem);
             aSet.Put( *pReplSet );
             rCursor.GetDoc()->getIDocumentContentOperations().InsertItemSet(
                     rCursor, aSet, SetAttrMode::DEFAULT, m_pLayout);

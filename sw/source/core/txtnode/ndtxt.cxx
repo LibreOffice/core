@@ -2468,7 +2468,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
                 // check all items in the property set
                 SfxItemIter aIter( *pDest->GetpSwAttrSet() );
                 const SfxPoolItem* pItem = aIter.GetCurItem();
-                while( true )
+                do
                 {
                     // check current item
                     sal_uInt16 nWhich = IsInvalidItem( pItem )
@@ -2489,10 +2489,8 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
                     }
 
                     // let's check next item
-                    if( aIter.IsAtEnd() )
-                        break;
                     pItem = aIter.NextItem();
-                }
+                } while (pItem);
             }
         }
 
