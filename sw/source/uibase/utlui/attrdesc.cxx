@@ -695,7 +695,7 @@ bool SwMirrorGrf::GetPresentation(
     if (pId)
     {
         rText = SwResId(pId);
-        if (bGrfToggle)
+        if (m_bGrfToggle)
             rText += SwResId( STR_MIRROR_TOGGLE );
     }
     return true;
