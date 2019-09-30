@@ -566,8 +566,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
 
     SfxItemIter aIter( rItemSet );
 
-    const SfxPoolItem *pItem = aIter.FirstItem();
-    while( pItem )
+    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
         HTMLAttr **ppAttr = nullptr;
 
@@ -727,8 +726,6 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
             HTMLAttrs &rAttrs = pContext->GetAttrs();
             rAttrs.push_back( *ppAttr );
         }
-
-        pItem = aIter.NextItem();
     }
 
     if( !rPropInfo.m_aId.isEmpty() )

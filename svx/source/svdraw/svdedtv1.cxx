@@ -937,8 +937,7 @@ std::vector<sal_uInt16> GetAllCharPropIds(const SfxItemSet& rSet)
     std::vector<sal_uInt16> aCharWhichIds;
     {
         SfxItemIter aIter(rSet);
-        const SfxPoolItem* pItem=aIter.FirstItem();
-        while (pItem!=nullptr)
+        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
         {
             if (!IsInvalidItem(pItem))
             {
@@ -946,7 +945,6 @@ std::vector<sal_uInt16> GetAllCharPropIds(const SfxItemSet& rSet)
                 if (nWhich>=EE_CHAR_START && nWhich<=EE_CHAR_END)
                     aCharWhichIds.push_back( nWhich );
             }
-            pItem=aIter.NextItem();
         }
     }
     return aCharWhichIds;
@@ -961,13 +959,13 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
     {
         bool bHasEEFeatureItems=false;
         SfxItemIter aIter(rAttr);
-        const SfxPoolItem* pItem=aIter.FirstItem();
-        while (!bHasEEFeatureItems && pItem!=nullptr) {
+        for (const SfxPoolItem* pItem = aIter.GetCurItem(); !bHasEEFeatureItems && pItem;
+             pItem = aIter.NextItem())
+        {
             if (!IsInvalidItem(pItem)) {
                 sal_uInt16 nW=pItem->Which();
                 if (nW>=EE_FEATURE_START && nW<=EE_FEATURE_END) bHasEEFeatureItems=true;
             }
-            pItem=aIter.NextItem();
         }
         if(bHasEEFeatureItems)
         {

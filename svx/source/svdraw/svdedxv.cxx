@@ -2168,8 +2168,8 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
         {
             bool bHasEEFeatureItems = false;
             SfxItemIter aIter(rSet);
-            const SfxPoolItem* pItem = aIter.FirstItem();
-            while (!bHasEEFeatureItems && pItem != nullptr)
+            for (const SfxPoolItem* pItem = aIter.GetCurItem(); !bHasEEFeatureItems && pItem;
+                 pItem = aIter.NextItem())
             {
                 if (!IsInvalidItem(pItem))
                 {
@@ -2177,8 +2177,6 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
                     if (nW >= EE_FEATURE_START && nW <= EE_FEATURE_END)
                         bHasEEFeatureItems = true;
                 }
-
-                pItem = aIter.NextItem();
             }
 
             if (bHasEEFeatureItems)

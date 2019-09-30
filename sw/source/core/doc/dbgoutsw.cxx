@@ -251,13 +251,10 @@ const char * dbg_out(const SfxPoolItem * pItem)
 static OUString lcl_dbg_out(const SfxItemSet & rSet)
 {
     SfxItemIter aIter(rSet);
-    const SfxPoolItem * pItem;
     bool bFirst = true;
     OUStringBuffer aStr = "[ ";
 
-    pItem = aIter.FirstItem();
-
-    while (pItem )
+    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
         if (!bFirst)
             aStr.append(", ");
@@ -268,8 +265,6 @@ static OUString lcl_dbg_out(const SfxItemSet & rSet)
             aStr.append("invalid");
 
         bFirst = false;
-
-        pItem = aIter.NextItem();
     }
 
     aStr.append(" ]");

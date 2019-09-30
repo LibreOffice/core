@@ -492,7 +492,7 @@ void SwDoc::CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet)
     SwDrawModel* pDrawModel = getIDocumentDrawModelAccess().GetOrCreateDrawModel();
     SfxItemIter aIter(rSet);
 
-    for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem())
+    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
         if (IsInvalidItem(pItem))
             continue;

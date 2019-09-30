@@ -396,7 +396,7 @@ void SfxBindings::SetState
     if ( nRegLevel )
     {
         SfxItemIter aIter(rSet);
-        for ( const SfxPoolItem *pItem = aIter.FirstItem();
+        for ( const SfxPoolItem *pItem = aIter.GetCurItem();
               pItem;
               pItem = aIter.NextItem() )
             Invalidate( pItem->Which() );
@@ -410,7 +410,7 @@ void SfxBindings::SetState
         // Iterate over the itemset, update if the slot bound
         //! Bug: Use WhichIter and possibly send VoidItems up
         SfxItemIter aIter(rSet);
-        for ( const SfxPoolItem *pItem = aIter.FirstItem();
+        for ( const SfxPoolItem *pItem = aIter.GetCurItem();
               pItem;
               pItem = aIter.NextItem() )
         {

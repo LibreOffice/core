@@ -832,7 +832,7 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
         SfxItemIter aIter( *pSet );
         OUStringBuffer aDesc;
 
-        for (const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem())
+        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
         {
             if(!IsInvalidItem(pItem))
             {
@@ -883,7 +883,7 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
         const drawing::FillStyle eFillStyle(pSet->Get(XATTR_FILLSTYLE).GetValue());
         const bool bUseFloatTransparence(pSet->Get(XATTR_FILLFLOATTRANSPARENCE).IsEnabled());
 
-        for ( const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem() )
+        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
         {
             if(!IsInvalidItem(pItem))
             {

@@ -773,8 +773,8 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
     , m_nNodeIndex( nNodePos )
 {
     SfxItemIter aIter( m_OldSet ), aOrigIter( rSet );
-    const SfxPoolItem* pItem = aIter.FirstItem(),
-                     * pOrigItem = aOrigIter.FirstItem();
+    const SfxPoolItem* pItem = aIter.GetCurItem(),
+                     * pOrigItem = aOrigIter.GetCurItem();
     while (pItem && pOrigItem)
     {
         if( !rSetArr.count( pOrigItem->Which() ))
@@ -1316,7 +1316,7 @@ void SwRegHistory::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             {
                 pNewHstr.reset( new SwHistorySetAttrSet( rSet, m_nNodeIndex, m_WhichIdSet ) );
             }
-            else if (const SfxPoolItem* pItem = SfxItemIter( rSet ).FirstItem())
+            else if (const SfxPoolItem* pItem = SfxItemIter(rSet).GetCurItem())
             {
                 if ( m_WhichIdSet.count( pItem->Which() ) )
                 {
@@ -1374,7 +1374,7 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
     if ( m_pHistory && bInserted )
     {
         SfxItemIter aIter(rSet);
-        for (SfxPoolItem const* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem())
+        for (SfxPoolItem const* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
         {   // check that the history recorded a hint to reset every item
             sal_uInt16 const nWhich(pItem->Which());
             sal_uInt16 const nExpected(
@@ -1435,12 +1435,10 @@ void SwRegHistory::MakeSetWhichIds()
         if( pSet && pSet->Count() )
         {
             SfxItemIter aIter( *pSet );
-            const SfxPoolItem* pItem = aIter.FirstItem();
-            while(pItem)
+            for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
             {
                 sal_uInt16 nW = pItem->Which();
                 m_WhichIdSet.insert( nW );
-                pItem = aIter.NextItem();
             }
         }
     }

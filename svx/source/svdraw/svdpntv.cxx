@@ -967,13 +967,13 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll)
     {
         bool bHasEEFeatureItems=false;
         SfxItemIter aIter(rAttr);
-        const SfxPoolItem* pItem=aIter.FirstItem();
-        while (!bHasEEFeatureItems && pItem!=nullptr) {
+        for (const SfxPoolItem* pItem = aIter.GetCurItem(); !bHasEEFeatureItems && pItem;
+             pItem = aIter.NextItem())
+        {
             if (!IsInvalidItem(pItem)) {
                 sal_uInt16 nW=pItem->Which();
                 if (nW>=EE_FEATURE_START && nW<=EE_FEATURE_END) bHasEEFeatureItems=true;
             }
-            pItem=aIter.NextItem();
         }
 
         if(bHasEEFeatureItems)
