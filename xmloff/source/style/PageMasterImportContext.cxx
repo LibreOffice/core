@@ -18,19 +18,18 @@
  */
 
 #include <PageMasterImportContext.hxx>
+#include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "PageMasterPropHdl.hxx"
 #include "PagePropertySetContext.hxx"
 #include "PageHeaderFooterContext.hxx"
-#include "PageMasterPropMapper.hxx"
-#include "PageMasterImportPropMapper.hxx"
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <osl/diagnose.h>
 
 //
-#include <xmlsdtypes.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <xmloff/xmlerror.hxx>

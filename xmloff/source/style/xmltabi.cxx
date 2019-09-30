@@ -18,14 +18,12 @@
  */
 
 #include <com/sun/star/style/TabAlign.hpp>
-#include <rtl/ustrbuf.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <com/sun/star/style/TabStop.hpp>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/i18nmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmltabi.hxx>
 

@@ -22,10 +22,7 @@
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/xmltoken.hxx>
-#include <tools/fontenum.hxx>
 
-#include <limits.h>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/uno/Any.hxx>

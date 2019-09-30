@@ -23,7 +23,6 @@
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/DashStyle.hxx>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnmspe.hxx>

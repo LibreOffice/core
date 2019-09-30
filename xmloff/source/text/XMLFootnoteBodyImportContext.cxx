@@ -22,8 +22,6 @@
 #include <rtl/ustring.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
-#include <xmloff/nmspmap.hxx>
-#include <xmloff/xmlnmspe.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 using ::com::sun::star::uno::Reference;

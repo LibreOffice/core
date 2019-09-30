@@ -27,8 +27,6 @@
 #include <xmloff/xmltoken.hxx>
 
 #include "XMLFootnoteBodyImportContext.hxx"
-#include "XMLTextListBlockContext.hxx"
-#include "XMLTextListItemContext.hxx"
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/text/XTextContent.hpp>

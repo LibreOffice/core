@@ -22,12 +22,10 @@
 #include <com/sun/star/text/XLineNumberingProperties.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #include <o3tl/any.hxx>
-#include <sax/tools/converter.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnume.hxx>
 #include <xmloff/xmlement.hxx>
 
 
