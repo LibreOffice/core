@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="SafeModeDialog">
@@ -7,7 +7,13 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="safemodedialog|SafeModeDialog">Safe Mode</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -37,6 +43,7 @@
                 <property name="label" translatable="yes" context="safemodedialog|btn_continue">_Continue in Safe Mode</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
@@ -114,7 +121,6 @@ You can make one or more of the following changes to your user profile to return
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
-                <property name="group">radio_configure</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -482,5 +488,4 @@ You can make one or more of the following changes to your user profile to return
       <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkActionGroup" id="actiongroup1"/>
 </interface>
