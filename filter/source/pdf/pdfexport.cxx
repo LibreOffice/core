@@ -847,7 +847,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 pPDFExtOutDevData->SetIsReduceImageResolution( mbReduceImageResolution );
                 pPDFExtOutDevData->SetIsExportNamedDestinations( mbExportBmkToDest );
 
-                Sequence< PropertyValue > aRenderOptions( 7 );
+                Sequence< PropertyValue > aRenderOptions( 8 );
                 aRenderOptions[ 0 ].Name = "RenderDevice";
                 aRenderOptions[ 0 ].Value <<= uno::Reference<awt::XDevice>(xDevice.get());
                 aRenderOptions[ 1 ].Name = "ExportNotesPages";
@@ -863,6 +863,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 aRenderOptions[ 5 ].Value <<= aPageRange;
                 aRenderOptions[ 6 ].Name = "ExportPlaceholders";
                 aRenderOptions[ 6 ].Value <<= mbExportPlaceholders;
+                aRenderOptions[ 7 ].Name = "SinglePageSheets";
+                aRenderOptions[ 7 ].Value <<= mbSinglePageSheets;
 
                 if( !aPageRange.isEmpty() || !aSelection.hasValue() )
                 {
@@ -912,7 +914,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 }
                 const bool bExportPages = !bExportNotesPages || !mbExportOnlyNotesPages;
 
-                if( aPageRange.isEmpty() )
+                if( aPageRange.isEmpty() || mbSinglePageSheets)
                 {
                     aPageRange = OUString::number( 1 ) + "-" + OUString::number(nPageCount );
                 }

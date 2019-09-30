@@ -1619,13 +1619,22 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
     maValidPages.clear();
 
     sal_Int32 nContent = 0;
+    bool bSinglePageSheets = false;
     for ( const auto& rValue : rOptions)
     {
         if ( rValue.Name == "PrintRange" )
         {
             rValue.Value >>= nContent;
-            break;
         }
+        else if ( rValue.Name == "SinglePageSheets" )
+        {
+            rValue.Value >>= bSinglePageSheets;
+        }
+    }
+
+    if (bSinglePageSheets)
+    {
+        return pDocShell->GetDocument().GetTableCount();
     }
 
     bool bIsPrintEvenPages = nContent != 3;
@@ -1685,6 +1694,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     // #i115266# if FillRenderMarkData fails, keep nTotalPages at 0, but still handle getRenderer(0) below
     long nTotalPages = 0;
     bool bRenderToGraphic = false;
+    bool bSinglePageSheets = false;
     if ( FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr, bRenderToGraphic ) )
     {
         if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
@@ -1693,7 +1703,21 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         }
         nTotalPages = pPrintFuncCache->GetPageCount();
     }
+
+    for ( const auto& rValue : rOptions)
+    {
+        if ( rValue.Name == "SinglePageSheets" )
+        {
+            rValue.Value >>= bSinglePageSheets;
+            break;
+        }
+    }
+
+    if (bSinglePageSheets)
+        nTotalPages = pDocShell->GetDocument().GetTableCount();
+
     sal_Int32 nRenderer = lcl_GetRendererNum( nSelRenderer, aPagesStr, nTotalPages );
+
     if ( nRenderer < 0 )
     {
         if ( nSelRenderer != 0 )
@@ -1738,7 +1762,9 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     //  printer is used as device (just for page layout), draw view is not needed
 
     SCTAB nTab;
-    if ( !maValidPages.empty() )
+    if (bSinglePageSheets)
+        nTab = nSelRenderer;
+    else if ( !maValidPages.empty() )
         nTab = pPrintFuncCache->GetTabForPage( maValidPages.at( nRenderer )-1 );
     else
         nTab = pPrintFuncCache->GetTabForPage( nRenderer );
@@ -1746,7 +1772,56 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
 
     ScRange aRange;
     const ScRange* pSelRange = nullptr;
-    if ( aMark.IsMarked() )
+    if ( bSinglePageSheets )
+    {
+        awt::Size aPageSize;
+        SCCOL nStartCol;
+        SCROW nStartRow;
+        const ScDocument* pDocument = &pDocShell->GetDocument();
+        pDocument->GetDataStart( nTab, nStartCol, nStartRow );
+        SCCOL nEndCol;
+        SCROW nEndRow;
+        pDocument->GetPrintArea( nTab, nEndCol, nEndRow );
+
+        aRange.aStart = ScAddress(nStartCol, nStartRow, nTab);
+        aRange.aEnd = ScAddress(nEndCol, nEndRow, nTab);
+        pSelRange = &aRange;
+
+        table::CellRangeAddress aRangeAddress( nTab,
+                        aRange.aStart.Col(), aRange.aStart.Row(),
+                        aRange.aEnd.Col(), aRange.aEnd.Row() );
+        tools::Rectangle aMMRect( pDocShell->GetDocument().GetMMRect(
+                    aRange.aStart.Col(), aRange.aStart.Row(),
+                    aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab()));
+
+        aPageSize.Width = aMMRect.GetWidth();
+        aPageSize.Height = aMMRect.GetHeight();
+
+        awt::Size aCalcPageSize ( aMMRect.GetSize().Width(),  aMMRect.GetSize().Height() );
+        awt::Point aCalcPagePos( aMMRect.getX(), aMMRect.getY() );
+
+        uno::Sequence<beans::PropertyValue> aSequence(5);
+        beans::PropertyValue* pArray = aSequence.getArray();
+        pArray[0].Name = SC_UNONAME_PAGESIZE;
+        pArray[0].Value <<= aPageSize;
+        // #i111158# all positions are relative to the whole page, including non-printable area
+        pArray[1].Name = SC_UNONAME_INC_NP_AREA;
+        pArray[1].Value <<= true;
+        pArray[2].Name = SC_UNONAME_SOURCERANGE;
+        pArray[2].Value <<= aRangeAddress;
+        pArray[3].Name = SC_UNONAME_CALCPAGESIZE;
+        pArray[3].Value <<= aCalcPageSize;
+        pArray[4].Name = SC_UNONAME_CALCPAGEPOS;
+        pArray[4].Value <<= aCalcPagePos;
+
+        if( ! pPrinterOptions )
+            pPrinterOptions.reset(new ScPrintUIOptions);
+        else
+            pPrinterOptions->SetDefaults();
+        pPrinterOptions->appendPrintUIOptions( aSequence );
+        return aSequence;
+    }
+    else if ( aMark.IsMarked() )
     {
         aMark.GetMarkArea( aRange );
         pSelRange = &aRange;
@@ -1865,6 +1940,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     ScPrintSelectionStatus aStatus;
     OUString aPagesStr;
     bool bRenderToGraphic = false;
+    bool bSinglePageSheets = false;
     if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr, bRenderToGraphic ) )
         throw lang::IllegalArgumentException();
 
@@ -1873,6 +1949,19 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         pPrintFuncCache.reset(new ScPrintFuncCache( pDocShell, aMark, aStatus ));
     }
     long nTotalPages = pPrintFuncCache->GetPageCount();
+
+    for ( const auto& rValue : rOptions)
+    {
+        if ( rValue.Name == "SinglePageSheets" )
+        {
+            rValue.Value >>= bSinglePageSheets;
+            break;
+        }
+    }
+
+    if (bSinglePageSheets)
+        nTotalPages = pDocShell->GetDocument().GetTableCount();
+
     sal_Int32 nRenderer = lcl_GetRendererNum( nSelRenderer, aPagesStr, nTotalPages );
     if ( nRenderer < 0 )
         throw lang::IllegalArgumentException();
@@ -1885,7 +1974,39 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
     ScRange aRange;
     const ScRange* pSelRange = nullptr;
-    if ( aMark.IsMarked() )
+    if ( bSinglePageSheets )
+    {
+        awt::Size aPageSize;
+        SCCOL nStartCol;
+        SCROW nStartRow;
+        rDoc.GetDataStart( nSelRenderer, nStartCol, nStartRow );
+        SCCOL nEndCol;
+        SCROW nEndRow;
+        rDoc.GetPrintArea( nSelRenderer, nEndCol, nEndRow );
+
+        aRange.aStart = ScAddress(nStartCol, nStartRow, nSelRenderer);
+        aRange.aEnd = ScAddress(nEndCol, nEndRow, nSelRenderer);
+
+        tools::Rectangle aMMRect( pDocShell->GetDocument().GetMMRect(
+                    aRange.aStart.Col(), aRange.aStart.Row(),
+                    aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab()));
+
+        aPageSize.Width = aMMRect.GetWidth();
+        aPageSize.Height = aMMRect.GetHeight();
+
+        //Set visible tab
+        SCTAB nVisTab = rDoc.GetVisibleTab();
+        if (nVisTab != nSelRenderer)
+        {
+            nVisTab = nSelRenderer;
+            rDoc.SetVisibleTab(nVisTab);
+        }
+
+        pDocShell->DoDraw(pDev, Point(0,0), Size(aPageSize.Width, aPageSize.Height), JobSetup());
+
+        return;
+    }
+    else if ( aMark.IsMarked() )
     {
         aMark.GetMarkArea( aRange );
         pSelRange = &aRange;
@@ -1927,6 +2048,8 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     } aDrawViewKeeper;
 
     SCTAB nTab;
+    if (bSinglePageSheets)
+        nTab = nSelRenderer;
     if ( !maValidPages.empty() )
         nTab = pPrintFuncCache->GetTabForPage( maValidPages.at( nRenderer )-1 );
     else
