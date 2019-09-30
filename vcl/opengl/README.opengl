@@ -1,6 +1,6 @@
 Run LO with OpenGL enabled
 --------------------------
-SAL_USE_VCLPLUGIN=gtk SAL_FORCEGL=1 ./soffice
+SAL_USE_VCLPLUGIN=gen SAL_FORCEGL=1 ./soffice
 
 Environment variables used:
 
@@ -23,4 +23,4 @@ APItrace. The path is the default used in Fedora 21+.
 Run VCLDemo
 -----------
 
-SAL_USE_VCLPLUGIN=gtk SAL_FORCEGL=1 ./bin/run vcldemo
+SAL_USE_VCLPLUGIN=gen SAL_FORCEGL=1 ./bin/run vcldemo
