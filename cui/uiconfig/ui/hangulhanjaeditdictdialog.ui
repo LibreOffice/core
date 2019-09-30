@@ -152,6 +152,7 @@
                             <child internal-child="entry">
                               <object class="GtkEntry" id="combobox-entry">
                                 <property name="can_focus">True</property>
+                                <property name="activates_default">True</property>
                                 <property name="shadow_type">none</property>
                                 <property name="caps_lock_warning">False</property>
                               </object>
@@ -266,6 +267,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="hexpand">True</property>
+                                    <property name="activates_default">True</property>
                                     <property name="width_chars">40</property>
                                   </object>
                                   <packing>
@@ -279,6 +281,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="hexpand">True</property>
+                                    <property name="activates_default">True</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -291,6 +294,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="hexpand">True</property>
+                                    <property name="activates_default">True</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -303,6 +307,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="hexpand">True</property>
+                                    <property name="activates_default">True</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>

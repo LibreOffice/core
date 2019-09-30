@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="SpecialCharactersDialog">
@@ -10,6 +10,9 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -20,13 +23,13 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="ok">
-                <property name="label">gtk-ok</property>
+              <object class="GtkButton" id="insert">
+                <property name="label" translatable="yes" context="specialcharacters|insert">_Insert</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -35,13 +38,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="insert">
-                <property name="label" translatable="yes" context="specialcharacters|insert">_Insert</property>
+              <object class="GtkButton" id="ok">
+                <property name="label">gtk-ok</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -146,6 +149,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -172,6 +176,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
                       </object>
                     </child>
                   </object>
@@ -252,6 +257,7 @@
                           <object class="GtkEntry" id="hexvalue">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                             <property name="width_chars">8</property>
                             <property name="text" translatable="no">A2</property>
                           </object>
@@ -285,6 +291,7 @@
                       <object class="GtkEntry" id="decimalvalue">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
                         <property name="width_chars">8</property>
                         <property name="text">162</property>
                       </object>
@@ -872,9 +879,6 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
-      <placeholder/>
-    </child>
   </object>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">80</property>

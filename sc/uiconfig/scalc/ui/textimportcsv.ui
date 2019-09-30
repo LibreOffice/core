@@ -15,6 +15,9 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="textimportcsv|TextImportCsvDialog">Text Import</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -170,6 +173,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
+                            <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
                           </object>
                           <packing>
@@ -410,6 +414,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="hexpand">True</property>
                                         <property name="max_length">10</property>
+                                        <property name="activates_default">True</property>
                                         <property name="width_chars">3</property>
                                         <accessibility>
                                           <relation type="labelled-by" target="other"/>
@@ -460,6 +465,7 @@
                                         <child internal-child="entry">
                                           <object class="GtkEntry" id="comboboxtext-entry">
                                             <property name="can_focus">True</property>
+                                            <property name="activates_default">True</property>
                                           </object>
                                         </child>
                                       </object>
