@@ -49,7 +49,6 @@ private:
     std::unique_ptr<weld::Button> m_xBtnEdit;
 
     DECL_LINK(BtnHdl, weld::Button&, void);
-    DECL_LINK( HFEditHdl, void*, void );
     DECL_LINK(TurnOnHdl, weld::ToggleButton&, void);
 };
 
