@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_3a69c0bd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-09-30T09:26:33Z",
+      "side": 1,
+      "message": "suggestion:\n\ncrashreport: change addKeyValue to lower-case camel",
+      "revId": "aee5eb228c71864100addce36766a47bd250ab41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
