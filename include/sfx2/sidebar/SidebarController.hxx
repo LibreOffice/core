@@ -167,6 +167,8 @@ public:
     sal_Int32 getMaximumWidth() const { return mnMaximumSidebarWidth; }
     void setMaximumWidth(sal_Int32 nMaximumWidth) { mnMaximumSidebarWidth = nMaximumWidth; }
 
+    void saveDeckState();
+
 private:
     SidebarController(SidebarDockingWindow* pParentWindow, const SfxViewFrame* pViewFrame);
 

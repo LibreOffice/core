@@ -221,6 +221,9 @@ void SidebarController::registerSidebarForFrame(SidebarController* pController, 
 
 void SidebarController::unregisterSidebarForFrame(SidebarController* pController, const css::uno::Reference<css::frame::XController>& xController)
 {
+    pController->saveDeckState();
+    pController->disposeDecks();
+
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
             ::comphelper::getProcessComponentContext()));
@@ -258,19 +261,25 @@ void SAL_CALL SidebarController::disposing()
     maFocusManager.Clear();
     mpTabBar.disposeAndClear();
 
-    // save decks settings
-    // Impress shutdown : context (frame) is disposed before sidebar disposing
-    // calc writer : context (frame) is disposed after sidebar disposing
-    // so need to test if GetCurrentContext is still valid regarding msApplication
-
-    if (GetCurrentContext().msApplication != "none")
-    {
-        mpResourceManager->SaveDecksSettings(GetCurrentContext());
-        mpResourceManager->SaveLastActiveDeck(GetCurrentContext(), msCurrentDeckId);
-    }
+    saveDeckState();
 
     // clear decks
-    disposeDecks();
+    ResourceManager::DeckContextDescriptorContainer aDecks;
+
+    mpResourceManager->GetMatchingDecks (
+            aDecks,
+            GetCurrentContext(),
+            IsDocumentReadOnly(),
+            mxFrame->getController());
+
+    for (const auto& rDeck : aDecks)
+    {
+        std::shared_ptr<DeckDescriptor> deckDesc = mpResourceManager->GetDeckDescriptor(rDeck.msId);
+
+        VclPtr<Deck> aDeck = deckDesc->mpDeck;
+        if (aDeck)
+            aDeck.disposeAndClear();
+    }
 
     uno::Reference<css::frame::XController> xController = mxFrame->getController();
     if (!xController.is())
@@ -1560,6 +1569,18 @@ void SidebarController::frameAction(const css::frame::FrameActionEvent& rEvent)
             unregisterSidebarForFrame(this, mxFrame->getController());
         else if (rEvent.Action == css::frame::FrameAction_COMPONENT_REATTACHED)
             registerSidebarForFrame(this, mxFrame->getController());
+    }
+}
+
+void SidebarController::saveDeckState()
+{
+    // Impress shutdown : context (frame) is disposed before sidebar disposing
+    // calc writer : context (frame) is disposed after sidebar disposing
+    // so need to test if GetCurrentContext is still valid regarding msApplication
+    if (GetCurrentContext().msApplication != "none")
+    {
+        mpResourceManager->SaveDecksSettings(GetCurrentContext());
+        mpResourceManager->SaveLastActiveDeck(GetCurrentContext(), msCurrentDeckId);
     }
 }
 
