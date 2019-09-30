@@ -854,8 +854,7 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const OUString& 
     const OUString* pEnd = pBegin + types.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        aCOL += OUStringToOString(*pBegin,m_nTextEncoding);
-        aCOL += pComma;
+        aCOL += OUStringToOString(*pBegin,m_nTextEncoding) + pComma;
     }
     if ( !aCOL.isEmpty() )
     {

@@ -642,8 +642,7 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
                         (static_cast<float>(aOrigSize.Width())/TWIP_TO_INCH)+0.5));
              sal_Int32 ay = sal_Int32(floor(static_cast<float>(aOrigPixelSize.Height()) /
                         (static_cast<float>(aOrigSize.Height())/TWIP_TO_INCH)+0.5));
-             sTemp += " ";
-             sTemp += CuiResId( RID_SVXSTR_PPI );
+             sTemp += " " + CuiResId( RID_SVXSTR_PPI );
              OUString sPPI = OUString::number(ax);
              if (abs(ax - ay) > 1) {
                 sPPI += OUStringLiteral1(0x00D7) + OUString::number(ay);
