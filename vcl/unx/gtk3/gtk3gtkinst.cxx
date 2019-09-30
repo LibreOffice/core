@@ -56,7 +56,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/bootstrap.hxx>
-#include <sal/log.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <tools/helpers.hxx>

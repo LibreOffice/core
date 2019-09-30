@@ -80,8 +80,6 @@
 #include <svtools/restartdialog.hxx>
 #include <svtools/imgdef.hxx>
 
-#include <config_vclplug.h>
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
