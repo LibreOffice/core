@@ -669,9 +669,17 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage(weld::Container* pPage, weld::Dia
     , m_xNewReplacePB(m_xBuilder->weld_button("new"))
     , m_xReplacePB(m_xBuilder->weld_button("replace"))
     , m_xDeleteReplacePB(m_xBuilder->weld_button("delete"))
+    , m_xButtonBox(m_xBuilder->weld_container("buttonbox"))
 {
     sNew = m_xNewReplacePB->get_label();
     sModify = m_xReplacePB->get_label();
+
+    // lock down the width of the button box to its max
+    // desired width
+    auto nMaxWidth = m_xButtonBox->get_preferred_size().Width();
+    m_xButtonBox->set_size_request(nMaxWidth, -1);
+    m_xReplacePB->hide();
+
     // tdf#125348 set some small but fixed initial width size, final width will
     // depend on the size of the entry boxes
     m_xReplaceTLB->set_size_request(42, m_xReplaceTLB->get_height_rows(10));
