@@ -33,6 +33,24 @@
       "revId": "40d5a64c77134aabc80963f5558ca33004361208",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_7a7df86c",
+        "filename": "desktop/source/app/crashreport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2019-09-30T09:48:48Z",
+      "side": 1,
+      "message": "look to line 102 make it consistent",
+      "parentUuid": "7f7f9b97_1a6084ce",
+      "revId": "40d5a64c77134aabc80963f5558ca33004361208",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
