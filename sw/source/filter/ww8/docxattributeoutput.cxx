@@ -7198,10 +7198,7 @@ void DocxAttributeOutput::CharHighlight( const SvxBrushItem& rHighlight )
 
 void DocxAttributeOutput::TextINetFormat( const SwFormatINetFormat& rLink )
 {
-    const SwTextINetFormat* pINetFormat = rLink.GetTextINetFormat();
-    const SwCharFormat* pCharFormat = pINetFormat->GetCharFormat();
-
-    OString aStyleId(m_rExport.m_pStyles->GetStyleId(m_rExport.GetId(pCharFormat)));
+    OString aStyleId = MSWordStyles::CreateStyleId(rLink.GetINetFormat());
 
     m_pSerializer->singleElementNS(XML_w, XML_rStyle, FSNS(XML_w, XML_val), aStyleId);
 }
