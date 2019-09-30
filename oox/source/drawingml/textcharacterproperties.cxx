@@ -21,8 +21,10 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <comphelper/sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <editeng/escapementitem.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/helper/propertyset.hxx>
@@ -52,6 +54,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     maSymbolFont.assignIfUsed( rSourceProps.maSymbolFont );
     maHighlightColor.assignIfUsed( rSourceProps.maHighlightColor );
     maUnderlineColor.assignIfUsed( rSourceProps.maUnderlineColor );
+    moLang.assignIfUsed( rSourceProps.moLang );
     moHeight.assignIfUsed( rSourceProps.moHeight );
     moFontScale.assignIfUsed(rSourceProps.moFontScale);
     moSpacing.assignIfUsed( rSourceProps.moSpacing );
@@ -110,10 +113,17 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
 
     if( moLang.has() && !moLang.get().isEmpty() )
     {
-        lang::Locale aLocale( LanguageTag( moLang.get()).getLocale());
-        rPropMap.setProperty( PROP_CharLocale, aLocale);
-        rPropMap.setProperty( PROP_CharLocaleAsian, aLocale);
-        rPropMap.setProperty( PROP_CharLocaleComplex, aLocale);
+        LanguageTag aTag(moLang.get());
+        lang::Locale aLocale(aTag.getLocale());
+        switch(MsLangId::getScriptType(aTag.getLanguageType()))
+        {
+            case css::i18n::ScriptType::LATIN:
+                rPropMap.setProperty( PROP_CharLocale, aLocale);break;
+            case css::i18n::ScriptType::ASIAN:
+                rPropMap.setProperty( PROP_CharLocaleAsian, aLocale);break;
+            case css::i18n::ScriptType::COMPLEX:
+                rPropMap.setProperty( PROP_CharLocaleComplex, aLocale);break;
+        }
     }
 
     if( moHeight.has() )
