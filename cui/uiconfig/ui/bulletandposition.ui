@@ -194,6 +194,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="top_padding">6</property>
+                    <property name="left_padding">12</property>
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="width_request">78</property>
@@ -799,6 +800,7 @@
                                       <object class="GtkAlignment">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="top_padding">6</property>
                                         <property name="left_padding">12</property>
                                         <child>
                                           <object class="GtkGrid">
@@ -993,6 +995,8 @@
                     <property name="width_request">150</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="top_padding">6</property>
+                    <property name="left_padding">12</property>
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="width_request">150</property>
