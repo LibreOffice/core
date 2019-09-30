@@ -464,8 +464,7 @@ SdStyleSheet* SdStyleSheet::GetPseudoStyleSheet() const
         if (nPos != -1)
         {
             OUString aNumStr(aStyleName.copy(aOutlineStr.getLength()));
-            aStyleName = SdResId(STR_PSEUDOSHEET_OUTLINE);
-            aStyleName += aNumStr;
+            aStyleName = SdResId(STR_PSEUDOSHEET_OUTLINE) + aNumStr;
         }
     }
 
