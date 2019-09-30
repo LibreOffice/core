@@ -39,6 +39,15 @@ using namespace ::com::sun::star::awt;
 using ::std::vector;
 using ::std::find;
 
+#define FIXEDTEXT_SERVICENAME                   "com.sun.star.awt.UnoControlFixedText"
+#define FIXEDTEXT_MODELNAME                     "com.sun.star.awt.UnoControlFixedTextModel"
+#define CONTROLNAME_TEXT                        "Text"   // identifier the control in container
+#define CONTROLNAME_PROGRESSBAR                 "ProgressBar"
+#define BUTTON_SERVICENAME                      "com.sun.star.awt.UnoControlButton"
+#define CONTROLNAME_BUTTON                      "Button"
+#define BUTTON_MODELNAME                        "com.sun.star.awt.UnoControlButtonModel"
+#define DEFAULT_BUTTONLABEL                     "Abbrechen"
+
 namespace unocontrols {
 
 ProgressMonitor::ProgressMonitor( const css::uno::Reference< XComponentContext >& rxContext )

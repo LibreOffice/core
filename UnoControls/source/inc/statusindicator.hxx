@@ -37,10 +37,6 @@ namespace unocontrols {
 class ProgressBar;
 
 #define STATUSINDICATOR_FREEBORDER              5                                                       // border around and between the controls
-#define FIXEDTEXT_SERVICENAME                   "com.sun.star.awt.UnoControlFixedText"
-#define FIXEDTEXT_MODELNAME                     "com.sun.star.awt.UnoControlFixedTextModel"
-#define CONTROLNAME_TEXT                        "Text"                                                  // identifier the control in container
-#define CONTROLNAME_PROGRESSBAR                 "ProgressBar"                                           //              -||-
 #define STATUSINDICATOR_BACKGROUNDCOLOR         sal_Int32(Color( 0x00, 0xC0, 0xC0, 0xC0 ))              // lightgray
 #define STATUSINDICATOR_LINECOLOR_BRIGHT        sal_Int32(Color( 0x00, 0xFF, 0xFF, 0xFF ))              // white
 #define STATUSINDICATOR_LINECOLOR_SHADOW        sal_Int32(Color( 0x00, 0x00, 0x00, 0x00 ))              // black
