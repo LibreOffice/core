@@ -138,14 +138,15 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
+                            <property name="border_width">6</property>
                             <property name="row_spacing">6</property>
                             <property name="column_spacing">12</property>
-                            <property name="border_width">6</property>
                             <child>
                               <object class="GtkEntry" id="Left2ED">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
+                                <property name="activates_default">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Left2ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Left2ED-atkobject">Base text</property>
@@ -161,6 +162,7 @@
                               <object class="GtkEntry" id="Left1ED">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="activates_default">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -172,6 +174,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
+                                <property name="activates_default">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -182,6 +185,7 @@
                               <object class="GtkEntry" id="Right2ED">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="activates_default">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Right2ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Right2ED-atkobject">Ruby text</property>
@@ -197,6 +201,7 @@
                               <object class="GtkEntry" id="Left3ED">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="activates_default">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Left3ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Left3ED-atkobject">Base text</property>
@@ -212,6 +217,7 @@
                               <object class="GtkEntry" id="Right3ED">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="activates_default">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Right3ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Right3ED-atkobject">Ruby text</property>
@@ -227,6 +233,7 @@
                               <object class="GtkEntry" id="Right4ED">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="activates_default">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Right4ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Right4ED-atkobject">Ruby text</property>
@@ -242,6 +249,7 @@
                               <object class="GtkEntry" id="Left4ED">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="activates_default">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Left4ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Left4ED-atkobject">Base text</property>

@@ -2,6 +2,30 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkTreeStore" id="liststore2">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name text2 -->
+      <column type="gchararray"/>
+      <!-- column-name text3 -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="liststore3">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name text2 -->
+      <column type="gchararray"/>
+      <!-- column-name text3 -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="ChineseDictionaryDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -279,6 +303,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -290,6 +315,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -476,6 +502,13 @@
       <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <property name="mode">both</property>
+    <widgets>
+      <widget name="tradtosimpleview"/>
+      <widget name="simpletotradview"/>
+    </widgets>
+  </object>
   <object class="GtkSizeGroup" id="sizegroup2">
     <widgets>
       <widget name="termft"/>
@@ -492,37 +525,6 @@
     <widgets>
       <widget name="propertyft"/>
       <widget name="property"/>
-    </widgets>
-  </object>
-  <object class="GtkTreeStore" id="liststore2">
-    <columns>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-      <!-- column-name text2 -->
-      <column type="gchararray"/>
-      <!-- column-name text3 -->
-      <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkTreeStore" id="liststore3">
-    <columns>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-      <!-- column-name text2 -->
-      <column type="gchararray"/>
-      <!-- column-name text3 -->
-      <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
-    <property name="mode">both</property>
-    <widgets>
-      <widget name="tradtosimpleview"/>
-      <widget name="simpletotradview"/>
     </widgets>
   </object>
 </interface>
