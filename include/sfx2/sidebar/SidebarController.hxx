@@ -166,6 +166,8 @@ public:
 
     tools::Rectangle GetDeckDragArea() const;
 
+    void saveDeckState();
+
 private:
     SidebarController(
         SidebarDockingWindow* pParentWindow,
