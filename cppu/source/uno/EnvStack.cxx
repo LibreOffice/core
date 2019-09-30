@@ -119,8 +119,7 @@ extern "C" void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl
 
     if (pTypeName && rtl_uString_getLength(pTypeName))
     {
-        OUString envDcp(pTypeName);
-        envDcp += currPurpose;
+        OUString envDcp = OUString(pTypeName) + currPurpose;
 
         uno_getEnvironment(ppEnv, envDcp.pData, nullptr);
     }
@@ -202,9 +201,7 @@ static int s_getNextEnv(uno_Environment ** ppEnv, uno_Environment * pCurrEnv, un
 
     if (!nextPurpose.isEmpty())
     {
-        OUString next_envDcp(UNO_LB_UNO);
-        next_envDcp += nextPurpose;
-
+        OUString next_envDcp = UNO_LB_UNO + nextPurpose;
         uno_getEnvironment(ppEnv, next_envDcp.pData, nullptr);
     }
     else

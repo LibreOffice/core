@@ -931,9 +931,9 @@ void EnvironmentsData::registerEnvironment( uno_Environment ** ppEnv )
     OSL_ENSURE( ppEnv, "### null ptr!" );
     uno_Environment * pEnv =  *ppEnv;
 
-    OUString aKey(
-        OUString::number( reinterpret_cast< sal_IntPtr >(pEnv->pContext) ) );
-    aKey += pEnv->pTypeName;
+    OUString aKey =
+        OUString::number( reinterpret_cast< sal_IntPtr >(pEnv->pContext) ) +
+        OUString(pEnv->pTypeName);
 
     // try to find registered environment
     OUString2EnvironmentMap::const_iterator const iFind(
