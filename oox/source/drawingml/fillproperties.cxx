@@ -758,8 +758,10 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         xGraphic = lclCheckAndApplyDuotoneTransform(maBlipProps, xGraphic, rGraphicHelper, API_RGB_TRANSPARENT);
 
         if (eColorMode == ColorMode_STANDARD && nBrightness == 70 && nContrast == -70)
+        {
             // map MSO 'washout' to our Watermark colormode
             eColorMode = ColorMode_WATERMARK;
+        }
         else if( nBrightness != 0 && nContrast != 0 )
         {
             // MSO uses a different algorithm for contrast+brightness, LO applies contrast before brightness,
@@ -767,9 +769,11 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
             // contrast or brightness need to be altered, the result is the same, but if both are involved,
             // there's no way to map that, so just force a conversion of the image.
             xGraphic = applyBrightnessContrast( xGraphic, nBrightness, nContrast );
-            nBrightness = 0;
-            nContrast = 0;
         }
+
+        nBrightness = 0;
+        nContrast = 0;
+
         if(mbIsCustomShape)
         {
             // it is a cropped graphic.
