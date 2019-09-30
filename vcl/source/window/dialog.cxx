@@ -621,7 +621,9 @@ Dialog::~Dialog()
 
 void Dialog::dispose()
 {
-    mpDialogImpl.reset();
+    mpDialogImpl->maOwnedButtons.clear();
+    mpDialogImpl->maResponses.clear();
+
     RemoveFromDlgList();
     mpActionArea.clear();
     mpContentArea.clear();
@@ -1163,13 +1165,13 @@ void Dialog::EndDialog( long nResult )
     if ( mpDialogImpl->mbStartedModal )
         ImplEndExecuteModal();
 
-    if ( mpDialogImpl && mpDialogImpl->maEndCtx.isSet() )
+    if ( mpDialogImpl->maEndCtx.isSet() )
     {
         auto fn = std::move(mpDialogImpl->maEndCtx.maEndDialogFn);
         fn(nResult);
     }
 
-    if ( mpDialogImpl && mpDialogImpl->mbStartedModal )
+    if ( mpDialogImpl->mbStartedModal )
     {
         mpDialogImpl->mbStartedModal = false;
         mpDialogImpl->mnResult = -1;
@@ -1177,15 +1179,12 @@ void Dialog::EndDialog( long nResult )
 
     mbInExecute = false;
 
-    if ( mpDialogImpl )
-    {
-        // Destroy ourselves (if we have a context with VclPtr owner)
-        std::shared_ptr<weld::DialogController> xOwnerDialogController = std::move(mpDialogImpl->maEndCtx.mxOwnerDialogController);
-        std::shared_ptr<weld::Dialog> xOwnerSelf = std::move(mpDialogImpl->maEndCtx.mxOwnerSelf);
-        mpDialogImpl->maEndCtx.mxOwner.disposeAndClear();
-        xOwnerDialogController.reset();
-        xOwnerSelf.reset();
-    }
+    // Destroy ourselves (if we have a context with VclPtr owner)
+    std::shared_ptr<weld::DialogController> xOwnerDialogController = std::move(mpDialogImpl->maEndCtx.mxOwnerDialogController);
+    std::shared_ptr<weld::Dialog> xOwnerSelf = std::move(mpDialogImpl->maEndCtx.mxOwnerSelf);
+    mpDialogImpl->maEndCtx.mxOwner.disposeAndClear();
+    xOwnerDialogController.reset();
+    xOwnerSelf.reset();
 }
 
 void Dialog::EndAllDialogs( vcl::Window const * pParent )
