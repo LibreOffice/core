@@ -124,6 +124,35 @@ static OUString lcl_GetColumnValueOf(const OUString& rColumn, Reference < contai
     return sRet;
 }
 
+/**
+ * Replace email server settings in rConfigItem with those set in Writer's global
+ * mail merge config settings.
+ */
+static void lcl_UpdateEmailSettingsFromGlobalConfig(SwMailMergeConfigItem& rConfigItem)
+{
+    // newly created SwMailMergeConfigItem is initialized with values from (global) config
+    SwMailMergeConfigItem aConfigItem;
+
+    // take over email-related settings
+    rConfigItem.SetMailDisplayName(aConfigItem.GetMailDisplayName());
+    rConfigItem.SetMailAddress(aConfigItem.GetMailAddress());
+    rConfigItem.SetMailReplyTo(aConfigItem.GetMailReplyTo());
+    rConfigItem.SetMailReplyTo(aConfigItem.IsMailReplyTo());
+    rConfigItem.SetMailServer(aConfigItem.GetMailServer());
+    rConfigItem.SetMailPort(aConfigItem.GetMailPort());
+    rConfigItem.SetSecureConnection(aConfigItem.IsSecureConnection());
+    // authentication settings
+    rConfigItem.SetAuthentication(aConfigItem.IsAuthentication());
+    rConfigItem.SetSMTPAfterPOP(aConfigItem.IsSMTPAfterPOP());
+    rConfigItem.SetMailUserName(aConfigItem.GetMailUserName());
+    rConfigItem.SetMailPassword(aConfigItem.GetMailPassword());
+    rConfigItem.SetInServerName(aConfigItem.GetInServerName());
+    rConfigItem.SetInServerPort(aConfigItem.GetInServerPort());
+    rConfigItem.SetInServerPOP(aConfigItem.IsInServerPOP());
+    rConfigItem.SetInServerUserName(aConfigItem.GetInServerUserName());
+    rConfigItem.SetInServerPassword(aConfigItem.GetInServerPassword());
+}
+
 class SwSaveWarningBox_Impl : public SwMessageAndEditDialog
 {
     DECL_LINK( ModifyHdl, weld::Entry&, void);
@@ -856,6 +885,10 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
 
         if(nRet != RET_OK && nRet != RET_YES)
             return; // back to the dialog
+
+        // SwMailConfigDlg writes mail merge email settings only to (global) config,
+        // so copy them to the existing config item
+        lcl_UpdateEmailSettingsFromGlobalConfig(*xConfigItem.get());
     }
     //add the documents
     sal_uInt32 nBegin = 0;
