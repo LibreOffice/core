@@ -1562,7 +1562,15 @@ bool ImpGraphic::loadPrepared()
     if (mpGfxLink->LoadNative(aGraphic))
     {
         GraphicExternalLink aLink = maGraphicExternalLink;
+
+        Size aPrefSize = maSwapInfo.maPrefSize;
         *this = *aGraphic.ImplGetImpGraphic();
+        if (aPrefSize.getWidth() && aPrefSize.getHeight())
+        {
+            // Use custom preferred size if it was set when the graphic was still unloaded.
+            ImplSetPrefSize(aPrefSize);
+        }
+
         maGraphicExternalLink = aLink;
 
         return true;
