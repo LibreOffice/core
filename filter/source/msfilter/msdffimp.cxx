@@ -7177,8 +7177,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
         if ( pName || pFilter )
         {
             //Reuse current ole name
-            OUString aDstStgName(MSO_OLE_Obj);
-            aDstStgName += OUString::number(nMSOleObjCntr);
+            OUString aDstStgName = MSO_OLE_Obj + OUString::number(nMSOleObjCntr);
 
             OUString aFilterName;
             if ( pFilter )
