@@ -711,7 +711,13 @@ namespace emfio
                 bool bOk = nWidth && nHeight && nPlanes == 1 && nBitCount == 1 && nBytesPerScan != 0;
                 if (bOk)
                 {
+                    // must be enough data to fulfil the request
                     bOk = nBytesPerScan <= mpInputStream->remainingSize() / nHeight;
+                }
+                if (bOk)
+                {
+                    // scanline must be large enough to provide all pixels
+                    bOk = nBytesPerScan >= nWidth / 8;
                 }
                 if (bOk)
                 {
