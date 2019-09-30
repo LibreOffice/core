@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkListStore" id="os-liststore">
@@ -137,6 +137,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                             <property name="width_chars">22</property>
                           </object>
                           <packing>
@@ -149,6 +150,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                             <property name="width_chars">12</property>
                           </object>
                           <packing>
@@ -161,6 +163,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                             <property name="width_chars">22</property>
                           </object>
                           <packing>
@@ -173,6 +176,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                             <property name="width_chars">22</property>
                           </object>
                           <packing>
