@@ -10,55 +10,46 @@
 #ifndef INCLUDED_SVX_SOURCE_DIALOG_SAFEMODEDIALOG_HXX
 #define INCLUDED_SVX_SOURCE_DIALOG_SAFEMODEDIALOG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixedhyper.hxx>
 #include <comphelper/backupfilehelper.hxx>
+#include <vcl/weld.hxx>
 
-class SafeModeDialog : public Dialog
+class SafeModeDialog : public weld::GenericDialogController
 {
 public:
-
-    explicit SafeModeDialog(vcl::Window* pParent);
-
+    explicit SafeModeDialog(weld::Window* pParent);
+    virtual short run() override;
     virtual ~SafeModeDialog() override;
-
-    virtual void dispose() override;
-
-    virtual bool Close() override;
 
 private:
 
-    VclPtr<Button> mpBtnContinue;
-    VclPtr<Button> mpBtnRestart;
-    VclPtr<Button> mpBtnApply;
+    std::unique_ptr<weld::Button> mxBtnContinue;
+    std::unique_ptr<weld::Button> mxBtnRestart;
+    std::unique_ptr<weld::Button> mxBtnApply;
 
-    VclPtr<VclBox> mpBoxRestore;
-    VclPtr<VclBox> mpBoxConfigure;
-    VclPtr<VclBox> mpBoxDeinstall;
-    VclPtr<VclBox> mpBoxReset;
+    std::unique_ptr<weld::Container> mxBoxRestore;
+    std::unique_ptr<weld::Container> mxBoxConfigure;
+    std::unique_ptr<weld::Container> mxBoxDeinstall;
+    std::unique_ptr<weld::Container> mxBoxReset;
 
-    VclPtr<RadioButton> mpRadioRestore;
-    VclPtr<RadioButton> mpRadioConfigure;
-    VclPtr<RadioButton> mpRadioExtensions;
-    VclPtr<RadioButton> mpRadioReset;
+    std::unique_ptr<weld::RadioButton> mxRadioRestore;
+    std::unique_ptr<weld::RadioButton> mxRadioConfigure;
+    std::unique_ptr<weld::RadioButton> mxRadioExtensions;
+    std::unique_ptr<weld::RadioButton> mxRadioReset;
 
-    VclPtr<CheckBox> mpCBCheckProfilesafeConfig;
-    VclPtr<CheckBox> mpCBCheckProfilesafeExtensions;
-    VclPtr<CheckBox> mpCBDisableAllExtensions;
-    VclPtr<CheckBox> mpCBDeinstallUserExtensions;
-    VclPtr<CheckBox> mpCBResetSharedExtensions;
-    VclPtr<CheckBox> mpCBResetBundledExtensions;
-    VclPtr<CheckBox> mpCBDisableHWAcceleration;
-    VclPtr<CheckBox> mpCBResetCustomizations;
-    VclPtr<CheckBox> mpCBResetWholeUserProfile;
+    std::unique_ptr<weld::CheckButton> mxCBCheckProfilesafeConfig;
+    std::unique_ptr<weld::CheckButton> mxCBCheckProfilesafeExtensions;
+    std::unique_ptr<weld::CheckButton> mxCBDisableAllExtensions;
+    std::unique_ptr<weld::CheckButton> mxCBDeinstallUserExtensions;
+    std::unique_ptr<weld::CheckButton> mxCBResetSharedExtensions;
+    std::unique_ptr<weld::CheckButton> mxCBResetBundledExtensions;
+    std::unique_ptr<weld::CheckButton> mxCBDisableHWAcceleration;
+    std::unique_ptr<weld::CheckButton> mxCBResetCustomizations;
+    std::unique_ptr<weld::CheckButton> mxCBResetWholeUserProfile;
 
-    VclPtr<FixedHyperlink> mpBugLink;
-    VclPtr<FixedHyperlink> mpUserProfileLink;
-    VclPtr<Button> mpBtnCreateZip;
+    std::unique_ptr<weld::LinkButton> mxBugLink;
+    std::unique_ptr<weld::LinkButton> mxUserProfileLink;
+    std::unique_ptr<weld::Button> mxBtnCreateZip;
+    std::unique_ptr<weld::Expander> mxExpander;
 
     // local BackupFileHelper for handling possible restores
     comphelper::BackupFileHelper maBackupFileHelper;
@@ -66,10 +57,10 @@ private:
     void enableDisableWidgets();
     void applyChanges();
 
-    DECL_LINK(RadioBtnHdl, Button*, void);
-    DECL_LINK(CheckBoxHdl, CheckBox&, void);
-    DECL_LINK(CreateZipBtnHdl, Button*, void);
-    DECL_LINK(DialogBtnHdl, Button*, void);
+    DECL_LINK(RadioBtnHdl, weld::Button&, void);
+    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(CreateZipBtnHdl, weld::Button&, void);
+    DECL_LINK(DialogBtnHdl, weld::Button&, void);
 };
 
 #endif

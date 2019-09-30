@@ -30,172 +30,110 @@
 
 using namespace css;
 
-SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
-:   Dialog(pParent, "SafeModeDialog", "svx/ui/safemodedialog.ui"),
-
-    mpBtnContinue(),
-    mpBtnRestart(),
-    mpBtnApply(),
-
-    mpBoxRestore(),
-    mpBoxConfigure(),
-    mpBoxDeinstall(),
-    mpBoxReset(),
-
-    mpRadioRestore(),
-    mpRadioConfigure(),
-    mpRadioExtensions(),
-    mpRadioReset(),
-
-    mpCBCheckProfilesafeConfig(),
-    mpCBCheckProfilesafeExtensions(),
-    mpCBDisableAllExtensions(),
-    mpCBDeinstallUserExtensions(),
-    mpCBResetSharedExtensions(),
-    mpCBResetBundledExtensions(),
-    mpCBDisableHWAcceleration(),
-    mpCBResetCustomizations(),
-    mpCBResetWholeUserProfile(),
-
-    maBackupFileHelper()
+SafeModeDialog::SafeModeDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "svx/ui/safemodedialog.ui", "SafeModeDialog")
+    , mxBtnContinue(m_xBuilder->weld_button("btn_continue"))
+    , mxBtnRestart(m_xBuilder->weld_button("btn_restart"))
+    , mxBtnApply(m_xBuilder->weld_button("btn_apply"))
+    , mxBoxRestore(m_xBuilder->weld_container("group_restore"))
+    , mxBoxConfigure(m_xBuilder->weld_container("group_configure"))
+    , mxBoxDeinstall(m_xBuilder->weld_container("group_deinstall"))
+    , mxBoxReset(m_xBuilder->weld_container("group_reset"))
+    , mxRadioRestore(m_xBuilder->weld_radio_button("radio_restore"))
+    , mxRadioConfigure(m_xBuilder->weld_radio_button("radio_configure"))
+    , mxRadioExtensions(m_xBuilder->weld_radio_button("radio_extensions"))
+    , mxRadioReset(m_xBuilder->weld_radio_button("radio_reset"))
+    , mxCBCheckProfilesafeConfig(m_xBuilder->weld_check_button("check_profilesafe_config"))
+    , mxCBCheckProfilesafeExtensions(m_xBuilder->weld_check_button("check_profilesafe_extensions"))
+    , mxCBDisableAllExtensions(m_xBuilder->weld_check_button("check_disable_all_extensions"))
+    , mxCBDeinstallUserExtensions(m_xBuilder->weld_check_button("check_deinstall_user_extensions"))
+    , mxCBResetSharedExtensions(m_xBuilder->weld_check_button("check_reset_shared_extensions"))
+    , mxCBResetBundledExtensions(m_xBuilder->weld_check_button("check_reset_bundled_extensions"))
+    , mxCBDisableHWAcceleration(m_xBuilder->weld_check_button("check_disable_hw_acceleration"))
+    , mxCBResetCustomizations(m_xBuilder->weld_check_button("check_reset_customizations"))
+    , mxCBResetWholeUserProfile(m_xBuilder->weld_check_button("check_reset_whole_userprofile"))
+    , mxBugLink(m_xBuilder->weld_link_button("linkbutton_bugs"))
+    , mxUserProfileLink(m_xBuilder->weld_link_button("linkbutton_profile"))
+    , mxBtnCreateZip(m_xBuilder->weld_button("btn_create_zip"))
+    , mxExpander(m_xBuilder->weld_expander("expander"))
+    , maBackupFileHelper()
 {
-    get(mpBtnContinue, "btn_continue");
-    get(mpBtnRestart, "btn_restart");
-    get(mpBtnApply, "btn_apply");
+    m_xDialog->set_centered_on_parent(false);
+    mxRadioRestore->connect_clicked(LINK(this, SafeModeDialog, RadioBtnHdl));
+    mxRadioConfigure->connect_clicked(LINK(this, SafeModeDialog, RadioBtnHdl));
+    mxRadioExtensions->connect_clicked(LINK(this, SafeModeDialog, RadioBtnHdl));
+    mxRadioReset->connect_clicked(LINK(this, SafeModeDialog, RadioBtnHdl));
 
-    get(mpBoxRestore, "group_restore");
-    get(mpBoxConfigure, "group_configure");
-    get(mpBoxDeinstall, "group_deinstall");
-    get(mpBoxReset, "group_reset");
+    mxBtnContinue->connect_clicked(LINK(this, SafeModeDialog, DialogBtnHdl));
+    mxBtnRestart->connect_clicked(LINK(this, SafeModeDialog, DialogBtnHdl));
+    mxBtnApply->connect_clicked(LINK(this, SafeModeDialog, DialogBtnHdl));
 
-    get(mpRadioRestore, "radio_restore");
-    get(mpRadioConfigure, "radio_configure");
-    get(mpRadioExtensions, "radio_extensions");
-    get(mpRadioReset, "radio_reset");
+    mxCBCheckProfilesafeConfig->connect_toggled(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mxCBCheckProfilesafeExtensions->connect_toggled(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mxCBDisableAllExtensions->connect_toggled(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mxCBDeinstallUserExtensions->connect_toggled(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mxCBResetSharedExtensions->connect_toggled(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mxCBResetBundledExtensions->connect_toggled(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mxCBDisableHWAcceleration->connect_toggled(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mxCBResetCustomizations->connect_toggled(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mxCBResetWholeUserProfile->connect_toggled(LINK(this, SafeModeDialog, CheckBoxHdl));
 
-    get(mpCBCheckProfilesafeConfig, "check_profilesafe_config");
-    get(mpCBCheckProfilesafeExtensions, "check_profilesafe_extensions");
-    get(mpCBDisableAllExtensions, "check_disable_all_extensions");
-    get(mpCBDeinstallUserExtensions, "check_deinstall_user_extensions");
-    get(mpCBResetSharedExtensions, "check_reset_shared_extensions");
-    get(mpCBResetBundledExtensions, "check_reset_bundled_extensions");
-    get(mpCBDisableHWAcceleration, "check_disable_hw_acceleration");
-    get(mpCBResetCustomizations, "check_reset_customizations");
-    get(mpCBResetWholeUserProfile, "check_reset_whole_userprofile");
-
-    get(mpBugLink, "linkbutton_bugs");
-    get(mpUserProfileLink, "linkbutton_profile");
-    get(mpBtnCreateZip, "btn_create_zip");
-
-    mpRadioRestore->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
-    mpRadioConfigure->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
-    mpRadioExtensions->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
-    mpRadioReset->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
-
-    mpBtnContinue->SetClickHdl(LINK(this, SafeModeDialog, DialogBtnHdl));
-    mpBtnRestart->SetClickHdl(LINK(this, SafeModeDialog, DialogBtnHdl));
-    mpBtnApply->SetClickHdl(LINK(this, SafeModeDialog, DialogBtnHdl));
-
-    mpCBCheckProfilesafeConfig->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
-    mpCBCheckProfilesafeExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
-    mpCBDisableAllExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
-    mpCBDeinstallUserExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
-    mpCBResetSharedExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
-    mpCBResetBundledExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
-    mpCBDisableHWAcceleration->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
-    mpCBResetCustomizations->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
-    mpCBResetWholeUserProfile->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
-
-    mpBtnCreateZip->SetClickHdl(LINK(this, SafeModeDialog, CreateZipBtnHdl));
+    mxBtnCreateZip->connect_clicked(LINK(this, SafeModeDialog, CreateZipBtnHdl));
 
     // Disable restart btn until some checkbox is active
-    mpBtnApply->Disable();
+    mxBtnApply->set_sensitive(false);
 
     // Check the first radio button and call its handler,
     // it'll disable the relevant parts
-    mpRadioRestore->Check();
-    RadioBtnHdl( mpRadioRestore );
+    mxRadioRestore->set_active(true);
+    RadioBtnHdl(*mxRadioRestore);
 
     // Set URL for help button (module=safemode)
     OUString sURL("http://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
         "&LOlocale=" + utl::ConfigManager::getUILocale() + "&LOmodule=safemode");
-    mpBugLink->SetURL(sURL);
+    mxBugLink->set_uri(sURL);
 
-    mpUserProfileLink->SetURL(comphelper::BackupFileHelper::getUserProfileURL());
+    mxUserProfileLink->set_uri(comphelper::BackupFileHelper::getUserProfileURL());
 }
 
 SafeModeDialog::~SafeModeDialog()
 {
-    disposeOnce();
-}
-
-void SafeModeDialog::dispose()
-{
-    mpRadioRestore.clear();
-    mpRadioConfigure.clear();
-    mpRadioExtensions.clear();
-    mpRadioReset.clear();
-
-    mpBoxRestore.clear();
-    mpBoxConfigure.clear();
-    mpBoxDeinstall.clear();
-    mpBoxReset.clear();
-
-    mpBtnContinue.clear();
-    mpBtnRestart.clear();
-    mpBtnApply.clear();
-
-    mpCBCheckProfilesafeConfig.clear();
-    mpCBCheckProfilesafeExtensions.clear();
-    mpCBDisableAllExtensions.clear();
-    mpCBDeinstallUserExtensions.clear();
-    mpCBResetSharedExtensions.clear();
-    mpCBResetBundledExtensions.clear();
-    mpCBDisableHWAcceleration.clear();
-    mpCBResetCustomizations.clear();
-    mpCBResetWholeUserProfile.clear();
-
-    mpBugLink.clear();
-    mpUserProfileLink.clear();
-    mpBtnCreateZip.clear();
-
-    Dialog::dispose();
 }
 
 void SafeModeDialog::enableDisableWidgets()
 {
-    mpCBCheckProfilesafeConfig->Enable(maBackupFileHelper.isPopPossible());
-    mpCBCheckProfilesafeExtensions->Enable(maBackupFileHelper.isPopPossibleExtensionInfo());
-    mpCBDisableAllExtensions->Enable(comphelper::BackupFileHelper::isTryDisableAllExtensionsPossible());
-    mpCBDeinstallUserExtensions->Enable(comphelper::BackupFileHelper::isTryDeinstallUserExtensionsPossible());
-    mpCBResetSharedExtensions->Enable(comphelper::BackupFileHelper::isTryResetSharedExtensionsPossible());
-    mpCBResetBundledExtensions->Enable(comphelper::BackupFileHelper::isTryResetBundledExtensionsPossible());
-    mpCBResetCustomizations->Enable(comphelper::BackupFileHelper::isTryResetCustomizationsPossible());
+    mxCBCheckProfilesafeConfig->set_sensitive(maBackupFileHelper.isPopPossible());
+    mxCBCheckProfilesafeExtensions->set_sensitive(maBackupFileHelper.isPopPossibleExtensionInfo());
+    mxCBDisableAllExtensions->set_sensitive(comphelper::BackupFileHelper::isTryDisableAllExtensionsPossible());
+    mxCBDeinstallUserExtensions->set_sensitive(comphelper::BackupFileHelper::isTryDeinstallUserExtensionsPossible());
+    mxCBResetSharedExtensions->set_sensitive(comphelper::BackupFileHelper::isTryResetSharedExtensionsPossible());
+    mxCBResetBundledExtensions->set_sensitive(comphelper::BackupFileHelper::isTryResetBundledExtensionsPossible());
+    mxCBResetCustomizations->set_sensitive(comphelper::BackupFileHelper::isTryResetCustomizationsPossible());
 
-    // no disable of mpCBResetWholeUserProfile, always possible (as last choice)
+    // no disable of mxCBResetWholeUserProfile, always possible (as last choice)
 }
 
-bool SafeModeDialog::Close()
+short SafeModeDialog::run()
 {
+    short nRet = weld::GenericDialogController::run();
     // Remove the safe mode flag before exiting this dialog
     sfx2::SafeMode::removeFlag();
-
-    return Dialog::Close();
+    return nRet;
 }
 
 void SafeModeDialog::applyChanges()
 {
     // Restore
-    if (mpRadioRestore->IsChecked())
+    if (mxRadioRestore->get_active())
     {
-        if (mpCBCheckProfilesafeConfig->IsChecked())
+        if (mxCBCheckProfilesafeConfig->get_active())
         {
             // reset UserConfiguration to last known working state
             // ProfileSafeMode/BackupFileHelper
             maBackupFileHelper.tryPop();
         }
 
-        if (mpCBCheckProfilesafeExtensions->IsChecked())
+        if (mxCBCheckProfilesafeExtensions->get_active())
         {
             // reset State of installed Extensions to last known working state
             // ProfileSafeMode/BackupFileHelper
@@ -204,35 +142,35 @@ void SafeModeDialog::applyChanges()
     }
 
     // Configure
-    if (mpRadioConfigure->IsChecked())
+    if (mxRadioConfigure->get_active())
     {
-        if (mpCBDisableAllExtensions->IsChecked())
+        if (mxCBDisableAllExtensions->get_active())
         {
             // Disable all extensions
             comphelper::BackupFileHelper::tryDisableAllExtensions();
         }
 
-        if (mpCBDisableHWAcceleration->IsChecked())
+        if (mxCBDisableHWAcceleration->get_active())
         {
             comphelper::BackupFileHelper::tryDisableHWAcceleration();
         }
     }
 
     // Deinstall
-    if (mpRadioExtensions->IsChecked())
+    if (mxRadioExtensions->get_active())
     {
-        if (mpCBDeinstallUserExtensions->IsChecked())
+        if (mxCBDeinstallUserExtensions->get_active())
         {
             // Deinstall all User Extensions (installed for User only)
             comphelper::BackupFileHelper::tryDeinstallUserExtensions();
         }
 
-        if (mpCBResetSharedExtensions->IsChecked())
+        if (mxCBResetSharedExtensions->get_active())
         {
             // Reset shared Extensions
             comphelper::BackupFileHelper::tryResetSharedExtensions();
         }
-        if (mpCBResetBundledExtensions->IsChecked())
+        if (mxCBResetBundledExtensions->get_active())
         {
             // Reset bundled Extensions
             comphelper::BackupFileHelper::tryResetBundledExtensions();
@@ -240,15 +178,15 @@ void SafeModeDialog::applyChanges()
     }
 
     // Reset
-    if (mpRadioReset->IsChecked())
+    if (mxRadioReset->get_active())
     {
-        if (mpCBResetCustomizations->IsChecked())
+        if (mxCBResetCustomizations->get_active())
         {
             // Reset customizations (Settings and UserInterface modifications)
             comphelper::BackupFileHelper::tryResetCustomizations();
         }
 
-        if (mpCBResetWholeUserProfile->IsChecked())
+        if (mxCBResetWholeUserProfile->get_active())
         {
             // Reset the whole UserProfile
             comphelper::BackupFileHelper::tryResetUserProfile();
@@ -260,73 +198,73 @@ void SafeModeDialog::applyChanges()
         css::uno::Reference< css::task::XInteractionHandler >());
 }
 
-IMPL_LINK(SafeModeDialog, RadioBtnHdl, Button*, pBtn, void)
+IMPL_LINK(SafeModeDialog, RadioBtnHdl, weld::Button&, rBtn, void)
 {
-    if (pBtn == mpRadioRestore.get())
+    if (&rBtn == mxRadioRestore.get())
     {
         // Enable the currently selected box
-        mpBoxRestore->Enable();
+        mxBoxRestore->set_sensitive(true);
         // Make sure only possible choices are active
         enableDisableWidgets();
         // Disable the unselected boxes
-        mpBoxReset->Disable();
-        mpBoxConfigure->Disable();
-        mpBoxDeinstall->Disable();
+        mxBoxReset->set_sensitive(false);
+        mxBoxConfigure->set_sensitive(false);
+        mxBoxDeinstall->set_sensitive(false);
     }
-    else if (pBtn == mpRadioConfigure.get())
+    else if (&rBtn == mxRadioConfigure.get())
     {
         // Enable the currently selected box
-        mpBoxConfigure->Enable();
+        mxBoxConfigure->set_sensitive(true);
         // Make sure only possible choices are active
         enableDisableWidgets();
         // Disable the unselected boxes
-        mpBoxRestore->Disable();
-        mpBoxReset->Disable();
-        mpBoxDeinstall->Disable();
+        mxBoxRestore->set_sensitive(false);
+        mxBoxReset->set_sensitive(false);
+        mxBoxDeinstall->set_sensitive(false);
 
     }
-    else if (pBtn == mpRadioExtensions.get())
+    else if (&rBtn == mxRadioExtensions.get())
     {
         // Enable the currently selected box
-        mpBoxDeinstall->Enable();
+        mxBoxDeinstall->set_sensitive(true);
         // Make sure only possible choices are active
         enableDisableWidgets();
         // Disable the unselected boxes
-        mpBoxRestore->Disable();
-        mpBoxConfigure->Disable();
-        mpBoxReset->Disable();
+        mxBoxRestore->set_sensitive(false);
+        mxBoxConfigure->set_sensitive(false);
+        mxBoxReset->set_sensitive(false);
     }
-    else if (pBtn == mpRadioReset.get())
+    else if (&rBtn == mxRadioReset.get())
     {
         // Enable the currently selected box
-        mpBoxReset->Enable();
+        mxBoxReset->set_sensitive(true);
         // Make sure only possible choices are active
         enableDisableWidgets();
         // Disable the unselected boxes
-        mpBoxConfigure->Disable();
-        mpBoxRestore->Disable();
-        mpBoxDeinstall->Disable();
+        mxBoxConfigure->set_sensitive(false);
+        mxBoxRestore->set_sensitive(false);
+        mxBoxDeinstall->set_sensitive(false);
     }
 }
 
-IMPL_LINK(SafeModeDialog, DialogBtnHdl, Button*, pBtn, void)
+IMPL_LINK(SafeModeDialog, DialogBtnHdl, weld::Button&, rBtn, void)
 {
-    if (pBtn == mpBtnContinue.get())
+    if (&rBtn == mxBtnContinue.get())
     {
-        Close();
+        m_xDialog->response(RET_CLOSE);
     }
-    else if (pBtn == mpBtnRestart.get())
+    else if (&rBtn == mxBtnRestart.get())
     {
         sfx2::SafeMode::putRestartFlag();
-        Close();
+        m_xDialog->response(RET_CLOSE);
         uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
         css::task::OfficeRestartManager::get(xContext)->requestRestart(
             css::uno::Reference< css::task::XInteractionHandler >());
     }
-    else if (pBtn == mpBtnApply.get())
+    else if (&rBtn == mxBtnApply.get())
     {
         sfx2::SafeMode::putRestartFlag();
-        Close();
+        m_xDialog->response(RET_CLOSE);
         applyChanges();
     }
 }
@@ -362,7 +300,7 @@ namespace {
     }
 }
 
-IMPL_LINK(SafeModeDialog, CreateZipBtnHdl, Button*, /*pBtn*/, void)
+IMPL_LINK(SafeModeDialog, CreateZipBtnHdl, weld::Button&, /*rBtn*/, void)
 {
     const OUString zipFileName("libreoffice-profile.zip");
     const OUString zipFileURL(comphelper::BackupFileHelper::getUserProfileURL() + "/" + zipFileName);
@@ -375,31 +313,31 @@ IMPL_LINK(SafeModeDialog, CreateZipBtnHdl, Button*, /*pBtn*/, void)
     }
     catch (const uno::Exception &)
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                                  VclMessageType::Warning, VclButtonsType::Ok,
                                                                  SvxResId(RID_SVXSTR_SAFEMODE_ZIP_FAILURE)));
         xBox->run();
         return;
     }
 
-    ProfileExportedDialog aDialog(GetFrameWeld());
+    ProfileExportedDialog aDialog(m_xDialog.get());
     aDialog.run();
 }
 
-IMPL_LINK(SafeModeDialog, CheckBoxHdl, CheckBox&, /*pCheckBox*/, void)
+IMPL_LINK(SafeModeDialog, CheckBoxHdl, weld::ToggleButton&, /*pCheckBox*/, void)
 {
     const bool bEnable(
-        mpCBCheckProfilesafeConfig->IsChecked() ||
-        mpCBCheckProfilesafeExtensions->IsChecked() ||
-        mpCBDisableAllExtensions->IsChecked() ||
-        mpCBDeinstallUserExtensions->IsChecked() ||
-        mpCBResetSharedExtensions->IsChecked() ||
-        mpCBResetBundledExtensions->IsChecked() ||
-        mpCBDisableHWAcceleration->IsChecked() ||
-        mpCBResetCustomizations->IsChecked() ||
-        mpCBResetWholeUserProfile->IsChecked());
+        mxCBCheckProfilesafeConfig->get_active() ||
+        mxCBCheckProfilesafeExtensions->get_active() ||
+        mxCBDisableAllExtensions->get_active() ||
+        mxCBDeinstallUserExtensions->get_active() ||
+        mxCBResetSharedExtensions->get_active() ||
+        mxCBResetBundledExtensions->get_active() ||
+        mxCBDisableHWAcceleration->get_active() ||
+        mxCBResetCustomizations->get_active() ||
+        mxCBResetWholeUserProfile->get_active());
 
-    mpBtnApply->Enable(bEnable);
+    mxBtnApply->set_sensitive(bEnable);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

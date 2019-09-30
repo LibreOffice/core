@@ -14,6 +14,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 
 #include "SafeModeDialog.hxx"
 
@@ -61,8 +62,9 @@ css::uno::Any SAL_CALL SafeModeUI::dispatchWithReturnValue(const css::util::URL&
 {
     SolarMutexGuard aGuard;
     css::uno::Any aRet;
-    ScopedVclPtrInstance<SafeModeDialog> xDialog(nullptr);
-    xDialog->Execute();
+    vcl::Window* pParentWindow = Application::GetDefDialogParent();
+    SafeModeDialog aDialog(pParentWindow ? pParentWindow->GetFrameWeld() : nullptr);
+    aDialog.run();
     return aRet;
 }
 
