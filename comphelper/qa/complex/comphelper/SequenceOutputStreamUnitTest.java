@@ -35,35 +35,13 @@ import static org.junit.Assert.*;
 /* Document.
  */
 
-class TestHelper
-{
-    private String m_sTestPrefix;
-
-    /** Creates a new instance of TestHelper
-     */
-    public TestHelper ( String sTestPrefix ) {
-        m_sTestPrefix = sTestPrefix;
-    }
-
-    public void Error ( String sError ) {
-        System.out.println ( m_sTestPrefix + "Error: " + sError );
-    }
-
-    public void Message ( String sMessage ) {
-        System.out.println ( m_sTestPrefix + sMessage );
-    }
-}
-
 public class SequenceOutputStreamUnitTest
 {
     private XMultiServiceFactory m_xMSF = null;
 
-    TestHelper m_aTestHelper = null;
-
     @Before public void before() {
         try {
             m_xMSF = getMSF();
-            m_aTestHelper = new TestHelper ( "Test01: ");
         } catch (Exception e) {
             fail ("Cannot create service factory!");
         }
@@ -86,15 +64,19 @@ public class SequenceOutputStreamUnitTest
             XSequenceOutputStream xSeqOutStream =
                     UnoRuntime.queryInterface (
                     XSequenceOutputStream.class, oSequenceOutputStream );
-            m_aTestHelper.Message ( "SequenceOutputStream created." );
 
             //write something to the stream
             byte pBytesOriginal[] = new byte [nBytesCnt];
             Random oRandom = new Random();
             oRandom.nextBytes (pBytesOriginal);
             xSeqOutStream.writeBytes (pBytesOriginal);
+
+            // Append the same content once again
+            xSeqOutStream.writeBytes (pBytesOriginal);
+
             byte pBytesWritten[] = xSeqOutStream.getWrittenBytes ();
-            m_aTestHelper.Message ( "SequenceOutputStream filled." );
+            assertTrue( "SequenceOutputStream::getWrittenBytes() - wrong amount of bytes returned",
+                    pBytesWritten.length == nBytesCnt * 2 );
 
             //create SequenceInputstream
             Object pArgs[] = new Object[1];
@@ -104,36 +86,28 @@ public class SequenceOutputStreamUnitTest
             XSeekableInputStream xSeekableInStream =
                     UnoRuntime.queryInterface (
                     XSeekableInputStream.class, oSequenceInputStream );
-            m_aTestHelper.Message ( "SequenceInputStream created." );
 
             //read from the stream
-            byte pBytesRead[][] = new byte [1][nBytesCnt];
-            xSeekableInStream.readBytes ( pBytesRead, pBytesRead[0].length + 1 );
-            m_aTestHelper.Message ( "Read from SequenceInputStream." );
+            byte pBytesRead[][] = new byte [1][nBytesCnt*2];
+            int nBytesCountRead = xSeekableInStream.readBytes ( pBytesRead, pBytesRead[0].length + 1 );
+
+            assertTrue( "SequenceInputStream::readBytes() - wrong amount of bytes returned " + pBytesRead[0].length + " vs " + (nBytesCountRead),
+                    pBytesRead[0].length == nBytesCountRead);
 
             //close the streams
             xSeqOutStream.closeOutput ();
             xSeekableInStream.closeInput ();
-            m_aTestHelper.Message ( "Both streams closed." );
 
             //compare the original, written and read arrays
-            for ( int i = 0; i < nBytesCnt; ++i ) {
-                if ( pBytesOriginal[i] != pBytesWritten[i] ) {
-                    m_aTestHelper.Error ( "Written array not identical to " +
-                            "original array. Position: " + i );
-                    return /* false */;
-                } else if ( pBytesOriginal[i] != pBytesRead[0][i] ) {
-                    m_aTestHelper.Error ( "Read array not identical to original " +
-                            "array. Position: " + i );
-                    return /* false */;
-                }
+            for ( int i = 0; i < nBytesCnt * 2; ++i ) {
+                assertTrue( "Written array not identical to original array. Position: " + i,
+                    pBytesOriginal[i % nBytesCnt] == pBytesWritten[i] );
+                assertTrue( "Read array not identical to original array. Position: " + i,
+                    pBytesOriginal[i % nBytesCnt] == pBytesRead[0][i] );
             }
-            m_aTestHelper.Message ( "All data correct." );
         } catch ( Exception e ) {
-            m_aTestHelper.Error ( "Exception: " + e );
-            return /* false */;
+            fail ( "Exception: " + e );
         }
-        // return /* true */;
     }
 
     private static XMultiServiceFactory getMSF()
