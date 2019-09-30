@@ -33,6 +33,24 @@
       "revId": "f9c2bc659784f9c60f8f3f8cfd2c26589d87899c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_7ab178e1",
+        "filename": "compilerplugins/clang/stringadd.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-09-30T11:57:10Z",
+      "side": 1,
+      "message": "Good point, tightened that up",
+      "parentUuid": "7f7f9b97_7adc1846",
+      "revId": "f9c2bc659784f9c60f8f3f8cfd2c26589d87899c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
