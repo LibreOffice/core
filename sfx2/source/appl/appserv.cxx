@@ -587,7 +587,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             // Open release notes depending on version and locale
             OUString sURL(officecfg::Office::Common::Menus::ReleaseNotesURL::get() + //https://hub.libreoffice.org/ReleaseNotes/
                 "?LOvers=" + utl::ConfigManager::getProductVersion() +
-                "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getLanguage() );
+                "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47() );
             sfx2::openUriExternally(sURL, false);
             break;
         }
