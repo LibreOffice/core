@@ -37,6 +37,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <sal/log.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 #define ENDNOTE 0x80000000
 
@@ -1431,9 +1432,11 @@ void SwFootnoteBossFrame::AppendFootnote( SwContentFrame *pRef, SwTextFootnote *
     if ( pAttr->GetFootnote().IsEndNote() )
     {
         bEnd = true;
+        const IDocumentSettingAccess& rSettings = *pAttr->GetTextNode().getIDocumentSettingAccess();
         if( GetUpper()->IsSctFrame() &&
             static_cast<SwSectionFrame*>(GetUpper())->IsEndnAtEnd() )
         {
+            // Endnotes at the end of the section.
             SwFrame* pLast =
                 static_cast<SwSectionFrame*>(GetUpper())->FindLastContent( SwFindMode::EndNote );
             if( pLast )
@@ -1442,8 +1445,15 @@ void SwFootnoteBossFrame::AppendFootnote( SwContentFrame *pRef, SwTextFootnote *
                 pPage = pBoss->FindPageFrame();
             }
         }
+        else if (rSettings.get(DocumentSettingId::CONTINUOUS_ENDNOTES))
+        {
+            // Endnotes at the end of the document.
+            pBoss = getRootFrame()->GetLastPage();
+            pPage = pBoss->FindPageFrame();
+        }
         else
         {
+            // Endnotes on a separate page.
             while ( pPage->GetNext() && !pPage->IsEndNotePage() )
             {
                 pPage = static_cast<SwPageFrame*>(pPage->GetNext());

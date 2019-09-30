@@ -143,6 +143,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_SUBTRACT_FLYS,
     HANDLE_DISABLE_OFF_PAGE_POSITIONING,
     HANDLE_EMPTY_DB_FIELD_HIDES_PARA,
+    HANDLE_CONTINUOUS_ENDNOTES,
 };
 
 static MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -227,6 +228,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("SubtractFlysAnchoredAtFlys"),       HANDLE_SUBTRACT_FLYS,         cppu::UnoType<bool>::get(),           0},
         { OUString("DisableOffPagePositioning"),       HANDLE_DISABLE_OFF_PAGE_POSITIONING,         cppu::UnoType<bool>::get(),           0},
         { OUString("EmptyDbFieldHidesPara"), HANDLE_EMPTY_DB_FIELD_HIDES_PARA, cppu::UnoType<bool>::get(), 0 },
+        { OUString("ContinuousEndnotes"), HANDLE_CONTINUOUS_ENDNOTES, cppu::UnoType<bool>::get(), 0 },
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -925,6 +927,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
+        case HANDLE_CONTINUOUS_ENDNOTES:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::CONTINUOUS_ENDNOTES,
+                                                       bTmp);
+            }
+        }
+        break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1379,6 +1391,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA);
+        }
+        break;
+        case HANDLE_CONTINUOUS_ENDNOTES:
+        {
+            rValue
+                <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::CONTINUOUS_ENDNOTES);
         }
         break;
         default:
