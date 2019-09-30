@@ -1045,6 +1045,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
         return;
 
     // Prevent triple change broadcasts of the same object.
+    bool bWasLocked = maNoteData.mxCaption->getSdrModelFromSdrObject().isLocked();
     maNoteData.mxCaption->getSdrModelFromSdrObject().setLock(true);
 
     // transfer ownership of outliner object to caption, or set simple text
@@ -1079,7 +1080,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
     }
 
     // End prevent triple change broadcasts of the same object.
-    maNoteData.mxCaption->getSdrModelFromSdrObject().setLock(false);
+    maNoteData.mxCaption->getSdrModelFromSdrObject().setLock(bWasLocked);
     maNoteData.mxCaption->BroadcastObjectChange();
 }
 
