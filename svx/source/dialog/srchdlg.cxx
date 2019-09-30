@@ -196,7 +196,7 @@ void SearchAttrItemList::Put( const SfxItemSet& rSet )
     const SfxPoolItem* pItem = aIter.GetCurItem();
     sal_uInt16 nWhich;
 
-    while ( true )
+    do
     {
         // only test that it is available?
         if( IsInvalidItem( pItem ) )
@@ -213,10 +213,8 @@ void SearchAttrItemList::Put( const SfxItemSet& rSet )
         aItem.nSlot = pPool->GetSlotId( nWhich );
         Insert( aItem );
 
-        if ( aIter.IsAtEnd() )
-            break;
         pItem = aIter.NextItem();
-    }
+    } while (pItem);
 }
 
 

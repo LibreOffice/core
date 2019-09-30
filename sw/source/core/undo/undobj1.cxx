@@ -542,18 +542,13 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
             m_pFrameFormat->SetDerivedFrom(pDerivedFromFrameFormat);
 
         SfxItemIter aIter( *m_pItemSet );
-        const SfxPoolItem* pItem = aIter.GetCurItem();
-        while( pItem )
+        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
         {
             if( IsInvalidItem( pItem ))
                 m_pFrameFormat->ResetFormatAttr( m_pItemSet->GetWhichByPos(
                                         aIter.GetCurPos() ));
             else
                 m_pFrameFormat->SetFormatAttr( *pItem );
-
-            if( aIter.IsAtEnd() )
-                break;
-            pItem = aIter.NextItem();
         }
 
         if( m_bAnchorChanged )
@@ -689,13 +684,9 @@ void SwUndoSetFlyFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* )
         else if( RES_ATTRSET_CHG == nWhich )
         {
             SfxItemIter aIter( *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
-            const SfxPoolItem* pItem = aIter.GetCurItem();
-            while( pItem )
+            for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
             {
                 PutAttr( pItem->Which(), pItem );
-                if( aIter.IsAtEnd() )
-                    break;
-                pItem = aIter.NextItem();
             }
         }
     }

@@ -1014,17 +1014,15 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
     {
         SfxItemIter aIter( *this );
         const SfxPoolItem* pItem = aIter.GetCurItem();
-        while( true )
+        do
         {
             sal_uInt16 nWhich = IsInvalidItem( pItem )
                                 ? GetWhichByPos( aIter.GetCurPos() )
                                 : pItem->Which();
             if( SfxItemState::UNKNOWN == rSet.GetItemState( nWhich, false ) )
                 ClearItem( nWhich );        // Delete
-            if( aIter.IsAtEnd() )
-                break;
             pItem = aIter.NextItem();
-        }
+        } while (pItem);
     }
 }
 
@@ -1080,17 +1078,15 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
     {
         SfxItemIter aIter( *this );
         const SfxPoolItem* pItem = aIter.GetCurItem();
-        while( true )
+        do
         {
             sal_uInt16 nWhich = IsInvalidItem( pItem )
                                 ? GetWhichByPos( aIter.GetCurPos() )
                                 : pItem->Which();
             if( SfxItemState::SET == rSet.GetItemState( nWhich, false ) )
                 ClearItem( nWhich ); // Delete
-            if( aIter.IsAtEnd() )
-                break;
             pItem = aIter.NextItem();
-        }
+        } while (pItem);
 
     }
 }

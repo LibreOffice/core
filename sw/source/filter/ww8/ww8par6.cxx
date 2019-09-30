@@ -2265,7 +2265,7 @@ void WW8DupProperties::Insert(const SwPosition &rPos)
             do
             {
                 pCtrlStck->NewAttr(rPos, *pItem);
-            }while( !aIter.IsAtEnd() && nullptr != ( pItem = aIter.NextItem() ) );
+            } while ((pItem = aIter.NextItem()));
         }
     }
 }

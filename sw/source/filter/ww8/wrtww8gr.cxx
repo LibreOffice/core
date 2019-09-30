@@ -99,9 +99,8 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStora
 {
     bool bGraphicNeeded = false;
     SfxItemIter aIter( rSet );
-    const SfxPoolItem* pItem = aIter.GetCurItem();
-
-    do {
+    for (auto pItem = aIter.GetCurItem(); !bGraphicNeeded && pItem; pItem = aIter.NextItem())
+    {
         switch (pItem->Which())
         {
             /*
@@ -121,8 +120,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStora
             default:
                 bGraphicNeeded = true;
         }
-    } while( !bGraphicNeeded && !aIter.IsAtEnd() &&
-        nullptr != ( pItem = aIter.NextItem() ) );
+    }
 
     /*
     Now we must see if the object contains a preview itself which is equal to

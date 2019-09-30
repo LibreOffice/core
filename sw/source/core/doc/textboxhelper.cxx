@@ -661,14 +661,14 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
         SfxItemSet aTextBoxSet(pFormat->GetDoc()->GetAttrPool(), aFrameFormatSetRange);
 
         SfxItemIter aIter(rSet);
-        sal_uInt16 nWhich = aIter.GetCurItem()->Which();
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         do
         {
-            switch (nWhich)
+            switch (pItem->Which())
             {
                 case RES_VERT_ORIENT:
                 {
-                    auto& rOrient = static_cast<const SwFormatVertOrient&>(*aIter.GetCurItem());
+                    auto& rOrient = static_cast<const SwFormatVertOrient&>(*pItem);
                     SwFormatVertOrient aOrient(rOrient);
 
                     tools::Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
@@ -688,7 +688,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                 break;
                 case RES_HORI_ORIENT:
                 {
-                    auto& rOrient = static_cast<const SwFormatHoriOrient&>(*aIter.GetCurItem());
+                    auto& rOrient = static_cast<const SwFormatHoriOrient&>(*pItem);
                     SwFormatHoriOrient aOrient(rOrient);
 
                     tools::Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
@@ -724,14 +724,13 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                 }
                 break;
                 default:
-                    SAL_WARN("sw.core",
-                             "SwTextBoxHelper::syncFlyFrameAttr: unhandled which-id: " << nWhich);
+                    SAL_WARN("sw.core", "SwTextBoxHelper::syncFlyFrameAttr: unhandled which-id: "
+                                            << pItem->Which());
                     break;
             }
 
-            if (aIter.IsAtEnd())
-                break;
-        } while (0 != (nWhich = aIter.NextItem()->Which()));
+            pItem = aIter.NextItem();
+        } while (pItem && (0 != pItem->Which()));
 
         if (aTextBoxSet.Count())
             pFormat->GetDoc()->SetFlyFrameAttr(*pFormat, aTextBoxSet);
