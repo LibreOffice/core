@@ -81,7 +81,7 @@ struct SbiForStack {                // for/next stack:
     {}
 };
 
-#define MAXRECURSION 500
+#define MAXRECURSION 500 //to prevent dead-recursions
 
 enum class SbAttributes {
     NONE          = 0x0000,

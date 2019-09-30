@@ -119,8 +119,6 @@ struct SbiArgv {                   // Argv stack:
         nArgc(nArgc_) {}
 };
 
-#define MAXRECURSION 500 //to prevent dead-recursions
-
 struct SbiGosub {              // GOSUB-Stack:
     const sal_uInt8* pCode;         // Return-Pointer
     sal_uInt16 nStartForLvl;        // #118235: For Level in moment of gosub
