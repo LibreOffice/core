@@ -96,6 +96,14 @@ bool TextBody::isEmpty() const
     return aRuns[0]->getText().getLength() <= 0;
 }
 
+OUString TextBody::toString() const
+{
+    if (!isEmpty())
+        return maParagraphs.front()->getRuns().front()->getText();
+    else
+        return OUString();
+}
+
 void TextBody::ApplyStyleEmpty(
     const ::oox::core::XmlFilterBase& rFilterBase,
     const Reference < XText > & xText,

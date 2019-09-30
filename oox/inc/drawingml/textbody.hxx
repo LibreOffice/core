@@ -62,6 +62,7 @@ public:
                             const TextCharacterProperties& rTextStyleProperties,
                             const TextListStylePtr& pMasterTextListStyle ) const;
     bool isEmpty() const;
+    OUString toString() const;
 
     void                ApplyStyleEmpty(
                             const ::oox::core::XmlFilterBase& rFilterBase,
