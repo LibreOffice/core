@@ -2011,8 +2011,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                 if ( !pContent && pElement->IsModified() )
                 {
                     // if the element has never been opened, no content has been created until now
-                    OUString aName( m_aURL );
-                    aName += "/";
+                    OUString aName = m_aURL + "/";
                     aName += pElement->m_aOriginalName;
                     pContent = new ::ucbhelper::Content( aName, Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                     xDeleteContent.reset(pContent);  // delete it later on exit scope
@@ -2538,9 +2537,7 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
         if( nMode & StreamMode::NOCREATE )
         {
             SetError( ( nMode & StreamMode::WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
-            OUString aName( pImp->m_aURL );
-            aName += "/";
-            aName += rEleName;
+            OUString aName = pImp->m_aURL + "/" + rEleName;
             UCBStorageStream* pStream = new UCBStorageStream( aName, nMode, bDirect, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
             pStream->SetError( GetError() );
             pStream->pImp->m_aName = rEleName;
@@ -2593,9 +2590,7 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
 
 void UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pElement, StreamMode nMode, bool bDirect )
 {
-    OUString aName( m_aURL );
-    aName += "/";
-    aName += pElement->m_aOriginalName;
+    OUString aName = m_aURL + "/" +pElement->m_aOriginalName;
     pElement->m_xStream = new UCBStorageStream_Impl( aName, nMode, nullptr, bDirect, m_bRepairPackage, m_xProgressHandler );
 }
 
@@ -2633,9 +2628,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
         if( nMode & StreamMode::NOCREATE )
         {
             SetError( ( nMode & StreamMode::WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
-            OUString aName( pImp->m_aURL );
-            aName += "/";
-            aName += rEleName;  //  ???
+            OUString aName = pImp->m_aURL + "/" + rEleName;  //  ???
             UCBStorage *pStorage = new UCBStorage( aName, nMode, bDirect, false, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
             pStorage->pImp->m_bIsRoot = false;
             pStorage->pImp->m_bListCreated = true; // the storage is pretty new, nothing to read
@@ -2695,9 +2688,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
             bool bIsWritable = bool( pElement->m_xStorage->m_nMode & StreamMode::WRITE );
             if ( !bIsWritable && ( nMode & StreamMode::WRITE ) )
             {
-                OUString aName( pImp->m_aURL );
-                aName += "/";
-                aName += pElement->m_aOriginalName;
+                OUString aName = pImp->m_aURL + "/" + pElement->m_aOriginalName;
                 UCBStorage* pStorage = new UCBStorage( aName, nMode, bDirect, false, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
                 pElement->m_xStorage = pStorage->pImp;
                 return pStorage;
@@ -2744,9 +2735,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
 UCBStorage_Impl* UCBStorage_Impl::OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, bool bDirect )
 {
     UCBStorage_Impl* pRet = nullptr;
-    OUString aName( m_aURL );
-    aName += "/";
-    aName += pElement->m_aOriginalName;  //  ???
+    OUString aName = m_aURL + "/" + pElement->m_aOriginalName;  //  ???
 
     pElement->m_bIsStorage = pElement->m_bIsFolder = true;
 

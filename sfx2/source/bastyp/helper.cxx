@@ -93,10 +93,10 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
                 {
                     OUString aTitle( xRow->getString(1) );
                     OUString aType( xRow->getString(2) );
-                    OUString aRow = aTitle;
-                    aRow += "\t";
-                    aRow += aType;
-                    aRow += "\t";
+                    OUString aRow = aTitle +
+                        "\t" +
+                        aType +
+                        "\t";
                     aRow += xContentAccess->queryContentIdentifierString();
                     aList.push_back( aRow );
                 }
@@ -156,8 +156,7 @@ std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUStrin
                 {
                     OUString aTitle( xRow->getString(1) );
                     bool bFolder = xRow->getBoolean(2);
-                    OUString aRow = aTitle;
-                    aRow += "\t";
+                    OUString aRow = aTitle + "\t";
                     aRow += xContentAccess->queryContentIdentifierString();
                     aRow += "\t";
                     aRow += bFolder ? OUString("1") : OUString("0");

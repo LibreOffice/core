@@ -500,8 +500,8 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
     OUString aDelim( "/" );
     for (const SmSym& rSymbol : rNewSymbols)
     {
-        OUString  aNodeNameDelim( SYMBOL_LIST );
-        aNodeNameDelim += aDelim;
+        OUString  aNodeNameDelim = SYMBOL_LIST +
+            aDelim;
         aNodeNameDelim += rSymbol.GetExportName();
         aNodeNameDelim += aDelim;
 
@@ -652,10 +652,10 @@ void SmMathConfig::SaveFontFormatList()
         assert(pFntFmt);
         const SmFontFormat aFntFmt(*pFntFmt);
 
-        OUString  aNodeNameDelim( FONT_FORMAT_LIST );
-        aNodeNameDelim += aDelim;
-        aNodeNameDelim += aFntFmtId;
-        aNodeNameDelim += aDelim;
+        OUString  aNodeNameDelim = FONT_FORMAT_LIST +
+            aDelim +
+            aFntFmtId +
+            aDelim;
 
         const OUString *pName = aNames.getConstArray();
 
