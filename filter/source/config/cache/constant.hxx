@@ -91,7 +91,6 @@
  */
 #define  CFGDIRECTKEY_OFFICELOCALE          "/org.openoffice.Setup/L10N/ooLocale"
 #define  CFGDIRECTKEY_DEFAULTFRAMELOADER    "/org.openoffice.TypeDetection.Misc/Defaults/DefaultFrameLoader"
-#define  CFGDIRECTKEY_OFFICELOCALE          "/org.openoffice.Setup/L10N/ooLocale"
 #define  CFGDIRECTKEY_PRODUCTNAME           "/org.openoffice.Setup/Product/ooName"
 
 // Note that these flag bits have parallel names in
