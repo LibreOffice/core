@@ -183,9 +183,7 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
                 sCondition += "cell-content-is-decimal-number()";
             break;
             case sheet::ValidationType_LIST :
-                sCondition += "cell-content-is-in-list(";
-                sCondition += aValidation.sFormula1;
-                sCondition += ")";
+                sCondition += "cell-content-is-in-list(" + aValidation.sFormula1 + ")";
             break;
             case sheet::ValidationType_TEXT_LEN :
                 if (aValidation.aOperator != sheet::ConditionOperator_BETWEEN &&
@@ -199,9 +197,7 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
                 sCondition += "cell-content-is-whole-number()";
             break;
             case sheet::ValidationType_CUSTOM :
-                sCondition += "is-true-formula(";
-                sCondition += aValidation.sFormula1;
-                sCondition += ")";
+                sCondition += "is-true-formula(" + aValidation.sFormula1 + ")";
             break;
             default:
             {
@@ -265,10 +261,7 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
                     else
                         sCondition += "cell-content-is-not-between(";
                 }
-                sCondition += aValidation.sFormula1;
-                sCondition += ",";
-                sCondition += aValidation.sFormula2;
-                sCondition += ")";
+                sCondition += aValidation.sFormula1 + "," + aValidation.sFormula2 + ")";
             }
         }
         else

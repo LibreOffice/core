@@ -438,10 +438,9 @@ static bool lcl_HFPresentation
                                            eCoreMetric, ePresentationMetric, &rIntl );
                     aText += " " + EditResId(GetMetricId(ePresentationMetric));
                 }
-                aText += cpDelim;
-
-                // We don't have a nPropFirstLineOfst
-                aText += EditResId(RID_SVXITEMS_LRSPACE_RIGHT);
+                aText += cpDelim +
+                    // We don't have a nPropFirstLineOfst
+                    EditResId(RID_SVXITEMS_LRSPACE_RIGHT);
                 if ( 100 != nPropRightMargin )
                 {
                     aText = aText + unicode::formatPercent(nPropLeftMargin,

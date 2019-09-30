@@ -2424,12 +2424,11 @@ void lcl_createGroupsData(
 
                 bool bGroupHidden = pEntry->IsHidden();
 
-                OUString aGroupData;
-                aGroupData += "{ \"level\": \"" + OUString::number(nLevel + 1) + "\", ";
-                aGroupData += "\"index\": \"" + OUString::number(nIndex) + "\", ";
-                aGroupData += "\"startPos\": \"" + OUString::number(rGroupStartPositions[nLevel]) + "\", ";
-                aGroupData += "\"endPos\": \"" + OUString::number(nTotalTwips) + "\", ";
-                aGroupData += "\"hidden\": \"" + OUString::number(bGroupHidden ? 1 : 0) + "\" }";
+                OUString aGroupData = "{ \"level\": \"" + OUString::number(nLevel + 1) + "\", "
+                    "\"index\": \"" + OUString::number(nIndex) + "\", "
+                    "\"startPos\": \"" + OUString::number(rGroupStartPositions[nLevel]) + "\", "
+                    "\"endPos\": \"" + OUString::number(nTotalTwips) + "\", "
+                    "\"hidden\": \"" + OUString::number(bGroupHidden ? 1 : 0) + "\" }";
 
                 rGroupsBuffer += aGroupData;
 
@@ -2593,8 +2592,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         aBuffer.append("\"groupLevels\": \"").append(OUString::number(nRowGroupDepth)).append("\" }");
     }
 
-    OUString aRowGroupsBuffer;
-    aRowGroupsBuffer += "\"rowGroups\": [\n";
+    OUString aRowGroupsBuffer = "\"rowGroups\": [\n";
     std::vector<long> aRowGroupStartPositions(nRowGroupDepth, -nTotalPixels);
     long nPrevSizePx = -1;
     for (SCROW nRow = nStartRow + 1; nRow <= nEndRow; ++nRow)
@@ -2737,8 +2735,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         aBuffer.append("\"groupLevels\": \"").append(OUString::number(nColGroupDepth)).append("\" }");
     }
 
-    OUString aColGroupsBuffer;
-    aColGroupsBuffer += "\"columnGroups\": [\n";
+    OUString aColGroupsBuffer = "\"columnGroups\": [\n";
     std::vector<long> aColGroupStartPositions(nColGroupDepth, -nTotalPixels);
     nPrevSizePx = -1;
     for (SCCOL nCol = nStartCol + 1; nCol <= nEndCol; ++nCol)

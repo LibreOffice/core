@@ -321,8 +321,7 @@ OUString ScGlobal::GetAbsDocName( const OUString& rFileName,
 OUString ScGlobal::GetDocTabName( const OUString& rFileName,
                                 const OUString& rTabName )
 {
-    OUString  aDocTab('\'');
-    aDocTab += rFileName;
+    OUString  aDocTab = "'" + rFileName;
     sal_Int32 nPos = 1;
     while( (nPos = aDocTab.indexOf( '\'', nPos )) != -1 )
     {   // escape Quotes

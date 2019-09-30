@@ -140,14 +140,14 @@ IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueHdl, Edit&, void )
     OUString sPrecision = OUString::number(nPrecision);
     OUString sLeadZeroes = OUString::number(nLeadZeroes);
 
-    aFormat += sThousand;
-    aFormat += sBreak;
-    aFormat += sNegRed;
-    aFormat += sBreak;
-    aFormat += sPrecision;
-    aFormat += sBreak;
-    aFormat += sLeadZeroes;
-    aFormat += sBreak;
+    aFormat += sThousand +
+        sBreak +
+        sNegRed +
+        sBreak +
+        sPrecision +
+        sBreak +
+        sLeadZeroes +
+        sBreak;
 
     SfxStringItem aItem( SID_NUMBER_FORMAT,  aFormat );
     GetBindings()->GetDispatcher()->ExecuteList(SID_NUMBER_FORMAT,

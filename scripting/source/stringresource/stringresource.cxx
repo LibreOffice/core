@@ -1628,21 +1628,18 @@ static OUString implGetNameScemeForLocaleItem( const LocaleItem* pLocaleItem )
         "StringResourcePersistenceImpl::implGetNameScemeForLocaleItem(): pLocaleItem == NULL" );
     Locale aLocale = pLocaleItem->m_locale;
 
-    OUString aRetStr = aUnder;
-    aRetStr += aLocale.Language;
+    OUString aRetStr = aUnder + aLocale.Language;
 
     OUString aCountry  = aLocale.Country;
     if( !aCountry.isEmpty() )
     {
-        aRetStr += aUnder;
-        aRetStr += aCountry;
+        aRetStr += aUnder + aCountry;
     }
 
     OUString aVariant  = aLocale.Variant;
     if( !aVariant.isEmpty() )
     {
-        aRetStr += aUnder;
-        aRetStr += aVariant;
+        aRetStr += aUnder + aVariant;
     }
     return aRetStr;
 }
