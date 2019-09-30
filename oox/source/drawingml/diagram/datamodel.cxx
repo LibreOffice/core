@@ -59,6 +59,14 @@ void Point::dump() const
 
 } // dgm namespace
 
+static OUString GetTextBodyAsString(const TextBodyPtr pTextBody)
+{
+    if (!pTextBody->isEmpty())
+        return pTextBody->getParagraphs().front()->getRuns().front()->getText();
+    else
+        return OUString();
+}
+
 DiagramData::DiagramData() :
     mpFillProperties( new FillProperties )
 {
@@ -96,7 +104,7 @@ void DiagramData::getChildrenString(OUStringBuffer& rBuf, const dgm::Point* pPoi
             rBuf.append('\t');
         rBuf.append('+');
         rBuf.append(' ');
-        rBuf.append(pPoint->mpShape->getTextBody()->getParagraphs().front()->getRuns().front()->getText());
+        rBuf.append(GetTextBodyAsString(pPoint->mpShape->getTextBody()));
         rBuf.append('\n');
     }
 
@@ -136,7 +144,7 @@ std::vector<std::pair<OUString, OUString>> DiagramData::getChildren(const OUStri
             if (pChild != maPointNameMap.end())
                 aChildren[rCxn.mnSourceOrder] = std::make_pair(
                     pChild->second->msModelId,
-                    pChild->second->mpShape->getTextBody()->getParagraphs().front()->getRuns().front()->getText());
+                    GetTextBodyAsString(pChild->second->mpShape->getTextBody()));
         }
 
     // HACK: empty items shouldn't appear there
@@ -361,8 +369,7 @@ void DiagramData::build()
         // does currpoint have any text set?
         if( point.mpShape &&
             point.mpShape->getTextBody() &&
-            !point.mpShape->getTextBody()->getParagraphs().empty() &&
-            !point.mpShape->getTextBody()->getParagraphs().front()->getRuns().empty() )
+            !point.mpShape->getTextBody()->isEmpty() )
         {
 #ifdef DEBUG_OOX_DIAGRAM
             static sal_Int32 nCount=0;
@@ -371,7 +378,7 @@ void DiagramData::build()
                    << " ["
                    << "label=\""
                    << OUStringToOString(
-                       point.mpShape->getTextBody()->getParagraphs().front()->getRuns().front()->getText(),
+                       GetTextBodyAsString(point.mpShape->getTextBody()),
                        RTL_TEXTENCODING_UTF8).getStr()
                    << "\"" << "];" << std::endl;
             output << "\t"
