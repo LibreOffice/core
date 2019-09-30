@@ -16,6 +16,23 @@
       "revId": "f9c2bc659784f9c60f8f3f8cfd2c26589d87899c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_7adc1846",
+        "filename": "compilerplugins/clang/stringadd.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-09-30T10:58:59Z",
+      "side": 1,
+      "message": "should this be inside the \"Class(\"OUString\")\" if?\n\nsome expression might invoke a different template constructor but we dont want to whitelist that?",
+      "revId": "f9c2bc659784f9c60f8f3f8cfd2c26589d87899c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
