@@ -325,8 +325,7 @@ bool DlgFilterCrit::getCondition(const weld::ComboBox& _rField,const weld::Combo
                 _rFilter.Name = ::dbtools::quoteName(aQuote,_rFilter.Name);
                 if ( !sTableName.isEmpty() )
                 {
-                    sTableName += ".";
-                    sTableName += _rFilter.Name;
+                    sTableName += "." + _rFilter.Name;
                     _rFilter.Name = sTableName;
                 }
             }
