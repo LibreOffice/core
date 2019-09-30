@@ -59,18 +59,12 @@ const SCTAB    SCTAB_MAX    = ::std::numeric_limits<SCTAB>::max();
 const SCCOLROW SCCOLROW_MAX = ::std::numeric_limits<SCCOLROW>::max();
 const SCSIZE   SCSIZE_MAX   = ::std::numeric_limits<SCSIZE>::max();
 
-// The maximum values. Defines are needed for preprocessor checks, for example
-// in bcaslot.cxx, otherwise type safe constants are preferred.
-#define MAXROWCOUNT_DEFINE 1048576
-#define MAXCOLCOUNT_DEFINE 1024
-
 // Count values
-const SCROW       MAXROWCOUNT    = MAXROWCOUNT_DEFINE;
-const SCCOL       MAXCOLCOUNT    = MAXCOLCOUNT_DEFINE;
-const SCCOL       INITIALCOLCOUNT = 64;
+const SCROW       MAXROWCOUNT    = 1048576;
+const SCCOL       MAXCOLCOUNT    = 1024;
+const SCCOL       INITIALCOLCOUNT = 64; // initial number of columns we allocate memory for
 /// limiting to 10000 for now, problem with 32 bit builds for now
 const SCTAB       MAXTABCOUNT    = 10000;
-const SCCOLROW    MAXCOLROWCOUNT = MAXROWCOUNT;
 // Maximum values
 const SCROW       MAXROW         = MAXROWCOUNT - 1;
 const SCCOL       MAXCOL         = MAXCOLCOUNT - 1;
@@ -87,11 +81,11 @@ const SCTAB       MININITTAB = 1;
 // Special values
 const SCTAB SC_TAB_APPEND     = SCTAB_MAX;
 const SCTAB TABLEID_DOC       = SCTAB_MAX;  // entire document, e.g. protect
-const SCROW SCROWS32K         = 32000;
+const SCROW SCROWS32K         = 32000; // for fuzzing
 const SCCOL SCCOL_REPEAT_NONE = SCCOL_MAX;
 const SCROW SCROW_REPEAT_NONE = SCROW_MAX;
 
-#define MAXROW_30   8191
+const SCROW MAXROW_30         = 8191;
 
 [[nodiscard]] inline bool ValidCol( SCCOL nCol )
 {

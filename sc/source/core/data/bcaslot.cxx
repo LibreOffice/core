@@ -37,26 +37,21 @@
 
 // Number of slots per dimension
 // must be integer divisors of MAXCOLCOUNT respectively MAXROWCOUNT
-#define BCA_SLOTS_COL ((MAXCOLCOUNT_DEFINE) / 16)
-#define BCA_SLICE 128
-#define BCA_SLOTS_ROW ((MAXROWCOUNT_DEFINE) / BCA_SLICE)
-#define BCA_SLOT_COLS ((MAXCOLCOUNT_DEFINE) / BCA_SLOTS_COL)
-#define BCA_SLOT_ROWS ((MAXROWCOUNT_DEFINE) / BCA_SLOTS_ROW)
+constexpr SCCOL BCA_SLOTS_COL  = MAXCOLCOUNT / 16;
+constexpr SCROW BCA_SLICE = 128;
+constexpr SCROW BCA_SLOTS_ROW  = MAXROWCOUNT / BCA_SLICE;
+constexpr SCCOL BCA_SLOT_COLS  = MAXCOLCOUNT / BCA_SLOTS_COL;
+constexpr SCROW BCA_SLOT_ROWS  = MAXROWCOUNT / BCA_SLOTS_ROW;
 // multiple?
-#if (BCA_SLOT_COLS * BCA_SLOTS_COL) != (MAXCOLCOUNT_DEFINE)
-#error bad BCA_SLOTS_COL value!
-#endif
-#if (BCA_SLOT_ROWS * BCA_SLOTS_ROW) != (MAXROWCOUNT_DEFINE)
-#error bad BCA_SLOTS_ROW value!
-#endif
+static_assert((BCA_SLOT_COLS * BCA_SLOTS_COL) == MAXCOLCOUNT && "bad BCA_SLOTS_COL value");
+static_assert((BCA_SLOT_ROWS * BCA_SLOTS_ROW) == MAXROWCOUNT && "bad BCA_SLOTS_ROW value");
+
 // size of slot array if linear
-#define BCA_SLOTS_DEFINE (BCA_SLOTS_COL * BCA_SLOTS_ROW)
+constexpr int BCA_SLOTS  = BCA_SLOTS_COL * BCA_SLOTS_ROW;
 // Arbitrary 2**31/8, assuming size_t can hold at least 2^31 values and
 // sizeof_ptr is at most 8 bytes. You'd probably doom your machine's memory
 // anyway, once you reached these values...
-#if BCA_SLOTS_DEFINE > 268435456
-#error BCA_SLOTS_DEFINE DOOMed!
-#endif
+static_assert(BCA_SLOTS <= 268435456 && "DOOMed");
 
 struct ScSlotData
 {
