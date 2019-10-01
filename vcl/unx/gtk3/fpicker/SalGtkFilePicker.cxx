@@ -1430,8 +1430,8 @@ void SalGtkFilePicker::implChangeType( GtkTreeSelection *selection )
     {
         gchar *title;
         gtk_tree_model_get (model, &iter, 2, &title, -1);
-        aLabel += ": ";
-        aLabel += OUString( title, strlen(title), RTL_TEXTENCODING_UTF8 );
+        aLabel += ": " +
+            OUString( title, strlen(title), RTL_TEXTENCODING_UTF8 );
         g_free (title);
     }
     gtk_expander_set_label (GTK_EXPANDER (m_pFilterExpander),

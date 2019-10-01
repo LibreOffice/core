@@ -105,8 +105,8 @@ OUString createPath(OUString const & name, sal_Int32 pos, OUString const & local
 
 OUString getIconCacheUrl(OUString const & sVariant, ImageRequestParameters const & rParameters)
 {
-    OUString sUrl("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
-    sUrl += rParameters.msStyle + "/" + sVariant + "/" + rParameters.msName;
+    OUString sUrl = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/"
+        + rParameters.msStyle + "/" + sVariant + "/" + rParameters.msName;
     rtl::Bootstrap::expandMacros(sUrl);
     return sUrl;
 }

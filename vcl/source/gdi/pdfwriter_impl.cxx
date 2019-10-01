@@ -401,8 +401,8 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
         // how funny, an empty field name
         if( i_rControl.getType() == PDFWriter::RadioButton )
         {
-            aPartialName  = "RadioGroup";
-            aPartialName += OString::number( static_cast<const PDFWriter::RadioButtonWidget&>(i_rControl).RadioGroup );
+            aPartialName  = "RadioGroup" +
+                OString::number( static_cast<const PDFWriter::RadioButtonWidget&>(i_rControl).RadioGroup );
         }
         else
             aPartialName = OString( "Widget" );
