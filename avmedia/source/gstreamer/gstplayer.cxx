@@ -854,7 +854,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
         OUString aPlatform = OUString::createFromAscii(pEnvData->pPlatformName);
 
         // tdf#124027: the position of embedded window is identical w/ the position
-        // of media object in all other vclplugs (gtk, kde5, gen), in gtk3 w/o gtksink it
+        // of media object in all other vclplugs (kf5, gen), in gtk3 w/o gtksink it
         // needs to be translated
         if (aToolkit == "gtk3")
         {

@@ -33,15 +33,12 @@ qt5/
 
 unx/
 	+ X11 backend and its sub-platforms
-
-	gtk/
-		+ GTK2 support
 	gtk3/
 		+ GTK3 support
 	kf5/
-		+ KF5 support
+		+ KF5 support (based on qt5 VCL plugin mentioned above)
 	gtk3_kde5/
-		+ GTK3 support with KDE5 file pickers (alternative to native kde5 one)
+		+ GTK3 support with KDE5 file pickers (alternative to native kf5 one)
 	generic/
 		+ raw X11 support
 
