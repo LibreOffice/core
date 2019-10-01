@@ -24,10 +24,4 @@ void X11SkiaSalGraphicsImpl::Init()
     SkiaSalGraphicsImpl::Init();
 }
 
-void X11SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics)
-{
-    (void)rPosAry;
-    (void)pSrcGraphics;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

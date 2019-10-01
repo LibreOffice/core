@@ -19,6 +19,7 @@
 
 #include <skia/gdiimpl.hxx>
 
+#include <salgdi.hxx>
 #include <skia/salbmp.hxx>
 
 #include <SkCanvas.h>
@@ -224,6 +225,26 @@ void SkiaSalGraphicsImpl::copyArea(long nDestX, long nDestY, long nSrcX, long nS
         = mSurface->makeImageSnapshot(SkIRect::MakeXYWH(nSrcX, nSrcY, nSrcWidth, nSrcHeight));
     // TODO makeNonTextureImage() ?
     mSurface->getCanvas()->drawImage(image, nDestX, nDestY);
+}
+
+void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics)
+{
+    SkiaSalGraphicsImpl* src;
+    if (pSrcGraphics)
+    {
+        assert(dynamic_cast<SkiaSalGraphicsImpl*>(pSrcGraphics->GetImpl()));
+        src = static_cast<SkiaSalGraphicsImpl*>(pSrcGraphics->GetImpl());
+    }
+    else
+        src = this;
+    sk_sp<SkImage> image = src->mSurface->makeImageSnapshot(
+        SkIRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight));
+    // TODO makeNonTextureImage() ?
+    mSurface->getCanvas()->drawImageRect(image,
+                                         SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY,
+                                                          rPosAry.mnDestWidth,
+                                                          rPosAry.mnDestHeight),
+                                         nullptr);
 }
 
 bool SkiaSalGraphicsImpl::blendBitmap(const SalTwoRect&, const SalBitmap& rBitmap)
