@@ -37,21 +37,6 @@ SkiaSalBitmap::SkiaSalBitmap() {}
 
 SkiaSalBitmap::~SkiaSalBitmap() {}
 
-static SkColorType getSkColorType(int bitCount)
-{
-    switch (bitCount)
-    {
-        case 8:
-            return kGray_8_SkColorType; // see GetAlphaSkBitmap()
-        case 24:
-            return kRGB_888x_SkColorType;
-        case 32:
-            return kN32_SkColorType;
-        default:
-            abort();
-    }
-}
-
 static bool isValidBitCount(sal_uInt16 nBitCount)
 {
     return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 24)
@@ -60,7 +45,6 @@ static bool isValidBitCount(sal_uInt16 nBitCount)
 
 SkiaSalBitmap::SkiaSalBitmap(const SkImage& image)
 {
-    assert(image.colorType() == kN32_SkColorType);
     if (Create(Size(image.width(), image.height()), 32, BitmapPalette()))
     {
         SkCanvas canvas(mBitmap);
@@ -74,18 +58,34 @@ bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const Bitmap
     Destroy();
     if (!isValidBitCount(nBitCount))
         return false;
-    // Skia does not support paletted images, so convert only types Skia supports.
-    if (nBitCount > 8 || (nBitCount == 8 && (!rPal || rPal.IsGreyPalette())))
+    // Skia only supports 8bit gray, 16bit and 32bit formats (e.g. 24bpp is actually stored as 32bpp).
+    // But some of our code accessing the bitmap assumes that when it asked for 24bpp, the format
+    // really will be 24bpp (e.g. the png loader).
+    // TODO what is the performance impact of handling 24bpp ourselves instead of in Skia?
+    SkColorType colorType = kUnknown_SkColorType;
+    switch (nBitCount)
     {
-        if (!mBitmap.tryAllocPixels(SkImageInfo::Make(
-                rSize.Width(), rSize.Height(), getSkColorType(nBitCount), kPremul_SkAlphaType)))
+        case 8:
+            if (rPal.IsGreyPalette()) // see GetAlphaSkBitmap()
+                colorType = kGray_8_SkColorType;
+            break;
+        case 32:
+            colorType = kN32_SkColorType;
+            break;
+        default:
+            break;
+    }
+    if (colorType != kUnknown_SkColorType)
+    {
+        if (!mBitmap.tryAllocPixels(
+                SkImageInfo::Make(rSize.Width(), rSize.Height(), colorType, kPremul_SkAlphaType)))
         {
             return false;
         }
     }
     else
     {
-        // Paletted images are stored in a buffer and converted as necessary.
+        // Image formats not supported by Skia are stored in a buffer and converted as necessary.
         int bitScanlineWidth;
         if (o3tl::checked_multiply<int>(rSize.Width(), nBitCount, bitScanlineWidth))
         {
@@ -201,13 +201,20 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
             buffer->mnFormat = ScanlineFormat::N4BitMsnPal;
             break;
         case 8:
-            // TODO or always N8BitPal?
-            //            buffer->mnFormat = !mPalette ? ScanlineFormat::N8BitTcMask : ScanlineFormat::N8BitPal;
             buffer->mnFormat = ScanlineFormat::N8BitPal;
             break;
         case 24:
-            buffer->mnFormat = ScanlineFormat::N24BitTcRgb;
+        {
+// Make the RGB/BGR format match the default Skia 32bpp format, to allow
+// easy conversion later.
+// Use a macro to hide an unreachable code warning.
+#define GET_FORMAT                                                                                 \
+    (kN32_SkColorType == kBGRA_8888_SkColorType ? ScanlineFormat::N24BitTcBgr                      \
+                                                : ScanlineFormat::N24BitTcRgb)
+            buffer->mnFormat = GET_FORMAT;
+#undef GET_FORMAT
             break;
+        }
         case 32:
             // TODO are these correct?
             buffer->mnFormat = mBitmap.colorType() == kRGBA_8888_SkColorType
@@ -266,15 +273,43 @@ const SkBitmap& SkiaSalBitmap::GetSkBitmap() const
 {
     if (mBuffer && mBitmap.drawsNothing())
     {
-        std::unique_ptr<sal_uInt8[]> data = convertDataBitCount(
-            mBuffer.get(), mSize.Width(), mSize.Height(), mBitCount, mScanlineSize, mPalette,
-            kN32_SkColorType == kBGRA_8888_SkColorType ? BitConvert::BGRA
-                                                       : BitConvert::RGBA); // TODO
-        if (!const_cast<SkBitmap&>(mBitmap).installPixels(
-                SkImageInfo::MakeS32(mSize.Width(), mSize.Height(), kOpaque_SkAlphaType),
-                data.release(), mSize.Width() * 4,
-                [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
-            abort();
+        if (mBitCount == 24)
+        {
+            // Convert 24bpp RGB/BGR to 32bpp RGBA/BGRA.
+            std::unique_ptr<sal_uInt8[]> data(new sal_uInt8[mSize.Height() * mSize.Width() * 4]);
+            sal_uInt8* dest = data.get();
+            for (int y = 0; y < mSize.Height(); ++y)
+            {
+                const sal_uInt8* src = mBuffer.get() + mScanlineSize * y;
+                for (int x = 0; x < mSize.Width(); ++x)
+                {
+                    *dest++ = *src++;
+                    *dest++ = *src++;
+                    *dest++ = *src++;
+                    *dest++ = 0xff;
+                }
+            }
+            if (!const_cast<SkBitmap&>(mBitmap).installPixels(
+                    SkImageInfo::MakeS32(mSize.Width(), mSize.Height(), kOpaque_SkAlphaType),
+                    data.release(), mSize.Width() * 4,
+                    [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
+                abort();
+        }
+        else
+        {
+// Use a macro to hide an unreachable code warning.
+#define GET_FORMAT                                                                                 \
+    (kN32_SkColorType == kBGRA_8888_SkColorType ? BitConvert::BGRA : BitConvert::RGBA)
+            std::unique_ptr<sal_uInt8[]> data
+                = convertDataBitCount(mBuffer.get(), mSize.Width(), mSize.Height(), mBitCount,
+                                      mScanlineSize, mPalette, GET_FORMAT);
+#undef GET_FORMAT
+            if (!const_cast<SkBitmap&>(mBitmap).installPixels(
+                    SkImageInfo::MakeS32(mSize.Width(), mSize.Height(), kOpaque_SkAlphaType),
+                    data.release(), mSize.Width() * 4,
+                    [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
+                abort();
+        }
     }
     return mBitmap;
 }
