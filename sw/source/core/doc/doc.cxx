@@ -1611,11 +1611,10 @@ bool SwDoc::ConvertFieldsToText(SwRootFrame const& rLayout)
     GetIDocumentUndoRedo().StartUndo( SwUndoId::UI_REPLACE, nullptr );
 
     const SwFieldTypes* pMyFieldTypes = getIDocumentFieldsAccess().GetFieldTypes();
-    const SwFieldTypes::size_type nCount = pMyFieldTypes->size();
     //go backward, field types are removed
-    for(SwFieldTypes::size_type nType = nCount; nType > 0; --nType)
+    for (auto aIt = pMyFieldTypes->crbegin(); aIt != pMyFieldTypes->crend(); aIt++)
     {
-        const SwFieldType *pCurType = (*pMyFieldTypes)[nType - 1].get();
+        const std::unique_ptr<SwFieldType>& pCurType = *aIt;
 
         if ( SwFieldIds::Postit == pCurType->Which() )
             continue;
