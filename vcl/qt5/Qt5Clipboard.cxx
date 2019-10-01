@@ -29,6 +29,7 @@ Qt5Clipboard::Qt5Clipboard(const OUString& aModeString, const QClipboard::Mode a
                                     XServiceInfo>(m_aMutex)
     , m_aClipboardName(aModeString)
     , m_aClipboardMode(aMode)
+    , m_bInSetContents(false)
 {
     assert(isSupported(m_aClipboardMode));
     // DirectConnection guarantees the changed slot runs in the same thread as the QClipboard
@@ -73,8 +74,10 @@ css::uno::Reference<css::datatransfer::XTransferable> Qt5Clipboard::getContents(
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    // if we're the owner, we have the XTransferable from setContents
-    if (isOwner(m_aClipboardMode))
+    // if we're the owner, we might have the XTransferable from setContents. but
+    // maybe a non-LO clipboard change from within LO, like some C'n'P in the
+    // QFileDialog, might have invalidated m_aContents, so we need to check it too.
+    if (isOwner(m_aClipboardMode) && m_aContents.is())
         return m_aContents;
 
     // check if we can still use the shared Qt5ClipboardTransferable
@@ -103,7 +106,9 @@ void Qt5Clipboard::setContents(
     m_aContents = xTrans;
     m_aOwner = xClipboardOwner;
 
-    // these will trigger QClipboard::changed / handleChanged
+    // these QApplication::clipboard() calls will trigger QClipboard::changed / handleChanged.
+    // we need to prevent freeing the contents, so tell handleChanged about us setting it
+    m_bInSetContents = true;
     if (m_aContents.is())
         QApplication::clipboard()->setMimeData(new Qt5MimeData(m_aContents), m_aClipboardMode);
     else
@@ -111,6 +116,7 @@ void Qt5Clipboard::setContents(
         assert(!m_aOwner.is());
         QApplication::clipboard()->clear(m_aClipboardMode);
     }
+    m_bInSetContents = false;
 
     aGuard.clear();
 
@@ -130,8 +136,7 @@ void Qt5Clipboard::handleChanged(QClipboard::Mode aMode)
     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> xOldOwner(m_aOwner);
     css::uno::Reference<css::datatransfer::XTransferable> xOldContents(m_aContents);
     // ownership change from LO POV is handled in setContents
-    const bool bLostOwnership = !isOwner(m_aClipboardMode);
-    if (bLostOwnership)
+    if (!m_bInSetContents)
     {
         m_aContents.clear();
         m_aOwner.clear();
@@ -144,7 +149,7 @@ void Qt5Clipboard::handleChanged(QClipboard::Mode aMode)
 
     aGuard.clear();
 
-    if (bLostOwnership && xOldOwner.is())
+    if (!m_bInSetContents && xOldOwner.is())
         xOldOwner->lostOwnership(this, xOldContents);
     for (auto const& listener : aListeners)
         listener->changedContents(aEv);
