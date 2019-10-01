@@ -80,7 +80,9 @@ class SwFieldMarkPortion : public SwTextPortion
 {
     public:
         SwFieldMarkPortion() : SwTextPortion()
-            { }
+        {
+            SetWhichPor(PortionType::FieldMark);
+        }
         virtual void Paint( const SwTextPaintInfo &rInf ) const override;
         virtual bool Format( SwTextFormatInfo &rInf ) override;
 };
@@ -90,6 +92,7 @@ class SwFieldFormCheckboxPortion : public SwTextPortion
 public:
     SwFieldFormCheckboxPortion() : SwTextPortion()
     {
+        SetWhichPor(PortionType::FieldFormCheckbox);
     }
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;

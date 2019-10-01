@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_TXTTYPES_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_TXTTYPES_HXX
 
+/// @see PORGRP_* masks in porlin.hxx for meaning of bits!
 enum class PortionType
 {
     NONE        = 0x0000,
@@ -38,6 +39,8 @@ enum class PortionType
     Para        = 0x8002,
     Hanging     = 0x8004,
     InputField  = 0x8005,
+    FieldMark   = 0x8006,
+    FieldFormCheckbox = 0x8007,
 
     Drop        = 0x8080,
     Tox         = 0x8089,

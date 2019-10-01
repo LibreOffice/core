@@ -65,6 +65,8 @@ class XmlPortionDumper:public SwPortionHandler
             case PortionType::Ref: return "PortionType::Ref";
             case PortionType::IsoRef: return "PortionType::IsoRef";
             case PortionType::Meta: return "PortionType::Meta";
+            case PortionType::FieldMark: return "PortionType::FieldMark";
+            case PortionType::FieldFormCheckbox: return "PortionType::FieldFormCheckbox";
 
             case PortionType::Expand: return "PortionType::Expand";
             case PortionType::Blank: return "PortionType::Blank";
