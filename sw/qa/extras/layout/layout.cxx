@@ -3124,6 +3124,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf127235)
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124601b)
+{
+    // Table has an image, which is anchored in the first row, but its vertical position is large
+    // enough to be rendered in the second row.
+    // The shape has layoutInCell=1, so should match what Word does here.
+    createDoc("tdf124601b.doc");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    sal_Int32 nFlyTop = getXPath(pXmlDoc, "//fly/infos/bounds", "top").toInt32();
+    sal_Int32 nSecondRowTop = getXPath(pXmlDoc, "//tab/row[2]/infos/bounds", "top").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 3736
+    // - Actual  : 2852
+    // i.e. the image was still inside the first row.
+    CPPUNIT_ASSERT_GREATER(nSecondRowTop, nFlyTop);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
