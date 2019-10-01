@@ -338,8 +338,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
     {
         // a home that refers to /
 
-        OUString aNewText( aText );
-        aNewText += "/";
+        OUString aNewText = aText + "/";
         Insert( aNewText, rURL, true );
 
         return;
@@ -642,8 +641,7 @@ void MatchContext_Impl::ReadFolder( const OUString& rURL,
     {
         // a home that refers to /
 
-        OUString aNewText( aText );
-        aNewText += "/";
+        OUString aNewText = aText + "/";
         Insert( aNewText, rURL, true );
 
         return;

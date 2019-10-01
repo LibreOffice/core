@@ -297,9 +297,7 @@ void AssignmentPersistentData::ImplCommit()
         OUString sAssignment;
         if (hasFieldAssignment(_rLogicalName))
         {
-            OUString sFieldPath("Fields/");
-            sFieldPath += _rLogicalName;
-            sFieldPath += "/AssignedFieldName";
+            OUString sFieldPath = "Fields/" + _rLogicalName + "/AssignedFieldName";
             sAssignment = getStringProperty(sFieldPath);
         }
         return sAssignment;
@@ -356,9 +354,7 @@ void AssignmentPersistentData::ImplCommit()
         OUString sDescriptionNodePath("Fields");
 
         // Fields/<field>
-        OUString sFieldElementNodePath(sDescriptionNodePath);
-        sFieldElementNodePath += "/";
-        sFieldElementNodePath += _rLogicalName;
+        OUString sFieldElementNodePath = sDescriptionNodePath + "/" + _rLogicalName;
 
         Sequence< PropertyValue > aNewFieldDescription(2);
         // Fields/<field>/ProgrammaticFieldName
