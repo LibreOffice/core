@@ -29,7 +29,8 @@ class SwTextPaintInfo;
 class SwTextFormatInfo;
 class SwPortionHandler;
 
-// Portion groups
+/// Portion groups
+/// @see enum PortionType in txttypes.hxx
 #define PORGRP_TXT      0x8000
 #define PORGRP_EXP      0x4000
 #define PORGRP_FLD      0x2000
