@@ -4359,10 +4359,14 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
             // Only handle shape if it is a background shape
             if (aData.begin()->get()->nFlags & ShapeFlag::Background)
             {
-                SfxItemSet aSet(rFormat.GetAttrSet());
+                SfxItemSet aSet(rFormat.GetDoc()->GetAttrPool(),
+                                svl::Items<RES_BACKGROUND, RES_BACKGROUND,XATTR_START, XATTR_END>{});
                 mrReader.MatchSdrItemsIntoFlySet(pObject, aSet, mso_lineSimple,
                                                  mso_lineSolid, mso_sptRectangle, aRect);
-                rFormat.SetFormatAttr(aSet.Get(RES_BACKGROUND));
+                if ( aSet.HasItem(RES_BACKGROUND) )
+                    rFormat.SetFormatAttr(aSet.Get(RES_BACKGROUND));
+                else
+                    rFormat.SetFormatAttr(aSet);
             }
         }
         SdrObject::Free(pObject);
