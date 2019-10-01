@@ -65,7 +65,7 @@ void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* 
     {
         systemdata = nullptr;
     }
-    Reference<css::accessibility::XAccessibleContext> xContext(pAccessible->getAccessibleContext(),UNO_QUERY);
+    Reference<css::accessibility::XAccessibleContext> xContext = pAccessible->getAccessibleContext();
     if(!xContext.is())
         return;
 
@@ -136,7 +136,7 @@ void AccTopWindowListener::windowOpened( const css::lang::EventObject& e )
  */
 void AccTopWindowListener::AddAllListeners(css::accessibility::XAccessible* pAccessible, css::accessibility::XAccessible* pParentXAcc, HWND pWND)
 {
-    Reference<css::accessibility::XAccessibleContext> xContext(pAccessible->getAccessibleContext(),UNO_QUERY);
+    Reference<css::accessibility::XAccessibleContext> xContext = pAccessible->getAccessibleContext();
     if(!xContext.is())
     {
         return;
@@ -209,7 +209,7 @@ void AccTopWindowListener::windowClosed( const css::lang::EventObject& e )
     if ( pAccessible == nullptr)
         return;
 
-    Reference<css::accessibility::XAccessibleContext> xContext(pAccessible->getAccessibleContext(),UNO_QUERY);
+    Reference<css::accessibility::XAccessibleContext> xContext = pAccessible->getAccessibleContext();
     if(!xContext.is())
     {
         return;
