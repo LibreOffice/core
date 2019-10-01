@@ -1372,8 +1372,8 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                 else
                 {
                     OUString aNewTitle( m_aProps.getTitle() );
-                    aNewTitle += "_";
-                    aNewTitle += OUString::number( nTry );
+                    aNewTitle += "_" +
+                        OUString::number( nTry );
                     m_aProps.setTitle( aNewTitle );
                 }
             }
