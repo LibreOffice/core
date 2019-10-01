@@ -187,11 +187,8 @@ void GlobalEventConfig_Impl::initBindingInfo()
     // Get ALL names of current existing list items in configuration!
     const Sequence< OUString > lEventNames = GetNodeNames( SETNODE_BINDINGS, utl::ConfigNameFormat::LocalPath );
 
-    OUString aSetNode( SETNODE_BINDINGS );
-    aSetNode += PATHDELIMITER;
-
-    OUString aCommandKey( PATHDELIMITER );
-    aCommandKey += PROPERTYNAME_BINDINGURL;
+    OUString aSetNode = SETNODE_BINDINGS PATHDELIMITER;
+    OUString aCommandKey = PATHDELIMITER PROPERTYNAME_BINDINGURL;
 
     // Expand all keys
     Sequence< OUString > lMacros(1);

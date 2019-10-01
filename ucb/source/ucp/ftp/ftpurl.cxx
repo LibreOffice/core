@@ -675,8 +675,8 @@ void FTPURL::mkdir(bool ReplaceExisting) const
         // will give an error
         title = OString("/");
 
-    OString aDel("del "); aDel += title;
-    OString mkd("mkd "); mkd += title;
+    OString aDel = "del " + title;
+    OString mkd = "mkd " + title;
 
     struct curl_slist *slist = nullptr;
 
