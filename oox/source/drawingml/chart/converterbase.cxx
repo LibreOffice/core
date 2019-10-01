@@ -396,10 +396,15 @@ void LayoutConverter::convertFromModel( const Reference< XShape >& rxShape, doub
 {
     if( !mrModel.mbAutoLayout )
     {
-        const awt::Size& rChartSize = getChartSize();
+        awt::Size aChartSize = getChartSize();
+        if (aChartSize.Width <= 0 || aChartSize.Height <= 0)
+        {
+            aChartSize.Width = 16000;
+            aChartSize.Height = 9000;
+        }
         awt::Point aShapePos(
-            lclCalcPosition( rChartSize.Width,  mrModel.mfX, mrModel.mnXMode ),
-            lclCalcPosition( rChartSize.Height, mrModel.mfY, mrModel.mnYMode ) );
+            lclCalcPosition( aChartSize.Width,  mrModel.mfX, mrModel.mnXMode ),
+            lclCalcPosition( aChartSize.Height, mrModel.mfY, mrModel.mnYMode ) );
         if( (aShapePos.X >= 0) && (aShapePos.Y >= 0) )
         {
             // the call to XShape.getSize() may recalc the chart view
