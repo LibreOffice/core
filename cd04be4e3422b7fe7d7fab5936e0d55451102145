@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_3d9e9763",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-10-01T20:12:10Z",
+      "side": 1,
+      "message": "Makes me wonder, because row heights may depend even on formula recalculation if text results are to be wrapped and automatic row heights are enabled. Formulas may get recalculated in array/matrix context or when including volatile functions even when documents are not forcedly recalculated on load. I still think there will be cases where this may seriously hurt when the entire document is triggered to be recalculated instead of just the immediately visible portion. But let\u0027s try but bear in mind this may need some additional work to prevent such things.",
+      "parentUuid": "bf659307_afe1ff9c",
+      "range": {
+        "startLine": 577,
+        "startChar": 23,
+        "endLine": 577,
+        "endChar": 34
+      },
+      "revId": "cd04be4e3422b7fe7d7fab5936e0d55451102145",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_16bcd703",
         "filename": "sc/source/ui/view/gridwin4.cxx",
         "patchSetId": 6
