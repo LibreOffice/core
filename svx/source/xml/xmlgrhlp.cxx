@@ -844,8 +844,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
             if (xStorage.is())
                 xStorage->commit();
 
-            OUString aStoragePath("Pictures/");
-            aStoragePath += rPictureStreamName;
+            OUString aStoragePath = "Pictures/" + rPictureStreamName;
 
             // put into cache
             maExportGraphics[aGraphic] = std::make_pair(aStoragePath, rOutSavedMimeType);
@@ -923,8 +922,7 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveOutputStream( const Reference< XOut
 
                 if( !aId.isEmpty() )
                 {
-                    aRet = XML_GRAPHICOBJECT_URL_BASE;
-                    aRet += aId;
+                    aRet = XML_GRAPHICOBJECT_URL_BASE + aId;
                 }
             }
         }
