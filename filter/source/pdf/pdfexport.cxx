@@ -200,7 +200,10 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
                     for( sal_Int32 nProperty = 0, nPropertyCount = aRenderer.getLength(); nProperty < nPropertyCount; ++nProperty )
                     {
                         if ( aRenderer[ nProperty ].Name == "PageSize" )
+                        {
                             aRenderer[ nProperty].Value >>= aPageSize;
+                            break;
+                        }
                     }
 
                     rPDFExtOutDevData.SetCurrentPageNumber( nCurrentPage );
