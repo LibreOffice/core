@@ -24,6 +24,7 @@ ifneq ($(OS),MACOSX)
 ifneq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,libwps,\
 	external/libwps/libwps-bundled-soname.patch.0 \
+	external/libwps/libwps-lotus-version-tdf127887.patch.1 \
 ))
 endif
 endif
