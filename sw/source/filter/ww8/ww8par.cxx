@@ -4359,7 +4359,14 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
                 SfxItemSet aSet(rFormat.GetAttrSet());
                 mrReader.MatchSdrItemsIntoFlySet(pObject, aSet, mso_lineSimple,
                                                  mso_lineSolid, mso_sptRectangle, aRect);
-                rFormat.SetFormatAttr(aSet.Get(RES_BACKGROUND));
+                if ( aSet.HasItem(RES_BACKGROUND) )
+                    rFormat.SetFormatAttr(aSet.Get(RES_BACKGROUND));
+                else
+                {
+                    SfxItemSet aSet2(rFormat.GetDoc()->GetAttrPool(), svl::Items<XATTR_START, XATTR_END>{});
+                    aSet2.Put(aSet);
+                    rFormat.SetFormatAttr(aSet2);
+                }
             }
         }
         SdrObject::Free(pObject);
