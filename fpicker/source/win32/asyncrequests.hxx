@@ -135,7 +135,7 @@ typedef std::shared_ptr< RequestHandler > RequestHandlerRef;
 
 /** @todo document me
  */
-class AsyncRequests : private ::cppu::BaseMutex
+class AsyncRequests final: private ::cppu::BaseMutex
                     , public  ::osl::Thread
 {
     public:
