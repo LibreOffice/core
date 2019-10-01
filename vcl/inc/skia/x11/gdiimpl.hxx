@@ -26,8 +26,6 @@ public:
     virtual ~X11SkiaSalGraphicsImpl() override;
 
 public:
-    virtual void copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics) override;
-
     virtual void Init() override;
 };
 
