@@ -624,6 +624,29 @@ sal_Int32 VmlCommentExporter::StartShape()
     return nId;
 }
 
+static const char* lcl_GetHorAlignFromItemSetChar(const SfxItemSet& rItemSet)
+{
+    const char* nHorAlign = "Left";
+
+    switch (rItemSet.Get(SDRATTR_TEXT_HORZADJUST).GetValue())
+    {
+    case SDRTEXTHORZADJUST_LEFT:   nHorAlign = "Left";       break;
+    case SDRTEXTHORZADJUST_CENTER: nHorAlign = "Center";     break;
+    case SDRTEXTHORZADJUST_RIGHT:  nHorAlign = "Right";      break;
+    case SDRTEXTHORZADJUST_BLOCK:
+        switch (rItemSet.Get(EE_PARA_JUST).GetAdjust())
+        {
+        case SvxAdjust::Center:    nHorAlign = "Center";     break;
+        case SvxAdjust::Right:     nHorAlign = "Right";      break;
+        case SvxAdjust::Block:     nHorAlign = "Justify";    break;
+        default:                   nHorAlign = "Left";
+        }
+        break;
+    default:;
+    }
+    return nHorAlign;
+}
+
 void VmlCommentExporter::EndShape( sal_Int32 nShapeElement )
 {
     char pAnchor[100];
@@ -632,11 +655,14 @@ void VmlCommentExporter::EndShape( sal_Int32 nShapeElement )
                   maFrom.Left(), maFrom.Top(), maFrom.Right(), maFrom.Bottom(),
                   maTo.Left(), maTo.Top(), maTo.Right(), maTo.Bottom() );
 
+    const char* THA = lcl_GetHorAlignFromItemSetChar(mpCaption->GetMergedItemSet());
+
     pVmlDrawing->startElement(FSNS(XML_x, XML_ClientData), XML_ObjectType, "Note");
     pVmlDrawing->singleElement(FSNS(XML_x, XML_MoveWithCells));
     pVmlDrawing->singleElement(FSNS(XML_x, XML_SizeWithCells));
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Anchor ), pAnchor );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_AutoFill ), "False" );
+    XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_TextHAlign ), THA );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Row ), maScPos.Row() );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS(XML_x, XML_Column), sal_Int32(maScPos.Col()));
     if(mbVisible)
@@ -706,17 +732,25 @@ void XclObjDropDown::WriteSubRecs( XclExpStream& rStrm )
 
 // --- class XclTxo --------------------------------------------------
 
-static sal_uInt8 lcl_GetHorAlignFromItemSet( const SfxItemSet& rItemSet )
+static sal_uInt8 lcl_GetHorAlignFromItemSet(const SfxItemSet& rItemSet)
 {
     sal_uInt8 nHorAlign = EXC_OBJ_HOR_LEFT;
 
-    switch( rItemSet.Get( EE_PARA_JUST ).GetAdjust() )
+    switch (rItemSet.Get(SDRATTR_TEXT_HORZADJUST).GetValue())
     {
-        case SvxAdjust::Left:   nHorAlign = EXC_OBJ_HOR_LEFT;      break;
-        case SvxAdjust::Center: nHorAlign = EXC_OBJ_HOR_CENTER;    break;
-        case SvxAdjust::Right:  nHorAlign = EXC_OBJ_HOR_RIGHT;     break;
-        case SvxAdjust::Block:  nHorAlign = EXC_OBJ_HOR_JUSTIFY;   break;
-        default:;
+    case SDRTEXTHORZADJUST_LEFT:   nHorAlign = EXC_OBJ_HOR_LEFT;       break;
+    case SDRTEXTHORZADJUST_CENTER: nHorAlign = EXC_OBJ_HOR_CENTER;     break;
+    case SDRTEXTHORZADJUST_RIGHT:  nHorAlign = EXC_OBJ_HOR_RIGHT;      break;
+    case SDRTEXTHORZADJUST_BLOCK:
+        switch (rItemSet.Get(EE_PARA_JUST).GetAdjust())
+        {
+        case SvxAdjust::Center:    nHorAlign = EXC_OBJ_HOR_CENTER;     break;
+        case SvxAdjust::Right:     nHorAlign = EXC_OBJ_HOR_RIGHT;      break;
+        case SvxAdjust::Block:     nHorAlign = EXC_OBJ_HOR_JUSTIFY;    break;
+        default:                   nHorAlign = EXC_OBJ_HOR_LEFT;
+        }
+        break;
+    default:;
     }
     return nHorAlign;
 }
