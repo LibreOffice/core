@@ -35,9 +35,9 @@ class DuplicateDefines : public clang::PPCallbacks, public Plugin
 public:
     explicit DuplicateDefines(const InstantiationData& data);
     virtual void run() override;
-    void MacroDefined(const Token& MacroNameTok, const MacroDirective* MD);
+    void MacroDefined(const Token& MacroNameTok, const MacroDirective* MD) override;
     void MacroUndefined(const Token& MacroNameTok, const MacroDefinition& MD,
-                        const MacroDirective* Undef);
+                        const MacroDirective* Undef) override;
     enum
     {
         isPPCallback = true
