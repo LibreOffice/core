@@ -656,7 +656,7 @@ DdeItem::~DdeItem()
     delete pImpData;
 }
 
-const OUString DdeItem::GetName() const
+OUString DdeItem::GetName() const
 {
     return pName->toOUString();
 }

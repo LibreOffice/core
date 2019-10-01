@@ -99,7 +99,7 @@ public:
     virtual        ~DdeTransaction();
 
     bool            IsBusy() const { return bBusy; }
-    const OUString GetName() const;
+    OUString GetName() const;
 
     void            Execute();
 
@@ -211,7 +211,7 @@ public:
                     DdeItem( const DdeItem& );
                     virtual ~DdeItem();
 
-    const OUString GetName() const;
+    OUString GetName() const;
     short           GetLinks();
     void            NotifyClient();
 };

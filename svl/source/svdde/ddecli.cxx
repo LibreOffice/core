@@ -313,7 +313,7 @@ void DdeTransaction::Execute()
     }
 }
 
-const OUString DdeTransaction::GetName() const
+OUString DdeTransaction::GetName() const
 {
     return pName->toOUString();
 }
