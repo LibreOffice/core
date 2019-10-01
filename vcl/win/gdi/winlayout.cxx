@@ -432,7 +432,7 @@ bool WinSalGraphics::DrawCachedGlyphs(const GenericSalLayout& rLayout)
     rLayout.GetBoundRect(aRect);
 
     COLORREF color = GetTextColor(hDC);
-    Color salColor = Color(GetRValue(color), GetGValue(color), GetBValue(color));
+    Color salColor(GetRValue(color), GetGValue(color), GetBValue(color));
 
     WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
     if (!pImpl)
