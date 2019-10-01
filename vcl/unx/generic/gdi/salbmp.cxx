@@ -149,7 +149,7 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
         case 8: pDIB->mnFormat |= ScanlineFormat::N8BitPal; break;
         case 24: pDIB->mnFormat |= ScanlineFormat::N24BitTcBgr; break;
         default:
-            assert(false);
+            SAL_WARN("vcl.gdi", "32-bit images not supported, converting to 24-bit");
             nBitCount = 24;
             pDIB->mnFormat |= ScanlineFormat::N24BitTcBgr;
         break;
