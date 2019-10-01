@@ -18,6 +18,8 @@
  */
 
 #include <memory>
+#include <utility>
+
 #include <MarkManager.hxx>
 #include <bookmrk.hxx>
 #include <cntfrm.hxx>
@@ -408,7 +410,7 @@ namespace
         {
             if(*ppCurrentMark == pMarkToFind)
             {
-                return ppCurrentMark;
+                return std::move(ppCurrentMark);
             }
             ++ppCurrentMark;
         }
@@ -435,7 +437,7 @@ namespace
                 break;
             if(IDocumentMarkAccess::GetType(**ppCurrentMark) == eType)
             {
-                return ppCurrentMark;
+                return std::move(ppCurrentMark);
             }
         }
         // reached a mark starting on a later start pos or the end of the
