@@ -691,8 +691,7 @@ bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUStr
                     mvAutoLayoutInfoList.emplace_back( pNew );
                     OUString sNewName = "AL";
                     sNewName += OUString::number(mvAutoLayoutInfoList.size() - 1);
-                    sNewName += "T";
-                    sNewName += OUString::number(nType);
+                    sNewName += "T" + OUString::number(nType);
                     pNew->SetLayoutName(sNewName);
                 }
 
@@ -1219,9 +1218,7 @@ void SdXMLExport::ImpWritePageMasterInfos()
         if(pInfo)
         {
             // create name
-            OUString sNewName("PM");
-
-            sNewName += OUString::number(nCnt);
+            OUString sNewName = "PM" + OUString::number(nCnt);
             pInfo->SetName(sNewName);
 
             // prepare page-master attributes

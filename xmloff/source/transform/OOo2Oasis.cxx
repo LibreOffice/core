@@ -1149,8 +1149,7 @@ void XMLDocumentTransformerContext_Impl::StartElement(
 
             pMutableAttrList = new XMLMutableAttributeList( xAttrList );
             xAttrList = pMutableAttrList;
-            OUString sMime("application/vnd.oasis.opendocument.");
-            sMime += rValue;
+            OUString sMime = "application/vnd.oasis.opendocument." + rValue;
             pMutableAttrList->SetValueByIndex( i, sMime );
             OUString aNewAttrQName( GetTransformer().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, ::xmloff::token::GetXMLToken( XML_MIMETYPE ) ) );
             pMutableAttrList->RenameAttributeByIndex(i, aNewAttrQName );
