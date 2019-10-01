@@ -132,7 +132,7 @@ private:
         }
         catch ( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION("extensions.ole");
+            DBG_UNHANDLED_EXCEPTION("extensions.olebridge");
         }
     }
 
