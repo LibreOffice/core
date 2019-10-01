@@ -19,6 +19,7 @@ class CertPathDialog : public weld::GenericDialogController
     std::unique_ptr<weld::TreeView> m_xCertPathList;
     OUString m_sAddDialogText;
     OUString m_sManualLabel;
+    OUString m_sManualPath;
 
     typedef std::pair<int, int> row_col;
     DECL_LINK(CheckHdl_Impl, const row_col&, void);
@@ -27,6 +28,7 @@ class CertPathDialog : public weld::GenericDialogController
 
     void HandleEntryChecked(int nRow);
     void AddCertPath(const OUString &rProfile, const OUString &rPath, bool bSelect = true);
+    void AddManualCertPath(const OUString& sUserSetCertPath, bool bSelect = true);
 
 public:
     explicit CertPathDialog(weld::Window* pParent);
