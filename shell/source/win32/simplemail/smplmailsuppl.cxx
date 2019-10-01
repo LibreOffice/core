@@ -72,7 +72,7 @@ Reference<XSimpleMailClient> SAL_CALL CSmplMailSuppl::querySimpleMailClient()
 
 OUString SAL_CALL CSmplMailSuppl::getImplementationName()
 {
-    return OUString(COMP_IMPL_NAME);
+    return COMP_IMPL_NAME;
 }
 
 sal_Bool SAL_CALL CSmplMailSuppl::supportsService(const OUString& ServiceName)

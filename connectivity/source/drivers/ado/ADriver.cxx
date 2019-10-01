@@ -80,7 +80,7 @@ void ODriver::disposing()
 
 OUString ODriver::getImplementationName_Static(  )
 {
-    return OUString("com.sun.star.comp.sdbc.ado.ODriver");
+    return "com.sun.star.comp.sdbc.ado.ODriver";
 }
 
 Sequence< OUString > ODriver::getSupportedServiceNames_Static(  )

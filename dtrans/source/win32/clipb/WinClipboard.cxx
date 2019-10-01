@@ -223,7 +223,7 @@ void SAL_CALL CWinClipboard::disposing()
 
 OUString SAL_CALL CWinClipboard::getImplementationName(  )
 {
-    return OUString( WINCLIPBOARD_IMPL_NAME );
+    return WINCLIPBOARD_IMPL_NAME;
 }
 
 sal_Bool SAL_CALL CWinClipboard::supportsService( const OUString& ServiceName )

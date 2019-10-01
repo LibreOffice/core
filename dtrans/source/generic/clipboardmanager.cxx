@@ -48,7 +48,7 @@ ClipboardManager::~ClipboardManager()
 
 OUString SAL_CALL ClipboardManager::getImplementationName(  )
 {
-    return OUString(CLIPBOARDMANAGER_IMPLEMENTATION_NAME);
+    return CLIPBOARDMANAGER_IMPLEMENTATION_NAME;
 }
 
 sal_Bool SAL_CALL ClipboardManager::supportsService( const OUString& ServiceName )

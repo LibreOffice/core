@@ -114,7 +114,7 @@ namespace dxcanvas
 
     OUString SAL_CALL CanvasFont::getImplementationName()
     {
-        return OUString( "DXCanvas::CanvasFont" );
+        return "DXCanvas::CanvasFont";
     }
 
     sal_Bool SAL_CALL CanvasFont::supportsService( const OUString& ServiceName )

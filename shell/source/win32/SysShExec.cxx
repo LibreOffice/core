@@ -484,7 +484,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
 
 OUString SAL_CALL CSysShExec::getImplementationName(  )
 {
-    return OUString(SYSSHEXEC_IMPL_NAME );
+    return SYSSHEXEC_IMPL_NAME;
 }
 
 sal_Bool SAL_CALL CSysShExec::supportsService( const OUString& ServiceName )

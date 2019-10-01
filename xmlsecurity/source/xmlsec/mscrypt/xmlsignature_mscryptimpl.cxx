@@ -277,7 +277,7 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
 
 /* XServiceInfo */
 OUString SAL_CALL XMLSignature_MSCryptImpl::getImplementationName() {
-    return OUString("com.sun.star.xml.crypto.XMLSignature");
+    return "com.sun.star.xml.crypto.XMLSignature";
 }
 
 /* XServiceInfo */

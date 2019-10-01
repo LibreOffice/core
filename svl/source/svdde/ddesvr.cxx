@@ -847,7 +847,7 @@ OUString DdeService::Formats()
 
 OUString DdeService::Status()
 {
-    return OUString("Ready\r\n");
+    return "Ready\r\n";
 }
 
 bool DdeTopic::MakeItem( const OUString& )

@@ -57,7 +57,7 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
 
 #ifdef _WIN32
     (void)desktopEnvironment;
-    return OUString("colibre");
+    return "colibre";
 #else
     OUString r;
     if ( desktopEnvironment.equalsIgnoreAsciiCase("plasma5") ||

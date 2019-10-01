@@ -542,9 +542,9 @@ void SAL_CALL VistaFilePicker::setDescription( const OUString& aDescription )
 OUString SAL_CALL VistaFilePicker::getImplementationName()
 {
     if (m_bFolderPicker)
-        return OUString(FOLDER_PICKER_IMPL_NAME);
+        return FOLDER_PICKER_IMPL_NAME;
     else
-        return OUString(FILE_PICKER_IMPL_NAME);
+        return FILE_PICKER_IMPL_NAME;
 }
 
 sal_Bool SAL_CALL VistaFilePicker::supportsService(const OUString& sServiceName)

@@ -204,7 +204,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 
 OUString SAL_CALL FrameGrabber::getImplementationName(  )
 {
-    return OUString( AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME );
+    return AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME;
 }
 
 

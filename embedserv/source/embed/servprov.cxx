@@ -119,7 +119,7 @@ EmbedServer_Impl::~EmbedServer_Impl()
 
 OUString EmbedServer_Impl::getImplementationName()
 {
-    return OUString("com.sun.star.comp.ole.EmbedServer");
+    return "com.sun.star.comp.ole.EmbedServer";
 }
 
 sal_Bool EmbedServer_Impl::supportsService(OUString const & ServiceName)

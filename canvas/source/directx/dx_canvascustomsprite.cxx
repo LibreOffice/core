@@ -81,7 +81,7 @@ namespace dxcanvas
 
     OUString SAL_CALL CanvasCustomSprite::getImplementationName()
     {
-        return OUString( "DXCanvas.CanvasCustomSprite" );
+        return "DXCanvas.CanvasCustomSprite";
     }
 
     sal_Bool SAL_CALL CanvasCustomSprite::supportsService( const OUString& ServiceName )

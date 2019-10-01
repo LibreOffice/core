@@ -248,7 +248,7 @@ DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
 // XServiceInfo
 OUString SAL_CALL DropTarget::getImplementationName(  )
 {
-    return OUString(DNDTARGET_IMPL_NAME);
+    return DNDTARGET_IMPL_NAME;
 }
 // XServiceInfo
 sal_Bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName )

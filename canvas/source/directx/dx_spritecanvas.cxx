@@ -151,7 +151,7 @@ namespace dxcanvas
 
     OUString SAL_CALL SpriteCanvas::getServiceName(  )
     {
-        return OUString( SPRITECANVAS_SERVICE_NAME );
+        return SPRITECANVAS_SERVICE_NAME;
     }
 
     const IDXRenderModuleSharedPtr& SpriteCanvas::getRenderModule() const

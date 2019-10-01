@@ -185,7 +185,7 @@ namespace
 OUString impl_SystemFileOpenServiceName()
 {
     #if defined(_WIN32)
-    return OUString("com.sun.star.ui.dialogs.SystemFilePicker");
+    return "com.sun.star.ui.dialogs.SystemFilePicker";
     #elif defined MACOSX
     return "com.sun.star.ui.dialogs.AquaFilePicker";
     #else

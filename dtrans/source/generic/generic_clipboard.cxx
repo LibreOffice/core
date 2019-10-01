@@ -56,7 +56,7 @@ void SAL_CALL GenericClipboard::initialize( const Sequence< Any >& aArguments )
 
 OUString SAL_CALL GenericClipboard::getImplementationName(  )
 {
-    return OUString(GENERIC_CLIPBOARD_IMPLEMENTATION_NAME);
+    return GENERIC_CLIPBOARD_IMPLEMENTATION_NAME;
 }
 
 sal_Bool SAL_CALL GenericClipboard::supportsService( const OUString& ServiceName )

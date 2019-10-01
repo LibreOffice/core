@@ -56,7 +56,7 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString&
 
 OUString SAL_CALL Manager::getImplementationName(  )
 {
-    return OUString( AVMEDIA_WIN_MANAGER_IMPLEMENTATIONNAME );
+    return AVMEDIA_WIN_MANAGER_IMPLEMENTATIONNAME;
 }
 
 
