@@ -55,6 +55,7 @@
 
 #include <osl/diagnose.h>
 #include <salhelper/simplereferenceobject.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
@@ -137,10 +138,10 @@ private:
     }
 
 public:
-    static Reference< TerminationVetoer > get()
+    static rtl::Reference< TerminationVetoer > get()
     {
         static TerminationVetoer* pInstance = new TerminationVetoer;
-        static Reference< TerminationVetoer > aInstance( pInstance );
+        static rtl::Reference< TerminationVetoer > aInstance( pInstance );
 
         return aInstance;
     }
