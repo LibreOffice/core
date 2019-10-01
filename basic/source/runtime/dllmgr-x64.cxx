@@ -524,52 +524,58 @@ ErrCode call(
     case SbxOBJECT:
     case SbxBOOL:
     case SbxBYTE:
-        iRetVal =
-            proc_i(*reinterpret_cast<double *>(&stack[0]),
-                   *reinterpret_cast<double *>(&stack[1*8]),
-                   *reinterpret_cast<double *>(&stack[2*8]),
-                   *reinterpret_cast<double *>(&stack[3*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[4*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[5*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[6*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[7*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[8*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[9*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[10*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[11*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[12*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[13*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[14*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[15*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[16*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[17*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[18*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[19*8]));
-        break;
+        {
+            auto const st = stack.data();
+            iRetVal =
+                proc_i(*reinterpret_cast<double *>(st + 0),
+                       *reinterpret_cast<double *>(st + 1*8),
+                       *reinterpret_cast<double *>(st + 2*8),
+                       *reinterpret_cast<double *>(st + 3*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 4*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 5*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 6*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 7*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 8*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 9*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 10*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 11*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 12*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 13*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 14*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 15*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 16*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 17*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 18*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 19*8));
+            break;
+        }
     case SbxSINGLE:
     case SbxDOUBLE:
-        dRetVal =
-            proc_d(*reinterpret_cast<double *>(&stack[0]),
-                   *reinterpret_cast<double *>(&stack[1*8]),
-                   *reinterpret_cast<double *>(&stack[2*8]),
-                   *reinterpret_cast<double *>(&stack[3*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[4*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[5*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[6*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[7*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[8*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[9*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[10*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[11*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[12*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[13*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[14*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[15*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[16*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[17*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[18*8]),
-                   *reinterpret_cast<sal_uInt64 *>(&stack[19*8]));
-        break;
+        {
+            auto const st = stack.data();
+            dRetVal =
+                proc_d(*reinterpret_cast<double *>(st + 0),
+                       *reinterpret_cast<double *>(st + 1*8),
+                       *reinterpret_cast<double *>(st + 2*8),
+                       *reinterpret_cast<double *>(st + 3*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 4*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 5*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 6*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 7*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 8*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 9*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 10*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 11*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 12*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 13*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 14*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 15*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 16*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 17*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 18*8),
+                       *reinterpret_cast<sal_uInt64 *>(st + 19*8));
+            break;
+        }
     default:
         break;
     }
