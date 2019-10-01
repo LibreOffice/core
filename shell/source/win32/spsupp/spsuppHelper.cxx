@@ -184,6 +184,8 @@ int ViewDocument(LPCWSTR DocumentLocation, LPCWSTR OpenType, LPCWSTR varProgID)
         {
             case Answer::Cancel:
                 return 1;
+            case Answer::ReadOnly:
+                break;
             case Answer::Edit:
                 return EditDocument(DocumentLocation, L"0", varProgID);
         }
