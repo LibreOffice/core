@@ -574,7 +574,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
             hr = E_FAIL;
     }
 
-       return hr;
+    return hr;
 }
 
 STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
