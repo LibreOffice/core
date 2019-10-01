@@ -156,7 +156,7 @@ using namespace com::sun::star::accessibility::AccessibleRole;
 {                       \
     return FALSE;       \
 }                       \
-    *ppXI = static_cast<XInterface*>(pRXI.get()); \
+    *ppXI = pRXI.get(); \
     return TRUE;            \
 }
 
