@@ -4386,7 +4386,7 @@ public:
 
     virtual void set_label(const OUString& rText) override
     {
-        gtk_label_set_label(GTK_LABEL(gtk_frame_get_label_widget(m_pFrame)), MapToGtkAccelerator(rText).getStr());
+        gtk_label_set_label(GTK_LABEL(gtk_frame_get_label_widget(m_pFrame)), rText.replaceFirst("~", "").toUtf8().getStr());
     }
 
     virtual OUString get_label() const override
