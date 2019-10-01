@@ -40,7 +40,7 @@ class CSimpleTag : public ITag
         virtual void addAttributes(const XmlTagAttributes_t& attributes) override;
         virtual std::wstring getTagContent() override;
 
-        virtual ::std::wstring const getTagAttribute( ::std::wstring  const & attrname ) override;
+        virtual ::std::wstring getTagAttribute( ::std::wstring  const & attrname ) override;
 
     private:
         std::wstring       m_SimpleContent;
