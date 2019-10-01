@@ -282,7 +282,11 @@ gb_LTOFLAGS := $(if $(filter TRUE,$(ENABLE_LTO)),-GL)
 
 # When compiling for CLR, disable "warning C4339: use of undefined type detected
 # in CLR meta-data - use of this type may lead to a runtime exception":
-gb_CXXCLRFLAGS := $(gb_CXXFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
+gb_CXXCLRFLAGS := \
+	$(if $(COM_IS_CLANG), \
+	    $(patsubst -std=%,-std:c++17 -Zc:__cplusplus,$(gb_CXXFLAGS)), \
+	    $(gb_CXXFLAGS)) \
+	$(gb_LinkTarget_EXCEPTIONFLAGS) \
 	-AI $(INSTDIR)/$(LIBO_URE_LIB_FOLDER) \
 	-EHa \
 	-clr \
