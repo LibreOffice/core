@@ -25,6 +25,7 @@ $(eval $(call gb_Library_use_libraries,WinUserInfoBe,\
 	cppuhelper \
 	cppu \
 	sal \
+	tl \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,WinUserInfoBe,\
