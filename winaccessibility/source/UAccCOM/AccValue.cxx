@@ -44,7 +44,7 @@ using namespace com::sun::star::uno;
    * @return Result.
    */
 
-STDMETHODIMP CAccValue::get_currentValue(VARIANT * currentValue)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_currentValue(VARIANT * currentValue)
 {
     SolarMutexGuard g;
 
@@ -71,7 +71,7 @@ STDMETHODIMP CAccValue::get_currentValue(VARIANT * currentValue)
    * @param  success If the method is successfully called.
    * @return Result.
    */
-STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
 {
     SolarMutexGuard g;
 
@@ -150,7 +150,7 @@ STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
    * @param  maximumValue Variant that accepts maximum value.
    * @return Result.
    */
-STDMETHODIMP CAccValue::get_maximumValue(VARIANT *maximumValue)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_maximumValue(VARIANT *maximumValue)
 {
     SolarMutexGuard g;
 
@@ -176,7 +176,7 @@ STDMETHODIMP CAccValue::get_maximumValue(VARIANT *maximumValue)
    * @param  mininumValue Variant that accepts minimum value.
    * @return Result.
    */
-STDMETHODIMP CAccValue::get_minimumValue(VARIANT *mininumValue)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_minimumValue(VARIANT *mininumValue)
 {
     SolarMutexGuard g;
 
@@ -202,7 +202,7 @@ STDMETHODIMP CAccValue::get_minimumValue(VARIANT *mininumValue)
    * @param  pXInterface UNO interface.
    * @return Result.
    */
-STDMETHODIMP CAccValue::put_XInterface(hyper pXInterface)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::put_XInterface(hyper pXInterface)
 {
     // internal IUNOXWrapper - no mutex meeded
 

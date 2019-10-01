@@ -43,7 +43,7 @@ using namespace css::uno;
    * @param description Variant to get description.
    * @return Result.
 */
-STDMETHODIMP CAccImage::get_description(BSTR * description)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_description(BSTR * description)
 {
     SolarMutexGuard g;
 
@@ -64,7 +64,7 @@ STDMETHODIMP CAccImage::get_description(BSTR * description)
     LEAVE_PROTECTED_BLOCK
 }
 
-STDMETHODIMP CAccImage::get_imagePosition(
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_imagePosition(
     /* [in] */ enum IA2CoordinateType,
     /* [out] */ long __RPC_FAR *,
     /* [retval][out] */ long __RPC_FAR *)
@@ -72,7 +72,7 @@ STDMETHODIMP CAccImage::get_imagePosition(
     return E_NOTIMPL;
 }
 
-STDMETHODIMP CAccImage::get_imageSize(
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_imageSize(
     /* [out] */ long __RPC_FAR *,
     /* [retval][out] */ long __RPC_FAR *)
 {
@@ -84,7 +84,7 @@ STDMETHODIMP CAccImage::get_imageSize(
    * @param pXInterface UNO interface.
    * @return Result.
 */
-STDMETHODIMP CAccImage::put_XInterface(hyper pXInterface)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::put_XInterface(hyper pXInterface)
 {
     // internal IUNOXWrapper - no mutex meeded
 

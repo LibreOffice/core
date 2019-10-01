@@ -40,7 +40,7 @@ using namespace com::sun::star::uno;
  *
  * @param    nActions    the number of action.
  */
-STDMETHODIMP CAccAction::nActions(/*[out,retval]*/long* nActions)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccAction::nActions(/*[out,retval]*/long* nActions)
 {
 
     return CAccActionBase::nActions(nActions);
@@ -51,7 +51,7 @@ STDMETHODIMP CAccAction::nActions(/*[out,retval]*/long* nActions)
  *
  * @param    actionIndex    the index of action.
  */
-STDMETHODIMP CAccAction::doAction(/* [in] */ long actionIndex)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccAction::doAction(/* [in] */ long actionIndex)
 {
 
     return CAccActionBase::doAction(actionIndex);
@@ -63,19 +63,19 @@ STDMETHODIMP CAccAction::doAction(/* [in] */ long actionIndex)
  * @param    actionIndex    the index of action.
  * @param    description    the description string of the specified action.
  */
-STDMETHODIMP CAccAction::get_description(long actionIndex,BSTR __RPC_FAR *description)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccAction::get_description(long actionIndex,BSTR __RPC_FAR *description)
 {
 
     return CAccActionBase::get_description(actionIndex, description);
 }
 
-STDMETHODIMP CAccAction::get_name( long actionIndex, BSTR __RPC_FAR *name)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccAction::get_name( long actionIndex, BSTR __RPC_FAR *name)
 {
 
     return CAccActionBase::get_name(actionIndex, name);
 }
 
-STDMETHODIMP CAccAction::get_localizedName( long actionIndex, BSTR __RPC_FAR *localizedName)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccAction::get_localizedName( long actionIndex, BSTR __RPC_FAR *localizedName)
 {
 
     return CAccActionBase::get_localizedName(actionIndex, localizedName);
@@ -91,7 +91,7 @@ STDMETHODIMP CAccAction::get_localizedName( long actionIndex, BSTR __RPC_FAR *lo
  * @param    keyBinding     the key binding array.
  * @param    nBinding       the actual number of key binding returned.
  */
-STDMETHODIMP CAccAction::get_keyBinding(
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccAction::get_keyBinding(
     /* [in] */ long actionIndex,
     /* [in] */ long nMaxBinding,
     /* [length_is][length_is][size_is][size_is][out] */ BSTR __RPC_FAR *__RPC_FAR *keyBinding,
@@ -106,7 +106,7 @@ STDMETHODIMP CAccAction::get_keyBinding(
    * @param pXSubInterface XAccessibleHyperlink interface.
    * @return Result.
 */
-STDMETHODIMP CAccAction::put_XSubInterface(hyper pXSubInterface)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccAction::put_XSubInterface(hyper pXSubInterface)
 {
 
 

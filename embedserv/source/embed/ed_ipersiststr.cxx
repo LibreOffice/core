@@ -274,7 +274,7 @@ HRESULT EmbedDocument_Impl::SaveTo_Impl( IStorage* pStg )
 
 // IUnknown
 
-STDMETHODIMP EmbedDocument_Impl::QueryInterface( REFIID riid, void FAR* FAR* ppv )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::QueryInterface( REFIID riid, void FAR* FAR* ppv )
 {
     if(IsEqualIID(riid, IID_IUnknown))
     {
@@ -341,12 +341,12 @@ STDMETHODIMP EmbedDocument_Impl::QueryInterface( REFIID riid, void FAR* FAR* ppv
     return ResultFromScode(E_NOINTERFACE);
 }
 
-STDMETHODIMP_(ULONG) EmbedDocument_Impl::AddRef()
+COM_DECLSPEC_NOTHROW STDMETHODIMP_(ULONG) EmbedDocument_Impl::AddRef()
 {
     return osl_atomic_increment( &m_refCount);
 }
 
-STDMETHODIMP_(ULONG) EmbedDocument_Impl::Release()
+COM_DECLSPEC_NOTHROW STDMETHODIMP_(ULONG) EmbedDocument_Impl::Release()
 {
     // if there is a time when the last reference is destructed, that means that only internal pointers are alive
     // after the following call either the refcount is increased or the pointers are empty
@@ -362,7 +362,7 @@ STDMETHODIMP_(ULONG) EmbedDocument_Impl::Release()
 
 // IPersist
 
-STDMETHODIMP EmbedDocument_Impl::GetClassID( CLSID* pClassId )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetClassID( CLSID* pClassId )
 {
     *pClassId = m_guid;
     return S_OK;
@@ -371,7 +371,7 @@ STDMETHODIMP EmbedDocument_Impl::GetClassID( CLSID* pClassId )
 
 // IPersistStorage
 
-STDMETHODIMP EmbedDocument_Impl::IsDirty()
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::IsDirty()
 {
     // the link modified state is controlled by the document
     if ( m_bIsDirty && !m_aFileName.getLength() )
@@ -383,7 +383,7 @@ STDMETHODIMP EmbedDocument_Impl::IsDirty()
     return S_FALSE;
 }
 
-STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
 {
     HRESULT hr = CO_E_ALREADYINITIALIZED;
 
@@ -469,7 +469,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
     return hr;
 }
 
-STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
 {
     if ( m_pDocHolder->GetDocument().is() )
         return CO_E_ALREADYINITIALIZED;
@@ -577,7 +577,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
     return hr;
 }
 
-STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
 {
     if ( !m_pDocHolder->GetDocument().is() || !m_xFactory.is() || !pStgSave || !m_pOwnStream || !m_pExtStream )
         return E_FAIL;
@@ -672,7 +672,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
     return hr;
 }
 
-STDMETHODIMP EmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
 {
     // m_pOwnStream == NULL && m_pMasterStorage != NULL means the object is in NoScribble mode
     // m_pOwnStream == NULL && m_pMasterStorage == NULL means the object is in HandsOff mode
@@ -714,7 +714,7 @@ STDMETHODIMP EmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
     return S_OK;
 }
 
-STDMETHODIMP EmbedDocument_Impl::HandsOffStorage()
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::HandsOffStorage()
 {
     m_pMasterStorage = CComPtr< IStorage >();
     m_pOwnStream = CComPtr< IStream >();
@@ -726,7 +726,7 @@ STDMETHODIMP EmbedDocument_Impl::HandsOffStorage()
 
 // IPersistFile
 
-STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
 {
     if ( m_pDocHolder->GetDocument().is() )
         return CO_E_ALREADYINITIALIZED;
@@ -839,7 +839,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
     return hr;
 }
 
-STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
 {
     if ( !m_pDocHolder->GetDocument().is() || !m_xFactory.is() )
         return E_FAIL;
@@ -881,14 +881,14 @@ STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
     return hr;
 }
 
-STDMETHODIMP EmbedDocument_Impl::SaveCompleted( LPCOLESTR pszFileName )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::SaveCompleted( LPCOLESTR pszFileName )
 {
     // the different file name would mean error here
     m_aFileName = o3tl::toU(pszFileName);
     return S_OK;
 }
 
-STDMETHODIMP EmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
 {
     CComPtr<IMalloc> pMalloc;
 

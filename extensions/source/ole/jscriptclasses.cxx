@@ -32,13 +32,13 @@ JScriptValue::~JScriptValue()
 
 
 // JScriptValue, IDispatch --------------------------------------------
-STDMETHODIMP JScriptValue::GetTypeInfoCount(UINT* /*pctinfo*/)
+COM_DECLSPEC_NOTHROW STDMETHODIMP JScriptValue::GetTypeInfoCount(UINT* /*pctinfo*/)
 {
     return E_NOTIMPL;
 }
 
 // JScriptValue, IDispatch --------------------------------------------
-STDMETHODIMP JScriptValue::GetTypeInfo( UINT /*iTInfo*/,
+COM_DECLSPEC_NOTHROW STDMETHODIMP JScriptValue::GetTypeInfo( UINT /*iTInfo*/,
                                            LCID /*lcid*/,
                                            ITypeInfo** /*ppTInfo*/)
 {
@@ -46,7 +46,7 @@ STDMETHODIMP JScriptValue::GetTypeInfo( UINT /*iTInfo*/,
 }
 
 // JScriptValue, IDispatch --------------------------------------------
-STDMETHODIMP JScriptValue::GetIDsOfNames( REFIID /*riid*/,
+COM_DECLSPEC_NOTHROW STDMETHODIMP JScriptValue::GetIDsOfNames( REFIID /*riid*/,
                                              LPOLESTR *rgszNames,
                                              UINT /*cNames*/,
                                              LCID /*lcid*/,
@@ -75,7 +75,7 @@ STDMETHODIMP JScriptValue::GetIDsOfNames( REFIID /*riid*/,
 }
 
 // JScriptValue, IDispatch --------------------------------------------
-STDMETHODIMP JScriptValue::Invoke( DISPID dispIdMember,
+COM_DECLSPEC_NOTHROW STDMETHODIMP JScriptValue::Invoke( DISPID dispIdMember,
                          REFIID /*riid*/,
                          LCID /*lcid*/,
                          WORD wFlags,
@@ -133,7 +133,7 @@ STDMETHODIMP JScriptValue::Invoke( DISPID dispIdMember,
 }
 
 // JScriptValue, IScriptOutParam-----------------------
-STDMETHODIMP JScriptValue::Set( VARIANT type, VARIANT value)
+COM_DECLSPEC_NOTHROW STDMETHODIMP JScriptValue::Set( VARIANT type, VARIANT value)
 {
     Lock();
     m_varValue.Clear();
@@ -146,7 +146,7 @@ STDMETHODIMP JScriptValue::Set( VARIANT type, VARIANT value)
     return hr;
 }
 // JScriptValue, IScriptOutParam-----------------------
-STDMETHODIMP JScriptValue::Get( VARIANT *val)
+COM_DECLSPEC_NOTHROW STDMETHODIMP JScriptValue::Get( VARIANT *val)
 {
     Lock();
     if( !val)
@@ -156,7 +156,7 @@ STDMETHODIMP JScriptValue::Get( VARIANT *val)
     return hr;
 }
 
-STDMETHODIMP JScriptValue::InitOutParam()
+COM_DECLSPEC_NOTHROW STDMETHODIMP JScriptValue::InitOutParam()
 {
     Lock();
     m_varValue.Clear();
@@ -166,7 +166,7 @@ STDMETHODIMP JScriptValue::InitOutParam()
     return S_OK;
 }
 
-STDMETHODIMP JScriptValue::InitInOutParam( VARIANT type, VARIANT value)
+COM_DECLSPEC_NOTHROW STDMETHODIMP JScriptValue::InitInOutParam( VARIANT type, VARIANT value)
 {
     Lock();
     m_bInOutParam= true;
@@ -175,7 +175,7 @@ STDMETHODIMP JScriptValue::InitInOutParam( VARIANT type, VARIANT value)
     return Set( type, value);
 }
 
-STDMETHODIMP JScriptValue::IsOutParam( VARIANT_BOOL * flag)
+COM_DECLSPEC_NOTHROW STDMETHODIMP JScriptValue::IsOutParam( VARIANT_BOOL * flag)
 {
     Lock();
     if( !flag)
@@ -185,7 +185,7 @@ STDMETHODIMP JScriptValue::IsOutParam( VARIANT_BOOL * flag)
     return S_OK;
 }
 
-STDMETHODIMP JScriptValue::IsInOutParam( VARIANT_BOOL * flag)
+COM_DECLSPEC_NOTHROW STDMETHODIMP JScriptValue::IsInOutParam( VARIANT_BOOL * flag)
 {
     Lock();
     if( !flag)
@@ -195,7 +195,7 @@ STDMETHODIMP JScriptValue::IsInOutParam( VARIANT_BOOL * flag)
     return S_OK;
 }
 
-STDMETHODIMP JScriptValue::GetValue( BSTR* type, VARIANT *value)
+COM_DECLSPEC_NOTHROW STDMETHODIMP JScriptValue::GetValue( BSTR* type, VARIANT *value)
 {
     Lock();
     if( !type || !value)
@@ -221,13 +221,13 @@ JScriptOutParam::~JScriptOutParam()
 
 
 // JScriptOutParam, IDispatch --------------------------------------------
-STDMETHODIMP JScriptOutParam::GetTypeInfoCount(UINT* /*pctinfo*/)
+COM_DECLSPEC_NOTHROW STDMETHODIMP JScriptOutParam::GetTypeInfoCount(UINT* /*pctinfo*/)
 {
     return E_NOTIMPL;
 }
 
 // JScriptOutParam, IDispatch --------------------------------------------
-STDMETHODIMP JScriptOutParam::GetTypeInfo( UINT /*iTInfo*/,
+COM_DECLSPEC_NOTHROW STDMETHODIMP JScriptOutParam::GetTypeInfo( UINT /*iTInfo*/,
                                            LCID /*lcid*/,
                                            ITypeInfo** /*ppTInfo*/)
 {
@@ -235,7 +235,7 @@ STDMETHODIMP JScriptOutParam::GetTypeInfo( UINT /*iTInfo*/,
 }
 
 // JScriptOutParam, IDispatch --------------------------------------------
-STDMETHODIMP JScriptOutParam::GetIDsOfNames( REFIID /*riid*/,
+COM_DECLSPEC_NOTHROW STDMETHODIMP JScriptOutParam::GetIDsOfNames( REFIID /*riid*/,
                                              LPOLESTR *rgszNames,
                                              UINT /*cNames*/,
                                              LCID /*lcid*/,
@@ -258,7 +258,7 @@ STDMETHODIMP JScriptOutParam::GetIDsOfNames( REFIID /*riid*/,
 }
 
 // JScriptOutParam, IDispatch --------------------------------------------
-STDMETHODIMP JScriptOutParam::Invoke( DISPID dispIdMember,
+COM_DECLSPEC_NOTHROW STDMETHODIMP JScriptOutParam::Invoke( DISPID dispIdMember,
                          REFIID /*riid*/,
                          LCID /*lcid*/,
                          WORD wFlags,

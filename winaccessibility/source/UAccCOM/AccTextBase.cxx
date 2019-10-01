@@ -58,7 +58,7 @@ CAccTextBase::~CAccTextBase()
    * @param success     Variant to accept the result of if the method call is successful.
    * @return Result.
 */
-STDMETHODIMP CAccTextBase::get_addSelection(long startOffset, long endOffset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_addSelection(long startOffset, long endOffset)
 {
     SolarMutexGuard g;
 
@@ -94,7 +94,7 @@ STDMETHODIMP CAccTextBase::get_addSelection(long startOffset, long endOffset)
    * @param textAttributes     Variant to accept attributes.
    * @return Result.
 */
-STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long * endOffset, BSTR * textAttributes)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long * endOffset, BSTR * textAttributes)
 {
     SolarMutexGuard g;
 
@@ -209,7 +209,7 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
    * @param offset     Variant to accept caret offset.
    * @return Result.
 */
-STDMETHODIMP CAccTextBase::get_caretOffset(long * offset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_caretOffset(long * offset)
 {
     SolarMutexGuard g;
 
@@ -235,7 +235,7 @@ STDMETHODIMP CAccTextBase::get_caretOffset(long * offset)
    * @param nCharacters  Variant to accept character count.
    * @return Result.
 */
-STDMETHODIMP CAccTextBase::get_characterCount(long * nCharacters)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_characterCount(long * nCharacters)
 {
     SolarMutexGuard g;
 
@@ -265,7 +265,7 @@ STDMETHODIMP CAccTextBase::get_characterCount(long * nCharacters)
    * @param Height Variant to accept height.
    * @return Result.
 */
-STDMETHODIMP CAccTextBase::get_characterExtents(long offset, IA2CoordinateType coordType, long * x, long * y, long * width, long * height)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_characterExtents(long offset, IA2CoordinateType coordType, long * x, long * y, long * width, long * height)
 {
     SolarMutexGuard g;
 
@@ -337,7 +337,7 @@ STDMETHODIMP CAccTextBase::get_characterExtents(long offset, IA2CoordinateType c
    * @param nSelections Variant to accept selections count.
    * @return Result.
 */
-STDMETHODIMP CAccTextBase::get_nSelections(long * nSelections)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_nSelections(long * nSelections)
 {
     SolarMutexGuard g;
 
@@ -383,7 +383,7 @@ STDMETHODIMP CAccTextBase::get_nSelections(long * nSelections)
    * @param offset Variant to accept offset.
    * @return Result.
 */
-STDMETHODIMP CAccTextBase::get_offsetAtPoint(long x, long y, IA2CoordinateType, long * offset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_offsetAtPoint(long x, long y, IA2CoordinateType, long * offset)
 {
     SolarMutexGuard g;
 
@@ -412,7 +412,7 @@ STDMETHODIMP CAccTextBase::get_offsetAtPoint(long x, long y, IA2CoordinateType, 
    * @return Result.
 */
 
-STDMETHODIMP CAccTextBase::get_selection(long selectionIndex, long * startOffset, long * endOffset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_selection(long selectionIndex, long * startOffset, long * endOffset)
 {
     SolarMutexGuard g;
 
@@ -461,7 +461,7 @@ STDMETHODIMP CAccTextBase::get_selection(long selectionIndex, long * startOffset
    * @param text        Variant to accept the text of special range.
    * @return Result.
 */
-STDMETHODIMP CAccTextBase::get_text(long startOffset, long endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_text(long startOffset, long endOffset, BSTR * text)
 {
     SolarMutexGuard g;
 
@@ -508,7 +508,7 @@ STDMETHODIMP CAccTextBase::get_text(long startOffset, long endOffset, BSTR * tex
    * @param text        Variant to accept the special text.
    * @return Result.
 */
-STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
 {
     SolarMutexGuard g;
 
@@ -596,7 +596,7 @@ STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset, IA2TextBoundaryType
    * @param text        Variant to accept the special text.
    * @return Result.
 */
-STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
 {
     SolarMutexGuard g;
 
@@ -682,7 +682,7 @@ STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset, IA2TextBoundaryType 
    * @param text        Variant to accept the special text.
    * @return Result.
 */
-STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
 {
     SolarMutexGuard g;
 
@@ -766,7 +766,7 @@ STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA2TextBoundaryType bou
    * @param success Variant to accept the memthod called result.
    * @return Result.
 */
-STDMETHODIMP CAccTextBase::removeSelection(long selectionIndex)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::removeSelection(long selectionIndex)
 {
     SolarMutexGuard g;
 
@@ -802,7 +802,7 @@ STDMETHODIMP CAccTextBase::removeSelection(long selectionIndex)
    * @param success Variant to accept the memthod called result.
    * @return Result.
 */
-STDMETHODIMP CAccTextBase::setCaretOffset(long offset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::setCaretOffset(long offset)
 {
     SolarMutexGuard g;
 
@@ -827,7 +827,7 @@ STDMETHODIMP CAccTextBase::setCaretOffset(long offset)
    * @param success Variant to accept the memthod called result.
    * @return Result.
 */
-STDMETHODIMP CAccTextBase::setSelection(long, long startOffset, long endOffset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::setSelection(long, long startOffset, long endOffset)
 {
     SolarMutexGuard g;
 
@@ -851,7 +851,7 @@ STDMETHODIMP CAccTextBase::setSelection(long, long startOffset, long endOffset)
    * @param nCharacters Variant to accept the characters count.
    * @return Result.
 */
-STDMETHODIMP CAccTextBase::get_nCharacters(long * nCharacters)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_nCharacters(long * nCharacters)
 {
     SolarMutexGuard g;
 
@@ -874,12 +874,12 @@ STDMETHODIMP CAccTextBase::get_nCharacters(long * nCharacters)
 }
 
 // added by qiuhd, 2006/07/03, for direver 07/11
-STDMETHODIMP CAccTextBase::get_newText( IA2TextSegment *)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_newText( IA2TextSegment *)
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP CAccTextBase::get_oldText( IA2TextSegment *)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_oldText( IA2TextSegment *)
 {
     return E_NOTIMPL;
 }
@@ -890,12 +890,12 @@ STDMETHODIMP CAccTextBase::get_oldText( IA2TextSegment *)
    * @param endIndex   End index of sub string.
    * @return Result.
 */
-STDMETHODIMP CAccTextBase::scrollSubstringToPoint(long, long, IA2CoordinateType, long, long )
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::scrollSubstringToPoint(long, long, IA2CoordinateType, long, long )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP CAccTextBase::scrollSubstringTo(long, long, IA2ScrollType)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::scrollSubstringTo(long, long, IA2ScrollType)
 {
     return E_NOTIMPL;
 }
@@ -905,7 +905,7 @@ STDMETHODIMP CAccTextBase::scrollSubstringTo(long, long, IA2ScrollType)
    * @param pXInterface UNO interface.
    * @return Result.
 */
-STDMETHODIMP CAccTextBase::put_XInterface(hyper pXInterface)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::put_XInterface(hyper pXInterface)
 {
     // internal IUNOXWrapper - no mutex meeded
 

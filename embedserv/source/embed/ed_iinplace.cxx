@@ -21,7 +21,7 @@
 #include <osl/diagnose.h>
 
 
-STDMETHODIMP EmbedDocument_Impl::GetWindow(HWND *hWnd)
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetWindow(HWND *hWnd)
 {
     OSL_ENSURE(m_pDocHolder,"no document for inplace activation");
 
@@ -32,12 +32,12 @@ STDMETHODIMP EmbedDocument_Impl::GetWindow(HWND *hWnd)
         return ERROR;
 }
 
-STDMETHODIMP EmbedDocument_Impl::ContextSensitiveHelp(BOOL)
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::ContextSensitiveHelp(BOOL)
 {
     return NOERROR;
 }
 
-STDMETHODIMP EmbedDocument_Impl::InPlaceDeactivate()
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::InPlaceDeactivate()
 {
     // no locking is used since the OLE must use the same thread always
     if ( m_bIsInVerbHandling )
@@ -54,7 +54,7 @@ STDMETHODIMP EmbedDocument_Impl::InPlaceDeactivate()
     return NOERROR;
 }
 
-STDMETHODIMP EmbedDocument_Impl::UIDeactivate()
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::UIDeactivate()
 {
     // no locking is used since the OLE must use the same thread always
     if ( m_bIsInVerbHandling )
@@ -72,14 +72,14 @@ STDMETHODIMP EmbedDocument_Impl::UIDeactivate()
     return NOERROR;
 }
 
-STDMETHODIMP EmbedDocument_Impl::SetObjectRects(LPCRECT aRect, LPCRECT aClip)
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::SetObjectRects(LPCRECT aRect, LPCRECT aClip)
 {
     OSL_ENSURE(m_pDocHolder,"no document for inplace activation");
 
     return m_pDocHolder->SetObjectRects(aRect,aClip);
 }
 
-STDMETHODIMP EmbedDocument_Impl::ReactivateAndUndo()
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::ReactivateAndUndo()
 {
     return E_NOTIMPL;
 }

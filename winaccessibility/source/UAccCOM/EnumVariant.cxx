@@ -195,7 +195,7 @@ long CEnumVariant::GetCountOfElements()
    * @param.
    * @return Result
    */
-STDMETHODIMP CEnumVariant::ClearEnumeration()
+COM_DECLSPEC_NOTHROW STDMETHODIMP CEnumVariant::ClearEnumeration()
 {
     // internal IEnumVariant - no mutex meeded
 

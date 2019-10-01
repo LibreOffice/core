@@ -38,7 +38,7 @@
  *
  * @param    Location    the upper left corner of the object's bounding box.
  */
-STDMETHODIMP CAccComponent::get_locationInParent(long *x, long *y)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponent::get_locationInParent(long *x, long *y)
 {
 
     return CAccComponentBase::get_locationInParent(x,y);
@@ -49,7 +49,7 @@ STDMETHODIMP CAccComponent::get_locationInParent(long *x, long *y)
  *
  * @param    Color    the color of foreground.
  */
-STDMETHODIMP CAccComponent::get_foreground(IA2Color * foreground)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponent::get_foreground(IA2Color * foreground)
 {
 
     return CAccComponentBase::get_foreground(foreground);
@@ -60,7 +60,7 @@ STDMETHODIMP CAccComponent::get_foreground(IA2Color * foreground)
  *
  * @param    Color    the color of background.
  */
-STDMETHODIMP CAccComponent::get_background(IA2Color * background)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponent::get_background(IA2Color * background)
 {
 
     return CAccComponentBase::get_background(background);

@@ -36,7 +36,7 @@
 #pragma clang diagnostic pop
 #endif
 
-STDMETHODIMP SOComWindowPeer::InterfaceSupportsErrorInfo(REFIID riid)
+COM_DECLSPEC_NOTHROW STDMETHODIMP SOComWindowPeer::InterfaceSupportsErrorInfo(REFIID riid)
 {
     static const IID* arr[] =
     {

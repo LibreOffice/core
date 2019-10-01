@@ -44,7 +44,7 @@ CAccComponentBase::~CAccComponentBase()
  *
  * @param    Location    the upper left corner of the object's bounding box.
  */
-STDMETHODIMP CAccComponentBase::get_locationInParent(long *x, long *y)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationInParent(long *x, long *y)
 {
     SolarMutexGuard g;
 
@@ -74,7 +74,7 @@ STDMETHODIMP CAccComponentBase::get_locationInParent(long *x, long *y)
  * @param    Location    the upper left corner of the object's bounding
  *                       box in screen coordinates.
  */
-STDMETHODIMP CAccComponentBase::get_locationOnScreen(long *x, long *y)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationOnScreen(long *x, long *y)
 {
     SolarMutexGuard g;
 
@@ -103,7 +103,7 @@ STDMETHODIMP CAccComponentBase::get_locationOnScreen(long *x, long *y)
  *
  * @param    success    the boolean result to be returned.
  */
-STDMETHODIMP CAccComponentBase::grabFocus(boolean * success)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::grabFocus(boolean * success)
 {
     SolarMutexGuard g;
 
@@ -129,7 +129,7 @@ STDMETHODIMP CAccComponentBase::grabFocus(boolean * success)
  *
  * @param    Color    the color of foreground.
  */
-STDMETHODIMP CAccComponentBase::get_foreground(IA2Color * foreground)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_foreground(IA2Color * foreground)
 {
     SolarMutexGuard g;
 
@@ -154,7 +154,7 @@ STDMETHODIMP CAccComponentBase::get_foreground(IA2Color * foreground)
  *
  * @param    Color    the color of background.
  */
-STDMETHODIMP CAccComponentBase::get_background(IA2Color * background)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_background(IA2Color * background)
 {
     SolarMutexGuard g;
 
@@ -179,7 +179,7 @@ STDMETHODIMP CAccComponentBase::get_background(IA2Color * background)
  *
  * @param    pXInterface    the pointer of UNO interface.
  */
-STDMETHODIMP CAccComponentBase::put_XInterface(hyper pXInterface)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::put_XInterface(hyper pXInterface)
 {
     // internal IUNOXWrapper - no mutex meeded
 

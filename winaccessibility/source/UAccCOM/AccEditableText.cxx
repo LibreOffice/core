@@ -57,7 +57,7 @@ using namespace std;
  * @param    endOffset      the end offset of copying.
  * @param    success        the boolean result to be returned.
  */
-STDMETHODIMP CAccEditableText::copyText(long startOffset, long endOffset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::copyText(long startOffset, long endOffset)
 {
     SolarMutexGuard g;
 
@@ -84,7 +84,7 @@ STDMETHODIMP CAccEditableText::copyText(long startOffset, long endOffset)
  * @param    endOffset      the end offset of deleting.
  * @param    success        the boolean result to be returned.
  */
-STDMETHODIMP CAccEditableText::deleteText(long startOffset, long endOffset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::deleteText(long startOffset, long endOffset)
 {
     SolarMutexGuard g;
 
@@ -108,7 +108,7 @@ STDMETHODIMP CAccEditableText::deleteText(long startOffset, long endOffset)
  * @param    text      the text to be inserted.
  * @param    success   the boolean result to be returned.
  */
-STDMETHODIMP CAccEditableText::insertText(long offset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::insertText(long offset, BSTR * text)
 {
     SolarMutexGuard g;
 
@@ -137,7 +137,7 @@ STDMETHODIMP CAccEditableText::insertText(long offset, BSTR * text)
  * @param    endOffset      the end offset of cutting.
  * @param    success        the boolean result to be returned.
  */
-STDMETHODIMP CAccEditableText::cutText(long startOffset, long endOffset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::cutText(long startOffset, long endOffset)
 {
     SolarMutexGuard g;
 
@@ -160,7 +160,7 @@ STDMETHODIMP CAccEditableText::cutText(long startOffset, long endOffset)
  * @param    offset    the offset of pasting.
  * @param    success   the boolean result to be returned.
  */
-STDMETHODIMP CAccEditableText::pasteText(long offset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::pasteText(long offset)
 {
     SolarMutexGuard g;
 
@@ -185,7 +185,7 @@ STDMETHODIMP CAccEditableText::pasteText(long offset)
  * @param    text           the replacing text.
  * @param    success        the boolean result to be returned.
  */
-STDMETHODIMP CAccEditableText::replaceText(long startOffset, long endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::replaceText(long startOffset, long endOffset, BSTR * text)
 {
     SolarMutexGuard g;
 
@@ -214,7 +214,7 @@ STDMETHODIMP CAccEditableText::replaceText(long startOffset, long endOffset, BST
  * @param    attributes     the attribute text.
  * @param    success        the boolean result to be returned.
  */
-STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, BSTR * attributes)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, BSTR * attributes)
 {
     SolarMutexGuard g;
 
@@ -476,7 +476,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const OUString &ouName, const OUString
  *
  * @param    pXInterface    the pointer of UNO interface.
  */
-STDMETHODIMP CAccEditableText::put_XInterface(hyper pXInterface)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::put_XInterface(hyper pXInterface)
 {
     // internal IUNOXWrapper - no mutex meeded
 
