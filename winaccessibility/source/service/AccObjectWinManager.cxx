@@ -763,7 +763,7 @@ void AccObjectWinManager::SaveTopWindowHandle(HWND hWnd, css::accessibility::XAc
 AccObjectWinManager::CreateAccEventListener(XAccessible* pXAcc)
 {
     ::rtl::Reference<AccEventListener> pRet;
-    Reference<XAccessibleContext> xContext(pXAcc->getAccessibleContext(),UNO_QUERY);
+    Reference<XAccessibleContext> xContext = pXAcc->getAccessibleContext();
     if(xContext.is())
     {
         switch( xContext->getAccessibleRole() )
@@ -1020,7 +1020,7 @@ bool AccObjectWinManager::IsContainer(XAccessible* pAccessible)
     {
         if(pAccessible)
         {
-            Reference<XAccessibleContext> xContext(pAccessible->getAccessibleContext(),UNO_QUERY);
+            Reference<XAccessibleContext> xContext = pAccessible->getAccessibleContext();
             if(xContext.is())
             {
                 switch( xContext->getAccessibleRole() )
@@ -1090,7 +1090,7 @@ bool AccObjectWinManager::IsStateManageDescendant(XAccessible* pAccessible)
 {
     if(pAccessible)
     {
-        Reference<XAccessibleContext> xContext(pAccessible->getAccessibleContext(),UNO_QUERY);
+        Reference<XAccessibleContext> xContext = pAccessible->getAccessibleContext();
         if(xContext.is())
         {
             Reference< XAccessibleStateSet > pRState = xContext->getAccessibleStateSet();
@@ -1204,7 +1204,7 @@ bool AccObjectWinManager::IsSpecialToolboItem(css::accessibility::XAccessible* p
 short AccObjectWinManager::GetRole(css::accessibility::XAccessible* pXAcc)
 {
     assert(pXAcc != nullptr);
-    Reference<css::accessibility::XAccessibleContext> xContext(pXAcc->getAccessibleContext(),UNO_QUERY);
+    Reference<css::accessibility::XAccessibleContext> xContext = pXAcc->getAccessibleContext();
     if(xContext.is())
     {
         return xContext->getAccessibleRole();

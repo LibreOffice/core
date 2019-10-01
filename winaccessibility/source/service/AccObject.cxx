@@ -336,7 +336,7 @@ void AccObject::UpdateValue()
         return ;
     }
 
-    Reference< XAccessibleValue > pRValue(m_xAccContextRef.get(),UNO_QUERY);
+    Reference< XAccessibleValue > pRValue(m_xAccContextRef,UNO_QUERY);
     Any pAny;
     if( pRValue.is() )
     {

@@ -679,11 +679,8 @@ void DocumentHolder::CloseFrame()
         }
         catch( const uno::Exception& ) {
         }
-    else {
-        uno::Reference<lang::XComponent> xComp(m_xFrame, uno::UNO_QUERY);
-        if (xComp.is())
-            xComp->dispose();
-    }
+    else if (m_xFrame.is())
+        m_xFrame->dispose();
 
     m_xFrame.clear();
 }
@@ -758,13 +755,10 @@ uno::Reference< frame::XFrame2 > DocumentHolder::DocumentFrame()
     {
         uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
 
-        uno::Reference<frame::XFrame> xFrame(xDesktop,uno::UNO_QUERY);
-
         // the frame will be registered on desktop here, later when the document
         // is loaded into the frame in ::show() method the terminate listener will be removed
         // this is so only for outplace activation
-        if( xFrame.is() )
-            m_xFrame.set( xFrame->findFrame( "_blank", 0 ), uno::UNO_QUERY );
+        m_xFrame.set( xDesktop->findFrame( "_blank", 0 ), uno::UNO_QUERY );
 
         uno::Reference< util::XCloseBroadcaster > xBroadcaster(
             m_xFrame, uno::UNO_QUERY );
@@ -871,8 +865,7 @@ void DocumentHolder::resizeWin( const SIZEL& rNewSize )
 
     if ( m_xFrame.is() && aDocLock.GetEmbedDocument() )
     {
-        uno::Reference< awt::XWindow > xWindow(
-            m_xFrame->getContainerWindow(), uno::UNO_QUERY );
+        uno::Reference< awt::XWindow > xWindow = m_xFrame->getContainerWindow();
         uno::Reference< awt::XView > xView( xWindow, uno::UNO_QUERY );
 
         if ( xWindow.is() && xView.is() )
