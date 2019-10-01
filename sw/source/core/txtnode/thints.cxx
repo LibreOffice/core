@@ -2440,6 +2440,10 @@ SwTextNode::impl_FormatToTextAttr(const SfxItemSet& i_rAttrSet)
             m_pSwpHints->Insert(
                     MakeTextAttr(*GetDoc(), aCurSet,
                         aCurRange->first.first, aCurRange->first.second));
+            // Looks like the line above is still not recorded for undo properly (character-level
+            // direct formatting persists after undo); using m_pSwpHints->TryInsertHint breaks the
+            // application of the attribute to only selected area; using m_pSwpHints->NoteInHistory
+            // makes no difference
         }
 
         aCurRange = aRange.second;
@@ -2451,7 +2455,8 @@ SwTextNode::impl_FormatToTextAttr(const SfxItemSet& i_rAttrSet)
     // 3. Clear items from the node
     std::vector<sal_uInt16> aClearedIds;
     lcl_FillWhichIds(i_rAttrSet, aClearedIds);
-    ClearItemsFromAttrSet(aClearedIds);
+    // ResetAttr to broadcast the change and record necessary undo information
+    ResetAttr(aClearedIds);
 }
 
 void SwTextNode::FormatToTextAttr( SwTextNode* pNd )
