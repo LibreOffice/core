@@ -30,8 +30,6 @@ struct SfxAllEnumValue_Impl
     OUString aText;
 };
 
-class SfxAllEnumValueArr : public std::vector<SfxAllEnumValue_Impl> {};
-
 
 SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which, sal_uInt16 nVal):
     SfxAllEnumItem_Base(which, nVal)
