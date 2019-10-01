@@ -31,6 +31,7 @@
 #include <comphelper/seqstream.hxx>
 #include <filter/msfilter/classids.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #if defined(_WIN32)
 #include "olecomponent.hxx"
@@ -234,9 +235,9 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                     {
                         changeState(embed::EmbedStates::LOADED);
                     }
-                    catch( const uno::Exception& e )
+                    catch( const uno::Exception& )
                     {
-                        SAL_WARN("embeddedobj.ole", "ignoring " << e);
+                        TOOLS_WARN_EXCEPTION("embeddedobj.ole", "ignoring ");
                     }
                 }
 
