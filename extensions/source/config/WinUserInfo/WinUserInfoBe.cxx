@@ -18,7 +18,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <map>
 #include <o3tl/char16_t2wchar_t.hxx>
-#include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <Iads.h>
 #include <Adshlp.h>
@@ -249,10 +249,10 @@ private:
                                                                         css::uno::UNO_QUERY_THROW);
             xChangesBatch->commitChanges();
         }
-        catch (const css::uno::Exception& e)
+        catch (const css::uno::Exception&)
         {
-            SAL_WARN("extensions.config",
-                     "ADsUserAccess: access to configuration data failed: " << e);
+            TOOLS_WARN_EXCEPTION("extensions.config",
+                                 "ADsUserAccess: access to configuration data failed:");
         }
     }
 
