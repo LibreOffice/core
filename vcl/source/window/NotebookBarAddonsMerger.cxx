@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/vclenum.hxx>
@@ -118,7 +122,7 @@ void NotebookBarAddonsMerger::MergeNotebookBarAddons(
     unsigned long nIter = 0;
     sal_uInt16 nPriorityIdx = aImageVec.size();
     css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> aExtension;
-    for (unsigned long nIdx = 0; nIdx < aNotebookBarAddonsItem.aAddonValues.size(); nIdx++)
+    for (std::size_t nIdx = 0; nIdx < aNotebookBarAddonsItem.aAddonValues.size(); nIdx++)
     {
         aExtension = aNotebookBarAddonsItem.aAddonValues[nIdx];
 
@@ -154,7 +158,7 @@ void NotebookBarAddonsMerger::MergeNotebookBarMenuAddons(
     std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;
     unsigned long nIter = 0;
     css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> aExtension;
-    for (unsigned long nIdx = 0; nIdx < aNotebookBarAddonsItem.aAddonValues.size(); nIdx++)
+    for (std::size_t nIdx = 0; nIdx < aNotebookBarAddonsItem.aAddonValues.size(); nIdx++)
     {
         aExtension = aNotebookBarAddonsItem.aAddonValues[nIdx];
 
