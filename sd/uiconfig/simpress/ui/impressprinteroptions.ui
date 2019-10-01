@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="box">
@@ -228,7 +228,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="originalcolors">
-                    <property name="label" translatable="yes" context="impressprinteroptions|originalcolors">Original size</property>
+                    <property name="label" translatable="yes" context="impressprinteroptions|originalcolors">Original colors</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
