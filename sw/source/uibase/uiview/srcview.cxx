@@ -158,11 +158,7 @@ static void lcl_PrintHeader( vcl::RenderContext &rOutDev, sal_Int32 nPages, sal_
     {
         aFont.SetWeight( WEIGHT_NORMAL );
         rOutDev.SetFont( aFont );
-        OUString aPageStr( " [" );
-        aPageStr += SwResId( STR_PAGE );
-        aPageStr += " ";
-        aPageStr += OUString::number( nCurPage );
-        aPageStr += "]";
+        OUString aPageStr = " [" + SwResId( STR_PAGE ) + " " + OUString::number( nCurPage ) + "]";
         aPos.AdjustX(rOutDev.GetTextWidth( rTitle ) );
         rOutDev.DrawText( aPos, aPageStr );
     }
@@ -450,8 +446,8 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                 OUString aPos( SwResId(STR_SRCVIEW_ROW) );
                 TextSelection aSel = pTextView->GetSelection();
                 aPos += OUString::number( aSel.GetEnd().GetPara()+1 );
-                aPos += " : ";
-                aPos += SwResId(STR_SRCVIEW_COL);
+                aPos += " : " +
+                    SwResId(STR_SRCVIEW_COL);
                 aPos += OUString::number( aSel.GetEnd().GetIndex()+1 );
                 SfxStringItem aItem( nWhich, aPos );
                 rSet.Put( aItem );

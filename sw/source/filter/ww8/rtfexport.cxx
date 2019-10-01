@@ -615,16 +615,13 @@ void RtfExport::WriteUserProps()
                 {
                     WriteUserPropType(64);
                     // Format is 'YYYY. MM. DD.'.
-                    aValue += OUString::number(aDate.Year);
-                    aValue += ". ";
+                    aValue += OUString::number(aDate.Year) + ". ";
                     if (aDate.Month < 10)
                         aValue += "0";
-                    aValue += OUString::number(aDate.Month);
-                    aValue += ". ";
+                    aValue += OUString::number(aDate.Month) + ". ";
                     if (aDate.Day < 10)
                         aValue += "0";
-                    aValue += OUString::number(aDate.Day);
-                    aValue += ".";
+                    aValue += OUString::number(aDate.Day) + ".";
                     WriteUserPropValue(aValue);
                 }
             }

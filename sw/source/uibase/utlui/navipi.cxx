@@ -991,9 +991,9 @@ void SwNavigationPI::UpdateListBox()
     {
         OUString sEntry = m_aContentTree->GetHiddenWrtShell()->GetView().
                                         GetDocShell()->GetTitle();
-        sEntry += " (";
-        sEntry += m_aStatusArr[IDX_STR_HIDDEN];
-        sEntry += ")";
+        sEntry += " (" +
+            m_aStatusArr[IDX_STR_HIDDEN] +
+            ")";
         m_aDocListBox->InsertEntry(sEntry);
         bDisable = false;
     }

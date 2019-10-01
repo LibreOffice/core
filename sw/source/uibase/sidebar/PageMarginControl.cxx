@@ -299,40 +299,40 @@ void PageMarginControl::FillHelpText( const bool bUserCustomValuesAvailable )
 
     SetMetricValue( *m_pWidthHeightField.get(), SWPAGE_NARROW_VALUE, m_eUnit );
     const OUString aNarrowValText = m_pWidthHeightField->GetText();
-    OUString aHelpText = aLeft;
-    aHelpText += aNarrowValText;
-    aHelpText += aRight;
-    aHelpText += aNarrowValText;
-    aHelpText += aTop;
-    aHelpText += aNarrowValText;
-    aHelpText += aBottom;
-    aHelpText += aNarrowValText;
+    OUString aHelpText = aLeft +
+        aNarrowValText +
+        aRight +
+        aNarrowValText +
+        aTop +
+        aNarrowValText +
+        aBottom +
+        aNarrowValText;
     m_pNarrow->SetQuickHelpText( aHelpText );
 
     SetMetricValue( *m_pWidthHeightField.get(), SWPAGE_NORMAL_VALUE, m_eUnit );
     const OUString aNormalValText = m_pWidthHeightField->GetText();
-    aHelpText = aLeft;
-    aHelpText += aNormalValText;
-    aHelpText += aRight;
-    aHelpText += aNormalValText;
-    aHelpText += aTop;
-    aHelpText += aNormalValText;
-    aHelpText += aBottom;
-    aHelpText += aNormalValText;
+    aHelpText = aLeft +
+        aNormalValText +
+        aRight +
+        aNormalValText +
+        aTop +
+        aNormalValText +
+        aBottom +
+        aNormalValText;
     m_pNormal->SetQuickHelpText( aHelpText );
 
     SetMetricValue( *m_pWidthHeightField.get(), SWPAGE_WIDE_VALUE1, m_eUnit );
     const OUString aWide1ValText = m_pWidthHeightField->GetText();
     SetMetricValue( *m_pWidthHeightField.get(), SWPAGE_WIDE_VALUE2, m_eUnit );
     const OUString aWide2ValText = m_pWidthHeightField->GetText();
-    aHelpText = aLeft;
-    aHelpText += aWide2ValText;
-    aHelpText += aRight;
-    aHelpText += aWide2ValText;
-    aHelpText += aTop;
-    aHelpText += aWide1ValText;
-    aHelpText += aBottom;
-    aHelpText += aWide1ValText;
+    aHelpText = aLeft +
+        aWide2ValText +
+        aRight +
+        aWide2ValText +
+        aTop +
+        aWide1ValText +
+        aBottom +
+        aWide1ValText;
     m_pWide->SetQuickHelpText( aHelpText );
 
     const OUString aInner = SwResId( STR_MARGIN_TOOLTIP_INNER );
@@ -340,14 +340,14 @@ void PageMarginControl::FillHelpText( const bool bUserCustomValuesAvailable )
 
     SetMetricValue( *m_pWidthHeightField.get(), SWPAGE_WIDE_VALUE3, m_eUnit );
     const OUString aWide3ValText = m_pWidthHeightField->GetText();
-    aHelpText = aInner;
-    aHelpText += aWide3ValText;
-    aHelpText += aOuter;
-    aHelpText += aWide1ValText;
-    aHelpText += aTop;
-    aHelpText += aWide1ValText;
-    aHelpText += aBottom;
-    aHelpText += aWide1ValText;
+    aHelpText = aInner +
+        aWide3ValText +
+        aOuter +
+        aWide1ValText +
+        aTop +
+        aWide1ValText +
+        aBottom +
+        aWide1ValText;
     m_pMirrored->SetQuickHelpText( aHelpText );
 
     if ( bUserCustomValuesAvailable )

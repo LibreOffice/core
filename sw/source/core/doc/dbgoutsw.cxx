@@ -395,13 +395,12 @@ const char * dbg_out(const SwRect & rRect)
 
 static OUString lcl_dbg_out(const SwFrameFormat & rFrameFormat)
 {
-    OUString aResult("[ ");
-
     char sBuffer[256];
     sprintf(sBuffer, "%p", &rFrameFormat);
 
-    aResult += OUString(sBuffer, strlen(sBuffer), RTL_TEXTENCODING_ASCII_US);
-    aResult += "(";
+    OUString aResult = "[ " +
+        OUString(sBuffer, strlen(sBuffer), RTL_TEXTENCODING_ASCII_US) +
+        "(";
     aResult += rFrameFormat.GetName();
     aResult += ")";
 
@@ -497,28 +496,22 @@ static OUString lcl_dbg_out_NumType(sal_Int16 nType)
 
 static OUString lcl_dbg_out(const SwNode & rNode)
 {
-    OUString aTmpStr;
-
-    aTmpStr += "<node ";
-    aTmpStr += "index=\"";
-    aTmpStr += OUString::number(rNode.GetIndex());
-    aTmpStr += "\"";
-
-    aTmpStr += " serial=\"";
-    aTmpStr += OUString::number(rNode.GetSerial());
-    aTmpStr += "\"";
-
-    aTmpStr += " type=\"";
-    aTmpStr += OUString::number(sal_Int32( rNode.GetNodeType() ) );
-    aTmpStr += "\"";
-
-    aTmpStr += " pointer=\"";
-
     char aBuffer[128];
     sprintf(aBuffer, "%p", &rNode);
-    aTmpStr += OUString(aBuffer, strlen(aBuffer), RTL_TEXTENCODING_ASCII_US);
 
-    aTmpStr += "\">";
+    OUString aTmpStr = "<node "
+        "index=\"" +
+        OUString::number(rNode.GetIndex()) +
+        "\""
+        " serial=\"" +
+        OUString::number(rNode.GetSerial()) +
+        "\""
+        " type=\"" +
+        OUString::number(sal_Int32( rNode.GetNodeType() ) ) +
+        "\""
+        " pointer=\"" +
+        OUString(aBuffer, strlen(aBuffer), RTL_TEXTENCODING_ASCII_US) +
+        "\">";
 
     const SwTextNode * pTextNode = rNode.GetTextNode();
 
@@ -548,8 +541,8 @@ static OUString lcl_dbg_out(const SwNode & rNode)
             }
             aTmpStr += "</number>";
 
-            aTmpStr += "<rule>";
-            aTmpStr += pNumRule->GetName();
+            aTmpStr += "<rule>" +
+                pNumRule->GetName();
 
             const SfxPoolItem * pItem = nullptr;
 
@@ -559,8 +552,7 @@ static OUString lcl_dbg_out(const SwNode & rNode)
                 aTmpStr += "(";
                 aTmpStr +=
                     static_cast<const SwNumRuleItem *>(pItem)->GetValue();
-                aTmpStr += ")";
-                aTmpStr += "*";
+                aTmpStr += ")*";
             }
 
             const SwNumFormat * pNumFormat = nullptr;
@@ -606,11 +598,10 @@ static OUString lcl_dbg_out(const SwNode & rNode)
 
             if (!sNumruleName.isEmpty())
             {
-                aTmpStr += ", ";
-                aTmpStr += sNumruleName;
+                aTmpStr += ", " + sNumruleName;
             }
-            aTmpStr += ")";
-            aTmpStr += "</coll>";
+            aTmpStr += ")"
+                "</coll>";
         }
 
         SwFormatColl * pCColl = pTextNode->GetCondFormatColl();
