@@ -134,7 +134,7 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
         mPalette = src.mPalette;
         mBitCount = src.mBitCount;
         mSize = src.mSize;
-        if (mBuffer != nullptr)
+        if (src.mBuffer != nullptr)
         {
             sal_uInt32 allocate = src.mScanlineSize * src.mSize.Height();
 #ifdef DBG_UTIL
