@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_ba562d06",
+        "filename": "cui/uiconfig/ui/lineendstabpage.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-10-01T10:01:49Z",
+      "side": 0,
+      "message": "Are those changes intentionally and if so why? Bottom line: please keep patches as plain as possible.",
+      "revId": "a1573b2e2fda77b7b7d605fe36f5a28f86a3e91b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
