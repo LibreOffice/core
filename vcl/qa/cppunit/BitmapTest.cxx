@@ -384,9 +384,6 @@ void BitmapTest::testConvert()
             CPPUNIT_ASSERT_EQUAL(sal_uInt32(30), pReadAccess->GetScanlineSize());
         else
 #endif
-            if (SkiaHelper::isVCLSkiaEnabled())
-            CPPUNIT_ASSERT_EQUAL(sal_uInt32(40), pReadAccess->GetScanlineSize());
-        else
             CPPUNIT_ASSERT_EQUAL(sal_uInt32(32), pReadAccess->GetScanlineSize());
 #else
 #if defined(_WIN32)
