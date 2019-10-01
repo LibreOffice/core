@@ -24,12 +24,6 @@ void X11SkiaSalGraphicsImpl::Init()
     SkiaSalGraphicsImpl::Init();
 }
 
-void X11SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics)
-{
-    (void)rPosAry;
-    (void)pSrcGraphics;
-}
-
 void X11SkiaSalGraphicsImpl::FillPixmapFromScreen(X11Pixmap* pPixmap, int nX, int nY)
 {
     (void)pPixmap;

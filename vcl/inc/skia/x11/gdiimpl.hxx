@@ -26,15 +26,11 @@ public:
     virtual ~X11SkiaSalGraphicsImpl() override;
 
 public:
-    // implementation of X11GraphicsImpl
-
-    virtual void copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics) override;
-
     virtual void Init() override;
 
+    // implementation of X11GraphicsImpl
     void FillPixmapFromScreen(X11Pixmap* pPixmap, int nX, int nY) override;
     bool RenderPixmapToScreen(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY) override;
-
     bool RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY,
                                      ControlCacheKey& aControlCacheKey) override;
     bool TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY) override;
