@@ -63,13 +63,22 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
 
         for (sal_Int32 i = 0; i < sal_Int32(SAL_N_ELEMENTS(productTypes)); ++i)
         {
-            OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
+            sal_Int32 nProfileCount = xMozillaBootstrap->getProfileCount(productTypes[i]);
+            if (nProfileCount <= 0)
+                continue;
+            OUString sDefaultProfile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
+            uno::Sequence<OUString> aProfileList(nProfileCount);
+#ifndef NDEBUG
+            sal_Int32 nListLen =
+#endif
+                 xMozillaBootstrap->getProfileList(productTypes[i], aProfileList);
+            assert((nProfileCount == nListLen) && (nListLen == aProfileList.getLength()));
 
-            if (!profile.isEmpty())
+            for (const auto& sProfileName : std::as_const(aProfileList))
             {
-                OUString sEntry = OUString::createFromAscii(productNames[i]) + ":" + profile;
-                OUString sProfilePath = xMozillaBootstrap->getProfilePath( productTypes[i], profile );
-                AddCertPath(sEntry, sProfilePath);
+                OUString sEntry = OUString::createFromAscii(productNames[i]) + ":" + sProfileName;
+                OUString sProfilePath = xMozillaBootstrap->getProfilePath(productTypes[i], sProfileName);
+                AddCertPath(sEntry, sProfilePath, sProfileName == sDefaultProfile);
             }
         }
     }
@@ -148,11 +157,11 @@ IMPL_LINK(CertPathDialog, CheckHdl_Impl, const row_col&, rRowCol, void)
 
 void CertPathDialog::HandleEntryChecked(int nRow)
 {
-    m_xCertPathList->select(nRow);
     const bool bChecked = m_xCertPathList->get_toggle(nRow, 0) == TRISTATE_TRUE;
     if (bChecked)
     {
         // we have radio button behavior -> so uncheck the other entries
+        m_xCertPathList->select(nRow);
         const int nCount = m_xCertPathList->n_children();
         for (int i = 0; i < nCount; ++i)
         {
@@ -162,7 +171,7 @@ void CertPathDialog::HandleEntryChecked(int nRow)
     }
 }
 
-void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath)
+void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath, const bool bSelect)
 {
     for (int i = 0, nCount = m_xCertPathList->n_children(); i < nCount; ++i)
     {
@@ -170,7 +179,8 @@ void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath
         //already exists, just select the original one
         if (sCertPath == rPath)
         {
-            m_xCertPathList->set_toggle(i, TRISTATE_TRUE, 0);
+            const bool bWantSelected = bSelect || m_xCertPathList->get_toggle(i, 0);
+            m_xCertPathList->set_toggle(i, bWantSelected ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
             HandleEntryChecked(i);
             return;
         }
@@ -178,7 +188,7 @@ void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath
 
     m_xCertPathList->append();
     const int nRow = m_xCertPathList->n_children() - 1;
-    m_xCertPathList->set_toggle(nRow, TRISTATE_TRUE, 0);
+    m_xCertPathList->set_toggle(nRow, bSelect ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
     m_xCertPathList->set_text(nRow, rProfile, 1);
     m_xCertPathList->set_text(nRow, rPath, 2);
     m_xCertPathList->set_id(nRow, rPath);
