@@ -526,8 +526,7 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 nPos,
     EndRun(&rNode, nPos);
     m_rExport.OutputField(nullptr, ww::eEQ, aStr, FieldFlags::Start | FieldFlags::CmdStart);
     aStr = rRuby.GetText();
-    aStr += ")";
-    aStr += ",";
+    aStr += "),";
     m_rExport.OutputField(nullptr, ww::eEQ, aStr, FieldFlags::NONE);
 }
 

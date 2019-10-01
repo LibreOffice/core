@@ -599,16 +599,15 @@ static void lcl_FormatPostIt(
     }
 
     OUString aStr( SwViewShell::GetShellRes()->aPostItPage );
-    aStr += sTmp;
-
-    aStr += OUString::number( nPageNo );
-    aStr += " ";
+    aStr += sTmp +
+        OUString::number( nPageNo ) +
+        " ";
     if( nLineNo )
     {
         aStr += SwViewShell::GetShellRes()->aPostItLine;
-        aStr += sTmp;
-        aStr += OUString::number( nLineNo );
-        aStr += " ";
+        aStr += sTmp +
+            OUString::number( nLineNo ) +
+            " ";
     }
     aStr += SwViewShell::GetShellRes()->aPostItAuthor;
     aStr += sTmp;

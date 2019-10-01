@@ -411,15 +411,15 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFormatFootnote& rFormatFootnote,
     if( rFormatFootnote.IsEndNote() )
     {
         sClass = OOO_STRING_SVTOOLS_HTML_sdendnote_sym;
-        sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdendnote;
-        sFootnoteName += OUString::number(static_cast<sal_Int32>(m_nEndNote));
+        sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdendnote +
+            OUString::number(static_cast<sal_Int32>(m_nEndNote));
         pInfo = &m_pDoc->GetEndNoteInfo();
     }
     else
     {
         sClass = OOO_STRING_SVTOOLS_HTML_sdfootnote_sym;
-        sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdfootnote;
-        sFootnoteName += OUString::number(static_cast<sal_Int32>(m_nFootNote));
+        sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdfootnote +
+            OUString::number(static_cast<sal_Int32>(m_nFootNote));
         pInfo = &m_pDoc->GetFootnoteInfo();
     }
 

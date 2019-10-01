@@ -143,10 +143,7 @@ SwLabelConfig::SwLabelConfig() :
         const Sequence<OUString> aLabels = GetNodeNames( rManufacturer );
         for( const OUString& rLabel : aLabels )
         {
-            OUString sPrefix( rManufacturer );
-            sPrefix += "/";
-            sPrefix += rLabel;
-            sPrefix += "/";
+            OUString sPrefix = rManufacturer + "/" + rLabel + "/";
             Sequence<OUString> aPropNames = lcl_CreatePropertyNames( sPrefix );
             Sequence<Any>   aValues = GetProperties( aPropNames );
             const Any* pValues = aValues.getConstArray();
@@ -293,8 +290,7 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
         const Sequence<OUString> aLabels = GetNodeNames( rManufacturer );
         sal_Int32 nIndex = aLabels.getLength();
         OUString sPrefix( "Label" );
-        sFoundNode = sPrefix;
-        sFoundNode += OUString::number( nIndex );
+        sFoundNode = sPrefix + OUString::number( nIndex );
         while ( comphelper::findValue(aLabels, sFoundNode) != -1 )
         {
             sFoundNode = sPrefix + OUString::number(nIndex++);
@@ -307,10 +303,7 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
         const Sequence<OUString> aLabels = GetNodeNames( sManufacturer );
         for (const OUString& rLabel : aLabels)
         {
-            OUString sPrefix( sManufacturer );
-            sPrefix += "/";
-            sPrefix += rLabel;
-            sPrefix += "/";
+            OUString sPrefix = sManufacturer + "/" + rLabel + "/";
             Sequence<OUString> aProperties { sPrefix };
             aProperties.getArray()[0] += "Name";
             Sequence<Any> aValues = GetProperties( aProperties );
@@ -329,9 +322,7 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
     }
 
     OUString sPrefix( wrapConfigurationElementName( rManufacturer ) );
-    sPrefix += "/";
-    sPrefix += sFoundNode;
-    sPrefix += "/";
+    sPrefix += "/" + sFoundNode + "/";
     Sequence<OUString> aPropNames = lcl_CreatePropertyNames( sPrefix );
     OUString sMeasure;
     Sequence<PropertyValue> aPropValues = lcl_CreateProperties( aPropNames, sMeasure, rRec );

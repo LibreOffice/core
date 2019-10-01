@@ -228,10 +228,8 @@ void SwWrtShell::Insert( const OUString &rStr )
         aRewriter.AddRule(UndoArg1, GetCursorDescr());
         aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
         {
-            OUString aTmpStr;
-            aTmpStr += SwResId(STR_START_QUOTE);
-            aTmpStr += rStr;
-            aTmpStr += SwResId(STR_END_QUOTE);
+            OUString aTmpStr = SwResId(STR_START_QUOTE) +
+                rStr + SwResId(STR_END_QUOTE);
 
             aRewriter.AddRule(UndoArg3, aTmpStr);
         }
@@ -414,8 +412,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                 {
                     SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
                     const SfxSlot* pSlot = pSlotPool->GetSlot(nSlotId);
-                    OString aCmd(".uno:");
-                    aCmd += pSlot->GetUnoName();
+                    OString aCmd = OStringLiteral(".uno:") + pSlot->GetUnoName();
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     vcl::Window* pWin = GetWin();
                     ScopedVclPtr<SfxAbstractInsertObjectDialog> pDlg(pFact->CreateInsertObjectDialog(pWin ? pWin->GetFrameWeld() : nullptr,
@@ -1647,12 +1644,10 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
                 // is already clipped to the editshell
             StartAllAction();
 
-            OUString aTmpStr1;
-            aTmpStr1 += SwResId(STR_START_QUOTE);
+            OUString aTmpStr1 = SwResId(STR_START_QUOTE);
             aTmpStr1 += GetSelText();
             aTmpStr1 += SwResId(STR_END_QUOTE);
-            OUString aTmpStr3;
-            aTmpStr3 += SwResId(STR_START_QUOTE);
+            OUString aTmpStr3 = SwResId(STR_START_QUOTE);
             aTmpStr3 += OUStringLiteral1(cChar);
             aTmpStr3 += SwResId(STR_END_QUOTE);
             aRewriter.AddRule( UndoArg1, aTmpStr1 );

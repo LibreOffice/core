@@ -265,8 +265,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl, weld::Button&, void)
 {
-    OUString aMessage = m_aStrDelMsg;
-    aMessage += "\n\n";
+    OUString aMessage = m_aStrDelMsg + "\n\n";
     aMessage += m_xLbFormat->get_selected_text();
     aMessage += "\n";
 

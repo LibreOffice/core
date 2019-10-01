@@ -1235,8 +1235,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                         sEntry = aMgr.GetFormatStr( pField->GetTypeId(), pField->GetFormat() );
                         if (sEntry.getLength() > 0)
                         {
-                            strTypeName += "-";
-                            strTypeName += sEntry;
+                            strTypeName += "-" + sEntry;
                         }
                     }
                 }
@@ -1253,8 +1252,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                         sEntry = aMgr.GetFormatStr(pField->GetTypeId(), nFormat);
                         if (sEntry.getLength() > 0)
                         {
-                            strTypeName += "-";
-                            strTypeName += sEntry;
+                            strTypeName += "-" + sEntry;
                         }
                     }
                 }
@@ -1268,8 +1266,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                     sEntry = pField->GetTyp()->GetName();
                     if (sEntry.getLength() > 0)
                     {
-                        strTypeName += "-";
-                        strTypeName += sEntry;
+                        strTypeName += "-" + sEntry;
                     }
                 }
                 break;
@@ -1319,8 +1316,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                     }
                     else
                     {
-                        strTypeName += "-";
-                        strTypeName += sEntry;
+                        strTypeName += "-" + sEntry;
                     }
                 }
             }

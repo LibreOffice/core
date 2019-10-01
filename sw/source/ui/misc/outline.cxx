@@ -739,8 +739,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
                                     static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i), OUString()));
         m_xLevelLB->append_text( OUString::number(i + 1) );
     }
-    OUString sStr("1 - ");
-    sStr += OUString::number(MAXLEVEL);
+    OUString sStr = "1 - " + OUString::number(MAXLEVEL);
     m_xLevelLB->append_text(sStr);
 
     // query the texttemplates' outlining levels

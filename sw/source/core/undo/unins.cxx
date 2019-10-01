@@ -541,8 +541,7 @@ MakeUndoReplaceRewriter(sal_uLong const occurrences,
         aResult.AddRule(UndoArg1, OUString::number(occurrences));
         aResult.AddRule(UndoArg2, SwResId(STR_OCCURRENCES_OF));
 
-        OUString aTmpStr;
-        aTmpStr += SwResId(STR_START_QUOTE);
+        OUString aTmpStr = SwResId(STR_START_QUOTE);
         aTmpStr += ShortenString(sOld, nUndoStringLength,
                                  SwResId(STR_LDOTS));
         aTmpStr += SwResId(STR_END_QUOTE);
@@ -551,9 +550,7 @@ MakeUndoReplaceRewriter(sal_uLong const occurrences,
     else if (1 == occurrences)
     {
         {
-            OUString aTmpStr;
-
-            aTmpStr += SwResId(STR_START_QUOTE);
+            OUString aTmpStr = SwResId(STR_START_QUOTE);
             // #i33488 #
             aTmpStr += ShortenString(sOld, nUndoStringLength,
                                      SwResId(STR_LDOTS));
@@ -564,9 +561,7 @@ MakeUndoReplaceRewriter(sal_uLong const occurrences,
         aResult.AddRule(UndoArg2, SwResId(STR_YIELDS));
 
         {
-            OUString aTmpStr;
-
-            aTmpStr += SwResId(STR_START_QUOTE);
+            OUString aTmpStr = SwResId(STR_START_QUOTE);
             // #i33488 #
             aTmpStr += ShortenString(sNew, nUndoStringLength,
                                      SwResId(STR_LDOTS));

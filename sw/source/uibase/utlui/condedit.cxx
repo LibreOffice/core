@@ -65,12 +65,10 @@ sal_Int8 ConditionEditDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
             if (bBrackets)
                 sDBName += "[";
             OUString sTmp = aColDesc.getDataSource();
-            sDBName += sTmp;
-            sDBName += ".";
+            sDBName += sTmp + ".";
 
             aColDesc[DataAccessDescriptorProperty::Command] >>= sTmp;
-            sDBName += sTmp;
-            sDBName += ".";
+            sDBName += sTmp + ".";
 
             aColDesc[DataAccessDescriptorProperty::ColumnName] >>= sTmp;
             sDBName += sTmp;

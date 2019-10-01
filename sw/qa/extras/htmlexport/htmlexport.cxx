@@ -357,11 +357,10 @@ DECLARE_HTMLEXPORT_TEST(testReqIfParagraph, "reqif-p.xhtml")
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
 
-    OString aExpected("<reqif-xhtml:div><reqif-xhtml:p>aaa<reqif-xhtml:br/>\nbbb"
-                      "</reqif-xhtml:p>" SAL_NEWLINE_STRING);
-
+    OString aExpected = "<reqif-xhtml:div><reqif-xhtml:p>aaa<reqif-xhtml:br/>\nbbb"
+                      "</reqif-xhtml:p>" SAL_NEWLINE_STRING
     // This was '<table' instead.
-    aExpected += "<reqif-xhtml:table";
+        "<reqif-xhtml:table";
 
     OString aStream(read_uInt8s_ToOString(*pStream, nLength));
     pStream->Seek(0);

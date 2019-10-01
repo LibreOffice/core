@@ -125,8 +125,7 @@ SwNumPositionTabPage::SwNumPositionTabPage(weld::Container* pPage, weld::DialogC
     // insert levels
     for(sal_uInt16 i = 1; i <= MAXLEVEL; i++)
         m_xLevelLB->append_text(OUString::number(i));
-    OUString sEntry("1 - ");
-    sEntry += OUString::number(MAXLEVEL);
+    OUString sEntry = "1 - " + OUString::number(MAXLEVEL);
     m_xLevelLB->append_text(sEntry);
     m_xLevelLB->select_text(sEntry);
 

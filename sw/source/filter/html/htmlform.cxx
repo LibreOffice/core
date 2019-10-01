@@ -799,8 +799,7 @@ static bool lcl_html_setEvents(
 
         if(!rUnoMacroParamTable.empty())
         {
-            OUString sSearch( sListener );
-            sSearch += "-" +sMethod + "-";
+            OUString sSearch = sListener + "-" +sMethod + "-";
             sal_Int32 nLen = sSearch.getLength();
             for(const auto & rParam : rUnoMacroParamTable)
             {

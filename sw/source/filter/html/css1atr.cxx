@@ -1297,8 +1297,7 @@ static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const OUString& rSelector,
                                        RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT>{} );
             aScriptItemSet.Put( rItemSet );
 
-            OUString aNewSelector( aSelector );
-            aNewSelector += ".western" + aPseudo;
+            OUString aNewSelector = aSelector + ".western" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                                      &aNewSelector );
@@ -1324,8 +1323,7 @@ static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const OUString& rSelector,
             // If there are script dependencies and we are derived from a tag,
             // when we have to export a style dependent class for all
             // scripts
-            OUString aNewSelector( aSelector );
-            aNewSelector += "-western" + aPseudo;
+            OUString aNewSelector = aSelector + "-western" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                                      &aNewSelector );
@@ -1400,8 +1398,7 @@ static void OutCSS1DropCapRule(
             if( pDCCharFormat )
                 aScriptItemSet.Set( pDCCharFormat->GetAttrSet() );
 
-            OUString aNewSelector( aSelector );
-            aNewSelector += ".western" + aPseudo;
+            OUString aNewSelector = aSelector + ".western" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
                                      &aNewSelector );
@@ -1427,8 +1424,7 @@ static void OutCSS1DropCapRule(
             // If there are script dependencies and we are derived from a tag,
             // when we have to export a style dependent class for all
             // scripts
-            OUString aNewSelector( aSelector );
-            aNewSelector += "-western" + aPseudo;
+            OUString aNewSelector = aSelector + "-western" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
                                      &aNewSelector );
@@ -1624,8 +1620,8 @@ static Writer& OutCSS1_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     const SfxPoolItem *pItem;
     if( SfxItemState::SET==aItemSet.GetItemState( RES_PARATR_DROP, false, &pItem ))
     {
-        OUString sOut( aSelector );
-        sOut += ":" + OStringToOUString( sCSS1_first_letter, RTL_TEXTENCODING_ASCII_US );
+        OUString sOut = aSelector +
+            ":" + OStringToOUString( sCSS1_first_letter, RTL_TEXTENCODING_ASCII_US );
         const SwFormatDrop *pDrop = static_cast<const SwFormatDrop *>(pItem);
         OutCSS1DropCapRule( rHTMLWrt, sOut, *pDrop, CSS1_FMT_ISTAG != nDeep, bHasScriptDependencies );
     }

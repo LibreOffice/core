@@ -198,8 +198,8 @@ ErrCode SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const OUString& rNewShort, con
         if (IsOnlyTextBlock ( nIdx ) )
         {
             OUString sExt(".xml");
-            OUString aOldStreamName( aOldName ); aOldStreamName += sExt;
-            OUString aNewStreamName( aPackageName ); aNewStreamName += sExt;
+            OUString aOldStreamName = aOldName  + sExt;
+            OUString aNewStreamName = aPackageName + sExt;
 
             xRoot = xBlkRoot->openStorageElement( aOldName, embed::ElementModes::READWRITE );
             try

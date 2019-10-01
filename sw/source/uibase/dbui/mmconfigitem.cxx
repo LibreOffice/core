@@ -299,10 +299,10 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         sal_Int32 nAssign;
         for(nAssign = 0; nAssign < aAssignProperties.getLength(); nAssign += 4)
         {
-            OUString sAssignPath = cAddressDataAssignments;
-            sAssignPath += "/";
-            sAssignPath += pAssignments[nAssign / 4];
-            sAssignPath += "/";
+            OUString sAssignPath = OUStringLiteral(cAddressDataAssignments) +
+                "/" +
+                pAssignments[nAssign / 4] +
+                "/";
             pAssignProperties[nAssign] = sAssignPath;
             pAssignProperties[nAssign] += cDataSourceName;
             pAssignProperties[nAssign + 1] = sAssignPath;
@@ -552,10 +552,7 @@ void  SwMailMergeConfigItem_Impl::ImplCommit()
                         rAssignment.sConfigNodeName :
                         lcl_CreateNodeName(aAssignments);
             OUString sSlash = "/";
-            OUString sNodePath = cAddressDataAssignments;
-            sNodePath += sSlash;
-            sNodePath += sNewNode;
-            sNodePath += sSlash;
+            OUString sNodePath = cAddressDataAssignments + sSlash + sNewNode + sSlash;
             //only one new entry is written
             Sequence< PropertyValue > aNewValues(4);
             PropertyValue* pNewValues = aNewValues.getArray();
@@ -1243,8 +1240,7 @@ bool SwMailMergeConfigItem::IsGreetingFieldsAssigned() const
     if(rMaleEntries.getLength() > nCurrentMale)
         sMale = rMaleEntries[nCurrentMale];
 
-    OUString sAddress( sFemale );
-    sAddress += sMale;
+    OUString sAddress = sFemale + sMale;
     SwAddressIterator aIter(sAddress);
     while(aIter.HasMore())
     {

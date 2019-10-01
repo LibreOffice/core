@@ -312,9 +312,7 @@ SwRewriter SwUndoOverwrite::GetRewriter() const
 {
     SwRewriter aResult;
 
-    OUString aString;
-
-    aString += SwResId(STR_START_QUOTE);
+    OUString aString = SwResId(STR_START_QUOTE);
     aString += ShortenString(aInsStr, nUndoStringLength,
                              SwResId(STR_LDOTS));
     aString += SwResId(STR_END_QUOTE);
