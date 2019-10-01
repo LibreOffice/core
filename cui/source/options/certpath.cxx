@@ -23,14 +23,13 @@ using namespace ::com::sun::star;
 
 CertPathDialog::CertPathDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/certdialog.ui", "CertDialog")
-    , m_xAddBtn(m_xBuilder->weld_button("add"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    , m_xManualButton(m_xBuilder->weld_button("add"))
+    , m_xOKButton(m_xBuilder->weld_button("ok"))
     , m_xCertPathList(m_xBuilder->weld_tree_view("paths"))
-    , m_xAddDialogLabel(m_xBuilder->weld_label("certdir"))
-    , m_xManualLabel(m_xBuilder->weld_label("manual"))
 {
-    m_sAddDialogText = m_xAddDialogLabel->get_label();
-    m_sManual = m_xManualLabel->get_label();
+    // these are just used to get translated strings
+    m_sAddDialogText = m_xBuilder->weld_label("certdir")->get_label();
+    m_sManualLabel = m_xBuilder->weld_label("manual")->get_label();
 
     m_xCertPathList->set_size_request(m_xCertPathList->get_approximate_digit_width() * 70,
                                       m_xCertPathList->get_height_rows(6));
@@ -45,11 +44,12 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
     m_xCertPathList->set_toggle_columns_as_radio(aRadioColumns);
 
     m_xCertPathList->connect_toggled(LINK(this, CertPathDialog, CheckHdl_Impl));
-    m_xAddBtn->connect_clicked( LINK( this, CertPathDialog, AddHdl_Impl ) );
-    m_xOKBtn->connect_clicked( LINK( this, CertPathDialog, OKHdl_Impl ) );
+    m_xManualButton->connect_clicked( LINK( this, CertPathDialog, ManualHdl_Impl ) );
+    m_xOKButton->connect_clicked( LINK( this, CertPathDialog, OKHdl_Impl ) );
 
     try
     {
+        // In the reverse order of preference for the default selected profile
         mozilla::MozillaProductType const productTypes[3] = {
             mozilla::MozillaProductType_Thunderbird,
             mozilla::MozillaProductType_Firefox,
@@ -101,7 +101,7 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
                 if ( result == ::osl::FileBase::E_None  )
                 {
                     // the cert path exists
-                    AddCertPath(m_sManual, sUserSetCertPath);
+                    AddCertPath(m_sManualLabel, sUserSetCertPath);
                 }
             }
         }
@@ -160,11 +160,11 @@ IMPL_LINK(CertPathDialog, CheckHdl_Impl, const row_col&, rRowCol, void)
 void CertPathDialog::HandleEntryChecked(int nRow)
 {
     m_xCertPathList->select(nRow);
-    bool bChecked = m_xCertPathList->get_toggle(nRow, 0) == TRISTATE_TRUE;
+    const bool bChecked = m_xCertPathList->get_toggle(nRow, 0) == TRISTATE_TRUE;
     if (bChecked)
     {
         // we have radio button behavior -> so uncheck the other entries
-        int nCount = m_xCertPathList->n_children();
+        const int nCount = m_xCertPathList->n_children();
         for (int i = 0; i < nCount; ++i)
         {
             if (i != nRow)
@@ -196,7 +196,7 @@ void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath
     HandleEntryChecked(nRow);
 }
 
-IMPL_LINK_NOARG(CertPathDialog, AddHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(CertPathDialog, ManualHdl_Impl, weld::Button&, void)
 {
     try
     {
@@ -212,7 +212,7 @@ IMPL_LINK_NOARG(CertPathDialog, AddHdl_Impl, weld::Button&, void)
             sURL = xFolderPicker->getDirectory();
             OUString aPath;
             if (osl::FileBase::E_None == osl::FileBase::getSystemPathFromFileURL(sURL, aPath))
-                AddCertPath(m_sManual, aPath);
+                AddCertPath(m_sManualLabel, aPath);
         }
     }
     catch (const uno::Exception &)
