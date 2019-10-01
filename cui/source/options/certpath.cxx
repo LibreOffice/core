@@ -88,27 +88,9 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
 
     try
     {
-        OUString sUserSetCertPath =
-            officecfg::Office::Common::Security::Scripting::CertDir::get().get_value_or(OUString());
-
-        if (!sUserSetCertPath.isEmpty())
-        {
-            // check existence
-            ::osl::DirectoryItem aUserPathItem;
-            OUString sUserSetCertURLPath;
-            osl::FileBase::getFileURLFromSystemPath(sUserSetCertPath, sUserSetCertURLPath);
-            ::osl::FileBase::RC result = ::osl::DirectoryItem::get( sUserSetCertURLPath, aUserPathItem );
-            if ( result == ::osl::FileBase::E_None  )
-            {
-                ::osl::FileStatus aStatus( osl_FileStatus_Mask_Validate );
-                result = aUserPathItem.getFileStatus( aStatus );
-                if ( result == ::osl::FileBase::E_None  )
-                {
-                    // the cert path exists
-                    AddCertPath(m_sManualLabel, sUserSetCertPath);
-                }
-            }
-        }
+        AddManualCertPath(officecfg::Office::Common::Security::Scripting::CertDir::get().get_value_or(OUString()));
+        if (m_sManualPath.isEmpty())
+            AddManualCertPath(officecfg::Office::Common::Security::Scripting::ManualCertDir::get(), false);
     }
     catch (const uno::Exception &)
     {
@@ -120,6 +102,24 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
         AddCertPath("$MOZILLA_CERTIFICATE_FOLDER", OUString(pEnv, strlen(pEnv), osl_getThreadTextEncoding()));
 }
 
+void CertPathDialog::AddManualCertPath(const OUString& sUserSetCertPath, bool bSelect)
+{
+    if (sUserSetCertPath.isEmpty())
+        return;
+
+    // check existence
+    ::osl::DirectoryItem aUserPathItem;
+    OUString sUserSetCertURLPath;
+    osl::FileBase::getFileURLFromSystemPath(sUserSetCertPath, sUserSetCertURLPath);
+    if (::osl::FileBase::E_None == ::osl::DirectoryItem::get(sUserSetCertURLPath, aUserPathItem))
+    {
+        ::osl::FileStatus aStatus( osl_FileStatus_Mask_Validate );
+        if (::osl::FileBase::E_None == aUserPathItem.getFileStatus(aStatus))
+            // the cert path exists
+            AddCertPath(m_sManualLabel, sUserSetCertPath, bSelect);
+    }
+}
+
 IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl, weld::Button&, void)
 {
     try
@@ -128,6 +128,7 @@ IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl, weld::Button&, void)
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Security::Scripting::CertDir::set(
             getDirectory(), batch);
+        officecfg::Office::Common::Security::Scripting::ManualCertDir::set(m_sManualPath, batch);
         batch->commit();
     }
     catch (const uno::Exception &)
@@ -173,6 +174,7 @@ void CertPathDialog::HandleEntryChecked(int nRow)
 
 void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath, const bool bSelect)
 {
+    int nRow = -1;
     for (int i = 0, nCount = m_xCertPathList->n_children(); i < nCount; ++i)
     {
         OUString sCertPath = m_xCertPathList->get_id(i);
@@ -184,10 +186,18 @@ void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath
             HandleEntryChecked(i);
             return;
         }
+        else if (m_xCertPathList->get_text(i, 1) == rProfile)
+            nRow = i;
     }
 
-    m_xCertPathList->append();
-    const int nRow = m_xCertPathList->n_children() - 1;
+    if (m_sManualLabel == rProfile)
+        m_sManualPath = rPath;
+
+    if (nRow < 0)
+    {
+        m_xCertPathList->append();
+        nRow = m_xCertPathList->n_children() - 1;
+    }
     m_xCertPathList->set_toggle(nRow, bSelect ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
     m_xCertPathList->set_text(nRow, rProfile, 1);
     m_xCertPathList->set_text(nRow, rPath, 2);
@@ -202,7 +212,10 @@ IMPL_LINK_NOARG(CertPathDialog, ManualHdl_Impl, weld::Button&, void)
         uno::Reference<ui::dialogs::XFolderPicker2> xFolderPicker = ui::dialogs::FolderPicker::create(comphelper::getProcessComponentContext());
 
         OUString sURL;
-        osl::Security().getHomeDir(sURL);
+        if (!m_sManualPath.isEmpty())
+            osl::FileBase::getFileURLFromSystemPath(m_sManualPath, sURL);
+        if (sURL.isEmpty())
+            osl::Security().getHomeDir(sURL);
         xFolderPicker->setDisplayDirectory(sURL);
         xFolderPicker->setDescription(m_sAddDialogText);
 
