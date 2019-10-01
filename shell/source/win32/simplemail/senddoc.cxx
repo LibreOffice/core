@@ -162,10 +162,10 @@ static void initMapiMessage(
     pMapiMessage->lpszSubject = const_cast<wchar_t*>(gSubject.c_str());
     pMapiMessage->lpszNoteText = (gBody.length() ? const_cast<wchar_t*>(gBody.c_str()) : nullptr);
     pMapiMessage->lpOriginator = aMapiOriginator;
-    pMapiMessage->lpRecips = aMapiRecipientList.size() ? &aMapiRecipientList[0] : nullptr;
+    pMapiMessage->lpRecips = aMapiRecipientList.size() ? aMapiRecipientList.data() : nullptr;
     pMapiMessage->nRecipCount = aMapiRecipientList.size();
     if (!aMapiAttachmentList.empty())
-        pMapiMessage->lpFiles = &aMapiAttachmentList[0];
+        pMapiMessage->lpFiles = aMapiAttachmentList.data();
     pMapiMessage->nFileCount = aMapiAttachmentList.size();
 }
 

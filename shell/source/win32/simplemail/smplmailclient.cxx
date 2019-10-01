@@ -136,7 +136,7 @@ namespace /* private */
         an array of pointers to rtl_uString's */
         oslProcessError err = osl_executeProcess(
             senddocUrl.pData,
-            const_cast<rtl_uString**>(reinterpret_cast<rtl_uString * const *>(&rCommandArgs[0])),
+            const_cast<rtl_uString**>(reinterpret_cast<rtl_uString * const *>(rCommandArgs.data())),
             rCommandArgs.size(),
             nProcOption,
             nullptr,

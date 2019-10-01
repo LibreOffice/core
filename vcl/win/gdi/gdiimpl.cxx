@@ -1137,7 +1137,7 @@ bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
 
             if(nTargetCount)
             {
-                mrParent.mhRegion = CreatePolyPolygonRgn( &aPolyPoints[0], &aPolyCounts[0], nTargetCount, ALTERNATE );
+                mrParent.mhRegion = CreatePolyPolygonRgn( aPolyPoints.data(), aPolyCounts.data(), nTargetCount, ALTERNATE );
             }
         }
     }

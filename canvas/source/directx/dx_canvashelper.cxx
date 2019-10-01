@@ -365,7 +365,7 @@ namespace dxcanvas
                     strokeAttributes.DashArray ) );
             if( !rDashArray.empty() )
             {
-                aPen.SetDashPattern( &rDashArray[0],
+                aPen.SetDashPattern( rDashArray.data(),
                                      rDashArray.size() );
             }
             aPen.SetLineCap( gdiCapFromCap(strokeAttributes.StartCapType),

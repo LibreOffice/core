@@ -67,7 +67,7 @@ void CBaseReader::Initialize( const std::string& ContentName)
         {
             xml_parser parser;
             parser.set_document_handler(this);  // pass current reader as reader to the sax parser
-            parser.parse(&m_ZipContent[0], m_ZipContent.size(), true/*IsFinal*/);
+            parser.parse(m_ZipContent.data(), m_ZipContent.size(), true/*IsFinal*/);
         }
     }
     catch(std::exception&)

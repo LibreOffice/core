@@ -193,11 +193,11 @@ static OString convertIncPathtoShortWindowsPath(const OString& incPath) {
     std::vector<sal_Unicode> vec(path.getLength() + 1);
     //GetShortPathNameW only works if the file can be found!
     const DWORD len = GetShortPathNameW(
-        o3tl::toW(path.getStr()), o3tl::toW(&vec[0]), path.getLength() + 1);
+        o3tl::toW(path.getStr()), o3tl::toW(vec.data()), path.getLength() + 1);
 
     if (len > 0)
     {
-        OUString ret(&vec[0], len);
+        OUString ret(vec.data(), len);
         return OUStringToOString(ret, RTL_TEXTENCODING_UTF8);
     }
 
