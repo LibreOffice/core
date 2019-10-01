@@ -96,7 +96,7 @@ char const* setEnvFromLoggingIniFile(const char* env, const char* key)
     char const* sResult = nullptr;
     wchar_t buffer[MAX_PATH];
     GetModuleFileNameW(nullptr, buffer, MAX_PATH);
-    std::wstring sProgramDirectory = std::wstring(buffer);
+    std::wstring sProgramDirectory(buffer);
     std::wstring::size_type pos = sProgramDirectory.find_last_of(L"\\/");
     sProgramDirectory = sProgramDirectory.substr(0, pos+1);
     sProgramDirectory += L"logging.ini";

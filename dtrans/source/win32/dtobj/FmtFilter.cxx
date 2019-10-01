@@ -227,13 +227,13 @@ static std::string GetHtmlFormatHeader(size_t startHtml, size_t endHtml, size_t 
 
 // the case of these tags has to match what we output in our filters
 // both tags don't allow parameters
-const std::string TAG_HTML = std::string("<html>");
-const std::string TAG_END_HTML = std::string("</html>");
+const std::string TAG_HTML("<html>");
+const std::string TAG_END_HTML("</html>");
 
 // The body tag may have parameters so we need to search for the
 // closing '>' manually e.g. <body param> #92840#
-const std::string TAG_BODY = std::string("<body");
-const std::string TAG_END_BODY = std::string("</body");
+const std::string TAG_BODY("<body");
+const std::string TAG_END_BODY("</body");
 
 Sequence<sal_Int8> TextHtmlToHTMLFormat(Sequence<sal_Int8> const & aTextHtml)
 {
