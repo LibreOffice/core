@@ -74,7 +74,6 @@
 #include <vcl/graphicfilter.hxx>
 
 #ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
 #include <prewin.h>
 #include <windows.h>
 #include <postwin.h>
