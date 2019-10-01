@@ -22,15 +22,12 @@
 
 #include <climits>
 #include <cstddef>
-#include <vector>
 
 struct SfxAllEnumValue_Impl
 {
     sal_uInt16 nValue;
     OUString aText;
 };
-
-class SfxAllEnumValueArr : public std::vector<SfxAllEnumValue_Impl> {};
 
 
 SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which, sal_uInt16 nVal):
