@@ -453,8 +453,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126512_OOXML_handle_in_ODP)
             if (aInitialPosition.X == aObservedPosition.X
                 && aInitialPosition.Y == aObservedPosition.Y)
             {
-                sErrors += "\n";
-                sErrors += OUString::number(i) + " " + sShapeType + "  " + OUString::number(j);
+                sErrors
+                    += "\n" + OUString::number(i) + " " + sShapeType + "  " + OUString::number(j);
             }
         }
     }
