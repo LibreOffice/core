@@ -49,10 +49,13 @@ static sal_Int32 lcl_ToHorizAlign( sal_Int32 nAlign )
     switch( nAlign )
     {
         case XML_left:
+        case XML_Left:
             return SDRTEXTHORZADJUST_LEFT;
         case XML_right:
+        case XML_Right:
             return SDRTEXTHORZADJUST_RIGHT;
         case XML_center:
+        case XML_Center:
             return SDRTEXTHORZADJUST_CENTER;
         default:
             return SDRTEXTHORZADJUST_BLOCK;
@@ -164,6 +167,8 @@ void Comment::finalizeImport()
             pNoteShape->convertFormatting( xAnnoShape );
             // visibility
             bVisible = pNoteShape->getTypeModel().mbVisible;
+          
+            aCommentPr.setProperty( PROP_TextHorizontalAdjust, lcl_ToHorizAlign( xClientData->mnTextHAlign ) );
         }
         xAnno->setIsVisible( bVisible );
 
