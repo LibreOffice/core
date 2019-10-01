@@ -19,6 +19,19 @@
    typedef array_iterator<T,T*,mpl::size_t<NumDims>,reference,
                           mutable_iterator_tag> iterator;
 
+# clang-cl cannot use MSVC's ATOMIC_FLAG_INIT:
+--- boost/smart_ptr/detail/spinlock.hpp
++++ boost/smart_ptr/detail/spinlock.hpp
+@@ -43,7 +43,7 @@
+ #elif defined( BOOST_SP_USE_PTHREADS )
+ #  include <boost/smart_ptr/detail/spinlock_pt.hpp>
+ 
+-#elif !defined( BOOST_NO_CXX11_HDR_ATOMIC )
++#elif !defined( BOOST_NO_CXX11_HDR_ATOMIC ) && !(defined __clang__ && defined _MSC_VER && _MSC_VER == 1916)
+ #  include <boost/smart_ptr/detail/spinlock_std_atomic.hpp>
+ 
+ #elif defined(__GNUC__) && defined( __arm__ ) && !defined( __thumb__ )
+
 # workdir/UnpackedTarball/boost/libs/thread/src/win32/thread.cpp(1006,36) :  error: dllimport cannot be applied to non-inline function definition
 #     BOOST_THREAD_DECL void __cdecl on_process_enter()
 #                                    ^
