@@ -334,10 +334,10 @@ bool ImplInitAccessBridge()
                      = css::accessibility::MSAAService::create(xContext);
                  SAL_INFO("vcl", "got IAccessible2 bridge");
                  return true;
-             } catch (css::uno::DeploymentException & e) {
-                 SAL_WARN(
+             } catch (css::uno::DeploymentException &) {
+                 TOOLS_WARN_EXCEPTION(
                     "vcl",
-                    "got no IAccessible2 bridge" << e);
+                    "got no IAccessible2 bridge");
                  return false;
              }
         }
