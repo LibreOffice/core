@@ -210,6 +210,10 @@ public:
                 || name == "aNonThreadedInterpreterPool" // ScInterpreterContext(Pool), not owning
                 || name == "lcl_parserContext" // getParserContext(), the chain from this to a VclPtr is not owning
                 || name == "aReaderWriter" // /home/noel/libo/sw/source/filter/basflt/fltini.cxx, non-owning
+                || name == "aTwain"
+                   // Windows-only extensions/source/scanner/scanwin.cxx, problematic
+                   // Twain::mpThread -> ShimListenerThread::mxTopWindow released via Twain::Reset
+                   // clearing mpThread
                ) // these variables appear unproblematic
             {
                 return true;
