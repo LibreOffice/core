@@ -734,8 +734,7 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
         {
             bShowExt = false;
             sExtension = sExtension.toAsciiUpperCase();
-            sDescription = sExtension;
-            sDescription += "-";
+            sDescription = sExtension + "-";
         }
         sDescription += SvtResId(pResId);
     }
@@ -744,9 +743,7 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
 
     if ( bShowExt )
     {
-        sDescription += " (";
-        sDescription += sExtension;
-        sDescription += ")";
+        sDescription += " (" + sExtension + ")";
     }
 
     return sDescription;
