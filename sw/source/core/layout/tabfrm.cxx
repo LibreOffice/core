@@ -3839,11 +3839,21 @@ long CalcHeightWithFlys( const SwFrame *pFrame )
                     // OD 30.09.2003 #i18732# - only objects, which follow
                     // the text flow have to be considered.
                     const SwFrameFormat& rFrameFormat = pAnchoredObj->GetFrameFormat();
+                    bool bFollowTextFlow = rFrameFormat.GetFollowTextFlow().GetValue();
                     const bool bConsiderObj =
                         (rFrameFormat.GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR) &&
                             pAnchoredObj->GetObjRect().Top() != FAR_AWAY &&
-                            rFrameFormat.GetFollowTextFlow().GetValue() &&
+                            bFollowTextFlow &&
                             pAnchoredObj->GetPageFrame() == pTmp->FindPageFrame();
+                    bool bWrapThrough = rFrameFormat.GetSurround().GetValue() == text::WrapTextMode_THROUGH;
+                    if (pFrame->IsInTab() && bFollowTextFlow && bWrapThrough)
+                    {
+                        // Ignore wrap-through objects when determining the cell height.
+                        // Normally FollowTextFlow requires a resize of the cell, but not in case of
+                        // wrap-through.
+                        continue;
+                    }
+
                     if ( bConsiderObj )
                     {
                         const SwFormatFrameSize &rSz = rFrameFormat.GetFrameSize();
