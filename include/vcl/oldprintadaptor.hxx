@@ -23,6 +23,11 @@
 #include <memory>
 #include <vcl/print.hxx>
 
+namespace weld
+{
+    class Window;
+}
+
 namespace vcl
 {
     struct ImplOldStyleAdaptorData;
@@ -30,7 +35,7 @@ namespace vcl
     {
         std::unique_ptr<ImplOldStyleAdaptorData>  mpData;
     public:
-        OldStylePrintAdaptor(const VclPtr<Printer>&, const VclPtr<vcl::Window>&);
+        OldStylePrintAdaptor(const VclPtr<Printer>&, weld::Window*);
         virtual ~OldStylePrintAdaptor() override;
 
         void StartPage();

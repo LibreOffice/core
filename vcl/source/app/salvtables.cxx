@@ -2020,6 +2020,11 @@ public:
         return m_xNotebook->GetPagePos(m_xNotebook->GetCurPageId());
     }
 
+    virtual OString get_page_ident(int nPage) const override
+    {
+        return m_xNotebook->GetPageName(m_xNotebook->GetPageId(nPage));
+    }
+
     virtual OString get_current_page_ident() const override
     {
         return m_xNotebook->GetPageName(m_xNotebook->GetCurPageId());
@@ -2083,6 +2088,11 @@ public:
         return m_xNotebook->GetPageText(m_xNotebook->GetPageId(rIdent));
     }
 
+    virtual void set_tab_label_text(const OString& rIdent, const OUString& rText) override
+    {
+        return m_xNotebook->SetPageText(m_xNotebook->GetPageId(rIdent), rText);
+    }
+
     virtual ~SalInstanceNotebook() override
     {
         for (auto &rGrid : m_aAddedGrids)
@@ -2125,6 +2135,11 @@ public:
     virtual int get_current_page() const override
     {
         return m_xNotebook->GetPagePos(m_xNotebook->GetCurPageId());
+    }
+
+    virtual OString get_page_ident(int nPage) const override
+    {
+        return m_xNotebook->GetPageId(nPage);
     }
 
     virtual OString get_current_page_ident() const override
@@ -2171,6 +2186,11 @@ public:
     virtual int get_n_pages() const override
     {
         return m_xNotebook->GetPageCount();
+    }
+
+    virtual void set_tab_label_text(const OString& rIdent, const OUString& rText) override
+    {
+        return m_xNotebook->SetPageText(rIdent, rText);
     }
 
     virtual OUString get_tab_label_text(const OString& rIdent) const override

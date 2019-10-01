@@ -131,12 +131,6 @@
     <glade-widget-class title="Table Preview" name="swuilo-AutoFmtPreview"
                         generic-name="Table Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Print Preview" name="vcllo-PrintPreviewWindow"
-                        generic-name="Print Preview" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="NUP Preview" name="vcllo-ShowNupOrderWindow"
-                        generic-name="NUP Preview" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
 
     <glade-widget-class title="Content List Box" name="sfxlo-ContentListBox"
                         generic-name="Content List Box" parent="GtkTreeView"

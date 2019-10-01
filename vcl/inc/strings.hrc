@@ -116,7 +116,6 @@
 #define SV_PRINT_NOPREVIEW                           NC_("SV_PRINT_NOPREVIEW", "Preview is disabled")
 #define SV_PRINT_TOFILE_TXT                          NC_("SV_PRINT_TOFILE_TXT", "Print to File...")
 #define SV_PRINT_DEFPRT_TXT                          NC_("SV_PRINT_DEFPRT_TXT", "Default printer")
-#define SV_PRINT_PRINTPREVIEW_TXT                    NC_("SV_PRINT_PRINTPREVIEW_TXT", "Print preview")
 #define SV_PRINT_QUERYFAXNUMBER_TXT                  NC_("SV_PRINT_QUERYFAXNUMBER_TXT", "Please enter the fax number")
 #define SV_PRINT_INVALID_TXT                         NC_("SV_PRINT_INVALID_TXT", "<ignore>")
 #define SV_PRINT_CUSTOM_TXT                          NC_("SV_PRINT_CUSTOM_TXT", "Custom")

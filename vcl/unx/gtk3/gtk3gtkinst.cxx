@@ -5027,26 +5027,6 @@ private:
         return OString(pStr, pStr ? strlen(pStr) : 0);
     }
 
-    OString get_page_ident(int nPage) const
-    {
-        auto nMainLen = gtk_notebook_get_n_pages(m_pNotebook);
-        auto nOverFlowLen = m_bOverFlowBoxActive ? gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1 : 0;
-        if (m_bOverFlowBoxIsStart)
-        {
-            if (nPage < nOverFlowLen)
-                return get_page_ident(m_pOverFlowNotebook, nPage);
-            nPage -= nOverFlowLen;
-            return get_page_ident(m_pNotebook, nPage);
-        }
-        else
-        {
-            if (nPage < nMainLen)
-                return get_page_ident(m_pNotebook, nPage);
-            nPage -= nMainLen;
-            return get_page_ident(m_pOverFlowNotebook, nPage);
-        }
-    }
-
     static gint get_page_number(GtkNotebook *pNotebook, const OString& rIdent)
     {
         gint nPages = gtk_notebook_get_n_pages(pNotebook);
@@ -5071,6 +5051,11 @@ private:
     {
         const gchar* pStr = gtk_notebook_get_tab_label_text(pNotebook, gtk_notebook_get_nth_page(pNotebook, nPage));
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    static void set_tab_label_text(GtkNotebook *pNotebook, guint nPage, const OUString& rText)
+    {
+        gtk_notebook_set_tab_label_text(pNotebook, gtk_notebook_get_nth_page(pNotebook, nPage), rText.toUtf8().getStr());
     }
 
     void append_useless_page(GtkNotebook *pNotebook)
@@ -5384,6 +5369,26 @@ public:
         return nPage;
     }
 
+    virtual OString get_page_ident(int nPage) const override
+    {
+        auto nMainLen = gtk_notebook_get_n_pages(m_pNotebook);
+        auto nOverFlowLen = m_bOverFlowBoxActive ? gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1 : 0;
+        if (m_bOverFlowBoxIsStart)
+        {
+            if (nPage < nOverFlowLen)
+                return get_page_ident(m_pOverFlowNotebook, nPage);
+            nPage -= nOverFlowLen;
+            return get_page_ident(m_pNotebook, nPage);
+        }
+        else
+        {
+            if (nPage < nMainLen)
+                return get_page_ident(m_pNotebook, nPage);
+            nPage -= nMainLen;
+            return get_page_ident(m_pOverFlowNotebook, nPage);
+        }
+    }
+
     virtual OString get_current_page_ident() const override
     {
         return get_page_ident(get_current_page());
@@ -5476,6 +5481,21 @@ public:
         if (nPageNum != -1)
             return get_tab_label_text(m_pOverFlowNotebook, nPageNum);
         return OUString();
+    }
+
+    virtual void set_tab_label_text(const OString& rIdent, const OUString& rText) override
+    {
+        gint nPageNum = get_page_number(m_pNotebook, rIdent);
+        if (nPageNum != -1)
+        {
+            set_tab_label_text(m_pNotebook, nPageNum, rText);
+            return;
+        }
+        nPageNum = get_page_number(m_pOverFlowNotebook, rIdent);
+        if (nPageNum != -1)
+        {
+            set_tab_label_text(m_pOverFlowNotebook, nPageNum, rText);
+        }
     }
 
     virtual void disable_notify_events() override

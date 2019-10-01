@@ -611,4 +611,12 @@ OUString VerticalTabControl::GetPageText(const OString& rPageId) const
     return pData->pEntry->GetText();
 }
 
+void VerticalTabControl::SetPageText(const OString& rPageId, const OUString& rText)
+{
+    VerticalTabPageData* pData = GetPageData(rPageId);
+    if (!pData)
+        return;
+    pData->pEntry->SetText(rText);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

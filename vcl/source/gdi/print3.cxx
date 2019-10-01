@@ -138,7 +138,7 @@ public:
     typedef std::unordered_map< OUString, css::uno::Sequence< sal_Bool > > ChoiceDisableMap;
 
     VclPtr< Printer >                                           mxPrinter;
-    VclPtr<vcl::Window>                                         mxWindow;
+    weld::Window*                                               mpWindow;
     css::uno::Sequence< css::beans::PropertyValue >             maUIOptions;
     std::vector< css::beans::PropertyValue >                    maUIProperties;
     std::vector< bool >                                         maUIPropertyEnabled;
@@ -183,6 +183,7 @@ public:
     // history suggests this is intentional...
 
     ImplPrinterControllerData() :
+        mpWindow( nullptr ),
         mbFirstPage( true ),
         mbLastPage( false ),
         mbReversePageOrder( false ),
@@ -219,11 +220,11 @@ public:
     void resetPaperToLastConfigured();
 };
 
-PrinterController::PrinterController(const VclPtr<Printer>& i_xPrinter, const VclPtr<vcl::Window>& i_xWindow)
+PrinterController::PrinterController(const VclPtr<Printer>& i_xPrinter, weld::Window* i_pWindow)
     : mpImplData( new ImplPrinterControllerData )
 {
     mpImplData->mxPrinter = i_xPrinter;
-    mpImplData->mxWindow = i_xWindow;
+    mpImplData->mpWindow = i_pWindow;
 }
 
 static OUString queryFile( Printer const * pPrinter )
@@ -316,8 +317,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     {
         if (xController->isShowDialogs())
         {
-            VclPtr<vcl::Window> xParent = xController->getWindow();
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(xParent ? xParent->GetFrameWeld() : nullptr, "vcl/ui/errornoprinterdialog.ui"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(xController->getWindow(), "vcl/ui/errornoprinterdialog.ui"));
             std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("ErrorNoPrinterDialog"));
             xBox->run();
         }
@@ -467,8 +467,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     {
         if( xController->getFilteredPageCount() == 0 )
         {
-            VclPtr<vcl::Window> xParent = xController->getWindow();
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(xParent ? xParent->GetFrameWeld() : nullptr, "vcl/ui/errornocontentdialog.ui"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(xController->getWindow(), "vcl/ui/errornocontentdialog.ui"));
             std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("ErrorNoContentDialog"));
             xBox->run();
             return false;
@@ -484,14 +483,13 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     {
         try
         {
-            VclPtr<vcl::Window> xParent = xController->getWindow();
-            ScopedVclPtrInstance< PrintDialog > aDlg( xParent, xController );
-            if( ! aDlg->Execute() )
+            PrintDialog aDlg(xController->getWindow(), xController);
+            if (!aDlg.run())
             {
                 xController->abortJob();
                 return false;
             }
-            if( aDlg->isPrintToFile() )
+            if (aDlg.isPrintToFile())
             {
                 OUString aFile = queryFile( xController->getPrinter().get() );
                 if( aFile.isEmpty() )
@@ -502,7 +500,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                 xController->setValue( "LocalFileName",
                                        css::uno::makeAny( aFile ) );
             }
-            else if( aDlg->isSingleJobs() )
+            else if (aDlg.isSingleJobs())
             {
                 xController->setValue( "PrintCollateAsSingleJobs",
                                         css::uno::makeAny( true ) );
@@ -775,9 +773,9 @@ const VclPtr<Printer>& PrinterController::getPrinter() const
     return mpImplData->mxPrinter;
 }
 
-const VclPtr<vcl::Window>& PrinterController::getWindow() const
+weld::Window* PrinterController::getWindow() const
 {
-    return mpImplData->mxWindow;
+    return mpImplData->mpWindow;
 }
 
 void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
@@ -1693,8 +1691,7 @@ void PrinterController::createProgressDialog()
 
         if( bShow && ! Application::IsHeadlessModeEnabled() )
         {
-            VclPtr<vcl::Window> xParent = getWindow();
-            mpImplData->mxProgress.reset(new PrintProgressDialog(xParent ? xParent->GetFrameWeld() : nullptr, getPageCountProtected()));
+            mpImplData->mxProgress.reset(new PrintProgressDialog(getWindow(), getPageCountProtected()));
             weld::DialogController::runAsync(mpImplData->mxProgress, [](sal_Int32 /*nResult*/){});
         }
     }

@@ -334,11 +334,13 @@ protected:
 
 public:
     virtual int get_current_page() const = 0;
+    virtual OString get_page_ident(int nPage) const = 0;
     virtual OString get_current_page_ident() const = 0;
     virtual void set_current_page(int nPage) = 0;
     virtual void set_current_page(const OString& rIdent) = 0;
     virtual void remove_page(const OString& rIdent) = 0;
     virtual void append_page(const OString& rIdent, const OUString& rLabel) = 0;
+    virtual void set_tab_label_text(const OString& rIdent, const OUString& rLabel) = 0;
     virtual OUString get_tab_label_text(const OString& rIdent) const = 0;
     virtual int get_n_pages() const = 0;
     virtual weld::Container* get_page(const OString& rIdent) const = 0;
