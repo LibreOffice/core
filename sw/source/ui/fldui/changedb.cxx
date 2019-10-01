@@ -135,14 +135,17 @@ std::unique_ptr<weld::TreeIter> SwChangeDBDlg::Insert(const OUString& rDBName)
         {
             if (sDBName == m_xUsedDBTLB->get_text(*xIter))
             {
-                if (m_xUsedDBTLB->iter_children(*xIter))
+                if (m_xUsedDBTLB->iter_has_child(*xIter))
                 {
-                    do
+                    std::unique_ptr<weld::TreeIter> xChild(m_xUsedDBTLB->make_iterator(xIter.get()));
+                    if (m_xUsedDBTLB->iter_children(*xChild))
                     {
-                        if (sTableName == m_xUsedDBTLB->get_text(*xIter))
-                            return xIter;
-                    } while (m_xUsedDBTLB->iter_next_sibling(*xIter));
-                    m_xUsedDBTLB->iter_parent(*xIter);
+                        do
+                        {
+                            if (sTableName == m_xUsedDBTLB->get_text(*xChild))
+                                return xChild;
+                        } while (m_xUsedDBTLB->iter_next_sibling(*xChild));
+                    }
                 }
                 m_xUsedDBTLB->insert(xIter.get(), -1, &sTableName, &sUserData, nullptr, nullptr,
                                      &rToInsert, false, xIter.get());
