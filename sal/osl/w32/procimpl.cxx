@@ -128,7 +128,7 @@ namespace /* private */
 
         for (sal_uInt32 i = 0; i < env_vars_count; i++)
         {
-            OUString env_var = OUString(env_vars[i]);
+            OUString env_var(env_vars[i]);
 
             if (env_var.getLength() == 0)
                 return false;

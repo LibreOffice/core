@@ -253,8 +253,7 @@ static Reference< XInterface > create_MSAAServiceImpl( Reference< XComponentCont
 
 MSAAServiceImpl::MSAAServiceImpl()
 {
-    Reference< XExtendedToolkit > xToolkit =
-        Reference< XExtendedToolkit >(Application::GetVCLToolkit(), UNO_QUERY);
+    Reference< XExtendedToolkit > xToolkit(Application::GetVCLToolkit(), UNO_QUERY);
 
     if( xToolkit.is() )
     {

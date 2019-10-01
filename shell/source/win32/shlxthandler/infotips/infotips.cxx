@@ -36,7 +36,7 @@
 
 #define MAX_STRING 80
 #define KB 1024.0
-const std::wstring WSPACE = std::wstring(SPACE);
+const std::wstring WSPACE(SPACE);
 
 
 CInfoTip::CInfoTip(long RefCnt) :

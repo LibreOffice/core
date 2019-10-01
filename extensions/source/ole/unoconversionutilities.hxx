@@ -1661,7 +1661,7 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
             spDispatch2.QueryInterface( & spUnknown.p);
     }
 
-    static Type VOID_TYPE= Type();
+    static Type VOID_TYPE;
     Any ret;
     //If no Type is provided and pVar contains IUnknown then we return a XInterface.
     //If pVar contains an IDispatch then we return a XInvocation.
