@@ -26,7 +26,8 @@ class CertPathDialog : public weld::GenericDialogController
     DECL_LINK(OKHdl_Impl, weld::Button&, void);
 
     void HandleEntryChecked(int nRow);
-    void AddCertPath(const OUString &rProfile, const OUString &rPath);
+    void AddCertPath(const OUString &rProfile, const OUString &rPath, bool bSelect = true);
+
 public:
     explicit CertPathDialog(weld::Window* pParent);
     virtual ~CertPathDialog() override;
