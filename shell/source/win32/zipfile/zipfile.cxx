@@ -464,7 +464,7 @@ void ZipFile::GetUncompressedContent(
     ContentBuffer.clear();
     ContentBuffer = ZipContentBuffer_t(entry.uncompressed_size);
     if (!entry.compression)
-        m_pStream->sread(reinterpret_cast<unsigned char *>(&ContentBuffer[0]), entry.uncompressed_size);
+        m_pStream->sread(reinterpret_cast<unsigned char *>(ContentBuffer.data()), entry.uncompressed_size);
     else
     {
         int ret;
@@ -481,14 +481,14 @@ void ZipFile::GetUncompressedContent(
             return;
 
         std::vector<unsigned char> tmpBuffer(entry.compressed_size);
-        if (entry.compressed_size != m_pStream->sread(&tmpBuffer[0], entry.compressed_size))
+        if (entry.compressed_size != m_pStream->sread(tmpBuffer.data(), entry.compressed_size))
             return;
 
         strm.avail_in = entry.compressed_size;
-        strm.next_in = reinterpret_cast<Bytef *>(&tmpBuffer[0]);
+        strm.next_in = reinterpret_cast<Bytef *>(tmpBuffer.data());
 
         strm.avail_out = entry.uncompressed_size;
-        strm.next_out = reinterpret_cast<Bytef *>(&ContentBuffer[0]);
+        strm.next_out = reinterpret_cast<Bytef *>(ContentBuffer.data());
         ret = inflate(&strm, Z_FINISH);
         switch (ret)
         {

@@ -68,8 +68,8 @@ namespace dxcanvas
                 rColors[0],
                 rColors[1] );
 
-            aBrush.SetInterpolationColors(&rColors[0],
-                                          &rStops[0],
+            aBrush.SetInterpolationColors(rColors.data(),
+                                          rStops.data(),
                                           rColors.size());
 
             // render background color, as LinearGradientBrush does not
@@ -378,8 +378,8 @@ namespace dxcanvas
 
                 pGradientBrush.reset(
                     new Gdiplus::PathGradientBrush( pGradientPath.get() ) );
-                pGradientBrush->SetInterpolationColors( &rColors[0],
-                                                        &rStops[0],
+                pGradientBrush->SetInterpolationColors( rColors.data(),
+                                                        rStops.data(),
                                                         rStops.size() );
 
                 // explicitly setup center point. Since the center of GDI+

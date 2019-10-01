@@ -232,7 +232,7 @@ namespace dxcanvas
                         }
                         else
                         {
-                            rOutput->AddBeziers( &rPoints[0], nCurrOutput );
+                            rOutput->AddBeziers( rPoints.data(), nCurrOutput );
                         }
                     }
                     else
@@ -254,7 +254,7 @@ namespace dxcanvas
                             }
                             else
                             {
-                                rOutput->AddBeziers( &rPoints[0], nCurrOutput-2 );
+                                rOutput->AddBeziers( rPoints.data(), nCurrOutput-2 );
                             }
                         }
                     }
@@ -288,7 +288,7 @@ namespace dxcanvas
                     }
                     else
                     {
-                        rOutput->AddLines( &rPoints[0], nPoints );
+                        rOutput->AddLines( rPoints.data(), nPoints );
                     }
                 }
 
@@ -423,7 +423,7 @@ namespace dxcanvas
                                       aPoints.begin(),
                                       implGdiPlusPointFromRealPoint2D );
 
-                    pRes->AddLines( &aPoints[0], nCurrSize );
+                    pRes->AddLines( aPoints.data(), nCurrSize );
                 }
             }
 

@@ -846,7 +846,7 @@ void VistaFilePickerImpl::impl_sta_setFiltersOnDialog()
     if (lFilters.empty())
         return;
 
-    COMDLG_FILTERSPEC   *pFilt = &lFilters[0];
+    COMDLG_FILTERSPEC   *pFilt = lFilters.data();
     iDialog->SetFileTypes(lFilters.size(), pFilt/*&lFilters[0]*/);
     iDialog->SetFileTypeIndex(nCurrentFilter + 1);
 

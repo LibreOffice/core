@@ -64,7 +64,7 @@ using namespace css;
 namespace {
 
 char * address(std::vector< char > & blob) {
-    return blob.empty() ? nullptr : &blob[0];
+    return blob.empty() ? nullptr : blob.data();
 }
 
 ErrCode convert(OUString const & source, OString * target) {
@@ -183,7 +183,7 @@ std::size_t alignment(SbxVariable const * variable) {
             sal_Int32 up;
             arr->GetDim32(i + 1, low[i], up);
         }
-        return alignment(arr->Get32(&low[0]));
+        return alignment(arr->Get32(low.data()));
     }
 }
 
@@ -239,7 +239,7 @@ ErrCode marshalArray(
     }
     for (std::vector< sal_Int32 > idx = low;;) {
         ErrCode e = marshal(
-            false, arr->Get32(&idx[0]), false, blob, offset, data);
+            false, arr->Get32(idx.data()), false, blob, offset, data);
         if (e != ERRCODE_NONE) {
             return e;
         }
@@ -434,7 +434,7 @@ void const * unmarshal(SbxVariable * variable, void const * data) {
             arr->GetDim32(i + 1, low[i], up[i]);
         }
         for (std::vector< sal_Int32 > idx = low;;) {
-            data = unmarshal(arr->Get32(&idx[0]), data);
+            data = unmarshal(arr->Get32(idx.data()), data);
             int i = dims - 1;
             while (idx[i] == up[i]) {
                 idx[i] = low[i];

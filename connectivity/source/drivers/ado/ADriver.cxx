@@ -173,7 +173,7 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
                 ,OUString( )
                 ,Sequence< OUString > ())
         );
-        return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
+        return Sequence< DriverPropertyInfo >(aDriverInfo.data(),aDriverInfo.size());
     }
     return Sequence< DriverPropertyInfo >();
 }

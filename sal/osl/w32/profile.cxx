@@ -391,7 +391,7 @@ DWORD GetPrivateProfileStringWrapper(const osl_TProfileImpl* pProfile,
             pWDefault = (pDefault ? o3tl::toW(rtl_uString_getStr(pDefault)) : nullptr);
 
     std::vector<wchar_t> aBuf(MaxLen + 1);
-    GetPrivateProfileStringW(pWSection, pWEntry, pWDefault, &aBuf[0], MaxLen, o3tl::toW(rtl_uString_getStr(pProfile->m_strFileName)));
+    GetPrivateProfileStringW(pWSection, pWEntry, pWDefault, aBuf.data(), MaxLen, o3tl::toW(rtl_uString_getStr(pProfile->m_strFileName)));
 
     if (pDefault)
         rtl_uString_release(pDefault);
@@ -400,7 +400,7 @@ DWORD GetPrivateProfileStringWrapper(const osl_TProfileImpl* pProfile,
     if (pSection)
         rtl_uString_release(pSection);
 
-    return WideCharToMultiByte(CP_ACP, 0, &aBuf[0], -1, pszString, MaxLen, nullptr, nullptr);
+    return WideCharToMultiByte(CP_ACP, 0, aBuf.data(), -1, pszString, MaxLen, nullptr, nullptr);
 }
 
 // Use Unicode version of WritePrivateProfileString, to work with Multi-language paths
@@ -1012,9 +1012,9 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuff
     else
     {
         std::vector<wchar_t> aBuf(MaxLen + 1);
-        GetPrivateProfileSectionNamesW(&aBuf[0], MaxLen, o3tl::toW(rtl_uString_getStr(pProfile->m_strFileName)));
+        GetPrivateProfileSectionNamesW(aBuf.data(), MaxLen, o3tl::toW(rtl_uString_getStr(pProfile->m_strFileName)));
 
-        n = WideCharToMultiByte(CP_ACP, 0, &aBuf[0], -1, pszBuffer, MaxLen, nullptr, nullptr);
+        n = WideCharToMultiByte(CP_ACP, 0, aBuf.data(), -1, pszBuffer, MaxLen, nullptr, nullptr);
     }
 
     releaseProfile(pProfile);

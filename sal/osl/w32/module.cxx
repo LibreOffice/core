@@ -67,13 +67,13 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
     if (h == nullptr && Module->length > 260)
     {
         std::vector<WCHAR> vec(Module->length + 1);
-        DWORD len = GetShortPathNameW(o3tl::toW(Module->buffer), &vec[0], Module->length + 1);
+        DWORD len = GetShortPathNameW(o3tl::toW(Module->buffer), vec.data(), Module->length + 1);
         if (len )
         {
-            h = LoadLibraryW(&vec[0]);
+            h = LoadLibraryW(vec.data());
 
             if (h == nullptr)
-                h = LoadLibraryExW(&vec[0], nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
+                h = LoadLibraryExW(vec.data(), nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
         }
     }
 

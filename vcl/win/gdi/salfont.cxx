@@ -718,7 +718,7 @@ void WinFontFace::GetFontCapabilities( HDC hDC ) const
     if( (nLength != GDI_ERROR) && nLength )
     {
         std::vector<unsigned char> aTable( nLength );
-        unsigned char* pTable = &aTable[0];
+        unsigned char* pTable = aTable.data();
         ::GetFontData( hDC, OS2Tag, 0, pTable, nLength );
         vcl::getTTCoverage(maFontCapabilities.oUnicodeRange, maFontCapabilities.oCodePageRange, pTable, nLength);
     }
@@ -1729,7 +1729,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
         for( int i = 0; i < nGlyphs; i++ )
             aGlyphIds[i] = sal_uInt16(i);
         std::unique_ptr<sal_uInt16[]> pMetrics = ::GetTTSimpleGlyphMetrics( aSftTTF.get(),
-                                                                    &aGlyphIds[0],
+                                                                    aGlyphIds.data(),
                                                                     nGlyphs,
                                                                     bVertical );
         if( pMetrics )
