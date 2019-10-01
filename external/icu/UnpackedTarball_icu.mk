@@ -21,6 +21,9 @@ $(eval $(call gb_UnpackedTarball_set_pre_action,icu,\
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,icu,0))
 
+# * external/icu/clang-cl.patch is covered by upstream
+#   <https://github.com/unicode-org/icu/commit/5a34bfb1516a6719b5f470063c6be2f47446f0b2> "ICU-20209
+#   Fix build failures on Windows with std::atomic not in enclo…":
 $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-build.patch.1 \
 	external/icu/icu4c-aix.patch.1 \
@@ -39,6 +42,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/gcc9.patch \
 	external/icu/char8_t.patch \
 	external/icu/CVE-2018-18928.patch.2 \
+	external/icu/clang-cl.patch \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))
