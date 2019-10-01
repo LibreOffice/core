@@ -85,6 +85,8 @@ protected:
                         getChartDocument() const;
     /** Returns the position and size of the chart shape in 1/100 mm. */
     const css::awt::Size& getChartSize() const;
+    /** Returns the default position and size of the chart shape in 1/100 mm. */
+    static css::awt::Size getDefaultPageSize() { return css::awt::Size(16000, 9000); }
     /** Returns the object formatter. */
     ObjectFormatter&    getFormatter() const;
 
