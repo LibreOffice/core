@@ -303,7 +303,8 @@ void CSmplMailClient::assembleCommandLine(
         rCommandArgs.push_back(subject);
     }
 
-    for (const auto& attachment : xSimpleMailMessage->getAttachement())
+    auto const attachments = xSimpleMailMessage->getAttachement();
+    for (const auto& attachment : attachments)
     {
         OUString sDisplayName;
         OUString sTempFileURL(CopyAttachment(attachment, sDisplayName));
