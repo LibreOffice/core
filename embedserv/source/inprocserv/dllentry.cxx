@@ -258,7 +258,7 @@ InprocEmbedProvider_Impl::~InprocEmbedProvider_Impl()
 
 // IUnknown
 
-STDMETHODIMP InprocEmbedProvider_Impl::QueryInterface( REFIID riid, void ** ppv )
+COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedProvider_Impl::QueryInterface( REFIID riid, void ** ppv )
 {
     if(IsEqualIID(riid, IID_IUnknown))
     {
@@ -278,13 +278,13 @@ STDMETHODIMP InprocEmbedProvider_Impl::QueryInterface( REFIID riid, void ** ppv 
 }
 
 
-STDMETHODIMP_(ULONG) InprocEmbedProvider_Impl::AddRef()
+COM_DECLSPEC_NOTHROW STDMETHODIMP_(ULONG) InprocEmbedProvider_Impl::AddRef()
 {
     return ++m_refCount;
 }
 
 
-STDMETHODIMP_(ULONG) InprocEmbedProvider_Impl::Release()
+COM_DECLSPEC_NOTHROW STDMETHODIMP_(ULONG) InprocEmbedProvider_Impl::Release()
 {
     sal_Int32 nCount = --m_refCount;
     if ( nCount == 0 )
@@ -293,7 +293,7 @@ STDMETHODIMP_(ULONG) InprocEmbedProvider_Impl::Release()
 }
 
 
-STDMETHODIMP InprocEmbedProvider_Impl::CreateInstance(IUnknown FAR* punkOuter,
+COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedProvider_Impl::CreateInstance(IUnknown FAR* punkOuter,
                                                        REFIID riid,
                                                        void FAR* FAR* ppv)
 {
@@ -315,7 +315,7 @@ STDMETHODIMP InprocEmbedProvider_Impl::CreateInstance(IUnknown FAR* punkOuter,
 }
 
 
-STDMETHODIMP InprocEmbedProvider_Impl::LockServer( BOOL fLock )
+COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedProvider_Impl::LockServer( BOOL fLock )
 {
     if ( fLock )
         g_nLock++;

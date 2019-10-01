@@ -37,7 +37,7 @@
 #pragma clang diagnostic pop
 #endif
 
-STDMETHODIMP SOActionsApproval::InterfaceSupportsErrorInfo(REFIID riid)
+COM_DECLSPEC_NOTHROW STDMETHODIMP SOActionsApproval::InterfaceSupportsErrorInfo(REFIID riid)
 {
     static const IID* arr[] =
     {

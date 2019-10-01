@@ -101,7 +101,7 @@ bool OneInstanceOleWrapper::deregisterClass()
     return CoRevokeClassObject(m_factoryHandle) == NOERROR;
 }
 
-STDMETHODIMP OneInstanceOleWrapper::QueryInterface(REFIID riid, void ** ppv)
+COM_DECLSPEC_NOTHROW STDMETHODIMP OneInstanceOleWrapper::QueryInterface(REFIID riid, void ** ppv)
 {
     if(IsEqualIID(riid, IID_IUnknown))
     {
@@ -120,12 +120,12 @@ STDMETHODIMP OneInstanceOleWrapper::QueryInterface(REFIID riid, void ** ppv)
     return ResultFromScode(E_NOINTERFACE);
 }
 
-STDMETHODIMP_(ULONG) OneInstanceOleWrapper::AddRef()
+COM_DECLSPEC_NOTHROW STDMETHODIMP_(ULONG) OneInstanceOleWrapper::AddRef()
 {
     return osl_atomic_increment( &m_refCount);
 }
 
-STDMETHODIMP_(ULONG) OneInstanceOleWrapper::Release()
+COM_DECLSPEC_NOTHROW STDMETHODIMP_(ULONG) OneInstanceOleWrapper::Release()
 {
     MutexGuard oGuard( Mutex::getGlobalMutex());
     ULONG refCount = --m_refCount;
@@ -137,7 +137,7 @@ STDMETHODIMP_(ULONG) OneInstanceOleWrapper::Release()
     return refCount;
 }
 
-STDMETHODIMP OneInstanceOleWrapper::CreateInstance(IUnknown FAR* punkOuter,
+COM_DECLSPEC_NOTHROW STDMETHODIMP OneInstanceOleWrapper::CreateInstance(IUnknown FAR* punkOuter,
                                                    REFIID riid,
                                                    void FAR* FAR* ppv)
 {
@@ -178,7 +178,7 @@ STDMETHODIMP OneInstanceOleWrapper::CreateInstance(IUnknown FAR* punkOuter,
     return ret;
 }
 
-STDMETHODIMP OneInstanceOleWrapper::LockServer(BOOL /*fLock*/)
+COM_DECLSPEC_NOTHROW STDMETHODIMP OneInstanceOleWrapper::LockServer(BOOL /*fLock*/)
 {
     return NOERROR;
 }

@@ -71,7 +71,7 @@ CColumnInfo::~CColumnInfo()
 // IUnknown methods
 
 
-HRESULT STDMETHODCALLTYPE CColumnInfo::QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
+COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CColumnInfo::QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
     *ppvObject = nullptr;
 
@@ -87,13 +87,13 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::QueryInterface(REFIID riid, void __RPC_FA
 }
 
 
-ULONG STDMETHODCALLTYPE CColumnInfo::AddRef()
+COM_DECLSPEC_NOTHROW ULONG STDMETHODCALLTYPE CColumnInfo::AddRef()
 {
     return InterlockedIncrement(&m_RefCnt);
 }
 
 
-ULONG STDMETHODCALLTYPE CColumnInfo::Release()
+COM_DECLSPEC_NOTHROW ULONG STDMETHODCALLTYPE CColumnInfo::Release()
 {
     long refcnt = InterlockedDecrement(&m_RefCnt);
 
@@ -107,13 +107,13 @@ ULONG STDMETHODCALLTYPE CColumnInfo::Release()
 // IColumnProvider
 
 
-HRESULT STDMETHODCALLTYPE CColumnInfo::Initialize(LPCSHCOLUMNINIT /*psci*/)
+COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CColumnInfo::Initialize(LPCSHCOLUMNINIT /*psci*/)
 {
     return S_OK;
 }
 
 // Register all columns we support
-HRESULT STDMETHODCALLTYPE CColumnInfo::GetColumnInfo(DWORD dwIndex, SHCOLUMNINFO *psci)
+COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CColumnInfo::GetColumnInfo(DWORD dwIndex, SHCOLUMNINFO *psci)
 {
     if (dwIndex >= ColumnInfoTableSize)
         return S_FALSE;
@@ -131,7 +131,7 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::GetColumnInfo(DWORD dwIndex, SHCOLUMNINFO
     return S_OK;
 }
 
-HRESULT STDMETHODCALLTYPE CColumnInfo::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDATA pscd, VARIANT *pvarData)
+COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CColumnInfo::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDATA pscd, VARIANT *pvarData)
 {
     if (IsOOFileExtension(pscd->pwszExt))
     {

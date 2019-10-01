@@ -47,9 +47,9 @@ public:
     // IQueryInfo methods
 
 
-    virtual HRESULT STDMETHODCALLTYPE GetInfoTip(DWORD dwFlags, PWSTR* ppwszTip) override;
+    virtual COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE GetInfoTip(DWORD dwFlags, PWSTR* ppwszTip) override;
 
-    virtual HRESULT STDMETHODCALLTYPE GetInfoFlags(DWORD *pdwFlags) override;
+    virtual COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE GetInfoFlags(DWORD *pdwFlags) override;
 
 
     // IPersist methods

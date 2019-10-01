@@ -39,7 +39,7 @@ using namespace com::sun::star::uno;
    * @param success     Variant to accept the result of if the method call is successful.
    * @return Result.
 */
-STDMETHODIMP CAccText::addSelection(long startOffset, long endOffset)//, unsigned char * success)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::addSelection(long startOffset, long endOffset)//, unsigned char * success)
 {
 
     return CAccTextBase::get_addSelection(startOffset, endOffset);//, success);
@@ -53,7 +53,7 @@ STDMETHODIMP CAccText::addSelection(long startOffset, long endOffset)//, unsigne
    * @param textAttributes     Variant to accept attributes.
    * @return Result.
 */
-STDMETHODIMP CAccText::get_attributes(long offset, long * startOffset, long * endOffset, BSTR * textAttributes)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::get_attributes(long offset, long * startOffset, long * endOffset, BSTR * textAttributes)
 {
 
     return CAccTextBase::get_attributes(offset, startOffset, endOffset, textAttributes);
@@ -64,7 +64,7 @@ STDMETHODIMP CAccText::get_attributes(long offset, long * startOffset, long * en
    * @param offset     Variant to accept caret offset.
    * @return Result.
 */
-STDMETHODIMP CAccText::get_caretOffset(long * offset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::get_caretOffset(long * offset)
 {
 
     return CAccTextBase::get_caretOffset(offset);
@@ -79,7 +79,7 @@ STDMETHODIMP CAccText::get_caretOffset(long * offset)
    * @param Height Variant to accept height.
    * @return Result.
 */
-STDMETHODIMP CAccText::get_characterExtents(long offset, IA2CoordinateType coordType, long * x, long * y, long * width, long * height)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::get_characterExtents(long offset, IA2CoordinateType coordType, long * x, long * y, long * width, long * height)
 {
 
     return CAccTextBase::get_characterExtents(offset, coordType, x, y, width, height);
@@ -90,7 +90,7 @@ STDMETHODIMP CAccText::get_characterExtents(long offset, IA2CoordinateType coord
    * @param nSelections Variant to accept selections count.
    * @return Result.
 */
-STDMETHODIMP CAccText::get_nSelections(long * nSelections)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::get_nSelections(long * nSelections)
 {
 
     return CAccTextBase::get_nSelections(nSelections);
@@ -105,7 +105,7 @@ STDMETHODIMP CAccText::get_nSelections(long * nSelections)
    * @return Result.
 */
 
-STDMETHODIMP CAccText::get_offsetAtPoint(long x, long y, IA2CoordinateType coordType, long * offset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::get_offsetAtPoint(long x, long y, IA2CoordinateType coordType, long * offset)
 {
 
     return CAccTextBase::get_offsetAtPoint(x, y, coordType, offset);
@@ -118,7 +118,7 @@ STDMETHODIMP CAccText::get_offsetAtPoint(long x, long y, IA2CoordinateType coord
    * @param endOffset Variant to accept the end offset of special selection.
    * @return Result.
 */
-STDMETHODIMP CAccText::get_selection(long selection, long * startOffset, long * endOffset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::get_selection(long selection, long * startOffset, long * endOffset)
 {
 
     return CAccTextBase::get_selection(selection, startOffset, endOffset);
@@ -131,7 +131,7 @@ STDMETHODIMP CAccText::get_selection(long selection, long * startOffset, long * 
    * @param text        Variant to accept the text of special range.
    * @return Result.
 */
-STDMETHODIMP CAccText::get_text(long startOffset, long endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::get_text(long startOffset, long endOffset, BSTR * text)
 {
 
     return CAccTextBase::get_text(startOffset, endOffset, text);
@@ -146,7 +146,7 @@ STDMETHODIMP CAccText::get_text(long startOffset, long endOffset, BSTR * text)
    * @param text        Variant to accept the special text.
    * @return Result.
 */
-STDMETHODIMP CAccText::get_textBeforeOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::get_textBeforeOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
 {
 
     return CAccTextBase::get_textBeforeOffset(offset, boundaryType,
@@ -162,7 +162,7 @@ STDMETHODIMP CAccText::get_textBeforeOffset(long offset, IA2TextBoundaryType bou
    * @param text        Variant to accept the special text.
    * @return Result.
 */
-STDMETHODIMP CAccText::get_textAfterOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::get_textAfterOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
 {
 
     return CAccTextBase::get_textAfterOffset(offset, boundaryType,
@@ -178,7 +178,7 @@ STDMETHODIMP CAccText::get_textAfterOffset(long offset, IA2TextBoundaryType boun
    * @param text        Variant to accept the special text.
    * @return Result.
 */
-STDMETHODIMP CAccText::get_textAtOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::get_textAtOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
 {
 
     return CAccTextBase::get_textAtOffset(offset, boundaryType,
@@ -191,7 +191,7 @@ STDMETHODIMP CAccText::get_textAtOffset(long offset, IA2TextBoundaryType boundar
    * @param success Variant to accept the memthod called result.
    * @return Result.
 */
-STDMETHODIMP CAccText::removeSelection(long selectionIndex)//, unsigned char * success)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::removeSelection(long selectionIndex)//, unsigned char * success)
 {
 
     return CAccTextBase::removeSelection(selectionIndex);//, success);
@@ -203,7 +203,7 @@ STDMETHODIMP CAccText::removeSelection(long selectionIndex)//, unsigned char * s
    * @param success Variant to accept the memthod called result.
    * @return Result.
 */
-STDMETHODIMP CAccText::setCaretOffset(long offset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::setCaretOffset(long offset)
 {
 
     return CAccTextBase::setCaretOffset(offset);
@@ -218,7 +218,7 @@ STDMETHODIMP CAccText::setCaretOffset(long offset)
    * @return Result.
 */
 
-STDMETHODIMP CAccText::setSelection(long selectionIndex, long startOffset, long endOffset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::setSelection(long selectionIndex, long startOffset, long endOffset)
 {
 
     return CAccTextBase::setSelection(selectionIndex, startOffset,
@@ -230,18 +230,18 @@ STDMETHODIMP CAccText::setSelection(long selectionIndex, long startOffset, long 
    * @param nCharacters Variant to accept the characters count.
    * @return Result.
 */
-STDMETHODIMP CAccText::get_nCharacters(long * nCharacters)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::get_nCharacters(long * nCharacters)
 {
 
     return CAccTextBase::get_nCharacters(nCharacters);
 }
 
-STDMETHODIMP CAccText::get_newText( IA2TextSegment *newText)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::get_newText( IA2TextSegment *newText)
 {
     return CAccTextBase::get_newText(newText);
 }
 
-STDMETHODIMP CAccText::get_oldText( IA2TextSegment *oldText)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::get_oldText( IA2TextSegment *oldText)
 {
     return CAccTextBase::get_oldText(oldText);
 }
@@ -252,13 +252,13 @@ STDMETHODIMP CAccText::get_oldText( IA2TextSegment *oldText)
    * @param endIndex   End index of sub string.
    * @return Result.
 */
-STDMETHODIMP CAccText::scrollSubstringToPoint(long startIndex, long endIndex,enum IA2CoordinateType coordinateType, long x, long y )
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::scrollSubstringToPoint(long startIndex, long endIndex,enum IA2CoordinateType coordinateType, long x, long y )
 {
 
     return CAccTextBase::scrollSubstringToPoint(startIndex, endIndex, coordinateType, x, y);
 }
 
-STDMETHODIMP CAccText::scrollSubstringTo(long startIndex, long endIndex,enum IA2ScrollType scrollType)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::scrollSubstringTo(long startIndex, long endIndex,enum IA2ScrollType scrollType)
 {
 
     return CAccTextBase::scrollSubstringTo(startIndex, endIndex,scrollType);

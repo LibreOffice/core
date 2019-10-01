@@ -44,7 +44,7 @@ using namespace com::sun::star::uno;
    * @param relationType Variant to get relation type.
    * @return Result.
 */
-STDMETHODIMP CAccRelation::get_relationType(BSTR * relationType)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_relationType(BSTR * relationType)
 {
     SolarMutexGuard g;
 
@@ -63,7 +63,7 @@ STDMETHODIMP CAccRelation::get_relationType(BSTR * relationType)
 }
 
 // Gets what the type of localized relation is.
-STDMETHODIMP CAccRelation::get_localizedRelationType(BSTR *)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_localizedRelationType(BSTR *)
 {
 
 
@@ -79,7 +79,7 @@ STDMETHODIMP CAccRelation::get_localizedRelationType(BSTR *)
    * @param nTargets Variant to get targets length.
    * @return Result.
 */
-STDMETHODIMP CAccRelation::get_nTargets(long * nTargets)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_nTargets(long * nTargets)
 {
     SolarMutexGuard g;
 
@@ -101,7 +101,7 @@ STDMETHODIMP CAccRelation::get_nTargets(long * nTargets)
    * @param target      Variant to get special target.
    * @return Result.
 */
-STDMETHODIMP CAccRelation::get_target(long targetIndex, IUnknown * * target)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_target(long targetIndex, IUnknown * * target)
 {
     SolarMutexGuard g;
 
@@ -138,7 +138,7 @@ STDMETHODIMP CAccRelation::get_target(long targetIndex, IUnknown * * target)
    * @param nTargets Variant to accept actual target length.
    * @return Result.
 */
-STDMETHODIMP CAccRelation::get_targets(long, IUnknown * * target, long * nTargets)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_targets(long, IUnknown * * target, long * nTargets)
 {
     SolarMutexGuard g;
 
@@ -180,7 +180,7 @@ STDMETHODIMP CAccRelation::get_targets(long, IUnknown * * target, long * nTarget
    * @param pXSubInterface AccessibleRelation pointer.
    * @return Result.
 */
-STDMETHODIMP CAccRelation::put_XSubInterface(hyper pXSubInterface)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::put_XSubInterface(hyper pXSubInterface)
 {
     // internal IUNOXWrapper - no mutex meeded
 

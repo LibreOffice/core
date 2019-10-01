@@ -289,14 +289,14 @@ HRESULT CSOActiveX::TerminateOffice()
     return hr;
 }
 
-STDMETHODIMP CSOActiveX::InitNew ()
+COM_DECLSPEC_NOTHROW STDMETHODIMP CSOActiveX::InitNew ()
 {
     mnVersion = GetVersionConnected();
     mbLoad = TRUE;
     return S_OK;
 }
 
-STDMETHODIMP CSOActiveX::Load ( LPSTREAM /*pStm*/ )
+COM_DECLSPEC_NOTHROW STDMETHODIMP CSOActiveX::Load ( LPSTREAM /*pStm*/ )
 {
     mnVersion = GetVersionConnected();
     mbLoad = TRUE;
@@ -307,7 +307,7 @@ STDMETHODIMP CSOActiveX::Load ( LPSTREAM /*pStm*/ )
     return S_OK;
 }
 
-STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG /*pErrorLog*/ )
+COM_DECLSPEC_NOTHROW STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG /*pErrorLog*/ )
 {
     mnVersion = GetVersionConnected();
 
@@ -1090,7 +1090,7 @@ HRESULT CSOActiveX::OnDraw( ATL_DRAWINFO& di )
     return S_OK;
 }
 
-STDMETHODIMP CSOActiveX::SetClientSite( IOleClientSite* aClientSite )
+COM_DECLSPEC_NOTHROW STDMETHODIMP CSOActiveX::SetClientSite( IOleClientSite* aClientSite )
 {
     HRESULT hr = IOleObjectImpl<CSOActiveX>::SetClientSite( aClientSite );
 
@@ -1125,7 +1125,7 @@ STDMETHODIMP CSOActiveX::SetClientSite( IOleClientSite* aClientSite )
     return hr;
 }
 
-STDMETHODIMP CSOActiveX::Invoke(DISPID dispidMember,
+COM_DECLSPEC_NOTHROW STDMETHODIMP CSOActiveX::Invoke(DISPID dispidMember,
                                 REFIID riid,
                                 LCID lcid,
                                 WORD wFlags,

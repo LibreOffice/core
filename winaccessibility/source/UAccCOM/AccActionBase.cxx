@@ -56,7 +56,7 @@ CAccActionBase::~CAccActionBase()
  *
  * @param    nActions    the number of action.
  */
-STDMETHODIMP CAccActionBase::nActions(/*[out,retval]*/long* nActions)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::nActions(/*[out,retval]*/long* nActions)
 {
     SolarMutexGuard g;
 
@@ -80,7 +80,7 @@ STDMETHODIMP CAccActionBase::nActions(/*[out,retval]*/long* nActions)
  *
  * @param    actionIndex    the index of action.
  */
-STDMETHODIMP CAccActionBase::doAction(/* [in] */ long actionIndex)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::doAction(/* [in] */ long actionIndex)
 {
     SolarMutexGuard g;
 
@@ -101,7 +101,7 @@ STDMETHODIMP CAccActionBase::doAction(/* [in] */ long actionIndex)
  * @param    actionIndex    the index of action.
  * @param    description    the description string of the specified action.
  */
-STDMETHODIMP CAccActionBase::get_description(long actionIndex,BSTR __RPC_FAR *description)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::get_description(long actionIndex,BSTR __RPC_FAR *description)
 {
     SolarMutexGuard g;
 
@@ -126,12 +126,12 @@ STDMETHODIMP CAccActionBase::get_description(long actionIndex,BSTR __RPC_FAR *de
     LEAVE_PROTECTED_BLOCK
 }
 
-STDMETHODIMP CAccActionBase::get_name( long, BSTR __RPC_FAR *)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::get_name( long, BSTR __RPC_FAR *)
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP CAccActionBase::get_localizedName( long, BSTR __RPC_FAR *)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::get_localizedName( long, BSTR __RPC_FAR *)
 {
     return E_NOTIMPL;
 }
@@ -146,7 +146,7 @@ STDMETHODIMP CAccActionBase::get_localizedName( long, BSTR __RPC_FAR *)
  * @param    keyBinding     the key binding array.
  * @param    nBinding       the actual number of key binding returned.
  */
-STDMETHODIMP CAccActionBase::get_keyBinding(
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::get_keyBinding(
     /* [in] */ long actionIndex,
     /* [in] */ long,
     /* [length_is][length_is][size_is][size_is][out] */ BSTR __RPC_FAR *__RPC_FAR *keyBinding,
@@ -193,7 +193,7 @@ STDMETHODIMP CAccActionBase::get_keyBinding(
  *
  * @param    pXInterface    the pointer of UNO interface.
  */
-STDMETHODIMP CAccActionBase::put_XInterface(hyper pXInterface)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::put_XInterface(hyper pXInterface)
 {
     // internal IUNOXWrapper - no mutex meeded
 

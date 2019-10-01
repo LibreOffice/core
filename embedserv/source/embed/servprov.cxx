@@ -169,7 +169,7 @@ bool EmbedProviderFactory_Impl::deregisterClass()
     return (hresult == NOERROR);
 }
 
-STDMETHODIMP EmbedProviderFactory_Impl::QueryInterface(REFIID riid, void FAR* FAR* ppv)
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedProviderFactory_Impl::QueryInterface(REFIID riid, void FAR* FAR* ppv)
 {
     if(IsEqualIID(riid, IID_IUnknown))
     {
@@ -188,12 +188,12 @@ STDMETHODIMP EmbedProviderFactory_Impl::QueryInterface(REFIID riid, void FAR* FA
     return ResultFromScode(E_NOINTERFACE);
 }
 
-STDMETHODIMP_(ULONG) EmbedProviderFactory_Impl::AddRef()
+COM_DECLSPEC_NOTHROW STDMETHODIMP_(ULONG) EmbedProviderFactory_Impl::AddRef()
 {
     return osl_atomic_increment( &m_refCount);
 }
 
-STDMETHODIMP_(ULONG) EmbedProviderFactory_Impl::Release()
+COM_DECLSPEC_NOTHROW STDMETHODIMP_(ULONG) EmbedProviderFactory_Impl::Release()
 {
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex());
     sal_Int32 nCount = --m_refCount;
@@ -205,7 +205,7 @@ STDMETHODIMP_(ULONG) EmbedProviderFactory_Impl::Release()
     return nCount;
 }
 
-STDMETHODIMP EmbedProviderFactory_Impl::CreateInstance(IUnknown FAR* punkOuter,
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedProviderFactory_Impl::CreateInstance(IUnknown FAR* punkOuter,
                                                        REFIID riid,
                                                        void FAR* FAR* ppv)
 {
@@ -216,7 +216,7 @@ STDMETHODIMP EmbedProviderFactory_Impl::CreateInstance(IUnknown FAR* punkOuter,
     return pEmbedDocument->QueryInterface( riid, ppv );
 }
 
-STDMETHODIMP EmbedProviderFactory_Impl::LockServer( int /*fLock*/ )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedProviderFactory_Impl::LockServer( int /*fLock*/ )
 {
     return NOERROR;
 }

@@ -205,7 +205,7 @@ InterfaceOleWrapper::~InterfaceOleWrapper()
     SAL_INFO("extensions.olebridge", "InterfaceOleWrapper DTOR, count=" << TerminationVetoer::get()->mnCount);
 }
 
-STDMETHODIMP InterfaceOleWrapper::QueryInterface(REFIID riid, void ** ppv)
+COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::QueryInterface(REFIID riid, void ** ppv)
 {
     comphelper::Automation::AutomationInvokedZone aAutomationActive;
 
@@ -257,7 +257,7 @@ STDMETHODIMP InterfaceOleWrapper::QueryInterface(REFIID riid, void ** ppv)
     return ret;
 }
 
-STDMETHODIMP_(ULONG) InterfaceOleWrapper::AddRef()
+COM_DECLSPEC_NOTHROW STDMETHODIMP_(ULONG) InterfaceOleWrapper::AddRef()
 {
     acquire();
     // does not need to guard because one should not rely on the return value of
@@ -265,7 +265,7 @@ STDMETHODIMP_(ULONG) InterfaceOleWrapper::AddRef()
     return m_refCount;
 }
 
-STDMETHODIMP_(ULONG) InterfaceOleWrapper::Release()
+COM_DECLSPEC_NOTHROW STDMETHODIMP_(ULONG) InterfaceOleWrapper::Release()
 {
     ULONG n= m_refCount;
     release();
@@ -273,17 +273,17 @@ STDMETHODIMP_(ULONG) InterfaceOleWrapper::Release()
 }
 
 // IUnoObjectWrapper --------------------------------------------------------
-STDMETHODIMP InterfaceOleWrapper::getWrapperXInterface( Reference<XInterface>* pXInt)
+COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::getWrapperXInterface( Reference<XInterface>* pXInt)
 {
     pXInt->set( static_cast<XWeak*>( this), UNO_QUERY);
     return pXInt->is() ? S_OK : E_FAIL;
 }
-STDMETHODIMP InterfaceOleWrapper::getOriginalUnoObject( Reference<XInterface>* pXInt)
+COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::getOriginalUnoObject( Reference<XInterface>* pXInt)
 {
     *pXInt= m_xOrigin;
     return m_xOrigin.is() ? S_OK : E_FAIL;
 }
-STDMETHODIMP  InterfaceOleWrapper::getOriginalUnoStruct( Any * pStruct)
+COM_DECLSPEC_NOTHROW STDMETHODIMP  InterfaceOleWrapper::getOriginalUnoStruct( Any * pStruct)
 {
     comphelper::Automation::AutomationInvokedZone aAutomationActive;
 
@@ -304,7 +304,7 @@ STDMETHODIMP  InterfaceOleWrapper::getOriginalUnoStruct( Any * pStruct)
     return ret;
 }
 
-STDMETHODIMP InterfaceOleWrapper::GetTypeInfoCount( UINT *pctinfo )
+COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::GetTypeInfoCount( UINT *pctinfo )
 {
     SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::GetTypeInfoCount");
 
@@ -1094,7 +1094,7 @@ void STDMETHODCALLTYPE CXTypeInfo::ReleaseVarDesc(VARDESC *)
     SAL_WARN("extensions.olebridge", this << "@CXTypeInfo::ReleaseVarDesc: E_NOTIMPL");
 }
 
-STDMETHODIMP InterfaceOleWrapper::GetTypeInfo(UINT iTInfo, LCID, ITypeInfo ** ppTInfo)
+COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::GetTypeInfo(UINT iTInfo, LCID, ITypeInfo ** ppTInfo)
 {
     comphelper::Automation::AutomationInvokedZone aAutomationActive;
 
@@ -1136,7 +1136,7 @@ STDMETHODIMP InterfaceOleWrapper::GetTypeInfo(UINT iTInfo, LCID, ITypeInfo ** pp
     return S_OK;
 }
 
-STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
+COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
                                                 LPOLESTR * rgszNames,
                                                 UINT cNames,
                                                 LCID /*lcid*/,
@@ -1864,7 +1864,7 @@ static bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource)
     return ret;
 }
 
-STDMETHODIMP InterfaceOleWrapper::Invoke(DISPID dispidMember,
+COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::Invoke(DISPID dispidMember,
                                          REFIID /*riid*/,
                                          LCID /*lcid*/,
                                          WORD wFlags,
@@ -3130,7 +3130,7 @@ Reference< XInterface > UnoObjectWrapperRemoteOpt::createUnoWrapperInstance()
     return Reference<XInterface>( xWeak, UNO_QUERY);
 }
 
-STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( REFIID /*riid*/, LPOLESTR * rgszNames, UINT cNames,
+COM_DECLSPEC_NOTHROW STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( REFIID /*riid*/, LPOLESTR * rgszNames, UINT cNames,
                                 LCID /*lcid*/, DISPID * rgdispid )
 {
     MutexGuard guard( getBridgeMutex());
@@ -3177,7 +3177,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( REFIID /*riid*/, LPOLES
     return ret;
 }
 
-STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*riid*/, LCID /*lcid*/, WORD wFlags,
+COM_DECLSPEC_NOTHROW STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*riid*/, LCID /*lcid*/, WORD wFlags,
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,
                          UINT * puArgErr )
 {

@@ -191,7 +191,7 @@ static std::wstring getFileSizeInfo(wchar_t const * FileName)
 // IQueryInfo methods
 
 
-HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, PWSTR* ppwszTip)
+COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, PWSTR* ppwszTip)
 {
     std::wstring msg;
     const std::wstring CONST_SPACE(SPACE);
@@ -297,7 +297,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, PWSTR* ppwszTi
 }
 
 
-HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoFlags(DWORD * /*pdwFlags*/ )
+COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoFlags(DWORD * /*pdwFlags*/ )
 {
     return E_NOTIMPL;
 }

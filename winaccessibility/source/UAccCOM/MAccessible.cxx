@@ -228,7 +228,7 @@ CMAccessible::~CMAccessible()
 *           when the point is null, should return null.
 * @return   S_OK if successful and E_FAIL if the m_pIParent is NULL.
 */
-STDMETHODIMP CMAccessible::get_accParent(IDispatch **ppdispParent)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accParent(IDispatch **ppdispParent)
 {
     SolarMutexGuard g;
 
@@ -265,7 +265,7 @@ STDMETHODIMP CMAccessible::get_accParent(IDispatch **ppdispParent)
 * @param    pcountChildren [in,out] used to return the children count.
 * @return   S_OK if successful.
 */
-STDMETHODIMP CMAccessible::get_accChildCount(long *pcountChildren)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accChildCount(long *pcountChildren)
 {
     SolarMutexGuard g;
 
@@ -299,7 +299,7 @@ STDMETHODIMP CMAccessible::get_accChildCount(long *pcountChildren)
 * @param    ppdispChild, [in,out] use to return the child interface point.
 * @return   S_OK if successful and S_FALSE if failure.
 */
-STDMETHODIMP CMAccessible::get_accChild(VARIANT varChild, IDispatch **ppdispChild)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accChild(VARIANT varChild, IDispatch **ppdispChild)
 {
     SolarMutexGuard g;
 
@@ -337,7 +337,7 @@ STDMETHODIMP CMAccessible::get_accChild(VARIANT varChild, IDispatch **ppdispChil
 * @param    pszName, [in,out] use to return the name of the proper object.
 * @return   S_OK if successful and S_FALSE if failure.
 */
-STDMETHODIMP CMAccessible::get_accName(VARIANT varChild, BSTR *pszName)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accName(VARIANT varChild, BSTR *pszName)
 {
     SolarMutexGuard g;
 
@@ -376,7 +376,7 @@ STDMETHODIMP CMAccessible::get_accName(VARIANT varChild, BSTR *pszName)
 * @param    pszValue, [in,out] use to return the value of the proper object.
 * @return   S_OK if successful and S_FALSE if failure.
 */
-STDMETHODIMP CMAccessible::get_accValue(VARIANT varChild, BSTR *pszValue)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accValue(VARIANT varChild, BSTR *pszValue)
 {
     SolarMutexGuard g;
 
@@ -421,7 +421,7 @@ STDMETHODIMP CMAccessible::get_accValue(VARIANT varChild, BSTR *pszValue)
 * @param    pszDescription, [in,out] use to return the description of the proper object.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::get_accDescription(VARIANT varChild, BSTR *pszDescription)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accDescription(VARIANT varChild, BSTR *pszDescription)
 {
     SolarMutexGuard g;
 
@@ -460,7 +460,7 @@ STDMETHODIMP CMAccessible::get_accDescription(VARIANT varChild, BSTR *pszDescrip
 * @param    pvarRole, [in,out] use to return the role of the proper object.
 * @return   S_OK if successful and S_FALSE if failure.
 */
-STDMETHODIMP CMAccessible::get_accRole(VARIANT varChild, VARIANT *pvarRole)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 {
     SolarMutexGuard g;
 
@@ -511,7 +511,7 @@ STDMETHODIMP CMAccessible::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 * @param    pvarState, [in,out] use to return the state of the proper object.
 * @return   S_OK if successful and S_FALSE if failure.
 */
-STDMETHODIMP CMAccessible::get_accState(VARIANT varChild, VARIANT *pvarState)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accState(VARIANT varChild, VARIANT *pvarState)
 {
     SolarMutexGuard g;
 
@@ -571,7 +571,7 @@ STDMETHODIMP CMAccessible::get_accState(VARIANT varChild, VARIANT *pvarState)
 * @param    pszHelp, [in,out] use to return the helpString of the proper object.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::get_accHelp(VARIANT, BSTR *)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accHelp(VARIANT, BSTR *)
 {
     return E_NOTIMPL;
 }
@@ -585,7 +585,7 @@ STDMETHODIMP CMAccessible::get_accHelp(VARIANT, BSTR *)
 * @return   S_OK if successful and E_FAIL if failure.
 * Not implemented yet
 */
-STDMETHODIMP CMAccessible::get_accHelpTopic(BSTR *, VARIANT, long *)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accHelpTopic(BSTR *, VARIANT, long *)
 {
     return E_NOTIMPL;
 }
@@ -612,7 +612,7 @@ static bool GetMnemonicChar( const OUString& aStr, sal_Unicode* wStr)
 * @param    pszKeyboardShortcut, [in,out] use to return the kbshortcut of the proper object.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKeyboardShortcut)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKeyboardShortcut)
 {
     SolarMutexGuard g;
 
@@ -765,7 +765,7 @@ STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKe
 * the child ID specify child index from 0 to children count, 0 stands for object self.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::get_accFocus(VARIANT *pvarChild)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accFocus(VARIANT *pvarChild)
 {
     SolarMutexGuard g;
 
@@ -804,7 +804,7 @@ STDMETHODIMP CMAccessible::get_accFocus(VARIANT *pvarChild)
 * if selection num >1,return VT_UNKNOWN for vt, and IEnumVariant* for punkVal
 * @return   S_OK if successful and S_FALSE if failure.
 */
-STDMETHODIMP CMAccessible::get_accSelection(VARIANT *pvarChildren)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accSelection(VARIANT *pvarChildren)
 {
     SolarMutexGuard g;
 
@@ -853,7 +853,7 @@ STDMETHODIMP CMAccessible::get_accSelection(VARIANT *pvarChildren)
 * @param    pcyHeight, [in,out] use to return the y-coordination height of the proper object.
 * @return   S_OK if successful and S_FALSE if failure.
 */
-STDMETHODIMP CMAccessible::accLocation(long *pxLeft, long *pyTop, long *pcxWidth, long *pcyHeight, VARIANT varChild)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accLocation(long *pxLeft, long *pyTop, long *pcxWidth, long *pcyHeight, VARIANT varChild)
 {
     SolarMutexGuard g;
 
@@ -911,7 +911,7 @@ STDMETHODIMP CMAccessible::accLocation(long *pxLeft, long *pyTop, long *pcxWidth
 * @param    pvarEndUpAt, [in,out] the end up child of this navigation action.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *pvarEndUpAt)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *pvarEndUpAt)
 {
     SolarMutexGuard g;
 
@@ -953,7 +953,7 @@ STDMETHODIMP CMAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *p
     LEAVE_PROTECTED_BLOCK
 }
 
-STDMETHODIMP CMAccessible::accHitTest(long xLeft, long yTop, VARIANT *pvarChild)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accHitTest(long xLeft, long yTop, VARIANT *pvarChild)
 {
     SolarMutexGuard g;
 
@@ -1014,7 +1014,7 @@ STDMETHODIMP CMAccessible::accHitTest(long xLeft, long yTop, VARIANT *pvarChild)
 * @param    riid, the IID interface .
 * @return   S_OK if successful and S_FALSE if failure.
 */
-STDMETHODIMP CMAccessible::QueryService(REFGUID guidService, REFIID riid, void** ppvObject)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::QueryService(REFGUID guidService, REFIID riid, void** ppvObject)
 {
     if( InlineIsEqualGUID(guidService, IID_IAccessible) )
         return QueryInterface(riid, ppvObject);
@@ -1028,7 +1028,7 @@ STDMETHODIMP CMAccessible::QueryService(REFGUID guidService, REFIID riid, void**
 * @param    szName, the name used to set the name of the proper object.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::put_accName(VARIANT varChild, BSTR szName)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::put_accName(VARIANT varChild, BSTR szName)
 {
     SolarMutexGuard g;
 
@@ -1062,7 +1062,7 @@ STDMETHODIMP CMAccessible::put_accName(VARIANT varChild, BSTR szName)
 * @param    szValue, the value used to set the value of the proper object.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::put_accValue(VARIANT varChild, BSTR szValue)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::put_accValue(VARIANT varChild, BSTR szValue)
 {
     SolarMutexGuard g;
 
@@ -1094,7 +1094,7 @@ STDMETHODIMP CMAccessible::put_accValue(VARIANT varChild, BSTR szValue)
 * @param    pszName, the name value used to set the name of the current object.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::Put_XAccName(const OLECHAR __RPC_FAR *pszName)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccName(const OLECHAR __RPC_FAR *pszName)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -1120,7 +1120,7 @@ STDMETHODIMP CMAccessible::Put_XAccName(const OLECHAR __RPC_FAR *pszName)
 * @param    pRole, the role value used to set the role of the current object.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::Put_XAccRole(unsigned short pRole)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccRole(unsigned short pRole)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -1133,7 +1133,7 @@ STDMETHODIMP CMAccessible::Put_XAccRole(unsigned short pRole)
 * @param    pXSate, the state used to set the name of the current object.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::DecreaseState(DWORD pXSate)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::DecreaseState(DWORD pXSate)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -1146,7 +1146,7 @@ STDMETHODIMP CMAccessible::DecreaseState(DWORD pXSate)
 * @param    pXSate, the state used to set the name of the current object.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::IncreaseState(DWORD pXSate)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::IncreaseState(DWORD pXSate)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -1159,7 +1159,7 @@ STDMETHODIMP CMAccessible::IncreaseState(DWORD pXSate)
 * @param    pXSate, the state used to set the name of the current object.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::SetState(DWORD pXSate)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::SetState(DWORD pXSate)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -1173,7 +1173,7 @@ STDMETHODIMP CMAccessible::SetState(DWORD pXSate)
 * @param    pszDescription, the name used to set the description of the current object.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::Put_XAccDescription(const OLECHAR __RPC_FAR *pszDescription)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccDescription(const OLECHAR __RPC_FAR *pszDescription)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -1200,7 +1200,7 @@ STDMETHODIMP CMAccessible::Put_XAccDescription(const OLECHAR __RPC_FAR *pszDescr
 * @param    pszAccValue, the name used to set the value of the current object.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::Put_XAccValue(const OLECHAR __RPC_FAR *pszAccValue)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccValue(const OLECHAR __RPC_FAR *pszAccValue)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -1226,7 +1226,7 @@ STDMETHODIMP CMAccessible::Put_XAccValue(const OLECHAR __RPC_FAR *pszAccValue)
 * @param    hwnd, the HWND used to set the value of the current object.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::Put_XAccWindowHandle(HWND hwnd)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccWindowHandle(HWND hwnd)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -1243,7 +1243,7 @@ STDMETHODIMP CMAccessible::Put_XAccWindowHandle(HWND hwnd)
 * @param    dChildID, the child id identifies the focus child.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::Put_XAccFocus(long dChildID)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccFocus(long dChildID)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -1277,7 +1277,7 @@ STDMETHODIMP CMAccessible::Put_XAccFocus(long dChildID)
 * @param    sLocation, the location of the current object.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::Put_XAccLocation(const Location sLocation)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccLocation(const Location sLocation)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -1291,7 +1291,7 @@ STDMETHODIMP CMAccessible::Put_XAccLocation(const Location sLocation)
 * @param    pIParent, the parent of the current object.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::Put_XAccParent(IMAccessible __RPC_FAR *pIParent)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccParent(IMAccessible __RPC_FAR *pIParent)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -1308,7 +1308,7 @@ STDMETHODIMP CMAccessible::Put_XAccParent(IMAccessible __RPC_FAR *pIParent)
 * @param    dChildID, the id of the current object.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::Put_XAccChildID(long dChildID)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccChildID(long dChildID)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -1321,7 +1321,7 @@ STDMETHODIMP CMAccessible::Put_XAccChildID(long dChildID)
 * @param    pAgent, the AccObjectManagerAgent point.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::Put_XAccAgent(hyper pAgent)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccAgent(hyper pAgent)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -1336,7 +1336,7 @@ STDMETHODIMP CMAccessible::Put_XAccAgent(hyper pAgent)
 * @param    isDestroy, true is it needs to be destroyed.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::NotifyDestroy(BOOL isDestroy)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::NotifyDestroy(BOOL isDestroy)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -1644,7 +1644,7 @@ HRESULT CMAccessible::GetPreSibling(VARIANT varStart,VARIANT* pvarEndUpAt)
 /**
 * For IAccessible2 implementation methods
 */
-STDMETHODIMP CMAccessible::get_nRelations( long __RPC_FAR *nRelations)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_nRelations( long __RPC_FAR *nRelations)
 {
     SolarMutexGuard g;
 
@@ -1675,7 +1675,7 @@ STDMETHODIMP CMAccessible::get_nRelations( long __RPC_FAR *nRelations)
     LEAVE_PROTECTED_BLOCK
 }
 
-STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation)
 {
     SolarMutexGuard g;
 
@@ -1737,7 +1737,7 @@ STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation
     LEAVE_PROTECTED_BLOCK
 }
 
-STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation, long __RPC_FAR *nRelations)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation, long __RPC_FAR *nRelations)
 {
     SolarMutexGuard g;
 
@@ -1798,7 +1798,7 @@ STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *_
     LEAVE_PROTECTED_BLOCK
 }
 
-STDMETHODIMP CMAccessible::role(long __RPC_FAR *role)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::role(long __RPC_FAR *role)
 {
     SolarMutexGuard g;
 
@@ -1812,7 +1812,7 @@ STDMETHODIMP CMAccessible::role(long __RPC_FAR *role)
 }
 
 
-STDMETHODIMP CMAccessible:: get_nActions(long __RPC_FAR *nActions)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_nActions(long __RPC_FAR *nActions)
 {
     SolarMutexGuard g;
 
@@ -1843,12 +1843,12 @@ STDMETHODIMP CMAccessible:: get_nActions(long __RPC_FAR *nActions)
 }
 
 
-STDMETHODIMP CMAccessible:: scrollToPoint(enum IA2CoordinateType, long, long)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: scrollToPoint(enum IA2CoordinateType, long, long)
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP CMAccessible:: scrollTo(enum IA2ScrollType)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: scrollTo(enum IA2ScrollType)
 {
     return E_NOTIMPL;
 }
@@ -1875,7 +1875,7 @@ static XAccessible* getTheParentOfMember(XAccessible* pXAcc)
     return nullptr;
 }
 
-STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __RPC_FAR *similarItemsInGroup,long __RPC_FAR *positionInGroup)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __RPC_FAR *similarItemsInGroup,long __RPC_FAR *positionInGroup)
 {
     SolarMutexGuard g;
 
@@ -2051,13 +2051,13 @@ STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __
     LEAVE_PROTECTED_BLOCK
 }
 
-STDMETHODIMP CMAccessible:: get_extendedStates( long, BSTR __RPC_FAR *__RPC_FAR *, long __RPC_FAR *)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_extendedStates( long, BSTR __RPC_FAR *__RPC_FAR *, long __RPC_FAR *)
 {
     return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CMAccessible:: get_uniqueID(long __RPC_FAR *uniqueID)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_uniqueID(long __RPC_FAR *uniqueID)
 {
     SolarMutexGuard g;
 
@@ -2074,7 +2074,7 @@ STDMETHODIMP CMAccessible:: get_uniqueID(long __RPC_FAR *uniqueID)
         LEAVE_PROTECTED_BLOCK
 }
 
-STDMETHODIMP CMAccessible:: get_windowHandle(HWND __RPC_FAR *windowHandle)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_windowHandle(HWND __RPC_FAR *windowHandle)
 {
     SolarMutexGuard g;
 
@@ -2251,7 +2251,7 @@ HRESULT CMAccessible::DeSelectMultipleChildren( XAccessible** pItem,int size )
 * @param    pXAcc, the XAccessible object of current object.
 * @return  S_OK if successful.
 */
-STDMETHODIMP CMAccessible::SetXAccessible(hyper pXAcc)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::SetXAccessible(hyper pXAcc)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -2273,7 +2273,7 @@ STDMETHODIMP CMAccessible::SetXAccessible(hyper pXAcc)
 * @param    varChild, the child object pointer of current action.
 * @return  S_OK if successful.
 */
-STDMETHODIMP CMAccessible::accSelect(long flagsSelect, VARIANT varChild)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accSelect(long flagsSelect, VARIANT varChild)
 {
     SolarMutexGuard g;
 
@@ -2370,7 +2370,7 @@ STDMETHODIMP CMAccessible::accSelect(long flagsSelect, VARIANT varChild)
 * @param pXAcc, [in, out] the Uno interface of the current object.
 * @return S_OK if successful.
 */
-STDMETHODIMP CMAccessible::GetUNOInterface(hyper * pXAcc)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::GetUNOInterface(hyper * pXAcc)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -2386,7 +2386,7 @@ STDMETHODIMP CMAccessible::GetUNOInterface(hyper * pXAcc)
 * @param pAction, the default action point of the current object.
 * @return S_OK if successful.
 */
-STDMETHODIMP CMAccessible::SetDefaultAction(hyper pAction)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::SetDefaultAction(hyper pAction)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -2401,7 +2401,7 @@ STDMETHODIMP CMAccessible::SetDefaultAction(hyper pAction)
 * @param pszDefaultAction,[in/out] the description of the current action.
 * @return S_OK if successful.
 */
-HRESULT STDMETHODCALLTYPE CMAccessible::get_accDefaultAction(VARIANT varChild, BSTR *pszDefaultAction)
+COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CMAccessible::get_accDefaultAction(VARIANT varChild, BSTR *pszDefaultAction)
 {
     SolarMutexGuard g;
 
@@ -2440,7 +2440,7 @@ HRESULT STDMETHODCALLTYPE CMAccessible::get_accDefaultAction(VARIANT varChild, B
 * @param varChild, the child id of the action object.
 * @return S_OK if successful.
 */
-HRESULT STDMETHODCALLTYPE CMAccessible::accDoDefaultAction(VARIANT varChild)
+COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CMAccessible::accDoDefaultAction(VARIANT varChild)
 {
     SolarMutexGuard g;
 
@@ -2475,7 +2475,7 @@ HRESULT STDMETHODCALLTYPE CMAccessible::accDoDefaultAction(VARIANT varChild)
 * @param szAction, the action description of the current object.
 * @return S_OK if successful.
 */
-STDMETHODIMP CMAccessible::Put_ActionDescription( const OLECHAR* szAction)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_ActionDescription( const OLECHAR* szAction)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -3016,7 +3016,7 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
     }
 }
 
-STDMETHODIMP CMAccessible::Get_XAccChildID(long* childID)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Get_XAccChildID(long* childID)
 {
     // internal IMAccessible - no mutex meeded
 
@@ -3028,7 +3028,7 @@ STDMETHODIMP CMAccessible::Get_XAccChildID(long* childID)
     return S_OK;
 }
 
-STDMETHODIMP CMAccessible:: get_states(AccessibleStates __RPC_FAR *states )
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_states(AccessibleStates __RPC_FAR *states )
 {
     SolarMutexGuard g;
 
@@ -3067,29 +3067,29 @@ STDMETHODIMP CMAccessible:: get_states(AccessibleStates __RPC_FAR *states )
 }
 
 // return the UNO roles
-STDMETHODIMP CMAccessible:: get_extendedRole( BSTR __RPC_FAR *  )
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_extendedRole( BSTR __RPC_FAR *  )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP CMAccessible:: get_localizedExtendedRole( BSTR __RPC_FAR *  )
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_localizedExtendedRole( BSTR __RPC_FAR *  )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP CMAccessible:: get_nExtendedStates( long __RPC_FAR * )
-{
-    return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CMAccessible:: get_localizedExtendedStates( long, BSTR __RPC_FAR *__RPC_FAR *, long __RPC_FAR *)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_nExtendedStates( long __RPC_FAR * )
 {
     return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CMAccessible:: get_indexInParent( long __RPC_FAR *accParentIndex)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_localizedExtendedStates( long, BSTR __RPC_FAR *__RPC_FAR *, long __RPC_FAR *)
+{
+    return E_NOTIMPL;
+}
+
+
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_indexInParent( long __RPC_FAR *accParentIndex)
 {
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -3106,7 +3106,7 @@ STDMETHODIMP CMAccessible:: get_indexInParent( long __RPC_FAR *accParentIndex)
 
     LEAVE_PROTECTED_BLOCK
 }
-STDMETHODIMP CMAccessible:: get_locale( IA2Locale __RPC_FAR *locale  )
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_locale( IA2Locale __RPC_FAR *locale  )
 {
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -3126,7 +3126,7 @@ STDMETHODIMP CMAccessible:: get_locale( IA2Locale __RPC_FAR *locale  )
     LEAVE_PROTECTED_BLOCK
 }
 
-STDMETHODIMP CMAccessible:: get_appName( BSTR __RPC_FAR *name)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_appName( BSTR __RPC_FAR *name)
 {
     SolarMutexGuard g;
 
@@ -3139,7 +3139,7 @@ STDMETHODIMP CMAccessible:: get_appName( BSTR __RPC_FAR *name)
         return S_OK;
     LEAVE_PROTECTED_BLOCK
 }
-STDMETHODIMP CMAccessible:: get_appVersion(BSTR __RPC_FAR *version)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_appVersion(BSTR __RPC_FAR *version)
 {
     SolarMutexGuard g;
 
@@ -3151,7 +3151,7 @@ STDMETHODIMP CMAccessible:: get_appVersion(BSTR __RPC_FAR *version)
         return S_OK;
     LEAVE_PROTECTED_BLOCK
 }
-STDMETHODIMP CMAccessible:: get_toolkitName(BSTR __RPC_FAR *name)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_toolkitName(BSTR __RPC_FAR *name)
 {
     SolarMutexGuard g;
 
@@ -3163,7 +3163,7 @@ STDMETHODIMP CMAccessible:: get_toolkitName(BSTR __RPC_FAR *name)
         return S_OK;
     LEAVE_PROTECTED_BLOCK
 }
-STDMETHODIMP CMAccessible:: get_toolkitVersion(BSTR __RPC_FAR *version)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_toolkitVersion(BSTR __RPC_FAR *version)
 {
     SolarMutexGuard g;
 
@@ -3177,7 +3177,7 @@ STDMETHODIMP CMAccessible:: get_toolkitVersion(BSTR __RPC_FAR *version)
 }
 
 
-STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *pAttr)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *pAttr)
 {
     SolarMutexGuard g;
 

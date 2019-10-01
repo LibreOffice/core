@@ -28,19 +28,19 @@ using namespace ::com::sun::star;
 // IOleObject
 
 
-STDMETHODIMP EmbedDocument_Impl::SetClientSite( IOleClientSite* pSite )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::SetClientSite( IOleClientSite* pSite )
 {
     m_pClientSite = pSite;
     return S_OK;
 }
 
-STDMETHODIMP EmbedDocument_Impl::GetClientSite( IOleClientSite** pSite )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetClientSite( IOleClientSite** pSite )
 {
     *pSite = m_pClientSite;
     return S_OK;
 }
 
-STDMETHODIMP EmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLESTR szContainerObj )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLESTR szContainerObj )
 {
     // the code should be ignored for links
     if ( !m_aFileName.getLength() )
@@ -52,7 +52,7 @@ STDMETHODIMP EmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLES
     return S_OK;
 }
 
-STDMETHODIMP EmbedDocument_Impl::Close( DWORD dwSaveOption )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Close( DWORD dwSaveOption )
 {
     HRESULT hr = S_OK;
 
@@ -100,22 +100,22 @@ HRESULT EmbedDocument_Impl::OLENotifyClosing()
 
 }
 
-STDMETHODIMP EmbedDocument_Impl::SetMoniker( DWORD /*dwWhichMoniker*/, IMoniker * /*pmk*/ )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::SetMoniker( DWORD /*dwWhichMoniker*/, IMoniker * /*pmk*/ )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP EmbedDocument_Impl::GetMoniker( DWORD /*dwAssign*/, DWORD /*dwWhichMoniker*/, IMoniker ** /*ppmk*/ )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetMoniker( DWORD /*dwAssign*/, DWORD /*dwWhichMoniker*/, IMoniker ** /*ppmk*/ )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP EmbedDocument_Impl::InitFromData( IDataObject * /*pDataObject*/, BOOL /*fCreation*/, DWORD /*dwReserved*/ )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::InitFromData( IDataObject * /*pDataObject*/, BOOL /*fCreation*/, DWORD /*dwReserved*/ )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP EmbedDocument_Impl::GetClipboardData( DWORD /*dwReserved*/, IDataObject ** /*ppDataObject*/ )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetClipboardData( DWORD /*dwReserved*/, IDataObject ** /*ppDataObject*/ )
 {
     return E_NOTIMPL;
 }
@@ -125,7 +125,7 @@ STDMETHODIMP EmbedDocument_Impl::GetClipboardData( DWORD /*dwReserved*/, IDataOb
  *
  */
 
-STDMETHODIMP EmbedDocument_Impl::DoVerb(
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::DoVerb(
     LONG iVerb,
     LPMSG,
     IOleClientSite *pActiveSite,
@@ -233,34 +233,34 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb(
 }
 
 
-STDMETHODIMP EmbedDocument_Impl::EnumVerbs( IEnumOLEVERB ** /*ppEnumOleVerb*/ )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::EnumVerbs( IEnumOLEVERB ** /*ppEnumOleVerb*/ )
 {
     return OLE_S_USEREG;
 }
 
-STDMETHODIMP EmbedDocument_Impl::Update()
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Update()
 {
     return S_OK;
 //    HRESULT hr = CACHE_E_NOCACHE_UPDATED;
 //    return hr;
 }
 
-STDMETHODIMP EmbedDocument_Impl::IsUpToDate()
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::IsUpToDate()
 {
     return S_OK;
 }
 
-STDMETHODIMP EmbedDocument_Impl::GetUserClassID( CLSID *pClsid )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetUserClassID( CLSID *pClsid )
 {
     return GetClassID( pClsid );
 }
 
-STDMETHODIMP EmbedDocument_Impl::GetUserType( DWORD /*dwFormOfTypeUe*/, LPOLESTR * /*pszUserType*/ )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetUserType( DWORD /*dwFormOfTypeUe*/, LPOLESTR * /*pszUserType*/ )
 {
     return OLE_S_USEREG;
 }
 
-STDMETHODIMP EmbedDocument_Impl::SetExtent( DWORD /*dwDrawAspect*/, SIZEL *psizel )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::SetExtent( DWORD /*dwDrawAspect*/, SIZEL *psizel )
 {
     if ( !psizel )
         return E_FAIL;
@@ -270,7 +270,7 @@ STDMETHODIMP EmbedDocument_Impl::SetExtent( DWORD /*dwDrawAspect*/, SIZEL *psize
     return S_OK;
 }
 
-STDMETHODIMP EmbedDocument_Impl::GetExtent( DWORD /*dwDrawAspect*/, SIZEL * psizel )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetExtent( DWORD /*dwDrawAspect*/, SIZEL * psizel )
 {
     if ( !psizel )
         return E_INVALIDARG;
@@ -285,7 +285,7 @@ STDMETHODIMP EmbedDocument_Impl::GetExtent( DWORD /*dwDrawAspect*/, SIZEL * psiz
     return S_OK;
 }
 
-STDMETHODIMP EmbedDocument_Impl::Advise( IAdviseSink *pAdvSink, DWORD *pdwConnection )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Advise( IAdviseSink *pAdvSink, DWORD *pdwConnection )
 {
     if ( m_nAdviseNum == 0xFFFFFFFF )
         return E_OUTOFMEMORY;
@@ -297,7 +297,7 @@ STDMETHODIMP EmbedDocument_Impl::Advise( IAdviseSink *pAdvSink, DWORD *pdwConnec
     return S_OK;
 }
 
-STDMETHODIMP EmbedDocument_Impl::Unadvise( DWORD dwConnection )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Unadvise( DWORD dwConnection )
 {
     auto iAdvise = m_aAdviseHashMap.find( dwConnection );
     if ( iAdvise != m_aAdviseHashMap.end() )
@@ -311,17 +311,17 @@ STDMETHODIMP EmbedDocument_Impl::Unadvise( DWORD dwConnection )
     return S_OK;
 }
 
-STDMETHODIMP EmbedDocument_Impl::EnumAdvise( IEnumSTATDATA ** /*ppenumAdvise*/ )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::EnumAdvise( IEnumSTATDATA ** /*ppenumAdvise*/ )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP EmbedDocument_Impl::GetMiscStatus( DWORD /*dwAspect*/, DWORD * /*pdwStatus*/ )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetMiscStatus( DWORD /*dwAspect*/, DWORD * /*pdwStatus*/ )
 {
     return OLE_S_USEREG;
 }
 
-STDMETHODIMP EmbedDocument_Impl::SetColorScheme( LOGPALETTE * /*pLogpal*/ )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::SetColorScheme( LOGPALETTE * /*pLogpal*/ )
 {
     return E_NOTIMPL;
 }
@@ -329,7 +329,7 @@ STDMETHODIMP EmbedDocument_Impl::SetColorScheme( LOGPALETTE * /*pLogpal*/ )
 
 // IDispatch
 
-STDMETHODIMP EmbedDocument_Impl::GetTypeInfoCount( unsigned int FAR*  pctinfo )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetTypeInfoCount( unsigned int FAR*  pctinfo )
 {
     if ( m_pDocHolder->GetIDispatch() )
         return m_pDocHolder->GetIDispatch()->GetTypeInfoCount( pctinfo );
@@ -337,7 +337,7 @@ STDMETHODIMP EmbedDocument_Impl::GetTypeInfoCount( unsigned int FAR*  pctinfo )
     return E_NOTIMPL;
 }
 
-STDMETHODIMP EmbedDocument_Impl::GetTypeInfo( unsigned int iTInfo, LCID lcid, ITypeInfo FAR* FAR* ppTInfo )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetTypeInfo( unsigned int iTInfo, LCID lcid, ITypeInfo FAR* FAR* ppTInfo )
 {
     if ( m_pDocHolder->GetIDispatch() )
         return m_pDocHolder->GetIDispatch()->GetTypeInfo( iTInfo, lcid, ppTInfo );
@@ -345,7 +345,7 @@ STDMETHODIMP EmbedDocument_Impl::GetTypeInfo( unsigned int iTInfo, LCID lcid, IT
     return DISP_E_BADINDEX; // the only error that can be returned
 }
 
-STDMETHODIMP EmbedDocument_Impl::GetIDsOfNames( REFIID riid,
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetIDsOfNames( REFIID riid,
                                                 OLECHAR FAR* FAR* rgszNames,
                                                 unsigned int cNames,
                                                 LCID lcid,
@@ -360,7 +360,7 @@ STDMETHODIMP EmbedDocument_Impl::GetIDsOfNames( REFIID riid,
     return DISP_E_UNKNOWNNAME;
 }
 
-STDMETHODIMP EmbedDocument_Impl::Invoke( DISPID dispIdMember,
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Invoke( DISPID dispIdMember,
                                          REFIID riid,
                                          LCID lcid,
                                          WORD wFlags,

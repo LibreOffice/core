@@ -61,13 +61,13 @@ UnoTypeWrapper::~UnoTypeWrapper()
 
 
 // UnoTypeWrapper, IDispatch --------------------------------------------
-STDMETHODIMP UnoTypeWrapper::GetTypeInfoCount(UINT* /*pctinfo*/)
+COM_DECLSPEC_NOTHROW STDMETHODIMP UnoTypeWrapper::GetTypeInfoCount(UINT* /*pctinfo*/)
 {
     return E_NOTIMPL;
 }
 
 // UnoTypeWrapper, IDispatch --------------------------------------------
-STDMETHODIMP UnoTypeWrapper::GetTypeInfo( UINT /*iTInfo*/,
+COM_DECLSPEC_NOTHROW STDMETHODIMP UnoTypeWrapper::GetTypeInfo( UINT /*iTInfo*/,
                                           LCID /*lcid*/,
                                           ITypeInfo** /*ppTInfo*/)
 {
@@ -75,7 +75,7 @@ STDMETHODIMP UnoTypeWrapper::GetTypeInfo( UINT /*iTInfo*/,
 }
 
 // UnoTypeWrapper, IDispatch --------------------------------------------
-STDMETHODIMP UnoTypeWrapper::GetIDsOfNames( REFIID /*riid*/,
+COM_DECLSPEC_NOTHROW STDMETHODIMP UnoTypeWrapper::GetIDsOfNames( REFIID /*riid*/,
                                             LPOLESTR *rgszNames,
                                             UINT /*cNames*/,
                                             LCID /*lcid*/,
@@ -97,7 +97,7 @@ STDMETHODIMP UnoTypeWrapper::GetIDsOfNames( REFIID /*riid*/,
 }
 
 // UnoTypeWrapper, IDispatch --------------------------------------------
-STDMETHODIMP UnoTypeWrapper::Invoke( DISPID dispIdMember,
+COM_DECLSPEC_NOTHROW STDMETHODIMP UnoTypeWrapper::Invoke( DISPID dispIdMember,
                          REFIID /*riid*/,
                          LCID /*lcid*/,
                          WORD wFlags,
@@ -137,7 +137,7 @@ STDMETHODIMP UnoTypeWrapper::Invoke( DISPID dispIdMember,
 }
 
 // IUnoTypeWrapper-----------------------
-STDMETHODIMP UnoTypeWrapper::put_Name(BSTR  val)
+COM_DECLSPEC_NOTHROW STDMETHODIMP UnoTypeWrapper::put_Name(BSTR  val)
 {
      Lock();
      m_sName = val;
@@ -146,7 +146,7 @@ STDMETHODIMP UnoTypeWrapper::put_Name(BSTR  val)
 }
 
 // (UnoTypeWrapper-----------------------
-STDMETHODIMP UnoTypeWrapper::get_Name(BSTR  *pVal)
+COM_DECLSPEC_NOTHROW STDMETHODIMP UnoTypeWrapper::get_Name(BSTR  *pVal)
 {
      Lock();
      if( !pVal)

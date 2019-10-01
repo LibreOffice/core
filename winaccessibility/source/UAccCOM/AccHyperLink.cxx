@@ -44,7 +44,7 @@ using namespace com::sun::star::awt;
  *
  * @param    nActions    the number of action.
  */
-STDMETHODIMP CAccHyperLink::nActions(/*[out,retval]*/long* nActions)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::nActions(/*[out,retval]*/long* nActions)
 {
 
     return CAccActionBase::nActions(nActions);
@@ -55,7 +55,7 @@ STDMETHODIMP CAccHyperLink::nActions(/*[out,retval]*/long* nActions)
  *
  * @param    actionIndex    the index of action.
  */
-STDMETHODIMP CAccHyperLink::doAction(/* [in] */ long actionIndex)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::doAction(/* [in] */ long actionIndex)
 {
 
     return CAccActionBase::doAction(actionIndex);
@@ -67,19 +67,19 @@ STDMETHODIMP CAccHyperLink::doAction(/* [in] */ long actionIndex)
  * @param    actionIndex    the index of action.
  * @param    description    the description string of the specified action.
  */
-STDMETHODIMP CAccHyperLink::get_description(long actionIndex,BSTR __RPC_FAR *description)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::get_description(long actionIndex,BSTR __RPC_FAR *description)
 {
 
     return CAccActionBase::get_description(actionIndex, description);
 }
 
-STDMETHODIMP CAccHyperLink::get_name( long actionIndex, BSTR __RPC_FAR *name)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::get_name( long actionIndex, BSTR __RPC_FAR *name)
 {
 
     return CAccActionBase::get_name(actionIndex, name);
 }
 
-STDMETHODIMP CAccHyperLink::get_localizedName( long actionIndex, BSTR __RPC_FAR *localizedName)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::get_localizedName( long actionIndex, BSTR __RPC_FAR *localizedName)
 {
 
     return CAccActionBase::get_name(actionIndex, localizedName);
@@ -95,7 +95,7 @@ STDMETHODIMP CAccHyperLink::get_localizedName( long actionIndex, BSTR __RPC_FAR 
  * @param    keyBinding     the key binding array.
  * @param    nBinding       the actual number of key binding returned.
  */
-STDMETHODIMP CAccHyperLink::get_keyBinding(
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::get_keyBinding(
     /* [in] */ long actionIndex,
     /* [in] */ long nMaxBinding,
     /* [length_is][length_is][size_is][size_is][out] */ BSTR __RPC_FAR *__RPC_FAR *keyBinding,
@@ -110,7 +110,7 @@ STDMETHODIMP CAccHyperLink::get_keyBinding(
    * @param
    * @return Result.
 */
-STDMETHODIMP CAccHyperLink::get_anchor(/* [in] */ long index,
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::get_anchor(/* [in] */ long index,
         /* [retval][out] */ VARIANT __RPC_FAR *anchor)
 {
     SolarMutexGuard g;
@@ -142,7 +142,7 @@ STDMETHODIMP CAccHyperLink::get_anchor(/* [in] */ long index,
    * @param
    * @return Result.
 */
-STDMETHODIMP CAccHyperLink::get_anchorTarget(/* [in] */ long index,
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::get_anchorTarget(/* [in] */ long index,
         /* [retval][out] */ VARIANT __RPC_FAR *anchorTarget)
 {
     SolarMutexGuard g;
@@ -175,7 +175,7 @@ STDMETHODIMP CAccHyperLink::get_anchorTarget(/* [in] */ long index,
    * @param index Variant to get start index.
    * @return Result.
 */
-STDMETHODIMP CAccHyperLink::get_startIndex(/* [retval][out] */ long __RPC_FAR *index)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::get_startIndex(/* [retval][out] */ long __RPC_FAR *index)
 {
     SolarMutexGuard g;
 
@@ -198,7 +198,7 @@ STDMETHODIMP CAccHyperLink::get_startIndex(/* [retval][out] */ long __RPC_FAR *i
    * @param index Variant to get end index.
    * @return Result.
 */
-STDMETHODIMP CAccHyperLink::get_endIndex(/* [retval][out] */ long __RPC_FAR *index)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::get_endIndex(/* [retval][out] */ long __RPC_FAR *index)
 {
     SolarMutexGuard g;
 
@@ -226,7 +226,7 @@ STDMETHODIMP CAccHyperLink::get_endIndex(/* [retval][out] */ long __RPC_FAR *ind
    * @param valid Variant to get validity.
    * @return Result.
 */
-STDMETHODIMP CAccHyperLink::get_valid(/* [retval][out] */ boolean __RPC_FAR *valid)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::get_valid(/* [retval][out] */ boolean __RPC_FAR *valid)
 {
     SolarMutexGuard g;
 
@@ -254,7 +254,7 @@ STDMETHODIMP CAccHyperLink::get_valid(/* [retval][out] */ boolean __RPC_FAR *val
    * @param pXInterface XAccessibleContext interface.
    * @return Result.
 */
-STDMETHODIMP CAccHyperLink::put_XInterface(hyper pXInterface)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::put_XInterface(hyper pXInterface)
 {
     // internal IUNOXWrapper - no mutex meeded
 
@@ -287,7 +287,7 @@ STDMETHODIMP CAccHyperLink::put_XInterface(hyper pXInterface)
    * @param pXSubInterface XAccessibleHyperlink interface.
    * @return Result.
 */
-STDMETHODIMP CAccHyperLink::put_XSubInterface(hyper pXSubInterface)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::put_XSubInterface(hyper pXSubInterface)
 {
     // internal IUNOXWrapper - no mutex meeded
 
