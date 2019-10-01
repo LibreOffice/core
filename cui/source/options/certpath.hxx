@@ -14,18 +14,15 @@
 
 class CertPathDialog : public weld::GenericDialogController
 {
-private:
-    std::unique_ptr<weld::Button> m_xAddBtn;
-    std::unique_ptr<weld::Button> m_xOKBtn;
+    std::unique_ptr<weld::Button> m_xManualButton;
+    std::unique_ptr<weld::Button> m_xOKButton;
     std::unique_ptr<weld::TreeView> m_xCertPathList;
-    std::unique_ptr<weld::Label> m_xAddDialogLabel;
-    std::unique_ptr<weld::Label> m_xManualLabel;
     OUString m_sAddDialogText;
-    OUString m_sManual;
+    OUString m_sManualLabel;
 
     typedef std::pair<int, int> row_col;
     DECL_LINK(CheckHdl_Impl, const row_col&, void);
-    DECL_LINK(AddHdl_Impl, weld::Button&, void);
+    DECL_LINK(ManualHdl_Impl, weld::Button&, void);
     DECL_LINK(OKHdl_Impl, weld::Button&, void);
 
     void HandleEntryChecked(int nRow);
