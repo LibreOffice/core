@@ -67,14 +67,9 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
 
             if (!profile.isEmpty())
             {
-                m_xCertPathList->append();
-                const int nRow = m_xCertPathList->n_children() - 1;
-                m_xCertPathList->set_toggle(nRow, TRISTATE_FALSE, 0);
                 OUString sEntry = OUString::createFromAscii(productNames[i]) + ":" + profile;
-                m_xCertPathList->set_text(nRow, sEntry, 1);
                 OUString sProfilePath = xMozillaBootstrap->getProfilePath( productTypes[i], profile );
-                m_xCertPathList->set_text(nRow, sProfilePath, 2);
-                m_xCertPathList->set_id(nRow, sProfilePath);
+                AddCertPath(sEntry, sProfilePath);
             }
         }
     }
@@ -114,12 +109,6 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
     const char* pEnv = getenv("MOZILLA_CERTIFICATE_FOLDER");
     if (pEnv)
         AddCertPath("$MOZILLA_CERTIFICATE_FOLDER", OUString(pEnv, strlen(pEnv), osl_getThreadTextEncoding()));
-
-    if (m_xCertPathList->n_children())
-    {
-        m_xCertPathList->set_toggle(0, TRISTATE_TRUE, 0);
-        HandleEntryChecked(0);
-    }
 }
 
 IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl, weld::Button&, void)
