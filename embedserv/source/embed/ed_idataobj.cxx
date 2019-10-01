@@ -97,7 +97,7 @@ STDMETHODIMP EmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIUM * pM
     }
     else if ( pFormatetc->cfFormat == CF_METAFILEPICT )
     {
-          if ( !( pFormatetc->tymed & TYMED_MFPICT ) )
+        if ( !( pFormatetc->tymed & TYMED_MFPICT ) )
             return DV_E_TYMED;
 
         HGLOBAL hMeta = reinterpret_cast<HGLOBAL>( getMetaFileHandle_Impl( false ) );
@@ -194,7 +194,7 @@ STDMETHODIMP EmbedDocument_Impl::QueryGetData( FORMATETC * pFormatetc )
         }
         else if ( pFormatetc->cfFormat == CF_METAFILEPICT )
         {
-              if ( !( pFormatetc->tymed & TYMED_MFPICT ) )
+            if ( !( pFormatetc->tymed & TYMED_MFPICT ) )
                 return DV_E_TYMED;
 
             return S_OK;
@@ -233,7 +233,7 @@ STDMETHODIMP EmbedDocument_Impl::GetCanonicalFormatEtc( FORMATETC * pFormatetcIn
     }
     else if ( pFormatetcIn->cfFormat == CF_METAFILEPICT )
     {
-          pFormatetcOut->tymed = TYMED_MFPICT;
+        pFormatetcOut->tymed = TYMED_MFPICT;
         return S_OK;
     }
     else
