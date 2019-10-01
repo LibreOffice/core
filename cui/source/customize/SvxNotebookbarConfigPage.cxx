@@ -25,6 +25,8 @@
 #include <vcl/svapp.hxx>
 
 #include <algorithm>
+#include <cstddef>
+
 #include <helpids.h>
 #include <strings.hrc>
 
@@ -64,7 +66,7 @@ static bool isCategoryAvailable(const OUString& sClassId, const OUString& sUIIte
 static OUString charToString(const char* cString)
 {
     OUStringBuffer aString;
-    for (unsigned long i = 0; i < strlen(cString); i++)
+    for (std::size_t i = 0; i < strlen(cString); i++)
     {
         aString.append(cString[i]);
     }
@@ -458,7 +460,7 @@ void SvxNotebookbarConfigPage::SelectElement()
 
     if (m_xTopLevelListBox->get_count() == 1)
     {
-        for (unsigned long nIdx = 0; nIdx < aCategoryList.size(); nIdx++)
+        for (std::size_t nIdx = 0; nIdx < aCategoryList.size(); nIdx++)
             m_xTopLevelListBox->append(aCategoryList[nIdx].sUIItemId,
                                        aCategoryList[nIdx].sDisplayName);
     }
@@ -468,7 +470,7 @@ void SvxNotebookbarConfigPage::SelectElement()
         nStart = 1;
 
     std::vector<NotebookbarEntries> aTempEntries;
-    for (unsigned long nIdx = nStart; nIdx < aEntries.size(); nIdx++)
+    for (std::size_t nIdx = nStart; nIdx < aEntries.size(); nIdx++)
     {
         if (aEntries[nIdx].sClassId == "svtlo-ManagedMenuButton")
         {
@@ -477,7 +479,7 @@ void SvxNotebookbarConfigPage::SelectElement()
             sal_Int32 rPos = 1;
             sActiveCategory = aEntries[nIdx].sUIItemId.getToken(rPos, ':', rPos);
             FillFunctionsList(aGtkEntries, aCategoryList, sActiveCategory);
-            for (unsigned long Idx = 0; Idx < aGtkEntries.size(); Idx++)
+            for (std::size_t Idx = 0; Idx < aGtkEntries.size(); Idx++)
                 aTempEntries.push_back(aGtkEntries[Idx]);
             aGtkEntries.clear();
         }
@@ -489,7 +491,7 @@ void SvxNotebookbarConfigPage::SelectElement()
     aTempEntries.clear();
 
     sal_Int64 nId = 0;
-    for (unsigned long nIdx = 0; nIdx < aEntries.size(); nIdx++)
+    for (std::size_t nIdx = 0; nIdx < aEntries.size(); nIdx++)
     {
         OUString sId(OUString::number(nId));
         m_xContentsListBox->insert(nIdx, sId);
