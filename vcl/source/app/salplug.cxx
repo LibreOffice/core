@@ -23,6 +23,7 @@
 #include <rtl/process.h>
 #include <sal/log.hxx>
 
+#include <salframe.hxx>
 #include <salinst.hxx>
 #include <config_vclplug.h>
 #include <desktop/crashreport.hxx>
