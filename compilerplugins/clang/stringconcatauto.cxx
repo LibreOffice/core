@@ -75,11 +75,11 @@ bool StringConcatAuto::checkDecl( const DeclaratorDecl* decl, QualType type, con
     std::string fileName = getFileNameOfSpellingLoc(
         compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(decl)));
     loplugin::normalizeDotDotInFilePath(fileName);
-    if (fileName == SRCDIR "/include/rtl/string.hxx"
-        || fileName == SRCDIR "/include/rtl/ustring.hxx"
-        || fileName == SRCDIR "/include/rtl/strbuf.hxx"
-        || fileName == SRCDIR "/include/rtl/ustrbuf.hxx"
-        || fileName == SRCDIR "/include/rtl/stringconcat.hxx")
+    if (loplugin::isSamePathname(fileName, SRCDIR "/include/rtl/string.hxx")
+        || loplugin::isSamePathname(fileName, SRCDIR "/include/rtl/ustring.hxx")
+        || loplugin::isSamePathname(fileName, SRCDIR "/include/rtl/strbuf.hxx")
+        || loplugin::isSamePathname(fileName, SRCDIR "/include/rtl/ustrbuf.hxx")
+        || loplugin::isSamePathname(fileName, SRCDIR "/include/rtl/stringconcat.hxx"))
         return true;
     auto const tc = loplugin::TypeCheck( type.getNonReferenceType().getCanonicalType());
     const char* typeString = nullptr;
