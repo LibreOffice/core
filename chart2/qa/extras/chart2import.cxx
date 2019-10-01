@@ -21,6 +21,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart/XAxisXSupplier.hpp>
+#include <com/sun/star/chart/XAxisYSupplier.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
@@ -108,6 +109,7 @@ public:
     void testAxisTitleDefaultRotationXLSX();
     void testSecondaryAxisTitleDefaultRotationXLSX();
     void testAxisTitleRotationXLSX();
+    void testAxisTitlePositionDOCX();
     void testCombinedChartAttachedAxisXLSX();
 
     void testTdf90510(); // Pie chart label placement settings(XLS)
@@ -200,6 +202,7 @@ public:
     CPPUNIT_TEST(testAxisTitleDefaultRotationXLSX);
     CPPUNIT_TEST(testSecondaryAxisTitleDefaultRotationXLSX);
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
+    CPPUNIT_TEST(testAxisTitlePositionDOCX);
     CPPUNIT_TEST(testCombinedChartAttachedAxisXLSX);
     CPPUNIT_TEST(testTdf90510);
     CPPUNIT_TEST(testTdf109858);
@@ -1503,6 +1506,39 @@ void Chart2ImportTest::testAxisTitleRotationXLSX()
         CPPUNIT_ASSERT_EQUAL(270.0, nRotation);
     }
 
+}
+
+void Chart2ImportTest::testAxisTitlePositionDOCX()
+{
+    load("/chart2/qa/extras/data/docx/", "testAxisTitlePosition.docx");
+    uno::Reference< chart::XDiagram > mxDiagram;
+    uno::Reference< drawing::XShape > xAxisTitle;
+    uno::Reference< chart::XChartDocument > xChartDoc = getChartDocFromWriter(0);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+    mxDiagram.set(xChartDoc->getDiagram());
+    CPPUNIT_ASSERT(mxDiagram.is());
+    // test X Axis title position
+    uno::Reference< chart::XAxisXSupplier > xAxisXSupp(mxDiagram, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xAxisXSupp.is());
+
+    xAxisTitle = xAxisXSupp->getXAxisTitle();
+    CPPUNIT_ASSERT(xAxisTitle.is());
+
+    awt::Point aPos = xAxisTitle->getPosition();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10640), static_cast<sal_Int32>(aPos.X));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7157), static_cast<sal_Int32>(aPos.Y));
+
+    // test Y Axis title position
+    uno::Reference< chart::XAxisYSupplier > xAxisYSupp(mxDiagram, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xAxisYSupp.is());
+
+    xAxisTitle = xAxisYSupp->getYAxisTitle();
+    CPPUNIT_ASSERT(xAxisTitle.is());
+
+    aPos = xAxisTitle->getPosition();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(387), static_cast<sal_Int32>(aPos.X));
+    // y coordinate is still wrong because of another older bug!
+    /*CPPUNIT_ASSERT_EQUAL(sal_Int32(1535), static_cast<sal_Int32>(aPos.Y));*/
 }
 
 void Chart2ImportTest::testCombinedChartAttachedAxisXLSX()
