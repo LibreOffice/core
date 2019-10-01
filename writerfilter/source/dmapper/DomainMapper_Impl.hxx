@@ -298,17 +298,17 @@ struct PermInsertPosition
 
         if (m_Ed.isEmpty())
         {
-            bookmarkName += "permission-for-group:";
-            bookmarkName += OUString::number(m_Id);
-            bookmarkName += ":";
-            bookmarkName += m_EdGrp;
+            bookmarkName += "permission-for-group:" +
+                OUString::number(m_Id) +
+                ":" +
+                m_EdGrp;
         }
         else
         {
-            bookmarkName += "permission-for-user:";
-            bookmarkName += OUString::number(m_Id);
-            bookmarkName += ":";
-            bookmarkName += m_Ed;
+            bookmarkName += "permission-for-user:" +
+                OUString::number(m_Id) +
+                ":" +
+                m_Ed;
         }
 
         //todo: make sure the name is not used already!

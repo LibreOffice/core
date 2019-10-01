@@ -452,8 +452,7 @@ OUString ListDef::GetStyleName(sal_Int32 const nId,
 {
     if (xStyles.is())
     {
-        OUString sStyleName( "WWNum" );
-        sStyleName += OUString::number( nId );
+        OUString sStyleName = "WWNum" + OUString::number( nId );
 
         while (xStyles.is() && xStyles->hasByName(sStyleName)) // unique
         {

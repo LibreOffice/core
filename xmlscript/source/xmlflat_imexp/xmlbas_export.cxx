@@ -119,8 +119,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                 }
 
                 // ooo/script:libraries element
-                OUString aLibContElementName( aPrefix );
-                aLibContElementName += ":libraries";
+                OUString aLibContElementName = aPrefix + ":libraries";
                 XMLElement* pLibContElement = new XMLElement( aLibContElementName );
                 Reference< xml::sax::XAttributeList > xLibContAttribs( pLibContElement );
 
@@ -163,8 +162,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                             if ( xLibContainer->isLibraryLink( rLibName ) )
                             {
                                 // ooo/script:library-linked element
-                                OUString aLibElementName( aPrefix );
-                                aLibElementName +=  ":library-linked";
+                                OUString aLibElementName = aPrefix + ":library-linked";
                                 XMLElement* pLibElement = new XMLElement( aLibElementName );
                                 Reference< xml::sax::XAttributeList > xLibAttribs = static_cast< xml::sax::XAttributeList* >( pLibElement );
 
@@ -198,8 +196,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                             else
                             {
                                 // ooo/script:library-embedded element
-                                OUString aLibElementName( aPrefix );
-                                aLibElementName += ":library-embedded";
+                                OUString aLibElementName = aPrefix + ":library-embedded";
                                 XMLElement* pLibElement = new XMLElement( aLibElementName );
                                 Reference< xml::sax::XAttributeList > xLibAttribs = static_cast< xml::sax::XAttributeList* >( pLibElement );
 
@@ -235,8 +232,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                                         if ( xLib->hasByName( rModName ) )
                                         {
                                             // ooo/script:module element
-                                            OUString aModElementName( aPrefix );
-                                            aModElementName += ":module";
+                                            OUString aModElementName = aPrefix + ":module";
                                             XMLElement* pModElement = new XMLElement( aModElementName );
                                             Reference< xml::sax::XAttributeList > xModAttribs = static_cast< xml::sax::XAttributeList* >( pModElement );
 
@@ -248,8 +244,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                                             m_xHandler->startElement( aModElementName, xModAttribs );
 
                                             // ooo/script:source-code element
-                                            OUString aSourceElementName( aPrefix );
-                                            aSourceElementName += ":source-code";
+                                            OUString aSourceElementName = aPrefix + ":source-code";
                                             XMLElement* pSourceElement = new XMLElement( aSourceElementName );
                                             Reference< xml::sax::XAttributeList > xSourceAttribs = static_cast< xml::sax::XAttributeList* >( pSourceElement );
 

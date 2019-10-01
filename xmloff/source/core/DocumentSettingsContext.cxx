@@ -489,8 +489,7 @@ void XMLConfigItemContext::Characters( const OUString& rChars )
             OUString sChars;
             if( !msValue.isEmpty() )
             {
-                sChars = msValue;
-                sChars += sTrimmedChars;
+                sChars = msValue + sTrimmedChars;
                 msValue.clear();
             }
             else

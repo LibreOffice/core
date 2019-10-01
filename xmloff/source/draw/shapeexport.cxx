@@ -2953,8 +2953,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
     }
     if( !bIsEmptyPresObj )
     {
-        OUString sURL(XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE);
-        sURL += sPersistName;
+        OUString sURL = XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE + sPersistName;
         if( !bExportEmbedded )
         {
             sURL = GetExport().AddEmbeddedObject( sURL );
@@ -3797,8 +3796,7 @@ static void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< OUStr
     sal_Int32 i;
     for ( i = 0; i < rEquations.getLength(); i++ )
     {
-        OUString aStr('f');
-        aStr += OUString::number( i );
+        OUString aStr= "f" + OUString::number( i );
         rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aStr );
 
         aStr = rEquations[ i ];
@@ -4919,8 +4917,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
 
                 if( !bExportEmbedded )
                 {
-                    OUString sURL( "Pictures/" );
-                    sURL += sPictureName;
+                    OUString sURL = "Pictures/" + sPictureName;
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sURL );
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );

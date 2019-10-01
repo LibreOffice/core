@@ -73,8 +73,8 @@ OUString GetParaStyleCondExternal( OUString const &internal)
             aResult += "()";
             if (g_ConditionMap[i].aValue != -1)
             {
-                aResult += "=";
-                aResult += OUString::number( g_ConditionMap[i].aValue );
+                aResult += "=" +
+                    OUString::number( g_ConditionMap[i].aValue );
             }
             return aResult;
         }
