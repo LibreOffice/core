@@ -23,8 +23,6 @@ and so their lifecycle should not extend the lifecycle of those temporaries.
 #include "plugin.hxx"
 #include "check.hxx"
 
-#include <unistd.h>
-
 namespace loplugin
 {
 
