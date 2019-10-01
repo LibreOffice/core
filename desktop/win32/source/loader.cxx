@@ -191,7 +191,7 @@ int officeloader_impl(bool bAllowConsole)
     }
 
     // create a Windows JobObject with a memory limit
-    HANDLE hJobObject = NULL;
+    HANDLE hJobObject = nullptr;
     if (nMaxMemoryInMB > 0)
     {
         JOBOBJECT_EXTENDED_LIMIT_INFORMATION aJobLimit;
@@ -199,8 +199,8 @@ int officeloader_impl(bool bAllowConsole)
         if (bExcludeChildProcesses)
             aJobLimit.BasicLimitInformation.LimitFlags |= JOB_OBJECT_LIMIT_SILENT_BREAKAWAY_OK;
         aJobLimit.JobMemoryLimit = nMaxMemoryInMB * 1024 * 1024;
-        hJobObject = CreateJobObjectW(NULL, NULL);
-        if (hJobObject != NULL)
+        hJobObject = CreateJobObjectW(nullptr, nullptr);
+        if (hJobObject != nullptr)
             SetInformationJobObject(hJobObject, JobObjectExtendedLimitInformation, &aJobLimit,
                                     sizeof(JOBOBJECT_EXTENDED_LIMIT_INFORMATION));
     }

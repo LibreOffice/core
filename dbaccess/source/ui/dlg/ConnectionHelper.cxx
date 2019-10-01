@@ -273,7 +273,7 @@ namespace dbaui
             {
                 OUString sOldDataSource=getURLNoPrefix();
                 OUString sNewDataSource;
-                HWND hWnd = 0;
+                HWND hWnd = nullptr;
 
                 weld::Window* pDialog = GetFrameWeld();
                 css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(pDialog->GetXWindow(), css::uno::UNO_QUERY);
