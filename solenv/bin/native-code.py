@@ -491,8 +491,6 @@ custom_widgets = [
     'SdPageObjsTLB',
     'SearchBox',
     'SearchResultsBox',
-    'ShowNupOrderWindow',
-    'ShowNupOrderWindow',
     'SidebarDialControl',
     'SidebarToolBox',
     'SpacingListBox',

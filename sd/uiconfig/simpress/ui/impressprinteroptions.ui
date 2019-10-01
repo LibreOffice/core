@@ -71,7 +71,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="impressdocument">
+                  <object class="GtkComboBoxText" id="impressdocument">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -81,7 +81,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="slidesperpage">
+                  <object class="GtkComboBoxText" id="slidesperpage">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -91,7 +91,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="slidesperpageorder">
+                  <object class="GtkComboBoxText" id="slidesperpageorder">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -236,7 +236,6 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">grayscale</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -254,7 +253,7 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">blackandwhite</property>
+                    <property name="group">originalcolors</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -329,7 +328,6 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">fittoprintable</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -347,7 +345,7 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">distributeonmultiple</property>
+                    <property name="group">originalsize</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -365,7 +363,7 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">tilesheet</property>
+                    <property name="group">originalsize</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
