@@ -126,7 +126,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="writercomments">
+                      <object class="GtkComboBoxText" id="writercomments">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>

@@ -320,6 +320,7 @@ public:
     void SetDeactivatePageHdl( const Link<VerticalTabControl*, bool>& rLink ) { m_aDeactivateHdl = rLink; }
 
     OUString GetPageText(const OString& rPageId) const;
+    void SetPageText(const OString& rPageId, const OUString& rText);
 
     vcl::Window* GetPageParent() { return m_xBox.get(); }
 };
