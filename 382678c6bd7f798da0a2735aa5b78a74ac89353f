@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_9a8571b0",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-10-01T14:47:40Z",
+      "side": 1,
+      "message": "Could you remove the cosmetic changes to simplify the patch and the review, please?",
+      "range": {
+        "startLine": 659,
+        "startChar": 2,
+        "endLine": 752,
+        "endChar": 17
+      },
+      "revId": "382678c6bd7f798da0a2735aa5b78a74ac89353f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
