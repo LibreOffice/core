@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <oox/dllapi.h>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/token/tokens.hxx>
@@ -251,7 +252,7 @@ public:
     void WriteRun( const css::uno::Reference< css::text::XTextRange >& rRun,
                    bool& rbOverridingCharHeight, sal_Int32& rnCharHeight );
     void WriteRunProperties( const css::uno::Reference< css::beans::XPropertySet >& rRun, bool bIsField, sal_Int32 nElement, bool bCheckDirect,
-                             bool& rbOverridingCharHeight, sal_Int32& rnCharHeight );
+                             bool& rbOverridingCharHeight, sal_Int32& rnCharHeight, sal_Int16 nScriptType = css::i18n::ScriptType::LATIN);
 
     void WritePresetShape( const char* pShape , std::vector< std::pair<sal_Int32,sal_Int32>> & rAvList );
     void WritePresetShape( const char* pShape );
@@ -282,6 +283,9 @@ public:
     sal_Int32 getBulletMarginIndentation (const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,sal_Int16 nLevel, const OUString& propName);
 
     static void ResetCounters();
+
+    // A Helper to decide the script type for given text in order to call WriteRunProperties.
+    static sal_Int16 GetScriptType(const OUString& rStr);
 
     static sal_Unicode SubstituteBullet( sal_Unicode cBulletId, css::awt::FontDescriptor& rFontDesc );
 
