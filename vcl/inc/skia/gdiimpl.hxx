@@ -114,6 +114,8 @@ public:
     virtual void copyArea(long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
                           long nSrcHeight, bool bWindowInvalidate) override;
 
+    virtual void copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics) override;
+
     virtual bool blendBitmap(const SalTwoRect&, const SalBitmap& rBitmap) override;
 
     virtual bool blendAlphaBitmap(const SalTwoRect&, const SalBitmap& rSrcBitmap,
