@@ -46,7 +46,7 @@ class CDummyTag : public ITag
             return EMPTY_STRING;
         };
 
-        virtual ::std::wstring const getTagAttribute( ::std::wstring  const & /*attrname*/ ) override { return ::std::wstring(EMPTY_STRING); };
+        virtual ::std::wstring getTagAttribute( ::std::wstring  const & /*attrname*/ ) override { return ::std::wstring(EMPTY_STRING); };
 };
 
 
