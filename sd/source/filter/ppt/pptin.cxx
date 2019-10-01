@@ -226,6 +226,7 @@ bool ImplSdPPTImport::Import()
     if ( !m_bOk )
         return false;
 
+    bool bWasLocked = pSdrModel->isLocked();
     pSdrModel->setLock(true);
     const bool bSavedUndoEnabled = pSdrModel->IsUndoEnabled();
     pSdrModel->EnableUndo(false);
@@ -1398,7 +1399,7 @@ bool ImplSdPPTImport::Import()
     sfx2::LoadOlePropertySet(xDocProps, &mrStorage);
     xDocProps->setTemplateName(OUString());
 
-    pSdrModel->setLock(false);
+    pSdrModel->setLock(bWasLocked);
     pSdrModel->EnableUndo(bSavedUndoEnabled);
     return m_bOk;
 }
