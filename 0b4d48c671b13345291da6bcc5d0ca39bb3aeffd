@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_30cb1f54",
+        "filename": "sw/source/filter/ww8/ww8par.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4368,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-10-01T09:48:04Z",
+      "side": 1,
+      "message": "There is probably a better way to generate this limited copy of aSet. But how to find that way? itemset.hxx isn\u0027t heavily documented (what is the difference between set and put for example). The entire concept of pools/items is foggy in my mind...\n\nHowever, other examples of aTmpSet seem to do the same thing. Probably I can just change aSet to do what aSet2 does except to include RES_BACKGROUND as well - that will save one level of duplication...",
+      "range": {
+        "startLine": 4368,
+        "startChar": 42,
+        "endLine": 4368,
+        "endChar": 47
+      },
+      "revId": "0b4d48c671b13345291da6bcc5d0ca39bb3aeffd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
