@@ -72,7 +72,7 @@ sdbcx::ObjectType OViews::appendObject( const OUString& _rForName, const Referen
     OUString sName( _rForName );
     aCommand.put_Name(sName);
     aCommand.put_CommandText(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND))));
-    ADOViews* pViews = static_cast<ADOViews*>(m_aCollection);
+    ADOViews* pViews = m_aCollection;
     if(FAILED(pViews->Append(OLEString(sName).asBSTR(),aCommand)))
         ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
 
