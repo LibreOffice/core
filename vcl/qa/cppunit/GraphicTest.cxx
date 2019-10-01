@@ -153,7 +153,7 @@ void GraphicTest::testUnloadedGraphicWmf()
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 42x42
     // - Actual  : 99x99
-    // i.e. we the custom preferred size was lost after lazy-load.
+    // i.e. the custom preferred size was lost after lazy-load.
     CPPUNIT_ASSERT_EQUAL(Size(42, 42), aGraphic.GetPrefSize());
 }
 
