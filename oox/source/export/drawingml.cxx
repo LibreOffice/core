@@ -56,6 +56,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -1265,6 +1266,23 @@ void DrawingML::WriteImageBrightnessContrastTransparence(uno::Reference<beans::X
     // Used for pictures
     if (nTransparence == 0 && GetProperty(rXPropSet, "Transparency"))
         nTransparence = static_cast<sal_Int32>(mAny.get<sal_Int16>());
+
+    if (GetProperty(rXPropSet, "GraphicColorMode"))
+    {
+        drawing::ColorMode aColorMode;
+        mAny >>= aColorMode;
+        if (aColorMode == drawing::ColorMode_GREYS)
+            mpFS->singleElementNS(XML_a, XML_grayscl);
+        else if (aColorMode == drawing::ColorMode_MONO)
+            //black/white has a 0,5 threshold in LibreOffice
+            mpFS->singleElementNS(XML_a, XML_biLevel, XML_thresh, OString::number(50000));
+        else if (aColorMode == drawing::ColorMode_WATERMARK)
+        {
+            //map watermark with mso washout
+            nBright = 70;
+            nContrast = -70;
+        }
+    }
 
 
     if (nBright || nContrast)
