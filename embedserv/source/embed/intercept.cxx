@@ -226,7 +226,7 @@ void Interceptor::generateFeatureStateEvent()
 
                 aStateEvent.FeatureURL.Complete = m_aInterceptedURL[0];
                 aStateEvent.FeatureDescriptor = "Update";
-                aStateEvent.State <<= ("($1) " + aTitle);
+                aStateEvent.State <<= "($1) " + aTitle;
 
             }
             else if ( i == 5 )
@@ -239,7 +239,7 @@ void Interceptor::generateFeatureStateEvent()
             {
                 aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
                 aStateEvent.FeatureDescriptor = "Close and Return";
-                aStateEvent.State <<= ("($2) " + aTitle);
+                aStateEvent.State <<= "($2) " + aTitle;
 
             }
 
@@ -285,7 +285,7 @@ Interceptor::addStatusListener(
         aStateEvent.FeatureDescriptor = "Update";
         aStateEvent.IsEnabled = true;
         aStateEvent.Requery = false;
-        aStateEvent.State <<= ("($1) " + aTitle );
+        aStateEvent.State <<= "($1) " + aTitle;
         Control->statusChanged(aStateEvent);
 
         {
@@ -323,7 +323,7 @@ Interceptor::addStatusListener(
         aStateEvent.FeatureDescriptor = "Close and Return";
         aStateEvent.IsEnabled = true;
         aStateEvent.Requery = false;
-        aStateEvent.State <<= ("($2) " + aTitle );
+        aStateEvent.State <<= "($2) " + aTitle;
         Control->statusChanged(aStateEvent);
 
 
