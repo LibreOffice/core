@@ -33,7 +33,7 @@ class   BitmapPalette;
 class   SalGraphics;
 namespace Gdiplus { class Bitmap; }
 
-class WinSalBitmap : public SalBitmap, public basegfx::SystemDependentDataHolder
+class WinSalBitmap final: public SalBitmap, public basegfx::SystemDependentDataHolder
 {
 private:
     Size                maSize;

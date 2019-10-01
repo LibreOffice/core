@@ -120,7 +120,7 @@ namespace dxcanvas
 
 
         /// Default implementation of IDXRenderModule
-        class DXRenderModule : public IDXRenderModule
+        class DXRenderModule final: public IDXRenderModule
         {
         public:
             explicit DXRenderModule( const vcl::Window& rWindow );

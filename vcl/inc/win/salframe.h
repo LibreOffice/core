@@ -27,7 +27,7 @@
 class WinSalGraphics;
 
 
-class WinSalFrame : public SalFrame
+class WinSalFrame final: public SalFrame
 {
 public:
     HWND                    mhWnd;                  // Window handle
