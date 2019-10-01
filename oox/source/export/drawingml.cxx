@@ -37,6 +37,7 @@
 #include <svtools/unitconv.hxx>
 #include <sax/fastattribs.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 #include <cstdio>
@@ -75,6 +76,8 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -211,6 +214,30 @@ void WriteRadialGradientPath(const awt::Gradient& rGradient, const FSHelperPtr& 
 int DrawingML::mnImageCounter = 1;
 int DrawingML::mnWdpImageCounter = 1;
 std::map<OUString, OUString> DrawingML::maWdpCache;
+
+sal_Int16 DrawingML::GetScriptType(const OUString& rStr)
+{
+    if (rStr.getLength() > 0)
+    {
+        static Reference<css::i18n::XBreakIterator> xBreakIterator =
+            css::i18n::BreakIterator::create(comphelper::getProcessComponentContext());
+
+        sal_Int16 nScriptType = xBreakIterator->getScriptType(rStr, 0);
+
+        if (nScriptType == css::i18n::ScriptType::WEAK)
+        {
+            sal_Int32 nPos = xBreakIterator->nextScript(rStr, 0, nScriptType);
+            if (nPos < rStr.getLength())
+                nScriptType = xBreakIterator->getScriptType(rStr, nPos);
+
+        }
+
+        if (nScriptType != css::i18n::ScriptType::WEAK)
+            return nScriptType;
+    }
+
+    return css::i18n::ScriptType::LATIN;
+}
 
 void DrawingML::ResetCounters()
 {
@@ -1626,14 +1653,13 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
 }
 
 void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool bIsField, sal_Int32 nElement, bool bCheckDirect,
-                                    bool& rbOverridingCharHeight, sal_Int32& rnCharHeight )
+                                    bool& rbOverridingCharHeight, sal_Int32& rnCharHeight, sal_Int16 nScriptType )
 {
     Reference< XPropertySet > rXPropSet = rRun;
     Reference< XPropertyState > rXPropState( rRun, UNO_QUERY );
     OUString usLanguage;
     PropertyState eState;
-    SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
-    bool bComplex = ( nScriptType == SvtScriptType::COMPLEX );
+    bool bComplex = ( nScriptType ==  css::i18n::ScriptType::COMPLEX );
     const char* bold = "0";
     const char* italic = nullptr;
     const char* underline = nullptr;
@@ -1771,7 +1797,18 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         }
     }
 
-    if (GetProperty(rXPropSet, "CharLocale"))
+    bool bLang = false;
+    switch(nScriptType)
+    {
+        case css::i18n::ScriptType::ASIAN:
+            bLang = GetProperty(rXPropSet, "CharLocaleAsian"); break;
+        case css::i18n::ScriptType::COMPLEX:
+            bLang = GetProperty(rXPropSet, "CharLocaleComplex"); break;
+        default:
+            bLang = GetProperty(rXPropSet, "CharLocale"); break;
+    }
+
+    if (bLang)
     {
         css::lang::Locale aLocale;
         mAny >>= aLocale;
@@ -2091,7 +2128,8 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
         }
 
         Reference< XPropertySet > xPropSet( rRun, uno::UNO_QUERY );
-        WriteRunProperties( xPropSet, bIsURLField, XML_rPr, true, rbOverridingCharHeight, rnCharHeight );
+
+        WriteRunProperties( xPropSet, bIsURLField, XML_rPr, true, rbOverridingCharHeight, rnCharHeight, GetScriptType(sText) );
         mpFS->startElementNS(XML_a, XML_t);
         mpFS->writeEscaped( sText );
         mpFS->endElementNS( XML_a, XML_t );

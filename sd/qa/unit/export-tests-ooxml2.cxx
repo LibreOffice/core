@@ -180,6 +180,7 @@ public:
     void testTdf126741();
     void testTdf127372();
     void testTdf127379();
+    void testTdf98603();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -278,6 +279,7 @@ public:
     CPPUNIT_TEST(testTdf126741);
     CPPUNIT_TEST(testTdf127372);
     CPPUNIT_TEST(testTdf127379);
+    CPPUNIT_TEST(testTdf98603);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2599,6 +2601,20 @@ void SdOOXMLExportTest2::testTdf127379()
     CPPUNIT_ASSERT(aXBackgroundPropSet->getPropertyValue("FillGradient") >>= aGradient);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF0000), aGradient.StartColor);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x2A6099), aGradient.EndColor);
+}
+
+void SdOOXMLExportTest2::testTdf98603()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf98603.pptx"), PPTX);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+    uno::Reference< beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
+    css::lang::Locale aLocale;
+    xPropSet->getPropertyValue("CharLocaleComplex") >>= aLocale;
+    CPPUNIT_ASSERT_EQUAL(OUString("he"), aLocale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("IL"), aLocale.Country);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
