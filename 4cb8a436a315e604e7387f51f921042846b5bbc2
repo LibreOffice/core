@@ -118,6 +118,30 @@
       "revId": "4cb8a436a315e604e7387f51f921042846b5bbc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_5abcb904",
+        "filename": "i18npool/source/transliteration/transliteration_body.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-01T11:20:06Z",
+      "side": 1,
+      "message": "Possibly you could add a memory allocation block prior to the aBuf creating: it could check if the memory requirement is no more than 2048*NMAXMAPPING*sizeof(sal_Unicode), and either call alloca, or initialize the unique_ptr; then use placement-new to create the vector in the allocated place ... that would keep the rest of the code intact, but allow to only use stack when appropriate, and only use the stack when necessary ... no idea if that complexity matters in reality actually. :-( That \"Yes, on massive use even such small things do count\" keeps worrying me.",
+      "parentUuid": "7f7f9b97_3f945244",
+      "range": {
+        "startLine": 104,
+        "startChar": 4,
+        "endLine": 104,
+        "endChar": 40
+      },
+      "revId": "4cb8a436a315e604e7387f51f921042846b5bbc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
