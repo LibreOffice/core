@@ -67,7 +67,8 @@ bool NoExceptMove::TraverseCXXConstructorDecl(CXXConstructorDecl* constructorDec
                         && constructorDecl->getExceptionSpecType() == EST_None
                         && !constructorDecl->isDefaulted() && !constructorDecl->isDeleted()
                         && !ignoreLocation(constructorDecl)
-                        && constructorDecl->isThisDeclarationADefinition();
+                        && constructorDecl->isThisDeclarationADefinition()
+                        && constructorDecl->getBody() != nullptr;
     if (isMove)
     {
         m_ConstructorThrows.push_back(false);
@@ -115,7 +116,7 @@ bool NoExceptMove::TraverseCXXMethodDecl(CXXMethodDecl* methodDecl)
     bool isMove = methodDecl->isMoveAssignmentOperator()
                   && methodDecl->getExceptionSpecType() == EST_None && !methodDecl->isDefaulted()
                   && !methodDecl->isDeleted() && !ignoreLocation(methodDecl)
-                  && methodDecl->isThisDeclarationADefinition();
+                  && methodDecl->isThisDeclarationADefinition() && methodDecl->getBody() != nullptr;
     if (isMove)
     {
         StringRef fn = getFileNameOfSpellingLoc(
