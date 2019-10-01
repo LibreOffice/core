@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_d0cbcb1b",
+        "filename": "offapi/com/sun/star/packages/XPackageEncryption.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-10-01T08:34:08Z",
+      "side": 1,
+      "message": "i think this should be [in] parameter not [out], because the Reference is not assigned to in the implementation, but it is read from.",
+      "revId": "4d0e087cb05e145146b73f6691caa4c8e4c8bb7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
