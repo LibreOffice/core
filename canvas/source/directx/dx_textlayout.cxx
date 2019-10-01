@@ -215,7 +215,7 @@ namespace dxcanvas
 
     OUString SAL_CALL TextLayout::getImplementationName()
     {
-        return OUString( "DXCanvas::TextLayout" );
+        return "DXCanvas::TextLayout";
     }
 
     sal_Bool SAL_CALL TextLayout::supportsService( const OUString& ServiceName )

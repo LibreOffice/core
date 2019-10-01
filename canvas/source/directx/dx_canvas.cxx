@@ -126,7 +126,7 @@ namespace dxcanvas
 
     OUString SAL_CALL Canvas::getServiceName(  )
     {
-        return OUString( CANVAS_SERVICE_NAME );
+        return CANVAS_SERVICE_NAME;
     }
 
     BitmapCanvas::BitmapCanvas( const uno::Sequence< uno::Any >&                aArguments,
@@ -202,7 +202,7 @@ namespace dxcanvas
 
     OUString SAL_CALL BitmapCanvas::getServiceName(  )
     {
-        return OUString( BITMAPCANVAS_SERVICE_NAME );
+        return BITMAPCANVAS_SERVICE_NAME;
     }
 
     IBitmapSharedPtr BitmapCanvas::getBitmap() const

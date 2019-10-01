@@ -319,7 +319,7 @@ OUString DragSource_getImplementationName()
 #elif defined UNX
     return "com.sun.star.datatransfer.dnd.XdndSupport";
 #else
-    return OUString("com.sun.star.datatransfer.dnd.VclGenericDragSource");
+    return "com.sun.star.datatransfer.dnd.VclGenericDragSource";
 #endif
 }
 

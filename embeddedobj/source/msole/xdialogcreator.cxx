@@ -117,7 +117,7 @@ uno::Sequence< OUString > MSOLEDialogObjectCreator::impl_staticGetSupportedServi
 
 OUString MSOLEDialogObjectCreator::impl_staticGetImplementationName()
 {
-    return OUString("com.sun.star.comp.embed.MSOLEObjectSystemCreator");
+    return "com.sun.star.comp.embed.MSOLEObjectSystemCreator";
 }
 
 

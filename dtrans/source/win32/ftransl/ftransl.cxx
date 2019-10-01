@@ -530,7 +530,7 @@ DataFlavor SAL_CALL CDataFormatTranslatorUNO::getDataFlavorFromSystemDataType( c
 
 OUString SAL_CALL CDataFormatTranslatorUNO::getImplementationName(  )
 {
-    return OUString( IMPL_NAME );
+    return IMPL_NAME;
 }
 
 sal_Bool SAL_CALL CDataFormatTranslatorUNO::supportsService( const OUString& ServiceName )

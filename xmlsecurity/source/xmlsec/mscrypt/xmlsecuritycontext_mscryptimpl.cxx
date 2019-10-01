@@ -126,7 +126,7 @@ void SAL_CALL XMLSecurityContext_MSCryptImpl::setDefaultSecurityEnvironmentIndex
 
 /* XServiceInfo */
 OUString SAL_CALL XMLSecurityContext_MSCryptImpl::getImplementationName() {
-    return OUString("com.sun.star.xml.crypto.XMLSecurityContext") ;
+    return "com.sun.star.xml.crypto.XMLSecurityContext" ;
 }
 
 /* XServiceInfo */

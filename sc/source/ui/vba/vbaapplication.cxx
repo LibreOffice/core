@@ -969,7 +969,7 @@ ScVbaApplication::getOperatingSystem()
     // TODO Solution should contain the version number of the operating system
     // too.
 #if   defined(_WIN32)
-        return OUString("Windows");
+        return "Windows";
 #elif defined(MACOSX)
         return "Macintosh";
 #elif defined(UNX)

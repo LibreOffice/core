@@ -96,34 +96,34 @@ std::u16string_view getServiceNameFromGUID_Impl( GUID const * guid )
 OUString getFilterNameFromGUID_Impl( GUID const * guid )
 {
     if ( *guid == OID_WriterTextServer )
-        return OUString( "StarOffice XML (Writer)" );
+        return "StarOffice XML (Writer)";
 
     if ( *guid == OID_WriterOASISTextServer )
-        return OUString( "writer8" );
+        return "writer8";
 
     if ( *guid == OID_CalcServer )
-        return OUString( "StarOffice XML (Calc)" );
+        return "StarOffice XML (Calc)";
 
     if ( *guid == OID_CalcOASISServer )
-        return OUString( "calc8" );
+        return "calc8";
 
     if ( *guid == OID_DrawingServer )
-        return OUString( "StarOffice XML (Draw)" );
+        return "StarOffice XML (Draw)";
 
     if ( *guid == OID_DrawingOASISServer )
-        return OUString( "draw8" );
+        return "draw8";
 
     if ( *guid == OID_PresentationServer )
-        return OUString( "StarOffice XML (Impress)" );
+        return "StarOffice XML (Impress)";
 
     if ( *guid == OID_PresentationOASISServer )
-        return OUString( "impress8" );
+        return "impress8";
 
     if ( *guid == OID_MathServer )
-        return OUString( "StarOffice XML (Math)" );
+        return "StarOffice XML (Math)";
 
     if ( *guid == OID_MathOASISServer )
-        return OUString( "math8" );
+        return "math8";
 
     return OUString();
 }

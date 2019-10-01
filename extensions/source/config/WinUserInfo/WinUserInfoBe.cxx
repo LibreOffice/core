@@ -450,7 +450,7 @@ css::uno::Any WinUserInfoBe::getPropertyValue(OUString const& PropertyName)
 
 OUString WinUserInfoBe::getWinUserInfoBeName()
 {
-    return OUString("com.sun.star.comp.configuration.backend.WinUserInfoBe");
+    return "com.sun.star.comp.configuration.backend.WinUserInfoBe";
 }
 
 OUString SAL_CALL WinUserInfoBe::getImplementationName() { return getWinUserInfoBeName(); }

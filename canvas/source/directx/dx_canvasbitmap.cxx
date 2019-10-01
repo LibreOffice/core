@@ -240,7 +240,7 @@ namespace dxcanvas
 
     OUString SAL_CALL CanvasBitmap::getImplementationName(  )
     {
-        return OUString( "DXCanvas.CanvasBitmap" );
+        return "DXCanvas.CanvasBitmap";
     }
 
     sal_Bool SAL_CALL CanvasBitmap::supportsService( const OUString& ServiceName )

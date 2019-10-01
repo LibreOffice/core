@@ -38,7 +38,7 @@ static uno::Reference<uno::XInterface> EmbedServer_createInstance(
 
 static OUString EmbedServer_getImplementationName() throw()
 {
-    return OUString("com.sun.star.comp.ole.EmbedServer");
+    return "com.sun.star.comp.ole.EmbedServer";
 
 }
 

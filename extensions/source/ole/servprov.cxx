@@ -375,7 +375,7 @@ Sequence< OUString >    SAL_CALL OleClient::getAvailableServiceNames()
 
 OUString OleClient::getImplementationName()
 {
-    return OUString("com.sun.star.comp.ole.OleClient");
+    return "com.sun.star.comp.ole.OleClient";
 }
 
 sal_Bool OleClient::supportsService(OUString const & ServiceName)
@@ -522,7 +522,7 @@ OleServer::~OleServer()
 
 OUString OleServer::getImplementationName()
 {
-    return OUString("com.sun.star.comp.ole.OleServer");
+    return "com.sun.star.comp.ole.OleServer";
 }
 
 sal_Bool OleServer::supportsService(OUString const & ServiceName)

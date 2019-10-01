@@ -2883,7 +2883,7 @@ OUString CMAccessible::get_String4Numbering(const Any& pAny, sal_Int16 numbering
     }
     else
     {
-        return OUString("Numbering:");
+        return "Numbering:";
     }
 }
 

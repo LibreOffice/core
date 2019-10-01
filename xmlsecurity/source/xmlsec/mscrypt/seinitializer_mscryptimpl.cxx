@@ -150,7 +150,7 @@ void SAL_CALL SEInitializer_MSCryptImpl::freeSecurityContext( const uno::Referen
 /* XServiceInfo */
 OUString SAL_CALL SEInitializer_MSCryptImpl::getImplementationName()
 {
-    return OUString("com.sun.star.xml.crypto.SEInitializer");
+    return "com.sun.star.xml.crypto.SEInitializer";
 }
 
 sal_Bool SAL_CALL SEInitializer_MSCryptImpl::supportsService( const OUString& rServiceName )

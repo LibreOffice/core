@@ -54,7 +54,7 @@ static Sequence< OUString > getSupportedServiceNames_MSAAServiceImpl()
 
 static OUString getImplementationName_MSAAServiceImpl()
 {
-    return OUString( "com.sun.star.accessibility.my_sc_implementation.MSAAService" );
+    return "com.sun.star.accessibility.my_sc_implementation.MSAAService";
 }
 
 class MSAAServiceImpl : public ::cppu::WeakImplHelper<

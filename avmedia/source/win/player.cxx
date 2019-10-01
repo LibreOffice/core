@@ -435,7 +435,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
 
 OUString SAL_CALL Player::getImplementationName(  )
 {
-    return OUString( AVMEDIA_WIN_PLAYER_IMPLEMENTATIONNAME );
+    return AVMEDIA_WIN_PLAYER_IMPLEMENTATIONNAME;
 }
 
 

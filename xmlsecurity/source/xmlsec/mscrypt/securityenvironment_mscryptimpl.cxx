@@ -155,7 +155,7 @@ SecurityEnvironment_MSCryptImpl::~SecurityEnvironment_MSCryptImpl() {
 
 /* XServiceInfo */
 OUString SAL_CALL SecurityEnvironment_MSCryptImpl::getImplementationName() {
-    return OUString("com.sun.star.xml.crypto.SecurityEnvironment");
+    return "com.sun.star.xml.crypto.SecurityEnvironment";
 }
 
 /* XServiceInfo */
@@ -990,7 +990,7 @@ static X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cer
 
 OUString SecurityEnvironment_MSCryptImpl::getSecurityEnvironmentInformation()
 {
-    return OUString("Microsoft Crypto API");
+    return "Microsoft Crypto API";
 }
 
 xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
