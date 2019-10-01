@@ -24,8 +24,10 @@
 
 #include <cstddef>
 #include <memory>
+#include <vector>
 
-class SfxAllEnumValueArr;
+struct SfxAllEnumValue_Impl;
+typedef std::vector<SfxAllEnumValue_Impl> SfxAllEnumValueArr;
 
 // MSVC hack:
 class SAL_DLLPUBLIC_RTTI SfxAllEnumItem_Base: public SfxEnumItem<sal_uInt16> {
