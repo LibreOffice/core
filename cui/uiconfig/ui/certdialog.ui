@@ -40,7 +40,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="add">
-                <property name="label" translatable="yes" context="certdialog|add">_Add...</property>
+                <property name="label" translatable="yes" context="certdialog|add">_Select NSS path...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
