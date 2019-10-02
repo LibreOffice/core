@@ -338,7 +338,7 @@ extern "C" {
 
 /*****************************************************************************/
 
-static G_CONST_RETURN gchar*
+static const gchar*
 wrapper_get_name( AtkObject *atk_obj )
 {
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
@@ -369,7 +369,7 @@ wrapper_get_name( AtkObject *atk_obj )
 
 /*****************************************************************************/
 
-static G_CONST_RETURN gchar*
+static const gchar*
 wrapper_get_description( AtkObject *atk_obj )
 {
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
