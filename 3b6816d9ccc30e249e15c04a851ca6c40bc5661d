@@ -34,6 +34,24 @@
       "revId": "3b6816d9ccc30e249e15c04a851ca6c40bc5661d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_80c5fe90",
+        "filename": "sc/source/ui/unoobj/docuno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1807,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-10-02T07:19:37Z",
+      "side": 1,
+      "message": "More seriously, could you please consider extracting this \u0026 the original source to a separate function to avoid the copy\u0026paste?\n\nSo that next time you need to fix some bug in this code, you need to change only one place.",
+      "parentUuid": "7f7f9b97_7dcf2f7f",
+      "revId": "3b6816d9ccc30e249e15c04a851ca6c40bc5661d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
