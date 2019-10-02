@@ -4439,7 +4439,7 @@ private:
     DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
     DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
     DECL_LINK(StyleUpdatedHdl, VclDrawingArea&, void);
-    DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
     DECL_LINK(QueryTooltipHdl, tools::Rectangle&, OUString);
 
     // SalInstanceWidget has a generic listener for all these
@@ -4485,7 +4485,7 @@ public:
         m_xDrawingArea->SetKeyPressHdl(LINK(this, SalInstanceDrawingArea, KeyPressHdl));
         m_xDrawingArea->SetKeyReleaseHdl(LINK(this, SalInstanceDrawingArea, KeyReleaseHdl));
         m_xDrawingArea->SetStyleUpdatedHdl(LINK(this, SalInstanceDrawingArea, StyleUpdatedHdl));
-        m_xDrawingArea->SetPopupMenuHdl(LINK(this, SalInstanceDrawingArea, PopupMenuHdl));
+        m_xDrawingArea->SetCommandHdl(LINK(this, SalInstanceDrawingArea, CommandHdl));
         m_xDrawingArea->SetQueryTooltipHdl(LINK(this, SalInstanceDrawingArea, QueryTooltipHdl));
     }
 
@@ -4563,7 +4563,7 @@ public:
     virtual ~SalInstanceDrawingArea() override
     {
         m_xDrawingArea->SetQueryTooltipHdl(Link<tools::Rectangle&, OUString>());
-        m_xDrawingArea->SetPopupMenuHdl(Link<const CommandEvent&, bool>());
+        m_xDrawingArea->SetCommandHdl(Link<const CommandEvent&, bool>());
         m_xDrawingArea->SetStyleUpdatedHdl(Link<VclDrawingArea&, void>());
         m_xDrawingArea->SetMousePressHdl(Link<const MouseEvent&, bool>());
         m_xDrawingArea->SetMouseMoveHdl(Link<const MouseEvent&, bool>());
@@ -4623,9 +4623,9 @@ IMPL_LINK_NOARG(SalInstanceDrawingArea, StyleUpdatedHdl, VclDrawingArea&, void)
     m_aStyleUpdatedHdl.Call(*this);
 }
 
-IMPL_LINK(SalInstanceDrawingArea, PopupMenuHdl, const CommandEvent&, rEvent, bool)
+IMPL_LINK(SalInstanceDrawingArea, CommandHdl, const CommandEvent&, rEvent, bool)
 {
-    return m_aPopupMenuHdl.Call(rEvent);
+    return m_aCommandHdl.Call(rEvent);
 }
 
 IMPL_LINK(SalInstanceDrawingArea, QueryTooltipHdl, tools::Rectangle&, rHelpArea, OUString)

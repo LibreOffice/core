@@ -33,7 +33,7 @@ public:
     virtual void GetFocus() {}
     virtual void LoseFocus() {}
     virtual void StyleUpdated() { Invalidate(); }
-    virtual bool ContextMenu(const CommandEvent&) { return false; }
+    virtual bool Command(const CommandEvent&) { return false; }
     virtual bool KeyInput(const KeyEvent&) { return false; }
     virtual tools::Rectangle GetFocusRect() { return tools::Rectangle(); }
     virtual FactoryFunction GetUITestFactory() const { return nullptr; }
@@ -104,7 +104,7 @@ private:
     DECL_LINK(DoLoseFocus, weld::Widget&, void);
     DECL_LINK(DoKeyPress, const KeyEvent&, bool);
     DECL_LINK(DoFocusRect, weld::Widget&, tools::Rectangle);
-    DECL_LINK(DoPopupMenu, const CommandEvent&, bool);
+    DECL_LINK(DoCommand, const CommandEvent&, bool);
     DECL_LINK(DoStyleUpdated, weld::Widget&, void);
     DECL_LINK(DoRequestHelp, tools::Rectangle&, OUString);
 

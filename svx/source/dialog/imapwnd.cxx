@@ -487,7 +487,7 @@ IMapObject* IMapWindow::GetIMapObj( const SdrObject* pSdrObj )
     return pIMapObj;
 }
 
-bool IMapWindow::ContextMenu(const CommandEvent& rCEvt)
+bool IMapWindow::Command(const CommandEvent& rCEvt)
 {
     vcl::Region  aRegion;
 
@@ -530,8 +530,7 @@ bool IMapWindow::ContextMenu(const CommandEvent& rCEvt)
 
         return true;
     }
-    else
-        return CustomWidgetController::ContextMenu(rCEvt);
+    return CustomWidgetController::Command(rCEvt);
 }
 
 IMapDropTargetHelper::IMapDropTargetHelper(IMapWindow& rImapWindow)

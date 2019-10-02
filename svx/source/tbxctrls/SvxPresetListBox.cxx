@@ -43,8 +43,10 @@ void SvxPresetListBox::Resize()
     SvtValueSet::Resize();
 }
 
-bool SvxPresetListBox::ContextMenu(const CommandEvent& rEvent)
+bool SvxPresetListBox::Command(const CommandEvent& rEvent)
 {
+    if (rEvent.GetCommand() != CommandEventId::ContextMenu)
+        return CustomWidgetController::Command(rEvent);
     const sal_uInt16 nIndex = GetSelectedItemId();
     if(nIndex > 0)
     {

@@ -83,8 +83,11 @@ bool TemplateSearchView::KeyInput( const KeyEvent& rKEvt )
     return SfxThumbnailView::KeyInput(rKEvt);
 }
 
-bool TemplateSearchView::ContextMenu(const CommandEvent& rCEvt)
+bool TemplateSearchView::Command(const CommandEvent& rCEvt)
 {
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
+        return CustomWidgetController::Command(rCEvt);
+
     if (rCEvt.IsMouseEvent())
     {
         deselectItems();

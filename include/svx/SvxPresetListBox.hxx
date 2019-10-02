@@ -44,7 +44,7 @@ public:
     SvxPresetListBox(std::unique_ptr<weld::ScrolledWindow> pWindow);
 
     virtual void Resize() override;
-    virtual bool ContextMenu(const CommandEvent& rEvent) override;
+    virtual bool Command(const CommandEvent& rEvent) override;
     static sal_uInt32 getColumnCount() { return nColCount; }
     Size const & GetIconSize() const { return aIconSize; }
 

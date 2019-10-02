@@ -71,7 +71,7 @@ public:
                     const OUString* pURL = nullptr);
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-    virtual bool ContextMenu(const CommandEvent& rCEvt) override;
+    virtual bool Command(const CommandEvent& rCEvt) override;
     virtual ~SwOneExampleFrame() override;
 
     css::uno::Reference< css::frame::XModel > &       GetModel()      {return m_xModel;}
