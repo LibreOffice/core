@@ -3239,16 +3239,32 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124601b)
     // Table has an image, which is anchored in the first row, but its vertical position is large
     // enough to be rendered in the second row.
     // The shape has layoutInCell=1, so should match what Word does here.
+    // Also the horizontal position should be in the last column, even if the anchor is in the
+    // last-but-one column.
     createDoc("tdf124601b.doc");
     xmlDocPtr pXmlDoc = parseLayoutDump();
 
     sal_Int32 nFlyTop = getXPath(pXmlDoc, "//fly/infos/bounds", "top").toInt32();
+    sal_Int32 nFlyLeft = getXPath(pXmlDoc, "//fly/infos/bounds", "left").toInt32();
+    sal_Int32 nFlyRight = nFlyLeft + getXPath(pXmlDoc, "//fly/infos/bounds", "width").toInt32();
     sal_Int32 nSecondRowTop = getXPath(pXmlDoc, "//tab/row[2]/infos/bounds", "top").toInt32();
+    sal_Int32 nLastCellLeft
+        = getXPath(pXmlDoc, "//tab/row[1]/cell[5]/infos/bounds", "left").toInt32();
+    sal_Int32 nLastCellRight
+        = nLastCellLeft + getXPath(pXmlDoc, "//tab/row[1]/cell[5]/infos/bounds", "width").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected greater than: 3736
     // - Actual  : 2852
     // i.e. the image was still inside the first row.
     CPPUNIT_ASSERT_GREATER(nSecondRowTop, nFlyTop);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 9640
+    // - Actual  : 9639
+    // i.e. the right edge of the image was not within the bounds of the last column, the right edge
+    // was in the last-but-one column.
+    CPPUNIT_ASSERT_GREATER(nLastCellLeft, nFlyRight);
+    CPPUNIT_ASSERT_LESS(nLastCellRight, nFlyRight);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

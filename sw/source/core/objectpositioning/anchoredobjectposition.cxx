@@ -881,7 +881,13 @@ SwTwips SwAnchoredObjectPosition::CalcRelPosX(
     // keep object inside 'page' alignment layout frame
     const SwFrame& rEnvironmentLayFrame =
             _rEnvOfObj.GetHoriEnvironmentLayoutFrame( _rHoriOrientFrame );
-    nRelPosX = AdjustHoriRelPos( rEnvironmentLayFrame, nRelPosX );
+    bool bFollowTextFlow = GetFrameFormat().GetFollowTextFlow().GetValue();
+    bool bWrapThrough = GetFrameFormat().GetSurround().GetSurround() != text::WrapTextMode_THROUGH;
+    // Don't try to keep wrap-though objects inside the cell, even if they are following text flow.
+    if (!rEnvironmentLayFrame.IsInTab() || !bFollowTextFlow || bWrapThrough)
+    {
+        nRelPosX = AdjustHoriRelPos( rEnvironmentLayFrame, nRelPosX );
+    }
 
     // if object is a Writer fly frame and it's anchored to a content and
     // it is horizontal positioned left or right, but not relative to character,
