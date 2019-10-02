@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:56:45 using:
+ Generated on 2019-10-02 19:33:38 using:
  ./bin/update_pch basctl basctl --cutoff=3 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -51,6 +51,7 @@
 #include <vector>
 #include <boost/functional/hash.hpp>
 #include <boost/optional.hpp>
+#include <boost/property_tree/ptree.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -80,6 +81,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
+#include <rtl/uuid.h>
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
@@ -91,30 +93,27 @@
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/IDialogRenderable.hxx>
-#include <vcl/abstdlg.hxx>
-#include <vcl/accel.hxx>
+#include <vcl/NotebookBarAddonsMerger.hxx>
+#include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/builderfactory.hxx>
+#include <vcl/button.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/devicecoordinate.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
-#include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
@@ -130,26 +129,21 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
-#include <vcl/mnemonicengine.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
-#include <vcl/quickselectionengine.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/spinfld.hxx>
 #include <vcl/status.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/task.hxx>
+#include <vcl/textfilter.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/transfer.hxx>
-#include <vcl/treelist.hxx>
-#include <vcl/treelistentries.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
@@ -193,7 +187,6 @@
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
-#include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -205,26 +198,17 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/datatransfer/DataFlavor.hpp>
-#include <com/sun/star/datatransfer/XTransferable2.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
-#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
-#include <com/sun/star/datatransfer/dnd/DropTargetDragEvent.hpp>
-#include <com/sun/star/datatransfer/dnd/DropTargetDropEvent.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/drawing/DashStyle.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/HatchStyle.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
-#include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XStatusbarController.hpp>
-#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
@@ -241,6 +225,7 @@
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uno/Any.h>
@@ -275,6 +260,8 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propstate.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/weak.hxx>
 #include <cppu/cppudllapi.h>
@@ -298,6 +285,7 @@
 #include <editeng/editstat.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/eedata.hxx>
+#include <editeng/flditem.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/paragraphdata.hxx>
@@ -305,11 +293,11 @@
 #include <editeng/svxfont.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
+#include <i18nutil/i18nutildllapi.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/safeint.hxx>
-#include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -329,9 +317,6 @@
 #include <sfx2/shell.hxx>
 #include <sfx2/stbitem.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sot/exchange.hxx>
-#include <sot/formats.hxx>
-#include <sot/sotdllapi.h>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/cenumitm.hxx>
@@ -340,7 +325,6 @@
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
 #include <svl/lstner.hxx>
-#include <svl/memberid.h>
 #include <svl/poolitem.hxx>
 #include <svl/srchdefs.hxx>
 #include <svl/srchitem.hxx>
@@ -358,17 +342,17 @@
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <svtools/valueset.hxx>
+#include <svx/DiagramDataInterface.hxx>
 #include <svx/Palette.hxx>
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/XPropertyEntry.hxx>
-#include <svx/grfcrop.hxx>
 #include <svx/ipolypolygoneditorcontroller.hxx>
 #include <svx/itextprovider.hxx>
-#include <svx/pageitem.hxx>
-#include <svx/sdgcpitm.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
+#include <svx/sdr/properties/defaultproperties.hxx>
+#include <svx/sdr/properties/properties.hxx>
 #include <svx/sdrobjectuser.hxx>
 #include <svx/sdtaditm.hxx>
 #include <svx/sdtaitm.hxx>
@@ -392,7 +376,6 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/svdpagv.hxx>
 #include <svx/svdpntv.hxx>
 #include <svx/svdpoev.hxx>
 #include <svx/svdsnpv.hxx>
@@ -405,20 +388,13 @@
 #include <svx/svxdllapi.h>
 #include <svx/xdash.hxx>
 #include <svx/xdef.hxx>
-#include <svx/xenum.hxx>
-#include <svx/xfillit0.hxx>
-#include <svx/xflasit.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/xlnasit.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xtable.hxx>
-#include <svx/xtextit0.hxx>
 #include <toolkit/dllapi.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
-#include <tools/contnr.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
@@ -427,7 +403,6 @@
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
-#include <tools/globname.hxx>
 #include <tools/helpers.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
@@ -435,7 +410,6 @@
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
-#include <tools/stream.hxx>
 #include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
