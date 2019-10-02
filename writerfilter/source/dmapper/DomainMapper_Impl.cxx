@@ -1750,25 +1750,17 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                     {
                         m_bStartedTOC = true;
                         uno::Reference< text::XTextCursor > xTOCTextCursor = xTextAppend->getEnd()->getText( )->createTextCursor( );
+                        assert(xTOCTextCursor.is());
                         xTOCTextCursor->gotoEnd(false);
-                        if (xTOCTextCursor.is())
-                        {
-                            if (m_bStartIndex || m_bStartBibliography || m_bStartGenericField)
-                                xTOCTextCursor->goLeft(1, false);
-                            xTextRange = xTextAppend->insertTextPortion(rString, aValues, xTOCTextCursor);
-                            SAL_WARN_IF(!xTextRange.is(), "writerfilter.dmapper", "insertTextPortion failed");
-                            if (!xTextRange.is())
-                                throw uno::Exception("insertTextPortion failed", nullptr);
-                            m_bTextInserted = true;
-                            xTOCTextCursor->gotoRange(xTextRange->getEnd(), true);
-                            mxTOCTextCursor = xTOCTextCursor;
-                        }
-                        else
-                        {
-                            xTextRange = xTextAppend->appendTextPortion(rString, aValues);
-                            xTOCTextCursor = xTextAppend->createTextCursor();
-                            xTOCTextCursor->gotoRange(xTextRange->getEnd(), false);
-                        }
+                        if (m_bStartIndex || m_bStartBibliography || m_bStartGenericField)
+                            xTOCTextCursor->goLeft(1, false);
+                        xTextRange = xTextAppend->insertTextPortion(rString, aValues, xTOCTextCursor);
+                        SAL_WARN_IF(!xTextRange.is(), "writerfilter.dmapper", "insertTextPortion failed");
+                        if (!xTextRange.is())
+                            throw uno::Exception("insertTextPortion failed", nullptr);
+                        m_bTextInserted = true;
+                        xTOCTextCursor->gotoRange(xTextRange->getEnd(), true);
+                        mxTOCTextCursor = xTOCTextCursor;
                         m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTOCTextCursor));
                     }
                 }
