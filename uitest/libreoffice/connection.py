@@ -134,14 +134,12 @@ class OfficeConnection:
             time_ = 0
             while time_ < 30:
                 time_ += DEFAULT_SLEEP
-                ret_attr = self.soffice.poll()
-                if ret_attr is not None:
+                ret = self.soffice.poll()
+                if ret is not None:
                     break
                 time.sleep(DEFAULT_SLEEP)
 
-            ret = 0
-            if ret_attr is None:
-                ret = 1
+            if ret is None:
                 self.soffice.terminate()
 
             # ret = self.soffice.wait()
