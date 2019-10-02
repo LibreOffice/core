@@ -2655,6 +2655,51 @@ IMPL_LINK_NOARG(GtkSalFrame, AsyncScroll, Timer *, void)
     }
 }
 
+SalWheelMouseEvent GtkSalFrame::GetWheelEvent(GdkEventScroll& rEvent)
+{
+    SalWheelMouseEvent aEvent;
+
+    aEvent.mnTime = rEvent.time;
+    aEvent.mnX = static_cast<sal_uLong>(rEvent.x);
+    aEvent.mnY = static_cast<sal_uLong>(rEvent.y);
+    aEvent.mnCode = GetMouseModCode(rEvent.state);
+
+    switch (rEvent.direction)
+    {
+        case GDK_SCROLL_UP:
+            aEvent.mnDelta = 120;
+            aEvent.mnNotchDelta = 1;
+            aEvent.mnScrollLines = 3;
+            aEvent.mbHorz = false;
+            break;
+
+        case GDK_SCROLL_DOWN:
+            aEvent.mnDelta = -120;
+            aEvent.mnNotchDelta = -1;
+            aEvent.mnScrollLines = 3;
+            aEvent.mbHorz = false;
+            break;
+
+        case GDK_SCROLL_LEFT:
+            aEvent.mnDelta = 120;
+            aEvent.mnNotchDelta = 1;
+            aEvent.mnScrollLines = 3;
+            aEvent.mbHorz = true;
+            break;
+
+        case GDK_SCROLL_RIGHT:
+            aEvent.mnDelta = -120;
+            aEvent.mnNotchDelta = -1;
+            aEvent.mnScrollLines = 3;
+            aEvent.mbHorz = true;
+            break;
+        default:
+            break;
+    }
+
+    return aEvent;
+}
+
 gboolean GtkSalFrame::signalScroll(GtkWidget*, GdkEvent* pInEvent, gpointer frame)
 {
     GdkEventScroll& rEvent = pInEvent->scroll;
@@ -2677,52 +2722,13 @@ gboolean GtkSalFrame::signalScroll(GtkWidget*, GdkEvent* pInEvent, gpointer fram
         assert(pThis->m_aPendingScrollEvents.empty());
     }
 
-    SalWheelMouseEvent aEvent;
+    SalWheelMouseEvent aEvent(GetWheelEvent(rEvent));
 
-    aEvent.mnTime = rEvent.time;
-    aEvent.mnX = static_cast<sal_uLong>(rEvent.x);
     // --- RTL --- (mirror mouse pos)
     if (AllSettings::GetLayoutRTL())
         aEvent.mnX = pThis->maGeometry.nWidth - 1 - aEvent.mnX;
-    aEvent.mnY = static_cast<sal_uLong>(rEvent.y);
-    aEvent.mnCode = GetMouseModCode(rEvent.state);
 
-    switch (rEvent.direction)
-    {
-        case GDK_SCROLL_UP:
-            aEvent.mnDelta = 120;
-            aEvent.mnNotchDelta = 1;
-            aEvent.mnScrollLines = 3;
-            aEvent.mbHorz = false;
-            pThis->CallCallbackExc(SalEvent::WheelMouse, &aEvent);
-            break;
-
-        case GDK_SCROLL_DOWN:
-            aEvent.mnDelta = -120;
-            aEvent.mnNotchDelta = -1;
-            aEvent.mnScrollLines = 3;
-            aEvent.mbHorz = false;
-            pThis->CallCallbackExc(SalEvent::WheelMouse, &aEvent);
-            break;
-
-        case GDK_SCROLL_LEFT:
-            aEvent.mnDelta = 120;
-            aEvent.mnNotchDelta = 1;
-            aEvent.mnScrollLines = 3;
-            aEvent.mbHorz = true;
-            pThis->CallCallbackExc(SalEvent::WheelMouse, &aEvent);
-            break;
-
-        case GDK_SCROLL_RIGHT:
-            aEvent.mnDelta = -120;
-            aEvent.mnNotchDelta = -1;
-            aEvent.mnScrollLines = 3;
-            aEvent.mbHorz = true;
-            pThis->CallCallbackExc(SalEvent::WheelMouse, &aEvent);
-            break;
-        default:
-            break;
-    }
+    pThis->CallCallbackExc(SalEvent::WheelMouse, &aEvent);
 
     return true;
 }
