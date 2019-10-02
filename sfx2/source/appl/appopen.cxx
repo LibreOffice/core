@@ -50,7 +50,6 @@
 
 #include <vcl/wrkwin.hxx>
 #include <svl/intitem.hxx>
-#include <vcl/layout.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/doctempl.hxx>

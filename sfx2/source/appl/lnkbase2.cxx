@@ -24,7 +24,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <vcl/layout.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

@@ -23,8 +23,8 @@
 #include <unx/gtk/gtkgdi.hxx>
 #include <unx/gtk/gtksalmenu.hxx>
 #include <unx/gtk/hudawareness.h>
+#include <vcl/event.hxx>
 #include <vcl/keycodes.hxx>
-#include <vcl/layout.hxx>
 #include <unx/wmadaptor.hxx>
 #include <unx/sm.hxx>
 #include <unx/salbmp.h>

@@ -28,7 +28,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>

@@ -23,7 +23,6 @@
 #include <basic/sbstar.hxx>
 
 #include <svl/svdde.hxx>
-#include <vcl/layout.hxx>
 #include <svl/eitem.hxx>
 
 #include <unotools/saveopt.hxx>

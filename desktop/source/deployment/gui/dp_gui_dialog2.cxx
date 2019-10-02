@@ -35,12 +35,8 @@
 
 #include <fpicker/strings.hrc>
 
-#include <vcl/ctrl.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/builderfactory.hxx>
 
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>

@@ -26,12 +26,10 @@
 #include <editeng/editids.hrc>
 #include <svtools/colorcfg.hxx>
 #include <svtools/extcolorcfg.hxx>
-#include <vcl/headbar.hxx>
-#include <vcl/scrbar.hxx>
 #include <svx/colorbox.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svxdlg.hxx>
 #include <helpids.h>

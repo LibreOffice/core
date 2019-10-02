@@ -24,8 +24,6 @@
 
 #include <tpstat.hxx>
 
-#include <vcl/layout.hxx>
-
 // Dokumentinfo-Tabpage:
 
 std::unique_ptr<SfxTabPage> ScDocStatPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet )

@@ -24,9 +24,8 @@
 #include <svl/itemset.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
