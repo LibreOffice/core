@@ -29,7 +29,7 @@ Qt5Clipboard::Qt5Clipboard(const OUString& aModeString, const QClipboard::Mode a
                                     XServiceInfo>(m_aMutex)
     , m_aClipboardName(aModeString)
     , m_aClipboardMode(aMode)
-    , m_bInSetContents(false)
+    , m_bOwnClipboardChange(false)
 {
     assert(isSupported(m_aClipboardMode));
     // DirectConnection guarantees the changed slot runs in the same thread as the QClipboard
@@ -66,7 +66,11 @@ void Qt5Clipboard::flushClipboard()
 
         QMimeData* pMimeCopy = nullptr;
         if (pQt5MimeData && pQt5MimeData->deepCopy(&pMimeCopy))
+        {
+            m_bOwnClipboardChange = true;
             pClipboard->setMimeData(pMimeCopy, m_aClipboardMode);
+            m_bOwnClipboardChange = false;
+        }
     });
 }
 
@@ -106,9 +110,7 @@ void Qt5Clipboard::setContents(
     m_aContents = xTrans;
     m_aOwner = xClipboardOwner;
 
-    // these QApplication::clipboard() calls will trigger QClipboard::changed / handleChanged.
-    // we need to prevent freeing the contents, so tell handleChanged about us setting it
-    m_bInSetContents = true;
+    m_bOwnClipboardChange = true;
     if (m_aContents.is())
         QApplication::clipboard()->setMimeData(new Qt5MimeData(m_aContents), m_aClipboardMode);
     else
@@ -116,7 +118,7 @@ void Qt5Clipboard::setContents(
         assert(!m_aOwner.is());
         QApplication::clipboard()->clear(m_aClipboardMode);
     }
-    m_bInSetContents = false;
+    m_bOwnClipboardChange = false;
 
     aGuard.clear();
 
@@ -136,7 +138,7 @@ void Qt5Clipboard::handleChanged(QClipboard::Mode aMode)
     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> xOldOwner(m_aOwner);
     css::uno::Reference<css::datatransfer::XTransferable> xOldContents(m_aContents);
     // ownership change from LO POV is handled in setContents
-    if (!m_bInSetContents)
+    if (!m_bOwnClipboardChange)
     {
         m_aContents.clear();
         m_aOwner.clear();
@@ -149,7 +151,7 @@ void Qt5Clipboard::handleChanged(QClipboard::Mode aMode)
 
     aGuard.clear();
 
-    if (!m_bInSetContents && xOldOwner.is())
+    if (!m_bOwnClipboardChange && xOldOwner.is())
         xOldOwner->lostOwnership(this, xOldContents);
     for (auto const& listener : aListeners)
         listener->changedContents(aEv);
