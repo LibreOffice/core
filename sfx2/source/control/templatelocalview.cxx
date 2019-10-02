@@ -1157,8 +1157,11 @@ bool SfxTemplateLocalView::MouseButtonDown( const MouseEvent& rMEvt )
     return SfxThumbnailView::MouseButtonDown(rMEvt);
 }
 
-bool SfxTemplateLocalView::ContextMenu(const CommandEvent& rCEvt)
+bool SfxTemplateLocalView::Command(const CommandEvent& rCEvt)
 {
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
+        return CustomWidgetController::Command(rCEvt);
+
     if (rCEvt.IsMouseEvent())
     {
         deselectItems();
