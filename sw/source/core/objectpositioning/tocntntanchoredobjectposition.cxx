@@ -632,7 +632,12 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                         // <lcl_DoesVertPosFits(..)>.
                         if ( pLayoutFrameToGrow )
                         {
-                            pLayoutFrameToGrow->Grow( nRelPosY - nAvail );
+                            // No need to grow the anchor cell in case the follow-text-flow object
+                            // is wrap-though.
+                            if (!GetAnchorFrame().IsInTab() || !DoesObjFollowsTextFlow() || !bWrapThrough)
+                            {
+                                pLayoutFrameToGrow->Grow( nRelPosY - nAvail );
+                            }
                         }
                         nRelPosY = 0;
                     }
@@ -789,7 +794,12 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             }
             if ( pLayoutFrameToGrow )
             {
-                pLayoutFrameToGrow->Grow( -nDist );
+                // No need to grow the anchor cell in case the follow-text-flow object
+                // is wrap-though.
+                if (!GetAnchorFrame().IsInTab() || !DoesObjFollowsTextFlow() || !bWrapThrough)
+                {
+                    pLayoutFrameToGrow->Grow( -nDist );
+                }
             }
         }
 

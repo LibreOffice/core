@@ -501,11 +501,11 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
              !GetDrawObjs() && !GetAnchorFrame()->IsInTab() )
         {
             SwFrame* pHeader = FindFooterOrHeader();
-            // In a header or footer, correction of the position is no good idea.
+            // In a header, correction of the position is no good idea.
             // If the fly moves, some paragraphs have to be formatted, this
             // could cause a change of the height of the headerframe,
             // now the flyframe can change its position and so on ...
-            if ( !pHeader )
+            if ( !pHeader || !pHeader->IsHeaderFrame() )
             {
                 const long nOld = getFrameArea().Top();
 
