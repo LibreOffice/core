@@ -50,7 +50,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <dbconfig.hxx>
 #include <pagedesc.hxx>
-#include <vcl/lstbox.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/urihelper.hxx>

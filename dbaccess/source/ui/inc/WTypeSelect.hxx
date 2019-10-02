@@ -23,11 +23,6 @@
 #include "TypeInfo.hxx"
 #include "WTabPage.hxx"
 
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-
 class SvStream;
 
 namespace dbaui

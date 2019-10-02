@@ -19,8 +19,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_FIELDCONTROLS_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_FIELDCONTROLS_HXX
 
-#include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include "SqlNameEdit.hxx"
 

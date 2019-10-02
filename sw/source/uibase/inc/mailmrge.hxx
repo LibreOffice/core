@@ -22,14 +22,6 @@
 #include <memory>
 #include <sfx2/basedlgs.hxx>
 
-#include <vcl/button.hxx>
-
-#include <vcl/field.hxx>
-
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-
-#include <vcl/lstbox.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 
