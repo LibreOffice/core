@@ -110,6 +110,7 @@ static void g_lo_action_group_iface_init (GActionGroupInterface *);
 #endif
 G_DEFINE_TYPE_WITH_CODE (GLOActionGroup,
     g_lo_action_group, G_TYPE_OBJECT,
+    G_ADD_PRIVATE(GLOActionGroup)
     G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
                            g_lo_action_group_iface_init));
 #ifdef __GNUC__
@@ -312,9 +313,7 @@ static void
 g_lo_action_group_init (GLOActionGroup *group)
 {
     SAL_INFO("vcl.unity", "g_lo_action_group_init on " << group);
-    group->priv = G_TYPE_INSTANCE_GET_PRIVATE (group,
-                                                 G_TYPE_LO_ACTION_GROUP,
-                                                 GLOActionGroupPrivate);
+    group->priv = static_cast<GLOActionGroupPrivate *>(g_lo_action_group_get_instance_private (group));
     group->priv->table = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                   g_free, g_object_unref);
 }
@@ -325,14 +324,6 @@ g_lo_action_group_class_init (GLOActionGroupClass *klass)
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
     object_class->finalize = g_lo_action_group_finalize;
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-    g_type_class_add_private (klass, sizeof (GLOActionGroupPrivate));
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
 }
 
 static void
