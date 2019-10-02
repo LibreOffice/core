@@ -421,6 +421,7 @@ private:
     std::stack<AnchoredContext>                                                     m_aAnchoredStack;
     std::stack<HeaderFooterContext>                                                 m_aHeaderFooterStack;
     std::stack<FieldContextPtr>                                                     m_aFieldStack;
+    bool m_bForceGenericFields;
     bool                                                                            m_bSetUserFieldContent;
     bool                                                                            m_bSetCitation;
     bool                                                                            m_bSetDateValue;
@@ -999,6 +1000,8 @@ public:
     bool IsSdtEndBefore();
 
     bool IsDiscardHeaderFooter();
+
+    bool IsForceGenericFields() const { return m_bForceGenericFields; }
 
     void SetParaAutoBefore(bool bParaAutoBefore) { m_bParaAutoBefore = bParaAutoBefore; }
 

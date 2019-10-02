@@ -193,6 +193,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_xTextDocument( xModel, uno::UNO_QUERY ),
         m_xTextFactory( xModel, uno::UNO_QUERY ),
         m_xComponentContext( xContext ),
+        m_bForceGenericFields(getenv("SW_FIELDEDIT") != nullptr),
         m_bSetUserFieldContent( false ),
         m_bSetCitation( false ),
         m_bSetDateValue( false ),
@@ -4305,7 +4306,7 @@ void DomainMapper_Impl::CloseFieldCommand()
 
             FieldConversionMap_t::const_iterator const aIt =
                 aFieldConversionMap.find(std::get<0>(field));
-            if(aIt != aFieldConversionMap.end())
+            if (aIt != aFieldConversionMap.end() && !m_bForceGenericFields)
             {
                 pContext->SetFieldId(aIt->second.eFieldId);
 

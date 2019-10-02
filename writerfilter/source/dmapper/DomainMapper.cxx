@@ -3142,8 +3142,10 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
             m_pImpl->SetCustomFtnMark( false );
             //otherwise ignore sText
         }
-        else if( m_pImpl->IsOpenFieldCommand() )
+        else if (m_pImpl->IsOpenFieldCommand() && !m_pImpl->IsForceGenericFields())
+        {
             m_pImpl->AppendFieldCommand(sText);
+        }
         else if( m_pImpl->IsOpenField() && m_pImpl->IsFieldResultAsString())
              /*depending on the success of the field insert operation this result will be
               set at the field or directly inserted into the text*/
@@ -3410,8 +3412,10 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 pContext->GetFootnote()->setLabel( sText );
                 //otherwise ignore sText
             }
-            else if( m_pImpl->IsOpenFieldCommand() )
+            else if (m_pImpl->IsOpenFieldCommand() && !m_pImpl->IsForceGenericFields())
+            {
                 m_pImpl->AppendFieldCommand(sText);
+            }
             else if( m_pImpl->IsOpenField() && m_pImpl->IsFieldResultAsString())
                 /*depending on the success of the field insert operation this result will be
                   set at the field or directly inserted into the text*/
