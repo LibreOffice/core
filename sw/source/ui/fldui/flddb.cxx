@@ -46,7 +46,7 @@ SwFieldDBPage::SwFieldDBPage(weld::Container* pPage, weld::DialogController* pCo
     , m_xValueED(m_xBuilder->weld_entry("recnumber"))
     , m_xDBFormatRB(m_xBuilder->weld_radio_button("fromdatabasecb"))
     , m_xNewFormatRB(m_xBuilder->weld_radio_button("userdefinedcb"))
-    , m_xNumFormatLB(new SwNumFormatListBox(m_xBuilder->weld_combo_box("numformat")))
+    , m_xNumFormatLB(new NumFormatListBox(m_xBuilder->weld_combo_box("numformat")))
     , m_xFormatLB(m_xBuilder->weld_combo_box("format"))
     , m_xFormat(m_xBuilder->weld_widget("formatframe"))
 {

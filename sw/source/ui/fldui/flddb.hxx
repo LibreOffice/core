@@ -42,7 +42,7 @@ class SwFieldDBPage : public SwFieldPage
     std::unique_ptr<weld::Entry> m_xValueED;
     std::unique_ptr<weld::RadioButton> m_xDBFormatRB;
     std::unique_ptr<weld::RadioButton> m_xNewFormatRB;
-    std::unique_ptr<SwNumFormatListBox> m_xNumFormatLB;
+    std::unique_ptr<NumFormatListBox> m_xNumFormatLB;
     std::unique_ptr<weld::ComboBox> m_xFormatLB;
     std::unique_ptr<weld::Widget> m_xFormat;
 

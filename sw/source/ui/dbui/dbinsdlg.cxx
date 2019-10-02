@@ -200,7 +200,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     , m_xFormatFrame(m_xBuilder->weld_frame("formatframe"))
     , m_xRbDbFormatFromDb(m_xBuilder->weld_radio_button("fromdatabase"))
     , m_xRbDbFormatFromUsr(m_xBuilder->weld_radio_button("userdefined"))
-    , m_xLbDbFormatFromUsr(new SwNumFormatListBox(m_xBuilder->weld_combo_box("numformat")))
+    , m_xLbDbFormatFromUsr(new NumFormatListBox(m_xBuilder->weld_combo_box("numformat")))
     , m_xIbDbcolToEdit(m_xBuilder->weld_button("toedit"))
     , m_xEdDbText(m_xBuilder->weld_text_view("textview"))
     , m_xFtDbParaColl(m_xBuilder->weld_label("parastylelabel"))
