@@ -108,11 +108,14 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const OUString &rValue )
     SfxAllEnumValue_Impl aVal;
     aVal.nValue = nValue;
     aVal.aText = rValue;
+    sal_uInt16 nPos = GetPosByValue(nValue);
     if ( !pValues )
         pValues.reset( new SfxAllEnumValueArr );
-    else if ( GetPosByValue( nValue ) != USHRT_MAX )
+    else if ( nPos != USHRT_MAX )
+    {
         // remove when exists
-        RemoveValue( nValue );
+        pValues->erase( pValues->begin() + nPos );
+    }
     // then insert
     pValues->insert(pValues->begin() + GetPosByValue_(nValue), aVal); // FIXME: Duplicates?
 }
@@ -126,13 +129,6 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue )
         pValues.reset( new SfxAllEnumValueArr );
 
     pValues->insert(pValues->begin() + GetPosByValue_(nValue), aVal); // FIXME: Duplicates?
-}
-
-void SfxAllEnumItem::RemoveValue( sal_uInt16 nValue )
-{
-    sal_uInt16 nPos = GetPosByValue(nValue);
-    assert(nPos != USHRT_MAX);
-    pValues->erase( pValues->begin() + nPos );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
