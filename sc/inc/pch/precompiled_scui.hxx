@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:16:41 using:
+ Generated on 2019-10-02 19:35:59 using:
  ./bin/update_pch sc scui --cutoff=1 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -22,6 +22,7 @@
 
 #if PCH_LEVEL >= 1
 #include <memory>
+#include <utility>
 #include <vector>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -33,7 +34,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
-#include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/edit.hxx>
@@ -86,7 +86,6 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <svl/memberid.h>
 #include <svl/sharedstringpool.hxx>
 #include <svl/style.hxx>
 #include <svl/typedwhich.hxx>
@@ -104,8 +103,8 @@
 #include <svx/numinf.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/txencbox.hxx>
-#include <svx/unomid.hxx>
 #include <tools/color.hxx>
+#include <tools/fldunit.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
