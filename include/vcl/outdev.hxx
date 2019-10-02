@@ -458,6 +458,10 @@ public:
 
     VirtualDevice* GetAlphaVirtDev() const { return mpAlphaVDev; }
 
+    VclPtr<VirtualDevice> GetRotateDev() const;
+    void SetRotateDev(VclPtr<VirtualDevice> pDev);
+
+
 protected:
 
     /** Acquire a graphics device that the output device uses to draw on.

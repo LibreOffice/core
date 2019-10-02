@@ -731,4 +731,8 @@ bool OutputDevice::is_double_buffered_window() const
     return pWindow && pWindow->SupportsDoubleBuffering();
 }
 
+VclPtr<VirtualDevice> OutputDevice::GetRotateDev() const { return mpOutDevData->mpRotateDev; }
+
+void OutputDevice::SetRotateDev(VclPtr<VirtualDevice> pDev) { mpOutDevData->mpRotateDev = pDev; }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
