@@ -87,6 +87,7 @@ bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
     // So handle that by always having the full clip region saved on the stack
     // and always go back to that. SkCanvas::restore() only affects the clip
     // and the matrix.
+    assert(canvas->getSaveCount() == 2); // = there is just one save()
     canvas->restore();
     canvas->save();
     canvas->clipRegion(toSkRegion(region));
@@ -124,14 +125,18 @@ void SkiaSalGraphicsImpl::SetROPFillColor(SalROPColor nROPColor) { (void)nROPCol
 
 void SkiaSalGraphicsImpl::drawPixel(long nX, long nY)
 {
+    if (mLineColor == SALCOLOR_NONE)
+        return;
     SkCanvas* canvas = mSurface->getCanvas();
-    canvas->drawPoint(nX, nY, mPaint);
+    canvas->drawPoint(nX, nY, SkPaint());
 }
 
 void SkiaSalGraphicsImpl::drawPixel(long nX, long nY, Color nColor)
 {
+    if (nColor == SALCOLOR_NONE)
+        return;
     SkCanvas* canvas = mSurface->getCanvas();
-    SkPaint paint(mPaint);
+    SkPaint paint;
     paint.setColor(toSkColor(nColor));
     // Apparently drawPixel() is actually expected to set the pixel and not draw it.
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
@@ -140,15 +145,18 @@ void SkiaSalGraphicsImpl::drawPixel(long nX, long nY, Color nColor)
 
 void SkiaSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
 {
+    if (mLineColor == SALCOLOR_NONE)
+        return;
     SkCanvas* canvas = mSurface->getCanvas();
-    canvas->drawLine(nX1, nY1, nX2, nY2, mPaint);
+    SkPaint paint;
+    paint.setColor(toSkColor(mLineColor));
+    canvas->drawLine(nX1, nY1, nX2, nY2, paint);
 }
 
 void SkiaSalGraphicsImpl::drawRect(long nX, long nY, long nWidth, long nHeight)
 {
     SkCanvas* canvas = mSurface->getCanvas();
-    SkPaint paint(mPaint);
-    paint.setStrokeWidth(0); // smallest possible
+    SkPaint paint;
     if (mFillColor != SALCOLOR_NONE)
     {
         paint.setColor(toSkColor(mFillColor));
@@ -165,29 +173,47 @@ void SkiaSalGraphicsImpl::drawRect(long nX, long nY, long nWidth, long nHeight)
 
 void SkiaSalGraphicsImpl::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
 {
+    if (mLineColor == SALCOLOR_NONE)
+        return;
     std::vector<SkPoint> pointVector;
     pointVector.reserve(nPoints);
     for (sal_uInt32 i = 0; i < nPoints; ++i)
         pointVector.emplace_back(SkPoint::Make(pPtAry[i].mnX, pPtAry[i].mnY));
+    SkPaint paint;
+    paint.setColor(toSkColor(mLineColor));
     mSurface->getCanvas()->drawPoints(SkCanvas::kLines_PointMode, nPoints, pointVector.data(),
-                                      mPaint);
+                                      paint);
 }
 
 void SkiaSalGraphicsImpl::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
 {
+    if (mLineColor == SALCOLOR_NONE && mFillColor == SALCOLOR_NONE)
+        return;
     std::vector<SkPoint> pointVector;
     pointVector.reserve(nPoints);
     for (sal_uInt32 i = 0; i < nPoints; ++i)
         pointVector.emplace_back(SkPoint::Make(pPtAry[i].mnX, pPtAry[i].mnY));
     SkPath path;
-    path.addPoly(pointVector.data(), nPoints, true);
-    mSurface->getCanvas()->drawPath(path, mPaint);
+    path.addPoly(pointVector.data(), nPoints, false);
+    SkPaint paint;
+    if (mFillColor != SALCOLOR_NONE)
+    {
+        paint.setColor(toSkColor(mFillColor));
+        paint.setStyle(SkPaint::kFill_Style);
+        mSurface->getCanvas()->drawPath(path, paint);
+    }
+    if (mLineColor != SALCOLOR_NONE)
+    {
+        paint.setColor(toSkColor(mLineColor));
+        paint.setStyle(SkPaint::kStroke_Style);
+        mSurface->getCanvas()->drawPath(path, paint);
+    }
 }
 
 void SkiaSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                           PCONSTSALPOINT* pPtAry)
 {
-    if (SALCOLOR_NONE == mFillColor && SALCOLOR_NONE == mLineColor)
+    if (mLineColor == SALCOLOR_NONE && mFillColor == SALCOLOR_NONE)
         return;
     std::vector<SkPoint> pointVector;
     SkPath path;
@@ -203,12 +229,26 @@ void SkiaSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pP
             path.addPoly(pointVector.data(), points, true);
         }
     }
-    mSurface->getCanvas()->drawPath(path, mPaint);
+    SkPaint paint;
+    if (mFillColor != SALCOLOR_NONE)
+    {
+        paint.setColor(toSkColor(mFillColor));
+        paint.setStyle(SkPaint::kFill_Style);
+        mSurface->getCanvas()->drawPath(path, paint);
+    }
+    if (mLineColor != SALCOLOR_NONE)
+    {
+        paint.setColor(toSkColor(mLineColor));
+        paint.setStyle(SkPaint::kStroke_Style);
+        mSurface->getCanvas()->drawPath(path, paint);
+    }
 }
 
 bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
                                           const basegfx::B2DPolyPolygon&, double fTransparency)
 {
+    if (mLineColor == SALCOLOR_NONE && mFillColor == SALCOLOR_NONE)
+        return true;
     (void)rObjectToDevice;
     (void)fTransparency;
     return false;

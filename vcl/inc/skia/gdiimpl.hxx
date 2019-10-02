@@ -25,7 +25,6 @@
 #include <salgdiimpl.hxx>
 #include <salgeom.hxx>
 
-#include <SkPaint.h>
 #include <SkSurface.h>
 
 class VCL_DLLPUBLIC SkiaSalGraphicsImpl : public SalGraphicsImpl
@@ -213,7 +212,6 @@ private:
     SalGeometryProvider* mProvider;
     // The Skia surface that is target of all the rendering.
     sk_sp<SkSurface> mSurface;
-    SkPaint mPaint; // The current paint object (contains paint setup, such as color to use).
     vcl::Region mClipRegion;
     Color mLineColor;
     Color mFillColor;
