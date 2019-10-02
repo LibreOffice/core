@@ -19,14 +19,14 @@
 class VCL_PLUGIN_PUBLIC X11SkiaSalGraphicsImpl : public SkiaSalGraphicsImpl, public X11GraphicsImpl
 {
 private:
-    X11SalGraphics& mrX11Parent;
+    X11SalGraphics& mParent;
 
 public:
     X11SkiaSalGraphicsImpl(X11SalGraphics& rParent);
     virtual ~X11SkiaSalGraphicsImpl() override;
 
-public:
     virtual void Init() override;
+    virtual void freeResources() override;
 
     // implementation of X11GraphicsImpl
     void FillPixmapFromScreen(X11Pixmap* pPixmap, int nX, int nY) override;
@@ -34,6 +34,13 @@ public:
     bool RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY,
                                      ControlCacheKey& aControlCacheKey) override;
     bool TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY) override;
+
+protected:
+    virtual void performFlush() override;
+
+private:
+    GC getGC();
+    GC mCopyGc;
 };
 
 #endif // INCLUDED_VCL_INC_SKIA_X11_GDIIMPL_HXX
