@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_63730c17",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-10-02T18:18:39Z",
+      "side": 1,
+      "message": "note that std::stack uses a std::deque by default, so performance can be underwhelming",
+      "revId": "8af5145cf6d2a6ea26f42fabfd14d82ef6efb0de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
