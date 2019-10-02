@@ -27,6 +27,8 @@
 
 #include <SkSurface.h>
 
+class SkiaFlushIdle;
+
 class VCL_DLLPUBLIC SkiaSalGraphicsImpl : public SalGraphicsImpl
 {
 public:
@@ -36,8 +38,6 @@ public:
     virtual void Init() override;
 
     virtual void DeInit() override;
-
-    virtual void freeResources() override;
 
     const vcl::Region& getClipRegion() const;
     virtual bool setClipRegion(const vcl::Region&) override;
@@ -183,6 +183,12 @@ public:
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon,
                               const Gradient& rGradient) override;
 
+    // To be called after any drawing.
+    void scheduleFlush();
+
+    // Internal, called by SkiaFlushIdle.
+    virtual void performFlush() = 0;
+
 #ifdef DBG_UTIL
     void dump(const char* file) const;
     void dump(const SkBitmap& bitmap, const char* file) const;
@@ -191,7 +197,9 @@ public:
 protected:
     void setProvider(SalGeometryProvider* provider) { mProvider = provider; }
 
-private:
+    bool isOffscreen() const { return mProvider == nullptr || mProvider->IsOffScreen(); }
+
+protected:
     // get the width of the device
     int GetWidth() const { return mProvider ? mProvider->GetWidth() : 1; }
     // get the height of the device
@@ -215,6 +223,7 @@ private:
     vcl::Region mClipRegion;
     Color mLineColor;
     Color mFillColor;
+    std::unique_ptr<SkiaFlushIdle> mFlush;
 };
 
 #endif
