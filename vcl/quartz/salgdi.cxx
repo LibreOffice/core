@@ -66,7 +66,7 @@ bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& 
     OUString& rMissingChars) const
 {
     bool bFound = false;
-    CoreTextStyle* pStyle = static_cast<CoreTextStyle*>(rPattern.mpFontInstance.get());
+    CoreTextStyle* pStyle = static_cast<CoreTextStyle*>(rPattern.mpFontInstance);
     CTFontRef pFont = static_cast<CTFontRef>(CFDictionaryGetValue(pStyle->GetStyleDict(), kCTFontAttributeName));
     CFStringRef pStr = CreateCFString(rMissingChars);
     if (pStr)
@@ -243,7 +243,7 @@ AquaSalGraphics::~AquaSalGraphics()
     {
         if (!mpTextStyle[i])
             break;
-        mpTextStyle[i].clear();
+        mpTextStyle[i]->Release();
     }
 
     if( mpXorEmulation )
@@ -488,7 +488,8 @@ void AquaSalGraphics::SetFont(const FontSelectPattern* pReqFont, int nFallbackLe
     {
         if (!mpTextStyle[i])
             break;
-        mpTextStyle[i].clear();
+        mpTextStyle[i]->Release();
+        mpTextStyle[i] = nullptr;
     }
 
     if (!pReqFont)
@@ -498,7 +499,8 @@ void AquaSalGraphics::SetFont(const FontSelectPattern* pReqFont, int nFallbackLe
         return;
 
     // update the text style
-    mpTextStyle[nFallbackLevel] = static_cast<CoreTextStyle*>(pReqFont->mpFontInstance.get());
+    mpTextStyle[nFallbackLevel] = static_cast<CoreTextStyle*>(pReqFont->mpFontInstance);
+    mpTextStyle[nFallbackLevel]->Acquire();
 
     SAL_INFO("vcl.ct",
             "SetFont"

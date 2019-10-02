@@ -288,7 +288,7 @@ rtl::Reference<PhysicalFontFace> CoreTextFontFace::Clone() const
     return new CoreTextFontFace( *this);
 }
 
-rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
+LogicalFontInstance* CoreTextFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
     return new CoreTextStyle(*this, rFSD);
 }

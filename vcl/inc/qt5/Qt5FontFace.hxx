@@ -46,8 +46,7 @@ public:
     bool GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const;
     bool HasChar(sal_uInt32 cChar) const;
 
-    rtl::Reference<LogicalFontInstance>
-    CreateFontInstance(const FontSelectPattern& rFSD) const override;
+    LogicalFontInstance* CreateFontInstance(const FontSelectPattern& rFSD) const override;
 
 protected:
     Qt5FontFace(const Qt5FontFace&);

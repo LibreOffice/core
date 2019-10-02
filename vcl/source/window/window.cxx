@@ -1735,7 +1735,7 @@ void Window::ImplNewInputContext()
     SalInputContext         aNewContext;
     const vcl::Font&        rFont = rInputContext.GetFont();
     const OUString&         rFontName = rFont.GetFamilyName();
-    rtl::Reference<LogicalFontInstance> pFontInstance;
+    LogicalFontInstance*    pFontInstance = nullptr;
     aNewContext.mpFont = nullptr;
     if (!rFontName.isEmpty())
     {
@@ -1758,6 +1758,9 @@ void Window::ImplNewInputContext()
     aNewContext.meLanguage  = rFont.GetLanguage();
     aNewContext.mnOptions   = rInputContext.GetOptions();
     pFocusWin->ImplGetFrame()->SetInputContext( &aNewContext );
+
+    if ( pFontInstance )
+        pFontInstance->Release();
 }
 
 void Window::SetModalHierarchyHdl(const Link<bool, void>& rLink)

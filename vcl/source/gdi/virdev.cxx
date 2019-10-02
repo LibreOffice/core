@@ -487,7 +487,11 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
 
     // the reference device should have only scalable fonts
     // => clean up the original font lists before getting new ones
-    mpFontInstance.clear();
+    if ( mpFontInstance )
+    {
+        mpFontInstance->Release();
+        mpFontInstance = nullptr;
+    }
     mpDeviceFontList.reset();
     mpDeviceFontSizeList.reset();
 
