@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/awt/XRequestCallback.hpp>
 
 #include "platform.h"

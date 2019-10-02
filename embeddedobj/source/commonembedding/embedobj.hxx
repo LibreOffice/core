@@ -20,6 +20,8 @@
 #ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_COMMONEMBEDDING_EMBEDOBJ_HXX
 #define INCLUDED_EMBEDDEDOBJ_SOURCE_COMMONEMBEDDING_EMBEDOBJ_HXX
 
+#include <com/sun/star/awt/Rectangle.hpp>
+
 css::awt::Rectangle GetRectangleInterception( const css::awt::Rectangle& aRect1, const css::awt::Rectangle& aRect2 );
 
 #endif // INCLUDED_EMBEDDEDOBJ_SOURCE_COMMONEMBEDDING_EMBEDOBJ_HXX

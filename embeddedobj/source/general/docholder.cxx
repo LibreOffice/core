@@ -23,13 +23,11 @@
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -42,14 +40,10 @@
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
-#include <com/sun/star/bridge/XBridgeSupplier2.hpp>
-#include <com/sun/star/bridge/ModelDependent.hpp>
 #include <com/sun/star/embed/XHatchWindow.hpp>
 #include <com/sun/star/embed/HatchWindowFactory.hpp>
-#include <com/sun/star/embed/XInplaceClient.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XMenuBarMergingAcceptor.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -63,11 +57,8 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <osl/diagnose.h>
-#include <rtl/process.h>
 #include <vcl/svapp.hxx>
-#include <svtools/embedhlp.hxx>
 #include <unotools/resmgr.hxx>
-#include <vcl/settings.hxx>
 #include <sfx2/strings.hrc>
 
 #include <comphelper/processfactory.hxx>

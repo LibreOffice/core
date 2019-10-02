@@ -40,7 +40,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include "olepersist.hxx"

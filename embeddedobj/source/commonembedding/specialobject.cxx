@@ -19,27 +19,17 @@
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/embed/EmbedVerbs.hpp>
-#include <com/sun/star/embed/EmbedUpdateModes.hpp>
 #include <com/sun/star/embed/UnreachableStateException.hpp>
 #include <com/sun/star/embed/WrongStateException.hpp>
-#include <com/sun/star/embed/XEmbeddedClient.hpp>
-#include <com/sun/star/embed/XInplaceClient.hpp>
-#include <com/sun/star/embed/XWindowSupplier.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 
 #include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
 
 #include <specialobject.hxx>
-#include <intercept.hxx>
 
 using namespace ::com::sun::star;
 
