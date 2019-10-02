@@ -9753,6 +9753,7 @@ private:
     gulong m_nStyleUpdatedSignalId;
     gulong m_nQueryTooltip;
     gulong m_nPopupMenu;
+    gulong m_nScrollEvent;
 
     static gboolean signalDraw(GtkWidget*, cairo_t* cr, gpointer widget)
     {
@@ -9822,6 +9823,38 @@ private:
     {
         return m_aCommandHdl.Call(rCEvt);
     }
+    bool signal_scroll(GdkEventScroll* pEvent)
+    {
+        SalWheelMouseEvent aEvt(GtkSalFrame::GetWheelEvent(*pEvent));
+
+        if (AllSettings::GetLayoutRTL())
+            aEvt.mnX = gtk_widget_get_allocated_width(m_pWidget) - 1 - aEvt.mnX;
+
+        CommandWheelMode nMode;
+        sal_uInt16 nCode = aEvt.mnCode;
+        bool bHorz = aEvt.mbHorz;
+        if (nCode & KEY_MOD1)
+            nMode = CommandWheelMode::ZOOM;
+        else if (nCode & KEY_MOD2)
+            nMode = CommandWheelMode::DATAZOOM;
+        else
+        {
+            nMode = CommandWheelMode::SCROLL;
+            // #i85450# interpret shift-wheel as horizontal wheel action
+            if( (nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)) == KEY_SHIFT )
+                bHorz = true;
+        }
+
+        CommandWheelData aWheelData(aEvt.mnDelta, aEvt.mnNotchDelta, aEvt.mnScrollLines,
+                                    nMode, nCode, bHorz, aEvt.mbDeltaIsPixel);
+        CommandEvent aCEvt(Point(aEvt.mnX, aEvt.mnY), CommandEventId::Wheel, true, &aWheelData);
+        return m_aCommandHdl.Call(aCEvt);
+    }
+    static gboolean signalScroll(GtkWidget*, GdkEventScroll* pEvent, gpointer widget)
+    {
+        GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
+        return pThis->signal_scroll(pEvent);
+    }
 public:
     GtkInstanceDrawingArea(GtkDrawingArea* pDrawingArea, GtkInstanceBuilder* pBuilder, const a11yref& rA11y, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pDrawingArea), pBuilder, bTakeOwnership)
@@ -9834,6 +9867,7 @@ public:
         , m_nStyleUpdatedSignalId(g_signal_connect(m_pDrawingArea,"style-updated", G_CALLBACK(signalStyleUpdated), this))
         , m_nQueryTooltip(g_signal_connect(m_pDrawingArea, "query-tooltip", G_CALLBACK(signalQueryTooltip), this))
         , m_nPopupMenu(g_signal_connect(m_pDrawingArea, "popup-menu", G_CALLBACK(signalPopupMenu), this))
+        , m_nScrollEvent(g_signal_connect(m_pDrawingArea, "scroll-event", G_CALLBACK(signalScroll), this))
     {
         gtk_widget_set_has_tooltip(m_pWidget, true);
         g_object_set_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea", this);
@@ -9939,6 +9973,7 @@ public:
         css::uno::Reference<css::lang::XComponent> xComp(m_xAccessible, css::uno::UNO_QUERY);
         if (xComp.is())
             xComp->dispose();
+        g_signal_handler_disconnect(m_pDrawingArea, m_nScrollEvent);
         g_signal_handler_disconnect(m_pDrawingArea, m_nPopupMenu);
         g_signal_handler_disconnect(m_pDrawingArea, m_nQueryTooltip);
         g_signal_handler_disconnect(m_pDrawingArea, m_nStyleUpdatedSignalId);
