@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <tools/datetime.hxx>
+#include <tools/solar.h>
 #include <unotools/textsearch.hxx>
 #include <svx/ctredlin.hxx>
 #include "rangelst.hxx"
