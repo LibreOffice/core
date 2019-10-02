@@ -410,7 +410,7 @@ namespace
         {
             if(*ppCurrentMark == pMarkToFind)
             {
-                return std::move(ppCurrentMark);
+                return MarkManager::container_t::const_iterator(std::move(ppCurrentMark));
             }
             ++ppCurrentMark;
         }
@@ -437,7 +437,7 @@ namespace
                 break;
             if(IDocumentMarkAccess::GetType(**ppCurrentMark) == eType)
             {
-                return std::move(ppCurrentMark);
+                return MarkManager::container_t::const_iterator(std::move(ppCurrentMark));
             }
         }
         // reached a mark starting on a later start pos or the end of the
