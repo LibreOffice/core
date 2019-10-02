@@ -22,9 +22,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {
