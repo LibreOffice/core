@@ -32,8 +32,8 @@
 #include <sal/macros.h>
 #include <osl/time.h>
 #include <vcl/errinf.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/layout.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/urlobj.hxx>

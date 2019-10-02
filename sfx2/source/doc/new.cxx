@@ -19,7 +19,6 @@
 
 #include <osl/file.hxx>
 #include <sfx2/new.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/gdimtf.hxx>
 #include <svl/itemset.hxx>

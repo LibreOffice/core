@@ -71,7 +71,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/keycod.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/ehdl.hxx>

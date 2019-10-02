@@ -22,7 +22,7 @@
 #include <sfx2/newstyle.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
 // Private methods ------------------------------------------------------

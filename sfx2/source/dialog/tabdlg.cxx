@@ -34,9 +34,7 @@
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/viewsh.hxx>
 #include <unotools/viewoptions.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/IDialogRenderable.hxx>
-#include <vcl/layout.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 

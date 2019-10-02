@@ -22,10 +22,7 @@
 #include <FieldControls.hxx>
 #include <tools/diagnose_ex.h>
 #include <TableDesignHelpBar.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/fixed.hxx>
 #include <vector>
 #include <FieldDescriptions.hxx>
 #include <dlgattr.hxx>

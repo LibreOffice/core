@@ -24,9 +24,10 @@
 #include <editeng/eeitem.hxx>
 #include <svl/grabbagitem.hxx>
 #include <svl/itemset.hxx>
+#include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/transfer.hxx>
-#include <vcl/txtattr.hxx>
 #include <mmconfigitem.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
