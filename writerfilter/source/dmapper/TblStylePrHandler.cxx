@@ -162,6 +162,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
             break;
         case NS_ooxml::LN_CT_TrPrBase_tblHeader:
         {
+            m_pProperties->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny(sal_Int32(1)));
             beans::PropertyValue aValue;
             aValue.Name = "tblHeader";
             aValue.Value <<= true;
