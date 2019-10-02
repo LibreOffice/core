@@ -1457,7 +1457,7 @@ void SvxTableController::changeTableEdge(const SfxRequest& rReq)
         const sal_Int32 nOffset = convertTwipToMm100(pOffset->GetValue());
 
         SdrTableObj* pTableObj = dynamic_cast<SdrTableObj*>(mxTableObj.get());
-        if (pTableObj)
+        if (!pTableObj)
             return;
 
         sal_Int32 nEdgeIndex = -1;
