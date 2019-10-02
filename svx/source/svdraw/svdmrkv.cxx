@@ -997,7 +997,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                 }
             }
 
-            if (sSelectionText.isEmpty() || bCellsAreSelected || bIsInTextEditMode)
+            if (sSelectionText.isEmpty())
                 sSelectionText = "EMPTY";
 
             if (bTableSelection)
