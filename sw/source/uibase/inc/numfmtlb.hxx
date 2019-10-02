@@ -71,7 +71,7 @@ public:
     virtual ~SwNumFormatBase() {}
 };
 
-class SW_DLLPUBLIC SwNumFormatListBox : public SwNumFormatBase
+class SW_DLLPUBLIC NumFormatListBox : public SwNumFormatBase
 {
     std::unique_ptr<weld::ComboBox> mxControl;
 
@@ -80,7 +80,7 @@ class SW_DLLPUBLIC SwNumFormatListBox : public SwNumFormatBase
     virtual void Init() override;
 
 public:
-    SwNumFormatListBox(std::unique_ptr<weld::ComboBox> xControl);
+    NumFormatListBox(std::unique_ptr<weld::ComboBox> xControl);
 
     virtual sal_uInt32 GetFormat() const override;
 

@@ -102,7 +102,7 @@ class SwInsertDBColAutoPilot : public SfxDialogController, public utl::ConfigIte
     std::unique_ptr<weld::Frame> m_xFormatFrame;
     std::unique_ptr<weld::RadioButton> m_xRbDbFormatFromDb;
     std::unique_ptr<weld::RadioButton> m_xRbDbFormatFromUsr;
-    std::unique_ptr<SwNumFormatListBox> m_xLbDbFormatFromUsr;
+    std::unique_ptr<NumFormatListBox> m_xLbDbFormatFromUsr;
 
     // Page Text/Field
     std::unique_ptr<weld::Button> m_xIbDbcolToEdit;

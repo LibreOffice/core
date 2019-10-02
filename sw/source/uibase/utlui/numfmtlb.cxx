@@ -129,7 +129,7 @@ SwNumFormatBase::SwNumFormatBase()
 {
 }
 
-SwNumFormatListBox::SwNumFormatListBox(std::unique_ptr<weld::ComboBox> xControl)
+NumFormatListBox::NumFormatListBox(std::unique_ptr<weld::ComboBox> xControl)
     : mxControl(std::move(xControl))
 {
     Init();
@@ -154,11 +154,11 @@ void SwNumFormatBase::Init()
     SetDefFormat(nDefFormat);
 }
 
-void SwNumFormatListBox::Init()
+void NumFormatListBox::Init()
 {
     SwNumFormatBase::Init();
 
-    mxControl->connect_changed(LINK(this, SwNumFormatListBox, SelectHdl));
+    mxControl->connect_changed(LINK(this, NumFormatListBox, SelectHdl));
 }
 
 void SwNumFormatTreeView::Init()
@@ -361,7 +361,7 @@ void SwNumFormatBase::SetDefFormat(const sal_uInt32 nDefaultFormat)
     nDefFormat = GetFormat();
 }
 
-sal_uInt32 SwNumFormatListBox::GetFormat() const
+sal_uInt32 NumFormatListBox::GetFormat() const
 {
     return mxControl->get_active_id().toUInt32();
 }
@@ -447,7 +447,7 @@ void SwNumFormatBase::CallSelectHdl()
 
 }
 
-IMPL_LINK_NOARG(SwNumFormatListBox, SelectHdl, weld::ComboBox&, void)
+IMPL_LINK_NOARG(NumFormatListBox, SelectHdl, weld::ComboBox&, void)
 {
     CallSelectHdl();
 }
@@ -463,7 +463,7 @@ void SwNumFormatBase::clear()
     nCurrFormatType = SvNumFormatType::ALL;
 }
 
-void SwNumFormatListBox::clear()
+void NumFormatListBox::clear()
 {
     mxControl->clear();
     SwNumFormatBase::clear();
