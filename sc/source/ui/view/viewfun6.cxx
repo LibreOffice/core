@@ -493,30 +493,28 @@ void ScViewFunc::EditNote()
         // hide temporary note caption
         HideNoteMarker();
         // show caption object without changing internal visibility state
-        pNote->ShowCaptionTemp( aPos );
+        pNote->ShowCaption( aPos );
 
         /*  Drawing object has been created in ScDocument::GetOrCreateNote() or
             in ScPostIt::ShowCaptionTemp(), so ScPostIt::GetCaption() should
             return a caption object. */
-        if( SdrCaptionObj* pCaption = pNote->GetCaption() )
+        SdrCaptionObj* pCaption = pNote->GetShownCaption();
+        if ( ScDrawView* pScDrawView = GetScDrawView() )
+           pScDrawView->SyncForGrid( pCaption );
+        // #i33764# enable the resize handles before starting edit mode
+        if( FuPoor* pDraw = GetDrawFuncPtr() )
+            static_cast< FuSelection* >( pDraw )->ActivateNoteHandles( pCaption );
+
+        // activate object (as in FuSelection::TestComment)
+        GetViewData().GetDispatcher().Execute( SID_DRAW_NOTEEDIT, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
+        // now get the created FuText and set into EditMode
+        FuText* pFuText = dynamic_cast<FuText*>(GetDrawFuncPtr());
+        if (pFuText)
         {
-            if ( ScDrawView* pScDrawView = GetScDrawView() )
-               pScDrawView->SyncForGrid( pCaption );
-            // #i33764# enable the resize handles before starting edit mode
-            if( FuPoor* pDraw = GetDrawFuncPtr() )
-                static_cast< FuSelection* >( pDraw )->ActivateNoteHandles( pCaption );
+            ScrollToObject( pCaption );         // make object fully visible
+            pFuText->SetInEditMode( pCaption );
 
-            // activate object (as in FuSelection::TestComment)
-            GetViewData().GetDispatcher().Execute( SID_DRAW_NOTEEDIT, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
-            // now get the created FuText and set into EditMode
-            FuText* pFuText = dynamic_cast<FuText*>(GetDrawFuncPtr());
-            if (pFuText)
-            {
-                ScrollToObject( pCaption );         // make object fully visible
-                pFuText->SetInEditMode( pCaption );
-
-                ScTabView::OnLOKNoteStateChanged( pNote );
-            }
+            ScTabView::OnLOKNoteStateChanged( pNote );
         }
     }
 }

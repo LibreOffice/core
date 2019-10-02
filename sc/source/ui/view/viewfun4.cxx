@@ -137,7 +137,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             {
                 ScDocumentUniquePtr pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
                 pRedoDoc->InitUndo( &rDoc, nTab, nTab );
-                rDoc.CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, InsertDeleteFlags::ALL|InsertDeleteFlags::NOCAPTIONS, false, *pRedoDoc );
+                rDoc.CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, InsertDeleteFlags::ALL, false, *pRedoDoc );
 
                 ScRange aMarkRange(nStartCol, nStartRow, nTab, nStartCol, nEndRow, nTab);
                 ScMarkData aDestMark;

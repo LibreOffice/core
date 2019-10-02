@@ -855,7 +855,7 @@ void ScDrawView::DeleteMarked()
 {
     // try to delete a note caption object with its cell note in the Calc document
     ScDrawObjData* pCaptData = nullptr;
-    if( SdrObject* pCaptObj = GetMarkedNoteCaption( &pCaptData ) )
+    if( GetMarkedNoteCaption( &pCaptData ) )
     {
         ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
         ScDocShell* pDocShell = pViewData ? pViewData->GetDocShell() : nullptr;
@@ -864,26 +864,22 @@ void ScDrawView::DeleteMarked()
 
         // remove the cell note from document, we are its owner now
         std::unique_ptr<ScPostIt> pNote = pDoc->ReleaseNote( pCaptData->maStart );
-        OSL_ENSURE( pNote, "ScDrawView::DeleteMarked - cell note missing in document" );
-        if( pNote )
-        {
-            // rescue note data for undo (with pointer to caption object)
-            ScNoteData aNoteData = pNote->GetNoteData();
-            OSL_ENSURE( aNoteData.mxCaption.get() == pCaptObj, "ScDrawView::DeleteMarked - caption object does not match" );
-            // collect the drawing undo action created while deleting the note
-            if( bUndo )
-                pDrawLayer->BeginCalcUndo(false);
-            // delete the note (already removed from document above)
-            pNote.reset();
-            // add the undo action for the note
-            if( bUndo )
-                pUndoMgr->AddUndoAction( std::make_unique<ScUndoReplaceNote>( *pDocShell, pCaptData->maStart, aNoteData, false, pDrawLayer->GetCalcUndo() ) );
-            // repaint the cell to get rid of the note marker
-            if( pDocShell )
-                pDocShell->PostPaintCell( pCaptData->maStart );
-            // done, return now to skip call of FmFormView::DeleteMarked()
-            return;
-        }
+        assert( pNote && "ScDrawView::DeleteMarked - cell note missing in document" );
+        // rescue note data for undo (with pointer to caption object)
+        ScNoteDataSaved aNoteData = pNote->GetNoteData();
+        // collect the drawing undo action created while deleting the note
+        if( bUndo )
+            pDrawLayer->BeginCalcUndo(false);
+        // delete the note (already removed from document above)
+        pNote.reset();
+        // add the undo action for the note
+        if( bUndo )
+            pUndoMgr->AddUndoAction( std::make_unique<ScUndoReplaceNote>( *pDocShell, pCaptData->maStart, std::move(aNoteData), false, pDrawLayer->GetCalcUndo() ) );
+        // repaint the cell to get rid of the note marker
+        if( pDocShell )
+            pDocShell->PostPaintCell( pCaptData->maStart );
+        // done, return now to skip call of FmFormView::DeleteMarked()
+        return;
     }
 
     FmFormView::DeleteMarked();

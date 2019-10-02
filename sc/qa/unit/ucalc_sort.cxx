@@ -58,7 +58,7 @@ void Test::testSort()
     // Insert note in cell B2.
     ScAddress rAddr(1, 1, 0);
     ScPostIt* pNote = m_pDoc->GetOrCreateNote(rAddr);
-    pNote->SetText(rAddr, "Hello");
+    pNote->SetText("Hello");
     pNote->SetAuthor("Jim Bob");
 
     ScSortParam aSortData;

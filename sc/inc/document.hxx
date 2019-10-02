@@ -1258,7 +1258,7 @@ public:
                                     SCCOL nEndCol, SCROW nEndRow );
                     //  without checking:
     SC_DLLPUBLIC void DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                               SCCOL nEndCol, SCROW nEndRow, bool bDeleteCaptions = true );
+                               SCCOL nEndCol, SCROW nEndRow );
     void              RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab );
 
     bool              IsBlockEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,

@@ -614,7 +614,7 @@ public:
     const ScPostIt* GetCellNote( SCROW nRow ) const;
     ScPostIt* GetCellNote( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow );
     const ScPostIt* GetCellNote( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
-    void DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, bool bForgetCaptionOwnership );
+    void DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 );
     bool HasCellNotes() const;
     void SetCellNote( SCROW nRow, std::unique_ptr<ScPostIt> pNote);
     bool IsNotesEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
@@ -631,11 +631,10 @@ public:
     SCROW GetCellNotesMinRow() const;
 
     void CopyCellNotesToDocument(
-        SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, bool bCloneCaption = true,
-        SCROW nRowOffsetDest = 0) const;
+        SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, SCROW nRowOffsetDest = 0) const;
 
     void DuplicateNotes(SCROW nStartRow, size_t nDataSize, ScColumn& rDestCol,
-                            sc::ColumnBlockPosition& maDestBlockPos, bool bCloneCaption, SCROW nRowOffsetDest=0 ) const;
+                            sc::ColumnBlockPosition& maDestBlockPos, SCROW nRowOffsetDest=0 ) const;
 
     void UpdateNoteCaptions( SCROW nRow1, SCROW nRow2 );
 
@@ -753,7 +752,7 @@ private:
      * Call this only from those methods where maCells is modified directly.
      */
     void CellStorageModified();
-    void CellNotesDeleting(SCROW nRow1, SCROW nRow2, bool bForgetCaptionOwnership );
+    void CellNotesDeleting(SCROW nRow1, SCROW nRow2);
 
     void CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const;
 

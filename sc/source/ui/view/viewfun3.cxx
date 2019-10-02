@@ -127,7 +127,7 @@ void ScViewFunc::CutToClip()
             ScRange aCopyRange = aRange;
             aCopyRange.aStart.SetTab(0);
             aCopyRange.aEnd.SetTab(pDoc->GetTableCount()-1);
-            pDoc->CopyToDocument( aCopyRange, (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS) | InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc );
+            pDoc->CopyToDocument( aCopyRange, (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS), false, *pUndoDoc );
             pDoc->BeginDrawUndo();
         }
 
@@ -900,8 +900,6 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     InsertDeleteFlags nUndoFlags = nContFlags;
     if (nUndoExtraFlags & InsertDeleteFlags::ATTRIB)
         nUndoFlags |= InsertDeleteFlags::ATTRIB;
-    // do not copy note captions into undo document
-    nUndoFlags |= InsertDeleteFlags::NOCAPTIONS;
 
     ScClipParam& rClipParam = pClipDoc->GetClipParam();
     if (rClipParam.isMultiRange())

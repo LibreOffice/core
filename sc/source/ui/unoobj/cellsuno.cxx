@@ -1126,7 +1126,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
     {
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( &rDoc, nTab, nTab );
-        rDoc.CopyToDocument(rRange, InsertDeleteFlags::CONTENTS|InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc);
+        rDoc.CopyToDocument(rRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc);
     }
 
     rDoc.DeleteAreaTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, InsertDeleteFlags::CONTENTS );

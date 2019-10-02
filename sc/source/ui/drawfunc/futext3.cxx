@@ -50,7 +50,7 @@ void FuText::StopEditMode()
     ScViewData& rViewData = rViewShell.GetViewData();
     ScDocument& rDoc = *rViewData.GetDocument();
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    OSL_ENSURE( pDrawLayer && (pDrawLayer == pDrDoc), "FuText::StopEditMode - missing or different drawing layers" );
+    assert( pDrawLayer && (pDrawLayer == pDrDoc) && "FuText::StopEditMode - missing or different drawing layers" );
 
     ScAddress aNotePos;
     ScPostIt* pNote = nullptr;
@@ -58,7 +58,7 @@ void FuText::StopEditMode()
     {
         aNotePos = pCaptData->maStart;
         pNote = rDoc.GetNote( aNotePos );
-        OSL_ENSURE( pNote && (pNote->GetCaption() == pObject), "FuText::StopEditMode - missing or invalid cell note" );
+        assert( pNote && (pNote->GetShownCaption() == pObject) && "FuText::StopEditMode - missing or invalid cell note" );
     }
 
     ScDocShell* pDocShell = rViewData.GetDocShell();
@@ -113,7 +113,7 @@ void FuText::StopEditMode()
         ScTabView::OnLOKNoteStateChanged( pNote );
 
         // hide the caption object if it is in hidden state
-        pNote->ShowCaptionTemp( aNotePos, false );
+        pNote->HideCaption();
 
         // update author and date
         pNote->AutoStamp();
@@ -128,12 +128,10 @@ void FuText::StopEditMode()
             {
                 // collect the "remove object" drawing undo action created by DeleteNote()
                 pDrawLayer->BeginCalcUndo(false);
-                // rescue note data before deletion
-                ScNoteData aNoteData( pNote->GetNoteData() );
                 // delete note from document (removes caption, but does not delete it)
                 rDoc.ReleaseNote(aNotePos);
                 // create undo action for removed note
-                pUndoMgr->AddUndoAction( std::make_unique<ScUndoReplaceNote>( *pDocShell, aNotePos, aNoteData, false, pDrawLayer->GetCalcUndo() ) );
+                pUndoMgr->AddUndoAction( std::make_unique<ScUndoReplaceNote>( *pDocShell, aNotePos, pNote->GetNoteData(), false, pDrawLayer->GetCalcUndo() ) );
             }
             else
             {

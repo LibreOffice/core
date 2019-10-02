@@ -6589,9 +6589,10 @@ ScPostIt* ScDocument::GetOrCreateNote(const ScAddress& rPos)
     else
         return CreateNote(rPos);
 }
+
 ScPostIt* ScDocument::CreateNote(const ScAddress& rPos)
 {
-    ScPostIt* pPostIt = new ScPostIt(*this, rPos);
+    ScPostIt* pPostIt = new ScPostIt(*this);
     SetNote(rPos, std::unique_ptr<ScPostIt>(pPostIt));
     return pPostIt;
 }

@@ -710,36 +710,32 @@ bool ScUndoThesaurus::CanRepeat(SfxRepeatTarget& rTarget) const
 
 
 ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rPos,
-        const ScNoteData& rNoteData, bool bInsert, std::unique_ptr<SdrUndoAction> pDrawUndo ) :
+        ScNoteDataSaved aNoteData, bool bInsert, std::unique_ptr<SdrUndoAction> pDrawUndo ) :
     ScSimpleUndo( &rDocShell ),
     maPos( rPos ),
     mpDrawUndo( std::move(pDrawUndo) )
 {
-    OSL_ENSURE( rNoteData.mxCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note caption" );
     if (bInsert)
     {
-        maNewData = rNoteData;
-        maNewData.mxCaption.setNotOwner();
+        meUndoType = UndoType::Insert;
+        mxNewData = std::move(aNoteData);
     }
     else
     {
-        maOldData = rNoteData;
-        maOldData.mxCaption.setNotOwner();
+        meUndoType = UndoType::Remove;
+        mxOldData = std::move(aNoteData);
     }
 }
 
 ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rPos,
-        const ScNoteData& rOldData, const ScNoteData& rNewData, std::unique_ptr<SdrUndoAction> pDrawUndo ) :
+        ScNoteDataSaved aOldData, ScNoteDataSaved aNewData, std::unique_ptr<SdrUndoAction> pDrawUndo ) :
     ScSimpleUndo( &rDocShell ),
     maPos( rPos ),
-    maOldData( rOldData ),
-    maNewData( rNewData ),
+    meUndoType( UndoType::Edit ),
+    mxOldData( std::move(aOldData) ),
+    mxNewData( std::move(aNewData) ),
     mpDrawUndo( std::move(pDrawUndo) )
 {
-    OSL_ENSURE( maOldData.mxCaption || maNewData.mxCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note captions" );
-    OSL_ENSURE( !maOldData.mxInitData.get() && !maNewData.mxInitData.get(), "ScUndoReplaceNote::ScUndoReplaceNote - unexpected uninitialized note" );
-    maOldData.mxCaption.setNotOwner();
-    maNewData.mxCaption.setNotOwner();
 }
 
 ScUndoReplaceNote::~ScUndoReplaceNote()
@@ -751,11 +747,12 @@ void ScUndoReplaceNote::Undo()
 {
     BeginUndo();
     DoSdrUndoAction( mpDrawUndo.get(), &pDocShell->GetDocument() );
-    /*  Undo insert -> remove new note.
-        Undo remove -> insert old note.
-        Undo replace -> remove new note, insert old note. */
-    DoRemoveNote( maNewData );
-    DoInsertNote( maOldData );
+    switch (meUndoType)
+    {
+    case UndoType::Edit: DoEditNote( *mxOldData ); break;
+    case UndoType::Remove: DoInsertNote( *mxOldData ); break;
+    case UndoType::Insert: DoRemoveNote( *mxNewData ); break;
+    }
     pDocShell->PostPaintCell( maPos );
     EndUndo();
 }
@@ -764,11 +761,12 @@ void ScUndoReplaceNote::Redo()
 {
     BeginRedo();
     RedoSdrUndoAction( mpDrawUndo.get() );
-    /*  Redo insert -> insert new note.
-        Redo remove -> remove old note.
-        Redo replace -> remove old note, insert new note. */
-    DoRemoveNote( maOldData );
-    DoInsertNote( maNewData );
+    switch (meUndoType)
+    {
+    case UndoType::Edit: DoEditNote( *mxNewData ); break;
+    case UndoType::Remove: DoRemoveNote( *mxOldData ); break;
+    case UndoType::Insert: DoInsertNote( *mxNewData ); break;
+    }
     pDocShell->PostPaintCell( maPos );
     EndRedo();
 }
@@ -784,37 +782,38 @@ bool ScUndoReplaceNote::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
 
 OUString ScUndoReplaceNote::GetComment() const
 {
-    return ScResId( maNewData.mxCaption ?
-        (maOldData.mxCaption ? STR_UNDO_EDITNOTE : STR_UNDO_INSERTNOTE) : STR_UNDO_DELETENOTE );
-}
-
-void ScUndoReplaceNote::DoInsertNote( const ScNoteData& rNoteData )
-{
-    if( rNoteData.mxCaption )
+    switch (meUndoType)
     {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        OSL_ENSURE( !rDoc.GetNote(maPos), "ScUndoReplaceNote::DoInsertNote - unexpected cell note" );
-        ScPostIt* pNote = new ScPostIt( rDoc, maPos, rNoteData, false );
-        rDoc.SetNote( maPos, std::unique_ptr<ScPostIt>(pNote) );
-        ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, &rDoc, maPos, pNote);
+    case UndoType::Edit: return ScResId(STR_UNDO_EDITNOTE);
+    case UndoType::Remove: return ScResId(STR_UNDO_DELETENOTE);
+    default:
+    case UndoType::Insert: return ScResId(STR_UNDO_INSERTNOTE);
     }
 }
 
-void ScUndoReplaceNote::DoRemoveNote( const ScNoteData& rNoteData )
+void ScUndoReplaceNote::DoInsertNote( const ScNoteDataSaved& rNoteData )
 {
-    if( rNoteData.mxCaption )
-    {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        OSL_ENSURE( rDoc.GetNote(maPos), "ScUndoReplaceNote::DoRemoveNote - missing cell note" );
-        if( std::unique_ptr<ScPostIt> pNote = rDoc.ReleaseNote( maPos ) )
-        {
-            /*  Forget pointer to caption object to suppress removing the
-                caption object from the drawing layer while deleting pNote
-                (removing the caption is done by a drawing undo action). */
-            pNote->ForgetCaption();
-            ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Remove, &rDoc, maPos, pNote.get());
-        }
-    }
+    ScDocument& rDoc = pDocShell->GetDocument();
+    assert( !rDoc.GetNote(maPos) && "ScUndoReplaceNote::DoInsertNote - unexpected cell note" );
+    ScPostIt* pNote = new ScPostIt( rDoc, rNoteData );
+    rDoc.SetNote( maPos, std::unique_ptr<ScPostIt>(pNote) );
+    ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, &rDoc, maPos, pNote);
+}
+
+void ScUndoReplaceNote::DoRemoveNote( const ScNoteDataSaved& /*rNoteData*/ )
+{
+    ScDocument& rDoc = pDocShell->GetDocument();
+    assert( rDoc.GetNote(maPos) && "ScUndoReplaceNote::DoRemoveNote - missing cell note" );
+    std::unique_ptr<ScPostIt> pNote = rDoc.ReleaseNote( maPos );
+    ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Remove, &rDoc, maPos, pNote.get());
+}
+
+void ScUndoReplaceNote::DoEditNote( const ScNoteDataSaved& rNoteData )
+{
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScPostIt* pNote = rDoc.GetNote( maPos );
+    pNote->Update(rNoteData);
+    ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Modify, &rDoc, maPos, pNote);
 }
 
 ScUndoShowHideNote::ScUndoShowHideNote( ScDocShell& rDocShell, const ScAddress& rPos, bool bShow ) :

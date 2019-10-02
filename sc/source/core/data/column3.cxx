@@ -184,7 +184,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>*
     maBroadcasters.erase(nStartRow, nEndRow);
     maBroadcasters.resize(MAXROWCOUNT);
 
-    CellNotesDeleting(nStartRow, nEndRow, false);
+    CellNotesDeleting(nStartRow, nEndRow);
     maCellNotes.erase(nStartRow, nEndRow);
     maCellNotes.resize(MAXROWCOUNT);
 
@@ -977,11 +977,7 @@ void ScColumn::DeleteArea(
     SCROW nStartRow, SCROW nEndRow, InsertDeleteFlags nDelFlag, bool bBroadcast,
     sc::ColumnSpanSet* pBroadcastSpans )
 {
-    InsertDeleteFlags nContMask = InsertDeleteFlags::CONTENTS;
-    // InsertDeleteFlags::NOCAPTIONS needs to be passed too, if InsertDeleteFlags::NOTE is set
-    if( nDelFlag & InsertDeleteFlags::NOTE )
-        nContMask |= InsertDeleteFlags::NOCAPTIONS;
-    InsertDeleteFlags nContFlag = nDelFlag & nContMask;
+    InsertDeleteFlags nContFlag = nDelFlag & InsertDeleteFlags::CONTENTS;
 
     sc::SingleColumnSpanSet aDeletedRows;
 
@@ -1001,10 +997,7 @@ void ScColumn::DeleteArea(
     }
 
     if (nDelFlag & InsertDeleteFlags::NOTE)
-    {
-        bool bForgetCaptionOwnership = ((nDelFlag & InsertDeleteFlags::FORGETCAPTIONS) != InsertDeleteFlags::NONE);
-        DeleteCellNotes(aBlockPos, nStartRow, nEndRow, bForgetCaptionOwnership);
-    }
+        DeleteCellNotes(aBlockPos, nStartRow, nEndRow);
 
     if ( nDelFlag & InsertDeleteFlags::EDITATTR )
     {
@@ -1090,9 +1083,9 @@ class CopyCellsFromClipHandler
             maDestBlockPos, nDestRow, new ScFormulaCell(mrDestCol.GetDoc(), aDestPos, aArr));
     }
 
-    void duplicateNotes(SCROW nStartRow, size_t nDataSize, bool bCloneCaption )
+    void duplicateNotes(SCROW nStartRow, size_t nDataSize )
     {
-        mrSrcCol.DuplicateNotes(nStartRow, nDataSize, mrDestCol, maDestBlockPos, bCloneCaption, mnRowOffset);
+        mrSrcCol.DuplicateNotes(nStartRow, nDataSize, mrDestCol, maDestBlockPos, mnRowOffset);
     }
 
 public:
@@ -1132,8 +1125,7 @@ public:
         {
             if (bCopyCellNotes && !mrCxt.isSkipAttrForEmptyCells())
             {
-                bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
-                duplicateNotes(nSrcRow1, nDataSize, bCloneCaption );
+                duplicateNotes(nSrcRow1, nDataSize);
             }
             return;
         }
@@ -1321,10 +1313,7 @@ public:
                 ;
         }
         if (bCopyCellNotes)
-        {
-            bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
-            duplicateNotes(nSrcRow1, nDataSize, bCloneCaption );
-        }
+            duplicateNotes(nSrcRow1, nDataSize );
     }
 };
 

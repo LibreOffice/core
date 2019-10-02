@@ -1219,12 +1219,8 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
         ScPostIt* pNote = maCellNotes.get<ScPostIt*>(nSrcRow);
         if (pNote)
         {
-            pNote = pNote->Clone(ScAddress(nCol, nSrcRow, nTab),
-                                 *rDestCol.GetDoc(),
-                                 ScAddress(rDestCol.nCol, nDestRow, rDestCol.nTab),
-                                 false).release();
+            pNote = pNote->Clone(*rDestCol.GetDoc()).release();
             rDestCol.maCellNotes.set(nDestRow, pNote);
-            pNote->UpdateCaptionPos(ScAddress(rDestCol.nCol, nDestRow, rDestCol.nTab));
         }
         else
             rDestCol.maCellNotes.set_empty(nDestRow, nDestRow);
@@ -1335,8 +1331,7 @@ public:
 
         if (mnCopyFlags & (InsertDeleteFlags::NOTE|InsertDeleteFlags::ADDNOTES))
         {
-            bool bCloneCaption = (mnCopyFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
-            mrSrcCol.DuplicateNotes(nRow, nDataSize, mrDestCol, maDestPos, bCloneCaption);
+            mrSrcCol.DuplicateNotes(nRow, nDataSize, mrDestCol, maDestPos);
         }
 
         switch (aNode.type)
@@ -1553,10 +1548,7 @@ public:
         size_t nRow = aNode.position + nOffset;
 
         if (mnCopyFlags & (InsertDeleteFlags::NOTE|InsertDeleteFlags::ADDNOTES))
-        {
-            bool bCloneCaption = (mnCopyFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
-            mrSrcCol.DuplicateNotes(nRow, nDataSize, mrDestCol, maDestPos, bCloneCaption);
-        }
+            mrSrcCol.DuplicateNotes(nRow, nDataSize, mrDestCol, maDestPos);
 
         switch (aNode.type)
         {

@@ -4259,7 +4259,7 @@ void XclImpSheetDrawing::ReadNote3( XclImpStream& rStrm )
                 nTotalLen = 0;
             }
         }
-        ScNoteUtil::CreateNoteFromString( GetDoc(), aScNotePos, aNoteText.makeStringAndClear(), false, false );
+        ScNoteUtil::CreateNoteFromString( GetDoc(), aScNotePos, aNoteText.makeStringAndClear(), false );
     }
 }
 

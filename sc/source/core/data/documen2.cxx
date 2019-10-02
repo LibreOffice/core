@@ -874,7 +874,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         // 1. the updated source ScColumn::nTab members if nNewPos <= nOldPos
         // 2. row heights and column widths of the destination
         // 3. RTL settings of the destination
-        maTabs[nOldPos]->CopyCaptionsToTable( 0, 0, MAXCOL, MAXROW, maTabs[nNewPos].get(), true /*bCloneCaption*/);
+        maTabs[nOldPos]->CopyCaptionsToTable( 0, 0, MAXCOL, MAXROW, maTabs[nNewPos].get());
     }
 
     return bValid;

@@ -233,7 +233,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
             // NB: rich text format is lost.
             // This is also true of Cells.
             if (pNote)
-                pNote->SetText( ScAddress( nCol, nRow, nTab ), aString );
+                pNote->SetText( aString );
         }
         else if ( cMatrixFlag != ScMatrixMode::NONE )
         {   // don't split Matrix

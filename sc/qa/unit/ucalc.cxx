@@ -805,7 +805,7 @@ void Test::testCopyToDocument()
     //note on A1
     ScAddress aAdrA1 (0, 0, 0); // numerical cell content
     ScPostIt* pNote = m_pDoc->GetOrCreateNote(aAdrA1);
-    pNote->SetText(aAdrA1, "Hello world in A1");
+    pNote->SetText("Hello world in A1");
 
     // Copy statically to another document.
 
@@ -2028,7 +2028,7 @@ void Test::testSheetCopy()
     // insert a note
     ScAddress aAdrA1 (0,2,0); // empty cell content.
     ScPostIt *pNoteA1 = m_pDoc->GetOrCreateNote(aAdrA1);
-    pNoteA1->SetText(aAdrA1, "Hello world in A3");
+    pNoteA1->SetText("Hello world in A3");
 
     // Copy and test the result.
     m_pDoc->CopyTab(0, 1);
@@ -3322,15 +3322,15 @@ void Test::testCopyPaste()
     ScAddress aAdrA1 (0, 0, 0); // empty cell content
     OUString const aHelloA1("Hello world in A1");
     ScPostIt* pNoteA1 = m_pDoc->GetOrCreateNote(aAdrA1);
-    pNoteA1->SetText(aAdrA1, aHelloA1);
+    pNoteA1->SetText(aHelloA1);
     ScAddress aAdrB1 (1, 0, 0); // formula cell content
     OUString const aHelloB1("Hello world in B1");
     ScPostIt* pNoteB1 = m_pDoc->GetOrCreateNote(aAdrB1);
-    pNoteB1->SetText(aAdrB1, aHelloB1);
+    pNoteB1->SetText(aHelloB1);
     ScAddress aAdrC1 (2, 0, 0); // string cell content
     OUString const aHelloC1("Hello world in C1");
     ScPostIt* pNoteC1 = m_pDoc->GetOrCreateNote(aAdrC1);
-    pNoteC1->SetText(aAdrC1, aHelloC1);
+    pNoteC1->SetText(aHelloC1);
 
     //copy Sheet1.A1:C1 to Sheet2.A2:C2
     ScRange aRange(0,0,0,2,0,0);
@@ -3505,15 +3505,15 @@ void Test::testCopyPasteTranspose()
     ScAddress aAdrA1 (0, 0, 0); // numerical cell content
     OUString const aHelloA1("Hello world in A1");
     ScPostIt* pNoteA1 = m_pDoc->GetOrCreateNote(aAdrA1);
-    pNoteA1->SetText(aAdrA1, aHelloA1);
+    pNoteA1->SetText(aHelloA1);
     ScAddress aAdrB1 (1, 0, 0); // formula cell content
     OUString const aHelloB1("Hello world in B1");
     ScPostIt* pNoteB1 = m_pDoc->GetOrCreateNote(aAdrB1);
-    pNoteB1->SetText(aAdrB1, aHelloB1);
+    pNoteB1->SetText(aHelloB1);
     ScAddress aAdrC1 (2, 0, 0); // string cell content
     OUString const aHelloC1("Hello world in C1");
     ScPostIt* pNoteC1 = m_pDoc->GetOrCreateNote(aAdrC1);
-    pNoteC1->SetText(aAdrC1, aHelloC1);
+    pNoteC1->SetText(aHelloC1);
 
     // transpose clipboard, paste and check on Sheet2
     m_pDoc->InsertTab(1, "Sheet2");
@@ -4086,15 +4086,15 @@ void Test::testMoveBlock()
     ScAddress aAddrA1 (0, 0, 0);
     OUString const aHelloA1("Hello world in A1");
     ScPostIt* pNoteA1 = m_pDoc->GetOrCreateNote(aAddrA1);
-    pNoteA1->SetText(aAddrA1, aHelloA1);
+    pNoteA1->SetText(aHelloA1);
     ScAddress aAddrB1 (1, 0, 0);
     OUString const aHelloB1("Hello world in B1");
     ScPostIt* pNoteB1 = m_pDoc->GetOrCreateNote(aAddrB1);
-    pNoteB1->SetText(aAddrB1, aHelloB1);
+    pNoteB1->SetText(aHelloB1);
     ScAddress aAddrC1 (2, 0, 0);
     OUString const aHelloC1("Hello world in C1");
     ScPostIt* pNoteC1 = m_pDoc->GetOrCreateNote(aAddrC1);
-    pNoteC1->SetText(aAddrC1, aHelloC1);
+    pNoteC1->SetText(aHelloC1);
     ScAddress aAddrD1 (3, 0, 0);
 
     // previous tests on cell note content are ok. this one fails !!! :(
@@ -4354,7 +4354,7 @@ void Test::testMergedCells()
     //test merge and unmerge
     //TODO: an undo/redo test for this would be a good idea
     m_pDoc->InsertTab(0, "Sheet1");
-    m_pDoc->DoMerge(0, 1, 1, 3, 3, false);
+    m_pDoc->DoMerge(0, 1, 1, 3, 3);
     SCCOL nEndCol = 1;
     SCROW nEndRow = 1;
     m_pDoc->ExtendMerge( 1, 1, nEndCol, nEndRow, 0);
@@ -5116,7 +5116,7 @@ void Test::testShiftCells()
     // put a Note in cell E5
     ScAddress rAddr(4, 3, 0);
     ScPostIt* pNote = m_pDoc->GetOrCreateNote(rAddr);
-    pNote->SetText(rAddr, "Hello");
+    pNote->SetText("Hello");
 
     CPPUNIT_ASSERT_MESSAGE("there should be a note", m_pDoc->HasNote(4, 3, 0));
 
@@ -5160,7 +5160,7 @@ void Test::testNoteBasic()
     ScAddress aAddr(2, 2, 0); // cell C3
     ScPostIt *pNote = m_pDoc->GetOrCreateNote(aAddr);
 
-    pNote->SetText(aAddr, "Hello world");
+    pNote->SetText("Hello world");
     pNote->SetAuthor("Jim Bob");
 
     ScPostIt *pGetNote = m_pDoc->GetNote(aAddr);
@@ -5233,7 +5233,7 @@ void Test::testNoteDeleteRow()
     OUString const aJimBob("Jim Bob");
     ScAddress aPos(1, 1, 0);
     ScPostIt* pNote = m_pDoc->GetOrCreateNote(aPos);
-    pNote->SetText(aPos, aHello);
+    pNote->SetText(aHello);
     pNote->SetAuthor(aJimBob);
 
     CPPUNIT_ASSERT_MESSAGE("there should be a note", m_pDoc->HasNote(1, 1, 0));
@@ -5251,11 +5251,11 @@ void Test::testNoteDeleteRow()
     // Set values and notes into B3:B4.
     aPos = ScAddress(1,2,0); // B3
     m_pDoc->SetString(aPos, "First");
-    ScNoteUtil::CreateNoteFromString(*m_pDoc, aPos, "First Note", false, false);
+    ScNoteUtil::CreateNoteFromString(*m_pDoc, aPos, "First Note", false);
 
     aPos = ScAddress(1,3,0); // B4
     m_pDoc->SetString(aPos, "Second");
-    ScNoteUtil::CreateNoteFromString(*m_pDoc, aPos, "Second Note", false, false);
+    ScNoteUtil::CreateNoteFromString(*m_pDoc, aPos, "Second Note", false);
 
     // Delete row 2.
     ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
@@ -5320,7 +5320,7 @@ void Test::testNoteDeleteCol()
 
     ScAddress rAddr(1, 1, 0);
     ScPostIt* pNote = m_pDoc->GetOrCreateNote(rAddr);
-    pNote->SetText(rAddr, "Hello");
+    pNote->SetText("Hello");
     pNote->SetAuthor("Jim Bob");
 
     CPPUNIT_ASSERT_MESSAGE("there should be a note", rDoc.HasNote(1, 1, 0));
@@ -5343,14 +5343,14 @@ void Test::testNoteLifeCycle()
     ScPostIt* pNote = m_pDoc->GetOrCreateNote(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new cell comment.", pNote);
 
-    pNote->SetText(aPos, "New note");
+    pNote->SetText("New note");
     std::unique_ptr<ScPostIt> pNote2 = m_pDoc->ReleaseNote(aPos);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("This note instance is expected to be identical to the original.", pNote, pNote2.get());
     CPPUNIT_ASSERT_MESSAGE("The note shouldn't be here after it's been released.", !m_pDoc->HasNote(aPos));
 
     // Modify the internal state of the note instance to make sure it's really
     // been released.
-    pNote->SetText(aPos, "New content");
+    pNote->SetText("New content");
 
     // Re-insert the note back to the same place.
     m_pDoc->SetNote(aPos, std::move(pNote2));
@@ -5369,9 +5369,6 @@ void Test::testNoteLifeCycle()
 
     ScPostIt* pClipNote = aClipDoc.GetNote(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to copy note to the clipboard.", pClipNote);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Note on the clipboard should share the same caption object from the original.",
-                           pCaption, pClipNote->GetCaption());
-
 
     // Move B2 to B3 with note, which creates an ScUndoDragDrop, and Undo.
 
@@ -5432,7 +5429,7 @@ void Test::testNoteLifeCycle()
     // at B4 after the merge and not cloned nor recreated during Undo.
     ScPostIt* pUndoNoteB4 = m_pDoc->GetNote(aPosB4);
     CPPUNIT_ASSERT_MESSAGE("No cell comment at B4 after Undo.", pUndoNoteB4);
-    const SdrCaptionObj* pUndoCaptionB4 = pUndoNoteB4->GetCaption();
+    const SdrCaptionObj* pUndoCaptionB4 = pUndoNoteB4->GetShownCaption();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Captions not identical after Merge Undo.", pCaptionB4, pUndoCaptionB4);
 
 
@@ -5488,14 +5485,14 @@ void Test::testNoteCopyPaste()
     m_pDoc->SetString(aPos, "Text");
     ScPostIt* pNote = m_pDoc->GetOrCreateNote(aPos);
     CPPUNIT_ASSERT(pNote);
-    pNote->SetText(aPos, "Note1");
+    pNote->SetText("Note1");
 
     // Insert in B4 a number and cell comment.
     aPos.SetRow(3);
     m_pDoc->SetValue(aPos, 1.1);
     pNote = m_pDoc->GetOrCreateNote(aPos);
     CPPUNIT_ASSERT(pNote);
-    pNote->SetText(aPos, "Note2");
+    pNote->SetText("Note2");
 
     // Copy B2:B4 to clipboard.
     ScMarkData aMark;
@@ -5569,11 +5566,11 @@ void Test::testAreasWithNotes()
 
     ScAddress rAddr(1, 5, 0);
     ScPostIt* pNote = m_pDoc->GetOrCreateNote(rAddr);
-    pNote->SetText(rAddr, "Hello");
+    pNote->SetText("Hello");
     pNote->SetAuthor("Jim Bob");
     ScAddress rAddrMin(2, 2, 0);
     ScPostIt* pNoteMin = m_pDoc->GetOrCreateNote(rAddrMin);
-    pNoteMin->SetText(rAddrMin, "Hello");
+    pNoteMin->SetText("Hello");
 
     SCCOL col;
     SCROW row;
@@ -6367,7 +6364,7 @@ void Test::testSetStringAndNote()
     //note on A1
     ScAddress aAdrA1 (0, 0, 0);
     ScPostIt* pNote = m_pDoc->GetOrCreateNote(aAdrA1);
-    pNote->SetText(aAdrA1, "Hello world in A1");
+    pNote->SetText("Hello world in A1");
 
     m_pDoc->SetString(0, 0, 0, "");
 
@@ -6714,7 +6711,7 @@ ScUndoCut* Test::cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(pSrcDoc->GetTableCount()-1);
         pSrcDoc->CopyToDocument( aCopyRange,
-                (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS) | InsertDeleteFlags::NOCAPTIONS,
+                (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS),
                 false, *pUndoDoc );
     }
 

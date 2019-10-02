@@ -2032,7 +2032,7 @@ void ScDocument::DoEmptyBlock( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
 }
 
 void ScDocument::DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                    SCCOL nEndCol, SCROW nEndRow, bool bDeleteCaptions )
+                                    SCCOL nEndCol, SCROW nEndRow )
 {
     ScTable* pTab = FetchTable(nTab);
     if (!pTab)
@@ -2040,8 +2040,7 @@ void ScDocument::DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
 
     pTab->SetMergedCells(nStartCol, nStartRow, nEndCol, nEndRow);
 
-    // Remove all covered notes (removed captions are collected by drawing undo if active)
-    InsertDeleteFlags nDelFlag = InsertDeleteFlags::NOTE | (bDeleteCaptions ? InsertDeleteFlags::NONE : InsertDeleteFlags::NOCAPTIONS);
+    InsertDeleteFlags nDelFlag = InsertDeleteFlags::NOTE;
     if( nStartCol < nEndCol )
         DeleteAreaTab( nStartCol + 1, nStartRow, nEndCol, nStartRow, nTab, nDelFlag );
     if( nStartRow < nEndRow )

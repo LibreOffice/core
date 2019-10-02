@@ -68,8 +68,6 @@ ScDocumentUniquePtr DocFuncUtil::createDeleteContentsUndoDoc(
         nUndoDocFlags |= InsertDeleteFlags::STRING;    // -> cells will be changed
     if (nFlags & InsertDeleteFlags::NOTE)
         nUndoDocFlags |= InsertDeleteFlags::CONTENTS;  // copy all cells with their notes
-    // do not copy note captions to undo document
-    nUndoDocFlags |= InsertDeleteFlags::NOCAPTIONS;
     rDoc.CopyToDocument(aCopyRange, nUndoDocFlags, bOnlyMarked, *pUndoDoc, &rMark);
 
     return pUndoDoc;

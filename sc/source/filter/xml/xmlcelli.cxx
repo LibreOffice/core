@@ -910,7 +910,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
     {
         // create note from simple text
         pNote = ScNoteUtil::CreateNoteFromString( *pDoc, rPos,
-            mxAnnotationData->maSimpleText, mxAnnotationData->mbShown, false );
+            mxAnnotationData->maSimpleText, mxAnnotationData->mbShown );
     }
 
     // set author and date

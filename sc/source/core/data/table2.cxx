@@ -1044,7 +1044,7 @@ void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SC
                         ScPostIt* pNote = *itData;
                         if (pNote)
                         {
-                            std::unique_ptr<ScPostIt> pClonedNote = pNote->Clone( ScAddress(nCol, curRow, nTab), *pTransClip->pDocument, aDestPos, true );
+                            std::unique_ptr<ScPostIt> pClonedNote = pNote->Clone( *pTransClip->pDocument );
                             pTransClip->pDocument->SetNote(aDestPos, std::move(pClonedNote));
                         }
                     }
@@ -1061,7 +1061,7 @@ void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SC
                         ScPostIt* pNote = *itData;
                         if (pNote)
                         {
-                            std::unique_ptr<ScPostIt> pClonedNote = pNote->Clone( ScAddress(nCol, curRow, nTab), *pTransClip->pDocument, aDestPos, true );
+                            std::unique_ptr<ScPostIt> pClonedNote = pNote->Clone( *pTransClip->pDocument );
                             pTransClip->pDocument->SetNote(aDestPos, std::move(pClonedNote));
                         }
                     }
@@ -1292,13 +1292,11 @@ void ScTable::CopyToTable(
 
     if (!bIsUndoDoc && bCopyCaptions && (nFlags & (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES)))
     {
-        bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
-        CopyCaptionsToTable( nCol1, nRow1, nCol2, nRow2, pDestTab, bCloneCaption);
+        CopyCaptionsToTable( nCol1, nRow1, nCol2, nRow2, pDestTab);
     }
 }
 
-void ScTable::CopyCaptionsToTable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab,
-        bool bCloneCaption )
+void ScTable::CopyCaptionsToTable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab )
 {
     if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
         return;
@@ -1306,7 +1304,7 @@ void ScTable::CopyCaptionsToTable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
     nCol2 = ClampToAllocatedColumns(nCol2);
     for (SCCOL i = nCol1; i <= nCol2; i++)
     {
-        aCol[i].CopyCellNotesToDocument(nRow1, nRow2, pDestTab->CreateColumnIfNotExists(i), bCloneCaption);
+        aCol[i].CopyCellNotesToDocument(nRow1, nRow2, pDestTab->CreateColumnIfNotExists(i));
         pDestTab->aCol[i].UpdateNoteCaptions(nRow1, nRow2);
     }
 }

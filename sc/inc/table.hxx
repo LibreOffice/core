@@ -521,7 +521,7 @@ public:
         const ScMarkData* pMarkData, bool bAsLink, bool bColRowFlags,
         bool bGlobalNamesToLocal, bool bCopyCaptions );
 
-    void CopyCaptionsToTable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab, bool bCloneCaption );
+    void CopyCaptionsToTable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab );
 
     void UndoToTable(
         sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,

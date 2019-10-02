@@ -454,7 +454,7 @@ void OP_Note123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     pText.reset();
 
     ScAddress aPos(nCol, nRow, nTab);
-    ScNoteUtil::CreateNoteFromString( *rContext.pDoc, aPos, aNoteText, false, false );
+    ScNoteUtil::CreateNoteFromString( *rContext.pDoc, aPos, aNoteText, false );
 }
 
 void OP_HorAlign123(LotusContext& /*rContext*/, sal_uInt8 nAlignPattern, SfxItemSet& rPatternItemSet)

@@ -1254,11 +1254,12 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
 
     ScTabView::OnLOKNoteStateChanged(pNote);
 
-    if (ScViewData* pViewData = ScDocShell::GetViewData())
-    {
-        if (ScDrawView* pDrawView = pViewData->GetScDrawView())
-            pDrawView->SyncForGrid( pNote->GetCaption());
-    }
+    if (bShow)
+        if (ScViewData* pViewData = ScDocShell::GetViewData())
+        {
+            if (ScDrawView* pDrawView = pViewData->GetScDrawView())
+                pDrawView->SyncForGrid( pNote->GetShownCaption());
+        }
 
     rDocShell.SetDocumentModified();
 
@@ -1281,7 +1282,7 @@ void ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, bool 
     OUString aNewText = convertLineEnd(rText, GetSystemLineEnd()); //! is this necessary ???
 
     if( ScPostIt* pNote = (!aNewText.isEmpty()) ? rDoc.GetOrCreateNote( rPos ) : rDoc.GetNote(rPos) )
-        pNote->SetText( rPos, aNewText );
+        pNote->SetText( aNewText );
 
     //! Undo !!!
 
@@ -1301,41 +1302,43 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
         ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
         SfxUndoManager* pUndoMgr = (pDrawLayer && rDoc.IsUndoEnabled()) ? rDocShell.GetUndoManager() : nullptr;
 
-        ScNoteData aOldData;
-        std::unique_ptr<ScPostIt> pOldNote = rDoc.ReleaseNote( rPos );
-        sal_uInt32 nNoteId = 0;
-        if( pOldNote )
-        {
-            nNoteId = pOldNote->GetId();
-            // ensure existing caption object before draw undo tracking starts
-            pOldNote->GetOrCreateCaption( rPos );
-            // rescue note data for undo
-            aOldData = pOldNote->GetNoteData();
-        }
-
         // collect drawing undo actions for deleting/inserting caption objects
         if( pUndoMgr )
             pDrawLayer->BeginCalcUndo(false);
 
-        // delete the note (creates drawing undo action for the caption object)
-        bool hadOldNote(pOldNote);
-        pOldNote.reset();
-
-        // create new note (creates drawing undo action for the new caption object)
-        ScNoteData aNewData;
-        ScPostIt* pNewNote = nullptr;
-        if( (pNewNote = ScNoteUtil::CreateNoteFromString( rDoc, rPos, rNoteText, false, true, nNoteId )) )
+        bool hadOldNote;
+        ScPostIt* pNote = nullptr;
+        if ((pNote = rDoc.GetNote( rPos )))
         {
-            if( pAuthor ) pNewNote->SetAuthor( *pAuthor );
-            if( pDate ) pNewNote->SetDate( *pDate );
+            // Note exists, so perform edit
+            hadOldNote = true;
 
             // rescue note data for undo
-            aNewData = pNewNote->GetNoteData();
+            ScNoteDataSaved aOldData = pNote->GetNoteData();
+            if( pAuthor ) pNote->SetAuthor( *pAuthor );
+            if( pDate ) pNote->SetDate( *pDate );
+            // create the undo action
+            if( pUndoMgr )
+                pUndoMgr->AddUndoAction( std::make_unique<ScUndoReplaceNote>( rDocShell, rPos,
+                    std::move(aOldData), pNote->GetNoteData(), pDrawLayer->GetCalcUndo() ) );
+        }
+        else
+        {
+            // Note does not exist, so perform insert
+            hadOldNote = false;
+
+            // create new note (creates drawing undo action for the new caption object)
+            pNote = ScNoteUtil::CreateNoteFromString( rDoc, rPos, rNoteText, false );
+            if( pAuthor ) pNote->SetAuthor( *pAuthor );
+            if( pDate ) pNote->SetDate( *pDate );
+            // rescue note data for undo
+            ScNoteDataSaved aNewData = pNote->GetNoteData();
+
+            // create the undo action
+            if( pUndoMgr )
+                pUndoMgr->AddUndoAction( std::make_unique<ScUndoReplaceNote>( rDocShell, rPos, std::move(aNewData), /*bInsert*/true, pDrawLayer->GetCalcUndo() ) );
         }
 
-        // create the undo action
-        if( pUndoMgr && (aOldData.mxCaption || aNewData.mxCaption) )
-            pUndoMgr->AddUndoAction( std::make_unique<ScUndoReplaceNote>( rDocShell, rPos, aOldData, aNewData, pDrawLayer->GetCalcUndo() ) );
 
         // repaint cell (to make note marker visible)
         rDocShell.PostPaintCell( rPos );
@@ -1345,11 +1348,8 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
         aModificator.SetDocumentModified();
 
         // Let our LOK clients know about the new/modified note
-        if (pNewNote)
-        {
-            ScDocShell::LOKCommentNotify(hadOldNote ? LOKCommentNotificationType::Modify : LOKCommentNotificationType::Add,
-                                         &rDoc, rPos, pNewNote);
-        }
+        ScDocShell::LOKCommentNotify(hadOldNote ? LOKCommentNotificationType::Modify : LOKCommentNotificationType::Add,
+                                     &rDoc, rPos, pNote);
     }
     else if (!bApi)
     {
@@ -2526,7 +2526,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                 nScenarioCount ++;
 
             rDoc.CopyToDocument( nUndoStartCol, nUndoStartRow, rTab, nUndoEndCol, nUndoEndRow, rTab+nScenarioCount,
-                InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc );
+                InsertDeleteFlags::ALL, false, *pUndoDoc );
         }
 
         pRefUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
@@ -2923,7 +2923,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     {
         bool bWholeCols = ( nStartRow == 0 && nEndRow == MAXROW );
         bool bWholeRows = ( nStartCol == 0 && nEndCol == MAXCOL );
-        InsertDeleteFlags nUndoFlags = (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS) | InsertDeleteFlags::NOCAPTIONS;
+        InsertDeleteFlags nUndoFlags = (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS);
 
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( &rDoc, nStartTab, nEndTab, bWholeCols, bWholeRows );
@@ -4946,7 +4946,7 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
             }
             // note captions are collected by drawing undo
             rDoc.CopyToDocument( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
-                                  InsertDeleteFlags::ALL|InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc );
+                                  InsertDeleteFlags::ALL, false, *pUndoDoc );
             if( bHasNotes )
                 rDoc.BeginDrawUndo();
         }

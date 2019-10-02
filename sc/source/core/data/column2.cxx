@@ -1802,10 +1802,9 @@ class CopyCellNotesHandler
     SCTAB const mnDestTab;
     SCCOL const mnDestCol;
     SCROW const mnDestOffset; /// Add this to the source row position to get the destination row.
-    bool const mbCloneCaption;
 
 public:
-    CopyCellNotesHandler( const ScColumn& rSrcCol, ScColumn& rDestCol, SCROW nDestOffset, bool bCloneCaption ) :
+    CopyCellNotesHandler( const ScColumn& rSrcCol, ScColumn& rDestCol, SCROW nDestOffset ) :
         mrDestCol(rDestCol),
         mrDestNotes(rDestCol.GetCellNoteStore()),
         miPos(mrDestNotes.begin()),
@@ -1813,15 +1812,14 @@ public:
         mnSrcCol(rSrcCol.GetCol()),
         mnDestTab(rDestCol.GetTab()),
         mnDestCol(rDestCol.GetCol()),
-        mnDestOffset(nDestOffset),
-        mbCloneCaption(bCloneCaption) {}
+        mnDestOffset(nDestOffset) {}
 
     void operator() ( size_t nRow, const ScPostIt* p )
     {
         SCROW nDestRow = nRow + mnDestOffset;
         ScAddress aSrcPos(mnSrcCol, nRow, mnSrcTab);
         ScAddress aDestPos(mnDestCol, nDestRow, mnDestTab);
-        miPos = mrDestNotes.set(miPos, nDestRow, p->Clone(aSrcPos, *mrDestCol.GetDoc(), aDestPos, mbCloneCaption).release());
+        miPos = mrDestNotes.set(miPos, nDestRow, p->Clone(*mrDestCol.GetDoc()).release());
         // Notify our LOK clients also
         ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, mrDestCol.GetDoc(), aDestPos, p);
     }
@@ -1830,7 +1828,7 @@ public:
 }
 
 void ScColumn::CopyCellNotesToDocument(
-    SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, bool bCloneCaption, SCROW nRowOffsetDest ) const
+    SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, SCROW nRowOffsetDest ) const
 {
     if (IsNotesEmptyBlock(nRow1, nRow2))
         // The column has no cell notes to copy between specified rows.
@@ -1845,16 +1843,16 @@ void ScColumn::CopyCellNotesToDocument(
         bWasLocked = pDrawLayer->isLocked();
         pDrawLayer->setLock(true);
     }
-    CopyCellNotesHandler aFunc(*this, rDestCol, nRowOffsetDest, bCloneCaption);
+    CopyCellNotesHandler aFunc(*this, rDestCol, nRowOffsetDest);
     sc::ParseNote(maCellNotes.begin(), maCellNotes, nRow1, nRow2, aFunc);
     if (pDrawLayer)
         pDrawLayer->setLock(bWasLocked);
 }
 
 void ScColumn::DuplicateNotes(SCROW nStartRow, size_t nDataSize, ScColumn& rDestCol, sc::ColumnBlockPosition& maDestBlockPos,
-                              bool bCloneCaption, SCROW nRowOffsetDest ) const
+                              SCROW nRowOffsetDest ) const
 {
-    CopyCellNotesToDocument(nStartRow, nStartRow + nDataSize -1, rDestCol, bCloneCaption, nRowOffsetDest);
+    CopyCellNotesToDocument(nStartRow, nStartRow + nDataSize -1, rDestCol, nRowOffsetDest);
     maDestBlockPos.miCellNotePos = rDestCol.maCellNotes.begin();
 }
 
@@ -1925,19 +1923,14 @@ namespace {
     {
         const ScDocument* m_pDocument;
         const ScAddress m_aAddress; // 'incomplete' address consisting of tab, column
-        const bool m_bForgetCaptionOwnership;
 
     public:
-        CellNoteHandler(const ScDocument* pDocument, const ScAddress& rPos, bool bForgetCaptionOwnership) :
+        CellNoteHandler(const ScDocument* pDocument, const ScAddress& rPos) :
             m_pDocument(pDocument),
-            m_aAddress(rPos),
-            m_bForgetCaptionOwnership(bForgetCaptionOwnership) {}
+            m_aAddress(rPos) {}
 
         void operator() ( size_t nRow, ScPostIt* p )
         {
-            if (m_bForgetCaptionOwnership)
-                p->ForgetCaption();
-
             // Create a 'complete' address object
             ScAddress aAddr(m_aAddress);
             aAddr.SetRow(nRow);
@@ -1947,16 +1940,16 @@ namespace {
     };
 } // anonymous namespace
 
-void ScColumn::CellNotesDeleting(SCROW nRow1, SCROW nRow2, bool bForgetCaptionOwnership)
+void ScColumn::CellNotesDeleting(SCROW nRow1, SCROW nRow2)
 {
     ScAddress aAddr(nCol, 0, nTab);
-    CellNoteHandler aFunc(GetDoc(), aAddr, bForgetCaptionOwnership);
+    CellNoteHandler aFunc(GetDoc(), aAddr);
     sc::ParseNote(maCellNotes.begin(), maCellNotes, nRow1, nRow2, aFunc);
 }
 
-void ScColumn::DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, bool bForgetCaptionOwnership )
+void ScColumn::DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 )
 {
-    CellNotesDeleting(nRow1, nRow2, bForgetCaptionOwnership);
+    CellNotesDeleting(nRow1, nRow2);
 
     rBlockPos.miCellNotePos =
         maCellNotes.set_empty(rBlockPos.miCellNotePos, nRow1, nRow2);

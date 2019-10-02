@@ -118,8 +118,6 @@ void ScUndoDeleteContents::DoChange( const bool bUndo )
             nUndoFlags |= InsertDeleteFlags::ATTRIB;
         if (nFlags & InsertDeleteFlags::EDITATTR)          // Edit-Engine attribute
             nUndoFlags |= InsertDeleteFlags::STRING;       // -> Cells will be changed
-        // do not create clones of note captions, they will be restored via drawing undo
-        nUndoFlags |= InsertDeleteFlags::NOCAPTIONS;
 
         ScRange aCopyRange = aRange;
         SCTAB nTabCount = rDoc.GetTableCount();
@@ -142,8 +140,8 @@ void ScUndoDeleteContents::DoChange( const bool bUndo )
 
         aMarkData.MarkToMulti();
         RedoSdrUndoAction( pDrawUndo.get() );
-        // do not delete objects and note captions, they have been removed via drawing undo
-        InsertDeleteFlags nRedoFlags = (nFlags & ~InsertDeleteFlags::OBJECTS) | InsertDeleteFlags::NOCAPTIONS;
+        // do not delete objects, they have been removed via drawing undo
+        InsertDeleteFlags nRedoFlags = (nFlags & ~InsertDeleteFlags::OBJECTS);
         rDoc.DeleteSelection( nRedoFlags, aMarkData );
         aMarkData.MarkToSimple();
 
@@ -677,7 +675,7 @@ void ScUndoMerge::DoChange( bool bUndo ) const
             // repeat merge, but do not remove note captions (will be done by drawing redo below)
             rDoc.DoMerge( aRange.aStart.Tab(),
                            aRange.aStart.Col(), aRange.aStart.Row(),
-                           aRange.aEnd.Col(),   aRange.aEnd.Row(), false );
+                           aRange.aEnd.Col(),   aRange.aEnd.Row() );
 
             if (maOption.mbCenter)
             {
@@ -694,13 +692,9 @@ void ScUndoMerge::DoChange( bool bUndo ) const
         if (bUndo && mxUndoDoc)
         {
             // If there are note captions to be deleted during Undo they were
-            // kept or moved during the merge and copied to the Undo document
-            // without cloning the caption. Forget the target area's caption
-            // pointer that is identical to the one in the Undo document
-            // instead of deleting it.
-            rDoc.DeleteAreaTab( aRange,
-                    InsertDeleteFlags::CONTENTS | InsertDeleteFlags::NOCAPTIONS | InsertDeleteFlags::FORGETCAPTIONS );
-            mxUndoDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL|InsertDeleteFlags::NOCAPTIONS, false, rDoc);
+            // kept or moved during the merge and copied to the Undo document,
+            rDoc.DeleteAreaTab( aRange, InsertDeleteFlags::CONTENTS );
+            mxUndoDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL, false, rDoc);
         }
 
         // redo -> merge contents again
@@ -1014,7 +1008,7 @@ void ScUndoReplace::Undo()
         ScPostIt* pNote = rDoc.GetNote(aCursorPos);
         OSL_ENSURE( pNote, "ScUndoReplace::Undo - cell does not contain a note" );
         if (pNote)
-            pNote->SetText( aCursorPos, aUndoStr );
+            pNote->SetText( aUndoStr );
         if (pViewShell)
             pViewShell->MoveCursorAbs( aCursorPos.Col(), aCursorPos.Row(),
                                        SC_FOLLOW_JUMP, false, false );

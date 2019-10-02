@@ -165,7 +165,7 @@ void ScColumn::DeleteBeforeCopyFromClip(
         }
 
         if (nDelFlag & InsertDeleteFlags::NOTE)
-            DeleteCellNotes(aBlockPos, nRow1, nRow2, false);
+            DeleteCellNotes(aBlockPos, nRow1, nRow2);
 
         if (nDelFlag & InsertDeleteFlags::EDITATTR)
             RemoveEditAttribs(nRow1, nRow2);
@@ -296,8 +296,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
         aNotes.reserve(nDestSize);
         for (size_t i = 0; i < nDestSize; ++i)
         {
-            bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
-            aNotes.push_back(pNote->Clone(aSrcPos, *pDocument, aDestPos, bCloneCaption).release());
+            aNotes.push_back(pNote->Clone(*pDocument).release());
             aDestPos.IncRow();
         }
 
@@ -640,7 +639,7 @@ class NoteCaptionCreator
 public:
     NoteCaptionCreator( SCTAB nTab, SCCOL nCol ) : maPos(nCol,0,nTab) {}
 
-    void operator() ( size_t nRow, const ScPostIt* p )
+    void operator() ( size_t nRow, ScPostIt* p )
     {
         maPos.SetRow(nRow);
         p->GetOrCreateCaption(maPos);
@@ -655,7 +654,9 @@ public:
 
     void operator() ( size_t /*nRow*/, ScPostIt* p )
     {
-        p->ForgetCaption(mbPreserveData);
+        p->HideCaption();
+        if (!mbPreserveData)
+            p->SetText("");
     }
 };
 

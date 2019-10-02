@@ -442,7 +442,7 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
     for( i=0; i<nCount && bUndo; i++ )
     {
         pRefUndoDoc->CopyToDocument(aEffRange.aStart.Col(), aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Col(), aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i],
-            InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, rDoc);
+            InsertDeleteFlags::ALL, false, rDoc);
     }
 
     ScRange aWorkRange( aEffRange );
@@ -827,8 +827,8 @@ void ScUndoCut::DoChange( const bool bUndo )
     ScDocument& rDoc = pDocShell->GetDocument();
     sal_uInt16 nExtFlags = 0;
 
-    // do not undo/redo objects and note captions, they are handled via drawing undo
-    InsertDeleteFlags nUndoFlags = (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS) | InsertDeleteFlags::NOCAPTIONS;
+    // do not undo/redo objects, they are handled via drawing undo
+    InsertDeleteFlags nUndoFlags = (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS);
 
     if (bUndo)  // only for Undo
     {
@@ -964,7 +964,6 @@ void ScUndoPaste::DoChange(bool bUndo)
 
     // do not undo/redo objects and note captions, they are handled via drawing undo
     nUndoFlags &= ~InsertDeleteFlags::OBJECTS;
-    nUndoFlags |= InsertDeleteFlags::NOCAPTIONS;
 
     bool bPaintAll = false;
 
@@ -1295,14 +1294,14 @@ void ScUndoDragDrop::DoUndo( ScRange aRange )
     pDocShell->UpdatePaintExt(mnPaintExtFlags, aPaintRange);
 
     // do not undo objects and note captions, they are handled via drawing undo
-    InsertDeleteFlags nUndoFlags = (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS) | InsertDeleteFlags::NOCAPTIONS;
+    InsertDeleteFlags nUndoFlags = (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS);
 
     // Additionally discard/forget caption ownership during deletion, as
     // Drag&Drop is a special case in that the Undo holds captions of the
     // transferred target range, which would get deleted and
     // SdrGroupUndo::Undo() would attempt to access invalidated captions and
     // crash, tdf#92995
-    InsertDeleteFlags nDelFlags = nUndoFlags | InsertDeleteFlags::FORGETCAPTIONS;
+    InsertDeleteFlags nDelFlags = nUndoFlags;
 
     rDoc.DeleteAreaTab( aRange, nDelFlags );
     pRefUndoDoc->CopyToDocument(aRange, nUndoFlags, false, rDoc);
@@ -1388,8 +1387,8 @@ void ScUndoDragDrop::Redo()
 
     EnableDrawAdjust( &rDoc, false );                //! include in ScBlockUndo?
 
-    // do not undo/redo objects and note captions, they are handled via drawing undo
-    InsertDeleteFlags const nRedoFlags = (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS) | InsertDeleteFlags::NOCAPTIONS;
+    // do not undo/redo objects, they are handled via drawing undo
+    InsertDeleteFlags const nRedoFlags = (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS);
 
     /*  TODO: Redoing note captions is quite tricky due to the fact that a
         helper clip document is used. While (re-)pasting the contents to the

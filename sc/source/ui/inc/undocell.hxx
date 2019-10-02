@@ -28,6 +28,7 @@
 #include <editeng/editobj.hxx>
 
 #include <memory>
+#include <boost/optional.hpp>
 
 class ScDocShell;
 class ScPatternAttr;
@@ -243,7 +244,7 @@ public:
                     ScUndoReplaceNote(
                         ScDocShell& rDocShell,
                         const ScAddress& rPos,
-                        const ScNoteData& rNoteData,
+                        ScNoteDataSaved aNoteData,
                         bool bInsert,
                         std::unique_ptr<SdrUndoAction> pDrawUndo );
 
@@ -251,8 +252,8 @@ public:
                     ScUndoReplaceNote(
                         ScDocShell& rDocShell,
                         const ScAddress& rPos,
-                        const ScNoteData& rOldData,
-                        const ScNoteData& rNewData,
+                        ScNoteDataSaved aOldData,
+                        ScNoteDataSaved aNewData,
                         std::unique_ptr<SdrUndoAction> pDrawUndo );
 
     virtual         ~ScUndoReplaceNote() override;
@@ -265,13 +266,16 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    void            DoInsertNote( const ScNoteData& rNoteData );
-    void            DoRemoveNote( const ScNoteData& rNoteData );
+    void            DoInsertNote( const ScNoteDataSaved& aNoteData );
+    void            DoRemoveNote( const ScNoteDataSaved& aNoteData );
+    void            DoEditNote( const ScNoteDataSaved& aNoteData );
 
 private:
     ScAddress const maPos;
-    ScNoteData      maOldData;
-    ScNoteData      maNewData;
+    enum class UndoType { Insert, Remove, Edit };
+    UndoType meUndoType;
+    boost::optional<ScNoteDataSaved>  mxOldData;
+    boost::optional<ScNoteDataSaved>  mxNewData;
     std::unique_ptr<SdrUndoAction> mpDrawUndo;
 };
 

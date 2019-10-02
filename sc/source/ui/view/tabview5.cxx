@@ -652,8 +652,9 @@ void ScTabView::OnLOKNoteStateChanged(const ScPostIt* pNote)
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    const SdrCaptionObj* pCaption = pNote->GetCaption();
-    if (!pCaption) return;
+    if (!pNote->IsCaptionShown())
+        return;
+    const SdrCaptionObj* pCaption = pNote->GetShownCaption();
 
     tools::Rectangle aRect = pCaption->GetLogicRect();
     basegfx::B2DRange aTailRange = pCaption->getTailPolygon().getB2DRange();
