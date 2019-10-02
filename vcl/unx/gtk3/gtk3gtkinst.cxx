@@ -3537,8 +3537,9 @@ struct DialogRunner
         if (m_xFrameWindow)
         {
             m_xFrameWindow->IncModalCount();
+            if (m_nModalDepth == 0)
+                m_xFrameWindow->ImplGetFrame()->NotifyModalHierarchy(true);
             ++m_nModalDepth;
-            m_xFrameWindow->ImplGetFrame()->NotifyModalHierarchy(true);
         }
     }
 
@@ -3548,7 +3549,8 @@ struct DialogRunner
         {
             m_xFrameWindow->DecModalCount();
             --m_nModalDepth;
-            m_xFrameWindow->ImplGetFrame()->NotifyModalHierarchy(false);
+            if (m_nModalDepth == 0)
+                m_xFrameWindow->ImplGetFrame()->NotifyModalHierarchy(false);
         }
     }
 
@@ -3608,13 +3610,8 @@ struct DialogRunner
             // if, like the calc validation dialog does, the modality was
             // toggled off during execution ensure that on cleanup the parent
             // is left in the state it was found
-            SalFrame* pFrame = m_xFrameWindow->ImplGetFrame();
-            do
-            {
+            while (m_nModalDepth++ < 0)
                 m_xFrameWindow->IncModalCount();
-                pFrame->NotifyModalHierarchy(true);
-            }
-            while (++m_nModalDepth < 0);
         }
     }
 };
