@@ -3870,6 +3870,12 @@
             </info>
             <value>true</value>
           </prop>
+          <prop oor:name="ForceImportWWFieldsAsGenericFields" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Experimental: force all fields in RTF/DOCX to be imported as dumb generic enhanced fields.</desc>
+            </info>
+            <value>false</value>
+          </prop>
           <prop oor:name="CreateMSOLockFiles" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if LO should create MSO lock files next to the LO lock files
