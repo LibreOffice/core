@@ -68,8 +68,8 @@ CPPUNIT_TEST_FIXTURE(GenTest, testTdf121120)
 {
     Bitmap aBitmap = load("tdf121120.png");
     Bitmap::ScopedReadAccess pAccess(aBitmap);
-    const Size& rSize = aBitmap.GetPrefSize();
-    Color aColor(pAccess->GetPixel(rSize.getWidth() / 2, rSize.getHeight() / 2));
+    const Size& rSize = aBitmap.GetSizePixel();
+    Color aColor(pAccess->GetPixel(rSize.getHeight() / 2, rSize.getWidth() / 2));
     // Without the accompanying fix in place, this test would have failed with 'Expected: 255;
     // Actual  : 1'. I.e. center of the preview (which has the background color) was ~black, not
     // white.
