@@ -1761,7 +1761,10 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                         m_bTextInserted = true;
                         xTOCTextCursor->gotoRange(xTextRange->getEnd(), true);
                         mxTOCTextCursor = xTOCTextCursor;
-                        m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTOCTextCursor));
+                        if (!m_bStartGenericField)
+                        {
+                            m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTOCTextCursor));
+                        }
                     }
                 }
                 else
@@ -5020,12 +5023,27 @@ void DomainMapper_Impl::CloseFieldCommand()
                     const uno::Reference<text::XTextContent> xTextContent(xFieldInterface, uno::UNO_QUERY_THROW);
                     uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
                     uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange(pContext->GetStartRange());
-                    if (xTextContent.is())
+                    if (m_aTextAppendStack.top().xInsertPosition.is())
                     {
-                        xTextAppend->insertTextContent(xCrsr,xTextContent, true);
+                        xCrsr->gotoRange(m_aTextAppendStack.top().xInsertPosition, true);
                     }
-                    uno::Reference<uno::XInterface> xContent(xTextContent);
-                    uno::Reference< text::XFormField> xFormField(xContent, uno::UNO_QUERY);
+                    else
+                    {
+                        xCrsr->gotoEnd(true);
+                    }
+                    xTextAppend->insertTextContent(xCrsr, xTextContent, true);
+                    // problem: the fieldmark must be inserted here, because
+                    //          attach() takes 2 positions, not 3!
+                    // FAIL: AppendTextNode() ignores the content index!
+                    // plan B: insert a spurious paragraph break now and join
+                    //         it in PopFieldContext()!
+                    xCrsr->gotoRange(xTextContent->getAnchor()->getEnd(), false);
+                    xCrsr->goLeft(1, false); // skip CH_TXT_ATR_FIELDEND
+                    xTextAppend->insertControlCharacter(xCrsr, text::ControlCharacter::PARAGRAPH_BREAK, false);
+                    xCrsr->goLeft(1, false); // back to previous paragraph
+                    m_aTextAppendStack.push(TextAppendContext(xTextAppend, xCrsr));
+
+                    uno::Reference<text::XFormField> xFormField(xTextContent, uno::UNO_QUERY);
                     xFormField->setFieldType(aCode);
                     m_bStartGenericField = true;
                     pContext->SetFormField( xFormField );
@@ -5378,9 +5396,14 @@ void DomainMapper_Impl::PopFieldContext()
                         else if(m_bStartGenericField)
                         {
                             m_bStartGenericField = false;
+                            xCrsr->gotoRange(m_aTextAppendStack.top().xInsertPosition, false);
+                            xCrsr->goRight(1, true);
+                            xCrsr->setString(OUString()); // undo SplitNode from CloseFieldCommand()
+                            // note: paragraph properties will be overwritten
+                            // by finishParagraph() anyway so ignore here
+                            m_aTextAppendStack.pop();
                             if(m_bTextInserted)
                             {
-                                m_aTextAppendStack.pop();
                                 m_bTextInserted = false;
                             }
                         }
