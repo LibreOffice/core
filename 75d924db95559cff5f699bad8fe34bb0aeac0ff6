@@ -46,6 +46,30 @@
       "revId": "75d924db95559cff5f699bad8fe34bb0aeac0ff6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_2033caad",
+        "filename": "sw/source/uibase/dochdl/swdtflvr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-02T08:52:41Z",
+      "side": 0,
+      "message": "seen addressed at \u003chttps://gerrit.libreoffice.org/#/c/80005/\u003e \"windows.h is already included in prewin.h\"",
+      "parentUuid": "7f7f9b97_20898a74",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 20
+      },
+      "revId": "75d924db95559cff5f699bad8fe34bb0aeac0ff6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
