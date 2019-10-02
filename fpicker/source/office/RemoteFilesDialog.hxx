@@ -14,7 +14,6 @@
 #include <svtools/foldertree.hxx>
 #include <svtools/place.hxx>
 #include <svtools/PlaceEditDialog.hxx>
-#include <svtools/breadcrumb.hxx>
 #include <svtools/fileview.hxx>
 
 #include <vcl/errinf.hxx>
@@ -38,6 +37,7 @@
 #include <vector>
 
 #include "fpdialogbase.hxx"
+#include "breadcrumb.hxx"
 #include "QueryFolderName.hxx"
 
 using namespace ::com::sun::star::beans;
