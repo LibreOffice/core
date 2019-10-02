@@ -746,7 +746,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     }
 
     SfxViewShell* pViewShell = GetSfxViewShell();
-    bool bIsInTextEditMode = false;
+
     // check if text edit or ole is active and handles need to be suppressed. This may be the case
     // when a single object is selected
     // Using a strict return statement is okay here; no handles means *no* handles.
@@ -764,9 +764,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 
             if (pSdrTextObj && pSdrTextObj->IsInEditMode())
             {
-                if (bTiledRendering)
-                    bIsInTextEditMode = true;
-                else
+                if (!bTiledRendering)
                     return;
             }
         }
@@ -832,19 +830,11 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
             OString sSelectionText;
             boost::property_tree::ptree aTableJsonTree;
             bool bTableSelection = false;
-            bool bCellsAreSelected = false;
 
             if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == OBJ_TABLE)
             {
                 auto* pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(mpMarkedObj);
                 bTableSelection = pTableObject->createTableEdgesJson(aTableJsonTree);
-
-                rtl::Reference<sdr::SelectionController> xController = static_cast<SdrView*>(this)->getSelectionController();
-                if (xController.is() && xController->hasSelectedCells())
-                {
-                    // The table shape has selected cells, which provide text selection already -> no graphic selection.
-                    bCellsAreSelected = true;
-                }
             }
             if (GetMarkedObjectCount())
             {
@@ -1002,7 +992,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                 }
             }
 
-            if (sSelectionText.isEmpty() || bCellsAreSelected || bIsInTextEditMode)
+            if (sSelectionText.isEmpty())
                 sSelectionText = "EMPTY";
 
             if (bTableSelection)
