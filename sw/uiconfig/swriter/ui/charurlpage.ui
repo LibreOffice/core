@@ -37,7 +37,7 @@
                     <property name="label" translatable="yes" context="charurlpage|label36">URL:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">urled</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -51,7 +51,7 @@
                     <property name="label" translatable="yes" context="charurlpage|label37">Name:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">nameed</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -65,7 +65,7 @@
                     <property name="label" translatable="yes" context="charurlpage|textft">Text:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">texted</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -79,7 +79,7 @@
                     <property name="label" translatable="yes" context="charurlpage|label39">Target frame:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">targetfrmlb</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -95,8 +95,8 @@
                     <property name="valign">center</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">4</property>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -172,15 +172,6 @@
                 <child>
                   <placeholder/>
                 </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
             </child>
           </object>
@@ -227,7 +218,7 @@
                     <property name="label" translatable="yes" context="charurlpage|label34">Visited links:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">visitedlb</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -241,7 +232,7 @@
                     <property name="label" translatable="yes" context="charurlpage|label10">Unvisited links:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">unvisitedlb</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
