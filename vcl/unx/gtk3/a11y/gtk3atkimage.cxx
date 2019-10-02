@@ -24,7 +24,7 @@
 using namespace ::com::sun::star;
 
 // FIXME
-static G_CONST_RETURN gchar *
+static const gchar *
 getAsConst( const OUString& rString )
 {
     static const int nMax = 10;
@@ -55,7 +55,7 @@ static css::uno::Reference<css::accessibility::XAccessibleImage>
 
 extern "C" {
 
-static G_CONST_RETURN gchar *
+static const gchar *
 image_get_image_description( AtkImage *image )
 {
     try {

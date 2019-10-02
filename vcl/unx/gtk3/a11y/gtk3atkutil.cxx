@@ -701,7 +701,7 @@ static Link<VclSimpleEvent&,void> g_aEventListenerLink( nullptr, WindowEventHand
 
 extern "C" {
 
-static G_CONST_RETURN gchar *
+static const gchar *
 ooo_atk_util_get_toolkit_name()
 {
     return "VCL";
@@ -709,7 +709,7 @@ ooo_atk_util_get_toolkit_name()
 
 /*****************************************************************************/
 
-static G_CONST_RETURN gchar *
+static const gchar *
 ooo_atk_util_get_toolkit_version()
 {
     return LIBO_VERSION_DOTTED;
