@@ -30,7 +30,11 @@
 #include "DialogModel.hxx"
 
 #define CHART_WIZARD_PAGEWIDTH  250
+#ifdef IOS
+#define CHART_WIZARD_PAGEHEIGHT 200
+#else
 #define CHART_WIZARD_PAGEHEIGHT 170
+#endif
 
 using namespace css;
 
