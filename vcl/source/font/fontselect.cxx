@@ -21,7 +21,6 @@
 #include <o3tl/safeint.hxx>
 
 #include <fontselect.hxx>
-#include <fontinstance.hxx>
 
 #include <PhysicalFontFace.hxx>
 #include <svdata.hxx>

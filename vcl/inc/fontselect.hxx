@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_INC_FONTSELECT_HXX
 
 #include <i18nlangtag/lang.h>
-#include <rtl/ref.hxx>
 
 #include "fontattributes.hxx"
 
@@ -81,7 +80,7 @@ public:
 #endif
 
 public: // TODO: change to private
-    rtl::Reference<LogicalFontInstance> mpFontInstance;                // pointer to the resulting FontCache entry
+    LogicalFontInstance*  mpFontInstance;                // pointer to the resulting FontCache entry
 
     void            copyAttributes(const FontSelectPatternAttributes &rAttributes);
 };

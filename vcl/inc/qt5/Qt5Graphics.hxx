@@ -54,7 +54,7 @@ class Qt5Graphics : public SalGraphics
     QPainter::CompositionMode m_eCompositionMode;
 
     PhysicalFontCollection* m_pFontCollection;
-    rtl::Reference<Qt5Font> m_pTextStyle[MAX_FALLBACK];
+    Qt5Font* m_pTextStyle[MAX_FALLBACK];
     Color m_aTextColor;
     std::unique_ptr<QPushButton> m_focusedButton;
     std::unique_ptr<QImage> m_image;

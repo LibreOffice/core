@@ -58,10 +58,12 @@ GenericSalLayout::GenericSalLayout(LogicalFontInstance &rFont)
     , mpVertGlyphs(nullptr)
     , mbFuzzing(utl::ConfigManager::IsFuzzing())
 {
+    mpFont->Acquire();
 }
 
 GenericSalLayout::~GenericSalLayout()
 {
+    mpFont->Release();
 }
 
 void GenericSalLayout::ParseFeatures(const OUString& aName)

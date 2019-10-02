@@ -29,7 +29,6 @@
 #include <win/salgdi.h>
 #include <win/salframe.h>
 #include <win/salvd.h>
-#include <win/winlayout.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <salgdiimpl.hxx>

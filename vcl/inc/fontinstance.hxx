@@ -24,7 +24,6 @@
 #include "impfontmetricdata.hxx"
 
 #include <rtl/ref.hxx>
-#include <salhelper/simplereferenceobject.hxx>
 #include <unordered_map>
 #include <memory>
 
@@ -36,7 +35,7 @@ class PhysicalFontFace;
 
 // TODO: allow sharing of metrics for related fonts
 
-class VCL_PLUGIN_PUBLIC LogicalFontInstance : public salhelper::SimpleReferenceObject
+class VCL_PLUGIN_PUBLIC LogicalFontInstance
 {
     // just declaring the factory function doesn't work AKA
     // friend LogicalFontInstance* PhysicalFontFace::CreateFontInstance(const FontSelectPattern&) const;
@@ -44,7 +43,7 @@ class VCL_PLUGIN_PUBLIC LogicalFontInstance : public salhelper::SimpleReferenceO
     friend class ImplFontCache;
 
 public: // TODO: make data members private
-    virtual ~LogicalFontInstance() override;
+    virtual ~LogicalFontInstance();
 
     ImplFontMetricDataRef mxFontMetric;        // Font attributes
     const ConvertChar* mpConversion;        // used e.g. for StarBats->StarSymbol
@@ -57,6 +56,9 @@ public: // TODO: make data members private
     void            AddFallbackForUnicode( sal_UCS4, FontWeight eWeight, const OUString& rFontName );
     bool            GetFallbackForUnicode( sal_UCS4, FontWeight eWeight, OUString* pFontName ) const;
     void            IgnoreFallbackForUnicode( sal_UCS4, FontWeight eWeight, const OUString& rFontName );
+
+    void            Acquire();
+    void            Release();
 
     inline hb_font_t* GetHbFont();
     void SetAverageWidthFactor(double nFactor) { m_nAveWidthFactor = nFactor; }
@@ -86,6 +88,7 @@ private:
     typedef ::std::unordered_map< ::std::pair<sal_UCS4,FontWeight>, OUString > UnicodeFallbackList;
     std::unique_ptr<UnicodeFallbackList> mpUnicodeFallbackList;
     ImplFontCache * mpFontCache;
+    sal_uInt32      mnRefCount;
     const FontSelectPattern m_aFontSelData;
     hb_font_t* m_pHbFont;
     double m_nAveWidthFactor;

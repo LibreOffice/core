@@ -39,7 +39,6 @@
 #include <unordered_map>
 
 class FreetypeManager;
-class FreetypeFontInstance;
 class FreetypeFontInfo;
 class GlyphData;
 class FontConfigFontOptions;
@@ -140,7 +139,7 @@ public:
     bool                    GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPolygon&) const;
     bool                    GetAntialiasAdvice() const;
 
-    FreetypeFontInstance*   GetFontInstance() const { return mpFontInstance.get(); }
+    LogicalFontInstance* GetFontInstance() const { return mpFontInstance; }
 
 private:
     friend class GlyphCache;
@@ -162,7 +161,7 @@ private:
     typedef std::unordered_map<int,GlyphData> GlyphList;
     mutable GlyphList       maGlyphList;
 
-    rtl::Reference<FreetypeFontInstance> mpFontInstance;
+    LogicalFontInstance* const mpFontInstance;
 
     // used by GlyphCache for cache LRU algorithm
     mutable long            mnRefCount;
