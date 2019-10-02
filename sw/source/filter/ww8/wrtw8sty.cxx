@@ -633,6 +633,10 @@ void MSWordStyles::OutputStyle( SwFormat* pFormat, sal_uInt16 nPos )
         {
             aName = "Hyperlink";
         }
+        else if (aName.equalsIgnoreAsciiCase("Visited Internet Link"))
+        {
+            aName = "FollowedHyperlink";
+        }
 
         m_rExport.AttrOutput().StartStyle( aName, (bFormatColl ? STYLE_TYPE_PARA : STYLE_TYPE_CHAR),
                 nBase, nWwNext, GetWWId( *pFormat ), nPos,
