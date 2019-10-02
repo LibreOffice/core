@@ -24,8 +24,6 @@
 #include <dsntypes.hxx>
 #include <commontypes.hxx>
 #include <vcl/wizardmachine.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
 #include <curledit.hxx>
 
 class NumericField;

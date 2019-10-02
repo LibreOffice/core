@@ -26,7 +26,6 @@
 #include <ucbhelper/content.hxx>
 #include <curledit.hxx>
 #include <vcl/roadmapwizard.hxx>
-#include <vcl/field.hxx>
 #include <rtl/ustring.hxx>
 
 namespace dbaui

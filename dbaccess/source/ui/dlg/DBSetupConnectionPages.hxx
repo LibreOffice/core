@@ -29,7 +29,6 @@
 
 #include <vcl/roadmapwizard.hxx>
 #include <ucbhelper/content.hxx>
-#include <vcl/field.hxx>
 
 namespace dbaui
 
