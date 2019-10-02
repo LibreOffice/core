@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:57:39 using:
+ Generated on 2019-10-02 19:37:40 using:
  ./bin/update_pch sw msword --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -36,7 +36,6 @@
 #include <iostream>
 #include <limits.h>
 #include <limits>
-#include <list>
 #include <locale>
 #include <map>
 #include <math.h>
@@ -53,6 +52,7 @@
 #include <utility>
 #include <vector>
 #include <boost/optional.hpp>
+#include <boost/property_tree/ptree.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -100,6 +100,7 @@
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/IDialogRenderable.hxx>
+#include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
@@ -107,15 +108,10 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/ctrl.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/dndhelp.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
-#include <vcl/field.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
@@ -126,7 +122,6 @@
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
@@ -134,13 +129,11 @@
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
-#include <vcl/spinfld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/task.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
 #include <vcl/vectorgraphicdata.hxx>
@@ -157,11 +150,8 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <basegfx/range/b2irange.hxx>
-#include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
-#include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/vector/b2dsize.hxx>
@@ -183,7 +173,6 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
-#include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -191,28 +180,21 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
-#include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
-#include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
+#include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/DashStyle.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/HatchStyle.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/drawing/XShapeBinder.hpp>
-#include <com/sun/star/drawing/XShapeCombiner.hpp>
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
 #include <com/sun/star/drawing/XShapes2.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -236,7 +218,6 @@
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -253,6 +234,7 @@
 #include <com/sun/star/text/XTextCopy.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
+#include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -325,7 +307,9 @@
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <editeng/flditem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/keepitem.hxx>
@@ -347,7 +331,6 @@
 #include <editeng/twolinesitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/unoipset.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/widwitem.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
@@ -357,7 +340,6 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nutil/transliteration.hxx>
 #include <o3tl/cow_wrapper.hxx>
-#include <o3tl/deleter.hxx>
 #include <o3tl/enumrange.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
@@ -377,7 +359,9 @@
 #include <sax/saxdllapi.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/docfile.hxx>
+#include <sfx2/shell.hxx>
 #include <sot/formats.hxx>
+#include <sot/object.hxx>
 #include <sot/sotdllapi.h>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/broadcast.hxx>
@@ -407,18 +391,19 @@
 #include <svtools/colorcfg.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>
+#include <svx/DiagramDataInterface.hxx>
 #include <svx/XPropertyEntry.hxx>
 #include <svx/fmglob.hxx>
-#include <svx/grfcrop.hxx>
 #include <svx/ipolypolygoneditorcontroller.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/msdffdef.hxx>
-#include <svx/sdgcpitm.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
+#include <svx/sdr/properties/defaultproperties.hxx>
+#include <svx/sdr/properties/properties.hxx>
 #include <svx/sdrobjectuser.hxx>
 #include <svx/sdtaditm.hxx>
 #include <svx/sdtaitm.hxx>
@@ -445,7 +430,6 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdpagv.hxx>
 #include <svx/svdpntv.hxx>
 #include <svx/svdpoev.hxx>
 #include <svx/svdsnpv.hxx>
@@ -457,26 +441,20 @@
 #include <svx/svdxcgv.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/unoapi.hxx>
-#include <svx/unoprov.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xdef.hxx>
-#include <svx/xenum.hxx>
 #include <svx/xfillit0.hxx>
-#include <svx/xflasit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/xit.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/xlnasit.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xtable.hxx>
-#include <svx/xtextit0.hxx>
 #include <tools/color.hxx>
-#include <tools/contnr.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
@@ -576,6 +554,7 @@
 #include <pam.hxx>
 #include <paratr.hxx>
 #include <poolfmt.hxx>
+#include <redline.hxx>
 #include <reffld.hxx>
 #include <shellio.hxx>
 #include <swcrsr.hxx>
@@ -585,6 +564,7 @@
 #include <swrect.hxx>
 #include <swregion.hxx>
 #include <swtable.hxx>
+#include <swtypes.hxx>
 #include <tblsel.hxx>
 #include <toxe.hxx>
 #include <txatbase.hxx>
