@@ -112,24 +112,15 @@ struct ImplColorSet
     bool        mbSet = false;
 };
 
-static int ImplColorSetCmpFnc( const ImplColorSet& lhs, const ImplColorSet& rhs)
+static bool ImplColorSetCmpFnc( const ImplColorSet& lhs, const ImplColorSet& rhs)
 {
-    int             nRet;
-
     if( lhs.mbSet && rhs.mbSet )
     {
         const sal_uInt8 cLum1 = lhs.maColor.GetLuminance();
         const sal_uInt8 cLum2 = rhs.maColor.GetLuminance();
-        nRet = ( cLum1 > cLum2 ) ? -1 : ( ( cLum1 == cLum2 ) ? 0 : 1 );
+        return cLum1 < cLum2;
     }
-    else if( lhs.mbSet )
-        nRet = -1;
-    else if( rhs.mbSet )
-        nRet = 1;
-    else
-        nRet = 0;
-
-    return nRet;
+    return lhs.mbSet < rhs.mbSet;
 }
 
 class ImplPointArray
