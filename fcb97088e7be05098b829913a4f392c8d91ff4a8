@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_e35b9c2b",
+        "filename": "sc/qa/uitest/calc_tests2/tdf118189.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-02T13:31:30Z",
+      "side": 1,
+      "message": "Just wondering:  Would this need something like a double close_doc(), for both calc_doc and calc_doc2?",
+      "revId": "fcb97088e7be05098b829913a4f392c8d91ff4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
