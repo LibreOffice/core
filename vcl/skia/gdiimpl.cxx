@@ -21,6 +21,8 @@
 
 #include <salgdi.hxx>
 #include <skia/salbmp.hxx>
+#include <vcl/idle.hxx>
+#include <vcl/svapp.hxx>
 
 #include <SkCanvas.h>
 #include <SkPath.h>
@@ -30,11 +32,34 @@
 #include <fstream>
 #endif
 
+// Class that triggers flushing the backing buffer when idle.
+class SkiaFlushIdle : public Idle
+{
+    SkiaSalGraphicsImpl* graphics;
+
+public:
+    explicit SkiaFlushIdle(SkiaSalGraphicsImpl* graphics)
+        : Idle("skia idle swap")
+        , graphics(graphics)
+    {
+        // We don't want to be swapping before we've painted.
+        SetPriority(TaskPriority::POST_PAINT);
+    }
+
+    virtual void Invoke() override
+    {
+        graphics->performFlush();
+        Stop();
+        SetPriority(TaskPriority::HIGHEST);
+    }
+};
+
 SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvider* pProvider)
     : mParent(rParent)
     , mProvider(pProvider)
     , mLineColor(SALCOLOR_NONE)
     , mFillColor(SALCOLOR_NONE)
+    , mFlush(new SkiaFlushIdle(this))
 {
 }
 
@@ -46,11 +71,12 @@ void SkiaSalGraphicsImpl::Init()
     mSurface = SkSurface::MakeRasterN32Premul(GetWidth(), GetHeight());
     mSurface->getCanvas()->save(); // see SetClipRegion()
     mClipRegion = vcl::Region(tools::Rectangle(0, 0, GetWidth(), GetHeight()));
+
+    // We don't want to be swapping before we've painted.
+    mFlush->SetPriority(TaskPriority::POST_PAINT);
 }
 
 void SkiaSalGraphicsImpl::DeInit() { mSurface.reset(); }
-
-void SkiaSalGraphicsImpl::freeResources() {}
 
 static SkIRect toSkIRect(const tools::Rectangle& rectangle)
 {
@@ -129,6 +155,7 @@ void SkiaSalGraphicsImpl::drawPixel(long nX, long nY)
         return;
     SkCanvas* canvas = mSurface->getCanvas();
     canvas->drawPoint(nX, nY, SkPaint());
+    scheduleFlush();
 }
 
 void SkiaSalGraphicsImpl::drawPixel(long nX, long nY, Color nColor)
@@ -141,6 +168,7 @@ void SkiaSalGraphicsImpl::drawPixel(long nX, long nY, Color nColor)
     // Apparently drawPixel() is actually expected to set the pixel and not draw it.
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
     canvas->drawPoint(nX, nY, paint);
+    scheduleFlush();
 }
 
 void SkiaSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
@@ -151,6 +179,7 @@ void SkiaSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
     SkPaint paint;
     paint.setColor(toSkColor(mLineColor));
     canvas->drawLine(nX1, nY1, nX2, nY2, paint);
+    scheduleFlush();
 }
 
 void SkiaSalGraphicsImpl::drawRect(long nX, long nY, long nWidth, long nHeight)
@@ -169,6 +198,7 @@ void SkiaSalGraphicsImpl::drawRect(long nX, long nY, long nWidth, long nHeight)
         paint.setStyle(SkPaint::kStroke_Style);
         canvas->drawIRect(SkIRect::MakeXYWH(nX, nY, nWidth - 1, nHeight - 1), paint);
     }
+    scheduleFlush();
 }
 
 void SkiaSalGraphicsImpl::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
@@ -183,6 +213,7 @@ void SkiaSalGraphicsImpl::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAr
     paint.setColor(toSkColor(mLineColor));
     mSurface->getCanvas()->drawPoints(SkCanvas::kLines_PointMode, nPoints, pointVector.data(),
                                       paint);
+    scheduleFlush();
 }
 
 void SkiaSalGraphicsImpl::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
@@ -208,6 +239,7 @@ void SkiaSalGraphicsImpl::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry
         paint.setStyle(SkPaint::kStroke_Style);
         mSurface->getCanvas()->drawPath(path, paint);
     }
+    scheduleFlush();
 }
 
 void SkiaSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints,
@@ -242,6 +274,7 @@ void SkiaSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pP
         paint.setStyle(SkPaint::kStroke_Style);
         mSurface->getCanvas()->drawPath(path, paint);
     }
+    scheduleFlush();
 }
 
 bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
@@ -306,6 +339,7 @@ void SkiaSalGraphicsImpl::copyArea(long nDestX, long nDestY, long nSrcX, long nS
         = mSurface->makeImageSnapshot(SkIRect::MakeXYWH(nSrcX, nSrcY, nSrcWidth, nSrcHeight));
     // TODO makeNonTextureImage() ?
     mSurface->getCanvas()->drawImage(image, nDestX, nDestY);
+    scheduleFlush();
 }
 
 void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics)
@@ -326,6 +360,7 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
                                                           rPosAry.mnDestWidth,
                                                           rPosAry.mnDestHeight),
                                          nullptr);
+    scheduleFlush();
 }
 
 bool SkiaSalGraphicsImpl::blendBitmap(const SalTwoRect&, const SalBitmap& rBitmap)
@@ -356,6 +391,7 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap&
         SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                          rPosAry.mnDestHeight),
         nullptr);
+    scheduleFlush();
 }
 
 void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
@@ -385,6 +421,7 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& r
         SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                          rPosAry.mnDestHeight),
         nullptr);
+    scheduleFlush();
 }
 
 std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long nWidth,
@@ -459,6 +496,7 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
         SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                          rPosAry.mnDestHeight),
         nullptr);
+    scheduleFlush();
     return true;
 }
 
@@ -493,6 +531,16 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolygon,
     (void)rPolygon;
     (void)rGradient;
     return false;
+}
+
+void SkiaSalGraphicsImpl::scheduleFlush()
+{
+    if (isOffscreen())
+        return;
+    if (!Application::IsInExecute())
+        performFlush(); // otherwise nothing would trigger idle rendering
+    else if (!mFlush->IsActive())
+        mFlush->Start();
 }
 
 #ifdef DBG_UTIL
