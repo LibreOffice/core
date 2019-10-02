@@ -31,7 +31,6 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/msgbox.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

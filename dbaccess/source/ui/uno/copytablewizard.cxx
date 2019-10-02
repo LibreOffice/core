@@ -71,7 +71,6 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/waitobj.hxx>
 
 namespace dbaui
 {

@@ -32,7 +32,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/waitobj.hxx>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>

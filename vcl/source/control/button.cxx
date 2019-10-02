@@ -123,37 +123,6 @@ void Button::Click()
     ImplCallEventListenersAndHandler( VclEventId::ButtonClick, [this] () { maClickHdl.Call(this); } );
 }
 
-OUString GetStandardText(StandardButtonType eButton)
-{
-    static const char* aResIdAry[static_cast<int>(StandardButtonType::Count)] =
-    {
-        // http://lists.freedesktop.org/archives/libreoffice/2013-January/044513.html
-        // Under windows we don't want accelerators on ok/cancel but do on other
-        // buttons
-#ifdef _WIN32
-        SV_BUTTONTEXT_OK_NOMNEMONIC,
-        SV_BUTTONTEXT_CANCEL_NOMNEMONIC,
-#else
-        SV_BUTTONTEXT_OK,
-        SV_BUTTONTEXT_CANCEL,
-#endif
-        SV_BUTTONTEXT_YES,
-        SV_BUTTONTEXT_NO,
-        SV_BUTTONTEXT_RETRY,
-        SV_BUTTONTEXT_HELP,
-        SV_BUTTONTEXT_CLOSE,
-        SV_BUTTONTEXT_MORE,
-        SV_BUTTONTEXT_IGNORE,
-        SV_BUTTONTEXT_ABORT,
-        SV_BUTTONTEXT_LESS,
-        STR_WIZDLG_PREVIOUS,
-        STR_WIZDLG_NEXT,
-        STR_WIZDLG_FINISH,
-    };
-
-    return VclResId(aResIdAry[static_cast<sal_uInt16>(eButton)]);
-}
-
 void Button::SetModeImage( const Image& rImage )
 {
     if ( rImage != mpButtonData->maImage )

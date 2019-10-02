@@ -24,10 +24,25 @@
 #include <tools/wintypes.hxx>
 #include <vcl/dllapi.h>
 
+class Image;
 namespace weld { class Widget; }
 
 void VCL_DLLPUBLIC ShowServiceNotAvailableError(weld::Widget* pParent, const OUString& rServiceName, bool bError);
+
 OUString VCL_DLLPUBLIC GetStandardText(StandardButtonType eButton);
+
+VCL_DLLPUBLIC Image const & GetStandardInfoBoxImage();
+VCL_DLLPUBLIC OUString GetStandardInfoBoxText();
+
+VCL_DLLPUBLIC Image const & GetStandardWarningBoxImage();
+VCL_DLLPUBLIC OUString GetStandardWarningBoxText();
+
+VCL_DLLPUBLIC Image const & GetStandardErrorBoxImage();
+VCL_DLLPUBLIC OUString GetStandardErrorBoxText();
+
+VCL_DLLPUBLIC Image const & GetStandardQueryBoxImage();
+VCL_DLLPUBLIC OUString GetStandardQueryBoxText();
+
 
 #endif // INCLUDED_VCL_STDTEXT_HXX
 

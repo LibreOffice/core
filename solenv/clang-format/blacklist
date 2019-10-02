@@ -7855,7 +7855,6 @@ include/vcl/metaactiontypes.hxx
 include/vcl/metric.hxx
 include/vcl/mnemonic.hxx
 include/vcl/mnemonicengine.hxx
-include/vcl/msgbox.hxx
 include/vcl/mtfxmldump.hxx
 include/vcl/notebookbar.hxx
 include/vcl/oldprintadaptor.hxx
@@ -18009,7 +18008,6 @@ vcl/source/window/menuwindow.hxx
 vcl/source/window/mnemonic.cxx
 vcl/source/window/mnemonicengine.cxx
 vcl/source/window/mouse.cxx
-vcl/source/window/msgbox.cxx
 vcl/source/window/paint.cxx
 vcl/source/window/popupmenuwindow.cxx
 vcl/source/window/printdlg.cxx

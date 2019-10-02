@@ -20,11 +20,11 @@
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/imagerepository.hxx>
 #include <tools/fract.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
