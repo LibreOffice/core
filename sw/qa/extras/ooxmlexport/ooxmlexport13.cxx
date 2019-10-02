@@ -829,6 +829,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123628, "tdf123628.odt")
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='InternetLink']/w:name", "val", "Hyperlink");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf127925, "tdf127925.odt")
+{
+    xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    if (!pXmlStyles)
+        return;
+
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='VisitedInternetLink']/w:name", "val", "FollowedHyperlink");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
