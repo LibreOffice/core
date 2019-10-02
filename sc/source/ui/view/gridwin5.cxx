@@ -326,7 +326,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         if ( !aHelpText.isEmpty() )
         {
             tools::Rectangle aScreenRect(OutputToScreenPixel(aPixRect.TopLeft()),
-                                    OutputToScreenPixel(aPixRect.BottomRight()));
+                                         OutputToScreenPixel(aPixRect.BottomRight()));
 
             if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
                 Help::ShowBalloon(this,rHEvt.GetMousePosPixel(), aScreenRect, aHelpText);

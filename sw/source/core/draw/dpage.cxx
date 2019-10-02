@@ -166,9 +166,13 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
         SdrObject* pObj = pView->PickObj(aPos, 0, pPV, SdrSearchOptions::PICKMACRO);
         SwVirtFlyDrawObj* pDrawObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
         OUString sText;
+        tools::Rectangle aPixRect;
         if (pDrawObj)
         {
             SwFlyFrame *pFly = pDrawObj->GetFlyFrame();
+
+            aPixRect = pWindow->LogicToPixel(pFly->getFrameArea().SVRect());
+
             const SwFormatURL &rURL = pFly->GetFormat()->GetURL();
             if( rURL.GetMap() )
             {
@@ -211,6 +215,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
             if (aVEvt.eEvent == SdrEventKind::ExecuteUrl)
             {
                 sText = aVEvt.pURLField->GetURL();
+                aPixRect = pWindow->LogicToPixel(aVEvt.pObj->GetLogicRect());
             }
         }
 
@@ -222,11 +227,13 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
                 sText = SfxHelp::GetURLHelpText(sText);
 
             // then display the help:
-            tools::Rectangle aRect(rEvt.GetMousePosPixel(), Size(1, 1));
+            tools::Rectangle aScreenRect(pWindow->OutputToScreenPixel(aPixRect.TopLeft()),
+                                         pWindow->OutputToScreenPixel(aPixRect.BottomRight()));
+
             if (rEvt.GetMode() & HelpEventMode::BALLOON)
-                Help::ShowBalloon(pWindow, rEvt.GetMousePosPixel(), aRect, sText);
+                Help::ShowBalloon(pWindow, rEvt.GetMousePosPixel(), aScreenRect, sText);
             else
-                Help::ShowQuickHelp(pWindow, aRect, sText);
+                Help::ShowQuickHelp(pWindow, aScreenRect, sText);
             bContinue = false;
         }
     }
