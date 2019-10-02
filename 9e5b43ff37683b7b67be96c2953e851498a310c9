@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_603222f4",
+        "filename": "tools/source/debug/debug.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-02T06:36:06Z",
+      "side": 1,
+      "message": "I\u0027m curious why this way was chosen, not like\n\n    sMessage.append(\" message: \" +\n                    toOString(exception.Message));\n\nwhich would append the concat?",
+      "range": {
+        "startLine": 108,
+        "startChar": 8,
+        "endLine": 109,
+        "endChar": 54
+      },
+      "revId": "9e5b43ff37683b7b67be96c2953e851498a310c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
