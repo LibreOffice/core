@@ -914,7 +914,7 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
             <rng:ref name="nonNegativeInteger"/>
           </rng:attribute>
         </rng:optional>
-        <!-- TODO no proposal -->
+        <!-- https://issues.oasis-open.org/browse/OFFICE-4047 -->
         <rng:optional>
           <rng:attribute name="loext:allow-overlap">
             <rng:ref name="boolean"/>
