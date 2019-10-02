@@ -23,8 +23,6 @@
 
 #include "QEnumTypes.hxx"
 #include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/button.hxx>
 
 namespace dbaui
 {

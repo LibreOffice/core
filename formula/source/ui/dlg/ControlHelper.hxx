@@ -20,7 +20,7 @@
 #define INCLUDED_FORMULA_SOURCE_UI_DLG_CONTROLHELPER_HXX
 
 #include <formula/funcutl.hxx>
-#include <svtools/svmedit.hxx>
+
 namespace formula
 {
 

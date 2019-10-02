@@ -20,6 +20,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <comphelper/string.hxx>
+#include <tools/lineend.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 

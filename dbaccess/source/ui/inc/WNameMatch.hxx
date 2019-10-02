@@ -22,8 +22,6 @@
 #include "WTabPage.hxx"
 #include "marktree.hxx"
 #include "DExport.hxx"
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
 #include "WCopyTable.hxx"
 
 namespace dbaui

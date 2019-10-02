@@ -25,8 +25,6 @@
 #include <ucbhelper/content.hxx>
 #include <curledit.hxx>
 
-#include <vcl/field.hxx>
-
 namespace dbaui
 {
 

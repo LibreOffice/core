@@ -23,7 +23,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/event.hxx>
-#include <vcl/field.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/colorcfg.hxx>
 #include <i18nlangtag/languagetag.hxx>
