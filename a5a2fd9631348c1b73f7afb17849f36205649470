@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_80cbbe51",
+        "filename": "sw/source/core/txtnode/thints.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2444,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-02T10:03:45Z",
+      "side": 1,
+      "message": "Unfortunately, using m_pSwpHints-\u003eTryInsertHint breaks the application of the attribute to only selected area; using m_pSwpHints-\u003eNoteInHistory makes no difference...",
+      "range": {
+        "startLine": 2444,
+        "startChar": 55,
+        "endLine": 2444,
+        "endChar": 60
+      },
+      "revId": "a5a2fd9631348c1b73f7afb17849f36205649470",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
