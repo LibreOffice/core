@@ -43,6 +43,7 @@ class SVL_DLLPUBLIC SfxAllEnumItem: public SfxAllEnumItem_Base
 
     sal_uInt16              GetPosByValue( sal_uInt16 nValue ) const;
     std::size_t             GetPosByValue_( sal_uInt16 nValue ) const;
+    sal_uInt16              GetValueByPos( sal_uInt16 nPos ) const;
 
 public:
     explicit                SfxAllEnumItem( sal_uInt16 nWhich);
@@ -52,10 +53,8 @@ public:
 
     void                    InsertValue( sal_uInt16 nValue );
     void                    InsertValue( sal_uInt16 nValue, const OUString &rText );
-    void                    RemoveValue( sal_uInt16 nValue );
 
     virtual sal_uInt16      GetValueCount() const override;
-    sal_uInt16              GetValueByPos( sal_uInt16 nPos ) const;
     OUString const &        GetValueTextByPos( sal_uInt16 nPos ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 };
