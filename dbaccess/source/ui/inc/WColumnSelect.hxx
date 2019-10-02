@@ -22,9 +22,6 @@
 #include "WTabPage.hxx"
 #include "WCopyTable.hxx"
 
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
 #include <comphelper/stl_types.hxx>
 
 namespace dbaui

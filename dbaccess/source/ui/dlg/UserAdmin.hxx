@@ -19,10 +19,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_USERADMIN_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_DLG_USERADMIN_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
 #include <TableGrantCtrl.hxx>
 #include "adminpages.hxx"
 

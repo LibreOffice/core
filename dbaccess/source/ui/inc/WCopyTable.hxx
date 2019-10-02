@@ -29,7 +29,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/stl_types.hxx>
 #include "TypeInfo.hxx"
-#include <vcl/button.hxx>
 #include <vcl/roadmapwizard.hxx>
 #include "DExport.hxx"
 #include "WTabPage.hxx"
@@ -37,7 +36,6 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <vcl/lstbox.hxx>
 #include <map>
 #include <algorithm>
 
