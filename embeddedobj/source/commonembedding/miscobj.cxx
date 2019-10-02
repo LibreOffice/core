@@ -27,15 +27,12 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/mimeconfighelper.hxx>
 
 #include <vcl/svapp.hxx>
 
-#include <closepreventer.hxx>
-#include <intercept.hxx>
 #include "persistence.hxx"
 
 using namespace ::com::sun::star;

@@ -3,3 +3,30 @@ assumeFilename: embeddedobj/source/commonembedding/embedobj.cxx
 blacklist:
     embeddedobj/qa/cppunit/general.cxx:
     - comphelper/scopeguard.hxx
+    embeddedobj/source/inc/dummyobject.hxx:
+    # Don't propose hxx -> h change in URE libs
+    - cppuhelper/interfacecontainer.hxx
+    embeddedobj/source/inc/oleembobj.hxx:
+    # Needed on WIN
+    - osl/thread.h
+    embeddedobj/source/msole/olevisual.cxx:
+    # Needed on WIN
+    - com/sun/star/embed/EmbedMisc.hpp
+    - comphelper/seqstream.hxx
+    - filter/msfilter/classids.hxx
+    embeddedobj/source/msole/oleembed.cxx:
+    # Needed on WIN
+    - com/sun/star/embed/NeedsRunningStateException.hpp
+    - com/sun/star/embed/StateChangeInProgressException.hpp
+    - targetstatecontrol.hxx
+    embeddedobj/source/msole/olemisc.cxx:
+    # Needed on WIN
+    - com/sun/star/embed/EmbedStates.hpp
+    embeddedobj/source/msole/olepersist.cxx:
+    # Needed on WIN
+    - com/sun/star/embed/EmbedVerbs.hpp
+    - osl/thread.hxx
+    - closepreventer.hxx
+    embeddedobj/source/commonembedding/embedobj.cxx:
+    # Don't propose hxx -> h change in URE libs
+    - cppuhelper/interfacecontainer.hxx

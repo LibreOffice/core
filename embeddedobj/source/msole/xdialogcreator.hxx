@@ -23,8 +23,10 @@
 #include <com/sun/star/embed/XInsertObjectDialog.hpp>
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <osl/diagnose.h>
 
 
 class MSOLEDialogObjectCreator : public ::cppu::WeakImplHelper<

@@ -19,7 +19,6 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>
-#include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -32,7 +31,6 @@
 #include "xfactory.hxx"
 #include <commonembobj.hxx>
 #include <specialobject.hxx>
-#include <oleembobj.hxx>
 
 
 using namespace ::com::sun::star;

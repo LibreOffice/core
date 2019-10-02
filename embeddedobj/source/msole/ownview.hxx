@@ -24,7 +24,6 @@
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase.hxx>
 

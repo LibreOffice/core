@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <com/sun/star/embed/EmbedUpdateModes.hpp>
 #include <com/sun/star/embed/ObjectSaveVetoException.hpp>
 #include <com/sun/star/embed/StorageWrappedTargetException.hpp>
@@ -31,7 +30,6 @@
 
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -48,7 +46,6 @@
 #include <targetstatecontrol.hxx>
 
 #include <commonembobj.hxx>
-#include <intercept.hxx>
 #include "embedobj.hxx"
 #include <specialobject.hxx>
 

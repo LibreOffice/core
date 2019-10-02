@@ -20,6 +20,8 @@
 #ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_COMMONEMBEDDING_PERSISTENCE_HXX
 #define INCLUDED_EMBEDDEDOBJ_SOURCE_COMMONEMBEDDING_PERSISTENCE_HXX
 
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 css::uno::Sequence< css::beans::PropertyValue > GetValuableArgs_Impl( const css::uno::Sequence< css::beans::PropertyValue >& aMedDescr,
                                                             bool bCanUseDocumentBaseURL );
 
