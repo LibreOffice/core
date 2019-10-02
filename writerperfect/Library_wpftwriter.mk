@@ -97,4 +97,15 @@ $(eval $(call gb_Library_add_exception_objects,wpftwriter,\
 	writerperfect/source/writer/exp/xmltext \
 ))
 
+# On Windows, libepubgen-0.1.lib(EPUBGenerator.obj) references BCryptCloseAlgorithmProvider,
+# BCryptGenRandom, and BCryptOpenAlgorithmProvider via
+# workdir/UnpackedTarball/boost/boost/winapi/bcrypt.hpp:
+ifeq ($(OS),WNT)
+ifeq ($(SYSTEM_EPUBGEN)$(SYSTEM_BOOST),)
+$(eval $(call gb_Library_add_libs,wpftwriter, \
+    Bcrypt.lib \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:
