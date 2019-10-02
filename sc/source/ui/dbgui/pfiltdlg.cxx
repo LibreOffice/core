@@ -19,8 +19,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include <vcl/waitobj.hxx>
-
 #include <viewdata.hxx>
 #include <document.hxx>
 #include <uiitems.hxx>

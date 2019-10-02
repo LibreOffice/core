@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <vcl/svapp.hxx>
-#include <vcl/waitobj.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <tools/lineend.hxx>

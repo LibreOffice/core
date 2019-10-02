@@ -94,7 +94,7 @@
 #include <vcl/longcurr.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/spin.hxx>
 #include <vcl/split.hxx>

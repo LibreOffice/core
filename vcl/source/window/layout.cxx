@@ -13,7 +13,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/stdtext.hxx>

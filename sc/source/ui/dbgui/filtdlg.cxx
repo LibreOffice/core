@@ -35,7 +35,6 @@
 
 #include <filtdlg.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>
 #include <svl/sharedstringpool.hxx>
 
