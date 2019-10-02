@@ -393,8 +393,13 @@ void SmParser::NextToken()
         KParseTokens::IGNORE_LEADING_WS;
 
     // Continuing characters for numbers, may be any numeric or dot.
+    // tdf#127873: additionally accept ',' comma group separator as too many
+    // existing documents unwittingly may have used that as decimal separator
+    // in such locales (though it never was as this is always the en-US locale
+    // and the group separator is only parsed away).
     static const sal_Int32 coNumContFlags =
-        coNumStartFlags & ~KParseTokens::IGNORE_LEADING_WS;
+        (coNumStartFlags & ~KParseTokens::IGNORE_LEADING_WS) |
+        KParseTokens::GROUP_SEPARATOR_IN_NUMBER;
 
     sal_Int32   nBufLen = m_aBufferString.getLength();
     ParseResult aRes;
