@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <svtools/breadcrumb.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/fixedhyper.hxx>
+#include "breadcrumb.hxx"
 
 class CustomLink : public FixedHyperlink
 {

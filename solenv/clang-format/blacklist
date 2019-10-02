@@ -4981,6 +4981,8 @@ fpicker/source/office/RemoteFilesDialog.cxx
 fpicker/source/office/RemoteFilesDialog.hxx
 fpicker/source/office/asyncfilepicker.cxx
 fpicker/source/office/asyncfilepicker.hxx
+fpicker/source/office/breadcrumb.cxx
+fpicker/source/office/breadcrumb.hxx
 fpicker/source/office/commonpicker.cxx
 fpicker/source/office/commonpicker.hxx
 fpicker/source/office/fpdialogbase.hxx
@@ -6908,7 +6910,6 @@ include/svtools/autocmpledit.hxx
 include/svtools/bindablecontrolhelper.hxx
 include/svtools/borderhelper.hxx
 include/svtools/borderline.hxx
-include/svtools/breadcrumb.hxx
 include/svtools/brwbox.hxx
 include/svtools/brwhead.hxx
 include/svtools/calendar.hxx
@@ -13698,7 +13699,6 @@ svtools/source/contnr/templwin.hxx
 svtools/source/control/accessibleruler.cxx
 svtools/source/control/asynclink.cxx
 svtools/source/control/autocmpledit.cxx
-svtools/source/control/breadcrumb.cxx
 svtools/source/control/calendar.cxx
 svtools/source/control/collatorres.cxx
 svtools/source/control/ctrlbox.cxx

@@ -10,8 +10,6 @@
 #ifndef INCLUDED_SVTOOLS_BREADCRUMB_HXX
 #define INCLUDED_SVTOOLS_BREADCRUMB_HXX
 
-#include <svtools/svtdllapi.h>
-
 #include <vcl/layout.hxx>
 
 #include <vector>
@@ -28,7 +26,7 @@ enum SvtBreadcrumbMode
 
 class CustomLink;
 
-class SVT_DLLPUBLIC Breadcrumb : public VclHBox
+class Breadcrumb : public VclHBox
 {
     private:
         std::vector< VclPtr< CustomLink > > m_aLinks;
