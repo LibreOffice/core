@@ -48,195 +48,6 @@ using namespace ::com::sun::star::lang;
  *     nDefaultFormat: Select this format and possibly insert it
  */
 
-NumFormatListBox::NumFormatListBox(vcl::Window* pWin, WinBits nStyle) :
-    ListBox             ( pWin, nStyle ),
-    nCurrFormatType     (SvNumFormatType::ALL),
-    mbCurrFormatTypeNeedsInit(true),
-    nStdEntry           (0),
-    bOneArea            (false),
-    nDefFormat          (0),
-    bShowLanguageControl(false),
-    bUseAutomaticLanguage(true)
-{
-    Init();
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeNumFormatListBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
-                                 decltype(makeNumFormatListBox)>);
-    WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
-
-    bool bDropdown = BuilderUtils::extractDropdown(rMap);
-
-    if (bDropdown)
-        nBits |= WB_DROPDOWN;
-    else
-        nBits |= WB_BORDER;
-
-    VclPtrInstance<NumFormatListBox> pListBox(pParent, nBits|WB_SIMPLEMODE);
-
-    if (bDropdown)
-        pListBox->EnableAutoSize(true);
-
-    rRet = pListBox;
-}
-
-void NumFormatListBox::Init()
-{
-    SwView *pView = GetActiveView();
-
-    if (pView)
-        eCurLanguage = pView->GetWrtShell().GetCurLang();
-    else
-        eCurLanguage = SvtSysLocale().GetLanguageTag().getLanguageType();
-
-    SetFormatType(SvNumFormatType::NUMBER);
-    SetDefFormat(nDefFormat);
-
-    SetSelectHdl(LINK(this, NumFormatListBox, SelectHdl));
-}
-
-NumFormatListBox::~NumFormatListBox()
-{
-    disposeOnce();
-}
-
-void NumFormatListBox::SetFormatType(const SvNumFormatType nFormatType)
-{
-    if (!mbCurrFormatTypeNeedsInit &&
-        (nCurrFormatType & nFormatType))   // there are mixed formats, like for example DateTime
-        return;
-
-    SwView *pView = GetActiveView();
-    OSL_ENSURE(pView, "no view found");
-    if(!pView)
-        return;
-    SwWrtShell &rSh = pView->GetWrtShell();
-    SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
-
-    Clear();    // Remove all entries from the Listbox
-
-    NfIndexTableOffset eOffsetStart = NF_NUMBER_START;
-    NfIndexTableOffset eOffsetEnd = NF_NUMBER_START;
-
-    switch( nFormatType )
-    {
-    case SvNumFormatType::NUMBER:
-        eOffsetStart=NF_NUMBER_START;
-        eOffsetEnd=NF_NUMBER_END;
-        break;
-
-    case SvNumFormatType::PERCENT:
-        eOffsetStart=NF_PERCENT_START;
-        eOffsetEnd=NF_PERCENT_END;
-        break;
-
-    case SvNumFormatType::CURRENCY:
-        eOffsetStart=NF_CURRENCY_START;
-        eOffsetEnd=NF_CURRENCY_END;
-        break;
-
-    case SvNumFormatType::DATETIME:
-        eOffsetStart=NF_DATE_START;
-        eOffsetEnd=NF_TIME_END;
-        break;
-
-    case SvNumFormatType::DATE:
-        eOffsetStart=NF_DATE_START;
-        eOffsetEnd=NF_DATE_END;
-        break;
-
-    case SvNumFormatType::TIME:
-        eOffsetStart=NF_TIME_START;
-        eOffsetEnd=NF_TIME_END;
-        break;
-
-    case SvNumFormatType::SCIENTIFIC:
-        eOffsetStart=NF_SCIENTIFIC_START;
-        eOffsetEnd=NF_SCIENTIFIC_END;
-        break;
-
-    case SvNumFormatType::FRACTION:
-        eOffsetStart=NF_FRACTION_START;
-        eOffsetEnd=NF_FRACTION_END;
-        break;
-
-    case SvNumFormatType::LOGICAL:
-        eOffsetStart=NF_BOOLEAN;
-        eOffsetEnd=NF_BOOLEAN;
-        break;
-
-    case SvNumFormatType::TEXT:
-        eOffsetStart=NF_TEXT;
-        eOffsetEnd=NF_TEXT;
-        break;
-
-    case SvNumFormatType::ALL:
-        eOffsetStart=NF_NUMERIC_START;
-        eOffsetEnd = NfIndexTableOffset( NF_INDEX_TABLE_ENTRIES - 1 );
-        break;
-
-    default:
-        OSL_FAIL("what a format?");
-        break;
-    }
-
-    const SvNumberformat* pFormat;
-    sal_Int32 i = 0;
-    Color* pCol;
-    double fVal = GetDefValue( nFormatType );
-    OUString sValue;
-
-    const sal_uInt32 nSysNumFormat = pFormatter->GetFormatIndex(
-                                    NF_NUMBER_SYSTEM, eCurLanguage );
-    const sal_uInt32 nSysShortDateFormat = pFormatter->GetFormatIndex(
-                                    NF_DATE_SYSTEM_SHORT, eCurLanguage );
-    const sal_uInt32 nSysLongDateFormat = pFormatter->GetFormatIndex(
-                                    NF_DATE_SYSTEM_LONG, eCurLanguage );
-
-    for( long nIndex = eOffsetStart; nIndex <= eOffsetEnd; ++nIndex )
-    {
-        const sal_uInt32 nFormat = pFormatter->GetFormatIndex(
-                        static_cast<NfIndexTableOffset>(nIndex), eCurLanguage );
-        pFormat = pFormatter->GetEntry( nFormat );
-
-        if( nFormat == pFormatter->GetFormatIndex( NF_NUMBER_STANDARD,
-                                                    eCurLanguage )
-            || const_cast<SvNumberformat*>(pFormat)->GetOutputString( fVal, sValue, &pCol )
-            || nFormatType == SvNumFormatType::UNDEFINED )
-        {
-            sValue = pFormat->GetFormatstring();
-        }
-        else if( nFormatType == SvNumFormatType::TEXT )
-        {
-            pFormatter->GetOutputString( "\"ABC\"", nFormat, sValue, &pCol);
-        }
-
-        if (nFormat != nSysNumFormat       &&
-            nFormat != nSysShortDateFormat &&
-            nFormat != nSysLongDateFormat)
-        {
-            const sal_Int32 nPos = InsertEntry( sValue );
-            SetEntryData( nPos, reinterpret_cast<void*>(nFormat) );
-
-            if( nFormat == pFormatter->GetStandardFormat(
-                                    nFormatType, eCurLanguage ) )
-                nStdEntry = i;
-            ++i;
-        }
-    }
-
-    const sal_Int32 nPos = InsertEntry(SwResId( STR_DEFINE_NUMBERFORMAT ));
-    SetEntryData( nPos, nullptr );
-
-    SelectEntryPos( nStdEntry );
-
-    nCurrFormatType = nFormatType;
-    mbCurrFormatTypeNeedsInit = false;
-
-}
-
 namespace
 {
 
@@ -267,148 +78,7 @@ bool lcl_isSystemFormat(sal_uInt32 nDefaultFormat, SvNumberFormatter* pFormatter
 
 }
 
-void NumFormatListBox::SetDefFormat(const sal_uInt32 nDefaultFormat)
-{
-    if (nDefaultFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
-    {
-        nDefFormat = nDefaultFormat;
-        return;
-    }
-
-    SwView *pView = GetActiveView();
-    OSL_ENSURE(pView, "no view found");
-    if(!pView)
-        return;
-    SwWrtShell &rSh = pView->GetWrtShell();
-    SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
-
-    SvNumFormatType nType = pFormatter->GetType(nDefaultFormat);
-
-    SetFormatType(nType);
-
-    sal_uInt32 nFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nDefaultFormat, eCurLanguage);
-
-    for (sal_Int32 i = 0; i < GetEntryCount(); i++)
-    {
-        if (nFormat == static_cast<sal_uInt32>(reinterpret_cast<sal_uIntPtr>(GetEntryData(i))))
-        {
-            SelectEntryPos(i);
-            nStdEntry = i;
-            nDefFormat = GetFormat();
-            return;
-        }
-    }
-
-    // No entry found:
-    OUString sValue;
-    Color* pCol = nullptr;
-
-    if (nType == SvNumFormatType::TEXT)
-    {
-        pFormatter->GetOutputString("\"ABC\"", nDefaultFormat, sValue, &pCol);
-    }
-    else
-    {
-        pFormatter->GetOutputString(GetDefValue(nType), nDefaultFormat, sValue, &pCol);
-    }
-
-    sal_Int32 nPos = 0;
-    while (static_cast<sal_uInt32>(reinterpret_cast<sal_uIntPtr>(GetEntryData(nPos))) == NUMBERFORMAT_ENTRY_NOT_FOUND)
-        nPos++;
-
-    if ( lcl_isSystemFormat(nDefaultFormat, pFormatter, eCurLanguage) )
-    {
-        sValue += SwResId(RID_STR_SYSTEM);
-    }
-
-    nPos = InsertEntry(sValue, nPos);   // Insert as first numeric entry
-    SetEntryData(nPos, reinterpret_cast<void*>(nDefaultFormat));
-    SelectEntryPos(nPos);
-    nDefFormat = GetFormat();
-}
-
-sal_uInt32 NumFormatListBox::GetFormat() const
-{
-    sal_Int32 nPos = GetSelectedEntryPos();
-
-    return static_cast<sal_uInt32>(reinterpret_cast<sal_uIntPtr>(GetEntryData(nPos)));
-}
-
-IMPL_LINK( NumFormatListBox, SelectHdl, ListBox&, rBox, void )
-{
-    const sal_Int32 nPos = rBox.GetSelectedEntryPos();
-    OUString sDefine(SwResId( STR_DEFINE_NUMBERFORMAT ));
-    SwView *pView = GetActiveView();
-
-    if( !pView || nPos != rBox.GetEntryCount() - 1 ||
-        rBox.GetEntry( nPos ) != sDefine )
-        return;
-
-    SwWrtShell &rSh = pView->GetWrtShell();
-    SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
-
-    SfxItemSet aCoreSet(
-        rSh.GetAttrPool(),
-        svl::Items<
-            SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,
-            SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,
-            SID_ATTR_NUMBERFORMAT_NOLANGUAGE,
-                SID_ATTR_NUMBERFORMAT_NOLANGUAGE,
-            SID_ATTR_NUMBERFORMAT_ADD_AUTO,
-                SID_ATTR_NUMBERFORMAT_ADD_AUTO>{});
-
-    double fValue = GetDefValue( nCurrFormatType);
-
-    sal_uInt32 nFormat = pFormatter->GetStandardFormat( nCurrFormatType, eCurLanguage);
-    aCoreSet.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, nFormat ));
-
-    aCoreSet.Put( SvxNumberInfoItem( pFormatter, fValue,
-                                        SID_ATTR_NUMBERFORMAT_INFO ) );
-
-    if( (SvNumFormatType::DATE | SvNumFormatType::TIME) & nCurrFormatType )
-        aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, bOneArea));
-
-    aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_NOLANGUAGE, !bShowLanguageControl));
-    aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO, bUseAutomaticLanguage));
-
-    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateNumFormatDialog(GetFrameWeld(), aCoreSet));
-
-    if (RET_OK == pDlg->Execute())
-    {
-        const SfxPoolItem* pItem = pView->GetDocShell()->
-                        GetItem( SID_ATTR_NUMBERFORMAT_INFO );
-
-        if( pItem )
-        {
-            for ( sal_uInt32 key : static_cast<const SvxNumberInfoItem*>(pItem)->GetDelFormats() )
-                pFormatter->DeleteEntry( key );
-        }
-
-        const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-        if( SfxItemState::SET == pOutSet->GetItemState(
-            SID_ATTR_NUMBERFORMAT_VALUE, false, &pItem ))
-        {
-            sal_uInt32 nNumberFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
-            // oj #105473# change order of calls
-            const SvNumberformat* pFormat = pFormatter->GetEntry(nNumberFormat);
-            if( pFormat )
-                eCurLanguage = pFormat->GetLanguage();
-            // SetDefFormat uses eCurLanguage to look for if this format already in the list
-            SetDefFormat(nNumberFormat);
-        }
-        if( bShowLanguageControl && SfxItemState::SET == pOutSet->GetItemState(
-            SID_ATTR_NUMBERFORMAT_ADD_AUTO, false, &pItem ))
-        {
-            bUseAutomaticLanguage = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-        }
-    }
-    else
-        SetDefFormat(nFormat);
-
-}
-
-double NumFormatListBox::GetDefValue(const SvNumFormatType nFormatType)
+double SwNumFormatBase::GetDefValue(const SvNumFormatType nFormatType)
 {
     SvxNumValCategory nDefValue = SvxNumValCategory::Standard;
 
@@ -446,13 +116,6 @@ double NumFormatListBox::GetDefValue(const SvNumFormatType nFormatType)
     }
 
     return fSvxNumValConst[nDefValue];
-}
-
-void NumFormatListBox::Clear()
-{
-    ListBox::Clear();
-    mbCurrFormatTypeNeedsInit = true;
-    nCurrFormatType = SvNumFormatType::ALL;
 }
 
 SwNumFormatBase::SwNumFormatBase()
@@ -588,7 +251,7 @@ void SwNumFormatBase::SetFormatType(const SvNumFormatType nFormatType)
     const SvNumberformat* pFormat;
     sal_Int32 i = 0;
     Color* pCol;
-    double fVal = NumFormatListBox::GetDefValue(nFormatType);
+    double fVal = SwNumFormatBase::GetDefValue(nFormatType);
     OUString sValue;
 
     const sal_uInt32 nSysNumFormat = pFormatter->GetFormatIndex(
@@ -680,7 +343,7 @@ void SwNumFormatBase::SetDefFormat(const sal_uInt32 nDefaultFormat)
     }
     else
     {
-        pFormatter->GetOutputString(NumFormatListBox::GetDefValue(nType), nDefaultFormat, sValue, &pCol);
+        pFormatter->GetOutputString(SwNumFormatBase::GetDefValue(nType), nDefaultFormat, sValue, &pCol);
     }
 
     sal_Int32 nPos = 0;
@@ -730,7 +393,7 @@ void SwNumFormatBase::CallSelectHdl()
             SID_ATTR_NUMBERFORMAT_ADD_AUTO,
                 SID_ATTR_NUMBERFORMAT_ADD_AUTO>{});
 
-    double fValue = NumFormatListBox::GetDefValue(nCurrFormatType);
+    double fValue = SwNumFormatBase::GetDefValue(nCurrFormatType);
 
     sal_uInt32 nFormat = pFormatter->GetStandardFormat( nCurrFormatType, eCurLanguage);
     aCoreSet.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, nFormat ));
