@@ -41,6 +41,8 @@
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <com/sun/star/uri/XVndSunStarScriptUrlReference.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
