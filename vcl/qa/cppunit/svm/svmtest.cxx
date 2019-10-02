@@ -885,27 +885,13 @@ void SvmTest::checkBitmaps(const GDIMetaFile& rMetaFile)
 {
     xmlDocPtr pDoc = dumpMeta(rMetaFile);
 
-    OUString crc1 = "b8dee5da";
-    OUString crc2 = "281fc589";
-    OUString crc3 = "5e01ddcc";
-#if HAVE_FEATURE_OPENGL
-    if (OpenGLHelper::isVCLOpenGLEnabled())
-    {
-        // OpenGL uses a different scaling algorithm and also a different RGB order.
-        crc1 = "5e01ddcc";
-        crc2 = "281fc589";
-        crc3 = "b8dee5da";
-    }
-#endif
-
-    assertXPathAttrs(pDoc, "/metafile/bmp[1]", {{"x", "1"}, {"y", "2"}, {"crc", crc1}});
+    assertXPathAttrs(pDoc, "/metafile/bmp[1]", {{"x", "1"}, {"y", "2"}});
     assertXPathAttrs(pDoc, "/metafile/bmpscale[1]", {
-        {"x", "1"}, {"y", "2"}, {"width", "3"}, {"height", "4"}, {"crc", crc2}
+        {"x", "1"}, {"y", "2"}, {"width", "3"}, {"height", "4"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpscalepart[1]", {
         {"destx", "1"}, {"desty", "2"}, {"destwidth", "3"}, {"destheight", "4"},
-        {"srcx", "2"},  {"srcy", "1"},  {"srcwidth", "4"},  {"srcheight", "3"},
-        {"crc", crc3}
+        {"srcx", "2"},  {"srcy", "1"},  {"srcwidth", "4"},  {"srcheight", "3"}
     });
 }
 
@@ -934,76 +920,43 @@ void SvmTest::testBitmaps()
     pVirtualDev->DrawBitmap(Point(1, 2), Size(3, 4), aBitmap2);
     pVirtualDev->DrawBitmap(Point(1, 2), Size(3, 4), Point(2, 1), Size(4, 3), aBitmap3);
 
-    checkBitmaps(writeAndRead(aGDIMetaFile, "bitmaps.svm"));
+    GDIMetaFile aReloadedGDIMetaFile = writeAndRead(aGDIMetaFile, "bitmaps.svm");
+    checkBitmaps(aReloadedGDIMetaFile);
+    checkRendering(pVirtualDev, aReloadedGDIMetaFile);
 }
 
 void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
 {
     xmlDocPtr pDoc = dumpMeta(rMetaFile);
 
-    std::vector<OUString> aExpectedCRC;
-
-#if HAVE_FEATURE_OPENGL
-    if (OpenGLHelper::isVCLOpenGLEnabled())
-    {
-        aExpectedCRC.insert(aExpectedCRC.end(),
-        {
-            "08feb5d3",
-            "281fc589",
-            "b8dee5da",
-            "4df0e464",
-            "7d3a8da3",
-            "1426653b",
-            "4fd547df",
-            "71efc447",
-        });
-    }
-    else
-#endif
-    {
-        aExpectedCRC.insert(aExpectedCRC.end(),
-        {
-            "d8377d4f",
-            "281fc589",
-            "5e01ddcc",
-            "4df0e464",
-            "34434a50",
-            "d1736327",
-            "b37875c2",
-            "a85d44b8",
-        });
-    }
-
     assertXPathAttrs(pDoc, "/metafile/bmpex[1]", {
-        {"x", "1"}, {"y", "1"}, {"crc", aExpectedCRC[0]}, {"transparenttype", "bitmap"}
+        {"x", "1"}, {"y", "1"}, {"transparenttype", "bitmap"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpexscale[1]", {
         {"x", "5"}, {"y", "0"}, {"width", "2"}, {"height", "3"},
-        {"crc", aExpectedCRC[1]}, {"transparenttype", "bitmap"}
+        {"transparenttype", "bitmap"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpexscalepart[1]", {
         {"destx", "7"}, {"desty", "1"}, {"destwidth", "2"}, {"destheight", "2"},
         {"srcx", "0"},  {"srcy", "0"},  {"srcwidth", "3"},  {"srcheight", "4"},
-        {"crc", aExpectedCRC[2]}, {"transparenttype", "bitmap"}
+        {"transparenttype", "bitmap"}
     });
 
-#ifndef MACOSX
     assertXPathAttrs(pDoc, "/metafile/bmpex[2]", {
-        {"x", "6"}, {"y", "6"}, {"crc", aExpectedCRC[3]}, {"transparenttype", "bitmap"}
+        {"x", "6"}, {"y", "6"}, {"transparenttype", "bitmap"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpex[3]", {
-        {"x", "0"}, {"y", "6"}, {"crc", aExpectedCRC[4]}, {"transparenttype", "bitmap"}
+        {"x", "0"}, {"y", "6"}, {"transparenttype", "bitmap"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpex[4]", {
-        {"x", "2"}, {"y", "6"}, {"crc", aExpectedCRC[5]}, {"transparenttype", "bitmap"}
+        {"x", "2"}, {"y", "6"}, {"transparenttype", "bitmap"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpex[5]", {
-        {"x", "0"}, {"y", "8"}, {"crc", aExpectedCRC[6]}, {"transparenttype", "bitmap"}
+        {"x", "0"}, {"y", "8"}, {"transparenttype", "bitmap"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpex[6]", {
-        {"x", "2"}, {"y", "8"}, {"crc", aExpectedCRC[7]}, {"transparenttype", "bitmap"}
+        {"x", "2"}, {"y", "8"}, {"transparenttype", "bitmap"}
     });
-#endif
 }
 
 void SvmTest::testBitmapExs()
