@@ -22,6 +22,30 @@
       "revId": "75d924db95559cff5f699bad8fe34bb0aeac0ff6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_20898a74",
+        "filename": "sw/source/uibase/dochdl/swdtflvr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-02T07:04:06Z",
+      "side": 0,
+      "message": "Yeah, can probably be stripped down to the\n\n  #include \u003cprewin.h\u003e\n  #include \u003cpostwin.h\u003e\n\nidiom that is already used in various other places.  Feel free to clean that up.",
+      "parentUuid": "7f7f9b97_bd838704",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 20
+      },
+      "revId": "75d924db95559cff5f699bad8fe34bb0aeac0ff6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
