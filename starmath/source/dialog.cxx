@@ -26,7 +26,6 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
@@ -1930,7 +1929,7 @@ bool SmSymDefineDialog::SelectSymbol(weld::ComboBox& rComboBox,
         // if there's a change of the old symbol, show only the available ones, otherwise show none
         const SmSym *pOldSymbol = nullptr;
         OUString     aTmpOldSymbolSetName;
-        if (nPos != COMBOBOX_ENTRY_NOTFOUND)
+        if (nPos != -1)
         {
             pOldSymbol        = m_aSymbolMgrCopy.GetSymbolByName(aNormName);
             aTmpOldSymbolSetName = m_xOldSymbolSets->get_active_text();
