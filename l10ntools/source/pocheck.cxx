@@ -149,7 +149,8 @@ static void checkFunctionNames(const OString& aLanguage)
                       aLanguage +
                       "/formula/messages.po";
     PoIfstream aPoInput;
-    aPoInput.open(aPoPaths[0]);
+    OString sPoHdrMsg;
+    aPoInput.open(aPoPaths[0], sPoHdrMsg);
     if( !aPoInput.isOpen() )
     {
         std::cerr << "Warning: Cannot open " << aPoPaths[0] << std::endl;
@@ -237,13 +238,13 @@ static void checkFunctionNames(const OString& aLanguage)
         {
         case 0:
         {
-            PoHeader hd("formula/inc");
+            PoHeader hd("formula/inc", sPoHdrMsg);
             aPoOutput.writeHeader(hd);
             break;
         }
         case 1:
         {
-            PoHeader hd("scaddins/inc");
+            PoHeader hd("scaddins/inc", sPoHdrMsg);
             aPoOutput.writeHeader(hd);
             break;
         }
