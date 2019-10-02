@@ -62,66 +62,6 @@
 #define INDENT_RIGHT_MARGIN 4
 #define INDENT_COUNT        3 //without the first two old values
 
-#ifdef DEBUG_RULER
-#include <vcl/lstbox.hxx>
-class RulerDebugWindow : public vcl::Window
-{
-    ListBox aBox;
-public:
-        explicit RulerDebugWindow(vcl::Window* pParent) :
-            Window(pParent, WB_BORDER|WB_SIZEMOVE|WB_DIALOGCONTROL|WB_CLIPCHILDREN|WB_SYSTEMWINDOW),
-            aBox(this, WB_BORDER)
-            {
-                Size aOutput(200, 400);
-                SetOutputSizePixel(aOutput);
-                aBox.SetSizePixel(aOutput);
-                aBox.Show();
-                Show();
-                Size aParentSize(pParent->GetOutputSizePixel());
-                Size aOwnSize(GetSizePixel());
-                aParentSize.setWidth(aParentSize.Width() - aOwnSize.Width());
-                aParentSize.setHeight(aParentSize.Height() - aOwnSize.Height());
-                SetPosPixel(Point(aParentSize.Width(), aParentSize.Height()));
-            }
-        ~RulerDebugWindow();
-
-        ListBox& GetLBox() {return aBox;}
-        static void     AddDebugText(const sal_Char* pDescription, const OUString& rText );
-};
-static RulerDebugWindow* pDebugWindow = 0;
-
-RulerDebugWindow::~RulerDebugWindow()
-{
-    pDebugWindow = 0;
-}
-void     RulerDebugWindow::AddDebugText(const sal_Char* pDescription, const OUString& rText )
-{
-    if(!pDebugWindow)
-    {
-        vcl::Window* pParent = Application::GetFocusWindow();
-        while(pParent->GetParent())
-            pParent = pParent->GetParent();
-        pDebugWindow = new RulerDebugWindow(pParent);
-    }
-    OUString sContent( OUString::createFromAscii(pDescription) );
-    sContent += rText;
-    sal_uInt16 nPos = pDebugWindow->GetLBox().InsertEntry(sContent);
-    pDebugWindow->GetLBox().SelectEntryPos(nPos);
-    pDebugWindow->GrabFocus();
-}
-
-#define ADD_DEBUG_TEXT(cDescription, sValue) \
-    RulerDebugWindow::AddDebugText(cDescription, sValue);
-
-#define REMOVE_DEBUG_WINDOW \
-    delete pDebugWindow;    \
-    pDebugWindow = 0;
-
-#else
-#define ADD_DEBUG_TEXT(cDescription, sValue)
-#define REMOVE_DEBUG_WINDOW
-#endif
-
 struct SvxRuler_Impl {
     std::unique_ptr<sal_uInt16[]> pPercBuf;
     std::unique_ptr<sal_uInt16[]> pBlockBuf;
@@ -350,7 +290,6 @@ SvxRuler::~SvxRuler()
 void SvxRuler::dispose()
 {
     /* Destructor ruler; release internal buffer */
-    REMOVE_DEBUG_WINDOW
     if(bListening)
         EndListening(*pBindings);
 
@@ -1344,7 +1283,6 @@ long SvxRuler::GetCorrectedDragPos( bool bLeft, bool bRight )
 
     const long lNullPix = Ruler::GetNullOffset();
     long lDragPos = GetDragPos() + lNullPix;
-ADD_DEBUG_TEXT("lDragPos: ", OUString::number(lDragPos))
     bool bHoriRows = bHorz && mxRulerImpl->bIsTableRows;
     if((bLeft || bHoriRows) && lDragPos < nMaxLeft)
         lDragPos = nMaxLeft;
@@ -1760,7 +1698,6 @@ void SvxRuler::DragBorders()
     {
         case RulerDragSize::Move:
         {
-ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(mxRulerImpl->lLastLMargin))
             if(GetDragType() == RulerType::Border)
                 lDiff = lPos - nDragOffset - mpBorders[nIndex].nPos;
             else
