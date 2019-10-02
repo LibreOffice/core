@@ -117,7 +117,7 @@ public:
     void InitFromDialog(ExtMgrDialog *pParentDialog);
 
     virtual bool    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual bool    ContextMenu( const CommandEvent& rCEvt ) override;
+    virtual bool    Command( const CommandEvent& rCEvt ) override;
 
     virtual void    RecalcAll() override;
     virtual void    selectEntry( const long nPos ) override;
@@ -214,10 +214,10 @@ void ExtBoxWithBtns_Impl::SetButtonStatus(const TEntry_Impl& rEntry)
     }
 }
 
-bool ExtBoxWithBtns_Impl::ContextMenu(const CommandEvent& rCEvt)
+bool ExtBoxWithBtns_Impl::Command(const CommandEvent& rCEvt)
 {
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
-        return false;
+        return ExtensionBox_Impl::Command(rCEvt);
 
     const Point aMousePos(rCEvt.GetMousePosPixel());
     const auto nPos = PointToPos(aMousePos);

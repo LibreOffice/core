@@ -48,7 +48,7 @@ private:
 
     virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
 
-    virtual bool ContextMenu(const CommandEvent& rPos) override;
+    virtual bool Command(const CommandEvent& rPos) override;
 
     virtual bool KeyInput( const KeyEvent& rKEvt ) override;
 

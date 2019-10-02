@@ -1657,7 +1657,7 @@ public:
 protected:
     Link<draw_args, void> m_aDrawHdl;
     Link<Widget&, void> m_aStyleUpdatedHdl;
-    Link<const CommandEvent&, bool> m_aPopupMenuHdl;
+    Link<const CommandEvent&, bool> m_aCommandHdl;
     Link<Widget&, tools::Rectangle> m_aGetFocusRectHdl;
     Link<tools::Rectangle&, OUString> m_aQueryTooltipHdl;
 
@@ -1669,10 +1669,7 @@ protected:
 public:
     void connect_draw(const Link<draw_args, void>& rLink) { m_aDrawHdl = rLink; }
     void connect_style_updated(const Link<Widget&, void>& rLink) { m_aStyleUpdatedHdl = rLink; }
-    void connect_popup_menu(const Link<const CommandEvent&, bool>& rLink)
-    {
-        m_aPopupMenuHdl = rLink;
-    }
+    void connect_command(const Link<const CommandEvent&, bool>& rLink) { m_aCommandHdl = rLink; }
     void connect_focus_rect(const Link<Widget&, tools::Rectangle>& rLink)
     {
         m_aGetFocusRectHdl = rLink;

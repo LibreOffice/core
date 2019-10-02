@@ -125,7 +125,7 @@ void SwOneExampleFrame::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     CreateControl();
 }
 
-bool SwOneExampleFrame::ContextMenu(const CommandEvent& rCEvt)
+bool SwOneExampleFrame::Command(const CommandEvent& rCEvt)
 {
     switch (rCEvt.GetCommand())
     {
@@ -139,7 +139,7 @@ bool SwOneExampleFrame::ContextMenu(const CommandEvent& rCEvt)
         default:;
         break;
     }
-    return false;
+    return CustomWidgetController::Command(rCEvt);
 }
 
 void SwOneExampleFrame::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
