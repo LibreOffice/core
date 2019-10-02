@@ -24,6 +24,7 @@
 
 #include <SkCanvas.h>
 #include <SkPath.h>
+#include <SkRegion.h>
 
 #ifdef DBG_UTIL
 #include <fstream>
@@ -43,25 +44,65 @@ void SkiaSalGraphicsImpl::Init()
 {
     // TODO
     mSurface = SkSurface::MakeRasterN32Premul(GetWidth(), GetHeight());
+    mSurface->getCanvas()->save(); // see SetClipRegion()
+    mClipRegion = vcl::Region(tools::Rectangle(0, 0, GetWidth(), GetHeight()));
 }
 
 void SkiaSalGraphicsImpl::DeInit() { mSurface.reset(); }
 
 void SkiaSalGraphicsImpl::freeResources() {}
 
-const vcl::Region& SkiaSalGraphicsImpl::getClipRegion() const { return mClipRegion; }
+static SkIRect toSkIRect(const tools::Rectangle& rectangle)
+{
+    return SkIRect::MakeXYWH(rectangle.Left(), rectangle.Top(), rectangle.GetWidth(),
+                             rectangle.GetHeight());
+}
+
+static SkRegion toSkRegion(const vcl::Region& region)
+{
+    if (region.IsEmpty())
+        return SkRegion();
+    if (region.IsRectangle())
+        return SkRegion(toSkIRect(region.GetBoundRect()));
+    if (!region.HasPolyPolygonOrB2DPolyPolygon())
+    {
+        SkRegion skRegion;
+        RectangleVector rectangles;
+        region.GetRegionRectangles(rectangles);
+        for (const tools::Rectangle& rect : rectangles)
+            skRegion.op(toSkIRect(rect), SkRegion::kUnion_Op);
+        return skRegion;
+    }
+    abort();
+}
 
 bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
 {
+    if (mClipRegion == region)
+        return true;
     mClipRegion = region;
+    SkCanvas* canvas = mSurface->getCanvas();
+    // SkCanvas::clipRegion() can only further reduce the clip region,
+    // but we need to set the given region, which may extend it.
+    // So handle that by always having the full clip region saved on the stack
+    // and always go back to that. SkCanvas::restore() only affects the clip
+    // and the matrix.
+    canvas->restore();
+    canvas->save();
+    canvas->clipRegion(toSkRegion(region));
     return true;
 }
+
+void SkiaSalGraphicsImpl::ResetClipRegion()
+{
+    setClipRegion(vcl::Region(tools::Rectangle(0, 0, GetWidth(), GetHeight())));
+}
+
+const vcl::Region& SkiaSalGraphicsImpl::getClipRegion() const { return mClipRegion; }
 
 sal_uInt16 SkiaSalGraphicsImpl::GetBitCount() const { return 32; }
 
 long SkiaSalGraphicsImpl::GetGraphicsWidth() const { return GetWidth(); }
-
-void SkiaSalGraphicsImpl::ResetClipRegion() { mClipRegion.SetEmpty(); }
 
 void SkiaSalGraphicsImpl::SetLineColor() { mLineColor = SALCOLOR_NONE; }
 
