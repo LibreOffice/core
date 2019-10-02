@@ -225,7 +225,16 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     insertTableProps(pPropMap);
                 }
                 else
+                {
+                    if ( nIntValue == 0 && m_nRow == 0 )
+                    {
+                        // explicit tblHeader=0 in the first row must overwrite table style
+                        TablePropertyMapPtr pPropMap( new TablePropertyMap );
+                        pPropMap->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny(sal_Int32(0)));
+                        insertTableProps(pPropMap);
+                    }
                     m_nHeaderRepeat = -1;
+                }
                 if (nIntValue)
                 {
                     // Store the info that this is a header, we'll need that when we apply table styles.

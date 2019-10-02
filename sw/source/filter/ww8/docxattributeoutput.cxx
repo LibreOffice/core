@@ -3540,7 +3540,7 @@ void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t c
     // Header row: tblHeader
     const SwTable *pTable = pTableTextNodeInfoInner->getTable( );
     if ( pTable->GetRowsToRepeat( ) > pTableTextNodeInfoInner->getRow( ) )
-        m_pSerializer->singleElementNS(XML_w, XML_tblHeader, FSNS(XML_w, XML_val), "true");
+        m_pSerializer->singleElementNS(XML_w, XML_tblHeader, FSNS(XML_w, XML_val), "true"); // TODO to overwrite table style may need explicit false
 
     TableRowRedline( pTableTextNodeInfoInner );
     TableHeight( pTableTextNodeInfoInner );

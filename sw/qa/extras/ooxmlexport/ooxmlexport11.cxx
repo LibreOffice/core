@@ -974,6 +974,17 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf81100, "tdf81100.docx")
     CPPUNIT_ASSERT(pXmlDoc);
     // keep "repeat table header" setting of table styles
     assertXPath(pXmlDoc, "/w:styles/w:style/w:tblStylePr/w:trPr/w:tblHeader", 4);
+
+    xmlDocPtr pDump = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+
+    // table starts on page 1 and finished on page 2
+    // and it has got only a single repeating header line
+    assertXPath(pDump, "/root/page[2]/body/tab[1]", 1);
+    assertXPath(pDump, "/root/page[2]/body/tab[1]/row", 2);
+    assertXPath(pDump, "/root/page[3]/body/tab", 1);
+    if (!mbExported) // TODO export tblHeader=false
+        assertXPath(pDump, "/root/page[3]/body/tab/row", 1);
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121597TrackedDeletionOfMultipleParagraphs, "tdf121597.odt")
