@@ -20,7 +20,6 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_SQLNAMEEDIT_HXX
 
 #include <vcl/edit.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/weld.hxx>
 
 namespace dbaui
