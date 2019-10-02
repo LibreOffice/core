@@ -1408,7 +1408,7 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
 //        { "Body Text Indent 3", "" },
 //        { "Block Text", "" },
         { "Hyperlink", "Internet link" },
-        { "Followed Hyperlink", "Visited Internet Link" },
+        { "FollowedHyperlink", "Visited Internet Link" },
         { "Emphasis", "Emphasis" },
 //        { "Document Map", "" },
 //        { "Plain Text", "" },

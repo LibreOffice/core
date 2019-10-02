@@ -844,6 +844,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127741, "tdf127741.docx")
     CPPUNIT_ASSERT(visitedStyleName.equalsIgnoreAsciiCase("Visited Internet Link"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf127925, "tdf127925.odt")
+{
+    xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    if (!pXmlStyles)
+        return;
+
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='VisitedInternetLink']/w:name", "val", "FollowedHyperlink");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
