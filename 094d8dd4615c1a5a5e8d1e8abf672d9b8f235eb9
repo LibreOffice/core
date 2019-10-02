@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_c3aa2084",
+        "filename": "unotest/source/python/org/libreoffice/unotest.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2019-10-02T15:48:03Z",
+      "side": 0,
+      "message": "Thanks for the clean up! I also don\u0027t know what I was trying to achieve here.",
+      "revId": "094d8dd4615c1a5a5e8d1e8abf672d9b8f235eb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
