@@ -142,10 +142,8 @@ class OfficeConnection(object):
             self.xContext = None
             self.socket = None
             self.soffice = None
-# WTF 255 return value?
-#            if ret != 0:
-#                raise Exception("Exit status indicates failure: " + str(ret))
-#            return ret
+            if ret != 0:
+                raise Exception("Exit status indicates failure: " + str(ret))
 
     def getContext(self):
         return self.xContext
