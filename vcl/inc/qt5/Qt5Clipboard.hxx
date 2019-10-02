@@ -38,7 +38,9 @@ class Qt5Clipboard final
     osl::Mutex m_aMutex;
     const OUString m_aClipboardName;
     const QClipboard::Mode m_aClipboardMode;
-    bool m_bInSetContents;
+    // has to be set, if LO changes the QClipboard itself, so it won't instantly lose
+    // ownership by it's self-triggered QClipboard::changed handler
+    bool m_bOwnClipboardChange;
 
     // if not empty, this holds the setContents provided XTransferable or a Qt5ClipboardTransferable
     css::uno::Reference<css::datatransfer::XTransferable> m_aContents;
