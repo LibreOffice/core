@@ -881,6 +881,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127579, "tdf127579.odt")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:r/w:rPr/w:rStyle", "val", "InternetLink");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf127925, "tdf127925.odt")
+{
+    xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    if (!pXmlStyles)
+        return;
+
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='VisitedInternetLink']/w:name", "val", "FollowedHyperlink");
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
