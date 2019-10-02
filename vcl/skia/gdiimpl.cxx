@@ -350,12 +350,14 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& r
 std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long nWidth,
                                                           long nHeight)
 {
+    mSurface->getCanvas()->flush();
     sk_sp<SkImage> image = mSurface->makeImageSnapshot(SkIRect::MakeXYWH(nX, nY, nWidth, nHeight));
     return std::make_shared<SkiaSalBitmap>(*image);
 }
 
 Color SkiaSalGraphicsImpl::getPixel(long nX, long nY)
 {
+    mSurface->getCanvas()->flush();
     // TODO this is presumably slow, and possibly won't work with GPU surfaces
     SkBitmap bitmap;
     if (!bitmap.tryAllocN32Pixels(GetWidth(), GetHeight()))
@@ -456,6 +458,7 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolygon,
 #ifdef DBG_UTIL
 void SkiaSalGraphicsImpl::dump(const char* file) const
 {
+    mSurface->getCanvas()->flush();
     sk_sp<SkImage> image = mSurface->makeImageSnapshot();
     sk_sp<SkData> data = image->encodeToData();
     std::ofstream ostream(file, std::ios::binary);
