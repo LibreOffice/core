@@ -21,7 +21,6 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>
 #include <com/sun/star/embed/StorageWrappedTargetException.hpp>
 #include <com/sun/star/embed/WrongStateException.hpp>
@@ -37,7 +36,6 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
