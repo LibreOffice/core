@@ -145,7 +145,7 @@ public:
         Any rendering will happen directly on the context and not on any intermediate bitmap.
         Note: This might not be supported on all platforms !
      */
-    explicit VirtualDevice(const SystemGraphicsData *pData, const Size &rSize,
+    explicit VirtualDevice(const SystemGraphicsData& rData, const Size &rSize,
                            DeviceFormat eFormat);
 
     virtual             ~VirtualDevice() override;

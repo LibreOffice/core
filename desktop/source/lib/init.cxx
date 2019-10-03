@@ -1773,7 +1773,7 @@ void paintTileToCGContext(ITiledRenderable* pDocument,
     SystemGraphicsData aData;
     aData.rCGContext = reinterpret_cast<CGContextRef>(rCGContext);
 
-    ScopedVclPtrInstance<VirtualDevice> pDevice(&aData, Size(1, 1), DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(aData, Size(1, 1), DeviceFormat::DEFAULT);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixel(nCanvasSize);
     pDocument->paintTile(*pDevice, nCanvasSize.Width(), nCanvasSize.Height(),
@@ -4732,7 +4732,7 @@ static void doc_paintWindowDPI(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKW
     SystemGraphicsData aData;
     aData.rCGContext = cgc;
 
-    ScopedVclPtrInstance<VirtualDevice> pDevice(&aData, Size(1, 1), DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(aData, Size(1, 1), DeviceFormat::DEFAULT);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
     pDevice->SetOutputSizePixel(Size(nWidth, nHeight));
