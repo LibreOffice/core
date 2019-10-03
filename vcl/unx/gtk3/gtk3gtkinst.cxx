@@ -9879,7 +9879,7 @@ public:
         , m_pDrawingArea(pDrawingArea)
         , m_xAccessible(rA11y)
         , m_pAccessible(nullptr)
-        , m_xDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT)
+        , m_xDevice(DeviceFormat::DEFAULT)
         , m_pSurface(nullptr)
         , m_nDrawSignalId(g_signal_connect(m_pDrawingArea, "draw", G_CALLBACK(signalDraw), this))
         , m_nStyleUpdatedSignalId(g_signal_connect(m_pDrawingArea,"style-updated", G_CALLBACK(signalStyleUpdated), this))
