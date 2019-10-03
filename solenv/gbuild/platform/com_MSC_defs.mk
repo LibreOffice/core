@@ -156,7 +156,7 @@ gb_CFLAGS := \
 	-wd4800 \
 	-wd4267 \
 
-gb_Helper_disable_warnings = $(filter-out -W4,$(1)) -w
+gb_CXXFLAGS_DISABLE_WARNINGS = -w
 
 ifneq ($(COM_IS_CLANG),TRUE)
 
