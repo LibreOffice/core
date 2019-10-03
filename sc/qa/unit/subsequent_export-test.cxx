@@ -223,6 +223,7 @@ public:
     void testTdf126024XLSX();
     void testTdf126177XLSX();
     void testCommentTextVAlignment();
+    void testCommentTextHAlignment();
 
     void testXltxExport();
 
@@ -351,6 +352,7 @@ public:
     CPPUNIT_TEST(testTdf126024XLSX);
     CPPUNIT_TEST(testTdf126177XLSX);
     CPPUNIT_TEST(testCommentTextVAlignment);
+    CPPUNIT_TEST(testCommentTextHAlignment);
 
     CPPUNIT_TEST(testXltxExport);
 
@@ -4502,6 +4504,22 @@ void ScExportTest::testCommentTextVAlignment()
     CPPUNIT_ASSERT(pVmlDrawing);
 
     assertXPathContent(pVmlDrawing, "/xml/v:shape/xx:ClientData/xx:TextVAlign", "Center");
+}
+
+void ScExportTest::testCommentTextHAlignment()
+{
+    // Testing comment text alignments.
+    ScDocShellRef xShell = loadDoc("CommentTextHAlign.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    const xmlDocPtr pVmlDrawing
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/vmlDrawing1.vml");
+    CPPUNIT_ASSERT(pVmlDrawing);
+
+    assertXPathContent(pVmlDrawing, "/xml/v:shape/xx:ClientData/xx:TextHAlign", "Center");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
