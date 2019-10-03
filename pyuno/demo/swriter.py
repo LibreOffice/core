@@ -67,7 +67,7 @@ rows = table.Rows
 
 table.setPropertyValue( "BackTransparent", False )
 table.setPropertyValue( "BackColor", 13421823 )
-row = rows.getByIndex(0)
+row = rows[0]
 row.setPropertyValue( "BackTransparent", False )
 row.setPropertyValue( "BackColor", 6710932 )
 

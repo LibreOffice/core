@@ -66,7 +66,7 @@ class TestXIndexContainer(CollectionsTestBase):
             self.assertEqual(None, captured)
             self.assertEqual(len(expected), property_values.getCount())
             for i in range(property_values.getCount()):
-                self.assertEqual(to_compare[i][0].Name, property_values.getByIndex(i)[0].Name)
+                self.assertEqual(to_compare[i][0].Name, property_values[i][0].Name)
 
     def deleteValuesTestFixture(self, count, key, expected):
         # Given
@@ -91,7 +91,7 @@ class TestXIndexContainer(CollectionsTestBase):
             self.assertEqual(None, captured)
             self.assertEqual(len(expected), property_values.getCount())
             for i in range(property_values.getCount()):
-                self.assertEqual(to_compare[i][0].Name, property_values.getByIndex(i)[0].Name)
+                self.assertEqual(to_compare[i][0].Name, property_values[i][0].Name)
 
     # Tests syntax:
     #    obj[2:4] = val1,val2        # Replace by slice
