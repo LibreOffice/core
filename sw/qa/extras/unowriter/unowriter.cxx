@@ -17,6 +17,7 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -668,6 +669,30 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testShapeAllowOverlap)
     // Turn it back to on & verify.
     xShapeProperties->setPropertyValue("AllowOverlap", uno::makeAny(true));
     CPPUNIT_ASSERT(getProperty<bool>(xShapeProperties, "AllowOverlap"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextConvertToTableLineSpacing)
+{
+    // Load a document which has a table with a single cell.
+    // The cell has both a table style and a paragraph style, with different line spacing
+    // heights.
+    load(mpTestDocumentPath, "table-line-spacing.docx");
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
+    uno::Reference<text::XText> xCellText(xCell, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xCellText);
+    style::LineSpacing aLineSpacing
+        = getProperty<style::LineSpacing>(xParagraph, "ParaLineSpacing");
+    // Make sure that we take the line spacing from the paragraph style, not from the table style.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 388
+    // - Actual  : 635
+    // I.e. the 360 twips line spacing was taken from the table style, not the 220 twips one from
+    // the paragraph style.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(convertTwipToMm100(220)), aLineSpacing.Height);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
