@@ -1723,7 +1723,7 @@ void SwTiledRenderingTest::testPaintCallbacks()
     int nCanvasWidth = 256;
     int nCanvasHeight = 256;
     std::vector<unsigned char> aBuffer(nCanvasWidth * nCanvasHeight * 4);
-    ScopedVclPtrInstance<VirtualDevice> pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(), aBuffer.data());
     // Make sure that painting a tile in the second view doesn't invoke
     // callbacks on the first view.
@@ -2402,7 +2402,7 @@ void SwTiledRenderingTest::testSemiTransparent()
     size_t nCanvasHeight = 512;
     size_t nTileSize = 256;
     std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
-    ScopedVclPtrInstance<VirtualDevice> pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
                                                     Fraction(1.0), Point(), aPixmap.data());
