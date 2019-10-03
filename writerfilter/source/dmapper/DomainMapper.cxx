@@ -419,7 +419,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 // Don't overwrite NS_ooxml::LN_CT_Spacing_afterAutospacing.
                 m_pImpl->GetTopContext()->Insert(PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ), false);
 
-                uno::Any aContextualSpacingFromStyle = m_pImpl->GetPropertyFromStyleSheet(PROP_PARA_CONTEXT_MARGIN);
+                uno::Any aContextualSpacingFromStyle = m_pImpl->GetPropertyFromParaStyleSheet(PROP_PARA_CONTEXT_MARGIN);
                 if (aContextualSpacingFromStyle.hasValue())
                     // Setting "after" spacing means Writer doesn't inherit
                     // contextual spacing anymore from style, but Word does.
@@ -1460,7 +1460,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
 
             const sal_Int16 nWritingMode = nIntValue ? text::WritingMode2::RL_TB : text::WritingMode2::LR_TB;
             sal_Int16 nParentBidi = -1;
-            m_pImpl->GetPropertyFromStyleSheet(PROP_WRITING_MODE) >>= nParentBidi;
+            m_pImpl->GetPropertyFromParaStyleSheet(PROP_WRITING_MODE) >>= nParentBidi;
             // Paragraph justification reverses its meaning in an RTL context.
             // 1. Only make adjustments if the BiDi changes.
             if ( nParentBidi != nWritingMode && !IsRTFImport() )
@@ -1566,7 +1566,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 {
                     //get value from style sheet and invert it
                     sal_Int16 nStyleValue = 0;
-                    uno::Any aStyleVal = m_pImpl->GetPropertyFromStyleSheet(ePropertyId);
+                    uno::Any aStyleVal = m_pImpl->GetPropertyFromParaStyleSheet(ePropertyId);
                     if( !aStyleVal.hasValue() )
                     {
                         nIntValue = NS_ooxml::LN_EG_RPrBase_smallCaps == nSprmId ?
@@ -1841,7 +1841,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         // not applied to the paragraph directly => don't InitTabStopFromStyle
         if ( !IsRTFImport() )
         {
-            uno::Any aValue = m_pImpl->GetPropertyFromStyleSheet(PROP_PARA_TAB_STOPS);
+            uno::Any aValue = m_pImpl->GetPropertyFromParaStyleSheet(PROP_PARA_TAB_STOPS);
             uno::Sequence< style::TabStop > aStyleTabStops;
             if(aValue >>= aStyleTabStops)
             {
