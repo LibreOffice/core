@@ -108,10 +108,9 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const OUString &rValue )
     SfxAllEnumValue_Impl aVal;
     aVal.nValue = nValue;
     aVal.aText = rValue;
-    sal_uInt16 nPos = GetPosByValue(nValue);
     if ( !pValues )
         pValues.reset( new SfxAllEnumValueArr );
-    else if ( nPos != USHRT_MAX )
+    else if ( sal_uInt16 nPos = GetPosByValue(nValue); nPos != USHRT_MAX )
     {
         // remove when exists
         pValues->erase( pValues->begin() + nPos );
