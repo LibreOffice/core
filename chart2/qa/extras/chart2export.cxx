@@ -149,6 +149,7 @@ public:
     void testTdf121744();
     void testTdf122031();
     void testTdf115012();
+    void testTdf123206_customLabelText();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -261,6 +262,8 @@ public:
     CPPUNIT_TEST(testTdf121744);
     CPPUNIT_TEST(testTdf122031);
     CPPUNIT_TEST(testTdf115012);
+    CPPUNIT_TEST(testTdf123206_customLabelText);
+
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -2384,6 +2387,19 @@ void Chart2ExportTest::testTdf115012()
     CPPUNIT_ASSERT(pXmlDoc);
     // workaround: use-zero instead of leave-gap to show the original line chart
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:dispBlanksAs", "val", "zero");
+}
+
+void Chart2ExportTest::testTdf123206_customLabelText()
+{
+    load("/chart2/qa/extras/data/docx/", "tdf123206.docx");
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[2]/c:tx/c:rich/a:p/a:r/a:t", "kiscica");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
