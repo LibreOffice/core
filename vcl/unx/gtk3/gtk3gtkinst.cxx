@@ -1618,6 +1618,12 @@ namespace
         nKeyCode |= GtkSalFrame::GetKeyModCode(rEvent.state);
         return KeyEvent(gdk_keyval_to_unicode(rEvent.keyval), nKeyCode, 0);
     }
+
+    OString get_buildable_name(const GtkWidget* pWidget)
+    {
+        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pWidget));
+        return OString(pStr, pStr ? strlen(pStr) : 0);
+    }
 }
 
 static MouseEventModifiers ImplGetMouseButtonMode(sal_uInt16 nButton, sal_uInt16 nCode)
@@ -2420,8 +2426,7 @@ public:
 
     virtual OString get_buildable_name() const override
     {
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(m_pWidget));
-        return OString(pStr, pStr ? strlen(pStr) : 0);
+        return ::get_buildable_name(m_pWidget);
     }
 
     virtual void set_help_id(const OString& rHelpId) override
@@ -2876,16 +2881,14 @@ public:
 
     void add_to_map(GtkMenuItem* pMenuItem)
     {
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pMenuItem));
-        OString id(pStr, pStr ? strlen(pStr) : 0);
+        OString id = ::get_buildable_name(GTK_WIDGET(pMenuItem));
         m_aMap[id] = pMenuItem;
         g_signal_connect(pMenuItem, "activate", G_CALLBACK(signalActivate), this);
     }
 
     void remove_from_map(GtkMenuItem* pMenuItem)
     {
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pMenuItem));
-        OString id(pStr, pStr ? strlen(pStr) : 0);
+        OString id = ::get_buildable_name(GTK_WIDGET(pMenuItem));
         auto iter = m_aMap.find(id);
         g_signal_handlers_disconnect_by_data(pMenuItem, this);
         m_aMap.erase(iter);
@@ -4251,8 +4254,7 @@ public:
     virtual OString get_page_ident(int nPage) const override
     {
         const GtkWidget* pWidget = gtk_assistant_get_nth_page(m_pAssistant, nPage);
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pWidget));
-        return OString(pStr, pStr ? strlen(pStr) : 0);
+        return ::get_buildable_name(pWidget);
     }
 
     virtual OString get_current_page_ident() const override
@@ -5020,8 +5022,7 @@ private:
     static OString get_page_ident(GtkNotebook *pNotebook, guint nPage)
     {
         const GtkWidget* pTabWidget = gtk_notebook_get_tab_label(pNotebook, gtk_notebook_get_nth_page(pNotebook, nPage));
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pTabWidget));
-        return OString(pStr, pStr ? strlen(pStr) : 0);
+        return ::get_buildable_name(pTabWidget);
     }
 
     static gint get_page_number(GtkNotebook *pNotebook, const OString& rIdent)
@@ -6222,8 +6223,7 @@ protected:
 private:
     virtual void signal_activate(GtkMenuItem* pItem) override
     {
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
-        m_sActivated = OString(pStr, pStr ? strlen(pStr) : 0);
+        m_sActivated = ::get_buildable_name(GTK_WIDGET(pItem));
     }
 
     void clear_extras()
@@ -6424,6 +6424,18 @@ public:
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
     }
 
+    virtual void all_foreach(const std::function<bool(const OString&)>& func) override
+    {
+        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pMenu));
+        for (GList* pChild = g_list_first(pChildren); pChild; pChild = g_list_next(pChild))
+        {
+            GtkMenuItem* pMenuItem = GTK_MENU_ITEM(pChild->data);
+            if (func(get_buildable_name(GTK_WIDGET(pMenuItem))))
+                break;
+        }
+        g_list_free(pChildren);
+    }
+
     virtual ~GtkInstanceMenu() override
     {
         clear_extras();
@@ -6449,8 +6461,7 @@ private:
 
     void add_to_map(GtkToolButton* pToolItem)
     {
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pToolItem));
-        OString id(pStr, pStr ? strlen(pStr) : 0);
+        OString id = ::get_buildable_name(GTK_WIDGET(pToolItem));
         m_aMap[id] = pToolItem;
         g_signal_connect(pToolItem, "clicked", G_CALLBACK(signalItemClicked), this);
     }
@@ -6464,8 +6475,7 @@ private:
 
     void signal_item_clicked(GtkToolButton* pItem)
     {
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
-        signal_clicked(OString(pStr, pStr ? strlen(pStr) : 0));
+        signal_clicked(::get_buildable_name(GTK_WIDGET(pItem)));
     }
 
 public:

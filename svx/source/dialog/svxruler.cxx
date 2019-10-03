@@ -20,7 +20,6 @@
 #include <cstring>
 #include <climits>
 
-#include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/field.hxx>
@@ -28,6 +27,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld.hxx>
 #include <svl/eitem.hxx>
 #include <svl/rectitem.hxx>
 #include <svl/hint.hxx>
@@ -3257,11 +3257,12 @@ void SvxRuler::Notify(SfxBroadcaster&, const SfxHint& rHint)
     }
 }
 
-IMPL_LINK( SvxRuler, MenuSelect, Menu *, pMenu, bool )
+void SvxRuler::MenuSelect(const OString& rIdent)
 {
+    if (rIdent.isEmpty())
+        return;
     /* Handler of the context menus for switching the unit of measurement */
-    SetUnit(MetricFormatter::StringToMetric(OUString::fromUtf8(pMenu->GetCurItemIdent())));
-    return false;
+    SetUnit(MetricFormatter::StringToMetric(OUString::fromUtf8(rIdent)));
 }
 
 IMPL_LINK( SvxRuler, TabMenuSelect, Menu *, pMenu, bool )
@@ -3328,19 +3329,15 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
         }
         else
         {
-            VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/rulermenu.ui", "");
-            VclPtr<PopupMenu> aMenu(aBuilder.get_menu("menu"));
-            aMenu->SetSelectHdl(LINK(this, SvxRuler, MenuSelect));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "svx/ui/rulermenu.ui"));
+            std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
             FieldUnit eUnit = GetUnit();
-            const sal_uInt16 nCount = aMenu->GetItemCount();
 
             bool bReduceMetric = bool(nFlags & SvxRulerSupportFlags::REDUCED_METRIC);
-            for ( sal_uInt16 i = nCount; i; --i )
-            {
-                sal_uInt16 nId = aMenu->GetItemId(i - 1);
-                OString sIdent = aMenu->GetItemIdent(nId);
-                FieldUnit eMenuUnit = MetricFormatter::StringToMetric(OUString::fromUtf8(sIdent));
-                aMenu->CheckItem(nId, eMenuUnit == eUnit);
+
+            xMenu->all_foreach([this, &xMenu, bReduceMetric, eUnit](const OString& rIdent) {
+                FieldUnit eMenuUnit = MetricFormatter::StringToMetric(OUString::fromUtf8(rIdent));
+                xMenu->set_active(rIdent, eMenuUnit == eUnit);
                 if( bReduceMetric )
                 {
                     if (eMenuUnit == FieldUnit::M    ||
@@ -3348,19 +3345,21 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
                         eMenuUnit == FieldUnit::FOOT ||
                         eMenuUnit == FieldUnit::MILE)
                     {
-                        aMenu->RemoveItem(i - 1);
+                        xMenu->set_visible(rIdent, false);
                     }
                     else if (( eMenuUnit == FieldUnit::CHAR ) && !bHorz )
                     {
-                        aMenu->RemoveItem(i - 1);
+                        xMenu->set_visible(rIdent, false);
                     }
                     else if (( eMenuUnit == FieldUnit::LINE ) && bHorz )
                     {
-                        aMenu->RemoveItem(i - 1);
+                        xMenu->set_visible(rIdent, false);
                     }
                 }
-            }
-            aMenu->Execute( this, rCommandEvent.GetMousePosPixel() );
+                return false;
+            });
+
+            MenuSelect(xMenu->popup_at_rect(GetFrameWeld(), tools::Rectangle(rCommandEvent.GetMousePosPixel(), Size(1, 1))));
         }
     }
     else
@@ -3563,3 +3562,5 @@ void SvxRuler::SetValues(RulerChangeType type, long diffValue)
         SetMargin2( GetMargin2() - diffValue);
     ApplyMargins();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1781,6 +1781,8 @@ public:
         insert(-1, rId, rStr, nullptr, &rImage, false);
     }
 
+    virtual void all_foreach(const std::function<bool(const OString&)>& func) = 0;
+
     virtual ~Menu() {}
 };
 

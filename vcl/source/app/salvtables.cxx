@@ -908,6 +908,17 @@ public:
         auto nInsertPos = pos == -1 ? MENU_APPEND : pos;
         m_xMenu->InsertSeparator(rId.toUtf8(), nInsertPos);
     }
+    virtual void all_foreach(const std::function<bool(const OString&)>& func) override
+    {
+        const sal_uInt16 nCount = m_xMenu->GetItemCount();
+        for (sal_uInt16 i = 0; i < nCount; ++i)
+        {
+            sal_uInt16 nId = m_xMenu->GetItemId(i);
+            OString sIdent = m_xMenu->GetItemIdent(nId);
+            if (func(sIdent))
+                break;
+        }
+    }
     virtual ~SalInstanceMenu() override
     {
         if (m_bTakeOwnership)
