@@ -77,10 +77,10 @@ class CheckStyle(unittest.TestCase):
         self.assertListEqual(vNames, vExpectedNames)
 
     def __test_StyleFamilyIndex(self, xFamily, vExpectedNames, sElementImplName):
-        self.assertEqual(xFamily.Count, len(vExpectedNames))
+        self.assertEqual(len(xFamily), len(vExpectedNames))
 
-        for nIndex in range(xFamily.Count):
-            xStyle = xFamily.getByIndex(nIndex)
+        for nIndex in range(len(xFamily)):
+            xStyle = xFamily[nIndex]
             self.assertEqual(xStyle.ImplementationName, sElementImplName)
             self.assertIn(xStyle.Name, vExpectedNames)
             self.assertFalse(xStyle.isUserDefined())
@@ -176,7 +176,7 @@ class CheckStyle(unittest.TestCase):
             self.assertIsNotNone(xTableStyles.getByName(sStyleName))
         #check SwXTextCellStyles
         vCellStyles = ["first-row", "last-row", "first-column", "last-column", "body", "even-rows", "odd-rows", "even-columns", "odd-columns", "background"]
-        xDefaultTableStyle = xTableStyles.getByIndex(0)
+        xDefaultTableStyle = xTableStyles[0]
         for sCellStyle in vCellStyles:
             xCellStyle = xDefaultTableStyle.getByName(sCellStyle)
             self.assertIsNotNone(xCellStyle.getPropertyValue("BackColor"))
