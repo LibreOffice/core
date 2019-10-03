@@ -35,13 +35,13 @@ class splitTable(UITestCase):
         copyheading.executeAction("CLICK", tuple())
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
-        self.assertEqual(document.TextTables.getCount(), 2)
+        self.assertEqual(len(document.TextTables), 2)
         tables = document.getTextTables()
         self.assertEqual(len(tables[0].getRows()), 2)
         self.assertEqual(len(tables[1].getRows()), 5)
         #undo -> verify 1 tables
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.TextTables.getCount(), 1)
+        self.assertEqual(len(document.TextTables), 1)
 
         self.ui_test.close_doc()
 
@@ -59,13 +59,13 @@ class splitTable(UITestCase):
         customheading.executeAction("CLICK", tuple())
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
-        self.assertEqual(document.TextTables.getCount(), 2)
+        self.assertEqual(len(document.TextTables), 2)
         tables = document.getTextTables()
         self.assertEqual(len(tables[0].getRows()), 2)
         self.assertEqual(len(tables[1].getRows()), 4)
         #undo -> verify 1 tables
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.TextTables.getCount(), 1)
+        self.assertEqual(len(document.TextTables), 1)
 
         self.ui_test.close_doc()
         #dialog Split table, check No heading, OK -> verify 2 tables, 1st has 2 rows, second has 4 rows
@@ -82,13 +82,13 @@ class splitTable(UITestCase):
         noheading.executeAction("CLICK", tuple())
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
-        self.assertEqual(document.TextTables.getCount(), 2)
+        self.assertEqual(len(document.TextTables), 2)
         tables = document.getTextTables()
         self.assertEqual(len(tables[0].getRows()), 2)
         self.assertEqual(len(tables[1].getRows()), 4)
         #undo -> verify 1 tables
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.TextTables.getCount(), 1)
+        self.assertEqual(len(document.TextTables), 1)
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -34,28 +34,22 @@ def InsertText(text):
     # all BeanShell scripts executed by the Script Framework
     xModel = XSCRIPTCONTEXT.getDocument()
 
-    #the writer controller impl supports the css.view.XSelectionSupplier interface
+    # The writer controller impl supports the css.view.XSelectionSupplier
+    # interface
     xSelectionSupplier = xModel.getCurrentController()
 
-    #see section 7.5.1 of developers' guide
+    # See section 7.5.1 of developers' guide
     xIndexAccess = xSelectionSupplier.getSelection()
-    count = xIndexAccess.getCount();
-    if count >= 1:  #ie we have a selection
-        i = 0
-
-    while i < count:
-            xTextRange = xIndexAccess.getByIndex(i);
-            theString = xTextRange.getString();
-            if not len(theString):
-                # Nothing really selected; just insert.
-                xText = xTextRange.getText();
-                xWordCursor = xText.createTextCursorByRange(xTextRange);
-                xWordCursor.setString(text);
-                xSelectionSupplier.select(xWordCursor);
-            else:
-                # Replace the selection.
-                xTextRange.setString(text);
-                xSelectionSupplier.select(xTextRange);
-
-            i += 1
-
+    for i, xTextRange in enumerate(xIndexAccess):
+        xTextRange = xIndexAccess.getByIndex(i)
+        theString = xTextRange.getString()
+        if not len(theString):
+            # Nothing really selected; just insert.
+            xText = xTextRange.getText()
+            xWordCursor = xText.createTextCursorByRange(xTextRange)
+            xWordCursor.setString(text)
+            xSelectionSupplier.select(xWordCursor)
+        else:
+            # Replace the selection.
+            xTextRange.setString(text)
+            xSelectionSupplier.select(xTextRange)

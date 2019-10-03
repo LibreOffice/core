@@ -20,15 +20,15 @@ class insertSlide(UITestCase):
         xCancelBtn = xTemplateDlg.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCancelBtn)
         document = self.ui_test.get_component()
-        self.assertEqual(document.DrawPages.getCount(), 1)  #nr. of pages
+        self.assertEqual(len(document.DrawPages), 1)  #nr. of pages
 
         self.xUITest.executeCommand(".uno:InsertPage")
 
         #verify
-        self.assertEqual(document.DrawPages.getCount(), 2)  #nr. of pages
+        self.assertEqual(len(document.DrawPages), 2)  #nr. of pages
         #undo
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.DrawPages.getCount(), 1)  #nr. of pages
+        self.assertEqual(len(document.DrawPages), 1)  #nr. of pages
         self.ui_test.close_doc()
 
    def test_tdf85360_insert_4th_slide(self):
@@ -37,19 +37,19 @@ class insertSlide(UITestCase):
         xCancelBtn = xTemplateDlg.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCancelBtn)
         document = self.ui_test.get_component()
-        self.assertEqual(document.DrawPages.getCount(), 1)  #nr. of pages
+        self.assertEqual(len(document.DrawPages), 1)  #nr. of pages
 
         self.xUITest.executeCommand(".uno:InsertPage")
         self.xUITest.executeCommand(".uno:InsertPage")
         self.xUITest.executeCommand(".uno:InsertPage")
         self.xUITest.executeCommand(".uno:InsertPage")
         #verify
-        self.assertEqual(document.DrawPages.getCount(), 5)  #nr. of pages
+        self.assertEqual(len(document.DrawPages), 5)  #nr. of pages
         #undo
         self.xUITest.executeCommand(".uno:Undo")
         self.xUITest.executeCommand(".uno:Undo")
         self.xUITest.executeCommand(".uno:Undo")
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.DrawPages.getCount(), 1)  #nr. of pages
+        self.assertEqual(len(document.DrawPages), 1)  #nr. of pages
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

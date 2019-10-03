@@ -73,6 +73,6 @@ class tdf53460(UITestCase):
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "ALT+RIGHT"}))
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "ALT+LEFT"}))
 
-        self.assertEqual(document.TextTables.getCount(), 2)
+        self.assertEqual(len(document.TextTables), 2)
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

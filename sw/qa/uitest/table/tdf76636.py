@@ -30,7 +30,7 @@ class tdf76636(UITestCase):
         #* merge the three top cells on the right
         #--> crash
 
-        self.assertEqual(document.TextTables.getCount(), 1)
+        self.assertEqual(len(document.TextTables), 1)
         #go to middle row
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
@@ -44,10 +44,10 @@ class tdf76636(UITestCase):
 
         #merge
         self.xUITest.executeCommand(".uno:MergeCells")
-        self.assertEqual(document.TextTables.getCount(), 1)
+        self.assertEqual(len(document.TextTables), 1)
         #undo
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.TextTables.getCount(), 1)
+        self.assertEqual(len(document.TextTables), 1)
         self.ui_test.close_doc()
 
     def test_tdf76636_merge_cells_doc_undo(self):
@@ -68,10 +68,10 @@ class tdf76636(UITestCase):
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "SHIFT+RIGHT"}))
         #merge
         self.xUITest.executeCommand(".uno:MergeCells")
-        self.assertEqual(document.TextTables.getCount(), 1)
+        self.assertEqual(len(document.TextTables), 1)
         #undo
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.TextTables.getCount(), 1)
+        self.assertEqual(len(document.TextTables), 1)
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

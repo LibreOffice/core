@@ -34,7 +34,7 @@ class tdf117601(UITestCase):
         xOkBtn = xDialog.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())
 
-        self.assertEqual(document.TextTables.getCount(), 1)
+        self.assertEqual(len(document.TextTables), 1)
         #go to middle row
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
@@ -42,7 +42,7 @@ class tdf117601(UITestCase):
         self.xUITest.executeCommand(".uno:EntireColumn")
         #merge
         self.xUITest.executeCommand(".uno:MergeCells")
-        self.assertEqual(document.TextTables.getCount(), 1)
+        self.assertEqual(len(document.TextTables), 1)
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

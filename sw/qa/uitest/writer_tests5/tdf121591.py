@@ -34,7 +34,7 @@ class tdf121591(UITestCase):
         self.xUITest.getTopFocusWindow() #Get focus after closing preview
 
         #verify nr. of frames
-        self.assertEqual(document.TextFrames.getCount(), 1)
+        self.assertEqual(len(document.TextFrames), 1)
 
         self.ui_test.close_doc()
 

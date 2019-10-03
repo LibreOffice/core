@@ -23,16 +23,16 @@ class tdf108124(UITestCase):
     xWriterEdit = xWriterDoc.getChild("writer_edit")
     document = self.ui_test.get_component()
 
-    self.assertEqual(document.GraphicObjects.getCount(), 2)  #nr. of images
+    self.assertEqual(len(document.GraphicObjects), 2)  #nr. of images
 
     xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+a"})) # select all
     xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+c"})) # copy
     xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+v"})) # paste
-    self.assertEqual(document.GraphicObjects.getCount(), 4)
+    self.assertEqual(len(document.GraphicObjects), 4)
     self.xUITest.executeCommand(".uno:Undo")  #Undo
-    self.assertEqual(document.GraphicObjects.getCount(), 2)
+    self.assertEqual(len(document.GraphicObjects), 2)
     self.xUITest.executeCommand(".uno:Redo")  #Redo
-    self.assertEqual(document.GraphicObjects.getCount(), 4)
+    self.assertEqual(len(document.GraphicObjects), 4)
 
     self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -27,7 +27,7 @@ class tdf107975(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        self.assertEqual(writer_doc.getGraphicObjects().getCount(), 1)
+        self.assertEqual(len(writer_doc.getGraphicObjects()), 1)
 
         #Press CTRL+A and + CTRL+C
         self.xUITest.executeCommand(".uno:SelectAll")
@@ -36,19 +36,19 @@ class tdf107975(UITestCase):
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
         #Paste CTRL+V
         self.xUITest.executeCommand(".uno:Paste")
-        self.assertEqual(writer_doc.getGraphicObjects().getCount(), 2)
+        self.assertEqual(len(writer_doc.getGraphicObjects()), 2)
         #Undo paste CTRL+Z -> Crash
         self.xUITest.executeCommand(".uno:Undo")
         self.assertEqual(document.Text.String[0:3], "ABC")
-        self.assertEqual(writer_doc.getGraphicObjects().getCount(), 1)
+        self.assertEqual(len(writer_doc.getGraphicObjects()), 1)
         self.xUITest.executeCommand(".uno:Redo")
-        self.assertEqual(writer_doc.getGraphicObjects().getCount(), 2)
+        self.assertEqual(len(writer_doc.getGraphicObjects()), 2)
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(writer_doc.getGraphicObjects().getCount(), 1)
+        self.assertEqual(len(writer_doc.getGraphicObjects()), 1)
         self.xUITest.executeCommand(".uno:Redo")
-        self.assertEqual(writer_doc.getGraphicObjects().getCount(), 2)
+        self.assertEqual(len(writer_doc.getGraphicObjects()), 2)
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(writer_doc.getGraphicObjects().getCount(), 1)
+        self.assertEqual(len(writer_doc.getGraphicObjects()), 1)
 
         # try again with anchor at start of doc which is another special case
         xShape = writer_doc.getGraphicObjects().getByIndex(0)
@@ -62,19 +62,19 @@ class tdf107975(UITestCase):
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
         #Paste CTRL+V
         self.xUITest.executeCommand(".uno:Paste")
-        self.assertEqual(writer_doc.getGraphicObjects().getCount(), 2)
+        self.assertEqual(len(writer_doc.getGraphicObjects()), 2)
         #Undo paste CTRL+Z -> Crash
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(writer_doc.getGraphicObjects().getCount(), 1)
+        self.assertEqual(len(writer_doc.getGraphicObjects()), 1)
         self.assertEqual(document.Text.String[0:3], "ABC")
         self.xUITest.executeCommand(".uno:Redo")
-        self.assertEqual(writer_doc.getGraphicObjects().getCount(), 2)
+        self.assertEqual(len(writer_doc.getGraphicObjects()), 2)
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(writer_doc.getGraphicObjects().getCount(), 1)
+        self.assertEqual(len(writer_doc.getGraphicObjects()), 1)
         self.xUITest.executeCommand(".uno:Redo")
-        self.assertEqual(writer_doc.getGraphicObjects().getCount(), 2)
+        self.assertEqual(len(writer_doc.getGraphicObjects()), 2)
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(writer_doc.getGraphicObjects().getCount(), 1)
+        self.assertEqual(len(writer_doc.getGraphicObjects()), 1)
 
         self.ui_test.close_doc()
 

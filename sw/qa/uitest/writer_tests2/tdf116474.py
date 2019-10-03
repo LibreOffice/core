@@ -42,13 +42,13 @@ class tdf116474(UITestCase):
 
         xFrame = document.TextFrames.getByIndex(0)
         self.assertEqual(document.TextFrames.getByIndex(0).Text.String, "\nFigure 1: Caption")
-        self.assertEqual(document.GraphicObjects.getCount(), 1)  #nr. of images
+        self.assertEqual(len(document.GraphicObjects), 1)  #nr. of images
         #Undo, redo
         self.xUITest.executeCommand(".uno:Undo")
         self.xUITest.executeCommand(".uno:Redo")
         #Verify
         self.assertEqual(document.TextFrames.getByIndex(0).Text.String, "\nFigure 1: Caption")
-        self.assertEqual(document.GraphicObjects.getCount(), 1)  #nr. of images
+        self.assertEqual(len(document.GraphicObjects), 1)  #nr. of images
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -33,7 +33,7 @@ class tdf124818(UITestCase):
     self.xUITest.executeCommand(".uno:SelectAll")
 
     #verify; no crashes
-    self.assertEqual(document.Sheets.getCount(), 3)
+    self.assertEqual(len(document.Sheets), 3)
 
     self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

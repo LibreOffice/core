@@ -33,8 +33,8 @@ class tdf107847(UITestCase):
         xokbtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xokbtn)
 
-        self.assertEqual(document.TextFrames.getCount(), 1)
+        self.assertEqual(len(document.TextFrames), 1)
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.TextFrames.getCount(), 0)
+        self.assertEqual(len(document.TextFrames), 0)
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

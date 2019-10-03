@@ -30,7 +30,7 @@ class moveCopySheet(UITestCase):
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
         #verify, the file has 2 sheets; first one "newName" is selected
-        self.assertEqual(document.Sheets.getCount(), 2)
+        self.assertEqual(len(document.Sheets), 2)
         # dialog move/copy sheet ; Move is selected; select -move to end position - ; New Name = moveName
         self.ui_test.execute_dialog_through_command(".uno:Move")
         xDialog = self.xUITest.getTopFocusWindow()
@@ -47,7 +47,7 @@ class moveCopySheet(UITestCase):
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
         #verify, the file has 2 sheets; first one is "Sheet1" ; second one is "moveName"
-        self.assertEqual(document.Sheets.getCount(), 2)
+        self.assertEqual(len(document.Sheets), 2)
 
         self.assertEqual(document.Sheets.getByIndex(0).Name, "Sheet1")
         self.assertEqual(document.Sheets.getByIndex(1).Name, "moveName")
@@ -58,7 +58,7 @@ class moveCopySheet(UITestCase):
         xCancelBtn = xDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCancelBtn)
 
-        self.assertEqual(document.Sheets.getCount(), 2)
+        self.assertEqual(len(document.Sheets), 2)
         self.assertEqual(document.Sheets.getByIndex(0).Name, "Sheet1")
         self.assertEqual(document.Sheets.getByIndex(1).Name, "moveName")
 

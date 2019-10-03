@@ -23,9 +23,9 @@ class tdf114992(UITestCase):
         xOKButton = xDialog.getChild("yes")
         xOKButton.executeAction("CLICK", tuple())
 
-        self.assertEqual(document.Sheets.getCount(), 1)
+        self.assertEqual(len(document.Sheets), 1)
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.Sheets.getCount(), 2)
+        self.assertEqual(len(document.Sheets), 2)
 
         self.ui_test.close_doc()
 

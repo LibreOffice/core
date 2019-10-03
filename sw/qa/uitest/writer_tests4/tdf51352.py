@@ -36,18 +36,18 @@ class tdf51352(UITestCase):
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
-        self.assertEqual(document.TextTables.getCount(), 2)
+        self.assertEqual(len(document.TextTables), 2)
         #4. From menu "Table->Convert->Table to Text
         self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText")
         xDialog = self.xUITest.getTopFocusWindow()
         xOkBtn = xDialog.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())
-        self.assertEqual(document.TextTables.getCount(), 0)
+        self.assertEqual(len(document.TextTables), 0)
         #5. Undo/Redo
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.TextTables.getCount(), 2)
+        self.assertEqual(len(document.TextTables), 2)
         self.xUITest.executeCommand(".uno:Redo")
-        self.assertEqual(document.TextTables.getCount(), 0)
+        self.assertEqual(len(document.TextTables), 0)
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
 

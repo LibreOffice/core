@@ -35,13 +35,13 @@ class textToTable(UITestCase):
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
         #verify
-        self.assertEqual(document.TextTables.getCount(), 1)
+        self.assertEqual(len(document.TextTables), 1)
         tables = document.getTextTables()
         self.assertEqual(len(tables[0].getRows()), 1)
         self.assertEqual(len(tables[0].getColumns()), 3)
         #undo
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.TextTables.getCount(), 0)
+        self.assertEqual(len(document.TextTables), 0)
         self.assertEqual(document.Text.String[0:5], "A;B;C")
 
         self.ui_test.close_doc()
@@ -66,13 +66,13 @@ class textToTable(UITestCase):
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
         #verify
-        self.assertEqual(document.TextTables.getCount(), 1)
+        self.assertEqual(len(document.TextTables), 1)
         tables = document.getTextTables()
         self.assertEqual(len(tables[0].getRows()), 4)
         self.assertEqual(len(tables[0].getColumns()), 3)
         #undo
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.TextTables.getCount(), 0)
+        self.assertEqual(len(document.TextTables), 0)
         self.assertEqual(document.Text.String[0:5], "A:B:C")
 
         self.ui_test.close_doc()

@@ -33,7 +33,7 @@ class tdf124896(UITestCase):
     xOKButton = xDialog.getChild("yes")
     xOKButton.executeAction("CLICK", tuple())
     #verify; no crashes
-    self.assertEqual(document.Sheets.getCount(), 2)
+    self.assertEqual(len(document.Sheets), 2)
 
     self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

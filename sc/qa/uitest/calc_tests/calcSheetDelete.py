@@ -23,25 +23,25 @@ class calcSheetDelete(UITestCase):
         document = self.ui_test.get_component()
 
         xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "L12"}))
-        nrSheets = document.Sheets.getCount()  #default number
+        nrSheets = len(document.Sheets)  #default number
 
         self.ui_test.execute_dialog_through_command(".uno:Insert")  #insert sheet
         xDialog = self.xUITest.getTopFocusWindow()
         xOKButton = xDialog.getChild("ok")
         xOKButton.executeAction("CLICK", tuple())
 
-        self.assertEqual(document.Sheets.getCount(), nrSheets + 1)
+        self.assertEqual(len(document.Sheets), nrSheets + 1)
 
         self.ui_test.execute_dialog_through_command(".uno:Remove")  #delete sheet
         xDialog = self.xUITest.getTopFocusWindow()
         xOKButton = xDialog.getChild("yes")
         xOKButton.executeAction("CLICK", tuple())
 
-        self.assertEqual(document.Sheets.getCount(), nrSheets)
+        self.assertEqual(len(document.Sheets), nrSheets)
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.Sheets.getCount(), nrSheets + 1)
+        self.assertEqual(len(document.Sheets), nrSheets + 1)
         self.xUITest.executeCommand(".uno:Redo")
-        self.assertEqual(document.Sheets.getCount(), nrSheets)
+        self.assertEqual(len(document.Sheets), nrSheets)
 
         self.ui_test.close_doc()
 
@@ -50,7 +50,7 @@ class calcSheetDelete(UITestCase):
         self.ui_test.create_doc_in_start_center("calc")
         document = self.ui_test.get_component()
 
-        nrSheets = document.Sheets.getCount()  #default number of sheets
+        nrSheets = len(document.Sheets)  #default number of sheets
 
         self.ui_test.execute_dialog_through_command(".uno:Insert")  #insert sheet
         xDialog = self.xUITest.getTopFocusWindow()
@@ -62,7 +62,7 @@ class calcSheetDelete(UITestCase):
         xOKButton = xDialog.getChild("ok")
         xOKButton.executeAction("CLICK", tuple())
 
-        self.assertEqual(document.Sheets.getCount(), nrSheets + 2)
+        self.assertEqual(len(document.Sheets), nrSheets + 2)
         xCalcDoc = self.xUITest.getTopFocusWindow()
         xGridWindow = xCalcDoc.getChild("grid_window")
         enter_text_to_cell(xGridWindow, "B2", "abcd")
@@ -72,11 +72,11 @@ class calcSheetDelete(UITestCase):
         xOKButton = xDialog.getChild("yes")
         xOKButton.executeAction("CLICK", tuple())
 
-        self.assertEqual(document.Sheets.getCount(), nrSheets + 1)
+        self.assertEqual(len(document.Sheets), nrSheets + 1)
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.Sheets.getCount(), nrSheets + 2)
+        self.assertEqual(len(document.Sheets), nrSheets + 2)
         self.xUITest.executeCommand(".uno:Redo")
-        self.assertEqual(document.Sheets.getCount(), nrSheets + 1)
+        self.assertEqual(len(document.Sheets), nrSheets + 1)
 
         self.ui_test.close_doc()
 
@@ -87,7 +87,7 @@ class calcSheetDelete(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         xGridWindow = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
-        nrSheets = document.Sheets.getCount()  #default number
+        nrSheets = len(document.Sheets)  #default number
         i = 0
         while i < 6:
             self.ui_test.execute_dialog_through_command(".uno:Insert")  #insert sheet
@@ -95,7 +95,7 @@ class calcSheetDelete(UITestCase):
             xOKButton = xDialog.getChild("ok")
             xOKButton.executeAction("CLICK", tuple())
             i = i + 1
-        self.assertEqual(document.Sheets.getCount(), nrSheets + 6)
+        self.assertEqual(len(document.Sheets), nrSheets + 6)
 
         i = 0
         while i < 5:
@@ -107,11 +107,11 @@ class calcSheetDelete(UITestCase):
         xOKButton = xDialog.getChild("yes")
         xOKButton.executeAction("CLICK", tuple())
 
-        self.assertEqual(document.Sheets.getCount(), nrSheets)
+        self.assertEqual(len(document.Sheets), nrSheets)
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.Sheets.getCount(), nrSheets + 6)
+        self.assertEqual(len(document.Sheets), nrSheets + 6)
         self.xUITest.executeCommand(".uno:Redo")
-        self.assertEqual(document.Sheets.getCount(), nrSheets)
+        self.assertEqual(len(document.Sheets), nrSheets)
 
         self.ui_test.close_doc()
 
@@ -122,7 +122,7 @@ class calcSheetDelete(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         xGridWindow = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
-        nrSheets = document.Sheets.getCount()  #default number
+        nrSheets = len(document.Sheets)  #default number
         i = 0
         while i < 100:
             self.ui_test.execute_dialog_through_command(".uno:Insert")  #insert sheet
@@ -130,7 +130,7 @@ class calcSheetDelete(UITestCase):
             xOKButton = xDialog.getChild("ok")
             xOKButton.executeAction("CLICK", tuple())
             i = i + 1
-        self.assertEqual(document.Sheets.getCount(), nrSheets + 100)
+        self.assertEqual(len(document.Sheets), nrSheets + 100)
 
         i = 0
         while i < 99:
@@ -142,11 +142,11 @@ class calcSheetDelete(UITestCase):
         xOKButton = xDialog.getChild("yes")
         xOKButton.executeAction("CLICK", tuple())
 
-        self.assertEqual(document.Sheets.getCount(), nrSheets)
+        self.assertEqual(len(document.Sheets), nrSheets)
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.Sheets.getCount(), nrSheets + 100)
+        self.assertEqual(len(document.Sheets), nrSheets + 100)
         self.xUITest.executeCommand(".uno:Redo")
-        self.assertEqual(document.Sheets.getCount(), nrSheets)
+        self.assertEqual(len(document.Sheets), nrSheets)
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

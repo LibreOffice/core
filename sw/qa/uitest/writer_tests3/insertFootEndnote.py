@@ -23,9 +23,9 @@ class insertFootEndnote(UITestCase):
         xDialog = self.xUITest.getTopFocusWindow()
         xOkBtn = xDialog.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())
-        self.assertEqual(document.Footnotes.getCount(), 1)
+        self.assertEqual(len(document.Footnotes), 1)
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.Footnotes.getCount(), 0)
+        self.assertEqual(len(document.Footnotes), 0)
 #Automatic - Endnote
         self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog")
         xDialog = self.xUITest.getTopFocusWindow()
@@ -35,9 +35,9 @@ class insertFootEndnote(UITestCase):
 
         xOkBtn = xDialog.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())
-        self.assertEqual(document.Endnotes.getCount(), 1)
+        self.assertEqual(len(document.Endnotes), 1)
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.Endnotes.getCount(), 0)
+        self.assertEqual(len(document.Endnotes), 0)
 #Character - Footnote
         self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog")
         xDialog = self.xUITest.getTopFocusWindow()
@@ -49,9 +49,9 @@ class insertFootEndnote(UITestCase):
 
         xOkBtn = xDialog.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())
-        self.assertEqual(document.Footnotes.getCount(), 1)
+        self.assertEqual(len(document.Footnotes), 1)
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.Footnotes.getCount(), 0)
+        self.assertEqual(len(document.Footnotes), 0)
 
 #Character - Endnote
         self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog")
@@ -67,9 +67,9 @@ class insertFootEndnote(UITestCase):
 
         xOkBtn = xDialog.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())
-        self.assertEqual(document.Endnotes.getCount(), 1)
+        self.assertEqual(len(document.Endnotes), 1)
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.Endnotes.getCount(), 0)
+        self.assertEqual(len(document.Endnotes), 0)
 
 #Cancel button
         self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog")

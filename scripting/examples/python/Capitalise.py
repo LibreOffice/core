@@ -31,7 +31,7 @@ def getNewString( theString ) :
         newString=theString.upper()
     return newString;
 
-def capitalisePython( ): 
+def capitalisePython( ):
     """Change the case of a selection, or current word from upper case, to first char upper case, to all lower case to upper case..."""
     import string
 
@@ -44,33 +44,27 @@ def capitalisePython( ):
 
     #see section 7.5.1 of developers' guide
     xIndexAccess = xSelectionSupplier.getSelection()
-    count = xIndexAccess.getCount();
-    if(count>=1):  #ie we have a selection
-        i=0
-    while i < count :
-            xTextRange = xIndexAccess.getByIndex(i);
-            #print "string: " + xTextRange.getString();
-            theString = xTextRange.getString();
-            if len(theString)==0 :
-                # sadly we can have a selection where nothing is selected
-                # in this case we get the XWordCursor and make a selection!
-                xText = xTextRange.getText();
-                xWordCursor = xText.createTextCursorByRange(xTextRange);
-                if not xWordCursor.isStartOfWord():
-                    xWordCursor.gotoStartOfWord(False);
-                xWordCursor.gotoNextWord(True);
-                theString = xWordCursor.getString();
-                newString = getNewString(theString);
-                if newString :
-                    xWordCursor.setString(newString);
-                    xSelectionSupplier.select(xWordCursor);
-            else :
-
-                newString = getNewString( theString );
-                if newString:
-                    xTextRange.setString(newString);
-                    xSelectionSupplier.select(xTextRange);
-            i+= 1
+    count = len(xIndexAccess)
+    for i, xTextRange in enumerate(xIndexAccess):
+        theString = xTextRange.getString()
+        if len(theString)==0 :
+            # sadly we can have a selection where nothing is selected
+            # in this case we get the XWordCursor and make a selection!
+            xText = xTextRange.getText()
+            xWordCursor = xText.createTextCursorByRange(xTextRange)
+            if not xWordCursor.isStartOfWord():
+                xWordCursor.gotoStartOfWord(False)
+            xWordCursor.gotoNextWord(True)
+            theString = xWordCursor.getString()
+            newString = getNewString(theString)
+            if newString:
+                xWordCursor.setString(newString)
+                xSelectionSupplier.select(xWordCursor)
+        else:
+            newString = getNewString( theString )
+            if newString:
+                xTextRange.setString(newString)
+                xSelectionSupplier.select(xTextRange)
 
 
 # lists the scripts, that shall be visible inside OOo. Can be omitted, if

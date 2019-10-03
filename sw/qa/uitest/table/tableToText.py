@@ -33,10 +33,10 @@ class tableToText(UITestCase):
         self.ui_test.close_dialog_through_button(xOKBtn)
         #verify
         self.assertEqual(document.Text.String[0:3], "a\ta")
-        self.assertEqual(document.TextTables.getCount(), 0)
+        self.assertEqual(len(document.TextTables), 0)
         #undo
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.TextTables.getCount(), 1)
+        self.assertEqual(len(document.TextTables), 1)
 
         #dialog Table to text - Paragraph; verify
         self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText")
@@ -47,10 +47,10 @@ class tableToText(UITestCase):
         self.ui_test.close_dialog_through_button(xOKBtn)
         #verify
         self.assertEqual(document.Text.String[0:4], "a\na\n")
-        self.assertEqual(document.TextTables.getCount(), 0)
+        self.assertEqual(len(document.TextTables), 0)
         #undo
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.TextTables.getCount(), 1)
+        self.assertEqual(len(document.TextTables), 1)
 
         #dialog Table to text - Semicolons; verify
         self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText")
@@ -61,10 +61,10 @@ class tableToText(UITestCase):
         self.ui_test.close_dialog_through_button(xOKBtn)
         #verify
         self.assertEqual(document.Text.String[0:6], "a;a\n;\n")
-        self.assertEqual(document.TextTables.getCount(), 0)
+        self.assertEqual(len(document.TextTables), 0)
         #undo
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.TextTables.getCount(), 1)
+        self.assertEqual(len(document.TextTables), 1)
 
         #dialog Table to text - other; verify
         self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText")
@@ -79,10 +79,10 @@ class tableToText(UITestCase):
         self.ui_test.close_dialog_through_button(xOKBtn)
         #verify
         self.assertEqual(document.Text.String[0:6], "a:a\n:\n")
-        self.assertEqual(document.TextTables.getCount(), 0)
+        self.assertEqual(len(document.TextTables), 0)
         #undo
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.TextTables.getCount(), 1)
+        self.assertEqual(len(document.TextTables), 1)
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

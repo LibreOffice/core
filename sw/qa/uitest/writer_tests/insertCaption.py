@@ -30,7 +30,7 @@ class insertCaption(UITestCase):
         xOkBtn=xDialogFr.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())
 
-        self.assertEqual(document.TextFrames.getCount(), 1)
+        self.assertEqual(len(document.TextFrames), 1)
 
         self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog")   #  caption
         xDialogCaption = self.xUITest.getTopFocusWindow()

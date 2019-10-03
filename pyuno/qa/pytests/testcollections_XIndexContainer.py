@@ -64,8 +64,8 @@ class TestXIndexContainer(CollectionsTestBase):
         else:
             # expected is list
             self.assertEqual(None, captured)
-            self.assertEqual(len(expected), property_values.getCount())
-            for i in range(property_values.getCount()):
+            self.assertEqual(len(expected), len(property_values))
+            for i in range(len(property_values)):
                 self.assertEqual(to_compare[i][0].Name, property_values.getByIndex(i)[0].Name)
 
     def deleteValuesTestFixture(self, count, key, expected):
@@ -89,8 +89,8 @@ class TestXIndexContainer(CollectionsTestBase):
         else:
             # expected is list
             self.assertEqual(None, captured)
-            self.assertEqual(len(expected), property_values.getCount())
-            for i in range(property_values.getCount()):
+            self.assertEqual(len(expected), len(property_values))
+            for i in range(len(property_values)):
                 self.assertEqual(to_compare[i][0].Name, property_values.getByIndex(i)[0].Name)
 
     # Tests syntax:

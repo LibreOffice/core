@@ -33,7 +33,7 @@ class tdf108654(UITestCase):
         xOKButton = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKButton)
 
-        self.assertEqual(document.Sheets.getCount(), 4)
+        self.assertEqual(len(document.Sheets), 4)
 
         self.xUITest.executeCommand(".uno:Paste")
         #Undo the action twice
@@ -41,7 +41,7 @@ class tdf108654(UITestCase):
         self.xUITest.executeCommand(".uno:Undo")
 
         #-> CRASH
-        self.assertEqual(document.Sheets.getCount(), 3)
+        self.assertEqual(len(document.Sheets), 3)
 
         self.ui_test.close_doc()
 

@@ -22,15 +22,15 @@ class insertFootnote(UITestCase):
 
         type_text(xWriterEdit, "LibreOffice")
         self.assertEqual(document.Footnotes.getByIndex(0).String, "LibreOffice")
-        self.assertEqual(document.Footnotes.getCount(), 1)
+        self.assertEqual(len(document.Footnotes), 1)
 
         self.xUITest.executeCommand(".uno:Undo")
         self.assertEqual(document.Footnotes.getByIndex(0).String, "")
         self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.Footnotes.getCount(), 0)
+        self.assertEqual(len(document.Footnotes), 0)
         self.xUITest.executeCommand(".uno:Redo")
         self.assertEqual(document.Footnotes.getByIndex(0).String, "")
-        self.assertEqual(document.Footnotes.getCount(), 1)
+        self.assertEqual(len(document.Footnotes), 1)
         self.xUITest.executeCommand(".uno:Redo")
         self.assertEqual(document.Footnotes.getByIndex(0).String, "LibreOffice")
 

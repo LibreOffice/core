@@ -58,7 +58,7 @@ class LibreLogoTest(UITestCase):
         # drawing, ie. in this example, three line shapes
         # instead of a single one. See its fix in
         # commit 502e8785085f9e8b54ee383080442c2dcaf95b15)
-        self.assertEqual(document.DrawPage.getCount(), 2)
+        self.assertEqual(len(document.DrawPage), 2)
 
         # check formatting by "magic wand"
         self.logo("__translate__")
@@ -96,7 +96,7 @@ x 3 ; draw only a few levels
         while xIsAlive.invoke((), (), ())[0]:
             pass
         # new shape + previous two ones = 3
-        self.assertEqual(document.DrawPage.getCount(), 3)
+        self.assertEqual(len(document.DrawPage), 3)
 
         self.ui_test.close_doc()
 
