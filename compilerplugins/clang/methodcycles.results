@@ -1,16 +1,39 @@
 found cycle
+    unsigned long slideshow::internal::hash::operator()(const type-parameter-?-? &) const
+    slideshow/source/inc/tools.hxx:84
+
+    unsigned long com::sun::star::uno::hash_value(const Reference<type-parameter-?-?> &)
+    slideshow/source/inc/tools.hxx:94
+
+found cycle
     void (anonymous namespace)::traceValue(_typelib_TypeDescriptionReference *,void *)
-    cppu/source/LogBridge/LogBridge.cxx:132
+    cppu/source/LogBridge/LogBridge.cxx:128
 
     void uno_ext_getMapping(_uno_Mapping **,_uno_Environment *,_uno_Environment *)
-    cppu/source/UnsafeBridge/UnsafeBridge.cxx:133
+    bridges/source/jni_uno/jni_bridge.cxx:514
 
     void LogProbe(bool,void *,void *,_typelib_TypeDescriptionReference *,_typelib_MethodParameter *,int,const _typelib_TypeDescription *,void *,void **,_uno_Any **)
-    cppu/source/LogBridge/LogBridge.cxx:192
+    cppu/source/LogBridge/LogBridge.cxx:188
+
+found cycle
+    void chart::ChartTypeDialogController::adjustParameterToMainType(chart::ChartTypeParameter &)
+    chart2/source/controller/dialogs/ChartTypeDialogController.hxx:116
+
+    chart::ChartTypeTabPage::ChartTypeTabPage(weld::Container *,weld::DialogController *,const com::sun::star::uno::Reference<com::sun::star::chart2::XChartDocument> &,bool)
+    chart2/source/controller/dialogs/tp_ChartType.hxx:48
+
+    void chart::ChartTypeTabPage::selectMainType()
+    chart2/source/controller/dialogs/tp_ChartType.hxx:67
+
+    void chart::ChartTypeTabPage::LinkStubSelectMainTypeHdl(void *,weld::TreeView &)
+    chart2/source/controller/dialogs/tp_ChartType.hxx:69
+
+    void chart::ChartTypeTabPage::SelectMainTypeHdl(weld::TreeView &)
+    chart2/source/controller/dialogs/tp_ChartType.hxx:69
 
 found cycle
     void SbxVariable::Dump(SvStream &,bool)
-    include/basic/sbxvar.hxx:260
+    include/basic/sbxvar.hxx:262
 
     void SbxObject::Dump(SvStream &,bool)
     include/basic/sbxobj.hxx:80
@@ -19,16 +42,52 @@ found cycle
     basic/source/inc/rtlproto.hxx:293
 
 found cycle
-    unsigned long slideshow::internal::hash::operator()(const type-parameter-?-? &) const
-    slideshow/source/inc/tools.hxx:83
+    SvxMenuConfigPage::SvxMenuConfigPage(weld::Container *,weld::DialogController *,const SfxItemSet &,bool)
+    cui/source/inc/SvxMenuConfigPage.hxx:59
 
-    unsigned long com::sun::star::uno::hash_value(const Reference<type-parameter-?-?> &)
-    slideshow/source/inc/tools.hxx:93
+    void SvxMenuConfigPage::LinkStubGearHdl(void *,const rtl::OString &)
+    cui/source/inc/SvxMenuConfigPage.hxx:35
+
+    rtl::OUString SvxConfigPageHelper::generateCustomMenuURL(std::::vector<SvxConfigEntry *, std::allocator<SvxConfigEntry *> > *,int)
+    cui/source/inc/SvxConfigPageHelper.hxx:46
+
+    SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(weld::Window *,std::::vector<SvxConfigEntry *, std::allocator<SvxConfigEntry *> > *,const SvxConfigEntry *,bool)
+    cui/source/inc/cfg.hxx:507
+
+    void SvxMenuConfigPage::GearHdl(const rtl::OString &)
+    cui/source/inc/SvxMenuConfigPage.hxx:35
+
+found cycle
+    sd::UndoAnimationPath::UndoAnimationPath(SdDrawDocument *,SdPage *,const com::sun::star::uno::Reference<com::sun::star::animations::XAnimationNode> &)
+    sd/inc/undoanim.hxx:55
+
+    sd::UndoAnimationPathImpl::UndoAnimationPathImpl(SdPage *,const com::sun::star::uno::Reference<com::sun::star::animations::XAnimationNode> &)
+    sd/source/core/undoanim.cxx:119
+
+    int sd::EffectSequenceHelper::getOffsetFromEffect(const std::shared_ptr<sd::CustomAnimationEffect> &) const
+    sd/inc/CustomAnimationEffect.hxx:324
+
+found cycle
+    sd::UndoAnimationPath::UndoAnimationPath(SdDrawDocument *,SdPage *,const com::sun::star::uno::Reference<com::sun::star::animations::XAnimationNode> &)
+    sd/inc/undoanim.hxx:55
+
+    std::shared_ptr<sd::CustomAnimationEffect> sd::EffectSequenceHelper::findEffect(const com::sun::star::uno::Reference<com::sun::star::animations::XAnimationNode> &) const
+    sd/inc/CustomAnimationEffect.hxx:288
+
+    sd::UndoAnimationPathImpl::UndoAnimationPathImpl(SdPage *,const com::sun::star::uno::Reference<com::sun::star::animations::XAnimationNode> &)
+    sd/source/core/undoanim.cxx:119
+
+found cycle
+    void GtkInstanceAssistant::find_sidebar(_GtkWidget *,void *)
+    vcl/unx/gtk3/gtk3gtkinst.cxx:4162
+
+    GtkInstanceAssistant::GtkInstanceAssistant(_GtkAssistant *,GtkInstanceBuilder *,bool)
+    vcl/unx/gtk3/gtk3gtkinst.cxx:4185
 
 found cycle
     void ScDPResultDimension::DumpState(const ScDPResultMember *,ScDocument *,ScAddress &) const
-    sc/inc/dptabres.hxx:583
+    sc/inc/dptabres.hxx:573
 
     void ScDPResultMember::DumpState(const ScDPResultMember *,ScDocument *,ScAddress &) const
-    sc/inc/dptabres.hxx:413
+    sc/inc/dptabres.hxx:405
 

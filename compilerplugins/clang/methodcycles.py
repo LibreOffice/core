@@ -33,7 +33,7 @@ def normalizeTypeParams( line ):
 # --------------------------------------------------------------------------------------------
 
 cnt = 0
-with io.open("workdir/loplugin.methodcycles.log2", "rb", buffering=1024*1024) as txt:
+with io.open("workdir/loplugin.methodcycles.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
         tokens = line.strip().split("\t")
         if tokens[0] == "definition:":
