@@ -40,6 +40,7 @@ namespace dbaui
 
         std::unique_ptr<OIndexCollection> m_xIndexes;
         std::unique_ptr<weld::TreeIter> m_xPreviousSelection;
+        bool                            m_bEditingActive;
         bool                            m_bEditAgain;
         bool                            m_bNoHandlerCall;
 
@@ -77,7 +78,7 @@ namespace dbaui
 
         DECL_LINK( OnIndexSelected, weld::TreeView&, void );
         DECL_LINK( OnIndexAction, const OString&, void );
-        DECL_STATIC_LINK(DbaIndexDialog, OnEntryEditing, const weld::TreeIter&, bool);
+        DECL_LINK( OnEntryEditing, const weld::TreeIter&, bool );
         DECL_LINK( OnEntryEdited, const IterString&, bool );
         DECL_LINK( OnModifiedClick, weld::Button&, void );
         DECL_LINK( OnModified, IndexFieldsControl&, void );
