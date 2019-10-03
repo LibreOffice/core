@@ -83,8 +83,6 @@ public:
                                          bool bChildrenOnDemand = false,
                                          sal_uLong nPos = TREELIST_APPEND, void* pUserData = nullptr ) override;
 
-    virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, sal_uLong nPos = TREELIST_APPEND,
-                                 sal_uInt16 nCol = 0xffff, void* pUserData = nullptr );
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, SvTreeListEntry* pParent,
                                  sal_uLong nPos, sal_uInt16 nCol, void* pUserData = nullptr );
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, const Image& rExpandedEntryBmp,
@@ -141,8 +139,6 @@ public:
     HeaderBar*      GetHeaderBar();
     static bool     IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol );
 
-    virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, sal_uLong nPos = TREELIST_APPEND,
-                                 sal_uInt16 nCol = 0xffff, void* pUserData = nullptr ) override;
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, SvTreeListEntry* pParent,
                                  sal_uLong nPos, sal_uInt16 nCol, void* pUserData = nullptr ) override;
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, const Image& rExpandedEntryBmp,
