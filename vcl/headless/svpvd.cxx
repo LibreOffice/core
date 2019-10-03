@@ -68,6 +68,46 @@ bool SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
     return SetSizeUsingBuffer(nNewDX, nNewDY, nullptr);
 }
 
+void SvpSalVirtualDevice::CreateSurface(long nNewDX, long nNewDY, sal_uInt8 *const pBuffer)
+{
+    m_aFrameSize = basegfx::B2IVector(nNewDX, nNewDY);
+
+    if (m_pSurface)
+    {
+        cairo_surface_destroy(m_pSurface);
+    }
+
+    if (m_eFormat == DeviceFormat::BITMASK)
+    {
+        m_pSurface = cairo_surface_create_similar(m_pRefSurface, CAIRO_CONTENT_ALPHA,
+                            nNewDX, nNewDY);
+    }
+    else if (pBuffer)
+    {
+        double fXScale, fYScale;
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            // Force scaling of the painting
+            fXScale = fYScale = comphelper::LibreOfficeKit::getDPIScale();
+        }
+        else
+        {
+            dl_cairo_surface_get_device_scale(m_pRefSurface, &fXScale, &fYScale);
+            nNewDX *= fXScale;
+            nNewDY *= fYScale;
+        }
+
+        m_pSurface = cairo_image_surface_create_for_data(pBuffer, CAIRO_FORMAT_ARGB32,
+                            nNewDX, nNewDY, cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nNewDX));
+
+        dl_cairo_surface_set_device_scale(m_pSurface, fXScale, fYScale);
+    }
+    else
+    {
+        m_pSurface = cairo_surface_create_similar(m_pRefSurface, CAIRO_CONTENT_COLOR_ALPHA, nNewDX, nNewDY);
+    }
+}
+
 bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
         sal_uInt8 *const pBuffer)
 {
@@ -77,44 +117,11 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
         nNewDY = 1;
 
     if (!m_pSurface || m_aFrameSize.getX() != nNewDX ||
-                       m_aFrameSize.getY() != nNewDY )
+                       m_aFrameSize.getY() != nNewDY)
     {
         m_aFrameSize = basegfx::B2IVector(nNewDX, nNewDY);
 
-        if (m_pSurface)
-        {
-            cairo_surface_destroy(m_pSurface);
-        }
-
-        if (m_eFormat == DeviceFormat::BITMASK)
-        {
-            m_pSurface = cairo_surface_create_similar(m_pRefSurface, CAIRO_CONTENT_ALPHA,
-                                nNewDX, nNewDY);
-        }
-        else if (pBuffer)
-        {
-            double fXScale, fYScale;
-            if (comphelper::LibreOfficeKit::isActive())
-            {
-                // Force scaling of the painting
-                fXScale = fYScale = comphelper::LibreOfficeKit::getDPIScale();
-            }
-            else
-            {
-                dl_cairo_surface_get_device_scale(m_pRefSurface, &fXScale, &fYScale);
-                nNewDX *= fXScale;
-                nNewDY *= fYScale;
-            }
-
-            m_pSurface = cairo_image_surface_create_for_data(pBuffer, CAIRO_FORMAT_ARGB32,
-                                nNewDX, nNewDY, cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nNewDX));
-
-            dl_cairo_surface_set_device_scale(m_pSurface, fXScale, fYScale);
-        }
-        else
-        {
-            m_pSurface = cairo_surface_create_similar(m_pRefSurface, CAIRO_CONTENT_COLOR_ALPHA, nNewDX, nNewDY);
-        }
+        CreateSurface(nNewDX, nNewDY, pBuffer);
 
         // update device in existing graphics
         for (auto const& graphic : m_aGraphics)
