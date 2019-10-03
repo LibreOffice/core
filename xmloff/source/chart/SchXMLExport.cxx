@@ -81,6 +81,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
@@ -109,10 +110,23 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::std::vector;
 
+
+struct SchXMLDataPointStruct
+{
+    OUString   maStyleName;
+    sal_Int32  mnRepeat;
+    sal_Int32  mnIndex; // index of data point
+
+    SchXMLDataPointStruct() : mnRepeat( 1 ) {}
+};
+
 // class SchXMLExportHelper_Impl
 
 class SchXMLExportHelper_Impl
 {
+private:
+    OUString getCustomLabelField(sal_Int32 nDataPointIndex,
+            const uno::Reference< chart2::XDataSeries >& rSeries) const;
 public:
     // first: data sequence for label, second: data sequence for values.
     typedef ::std::pair< css::uno::Reference< css::chart2::data::XDataSequence >,
@@ -920,14 +934,6 @@ bool lcl_exportDomainForThisSequence( const Reference< chart2::data::XDataSequen
 }
 
 } // anonymous namespace
-
-struct SchXMLDataPointStruct
-{
-    OUString   maStyleName;
-    sal_Int32  mnRepeat;
-
-    SchXMLDataPointStruct() : mnRepeat( 1 ) {}
-};
 
 // class SchXMLExportHelper
 
@@ -3232,6 +3238,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
 
                         SchXMLDataPointStruct aPoint;
                         aPoint.maStyleName = maAutoStyleNameQueue.front();
+                        aPoint.mnIndex = nElement;
                         maAutoStyleNameQueue.pop();
                         aDataPointVector.push_back( aPoint );
                     }
@@ -3259,6 +3266,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
             {
                 SchXMLDataPointStruct aPoint;
                 aPoint.mnRepeat = nCurrIndex - nLastIndex - 1;
+                aPoint.mnIndex = nCurrIndex;
                 aDataPointVector.push_back( aPoint );
             }
 
@@ -3291,6 +3299,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                         SAL_WARN_IF( maAutoStyleNameQueue.empty(), "xmloff.chart", "Autostyle queue empty!" );
                         SchXMLDataPointStruct aPoint;
                         aPoint.maStyleName = maAutoStyleNameQueue.front();
+                        aPoint.mnIndex = nCurrIndex;
                         maAutoStyleNameQueue.pop();
 
                         aDataPointVector.push_back( aPoint );
@@ -3306,6 +3315,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
 
             // if we get here the property states are empty
             SchXMLDataPointStruct aPoint;
+            aPoint.mnIndex = nCurrIndex;
             aDataPointVector.push_back( aPoint );
 
             nLastIndex = nCurrIndex;
@@ -3316,6 +3326,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         {
             SchXMLDataPointStruct aPoint;
             aPoint.mnRepeat = nRepeat;
+            aPoint.mnIndex = nLastIndex;
             aDataPointVector.push_back( aPoint );
         }
     }
@@ -3339,6 +3350,10 @@ void SchXMLExportHelper_Impl::exportDataPoints(
             aPoint.mnRepeat += aLastPoint.mnRepeat;
         else if( aLastPoint.mnRepeat > 0 )
         {
+            // export custom label text
+            OUString sLabel = getCustomLabelField(aPoint.mnIndex-1, xSeries);
+            if(!sLabel.isEmpty())
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CUSTOM_LABEL_FIELD, sLabel);
             // write last element
             if( !aLastPoint.maStyleName.isEmpty() )
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, aLastPoint.maStyleName );
@@ -3354,6 +3369,11 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     // write last element if it hasn't been written in last iteration
     if( aPoint.maStyleName == aLastPoint.maStyleName )
     {
+        // export custom label text
+        OUString sLabel = getCustomLabelField(aPoint.mnIndex, xSeries);
+        if(!sLabel.isEmpty())
+            mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CUSTOM_LABEL_FIELD, sLabel);
+
         if( !aLastPoint.maStyleName.isEmpty() )
             mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, aLastPoint.maStyleName );
 
@@ -3363,6 +3383,27 @@ void SchXMLExportHelper_Impl::exportDataPoints(
 
         SvXMLElementExport aPointElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, true, true );
     }
+}
+
+OUString SchXMLExportHelper_Impl::getCustomLabelField(sal_Int32 nDataPointIndex,
+            const uno::Reference< chart2::XDataSeries >& rSeries) const
+{
+    // export custom label text
+    if(Reference<beans::XPropertySet> xLabels = rSeries->getDataPointByIndex(nDataPointIndex); xLabels.is())
+    {
+        if(Any aAny = xLabels->getPropertyValue("CustomLabelFields"); aAny.hasValue())
+        {
+            Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aCustomLabels;
+            aAny >>= aCustomLabels;
+            OUString sLabel;
+            // TODO export formatted string instead of simple characters
+            for(auto& aLabel : aCustomLabels)
+                sLabel += aLabel->getString();
+            return sLabel;
+        }
+    }
+    SAL_WARN("xmloff.chart", "Data point has no properties");
+    return OUString{};
 }
 
 void SchXMLExportHelper_Impl::addPosition( const awt::Point & rPosition )

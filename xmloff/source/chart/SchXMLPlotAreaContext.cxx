@@ -609,6 +609,7 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     OUString sAutoStyleName;
     sal_Int32 nRepeat = 1;
+    OUString sCustomLabelField;
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
@@ -622,6 +623,10 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
                 sAutoStyleName = xAttrList->getValueByIndex( i );
             else if( IsXMLToken( aLocalName, XML_REPEATED ) )
                 nRepeat = xAttrList->getValueByIndex( i ).toInt32();
+            else if( IsXMLToken( aLocalName, XML_CUSTOM_LABEL_FIELD))
+            {
+                sCustomLabelField = xAttrList->getValueByIndex( i );
+            }
         }
     }
 
@@ -631,6 +636,7 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
             DataRowPointStyle::DATA_POINT,
             m_xSeries, mrIndex, nRepeat, sAutoStyleName );
         aStyle.mbSymbolSizeForSeriesIsMissingInFile = mbSymbolSizeForSeriesIsMissingInFile;
+        aStyle.msCustomLabelField = sCustomLabelField;
         mrStyleVector.push_back( aStyle );
     }
     mrIndex += nRepeat;
