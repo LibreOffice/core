@@ -94,7 +94,9 @@ public:
     bool ColValid() const;
     bool RowValid() const;
     bool TabValid() const;
-    /// In external references nTab is -1
+    /** In external references nTab is -1 if the external document was not
+        loaded but the sheet was cached, or >=0 if the external document was
+        loaded. */
     bool ValidExternal() const;
 
     ScAddress toAbs( const ScAddress& rPos ) const;
@@ -145,7 +147,8 @@ struct ScComplexRefData
     bool Valid() const;
 
     /** In external references nTab is -1 for the start tab and -1 for the end
-        tab if one sheet, or >=0 if more than one sheets. */
+        tab if one sheet and the external document was not loaded but sheet was
+        cached, or >=0 also if more than one sheets. */
     bool ValidExternal() const;
 
     /** Whether this references entire columns, A:A */
