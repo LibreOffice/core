@@ -61,7 +61,8 @@ class TestXIndexReplace(CollectionsTestBase):
             # expected is list
             self.assertEqual(None, captured)
             for i in range(10):
-                self.assertEqual(toCompare[i][0], index.LevelParagraphStyles.getByIndex(i)[0])
+                self.assertEqual(toCompare[i][0],
+                                 index.LevelParagraphStyles[i][0])
 
     # Tests syntax:
     #    obj[0] = val                # Replace by index

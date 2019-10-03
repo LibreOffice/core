@@ -68,7 +68,7 @@ class SWriterComp(XMain,unohelper.Base):
 
         table.setPropertyValue( "BackTransparent", uno.Bool(0) )
         table.setPropertyValue( "BackColor", 13421823 )
-        row = rows.getByIndex(0)
+        row = rows[0]
         row.setPropertyValue( "BackTransparent", uno.Bool(0) )
         row.setPropertyValue( "BackColor", 6710932 )
 

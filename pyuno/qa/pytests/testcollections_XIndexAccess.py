@@ -173,7 +173,7 @@ class TestXIndexAccess(CollectionsTestBase):
         footnote = getFootnoteInstance(doc)
         footnote.setLabel('foo')
         doc.Text.insertTextContent(cursor, footnote, 0)
-        footnote = doc.Footnotes.getByIndex(0)
+        footnote = doc.Footnotes[0]
 
         # When
         present = footnote in doc.Footnotes

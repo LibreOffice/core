@@ -44,7 +44,7 @@ class TestXNameAccess(CollectionsTestBase):
     def test_XNameAccess_ReadKey(self):
         # Given
         drw = self.createBlankDrawing()
-        drw.DrawPages.getByIndex(0).Name = 'foo'
+        drw.DrawPages[0].Name = 'foo'
 
         # When
         link = drw.Links['foo']
@@ -145,7 +145,7 @@ class TestXNameAccess(CollectionsTestBase):
     def test_XNameAccess_In(self):
         # Given
         drw = self.createBlankDrawing()
-        drw.DrawPages.getByIndex(0).Name = 'foo'
+        drw.DrawPages[0].Name = 'foo'
 
         # When
         present = 'foo' in drw.Links

@@ -33,7 +33,7 @@ class TestXCellRange(CollectionsTestBase):
     def test_XCellRange_Spreadsheet_Cell_00(self):
         # Given
         spr = self.createBlankSpreadsheet()
-        sht = spr.Sheets.getByIndex(0)
+        sht = spr.Sheets[0]
 
         # When
         cell = sht[0, 0]
@@ -57,7 +57,7 @@ class TestXCellRange(CollectionsTestBase):
         text_table.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
         doc.Text.insertTextContent(cursor, text_table, False)
-        tbl = doc.TextTables.getByIndex(0)
+        tbl = doc.TextTables[0]
 
         # When
         cell = tbl[0, 0]
@@ -75,7 +75,7 @@ class TestXCellRange(CollectionsTestBase):
     def test_XCellRange_Spreadsheet_Cell_37(self):
         # Given
         spr = self.createBlankSpreadsheet()
-        sht = spr.Sheets.getByIndex(0)
+        sht = spr.Sheets[0]
 
         # When
         rng = sht[3, 7]
@@ -99,7 +99,7 @@ class TestXCellRange(CollectionsTestBase):
         text_table.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
         doc.Text.insertTextContent(cursor, text_table, False)
-        tbl = doc.TextTables.getByIndex(0)
+        tbl = doc.TextTables[0]
 
         # When
         cell = tbl[3, 7]
@@ -116,7 +116,7 @@ class TestXCellRange(CollectionsTestBase):
     def test_XCellRange_Spreadsheet_Range_Index_Slice(self):
         # Given
         spr = self.createBlankSpreadsheet()
-        sht = spr.Sheets.getByIndex(0)
+        sht = spr.Sheets[0]
 
         # When
         rng = sht[0, 1:3]
@@ -141,7 +141,7 @@ class TestXCellRange(CollectionsTestBase):
         text_table.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
         doc.Text.insertTextContent(cursor, text_table, False)
-        tbl = doc.TextTables.getByIndex(0)
+        tbl = doc.TextTables[0]
         doc.lockControllers()
         tbl.DataArray = tuple(tuple(str(100 + y) for y in range(10*x, 10*x + 10)) for x in range(10))
         doc.unlockControllers()
@@ -161,7 +161,7 @@ class TestXCellRange(CollectionsTestBase):
     def test_XCellRange_Spreadsheet_Range_Slice_Index(self):
         # Given
         spr = self.createBlankSpreadsheet()
-        sht = spr.Sheets.getByIndex(0)
+        sht = spr.Sheets[0]
 
         # When
         rng = sht[1:3, 0]
@@ -186,7 +186,7 @@ class TestXCellRange(CollectionsTestBase):
         text_table.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
         doc.Text.insertTextContent(cursor, text_table, False)
-        tbl = doc.TextTables.getByIndex(0)
+        tbl = doc.TextTables[0]
         doc.lockControllers()
         tbl.DataArray = tuple(tuple(str(100 + y) for y in range(10*x, 10*x + 10)) for x in range(10))
         doc.unlockControllers()
@@ -206,7 +206,7 @@ class TestXCellRange(CollectionsTestBase):
     def test_XCellRange_Spreadsheet_Range_Slices(self):
         # Given
         spr = self.createBlankSpreadsheet()
-        sht = spr.Sheets.getByIndex(0)
+        sht = spr.Sheets[0]
 
         # When
         rng = sht[1:3, 3:5]
@@ -228,7 +228,7 @@ class TestXCellRange(CollectionsTestBase):
     def test_XCellRange_Spreadsheet_Range_Slices_Invalid(self):
         # Given
         spr = self.createBlankSpreadsheet()
-        sht = spr.Sheets.getByIndex(0)
+        sht = spr.Sheets[0]
 
         # When / Then
         with self.assertRaises(KeyError):
@@ -249,7 +249,7 @@ class TestXCellRange(CollectionsTestBase):
         text_table.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
         doc.Text.insertTextContent(cursor, text_table, False)
-        tbl = doc.TextTables.getByIndex(0)
+        tbl = doc.TextTables[0]
         doc.lockControllers()
         tbl.DataArray = tuple(tuple(str(100 + y) for y in range(10*x, 10*x + 10)) for x in range(10))
         doc.unlockControllers()
@@ -269,7 +269,7 @@ class TestXCellRange(CollectionsTestBase):
     def test_XCellRange_Spreadsheet_Range_Descriptor(self):
         # Given
         spr = self.createBlankSpreadsheet()
-        sht = spr.Sheets.getByIndex(0)
+        sht = spr.Sheets[0]
 
         # When
         rng = sht['A3:B4']
@@ -294,7 +294,7 @@ class TestXCellRange(CollectionsTestBase):
         text_table.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
         doc.Text.insertTextContent(cursor, text_table, False)
-        tbl = doc.TextTables.getByIndex(0)
+        tbl = doc.TextTables[0]
         doc.lockControllers()
         tbl.DataArray = tuple(tuple(str(100 + y) for y in range(10*x, 10*x + 10)) for x in range(10))
         doc.unlockControllers()
@@ -314,7 +314,7 @@ class TestXCellRange(CollectionsTestBase):
     def test_XCellRange_Spreadsheet_Range_Name(self):
         # Given
         spr = self.createBlankSpreadsheet()
-        sht = spr.Sheets.getByIndex(0)
+        sht = spr.Sheets[0]
         expr = '$' + sht.Name + '.$C2:F10'
         addr = CellAddress(Sheet=0, Row=1, Column=2)
         sht.NamedRanges.addNewByName('foo', expr, addr, 0)
@@ -338,7 +338,7 @@ class TestXCellRange(CollectionsTestBase):
     def test_XCellRange_Spreadsheet_Range_RowIndex(self):
         # Given
         spr = self.createBlankSpreadsheet()
-        sht = spr.Sheets.getByIndex(0)
+        sht = spr.Sheets[0]
 
         # When
         rng = sht[0]
@@ -359,7 +359,7 @@ class TestXCellRange(CollectionsTestBase):
     def test_XCellRange_Spreadsheet_Range_RowIndex_FullSlice(self):
         # Given
         spr = self.createBlankSpreadsheet()
-        sht = spr.Sheets.getByIndex(0)
+        sht = spr.Sheets[0]
 
         # When
         rng = sht[0, :]
@@ -380,7 +380,7 @@ class TestXCellRange(CollectionsTestBase):
     def test_XCellRange_Spreadsheet_Range_FullSlice_ColumnIndex(self):
         # Given
         spr = self.createBlankSpreadsheet()
-        sht = spr.Sheets.getByIndex(0)
+        sht = spr.Sheets[0]
 
         # When
         rng = sht[:, 0]
