@@ -48,6 +48,7 @@
 #include <svl/stritem.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/slstitm.hxx>
+#include <svl/intitem.hxx>
 
 static bool bLastRelative = false;
 
@@ -931,7 +932,7 @@ void SwSvxNumBulletTabDialog::PageCreated(const OString& rPageId, SfxTabPage& rP
         aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
 
         FieldUnit eMetric = ::GetDfltMetric(dynamic_cast< const SwWebDocShell *>( pDocShell ) !=  nullptr);
-        aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric) ) );
+        aSet.Put ( SfxUInt16Item(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric) ) );
         rPage.PageCreated(aSet);
     }
     else if (rPageId == "position")
@@ -939,7 +940,7 @@ void SwSvxNumBulletTabDialog::PageCreated(const OString& rPageId, SfxTabPage& rP
         SwDocShell* pDocShell = rWrtSh.GetView().GetDocShell();
         FieldUnit eMetric = ::GetDfltMetric(dynamic_cast< const SwWebDocShell *>( pDocShell ) !=  nullptr);
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-        aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)) );
+        aSet.Put ( SfxUInt16Item(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)) );
         rPage.PageCreated(aSet);
     }
 }

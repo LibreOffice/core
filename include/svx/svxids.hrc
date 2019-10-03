@@ -810,7 +810,7 @@ class SvxSetItem;
 #define SID_OBJECT_LIST                                 ( SID_SVX_START + 1021 )
 #define SID_ATTR_SET                                    ( SID_SVX_START + 1022 )
 #define SID_CHAR_FMT_LIST_BOX                           ( SID_SVX_START + 1023 )
-#define SID_METRIC_ITEM                                 ( SID_SVX_START + 1024 )
+#define SID_METRIC_ITEM                                 TypedWhichId<SfxUInt16Item>( SID_SVX_START + 1024 )
 #define SID_NUM_CHAR_FMT                                ( SID_SVX_START + 1025 )
 #define SID_BULLET_CHAR_FMT                             ( SID_SVX_START + 1026 )
 #define SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK    ( SID_SVX_START + 1027 )
