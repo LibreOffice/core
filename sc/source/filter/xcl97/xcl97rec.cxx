@@ -624,6 +624,19 @@ sal_Int32 VmlCommentExporter::StartShape()
     return nId;
 }
 
+static const char* lcl_GetHorAlignFromItemSetChar(const SfxItemSet& rItemSet)
+{
+    const char* nHorAlign = "Left";
+    switch (rItemSet.Get(EE_PARA_JUST).GetAdjust())
+    {
+        case SvxAdjust::Center:    nHorAlign = "Center";    break;
+        case SvxAdjust::Right:     nHorAlign = "Right";     break;
+        case SvxAdjust::Block:     nHorAlign = "Justify";   break;
+        default:                   nHorAlign = "Left";
+    }
+    return nHorAlign;
+}
+
 static const char* lcl_GetVerAlignFromItemSetChar( const SfxItemSet& rItemSet )
 {
     const char* nVerAlign = "Top";
@@ -648,6 +661,7 @@ void VmlCommentExporter::EndShape( sal_Int32 nShapeElement )
 
     // Getting comment text alignments
     const char* TVA = lcl_GetVerAlignFromItemSetChar(mpCaption->GetMergedItemSet());
+    const char* THA = lcl_GetHorAlignFromItemSetChar(mpCaption->GetMergedItemSet());
 
     pVmlDrawing->startElement(FSNS(XML_x, XML_ClientData), XML_ObjectType, "Note");
     pVmlDrawing->singleElement(FSNS(XML_x, XML_MoveWithCells));
@@ -655,6 +669,7 @@ void VmlCommentExporter::EndShape( sal_Int32 nShapeElement )
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Anchor ), pAnchor );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_AutoFill ), "False" );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_TextVAlign ), TVA );
+    XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_TextHAlign ), THA );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Row ), maScPos.Row() );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS(XML_x, XML_Column), sal_Int32(maScPos.Col()));
     if(mbVisible)
