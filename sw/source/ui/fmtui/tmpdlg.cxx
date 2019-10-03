@@ -309,7 +309,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
             SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
             FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebDocShell*>( pDocShell) !=  nullptr );
 
-            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
+            aSet.Put ( SfxUInt16Item(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
             rPage.PageCreated(aSet);
         }
     }
@@ -481,7 +481,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
 
         aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
         FieldUnit eMetric = ::GetDfltMetric(dynamic_cast< const SwWebDocShell *>( pDocShell ) !=  nullptr);
-        aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
+        aSet.Put ( SfxUInt16Item(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
         rPage.PageCreated(aSet);
     }
     else if (rId == "indents")
