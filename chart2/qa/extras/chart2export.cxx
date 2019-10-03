@@ -121,6 +121,7 @@ public:
     void testCombinedChartSecondaryAxisXLSX();
     void testCombinedChartSecondaryAxisODS();
     void testCrossBetweenXLSX();
+    void testCrossBetweenODS();
     void testAxisTitleRotationXLSX();
     void testAxisCrossBetweenXSLX();
     void testPieChartDataPointExplosionXLSX();
@@ -225,6 +226,7 @@ public:
     CPPUNIT_TEST(testCombinedChartSecondaryAxisXLSX);
     CPPUNIT_TEST(testCombinedChartSecondaryAxisODS);
     CPPUNIT_TEST(testCrossBetweenXLSX);
+    CPPUNIT_TEST(testCrossBetweenODS);
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
     CPPUNIT_TEST(testAxisCrossBetweenXSLX);
     CPPUNIT_TEST(testPieChartDataPointExplosionXLSX);
@@ -1907,6 +1909,15 @@ void Chart2ExportTest::testCrossBetweenXLSX()
 {
     // Original file was created with MS Office
     load("/chart2/qa/extras/data/xlsx/", "tdf127777.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:crossBetween", "val", "between");
+}
+
+void Chart2ExportTest::testCrossBetweenODS()
+{
+    // Original file was created with LibreOffice
+    load("/chart2/qa/extras/data/ods/", "test_CrossBetween.ods");
     xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:crossBetween", "val", "between");
