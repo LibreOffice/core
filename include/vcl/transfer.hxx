@@ -171,6 +171,8 @@ private:
     std::unique_ptr<TransferableObjectDescriptor>                             mxObjDesc;
 
 protected:
+    ~TransferableHelper();
+
     const css::uno::Reference< css::datatransfer::clipboard::XClipboard >&
         getOwnClipboard() const { return mxClipboard; }
 

@@ -64,7 +64,7 @@
 #include <vcl/pngwrite.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <memory>
-
+#include <utility>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -269,6 +269,18 @@ css::uno::Sequence<OUString> TransferableHelper::TerminateListener::getSupported
     return css::uno::Sequence<OUString>();
 }
 
+TransferableHelper::~TransferableHelper()
+{
+    css::uno::Reference<css::frame::XTerminateListener> listener;
+    {
+        const SolarMutexGuard aGuard;
+        std::swap(listener, mxTerminateListener);
+    }
+    if (listener.is()) {
+        Desktop::create(comphelper::getProcessComponentContext())->removeTerminateListener(
+            listener);
+    }
+}
 
 Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor )
 {
