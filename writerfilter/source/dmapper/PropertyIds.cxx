@@ -359,6 +359,11 @@ OUString getPropertyName( PropertyIds eId )
     return sName;
 }
 
+bool isCharacterProperty( const PropertyIds eId )
+{
+    return eId > PROP_CHARACTER_STYLES && eId < PROP_CHARACTER_END;
+}
+
 } //namespace dmapper
 } //namespace writerfilter
 

@@ -738,16 +738,8 @@ OUString DomainMapper_Impl::GetDefaultParaStyleName()
     return m_sDefaultParaStyleName;
 }
 
-/*-------------------------------------------------------------------------
-    returns the value from the current paragraph style - if available
-  -----------------------------------------------------------------------*/
-uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
+uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bPara)
 {
-    StyleSheetEntryPtr pEntry;
-    if( m_bInStyleSheetImport )
-        pEntry = GetStyleSheetTable()->GetCurrentEntry();
-    else
-        pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(GetCurrentParaStyleName());
     while(pEntry.get( ) )
     {
         if(pEntry->pProperties)
@@ -772,6 +764,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
         pEntry = pNewEntry;
     }
     // not found in style, try the document's DocDefault properties
+    if ( bPara )
     {
         const PropertyMapPtr& pDefaultParaProps = GetStyleSheetTable()->GetDefaultParaProps();
         if ( pDefaultParaProps )
@@ -780,6 +773,9 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
             if ( aProperty )
                 return aProperty->second;
         }
+    }
+    if ( isCharacterProperty(eId) )
+    {
         const PropertyMapPtr& pDefaultCharProps = GetStyleSheetTable()->GetDefaultCharProps();
         if ( pDefaultCharProps )
         {
@@ -791,6 +787,16 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
     return uno::Any();
 }
 
+uno::Any DomainMapper_Impl::GetPropertyFromParaStyleSheet(PropertyIds eId)
+{
+    StyleSheetEntryPtr pEntry;
+    if ( m_bInStyleSheetImport )
+        pEntry = GetStyleSheetTable()->GetCurrentEntry();
+    else
+        pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(GetCurrentParaStyleName());
+    return GetPropertyFromStyleSheet(eId, pEntry, /*bPara=*/true);
+}
+
 uno::Any DomainMapper_Impl::GetAnyProperty(PropertyIds eId, const PropertyMapPtr& rContext)
 {
     if ( rContext )
@@ -799,7 +805,7 @@ uno::Any DomainMapper_Impl::GetAnyProperty(PropertyIds eId, const PropertyMapPtr
         if ( aProperty )
             return aProperty->second;
     }
-    return GetPropertyFromStyleSheet(eId);
+    return GetPropertyFromParaStyleSheet(eId);
 }
 
 ListsManager::Pointer const & DomainMapper_Impl::GetListTable()
@@ -1607,19 +1613,19 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                         if ( !bTopSet )
                         {
-                            uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_TOP_MARGIN);
+                            uno::Any aMargin = GetPropertyFromParaStyleSheet(PROP_PARA_TOP_MARGIN);
                             if ( aMargin != uno::Any() )
                                 xParaProps->setPropertyValue("ParaTopMargin", aMargin);
                         }
                         if ( !bBottomSet )
                         {
-                            uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_BOTTOM_MARGIN);
+                            uno::Any aMargin = GetPropertyFromParaStyleSheet(PROP_PARA_BOTTOM_MARGIN);
                             if ( aMargin != uno::Any() )
                                 xParaProps->setPropertyValue("ParaBottomMargin", aMargin);
                         }
                         if ( !bContextSet )
                         {
-                            uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_CONTEXT_MARGIN);
+                            uno::Any aMargin = GetPropertyFromParaStyleSheet(PROP_PARA_CONTEXT_MARGIN);
                             if ( aMargin != uno::Any() )
                                 xParaProps->setPropertyValue("ParaContextMargin", aMargin);
                         }
@@ -1636,19 +1642,19 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     {
                         if ( !bLeftSet )
                         {
-                            uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_LEFT_MARGIN);
+                            uno::Any aMargin = GetPropertyFromParaStyleSheet(PROP_PARA_LEFT_MARGIN);
                             if ( aMargin != uno::Any() )
                                 xParaProps->setPropertyValue("ParaLeftMargin", aMargin);
                         }
                         if ( !bRightSet )
                         {
-                            uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_RIGHT_MARGIN);
+                            uno::Any aMargin = GetPropertyFromParaStyleSheet(PROP_PARA_RIGHT_MARGIN);
                             if ( aMargin != uno::Any() )
                                 xParaProps->setPropertyValue("ParaRightMargin", aMargin);
                         }
                         if ( !bFirstSet )
                         {
-                            uno::Any aMargin = GetPropertyFromStyleSheet(PROP_PARA_FIRST_LINE_INDENT);
+                            uno::Any aMargin = GetPropertyFromParaStyleSheet(PROP_PARA_FIRST_LINE_INDENT);
                             if ( aMargin != uno::Any() )
                                 xParaProps->setPropertyValue("ParaFirstLineIndent", aMargin);
                         }
@@ -4503,7 +4509,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                                         PropertyMapPtr pCharContext = GetTopContext();
                                         // dHeight is the font size of the current style.
                                         double dHeight = 0;
-                                        if ((GetPropertyFromStyleSheet(PROP_CHAR_HEIGHT) >>= dHeight) && dHeight != 0)
+                                        if ((GetPropertyFromParaStyleSheet(PROP_CHAR_HEIGHT) >>= dHeight) && dHeight != 0)
                                             // Character escapement should be given in negative percents for subscripts.
                                             pCharContext->Insert(PROP_CHAR_ESCAPEMENT, uno::makeAny( sal_Int16(- 100 * nDown / dHeight) ) );
                                         appendTextPortion(aContent, pCharContext);
