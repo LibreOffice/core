@@ -173,7 +173,7 @@ sal_uInt32 XMLTextListAutoStylePool::Find( const XMLTextListAutoStylePoolEntry_I
         uno::Any aAny1, aAny2;
         aAny1 <<= pEntry->GetNumRules();
 
-        for( sal_uLong nPos = 0; nPos < nCount; nPos++ )
+        for( sal_uInt32 nPos = 0; nPos < nCount; nPos++ )
         {
             aAny2 <<= (*pPool)[nPos]->GetNumRules();
 

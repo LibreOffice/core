@@ -134,7 +134,7 @@ VclPtr<ModulWindow> Shell::CreateBasWin( const ScriptDocument& rDocument, const 
 {
     bCreatingWindow = true;
 
-    sal_uLong nKey = 0;
+    sal_uInt16 nKey = 0;
     VclPtr<ModulWindow> pWin;
 
     OUString aLibName( rLibName );
@@ -192,7 +192,7 @@ VclPtr<ModulWindow> Shell::CreateBasWin( const ScriptDocument& rDocument, const 
             aModName += " (" + sObjName + ")";
         }
     }
-    pTabBar->InsertPage( static_cast<sal_uInt16>(nKey), aModName );
+    pTabBar->InsertPage( nKey, aModName );
     pTabBar->Sort();
     if(pWin)
     {

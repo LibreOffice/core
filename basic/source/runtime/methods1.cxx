@@ -2458,7 +2458,7 @@ static void CallFunctionAccessFunction( const Sequence< Any >& aArgs, const OUSt
 
 void SbRtl_SYD(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uLong nArgCount = rPar.Count()-1;
+    sal_uInt16 nArgCount = rPar.Count()-1;
 
     if ( nArgCount < 4 )
     {
@@ -2479,7 +2479,7 @@ void SbRtl_SYD(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_SLN(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uLong nArgCount = rPar.Count()-1;
+    sal_uInt16 nArgCount = rPar.Count()-1;
 
     if ( nArgCount < 3 )
     {
@@ -2499,7 +2499,7 @@ void SbRtl_SLN(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_Pmt(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uLong nArgCount = rPar.Count()-1;
+    sal_uInt16 nArgCount = rPar.Count()-1;
 
     if ( nArgCount < 3 || nArgCount > 5 )
     {
@@ -2541,7 +2541,7 @@ void SbRtl_Pmt(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_PPmt(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uLong nArgCount = rPar.Count()-1;
+    sal_uInt16 nArgCount = rPar.Count()-1;
 
     if ( nArgCount < 4 || nArgCount > 6 )
     {
@@ -2585,7 +2585,7 @@ void SbRtl_PPmt(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_PV(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uLong nArgCount = rPar.Count()-1;
+    sal_uInt16 nArgCount = rPar.Count()-1;
 
     if ( nArgCount < 3 || nArgCount > 5 )
     {
@@ -2627,7 +2627,7 @@ void SbRtl_PV(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_NPV(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uLong nArgCount = rPar.Count()-1;
+    sal_uInt16 nArgCount = rPar.Count()-1;
 
     if ( nArgCount < 1 || nArgCount > 2 )
     {
@@ -2652,7 +2652,7 @@ void SbRtl_NPV(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_NPer(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uLong nArgCount = rPar.Count()-1;
+    sal_uInt16 nArgCount = rPar.Count()-1;
 
     if ( nArgCount < 3 || nArgCount > 5 )
     {
@@ -2694,7 +2694,7 @@ void SbRtl_NPer(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_MIRR(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uLong nArgCount = rPar.Count()-1;
+    sal_uInt16 nArgCount = rPar.Count()-1;
 
     if ( nArgCount < 3 )
     {
@@ -2722,7 +2722,7 @@ void SbRtl_MIRR(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_IRR(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uLong nArgCount = rPar.Count()-1;
+    sal_uInt16 nArgCount = rPar.Count()-1;
 
     if ( nArgCount < 1 || nArgCount > 2 )
     {
@@ -2756,7 +2756,7 @@ void SbRtl_IRR(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_IPmt(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uLong nArgCount = rPar.Count()-1;
+    sal_uInt16 nArgCount = rPar.Count()-1;
 
     if ( nArgCount < 4 || nArgCount > 6 )
     {
@@ -2800,7 +2800,7 @@ void SbRtl_IPmt(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_FV(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uLong nArgCount = rPar.Count()-1;
+    sal_uInt16 nArgCount = rPar.Count()-1;
 
     if ( nArgCount < 3 || nArgCount > 5 )
     {
@@ -2842,7 +2842,7 @@ void SbRtl_FV(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_DDB(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uLong nArgCount = rPar.Count()-1;
+    sal_uInt16 nArgCount = rPar.Count()-1;
 
     if ( nArgCount < 4 || nArgCount > 5 )
     {
@@ -2878,7 +2878,7 @@ void SbRtl_DDB(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_Rate(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uLong nArgCount = rPar.Count()-1;
+    sal_uInt16 nArgCount = rPar.Count()-1;
 
     if ( nArgCount < 3 || nArgCount > 6 )
     {

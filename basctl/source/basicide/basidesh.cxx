@@ -732,8 +732,8 @@ void Shell::RemoveWindow( BaseWindow* pWindow_, bool bDestroy, bool bAllowChange
     VclPtr<BaseWindow> pWindowTmp( pWindow_ );
 
     DBG_ASSERT( pWindow_, "Cannot delete NULL-Pointer!" );
-    sal_uLong nKey = GetWindowId( pWindow_ );
-    pTabBar->RemovePage( static_cast<sal_uInt16>(nKey) );
+    sal_uInt16 nKey = GetWindowId( pWindow_ );
+    pTabBar->RemovePage( nKey );
     aWindowTable.erase( nKey );
     if ( pWindow_ == pCurWin )
     {
