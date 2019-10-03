@@ -504,6 +504,37 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Mirror)
     CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
 }
 
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126060_3D_Z_Rotation)
+{
+    // The document contains one textbox with inside overflowed text
+    // and the text has 3D z rotation. When we open the document we
+    // should see the text vertically and rotated from text bound center not text box.
+
+    const OUString sFileName("tdf126060_3D_Z_Rotation.pptx");
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+    OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
+
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    SdrObjCustomShape& rSdrObjCustomShape(
+        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+
+    if (rSdrObjCustomShape.GetCameraRotation() != 90)
+        sErrors += "Wrong text camera Z rotation";
+
+    basegfx::B2DHomMatrix aObjectTransform;
+    basegfx::B2DPolyPolygon aObjectPolyPolygon;
+    rSdrObjCustomShape.TRGetBaseGeometry(aObjectTransform, aObjectPolyPolygon);
+
+    if (aObjectTransform.get(0, 0) != 1492 || aObjectTransform.get(0, 1) != 0
+        || aObjectTransform.get(0, 2) != 1129 || aObjectTransform.get(1, 0) != 0
+        || aObjectTransform.get(1, 1) != 2500 || aObjectTransform.get(1, 2) != 5846)
+        sErrors += " Wrong transformation matrix";
+
+    CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
+}
+
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Asymmetric)
 {
     // The document contains a shapes with vertical flip and text frame asymmetrical

@@ -142,6 +142,7 @@ public:
 
     double GetObjectRotation() const { return fObjectRotation;}
     double GetExtraTextRotation( const bool bPreRotation = false ) const;
+    double GetCameraRotation() const;
 
     SdrObjCustomShape(SdrModel& rSdrModel);
 

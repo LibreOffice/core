@@ -510,6 +510,7 @@ Text
 TextAutoGrowHeight
 TextBox
 TextBreak
+TextCameraZRotateAngle
 TextColor
 TextFitToSize
 TextFrames
