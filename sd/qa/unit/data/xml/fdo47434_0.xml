@@ -29,6 +29,7 @@
   <CustomShapeGeometry>
    <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="mso-spt32" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="AdjustmentValues">
@@ -91,6 +92,7 @@
   <CustomShapeGeometry>
    <PropertyValue name="MirroredX" value="true" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="mso-spt32" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="AdjustmentValues">
@@ -153,6 +155,7 @@
   <CustomShapeGeometry>
    <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="mso-spt32" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="AdjustmentValues">
@@ -215,6 +218,7 @@
   <CustomShapeGeometry>
    <PropertyValue name="MirroredX" value="true" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="mso-spt32" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="AdjustmentValues">
