@@ -235,14 +235,18 @@ void SvpSalInstance::DestroyObject( SalObject* pObject )
 
 #ifndef IOS
 
-std::unique_ptr<SalVirtualDevice> SvpSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
+std::unique_ptr<SalVirtualDevice> SvpSalInstance::CreateVirtualDevice(SalGraphics* pGraphics,
                                                        long &nDX, long &nDY,
                                                        DeviceFormat eFormat,
-                                                       const SystemGraphicsData* /* pData */ )
+                                                       const SystemGraphicsData* pGd)
 {
     SvpSalGraphics *pSvpSalGraphics = dynamic_cast<SvpSalGraphics*>(pGraphics);
     assert(pSvpSalGraphics);
-    std::unique_ptr<SalVirtualDevice> pNew(new SvpSalVirtualDevice(eFormat, pSvpSalGraphics->getSurface()));
+    // tdf#127529 normally pPreExistingTarget is null and we are a true virtualdevice drawing to a backing buffer.
+    // Occasionally, for canvas/slideshow, pPreExistingTarget is pre-provided as a hack to use the vcl drawing
+    // apis to render onto a preexisting cairo surface. The necessity for that precedes the use of cairo in vcl proper
+    cairo_surface_t* pPreExistingTarget = pGd ? static_cast<cairo_surface_t*>(pGd->pSurface) : nullptr;
+    std::unique_ptr<SalVirtualDevice> pNew(new SvpSalVirtualDevice(eFormat, pSvpSalGraphics->getSurface(), pPreExistingTarget));
     pNew->SetSize( nDX, nDY );
     return pNew;
 }

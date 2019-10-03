@@ -25,8 +25,9 @@
 class VCL_DLLPUBLIC Qt5SvpVirtualDevice : public SvpSalVirtualDevice
 {
 public:
-    Qt5SvpVirtualDevice(DeviceFormat eFormat, cairo_surface_t* pRefSurface)
-        : SvpSalVirtualDevice(eFormat, pRefSurface)
+    Qt5SvpVirtualDevice(DeviceFormat eFormat, cairo_surface_t* pRefSurface,
+                        cairo_surface_t* pPreExistingTarget)
+        : SvpSalVirtualDevice(eFormat, pRefSurface, pPreExistingTarget)
     {
     }
 

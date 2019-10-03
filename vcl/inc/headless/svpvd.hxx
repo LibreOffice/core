@@ -34,14 +34,17 @@ class VCL_DLLPUBLIC SvpSalVirtualDevice : public SalVirtualDevice
     DeviceFormat const                  m_eFormat;
     cairo_surface_t* const              m_pRefSurface;
     cairo_surface_t*                    m_pSurface;
+    bool                                m_bOwnsSurface; // nearly always true, except for edge case of tdf#127529
     basegfx::B2IVector                  m_aFrameSize;
     std::vector< SvpSalGraphics* >      m_aGraphics;
+
+    void CreateSurface(long nNewDX, long nNewDY, sal_uInt8 *const pBuffer);
 
 protected:
     SvpSalGraphics* AddGraphics(SvpSalGraphics* aGraphics);
 
 public:
-    SvpSalVirtualDevice(DeviceFormat eFormat, cairo_surface_t* pRefSurface);
+    SvpSalVirtualDevice(DeviceFormat eFormat, cairo_surface_t* pRefSurface, cairo_surface_t* pPreExistingTarget);
     virtual ~SvpSalVirtualDevice() override;
 
     // SalVirtualDevice

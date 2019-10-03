@@ -334,10 +334,12 @@ std::unique_ptr<SalVirtualDevice> GtkInstance::CreateVirtualDevice( SalGraphics 
 {
     EnsureInit();
 #if GTK_CHECK_VERSION(3,0,0)
-    (void) pGd;
     SvpSalGraphics *pSvpSalGraphics = dynamic_cast<SvpSalGraphics*>(pG);
     assert(pSvpSalGraphics);
-    std::unique_ptr<SalVirtualDevice> pNew(new SvpSalVirtualDevice(eFormat, pSvpSalGraphics->getSurface()));
+    // tdf#127529 see SvpSalInstance::CreateVirtualDevice for the rare case of a non-null pPreExistingTarget
+    cairo_surface_t* pPreExistingTarget
+        = pGd ? static_cast<cairo_surface_t*>(pGd->pSurface) : nullptr;
+    std::unique_ptr<SalVirtualDevice> pNew(new SvpSalVirtualDevice(eFormat, pSvpSalGraphics->getSurface(), pPreExistingTarget));
     pNew->SetSize( nDX, nDY );
     return pNew;
 #else
