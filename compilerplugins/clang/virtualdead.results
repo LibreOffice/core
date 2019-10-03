@@ -31,6 +31,9 @@ Gui/qaccessible.h:613
 Gui/qaccessible.h:619
     void QAccessibleTableInterface::modelChange(class QAccessibleTableModelChangeEvent *,)
     empty
+include/basegfx/utils/unopolypolygon.hxx:97
+    void basegfx::unotools::UnoPolyPolygon::modifying()const
+    empty
 include/canvas/base/bitmapcanvasbase.hxx:80
     unsigned char canvas::BitmapCanvasBase::hasAlpha()
     1
@@ -52,6 +55,9 @@ include/canvas/base/graphicdevicebase.hxx:319
 include/connectivity/sdbcx/IRefreshable.hxx:31
     void connectivity::sdbcx::IRefreshableGroups::refreshGroups()
     empty
+include/dbaccess/ToolBoxHelper.hxx:56
+    void dbaui::OToolBoxHelper::setImageList(short,)
+    empty
 include/filter/msfilter/msdffimp.hxx:546
     _Bool SvxMSDffManager::ShapeHasText(unsigned long,unsigned long,)const
     1
@@ -66,6 +72,9 @@ include/svl/svdde.hxx:239
     0
 include/svl/svdde.hxx:241
     _Bool DdeTopic::MakeItem(const class rtl::OUString &,)
+    0
+include/svl/svdde.hxx:244
+    _Bool DdeTopic::StartAdviseLoop()
     0
 include/svtools/unoevent.hxx:199
     unsigned short SvEventDescriptor::getMacroItemWhich()const
@@ -82,7 +91,9 @@ include/unotools/desktopterminationobserver.hxx:35
 include/vbahelper/vbahelperinterface.hxx:77
     int InheritedHelperInterfaceImpl::getCreator()
     1400204879
-    unknown2
+include/vcl/tabpage.hxx:51
+    void TabPage::DeactivatePage()
+    empty
 sc/source/core/opencl/formulagroupcl.cxx:1059
     void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
     empty

@@ -52,7 +52,6 @@ namespace dbaui
             if ( nCurSymbolsSize != m_nSymbolsSize )
             {
                 m_nSymbolsSize  = nCurSymbolsSize;
-                setImageList(m_nSymbolsSize);
 
                 Size aTbOldSize = m_pToolBox->GetSizePixel();
                 adjustToolBoxSize(m_pToolBox);

@@ -125,12 +125,6 @@ namespace rptui
         virtual ~Condition() override;
         virtual void dispose() override;
 
-        /** will be called when the id of the image list needs to change.
-            @param  _eBitmapSet
-                <svtools/imgdef.hxx>
-        */
-        virtual void setImageList(sal_Int16 _eBitmapSet) override;
-
         /** will be called when the controls need to be resized.
         */
         virtual void resizeControls(const Size& _rDiff) override;
