@@ -34,16 +34,21 @@ endef
 
 # CObject class
 
+# $(call gb_CObject__compiler,flags,source)
+define gb_CObject__compiler
+	$(if $(filter YES,$(LIBRARY_X64)), $(CXX_X64_BINARY), \
+		$(if $(filter YES,$(PE_X86)), $(CXX_X86_BINARY), \
+			$(if $(filter %.c,$(2)), $(gb_CC), \
+				$(if $(filter -clr,$(1)), \
+					$(MSVC_CXX) -I$(SRCDIR)/solenv/clang-cl,$(gb_CXX)))))
+endef
+
 # $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,symbols)
 define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	unset INCLUDE && \
-	$(if $(filter YES,$(LIBRARY_X64)), $(CXX_X64_BINARY), \
-		$(if $(filter YES,$(PE_X86)), $(CXX_X86_BINARY), \
-			$(if $(filter %.c,$(3)), $(gb_CC), \
-				$(if $(filter -clr,$(2)), \
-					$(MSVC_CXX) -I$(SRCDIR)/solenv/clang-cl,$(gb_CXX))))) \
+	$(call gb_CObject__compiler,$(2),$(3)) \
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
 		$(if $(WARNINGS_DISABLED),$(call gb_Helper_disable_warnings,$(2)),$(2)) \
@@ -81,7 +86,7 @@ $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2),$(7))) && \
 	unset INCLUDE && \
-	$(gb_CXX) \
+	$(call gb_CObject__compiler,$(4) $(5),$(3)) \
 		$(if $(WARNINGS_DISABLED),$(call gb_Helper_disable_warnings,$(4) $(5)),$(4) $(5)) \
 		-Fd$(PDBFILE) \
 		$(if $(EXTERNAL_CODE),$(if $(COM_IS_CLANG),-Wno-undef),$(gb_DEFS_INTERNAL)) \
