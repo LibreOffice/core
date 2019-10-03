@@ -43,15 +43,23 @@ define gb_CObject__compiler
 					$(MSVC_CXX) -I$(SRCDIR)/solenv/clang-cl,$(gb_CXX)))))
 endef
 
+# Avoid annoying warning D9025 about overriding command-line arguments.
+gb_Helper_remove_overriden_flags = \
+    $(filter-out -W4 -w -arch:SSE -arch:AVX2 -Od -O2,$(1)) \
+    $(lastword $(filter -W4 -w,$(1))) \
+    $(lastword $(filter -Od -O2,$(1))) \
+    $(lastword $(filter -arch:SSE -arch:AVX2,$(1)))
+
 # $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,symbols)
 define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	unset INCLUDE && \
-	$(call gb_CObject__compiler,$(2),$(3)) \
+	$(filter-out -arch:SSE,$(call gb_CObject__compiler,$(2),$(3))) \
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
-		$(if $(WARNINGS_DISABLED),$(call gb_Helper_disable_warnings,$(2)),$(2)) \
+		$(call gb_Helper_remove_overriden_flags,$(filter -arch:SSE,$(call gb_CObject__compiler,$(2),$(3))) \
+			$(2) $(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS))) \
 		$(if $(EXTERNAL_CODE), \
 			$(if $(filter -clr,$(2)),,$(if $(COM_IS_CLANG),-Wno-undef)), \
 			$(gb_DEFS_INTERNAL)) \
@@ -86,8 +94,9 @@ $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2),$(7))) && \
 	unset INCLUDE && \
-	$(call gb_CObject__compiler,$(4) $(5),$(3)) \
-		$(if $(WARNINGS_DISABLED),$(call gb_Helper_disable_warnings,$(4) $(5)),$(4) $(5)) \
+	$(filter-out -arch:SSE,$(call gb_CObject__compiler,$(4) $(5),$(3))) \
+		$(call gb_Helper_remove_overriden_flags,$(filter -arch:SSE,$(call gb_CObject__compiler,$(4) $(5),$(3))) \
+			$(4) $(5) $(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS))) \
 		-Fd$(PDBFILE) \
 		$(if $(EXTERNAL_CODE),$(if $(COM_IS_CLANG),-Wno-undef),$(gb_DEFS_INTERNAL)) \
 		$(gb_LTOFLAGS) \
