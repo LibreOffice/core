@@ -308,9 +308,9 @@ ifeq ($(OS),iOS)
 # behaviour in the source code... Compiling this source file with
 # optimization causes some Smart Art images to end up with completely
 # wrong colour, some even totally black.
-$(eval $(call gb_Library_add_cxxobjects,oox,\
+$(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/color \
-    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
+    , $(gb_COMPILERNOOPTFLAGS) \
 ))
 else
 $(eval $(call gb_Library_add_exception_objects,oox,\
