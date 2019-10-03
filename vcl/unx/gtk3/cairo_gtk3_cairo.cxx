@@ -108,7 +108,8 @@ namespace cairo
 
     VclPtr<VirtualDevice> Gtk3Surface::createVirtualDevice() const
     {
-        return VclPtrInstance<VirtualDevice>(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
+        //TODO allow creating a VirtualDevice to draw to the current surface
+        return VclPtrInstance<VirtualDevice>(DeviceFormat::DEFAULT);
     }
 
 }
