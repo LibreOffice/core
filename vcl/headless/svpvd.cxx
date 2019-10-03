@@ -31,17 +31,19 @@
 
 using namespace basegfx;
 
-SvpSalVirtualDevice::SvpSalVirtualDevice(DeviceFormat eFormat, cairo_surface_t* pRefSurface)
+SvpSalVirtualDevice::SvpSalVirtualDevice(DeviceFormat eFormat, cairo_surface_t* pRefSurface, cairo_surface_t* pPreExistingTarget)
     : m_eFormat(eFormat)
     , m_pRefSurface(pRefSurface)
-    , m_pSurface(nullptr)
+    , m_pSurface(pPreExistingTarget)
+    , m_bOwnsSurface(!pPreExistingTarget)
 {
     cairo_surface_reference(m_pRefSurface);
 }
 
 SvpSalVirtualDevice::~SvpSalVirtualDevice()
 {
-    cairo_surface_destroy(m_pSurface);
+    if (m_bOwnsSurface)
+        cairo_surface_destroy(m_pSurface);
     cairo_surface_destroy(m_pRefSurface);
 }
 
@@ -70,8 +72,6 @@ bool SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
 
 void SvpSalVirtualDevice::CreateSurface(long nNewDX, long nNewDY, sal_uInt8 *const pBuffer)
 {
-    m_aFrameSize = basegfx::B2IVector(nNewDX, nNewDY);
-
     if (m_pSurface)
     {
         cairo_surface_destroy(m_pSurface);
@@ -121,7 +121,10 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
     {
         m_aFrameSize = basegfx::B2IVector(nNewDX, nNewDY);
 
-        CreateSurface(nNewDX, nNewDY, pBuffer);
+        if (m_bOwnsSurface)
+            CreateSurface(nNewDX, nNewDY, pBuffer);
+
+        assert(m_pSurface);
 
         // update device in existing graphics
         for (auto const& graphic : m_aGraphics)

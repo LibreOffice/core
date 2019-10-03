@@ -19,6 +19,18 @@
 #include <vcl/window.hxx>
 #include <basegfx/vector/b2isize.hxx>
 
+namespace
+{
+Size get_surface_size(cairo_surface_t* surface)
+{
+    cairo_t* cr = cairo_create(surface);
+    double x1, x2, y1, y2;
+    cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
+    cairo_destroy(cr);
+    return Size(x2 - x1, y2 - y1);
+}
+}
+
 namespace cairo
 {
 Qt5SvpSurface::Qt5SvpSurface(const CairoSurfaceSharedPtr& pSurface)
@@ -65,8 +77,13 @@ void Qt5SvpSurface::flush() const
 
 VclPtr<VirtualDevice> Qt5SvpSurface::createVirtualDevice() const
 {
-    //TODO allow creating a VirtualDevice to draw to the current surface
-    return VclPtrInstance<VirtualDevice>(DeviceFormat::DEFAULT);
+    SystemGraphicsData aSystemGraphicsData;
+
+    aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
+    aSystemGraphicsData.pSurface = m_pSurface.get();
+
+    return VclPtr<VirtualDevice>::Create(aSystemGraphicsData, get_surface_size(m_pSurface.get()),
+                                         DeviceFormat::DEFAULT);
 }
 
 } // namespace cairo
