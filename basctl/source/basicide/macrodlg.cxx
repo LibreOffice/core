@@ -172,7 +172,6 @@ void MacroChooser::RestoreMacroDescription()
 short MacroChooser::run()
 {
     RestoreMacroDescription();
-    m_xRunButton->grab_focus();
 
     // #104198 Check if "wrong" document is active
     bool bSelectedEntry = m_xBasicBox->get_cursor(m_xBasicBoxIter.get());
@@ -208,6 +207,9 @@ short MacroChooser::run()
 
     CheckButtons();
     UpdateFields();
+
+    // tdf#62955 - Allow searching a name with typing the first letter
+    m_xBasicBox->get_widget().grab_focus();
 
     if ( StarBASIC::IsRunning() )
         m_xCloseButton->grab_focus();
