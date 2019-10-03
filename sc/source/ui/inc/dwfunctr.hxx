@@ -19,12 +19,28 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DWFUNCTR_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DWFUNCTR_HXX
 
+#include <comphelper/configurationlistener.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 
 class ScFuncDesc;
 namespace formula { class IFunctionDescription; }
+
+class ScFunctionWin;
+
+class EnglishFunctionNameChange : public comphelper::ConfigurationListenerProperty<bool>
+{
+    VclPtr<ScFunctionWin> m_xFunctionWin;
+protected:
+    virtual void setProperty(const css::uno::Any &rProperty) override;
+public:
+    EnglishFunctionNameChange(const rtl::Reference<comphelper::ConfigurationListener> &rListener, ScFunctionWin* pFunctionWin)
+        : ConfigurationListenerProperty(rListener, "EnglishFunctionName")
+        , m_xFunctionWin(pFunctionWin)
+    {
+    }
+};
 
 class ScFunctionWin : public PanelLayout
 {
@@ -35,12 +51,13 @@ private:
 
     VclPtr<PushButton>  aInsertButton;
     VclPtr<FixedText>   aFiFuncDesc;
+    rtl::Reference<comphelper::ConfigurationListener> xConfigListener;
+    std::unique_ptr<EnglishFunctionNameChange> xConfigChange;
     const ScFuncDesc*   pFuncDesc;
     sal_uInt16          nArgs;
 
     ::std::vector< const formula::IFunctionDescription*> aLRUList;
 
-    void            UpdateFunctionList();
     void            UpdateLRUList();
     void            DoEnter();
     void            SetDescription();
@@ -56,6 +73,7 @@ public:
     virtual void    dispose() override;
 
     void            InitLRUList();
+    void            UpdateFunctionList();
 };
 
 #endif
