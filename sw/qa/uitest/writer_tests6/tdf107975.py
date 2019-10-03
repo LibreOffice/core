@@ -51,7 +51,7 @@ class tdf107975(UITestCase):
         self.assertEqual(writer_doc.getGraphicObjects().getCount(), 1)
 
         # try again with anchor at start of doc which is another special case
-        xShape = writer_doc.getGraphicObjects().getByIndex(0)
+        xShape = writer_doc.getGraphicObjects()[0]
         xStart = writer_doc.getText().getStart()
         xShape.attach(xStart)
 

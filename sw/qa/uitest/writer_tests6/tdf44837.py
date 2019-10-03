@@ -39,7 +39,7 @@ class tdf44837(UITestCase):
         self.ui_test.close_dialog_through_button(xcloseBtn)
 
         self.assertEqual(document.Text.String[0:8], "bsd bsd")
-        self.assertEqual(len(document.CurrentSelection.getByIndex(0).String) > 1, True)
+        self.assertEqual(len(document.CurrentSelection[0].String) > 1, True)
         #follow-up bug 125663
         self.ui_test.close_doc()
 
