@@ -73,7 +73,7 @@ ScaleData AxisHelper::createDefaultScale()
     ScaleData aScaleData;
     aScaleData.AxisType = chart2::AxisType::REALNUMBER;
     aScaleData.AutoDateAxis = true;
-    aScaleData.ShiftedCategoryPosition = false;//this is adapted in the view code currently
+    aScaleData.ShiftedCategoryPosition = false;
     Sequence< SubIncrement > aSubIncrements(1);
     aSubIncrements[0] = SubIncrement();
     aScaleData.IncrementData.SubIncrements = aSubIncrements;
