@@ -4,16 +4,19 @@ chart2/source/view/inc/PlottingPositionHelper.hxx:206
 connectivity/source/inc/dbase/dindexnode.hxx:125
     connectivity::dbase::ONDXPage bNoDelete
     unsigned int
-cui/source/inc/cfg.hxx:244
+cui/source/inc/cfg.hxx:231
     SvxConfigEntry nId
     sal_uInt16
-desktop/source/app/main.c:29
-    /media/noel/disk2/libo4/desktop/source/app/main.c g_Exiting
+dbaccess/source/ui/inc/tabletree.hxx:149
+    dbaui::TableTreeListBox m_nTextColumn
     int
-editeng/source/misc/hangulhanja.cxx:80
+desktop/source/app/main.c:29
+    /media/disk2/libo4/desktop/source/app/main.c g_Exiting
+    int
+editeng/source/misc/hangulhanja.cxx:79
     editeng::HangulHanjaConversion_Impl m_eConvType
     class HangulHanjaConversion::ConversionType
-editeng/source/misc/svxacorr.cxx:231
+editeng/source/misc/svxacorr.cxx:234
     GetIgnoreTranslWrapper bIsInit
     int
 filter/source/graphicfilter/eps/eps.cxx:142
@@ -40,7 +43,7 @@ include/vcl/headbar.hxx:213
 include/vcl/headbar.hxx:214
     HeaderBar mnBorderOff2
     long
-jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:190
+jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:191
     (anonymous) g_bInGetJavaVM
     sig_atomic_t
 libreofficekit/source/gtk/tilebuffer.hxx:219
@@ -55,26 +58,26 @@ sc/source/filter/inc/stylesbuffer.hxx:290
 sc/source/filter/inc/stylesbuffer.hxx:292
     oox::xls::ApiAlignmentData mnVerJustifyMethod
     sal_Int32
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1080
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1025
     ScPagePreviewCountData nHeaders
     long
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1081
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1026
     ScPagePreviewCountData nTables
     long
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1083
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1028
     ScPagePreviewCountData nFooters
     long
 sc/source/ui/vba/vbahyperlink.hxx:83
     ScVbaHyperlink mnType
     long
-sd/qa/unit/tiledrendering/tiledrendering.cxx:966
+sd/qa/unit/tiledrendering/tiledrendering.cxx:956
     ViewCallback m_nPart
     int
-soltools/cpp/_tokens.c:34
-    /media/noel/disk2/libo4/soltools/cpp/_tokens.c EBCDIC_ExternTokenDetected
-    int
 soltools/cpp/_tokens.c:35
-    /media/noel/disk2/libo4/soltools/cpp/_tokens.c EBCDIC_StartTokenDetected
+    /media/disk2/libo4/soltools/cpp/_tokens.c EBCDIC_ExternTokenDetected
+    int
+soltools/cpp/_tokens.c:36
+    /media/disk2/libo4/soltools/cpp/_tokens.c EBCDIC_StartTokenDetected
     int
 soltools/cpp/cpp.h:121
     includelist always
@@ -85,38 +88,35 @@ svx/source/inc/cell.hxx:205
 svx/source/table/tablertfimporter.cxx:55
     sdr::table::RTFCellDefault mnRowSpan
     sal_Int32
-sw/source/filter/ww8/docxexport.hxx:100
+sw/source/filter/ww8/docxexport.hxx:98
     DocxExport m_nHeadersFootersInSection
     sal_Int32
-sw/source/filter/ww8/ww8scan.hxx:65
+sw/source/filter/ww8/ww8scan.hxx:58
     SprmInfo nVari
     unsigned int
 sw/source/uibase/inc/tautofmt.hxx:48
     SwAutoFormatDlg m_nDfltStylePos
     sal_uInt8
-vcl/inc/canvasbitmap.hxx:57
-    vcl::unotools::VclCanvasBitmap m_nEndianness
-    sal_Int8
-vcl/inc/unx/i18n_ic.hxx:33
+vcl/inc/unx/i18n_ic.hxx:32
     SalI18N_InputContext mbUseable
     int
-vcl/inc/unx/salframe.h:130
+vcl/inc/unx/salframe.h:128
     X11SalFrame mbInputFocus
     int
-vcl/unx/generic/app/saldata.cxx:466
+vcl/unx/generic/app/saldata.cxx:449
     EmitFontpathWarning bOnce
     int
-vcl/unx/generic/app/saldata.cxx:519
+vcl/unx/generic/app/saldata.cxx:502
     X11SalData::XError bOnce
     int
-vcl/unx/generic/app/sm.cxx:186
-    /media/noel/disk2/libo4/vcl/unx/generic/app/sm.cxx nSmDel
+vcl/unx/generic/app/sm.cxx:184
+    /media/disk2/libo4/vcl/unx/generic/app/sm.cxx nSmDel
     int
 vcl/workben/icontest.cxx:145
     IconTestApp nRet
     int
-workdir/LexTarget/l10ntools/source/cfglex.cxx:2302
-    /media/noel/disk2/libo4/workdir/LexTarget/l10ntools/source/cfglex.cxx bText
+workdir/LexTarget/l10ntools/source/cfglex.cxx:2293
+    /media/disk2/libo4/workdir/LexTarget/l10ntools/source/cfglex.cxx bText
     int
 writerfilter/source/dmapper/PageBordersHandler.hxx:54
     writerfilter::dmapper::PageBordersHandler m_eOffsetFrom

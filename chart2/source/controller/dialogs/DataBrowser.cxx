@@ -494,7 +494,6 @@ DataBrowser::DataBrowser(const css::uno::Reference<css::awt::XWindow> &rParent,
             WB_BORDER | WB_TABSTOP, BrowserStdFlags ),
     m_nSeekRow( 0 ),
     m_bIsReadOnly( false ),
-    m_bLiveUpdate( true ),
     m_bDataValid( true ),
     m_aNumberEditField( VclPtr<FormattedField>::Create( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
     m_aTextEditField( VclPtr<Edit>::Create( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
@@ -852,16 +851,7 @@ void DataBrowser::SetDataFromModel(
     const Reference< chart2::XChartDocument > & xChartDoc,
     const Reference< uno::XComponentContext > & xContext )
 {
-    if( m_bLiveUpdate )
-    {
-        m_xChartDoc.set( xChartDoc );
-    }
-    else
-    {
-        Reference< util::XCloneable > xCloneable( xChartDoc, uno::UNO_QUERY );
-        if( xCloneable.is())
-            m_xChartDoc.set( xCloneable->createClone(), uno::UNO_QUERY );
-    }
+    m_xChartDoc.set( xChartDoc );
 
     m_apDataBrowserModel.reset( new DataBrowserModel( m_xChartDoc, xContext ));
     m_spNumberFormatterWrapper.reset(

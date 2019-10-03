@@ -165,7 +165,6 @@ TreeListBox::TreeListBox (vcl::Window* pParent, WinBits nStyle)
 {
     SetNodeDefaultImages();
     SetSelectionMode( SelectionMode::Single );
-    nMode = BrowseMode::All;   // everything
 }
 
 VCL_BUILDER_FACTORY_CONSTRUCTOR(TreeListBox, WB_TABSTOP)
@@ -257,11 +256,7 @@ void TreeListBox::ImpCreateLibEntries( SvTreeListEntry* pDocumentRootEntry, cons
             }
 
             // create tree list box entry
-            OUString sId;
-            if ( ( nMode & BrowseMode::Dialogs ) && !( nMode & BrowseMode::Modules ) )
-                sId = bLoaded ? OUStringLiteral(RID_BMP_DLGLIB) : OUStringLiteral(RID_BMP_DLGLIBNOTLOADED);
-            else
-                sId = bLoaded ? OUStringLiteral(RID_BMP_MODLIB) : OUStringLiteral(RID_BMP_MODLIBNOTLOADED);
+            OUString sId = bLoaded ? OUStringLiteral(RID_BMP_MODLIB) : OUStringLiteral(RID_BMP_MODLIBNOTLOADED);
             SvTreeListEntry* pLibRootEntry = FindEntry( pDocumentRootEntry, aLibName, OBJ_TYPE_LIBRARY );
             if ( pLibRootEntry )
             {
@@ -284,7 +279,6 @@ void TreeListBox::ImpCreateLibEntries( SvTreeListEntry* pDocumentRootEntry, cons
 void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
 {
     // modules
-    if ( nMode & BrowseMode::Modules )
     {
         Reference< script::XLibraryContainer > xModLibContainer( rDocument.getLibraryContainer( E_SCRIPTS ) );
 
@@ -315,7 +309,6 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                         }
 
                         // methods
-                        if ( nMode & BrowseMode::Subs )
                         {
                             Sequence< OUString > aNames = GetMethodNames( rDocument, rLibName, aModName );
                             FillTreeListBox( pModuleEntry, aNames, OBJ_TYPE_METHOD, RID_BMP_MACRO );
@@ -331,7 +324,6 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
     }
 
     // dialogs
-    if ( nMode & BrowseMode::Dialogs )
     {
          Reference< script::XLibraryContainer > xDlgLibContainer( rDocument.getLibraryContainer( E_DIALOGS ) );
 
@@ -440,7 +432,6 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRo
             }
 
             // methods
-            if ( nMode & BrowseMode::Subs )
             {
                 Sequence< OUString > aNames = GetMethodNames( rDocument, rLibName, aModName );
                 FillTreeListBox( pModuleEntry, aNames, OBJ_TYPE_METHOD, RID_BMP_MACRO );
@@ -667,19 +658,9 @@ void TreeListBox::SetEntryBitmaps( SvTreeListEntry * pEntry, const Image& rImage
     SetCollapsedEntryBmp( pEntry, rImage );
 }
 
-LibraryType TreeListBox::GetLibraryType() const
+OUString TreeListBox::GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
-    LibraryType eType = LibraryType::All;
-    if ( ( nMode & BrowseMode::Modules ) && !( nMode & BrowseMode::Dialogs ) )
-        eType = LibraryType::Module;
-    else if ( !( nMode & BrowseMode::Modules ) && ( nMode & BrowseMode::Dialogs ) )
-        eType = LibraryType::Dialog;
-    return eType;
-}
-
-OUString TreeListBox::GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const
-{
-    return rDocument.getTitle( eLocation, GetLibraryType() );
+    return rDocument.getTitle( eLocation, LibraryType::All );
 }
 
 void TreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage )

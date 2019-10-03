@@ -2128,7 +2128,6 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         }
     }
 
-    bool accel = ImplGetSVData()->maNWFData.mbEnableAccel;
     bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
 
     if ( nStyle & DrawTextFlags::Disable && ! pVector )
@@ -2168,7 +2167,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
 
         DrawText( rPos, aStr, nIndex, nLen, pVector, pDisplayText );
         if (!(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics)
-            && accel && (!autoacc || !(nStyle & DrawTextFlags::HideMnemonic)) )
+            && (!autoacc || !(nStyle & DrawTextFlags::HideMnemonic)) )
         {
             if ( nMnemonicPos != -1 )
                 ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
@@ -2181,7 +2180,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
     {
         DrawText( rPos, aStr, nIndex, nLen, pVector, pDisplayText, pGlyphs );
         if ( !(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics) && !pVector
-            && accel && (!autoacc || !(nStyle & DrawTextFlags::HideMnemonic)) )
+            && (!autoacc || !(nStyle & DrawTextFlags::HideMnemonic)) )
         {
             if ( nMnemonicPos != -1 )
                 ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );

@@ -303,14 +303,12 @@ protected:
     std::vector< int > m_aXineramaScreenIndexMap;
     std::list<SalObject*> m_aSalObjects;
 
-    bool            m_bUseRandRWrapper; // don't use randr on gtk, use gdk signals there
-
     mutable Time    m_nLastUserEventTime; // mutable because changed on first access
 
     virtual bool    Dispatch( XEvent *pEvent ) = 0;
     void            InitXinerama();
     void            InitRandR( ::Window aRoot ) const;
-    void            DeInitRandR();
+    static void     DeInitRandR();
     void            processRandREvent( XEvent* );
 
     void            doDestruct();

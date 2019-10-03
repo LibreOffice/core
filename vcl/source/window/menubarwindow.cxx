@@ -852,10 +852,9 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
         }
     }
 
-    bool accel = ImplGetSVData()->maNWFData.mbEnableAccel;
     bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
 
-    if ( !bDone && ( bFromMenu || (rKEvent.GetKeyCode().IsMod2() && accel) ) )
+    if ( !bDone && ( bFromMenu || rKEvent.GetKeyCode().IsMod2() ) )
     {
         sal_Unicode nCharCode = rKEvent.GetCharCode();
         if ( nCharCode )
@@ -876,7 +875,7 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
     {
         SetMBWMenuKey(bShowAccels);
         SetMBWHideAccel(!bShowAccels);
-        if (accel && autoacc)
+        if (autoacc)
             Invalidate(InvalidateFlags::Update);
     }
 
