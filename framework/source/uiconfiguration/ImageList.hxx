@@ -70,7 +70,6 @@ private:
     sal_uInt16  ImplGetImageId( const OUString& rImageName ) const;
     void ImplAddImage( const OUString &aPrefix, const OUString &aName, sal_uInt16 nId, const Image &aImage );
     void ImplRemoveImage( sal_uInt16 nPos );
-    void ImplLoad(ImageAryData&) const;
 };
 
 #endif // INCLUDED_VCL_IMAGE_HXX

@@ -22,7 +22,6 @@
 
 #include <atk/atk.h>
 
-GType ooo_atk_util_get_type();
 void ooo_atk_util_ensure_event_listener();
 
 #endif

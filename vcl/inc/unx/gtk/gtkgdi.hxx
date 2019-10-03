@@ -129,9 +129,6 @@ public:
 
     void WidgetQueueDraw() const;
 
-    static void refreshFontconfig( GtkSettings *pSettings );
-    static void signalSettingsNotify( GObject*, GParamSpec *pSpec, gpointer );
-
     virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
 
     GtkStyleContext* createStyleContext(gtk_widget_path_iter_set_object_nameFunc set_object_name, GtkControlPart ePart);

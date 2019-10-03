@@ -154,8 +154,6 @@ public:
     void            SetModifyHdl( const Link<Edit&,void>& rLink ) override { aModifyHdlLink = rLink; }
     const Link<Edit&,void>&   GetModifyHdl() const override                { return aModifyHdlLink; }
 
-    void            SetUpdateDataHdl( const Link<Edit&,void>& rLink ) override { aUpdateDataHdlLink = rLink; }
-
     virtual void    Resize() override;
     virtual void    GetFocus() override;
 

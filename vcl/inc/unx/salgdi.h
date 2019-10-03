@@ -263,19 +263,6 @@ public:
     void clipRegion(cairo_t* cr);
 #endif // ENABLE_CAIRO_CANVAS
 
-    bool TryRenderCachedNativeControl(ControlCacheKey& aControlCacheKey,
-                                      int nX, int nY);
-
-    bool RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY,
-                                     ControlCacheKey& aControlCacheKey);
-
-    // fill a pixmap from a screen region
-    void                            FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY );
-
-    // render a pixmap to the screen
-    bool                            RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY );
-
-
     /*  use to handle GraphicsExpose/NoExpose after XCopyArea & friends
      *  if pFrame is not NULL, corresponding Paint events are generated
      *  and dispatched to pFrame
@@ -299,8 +286,6 @@ public:
                                         int src_x, int src_y,
                                         unsigned int w, unsigned int h,
                                         int dest_x, int dest_y );
-
-    static void                     releaseGlyphPeer();
 
 protected:
     using SalGraphics::SetClipRegion;

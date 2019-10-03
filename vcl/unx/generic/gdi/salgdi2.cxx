@@ -22,7 +22,6 @@
 #include <vcl/sysdata.hxx>
 #include <sal/log.hxx>
 
-#include <unx/pixmap.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/salbmp.h>
 #include <unx/salgdi.h>
@@ -67,34 +66,6 @@ void X11SalGraphics::CopyScreenArea( Display* pDisplay,
         SalTwoRect aTwoRect(0, 0, w, h, dest_x, dest_y, w, h);
         aBM.ImplDraw(aDest, nXScreenDest, nDestDepth, aTwoRect,aDestGC);
     }
-}
-
-void X11SalGraphics::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY )
-{
-    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mxImpl);
-    rImpl.FillPixmapFromScreen( pPixmap, nX, nY );
-}
-
-bool X11SalGraphics::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY )
-{
-    SAL_INFO( "vcl", "RenderPixmapToScreen" );
-    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mxImpl);
-    return rImpl.RenderPixmapToScreen( pPixmap, pMask, nX, nY );
-}
-
-bool X11SalGraphics::TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY)
-{
-    SAL_INFO( "vcl", "TryRenderCachedNativeControl" );
-    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mxImpl);
-    return rImpl.TryRenderCachedNativeControl(rControlCacheKey, nX, nY);
-}
-
-bool X11SalGraphics::RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY,
-                                                 ControlCacheKey& rControlCacheKey)
-{
-    SAL_INFO( "vcl", "RenderAndCachePixmap" );
-    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mxImpl);
-    return rImpl.RenderAndCacheNativeControl(pPixmap, pMask, nX, nY, rControlCacheKey);
 }
 
 extern "C"

@@ -12,7 +12,6 @@
 
 #include <svdata.hxx>
 
-#include <unx/pixmap.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/salframe.h>
 #include <unx/salgdi.h>
@@ -596,183 +595,10 @@ void X11OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics*
     OpenGLSalGraphicsImpl::DoCopyBits( rPosAry, *pImpl );
 }
 
-void X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY )
-{
-    Display* pDisplay = mrX11Parent.GetXDisplay();
-    SalX11Screen nScreen = mrX11Parent.GetScreenNumber();
-    XVisualInfo aVisualInfo;
-    XImage* pImage;
-    char* pData;
-
-    SAL_INFO( "vcl.opengl", "FillPixmapFromScreen" );
-
-    if (!SalDisplay::BestOpenGLVisual(pDisplay, nScreen.getXScreen(), aVisualInfo))
-        return;
-
-    // make sure everything is synced up before reading back
-    mpContext->makeCurrent();
-    glXWaitX();
-
-    // TODO: lfrb: What if offscreen?
-    pData = static_cast<char*>(malloc( pPixmap->GetWidth() * pPixmap->GetHeight() * 4 ));
-    glPixelStorei( GL_PACK_ALIGNMENT, 1 );
-    CHECK_GL_ERROR();
-    glReadPixels( nX, GetHeight() - nY, pPixmap->GetWidth(), pPixmap->GetHeight(),
-                  GL_RGBA, GL_UNSIGNED_BYTE, pData );
-    CHECK_GL_ERROR();
-
-    pImage = XCreateImage( pDisplay, aVisualInfo.visual, 24, ZPixmap, 0, pData,
-                           pPixmap->GetWidth(), pPixmap->GetHeight(), 8, 0 );
-    XInitImage( pImage );
-    GC aGC = XCreateGC( pDisplay, pPixmap->GetPixmap(), 0, nullptr );
-    XPutImage( pDisplay, pPixmap->GetDrawable(), aGC, pImage,
-               0, 0, 0, 0, pPixmap->GetWidth(), pPixmap->GetHeight() );
-    XFreeGC( pDisplay, aGC );
-    XDestroyImage( pImage );
-}
-
 typedef typename std::pair<ControlCacheKey, std::unique_ptr<TextureCombo>> ControlCachePair;
 typedef o3tl::lru_map<ControlCacheKey, std::unique_ptr<TextureCombo>, ControlCacheHashFunction> ControlCacheType;
 
 static vcl::DeleteOnDeinit<ControlCacheType> gTextureCache(new ControlCacheType(200));
-
-namespace
-{
-    GLXFBConfig GetPixmapFBConfig( Display* pDisplay, bool& bInverted )
-    {
-        OpenGLZone aZone;
-
-        int nScreen = DefaultScreen( pDisplay );
-        GLXFBConfig *aFbConfigs;
-        int i, nFbConfigs, nValue;
-
-        aFbConfigs = glXGetFBConfigs( pDisplay, nScreen, &nFbConfigs );
-        for( i = 0; i < nFbConfigs; i++ )
-        {
-            glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_DRAWABLE_TYPE, &nValue );
-            if( !(nValue & GLX_PIXMAP_BIT) )
-                continue;
-
-            glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_BIND_TO_TEXTURE_TARGETS_EXT, &nValue );
-            if( !(nValue & GLX_TEXTURE_2D_BIT_EXT) )
-                continue;
-
-            glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_DEPTH_SIZE, &nValue );
-            if( nValue != 24 )
-                continue;
-
-            glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_RED_SIZE, &nValue );
-            if( nValue != 8 )
-                continue;
-            SAL_INFO( "vcl.opengl", "Red is " << nValue );
-
-            // TODO: lfrb: Make it configurable wrt RGB/RGBA
-            glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_BIND_TO_TEXTURE_RGB_EXT, &nValue );
-            if( nValue == False )
-            {
-                glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_BIND_TO_TEXTURE_RGBA_EXT, &nValue );
-                if( nValue == False )
-                    continue;
-            }
-
-            glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_Y_INVERTED_EXT, &nValue );
-
-            // Looks like that X sends GLX_DONT_CARE but this usually means "true" for most
-            // of the X implementations. Investigation on internet pointed that this could be
-            // safely "true" all the time (for example gnome-shell always assumes "true").
-            bInverted = nValue == True || nValue == int(GLX_DONT_CARE);
-
-            break;
-        }
-
-        if( i == nFbConfigs )
-        {
-            SAL_WARN( "vcl.opengl", "Unable to find FBconfig for pixmap texturing" );
-            return nullptr;
-        }
-
-        CHECK_GL_ERROR();
-        return aFbConfigs[i];
-    }
-}
-
-void X11OpenGLSalGraphicsImpl::RenderPixmap(X11Pixmap const * pPixmap, X11Pixmap const * pMask, int nX, int nY, TextureCombo& rCombo)
-{
-    const int aAttribs[] =
-    {
-        GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT,
-        GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGBA_EXT,
-        None
-    };
-
-    Display* pDisplay = mrX11Parent.GetXDisplay();
-    bool bInverted = false;
-
-    const long nWidth = pPixmap->GetWidth();
-    const long nHeight = pPixmap->GetHeight();
-    SalTwoRect aPosAry(0, 0, nWidth, nHeight, nX, nY, nWidth, nHeight);
-
-    PreDraw();
-    //glClear( GL_COLOR_BUFFER_BIT );
-
-    XSync( pDisplay, 0 );
-    GLXFBConfig pFbConfig = GetPixmapFBConfig( pDisplay, bInverted );
-    GLXPixmap pGlxPixmap = glXCreatePixmap( pDisplay, pFbConfig, pPixmap->GetPixmap(), aAttribs);
-    GLXPixmap pGlxMask;
-    if( pMask != nullptr )
-        pGlxMask = glXCreatePixmap( pDisplay, pFbConfig, pMask->GetPixmap(), aAttribs);
-    else
-        pGlxMask = 0;
-    XSync( pDisplay, 0 );
-
-    if( !pGlxPixmap )
-        SAL_WARN( "vcl.opengl", "Couldn't create GLXPixmap" );
-
-    //TODO: lfrb: glXGetProc to get the functions
-
-    rCombo.mpTexture.reset(new OpenGLTexture(pPixmap->GetWidth(), pPixmap->GetHeight(), false));
-
-    mpContext->state().texture().active(0);
-
-    rCombo.mpTexture->Bind();
-    glXBindTexImageEXT( pDisplay, pGlxPixmap, GLX_FRONT_LEFT_EXT, nullptr );
-    rCombo.mpTexture->Unbind();
-
-    if( pMask != nullptr && pGlxMask )
-    {
-        rCombo.mpMask.reset(new OpenGLTexture(pPixmap->GetWidth(), pPixmap->GetHeight(), false));
-        rCombo.mpMask->Bind();
-        glXBindTexImageEXT( pDisplay, pGlxMask, GLX_FRONT_LEFT_EXT, nullptr );
-        rCombo.mpMask->Unbind();
-
-        DrawTextureDiff(*rCombo.mpTexture, *rCombo.mpMask, aPosAry, bInverted);
-
-        glXReleaseTexImageEXT( pDisplay, pGlxMask, GLX_FRONT_LEFT_EXT );
-        glXDestroyPixmap( pDisplay, pGlxMask );
-    }
-    else
-    {
-        DrawTexture(*rCombo.mpTexture, aPosAry, bInverted);
-    }
-
-    CHECK_GL_ERROR();
-
-    glXReleaseTexImageEXT( pDisplay, pGlxPixmap, GLX_FRONT_LEFT_EXT );
-    glXDestroyPixmap( pDisplay, pGlxPixmap );
-
-    PostDraw();
-
-    CHECK_GL_ERROR();
-}
-
-bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY )
-{
-    SAL_INFO( "vcl.opengl", "RenderPixmapToScreen (" << nX << " " << nY << ")" );
-
-    TextureCombo aCombo;
-    RenderPixmap(pPixmap, pMask, nX, nY, aCombo);
-    return true;
-}
 
 bool X11OpenGLSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY)
 {
@@ -801,22 +627,6 @@ bool X11OpenGLSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey& rCo
         DrawTexture(rTexture, aPosAry, true);
 
     PostDraw();
-
-    return true;
-}
-
-bool X11OpenGLSalGraphicsImpl::RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY,
-                                                           ControlCacheKey& aControlCacheKey)
-{
-    std::unique_ptr<TextureCombo> pCombo(new TextureCombo);
-    RenderPixmap(pPixmap, pMask, nX, nY, *pCombo);
-
-    if (!aControlCacheKey.canCacheControl())
-        return true;
-
-    ControlCachePair pair(aControlCacheKey, std::move(pCombo));
-    if (gTextureCache.get())
-        gTextureCache.get()->insert(std::move(pair));
 
     return true;
 }

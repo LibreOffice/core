@@ -92,7 +92,6 @@ public:
     void            SpellDocument();        // Perform Spell Checking
     bool     IsStartDone() const { return bStartDone; }
     bool     IsEndDone() const { return bEndDone; }
-    bool     IsHyphen() const { return bHyphen; } // Split instead of Spell check
     void     SetHyphen() { bHyphen = true; }
     bool     IsAllRight() const { return bAllRight; }
 

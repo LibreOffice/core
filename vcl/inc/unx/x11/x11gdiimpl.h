@@ -10,7 +10,6 @@
 #ifndef INCLUDED_VCL_INC_UNX_X11_X11GDIIMPL_HXX
 #define INCLUDED_VCL_INC_UNX_X11_X11GDIIMPL_HXX
 
-#include <unx/pixmap.hxx>
 #include <ControlCacheKey.hxx>
 
 class ControlCacheKey;
@@ -20,12 +19,7 @@ class X11GraphicsImpl
 public:
     virtual ~X11GraphicsImpl() {};
 
-    virtual void FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) = 0;
-    virtual bool RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY ) = 0;
-
     virtual bool TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY) = 0;
-    virtual bool RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY,
-                                             ControlCacheKey& aControlCacheKey) = 0;
 };
 
 #endif // INCLUDED_VCL_INC_UNX_X11_X11GDIIMPL_HXX

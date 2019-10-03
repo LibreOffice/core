@@ -35,8 +35,6 @@ public:
 
     OString GetHelpId() const { return m_xContainer->get_help_id(); }
 
-    weld::DialogController* GetController() const { return m_pDialogController; }
-
 protected:
     weld::DialogController* m_pDialogController;
     std::unique_ptr<weld::Builder> m_xBuilder;

@@ -535,12 +535,6 @@ namespace vcl
         return Dialog::EventNotify( rNEvt );
     }
 
-    void RoadmapWizard::setTitleBase(const OUString& _rTitleBase)
-    {
-        m_xWizardImpl->sTitleBase = _rTitleBase;
-        implUpdateTitle();
-    }
-
     TabPage* RoadmapWizard::GetOrCreatePage( const WizardTypes::WizardState i_nState )
     {
         if ( nullptr == GetPage( i_nState ) )
@@ -576,39 +570,6 @@ namespace vcl
         GetOrCreatePage( nCurrentLevel );
 
         enterState( nCurrentLevel );
-    }
-
-    void RoadmapWizard::defaultButton(WizardButtonFlags _nWizardButtonFlags)
-    {
-        // the new default button
-        PushButton* pNewDefButton = nullptr;
-        if (m_pFinish && (_nWizardButtonFlags & WizardButtonFlags::FINISH))
-            pNewDefButton = m_pFinish;
-        if (m_pNextPage && (_nWizardButtonFlags & WizardButtonFlags::NEXT))
-            pNewDefButton = m_pNextPage;
-        if (m_pPrevPage && (_nWizardButtonFlags & WizardButtonFlags::PREVIOUS))
-            pNewDefButton = m_pPrevPage;
-        if (m_pHelp && (_nWizardButtonFlags & WizardButtonFlags::HELP))
-            pNewDefButton = m_pHelp;
-        if (m_pCancel && (_nWizardButtonFlags & WizardButtonFlags::CANCEL))
-            pNewDefButton = m_pCancel;
-
-        if ( pNewDefButton )
-            defaultButton( pNewDefButton );
-        else
-            implResetDefault( this );
-    }
-
-    bool RoadmapWizard::ShowNextPage()
-    {
-        return ShowPage( mnCurLevel+1 );
-    }
-
-    bool RoadmapWizard::ShowPrevPage()
-    {
-        if ( !mnCurLevel )
-            return false;
-        return ShowPage( mnCurLevel-1 );
     }
 
     bool RoadmapWizard::ShowPage( sal_uInt16 nLevel )
@@ -892,39 +853,6 @@ namespace vcl
         return true;
     }
 
-    void RoadmapWizard::skip()
-    {
-        // allowed to leave the current page?
-        if ( !prepareLeaveCurrentState( WizardTypes::eTravelForward ) )
-            return;
-
-        WizardTypes::WizardState nCurrentState = getCurrentState();
-        WizardTypes::WizardState nNextState = determineNextState(nCurrentState);
-
-        if (WZS_INVALID_STATE == nNextState)
-            return;
-
-        // remember the skipped state in the history
-        m_xWizardImpl->aStateHistory.push(nCurrentState);
-
-        // get the next state
-        nCurrentState = nNextState;
-
-        // show the (n+1)th page
-        if (!ShowPage(nCurrentState))
-        {
-            // TODO: this leaves us in a state where we have no current page and an inconsistent state history.
-            // Perhaps we should rollback the skipping here...
-            OSL_FAIL("RoadmapWizard::skip: very unpolite...");
-                // if somebody does a skip and then does not allow to leave...
-                // (can't be a commit error, as we've already committed the current page. So if ShowPage fails here,
-                // somebody behaves really strange...)
-            return;
-        }
-
-        // all fine
-    }
-
     bool RoadmapWizard::travelNext()
     {
         // allowed to leave the current page?
@@ -991,11 +919,6 @@ namespace vcl
             m_xWizardImpl->aStateHistory.push( aTemp.top() );
             aTemp.pop();
         }
-    }
-
-    void RoadmapWizard::enableAutomaticNextButtonState()
-    {
-        m_xWizardImpl->m_bAutoNextButtonState = true;
     }
 
     bool RoadmapWizard::isAutomaticNextButtonStateEnabled() const

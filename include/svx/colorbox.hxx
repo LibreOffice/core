@@ -67,7 +67,6 @@ public:
     void SetNoSelection() { getColorWindow()->SetNoSelection(); }
     bool IsNoSelection() const { return getColorWindow()->IsNoSelection(); }
 
-    void SetAutoDisplayColor(const Color &rColor) { m_aAutoDisplayColor = rColor; }
     void ShowPreview(const NamedColor &rColor);
     void EnsurePaletteManager();
 

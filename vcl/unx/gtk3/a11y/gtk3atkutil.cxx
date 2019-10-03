@@ -699,45 +699,6 @@ static Link<VclSimpleEvent&,void> g_aEventListenerLink( nullptr, WindowEventHand
 
 /*****************************************************************************/
 
-extern "C" {
-
-static const gchar *
-ooo_atk_util_get_toolkit_name()
-{
-    return "VCL";
-}
-
-/*****************************************************************************/
-
-static const gchar *
-ooo_atk_util_get_toolkit_version()
-{
-    return LIBO_VERSION_DOTTED;
-}
-
-/*****************************************************************************/
-
-/*
- * GObject inheritance
- */
-
-static void
-ooo_atk_util_class_init (AtkUtilClass *)
-{
-    AtkUtilClass *atk_class;
-    gpointer data;
-
-    data = g_type_class_peek (ATK_TYPE_UTIL);
-    atk_class = ATK_UTIL_CLASS (data);
-
-    atk_class->get_toolkit_name = ooo_atk_util_get_toolkit_name;
-    atk_class->get_toolkit_version = ooo_atk_util_get_toolkit_version;
-
-    ooo_atk_util_ensure_event_listener();
-}
-
-} // extern "C"
-
 void ooo_atk_util_ensure_event_listener()
 {
     static bool bInited;
@@ -746,44 +707,6 @@ void ooo_atk_util_ensure_event_listener()
         Application::AddEventListener( g_aEventListenerLink );
         bInited = true;
     }
-}
-
-GType
-ooo_atk_util_get_type()
-{
-    static GType type = 0;
-
-    if (!type)
-    {
-        GType parent_type = g_type_from_name( "GailUtil" );
-
-        if( ! parent_type )
-        {
-            g_warning( "Unknown type: GailUtil" );
-            parent_type = ATK_TYPE_UTIL;
-        }
-
-        GTypeQuery type_query;
-        g_type_query( parent_type, &type_query );
-
-        static const GTypeInfo typeInfo =
-        {
-            static_cast<guint16>(type_query.class_size),
-            nullptr,
-            nullptr,
-            reinterpret_cast<GClassInitFunc>(ooo_atk_util_class_init),
-            nullptr,
-            nullptr,
-            static_cast<guint16>(type_query.instance_size),
-            0,
-            nullptr,
-            nullptr
-        } ;
-
-        type = g_type_register_static (parent_type, "OOoUtil", &typeInfo, GTypeFlags(0)) ;
-    }
-
-    return type;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
