@@ -100,7 +100,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3_kde5,\
 	vcl/unx/gtk3_kde5/a11y/gtk3_kde5_atktext \
 	vcl/unx/gtk3_kde5/a11y/gtk3_kde5_atkutil \
 	vcl/unx/gtk3_kde5/a11y/gtk3_kde5_atkvalue \
-	vcl/unx/gtk3_kde5/a11y/gtk3_kde5_atkwindow \
 	vcl/unx/gtk3_kde5/a11y/gtk3_kde5_atkwrapper \
 	vcl/unx/gtk3_kde5/gtk3_kde5_gtkdata \
 	vcl/unx/gtk3_kde5/gtk3_kde5_gtkinst \
