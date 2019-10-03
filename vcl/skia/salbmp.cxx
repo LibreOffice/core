@@ -45,7 +45,6 @@ static bool isValidBitCount(sal_uInt16 nBitCount)
 
 SkiaSalBitmap::SkiaSalBitmap(const SkImage& image)
 {
-    assert(image.colorType() == kN32_SkColorType);
     if (Create(Size(image.width(), image.height()), 32, BitmapPalette()))
     {
         SkCanvas canvas(mBitmap);

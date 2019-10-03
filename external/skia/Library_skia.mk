@@ -68,6 +68,7 @@ $(eval $(call gb_Library_use_system_win32_libs,skia,\
 else
 $(eval $(call gb_Library_add_defs,skia,\
 	-DSK_BUILD_FOR_UNIX \
+	-DSK_R32_SHIFT=16 \
 ))
 
 # TODO
