@@ -224,8 +224,6 @@ void AxisConverter::convertFromModel(
             case API_Y_AXIS:
                 OSL_ENSURE( mrModel.mnTypeId == C_TOKEN( valAx ), "AxisConverter::convertFromModel - unexpected axis model type (must: c:valAx)" );
                 aScaleData.AxisType = isPercent(rTypeGroups) ? cssc2::AxisType::PERCENT : cssc2::AxisType::REALNUMBER;
-                if( mrModel.mnCrossBetween != -1 )
-                    aScaleData.ShiftedCategoryPosition = mrModel.mnCrossBetween == XML_between;
             break;
             case API_Z_AXIS:
                 OSL_ENSURE( mrModel.mnTypeId == C_TOKEN( serAx ), "AxisConverter::convertFromModel - unexpected axis model type (must: c:serAx)" );

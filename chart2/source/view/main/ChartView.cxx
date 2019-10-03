@@ -325,7 +325,7 @@ public:
     void AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel& rModel );
 
     bool isCategoryPositionShifted(
-        const chart2::ScaleData& rSourceScale, bool bHasComplexCategories, bool bShiftedCategoryPosition) const;
+        const chart2::ScaleData& rSourceScale, bool bHasComplexCategories ) const;
 
 private:
     /** A vector of series plotters.
@@ -349,14 +349,12 @@ private:
      */
     sal_Int32 m_nMaxAxisIndex;
 
-    bool m_bChartTypeUsesShiftedCategoryPositionPerDefault;
     sal_Int32 m_nDefaultDateNumberFormat;
 };
 
 SeriesPlotterContainer::SeriesPlotterContainer( std::vector< std::unique_ptr<VCoordinateSystem> >& rVCooSysList )
         : m_rVCooSysList( rVCooSysList )
         , m_nMaxAxisIndex(0)
-        , m_bChartTypeUsesShiftedCategoryPositionPerDefault(false)
         , m_nDefaultDateNumberFormat(0)
 {
 }
@@ -520,9 +518,6 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                 }
             }
 
-            if(nT==0)
-                m_bChartTypeUsesShiftedCategoryPositionPerDefault = ChartTypeHelper::shiftCategoryPosAtXAxisPerDefault( xChartType );
-
             bool bExcludingPositioning = DiagramHelper::getDiagramPositioningMode( xDiagram ) == DiagramPositioningMode_EXCLUDING;
             VSeriesPlotter* pPlotter = VSeriesPlotter::createSeriesPlotter( xChartType, nDimensionCount, bExcludingPositioning );
             if( !pPlotter )
@@ -631,9 +626,9 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
 }
 
 bool SeriesPlotterContainer::isCategoryPositionShifted(
-    const chart2::ScaleData& rSourceScale, bool bHasComplexCategories, bool bShiftedCategoryPosition) const
+    const chart2::ScaleData& rSourceScale, bool bHasComplexCategories ) const
 {
-    if (rSourceScale.AxisType == AxisType::CATEGORY && (m_bChartTypeUsesShiftedCategoryPositionPerDefault || bShiftedCategoryPosition))
+    if (rSourceScale.AxisType == AxisType::CATEGORY && rSourceScale.ShiftedCategoryPosition)
         return true;
 
     if (rSourceScale.AxisType == AxisType::CATEGORY && bHasComplexCategories)
@@ -683,9 +678,7 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
                         AxisHelper::checkDateAxis( aSourceScale, pCatProvider, bDateAxisAllowed );
 
                     bool bHasComplexCat = pCatProvider && pCatProvider->hasComplexCategories();
-                    // Come from CrossBetween OOXML tag
-                    bool bShiftedCategoryPosition = aSourceScale.ShiftedCategoryPosition;
-                    aSourceScale.ShiftedCategoryPosition = isCategoryPositionShifted(aSourceScale, bHasComplexCat, bShiftedCategoryPosition);
+                    aSourceScale.ShiftedCategoryPosition = isCategoryPositionShifted(aSourceScale, bHasComplexCat);
 
                     m_aAxisUsageList[xAxis].aAutoScaling = ScaleAutomatism(aSourceScale, rNullDate);
                 }
