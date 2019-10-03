@@ -166,6 +166,10 @@ namespace sdr
                     // #i101684# get the text range unrotated and absolute to the object range
                     const basegfx::B2DRange aTextRange(getCorrectedTextBoundRect());
 
+                    // Get the text range before unrotated and independent from object range
+                    const tools::Rectangle aIndTextRect(Point(aTextRange.getMinX(), aTextRange.getMinY()), GetCustomShapeObj().GetTextSize());
+                    const basegfx::B2DRange aIndTextRange = vcl::unotools::b2DRectangleFromRectangle(aIndTextRect);
+
                     // Rotation before scaling
                     if(!basegfx::fTools::equalZero(GetCustomShapeObj().GetExtraTextRotation(true)))
                     {
@@ -214,6 +218,12 @@ namespace sdr
 
                         // give text it's target position
                         aTextBoxMatrix.translate(aObjectRange.getMinimum().getX(), aObjectRange.getMinimum().getY());
+                    }
+                    // If text overflows from textbox we should use text info instead of textbox to relocation.
+                    else if(aTextRange.getWidth() < aIndTextRange.getWidth() ||
+                            aTextRange.getHeight() < aIndTextRange.getHeight())
+                    {
+                        aTextBoxMatrix.translate(aIndTextRange.getCenterX(), aIndTextRange.getCenterY());
                     }
                     else
                     {
