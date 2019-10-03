@@ -37,7 +37,6 @@ cairo_t* SkiaX11CairoTextRender::getCairoContext()
     if (!surface)
         return nullptr;
     cairo_t* cr = cairo_create(surface);
-    // TODO SKIA
     cairo_surface_destroy(surface);
     return cr;
 }
@@ -72,15 +71,13 @@ void SkiaX11CairoTextRender::releaseCairoContext(cairo_t* cr)
 
     SalTwoRect aRect(0, 0, nWidth, nHeight, aClipRect.Left(), aClipRect.Top(), nWidth, nHeight);
 
-    // Cairo surface data is ARGB with premultiplied alpha and is Y-inverted
-    // TODO SKIA
-    //    SkiaTexture aTexture( nWidth, nHeight, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, pSrc );
-    //    pImpl->PreDraw();
-    //    pImpl->DrawAlphaTexture( aTexture, aRect, true, true );
-    //    pImpl->PostDraw();
-    //    abort();
-    (void)pSrc;
+    SkBitmap bitmap;
+    if (!bitmap.installPixels(SkImageInfo::MakeN32Premul(nWidth, nHeight), pSrc, nWidth * 4))
+        abort();
 
+    pImpl->drawBitmap(aRect, bitmap);
+
+    bitmap.reset();
     cairo_destroy(cr);
 }
 

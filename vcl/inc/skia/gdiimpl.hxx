@@ -183,6 +183,8 @@ public:
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon,
                               const Gradient& rGradient) override;
 
+    void drawBitmap(const SalTwoRect& rPosAry, const SkBitmap& bitmap);
+
     // To be called after any drawing.
     void scheduleFlush();
 
