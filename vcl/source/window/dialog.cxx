@@ -610,8 +610,6 @@ void Dialog::settingOptimalLayoutSize(Window *pBox)
         GetSettings().GetStyleSettings().GetDialogStyle();
     VclBox * pBox2 = static_cast<VclBox*>(pBox);
     pBox2->set_border_width(rDialogStyle.content_area_border);
-    pBox2->set_spacing(pBox2->get_spacing() +
-        rDialogStyle.content_area_spacing);
 }
 
 Dialog::~Dialog()

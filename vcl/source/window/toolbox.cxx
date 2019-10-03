@@ -2578,22 +2578,6 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
 
     // Compute buttons area.
     Size    aBtnSize    = pItem->maRect.GetSize();
-    if( ImplGetSVData()->maNWFData.mbToolboxDropDownSeparate )
-    {
-        // separate button not for dropdown only where the whole button is painted
-        // exception: when text position is set to bottom then we want to calculate rect for dropdown only button
-        if ( ( pItem->mnBits & ToolBoxItemBits::DROPDOWN &&
-            ((pItem->mnBits & ToolBoxItemBits::DROPDOWNONLY) != ToolBoxItemBits::DROPDOWNONLY) )
-            || ( ( pItem->mnBits & ToolBoxItemBits::DROPDOWN) && ( meTextPosition == ToolBoxTextPosition::Bottom ) ) )
-        {
-            tools::Rectangle aArrowRect = pItem->GetDropDownRect( mbHorz );
-            if( aArrowRect.Top() == pItem->maRect.Top() ) // dropdown arrow on right side
-                aBtnSize.AdjustWidth( -(aArrowRect.GetWidth()) );
-            else if ( !( (meTextPosition == ToolBoxTextPosition::Bottom)
-                        && ((pItem->mnBits & ToolBoxItemBits::DROPDOWNONLY) == ToolBoxItemBits::DROPDOWNONLY) ) )
-                aBtnSize.AdjustHeight( -(aArrowRect.GetHeight()) ); // dropdown arrow on bottom side
-        }
-    }
 
     /* Compute the button/separator rectangle here, we'll need it for
      * both the buttons and the separators. */

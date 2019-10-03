@@ -182,7 +182,6 @@ struct ImplStyleData
     //primary means scroll by single page. Secondary button takes the alternative behaviour
     bool                            mbPrimaryButtonWarpsSlider;
     DialogStyle                     maDialogStyle;
-    FrameStyle                      maFrameStyle;
 
     sal_uInt16                      mnEdgeBlending;
     Color                           maEdgeBlendingTopLeftColor;
@@ -575,7 +574,6 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     meContextMenuShortcuts(rData.meContextMenuShortcuts),
     mbPrimaryButtonWarpsSlider(rData.mbPrimaryButtonWarpsSlider),
     maDialogStyle( rData.maDialogStyle ),
-    maFrameStyle( rData.maFrameStyle ),
     mnEdgeBlending(rData.mnEdgeBlending),
     maEdgeBlendingTopLeftColor(rData.maEdgeBlendingTopLeftColor),
     maEdgeBlendingBottomRightColor(rData.maEdgeBlendingBottomRightColor),
@@ -1881,19 +1879,6 @@ StyleSettings::SetDialogStyle( const DialogStyle& rStyle )
 {
     CopyData();
     mxData->maDialogStyle = rStyle;
-}
-
-const FrameStyle&
-StyleSettings::GetFrameStyle() const
-{
-    return mxData->maFrameStyle;
-}
-
-void
-StyleSettings::SetFrameStyle( const FrameStyle& rStyle )
-{
-    CopyData();
-    mxData->maFrameStyle = rStyle;
 }
 
 void

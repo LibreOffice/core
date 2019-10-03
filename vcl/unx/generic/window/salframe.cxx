@@ -849,7 +849,6 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
     bDefaultPosition_           = true;
     nVisibility_                = VisibilityFullyObscured;
     m_nWorkArea                 = 0;
-    mbInShow                    = false;
     m_bXEmbed                   = false;
 
 
@@ -1171,7 +1170,6 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
     setXEmbedInfo();
     if( bVisible )
     {
-        mbInShow = true;
         if( ! (nStyle_ & SalFrameStyleFlags::INTRO) )
         {
             // hide all INTRO frames
@@ -3937,7 +3935,6 @@ bool X11SalFrame::Dispatch( XEvent *pEvent )
                     }
 
                     RestackChildren();
-                    mbInShow = false;
                     m_bSetFocusOnMap = false;
                 }
                 break;

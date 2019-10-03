@@ -146,31 +146,14 @@ public:
 struct DialogStyle
 {
     int content_area_border;
-    int content_area_spacing;
     int button_spacing;
     int action_area_border;
     DialogStyle()
         : content_area_border(2)
-        , content_area_spacing(0)
         , button_spacing(6)
         , action_area_border(5)
     {}
 };
-
-struct FrameStyle
-{
-    int left;
-    int right;
-    int top;
-    int bottom;
-    FrameStyle()
-        : left(0)
-        , right(0)
-        , top(0)
-        , bottom(0)
-    {}
-};
-
 
 enum class StyleSettingsOptions
 {
@@ -556,9 +539,6 @@ public:
 
     const DialogStyle&              GetDialogStyle() const;
     void                            SetDialogStyle( const DialogStyle& rStyle );
-
-    const FrameStyle&               GetFrameStyle() const;
-    void                            SetFrameStyle( const FrameStyle& rStyle );
 
     BitmapEx const &                GetPersonaHeader() const;
 
