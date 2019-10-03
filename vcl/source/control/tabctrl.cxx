@@ -660,7 +660,6 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
     {
         if ( mbRestoreHelpId )
             pCtrlParent->SetHelpId( OString() );
-        pOldPage->DeactivatePage();
     }
 
     if ( pPage )

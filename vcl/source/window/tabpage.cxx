@@ -172,10 +172,6 @@ void TabPage::ActivatePage()
 {
 }
 
-void TabPage::DeactivatePage()
-{
-}
-
 Size TabPage::GetOptimalSize() const
 {
     if (isLayoutEnabled(this))

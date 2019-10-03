@@ -267,10 +267,6 @@ void Condition::ApplyCommand( sal_uInt16 _nCommandId, const NamedColor& rNamedCo
     m_rAction.applyCommand( m_nCondIndex, _nCommandId, rNamedColor.first );
 }
 
-void Condition::setImageList(sal_Int16 /*_eBitmapSet*/)
-{
-}
-
 void Condition::resizeControls(const Size& /*_rDiff*/)
 {
 }

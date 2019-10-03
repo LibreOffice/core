@@ -48,7 +48,6 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual void    ActivatePage();
-    virtual void    DeactivatePage();
 
     //To-Do, consider inheriting from VclContainer
     virtual void    SetPosSizePixel(const Point& rNewPos, const Size& rNewSize) override;

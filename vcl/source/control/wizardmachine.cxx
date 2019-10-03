@@ -321,8 +321,6 @@ namespace vcl
             return;
 
         TabPage* pOldTabPage = mpCurTabPage;
-        if ( pOldTabPage )
-            pOldTabPage->DeactivatePage();
 
         mpCurTabPage = pTabPage;
         if ( pTabPage )
@@ -582,9 +580,6 @@ namespace vcl
 
     bool RoadmapWizard::Finish( long nResult )
     {
-        if ( mpCurTabPage )
-            mpCurTabPage->DeactivatePage();
-
         if ( IsInExecute() )
             EndDialog( nResult );
         else if ( GetStyle() & WB_CLOSEABLE )

@@ -49,12 +49,6 @@ namespace dbaui
         */
         virtual void resizeControls(const Size& _rDiff) = 0;
 
-        /** will be called when the image list needs to change
-            @param  _eSymbolsSize
-                <svtools/imgdef.hxx>
-        */
-        virtual void setImageList(sal_Int16 _eSymbolsSize) = 0;
-
         /** only the member will be set, derived classes can override
             this function and do what need to be done.
             @param  _pTB
