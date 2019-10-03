@@ -2690,7 +2690,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 #if defined(IOS)
     paintTileIOS(pThis, pBuffer, nCanvasWidth, nCanvasHeight, fDPIScaleX, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 #else
-    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT) ;
+    ScopedVclPtrInstance< VirtualDevice > pDevice(DeviceFormat::DEFAULT);
 
 #if defined(ANDROID)
     if (!android_lok_from_jni)
@@ -4008,7 +4008,7 @@ static char* getFontSubset (const OString& aFontName)
         if ( nItFont < nFontCount )
         {
             FontCharMapRef xFontCharMap (new FontCharMap());
-            auto aDevice(VclPtr<VirtualDevice>::Create(nullptr, Size(1, 1), DeviceFormat::DEFAULT));
+            auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
             const vcl::Font& aFont(pList->GetFontName(nItFont));
 
             aDevice->SetFont(aFont);
@@ -4620,9 +4620,7 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
             if (aText.isEmpty())
                 aText = rFontMetric.GetFamilyName();
 
-            auto aDevice(
-                VclPtr<VirtualDevice>::Create(
-                    nullptr, Size(1, 1), DeviceFormat::DEFAULT));
+            auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
             ::tools::Rectangle aRect;
             vcl::Font aFont(rFontMetric);
             aFont.SetFontSize(Size(0, nDefaultFontSize));
@@ -4751,7 +4749,7 @@ static void doc_paintWindowDPI(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKW
 
 #else
 
-    ScopedVclPtrInstance<VirtualDevice> pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nWidth, nHeight), Fraction(1.0), Point(), pBuffer);
