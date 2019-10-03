@@ -1155,10 +1155,10 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
         }
         if ( bUpdateTabBar )
         {
-            sal_uLong nKey = GetWindowId( pCurWin );
-            if ( pCurWin && ( pTabBar->GetPagePos( static_cast<sal_uInt16>(nKey) ) == TAB_PAGE_NOTFOUND ) )
-                pTabBar->InsertPage( static_cast<sal_uInt16>(nKey), pCurWin->GetTitle() );   // has just been faded in
-            pTabBar->SetCurPageId( static_cast<sal_uInt16>(nKey) );
+            sal_uInt16 nKey = GetWindowId( pCurWin );
+            if ( pCurWin && ( pTabBar->GetPagePos( nKey ) == TAB_PAGE_NOTFOUND ) )
+                pTabBar->InsertPage( nKey, pCurWin->GetTitle() );   // has just been faded in
+            pTabBar->SetCurPageId( nKey );
         }
         if ( pCurWin && pCurWin->IsSuspended() )    // if the window is shown in the case of an error...
             pCurWin->SetStatus( pCurWin->GetStatus() & ~BASWIN_SUSPENDED );

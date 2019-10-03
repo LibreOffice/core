@@ -617,7 +617,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         {
             XMLAutoStylePoolProperties *const pProperties =
                 rParent.GetPropertiesList()[j].get();
-            sal_uLong nPos = pProperties->GetPos();
+            sal_uInt32 nPos = pProperties->GetPos();
             assert(nPos < nCount);
             assert(!aExpStyles[nPos].mpProperties);
             aExpStyles[nPos].mpProperties = pProperties;
