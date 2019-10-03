@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_aef6eb8e",
+        "filename": "svl/source/items/aeitem.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-03T08:16:27Z",
+      "side": 1,
+      "message": "A hint: new c++1x syntax could be useful gere, to both keep limiting the scope of nPos, and only running GetPosByValue in a relevant condition:\n\n    else if (sal_uInt16 nPos \u003d GetPosByValue(nValue); nPos !\u003d USHRT_MAX)\n    {\n        ...\n    }",
+      "range": {
+        "startLine": 111,
+        "startChar": 4,
+        "endLine": 111,
+        "endChar": 44
+      },
+      "revId": "72d22380f9356b196e51299bf608c192b6fd6cf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
