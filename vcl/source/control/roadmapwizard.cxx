@@ -226,23 +226,6 @@ namespace vcl
         m_xAssistant->set_page_side_help_id(rId);
     }
 
-    void RoadmapWizard::SetRoadmapInteractive( bool _bInteractive )
-    {
-        m_xRoadmapImpl->pRoadmap->SetRoadmapInteractive( _bInteractive );
-    }
-
-    void RoadmapWizard::declarePath( PathId _nPathId, const WizardPath& _lWizardStates)
-    {
-
-        m_xRoadmapImpl->aPaths.emplace( _nPathId, _lWizardStates );
-
-        if ( m_xRoadmapImpl->aPaths.size() == 1 )
-            // the very first path -> activate it
-            activatePath( _nPathId );
-        else
-            implUpdateRoadmap( );
-    }
-
     void RoadmapWizardMachine::declarePath( PathId _nPathId, const WizardPath& _lWizardStates)
     {
         m_pImpl->aPaths.emplace( _nPathId, _lWizardStates );
@@ -664,34 +647,6 @@ namespace vcl
         return *rPath.rbegin() != getCurrentState();
     }
 
-    void RoadmapWizard::updateTravelUI()
-    {
-        const IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
-        OSL_ENSURE( pController != nullptr, "RoadmapWizard::updateTravelUI: no controller for the current page!" );
-
-        bool bCanAdvance =
-                ( !pController || pController->canAdvance() )   // the current page allows to advance
-            &&  canAdvance();                                   // the dialog as a whole allows to advance
-        enableButtons( WizardButtonFlags::NEXT, bCanAdvance );
-
-        // disable the "Previous" button if all states in our history are disabled
-        std::vector< WizardTypes::WizardState > aHistory;
-        getStateHistory( aHistory );
-        bool bHaveEnabledState = false;
-        for (auto const& state : aHistory)
-        {
-            if ( isStateEnabled(state) )
-            {
-                bHaveEnabledState = true;
-                break;
-            }
-        }
-
-        enableButtons( WizardButtonFlags::PREVIOUS, bHaveEnabledState );
-
-        implUpdateRoadmap();
-    }
-
     void RoadmapWizardMachine::updateTravelUI()
     {
         WizardMachine::updateTravelUI();
@@ -866,21 +821,6 @@ namespace vcl
         return pPage;
     }
 
-    void RoadmapWizard::enableState( WizardTypes::WizardState _nState, bool _bEnable )
-    {
-        // remember this (in case the state appears in the roadmap later on)
-        if ( _bEnable )
-            m_xRoadmapImpl->aDisabledStates.erase( _nState );
-        else
-        {
-            m_xRoadmapImpl->aDisabledStates.insert( _nState );
-            removePageFromHistory( _nState );
-        }
-
-        // if the state is currently in the roadmap, reflect it's new status
-        m_xRoadmapImpl->pRoadmap->EnableRoadmapItem( static_cast<RoadmapTypes::ItemId>(_nState), _bEnable );
-    }
-
     void RoadmapWizardMachine::enableState( WizardTypes::WizardState _nState, bool _bEnable )
     {
         // remember this (in case the state appears in the roadmap later on)
@@ -894,19 +834,6 @@ namespace vcl
 
         // if the state is currently in the roadmap, reflect it's new status
         m_xAssistant->set_page_sensitive(OString::number(_nState), _bEnable);
-    }
-
-    bool RoadmapWizard::knowsState( WizardTypes::WizardState i_nState ) const
-    {
-        for (auto const& path : m_xRoadmapImpl->aPaths)
-        {
-            for (auto const& state : path.second)
-            {
-                if ( state == i_nState )
-                    return true;
-            }
-        }
-        return false;
     }
 
     bool RoadmapWizardMachine::knowsState( WizardTypes::WizardState i_nState ) const

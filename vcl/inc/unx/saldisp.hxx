@@ -391,7 +391,6 @@ public:
     unsigned int GetXScreenCount() const { return m_aScreens.size(); }
 
     const SalFrameSet& getFrames() const { return m_aFrames; }
-    bool            IsNumLockFromXS() const { return bNumLockFromXS_; }
 
     std::list< SalObject* >& getSalObjects() { return m_aSalObjects; }
 };

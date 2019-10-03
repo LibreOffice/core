@@ -655,7 +655,6 @@ public:
     // Place the expander checkitem at the optimal indent for hierarchical lists
     void            SetOptimalImageIndent() { SetIndent(12); }
     void            SetSpaceBetweenEntries( short nSpace );
-    short           GetSpaceBetweenEntries() const {return nEntryHeightOffs;}
     Point           GetEntryPosition( SvTreeListEntry* ) const;
     void            MakeVisible( SvTreeListEntry* pEntry );
     void            MakeVisible( SvTreeListEntry* pEntry, bool bMoveToTop );
@@ -717,7 +716,6 @@ public:
     void            ScrollToAbsPos( long nPos );
 
     void            ShowFocusRect( const SvTreeListEntry* pEntry );
-    void            InitStartEntry();
 
     virtual VclPtr<PopupMenu> CreateContextMenu();
     virtual void    ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );

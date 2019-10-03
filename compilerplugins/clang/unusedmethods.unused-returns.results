@@ -1,6 +1,6 @@
 connectivity/source/inc/java/lang/Object.hxx:117
     int connectivity::java_lang_Object::callIntMethodWithIntArg_ThrowRuntime(const char *,struct _jmethodID *&,int) const
-connectivity/source/inc/odbc/OConnection.hxx:78
+connectivity/source/inc/odbc/OConnection.hxx:76
     short connectivity::odbc::OConnection::Construct(const class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
 connectivity/source/inc/odbc/OStatement.hxx:115
     _Bool connectivity::odbc::OStatement_Base::lockIfNecessary(const class rtl::OUString &)
@@ -20,7 +20,7 @@ extensions/source/scanner/sanedlg.hxx:101
     _Bool SaneDlg::SetAdjustedNumericalValue(const char *,double,int)
 filter/source/flash/swfexporter.hxx:85
     _Bool swf::FlashExporter::exportAll(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XOutputStream> &,const class com::sun::star::uno::Reference<class com::sun::star::task::XStatusIndicator> &)
-i18nlangtag/source/languagetag/languagetag.cxx:276
+i18nlangtag/source/languagetag/languagetag.cxx:277
     const class rtl::OUString & LanguageTagImpl::getBcp47() const
 idlc/inc/aststack.hxx:38
     class AstStack * AstStack::push(class AstScope *)
@@ -76,13 +76,13 @@ include/LibreOfficeKit/LibreOfficeKit.hxx:671
     int lok::Document::getSignatureState()
 include/LibreOfficeKit/LibreOfficeKit.hxx:681
     unsigned long lok::Document::renderShapeSelection(char **)
-include/LibreOfficeKit/LibreOfficeKit.hxx:821
+include/LibreOfficeKit/LibreOfficeKit.hxx:834
     char * lok::Office::getFilterTypes()
-include/LibreOfficeKit/LibreOfficeKit.hxx:875
+include/LibreOfficeKit/LibreOfficeKit.hxx:888
     char * lok::Office::getVersionInfo()
-include/LibreOfficeKit/LibreOfficeKit.hxx:889
+include/LibreOfficeKit/LibreOfficeKit.hxx:902
     _Bool lok::Office::runMacro(const char *)
-include/LibreOfficeKit/LibreOfficeKit.hxx:897
+include/LibreOfficeKit/LibreOfficeKit.hxx:910
     _Bool lok::Office::signDocument(const char *,const unsigned char *,const int,const unsigned char *,const int)
 include/oox/crypto/AgileEngine.hxx:121
     _Bool oox::core::AgileEngine::decryptHmacKey()
@@ -232,16 +232,14 @@ include/vcl/texteng.hxx:276
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:515
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:795
+include/vcl/weld.hxx:807
     _Bool weld::TreeView::iter_nth_child(class weld::TreeIter &,int) const
-include/vcl/weld.hxx:1643
+include/vcl/weld.hxx:1662
     _Bool weld::TextView::get_selection_bounds(int &,int &)
-include/vcl/wizardmachine.hxx:447
-    _Bool vcl::WizardMachine::travelNext()
-include/vcl/wizardmachine.hxx:450
-    _Bool vcl::WizardMachine::travelPrevious()
-include/vcl/wizardmachine.hxx:524
-    class TabPage * vcl::WizardMachine::GetOrCreatePage(const short)
+include/vcl/window.hxx:1515
+    _Bool vcl::Window::set_font_attribute(const class rtl::OString &,const class rtl::OUString &)
+include/vcl/wizardmachine.hxx:319
+    class BuilderPage * vcl::WizardMachine::GetOrCreatePage(const short)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
 lotuswordpro/inc/lwpsvstream.hxx:77
@@ -249,7 +247,7 @@ lotuswordpro/inc/lwpsvstream.hxx:77
 lotuswordpro/inc/lwpsvstream.hxx:78
     class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
 sc/inc/document.hxx:2151
-    const struct ScDocumentThreadSpecific & ScDocument::CalculateInColumnInThread(struct ScInterpreterContext &,const class ScAddress &,unsigned long,unsigned int,unsigned int)
+    const struct ScDocumentThreadSpecific & ScDocument::CalculateInColumnInThread(struct ScInterpreterContext &,const class ScRange &,unsigned int,unsigned int)
 sc/inc/orcusfilters.hxx:45
     _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
 sc/source/core/opencl/formulagroupcl.cxx:1084
@@ -348,9 +346,9 @@ sw/source/uibase/inc/drawbase.hxx:54
     _Bool SwDrawBase::MouseMove(const class MouseEvent &)
 sw/source/uibase/inc/fldmgr.hxx:117
     const class com::sun::star::uno::Reference<class com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
-sw/source/uibase/inc/mailmergewizard.hxx:77
+sw/source/uibase/inc/mailmergewizard.hxx:80
     _Bool SwMailMergeWizard::skipUntil(unsigned short)
-ucb/source/ucp/webdav-neon/ContentProperties.hxx:169
+ucb/source/ucp/webdav-neon/ContentProperties.hxx:170
     _Bool webdav_ucp::CachableContentProperties::containsAllNames(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &) const
 ucb/source/ucp/webdav-neon/NeonSession.hxx:240
     _Bool webdav_ucp::NeonSession::UNLOCK(struct ne_lock *)
@@ -372,10 +370,20 @@ vcl/inc/salgdi.hxx:385
     _Bool SalGraphics::UpdateSettings(class AllSettings &)
 vcl/inc/salgdi.hxx:387
     _Bool SalGraphics::BlendBitmap(const struct SalTwoRect &,const class SalBitmap &,const class OutputDevice *)
-vcl/inc/unx/gtk/gtkdata.hxx:165
+vcl/inc/salinst.hxx:177
+    _Bool SalInstance::CallEventCallback(const void *,int)
+vcl/inc/unx/gtk/gtkdata.hxx:138
     int GtkSalDisplay::CaptureMouse(class SalFrame *)
 vcl/inc/unx/saldisp.hxx:310
     _Bool SalDisplay::Dispatch(union _XEvent *)
+vcl/inc/wizdlg.hxx:223
+    _Bool vcl::RoadmapWizard::onFinish()
+vcl/inc/wizdlg.hxx:226
+    _Bool vcl::RoadmapWizard::travelNext()
+vcl/inc/wizdlg.hxx:229
+    _Bool vcl::RoadmapWizard::travelPrevious()
+vcl/inc/wizdlg.hxx:415
+    class TabPage * vcl::RoadmapWizard::GetOrCreatePage(const short)
 vcl/source/gdi/pdfwriter_impl.hxx:1233
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
 vcl/source/gdi/pdfwriter_impl.hxx:1234

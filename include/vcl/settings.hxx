@@ -538,7 +538,6 @@ public:
     void                            SetPreferredIconTheme(const OUString&, bool bDarkIconTheme = false);
 
     const DialogStyle&              GetDialogStyle() const;
-    void                            SetDialogStyle( const DialogStyle& rStyle );
 
     BitmapEx const &                GetPersonaHeader() const;
 

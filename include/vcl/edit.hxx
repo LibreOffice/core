@@ -230,7 +230,6 @@ public:
 
     virtual void        SetModifyHdl( const Link<Edit&,void>& rLink ) { maModifyHdl = rLink; }
     virtual const Link<Edit&,void>& GetModifyHdl() const { return maModifyHdl; }
-    virtual void        SetUpdateDataHdl( const Link<Edit&,void>& rLink ) { maUpdateDataHdl = rLink; }
 
     void                SetActivateHdl(const Link<Edit&,bool>& rLink) { maActivateHdl = rLink; }
 

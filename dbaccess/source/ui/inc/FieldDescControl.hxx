@@ -131,13 +131,10 @@ namespace dbaui
 
     protected:
         void    setRightAligned()       { m_bRightAligned = true; }
-        bool    isRightAligned() const  { return m_bRightAligned; }
 
         void                saveCurrentFieldDescData() { SaveData( pActFieldDescr ); }
         OFieldDescription*  getCurrentFieldDescData() { return pActFieldDescr; }
         void                setCurrentFieldDescData( OFieldDescription* _pDesc ) { pActFieldDescr = _pDesc; }
-
-        sal_uInt16          CountActiveAggregates() const;
 
         virtual void        ActivateAggregate( EControlType eType );
         virtual void        DeactivateAggregate( EControlType eType );

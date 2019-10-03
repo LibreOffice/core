@@ -3547,12 +3547,6 @@ sal_uInt16 SvTreeListBox::GetCurrentTabPos() const
     return pImpl->GetCurrentTabPos();
 }
 
-void SvTreeListBox::InitStartEntry()
-{
-    if( !pImpl->m_pStartEntry )
-        pImpl->m_pStartEntry = GetModel()->First();
-}
-
 VclPtr<PopupMenu> SvTreeListBox::CreateContextMenu()
 {
     return nullptr;

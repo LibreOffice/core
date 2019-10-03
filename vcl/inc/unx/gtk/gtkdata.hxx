@@ -118,8 +118,6 @@ class GtkSalDisplay : public SalGenericDisplay
     bool                            m_bStartupCompleted;
     bool                            m_bX11Display;
 
-    GdkCursor* getFromXBM( const unsigned char *pBitmap, const unsigned char *pMask,
-                           int nWidth, int nHeight, int nXHot, int nYHot );
     GdkCursor* getFromSvg( OUString const & name, int nXHot, int nYHot );
 
 public:
@@ -139,7 +137,6 @@ public:
 
     SalX11Screen GetDefaultXScreen() { return m_pSys->GetDisplayDefaultXScreen(); }
     Size         GetScreenSize( int nDisplayScreen );
-    int          GetXScreenCount() { return m_pSys->GetDisplayXScreenCount(); }
 
     GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event );
     void startupNotificationCompleted() { m_bStartupCompleted = true; }
@@ -149,8 +146,6 @@ public:
 
     virtual void TriggerUserEventProcessing() override;
     virtual void TriggerAllUserEventsProcessed() override;
-
-    void RefreshMenusUnity();
 };
 
 inline GtkSalData* GetGtkSalData()

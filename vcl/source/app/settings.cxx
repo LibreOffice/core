@@ -1875,13 +1875,6 @@ StyleSettings::GetDialogStyle() const
 }
 
 void
-StyleSettings::SetDialogStyle( const DialogStyle& rStyle )
-{
-    CopyData();
-    mxData->maDialogStyle = rStyle;
-}
-
-void
 StyleSettings::SetEdgeBlending(sal_uInt16 nCount)
 {
     CopyData();

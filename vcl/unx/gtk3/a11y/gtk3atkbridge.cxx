@@ -22,7 +22,6 @@
 
 #include "atkfactory.hxx"
 #include "atkutil.hxx"
-#include "atkwindow.hxx"
 
 bool InitAtkBridge()
 {

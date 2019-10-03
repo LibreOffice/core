@@ -181,18 +181,6 @@ void OFieldDescControl::Init()
     ::dbaui::setEvalDateFormatForFormatter(xFormatter);
 }
 
-sal_uInt16 OFieldDescControl::CountActiveAggregates() const
-{
-    OWidgetBase* ppAggregates[] = { m_xRequired.get(), m_xNumType.get(), m_xAutoIncrement.get(), m_xDefault.get(), m_xTextLen.get(), m_xLength.get(), m_xScale.get(), m_xColumnName.get(), m_xType.get(),m_xAutoIncrementValue.get()};
-    sal_uInt16 nVisibleAggregates = 0;
-    for (OWidgetBase* pAggregate : ppAggregates)
-        if (pAggregate)
-            ++nVisibleAggregates;
-    if (m_xFormat)
-        ++nVisibleAggregates;
-    return nVisibleAggregates;
-}
-
 void OFieldDescControl::SetReadOnly( bool bReadOnly )
 {
     // Enable/disable Controls

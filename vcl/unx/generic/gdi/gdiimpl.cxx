@@ -154,67 +154,9 @@ void X11SalGraphicsImpl::Init()
     mnBrushPixel = mrParent.GetPixel( mnBrushColor );
 }
 
-void X11SalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY )
-{
-    //TODO lfrb: don't hardcode the depth
-    Display* pDpy = mrParent.GetXDisplay();
-    GC aTmpGC = XCreateGC( pDpy, pPixmap->GetPixmap(), 0, nullptr );
-
-    if( !aTmpGC )
-    {
-        SAL_WARN( "vcl", "Could not create GC from screen" );
-        return;
-    }
-
-    // Copy the background of the screen into a composite pixmap
-    X11SalGraphics::CopyScreenArea( mrParent.GetXDisplay(),
-                             mrParent.GetDrawable(), mrParent.GetScreenNumber(),
-                             mrParent.GetVisual().GetDepth(),
-                             pPixmap->GetDrawable(), pPixmap->GetScreen(),
-                             pPixmap->GetDepth(),
-                             aTmpGC,
-                             nX, nY, pPixmap->GetWidth(), pPixmap->GetHeight(),
-                             0, 0 );
-
-    XFreeGC( pDpy, aTmpGC );
-}
-
-bool X11SalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* /*Mask*/, int nX, int nY )
-{
-    // TODO: lfrb: Use the mask
-    GC aFontGC = mrParent.GetFontGC();
-
-    // The GC can't be null, otherwise we'd have no clip region
-    if( aFontGC == nullptr )
-    {
-        SAL_WARN( "vcl", "no valid GC to render pixmap" );
-        return false;
-    }
-
-    if( !pPixmap )
-        return false;
-
-    X11SalGraphics::CopyScreenArea( mrParent.GetXDisplay(),
-                             pPixmap->GetDrawable(), pPixmap->GetScreen(),
-                             pPixmap->GetDepth(),
-                             mrParent.GetDrawable(), mrParent.m_nXScreen,
-                             mrParent.GetVisual().GetDepth(),
-                             aFontGC,
-                             0, 0,
-                             pPixmap->GetWidth(), pPixmap->GetHeight(),
-                             nX, nY );
-    return true;
-}
-
 bool X11SalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey& /*rControlCacheKey*/, int /*nX*/, int /*nY*/)
 {
     return false;
-}
-
-bool X11SalGraphicsImpl::RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY,
-                                              ControlCacheKey& /*rControlCacheKey*/)
-{
-    return RenderPixmapToScreen(pPixmap, pMask, nX, nY);
 }
 
 XID X11SalGraphicsImpl::GetXRenderPicture()

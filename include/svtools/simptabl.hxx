@@ -56,7 +56,6 @@ private:
 
     VclPtr<HeaderBar>   aHeaderBar;
     long                nOldPos;
-    sal_uInt16          nHeaderItemId;
     bool                bPaintFlag;
     bool                bSortDirection;
     sal_uInt16          nSortCol;
@@ -89,14 +88,9 @@ public:
 
     void UpdateViewSize();
 
-    void            InsertHeaderEntry(const OUString& rText,
-                            sal_uInt16 nCol=HEADERBAR_APPEND,
-                            HeaderBarItemBits nBits = HeaderBarItemBits::STDSTYLE);
-
     using SvHeaderTabListBox::SetTabs;
 
     void            SortByCol(sal_uInt16, bool bDir=true);
-    sal_uInt16      GetSortedCol() const { return nSortCol;}
     SvLBoxItem*     GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 nPos ) const;
 
     bool     IsFocusOnCellEnabled() const { return IsCellFocusEnabled(); }

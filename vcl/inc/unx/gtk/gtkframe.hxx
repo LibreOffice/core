@@ -305,7 +305,6 @@ class GtkSalFrame : public SalFrame
     Size calcDefaultSize();
 
     void setMinMaxSize();
-    void createNewWindow( ::Window aParent, bool bXEmbed, SalX11Screen nXScreen );
 
     void AllocateFrame();
     void TriggerPaintEvent();
@@ -332,10 +331,6 @@ public:
     guint                           m_nHudAwarenessId;
     std::vector<gulong>             m_aMouseSignalIds;
 
-    // dispatches an event, returns true if dispatched
-    // and false else; if true was returned the event should
-    // be swallowed
-    bool Dispatch( const XEvent* pEvent );
     void grabPointer(bool bGrab, bool bOwnerEvents = false);
 
     static GtkSalDisplay*  getDisplay();
@@ -345,10 +340,6 @@ public:
     GtkEventBox* getEventBox() const { return m_pEventBox; }
     GtkWidget*  getMouseEventWidget() const;
     GtkGrid*    getTopLevelGridWidget() const { return m_pTopLevelGrid; }
-    GdkWindow*  getForeignParent() const { return m_pForeignParent; }
-    GdkNativeWindow getForeignParentWindow() const { return m_aForeignParentWindow; }
-    GdkWindow*  getForeignTopLevel() const { return m_pForeignTopLevel; }
-    GdkNativeWindow getForeignTopLevelWindow() const { return m_aForeignTopLevelWindow; }
     const SalX11Screen& getXScreenNumber() const { return m_nXScreen; }
     int          GetDisplayScreen() const { return maGeometry.nDisplayScreenNumber; }
     void updateScreenNumber();

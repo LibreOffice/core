@@ -100,7 +100,6 @@ SvSimpleTable::SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits):
         SvHeaderTabListBox(&rParent, nBits | WB_CLIPCHILDREN | WB_HSCROLL | WB_TABSTOP),
         m_rParentTableContainer(rParent),
         aHeaderBar(VclPtr<HeaderBar>::Create(&rParent,WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP)),
-        nHeaderItemId(1),
         bPaintFlag(true),
         aCollator(*(IntlWrapper(SvtSysLocale().GetUILanguageTag()).getCaseCollator()))
 {
@@ -217,27 +216,6 @@ void SvSimpleTable::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
         }
     }
     bPaintFlag = true;
-}
-
-void SvSimpleTable::InsertHeaderEntry(const OUString& rText,
-    sal_uInt16 nCol, HeaderBarItemBits nBits)
-{
-    sal_Int32 nEnd = rText.indexOf( '\t' );
-    if( nEnd == -1 )
-    {
-        aHeaderBar->InsertItem(nHeaderItemId++, rText, 0, nBits, nCol);
-    }
-    else
-    {
-        sal_Int32 nIndex = 0;
-        do
-        {
-            OUString aString = rText.getToken(0, '\t', nIndex);
-            aHeaderBar->InsertItem(nHeaderItemId++, aString, 0, nBits, nCol);
-        }
-        while ( nIndex >= 0 );
-    }
-    SetTabs();
 }
 
 void SvSimpleTable::SortByCol(sal_uInt16 nCol, bool bDir)

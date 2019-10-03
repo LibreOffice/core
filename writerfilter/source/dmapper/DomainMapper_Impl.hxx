@@ -734,7 +734,6 @@ public:
 
     void PopPageHeaderFooter();
     bool IsInHeaderFooter() const { return m_eInHeaderFooterImport != HeaderFooterImportState::none; }
-    bool IsInFooter() const { return m_eInHeaderFooterImport == HeaderFooterImportState::footer; }
 
     bool IsInTOC() const { return m_bStartTOC; }
 
