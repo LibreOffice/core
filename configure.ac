@@ -6785,6 +6785,10 @@ if test "$GCC" = "yes"; then
     else
         AC_MSG_WARN([cannot compile AVX2 intrinsics])
     fi
+else
+    # All supported MSVC versions support this flag
+    # (https://docs.microsoft.com/en-us/cpp/build/reference/arch-x86).
+    INTRINSICS_CXXFLAGS="-arch:AVX2"
 fi
 
 AC_SUBST([INTRINSICS_CXXFLAGS])
