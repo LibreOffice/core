@@ -414,8 +414,8 @@ private:
 
     std::unique_ptr<weld::Widget> m_xBox;
     std::unique_ptr<weld::Container> m_xBody;
-    std::unique_ptr<CustomPropertiesWindow> m_xPropertiesWin;
     std::unique_ptr<weld::ScrolledWindow> m_xVertScroll;
+    std::unique_ptr<CustomPropertiesWindow> m_xPropertiesWin;
     std::unique_ptr<weld::Label> m_xName;
     std::unique_ptr<weld::Label> m_xType;
     std::unique_ptr<weld::Label> m_xValue;
