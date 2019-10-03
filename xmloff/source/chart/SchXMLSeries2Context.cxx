@@ -30,6 +30,10 @@
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 
+#include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
+#include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
+#include <com/sun/star/chart2/DataPointCustomLabelField.hpp>
+
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
 #include <com/sun/star/chart/ChartSymbolType.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
@@ -1084,6 +1088,17 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                     pPropStyleContext->FillPropertySet( xPointProp );
                     if( seriesStyle.mbSymbolSizeForSeriesIsMissingInFile )
                         lcl_resetSymbolSizeForPointsIfNecessary( xPointProp, rImport, pPropStyleContext, pStylesCtxt );
+                }
+
+                if(!seriesStyle.msCustomLabelField.isEmpty())
+                {
+                    Sequence< Reference<chart2::XDataPointCustomLabelField>> xLabels(1);
+                    Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+                    Reference< chart2::XDataPointCustomLabelField > xCustomLabel = chart2::DataPointCustomLabelField::create(xContext);
+                    xLabels[0] = xCustomLabel;
+                    xCustomLabel->setString(seriesStyle.msCustomLabelField);
+                    xCustomLabel->setFieldType(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT);
+                    xPointProp->setPropertyValue("CustomLabelFields", uno::Any(xLabels));
                 }
             }
             catch( const uno::Exception & )
