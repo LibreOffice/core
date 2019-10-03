@@ -66,14 +66,11 @@ namespace dbaui
 
         DECL_LINK(CommandHdl, const CommandEvent&, bool);
 
-        OWizTypeSelect* m_pParentTabPage;
-
         Link<weld::TreeView&, void> m_aChangeHdl;
 
     public:
         OWizTypeSelectList(std::unique_ptr<weld::TreeView> xControl);
         void SetPKey(bool bPKey) { m_bPKey = bPKey; }
-        void SetParentTabPage(OWizTypeSelect* pParentTabPage) { m_pParentTabPage = pParentTabPage; }
         weld::TreeView* GetWidget() { return m_xControl.get(); }
         OUString get_selected_id() const { return m_xControl->get_selected_id(); }
         void show() { m_xControl->show(); }

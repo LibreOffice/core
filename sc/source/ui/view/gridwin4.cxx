@@ -1230,8 +1230,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                              -nTopLeftTileRowOffset,
                              nTopLeftTileCol, nTopLeftTileRow,
                              nBottomRightTileCol, nBottomRightTileRow,
-                             fPPTX, fPPTY, nullptr, nullptr,
-                             nTilePosX, nTilePosY);
+                             fPPTX, fPPTY, nullptr, nullptr);
 
     // setup the SdrPage so that drawinglayer works correctly
     ScDrawLayer* pModel = pDoc->GetDrawLayer();

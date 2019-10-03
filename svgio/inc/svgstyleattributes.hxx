@@ -182,10 +182,6 @@ namespace svgio
             SvgPaint                    maStopColor;
             SvgNumber                   maStrokeWidth;
             SvgNumber                   maStopOpacity;
-            const SvgGradientNode*      mpSvgGradientNodeFill;
-            const SvgGradientNode*      mpSvgGradientNodeStroke;
-            const SvgPatternNode*       mpSvgPatternNodeFill;
-            const SvgPatternNode*       mpSvgPatternNodeStroke;
             SvgNumber                   maFillOpacity;
             SvgNumberVector             maStrokeDasharray;
             SvgNumber                   maStrokeDashOffset;

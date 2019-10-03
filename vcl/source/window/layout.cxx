@@ -1528,11 +1528,6 @@ Size VclFrame::calculateRequisition() const
         aRet.setWidth( std::max(aLabelSize.Width(), aRet.Width()) );
     }
 
-    const FrameStyle &rFrameStyle =
-        GetSettings().GetStyleSettings().GetFrameStyle();
-    aRet.AdjustWidth(rFrameStyle.left + rFrameStyle.right );
-    aRet.AdjustHeight(rFrameStyle.top + rFrameStyle.bottom );
-
     return aRet;
 }
 
@@ -1540,11 +1535,8 @@ void VclFrame::setAllocation(const Size &rAllocation)
 {
     //SetBackground( Color(0xFF, 0x00, 0xFF) );
 
-    const FrameStyle &rFrameStyle =
-        GetSettings().GetStyleSettings().GetFrameStyle();
-    Size aAllocation(rAllocation.Width() - rFrameStyle.left - rFrameStyle.right,
-        rAllocation.Height() - rFrameStyle.top - rFrameStyle.bottom);
-    Point aChildPos(rFrameStyle.left, rFrameStyle.top);
+    Size aAllocation(rAllocation);
+    Point aChildPos;
 
     vcl::Window *pChild = get_child();
     vcl::Window *pLabel = get_label_widget();
@@ -1732,21 +1724,13 @@ Size VclExpander::calculateRequisition() const
     aRet.AdjustHeight(aExpanderSize.Height() );
     aRet.setWidth( std::max(aExpanderSize.Width(), aRet.Width()) );
 
-    const FrameStyle &rFrameStyle =
-        GetSettings().GetStyleSettings().GetFrameStyle();
-    aRet.AdjustWidth(rFrameStyle.left + rFrameStyle.right );
-    aRet.AdjustHeight(rFrameStyle.top + rFrameStyle.bottom );
-
     return aRet;
 }
 
 void VclExpander::setAllocation(const Size &rAllocation)
 {
-    const FrameStyle &rFrameStyle =
-        GetSettings().GetStyleSettings().GetFrameStyle();
-    Size aAllocation(rAllocation.Width() - rFrameStyle.left - rFrameStyle.right,
-        rAllocation.Height() - rFrameStyle.top - rFrameStyle.bottom);
-    Point aChildPos(rFrameStyle.left, rFrameStyle.top);
+    Size aAllocation(rAllocation);
+    Point aChildPos;
 
     WindowImpl* pWindowImpl = ImplGetWindowImpl();
 

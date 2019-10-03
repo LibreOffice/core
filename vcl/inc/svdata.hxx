@@ -266,17 +266,13 @@ struct ImplSVNWFData
     int                     mnStatusBarLowerRightOffset = 0; // amount in pixel to avoid in the lower righthand corner
     int                     mnMenuFormatBorderX = 0;        // horizontal inner popup menu border
     int                     mnMenuFormatBorderY = 0;        // vertical inner popup menu border
-    int                     mnMenuSeparatorBorderX = 0;     // gap at each side of separator
     ::Color                 maMenuBarHighlightTextColor = COL_TRANSPARENT; // override highlight text color
                                                             // in menubar if not transparent
     bool                    mbMenuBarDockingAreaCommonBG = false; // e.g. WinXP default theme
     bool                    mbDockingAreaSeparateTB = false; // individual toolbar backgrounds
                                                             // instead of one for docking area
     bool                    mbDockingAreaAvoidTBFrames = false; ///< don't draw frames around the individual toolbars if mbDockingAreaSeparateTB is false
-    bool                    mbToolboxDropDownSeparate = false; // two adjacent buttons for
-                                                            // toolbox dropdown buttons
     bool                    mbFlatMenu = false;             // no popup 3D border
-    bool                    mbOpenMenuOnF10 = false;        // on gnome the first menu opens on F10
     bool                    mbNoFocusRects = false;         // on Aqua/Gtk3 use native focus rendering, except for flat buttons
     bool                    mbNoFocusRectsForFlatButtons = false; // on Gtk3 native focusing is also preferred for flat buttons
     bool                    mbCenteredTabs = false;         // on Aqua, tabs are centered

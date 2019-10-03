@@ -185,8 +185,6 @@ private:
     long nScrW;                 // Output size (Pixel)
     long nScrH;
     long nMirrorW;              // Visible output width for mirroring (default: nScrW)
-    long nTilePosX;             // Current tile X offset (twips)
-    long nTilePosY;             // Current tile Y offset (twips)
     SCCOL const nX1;            // Start-/End coordinates
     SCROW const nY1;            //  ( incl. hidden )
     SCCOL const nX2;
@@ -306,8 +304,7 @@ public:
                                     SCCOL nNewX1, SCROW nNewY1, SCCOL nNewX2, SCROW nNewY2,
                                     double nPixelPerTwipsX, double nPixelPerTwipsY,
                                     const Fraction* pZoomX = nullptr,
-                                    const Fraction* pZoomY = nullptr,
-                                    long nNewTilePosX = 0, long nNewTilePosY = 0 );
+                                    const Fraction* pZoomY = nullptr );
 
                     ~ScOutputData();
 

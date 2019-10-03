@@ -72,7 +72,6 @@ namespace dbaui
                                    const Reference< XComponentContext >& _rxContext)
         : GenericDialogController(pParent, "dbaccess/ui/indexdesigndialog.ui", "IndexDesignDialog")
         , m_xConnection(_rxConnection)
-        , m_bEditingActive(false)
         , m_bEditAgain(false)
         , m_bNoHandlerCall(false)
         , m_xContext(_rxContext)
@@ -146,7 +145,7 @@ namespace dbaui
 
     void DbaIndexDialog::updateToolbox()
     {
-        m_xActions->set_item_sensitive("ID_INDEX_NEW", !m_bEditingActive);
+        m_xActions->set_item_sensitive("ID_INDEX_NEW", true);
 
         int nSelected = m_xIndexList->get_selected_index();
         bool bSelectedAnything = nSelected != -1;
@@ -427,17 +426,6 @@ namespace dbaui
 
     IMPL_LINK_NOARG(DbaIndexDialog, OnCloseDialog, weld::Button&, void)
     {
-        if (m_bEditingActive)
-        {
-            OSL_ENSURE(!m_bEditAgain, "DbaIndexDialog::OnCloseDialog: somebody was faster than hell!");
-                // this means somebody entered a new name, which was invalid, which cause us to posted us an event,
-                // and before the event arrived the user clicked onto "close". VERY fast, this user...
-            m_xIndexList->end_editing();
-            if (m_bEditAgain)
-                // could not commit the new name (started a new - asynchronous - edit trial)
-                return;
-        }
-
         // the currently selected entry
         std::unique_ptr<weld::TreeIter> xSelected(m_xIndexList->make_iterator());
         // the selected index
@@ -660,9 +648,6 @@ namespace dbaui
     void DbaIndexDialog::IndexSelected()
     {
 //TODO        m_xIndexList->EndSelection();
-
-        if (m_bEditingActive)
-            m_xIndexList->end_editing();
 
         std::unique_ptr<weld::TreeIter> xSelected(m_xIndexList->make_iterator());
         if (!m_xIndexList->get_selected(xSelected.get()))

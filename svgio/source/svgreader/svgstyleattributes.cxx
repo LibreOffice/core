@@ -1256,10 +1256,6 @@ namespace svgio
             maStopColor(basegfx::BColor(0.0, 0.0, 0.0), true),
             maStrokeWidth(),
             maStopOpacity(),
-            mpSvgGradientNodeFill(nullptr),
-            mpSvgGradientNodeStroke(nullptr),
-            mpSvgPatternNodeFill(nullptr),
-            mpSvgPatternNodeStroke(nullptr),
             maFillOpacity(),
             maStrokeDasharray(),
             maStrokeDashOffset(),
@@ -2095,11 +2091,7 @@ namespace svgio
 
         const SvgGradientNode* SvgStyleAttributes::getSvgGradientNodeFill() const
         {
-            if(mpSvgGradientNodeFill)
-            {
-                return mpSvgGradientNodeFill;
-            }
-            else if (!maFill.isSet() && !mpSvgPatternNodeFill)
+            if (!maFill.isSet())
             {
                 if (!maNodeFillURL.isEmpty())
                 {
@@ -2129,11 +2121,7 @@ namespace svgio
 
         const SvgGradientNode* SvgStyleAttributes::getSvgGradientNodeStroke() const
         {
-            if(mpSvgGradientNodeStroke)
-            {
-                return mpSvgGradientNodeStroke;
-            }
-            else if (!maStroke.isSet() && !mpSvgPatternNodeStroke)
+            if (!maStroke.isSet())
             {
                 if(!maNodeStrokeURL.isEmpty())
                 {
@@ -2164,11 +2152,7 @@ namespace svgio
 
         const SvgPatternNode* SvgStyleAttributes::getSvgPatternNodeFill() const
         {
-            if(mpSvgPatternNodeFill)
-            {
-                return mpSvgPatternNodeFill;
-            }
-            else if (!maFill.isSet() && !mpSvgGradientNodeFill)
+            if (!maFill.isSet())
             {
                 if (!maNodeFillURL.isEmpty())
                 {
@@ -2199,11 +2183,7 @@ namespace svgio
 
         const SvgPatternNode* SvgStyleAttributes::getSvgPatternNodeStroke() const
         {
-            if(mpSvgPatternNodeStroke)
-            {
-                return mpSvgPatternNodeStroke;
-            }
-            else if (!maStroke.isSet() && !mpSvgGradientNodeStroke)
+            if (!maStroke.isSet())
             {
                 if(!maNodeStrokeURL.isEmpty())
                 {
