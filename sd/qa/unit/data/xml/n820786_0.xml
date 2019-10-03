@@ -56,6 +56,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -141,6 +142,7 @@
        <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
       </Path>
      </PropertyValue>
+     <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Type" value="ooxml-ellipse" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="ViewBox">
@@ -224,6 +226,7 @@
        <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
       </Path>
      </PropertyValue>
+     <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Type" value="ooxml-ellipse" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="ViewBox">
@@ -294,6 +297,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -357,6 +361,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -420,6 +425,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -483,6 +489,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -546,6 +553,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -609,6 +617,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -672,6 +681,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -735,6 +745,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -798,6 +809,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -861,6 +873,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -924,6 +937,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -987,6 +1001,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -1050,6 +1065,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -1113,6 +1129,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -1176,6 +1193,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -1239,6 +1257,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -1302,6 +1321,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -1365,6 +1385,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -1428,6 +1449,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -1491,6 +1513,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -1554,6 +1577,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -1617,6 +1641,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -1680,6 +1705,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -1743,6 +1769,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -1806,6 +1833,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -1869,6 +1897,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -1932,6 +1961,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -1995,6 +2025,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -2058,6 +2089,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -2121,6 +2153,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -2184,6 +2217,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -2247,6 +2281,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -2310,6 +2345,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -2373,6 +2409,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -2436,6 +2473,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -2499,6 +2537,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -2562,6 +2601,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -2625,6 +2665,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -2688,6 +2729,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -2751,6 +2793,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -2814,6 +2857,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -2877,6 +2921,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -2940,6 +2985,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -3003,6 +3049,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -3066,6 +3113,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -3129,6 +3177,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -3192,6 +3241,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
@@ -3255,6 +3305,7 @@
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-rect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
