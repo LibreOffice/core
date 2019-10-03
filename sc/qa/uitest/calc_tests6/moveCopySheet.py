@@ -46,21 +46,21 @@ class moveCopySheet(UITestCase):
         newName.executeAction("TYPE", mkPropertyValues({"TEXT":"moveName"}))
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
-        #verify, the file has 2 sheets; first one is "Sheet1" ; second one is "moveName"
+        # Verify, the file has 2 sheets; first one is "Sheet1" ; second one is "moveName"
         self.assertEqual(document.Sheets.getCount(), 2)
 
-        self.assertEqual(document.Sheets.getByIndex(0).Name, "Sheet1")
-        self.assertEqual(document.Sheets.getByIndex(1).Name, "moveName")
+        self.assertEqual(document.Sheets[0].Name, "Sheet1")
+        self.assertEqual(document.Sheets[1].Name, "moveName")
 
-        #verify that the cancel button does not do anything
+        # Verify that the cancel button does not do anything
         self.ui_test.execute_dialog_through_command(".uno:Move")
         xDialog = self.xUITest.getTopFocusWindow()
         xCancelBtn = xDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCancelBtn)
 
         self.assertEqual(document.Sheets.getCount(), 2)
-        self.assertEqual(document.Sheets.getByIndex(0).Name, "Sheet1")
-        self.assertEqual(document.Sheets.getByIndex(1).Name, "moveName")
+        self.assertEqual(document.Sheets[0].Name, "Sheet1")
+        self.assertEqual(document.Sheets[1].Name, "moveName")
 
         self.ui_test.close_doc()
 

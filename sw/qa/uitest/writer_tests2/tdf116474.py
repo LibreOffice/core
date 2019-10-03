@@ -29,7 +29,7 @@ class tdf116474(UITestCase):
         textGraphic.Graphic = graphic
         text.insertTextContent(cursor, textGraphic, False)
         #select image
-        document.getCurrentController().select(document.getDrawPage().getByIndex(0))
+        document.getCurrentController().select(document.getDrawPage()[0])
 
         self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog")   #  caption
         xDialogCaption = self.xUITest.getTopFocusWindow()
@@ -40,14 +40,14 @@ class tdf116474(UITestCase):
         xOkBtn=xDialogCaption.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())
 
-        xFrame = document.TextFrames.getByIndex(0)
-        self.assertEqual(document.TextFrames.getByIndex(0).Text.String, "\nFigure 1: Caption")
+        xFrame = document.TextFrames[0]
+        self.assertEqual(document.TextFrames[0].Text.String, "\nFigure 1: Caption")
         self.assertEqual(document.GraphicObjects.getCount(), 1)  #nr. of images
         #Undo, redo
         self.xUITest.executeCommand(".uno:Undo")
         self.xUITest.executeCommand(".uno:Redo")
         #Verify
-        self.assertEqual(document.TextFrames.getByIndex(0).Text.String, "\nFigure 1: Caption")
+        self.assertEqual(document.TextFrames[0].Text.String, "\nFigure 1: Caption")
         self.assertEqual(document.GraphicObjects.getCount(), 1)  #nr. of images
 
         self.ui_test.close_doc()

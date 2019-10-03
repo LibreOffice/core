@@ -126,7 +126,7 @@ class TestVarFields(unittest.TestCase):
         xDoc.storeToURL(url, tuple(list(range(0))))
 
         # 19. retrieve the section
-        xSection = xDoc.getTextSections().getByIndex(0)
+        xSection = xDoc.getTextSections()[0]
 
         # 20. retrieve the condition property of that section
         read_content = xSection.getPropertyValue("Condition")
