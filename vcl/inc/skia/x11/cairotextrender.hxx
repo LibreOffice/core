@@ -10,7 +10,7 @@
 #ifndef INCLUDED_VCL_UNX_GENERIC_GDI_SKIAX11CAIROTEXTRENDER_HXX
 #define INCLUDED_VCL_UNX_GENERIC_GDI_SKIAX11CAIROTEXTRENDER_HXX
 
-#include "x11cairotextrender.hxx"
+#include <unx/x11/x11cairotextrender.hxx>
 
 class SkiaX11CairoTextRender : public X11CairoTextRender
 {

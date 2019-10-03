@@ -17482,6 +17482,7 @@ vcl/inc/unx/screensaverinhibitor.hxx
 vcl/inc/unx/sm.hxx
 vcl/inc/unx/svsys.h
 vcl/inc/unx/wmadaptor.hxx
+vcl/inc/unx/x11/x11cairotextrender.hxx
 vcl/inc/unx/x11/x11gdiimpl.h
 vcl/inc/unx/x11/x11sys.hxx
 vcl/inc/unx/x11/xlimits.hxx
@@ -17650,6 +17651,8 @@ vcl/opengl/texture.cxx
 vcl/opengl/win/WinDeviceInfo.cxx
 vcl/opengl/win/blocklist_parser.cxx
 vcl/opengl/win/gdiimpl.cxx
+vcl/opengl/x11/cairotextrender.cxx
+vcl/opengl/x11/cairotextrender.hxx
 vcl/opengl/x11/X11DeviceInfo.cxx
 vcl/opengl/x11/gdiimpl.cxx
 vcl/opengl/x11/salvd.cxx
@@ -18119,14 +18122,11 @@ vcl/unx/generic/gdi/font.cxx
 vcl/unx/generic/gdi/gdiimpl.cxx
 vcl/unx/generic/gdi/gdiimpl.hxx
 vcl/unx/generic/gdi/nativewindowhandleprovider.cxx
-vcl/unx/generic/gdi/openglx11cairotextrender.cxx
-vcl/unx/generic/gdi/openglx11cairotextrender.hxx
 vcl/unx/generic/gdi/salbmp.cxx
 vcl/unx/generic/gdi/salgdi.cxx
 vcl/unx/generic/gdi/salgdi2.cxx
 vcl/unx/generic/gdi/salvd.cxx
 vcl/unx/generic/gdi/x11cairotextrender.cxx
-vcl/unx/generic/gdi/x11cairotextrender.hxx
 vcl/unx/generic/gdi/xrender_peer.cxx
 vcl/unx/generic/glyphs/freetype_glyphcache.cxx
 vcl/unx/generic/glyphs/glyphcache.cxx

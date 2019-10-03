@@ -59,9 +59,9 @@
 #include "gdiimpl.hxx"
 #include <opengl/x11/gdiimpl.hxx>
 #include <skia/x11/gdiimpl.hxx>
-#include "x11cairotextrender.hxx"
-#include "openglx11cairotextrender.hxx"
-#include "skiax11cairotextrender.hxx"
+#include <unx/x11/x11cairotextrender.hxx>
+#include <opengl/x11/cairotextrender.hxx>
+#include <skia/x11/cairotextrender.hxx>
 
 #include <unx/printergfx.hxx>
 #include <unx/x11/xrender_peer.hxx>

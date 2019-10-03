@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "x11cairotextrender.hxx"
+#include <unx/x11/x11cairotextrender.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/salvd.h>
 #include <unx/glyphcache.hxx>

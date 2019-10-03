@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "skiax11cairotextrender.hxx"
+#include <skia/x11/cairotextrender.hxx>
 
 #include <salbmp.hxx>
 #include <vcl/salbtype.hxx>
@@ -38,6 +38,7 @@ cairo_t* SkiaX11CairoTextRender::getCairoContext()
     if (!surface)
         return nullptr;
     cairo_t* cr = cairo_create(surface);
+    // TODO
     cairo_surface_destroy(surface);
     return cr;
 }
@@ -80,6 +81,7 @@ void SkiaX11CairoTextRender::releaseCairoContext(cairo_t* cr)
     //    pImpl->PreDraw();
     //    pImpl->DrawAlphaTexture( aTexture, aRect, true, true );
     //    pImpl->PostDraw();
+    //    abort();
 
     cairo_destroy(cr);
 }
