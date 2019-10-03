@@ -6207,6 +6207,7 @@ public:
         if (m_pMenuHack)
         {
             g_signal_handler_disconnect(m_pMenuButton, m_nSignalId);
+            gtk_menu_button_set_popover(m_pMenuButton, nullptr);
             gtk_widget_destroy(GTK_WIDGET(m_pMenuHack));
         }
     }
