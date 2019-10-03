@@ -103,7 +103,7 @@ define gb_LinkTarget_add_cobject
 $(call gb_LinkTarget_get_target,$(1)) : COBJECTS += $(2)
 
 endef
-define gb_LinkTarget_add_cxxobject
+define gb_LinkTarget_add_cxxobject_internal
 $(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS += $(2)
 
 endef
@@ -111,7 +111,7 @@ define gb_LinkTarget_add_generated_c_object
 $(call gb_LinkTarget_get_target,$(1)) : GENCOBJECTS += $(2)
 
 endef
-define gb_LinkTarget_add_generated_cxx_object
+define gb_LinkTarget_add_generated_cxx_object_internal
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS += $(2)
 
 endef
