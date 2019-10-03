@@ -47,6 +47,8 @@
 
 ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame> &rFrame)
     : PanelLayout(pParent, "FunctionPanel", "modules/scalc/ui/functionpanel.ui", rFrame)
+    , xConfigListener(new comphelper::ConfigurationListener("/org.openoffice.Office.Calc/Formula/Syntax"))
+    , xConfigChange(std::make_unique<EnglishFunctionNameChange>(xConfigListener, this))
     , pFuncDesc(nullptr)
 {
     get(aCatBox, "category");
@@ -99,6 +101,12 @@ ScFunctionWin::~ScFunctionWin()
 
 void ScFunctionWin::dispose()
 {
+    if (xConfigChange)
+    {
+        xConfigChange.reset();
+        xConfigListener->dispose();
+        xConfigListener.clear();
+    }
     aCatBox.clear();
     aFuncList.clear();
     aInsertButton.clear();
@@ -412,9 +420,17 @@ IMPL_LINK_NOARG( ScFunctionWin, SetSelectionClickHdl, Button*, void )
 {
     DoEnter();          // saves the input
 }
+
 IMPL_LINK_NOARG( ScFunctionWin, SetSelectionHdl, ListBox&, void )
 {
     DoEnter();          // saves the input
+}
+
+void EnglishFunctionNameChange::setProperty(const css::uno::Any &rProperty)
+{
+    ConfigurationListenerProperty::setProperty(rProperty);
+    m_xFunctionWin->InitLRUList();
+    m_xFunctionWin->UpdateFunctionList();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
