@@ -2690,7 +2690,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 #if defined(IOS)
     paintTileIOS(pThis, pBuffer, nCanvasWidth, nCanvasHeight, fDPIScaleX, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 #else
-    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT) ;
+    ScopedVclPtrInstance< VirtualDevice > pDevice(DeviceFormat::DEFAULT);
 
 #if defined(ANDROID)
     if (!android_lok_from_jni)
