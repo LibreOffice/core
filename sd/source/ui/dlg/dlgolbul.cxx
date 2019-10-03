@@ -31,6 +31,7 @@
 #include <View.hxx>
 #include <svx/svdobj.hxx>
 #include <svl/style.hxx>
+#include <svl/intitem.hxx>
 #include <drawdoc.hxx>
 
 #include <strings.hxx>
@@ -135,14 +136,14 @@ void OutlineBulletDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
     {
         FieldUnit eMetric = m_pSdView->GetDoc().GetUIUnit();
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-        aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,static_cast<sal_uInt16>(eMetric)));
+        aSet.Put ( SfxUInt16Item(SID_METRIC_ITEM,static_cast<sal_uInt16>(eMetric)));
         rPage.PageCreated(aSet);
     }
     else if (rId == "position")
     {
         FieldUnit eMetric = m_pSdView->GetDoc().GetUIUnit();
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-        aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,static_cast<sal_uInt16>(eMetric)));
+        aSet.Put ( SfxUInt16Item(SID_METRIC_ITEM,static_cast<sal_uInt16>(eMetric)));
         rPage.PageCreated(aSet);
     }
 }

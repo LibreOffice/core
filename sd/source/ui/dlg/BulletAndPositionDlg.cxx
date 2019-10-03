@@ -185,11 +185,11 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     // PageCreated
     FieldUnit eMetric = pView->GetDoc().GetUIUnit();
     SfxAllItemSet aSet(*(rSet.GetPool()));
-    aSet.Put(SfxAllEnumItem(SID_METRIC_ITEM, static_cast<sal_uInt16>(eMetric)));
+    aSet.Put(SfxUInt16Item(SID_METRIC_ITEM, static_cast<sal_uInt16>(eMetric)));
 
     const SfxStringItem* pNumCharFmt = aSet.GetItem<SfxStringItem>(SID_NUM_CHAR_FMT, false);
     const SfxStringItem* pBulletCharFmt = aSet.GetItem<SfxStringItem>(SID_BULLET_CHAR_FMT, false);
-    const SfxAllEnumItem* pMetricItem = aSet.GetItem<SfxAllEnumItem>(SID_METRIC_ITEM, false);
+    const SfxUInt16Item* pMetricItem = aSet.GetItem<SfxUInt16Item>(SID_METRIC_ITEM, false);
 
     if (pNumCharFmt && pBulletCharFmt)
         SetCharFmts(pNumCharFmt->GetValue(), pBulletCharFmt->GetValue());
