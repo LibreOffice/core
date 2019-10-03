@@ -181,7 +181,7 @@ bool ScSingleRefData::TabValid() const
 
 bool ScSingleRefData::ValidExternal() const
 {
-    return ColValid() && RowValid() && mnTab == -1;
+    return ColValid() && RowValid() && mnTab >= -1;
 }
 
 ScAddress ScSingleRefData::toAbs( const ScAddress& rPos ) const
