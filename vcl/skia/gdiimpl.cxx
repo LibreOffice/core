@@ -490,14 +490,19 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
                       &paint);
     paint.setBlendMode(SkBlendMode::kSrcIn);
     canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rSourceBitmap).GetSkBitmap(), 0, 0, &paint);
+    drawBitmap(rPosAry, tmpBitmap);
+    return true;
+}
+
+void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkBitmap& bitmap)
+{
     mSurface->getCanvas()->drawBitmapRect(
-        tmpBitmap,
+        bitmap,
         SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
         SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                          rPosAry.mnDestHeight),
         nullptr);
     scheduleFlush();
-    return true;
 }
 
 bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
