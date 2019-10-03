@@ -526,6 +526,23 @@ double SdrObjCustomShape::GetExtraTextRotation( const bool bPreRotation ) const
     return fExtraTextRotateAngle;
 }
 
+double SdrObjCustomShape::GetCameraRotation() const
+{
+    const css::uno::Any* pAny;
+    double fTextCameraZRotateAngle = 90.0;
+    //const SdrCustomShapeGeometryItem& rGeometryItem = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+    //const OUString sCameraRotateAngle( "TextCameraZRotateAngle" );
+
+    //pAny = rGeometryItem.GetPropertyValueByName(sTextCameraZRotateAngle);
+
+    //if ( pAny )
+        //*pAny >>= fTextCameraZRotateAngle;
+
+    return fTextCameraZRotateAngle;
+}
+
+
+
 bool SdrObjCustomShape::GetTextBounds( tools::Rectangle& rTextBound ) const
 {
     bool bRet = false;

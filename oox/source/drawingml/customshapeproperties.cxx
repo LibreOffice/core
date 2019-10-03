@@ -46,6 +46,7 @@ CustomShapeProperties::CustomShapeProperties()
 , mbMirroredX   ( false )
 , mbMirroredY   ( false )
 , mnTextRotateAngle ( 0 )
+, mnTextCameraZRotateAngle ( 0 )
 , mnArcNum ( 0 )
 {
 }
@@ -152,6 +153,8 @@ void CustomShapeProperties::pushToPropSet(
         aPropertyMap.setProperty( PROP_TextPreRotateAngle, mnTextRotateAngle );
         Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
         aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
+
+        // set new propety here
 
         const OUString sCustomShapeGeometry("CustomShapeGeometry");
         const OUString sAdjustmentValues("AdjustmentValues");
