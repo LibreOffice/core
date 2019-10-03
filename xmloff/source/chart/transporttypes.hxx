@@ -168,6 +168,7 @@ struct DataRowPointStyle
     sal_Int32 m_nPointRepeat;
     OUString msStyleName;
     OUString msSeriesStyleNameForDonuts;
+    OUString msCustomLabelField;
     sal_Int32 mnAttachedAxis;
     bool mbSymbolSizeForSeriesIsMissingInFile;
 
