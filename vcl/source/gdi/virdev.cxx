@@ -210,7 +210,7 @@ VirtualDevice::VirtualDevice(const OutputDevice* pCompDev, DeviceFormat eFormat,
     ImplInitVirDev(pCompDev ? pCompDev : Application::GetDefaultDevice(), 0, 0);
 }
 
-VirtualDevice::VirtualDevice(const SystemGraphicsData *pData, const Size &rSize,
+VirtualDevice::VirtualDevice(const SystemGraphicsData& rData, const Size &rSize,
                              DeviceFormat eFormat)
     : OutputDevice(OUTDEV_VIRDEV)
     , meFormat(eFormat)
@@ -218,7 +218,7 @@ VirtualDevice::VirtualDevice(const SystemGraphicsData *pData, const Size &rSize,
 {
     SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
 
-    ImplInitVirDev(Application::GetDefaultDevice(), rSize.Width(), rSize.Height(), pData);
+    ImplInitVirDev(Application::GetDefaultDevice(), rSize.Width(), rSize.Height(), &rData);
 }
 
 VirtualDevice::~VirtualDevice()

@@ -255,7 +255,7 @@ namespace cairo
         int width = cairo_xlib_surface_get_width(mpSurface.get());
         int height = cairo_xlib_surface_get_height(mpSurface.get());
 
-        return VclPtr<VirtualDevice>::Create(&aSystemGraphicsData,
+        return VclPtr<VirtualDevice>::Create(aSystemGraphicsData,
                               Size(width, height),
                               getFormat());
     }
