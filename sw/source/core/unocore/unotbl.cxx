@@ -115,6 +115,7 @@
 #include <docsh.hxx>
 #include <fesh.hxx>
 #include <itabenum.hxx>
+#include <poolfmt.hxx>
 
 using namespace ::com::sun::star;
 using ::editeng::SvxBorderLine;
@@ -1030,8 +1031,16 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
                         const bool bHasAttrSet = pNd->HasSwAttrSet();
                         const SfxItemSet& aSet = pNd->GetSwAttrSet();
                         // isPARATR: replace DEFAULT_VALUE properties only
+                        // Require that the property is default in the paragraph style as well,
+                        // unless the style is the default style.
                         // isCHRATR: change the base/auto SwAttr property, but don't remove the DIRECT hints
-                        if ( !bHasAttrSet || SfxItemState::DEFAULT == aSet.GetItemState(pEntry->nWID, /*bSrchInParent=*/false) )
+                        bool bCustomParent = false;
+                        if (const SwFormatColl* pFormatColl = pNd->GetFormatColl())
+                        {
+                            bCustomParent = pFormatColl->GetPoolFormatId() != RES_POOLCOLL_STANDARD;
+                        }
+                        bool bSearchInParent = bCustomParent && !pNd->GetNumRule();
+                        if ( !bHasAttrSet || SfxItemState::DEFAULT == aSet.GetItemState(pEntry->nWID, bSearchInParent) )
                             SwUnoCursorHelper::SetPropertyValue(aPaM, rParaPropSet, rPropertyName, aValue, SetAttrMode::DONTREPLACE);
                     }
                     ++aIdx;
