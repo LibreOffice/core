@@ -44,9 +44,6 @@ blacklist:
     vcl/source/gdi/configsettings.cxx:
     # Needed for OSL_DEBUG_LEVEL > 2
     - sal/log.hxx
-    include/vcl/mtfxmldump.hxx:
-    # Silence warning about include/vcl/mtfxmldump.hxx
-    - vcl/metaactiontypes.hxx
     vcl/source/gdi/salgdilayout.cxx:
     # Needed on WIN32
     - desktop/exithelper.h

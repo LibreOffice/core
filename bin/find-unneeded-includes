@@ -147,7 +147,7 @@ def unwrapInclude(include):
     return include[1:-1]
 
 
-def processIWYUOutput(iwyuOutput, moduleRules):
+def processIWYUOutput(iwyuOutput, moduleRules, fileName):
     inAdd = False
     toAdd = []
     inRemove = False
@@ -169,15 +169,17 @@ def processIWYUOutput(iwyuOutput, moduleRules):
                 inAdd = False
                 continue
 
-        match = re.match("(.*) should add these lines:$", line)
+        shouldAdd = fileName + " should add these lines:"
+        match = re.match(shouldAdd, line)
         if match:
-            currentFileName = match.group(1)
+            currentFileName = match.group(0).split(' ')[0]
             inAdd = True
             continue
 
-        match = re.match("(.*) should remove these lines:$", line)
+        shouldRemove = fileName + " should remove these lines:"
+        match = re.match(shouldRemove, line)
         if match:
-            currentFileName = match.group(1)
+            currentFileName = match.group(0).split(' ')[0]
             inRemove = True
             continue
 
@@ -212,7 +214,7 @@ def run_tool(task_queue, failed_files):
         if not len(failed_files):
             print("[IWYU] " + invocation.split(' ')[-1])
             p = subprocess.Popen(invocation, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            retcode = processIWYUOutput(p.communicate()[0].decode('utf-8').splitlines(), moduleRules)
+            retcode = processIWYUOutput(p.communicate()[0].decode('utf-8').splitlines(), moduleRules, invocation.split(' ')[-1])
             if retcode == -1:
                 print("ERROR: A file is probably not self contained, check this commands output:\n" + invocation)
             elif retcode > 0:

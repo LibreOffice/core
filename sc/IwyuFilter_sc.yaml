@@ -58,9 +58,6 @@ blacklist:
     sc/inc/chgviset.hxx:
     # base class has to be a complete type
     - unotools/textsearch.hxx
-    sc/inc/colcontainer.hxx:
-    # Needed to silence the check on colcontainer.cxx
-    - column.hxx
     sc/inc/column.hxx:
     # base class has to be a complete type
     - mdds/flat_segment_tree.hpp
@@ -384,9 +381,6 @@ blacklist:
     sc/source/filter/inc/formulabase.hxx:
     # Needed for typedef
     - com/sun/star/table/CellAddress.hpp
-    sc/source/filter/inc/fprogressbar.hxx:
-    # Avoid collision with fprogressbar.cxx checking
-    - progress.hxx
     sc/source/filter/inc/ooxformulaparser.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XInitialization.hpp

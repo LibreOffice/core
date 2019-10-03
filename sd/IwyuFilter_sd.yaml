@@ -124,8 +124,6 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/drawing/framework/XResourceFactory.hpp
     - com/sun/star/lang/XInitialization.hpp
-    # Don't stop on false positive while checking BasicViewFactory.cxx
-    - namespace vcl { class Window; }
     sd/source/ui/framework/factories/ChildWindowPane.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XEventListener.hpp
@@ -466,9 +464,6 @@ blacklist:
     sd/source/ui/func/fuhhconv.cxx:
     # Needed for direct member access
     - com/sun/star/awt/XWindow.hpp
-    sd/source/ui/inc/fupoor.hxx:
-    # Don't stop on false positive while checking fupoor.cxx
-    - namespace sd { class Window; }
     sd/source/ui/slidesorter/view/SlsInsertionIndicatorOverlay.cxx:
     # Needed for instantiation of function template specialization
     - Window.hxx
