@@ -16,7 +16,6 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/stdtext.hxx>
 #include <messagedialog.hxx>
 #include <window.h>
 #include <boost/multi_array.hpp>
