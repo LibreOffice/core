@@ -158,7 +158,6 @@ private:
     /// the row that is currently painted
     long                m_nSeekRow;
     bool                m_bIsReadOnly;
-    bool                m_bLiveUpdate;
     bool                m_bDataValid;
 
     VclPtr<FormattedField>      m_aNumberEditField;

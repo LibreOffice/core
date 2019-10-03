@@ -278,7 +278,6 @@ SalDisplay::SalDisplay( Display *display ) :
         nCtrlKeySym_( 0 ),
         nMod1KeySym_( 0 ),
         m_bXinerama( false ),
-        m_bUseRandRWrapper( true ),
         m_nLastUserEventTime( CurrentTime )
 {
 #if OSL_DEBUG_LEVEL > 1

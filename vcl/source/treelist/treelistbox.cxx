@@ -374,7 +374,6 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     nMinWidthInChars(0),
     mbCenterAndClipText(false)
 {
-    nDragOptions =  DND_ACTION_COPYMOVE | DND_ACTION_LINK;
     nImpFlags = SvTreeListBoxFlags::NONE;
     pTargetEntry = nullptr;
     nDragDropMode = DragDropMode::NONE;
@@ -1201,7 +1200,7 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
     // (GetSourceListBox()->EnableSelectionAsDropTarget( true, true );)
     EnableSelectionAsDropTarget( false );
 
-    pContainer->StartDrag( this, nDragOptions, GetDragFinishedHdl() );
+    pContainer->StartDrag( this, DND_ACTION_COPYMOVE | DND_ACTION_LINK, GetDragFinishedHdl() );
 }
 
 void SvTreeListBox::DragFinished( sal_Int8

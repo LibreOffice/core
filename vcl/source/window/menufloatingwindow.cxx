@@ -1033,7 +1033,6 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
 {
     VclPtr<vcl::Window> xWindow = this;
 
-    bool accel = ImplGetSVData()->maNWFData.mbEnableAccel;
     bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
     sal_uInt16 nCode = rKEvent.GetKeyCode().GetCode();
     bKeyInput = true;
@@ -1161,7 +1160,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
             sal_Unicode nCharCode = rKEvent.GetCharCode();
             size_t nPos = 0;
             size_t nDuplicates = 0;
-            MenuItemData* pData = (nCharCode && pMenu && accel) ?
+            MenuItemData* pData = (nCharCode && pMenu) ?
                 pMenu->GetItemList()->SearchItem(nCharCode, rKEvent.GetKeyCode(), nPos, nDuplicates, nHighlightedItem) : nullptr;
             if (pData)
             {
@@ -1189,7 +1188,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
         {
             pMenuBar->getMenuBarWindow()->SetMBWMenuKey(bShowAccels);
             pMenuBar->getMenuBarWindow()->SetMBWHideAccel(!bShowAccels);
-            if (accel && autoacc)
+            if (autoacc)
                 Invalidate(InvalidateFlags::Update);
         }
     }

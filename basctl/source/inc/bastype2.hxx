@@ -179,7 +179,6 @@ public:
 class TreeListBox : public SvTreeListBox, public DocumentEventListener
 {
 private:
-    BrowseMode            nMode;
     DocumentEventNotifier m_aNotifier;
     void            SetEntryBitmaps( SvTreeListEntry * pEntry, const Image& rImage );
     virtual void    MouseButtonDown(const MouseEvent& rMEvt) override;
@@ -236,13 +235,10 @@ public:
     void            RemoveEntry (SvTreeListEntry const *);
     void            RemoveEntry (ScriptDocument const&);
 
-    OUString        GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const;
+    static OUString GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation );
     static void     GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage );
 
     void            SetCurrentEntry (EntryDescriptor const &);
-
-private:
-    LibraryType     GetLibraryType() const;
 };
 
 class SbTreeListBox : public DocumentEventListener

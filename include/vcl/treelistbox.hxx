@@ -222,7 +222,6 @@ class VCL_DLLPUBLIC SvTreeListBox
     DragDropMode    nDragDropMode;
     DragDropMode    nOldDragMode;
     SelectionMode   eSelMode;
-    sal_Int8        nDragOptions;
     sal_Int32       nMinWidthInChars;
 
     SvTreeListEntry*        pEdEntry;

@@ -108,8 +108,7 @@ void RandRWrapper::releaseWrapper()
 void SalDisplay::InitRandR( ::Window aRoot ) const
 {
     #ifdef USE_RANDR
-    if( m_bUseRandRWrapper )
-        RandRWrapper::get( GetDisplay() ).XRRSelectInput( GetDisplay(), aRoot, RRScreenChangeNotifyMask );
+    RandRWrapper::get( GetDisplay() ).XRRSelectInput( GetDisplay(), aRoot, RRScreenChangeNotifyMask );
     #else
     (void)this;
     (void)aRoot;
@@ -119,13 +118,10 @@ void SalDisplay::InitRandR( ::Window aRoot ) const
 void SalDisplay::DeInitRandR()
 {
     #ifdef USE_RANDR
-    if( m_bUseRandRWrapper )
-        RandRWrapper::releaseWrapper();
+    RandRWrapper::releaseWrapper();
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SalDisplay::DeInitRandR()\n" );
 #endif
-    #else
-    (void)this;
     #endif
 }
 
@@ -133,7 +129,7 @@ void SalDisplay::processRandREvent( XEvent* pEvent )
 {
 #ifdef USE_RANDR
     XConfigureEvent* pCnfEvent=reinterpret_cast<XConfigureEvent*>(pEvent);
-    if( m_bUseRandRWrapper && pWrapper && pWrapper->XRRRootToScreen(GetDisplay(),pCnfEvent->window) != -1 )
+    if( pWrapper && pWrapper->XRRRootToScreen(GetDisplay(),pCnfEvent->window) != -1 )
     {
         int nRet = pWrapper->XRRUpdateConfiguration( pEvent );
         if( nRet == 1 && pEvent->type != ConfigureNotify) // this should then be a XRRScreenChangeNotifyEvent

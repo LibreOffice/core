@@ -1768,14 +1768,13 @@ void Window::SimulateKeyPress( sal_uInt16 nKeyCode ) const
 void Window::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode cod = rKEvt.GetKeyCode ();
-    bool accel = ImplGetSVData()->maNWFData.mbEnableAccel;
     bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
 
     // do not respond to accelerators unless Alt is held */
     if (cod.GetCode () >= 0x200 && cod.GetCode () <= 0x219)
     {
-        if (!accel) return;
-        if (autoacc && cod.GetModifier () != KEY_MOD2) return;
+        if (autoacc && cod.GetModifier () != KEY_MOD2)
+            return;
     }
 
     NotifyEvent aNEvt( MouseNotifyEvent::KEYINPUT, this, &rKEvt );

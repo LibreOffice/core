@@ -285,7 +285,6 @@ struct ImplSVNWFData
 
     /// entire drop down listbox resembles a button, no textarea/button parts (as currently on Windows)
     bool                    mbDDListBoxNoTextArea = false;
-    bool                    mbEnableAccel = true;           // whether or not accelerators are shown
     bool                    mbAutoAccel = false;            // whether accelerators are only shown when Alt is held down
     bool                    mbRolloverMenubar = false;      // theming engine supports rollover in menubar
     // gnome#768128 I cannot see a route under wayland at present to support
