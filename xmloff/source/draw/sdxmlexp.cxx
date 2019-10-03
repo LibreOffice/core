@@ -2725,13 +2725,20 @@ com_sun_star_comp_Draw_XMLContentExporter_get_implementation(uno::XComponentCont
                                              | SvXMLExportFlags::FONTDECLS));
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Draw_XMLMetaExporter_get_implementation(uno::XComponentContext* pCtx,
+                                                            uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(
+        new SdXMLExport(pCtx, "XMLDrawMetaExportOOO", true, SvXMLExportFlags::META));
+}
+
 SERVICE( XMLDrawExportOasis, "com.sun.star.comp.Draw.XMLOasisExporter", "XMLDrawExportOasis", true, SvXMLExportFlags::OASIS|SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::SETTINGS|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::EMBEDDED );
 SERVICE( XMLDrawStylesExportOasis, "com.sun.star.comp.Draw.XMLOasisStylesExporter", "XMLDrawStylesExportOasis", true, SvXMLExportFlags::OASIS|SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS );
 SERVICE( XMLDrawContentExportOasis, "com.sun.star.comp.Draw.XMLOasisContentExporter", "XMLDrawContentExportOasis", true, SvXMLExportFlags::OASIS|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::FONTDECLS );
 SERVICE( XMLDrawMetaExportOasis, "com.sun.star.comp.Draw.XMLOasisMetaExporter", "XMLDrawMetaExportOasis", true, SvXMLExportFlags::OASIS|SvXMLExportFlags::META );
 SERVICE( XMLDrawSettingsExportOasis, "com.sun.star.comp.Draw.XMLOasisSettingsExporter", "XMLDrawSettingsExportOasis", true, SvXMLExportFlags::OASIS|SvXMLExportFlags::SETTINGS );
 
-SERVICE( XMLDrawMetaExportOOO, "com.sun.star.comp.Draw.XMLMetaExporter", "XMLDrawMetaExportOOO", true, SvXMLExportFlags::META );
 SERVICE( XMLDrawSettingsExportOOO, "com.sun.star.comp.Draw.XMLSettingsExporter", "XMLDrawSettingsExportOOO", true, SvXMLExportFlags::SETTINGS );
 
 SERVICE( XMLDrawingLayerExport, "com.sun.star.comp.DrawingLayer.XMLExporter", "XMLDrawingLayerExport", true, SvXMLExportFlags::OASIS|SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::EMBEDDED );
