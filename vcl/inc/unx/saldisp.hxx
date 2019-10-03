@@ -347,9 +347,9 @@ public:
                                XIC = nullptr ) const;
 
     Cursor                GetPointer( PointerStyle ePointerStyle );
-    virtual int           CaptureMouse( SalFrame *pCapture );
+    int             CaptureMouse( SalFrame *pCapture );
 
-    virtual ScreenData   *initScreen( SalX11Screen nXScreen ) const;
+    ScreenData*     initScreen( SalX11Screen nXScreen ) const;
     const ScreenData&     getDataForScreen( SalX11Screen nXScreen ) const
     {
         if( nXScreen.getXScreen() >= m_aScreens.size() )

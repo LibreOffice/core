@@ -52,8 +52,6 @@ forms/source/xforms/namedcollection.hxx:99
     class com::sun::star::uno::Sequence<class rtl::OUString> NamedCollection::getElementNames()
 forms/source/xforms/namedcollection.hxx:104
     unsigned char NamedCollection::hasByName(const class rtl::OUString &,)
-include/basegfx/utils/systemdependentdata.hxx:122
-    unsigned int basegfx::SystemDependentData::getHoldCyclesInSeconds()const
 include/basegfx/utils/unopolypolygon.hxx:97
     void basegfx::unotools::UnoPolyPolygon::modifying()const
 include/comphelper/interaction.hxx:54
@@ -84,8 +82,8 @@ include/svl/svdde.hxx:244
     _Bool DdeTopic::StartAdviseLoop()
 include/svl/svdde.hxx:300
     void DdeService::~DdeService()
-include/svx/svdmodel.hxx:590
-    class ImageMap * SdrModel::GetImageMapForObject(class SdrObject *,)
+include/svx/svdmrkv.hxx:323
+    _Bool SdrMarkView::IsPointMarkable(const class SdrHdl &,)const
 include/toolkit/controls/geometrycontrolmodel.hxx:184
     void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
 include/vbahelper/vbacollectionimpl.hxx:290
@@ -112,12 +110,12 @@ include/vbahelper/vbareturntypes.hxx:41
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
 include/vcl/customweld.hxx:41
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
+include/vcl/tabpage.hxx:51
+    void TabPage::DeactivatePage()
 include/vcl/weld.hxx:97
     void weld::Widget::set_visible(_Bool,)
-include/vcl/window.hxx:1155
+include/vcl/window.hxx:1157
     class rtl::OString vcl::Window::GetScreenshotId()const
-include/vcl/wizardmachine.hxx:208
-    _Bool vcl::OWizardMachine::prepareLeaveCurrentState(enum vcl::WizardTypes::CommitPageReason,)
 sc/source/core/opencl/formulagroupcl.cxx:1051
     _Bool sc::opencl::DynamicKernelSlidingArgument::NeedParallelReduction()const
 sc/source/core/opencl/formulagroupcl.cxx:1059
@@ -214,7 +212,7 @@ slideshow/source/engine/animationfactory.cxx:447
     void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
 sw/inc/flypos.hxx:37
     void SwPosFlyFrame::~SwPosFlyFrame()
-sw/source/ui/dbui/mmaddressblockpage.hxx:242
+sw/source/ui/dbui/mmaddressblockpage.hxx:241
     class weld::TreeView * SwCustomizeAddressBlockDialog::get_drag_source()const
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
@@ -234,14 +232,12 @@ vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
 vcl/inc/unx/glyphcache.hxx:54
     void GlyphCache::~GlyphCache()
-vcl/inc/unx/gtk/gtkdata.hxx:165
+vcl/inc/unx/gtk/gtkdata.hxx:138
     int GtkSalDisplay::CaptureMouse(class SalFrame *,)
+vcl/inc/unx/pixmap.hxx:27
+    void X11Pixmap::~X11Pixmap()
 vcl/inc/unx/saldata.hxx:51
     void X11SalData::Init()
-vcl/inc/unx/saldata.hxx:54
-    void X11SalData::initNWF()
-vcl/inc/unx/saldata.hxx:55
-    void X11SalData::deInitNWF()
 vcl/inc/unx/saldisp.hxx:182
     void SalXLib::~SalXLib()
 vcl/inc/unx/saldisp.hxx:183
@@ -260,36 +256,22 @@ vcl/inc/unx/saldisp.hxx:196
     void SalXLib::StopTimer()
 vcl/inc/unx/saldisp.hxx:198
     _Bool SalXLib::CheckTimeout(_Bool,)
+vcl/inc/unx/saldisp.hxx:350
+    int SalDisplay::CaptureMouse(class SalFrame *,)
+vcl/inc/unx/saldisp.hxx:352
+    struct SalDisplay::ScreenData * SalDisplay::initScreen(class SalX11Screen,)const
 vcl/inc/unx/saldisp.hxx:409
     void SalX11Display::Yield()
 vcl/inc/unx/salframe.h:208
     void X11SalFrame::updateGraphics(_Bool,)
 vcl/inc/unx/salinst.h:45
     class SalX11Display * X11SalInstance::CreateDisplay()const
-vcl/inc/wizdlg.hxx:117
-    void vcl::RoadmapWizard::ActivatePage()
-vcl/inc/wizdlg.hxx:118
-    _Bool vcl::RoadmapWizard::DeactivatePage()
-vcl/inc/wizdlg.hxx:158
-    _Bool vcl::RoadmapWizard::canAdvance()const
-vcl/inc/wizdlg.hxx:166
-    void vcl::RoadmapWizard::updateTravelUI()
-vcl/inc/wizdlg.hxx:185
-    class VclPtr<class TabPage> vcl::RoadmapWizard::createPage(short,)
-vcl/inc/wizdlg.hxx:188
-    void vcl::RoadmapWizard::enterState(short,)
-vcl/inc/wizdlg.hxx:200
-    _Bool vcl::RoadmapWizard::prepareLeaveCurrentState(enum vcl::WizardTypes::CommitPageReason,)
-vcl/inc/wizdlg.hxx:214
-    _Bool vcl::RoadmapWizard::leaveState(short,)
-vcl/inc/wizdlg.hxx:224
-    short vcl::RoadmapWizard::determineNextState(short,)const
-vcl/inc/wizdlg.hxx:229
-    _Bool vcl::RoadmapWizard::onFinish()
-vcl/inc/wizdlg.hxx:306
-    class vcl::IWizardPageController * vcl::RoadmapWizard::getPageController(class TabPage *,)const
+vcl/inc/wizdlg.hxx:390
+    class rtl::OUString vcl::RoadmapWizard::getStateDisplayName(short,)const
 workdir/../vcl/inc/qt5/Qt5FilePicker.hxx:145
     void Qt5FilePicker::disposing(const struct com::sun::star::lang::EventObject &,)
+workdir/../vcl/inc/qt5/Qt5FilePicker.hxx:161
+    void Qt5FilePicker::addCustomControl(short,)
 workdir/../vcl/inc/qt5/Qt5Frame.hxx:160
     void Qt5Frame::registerDragSource(class Qt5DragSource *,)
 workdir/../vcl/inc/qt5/Qt5Frame.hxx:161
@@ -298,6 +280,8 @@ workdir/../vcl/inc/qt5/Qt5Frame.hxx:162
     void Qt5Frame::registerDropTarget(class Qt5DropTarget *,)
 workdir/../vcl/inc/qt5/Qt5Frame.hxx:163
     void Qt5Frame::deregisterDropTarget(const class Qt5DropTarget *,)
+workdir/../vcl/inc/qt5/Qt5Instance.hxx:82
+    class Qt5FilePicker * Qt5Instance::createPicker(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,enum QFileDialog::FileMode,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:72
     void writerfilter::ooxml::OOXMLFactory_ns::startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:73

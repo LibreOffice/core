@@ -306,7 +306,7 @@ namespace vcl
             this is worth an assertion in a non-product build, and then an empty string is
             returned.
         */
-        virtual OUString  getStateDisplayName(WizardTypes::WizardState nState) const;
+        OUString  getStateDisplayName(WizardTypes::WizardState nState) const;
 
     private:
         DECL_LINK( OnRoadmapItemSelected, LinkParamNone*, void );

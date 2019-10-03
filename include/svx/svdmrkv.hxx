@@ -320,7 +320,7 @@ public:
     virtual bool HasMarkedPoints() const;
 
     // There might be points which can't be marked:
-    virtual bool IsPointMarkable(const SdrHdl& rHdl) const;
+    bool IsPointMarkable(const SdrHdl& rHdl) const;
     virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark=false);
 
     /** should only be used from outside svx for special ui elements */
