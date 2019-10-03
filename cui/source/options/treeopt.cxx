@@ -608,6 +608,22 @@ sal_uInt16  OfaTreeOptionsDialog::AddGroup(const OUString& rGroupName,
     return nRet - 1;
 }
 
+// which is better?
+
+//IMPL_LINK_NOARG(OfaTreeOptionsDialog, DoubleClickHdl_Impl, weld::TreeView&, void)
+//{
+//    std::unique_ptr<weld::TreeIter> xEntry(xTreeLB->make_iterator());
+//    xTreeLB->get_selected(xEntry.get());
+//    xTreeLB->get_row_expanded(*xEntry.get()) ? xTreeLB->collapse_row(*xEntry.get()) : xTreeLB->expand_row(*xEntry.get());
+//}
+
+IMPL_STATIC_LINK(OfaTreeOptionsDialog, DoubleClickHdl_Impl, weld::TreeView&, xTreeView, void)
+{
+    std::unique_ptr<weld::TreeIter> xEntry(xTreeView.make_iterator());
+    xTreeView.get_selected(xEntry.get());
+    xTreeView.get_row_expanded(*xEntry.get()) ? xTreeView.collapse_row(*xEntry.get()) : xTreeView.expand_row(*xEntry.get());
+}
+
 IMPL_LINK_NOARG(OfaTreeOptionsDialog, ShowPageHdl_Impl, weld::TreeView&, void)
 {
     SelectHdl_Impl();
@@ -741,6 +757,7 @@ void OfaTreeOptionsDialog::ApplyItemSets()
 void OfaTreeOptionsDialog::InitTreeAndHandler()
 {
     xTreeLB->set_help_id(HID_OFADLG_TREELISTBOX);
+    xTreeLB->connect_row_activated( LINK( this, OfaTreeOptionsDialog, DoubleClickHdl_Impl ) );
     xTreeLB->connect_changed( LINK( this, OfaTreeOptionsDialog, ShowPageHdl_Impl ) );
     xBackPB->connect_clicked( LINK( this, OfaTreeOptionsDialog, BackHdl_Impl ) );
     xApplyPB->connect_clicked( LINK( this, OfaTreeOptionsDialog, ApplyHdl_Impl ) );
