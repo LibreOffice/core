@@ -1702,7 +1702,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         break;
     case NS_ooxml::LN_EG_RPrBase_position:
         // The spec says 0 is the same as the lack of the value, so don't parse that.
-        if (nIntValue)
+        // FIXME: StyleSheets don't currently process deferredCharacterProperties - so position is lost in charStyles
+        if ( nIntValue && !IsStyleSheetImport() )
             m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
         break;
     case NS_ooxml::LN_EG_RPrBase_spacing:
