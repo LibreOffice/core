@@ -1021,7 +1021,10 @@ bool SdrObjEditView::SdrBeginTextEdit(
     bool bDontDeleteOutliner, bool bOnlyOneView,
     bool bGrabFocus)
 {
-    assert(!IsTextEdit());
+    // FIXME cannot be an assert() yet, the code is not ready for that;
+    // eg. press F7 in Impress when you are inside a text object with spelling
+    // mistakes => boom; and it is unclear how to avoid that
+    SAL_WARN_IF(IsTextEdit(), "svx", "SdrBeginTextEdit called when IsTextEdit() is already true.");
     // FIXME this encourages all sorts of bad habits and should be removed
     SdrEndTextEdit();
 
