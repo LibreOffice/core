@@ -223,6 +223,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127316_autoEscapement, "tdf127316_autoEscapement
     CPPUNIT_ASSERT_DOUBLES_EQUAL(33.f, getProperty<float>(getRun(xPara, 2), "CharEscapement"), 20);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf99602_subscript_charStyleSize, "tdf99602_subscript_charStyleSize.docx")
+{
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    // The word "Base" should not be subscripted.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1), "CharEscapement"), 0);
+    // The word "Subscript" should be 48pt, subscripted by 25% (12pt).
+    //CPPUNIT_ASSERT_DOUBLES_EQUAL( 25.f, getProperty<float>(getRun(xPara, 2), "CharEscapement"), 1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf124637_sectionMargin, "tdf124637_sectionMargin.docx")
 {
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
