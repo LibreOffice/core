@@ -623,8 +623,11 @@ void ChartTypeTemplate::adaptScales(
                         aData.Categories = xCategories;
                         if(bSupportsCategories)
                         {
-
-                            Reference< XChartType > xChartType( getChartTypeForNewSeries(Sequence< Reference< XChartType > >() ));
+                            Reference< XChartType > xChartType(getChartTypeForNewSeries(Sequence< Reference< XChartType > >()));
+                            if( aData.AxisType == AxisType::CATEGORY )
+                            {
+                                aData.ShiftedCategoryPosition = ::chart::ChartTypeHelper::shiftCategoryPosAtXAxisPerDefault(xChartType);
+                            }
                             bool bSupportsDates = ::chart::ChartTypeHelper::isSupportingDateAxis( xChartType, nDimensionX );
                             if( aData.AxisType != AxisType::CATEGORY && ( aData.AxisType != AxisType::DATE || !bSupportsDates) )
                             {
