@@ -32,10 +32,9 @@ ifneq ($(filter ANDROID DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_aarch64
 bridge_exception_objects := abi callvirtualfunction uno2cpp
 
-$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno, \
+$(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno, \
     bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/cpp2uno, \
-    $(gb_LinkTarget_EXCEPTIONFLAGS) \
-    $(call gb_LinkTarget__get_cxxflags,$(gb_CPPU_ENV)_uno) -fstack-protector \
+    -fstack-protector \
 ))
 endif
 
@@ -219,8 +218,6 @@ bridges_NON_CALL_EXCEPTIONS_FLAGS := -fnon-call-exceptions
 endif
 endif
 
-bridges_DEBUGINFO_FLAGS := $(if $(call gb_LinkTarget__symbols_enabled,Library_$(gb_CPPU_ENV)_uno),$(gb_DEBUGINFO_FLAGS))
-
 $(eval $(call gb_Library_use_libraries,$(gb_CPPU_ENV)_uno,\
 	cppu \
 	sal \
@@ -231,19 +228,19 @@ $(foreach obj,$(bridge_exception_objects),\
 	bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj))) \
 )
 $(foreach obj,$(bridge_noncallexception_objects),\
-	$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
+	$(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno,\
 	bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj) \
-	, $(bridges_NON_CALL_EXCEPTIONS_FLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) $(bridges_DEBUGINFO_FLAGS))) \
+	, $(bridges_NON_CALL_EXCEPTIONS_FLAGS) )) \
 )
 $(foreach obj,$(bridge_noopt_objects),\
-		$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
+		$(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno,\
 				bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj) \
-				, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) $(bridges_DEBUGINFO_FLAGS))) \
+				, $(gb_COMPILERNOOPTFLAGS))) \
  )
 $(foreach obj,$(bridge_noncallexception_noopt_objects),\
-		$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
+		$(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno,\
 				bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj) \
-				, $(gb_COMPILERNOOPTFLAGS) $(bridges_NON_CALL_EXCEPTIONS_FLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) $(bridges_DEBUGINFO_FLAGS))) \
+				, $(gb_COMPILERNOOPTFLAGS) $(bridges_NON_CALL_EXCEPTIONS_FLAGS) )) \
  )
 $(foreach obj,$(bridge_cxx_objects),\
 		$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
