@@ -96,7 +96,6 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame final : public SalFrame, public NativeWindo
     bool            bAlwaysOnTop_;
     bool            bViewable_;
     bool            bMapped_;
-    bool            mbInShow;
     bool            bDefaultPosition_;  // client is centered initially
     bool            m_bXEmbed;
     int             nVisibility_;

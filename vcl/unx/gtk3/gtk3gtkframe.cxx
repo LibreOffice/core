@@ -473,7 +473,6 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
     getDisplay()->registerFrame( this );
     m_bDefaultPos       = true;
     m_bDefaultSize      = ( (nStyle & SalFrameStyleFlags::SIZEABLE) && ! pParent );
-    m_bWindowIsGtkPlug  = false;
     Init( pParent, nStyle );
 }
 
@@ -1176,7 +1175,6 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     if( pSysData->nSize > sizeof(pSysData->nSize)+sizeof(pSysData->aWindow) && pSysData->bXEmbedSupport )
     {
         m_pWindow = gtk_plug_new_for_display( getGdkDisplay(), pSysData->aWindow );
-        m_bWindowIsGtkPlug  = true;
         widget_set_can_default( m_pWindow, true );
         widget_set_can_focus( m_pWindow, true );
         gtk_widget_set_sensitive( m_pWindow, true );
@@ -1184,7 +1182,6 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     else
     {
         m_pWindow = gtk_window_new( GTK_WINDOW_POPUP );
-        m_bWindowIsGtkPlug  = false;
     }
     m_nStyle = SalFrameStyleFlags::PLUG;
     InitCommon();
@@ -1233,7 +1230,6 @@ bool GtkSalFrame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
 
 void GtkSalFrame::SetTitle( const OUString& rTitle )
 {
-    m_aTitle = rTitle;
     if( m_pWindow && ! isChild() )
     {
         OString sTitle(OUStringToOString(rTitle, RTL_TEXTENCODING_UTF8));

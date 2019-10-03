@@ -750,7 +750,7 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
 
     if ( nCode == KEY_MENU && !rKEvent.GetKeyCode().IsShift() ) // only F10, not Shift-F10
     {
-        mbAutoPopup = ImplGetSVData()->maNWFData.mbOpenMenuOnF10;
+        mbAutoPopup = false;
         if ( m_nHighlightedItem == ITEMPOS_INVALID )
         {
             ChangeHighlightItem( 0, false );
@@ -775,17 +775,6 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
                     n = 0;
                 else
                     n = m_pMenu->GetItemCount()-1;
-            }
-
-            // handling gtk like (aka mbOpenMenuOnF10)
-            // do not highlight an item when opening a sub menu
-            // unless there already was a highlighted sub menu item
-            bool bWasHighlight = false;
-            if( m_pActivePopup )
-            {
-                MenuFloatingWindow* pSubWindow = dynamic_cast<MenuFloatingWindow*>(m_pActivePopup->ImplGetWindow());
-                if( pSubWindow )
-                    bWasHighlight = (pSubWindow->GetHighlightedItem() != ITEMPOS_INVALID);
             }
 
             sal_uInt16 nLoop = n;
@@ -816,10 +805,7 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
                     m_pMenu->ImplIsVisible(n) &&
                     !m_pMenu->ImplCurrentlyHiddenOnGUI(n))
                 {
-                    bool bDoSelect = true;
-                    if( ImplGetSVData()->maNWFData.mbOpenMenuOnF10 )
-                        bDoSelect = bWasHighlight;
-                    ChangeHighlightItem( n, bDoSelect );
+                    ChangeHighlightItem( n, true );
                     break;
                 }
             } while ( n != nLoop );

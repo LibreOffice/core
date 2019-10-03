@@ -40,7 +40,6 @@ namespace dbaui
 
         std::unique_ptr<OIndexCollection> m_xIndexes;
         std::unique_ptr<weld::TreeIter> m_xPreviousSelection;
-        bool                            m_bEditingActive;
         bool                            m_bEditAgain;
         bool                            m_bNoHandlerCall;
 

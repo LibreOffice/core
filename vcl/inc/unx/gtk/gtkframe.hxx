@@ -183,13 +183,10 @@ class GtkSalFrame : public SalFrame
     GdkCursor                      *m_pCurrentCursor;
     PointerStyle                    m_ePointerStyle;
     ScreenSaverInhibitor            m_ScreenSaverInhibitor;
-    int                             m_nWorkArea;
     bool                            m_bFullscreen;
     bool                            m_bSpanMonitorsWhenFullscreen;
     bool                            m_bDefaultPos;
     bool                            m_bDefaultSize;
-    bool                            m_bWindowIsGtkPlug;
-    OUString                        m_aTitle;
     OUString                        m_sWMClass;
 
     std::unique_ptr<IMHandler>      m_pIMHandler;

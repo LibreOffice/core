@@ -136,8 +136,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
                             SCTAB nNewTab, long nNewScrX, long nNewScrY,
                             SCCOL nNewX1, SCROW nNewY1, SCCOL nNewX2, SCROW nNewY2,
                             double nPixelPerTwipsX, double nPixelPerTwipsY,
-                            const Fraction* pZoomX, const Fraction* pZoomY,
-                            long nNewTilePosX, long nNewTilePosY ) :
+                            const Fraction* pZoomX, const Fraction* pZoomY ) :
     mpDev( pNewDev ),
     mpRefDevice( pNewDev ),      // default is output device
     pFmtDevice( pNewDev ),      // default is output device
@@ -148,8 +147,6 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     nTab( nNewTab ),
     nScrX( nNewScrX ),
     nScrY( nNewScrY ),
-    nTilePosX( nNewTilePosX ),
-    nTilePosY( nNewTilePosY ),
     nX1( nNewX1 ),
     nY1( nNewY1 ),
     nX2( nNewX2 ),

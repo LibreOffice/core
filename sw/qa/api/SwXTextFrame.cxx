@@ -43,8 +43,6 @@ class SwXTextFrame final : public test::BootstrapFixture,
 {
     uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<text::XTextDocument> mxTextDocument;
-    uno::Reference<text::XTextRange> mxTextRange;
-    uno::Reference<text::XTextContent> mxTextContent;
 
 public:
     virtual void setUp() override;
@@ -95,9 +93,6 @@ uno::Reference<uno::XInterface> SwXTextFrame::init()
     CPPUNIT_ASSERT(xTextCursor.is());
     xText->insertTextContent(xTextCursor, xTextFrame, false);
     xTextCursor->gotoEnd(false);
-    mxTextRange = uno::Reference<text::XTextRange>(xTextCursor, uno::UNO_QUERY_THROW);
-    mxTextContent = uno::Reference<text::XTextContent>(
-        xMSF->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY_THROW);
     return xTextFrame;
 }
 

@@ -221,8 +221,6 @@ OWizTypeSelect::OWizTypeSelect(weld::Container* pPage, OCopyTableWizard* pWizard
     , m_bAutoIncrementEnabled(false)
     , m_bDuplicateName(false)
 {
-    m_xColumnNames->SetParentTabPage(this);
-
     m_xColumnNames->connect_changed(LINK(this,OWizTypeSelect,ColumnSelectHdl));
 
     m_xTypeControl->Show();
@@ -334,7 +332,6 @@ IMPL_LINK_NOARG(OWizTypeSelect, ButtonClickHdl, weld::Button&, void)
 OWizTypeSelectList::OWizTypeSelectList(std::unique_ptr<weld::TreeView> xControl)
     : m_xControl(std::move(xControl))
     , m_bPKey(false)
-    , m_pParentTabPage(nullptr)
 {
     m_xControl->connect_popup_menu(LINK(this, OWizTypeSelectList, CommandHdl));
 }
