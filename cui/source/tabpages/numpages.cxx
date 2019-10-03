@@ -3313,7 +3313,7 @@ void SvxNumOptionsTabPage::PageCreated(const SfxAllItemSet& aSet)
     const SfxStringListItem* pListItem = aSet.GetItem<SfxStringListItem>(SID_CHAR_FMT_LIST_BOX, false);
     const SfxStringItem* pNumCharFmt = aSet.GetItem<SfxStringItem>(SID_NUM_CHAR_FMT, false);
     const SfxStringItem* pBulletCharFmt = aSet.GetItem<SfxStringItem>(SID_BULLET_CHAR_FMT, false);
-    const SfxAllEnumItem* pMetricItem = aSet.GetItem<SfxAllEnumItem>(SID_METRIC_ITEM, false);
+    const SfxUInt16Item* pMetricItem = aSet.GetItem<SfxUInt16Item>(SID_METRIC_ITEM, false);
 
     if (pNumCharFmt &&pBulletCharFmt)
         SetCharFmts( pNumCharFmt->GetValue(),pBulletCharFmt->GetValue());
@@ -3331,7 +3331,7 @@ void SvxNumOptionsTabPage::PageCreated(const SfxAllItemSet& aSet)
 
 void SvxNumPositionTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    const SfxAllEnumItem* pMetricItem = aSet.GetItem<SfxAllEnumItem>(SID_METRIC_ITEM, false);
+    const SfxUInt16Item* pMetricItem = aSet.GetItem<SfxUInt16Item>(SID_METRIC_ITEM, false);
 
     if (pMetricItem)
         SetMetric(static_cast<FieldUnit>(pMetricItem->GetValue()));
