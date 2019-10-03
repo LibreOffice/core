@@ -70,7 +70,7 @@ class CalcRTL(unittest.TestCase):
         return worked
 
     def getSpreadsheet(self):
-        return self.xSheetDoc.getSheets().getByIndex(0)
+        return self.xSheetDoc.getSheets()[0]
 
 if __name__ == '__main__':
     unittest.main()
