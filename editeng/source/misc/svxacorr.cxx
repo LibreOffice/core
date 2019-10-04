@@ -1550,7 +1550,7 @@ bool SvxAutoCorrect::AddWrtSttException( const OUString& rNew,
 
 bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc const & rDoc,
                                         const OUString& rTxt, sal_Int32 nPos,
-                                        OUString& rWord ) const
+                                        OUString& rWord )
 {
     if( !nPos )
         return false;
@@ -1581,8 +1581,7 @@ bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc const & rDoc,
 
     const LanguageType eLang = GetDocLanguage( rDoc, nCapLttrPos );
 
-    SvxAutoCorrect* pThis = const_cast<SvxAutoCorrect*>(this);
-    CharClass& rCC = pThis->GetCharClass( eLang );
+    CharClass& rCC = GetCharClass(eLang);
 
     if( lcl_IsSymbolChar( rCC, rTxt, nCapLttrPos, nEnde ))
         return false;

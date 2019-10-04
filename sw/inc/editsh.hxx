@@ -816,7 +816,7 @@ public:
     /// Call AutoCorrect
     void AutoCorrect( SvxAutoCorrect& rACorr, bool bInsertMode,
                         sal_Unicode cChar );
-    bool GetPrevAutoCorrWord( SvxAutoCorrect const & rACorr, OUString& rWord );
+    bool GetPrevAutoCorrWord(SvxAutoCorrect& rACorr, OUString& rWord);
 
     /// Set our styles according to the respective rules.
     void AutoFormat( const SvxSwAutoFormatFlags* pAFlags );

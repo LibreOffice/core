@@ -292,7 +292,7 @@ public:
     // Return for the autotext expansion the previous word,
     // AutoCorrect - corresponding algorithm
     bool GetPrevAutoCorrWord( SvxAutoCorrDoc const & rDoc, const OUString& rTxt,
-                                sal_Int32 nPos, OUString& rWord ) const;
+                                sal_Int32 nPos, OUString& rWord );
 
     // Search for the words in the replacement table.
     // rText - check in this text the words of the list
