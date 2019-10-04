@@ -42,6 +42,7 @@
 #include <sfx2/docfile.hxx>
 #include <svx/xtable.hxx>
 #include <vcl/mnemonic.hxx>
+#include <svl/intitem.hxx>
 #include <svl/urihelper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svx/drawitem.hxx>
@@ -249,7 +250,7 @@ bool SdTPAction::FillItemSet( SfxItemSet* rAttrs )
 
     if( m_xLbAction->get_value_changed_from_saved() )
     {
-        rAttrs->Put( SfxAllEnumItem( ATTR_ACTION, static_cast<sal_uInt16>(eCA) ) );
+        rAttrs->Put( SfxUInt16Item( ATTR_ACTION, static_cast<sal_uInt16>(eCA) ) );
         bModified = true;
     }
     else
@@ -290,7 +291,7 @@ void SdTPAction::Reset( const SfxItemSet* rAttrs )
     // m_xLbAction
     if( rAttrs->GetItemState( ATTR_ACTION ) != SfxItemState::DONTCARE )
     {
-        eCA = static_cast<presentation::ClickAction>(static_cast<const SfxAllEnumItem&>( rAttrs->
+        eCA = static_cast<presentation::ClickAction>(static_cast<const SfxUInt16Item&>( rAttrs->
                     Get( ATTR_ACTION ) ).GetValue());
         SetActualClickAction( eCA );
     }

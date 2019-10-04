@@ -27,6 +27,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <svl/aeitem.hxx>
+#include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svx/svdopath.hxx>
 #include <tools/debug.hxx>
@@ -347,21 +348,21 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             aSet.Put(SfxBoolItem(ATTR_ANIMATION_ACTIVE, false));
 
         if (nEffectSet == ATTR_SET)
-            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_EFFECT, static_cast<sal_uInt16>(eEffect)));
+            aSet.Put(SfxUInt16Item(ATTR_ANIMATION_EFFECT, static_cast<sal_uInt16>(eEffect)));
         else if (nEffectSet == ATTR_MIXED)
             aSet.InvalidateItem( ATTR_ANIMATION_EFFECT );
         else
-            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_EFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
+            aSet.Put(SfxUInt16Item(ATTR_ANIMATION_EFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
 
         if (nTextEffectSet == ATTR_SET)
-            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_TEXTEFFECT, static_cast<sal_uInt16>(eTextEffect)));
+            aSet.Put(SfxUInt16Item(ATTR_ANIMATION_TEXTEFFECT, static_cast<sal_uInt16>(eTextEffect)));
         else if (nTextEffectSet == ATTR_MIXED)
             aSet.InvalidateItem( ATTR_ANIMATION_TEXTEFFECT );
         else
-            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_TEXTEFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
+            aSet.Put(SfxUInt16Item(ATTR_ANIMATION_TEXTEFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
 
         if (nSpeedSet == ATTR_SET)
-            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_SPEED, static_cast<sal_uInt16>(eSpeed)));
+            aSet.Put(SfxUInt16Item(ATTR_ANIMATION_SPEED, static_cast<sal_uInt16>(eSpeed)));
         else
             aSet.InvalidateItem(ATTR_ANIMATION_SPEED);
 
@@ -406,11 +407,11 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, false));
 
         if (nClickActionSet == ATTR_SET)
-            aSet.Put(SfxAllEnumItem(ATTR_ACTION, static_cast<sal_uInt16>(eClickAction)));
+            aSet.Put(SfxUInt16Item(ATTR_ACTION, static_cast<sal_uInt16>(eClickAction)));
         else if (nClickActionSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ACTION);
         else
-            aSet.Put(SfxAllEnumItem(ATTR_ACTION, sal_uInt16(presentation::ClickAction_NONE)));
+            aSet.Put(SfxUInt16Item(ATTR_ACTION, sal_uInt16(presentation::ClickAction_NONE)));
 
         if (nBookmarkSet == ATTR_SET)
             aSet.Put(SfxStringItem(ATTR_ACTION_FILENAME, aBookmark));
@@ -418,14 +419,14 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             aSet.InvalidateItem(ATTR_ACTION_FILENAME);
 
         if (nSecondEffectSet == ATTR_SET)
-            aSet.Put(SfxAllEnumItem(ATTR_ACTION_EFFECT, static_cast<sal_uInt16>(eSecondEffect)));
+            aSet.Put(SfxUInt16Item(ATTR_ACTION_EFFECT, static_cast<sal_uInt16>(eSecondEffect)));
         else if (nSecondEffectSet == ATTR_MIXED)
             aSet.InvalidateItem( ATTR_ACTION_EFFECT );
         else
-            aSet.Put(SfxAllEnumItem(ATTR_ACTION_EFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
+            aSet.Put(SfxUInt16Item(ATTR_ACTION_EFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
 
         if (nSecondSpeedSet == ATTR_SET)
-            aSet.Put(SfxAllEnumItem(ATTR_ACTION_EFFECTSPEED, static_cast<sal_uInt16>(eSecondSpeed)));
+            aSet.Put(SfxUInt16Item(ATTR_ACTION_EFFECTSPEED, static_cast<sal_uInt16>(eSecondSpeed)));
         else
             aSet.InvalidateItem(ATTR_ACTION_EFFECTSPEED);
 
@@ -466,7 +467,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ANIMATION_EFFECT) == SfxItemState::SET)
     {
-        eEffect = static_cast<presentation::AnimationEffect>(static_cast<const SfxAllEnumItem&>( pArgs->
+        eEffect = static_cast<presentation::AnimationEffect>(static_cast<const SfxUInt16Item&>( pArgs->
                     Get(ATTR_ANIMATION_EFFECT)).GetValue());
         nEffectSet = ATTR_SET;
     }
@@ -475,7 +476,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ANIMATION_TEXTEFFECT) == SfxItemState::SET)
     {
-        eTextEffect = static_cast<presentation::AnimationEffect>(static_cast<const SfxAllEnumItem&>( pArgs->
+        eTextEffect = static_cast<presentation::AnimationEffect>(static_cast<const SfxUInt16Item&>( pArgs->
                         Get(ATTR_ANIMATION_TEXTEFFECT)).GetValue());
         nTextEffectSet = ATTR_SET;
     }
@@ -484,7 +485,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ANIMATION_SPEED) == SfxItemState::SET)
     {
-        eSpeed  = static_cast<presentation::AnimationSpeed>(static_cast<const SfxAllEnumItem&>( pArgs->
+        eSpeed  = static_cast<presentation::AnimationSpeed>(static_cast<const SfxUInt16Item&>( pArgs->
                     Get(ATTR_ANIMATION_SPEED)).GetValue());
         nSpeedSet = ATTR_SET;
     }
@@ -541,7 +542,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ACTION) == SfxItemState::SET)
     {
-        eClickAction = static_cast<presentation::ClickAction>(static_cast<const SfxAllEnumItem&>(pArgs->
+        eClickAction = static_cast<presentation::ClickAction>(static_cast<const SfxUInt16Item&>(pArgs->
                     Get(ATTR_ACTION)).GetValue());
         nClickActionSet = ATTR_SET;
     }
@@ -559,7 +560,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ACTION_EFFECT) == SfxItemState::SET)
     {
-        eSecondEffect = static_cast<presentation::AnimationEffect>(static_cast<const SfxAllEnumItem&>( pArgs->
+        eSecondEffect = static_cast<presentation::AnimationEffect>(static_cast<const SfxUInt16Item&>( pArgs->
                     Get(ATTR_ACTION_EFFECT)).GetValue());
         nSecondEffectSet = ATTR_SET;
     }
@@ -568,7 +569,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ACTION_EFFECTSPEED) == SfxItemState::SET)
     {
-        eSecondSpeed  = static_cast<presentation::AnimationSpeed>(static_cast<const SfxAllEnumItem&>( pArgs->
+        eSecondSpeed  = static_cast<presentation::AnimationSpeed>(static_cast<const SfxUInt16Item&>( pArgs->
                     Get(ATTR_ACTION_EFFECTSPEED)).GetValue());
         nSecondSpeedSet = ATTR_SET;
     }
