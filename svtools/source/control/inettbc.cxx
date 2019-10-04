@@ -53,7 +53,7 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <svtools/asynclink.hxx>
-#include <svl/urlfilter.hxx>
+#include <svtools/urlfilter.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -2200,6 +2200,30 @@ void URLBox::SetFilter(const OUString& _sFilter)
 {
     pImpl->m_aFilters.clear();
     FilterMatch::createWildCardFilterList(_sFilter,pImpl->m_aFilters);
+}
+
+void FilterMatch::createWildCardFilterList(const OUString& _rFilterList,::std::vector< WildCard >& _rFilters)
+{
+    if( _rFilterList.getLength() )
+    {
+        // filter is given
+        sal_Int32 nIndex = 0;
+        OUString sToken;
+        do
+        {
+            sToken = _rFilterList.getToken( 0, ';', nIndex );
+            if ( !sToken.isEmpty() )
+            {
+                _rFilters.emplace_back( sToken.toAsciiUpperCase() );
+            }
+        }
+        while ( nIndex >= 0 );
+    }
+    else
+    {
+        // no filter is given -> match all
+        _rFilters.emplace_back("*" );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

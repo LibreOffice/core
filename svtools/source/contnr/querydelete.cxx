@@ -17,27 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_URLFILTER_HXX
-#define INCLUDED_SVL_URLFILTER_HXX
+#include <svtools/querydelete.hxx>
 
-#include <tools/wldcrd.hxx>
-#include <vector>
-
-struct FilterMatch
+namespace svtools
 {
-private:
-    const OUString&   m_rCompareString;
-public:
-    FilterMatch( const OUString& _rCompareString ) : m_rCompareString( _rCompareString ) { }
+QueryDeleteDlg_Impl::QueryDeleteDlg_Impl(weld::Widget* pParent, const OUString& rName)
+    : MessageDialogController(pParent, "svt/ui/querydeletedialog.ui", "QueryDeleteDialog")
+    , m_xAllButton(m_xBuilder->weld_button("all"))
+{
+    // display specified texts
+    m_xDialog->set_secondary_text(m_xDialog->get_secondary_text().replaceFirst("%s", rName));
+}
 
-    bool operator()( const WildCard& _rMatcher )
-    {
-        return _rMatcher.Matches( m_rCompareString );
-    }
-
-    static void createWildCardFilterList(const OUString& _rFilterList,::std::vector< WildCard >& _rFilters);
-};
-
-#endif // INCLUDED_SVL_URLFILTER_HXX
+QueryDeleteDlg_Impl::~QueryDeleteDlg_Impl() {}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

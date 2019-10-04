@@ -8,7 +8,6 @@
  */
 
 #include <comphelper/processfactory.hxx>
-#include <svtools/foldertree.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/commandenvironment.hxx>
@@ -17,6 +16,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include "contentenumeration.hxx"
+#include "foldertree.hxx"
 #include <bitmaps.hlst>
 
 using namespace ::com::sun::star::task;
