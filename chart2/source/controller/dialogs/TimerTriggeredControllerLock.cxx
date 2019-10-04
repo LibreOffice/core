@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/frame/XModel.hpp>
 #include <TimerTriggeredControllerLock.hxx>
 #include <ControllerLockGuard.hxx>
-
-#include <vcl/edit.hxx>
 
 namespace chart
 {
