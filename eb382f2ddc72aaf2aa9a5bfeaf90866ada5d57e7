@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_f4e11400",
+        "filename": "cui/source/options/treeopt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-10-04T07:01:01Z",
+      "side": 1,
+      "message": "this line can be\n\n    xTreeView.get_row_expanded(*xEntry) ? xTreeView.collapse_row(*xEntry) : xTreeView.expand_row(*xEntry);\n\nand this block is better",
+      "revId": "eb382f2ddc72aaf2aa9a5bfeaf90866ada5d57e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
