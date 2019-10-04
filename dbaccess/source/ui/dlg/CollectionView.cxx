@@ -116,7 +116,6 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click, Button*, void)
         return;
     try
     {
-        OUString sSubFolder = m_pView->GetCurrentURL();
         sal_Int32 nIndex = sName.lastIndexOf('/') + 1;
         if ( nIndex )
         {
@@ -136,7 +135,7 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click, Button*, void)
                 m_pView->Initialize(m_xContent);
                 initCurrentPath();
             }
-            sSubFolder = sName.copy(0,nIndex-1);
+            OUString sSubFolder = sName.copy(0,nIndex-1);
             sName = sName.copy(nIndex);
             Reference<XHierarchicalNameContainer> xHier(m_xContent,UNO_QUERY);
             OSL_ENSURE(xHier.is(),"XHierarchicalNameContainer not supported!");
