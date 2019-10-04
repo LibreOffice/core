@@ -117,7 +117,7 @@ public:
     virtual void    ClearModifyFlag() override;
     virtual bool    IsModified() const override;
 
-    virtual void    EnableUpdateData( sal_uLong nTimeout = EDIT_UPDATEDATA_TIMEOUT ) override;
+    virtual void    EnableUpdateData( sal_uLong nTimeout ) override;
     virtual void    DisableUpdateData() override { pUpdateDataTimer.reset(); }
 
     virtual void    SetReadOnly( bool bReadOnly = true ) override;
