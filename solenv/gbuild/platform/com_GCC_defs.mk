@@ -104,7 +104,9 @@ gb_LinkTarget_LDFLAGS += -Wl,--gc-sections
 endif
 
 ifeq ($(COM_IS_CLANG),TRUE)
-gb_CXXFLAGS_COMMON += -Wimplicit-fallthrough
+gb_CXXFLAGS_COMMON += \
+	-Wimplicit-fallthrough \
+	-Wunused-exception-parameter
 else
 gb_CFLAGS_COMMON += \
     -Wduplicated-cond \

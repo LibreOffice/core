@@ -4140,7 +4140,7 @@ static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText(vcl::
         if (xAccessible.is())
             xText = FindFocusedEditableText(xAccessible->getAccessibleContext());
     }
-    catch(const uno::Exception& e)
+    catch(const uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "vcl.gtk3", "Exception in getting input method surrounding text");
     }

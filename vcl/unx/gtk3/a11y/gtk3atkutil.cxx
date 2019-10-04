@@ -243,7 +243,7 @@ void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObj
                 break;
         }
     }
-    catch( const lang::IndexOutOfBoundsException& e )
+    catch( const lang::IndexOutOfBoundsException& )
     {
         g_warning("Focused object has invalid index in parent");
     }
