@@ -967,7 +967,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
         // put Width & Height to itemset
         rOutAttrs->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_WIDTH ), static_cast<sal_uInt32>(lWidth) ) );
         rOutAttrs->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_HEIGHT ), static_cast<sal_uInt32>(lHeight) ) );
-        rOutAttrs->Put( SfxAllEnumItem( GetWhich( SID_ATTR_TRANSFORM_SIZE_POINT ), sal::static_int_cast< sal_uInt16 >( meRP ) ) );
+        rOutAttrs->Put( SfxUInt16Item( GetWhich( SID_ATTR_TRANSFORM_SIZE_POINT ), sal::static_int_cast< sal_uInt16 >( meRP ) ) );
         bModified = true;
     }
 

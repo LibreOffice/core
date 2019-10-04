@@ -877,7 +877,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
         rSet->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_WIDTH ), nWidth ) );
         rSet->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_HEIGHT ), nHeight ) );
         //this item is required by SdrEditView::SetGeoAttrToMarked()
-        rSet->Put( SfxAllEnumItem( GetWhich( SID_ATTR_TRANSFORM_SIZE_POINT ), sal_uInt16(RectPoint::LT) ) );
+        rSet->Put( SfxUInt16Item( GetWhich( SID_ATTR_TRANSFORM_SIZE_POINT ), sal_uInt16(RectPoint::LT) ) );
 
         bModified = true;
     }

@@ -25,7 +25,6 @@
 #include <svl/typedwhich.hxx>
 
 class SfxInt32Item;
-class SfxAllEnumItem;
 class SfxPointItem;
 class SfxBoolItem;
 class SfxUInt32Item;
@@ -236,7 +235,7 @@ class SvxSetItem;
 #define SID_ATTR_TRANSFORM_POS_Y                        TypedWhichId<SfxInt32Item>( SID_SVX_START + 89 )
 #define SID_ATTR_TRANSFORM_WIDTH                        TypedWhichId<SfxUInt32Item>( SID_SVX_START + 90 )
 #define SID_ATTR_TRANSFORM_HEIGHT                       TypedWhichId<SfxUInt32Item>( SID_SVX_START + 91 )
-#define SID_ATTR_TRANSFORM_SIZE_POINT                   TypedWhichId<SfxAllEnumItem>( SID_SVX_START + 92 )
+#define SID_ATTR_TRANSFORM_SIZE_POINT                   TypedWhichId<SfxUInt16Item>( SID_SVX_START + 92 )
 #define SID_ATTR_TRANSFORM_ROT_X                        TypedWhichId<SfxInt32Item>( SID_SVX_START + 93 )
 #define SID_ATTR_TRANSFORM_ROT_Y                        TypedWhichId<SfxInt32Item>( SID_SVX_START + 94 )
 #define SID_ATTR_TRANSFORM_ANGLE                        TypedWhichId<SfxInt32Item>( SID_SVX_START + 95 )
