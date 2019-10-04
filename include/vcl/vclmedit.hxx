@@ -110,14 +110,14 @@ public:
     void            SelectionChanged();
     void            CaretChanged();
     virtual void    Modify() override;
-    virtual void    UpdateData() override;
 
     virtual void    SetModifyFlag() override;
     virtual void    ClearModifyFlag() override;
     virtual bool    IsModified() const override;
 
-    virtual void    EnableUpdateData( sal_uLong nTimeout ) override;
-    virtual void    DisableUpdateData() override { pUpdateDataTimer.reset(); }
+    void            EnableUpdateData( sal_uLong nTimeout );
+    virtual void    UpdateData();
+    void            DisableUpdateData() { pUpdateDataTimer.reset(); }
 
     virtual void    SetReadOnly( bool bReadOnly = true ) override;
     virtual bool    IsReadOnly() const override;
