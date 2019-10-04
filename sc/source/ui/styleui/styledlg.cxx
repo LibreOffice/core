@@ -85,7 +85,7 @@ void ScStyleDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
         if (rPageId == "page")
         {
-            aSet.Put (SfxAllEnumItem(sal_uInt16(SID_ENUM_PAGE_MODE), SVX_PAGE_MODE_CENTER));
+            aSet.Put (SfxUInt16Item(sal_uInt16(SID_ENUM_PAGE_MODE), SVX_PAGE_MODE_CENTER));
             rTabPage.PageCreated(aSet);
         }
         else if (rPageId == "header" || rPageId == "footer")
