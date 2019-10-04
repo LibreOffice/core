@@ -1508,7 +1508,10 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
             if ( bStatus )
             {
                 sal_uInt64 nRowSize = (static_cast<sal_uInt64>(nImageWidth) * nSamplesPerPixel / nPlanes * nBitsPerSample + 7) >> 3;
-                if (nRowSize > SAL_MAX_INT32 / SAL_N_ELEMENTS(aMap))
+                auto nMaxSize = SAL_MAX_INT32 / SAL_N_ELEMENTS(aMap);
+                if (utl::ConfigManager::IsFuzzing())
+                    nMaxSize /= 2;
+                if (nRowSize > nMaxSize)
                 {
                     SAL_WARN("filter.tiff", "Ludicrous row size of: " << nRowSize << " required");
                     bStatus = false;
