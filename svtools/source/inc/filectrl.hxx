@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVTOOLS_FILECTRL_HXX
 #define INCLUDED_SVTOOLS_FILECTRL_HXX
 
-#include <svtools/svtdllapi.h>
 #include <vcl/window.hxx>
 #include <vcl/button.hxx>
 
@@ -39,18 +38,18 @@ namespace o3tl
 }
 
 
-class SVT_DLLPUBLIC FileControl final : public vcl::Window
+class FileControl final : public vcl::Window
 {
     VclPtr<Edit>       maEdit;
     VclPtr<PushButton> maButton;
     OUString const           maButtonText;
     FileControlMode_Internal    mnInternalFlags;
 
-    SVT_DLLPRIVATE void     Resize() override;
-    SVT_DLLPRIVATE void     GetFocus() override;
-    SVT_DLLPRIVATE void     StateChanged( StateChangedType nType ) override;
-    SVT_DLLPRIVATE WinBits  ImplInitStyle( WinBits nStyle );
-    DECL_DLLPRIVATE_LINK( ButtonHdl, Button*, void );
+    void     Resize() override;
+    void     GetFocus() override;
+    void     StateChanged( StateChangedType nType ) override;
+    WinBits  ImplInitStyle( WinBits nStyle );
+    DECL_LINK( ButtonHdl, Button*, void );
 
 public:
                     FileControl( vcl::Window* pParent, WinBits nStyle );
