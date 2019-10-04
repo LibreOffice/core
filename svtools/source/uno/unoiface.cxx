@@ -24,8 +24,8 @@
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/svmedit.hxx>
+#include <filectrl.hxx>
 #include <unoiface.hxx>
-#include <svtools/filectrl.hxx>
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
