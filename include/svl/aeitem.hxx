@@ -26,37 +26,20 @@
 #include <memory>
 #include <vector>
 
-struct SfxAllEnumValue_Impl;
-typedef std::vector<SfxAllEnumValue_Impl> SfxAllEnumValueArr;
-
-// MSVC hack:
-class SAL_DLLPUBLIC_RTTI SfxAllEnumItem_Base: public SfxEnumItem<sal_uInt16> {
-protected:
-    explicit SfxAllEnumItem_Base(sal_uInt16 nWhich, sal_uInt16 nValue):
-        SfxEnumItem(nWhich, nValue)
-    {}
-};
-
-class SVL_DLLPUBLIC SfxAllEnumItem: public SfxAllEnumItem_Base
+class SVL_DLLPUBLIC SfxAllEnumItem: public SfxPoolItem
 {
-    std::unique_ptr<SfxAllEnumValueArr>   pValues;
-
-    sal_uInt16              GetPosByValue( sal_uInt16 nValue ) const;
-    std::size_t             GetPosByValue_( sal_uInt16 nValue ) const;
-    sal_uInt16              GetValueByPos( sal_uInt16 nPos ) const;
+    std::vector<OUString>   m_Values;
 
 public:
     explicit                SfxAllEnumItem( sal_uInt16 nWhich);
-                            SfxAllEnumItem( sal_uInt16 nWhich, sal_uInt16 nVal );
                             SfxAllEnumItem( const SfxAllEnumItem & );
                             virtual ~SfxAllEnumItem() override;
 
-    void                    InsertValue( sal_uInt16 nValue );
-    void                    InsertValue( sal_uInt16 nValue, const OUString &rText );
-
-    virtual sal_uInt16      GetValueCount() const override;
-    OUString const &        GetValueTextByPos( sal_uInt16 nPos ) const;
+    void                    SetTextByPos( sal_uInt16 nPos, const OUString &rText );
+    OUString const &        GetTextByPos( sal_uInt16 nPos ) const;
+    sal_Int32               GetTextCount() const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual bool            operator==( SfxPoolItem const & ) const override;
 };
 
 #endif
