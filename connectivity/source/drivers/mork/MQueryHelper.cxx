@@ -218,7 +218,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
                     entry->setValue(key, valueOUString);
                 }
                 bool result = true;
-                for (auto const& elem : entryMatchedByExpression(this, &expr, entry.get()))
+                for (bool elem : entryMatchedByExpression(this, &expr, entry.get()))
                 {
                     result = result && elem;
                 }
@@ -296,7 +296,7 @@ std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpressi
             MQueryExpression::bool_cond condition = queryExpression->getExpressionCondition();
             if (condition == MQueryExpression::OR) {
                 bool result = false;
-                for (auto const& elem : subquery_result)
+                for (bool elem : subquery_result)
                 {
                     result = result || elem;
                 }
@@ -304,7 +304,7 @@ std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpressi
             } else {
                 assert(condition == MQueryExpression::AND && "only OR or AND should exist");
                 bool result = true;
-                for (auto const& elem : subquery_result)
+                for (bool elem : subquery_result)
                 {
                     result = result && elem;
                 }
