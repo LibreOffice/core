@@ -47,8 +47,9 @@
 #include <xmlreader/xmlreader.hxx>
 #include <desktop/crashreport.hxx>
 #include <strings.hrc>
+#include <comphelper/lok.hxx>
 
-#ifdef DISABLE_DYNLOADING
+#if defined(DISABLE_DYNLOADING) || defined(LINUX)
 #include <dlfcn.h>
 #endif
 
@@ -1670,7 +1671,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         sal_Int32 nDelim = name.indexOf('-');
         if (nDelim != -1)
         {
-            OUString sFunction(OStringToOUString(OString("make") + name.copy(nDelim+1), RTL_TEXTENCODING_UTF8));
+            OString aFunction(OString("make") + name.copy(nDelim+1));
+            OUString sFunction(OStringToOUString(aFunction, RTL_TEXTENCODING_UTF8));
 
             customMakeWidget pFunction = nullptr;
 #ifndef DISABLE_DYNLOADING
@@ -1694,9 +1696,22 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                 {
                     pModule.reset(new osl::Module);
                     bool ok = pModule->loadRelative(&thisModule, sModule);
-                    assert(ok && "bad module name in .ui");
-                    (void) ok;
-                    pFunction = reinterpret_cast<customMakeWidget>(pModule->getFunctionSymbol(sFunction));
+#ifdef LINUX
+                    if (!ok && comphelper::LibreOfficeKit::isActive())
+                    {
+                        // in the case of preloading, we don't have eg. the
+                        // libcuilo.so, but still need to dlsym the symbols -
+                        // which are already in-process
+                        pFunction = reinterpret_cast<customMakeWidget>(dlsym(RTLD_DEFAULT, aFunction.getStr()));
+                        assert(pFunction && "couldn't even directly dlsym the sFunction (available via preload)");
+                    }
+                    else
+#endif
+                    {
+                        assert(ok && "bad module name in .ui");
+                        (void) ok;
+                        pFunction = reinterpret_cast<customMakeWidget>(pModule->getFunctionSymbol(sFunction));
+                    }
                 }
                 g_aModuleMap.insert(std::make_pair(sModule, pModule));
             }
