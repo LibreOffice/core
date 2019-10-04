@@ -229,7 +229,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99602_subscript_charStyleSize, "tdf99602_subscri
     // The word "Base" should not be subscripted.
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1), "CharEscapement"), 0);
     // The word "Subscript" should be 48pt, subscripted by 25% (12pt).
-    //CPPUNIT_ASSERT_DOUBLES_EQUAL( 25.f, getProperty<float>(getRun(xPara, 2), "CharEscapement"), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( -25.f, getProperty<float>(getRun(xPara, 2), "CharEscapement"), 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124637_sectionMargin, "tdf124637_sectionMargin.docx")
