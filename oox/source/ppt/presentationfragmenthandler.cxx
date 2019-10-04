@@ -496,7 +496,7 @@ void PresentationFragmentHandler::finalizeImport()
         try
         {
             int nPagesImported = 0;
-            for (auto const& elem : aRangeEnumerator)
+            for (sal_Int32 elem : aRangeEnumerator)
             {
                 if ( rxStatusIndicator.is() )
                     rxStatusIndicator->setValue((nPagesImported * 10000) / aRangeEnumerator.size());
