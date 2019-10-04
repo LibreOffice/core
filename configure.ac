@@ -11902,7 +11902,7 @@ EOF
     ant_minminor1=`echo $ant_minver | cut -d"." -f2`
 
     AC_MSG_CHECKING([whether Ant is >= $ant_minver])
-    ant_version=`"$ANT" -version | $AWK '{ print $4; }'`
+    ant_version=`"$ANT" -version | $AWK '$3 == "version" { print $4; }'`
     ant_version_major=`echo $ant_version | cut -d. -f1`
     ant_version_minor=`echo $ant_version | cut -d. -f2`
     echo "configure: ant_version $ant_version " >&5
