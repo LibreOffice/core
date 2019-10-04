@@ -76,6 +76,9 @@ public:
     AutoTimer( const sal_Char *pDebugName = nullptr );
 };
 
+/// Value suitable as a timeout user input into an EditBox to an expensive update
+#define EDIT_UPDATEDATA_TIMEOUT     350
+
 #endif // INCLUDED_VCL_TIMER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

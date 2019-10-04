@@ -29,7 +29,6 @@
 #include <sfx2/sfxresid.hxx>
 
 #include <sal/macros.h>
-#include <vcl/edit.hxx>
 #include <vcl/event.hxx>
 
 #include <strings.hrc>
