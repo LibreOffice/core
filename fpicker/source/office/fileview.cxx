@@ -18,12 +18,10 @@
  */
 
 #include <vcl/treelistbox.hxx>
-#include <svtools/iconview.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <vcl/treelistentry.hxx>
-#include <svtools/fileview.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/imagemgr.hxx>
 #include <vcl/event.hxx>
@@ -62,9 +60,11 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
-#include <svl/urlfilter.hxx>
+#include <svtools/urlfilter.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
+#include "fileview.hxx"
+#include "iconview.hxx"
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -120,30 +120,6 @@ namespace
 
 }
 
-
-void FilterMatch::createWildCardFilterList(const OUString& _rFilterList,::std::vector< WildCard >& _rFilters)
-{
-    if( _rFilterList.getLength() )
-    {
-        // filter is given
-        sal_Int32 nIndex = 0;
-        OUString sToken;
-        do
-        {
-            sToken = _rFilterList.getToken( 0, ';', nIndex );
-            if ( !sToken.isEmpty() )
-            {
-                _rFilters.emplace_back( sToken.toAsciiUpperCase() );
-            }
-        }
-        while ( nIndex >= 0 );
-    }
-    else
-    {
-        // no filter is given -> match all
-        _rFilters.emplace_back("*" );
-    }
-}
 
 class ViewTabListBox_Impl : public SvHeaderTabListBox
 {

@@ -71,7 +71,6 @@
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/docfilt.hxx>
-#include <svtools/fileview.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <defaultobjectnamecheck.hxx>

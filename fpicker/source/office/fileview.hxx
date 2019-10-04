@@ -20,7 +20,6 @@
 #define INCLUDED_VCL_FILEVIEW_HXX
 
 #include <memory>
-#include <svtools/svtdllapi.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <vcl/ctrl.hxx>
 #include <vcl/weld.hxx>
@@ -64,7 +63,7 @@ struct FileViewAsyncAction
     }
 };
 
-class SVT_DLLPUBLIC SvtFileView : public Control
+class SvtFileView : public Control
 {
 private:
     std::unique_ptr<SvtFileView_Impl> mpImpl;
@@ -205,7 +204,7 @@ enum QueryDeleteResult_Impl
     QUERYDELETE_ALL = 101
 };
 
-class SVT_DLLPUBLIC QueryDeleteDlg_Impl :  public weld::MessageDialogController
+class QueryDeleteDlg_Impl :  public weld::MessageDialogController
 {
 private:
     std::unique_ptr<weld::Button> m_xAllButton;

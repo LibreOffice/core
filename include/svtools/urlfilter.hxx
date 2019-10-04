@@ -20,10 +20,11 @@
 #ifndef INCLUDED_SVL_URLFILTER_HXX
 #define INCLUDED_SVL_URLFILTER_HXX
 
+#include <svtools/svtdllapi.h>
 #include <tools/wldcrd.hxx>
 #include <vector>
 
-struct FilterMatch
+struct SVT_DLLPUBLIC FilterMatch
 {
 private:
     const OUString&   m_rCompareString;

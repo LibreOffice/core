@@ -19,8 +19,8 @@
 
 
 #include "asyncfilepicker.hxx"
+#include "fileview.hxx"
 #include "iodlg.hxx"
-#include <svtools/fileview.hxx>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 

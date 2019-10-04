@@ -4985,6 +4985,15 @@ fpicker/source/office/breadcrumb.cxx
 fpicker/source/office/breadcrumb.hxx
 fpicker/source/office/commonpicker.cxx
 fpicker/source/office/commonpicker.hxx
+fpicker/source/office/contentenumeration.cxx
+fpicker/source/office/contentenumeration.hxx
+fpicker/source/office/fileview.cxx
+fpicker/source/office/fileview.hxx
+fpicker/source/office/foldertree.cxx
+fpicker/source/office/iconview.cxx
+fpicker/source/office/iconview.hxx
+fpicker/source/office/iconviewimpl.cxx
+fpicker/source/office/iconviewimpl.hxx
 fpicker/source/office/fpdialogbase.hxx
 fpicker/source/office/fpinteraction.cxx
 fpicker/source/office/fpinteraction.hxx
@@ -6890,7 +6899,6 @@ include/svl/svlresid.hxx
 include/svl/undo.hxx
 include/svl/urihelper.hxx
 include/svl/urlbmk.hxx
-include/svl/urlfilter.hxx
 include/svl/visitem.hxx
 include/svl/whiter.hxx
 include/svl/zforlist.hxx
@@ -6931,7 +6939,6 @@ include/svtools/extcolorcfg.hxx
 include/svtools/filechangedchecker.hxx
 include/svtools/filectrl.hxx
 include/svtools/fileurlbox.hxx
-include/svtools/fileview.hxx
 include/svtools/foldertree.hxx
 include/svtools/fontsubstconfig.hxx
 include/svtools/framestatuslistener.hxx
@@ -6943,7 +6950,6 @@ include/svtools/htmlcfg.hxx
 include/svtools/htmlkywd.hxx
 include/svtools/htmlout.hxx
 include/svtools/htmltokn.h
-include/svtools/iconview.hxx
 include/svtools/imagemgr.hxx
 include/svtools/imageresourceaccess.hxx
 include/svtools/imgdef.hxx
@@ -6997,6 +7003,7 @@ include/svtools/toolboxcontroller.hxx
 include/svtools/unitconv.hxx
 include/svtools/unoevent.hxx
 include/svtools/unoimap.hxx
+include/svtools/urlfilter.hxx
 include/svtools/valueset.hxx
 include/svx/AccessibleControlShape.hxx
 include/svx/AccessibleGraphicShape.hxx
@@ -13686,12 +13693,6 @@ svtools/source/config/printoptions.cxx
 svtools/source/config/slidesorterbaropt.cxx
 svtools/source/config/test/test.cxx
 svtools/source/contnr/DocumentInfoPreview.cxx
-svtools/source/contnr/contentenumeration.cxx
-svtools/source/contnr/contentenumeration.hxx
-svtools/source/contnr/fileview.cxx
-svtools/source/contnr/foldertree.cxx
-svtools/source/contnr/iconview.cxx
-svtools/source/contnr/iconviewimpl.cxx
 svtools/source/contnr/simptabl.cxx
 svtools/source/contnr/templwin.cxx
 svtools/source/contnr/templwin.hxx
@@ -13739,7 +13740,6 @@ svtools/source/hatchwindow/hatchwindowfactory.cxx
 svtools/source/hatchwindow/ipwin.cxx
 svtools/source/hatchwindow/ipwin.hxx
 svtools/source/inc/hatchwindow.hxx
-svtools/source/inc/iconviewimpl.hxx
 svtools/source/inc/unoiface.hxx
 svtools/source/java/javacontext.cxx
 svtools/source/java/javainteractionhandler.cxx
