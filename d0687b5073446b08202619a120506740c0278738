@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_34f54c58",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-10-04T09:48:43Z",
+      "side": 1,
+      "message": "i don\u0027t understand what this means",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 70
+      },
+      "revId": "d0687b5073446b08202619a120506740c0278738",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_d4e97880",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3356,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-10-04T09:48:43Z",
+      "side": 1,
+      "message": "this isn\u0027t an ODF 1.2 attributre, so 2 problems:\n* use XML_NAMESPACE_LOEXT\n* add a check to only export it if the ODF version is \u003e ODF 1.2 i.e. ODF 1.2 extended",
+      "revId": "d0687b5073446b08202619a120506740c0278738",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_f4eef486",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3375,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-10-04T09:48:43Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "d0687b5073446b08202619a120506740c0278738",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
