@@ -20,7 +20,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_OPENDOCCONTROLS_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_OPENDOCCONTROLS_HXX
 
-#include <vcl/button.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
 #include <map>
