@@ -2830,8 +2830,9 @@ void GDIMetaFile::UseCanvas( bool _bUseCanvas )
 
 void GDIMetaFile::dumpAsXml(const char* pFileName) const
 {
-    SvFileStream aStream(pFileName ? OUString::fromUtf8(pFileName) : OUString("metafile.xml"),
+    SvFileStream aStream(pFileName ? OUString::fromUtf8(pFileName) : OUString("file:///tmp/metafile.xml"),
             StreamMode::STD_READWRITE | StreamMode::TRUNC);
+    assert(aStream.good());
     MetafileXmlDump aDumper;
     aDumper.dump(*this, aStream);
 }
