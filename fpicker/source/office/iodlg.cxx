@@ -21,6 +21,7 @@
 
 #include <sal/macros.h>
 #include <sal/log.hxx>
+#include "fileview.hxx"
 #include "iodlg.hxx"
 #include <svtools/PlaceEditDialog.hxx>
 #include "PlacesListBox.hxx"
@@ -37,7 +38,6 @@
 #include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
-#include <svtools/fileview.hxx>
 #include <svtools/sfxecode.hxx>
 #include <vcl/svtabbx.hxx>
 #include <vcl/treelistentry.hxx>

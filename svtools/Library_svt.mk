@@ -88,11 +88,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/config/optionsdrawinglayer \
     svtools/source/config/printoptions \
     svtools/source/contnr/DocumentInfoPreview \
-    svtools/source/contnr/contentenumeration \
-    svtools/source/contnr/fileview \
-    svtools/source/contnr/foldertree \
-    svtools/source/contnr/iconview \
-    svtools/source/contnr/iconviewimpl \
+    svtools/source/contnr/querydelete \
     svtools/source/contnr/simptabl \
     svtools/source/contnr/templwin \
     svtools/source/control/accessibleruler \
