@@ -843,7 +843,7 @@ void PosSizePropertyPanel::executeSize()
     // put Width & Height to itemset
     SfxUInt32Item aWidthItem( SID_ATTR_TRANSFORM_WIDTH, static_cast<sal_uInt32>(lWidth));
     SfxUInt32Item aHeightItem( SID_ATTR_TRANSFORM_HEIGHT, static_cast<sal_uInt32>(lHeight));
-    SfxAllEnumItem aPointItem (SID_ATTR_TRANSFORM_SIZE_POINT, sal_uInt16(RectPoint::LT));
+    SfxUInt16Item aPointItem (SID_ATTR_TRANSFORM_SIZE_POINT, sal_uInt16(RectPoint::LT));
     const sal_Int32 nCombinedContext(maContext.GetCombinedContext_DI());
 
     if( nCombinedContext == CombinedEnumContext(Application::WriterVariants, Context::Graphic)
