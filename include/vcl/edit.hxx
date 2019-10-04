@@ -58,7 +58,6 @@ class VCL_DLLPUBLIC Edit : public Control, public vcl::unohelper::DragAndDropCli
 {
 private:
     VclPtr<Edit>        mpSubEdit;
-    std::unique_ptr<Timer> mpUpdateDataTimer;
     TextFilter*         mpFilterText;
     std::unique_ptr<DDInfo, o3tl::default_delete<DDInfo>> mpDDInfo;
     std::unique_ptr<Impl_IMEInfos> mpIMEInfos;
@@ -89,8 +88,6 @@ private:
     std::unique_ptr<VclBuilder> mpUIBuilder;
 
     css::uno::Reference<css::i18n::XExtendedInputSequenceChecker> mxISC;
-
-    DECL_DLLPRIVATE_LINK(ImplUpdateDataHdl, Timer*, void);
 
     SAL_DLLPRIVATE bool        ImplTruncateToMaxLen( OUString&, sal_Int32 nSelectionLen ) const;
     SAL_DLLPRIVATE void        ImplInitEditData();
@@ -170,16 +167,12 @@ public:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual void        Modify();
-    virtual void        UpdateData();
 
     static bool         IsCharInput( const KeyEvent& rKEvt );
 
     virtual void        SetModifyFlag();
     virtual void        ClearModifyFlag();
     virtual bool        IsModified() const { return mpSubEdit ? mpSubEdit->mbModified : mbModified; }
-
-    virtual void        EnableUpdateData( sal_uLong nTimeout );
-    virtual void        DisableUpdateData();
 
     void                SetEchoChar( sal_Unicode c );
     sal_Unicode         GetEchoChar() const { return mcEchoChar; }
