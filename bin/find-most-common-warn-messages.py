@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # A script to search our test logs and sort the messages by how common they are so we can start to
 # reduce the noise a little.
@@ -28,11 +28,11 @@ for line in process.stdout:
         sampleOfMessage[sourceAndLine] = line[line.find(tokens[6]):]
 
 tmplist = list() # set of tuple (count, sourceAndLine)
-for key, value in messages.iteritems():
+for key, value in messages.items():
     tmplist.append([value,key])
 
 print( "The top 20 warnings" )
-print
+print("")
 for i in sorted(tmplist, key=lambda v: v[0])[-20:]:
     print( "%6d %s %s" % (i[0], i[1], sampleOfMessage[i[1]]) )
 
