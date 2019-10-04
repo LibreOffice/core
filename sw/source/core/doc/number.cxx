@@ -20,7 +20,6 @@
 #include <memory>
 #include <hintids.hxx>
 
-#include <string.h>
 #include <vcl/font.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -442,7 +441,6 @@ SwNumRule::SwNumRule( const OUString& rNm,
             SwNumRule::maLabelAlignmentBaseFormats[ OUTLINE_RULE ][ n ] = pFormat;
         }
     }
-    memset( maFormats, 0, sizeof( maFormats ));
     OSL_ENSURE( !msName.isEmpty(), "NumRule without a name!" );
 }
 
