@@ -324,7 +324,8 @@ static Reference<graphic::XGraphic> GetXGraphicForCommand(const OUString& rsComm
 
             aGraphicSeq = xDocImgMgr->getImages( nImageType, aImageCmdSeq );
             Reference<graphic::XGraphic> xGraphic = aGraphicSeq[0];
-            return xGraphic;
+            if (xGraphic)
+                return xGraphic;
         }
     }
     catch (Exception&)
