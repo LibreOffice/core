@@ -105,7 +105,6 @@
 #include <svl/numuno.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/filenotation.hxx>
-#include <svtools/fileview.hxx>
 #include <connectivity/FValue.hxx>
 
 #include <editeng/justifyitem.hxx>

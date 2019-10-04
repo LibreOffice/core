@@ -103,7 +103,6 @@
 #define BMP_EXTENSION_LC            "res/lx03256.png"
 #define BMP_PLUGIN                  "res/plugin.png"
 #define RID_BMP_FOLDER              "svtools/res/folder.png"
-#define RID_BMP_FOLDER_OPEN         "res/folderop.png"
 #define BMP_CURRENT                 "svtools/res/ed01.png"
 #define BMP_MODIFIED                "svtools/res/ed02.png"
 #define BMP_NEW                     "svtools/res/ed03.png"

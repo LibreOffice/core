@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "fileview.hxx"
 #include "iodlgimp.hxx"
 #include <vcl/headbar.hxx>
 #include <tools/debug.hxx>
@@ -26,7 +27,6 @@
 #include <vcl/svapp.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/viewoptions.hxx>
-#include <svtools/fileview.hxx>
 #include <svtools/inettbc.hxx>
 #include "iodlg.hxx"
 #include <bitmaps.hlst>
