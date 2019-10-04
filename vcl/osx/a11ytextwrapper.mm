@@ -64,7 +64,7 @@ using namespace ::com::sun::star::uno;
         NSRange selectedTextRange = [ [ AquaA11yTextWrapper selectedTextRangeAttributeForElement: wrapper ] rangeValue ];
         try {
             [ wrapper accessibleEditableText ] -> replaceText ( selectedTextRange.location, selectedTextRange.location + selectedTextRange.length, newText );
-        } catch ( const Exception & e ) {
+        } catch ( const Exception & ) {
             // empty
         }
         [ pool release ];
@@ -89,7 +89,7 @@ using namespace ::com::sun::star::uno;
     NSRange range = [ value rangeValue ];
     try {
         [ wrapper accessibleText ] -> setSelection ( range.location, range.location + range.length );
-    } catch ( const Exception & e ) {
+    } catch ( const Exception & ) {
         // empty
     }
 }
@@ -155,7 +155,7 @@ using namespace ::com::sun::star::uno;
     try {
         sal_Int32 line = [ wrapper accessibleMultiLineText ] -> getLineNumberAtIndex ( static_cast<sal_Int32>([ index intValue ]) );
         lineNumber = [ NSNumber numberWithInt: line ];
-    } catch ( IndexOutOfBoundsException & e ) {
+    } catch ( IndexOutOfBoundsException & ) {
         // empty
     }
     return lineNumber;
@@ -166,7 +166,7 @@ using namespace ::com::sun::star::uno;
     try {
         TextSegment textSegment = [ wrapper accessibleMultiLineText ] -> getTextAtLineNumber ( [ line intValue ] );
         range = [ NSValue valueWithRange: NSMakeRange ( textSegment.SegmentStart, textSegment.SegmentEnd - textSegment.SegmentStart ) ];
-    } catch ( IndexOutOfBoundsException & e ) {
+    } catch ( IndexOutOfBoundsException & ) {
         // empty
     }
     return range;
@@ -178,7 +178,7 @@ using namespace ::com::sun::star::uno;
     NSMutableString * textRange = [ [ NSMutableString alloc ] init ];
     try {
         [ textRange appendString: CreateNSString ( [ wrapper accessibleText ] -> getTextRange ( loc, loc + len ) ) ];
-    } catch ( IndexOutOfBoundsException & e ) {
+    } catch ( IndexOutOfBoundsException & ) {
         // empty
     }
     return textRange;
@@ -193,9 +193,9 @@ using namespace ::com::sun::star::uno;
     try {
         TextSegment textSegment = [ wrapper accessibleText ] -> getTextBeforeIndex ( [ index intValue ], AccessibleTextType::GLYPH );
         range = [ NSValue valueWithRange: NSMakeRange ( textSegment.SegmentStart, textSegment.SegmentEnd - textSegment.SegmentStart ) ];
-    } catch ( IndexOutOfBoundsException & e ) {
+    } catch ( IndexOutOfBoundsException & ) {
         // empty
-    } catch ( IllegalArgumentException & e ) {
+    } catch ( IllegalArgumentException & ) {
         // empty
     }
     return range;
@@ -246,7 +246,7 @@ using namespace ::com::sun::star::uno;
             rect = [ NSValue valueWithRect: NSMakeRect ( [ nsPos pointValue ].x, [ nsPos pointValue ].y - size.Y, size.X, size.Y ) ];
             //printf("Range: %s --- Rect: %s\n", [ NSStringFromRange ( [ range rangeValue ] ) UTF8String ], [ NSStringFromRect ( [ rect rectValue ] ) UTF8String ]);
         }
-    } catch ( IndexOutOfBoundsException & e ) {
+    } catch ( IndexOutOfBoundsException & ) {
         // empty
     }
     return rect;
@@ -257,9 +257,9 @@ using namespace ::com::sun::star::uno;
     try {
         TextSegment textSegment = [ wrapper accessibleText ] -> getTextAtIndex ( [ index intValue ], AccessibleTextType::ATTRIBUTE_RUN );
         range = [ NSValue valueWithRange: NSMakeRange ( textSegment.SegmentStart, textSegment.SegmentEnd - textSegment.SegmentStart ) ];
-    } catch ( IndexOutOfBoundsException & e ) {
+    } catch ( IndexOutOfBoundsException & ) {
         // empty
-    } catch ( IllegalArgumentException & e ) {
+    } catch ( IllegalArgumentException & ) {
         // empty
     }
     return range;
@@ -271,7 +271,7 @@ using namespace ::com::sun::star::uno;
     if ( attrString != nil ) {
         @try {
             rtfData = [ attrString RTFFromRange: [ range rangeValue ] documentAttributes: @{NSDocumentTypeDocumentAttribute : NSRTFTextDocumentType} ];
-        } @catch ( NSException * e) {
+        } @catch ( NSException *) {
             // empty
         }
     }
