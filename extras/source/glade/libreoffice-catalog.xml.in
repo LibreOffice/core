@@ -125,9 +125,6 @@
     <glade-widget-class title="Table Container" name="svtlo-SvSimpleTableContainer"
                         generic-name="Simple Table Container" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="File View" name="svtlo-SvtFileView"
-                        generic-name="File View" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Table Preview" name="swuilo-AutoFmtPreview"
                         generic-name="Table Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
