@@ -261,8 +261,8 @@ namespace dbaui
                 Reference< XInteractionDocumentSave > xCallback(_rContinuations[nDocuPos], UNO_QUERY);
                 OSL_ENSURE(xCallback.is(), "BasicInteractionHandler::implHandle(DocumentSaveRequest): can't save document without an appropriate interaction handler!s");
 
-                ScopedVclPtrInstance< OCollectionView > aDlg(nullptr, _rDocuRequest.Content, _rDocuRequest.Name, m_xContext);
-                sal_Int16 nResult = aDlg->Execute();
+                OCollectionView aDlg(Application::GetFrameWeld(m_xParentWindow), _rDocuRequest.Content, _rDocuRequest.Name, m_xContext);
+                sal_Int16 nResult = aDlg.run();
                 try
                 {
                     switch (nResult)
@@ -270,7 +270,7 @@ namespace dbaui
                         case RET_OK:
                             if (xCallback.is())
                             {
-                                xCallback->setName(aDlg->getName(), aDlg->getSelectedFolder());
+                                xCallback->setName(aDlg.getName(), aDlg.getSelectedFolder());
                                 xCallback->select();
                             }
                             break;
