@@ -2,9 +2,9 @@ basctl/source/basicide/moduldlg.hxx:131
     basctl::ObjectPage m_xDropTarget std::unique_ptr<SbTreeListBoxDropTarget>
 basctl/source/inc/basidesh.hxx:87
     basctl::Shell m_aNotifier class basctl::DocumentEventNotifier
-basctl/source/inc/bastype2.hxx:183
+basctl/source/inc/bastype2.hxx:182
     basctl::TreeListBox m_aNotifier class basctl::DocumentEventNotifier
-basctl/source/inc/bastype2.hxx:255
+basctl/source/inc/bastype2.hxx:251
     basctl::SbTreeListBox m_aNotifier class basctl::DocumentEventNotifier
 basctl/source/inc/IDEComboBox.hxx:101
     basctl::DocListenerBox maNotifier class basctl::DocumentEventNotifier
@@ -230,10 +230,10 @@ dbaccess/source/filter/xml/dbloader2.cxx:227
     dbaxml::DBContentLoader m_xMySelf Reference<class com::sun::star::frame::XFrameLoader>
 dbaccess/source/ui/browser/dbloader.cxx:69
     DBContentLoader m_xListener Reference<class com::sun::star::frame::XLoadEventListener>
+dbaccess/source/ui/inc/FieldDescControl.hxx:112
+    dbaui::OFieldDescControl m_bRightAligned _Bool
 dbaccess/source/ui/inc/RelationController.hxx:33
     dbaui::ORelationController m_pWaitObject std::unique_ptr<WaitObject>
-dbaccess/source/ui/inc/WTypeSelect.hxx:74
-    dbaui::OWizTypeSelectList m_pParentTabPage class dbaui::OWizTypeSelect *
 desktop/qa/desktop_lib/test_desktop_lib.cxx:223
     DesktopLOKTest m_bModified _Bool
 desktop/source/app/app.cxx:1209
@@ -352,6 +352,8 @@ include/editeng/adjustitem.hxx:37
     SvxAdjustItem bLeft _Bool
 include/editeng/outlobj.hxx:43
     OutlinerParaObjData mbIsEditDoc _Bool
+include/editeng/splwrap.hxx:59
+    SvxSpellWrapper bHyphen _Bool
 include/editeng/unotext.hxx:415
     SvxUnoTextBase xParentText css::uno::Reference<css::text::XText>
 include/editeng/unotext.hxx:584
@@ -409,9 +411,9 @@ include/svx/srchdlg.hxx:162
 include/svx/srchdlg.hxx:163
     SvxSearchDialog pOptionsController std::unique_ptr<SvxSearchController>
 include/svx/viewpt3d.hxx:62
-    Viewport3D::(anonymous) X double
-include/svx/viewpt3d.hxx:62
     Viewport3D::(anonymous) H double
+include/svx/viewpt3d.hxx:62
+    Viewport3D::(anonymous) X double
 include/svx/viewpt3d.hxx:62
     Viewport3D::(anonymous) Y double
 include/test/beans/xpropertyset.hxx:56
@@ -784,10 +786,6 @@ sw/inc/unoframe.hxx:313
     SwXOLEListener m_xOLEModel css::uno::Reference<css::frame::XModel>
 sw/inc/view.hxx:184
     SwView m_xGlueDocShell std::unique_ptr<SwViewGlueDocShell>
-sw/qa/api/SwXTextFrame.cxx:46
-    (anonymous namespace)::SwXTextFrame mxTextRange uno::Reference<text::XTextRange>
-sw/qa/api/SwXTextFrame.cxx:47
-    (anonymous namespace)::SwXTextFrame mxTextContent uno::Reference<text::XTextContent>
 sw/source/core/inc/swfont.hxx:986
     SvStatistics nGetTextSize sal_uInt16
 sw/source/core/inc/swfont.hxx:987
@@ -950,7 +948,7 @@ vcl/inc/salwtype.hxx:250
     SalSwipeEvent mnVelocityY double
 vcl/inc/sft.hxx:478
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
-vcl/inc/svdata.hxx:408
+vcl/inc/svdata.hxx:403
     ImplSVEvent mpInstanceRef VclPtr<vcl::Window>
 vcl/inc/unx/gtk/gtkframe.hxx:80
     GtkSalFrame::IMHandler::PreviousKeyPress window GdkWindow *
@@ -958,12 +956,6 @@ vcl/inc/unx/gtk/gtkframe.hxx:81
     GtkSalFrame::IMHandler::PreviousKeyPress send_event gint8
 vcl/inc/unx/gtk/gtkframe.hxx:82
     GtkSalFrame::IMHandler::PreviousKeyPress time guint32
-vcl/inc/unx/gtk/gtkframe.hxx:191
-    GtkSalFrame m_bWindowIsGtkPlug _Bool
-vcl/inc/unx/gtk/gtkframe.hxx:192
-    GtkSalFrame m_aTitle class rtl::OUString
-vcl/inc/unx/salframe.h:99
-    X11SalFrame mbInShow _Bool
 vcl/inc/WidgetThemeLibrary.hxx:20
     vcl::WidgetDrawStyle nSize uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:91

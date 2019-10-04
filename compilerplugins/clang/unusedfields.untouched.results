@@ -119,9 +119,9 @@ include/sfx2/msg.hxx:138
 include/sfx2/msg.hxx:138
     SfxType7 pType const std::type_info *
 include/sfx2/msg.hxx:139
-    SfxType8 nAttribs sal_uInt16
-include/sfx2/msg.hxx:139
     SfxType8 pType const std::type_info *
+include/sfx2/msg.hxx:139
+    SfxType8 nAttribs sal_uInt16
 include/sfx2/msg.hxx:139
     SfxType8 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:139
@@ -147,9 +147,9 @@ include/sfx2/msg.hxx:143
 include/sfx2/msg.hxx:143
     SfxType13 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:143
-    SfxType13 aAttrib struct SfxTypeAttrib [13]
-include/sfx2/msg.hxx:143
     SfxType13 nAttribs sal_uInt16
+include/sfx2/msg.hxx:143
+    SfxType13 aAttrib struct SfxTypeAttrib [13]
 include/sfx2/msg.hxx:144
     SfxType14 pType const std::type_info *
 include/sfx2/msg.hxx:144
@@ -326,10 +326,6 @@ sc/source/filter/inc/sheetdatacontext.hxx:62
     oox::xls::SheetDataContext aReleaser const class SolarMutexReleaser
 sc/source/ui/inc/docsh.hxx:455
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
-sc/source/ui/inc/output.hxx:188
-    ScOutputData nTilePosX long
-sc/source/ui/inc/output.hxx:189
-    ScOutputData nTilePosY long
 sc/source/ui/inc/PivotLayoutTreeListBase.hxx:48
     ScPivotLayoutTreeListBase maDropTargetHelper class ScPivotLayoutTreeDropTarget
 sd/source/ui/remotecontrol/ZeroconfService.hxx:34
@@ -426,8 +422,6 @@ vcl/inc/qt5/Qt5Graphics.hxx:58
     Qt5Graphics m_lastPopupRect class QRect
 vcl/inc/salprn.hxx:45
     SalPrinterQueueInfo mpPortName std::unique_ptr<OUString>
-vcl/inc/unx/gtk/gtkframe.hxx:186
-    GtkSalFrame m_nWorkArea int
 vcl/inc/WidgetThemeLibrary.hxx:87
     vcl::ControlDrawParameters nSize uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:88

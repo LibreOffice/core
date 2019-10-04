@@ -75,7 +75,6 @@ namespace vcl
         VclPtr<vcl::Window>     mpViewWindow;
         sal_uInt16              mnCurLevel;
         WindowAlign             meViewAlign;
-        Link<RoadmapWizard*,void>  maActivateHdl;
         sal_Int16               mnLeftAlignCount;
         bool                    mbEmptyViewMargin;
 

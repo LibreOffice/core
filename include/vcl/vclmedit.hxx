@@ -82,7 +82,6 @@ private:
     Link<Edit&,void>  aModifyHdlLink;
 
     std::unique_ptr<Timer> pUpdateDataTimer;
-    Link<Edit&,void>  aUpdateDataHdlLink;
 
 protected:
 

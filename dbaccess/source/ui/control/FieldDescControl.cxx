@@ -88,7 +88,6 @@ OFieldDescControl::OFieldDescControl(weld::Container* pPage, vcl::Window* pParen
     ,aNo(DBA_RES(STR_VALUE_NO))
     ,m_nEditWidth(50)
     ,m_bAdded(false)
-    ,m_bRightAligned(false)
     ,pActFieldDescr(nullptr)
 {
 }

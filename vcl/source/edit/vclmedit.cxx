@@ -1007,7 +1007,6 @@ IMPL_LINK_NOARG(VclMultiLineEdit, ImpUpdateDataHdl, Timer *, void)
 
 void VclMultiLineEdit::UpdateData()
 {
-    aUpdateDataHdlLink.Call( *this );
 }
 
 void VclMultiLineEdit::SetModifyFlag()
