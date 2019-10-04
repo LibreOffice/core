@@ -26,7 +26,6 @@
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/svapp.hxx>
 
 namespace chart
