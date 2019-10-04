@@ -33,8 +33,8 @@
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <UITools.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/stdtext.hxx>
-#include <vcl/button.hxx>
 #include <vcl/weld.hxx>
 #include <svl/filenotation.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
