@@ -848,7 +848,7 @@ static std::string getAuthorRenderingArgument(LOKDocViewPrivate& priv)
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     std::string aRet;
-    for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aTree)
+    for (const auto& rPair : aTree)
     {
         if (rPair.first == ".uno:Author")
         {

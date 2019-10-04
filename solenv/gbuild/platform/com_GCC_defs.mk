@@ -106,7 +106,8 @@ endif
 ifeq ($(COM_IS_CLANG),TRUE)
 gb_CXXFLAGS_COMMON += \
 	-Wimplicit-fallthrough \
-	-Wunused-exception-parameter
+	-Wunused-exception-parameter \
+	-Wrange-loop-analysis
 else
 gb_CFLAGS_COMMON += \
     -Wduplicated-cond \
