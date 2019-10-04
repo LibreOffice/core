@@ -119,7 +119,7 @@ public:
     CPPUNIT_TEST(testTdf122878);
     CPPUNIT_TEST(testTdf115094);
     CPPUNIT_TEST(testTdf118719);
-    CPPUNIT_TEST(testTdf127235)
+    CPPUNIT_TEST(testTdf127235);
     CPPUNIT_TEST(testTdf123651);
     CPPUNIT_TEST(testBtlrCell);
     CPPUNIT_TEST(testImageComment);
