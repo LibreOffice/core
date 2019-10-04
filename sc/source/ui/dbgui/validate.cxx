@@ -416,13 +416,13 @@ void ScTPValidationValue::Reset( const SfxItemSet* rArgSet )
     sal_uInt16 nLbPos = SC_VALIDDLG_ALLOW_ANY;
     if( rArgSet->GetItemState( FID_VALID_MODE, true, &pItem ) == SfxItemState::SET )
         nLbPos = lclGetPosFromValMode( static_cast< ScValidationMode >(
-            static_cast< const SfxAllEnumItem* >( pItem )->GetValue() ) );
+            static_cast< const SfxUInt16Item* >( pItem )->GetValue() ) );
     m_xLbAllow->set_active( nLbPos );
 
     nLbPos = SC_VALIDDLG_DATA_EQUAL;
     if( rArgSet->GetItemState( FID_VALID_CONDMODE, true, &pItem ) == SfxItemState::SET )
         nLbPos = lclGetPosFromCondMode( static_cast< ScConditionMode >(
-            static_cast< const SfxAllEnumItem* >( pItem )->GetValue() ) );
+            static_cast< const SfxUInt16Item* >( pItem )->GetValue() ) );
     m_xLbValue->set_active( nLbPos );
 
     // *** check boxes ***
@@ -463,9 +463,9 @@ bool ScTPValidationValue::FillItemSet( SfxItemSet* rArgSet )
     ScConditionMode eCondMode = bCustom ?
             ScConditionMode::Direct : lclGetCondModeFromPos( m_xLbValue->get_active() );
 
-    rArgSet->Put( SfxAllEnumItem( FID_VALID_MODE, sal::static_int_cast<sal_uInt16>(
+    rArgSet->Put( SfxUInt16Item( FID_VALID_MODE, sal::static_int_cast<sal_uInt16>(
                     lclGetValModeFromPos( nLbPos ) ) ) );
-    rArgSet->Put( SfxAllEnumItem( FID_VALID_CONDMODE, sal::static_int_cast<sal_uInt16>( eCondMode ) ) );
+    rArgSet->Put( SfxUInt16Item( FID_VALID_CONDMODE, sal::static_int_cast<sal_uInt16>( eCondMode ) ) );
     rArgSet->Put( SfxStringItem( FID_VALID_VALUE1, GetFirstFormula() ) );
     rArgSet->Put( SfxStringItem( FID_VALID_VALUE2, GetSecondFormula() ) );
     rArgSet->Put( SfxBoolItem( FID_VALID_BLANK, m_xCbAllow->get_active() ) );
@@ -775,7 +775,7 @@ void ScTPValidationError::Reset( const SfxItemSet* rArgSet )
         m_xTsbShow->set_state( TRISTATE_TRUE );   // check by default
 
     if ( rArgSet->GetItemState( FID_VALID_ERRSTYLE, true, &pItem ) == SfxItemState::SET )
-        m_xLbAction->set_active( static_cast<const SfxAllEnumItem*>(pItem)->GetValue() );
+        m_xLbAction->set_active( static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
     else
         m_xLbAction->set_active( 0 );
 
@@ -795,7 +795,7 @@ void ScTPValidationError::Reset( const SfxItemSet* rArgSet )
 bool ScTPValidationError::FillItemSet( SfxItemSet* rArgSet )
 {
     rArgSet->Put( SfxBoolItem( FID_VALID_SHOWERR, m_xTsbShow->get_state() == TRISTATE_TRUE ) );
-    rArgSet->Put( SfxAllEnumItem( FID_VALID_ERRSTYLE, m_xLbAction->get_active() ) );
+    rArgSet->Put( SfxUInt16Item( FID_VALID_ERRSTYLE, m_xLbAction->get_active() ) );
     rArgSet->Put( SfxStringItem( FID_VALID_ERRTITLE, m_xEdtTitle->get_text() ) );
     rArgSet->Put( SfxStringItem( FID_VALID_ERRTEXT, m_xEdError->get_text() ) );
 

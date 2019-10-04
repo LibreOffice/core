@@ -869,8 +869,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             bShowHelp = pOldData->GetInput( aHelpTitle, aHelpText );
                             bShowError = pOldData->GetErrMsg( aErrTitle, aErrText, eErrStyle );
 
-                            aArgSet.Put( SfxAllEnumItem( FID_VALID_MODE,        sal::static_int_cast<sal_uInt16>(eMode) ) );
-                            aArgSet.Put( SfxAllEnumItem( FID_VALID_CONDMODE,    sal::static_int_cast<sal_uInt16>(eOper) ) );
+                            aArgSet.Put( SfxUInt16Item( FID_VALID_MODE,         sal::static_int_cast<sal_uInt16>(eMode) ) );
+                            aArgSet.Put( SfxUInt16Item( FID_VALID_CONDMODE,     sal::static_int_cast<sal_uInt16>(eOper) ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_VALUE1,      aExpr1 ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_VALUE2,      aExpr2 ) );
                             aArgSet.Put( SfxBoolItem(    FID_VALID_BLANK,       bBlank ) );
@@ -879,7 +879,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             aArgSet.Put( SfxStringItem(  FID_VALID_HELPTITLE,   aHelpTitle ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_HELPTEXT,    aHelpText ) );
                             aArgSet.Put( SfxBoolItem(    FID_VALID_SHOWERR,     bShowError ) );
-                            aArgSet.Put( SfxAllEnumItem( FID_VALID_ERRSTYLE,    sal::static_int_cast<sal_uInt16>(eErrStyle) ) );
+                            aArgSet.Put( SfxUInt16Item( FID_VALID_ERRSTYLE,     sal::static_int_cast<sal_uInt16>(eErrStyle) ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_ERRTITLE,    aErrTitle ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_ERRTEXT,     aErrText ) );
                         }
@@ -897,9 +897,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         const SfxItemSet* pOutSet = static_cast<ScValidationDlg*>(xDlg.get())->GetOutputItemSet();
 
                         if ( pOutSet->GetItemState( FID_VALID_MODE, true, &pItem ) == SfxItemState::SET )
-                            eMode = static_cast<ScValidationMode>(static_cast<const SfxAllEnumItem*>(pItem)->GetValue());
+                            eMode = static_cast<ScValidationMode>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
                         if ( pOutSet->GetItemState( FID_VALID_CONDMODE, true, &pItem ) == SfxItemState::SET )
-                            eOper = static_cast<ScConditionMode>(static_cast<const SfxAllEnumItem*>(pItem)->GetValue());
+                            eOper = static_cast<ScConditionMode>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
                         if ( pOutSet->GetItemState( FID_VALID_VALUE1, true, &pItem ) == SfxItemState::SET )
                         {
                             OUString aTemp1 = static_cast<const SfxStringItem*>(pItem)->GetValue();
@@ -966,7 +966,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         if ( pOutSet->GetItemState( FID_VALID_SHOWERR, true, &pItem ) == SfxItemState::SET )
                             bShowError = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         if ( pOutSet->GetItemState( FID_VALID_ERRSTYLE, true, &pItem ) == SfxItemState::SET )
-                            eErrStyle = static_cast<ScValidErrorStyle>(static_cast<const SfxAllEnumItem*>(pItem)->GetValue());
+                            eErrStyle = static_cast<ScValidErrorStyle>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
                         if ( pOutSet->GetItemState( FID_VALID_ERRTITLE, true, &pItem ) == SfxItemState::SET )
                             aErrTitle = static_cast<const SfxStringItem*>(pItem)->GetValue();
                         if ( pOutSet->GetItemState( FID_VALID_ERRTEXT, true, &pItem ) == SfxItemState::SET )
