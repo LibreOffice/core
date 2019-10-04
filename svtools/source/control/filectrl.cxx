@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/filectrl.hxx>
+#include <filectrl.hxx>
 
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
