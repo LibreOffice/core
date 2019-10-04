@@ -696,44 +696,6 @@ void FinitCore()
 #endif
     delete SwDoc::s_pAutoCompleteWords;
 
-    delete SwStyleNameMapper::s_pTextUINameArray;
-    delete SwStyleNameMapper::s_pListsUINameArray;
-    delete SwStyleNameMapper::s_pExtraUINameArray;
-    delete SwStyleNameMapper::s_pRegisterUINameArray;
-    delete SwStyleNameMapper::s_pDocUINameArray;
-    delete SwStyleNameMapper::s_pHTMLUINameArray;
-    delete SwStyleNameMapper::s_pFrameFormatUINameArray;
-    delete SwStyleNameMapper::s_pChrFormatUINameArray;
-    delete SwStyleNameMapper::s_pHTMLChrFormatUINameArray;
-    delete SwStyleNameMapper::s_pPageDescUINameArray;
-    delete SwStyleNameMapper::s_pNumRuleUINameArray;
-
-    // Delete programmatic name arrays also
-    delete SwStyleNameMapper::s_pTextProgNameArray;
-    delete SwStyleNameMapper::s_pListsProgNameArray;
-    delete SwStyleNameMapper::s_pExtraProgNameArray;
-    delete SwStyleNameMapper::s_pRegisterProgNameArray;
-    delete SwStyleNameMapper::s_pDocProgNameArray;
-    delete SwStyleNameMapper::s_pHTMLProgNameArray;
-    delete SwStyleNameMapper::s_pFrameFormatProgNameArray;
-    delete SwStyleNameMapper::s_pChrFormatProgNameArray;
-    delete SwStyleNameMapper::s_pHTMLChrFormatProgNameArray;
-    delete SwStyleNameMapper::s_pPageDescProgNameArray;
-    delete SwStyleNameMapper::s_pNumRuleProgNameArray;
-
-    // And finally, any hash tables that we used
-    delete SwStyleNameMapper::s_pParaUIMap;
-    delete SwStyleNameMapper::s_pCharUIMap;
-    delete SwStyleNameMapper::s_pPageUIMap;
-    delete SwStyleNameMapper::s_pFrameUIMap;
-    delete SwStyleNameMapper::s_pNumRuleUIMap;
-
-    delete SwStyleNameMapper::s_pParaProgMap;
-    delete SwStyleNameMapper::s_pCharProgMap;
-    delete SwStyleNameMapper::s_pPageProgMap;
-    delete SwStyleNameMapper::s_pFrameProgMap;
-    delete SwStyleNameMapper::s_pNumRuleProgMap;
-
     // delete all default attributes
     for(SfxPoolItem* pHt : aAttrTab)
     {
