@@ -738,7 +738,7 @@ OUString DomainMapper_Impl::GetDefaultParaStyleName()
     return m_sDefaultParaStyleName;
 }
 
-uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bPara)
+uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bDocDefaults, const bool bPara)
 {
     while(pEntry.get( ) )
     {
@@ -764,7 +764,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleShee
         pEntry = pNewEntry;
     }
     // not found in style, try the document's DocDefault properties
-    if ( bPara )
+    if ( bDocDefaults && bPara )
     {
         const PropertyMapPtr& pDefaultParaProps = GetStyleSheetTable()->GetDefaultParaProps();
         if ( pDefaultParaProps )
@@ -774,7 +774,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleShee
                 return aProperty->second;
         }
     }
-    if ( isCharacterProperty(eId) )
+    if ( bDocDefaults && isCharacterProperty(eId) )
     {
         const PropertyMapPtr& pDefaultCharProps = GetStyleSheetTable()->GetDefaultCharProps();
         if ( pDefaultCharProps )
@@ -794,17 +794,40 @@ uno::Any DomainMapper_Impl::GetPropertyFromParaStyleSheet(PropertyIds eId)
         pEntry = GetStyleSheetTable()->GetCurrentEntry();
     else
         pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(GetCurrentParaStyleName());
-    return GetPropertyFromStyleSheet(eId, pEntry, /*bPara=*/true);
+    return GetPropertyFromStyleSheet(eId, pEntry, /*bDocDefaults=*/true, /*bPara=*/true);
+}
+
+uno::Any DomainMapper_Impl::GetPropertyFromCharStyleSheet(PropertyIds eId, const PropertyMapPtr& rContext)
+{
+    if ( m_bInStyleSheetImport || eId == PROP_CHAR_STYLE_NAME || !isCharacterProperty(eId) )
+        return uno::Any();
+
+    StyleSheetEntryPtr pEntry;
+    OUString sCharStyleName;
+    if ( GetAnyProperty(PROP_CHAR_STYLE_NAME, rContext) >>= sCharStyleName )
+        pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(sCharStyleName);
+    return GetPropertyFromStyleSheet(eId, pEntry, /*bDocDefaults=*/false, /*bPara=*/false);
 }
 
 uno::Any DomainMapper_Impl::GetAnyProperty(PropertyIds eId, const PropertyMapPtr& rContext)
 {
+    // first look in directly applied attributes
     if ( rContext )
     {
         boost::optional<PropertyMap::Property> aProperty = rContext->getProperty(eId);
         if ( aProperty )
             return aProperty->second;
     }
+
+    // then look whether it was inherited from a directly applied character style
+    if ( eId != PROP_CHAR_STYLE_NAME && isCharacterProperty(eId) )
+    {
+        uno::Any aRet = GetPropertyFromCharStyleSheet(eId, rContext);
+        if ( aRet.hasValue() )
+            return aRet;
+    }
+
+    // then look in current paragraph style, and docDefaults
     return GetPropertyFromParaStyleSheet(eId);
 }
 

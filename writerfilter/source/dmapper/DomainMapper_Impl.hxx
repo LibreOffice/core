@@ -713,9 +713,11 @@ public:
     OUString  GetDefaultParaStyleName();
 
     // specified style - including inherited properties. Indicate whether paragraph defaults should be checked.
-    css::uno::Any GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bPara);
+    css::uno::Any GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bDocDefaults, const bool bPara);
     // current paragraph style - including inherited properties
     css::uno::Any GetPropertyFromParaStyleSheet(PropertyIds eId);
+    // context's character style - including inherited properties
+    css::uno::Any GetPropertyFromCharStyleSheet(PropertyIds eId, const PropertyMapPtr& rContext);
     // get property first from the given context, or secondly via inheritance from styles/docDefaults
     css::uno::Any GetAnyProperty(PropertyIds eId, const PropertyMapPtr& rContext);
     void        SetStyleSheetImport( bool bSet ) { m_bInStyleSheetImport = bSet;}
