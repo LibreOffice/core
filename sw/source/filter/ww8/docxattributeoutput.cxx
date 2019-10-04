@@ -6847,8 +6847,10 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
         else if ( DFLT_ESC_SUPER == nEsc || DFLT_ESC_AUTO_SUPER == nEsc )
             sIss = OString( "superscript" );
     }
+    // FIXME: these need a better formula. See rtfAttributeOutput
     else if ( DFLT_ESC_AUTO_SUPER == nEsc )
         nEsc = DFLT_ESC_SUPER;
+    // FIXME: this actually needs to know font information (descending, bottom line) for a proper formula
     else if ( DFLT_ESC_AUTO_SUB == nEsc )
         nEsc = DFLT_ESC_SUB;
 
@@ -6858,13 +6860,13 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
     const SvxFontHeightItem& rItem = m_rExport.GetItem(RES_CHRATR_FONTSIZE);
     if (sIss.isEmpty() || sIss.match("baseline"))
     {
-        long nHeight = rItem.GetHeight();
-        OString sPos = OString::number( ( nHeight * nEsc + 500 ) / 1000 );
+        float fHeight = rItem.GetHeight();
+        OString sPos = OString::number( round(( fHeight * nEsc ) / 1000) );
         m_pSerializer->singleElementNS(XML_w, XML_position, FSNS(XML_w, XML_val), sPos);
 
         if( ( 100 != nProp || sIss.match( "baseline" ) ) && !m_rExport.m_bFontSizeWritten )
         {
-            OString sSize = OString::number( ( nHeight * nProp + 500 ) / 1000 );
+            OString sSize = OString::number( round(( fHeight * nProp ) / 1000) );
             m_pSerializer->singleElementNS(XML_w, XML_sz, FSNS(XML_w, XML_val), sSize);
         }
     }
