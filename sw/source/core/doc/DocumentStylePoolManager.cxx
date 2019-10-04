@@ -2530,119 +2530,104 @@ DocumentStylePoolManager::~DocumentStylePoolManager()
 
 }
 
-// Initialise UI names to 0
-std::vector<OUString> *SwStyleNameMapper::s_pTextUINameArray = nullptr,
-                *SwStyleNameMapper::s_pListsUINameArray = nullptr,
-                *SwStyleNameMapper::s_pExtraUINameArray = nullptr,
-                *SwStyleNameMapper::s_pRegisterUINameArray = nullptr,
-                *SwStyleNameMapper::s_pDocUINameArray = nullptr,
-                *SwStyleNameMapper::s_pHTMLUINameArray = nullptr,
-                *SwStyleNameMapper::s_pFrameFormatUINameArray = nullptr,
-                *SwStyleNameMapper::s_pChrFormatUINameArray = nullptr,
-                *SwStyleNameMapper::s_pHTMLChrFormatUINameArray = nullptr,
-                *SwStyleNameMapper::s_pPageDescUINameArray = nullptr,
-                *SwStyleNameMapper::s_pNumRuleUINameArray = nullptr,
-                *SwStyleNameMapper::s_pTableStyleUINameArray = nullptr,
-                *SwStyleNameMapper::s_pCellStyleUINameArray = nullptr;
-
-static std::vector<OUString>*
+static std::vector<OUString>
 lcl_NewUINameArray(const char** pIds, const size_t nLen, const size_t nSvxIds = 0)
 {
     assert(nSvxIds <= nLen);
     const size_t nWriterIds = nLen - nSvxIds;
-    std::vector<OUString> *const pNameArray = new std::vector<OUString>;
-    pNameArray->reserve(nLen);
+    std::vector<OUString> aNameArray;
+    aNameArray.reserve(nLen);
     for (size_t i = 0; i < nWriterIds; ++i)
-        pNameArray->push_back(SwResId(pIds[i]));
+        aNameArray.push_back(SwResId(pIds[i]));
     for (size_t i = nWriterIds; i < nLen; ++i)
-        pNameArray->push_back(SvxResId(pIds[i]));
-    return pNameArray;
+        aNameArray.push_back(SvxResId(pIds[i]));
+    return aNameArray;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetTextUINameArray()
 {
-    if (!s_pTextUINameArray)
-        s_pTextUINameArray = lcl_NewUINameArray(STR_POOLCOLL_TEXT_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_TEXT_ARY));
-    return *s_pTextUINameArray;
+    static const std::vector<OUString> s_aTextUINameArray(
+        lcl_NewUINameArray(STR_POOLCOLL_TEXT_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_TEXT_ARY)));
+    return s_aTextUINameArray;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetListsUINameArray()
 {
-    if (!s_pListsUINameArray)
-        s_pListsUINameArray = lcl_NewUINameArray(STR_POOLCOLL_LISTS_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_LISTS_ARY));
-    return *s_pListsUINameArray;
+    static const std::vector<OUString> s_aListsUINameArray(
+        lcl_NewUINameArray(STR_POOLCOLL_LISTS_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_LISTS_ARY)));
+    return s_aListsUINameArray;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetExtraUINameArray()
 {
-    if (!s_pExtraUINameArray)
-        s_pExtraUINameArray = lcl_NewUINameArray(STR_POOLCOLL_EXTRA_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_EXTRA_ARY));
-    return *s_pExtraUINameArray;
+    static const std::vector<OUString> s_aExtraUINameArray(
+        lcl_NewUINameArray(STR_POOLCOLL_EXTRA_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_EXTRA_ARY)));
+    return s_aExtraUINameArray;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetRegisterUINameArray()
 {
-    if (!s_pRegisterUINameArray)
-        s_pRegisterUINameArray = lcl_NewUINameArray(STR_POOLCOLL_REGISTER_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_REGISTER_ARY));
-    return *s_pRegisterUINameArray;
+    static const std::vector<OUString> s_aRegisterUINameArray(
+        lcl_NewUINameArray(STR_POOLCOLL_REGISTER_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_REGISTER_ARY)));
+    return s_aRegisterUINameArray;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetDocUINameArray()
 {
-    if (!s_pDocUINameArray)
-        s_pDocUINameArray = lcl_NewUINameArray(STR_POOLCOLL_DOC_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_DOC_ARY));
-    return *s_pDocUINameArray;
+    static const std::vector<OUString> s_aDocUINameArray(
+        lcl_NewUINameArray(STR_POOLCOLL_DOC_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_DOC_ARY)));
+    return s_aDocUINameArray;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetHTMLUINameArray()
 {
-    if (!s_pHTMLUINameArray)
-        s_pHTMLUINameArray = lcl_NewUINameArray(STR_POOLCOLL_HTML_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_HTML_ARY));
-    return *s_pHTMLUINameArray;
+    static const std::vector<OUString> s_aHTMLUINameArray(
+        lcl_NewUINameArray(STR_POOLCOLL_HTML_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_HTML_ARY)));
+    return s_aHTMLUINameArray;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetFrameFormatUINameArray()
 {
-    if (!s_pFrameFormatUINameArray)
-        s_pFrameFormatUINameArray = lcl_NewUINameArray(STR_POOLFRM_ARY, SAL_N_ELEMENTS(STR_POOLFRM_ARY));
-    return *s_pFrameFormatUINameArray;
+    static const std::vector<OUString> s_aFrameFormatUINameArray(
+        lcl_NewUINameArray(STR_POOLFRM_ARY, SAL_N_ELEMENTS(STR_POOLFRM_ARY)));
+    return s_aFrameFormatUINameArray;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetChrFormatUINameArray()
 {
-    if (!s_pChrFormatUINameArray)
-        s_pChrFormatUINameArray = lcl_NewUINameArray(STR_POOLCHR_ARY, SAL_N_ELEMENTS(STR_POOLCHR_ARY));
-    return *s_pChrFormatUINameArray;
+    static const std::vector<OUString> s_aChrFormatUINameArray(
+        lcl_NewUINameArray(STR_POOLCHR_ARY, SAL_N_ELEMENTS(STR_POOLCHR_ARY)));
+    return s_aChrFormatUINameArray;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetHTMLChrFormatUINameArray()
 {
-    if (!s_pHTMLChrFormatUINameArray)
-        s_pHTMLChrFormatUINameArray = lcl_NewUINameArray(STR_POOLCHR_HTML_ARY, SAL_N_ELEMENTS(STR_POOLCHR_HTML_ARY));
-    return *s_pHTMLChrFormatUINameArray;
+    static const std::vector<OUString> s_aHTMLChrFormatUINameArray(
+        lcl_NewUINameArray(STR_POOLCHR_HTML_ARY, SAL_N_ELEMENTS(STR_POOLCHR_HTML_ARY)));
+    return s_aHTMLChrFormatUINameArray;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetPageDescUINameArray()
 {
-    if (!s_pPageDescUINameArray)
-        s_pPageDescUINameArray = lcl_NewUINameArray(STR_POOLPAGE_ARY, SAL_N_ELEMENTS(STR_POOLPAGE_ARY));
-    return *s_pPageDescUINameArray;
+    static const std::vector<OUString> s_aPageDescUINameArray(
+        lcl_NewUINameArray(STR_POOLPAGE_ARY, SAL_N_ELEMENTS(STR_POOLPAGE_ARY)));
+    return s_aPageDescUINameArray;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetNumRuleUINameArray()
 {
-    if (!s_pNumRuleUINameArray)
-        s_pNumRuleUINameArray = lcl_NewUINameArray(STR_POOLNUMRULE_NUM_ARY, SAL_N_ELEMENTS(STR_POOLNUMRULE_NUM_ARY));
-    return *s_pNumRuleUINameArray;
+    static const std::vector<OUString> s_aNumRuleUINameArray(
+        lcl_NewUINameArray(STR_POOLNUMRULE_NUM_ARY, SAL_N_ELEMENTS(STR_POOLNUMRULE_NUM_ARY)));
+    return s_aNumRuleUINameArray;
 }
 
 const std::vector<OUString>& SwStyleNameMapper::GetTableStyleUINameArray()
 {
-    if (!s_pTableStyleUINameArray)
+    static const std::vector<OUString> s_aTableStyleUINameArray(
         // 1 Writer resource string (XXX if this ever changes rather use offset math)
-        s_pTableStyleUINameArray = lcl_NewUINameArray(STR_TABSTYLE_ARY, SAL_N_ELEMENTS(STR_TABSTYLE_ARY),
-                static_cast<size_t>(SAL_N_ELEMENTS(STR_TABSTYLE_ARY) - 1));
-    return *s_pTableStyleUINameArray;
+        lcl_NewUINameArray(STR_TABSTYLE_ARY, SAL_N_ELEMENTS(STR_TABSTYLE_ARY),
+                static_cast<size_t>(SAL_N_ELEMENTS(STR_TABSTYLE_ARY) - 1)));
+    return s_aTableStyleUINameArray;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
