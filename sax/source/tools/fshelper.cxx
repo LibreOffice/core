@@ -81,6 +81,12 @@ FastSerializerHelper* FastSerializerHelper::write(const char* value)
     return this;
 }
 
+FastSerializerHelper* FastSerializerHelper::write(const OString& value)
+{
+    mpSerializer->write(value);
+    return this;
+}
+
 FastSerializerHelper* FastSerializerHelper::write(const OUString& value)
 {
     mpSerializer->write(value);

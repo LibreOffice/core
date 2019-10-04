@@ -131,6 +131,7 @@ public:
         { startElement( FSNS( namespaceTokenId, elementTokenId ), xAttrList ); }
 
     FastSerializerHelper* write(const char* value);
+    FastSerializerHelper* write(const OString& value);
     FastSerializerHelper* write(const OUString& value);
     FastSerializerHelper* write(sal_Int32 value);
     FastSerializerHelper* write(sal_Int64 value);

@@ -464,7 +464,7 @@ void XclExpExtConditionalFormatting::SaveXml( XclExpXmlStream& rStrm )
 
     maCfRules.SaveXml( rStrm );
     rWorksheet->startElementNS(XML_xm, XML_sqref);
-    rWorksheet->write(XclXmlUtils::ToOString(maRange).getStr());
+    rWorksheet->write(XclXmlUtils::ToOString(maRange));
 
     rWorksheet->endElementNS( XML_xm, XML_sqref );
 
