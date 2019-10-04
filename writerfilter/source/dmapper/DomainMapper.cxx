@@ -1711,9 +1711,28 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         break;
     case NS_ooxml::LN_EG_RPrBase_position:
         // The spec says 0 is the same as the lack of the value, so don't parse that.
-        // FIXME: StyleSheets don't currently process deferredCharacterProperties - so position is lost in charStyles
-        if ( nIntValue && !IsStyleSheetImport() )
-            m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
+        if ( nIntValue )
+        {
+            if ( !IsStyleSheetImport() )
+                m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
+            else
+            {
+                // DON'T FIXME: Truly calculating this for Character Styles will be tricky,
+                // because it depends on the final fontsize - regardless of
+                // where it is set. So at the style level,
+                // the escapement value would need to be grabbagged.
+                // At appendText time the final fontsize needs to be determined, and then
+                // the escapement can be calculated from the grabbag'd half-point value
+                // and directly applied. Yuck.
+                // It seems best to just treat charstyle escapement like
+                // pre-commit e70df84352d3670508a4666c97df44f82c1ce934
+                // which just assigned default values and ignored the actual/given escapement.
+                sal_Int16 nEscapement = nIntValue > 0 ? DFLT_ESC_AUTO_SUPER : DFLT_ESC_AUTO_SUB;
+                sal_Int8 nProp = DFLT_ESC_PROP;
+                rContext->Insert(PROP_CHAR_ESCAPEMENT, uno::makeAny( nEscapement ) );
+                rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT, uno::makeAny( nProp ) );
+            }
+        }
         break;
     case NS_ooxml::LN_EG_RPrBase_spacing:
         {

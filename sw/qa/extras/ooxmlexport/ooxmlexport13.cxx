@@ -14,6 +14,7 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <editeng/escapementitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <xmloff/odffields.hxx>
@@ -242,6 +243,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99602_subscript_charStyleSize, "tdf99602_subscri
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1, "Base"), "CharEscapement"), 0);
     // The word "Subscript" should be 48pt, subscripted by 25% (12pt).
     CPPUNIT_ASSERT_DOUBLES_EQUAL( -25.f, getProperty<float>(getRun(xPara, 2, "Subscript"), "CharEscapement"), 0);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf99602_charStyleSubscript, "tdf99602_charStyleSubscript.docx")
+{
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    // The word "Base" should not be subscripted.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1, "Base"), "CharEscapement"), 0);
+    // The word "Subscript" should be 48pt, automatically subscripted, and automatic propertioned.
+    CPPUNIT_ASSERT_EQUAL( sal_Int16(DFLT_ESC_AUTO_SUB), getProperty<sal_Int16>(getRun(xPara, 2, "Subscript"), "CharEscapement") );
+    CPPUNIT_ASSERT_EQUAL( sal_Int16(DFLT_ESC_PROP), getProperty<sal_Int16>(getRun(xPara, 2), "CharEscapementHeight") );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124637_sectionMargin, "tdf124637_sectionMargin.docx")
