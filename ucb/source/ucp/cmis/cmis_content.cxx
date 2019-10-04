@@ -142,9 +142,9 @@ namespace
                     uno::Sequence< sal_Bool > aBools( aCmisBools.size( ) );
                     sal_Bool* aBoolsArr = aBools.getArray( );
                     sal_Int32 i = 0;
-                    for ( const auto& rCmisBool : aCmisBools )
+                    for ( bool bCmisBool : aCmisBools )
                     {
-                        aBoolsArr[i++] = rCmisBool;
+                        aBoolsArr[i++] = bCmisBool;
                     }
                     aValue <<= aBools;
                 }
