@@ -176,8 +176,12 @@ DECLARE_WW8EXPORT_TEST(testTdf120225_textControlCrossRef, "tdf120225_textControl
 DECLARE_WW8EXPORT_TEST(testTdf127316_autoEscapement, "tdf127316_autoEscapement.odt")
 {
     uno::Reference<text::XTextRange> xPara = getParagraph(2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1), "CharEscapement"), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-33.f, getProperty<float>(getRun(xPara, 2), "CharEscapement"), 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1, "Normal text "), "CharEscapement"), 0);
+    // Automatic escapement SHOULD BE limited by the font bottom line(?)
+    // and so the calculations ought to be different. There is room for a lot of export improvement here.
+    // Negative escapements (subscripts) were decreasing by 1% every round-trip due to bad manual rounding.
+    // The actual number of 33% isn't so important here, but test that it is stable across multiple round-trips.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Did you fix or break me?", -33.f, getProperty<float>(getRun(xPara, 2), "CharEscapement"), 1);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf121111_fillStyleNone, "tdf121111_fillStyleNone.docx")
