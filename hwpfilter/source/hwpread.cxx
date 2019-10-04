@@ -20,6 +20,7 @@
 #include "precompile.h"
 
 #include <comphelper/newarray.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <assert.h>
 #include <list>
@@ -376,6 +377,10 @@ bool Picture::Read(HWPFile & hwpf)
     hwpf.AddBox(this);
 
     hwpf.Read4b(&follow_block_size, 1);
+
+    //when fuzzing with a max len set, max decompress to 10 times that limit
+    static size_t nMaxAllowedDecompression = [](const char* pEnv) { size_t nRet = pEnv ? std::atoi(pEnv) : 0; return nRet * 10; }(std::getenv("FUZZ_MAX_INPUT_LEN"));
+
     hwpf.Read2b(&dummy1, 1);                      /* Reserved 4 bytes */
     hwpf.Read2b(&dummy2, 1);
 
@@ -455,6 +460,8 @@ bool Picture::Read(HWPFile & hwpf)
            }
            if (nBlock != nReadBlock)
                break;
+           if (nMaxAllowedDecompression && follow.size() > nMaxAllowedDecompression)
+               break;
         }
         follow_block_size = follow.size();
 
@@ -476,6 +483,8 @@ bool Picture::Read(HWPFile & hwpf)
                 ishyper = true;
             }
         }
+        else
+            fprintf(stderr, "arse\n");
     }
 
     if( pictype != 3 )
