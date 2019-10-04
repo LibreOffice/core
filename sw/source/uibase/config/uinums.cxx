@@ -121,14 +121,8 @@ SwNumRulesWithName::SwNumRulesWithName( const SwNumRule &rCopy,
     }
 }
 
-SwNumRulesWithName::SwNumRulesWithName()
-{
-    memset(aFormats, 0, sizeof(aFormats));
-}
-
 SwNumRulesWithName::SwNumRulesWithName( const SwNumRulesWithName& rCopy )
 {
-    memset( aFormats, 0, sizeof( aFormats ));
     *this = rCopy;
 }
 

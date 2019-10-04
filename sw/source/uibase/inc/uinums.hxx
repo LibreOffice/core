@@ -62,7 +62,7 @@ class SW_DLLPUBLIC SwNumRulesWithName final
     friend class SwChapterNumRules;
     void SetName(const OUString& rSet) {maName = rSet;}
     void SetNumFormat(size_t, SwNumFormat const&, OUString const&);
-    SwNumRulesWithName();
+    SwNumRulesWithName() = default;
 
 public:
     SwNumRulesWithName(const SwNumRule &, const OUString &);
