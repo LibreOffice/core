@@ -22,19 +22,16 @@
 #include <strings.hrc>
 #include <bitmaps.hlst>
 
+#include <vcl/commandevent.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/print.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/configsettings.hxx>
 #include <vcl/help.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/tabpage.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/lstbox.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 
