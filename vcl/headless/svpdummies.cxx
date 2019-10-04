@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
 #include <rtl/ustrbuf.hxx>
 #include <headless/svpdummies.hxx>
 #include <headless/svpinst.hxx>
@@ -25,8 +24,6 @@
 // SalObject
 SvpSalObject::SvpSalObject()
 {
-    // fast and easy cross-platform wiping of the data
-    memset( static_cast<void *>(&m_aSystemChildData), 0, sizeof( SystemEnvData ) );
     m_aSystemChildData.nSize = sizeof( SystemEnvData );
 }
 

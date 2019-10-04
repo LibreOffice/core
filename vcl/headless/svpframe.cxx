@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-
 #include <comphelper/lok.hxx>
 #include <vcl/syswin.hxx>
 #include <sal/log.hxx>
@@ -57,8 +55,6 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     m_nMaxHeight( 0 )
 {
     // SAL_DEBUG("SvpSalFrame::SvpSalFrame: " << this);
-    // fast and easy cross-platform wiping of the data
-    memset( static_cast<void *>(&m_aSystemChildData), 0, sizeof( SystemEnvData ) );
     m_aSystemChildData.nSize        = sizeof( SystemEnvData );
 #ifdef IOS
     // Nothing
