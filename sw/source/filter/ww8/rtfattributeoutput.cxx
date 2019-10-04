@@ -2306,14 +2306,14 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
 
     const char* pUpDn;
 
-    SwTwips nH = m_rExport.GetItem(RES_CHRATR_FONTSIZE).GetHeight();
+    double fHeight = m_rExport.GetItem(RES_CHRATR_FONTSIZE).GetHeight();
 
     if (0 < rEscapement.GetEsc())
         pUpDn = OOO_STRING_SVTOOLS_RTF_UP;
     else if (0 > rEscapement.GetEsc())
     {
         pUpDn = OOO_STRING_SVTOOLS_RTF_DN;
-        nH = -nH;
+        fHeight = -fHeight;
     }
     else
         return;
@@ -2344,9 +2344,7 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
      *                    -----------------------  = ------------
      *                      100%                       Escapement
      */
-
-    m_aStyles.append(static_cast<sal_Int32>((long(nEsc) * nH) + 500) / 1000);
-    // 500 to round !!
+    m_aStyles.append(static_cast<sal_Int32>(round(fHeight * nEsc / 1000)));
 }
 
 void RtfAttributeOutput::CharFont(const SvxFontItem& rFont)
