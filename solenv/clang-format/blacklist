@@ -6938,7 +6938,6 @@ include/svtools/embedhlp.hxx
 include/svtools/embedtransfer.hxx
 include/svtools/extcolorcfg.hxx
 include/svtools/filechangedchecker.hxx
-include/svtools/filectrl.hxx
 include/svtools/fileurlbox.hxx
 include/svtools/fontsubstconfig.hxx
 include/svtools/framestatuslistener.hxx
@@ -13739,6 +13738,7 @@ svtools/source/hatchwindow/hatchwindow.cxx
 svtools/source/hatchwindow/hatchwindowfactory.cxx
 svtools/source/hatchwindow/ipwin.cxx
 svtools/source/hatchwindow/ipwin.hxx
+svtools/source/inc/filectrl.hxx
 svtools/source/inc/hatchwindow.hxx
 svtools/source/inc/unoiface.hxx
 svtools/source/java/javacontext.cxx
