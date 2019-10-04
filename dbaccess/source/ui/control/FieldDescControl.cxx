@@ -497,7 +497,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             return;
         m_nPos++;
         {
-            sal_Int32 nMax = EDIT_NOLIMIT;
+            sal_Int32 nMax(0);
             OUString aTmpString;
             try
             {
@@ -517,7 +517,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             m_xColumnName = std::make_unique<OPropColumnEditCtrl>(
                     m_xBuilder->weld_entry("ColumnName"), aTmpString,
                     STR_HELP_DEFAULT_VALUE, FIELD_PROPERTY_COLUMNNAME);
-            m_xColumnName->set_max_length(nMax ? nMax : EDIT_NOLIMIT);
+            m_xColumnName->set_max_length(nMax);
             m_xColumnName->setCheck( isSQL92CheckEnabled(getConnection()) );
         }
 
