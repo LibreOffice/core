@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_21f3c9a0",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-10-04T18:21:52Z",
+      "side": 1,
+      "message": "trying to be efficient - better to test this than do a full search for an impossible result...",
+      "range": {
+        "startLine": 777,
+        "startChar": 8,
+        "endLine": 777,
+        "endChar": 33
+      },
+      "revId": "99c7a5bfa588cb79b4b591e5e81e60a45758101f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_c188d520",
+        "filename": "writerfilter/source/dmapper/PropertyIds.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-10-04T18:21:52Z",
+      "side": 1,
+      "message": "I re-organized things so that this function could be efficient. Michael Stahl just did something similar based on the name (just in his own part of the code, and I don\u0027t think he had the eId...) but that seemed like it would be pretty inefficient. Did I do it right/smart?",
+      "range": {
+        "startLine": 364,
+        "startChar": 4,
+        "endLine": 364,
+        "endChar": 67
+      },
+      "revId": "99c7a5bfa588cb79b4b591e5e81e60a45758101f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
