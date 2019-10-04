@@ -42,7 +42,7 @@ using namespace ::com::sun::star::uno;
 
             return children;
 
-        } catch ( Exception& e)
+        } catch ( Exception&)
         {
         }
     }
@@ -79,7 +79,7 @@ using namespace ::com::sun::star::uno;
         for ( unsigned i = 0 ; i < c ; ++i ) {
             xAccessibleSelection -> selectAccessibleChild( [ [ value objectAtIndex: i ] accessibleContext ] -> getAccessibleIndexInParent() );
         }
-    } catch ( Exception& e) {
+    } catch ( Exception&) {
     }
 }
 

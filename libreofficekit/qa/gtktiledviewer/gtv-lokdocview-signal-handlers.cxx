@@ -386,7 +386,7 @@ void LOKDocViewSigHandlers::window(LOKDocView* pDocView, gchar* pPayload, gpoint
                     if (aRectPoints.size() == 4)
                         aGdkRectangle = {aRectPoints[0], aRectPoints[1], aRectPoints[2], aRectPoints[3]};
                 }
-                catch(const std::exception& e)
+                catch(const std::exception&)
                 {}
 
                 gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pDialog), aGdkRectangle);
