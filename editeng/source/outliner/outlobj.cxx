@@ -233,7 +233,7 @@ void OutlinerParaObject::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterStartElement(pWriter, BAD_CAST("OutlinerParaObject"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     mpImpl->mpEditTextObject->dumpAsXml(pWriter);
-    for (Paragraph const & p : mpImpl->maParagraphDataVector)
+    for (ParagraphData const & p : mpImpl->maParagraphDataVector)
         p.dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 }
