@@ -45,6 +45,24 @@
       "revId": "99c7a5bfa588cb79b4b591e5e81e60a45758101f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_214f49be",
+        "filename": "writerfilter/source/dmapper/PropertyIds.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-10-04T18:48:14Z",
+      "side": 1,
+      "message": "Sure, just I would suggest avoiding explicit inline without profiling :-)",
+      "parentUuid": "7f7f9b97_c188d520",
+      "revId": "99c7a5bfa588cb79b4b591e5e81e60a45758101f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
