@@ -26,7 +26,6 @@
 
 #include <vcl/stdtext.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
