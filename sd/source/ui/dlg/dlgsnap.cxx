@@ -126,7 +126,7 @@ void SdSnapLineDlg::GetAttr(SfxItemSet& rOutAttrs)
     nXValue = sal_Int32(GetCoreValue(*m_xMtrFldX, MapUnit::Map100thMM) * aUIScale);
     nYValue = sal_Int32(GetCoreValue(*m_xMtrFldY, MapUnit::Map100thMM) * aUIScale);
 
-    rOutAttrs.Put(SfxAllEnumItem(ATTR_SNAPLINE_KIND, static_cast<sal_uInt16>(eKind)));
+    rOutAttrs.Put(SfxUInt16Item(ATTR_SNAPLINE_KIND, static_cast<sal_uInt16>(eKind)));
     rOutAttrs.Put(SfxInt32Item(ATTR_SNAPLINE_X, nXValue));
     rOutAttrs.Put(SfxInt32Item(ATTR_SNAPLINE_Y, nYValue));
 }
