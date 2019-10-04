@@ -1189,7 +1189,7 @@ sal_Int32 VMLExport::StartShape()
                         "<v:path shadowok=\"f\" o:extrusionok=\"f\" strokeok=\"f\" fillok=\"f\" o:connecttype=\"rect\"/>\n"
                         "<o:lock v:ext=\"edit\" shapetype=\"t\"/>\n"
                         "</v:shapetype>");
-                m_pSerializer->write(sShapeType.makeStringAndClear().getStr());
+                m_pSerializer->write(sShapeType.makeStringAndClear());
                 m_aShapeTypeWritten[ m_nShapeType ] = true;
             }
             break;
@@ -1224,7 +1224,7 @@ sal_Int32 VMLExport::StartShape()
                         "<v:path o:extrusionok=\"f\" gradientshapeok=\"t\" o:connecttype=\"rect\"/>\n"
                         "<o:lock v:ext=\"edit\" aspectratio=\"t\"/>\n"
                         "</v:shapetype>");
-                m_pSerializer->write(sShapeType.makeStringAndClear().getStr());
+                m_pSerializer->write(sShapeType.makeStringAndClear());
                 m_aShapeTypeWritten[ m_nShapeType ] = true;
             }
             break;

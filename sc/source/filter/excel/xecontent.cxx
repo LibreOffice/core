@@ -1507,7 +1507,7 @@ void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
         XML_uri, "{B025F937-C7B1-47D3-B67F-A62EFF666E3E}");
 
     rWorksheet->startElementNS( XML_x14, XML_id );
-    rWorksheet->write( maGUID.getStr() );
+    rWorksheet->write(maGUID);
     rWorksheet->endElementNS( XML_x14, XML_id );
 
     rWorksheet->endElement( XML_ext );

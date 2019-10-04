@@ -813,33 +813,6 @@ OUString XclXmlUtils::ToOUString( const XclExpString& s )
     return ToOUString( s.GetUnicodeBuffer() );
 }
 
-sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, sal_Int32 nValue )
-{
-    pStream->startElement(nElement);
-    pStream->write( nValue );
-    pStream->endElement( nElement );
-
-    return pStream;
-}
-
-sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, sal_Int64 nValue )
-{
-    pStream->startElement(nElement);
-    pStream->write( nValue );
-    pStream->endElement( nElement );
-
-    return pStream;
-}
-
-sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, const char* sValue )
-{
-    pStream->startElement(nElement);
-    pStream->write( sValue );
-    pStream->endElement( nElement );
-
-    return pStream;
-}
-
 static void lcl_WriteValue( const sax_fastparser::FSHelperPtr& rStream, sal_Int32 nElement, const char* pValue )
 {
     if( !pValue )

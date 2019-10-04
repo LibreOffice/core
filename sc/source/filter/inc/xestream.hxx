@@ -265,9 +265,15 @@ public:
     static OUString ToOUString( sc::CompileFormulaContext& rCtx, const ScAddress& rAddress, const ScTokenArray* pTokenArray );
     static OUString ToOUString( const XclExpString& s );
 
-    static sax_fastparser::FSHelperPtr  WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, sal_Int32 nValue );
-    static sax_fastparser::FSHelperPtr  WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, sal_Int64 nValue );
-    static sax_fastparser::FSHelperPtr  WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, const char* sValue );
+    template <class T>
+    static sax_fastparser::FSHelperPtr WriteElement(sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, const T& value)
+    {
+        pStream->startElement(nElement);
+        pStream->write(value);
+        pStream->endElement(nElement);
+
+        return pStream;
+    }
     static sax_fastparser::FSHelperPtr  WriteFontData( sax_fastparser::FSHelperPtr pStream, const XclFontData& rFontData, sal_Int32 nNameId );
 };
 
