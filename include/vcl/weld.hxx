@@ -1153,6 +1153,7 @@ public:
     virtual OUString get_text() const = 0;
     virtual void set_width_chars(int nChars) = 0;
     virtual int get_width_chars() const = 0;
+    // The maximum length of the entry. Use 0 for no maximum
     virtual void set_max_length(int nChars) = 0;
     // nEndPos can be -1 in order to select all text
     virtual void select_region(int nStartPos, int nEndPos) = 0;
