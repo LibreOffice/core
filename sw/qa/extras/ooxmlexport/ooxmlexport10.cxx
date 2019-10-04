@@ -213,8 +213,10 @@ DECLARE_OOXMLEXPORT_TEST(testFontEsc, "test_tdf120412.docx")
         return;
     // don't lose the run with superscript formatting
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 2);
-    // raising is greater than 100%
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w:position","val", "24");
+    // Superscript should be raised by 100% (11pt). Was 110% (12pt)
+    // calculated using docDefault with fontsize 10pt (note only w:szCs defined as 11pt, not w:sz)
+    // instead of inherited normal paraStyle fontsize 11pt (related to tdf#99602)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w:position","val", "22");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testMceWpg, "mce-wpg.docx")

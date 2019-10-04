@@ -1699,9 +1699,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                         xCharStyle->setPropertyValue(getPropertyName(PROP_CHAR_HEIGHT), aVal);
                 }
             }
-            // Make sure char sizes defined in the stylesheets don't affect char props from direct formatting.
-            if (!IsStyleSheetImport())
-                m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, (nSprmId == NS_ooxml::LN_EG_RPrBase_sz ? OUString("sz") : OUString("szCs")), OUString::number(nIntValue));
         }
         break;
@@ -2803,57 +2800,28 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
         rProp.second >>= sStringValue;
         switch( Id )
         {
-        case NS_ooxml::LN_EG_RPrBase_sz:
-        case NS_ooxml::LN_EG_RPrBase_szCs:
-        break; // only for use by other properties, ignore here
         case NS_ooxml::LN_EG_RPrBase_position:
         {
-            double nEscapement = 0;
-            sal_Int8 nProp  = 100;
-            if(nIntValue == 0)
-                nProp = 0;
-            else
+            double fEscapement = 0;
+            sal_Int8 nProp = 0;
+            if ( nIntValue )
             {
-                std::map< sal_Int32, uno::Any >::const_iterator font = deferredCharacterProperties.find( NS_ooxml::LN_EG_RPrBase_sz );
-                PropertyMapPtr pDefaultCharProps = m_pImpl->GetStyleSheetTable()->GetDefaultCharProps();
-                boost::optional<PropertyMap::Property> aDefaultFont = pDefaultCharProps->getProperty(PROP_CHAR_HEIGHT);
-                if( font != deferredCharacterProperties.end())
-                {
-                    double fontSize = 0;
-                    font->second >>= fontSize;
-                    if (fontSize != 0.0)
-                        nEscapement = nIntValue * 100 / fontSize;
-                }
-                // TODO if not direct formatting, check the style first, not directly the default char props.
-                else if (aDefaultFont)
-                {
-                    double fHeight = 0;
-                    aDefaultFont->second >>= fHeight;
-                    if (fHeight != 0.0)
-                    {
-                        // fHeight is in points, nIntValue is in half points, nEscapement is in percents.
-                        nEscapement = nIntValue * 100 / fHeight / 2;
-                    }
-                }
+                nProp = 100;
+                double fFontSize = 0;
+                m_pImpl->GetAnyProperty(PROP_CHAR_HEIGHT, rContext) >>= fFontSize;
+                if ( fFontSize )
+                    // nIntValue is in half-points, fontsize is in points, fEscapement is a percentage.
+                    fEscapement = round( nIntValue/2.0 / fFontSize * 100 );
                 else
-                { // TODO: Find out the font size. The 58/-58 values were here previous, but I have
-                  // no idea what they are (they are probably some random guess that did fit whatever
-                  // specific case somebody was trying to fix).
-                    nEscapement = ( nIntValue > 0 ) ? 58: -58;
-                }
+                    fEscapement = nIntValue > 0 ? DFLT_ESC_SUPER : DFLT_ESC_SUB;
             }
-
             // tdf#120412 up to 14400% (eg. 1584 pt with 11 pt letters)
-            if ( nEscapement > MAX_ESC_POS )
-            {
-                nEscapement = MAX_ESC_POS;
-            }
-            else if ( nEscapement < -MAX_ESC_POS )
-            {
-                nEscapement = -MAX_ESC_POS;
-            }
+            if ( fEscapement > MAX_ESC_POS )
+                fEscapement = MAX_ESC_POS;
+            else if ( fEscapement < -MAX_ESC_POS )
+                fEscapement = -MAX_ESC_POS;
 
-            rContext->Insert(PROP_CHAR_ESCAPEMENT,         uno::makeAny( sal_Int16(nEscapement) ) );
+            rContext->Insert(PROP_CHAR_ESCAPEMENT,         uno::makeAny( sal_Int16(fEscapement) ) );
             rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT,  uno::makeAny( nProp ) );
         }
         break;
