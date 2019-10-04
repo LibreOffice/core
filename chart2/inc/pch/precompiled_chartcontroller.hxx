@@ -100,7 +100,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/dockwin.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
