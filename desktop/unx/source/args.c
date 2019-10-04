@@ -9,10 +9,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <osl/process.h>
-#ifdef LINUX
-#include <sys/prctl.h>
-#include <signal.h>
-#endif
 
 #include "args.h"
 
@@ -123,15 +119,6 @@ Args *args_parse (void)
                 args->bInhibitPipe    |= pArgDescr[j].bInhibitPipe;
                 if (pArgDescr[j].pPageinType)
                     args->pPageinType = pArgDescr[j].pPageinType;
-                break;
-            }
-            if (rtl_ustr_ascii_compare_WithLength(
-                    arg, length, "dont-survive-parent")
-                == 0)
-            {
-#ifdef LINUX
-                prctl(PR_SET_PDEATHSIG, SIGKILL);
-#endif
                 break;
             }
         }

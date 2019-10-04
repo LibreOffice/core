@@ -42,11 +42,6 @@
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 
-#ifdef LINUX
-#include <sys/prctl.h>
-#include <signal.h>
-#endif
-
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uri;
 using namespace com::sun::star::uno;
@@ -366,15 +361,6 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             else if ( oArg == "nofirststartwizard" )
             {
                 // Do nothing, accept only for backward compatibility
-            }
-            else if ( oArg == "dont-survive-parent" )
-            {
-// only supported on linux for now
-#ifdef LINUX
-            prctl(PR_SET_PDEATHSIG, SIGKILL);
-#else
-            fprintf(stderr, "Warning: dont-survive-parent is not supported on this platform (yet).\n");
-#endif
             }
             else if ( oArg == "nologo" )
             {
