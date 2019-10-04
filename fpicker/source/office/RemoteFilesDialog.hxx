@@ -11,10 +11,8 @@
 #define INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
 
 #include <svtools/autocmpledit.hxx>
-#include <svtools/foldertree.hxx>
 #include <svtools/place.hxx>
 #include <svtools/PlaceEditDialog.hxx>
-#include <svtools/fileview.hxx>
 
 #include <vcl/errinf.hxx>
 
@@ -38,6 +36,8 @@
 
 #include "fpdialogbase.hxx"
 #include "breadcrumb.hxx"
+#include "fileview.hxx"
+#include "foldertree.hxx"
 #include "QueryFolderName.hxx"
 
 using namespace ::com::sun::star::beans;

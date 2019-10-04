@@ -69,9 +69,9 @@
 #include <iterator>
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
+#include <svtools/querydelete.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/docfilt.hxx>
-#include <svtools/fileview.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <defaultobjectnamecheck.hxx>

@@ -11,9 +11,6 @@
 #define INCLUDED_SVTOOLS_FOLDERTREE_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
-
-#include <svtools/svtdllapi.h>
-
 #include <tools/wintypes.hxx>
 #include <vcl/treelistbox.hxx>
 
@@ -25,7 +22,7 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace ::svt;
 
-class SVT_DLLPUBLIC FolderTree : public SvTreeListBox
+class FolderTree : public SvTreeListBox
 {
 private:
     Reference< XCommandEnvironment > m_xEnv;
