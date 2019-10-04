@@ -232,9 +232,9 @@ include/vcl/texteng.hxx:276
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:515
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:807
+include/vcl/weld.hxx:809
     _Bool weld::TreeView::iter_nth_child(class weld::TreeIter &,int) const
-include/vcl/weld.hxx:1662
+include/vcl/weld.hxx:1664
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 include/vcl/window.hxx:1515
     _Bool vcl::Window::set_font_attribute(const class rtl::OString &,const class rtl::OUString &)
@@ -372,17 +372,17 @@ vcl/inc/salgdi.hxx:387
     _Bool SalGraphics::BlendBitmap(const struct SalTwoRect &,const class SalBitmap &,const class OutputDevice *)
 vcl/inc/salinst.hxx:177
     _Bool SalInstance::CallEventCallback(const void *,int)
-vcl/inc/unx/gtk/gtkdata.hxx:138
+vcl/inc/unx/gtk/gtkdata.hxx:136
     int GtkSalDisplay::CaptureMouse(class SalFrame *)
-vcl/inc/unx/saldisp.hxx:310
+vcl/inc/unx/saldisp.hxx:308
     _Bool SalDisplay::Dispatch(union _XEvent *)
-vcl/inc/wizdlg.hxx:223
+vcl/inc/wizdlg.hxx:204
     _Bool vcl::RoadmapWizard::onFinish()
-vcl/inc/wizdlg.hxx:226
+vcl/inc/wizdlg.hxx:207
     _Bool vcl::RoadmapWizard::travelNext()
-vcl/inc/wizdlg.hxx:229
+vcl/inc/wizdlg.hxx:210
     _Bool vcl::RoadmapWizard::travelPrevious()
-vcl/inc/wizdlg.hxx:415
+vcl/inc/wizdlg.hxx:334
     class TabPage * vcl::RoadmapWizard::GetOrCreatePage(const short)
 vcl/source/gdi/pdfwriter_impl.hxx:1233
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)

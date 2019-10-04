@@ -237,49 +237,6 @@ namespace vcl
             implUpdateRoadmap( );
     }
 
-    void RoadmapWizard::activatePath( PathId _nPathId, bool _bDecideForIt )
-    {
-
-        if ( ( _nPathId == m_xRoadmapImpl->nActivePath ) && ( _bDecideForIt == m_xRoadmapImpl->bActivePathIsDefinite ) )
-            // nothing to do
-            return;
-
-        // does the given path exist?
-        Paths::const_iterator aNewPathPos = m_xRoadmapImpl->aPaths.find( _nPathId );
-        DBG_ASSERT( aNewPathPos != m_xRoadmapImpl->aPaths.end(), "RoadmapWizard::activate: there is no such path!" );
-        if ( aNewPathPos == m_xRoadmapImpl->aPaths.end() )
-            return;
-
-        // determine the index of the current state in the current path
-        sal_Int32 nCurrentStatePathIndex = -1;
-        if ( m_xRoadmapImpl->nActivePath != -1 )
-            nCurrentStatePathIndex = m_xRoadmapImpl->getStateIndexInPath( getCurrentState(), m_xRoadmapImpl->nActivePath );
-
-        DBG_ASSERT( static_cast<sal_Int32>(aNewPathPos->second.size()) > nCurrentStatePathIndex,
-            "RoadmapWizard::activate: you cannot activate a path which has less states than we've already advanced!" );
-            // If this asserts, this for instance means that we are already in state number, say, 5
-            // of our current path, and the caller tries to activate a path which has less than 5
-            // states
-        if ( static_cast<sal_Int32>(aNewPathPos->second.size()) <= nCurrentStatePathIndex )
-            return;
-
-        // assert that the current and the new path are equal, up to nCurrentStatePathIndex
-        Paths::const_iterator aActivePathPos = m_xRoadmapImpl->aPaths.find( m_xRoadmapImpl->nActivePath );
-        if ( aActivePathPos != m_xRoadmapImpl->aPaths.end() )
-        {
-            if ( RoadmapWizardImpl::getFirstDifferentIndex( aActivePathPos->second, aNewPathPos->second ) <= nCurrentStatePathIndex )
-            {
-                OSL_FAIL( "RoadmapWizard::activate: you cannot activate a path which conflicts with the current one *before* the current state!" );
-                return;
-            }
-        }
-
-        m_xRoadmapImpl->nActivePath = _nPathId;
-        m_xRoadmapImpl->bActivePathIsDefinite = _bDecideForIt;
-
-        implUpdateRoadmap( );
-    }
-
     void RoadmapWizardMachine::activatePath( PathId _nPathId, bool _bDecideForIt )
     {
         if ( ( _nPathId == m_pImpl->nActivePath ) && ( _bDecideForIt == m_pImpl->bActivePathIsDefinite ) )
@@ -847,11 +804,6 @@ namespace vcl
             }
         }
         return false;
-    }
-
-    bool RoadmapWizard::isStateEnabled( WizardTypes::WizardState _nState ) const
-    {
-        return m_xRoadmapImpl->aDisabledStates.find( _nState ) == m_xRoadmapImpl->aDisabledStates.end();
     }
 
     bool RoadmapWizardMachine::isStateEnabled( WizardTypes::WizardState _nState ) const

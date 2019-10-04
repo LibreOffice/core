@@ -150,8 +150,6 @@ namespace vcl
 
         /// enable (or disable) buttons
         void                enableButtons(WizardButtonFlags _nWizardButtonFlags, bool _bEnable);
-        /// set the default style for a button
-        void                defaultButton(PushButton* _pNewDefButton);
 
         /// determines whether there is a next state to which we can advance
         bool            canAdvance() const;
@@ -164,9 +162,6 @@ namespace vcl
         void            SelectRoadmapItemByID(int nId);
         void            SetItemSelectHdl( const Link<LinkParamNone*,void>& _rHdl );
         void            ShowRoadmap(bool bShow);
-
-        // returns whether a given state is enabled
-        bool            isStateEnabled( WizardTypes::WizardState _nState ) const;
 
     protected:
 
@@ -261,43 +256,6 @@ namespace vcl
         WizardTypes::WizardState getCurrentState() const { return GetCurLevel(); }
 
         static IWizardPageController*  getPageController( TabPage* _pCurrentPage );
-
-        /** retrieves a copy of the state history, i.e. all states we already visited
-        */
-        void                    getStateHistory(std::vector<WizardTypes::WizardState>& out_rHistory);
-
-        /** activates a path which has previously been declared with <member>declarePath</member>
-
-            You can only activate paths which share the first <code>k</code> states with the path
-            which is previously active (if any), where <code>k</code> is the index of the
-            current state within the current path.
-
-            <example>
-            Say you have paths, <code>(0,1,2,5)</code> and <code>(0,1,4,5)</code>. This means that after
-            step <code>1</code>, you either continue with state <code>2</code> or state <code>4</code>,
-            and after this, you finish in state <code>5</code>.<br/>
-            Now if the first path is active, and your current state is <code>1</code>, then you can
-            easily switch to the second path, since both paths start with <code>(0,1)</code>.<br/>
-            However, if your current state is <code>2</code>, then you can not switch to the second
-            path anymore.
-            </example>
-
-            @param _nPathId
-                the id of the path. The path must have been declared (under this id) with
-                <member>declarePath</member> before it can be activated.
-
-            @param _bDecideForIt
-                If <TRUE/>, the path will be completely activated, even if it is a conflicting path
-                (i.e. there is another path which shares the first <code>k</code> states with
-                the to-be-activated path.)<br/>
-                If <FALSE/>, then the new path is checked for conflicts with other paths. If such
-                conflicts exists, the path is not completely activated, but only up to the point
-                where it does <em>not</em> conflict.<br/>
-                With the paths in the example above, if you activate the second path (when both are
-                already declared), then only steps <code>0</code> and <code>1</code> are activated,
-                since they are common to both paths.
-        */
-        void    activatePath( RoadmapWizardTypes::PathId _nPathId, bool _bDecideForIt = false );
 
         /** returns a human readable name for a given state
 

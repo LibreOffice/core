@@ -1819,14 +1819,6 @@ sal_uInt16 TabControl::GetPageId( const Point& rPos ) const
     return (it != rList.end()) ? it->id() : 0;
 }
 
-sal_uInt16 TabControl::GetPageId( const TabPage& rPage ) const
-{
-    const auto &rList = mpTabCtrlData->maItemList;
-    const auto it = std::find_if(rList.begin(), rList.end(), [&rPage](const auto &item) {
-        return item.mpTabPage == &rPage; });
-    return (it != rList.end()) ? it->id() : 0;
-}
-
 sal_uInt16 TabControl::GetPageId( const OString& rName ) const
 {
     const auto &rList = mpTabCtrlData->maItemList;
@@ -1987,14 +1979,6 @@ const OUString& TabControl::GetHelpText( sal_uInt16 nPageId ) const
             pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
     }
     return pItem->maHelpText;
-}
-
-void TabControl::SetHelpId( sal_uInt16 nPageId, const OString& rId ) const
-{
-    ImplTabItem* pItem = ImplGetItem( nPageId );
-
-    if ( pItem )
-        pItem->maHelpId = rId;
 }
 
 void TabControl::SetPageName( sal_uInt16 nPageId, const OString& rName ) const

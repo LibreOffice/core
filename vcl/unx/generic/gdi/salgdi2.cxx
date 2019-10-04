@@ -31,43 +31,6 @@
 
 #include <ControlCacheKey.hxx>
 
-void X11SalGraphics::CopyScreenArea( Display* pDisplay,
-                                     Drawable aSrc, SalX11Screen nXScreenSrc, int nSrcDepth,
-                                     Drawable aDest, SalX11Screen nXScreenDest, int nDestDepth,
-                                     GC aDestGC,
-                                     int src_x, int src_y,
-                                     unsigned int w, unsigned int h,
-                                     int dest_x, int dest_y )
-{
-    if( nSrcDepth == nDestDepth )
-    {
-        if( nXScreenSrc == nXScreenDest )
-            XCopyArea( pDisplay, aSrc, aDest, aDestGC,
-                       src_x, src_y, w, h, dest_x, dest_y );
-        else
-        {
-            GetGenericUnixSalData()->ErrorTrapPush();
-            XImage* pImage = XGetImage( pDisplay, aSrc, src_x, src_y, w, h,
-                                        AllPlanes, ZPixmap );
-            if( pImage )
-            {
-                if( pImage->data )
-                    XPutImage( pDisplay, aDest, aDestGC, pImage,
-                               0, 0, dest_x, dest_y, w, h );
-                XDestroyImage( pImage );
-            }
-            GetGenericUnixSalData()->ErrorTrapPop();
-        }
-    }
-    else
-    {
-        X11SalBitmap aBM;
-        aBM.ImplCreateFromDrawable( aSrc, nXScreenSrc, nSrcDepth, src_x, src_y, w, h );
-        SalTwoRect aTwoRect(0, 0, w, h, dest_x, dest_y, w, h);
-        aBM.ImplDraw(aDest, nXScreenDest, nDestDepth, aTwoRect,aDestGC);
-    }
-}
-
 extern "C"
 {
     static Bool GraphicsExposePredicate( Display*, XEvent* pEvent, const XPointer pFrameWindow )

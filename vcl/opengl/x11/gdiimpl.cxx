@@ -595,40 +595,4 @@ void X11OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics*
     OpenGLSalGraphicsImpl::DoCopyBits( rPosAry, *pImpl );
 }
 
-typedef typename std::pair<ControlCacheKey, std::unique_ptr<TextureCombo>> ControlCachePair;
-typedef o3tl::lru_map<ControlCacheKey, std::unique_ptr<TextureCombo>, ControlCacheHashFunction> ControlCacheType;
-
-static vcl::DeleteOnDeinit<ControlCacheType> gTextureCache(new ControlCacheType(200));
-
-bool X11OpenGLSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY)
-{
-    static bool gbCacheEnabled = !getenv("SAL_WITHOUT_WIDGET_CACHE");
-
-    if (!gbCacheEnabled || !gTextureCache.get())
-        return false;
-
-    ControlCacheType::const_iterator iterator = gTextureCache.get()->find(rControlCacheKey);
-
-    if (iterator == gTextureCache.get()->end())
-        return false;
-
-    const std::unique_ptr<TextureCombo>& pCombo = iterator->second;
-
-    PreDraw();
-
-    OpenGLTexture& rTexture = *pCombo->mpTexture;
-
-    SalTwoRect aPosAry(0,  0,  rTexture.GetWidth(), rTexture.GetHeight(),
-                       nX, nY, rTexture.GetWidth(), rTexture.GetHeight());
-
-    if (pCombo->mpMask)
-        DrawTextureDiff(rTexture, *pCombo->mpMask, aPosAry, true);
-    else
-        DrawTexture(rTexture, aPosAry, true);
-
-    PostDraw();
-
-    return true;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

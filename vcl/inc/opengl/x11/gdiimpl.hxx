@@ -37,9 +37,6 @@ public:
     virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) override;
 
     virtual void Init() override;
-
-    bool TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey,
-                                      int nX, int nY) override;
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_X11_GDIIMPL_HXX

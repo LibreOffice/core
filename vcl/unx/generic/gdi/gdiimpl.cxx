@@ -154,11 +154,6 @@ void X11SalGraphicsImpl::Init()
     mnBrushPixel = mrParent.GetPixel( mnBrushColor );
 }
 
-bool X11SalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey& /*rControlCacheKey*/, int /*nX*/, int /*nY*/)
-{
-    return false;
-}
-
 XID X11SalGraphicsImpl::GetXRenderPicture()
 {
     XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();

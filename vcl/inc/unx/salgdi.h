@@ -276,25 +276,12 @@ public:
     static void releaseCairoContext(cairo_t* cr);
 
 
-    // do XCopyArea or XGet/PutImage depending on screen numbers
-    // signature is like XCopyArea with screen numbers added
-    static void                     CopyScreenArea(
-                                        Display* pDisplay,
-                                        Drawable aSrc, SalX11Screen nXScreenSrc, int nSrcDepth,
-                                        Drawable aDest, SalX11Screen nXScreenDest, int nDestDepth,
-                                        GC aDestGC,
-                                        int src_x, int src_y,
-                                        unsigned int w, unsigned int h,
-                                        int dest_x, int dest_y );
-
 protected:
     using SalGraphics::SetClipRegion;
     void                            SetClipRegion( GC pGC, Region pXReg = nullptr ) const;
     bool                            GetDitherPixmap ( Color nColor );
 
     using SalGraphics::DrawBitmap;
-
-    GC                              GetFontGC();
 
     void                            freeResources();
 

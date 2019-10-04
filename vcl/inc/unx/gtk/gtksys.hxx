@@ -35,7 +35,6 @@ public:
                                             const std::vector< OUString >& rButtons) override;
     SalX11Screen      GetDisplayDefaultXScreen()
             { return getXScreenFromDisplayScreen( GetDisplayBuiltInScreen() ); }
-    int               GetDisplayXScreenCount();
     SalX11Screen      getXScreenFromDisplayScreen(unsigned int nDisplayScreen);
     void              countScreenMonitors();
     // We have a 'screen' number that is combined from screen-idx + monitor-idx

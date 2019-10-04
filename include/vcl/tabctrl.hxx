@@ -133,7 +133,6 @@ public:
     sal_uInt16          GetPageCount() const;
     sal_uInt16          GetPageId( sal_uInt16 nPos ) const;
     sal_uInt16 GetPageId(const Point& rPos) const;
-    sal_uInt16          GetPageId( const TabPage& rPage ) const;
     sal_uInt16          GetPageId( const OString& rName ) const;
 
     void SetCurPageId(sal_uInt16 nPageId);
@@ -149,8 +148,6 @@ public:
 
     void                SetHelpText( sal_uInt16 nPageId, const OUString& rText );
     const OUString&     GetHelpText( sal_uInt16 nPageId ) const;
-
-    void                SetHelpId( sal_uInt16 nPageId, const OString& rId ) const;
 
     void                SetPageName( sal_uInt16 nPageId, const OString& rName ) const;
     OString             GetPageName( sal_uInt16 nPageId ) const;
