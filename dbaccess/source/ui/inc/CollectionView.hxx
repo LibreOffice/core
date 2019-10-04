@@ -20,12 +20,9 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_COLLECTIONVIEW_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_COLLECTIONVIEW_HXX
 
-#include <svtools/fileview.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/ucb/XContent.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -33,32 +30,35 @@ namespace dbaui
 {
     /* this class allows to browse through the collection of forms and reports
     */
-    class OCollectionView : public ModalDialog
+    class OCollectionView : public weld::GenericDialogController
     {
-        VclPtr<FixedText>      m_pFTCurrentPath;
-        VclPtr<PushButton>     m_pNewFolder;
-        VclPtr<PushButton>     m_pUp;
-        VclPtr<SvtFileView>    m_pView;
-        VclPtr<Edit>           m_pName;
-        VclPtr<PushButton>     m_pPB_OK;
         css::uno::Reference< css::ucb::XContent>                  m_xContent;
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< css::ucb::XCommandEnvironment >      m_xCmdEnv;
         bool                   m_bCreateForm;
 
-        DECL_LINK(Up_Click, Button*, void);
-        DECL_LINK(NewFolder_Click, Button*, void);
-        DECL_LINK(Save_Click, Button*, void);
-        DECL_LINK(Dbl_Click_FileView, SvTreeListBox*, bool);
+        std::unique_ptr<weld::Label> m_xFTCurrentPath;
+        std::unique_ptr<weld::Button> m_xNewFolder;
+        std::unique_ptr<weld::Button> m_xUp;
+        std::unique_ptr<weld::TreeView> m_xView;
+        std::unique_ptr<weld::Entry> m_xName;
+        std::unique_ptr<weld::Button> m_xPB_OK;
+
+        DECL_LINK(Up_Click, weld::Button&, void);
+        DECL_LINK(NewFolder_Click, weld::Button&, void);
+        DECL_LINK(Save_Click, weld::Button&, void);
+        DECL_LINK(Dbl_Click_FileView, weld::TreeView&, void);
 
         /// sets the fixedtext to the right content
         void initCurrentPath();
+
+        void Initialize();
     public:
-        OCollectionView( vcl::Window * pParent
-                        ,const css::uno::Reference< css::ucb::XContent>& _xContent
-                        ,const OUString& _sDefaultName
-                        ,const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+        OCollectionView(weld::Window * pParent,
+                        const css::uno::Reference< css::ucb::XContent>& _xContent,
+                        const OUString& _sDefaultName,
+                        const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
         virtual ~OCollectionView() override;
-        virtual void dispose() override;
         const css::uno::Reference< css::ucb::XContent>& getSelectedFolder() const { return m_xContent;}
         OUString getName() const;
     };
