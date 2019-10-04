@@ -206,6 +206,15 @@ DECLARE_OOXMLEXPORT_TEST(textboxWpgOnly, "textbox-wpg-only.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xText), 1), "CharEscapementHeight"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf120412_400PercentSubscript, "tdf120412_400PercentSubscript.docx")
+{
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    // The word "Base" should not be subscripted.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1, "Base"), "CharEscapement"), 0);
+    // The word "Subscript" should be 12pt, subscripted by 400% (48pt).
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( -400.f, getProperty<float>(getRun(xPara, 2, "Subscript"), "CharEscapement"), 0);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFontEsc, "test_tdf120412.docx")
 {
     xmlDocPtr pXmlDoc =parseExport("word/document.xml");
