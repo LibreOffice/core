@@ -63,8 +63,6 @@ OCopyTable::OCopyTable(weld::Container* pPage, OCopyTableWizard* pWizard)
     , m_xFT_KeyName(m_xBuilder->weld_label("keynamelabel"))
     , m_xEdKeyName(m_xBuilder->weld_entry("keyname"))
 {
-    m_xEdTableName->set_max_length(EDIT_NOLIMIT);
-
     if ( m_pParent->m_xDestConnection.is() )
     {
         if (!m_pParent->supportsViews())
@@ -88,7 +86,7 @@ OCopyTable::OCopyTable(weld::Container* pPage, OCopyTableWizard* pWizard)
         m_xEdKeyName->set_text(m_pParent->createUniqueName("ID"));
 
         const sal_Int32 nMaxLen = m_pParent->getMaxColumnNameLength();
-        m_xEdKeyName->set_max_length(nMaxLen ? nMaxLen : EDIT_NOLIMIT);
+        m_xEdKeyName->set_max_length(nMaxLen);
     }
 
     SetPageTitle(DBA_RES(STR_COPYTABLE_TITLE_COPY));
