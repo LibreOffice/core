@@ -16,6 +16,24 @@
       "revId": "9c1aeb57bfb665acac8fc8bce5c65cc0eb6a8244",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_e14b9184",
+        "filename": "lotuswordpro/source/filter/lwpstory.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-10-04T20:19:48Z",
+      "side": 1,
+      "message": "probably should do that alright consistently across all of the similar ones that have grown in this filter",
+      "parentUuid": "7f7f9b97_01d7ad4d",
+      "revId": "9c1aeb57bfb665acac8fc8bce5c65cc0eb6a8244",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
