@@ -1520,8 +1520,8 @@ bool SvxPageDescPage::IsMarginOutOfRange() const
 void SvxPageDescPage::PageCreated(const SfxAllItemSet& aSet)
 {
     const SfxUInt16Item* pModeItem = aSet.GetItem(SID_ENUM_PAGE_MODE, false);
-    const SfxAllEnumItem* pPaperStartItem = aSet.GetItem<SfxAllEnumItem>(SID_PAPER_START, false);
-    const SfxAllEnumItem* pPaperEndItem = aSet.GetItem<SfxAllEnumItem>(SID_PAPER_END, false);
+    const SfxUInt16Item* pPaperStartItem = aSet.GetItem(SID_PAPER_START, false);
+    const SfxUInt16Item* pPaperEndItem = aSet.GetItem(SID_PAPER_END, false);
     const SfxStringListItem* pCollectListItem = aSet.GetItem<SfxStringListItem>(SID_COLLECT_LIST, false);
     const SfxBoolItem* pSupportDrawingLayerFillStyleItem = aSet.GetItem<SfxBoolItem>(SID_DRAWINGLAYER_FILLSTYLES, false);
 
@@ -1532,7 +1532,7 @@ void SvxPageDescPage::PageCreated(const SfxAllItemSet& aSet)
 
     if(pPaperStartItem && pPaperEndItem)
     {
-        SetPaperFormatRanges(static_cast<Paper>(pPaperStartItem->GetEnumValue()));
+        SetPaperFormatRanges(static_cast<Paper>(pPaperStartItem->GetValue()));
     }
 
     if(pCollectListItem)
