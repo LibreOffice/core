@@ -56,7 +56,6 @@ private:
     css::uno::Reference<
         css::linguistic2::XHyphenator >    xHyph;
     bool        bOtherCntnt : 1; // set => Check special sections initially
-    bool        bHyphen     : 1; // Split instead of spell checking
     bool        bReverse    : 1; // Reverse spell check
     bool        bStartDone  : 1; // Beginning already corrected
     bool        bEndDone    : 1; // End part already corrected
@@ -92,7 +91,6 @@ public:
     void            SpellDocument();        // Perform Spell Checking
     bool     IsStartDone() const { return bStartDone; }
     bool     IsEndDone() const { return bEndDone; }
-    void     SetHyphen() { bHyphen = true; }
     bool     IsAllRight() const { return bAllRight; }
 
 protected:

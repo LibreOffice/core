@@ -146,7 +146,7 @@ cui/source/inc/tabstpge.hxx:87
     SvxTabulatorTabPage m_aCenterWin class TabWin_Impl
 cui/source/inc/tabstpge.hxx:88
     SvxTabulatorTabPage m_aDezWin class TabWin_Impl
-cui/source/options/optcolor.cxx:237
+cui/source/options/optcolor.cxx:235
     ColorConfigWindow_Impl::Entry m_aDefaultColor class Color
 dbaccess/source/core/api/RowSet.hxx:111
     dbaccess::ORowSet m_aURL class rtl::OUString
@@ -570,10 +570,6 @@ sc/source/ui/inc/msgpool.hxx:44
     ScMessagePool aCondFormatDlgItem class ScCondFormatDlgItem
 sc/source/ui/inc/notemark.hxx:46
     ScNoteMarker m_aTimer class Timer
-sc/source/ui/inc/output.hxx:188
-    ScOutputData nTilePosX long
-sc/source/ui/inc/output.hxx:189
-    ScOutputData nTilePosY long
 sc/source/ui/inc/PivotLayoutTreeListBase.hxx:48
     ScPivotLayoutTreeListBase maDropTargetHelper class ScPivotLayoutTreeDropTarget
 sc/source/ui/inc/xmlsourcedlg.hxx:62
@@ -631,9 +627,9 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition dict_begin rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
-    PDFGrammar::definition value rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition dict_end rule<ScannerT>
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
+    PDFGrammar::definition value rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
     PDFGrammar::definition object_end rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
@@ -806,8 +802,6 @@ vcl/inc/salmenu.hxx:43
     SalMenuButtonItem maImage class Image
 vcl/inc/salmenu.hxx:44
     SalMenuButtonItem maToolTipText class rtl::OUString
-vcl/inc/unx/gtk/gtkframe.hxx:186
-    GtkSalFrame m_nWorkArea int
 vcl/inc/unx/i18n_ic.hxx:40
     SalI18N_InputContext maPreeditStartCallback XIMCallback
 vcl/inc/unx/i18n_ic.hxx:41
@@ -832,9 +826,9 @@ vcl/inc/WidgetThemeLibrary.hxx:90
     vcl::ControlDrawParameters eState enum ControlState
 vcl/inc/WidgetThemeLibrary.hxx:106
     vcl::WidgetThemeLibrary_t nSize uint32_t
-vcl/source/app/salvtables.cxx:2870
+vcl/source/app/salvtables.cxx:2890
     SalInstanceEntry m_aTextFilter class (anonymous namespace)::WeldTextFilter
-vcl/source/app/salvtables.cxx:5358
+vcl/source/app/salvtables.cxx:5378
     SalInstanceComboBoxWithEdit m_aTextFilter class (anonymous namespace)::WeldTextFilter
 vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cDeviceName char [32]

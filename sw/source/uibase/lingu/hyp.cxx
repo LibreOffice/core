@@ -55,7 +55,6 @@ SwHyphWrapper::SwHyphWrapper( SwView* pVw,
 {
     uno::Reference< linguistic2::XLinguProperties >  xProp( GetLinguPropertySet() );
     bAutomatic = xProp.is() && xProp->getIsHyphAuto();
-    SetHyphen();
 }
 
 void SwHyphWrapper::SpellStart( SvxSpellArea eSpell )

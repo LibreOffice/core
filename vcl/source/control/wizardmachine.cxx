@@ -562,8 +562,6 @@ namespace vcl
 
     void RoadmapWizard::ActivatePage()
     {
-        maActivateHdl.Call( this );
-
         WizardTypes::WizardState nCurrentLevel = GetCurLevel();
         GetOrCreatePage( nCurrentLevel );
 

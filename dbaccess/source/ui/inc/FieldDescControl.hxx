@@ -109,7 +109,6 @@ namespace dbaui
         sal_Int32               m_nEditWidth;
 
         bool                m_bAdded;
-        bool                    m_bRightAligned;
 
         OFieldDescription*      pActFieldDescr;
 
@@ -130,8 +129,6 @@ namespace dbaui
         void                InitializeControl(OPropListBoxCtrl* _pControl,const OString& _sHelpId,bool _bAddChangeHandler);
 
     protected:
-        void    setRightAligned()       { m_bRightAligned = true; }
-
         void                saveCurrentFieldDescData() { SaveData( pActFieldDescr ); }
         OFieldDescription*  getCurrentFieldDescData() { return pActFieldDescr; }
         void                setCurrentFieldDescData( OFieldDescription* _pDesc ) { pActFieldDescr = _pDesc; }
