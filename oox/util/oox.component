@@ -40,14 +40,6 @@
     constructor="com_sun_star_comp_oox_ShapeContextHandler_get_implementation">
     <service name="com.sun.star.xml.sax.FastShapeContextHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.oox.crypto.DRMEncryptedDataSpace"
-    constructor="com_sun_star_comp_oox_crypto_DRMEncryptedDataSpace_get_implementation">
-    <service name="com.sun.star.packages.XPackageEncryption"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.oox.crypto.DRMDataSpace"
-    constructor="com_sun_star_comp_oox_crypto_DRMDataSpace_get_implementation">
-    <service name="com.sun.star.packages.XPackageEncryption"/>
-  </implementation>
   <implementation name="com.sun.star.comp.oox.crypto.Standard2007Engine"
     constructor="com_sun_star_comp_oox_crypto_Standard2007_get_implementation">
     <service name="com.sun.star.packages.XPackageEncryption"/>
