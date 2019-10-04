@@ -180,7 +180,7 @@ public:
     virtual void        ClearModifyFlag();
     virtual bool        IsModified() const { return mpSubEdit ? mpSubEdit->mbModified : mbModified; }
 
-    virtual void        EnableUpdateData( sal_uLong nTimeout = EDIT_UPDATEDATA_TIMEOUT );
+    virtual void        EnableUpdateData( sal_uLong nTimeout );
     virtual void        DisableUpdateData();
 
     void                SetEchoChar( sal_Unicode c );
