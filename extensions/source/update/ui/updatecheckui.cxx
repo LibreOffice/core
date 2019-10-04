@@ -38,11 +38,10 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/lineinfo.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/lineinfo.hxx>
-#include <vcl/button.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/strings.hrc>
