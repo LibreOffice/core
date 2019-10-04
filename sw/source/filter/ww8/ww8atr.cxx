@@ -1396,6 +1396,7 @@ void WW8AttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
         else if ( DFLT_ESC_SUPER == nEsc || DFLT_ESC_AUTO_SUPER == nEsc )
             b = 1;
     }
+    // FIXME: these need a better formula. See rtfAttributeOutput
     else if ( DFLT_ESC_AUTO_SUPER == nEsc )
         nEsc = DFLT_ESC_SUPER;
     else if ( DFLT_ESC_AUTO_SUB == nEsc )
@@ -1410,17 +1411,15 @@ void WW8AttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
 
     if ( 0 == b || 0xFF == b )
     {
-        long nHeight = m_rWW8Export.GetItem( RES_CHRATR_FONTSIZE ).GetHeight();
+        double fHeight = m_rWW8Export.GetItem( RES_CHRATR_FONTSIZE ).GetHeight();
         m_rWW8Export.InsUInt16( NS_sprm::sprmCHpsPos );
 
-        m_rWW8Export.InsUInt16( static_cast<short>(( nHeight * nEsc + 500 ) / 1000 ));
+        m_rWW8Export.InsUInt16(static_cast<short>( round(fHeight * nEsc / 1000) ));
 
         if( 100 != nProp || !b )
         {
             m_rWW8Export.InsUInt16( NS_sprm::sprmCHps );
-
-            m_rWW8Export.InsUInt16(
-                msword_cast<sal_uInt16>((nHeight * nProp + 500 ) / 1000));
+            m_rWW8Export.InsUInt16(msword_cast<sal_uInt16>( round(fHeight * nProp / 1000) ));
         }
     }
 }
