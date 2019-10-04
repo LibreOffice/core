@@ -62,8 +62,9 @@
 #include <tools/diagnose_ex.h>
 #include <wizdlg.hxx>
 #include <tools/svlibrary.h>
+#include <comphelper/lok.hxx>
 
-#ifdef DISABLE_DYNLOADING
+#if defined(DISABLE_DYNLOADING) || defined(LINUX)
 #include <dlfcn.h>
 #endif
 
@@ -1642,8 +1643,8 @@ VclBuilder::customMakeWidget GetCustomMakeWidget(const OString& name)
     VclBuilder::customMakeWidget pFunction = nullptr;
     if (sal_Int32 nDelim = name.indexOf('-'); nDelim != -1)
     {
-        const OUString sFunction("make"
-                                 + OStringToOUString(name.copy(nDelim + 1), RTL_TEXTENCODING_UTF8));
+        const OString aFunction(OString("make") + name.copy(nDelim+1));
+        const OUString sFunction(OStringToOUString(aFunction, RTL_TEXTENCODING_UTF8));
 
 #ifndef DISABLE_DYNLOADING
         const OUString sModule = SAL_DLLPREFIX
@@ -1664,10 +1665,23 @@ VclBuilder::customMakeWidget GetCustomMakeWidget(const OString& name)
             {
                 pModule.reset(new NoAutoUnloadModule);
                 bool ok = pModule->loadRelative(&thisModule, sModule);
-                assert(ok && "bad module name in .ui");
-                (void)ok;
-                pFunction = reinterpret_cast<VclBuilder::customMakeWidget>(
-                    pModule->getFunctionSymbol(sFunction));
+#ifdef LINUX
+                if (!ok && comphelper::LibreOfficeKit::isActive())
+                {
+                    // in the case of preloading, we don't have eg. the
+                    // libcuilo.so, but still need to dlsym the symbols -
+                    // which are already in-process
+                    pFunction = reinterpret_cast<VclBuilder::customMakeWidget>(dlsym(RTLD_DEFAULT, aFunction.getStr()));
+                    assert(pFunction && "couldn't even directly dlsym the sFunction (available via preload)");
+                }
+                else
+#endif
+                {
+                    assert(ok && "bad module name in .ui");
+                    (void)ok;
+                    pFunction = reinterpret_cast<VclBuilder::customMakeWidget>(
+                            pModule->getFunctionSymbol(sFunction));
+                }
             }
             g_aModuleMap.insert(std::make_pair(sModule, pModule));
         }
