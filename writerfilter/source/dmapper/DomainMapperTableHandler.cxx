@@ -439,10 +439,13 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 m_aTableProperties->dumpXml();
                 TagLogger::getInstance().endElement();
 #endif
-                // apply tblHeader setting of the table style
-                PropertyMapPtr pHeaderStyleProps = pTableStyle->GetProperties(CNF_FIRST_ROW);
-                if ( pHeaderStyleProps->getProperty(PROP_HEADER_ROW_COUNT) )
-                    m_aTableProperties->Insert(PROP_HEADER_ROW_COUNT, uno::makeAny( sal_Int32(1)), false);
+                if (pTableStyle)
+                {
+                    // apply tblHeader setting of the table style
+                    PropertyMapPtr pHeaderStyleProps = pTableStyle->GetProperties(CNF_FIRST_ROW);
+                    if ( pHeaderStyleProps->getProperty(PROP_HEADER_ROW_COUNT) )
+                        m_aTableProperties->Insert(PROP_HEADER_ROW_COUNT, uno::makeAny( sal_Int32(1)), false);
+                }
             }
         }
 
