@@ -36,9 +36,6 @@
 #include <svdata.hxx>
 #include <brdwin.hxx>
 #include <toolbox.h>
-#include <tools/stream.hxx>
-#include <vcl/cvtgrf.hxx>
-#include <comphelper/base64.hxx>
 
 #include <unotools/confignode.hxx>
 
@@ -1804,18 +1801,6 @@ boost::property_tree::ptree ToolBox::DumpAsPropertyTree()
         {
             boost::property_tree::ptree aEntry;
             int nId = GetItemId(i);
-
-            Image aImage = GetItemImage(nId);
-            SvMemoryStream aOStm(65535, 65535);
-
-            if(GraphicConverter::Export(aOStm, aImage.GetBitmapEx(), ConvertDataFormat::PNG) == ERRCODE_NONE)
-            {
-                css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
-                OUStringBuffer aBuffer("data:image/png;base64,");
-                ::comphelper::Base64::encode(aBuffer, aSeq);
-                aEntry.put("image", aBuffer.makeStringAndClear());
-            }
-
             aEntry.put("type", "toolitem");
             aEntry.put("text", GetItemText(nId));
             aEntry.put("command", GetItemCommand(nId));
