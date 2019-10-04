@@ -43,8 +43,6 @@ OColumnControlWindow::OColumnControlWindow(vcl::Window* pParent
             , m_sTypeNames(DBA_RES(STR_TABLEDESIGN_DBFIELDTYPES))
             , m_bAutoIncrementEnabled(true)
 {
-
-    setRightAligned();
     m_aLocale = SvtSysLocale().GetLanguageTag().getLocale();
 }
 

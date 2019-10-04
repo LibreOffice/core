@@ -158,7 +158,7 @@ cppu/source/uno/check.cxx:134
     (anonymous namespace)::Char3 c3 char
 cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
-cui/source/options/optcolor.cxx:255
+cui/source/options/optcolor.cxx:253
     ColorConfigWindow_Impl aModuleOptions class SvtModuleOptions
 cui/source/options/optpath.cxx:67
     OptPath_Impl m_aDefOpt class SvtDefaultOptions
@@ -178,9 +178,7 @@ dbaccess/source/ui/inc/charsetlistbox.hxx:44
     dbaui::CharSetListBox m_aCharSets class dbaui::OCharsetDisplay
 dbaccess/source/ui/inc/directsql.hxx:65
     dbaui::DirectSQLDialog m_aColorConfig const svtools::ColorConfig
-dbaccess/source/ui/inc/indexdialog.hxx:43
-    dbaui::DbaIndexDialog m_bEditingActive _Bool
-dbaccess/source/ui/inc/WCopyTable.hxx:263
+dbaccess/source/ui/inc/WCopyTable.hxx:261
     dbaui::OCopyTableWizard m_aLocale css::lang::Locale
 drawinglayer/source/processor2d/vclprocessor2d.hxx:84
     drawinglayer::processor2d::VclProcessor2D maDrawinglayerOpt const class SvtOptionsDrawinglayer
@@ -374,22 +372,16 @@ include/unoidl/unoidl.hxx:453
     unoidl::ConstantValue::(anonymous) doubleValue double
 include/unotest/bootstrapfixturebase.hxx:52
     test::BootstrapFixtureBase m_directories class test::Directories
+include/vcl/edit.hxx:88
+    Edit maUpdateDataHdl Link<class Edit &, void>
 include/vcl/opengl/OpenGLContext.hxx:48
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
 include/vcl/opengl/OpenGLContext.hxx:167
     OpenGLContext mpLastFramebuffer class OpenGLFramebuffer *
 include/vcl/ppdparser.hxx:127
     psp::PPDParser::PPDConstraint m_pKey1 const class psp::PPDKey *
-include/vcl/settings.hxx:149
-    DialogStyle content_area_spacing int
-include/vcl/settings.hxx:162
-    FrameStyle left int
-include/vcl/settings.hxx:163
-    FrameStyle right int
-include/vcl/settings.hxx:164
-    FrameStyle top int
-include/vcl/settings.hxx:165
-    FrameStyle bottom int
+include/vcl/vclmedit.hxx:85
+    VclMultiLineEdit aUpdateDataHdlLink Link<class Edit &, void>
 io/source/stm/odata.cxx:571
     io_stm::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n2 sal_uInt32
 io/source/stm/odata.cxx:571
@@ -536,7 +528,7 @@ sdext/source/pdfimport/inc/pdfihelper.hxx:102
     pdfi::GraphicsContext BlendMode sal_Int8
 sdext/source/pdfimport/tree/style.hxx:43
     pdfi::StyleContainer::Style Contents const class rtl::OUString
-sfx2/source/appl/lnkbase2.cxx:96
+sfx2/source/appl/lnkbase2.cxx:95
     sfx2::ImplDdeItem pLink class sfx2::SvBaseLink *
 slideshow/source/engine/slideshowimpl.cxx:156
     (anonymous namespace)::FrameSynchronization maTimer const canvas::tools::ElapsedTime
@@ -546,14 +538,6 @@ starmath/source/view.cxx:862
     SmViewShell_Impl aOpts class SvtMiscOptions
 store/source/storbios.cxx:57
     OStoreSuperBlock m_aMarked OStoreSuperBlock::L
-svgio/inc/svgstyleattributes.hxx:185
-    svgio::svgreader::SvgStyleAttributes mpSvgGradientNodeFill const class svgio::svgreader::SvgGradientNode *
-svgio/inc/svgstyleattributes.hxx:186
-    svgio::svgreader::SvgStyleAttributes mpSvgGradientNodeStroke const class svgio::svgreader::SvgGradientNode *
-svgio/inc/svgstyleattributes.hxx:187
-    svgio::svgreader::SvgStyleAttributes mpSvgPatternNodeFill const class svgio::svgreader::SvgPatternNode *
-svgio/inc/svgstyleattributes.hxx:188
-    svgio::svgreader::SvgStyleAttributes mpSvgPatternNodeStroke const class svgio::svgreader::SvgPatternNode *
 svl/source/crypto/cryptosign.cxx:283
     (anonymous namespace)::PKIStatusInfo status SECItem
 svl/source/crypto/cryptosign.cxx:303
@@ -726,6 +710,10 @@ unotools/source/config/saveopt.cxx:76
     SvtSaveOptions_Impl bROUserAutoSave _Bool
 vcl/inc/BitmapFastScaleFilter.hxx:31
     BitmapFastScaleFilter maSize const class Size
+vcl/inc/openglgdiimpl.hxx:52
+    TextureCombo mpTexture std::unique_ptr<OpenGLTexture>
+vcl/inc/openglgdiimpl.hxx:53
+    TextureCombo mpMask std::unique_ptr<OpenGLTexture>
 vcl/inc/printerinfomanager.hxx:74
     psp::PrinterInfoManager::SystemPrintQueue m_aComment class rtl::OUString
 vcl/inc/salwtype.hxx:157
@@ -736,14 +724,8 @@ vcl/inc/salwtype.hxx:205
     SalSurroundingTextSelectionChangeEvent mnEnd const sal_uLong
 vcl/inc/salwtype.hxx:211
     SalQueryCharPositionEvent mnCharPos sal_uLong
-vcl/inc/svdata.hxx:269
-    ImplSVNWFData mnMenuSeparatorBorderX int
-vcl/inc/svdata.hxx:272
+vcl/inc/svdata.hxx:271
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
-vcl/inc/svdata.hxx:276
-    ImplSVNWFData mbToolboxDropDownSeparate _Bool
-vcl/inc/svdata.hxx:279
-    ImplSVNWFData mbOpenMenuOnF10 _Bool
 vcl/inc/toolbox.h:108
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<sal_uInt16>
 vcl/inc/unx/saldisp.hxx:282
@@ -898,6 +880,10 @@ vcl/inc/WidgetThemeLibrary.hxx:135
     vcl::WidgetThemeLibrary_t drawListHeader _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:137
     vcl::WidgetThemeLibrary_t updateSettings _Bool (*)(struct vcl::WidgetDrawStyle &)
+vcl/inc/wizdlg.hxx:78
+    vcl::RoadmapWizard maActivateHdl Link<class vcl::RoadmapWizard *, void>
+vcl/source/app/settings.cxx:184
+    ImplStyleData maDialogStyle struct DialogStyle
 vcl/source/control/roadmapwizard.cxx:62
     vcl::RoadmapWizardImpl aStateDescriptors vcl::(anonymous namespace)::StateDescriptions
 vcl/source/control/tabctrl.cxx:79

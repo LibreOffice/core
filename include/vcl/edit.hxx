@@ -85,7 +85,6 @@ private:
                         mbForceControlBackground:1,
                         mbPassword;
     Link<Edit&,void>    maModifyHdl;
-    Link<Edit&,void>    maUpdateDataHdl;
     Link<Edit&,void>    maAutocompleteHdl;
     Link<Edit&,bool>    maActivateHdl;
     std::unique_ptr<VclBuilder> mpUIBuilder;
