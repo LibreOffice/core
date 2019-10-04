@@ -286,9 +286,6 @@ public:
     // implementation of X11GraphicsImpl
 
     void Init() override;
-
-    virtual bool TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey,
-                                              int nX, int nY) override;
 };
 
 #endif

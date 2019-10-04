@@ -51,12 +51,6 @@ GtkSalSystem::~GtkSalSystem()
 {
 }
 
-int
-GtkSalSystem::GetDisplayXScreenCount()
-{
-    return gdk_display_get_n_screens (mpDisplay);
-}
-
 namespace
 {
 

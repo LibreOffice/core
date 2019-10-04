@@ -18,8 +18,6 @@ class X11GraphicsImpl
 {
 public:
     virtual ~X11GraphicsImpl() {};
-
-    virtual bool TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY) = 0;
 };
 
 #endif // INCLUDED_VCL_INC_UNX_X11_X11GDIIMPL_HXX

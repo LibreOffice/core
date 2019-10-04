@@ -734,17 +734,6 @@ namespace vcl
         }
     }
 
-    void RoadmapWizard::defaultButton(PushButton* _pNewDefButton)
-    {
-        // loop through all (direct and indirect) descendants which participate in our tabbing order, and
-        // reset the WB_DEFBUTTON for every window which is a button
-        implResetDefault(this);
-
-        // set its new style
-        if (_pNewDefButton)
-            _pNewDefButton->SetStyle(_pNewDefButton->GetStyle() | WB_DEFBUTTON);
-    }
-
     void RoadmapWizard::enableButtons(WizardButtonFlags _nWizardButtonFlags, bool _bEnable)
     {
         if (m_pFinish && (_nWizardButtonFlags & WizardButtonFlags::FINISH))
@@ -941,16 +930,6 @@ namespace vcl
     {
         IWizardPageController* pController = dynamic_cast< IWizardPageController* >( _pCurrentPage );
         return pController;
-    }
-
-    void RoadmapWizard::getStateHistory( std::vector< WizardTypes::WizardState >& _out_rHistory )
-    {
-        std::stack< WizardTypes::WizardState > aHistoryCopy( m_xWizardImpl->aStateHistory );
-        while ( !aHistoryCopy.empty() )
-        {
-            _out_rHistory.push_back( aHistoryCopy.top() );
-            aHistoryCopy.pop();
-        }
     }
 
     bool RoadmapWizard::isTravelingSuspended() const
