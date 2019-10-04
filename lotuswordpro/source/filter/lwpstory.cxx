@@ -322,8 +322,10 @@ void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
     while (xLayout.is())
     {
         rtl::Reference<LwpVirtualLayout> xFrameLayout(dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get()));
+        std::set<LwpVirtualLayout*> aSeen;
         while (xFrameLayout.is())
         {
+            aSeen.insert(xFrameLayout.get());
             if( xFrameLayout->IsAnchorPage()
                 && (xFrameLayout->IsFrame()
                     || xFrameLayout->IsSuperTable()
@@ -332,6 +334,8 @@ void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
                 xFrameLayout->DoXFConvert(pCont);
             }
             xFrameLayout.set(dynamic_cast<LwpVirtualLayout*>(xFrameLayout->GetNext().obj().get()));
+            if (aSeen.find(xFrameLayout.get()) != aSeen.end())
+                throw std::runtime_error("loop in conversion");
         }
         xLayout = GetLayout(xLayout.get());
     }
