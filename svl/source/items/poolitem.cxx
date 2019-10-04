@@ -70,6 +70,7 @@
 // class SfxObjectShellItem: public SfxPoolItem
 // class SfxViewFrameItem: public SfxPoolItem
 // class SfxWatermarkItem: public SfxPoolItem
+// class SfxAllEnumItem: public SfxPoolItem
 // class SfxEnumItemInterface: public SfxPoolItem
 //    class SvxAdjustItem : public SfxEnumItemInterface
 //    class SvxEscapementItem : public SfxEnumItemInterface
@@ -91,8 +92,6 @@
 //            class SvxUnderlineItem : public SvxTextLineItem
 //            class SvxOverlineItem : public SvxTextLineItem
 //        class SvxWeightItem : public SfxEnumItem<FontWeight>
-//        class SfxAllEnumItem_Base: public SfxEnumItem<sal_uInt16>
-//            class SfxAllEnumItem: public SfxAllEnumItem_Base
 //        class SvxOrientationItem: public SfxEnumItem<SvxCellOrientation>
 //        class SvxChartRegressItem : public SfxEnumItem<SvxChartRegress>
 //        class SvxChartTextOrderItem : public SfxEnumItem<SvxChartTextOrder>
