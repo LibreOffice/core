@@ -1234,7 +1234,7 @@ void ORowSet::impl_restoreDataColumnsWriteable_throw()
 {
     assert(m_aDataColumns.size() == m_aReadOnlyDataColumns.size() || m_aReadOnlyDataColumns.size() == 0 );
     TDataColumns::const_iterator aIter = m_aDataColumns.begin();
-    for (auto const& readOnlyDataColumn : m_aReadOnlyDataColumns)
+    for (bool readOnlyDataColumn : m_aReadOnlyDataColumns)
     {
         (*aIter)->setPropertyValue(PROPERTY_ISREADONLY, makeAny( static_cast<bool>(readOnlyDataColumn)) );
         ++aIter;
