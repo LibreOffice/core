@@ -626,7 +626,6 @@ SvxNumRule::SvxNumRule(const SvxNumRule& rCopy)
     nFeatureFlags        = rCopy.nFeatureFlags       ;
     bContinuousNumbering = rCopy.bContinuousNumbering;
     eNumberingType       = rCopy.eNumberingType;
-    memset( aFmts, 0, sizeof( aFmts ));
     for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
         if(rCopy.aFmts[i])
