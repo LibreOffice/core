@@ -347,9 +347,9 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
                 [AquaA11yTextAttributesWrapper addMarkup:[wrapper accessibleTextMarkup] toString:string inRange:[origRange rangeValue]];
             [ string endEditing ];
         }
-    } catch ( IllegalArgumentException & e ) {
+    } catch ( IllegalArgumentException & ) {
         // empty
-    } catch ( IndexOutOfBoundsException & e ) {
+    } catch ( IndexOutOfBoundsException & ) {
         // empty
     } catch ( RuntimeException& ) {
         // at least don't crash

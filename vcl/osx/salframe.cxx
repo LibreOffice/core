@@ -211,7 +211,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         mpNSWindow = [[SalFrameWindow alloc] initWithSalFrame: this];
         mpNSView = [[SalFrameView alloc] initWithSalFrame: this];
     }
-    @catch ( id exception )
+    @catch ( id )
     {
         std::abort();
     }

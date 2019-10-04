@@ -177,7 +177,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         }
         // step 2: create selector
         selector = NSSelectorFromString ( methodName );
-    } @catch ( id exception ) {
+    } @catch ( id  ) {
         selector = static_cast<SEL>(nil);
     }
     [ pool release ];
@@ -368,7 +368,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 
             [ children autorelease ];
             return NSAccessibilityUnignoredChildren( children );
-        } catch (const Exception &e) {
+        } catch (const Exception &) {
             // TODO: Log
             return nil;
         }
@@ -690,11 +690,11 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
             if ( [ self respondsToSelector: methodSelector ] ) {
                 value = [ self performSelector: methodSelector ];
             }
-        } catch ( const DisposedException & e ) {
+        } catch ( const DisposedException & ) {
             mIsTableCell = NO; // just to be sure
             [ AquaA11yFactory removeFromWrapperRepositoryFor: [ self accessibleContext ] ];
             return nil;
-        } catch ( const Exception & e ) {
+        } catch ( const Exception & ) {
             // empty
         }
     }
@@ -794,7 +794,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         [ nativeSubrole release ];
         [ title release ];
         return attributeNames;
-    } catch ( DisposedException & e ) { // Object is no longer available
+    } catch ( DisposedException & ) { // Object is no longer available
         if ( nativeSubrole ) {
             [ nativeSubrole release ];
         }
