@@ -938,7 +938,8 @@ SvxNumBulletItem::~SvxNumBulletItem()
 
 bool SvxNumBulletItem::operator==( const SfxPoolItem& rCopy) const
 {
-    return *pNumRule == *static_cast<const SvxNumBulletItem&>(rCopy).pNumRule;
+    return SfxPoolItem::operator==(rCopy) &&
+        *pNumRule == *static_cast<const SvxNumBulletItem&>(rCopy).pNumRule;
 }
 
 SfxPoolItem*  SvxNumBulletItem::Clone( SfxItemPool * ) const

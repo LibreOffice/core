@@ -1061,8 +1061,6 @@ bool SvxPageModelItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId 
 
 bool SvxPageModelItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    assert(SfxPoolItem::operator==(rAttr));
-
     return SfxStringItem::operator==(rAttr) &&
            bAuto == static_cast<const SvxPageModelItem&>( rAttr ).bAuto;
 }
@@ -1217,11 +1215,6 @@ bool SvxParaVertAlignItem::PutValue( const css::uno::Any& rVal,
         return false;
 }
 
-bool SvxParaVertAlignItem::operator==( const SfxPoolItem& rItem ) const
-{
-    assert(SfxPoolItem::operator==(rItem));
-    return SfxUInt16Item::operator==( rItem );
-}
 
 
 SvxParaGridItem::SvxParaGridItem( bool bOn, const sal_uInt16 nId )

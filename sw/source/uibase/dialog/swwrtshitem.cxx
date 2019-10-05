@@ -28,7 +28,8 @@ SwWrtShellItem::SwWrtShellItem( SwWrtShell* pSh )
 
 bool SwWrtShellItem::operator==( const SfxPoolItem& rItem) const
 {
-    return static_cast<const SwWrtShellItem&>(rItem).pWrtSh == pWrtSh;
+    return SfxPoolItem::operator==(rItem)
+        && pWrtSh == static_cast<const SwWrtShellItem&>(rItem).pWrtSh;
 }
 
 SfxPoolItem* SwWrtShellItem::Clone( SfxItemPool * /*pPool*/ ) const

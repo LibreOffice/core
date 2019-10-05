@@ -486,7 +486,8 @@ SfxPoolItem::~SfxPoolItem()
 
 bool SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
 {
-    return typeid(rCmp)  == typeid(*this);
+    assert(typeid(rCmp) == typeid(*this) && "comparing different pool item subclasses");
+    return true;
 }
 
 

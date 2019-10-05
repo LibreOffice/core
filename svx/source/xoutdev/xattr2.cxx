@@ -203,7 +203,7 @@ bool AffineMatrixItem::operator==(const SfxPoolItem& rRef) const
         return false;
     }
 
-    const AffineMatrixItem* pRef = dynamic_cast< const AffineMatrixItem* >(&rRef);
+    const AffineMatrixItem* pRef = static_cast< const AffineMatrixItem* >(&rRef);
 
     if(!pRef)
     {

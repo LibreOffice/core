@@ -1040,8 +1040,7 @@ bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 bool SvxTextLineItem::operator==( const SfxPoolItem& rItem ) const
 {
-    assert(SfxPoolItem::operator==(rItem));
-    return SfxEnumItem::operator==( static_cast<const SfxEnumItem<FontLineStyle>&>(rItem) ) &&
+    return SfxEnumItem::operator==( rItem ) &&
            GetColor() == static_cast<const SvxTextLineItem&>(rItem).GetColor();
 }
 
@@ -2239,12 +2238,6 @@ bool SvxTextRotateItem::PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId)
         bRet = false;
     }
     return bRet;
-}
-
-bool SvxTextRotateItem::operator==(const SfxPoolItem& rItem) const
-{
-    assert(SfxPoolItem::operator==(rItem));
-    return SfxUInt16Item::operator==(rItem);
 }
 
 void SvxTextRotateItem::dumpAsXml(xmlTextWriterPtr pWriter) const

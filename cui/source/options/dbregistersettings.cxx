@@ -35,7 +35,9 @@ namespace svx
 
     bool DatabaseMapItem::operator==( const SfxPoolItem& _rCompare ) const
     {
-        const DatabaseMapItem* pItem = dynamic_cast<const DatabaseMapItem*>( &_rCompare );
+        if (!SfxPoolItem::operator==(_rCompare))
+            return false;
+        const DatabaseMapItem* pItem = static_cast<const DatabaseMapItem*>( &_rCompare );
         if ( !pItem )
             return false;
 
