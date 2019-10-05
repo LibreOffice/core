@@ -48,7 +48,6 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
     gtk_widget_realize( m_pSocket );
 
     // system data
-    m_aSystemData.nSize         = sizeof( SystemEnvData );
     m_aSystemData.aWindow       = pParent->GetNativeWindowHandle(m_pSocket);
     m_aSystemData.aShellWindow  = reinterpret_cast<sal_IntPtr>(this);
     m_aSystemData.pSalFrame     = nullptr;

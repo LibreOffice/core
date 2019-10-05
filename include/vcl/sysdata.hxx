@@ -51,7 +51,6 @@ typedef struct CGContext *CGContextRef;
 
 struct SystemEnvData
 {
-    sal_uInt32          nSize;          // size in bytes of this structure
 #if defined(_WIN32)
     HWND                hWnd;           // the window hwnd
 #elif defined( MACOSX )
@@ -76,16 +75,15 @@ struct SystemEnvData
 #endif
 
     SystemEnvData()
-        : nSize(0)
 #if defined(_WIN32)
-        , hWnd(nullptr)
+        : hWnd(nullptr)
 #elif defined( MACOSX )
-        , mpNSView(nullptr)
+        : mpNSView(nullptr)
         , mbOpenGL(false)
 #elif defined( ANDROID )
 #elif defined( IOS )
 #elif defined( UNX )
-        , pDisplay(nullptr)
+        : pDisplay(nullptr)
         , aWindow(0)
         , pSalFrame(nullptr)
         , pWidget(nullptr)

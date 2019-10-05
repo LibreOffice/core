@@ -41,7 +41,6 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     if (bShow)
         m_pQWidget->show();
 
-    m_aSystemData.nSize = sizeof(SystemEnvData);
     m_aSystemData.aShellWindow = reinterpret_cast<sal_IntPtr>(this);
     //m_aSystemData.pSalFrame = this;
     m_aSystemData.pWidget = m_pQWidget;

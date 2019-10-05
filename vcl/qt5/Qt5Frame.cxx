@@ -165,8 +165,6 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
             pChildWindow->setTransientParent(pParentWindow);
     }
 
-    m_aSystemData.nSize = sizeof(SystemEnvData);
-
     // Calling 'QWidget::winId()' implicitly enables native windows to be used
     // rather than "alien widgets" that are unknown to the windowing system,
     // s. https://doc.qt.io/qt-5/qwidget.html#native-widgets-vs-alien-widgets

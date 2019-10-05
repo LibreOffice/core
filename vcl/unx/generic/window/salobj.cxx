@@ -219,7 +219,6 @@ X11SalObject::X11SalObject()
     , maColormap(0)
     , mbVisible(false)
 {
-    maSystemChildData.nSize     = sizeof( SystemEnvData );
     maSystemChildData.pDisplay  = vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetDisplay();
     maSystemChildData.aWindow       = None;
     maSystemChildData.pSalFrame = nullptr;

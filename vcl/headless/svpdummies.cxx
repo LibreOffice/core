@@ -21,12 +21,6 @@
 #include <headless/svpdummies.hxx>
 #include <headless/svpinst.hxx>
 
-// SalObject
-SvpSalObject::SvpSalObject()
-{
-    m_aSystemChildData.nSize = sizeof( SystemEnvData );
-}
-
 SvpSalObject::~SvpSalObject()
 {
 }

@@ -550,7 +550,6 @@ WinSalObject::WinSalObject()
     mhWnd           = nullptr;
     mhWndChild      = nullptr;
     mhLastFocusWnd  = nullptr;
-    maSysData.nSize = sizeof( SystemEnvData );
     mpStdClipRgnData    = nullptr;
 
     // Insert object in objectlist
