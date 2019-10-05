@@ -7037,7 +7037,7 @@ if test "$COM_IS_CLANG" = "TRUE"; then
         CXXCPP="$COMPILER_PLUGINS_CXX -E"
         CPPFLAGS="$COMPILER_PLUGINS_CPPFLAGS"
         CXXFLAGS="$COMPILER_PLUGINS_CXXFLAGS"
-        AC_CHECK_HEADER(clang/AST/RecursiveASTVisitor.h,
+        AC_CHECK_HEADER(clang/Basic/SourceLocation.h,
             [COMPILER_PLUGINS=TRUE],
             [
             if test "$compiler_plugins" = "yes"; then
@@ -7054,15 +7054,15 @@ if test "$COM_IS_CLANG" = "TRUE"; then
                 LDFLAGS="-lclangTooling -lclangDriver -lclangFrontend -lclangParse -lclangSema -lclangEdit \
  -lclangAnalysis -lclangAST -lclangLex -lclangSerialization -lclangBasic $COMPILER_PLUGINS_CXX_LINKFLAGS"
                 AC_LINK_IFELSE([
-                    AC_LANG_PROGRAM([[#include "clang/Tooling/Tooling.h"]],
-                        [[ clang::tooling::runToolOnCode( nullptr, "some code" ); ]])
+                    AC_LANG_PROGRAM([[#include "clang/Basic/SourceLocation.h"]],
+                        [[ clang::FullSourceLoc().dump(); ]])
                 ],[CLANGTOOLLIBS="$LDFLAGS"],[])
             fi
             if test -z "$CLANGTOOLLIBS"; then
                 LDFLAGS="-lclang-cpp $COMPILER_PLUGINS_CXX_LINKFLAGS"
                 AC_LINK_IFELSE([
-                    AC_LANG_PROGRAM([[#include "clang/Tooling/Tooling.h"]],
-                        [[ clang::tooling::runToolOnCode( nullptr, "some code" ); ]])
+                    AC_LANG_PROGRAM([[#include "clang/Basic/SourceLocation.h"]],
+                        [[ clang::FullSourceLoc().dump(); ]])
                 ],[CLANGTOOLLIBS="$LDFLAGS"],[])
             fi
             AC_MSG_RESULT([$CLANGTOOLLIBS])
