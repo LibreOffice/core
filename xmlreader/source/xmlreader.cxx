@@ -182,11 +182,21 @@ Span XmlReader::getAttributeValue(bool fullyNormalize) {
 }
 
 int XmlReader::getNamespaceId(Span const & prefix) const {
+    OUString spanString = prefix.convertFromUtf8();
+
+    if (auto it = cacheNSIds_.find(spanString); it != cacheNSIds_.end())
+    {
+        return it->second;
+    }
+
     auto i = std::find_if(namespaces_.crbegin(), namespaces_.crend(),
         [&prefix](const NamespaceData& rNamespaceData) { return prefix.equals(rNamespaceData.prefix); });
 
     if (i != namespaces_.rend())
+    {
+        cacheNSIds_[spanString]= i->nsId;
         return i->nsId;
+    }
 
     return NAMESPACE_UNKNOWN;
 }

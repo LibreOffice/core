@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <unordered_map>
 #include <stack>
 #include <vector>
 
@@ -172,6 +173,7 @@ private:
     void * fileAddress_;
     NamespaceIris namespaceIris_;
     NamespaceList namespaces_;
+    mutable std::unordered_map<OUString, int> cacheNSIds_;
     ElementStack elements_;
     char const * pos_;
     char const * end_;
