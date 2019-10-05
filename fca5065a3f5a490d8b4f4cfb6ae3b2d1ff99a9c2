@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_84942b8d",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2805,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-10-05T04:33:58Z",
+      "side": 1,
+      "message": "Stephan was the one who made it a double - because some fake crasher document caused the number to overflow. Don\u0027t argue with the boss (but at least I\u0027ll keep my fingers off and leave it as \"nEsc\" so git blame points to Stephan\u0027s change.",
+      "parentUuid": "7f7f9b97_811e5d0a",
+      "range": {
+        "startLine": 2805,
+        "startChar": 12,
+        "endLine": 2805,
+        "endChar": 18
+      },
+      "revId": "fca5065a3f5a490d8b4f4cfb6ae3b2d1ff99a9c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_a127d964",
         "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
         "patchSetId": 2
