@@ -59,17 +59,16 @@ namespace cairocanvas
 
         /* maArguments:
            0: ptr to creating instance (Window or VirtualDevice)
-           1: SystemEnvData as a streamed Any (or empty for VirtualDevice)
-           2: current bounds of creating instance
-           3: bool, denoting always on top state for Window (always false for VirtualDevice)
-           4: XWindow for creating Window (or empty for VirtualDevice)
-           5: SystemGraphicsData as a streamed Any
+           1: current bounds of creating instance
+           2: bool, denoting always on top state for Window (always false for VirtualDevice)
+           3: XWindow for creating Window (or empty for VirtualDevice)
+           4: SystemGraphicsData as a streamed Any
          */
         SAL_INFO("canvas.cairo","Canvas created " <<  this);
 
-        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 6 &&
+        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 5 &&
                              maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER &&
-                             maArguments[5].getValueTypeClass() == uno::TypeClass_SEQUENCE,
+                             maArguments[4].getValueTypeClass() == uno::TypeClass_SEQUENCE,
                              "Canvas::initialize: wrong number of arguments, or wrong types" );
 
         // We expect a single Any here, containing a pointer to a valid
@@ -82,10 +81,10 @@ namespace cairocanvas
                              "Canvas::initialize: invalid OutDev pointer" );
 
         awt::Rectangle aBounds;
-        maArguments[2] >>= aBounds;
+        maArguments[1] >>= aBounds;
 
         uno::Sequence<sal_Int8> aSeq;
-        maArguments[5] >>= aSeq;
+        maArguments[4] >>= aSeq;
 
         const SystemGraphicsData* pSysData=reinterpret_cast<const SystemGraphicsData*>(aSeq.getConstArray());
         if( !pSysData || !pSysData->nSize )

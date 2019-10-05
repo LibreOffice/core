@@ -79,17 +79,16 @@ namespace vclcanvas
 
         /* maArguments:
            0: ptr to creating instance (Window or VirtualDevice)
-           1: SystemEnvData as a streamed Any (or empty for VirtualDevice)
-           2: current bounds of creating instance
-           3: bool, denoting always on top state for Window (always false for VirtualDevice)
-           4: XWindow for creating Window (or empty for VirtualDevice)
-           5: SystemGraphicsData as a streamed Any
+           1: current bounds of creating instance
+           2: bool, denoting always on top state for Window (always false for VirtualDevice)
+           3: XWindow for creating Window (or empty for VirtualDevice)
+           4: SystemGraphicsData as a streamed Any
          */
         SolarMutexGuard aGuard;
 
         SAL_INFO("canvas.vcl", "VCLCanvas::initialize called" );
 
-        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 6 &&
+        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 5 &&
                              maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER,
                              "Canvas::initialize: wrong number of arguments, or wrong types" );
 

@@ -1193,7 +1193,6 @@ public:
                                                        const Point& rPos, const Size& rSize, const Size&) const override;
 
     virtual const SystemEnvData*        GetSystemData() const;
-    css::uno::Any                       GetSystemDataAny() const;
 
     // API to set/query the component interfaces
     virtual css::uno::Reference< css::awt::XWindowPeer >

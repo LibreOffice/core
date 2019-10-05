@@ -3695,19 +3695,18 @@ Reference< css::rendering::XCanvas > Window::ImplGetCanvas( bool bSpriteCanvas )
     if( xCanvas.is() )
         return xCanvas;
 
-    Sequence< Any > aArg(6);
+    Sequence< Any > aArg(5);
 
     // Feed any with operating system's window handle
 
     // common: first any is VCL pointer to window (for VCL canvas)
     aArg[ 0 ] <<= reinterpret_cast<sal_Int64>(this);
-    aArg[ 1 ] = GetSystemDataAny();
-    aArg[ 2 ] <<= css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight );
-    aArg[ 3 ] <<= mpWindowImpl->mbAlwaysOnTop;
-    aArg[ 4 ] <<= Reference< css::awt::XWindow >(
+    aArg[ 1 ] <<= css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight );
+    aArg[ 2 ] <<= mpWindowImpl->mbAlwaysOnTop;
+    aArg[ 3 ] <<= Reference< css::awt::XWindow >(
                              const_cast<vcl::Window*>(this)->GetComponentInterface(),
                              UNO_QUERY );
-    aArg[ 5 ] = GetSystemGfxDataAny();
+    aArg[ 4 ] = GetSystemGfxDataAny();
 
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
@@ -3791,18 +3790,6 @@ const SystemEnvData* Window::GetSystemData() const
 {
 
     return mpWindowImpl->mpFrame ? mpWindowImpl->mpFrame->GetSystemData() : nullptr;
-}
-
-Any Window::GetSystemDataAny() const
-{
-    Any aRet;
-    const SystemEnvData* pSysData = GetSystemData();
-    if( pSysData )
-    {
-        Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(pSysData), pSysData->nSize );
-        aRet <<= aSeq;
-    }
-    return aRet;
 }
 
 bool Window::SupportsDoubleBuffering() const
