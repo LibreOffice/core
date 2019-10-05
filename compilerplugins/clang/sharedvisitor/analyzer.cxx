@@ -12,6 +12,7 @@
 #include "clang/Frontend/CompilerInstance.h"
 #include "clang/Frontend/FrontendAction.h"
 #include "clang/Tooling/Tooling.h"
+#include "llvm/ADT/StringExtras.h"
 
 #include <cstddef>
 #include <cstring>
@@ -27,6 +28,7 @@
 using namespace std;
 
 using namespace clang;
+using namespace llvm;
 
 using namespace loplugin;
 
@@ -241,16 +243,13 @@ int main(int argc, char** argv)
     }
 #define STRINGIFY2(a) #a
 #define STRINGIFY(a) STRINGIFY2(a)
+    SmallVector< StringRef, 20 > clangflags;
+    SplitString( STRINGIFY(CLANGFLAGS), clangflags );
+    args.insert( args.end(), clangflags.begin(), clangflags.end());
     args.insert(
         args.end(),
         {   // These must match LO_CLANG_ANALYZER_PCH_CXXFLAGS in Makefile-clang.mk .
-            "-I" BUILDDIR "/config_host", // plugin sources use e.g. config_global.h
-            "-I" STRINGIFY(CLANGDIR) "/include", // clang's headers
-            "-I" STRINGIFY(CLANGSYSINCLUDE), // clang system headers
-            STDOPTION,
-            "-D__STDC_CONSTANT_MACROS", // Clang headers require these.
-            "-D__STDC_FORMAT_MACROS",
-            "-D__STDC_LIMIT_MACROS"
+            "-I" BUILDDIR "/config_host" // plugin sources use e.g. config_global.h
 #ifdef LO_CLANG_USE_ANALYZER_PCH
             ,
             "-include-pch", // use PCH with Clang headers to speed up parsing/analysing
@@ -264,9 +263,9 @@ int main(int argc, char** argv)
             continue;
         foundSomething = false;
 #if CLANG_VERSION >= 100000
-        if( !clang::tooling::runToolOnCodeWithArgs( std::unique_ptr<FindNamedClassAction>(new FindNamedClassAction), contents, args, argv[ i ] ))
+        if( !tooling::runToolOnCodeWithArgs( std::unique_ptr<FindNamedClassAction>(new FindNamedClassAction), contents, args, argv[ i ] ))
 #else
-        if( !clang::tooling::runToolOnCodeWithArgs( new FindNamedClassAction, contents, args, argv[ i ] ))
+        if( !tooling::runToolOnCodeWithArgs( new FindNamedClassAction, contents, args, argv[ i ] ))
 #endif
         {
             cerr << "Failed to analyze: " << argv[ i ] << endl;
