@@ -539,6 +539,40 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Asymmetric)
 
     CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
 }
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_TextRotateAngle)
+{
+    // The document contains a shapes with vertical flip and a text frame with own
+    // rotate angle. The shape has not stroke and no fill, so that the bounding box
+    // surrounds the text and therefore equals approximately the text frame.
+    // Error was, that the compensation for the 180° rotation added for vertical
+    // flip were not made to the text box position but to the text matrix.
+    const OUString sFileName("tdf127785_TextRotateAngle.odp");
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+    OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
+
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    awt::Rectangle aBoundRect;
+    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    const sal_Int32 nLeft = aBoundRect.X;
+    const sal_Int32 nTop = aBoundRect.Y;
+    const sal_Int32 nRight = aBoundRect.X + aBoundRect.Width - 1;
+    const sal_Int32 nBottom = aBoundRect.Y + aBoundRect.Height - 1;
+    if (abs(nLeft - 5054) > 5)
+        sErrors += "wrong left";
+    if (abs(nRight - 6374) > 5)
+        sErrors += " wrong right";
+    if (abs(nTop - 4516) > 5)
+        sErrors += " wrong top";
+    if (abs(nBottom - 8930) > 5)
+        sErrors += " wrong bottom";
+
+    CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
