@@ -1389,18 +1389,27 @@ void WW8AttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
         nEsc = 0;
         nProp = 100;
     }
-    else if ( DFLT_ESC_PROP == nProp )
+    else if ( DFLT_ESC_PROP == nProp || nProp < 1 || nProp > 100 )
     {
         if ( DFLT_ESC_SUB == nEsc || DFLT_ESC_AUTO_SUB == nEsc )
             b = 2;
         else if ( DFLT_ESC_SUPER == nEsc || DFLT_ESC_AUTO_SUPER == nEsc )
             b = 1;
     }
-    // FIXME: these need a better formula. See rtfAttributeOutput
     else if ( DFLT_ESC_AUTO_SUPER == nEsc )
-        nEsc = DFLT_ESC_SUPER;
+    {
+        // Raised by the differences between the ascenders (ascent = baseline to top of highest letter).
+        // The ascent is generally about 80% of the total font height.
+        // That is why DFLT_ESC_PROP (58) leads to 33% (DFLT_ESC_SUPER)
+        nEsc = .8 * (100 - nProp);
+    }
     else if ( DFLT_ESC_AUTO_SUB == nEsc )
-        nEsc = DFLT_ESC_SUB;
+    {
+        // Lowered by the differences between the descenders (descent = baseline to bottom of lowest letter).
+        // The descent is generally about 20% of the total font height.
+        // That is why DFLT_ESC_PROP (58) _originally_ lead to 8% (DFLT_ESC_SUB)
+        nEsc = .2 * -(100 - nProp);
+    }
 
     if ( 0xFF != b )
     {

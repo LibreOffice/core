@@ -177,11 +177,24 @@ DECLARE_WW8EXPORT_TEST(testTdf127316_autoEscapement, "tdf127316_autoEscapement.o
 {
     uno::Reference<text::XTextRange> xPara = getParagraph(2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1, "Normal text "), "CharEscapement"), 0);
-    // Automatic escapement SHOULD BE limited by the font bottom line(?)
-    // and so the calculations ought to be different. There is room for a lot of export improvement here.
     // Negative escapements (subscripts) were decreasing by 1% every round-trip due to bad manual rounding.
-    // The actual number of 50% isn't so important here, but test that it is stable across multiple round-trips.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Did you fix or break me?", -50.f, getProperty<float>(getRun(xPara, 2), "CharEscapement"), 1);
+    // This should be roughly .2*35% of the ORIGINAL (non-reduced) size. However, during export the
+    // proportional height has to be changed into direct formatting, which then changes the relative percent.
+    // In this case, a 24pt font, proportional at 65% becomes roughly a 16pt font.
+    // Thus an escapement of 7% (1.68pt) becomes roughly 10.5% for the 16pt font.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Subscript", -10.f, getProperty<float>(getRun(xPara, 2), "CharEscapement"), 1);
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf127316_autoEscapement2, "tdf127316_autoEscapement2.odt")
+{
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1, "Base1"), "CharEscapement"), 0);
+    // Font is 80% of 40pt or 32pt, original escapement is 6.4pt, so round-trip escapement is 20%.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.f, getProperty<float>(getRun(xPara, 2,"AutoSuperscript"), "CharEscapement"), 1);
+    xPara.set( getParagraph(3) );
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1, "Base3"), "CharEscapement"), 0);
+    // font is 20% of 40pt or 8pt, original escapement is 25.6pt, so round-trip escapement is 320%.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(320.f, getProperty<float>(getRun(xPara, 2,"AutoSuperscript"), "CharEscapement"), 3);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf120412_proportionalEscapement, "tdf120412_proportionalEscapement.odt")
