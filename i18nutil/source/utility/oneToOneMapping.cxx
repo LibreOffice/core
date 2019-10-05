@@ -18,7 +18,6 @@
  */
 
 #include <i18nutil/oneToOneMapping.hxx>
-#include <string.h>
 
 namespace i18nutil {
 
@@ -63,7 +62,6 @@ oneToOneMappingWithFlag::oneToOneMappingWithFlag( UnicodePairWithFlag const *rpT
       mnFlag    ( rnFlag ),
       mbHasIndex( false )
 {
-    memset(mpIndex, 0, sizeof(mpIndex));
 }
 
 oneToOneMappingWithFlag::~oneToOneMappingWithFlag()
