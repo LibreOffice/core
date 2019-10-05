@@ -25,7 +25,6 @@
 
 class ScViewData;
 class ScDocShell;
-class SvSimpleTable;
 
 // class ScShareDocumentDlg
 
