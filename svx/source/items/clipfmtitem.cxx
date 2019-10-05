@@ -87,6 +87,8 @@ bool SvxClipboardFormatItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nM
 
 bool SvxClipboardFormatItem::operator==( const SfxPoolItem& rComp ) const
 {
+    if (!SfxPoolItem::operator==(rComp))
+        return false;
     const SvxClipboardFormatItem& rCmp = static_cast<const SvxClipboardFormatItem&>(rComp);
     if(rCmp.pImpl->aFmtNms.size() != pImpl->aFmtNms.size())
         return false;

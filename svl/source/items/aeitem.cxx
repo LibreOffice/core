@@ -62,10 +62,9 @@ void SfxAllEnumItem::SetTextByPos( sal_uInt16 nPos, const OUString &rText )
 
 bool SfxAllEnumItem::operator==( const SfxPoolItem& rCmp ) const
 {
-    assert(dynamic_cast< const SfxAllEnumItem* >(&rCmp) && "operator==Types not matching");
-    const SfxAllEnumItem& rOther = static_cast<const SfxAllEnumItem&>(rCmp);
     if (!SfxPoolItem::operator==(rCmp))
         return false;
+    const SfxAllEnumItem& rOther = static_cast<const SfxAllEnumItem&>(rCmp);
     return m_Values == rOther.m_Values;
 }
 

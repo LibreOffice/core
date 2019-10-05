@@ -52,9 +52,8 @@ namespace offapp
 
     bool DriverPoolingSettingsItem::operator==( const SfxPoolItem& _rCompare ) const
     {
-        const DriverPoolingSettingsItem* pItem = dynamic_cast<const DriverPoolingSettingsItem*>( &_rCompare );
-        if (!pItem)
-            return false;
+        assert(SfxPoolItem::operator==(_rCompare));
+        const DriverPoolingSettingsItem* pItem = static_cast<const DriverPoolingSettingsItem*>( &_rCompare );
 
         if (m_aSettings.size() != pItem->m_aSettings.size())
             return false;

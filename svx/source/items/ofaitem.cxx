@@ -28,7 +28,8 @@ OfaPtrItem::OfaPtrItem( sal_uInt16 _nWhich, void *_pPtr )
 
 bool OfaPtrItem::operator==( const SfxPoolItem& rItem) const
 {
-    return static_cast<const OfaPtrItem&>(rItem).pPtr == pPtr;
+    return SfxPoolItem::operator==(rItem) &&
+        static_cast<const OfaPtrItem&>(rItem).pPtr == pPtr;
 }
 
 SfxPoolItem* OfaPtrItem::Clone( SfxItemPool * ) const

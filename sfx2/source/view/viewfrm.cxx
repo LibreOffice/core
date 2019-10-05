@@ -1745,7 +1745,8 @@ void SfxViewFrame::DoAdjustPosSizePixel //! divide on Inner.../Outer...
 
 bool SfxViewFrameItem::operator==( const SfxPoolItem &rItem ) const
 {
-    return dynamic_cast<const SfxViewFrameItem&>(rItem).pFrame == pFrame;
+    return SfxPoolItem::operator==(rItem) &&
+        static_cast<const SfxViewFrameItem&>(rItem).pFrame == pFrame;
 }
 
 SfxPoolItem* SfxViewFrameItem::Clone( SfxItemPool *) const

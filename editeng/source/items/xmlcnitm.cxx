@@ -53,9 +53,8 @@ SvXMLAttrContainerItem::~SvXMLAttrContainerItem()
 
 bool SvXMLAttrContainerItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( dynamic_cast< const SvXMLAttrContainerItem* >(&rItem) !=  nullptr,
-               "SvXMLAttrContainerItem::operator ==(): Bad type");
-    return *pImpl == *static_cast<const SvXMLAttrContainerItem&>(rItem).pImpl;
+    return SfxPoolItem::operator==(rItem) &&
+        *pImpl == *static_cast<const SvXMLAttrContainerItem&>(rItem).pImpl;
 }
 
 bool SvXMLAttrContainerItem::GetPresentation(

@@ -79,7 +79,6 @@ bool SwFormatFollowTextFlow::QueryValue(css::uno::Any& rVal, sal_uInt8 aInt) con
 
 bool SwFormatFollowTextFlow::operator==(const SfxPoolItem& rItem) const
 {
-    assert(dynamic_cast<const SwFormatFollowTextFlow*>(&rItem) != nullptr);
     return SfxBoolItem::operator==(rItem)
            && mbLayoutInCell == static_cast<SwFormatFollowTextFlow const*>(&rItem)->mbLayoutInCell;
 }

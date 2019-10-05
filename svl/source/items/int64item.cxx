@@ -18,7 +18,7 @@ SfxInt64Item::~SfxInt64Item() {}
 
 bool SfxInt64Item::operator== ( const SfxPoolItem& rItem ) const
 {
-    return mnValue == static_cast<const SfxInt64Item&>(rItem).mnValue;
+    return SfxPoolItem::operator==(rItem) && mnValue == static_cast<const SfxInt64Item&>(rItem).mnValue;
 }
 
 bool SfxInt64Item::GetPresentation(

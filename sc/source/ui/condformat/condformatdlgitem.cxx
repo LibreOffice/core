@@ -27,8 +27,9 @@ ScCondFormatDlgItem::~ScCondFormatDlgItem()
 {
 }
 
-bool ScCondFormatDlgItem::operator==(const SfxPoolItem& /*rItem*/) const
+bool ScCondFormatDlgItem::operator==(const SfxPoolItem& rItem) const
 {
+    assert(SfxPoolItem::operator==(rItem)); (void)rItem;
     return false;
 }
 
