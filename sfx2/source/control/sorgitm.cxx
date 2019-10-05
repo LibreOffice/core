@@ -42,8 +42,7 @@ SfxPoolItem* SfxScriptOrganizerItem::Clone( SfxItemPool * ) const
 
 bool SfxScriptOrganizerItem::operator==( const SfxPoolItem& rItem) const
 {
-     return typeid(rItem) == typeid(*this) &&
-         SfxStringItem::operator==(rItem) &&
+     return SfxStringItem::operator==(rItem) &&
          aLanguage == static_cast<const SfxScriptOrganizerItem &>(rItem).aLanguage;
 }
 

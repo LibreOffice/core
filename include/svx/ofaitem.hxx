@@ -48,7 +48,8 @@ public:
     {}
     virtual bool operator==( const SfxPoolItem& rItem ) const override
     {
-        return mxRef == static_cast<OfaRefItem<reference_type> const &>(rItem).mxRef;
+        return SfxPoolItem::operator==(rItem)
+            && mxRef == static_cast<OfaRefItem<reference_type> const &>(rItem).mxRef;
     }
     virtual SfxPoolItem* Clone( SfxItemPool* /*pPool = 0*/ ) const override
     {

@@ -139,7 +139,7 @@ SwMsgPoolItem::SwMsgPoolItem( sal_uInt16 nWhch )
 
 bool SwMsgPoolItem::operator==( const SfxPoolItem& ) const
 {
-    OSL_FAIL( "SwMsgPoolItem knows no ==" );
+    assert( false && "SwMsgPoolItem knows no ==" );
     return false;
 }
 

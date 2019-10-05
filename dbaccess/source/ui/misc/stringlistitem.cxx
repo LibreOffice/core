@@ -39,8 +39,10 @@ OStringListItem::OStringListItem(const OStringListItem& _rSource)
 
 bool OStringListItem::operator==(const SfxPoolItem& _rItem) const
 {
-    const OStringListItem* pCompare = dynamic_cast<const OStringListItem*>( &_rItem );
-    if ((!pCompare) || (pCompare->m_aList.getLength() != m_aList.getLength()))
+    if (!SfxPoolItem::operator==(_rItem))
+        return false;
+    const OStringListItem* pCompare = static_cast<const OStringListItem*>( &_rItem );
+    if (pCompare->m_aList.getLength() != m_aList.getLength())
         return false;
 
     // compare all strings individually
