@@ -966,7 +966,8 @@ void SwFltAnchor::SetFrameFormat(SwFrameFormat * _pFrameFormat)
 
 bool SwFltAnchor::operator==(const SfxPoolItem& rItem) const
 {
-    return pFrameFormat == static_cast<const SwFltAnchor&>(rItem).pFrameFormat;
+    return SfxPoolItem::operator==(rItem) &&
+        pFrameFormat == static_cast<const SwFltAnchor&>(rItem).pFrameFormat;
 }
 
 SfxPoolItem* SwFltAnchor::Clone(SfxItemPool*) const
@@ -994,7 +995,8 @@ void SwFltAnchorListener::Notify(const SfxHint& rHint)
 // methods of SwFltRedline follow
 bool SwFltRedline::operator==(const SfxPoolItem& rItem) const
 {
-    return this == &rItem;
+    return SfxPoolItem::operator==(rItem) &&
+        this == &rItem;
 }
 
 SfxPoolItem* SwFltRedline::Clone( SfxItemPool* ) const
@@ -1026,8 +1028,9 @@ SwFltBookmark::SwFltBookmark( const OUString& rNa, const OUString& rVa,
 
 bool SwFltBookmark::operator==(const SfxPoolItem& rItem) const
 {
-    return ( maName == static_cast<const SwFltBookmark&>(rItem).maName)
-            && (mnHandle == static_cast<const SwFltBookmark&>(rItem).mnHandle);
+    return SfxPoolItem::operator==(rItem)
+        && maName == static_cast<const SwFltBookmark&>(rItem).maName
+        && mnHandle == static_cast<const SwFltBookmark&>(rItem).mnHandle;
 }
 
 SfxPoolItem* SwFltBookmark::Clone(SfxItemPool*) const
@@ -1085,7 +1088,8 @@ SwFltTOX::SwFltTOX(SwTOXBase* pBase)
 
 bool SwFltTOX::operator==(const SfxPoolItem& rItem) const
 {
-    return m_xTOXBase.get() == static_cast<const SwFltTOX&>(rItem).m_xTOXBase.get();
+    return SfxPoolItem::operator==(rItem) &&
+        m_xTOXBase.get() == static_cast<const SwFltTOX&>(rItem).m_xTOXBase.get();
 }
 
 SfxPoolItem* SwFltTOX::Clone(SfxItemPool*) const

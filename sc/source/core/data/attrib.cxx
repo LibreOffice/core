@@ -101,8 +101,7 @@ ScMergeAttr::~ScMergeAttr()
 
 bool ScMergeAttr::operator==( const SfxPoolItem& rItem ) const
 {
-    OSL_ENSURE( Which() != rItem.Which() || typeid(*this) == typeid(rItem), "which ==, type !=" );
-    return (Which() == rItem.Which())
+    return SfxPoolItem::operator==(rItem)
              && (nColMerge == static_cast<const ScMergeAttr&>(rItem).nColMerge)
              && (nRowMerge == static_cast<const ScMergeAttr&>(rItem).nRowMerge);
 }
@@ -333,8 +332,7 @@ bool ScProtectionAttr::GetPresentation
 
 bool ScProtectionAttr::operator==( const SfxPoolItem& rItem ) const
 {
-    OSL_ENSURE( Which() != rItem.Which() || typeid(*this) == typeid(rItem), "which ==, type !=" );
-    return (Which() == rItem.Which())
+    return SfxPoolItem::operator==(rItem)
              && (bProtection == static_cast<const ScProtectionAttr&>(rItem).bProtection)
              && (bHideFormula == static_cast<const ScProtectionAttr&>(rItem).bHideFormula)
              && (bHideCell == static_cast<const ScProtectionAttr&>(rItem).bHideCell)
@@ -689,6 +687,8 @@ ScCondFormatItem::~ScCondFormatItem()
 
 bool ScCondFormatItem::operator==( const SfxPoolItem& rCmp ) const
 {
+    if (!SfxPoolItem::operator==(rCmp))
+        return false;
     auto const & other = static_cast<const ScCondFormatItem&>(rCmp);
     if (maIndex.empty() && other.maIndex.empty())
         return true;

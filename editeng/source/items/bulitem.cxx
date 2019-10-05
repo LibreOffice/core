@@ -87,7 +87,7 @@ void SvxBulletItem::CopyValidProperties( const SvxBulletItem& rCopyFrom )
 
 bool SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT(dynamic_cast< const SvxBulletItem* >(&rItem) !=  nullptr,"operator==Types not matching");
+    assert(SfxPoolItem::operator==(rItem));
     const SvxBulletItem& rBullet = static_cast<const SvxBulletItem&>(rItem);
     // Compare with ValidMask, otherwise no put possible in an AttrSet if the
     // item differs only in terms of the ValidMask from an existing one.

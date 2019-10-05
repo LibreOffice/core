@@ -415,8 +415,9 @@ SfxFrameItem::SfxFrameItem( SfxFrame *p ):
 
 bool SfxFrameItem::operator==( const SfxPoolItem &rItem ) const
 {
-     return static_cast<const SfxFrameItem&>(rItem).pFrame == pFrame &&
-         static_cast<const SfxFrameItem&>(rItem).wFrame == wFrame;
+     return SfxPoolItem::operator==(rItem) &&
+        static_cast<const SfxFrameItem&>(rItem).pFrame == pFrame &&
+        static_cast<const SfxFrameItem&>(rItem).wFrame == wFrame;
 }
 
 SfxPoolItem* SfxFrameItem::Clone( SfxItemPool *) const
@@ -470,8 +471,9 @@ SfxUnoAnyItem::SfxUnoAnyItem( sal_uInt16 nWhichId, const css::uno::Any& rAny )
     aValue = rAny;
 }
 
-bool SfxUnoAnyItem::operator==( const SfxPoolItem& /*rItem*/ ) const
+bool SfxUnoAnyItem::operator==( const SfxPoolItem& rItem ) const
 {
+    assert(SfxPoolItem::operator==(rItem)); (void)rItem;
     return false;
 }
 
@@ -506,7 +508,8 @@ SfxUnoFrameItem::SfxUnoFrameItem( sal_uInt16 nWhichId, const css::uno::Reference
 
 bool SfxUnoFrameItem::operator==( const SfxPoolItem& i_rItem ) const
 {
-    return dynamic_cast< const SfxUnoFrameItem* >(&i_rItem)  !=  nullptr && static_cast< const SfxUnoFrameItem& >( i_rItem ).m_xFrame == m_xFrame;
+    return SfxPoolItem::operator==(i_rItem) &&
+        static_cast< const SfxUnoFrameItem& >( i_rItem ).m_xFrame == m_xFrame;
 }
 
 SfxPoolItem* SfxUnoFrameItem::Clone( SfxItemPool* ) const

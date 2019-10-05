@@ -87,9 +87,10 @@ SfxPoolItem* MediaItem::Clone( SfxItemPool*) const
   return nullptr;
 }
 
-bool MediaItem::operator==( const SfxPoolItem& ) const
+bool MediaItem::operator==( const SfxPoolItem& rItem ) const
 {
-  return false;
+    assert(SfxPoolItem::operator==(rItem)); (void)rItem;
+    return false;
 }
 
 } // namespace avmedia

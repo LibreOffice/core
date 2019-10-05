@@ -38,13 +38,6 @@ SvxWritingModeItem::~SvxWritingModeItem()
 {
 }
 
-bool SvxWritingModeItem::operator==( const SfxPoolItem& rCmp ) const
-{
-    assert(SfxPoolItem::operator==(rCmp));
-
-    return GetValue() == static_cast<const SvxWritingModeItem&>(rCmp).GetValue();
-}
-
 SfxPoolItem* SvxWritingModeItem::Clone( SfxItemPool * ) const
 {
     return new SvxWritingModeItem( *this );

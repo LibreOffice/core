@@ -51,8 +51,8 @@ SfxPoolItem*  SwPageFootnoteInfoItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 bool SwPageFootnoteInfoItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( Which() == rAttr.Which(), "no equal attributes" );
-    return ( aFootnoteInfo == static_cast<const SwPageFootnoteInfoItem&>(rAttr).GetPageFootnoteInfo());
+    return SfxPoolItem::operator==(rAttr)
+        && aFootnoteInfo == static_cast<const SwPageFootnoteInfoItem&>(rAttr).aFootnoteInfo;
 }
 
 bool SwPageFootnoteInfoItem::GetPresentation
@@ -204,9 +204,8 @@ SfxPoolItem* SwPtrItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 bool SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    assert(SfxPoolItem::operator==(rAttr));
-    const SwPtrItem& rItem = static_cast<const SwPtrItem&>(rAttr);
-    return ( pMisc == rItem.pMisc );
+    return SfxPoolItem::operator==(rAttr)
+        && pMisc == static_cast<const SwPtrItem&>(rAttr).pMisc;
 }
 
 // SwUINumRuleItem for the NumTabPages of the FormatNumRule/Styleists
@@ -233,8 +232,8 @@ SfxPoolItem*  SwUINumRuleItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 bool SwUINumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    assert(SfxPoolItem::operator==(rAttr));
-    return *pRule == *static_cast<const SwUINumRuleItem&>(rAttr).pRule;
+    return SfxPoolItem::operator==(rAttr)
+        && *pRule == *static_cast<const SwUINumRuleItem&>(rAttr).pRule;
 }
 
 bool SwUINumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
@@ -270,9 +269,8 @@ SfxPoolItem* SwPaMItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 bool SwPaMItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    assert(SfxPoolItem::operator==(rAttr));
-    const SwPaMItem& rItem = static_cast<const SwPaMItem&>(rAttr);
-    return ( m_pPaM == rItem.m_pPaM );
+    return SfxPoolItem::operator==(rAttr)
+        && m_pPaM ==  static_cast<const SwPaMItem&>(rAttr).m_pPaM;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

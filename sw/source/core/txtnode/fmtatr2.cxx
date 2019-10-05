@@ -562,9 +562,8 @@ SwFormatMeta::~SwFormatMeta()
 
 bool SwFormatMeta::operator==( const SfxPoolItem & i_rOther ) const
 {
-    assert(SfxPoolItem::operator==(i_rOther));
     return SfxPoolItem::operator==( i_rOther )
-        && (m_pMeta == static_cast<SwFormatMeta const &>( i_rOther ).m_pMeta);
+        && m_pMeta == static_cast<SwFormatMeta const &>( i_rOther ).m_pMeta;
 }
 
 SfxPoolItem * SwFormatMeta::Clone( SfxItemPool * /*pPool*/ ) const

@@ -302,7 +302,7 @@ SfxPoolItem* SfxDocumentInfoItem::Clone( SfxItemPool * ) const
 
 bool SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
 {
-    if (!(typeid(rItem) == typeid(*this) && SfxStringItem::operator==(rItem)))
+    if (!SfxStringItem::operator==(rItem))
         return false;
     const SfxDocumentInfoItem& rInfoItem(static_cast<const SfxDocumentInfoItem&>(rItem));
 

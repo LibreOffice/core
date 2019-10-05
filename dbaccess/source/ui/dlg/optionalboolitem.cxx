@@ -31,11 +31,8 @@ namespace dbaui
 
     bool OptionalBoolItem::operator==( const SfxPoolItem& _rItem ) const
     {
-        const OptionalBoolItem* pCompare = dynamic_cast<const OptionalBoolItem*>( &_rItem  );
-        if ( !pCompare )
-            return false;
-
-        return m_aValue == pCompare->m_aValue;
+        return SfxPoolItem::operator==(_rItem) &&
+            static_cast<const OptionalBoolItem&>( _rItem  ).m_aValue == m_aValue;
     }
 
     SfxPoolItem* OptionalBoolItem::Clone( SfxItemPool* /*_pPool*/ ) const

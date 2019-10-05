@@ -1064,8 +1064,8 @@ DbuTypeCollectionItem::DbuTypeCollectionItem(const DbuTypeCollectionItem& _rSour
 
 bool DbuTypeCollectionItem::operator==(const SfxPoolItem& _rItem) const
 {
-    const DbuTypeCollectionItem* pCompare = dynamic_cast<const DbuTypeCollectionItem*>( &_rItem );
-    return pCompare && (pCompare->getCollection() == getCollection());
+    return SfxPoolItem::operator==(_rItem) &&
+        static_cast<const DbuTypeCollectionItem&>( _rItem ).getCollection() == getCollection();
 }
 
 SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* /*_pPool*/) const
