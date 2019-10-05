@@ -869,7 +869,6 @@ WinSalFrame::WinSalFrame()
     mbPropertiesStored  = false;
 
     memset( &maState, 0, sizeof( SalFrameState ) );
-    maSysData.nSize     = sizeof( SystemEnvData );
 
     memset( &maGeometry, 0, sizeof( maGeometry ) );
 

@@ -31,7 +31,6 @@ class VCL_DLLPUBLIC SvpSalObject : public SalObject
 public:
     SystemEnvData m_aSystemChildData;
 
-    SvpSalObject();
     virtual ~SvpSalObject() override;
 
     // override all pure virtual methods

@@ -43,7 +43,6 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData const * pWi
     mnWidth( 20 ),
     mnHeight( 20 )
 {
-    maSysData.nSize = sizeof( maSysData );
     maSysData.mpNSView = nullptr;
     maSysData.mbOpenGL = false;
 
