@@ -21,6 +21,7 @@
 
 #include <cassert>
 #include <climits>
+#include <map>
 
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -182,11 +183,22 @@ Span XmlReader::getAttributeValue(bool fullyNormalize) {
 }
 
 int XmlReader::getNamespaceId(Span const & prefix) const {
+    static std::map<OUString, int> cacheNSIds_;
+    OUString spanString = prefix.convertFromUtf8();
+
+    if (auto it = cacheNSIds_.find(spanString); it != cacheNSIds_.end())
+    {
+        return it->second;
+    }
+
     auto i = std::find_if(namespaces_.crbegin(), namespaces_.crend(),
         [&prefix](const NamespaceData& rNamespaceData) { return prefix.equals(rNamespaceData.prefix); });
 
     if (i != namespaces_.rend())
+    {
+        cacheNSIds_[spanString]= i->nsId;
         return i->nsId;
+    }
 
     return NAMESPACE_UNKNOWN;
 }
