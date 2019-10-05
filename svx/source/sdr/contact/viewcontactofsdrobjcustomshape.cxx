@@ -94,6 +94,16 @@ namespace sdr
                         aTextRange.getMinX() + aTranslation.getX(), aTextRange.getMinY() + aTranslation.getY(),
                         aTextRange.getMaxX() + aTranslation.getX(), aTextRange.getMaxY() + aTranslation.getY());
                 }
+
+                // NbcMirror() of SdrTextObj (from which SdrObjCustomShape is derived), adds a
+                // 180deg rotation around the shape center to GeoStat.nRotationAngle. So remove here the
+                // 180° rotation, which was added by GetTextBounds().
+                if(GetCustomShapeObj().IsMirroredY())
+                {
+                    basegfx::B2DHomMatrix aRotMatrix(basegfx::utils::createRotateAroundPoint(
+                        aObjectRange.getCenterX(), aObjectRange.getCenterY(), F_PI));
+                    aTextRange.transform(aRotMatrix);
+                }
             }
 
             return aTextRange;
@@ -167,19 +177,6 @@ namespace sdr
                     }
                     // give text object a size
                     aTextBoxMatrix.scale(aTextRange.getWidth(), aTextRange.getHeight());
-
-                    // NbcMirror() of SdrTextObj (from which SdrObjCustomShape is derived), adds a
-                    // 180deg rotation around the shape center to the text box. If aTextRange differs
-                    // from aObjectRange, that is not the position needed for mirroring. We
-                    // translate the text box here so, that it is at the correct position after rotation.
-                    if(GetCustomShapeObj().IsMirroredY())
-                    {
-                        aTextBoxMatrix.translate(
-                                aObjectRange.getWidth() - aTextRange.getWidth()
-                                - 2 * (aTextRange.getMinX() - aObjectRange.getMinimum().getX()),
-                                aObjectRange.getHeight() - aTextRange.getHeight()
-                                - 2 * (aTextRange.getMinY() - aObjectRange.getMinimum().getY()));
-                    }
 
                     // check if we have a rotation/shear at all to take care of
                     const double fExtraTextRotation(GetCustomShapeObj().GetExtraTextRotation());
