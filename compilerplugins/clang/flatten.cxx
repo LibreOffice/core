@@ -474,7 +474,10 @@ std::string stripOpenAndCloseBrace(std::string s)
 {
     size_t i = s.find("{");
     if (i == std::string::npos)
-        throw "did not find {";
+    {
+        assert( !"did not find {" );
+        abort();
+    }
 
     ++i;
     // strip to line end
@@ -486,7 +489,10 @@ std::string stripOpenAndCloseBrace(std::string s)
 
     i = s.rfind("}");
     if (i == std::string::npos)
-        throw "did not find }";
+    {
+        assert( !"did not find }" );
+        abort();
+    }
     --i;
     while (s[i] == ' ')
         --i;
