@@ -69,7 +69,6 @@
 #include <unotools/securityoptions.hxx>
 #include <rtl/uri.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/waitobj.hxx>
@@ -1057,7 +1056,6 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
             {
                 // no help found -> try with parent help id.
                 vcl::Window* pParent = pWindow->GetParent();
-                bool bTriedTabPage = false;
                 while ( pParent )
                 {
                     OString aHelpId = pParent->GetHelpId();
@@ -1074,20 +1072,6 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
                         {
                             // create help url of start page ( helpid == 0 -> start page)
                             aHelpURL = CreateHelpURL( OUString(), aHelpModuleName );
-
-                        }
-                        else if (pParent->IsDialog() && !bTriedTabPage)
-                        {
-                            //During help fallback, before we ask a dialog for its help
-                            //see if it has a TabControl and ask the active tab of
-                            //that for help
-                            bTriedTabPage = true;
-                            Dialog *pDialog = static_cast<Dialog*>(pParent);
-                            TabControl *pCtrl = pDialog->hasBuilder() ? pDialog->get<TabControl>("tabcontrol") : nullptr;
-                            TabPage* pTabPage = pCtrl ? pCtrl->GetTabPage(pCtrl->GetCurPageId()) : nullptr;
-                            vcl::Window *pTabChild = pTabPage ? pTabPage->GetWindow(GetWindowType::FirstChild) : nullptr;
-                            if (pTabChild)
-                                pParent = pTabChild;
                         }
                     }
                 }
