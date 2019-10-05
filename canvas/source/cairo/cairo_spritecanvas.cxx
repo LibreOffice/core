@@ -65,7 +65,7 @@ namespace cairocanvas
            4: XWindow for creating Window (or empty for VirtualDevice)
            5: SystemGraphicsData as a streamed Any
          */
-        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 4 &&
+        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 5 &&
                              maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER &&
                              maArguments[4].getValueTypeClass() == uno::TypeClass_INTERFACE,
                              "CairoSpriteCanvas::initialize: wrong number of arguments, or wrong types" );
