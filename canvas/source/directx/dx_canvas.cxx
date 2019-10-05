@@ -87,12 +87,12 @@ namespace dxcanvas
         // At index 1, we expect a HWND handle here, containing a
         // pointer to a valid window, on which to output
         // At index 2, we expect the current window bound rect
-        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 6 &&
-                             maArguments[5].getValueTypeClass() == uno::TypeClass_SEQUENCE,
+        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 5 &&
+                             maArguments[4].getValueTypeClass() == uno::TypeClass_SEQUENCE,
                              "Canvas::initialize: wrong number of arguments, or wrong types" );
 
         uno::Sequence<sal_Int8> aSeq;
-        maArguments[5] >>= aSeq;
+        maArguments[4] >>= aSeq;
 
         const SystemGraphicsData* pSysData=reinterpret_cast<const SystemGraphicsData*>(aSeq.getConstArray());
         if( !pSysData || !pSysData->hDC )
@@ -148,12 +148,12 @@ namespace dxcanvas
         // At index 1, we expect a HWND handle here, containing a
         // pointer to a valid window, on which to output
         // At index 2, we expect the current window bound rect
-        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 6 &&
-                             maArguments[5].getValueTypeClass() == uno::TypeClass_SEQUENCE,
+        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 5 &&
+                             maArguments[4].getValueTypeClass() == uno::TypeClass_SEQUENCE,
                              "Canvas::initialize: wrong number of arguments, or wrong types" );
 
         uno::Sequence<sal_Int8> aSeq;
-        maArguments[5] >>= aSeq;
+        maArguments[4] >>= aSeq;
 
         const SystemGraphicsData* pSysData=reinterpret_cast<const SystemGraphicsData*>(aSeq.getConstArray());
         if( !pSysData || !pSysData->hDC )

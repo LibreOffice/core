@@ -50,25 +50,24 @@ namespace oglcanvas
 
         /* aArguments:
            0: ptr to creating instance (Window or VirtualDevice)
-           1: SystemEnvData as a streamed Any (or empty for VirtualDevice)
-           2: current bounds of creating instance
-           3: bool, denoting always on top state for Window (always false for VirtualDevice)
-           4: XWindow for creating Window (or empty for VirtualDevice)
-           5: SystemGraphicsData as a streamed Any
+           1: current bounds of creating instance
+           2: bool, denoting always on top state for Window (always false for VirtualDevice)
+           3: XWindow for creating Window (or empty for VirtualDevice)
+           4: SystemGraphicsData as a streamed Any
          */
-        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 5 &&
-                             maArguments[4].getValueTypeClass() == uno::TypeClass_INTERFACE,
+        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 4 &&
+                             maArguments[3].getValueTypeClass() == uno::TypeClass_INTERFACE,
                              "OpenGL SpriteCanvas::initialize: wrong number of arguments, or wrong types" );
 
         uno::Reference< awt::XWindow > xParentWindow;
-        maArguments[4] >>= xParentWindow;
+        maArguments[3] >>= xParentWindow;
         VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
         if( !pParentWindow )
             throw lang::NoSupportException(
                 "Parent window not VCL window, or canvas out-of-process!", nullptr);
 
         awt::Rectangle aRect;
-        maArguments[2] >>= aRect;
+        maArguments[1] >>= aRect;
 
         // setup helper
         maDeviceHelper.init( *pParentWindow,
