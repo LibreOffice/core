@@ -56,7 +56,6 @@
 
 class SwInsertAbstractDlg;
 class SwAsciiFilterDlg;
-class Dialog;
 class SwBreakDlg;
 class SwMultiTOXMarkDlg;
 class SwSortDlg;
@@ -84,26 +83,6 @@ namespace sw
 class DropDownFieldDialog;
 class DropDownFormFieldDialog;
 class DateFormFieldDialog;
-}
-
-#define DECL_ABSTDLG_BASE(Class,DialogClass)        \
-private:                                          \
-    ScopedVclPtr<DialogClass> pDlg;                 \
-public:                                             \
-    explicit        Class( DialogClass* p)          \
-                     : pDlg(p)                      \
-                     {}                             \
-    virtual short   Execute() override;             \
-    virtual bool    StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
-
-#define IMPL_ABSTDLG_BASE(Class)                    \
-short Class::Execute()                              \
-{                                                   \
-    return pDlg->Execute();                         \
-}                                                   \
-bool Class::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) \
-{ \
-    return pDlg->StartExecuteAsync(rCtx); \
 }
 
 class SwWordCountFloatDlg;
