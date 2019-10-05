@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_c42c6349",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-05T11:32:01Z",
+      "side": 1,
+      "message": "see \u003chttps://gcc.gnu.org/bugzilla/show_bug.cgi?id\u003d92001\u003e \"missing -Wclass-memaccess with array as first argument to memset\"",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 46
+      },
+      "revId": "d03041e19215592f21ba1222d3cfa29e1f94260a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
