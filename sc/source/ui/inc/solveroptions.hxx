@@ -67,7 +67,7 @@ class ScSolverOptionsDialog : public weld::GenericDialogController
 
     DECL_LINK( EngineSelectHdl, weld::ComboBox&, void );
     DECL_LINK( SettingsSelHdl, weld::TreeView&, void );
-    DECL_LINK( SettingsDoubleClickHdl, weld::TreeView&, void );
+    DECL_LINK( SettingsDoubleClickHdl, weld::TreeView&, bool );
     DECL_LINK( ButtonHdl, weld::Button&, void );
 
     void    ReadFromComponent();

@@ -408,7 +408,7 @@ protected:
 
     DECL_LINK(MoveHdl, weld::Button&, void);
     DECL_LINK(SelectFunctionHdl, weld::TreeView&, void);
-    DECL_LINK(FunctionDoubleClickHdl, weld::TreeView&, void);
+    DECL_LINK(FunctionDoubleClickHdl, weld::TreeView&, bool);
     DECL_LINK(SelectSaveInLocation, weld::ComboBox&, void);
     DECL_LINK(SelectElementHdl, weld::ComboBox&, void);
     DECL_LINK(ImplUpdateDataHdl, Timer*, void);

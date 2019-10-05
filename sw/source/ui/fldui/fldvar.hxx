@@ -59,7 +59,7 @@ class SwFieldVarPage : public SwFieldPage
     DECL_LINK( TBClickHdl, weld::Button&, void );
     DECL_LINK( ChapterHdl, weld::ComboBox&, void );
     DECL_LINK( SeparatorHdl, weld::Entry&, void );
-    DECL_LINK( SubTypeInsertHdl, weld::TreeView&, void );
+    DECL_LINK( SubTypeInsertHdl, weld::TreeView&, bool );
     void SubTypeHdl(const weld::TreeView*);
 
     void                UpdateSubType();

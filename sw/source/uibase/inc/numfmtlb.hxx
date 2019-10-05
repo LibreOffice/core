@@ -134,7 +134,7 @@ public:
     int             get_selected_index() const { return mxControl->get_selected_index(); }
     void            set_visible(bool bVisible) { mxControl->set_visible(bVisible); }
     void            select(int nPos) { mxControl->select(nPos); }
-    void            connect_row_activated(const Link<weld::TreeView&, void>& rLink) { mxControl->connect_row_activated(rLink); }
+    void            connect_row_activated(const Link<weld::TreeView&, bool>& rLink) { mxControl->connect_row_activated(rLink); }
 
     void            set_sensitive(bool bSensitive) { mxControl->set_sensitive(bSensitive); }
     void            connect_changed(const Link<weld::TreeView&, void>& rLink) { mxControl->connect_changed(rLink); }

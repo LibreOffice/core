@@ -1553,10 +1553,11 @@ IMPL_LINK(SvxConfigPage, MoveHdl, weld::Button&, rButton, void)
     MoveEntry(&rButton == m_xMoveUpButton.get());
 }
 
-IMPL_LINK_NOARG(SvxConfigPage, FunctionDoubleClickHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(SvxConfigPage, FunctionDoubleClickHdl, weld::TreeView&, bool)
 {
     if (m_xAddCommandButton->get_sensitive())
         m_xAddCommandButton->clicked();
+    return true;
 }
 
 IMPL_LINK_NOARG(SvxConfigPage, SelectFunctionHdl, weld::TreeView&, void)

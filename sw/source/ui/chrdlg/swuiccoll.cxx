@@ -188,9 +188,10 @@ IMPL_LINK(SwCondCollPage, AssignRemoveClickHdl, weld::Button&, rBtn, void)
     AssignRemove(&rBtn);
 }
 
-IMPL_LINK(SwCondCollPage, AssignRemoveTreeListBoxHdl, weld::TreeView&, rBtn, void)
+IMPL_LINK(SwCondCollPage, AssignRemoveTreeListBoxHdl, weld::TreeView&, rBtn, bool)
 {
     AssignRemove(&rBtn);
+    return true;
 }
 
 void SwCondCollPage::AssignRemove(const weld::Widget* pBtn)

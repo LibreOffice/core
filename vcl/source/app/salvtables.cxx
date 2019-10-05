@@ -4402,8 +4402,7 @@ IMPL_LINK_NOARG(SalInstanceTreeView, DoubleClickHdl, SvTreeListBox*, bool)
 {
     if (notify_events_disabled())
         return false;
-    signal_row_activated();
-    return false;
+    return !signal_row_activated();
 }
 
 IMPL_LINK(SalInstanceTreeView, EndDragHdl, HeaderBar*, pHeaderBar, void)

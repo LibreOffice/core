@@ -34,9 +34,10 @@ SwSelGlossaryDlg::~SwSelGlossaryDlg()
 {
 }
 
-IMPL_LINK_NOARG(SwSelGlossaryDlg, DoubleClickHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(SwSelGlossaryDlg, DoubleClickHdl, weld::TreeView&, bool)
 {
     m_xDialog->response(RET_OK);
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

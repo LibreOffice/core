@@ -123,7 +123,7 @@ private:
 
     DECL_LINK( SelectHdl_Impl, weld::TreeView&, void );
     DECL_LINK( ClickHdl_Impl, weld::Button&, void );
-    DECL_LINK( BoxDoubleClickHdl_Impl, weld::TreeView&, void );
+    DECL_LINK( BoxDoubleClickHdl_Impl, weld::TreeView&, bool );
     typedef std::pair<int, int> row_col;
     DECL_LINK( ModulesBoxCheckButtonHdl_Impl, const row_col&, void );
     DECL_LINK( DicsBoxCheckButtonHdl_Impl, const row_col&, void );

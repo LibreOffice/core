@@ -431,7 +431,7 @@ void MacroChooser::CheckButtons()
     }
 }
 
-IMPL_LINK_NOARG(MacroChooser, MacroDoubleClickHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(MacroChooser, MacroDoubleClickHdl, weld::TreeView&, bool)
 {
     SbMethod* pMethod = GetMacro();
     SbModule* pModule = pMethod ? pMethod->GetModule() : nullptr;
@@ -444,17 +444,18 @@ IMPL_LINK_NOARG(MacroChooser, MacroDoubleClickHdl, weld::TreeView&, void)
             Application::CreateMessageDialog(m_xDialog.get(), VclMessageType::Warning,
                                              VclButtonsType::Ok, IDEResId(RID_STR_CANNOTRUNMACRO)));
         xError->run();
-        return;
+        return true;
     }
 
     StoreMacroDescription();
     if (nMode == Recording)
     {
         if (pMethod && !QueryReplaceMacro(pMethod->GetName(), m_xDialog.get()))
-            return;
+            return true;
     }
 
     m_xDialog->response(Macro_OkRun);
+    return true;
 }
 
 IMPL_LINK_NOARG(MacroChooser, MacroSelectHdl, weld::TreeView&, void)

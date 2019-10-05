@@ -34,17 +34,17 @@ void ScPivotLayoutTreeList::Setup(ScPivotLayoutDialog* pParent, SvPivotTreeListT
     meType = eType;
 }
 
-IMPL_LINK_NOARG(ScPivotLayoutTreeList, DoubleClickHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(ScPivotLayoutTreeList, DoubleClickHdl, weld::TreeView&, bool)
 {
     int nEntry = mxControl->get_cursor_index();
     if (nEntry == -1)
-        return;
+        return true;
 
     ScItemValue* pCurrentItemValue = reinterpret_cast<ScItemValue*>(mxControl->get_id(nEntry).toInt64());
     ScPivotFuncData& rCurrentFunctionData = pCurrentItemValue->maFunctionData;
 
     if (mpParent->IsDataElement(rCurrentFunctionData.mnCol))
-        return;
+        return true;
 
     SCCOL nCurrentColumn = rCurrentFunctionData.mnCol;
     ScDPLabelData& rCurrentLabelData = mpParent->GetLabelData(nCurrentColumn);
@@ -62,6 +62,8 @@ IMPL_LINK_NOARG(ScPivotLayoutTreeList, DoubleClickHdl, weld::TreeView&, void)
         pDialog->FillLabelData(rCurrentLabelData);
         rCurrentFunctionData.mnFuncMask = pDialog->GetFuncMask();
     }
+
+    return true;
 }
 
 void ScPivotLayoutTreeList::FillFields(ScPivotFieldVector& rFieldVector)

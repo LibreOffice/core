@@ -71,11 +71,11 @@ ScPivotLayoutTreeListData::ScPivotLayoutTreeListData(std::unique_ptr<weld::TreeV
 ScPivotLayoutTreeListData::~ScPivotLayoutTreeListData()
 {}
 
-IMPL_LINK_NOARG(ScPivotLayoutTreeListData, DoubleClickHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(ScPivotLayoutTreeListData, DoubleClickHdl, weld::TreeView&, bool)
 {
     int nEntry = mxControl->get_cursor_index();
     if (nEntry == -1)
-        return;
+        return true;
 
     ScItemValue* pCurrentItemValue = reinterpret_cast<ScItemValue*>(mxControl->get_id(nEntry).toInt64());
     ScPivotFuncData& rCurrentFunctionData = pCurrentItemValue->maFunctionData;
@@ -106,6 +106,8 @@ IMPL_LINK_NOARG(ScPivotLayoutTreeListData, DoubleClickHdl, weld::TreeView&, void
 
         mxControl->set_text(nEntry, sDataItemName);
     }
+
+    return true;
 }
 
 void ScPivotLayoutTreeListData::FillDataField(ScPivotFieldVector& rDataFields)

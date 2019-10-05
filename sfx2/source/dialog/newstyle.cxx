@@ -49,9 +49,10 @@ IMPL_LINK_NOARG(SfxNewStyleDlg, OKClickHdl, weld::Button&, void)
         m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(SfxNewStyleDlg, OKHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(SfxNewStyleDlg, OKHdl, weld::TreeView&, bool)
 {
     OKClickHdl(*m_xOKBtn);
+    return true;
 }
 
 IMPL_LINK(SfxNewStyleDlg, ModifyHdl, weld::ComboBox&, rBox, void)

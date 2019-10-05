@@ -253,7 +253,7 @@ private:
 
 protected:
     DECL_LINK(RequestingChildrenHdl, const weld::TreeIter&, bool);
-    DECL_LINK(OpenCurrentHdl, weld::TreeView&, void);
+    DECL_LINK(OpenCurrentHdl, weld::TreeView&, bool);
     void                    ImpCreateLibEntries(const weld::TreeIter& rShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation);
     void                    ImpCreateLibSubEntries(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName);
     void                    ImpCreateLibSubEntriesInVBAMode(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );

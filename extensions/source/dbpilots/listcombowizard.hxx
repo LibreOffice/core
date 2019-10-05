@@ -109,7 +109,7 @@ namespace dbp
         virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
         virtual bool        canAdvance() const override;
 
-        DECL_LINK( OnTableDoubleClicked, weld::TreeView&, void );
+        DECL_LINK( OnTableDoubleClicked, weld::TreeView&, bool );
         DECL_LINK( OnTableSelected, weld::TreeView&, void );
     };
 
@@ -125,7 +125,7 @@ namespace dbp
 
     private:
         DECL_LINK( OnFieldSelected, weld::TreeView&, void );
-        DECL_LINK( OnTableDoubleClicked, weld::TreeView&, void );
+        DECL_LINK( OnTableDoubleClicked, weld::TreeView&, bool );
 
         // OWizardPage overridables
         virtual void        initializePage() override;

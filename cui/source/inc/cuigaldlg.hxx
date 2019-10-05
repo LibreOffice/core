@@ -256,7 +256,7 @@ class TPGalleryThemeProperties : public SfxTabPage
     DECL_LINK(ClickTakeAllHdl, weld::Button&, void);
     DECL_LINK(SelectFoundHdl, weld::TreeView&, void);
     DECL_LINK(SelectFileTypeHdl, weld::ComboBox&, void);
-    DECL_LINK(DClickFoundHdl, weld::TreeView&, void);
+    DECL_LINK(DClickFoundHdl, weld::TreeView&, bool);
     DECL_LINK(PreviewTimerHdl, Timer*, void);
     DECL_LINK(DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void);
 

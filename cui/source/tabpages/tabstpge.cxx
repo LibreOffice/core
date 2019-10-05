@@ -615,7 +615,7 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, GetDezCharHdl_Impl, weld::Widget&, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl, weld::TreeView&, void)
+IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl, weld::TreeView&, bool)
 {
     const int nPos = FindCurrentTab();
     if (nPos != -1)
@@ -624,6 +624,7 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl, weld::TreeView&, void)
         m_xNewBtn->set_sensitive(false);
         SetFillAndTabType_Impl();
     }
+    return true;
 }
 
 OUString SvxTabulatorTabPage::FormatTab()

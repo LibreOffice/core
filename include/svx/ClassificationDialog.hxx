@@ -56,10 +56,10 @@ private:
     DECL_LINK(ButtonClicked, weld::Button&, void);
     DECL_LINK(SelectToolboxHdl, weld::ToggleButton&, void);
     DECL_LINK(SelectClassificationHdl, weld::ComboBox&, void);
-    DECL_LINK(SelectMarkingHdl, weld::TreeView&, void);
-    DECL_LINK(SelectIPPartNumbersHdl, weld::TreeView&, void);
+    DECL_LINK(SelectMarkingHdl, weld::TreeView&, bool);
+    DECL_LINK(SelectIPPartNumbersHdl, weld::TreeView&, bool);
     DECL_LINK(SelectRecentlyUsedHdl, weld::ComboBox&, void);
-    DECL_LINK(SelectIPPartHdl, weld::TreeView&, void);
+    DECL_LINK(SelectIPPartHdl, weld::TreeView&, bool);
     DECL_LINK(EditWindowModifiedHdl, LinkParamNone*, void);
     DECL_STATIC_LINK(ClassificationDialog, ExpandedHdl, weld::Expander&, void);
     DECL_STATIC_LINK(ClassificationDialog, KeyInput, const KeyEvent&, bool);

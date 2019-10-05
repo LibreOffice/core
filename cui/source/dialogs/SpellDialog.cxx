@@ -498,9 +498,10 @@ OUString SpellDialog::getReplacementString() const
     return getDotReplacementString(sOrigString, sReplacement);
 }
 
-IMPL_LINK_NOARG(SpellDialog, DoubleClickChangeHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(SpellDialog, DoubleClickChangeHdl, weld::TreeView&, bool)
 {
     ChangeHdl(*m_xChangePB);
+    return true;
 }
 
 IMPL_LINK_NOARG(SpellDialog, ChangeHdl, weld::Button&, void)

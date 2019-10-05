@@ -204,9 +204,10 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, NewHdl, weld::Button&, void)
     openLinkDialog(OUString(),OUString());
 }
 
-IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathBoxDoubleClickHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathBoxDoubleClickHdl, weld::TreeView&, bool)
 {
     EditHdl(*m_xEdit);
+    return true;
 }
 
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, EditHdl, weld::Button&, void)

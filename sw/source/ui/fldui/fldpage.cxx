@@ -300,9 +300,10 @@ void SwFieldPage::RestorePos(weld::TreeView& rLst1)
 }
 
 // Insert new fields
-IMPL_LINK( SwFieldPage, TreeViewInsertHdl, weld::TreeView&, rBox, void )
+IMPL_LINK( SwFieldPage, TreeViewInsertHdl, weld::TreeView&, rBox, bool )
 {
     InsertHdl(&rBox);
+    return true;
 }
 
 void SwFieldPage::InsertHdl(weld::Widget* pBtn)
@@ -338,9 +339,10 @@ void SwFieldPage::EnableInsert(bool bEnable)
     m_bInsert = bEnable;
 }
 
-IMPL_LINK_NOARG(SwFieldPage, NumFormatHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(SwFieldPage, NumFormatHdl, weld::TreeView&, bool)
 {
     InsertHdl(nullptr);
+    return true;
 }
 
 void SwFieldPage::SetWrtShell( SwWrtShell* pShell )

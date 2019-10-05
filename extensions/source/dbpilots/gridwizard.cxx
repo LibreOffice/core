@@ -366,13 +366,12 @@ namespace dbp
         getDialog()->enableButtons(WizardButtonFlags::FINISH, 0 != m_xSelFields->n_children());
     }
 
-    IMPL_LINK(OGridFieldsSelection, OnEntryDoubleClicked, weld::TreeView&, rList, void)
+    IMPL_LINK(OGridFieldsSelection, OnEntryDoubleClicked, weld::TreeView&, rList, bool)
     {
         weld::Button* pSimulateButton = m_xExistFields.get() == &rList ? m_xSelectOne.get() : m_xDeselectOne.get();
         if (pSimulateButton->get_sensitive())
-        {
             OnMoveOneEntry(*pSimulateButton);
-        }
+        return true;
     }
 
     IMPL_LINK_NOARG(OGridFieldsSelection, OnEntrySelected, weld::TreeView&, void)

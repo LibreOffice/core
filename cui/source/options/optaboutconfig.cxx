@@ -557,9 +557,10 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, ResetBtnHdl_Impl, weld::Button&, void )
     Reset();
 }
 
-IMPL_LINK_NOARG(CuiAboutConfigTabPage, DoubleClickHdl_Impl, weld::TreeView&, void)
+IMPL_LINK_NOARG(CuiAboutConfigTabPage, DoubleClickHdl_Impl, weld::TreeView&, bool)
 {
     StandardHdl_Impl(*m_xEditBtn);
+    return true;
 }
 
 IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )

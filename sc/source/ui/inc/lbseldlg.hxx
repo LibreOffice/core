@@ -27,7 +27,7 @@ class ScSelEntryDlg : public weld::GenericDialogController
 private:
     std::unique_ptr<weld::TreeView> m_xLb;
 
-    DECL_LINK(DblClkHdl, weld::TreeView&, void);
+    DECL_LINK(DblClkHdl, weld::TreeView&, bool);
 
 public:
     ScSelEntryDlg(weld::Window* pParent, const std::vector<OUString> &rEntryList);

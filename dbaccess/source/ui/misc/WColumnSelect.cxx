@@ -226,7 +226,7 @@ IMPL_LINK(OWizColumnSelect, ButtonClickHdl, weld::Button&, rButton, void)
         m_xOrgColumnNames->select(0);
 }
 
-IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, weld::TreeView&, rListBox, void )
+IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, weld::TreeView&, rListBox, bool )
 {
     weld::TreeView *pLeft,*pRight;
     if (&rListBox == m_xOrgColumnNames.get())
@@ -259,6 +259,8 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, weld::TreeView&, rListBox, void
         pLeft->remove(*it);
 
     enableButtons();
+
+    return true;
 }
 
 void OWizColumnSelect::clearListBox(weld::TreeView& rListBox)

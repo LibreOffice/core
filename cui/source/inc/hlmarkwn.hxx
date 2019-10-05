@@ -53,7 +53,7 @@ protected:
     int FillTree( const css::uno::Reference< css::container::XNameAccess >& xLinks, const weld::TreeIter* pParentEntry =nullptr );
 
     DECL_LINK( ClickApplyHdl_Impl, weld::Button&, void );
-    DECL_LINK( DoubleClickApplyHdl_Impl, weld::TreeView&, void );
+    DECL_LINK( DoubleClickApplyHdl_Impl, weld::TreeView&, bool );
     DECL_LINK( ClickCloseHdl_Impl, weld::Button&, void );
 
 public:

@@ -7373,11 +7373,22 @@ private:
         pThis->launch_signal_changed();
     }
 
+    void handle_row_activated()
+    {
+        if (signal_row_activated())
+            return;
+        GtkInstanceTreeIter aIter(nullptr);
+        if (!get_cursor(&aIter))
+            return;
+        if (iter_has_child(aIter))
+            get_row_expanded(aIter) ? collapse_row(aIter) : expand_row(aIter);
+    }
+
     static void signalRowActivated(GtkTreeView*, GtkTreePath*, GtkTreeViewColumn*, gpointer widget)
     {
         GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
         SolarMutexGuard aGuard;
-        pThis->signal_row_activated();
+        pThis->handle_row_activated();
     }
 
     virtual bool signal_popup_menu(const CommandEvent& rCEvt) override

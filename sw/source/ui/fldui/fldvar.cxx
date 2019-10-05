@@ -531,7 +531,7 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
     ModifyHdl(*m_xNameED);    // apply/insert/delete status update
 }
 
-IMPL_LINK(SwFieldVarPage, SubTypeInsertHdl, weld::TreeView&, rBox, void)
+IMPL_LINK(SwFieldVarPage, SubTypeInsertHdl, weld::TreeView&, rBox, bool)
 {
     if (!bInit)
     {
@@ -543,11 +543,12 @@ IMPL_LINK(SwFieldVarPage, SubTypeInsertHdl, weld::TreeView&, rBox, void)
             {
                 m_xValueED->replace_selection(m_xSelectionLB->get_text(nSelPos));
                 ModifyHdl(*m_xNameED);
-                return;
+                return true;
             }
         }
     }
     TreeViewInsertHdl(rBox);
+    return true;
 }
 
 // renew types in SelectionBox

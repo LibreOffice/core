@@ -41,7 +41,7 @@ public:
 
     void set_sensitive(bool sensitive) { m_xControl->set_sensitive(sensitive); }
     void set_selection_mode(SelectionMode eMode) { m_xControl->set_selection_mode(eMode); }
-    void connect_row_activated(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_row_activated(rLink); }
+    void connect_row_activated(const Link<weld::TreeView&, bool>& rLink) { m_xControl->connect_row_activated(rLink); }
     int get_height_rows(int nRows) const { return m_xControl->get_height_rows(nRows); }
     void set_size_request(int nWidth, int nHeight) { m_xControl->set_size_request(nWidth, nHeight); }
 
@@ -70,7 +70,7 @@ private:
     sal_Int32 FindBaseItemPos( const OUString& rEntry, sal_Int32 nStartPos ) const;
 
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
-    DECL_LINK(DblClickHdl, weld::TreeView&, void);
+    DECL_LINK(DblClickHdl, weld::TreeView&, bool);
 
 private:
     std::unique_ptr<ScDPFunctionListBox> mxLbFunc;
@@ -103,7 +103,7 @@ public:
 private:
     void                Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
 
-    DECL_LINK( DblClickHdl, weld::TreeView&, void );
+    DECL_LINK( DblClickHdl, weld::TreeView&, bool );
     DECL_LINK( RadioClickHdl, weld::Button&, void );
     DECL_LINK( ClickHdl, weld::Button&, void );
 
@@ -191,7 +191,7 @@ public:
     OUString GetDimensionName() const;
 
 private:
-    DECL_LINK(DblClickHdl, weld::TreeView&, void);
+    DECL_LINK(DblClickHdl, weld::TreeView&, bool);
 
 private:
     typedef std::unordered_map<OUString, long> DimNameIndexMap;

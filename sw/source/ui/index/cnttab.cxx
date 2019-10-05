@@ -3511,7 +3511,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, StdHdl, weld::Button&, void)
     }
 }
 
-IMPL_LINK_NOARG(SwTOXStylesTabPage, DoubleClickHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(SwTOXStylesTabPage, DoubleClickHdl, weld::TreeView&, bool)
 {
     const OUString aTmpName(m_xParaLayLB->get_selected_text());
     SwWrtShell& rSh = static_cast<SwMultiTOXTabDialog*>(GetDialogController())->GetWrtShell();
@@ -3519,6 +3519,8 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, DoubleClickHdl, weld::TreeView&, void)
     if(m_xParaLayLB->get_selected_index() != -1 &&
        (m_xLevelLB->get_selected_index() == 0 || SwMultiTOXTabDialog::IsNoNum(rSh, aTmpName)))
         AssignHdl(*m_xAssignBT);
+
+    return true;
 }
 
 // enable only when selected

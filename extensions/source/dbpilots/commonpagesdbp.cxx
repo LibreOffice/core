@@ -209,10 +209,11 @@ namespace dbp
         }
     }
 
-    IMPL_LINK(OTableSelectionPage, OnListboxDoubleClicked, weld::TreeView&, _rBox, void)
+    IMPL_LINK(OTableSelectionPage, OnListboxDoubleClicked, weld::TreeView&, _rBox, bool)
     {
         if (_rBox.count_selected_rows())
             getDialog()->travelNext();
+        return true;
     }
 
     IMPL_LINK(OTableSelectionPage, OnListboxSelection, weld::TreeView&, _rBox, void)

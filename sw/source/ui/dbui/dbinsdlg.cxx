@@ -605,7 +605,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableToFromHdl, weld::Button&, rButton, void 
     }
 }
 
-IMPL_LINK(SwInsertDBColAutoPilot, DblClickHdl, weld::TreeView&, rBox, void)
+IMPL_LINK(SwInsertDBColAutoPilot, DblClickHdl, weld::TreeView&, rBox, bool)
 {
     weld::Button* pButton = nullptr;
     if( &rBox == m_xLbTextDbColumn.get() )
@@ -617,6 +617,8 @@ IMPL_LINK(SwInsertDBColAutoPilot, DblClickHdl, weld::TreeView&, rBox, void)
 
     if (pButton)
         TableToFromHdl(*pButton);
+
+    return true;
 }
 
 IMPL_LINK_NOARG(SwInsertDBColAutoPilot, TableFormatHdl, weld::Button&, void)

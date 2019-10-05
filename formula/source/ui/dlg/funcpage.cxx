@@ -203,9 +203,10 @@ IMPL_LINK_NOARG(FuncPage, SelTreeViewHdl, weld::TreeView&, void)
     aSelectionLink.Call(*this);
 }
 
-IMPL_LINK_NOARG(FuncPage, DblClkHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(FuncPage, DblClkHdl, weld::TreeView&, bool)
 {
     aDoubleClickLink.Call(*this);
+    return true;
 }
 
 IMPL_LINK_NOARG(FuncPage, ModifyHdl, weld::Entry&, void)

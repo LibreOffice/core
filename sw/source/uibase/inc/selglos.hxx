@@ -26,7 +26,7 @@ class SwSelGlossaryDlg final : public weld::GenericDialogController
     std::unique_ptr<weld::Frame> m_xFrame;
     std::unique_ptr<weld::TreeView> m_xGlosBox;
 
-    DECL_LINK(DoubleClickHdl, weld::TreeView&, void);
+    DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
 public:
     SwSelGlossaryDlg(weld::Window * pParent, const OUString &rShortName);
     virtual ~SwSelGlossaryDlg() override;

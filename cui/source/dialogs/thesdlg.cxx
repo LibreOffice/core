@@ -197,7 +197,7 @@ IMPL_LINK( SvxThesaurusDialog, AlternativesSelectHdl_Impl, weld::TreeView&, rBox
     }
 }
 
-IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, weld::TreeView&, rBox, void )
+IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, weld::TreeView&, rBox, bool )
 {
     int nEntry = rBox.get_selected_index();
     if (nEntry != -1)
@@ -217,6 +217,8 @@ IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, weld::TreeView&,
     //! workaround to set the selection since calling SelectEntryPos within
     //! the double click handler does not work
     Application::PostUserEvent(LINK(this, SvxThesaurusDialog, SelectFirstHdl_Impl));
+
+    return true;
 }
 
 IMPL_LINK_NOARG(SvxThesaurusDialog, SelectFirstHdl_Impl, void *, void)

@@ -966,7 +966,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFoundHdl, weld::TreeView&, void)
     }
 }
 
-IMPL_LINK_NOARG(TPGalleryThemeProperties, DClickFoundHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, DClickFoundHdl, weld::TreeView&, bool)
 {
     if( bInputAllowed )
     {
@@ -975,6 +975,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, DClickFoundHdl, weld::TreeView&, void)
         if (m_xLbxFound->count_selected_rows() == 1 && bEntriesFound)
             ClickTakeHdl(*m_xBtnTake);
     }
+    return true;
 }
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, PreviewTimerHdl, Timer *, void)

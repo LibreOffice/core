@@ -408,21 +408,8 @@ CuiConfigGroupListBox::CuiConfigGroupListBox(std::unique_ptr<weld::TreeView> xTr
     , m_pStylesInfo(nullptr)
     , m_xTreeView(std::move(xTreeView))
 {
-    m_xTreeView->connect_row_activated(LINK(this, CuiConfigGroupListBox, OpenCurrentHdl));
     m_xTreeView->connect_expanding(LINK(this, CuiConfigGroupListBox, ExpandingHdl));
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 35, m_xTreeView->get_height_rows(9));
-}
-
-IMPL_LINK_NOARG(CuiConfigGroupListBox, OpenCurrentHdl, weld::TreeView&, void)
-{
-    std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-    bool bValidIter = m_xTreeView->get_cursor(xIter.get());
-    if (!bValidIter)
-        return;
-    if (!m_xTreeView->get_row_expanded(*xIter))
-        m_xTreeView->expand_row(*xIter);
-    else
-        m_xTreeView->collapse_row(*xIter);
 }
 
 CuiConfigGroupListBox::~CuiConfigGroupListBox()
@@ -1133,10 +1120,11 @@ IMPL_LINK(SvxScriptSelectorDialog, SelectHdl, weld::TreeView&, rCtrl, void)
     UpdateUI();
 }
 
-IMPL_LINK_NOARG(SvxScriptSelectorDialog, FunctionDoubleClickHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(SvxScriptSelectorDialog, FunctionDoubleClickHdl, weld::TreeView&, bool)
 {
     if (m_xOKButton->get_sensitive())
         ClickHdl(*m_xOKButton);
+    return true;
 }
 
 // Check if command is selected and enable the OK button accordingly

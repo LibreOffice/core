@@ -111,7 +111,7 @@ public:
     CuiConfigFunctionListBox(std::unique_ptr<weld::TreeView> xTreeView);
     void set_sensitive(bool bSensitive) { m_xTreeView->set_sensitive(bSensitive); }
     void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_changed(rLink); }
-    void connect_row_activated(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_row_activated(rLink); }
+    void connect_row_activated(const Link<weld::TreeView&, bool>& rLink) { m_xTreeView->connect_row_activated(rLink); }
     void freeze() { m_xTreeView->freeze(); }
     void thaw() { m_xTreeView->thaw(); }
     void append(const OUString& rId, const OUString& rStr, const weld::TreeIter* pParent = nullptr)
@@ -208,7 +208,6 @@ class CuiConfigGroupListBox
     OUString MapCommand2UIName(const OUString& sCommand);
 
     DECL_LINK(ExpandingHdl, const weld::TreeIter&, bool);
-    DECL_LINK(OpenCurrentHdl, weld::TreeView&, void);
 
 public:
     CuiConfigGroupListBox(std::unique_ptr<weld::TreeView> xTreeView);
@@ -250,7 +249,7 @@ class SvxScriptSelectorDialog : public weld::GenericDialogController
 
     DECL_LINK(ClickHdl, weld::Button&, void);
     DECL_LINK(SelectHdl, weld::TreeView&, void);
-    DECL_LINK(FunctionDoubleClickHdl, weld::TreeView&, void);
+    DECL_LINK(FunctionDoubleClickHdl, weld::TreeView&, bool);
 
     void                            UpdateUI();
 

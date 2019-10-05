@@ -69,7 +69,7 @@ private:
 
     DECL_LINK(ViewButtonHdl, weld::Button&, void);
     DECL_LINK(CertificateHighlightHdl, weld::TreeView&, void);
-    DECL_LINK(CertificateSelectHdl, weld::TreeView&, void);
+    DECL_LINK(CertificateSelectHdl, weld::TreeView&, bool);
 
     void ImplShowCertificateDetails();
     void ImplInitialize();

@@ -45,9 +45,10 @@ OUString ScSelEntryDlg::GetSelectedEntry() const
     return m_xLb->get_selected_text();
 }
 
-IMPL_LINK_NOARG(ScSelEntryDlg, DblClkHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(ScSelEntryDlg, DblClkHdl, weld::TreeView&, bool)
 {
     m_xDialog->response(RET_OK);
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

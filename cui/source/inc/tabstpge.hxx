@@ -133,7 +133,7 @@ private:
     DECL_LINK(FillTypeCheckHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(TabTypeCheckHdl_Impl, weld::ToggleButton&, void);
 
-    DECL_LINK(SelectHdl_Impl, weld::TreeView&, void);
+    DECL_LINK(SelectHdl_Impl, weld::TreeView&, bool);
     DECL_LINK(ModifyHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(ReformatHdl_Impl, weld::Widget&, void);
     DECL_LINK(GetFillCharHdl_Impl, weld::Widget&, void);

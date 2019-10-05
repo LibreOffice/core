@@ -85,7 +85,7 @@ private:
 
     DECL_LINK(RegionSelect, weld::TreeView&, void);
     DECL_LINK(TemplateSelect, weld::TreeView&, void);
-    DECL_LINK(DoubleClick, weld::TreeView&, void);
+    DECL_LINK(DoubleClick, weld::TreeView&, bool);
     DECL_LINK(Expand, weld::Expander&, void);
     sal_uInt16  GetSelectedTemplatePos() const;
 

@@ -1270,7 +1270,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
                                          m_xLinguOptionsCLB->get_height_rows(5));
 }
 
-IMPL_LINK(SvxLinguTabPage, BoxDoubleClickHdl_Impl, weld::TreeView&, rBox, void)
+IMPL_LINK(SvxLinguTabPage, BoxDoubleClickHdl_Impl, weld::TreeView&, rBox, bool)
 {
     if (&rBox == m_xLinguModulesCLB.get())
     {
@@ -1284,6 +1284,7 @@ IMPL_LINK(SvxLinguTabPage, BoxDoubleClickHdl_Impl, weld::TreeView&, rBox, void)
     {
         ClickHdl_Impl(*m_xLinguOptionsEditPB);
     }
+    return true;
 }
 
 IMPL_LINK_NOARG(SvxLinguTabPage, PostDblClickHdl_Impl, void*, void)
