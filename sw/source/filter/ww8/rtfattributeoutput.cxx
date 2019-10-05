@@ -2324,8 +2324,8 @@ void RtfAttributeOutput::CharCrossedOut(const SvxCrossedOutItem& rCrossedOut)
 
 void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
 {
-    short nEsc = rEscapement.GetEsc();
-    if (rEscapement.GetProportionalHeight() == DFLT_ESC_PROP)
+    short nEsc = rEscapement.GetEsc(), nProp = rEscapement.GetProportionalHeight();
+    if (DFLT_ESC_PROP == nProp || nProp < 1 || nProp > 100)
     {
         if (DFLT_ESC_SUB == nEsc || DFLT_ESC_AUTO_SUB == nEsc)
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SUB);
@@ -2333,14 +2333,22 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SUPER);
         return;
     }
+    else if (DFLT_ESC_AUTO_SUPER == nEsc)
+    {
+        nEsc = .8 * (100 - nProp);
+    }
+    else if (DFLT_ESC_AUTO_SUB == nEsc)
+    {
+        nEsc = .2 * -(100 - nProp);
+    }
 
     const char* pUpDn;
 
     double fHeight = m_rExport.GetItem(RES_CHRATR_FONTSIZE).GetHeight();
 
-    if (0 < rEscapement.GetEsc())
+    if (0 < nEsc)
         pUpDn = OOO_STRING_SVTOOLS_RTF_UP;
-    else if (0 > rEscapement.GetEsc())
+    else if (0 > nEsc)
     {
         pUpDn = OOO_STRING_SVTOOLS_RTF_DN;
         fHeight = -fHeight;
@@ -2348,22 +2356,10 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
     else
         return;
 
-    short nProp = rEscapement.GetProportionalHeight() * 100;
-    if (DFLT_ESC_AUTO_SUPER == nEsc)
-    {
-        nEsc = 100 - rEscapement.GetProportionalHeight();
-        ++nProp;
-    }
-    else if (DFLT_ESC_AUTO_SUB == nEsc)
-    {
-        nEsc = -100 + rEscapement.GetProportionalHeight();
-        ++nProp;
-    }
-
     m_aStyles.append('{');
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_IGNORE);
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_UPDNPROP);
-    m_aStyles.append(static_cast<sal_Int32>(nProp));
+    m_aStyles.append(static_cast<sal_Int32>(nProp * 100));
     m_aStyles.append('}');
     m_aStyles.append(pUpDn);
 
