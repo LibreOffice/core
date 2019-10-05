@@ -1250,12 +1250,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                 }
                 break;
             case SID_MANAGE_XML_SOURCE:
-                {
-                    SvtMiscOptions aMiscOptions;
-                    if ( !aMiscOptions.IsExperimentalMode() )
-                        rSet.DisableItem( nWhich );
-                }
-            break;
+                break;
         }
         nWhich = aIter.NextWhich();
     }
