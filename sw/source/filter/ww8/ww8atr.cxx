@@ -1397,7 +1397,12 @@ void WW8AttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
             b = 1;
     }
     else if ( DFLT_ESC_AUTO_SUPER == nEsc )
-        nEsc = DFLT_ESC_SUPER;
+    {
+        if ( nProp > 0 && nProp < 101 )
+            nEsc = 100 - nProp;
+        else
+            nEsc = DFLT_ESC_SUPER;
+    }
     else if ( DFLT_ESC_AUTO_SUB == nEsc )
         nEsc = DFLT_ESC_SUB;
 

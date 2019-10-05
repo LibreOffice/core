@@ -180,6 +180,19 @@ DECLARE_WW8EXPORT_TEST(testTdf127316_autoEscapement, "tdf127316_autoEscapement.o
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-33.f, getProperty<float>(getRun(xPara, 2), "CharEscapement"), 3);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf127316_autoEscapement2, "tdf127316_autoEscapement2.odt")
+{
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1, "Base1"), "CharEscapement"), 0);
+    // Font is 80% of 40pt or 32pt, original escapement is 20% or 8pt, so round-trip escapement is 25%.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(25.f, getProperty<float>(getRun(xPara, 2,"AutoSuperscript"), "CharEscapement"), 1);
+    xPara.set( getParagraph(2) );
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1, "Base2"), "CharEscapement"), 0);
+    // font is 20% of 40pt or 8pt, original escapement is 80%, or 32pt, so round-trip escapement is 400%.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(400.f, getProperty<float>(getRun(xPara, 2,"AutoSuperscript"), "CharEscapement"), 1);
+
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf121111_fillStyleNone, "tdf121111_fillStyleNone.docx")
 {
     uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Numbering - First level"),

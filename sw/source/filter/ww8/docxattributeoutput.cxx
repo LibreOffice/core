@@ -6829,7 +6829,12 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
             sIss = OString( "superscript" );
     }
     else if ( DFLT_ESC_AUTO_SUPER == nEsc )
-        nEsc = DFLT_ESC_SUPER;
+    {
+        if ( nProp > 0 && nProp < 101 )
+            nEsc = 100 - nProp;
+        else
+            nEsc = DFLT_ESC_SUPER;
+    }
     else if ( DFLT_ESC_AUTO_SUB == nEsc )
         nEsc = DFLT_ESC_SUB;
 
