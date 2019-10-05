@@ -55,7 +55,6 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     m_nMaxHeight( 0 )
 {
     // SAL_DEBUG("SvpSalFrame::SvpSalFrame: " << this);
-    m_aSystemChildData.nSize        = sizeof( SystemEnvData );
 #ifdef IOS
     // Nothing
 #elif defined ANDROID

@@ -84,8 +84,6 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
     mrClippingPath( nullptr ),
     mnICOptions( InputContextFlags::NONE )
 {
-    maSysData.nSize     = sizeof( SystemEnvData );
-
     mpParent = dynamic_cast<AquaSalFrame*>(pParent);
 
     initWindowAndView();

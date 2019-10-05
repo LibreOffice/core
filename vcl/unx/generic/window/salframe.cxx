@@ -948,7 +948,6 @@ void X11SalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
 const SystemEnvData* X11SalFrame::GetSystemData() const
 {
     X11SalFrame *pFrame = const_cast<X11SalFrame*>(this);
-    pFrame->maSystemChildData.nSize         = sizeof( SystemEnvData );
     pFrame->maSystemChildData.pDisplay      = GetXDisplay();
     pFrame->maSystemChildData.aWindow       = pFrame->GetWindow();
     pFrame->maSystemChildData.pSalFrame     = pFrame;
