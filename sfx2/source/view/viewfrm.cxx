@@ -1315,8 +1315,11 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 if (bShowTipOfTheDay && !Application::IsHeadlessModeEnabled() && !bIsUITest) {
                     const sal_Int32 nLastTipOfTheDay = officecfg::Office::Common::Misc::LastTipOfTheDayShown::get();
                     const sal_Int32 nDay = std::chrono::duration_cast<std::chrono::hours>(t0).count()/24; // days since 1970-01-01
-                    if (nDay-nLastTipOfTheDay > 0) //only once per day
-                        GetDispatcher()->Execute(SID_TIPOFTHEDAY);
+                    if (nDay-nLastTipOfTheDay > 0) { //only once per day
+                        // tdf#127946 pass in argument for dialog parent
+                        SfxUnoFrameItem aDocFrame(SID_FILLFRAME, GetFrame().GetFrameInterface());
+                        GetDispatcher()->ExecuteList(SID_TIPOFTHEDAY, SfxCallMode::SLOT, {}, { &aDocFrame });
+                    }
                 } //bShowTipOfTheDay
 
                 // inform about the community involvement
