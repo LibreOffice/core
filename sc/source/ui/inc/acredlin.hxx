@@ -27,7 +27,6 @@
 
 class ScViewData;
 class ScDocument;
-class SvSimpleTable;
 
 struct SfxChildWinInfo;
 
