@@ -104,6 +104,10 @@ Fraction::operator double() const
         return 0.0;
     }
 
+    // https://github.com/boostorg/boost/issues/335 when these are std::numeric_limits<sal_Int32>::min
+    if (mnNumerator == mnDenominator)
+        return 1.0;
+
     return boost::rational_cast<double>(toRational(mnNumerator, mnDenominator));
 }
 
