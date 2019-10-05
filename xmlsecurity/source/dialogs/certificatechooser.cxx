@@ -303,9 +303,10 @@ IMPL_LINK_NOARG(CertificateChooser, CertificateHighlightHdl, weld::TreeView&, vo
     m_xDescriptionED->set_sensitive(bEnable);
 }
 
-IMPL_LINK_NOARG(CertificateChooser, CertificateSelectHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(CertificateChooser, CertificateSelectHdl, weld::TreeView&, bool)
 {
     m_xDialog->response(RET_OK);
+    return true;
 }
 
 IMPL_LINK_NOARG(CertificateChooser, ViewButtonHdl, weld::Button&, void)

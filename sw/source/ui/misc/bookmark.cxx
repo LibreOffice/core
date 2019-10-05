@@ -136,9 +136,10 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, GotoHdl, weld::Button&, void)
     GotoSelectedBookmark();
 }
 
-IMPL_LINK_NOARG(SwInsertBookmarkDlg, DoubleClickHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(SwInsertBookmarkDlg, DoubleClickHdl, weld::TreeView&, bool)
 {
     GotoSelectedBookmark();
+    return true;
 }
 
 IMPL_LINK_NOARG(SwInsertBookmarkDlg, SelectionChangedHdl, weld::TreeView&, void)

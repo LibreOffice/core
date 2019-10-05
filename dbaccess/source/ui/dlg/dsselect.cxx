@@ -65,10 +65,11 @@ ODatasourceSelectDialog::~ODatasourceSelectDialog()
 {
 }
 
-IMPL_LINK(ODatasourceSelectDialog, ListDblClickHdl, weld::TreeView&, rListBox, void)
+IMPL_LINK(ODatasourceSelectDialog, ListDblClickHdl, weld::TreeView&, rListBox, bool)
 {
     if (rListBox.n_children())
         m_xDialog->response(RET_OK);
+    return true;
 }
 
 short ODatasourceSelectDialog::run()

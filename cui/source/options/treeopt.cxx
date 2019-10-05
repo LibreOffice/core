@@ -608,14 +608,6 @@ sal_uInt16  OfaTreeOptionsDialog::AddGroup(const OUString& rGroupName,
     return nRet - 1;
 }
 
-IMPL_STATIC_LINK(OfaTreeOptionsDialog, ExpandCollapseHdl_Impl, weld::TreeView&, xTreeView, void)
-{
-    std::unique_ptr<weld::TreeIter> xEntry(xTreeView.make_iterator());
-    xTreeView.get_selected(xEntry.get());
-    if (xTreeView.iter_has_child(*xEntry))
-        xTreeView.get_row_expanded(*xEntry) ? xTreeView.collapse_row(*xEntry) : xTreeView.expand_row(*xEntry);
-}
-
 IMPL_LINK_NOARG(OfaTreeOptionsDialog, ShowPageHdl_Impl, weld::TreeView&, void)
 {
     SelectHdl_Impl();
@@ -749,7 +741,6 @@ void OfaTreeOptionsDialog::ApplyItemSets()
 void OfaTreeOptionsDialog::InitTreeAndHandler()
 {
     xTreeLB->set_help_id(HID_OFADLG_TREELISTBOX);
-    xTreeLB->connect_row_activated( LINK( this, OfaTreeOptionsDialog, ExpandCollapseHdl_Impl ) );
     xTreeLB->connect_changed( LINK( this, OfaTreeOptionsDialog, ShowPageHdl_Impl ) );
     xBackPB->connect_clicked( LINK( this, OfaTreeOptionsDialog, BackHdl_Impl ) );
     xApplyPB->connect_clicked( LINK( this, OfaTreeOptionsDialog, ApplyHdl_Impl ) );

@@ -1498,11 +1498,11 @@ void SbTreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
     m_xControl->set_cursor(*xCurIter);
 }
 
-IMPL_LINK_NOARG(SbTreeListBox, OpenCurrentHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(SbTreeListBox, OpenCurrentHdl, weld::TreeView&, bool)
 {
     bool bValidIter = m_xControl->get_cursor(m_xIter.get());
     if (!bValidIter)
-        return;
+        return true;
     EntryDescriptor aDesc = GetEntryDescriptor(m_xIter.get());
     switch (aDesc.GetType())
     {
@@ -1520,7 +1520,7 @@ IMPL_LINK_NOARG(SbTreeListBox, OpenCurrentHdl, weld::TreeView&, void)
                     SID_BASICIDE_SHOWSBX, SfxCallMode::SYNCHRON,
                     { &aSbxItem }
                 );
-                return;
+                return true;
             }
             break;
 
@@ -1531,6 +1531,7 @@ IMPL_LINK_NOARG(SbTreeListBox, OpenCurrentHdl, weld::TreeView&, void)
                 m_xControl->collapse_row(*m_xIter);
             break;
     }
+    return true;
 }
 
 } // namespace basctl

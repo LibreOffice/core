@@ -53,7 +53,7 @@ private:
 
     DECL_LINK(SelComboBoxHdl, weld::ComboBox&, void);
     DECL_LINK(SelTreeViewHdl, weld::TreeView&, void);
-    DECL_LINK(DblClkHdl, weld::TreeView&, void);
+    DECL_LINK(DblClkHdl, weld::TreeView&, bool);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(ModifyHdl, weld::Entry&, void);
 

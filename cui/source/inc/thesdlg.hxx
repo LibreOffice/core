@@ -54,7 +54,7 @@ public:
     DECL_LINK( LanguageHdl_Impl, weld::ComboBox&, void );
     DECL_LINK( WordSelectHdl_Impl, weld::ComboBox&, void );
     DECL_LINK( AlternativesSelectHdl_Impl, weld::TreeView&, void );
-    DECL_LINK( AlternativesDoubleClickHdl_Impl, weld::TreeView&, void );
+    DECL_LINK( AlternativesDoubleClickHdl_Impl, weld::TreeView&, bool );
     DECL_LINK( SelectFirstHdl_Impl, void*, void );
     DECL_LINK( ReplaceEditHdl_Impl, weld::Entry&, void );
     DECL_LINK( ModifyTimer_Hdl, Timer *, void );

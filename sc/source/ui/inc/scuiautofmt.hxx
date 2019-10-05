@@ -70,7 +70,7 @@ private:
     DECL_LINK( RemoveHdl, weld::Button&, void );
     DECL_LINK( SelFmtHdl, weld::TreeView&, void );
     DECL_LINK( CloseHdl, weld::Button&, void );
-    DECL_LINK( DblClkHdl, weld::TreeView&, void );
+    DECL_LINK( DblClkHdl, weld::TreeView&, bool );
     DECL_LINK( RenameHdl, weld::Button&, void );
 
 };

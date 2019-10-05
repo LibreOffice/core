@@ -63,9 +63,10 @@ OUString ScShowTabDlg::GetEntry(sal_Int32 nIndex) const
     return m_xLb->get_text(nIndex);
 }
 
-IMPL_LINK_NOARG(ScShowTabDlg, DblClkHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(ScShowTabDlg, DblClkHdl, weld::TreeView&, bool)
 {
     m_xDialog->response(RET_OK);
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

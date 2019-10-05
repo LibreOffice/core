@@ -159,7 +159,6 @@ private:
 
     void            ApplyOptions( bool deactivate );
 
-    DECL_STATIC_LINK(OfaTreeOptionsDialog, ExpandCollapseHdl_Impl, weld::TreeView&, void);
     DECL_LINK(ShowPageHdl_Impl, weld::TreeView&, void);
     DECL_LINK(BackHdl_Impl, weld::Button&, void);
     DECL_LINK(ApplyHdl_Impl, weld::Button&, void);

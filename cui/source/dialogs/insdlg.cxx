@@ -76,9 +76,10 @@ InsertObjectDialog_Impl::InsertObjectDialog_Impl(weld::Window* pParent,
 {
 }
 
-IMPL_LINK_NOARG(SvInsertOleDlg, DoubleClickHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(SvInsertOleDlg, DoubleClickHdl, weld::TreeView&, bool)
 {
     m_xDialog->response(RET_OK);
+    return true;
 }
 
 IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl, weld::Button&, void)

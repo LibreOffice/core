@@ -136,17 +136,17 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnClickHdl, weld::Button&, void)
     EditBtnHdl(*m_xTreeView);
 }
 
-IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl, weld::TreeView&, bool)
 {
     ScConditionalFormat* pFormat = m_xCtrlManager->GetSelection();
 
     if (!pFormat)
-        return;
+        return true;
 
     m_bModified = true;
     m_xDialog->response( DLG_RET_EDIT );
 
-    return;
+    return true;
 }
 
 IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl, weld::Button&, void)

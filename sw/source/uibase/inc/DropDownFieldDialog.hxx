@@ -44,7 +44,7 @@ class DropDownFieldDialog : public weld::GenericDialogController
     DECL_LINK(PrevHdl, weld::Button&, void);
     DECL_LINK(NextHdl, weld::Button&, void);
     void    Apply();
-    DECL_LINK(DoubleClickHdl, weld::TreeView&, void);
+    DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
 public:
     DropDownFieldDialog(weld::Widget *pParent, SwWrtShell &rSh,
                         SwField* pField, bool bPrevButton, bool bNextButton);

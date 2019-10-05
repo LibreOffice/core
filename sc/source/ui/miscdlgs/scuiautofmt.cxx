@@ -141,12 +141,14 @@ IMPL_LINK(ScAutoFormatDlg, CloseHdl, weld::Button&, rBtn, void)
     }
 }
 
-IMPL_LINK_NOARG(ScAutoFormatDlg, DblClkHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(ScAutoFormatDlg, DblClkHdl, weld::TreeView&, bool)
 {
     if ( bCoreDataChanged )
         ScGlobal::GetOrCreateAutoFormat()->Save();
 
     m_xDialog->response( RET_OK );
+
+    return true;
 }
 
 IMPL_LINK(ScAutoFormatDlg, CheckHdl, weld::ToggleButton&, rBtn, void)

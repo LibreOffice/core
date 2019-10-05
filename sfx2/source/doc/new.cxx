@@ -206,11 +206,12 @@ IMPL_LINK_NOARG(SfxNewFileDialog, TemplateSelect, weld::TreeView&, void)
     m_aPrevIdle.Start();
 }
 
-IMPL_LINK_NOARG( SfxNewFileDialog, DoubleClick, weld::TreeView&, void )
+IMPL_LINK_NOARG( SfxNewFileDialog, DoubleClick, weld::TreeView&, bool )
 {
     // Still loading
     if (!m_xDocShell.Is() || !m_xDocShell->GetProgress())
         m_xDialog->response(RET_OK);
+    return true;
 }
 
 sal_uInt16  SfxNewFileDialog::GetSelectedTemplatePos() const

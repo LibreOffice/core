@@ -171,7 +171,7 @@ private:
     std::unique_ptr<weld::CustomWeld> m_xSentenceEDWeld;
 
     DECL_LINK(ChangeHdl, weld::Button&, void);
-    DECL_LINK(DoubleClickChangeHdl, weld::TreeView&, void);
+    DECL_LINK(DoubleClickChangeHdl, weld::TreeView&, bool);
     DECL_LINK(ChangeAllHdl, weld::Button&, void);
     DECL_LINK(IgnoreAllHdl, weld::Button&, void);
     DECL_LINK(IgnoreHdl, weld::Button&, void);

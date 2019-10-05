@@ -47,7 +47,7 @@ namespace dbaui
         DECL_LINK(Up_Click, weld::Button&, void);
         DECL_LINK(NewFolder_Click, weld::Button&, void);
         DECL_LINK(Save_Click, weld::Button&, void);
-        DECL_LINK(Dbl_Click_FileView, weld::TreeView&, void);
+        DECL_LINK(Dbl_Click_FileView, weld::TreeView&, bool);
 
         /// sets the fixedtext to the right content
         void initCurrentPath();

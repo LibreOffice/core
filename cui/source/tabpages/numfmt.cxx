@@ -1118,8 +1118,7 @@ void SvxNumberFormatTabPage::UpdateDecimalsDenominatorEditBox()
 #*  Output:     ---
 #*
 #************************************************************************/
-
-IMPL_LINK(SvxNumberFormatTabPage, DoubleClickHdl_Impl, weld::TreeView&, rLb, void)
+IMPL_LINK(SvxNumberFormatTabPage, DoubleClickHdl_Impl, weld::TreeView&, rLb, bool)
 {
     SelFormatHdl_Impl(&rLb);
 
@@ -1127,8 +1126,9 @@ IMPL_LINK(SvxNumberFormatTabPage, DoubleClickHdl_Impl, weld::TreeView&, rLb, voi
     assert(pController);
     weld::Button& rOkButton = pController->GetOKButton();
     rOkButton.clicked();
-}
 
+    return true;
+}
 
 /*************************************************************************
 #*  Method:    SelFormatHdl_Impl

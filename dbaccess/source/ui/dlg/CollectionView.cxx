@@ -226,7 +226,7 @@ IMPL_LINK_NOARG(OCollectionView, Up_Click, weld::Button&, void)
     }
 }
 
-IMPL_LINK_NOARG(OCollectionView, Dbl_Click_FileView, weld::TreeView&, void)
+IMPL_LINK_NOARG(OCollectionView, Dbl_Click_FileView, weld::TreeView&, bool)
 {
     try
     {
@@ -252,6 +252,8 @@ IMPL_LINK_NOARG(OCollectionView, Dbl_Click_FileView, weld::TreeView&, void)
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
+
+    return true;
 }
 
 void OCollectionView::initCurrentPath()

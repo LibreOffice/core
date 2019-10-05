@@ -659,9 +659,10 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, SelectHdl_Impl, weld::TreeView&, void)
     EnableRemoveButton();
 }
 
-IMPL_LINK_NOARG(SvxJavaParameterDlg, DblClickHdl_Impl, weld::TreeView&, void)
+IMPL_LINK_NOARG(SvxJavaParameterDlg, DblClickHdl_Impl, weld::TreeView&, bool)
 {
     EditParameter();
+    return true;
 }
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, RemoveHdl_Impl, weld::Button&, void)

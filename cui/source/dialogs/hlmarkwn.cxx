@@ -411,9 +411,10 @@ bool SvxHlinkDlgMarkWnd::SelectEntry(const OUString& aStrMark)
 }
 
 // Click on Apply-Button / Double-click on item in tree
-IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl, weld::TreeView&, void)
+IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl, weld::TreeView&, bool)
 {
     ClickApplyHdl_Impl(*mxBtApply);
+    return true;
 }
 
 IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl, weld::Button&, void)

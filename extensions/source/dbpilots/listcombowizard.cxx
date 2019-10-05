@@ -292,10 +292,11 @@ namespace dbp
         updateDialogTravelUI();
     }
 
-    IMPL_LINK( OContentTableSelection, OnTableDoubleClicked, weld::TreeView&, _rListBox, void )
+    IMPL_LINK( OContentTableSelection, OnTableDoubleClicked, weld::TreeView&, _rListBox, bool )
     {
         if (_rListBox.count_selected_rows())
             getDialog()->travelNext();
+        return true;
     }
 
     void OContentTableSelection::initializePage()
@@ -369,10 +370,11 @@ namespace dbp
         return 0 != m_xSelectTableField->count_selected_rows();
     }
 
-    IMPL_LINK_NOARG( OContentFieldSelection, OnTableDoubleClicked, weld::TreeView&, void )
+    IMPL_LINK_NOARG( OContentFieldSelection, OnTableDoubleClicked, weld::TreeView&, bool )
     {
         if (m_xSelectTableField->count_selected_rows())
             getDialog()->travelNext();
+        return true;
     }
 
     IMPL_LINK_NOARG( OContentFieldSelection, OnFieldSelected, weld::TreeView&, void )

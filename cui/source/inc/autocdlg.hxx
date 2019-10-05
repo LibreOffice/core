@@ -114,7 +114,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
 
     DECL_LINK(SelectHdl, weld::TreeView&, void);
     DECL_LINK(EditHdl, weld::Button&, void);
-    DECL_LINK(DoubleClickEditHdl, weld::TreeView&, void);
+    DECL_LINK(DoubleClickEditHdl, weld::TreeView&, bool);
 
     void CreateEntry(const OUString& rTxt, sal_uInt16 nCol);
 

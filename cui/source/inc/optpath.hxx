@@ -45,7 +45,7 @@ private:
     void        ChangeCurrentEntry( const OUString& _rFolder );
 
     DECL_LINK(PathHdl_Impl, weld::Button&, void);
-    DECL_LINK(DoubleClickPathHdl_Impl, weld::TreeView&, void);
+    DECL_LINK(DoubleClickPathHdl_Impl, weld::TreeView&, bool);
     DECL_LINK(StandardHdl_Impl, weld::Button&, void);
 
     DECL_LINK(PathSelect_Impl, weld::TreeView&, void);

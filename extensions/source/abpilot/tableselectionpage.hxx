@@ -44,7 +44,7 @@ namespace abp
         virtual bool        canAdvance() const override;
 
         DECL_LINK(OnTableSelected, weld::TreeView&, void);
-        DECL_LINK(OnTableDoubleClicked, weld::TreeView&, void);
+        DECL_LINK(OnTableDoubleClicked, weld::TreeView&, bool);
     };
 
 }   // namespace abp

@@ -259,9 +259,10 @@ IMPL_LINK(SfxMacroTabPage, AssignDeleteClickHdl_Impl, weld::Button&, rBtn, void)
     AssignDeleteHdl(&rBtn);
 }
 
-IMPL_LINK(SfxMacroTabPage, AssignDeleteHdl_Impl, weld::TreeView&, rBtn, void)
+IMPL_LINK(SfxMacroTabPage, AssignDeleteHdl_Impl, weld::TreeView&, rBtn, bool)
 {
     AssignDeleteHdl(&rBtn);
+    return true;
 }
 
 void SfxMacroTabPage::AssignDeleteHdl(const weld::Widget* pBtn)
@@ -316,7 +317,7 @@ IMPL_LINK( SfxMacroTabPage, TimeOut_Impl, Timer*,, void )
 void SfxMacroTabPage::InitAndSetHandler()
 {
     weld::TreeView& rListBox = mpImpl->m_xEventLB->GetListBox();
-    Link<weld::TreeView&,void> aLnk(LINK(this, SfxMacroTabPage, AssignDeleteHdl_Impl));
+    Link<weld::TreeView&,bool> aLnk(LINK(this, SfxMacroTabPage, AssignDeleteHdl_Impl));
     mpImpl->m_xMacroLB->connect_row_activated( aLnk);
     mpImpl->m_xDeletePB->connect_clicked(LINK(this, SfxMacroTabPage, AssignDeleteClickHdl_Impl));
     mpImpl->m_xAssignPB->connect_clicked(LINK(this, SfxMacroTabPage, AssignDeleteClickHdl_Impl));

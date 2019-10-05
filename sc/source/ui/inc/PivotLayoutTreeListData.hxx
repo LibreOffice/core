@@ -20,7 +20,7 @@ class ScPivotLayoutTreeListData final : public ScPivotLayoutTreeListBase
 {
 private:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-    DECL_LINK(DoubleClickHdl, weld::TreeView&, void);
+    DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
 
 public:
     ScPivotLayoutTreeListData(std::unique_ptr<weld::TreeView> xControl);

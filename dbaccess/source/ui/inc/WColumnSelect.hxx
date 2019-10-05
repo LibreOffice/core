@@ -40,7 +40,7 @@ namespace dbaui
         std::unique_ptr<weld::TreeView> m_xNewColumnNames; // right side
 
         DECL_LINK( ButtonClickHdl, weld::Button&, void );
-        DECL_LINK( ListDoubleClickHdl, weld::TreeView&, void );
+        DECL_LINK( ListDoubleClickHdl, weld::TreeView&, bool );
 
         static void clearListBox(weld::TreeView& _rListBox);
         static void fillColumns(weld::TreeView const * pRight,

@@ -70,7 +70,7 @@ private:
     void FillFromDbTextEncodingMap(bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags = 0);
 
     DECL_LINK(FixedWidthHdl, weld::ToggleButton&, void);
-    DECL_LINK(DoubleClickHdl, weld::TreeView&, void);
+    DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
 };
 
 #endif

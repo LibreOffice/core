@@ -390,10 +390,11 @@ IMPL_LINK_NOARG(SwFieldFuncPage, SelectHdl, weld::TreeView&, void)
         m_xNameED->set_text( m_xSelectionLB->get_selected_text() );
 }
 
-IMPL_LINK_NOARG(SwFieldFuncPage, InsertMacroHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(SwFieldFuncPage, InsertMacroHdl, weld::TreeView&, bool)
 {
     SelectHdl(*m_xSelectionLB);
     InsertHdl(nullptr);
+    return true;
 }
 
 IMPL_LINK(SwFieldFuncPage, ListModifyButtonHdl, weld::Button&, rControl, void)

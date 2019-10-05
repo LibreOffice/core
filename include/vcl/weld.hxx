@@ -642,7 +642,7 @@ private:
 
 protected:
     Link<TreeView&, void> m_aChangeHdl;
-    Link<TreeView&, void> m_aRowActivatedHdl;
+    Link<TreeView&, bool> m_aRowActivatedHdl;
     Link<int, void> m_aColumnClickedHdl;
     Link<const std::pair<int, int>&, void> m_aRadioToggleHdl;
     Link<const TreeIter&, bool> m_aEditingStartedHdl;
@@ -657,7 +657,7 @@ protected:
     std::vector<int> m_aRadioIndexes;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
-    void signal_row_activated() { m_aRowActivatedHdl.Call(*this); }
+    bool signal_row_activated() { return m_aRowActivatedHdl.Call(*this); }
     void signal_column_clicked(int nColumn) { m_aColumnClickedHdl.Call(nColumn); }
     bool signal_expanding(const TreeIter& rIter)
     {
@@ -725,7 +725,14 @@ public:
     }
 
     void connect_changed(const Link<TreeView&, void>& rLink) { m_aChangeHdl = rLink; }
-    void connect_row_activated(const Link<TreeView&, void>& rLink) { m_aRowActivatedHdl = rLink; }
+
+    /* A row is "activated" when the user double clicks a treeview row. It may
+       also be emitted when a row is selected and Space or Enter is pressed.
+
+       a return of "true" means the activation has been handled, a "false" propogates
+       the activation to the default handler which expands/collapses the row, if possible.
+    */
+    void connect_row_activated(const Link<TreeView&, bool>& rLink) { m_aRowActivatedHdl = rLink; }
 
     // Argument is a pair of row, col describing the node in non-tree mode.
     // If in tree mode, then retrieve the toggled node with get_cursor
@@ -1400,7 +1407,7 @@ public:
     {
         return m_xEntry->get_selection_bounds(rStartPos, rEndPos);
     }
-    void connect_row_activated(const Link<TreeView&, void>& rLink)
+    void connect_row_activated(const Link<TreeView&, bool>& rLink)
     {
         m_xTreeView->connect_row_activated(rLink);
     }

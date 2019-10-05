@@ -438,9 +438,10 @@ IMPL_LINK( ScDPFunctionDlg, SelectHdl, weld::ComboBox&, rLBox, void )
     }
 }
 
-IMPL_LINK_NOARG(ScDPFunctionDlg, DblClickHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(ScDPFunctionDlg, DblClickHdl, weld::TreeView&, bool)
 {
     m_xDialog->response(RET_OK);
+    return true;
 }
 
 ScDPSubtotalDlg::ScDPSubtotalDlg(weld::Widget* pParent, ScDPObject& rDPObj,
@@ -529,9 +530,10 @@ IMPL_LINK(ScDPSubtotalDlg, RadioClickHdl, weld::Button&, rBtn, void)
     mxLbFunc->set_sensitive(&rBtn == mxRbUser.get());
 }
 
-IMPL_LINK_NOARG(ScDPSubtotalDlg, DblClickHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(ScDPSubtotalDlg, DblClickHdl, weld::TreeView&, bool)
 {
     m_xDialog->response(RET_OK);
+    return true;
 }
 
 IMPL_LINK(ScDPSubtotalDlg, ClickHdl, weld::Button&, rBtn, void)
@@ -905,9 +907,10 @@ OUString ScDPShowDetailDlg::GetDimensionName() const
     return mrDPObj.GetDimName(nDim, bIsDataLayout);
 }
 
-IMPL_LINK_NOARG(ScDPShowDetailDlg, DblClickHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(ScDPShowDetailDlg, DblClickHdl, weld::TreeView&, bool)
 {
     m_xDialog->response(RET_OK);
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
