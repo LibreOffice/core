@@ -31,7 +31,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/simptabl.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxdlg.hxx>
 #include <svx/flagsdef.hxx>
