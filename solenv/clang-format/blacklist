@@ -6979,7 +6979,6 @@ include/svtools/sampletext.hxx
 include/svtools/scriptedtext.hxx
 include/svtools/scrwin.hxx
 include/svtools/sfxecode.hxx
-include/svtools/simptabl.hxx
 include/svtools/slidesorterbaropt.hxx
 include/svtools/soerr.hxx
 include/svtools/statusbarcontroller.hxx
@@ -13660,7 +13659,6 @@ svtools/inc/table/defaultinputhandler.hxx
 svtools/inc/table/gridtablerenderer.hxx
 svtools/inc/table/tablecontrol.hxx
 svtools/inc/table/tablecontrolinterface.hxx
-svtools/inc/uitest/uiobject.hxx
 svtools/langsupport/langsupport.cxx
 svtools/qa/unit/GraphicObjectTest.cxx
 svtools/qa/unit/svtools-dialogs-test.cxx
@@ -13692,7 +13690,6 @@ svtools/source/config/printoptions.cxx
 svtools/source/config/slidesorterbaropt.cxx
 svtools/source/config/test/test.cxx
 svtools/source/contnr/DocumentInfoPreview.cxx
-svtools/source/contnr/simptabl.cxx
 svtools/source/contnr/templwin.cxx
 svtools/source/contnr/templwin.hxx
 svtools/source/control/accessibleruler.cxx
@@ -13783,7 +13780,6 @@ svtools/source/table/tabledatawindow.cxx
 svtools/source/table/tabledatawindow.hxx
 svtools/source/table/tablegeometry.cxx
 svtools/source/table/tablegeometry.hxx
-svtools/source/uitest/uiobject.cxx
 svtools/source/uno/addrtempuno.cxx
 svtools/source/uno/fpicker.cxx
 svtools/source/uno/fpicker.hxx
