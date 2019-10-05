@@ -224,21 +224,24 @@ DECLARE_OOXMLEXPORT_TEST(testBtlrShape, "btlr-textbox.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf127316_autoEscapement, "tdf127316_autoEscapement.odt")
 {
-    // This should be roughly 33% of the ORIGINAL(non-reduced) size. However, during export the
+    // This should be roughly .8*35% of the ORIGINAL(non-reduced) size. However, during export the
     // proportional height has to be changed into direct formatting, which then changes the relative percent.
     // In this case, a 24pt font, proportional at 65% becomes roughly a 16pt font.
-    // Thus an escapement of 33% (8pt) becomes roughly 50% for the 16pt font.
+    // Thus an escapement of 28% (6.72pt) becomes roughly 42% for the 16pt font.
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1), "CharEscapement"), 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(33.f, getProperty<float>(getRun(xPara, 2), "CharEscapement"), 20);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(42.f, getProperty<float>(getRun(xPara, 2), "CharEscapement"), 1);
 
     // Subscripts are different. Automatic escapement SHOULD BE limited by the font bottom line(?)
     // and so the calculations ought to be different. There is room for a lot of export improvement here.
     xPara.set(getParagraph(2));
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1, "Normal text "), "CharEscapement"), 0);
     // Negative escapements (subscripts) were decreasing by 1% every round-trip due to bad manual rounding.
-    // The actual number of 52% isn't so important here, but test that it is stable across multiple round-trips.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Did you fix or break me?", -52.f, getProperty<float>(getRun(xPara, 2), "CharEscapement"), 2);
+    // This should be roughly .2*35% of the ORIGINAL (non-reduced) size. However, during export the
+    // proportional height has to be changed into direct formatting, which then changes the relative percent.
+    // In this case, a 24pt font, proportional at 65% becomes roughly a 16pt font.
+    // Thus an escapement of 7% (1.68pt) becomes roughly 10.5% for the 16pt font.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Subscript", -10.f, getProperty<float>(getRun(xPara, 2), "CharEscapement"), 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf99602_subscript_charStyleSize, "tdf99602_subscript_charStyleSize.docx")
