@@ -63,6 +63,24 @@
       "revId": "99c7a5bfa588cb79b4b591e5e81e60a45758101f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_c4f783f5",
+        "filename": "writerfilter/source/dmapper/PropertyIds.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-10-05T05:31:05Z",
+      "side": 1,
+      "message": "Thanks for that. I was too fixated on keeping the function in .hxx (and had an error without the inline...).",
+      "parentUuid": "7f7f9b97_214f49be",
+      "revId": "99c7a5bfa588cb79b4b591e5e81e60a45758101f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
