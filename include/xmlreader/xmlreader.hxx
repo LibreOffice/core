@@ -77,8 +77,8 @@ private:
     // elements_ and attributes_):
 
     struct NamespaceData {
-        Span const prefix;
-        int const nsId;
+        Span prefix;
+        int nsId;
 
         NamespaceData():
             nsId(-1) {}
@@ -90,9 +90,9 @@ private:
     typedef std::vector< NamespaceData > NamespaceList;
 
     struct ElementData {
-        Span const name;
-        NamespaceList::size_type const inheritedNamespaces;
-        int const defaultNamespaceId;
+        Span name;
+        NamespaceList::size_type inheritedNamespaces;
+        int defaultNamespaceId;
 
         ElementData(
             Span const & theName,
@@ -173,7 +173,7 @@ private:
     void * fileAddress_;
     NamespaceIris namespaceIris_;
     NamespaceList namespaces_;
-    mutable std::unordered_map<OUString, int> cacheNSIds_;
+    mutable std::unordered_map<Span, int> cacheNSIds_;
     ElementStack elements_;
     char const * pos_;
     char const * end_;
