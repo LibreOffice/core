@@ -208,7 +208,7 @@ bool CountUsersOfDefaultParams::VisitCXXConstructExpr(const CXXConstructExpr * c
 std::string CountUsersOfDefaultParams::locationToString(const SourceLocation& sourceLoc)
 {
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( sourceLoc );
-    StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
+    StringRef name = getFileNameOfSpellingLoc(expansionLoc);
     return std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
 }
 

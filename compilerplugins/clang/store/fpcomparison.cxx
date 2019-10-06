@@ -70,7 +70,7 @@ bool FpComparison::ignore(FunctionDecl* function)
         return true;
     }
     // we assume that these modules know what they are doing with FP stuff
-    StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(function->getLocStart()));
+    StringRef aFileName = getFileNameOfSpellingLoc(compiler.getSourceManager().getSpellingLoc(function->getLocStart()));
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sc/")) {
         return true;
     }
