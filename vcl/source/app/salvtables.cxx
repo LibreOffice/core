@@ -1599,7 +1599,7 @@ public:
             m_xWizard->SetPageSizePixel(aFinalSize);
         }
 
-        m_xWizard->ShowPage(m_aIds[nPage]);
+        (void)m_xWizard->ShowPage(m_aIds[nPage]);
         enable_notify_events();
     }
 
