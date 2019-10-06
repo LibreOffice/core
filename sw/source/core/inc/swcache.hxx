@@ -210,10 +210,6 @@ protected:
 
 public:
     virtual ~SwCacheAccess();
-
-    /// Shorthand for those who know that they did not override isAvailable()
-    /// FIXME: wtf?
-    bool IsAvail() const { return m_pObj != nullptr; }
 };
 
 
