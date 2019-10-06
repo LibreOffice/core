@@ -422,6 +422,7 @@ ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< f
     , mxChartModel( xModel )
     , mpURLTransformer(new URLTransformer)
     , mbHasCategoryLabels( false )
+    , mbIsCategoryPositionShifted( false )
     , mbHasZAxis( false )
     , mbIs3DChart( false )
     , mbStacked(false)
