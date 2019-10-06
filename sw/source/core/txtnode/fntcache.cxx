@@ -2275,7 +2275,7 @@ SwFntAccess::SwFntAccess( const void* & rnFontCacheId,
   m_pShell( pSh )
 {
     // the used ctor of SwCacheAccess searches for rnFontCacheId+rIndex in the cache
-    if ( IsAvail() )
+    if ( m_pObj )
     {
         // fast case: known Font (rnFontCacheId), no need to check printer and zoom
         if ( !bCheck )
