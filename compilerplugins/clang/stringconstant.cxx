@@ -1333,8 +1333,6 @@ std::string StringConstant::describeChangeKind(ChangeKind kind) {
         return "sal_Unicode argument";
     case ChangeKind::OUStringLiteral1:
         return "OUStringLiteral1 argument";
-    default:
-        std::abort();
     }
 }
 

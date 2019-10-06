@@ -174,6 +174,7 @@ bool isBoolExpr(Expr const * expr) {
                 CXXOperatorCallExpr const * op
                     = dyn_cast<CXXOperatorCallExpr>(stack.top());
                 assert(op != nullptr);
+                (void)op;
                 TemplateDecl const * d
                     = t->getTemplateName().getAsTemplateDecl();
                 if (d == nullptr
