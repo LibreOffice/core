@@ -46,7 +46,7 @@ public:
             if (getFunctionsWithAddressTaken().find((FunctionDecl const *)canonicalDecl)
                     != getFunctionsWithAddressTaken().end())
                 continue;
-            StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(canonicalDecl)));
+            StringRef aFileName = getFileNameOfSpellingLoc(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(canonicalDecl)));
             if (loplugin::isSamePathname(aFileName, SRCDIR "/include/LibreOfficeKit/LibreOfficeKit.hxx"))
                 continue;
             report(

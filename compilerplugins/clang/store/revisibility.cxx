@@ -63,7 +63,7 @@ bool ReVisibility::VisitFunctionDecl(FunctionDecl const * decl) {
             }
         }
         if (decl->isThisDeclarationADefinition() && first != nullptr
-            && !(compiler.getSourceManager().getFilename(
+            && !(getFileNameOfSpellingLoc(
                      compiler.getSourceManager().getSpellingLoc(
                          decl->getLocation()))
                  .startswith(SRCDIR "/libreofficekit/")))

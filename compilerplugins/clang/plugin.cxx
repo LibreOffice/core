@@ -621,8 +621,7 @@ bool RewritePlugin::wouldRewriteWorkdir(SourceLocation loc)
         return false;
     }
     return
-        compiler.getSourceManager().getFilename(
-            compiler.getSourceManager().getSpellingLoc(loc))
+        getFileNameOfSpellingLoc(compiler.getSourceManager().getSpellingLoc(loc))
         .startswith(WORKDIR "/");
 }
 
