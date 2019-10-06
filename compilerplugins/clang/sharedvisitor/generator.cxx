@@ -420,6 +420,7 @@ static bool readFile( const string& fileName )
     }
 
     assert( endOk );
+    (void)endOk;
 
     if( pluginInfo.shouldVisitTemplateInstantiations && pluginInfo.shouldVisitImplicitCode )
         plugins[ PluginVisitTemplatesImplicit ].push_back( move( pluginInfo ));

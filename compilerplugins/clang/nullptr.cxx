@@ -29,11 +29,9 @@ char const * kindName(Expr::NullPointerConstantKind kind) {
     case Expr::NPCK_GNUNull:
         return "GNUNull";
     case Expr::NPCK_NotNull:
-        assert(false); // cannot happen
-        // fall through
-    default:
-        std::abort();
+        break; // cannot happen
     }
+    llvm_unreachable("unknown null pointer kind");
 }
 
 bool isAnyKindOfPointerType(QualType type) {

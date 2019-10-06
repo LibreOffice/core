@@ -69,6 +69,7 @@ UnusedFieldsRemove::~UnusedFieldsRemove()
     //Cleanup
     int rc = munmap(mmappedData, mmapFilesize);
     assert(rc == 0);
+    (void)rc;
     close(mmapFD);
 }
 
