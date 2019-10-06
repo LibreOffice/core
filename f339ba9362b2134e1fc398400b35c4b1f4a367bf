@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_d72ad7e5",
+        "filename": "compilerplugins/clang/store/deletedspecial.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-10-06T19:06:25Z",
+      "side": 1,
+      "message": "when I see code like this I tend to think that we should call our method just \"getFileNameOfLoc\" \n?",
+      "revId": "f339ba9362b2134e1fc398400b35c4b1f4a367bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
