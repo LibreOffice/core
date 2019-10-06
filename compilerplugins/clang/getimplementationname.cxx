@@ -209,8 +209,7 @@ bool GetImplementationName::isStringConstant(
             return false;//TODO
         }
     default:
-        assert(false); //TODO???
-        return "BAD11";
+        abort(); //TODO???
     }
 }
 
