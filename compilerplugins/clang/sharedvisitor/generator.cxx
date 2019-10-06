@@ -124,7 +124,7 @@ void generate()
 "} // namespace loplugin\n"
 "\n"
 "#endif // LO_CLANG_SHARED_PLUGINS\n";
-};
+}
 
 void generateVisitor( PluginType type )
 {
