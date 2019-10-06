@@ -35,7 +35,7 @@ BinaryOperatorKind revert(BinaryOperatorKind op)
         case BO_NE:
             return op;
         default:
-            assert(false);
+            abort();
     }
 }
 
