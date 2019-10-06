@@ -61,6 +61,9 @@ struct SystemEnvData
 #elif defined( IOS )
     // Nothing
 #elif defined( UNX )
+    enum class Toolkit { Gtk3, Qt5 };
+    enum class Platform { Wayland, Xcb };
+
     void*               pDisplay;       // the relevant display connection
     unsigned long       aWindow;        // the window of the object
     void*               pSalFrame;      // contains a salframe, if object has one
@@ -70,8 +73,8 @@ struct SystemEnvData
     // note: this is a "long" in Xlib *but* in the protocol it's only 32-bit
     // however, the GTK3 vclplug wants to store pointers in here!
     sal_IntPtr          aShellWindow;   // the window of the frame's shell
-    const char*         pToolkit;       // the toolkit in use (gtk2 vs gtk3)
-    const char*         pPlatformName; // the windowing system in use (xcb vs wayland)
+    Toolkit             toolkit;        // the toolkit in use
+    Platform            platform;       // the windowing system in use
 #endif
 
     SystemEnvData()
@@ -90,8 +93,8 @@ struct SystemEnvData
         , pVisual(nullptr)
         , nScreen(0)
         , aShellWindow(0)
-        , pToolkit(nullptr)
-        , pPlatformName(nullptr)
+        , toolkit(Toolkit())
+        , platform(Platform())
 #endif
     {
     }

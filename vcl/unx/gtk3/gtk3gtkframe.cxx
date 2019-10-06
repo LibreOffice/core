@@ -968,14 +968,14 @@ void GtkSalFrame::InitCommon()
     m_aSystemData.pSalFrame     = this;
     m_aSystemData.pWidget       = m_pWindow;
     m_aSystemData.nScreen       = m_nXScreen.getXScreen();
-    m_aSystemData.pToolkit      = "gtk3";
+    m_aSystemData.toolkit       = SystemEnvData::Toolkit::Gtk3;
 
 #if defined(GDK_WINDOWING_X11)
     GdkDisplay *pDisplay = getGdkDisplay();
     if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
     {
         m_aSystemData.pDisplay = gdk_x11_display_get_xdisplay(pDisplay);
-        m_aSystemData.pPlatformName = "xcb";
+        m_aSystemData.platform = SystemEnvData::Platform::Xcb;
         if (GTK_IS_WINDOW(m_pWindow))
         {
             GdkScreen* pScreen = gtk_window_get_screen(GTK_WINDOW(m_pWindow));
@@ -988,7 +988,7 @@ void GtkSalFrame::InitCommon()
     if (DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay))
     {
         m_aSystemData.pDisplay = gdk_wayland_display_get_wl_display(pDisplay);
-        m_aSystemData.pPlatformName = "wayland";
+        m_aSystemData.platform = SystemEnvData::Platform::Wayland;
     }
 #endif
 
