@@ -7012,15 +7012,30 @@ if test "$COM_IS_CLANG" = "TRUE"; then
         if test -z "$CLANGDIR"; then
             CLANGDIR=$(dirname $(dirname $($CXX -print-prog-name=$(basename $CXX))))
         fi
+        # Assume Clang is self-built, but allow overriding COMPILER_PLUGINS_CXX to the compiler Clang was built with.
+        if test -z "$COMPILER_PLUGINS_CXX"; then
+            COMPILER_PLUGINS_CXX=$CXX
+        fi
+        AC_PATH_PROG(LLVM_CONFIG, llvm-config,[],$CLANGDIR/bin $PATH)
+        if test -n "$LLVM_CONFIG"; then
+            COMPILER_PLUGINS_CXXFLAGS=$($LLVM_CONFIG --cxxflags)
+            COMPILER_PLUGINS_CXX_LINKFLAGS=$($LLVM_CONFIG --ldflags --libs --system-libs | tr '\n' ' ')
+            if test -z "$CLANGLIBDIR"; then
+                CLANGLIBDIR=$($LLVM_CONFIG --libdir)
+            fi
+        fi
+        AC_MSG_NOTICE([compiler plugins compile flags: $COMPILER_PLUGINS_CXXFLAGS])
         AC_LANG_PUSH([C++])
-        save_CPPFLAGS=$CPPFLAGS
         save_CXX=$CXX
         save_CXXCPP=$CXXCPP
-        # compiler plugins must be built with "native" compiler that was used to build Clang itself:
-        : "${COMPILER_PLUGINS_CXX=g++ -std=c++11}"
+        save_CPPFLAGS=$CPPFLAGS
+        save_CXXFLAGS=$CXXFLAGS
+        save_LDFLAGS=$LDFLAGS
+        save_LIBS=$LIBS
         CXX=$COMPILER_PLUGINS_CXX
         CXXCPP="$COMPILER_PLUGINS_CXX -E"
-        CPPFLAGS="$CPPFLAGS -I$CLANGDIR/include -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS"
+        CPPFLAGS="$COMPILER_PLUGINS_CXXFLAGS"
+        CXXFLAGS="$COMPILER_PLUGINS_CXXFLAGS"
         AC_CHECK_HEADER(clang/AST/RecursiveASTVisitor.h,
             [COMPILER_PLUGINS=TRUE],
             [
@@ -7031,9 +7046,50 @@ if test "$COM_IS_CLANG" = "TRUE"; then
                 add_warning "Cannot find Clang headers to build compiler plugins, plugins disabled."
             fi
             ])
+        if test -n "$COMPILER_PLUGINS"; then
+            LDFLAGS=""
+            AC_MSG_CHECKING([for clang libraries to use])
+            if test -z "$CLANGTOOLLIBS"; then
+                LIBS="-lclangTooling -lclangDriver -lclangFrontend -lclangParse -lclangSema -lclangEdit \
+ -lclangAnalysis -lclangAST -lclangLex -lclangSerialization -lclangBasic $COMPILER_PLUGINS_CXX_LINKFLAGS"
+                AC_LINK_IFELSE([
+                    AC_LANG_PROGRAM([[#include "clang/Tooling/Tooling.h"]],
+                        [[ clang::tooling::runToolOnCode( nullptr, "some code" ); ]])
+                ],[CLANGTOOLLIBS="$LIBS"],[])
+            fi
+            if test -z "$CLANGTOOLLIBS"; then
+                LIBS="-lclang-cpp $COMPILER_PLUGINS_CXX_LINKFLAGS"
+                AC_LINK_IFELSE([
+                    AC_LANG_PROGRAM([[#include "clang/Tooling/Tooling.h"]],
+                        [[ clang::tooling::runToolOnCode( nullptr, "some code" ); ]])
+                ],[CLANGTOOLLIBS="$LIBS"],[])
+            fi
+            AC_MSG_RESULT([$CLANGTOOLLIBS])
+            if test -z "$CLANGTOOLLIBS"; then
+                if test "$compiler_plugins" = "yes"; then
+                    cat config.log
+                    AC_MSG_ERROR([Cannot find Clang libraries to build compiler plugins.])
+                else
+                    AC_MSG_WARN([Cannot find Clang libraries to build compiler plugins, plugins disabled])
+                    add_warning "Cannot find Clang libraries to build compiler plugins, plugins disabled."
+                fi
+                COMPILER_PLUGINS=
+            fi
+            if test -n "$COMPILER_PLUGINS"; then
+                if test -z "$CLANGSYSINCLUDE"; then
+                    if test -n "$LLVM_CONFIG"; then
+                        # Path to the clang system headers (no idea if there's a better way to get it).
+                        CLANGSYSINCLUDE=$($LLVM_CONFIG --libdir)/clang/$($LLVM_CONFIG --version | sed 's/svn//')/include
+                    fi
+                fi
+            fi
+        fi
         CXX=$save_CXX
         CXXCPP=$save_CXXCPP
         CPPFLAGS=$save_CPPFLAGS
+        CXXFLAGS=$save_CXXFLAGS
+        LDFLAGS=$save_LDFLAGS
+        LIBS="$save_LIBS"
         AC_LANG_POP([C++])
     fi
 else
@@ -7043,11 +7099,14 @@ else
 fi
 AC_SUBST(COMPILER_PLUGINS)
 AC_SUBST(COMPILER_PLUGINS_CXX)
+AC_SUBST(COMPILER_PLUGINS_CXXFLAGS)
 AC_SUBST(COMPILER_PLUGINS_CXX_LINKFLAGS)
 AC_SUBST(COMPILER_PLUGINS_DEBUG)
 AC_SUBST(COMPILER_PLUGINS_TOOLING_ARGS)
 AC_SUBST(CLANGDIR)
 AC_SUBST(CLANGLIBDIR)
+AC_SUBST(CLANGTOOLLIBS)
+AC_SUBST(CLANGSYSINCLUDE)
 
 # Plugin to help linker.
 # Add something like LD_PLUGIN=/usr/lib64/LLVMgold.so to your autogen.input.

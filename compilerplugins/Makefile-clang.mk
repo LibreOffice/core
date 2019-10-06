@@ -23,14 +23,14 @@ CLANGCXXFLAGS=/nologo /D_HAS_EXCEPTIONS=0 /wd4141 /wd4577 /EHs-c- /GR-
 ifeq ($(CLANGDEBUG),)
 CLANGCXXFLAGS+=/O2 /Oi
 else
-CLANGCXXFLAGS+=/DEBUG
+CLANGCXXFLAGS+=/DEBUG /Od
 endif
 else # WNT
 CLANGCXXFLAGS=-Wall -Wextra -Wundef
 ifeq ($(CLANGDEBUG),)
 CLANGCXXFLAGS+=-O2
 else
-CLANGCXXFLAGS+=-g
+CLANGCXXFLAGS+=-g -O0 -UNDEBUG
 endif
 endif
 
@@ -61,19 +61,12 @@ CLANG_EXE_EXT =
 endif
 
 # Clang headers require these.
-CLANGDEFS=-D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS
-ifneq ($(OS),WNT)
-CLANGDEFS += -fno-rtti
-endif
+CLANGDEFS:=$(COMPILER_PLUGINS_CXXFLAGS)
 # All include locations needed (using -isystem silences various warnings when
 # including those files):
-ifeq ($(OS),WNT)
-CLANGINCLUDES=-I$(CLANGDIR)/include
-else
-CLANGINCLUDES=$(if $(filter /usr,$(CLANGDIR)),,-isystem $(CLANGDIR)/include)
+ifneq ($(OS),WNT)
+CLANGDEFS:=$(filter-out -isystem/usr/include,$(foreach opt,$(CLANGDEFS),$(patsubst -I%,-isystem%,$(opt))))
 endif
-
-LLVMCONFIG=$(CLANGDIR)/bin/llvm-config
 
 # Clang/LLVM libraries are intentionally not linked in, they are usually built as static libraries, which means the resulting
 # plugin would be big (even though the clang binary already includes it all) and it'd be necessary to explicitly specify
@@ -166,7 +159,7 @@ ifeq ($(OS),WNT)
 define clangbuildsrc
 $(2): $(1) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
 	$$(call gb_Output_announce,$(subst $(SRCDIR)/,,$(subst $(BUILDDIR)/,,$(1))),$(true),CXX,3)
-	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) \
+	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGDEFS) $(CLANGCXXFLAGS) $(CLANGWERROR) \
         $(CLANGINCLUDES) /I$(BUILDDIR)/config_host /I$(CLANGINDIR) $(1) /MD \
         /c /Fo: $(2)
 
@@ -182,7 +175,7 @@ else
 define clangbuildsrc
 $(2): $(1) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
 	$$(call gb_Output_announce,$(subst $(SRCDIR)/,,$(subst $(BUILDDIR)/,,$(1))),$(true),CXX,3)
-	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) \
+	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGDEFS) $(CLANGCXXFLAGS) $(CLANGWERROR) \
 	$(CLANGINCLUDES) -I$(BUILDDIR)/config_host -I$(CLANGINDIR) $(1) \
 	-fPIC -c -o $(2) -MMD -MT $(2) -MP -MF $(3)
 
@@ -231,38 +224,37 @@ $(CLANGOUTDIR)/sharedvisitor/sharedvisitor.cxx: $(SHARED_SOURCE_INFOS) $(CLANGOU
 	$(QUIET)$(ICECREAM_RUN) $(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT) \
         $(SHARED_SOURCE_INFOS) > $@
 
-CLANGTOOLLIBS = -lclangTooling -lclangDriver -lclangFrontend -lclangParse -lclangSema -lclangEdit -lclangAnalysis \
-        -lclangAST -lclangLex -lclangSerialization -lclangBasic $(shell $(LLVMCONFIG) --ldflags --libs --system-libs)
-# Path to the clang system headers (no idea if there's a better way to get it).
-CLANGTOOLDEFS = -DCLANGSYSINCLUDE=$(shell $(LLVMCONFIG) --libdir)/clang/$(shell $(LLVMCONFIG) --version | sed 's/svn//')/include
-# -std=c++11 is in line with the default value for COMPILER_PLUGINS_CXX in configure.ac:
-CLANGSTDOPTION := $(or $(filter -std=%,$(COMPILER_PLUGINS_CXX)),-std=c++11)
-CLANGTOOLDEFS += -DSTDOPTION=\"$(CLANGSTDOPTION)\"
+# Flags used internally in analyzer.
+# Older versions of Clang have a problem to find their own internal headers, so add it.
+# Also filter out the c++ library, it's not necessary to be specific about it in this case
+# and it can also cause trouble with finding the proper headers.
+CLANGTOOLDEFS = $(filter-out -stdlib=%,$(CLANGDEFS) -I$(CLANGSYSINCLUDE))
+CLANGTOOLDEFS += -w
 ifneq ($(filter-out MACOSX WNT,$(OS)),)
 ifneq ($(CLANGDIR),/usr)
 # Help the generator find Clang shared libs, if Clang is built so and installed in a non-standard prefix.
-CLANGTOOLLIBS += -Wl,--rpath,$(shell $(LLVMCONFIG) --libdir)
+CLANGTOOLLIBS += -Wl,--rpath,$(CLANGLIBDIR)
 endif
 endif
 
 $(CLANGOUTDIR)/sharedvisitor/analyzer$(CLANG_EXE_EXT): $(CLANGINDIR)/sharedvisitor/analyzer.cxx \
         | $(CLANGOUTDIR)/sharedvisitor
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,1)
-	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) $(CLANGTOOLDEFS) $(CLANGINCLUDES) \
-        -DCLANGDIR=$(CLANGDIR) -I$(BUILDDIR)/config_host \
+	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGDEFS) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGINCLUDES) \
+        -I$(BUILDDIR)/config_host -DCLANGFLAGS="$(CLANGTOOLDEFS)" \
         -DLO_CLANG_USE_ANALYZER_PCH=$(LO_CLANG_USE_ANALYZER_PCH) \
         -c $< -o $(CLANGOUTDIR)/sharedvisitor/analyzer.o -MMD -MT $@ -MP \
         -MF $(CLANGOUTDIR)/sharedvisitor/analyzer.d
-	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGOUTDIR)/sharedvisitor/analyzer.o \
+	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGDEFS) $(CLANGCXXFLAGS) $(CLANGOUTDIR)/sharedvisitor/analyzer.o \
         -o $@ $(CLANGTOOLLIBS)
 
 $(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT): $(CLANGINDIR)/sharedvisitor/generator.cxx \
         | $(CLANGOUTDIR)/sharedvisitor
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,1)
-	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) \
+	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGDEFS) $(CLANGCXXFLAGS) $(CLANGWERROR) \
         -c $< -o $(CLANGOUTDIR)/sharedvisitor/generator.o -MMD -MT $@ -MP \
         -MF $(CLANGOUTDIR)/sharedvisitor/generator.d
-	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGOUTDIR)/sharedvisitor/generator.o \
+	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGDEFS) $(CLANGCXXFLAGS) $(CLANGOUTDIR)/sharedvisitor/generator.o \
         -o $@
 
 $(CLANGOUTDIR)/sharedvisitor/analyzer$(CLANG_EXE_EXT): $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
@@ -302,8 +294,7 @@ endif
 ifdef LO_CLANG_USE_ANALYZER_PCH
 
 # these are from the invocation in analyzer.cxx
-LO_CLANG_ANALYZER_PCH_CXXFLAGS := -I$(BUILDDIR)/config_host -I$(CLANGDIR)/include $(CLANGTOOLDEFS) $(CLANGSTDOPTION) \
-    -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS
+LO_CLANG_ANALYZER_PCH_CXXFLAGS := -I$(BUILDDIR)/config_host $(CLANGTOOLDEFS)
 
 $(CLANGOUTDIR)/sharedvisitor/clang.pch: $(CLANGINDIR)/sharedvisitor/precompiled_clang.hxx \
         $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp \
