@@ -123,6 +123,8 @@
 #include <ndtxt.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
@@ -745,7 +747,18 @@ void SwView::Execute(SfxRequest &rReq)
                 pNext = m_pWrtShell->SelNextRedline();
 
             if (pNext)
+            {
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    OString aPayload(".uno:CurrentTrackedChangeId=");
+                    sal_uInt32 nRedlineId = pNext->GetId();
+                    aPayload += OString::number(nRedlineId);
+                    libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload.getStr());
+                }
+
                 m_pWrtShell->SetInSelect();
+            }
+
         }
         break;
 
@@ -754,7 +767,17 @@ void SwView::Execute(SfxRequest &rReq)
             const SwRangeRedline *pPrev = m_pWrtShell->SelPrevRedline();
 
             if (pPrev)
+            {
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    OString aPayload(".uno:CurrentTrackedChangeId=");
+                    sal_uInt32 nRedlineId = pPrev->GetId();
+                    aPayload += OString::number(nRedlineId);
+                    libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload.getStr());
+                }
+
                 m_pWrtShell->SetInSelect();
+            }
         }
         break;
 
