@@ -160,7 +160,7 @@ MyFuncInfo ExpandableMethods::niceName(const FunctionDecl* functionDecl)
 std::string ExpandableMethods::toString(SourceLocation loc)
 {
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( loc );
-    StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
+    StringRef name = getFileNameOfSpellingLoc(expansionLoc);
     std::string sourceLocation = std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
     loplugin::normalizeDotDotInFilePath(sourceLocation);
     return sourceLocation;
