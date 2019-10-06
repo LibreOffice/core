@@ -46,6 +46,10 @@ OUString Span::convertFromUtf8() const {
     return OUString(s, SAL_NO_ACQUIRE);
 }
 
+std::size_t Span::hashCode() const {
+    return rtl_str_hashCode_WithLength(begin, length);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
