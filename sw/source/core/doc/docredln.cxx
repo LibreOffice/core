@@ -376,8 +376,8 @@ void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRe
     {
         SwShellCursor aCursor(pView->GetWrtShell(), *pStartPos);
         aCursor.SetMark();
-        aCursor.GetMark()->nNode = *pContentNd;
-        aCursor.GetMark()->nContent.Assign(pContentNd, pEndPos->nContent.GetIndex());
+        aCursor.GetMark()->nNode = pEndPos->nNode;
+        aCursor.GetMark()->nContent = pEndPos->nContent;
 
         aCursor.FillRects();
 
@@ -1015,7 +1015,7 @@ SwRangeRedline::SwRangeRedline( const SwRangeRedline& rCpy )
     : SwPaM( *rCpy.GetMark(), *rCpy.GetPoint() ),
     m_pRedlineData( new SwRedlineData( *rCpy.m_pRedlineData )),
     m_pContentSect( nullptr ),
-    m_nId( rCpy.m_nId )
+    m_nId( m_nLastId++ )
 {
     m_bDelLastPara = false;
     m_bIsVisible = true;
