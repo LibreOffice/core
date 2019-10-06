@@ -63,11 +63,11 @@ bool parseHexDigit(char c, int * value) {
 
 bool parseValue(xmlreader::Span const & text, sal_Bool * value) {
     assert(text.is() && value != nullptr);
-    if (text.equals("true") || text.equals("1")) {
+    if (text == "true" || text == "1") {
         *value = true;
         return true;
     }
-    if (text.equals("false") || text.equals("0")) {
+    if (text == "false" || text == "0") {
         *value = false;
         return true;
     }
@@ -278,7 +278,7 @@ bool ValueParser::startElement(
     }
     switch (state_) {
     case State::Text:
-        if (nsId == xmlreader::XmlReader::NAMESPACE_NONE && name.equals("it") &&
+        if (nsId == xmlreader::XmlReader::NAMESPACE_NONE && name == "it" &&
             isListType(type_) && separator_.isEmpty())
         {
             pad_.clear();
@@ -290,7 +290,7 @@ bool ValueParser::startElement(
         [[fallthrough]];
     case State::IT:
         if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-            name.equals("unicode") &&
+            name == "unicode" &&
             (type_ == TYPE_STRING || type_ == TYPE_STRING_LIST))
         {
             sal_Int32 scalar = -1;
@@ -301,7 +301,7 @@ bool ValueParser::startElement(
                     break;
                 }
                 if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                    attrLn.equals("scalar"))
+                    attrLn == "scalar")
                 {
                     if (!parseValue(reader.getAttributeValue(true), &scalar)) {
                         scalar = -1;
