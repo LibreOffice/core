@@ -54,7 +54,7 @@ static OUString lcl_getValue(xmlreader::XmlReader& reader,
     xmlreader::Span name;
     xmlreader::XmlReader::Result res;
     res = reader.nextItem(xmlreader::XmlReader::Text::NONE, &name, &nsId);
-    assert(res == xmlreader::XmlReader::Result::Begin && name.equals(span));
+    assert(res == xmlreader::XmlReader::Result::Begin && name == span);
     res = reader.nextItem(xmlreader::XmlReader::Text::Raw, &name, &nsId);
     assert(res == xmlreader::XmlReader::Result::Text);
     (void) res; (void) span;
@@ -92,7 +92,7 @@ SwLabelConfig::SwLabelConfig() :
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
     assert(
         res == xmlreader::XmlReader::Result::Begin
-        && name.equals("manufacturers"));
+        && name == "manufacturers");
     res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
     while (res != xmlreader::XmlReader::Result::End)
@@ -100,12 +100,12 @@ SwLabelConfig::SwLabelConfig() :
         // Opening manufacturer
         assert(
             res == xmlreader::XmlReader::Result::Begin
-            && name.equals("manufacturer"));
+            && name == "manufacturer");
         // Get the name
         (void)reader.nextAttribute(&nsId, &name);
         assert(
             nsId == xmlreader::XmlReader::NAMESPACE_NONE
-            && name.equals("name"));
+            && name == "name");
         sManufacturer = reader.getAttributeValue(false).convertFromUtf8();
 
         for(;;) {
@@ -116,7 +116,7 @@ SwLabelConfig::SwLabelConfig() :
                 break;
             assert(
                 res == xmlreader::XmlReader::Result::Begin
-                && name.equals("label"));
+                && name == "label");
             // Get name value
             sName = lcl_getValue(reader, xmlreader::Span("name"));
             // Get measure value

@@ -112,7 +112,7 @@ XmlReader::~XmlReader() {
 int XmlReader::registerNamespaceIri(Span const & iri) {
     int id = toNamespaceId(namespaceIris_.size());
     namespaceIris_.push_back(iri);
-    if (iri.equals("http://www.w3.org/2001/XMLSchema-instance")) {
+    if (iri == "http://www.w3.org/2001/XMLSchema-instance") {
         // Old user layer .xcu files used the xsi namespace prefix without
         // declaring a corresponding namespace binding, see issue 77174; reading
         // those files during migration would fail without this hack that can be
@@ -190,7 +190,7 @@ int XmlReader::getNamespaceId(Span const & prefix) const {
     }
 
     auto i = std::find_if(namespaces_.crbegin(), namespaces_.crend(),
-        [&prefix](const NamespaceData& rNamespaceData) { return prefix.equals(rNamespaceData.prefix); });
+        [&prefix](const NamespaceData& rNamespaceData) { return prefix == rNamespaceData.prefix; });
 
     if (i != namespaces_.rend())
     {
@@ -379,7 +379,7 @@ int XmlReader::scanNamespaceIri(char const * begin, char const * end) {
     assert(begin != nullptr && begin <= end);
     Span iri(handleAttributeValue(begin, end, false));
     for (NamespaceIris::size_type i = 0; i < namespaceIris_.size(); ++i) {
-        if (namespaceIris_[i].equals(iri)) {
+        if (namespaceIris_[i] == iri) {
             return toNamespaceId(i);
         }
     }
@@ -645,13 +645,13 @@ XmlReader::Result XmlReader::handleStartTag(int * nsId, Span * localName) {
         char const * valueEnd = pos_ + i;
         pos_ += i + 1;
         if (attrNameColon == nullptr &&
-            Span(attrNameBegin, attrNameEnd - attrNameBegin).equals("xmlns"))
+            Span(attrNameBegin, attrNameEnd - attrNameBegin) == "xmlns")
         {
             hasDefaultNs = true;
             defaultNsId = scanNamespaceIri(valueBegin, valueEnd);
         } else if (attrNameColon != nullptr &&
-                   Span(attrNameBegin, attrNameColon - attrNameBegin).equals(
-                       "xmlns"))
+                   Span(attrNameBegin, attrNameColon - attrNameBegin) ==
+                       "xmlns")
         {
             namespaces_.emplace_back(
                     Span(attrNameColon + 1, attrNameEnd - (attrNameColon + 1)),
