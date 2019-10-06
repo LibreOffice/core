@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <cstddef>
+#include <cstring>
 
 #include <sal/types.h>
 #include <rtl/string.h>
@@ -50,21 +51,29 @@ struct SAL_WARN_UNUSED OOO_DLLPUBLIC_XMLREADER Span {
 
     bool is() const { return begin != nullptr; }
 
-    bool equals(Span const & text) const {
+    bool operator==(Span const & text) const {
         return length == text.length
-            && (rtl_str_compare_WithLength(
-                    begin, length, text.begin, text.length)
-                == 0);
+            && memcmp(begin, text.begin, text.length) == 0;
+    }
+
+    bool operator!=(Span const & text) const {
+        return !(operator==(text));
     }
 
     bool equals(char const * textBegin, sal_Int32 textLength) const {
-        return equals(Span(textBegin, textLength));
+        return operator==(Span(textBegin, textLength));
     }
 
-    template< std::size_t N > bool equals(char const (& literal)[N])
+    template< std::size_t N > bool operator==(char const (& literal)[N])
         const
     {
-        return equals(Span(literal, N - 1));
+        return operator==(Span(literal, N - 1));
+    }
+
+    template< std::size_t N > bool operator!=(char const (& literal)[N])
+        const
+    {
+        return operator!=(Span(literal, N - 1));
     }
 
     rtl::OUString convertFromUtf8() const;

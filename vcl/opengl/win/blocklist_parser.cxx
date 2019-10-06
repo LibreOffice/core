@@ -162,16 +162,16 @@ void handleDevices(wgl::DriverInfo& rDriver, xmlreader::XmlReader& rReader)
             if (nLevel > 2)
                 throw InvalidFileException();
 
-            if (name.equals("msg"))
+            if (name == "msg")
             {
                 bInMsg = true;
             }
-            else if (name.equals("device"))
+            else if (name == "device")
             {
                 int nsIdDeveice;
                 while (rReader.nextAttribute(&nsIdDeveice, &name))
                 {
-                    if (name.equals("id"))
+                    if (name == "id")
                     {
                         name = rReader.getAttributeValue(false);
                         OString aDeviceId(name.begin, name.length);
@@ -222,37 +222,37 @@ void WinBlocklistParser::handleEntry(wgl::DriverInfo& rDriver, xmlreader::XmlRea
 
     while (rReader.nextAttribute(&nsId, &name))
     {
-        if (name.equals("os"))
+        if (name == "os")
         {
             name = rReader.getAttributeValue(false);
             OString sOS(name.begin, name.length);
             rDriver.meOperatingSystem = getOperatingSystem(sOS);
         }
-        else if (name.equals("vendor"))
+        else if (name == "vendor")
         {
             name = rReader.getAttributeValue(false);
             OString sVendor(name.begin, name.length);
             rDriver.maAdapterVendor = getVendor(sVendor);
         }
-        else if (name.equals("compare"))
+        else if (name == "compare")
         {
             name = rReader.getAttributeValue(false);
             OString sCompare(name.begin, name.length);
             rDriver.meComparisonOp = getComparison(sCompare);
         }
-        else if (name.equals("version"))
+        else if (name == "version")
         {
             name = rReader.getAttributeValue(false);
             OString sVersion(name.begin, name.length);
             rDriver.mnDriverVersion = getVersion(sVersion);
         }
-        else if (name.equals("minVersion"))
+        else if (name == "minVersion")
         {
             name = rReader.getAttributeValue(false);
             OString sMinVersion(name.begin, name.length);
             rDriver.mnDriverVersion = getVersion(sMinVersion);
         }
-        else if (name.equals("maxVersion"))
+        else if (name == "maxVersion")
         {
             name = rReader.getAttributeValue(false);
             OString sMaxVersion(name.begin, name.length);
@@ -280,13 +280,13 @@ void WinBlocklistParser::handleList(xmlreader::XmlReader& rReader)
 
         if (res == xmlreader::XmlReader::Result::Begin)
         {
-            if (name.equals("entry"))
+            if (name == "entry")
             {
                 wgl::DriverInfo aDriver;
                 handleEntry(aDriver, rReader);
                 mrDriverList.push_back(aDriver);
             }
-            else if (name.equals("entryRange"))
+            else if (name == "entryRange")
             {
                 wgl::DriverInfo aDriver;
                 handleEntry(aDriver, rReader);
@@ -316,17 +316,17 @@ void WinBlocklistParser::handleContent(xmlreader::XmlReader& rReader)
 
         if (res == xmlreader::XmlReader::Result::Begin)
         {
-            if (name.equals("whitelist"))
+            if (name == "whitelist")
             {
                 meBlockType = BlockType::WHITELIST;
                 handleList(rReader);
             }
-            else if (name.equals("blacklist"))
+            else if (name == "blacklist")
             {
                 meBlockType = BlockType::BLACKLIST;
                 handleList(rReader);
             }
-            else if (name.equals("root"))
+            else if (name == "root")
             {
             }
             else
@@ -336,9 +336,7 @@ void WinBlocklistParser::handleContent(xmlreader::XmlReader& rReader)
         }
         else if (res == xmlreader::XmlReader::Result::End)
         {
-            if (name.equals("whitelist")
-                    ||
-                    name.equals("blacklist"))
+            if (name == "whitelist" || name == "blacklist")
             {
                 meBlockType = BlockType::UNKNOWN;
             }
