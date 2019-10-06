@@ -182,9 +182,7 @@ Span XmlReader::getAttributeValue(bool fullyNormalize) {
 }
 
 int XmlReader::getNamespaceId(Span const & prefix) const {
-    OUString spanString = prefix.convertFromUtf8();
-
-    if (auto it = cacheNSIds_.find(spanString); it != cacheNSIds_.end())
+    if (auto it = cacheNSIds_.find(prefix); it != cacheNSIds_.end())
     {
         return it->second;
     }
@@ -194,7 +192,7 @@ int XmlReader::getNamespaceId(Span const & prefix) const {
 
     if (i != namespaces_.rend())
     {
-        cacheNSIds_[spanString]= i->nsId;
+        cacheNSIds_[i->prefix]= i->nsId;
         return i->nsId;
     }
 
