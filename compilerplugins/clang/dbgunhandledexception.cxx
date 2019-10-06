@@ -59,6 +59,7 @@ bool DbgUnhandledException::PreTraverseCXXCatchStmt(CXXCatchStmt* catchStmt)
 bool DbgUnhandledException::PostTraverseCXXCatchStmt(CXXCatchStmt* catchStmt, bool)
 {
     assert(currCatchStmt.top() == catchStmt);
+    (void)catchStmt;
     currCatchStmt.pop();
     return true;
 }
