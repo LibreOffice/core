@@ -306,7 +306,7 @@ LO_CLANG_ANALYZER_PCH_CXXFLAGS := -I$(BUILDDIR)/config_host -I$(CLANGDIR)/includ
     -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS
 
 $(CLANGOUTDIR)/sharedvisitor/clang.pch: $(CLANGINDIR)/sharedvisitor/precompiled_clang.hxx \
-        $(CLANGOUTDIR)/clang-timestamp \
+        $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp \
         | $(CLANGOUTDIR)/sharedvisitor
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),PCH,1)
 	$(QUIET)$(CLANGDIR)/bin/clang -x c++-header $(LO_CLANG_ANALYZER_PCH_CXXFLAGS) \
