@@ -141,7 +141,7 @@ bool DeletedSpecial::whitelist(
     std::string const & path)
 {
     return getClass(decl)->getQualifiedNameAsString() == name
-        && (compiler.getSourceManager().getFilename(
+        && (getFileNameOfSpellingLoc(
                 compiler.getSourceManager().getSpellingLoc(decl->getLocation()))
             == SRCDIR "/" + path);
 }

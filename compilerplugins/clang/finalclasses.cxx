@@ -128,7 +128,7 @@ bool FinalClasses::VisitCXXRecordDecl(const CXXRecordDecl* decl)
         return true;
 
     SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(decl));
-    std::string filename = compiler.getSourceManager().getFilename(spellingLocation);
+    std::string filename = getFileNameOfSpellingLoc(spellingLocation);
     auto sourceLocation = filename.substr(strlen(SRCDIR)) + ":"
         + std::to_string(compiler.getSourceManager().getSpellingLineNumber(spellingLocation));
     definitionMap.insert( std::pair<std::string,std::string>(s, sourceLocation) );
