@@ -59,6 +59,7 @@ bool isDerivedFrom(
             if (bases->insert(bd).second) {
                 auto const d = isDerivedFrom(bd, base, bases, hidden);
                 assert(d);
+                (void)d;
                 *hidden |= getTypeVisibility(bd) != DefaultVisibility;
             }
             derived = true;
@@ -75,9 +76,8 @@ StringRef vis(Visibility v) {
         return "protected";
     case DefaultVisibility:
         return "default";
-    default:
-        llvm_unreachable("unknown visibility");
     }
+    abort();
 }
 
 class DynCastVisibility final:
