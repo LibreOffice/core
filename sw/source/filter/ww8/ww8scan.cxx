@@ -4896,7 +4896,6 @@ WW8PLCFMan::WW8PLCFMan(const WW8ScannerBase* pBase, ManTypes nType, long nStartC
 {
     m_pWwFib = pBase->m_pWw8Fib;
 
-    memset( m_aD, 0, sizeof( m_aD ) );
     m_nLineEnd = WW8_CP_MAX;
     m_nManType = nType;
 
