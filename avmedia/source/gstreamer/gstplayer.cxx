@@ -850,13 +850,10 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
         if (!pEnvData)
             return nullptr;
 
-        OUString aToolkit = OUString::createFromAscii(pEnvData->pToolkit);
-        OUString aPlatform = OUString::createFromAscii(pEnvData->pPlatformName);
-
         // tdf#124027: the position of embedded window is identical w/ the position
         // of media object in all other vclplugs (kf5, gen), in gtk3 w/o gtksink it
         // needs to be translated
-        if (aToolkit == "gtk3")
+        if (pEnvData->toolkit == SystemEnvData::Toolkit::Gtk3)
         {
             Point aPoint = pParentWindow->GetPosPixel();
             maArea.X = aPoint.getX();
@@ -868,12 +865,12 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
         GstElement *pVideosink = static_cast<GstElement*>(pParentWindow->CreateGStreamerSink());
         if (pVideosink)
         {
-            if (aToolkit == "gtk3")
+            if (pEnvData->toolkit == SystemEnvData::Toolkit::Gtk3)
                 mbUseGtkSink = true;
         }
         else
         {
-            if (aPlatform == "wayland")
+            if (pEnvData->platform == SystemEnvData::Platform::Wayland)
                 pVideosink = gst_element_factory_make("waylandsink", "video-output");
             else
                 pVideosink = gst_element_factory_make("autovideosink", "video-output");

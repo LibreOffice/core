@@ -187,11 +187,11 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     //m_aSystemData.pSalFrame = this;
     m_aSystemData.pWidget = m_pQWidget;
     //m_aSystemData.nScreen = m_nXScreen.getXScreen();
-    m_aSystemData.pToolkit = "qt5";
+    m_aSystemData.toolkit = SystemEnvData::Toolkit::Qt5;
     if (!bWayland)
-        m_aSystemData.pPlatformName = "xcb";
+        m_aSystemData.platform = SystemEnvData::Platform::Xcb;
     else
-        m_aSystemData.pPlatformName = "wayland";
+        m_aSystemData.platform = SystemEnvData::Platform::Wayland;
 
     SetIcon(SV_ICON_ID_OFFICE);
 }

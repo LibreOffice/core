@@ -515,8 +515,7 @@ void* Qt5Instance::CreateGStreamerSink(const SystemChildWindow* pWindow)
     if (!pEnvData)
         return nullptr;
 
-    OUString aPlatform = OUString::createFromAscii(pEnvData->pPlatformName);
-    if (aPlatform != "wayland")
+    if (pEnvData->platform != SystemEnvData::Platform::Wayland)
         return nullptr;
 
     GstElement* pVideosink = pSymbol("qwidget5videosink", "qwidget5videosink");

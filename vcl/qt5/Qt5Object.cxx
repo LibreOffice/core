@@ -45,17 +45,17 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     //m_aSystemData.pSalFrame = this;
     m_aSystemData.pWidget = m_pQWidget;
     //m_aSystemData.nScreen = m_nXScreen.getXScreen();
-    m_aSystemData.pToolkit = "qt5";
-    m_aSystemData.pPlatformName = "xcb";
+    m_aSystemData.toolkit = SystemEnvData::Toolkit::Qt5;
+    m_aSystemData.platform = SystemEnvData::Platform::Xcb;
     const bool bWayland = QGuiApplication::platformName() == "wayland";
     if (!bWayland)
     {
-        m_aSystemData.pPlatformName = "xcb";
+        m_aSystemData.platform = SystemEnvData::Platform::Xcb;
         m_aSystemData.aWindow = m_pQWindow->winId(); // ID of the embedded window
     }
     else
     {
-        m_aSystemData.pPlatformName = "wayland";
+        m_aSystemData.platform = SystemEnvData::Platform::Wayland;
         // TODO implement as needed for Wayland,
         // s.a. commit c0d4f3ad3307c which did this for gtk3
         // QPlatformNativeInterface* native = QGuiApplication::platformNativeInterface();
