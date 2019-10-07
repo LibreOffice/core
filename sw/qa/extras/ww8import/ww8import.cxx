@@ -162,6 +162,21 @@ DECLARE_WW8IMPORT_TEST( testTdf105570, "tdf105570.doc" )
     CPPUNIT_ASSERT_EQUAL( sal_uInt16(0), pTableNd->GetTable().GetRowsToRepeat() );
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf121649, "tdf121649.doc")
+{
+    uno::Reference<drawing::XShape> xShape1 = getShapeByName("Straight Arrow Connector 1");
+    CPPUNIT_ASSERT(xShape1.is());
+
+    awt::Point aShape1Position = xShape1->getPosition();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9095), aShape1Position.X);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8835), aShape1Position.Y);
+
+    // Without the accompanying fix in place, the size would be 0x0
+    awt::Size aShape1Size = xShape1->getSize();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9193), aShape1Size.Width);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aShape1Size.Height);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testImageLazyRead, "image-lazy-read.doc")
 {
     auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
