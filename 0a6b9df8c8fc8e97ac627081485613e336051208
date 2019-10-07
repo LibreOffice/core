@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_37a8eb1d",
+        "filename": "include/xmlreader/span.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-07T07:27:29Z",
+      "side": 1,
+      "message": "this include is unused now, I think",
+      "revId": "0a6b9df8c8fc8e97ac627081485613e336051208",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_17ab6f1d",
+        "filename": "include/xmlreader/span.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-07T07:27:29Z",
+      "side": 1,
+      "message": "this should be std::memcmp if you include \u003ccstring\u003e",
+      "revId": "0a6b9df8c8fc8e97ac627081485613e336051208",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
