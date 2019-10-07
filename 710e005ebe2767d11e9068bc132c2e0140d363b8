@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_babce269",
+        "filename": "compilerplugins/clang/empty.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-10-07T11:41:03Z",
+      "side": 1,
+      "message": "BTW, is this correct? It doesn\u0027t not invert the operation in this case.",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 36,
+        "endChar": 18
+      },
+      "revId": "710e005ebe2767d11e9068bc132c2e0140d363b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
