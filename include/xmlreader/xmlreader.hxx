@@ -22,8 +22,8 @@
 
 #include <sal/config.h>
 
-#include <unordered_map>
 #include <stack>
+#include <unordered_map>
 #include <vector>
 
 #include <osl/file.h>

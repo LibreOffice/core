@@ -24,9 +24,9 @@
 
 #include <cstddef>
 #include <cstring>
+#include <functional>
 
 #include <sal/types.h>
-#include <rtl/string.h>
 #include <xmlreader/detail/xmlreaderdllapi.hxx>
 
 namespace rtl { class OUString; }
@@ -53,7 +53,7 @@ struct SAL_WARN_UNUSED OOO_DLLPUBLIC_XMLREADER Span {
 
     bool operator==(Span const & text) const {
         return length == text.length
-            && memcmp(begin, text.begin, text.length) == 0;
+            && std::memcmp(begin, text.begin, text.length) == 0;
     }
 
     bool operator!=(Span const & text) const {
