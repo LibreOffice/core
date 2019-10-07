@@ -76,7 +76,7 @@ protected:
 
 public:
     SalUserEventList();
-    virtual ~SalUserEventList();
+    virtual ~SalUserEventList() COVERITY_NOEXCEPT_FALSE;
 
     inline const SalFrameSet& getFrames() const;
     inline SalFrame* anyFrame() const;
