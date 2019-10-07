@@ -364,15 +364,19 @@ void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
 // Give back all (not exceeding FIND_MAX_GLOS) found modules
 // with matching beginning.
 
-void SwGlossaryList::HasLongName(const OUString& rBegin, std::vector<OUString> *pLongNames)
+void SwGlossaryList::HasLongName(const std::vector<OUString>& rBeginCandidates,
+                                 std::vector<std::pair<OUString, sal_uInt16>>& rLongNames)
 {
     if(!bFilled)
         Update();
-    sal_uInt16 nFound = 0;
     const size_t nCount = aGroupArr.size();
-    sal_Int32 nBeginLen = rBegin.getLength();
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
+    // We store results for all candidate words in separate lists, so that later
+    // we can sort them according to the candidate position
+    std::vector<std::vector<OUString>> aResults(rBeginCandidates.size());
 
+    // We can't break after FIND_MAX_GLOS items found, since first items may have ended up in
+    // lower-priority lists, and those from higher-priority lists are yet to come. So process all.
     for(size_t i = 0; i < nCount; ++i)
     {
         AutoTextGroup* pGroup = aGroupArr[i].get();
@@ -380,15 +384,50 @@ void SwGlossaryList::HasLongName(const OUString& rBegin, std::vector<OUString> *
         for(sal_uInt16 j = 0; j < pGroup->nCount; j++)
         {
             OUString sBlock = pGroup->sLongNames.getToken(0, STRING_DELIM, nIdx);
-            if( nBeginLen + 1 < sBlock.getLength() &&
-                rSCmp.isEqual( sBlock.copy(0, nBeginLen), rBegin ))
+            for (size_t k = 0; k < rBeginCandidates.size(); ++k)
             {
-                pLongNames->push_back( sBlock );
-                nFound++;
-                if(FIND_MAX_GLOS == nFound)
-                    break;
+                const OUString& s = rBeginCandidates[k];
+                if (s.getLength() + 1 < sBlock.getLength()
+                    && rSCmp.isEqual(sBlock.copy(0, s.getLength()), s))
+                {
+                    aResults[k].push_back(sBlock);
+                }
             }
         }
+    }
+
+    std::vector<std::pair<OUString, sal_uInt16>> aAllResults;
+    // Sort and concatenate all result lists. See QuickHelpData::SortAndFilter
+    for (size_t i = 0; i < rBeginCandidates.size(); ++i)
+    {
+        std::sort(aResults[i].begin(), aResults[i].end(),
+                  [origWord = rBeginCandidates[i]](const OUString& s1, const OUString& s2) {
+                      int nRet = s1.compareToIgnoreAsciiCase(s2);
+                      if (nRet == 0)
+                      {
+                          // fdo#61251 sort stuff that starts with the exact rOrigWord before
+                          // another ignore-case candidate
+                          int n1StartsWithOrig = s1.startsWith(origWord) ? 0 : 1;
+                          int n2StartsWithOrig = s2.startsWith(origWord) ? 0 : 1;
+                          return n1StartsWithOrig < n2StartsWithOrig;
+                      }
+                      return nRet < 0;
+                  });
+        // All suggestions must be accompanied with length of the text they would replace
+        std::transform(aResults[i].begin(), aResults[i].end(), std::back_inserter(aAllResults),
+                       [nLen = sal_uInt16(rBeginCandidates[i].getLength())](const OUString& s) {
+                           return std::make_pair(s, nLen);
+                       });
+    }
+
+    const auto& it = std::unique(
+        aAllResults.begin(), aAllResults.end(),
+        [](const std::pair<OUString, sal_uInt16>& s1, const std::pair<OUString, sal_uInt16>& s2) {
+            return s1.first.equalsIgnoreAsciiCase(s2.first);
+        });
+    if (const auto nCount = std::min<size_t>(std::distance(aAllResults.begin(), it), FIND_MAX_GLOS))
+    {
+        rLongNames.insert(rLongNames.end(), aAllResults.begin(), aAllResults.begin() + nCount);
     }
 }
 
