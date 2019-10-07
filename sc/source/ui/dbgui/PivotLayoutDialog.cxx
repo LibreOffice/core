@@ -613,7 +613,7 @@ bool ScPivotLayoutDialog::IsDataElement(SCCOL nColumn)
 
 ScDPLabelData& ScPivotLayoutDialog::GetLabelData(SCCOL nColumn)
 {
-    return *maPivotParameters.maLabelArray[nColumn].get();
+    return *maPivotParameters.maLabelArray[nColumn];
 }
 
 void ScPivotLayoutDialog::PushDataFieldNames(std::vector<ScDPName>& rDataFieldNames)

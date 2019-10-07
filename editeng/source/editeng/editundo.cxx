@@ -539,7 +539,7 @@ void EditUndoSetAttribs::Undo()
     bool bFields = false;
     for ( sal_Int32 nPara = aESel.nStartPara; nPara <= aESel.nEndPara; nPara++ )
     {
-        const ContentAttribsInfo& rInf = *aPrevAttribs[nPara-aESel.nStartPara].get();
+        const ContentAttribsInfo& rInf = *aPrevAttribs[nPara-aESel.nStartPara];
 
         // first the paragraph attributes ...
         pEE->SetParaAttribsOnly(nPara, rInf.GetPrevParaAttribs());

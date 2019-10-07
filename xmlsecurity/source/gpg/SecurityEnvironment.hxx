@@ -60,7 +60,7 @@ public:
     virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromAscii(
         const OUString& asciiCertificate ) override;
 
-    GpgME::Context& getGpgContext() { return *m_ctx.get(); }
+    GpgME::Context& getGpgContext() { return *m_ctx; }
     virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getAllCertificates() override;
 
 private:

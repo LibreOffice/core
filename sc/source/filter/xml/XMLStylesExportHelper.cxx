@@ -1057,7 +1057,7 @@ sal_Int32 ScRowStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32
         // Cache hit !
         return maCache.mnStyle;
 
-    StylesType& r = *aTables[nTable].get();
+    StylesType& r = *aTables[nTable];
     if (!r.is_tree_valid())
         r.build_tree();
     sal_Int32 nStyle(0);
@@ -1079,7 +1079,7 @@ void ScRowStyles::AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nFie
     const sal_Int32 nStringIndex)
 {
     OSL_ENSURE(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
-    StylesType& r = *aTables[nTable].get();
+    StylesType& r = *aTables[nTable];
     r.insert_back(nField, nField+1, nStringIndex);
 }
 
@@ -1088,7 +1088,7 @@ void ScRowStyles::AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nSta
 {
     OSL_ENSURE( nStartField <= nEndField, "bad field range");
     OSL_ENSURE(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
-    StylesType& r = *aTables[nTable].get();
+    StylesType& r = *aTables[nTable];
     r.insert_back(nStartField, nEndField+1, nStringIndex);
 }
 

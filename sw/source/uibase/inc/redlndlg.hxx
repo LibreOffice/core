@@ -107,7 +107,7 @@ public:
 
     DECL_LINK( FilterChangedHdl, SvxTPFilter*, void );
 
-    SvxAcceptChgCtr& GetChgCtrl()        { return *m_xTabPagesCTRL.get(); }
+    SvxAcceptChgCtr& GetChgCtrl()        { return *m_xTabPagesCTRL; }
     bool     HasRedlineAutoFormat() const   { return m_bRedlnAutoFormat; }
 
     void            Init(SwRedlineTable::size_type nStart = 0);

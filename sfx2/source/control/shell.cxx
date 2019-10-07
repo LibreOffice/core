@@ -570,7 +570,7 @@ void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >&
 
         if (!pImpl->aSlotArr.empty())
         {
-            SfxSlot& rSlot = *pImpl->aSlotArr[0].get();
+            SfxSlot& rSlot = *pImpl->aSlotArr[0];
             pNewSlot->pNextSlot = rSlot.pNextSlot;
             rSlot.pNextSlot = pNewSlot;
         }

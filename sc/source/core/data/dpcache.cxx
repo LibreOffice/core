@@ -647,7 +647,7 @@ bool ScDPCache::InitFromDataBase(DBConnector& rDB)
                 continue;
 
             aBuckets.clear();
-            Field& rField = *maFields[nCol].get();
+            Field& rField = *maFields[nCol];
             SCROW nRow = 0;
             do
             {
@@ -961,7 +961,7 @@ SCROW ScDPCache::GetItemDataId(sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty)
 {
     OSL_ENSURE(nDim < mnColumnCount, "ScDPTableDataCache::GetItemDataId ");
 
-    const Field& rField = *maFields[nDim].get();
+    const Field& rField = *maFields[nDim];
     if (static_cast<size_t>(nRow) >= rField.maData.size())
     {
         // nRow is in the trailing empty rows area.
@@ -993,7 +993,7 @@ const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
     if (nDimPos < nSourceCount)
     {
         // source field.
-        const Field& rField = *maFields[nDimPos].get();
+        const Field& rField = *maFields[nDimPos];
         if (nItemId < rField.maItems.size())
             return &rField.maItems[nItemId];
 
@@ -1287,7 +1287,7 @@ void ScDPCache::ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo, sal
     nDim -= nSourceCount;
     if (nDim < static_cast<long>(maGroupFields.size()))
     {
-        GroupItems& rGI = *maGroupFields[nDim].get();
+        GroupItems& rGI = *maGroupFields[nDim];
         rGI.maItems.clear();
         rGI.maInfo = rNumInfo;
         rGI.mnGroupType = nGroupType;

@@ -671,7 +671,7 @@ void WriterXmlOptimizer::checkHeaderAndFooter( PageElement& rElem )
     auto it = std::find_if(rElem.Children.begin(), rElem.Children.end(), isParagraphElement);
     if (it != rElem.Children.end())
     {
-        ParagraphElement& rPara = dynamic_cast<ParagraphElement&>(*it->get());
+        ParagraphElement& rPara = dynamic_cast<ParagraphElement&>(**it);
         if( rPara.y+rPara.h < rElem.h*0.15 && rPara.isSingleLined( m_rProcessor ) )
         {
             auto next_it = it;
@@ -694,7 +694,7 @@ void WriterXmlOptimizer::checkHeaderAndFooter( PageElement& rElem )
     if (rit == rElem.Children.rend())
         return;
 
-    ParagraphElement& rPara = dynamic_cast<ParagraphElement&>(*rit->get());
+    ParagraphElement& rPara = dynamic_cast<ParagraphElement&>(**rit);
     if( !(rPara.y > rElem.h*0.85 && rPara.isSingleLined( m_rProcessor )) )
         return;
 

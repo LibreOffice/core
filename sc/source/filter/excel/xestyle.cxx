@@ -347,7 +347,7 @@ void XclExpPaletteImpl::Finalize()
     maColorIdDataVec.resize( nCount );
     for( sal_uInt32 nIdx = 0; nIdx < nCount; ++nIdx )
     {
-        const XclListColor& listColor = *mxColorList->at( nIdx ).get();
+        const XclListColor& listColor = *mxColorList->at( nIdx );
         maColorIdDataVec[ listColor.GetColorId() ].Set( listColor.GetColor(), nIdx );
     }
 
@@ -654,7 +654,7 @@ sal_uInt32 XclExpPaletteImpl::GetLeastUsedListColor() const
 
     for( sal_uInt32 nIdx = 0, nCount = mxColorList->size(); nIdx < nCount; ++nIdx )
     {
-        XclListColor& rEntry = *mxColorList->at( nIdx ).get();
+        XclListColor& rEntry = *mxColorList->at( nIdx );
         // ignore the base colors
         if( !rEntry.IsBaseColor() && (rEntry.GetWeighting() < nMinW) )
         {

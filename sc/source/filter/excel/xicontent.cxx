@@ -891,7 +891,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
 
     maDVItems.push_back(
         std::make_unique<DVItem>(aScRanges, ScValidationData(eValMode, eCondMode, xTokArr1.get(), xTokArr2.get(), &rDoc, rScRange.aStart)));
-    DVItem& rItem = *maDVItems.back().get();
+    DVItem& rItem = *maDVItems.back();
 
     rItem.maValidData.SetIgnoreBlank( ::get_flag( nFlags, EXC_DV_IGNOREBLANK ) );
     rItem.maValidData.SetListType( ::get_flagvalue( nFlags, EXC_DV_SUPPRESSDROPDOWN, css::sheet::TableValidationVisibility::INVISIBLE, css::sheet::TableValidationVisibility::UNSORTED ) );

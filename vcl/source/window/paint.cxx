@@ -128,7 +128,7 @@ PaintBufferGuard::~PaintBufferGuard()
                 aPaintRectSize = m_pWindow->PixelToLogic(aRectanglePixel.GetSize());
             }
 
-            m_pWindow->DrawOutDev(m_aPaintRect.TopLeft(), aPaintRectSize, m_aPaintRect.TopLeft(), aPaintRectSize, *mpFrameData->mpBuffer.get());
+            m_pWindow->DrawOutDev(m_aPaintRect.TopLeft(), aPaintRectSize, m_aPaintRect.TopLeft(), aPaintRectSize, *mpFrameData->mpBuffer);
         }
     }
 
@@ -287,10 +287,10 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         {
             // double-buffering
             PaintBufferGuard g(pFrameData, m_pWindow);
-            m_pWindow->ApplySettings(*pFrameData->mpBuffer.get());
+            m_pWindow->ApplySettings(*pFrameData->mpBuffer);
 
-            m_pWindow->PushPaintHelper(this, *pFrameData->mpBuffer.get());
-            m_pWindow->Paint(*pFrameData->mpBuffer.get(), m_aPaintRect);
+            m_pWindow->PushPaintHelper(this, *pFrameData->mpBuffer);
+            m_pWindow->Paint(*pFrameData->mpBuffer, m_aPaintRect);
             pFrameData->maBufferedRect.Union(m_aPaintRect);
         }
         else

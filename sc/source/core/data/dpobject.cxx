@@ -2693,7 +2693,7 @@ void ScDPObject::ConvertOrientation(
         pDim->RemoveSubtotalName();
         if (nDimIndex < rLabels.size())
         {
-            const ScDPLabelData& rLabel = *rLabels[nDimIndex].get();
+            const ScDPLabelData& rLabel = *rLabels[nDimIndex];
             if (!rLabel.maLayoutName.isEmpty())
                 pDim->SetLayoutName(rLabel.maLayoutName);
             if (!rLabel.maSubtotalName.isEmpty())
@@ -3651,12 +3651,12 @@ void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
         OSL_ENSURE( nSrcSize >= nDestSize, "WriteRefsTo: missing entries in document" );
         for (size_t nSrcPos = 0; nSrcPos < nSrcSize; ++nSrcPos)
         {
-            const ScDPObject& rSrcObj = *maTables[nSrcPos].get();
+            const ScDPObject& rSrcObj = *maTables[nSrcPos];
             const OUString& aName = rSrcObj.GetName();
             bool bFound = false;
             for (size_t nDestPos = 0; nDestPos < nDestSize && !bFound; ++nDestPos)
             {
-                ScDPObject& rDestObj = *r.maTables[nDestPos].get();
+                ScDPObject& rDestObj = *r.maTables[nDestPos];
                 if (rDestObj.GetName() == aName)
                 {
                     rSrcObj.WriteRefsTo(rDestObj);     // found object, copy refs
@@ -3681,12 +3681,12 @@ size_t ScDPCollection::GetCount() const
 
 ScDPObject& ScDPCollection::operator [](size_t nIndex)
 {
-    return *maTables[nIndex].get();
+    return *maTables[nIndex];
 }
 
 const ScDPObject& ScDPCollection::operator [](size_t nIndex) const
 {
-    return *maTables[nIndex].get();
+    return *maTables[nIndex];
 }
 
 ScDPObject* ScDPCollection::GetByName(const OUString& rName) const

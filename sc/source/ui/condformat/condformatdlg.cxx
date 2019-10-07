@@ -101,7 +101,7 @@ void ScCondFormatList::init(ScDocument* pDoc,
             }
         }
         if(nCount)
-            EntrySelectHdl(*maEntries[0].get());
+            EntrySelectHdl(*maEntries[0]);
     }
     else
     {

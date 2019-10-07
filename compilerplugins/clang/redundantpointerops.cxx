@@ -113,14 +113,24 @@ bool RedundantPointerOps::VisitUnaryOperator(UnaryOperator const * unaryOperator
         return true;
     if (unaryOperator->getOpcode() != UO_Deref)
         return true;
-    auto innerOp = dyn_cast<UnaryOperator>(unaryOperator->getSubExpr()->IgnoreParenImpCasts());
-    if (!innerOp || innerOp->getOpcode() != UO_AddrOf)
-        return true;
+    auto subExpr = unaryOperator->getSubExpr()->IgnoreParenImpCasts();
+    auto innerOp = dyn_cast<UnaryOperator>(subExpr);
+    if (innerOp && innerOp->getOpcode() == UO_AddrOf)
+        report(
+            DiagnosticsEngine::Warning, "'&' followed by '*', rather use '.'",
+            compat::getBeginLoc(unaryOperator))
+            << unaryOperator->getSourceRange();
+    if (auto cxxMemberCallExpr = dyn_cast<CXXMemberCallExpr>(subExpr))
+    {
+        auto methodDecl = cxxMemberCallExpr->getMethodDecl();
+        if (methodDecl->getIdentifier() && methodDecl->getName() == "get"
+            && cxxMemberCallExpr->getRecordDecl()->getName() == "unique_ptr")
+            report(
+                DiagnosticsEngine::Warning, "'*' followed by '.get()', just use '*'",
+                compat::getBeginLoc(unaryOperator))
+                << unaryOperator->getSourceRange();
 
-    report(
-        DiagnosticsEngine::Warning, "'&' followed by '*', rather use '.'",
-        compat::getBeginLoc(unaryOperator))
-        << unaryOperator->getSourceRange();
+    }
     return true;
 }
 

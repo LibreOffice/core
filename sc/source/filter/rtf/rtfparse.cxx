@@ -203,7 +203,7 @@ void ScRTFParser::NewCellRow()
         // Not flush on the right? => new table
         if ( nLastWidth && !maDefaultList.empty() )
         {
-            const ScRTFCellDefault& rD = *maDefaultList.back().get();
+            const ScRTFCellDefault& rD = *maDefaultList.back();
             if (rD.nTwips != nLastWidth)
             {
                 SCCOL n1, n2;

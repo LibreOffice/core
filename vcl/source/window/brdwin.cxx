@@ -150,7 +150,7 @@ void ImplBorderWindowView::ImplInitTitle(ImplBorderFrameData* pData)
     {
         const StyleSettings& rStyleSettings = pData->mpOutDev->GetSettings().GetStyleSettings();
         if (pData->mnTitleType == BorderWindowTitleType::Tearoff)
-            pData->mnTitleHeight = ToolBox::ImplGetDragWidth(*pData->mpBorderWindow.get(), false) + 2;
+            pData->mnTitleHeight = ToolBox::ImplGetDragWidth(*pData->mpBorderWindow, false) + 2;
         else
         {
             if (pData->mnTitleType == BorderWindowTitleType::Small)

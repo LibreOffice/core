@@ -116,7 +116,7 @@ struct ThreadPoolStatic : public rtl::StaticWithInit< std::shared_ptr< ThreadPoo
 
 ThreadPool& ThreadPool::getSharedOptimalPool()
 {
-    return *ThreadPoolStatic::get().get();
+    return *ThreadPoolStatic::get();
 }
 
 sal_Int32 ThreadPool::getPreferredConcurrency()

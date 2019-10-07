@@ -42,8 +42,8 @@ public:
     void            Clear();
     sal_uInt16          Count() const               { return maAttribs.size(); }
 
-    const TextCharAttrib& GetAttrib( sal_uInt16 n ) const { return *maAttribs[n].get(); }
-    TextCharAttrib& GetAttrib( sal_uInt16 n )       { return *maAttribs[n].get(); }
+    const TextCharAttrib& GetAttrib( sal_uInt16 n ) const { return *maAttribs[n]; }
+    TextCharAttrib& GetAttrib( sal_uInt16 n )       { return *maAttribs[n]; }
     std::unique_ptr<TextCharAttrib>  RemoveAttrib( sal_uInt16 n )
     {
         std::unique_ptr<TextCharAttrib> pReleased = std::move(maAttribs[n]);

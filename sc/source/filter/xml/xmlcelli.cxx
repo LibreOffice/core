@@ -321,7 +321,7 @@ void ScXMLTableRowCellContext::PushParagraphField(std::unique_ptr<SvxFieldData> 
 {
     mbHasFormatRuns = true;
     maFields.push_back(std::make_unique<Field>(std::move(pData)));
-    Field& rField = *maFields.back().get();
+    Field& rField = *maFields.back();
 
     sal_Int32 nPos = maParagraph.getLength();
     maParagraph.append('\1'); // Placeholder text for inserted field item.
@@ -366,7 +366,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
 
     mbHasFormatRuns = true;
     maFormats.push_back(std::make_unique<ParaFormat>(*mpEditEngine));
-    ParaFormat& rFmt = *maFormats.back().get();
+    ParaFormat& rFmt = *maFormats.back();
     rFmt.maSelection.nStartPara = rFmt.maSelection.nEndPara = mnCurParagraph;
     rFmt.maSelection.nStartPos = nBegin;
     rFmt.maSelection.nEndPos = nEnd;

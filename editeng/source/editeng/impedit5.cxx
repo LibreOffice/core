@@ -210,7 +210,7 @@ std::unique_ptr<EditUndoSetAttribs> ImpEditEngine::CreateAttribUndo( EditSelecti
 
         for ( sal_Int32 nAttr = 0; nAttr < pNode->GetCharAttribs().Count(); nAttr++ )
         {
-            const EditCharAttrib& rAttr = *pNode->GetCharAttribs().GetAttribs()[nAttr].get();
+            const EditCharAttrib& rAttr = *pNode->GetCharAttribs().GetAttribs()[nAttr];
             if (rAttr.GetLen())
             {
                 EditCharAttrib* pNew = MakeCharAttrib(*pPool, *rAttr.GetItem(), rAttr.GetStart(), rAttr.GetEnd());

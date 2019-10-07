@@ -52,7 +52,7 @@ namespace drawinglayer
                     return false;
                 }
 
-                return *getColorModifier().get() == *rCompare.getColorModifier().get();
+                return *getColorModifier() == *rCompare.getColorModifier();
             }
 
             return false;

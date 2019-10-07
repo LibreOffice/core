@@ -394,12 +394,12 @@ sal_Int32 TextPortionList::Count() const
 
 const TextPortion& TextPortionList::operator[](sal_Int32 nPos) const
 {
-    return *maPortions[nPos].get();
+    return *maPortions[nPos];
 }
 
 TextPortion& TextPortionList::operator[](sal_Int32 nPos)
 {
-    return *maPortions[nPos].get();
+    return *maPortions[nPos];
 }
 
 void TextPortionList::Append(TextPortion* p)
@@ -451,7 +451,7 @@ sal_Int32 TextPortionList::FindPortion(
     sal_Int32 n = maPortions.size();
     for (sal_Int32 i = 0; i < n; ++i)
     {
-        const TextPortion& rPortion = *maPortions[i].get();
+        const TextPortion& rPortion = *maPortions[i];
         nTmpPos = nTmpPos + rPortion.GetLen();
         if ( nTmpPos >= nCharPos )
         {
@@ -472,7 +472,7 @@ sal_Int32 TextPortionList::GetStartPos(sal_Int32 nPortion)
     sal_Int32 nPos = 0;
     for (sal_Int32 i = 0; i < nPortion; ++i)
     {
-        const TextPortion& rPortion = *maPortions[i].get();
+        const TextPortion& rPortion = *maPortions[i];
         nPos = nPos + rPortion.GetLen();
     }
     return nPos;
@@ -1067,7 +1067,7 @@ sal_Int32 EditLineList::FindLine(sal_Int32 nChar, bool bInclEnd)
     sal_Int32 n = maLines.size();
     for (sal_Int32 i = 0; i < n; ++i)
     {
-        const EditLine& rLine = *maLines[i].get();
+        const EditLine& rLine = *maLines[i];
         if ( (bInclEnd && (rLine.GetEnd() >= nChar)) ||
              (rLine.GetEnd() > nChar) )
         {
@@ -1086,12 +1086,12 @@ sal_Int32 EditLineList::Count() const
 
 const EditLine& EditLineList::operator[](sal_Int32 nPos) const
 {
-    return *maLines[nPos].get();
+    return *maLines[nPos];
 }
 
 EditLine& EditLineList::operator[](sal_Int32 nPos)
 {
-    return *maLines[nPos].get();
+    return *maLines[nPos];
 }
 
 void EditLineList::Append(EditLine* p)
@@ -1282,7 +1282,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
                             sal_uInt16 nW = pAttrib->GetItem()->Which();
                             for ( sal_Int32 nA = 0; nA < nAttr; nA++ )
                             {
-                                const EditCharAttrib& r = *aCharAttribList.GetAttribs()[nA].get();
+                                const EditCharAttrib& r = *aCharAttribList.GetAttribs()[nA];
                                 if ( ( r.GetStart() == 0 ) && ( r.GetItem()->Which() == nW ) )
                                 {
                                     bExpand = false;
@@ -1610,7 +1610,7 @@ sal_uLong ContentNode::GetExpandedLen() const
     const CharAttribList::AttribsType& rAttrs = GetCharAttribs().GetAttribs();
     for (sal_Int32 nAttr = rAttrs.size(); nAttr; )
     {
-        const EditCharAttrib& rAttr = *rAttrs[--nAttr].get();
+        const EditCharAttrib& rAttr = *rAttrs[--nAttr];
         if (rAttr.Which() == EE_FEATURE_FIELD)
         {
             nLen += static_cast<const EditCharAttribField&>(rAttr).GetFieldValue().getLength();
@@ -1671,7 +1671,7 @@ void ContentNode::UnExpandPosition( sal_Int32 &rPos, bool bBiasStart )
     const CharAttribList::AttribsType& rAttrs = GetCharAttribs().GetAttribs();
     for (size_t nAttr = 0; nAttr < rAttrs.size(); ++nAttr )
     {
-        const EditCharAttrib& rAttr = *rAttrs[nAttr].get();
+        const EditCharAttrib& rAttr = *rAttrs[nAttr];
         assert (!(nAttr < rAttrs.size() - 1) ||
                 rAttrs[nAttr]->GetStart() <= rAttrs[nAttr + 1]->GetStart());
 
@@ -1951,7 +1951,7 @@ void EditDoc::RemoveItemsFromPool(const ContentNode& rNode)
 {
     for (sal_Int32 nAttr = 0; nAttr < rNode.GetCharAttribs().Count(); ++nAttr)
     {
-        const EditCharAttrib& rAttr = *rNode.GetCharAttribs().GetAttribs()[nAttr].get();
+        const EditCharAttrib& rAttr = *rNode.GetCharAttribs().GetAttribs()[nAttr];
         GetItemPool().Remove(*rAttr.GetItem());
     }
 }
@@ -2733,7 +2733,7 @@ void CharAttribList::InsertAttrib( EditCharAttrib* pAttrib )
     bool bInsert(true);
     for (sal_Int32 i = 0, n = aAttribs.size(); i < n; ++i)
     {
-        const EditCharAttrib& rCurAttrib = *aAttribs[i].get();
+        const EditCharAttrib& rCurAttrib = *aAttribs[i];
         if (rCurAttrib.GetStart() > nStart)
         {
             aAttribs.insert(aAttribs.begin()+i, std::unique_ptr<EditCharAttrib>(pAttrib));
@@ -2765,10 +2765,10 @@ void CharAttribList::OptimizeRanges( SfxItemPool& rItemPool )
 #endif
     for (sal_Int32 i = 0; i < static_cast<sal_Int32>(aAttribs.size()); ++i)
     {
-        EditCharAttrib& rAttr = *aAttribs[i].get();
+        EditCharAttrib& rAttr = *aAttribs[i];
         for (sal_Int32 nNext = i+1; nNext < static_cast<sal_Int32>(aAttribs.size()); ++nNext)
         {
-            EditCharAttrib& rNext = *aAttribs[nNext].get();
+            EditCharAttrib& rNext = *aAttribs[nNext];
             if (!rAttr.IsFeature() && rNext.GetStart() == rAttr.GetEnd() && rNext.Which() == rAttr.Which())
             {
                 if (*rNext.GetItem() == *rAttr.GetItem())

@@ -1413,7 +1413,7 @@ DeactivateRC SvxBkgTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 void SvxBkgTabPage::Reset( const SfxItemSet* )
 {
-    maSet.Set( *m_pResetSet.get() );
+    maSet.Set( *m_pResetSet );
     if ( m_xTblLBox && m_xTblLBox->get_visible() )
     {
         m_nActPos = -1;
