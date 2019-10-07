@@ -20,11 +20,12 @@
 #define INCLUDED_CUI_SOURCE_INC_SCREENSHANNDLG_HXX
 
 #include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 #include <memory>
 
 class ScreenshotAnnotationDlg_Impl;
 
-class ScreenshotAnnotationDlg : public ModalDialog
+class ScreenshotAnnotationDlg : public weld::GenericDialogController
 {
 private:
     std::unique_ptr< ScreenshotAnnotationDlg_Impl >  m_pImpl;
@@ -34,7 +35,7 @@ private:
 
 public:
     ScreenshotAnnotationDlg(
-        vcl::Window* pParent,
+        weld::Window* pParent,
         Dialog& rParentDialog);
     virtual ~ScreenshotAnnotationDlg() override;
 };
