@@ -46,6 +46,30 @@
       "revId": "710e005ebe2767d11e9068bc132c2e0140d363b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_3a7d32b1",
+        "filename": "compilerplugins/clang/empty.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-07T11:54:11Z",
+      "side": 1,
+      "message": "(see \u003chttps://gerrit.libreoffice.org/#/c/80372/\u003e \"Fix function name, \u0027revert\u0027 -\u003e \u0027reverse\u0027\")",
+      "parentUuid": "7f7f9b97_7aae4a2f",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 36,
+        "endChar": 18
+      },
+      "revId": "710e005ebe2767d11e9068bc132c2e0140d363b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
