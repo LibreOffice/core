@@ -49,7 +49,7 @@ bool WeakBase::VisitCXXRecordDecl(CXXRecordDecl const* recordDecl)
     {
         return true;
     }
-    //    StringRef aFileName = getFileNameOfSpellingLoc(
+    //    StringRef aFileName = getFilenameOfLocation(
     //        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(fieldDecl)));
 
     //    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/chart2/source/"))

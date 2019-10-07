@@ -105,7 +105,7 @@ bool StringConcatLiterals::VisitCallExpr(CallExpr const * expr) {
 
     // We add an extra " " in the TOOLS_WARN_EXCEPTION macro, which triggers this plugin
     if (loplugin::isSamePathname(
-            getFileNameOfSpellingLoc(
+            getFilenameOfLocation(
                 compiler.getSourceManager().getSpellingLoc(
                     compiler.getSourceManager().getImmediateMacroCallerLoc(
                         compiler.getSourceManager().getImmediateMacroCallerLoc(
@@ -114,7 +114,7 @@ bool StringConcatLiterals::VisitCallExpr(CallExpr const * expr) {
         return true;
 
     StringRef name {
-        getFileNameOfSpellingLoc(
+        getFilenameOfLocation(
             compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr))) };
     if (loplugin::isSamePathname(
             name, SRCDIR "/sal/qa/rtl/oustringbuffer/test_oustringbuffer_assign.cxx")

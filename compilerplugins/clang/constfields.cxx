@@ -233,7 +233,7 @@ MyFieldInfo ConstFields::niceName(const FieldDecl* fieldDecl)
 
     SourceLocation expansionLoc
         = compiler.getSourceManager().getExpansionLoc(fieldDecl->getLocation());
-    StringRef name = getFileNameOfSpellingLoc(expansionLoc);
+    StringRef name = getFilenameOfLocation(expansionLoc);
     aInfo.sourceLocation
         = std::string(name.substr(strlen(SRCDIR) + 1)) + ":"
           + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));

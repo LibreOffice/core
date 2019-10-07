@@ -253,7 +253,7 @@ std::string VirtualDead::getCallValue(const Expr* arg)
 std::string VirtualDead::toString(SourceLocation loc)
 {
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc(loc);
-    StringRef name = getFileNameOfSpellingLoc(expansionLoc);
+    StringRef name = getFilenameOfLocation(expansionLoc);
     std::string sourceLocation
         = std::string(name.substr(strlen(SRCDIR) + 1)) + ":"
           + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));

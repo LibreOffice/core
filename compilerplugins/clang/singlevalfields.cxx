@@ -154,7 +154,7 @@ void SingleValFields::niceName(const DeclaratorDecl* fieldOrVarDecl, MyFieldInfo
     aInfo.fieldType = fieldOrVarDecl->getType().getAsString();
 
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( fieldOrVarDecl->getLocation() );
-    StringRef name = getFileNameOfSpellingLoc(expansionLoc);
+    StringRef name = getFilenameOfLocation(expansionLoc);
     aInfo.sourceLocation = std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
     loplugin::normalizeDotDotInFilePath(aInfo.sourceLocation);
 }

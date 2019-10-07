@@ -119,7 +119,7 @@ bool NoExceptMove::TraverseCXXMethodDecl(CXXMethodDecl* methodDecl)
                   && methodDecl->isThisDeclarationADefinition() && methodDecl->getBody() != nullptr;
     if (isMove)
     {
-        StringRef fn = getFileNameOfSpellingLoc(
+        StringRef fn = getFilenameOfLocation(
             compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(methodDecl)));
         // SfxObjectShellLock::operator= calls SotObject::OwnerLock which in turn calls stuff which cannot be noexcept
         if (loplugin::isSamePathname(fn, SRCDIR "/include/sfx2/objsh.hxx"))

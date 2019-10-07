@@ -104,7 +104,7 @@ bool TypedefParam::VisitCXXMethodDecl(CXXMethodDecl const* methodDecl)
     if (methodDecl->getCanonicalDecl() != methodDecl)
         return true;
 
-    StringRef aFileName = getFileNameOfSpellingLoc(
+    StringRef aFileName = getFilenameOfLocation(
         compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(methodDecl)));
     // seems to be using typedefs as a form of documentation for method params
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sw/source/filter/ww8/ww8scan.hxx"))

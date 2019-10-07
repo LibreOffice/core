@@ -70,7 +70,7 @@ bool StringConcatAuto::checkDecl( const DeclaratorDecl* decl, QualType type, con
         return true;
     if( isa< ParmVarDecl >( decl )) // parameters should be fine, temporaries should exist during the call
         return true;
-    std::string fileName = getFileNameOfSpellingLoc(
+    std::string fileName = getFilenameOfLocation(
         compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(decl)));
     loplugin::normalizeDotDotInFilePath(fileName);
     if (loplugin::isSamePathname(fileName, SRCDIR "/include/rtl/string.hxx")

@@ -120,7 +120,7 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         return true;
     }
 
-    StringRef aFileName = getFileNameOfSpellingLoc(
+    StringRef aFileName = getFilenameOfLocation(
         compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(methodDecl)));
 
     if (isa<CXXDestructorDecl>(methodDecl)
@@ -367,7 +367,7 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         pOther = methodDecl->getCanonicalDecl();
 
     if (pOther) {
-        StringRef aFileName = getFileNameOfSpellingLoc(
+        StringRef aFileName = getFilenameOfLocation(
             compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(pOther)));
         // SFX_DECL_CHILDWINDOW_WITHID macro
         if (loplugin::isSamePathname(aFileName, SRCDIR "/include/sfx2/childwin.hxx"))

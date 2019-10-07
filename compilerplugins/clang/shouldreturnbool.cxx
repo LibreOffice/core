@@ -199,7 +199,7 @@ bool ShouldReturnBool::IsInteresting(FunctionDecl const* functionDecl)
         return false;
 
     // not sure what basegfx is doing here
-    StringRef fileName{ getFileNameOfSpellingLoc(functionDecl->getLocation()) };
+    StringRef fileName{ getFilenameOfLocation(functionDecl->getLocation()) };
     if (loplugin::isSamePathname(fileName, SRCDIR "/include/basegfx/range/basicrange.hxx"))
         return false;
     // false +

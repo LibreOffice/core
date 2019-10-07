@@ -72,7 +72,7 @@ bool ConvertLong::VisitVarDecl(VarDecl const* varDecl)
 {
     if (ignoreLocation(varDecl))
         return true;
-    StringRef fileName{ getFileNameOfSpellingLoc(varDecl->getLocation()) };
+    StringRef fileName{ getFilenameOfLocation(varDecl->getLocation()) };
     if (loplugin::isSamePathname(fileName, SRCDIR "/include/tools/bigint.hxx"))
         return true;
     if (loplugin::isSamePathname(fileName, SRCDIR "/include/tools/solar.h"))

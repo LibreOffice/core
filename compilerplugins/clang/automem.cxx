@@ -51,7 +51,7 @@ bool AutoMem::VisitCXXDeleteExpr(const CXXDeleteExpr* expr)
 {
     if (ignoreLocation( expr ))
         return true;
-    StringRef aFileName = getFileNameOfSpellingLoc(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr)));
+    StringRef aFileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr)));
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/salhelper/")
         || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/osl/")
         || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/salhelper/")

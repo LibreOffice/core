@@ -510,7 +510,7 @@ MyVarInfo WriteOnlyVars::niceName(const VarDecl* varDecl)
 
     SourceLocation expansionLoc
         = compiler.getSourceManager().getExpansionLoc(varDecl->getLocation());
-    StringRef filename = getFileNameOfSpellingLoc(expansionLoc);
+    StringRef filename = getFilenameOfLocation(expansionLoc);
     aInfo.sourceLocation
         = std::string(filename.substr(strlen(SRCDIR) + 1)) + ":"
           + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
