@@ -30,6 +30,7 @@
 
 #include <comphelper/random.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/customweld.hxx>
@@ -153,6 +154,7 @@ class ScreenshotAnnotationDlg_Impl
 {
 public:
     ScreenshotAnnotationDlg_Impl(
+        weld::Window* pParent,
         weld::Builder& rParent,
         Dialog& rParentDialog);
     ~ScreenshotAnnotationDlg_Impl();
@@ -179,6 +181,7 @@ private:
     Point GetOffsetInPicture() const;
 
     // local variables
+    weld::Window*               mpParentWindow;
     Dialog&                     mrParentDialog;
     BitmapEx                    maParentDialogBitmap;
     BitmapEx                    maDimmedDialogBitmap;
@@ -216,9 +219,11 @@ public:
 OUString ScreenshotAnnotationDlg_Impl::maLastFolderURL = OUString();
 
 ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
-    weld::Builder& rParent,
+    weld::Window* pParent,
+    weld::Builder& rParentBuilder,
     Dialog& rParentDialog)
-:   mrParentDialog(rParentDialog),
+:   mpParentWindow(pParent),
+    mrParentDialog(rParentDialog),
     maParentDialogBitmap(rParentDialog.createScreenshot()),
     maDimmedDialogBitmap(maParentDialogBitmap),
     maParentDialogSize(maParentDialogBitmap.GetSizePixel()),
@@ -235,11 +240,11 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     assert(0 != maParentDialogBitmap.GetSizePixel().Height());
 
     // get needed widgets
-    mxPicture.reset(new weld::CustomWeld(rParent, "picture", maPicture));
+    mxPicture.reset(new weld::CustomWeld(rParentBuilder, "picture", maPicture));
     assert(mxPicture.get());
-    mxText = rParent.weld_text_view("text");
+    mxText = rParentBuilder.weld_text_view("text");
     assert(mxText.get());
-    mxSave = rParent.weld_button("save");
+    mxSave = rParentBuilder.weld_button("save");
     assert(mxSave.get());
 
     // set screenshot image at FixedImage, resize, set event listener
@@ -350,9 +355,10 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, 
         } while (nIndex >= 0);
     }
 
-    uno::Reference< uno::XComponentContext > xContext = cppu::defaultBootstrap_InitialComponentContext();
-    const uno::Reference< ui::dialogs::XFilePicker3 > xFilePicker =
-        ui::dialogs::FilePicker::createWithMode(xContext, ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION);
+    auto xFileDlg = std::make_unique<sfx2::FileDialogHelper>(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
+                                                             FileDialogFlags::NONE, mpParentWindow);
+
+    const uno::Reference< ui::dialogs::XFilePicker3 > xFilePicker = xFileDlg->GetFilePicker();
 
     xFilePicker->setTitle(maSaveAsText);
 
@@ -641,7 +647,7 @@ bool Picture::MouseButtonUp(const MouseEvent&)
 ScreenshotAnnotationDlg::ScreenshotAnnotationDlg(weld::Window* pParent, Dialog& rParentDialog)
     : GenericDialogController(pParent, "cui/ui/screenshotannotationdialog.ui", "ScreenshotAnnotationDialog")
 {
-    m_pImpl.reset(new ScreenshotAnnotationDlg_Impl(*m_xBuilder, rParentDialog));
+    m_pImpl.reset(new ScreenshotAnnotationDlg_Impl(m_xDialog.get(), *m_xBuilder, rParentDialog));
 }
 
 ScreenshotAnnotationDlg::~ScreenshotAnnotationDlg()
