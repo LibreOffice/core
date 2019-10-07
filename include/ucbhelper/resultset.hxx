@@ -32,7 +32,7 @@
 
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 #include <memory>
 
@@ -58,16 +58,15 @@ struct ResultSet_Impl;
  * @see ResultSetDataSupplier
  */
 class UCBHELPER_DLLPUBLIC ResultSet :
-                public cppu::OWeakObject,
-                public css::lang::XTypeProvider,
-                public css::lang::XServiceInfo,
-                public css::lang::XComponent,
-                public css::ucb::XContentAccess,
-                public css::sdbc::XResultSet,
-                public css::sdbc::XResultSetMetaDataSupplier,
-                public css::sdbc::XRow,
-                public css::sdbc::XCloseable,
-                public css::beans::XPropertySet
+                public cppu::WeakImplHelper<
+                    css::lang::XServiceInfo,
+                    css::lang::XComponent,
+                    css::ucb::XContentAccess,
+                    css::sdbc::XResultSet,
+                    css::sdbc::XResultSetMetaDataSupplier,
+                    css::sdbc::XRow,
+                    css::sdbc::XCloseable,
+                    css::beans::XPropertySet>
 {
     std::unique_ptr<ResultSet_Impl> m_pImpl;
 
@@ -100,19 +99,6 @@ public:
             const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );
     virtual ~ResultSet() override;
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
-
-    // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
