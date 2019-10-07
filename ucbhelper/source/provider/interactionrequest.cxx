@@ -105,55 +105,6 @@ void InteractionRequest::setSelection(
 // XInterface methods.
 
 
-// virtual
-void SAL_CALL InteractionRequest::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-
-// virtual
-void SAL_CALL InteractionRequest::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-
-// virtual
-uno::Any SAL_CALL
-InteractionRequest::queryInterface( const uno::Type & rType )
-{
-    uno::Any aRet = cppu::queryInterface( rType,
-                static_cast< lang::XTypeProvider * >( this ),
-                static_cast< task::XInteractionRequest * >( this ) );
-
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-
-// XTypeProvider methods.
-
-
-// virtual
-uno::Sequence< sal_Int8 > SAL_CALL InteractionRequest::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-
-// virtual
-uno::Sequence< uno::Type > SAL_CALL InteractionRequest::getTypes()
-{
-    static cppu::OTypeCollection s_aCollection(
-                cppu::UnoType<lang::XTypeProvider>::get(),
-                cppu::UnoType<task::XInteractionRequest>::get() );
-
-    return s_aCollection.getTypes();
-}
-
-
 // XInteractionRequest methods.
 
 
