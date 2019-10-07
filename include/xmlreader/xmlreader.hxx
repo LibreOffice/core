@@ -103,7 +103,7 @@ private:
         {}
     };
 
-    typedef std::stack< ElementData > ElementStack;
+    typedef std::stack< ElementData, std::vector<ElementData> > ElementStack;
 
     struct AttributeData {
         char const * nameBegin;
