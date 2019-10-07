@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_faf49a5d",
+        "filename": "schema/libreoffice/OpenDocument-schema-v1.3+libreoffice.rng",
+        "patchSetId": 5
+      },
+      "lineNbr": 2398,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-10-07T11:17:56Z",
+      "side": 1,
+      "message": "hmm there\u0027s nothing referencing this name, don\u0027t think it\u0027s going to work... you want the existing name for attributes on the element in the schema and combine\u003d\"interleave\"",
+      "revId": "a53e56b63367231231b0e5597f0198f407524e5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_baee2286",
+        "filename": "xmloff/source/chart/SchXMLPlotAreaContext.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-10-07T11:17:56Z",
+      "side": 1,
+      "message": "i guess it makes sense here to check for both LO_EXT and CHART namespace, in case we\u0027re lucky and the attribute name is accepted as-is by the ODF TC we\u0027ll be able to read both the current extended ODF and whatever future standard ODF attribute.",
+      "revId": "a53e56b63367231231b0e5597f0198f407524e5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
