@@ -159,21 +159,21 @@ namespace ooo
     }
 }
 
-class SC_DLLPUBLIC ScCellRangesBase : public css::beans::XPropertySet,
-                         public css::beans::XMultiPropertySet,
-                         public css::beans::XPropertyState,
-                         public css::sheet::XSheetOperation,
-                         public css::chart::XChartDataArray,
-                         public css::util::XIndent,
-                         public css::sheet::XCellRangesQuery,
-                         public css::sheet::XFormulaQuery,
-                         public css::util::XReplaceable,
-                         public css::util::XModifyBroadcaster,
-                         public css::lang::XServiceInfo,
-                         public css::lang::XUnoTunnel,
-                         public css::lang::XTypeProvider,
-                         public css::beans::XTolerantMultiPropertySet,
-                         public cppu::OWeakObject,
+class SC_DLLPUBLIC ScCellRangesBase :
+                         public cppu::WeakImplHelper<
+                            css::beans::XPropertySet,
+                             css::beans::XMultiPropertySet,
+                             css::beans::XPropertyState,
+                             css::sheet::XSheetOperation,
+                             css::chart::XChartDataArray,
+                             css::util::XIndent,
+                             css::sheet::XCellRangesQuery,
+                             css::sheet::XFormulaQuery,
+                             css::util::XReplaceable,
+                             css::util::XModifyBroadcaster,
+                             css::lang::XServiceInfo,
+                             css::lang::XUnoTunnel,
+                             css::beans::XTolerantMultiPropertySet>,
                          public SfxListener
 {
     friend class ScTabViewObj;      // for select()
@@ -238,10 +238,6 @@ public:
                             ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR);
                             ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR);
     virtual                 ~ScCellRangesBase() override;
-
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL   acquire() throw() override;
-    virtual void SAL_CALL   release() throw() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     virtual void            RefChanged();
@@ -384,10 +380,6 @@ public:
 
                             // XUnoTunnel
     UNO3_GETIMPLEMENTATION_DECL(ScCellRangesBase)
-
-                            // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 };
 
 class SC_DLLPUBLIC ScCellRangesObj : public ScCellRangesBase,
