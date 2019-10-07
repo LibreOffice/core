@@ -19,7 +19,7 @@
 
 namespace
 {
-BinaryOperatorKind revert(BinaryOperatorKind op)
+BinaryOperatorKind reverse(BinaryOperatorKind op)
 {
     switch (op)
     {
@@ -177,7 +177,7 @@ private:
         }
         else if (auto const call = dyn_cast<CallExpr>(expr->getRHS()->IgnoreParenImpCasts()))
         {
-            visitComparison(expr, call, expr->getLHS(), revert(expr->getOpcode()));
+            visitComparison(expr, call, expr->getLHS(), reverse(expr->getOpcode()));
         }
     }
 };
