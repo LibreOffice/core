@@ -65,39 +65,6 @@ ResultSetImplHelper::~ResultSetImplHelper()
 }
 
 
-// XInterface methods.
-void SAL_CALL ResultSetImplHelper::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL ResultSetImplHelper::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL ResultSetImplHelper::queryInterface( const css::uno::Type & rType )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               static_cast< lang::XTypeProvider* >(this),
-                                               static_cast< lang::XServiceInfo* >(this),
-                                               static_cast< lang::XComponent* >(this),
-                                               static_cast< css::ucb::XDynamicResultSet* >(this)
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods.
-
-
-XTYPEPROVIDER_IMPL_3( ResultSetImplHelper,
-                      lang::XTypeProvider,
-                      lang::XServiceInfo,
-                      css::ucb::XDynamicResultSet );
-
-
 // XServiceInfo methods.
 
 OUString SAL_CALL ResultSetImplHelper::getImplementationName()
