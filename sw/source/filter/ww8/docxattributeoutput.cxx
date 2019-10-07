@@ -7263,7 +7263,7 @@ void DocxAttributeOutput::WritePostitFieldReference()
 
 void DocxAttributeOutput::WritePostitFields()
 {
-    for (const std::pair<const SwPostItField*,int> & rPair : m_postitFields)
+    for (const auto& rPair : m_postitFields)
     {
         OString idstr = OString::number( rPair.second);
         const SwPostItField* f = rPair.first;
