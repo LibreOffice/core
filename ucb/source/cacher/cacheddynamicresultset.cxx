@@ -161,38 +161,6 @@ CachedDynamicResultSetFactory::~CachedDynamicResultSetFactory()
 }
 
 
-// CachedDynamicResultSetFactory XInterface methods.
-void SAL_CALL CachedDynamicResultSetFactory::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL CachedDynamicResultSetFactory::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL CachedDynamicResultSetFactory::queryInterface( const css::uno::Type & rType )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               static_cast< XTypeProvider* >(this),
-                                               static_cast< XServiceInfo* >(this),
-                                               static_cast< XCachedDynamicResultSetFactory* >(this)
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// CachedDynamicResultSetFactory XTypeProvider methods.
-
-
-XTYPEPROVIDER_IMPL_3( CachedDynamicResultSetFactory,
-                      XTypeProvider,
-                         XServiceInfo,
-                      XCachedDynamicResultSetFactory );
-
-
 // CachedDynamicResultSetFactory XServiceInfo methods.
 
 XSERVICEINFO_COMMOM_IMPL( CachedDynamicResultSetFactory,
