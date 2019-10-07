@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UCBHELPER_CONTENTIDENTIFIER_HXX
 #define INCLUDED_UCBHELPER_CONTENTIDENTIFIER_HXX
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <ucbhelper/ucbhelperdllapi.h>
@@ -40,27 +40,11 @@ struct ContentIdentifier_Impl;
   * be done, because URL schemes are never case sensitive.
   */
 class UCBHELPER_DLLPUBLIC ContentIdentifier :
-                public cppu::OWeakObject,
-                public css::lang::XTypeProvider,
-                public css::ucb::XContentIdentifier
+                public cppu::WeakImplHelper<css::ucb::XContentIdentifier>
 {
 public:
     ContentIdentifier( const OUString& rURL );
     virtual ~ContentIdentifier() override;
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL
-    acquire() throw() override;
-    virtual void SAL_CALL
-    release() throw() override;
-
-    // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes() override;
 
     // XContentIdentifier
     virtual OUString SAL_CALL
