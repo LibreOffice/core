@@ -32,7 +32,6 @@ namespace com { namespace sun { namespace star { namespace uno { template <class
 
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
-namespace vcl { class Window; }
 class Dialog;
 class BitmapEx;
 class DiagramDataInterface;
