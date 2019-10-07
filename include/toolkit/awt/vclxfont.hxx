@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/font.hxx>
 
@@ -38,10 +38,10 @@ class FontMetric;
 //  class VCLXFont
 
 
-class TOOLKIT_DLLPUBLIC VCLXFont final : public css::awt::XFont2,
-                    public css::lang::XTypeProvider,
-                    public css::lang::XUnoTunnel,
-                    public ::cppu::OWeakObject
+class TOOLKIT_DLLPUBLIC VCLXFont final :
+                        public cppu::WeakImplHelper<
+                            css::awt::XFont2,
+                            css::lang::XUnoTunnel>
 {
     ::osl::Mutex    maMutex;
     css::uno::Reference< css::awt::XDevice> mxDevice;
@@ -59,17 +59,8 @@ public:
     void            Init( css::awt::XDevice& rxDev, const vcl::Font& rFont );
     const vcl::Font&     GetFont() const { return maFont; }
 
-    // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
-
     // css::lang::XUnoTunnel
     UNO3_GETIMPLEMENTATION_DECL(VCLXFont)
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::lang::XFont
     css::awt::FontDescriptor           SAL_CALL getFontDescriptor(  ) override;
