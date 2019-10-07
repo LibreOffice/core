@@ -31,7 +31,7 @@
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include "providermap.hxx"
 #include <ucbhelper/registerucb.hxx>
@@ -50,27 +50,15 @@ namespace com { namespace sun { namespace star { namespace ucb {
 } } } }
 
 class UniversalContentBroker :
-                public cppu::OWeakObject,
-                public css::ucb::XUniversalContentBroker,
-                public css::lang::XTypeProvider,
-                public css::lang::XServiceInfo,
-                public css::lang::XInitialization,
-                public css::util::XChangesListener
+                public cppu::WeakImplHelper<
+                    css::ucb::XUniversalContentBroker,
+                    css::lang::XServiceInfo,
+                    css::lang::XInitialization,
+                    css::util::XChangesListener>
 {
 public:
     explicit UniversalContentBroker( const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~UniversalContentBroker() override;
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
-
-    // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
