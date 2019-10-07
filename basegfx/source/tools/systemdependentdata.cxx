@@ -109,7 +109,7 @@ namespace basegfx
             }
 
             // set locally (once, on-demand created, non-zero)
-            const_cast<SystemDependentData*>(this)->mnCalculatedCycles = nResult < 1 ? 1 : nResult;
+            const_cast<SystemDependentData*>(this)->mnCalculatedCycles = nResult;
         }
 
         return mnCalculatedCycles;
