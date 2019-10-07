@@ -25,6 +25,8 @@ $(eval $(call gb_Library_add_defs,skia,\
     -DSK_HAS_JPEG_LIBRARY=1 \
     -DSK_HAS_PNG_LIBRARY=1 \
     -DSK_GAMMA_APPLY_TO_A8 \
+    -DSK_ASSUME_GL=1 \
+    -DSK_ASSUME_GL_ES=0 \
 ))
 
 ifneq (,$(gb_ENABLE_DBGUTIL))
@@ -92,6 +94,9 @@ $(eval $(call gb_Library_add_libs,skia,\
     -lm \
     -ldl \
     -lGLX \
+    -lGL \
+    -lX11-xcb \
+    -lX11 \
 ))
 endif
 
@@ -831,6 +836,12 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/ports/SkOSFile_stdio \
 ))
 
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/tools/gpu/vk/VkTestUtils \
+    UnpackedTarball/skia/tools/sk_app/GLWindowContext \
+    UnpackedTarball/skia/tools/sk_app/VulkanWindowContext \
+))
+
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/gl/win/GrGLMakeNativeInterface_win \
@@ -852,6 +863,12 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/utils/win/SkIStream \
     UnpackedTarball/skia/src/utils/win/SkWGL_win \
 ))
+
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/tools/sk_app/win/GLWindowContext_win \
+    UnpackedTarball/skia/tools/sk_app/win/RasterWindowContext_win \
+    UnpackedTarball/skia/tools/sk_app/win/VulkanWindowContext_win \
+))
 else
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/gl/glx/GrGLMakeNativeInterface_glx \
@@ -867,6 +884,12 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/ports/SkOSFile_posix \
     UnpackedTarball/skia/src/ports/SkOSLibrary_posix \
     UnpackedTarball/skia/src/ports/SkTLS_pthread \
+))
+
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/tools/sk_app/unix/GLWindowContext_unix \
+    UnpackedTarball/skia/tools/sk_app/unix/RasterWindowContext_unix \
+    UnpackedTarball/skia/tools/sk_app/unix/VulkanWindowContext_unix \
 ))
 endif
 

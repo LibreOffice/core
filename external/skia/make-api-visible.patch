@@ -1,0 +1,17 @@
+--- skia/tools/sk_app/unix/WindowContextFactory_unix.h.sav	2019-09-26 15:02:19.637587019 +0200
++++ skia/tools/sk_app/unix/WindowContextFactory_unix.h	2019-10-07 11:52:46.744194127 +0200
+@@ -33,11 +33,11 @@ struct XlibWindowInfo {
+     int          fHeight;
+ };
+ 
+-WindowContext* NewVulkanForXlib(const XlibWindowInfo&, const DisplayParams&);
++SK_API WindowContext* NewVulkanForXlib(const XlibWindowInfo&, const DisplayParams&);
+ 
+-WindowContext* NewGLForXlib(const XlibWindowInfo&, const DisplayParams&);
++SK_API WindowContext* NewGLForXlib(const XlibWindowInfo&, const DisplayParams&);
+ 
+-WindowContext* NewRasterForXlib(const XlibWindowInfo&, const DisplayParams&);
++SK_API WindowContext* NewRasterForXlib(const XlibWindowInfo&, const DisplayParams&);
+ 
+ }  // namespace window_context_factory
+ 
