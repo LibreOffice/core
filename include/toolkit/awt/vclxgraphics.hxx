@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <vcl/font.hxx>
 #include <tools/color.hxx>
@@ -54,10 +54,9 @@ namespace o3tl
 //  class VCLXGraphics
 
 
-class VCLXGraphics :    public css::awt::XGraphics2,
-                        public css::lang::XTypeProvider,
-                        public css::lang::XUnoTunnel,
-                        public ::cppu::OWeakObject
+class VCLXGraphics : public cppu::WeakImplHelper<
+                        css::awt::XGraphics2,
+                        css::lang::XUnoTunnel>
 {
 private:
     // used to return same reference on each call to getDevice()
@@ -84,17 +83,8 @@ public:
     void            SetOutputDevice( OutputDevice* pOutDev );
     OutputDevice*   GetOutputDevice() const { return mpOutputDevice; }
 
-    // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
-
     // css::lang::XUnoTunnel
     UNO3_GETIMPLEMENTATION_DECL(VCLXGraphics)
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XGraphics Attributes
     virtual css::uno::Reference< css::awt::XDevice > SAL_CALL getDevice() override;
