@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/ucb/XContentIdentifierMapping.hpp>
 #include <com/sun/star/ucb/XCachedDynamicResultSetFactory.hpp>
+#include <cppuhelper/implbase.hxx>
 
 #define CACHED_DRS_SERVICE_NAME "com.sun.star.ucb.CachedDynamicResultSet"
 #define CACHED_DRS_FACTORY_NAME "com.sun.star.ucb.CachedDynamicResultSetFactory"
@@ -78,11 +79,10 @@ public:
 };
 
 
-class CachedDynamicResultSetFactory final
-                : public cppu::OWeakObject
-                , public css::lang::XTypeProvider
-                , public css::lang::XServiceInfo
-                , public css::ucb::XCachedDynamicResultSetFactory
+class CachedDynamicResultSetFactory final :
+                public cppu::WeakImplHelper<
+                    css::lang::XServiceInfo,
+                    css::ucb::XCachedDynamicResultSetFactory>
 {
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;
 
@@ -92,19 +92,6 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext);
 
     virtual ~CachedDynamicResultSetFactory() override;
-
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
-
-    // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
