@@ -596,48 +596,6 @@ ScDataPilotDescriptorBase::~ScDataPilotDescriptorBase()
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
-Any SAL_CALL ScDataPilotDescriptorBase::queryInterface( const uno::Type& rType )
-{
-    SC_QUERYINTERFACE( XDataPilotDescriptor )
-    SC_QUERYINTERFACE( XPropertySet )
-    SC_QUERYINTERFACE( XDataPilotDataLayoutFieldSupplier )
-    SC_QUERYINTERFACE( XNamed )                 // base of XDataPilotDescriptor
-    SC_QUERYINTERFACE( lang::XUnoTunnel )
-    SC_QUERYINTERFACE( lang::XTypeProvider )
-    SC_QUERYINTERFACE( lang::XServiceInfo )
-
-    return OWeakObject::queryInterface( rType );
-}
-
-void SAL_CALL ScDataPilotDescriptorBase::acquire() throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL ScDataPilotDescriptorBase::release() throw()
-{
-    OWeakObject::release();
-}
-
-Sequence< uno::Type > SAL_CALL ScDataPilotDescriptorBase::getTypes()
-{
-    static Sequence< uno::Type > const aTypes
-    {
-        cppu::UnoType<XDataPilotDescriptor>::get(),
-        cppu::UnoType<XPropertySet>::get(),
-        cppu::UnoType<XDataPilotDataLayoutFieldSupplier>::get(),
-        cppu::UnoType<lang::XUnoTunnel>::get(),
-        cppu::UnoType<lang::XTypeProvider>::get(),
-        cppu::UnoType<lang::XServiceInfo>::get(),
-    };
-    return aTypes;
-}
-
-Sequence<sal_Int8> SAL_CALL ScDataPilotDescriptorBase::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 void ScDataPilotDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! update of references ?

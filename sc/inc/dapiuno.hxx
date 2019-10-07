@@ -128,13 +128,13 @@ public:
 };
 
 //  ScDataPilotDescriptorBase is never instantiated directly
-class SAL_DLLPUBLIC_RTTI ScDataPilotDescriptorBase : public css::sheet::XDataPilotDescriptor,
-                                  public css::beans::XPropertySet,
-                                  public css::sheet::XDataPilotDataLayoutFieldSupplier,
-                                  public css::lang::XServiceInfo,
-                                  public css::lang::XUnoTunnel,
-                                  public css::lang::XTypeProvider,
-                                  public cppu::OWeakObject,
+class SAL_DLLPUBLIC_RTTI ScDataPilotDescriptorBase :
+                                  public cppu::WeakImplHelper<
+                                    css::sheet::XDataPilotDescriptor,
+                                    css::beans::XPropertySet,
+                                    css::sheet::XDataPilotDataLayoutFieldSupplier,
+                                    css::lang::XServiceInfo,
+                                    css::lang::XUnoTunnel>,
                                   public SfxListener
 {
 private:
@@ -144,11 +144,6 @@ private:
 public:
                             ScDataPilotDescriptorBase(ScDocShell* pDocSh);
     virtual                 ~ScDataPilotDescriptorBase() override;
-
-    virtual css::uno::Any SAL_CALL queryInterface(
-                                const css::uno::Type & rType ) override;
-    virtual void SAL_CALL   acquire() throw() override;
-    virtual void SAL_CALL   release() throw() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -203,10 +198,6 @@ public:
                                     sal_Int8 >& aIdentifier ) override;
 
     SC_DLLPUBLIC static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-
-                            // XTypeProvider (override in ScDataPilotTableObj)
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
                             // XServiceInfo is in derived classes
 };
