@@ -2169,7 +2169,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 
         // Check if watermark for pdf is passed by filteroptions...
         // It is not a real filter option so it must be filtered out.
-        OUString watermarkText;
+        OUString watermarkText, sFullSheetPreview;
         int aIndex = -1;
         if ((aIndex = aFilterOptions.indexOf(",Watermark=")) >= 0)
         {
@@ -2179,6 +2179,18 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
             OUString temp = aFilterOptions.copy(0, aIndex);
             aFilterOptions = temp + aFilterOptions.copy(bIndex+12);
         }
+
+        aIndex = -1;
+        if ((aIndex = aFilterOptions.indexOf(",FullSheetPreview=")) >= 0)
+        {
+            int bIndex = aFilterOptions.indexOf("FULLSHEETPREVEND");
+            sFullSheetPreview = aFilterOptions.copy(aIndex+18, bIndex-(aIndex+18));
+
+            OUString temp = aFilterOptions.copy(0, aIndex);
+            aFilterOptions = temp + aFilterOptions.copy(bIndex+16);
+        }
+
+        bool bFullSheetPreview = sFullSheetPreview == "true";
 
         // 'TakeOwnership' == this is a 'real' SaveAs (that is, the document
         // gets a new name).  When this is not provided, the meaning of
@@ -2205,11 +2217,25 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         auto aFilteredOptionSeq = comphelper::containerToSequence<OUString>(aFilteredOptionVec);
         aFilterOptions = comphelper::string::convertCommaSeparated(aFilteredOptionSeq);
         aSaveMediaDescriptor[MediaDescriptor::PROP_FILTEROPTIONS()] <<= aFilterOptions;
-        if(!watermarkText.isEmpty())
+
+        if(!watermarkText.isEmpty() || bFullSheetPreview)
         {
-            uno::Sequence< beans::PropertyValue > aFilterData( 1 );
-            aFilterData[ 0 ].Name = "TiledWatermark";
-            aFilterData[ 0 ].Value <<= watermarkText;
+            uno::Sequence< beans::PropertyValue > aFilterData( static_cast<int>(bFullSheetPreview) + static_cast<int>(!watermarkText.isEmpty()) );
+
+            if (!watermarkText.isEmpty())
+            {
+                aFilterData[ 0 ].Name = "TiledWatermark";
+                aFilterData[ 0 ].Value <<= watermarkText;
+            }
+
+            if (bFullSheetPreview)
+            {
+                int nOptIndex = static_cast<int>(!watermarkText.isEmpty());
+
+                aFilterData[ nOptIndex ].Name = "SinglePageSheets";
+                aFilterData[ nOptIndex ].Value <<= true;
+            }
+
             aSaveMediaDescriptor["FilterData"] <<= aFilterData;
         }
 
