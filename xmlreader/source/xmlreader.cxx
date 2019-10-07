@@ -714,7 +714,11 @@ XmlReader::Result XmlReader::handleEndTag() {
 
 void XmlReader::handleElementEnd() {
     assert(!elements_.empty());
-    namespaces_.resize(elements_.top().inheritedNamespaces);
+    // remove keys from cache that are no longer valid
+    auto end = elements_.top().inheritedNamespaces;
+    for (size_t i = namespaces_.size() - 1; i < end; ++i)
+        cacheNSIds_.erase(namespaces_[i].prefix);
+    namespaces_.resize(end);
     elements_.pop();
     state_ = elements_.empty() ? State::Done : State::Content;
 }
