@@ -128,7 +128,7 @@ private:
 
 typedef std::vector< ControlDataEntry > ControlDataCollection;
 
-class ScreenshotAnnotationDlg_Impl // : public ModalDialog
+class ScreenshotAnnotationDlg_Impl
 {
 public:
     ScreenshotAnnotationDlg_Impl(
