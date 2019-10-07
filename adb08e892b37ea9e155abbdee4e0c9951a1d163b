@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_35f0e3c9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-07T14:14:44Z",
+      "side": 1,
+      "message": "was since moved to compilerplugins/clang/sharedvisitor/README (ceb26770b3d1c5c2ffaf73f8f589c5e169e6db06 \"split clangplugins sharedvisitor generator into two steps\")",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 43
+      },
+      "revId": "adb08e892b37ea9e155abbdee4e0c9951a1d163b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
