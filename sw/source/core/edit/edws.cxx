@@ -276,23 +276,36 @@ void SwEditShell::SetNewDoc()
     GetDoc()->getIDocumentState().SetNewDoc(true);
 }
 
-bool SwEditShell::GetPrevAutoCorrWord( SvxAutoCorrect const & rACorr, OUString& rWord )
+OUString SwEditShell::GetPrevAutoCorrWord(SvxAutoCorrect& rACorr)
 {
     SET_CURR_SHELL( this );
 
-    bool bRet;
+    OUString sRet;
     SwPaM* pCursor = getShellCursor( true );
     const sal_Int32 nPos = pCursor->GetPoint()->nContent.GetIndex();
     SwTextNode* pTNd = pCursor->GetNode().GetTextNode();
     if( pTNd && nPos )
     {
         SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCursor, 0 );
-        bRet = rACorr.GetPrevAutoCorrWord( aSwAutoCorrDoc,
-                                            pTNd->GetText(), nPos, rWord );
+        sRet = rACorr.GetPrevAutoCorrWord(aSwAutoCorrDoc, pTNd->GetText(), nPos);
     }
-    else
-        bRet = false;
-    return bRet;
+    return sRet;
+}
+
+std::vector<OUString> SwEditShell::GetChunkForAutoText()
+{
+    SET_CURR_SHELL(this);
+
+    std::vector<OUString> aRet;
+    SwPaM* pCursor = getShellCursor(true);
+    SwTextNode* pTNd = pCursor->GetNode().GetTextNode();
+    if (pTNd)
+    {
+        const auto pFrame = static_cast<SwTextFrame const*>(pTNd->getLayoutFrame(GetLayout()));
+        TextFrameIndex const nPos(pFrame->MapModelToViewPos(*pCursor->GetPoint()));
+        aRet = SvxAutoCorrect::GetChunkForAutoText(pFrame->GetText(), sal_Int32(nPos));
+    }
+    return aRet;
 }
 
 SwAutoCompleteWord& SwEditShell::GetAutoCompleteWords()
