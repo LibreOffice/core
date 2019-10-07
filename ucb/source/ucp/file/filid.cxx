@@ -47,51 +47,6 @@ FileContentIdentifier::~FileContentIdentifier()
 {
 }
 
-
-void SAL_CALL
-FileContentIdentifier::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-
-void SAL_CALL
-FileContentIdentifier::release()
-  throw()
-{
-  OWeakObject::release();
-}
-
-
-uno::Any SAL_CALL
-FileContentIdentifier::queryInterface( const uno::Type& rType )
-{
-    uno::Any aRet = cppu::queryInterface( rType,
-                                          static_cast< lang::XTypeProvider* >(this),
-                                          static_cast< XContentIdentifier* >(this) );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-
-uno::Sequence< sal_Int8 > SAL_CALL
-FileContentIdentifier::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-
-uno::Sequence< uno::Type > SAL_CALL
-FileContentIdentifier::getTypes()
-{
-    static cppu::OTypeCollection s_aCollection(
-                cppu::UnoType<lang::XTypeProvider>::get(),
-                cppu::UnoType<XContentIdentifier>::get() );
-
-    return s_aCollection.getTypes();
-}
-
-
 OUString
 SAL_CALL
 FileContentIdentifier::getContentIdentifier()

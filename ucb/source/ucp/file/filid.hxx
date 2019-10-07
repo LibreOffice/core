@@ -20,7 +20,7 @@
 #define INCLUDED_UCB_SOURCE_UCP_FILE_FILID_HXX
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 
@@ -29,9 +29,7 @@ namespace fileaccess {
     class TaskManager;
 
     class FileContentIdentifier :
-        public cppu::OWeakObject,
-        public css::lang::XTypeProvider,
-        public css::ucb::XContentIdentifier
+        public cppu::WeakImplHelper<css::ucb::XContentIdentifier>
     {
 
         // This implementation has to be reworked
@@ -40,25 +38,6 @@ namespace fileaccess {
                                bool IsNormalized = true );
 
         virtual ~FileContentIdentifier() override;
-
-        // XInterface
-        virtual css::uno::Any SAL_CALL
-        queryInterface( const css::uno::Type& aType ) override;
-
-        virtual void SAL_CALL
-        acquire()
-            throw() override;
-
-        virtual void SAL_CALL
-        release()
-            throw() override;
-
-        // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-        getTypes() override;
-
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-        getImplementationId() override;
 
         // XContentIdentifier
         virtual OUString SAL_CALL
