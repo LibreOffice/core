@@ -126,43 +126,6 @@ BaseContent::~BaseContent( )
 }
 
 
-// XInterface
-
-
-void SAL_CALL
-BaseContent::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-
-void SAL_CALL
-BaseContent::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-
-Any SAL_CALL
-BaseContent::queryInterface( const Type& rType )
-{
-    Any aRet = cppu::queryInterface( rType,
-                                     static_cast< lang::XComponent* >(this),
-                                     static_cast< lang::XTypeProvider* >(this),
-                                     static_cast< lang::XServiceInfo* >(this),
-                                     static_cast< XCommandProcessor* >(this),
-                                     static_cast< container::XChild* >(this),
-                                     static_cast< beans::XPropertiesChangeNotifier* >(this),
-                                     static_cast< beans::XPropertyContainer* >(this),
-                                     static_cast< XContentCreator* >(this),
-                                     static_cast< beans::XPropertySetInfoChangeNotifier* >(this),
-                                     static_cast< XContent* >(this) );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-
 // XComponent
 
 
@@ -240,20 +203,6 @@ BaseContent::getSupportedServiceNames()
     Sequence<OUString> ret { "com.sun.star.ucb.FileContent" };
     return ret;
 }
-
-//  XTypeProvider
-XTYPEPROVIDER_IMPL_10( BaseContent,
-                       lang::XComponent,
-                       lang::XTypeProvider,
-                       lang::XServiceInfo,
-                       XCommandProcessor,
-                       XContentCreator,
-                       XContent,
-                       container::XChild,
-                       beans::XPropertiesChangeNotifier,
-                       beans::XPropertyContainer,
-                       beans::XPropertySetInfoChangeNotifier )
-
 
 //  XCommandProcessor
 
