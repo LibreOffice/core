@@ -729,7 +729,7 @@ public:
     /* A row is "activated" when the user double clicks a treeview row. It may
        also be emitted when a row is selected and Space or Enter is pressed.
 
-       a return of "true" means the activation has been handled, a "false" propogates
+       a return of "true" means the activation has been handled, a "false" propagates
        the activation to the default handler which expands/collapses the row, if possible.
     */
     void connect_row_activated(const Link<TreeView&, bool>& rLink) { m_aRowActivatedHdl = rLink; }
