@@ -89,35 +89,35 @@ void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
 SwElemItem::SwElemItem() :
     SfxPoolItem(FN_PARAM_ELEM)
 {
-    bVertRuler     =
-    bVertRulerRight=
-    bCrosshair     =
-    bSmoothScroll  =
-    bTable              =
-    bGraphic            =
-    bDrawing            =
-    bFieldName          =
-    bNotes              = false;
-    bShowInlineTooltips = true;
-    bFieldHiddenText =
-    bShowHiddenPara  = false;
+    m_bVertRuler     =
+    m_bVertRulerRight=
+    m_bCrosshair     =
+    m_bSmoothScroll  =
+    m_bTable              =
+    m_bGraphic            =
+    m_bDrawing            =
+    m_bFieldName          =
+    m_bNotes              = false;
+    m_bShowInlineTooltips = true;
+    m_bFieldHiddenText =
+    m_bShowHiddenPara  = false;
 }
 
 SwElemItem::SwElemItem(const SwViewOption& rVOpt) :
             SfxPoolItem( FN_PARAM_ELEM )
 {
-    bVertRuler      = rVOpt.IsViewVRuler(true);
-    bVertRulerRight = rVOpt.IsVRulerRight();
-    bCrosshair      = rVOpt.IsCrossHair();
-    bSmoothScroll   = rVOpt.IsSmoothScroll();
-    bTable              = rVOpt.IsTable();
-    bGraphic            = rVOpt.IsGraphic();
-    bDrawing            = rVOpt.IsDraw() && rVOpt.IsControl();
-    bFieldName          = rVOpt.IsFieldName();
-    bNotes              = rVOpt.IsPostIts();
-    bShowInlineTooltips = rVOpt.IsShowInlineTooltips();
-    bFieldHiddenText = rVOpt.IsShowHiddenField();
-    bShowHiddenPara  = rVOpt.IsShowHiddenPara();
+    m_bVertRuler      = rVOpt.IsViewVRuler(true);
+    m_bVertRulerRight = rVOpt.IsVRulerRight();
+    m_bCrosshair      = rVOpt.IsCrossHair();
+    m_bSmoothScroll   = rVOpt.IsSmoothScroll();
+    m_bTable              = rVOpt.IsTable();
+    m_bGraphic            = rVOpt.IsGraphic();
+    m_bDrawing            = rVOpt.IsDraw() && rVOpt.IsControl();
+    m_bFieldName          = rVOpt.IsFieldName();
+    m_bNotes              = rVOpt.IsPostIts();
+    m_bShowInlineTooltips = rVOpt.IsShowInlineTooltips();
+    m_bFieldHiddenText = rVOpt.IsShowHiddenField();
+    m_bShowHiddenPara  = rVOpt.IsShowHiddenPara();
 }
 
 SfxPoolItem* SwElemItem::Clone( SfxItemPool* ) const
@@ -131,35 +131,35 @@ bool SwElemItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SwElemItem& rItem = static_cast<const SwElemItem&>(rAttr);
 
-    return (    bVertRuler      == rItem.bVertRuler     &&
-                bVertRulerRight == rItem.bVertRulerRight&&
-                bCrosshair      == rItem.bCrosshair     &&
-                bSmoothScroll   == rItem.bSmoothScroll  &&
-                bTable                == rItem.bTable              &&
-                bGraphic              == rItem.bGraphic            &&
-                bDrawing              == rItem.bDrawing            &&
-                bFieldName            == rItem.bFieldName          &&
-                bNotes                == rItem.bNotes              &&
-                bShowInlineTooltips   == rItem.bShowInlineTooltips &&
-                bFieldHiddenText == rItem.bFieldHiddenText &&
-                bShowHiddenPara  == rItem.bShowHiddenPara);
+    return (    m_bVertRuler      == rItem.m_bVertRuler     &&
+                m_bVertRulerRight == rItem.m_bVertRulerRight&&
+                m_bCrosshair      == rItem.m_bCrosshair     &&
+                m_bSmoothScroll   == rItem.m_bSmoothScroll  &&
+                m_bTable                == rItem.m_bTable              &&
+                m_bGraphic              == rItem.m_bGraphic            &&
+                m_bDrawing              == rItem.m_bDrawing            &&
+                m_bFieldName            == rItem.m_bFieldName          &&
+                m_bNotes                == rItem.m_bNotes              &&
+                m_bShowInlineTooltips   == rItem.m_bShowInlineTooltips &&
+                m_bFieldHiddenText == rItem.m_bFieldHiddenText &&
+                m_bShowHiddenPara  == rItem.m_bShowHiddenPara);
 }
 
 void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
 {
-    rVOpt.SetViewVRuler(bVertRuler    );
-    rVOpt.SetVRulerRight(bVertRulerRight );
-    rVOpt.SetCrossHair(bCrosshair     );
-    rVOpt.SetSmoothScroll(bSmoothScroll);
-    rVOpt.SetTable      (bTable             );
-    rVOpt.SetGraphic    (bGraphic           );
-    rVOpt.SetDraw       (bDrawing           );
-    rVOpt.SetControl    (bDrawing           );
-    rVOpt.SetFieldName  (bFieldName         );
-    rVOpt.SetPostIts    (bNotes             );
-    rVOpt.SetShowInlineTooltips( bShowInlineTooltips );
-    rVOpt.SetShowHiddenField(bFieldHiddenText );
-    rVOpt.SetShowHiddenPara(bShowHiddenPara );
+    rVOpt.SetViewVRuler(m_bVertRuler    );
+    rVOpt.SetVRulerRight(m_bVertRulerRight );
+    rVOpt.SetCrossHair(m_bCrosshair     );
+    rVOpt.SetSmoothScroll(m_bSmoothScroll);
+    rVOpt.SetTable      (m_bTable             );
+    rVOpt.SetGraphic    (m_bGraphic           );
+    rVOpt.SetDraw       (m_bDrawing           );
+    rVOpt.SetControl    (m_bDrawing           );
+    rVOpt.SetFieldName  (m_bFieldName         );
+    rVOpt.SetPostIts    (m_bNotes             );
+    rVOpt.SetShowInlineTooltips( m_bShowInlineTooltips );
+    rVOpt.SetShowHiddenField(m_bFieldHiddenText );
+    rVOpt.SetShowHiddenPara(m_bShowHiddenPara );
 }
 
 // CTOR for empty Item

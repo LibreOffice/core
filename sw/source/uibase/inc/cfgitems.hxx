@@ -65,20 +65,20 @@ public:
 class SW_DLLPUBLIC SwElemItem : public SfxPoolItem
 {
     //view
-    bool bVertRuler     :1;
-    bool bVertRulerRight:1;
-    bool bSmoothScroll  :1;
+    bool m_bVertRuler     :1;
+    bool m_bVertRulerRight:1;
+    bool m_bSmoothScroll  :1;
     //visual aids
-    bool bCrosshair     :1;
+    bool m_bCrosshair     :1;
     //display
-    bool bTable             :1;
-    bool bGraphic           :1;
-    bool bDrawing           :1;
-    bool bFieldName         :1;
-    bool bNotes             :1;
-    bool bShowInlineTooltips :1;
-    bool bFieldHiddenText   :1;
-    bool bShowHiddenPara    :1;
+    bool m_bTable             :1;
+    bool m_bGraphic           :1;
+    bool m_bDrawing           :1;
+    bool m_bFieldName         :1;
+    bool m_bNotes             :1;
+    bool m_bShowInlineTooltips :1;
+    bool m_bFieldHiddenText   :1;
+    bool m_bShowHiddenPara    :1;
 
     friend class SwContentOptPage;
 
