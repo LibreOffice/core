@@ -82,58 +82,6 @@ ContentIdentifier::~ContentIdentifier()
 }
 
 
-// XInterface methods.
-
-
-// virtual
-void SAL_CALL ContentIdentifier::acquire() throw()
-{
-    OWeakObject::acquire();
-}
-
-
-// virtual
-void SAL_CALL ContentIdentifier::release() throw()
-{
-    OWeakObject::release();
-}
-
-
-// virtual
-Any SAL_CALL
-ContentIdentifier::queryInterface( const Type & rType )
-{
-    Any aRet = cppu::queryInterface( rType,
-                static_cast< XTypeProvider * >( this ),
-                static_cast< XContentIdentifier * >( this ) );
-
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-
-// XTypeProvider methods.
-
-
-// virtual
-Sequence< sal_Int8 > SAL_CALL
-ContentIdentifier::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-
-// virtual
-Sequence< css::uno::Type > SAL_CALL
-ContentIdentifier::getTypes()
-{
-    static cppu::OTypeCollection s_aCollection(
-                    cppu::UnoType<XTypeProvider>::get(),
-                    cppu::UnoType<XContentIdentifier>::get() );
-
-    return s_aCollection.getTypes();
-}
-
-
 // XContentIdentifier methods.
 
 
