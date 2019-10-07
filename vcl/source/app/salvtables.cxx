@@ -1255,6 +1255,34 @@ namespace
     }
 }
 
+namespace
+{
+    void CollectChildren(const vcl::Window& rCurrent, const basegfx::B2IPoint& rTopLeft, weld::ScreenShotCollection& rControlDataCollection)
+    {
+        if (rCurrent.IsVisible())
+        {
+            const Point aCurrentPos(rCurrent.GetPosPixel());
+            const Size aCurrentSize(rCurrent.GetSizePixel());
+            const basegfx::B2IPoint aCurrentTopLeft(rTopLeft.getX() + aCurrentPos.X(), rTopLeft.getY() + aCurrentPos.Y());
+            const basegfx::B2IRange aCurrentRange(aCurrentTopLeft, aCurrentTopLeft + basegfx::B2IPoint(aCurrentSize.Width(), aCurrentSize.Height()));
+
+            if (!aCurrentRange.isEmpty())
+            {
+                rControlDataCollection.emplace_back(rCurrent.GetHelpId(), aCurrentRange);
+            }
+
+            for (sal_uInt16 a(0); a < rCurrent.GetChildCount(); a++)
+            {
+                vcl::Window* pChild = rCurrent.GetChild(a);
+                if (nullptr != pChild)
+                {
+                    CollectChildren(*pChild, aCurrentTopLeft, rControlDataCollection);
+                }
+            }
+        }
+    }
+}
+
 class SalInstanceDialog : public SalInstanceWindow, public virtual weld::Dialog
 {
 private:
@@ -1434,6 +1462,24 @@ public:
     virtual Container* weld_content_area() override
     {
         return new SalInstanceContainer(m_xDialog->get_content_area(), m_pBuilder, false);
+    }
+
+    virtual void draw(VirtualDevice& rOutput) override
+    {
+        m_xDialog->createScreenshot(rOutput);
+    }
+
+    virtual weld::ScreenShotCollection collect_screenshot_data() override
+    {
+        weld::ScreenShotCollection aRet;
+
+        // collect all children. Choose start pos to be negative
+        // of target dialog's position to get all positions relative to (0,0)
+        const Point aParentPos(m_xDialog->GetPosPixel());
+        const basegfx::B2IPoint aTopLeft(-aParentPos.X(), -aParentPos.Y());
+        CollectChildren(*m_xDialog, aTopLeft, aRet);
+
+        return aRet;
     }
 };
 

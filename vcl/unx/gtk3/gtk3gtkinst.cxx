@@ -55,6 +55,7 @@
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <rtl/bootstrap.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -64,6 +65,7 @@
 #include <unotools/resmgr.hxx>
 #include <unx/gstsink.hxx>
 #include <vcl/ImageTree.hxx>
+#include <vcl/abstdlg.hxx>
 #include <vcl/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/i18nhelp.hxx>
@@ -75,6 +77,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/wrkwin.hxx>
+#include <strings.hrc>
 #include <window.h>
 #include <numeric>
 
@@ -3652,6 +3655,7 @@ class GtkInstanceDialog : public GtkInstanceWindow, public virtual weld::Dialog
 {
 private:
     GtkWindow* m_pDialog;
+    GtkWidget* m_pScreenshotEventBox;
     DialogRunner m_aDialogRun;
     std::shared_ptr<weld::DialogController> m_xDialogController;
     // Used to keep ourself alive during a runAsync(when doing runAsync without a DialogController)
@@ -3742,10 +3746,92 @@ private:
 
     void asyncresponse(gint ret);
 
+    static void signalActivate(GtkMenuItem*, gpointer data)
+    {
+        bool* pActivate = static_cast<bool*>(data);
+        *pActivate = true;
+    }
+
+    bool signal_screenshot_popup_menu(GdkEventButton* pEvent)
+    {
+        GtkWidget *pMenu = gtk_menu_new();
+
+        GtkWidget* pMenuItem = gtk_menu_item_new_with_mnemonic(MapToGtkAccelerator(VclResId(SV_BUTTONTEXT_SCREENSHOT)).getStr());
+        gtk_menu_shell_append(GTK_MENU_SHELL(pMenu), pMenuItem);
+        bool bActivate(false);
+        g_signal_connect(pMenuItem, "activate", G_CALLBACK(signalActivate), &bActivate);
+        gtk_widget_show(pMenuItem);
+
+        int button, event_time;
+        if (pEvent)
+        {
+            button = pEvent->button;
+            event_time = pEvent->time;
+        }
+        else
+        {
+            button = 0;
+            event_time = gtk_get_current_event_time();
+        }
+
+        gtk_menu_attach_to_widget(GTK_MENU(pMenu), m_pScreenshotEventBox, nullptr);
+
+        GMainLoop* pLoop = g_main_loop_new(nullptr, true);
+        gulong nSignalId = g_signal_connect_swapped(G_OBJECT(pMenu), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
+
+        gtk_menu_popup(GTK_MENU(pMenu), nullptr, nullptr, nullptr, nullptr, button, event_time);
+
+        if (g_main_loop_is_running(pLoop))
+        {
+            gdk_threads_leave();
+            g_main_loop_run(pLoop);
+            gdk_threads_enter();
+        }
+
+        g_main_loop_unref(pLoop);
+        g_signal_handler_disconnect(pMenu, nSignalId);
+        gtk_menu_detach(GTK_MENU(pMenu));
+
+        if (bActivate)
+        {
+            // open screenshot annotation dialog
+            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+            VclPtr<AbstractScreenshotAnnotationDlg> xTmp = pFact->CreateScreenshotAnnotationDlg(*this);
+            ScopedVclPtr<AbstractScreenshotAnnotationDlg> xDialog(xTmp);
+            xDialog->Execute();
+        }
+
+        return false;
+    }
+
+    static gboolean signalScreenshotPopupMenu(GtkWidget*, gpointer widget)
+    {
+        GtkInstanceDialog* pThis = static_cast<GtkInstanceDialog*>(widget);
+        return pThis->signal_screenshot_popup_menu(nullptr);
+    }
+
+    static gboolean signalScreenshotButton(GtkWidget*, GdkEventButton* pEvent, gpointer widget)
+    {
+        GtkInstanceDialog* pThis = static_cast<GtkInstanceDialog*>(widget);
+        SolarMutexGuard aGuard;
+        return pThis->signal_screenshot_button(pEvent);
+    }
+
+    bool signal_screenshot_button(GdkEventButton* pEvent)
+    {
+        if (gdk_event_triggers_context_menu(reinterpret_cast<GdkEvent*>(pEvent)) && pEvent->type == GDK_BUTTON_PRESS)
+        {
+            //if handled for context menu, stop processing
+            return signal_screenshot_popup_menu(pEvent);
+        }
+        return false;
+    }
+
 public:
     GtkInstanceDialog(GtkWindow* pDialog, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWindow(pDialog, pBuilder, bTakeOwnership)
         , m_pDialog(pDialog)
+        , m_pScreenshotEventBox(nullptr)
         , m_aDialogRun(pDialog, this)
         , m_nCloseSignalId(g_signal_connect(m_pDialog, "close", G_CALLBACK(signalClose), this))
         , m_nResponseSignalId(0)
@@ -3756,6 +3842,34 @@ public:
         , m_nOldEditWidthReq(0)
         , m_nOldBorderWidth(0)
     {
+        const bool bScreenshotMode(officecfg::Office::Common::Misc::ScreenshotMode::get());
+        if (bScreenshotMode)
+        {
+            // insert in an eventbox to capture the right click on action area hackery
+            if (GtkWidget* pActionArea = gtk_dialog_get_action_area(GTK_DIALOG(m_pDialog)))
+            {
+                GtkWidget* pParent = gtk_widget_get_parent(pActionArea);
+
+                g_object_ref(pActionArea);
+                gtk_container_remove(GTK_CONTAINER(pParent), pActionArea);
+
+                m_pScreenshotEventBox = gtk_event_box_new();
+                gtk_event_box_set_above_child(GTK_EVENT_BOX(m_pScreenshotEventBox), false);
+                gtk_event_box_set_visible_window(GTK_EVENT_BOX(m_pScreenshotEventBox), false);
+                gtk_widget_show(m_pScreenshotEventBox);
+
+                gtk_container_add(GTK_CONTAINER(pParent), m_pScreenshotEventBox);
+
+                gtk_container_add(GTK_CONTAINER(m_pScreenshotEventBox), pActionArea);
+                g_object_unref(pActionArea);
+
+                gtk_widget_set_hexpand(m_pScreenshotEventBox, gtk_widget_get_hexpand(pActionArea));
+                gtk_widget_set_vexpand(m_pScreenshotEventBox, gtk_widget_get_vexpand(pActionArea));
+
+                g_signal_connect(m_pScreenshotEventBox, "popup-menu", G_CALLBACK(signalScreenshotPopupMenu), this);
+                g_signal_connect(m_pScreenshotEventBox, "button-press-event", G_CALLBACK(signalScreenshotButton), this);
+            }
+        }
     }
 
     virtual bool runAsync(std::shared_ptr<weld::DialogController> rDialogController, const std::function<void(sal_Int32)>& func) override
@@ -3947,6 +4061,51 @@ public:
     virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>&) override
     {
         //not implemented for the gtk variant
+    }
+
+    virtual void draw(VirtualDevice& rOutput) override
+    {
+        rOutput.SetOutputSizePixel(get_size());
+        cairo_surface_t* pSurface = get_underlying_cairo_surface(rOutput);
+        cairo_t* cr = cairo_create(pSurface);
+
+        // try and omit drawing CSD under wayland
+        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pDialog));
+        GList* pChild = g_list_first(pChildren);
+
+        int x, y;
+        gtk_widget_translate_coordinates(GTK_WIDGET(pChild->data),
+                                         GTK_WIDGET(m_pDialog),
+                                         0, 0, &x, &y);
+
+        int innerborder = gtk_container_get_border_width(GTK_CONTAINER(pChild->data));
+        g_list_free(pChildren);
+
+        int outerborder = gtk_container_get_border_width(GTK_CONTAINER(m_pDialog));
+        int totalborder = outerborder + innerborder;
+        x -= totalborder;
+        y -= totalborder;
+
+#if defined(GDK_WINDOWING_X11)
+        GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pWidget));
+        if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
+            assert(x == 0 && y == 0 && "expected offset of 0 under X");
+#endif
+
+        cairo_translate(cr, -x, -y);
+
+        gtk_widget_draw(GTK_WIDGET(m_pDialog), cr);
+
+        cairo_destroy(cr);
+    }
+
+    virtual weld::ScreenShotCollection collect_screenshot_data() override
+    {
+        weld::ScreenShotCollection aRet;
+
+        //TODO
+
+        return aRet;
     }
 
     virtual ~GtkInstanceDialog() override

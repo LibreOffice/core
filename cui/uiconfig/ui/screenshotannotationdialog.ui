@@ -68,6 +68,8 @@
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="screenshotannotationdialog|label2">Click the widgets to add annotation:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">picture</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -93,6 +95,8 @@
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="screenshotannotationdialog|label1">Paste the following markup into the help file:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">text</property>
             <property name="ellipsize">end</property>
           </object>
           <packing>

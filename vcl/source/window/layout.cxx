@@ -305,6 +305,7 @@ void VclContainer::Command(const CommandEvent& rCEvt)
 
                         if (bAddScreenshotButtonToMenu && nId == nScreenshotButtonID)
                         {
+#if 0
                             // screenshot was selected, access parent dialog (needed for
                             // screenshot and other data access)
                             Dialog* pParentDialog = GetParentDialog();
@@ -326,6 +327,7 @@ void VclContainer::Command(const CommandEvent& rCEvt)
                                     pDialog->Execute();
                                 }
                             }
+#endif
                         }
                     }
 

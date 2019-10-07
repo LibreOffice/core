@@ -51,6 +51,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/logger.hxx>
@@ -1042,7 +1043,7 @@ void Dialog::ensureRepaint()
     }
 }
 
-BitmapEx Dialog::createScreenshot()
+void Dialog::createScreenshot(VirtualDevice& rOutput)
 {
     // same prerequisites as in Execute()
     setDeferredProperties();
@@ -1051,7 +1052,11 @@ BitmapEx Dialog::createScreenshot()
     ToTop();
     ensureRepaint();
 
-    return GetBitmapEx(Point(), GetOutputSizePixel());
+    Point aPos;
+    Size aSize(GetOutputSizePixel());
+
+    rOutput.SetOutputSizePixel(aSize);
+    rOutput.DrawOutDev(aPos, aSize, aPos, aSize, *this);
 }
 
 short Dialog::Execute()
