@@ -31,6 +31,7 @@
 #include <com/sun/star/ucb/FetchResult.hpp>
 #include <com/sun/star/ucb/XContentIdentifierMapping.hpp>
 #include <com/sun/star/ucb/XCachedContentResultSetFactory.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
 #include <memory>
@@ -365,11 +366,10 @@ private:
 };
 
 
-class CachedContentResultSetFactory final
-                : public cppu::OWeakObject
-                , public css::lang::XTypeProvider
-                , public css::lang::XServiceInfo
-                , public css::ucb::XCachedContentResultSetFactory
+class CachedContentResultSetFactory final :
+                public cppu::WeakImplHelper<
+                    css::lang::XServiceInfo,
+                    css::ucb::XCachedContentResultSetFactory>
 {
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;
 
@@ -378,18 +378,6 @@ public:
     CachedContentResultSetFactory( const css::uno::Reference< css::uno::XComponentContext > & rxContext);
 
     virtual ~CachedContentResultSetFactory() override;
-
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
-
-    // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
