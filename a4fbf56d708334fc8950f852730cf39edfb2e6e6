@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_3a2bf294",
+        "filename": "sc/source/filter/oox/commentsbuffer.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-10-07T12:27:31Z",
+      "side": 1,
+      "message": "Instead of this, set the paragraph adjustment:\n\naCommentPr.setProperty( PROP_ParaAdjust, lcl_ToParaAlign(...) );\n\nwhere\n\nlcol_ToParaAlign()\n...\ncase XML_right:\n   return css::style::ParagraphAdjust_RIGHT;\n...",
+      "range": {
+        "startLine": 177,
+        "startChar": 11,
+        "endLine": 177,
+        "endChar": 107
+      },
+      "revId": "a4fbf56d708334fc8950f852730cf39edfb2e6e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
