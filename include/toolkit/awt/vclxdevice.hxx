@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/vclptr.hxx>
 
@@ -33,11 +33,10 @@
 
 /// A UNO wrapper for the VCL OutputDevice
 class TOOLKIT_DLLPUBLIC VCLXDevice :
-                    public css::awt::XDevice,
-                    public css::lang::XTypeProvider,
-                    public css::lang::XUnoTunnel,
-                    public css::awt::XUnitConversion,
-                    public ::cppu::OWeakObject
+                    public cppu::WeakImplHelper<
+                        css::awt::XDevice,
+                        css::lang::XUnoTunnel,
+                        css::awt::XUnitConversion>
 {
     friend class VCLXGraphics;
     friend class VCLXVirtualDevice;
@@ -52,17 +51,8 @@ public:
     void                    SetOutputDevice( const VclPtr<OutputDevice> &pOutDev ) { mpOutputDevice = pOutDev; }
     const VclPtr<OutputDevice>& GetOutputDevice() const { return mpOutputDevice; }
 
-    // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
-
     // css::lang::XUnoTunnel
     UNO3_GETIMPLEMENTATION_DECL(VCLXDevice)
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XDevice,
     css::uno::Reference< css::awt::XGraphics >    SAL_CALL createGraphics(  ) override;
