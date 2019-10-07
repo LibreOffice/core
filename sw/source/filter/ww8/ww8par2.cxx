@@ -1080,7 +1080,8 @@ WW8TabBandDesc::WW8TabBandDesc( WW8TabBandDesc const & rBand )
     *this = rBand;
     if( rBand.pTCs )
     {
-        pTCs = new WW8_TCell[nWwCols];
+        pTCs = reinterpret_cast<WW8_TCell *>(new char[nWwCols * sizeof (WW8_TCell)]);
+            // create uninitialized
         memcpy( pTCs, rBand.pTCs, nWwCols * sizeof( WW8_TCell ) );
     }
     if( rBand.pSHDs )
@@ -1142,7 +1143,6 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS, short nLen)
     {
         // create empty TCs
         pTCs = new WW8_TCell[nCols];
-        setcelldefaults(pTCs,nCols);
     }
 
     short nColsToRead = std::min<short>(nFileCols, nCols);
@@ -1398,7 +1398,6 @@ void WW8TabBandDesc::ProcessSprmTInsert(const sal_uInt8* pParamsTInsert)
     }
 
     WW8_TCell *pTC2s = new WW8_TCell[nNewWwCols];
-    setcelldefaults(pTC2s, nNewWwCols);
 
     if (pTCs)
     {
@@ -1612,11 +1611,6 @@ void WW8TabBandDesc::ReadNewShd(const sal_uInt8* pS, bool bVer67)
 
     while (i < nWwCols)
         pNewSHDs[i++] = COL_AUTO;
-}
-
-void WW8TabBandDesc::setcelldefaults(WW8_TCell *pCells, short nCols)
-{
-    memset(static_cast<void*>(pCells), 0, nCols * sizeof(WW8_TCell));
 }
 
 namespace
@@ -2227,7 +2221,6 @@ void WW8TabDesc::CalcDefaults()
         if( !pR->pTCs )
         {
             pR->pTCs = new WW8_TCell[ pR->nWwCols ];
-            WW8TabBandDesc::setcelldefaults(pR->pTCs, pR->nWwCols);
         }
         for (int k = 0; k < pR->nWwCols; ++k)
         {

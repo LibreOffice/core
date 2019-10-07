@@ -548,6 +548,11 @@ struct WW8_TCell    // this is the base for further work (corresponds mostly to 
 //  BRC brcLeft;            // specification of left border of table row
 //  BRC brcBottom;          // specification of bottom border of table row
 //  BRC brcRight;           // specification of right border of table row.
+
+    WW8_TCell():
+        bFirstMerged(0), bMerged(0), bVertical(0), bBackward(0), bRotateFont(0), bVertMerge(0),
+        bVertRestart(0), nVertAlign(0), fUnused(0) {}
+        // default member initializers for the bitfields will only work in C++20
 };
 // cbTC (count of bytes of a TC) is 18(decimal), 12(hex).
 
