@@ -930,7 +930,7 @@ public:
 
     virtual VclPtr<AbstractPasswordToOpenModifyDialog> CreatePasswordToOpenModifyDialog(weld::Window* pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify) override;
 
-    virtual VclPtr<AbstractScreenshotAnnotationDlg> CreateScreenshotAnnotationDlg(weld::Window* pParent, Dialog& rParentDialog) override;
+    virtual VclPtr<AbstractScreenshotAnnotationDlg> CreateScreenshotAnnotationDlg(weld::Dialog& rParentDialog) override;
 
     virtual VclPtr<AbstractSignatureLineDialog>
     CreateSignatureLineDialog(weld::Window* pParent,

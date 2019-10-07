@@ -19,6 +19,7 @@
 
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <officecfg/Office/Common.hxx>
 #include <salframe.hxx>
 #include <salinst.hxx>
 #include <salvd.hxx>
@@ -29,12 +30,14 @@
 #include <salbmp.hxx>
 #include <salobj.hxx>
 #include <salmenu.hxx>
+#include <strings.hrc>
 #include <svdata.hxx>
 #include <messagedialog.hxx>
 #include <treeglue.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <utility>
 #include <tools/helpers.hxx>
+#include <vcl/abstdlg.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/calendar.hxx>
 #include <vcl/combobox.hxx>
@@ -1255,6 +1258,34 @@ namespace
     }
 }
 
+namespace
+{
+    void CollectChildren(const vcl::Window& rCurrent, const basegfx::B2IPoint& rTopLeft, weld::ScreenShotCollection& rControlDataCollection)
+    {
+        if (rCurrent.IsVisible())
+        {
+            const Point aCurrentPos(rCurrent.GetPosPixel());
+            const Size aCurrentSize(rCurrent.GetSizePixel());
+            const basegfx::B2IPoint aCurrentTopLeft(rTopLeft.getX() + aCurrentPos.X(), rTopLeft.getY() + aCurrentPos.Y());
+            const basegfx::B2IRange aCurrentRange(aCurrentTopLeft, aCurrentTopLeft + basegfx::B2IPoint(aCurrentSize.Width(), aCurrentSize.Height()));
+
+            if (!aCurrentRange.isEmpty())
+            {
+                rControlDataCollection.emplace_back(rCurrent.GetHelpId(), aCurrentRange);
+            }
+
+            for (sal_uInt16 a(0); a < rCurrent.GetChildCount(); a++)
+            {
+                vcl::Window* pChild = rCurrent.GetChild(a);
+                if (nullptr != pChild)
+                {
+                    CollectChildren(*pChild, aCurrentTopLeft, rControlDataCollection);
+                }
+            }
+        }
+    }
+}
+
 class SalInstanceDialog : public SalInstanceWindow, public virtual weld::Dialog
 {
 private:
@@ -1266,6 +1297,8 @@ private:
     long m_nOldEditWidthReq; // Original width request of the input field
     sal_Int32 m_nOldBorderWidth; // border width for expanded dialog
 
+    DECL_LINK(PopupScreenShotMenuHdl, const CommandEvent&, bool);
+
 public:
     SalInstanceDialog(::Dialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceWindow(pDialog, pBuilder, bTakeOwnership)
@@ -1273,6 +1306,11 @@ public:
         , m_nOldEditWidthReq(0)
         , m_nOldBorderWidth(0)
     {
+        const bool bScreenshotMode(officecfg::Office::Common::Misc::ScreenshotMode::get());
+        if (bScreenshotMode)
+        {
+            m_xDialog->SetPopupMenuHdl(LINK(this, SalInstanceDialog, PopupScreenShotMenuHdl));
+        }
     }
 
     virtual bool runAsync(std::shared_ptr<weld::DialogController> aOwner, const std::function<void(sal_Int32)> &rEndDialogFn) override
@@ -1435,7 +1473,66 @@ public:
     {
         return new SalInstanceContainer(m_xDialog->get_content_area(), m_pBuilder, false);
     }
+
+    virtual void draw(VirtualDevice& rOutput) override
+    {
+        m_xDialog->createScreenshot(rOutput);
+    }
+
+    virtual weld::ScreenShotCollection collect_screenshot_data() override
+    {
+        weld::ScreenShotCollection aRet;
+
+        // collect all children. Choose start pos to be negative
+        // of target dialog's position to get all positions relative to (0,0)
+        const Point aParentPos(m_xDialog->GetPosPixel());
+        const basegfx::B2IPoint aTopLeft(-aParentPos.X(), -aParentPos.Y());
+        CollectChildren(*m_xDialog, aTopLeft, aRet);
+
+        return aRet;
+    }
 };
+
+IMPL_LINK(SalInstanceDialog, PopupScreenShotMenuHdl, const CommandEvent&, rCEvt, bool)
+{
+    if (CommandEventId::ContextMenu == rCEvt.GetCommand())
+    {
+        const Point aMenuPos(rCEvt.GetMousePosPixel());
+        ScopedVclPtrInstance<PopupMenu> aMenu;
+        sal_uInt16 nLocalID(1);
+
+        aMenu->InsertItem(nLocalID, VclResId(SV_BUTTONTEXT_SCREENSHOT));
+        aMenu->SetHelpText(nLocalID, VclResId(SV_HELPTEXT_SCREENSHOT));
+        aMenu->SetHelpId(nLocalID, "InteractiveScreenshotMode");
+        aMenu->EnableItem(nLocalID);
+
+        const sal_uInt16 nId(aMenu->Execute(m_xDialog, aMenuPos));
+
+        // 0 == no selection (so not usable as ID)
+        if (0 != nId)
+        {
+            // open screenshot annotation dialog
+            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+            VclPtr<AbstractScreenshotAnnotationDlg> pTmp = pFact->CreateScreenshotAnnotationDlg(*this);
+            ScopedVclPtr<AbstractScreenshotAnnotationDlg> pDialog(pTmp);
+
+            if (pDialog)
+            {
+                // currently just execute the dialog, no need to do
+                // different things for ok/cancel. This may change later,
+                // for that case use 'if (pDlg->Execute() == RET_OK)'
+                pDialog->Execute();
+            }
+        }
+
+        // consume event when:
+        // - CommandEventId::ContextMenu
+        // - bScreenshotMode
+        return true;
+    }
+
+    return false;
+}
 
 class SalInstanceMessageDialog : public SalInstanceDialog, public virtual weld::MessageDialog
 {

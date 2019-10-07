@@ -68,6 +68,8 @@
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="screenshotannotationdialog|label2">Click the widgets to add annotation:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">picture</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -80,6 +82,7 @@
             <property name="name">image</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK | GDK_STRUCTURE_MASK</property>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -93,6 +96,8 @@
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="screenshotannotationdialog|label1">Paste the following markup into the help file:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">text</property>
             <property name="ellipsize">end</property>
           </object>
           <packing>

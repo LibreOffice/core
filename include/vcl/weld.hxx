@@ -10,6 +10,7 @@
 #ifndef INCLUDED_VCL_WELD_HXX
 #define INCLUDED_VCL_WELD_HXX
 
+#include <basegfx/range/b2irange.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
@@ -419,6 +420,26 @@ public:
 
 class Button;
 
+class VCL_DLLPUBLIC ScreenShotEntry
+{
+public:
+    ScreenShotEntry(const OString& rHelpId, const basegfx::B2IRange& rB2IRange)
+        : msHelpId(rHelpId)
+        , maB2IRange(rB2IRange)
+    {
+    }
+
+    const basegfx::B2IRange& getB2IRange() const { return maB2IRange; }
+
+    const OString& GetHelpId() const { return msHelpId; }
+
+private:
+    OString msHelpId;
+    basegfx::B2IRange maB2IRange;
+};
+
+typedef std::vector<ScreenShotEntry> ScreenShotCollection;
+
 class VCL_DLLPUBLIC Dialog : virtual public Window
 {
 private:
@@ -445,6 +466,11 @@ public:
     virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) = 0;
     // undo previous dialog collapse
     virtual void undo_collapse() = 0;
+
+    // render the dialog for a screenshot
+    virtual void draw(VirtualDevice& rOutput) = 0;
+    // collect positions of widgets and their help ids for screenshot purposes
+    virtual ScreenShotCollection collect_screenshot_data() = 0;
 
     virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink)
         = 0;

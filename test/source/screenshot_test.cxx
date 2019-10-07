@@ -19,6 +19,7 @@
 #include <vcl/abstdlg.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 #include <unotools/configmgr.hxx>
 #include <tools/stream.hxx>
 
@@ -109,7 +110,9 @@ void ScreenshotTest::saveScreenshot(VclAbstractDialog const & rDialog)
 
 void ScreenshotTest::saveScreenshot(Dialog& rDialog)
 {
-    const BitmapEx aScreenshot(rDialog.createScreenshot());
+    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    rDialog.createScreenshot(*xDialogSurface);
+    const BitmapEx aScreenshot(xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel()));
 
     if (!aScreenshot.IsEmpty())
     {

@@ -110,6 +110,7 @@ public:
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual void    StateChanged( StateChangedType nStateChange ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void    Command( const CommandEvent& rCEvt ) override;
 
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
@@ -127,7 +128,7 @@ public:
     // Screenshot interface
     virtual std::vector<OString> getAllPageUIXMLDescriptions() const;
     virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription);
-    BitmapEx createScreenshot();
+    void createScreenshot(VirtualDevice& rOutput);
 
     virtual short   Execute();
     bool            IsInExecute() const { return mbInExecute; }
@@ -174,7 +175,7 @@ public:
 
     void            Activate() override;
 
-
+    void            SetPopupMenuHdl(const Link<const CommandEvent&, bool>& rLink);
     void            SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink);
 
     void            add_button(PushButton* pButton, int nResponse, bool bTransferOwnership);

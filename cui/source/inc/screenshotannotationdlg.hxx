@@ -34,9 +34,7 @@ private:
     ScreenshotAnnotationDlg& operator=(const ScreenshotAnnotationDlg &) = delete;
 
 public:
-    ScreenshotAnnotationDlg(
-        weld::Window* pParent,
-        Dialog& rParentDialog);
+    ScreenshotAnnotationDlg(weld::Dialog& rParentDialog);
     virtual ~ScreenshotAnnotationDlg() override;
 };
 
