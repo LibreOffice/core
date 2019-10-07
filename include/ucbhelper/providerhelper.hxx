@@ -25,7 +25,7 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
@@ -61,10 +61,10 @@ typedef std::vector< ContentImplHelperRef > ContentRefList;
   *   ( These set contains the properties added to a content using its
   *   XPropertyContainer interface )
   */
-class UCBHELPER_DLLPUBLIC ContentProviderImplHelper : public cppu::OWeakObject,
-                                    public css::lang::XTypeProvider,
-                                    public css::lang::XServiceInfo,
-                                    public css::ucb::XContentProvider
+class UCBHELPER_DLLPUBLIC ContentProviderImplHelper :
+                                    public cppu::WeakImplHelper<
+                                        css::lang::XServiceInfo,
+                                        css::ucb::XContentProvider>
 {
     friend class ContentImplHelper;
 
@@ -134,21 +134,6 @@ public:
                 const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~ContentProviderImplHelper() override;
 
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
-
-    // XTypeProvider
-
-
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes() override;
 
     // XServiceInfo
 
