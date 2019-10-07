@@ -202,18 +202,18 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
                                     reinterpret_cast<const SfxPoolItem**>(&pElemAttr) );
     if(pElemAttr)
     {
-        m_xTableCB->set_active(pElemAttr->bTable);
-        m_xGrfCB->set_active(pElemAttr->bGraphic);
-        m_xDrwCB->set_active(pElemAttr->bDrawing);
-        m_xFieldNameCB->set_active(pElemAttr->bFieldName);
-        m_xPostItCB->set_active(pElemAttr->bNotes);
-        m_xCrossCB->set_active(pElemAttr->bCrosshair);
-        m_xVRulerCBox->set_active(pElemAttr->bVertRuler);
-        m_xVRulerRightCBox->set_active(pElemAttr->bVertRulerRight);
-        m_xSmoothCBox->set_active(pElemAttr->bSmoothScroll);
-        m_xShowInlineTooltips->set_active(pElemAttr->bShowInlineTooltips);
-        m_xFieldHiddenCB->set_active( pElemAttr->bFieldHiddenText );
-        m_xFieldHiddenParaCB->set_active( pElemAttr->bShowHiddenPara );
+        m_xTableCB->set_active(pElemAttr->m_bTable);
+        m_xGrfCB->set_active(pElemAttr->m_bGraphic);
+        m_xDrwCB->set_active(pElemAttr->m_bDrawing);
+        m_xFieldNameCB->set_active(pElemAttr->m_bFieldName);
+        m_xPostItCB->set_active(pElemAttr->m_bNotes);
+        m_xCrossCB->set_active(pElemAttr->m_bCrosshair);
+        m_xVRulerCBox->set_active(pElemAttr->m_bVertRuler);
+        m_xVRulerRightCBox->set_active(pElemAttr->m_bVertRulerRight);
+        m_xSmoothCBox->set_active(pElemAttr->m_bSmoothScroll);
+        m_xShowInlineTooltips->set_active(pElemAttr->m_bShowInlineTooltips);
+        m_xFieldHiddenCB->set_active( pElemAttr->m_bFieldHiddenText );
+        m_xFieldHiddenParaCB->set_active( pElemAttr->m_bShowHiddenPara );
     }
     m_xMetricLB->set_active(-1);
     lcl_SelectMetricLB(*m_xMetricLB, SID_ATTR_METRIC, *rSet);
@@ -227,18 +227,18 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
                         GetOldItem(GetItemSet(), FN_PARAM_ELEM));
 
     SwElemItem aElem;
-    aElem.bTable                = m_xTableCB->get_active();
-    aElem.bGraphic              = m_xGrfCB->get_active();
-    aElem.bDrawing              = m_xDrwCB->get_active();
-    aElem.bFieldName            = m_xFieldNameCB->get_active();
-    aElem.bNotes                = m_xPostItCB->get_active();
-    aElem.bCrosshair            = m_xCrossCB->get_active();
-    aElem.bVertRuler            = m_xVRulerCBox->get_active();
-    aElem.bVertRulerRight       = m_xVRulerRightCBox->get_active();
-    aElem.bSmoothScroll         = m_xSmoothCBox->get_active();
-    aElem.bShowInlineTooltips   = m_xShowInlineTooltips->get_active();
-    aElem.bFieldHiddenText      = m_xFieldHiddenCB->get_active();
-    aElem.bShowHiddenPara       = m_xFieldHiddenParaCB->get_active();
+    aElem.m_bTable                = m_xTableCB->get_active();
+    aElem.m_bGraphic              = m_xGrfCB->get_active();
+    aElem.m_bDrawing              = m_xDrwCB->get_active();
+    aElem.m_bFieldName            = m_xFieldNameCB->get_active();
+    aElem.m_bNotes                = m_xPostItCB->get_active();
+    aElem.m_bCrosshair            = m_xCrossCB->get_active();
+    aElem.m_bVertRuler            = m_xVRulerCBox->get_active();
+    aElem.m_bVertRulerRight       = m_xVRulerRightCBox->get_active();
+    aElem.m_bSmoothScroll         = m_xSmoothCBox->get_active();
+    aElem.m_bShowInlineTooltips   = m_xShowInlineTooltips->get_active();
+    aElem.m_bFieldHiddenText      = m_xFieldHiddenCB->get_active();
+    aElem.m_bShowHiddenPara       = m_xFieldHiddenParaCB->get_active();
 
     bool bRet = !pOldAttr || aElem != *pOldAttr;
     if(bRet)
