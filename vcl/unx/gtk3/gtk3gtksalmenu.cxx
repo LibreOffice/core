@@ -223,7 +223,6 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
         if (mbMenuBar && maUpdateMenuBarIdle.IsActive())
         {
             maUpdateMenuBarIdle.Stop();
-            maUpdateMenuBarIdle.Invoke();
             return;
         }
     }
