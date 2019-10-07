@@ -18,10 +18,16 @@
 
 #include <skia/x11/gdiimpl.hxx>
 
+// TODO
+#define SK_ASSUME_GL 1
+#define SK_ASSUME_GL_ES 0
+
+#include <tools/sk_app/unix/WindowContextFactory_unix.h>
+#include <tools/sk_app/WindowContext.h>
+
 X11SkiaSalGraphicsImpl::X11SkiaSalGraphicsImpl(X11SalGraphics& rParent)
     : SkiaSalGraphicsImpl(rParent, rParent.GetGeometryProvider())
     , mParent(rParent)
-    , mCopyGc(None)
 {
 }
 
@@ -34,54 +40,42 @@ void X11SkiaSalGraphicsImpl::Init()
     SkiaSalGraphicsImpl::Init();
 }
 
-GC X11SkiaSalGraphicsImpl::getGC()
+void X11SkiaSalGraphicsImpl::createSurface()
 {
-    if (mCopyGc == None)
-    {
-        XGCValues values;
-        values.graphics_exposures = False;
-        values.subwindow_mode = ClipByChildren;
-        mCopyGc = XCreateGC(mParent.GetXDisplay(), mParent.GetDrawable(),
-                            GCGraphicsExposures | GCSubwindowMode, &values);
-    }
-    return mCopyGc;
+    if (isOffscreen())
+        return SkiaSalGraphicsImpl::createSurface();
+    sk_app::DisplayParams displayParams;
+    // TODO The Skia Xlib code actually requires the non-native color type to work properly.
+    // Use a macro to hide an unreachable code warning.
+#define GET_FORMAT                                                                                 \
+    kN32_SkColorType == kBGRA_8888_SkColorType ? kRGBA_8888_SkColorType : kBGRA_8888_SkColorType
+    displayParams.fColorType = GET_FORMAT;
+#undef GET_FORMAT
+    sk_app::window_context_factory::XlibWindowInfo winInfo;
+    winInfo.fDisplay = mParent.GetXDisplay();
+    winInfo.fWindow = mParent.GetDrawable();
+    assert(winInfo.fDisplay && winInfo.fWindow != None);
+    winInfo.fFBConfig = nullptr; // not used
+    winInfo.fVisualInfo = const_cast<SalVisual*>(&mParent.GetVisual());
+    winInfo.fWidth = GetWidth();
+    winInfo.fHeight = GetHeight();
+    mWindowContext.reset(sk_app::window_context_factory::NewRasterForXlib(winInfo, displayParams));
+    assert(SkToBool(mWindowContext)); // TODO
+    mSurface = mWindowContext->getBackbufferSurface();
 }
 
-void X11SkiaSalGraphicsImpl::freeResources()
+void X11SkiaSalGraphicsImpl::DeInit()
 {
-    if (mCopyGc != None)
-    {
-        XFreeGC(mParent.GetXDisplay(), mCopyGc);
-        mCopyGc = None;
-    }
+    mWindowContext.reset();
+    SkiaSalGraphicsImpl::DeInit();
 }
+
+void X11SkiaSalGraphicsImpl::freeResources() {}
 
 void X11SkiaSalGraphicsImpl::performFlush()
 {
-    Display* dpy = mParent.GetXDisplay();
-    Drawable drawable = mParent.GetDrawable();
-    GC gc = getGC();
-    SkPixmap pm;
-    if (!mSurface->peekPixels(&pm))
-        abort();
-    int bitsPerPixel = pm.info().bytesPerPixel() * 8;
-    XImage image;
-    memset(&image, 0, sizeof(image));
-    image.width = pm.width();
-    image.height = pm.height();
-    image.format = ZPixmap;
-    image.data = (char*)pm.addr();
-    image.byte_order = LSBFirst;
-    image.bitmap_unit = bitsPerPixel;
-    image.bitmap_bit_order = LSBFirst;
-    image.bitmap_pad = bitsPerPixel;
-    image.depth = 24;
-    image.bytes_per_line = pm.rowBytes() - pm.width() * pm.info().bytesPerPixel();
-    image.bits_per_pixel = bitsPerPixel;
-    if (!XInitImage(&image))
-        abort();
     // TODO XPutImage() is somewhat inefficient, XShmPutImage() should be preferred.
-    XPutImage(dpy, drawable, gc, &image, 0, 0, 0, 0, pm.width(), pm.height());
+    mWindowContext->swapBuffers();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
