@@ -24,7 +24,7 @@
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <osl/mutex.hxx>
 
@@ -45,9 +45,7 @@ class ContentImplHelper;
   * Core Properties that may have been added to the content.
   */
 class PropertySetInfo :
-                public cppu::OWeakObject,
-                public css::lang::XTypeProvider,
-                public css::beans::XPropertySetInfo
+                public cppu::WeakImplHelper<css::beans::XPropertySetInfo>
 {
     css::uno::Reference< css::ucb::XCommandEnvironment >
                                 m_xEnv;
@@ -64,19 +62,6 @@ public:
     PropertySetInfo( const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv,
                      ContentImplHelper* pContent );
     virtual ~PropertySetInfo() override;
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
-
-    // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes() override;
 
     // XPropertySetInfo
     virtual css::uno::Sequence<
