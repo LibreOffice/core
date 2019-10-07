@@ -1723,64 +1723,6 @@ void ScCellRangesBase::SetCursorOnly( bool bSet )
     bCursorOnly = bSet;
 }
 
-uno::Any SAL_CALL ScCellRangesBase::queryInterface( const uno::Type& rType )
-{
-    SC_QUERYINTERFACE( beans::XPropertySet )
-    SC_QUERYINTERFACE( beans::XMultiPropertySet )
-    SC_QUERYINTERFACE( beans::XTolerantMultiPropertySet )
-    SC_QUERYINTERFACE( beans::XPropertyState )
-    SC_QUERYINTERFACE( sheet::XSheetOperation )
-    SC_QUERYINTERFACE( chart::XChartDataArray )
-    SC_QUERYINTERFACE( chart::XChartData )
-    SC_QUERYINTERFACE( util::XIndent )
-    SC_QUERYINTERFACE( sheet::XCellRangesQuery )
-    SC_QUERYINTERFACE( sheet::XFormulaQuery )
-    SC_QUERYINTERFACE( util::XReplaceable )
-    SC_QUERYINTERFACE( util::XSearchable )
-    SC_QUERYINTERFACE( util::XModifyBroadcaster )
-    SC_QUERYINTERFACE( lang::XServiceInfo )
-    SC_QUERYINTERFACE( lang::XUnoTunnel )
-    SC_QUERYINTERFACE( lang::XTypeProvider )
-
-    return OWeakObject::queryInterface( rType );
-}
-
-void SAL_CALL ScCellRangesBase::acquire() throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL ScCellRangesBase::release() throw()
-{
-    OWeakObject::release();
-}
-
-uno::Sequence<uno::Type> SAL_CALL ScCellRangesBase::getTypes()
-{
-    static uno::Sequence<uno::Type> const aTypes
-    {
-        cppu::UnoType<beans::XPropertySet>::get(),
-        cppu::UnoType<beans::XMultiPropertySet>::get(),
-        cppu::UnoType<beans::XPropertyState>::get(),
-        cppu::UnoType<sheet::XSheetOperation>::get(),
-        cppu::UnoType<chart::XChartDataArray>::get(),
-        cppu::UnoType<util::XIndent>::get(),
-        cppu::UnoType<sheet::XCellRangesQuery>::get(),
-        cppu::UnoType<sheet::XFormulaQuery>::get(),
-        cppu::UnoType<util::XReplaceable>::get(),
-        cppu::UnoType<util::XModifyBroadcaster>::get(),
-        cppu::UnoType<lang::XServiceInfo>::get(),
-        cppu::UnoType<lang::XUnoTunnel>::get(),
-        cppu::UnoType<lang::XTypeProvider>::get()
-    };
-    return aTypes;
-}
-
-uno::Sequence<sal_Int8> SAL_CALL ScCellRangesBase::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 void ScCellRangesBase::PaintGridRanges_Impl( )
 {
     for (size_t i = 0, nCount = aRanges.size(); i < nCount; ++i)
