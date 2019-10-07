@@ -324,7 +324,10 @@ short AbstractQrCodeGenDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractScreenshotAnnotationDlg_Impl);
+short AbstractScreenshotAnnotationDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short CuiAbstractTabController_Impl::Execute()
 {
@@ -1606,11 +1609,10 @@ VclPtr<AbstractPasswordToOpenModifyDialog> AbstractDialogFactory_Impl::CreatePas
 }
 
 VclPtr<AbstractScreenshotAnnotationDlg> AbstractDialogFactory_Impl::CreateScreenshotAnnotationDlg(
-    vcl::Window * pParent,
+    weld::Window* pParent,
     Dialog& rParentDialog)
 {
-    VclPtrInstance<ScreenshotAnnotationDlg> pDlg(pParent, rParentDialog);
-    return VclPtr<AbstractScreenshotAnnotationDlg_Impl>::Create(pDlg);
+    return VclPtr<AbstractScreenshotAnnotationDlg_Impl>::Create(std::make_unique<ScreenshotAnnotationDlg>(pParent, rParentDialog));
 }
 
 VclPtr<AbstractSignatureLineDialog> AbstractDialogFactory_Impl::CreateSignatureLineDialog(
