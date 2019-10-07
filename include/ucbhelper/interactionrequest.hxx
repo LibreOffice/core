@@ -29,7 +29,7 @@
 #include <com/sun/star/ucb/XInteractionAuthFallback.hpp>
 #include <com/sun/star/ucb/XInteractionReplaceExistingData.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 #include <memory>
 
@@ -61,9 +61,8 @@ struct InteractionRequest_Impl;
   * This class can also be used as base class for more specialized requests,
   * like authentication requests.
   */
-class UCBHELPER_DLLPUBLIC InteractionRequest : public cppu::OWeakObject,
-                           public css::lang::XTypeProvider,
-                           public css::task::XInteractionRequest
+class UCBHELPER_DLLPUBLIC InteractionRequest :
+                           public cppu::WeakImplHelper<css::task::XInteractionRequest>
 {
     std::unique_ptr<InteractionRequest_Impl> m_pImpl;
 
@@ -88,20 +87,6 @@ public:
       */
     void setContinuations(
         const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > & rContinuations );
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId() override;
 
     // XInteractionRequest
     virtual css::uno::Any SAL_CALL
