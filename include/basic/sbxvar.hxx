@@ -81,9 +81,10 @@ struct SbxValues
     void clear(SbxDataType type) {
         // A hacky way of zeroing the union value corresponding to the given type (even though the
         // relevant zero value need not be represented by all-zero bits, in general) without evoking
-        // GCC 8 -Wclass-memaccess, and without having to turn the anonymous union into a non-
-        // anonymous one:
-        std::memset(static_cast<void *>(this), 0, offsetof(SbxValues, eType));
+        // GCC 8 -Wclass-memaccess or loplugin:classmemaccess, and without having to turn the
+        // anonymous union into a non-anonymous one:
+        auto const p = static_cast<void *>(this);
+        std::memset(p, 0, offsetof(SbxValues, eType));
         eType = type;
     }
 };
