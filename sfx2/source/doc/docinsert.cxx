@@ -79,7 +79,6 @@ DocumentInserter::DocumentInserter(weld::Window* pParent, const OUString& rFacto
     , m_sDocFactory             ( rFactory )
     , m_nDlgFlags               ( lcl_map_mode_to_flags(mode) )
     , m_nError                  ( ERRCODE_NONE )
-    , m_pItemSet                ( nullptr )
 {
 }
 
@@ -103,12 +102,15 @@ void DocumentInserter::StartExecuteModal( const Link<sfx2::FileDialogHelper*,voi
 std::unique_ptr<SfxMedium> DocumentInserter::CreateMedium(char const*const pFallbackHack)
 {
     std::unique_ptr<SfxMedium> pMedium;
-    if (!m_nError && m_pItemSet && !m_pURLList.empty())
+    if (!m_nError && m_xItemSet && !m_pURLList.empty())
     {
         DBG_ASSERT( m_pURLList.size() == 1, "DocumentInserter::CreateMedium(): invalid URL list count" );
+        std::unique_ptr<SfxItemSet> xItemSet;
+        if (m_xItemSet)
+            xItemSet = std::make_unique<SfxItemSet>(*m_xItemSet);
         pMedium.reset(new SfxMedium(
                 m_pURLList[0], SFX_STREAM_READONLY,
-                SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), std::unique_ptr<SfxItemSet>(m_pItemSet) ));
+                SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), std::move(xItemSet) ));
         pMedium->UseInteractionHandler( true );
         std::unique_ptr<SfxFilterMatcher> pMatcher;
         if ( !m_sDocFactory.isEmpty() )
@@ -139,13 +141,16 @@ std::unique_ptr<SfxMedium> DocumentInserter::CreateMedium(char const*const pFall
 SfxMediumList DocumentInserter::CreateMediumList()
 {
     SfxMediumList aMediumList;
-    if (!m_nError && m_pItemSet && !m_pURLList.empty())
+    if (!m_nError && m_xItemSet && !m_pURLList.empty())
     {
         for (auto const& url : m_pURLList)
         {
+            std::unique_ptr<SfxItemSet> xItemSet;
+            if (m_xItemSet)
+                xItemSet = std::make_unique<SfxItemSet>(*m_xItemSet);
             std::unique_ptr<SfxMedium> pMedium(new SfxMedium(
                     url, SFX_STREAM_READONLY,
-                    SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), std::unique_ptr<SfxItemSet>(m_pItemSet) ));
+                    SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), std::move(xItemSet) ));
 
             pMedium->UseInteractionHandler( true );
 
@@ -196,7 +201,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
     if ( xCtrlAccess.is() )
     {
         // always create a new itemset
-        m_pItemSet = new SfxAllItemSet( SfxGetpApp()->GetPool() );
+        m_xItemSet.reset(new SfxAllItemSet( SfxGetpApp()->GetPool() ));
 
         short nDlgType = m_pFileDlg->GetDialogType();
         bool bHasPassword = (
@@ -218,11 +223,11 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
                     short nRet = aPasswordDlg.run();
                     if ( RET_OK == nRet )
                     {
-                        m_pItemSet->Put( SfxStringItem( SID_PASSWORD, aPasswordDlg.GetPassword() ) );
+                        m_xItemSet->Put( SfxStringItem( SID_PASSWORD, aPasswordDlg.GetPassword() ) );
                     }
                     else
                     {
-                        DELETEZ( m_pItemSet );
+                        m_xItemSet.reset();
                         return;
                     }
                 }
@@ -237,7 +242,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
                 Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0 );
                 bool bSelection = false;
                 if ( aValue >>= bSelection )
-                    m_pItemSet->Put( SfxBoolItem( SID_SELECTION, bSelection ) );
+                    m_xItemSet->Put( SfxBoolItem( SID_SELECTION, bSelection ) );
             }
             catch( const IllegalArgumentException& )
             {
@@ -248,7 +253,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
 
         // set the read-only flag. When inserting a file, this flag is always set
         if ( m_nDlgFlags & FileDialogFlags::Insert )
-            m_pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
+            m_xItemSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
         else
         {
             if ( TemplateDescription::FILEOPEN_READONLY_VERSION == nDlgType )
@@ -258,7 +263,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
                     Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_READONLY, 0 );
                     bool bReadOnly = false;
                     if ( ( aValue >>= bReadOnly ) && bReadOnly )
-                        m_pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, bReadOnly ) );
+                        m_xItemSet->Put( SfxBoolItem( SID_DOC_READONLY, bReadOnly ) );
                 }
                 catch( const IllegalArgumentException& )
                 {
@@ -276,7 +281,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
                 sal_Int32 nVersion = 0;
                 if ( ( aValue >>= nVersion ) && nVersion > 0 )
                     // open a special version; 0 == current version
-                    m_pItemSet->Put( SfxInt16Item( SID_VERSION, static_cast<short>(nVersion) ) );
+                    m_xItemSet->Put( SfxInt16Item( SID_VERSION, static_cast<short>(nVersion) ) );
             }
             catch( const IllegalArgumentException& ){}
         }
