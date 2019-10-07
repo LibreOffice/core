@@ -628,11 +628,13 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     if( maPController->getPrinter()->GetOrientation() == Orientation::Landscape )
     {
         maNupLandscapeSize = aNupSize;
+        // coverity[swapped_arguments : FALSE] - this is in the correct order
         maNupPortraitSize = Size( aNupSize.Height(), aNupSize.Width() );
     }
     else
     {
         maNupPortraitSize = aNupSize;
+        // coverity[swapped_arguments : FALSE] - this is in the correct order
         maNupLandscapeSize = Size( aNupSize.Height(), aNupSize.Width() );
     }
 
