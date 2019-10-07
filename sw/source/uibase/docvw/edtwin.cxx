@@ -261,12 +261,11 @@ public:
 /// Assists with auto-completion of AutoComplete words and AutoText names.
 struct QuickHelpData
 {
-    /// Strings that at least partially match an input word.
-    std::vector<OUString> m_aHelpStrings;
+    /// Strings that at least partially match an input word, and match length.
+    std::vector<std::pair<OUString, sal_uInt16>> m_aHelpStrings;
     /// Index of the current help string.
     sal_uInt16 nCurArrPos;
-    /// Length of the input word associated with the help data.
-    sal_uInt16 nLen;
+    static constexpr sal_uInt16 nNoPos = std::numeric_limits<sal_uInt16>::max();
 
     /// Help data stores AutoText names rather than AutoComplete words.
     bool m_bIsAutoText;
@@ -284,10 +283,12 @@ struct QuickHelpData
 
     void Move( QuickHelpData& rCpy );
     void ClearContent();
-    void Start( SwWrtShell& rSh, sal_uInt16 nWrdLen );
+    void Start(SwWrtShell& rSh, bool bRestart);
     void Stop( SwWrtShell& rSh );
 
-    bool HasContent() const { return !m_aHelpStrings.empty() && 0 != nLen; }
+    bool HasContent() const { return !m_aHelpStrings.empty() && nCurArrPos != nNoPos; }
+    const OUString& CurStr() const { return m_aHelpStrings[nCurArrPos].first; }
+    sal_uInt16 CurLen() const { return m_aHelpStrings[nCurArrPos].second; }
 
     /// Next help string.
     void Next( bool bEndLess )
@@ -2560,7 +2561,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 // replace the word or abbreviation with the auto text
                 rSh.StartUndo( SwUndoId::START );
 
-                OUString sFnd( aTmpQHD.m_aHelpStrings[ aTmpQHD.nCurArrPos ] );
+                OUString sFnd(aTmpQHD.CurStr());
                 if( aTmpQHD.m_bIsAutoText )
                 {
                     SwGlossaryList* pList = ::GetGlossaryList();
@@ -2569,7 +2570,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     if(pList->GetShortName( sFnd, sShrtNm, sGroup))
                     {
                         rSh.SttSelect();
-                        rSh.ExtendSelection( false, aTmpQHD.nLen );
+                        rSh.ExtendSelection(false, aTmpQHD.CurLen());
                         SwGlossaryHdl* pGlosHdl = GetView().GetGlosHdl();
                         pGlosHdl->SetCurGroup(sGroup, true);
                         pGlosHdl->InsertGlossary( sShrtNm);
@@ -2578,7 +2579,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 }
                 else
                 {
-                    sFnd = sFnd.copy( aTmpQHD.nLen );
+                    sFnd = sFnd.copy(aTmpQHD.CurLen());
                     rSh.Insert( sFnd );
                     m_pQuickHlpData->m_bAppendSpace = !pACorr ||
                             pACorr->GetSwFlags().bAutoCmpltAppendBlanc;
@@ -2589,7 +2590,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
             case SwKeyState::NextPrevGlossary:
                 m_pQuickHlpData->Move( aTmpQHD );
-                m_pQuickHlpData->Start( rSh, USHRT_MAX );
+                m_pQuickHlpData->Start(rSh, false);
                 break;
 
             case SwKeyState::EditFormula:
@@ -2656,13 +2657,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
         g_bFlushCharBuffer = bSave;
 
         // maybe show Tip-Help
-        OUString sWord;
-        if( bNormalChar && pACfg && pACorr &&
-            ( pACfg->IsAutoTextTip() ||
-              pACorr->GetSwFlags().bAutoCompleteWords ) &&
-            rSh.GetPrevAutoCorrWord( *pACorr, sWord ) )
+        if (bNormalChar)
         {
-            ShowAutoTextCorrectQuickHelp(sWord, pACfg, pACorr);
+            const bool bAutoTextShown
+                = pACfg->IsAutoTextTip() && ShowAutoText(rSh.GetChunkForAutoText());
+            if (!bAutoTextShown && pACorr && pACorr->GetSwFlags().bAutoCompleteWords)
+                ShowAutoCorrectQuickHelp(rSh.GetPrevAutoCorrWord(*pACorr), *pACorr);
         }
     }
 
@@ -5369,23 +5369,18 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     rSh.SetExtTextInputData( *pData );
                 }
             }
-                uno::Reference< frame::XDispatchRecorder > xRecorder =
-                        m_rView.GetViewFrame()->GetBindings().GetRecorder();
-                if(!xRecorder.is())
+            uno::Reference< frame::XDispatchRecorder > xRecorder =
+                    m_rView.GetViewFrame()->GetBindings().GetRecorder();
+            if(!xRecorder.is())
+            {
+                SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
+                if (!rACfg.IsAutoTextTip() || !ShowAutoText(rSh.GetChunkForAutoText()))
                 {
-                    SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
                     SvxAutoCorrect* pACorr = rACfg.GetAutoCorrect();
-                    if( pACorr &&
-                        // If autocompletion required...
-                        ( rACfg.IsAutoTextTip() ||
-                          pACorr->GetSwFlags().bAutoCompleteWords ) &&
-                        // ... and extraction of last word from text input was successful...
-                        rSh.GetPrevAutoCorrWord( *pACorr, sWord ) )
-                    {
-                        // ... request for auto completion help to be shown.
-                        ShowAutoTextCorrectQuickHelp(sWord, &rACfg, pACorr, true);
-                    }
+                    if (pACorr && pACorr->GetSwFlags().bAutoCompleteWords)
+                        ShowAutoCorrectQuickHelp(rSh.GetPrevAutoCorrWord(*pACorr), *pACorr);
                 }
+            }
         }
     }
     break;
@@ -5852,7 +5847,6 @@ void QuickHelpData::Move( QuickHelpData& rCpy )
     m_aHelpStrings.swap( rCpy.m_aHelpStrings );
 
     m_bIsDisplayed = rCpy.m_bIsDisplayed;
-    nLen = rCpy.nLen;
     nCurArrPos = rCpy.nCurArrPos;
     m_bAppendSpace = rCpy.m_bAppendSpace;
     m_bIsTip = rCpy.m_bIsTip;
@@ -5861,7 +5855,7 @@ void QuickHelpData::Move( QuickHelpData& rCpy )
 
 void QuickHelpData::ClearContent()
 {
-    nLen = nCurArrPos = 0;
+    nCurArrPos = nNoPos;
     m_bIsDisplayed = m_bAppendSpace = false;
     nTipId = nullptr;
     m_aHelpStrings.clear();
@@ -5869,11 +5863,10 @@ void QuickHelpData::ClearContent()
     m_bIsAutoText = true;
 }
 
-void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
+void QuickHelpData::Start(SwWrtShell& rSh, const bool bRestart)
 {
-    if( USHRT_MAX != nWrdLen )
+    if (bRestart)
     {
-        nLen = nWrdLen;
         nCurArrPos = 0;
     }
     m_bIsDisplayed = true;
@@ -5885,13 +5878,13 @@ void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
                     rSh.GetCharRect().Pos() )));
         aPt.AdjustY( -3 );
         nTipId = Help::ShowPopover(&rWin, tools::Rectangle( aPt, Size( 1, 1 )),
-                        m_aHelpStrings[ nCurArrPos ],
+                        CurStr(),
                         QuickHelpFlags::Left | QuickHelpFlags::Bottom);
     }
     else
     {
-        OUString sStr( m_aHelpStrings[ nCurArrPos ] );
-        sStr = sStr.copy( nLen );
+        OUString sStr(CurStr());
+        sStr = sStr.copy(CurLen());
         sal_uInt16 nL = sStr.getLength();
         const ExtTextInputAttr nVal = ExtTextInputAttr::DottedUnderline |
                                 ExtTextInputAttr::Highlight;
@@ -5970,23 +5963,24 @@ void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
             if( rStr.getLength() > rWord.getLength() &&
                 rCC.lowercase( rStr, 0, rWord.getLength() ) == sWordLower )
             {
+                OUString sStr;
+
                 //fdo#61251 if it's an exact match, ensure unchanged replacement
                 //exists as a candidate
                 if (rStr.startsWith(rWord))
-                    m_aHelpStrings.push_back(rStr);
+                    m_aHelpStrings.emplace_back(rStr, rWord.getLength());
+                else
+                    sStr = rStr; // to be added if no case conversion is performed below
 
                 if ( aWordCase == CASE_LOWER )
-                    m_aHelpStrings.push_back( rCC.lowercase( rStr ) );
+                    sStr = rCC.lowercase(rStr);
                 else if ( aWordCase == CASE_SENTENCE )
-                {
-                    OUString sTmp = rCC.lowercase( rStr );
-                    sTmp = sTmp.replaceAt( 0, 1, OUString(rStr[0]) );
-                    m_aHelpStrings.push_back( sTmp );
-                }
+                    sStr = rCC.lowercase(rStr).replaceAt(0, 1, OUString(rStr[0]));
                 else if ( aWordCase == CASE_UPPER )
-                    m_aHelpStrings.push_back( rCC.uppercase( rStr ) );
-                else // CASE_OTHER - use retrieved capitalization
-                    m_aHelpStrings.push_back( rStr );
+                    sStr = rCC.uppercase(rStr);
+
+                if (!sStr.isEmpty())
+                    m_aHelpStrings.emplace_back(sStr, rWord.getLength());
             }
         }
         // Data for second loop iteration
@@ -6014,7 +6008,7 @@ void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
         // only for "201" or "2016-..." (to avoid unintentional text
         // insertion at line ending, for example typing "30 January 2016")
         if (rWord.getLength() != 4 && rStrToday.startsWith(rWord))
-            m_aHelpStrings.push_back(rStrToday);
+            m_aHelpStrings.emplace_back(rStrToday, rWord.getLength());
     }
 
     // Add matching words from AutoCompleteWord list
@@ -6031,22 +6025,25 @@ void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
             if (!rStrToday.isEmpty() && aCompletedString.startsWith(rWord))
                 continue;
 
+            OUString sStr;
+
             //fdo#61251 if it's an exact match, ensure unchanged replacement
             //exists as a candidate
             if (aCompletedString.startsWith(rWord))
-                m_aHelpStrings.push_back(aCompletedString);
-            if ( aWordCase == CASE_LOWER )
-                m_aHelpStrings.push_back( rCC.lowercase( aCompletedString ) );
-            else if ( aWordCase == CASE_SENTENCE )
-            {
-                OUString sTmp = rCC.lowercase( aCompletedString );
-                sTmp = sTmp.replaceAt( 0, 1, OUString(aCompletedString[0]) );
-                m_aHelpStrings.push_back( sTmp );
-            }
-            else if ( aWordCase == CASE_UPPER )
-                m_aHelpStrings.push_back( rCC.uppercase( aCompletedString ) );
-            else // CASE_OTHER - use retrieved capitalization
-                m_aHelpStrings.push_back( aCompletedString );
+                m_aHelpStrings.emplace_back(aCompletedString, rWord.getLength());
+            else
+                sStr = aCompletedString; // to be added if no case conversion is performed below
+
+            if (aWordCase == CASE_LOWER)
+                sStr = rCC.lowercase(aCompletedString);
+            else if (aWordCase == CASE_SENTENCE)
+                sStr = rCC.lowercase(aCompletedString)
+                           .replaceAt(0, 1, OUString(aCompletedString[0]));
+            else if (aWordCase == CASE_UPPER)
+                sStr = rCC.uppercase(aCompletedString);
+
+            if (!sStr.isEmpty())
+                m_aHelpStrings.emplace_back(aCompletedString, rWord.getLength());
         }
     }
 
@@ -6063,15 +6060,16 @@ public:
     {
     }
 
-    bool operator()(const OUString& s1, const OUString& s2) const
+    bool operator()(const std::pair<OUString, sal_uInt16>& s1,
+                    const std::pair<OUString, sal_uInt16>& s2) const
     {
-        int nRet = s1.compareToIgnoreAsciiCase(s2);
+        int nRet = s1.first.compareToIgnoreAsciiCase(s2.first);
         if (nRet == 0)
         {
             //fdo#61251 sort stuff that starts with the exact rOrigWord before
             //another ignore-case candidate
-            int n1StartsWithOrig = s1.startsWith(m_rOrigWord) ? 0 : 1;
-            int n2StartsWithOrig = s2.startsWith(m_rOrigWord) ? 0 : 1;
+            int n1StartsWithOrig = s1.first.startsWith(m_rOrigWord) ? 0 : 1;
+            int n2StartsWithOrig = s2.first.startsWith(m_rOrigWord) ? 0 : 1;
             return n1StartsWithOrig < n2StartsWithOrig;
         }
         return nRet < 0;
@@ -6080,9 +6078,10 @@ public:
 
 struct EqualIgnoreCaseAscii
 {
-    bool operator()(const OUString& s1, const OUString& s2) const
+    bool operator()(const std::pair<OUString, sal_uInt16>& s1,
+                    const std::pair<OUString, sal_uInt16>& s2) const
     {
-        return s1.equalsIgnoreAsciiCase(s2);
+        return s1.first.equalsIgnoreAsciiCase(s2.first);
     }
 };
 
@@ -6095,33 +6094,74 @@ void QuickHelpData::SortAndFilter(const OUString &rOrigWord)
                m_aHelpStrings.end(),
                CompareIgnoreCaseAsciiFavorExact(rOrigWord) );
 
-    std::vector<OUString>::iterator it = std::unique( m_aHelpStrings.begin(),
-                                                    m_aHelpStrings.end(),
-                                                    EqualIgnoreCaseAscii() );
+    const auto& it
+        = std::unique(m_aHelpStrings.begin(), m_aHelpStrings.end(), EqualIgnoreCaseAscii());
     m_aHelpStrings.erase( it, m_aHelpStrings.end() );
 
     nCurArrPos = 0;
 }
 
-void SwEditWin::ShowAutoTextCorrectQuickHelp(
-        const OUString& rWord, SvxAutoCorrCfg const * pACfg, SvxAutoCorrect* pACorr,
-        bool bFromIME )
+// For a given chunk of typed text between 3 and 9 characters long that may start at a word boundary
+// or in a whitespace and may include whitespaces, SwEditShell::GetChunkForAutoTextcreates a list of
+// possible candidates for long AutoText names. Let's say, we have typed text "lorem ipsum  dr f";
+// and the cursor is right after the "f". SwEditShell::GetChunkForAutoText would take "  dr f",
+// since it's the longest chunk to the left of the cursor no longer than 9 characters, not starting
+// in the middle of a word. Then it would create this list from it (in this order, longest first):
+//     "  dr f"
+//      " dr f"
+//       "dr f"
+// It cannot add "r f", because it starts in the middle of the word "dr"; also it cannot give " f",
+// because it's only 2 characters long.
+// Now the result of SwEditShell::GetChunkForAutoText is passed here to SwEditWin::ShowAutoText, and
+// then to SwGlossaryList::HasLongName, where all existing autotext entries' long names are tested
+// if they start with one of the list elements. The matches are sorted according the position of the
+// candidate that matched first, then alhpabetically inside the group of suggestions for a given
+// candidate. Say, if we have these AutoText entry long names:
+//    "Dr Frodo"
+//    "Dr Credo"
+//    "Or Bilbo"
+//    "dr foo"
+//    "  Dr Fuzz"
+//    " dr Faust"
+// the resulting list would be:
+//    "  Dr Fuzz" -> matches the first (longest) item in the candidates list
+//    " dr Faust" -> matches the second candidate item
+//    "Dr Foo" -> first item of the two matching the third candidate; alphabetically sorted
+//    "Dr Frodo" -> second item of the two matching the third candidate; alphabetically sorted
+// Each of the resulting suggestions knows the length of the candidate it replaces, so accepting the
+// first suggestion would replace 6 characters before cursor, while tabbing to and accepting the
+// last suggestion would replace only 4 characters to the left of cursor.
+bool SwEditWin::ShowAutoText(const std::vector<OUString>& rChunkCandidates)
 {
-    SwWrtShell& rSh = m_rView.GetWrtShell();
     m_pQuickHlpData->ClearContent();
-    if( pACfg->IsAutoTextTip() )
+    if (!rChunkCandidates.empty())
     {
         SwGlossaryList* pList = ::GetGlossaryList();
-        pList->HasLongName( rWord, &m_pQuickHlpData->m_aHelpStrings );
+        pList->HasLongName(rChunkCandidates, m_pQuickHlpData->m_aHelpStrings);
     }
 
+    if (!m_pQuickHlpData->m_aHelpStrings.empty())
+    {
+        m_pQuickHlpData->Start(m_rView.GetWrtShell(), true);
+    }
+    return !m_pQuickHlpData->m_aHelpStrings.empty();
+}
+
+void SwEditWin::ShowAutoCorrectQuickHelp(
+        const OUString& rWord, SvxAutoCorrect& rACorr,
+        bool bFromIME )
+{
+    if (rWord.isEmpty())
+        return;
+    SwWrtShell& rSh = m_rView.GetWrtShell();
+    m_pQuickHlpData->ClearContent();
+
     if( m_pQuickHlpData->m_aHelpStrings.empty() &&
-        pACorr->GetSwFlags().bAutoCompleteWords )
+        rACorr.GetSwFlags().bAutoCompleteWords )
     {
         m_pQuickHlpData->m_bIsAutoText = false;
         m_pQuickHlpData->m_bIsTip = bFromIME ||
-                    !pACorr ||
-                    pACorr->GetSwFlags().bAutoCmpltShowAsTip;
+                    rACorr.GetSwFlags().bAutoCmpltShowAsTip;
 
         // Get the necessary data to show help text.
         m_pQuickHlpData->FillStrArr( rSh, rWord );
@@ -6130,7 +6170,7 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
     if( !m_pQuickHlpData->m_aHelpStrings.empty() )
     {
         m_pQuickHlpData->SortAndFilter(rWord);
-        m_pQuickHlpData->Start( rSh, rWord.getLength() );
+        m_pQuickHlpData->Start(rSh, true);
     }
 }
 
