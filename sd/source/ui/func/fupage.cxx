@@ -372,10 +372,18 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
             // if the background for this page was set to invisible, the background-object has to be deleted, too.
             const XFillStyleItem* pTempFillStyleItem = pTempSet->GetItem<XFillStyleItem>(XATTR_FILLSTYLE);
             assert(pTempFillStyleItem);
-            if( ( pTempFillStyleItem->GetValue() == drawing::FillStyle_NONE ) ||
-                ( ( pTempSet->GetItemState( XATTR_FILLSTYLE ) == SfxItemState::DEFAULT ) &&
-                    ( aMergedAttr.GetItem<XFillStyleItem>( XATTR_FILLSTYLE )->GetValue() == drawing::FillStyle_NONE ) ) )
+            if (pTempFillStyleItem->GetValue() == drawing::FillStyle_NONE)
                 mbPageBckgrdDeleted = true;
+            else
+            {
+                if (pTempSet->GetItemState(XATTR_FILLSTYLE) == SfxItemState::DEFAULT)
+                {
+                    const XFillStyleItem* pMergedFillStyleItem = aMergedAttr.GetItem<XFillStyleItem>(XATTR_FILLSTYLE);
+                    assert(pMergedFillStyleItem);
+                    if (pMergedFillStyleItem->GetValue() == drawing::FillStyle_NONE)
+                        mbPageBckgrdDeleted = true;
+                }
+            }
 
             if( !mbMasterPage && bChanges && mbPageBckgrdDeleted )
             {
