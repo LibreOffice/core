@@ -22,7 +22,7 @@
 
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -54,17 +54,16 @@ namespace fileaccess {
     class TaskManager;
 
     class BaseContent:
-        public cppu::OWeakObject,
-        public css::lang::XComponent,
-        public css::lang::XServiceInfo,
-        public css::lang::XTypeProvider,
-        public css::ucb::XCommandProcessor,
-        public css::beans::XPropertiesChangeNotifier,
-        public css::beans::XPropertyContainer,
-        public css::beans::XPropertySetInfoChangeNotifier,
-        public css::ucb::XContentCreator,
-        public css::container::XChild,
-        public css::ucb::XContent,
+        public cppu::WeakImplHelper<
+            css::lang::XComponent,
+            css::lang::XServiceInfo,
+            css::ucb::XCommandProcessor,
+            css::beans::XPropertiesChangeNotifier,
+            css::beans::XPropertyContainer,
+            css::beans::XPropertySetInfoChangeNotifier,
+            css::ucb::XContentCreator,
+            css::container::XChild,
+            css::ucb::XContent>,
         public fileaccess::Notifier    // implementation class
     {
     private:
@@ -82,19 +81,6 @@ namespace fileaccess {
 
         virtual ~BaseContent() override;
 
-        // XInterface
-        virtual css::uno::Any SAL_CALL
-        queryInterface( const css::uno::Type& aType ) override;
-
-        virtual void SAL_CALL
-        acquire()
-            throw() override;
-
-        virtual void SAL_CALL
-        release()
-            throw() override;
-
-
         // XComponent
         virtual void SAL_CALL
         dispose() override;
@@ -105,12 +91,6 @@ namespace fileaccess {
 
         virtual void SAL_CALL
         removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
-
-
-        // XTypeProvider
-
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
 
         // XServiceInfo
