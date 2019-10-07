@@ -529,18 +529,18 @@ struct WW8_TCell    // this is the base for further work (corresponds mostly to 
     // The single-bit fields should ideally be bool, but probably need to keep
     // them as sal_uInt8 to make them combine with the following two-bit
     // nVertAlign:
-    sal_uInt8 bFirstMerged   : 1;// 0001 set to 1 when cell is first cell of a range of cells that have been merged.
-    sal_uInt8 bMerged        : 1;// 0002 set to 1 when cell has been merged with preceding cell.
-    sal_uInt8 bVertical      : 1;// set to 1 when cell has vertical text flow
-    sal_uInt8 bBackward      : 1;// for a vertical table cell, text flow is bottom to top when 1 and is bottom to top when 0.
-    sal_uInt8 bRotateFont    : 1;// set to 1 when cell has rotated characters (i.e. uses @font)
-    sal_uInt8 bVertMerge     : 1;// set to 1 when cell is vertically merged with the cell(s) above and/or below. When cells are vertically merged, the display area of the merged cells are consolidated. The consolidated area is used to display the contents of the first vertically merged cell (the cell with fVertRestart set to 1), and all other vertically merged cells (those with fVertRestart set to 0) must be empty. Cells can only be merged vertically if their left and right boundaries are (nearly) identical (i.e. if corresponding entries in rgdxaCenter of the table rows differ by at most 3).
-    sal_uInt8 bVertRestart   : 1;// set to 1 when the cell is the first of a set of vertically merged cells. The contents of a cell with fVertStart set to 1 are displayed in the consolidated area belonging to the entire set of vertically merged cells. Vertically merged cells with fVertRestart set to 0 must be empty.
-    sal_uInt8 nVertAlign     : 2;// specifies the alignment of the cell contents relative to text flow (e.g. in a cell with bottom to top text flow and bottom vertical alignment, the text is shifted horizontally to match the cell's right boundary):
+    sal_uInt8 bFirstMerged   : 1 = 0;// 0001 set to 1 when cell is first cell of a range of cells that have been merged.
+    sal_uInt8 bMerged        : 1 = 0;// 0002 set to 1 when cell has been merged with preceding cell.
+    sal_uInt8 bVertical      : 1 = 0;// set to 1 when cell has vertical text flow
+    sal_uInt8 bBackward      : 1 = 0;// for a vertical table cell, text flow is bottom to top when 1 and is bottom to top when 0.
+    sal_uInt8 bRotateFont    : 1 = 0;// set to 1 when cell has rotated characters (i.e. uses @font)
+    sal_uInt8 bVertMerge     : 1 = 0;// set to 1 when cell is vertically merged with the cell(s) above and/or below. When cells are vertically merged, the display area of the merged cells are consolidated. The consolidated area is used to display the contents of the first vertically merged cell (the cell with fVertRestart set to 1), and all other vertically merged cells (those with fVertRestart set to 0) must be empty. Cells can only be merged vertically if their left and right boundaries are (nearly) identical (i.e. if corresponding entries in rgdxaCenter of the table rows differ by at most 3).
+    sal_uInt8 bVertRestart   : 1 = 0;// set to 1 when the cell is the first of a set of vertically merged cells. The contents of a cell with fVertStart set to 1 are displayed in the consolidated area belonging to the entire set of vertically merged cells. Vertically merged cells with fVertRestart set to 0 must be empty.
+    sal_uInt8 nVertAlign     : 2 = 0;// specifies the alignment of the cell contents relative to text flow (e.g. in a cell with bottom to top text flow and bottom vertical alignment, the text is shifted horizontally to match the cell's right boundary):
                                                     //          0 top
                                                     //          1 center
                                                     //          2 bottom
-    sal_uInt16 fUnused      : 7;// reserved - do not remove, fills up the sal_uInt16!
+    sal_uInt16 fUnused      : 7 = 0;// reserved - do not remove, fills up the sal_uInt16!
 
     WW8_BRCVer9 rgbrc[4];   // border codes
 //notational convenience for referring to brcTop, brcLeft, etc fields.
