@@ -1200,7 +1200,7 @@ bool SwTextNode::Convert( SwConversionArgs &rArgs )
         } while (!bFound && aIter.Next());  /* loop while nothing was found and still sth is left to be searched */
 
         // Apply implicit changes, if any, now that aIter is no longer used
-        for (const std::pair<int,int> & rImplicitChange : aImplicitChanges)
+        for (const auto& rImplicitChange : aImplicitChanges)
         {
             SwPaM aPaM( *this, rImplicitChange.first );
             aPaM.SetMark();
