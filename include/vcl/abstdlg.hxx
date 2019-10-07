@@ -172,7 +172,7 @@ public:
 
     // creates instance of ScreenshotAnnotationDlg from cui
     virtual VclPtr<AbstractScreenshotAnnotationDlg> CreateScreenshotAnnotationDlg(
-        weld::Window* pParent, Dialog& rParentDialog) = 0;
+        weld::Dialog& rParentDialog) = 0;
 
     // create info dialog to show tip-of-the-day
     virtual VclPtr<AbstractTipOfTheDayDialog>

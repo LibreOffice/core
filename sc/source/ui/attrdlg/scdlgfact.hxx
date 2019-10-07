@@ -21,6 +21,7 @@
 
 #include <scabstdlg.hxx>
 #include <sfx2/sfxdlg.hxx>
+#include <vcl/virdev.hxx>
 
 #include <corodlg.hxx>
 #include <condformatmgr.hxx>
@@ -87,9 +88,11 @@ bool Class::selectPageByUIXMLDescription(const OString& rUIXMLDescription) \
 {                                                   \
    return pDlg->selectPageByUIXMLDescription(rUIXMLDescription);  \
 }                                                   \
-BitmapEx Class::createScreenshot() const              \
+BitmapEx Class::createScreenshot() const            \
 {                                                   \
-    return pDlg->createScreenshot();                \
+    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT)); \
+    pDlg->createScreenshot(*xDialogSurface);        \
+    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel()); \
 }                                                   \
 OString Class::GetScreenshotId() const              \
 {                                                   \
