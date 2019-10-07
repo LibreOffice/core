@@ -37,31 +37,8 @@ using namespace com::sun::star;
 
 //  class VCLXGraphics
 
-
-// uno::XInterface
-uno::Any VCLXGraphics::queryInterface( const uno::Type & rType )
-{
-    uno::Any aRet = ::cppu::queryInterface( rType,
-                                        static_cast< css::awt::XGraphics* >(this),
-                                        static_cast< css::lang::XTypeProvider* >(this),
-                                        static_cast< css::lang::XUnoTunnel* >(this) );
-    return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
-}
-
 // lang::XUnoTunnel
 UNO3_GETIMPLEMENTATION_IMPL( VCLXGraphics );
-
-IMPL_IMPLEMENTATION_ID( VCLXGraphics )
-
-// lang::XTypeProvider
-css::uno::Sequence< css::uno::Type > VCLXGraphics::getTypes()
-{
-    static const css::uno::Sequence< css::uno::Type > aTypeList {
-        cppu::UnoType<css::lang::XTypeProvider>::get(),
-        cppu::UnoType<awt::XGraphics>::get()
-    };
-    return aTypeList;
-}
 
 VCLXGraphics::VCLXGraphics()
     : mpOutputDevice(nullptr)
