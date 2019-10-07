@@ -1092,7 +1092,7 @@ bool UseUniquePtr::TraverseConstructorInitializer(CXXCtorInitializer * ctorInit)
     if (!isa<DeclRefExpr>(init))
         return true;
 
-    StringRef fn = getFileNameOfSpellingLoc(compiler.getSourceManager().getSpellingLoc(ctorInit->getSourceLocation()));
+    StringRef fn = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(ctorInit->getSourceLocation()));
     // don't feel like fiddling with the yacc parser
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/idlc/"))
         return true;

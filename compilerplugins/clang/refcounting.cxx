@@ -479,7 +479,7 @@ bool RefCounting::VisitVarDecl(const VarDecl * varDecl) {
               << varDecl->getSourceRange();
         }
         if (containsSalhelperReferenceObjectSubclass(varDecl->getType().getTypePtr())) {
-            StringRef name { getFileNameOfSpellingLoc(
+            StringRef name { getFilenameOfLocation(
                 compiler.getSourceManager().getSpellingLoc(varDecl->getLocation())) };
             // this is playing games that it believes is safe
             if (loplugin::isSamePathname(name, SRCDIR "/stoc/source/security/permissions.cxx"))

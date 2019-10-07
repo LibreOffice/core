@@ -91,7 +91,7 @@ bool DefaultParams::VisitCallExpr(CallExpr * callExpr) {
         if (!found)
             break;
         // Ignore CPPUNIT, it's macros contain some stuff that triggers us
-        StringRef aFileName = getFileNameOfSpellingLoc(compiler.getSourceManager().getSpellingLoc(parmVarDecl->getLocStart()));
+        StringRef aFileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(parmVarDecl->getLocStart()));
         if (aFileName.find("include/cppunit") != std::string::npos)
             break;
         report(

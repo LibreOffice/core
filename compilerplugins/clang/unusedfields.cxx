@@ -247,7 +247,7 @@ MyFieldInfo UnusedFields::niceName(const FieldDecl* fieldDecl)
     aInfo.fieldType = fieldDecl->getType().getAsString();
 
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( fieldDecl->getLocation() );
-    StringRef name = getFileNameOfSpellingLoc(expansionLoc);
+    StringRef name = getFilenameOfLocation(expansionLoc);
     aInfo.sourceLocation = std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
     loplugin::normalizeDotDotInFilePath(aInfo.sourceLocation);
 

@@ -45,7 +45,7 @@ public:
 StringRef ConstantFunction::getFilename(const FunctionDecl* functionDecl)
 {
     SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(functionDecl->getCanonicalDecl()->getNameInfo().getLoc());
-    StringRef name { getFileNameOfSpellingLoc(spellingLocation) };
+    StringRef name { getFilenameOfLocation(spellingLocation) };
     return name;
 }
 

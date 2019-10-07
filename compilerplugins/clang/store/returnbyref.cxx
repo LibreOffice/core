@@ -128,7 +128,7 @@ nextStmt->dump();
 std::string ReturnByRef::getFilename(SourceLocation loc)
 {
     SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(loc);
-    return getFileNameOfSpellingLoc(spellingLocation);
+    return getFilenameOfLocation(spellingLocation);
 }
 
 loplugin::Plugin::Registration< ReturnByRef > X("returnbyref");

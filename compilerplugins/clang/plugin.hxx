@@ -81,8 +81,11 @@ protected:
     Stmt* getParentStmt( Stmt* stmt );
     const FunctionDecl* getParentFunctionDecl( const Stmt* stmt );
 
-    /// to check file names against whitelists, so that it works with preprocessed input too
-    StringRef getFileNameOfSpellingLoc(SourceLocation spellingLocation) const;
+    /**
+     Get filename of the given location. Use this instead of SourceManager::getFilename(), as that one
+     does not handle source with expanded #inline directives (used by Icecream for remote compilation).
+    */
+    StringRef getFilenameOfLocation(SourceLocation spellingLocation) const;
     /**
      Checks if the location is inside a UNO file, more specifically, if it forms part of the URE stable interface,
      which is not allowed to be changed.

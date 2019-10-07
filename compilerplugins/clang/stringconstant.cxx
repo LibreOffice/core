@@ -417,7 +417,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         // u.equalsIgnoreAsciiCaseAscii("foo") ->
         // u.equalsIngoreAsciiCase("foo"):
 
-        auto file = getFileNameOfSpellingLoc(
+        auto file = getFilenameOfLocation(
             compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr)));
         if (loplugin::isSamePathname(
                 file, SRCDIR "/sal/qa/rtl/strings/test_oustring_compare.cxx"))
@@ -435,7 +435,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
     {
         // u.equalsIgnoreAsciiCaseAsciiL("foo", 3) ->
         // u.equalsIngoreAsciiCase("foo"):
-        auto file = getFileNameOfSpellingLoc(
+        auto file = getFilenameOfLocation(
             compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr)));
         if (loplugin::isSamePathname(
                 file, SRCDIR "/sal/qa/rtl/strings/test_oustring_compare.cxx"))
@@ -802,7 +802,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         case 2:
             {
                 // b.append("foo", 3) -> b.append("foo"):
-                auto file = getFileNameOfSpellingLoc(
+                auto file = getFilenameOfLocation(
                     compiler.getSourceManager().getSpellingLoc(
                         compat::getBeginLoc(expr)));
                 if (loplugin::isSamePathname(
@@ -1169,7 +1169,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                 if (dc.Operator(OO_Plus).Namespace("rtl")
                                     .GlobalNamespace())
                                 {
-                                    auto file = getFileNameOfSpellingLoc(
+                                    auto file = getFilenameOfLocation(
                                             compiler.getSourceManager()
                                             .getSpellingLoc(
                                                 compat::getBeginLoc(expr)));

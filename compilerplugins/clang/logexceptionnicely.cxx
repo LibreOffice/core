@@ -101,7 +101,7 @@ public:
         if (ignoreLocation(operatorCallExpr))
             return true;
 
-        StringRef fn = getFileNameOfSpellingLoc(
+        StringRef fn = getFilenameOfLocation(
             compiler.getSourceManager().getExpansionLoc(compat::getBeginLoc(operatorCallExpr)));
         // these are below tools in the module hierarchy, so we can't use the pretty printing
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/include/comphelper/"))

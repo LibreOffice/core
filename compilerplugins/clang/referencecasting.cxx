@@ -67,7 +67,7 @@ static bool isDerivedFrom(const CXXRecordDecl* subtypeRecord, const CXXRecordDec
 bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
 {
     // don't bother processing anything in the Reference.h file. Makes my life easier when debugging this.
-    StringRef aFileName = getFileNameOfSpellingLoc(
+    StringRef aFileName = getFilenameOfLocation(
         compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(cce)));
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.h"))
         return true;
@@ -178,7 +178,7 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
 bool ReferenceCasting::VisitCXXMemberCallExpr(const CXXMemberCallExpr* mce)
 {
     // don't bother processing anything in the Reference.h file. Makes my life easier when debugging this.
-    StringRef aFileName = getFileNameOfSpellingLoc(
+    StringRef aFileName = getFilenameOfLocation(
         compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(mce)));
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.h"))
         return true;
@@ -308,7 +308,7 @@ bool ReferenceCasting::CheckForUnnecessaryGet(const Expr* expr)
     if (!loplugin::DeclCheck(methodDecl->getParent()).Class("Reference").Namespace("uno"))
         return false;
 
-    StringRef aFileName = getFileNameOfSpellingLoc(
+    StringRef aFileName = getFilenameOfLocation(
         compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr)));
     if (loplugin::isSamePathname(aFileName, SRCDIR "/cppu/qa/test_reference.cxx"))
         return false;
