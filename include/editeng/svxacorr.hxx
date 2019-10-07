@@ -291,8 +291,13 @@ public:
 
     // Return for the autotext expansion the previous word,
     // AutoCorrect - corresponding algorithm
-    bool GetPrevAutoCorrWord( SvxAutoCorrDoc const & rDoc, const OUString& rTxt,
-                                sal_Int32 nPos, OUString& rWord );
+    OUString GetPrevAutoCorrWord(SvxAutoCorrDoc const& rDoc, const OUString& rTxt, sal_Int32 nPos);
+
+    // Returns vector candidates for AutoText name match, starting with the longest string between
+    // 3 and 9 characters long, that is a chunk of text starting with a whitespace or with a word's
+    // first character, and ending at the current cursor position or empty string if no such string
+    // exists
+    static std::vector<OUString> GetChunkForAutoText(const OUString& rTxt, sal_Int32 nPos);
 
     // Search for the words in the replacement table.
     // rText - check in this text the words of the list
@@ -331,6 +336,7 @@ public:
     // Query/Set the current settings of AutoCorrect
     ACFlags GetFlags() const                { return nFlags; }
     SvxSwAutoFormatFlags&   GetSwFlags()    { return aSwFlags;}
+    const SvxSwAutoFormatFlags& GetSwFlags() const { return aSwFlags; }
     bool IsAutoCorrFlag( ACFlags nFlag ) const
                                 { return bool(nFlags & nFlag); }
     void SetAutoCorrFlag( ACFlags nFlag, bool bOn = true );
