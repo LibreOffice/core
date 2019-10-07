@@ -197,6 +197,8 @@ public:
 #endif
 
 protected:
+    virtual void createSurface();
+
     void setProvider(SalGeometryProvider* provider) { mProvider = provider; }
 
     bool isOffscreen() const { return mProvider == nullptr || mProvider->IsOffScreen(); }

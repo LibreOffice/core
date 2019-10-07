@@ -67,13 +67,18 @@ SkiaSalGraphicsImpl::~SkiaSalGraphicsImpl() {}
 
 void SkiaSalGraphicsImpl::Init()
 {
-    // TODO
-    mSurface = SkSurface::MakeRasterN32Premul(GetWidth(), GetHeight());
+    createSurface();
     mSurface->getCanvas()->save(); // see SetClipRegion()
     mClipRegion = vcl::Region(tools::Rectangle(0, 0, GetWidth(), GetHeight()));
 
     // We don't want to be swapping before we've painted.
     mFlush->SetPriority(TaskPriority::POST_PAINT);
+}
+
+void SkiaSalGraphicsImpl::createSurface()
+{
+    // TODO
+    mSurface = SkSurface::MakeRasterN32Premul(GetWidth(), GetHeight());
 }
 
 void SkiaSalGraphicsImpl::DeInit() { mSurface.reset(); }
