@@ -1548,12 +1548,12 @@ bool SvxAutoCorrect::AddWrtSttException( const OUString& rNew,
     return pLists && pLists->AddToWrdSttExceptList(rNew);
 }
 
-bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc const & rDoc,
-                                        const OUString& rTxt, sal_Int32 nPos,
-                                        OUString& rWord )
+OUString SvxAutoCorrect::GetPrevAutoCorrWord(SvxAutoCorrDoc const& rDoc, const OUString& rTxt,
+                                             sal_Int32 nPos)
 {
+    OUString sRet;
     if( !nPos )
-        return false;
+        return sRet;
 
     sal_Int32 nEnde = nPos;
 
@@ -1561,7 +1561,7 @@ bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc const & rDoc,
     if( ( nPos < rTxt.getLength() &&
         !IsWordDelim( rTxt[ nPos ])) ||
         IsWordDelim( rTxt[ --nPos ]))
-        return false;
+        return sRet;
 
     while( nPos && !IsWordDelim( rTxt[ --nPos ]))
         ;
@@ -1574,20 +1574,54 @@ bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc const & rDoc,
 
     while( lcl_IsInAsciiArr( sImplSttSkipChars, rTxt[ nCapLttrPos ]) )
         if( ++nCapLttrPos >= nEnde )
-            return false;
+            return sRet;
 
     if( 3 > nEnde - nCapLttrPos )
-        return false;
+        return sRet;
 
     const LanguageType eLang = GetDocLanguage( rDoc, nCapLttrPos );
 
     CharClass& rCC = GetCharClass(eLang);
 
     if( lcl_IsSymbolChar( rCC, rTxt, nCapLttrPos, nEnde ))
-        return false;
+        return sRet;
 
-    rWord = rTxt.copy( nCapLttrPos, nEnde - nCapLttrPos );
-    return true;
+    sRet = rTxt.copy( nCapLttrPos, nEnde - nCapLttrPos );
+    return sRet;
+}
+
+// static
+std::vector<OUString> SvxAutoCorrect::GetChunkForAutoText(const OUString& rTxt,
+                                                          const sal_Int32 nPos)
+{
+    constexpr sal_Int32 nMinLen = 3;
+    constexpr sal_Int32 nMaxLen = 9;
+    std::vector<OUString> aRes;
+    if (nPos >= nMinLen)
+    {
+        sal_Int32 nBegin = std::max<sal_Int32>(nPos - nMaxLen, 0);
+        // TODO: better detect word boundaries (not only whitespaces, but also e.g. punctuation)
+        if (nBegin > 0 && !IsWordDelim(rTxt[nBegin-1]))
+        {
+            while (nBegin + nMinLen <= nPos && !IsWordDelim(rTxt[nBegin]))
+                ++nBegin;
+        }
+        if (nBegin + nMinLen <= nPos)
+        {
+            OUString sRes = rTxt.copy(nBegin, nPos - nBegin);
+            aRes.push_back(sRes);
+            bool bLastStartedWithDelim = IsWordDelim(sRes[0]);
+            for (sal_Int32 i = 1; i <= sRes.getLength() - nMinLen; ++i)
+            {
+                bool bAdd = bLastStartedWithDelim;
+                bLastStartedWithDelim = IsWordDelim(sRes[i]);
+                bAdd = bAdd || bLastStartedWithDelim;
+                if (bAdd)
+                    aRes.push_back(sRes.copy(i));
+            }
+        }
+    }
+    return aRes;
 }
 
 bool SvxAutoCorrect::CreateLanguageFile( const LanguageTag& rLanguageTag, bool bNewFile )
