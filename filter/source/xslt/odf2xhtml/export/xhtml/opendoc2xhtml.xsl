@@ -124,9 +124,9 @@
     <xsl:param name="onlyStyleOutput"          select="false()" />
     <xsl:param name="onlyStyleOutputEnabled"   select="boolean($onlyStyleOutput)" />
 
-    <!-- ************************************* -->
-    <!-- *** build the propriate HTML file *** -->
-    <!-- ************************************* -->
+    <!-- *************************************** -->
+    <!-- *** build the appropriate HTML file *** -->
+    <!-- *************************************** -->
     <xsl:template match="/">
         <!-- debug output of parameter value set -->
         <xsl:if test="$debugEnabled">
