@@ -798,7 +798,7 @@ void SmElementsControl::KeyInput(const KeyEvent& rKEvt)
         case KEY_SPACE:
             assert(m_nCurrentElement < maElementList.size());
             assert(maSelectHdlLink.IsSet());
-            maSelectHdlLink.Call(*maElementList[m_nCurrentElement].get());
+            maSelectHdlLink.Call(*maElementList[m_nCurrentElement]);
             collectUIInformation(OUString::number(m_nCurrentElement));
             break;
 
@@ -1062,7 +1062,7 @@ bool SmElementsControl::itemTrigger(sal_uInt16 nPos)
     if (nPos < m_nCurrentOffset || (nPos -= m_nCurrentOffset) >= maElementList.size())
         return false;
 
-    maSelectHdlLink.Call(*maElementList[nPos].get());
+    maSelectHdlLink.Call(*maElementList[nPos]);
     collectUIInformation(OUString::number(nPos));
     return true;
 }

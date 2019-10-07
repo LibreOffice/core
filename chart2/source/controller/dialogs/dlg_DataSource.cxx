@@ -89,10 +89,10 @@ DataSourceDialog::DataSourceDialog(weld::Window * pParent,
     , m_xBtnOK(m_xBuilder->weld_button("ok"))
 {
     m_xRangeChooserTabPage = std::make_unique<RangeChooserTabPage>(m_xTabControl->get_page("range"), this,
-                                     *(m_apDialogModel.get()),
+                                     *m_apDialogModel,
                                      m_apDocTemplateProvider.get(), true /* bHideDescription */ );
     m_xDataSourceTabPage = std::make_unique<DataSourceTabPage>(m_xTabControl->get_page("series"), this,
-                                    *(m_apDialogModel.get()),
+                                    *m_apDialogModel,
                                     m_apDocTemplateProvider.get(), true /* bHideDescription */ );
     m_xTabControl->connect_enter_page(LINK(this, DataSourceDialog, ActivatePageHdl));
     m_xTabControl->connect_leave_page(LINK(this, DataSourceDialog, DeactivatePageHdl));

@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <memory>
+
 struct Struct1 {
     int x;
 };
@@ -35,4 +37,12 @@ void function3(Struct1& s)
 //{
 //    (*s).x = 1; // xxexpected-error {{'*' followed by '.', rather use '->' [loplugin:redundantpointerops]}}
 //};
+
+int function5(std::unique_ptr<int> x)
+{
+    return *x.get(); // expected-error {{'*' followed by '.get()', just use '*' [loplugin:redundantpointerops]}}
+};
+
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

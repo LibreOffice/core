@@ -29,7 +29,7 @@ ScDetOpList::ScDetOpList(const ScDetOpList& rList) :
     size_t nCount = rList.Count();
 
     for (size_t i=0; i<nCount; i++)
-        Append( new ScDetOpData( (*rList.aDetOpDataVector[i].get()) ) );
+        Append( new ScDetOpData( *rList.aDetOpDataVector[i] ) );
 }
 
 void ScDetOpList::DeleteOnTab( SCTAB nTab )
@@ -87,7 +87,7 @@ bool ScDetOpList::operator==( const ScDetOpList& r ) const
 
 const ScDetOpData& ScDetOpList::GetObject( size_t nPos ) const
 {
-    return (*aDetOpDataVector[nPos].get());
+    return *aDetOpDataVector[nPos];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

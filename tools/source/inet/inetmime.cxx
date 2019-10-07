@@ -296,7 +296,7 @@ bool translateUTF8Char(const sal_Char *& rBegin,
             return false;
         DBG_ASSERT(nSize == 1,
                    "translateUTF8Char(): Bad conversion");
-        rCharacter = *pBuffer.get();
+        rCharacter = pBuffer[0];
     }
     rBegin = p;
     return true;

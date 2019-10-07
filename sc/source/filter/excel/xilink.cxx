@@ -676,7 +676,7 @@ void XclImpSupbook::ReadCrn( XclImpStream& rStrm )
 {
     if (mnSBTab >= maSupbTabList.size())
         return;
-    XclImpSupbookTab& rSbTab = *maSupbTabList[mnSBTab].get();
+    XclImpSupbookTab& rSbTab = *maSupbTabList[mnSBTab];
     sal_uInt8 nXclColLast, nXclColFirst;
     sal_uInt16 nXclRow;
     nXclColLast = rStrm.ReaduInt8();

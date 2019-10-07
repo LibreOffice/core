@@ -277,7 +277,7 @@ namespace
 
         // first Matcher created for this factory
         aImplArr.push_back(std::make_unique<SfxFilterMatcher_Impl>(aName));
-        return *aImplArr.back().get();
+        return *aImplArr.back();
     }
 }
 

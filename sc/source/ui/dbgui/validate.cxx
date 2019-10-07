@@ -400,7 +400,7 @@ void ScTPValidationValue::Init()
     m_xLbAllow->set_active( SC_VALIDDLG_ALLOW_ANY );
     m_xLbValue->set_active( SC_VALIDDLG_DATA_EQUAL );
 
-    SelectHdl( *m_xLbAllow.get() );
+    SelectHdl( *m_xLbAllow );
     CheckHdl( *m_xCbShow );
 }
 
@@ -448,7 +448,7 @@ void ScTPValidationValue::Reset( const SfxItemSet* rArgSet )
         aFmlaStr = static_cast< const SfxStringItem* >( pItem )->GetValue();
     SetSecondFormula( aFmlaStr );
 
-    SelectHdl( *m_xLbAllow.get() );
+    SelectHdl( *m_xLbAllow );
     CheckHdl( *m_xCbShow );
 }
 

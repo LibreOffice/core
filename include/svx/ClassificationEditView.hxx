@@ -50,7 +50,7 @@ public:
 
     EditView& getEditView()
     {
-        return *m_xEditView.get();
+        return *m_xEditView;
     }
 };
 

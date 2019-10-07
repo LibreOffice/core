@@ -929,7 +929,7 @@ void generateDocumentation(std::ostream & o,
             }
             generateDocumentation(
                 o, options, manager,
-                u2b(dynamic_cast<unoidl::SingleInterfaceBasedServiceEntity&>(*entity.get())
+                u2b(dynamic_cast<unoidl::SingleInterfaceBasedServiceEntity&>(*entity)
                     .getBase()),
                 delegate);
             break;

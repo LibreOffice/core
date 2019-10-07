@@ -92,7 +92,7 @@ public:
 
     SfxFoundCache_Impl& operator[] ( size_t i )
     {
-        return *maData[i].get();
+        return *maData[i];
     }
 
     size_t size() const

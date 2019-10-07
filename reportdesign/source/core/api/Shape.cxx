@@ -198,7 +198,7 @@ cppu::IPropertyArrayHelper& OShape::getInfoHelper()
             aAggSeq = m_aProps.aComponent.m_xProperty->getPropertySetInfo()->getProperties();
         m_pAggHelper.reset(new OPropertyArrayAggregationHelper(ShapePropertySet::getPropertySetInfo()->getProperties(),aAggSeq));
     }
-    return *(m_pAggHelper.get());
+    return *m_pAggHelper;
 }
 
 

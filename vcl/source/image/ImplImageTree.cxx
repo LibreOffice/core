@@ -518,9 +518,9 @@ ImplImageTree::IconCache &ImplImageTree::getIconCache(const ImageRequestParamete
     IconSet &rSet = getCurrentIconSet();
     auto it = rSet.maScaledIconCaches.find(rParameters.mnScalePercentage);
     if ( it != rSet.maScaledIconCaches.end() )
-        return *it->second.get();
+        return *it->second;
     rSet.maScaledIconCaches[rParameters.mnScalePercentage] = std::make_unique<IconCache>();
-    return *rSet.maScaledIconCaches[rParameters.mnScalePercentage].get();
+    return *rSet.maScaledIconCaches[rParameters.mnScalePercentage];
 }
 
 bool ImplImageTree::iconCacheLookup(ImageRequestParameters& rParameters)

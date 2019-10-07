@@ -159,7 +159,7 @@ public:
         if(pCurToken != aTokList.begin())
             --pCurToken;
 
-        return *(*pRetToken).get();
+        return *(*pRetToken);
     }
 
     SvToken& GetToken_Next()
@@ -171,10 +171,10 @@ public:
 
         SetMax();
 
-        return *(*pRetToken).get();
+        return *(*pRetToken);
     }
 
-    SvToken& GetToken() const { return *(*pCurToken).get(); }
+    SvToken& GetToken() const { return *(*pCurToken); }
 
     bool     ReadIf( char cChar )
     {

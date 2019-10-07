@@ -115,7 +115,7 @@ public:
 
     const   LocaleDataWrapper*  get() const         { return pCurrent; }
     const   LocaleDataWrapper*  operator->() const  { return get(); }
-    const   LocaleDataWrapper&  operator*() const   { return *get(); }
+    const   LocaleDataWrapper&  operator*() const   { return *pCurrent; }
 };
 
 /** Load a calendar only if it's needed. Keep calendar for "en-US" locale

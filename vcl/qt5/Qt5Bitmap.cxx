@@ -86,7 +86,7 @@ bool Qt5Bitmap::Create(const SalBitmap& rSalBmp)
     const Qt5Bitmap* pBitmap = static_cast<const Qt5Bitmap*>(&rSalBmp);
     if (pBitmap->m_pImage.get())
     {
-        m_pImage.reset(new QImage(*pBitmap->m_pImage.get()));
+        m_pImage.reset(new QImage(*pBitmap->m_pImage));
         m_pBuffer.reset();
     }
     else

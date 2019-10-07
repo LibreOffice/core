@@ -1214,7 +1214,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
             bool bUpdateFields = false;
             for (size_t nAttr = 0; nAttr < nNewAttribs; ++nAttr)
             {
-                const XEditAttribute& rX = *pC->GetCharAttribs()[nAttr].get();
+                const XEditAttribute& rX = *pC->GetCharAttribs()[nAttr];
                 // Can happen when paragraphs > 16K, it is simply wrapped.
                     //TODO! Still true, still needed?
                 if ( rX.GetEnd() <= aPaM.GetNode()->Len() )

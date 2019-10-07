@@ -27,12 +27,12 @@ size_t SfxChildWinContextArr_Impl::size() const
 
 const SfxChildWinContextFactory& SfxChildWinContextArr_Impl::operator []( size_t i ) const
 {
-    return *maData[i].get();
+    return *maData[i];
 }
 
 SfxChildWinContextFactory& SfxChildWinContextArr_Impl::operator []( size_t i )
 {
-    return *maData[i].get();
+    return *maData[i];
 }
 
 void SfxChildWinContextArr_Impl::push_back( std::unique_ptr<SfxChildWinContextFactory> p )
@@ -47,12 +47,12 @@ size_t SfxChildWinFactArr_Impl::size() const
 
 const SfxChildWinFactory& SfxChildWinFactArr_Impl::operator []( size_t i ) const
 {
-    return *maData[i].get();
+    return *maData[i];
 }
 
 SfxChildWinFactory& SfxChildWinFactArr_Impl::operator []( size_t i )
 {
-    return *maData[i].get();
+    return *maData[i];
 }
 
 void SfxChildWinFactArr_Impl::push_back( std::unique_ptr<SfxChildWinFactory> p )

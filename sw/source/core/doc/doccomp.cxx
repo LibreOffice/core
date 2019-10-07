@@ -2451,8 +2451,8 @@ void LgstCommonSubseq::FindL( int *pL, int nStt1, int nEnd1,
         return;
     }
 
-    memset( pBuff1.get(), 0, sizeof( *pBuff1.get() ) * ( nLen2 + 1 ) );
-    memset( pBuff2.get(), 0, sizeof( *pBuff2.get() ) * ( nLen2 + 1 ) );
+    memset( pBuff1.get(), 0, sizeof( pBuff1[0] ) * ( nLen2 + 1 ) );
+    memset( pBuff2.get(), 0, sizeof( pBuff2[0] ) * ( nLen2 + 1 ) );
 
     // Find lcs
     for( int i = 1; i <= nLen1; i++ )

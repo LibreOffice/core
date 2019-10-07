@@ -220,7 +220,7 @@ class ParagraphObj : public PropStateValue, public SOParagraph
 
     bool empty() const { return mvPortions.empty(); }
 
-    const PortionObj& front() const { return *mvPortions.front().get(); }
+    const PortionObj& front() const { return *mvPortions.front(); }
 
     std::vector<std::unique_ptr<PortionObj> >::const_iterator begin() const { return mvPortions.begin(); }
     std::vector<std::unique_ptr<PortionObj> >::const_iterator end() const { return mvPortions.end(); }
