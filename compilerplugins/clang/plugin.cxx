@@ -216,7 +216,7 @@ const FunctionDecl* Plugin::getParentFunctionDecl( const Stmt* stmt )
     return nullptr;
 }
 
-StringRef Plugin::getFileNameOfSpellingLoc(SourceLocation spellingLocation) const
+StringRef Plugin::getFilenameOfLocation(SourceLocation spellingLocation) const
 {
     // prevent crashes when running the global-analysis plugins
     if (!spellingLocation.isValid())
@@ -244,13 +244,13 @@ StringRef Plugin::getFileNameOfSpellingLoc(SourceLocation spellingLocation) cons
         assert(fn.startswith("/") || fn == "<stdin>");
 #endif
         s_Mode = fn == "<stdin>" ? STDIN : GOOD;
-        return getFileNameOfSpellingLoc(spellingLocation);
+        return getFilenameOfLocation(spellingLocation);
     }
 }
 
 bool Plugin::isInUnoIncludeFile(SourceLocation spellingLocation) const
 {
-    StringRef name{ getFileNameOfSpellingLoc(spellingLocation) };
+    StringRef name{ getFilenameOfLocation(spellingLocation) };
     return compiler.getSourceManager().isInMainFile(spellingLocation)
         ? (isSamePathname(name, SRCDIR "/cppu/source/cppu/compat.cxx")
            || isSamePathname(name, SRCDIR "/cppuhelper/source/compat.cxx")
@@ -621,7 +621,7 @@ bool RewritePlugin::wouldRewriteWorkdir(SourceLocation loc)
         return false;
     }
     return
-        getFileNameOfSpellingLoc(compiler.getSourceManager().getSpellingLoc(loc))
+        getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(loc))
         .startswith(WORKDIR "/");
 }
 

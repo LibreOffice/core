@@ -118,7 +118,7 @@ MyFieldInfo UnusedEnumConstants::niceName(const EnumConstantDecl* enumConstantDe
     }
 
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( enumConstantDecl->getLocation() );
-    StringRef name = getFileNameOfSpellingLoc(expansionLoc);
+    StringRef name = getFilenameOfLocation(expansionLoc);
     aInfo.loc = expansionLoc;
     aInfo.sourceLocation = std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
     loplugin::normalizeDotDotInFilePath(aInfo.sourceLocation);

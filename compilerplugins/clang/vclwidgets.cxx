@@ -241,7 +241,7 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     if (!bOk) {
         SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
                               compat::getBeginLoc(pCXXDestructorDecl));
-        StringRef filename = getFileNameOfSpellingLoc(spellingLocation);
+        StringRef filename = getFilenameOfLocation(spellingLocation);
         if (   !(loplugin::isSamePathname(filename, SRCDIR "/vcl/source/window/window.cxx"))
             && !(loplugin::isSamePathname(filename, SRCDIR "/vcl/source/gdi/virdev.cxx"))
             && !(loplugin::isSamePathname(filename, SRCDIR "/vcl/qa/cppunit/lifecycle.cxx"))
@@ -281,7 +281,7 @@ void VCLWidgets::checkAssignmentForVclPtrToRawConversion(const SourceLocation& s
     if (!rhs) {
         return;
     }
-    StringRef filename = getFileNameOfSpellingLoc(spellingLocation);
+    StringRef filename = getFilenameOfLocation(spellingLocation);
     if (loplugin::isSamePathname(filename, SRCDIR "/include/rtl/ref.hxx")) {
         return;
     }
@@ -363,7 +363,7 @@ bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
     if (pVarDecl->getInit()) {
         checkAssignmentForVclPtrToRawConversion(spellingLocation, pVarDecl->getType().getTypePtr(), pVarDecl->getInit());
     }
-    StringRef aFileName = getFileNameOfSpellingLoc(spellingLocation);
+    StringRef aFileName = getFilenameOfLocation(spellingLocation);
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/vcl/vclptr.hxx"))
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/vcl/source/window/layout.cxx"))
@@ -415,7 +415,7 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (ignoreLocation(fieldDecl)) {
         return true;
     }
-    StringRef aFileName = getFileNameOfSpellingLoc(
+    StringRef aFileName = getFilenameOfLocation(
         compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(fieldDecl)));
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/vcl/vclptr.hxx"))
         return true;
@@ -673,7 +673,7 @@ bool VCLWidgets::VisitCXXDeleteExpr(const CXXDeleteExpr *pCXXDeleteExpr)
     if (pPointee && isDerivedFromVclReferenceBase(pPointee)) {
         SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
                               compat::getBeginLoc(pCXXDeleteExpr));
-        StringRef filename = getFileNameOfSpellingLoc(spellingLocation);
+        StringRef filename = getFilenameOfLocation(spellingLocation);
         if ( !(loplugin::isSamePathname(filename, SRCDIR "/include/vcl/vclreferencebase.hxx")))
         {
             report(
@@ -849,7 +849,7 @@ bool VCLWidgets::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr )
     const CXXConstructorDecl* pConstructorDecl = constructExpr->getConstructor();
     const CXXRecordDecl* recordDecl = pConstructorDecl->getParent();
     if (isDerivedFromVclReferenceBase(recordDecl)) {
-        StringRef aFileName = getFileNameOfSpellingLoc(
+        StringRef aFileName = getFilenameOfLocation(
             compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(constructExpr)));
         if (!loplugin::isSamePathname(aFileName, SRCDIR "/include/vcl/vclptr.hxx")) {
             report(
