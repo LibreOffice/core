@@ -22,7 +22,7 @@ void BuilderPage::Activate() {}
 
 void BuilderPage::Deactivate() {}
 
-BuilderPage::~BuilderPage() {}
+BuilderPage::~BuilderPage() COVERITY_NOEXCEPT_FALSE {}
 
 namespace weld
 {
