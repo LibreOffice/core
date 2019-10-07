@@ -106,37 +106,6 @@ ResultSetMetaData::~ResultSetMetaData()
 }
 
 
-// XInterface methods.
-
-void SAL_CALL ResultSetMetaData::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL ResultSetMetaData::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL ResultSetMetaData::queryInterface( const css::uno::Type & rType )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               static_cast< XTypeProvider* >(this),
-                                               static_cast< XResultSetMetaData* >(this)
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods.
-
-
-XTYPEPROVIDER_IMPL_2( ResultSetMetaData,
-                      XTypeProvider,
-                      XResultSetMetaData );
-
-
 // XResultSetMetaData methods.
 
 

@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 
 namespace com { namespace sun { namespace star {
@@ -71,9 +71,7 @@ ResultSetColumnData::ResultSetColumnData()
  * implementations of service com.sun.star.ucb.ContentResultSet.
  */
 class UCBHELPER_DLLPUBLIC ResultSetMetaData final :
-                public ::cppu::OWeakObject,
-                public css::lang::XTypeProvider,
-                public css::sdbc::XResultSetMetaData
+                public cppu::WeakImplHelper<css::sdbc::XResultSetMetaData>
 {
     std::unique_ptr<ucbhelper_impl::ResultSetMetaData_Impl> m_pImpl;
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;
@@ -114,19 +112,6 @@ public:
       * Destructor.
       */
     virtual ~ResultSetMetaData() override;
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
-
-    // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes() override;
 
     // XResultSetMetaData
 
