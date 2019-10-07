@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 
 #include <vcl/region.hxx>
@@ -34,10 +34,9 @@
 //  class VCLXRegion
 
 
-class VCLXRegion final : public css::awt::XRegion,
-                    public css::lang::XTypeProvider,
-                    public css::lang::XUnoTunnel,
-                    public ::cppu::OWeakObject
+class VCLXRegion final : public cppu::WeakImplHelper<
+                            css::awt::XRegion,
+                            css::lang::XUnoTunnel>
 {
     ::osl::Mutex    maMutex;
     vcl::Region          maRegion;
@@ -50,17 +49,8 @@ public:
 
     const vcl::Region&   GetRegion() const                   { return maRegion; }
 
-    // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
-
     // css::lang::XUnoTunnel
     UNO3_GETIMPLEMENTATION_DECL(VCLXRegion)
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XRegion
      css::awt::Rectangle       SAL_CALL getBounds() override;

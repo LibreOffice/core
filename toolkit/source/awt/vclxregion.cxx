@@ -34,31 +34,8 @@ VCLXRegion::~VCLXRegion()
 {
 }
 
-// css::uno::XInterface
-css::uno::Any VCLXRegion::queryInterface( const css::uno::Type & rType )
-{
-    css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        static_cast< css::awt::XRegion* >(this),
-                                        static_cast< css::lang::XUnoTunnel* >(this),
-                                        static_cast< css::lang::XTypeProvider* >(this) );
-    return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
-}
-
 // css::lang::XUnoTunnel
 UNO3_GETIMPLEMENTATION_IMPL( VCLXRegion );
-
-IMPL_IMPLEMENTATION_ID( VCLXRegion )
-
-// css::lang::XTypeProvider
-css::uno::Sequence< css::uno::Type > VCLXRegion::getTypes()
-{
-    static const css::uno::Sequence< css::uno::Type > aTypeList {
-        cppu::UnoType<css::lang::XTypeProvider>::get(),
-        cppu::UnoType<css::awt::XRegion>::get()
-    };
-    return aTypeList;
-}
-
 
 css::awt::Rectangle VCLXRegion::getBounds()
 {
