@@ -319,7 +319,7 @@ public:
     OUString GetQuote( SvxAutoCorrDoc const & rDoc, sal_Int32 nInsPos,
                     sal_Unicode cInsChar, bool bSttQuote );
     void InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
-                    sal_Unicode cInsChar, bool bSttQuote, bool bIns, bool b_iApostrophe );
+                    sal_Unicode cInsChar, bool bSttQuote, bool bIns, bool b_iApostrophe ) const;
 
     // Query/Set the name of the AutoCorrect file
     // the default is "autocorr.dat"

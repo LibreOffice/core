@@ -1181,7 +1181,7 @@ sal_Unicode SvxAutoCorrect::GetQuote( sal_Unicode cInsChar, bool bSttQuote,
 
 void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
                                     sal_Unicode cInsChar, bool bSttQuote,
-                                    bool bIns, bool b_iApostrophe )
+                                    bool bIns, bool b_iApostrophe ) const
 {
     const LanguageType eLang = GetDocLanguage( rDoc, nInsPos );
     sal_Unicode cRet = GetQuote( cInsChar, bSttQuote, eLang );
