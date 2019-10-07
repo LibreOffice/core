@@ -788,16 +788,13 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
 
         aRedlRest.Restore();
     }
-    else if( pEndNdIdx || !pTextNd )
+    else
     {
         SwNodeRange aRg( rNds, nNodeIdx, rNds, (pEndNdIdx
                         ? ((*pEndNdIdx) + 1)
                         : rNds.GetEndOfExtras().GetIndex() ) );
         rNds.MoveNodes(aRg, rDoc.GetNodes(), rInsPos.nNode, nullptr == pEndNdIdx || bForceCreateFrames);
 
-    }
-    else {
-        assert(false); // wtf?
     }
 }
 
