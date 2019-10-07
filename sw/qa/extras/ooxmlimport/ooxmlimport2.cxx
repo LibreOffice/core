@@ -19,6 +19,8 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/style/BreakType.hpp>
+#include <sortedobjs.hxx>
+#include <anchoredobject.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -405,6 +407,30 @@ DECLARE_OOXMLIMPORT_TEST(testTdf126114, "tdf126114.docx")
     // The problem was that after the drop-down form field, also the placeholder string
     // was imported as text. Beside the duplication of the field, it also caused a crash.
     CPPUNIT_ASSERT_EQUAL(7, getLength());
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf127825, "tdf127825.docx")
+{
+    // The document has a shape with Japanese-style text in it. The shape has relative size and also
+    // has automatic height.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwRootFrame* pLayout = pWrtShell->GetLayout();
+    CPPUNIT_ASSERT(pLayout);
+    SwFrame* pPage = pLayout->GetLower();
+    CPPUNIT_ASSERT(pPage);
+    SwFrame* pBody = pPage->GetLower();
+    CPPUNIT_ASSERT(pBody);
+    SwFrame* pText = pBody->GetLower();
+    CPPUNIT_ASSERT(pText);
+    CPPUNIT_ASSERT(pText->GetDrawObjs());
+    const SwSortedObjs& rDrawObjs = *pText->GetDrawObjs();
+    CPPUNIT_ASSERT(rDrawObjs.size());
+
+    // Without the accompanying fix in place, this overlapped the footer area, not the body area.
+    CPPUNIT_ASSERT(rDrawObjs[0]->GetObjRect().IsOver(pBody->getFrameArea()));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf103345, "numbering-circle.docx")
