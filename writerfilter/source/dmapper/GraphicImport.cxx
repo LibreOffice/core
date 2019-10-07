@@ -1114,7 +1114,25 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
                 {
                     uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
                     OUString aProperty = nSprmId == NS_ooxml::LN_CT_SizeRelH_pctWidth ? OUString("RelativeWidth") : OUString("RelativeHeight");
-                    xPropertySet->setPropertyValue(aProperty, uno::makeAny(nPositivePercentage));
+
+                    sal_Int32 nTextPreRotateAngle = 0;
+                    uno::Any aAny;
+                    if (xPropertySet->getPropertySetInfo()->hasPropertyByName(
+                            "CustomShapeGeometry"))
+                    {
+                        aAny = xPropertySet->getPropertyValue("CustomShapeGeometry");
+                    }
+                    comphelper::SequenceAsHashMap aCustomShapeGeometry(aAny);
+                    auto it = aCustomShapeGeometry.find("TextPreRotateAngle");
+                    if (it != aCustomShapeGeometry.end())
+                    {
+                        nTextPreRotateAngle = it->second.get<sal_Int32>();
+                    }
+                    if (nTextPreRotateAngle == 0)
+                    {
+                        xPropertySet->setPropertyValue(aProperty,
+                                                       uno::makeAny(nPositivePercentage));
+                    }
                 }
             }
 
