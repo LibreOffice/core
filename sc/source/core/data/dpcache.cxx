@@ -172,7 +172,8 @@ struct Bucket
     ScDPItemData maValue;
     SCROW mnOrderIndex;
     SCROW mnDataIndex;
-    Bucket() {}
+    Bucket() :
+        mnOrderIndex(0), mnDataIndex(0) {}
     Bucket(const ScDPItemData& rValue, SCROW nData) :
         maValue(rValue), mnOrderIndex(0), mnDataIndex(nData) {}
 };
