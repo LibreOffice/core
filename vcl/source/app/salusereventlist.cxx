@@ -38,7 +38,7 @@ SalUserEventList::SalUserEventList()
 {
 }
 
-SalUserEventList::~SalUserEventList()
+SalUserEventList::~SalUserEventList() COVERITY_NOEXCEPT_FALSE
 {
 }
 
