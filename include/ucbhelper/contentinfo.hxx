@@ -101,9 +101,7 @@ public:
   * ucb::ContentImplHelper.
   */
 class CommandProcessorInfo :
-                public cppu::OWeakObject,
-                public css::lang::XTypeProvider,
-                public css::ucb::XCommandInfo
+                public cppu::WeakImplHelper<css::ucb::XCommandInfo>
 {
     css::uno::Reference< css::ucb::XCommandEnvironment >
                                 m_xEnv;
@@ -122,19 +120,6 @@ public:
     CommandProcessorInfo( const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv,
                          ContentImplHelper* pContent );
     virtual ~CommandProcessorInfo() override;
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
-
-    // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes() override;
 
     // XCommandInfo
     virtual css::uno::Sequence<
