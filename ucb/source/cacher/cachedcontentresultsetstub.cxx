@@ -507,38 +507,6 @@ CachedContentResultSetStubFactory::~CachedContentResultSetStubFactory()
 }
 
 
-// CachedContentResultSetStubFactory XInterface methods.
-void SAL_CALL CachedContentResultSetStubFactory::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL CachedContentResultSetStubFactory::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL CachedContentResultSetStubFactory::queryInterface( const css::uno::Type & rType )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               static_cast< XTypeProvider* >(this),
-                                               static_cast< XServiceInfo* >(this),
-                                               static_cast< XCachedContentResultSetStubFactory* >(this)
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// CachedContentResultSetStubFactory XTypeProvider methods.
-
-
-XTYPEPROVIDER_IMPL_3( CachedContentResultSetStubFactory,
-                      XTypeProvider,
-                         XServiceInfo,
-                      XCachedContentResultSetStubFactory );
-
-
 // CachedContentResultSetStubFactory XServiceInfo methods.
 
 XSERVICEINFO_COMMOM_IMPL( CachedContentResultSetStubFactory,
