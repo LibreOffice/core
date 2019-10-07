@@ -55,6 +55,7 @@
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <rtl/bootstrap.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -64,6 +65,7 @@
 #include <unotools/resmgr.hxx>
 #include <unx/gstsink.hxx>
 #include <vcl/ImageTree.hxx>
+#include <vcl/abstdlg.hxx>
 #include <vcl/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/i18nhelp.hxx>
@@ -75,6 +77,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/wrkwin.hxx>
+#include <strings.hrc>
 #include <window.h>
 #include <numeric>
 
@@ -1809,6 +1812,8 @@ private:
     gulong m_nSizeAllocateSignalId;
     gulong m_nButtonPressSignalId;
     gulong m_nMotionSignalId;
+    gulong m_nLeaveSignalId;
+    gulong m_nEnterSignalId;
     gulong m_nButtonReleaseSignalId;
     gulong m_nDragMotionSignalId;
     gulong m_nDragDropSignalId;
@@ -1950,6 +1955,31 @@ private:
         return true;
     }
 
+    static gboolean signalCrossing(GtkWidget*, GdkEventCrossing* pEvent, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        SolarMutexGuard aGuard;
+        return pThis->signal_crossing(pEvent);
+    }
+
+    bool signal_crossing(const GdkEventCrossing* pEvent)
+    {
+        if (!m_aMouseMotionHdl.IsSet())
+            return false;
+
+        Point aPos(pEvent->x, pEvent->y);
+        if (AllSettings::GetLayoutRTL())
+            aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
+        sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
+        sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
+        MouseEventModifiers eModifiers = ImplGetMouseMoveMode(nModCode);
+        eModifiers = eModifiers | (pEvent->type == GDK_ENTER_NOTIFY ? MouseEventModifiers::ENTERWINDOW : MouseEventModifiers::LEAVEWINDOW);
+        MouseEvent aMEvt(aPos, 0, eModifiers, nCode, nCode);
+
+        m_aMouseMotionHdl.Call(aMEvt);
+        return true;
+    }
+
     virtual void drag_started()
     {
     }
@@ -2033,6 +2063,8 @@ public:
         , m_nSizeAllocateSignalId(0)
         , m_nButtonPressSignalId(0)
         , m_nMotionSignalId(0)
+        , m_nLeaveSignalId(0)
+        , m_nEnterSignalId(0)
         , m_nButtonReleaseSignalId(0)
         , m_nDragMotionSignalId(0)
         , m_nDragDropSignalId(0)
@@ -2063,6 +2095,8 @@ public:
     {
         ensureEventWidget();
         m_nMotionSignalId = g_signal_connect(m_pMouseEventBox, "motion-notify-event", G_CALLBACK(signalMotion), this);
+        m_nLeaveSignalId = g_signal_connect(m_pMouseEventBox, "leave-notify-event", G_CALLBACK(signalCrossing), this);
+        m_nEnterSignalId = g_signal_connect(m_pMouseEventBox, "enter-notify-event", G_CALLBACK(signalCrossing), this);
         weld::Widget::connect_mouse_move(rLink);
     }
 
@@ -2584,6 +2618,10 @@ public:
             g_signal_handler_disconnect(m_pMouseEventBox, m_nButtonPressSignalId);
         if (m_nMotionSignalId)
             g_signal_handler_disconnect(m_pMouseEventBox, m_nMotionSignalId);
+        if (m_nLeaveSignalId)
+            g_signal_handler_disconnect(m_pMouseEventBox, m_nLeaveSignalId);
+        if (m_nEnterSignalId)
+            g_signal_handler_disconnect(m_pMouseEventBox, m_nEnterSignalId);
         if (m_nButtonReleaseSignalId)
             g_signal_handler_disconnect(m_pMouseEventBox, m_nButtonReleaseSignalId);
         if (m_nFocusInSignalId)
@@ -3742,6 +3780,135 @@ private:
 
     void asyncresponse(gint ret);
 
+    static void signalActivate(GtkMenuItem*, gpointer data)
+    {
+        bool* pActivate = static_cast<bool*>(data);
+        *pActivate = true;
+    }
+
+    bool signal_screenshot_popup_menu(GdkEventButton* pEvent)
+    {
+        GtkWidget *pMenu = gtk_menu_new();
+
+        GtkWidget* pMenuItem = gtk_menu_item_new_with_mnemonic(MapToGtkAccelerator(VclResId(SV_BUTTONTEXT_SCREENSHOT)).getStr());
+        gtk_menu_shell_append(GTK_MENU_SHELL(pMenu), pMenuItem);
+        bool bActivate(false);
+        g_signal_connect(pMenuItem, "activate", G_CALLBACK(signalActivate), &bActivate);
+        gtk_widget_show(pMenuItem);
+
+        int button, event_time;
+        if (pEvent)
+        {
+            button = pEvent->button;
+            event_time = pEvent->time;
+        }
+        else
+        {
+            button = 0;
+            event_time = gtk_get_current_event_time();
+        }
+
+        gtk_menu_attach_to_widget(GTK_MENU(pMenu), GTK_WIDGET(m_pDialog), nullptr);
+
+        GMainLoop* pLoop = g_main_loop_new(nullptr, true);
+        gulong nSignalId = g_signal_connect_swapped(G_OBJECT(pMenu), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
+
+        gtk_menu_popup(GTK_MENU(pMenu), nullptr, nullptr, nullptr, nullptr, button, event_time);
+
+        if (g_main_loop_is_running(pLoop))
+        {
+            gdk_threads_leave();
+            g_main_loop_run(pLoop);
+            gdk_threads_enter();
+        }
+
+        g_main_loop_unref(pLoop);
+        g_signal_handler_disconnect(pMenu, nSignalId);
+        gtk_menu_detach(GTK_MENU(pMenu));
+
+        if (bActivate)
+        {
+            // open screenshot annotation dialog
+            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+            VclPtr<AbstractScreenshotAnnotationDlg> xTmp = pFact->CreateScreenshotAnnotationDlg(*this);
+            ScopedVclPtr<AbstractScreenshotAnnotationDlg> xDialog(xTmp);
+            xDialog->Execute();
+        }
+
+        return false;
+    }
+
+    static gboolean signalScreenshotPopupMenu(GtkWidget*, gpointer widget)
+    {
+        GtkInstanceDialog* pThis = static_cast<GtkInstanceDialog*>(widget);
+        return pThis->signal_screenshot_popup_menu(nullptr);
+    }
+
+    static gboolean signalScreenshotButton(GtkWidget*, GdkEventButton* pEvent, gpointer widget)
+    {
+        GtkInstanceDialog* pThis = static_cast<GtkInstanceDialog*>(widget);
+        SolarMutexGuard aGuard;
+        return pThis->signal_screenshot_button(pEvent);
+    }
+
+    bool signal_screenshot_button(GdkEventButton* pEvent)
+    {
+        if (gdk_event_triggers_context_menu(reinterpret_cast<GdkEvent*>(pEvent)) && pEvent->type == GDK_BUTTON_PRESS)
+        {
+            //if handled for context menu, stop processing
+            return signal_screenshot_popup_menu(pEvent);
+        }
+        return false;
+    }
+
+    static Point get_csd_offset(GtkWidget* pTopLevel)
+    {
+        // try and omit drawing CSD under wayland
+        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pTopLevel));
+        GList* pChild = g_list_first(pChildren);
+
+        int x, y;
+        gtk_widget_translate_coordinates(GTK_WIDGET(pChild->data),
+                                         GTK_WIDGET(pTopLevel),
+                                         0, 0, &x, &y);
+
+        int innerborder = gtk_container_get_border_width(GTK_CONTAINER(pChild->data));
+        g_list_free(pChildren);
+
+        int outerborder = gtk_container_get_border_width(GTK_CONTAINER(pTopLevel));
+        int totalborder = outerborder + innerborder;
+        x -= totalborder;
+        y -= totalborder;
+
+        return Point(x, y);
+    }
+
+    static void do_collect_screenshot_data(GtkWidget* pItem, gpointer data)
+    {
+        GtkWidget* pTopLevel = gtk_widget_get_toplevel(pItem);
+
+        int x, y;
+        gtk_widget_translate_coordinates(pItem, pTopLevel, 0, 0, &x, &y);
+
+        Point aOffset = get_csd_offset(pTopLevel);
+
+        GtkAllocation alloc;
+        gtk_widget_get_allocation(pItem, &alloc);
+
+        const basegfx::B2IPoint aCurrentTopLeft(x - aOffset.X(), y - aOffset.Y());
+        const basegfx::B2IRange aCurrentRange(aCurrentTopLeft, aCurrentTopLeft + basegfx::B2IPoint(alloc.width, alloc.height));
+
+        if (!aCurrentRange.isEmpty())
+        {
+            weld::ScreenShotCollection* pCollection = static_cast<weld::ScreenShotCollection*>(data);
+            pCollection->emplace_back(::get_help_id(pItem), aCurrentRange);
+        }
+
+        if (GTK_IS_CONTAINER(pItem))
+            gtk_container_forall(GTK_CONTAINER(pItem), do_collect_screenshot_data, data);
+    }
+
+
 public:
     GtkInstanceDialog(GtkWindow* pDialog, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWindow(pDialog, pBuilder, bTakeOwnership)
@@ -3756,6 +3923,12 @@ public:
         , m_nOldEditWidthReq(0)
         , m_nOldBorderWidth(0)
     {
+        const bool bScreenshotMode(officecfg::Office::Common::Misc::ScreenshotMode::get());
+        if (bScreenshotMode)
+        {
+            g_signal_connect(m_pDialog, "popup-menu", G_CALLBACK(signalScreenshotPopupMenu), this);
+            g_signal_connect(m_pDialog, "button-press-event", G_CALLBACK(signalScreenshotButton), this);
+        }
     }
 
     virtual bool runAsync(std::shared_ptr<weld::DialogController> rDialogController, const std::function<void(sal_Int32)>& func) override
@@ -3947,6 +4120,36 @@ public:
     virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>&) override
     {
         //not implemented for the gtk variant
+    }
+
+    virtual void draw(VirtualDevice& rOutput) override
+    {
+        rOutput.SetOutputSizePixel(get_size());
+        cairo_surface_t* pSurface = get_underlying_cairo_surface(rOutput);
+        cairo_t* cr = cairo_create(pSurface);
+
+        Point aOffset = get_csd_offset(GTK_WIDGET(m_pDialog));
+
+#if defined(GDK_WINDOWING_X11)
+        GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pDialog));
+        if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
+            assert(aOffset.X() == 0 && aOffset.Y() == 0 && "expected offset of 0 under X");
+#endif
+
+        cairo_translate(cr, -aOffset.X(), -aOffset.Y());
+
+        gtk_widget_draw(GTK_WIDGET(m_pDialog), cr);
+
+        cairo_destroy(cr);
+    }
+
+    virtual weld::ScreenShotCollection collect_screenshot_data() override
+    {
+        weld::ScreenShotCollection aRet;
+
+        gtk_container_foreach(GTK_CONTAINER(m_pDialog), do_collect_screenshot_data, &aRet);
+
+        return aRet;
     }
 
     virtual ~GtkInstanceDialog() override

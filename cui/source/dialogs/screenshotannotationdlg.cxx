@@ -103,31 +103,6 @@ namespace
     }
 }
 
-class ControlDataEntry
-{
-public:
-    ControlDataEntry(
-        const vcl::Window& rControl,
-        const basegfx::B2IRange& rB2IRange)
-        : mrControl(rControl),
-        maB2IRange(rB2IRange)
-    {
-    }
-
-    const basegfx::B2IRange& getB2IRange() const
-    {
-        return maB2IRange;
-    }
-
-    OString const & GetHelpId() const { return mrControl.GetHelpId(); }
-
-private:
-    const vcl::Window&  mrControl;
-    basegfx::B2IRange   maB2IRange;
-};
-
-typedef std::vector< ControlDataEntry > ControlDataCollection;
-
 class Picture : public weld::CustomWidgetController
 {
 private:
@@ -156,7 +131,7 @@ public:
     ScreenshotAnnotationDlg_Impl(
         weld::Window* pParent,
         weld::Builder& rParent,
-        Dialog& rParentDialog);
+        weld::Dialog& rParentDialog);
     ~ScreenshotAnnotationDlg_Impl();
 
 private:
@@ -167,10 +142,10 @@ private:
     void CollectChildren(
         const vcl::Window& rCurrent,
         const basegfx::B2IPoint& rTopLeft,
-        ControlDataCollection& rControlDataCollection);
-    ControlDataEntry* CheckHit(const basegfx::B2IPoint& rPosition);
-    void PaintControlDataEntry(
-        const ControlDataEntry& rEntry,
+        weld::ScreenShotCollection& rControlDataCollection);
+    weld::ScreenShotEntry* CheckHit(const basegfx::B2IPoint& rPosition);
+    void PaintScreenShotEntry(
+        const weld::ScreenShotEntry& rEntry,
         const Color& rColor,
         double fLineWidth,
         double fTransparency);
@@ -182,7 +157,7 @@ private:
 
     // local variables
     weld::Window*               mpParentWindow;
-    Dialog&                     mrParentDialog;
+    weld::Dialog&               mrParentDialog;
     BitmapEx                    maParentDialogBitmap;
     BitmapEx                    maDimmedDialogBitmap;
     Size                        maParentDialogSize;
@@ -191,11 +166,11 @@ private:
     VclPtr<VirtualDevice>       mxVirtualBufferDevice;
 
     // all detected children
-    ControlDataCollection       maAllChildren;
+    weld::ScreenShotCollection  maAllChildren;
 
     // highlighted/selected children
-    ControlDataEntry*           mpHilighted;
-    std::set< ControlDataEntry* >
+    weld::ScreenShotEntry*           mpHilighted;
+    std::set< weld::ScreenShotEntry* >
                                 maSelected;
 
     // list of detected controls
@@ -221,12 +196,9 @@ OUString ScreenshotAnnotationDlg_Impl::maLastFolderURL = OUString();
 ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     weld::Window* pParent,
     weld::Builder& rParentBuilder,
-    Dialog& rParentDialog)
+    weld::Dialog& rParentDialog)
 :   mpParentWindow(pParent),
     mrParentDialog(rParentDialog),
-    maParentDialogBitmap(rParentDialog.createScreenshot()),
-    maDimmedDialogBitmap(maParentDialogBitmap),
-    maParentDialogSize(maParentDialogBitmap.GetSizePixel()),
     mxVirtualBufferDevice(nullptr),
     maAllChildren(),
     mpHilighted(nullptr),
@@ -234,6 +206,12 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     maPicture(this),
     maSaveAsText(CuiResId(RID_SVXSTR_SAVE_SCREENSHOT_AS))
 {
+    VclPtr<VirtualDevice> xParentDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    rParentDialog.draw(*xParentDialogSurface);
+    maParentDialogSize = xParentDialogSurface->GetOutputSizePixel();
+    maParentDialogBitmap = xParentDialogSurface->GetBitmapEx(Point(), maParentDialogSize);
+    maDimmedDialogBitmap = maParentDialogBitmap;
+
     // image ain't empty
     assert(!maParentDialogBitmap.IsEmpty());
     assert(0 != maParentDialogBitmap.GetSizePixel().Width());
@@ -247,18 +225,10 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     mxSave = rParentBuilder.weld_button("save");
     assert(mxSave.get());
 
-    // set screenshot image at FixedImage, resize, set event listener
+    // set screenshot image at DrawingArea, resize, set event listener
     if (mxPicture)
     {
-        // collect all children. Choose start pos to be negative
-        // of target dialog's position to get all positions relative to (0,0)
-        const Point aParentPos(mrParentDialog.GetPosPixel());
-        const basegfx::B2IPoint aTopLeft(-aParentPos.X(), -aParentPos.Y());
-
-        CollectChildren(
-            mrParentDialog,
-            aTopLeft,
-            maAllChildren);
+        maAllChildren = mrParentDialog.collect_screenshot_data();
 
         // to make clear that maParentDialogBitmap is a background image, adjust
         // luminance a bit for maDimmedDialogBitmap - other methods may be applied
@@ -285,8 +255,8 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     if (mxText)
     {
         mxText->set_size_request(400, mxText->get_height_rows(10));
-        OUString aHelpId = OStringToOUString( mrParentDialog.GetHelpId(), RTL_TEXTENCODING_UTF8 );
-        Size aSizeCm = mrParentDialog.PixelToLogic(maParentDialogSize, MapMode(MapUnit::MapCM));
+        OUString aHelpId = OStringToOUString( mrParentDialog.get_help_id(), RTL_TEXTENCODING_UTF8 );
+        Size aSizeCm = Application::GetDefaultDevice()->PixelToLogic(maParentDialogSize, MapMode(MapUnit::MapCM));
         maMainMarkupText = lcl_ParagraphWithImage( aHelpId, aSizeCm );
         mxText->set_text( maMainMarkupText );
         mxText->set_editable(false);
@@ -302,7 +272,7 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
 void ScreenshotAnnotationDlg_Impl::CollectChildren(
     const vcl::Window& rCurrent,
     const basegfx::B2IPoint& rTopLeft,
-    ControlDataCollection& rControlDataCollection)
+    weld::ScreenShotCollection& rControlDataCollection)
 {
     if (rCurrent.IsVisible())
     {
@@ -313,7 +283,7 @@ void ScreenshotAnnotationDlg_Impl::CollectChildren(
 
         if (!aCurrentRange.isEmpty())
         {
-            rControlDataCollection.emplace_back(rCurrent, aCurrentRange);
+            rControlDataCollection.emplace_back(rCurrent.GetHelpId(), aCurrentRange);
         }
 
         for (sal_uInt16 a(0); a < rCurrent.GetChildCount(); a++)
@@ -337,23 +307,8 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, 
 {
     // 'save screenshot...' pressed, offer to save maParentDialogBitmap
     // as PNG image, use *.id file name as screenshot file name offering
-    OString aDerivedFileName;
-
-    // get a suggestion for the filename from ui file name
-    {
-        const OString& rUIFileName = mrParentDialog.getUIFile();
-        sal_Int32 nIndex(0);
-
-        do
-        {
-            const OString aToken(rUIFileName.getToken(0, '/', nIndex));
-
-            if (!aToken.isEmpty())
-            {
-                aDerivedFileName = aToken;
-            }
-        } while (nIndex >= 0);
-    }
+    // get a suggestion for the filename from buildable name
+    OString aDerivedFileName = mrParentDialog.get_buildable_name();
 
     auto xFileDlg = std::make_unique<sfx2::FileDialogHelper>(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                                                              FileDialogFlags::NONE, mpParentWindow);
@@ -421,9 +376,9 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, 
     }
 }
 
-ControlDataEntry* ScreenshotAnnotationDlg_Impl::CheckHit(const basegfx::B2IPoint& rPosition)
+weld::ScreenShotEntry* ScreenshotAnnotationDlg_Impl::CheckHit(const basegfx::B2IPoint& rPosition)
 {
-    ControlDataEntry* pRetval = nullptr;
+    weld::ScreenShotEntry* pRetval = nullptr;
 
     for (auto&& rCandidate : maAllChildren)
     {
@@ -447,8 +402,8 @@ ControlDataEntry* ScreenshotAnnotationDlg_Impl::CheckHit(const basegfx::B2IPoint
     return pRetval;
 }
 
-void ScreenshotAnnotationDlg_Impl::PaintControlDataEntry(
-    const ControlDataEntry& rEntry,
+void ScreenshotAnnotationDlg_Impl::PaintScreenShotEntry(
+    const weld::ScreenShotEntry& rEntry,
     const Color& rColor,
     double fLineWidth,
     double fTransparency)
@@ -527,14 +482,14 @@ void ScreenshotAnnotationDlg_Impl::RepaintToBuffer(
         for (auto&& rCandidate : maSelected)
         {
             static const double fLineWidthEntries(5.0);
-            PaintControlDataEntry(*rCandidate, COL_LIGHTRED, fLineWidthEntries, fTransparence * 0.2);
+            PaintScreenShotEntry(*rCandidate, COL_LIGHTRED, fLineWidthEntries, fTransparence * 0.2);
         }
 
         // paint highlighted entry
         if (mpHilighted && bPaintHilight)
         {
             static const double fLineWidthHilight(7.0);
-            PaintControlDataEntry(*mpHilighted, aHilightColor, fLineWidthHilight, fTransparence);
+            PaintScreenShotEntry(*mpHilighted, aHilightColor, fLineWidthHilight, fTransparence);
         }
 
         if (bIsAntiAliasing)
@@ -572,16 +527,16 @@ bool ScreenshotAnnotationDlg_Impl::MouseMove(const MouseEvent& rMouseEvent)
 
     if (maPicture.IsMouseOver())
     {
-        const ControlDataEntry* pOldHit = mpHilighted;
+        const weld::ScreenShotEntry* pOldHit = mpHilighted;
         const Point aOffset(GetOffsetInPicture());
         const basegfx::B2IPoint aMousePos(
             rMouseEvent.GetPosPixel().X() - aOffset.X(),
             rMouseEvent.GetPosPixel().Y() - aOffset.Y());
-        const ControlDataEntry* pHit = CheckHit(aMousePos);
+        const weld::ScreenShotEntry* pHit = CheckHit(aMousePos);
 
         if (pHit && pOldHit != pHit)
         {
-            mpHilighted = const_cast<ControlDataEntry*>(pHit);
+            mpHilighted = const_cast<weld::ScreenShotEntry*>(pHit);
             bRepaint = true;
         }
     }
@@ -644,8 +599,8 @@ bool Picture::MouseButtonUp(const MouseEvent&)
     return m_pDialog->MouseButtonUp();
 }
 
-ScreenshotAnnotationDlg::ScreenshotAnnotationDlg(weld::Window* pParent, Dialog& rParentDialog)
-    : GenericDialogController(pParent, "cui/ui/screenshotannotationdialog.ui", "ScreenshotAnnotationDialog")
+ScreenshotAnnotationDlg::ScreenshotAnnotationDlg(weld::Dialog& rParentDialog)
+    : GenericDialogController(&rParentDialog, "cui/ui/screenshotannotationdialog.ui", "ScreenshotAnnotationDialog")
 {
     m_pImpl.reset(new ScreenshotAnnotationDlg_Impl(m_xDialog.get(), *m_xBuilder, rParentDialog));
 }

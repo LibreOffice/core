@@ -51,6 +51,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/logger.hxx>
@@ -350,6 +351,7 @@ struct DialogImpl
     long    mnResult;
     bool    mbStartedModal;
     VclAbstractDialog::AsyncContext maEndCtx;
+    Link<const CommandEvent&, bool> m_aPopupMenuHdl;
     Link<void*, vcl::ILibreOfficeKitNotifier*> m_aInstallLOKNotifierHdl;
 
     DialogImpl() : mnResult( -1 ), mbStartedModal( false ) {}
@@ -733,6 +735,11 @@ Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize)
 #endif
 }
 
+void Dialog::SetPopupMenuHdl(const Link<const CommandEvent&, bool>& rLink)
+{
+    mpDialogImpl->m_aPopupMenuHdl = rLink;
+}
+
 void Dialog::SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink)
 {
     mpDialogImpl->m_aInstallLOKNotifierHdl = rLink;
@@ -1042,7 +1049,7 @@ void Dialog::ensureRepaint()
     }
 }
 
-BitmapEx Dialog::createScreenshot()
+void Dialog::createScreenshot(VirtualDevice& rOutput)
 {
     // same prerequisites as in Execute()
     setDeferredProperties();
@@ -1051,7 +1058,11 @@ BitmapEx Dialog::createScreenshot()
     ToTop();
     ensureRepaint();
 
-    return GetBitmapEx(Point(), GetOutputSizePixel());
+    Point aPos;
+    Size aSize(GetOutputSizePixel());
+
+    rOutput.SetOutputSizePixel(aSize);
+    rOutput.DrawOutDev(aPos, aSize, aPos, aSize, *this);
 }
 
 short Dialog::Execute()
@@ -1589,6 +1600,13 @@ void Dialog::Activate()
         xEventBroadcaster->documentEventOccured(aObject);
     }
     SystemWindow::Activate();
+}
+
+void Dialog::Command(const CommandEvent& rCEvt)
+{
+    if (mpDialogImpl && mpDialogImpl->m_aPopupMenuHdl.Call(rCEvt))
+        return;
+    SystemWindow::Command(rCEvt);
 }
 
 void TopLevelWindowLocker::incBusy(const weld::Widget* pIgnore)

@@ -50,7 +50,7 @@ protected:
 
     virtual sal_uInt16 getDefaultAccessibleRole() const override;
 
-    // evtl. support for screenshot context menu
+    // support for screenshot context menu
     virtual void Command(const CommandEvent& rCEvt) override;
 
 public:

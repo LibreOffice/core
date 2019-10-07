@@ -19,8 +19,6 @@
 #include <messagedialog.hxx>
 #include <window.h>
 #include <boost/multi_array.hpp>
-#include <officecfg/Office/Common.hxx>
-#include <vcl/abstdlg.hxx>
 #include <vcl/vclmedit.hxx>
 #include <sal/log.hxx>
 
@@ -183,159 +181,17 @@ void VclContainer::queue_resize(StateChangedType eReason)
     Window::queue_resize(eReason);
 }
 
-
-static Button* isVisibleButtonWithText(vcl::Window* pCandidate)
-{
-    if (!pCandidate)
-        return nullptr;
-
-    if (!pCandidate->IsVisible())
-        return nullptr;
-
-    if (pCandidate->GetText().isEmpty())
-        return nullptr;
-
-    return dynamic_cast<Button*>(pCandidate);
-}
-
-// evtl. support for screenshot context menu
+// support for screenshot context menu
 void VclContainer::Command(const CommandEvent& rCEvt)
 {
-    if (rCEvt.IsMouseEvent() && CommandEventId::ContextMenu == rCEvt.GetCommand())
+    if (CommandEventId::ContextMenu == rCEvt.GetCommand())
     {
-        const bool bScreenshotMode(officecfg::Office::Common::Misc::ScreenshotMode::get());
-
-        if (bScreenshotMode)
+        auto pParent = GetParent();
+        if (pParent)
         {
-            bool bVisibleChildren(false);
-            vcl::Window* pChild(nullptr);
-
-            for (pChild = GetWindow(GetWindowType::FirstChild); !bVisibleChildren && pChild; pChild = pChild->GetWindow(GetWindowType::Next))
-            {
-                Button* pCandidate = isVisibleButtonWithText(pChild);
-
-                if (nullptr == pCandidate)
-                    continue;
-
-                bVisibleChildren = true;
-            }
-
-            if (bVisibleChildren)
-            {
-                static bool bAddButtonsToMenu(true); // loplugin:constvars:ignore
-                static bool bAddScreenshotButtonToMenu(true); // loplugin:constvars:ignore
-
-                if (bAddButtonsToMenu || bAddScreenshotButtonToMenu)
-                {
-                    const Point aMenuPos(rCEvt.GetMousePosPixel());
-                    ScopedVclPtrInstance<PopupMenu> aMenu;
-                    sal_uInt16 nLocalID(1);
-                    sal_uInt16 nScreenshotButtonID(0);
-
-                    if (bAddButtonsToMenu)
-                    {
-                        for (pChild = GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
-                        {
-                            Button* pCandidate = isVisibleButtonWithText(pChild);
-
-                            if (nullptr == pCandidate)
-                                continue;
-
-                            aMenu->InsertItem(
-                                nLocalID,
-                                pChild->GetText());
-                            aMenu->SetHelpText(
-                                nLocalID,
-                                pChild->GetHelpText());
-                            aMenu->SetHelpId(
-                                nLocalID,
-                                pChild->GetHelpId());
-                            aMenu->EnableItem(
-                                nLocalID,
-                                pChild->IsEnabled());
-                            nLocalID++;
-                        }
-                    }
-
-                    if (bAddScreenshotButtonToMenu)
-                    {
-                        if (nLocalID > 1)
-                        {
-                            aMenu->InsertSeparator();
-                        }
-
-                        aMenu->InsertItem(
-                            nLocalID,
-                            VclResId(SV_BUTTONTEXT_SCREENSHOT));
-                        aMenu->SetHelpText(
-                            nLocalID,
-                            VclResId(SV_HELPTEXT_SCREENSHOT));
-                        aMenu->SetHelpId(
-                            nLocalID,
-                            "InteractiveScreenshotMode");
-                        aMenu->EnableItem(
-                            nLocalID);
-                        nScreenshotButtonID = nLocalID;
-                    }
-
-                    const sal_uInt16 nId(aMenu->Execute(this, aMenuPos));
-
-                    // 0 == no selection (so not usable as ID)
-                    if (0 != nId)
-                    {
-                        if (bAddButtonsToMenu && nId < nLocalID)
-                        {
-                            nLocalID = 1;
-
-                            for (pChild = GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
-                            {
-                                Button* pCandidate = isVisibleButtonWithText(pChild);
-
-                                if (nullptr == pCandidate)
-                                    continue;
-
-                                if (nLocalID++ == nId)
-                                {
-                                    // pCandidate is the selected button, trigger it
-                                    pCandidate->Click();
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (bAddScreenshotButtonToMenu && nId == nScreenshotButtonID)
-                        {
-                            // screenshot was selected, access parent dialog (needed for
-                            // screenshot and other data access)
-                            Dialog* pParentDialog = GetParentDialog();
-
-                            if (pParentDialog)
-                            {
-                                // open screenshot annotation dialog
-                                VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-                                VclPtr<AbstractScreenshotAnnotationDlg> pTmp = pFact->CreateScreenshotAnnotationDlg(
-                                    pParentDialog->GetFrameWeld(),
-                                    *pParentDialog);
-                                ScopedVclPtr<AbstractScreenshotAnnotationDlg> pDialog(pTmp);
-
-                                if (pDialog)
-                                {
-                                    // currently just execute the dialog, no need to do
-                                    // different things for ok/cancel. This may change later,
-                                    // for that case use 'if (pDlg->Execute() == RET_OK)'
-                                    pDialog->Execute();
-                                }
-                            }
-                        }
-                    }
-
-                    // consume event when:
-                    // - CommandEventId::ContextMenu
-                    // - bScreenshotMode
-                    // - bVisibleChildren
-                    return;
-                }
-            }
+            CommandEvent aCEvt(rCEvt.GetMousePosPixel() + GetPosPixel(), rCEvt.GetCommand(), rCEvt.IsMouseEvent(), rCEvt.GetEventData());
+            pParent->Command(aCEvt);
+            return;
         }
     }
 
