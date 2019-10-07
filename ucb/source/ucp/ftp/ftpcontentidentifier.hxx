@@ -25,42 +25,21 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTENTIDENTIFIER_HXX
 #define INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTENTIDENTIFIER_HXX
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 
 
 namespace ftp {
 
-    class FTPContentIdentifier
-        : public cppu::OWeakObject,
-          public css::lang::XTypeProvider,
-          public css::ucb::XContentIdentifier
+    class FTPContentIdentifier :
+        public cppu::WeakImplHelper<css::ucb::XContentIdentifier>
     {
     public:
 
         explicit FTPContentIdentifier(const OUString& ident);
 
         virtual ~FTPContentIdentifier() override;
-
-        // XInterface
-
-        virtual css::uno::Any SAL_CALL
-        queryInterface( const css::uno::Type& rType ) override;
-
-        virtual void SAL_CALL acquire() throw() override;
-
-        virtual void SAL_CALL release() throw() override;
-
-        // XTypeProvider
-
-        virtual
-        css::uno::Sequence<css::uno::Type> SAL_CALL
-        getTypes() override;
-
-        virtual css::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId() override;
-
 
         // XContentIdentifier
 

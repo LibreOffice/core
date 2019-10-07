@@ -48,48 +48,6 @@ FTPContentIdentifier::~FTPContentIdentifier()
 }
 
 
-Any SAL_CALL
-FTPContentIdentifier::queryInterface(
-    const Type& rType
-)
-{
-    Any aRet =
-        ::cppu::queryInterface(rType,
-                               static_cast< XTypeProvider* >(this),
-                               static_cast< XContentIdentifier* >(this));
-
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-
-void SAL_CALL FTPContentIdentifier::acquire() throw() {
-    OWeakObject::acquire();
-}
-
-
-void SAL_CALL FTPContentIdentifier::release() throw() {
-    OWeakObject::release();
-}
-
-
-Sequence<sal_Int8> SAL_CALL
-FTPContentIdentifier::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-
-Sequence<Type> SAL_CALL
-FTPContentIdentifier::getTypes()
-{
-    static cppu::OTypeCollection s_aCollection(
-                cppu::UnoType<XTypeProvider>::get(),
-                cppu::UnoType<XContentIdentifier>::get());
-
-    return s_aCollection.getTypes();
-}
-
-
 OUString SAL_CALL
 FTPContentIdentifier::getContentIdentifier(
 )
