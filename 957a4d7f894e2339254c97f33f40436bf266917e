@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_f767d324",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2848,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-10-07T07:28:22Z",
+      "side": 0,
+      "message": "Nitpick: next time please leave these as-is. There is no consensus if {}s should be written for one-liner if/while constructs, so if you just remove them, you may start an edit war where the next person puts it back, which pollutes the history.",
+      "revId": "957a4d7f894e2339254c97f33f40436bf266917e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
