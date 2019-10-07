@@ -247,7 +247,7 @@ std::unique_ptr<SalVirtualDevice> SvpSalInstance::CreateVirtualDevice(SalGraphic
 {
     SvpSalGraphics *pSvpSalGraphics = dynamic_cast<SvpSalGraphics*>(pGraphics);
     assert(pSvpSalGraphics);
-#if defined(UNX)
+#ifndef ANDROID
     // tdf#127529 normally pPreExistingTarget is null and we are a true virtualdevice drawing to a backing buffer.
     // Occasionally, for canvas/slideshow, pPreExistingTarget is pre-provided as a hack to use the vcl drawing
     // apis to render onto a preexisting cairo surface. The necessity for that precedes the use of cairo in vcl proper
