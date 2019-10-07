@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_9a0ec6e3",
+        "filename": "xmlreader/source/xmlreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-07T08:52:18Z",
+      "side": 1,
+      "message": "* use auto or NamespaceList::size_type (same type as that inheritedNamespaces member) instead of size_t (or std::size_t from \u003ccstddef\u003e)?\n* i should iterate over end, ..., namespace.size()-1",
+      "revId": "89a3d47fffa77608ab95d66a58869825b869bf64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
