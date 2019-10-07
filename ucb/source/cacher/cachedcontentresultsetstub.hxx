@@ -28,6 +28,7 @@
 #include <com/sun/star/ucb/XFetchProvider.hpp>
 #include <com/sun/star/ucb/XFetchProviderForContentAccess.hpp>
 #include <com/sun/star/ucb/XCachedContentResultSetStubFactory.hpp>
+#include <cppuhelper/implbase.hxx>
 
 #define CACHED_CRS_STUB_SERVICE_NAME "com.sun.star.ucb.CachedContentResultSetStub"
 #define CACHED_CRS_STUB_FACTORY_NAME "com.sun.star.ucb.CachedContentResultSetStubFactory"
@@ -142,30 +143,16 @@ public:
 };
 
 
-class CachedContentResultSetStubFactory final
-                : public cppu::OWeakObject
-                , public css::lang::XTypeProvider
-                , public css::lang::XServiceInfo
-                , public css::ucb::XCachedContentResultSetStubFactory
+class CachedContentResultSetStubFactory final :
+                public cppu::WeakImplHelper<
+                    css::lang::XServiceInfo,
+                    css::ucb::XCachedContentResultSetStubFactory>
 {
 public:
 
     CachedContentResultSetStubFactory();
 
     virtual ~CachedContentResultSetStubFactory() override;
-
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
-
-    // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
