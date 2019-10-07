@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/bitmapex.hxx>
 
@@ -33,11 +33,10 @@
 //  class VCLXBitmap
 
 
-class VCLXBitmap final : public css::awt::XBitmap,
-                    public css::awt::XDisplayBitmap,
-                    public css::lang::XTypeProvider,
-                    public css::lang::XUnoTunnel,
-                    public ::cppu::OWeakObject
+class VCLXBitmap final : public cppu::WeakImplHelper<
+                            css::awt::XBitmap,
+                            css::awt::XDisplayBitmap,
+                            css::lang::XUnoTunnel>
 {
     ::osl::Mutex    maMutex;
     BitmapEx        maBitmap;
@@ -49,18 +48,8 @@ public:
     void            SetBitmap( const BitmapEx& rBmp )   { maBitmap = rBmp; }
     const BitmapEx& GetBitmap() const                   { return maBitmap; }
 
-
-    // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
-
     // css::lang::XUnoTunnel
     UNO3_GETIMPLEMENTATION_DECL(VCLXBitmap)
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XBitmap
     css::awt::Size                 SAL_CALL getSize() override;
