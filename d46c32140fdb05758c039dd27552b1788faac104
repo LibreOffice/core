@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_558f9fcb",
+        "filename": "vcl/source/gdi/bmpacc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-07T19:19:11Z",
+      "side": 1,
+      "message": "This does not make sense.  Either xImpBmp must be true here (in which case the following \"if\" is an error) or not (in which case the assert is an error).  Which is it?",
+      "revId": "d46c32140fdb05758c039dd27552b1788faac104",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
