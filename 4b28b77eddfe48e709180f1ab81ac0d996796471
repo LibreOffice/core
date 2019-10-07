@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_d74bb784",
+        "filename": "include/xmlreader/span.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-07T07:38:02Z",
+      "side": 1,
+      "message": "should better include \u003cfunctional\u003e",
+      "revId": "4b28b77eddfe48e709180f1ab81ac0d996796471",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
