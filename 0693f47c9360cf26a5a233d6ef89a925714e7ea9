@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_1707ef1e",
+        "filename": "compilerplugins/clang/dyncastvisibility.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-07T08:00:55Z",
+      "side": 1,
+      "message": "could this remain llvm_unreachable?",
+      "revId": "0693f47c9360cf26a5a233d6ef89a925714e7ea9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
