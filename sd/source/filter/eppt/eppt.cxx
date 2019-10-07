@@ -759,8 +759,9 @@ bool PPTWriter::ImplCreateDocument()
                                                     // Bit 3    Use named show
                                                     // Bit 4    Browse mode on
                                                     // Bit 5    Kiosk mode on
+                                                    // Bit 6    Skip narration
                                                     // Bit 7    loop continuously
-                                                    // Bit ?    show scrollbar
+                                                    // Bit 8    show scrollbar
 
                 if ( ImplGetPropertyValue( "CustomShow" ) )
                 {
@@ -796,7 +797,7 @@ bool PPTWriter::ImplCreateDocument()
                         nFlags |= 1;
                 }
 
-                if ( ImplGetPropertyValue( "IsEndless" ) ) // the correct name would be IsNotEndless: WTF?
+                if ( ImplGetPropertyValue( "IsEndless" ) )
                 {
                     bool bBool = false;
                     mAny >>= bBool;
