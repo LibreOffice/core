@@ -24,7 +24,7 @@
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/beans/Property.hpp>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <osl/mutex.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
@@ -56,10 +56,9 @@ class PropertyValues;
   * directly be returned by the implementation of the command.
   */
 class UCBHELPER_DLLPUBLIC PropertyValueSet :
-                public cppu::OWeakObject,
-                public css::lang::XTypeProvider,
-                public css::sdbc::XRow,
-                public css::sdbc::XColumnLocate
+                public cppu::WeakImplHelper<
+                    css::sdbc::XRow,
+                    css::sdbc::XColumnLocate>
 {
     css::uno::Reference< css::uno::XComponentContext >   m_xContext;
     css::uno::Reference< css::script::XTypeConverter >   m_xTypeConverter;
@@ -82,19 +81,6 @@ public:
     PropertyValueSet(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~PropertyValueSet() override;
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
-
-    // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes() override;
 
     // XRow
     virtual sal_Bool SAL_CALL
