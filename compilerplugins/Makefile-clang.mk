@@ -146,7 +146,7 @@ compilerplugins-clean:
         $(CLANGOUTDIR)/clang-timestamp \
         $(CLANGOUTDIR)/plugin$(CLANG_DL_EXT) \
         $(CLANGOUTDIR)/sharedvisitor/*.plugininfo \
-        $(CLANGOUTDIR)/sharedvisitor/clang.pch \
+        $(CLANGOUTDIR)/sharedvisitor/clang.pch{,.d} \
         $(CLANGOUTDIR)/sharedvisitor/sharedvisitor.{cxx,d,o} \
         $(CLANGOUTDIR)/sharedvisitor/{analyzer,generator}{$(CLANG_EXE_EXT),.d,.o} \
         $(CLANGOUTDIR)/sources-new.txt \
@@ -310,7 +310,11 @@ $(CLANGOUTDIR)/sharedvisitor/clang.pch: $(CLANGINDIR)/sharedvisitor/precompiled_
         | $(CLANGOUTDIR)/sharedvisitor
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),PCH,1)
 	$(QUIET)$(CLANGDIR)/bin/clang -x c++-header $(LO_CLANG_ANALYZER_PCH_CXXFLAGS) \
-        $(COMPILER_PLUGINS_TOOLING_ARGS) $< -o $@
+        $(COMPILER_PLUGINS_TOOLING_ARGS) $< -o $@ -MMD -MT $@ -MP \
+        -MF $(CLANGOUTDIR)/sharedvisitor/clang.pch.d
+
+-include $(CLANGOUTDIR)/sharedvisitor/clan.pch.d
+
 else
 $(CLANGOUTDIR)/sharedvisitor/clang.pch:
 	touch $@
