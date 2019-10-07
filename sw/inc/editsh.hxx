@@ -816,7 +816,11 @@ public:
     /// Call AutoCorrect
     void AutoCorrect( SvxAutoCorrect& rACorr, bool bInsertMode,
                         sal_Unicode cChar );
-    bool GetPrevAutoCorrWord(SvxAutoCorrect& rACorr, OUString& rWord);
+    OUString GetPrevAutoCorrWord(SvxAutoCorrect& rACorr);
+
+    // We consider no more than 9 characters before the cursor, and they must not start in the
+    // middle of a word (leading spaces are OK)
+    std::vector<OUString> GetChunkForAutoText(const SvxAutoCorrect& rACorr);
 
     /// Set our styles according to the respective rules.
     void AutoFormat( const SvxSwAutoFormatFlags* pAFlags );
