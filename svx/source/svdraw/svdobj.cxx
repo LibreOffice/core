@@ -2802,7 +2802,7 @@ css::uno::Reference< css::uno::XInterface > SdrObject::getUnoShape()
         // inserted in a SdrObjList (page/group/3dScene)
         SdrPage* pPageCandidate(getSdrPageFromSdrObject());
 
-        // tdf#12152, tdf#120728
+        // tdf#120152, tdf#120728
         //
         // With the paradigm change to only get a SdrPage for a SdrObject when the SdrObject
         // is *inserted*, the functionality for creating 1:1 associated UNO API implementation
@@ -2837,7 +2837,7 @@ css::uno::Reference< css::uno::XInterface > SdrObject::getUnoShape()
             // If not inserted, alternatively access a SdrPage using the SdrModel. There is
             // no reason not to create and return a UNO API XShape when the SdrObject is not
             // inserted - it may be in construction. Main paradigm is that it exists.
-            if(0 != getSdrModelFromSdrObject().GetPageCount())
+            if(!getSdrModelFromSdrObject().IsSwapGraphics() && 0 != getSdrModelFromSdrObject().GetPageCount())
             {
                 // Take 1st SdrPage. That may be e.g. a special page (in SD), but the
                 // to-be-used method ::CreateShape will be correctly overloaded in
