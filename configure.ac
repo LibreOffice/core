@@ -7014,7 +7014,7 @@ if test "$COM_IS_CLANG" = "TRUE"; then
         AC_PATH_PROG(LLVM_CONFIG, llvm-config,[],$CLANGDIR/bin $PATH)
         if test -n "$LLVM_CONFIG"; then
             COMPILER_PLUGINS_CXXFLAGS=$($LLVM_CONFIG --cxxflags)
-            COMPILER_PLUGINS_CXX_LINKFLAGS=$($LLVM_CONFIG --ldflags --libs --system-libs | tr '\n' ' ')
+            COMPILER_PLUGINS_LINKFLAGS=$($LLVM_CONFIG --ldflags --libs --system-libs | tr '\n' ' ')
             if test -z "$CLANGLIBDIR"; then
                 CLANGLIBDIR=$($LLVM_CONFIG --libdir)
             fi
@@ -7046,14 +7046,14 @@ if test "$COM_IS_CLANG" = "TRUE"; then
             AC_MSG_CHECKING([for clang libraries to use])
             if test -z "$CLANGTOOLLIBS"; then
                 LIBS="-lclangTooling -lclangDriver -lclangFrontend -lclangParse -lclangSema -lclangEdit \
- -lclangAnalysis -lclangAST -lclangLex -lclangSerialization -lclangBasic $COMPILER_PLUGINS_CXX_LINKFLAGS"
+ -lclangAnalysis -lclangAST -lclangLex -lclangSerialization -lclangBasic $COMPILER_PLUGINS_LINKFLAGS"
                 AC_LINK_IFELSE([
                     AC_LANG_PROGRAM([[#include "clang/Basic/SourceLocation.h"]],
                         [[ clang::FullSourceLoc().dump(); ]])
                 ],[CLANGTOOLLIBS="$LIBS"],[])
             fi
             if test -z "$CLANGTOOLLIBS"; then
-                LIBS="-lclang-cpp $COMPILER_PLUGINS_CXX_LINKFLAGS"
+                LIBS="-lclang-cpp $COMPILER_PLUGINS_LINKFLAGS"
                 AC_LINK_IFELSE([
                     AC_LANG_PROGRAM([[#include "clang/Basic/SourceLocation.h"]],
                         [[ clang::FullSourceLoc().dump(); ]])
