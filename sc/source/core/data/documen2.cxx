@@ -98,6 +98,8 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpPrinter( nullptr ),
         mpVirtualDevice_100th_mm( nullptr ),
         pFormatExchangeList( nullptr ),
+        mnMaxCol(MAXCOL),
+        mnMaxRow(MAXROW),
         pFormulaTree( nullptr ),
         pEOFormulaTree( nullptr ),
         pFormulaTrack( nullptr ),

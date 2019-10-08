@@ -1446,8 +1446,8 @@ bool ScAttrArray::IsMerged( SCROW nRow ) const
  * Area around any given summaries expand and adapt any MergeFlag (bRefresh)
  */
 bool ScAttrArray::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
-                                SCCOL& rPaintCol, SCROW& rPaintRow,
-                                bool bRefresh )
+                               SCCOL& rPaintCol, SCROW& rPaintRow,
+                               bool bRefresh )
 {
     assert( nCol != -1 );
     SetDefaultIfNotInit();
@@ -1470,9 +1470,9 @@ bool ScAttrArray::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
             SCROW nThisRow = (i>0) ? mvData[i-1].nEndRow+1 : 0;
             SCCOL nMergeEndCol = nThisCol + nCountX - 1;
             SCROW nMergeEndRow = nThisRow + nCountY - 1;
-            if (nMergeEndCol > rPaintCol && nMergeEndCol <= MAXCOL)
+            if (nMergeEndCol > rPaintCol && nMergeEndCol <= pDocument->MaxCol())
                 rPaintCol = nMergeEndCol;
-            if (nMergeEndRow > rPaintRow && nMergeEndRow <= MAXROW)
+            if (nMergeEndRow > rPaintRow && nMergeEndRow <= pDocument->MaxRow())
                 rPaintRow = nMergeEndRow;
             bFound = true;
 

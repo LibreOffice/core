@@ -49,7 +49,7 @@ const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurrences( const OUString& 
 
     ScAutoNameAddresses& rAddresses = aNames[rName];
 
-    ScCellIterator aIter( pDoc, ScRange( 0, 0, nCurrentTab, MAXCOL, MAXROW, nCurrentTab ) );
+    ScCellIterator aIter( pDoc, ScRange( 0, 0, nCurrentTab, pDoc->MaxCol(), pDoc->MaxRow(), nCurrentTab ) );
     for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
     {
         // don't check code length here, always use the stored result
