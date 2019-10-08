@@ -1208,7 +1208,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     const bool bInvert(RasterOp::Invert == meRasterOp);
     const bool bBitmapChangedColor(mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap ));
     bool bDone(false);
-    const basegfx::B2DHomMatrix aFullTransform(GetViewTransformation() * rTransformation);
+    basegfx::B2DHomMatrix aFullTransform(GetViewTransformation() * rTransformation);
     const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !bMetafile );
 
     if(bTryDirectPaint)
@@ -1270,6 +1270,19 @@ void OutputDevice::DrawTransformedBitmapEx(
                 aMaskBmp.Erase(0);
 
                 aTransformed = BitmapEx(aContent, aMaskBmp);
+            }
+
+            // Remove scaling from aFulltransform: we transform due to shearing or rotation, scaling
+            // will happen according to aDestSize.
+            basegfx::B2DVector aFullScale, aFullTranslate;
+            double fFullRotate, fFullShearX;
+            aFullTransform.decompose(aFullScale, aFullTranslate, fFullRotate, fFullShearX);
+            if (aFullScale.getX() != 0 && aFullScale.getY() != 0)
+            {
+                basegfx::B2DHomMatrix aTransform = basegfx::utils::createScaleB2DHomMatrix(
+                    rOriginalSizePixel.getWidth() / aFullScale.getX(),
+                    rOriginalSizePixel.getHeight() / aFullScale.getY());
+                aFullTransform *= aTransform;
             }
 
             aTransformed = aTransformed.getTransformed(
