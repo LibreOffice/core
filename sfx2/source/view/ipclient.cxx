@@ -955,17 +955,6 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                 {
                     m_xImp->m_xObject->setClientSite( m_xImp->m_xClient );
 
-                    // Disable embedded object editing (e.g. chart) on mobile
-                    if ( comphelper::LibreOfficeKit::isActive() && comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView())
-                            && m_xImp->m_xObject->getCurrentState() == embed::EmbedStates::RUNNING )
-                    {
-                        // Also check next state
-                        // Needs to be embed::EmbedStates::UI_ACTIVE or embed::EmbedStates::INPLACE_ACTIVE
-                        // Conversion table is in embeddedobj/source/commonembedding/miscobj.cxx
-                        if (nVerb != embed::EmbedVerbs::MS_OLEVERB_OPEN && nVerb != embed::EmbedVerbs::MS_OLEVERB_HIDE)
-                            return nError;
-                    }
-
                     m_xImp->m_xObject->doVerb( nVerb );
                 }
                 catch ( embed::UnreachableStateException& )
