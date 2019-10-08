@@ -13,6 +13,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/metaact.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -27,6 +29,7 @@ public:
     void testWindowBackgroundColor();
     void testGetReadableFontColorPrinter();
     void testGetReadableFontColorWindow();
+    void testDrawTransformedBitmapEx();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -35,6 +38,7 @@ public:
     CPPUNIT_TEST(testWindowBackgroundColor);
     CPPUNIT_TEST(testGetReadableFontColorPrinter);
     CPPUNIT_TEST(testGetReadableFontColorWindow);
+    CPPUNIT_TEST(testDrawTransformedBitmapEx);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -130,6 +134,34 @@ void VclOutdevTest::testUseAfterDispose()
     pVDev->GetInverseViewTransformation();
 
     pVDev->GetViewTransformation();
+}
+
+void VclOutdevTest::testDrawTransformedBitmapEx()
+{
+    // Create a virtual device, and connect a metafile to it.
+    // Also create a 16x16 bitmap.
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    Bitmap aBitmap(Size(16, 16), 24);
+    BitmapEx aBitmapEx(aBitmap);
+    basegfx::B2DHomMatrix aMatrix;
+    aMatrix.scale(8, 8);
+    aMatrix.rotate(M_PI / 2);
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    // Draw the rotated bitmap on the vdev.
+    pVDev->DrawTransformedBitmapEx(aMatrix, aBitmapEx);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aMtf.GetActionSize());
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::BMPEXSCALE, pAction->GetType());
+    auto pBitmapAction = static_cast<MetaBmpExScaleAction*>(pAction);
+    const BitmapEx& rBitmapEx = pBitmapAction->GetBitmapEx();
+    Size aTransformedSize = rBitmapEx.GetSizePixel();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 16x16
+    // - Actual  : 8x8
+    // I.e. the bitmap before scaling was already scaled down, just because it was rotated.
+    CPPUNIT_ASSERT_EQUAL(Size(16, 16), aTransformedSize);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
