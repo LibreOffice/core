@@ -192,7 +192,7 @@ void ChartController::executeDispatch_PositionAndSize(const ::css::uno::Sequence
             bool bChanged = false;
             if ( eObjectType == OBJECTTYPE_LEGEND )
             {
-                ChartModel& rModel = dynamic_cast<ChartModel&>(*getModel().get());
+                ChartModel& rModel = dynamic_cast<ChartModel&>(*getModel());
                 bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning(rModel, false , true);
             }
 

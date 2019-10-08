@@ -72,7 +72,7 @@ namespace dbaui
         virtual void StateChanged( StateChangedType nStateChange ) override;
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-        IController& getCommandController() const { return *m_xController.get(); }
+        IController& getCommandController() const { return *m_xController; }
 
         const css::uno::Reference< css::uno::XComponentContext >& getORB() const { return m_xContext;}
 

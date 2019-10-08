@@ -175,7 +175,7 @@ public:
     const ConnectionSettings& getConnectionSettings() const { return m_settings; }
     OUString transFormPreparedStatement(const OUString& _sSQL);
 
-    const MysqlCDriver& getDriver() const { return *m_xDriver.get(); }
+    const MysqlCDriver& getDriver() const { return *m_xDriver; }
 
 }; /* OConnection */
 // TODO: Not used.

@@ -998,7 +998,7 @@ void ChartController::impl_switchDiagramPositioningToExcludingPositioning()
         ActionDescriptionProvider::ActionType::PosSize,
         ObjectNameProvider::getName( OBJECTTYPE_DIAGRAM)),
         m_xUndoManager );
-    ChartModel& rModel = dynamic_cast<ChartModel&>(*m_aModel->getModel().get());
+    ChartModel& rModel = dynamic_cast<ChartModel&>(*m_aModel->getModel());
     if (DiagramHelper::switchDiagramPositioningToExcludingPositioning(rModel, true, true))
         aUndoGuard.commit();
 }

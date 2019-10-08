@@ -192,7 +192,7 @@ namespace chart
             Reference< XChartDocument > xDestination( i_model, UNO_QUERY_THROW );
 
             // propagate the correct flag for plotting of hidden values to the data provider and all used sequences
-            ChartModel& rModel = dynamic_cast<ChartModel&>(*i_model.get());
+            ChartModel& rModel = dynamic_cast<ChartModel&>(*i_model);
             ChartModelHelper::setIncludeHiddenCells(ChartModelHelper::isIncludeHiddenCells( i_modelToCopyFrom ), rModel);
 
             // diagram

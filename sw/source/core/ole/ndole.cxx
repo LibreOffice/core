@@ -1124,7 +1124,7 @@ void SwOLEObj::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     xmlTextWriterStartElement(pWriter, BAD_CAST("m_xOLERef"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"),
-                                BAD_CAST(typeid(*m_xOLERef.GetObject().get()).name()));
+                                BAD_CAST(typeid(*m_xOLERef.GetObject()).name()));
     xmlTextWriterEndElement(pWriter);
 
     xmlTextWriterEndElement(pWriter);

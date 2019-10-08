@@ -449,7 +449,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
             if ( nType == STYLE_TYPE_TABLE )
             {
                 StyleSheetEntryPtr pEntry = m_pImpl->m_pCurrentEntry;
-                tools::SvRef<TableStyleSheetEntry> pTableEntry( new TableStyleSheetEntry( *pEntry.get( ) ) );
+                tools::SvRef<TableStyleSheetEntry> pTableEntry( new TableStyleSheetEntry( *pEntry ) );
                 m_pImpl->m_pCurrentEntry = pTableEntry.get();
             }
             else
