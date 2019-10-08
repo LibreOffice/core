@@ -33,6 +33,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
 #include <vcl/pngwrite.hxx>
