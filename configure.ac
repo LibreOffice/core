@@ -7067,7 +7067,6 @@ if test "$COM_IS_CLANG" = "TRUE"; then
             AC_MSG_RESULT([$CLANGTOOLLIBS])
             if test -z "$CLANGTOOLLIBS"; then
                 if test "$compiler_plugins" = "yes"; then
-                    cat config.log
                     AC_MSG_ERROR([Cannot find Clang libraries to build compiler plugins.])
                 else
                     AC_MSG_WARN([Cannot find Clang libraries to build compiler plugins, plugins disabled])
