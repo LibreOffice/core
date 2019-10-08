@@ -16,6 +16,24 @@
       "revId": "d46c32140fdb05758c039dd27552b1788faac104",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_f0efd984",
+        "filename": "vcl/source/gdi/bmpacc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-10-08T06:39:49Z",
+      "side": 1,
+      "message": "because I wanted to catch problems in debug/assert mode, but still allow release builds to \"work\", to some degree.\nSince this assert hasn\u0027t resulted in any bug reports yet, I think we can remove the if now",
+      "parentUuid": "7f7f9b97_558f9fcb",
+      "revId": "d46c32140fdb05758c039dd27552b1788faac104",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
