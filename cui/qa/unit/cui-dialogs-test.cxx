@@ -12,6 +12,8 @@
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <sfx2/app.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svxdlg.hxx>
 #include <vcl/abstdlg.hxx>
 
 using namespace ::com::sun::star;
@@ -20,6 +22,12 @@ using namespace ::com::sun::star;
 class CuiDialogsTest : public ScreenshotTest
 {
 private:
+    std::unique_ptr<SdrModel> mxModel;
+    std::unique_ptr<SfxItemSet> mxAttr;
+    SvxAbstractDialogFactory* mpFact;
+
+    void initialize();
+
     /// helper method to populate KnownDialogs, called in setUp(). Needs to be
     /// written and has to add entries to KnownDialogs
     virtual void registerKnownDialogsByID(mapType& rKnownDialogs) override;
@@ -43,18 +51,52 @@ CuiDialogsTest::CuiDialogsTest()
 {
 }
 
-void CuiDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
+void CuiDialogsTest::initialize()
 {
-    // fill map of known dialogs
+    mpFact = SvxAbstractDialogFactory::Create();
+    mxModel.reset(new SdrModel(nullptr, nullptr, true));
+    mxModel->GetItemPool().FreezeIdRanges();
+    mxAttr.reset(new SfxItemSet(mxModel->GetItemPool()));
 }
 
-VclPtr<VclAbstractDialog> CuiDialogsTest::createDialogByID(sal_uInt32 /*nID*/)
+void CuiDialogsTest::registerKnownDialogsByID(mapType& rKnownDialogs)
 {
-    return nullptr;
+    // fill map of known dialogs
+    rKnownDialogs["cui/ui/formatcellsdialog.ui"] = 0;
+    rKnownDialogs["cui/ui/textdialog.ui"] = 1;
+}
+
+VclPtr<VclAbstractDialog> CuiDialogsTest::createDialogByID(sal_uInt32 nID)
+{
+    VclPtr<VclAbstractDialog> pReturnDialog;
+
+    switch ( nID )
+    {
+        case 0: // "cui/ui/formatcellsdialog.ui"
+        {
+            pReturnDialog = mpFact->CreateSvxFormatCellsDialog(
+                nullptr, mxAttr.get(), *mxModel, nullptr);
+            break;
+        }
+
+        case 1: // "cui/ui/textdialog.ui"
+        {
+            pReturnDialog = mpFact->CreateTextTabDialog(
+                nullptr, mxAttr.get(), nullptr);
+            break;
+        }
+
+        default:
+            break;
+    }
+
+    return pReturnDialog;
 }
 
 void CuiDialogsTest::openAnyDialog()
 {
+    initialize();
+
     /// process input file containing the UXMLDescriptions of the dialogs to dump
     processDialogBatchFile("cui/qa/unit/data/cui-dialogs-test.txt");
 }

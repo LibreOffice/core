@@ -118,6 +118,18 @@ short AbstractScDataFormDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+BitmapEx AbstractScDataFormDlg_Impl::createScreenshot() const
+{
+    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    m_xDlg->getDialog()->draw(*xDialogSurface);
+    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
+}
+
+OString AbstractScDataFormDlg_Impl::GetScreenshotId() const
+{
+    return m_xDlg->get_help_id();
+}
+
 short AbstractScDeleteContentsDlg_Impl::Execute()
 {
     return m_xDlg->run();
@@ -161,6 +173,18 @@ short AbstractScMetricInputDlg_Impl::Execute()
 short AbstractScMoveTableDlg_Impl::Execute()
 {
     return m_xDlg->run();
+}
+
+BitmapEx AbstractScMoveTableDlg_Impl::createScreenshot() const
+{
+    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    m_xDlg->getDialog()->draw(*xDialogSurface);
+    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
+}
+
+OString AbstractScMoveTableDlg_Impl::GetScreenshotId() const
+{
+    return m_xDlg->get_help_id();
 }
 
 short AbstractScNameCreateDlg_Impl::Execute()
@@ -277,9 +301,33 @@ bool AbstractScColRowLabelDlg_Impl::IsRow()
     return m_xDlg->IsRow();
 }
 
+BitmapEx AbstractScColRowLabelDlg_Impl::createScreenshot() const
+{
+    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    m_xDlg->getDialog()->draw(*xDialogSurface);
+    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
+}
+
+OString AbstractScColRowLabelDlg_Impl::GetScreenshotId() const
+{
+    return m_xDlg->get_help_id();
+}
+
 void AbstractScDataPilotDatabaseDlg_Impl::GetValues( ScImportSourceDesc& rDesc )
 {
     m_xDlg->GetValues(rDesc);
+}
+
+BitmapEx AbstractScDataPilotDatabaseDlg_Impl::createScreenshot() const
+{
+    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    m_xDlg->getDialog()->draw(*xDialogSurface);
+    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
+}
+
+OString AbstractScDataPilotDatabaseDlg_Impl::GetScreenshotId() const
+{
+    return m_xDlg->get_help_id();
 }
 
 bool AbstractScDataPilotSourceTypeDlg_Impl::IsDatabase() const
@@ -305,6 +353,18 @@ OUString AbstractScDataPilotSourceTypeDlg_Impl::GetSelectedNamedRange() const
 void AbstractScDataPilotSourceTypeDlg_Impl::AppendNamedRange(const OUString& rName)
 {
     m_xDlg->AppendNamedRange(rName);
+}
+
+BitmapEx AbstractScDataPilotSourceTypeDlg_Impl::createScreenshot() const
+{
+    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    m_xDlg->getDialog()->draw(*xDialogSurface);
+    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
+}
+
+OString AbstractScDataPilotSourceTypeDlg_Impl::GetScreenshotId() const
+{
+    return m_xDlg->get_help_id();
 }
 
 OUString AbstractScDataPilotServiceDlg_Impl::GetServiceName() const
@@ -337,6 +397,18 @@ DelCellCmd AbstractScDeleteCellDlg_Impl::GetDelCellCmd() const
     return m_xDlg->GetDelCellCmd();
 }
 
+BitmapEx AbstractScDeleteCellDlg_Impl::createScreenshot() const
+{
+    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    m_xDlg->getDialog()->draw(*xDialogSurface);
+    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
+}
+
+OString AbstractScDeleteCellDlg_Impl::GetScreenshotId() const
+{
+    return m_xDlg->get_help_id();
+}
+
 void AbstractScDeleteContentsDlg_Impl::DisableObjects()
 {
     m_xDlg->DisableObjects();
@@ -345,6 +417,18 @@ void AbstractScDeleteContentsDlg_Impl::DisableObjects()
 InsertDeleteFlags AbstractScDeleteContentsDlg_Impl::GetDelContentsCmdBits() const
 {
     return m_xDlg->GetDelContentsCmdBits();
+}
+
+BitmapEx AbstractScDeleteContentsDlg_Impl::createScreenshot() const
+{
+    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    m_xDlg->getDialog()->draw(*xDialogSurface);
+    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
+}
+
+OString AbstractScDeleteContentsDlg_Impl::GetScreenshotId() const
+{
+    return m_xDlg->get_help_id();
 }
 
 FillDir AbstractScFillSeriesDlg_Impl::GetFillDir() const
@@ -447,6 +531,18 @@ InsCellCmd  AbstractScInsertContentsDlg_Impl::GetMoveMode()
     return m_xDlg->GetMoveMode();
 }
 
+BitmapEx AbstractScInsertContentsDlg_Impl::createScreenshot() const
+{
+    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    m_xDlg->getDialog()->draw(*xDialogSurface);
+    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
+}
+
+OString AbstractScInsertContentsDlg_Impl::GetScreenshotId() const
+{
+    return m_xDlg->get_help_id();
+}
+
 bool AbstractScInsertTableDlg_Impl::GetTablesFromFile()
 {
     return m_xDlg->GetTablesFromFile();
@@ -480,6 +576,18 @@ sal_uInt16 AbstractScInsertTableDlg_Impl::GetTableCount()
 const OUString* AbstractScInsertTableDlg_Impl::GetNextTable( sal_uInt16* pN )
 {
     return m_xDlg->GetNextTable( pN );
+}
+
+BitmapEx AbstractScInsertTableDlg_Impl::createScreenshot() const
+{
+    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    m_xDlg->getDialog()->draw(*xDialogSurface);
+    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
+}
+
+OString AbstractScInsertTableDlg_Impl::GetScreenshotId() const
+{
+    return m_xDlg->get_help_id();
 }
 
 OUString AbstractScSelEntryDlg_Impl::GetSelectedEntry() const
@@ -584,6 +692,18 @@ CreateNameFlags AbstractScNameCreateDlg_Impl::GetFlags() const
     return m_xDlg->GetFlags();
 }
 
+BitmapEx AbstractScNameCreateDlg_Impl::createScreenshot() const
+{
+    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    m_xDlg->getDialog()->draw(*xDialogSurface);
+    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
+}
+
+OString AbstractScNameCreateDlg_Impl::GetScreenshotId() const
+{
+    return m_xDlg->get_help_id();
+}
+
 std::vector<OUString> AbstractScNamePasteDlg_Impl::GetSelectedNames() const
 {
     return m_xDlg->GetSelectedNames();
@@ -678,9 +798,33 @@ OUString AbstractScStringInputDlg_Impl::GetInputString() const
     return m_xDlg->GetInputString();
 }
 
+BitmapEx AbstractScStringInputDlg_Impl::createScreenshot() const
+{
+    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    m_xDlg->getDialog()->draw(*xDialogSurface);
+    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
+}
+
+OString AbstractScStringInputDlg_Impl::GetScreenshotId() const
+{
+    return m_xDlg->get_help_id();
+}
+
 void AbstractScTabBgColorDlg_Impl::GetSelectedColor( Color& rColor ) const
 {
     m_xDlg->GetSelectedColor( rColor );
+}
+
+BitmapEx AbstractScTabBgColorDlg_Impl::createScreenshot() const
+{
+    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    m_xDlg->getDialog()->draw(*xDialogSurface);
+    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
+}
+
+OString AbstractScTabBgColorDlg_Impl::GetScreenshotId() const
+{
+    return m_xDlg->get_help_id();
 }
 
 void AbstractScImportOptionsDlg_Impl::GetImportOptions( ScImportOptions& rOptions ) const
@@ -701,6 +845,18 @@ LanguageType AbstractScTextImportOptionsDlg_Impl::GetLanguageType() const
 bool AbstractScTextImportOptionsDlg_Impl::IsDateConversionSet() const
 {
     return m_xDlg->isDateConversionSet();
+}
+
+BitmapEx AbstractScTextImportOptionsDlg_Impl::createScreenshot() const
+{
+    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    m_xDlg->getDialog()->draw(*xDialogSurface);
+    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
+}
+
+OString AbstractScTextImportOptionsDlg_Impl::GetScreenshotId() const
+{
+    return m_xDlg->get_help_id();
 }
 
 short ScAbstractTabController_Impl::Execute()
@@ -737,6 +893,26 @@ void ScAbstractTabController_Impl::SetInputSet( const SfxItemSet* pInSet )
 void ScAbstractTabController_Impl::SetText( const OUString& rStr )
 {
     m_xDlg->set_title(rStr);
+}
+
+std::vector<OString> ScAbstractTabController_Impl::getAllPageUIXMLDescriptions() const
+{
+    return m_xDlg->getAllPageUIXMLDescriptions();
+}
+
+bool ScAbstractTabController_Impl::selectPageByUIXMLDescription(const OString& rUIXMLDescription)
+{
+    return m_xDlg->selectPageByUIXMLDescription(rUIXMLDescription);
+}
+
+BitmapEx ScAbstractTabController_Impl::createScreenshot() const
+{
+    return m_xDlg->createScreenshot();
+}
+
+OString ScAbstractTabController_Impl::GetScreenshotId() const
+{
+    return m_xDlg->GetScreenshotId();
 }
 
 // =========================Factories  for createdialog ===================

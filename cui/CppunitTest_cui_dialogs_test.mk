@@ -42,6 +42,7 @@ $(eval $(call gb_CppunitTest_use_libraries,cui_dialogs_test, \
     svl \
     svt \
     cui \
+    svxcore \
     test \
     tl \
     tk \

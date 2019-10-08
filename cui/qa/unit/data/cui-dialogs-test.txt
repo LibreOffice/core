@@ -23,7 +23,8 @@
 # in registerKnownDialogsByID/createDialogByID
 #
 
-# No known dialogs in cui for now
+cui/ui/formatcellsdialog.ui
+cui/ui/textdialog.ui
 
 #
 # Dialogs without a hard-coded representation. These will
@@ -97,4 +98,3 @@ cui/ui/effectspage.ui
 cui/ui/embossdialog.ui
 cui/ui/eventassigndialog.ui
 cui/ui/eventassignpage.ui
-cui/ui/eventsconfigpage.ui
