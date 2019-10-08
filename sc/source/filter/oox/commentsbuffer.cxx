@@ -49,10 +49,13 @@ static sal_Int32 lcl_ToHorizAlign( sal_Int32 nAlign )
     switch( nAlign )
     {
         case XML_left:
+        case XML_Left:
             return SDRTEXTHORZADJUST_LEFT;
         case XML_right:
+        case XML_Right:
             return SDRTEXTHORZADJUST_RIGHT;
         case XML_center:
+        case XML_Center:
             return SDRTEXTHORZADJUST_CENTER;
         default:
             return SDRTEXTHORZADJUST_BLOCK;
@@ -74,6 +77,24 @@ static sal_Int32 lcl_ToVertAlign( sal_Int32 nAlign )
             return SDRTEXTVERTADJUST_BOTTOM;
         default:
             return SDRTEXTVERTADJUST_BLOCK;
+    }
+}
+
+static sal_Int16 lcl_ToParaAlign(sal_Int32 nAlign)
+{
+    switch ( nAlign )
+    {
+        case XML_left:
+        case XML_Left:
+            return sal_Int16(css::style::ParagraphAdjust_LEFT);
+        case XML_right:
+        case XML_Right:
+            return sal_Int16(css::style::ParagraphAdjust_RIGHT);
+        case XML_center:
+        case XML_Center:
+            return sal_Int16(css::style::ParagraphAdjust_CENTER);
+        default:
+            return sal_Int16(css::style::ParagraphAdjust_BLOCK);
     }
 }
 
@@ -171,6 +192,7 @@ void Comment::finalizeImport()
             // Setting comment text alignment
             const ::oox::vml::ClientData* xClientData = pNoteShape->getClientData();
             aCommentPr.setProperty(PROP_TextVerticalAdjust, lcl_ToVertAlign(xClientData->mnTextVAlign));
+            aCommentPr.setProperty(PROP_ParaAdjust, lcl_ToParaAlign(xClientData->mnTextHAlign));
         }
         xAnno->setIsVisible( bVisible );
 
