@@ -11,8 +11,8 @@
 
 # covering f to n
 
+cui/ui/eventsconfigpage.ui
 cui/ui/fmsearchdialog.ui
-cui/ui/formatcellsdialog.ui
 cui/ui/galleryapplyprogress.ui
 cui/ui/galleryfilespage.ui
 cui/ui/gallerygeneralpage.ui

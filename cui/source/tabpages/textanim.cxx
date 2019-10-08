@@ -59,15 +59,18 @@ void SvxTextTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
     if (rId == "RID_SVXPAGE_TEXTATTR")
     {
-        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-        bool bHasMarked = rMarkList.GetMarkCount() > 0;
         SdrObjKind eKind = OBJ_NONE;
-        if (bHasMarked)
+        if (pView)
         {
-            if (rMarkList.GetMarkCount() == 1)
+            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+            bool bHasMarked = rMarkList.GetMarkCount() > 0;
+            if (bHasMarked)
             {
-                const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                eKind = static_cast<SdrObjKind>(pObj->GetObjIdentifier());
+                if (rMarkList.GetMarkCount() == 1)
+                {
+                    const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                    eKind = static_cast<SdrObjKind>(pObj->GetObjIdentifier());
+                }
             }
         }
         static_cast<SvxTextAttrPage&>(rPage).SetObjKind(eKind);

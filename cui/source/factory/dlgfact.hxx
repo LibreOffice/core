@@ -152,8 +152,13 @@ public:
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual const sal_uInt16*   GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
-        //From class Window.
     virtual void        SetText( const OUString& rStr ) override;
+
+    // screenshotting
+    virtual std::vector<OString> getAllPageUIXMLDescriptions() const override;
+    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override;
+    virtual BitmapEx createScreenshot() const override;
+    virtual OString GetScreenshotId() const override;
 };
 
 class SvxDistributeDialog;
