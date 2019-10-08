@@ -24,6 +24,7 @@
 #include <chartview/DrawModelWrapper.hxx>
 
 #include <com/sun/star/frame/CommandGroup.hpp>
+#include <o3tl/unsafe_downcast.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/adjustitem.hxx>
@@ -161,12 +162,7 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
                 pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
                 pObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( false ) );
 
-                SdrObjCustomShape* pShape(dynamic_cast< SdrObjCustomShape* >( pObj ));
-                assert(pShape);
-                if(pShape)
-                {
-                    pShape->MergeDefaultAttributes( &m_aCustomShapeType );
-                }
+                o3tl::unsafe_downcast< SdrObjCustomShape* >( pObj )->MergeDefaultAttributes( &m_aCustomShapeType );
             }
         }
     }
