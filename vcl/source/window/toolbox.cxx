@@ -2506,7 +2506,7 @@ static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tool
     aPoly.SetPoint(Point(x, y), 3);
 
     if (bRotate) // TESTME: harder ...
-        aPoly.Rotate(Point(x,y+height/2),-900);
+        aPoly.Rotate(Point(x,y+height/2),2700);
 
     auto aaflags = rRenderContext.GetAntialiasing();
     rRenderContext.SetAntialiasing(AntialiasingFlags::EnableB2dDraw);
