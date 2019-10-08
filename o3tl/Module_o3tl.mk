@@ -24,6 +24,7 @@ $(eval $(call gb_Module_add_targets,o3tl,\
 $(eval $(call gb_Module_add_check_targets,o3tl,\
 	CppunitTest_o3tl_tests \
 	$(if $(COM_IS_CLANG),CompilerTest_o3tl_temporary) \
+	$(if $(COM_IS_CLANG),CompilerTest_o3tl_unsafe_downcast) \
 ))
 
 # vim: set noet sw=4:
