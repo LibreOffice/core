@@ -7041,7 +7041,9 @@ if test "$COM_IS_CLANG" = "TRUE"; then
                 add_warning "Cannot find Clang headers to build compiler plugins, plugins disabled."
             fi
             ])
-        if test -n "$COMPILER_PLUGINS"; then
+        dnl TODO: Windows doesn't use LO_CLANG_SHARED_PLUGINS for now, see corresponding TODO
+        dnl comment in compilerplugins/Makefile-clang.mk:
+        if test -n "$COMPILER_PLUGINS" && test "$_os" != "WINNT"; then
             LDFLAGS=""
             AC_MSG_CHECKING([for clang libraries to use])
             if test -z "$CLANGTOOLLIBS"; then
