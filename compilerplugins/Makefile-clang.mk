@@ -143,6 +143,8 @@ compilerplugins-clean:
         $(CLANGOUTDIR)/sharedvisitor/sharedvisitor.{cxx,d,o} \
         $(CLANGOUTDIR)/sharedvisitor/{analyzer,generator}{$(CLANG_EXE_EXT),.d,.o} \
         $(CLANGOUTDIR)/sources-new.txt \
+        $(CLANGOUTDIR)/sources-shared-new.txt \
+        $(CLANGOUTDIR)/sources-shared.txt \
         $(CLANGOUTDIR)/sources.txt
 
 $(CLANGOUTDIR):
