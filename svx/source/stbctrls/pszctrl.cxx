@@ -462,22 +462,26 @@ void SvxPosSizeStatusBarControl::ImplUpdateItemText()
     //  set only strings as text at the statusBar, so that the Help-Tips
     //  can work with the text, when it is too long for the statusBar
     OUString aText;
+    int nCharsWidth = -1;
     if ( pImpl->bPos || pImpl->bSize )
     {
         aText = GetMetricStr_Impl( pImpl->aPos.X());
         aText += " / ";
         aText += GetMetricStr_Impl( pImpl->aPos.Y());
+        // widest X/Y string looks like "-999,99"
+        nCharsWidth = 1 + 6 + 3 + 6; // icon + x + slash + y
         if ( pImpl->bSize )
         {
             aText += " ";
             aText += GetMetricStr_Impl( pImpl->aSize.Width() );
             aText += " x ";
             aText += GetMetricStr_Impl( pImpl->aSize.Height() );
+            nCharsWidth += 1 + 1 + 4 + 3 + 4; // icon + space + w + x + h
         }
     }
     else if ( pImpl->bTable )
        aText = pImpl->aStr;
 
-    GetStatusBar().SetItemText( GetId(), aText );
+    GetStatusBar().SetItemText( GetId(), aText, nCharsWidth );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
