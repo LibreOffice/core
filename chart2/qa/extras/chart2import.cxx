@@ -129,6 +129,7 @@ public:
     void testDataPointInheritedColorDOCX();
     void testExternalStrRefsXLSX();
     void testSourceNumberFormatComplexCategoriesXLS();
+    void testSimpleCategoryAxis();
     void testXaxisValues();
     void testTdf123504();
     void testTdf122765();
@@ -213,6 +214,7 @@ public:
     CPPUNIT_TEST(testDataPointInheritedColorDOCX);
     CPPUNIT_TEST(testExternalStrRefsXLSX);
     CPPUNIT_TEST(testSourceNumberFormatComplexCategoriesXLS);
+    CPPUNIT_TEST(testSimpleCategoryAxis);
     CPPUNIT_TEST(testXaxisValues);
     CPPUNIT_TEST(testTdf123504);
     CPPUNIT_TEST(testTdf122765);
@@ -1892,6 +1894,33 @@ void Chart2ImportTest::testSourceNumberFormatComplexCategoriesXLS()
     chart2::ScaleData aScaleData = xAxis->getScaleData();
     sal_Int32 nNumberFormat =  aScaleData.Categories->getValues()->getNumberFormatKeyByIndex(-1);
     CPPUNIT_ASSERT(nNumberFormat != 0);
+}
+
+void Chart2ImportTest::testSimpleCategoryAxis()
+{
+    load("/chart2/qa/extras/data/docx/", "testSimpleCategoryAxis.docx");
+    uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    // Test the internal data.
+    CPPUNIT_ASSERT(xChartDoc->hasInternalDataProvider());
+
+    Reference<chart2::XInternalDataProvider> xInternalProvider(xChartDoc->getDataProvider(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xInternalProvider.is());
+
+    Reference<chart::XComplexDescriptionAccess> xDescAccess(xInternalProvider, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDescAccess.is());
+
+    // Get the category labels.
+    Sequence<Sequence<OUString> > aCategories = xDescAccess->getComplexRowDescriptions();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aCategories[0].getLength());
+    CPPUNIT_ASSERT(aCategories[0][0].endsWith("ria 1"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aCategories[1].getLength());
+    CPPUNIT_ASSERT(aCategories[1][0].endsWith("ria 2"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aCategories[2].getLength());
+    CPPUNIT_ASSERT(aCategories[2][0].endsWith("ria 3"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aCategories[3].getLength());
+    CPPUNIT_ASSERT(aCategories[3][0].endsWith("ria 4"));
 }
 
 void Chart2ImportTest::testXaxisValues()
