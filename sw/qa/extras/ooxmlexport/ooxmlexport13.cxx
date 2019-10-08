@@ -834,6 +834,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123628, "tdf123628.odt")
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='InternetLink']/w:name", "val", "Hyperlink");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf127741, "tdf127741.docx")
+{
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    uno::Reference<beans::XPropertySet> xRun(getRun(xPara,1), uno::UNO_QUERY);
+    OUString unVisitedStyleName = getProperty<OUString>(xRun, "UnvisitedCharStyleName");
+    CPPUNIT_ASSERT(unVisitedStyleName.equalsIgnoreAsciiCase("Internet Link"));
+    OUString visitedStyleName = getProperty<OUString>(xRun, "VisitedCharStyleName");
+    CPPUNIT_ASSERT(visitedStyleName.equalsIgnoreAsciiCase("Visited Internet Link"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

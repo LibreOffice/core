@@ -1784,15 +1784,6 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                 }
                 else
                 {
-                    if (IsOpenField() && GetTopFieldContext()->GetFieldId() == FIELD_HYPERLINK)
-                    {
-                        // It is content of hyperlink field. We need to create and remember
-                        // character style for later applying to hyperlink
-                        PropertyValueVector_t aProps = comphelper::sequenceToContainer< PropertyValueVector_t >(GetTopContext()->GetPropertyValues());
-                        OUString sHyperlinkStyleName = GetStyleSheetTable()->getOrCreateCharStyle(aProps, /*bAlwaysCreate=*/false);
-                        GetTopFieldContext()->SetHyperlinkStyle(sHyperlinkStyleName);
-                    }
-
 #if !defined(MACOSX) // TODO: check layout differences and support all platforms, if needed
                     sal_Int32 nPos;
                     OUString sDoubleSpace("  ");
@@ -5385,10 +5376,19 @@ void DomainMapper_Impl::PopFieldContext()
                                 }
                                 else
                                 {
-                                    if (!pContext->GetHyperlinkStyle().isEmpty())
+                                    uno::Any aAny = xCrsrProperties->getPropertyValue("CharStyleName");
+                                    OUString charStyle;
+                                    if (css::uno::fromAny(aAny, &charStyle))
                                     {
-                                        xCrsrProperties->setPropertyValue("VisitedCharStyleName", uno::makeAny(pContext->GetHyperlinkStyle()));
-                                        xCrsrProperties->setPropertyValue("UnvisitedCharStyleName", uno::makeAny(pContext->GetHyperlinkStyle()));
+                                        if(!charStyle.isEmpty() && charStyle.equalsIgnoreAsciiCase("Internet Link"))
+                                        {
+                                            xCrsrProperties->setPropertyValue("CharStyleName", uno::makeAny(OUString("Default Style")));
+                                        }
+                                        else
+                                        {
+                                            xCrsrProperties->setPropertyValue("VisitedCharStyleName", aAny);
+                                            xCrsrProperties->setPropertyValue("UnvisitedCharStyleName", aAny);
+                                        }
                                     }
                                 }
                             }
