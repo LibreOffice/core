@@ -434,6 +434,7 @@ bool WinSalGraphics::DrawCachedGlyphs(const GenericSalLayout& rLayout)
     COLORREF color = GetTextColor(hDC);
     Color salColor(GetRValue(color), GetGValue(color), GetBValue(color));
 
+    // TODO SKIA
     WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
     if (!pImpl)
         return false;
@@ -475,6 +476,7 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 
     const WinFontInstance* pWinFont = static_cast<const WinFontInstance*>(&rLayout.GetFont());
     const HFONT hLayoutFont = pWinFont->GetHFONT();
+    // TODO SKIA
     bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter;
 
     // Our DirectWrite renderer is incomplete, skip it for vertical text where glyphs are not
@@ -523,6 +525,7 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
         tools::Rectangle aRect;
         rLayout.GetBoundRect(aRect);
 
+        // TODO SKIA
         WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
 
         if (pImpl)
