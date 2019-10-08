@@ -1779,8 +1779,12 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                         // It is content of hyperlink field. We need to create and remember
                         // character style for later applying to hyperlink
                         PropertyValueVector_t aProps = comphelper::sequenceToContainer< PropertyValueVector_t >(GetTopContext()->GetPropertyValues());
-                        OUString sHyperlinkStyleName = GetStyleSheetTable()->getOrCreateCharStyle(aProps, /*bAlwaysCreate=*/false);
-                        GetTopFieldContext()->SetHyperlinkStyle(sHyperlinkStyleName);
+                        OUString propValue;
+                        if(!(aProps.size() == 1 && css::uno::fromAny(aProps[0].Value, &propValue) && propValue.equalsIgnoreAsciiCase("Internet Link")))
+                        {
+                            OUString sHyperlinkStyleName = GetStyleSheetTable()->getOrCreateCharStyle(aProps, /*bAlwaysCreate=*/false);
+                            GetTopFieldContext()->SetHyperlinkStyle(sHyperlinkStyleName);
+                        }
                     }
 
 #if !defined(MACOSX) // TODO: check layout differences and support all platforms, if needed
