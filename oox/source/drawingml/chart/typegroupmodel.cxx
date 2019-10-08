@@ -56,7 +56,8 @@ TypeGroupModel::TypeGroupModel( sal_Int32 nTypeId, bool bMSO2007Doc ) :
     mbShowNegBubbles( !bMSO2007Doc ),
     mbSmooth( !bMSO2007Doc ),
     mbVaryColors( !bMSO2007Doc ),
-    mbWireframe( !bMSO2007Doc )
+    mbWireframe( !bMSO2007Doc ),
+    mbCatAxisVisible( !bMSO2007Doc )
 {
 }
 
