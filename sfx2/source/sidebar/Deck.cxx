@@ -196,7 +196,10 @@ void Deck::Resize()
 {
     Window::Resize();
 
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+    const vcl::ILibreOfficeKitNotifier *pNotifier;
+    if (comphelper::LibreOfficeKit::isActive() &&
+        comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()) &&
+        (pNotifier = GetLOKNotifier()))
     {
         std::vector<vcl::LOKPayloadItem> aItems;
         aItems.emplace_back("type", "deck");
