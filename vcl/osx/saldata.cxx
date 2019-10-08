@@ -256,7 +256,7 @@ NSCursor* SalData::getCursor( PointerStyle i_eStyle )
             NSAffineTransform *xform = [[NSAffineTransform alloc] init];
             [xform scaleBy:scale];
             id hints = @{ NSImageHintCTM: xform };
-            CGImageRef rasterCGImage = [theImage CGImageForProposedRect:NULL context:nil hints:hints];
+            CGImageRef rasterCGImage = [theImage CGImageForProposedRect:nullptr context:nil hints:hints];
             NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:rasterCGImage];
             [rep setSize:cursorSize];
             [multiResImage addRepresentation:rep];
