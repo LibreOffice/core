@@ -19,6 +19,7 @@
 
 
 #include <sal/log.hxx>
+#include <comphelper/string.hxx>
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
@@ -1126,7 +1127,7 @@ long StatusBar::GetItemOffset( sal_uInt16 nItemId ) const
     return 0;
 }
 
-void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
+void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText, int nCharsWidth )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
@@ -1141,12 +1142,22 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
             // adjust item width - see also DataChanged()
             long nFudge = GetTextHeight()/4;
 
-            std::unique_ptr<SalLayout> pSalLayout = ImplLayout(pItem->maText,0,-1);
-            const SalLayoutGlyphs* pGlyphs = pSalLayout ? pSalLayout->GetGlyphs() : nullptr;
-            long nWidth = GetTextWidth( pItem->maText,0,-1,nullptr,pGlyphs ) + nFudge;
-
-            // Store the calculated layout.
-            pItem->mxLayoutCache = std::move(pSalLayout);
+            long nWidth;
+            if (nCharsWidth != -1)
+            {
+                std::unique_ptr<SalLayout> pSalLayout = ImplLayout("0",0,-1);
+                const SalLayoutGlyphs* pGlyphs = pSalLayout ? pSalLayout->GetGlyphs() : nullptr;
+                nWidth = GetTextWidth("0",0,-1,nullptr,pGlyphs );
+                nWidth = nWidth * nCharsWidth + nFudge;
+            }
+            else
+            {
+                std::unique_ptr<SalLayout> pSalLayout = ImplLayout(pItem->maText,0,-1);
+                const SalLayoutGlyphs* pGlyphs = pSalLayout ? pSalLayout->GetGlyphs() : nullptr;
+                nWidth = GetTextWidth( pItem->maText,0,-1,nullptr,pGlyphs ) + nFudge;
+                // Store the calculated layout.
+                pItem->mxLayoutCache = std::move(pSalLayout);
+            }
 
             if( (nWidth > pItem->mnWidth + STATUSBAR_OFFSET) ||
                 ((nWidth < pItem->mnWidth) && (mnDX - STATUSBAR_OFFSET) < mnItemsWidth  ))
