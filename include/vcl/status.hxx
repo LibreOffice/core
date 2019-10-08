@@ -149,7 +149,8 @@ public:
 
     long                GetItemOffset( sal_uInt16 nItemId ) const;
 
-    void                SetItemText( sal_uInt16 nItemId, const OUString& rText );
+    /// @param nCharsWidth, if not -1, overrides the normal width calculation
+    void                SetItemText( sal_uInt16 nItemId, const OUString& rText, int nCharsWidth = -1 );
     const OUString&     GetItemText( sal_uInt16 nItemId ) const;
 
     void                SetItemData( sal_uInt16 nItemId, void* pNewData );
