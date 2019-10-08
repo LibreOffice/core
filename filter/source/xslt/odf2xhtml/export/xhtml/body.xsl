@@ -1084,7 +1084,7 @@
                     See fdo#66645 -->
                     <xsl:apply-templates select="@draw:name"/>
                         <xsl:text> </xsl:text>
-                    <xsl:apply-templates select="draw:object[1]"/>
+                    <xsl:apply-templates select="draw:image[last()]"/>
                     <!-- TODO: do not always add a space after the formula,
                     for example when it is followed by a comma, period,
                     dash etc This will probably require using regexp

@@ -28,7 +28,9 @@
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/stream.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/cvtgrf.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -89,6 +91,7 @@
 #include <unotools/docinfohelper.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/streamwrap.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XMLOasisBasicExporter.hpp>
@@ -1900,7 +1903,8 @@ OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )
     return sRet;
 }
 
-bool SvXMLExport::AddEmbeddedObjectAsBase64( const OUString& rEmbeddedObjectURL )
+bool SvXMLExport::AddEmbeddedObjectAsBase64(const OUString& rEmbeddedObjectURL,
+        bool const bConvert)
 {
     bool bRet = false;
     bool bSupportedURL = rEmbeddedObjectURL.startsWith(XML_EMBEDDEDOBJECT_URL_BASE) ||
@@ -1915,6 +1919,35 @@ bool SvXMLExport::AddEmbeddedObjectAsBase64( const OUString& rEmbeddedObjectURL 
             aAny >>= xIn;
             if( xIn.is() )
             {
+                SvMemoryStream buf;
+                if (bConvert)
+                {
+                    sal_Int32 n;
+                    uno::Sequence<sal_Int8> aSequence(4096);
+                    do
+                    {
+                        n = xIn->readBytes(aSequence, 4096);
+                        buf.WriteBytes(aSequence.getConstArray(), n);
+                    }
+                    while (4096 <= n);
+                    buf.Seek(0);
+                    Graphic grf;
+                    ErrCode nErr = GraphicConverter::Import(buf, grf);
+                    if (nErr)
+                    {
+                        SAL_WARN("xmloff", "GraphicConverter Import error " << nErr);
+                        return false;
+                    }
+                    buf.SetStreamSize(0); // clear
+                    nErr = GraphicConverter::Export(buf, grf, ConvertDataFormat::PNG);
+                    if (nErr)
+                    {
+                        SAL_WARN("xmloff", "GraphicConverter Export error " << nErr);
+                        return false;
+                    }
+                    buf.Seek(0);
+                    xIn = new ::utl::OInputStreamWrapper(buf);
+                }
                 XMLBase64Export aBase64Exp( *this );
                 bRet = aBase64Exp.exportOfficeBinaryDataElement( xIn );
             }

@@ -569,11 +569,21 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             lcl_addURL( rXMLExport, sURL, false );
         }
 
-        SvXMLElementExport aElementExport( GetExport(), XML_NAMESPACE_DRAW,
+        {
+            SvXMLElementExport aElementExport( GetExport(), XML_NAMESPACE_DRAW,
                                   XML_IMAGE, false, true );
 
-        if( rXMLExport.getExportFlags() & SvXMLExportFlags::EMBEDDED )
-            GetExport().AddEmbeddedObjectAsBase64( sURL );
+            if (rXMLExport.getExportFlags() & SvXMLExportFlags::EMBEDDED)
+                GetExport().AddEmbeddedObjectAsBase64( sURL );
+        }
+        // add some non-SVM fallback image
+        if (rXMLExport.getExportFlags() & SvXMLExportFlags::EMBEDDED)
+        {
+            SvXMLElementExport aElementExport( GetExport(), XML_NAMESPACE_DRAW,
+                                  XML_IMAGE, false, true );
+
+            GetExport().AddEmbeddedObjectAsBase64(sURL, true);
+        }
     }
 
     // Lastly the stuff common to each of Applet/Plugin/Floating Frame

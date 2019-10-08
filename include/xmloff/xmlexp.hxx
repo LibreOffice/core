@@ -464,7 +464,7 @@ public:
     OUString AddEmbeddedObject(
                             const OUString& rEmbeddedObjectURL );
     bool AddEmbeddedObjectAsBase64(
-                            const OUString& rEmbeddedObjectURL );
+            const OUString& rEmbeddedObjectURL, bool bConvert = false);
 
     OUString EncodeStyleName( const OUString& rName,
                                      bool *pEncoded=nullptr ) const;
