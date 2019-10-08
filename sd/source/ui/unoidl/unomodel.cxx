@@ -2943,7 +2943,7 @@ void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPag
 
                 SdPage* pNotesPage = static_cast< SdPage* >( rDoc.GetPage( nPage+1 ) );
 
-                bool bUndo = rDoc.IsUndoEnabled();
+                bool bUndo = rDoc.IsUndoEnabled() & !rDoc.isLocked();
                 if( bUndo )
                 {
                     // Add undo actions and delete the pages.  The order of adding
