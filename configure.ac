@@ -3518,7 +3518,6 @@ if test "$_os" = "WINNT"; then
 
         # This gives us a posix path with 8.3 filename restrictions
         MSVC_CXX=`win_short_path_for_make "$MSVC_CXX"`
-        CXX_BASE=`first_arg_basename "$MSVC_CXX"`
     fi
 
     if test -z "$CC"; then
@@ -3528,6 +3527,10 @@ if test "$_os" = "WINNT"; then
     if test "$BITNESS_OVERRIDE" = ""; then
         dnl since MSVC 2012, default for x86 is -arch:SSE2:
         MSVC_CXX="$MSVC_CXX -arch:SSE"
+    fi
+    if test -z "$CXX"; then
+        CXX=$MSVC_CXX
+        CXX_BASE=`first_arg_basename "$CXX"`
     fi
 
     if test -n "$CC"; then
@@ -5875,11 +5878,6 @@ if test "$_os" != "WINNT"; then
     CXXFLAGS=$save_CXXFLAGS
     if test -z "$CXX_BASE"; then
         CXX_BASE=`first_arg_basename "$CXX"`
-    fi
-else
-    if test -n "$CC" -a -z "$CXX"; then
-        CXX="$CC"
-        CXX_BASE="$CC_BASE"
     fi
 fi
 
