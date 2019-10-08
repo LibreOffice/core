@@ -148,6 +148,12 @@ public:
     //calls Ok without closing dialog
     bool Apply();
     void Applied() { m_xExampleSet->Put(*GetInputSetImpl()); }
+
+    //screenshotting
+    std::vector<OString> getAllPageUIXMLDescriptions() const;
+    bool selectPageByUIXMLDescription(const OString& rUIXMLDescription);
+    BitmapEx createScreenshot() const;
+    OString GetScreenshotId() const;
 };
 
 enum class DeactivateRC {

@@ -365,6 +365,26 @@ void CuiAbstractTabController_Impl::SetText( const OUString& rStr )
     m_xDlg->set_title(rStr);
 }
 
+std::vector<OString> CuiAbstractTabController_Impl::getAllPageUIXMLDescriptions() const
+{
+    return m_xDlg->getAllPageUIXMLDescriptions();
+}
+
+bool CuiAbstractTabController_Impl::selectPageByUIXMLDescription(const OString& rUIXMLDescription)
+{
+    return m_xDlg->selectPageByUIXMLDescription(rUIXMLDescription);
+}
+
+BitmapEx CuiAbstractTabController_Impl::createScreenshot() const
+{
+    return m_xDlg->createScreenshot();
+}
+
+OString CuiAbstractTabController_Impl::GetScreenshotId() const
+{
+    return m_xDlg->GetScreenshotId();
+}
+
 const SfxItemSet* CuiAbstractSingleTabController_Impl::GetOutputItemSet() const
 {
     return m_xDlg->GetOutputItemSet();
