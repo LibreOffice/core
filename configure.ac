@@ -7011,7 +7011,11 @@ if test "$COM_IS_CLANG" = "TRUE"; then
         if test -z "$COMPILER_PLUGINS_CXX"; then
             COMPILER_PLUGINS_CXX=$CXX
         fi
-        AC_PATH_PROG(LLVM_CONFIG, llvm-config,[],$CLANGDIR/bin $PATH)
+        clangbindir=$CLANGDIR/bin
+        if test "$build_os" = "cygwin"; then
+            clangbindir=$(cygpath -u "$clangbindir")
+        fi
+        AC_PATH_PROG(LLVM_CONFIG, llvm-config,[],"$clangbindir" $PATH)
         if test -n "$LLVM_CONFIG"; then
             COMPILER_PLUGINS_CXXFLAGS=$($LLVM_CONFIG --cxxflags)
             COMPILER_PLUGINS_LINKFLAGS=$($LLVM_CONFIG --ldflags --libs --system-libs | tr '\n' ' ')
