@@ -1096,7 +1096,7 @@ bool OSelectionBrowseBox::SaveModified()
                                                             xColumn,
                                                             pEntry->GetAlias(),
                                                             getDesignView()->getLocale(),
-                                                            static_cast<sal_Char>(getDesignView()->getDecimalSeparator().toChar()),
+                                                            getDesignView()->getDecimalSeparator(),
                                                             &(static_cast<OQueryController&>(getDesignView()->getController()).getParser().getContext()));
                     }
                     else
@@ -1133,7 +1133,7 @@ bool OSelectionBrowseBox::SaveModified()
                                                                     xColumn,
                                                                     pEntry->GetAlias(),
                                                                     getDesignView()->getLocale(),
-                                                                    static_cast<sal_Char>(getDesignView()->getDecimalSeparator().toChar()),
+                                                                    getDesignView()->getDecimalSeparator(),
                                                                     &(static_cast<OQueryController&>(getDesignView()->getController()).getParser().getContext()));
                             }
                             else

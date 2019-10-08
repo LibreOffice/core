@@ -82,7 +82,7 @@ namespace connectivity
         OUString                                              sPredicateTableAlias;
         css::uno::Reference< css::container::XNameAccess >    xQueries;  // see bParseToSDBCLevel
         const IParseContext&                                  m_rContext;
-        sal_Char            cDecSep;
+        OUString            sDecSep;
         bool                bQuote                      : 1;    /// should we quote identifiers?
         bool                bInternational              : 1;    /// should we internationalize keywords and placeholders?
         bool                bPredicate                  : 1;    /// are we going to parse a mere predicate?
@@ -97,7 +97,7 @@ namespace connectivity
             const IParseContext* _pContext,
             bool _bIntl,
             bool _bQuote,
-            sal_Char _cDecSep,
+            OUString _sDecSep,
             bool _bPredicate,
             bool _bParseToSDBC
         );
@@ -321,7 +321,7 @@ namespace connectivity
                                      const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
                                      const css::uno::Reference< css::util::XNumberFormatter > & xFormatter,
                                      const css::lang::Locale& rIntl,
-                                     sal_Char _cDec,
+                                     OUString _sDec,
                                      const IParseContext* pContext = nullptr ) const;
 
         void parseNodeToPredicateStr(OUString& rString,
@@ -330,7 +330,7 @@ namespace connectivity
                                      const css::uno::Reference< css::beans::XPropertySet > & _xField,
                                      const OUString &_sTableAlias,
                                      const css::lang::Locale& rIntl,
-                                     sal_Char _cDec,
+                                     OUString strDec,
                                      const IParseContext* pContext = nullptr ) const;
 
         OSQLParseNode* getByRule(OSQLParseNode::Rule eRule) const;
@@ -413,7 +413,7 @@ namespace connectivity
                             const IParseContext* pContext,
                             bool _bIntl,
                             bool _bQuote,
-                            sal_Char _cDecSep,
+                            OUString _sDecSep,
                             bool _bPredicate) const;
 
     private:

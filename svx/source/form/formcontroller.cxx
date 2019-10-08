@@ -3034,13 +3034,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
         Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
         const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetUILocaleDataWrapper() );
-        /* FIXME: casting this to sal_Char is plain wrong and of course only
-         * works for ASCII separators, but
-         * pParseNode->parseNodeToPredicateStr() expects a sal_Char. Fix it
-         * there. */
-        sal_Char cDecimalSeparator = static_cast<sal_Char>(rLocaleWrapper.getNumDecimalSep()[0]);
-        SAL_WARN_IF( static_cast<sal_Unicode>(cDecimalSeparator) != rLocaleWrapper.getNumDecimalSep()[0],
-                "svx.form", "FormController::setFilter: wrong cast of decimal separator to sal_Char!");
+        OUString strDecimalSeparator = rLocaleWrapper.getNumDecimalSep();
 
         // retrieving the filter
         for (const Sequence < PropertyValue >& rRow : aFilterRows)
@@ -3157,7 +3151,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                                                                     ,xField
                                                                     ,OUString()
                                                                     ,aAppLocale
-                                                                    ,cDecimalSeparator
+                                                                    ,strDecimalSeparator
                                                                     ,getParseContext());
                                 aRow[rFieldInfo.xText] = sCriteria;
                             }
