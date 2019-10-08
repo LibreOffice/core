@@ -133,6 +133,19 @@
 		BE60B5AB1DB7D80200D3E1E4 /* saltimer.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = saltimer.cxx; path = ../vcl/osx/saltimer.cxx; sourceTree = "<group>"; };
 		BE60B5AC1DB7D80200D3E1E4 /* service_entry.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = service_entry.cxx; path = ../vcl/osx/service_entry.cxx; sourceTree = "<group>"; };
 		BE60B5AD1DB7D80200D3E1E4 /* vclnsapp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = vclnsapp.mm; path = ../vcl/osx/vclnsapp.mm; sourceTree = "<group>"; };
+		BE7EC139234CC0FA000D1DB6 /* VerticalOrientationData.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VerticalOrientationData.cxx; path = ../vcl/source/gdi/VerticalOrientationData.cxx; sourceTree = "<group>"; };
+		BE7EC13A234CC0FA000D1DB6 /* impglyphitem.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = impglyphitem.cxx; path = ../vcl/source/gdi/impglyphitem.cxx; sourceTree = "<group>"; };
+		BE7EC13B234CC0FA000D1DB6 /* TypeSerializer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TypeSerializer.cxx; path = ../vcl/source/gdi/TypeSerializer.cxx; sourceTree = "<group>"; };
+		BE7EC13C234CC0FA000D1DB6 /* CommonSalLayout.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CommonSalLayout.cxx; path = ../vcl/source/gdi/CommonSalLayout.cxx; sourceTree = "<group>"; };
+		BE7EC13D234CC0FA000D1DB6 /* scrptrun.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = scrptrun.cxx; path = ../vcl/source/gdi/scrptrun.cxx; sourceTree = "<group>"; };
+		BE7EC13E234CC0FA000D1DB6 /* salgdiimpl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdiimpl.cxx; path = ../vcl/source/gdi/salgdiimpl.cxx; sourceTree = "<group>"; };
+		BE7EC13F234CC0FA000D1DB6 /* WidgetDefinition.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WidgetDefinition.cxx; path = ../vcl/source/gdi/WidgetDefinition.cxx; sourceTree = "<group>"; };
+		BE7EC140234CC0FA000D1DB6 /* mtfxmldump.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mtfxmldump.cxx; path = ../vcl/source/gdi/mtfxmldump.cxx; sourceTree = "<group>"; };
+		BE7EC141234CC0FA000D1DB6 /* FileDefinitionWidgetDraw.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FileDefinitionWidgetDraw.cxx; path = ../vcl/source/gdi/FileDefinitionWidgetDraw.cxx; sourceTree = "<group>"; };
+		BE7EC142234CC0FA000D1DB6 /* vectorgraphicdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vectorgraphicdata.cxx; path = ../vcl/source/gdi/vectorgraphicdata.cxx; sourceTree = "<group>"; };
+		BE7EC143234CC0FA000D1DB6 /* pdfbuildin_fonts.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pdfbuildin_fonts.cxx; path = ../vcl/source/gdi/pdfbuildin_fonts.cxx; sourceTree = "<group>"; };
+		BE7EC144234CC0FA000D1DB6 /* svmconverter.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svmconverter.cxx; path = ../vcl/source/gdi/svmconverter.cxx; sourceTree = "<group>"; };
+		BE7EC145234CC0FA000D1DB6 /* WidgetDefinitionReader.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WidgetDefinitionReader.cxx; path = ../vcl/source/gdi/WidgetDefinitionReader.cxx; sourceTree = "<group>"; };
 		BE82BE5718298DE100A447B5 /* formulacell.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = formulacell.cxx; path = ../sc/source/core/data/formulacell.cxx; sourceTree = "<group>"; };
 		BE82C3AA18C86D440050EB79 /* brand.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = brand.cxx; path = ../vcl/source/app/brand.cxx; sourceTree = "<group>"; };
 		BE82C3AB18C86D440050EB79 /* dndhelp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dndhelp.cxx; path = ../vcl/source/app/dndhelp.cxx; sourceTree = "<group>"; };
@@ -532,12 +545,14 @@
 				BE82C3D118C86DBF0050EB79 /* bmpacc2.cxx */,
 				BE82C3D218C86DBF0050EB79 /* bmpacc3.cxx */,
 				BE82C3D318C86DBF0050EB79 /* bmpfast.cxx */,
+				BE7EC13C234CC0FA000D1DB6 /* CommonSalLayout.cxx */,
 				BE82C3D418C86DBF0050EB79 /* configsettings.cxx */,
 				BE82C3D518C86DBF0050EB79 /* cvtgrf.cxx */,
 				BE82C3D618C86DBF0050EB79 /* cvtsvm.cxx */,
 				BE82C3D718C86DBF0050EB79 /* dibtools.cxx */,
 				BE82C3D818C86DBF0050EB79 /* embeddedfontshelper.cxx */,
 				BE82C3D918C86DBF0050EB79 /* extoutdevdata.cxx */,
+				BE7EC141234CC0FA000D1DB6 /* FileDefinitionWidgetDraw.cxx */,
 				BE82C3DA18C86DBF0050EB79 /* font.cxx */,
 				BE82C3DB18C86DBF0050EB79 /* gdimetafiletools.cxx */,
 				BE82C3DC18C86DBF0050EB79 /* gdimtf.cxx */,
@@ -551,6 +566,7 @@
 				BE82C3E418C86DBF0050EB79 /* impanmvw.cxx */,
 				BE82C3E518C86DBF0050EB79 /* impbmp.cxx */,
 				BE82C3E618C86DBF0050EB79 /* impfont.cxx */,
+				BE7EC13A234CC0FA000D1DB6 /* impglyphitem.cxx */,
 				BE82C3E718C86DBF0050EB79 /* impgraph.cxx */,
 				BE82C3E818C86DBF0050EB79 /* impimage.cxx */,
 				BE82C3E918C86DBF0050EB79 /* impimagetree.cxx */,
@@ -560,6 +576,7 @@
 				BE82C3ED18C86DBF0050EB79 /* mapmod.cxx */,
 				BE82C3EE18C86DBF0050EB79 /* metaact.cxx */,
 				BE82C3EF18C86DBF0050EB79 /* metric.cxx */,
+				BE7EC140234CC0FA000D1DB6 /* mtfxmldump.cxx */,
 				BE82C3F018C86DBF0050EB79 /* octree.cxx */,
 				BE82C3F118C86DBF0050EB79 /* oldprintadaptor.cxx */,
 				BE82C3F218C86DBF0050EB79 /* outdev.cxx */,
@@ -570,6 +587,7 @@
 				BE82C3F718C86DBF0050EB79 /* outdev6.cxx */,
 				BE82C3F818C86DBF0050EB79 /* outdevnative.cxx */,
 				BE82C3F918C86DBF0050EB79 /* outmap.cxx */,
+				BE7EC143234CC0FA000D1DB6 /* pdfbuildin_fonts.cxx */,
 				BE82C3FA18C86DBF0050EB79 /* pdfextoutdevdata.cxx */,
 				BE82C3FB18C86DBF0050EB79 /* pdffontcache.cxx */,
 				BE82C3FC18C86DBF0050EB79 /* pdfwriter_impl.cxx */,
@@ -583,14 +601,22 @@
 				BE82C40418C86DC00050EB79 /* regband.cxx */,
 				BE82C40518C86DC00050EB79 /* region.cxx */,
 				BE82C40618C86DC00050EB79 /* regionband.cxx */,
+				BE7EC13E234CC0FA000D1DB6 /* salgdiimpl.cxx */,
 				BE82C40718C86DC00050EB79 /* salgdilayout.cxx */,
 				BE82C40818C86DC00050EB79 /* sallayout.cxx */,
 				BE82C40918C86DC00050EB79 /* salmisc.cxx */,
 				BE82C40A18C86DC00050EB79 /* salnativewidgets-none.cxx */,
+				BE7EC13D234CC0FA000D1DB6 /* scrptrun.cxx */,
 				BE82C40B18C86DC00050EB79 /* svgdata.cxx */,
+				BE7EC144234CC0FA000D1DB6 /* svmconverter.cxx */,
 				BE82C40C18C86DC00050EB79 /* textlayout.cxx */,
+				BE7EC13B234CC0FA000D1DB6 /* TypeSerializer.cxx */,
+				BE7EC142234CC0FA000D1DB6 /* vectorgraphicdata.cxx */,
+				BE7EC139234CC0FA000D1DB6 /* VerticalOrientationData.cxx */,
 				BE82C40D18C86DC00050EB79 /* virdev.cxx */,
 				BE82C40E18C86DC00050EB79 /* wall.cxx */,
+				BE7EC13F234CC0FA000D1DB6 /* WidgetDefinition.cxx */,
+				BE7EC145234CC0FA000D1DB6 /* WidgetDefinitionReader.cxx */,
 			);
 			name = gdi;
 			sourceTree = "<group>";
@@ -688,6 +714,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = BEC3D9171710B0390030AD56;
