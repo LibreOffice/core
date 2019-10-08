@@ -229,8 +229,12 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
         if (mbMenuBar && maUpdateMenuBarIdle.IsActive())
         {
             maUpdateMenuBarIdle.Stop();
-            maUpdateMenuBarIdle.Invoke();
-            return;
+            // tdf#124391 Prevent doubled menus in global menu
+            if (!bUnityMode)
+            {
+                maUpdateMenuBarIdle.Invoke();
+                return;
+            }
         }
     }
 
