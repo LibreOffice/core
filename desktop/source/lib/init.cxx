@@ -2175,15 +2175,9 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         {
             int bIndex = aFilterOptions.indexOf("WATERMARKEND");
             watermarkText = aFilterOptions.copy(aIndex+11, bIndex-(aIndex+11));
-            if(aIndex > 0)
-            {
-                OUString temp = aFilterOptions.copy(0, aIndex);
-                aFilterOptions = temp + aFilterOptions.copy(bIndex+12);
-            }
-            else
-            {
-                aFilterOptions.clear();
-            }
+
+            OUString temp = aFilterOptions.copy(0, aIndex);
+            aFilterOptions = temp + aFilterOptions.copy(bIndex+12);
         }
 
         // 'TakeOwnership' == this is a 'real' SaveAs (that is, the document
