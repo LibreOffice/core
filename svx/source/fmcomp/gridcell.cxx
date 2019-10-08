@@ -2904,7 +2904,7 @@ bool DbFilterField::commitControl()
                                                     m_rColumn.GetField(),
                                                     OUString(),
                                                     aAppLocale,
-                                                    '.',
+                                                    OUString("."),
                                                     getParseContext());
                 m_aText = aPreparedText;
             }

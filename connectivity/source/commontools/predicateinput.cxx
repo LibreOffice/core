@@ -256,7 +256,7 @@ namespace dbtools
                 sTransformedText.clear();
                 pParseNode->parseNodeToPredicateStr(
                     sTransformedText, m_xConnection, m_xFormatter, _rxField, OUString(),
-                    rParseContext.getPreferredLocale(), static_cast<sal_Char>(nDecSeparator), &rParseContext
+                    rParseContext.getPreferredLocale(), OUString(nDecSeparator), &rParseContext
                 );
                 _rPredicateValue = sTransformedText;
 

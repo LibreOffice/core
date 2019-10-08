@@ -201,7 +201,7 @@ namespace
                                 xConnection,
                                 rController.getNumberFormatter(),
                                 _rLocale,
-                                static_cast<sal_Char>(_sDecimal.toChar()),
+                                _sDecimal,
                                 &rController.getParser().getContext());
         }
         return aCondition;
@@ -1341,14 +1341,14 @@ namespace
                                                         xConnection,
                                                         rController.getNumberFormatter(),
                                                         aLocale,
-                                                        static_cast<sal_Char>(sDecimal.toChar()),
+                                                        sDecimal,
                                                         &rController.getParser().getContext());
 
                     pValueExp->parseNodeToPredicateStr( aColumnName,
                                                         xConnection,
                                                         rController.getNumberFormatter(),
                                                         aLocale,
-                                                        static_cast<sal_Char>(sDecimal.toChar()),
+                                                        sDecimal,
                                                         &rController.getParser().getContext());
 
                     // don't display the column name
@@ -1417,7 +1417,7 @@ namespace
                                                     xConnection,
                                                     rController.getNumberFormatter(),
                                                     aLocale,
-                                                    static_cast<sal_Char>(sDecimal.toChar()),
+                                                    sDecimal,
                                                     &rController.getParser().getContext());
 
                 OTableFieldDescRef aDragLeft = new OTableFieldDesc();
@@ -1472,7 +1472,7 @@ namespace
                                                 xConnection,
                                                 rController.getNumberFormatter(),
                                                 _pView->getLocale(),
-                                                static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
+                                                _pView->getDecimalSeparator(),
                                                 &rController.getParser().getContext());
 
             pFunction->parseNodeToStr(  aColumnName,
@@ -1633,7 +1633,7 @@ namespace
                                                 xConnection,
                                                 rController.getNumberFormatter(),
                                                 _pView->getLocale(),
-                                                static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
+                                                _pView->getDecimalSeparator(),
                                                 &rController.getParser().getContext());
                 }
             }
@@ -1675,7 +1675,7 @@ namespace
                                                             xConnection,
                                                             rController.getNumberFormatter(),
                                                             _pView->getLocale(),
-                                                            static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
+                                                            _pView->getDecimalSeparator(),
                                                             &rController.getParser().getContext());
             }
 
@@ -2115,7 +2115,7 @@ namespace
                                                             xConnection,
                                                             rController.getNumberFormatter(),
                                                             _pView->getLocale(),
-                                                            static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
+                                                            _pView->getDecimalSeparator(),
                                                             &rController.getParser().getContext());
 
                         sal_Int32 nFunctionType = FKT_NONE;
@@ -2280,7 +2280,7 @@ namespace
                                                             xConnection,
                                                             rController.getNumberFormatter(),
                                                             _pView->getLocale(),
-                                                            static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
+                                                            _pView->getDecimalSeparator(),
                                                             &rController.getParser().getContext());
                         _pView->fillFunctionInfo(pArgument,sCondition,aDragLeft);
                         aDragLeft->SetFunctionType(FKT_OTHER);
