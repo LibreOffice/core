@@ -420,6 +420,8 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
 
     for (auto const& axesSet : aAxesSets)
     {
+        if( !axesSet->maAxes.empty() )
+            mrModel.maTypeGroups[nAxesSetIdx]->mbCatAxisDeleted = axesSet->maAxes[0]->mbDeleted;
         AxesSetConverter aAxesSetConv(*this, *axesSet);
         aAxesSetConv.convertFromModel( xDiagram, rView3DModel, nAxesSetIdx, bSupportsVaryColorsByPoint );
         if(nAxesSetIdx == nStartAxesSetIdx)
