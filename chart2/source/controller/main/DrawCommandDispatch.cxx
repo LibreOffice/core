@@ -445,7 +445,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                     case COMMAND_ID_DRAW_LINE:
                     case COMMAND_ID_LINE_ARROW_END:
                         {
-                            if ( dynamic_cast<const SdrPathObj*>( pObj) !=  nullptr )
+                            if ( auto const pathObj = dynamic_cast<SdrPathObj*>( pObj) )
                             {
                                 Point aStart = aRect.TopLeft();
                                 Point aEnd = aRect.BottomRight();
@@ -453,7 +453,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                                 basegfx::B2DPolygon aPoly;
                                 aPoly.append( basegfx::B2DPoint( aStart.X(), nYMiddle ) );
                                 aPoly.append( basegfx::B2DPoint( aEnd.X(), nYMiddle ) );
-                                dynamic_cast<SdrPathObj&>(*pObj).SetPathPoly(basegfx::B2DPolyPolygon(aPoly));
+                                pathObj->SetPathPoly(basegfx::B2DPolyPolygon(aPoly));
                                 SfxItemSet aSet( pDrawModelWrapper->GetItemPool() );
                                 setLineEnds( aSet );
                                 pObj->SetMergedItemSet( aSet );
@@ -462,7 +462,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                         break;
                     case COMMAND_ID_DRAW_FREELINE_NOFILL:
                         {
-                            if ( dynamic_cast<const SdrPathObj*>( pObj) !=  nullptr )
+                            if ( auto const pathObj = dynamic_cast<SdrPathObj*>( pObj) )
                             {
                                 basegfx::B2DPolygon aInnerPoly;
                                 aInnerPoly.append( basegfx::B2DPoint( aRect.Left(), aRect.Bottom() ) );
@@ -476,30 +476,26 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                                     basegfx::B2DPoint( aRect.Right(), aRect.Top() ) );
                                 basegfx::B2DPolyPolygon aPoly;
                                 aPoly.append( aInnerPoly );
-                                dynamic_cast<SdrPathObj&>(*pObj).SetPathPoly(aPoly);
+                                pathObj->SetPathPoly(aPoly);
                             }
                         }
                         break;
                     case COMMAND_ID_DRAW_TEXT:
                     case COMMAND_ID_DRAW_TEXT_VERTICAL:
                         {
-                            if ( dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr )
+                            if ( SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pObj) )
                             {
-                                SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
-                                if ( pTextObj )
+                                pTextObj->SetLogicRect( aRect );
+                                bool bVertical = ( nID == COMMAND_ID_DRAW_TEXT_VERTICAL );
+                                pTextObj->SetVerticalWriting( bVertical );
+                                if ( bVertical )
                                 {
-                                    pTextObj->SetLogicRect( aRect );
-                                    bool bVertical = ( nID == COMMAND_ID_DRAW_TEXT_VERTICAL );
-                                    pTextObj->SetVerticalWriting( bVertical );
-                                    if ( bVertical )
-                                    {
-                                        SfxItemSet aSet( pDrawModelWrapper->GetItemPool() );
-                                        aSet.Put( makeSdrTextAutoGrowWidthItem( true ) );
-                                        aSet.Put( makeSdrTextAutoGrowHeightItem( false ) );
-                                        aSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_TOP ) );
-                                        aSet.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_RIGHT ) );
-                                        pTextObj->SetMergedItemSet( aSet );
-                                    }
+                                    SfxItemSet aSet( pDrawModelWrapper->GetItemPool() );
+                                    aSet.Put( makeSdrTextAutoGrowWidthItem( true ) );
+                                    aSet.Put( makeSdrTextAutoGrowHeightItem( false ) );
+                                    aSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_TOP ) );
+                                    aSet.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_RIGHT ) );
+                                    pTextObj->SetMergedItemSet( aSet );
                                 }
                             }
                         }
@@ -507,14 +503,10 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                     case COMMAND_ID_DRAW_CAPTION:
                     case COMMAND_ID_DRAW_CAPTION_VERTICAL:
                         {
-                            if ( dynamic_cast<const SdrCaptionObj*>( pObj) !=  nullptr )
+                            if ( SdrCaptionObj* pCaptionObj = dynamic_cast<SdrCaptionObj*>( pObj) )
                             {
                                 bool bIsVertical( nID == COMMAND_ID_DRAW_CAPTION_VERTICAL );
-                                SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
-                                if ( pTextObj )
-                                {
-                                    pTextObj->SetVerticalWriting( bIsVertical );
-                                }
+                                pCaptionObj->SetVerticalWriting( bIsVertical );
                                 if ( bIsVertical )
                                 {
                                     SfxItemSet aSet( pObj->GetMergedItemSet() );
@@ -522,13 +514,9 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                                     aSet.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_RIGHT ) );
                                     pObj->SetMergedItemSet( aSet );
                                 }
-                                SdrCaptionObj* pCaptionObj = dynamic_cast< SdrCaptionObj* >( pObj );
-                                if ( pCaptionObj )
-                                {
-                                    pCaptionObj->SetLogicRect( aRect );
-                                    pCaptionObj->SetTailPos(
-                                        aRect.TopLeft() - Point( aRect.GetWidth() / 2, aRect.GetHeight() / 2 ) );
-                                }
+                                pCaptionObj->SetLogicRect( aRect );
+                                pCaptionObj->SetTailPos(
+                                    aRect.TopLeft() - Point( aRect.GetWidth() / 2, aRect.GetHeight() / 2 ) );
                             }
                         }
                         break;
