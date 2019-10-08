@@ -1135,6 +1135,14 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
                 ok = true;
             }
         }
+        else if (rArg.Name == "EncryptionData")
+        {
+            if (rArg.Value >>= bValue)
+            {
+                pMedium->GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, rArg.Value));
+                ok = true;
+            }
+        }
         if (!ok)
         {
             throw lang::IllegalArgumentException("Setting property not supported: " + rArg.Name,
