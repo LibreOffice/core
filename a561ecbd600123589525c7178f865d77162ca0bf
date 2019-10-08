@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_c613030d",
+        "filename": "vcl/uiconfig/ui/printdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-10-08T15:12:37Z",
+      "side": 1,
+      "message": "min content height crashes under gtk 3.18",
+      "revId": "a561ecbd600123589525c7178f865d77162ca0bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
