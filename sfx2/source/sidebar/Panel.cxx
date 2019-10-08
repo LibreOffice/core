@@ -63,9 +63,7 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
     , maContextAccess(rContextAccess)
     , mxFrame(rxFrame)
 {
-#ifdef DEBUG
-    SetText(OUString("Panel"));
-#endif
+    SetText(rPanelDescriptor.msTitle);
 }
 
 Panel::~Panel()
