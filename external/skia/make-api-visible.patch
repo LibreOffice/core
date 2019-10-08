@@ -15,3 +15,23 @@
  
  }  // namespace window_context_factory
  
+--- skia/tools/sk_app/win/WindowContextFactory_win.h
++++ skia/tools/sk_app/win/WindowContextFactory_win.h
+@@ -18,13 +18,13 @@ struct DisplayParams;
+ 
+ namespace window_context_factory {
+ 
+-WindowContext* NewVulkanForWin(HWND, const DisplayParams&);
++SK_API WindowContext* NewVulkanForWin(HWND, const DisplayParams&);
+ 
+-WindowContext* NewGLForWin(HWND, const DisplayParams&);
++SK_API WindowContext* NewGLForWin(HWND, const DisplayParams&);
+ 
+-WindowContext* NewANGLEForWin(HWND, const DisplayParams&);
++SK_API WindowContext* NewANGLEForWin(HWND, const DisplayParams&);
+ 
+-WindowContext* NewRasterForWin(HWND, const DisplayParams&);
++SK_API WindowContext* NewRasterForWin(HWND, const DisplayParams&);
+ 
+ }  // namespace window_context_factory
+ 
