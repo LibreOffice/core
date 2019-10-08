@@ -3622,7 +3622,7 @@ if test "$_os" = "WINNT"; then
             AC_MSG_WARN([Installation set will not contain 64-bit Explorer extensions])
         fi
     else
-        CXX_X64_BINARY=${CXX:-$MSVC_CXX}
+        CXX_X64_BINARY=$CXX
     fi
     AC_SUBST(BUILD_X64)
 
