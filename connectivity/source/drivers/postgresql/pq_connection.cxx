@@ -132,11 +132,11 @@ static LogLevel readLogLevelFromConfiguration()
     OUString fileName;
     osl_getModuleURLFromFunctionAddress(
         reinterpret_cast<oslGenericFunction>(readLogLevelFromConfiguration), &fileName.pData );
-    fileName = fileName.copy( fileName.lastIndexOf( '/' )+1 );
+    fileName = fileName.copy( fileName.lastIndexOf( '/' )+1 ) +
 #ifdef MACOSX
-    fileName += "../Resources/";
+        "../Resources/"
 #endif
-    fileName += "postgresql-sdbc.ini";
+        "postgresql-sdbc.ini";
     rtl::Bootstrap bootstrapHandle( fileName );
 
     OUString str;
