@@ -6127,7 +6127,7 @@ void QuickHelpData::SortAndFilter(const OUString &rOrigWord)
 // Now the result of SwEditShell::GetChunkForAutoText is passed here to SwEditWin::ShowAutoText, and
 // then to SwGlossaryList::HasLongName, where all existing autotext entries' long names are tested
 // if they start with one of the list elements. The matches are sorted according the position of the
-// candidate that matched first, then alhpabetically inside the group of suggestions for a given
+// candidate that matched first, then alphabetically inside the group of suggestions for a given
 // candidate. Say, if we have these AutoText entry long names:
 //    "Dr Frodo"
 //    "Dr Credo"
