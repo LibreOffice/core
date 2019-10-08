@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_d0a3bd4e",
+        "filename": "configure.ac",
+        "patchSetId": 10
+      },
+      "lineNbr": 7070,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-08T07:26:45Z",
+      "side": 1,
+      "message": "is this some leftover debug stuff?",
+      "range": {
+        "startLine": 7070,
+        "startChar": 20,
+        "endLine": 7070,
+        "endChar": 34
+      },
+      "revId": "ad5cbcf6ba0afdc1d8d7405c2641cce8de4a360b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
