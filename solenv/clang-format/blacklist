@@ -1605,8 +1605,6 @@ comphelper/source/misc/officerestartmanager.hxx
 comphelper/source/misc/profilezone.cxx
 comphelper/source/misc/proxyaggregation.cxx
 comphelper/source/misc/random.cxx
-comphelper/source/misc/scopeguard.cxx
-comphelper/source/misc/sequence.cxx
 comphelper/source/misc/sequenceashashmap.cxx
 comphelper/source/misc/servicedecl.cxx
 comphelper/source/misc/serviceinfohelper.cxx
@@ -1722,12 +1720,10 @@ compilerplugins/clang/rendercontext.cxx
 compilerplugins/clang/reservedid.cxx
 compilerplugins/clang/salbool.cxx
 compilerplugins/clang/sallogareas.cxx
-compilerplugins/clang/sallogareas.hxx
 compilerplugins/clang/salunicodeliteral.cxx
 compilerplugins/clang/sfxpoolitem.cxx
 compilerplugins/clang/sharedvisitor/analyzer.cxx
 compilerplugins/clang/sharedvisitor/generator.cxx
-compilerplugins/clang/sharedvisitor/sharedvisitor.cxx
 compilerplugins/clang/simplifybool.cxx
 compilerplugins/clang/singlevalfields.cxx
 compilerplugins/clang/staticaccess.cxx
@@ -1754,8 +1750,6 @@ compilerplugins/clang/store/manualrefcount.cxx
 compilerplugins/clang/store/paintmethodconversion.cxx
 compilerplugins/clang/store/postfixincrementfix.cxx
 compilerplugins/clang/store/postfixincrementfix.hxx
-compilerplugins/clang/store/referencecasting.cxx
-compilerplugins/clang/store/referencecasting.hxx
 compilerplugins/clang/store/removeforwardstringdecl.cxx
 compilerplugins/clang/store/removeforwardstringdecl.hxx
 compilerplugins/clang/store/removevirtuals.cxx
@@ -2704,7 +2698,6 @@ cui/source/customize/eventdlg.cxx
 cui/source/customize/eventdlg.hxx
 cui/source/customize/macropg.cxx
 cui/source/customize/macropg_impl.hxx
-cui/source/dialogs/SpellAttrib.cxx
 cui/source/dialogs/SpellAttrib.hxx
 cui/source/dialogs/SpellDialog.cxx
 cui/source/dialogs/about.cxx
@@ -2764,7 +2757,6 @@ cui/source/inc/cfgutil.hxx
 cui/source/inc/chardlg.hxx
 cui/source/inc/colorpicker.hxx
 cui/source/inc/connect.hxx
-cui/source/inc/cuicharmap.hxx
 cui/source/inc/cuifmsearch.hxx
 cui/source/inc/cuigaldlg.hxx
 cui/source/inc/cuigrfflt.hxx
@@ -2847,8 +2839,6 @@ cui/source/options/doclinkdialog.cxx
 cui/source/options/doclinkdialog.hxx
 cui/source/options/fontsubs.cxx
 cui/source/options/fontsubs.hxx
-cui/source/options/optHeaderTabListbox.cxx
-cui/source/options/optHeaderTabListbox.hxx
 cui/source/options/optaboutconfig.cxx
 cui/source/options/optaboutconfig.hxx
 cui/source/options/optaccessibility.cxx
@@ -5296,13 +5286,10 @@ framework/source/tabwin/tabwindow.cxx
 framework/source/tabwin/tabwinfactory.cxx
 framework/source/uiconfiguration/CommandImageResolver.cxx
 framework/source/uiconfiguration/CommandImageResolver.hxx
-framework/source/uiconfiguration/ImageArrayData.cxx
 framework/source/uiconfiguration/ImageList.cxx
 framework/source/uiconfiguration/ImageList.hxx
-framework/source/uiconfiguration/ImplImageList.cxx
 framework/source/uiconfiguration/globalsettings.cxx
 framework/source/uiconfiguration/graphicnameaccess.cxx
-framework/source/uiconfiguration/image.h
 framework/source/uiconfiguration/imagemanager.cxx
 framework/source/uiconfiguration/imagemanagerimpl.cxx
 framework/source/uiconfiguration/imagemanagerimpl.hxx
@@ -9996,7 +9983,6 @@ sc/qa/extras/sceditfieldobj-header.cxx
 sc/qa/extras/scmodelobj.cxx
 sc/qa/extras/scnamedrangeobj.cxx
 sc/qa/extras/scoutlineobj.cxx
-sc/qa/extras/scsubtotaldescriptorbaseobj.cxx
 sc/qa/extras/scsubtotalfieldobj.cxx
 sc/qa/extras/sctablesheetobj.cxx
 sc/qa/extras/sctablesheetsobj.cxx
@@ -12284,7 +12270,6 @@ sd/source/ui/slidesorter/inc/model/SlsPageEnumerationProvider.hxx
 sd/source/ui/slidesorter/inc/model/SlsSharedPageDescriptor.hxx
 sd/source/ui/slidesorter/inc/model/SlsVisualState.hxx
 sd/source/ui/slidesorter/inc/view/SlideSorterView.hxx
-sd/source/ui/slidesorter/inc/view/SlsFontProvider.hxx
 sd/source/ui/slidesorter/inc/view/SlsILayerPainter.hxx
 sd/source/ui/slidesorter/inc/view/SlsInsertAnimator.hxx
 sd/source/ui/slidesorter/inc/view/SlsInsertionIndicatorOverlay.hxx
@@ -12303,7 +12288,6 @@ sd/source/ui/slidesorter/shell/SlideSorterService.cxx
 sd/source/ui/slidesorter/shell/SlideSorterService.hxx
 sd/source/ui/slidesorter/shell/SlideSorterViewShell.cxx
 sd/source/ui/slidesorter/view/SlideSorterView.cxx
-sd/source/ui/slidesorter/view/SlsFontProvider.cxx
 sd/source/ui/slidesorter/view/SlsFramePainter.cxx
 sd/source/ui/slidesorter/view/SlsFramePainter.hxx
 sd/source/ui/slidesorter/view/SlsInsertAnimator.cxx
@@ -12605,7 +12589,6 @@ sfx2/inc/sidebar/ContextChangeBroadcaster.hxx
 sfx2/inc/sorgitm.hxx
 sfx2/inc/srchdlg.hxx
 sfx2/inc/strings.hxx
-sfx2/inc/uitest/sfx_uiobject.hxx
 sfx2/qa/cppunit/test_classification.cxx
 sfx2/qa/cppunit/test_controlleritem.cxx
 sfx2/qa/cppunit/test_metadatable.cxx
@@ -12876,7 +12859,6 @@ sfx2/source/sidebar/UnoSidebar.cxx
 sfx2/source/statbar/stbitem.cxx
 sfx2/source/styles/StyleManager.cxx
 sfx2/source/toolbox/tbxitem.cxx
-sfx2/source/uitest/sfx_uiobject.cxx
 sfx2/source/view/classificationcontroller.cxx
 sfx2/source/view/classificationhelper.cxx
 sfx2/source/view/frame.cxx
@@ -17279,7 +17261,6 @@ vcl/inc/impdel.hxx
 vcl/inc/impfont.hxx
 vcl/inc/impfontcache.hxx
 vcl/inc/impfontcharmap.hxx
-vcl/inc/impfontmetric.hxx
 vcl/inc/impfontmetricdata.hxx
 vcl/inc/impgraph.hxx
 vcl/inc/implimagetree.hxx
@@ -17335,7 +17316,6 @@ vcl/inc/osx/svsys.h
 vcl/inc/osx/vclnsapp.h
 vcl/inc/outdata.hxx
 vcl/inc/outdev.h
-vcl/inc/outdevstatestack.hxx
 vcl/inc/pch/precompiled_vcl.cxx
 vcl/inc/pch/precompiled_vcl.hxx
 vcl/inc/print.h
@@ -17416,7 +17396,6 @@ vcl/inc/unx/i18n_im.hxx
 vcl/inc/unx/i18n_keysym.hxx
 vcl/inc/unx/i18n_xkb.hxx
 vcl/inc/unx/nativewindowhandleprovider.hxx
-vcl/inc/unx/pixmap.hxx
 vcl/inc/unx/printergfx.hxx
 vcl/inc/unx/printerjob.hxx
 vcl/inc/unx/salbmp.h
@@ -17762,8 +17741,8 @@ vcl/source/control/spinfld.cxx
 vcl/source/control/tabctrl.cxx
 vcl/source/control/throbber.cxx
 vcl/source/control/thumbpos.hxx
-vcl/source/control/wizimpldata.hxx
 vcl/source/control/wizardmachine.cxx
+vcl/source/control/wizimpldata.hxx
 vcl/source/edit/textdat2.hxx
 vcl/source/edit/textdata.cxx
 vcl/source/edit/textdoc.cxx
@@ -17884,7 +17863,6 @@ vcl/source/gdi/salgdiimpl.cxx
 vcl/source/gdi/salgdilayout.cxx
 vcl/source/gdi/sallayout.cxx
 vcl/source/gdi/salmisc.cxx
-vcl/source/gdi/salnativewidgets-none.cxx
 vcl/source/gdi/scrptrun.cxx
 vcl/source/gdi/svmconverter.cxx
 vcl/source/gdi/textlayout.cxx
@@ -17927,7 +17905,6 @@ vcl/source/outdev/mask.cxx
 vcl/source/outdev/nativecontrols.cxx
 vcl/source/outdev/outdev.cxx
 vcl/source/outdev/outdevstate.cxx
-vcl/source/outdev/outdevstatestack.cxx
 vcl/source/outdev/pixel.cxx
 vcl/source/outdev/polygon.cxx
 vcl/source/outdev/polyline.cxx
@@ -18112,7 +18089,6 @@ vcl/unx/gtk3/a11y/atklistener.hxx
 vcl/unx/gtk3/a11y/atkregistry.hxx
 vcl/unx/gtk3/a11y/atktextattributes.hxx
 vcl/unx/gtk3/a11y/atkutil.hxx
-vcl/unx/gtk3/a11y/atkwindow.hxx
 vcl/unx/gtk3/a11y/atkwrapper.hxx
 vcl/unx/gtk3/a11y/gtk3atkaction.cxx
 vcl/unx/gtk3/a11y/gtk3atkbridge.cxx
@@ -18129,8 +18105,9 @@ vcl/unx/gtk3/a11y/gtk3atktext.cxx
 vcl/unx/gtk3/a11y/gtk3atktextattributes.cxx
 vcl/unx/gtk3/a11y/gtk3atkutil.cxx
 vcl/unx/gtk3/a11y/gtk3atkvalue.cxx
-vcl/unx/gtk3/a11y/gtk3atkwindow.cxx
 vcl/unx/gtk3/a11y/gtk3atkwrapper.cxx
+vcl/unx/gtk3/cairo_gtk3_cairo.cxx
+vcl/unx/gtk3/cairo_gtk3_cairo.hxx
 vcl/unx/gtk3/fpicker/SalGtkFilePicker.cxx
 vcl/unx/gtk3/fpicker/SalGtkFilePicker.hxx
 vcl/unx/gtk3/fpicker/SalGtkFolderPicker.cxx
@@ -18139,8 +18116,6 @@ vcl/unx/gtk3/fpicker/SalGtkPicker.cxx
 vcl/unx/gtk3/fpicker/SalGtkPicker.hxx
 vcl/unx/gtk3/fpicker/eventnotification.hxx
 vcl/unx/gtk3/fpicker/resourceprovider.cxx
-vcl/unx/gtk3/cairo_gtk3_cairo.cxx
-vcl/unx/gtk3/cairo_gtk3_cairo.hxx
 vcl/unx/gtk3/gtk3gloactiongroup.cxx
 vcl/unx/gtk3/gtk3glomenu.cxx
 vcl/unx/gtk3/gtk3gtkdata.cxx
@@ -18713,7 +18688,6 @@ xmloff/source/forms/handler/vcl_date_handler.cxx
 xmloff/source/forms/handler/vcl_date_handler.hxx
 xmloff/source/forms/handler/vcl_time_handler.cxx
 xmloff/source/forms/handler/vcl_time_handler.hxx
-xmloff/source/forms/ifacecompare.hxx
 xmloff/source/forms/layerexport.cxx
 xmloff/source/forms/layerexport.hxx
 xmloff/source/forms/layerimport.cxx
