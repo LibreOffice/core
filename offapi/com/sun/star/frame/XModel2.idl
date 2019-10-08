@@ -142,6 +142,7 @@ interface XModel2 : com::sun::star::frame::XModel
             <ul>
                 <li>com::sun::star::document::MediaDescriptor::SuggestedSaveAsDir</li>
                 <li>com::sun::star::document::MediaDescriptor::SuggestedSaveAsName</li>
+                <li>com::sun::star::document::MediaDescriptor::EncryptionData</li>
             </ul>
 
         @throws com::sun::star::lang::IllegalArgumentException When trying to set an unsupported property
