@@ -55,10 +55,12 @@ $(eval $(call gb_Library_use_externals,vclplug_win,\
     epoxy \
     glm_headers \
     harfbuzz \
+    skia \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_win,\
     vcl/opengl/win/gdiimpl \
+    vcl/skia/win/gdiimpl \
     vcl/win/app/saldata \
     vcl/win/app/salinfo \
     vcl/win/app/salinst \
