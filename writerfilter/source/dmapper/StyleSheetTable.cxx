@@ -684,6 +684,11 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
             m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pDefaultParaProps );
             resolveSprmProps( m_pImpl->m_rDMapper, rSprm );
+            if ( nSprmId == NS_ooxml::LN_CT_DocDefaults_pPrDefault && m_pImpl->m_pDefaultParaProps.get() &&
+                !m_pImpl->m_pDefaultParaProps->isSet( PROP_PARA_TOP_MARGIN ) )
+            {
+                m_pImpl->m_pDefaultParaProps->Insert( PROP_PARA_TOP_MARGIN, uno::makeAny( sal_Int32(0) ) );
+            }
             m_pImpl->m_rDMapper.PopStyleSheetProperties();
             applyDefaults( true );
             m_pImpl->m_bHasImportedDefaultParaProps = true;
