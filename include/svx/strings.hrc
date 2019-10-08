@@ -1674,7 +1674,6 @@
 #define RID_SUBSETSTR_ZANABAZAR_SQUARE                      NC_("RID_SUBSETMAP", "Zanabazar Square")
 #define RID_SUBSETSTR_CHESS_SYMBOLS                         NC_("RID_SUBSETMAP", "Chess Symbols")
 #define RID_SUBSETSTR_DOGRA                                 NC_("RID_SUBSETMAP", "Dogra")
-#define RID_SUBSETSTR_GEORGIAN_EXTENDED                     NC_("RID_SUBSETMAP", "Georgian Extended")
 #define RID_SUBSETSTR_GUNJALA_GONDI                         NC_("RID_SUBSETMAP", "Gunjala Gondi")
 #define RID_SUBSETSTR_HANIFI_ROHINGYA                       NC_("RID_SUBSETMAP", "Hanifi Rohingya")
 #define RID_SUBSETSTR_INDIC_SIYAQ_NUMBERS                   NC_("RID_SUBSETMAP", "Indic Siyaq Numbers")
