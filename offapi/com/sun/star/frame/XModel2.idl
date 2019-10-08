@@ -147,6 +147,7 @@ interface XModel2 : com::sun::star::frame::XModel
                 <li>com::sun::star::document::MediaDescriptor::LockPrint</li>
                 <li>com::sun::star::document::MediaDescriptor::LockSave</li>
                 <li>com::sun::star::document::MediaDescriptor::LockEditDoc</li>
+                <li>com::sun::star::document::MediaDescriptor::EncryptionData @since LibreOffice 6.5</li>
             </ul>
 
         @throws com::sun::star::lang::IllegalArgumentException When trying to set an unsupported property
