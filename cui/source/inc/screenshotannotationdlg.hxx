@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_SCREENSHANNDLG_HXX
 #define INCLUDED_CUI_SOURCE_INC_SCREENSHANNDLG_HXX
 
-#include <vcl/dialog.hxx>
 #include <vcl/weld.hxx>
 #include <memory>
 
