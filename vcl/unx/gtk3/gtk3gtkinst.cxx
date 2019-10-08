@@ -4124,6 +4124,21 @@ public:
 
     virtual void draw(VirtualDevice& rOutput) override
     {
+        // detect if we have to manually setup its size
+        bool bAlreadyRealized = gtk_widget_get_realized(GTK_WIDGET(m_pDialog));
+        // has to be visible for draw to work
+        bool bAlreadyVisible = gtk_widget_get_visible(GTK_WIDGET(m_pDialog));
+        if (!bAlreadyVisible)
+            gtk_widget_show(GTK_WIDGET(m_pDialog));
+
+        if (!bAlreadyRealized)
+        {
+            GtkAllocation allocation;
+            gtk_widget_realize(GTK_WIDGET(m_pDialog));
+            gtk_widget_get_allocation(GTK_WIDGET(m_pDialog), &allocation);
+            gtk_widget_size_allocate(GTK_WIDGET(m_pDialog), &allocation);
+        }
+
         rOutput.SetOutputSizePixel(get_size());
         cairo_surface_t* pSurface = get_underlying_cairo_surface(rOutput);
         cairo_t* cr = cairo_create(pSurface);
@@ -4141,6 +4156,11 @@ public:
         gtk_widget_draw(GTK_WIDGET(m_pDialog), cr);
 
         cairo_destroy(cr);
+
+        if (!bAlreadyVisible)
+            gtk_widget_hide(GTK_WIDGET(m_pDialog));
+        if (!bAlreadyRealized)
+            gtk_widget_unrealize(GTK_WIDGET(m_pDialog));
     }
 
     virtual weld::ScreenShotCollection collect_screenshot_data() override
