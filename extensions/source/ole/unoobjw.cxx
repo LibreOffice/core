@@ -164,7 +164,7 @@ public:
     }
 
     // XEventListener
-    void SAL_CALL disposing( const css::lang::EventObject& Source ) override
+    void SAL_CALL disposing( const css::lang::EventObject& /* Source */ ) override
     {
         // ???
     }
