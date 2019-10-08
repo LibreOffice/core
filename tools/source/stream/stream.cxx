@@ -1561,6 +1561,10 @@ bool SvStream::SetStreamSize(sal_uInt64 const nSize)
     sal_uInt16 nBuf = m_nBufSize;
     SetBufferSize( 0 );
     SetSize( nSize );
+    if (nSize < m_nBufFilePos)
+    {
+        m_nBufFilePos = nSize;
+    }
     SetBufferSize( nBuf );
 #ifdef DBG_UTIL
     DBG_ASSERT(Tell()==nFPos,"SetStreamSize failed");
