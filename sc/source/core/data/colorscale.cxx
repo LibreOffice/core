@@ -78,11 +78,11 @@ void ScFormulaListener::startListening(const ScTokenArray* pArr, const ScRange& 
                     {   // automagically
                         if ( rRef1.IsColRel() )
                         {   // ColName
-                            aRange1.aEnd.SetRow(MAXROW);
+                            aRange1.aEnd.SetRow(mpDoc->MaxRow());
                         }
                         else
                         {   // RowName
-                            aRange1.aEnd.SetCol(MAXCOL);
+                            aRange1.aEnd.SetCol(mpDoc->MaxCol());
                         }
                     }
                     mpDoc->StartListeningArea(aRange1, false, this);

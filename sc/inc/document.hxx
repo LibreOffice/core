@@ -370,6 +370,8 @@ private:
     std::unique_ptr<ScValidationDataList> pValidationList;              // validity
     SvNumberFormatterIndexTable* pFormatExchangeList;    // for application of number formats
     TableContainer maTabs;
+    SCCOL mnMaxCol; /// Maximum addressable column
+    SCROW mnMaxRow; /// Maximum addressable row
     std::vector<OUString> maTabNames;               // for undo document, we need the information tab name <-> index
     mutable std::unique_ptr<ScRangeName>    pRangeName;
     std::unique_ptr<ScDBCollection>         pDBCollection;
@@ -853,6 +855,8 @@ public:
     SC_DLLPUBLIC bool GetCodeName( SCTAB nTab, OUString& rName ) const;
     SC_DLLPUBLIC bool SetCodeName( SCTAB nTab, const OUString& rName );
     SC_DLLPUBLIC bool GetTable( const OUString& rName, SCTAB& rTab ) const;
+    SC_DLLPUBLIC SCCOL MaxCol() const { return mnMaxCol; }
+    SC_DLLPUBLIC SCROW MaxRow() const { return mnMaxRow; }
 
     SC_DLLPUBLIC std::vector<OUString> GetAllTableNames() const;
 

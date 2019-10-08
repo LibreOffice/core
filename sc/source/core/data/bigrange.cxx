@@ -13,9 +13,9 @@
 bool ScBigAddress::IsValid( const ScDocument* pDoc ) const
 {   // min/max interval bounds define whole col/row/tab
     return
-        ((0 <= nCol && nCol <= MAXCOL)
+        ((0 <= nCol && nCol <= pDoc->MaxCol())
             || nCol == nInt32Min || nCol == nInt32Max) &&
-        ((0 <= nRow && nRow <= MAXROW)
+        ((0 <= nRow && nRow <= pDoc->MaxRow())
             || nRow == nInt32Min || nRow == nInt32Max) &&
         ((0 <= nTab && nTab < pDoc->GetTableCount())
             || nTab == nInt32Min || nTab == nInt32Max)
