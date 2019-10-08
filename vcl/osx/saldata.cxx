@@ -121,6 +121,7 @@ void SalData::ensureThreadAutoreleasePool()
     }
 }
 
+namespace {
 
 NSImage* load_icon_by_name(const OUString& rIconName)
 {
@@ -139,6 +140,8 @@ NSImage* load_icon_by_name(const OUString& rIconName)
     NSImage * image = [[NSImage alloc] initWithSize:imageSize];
     [image addRepresentation:imageRep];
     return image;
+}
+
 }
 
 #define MAKE_CURSOR( vcl_name, name, name2 ) \
