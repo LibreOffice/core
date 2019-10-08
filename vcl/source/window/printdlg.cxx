@@ -758,7 +758,7 @@ void PrintDialog::readFromSettings()
     for (sal_uInt16 i = 0; i < nCount; ++i)
     {
         OString sPageId = mxTabCtrl->get_page_ident(i);
-        if (aValue == mxTabCtrl->get_tab_label_text(sPageId))
+        if (aValue != "" && aValue == mxTabCtrl->get_tab_label_text(sPageId))
         {
             mxTabCtrl->set_current_page(sPageId);
             break;
