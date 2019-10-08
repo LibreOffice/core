@@ -324,7 +324,6 @@
 #define UNO_NAME_EDIT_CHAR_STRIKEOUT            "CharStrikeout"
 #define UNO_NAME_EDIT_CHAR_CASEMAP              "CharCaseMap"
 #define UNO_NAME_EDIT_CHAR_ESCAPEMENT           "CharEscapement"
-#define UNO_NAME_EDIT_CHAR_FONTNAME             "CharFontName"
 #define UNO_NAME_EDIT_CHAR_SHADOWED             "CharShadowed"
 #define UNO_NAME_EDIT_CHAR_UNDERLINE            "CharUnderline"
 #define UNO_NAME_EDIT_CHAR_OVERLINE             "CharOverline"
