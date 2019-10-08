@@ -781,6 +781,7 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     static BYTE nDefaultQuality = NONANTIALIASED_QUALITY;
     if (nDefaultQuality == NONANTIALIASED_QUALITY)
     {
+        // TODO skia
         if (OpenGLWrapper::isVCLOpenGLEnabled())
             nDefaultQuality = ANTIALIASED_QUALITY;
         else

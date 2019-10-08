@@ -22,6 +22,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/opengl/OpenGLWrapper.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 #include <sal/log.hxx>
 
 #include <window.h>
@@ -517,10 +518,12 @@ void Window::ImplCallResize()
 #if HAVE_FEATURE_OPENGL
     if( OpenGLWrapper::isVCLOpenGLEnabled() )
         Invalidate();
-
-    // Normally we avoid blanking on re-size unless people might notice:
     else
 #endif
+    if( SkiaHelper::isVCLSkiaEnabled() ) // TODO
+        Invalidate();
+    // Normally we avoid blanking on re-size unless people might notice:
+    else
         if( GetBackground().IsGradient() )
         Invalidate();
 

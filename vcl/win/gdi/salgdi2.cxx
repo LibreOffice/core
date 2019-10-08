@@ -30,12 +30,14 @@
 #include <win/salgdi.h>
 #include <win/salframe.h>
 #include <opengl/salbmp.hxx>
+#include <skia/salbmp.hxx>
 
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <outdata.hxx>
 #include <salgdiimpl.hxx>
 #include <opengl/win/gdiimpl.hxx>
+#include <skia/win/gdiimpl.hxx>
 
 
 bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
@@ -120,6 +122,11 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
     {
         aBitmapPalette = pGLSalBitmap->GetBitmapPalette();
     }
+    SkiaSalBitmap* pSkiaSalBitmap = dynamic_cast<SkiaSalBitmap*>(&rSalBitmap);
+    if (pSkiaSalBitmap != nullptr) // TODO
+    {
+        aBitmapPalette = pSkiaSalBitmap->GetBitmapPalette();
+    }
 
     BitmapBuffer* pRead = rSalBitmap.AcquireBuffer(BitmapAccessMode::Read);
 
@@ -165,6 +172,7 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
 void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
     if (dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get()) == nullptr &&
+        dynamic_cast<WinSkiaSalGraphicsImpl*>(mpImpl.get()) == nullptr &&
         dynamic_cast<const WinSalBitmap*>(&rSalBitmap) == nullptr)
     {
         std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());
@@ -183,6 +191,7 @@ void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSTransparentBitmap )
 {
     if (dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get()) == nullptr &&
+        dynamic_cast<WinSkiaSalGraphicsImpl*>(mpImpl.get()) == nullptr &&
         dynamic_cast<const WinSalBitmap*>(&rSSalBitmap) == nullptr)
     {
         std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());

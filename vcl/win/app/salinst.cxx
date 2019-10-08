@@ -32,11 +32,13 @@
 #include <vcl/inputtypes.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/timer.hxx>
 #include <vclpluginapi.h>
 
 #include <opengl/salbmp.hxx>
 #include <opengl/win/gdiimpl.hxx>
+#include <skia/salbmp.hxx>
 #include <win/wincomp.hxx>
 #include <win/salids.hrc>
 #include <win/saldata.hxx>
@@ -967,10 +969,20 @@ SalTimer* WinSalInstance::CreateSalTimer()
 
 std::shared_ptr<SalBitmap> WinSalInstance::CreateSalBitmap()
 {
-    if (OpenGLHelper::isVCLOpenGLEnabled())
+    if (SkiaHelper::isVCLSkiaEnabled())
+        return std::make_shared<SkiaSalBitmap>();
+    else if (OpenGLHelper::isVCLOpenGLEnabled())
         return std::make_shared<OpenGLSalBitmap>();
     else
         return std::make_shared<WinSalBitmap>();
+}
+
+std::shared_ptr<vcl::BackendCapabilities> WinSalInstance::GetBackendCapabilities()
+{
+    auto pBackendCapabilities = SalInstance::GetBackendCapabilities();
+    if( SkiaHelper::isVCLSkiaEnabled())
+        pBackendCapabilities->mbSupportsBitmap32 = true;
+    return pBackendCapabilities;
 }
 
 int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int, LPEXCEPTION_POINTERS pExceptionInfo)

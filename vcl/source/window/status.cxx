@@ -30,6 +30,7 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #endif
+#include <vcl/skia/SkiaHelper.hxx>
 #include <svdata.hxx>
 #include <window.h>
 
@@ -723,6 +724,8 @@ void StatusBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         if( OpenGLWrapper::isVCLOpenGLEnabled() )
             bOffscreen = false;
 #endif
+        if( SkiaHelper::isVCLSkiaEnabled() ) // TODO
+            bOffscreen = false;
 
         if (!bOffscreen)
             rRenderContext.Erase(rRect);

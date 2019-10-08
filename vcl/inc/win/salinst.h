@@ -63,6 +63,7 @@ public:
     virtual SalSystem*          CreateSalSystem() override;
     virtual std::shared_ptr<SalBitmap> CreateSalBitmap() override;
     virtual bool                IsMainThread() const override;
+    std::shared_ptr<vcl::BackendCapabilities> GetBackendCapabilities() override;
 
     virtual bool                DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
     virtual bool                AnyInput( VclInputFlags nType ) override;

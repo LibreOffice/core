@@ -495,6 +495,7 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
                       &paint);
     paint.setBlendMode(SkBlendMode::kSrcIn);
     canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rSourceBitmap).GetSkBitmap(), 0, 0, &paint);
+    canvas.flush();
     drawBitmap(rPosAry, tmpBitmap);
     return true;
 }

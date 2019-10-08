@@ -362,7 +362,6 @@ const SkBitmap& SkiaSalBitmap::GetAlphaSkBitmap() const
             const_cast<SkBitmap&>(mAlphaBitmap)
                 .setPixelRef(sk_ref_sp(mBitmap.pixelRef()), mBitmap.pixelRefOrigin().x(),
                              mBitmap.pixelRefOrigin().y());
-            return mAlphaBitmap;
         }
     }
     return mAlphaBitmap;

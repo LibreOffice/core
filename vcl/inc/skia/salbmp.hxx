@@ -66,6 +66,8 @@ public:
 
     const SkBitmap& GetAlphaSkBitmap() const;
 
+    const BitmapPalette& GetBitmapPalette() const { return mPalette; }
+
 #ifdef DBG_UTIL
     void dump(const char* file) const;
 #endif

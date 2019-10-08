@@ -1159,6 +1159,7 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
     tools::Rectangle cacheRect = rControlRegion;
     Size keySize = cacheRect.GetSize();
 
+    // TODO skia
     WinOpenGLSalGraphicsImpl* pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
 
     // tdf#95618 - A few controls render outside the region they're given.
