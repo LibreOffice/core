@@ -113,7 +113,7 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
 
         for(std::vector<SvXMLImportContextRef>::size_type a = 0; a < maImplContextVector.size(); a++)
         {
-            const SvXMLImportContext& rContext = *maImplContextVector[a].get();
+            const SvXMLImportContext& rContext = *maImplContextVector[a];
 
 
             OUString sMimeType;
@@ -152,7 +152,7 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
         // remove the rest from parent
         for(std::vector<SvXMLImportContextRef>::size_type a = 0; a < maImplContextVector.size(); a++)
         {
-            SvXMLImportContext& rCandidate = *maImplContextVector[a].get();
+            SvXMLImportContext& rCandidate = *maImplContextVector[a];
 
             removeGraphicFromImportContext(rCandidate);
         }

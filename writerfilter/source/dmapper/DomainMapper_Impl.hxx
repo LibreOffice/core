@@ -823,8 +823,7 @@ public:
 
     DomainMapperTableManager& getTableManager()
     {
-        tools::SvRef< DomainMapperTableManager > pMngr = m_aTableManagers.top();
-        return *pMngr.get( );
+        return *m_aTableManagers.top();
     }
 
     void appendTableManager( )

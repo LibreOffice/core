@@ -448,7 +448,7 @@ void OGenericUnoController::ImplBroadcastFeatureState(const OUString& _rFeature,
             if ( aFeatureCommands.find( elem.aURL.Complete ) != aFeatureCommands.end() )
             {
                 aEvent.FeatureURL = elem.aURL;
-                lcl_notifyMultipleStates( *elem.xListener.get(), aEvent, aStates );
+                lcl_notifyMultipleStates( *elem.xListener, aEvent, aStates );
             }
         }
     }

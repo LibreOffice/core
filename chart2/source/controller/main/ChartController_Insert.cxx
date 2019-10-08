@@ -195,7 +195,7 @@ void ChartController::executeDispatch_DeleteLegend()
             ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_LEGEND )),
         m_xUndoManager );
 
-    ChartModel& rModel = dynamic_cast<ChartModel&>(*getModel().get());
+    ChartModel& rModel = dynamic_cast<ChartModel&>(*getModel());
     LegendHelper::hideLegend(rModel);
     aUndoGuard.commit();
 }
@@ -207,7 +207,7 @@ void ChartController::executeDispatch_InsertLegend()
             ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_LEGEND )),
         m_xUndoManager );
 
-    ChartModel& rModel = dynamic_cast<ChartModel&>(*getModel().get());
+    ChartModel& rModel = dynamic_cast<ChartModel&>(*getModel());
     Reference< chart2::XLegend > xLegend = LegendHelper::showLegend(rModel, m_xCC);
     aUndoGuard.commit();
 }

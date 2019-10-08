@@ -496,7 +496,7 @@ ODatabaseSource::~ODatabaseSource()
 
 void ODatabaseSource::setName( const Reference< XDocumentDataSource >& _rxDocument, const OUString& _rNewName, DBContextAccess )
 {
-    ODatabaseSource& rModelImpl = dynamic_cast< ODatabaseSource& >( *_rxDocument.get() );
+    ODatabaseSource& rModelImpl = dynamic_cast< ODatabaseSource& >( *_rxDocument );
 
     SolarMutexGuard g;
     if ( rModelImpl.m_pImpl.is() )

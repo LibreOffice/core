@@ -123,13 +123,16 @@ bool RedundantPointerOps::VisitUnaryOperator(UnaryOperator const * unaryOperator
     if (auto cxxMemberCallExpr = dyn_cast<CXXMemberCallExpr>(subExpr))
     {
         auto methodDecl = cxxMemberCallExpr->getMethodDecl();
-        if (methodDecl->getIdentifier() && methodDecl->getName() == "get"
-            && cxxMemberCallExpr->getRecordDecl()->getName() == "unique_ptr")
-            report(
-                DiagnosticsEngine::Warning, "'*' followed by '.get()', just use '*'",
-                compat::getBeginLoc(unaryOperator))
-                << unaryOperator->getSourceRange();
+        if (methodDecl->getIdentifier() && methodDecl->getName() == "get")
+        {
+            auto className = cxxMemberCallExpr->getRecordDecl()->getName();
+            if (className == "unique_ptr" || className == "shared_ptr" || className == "Reference" || className == "SvRef")
+                report(
+                    DiagnosticsEngine::Warning, "'*' followed by '.get()', just use '*'",
+                    compat::getBeginLoc(unaryOperator))
+                    << unaryOperator->getSourceRange();
 
+        }
     }
     return true;
 }

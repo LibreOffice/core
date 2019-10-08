@@ -810,7 +810,7 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
         OUString sMessage( ex.getValueTypeName() + ": \"" + e.Message + "\"");
         if (e.Context.is())
         {
-            const char* pContext = typeid(*e.Context.get()).name();
+            const char* pContext = typeid(*e.Context).name();
             sMessage += " (context: " + OUString::createFromAscii(pContext) + " )";
         }
         SetError( XMLERROR_FLAG_ERROR | XMLERROR_FLAG_SEVERE | XMLERROR_API,
@@ -1690,7 +1690,7 @@ void SvXMLExport::ExportStyles_( bool )
 
 XMLTextParagraphExport* SvXMLExport::CreateTextParagraphExport()
 {
-    return new XMLTextParagraphExport( *this, *(GetAutoStylePool().get()) );
+    return new XMLTextParagraphExport( *this, *GetAutoStylePool() );
 }
 
 XMLShapeExport* SvXMLExport::CreateShapeExport()

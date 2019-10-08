@@ -1522,7 +1522,7 @@ SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
 
                 if(getSupportsMultipleContents() && XML_TEXT_FRAME_GRAPHIC == nFrameType)
                 {
-                    addContent(*m_xImplContext.get());
+                    addContent(*m_xImplContext);
                 }
             }
         }
@@ -1535,7 +1535,7 @@ SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
             m_eDefaultAnchorType, XML_TEXT_FRAME_GRAPHIC, m_xAttrList, true);
 
         m_xImplContext = xContext;
-        addContent(*m_xImplContext.get());
+        addContent(*m_xImplContext);
     }
     else if( m_bSupportsReplacement && !m_xReplImplContext.is() &&
              XML_NAMESPACE_DRAW == p_nPrefix &&
