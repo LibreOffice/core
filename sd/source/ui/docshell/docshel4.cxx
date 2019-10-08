@@ -836,10 +836,13 @@ void DrawDocShell::GotoBookmark(const OUString& rBookmark)
                     pDrawViewShell->SwitchPage(nSdPgNum);
                 }
 
-                // show page
-                SvxZoomItem aZoom;
-                aZoom.SetType( SvxZoomType::WHOLEPAGE );
-                pDrawViewShell->GetDispatcher()->ExecuteList(SID_ATTR_ZOOM, SfxCallMode::ASYNCHRON, { &aZoom });
+                if (pDrawViewShell->GetDispatcher())
+                {
+                    // show page
+                    SvxZoomItem aZoom;
+                    aZoom.SetType( SvxZoomType::WHOLEPAGE );
+                    pDrawViewShell->GetDispatcher()->ExecuteList(SID_ATTR_ZOOM, SfxCallMode::ASYNCHRON, { &aZoom });
+                }
 
                 if (pObj != nullptr)
                 {
