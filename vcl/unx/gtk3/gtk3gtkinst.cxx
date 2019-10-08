@@ -4129,7 +4129,10 @@ public:
         // has to be visible for draw to work
         bool bAlreadyVisible = gtk_widget_get_visible(GTK_WIDGET(m_pDialog));
         if (!bAlreadyVisible)
+        {
+            sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(GTK_DIALOG(m_pDialog))));
             gtk_widget_show(GTK_WIDGET(m_pDialog));
+        }
 
         if (!bAlreadyRealized)
         {
