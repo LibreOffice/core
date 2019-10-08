@@ -35,8 +35,10 @@
 #include <salgdiimpl.hxx>
 #include "gdiimpl.hxx"
 #include <opengl/win/gdiimpl.hxx>
+#include <skia/win/gdiimpl.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 
 #define DITHER_PAL_DELTA                51
@@ -619,7 +621,9 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
     mpStdClipRgnData(nullptr),
     mnPenWidth(GSL_PEN_WIDTH)
 {
-    if (OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter)
+    if (SkiaHelper::isVCLSkiaEnabled() && !mbPrinter)
+        mpImpl.reset(new WinSkiaSalGraphicsImpl(*this, pProvider));
+    else if (OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter)
         mpImpl.reset(new WinOpenGLSalGraphicsImpl(*this, pProvider));
     else
         mpImpl.reset(new WinSalGraphicsImpl(*this));
