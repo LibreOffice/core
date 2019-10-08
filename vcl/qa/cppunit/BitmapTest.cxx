@@ -48,6 +48,7 @@ class BitmapTest : public CppUnit::TestFixture
     void testErase();
     void testBitmap32();
     void testOctree();
+    void testEmptyAccess();
 
     CPPUNIT_TEST_SUITE(BitmapTest);
     CPPUNIT_TEST(testCreation);
@@ -62,6 +63,7 @@ class BitmapTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testErase);
     CPPUNIT_TEST(testBitmap32);
     CPPUNIT_TEST(testOctree);
+    CPPUNIT_TEST(testEmptyAccess);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -649,6 +651,14 @@ void BitmapTest::testOctree()
         auto aBitmapPalette = aOctree.GetPalette();
         CPPUNIT_ASSERT_EQUAL(sal_uInt16(74), aBitmapPalette.GetEntryCount());
     }
+}
+
+void BitmapTest::testEmptyAccess()
+{
+    Bitmap empty;
+    BitmapInfoAccess access(empty);
+    CPPUNIT_ASSERT_EQUAL(long(0), access.Width());
+    CPPUNIT_ASSERT_EQUAL(long(0), access.Height());
 }
 
 } // namespace
