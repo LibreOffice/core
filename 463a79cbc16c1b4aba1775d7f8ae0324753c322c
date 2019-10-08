@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_e6fe3f04",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-08T14:03:33Z",
+      "side": 1,
+      "message": "see \u003chttps://gerrit.libreoffice.org/80468/\u003e \"CXX is now always set before CXX_X64_BINARY on Windows\"",
+      "range": {
+        "startLine": 18,
+        "startChar": 17,
+        "endLine": 19,
+        "endChar": 35
+      },
+      "revId": "463a79cbc16c1b4aba1775d7f8ae0324753c322c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
