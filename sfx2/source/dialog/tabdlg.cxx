@@ -35,6 +35,7 @@
 #include <sfx2/viewsh.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/IDialogRenderable.hxx>
+#include <vcl/virdev.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
@@ -94,11 +95,13 @@ typedef std::vector<Data_Impl*> SfxTabDlgData_Impl;
 
 struct TabDlg_Impl
 {
-    bool                bHideResetBtn   : 1;
+    bool                bHideResetBtn : 1;
+    bool                bStarted : 1;
     SfxTabDlgData_Impl  aData;
 
-    explicit TabDlg_Impl( sal_uInt8 nCnt ) :
-        bHideResetBtn   ( false )
+    explicit TabDlg_Impl(sal_uInt8 nCnt)
+        : bHideResetBtn(false)
+        , bStarted(false)
     {
         aData.reserve( nCnt );
     }
@@ -1004,6 +1007,8 @@ void SfxTabDialogController::Start_Impl()
     }
 
     ActivatePageHdl(m_xTabCtrl->get_current_page_ident());
+
+    m_pImpl->bStarted = true;
 }
 
 void SfxTabDialogController::SetCurPageId(const OString& rIdent)
@@ -1118,6 +1123,40 @@ bool SfxTabDialogController::Apply()
         }
     }
     return bApplied;
+}
+
+std::vector<OString> SfxTabDialogController::getAllPageUIXMLDescriptions() const
+{
+    int nPages = m_xTabCtrl->get_n_pages();
+    std::vector<OString> aRet;
+    aRet.reserve(nPages);
+    for (int i = 0; i < nPages; ++i)
+        aRet.push_back(m_xTabCtrl->get_page_ident(i));
+    return aRet;
+}
+
+bool SfxTabDialogController::selectPageByUIXMLDescription(const OString& rUIXMLDescription)
+{
+    ShowPage(rUIXMLDescription);
+    return m_xTabCtrl->get_current_page_ident() == rUIXMLDescription;
+}
+
+BitmapEx SfxTabDialogController::createScreenshot() const
+{
+    // if we haven't run Start_Impl yet, do so now to create the initial pages
+    if (!m_pImpl->bStarted)
+    {
+        const_cast<SfxTabDialogController*>(this)->Start_Impl();
+    }
+
+    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    m_xDialog->draw(*xDialogSurface);
+    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
+}
+
+OString SfxTabDialogController::GetScreenshotId() const
+{
+    return m_xDialog->get_help_id();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

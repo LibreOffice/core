@@ -63,7 +63,6 @@ cui/ui/storedwebconnectiondialog.ui
 cui/ui/swpossizepage.ui
 cui/ui/textanimtabpage.ui
 cui/ui/textattrtabpage.ui
-cui/ui/textdialog.ui
 cui/ui/textflowpage.ui
 cui/ui/transparencytabpage.ui
 cui/ui/tsaurldialog.ui

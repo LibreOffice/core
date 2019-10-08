@@ -130,6 +130,10 @@ public:
     virtual short Execute() override;
     virtual bool IsCol() override;
     virtual bool IsRow() override;
+
+    // screenshotting
+    virtual BitmapEx createScreenshot() const override;
+    virtual OString GetScreenshotId() const override;
 };
 
 class AbstractScCondFormatManagerDlg_Impl : public AbstractScCondFormatManagerDlg
@@ -157,7 +161,11 @@ public:
     {
     }
     virtual short Execute() override;
-    virtual void    GetValues( ScImportSourceDesc& rDesc ) override;
+    virtual void GetValues( ScImportSourceDesc& rDesc ) override;
+
+    // screenshotting
+    virtual BitmapEx createScreenshot() const override;
+    virtual OString GetScreenshotId() const override;
 };
 
 class AbstractScDataPilotSourceTypeDlg_Impl  :public AbstractScDataPilotSourceTypeDlg
@@ -174,6 +182,10 @@ public:
     virtual bool IsNamedRange() const override;
     virtual OUString GetSelectedNamedRange() const override;
     virtual void AppendNamedRange(const OUString& rName) override;
+
+    // screenshotting
+    virtual BitmapEx createScreenshot() const override;
+    virtual OString GetScreenshotId() const override;
 };
 
 class AbstractScDataPilotServiceDlg_Impl : public AbstractScDataPilotServiceDlg
@@ -202,6 +214,10 @@ public:
     }
     virtual short           Execute() override;
     virtual DelCellCmd GetDelCellCmd() const override;
+
+    // screenshotting
+    virtual BitmapEx createScreenshot() const override;
+    virtual OString GetScreenshotId() const override;
 };
 
 //for dataform
@@ -215,6 +231,9 @@ public:
     }
     virtual short Execute() override;
 
+    // screenshotting
+    virtual BitmapEx createScreenshot() const override;
+    virtual OString GetScreenshotId() const override;
 };
 
 class AbstractScDeleteContentsDlg_Impl : public AbstractScDeleteContentsDlg
@@ -228,6 +247,10 @@ public:
     virtual short   Execute() override;
     virtual void    DisableObjects() override;
     virtual InsertDeleteFlags GetDelContentsCmdBits() const override;
+
+    // screenshotting
+    virtual BitmapEx createScreenshot() const override;
+    virtual OString GetScreenshotId() const override;
 };
 
 class AbstractScFillSeriesDlg_Impl:public AbstractScFillSeriesDlg
@@ -292,6 +315,10 @@ public:
     virtual void        SetChangeTrack( bool bSet ) override;
     virtual void        SetCellShiftDisabled( CellShiftDisabledFlags nDisable ) override;
     virtual InsCellCmd  GetMoveMode() override;
+
+    // screenshotting
+    virtual BitmapEx createScreenshot() const override;
+    virtual OString GetScreenshotId() const override;
 };
 
 class AbstractScInsertTableDlg_Impl : public AbstractScInsertTableDlg
@@ -311,6 +338,9 @@ public:
     virtual sal_uInt16      GetTableCount() override;
     virtual const OUString* GetNextTable( sal_uInt16* pN ) override;
 
+    // screenshotting
+    virtual BitmapEx createScreenshot() const override;
+    virtual OString GetScreenshotId() const override;
 };
 
 class AbstractScSelEntryDlg_Impl : public AbstractScSelEntryDlg
@@ -373,6 +403,10 @@ public:
     virtual void    GetTabNameString( OUString& rString ) const override;
     virtual void    SetForceCopyTable       () override;
     virtual void    EnableRenameTable       (bool bFlag) override;
+
+    // screenshotting
+    virtual BitmapEx createScreenshot() const override;
+    virtual OString GetScreenshotId() const override;
 };
 
 class AbstractScNameCreateDlg_Impl : public AbstractScNameCreateDlg
@@ -385,6 +419,10 @@ public:
     }
     virtual short           Execute() override;
     virtual CreateNameFlags GetFlags() const override;
+
+    // screenshotting
+    virtual BitmapEx createScreenshot() const override;
+    virtual OString GetScreenshotId() const override;
 };
 
 class AbstractScNamePasteDlg_Impl : public AbstractScNamePasteDlg
@@ -528,6 +566,10 @@ public:
     }
     virtual short Execute() override;
     virtual OUString GetInputString() const override;
+
+    // screenshotting
+    virtual BitmapEx createScreenshot() const override;
+    virtual OString GetScreenshotId() const override;
 };
 
 class AbstractScTabBgColorDlg_Impl :  public AbstractScTabBgColorDlg
@@ -540,6 +582,10 @@ public:
     }
     virtual short Execute() override;
     virtual void GetSelectedColor( Color& rColor ) const override;
+
+    // screenshotting
+    virtual BitmapEx createScreenshot() const override;
+    virtual OString GetScreenshotId() const override;
 };
 
 class AbstractScImportOptionsDlg_Impl : public AbstractScImportOptionsDlg
@@ -566,6 +612,10 @@ public:
     virtual short Execute() override;
     virtual LanguageType GetLanguageType() const override;
     virtual bool IsDateConversionSet() const override;
+
+    // screenshotting
+    virtual BitmapEx createScreenshot() const override;
+    virtual OString GetScreenshotId() const override;
 };
 
 class ScAbstractTabController_Impl : public SfxAbstractTabDialog
@@ -582,8 +632,13 @@ public:
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual const sal_uInt16*   GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
-        //From class Window.
     virtual void        SetText( const OUString& rStr ) override;
+
+    // screenshotting
+    virtual std::vector<OString> getAllPageUIXMLDescriptions() const override;
+    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override;
+    virtual BitmapEx createScreenshot() const override;
+    virtual OString GetScreenshotId() const override;
 };
 
 //AbstractDialogFactory_Impl implementations
