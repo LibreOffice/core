@@ -1268,10 +1268,7 @@ AC_ARG_ENABLE(gtk3_kde5,
 
 AC_ARG_ENABLE(gui,
     AS_HELP_STRING([--disable-gui],
-        [Disable use of X11 or Wayland to reduce dependencies. Not related to the --headless
-         command-line option. Not related to LibreOffice Online functionality. Don't use
-         unless you are certain you need to. Nobody will help you if you insist on trying
-         this and run into problems.]),
+        [Disable use of X11 or Wayland to reduce dependencies (e.g. for building LibreOfficeKit).]),
 ,enable_gui=yes)
 
 libo_FUZZ_ARG_ENABLE(randr,
