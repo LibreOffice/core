@@ -372,8 +372,9 @@ bool SwGlossaryHdl::ExpandGlossary(weld::Window* pParent)
             pWrtShell->LeaveBlockMode();
         else if(pWrtShell->IsExtMode())
             pWrtShell->LeaveExtMode();
-        // select word
-        pWrtShell->SelNearestWrd();
+        // select word (tdf#126589: part to the left of cursor)
+        if (pWrtShell->IsInWord() || pWrtShell->IsEndWrd())
+            pWrtShell->PrvWrd(true);
             // ask for word
         if(pWrtShell->IsSelection())
             aShortName = pWrtShell->GetSelText();
