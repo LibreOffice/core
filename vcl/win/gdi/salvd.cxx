@@ -218,12 +218,7 @@ bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
     mhBmp.reset(hNewBmp);
 
     if (mpGraphics)
-    {
-        WinOpenGLSalGraphicsImpl *pImpl;
-        pImpl = dynamic_cast< WinOpenGLSalGraphicsImpl * >(mpGraphics->GetImpl());
-        if (pImpl)
-            pImpl->Init();
-    }
+        mpGraphics->GetImpl()->Init();
 
     return true;
 }
