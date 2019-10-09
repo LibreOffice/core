@@ -95,6 +95,7 @@ protected:
 
 protected:
     friend class VclBuilder;
+    friend class SalInstanceBuilder;
     void set_action_area(VclButtonBox* pBox);
     virtual void set_content_area(VclBox* pBox);
 
