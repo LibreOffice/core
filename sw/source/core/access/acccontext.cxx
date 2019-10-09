@@ -1080,16 +1080,18 @@ void SwAccessibleContext::DisposeChild( const SwAccessibleChild& rChildFrameOrOb
         if( rChildFrameOrObj.GetSwFrame() )
         {
             ::rtl::Reference< SwAccessibleContext > xAccImpl =
-                    GetMap()->GetContextImpl( rChildFrameOrObj.GetSwFrame() );
-            xAccImpl->Dispose( bRecursive );
+                    GetMap()->GetContextImpl( rChildFrameOrObj.GetSwFrame(), false );
+            if (xAccImpl)
+                xAccImpl->Dispose( bRecursive );
         }
         else if ( rChildFrameOrObj.GetDrawObject() )
         {
             ::rtl::Reference< ::accessibility::AccessibleShape > xAccImpl =
                     GetMap()->GetContextImpl( rChildFrameOrObj.GetDrawObject(),
-                                              this );
-            DisposeShape( rChildFrameOrObj.GetDrawObject(),
-                          xAccImpl.get() );
+                                              this, false );
+            if (xAccImpl)
+                DisposeShape( rChildFrameOrObj.GetDrawObject(),
+                              xAccImpl.get() );
         }
         else if ( rChildFrameOrObj.GetWindow() )
         {
