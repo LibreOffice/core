@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_ee6615ee",
+        "filename": "vcl/source/window/status.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1160,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-09T17:10:10Z",
+      "side": 1,
+      "message": "Possibly something like this would help meduce code duplication?\n\n            const OUString sWidthStr \u003d nCharsWidth !\u003d -1 ? \"0\" : rText;\n            int nMultiplier \u003d nCharsWidth !\u003d -1 ? nCharsWidth : 1;\n            std::unique_ptr\u003cSalLayout\u003e pSalLayout \u003d ImplLayout(sWidthStr, 0, -1);\n            const SalLayoutGlyphs* pGlyphs \u003d pSalLayout ? pSalLayout-\u003eGetGlyphs() : nullptr;\n            long nWidth \u003d GetTextWidth(sWidthStr, 0, -1, nullptr, pGlyphs) * nMultiplier + nFudge;\n\n            // Store the calculated layout.\n            if (nCharsWidth !\u003d -1)\n                pItem-\u003emxLayoutCache \u003d std::move(pSalLayout);",
+      "range": {
+        "startLine": 1145,
+        "startChar": 12,
+        "endLine": 1160,
+        "endChar": 13
+      },
+      "revId": "e668fcd4ef51ca926175af6294a07373db436715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
