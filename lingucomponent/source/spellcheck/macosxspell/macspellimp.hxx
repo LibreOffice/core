@@ -79,7 +79,7 @@ class MacSpellChecker :
     linguistic::PropertyHelper_Spell &  GetPropHelper_Impl();
     linguistic::PropertyHelper_Spell &  GetPropHelper()
     {
-        return xPropHelper.is() ? *xPropHelper.get() : GetPropHelper_Impl();
+        return xPropHelper.is() ? *xPropHelper : GetPropHelper_Impl();
     }
 
     sal_Int16   GetSpellFailure( const OUString &rWord, const Locale &rLocale );

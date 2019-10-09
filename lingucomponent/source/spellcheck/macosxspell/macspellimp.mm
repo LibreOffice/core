@@ -87,7 +87,7 @@ PropertyHelper_Spell & MacSpellChecker::GetPropHelper_Impl()
         xPropHelper = new PropertyHelper_Spell( static_cast<XSpellChecker *>(this), xPropSet );
         xPropHelper->AddAsPropListener();
     }
-    return *xPropHelper.get();
+    return *xPropHelper;
 }
 
 
