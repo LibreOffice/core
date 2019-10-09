@@ -1152,6 +1152,18 @@ long ScDPOutput::GetHeaderRows() const
     return pPageFields.size() + ( bDoFilter ? 1 : 0 );
 }
 
+namespace
+{
+    void insertNames(ScDPUniqueStringSet& rNames, const uno::Sequence<sheet::MemberResult>& rMemberResults)
+    {
+        for (const sheet::MemberResult& rMemberResult : rMemberResults)
+        {
+            if (rMemberResult.Flags & sheet::MemberResultFlags::HASMEMBER)
+                rNames.insert(rMemberResult.Name);
+        }
+    }
+}
+
 void ScDPOutput::GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension)
 {
     //  Return the list of all member names in a dimension's MemberResults.
@@ -1161,26 +1173,20 @@ void ScDPOutput::GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimensi
     auto lFindDimension = [nDimension](const ScDPOutLevelData& rField) { return rField.mnDim == nDimension; };
 
     // look in column fields
-    auto it = std::find_if(pColFields.begin(), pColFields.end(), lFindDimension);
-    bool bFound = it != pColFields.end();
-
-    if (!bFound)
+    auto colit = std::find_if(pColFields.begin(), pColFields.end(), lFindDimension);
+    if (colit != pColFields.end())
     {
-        // look in row fields
-        it = std::find_if(pRowFields.begin(), pRowFields.end(), lFindDimension);
-        bFound = it != pRowFields.end();
+        // collect the member names
+        insertNames(rNames, colit->maResult);
+        return;
     }
 
-    // collect the member names
-
-    if ( bFound )
+    // look in row fields
+    auto rowit = std::find_if(pRowFields.begin(), pRowFields.end(), lFindDimension);
+    if (rowit != pRowFields.end())
     {
-        const uno::Sequence<sheet::MemberResult> aMemberResults = it->maResult;
-        for (const sheet::MemberResult& rMemberResult : aMemberResults)
-        {
-            if ( rMemberResult.Flags & sheet::MemberResultFlags::HASMEMBER )
-                rNames.insert(rMemberResult.Name);
-        }
+        // collect the member names
+        insertNames(rNames, rowit->maResult);
     }
 }
 
