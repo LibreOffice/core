@@ -28,6 +28,7 @@ fuzzer_externals = \
     icudata \
     lcms2 \
     librdf \
+    libexttextcat \
     liblangtag \
     libxslt \
     libxml2 \

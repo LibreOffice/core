@@ -23,6 +23,7 @@ $(eval $(call gb_UIConfig_add_uifiles,vcl,\
 	vcl/uiconfig/ui/printerpropertiesdialog \
 	vcl/uiconfig/ui/printprogressdialog \
 	vcl/uiconfig/ui/querydialog \
+	vcl/uiconfig/ui/screenshotparent \
 ))
 
 $(eval $(call gb_UIConfig_add_a11yerrors_uifiles,vcl,\
