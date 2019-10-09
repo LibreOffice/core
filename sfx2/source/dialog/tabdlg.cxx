@@ -1156,6 +1156,15 @@ BitmapEx SfxTabDialogController::createScreenshot() const
 
 OString SfxTabDialogController::GetScreenshotId() const
 {
+    const OString sId = m_xTabCtrl->get_current_page_ident();
+    Data_Impl* pDataObject = Find(m_pImpl->aData, sId);
+    SfxTabPage* pPage = pDataObject ? pDataObject->xTabPage.get() : nullptr;
+    if (pPage)
+    {
+        OString sHelpId(pPage->GetHelpId());
+        if (!sHelpId.isEmpty())
+            return sHelpId;
+    }
     return m_xDialog->get_help_id();
 }
 
