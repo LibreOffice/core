@@ -11744,7 +11744,6 @@ public:
         return sPageHelpId;
     }
 
-
     virtual ~GtkInstanceBuilder() override
     {
         g_slist_free(m_pObjectList);
@@ -11791,12 +11790,50 @@ public:
 
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString &id, bool bTakeOwnership) override
     {
-        GtkDialog* pDialog = GTK_DIALOG(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        GtkWindow* pDialog = GTK_WINDOW(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pDialog)
             return nullptr;
         if (m_pParentWidget)
-            gtk_window_set_transient_for(GTK_WINDOW(pDialog), GTK_WINDOW(gtk_widget_get_toplevel(m_pParentWidget)));
-        return std::make_unique<GtkInstanceDialog>(GTK_WINDOW(pDialog), this, bTakeOwnership);
+            gtk_window_set_transient_for(pDialog, GTK_WINDOW(gtk_widget_get_toplevel(m_pParentWidget)));
+        return std::make_unique<GtkInstanceDialog>(pDialog, this, bTakeOwnership);
+    }
+
+    virtual std::unique_ptr<weld::Dialog> create_screenshot_dialog() override
+    {
+        GtkWidget* pTopLevel = nullptr;
+
+        for (GSList* l = m_pObjectList; l; l = g_slist_next(l))
+        {
+            GObject* pObj = static_cast<GObject*>(l->data);
+
+            if (!GTK_IS_WIDGET(pObj) || gtk_widget_get_parent(GTK_WIDGET(pObj)))
+                continue;
+
+            if (!pTopLevel)
+                pTopLevel = GTK_WIDGET(pObj);
+            else if (GTK_IS_WINDOW(pObj))
+                pTopLevel = GTK_WIDGET(pObj);
+        }
+
+        if (!pTopLevel)
+            return nullptr;
+
+        GtkWindow* pDialog;
+        if (GTK_IS_WINDOW(pTopLevel))
+            pDialog = GTK_WINDOW(pTopLevel);
+        else
+        {
+            pDialog = GTK_WINDOW(gtk_dialog_new());
+            ::set_help_id(GTK_WIDGET(pDialog), ::get_help_id(pTopLevel));
+
+            GtkWidget* pContentArea = gtk_dialog_get_content_area(GTK_DIALOG(pDialog));
+            gtk_container_add(GTK_CONTAINER(pContentArea), pTopLevel);
+            gtk_widget_show_all(pTopLevel);
+        }
+
+        if (m_pParentWidget)
+            gtk_window_set_transient_for(pDialog, GTK_WINDOW(gtk_widget_get_toplevel(m_pParentWidget)));
+        return std::make_unique<GtkInstanceDialog>(pDialog, this, true);
     }
 
     virtual std::unique_ptr<weld::Window> weld_window(const OString &id, bool bTakeOwnership) override
