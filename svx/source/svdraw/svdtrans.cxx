@@ -838,166 +838,86 @@ OUString SdrFormatter::GetStr(long nVal) const
     return aStr.makeStringAndClear();
 }
 
-void SdrFormatter::TakeUnitStr(MapUnit eUnit, OUString& rStr)
+OUString SdrFormatter::GetUnitStr(MapUnit eUnit)
 {
     switch(eUnit)
     {
         // metrically
         case MapUnit::Map100thMM   :
-        {
-            rStr = "/100mm";
-            break;
-        }
+            return "/100mm";
         case MapUnit::Map10thMM    :
-        {
-            rStr = "/10mm";
-            break;
-        }
+            return "/10mm";
         case MapUnit::MapMM         :
-        {
-            rStr = "mm";
-            break;
-        }
+            return "mm";
         case MapUnit::MapCM         :
-        {
-            rStr = "cm";
-            break;
-        }
+            return "cm";
 
         // Inch
         case MapUnit::Map1000thInch:
-        {
-            rStr = "/1000\"";
-            break;
-        }
+            return "/1000\"";
         case MapUnit::Map100thInch :
-        {
-            rStr = "/100\"";
-            break;
-        }
+            return "/100\"";
         case MapUnit::Map10thInch  :
-        {
-            rStr = "/10\"";
-            break;
-        }
+            return "/10\"";
         case MapUnit::MapInch       :
-        {
-            rStr = "\"";
-            break;
-        }
+            return "\"";
         case MapUnit::MapPoint      :
-        {
-            rStr = "pt";
-            break;
-        }
+            return "pt";
         case MapUnit::MapTwip       :
-        {
-            rStr = "twip";
-            break;
-        }
+            return "twip";
 
         // others
         case MapUnit::MapPixel      :
-        {
-            rStr = "pixel";
-            break;
-        }
+            return "pixel";
         case MapUnit::MapSysFont    :
-        {
-            rStr = "sysfont";
-            break;
-        }
+            return "sysfont";
         case MapUnit::MapAppFont    :
-        {
-            rStr = "appfont";
-            break;
-        }
+            return "appfont";
         case MapUnit::MapRelative   :
-        {
-            rStr = "%";
-            break;
-        }
-        default: break;
+            return "%";
+        default:
+            return OUString();
     }
 }
 
-void SdrFormatter::TakeUnitStr(FieldUnit eUnit, OUString& rStr)
+OUString SdrFormatter::GetUnitStr(FieldUnit eUnit)
 {
     switch(eUnit)
     {
         default             :
         case FieldUnit::NONE     :
         case FieldUnit::CUSTOM   :
-        {
-            rStr.clear();
-            break;
-        }
+            return OUString();
 
         // metrically
         case FieldUnit::MM_100TH:
-        {
-            rStr = "/100mm";
-            break;
-        }
+            return "/100mm";
         case FieldUnit::MM     :
-        {
-            rStr = "mm";
-            break;
-        }
+            return "mm";
         case FieldUnit::CM     :
-        {
-            rStr = "cm";
-            break;
-        }
+            return "cm";
         case FieldUnit::M      :
-        {
-            rStr = "m";
-            break;
-        }
+            return "m";
         case FieldUnit::KM     :
-        {
-            rStr = "km";
-            break;
-        }
+            return "km";
 
         // Inch
         case FieldUnit::TWIP   :
-        {
-            rStr = "twip";
-            break;
-        }
+            return "twip";
         case FieldUnit::POINT  :
-        {
-            rStr = "pt";
-            break;
-        }
+            return "pt";
         case FieldUnit::PICA   :
-        {
-            rStr = "pica";
-            break;
-        }
+            return "pica";
         case FieldUnit::INCH   :
-        {
-            rStr = "\"";
-            break;
-        }
+            return "\"";
         case FieldUnit::FOOT   :
-        {
-            rStr = "ft";
-            break;
-        }
+            return "ft";
         case FieldUnit::MILE   :
-        {
-            rStr = "mile(s)";
-            break;
-        }
+            return "mile(s)";
 
         // others
         case FieldUnit::PERCENT:
-        {
-            rStr = "%";
-            break;
-        }
+            return "%";
     }
 }
 
