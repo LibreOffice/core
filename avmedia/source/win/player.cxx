@@ -142,7 +142,13 @@ bool Player::create( const OUString& rURL )
         // It disables the desktop composition as soon as RenderFile is called
         // also causes some other problems: video rendering is not reliable
 
-        if( SUCCEEDED( hR = mpGB->RenderFile( o3tl::toW(rURL.getStr()), nullptr ) ) &&
+        // tdf#128057: IGraphBuilder::RenderFile seems to fail to handle file URIs properly when
+        // they contain encoded characters like "%23"; so pass system path in that case instead.
+        OUString aFile(rURL);
+        if (aFile.startsWithIgnoreAsciiCase("file:"))
+            osl::FileBase::getSystemPathFromFileURL(rURL, aFile);
+
+        if( SUCCEEDED( hR = mpGB->RenderFile( o3tl::toW(aFile.getStr()), nullptr ) ) &&
             SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaControl, reinterpret_cast<void**>(&mpMC) ) ) &&
             SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaEventEx, reinterpret_cast<void**>(&mpME) ) ) &&
             SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaSeeking, reinterpret_cast<void**>(&mpMS) ) ) &&
