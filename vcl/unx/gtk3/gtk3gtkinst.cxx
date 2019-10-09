@@ -4706,6 +4706,8 @@ public:
 
     virtual ~GtkInstanceNotebook() override
     {
+        if (m_nLaunchSplitTimeoutId)
+            g_source_remove(m_nLaunchSplitTimeoutId);
         if (m_nSizeAllocateSignalId)
             g_signal_handler_disconnect(m_pNotebook, m_nSizeAllocateSignalId);
         g_signal_handler_disconnect(m_pNotebook, m_nSwitchPageSignalId);
