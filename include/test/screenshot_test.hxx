@@ -15,7 +15,8 @@
 #include <unotest/macros_test.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <osl/file.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/weld.hxx>
 #include <map>
 
 class VclAbstractDialog;
@@ -30,11 +31,18 @@ private:
     /// the set of known dialogs and their ID for usage in createDialogByID
     mapType     maKnownDialogs;
 
+    /// parent for non-dialog buildables
+    weld::GenericDialogController maParent;
+    std::unique_ptr<weld::Container> mxParentWidget;
+
 private:
     /// helpers
     void implSaveScreenshot(const BitmapEx& rScreenshot, const OString& rScreenshotId);
     void saveScreenshot(VclAbstractDialog const & rDialog);
-    void saveScreenshot(Dialog& rDialog);
+    void saveScreenshot(weld::Window& rDialog);
+
+    /// helper method to create and dump a dialog based on Builder contents.
+    void dumpDialogToPath(weld::Builder& rDialog);
 
     /// helper method to populate maKnownDialogs, called in setUp(). Needs to be
     /// written and has to add entries to maKnownDialogs
@@ -57,9 +65,6 @@ public:
 
     /// version for AbstractDialogs, the ones created in AbstractDialogFactories
     void dumpDialogToPath(VclAbstractDialog& rDialog);
-
-    /// version for pure vcl-based dialogs
-    void dumpDialogToPath(Dialog& rDialog);
 
     /// fallback version for dialogs for which only the UXMLDescription is known.
     /// This should be used with care - no active layouting will be done, only the
