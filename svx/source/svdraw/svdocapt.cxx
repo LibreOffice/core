@@ -401,18 +401,14 @@ OUString SdrCaptionObj::getSpecialDragComment(const SdrDragStat& rDrag) const
         }
         else
         {
-            OUString aStr;
-
             if(!pHdl)
             {
-                ImpTakeDescriptionStr(STR_DragCaptFram, aStr);
+                return ImpGetDescriptionStr(STR_DragCaptFram);
             }
             else
             {
-                ImpTakeDescriptionStr(STR_DragCaptTail, aStr);
+                return ImpGetDescriptionStr(STR_DragCaptTail);
             }
-
-            return aStr;
         }
     }
 }

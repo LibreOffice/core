@@ -917,9 +917,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
         const ImpPathCreateUser* pU = static_cast<const ImpPathCreateUser*>(rDrag.GetUser());
         const SdrObjKind eOriginalKind(meObjectKind);
         mrSdrPathObject.meKind = pU->eCurrentKind;
-        OUString aTmp;
-        mrSdrPathObject.ImpTakeDescriptionStr(STR_ViewCreateObj, aTmp);
-        aStr = aTmp;
+        aStr = mrSdrPathObject.ImpGetDescriptionStr(STR_ViewCreateObj);
         mrSdrPathObject.meKind = eOriginalKind;
 
         Point aPrev(rDrag.GetPrev());
@@ -959,9 +957,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
     {
         // #i103058# fallback when no model and/or Handle, both needed
         // for else-path
-        OUString aTmp;
-        mrSdrPathObject.ImpTakeDescriptionStr(STR_DragPathObj, aTmp);
-        aStr = aTmp;
+        aStr = mrSdrPathObject.ImpGetDescriptionStr(STR_DragPathObj);
     }
     else
     {
@@ -984,9 +980,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
         if(!pDragData->IsMultiPointDrag() && pDragData->bEliminate)
         {
             // point of ...
-            OUString aTmp;
-            mrSdrPathObject.ImpTakeDescriptionStr(STR_ViewMarkedPoint, aTmp);
-            aStr = aTmp;
+            aStr = mrSdrPathObject.ImpGetDescriptionStr(STR_ViewMarkedPoint);
 
             // delete %O
             OUString aStr2(SvxResId(STR_EditDelete));

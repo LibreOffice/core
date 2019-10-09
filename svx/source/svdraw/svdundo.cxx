@@ -212,10 +212,11 @@ OUString SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject
     return rStr.replaceAt(nPos, 2, _rForObject.TakeObjNameSingul());
 }
 
-void SdrUndoObj::ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr, bool bRepeat) const
+OUString SdrUndoObj::ImpGetDescriptionStr(const char* pStrCacheID, bool bRepeat) const
 {
     if ( pObj )
-        rStr = GetDescriptionStringForObject( *pObj, pStrCacheID, bRepeat );
+        return GetDescriptionStringForObject( *pObj, pStrCacheID, bRepeat );
+    return OUString();
 }
 
 // common call method for possible change of the page when UNDO/REDO is triggered
@@ -481,34 +482,26 @@ void SdrUndoAttrObj::Redo()
 
 OUString SdrUndoAttrObj::GetComment() const
 {
-    OUString aStr;
-
     if(bStyleSheet)
     {
-        ImpTakeDescriptionStr(STR_EditSetStylesheet, aStr);
+        return ImpGetDescriptionStr(STR_EditSetStylesheet);
     }
     else
     {
-        ImpTakeDescriptionStr(STR_EditSetAttributes, aStr);
+        return ImpGetDescriptionStr(STR_EditSetAttributes);
     }
-
-    return aStr;
 }
 
 OUString SdrUndoAttrObj::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
-    OUString aStr;
-
     if(bStyleSheet)
     {
-        ImpTakeDescriptionStr(STR_EditSetStylesheet, aStr, true);
+        return ImpGetDescriptionStr(STR_EditSetStylesheet, true);
     }
     else
     {
-        ImpTakeDescriptionStr(STR_EditSetAttributes, aStr, true);
+        return ImpGetDescriptionStr(STR_EditSetAttributes, true);
     }
-
-    return aStr;
 }
 
 
@@ -532,9 +525,7 @@ void SdrUndoMoveObj::Redo()
 
 OUString SdrUndoMoveObj::GetComment() const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_EditMove,aStr);
-    return aStr;
+    return ImpGetDescriptionStr(STR_EditMove);
 }
 
 void SdrUndoMoveObj::SdrRepeat(SdrView& rView)
@@ -549,9 +540,7 @@ bool SdrUndoMoveObj::CanSdrRepeat(SdrView& rView) const
 
 OUString SdrUndoMoveObj::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_EditMove,aStr,true);
-    return aStr;
+    return ImpGetDescriptionStr(STR_EditMove,true);
 }
 
 
@@ -630,9 +619,7 @@ void SdrUndoGeoObj::Redo()
 
 OUString SdrUndoGeoObj::GetComment() const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_DragMethObjOwn,aStr);
-    return aStr;
+    return ImpGetDescriptionStr(STR_DragMethObjOwn);
 }
 
 
@@ -784,9 +771,7 @@ void SdrUndoDelObj::Redo()
 
 OUString SdrUndoDelObj::GetComment() const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_EditDelete,aStr);
-    return aStr;
+    return ImpGetDescriptionStr(STR_EditDelete);
 }
 
 void SdrUndoDelObj::SdrRepeat(SdrView& rView)
@@ -801,9 +786,7 @@ bool SdrUndoDelObj::CanSdrRepeat(SdrView& rView) const
 
 OUString SdrUndoDelObj::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_EditDelete,aStr,true);
-    return aStr;
+    return ImpGetDescriptionStr(STR_EditDelete,true);
 }
 
 
@@ -828,9 +811,7 @@ OUString SdrUndoNewObj::GetComment( const SdrObject& _rForObject )
 
 OUString SdrUndoNewObj::GetComment() const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoInsertObj,aStr);
-    return aStr;
+    return ImpGetDescriptionStr(STR_UndoInsertObj);
 }
 
 SdrUndoReplaceObj::SdrUndoReplaceObj(SdrObject& rOldObj1, SdrObject& rNewObj1)
@@ -919,9 +900,7 @@ void SdrUndoReplaceObj::SetOldOwner(bool bNew)
 
 OUString SdrUndoCopyObj::GetComment() const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoCopyObj,aStr);
-    return aStr;
+    return ImpGetDescriptionStr(STR_UndoCopyObj);
 }
 
 
@@ -984,9 +963,7 @@ void SdrUndoObjOrdNum::Redo()
 
 OUString SdrUndoObjOrdNum::GetComment() const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoObjOrdNum,aStr);
-    return aStr;
+    return ImpGetDescriptionStr(STR_UndoObjOrdNum);
 }
 
 
@@ -1101,16 +1078,12 @@ void SdrUndoObjSetText::Redo()
 
 OUString SdrUndoObjSetText::GetComment() const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoObjSetText,aStr);
-    return aStr;
+    return ImpGetDescriptionStr(STR_UndoObjSetText);
 }
 
 OUString SdrUndoObjSetText::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoObjSetText,aStr);
-    return aStr;
+    return ImpGetDescriptionStr(STR_UndoObjSetText);
 }
 
 void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
@@ -1122,8 +1095,7 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
         const bool bUndo = rView.IsUndoEnabled();
         if( bUndo )
         {
-            OUString aStr;
-            ImpTakeDescriptionStr(STR_UndoObjSetText,aStr);
+            OUString aStr = ImpGetDescriptionStr(STR_UndoObjSetText);
             rView.BegUndo(aStr);
         }
 
@@ -1212,14 +1184,14 @@ OUString SdrUndoObjStrAttr::GetComment() const
     switch ( meObjStrAttr )
     {
     case ObjStrAttrType::Name:
-        ImpTakeDescriptionStr( STR_UndoObjName, aStr );
-        aStr += " '" + msNewStr + "'";
+        aStr = ImpGetDescriptionStr( STR_UndoObjName) +
+                " '" + msNewStr + "'";
         break;
     case ObjStrAttrType::Title:
-        ImpTakeDescriptionStr( STR_UndoObjTitle, aStr );
+        aStr = ImpGetDescriptionStr( STR_UndoObjTitle );
         break;
     case ObjStrAttrType::Description:
-        ImpTakeDescriptionStr( STR_UndoObjDescription, aStr );
+        aStr = ImpGetDescriptionStr( STR_UndoObjDescription );
         break;
     }
 
@@ -1343,9 +1315,9 @@ void SdrUndoPage::ImpMovePage(sal_uInt16 nOldNum, sal_uInt16 nNewNum)
     }
 }
 
-void SdrUndoPage::ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr)
+OUString SdrUndoPage::ImpGetDescriptionStr(const char* pStrCacheID)
 {
-    rStr = SvxResId(pStrCacheID);
+    return SvxResId(pStrCacheID);
 }
 
 
@@ -1442,16 +1414,12 @@ void SdrUndoDelPage::Redo()
 
 OUString SdrUndoDelPage::GetComment() const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoDelPage,aStr);
-    return aStr;
+    return ImpGetDescriptionStr(STR_UndoDelPage);
 }
 
 OUString SdrUndoDelPage::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoDelPage,aStr);
-    return aStr;
+    return ImpGetDescriptionStr(STR_UndoDelPage);
 }
 
 void SdrUndoDelPage::SdrRepeat(SdrView& /*rView*/)
@@ -1535,24 +1503,18 @@ void SdrUndoNewPage::Redo()
 
 OUString SdrUndoNewPage::GetComment() const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoNewPage,aStr);
-    return aStr;
+    return ImpGetDescriptionStr(STR_UndoNewPage);
 }
 
 
 OUString SdrUndoCopyPage::GetComment() const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoCopPage,aStr);
-    return aStr;
+    return ImpGetDescriptionStr(STR_UndoCopPage);
 }
 
 OUString SdrUndoCopyPage::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoCopPage,aStr);
-    return aStr;
+    return ImpGetDescriptionStr(STR_UndoCopPage);
 }
 
 void SdrUndoCopyPage::SdrRepeat(SdrView& /*rView*/)
@@ -1578,9 +1540,7 @@ void SdrUndoSetPageNum::Redo()
 
 OUString SdrUndoSetPageNum::GetComment() const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoMovPage,aStr);
-    return aStr;
+    return ImpGetDescriptionStr(STR_UndoMovPage);
 }
 
 SdrUndoPageMasterPage::SdrUndoPageMasterPage(SdrPage& rChangedPage)
@@ -1621,9 +1581,7 @@ void SdrUndoPageRemoveMasterPage::Redo()
 
 OUString SdrUndoPageRemoveMasterPage::GetComment() const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoDelPageMasterDscr,aStr);
-    return aStr;
+    return ImpGetDescriptionStr(STR_UndoDelPageMasterDscr);
 }
 
 SdrUndoPageChangeMasterPage::SdrUndoPageChangeMasterPage(SdrPage& rChangedPage)
@@ -1665,9 +1623,7 @@ void SdrUndoPageChangeMasterPage::Redo()
 
 OUString SdrUndoPageChangeMasterPage::GetComment() const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoChgPageMasterDscr,aStr);
-    return aStr;
+    return ImpGetDescriptionStr(STR_UndoChgPageMasterDscr);
 }
 
 

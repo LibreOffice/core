@@ -1060,21 +1060,22 @@ OUString SdrObject::TakeObjNamePlural() const
     return SvxResId(STR_ObjNamePluralNONE);
 }
 
-void SdrObject::ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr) const
+OUString SdrObject::ImpGetDescriptionStr(const char* pStrCacheID) const
 {
-    rStr = SvxResId(pStrCacheID);
-    sal_Int32 nPos = rStr.indexOf("%1");
+    OUString aStr = SvxResId(pStrCacheID);
+    sal_Int32 nPos = aStr.indexOf("%1");
     if (nPos >= 0)
     {
         // Replace '%1' with the object name.
         OUString aObjName(TakeObjNameSingul());
-        rStr = rStr.replaceAt(nPos, 2, aObjName);
+        aStr = aStr.replaceAt(nPos, 2, aObjName);
     }
 
-    nPos = rStr.indexOf("%2");
+    nPos = aStr.indexOf("%2");
     if (nPos >= 0)
         // Replace '%2' with the passed value.
-        rStr = rStr.replaceAt(nPos, 2, "0");
+        aStr = aStr.replaceAt(nPos, 2, "0");
+    return aStr;
 }
 
 void SdrObject::ImpForcePlusData()
