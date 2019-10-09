@@ -39,7 +39,7 @@ public:
 
     OUString getUndoDescription() const;
 
-    virtual void TakeSdrDragComment(OUString& rStr) const override;
+    virtual OUString GetSdrDragComment() const override;
     virtual PointerStyle GetSdrDragPointer() const override;
 
 protected:

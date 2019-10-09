@@ -36,7 +36,7 @@ protected:
 public:
     explicit SdrDragMovHdl(SdrDragView& rNewView);
 
-    virtual void TakeSdrDragComment(OUString& rStr) const override;
+    virtual OUString GetSdrDragComment() const override;
     virtual bool BeginSdrDrag() override;
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual bool EndSdrDrag(bool bCopy) override;
@@ -56,7 +56,7 @@ private:
 public:
     explicit SdrDragRotate(SdrDragView& rNewView);
 
-    virtual void TakeSdrDragComment(OUString& rStr) const override;
+    virtual OUString GetSdrDragComment() const override;
     virtual bool BeginSdrDrag() override;
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual bool EndSdrDrag(bool bCopy) override;
@@ -81,7 +81,7 @@ private:
 public:
     SdrDragShear(SdrDragView& rNewView,bool bSlant1);
 
-    virtual void TakeSdrDragComment(OUString& rStr) const override;
+    virtual OUString GetSdrDragComment() const override;
     virtual bool BeginSdrDrag() override;
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual bool EndSdrDrag(bool bCopy) override;
@@ -104,7 +104,7 @@ private:
 public:
     explicit SdrDragMirror(SdrDragView& rNewView);
 
-    virtual void TakeSdrDragComment(OUString& rStr) const override;
+    virtual OUString GetSdrDragComment() const override;
     virtual bool BeginSdrDrag() override;
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual bool EndSdrDrag(bool bCopy) override;
@@ -128,7 +128,7 @@ public:
 
     bool IsGradient() const { return bIsGradient; }
 
-    virtual void TakeSdrDragComment(OUString& rStr) const override;
+    virtual OUString GetSdrDragComment() const override;
     virtual bool BeginSdrDrag() override;
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual bool EndSdrDrag(bool bCopy) override;
@@ -174,7 +174,7 @@ protected:
 public:
     explicit SdrDragCrook(SdrDragView& rNewView);
 
-    virtual void TakeSdrDragComment(OUString& rStr) const override;
+    virtual OUString GetSdrDragComment() const override;
     virtual bool BeginSdrDrag() override;
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual bool EndSdrDrag(bool bCopy) override;
@@ -204,7 +204,7 @@ protected:
 public:
     explicit SdrDragDistort(SdrDragView& rNewView);
 
-    virtual void TakeSdrDragComment(OUString& rStr) const override;
+    virtual OUString GetSdrDragComment() const override;
     virtual bool BeginSdrDrag() override;
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual bool EndSdrDrag(bool bCopy) override;
@@ -221,7 +221,7 @@ class SdrDragCrop : public SdrDragObjOwn
 public:
     explicit SdrDragCrop(SdrDragView& rNewView);
 
-    virtual void TakeSdrDragComment(OUString& rStr) const override;
+    virtual OUString GetSdrDragComment() const override;
     virtual bool BeginSdrDrag() override;
     virtual bool EndSdrDrag(bool bCopy) override;
     virtual PointerStyle GetSdrDragPointer() const override;
