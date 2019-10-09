@@ -394,7 +394,7 @@
                     <property name="label" translatable="yes" context="columnpage|linestyleft">St_yle:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">linestylelb</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -408,11 +408,11 @@
                     <property name="label" translatable="yes" context="columnpage|linewidthft">_Width:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">linewidthmf</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="top_attach">2</property>
                   </packing>
                 </child>
                 <child>
@@ -422,11 +422,11 @@
                     <property name="label" translatable="yes" context="columnpage|lineheightft">H_eight:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">lineheightmf</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -436,11 +436,11 @@
                     <property name="label" translatable="yes" context="columnpage|lineposft">_Position:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">lineposlb</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -450,7 +450,6 @@
                     <property name="receives_default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -472,7 +471,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
-                    <property name="top_attach">1</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -482,8 +481,8 @@
                     <property name="adjustment">adjustment5</property>
                   </object>
                   <packing>
-                    <property name="left_attach">3</property>
-                    <property name="top_attach">0</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -495,7 +494,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="top_attach">2</property>
                   </packing>
                 </child>
                 <child>
@@ -505,14 +504,13 @@
                     <property name="receives_default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">5</property>
-                    <property name="top_attach">0</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -522,12 +520,24 @@
                     <property name="label" translatable="yes" context="columnpage|linecolorft">_Color:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">colorlb</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">4</property>
-                    <property name="top_attach">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
