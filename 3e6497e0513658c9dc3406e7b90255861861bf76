@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7f7f9b97_eec29585",
+        "filename": "include/xmlreader/xmlreader.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-09T18:52:47Z",
+      "side": 1,
+      "message": "this can be removed again",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 24
+      },
+      "revId": "3e6497e0513658c9dc3406e7b90255861861bf76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_6e3c4593",
         "filename": "xmlreader/source/xmlreader.cxx",
         "patchSetId": 1
@@ -13,6 +36,29 @@
       "writtenOn": "2019-10-09T18:50:30Z",
       "side": 1,
       "message": "and this comment too, please",
+      "revId": "3e6497e0513658c9dc3406e7b90255861861bf76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_2e464d25",
+        "filename": "xmlreader/source/xmlreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-09T18:52:47Z",
+      "side": 1,
+      "message": "There is no cache..  Why not just revert completely?",
+      "range": {
+        "startLine": 709,
+        "startChar": 24,
+        "endLine": 709,
+        "endChar": 29
+      },
       "revId": "3e6497e0513658c9dc3406e7b90255861861bf76",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
