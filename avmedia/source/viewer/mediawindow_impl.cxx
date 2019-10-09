@@ -183,24 +183,22 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
     {
         return xPlayer;
     }
-    uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
 
     if (!pMimeType || *pMimeType == AVMEDIA_MIMETYPE_COMMON)
     {
+        uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
 
-        static const char * aServiceManagers[] =
+        static OUStringLiteral aServiceManagers[] =
         {
             AVMEDIA_MANAGER_SERVICE_PREFERRED,
             AVMEDIA_MANAGER_SERVICE_NAME,
         };
 
-        for (sal_uInt32 i = 0; !xPlayer.is() && i < SAL_N_ELEMENTS( aServiceManagers ); ++i)
+        for (const auto& rServiceName : aServiceManagers)
         {
-            const OUString aServiceName(aServiceManagers[i],
-                                        strlen( aServiceManagers[i]),
-                                        RTL_TEXTENCODING_ASCII_US);
-
-            xPlayer = createPlayer(rURL, aServiceName, xContext);
+            xPlayer = createPlayer(rURL, rServiceName, xContext);
+            if (xPlayer)
+                break;
         }
     }
 
