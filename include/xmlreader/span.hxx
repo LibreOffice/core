@@ -24,7 +24,6 @@
 
 #include <cstddef>
 #include <cstring>
-#include <functional>
 
 #include <sal/types.h>
 #include <xmlreader/detail/xmlreaderdllapi.hxx>
@@ -77,19 +76,6 @@ struct SAL_WARN_UNUSED OOO_DLLPUBLIC_XMLREADER Span {
     }
 
     rtl::OUString convertFromUtf8() const;
-
-    std::size_t hashCode() const;
-};
-
-}
-
-namespace std {
-
-template<>
-struct hash<::xmlreader::Span>
-{
-    std::size_t operator()(::xmlreader::Span const & s) const
-    { return s.hashCode(); }
 };
 
 }
