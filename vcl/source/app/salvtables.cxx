@@ -35,6 +35,7 @@
 #include <messagedialog.hxx>
 #include <treeglue.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
+#include <unotools/configmgr.hxx>
 #include <utility>
 #include <tools/helpers.hxx>
 #include <vcl/abstdlg.hxx>
@@ -5759,6 +5760,32 @@ public:
         return pRet;
     }
 
+    virtual std::unique_ptr<weld::Dialog> create_screenshot_dialog() override
+    {
+        vcl::Window *pRoot = m_xBuilder->get_widget_root();
+
+        if (vcl::AboutDialog* pAboutDialog = dynamic_cast<vcl::AboutDialog*>(pRoot))
+            return std::unique_ptr<weld::AboutDialog>(new SalInstanceAboutDialog(pAboutDialog, this, true));
+
+        if (Dialog *pDialog = dynamic_cast<Dialog*>(pRoot))
+            return std::unique_ptr<weld::Dialog>(new SalInstanceDialog(pDialog, this, true));
+
+        VclPtrInstance<Dialog> xDialog(nullptr, WB_STDDIALOG | WB_SIZEABLE | WB_CLOSEABLE, Dialog::InitFlag::NoParent);
+        xDialog->SetText(utl::ConfigManager::getProductName());
+
+        auto xContentArea = VclPtr<VclVBox>::Create(xDialog, false, 12);
+        pRoot->SetParent(xContentArea);
+        xContentArea->Show();
+        pRoot->Show();
+        xDialog->SetHelpId(pRoot->GetHelpId());
+
+        assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
+        m_aOwnedToplevel.set(xDialog);
+        m_xBuilder->drop_ownership(pRoot);
+
+        return std::unique_ptr<weld::Dialog>(new SalInstanceDialog(xDialog, this, true));
+    }
+
     virtual std::unique_ptr<weld::Window> weld_window(const OString &id, bool bTakeOwnership) override
     {
         SystemWindow* pWindow = m_xBuilder->get<SystemWindow>(id);
@@ -5799,6 +5826,8 @@ public:
     virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString &id, bool bTakeOwnership) override
     {
         vcl::Window* pNotebook = m_xBuilder->get<vcl::Window>(id);
+        if (!pNotebook)
+            return nullptr;
         if (pNotebook->GetType() == WindowType::TABCONTROL)
             return std::make_unique<SalInstanceNotebook>(static_cast<TabControl*>(pNotebook), this, bTakeOwnership);
         if (pNotebook->GetType() == WindowType::VERTICALTABCONTROL)
