@@ -240,6 +240,19 @@ inline const clang::Expr *getSubExprAsWritten(const clang::CastExpr *This) {
   return getSubExprAsWritten(const_cast<clang::CastExpr *>(This));
 }
 
+inline clang::QualType getObjectType(clang::CXXMemberCallExpr const * expr) {
+#if CLANG_VERSION >= 100000
+    return expr->getObjectType();
+#else
+    // <https://github.com/llvm/llvm-project/commit/88559637641e993895337e1047a0bd787fecc647>
+    // "[OpenCL] Improve destructor support in C++ for OpenCL":
+    clang::QualType Ty = expr->getImplicitObjectArgument()->getType();
+    if (Ty->isPointerType())
+        Ty = Ty->getPointeeType();
+    return Ty;
+#endif
+}
+
 inline bool isExplicitSpecified(clang::CXXConstructorDecl const * decl) {
 #if CLANG_VERSION >= 90000
     return decl->getExplicitSpecifier().isExplicit();

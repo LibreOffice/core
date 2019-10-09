@@ -15,7 +15,7 @@ struct Struct1 {
 
 void function1(Struct1& s)
 {
-    (&s)->x = 1; // expected-error {{'&' followed by '->', rather use '.' [loplugin:redundantpointerops]}}
+    (&s)->x = 1; // expected-error {{'&' followed by '->' operating on 'Struct1', rather use '.' [loplugin:redundantpointerops]}}
 };
 
 struct Struct2 {
@@ -25,12 +25,12 @@ struct Struct2 {
 
 void function2(Struct2 s)
 {
-    (&s)->x = 1; // expected-error {{'&' followed by '->', rather use '.' [loplugin:redundantpointerops]}}
+    (&s)->x = 1; // expected-error {{'&' followed by '->' operating on 'Struct2', rather use '.' [loplugin:redundantpointerops]}}
 };
 
 void function3(Struct1& s)
 {
-    (*(&s)).x = 1; // expected-error {{'&' followed by '*', rather use '.' [loplugin:redundantpointerops]}}
+    (*(&s)).x = 1; // expected-error {{'&' followed by '*' operating on 'Struct1', rather use '.' [loplugin:redundantpointerops]}}
 };
 
 //void function4(Struct1* s)
@@ -40,7 +40,7 @@ void function3(Struct1& s)
 
 int function5(std::unique_ptr<int> x)
 {
-    return *x.get(); // expected-error {{'*' followed by '.get()', just use '*' [loplugin:redundantpointerops]}}
+    return *x.get(); // expected-error-re {{'*' followed by '.get()' operating on '{{.*}}unique_ptr{{.*}}', just use '*' [loplugin:redundantpointerops]}}
 };
 
 
