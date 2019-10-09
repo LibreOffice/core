@@ -727,14 +727,13 @@ void SdrFormatter::Undirty()
 }
 
 
-void SdrFormatter::TakeStr(long nVal, OUString& rStr) const
+OUString SdrFormatter::GetStr(long nVal) const
 {
-    OUString aNullCode("0");
+    const OUString aNullCode("0");
 
     if(!nVal)
     {
-        rStr = aNullCode;
-        return;
+        return aNullCode;
     }
 
     // we may lose some decimal places here, because of MulDiv instead of Real
@@ -836,7 +835,7 @@ void SdrFormatter::TakeStr(long nVal, OUString& rStr) const
         aStr.insert(0, "-");
     }
 
-    rStr = aStr.makeStringAndClear();
+    return aStr.makeStringAndClear();
 }
 
 void SdrFormatter::TakeUnitStr(MapUnit eUnit, OUString& rStr)

@@ -291,7 +291,7 @@ public:
         , eDstMU(eDst)
     {
     }
-    void TakeStr(long nVal, OUString& rStr) const;
+    OUString GetStr(long nVal) const;
     static void TakeUnitStr(MapUnit eUnit, OUString& rStr);
     static void TakeUnitStr(FieldUnit eUnit, OUString& rStr);
     static OUString GetUnitStr(FieldUnit eUnit) { OUString aStr; TakeUnitStr(eUnit,aStr); return aStr; }
