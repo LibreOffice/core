@@ -88,7 +88,7 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
     , pExampleSet     ( nullptr )
     , maCtrl          ( SID_HYPERLINK_GETLINK, *pBindings, this )
     , mbIsHTMLDoc     ( false )
-    , m_xIconCtrl(m_xBuilder->weld_notebook("icon_control"))
+    , m_xIconCtrl(m_xBuilder->weld_notebook("tabcontrol"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
     , m_xApplyBtn(m_xBuilder->weld_button("apply"))
     , m_xCancelBtn(m_xBuilder->weld_button("cancel"))

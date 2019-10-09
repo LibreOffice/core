@@ -85,7 +85,7 @@ DataSourceDialog::DataSourceDialog(weld::Window * pParent,
     , m_bRangeChooserTabIsValid(true)
     , m_bDataSourceTabIsValid(true)
     , m_bTogglingEnabled(true)
-    , m_xTabControl(m_xBuilder->weld_notebook("notebook"))
+    , m_xTabControl(m_xBuilder->weld_notebook("tabcontrol"))
     , m_xBtnOK(m_xBuilder->weld_button("ok"))
 {
     m_xRangeChooserTabPage = std::make_unique<RangeChooserTabPage>(m_xTabControl->get_page("range"), this,
