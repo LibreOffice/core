@@ -307,7 +307,7 @@ $(CLANGOUTDIR)/sharedvisitor/clang.pch: $(CLANGINDIR)/sharedvisitor/precompiled_
         $(COMPILER_PLUGINS_TOOLING_ARGS) $< -o $@ -MMD -MT $@ -MP \
         -MF $(CLANGOUTDIR)/sharedvisitor/clang.pch.d
 
--include $(CLANGOUTDIR)/sharedvisitor/clan.pch.d
+-include $(CLANGOUTDIR)/sharedvisitor/clang.pch.d
 
 else
 $(CLANGOUTDIR)/sharedvisitor/clang.pch:
