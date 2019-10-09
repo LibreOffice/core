@@ -60,10 +60,8 @@ SaxEmitter::SaxEmitter( const uno::Reference< xml::sax::XDocumentHandler >& xDoc
         OUString aStr( OStringToOUString( pDir, RTL_TEXTENCODING_UTF8 ) );
         OUString aFileURL;
         osl_getFileURLFromSystemPath( aStr.pData, &aFileURL.pData );
-        OUStringBuffer aBuf( 256 );
-        aBuf.append( aFileURL );
-        aBuf.append( "/pdfimport.xml" );
-        pStream = new osl::File( aBuf.makeStringAndClear() );
+        OUString aBuf = aFileURL + "/pdfimport.xml";
+        pStream = new osl::File( aBuf );
         if( pStream->open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create ) )
         {
             pStream->open( osl_File_OpenFlag_Write );
@@ -119,11 +117,11 @@ void SaxEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
     aBuf.append( pTag );
     for( const auto& rProperty : rProperties )
     {
-        aBuf.append( ' ' );
-        aBuf.append( OUStringToOString( rProperty.first, RTL_TEXTENCODING_UTF8 ) );
-        aBuf.append( "=\"" );
-        aBuf.append( OUStringToOString( rProperty.second, RTL_TEXTENCODING_UTF8 ) );
-        aBuf.append( "\"" );
+        aBuf.append( " " +
+                OUStringToOString( rProperty.first, RTL_TEXTENCODING_UTF8 ) +
+                "=\"" +
+                OUStringToOString( rProperty.second, RTL_TEXTENCODING_UTF8 ) +
+                "\"" );
     }
     aBuf.append( ">\n" );
     pStream->write( aBuf.getStr(), aBuf.getLength(), nWritten );

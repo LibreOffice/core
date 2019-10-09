@@ -362,17 +362,15 @@ void RtfAttributeOutput::SectionBreaks(const SwNode& rNode)
 
 void RtfAttributeOutput::StartParagraphProperties()
 {
-    OStringBuffer aPar;
+    OString aPar;
     if (!m_rExport.GetRTFFlySyntax())
     {
-        aPar.append(OOO_STRING_SVTOOLS_RTF_PARD);
-        aPar.append(OOO_STRING_SVTOOLS_RTF_PLAIN);
-        aPar.append(' ');
+        aPar = OOO_STRING_SVTOOLS_RTF_PARD OOO_STRING_SVTOOLS_RTF_PLAIN " ";
     }
     if (!m_bBufferSectionHeaders)
-        m_rExport.Strm().WriteOString(aPar.makeStringAndClear());
+        m_rExport.Strm().WriteOString(aPar);
     else
-        m_aSectionHeaders.append(aPar.makeStringAndClear());
+        m_aSectionHeaders.append(aPar);
 }
 
 void RtfAttributeOutput::EndParagraphProperties(

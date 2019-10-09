@@ -756,10 +756,7 @@ bool Impl_ExistURLInMenu(
 
     if ( !bValidFallback )
     {
-        OUStringBuffer aBuffer;
-        aBuffer.append( "private:factory/" );
-        aBuffer.append( SvtModuleOptions().GetDefaultModuleName() );
-        sFallback = aBuffer.makeStringAndClear();
+        sFallback = "private:factory/" + SvtModuleOptions().GetDefaultModuleName();
     }
 
     return false;

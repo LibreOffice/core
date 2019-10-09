@@ -41,15 +41,15 @@ OUString firebird::StatusVectorToString(const ISC_STATUS_ARRAY& rStatusVector,
         while(fb_interpret(msg, sizeof(msg), &pStatus))
         {
             // TODO: verify encoding
-            buf.append("\n*");
-            buf.append(OUString(msg, strlen(msg), RTL_TEXTENCODING_UTF8));
+            buf.append("\n*" +
+                OUString(msg, strlen(msg), RTL_TEXTENCODING_UTF8));
         }
     }
     catch (...)
     {
         SAL_WARN("connectivity.firebird", "ignore fb_interpret exception");
     }
-    buf.append("\ncaused by\n'").append(rCause).append("'\n");
+    buf.append("\ncaused by\n'" + rCause + "'\n");
 
     OUString error = buf.makeStringAndClear();
     SAL_WARN("connectivity.firebird", error);

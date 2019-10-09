@@ -250,14 +250,8 @@ namespace pcr
                 OUString sLocation = aScriptEvent.ScriptCode.copy( 0, nPrefixLen );
                 OUString sMacroPath = aScriptEvent.ScriptCode.copy( nPrefixLen + 1 );
 
-                OUStringBuffer aNewStyleSpec;
-                aNewStyleSpec.append( "vnd.sun.star.script:" );
-                aNewStyleSpec.append     ( sMacroPath );
-                aNewStyleSpec.append( "?language=Basic&location=" );
-                aNewStyleSpec.append     ( sLocation );
-
-                aScriptEvent.ScriptCode = aNewStyleSpec.makeStringAndClear();
-
+                aScriptEvent.ScriptCode = "vnd.sun.star.script:" + sMacroPath +
+                        "?language=Basic&location=" + sLocation;
                 // also, this new-style spec requires the script code to be "Script" instead of "StarBasic"
                 aScriptEvent.ScriptType = "Script";
             }
@@ -636,8 +630,7 @@ namespace pcr
                     OSL_ENSURE( !sLocation.isEmpty(), "EventHandler::convertToControlValue: unexpected: no location!" );
                     if ( !sLocation.isEmpty() )
                     {
-                        aComposeBuffer.append( sLocation );
-                        aComposeBuffer.append( ", " );
+                        aComposeBuffer.append( sLocation + ", " );
                     }
 
                     // language
@@ -1080,11 +1073,8 @@ namespace pcr
             Reference< XScriptEventsSupplier > xEventsSupplier( m_xComponent, UNO_QUERY_THROW );
             Reference< XNameContainer > xEvents( xEventsSupplier->getEvents(), UNO_SET_THROW );
 
-            OUStringBuffer aCompleteName;
-            aCompleteName.append( _rScriptEvent.ListenerType );
-            aCompleteName.append( "::" );
-            aCompleteName.append( _rScriptEvent.EventMethod );
-            OUString sCompleteName( aCompleteName.makeStringAndClear() );
+            OUString sCompleteName = _rScriptEvent.ListenerType +
+                "::" + _rScriptEvent.EventMethod;
 
             bool bExists = xEvents->hasByName( sCompleteName );
 

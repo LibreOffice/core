@@ -1134,8 +1134,8 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
                 bool bDone = pInStream->ReadLine( sLine );
                 while ( bDone )
                 {
-                    sBody.append( OStringToOUString(sLine, eEncoding) );
-                    sBody.append("\n");
+                    sBody.append( OStringToOUString(sLine, eEncoding) +
+                                "\n");
                     bDone = pInStream->ReadLine( sLine );
                 }
             }

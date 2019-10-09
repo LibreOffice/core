@@ -2493,12 +2493,8 @@ void ScInterpreter::ScCellExternal()
             return;
         }
 
-        OUStringBuffer aBuf;
-        aBuf.append('\'');
-        aBuf.append(*p);
-        aBuf.append("'#$");
-        aBuf.append(aTabName);
-        PushString(aBuf.makeStringAndClear());
+        OUString aBuf = "\'" + *p + "'#$" + aTabName;
+        PushString(aBuf);
     }
     else if ( aInfoType == "CONTENTS" )
     {

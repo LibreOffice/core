@@ -47,10 +47,7 @@ namespace framework
 {
 static OUString getHashKeyFromStrings( const OUString& aCommandURL, const OUString& aModuleName )
 {
-    OUStringBuffer aKey( aCommandURL );
-    aKey.append( "-" );
-    aKey.append( aModuleName );
-    return aKey.makeStringAndClear();
+    return aCommandURL + "-" + aModuleName;
 }
 
 //  XInterface, XTypeProvider

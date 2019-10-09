@@ -126,11 +126,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
                 theDbName = pDBData->GetName();
         }
 
-        OUStringBuffer aBuf;
-        aBuf.append(" (");
-        aBuf.append(theDbName);
-        aBuf.append(')');
-        m_xFtDbArea->set_label(aBuf.makeStringAndClear());
+        m_xFtDbArea->set_label(" (" + theDbName + ")");
     }
     else
     {

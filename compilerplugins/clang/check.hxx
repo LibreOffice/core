@@ -61,11 +61,15 @@ public:
 
     TypeCheck LvalueReference() const;
 
+    TypeCheck RvalueReference() const;
+
     inline ContextCheck Class(llvm::StringRef id) const;
 
     inline ContextCheck Struct(llvm::StringRef id) const;
 
     inline ContextCheck ClassOrStruct(llvm::StringRef id) const;
+
+    ContextCheck TemplateSpecialization(llvm::StringRef id) const;
 
     TypeCheck Typedef() const;
 

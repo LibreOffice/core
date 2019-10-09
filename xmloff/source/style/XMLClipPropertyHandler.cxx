@@ -115,8 +115,8 @@ bool XMLClipPropertyHandler::exportXML( OUString& rStrExpValue, const uno::Any& 
 
     if( rValue >>= aCrop )
     {
-        aOut.append( GetXMLToken(XML_RECT) );
-        aOut.append( '(' );
+        aOut.append( GetXMLToken(XML_RECT) +
+                "(" );
         rUnitConverter.convertMeasureToXML( aOut, aCrop.Top );
         if( !m_bODF11 )
             aOut.append( ',' );

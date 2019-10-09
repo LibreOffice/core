@@ -68,8 +68,7 @@ OUString SAL_CALL SimpleTextFormatter::format(const LogRecord& _rRecord)
     if (_rRecord.Level == css::logging::LogLevel::WARNING)
         aLogEntry.append("WARNING: ");
 
-    aLogEntry.append(_rRecord.Message);
-    aLogEntry.append("\n");
+    aLogEntry.append(_rRecord.Message + "\n");
 
     return aLogEntry.makeStringAndClear();
 }

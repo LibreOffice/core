@@ -80,8 +80,7 @@ static short generateNamespace(std::ostream & o,
     OStringBuffer buf;
     if (index == -1) {
         if (serviceobject) {
-            buf.append("comp_");
-            buf.append(implname);
+            buf.append("comp_" + implname);
             nm = buf.makeStringAndClear();
             o << "namespace comp_" << implname << " {\n\n";
             count=1;
@@ -93,13 +92,11 @@ static short generateNamespace(std::ostream & o,
         do {
             OString token(implname.getToken(0, '.', nPos));
             if (nPos < 0 && serviceobject) {
-                buf.append("::comp_");
-                buf.append(token);
+                buf.append("::comp_" + token);
                 o << "namespace comp_" << token << " { ";
                 count++;
             } else {
-                buf.append("::");
-                buf.append(token);
+                buf.append("::" + token);
                 o << "namespace " << token << " { ";
                 count++;
             }

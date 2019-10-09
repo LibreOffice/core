@@ -300,12 +300,12 @@ void SfxSplitWindow::dispose()
 void SfxSplitWindow::SaveConfig_Impl()
 {
     // Save configuration
-    OUStringBuffer aWinData;
-    aWinData.append('V');
-    aWinData.append(static_cast<sal_Int32>(VERSION));
-    aWinData.append(',');
-    aWinData.append(static_cast<sal_Int32>(pEmptyWin->nState));
-    aWinData.append(',');
+    OUStringBuffer aWinData =
+            "V" +
+            OUString::number(static_cast<sal_Int32>(VERSION)) +
+            "," +
+            OUString::number(static_cast<sal_Int32>(pEmptyWin->nState)) +
+            ",";
 
     sal_uInt16 nCount = 0;
     for ( auto const & rDock: maDockArr )

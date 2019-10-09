@@ -32,11 +32,10 @@ extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
     typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C()
 {
-    OUStringBuffer buf( 64 );
-    buf.append( "unsatisfied query for interface of type " );
-    buf.append( OUString::unacquired( &pType->pTypeName ) );
-    buf.append( '!' );
-    OUString ret( buf.makeStringAndClear() );
+    OUString ret =
+        "unsatisfied query for interface of type " +
+        OUString::unacquired( &pType->pTypeName ) +
+        OUStringLiteral1('!');
     rtl_uString_acquire( ret.pData );
     return ret.pData;
 }
@@ -46,11 +45,10 @@ extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iset_msg(
     typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C()
 {
-    OUStringBuffer buf( 64 );
-    buf.append( "invalid attempt to assign an empty interface of type " );
-    buf.append( OUString::unacquired( &pType->pTypeName ) );
-    buf.append( '!' );
-    OUString ret( buf.makeStringAndClear() );
+    OUString ret =
+        "invalid attempt to assign an empty interface of type " +
+        OUString::unacquired( &pType->pTypeName ) +
+        OUStringLiteral1('!');
     rtl_uString_acquire( ret.pData );
     return ret.pData;
 }
@@ -60,13 +58,12 @@ extern "C" rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg(
     uno_Any const * pAny, typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C()
 {
-    OUStringBuffer buf;
-    buf.append( "Cannot extract an Any(" );
-    buf.append( OUString::unacquired(&pAny->pType->pTypeName) );
-    buf.append( ") to " );
-    buf.append( OUString::unacquired(&pType->pTypeName) );
-    buf.append( '!' );
-    const OUString ret( buf.makeStringAndClear() );
+    OUString ret =
+        "Cannot extract an Any(" +
+        OUString::unacquired(&pAny->pType->pTypeName) +
+        ") to " +
+        OUString::unacquired(&pType->pTypeName) +
+        OUStringLiteral1('!');
     rtl_uString_acquire( ret.pData );
     return ret.pData;
 }

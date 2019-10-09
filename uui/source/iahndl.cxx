@@ -893,21 +893,15 @@ UUIInteractionHelper::getInteractionHandlerList(
             // Iterate over children.
             for ( const auto& rElem : aElems )
             {
-                OUStringBuffer aElemBuffer;
-                aElemBuffer.append( "['" );
-                aElemBuffer.append( rElem );
-
                 try
                 {
                     InteractionHandlerData aInfo;
 
                     // Obtain service name.
-                    OUStringBuffer aKeyBuffer = aElemBuffer;
-                    aKeyBuffer.append( "']/ServiceName" );
+                    OUString aKey = "['" + rElem + "']/ServiceName";
 
                     OUString aValue;
-                    if ( !( xHierNameAccess->getByHierarchicalName(
-                                aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
+                    if ( !( xHierNameAccess->getByHierarchicalName( aKey ) >>= aValue ) )
                     {
                         OSL_FAIL( "GetInteractionHandlerList - "
                                     "Error getting item value!" );

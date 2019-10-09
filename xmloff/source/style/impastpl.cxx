@@ -81,8 +81,7 @@ struct2string(void *data,
     {
         if (i > 0)
             result.append(":");
-        result.append(compoundType->ppMemberNames[i]);
-        result.append("=");
+        result.append(OUString::unacquired(&compoundType->ppMemberNames[i]) + "=");
         result.append(data2string(static_cast<char *>(data)+compoundType->pMemberOffsets[i],
                                   compoundType->ppTypeRefs[i]));
     }
@@ -161,8 +160,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
 
         if (!rParentName.isEmpty())
             {
-                aStemBuffer.append("-");
-                aStemBuffer.append(rParentName);
+                aStemBuffer.append("-" + rParentName);
             }
 
         // Create a name based on the properties used
@@ -175,9 +173,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
                     continue;
                 aStemBuffer.append("-");
                 aStemBuffer.append(OUString::number(rFamilyData.mxMapper->getPropertySetMapper()->GetEntryNameSpace(rState.mnIndex)));
-                aStemBuffer.append(":");
-                aStemBuffer.append(sXMLName);
-                aStemBuffer.append("=");
+                aStemBuffer.append(":" + sXMLName + "=");
                 aStemBuffer.append(any2string(rState.maValue));
             }
 
@@ -203,8 +199,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
             bWarned = true;
             rFamilyData.mnName++;
             aTry.append( aStemBuffer );
-            aTry.append( "-" );
-            aTry.append( OUString::number( rFamilyData.mnName ) );
+            aTry.append( "-" + OUString::number( rFamilyData.mnName ) );
             msName = aTry.makeStringAndClear();
         }
         rFamilyData.maNameSet.insert(msName);
@@ -213,13 +208,10 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
     {
         // create a name that hasn't been used before. The created name has not
         // to be added to the array, because it will never tried again
-        OUStringBuffer sBuffer( 7 );
         do
         {
             rFamilyData.mnName++;
-            sBuffer.append( rFamilyData.maStrPrefix );
-            sBuffer.append( OUString::number( rFamilyData.mnName ) );
-            msName = sBuffer.makeStringAndClear();
+            msName = rFamilyData.maStrPrefix + OUString::number( rFamilyData.mnName );
         }
         while (rFamilyData.maNameSet.find(msName) != rFamilyData.maNameSet.end() || rFamilyData.maReservedNameSet.find(msName) != rFamilyData.maReservedNameSet.end());
     }

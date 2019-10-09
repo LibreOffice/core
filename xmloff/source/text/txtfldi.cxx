@@ -2784,11 +2784,6 @@ void XMLDdeFieldDeclImportContext::StartElement(
     // valid data?
     if (bNameOK && bCommandApplicationOK && bCommandTopicOK && bCommandItemOK)
     {
-        // make service name
-        OUStringBuffer sBuf;
-        sBuf.append(sAPI_fieldmaster_prefix);
-        sBuf.append(sAPI_dde);
-
         // create DDE TextFieldMaster
         Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),
                                                  UNO_QUERY);
@@ -2803,7 +2798,7 @@ void XMLDdeFieldDeclImportContext::StartElement(
             try
             {
                 Reference<XInterface> xIfc =
-                    xFactory->createInstance(sBuf.makeStringAndClear());
+                    xFactory->createInstance(OUStringLiteral(sAPI_fieldmaster_prefix) + sAPI_dde);
                 if( xIfc.is() )
                 {
                     Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
@@ -2868,12 +2863,8 @@ void XMLDdeFieldImportContext::EndElement()
     if (bValid)
     {
         // find master
-        OUStringBuffer sBuf;
-        sBuf.append(sAPI_fieldmaster_prefix);
-        sBuf.append(sAPI_dde);
-        sBuf.append('.');
-        sBuf.append(sName);
-        OUString sMasterName = sBuf.makeStringAndClear();
+        OUString sMasterName = OUStringLiteral(sAPI_fieldmaster_prefix) +
+            sAPI_dde + "." + sName;
 
         Reference<XTextFieldsSupplier> xTextFieldsSupp(GetImport().GetModel(),
                                                        UNO_QUERY);
@@ -2889,9 +2880,8 @@ void XMLDdeFieldImportContext::EndElement()
             xMaster->setPropertyValue( sPropertyContent, uno::makeAny( GetContent()));
             // master exists: create text field and attach
             Reference<XPropertySet> xField;
-            sBuf.append(sAPI_textfield_prefix);
-            sBuf.append(sAPI_dde);
-            if (CreateField(xField, sBuf.makeStringAndClear()))
+            OUString sFieldName = OUStringLiteral(sAPI_textfield_prefix) + sAPI_dde;
+            if (CreateField(xField, sFieldName))
             {
                 Reference<XDependentTextField> xDepTextField(xField,UNO_QUERY);
                 xDepTextField->attachTextFieldMaster(xMaster);

@@ -190,9 +190,9 @@ css::uno::Sequence< OUString > VCLXPrinterPropertySet::getFormDescriptions(  )
         // Format: <DisplayFormName;FormNameId;DisplayPaperBinName;PaperBinNameId;DisplayPaperName;PaperNameId>
         OUStringBuffer aDescr( "*;*;" );
         aDescr.append(GetPrinter()->GetPaperBinName( n ));
-        aDescr.append(';');
-        aDescr.append(OUString::number(n));
-        aDescr.append(";*;*");
+        aDescr.append(";" +
+                    OUString::number(n) +
+                    ";*;*");
 
         aDescriptions.getArray()[n] = aDescr.makeStringAndClear();
     }

@@ -1856,7 +1856,7 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl()
     const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
 
     OUStringBuffer aMsg;
-    aMsg.append(SfxResId(STR_DELETE_STYLE_USED)).append(SfxResId(STR_DELETE_STYLE));
+    aMsg.append(SfxResId(STR_DELETE_STYLE_USED) + SfxResId(STR_DELETE_STYLE));
 
     while (pEntry)
     {

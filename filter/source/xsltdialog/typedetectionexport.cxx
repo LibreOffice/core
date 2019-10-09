@@ -176,13 +176,13 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
                 sValue.append(createRelativeURL( filter->maFilterName, filter->maImportXSLT ));
                 sValue.append(sDelim);
                 sValue.append(createRelativeURL( filter->maFilterName, filter->maExportXSLT ));
-                sValue.append(sDelim);
+                sValue.append(sDelim +
                 // entry DTD obsolete and removed, but delimiter kept
-                sValue.append(sDelim);
-                sValue.append(filter->maComment);
-                sValue.append(sComma);
-                sValue.append("0");
-                sValue.append(sComma);
+                            sDelim +
+                            filter->maComment +
+                            sComma +
+                            "0" +
+                            sComma);
                 sValue.append(createRelativeURL( filter->maFilterName, filter->maImportTemplate ));
                 addProperty( xHandler, sData, sValue.makeStringAndClear() );
                 xHandler->ignorableWhitespace ( sWhiteSpace );

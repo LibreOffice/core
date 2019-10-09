@@ -263,8 +263,7 @@ static int write_addStreamArray( const char* pOutFile, PDFArray* pStreams, PDFFi
             PDFObject* pObject = pPDFFile->findObject( pStreamRef->m_nNumber, pStreamRef->m_nGeneration );
             if( pObject )
             {
-                OStringBuffer aOutStream( pOutFile );
-                aOutStream.append( "_stream_" );
+                OStringBuffer aOutStream( pOutFile + OStringLiteral("_stream_") );
                 aOutStream.append( sal_Int32(pStreamRef->m_nNumber) );
                 aOutStream.append( "_" );
                 aOutStream.append( sal_Int32(pStreamRef->m_nGeneration) );
@@ -371,13 +370,11 @@ static int write_fonts( const char* i_pInFile, const char* i_pOutFile, PDFFile* 
         if( ! pStream )
             continue;
 
-        OStringBuffer aOutStream( i_pOutFile );
-        aOutStream.append( "_font_" );
+        OStringBuffer aOutStream( i_pOutFile + OStringLiteral("_font_") );
         aOutStream.append( sal_Int32(pStreamRef->m_nNumber) );
         aOutStream.append( "_" );
         aOutStream.append( sal_Int32(pStreamRef->m_nGeneration) );
-        aOutStream.append( "_" );
-        aOutStream.append( aFontName );
+        aOutStream.append( "_" + aFontName );
         if( pFileType )
         {
             aOutStream.append( "." );
@@ -406,8 +403,7 @@ static int write_objects( const char* i_pInFile, const char* i_pOutFile, PDFFile
             continue;
         }
 
-        OStringBuffer aOutStream( i_pOutFile );
-        aOutStream.append( "_stream_" );
+        OStringBuffer aOutStream = i_pOutFile + OStringLiteral("_stream_");
         aOutStream.append( nObject );
         aOutStream.append( "_" );
         aOutStream.append( nGeneration );

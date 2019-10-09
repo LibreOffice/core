@@ -140,10 +140,7 @@ OUString E3dExtrudeObj::TakeObjNameSingul() const
     OUString aName(GetName());
     if (!aName.isEmpty())
     {
-        sName.append(' ');
-        sName.append('\'');
-        sName.append(aName);
-        sName.append('\'');
+        sName.append(" \'" + aName + "\'");
     }
     return sName.makeStringAndClear();
 }

@@ -728,11 +728,7 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
     css::uno::Sequence< OUString > lFactories = GetNodeNames(OUString());
     std::transform(lFactories.begin(), lFactories.end(), lFactories.begin(),
         [](const OUString& rFactory) -> OUString {
-            OUStringBuffer sPath(256);
-            sPath.append(rFactory                  );
-            sPath.append(PATHSEPARATOR             );
-            sPath.append(PROPERTYNAME_DEFAULTFILTER);
-            return sPath.makeStringAndClear();
+            return rFactory + PATHSEPARATOR PROPERTYNAME_DEFAULTFILTER;
         });
 
     css::uno::Sequence< sal_Bool > lReadonlyStates = GetReadOnlyStates(lFactories);

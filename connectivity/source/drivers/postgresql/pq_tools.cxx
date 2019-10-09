@@ -88,11 +88,7 @@ namespace pq_sdbc_driver
 
 OUString concatQualified( const OUString & a, const OUString &b)
 {
-    OUStringBuffer buf( a.getLength() + 2 + b.getLength() );
-    buf.append( a );
-    buf.append( "." );
-    buf.append( b );
-    return buf.makeStringAndClear();
+    return a + "." + b;
 }
 
 static OString iOUStringToOString( const OUString& str, ConnectionSettings const *settings) {

@@ -245,7 +245,7 @@ OUString lcl_wrapName(const OUString& _sContent, const OUString& _sType)
     OUStringBuffer aNormalized(_sType.getLength() + _sContent.getLength() + 4); // reserve approximate size initially
 
     // prefix: type, opening bracket and quote
-    aNormalized.append( _sType ).append( "['" );
+    aNormalized.append( _sType + "['" );
 
     // content: copy over each char and handle escaping
     for(const sal_Unicode* pCur = pBeginContent; pCur != pEndContent; ++pCur)

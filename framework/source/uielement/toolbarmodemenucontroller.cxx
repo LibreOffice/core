@@ -240,12 +240,10 @@ void SAL_CALL ToolbarModeMenuController::itemSelected( const css::awt::MenuEvent
             OUString aCmd( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ));
 
             {
-                OUStringBuffer aBuf(".uno:Notebookbar?File:string=");
-                aBuf.append( aCmd );
                 URL aTargetURL;
                 Sequence<PropertyValue> aArgs;
 
-                aTargetURL.Complete = aBuf.makeStringAndClear();
+                aTargetURL.Complete = ".uno:Notebookbar?File:string=" + aCmd;
                 xURLTransformer->parseStrict( aTargetURL );
                 Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
                 if ( xDispatchProvider.is() )
@@ -261,12 +259,10 @@ void SAL_CALL ToolbarModeMenuController::itemSelected( const css::awt::MenuEvent
                 }
             }
 
-            OUStringBuffer aBuf(".uno:ToolbarMode?Mode:string=");
-            aBuf.append( aCmd );
             URL aTargetURL;
             Sequence<PropertyValue> aArgs;
 
-            aTargetURL.Complete = aBuf.makeStringAndClear();
+            aTargetURL.Complete = ".uno:ToolbarMode?Mode:string=" + aCmd;
             xURLTransformer->parseStrict( aTargetURL );
             Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
             if ( xDispatchProvider.is() )

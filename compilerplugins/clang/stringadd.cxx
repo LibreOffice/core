@@ -68,20 +68,28 @@ public:
     }
 
     bool VisitCompoundStmt(CompoundStmt const*);
+    bool VisitCXXMemberCallExpr(CXXMemberCallExpr const*);
     bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const*);
 
 private:
     const VarDecl* findAssignOrAdd(Stmt const*);
     void checkForCompoundAssign(Stmt const* stmt1, Stmt const* stmt2, VarDecl const* varDecl);
 
+    const VarDecl* findBufferAssignOrAdd(Stmt const*);
+    void checkForBufferCompoundAssign(Stmt const* stmt1, Stmt const* stmt2, VarDecl const* varDecl);
+
     Expr const* ignore(Expr const*);
     std::string getSourceAsString(SourceLocation startLoc, SourceLocation endLoc);
     bool isSideEffectFree(Expr const*);
+    bool isAppendMethodOkToMerge(CXXMemberCallExpr const*);
 };
 
 bool StringAdd::VisitCompoundStmt(CompoundStmt const* compoundStmt)
 {
     if (ignoreLocation(compoundStmt))
+        return true;
+    StringRef fn(handler.getMainFileName());
+    if (loplugin::isSamePathname(fn, SRCDIR "/vcl/source/gdi/pdfwriter_impl.cxx"))
         return true;
 
     auto it = compoundStmt->body_begin();
@@ -104,6 +112,26 @@ bool StringAdd::VisitCompoundStmt(CompoundStmt const* compoundStmt)
             ++it;
     }
 
+    it = compoundStmt->body_begin();
+    while (true)
+    {
+        if (it == compoundStmt->body_end())
+            break;
+        const VarDecl* foundVar = findBufferAssignOrAdd(*it);
+        // reference types have slightly weird behaviour
+        if (foundVar && !foundVar->getType()->isReferenceType())
+        {
+            auto stmt1 = *it;
+            ++it;
+            if (it == compoundStmt->body_end())
+                break;
+            checkForBufferCompoundAssign(stmt1, *it, foundVar);
+            continue;
+        }
+        else
+            ++it;
+    }
+
     return true;
 }
 
@@ -120,7 +148,9 @@ const VarDecl* StringAdd::findAssignOrAdd(Stmt const* stmt)
             {
                 auto tc = loplugin::TypeCheck(varDeclLHS->getType());
                 if (!tc.Class("OUString").Namespace("rtl").GlobalNamespace()
-                    && !tc.Class("OString").Namespace("rtl").GlobalNamespace())
+                    && !tc.Class("OString").Namespace("rtl").GlobalNamespace()
+                    && !tc.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+                    && !tc.Class("OStringBuffer").Namespace("rtl").GlobalNamespace())
                     return nullptr;
                 if (varDeclLHS->getStorageDuration() == SD_Static)
                     return nullptr;
@@ -144,6 +174,61 @@ const VarDecl* StringAdd::findAssignOrAdd(Stmt const* stmt)
                         return nullptr;
                     return varDeclLHS;
                 }
+    return nullptr;
+}
+
+const VarDecl* StringAdd::findBufferAssignOrAdd(Stmt const* stmt)
+{
+    if (auto exprCleanup = dyn_cast<ExprWithCleanups>(stmt))
+        stmt = exprCleanup->getSubExpr();
+    if (auto switchCase = dyn_cast<SwitchCase>(stmt))
+        stmt = switchCase->getSubStmt();
+
+    if (auto declStmt = dyn_cast<DeclStmt>(stmt))
+        if (declStmt->isSingleDecl())
+            if (auto varDeclLHS = dyn_cast_or_null<VarDecl>(declStmt->getSingleDecl()))
+            {
+                auto tc = loplugin::TypeCheck(varDeclLHS->getType());
+                if (!tc.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+                    && !tc.Class("OStringBuffer").Namespace("rtl").GlobalNamespace())
+                    return nullptr;
+                if (varDeclLHS->getStorageDuration() == SD_Static)
+                    return nullptr;
+                if (!varDeclLHS->hasInit())
+                    return nullptr;
+                auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(ignore(varDeclLHS->getInit()));
+                if (cxxConstructExpr)
+                {
+                    if (cxxConstructExpr->getNumArgs() == 0)
+                        return nullptr;
+                    auto tc2 = loplugin::TypeCheck(cxxConstructExpr->getArg(0)->getType());
+                    if (cxxConstructExpr->getArg(0)->getType()->isBuiltinType()
+                        || tc2.LvalueReference().Class("OUStringBuffer")
+                        || tc2.LvalueReference().Class("OStringBuffer")
+                        || tc2.Class("OUStringBuffer") || tc2.Class("OStringBuffer"))
+                        return nullptr;
+                }
+                if (!isSideEffectFree(varDeclLHS->getInit()))
+                    return nullptr;
+                return varDeclLHS;
+            }
+    if (auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(stmt))
+    {
+        auto methodDecl = memberCallExpr->getMethodDecl();
+        if (methodDecl && methodDecl->getIdentifier() && methodDecl->getName() == "append")
+            if (auto declRefExprLHS
+                = dyn_cast<DeclRefExpr>(ignore(memberCallExpr->getImplicitObjectArgument())))
+                if (auto varDeclLHS = dyn_cast<VarDecl>(declRefExprLHS->getDecl()))
+                {
+                    auto tc = loplugin::TypeCheck(varDeclLHS->getType());
+                    if (!tc.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+                        && !tc.Class("OStringBuffer").Namespace("rtl").GlobalNamespace())
+                        return nullptr;
+                    if (!isAppendMethodOkToMerge(memberCallExpr))
+                        return nullptr;
+                    return varDeclLHS;
+                }
+    }
     return nullptr;
 }
 
@@ -175,6 +260,79 @@ void StringAdd::checkForCompoundAssign(Stmt const* stmt1, Stmt const* stmt2, Var
     report(DiagnosticsEngine::Warning, "simplify by merging with the preceding assignment",
            compat::getBeginLoc(stmt2))
         << stmt2->getSourceRange();
+}
+
+void StringAdd::checkForBufferCompoundAssign(Stmt const* stmt1, Stmt const* stmt2,
+                                             VarDecl const* varDecl)
+{
+    // OString additions are frequently wrapped in these
+    if (auto exprCleanup = dyn_cast<ExprWithCleanups>(stmt2))
+        stmt2 = exprCleanup->getSubExpr();
+    if (auto switchCase = dyn_cast<SwitchCase>(stmt2))
+        stmt2 = switchCase->getSubStmt();
+    auto memberCall = dyn_cast<CXXMemberCallExpr>(stmt2);
+    if (!memberCall)
+        return;
+    auto methodDecl = memberCall->getMethodDecl();
+    if (!methodDecl->getIdentifier() || methodDecl->getName() != "append")
+        return;
+    auto declRefExprLHS = dyn_cast<DeclRefExpr>(ignore(memberCall->getImplicitObjectArgument()));
+    if (!declRefExprLHS)
+        return;
+    if (declRefExprLHS->getDecl() != varDecl)
+        return;
+    if (!isAppendMethodOkToMerge(memberCall))
+        return;
+    // if we cross a #ifdef boundary
+    auto s
+        = getSourceAsString(stmt1->getSourceRange().getBegin(), stmt2->getSourceRange().getEnd());
+    if (s.find("#if") != std::string::npos)
+        return;
+    report(DiagnosticsEngine::Warning, "simplify by merging with the preceding append",
+           compat::getBeginLoc(stmt2))
+        << stmt2->getSourceRange();
+}
+
+/**
+  look for buffer.append(..).append(...)
+  that we can merge
+*/
+bool StringAdd::VisitCXXMemberCallExpr(CXXMemberCallExpr const* memberCallExpr)
+{
+    if (ignoreLocation(memberCallExpr))
+        return true;
+    StringRef fn(handler.getMainFileName());
+    if (loplugin::isSamePathname(fn, SRCDIR "/vcl/source/gdi/pdfwriter_impl.cxx"))
+        return true;
+
+    {
+        auto methodDecl = memberCallExpr->getMethodDecl();
+        if (!methodDecl || !methodDecl->getIdentifier() || methodDecl->getName() != "append")
+            return true;
+        auto tc = loplugin::TypeCheck(memberCallExpr->getType());
+        if (!tc.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+            && !tc.Class("OStringBuffer").Namespace("rtl").GlobalNamespace())
+            return true;
+        if (!isAppendMethodOkToMerge(memberCallExpr))
+            return true;
+    }
+
+    auto secondCallExpr = dyn_cast<CXXMemberCallExpr>(memberCallExpr->getImplicitObjectArgument());
+    if (!secondCallExpr)
+        return true;
+
+    {
+        auto methodDecl = secondCallExpr->getMethodDecl();
+        if (!methodDecl->getIdentifier() || methodDecl->getName() != "append")
+            return true;
+        if (!isAppendMethodOkToMerge(secondCallExpr))
+            return true;
+    }
+    report(DiagnosticsEngine::Warning, "simplify by merging with the preceding append",
+           compat::getBeginLoc(secondCallExpr))
+        << secondCallExpr->getSourceRange();
+
+    return true;
 }
 
 // Check for generating temporaries when adding strings
@@ -233,6 +391,46 @@ bool StringAdd::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* operatorCall
         check(matTempExpr);
     if (auto matTempExpr = dyn_cast<MaterializeTemporaryExpr>(operatorCall->getArg(1)))
         check(matTempExpr);
+    return true;
+}
+
+bool StringAdd::isAppendMethodOkToMerge(CXXMemberCallExpr const* memberCall)
+{
+    auto methodDecl = memberCall->getMethodDecl();
+    auto tc2 = loplugin::TypeCheck(methodDecl->getParamDecl(0)->getType());
+    if (tc2.LvalueReference().Class("OUStringBuffer")
+        || tc2.LvalueReference().Class("OStringBuffer"))
+        return false;
+
+    auto rhs = memberCall->getArg(0);
+
+    if (loplugin::TypeCheck(memberCall->getType())
+            .Class("OStringBuffer")
+            .Namespace("rtl")
+            .GlobalNamespace())
+    {
+        // because we have no OStringLiteral1
+        if (tc2.Char())
+            return false;
+        // Can't see how to make the call to append(sal_Unicode*pStart, sal_Unicode*pEnd) work
+        if (memberCall->getNumArgs() == 2 && loplugin::TypeCheck(rhs->getType()).Pointer())
+            return false;
+    }
+    if (loplugin::TypeCheck(memberCall->getType())
+            .Class("OUStringBuffer")
+            .Namespace("rtl")
+            .GlobalNamespace())
+    {
+        // character literals we do with OUStringBuffer, not variables of type sal_Unicode/char
+        if (tc2.Typedef("sal_Unicode").GlobalNamespace() && !isa<CharacterLiteral>(rhs))
+            return false;
+        // Can't see how to make the call to append(sal_Unicode*pStart, sal_Unicode*pEnd) work
+        if (memberCall->getNumArgs() == 2
+            && loplugin::TypeCheck(memberCall->getArg(0)->getType()).Pointer())
+            return false;
+    }
+    if (!isSideEffectFree(rhs))
+        return false;
     return true;
 }
 
@@ -302,7 +500,9 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
     if (auto constructExpr = dyn_cast<CXXConstructExpr>(expr))
     {
         auto dc = loplugin::DeclCheck(constructExpr->getConstructor());
-        if (dc.MemberFunction().Class("OUString") || dc.MemberFunction().Class("OString"))
+        if (dc.MemberFunction().Class("OUString") || dc.MemberFunction().Class("OString")
+            || dc.MemberFunction().Class("OUStringBuffer")
+            || dc.MemberFunction().Class("OStringBuffer"))
             if (constructExpr->getNumArgs() == 0 || isSideEffectFree(constructExpr->getArg(0)))
                 return true;
         // Expr::HasSideEffects does not like stuff that passes through OUStringLiteral

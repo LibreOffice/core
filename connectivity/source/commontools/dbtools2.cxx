@@ -129,8 +129,7 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
         sal_Int32 nParenPos = sTypeName.indexOf('(');
         if ( nParenPos == -1 )
         {
-            aSql.append(sTypeName);
-            aSql.append("(");
+            aSql.append(sTypeName + "(");
         }
         else
         {
@@ -160,10 +159,7 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
     OUString aDefault = ::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
     if ( !aDefault.isEmpty() )
     {
-        aSql.append(" DEFAULT ");
-        aSql.append(sPrefix);
-        aSql.append(aDefault);
-        aSql.append(sPostfix);
+        aSql.append(" DEFAULT " + sPrefix + aDefault + sPostfix);
     } // if ( aDefault.getLength() )
 
     return aSql.makeStringAndClear();
@@ -196,8 +192,7 @@ OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,cons
 
     if ( bIsAutoIncrement && !sAutoIncrementValue.isEmpty())
     {
-        aSql.append(" ");
-        aSql.append(sAutoIncrementValue);
+        aSql.append(" " + sAutoIncrementValue);
     }
 
     if ( _pHelper )
@@ -223,8 +218,7 @@ OUString createStandardCreateStatement(const Reference< XPropertySet >& descript
     if ( sComposedName.isEmpty() )
         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-    aSql.append(sComposedName);
-    aSql.append(" (");
+    aSql.append(sComposedName + " (");
 
     // columns
     Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);

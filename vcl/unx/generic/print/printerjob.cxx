@@ -211,11 +211,7 @@ createSpoolDir ()
 
     do
     {
-        OUStringBuffer aDir( aTmpDir.getLength() + 16 );
-        aDir.append( aTmpDir );
-        aDir.append( "/psp" );
-        aDir.append(nRand);
-        OUString aResult = aDir.makeStringAndClear();
+        OUString aResult = aTmpDir + "/psp" + OUString::number(nRand);
         if( osl::Directory::create( aResult ) == osl::FileBase::E_None )
         {
             osl::File::setAttributes( aResult,
@@ -397,11 +393,11 @@ PrinterJob::EndJob()
 
     // write document trailer according to Document Structuring Conventions (DSC)
     OStringBuffer aTrailer(512);
-    aTrailer.append( "%%Trailer\n" );
-    aTrailer.append( "%%BoundingBox: 0 0 " );
-    aTrailer.append( static_cast<sal_Int32>(mnMaxWidthPt) );
-    aTrailer.append( " " );
-    aTrailer.append( static_cast<sal_Int32>(mnMaxHeightPt) );
+    aTrailer.append( "%%Trailer\n"
+                    "%%BoundingBox: 0 0 " +
+                    OString::number( static_cast<sal_Int32>(mnMaxWidthPt) ) +
+                    " " +
+                    OString::number( static_cast<sal_Int32>(mnMaxHeightPt) ) );
     if( mnLandscapes > mnPortraits )
         aTrailer.append("\n%%Orientation: Landscape");
     else
@@ -660,8 +656,8 @@ static bool writeFeature( osl::File* pFile, const PPDKey* pKey, const PPDValue* 
     if( !bUseIncluseFeature )
     {
         aFeature.append( '\n' );
-        aFeature.append( OUStringToOString( pValue->m_aValue, RTL_TEXTENCODING_ASCII_US ) );
-        aFeature.append( "\n%%EndFeature" );
+        aFeature.append( OUStringToOString( pValue->m_aValue, RTL_TEXTENCODING_ASCII_US ) +
+                        "\n%%EndFeature" );
     }
     aFeature.append( "\n} stopped cleartomark\n" );
     sal_uInt64 nWritten = 0;
@@ -951,9 +947,9 @@ bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
     if( ! bExternalDialog && rJob.m_nCopies > 1 )
     {
         // setup code
-        OStringBuffer aLine("/#copies ");
-        aLine.append(static_cast<sal_Int32>(rJob.m_nCopies));
-        aLine.append(" def\n");
+        OString aLine = "/#copies " +
+            OString::number(static_cast<sal_Int32>(rJob.m_nCopies)) +
+            " def\n";
         sal_uInt64 nWritten = 0;
         bSuccess = !(pFile->write(aLine.getStr(), aLine.getLength(), nWritten)
             || nWritten != static_cast<sal_uInt64>(aLine.getLength()));

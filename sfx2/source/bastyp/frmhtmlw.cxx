@@ -75,7 +75,7 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
 
     HTMLOutFuncs::Out_String( rStrm, rName, eDestEnc, pNonConvertableChars );
 
-    sOut.append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_content).append("=\"");
+    sOut.append("\" " OOO_STRING_SVTOOLS_HTML_O_content "=\"");
     rStrm.WriteOString( sOut.makeStringAndClear() );
 
     HTMLOutFuncs::Out_String( rStrm, rContent, eDestEnc, pNonConvertableChars ).WriteCharPtr( "\"/>" );
@@ -120,10 +120,9 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
             if( pIndent )
                 rStrm.WriteCharPtr( pIndent );
 
-            OStringBuffer sOut;
-            sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_base).append(' ')
-                .append(OOO_STRING_SVTOOLS_HTML_O_target).append("=\"");
-            rStrm.WriteOString( sOut.makeStringAndClear() );
+            OString sOut = "<" OOO_STRING_SVTOOLS_HTML_base " "
+                    OOO_STRING_SVTOOLS_HTML_O_target "=\"";
+            rStrm.WriteOString( sOut );
             HTMLOutFuncs::Out_String( rStrm, rTarget, eDestEnc, pNonConvertableChars )
                .WriteCharPtr( "\">" );
         }
@@ -250,8 +249,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             {
                 aURL = URIHelper::simpleNormalizedMakeRelative(
                     rBaseURL, aURL );
-                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_src)
-                    .append("=\"");
+                sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_src "=\"");
                 rOut.WriteOString( sOut.makeStringAndClear() );
                 HTMLOutFuncs::Out_String( rOut, aURL, eDestEnc, pNonConvertableChars );
                 sOut.append('\"');
@@ -261,8 +259,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         aAny = xSet->getPropertyValue("FrameName");
         if ( (aAny >>= aStr) && !aStr.isEmpty() )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
-                .append("=\"");
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
             rOut.WriteOString( sOut.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rOut, aStr, eDestEnc, pNonConvertableChars );
             sOut.append('\"');
@@ -290,8 +287,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             if ( aAny >>= bVal )
             {
                 const sal_Char *pStr = bVal ? sHTML_SC_yes : sHTML_SC_no;
-                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_scrolling)
-                    .append(pStr);
+                sOut.append(OStringLiteral(" " OOO_STRING_SVTOOLS_HTML_O_scrolling) + pStr);
             }
         }
 

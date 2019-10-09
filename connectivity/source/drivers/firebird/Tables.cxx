@@ -105,28 +105,24 @@ OUString Tables::createStandardColumnPart(const Reference< XPropertySet >& xColP
             >>= aType;
         if(aType == DataType::BINARY || aType == DataType::VARBINARY)
         {
-            aSql.append(" ");
-            aSql.append("CHARACTER SET OCTETS");
+            aSql.append(" " "CHARACTER SET OCTETS");
         }
         else if(aType == DataType::CLOB)
         {
             // CLOB is a special type of blob in Firebird context.
             // Subtype number 1 always refers to CLOB
-            aSql.append(" ");
-            aSql.append("SUB_TYPE 1");
+            aSql.append(" " "SUB_TYPE 1");
         }
         else if(aType == DataType::LONGVARBINARY)
         {
-            aSql.append(" ");
-            aSql.append("SUB_TYPE ");
-            aSql.append(OUString::number(static_cast<short>(BlobSubtype::Image)));
+            aSql.append(" " "SUB_TYPE " +
+                OUString::number(static_cast<short>(BlobSubtype::Image)));
         }
     }
 
     if ( bIsAutoIncrement && !sAutoIncrementValue.isEmpty())
     {
-        aSql.append(" ");
-        aSql.append(sAutoIncrementValue);
+        aSql.append(" " + sAutoIncrementValue);
     }
     // AutoIncrement "IDENTITY" is implicitly "NOT NULL"
     else if(::comphelper::getINT32(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
@@ -163,8 +159,7 @@ ObjectType Tables::appendObject(const OUString& rName,
     if ( sComposedName.isEmpty() )
         ::dbtools::throwFunctionSequenceException(xConnection);
 
-    aSqlBuffer.append(sComposedName);
-    aSqlBuffer.append(" (");
+    aSqlBuffer.append(sComposedName + " (");
 
     // columns
     Reference<XColumnsSupplier> xColumnSup(rDescriptor,UNO_QUERY);

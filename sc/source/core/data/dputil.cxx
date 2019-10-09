@@ -394,8 +394,7 @@ OUString ScDPUtil::getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc
     const char* pId = aFuncStrIds[eFunc];
     if (pId)
     {
-        aRet.append(ScResId(pId));        // function name
-        aRet.append(" - ");
+        aRet.append(ScResId(pId) + " - "); // function name
     }
     aRet.append(rName);                   // field name
 

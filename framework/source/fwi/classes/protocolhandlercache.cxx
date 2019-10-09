@@ -200,13 +200,12 @@ void HandlerCFGAccess::read( HandlerHash& rHandlerHash, PatternHash& rPatternHas
     sal_Int32 nTarget=0;
     for( nSource=0; nSource<nSourceCount; ++nSource )
     {
-        OUStringBuffer sPath( SETNAME_HANDLER );
-        sPath.append(CFG_PATH_SEPARATOR);
-        sPath.append(lNames[nSource]);
-        sPath.append(CFG_PATH_SEPARATOR);
-        sPath.append(PROPERTY_PROTOCOLS);
-
-        lFullNames[nTarget]  = sPath.makeStringAndClear();
+        lFullNames[nTarget]  =
+                SETNAME_HANDLER
+                CFG_PATH_SEPARATOR +
+                lNames[nSource] +
+                CFG_PATH_SEPARATOR
+                PROPERTY_PROTOCOLS;
         ++nTarget;
     }
 

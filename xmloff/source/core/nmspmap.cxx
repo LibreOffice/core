@@ -181,8 +181,7 @@ OUString SvXMLNamespaceMap::GetAttrNameByKey( sal_uInt16 nKey ) const
         const OUString & prefix( (*aIter).second->sPrefix );
         if (!prefix.isEmpty()) // not default namespace
         {
-            sAttrName.append( ':' );
-            sAttrName.append( prefix );
+            sAttrName.append( ":" + prefix );
         }
     }
     return sAttrName.makeStringAndClear();
@@ -211,19 +210,14 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
             sQName.append ( sXMLNS );
             if (!rLocalName.isEmpty()) // not default namespace
             {
-                sQName.append ( ':' );
-                sQName.append ( rLocalName );
+                sQName.append ( ":" + rLocalName );
             }
             return sQName.makeStringAndClear();
         }
         case XML_NAMESPACE_XML:
         {
             // this namespace is reserved, and needs not to be declared
-            OUStringBuffer sQName;
-            sQName.append ( GetXMLToken(XML_XML) );
-            sQName.append ( ':' );
-            sQName.append ( rLocalName );
-            return sQName.makeStringAndClear();
+            return GetXMLToken(XML_XML) +":" + rLocalName;
         }
         default:
         {
@@ -244,8 +238,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                     const OUString & prefix( (*aIter).second->sPrefix );
                     if (!prefix.isEmpty()) // not default namespace
                     {
-                        sQName.append( prefix );
-                        sQName.append( ':' );
+                        sQName.append( prefix + ":" );
                     }
                     sQName.append ( rLocalName );
                     if (bCache)

@@ -161,9 +161,7 @@ void logException( RuntimeCargo *cargo, const char *intro,
         OUStringBuffer buf( 128 );
         buf.appendAscii( intro );
         appendPointer(buf, ptr);
-        buf.append( "]." );
-        buf.append( aFunctionName );
-        buf.append( " = " );
+        buf.append( "]." + aFunctionName + " = " );
         buf.append(
             val2str( data, type.getTypeLibType(), VAL2STR_MODE_SHALLOW ) );
         log( cargo,LogLevel::CALL, buf.makeStringAndClear() );
@@ -182,9 +180,7 @@ void logReply(
     OUStringBuffer buf( 128 );
     buf.appendAscii( intro );
     appendPointer(buf, ptr);
-    buf.append( "]." );
-    buf.append( aFunctionName );
-    buf.append( "()=" );
+    buf.append( "]." + aFunctionName + "()=" );
     if( isLog( cargo, LogLevel::ARGS ) )
     {
         buf.append(
@@ -207,9 +203,7 @@ void logCall( RuntimeCargo *cargo, const char *intro,
     OUStringBuffer buf( 128 );
     buf.appendAscii( intro );
     appendPointer(buf, ptr);
-    buf.append( "]." );
-    buf.append( aFunctionName );
-    buf.append( "(" );
+    buf.append( "]." + aFunctionName + "(" );
     if( isLog( cargo, LogLevel::ARGS ) )
     {
         for( int i = 0; i < aParams.getLength() ; i ++ )

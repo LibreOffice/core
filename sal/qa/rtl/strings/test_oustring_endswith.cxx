@@ -98,8 +98,7 @@ void test::oustring::EndsWith::endsWith()
         appendString(msg, OString(data[i].str1, data[i].str1Len));
         msg.append(".endsWithIgnoreAsciiCaseAsciiL(");
         appendString(msg, OString(data[i].str2, data[i].str2Len));
-        msg.append(") == ");
-        msg.append(data[i].endsWith);
+        msg.append(") == " + OString::boolean(data[i].endsWith));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             msg.getStr(),
             data[i].endsWith,

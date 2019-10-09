@@ -2886,9 +2886,9 @@ void FmXFormShell::impl_collectFormSearchContexts_nothrow_Lock( const Reference<
             OUStringBuffer sCompleteCurrentName( sCurrentFormName );
             if ( !_rCurrentLevelPrefix.isEmpty() )
             {
-                sCompleteCurrentName.append( " (" );
-                sCompleteCurrentName.append     ( _rCurrentLevelPrefix );
-                sCompleteCurrentName.append( ")" );
+                sCompleteCurrentName.append( " ("  +
+                            _rCurrentLevelPrefix +
+                            ")" );
             }
 
             // the prefix for the next level

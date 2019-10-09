@@ -1197,9 +1197,8 @@ void ScChangeActionMove::GetDescription(
         aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
     }
 
-    OUStringBuffer aBuf(rStr); // append to the original string.
-    aBuf.append(aRsc);
-    rStr = aBuf.makeStringAndClear();
+    // append to the original string.
+    rStr += aRsc;
 }
 
 void ScChangeActionMove::GetRefString(
@@ -1470,9 +1469,8 @@ void ScChangeActionContent::GetDescription(
         aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
     }
 
-    OUStringBuffer aBuf(rStr); // append to the original string.
-    aBuf.append(aRsc);
-    rStr = aBuf.makeStringAndClear();
+    // append to the original string.
+    rStr += aRsc;
 }
 
 void ScChangeActionContent::GetRefString(

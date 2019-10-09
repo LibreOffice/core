@@ -406,12 +406,11 @@ OString exceptionToString(const css::uno::Any & caught)
 void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunction, const char* fileAndLineNo,
         const char* area, const char* explanatory)
 {
-        OStringBuffer sMessage( "DBG_UNHANDLED_EXCEPTION in " );
-        sMessage.append(currentFunction);
+        OStringBuffer sMessage( OStringLiteral("DBG_UNHANDLED_EXCEPTION in ") +
+            currentFunction);
         if (explanatory)
         {
-            sMessage.append("\n    when: ");
-            sMessage.append(explanatory);
+            sMessage.append(OStringLiteral("\n    when: ") + explanatory);
         }
         sMessage.append(" exception: ");
         exceptionToStringImpl(sMessage, caught);

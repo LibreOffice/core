@@ -347,8 +347,9 @@ UcbContentProviderProxy::getContentProvider()
             m_xTargetProvider = m_xProvider;
     }
 
-    OSL_ENSURE( m_xProvider.is(),
-        OStringBuffer("UcbContentProviderProxy::getContentProvider - No provider for '").append(OUStringToOString(m_aService, osl_getThreadTextEncoding())).append(".").getStr() );
+    OString aMsg = "UcbContentProviderProxy::getContentProvider - No provider for '" +
+            OUStringToOString(m_aService, osl_getThreadTextEncoding()) + ".";
+    OSL_ENSURE( m_xProvider.is(), aMsg.getStr() );
     return m_xTargetProvider;
 }
 

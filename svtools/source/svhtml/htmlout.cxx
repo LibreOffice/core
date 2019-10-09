@@ -624,13 +624,12 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
     if( rOutName.isEmpty() )
         return rStream;
 
-    OStringBuffer sOut;
-    sOut.append('<')
-        .append(OOO_STRING_SVTOOLS_HTML_map)
-        .append(' ')
-        .append(OOO_STRING_SVTOOLS_HTML_O_name)
-        .append("=\"");
-    rStream.WriteOString( sOut.makeStringAndClear() );
+    OString sOut = "<"
+        OOO_STRING_SVTOOLS_HTML_map
+        " "
+        OOO_STRING_SVTOOLS_HTML_O_name
+        "=\"";
+    rStream.WriteOString( sOut );
     Out_String( rStream, rOutName, eDestEnc, pNonConvertableChars );
     rStream.WriteCharPtr( "\">" );
 
@@ -718,20 +717,20 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 if( pIndentArea )
                     rStream.WriteCharPtr( pIndentArea );
 
-                sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_area)
-                    .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_shape)
-                    .append('=').append(pShape).append(' ')
-                    .append(OOO_STRING_SVTOOLS_HTML_O_coords).append("=\"")
-                    .append(aCoords).append("\" ");
-                rStream.WriteOString( sOut.makeStringAndClear() );
+                sOut = OStringLiteral("<" OOO_STRING_SVTOOLS_HTML_area
+                    " " OOO_STRING_SVTOOLS_HTML_O_shape
+                    "=") + pShape + " "
+                    OOO_STRING_SVTOOLS_HTML_O_coords "=\"" +
+                    aCoords + "\" ";
+                rStream.WriteOString( sOut );
 
                 OUString aURL( pObj->GetURL() );
                 if( !aURL.isEmpty() && pObj->IsActive() )
                 {
                     aURL = URIHelper::simpleNormalizedMakeRelative(
                         rBaseURL, aURL );
-                    sOut.append(OOO_STRING_SVTOOLS_HTML_O_href).append("=\"");
-                    rStream.WriteOString( sOut.makeStringAndClear() );
+                    sOut = OOO_STRING_SVTOOLS_HTML_O_href "=\"";
+                    rStream.WriteOString( sOut );
                     Out_String( rStream, aURL, eDestEnc, pNonConvertableChars ).WriteChar( '\"' );
                 }
                 else
@@ -740,18 +739,16 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 const OUString& rObjName = pObj->GetName();
                 if( !rObjName.isEmpty() )
                 {
-                    sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
-                        .append("=\"");
-                    rStream.WriteOString( sOut.makeStringAndClear() );
+                    sOut = " " OOO_STRING_SVTOOLS_HTML_O_name "=\"";
+                    rStream.WriteOString( sOut );
                     Out_String( rStream, rObjName, eDestEnc, pNonConvertableChars ).WriteChar( '\"' );
                 }
 
                 const OUString& rTarget = pObj->GetTarget();
                 if( !rTarget.isEmpty() && pObj->IsActive() )
                 {
-                    sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_target)
-                        .append("=\"");
-                    rStream.WriteOString( sOut.makeStringAndClear() );
+                    sOut = " " OOO_STRING_SVTOOLS_HTML_O_target "=\"";
+                    rStream.WriteOString( sOut );
                     Out_String( rStream, rTarget, eDestEnc, pNonConvertableChars ).WriteChar( '\"' );
                 }
 
@@ -761,9 +758,8 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
 
                 if( !rDesc.isEmpty() )
                 {
-                    sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_alt)
-                        .append("=\"");
-                    rStream.WriteOString( sOut.makeStringAndClear() );
+                    sOut = " " OOO_STRING_SVTOOLS_HTML_O_alt "=\"";
+                    rStream.WriteOString( sOut );
                     Out_String( rStream, rDesc, eDestEnc, pNonConvertableChars ).WriteChar( '\"' );
                 }
 
@@ -808,9 +804,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 
     if( !rLanguage.isEmpty() )
     {
-        sOut.append(' ')
-            .append(OOO_STRING_SVTOOLS_HTML_O_language)
-            .append("=\"");
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_language "=\"");
         rStrm.WriteOString( sOut.makeStringAndClear() );
         Out_String( rStrm, rLanguage, eDestEnc, pNonConvertableChars );
         sOut.append('\"');
@@ -818,7 +812,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 
     if( !rSrc.isEmpty() )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_src).append("=\"");
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_src "=\"");
         rStrm.WriteOString( sOut.makeStringAndClear() );
         Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(rBaseURL, rSrc), eDestEnc, pNonConvertableChars );
         sOut.append('\"');
@@ -826,8 +820,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 
     if( STARBASIC != eScriptType && pSBLibrary )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdlibrary)
-            .append("=\"");
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_sdlibrary "=\"");
         rStrm.WriteOString( sOut.makeStringAndClear() );
         Out_String( rStrm, *pSBLibrary, eDestEnc, pNonConvertableChars );
         sOut.append('\"');
@@ -835,8 +828,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 
     if( STARBASIC != eScriptType && pSBModule )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdmodule)
-            .append("=\"");
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_sdmodule "=\"");
         rStrm.WriteOString( sOut.makeStringAndClear() );
         Out_String( rStrm, *pSBModule, eDestEnc, pNonConvertableChars );
         sOut.append('\"');
@@ -860,19 +852,19 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
         {
             if( pSBLibrary )
             {
-                sOut.append("' ")
-                    .append(OOO_STRING_SVTOOLS_HTML_SB_library)
-                    .append(' ')
-                    .append(OUStringToOString(*pSBLibrary, eDestEnc));
+                sOut.append("' "
+                            OOO_STRING_SVTOOLS_HTML_SB_library
+                            " " +
+                            OUStringToOString(*pSBLibrary, eDestEnc));
                 rStrm.WriteOString( sOut.makeStringAndClear() ).WriteCharPtr( SAL_NEWLINE_STRING );
             }
 
             if( pSBModule )
             {
-                sOut.append("' ")
-                    .append(OOO_STRING_SVTOOLS_HTML_SB_module)
-                    .append(' ')
-                    .append(OUStringToOString(*pSBModule, eDestEnc));
+                sOut.append("' "
+                            OOO_STRING_SVTOOLS_HTML_SB_module
+                            " " +
+                            OUStringToOString(*pSBModule, eDestEnc));
                 rStrm.WriteOString( sOut.makeStringAndClear() ).WriteCharPtr( SAL_NEWLINE_STRING );
             }
         }
@@ -923,9 +915,8 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
 
             if( pStr )
             {
-                OStringBuffer sOut;
-                sOut.append(' ').append(pStr).append("=\"");
-                rStrm.WriteOString( sOut.makeStringAndClear() );
+                OString sOut = OStringLiteral(" ") + pStr + "=\"";
+                rStrm.WriteOString( sOut );
 
                 Out_String( rStrm, pMacro->GetMacName(), eDestEnc, pNonConvertableChars ).WriteChar( '\"' );
             }
@@ -949,19 +940,19 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
         OUString aValStr;
         rFormatter.GetInputLineString( fVal, 0, aValStr );
         OString sTmp(OUStringToOString(aValStr, eDestEnc));
-        aStrTD.append(' ').
-            append(OOO_STRING_SVTOOLS_HTML_O_SDval).
-            append("=\"").
-            append(sTmp).append('\"');
+        aStrTD.append(" "
+                OOO_STRING_SVTOOLS_HTML_O_SDval
+                "=\"" +
+                sTmp + "\"");
     }
     if ( bValue || nFormat )
     {
-        aStrTD.append(' ').
-            append(OOO_STRING_SVTOOLS_HTML_O_SDnum).
-            append("=\"").
-            append(static_cast<sal_Int32>(static_cast<sal_uInt16>(
-                Application::GetSettings().GetLanguageTag().getLanguageType()))).
-            append(';'); // Language for Format 0
+        aStrTD.append(" "
+                OOO_STRING_SVTOOLS_HTML_O_SDnum
+                "=\"" +
+                OString::number(static_cast<sal_Int32>(static_cast<sal_uInt16>(
+                    Application::GetSettings().GetLanguageTag().getLanguageType()))) +
+                ";"); // Language for Format 0
         if ( nFormat )
         {
             OString aNumStr;

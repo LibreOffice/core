@@ -271,8 +271,8 @@ static OUString getMappingName(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
 {
     OUStringBuffer aKey( 64 );
-    aKey.append( rAddPurpose );
-    aKey.append( ';' );
+    aKey.append( rAddPurpose +
+                OUStringLiteral1(';') );
     aKey.append( rFrom.getTypeName() );
     aKey.append( '[' );
     aKey.append( reinterpret_cast< sal_IntPtr >(rFrom.get()), 16 );
@@ -290,8 +290,7 @@ static OUString getBridgeName(
     OUStringBuffer aBridgeName( 16 );
     if (!rAddPurpose.isEmpty())
     {
-        aBridgeName.append( rAddPurpose );
-        aBridgeName.append( '_' );
+        aBridgeName.append( rAddPurpose + OUStringLiteral1('_') );
     }
     aBridgeName.append( EnvDcp::getTypeName(rFrom.getTypeName()) );
     aBridgeName.append( '_' );

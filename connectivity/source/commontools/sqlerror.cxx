@@ -234,7 +234,7 @@ namespace connectivity
 
         OUString sResMessage(Translate::get(lcl_getResourceErrorID(_eCondition), m_aResources));
         OSL_ENSURE( !sResMessage.isEmpty(), "SQLError_Impl::impl_getErrorMessage: illegal error condition, or invalid resource!" );
-        aMessage.append( getMessagePrefix() ).append( " " ).append( sResMessage );
+        aMessage.append( getMessagePrefix() + " " + sResMessage );
 
         return aMessage.makeStringAndClear();
     }

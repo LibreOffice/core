@@ -1025,8 +1025,7 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
                 }
                 else
                 {
-                    sTmp.append( fTemp );
-                    sTmp.append( 's' );
+                    sTmp.append( OUString::number(fTemp) + "s" );
                     mxExport->AddAttribute( XML_NAMESPACE_ANIMATION, XML_ITERATE_INTERVAL, sTmp.makeStringAndClear() );
                 }
             }
@@ -1207,7 +1206,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
                     if( !sTmp.isEmpty() )
                         sTmp.append( ';' );
 
-                    sTmp.append( OUString::number(rPair.Time) ).append( "," ).append( OUString::number(rPair.Progress) );
+                    sTmp.append( OUString::number(rPair.Time)  + "," + OUString::number(rPair.Progress) );
                 }
 
                 mxExport->AddAttribute( XML_NAMESPACE_SMIL, XML_KEYSPLINES, sTmp.makeStringAndClear() );

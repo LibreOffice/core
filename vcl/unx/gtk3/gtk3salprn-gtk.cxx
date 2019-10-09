@@ -877,8 +877,8 @@ GtkPrintDialog::updateControllerPrintRange()
                         sBuf.append(sal_Int32(pRanges[i].start+1));
                         if (pRanges[i].start != pRanges[i].end)
                         {
-                            sBuf.append('-');
-                            sBuf.append(sal_Int32(pRanges[i].end+1));
+                            sBuf.append("-" +
+                                OUString::number(sal_Int32(pRanges[i].end+1)));
                         }
 
                         if (i != num_ranges-1)

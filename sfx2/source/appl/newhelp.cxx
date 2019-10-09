@@ -589,8 +589,7 @@ void IndexTabPage_Impl::InitializeIndex()
 
     try
     {
-        OUStringBuffer aURL = HELP_URL;
-        aURL.append(sFactory);
+        OUStringBuffer aURL = HELP_URL + sFactory;
         AppendConfigToken(aURL, true);
 
         Content aCnt( aURL.makeStringAndClear(), Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
@@ -676,12 +675,7 @@ void IndexTabPage_Impl::InitializeIndex()
 
                     for ( sal_uInt32 j = 1; j < nRefListLen ; ++j )
                     {
-                        aData
-                            .append( aKeywordPair )
-                            .append( ' ' )
-                            .append( '-' )
-                            .append( ' ' )
-                            .append( aTitleList[j] );
+                        aData.append( aKeywordPair + " - " + aTitleList[j] );
 
                         aTempString = aData.makeStringAndClear();
                         it = aInfo.emplace(aTempString, 0).first;
@@ -1030,9 +1024,7 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl, LinkParamNone*, void)
     EnterWait();
     ClearSearchResults();
     RememberSearchText( aSearchText );
-    OUStringBuffer aSearchURL(HELP_URL);
-    aSearchURL.append(aFactory);
-    aSearchURL.append(HELP_SEARCH_TAG);
+    OUStringBuffer aSearchURL(HELP_URL + aFactory + HELP_SEARCH_TAG);
     if ( !m_pFullWordsCB->IsChecked() )
         aSearchText = sfx2::PrepareSearchString( aSearchText, xBreakIterator, true );
     aSearchURL.append(aSearchText);
@@ -1351,9 +1343,7 @@ OUString SfxHelpWindow_Impl::buildHelpURL(const OUString& sFactory        ,
                                           const OUString& sAnchor)
 {
     OUStringBuffer sHelpURL(256);
-    sHelpURL.append(HELP_URL);
-    sHelpURL.append(sFactory);
-    sHelpURL.append(sContent);
+    sHelpURL.append(HELP_URL + sFactory + sContent);
     AppendConfigToken(sHelpURL, true/*bUseQuestionMark*/);
     if (!sAnchor.isEmpty())
         sHelpURL.append(sAnchor);

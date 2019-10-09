@@ -182,11 +182,12 @@ void Test::test_Uri() {
 
     // Check surrogate handling:
 
-    aBuffer.append(u'\xD800'); // %ED%A0%80
-    aBuffer.append(u'\xD800'); // %F0%90%8F%BF
-    aBuffer.append(u'\xDFFF');
-    aBuffer.append(u'\xDFFF'); // %ED%BF%BF
-    aBuffer.append('A'); // A
+    aBuffer.append(
+                u"\xD800" // %ED%A0%80
+                u"\xD800" // %F0%90%8F%BF
+                u"\xDFFF"
+                u"\xDFFF" // %ED%BF%BF
+                "A"); // A
     aText1 = aBuffer.makeStringAndClear();
     aText2 = "%ED%A0%80" "%F0%90%8F%BF" "%ED%BF%BF" "A";
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -209,11 +210,7 @@ void Test::test_Uri() {
             RTL_TEXTENCODING_UTF8));
 
     aText1 = "%ed%a0%80" "%f0%90%8f%bf" "%ed%bf%bf" "A";
-    aBuffer.append("%ED%A0%80");
-    aBuffer.append(u'\xD800');
-    aBuffer.append(u'\xDFFF');
-    aBuffer.append("%ED%BF%BF");
-    aBuffer.append('A');
+    aBuffer.append(u"%ED%A0%80\xD800\xDFFF%ED%BF%BFA");
     aText2 = aBuffer.makeStringAndClear();
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 14",
@@ -250,8 +247,7 @@ void Test::test_Uri() {
     // Check IURI handling:
 
     aText1 = "%30%C3%BF";
-    aBuffer.append("%30");
-    aBuffer.append(u'\x00FF');
+    aBuffer.append("%30" + OUStringLiteral1(u'\x00FF'));
     aText2 = aBuffer.makeStringAndClear();
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 18",

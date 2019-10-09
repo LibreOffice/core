@@ -189,8 +189,7 @@ OUString const & psp::getFontPath()
         {
             // #i53530# Path from CustomDataUrl will completely
             // replace net and user paths if the path exists
-            aPathBuffer.append(aConfigPath);
-            aPathBuffer.append("/" LIBO_SHARE_FOLDER "/fonts");
+            aPathBuffer.append(aConfigPath + "/" LIBO_SHARE_FOLDER "/fonts");
             // check existence of config path
             struct stat aStat;
             if( 0 != stat( OUStringToOString( aPathBuffer.makeStringAndClear(), osl_getThreadTextEncoding() ).getStr(), &aStat )
@@ -198,21 +197,18 @@ OUString const & psp::getFontPath()
                 aConfigPath.clear();
             else
             {
-                aPathBuffer.append(aConfigPath);
-                aPathBuffer.append("/" LIBO_SHARE_FOLDER "/fonts");
+                aPathBuffer.append(aConfigPath + "/" LIBO_SHARE_FOLDER "/fonts");
             }
         }
         if( aConfigPath.isEmpty() )
         {
             if( !aInstallationRootPath.isEmpty() )
             {
-                aPathBuffer.append( aInstallationRootPath );
-                aPathBuffer.append( "/" LIBO_SHARE_FOLDER "/fonts/truetype;");
+                aPathBuffer.append( aInstallationRootPath + "/" LIBO_SHARE_FOLDER "/fonts/truetype;");
             }
             if( !aUserPath.isEmpty() )
             {
-                aPathBuffer.append( aUserPath );
-                aPathBuffer.append( "/user/fonts" );
+                aPathBuffer.append( aUserPath + "/user/fonts" );
             }
         }
 

@@ -182,9 +182,7 @@ OUString lcl_createInsertStatement(const OUString& sTableName,
                                    const std::vector<dbahsql::ColumnDefinition>& rColTypes)
 {
     assert(rColTypes.size() > 0);
-    OUStringBuffer sql("INSERT INTO ");
-    sql.append(sTableName);
-    sql.append(" (");
+    OUStringBuffer sql = "INSERT INTO " + sTableName + " (";
 
     // column names
     for (size_t i = 0; i < rColTypes.size(); ++i)
@@ -193,9 +191,8 @@ OUString lcl_createInsertStatement(const OUString& sTableName,
         if (i < rColTypes.size() - 1)
             sql.append(", ");
     }
-    sql.append(")");
-
-    sql.append(" VALUES (");
+    sql.append(")"
+               " VALUES (");
     for (size_t i = 0; i < rColTypes.size(); ++i)
     {
         sql.append("?");

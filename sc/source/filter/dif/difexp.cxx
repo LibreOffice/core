@@ -109,8 +109,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     aOS.append("\n0,1\n\"");
 
     pDoc->GetName( nTab, aString );
-    aOS.append(aString);
-    aOS.append("\"\n");
+    aOS.append(aString + "\"\n");
     rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
     // VECTORS
@@ -131,8 +130,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
 
     // DATA
     aOS.append(pKeyDATA);
-    aOS.append("\n0,0\n");
-    aOS.append(p2DoubleQuotes_LF);
+    aOS.append(OUStringLiteral("\n0,0\n") + p2DoubleQuotes_LF);
     rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
     SCCOL               nColCnt;
@@ -159,8 +157,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                 case CELLTYPE_VALUE:
                     aOS.append(pNumData);
                     pDoc->GetInputString( nColCnt, nRowCnt, nTab, aString );
-                    aOS.append(aString);
-                    aOS.append("\nV\n");
+                    aOS.append(aString + "\nV\n");
                 break;
                 case CELLTYPE_EDIT:
                 case CELLTYPE_STRING:
@@ -174,8 +171,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                     {
                         aOS.append(pNumData);
                         pDoc->GetInputString( nColCnt, nRowCnt, nTab, aString );
-                        aOS.append(aString);
-                        aOS.append("\nV\n");
+                        aOS.append(aString + "\nV\n");
                     }
                     else
                     {

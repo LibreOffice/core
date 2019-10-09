@@ -1599,9 +1599,7 @@ static OUString getDbgObjectName(SbUnoObject& rUnoObj)
     {
         aRet.append( "\n" );
     }
-    aRet.append( "\"" );
-    aRet.append( aName );
-    aRet.append( "\":" );
+    aRet.append( "\"" + aName + "\":" );
     return aRet.makeStringAndClear();
 }
 
@@ -1719,8 +1717,8 @@ static OUString Impl_GetSupportedInterfaces(SbUnoObject& rUnoObj)
     auto x = o3tl::tryAccess<Reference<XInterface>>(aToInspectObj);
     if( !x )
     {
-        aRet.append( ID_DBG_SUPPORTEDINTERFACES );
-        aRet.append( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
+        aRet.append( OUStringLiteral(ID_DBG_SUPPORTEDINTERFACES) +
+                " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
     }
     else
     {
@@ -1749,9 +1747,9 @@ static OUString Impl_GetSupportedInterfaces(SbUnoObject& rUnoObj)
                     typelib_TypeDescription * pTD = nullptr;
                     rType.getDescription( &pTD );
 
-                    aRet.append( "*** ERROR: No IdlClass for type \"" );
-                    aRet.append( pTD->pTypeName );
-                    aRet.append( "\"\n*** Please check type library\n" );
+                    aRet.append( "*** ERROR: No IdlClass for type \"" +
+                                OUString::unacquired(&pTD->pTypeName) +
+                                "\"\n*** Please check type library\n" );
                 }
             }
         }
@@ -4893,9 +4891,7 @@ OUString SbUnoStructRefObject::getDbgObjectName() const
     {
         aRet.append( "\n" );
     }
-    aRet.append( "\"" );
-    aRet.append( aName );
-    aRet.append( "\":" );
+    aRet.append( "\"" + aName + "\":" );
     return aRet.makeStringAndClear();
 }
 

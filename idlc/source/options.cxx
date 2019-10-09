@@ -165,11 +165,9 @@ bool Options::checkCommandFile (std::vector< std::string > & rArgs, char const *
 
 bool Options::badOption(char const * reason, std::string const & rArg)
 {
-  OStringBuffer message;
   if (reason != nullptr)
   {
-    message.append(reason); message.append(" option '"); message.append(rArg.c_str()); message.append("'");
-    throw IllegalArgument(message.makeStringAndClear());
+    throw IllegalArgument(reason + OStringLiteral(" option '") + rArg.c_str() + "'");
   }
   return false;
 }
@@ -274,9 +272,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs)
         if (m_options.count("-I") > 0)
         {
           // append param.
-          OStringBuffer buffer(m_options["-I"]);
-          buffer.append(' '); buffer.append(param);
-          param = buffer.makeStringAndClear();
+          param = m_options["-I"] + " " + param;
         }
         m_options["-I"] = param;
         break;
@@ -291,9 +287,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs)
         param += OString((*first).c_str(), (*first).size());
         if (m_options.count("-D") > 0)
         {
-          OStringBuffer buffer(m_options["-D"]);
-          buffer.append(' '); buffer.append(param);
-          param = buffer.makeStringAndClear();
+          param = m_options["-D"] + " " + param;
         }
         m_options["-D"] = param;
         break;

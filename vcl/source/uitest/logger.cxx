@@ -98,21 +98,21 @@ void UITestLogger::logCommand(const OUString& rAction,
             {
                 sal_Int32 nValue = 0;
                 rProp.Value >>= nValue;
-                aBuffer.append("\"").append(rProp.Name).append("\": ");
-                aBuffer.append(OUString::number(nValue)).append(", ");
+                aBuffer.append("\"" + rProp.Name + "\": " +
+                            OUString::number(nValue) + ", ");
             }
             else if (aTypeName == "unsigned long")
             {
                 sal_uInt32 nValue = 0;
                 rProp.Value >>= nValue;
-                aBuffer.append("\"").append(rProp.Name).append("\": ");
-                aBuffer.append(OUString::number(nValue)).append(", ");
+                aBuffer.append("\"" + rProp.Name + "\": " +
+                        OUString::number(nValue) + ", ");
             }
             else if (aTypeName == "boolean")
             {
                 bool bValue = false;
                 rProp.Value >>= bValue;
-                aBuffer.append("\"").append(rProp.Name).append("\": ");
+                aBuffer.append("\"" + rProp.Name + "\": ");
                 if (bValue)
                     aBuffer.append("True, ");
                 else

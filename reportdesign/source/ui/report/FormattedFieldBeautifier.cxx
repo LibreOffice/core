@@ -90,10 +90,7 @@ namespace rptui
                         OUString sLabel = m_rReportController.getColumnLabel_throw(sColumnName);
                         if ( !sLabel.isEmpty() )
                         {
-                            OUStringBuffer aBuffer;
-                            aBuffer.append( "=" );
-                            aBuffer.append( sLabel );
-                            sDataField = aBuffer.makeStringAndClear();
+                            sDataField = "=" + sLabel;
                             bSet = false;
                         }
                     }

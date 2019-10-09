@@ -622,11 +622,11 @@ void HtmlExport::ExportSingleDocument()
     mnPagesWritten = 0;
     InitProgress(mnSdPageCount);
 
-    OUStringBuffer aStr(gaHTMLHeader);
-    aStr.append(DocumentMetadata());
-    aStr.append("\r\n");
-    aStr.append("</head>\r\n");
-    aStr.append(CreateBodyTag());
+    OUStringBuffer aStr(gaHTMLHeader +
+        DocumentMetadata() +
+        "\r\n"
+        "</head>\r\n" +
+        CreateBodyTag());
 
     for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; ++nSdPage)
     {
@@ -648,8 +648,7 @@ void HtmlExport::ExportSingleDocument()
 
         lclAppendStyle(aStr, "h1", sStyle);
 
-        aStr.append(sTitleText);
-        aStr.append("</h1>\r\n");
+        aStr.append(sTitleText + "</h1>\r\n");
 
         // write outline text
         aStr.append(CreateTextForPage( pOutliner, pPage, true, pPage->GetPageBackgroundColor() ));
@@ -664,9 +663,8 @@ void HtmlExport::ExportSingleDocument()
             {
                 aStr.append("<br>\r\n<h3>");
                 aStr.append(RESTOHTML(STR_HTMLEXP_NOTES));
-                aStr.append(":</h3>\r\n");
-
-                aStr.append(aNotesStr);
+                aStr.append(":</h3>\r\n" +
+                            aNotesStr);
             }
         }
 
@@ -1089,8 +1087,8 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>");
         aStr.append(StringToHTMLString(maPageNames[nSdPage]));
-        aStr.append("</title>\r\n");
-        aStr.append("</head>\r\n");
+        aStr.append("</title>\r\n"
+                    "</head>\r\n");
         aStr.append(CreateBodyTag());
 
         // navigation bar
@@ -1099,8 +1097,8 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         // page title
         OUString sTitleText( CreateTextForTitle(pOutliner,pPage, pPage->GetPageBackgroundColor()) );
         lclAppendStyle(aStr, "h1", getParagraphStyle(pOutliner, 0));
-        aStr.append(sTitleText);
-        aStr.append("</h1>\r\n");
+        aStr.append(sTitleText +
+                    "</h1>\r\n");
 
         // write outline text
         aStr.append(CreateTextForPage( pOutliner, pPage, true, pPage->GetPageBackgroundColor() ));
@@ -1115,9 +1113,8 @@ bool HtmlExport::CreateHtmlTextForPresPages()
             {
                 aStr.append("<br>\r\n<h3>");
                 aStr.append(RESTOHTML(STR_HTMLEXP_NOTES));
-                aStr.append(":</h3>\r\n");
-
-                aStr.append(aNotesStr);
+                aStr.append(":</h3>\r\n" +
+                            aNotesStr);
             }
         }
 
@@ -1625,8 +1622,8 @@ bool HtmlExport::CreateHtmlForPresPages()
         if(!mbFrames )
             aStr.append(CreateNavBar(nSdPage, false));
         // Image
-        aStr.append("<center>");
-        aStr.append("<img src=\"");
+        aStr.append("<center>"
+                    "<img src=\"");
         aStr.append(maImageFiles[nSdPage]);
         aStr.append("\" alt=\"\"");
 
@@ -1647,10 +1644,9 @@ bool HtmlExport::CreateHtmlForPresPages()
             {
                 aStr.append("<h3>");
                 aStr.append(RESTOHTML(STR_HTMLEXP_NOTES));
-                aStr.append(":</h3><br>\r\n\r\n<p>");
-
-                aStr.append(aNotesStr);
-                aStr.append("\r\n</p>\r\n");
+                aStr.append(":</h3><br>\r\n\r\n<p>" +
+                    aNotesStr +
+                    "\r\n</p>\r\n");
             }
         }
 
@@ -1922,13 +1918,11 @@ bool HtmlExport::CreateContentPage()
         aStr.append(CreateLink(StringToHTMLString(maHTMLFiles[0]),
                                RESTOHTML(STR_HTMLEXP_CLICKSTART)));
 
-    aStr.append("</h2>\r\n</center>\r\n");
-
-    aStr.append("<center><table width=\"90%\"><tr>\r\n");
-
+    aStr.append("</h2>\r\n</center>\r\n"
+            "<center><table width=\"90%\"><tr>\r\n"
     // table of content
-    aStr.append("<td valign=\"top\" align=\"left\" width=\"25%\">\r\n");
-    aStr.append("<h3>");
+            "<td valign=\"top\" align=\"left\" width=\"25%\">\r\n"
+            "<h3>");
     aStr.append(RESTOHTML(STR_HTMLEXP_CONTENTS));
     aStr.append("</h3>");
 
@@ -1942,10 +1936,9 @@ bool HtmlExport::CreateContentPage()
             aStr.append(CreateLink(maHTMLFiles[nSdPage], aPageName));
         aStr.append("</div>\r\n");
     }
-    aStr.append("</td>\r\n");
-
+    aStr.append("</td>\r\n"
     // document information
-    aStr.append("<td valign=\"top\" align=\"left\" width=\"75%\">\r\n");
+            "<td valign=\"top\" align=\"left\" width=\"75%\">\r\n");
 
     if (!maAuthor.isEmpty())
     {
@@ -1958,42 +1951,42 @@ bool HtmlExport::CreateContentPage()
 
     if (!maEMail.isEmpty())
     {
-        aStr.append("<p><strong>");
-        aStr.append(RESTOHTML(STR_HTMLEXP_EMAIL));
-        aStr.append(":</strong> <a href=\"mailto:");
-        aStr.append(maEMail);
-        aStr.append("\">");
-        aStr.append(StringToHTMLString(maEMail));
-        aStr.append("</a></p>\r\n");
+        aStr.append("<p><strong>" +
+                RESTOHTML(STR_HTMLEXP_EMAIL) +
+                ":</strong> <a href=\"mailto:" +
+                maEMail +
+                "\">" +
+                StringToHTMLString(maEMail) +
+                "</a></p>\r\n");
     }
 
     if (!maHomePage.isEmpty())
     {
-        aStr.append("<p><strong>");
-        aStr.append(RESTOHTML(STR_HTMLEXP_HOMEPAGE));
-        aStr.append(":</strong> <a href=\"");
-        aStr.append(maHomePage);
-        aStr.append("\">");
-        aStr.append(StringToHTMLString(maHomePage));
-        aStr.append("</a> </p>\r\n");
+        aStr.append("<p><strong>" +
+            RESTOHTML(STR_HTMLEXP_HOMEPAGE) +
+            ":</strong> <a href=\"" +
+            maHomePage +
+            "\">" +
+            StringToHTMLString(maHomePage) +
+            "</a> </p>\r\n");
     }
 
     if (!maInfo.isEmpty())
     {
-        aStr.append("<p><strong>");
-        aStr.append(RESTOHTML(STR_HTMLEXP_INFO));
-        aStr.append(":</strong><br>\r\n");
-        aStr.append(StringToHTMLString(maInfo));
-        aStr.append("</p>\r\n");
+        aStr.append("<p><strong>" +
+                RESTOHTML(STR_HTMLEXP_INFO) +
+                ":</strong><br>\r\n" +
+                StringToHTMLString(maInfo) +
+                "</p>\r\n");
     }
 
     if(mbDownload)
     {
-        aStr.append("<p><a href=\"");
-        aStr.append(maDocFileName);
-        aStr.append("\">");
-        aStr.append(RESTOHTML(STR_HTMLEXP_DOWNLOAD));
-        aStr.append("</a></p>\r\n");
+        aStr.append("<p><a href=\"" +
+                maDocFileName +
+                "\">" +
+                RESTOHTML(STR_HTMLEXP_DOWNLOAD) +
+                "</a></p>\r\n");
     }
 
     for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
@@ -2009,9 +2002,8 @@ bool HtmlExport::CreateContentPage()
         aStr.append("\r\n");
     }
 
-    aStr.append("</td></tr></table></center>\r\n");
-
-    aStr.append("</body>\r\n</html>");
+    aStr.append("</td></tr></table></center>\r\n"
+                "</body>\r\n</html>");
 
     bool bOk = WriteHtml(maIndex, false, aStr.makeStringAndClear());
 
@@ -2266,20 +2258,16 @@ static const char JS_CollapseOutline[] =
 
 bool HtmlExport::CreateFrames()
 {
-    OUString aTmp;
     OUStringBuffer aStr(
         "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\"\r\n"
         "    \"http://www.w3.org/TR/html4/frameset.dtd\">\r\n"
-        "<html>\r\n<head>\r\n");
-
-    aStr.append(CreateMetaCharset());
-    aStr.append("  <title>");
-    aStr.append(StringToHTMLString(maPageNames[0]));
-    aStr.append("</title>\r\n");
-
-    aStr.append("<script type=\"text/javascript\">\r\n<!--\r\n");
-
-    aStr.append("var nCurrentPage = 0;\r\nvar nPageCount = ");
+        "<html>\r\n<head>\r\n" +
+        CreateMetaCharset() +
+        "  <title>" +
+        StringToHTMLString(maPageNames[0]) +
+        "</title>\r\n"
+        "<script type=\"text/javascript\">\r\n<!--\r\n"
+        "var nCurrentPage = 0;\r\nvar nPageCount = ");
     aStr.append(OUString::number(mnSdPageCount));
     aStr.append(";\r\n\r\n");
 
@@ -2295,7 +2283,7 @@ bool HtmlExport::CreateFrames()
     aFunction = aFunction.replaceAll(aPlaceHolder, gaHTMLExtension);
     aStr.append(aFunction);
 
-    aTmp = JS_NavigateRel;
+    OUString aTmp = JS_NavigateRel;
     aTmp = aTmp.replaceAll(aPlaceHolder, gaHTMLExtension);
     aStr.append(aTmp);
 
@@ -2309,23 +2297,21 @@ bool HtmlExport::CreateFrames()
         aTmp = aTmp.replaceAll(aPlaceHolder, gaHTMLExtension);
         aStr.append(aTmp);
     }
-    aStr.append("// -->\r\n</script>\r\n");
-
-    aStr.append("</head>\r\n");
-
-    aStr.append("<frameset cols=\"*,");
+    aStr.append("// -->\r\n</script>\r\n"
+            "</head>\r\n"
+            "<frameset cols=\"*,");
     aStr.append(OUString::number((mnWidthPixel + 16)));
     aStr.append("\">\r\n");
     if(mbImpress)
     {
-        aStr.append("  <frameset rows=\"42,*\">\r\n");
-        aStr.append("    <frame src=\"navbar3");
-        aStr.append(gaHTMLExtension);
-        aStr.append("\" name=\"navbar2\" marginwidth=\"4\" marginheight=\"4\" scrolling=\"no\">\r\n");
+        aStr.append("  <frameset rows=\"42,*\">\r\n"
+                "    <frame src=\"navbar3" +
+                gaHTMLExtension +
+                "\" name=\"navbar2\" marginwidth=\"4\" marginheight=\"4\" scrolling=\"no\">\r\n");
     }
-    aStr.append("    <frame src=\"outline0");
-    aStr.append(gaHTMLExtension);
-    aStr.append("\" name=\"outline\">\r\n");
+    aStr.append("    <frame src=\"outline0" +
+            gaHTMLExtension +
+            "\" name=\"outline\">\r\n");
     if(mbImpress)
         aStr.append("  </frameset>\r\n");
 
@@ -2338,23 +2324,21 @@ bool HtmlExport::CreateFrames()
     else
         aStr.append("  <frameset rows=\"42,*\">\r\n");
 
-    aStr.append("    <frame src=\"navbar0");
-    aStr.append(gaHTMLExtension);
-    aStr.append("\" name=\"navbar1\" marginwidth=\"4\" marginheight=\"4\" scrolling=\"no\">\r\n");
-
-    aStr.append("    <frame src=\"");
-    aStr.append(maHTMLFiles[0]);
-    aStr.append("\" name=\"show\" marginwidth=\"4\" marginheight=\"4\">\r\n");
+    aStr.append("    <frame src=\"navbar0" +
+            gaHTMLExtension +
+            "\" name=\"navbar1\" marginwidth=\"4\" marginheight=\"4\" scrolling=\"no\">\r\n"
+            "    <frame src=\"" +
+            maHTMLFiles[0] +
+            "\" name=\"show\" marginwidth=\"4\" marginheight=\"4\">\r\n");
 
     if(mbNotes)
     {
-        aStr.append("    <frame src=\"note0");
-        aStr.append(gaHTMLExtension);
-        aStr.append("\" name=\"notes\">\r\n");
+        aStr.append("    <frame src=\"note0" +
+                gaHTMLExtension +
+                "\" name=\"notes\">\r\n");
     }
-    aStr.append("  </frameset>\r\n");
-
-    aStr.append("<noframes>\r\n");
+    aStr.append("  </frameset>\r\n"
+        "<noframes>\r\n");
     aStr.append(CreateBodyTag());
     aStr.append(RESTOHTML(STR_HTMLEXP_NOFRAMES));
     aStr.append("\r\n</noframes>\r\n</frameset>\r\n</html>");
@@ -2404,8 +2388,7 @@ bool HtmlExport::CreateNavBarFrames()
         if(nFile != 0 && mnSdPageCount > 1)
             aButton = CreateLink("JavaScript:parent.NavigateAbs(0)", aButton);
 
-        aStr.append(aButton);
-        aStr.append("\r\n");
+        aStr.append(aButton + "\r\n");
 
         // to the previous page
         aButton = SdResId(STR_PUBLISH_BACK);
@@ -2417,8 +2400,7 @@ bool HtmlExport::CreateNavBarFrames()
         if(nFile != 0 && mnSdPageCount > 1)
             aButton = CreateLink("JavaScript:parent.NavigateRel(-1)", aButton);
 
-        aStr.append(aButton);
-        aStr.append("\r\n");
+        aStr.append(aButton + "\r\n");
 
         // to the next page
         aButton = SdResId(STR_PUBLISH_NEXT);
@@ -2430,8 +2412,7 @@ bool HtmlExport::CreateNavBarFrames()
         if(nFile != 2 && mnSdPageCount > 1)
             aButton = CreateLink("JavaScript:parent.NavigateRel(1)", aButton);
 
-        aStr.append(aButton);
-        aStr.append("\r\n");
+        aStr.append(aButton + "\r\n");
 
         // to the last page
         aButton = SdResId(STR_HTMLEXP_LASTPAGE);
@@ -2448,8 +2429,7 @@ bool HtmlExport::CreateNavBarFrames()
             aButton = CreateLink(aLink, aButton);
         }
 
-        aStr.append(aButton);
-        aStr.append("\r\n");
+        aStr.append(aButton + "\r\n");
 
         // content
         if (mbContentsPage)
@@ -2476,8 +2456,8 @@ bool HtmlExport::CreateNavBarFrames()
         }
 
         // and finished...
-        aStr.append("</center>\r\n");
-        aStr.append("</body>\r\n</html>");
+        aStr.append("</center>\r\n"
+                "</body>\r\n</html>");
 
         OUString aFileName("navbar" + OUString::number(nFile));
 
@@ -2692,16 +2672,12 @@ OUString HtmlExport::CreateLink( const OUString& aLink,
                                  const OUString& aText,
                                  const OUString& aTarget )
 {
-    OUStringBuffer aStr( "<a href=\"" );
-    aStr.append(aLink);
+    OUStringBuffer aStr( "<a href=\"" + aLink );
     if (!aTarget.isEmpty())
     {
-        aStr.append("\" target=\"");
-        aStr.append(aTarget);
+        aStr.append("\" target=\"" + aTarget);
     }
-    aStr.append("\">");
-    aStr.append(aText);
-    aStr.append("</a>");
+    aStr.append("\">" + aText + "</a>");
 
     return aStr.makeStringAndClear();
 }
@@ -2709,25 +2685,10 @@ OUString HtmlExport::CreateLink( const OUString& aLink,
 // creates an image tag
 OUString HtmlExport::CreateImage( const OUString& aImage, const OUString& aAltText )
 {
-    OUStringBuffer aStr( "<img src=\"");
-    aStr.append(aImage);
-    aStr.append("\" border=0");
-
-    if (!aAltText.isEmpty())
-    {
-        aStr.append(" alt=\"");
-        aStr.append(aAltText);
-        aStr.append('"');
-    }
-    else
-    {
+    return "<img src=\"" + aImage + "\" border=0"
         // Agerskov: HTML 4.01 has to have an alt attribute even if it is an empty string
-        aStr.append(" alt=\"\"");
-    }
-
-    aStr.append('>');
-
-    return aStr.makeStringAndClear();
+        " alt=\"" + aAltText + "\""
+        ">";
 }
 
 // create area for a circle; we expect pixel coordinates

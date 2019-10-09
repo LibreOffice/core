@@ -189,12 +189,10 @@ ContentProvider::createDocumentContentIdentifier(
             1 );
     }
 
-    OUStringBuffer aBuffer;
-    aBuffer.append( TDOC_URL_SCHEME ":/" );
-    aBuffer.append( aDocId );
+    OUString aBuffer = TDOC_URL_SCHEME ":/" + aDocId;
 
     uno::Reference< ucb::XContentIdentifier > xId
-        = new ::ucbhelper::ContentIdentifier( aBuffer.makeStringAndClear() );
+        = new ::ucbhelper::ContentIdentifier( aBuffer );
     return xId;
 }
 

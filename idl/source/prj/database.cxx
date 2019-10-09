@@ -419,11 +419,11 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
         }
 
         // error position
-        aErrorText.append("> at ( ");
-        aErrorText.append(static_cast<sal_Int64>(aError.nLine));
-        aErrorText.append(", ");
-        aErrorText.append(static_cast<sal_Int64>(aError.nColumn));
-        aErrorText.append(" )");
+        aErrorText.append("> at ( " +
+                OString::number(static_cast<sal_Int64>(aError.nLine)) +
+                ", " +
+                OString::number(static_cast<sal_Int64>(aError.nColumn)) +
+                " )");
 
         // reset error
         aError = SvIdlError();

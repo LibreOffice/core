@@ -97,9 +97,9 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
             bool bSuccess =
                 ::sax::Converter::convertBool(bValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
-                    OStringBuffer("PropertyConversion::convertString: could not convert \"").
-                append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
-                append("\" into a boolean!").getStr());
+                    OString("PropertyConversion::convertString: could not convert \"" +
+                        OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US) +
+                        "\" into a boolean!").getStr());
             aReturn <<= (_bInvertBoolean ? !bValue : bValue);
         }
         break;
@@ -111,9 +111,9 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
                 bool bSuccess =
                     ::sax::Converter::convertNumber(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
-                        OStringBuffer("PropertyConversion::convertString: could not convert \"").
-                    append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
-                    append("\" into an integer!").getStr());
+                        OString("PropertyConversion::convertString: could not convert \"" +
+                            OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US) +
+                            "\" into an integer!").getStr());
                 if (TypeClass_SHORT == _rExpectedType.getTypeClass())
                     aReturn <<= static_cast<sal_Int16>(nValue);
                 else
@@ -148,9 +148,9 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
             bool bSuccess =
                 ::sax::Converter::convertDouble(nValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
-                    OStringBuffer("PropertyConversion::convertString: could not convert \"").
-                append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
-                append("\" into a double!").getStr());
+                    OString("PropertyConversion::convertString: could not convert \"" +
+                        OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US) +
+                        "\" into a double!").getStr());
             aReturn <<= nValue;
         }
         break;
@@ -174,9 +174,9 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
                 bool bSuccess =
                     ::sax::Converter::convertDouble(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
-                        OStringBuffer("PropertyConversion::convertString: could not convert \"").
-                    append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
-                    append("\" into a double!").getStr());
+                        OString("PropertyConversion::convertString: could not convert \"" +
+                            OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US) +
+                            "\" into a double!").getStr());
 
                 // then convert it into the target type
                 switch (nType)
@@ -267,9 +267,9 @@ SvXMLImportContextRef OPropertyImport::CreateChildContext(sal_uInt16 _nPrefix, c
     }
     else
     {
-        OSL_FAIL(OStringBuffer("OPropertyImport::CreateChildContext: unknown sub element (only \"properties\" is recognized, but it is ").
-            append(OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US)).
-            append(")!").getStr());
+        OSL_FAIL(OString("OPropertyImport::CreateChildContext: unknown sub element (only \"properties\" is recognized, but it is " +
+                OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US) +
+                ")!").getStr());
         return SvXMLImportContext::CreateChildContext(_nPrefix, _rLocalName, _rxAttrList);
     }
 }
@@ -365,9 +365,9 @@ SvXMLImportContextRef OPropertyElementsContext::CreateChildContext(sal_uInt16 _n
     }
     else
     {
-        OSL_FAIL(OStringBuffer("OPropertyElementsContext::CreateChildContext: unknown child element (\"").
-            append(OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US)).
-            append("\")!").getStr());
+        OSL_FAIL(OString("OPropertyElementsContext::CreateChildContext: unknown child element (\"" +
+                OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US) +
+                "\")!").getStr());
         return new SvXMLImportContext(GetImport(), _nPrefix, _rLocalName);
     }
 }
@@ -398,9 +398,9 @@ OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16
 SvXMLImportContextRef OSinglePropertyContext::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
         const Reference< XAttributeList >&)
 {
-    OSL_FAIL(OStringBuffer("OSinglePropertyContext::CreateChildContext: unknown child element (\"").
-        append(OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US)).
-        append("\")!").getStr());
+    OSL_FAIL(OString("OSinglePropertyContext::CreateChildContext: unknown child element (\"" +
+            OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US) +
+            "\")!").getStr());
     return new SvXMLImportContext(GetImport(), _nPrefix, _rLocalName);
 }
 
@@ -493,9 +493,9 @@ void OListPropertyContext::StartElement( const Reference< XAttributeList >& _rxA
         }
         else
         {
-            OSL_FAIL( OStringBuffer( "OListPropertyContext::StartElement: unknown child element (\"").
-                append(OUStringToOString(sAttributeName, RTL_TEXTENCODING_ASCII_US)).
-                append("\")!").getStr() );
+            OSL_FAIL( OString( "OListPropertyContext::StartElement: unknown child element (\"" +
+                        OUStringToOString(sAttributeName, RTL_TEXTENCODING_ASCII_US) +
+                        "\")!").getStr() );
         }
     }
 }
@@ -568,9 +568,9 @@ void OListValueContext::StartElement( const Reference< XAttributeList >& _rxAttr
             }
         }
 
-        OSL_FAIL( OStringBuffer( "OListValueContext::StartElement: unknown child element (\"").
-            append(OUStringToOString(sAttributeName, RTL_TEXTENCODING_ASCII_US)).
-            append("\")!").getStr() );
+        OSL_FAIL( OString( "OListValueContext::StartElement: unknown child element (\"" +
+                    OUStringToOString(sAttributeName, RTL_TEXTENCODING_ASCII_US) +
+                    "\")!").getStr() );
     }
 }
 

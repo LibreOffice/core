@@ -172,12 +172,11 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         // 2.4  If it does not match an exitsting pathname (relative to CWD):
         //  Results in "The file /.../foo:bar does not exits." (where "/..." is
         //  the CWD) on stderr and SystemShellExecuteException.
-        aBuffer.append("open --");
+        aBuffer.append("open -- ");
 #else
         // Just use xdg-open on non-Mac
-        aBuffer.append("/usr/bin/xdg-open");
+        aBuffer.append("/usr/bin/xdg-open ");
 #endif
-        aBuffer.append(" ");
         escapeForShell(aBuffer, OUStringToOString(aURL, osl_getThreadTextEncoding()));
 
         if ( pDesktopLaunch && *pDesktopLaunch )

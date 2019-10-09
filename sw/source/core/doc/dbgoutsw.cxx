@@ -723,9 +723,7 @@ static OUString lcl_dbg_out(const SwNumRule & rRule)
         aResult.append(lcl_dbg_out(rRule.Get(n)));
     }
 
-    aResult.append("]");
-
-    aResult.append("]");
+    aResult.append("]]");
 
     return aResult.makeStringAndClear();
 }

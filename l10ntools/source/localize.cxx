@@ -98,10 +98,7 @@ void handleCommand(
         buf.append("/LinkTarget/Executable/");
     }
     buf.append(rExecutable.data());
-    buf.append(" -i ");
-    buf.append(rInPath);
-    buf.append(" -o ");
-    buf.append(rOutPath);
+    buf.append(" -i " + rInPath + " -o " + rOutPath);
 
     const OString cmd = buf.makeStringAndClear();
     if (system(cmd.getStr()) != 0)

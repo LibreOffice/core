@@ -10,6 +10,7 @@
 #include <cassert>
 
 #include <clang/AST/DeclCXX.h>
+#include <clang/AST/DeclTemplate.h>
 
 #include "check.hxx"
 
@@ -100,6 +101,30 @@ TypeCheck TypeCheck::LvalueReference() const {
         }
     }
     return TypeCheck();
+}
+
+TypeCheck TypeCheck::RvalueReference() const {
+    if (!type_.isNull()) {
+        auto const t = type_->getAs<clang::RValueReferenceType>();
+        if (t != nullptr) {
+            return TypeCheck(t->getPointeeType());
+        }
+    }
+    return TypeCheck();
+}
+
+ContextCheck TypeCheck::TemplateSpecialization(llvm::StringRef id) const
+{
+    if (!type_.isNull()) {
+        auto const t = type_->getAs<clang::TemplateSpecializationType>();
+        if (t != nullptr) {
+            auto const templateDecl = t->getTemplateName().getAsTemplateDecl();
+            if (templateDecl && templateDecl->getName() == id) {
+                return ContextCheck(templateDecl->getDeclContext());
+            }
+        }
+    }
+    return ContextCheck();
 }
 
 TypeCheck TypeCheck::Pointer() const {

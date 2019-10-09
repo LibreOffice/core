@@ -82,9 +82,8 @@ OUString Data::createSegment(
     if (templateName.isEmpty()) {
         return name;
     }
-    OUStringBuffer buf(templateName);
+    OUStringBuffer buf = templateName + "['";
         //TODO: verify template name contains no bad chars?
-    buf.append("['");
     for (sal_Int32 i = 0; i < name.getLength(); ++i) {
         sal_Unicode c = name[i];
         switch (c) {
@@ -154,10 +153,7 @@ OUString Data::fullTemplateName(
             "bad component/name pair containing colon " + component + "/" +
             name);
     }
-    OUStringBuffer buf(component);
-    buf.append(':');
-    buf.append(name);
-    return buf.makeStringAndClear();
+    return component + ":" + name;
 }
 
 bool Data::equalTemplateNames(

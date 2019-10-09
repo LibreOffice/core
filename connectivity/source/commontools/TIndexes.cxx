@@ -154,9 +154,7 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const
         if (!_rForName.isEmpty() )
         {
             aSql.append( ::dbtools::quoteName( aQuote, _rForName ) );
-            aSql.append(" ON ");
-            aSql.append(aComposedName);
-            aSql.append(" ( ");
+            aSql.append(" ON " + aComposedName + " ( ");
 
             Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
             Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);

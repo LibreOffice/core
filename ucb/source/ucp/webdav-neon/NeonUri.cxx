@@ -149,21 +149,17 @@ void NeonUri::init( const OString & rUri, const ne_uri * pUri )
 
 void NeonUri::calculateURI ()
 {
-    OUStringBuffer aBuf( mScheme );
-    aBuf.append( "://" );
+    OUStringBuffer aBuf( mScheme + "://" );
     if ( !mUserInfo.isEmpty() )
     {
         //TODO! differentiate between empty and missing userinfo
-        aBuf.append( mUserInfo );
-        aBuf.append( "@" );
+        aBuf.append( mUserInfo + "@" );
     }
     // Is host a numeric IPv6 address?
     if ( ( mHostName.indexOf( ':' ) != -1 ) &&
          ( mHostName[ 0 ] != '[' ) )
     {
-        aBuf.append( "[" );
-        aBuf.append( mHostName );
-        aBuf.append( "]" );
+        aBuf.append( "[" + mHostName + "]" );
     }
     else
     {
@@ -188,8 +184,7 @@ void NeonUri::calculateURI ()
     }
     if ( bAppendPort )
     {
-        aBuf.append( ":" );
-        aBuf.append( OUString::number( mPort ) );
+        aBuf.append( ":" + OUString::number( mPort ) );
     }
     aBuf.append( mPath );
 
@@ -271,9 +266,7 @@ OUString NeonUri::makeConnectionEndPointString(
     if ( ( rHostName.indexOf( ':' ) != -1 ) &&
          ( rHostName[ 0 ] != '[' ) )
     {
-        aBuf.append( "[" );
-        aBuf.append( rHostName );
-        aBuf.append( "]" );
+        aBuf.append( "[" + rHostName + "]" );
     }
     else
     {
@@ -282,8 +275,7 @@ OUString NeonUri::makeConnectionEndPointString(
 
     if ( ( nPort != DEFAULT_HTTP_PORT ) && ( nPort != DEFAULT_HTTPS_PORT ) )
     {
-        aBuf.append( ":" );
-        aBuf.append( OUString::number( nPort ) );
+        aBuf.append( ":" + OUString::number( nPort ) );
     }
     return aBuf.makeStringAndClear();
 }

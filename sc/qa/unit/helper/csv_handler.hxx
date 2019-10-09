@@ -50,13 +50,12 @@ inline OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab)
 
 inline OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rExpectedString, const OUString& rString)
 {
-    OStringBuffer aString(createErrorMessage(nCol, nRow, nTab));
-    aString.append("; Expected: '");
-    aString.append(OUStringToOString(rExpectedString, RTL_TEXTENCODING_UTF8));
-    aString.append("' Found: '");
-    aString.append(OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
-    aString.append("'");
-    return aString.makeStringAndClear();
+    return createErrorMessage(nCol, nRow, nTab) +
+        "; Expected: '" +
+        OUStringToOString(rExpectedString, RTL_TEXTENCODING_UTF8) +
+        "' Found: '" +
+        OUStringToOString(rString, RTL_TEXTENCODING_UTF8) +
+        "'";
 }
 
 inline OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, double aExpected, double aValue)

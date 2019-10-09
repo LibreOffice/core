@@ -153,6 +153,116 @@ void g(int x, const Foo& aValidation)
 }
 
 // ---------------------------------------------------------------
+// .append tests
+
+namespace test7
+{
+void f0(OUString const& a, OString const& aOString, const sal_Unicode* pUnicode, sal_Unicode nChar)
+{
+    rtl_uString* pTypeName;
+    OUStringBuffer sShapeType("aaa");
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sShapeType.append("xxxx");
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sShapeType.append("yyy");
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sShapeType.append(a);
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sShapeType.append(OStringToOUString(aOString, RTL_TEXTENCODING_ASCII_US));
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sShapeType.append("xxx");
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sShapeType.append(OUString::number(10));
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sShapeType.append(pUnicode);
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sShapeType.append('n');
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sShapeType.append(OUString::unacquired(&pTypeName));
+    // no warning expected because we have no way to use this with the StringConcat framework
+    sShapeType.append(nChar);
+
+    sShapeType.append("xxx");
+    // no warning expected - I can't see how to make this into an StringConcat expression
+    sShapeType.append(pUnicode, 10);
+}
+void f1(OString const& a, OUString const& aOUString, const char* pChar, char nChar)
+{
+    OStringBuffer sShapeType("aaa");
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sShapeType.append("xxxx");
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sShapeType.append("yyy");
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sShapeType.append(a);
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sShapeType.append(OUStringToOString(aOUString, RTL_TEXTENCODING_ASCII_US));
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sShapeType.append("xxx");
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sShapeType.append(OString::number(10));
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sShapeType.append(pChar);
+    // no warning expected because we have no OStringLiteral1
+    sShapeType.append('n');
+    // no warning expected because we have no way to use this with the StringConcat framework
+    sShapeType.append(nChar);
+}
+void f2(OUStringBuffer const& buf)
+{
+    OUStringBuffer sShapeType("aaa");
+    // no warning expected
+    sShapeType.append(buf);
+}
+void f6()
+{
+    OUStringBuffer sShapeType(64);
+    // no warning expected
+    sShapeType.append("aaa");
+}
+void f7()
+{
+    OUStringBuffer sShapeType2("aaa");
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sShapeType2.append("xxxx");
+}
+void f8(bool b)
+{
+    OUStringBuffer sShapeType2("aaa");
+    // no warning expected
+    sShapeType2.append(b ? "xxxx" : "yyy");
+}
+void f9()
+{
+    OUStringBuffer sShapeType2;
+    // no warning expected
+    sShapeType2.append("xxxx");
+}
+void f10(OUStringBuffer const& buf2)
+{
+    OUStringBuffer sShapeType2(buf2);
+    // no warning expected
+    sShapeType2.append("xxxx");
+}
+}
+
+// ---------------------------------------------------------------
+// .append.append tests
+
+namespace test8
+{
+void f1()
+{
+    OUStringBuffer sNowNow;
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sNowNow.append("aaaaa").append("bbbb");
+    sNowNow.append("aaaaa");
+    // expected-error@+1 {{simplify by merging with the preceding append [loplugin:stringadd]}}
+    sNowNow.append(OUString::number(99));
+}
+}
+
+// ---------------------------------------------------------------
 // detecting OUString temporary construction in +
 
 namespace test9

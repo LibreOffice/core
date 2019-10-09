@@ -901,8 +901,8 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
         bool space = false;
         if (!sCommonRDB.isEmpty())
         {
-            buf.append( "?$ORIGIN/" );
-            buf.append( OUStringToOString(
+            buf.append( "?$ORIGIN/" +
+                    OUStringToOString(
                             sCommonRDB, RTL_TEXTENCODING_ASCII_US ) );
             space = true;
         }
@@ -917,11 +917,10 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
 
             // write native rc:
             OStringBuffer buf2;
-            buf2.append("ORIGIN=");
-            buf2.append(osOrigin);
+            buf2.append("ORIGIN=" + osOrigin);
             buf2.append(LF);
-            buf2.append( "UNO_SERVICES=?$ORIGIN/" );
-            buf2.append( OUStringToOString(
+            buf2.append( "UNO_SERVICES=?$ORIGIN/" +
+                        OUStringToOString(
                              sNativeRDB, RTL_TEXTENCODING_ASCII_US ) );
             buf2.append(LF);
 
@@ -1074,7 +1073,7 @@ Reference<XComponentContext> raise_uno_process(
     catch (...) {
         OUStringBuffer sMsg = "error starting process: " + url;
         for(const auto& arg : args)
-            sMsg.append(" ").append(arg);
+            sMsg.append(" " + arg);
         throw uno::RuntimeException(sMsg.makeStringAndClear());
     }
     try {

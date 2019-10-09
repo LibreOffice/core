@@ -645,8 +645,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
                 return RegError::CREATE_KEY_FAILED;
             }
 
-            sFullPath.append(token);
-            sFullPath.append('/');
+            sFullPath.append(token + "/");
         }
     } while(nIndex != -1);
 

@@ -100,7 +100,7 @@ VendorSettings::VendorSettings():
         if (m_xmlDocVendorSettings == nullptr)
             throw FrameworkException(
                 JFW_E_ERROR,
-                OStringLiteral("[Java framework] Error while parsing file: ")
+                "[Java framework] Error while parsing file: "
                 + sSettingsPath + ".");
 
         m_xmlPathContextVendorSettings = xmlXPathNewContext(m_xmlDocVendorSettings);
@@ -252,7 +252,7 @@ OString BootParams::getClasspath()
         char * pCp = getenv("CLASSPATH");
         if (pCp)
         {
-            char szSep[] = {SAL_PATHSEPARATOR,0};
+            const char szSep[] = {SAL_PATHSEPARATOR,0};
             sClassPath += OStringLiteral(szSep) + pCp;
         }
         SAL_INFO(

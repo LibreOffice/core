@@ -152,9 +152,7 @@ OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rFormat, c
                         if(eMode == ScConditionMode::Between || eMode == ScConditionMode::NotBetween)
                         {
                             aBuffer.append(pEntry->GetExpression(rPos, 0));
-                            aBuffer.append(" ");
-                            aBuffer.append(ScResId(STR_COND_AND));
-                            aBuffer.append(" ");
+                            aBuffer.append(" " + ScResId(STR_COND_AND) + " ");
                             aBuffer.append(pEntry->GetExpression(rPos, 1));
                         }
                         else if(eMode <= ScConditionMode::NotEqual || eMode >= ScConditionMode::BeginsWith)
@@ -204,10 +202,7 @@ OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sal_Int
             aBuffer.append(" ").append(aStr1);
             if(nIndex == 6 || nIndex == 7)
             {
-                aBuffer.append(" ");
-                aBuffer.append(ScResId(STR_COND_AND));
-                aBuffer.append(" ");
-                aBuffer.append(aStr2);
+                aBuffer.append(" " + ScResId(STR_COND_AND) + " " + aStr2);
             }
         }
     }

@@ -280,12 +280,12 @@ void Columns::refresh()
     {
         if (isLog(m_pSettings, LogLevel::Info))
         {
-            OStringBuffer buf;
-            buf.append( "sdbcx.Columns get refreshed for table " );
-            buf.append( OUStringToOString( m_schemaName, ConnectionSettings::encoding ) );
-            buf.append( "." );
-            buf.append( OUStringToOString( m_tableName, ConnectionSettings::encoding ) );
-            log( m_pSettings, LogLevel::Info, buf.makeStringAndClear().getStr() );
+            OString buf =
+                "sdbcx.Columns get refreshed for table " +
+                OUStringToOString( m_schemaName, ConnectionSettings::encoding ) +
+                "."  +
+                OUStringToOString( m_tableName, ConnectionSettings::encoding );
+            log( m_pSettings, LogLevel::Info, buf.getStr() );
         }
         osl::MutexGuard guard( m_xMutex->GetMutex() );
 
@@ -409,11 +409,10 @@ void alterColumnByDescriptor(
         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName, settings );
         buf.append( "ALTER COLUMN" );
         bufferQuoteIdentifier( buf, futureColumnName, settings );
-        buf.append( "SET DEFAULT " );
         // LEM TODO: check out
         // default value is not quoted, caller needs to quote himself (otherwise
         // how to pass e.g. nextval('something' ) ????
-        buf.append( futureDefaultValue );
+        buf.append( "SET DEFAULT " + futureDefaultValue );
 //        bufferQuoteConstant( buf, defaultValue, encoding );
         transaction.executeUpdate( buf.makeStringAndClear() );
     }

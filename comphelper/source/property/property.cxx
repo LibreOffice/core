@@ -87,10 +87,10 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
             catch (Exception&)
             {
 #if OSL_DEBUG_LEVEL > 0
-                OUStringBuffer aBuffer;
-                aBuffer.append( "::comphelper::copyProperties: could not copy property '" );
-                aBuffer.append(rSourceProp.Name );
-                aBuffer.append( "' to the destination set (a '" );
+                OUStringBuffer aBuffer(
+                    "::comphelper::copyProperties: could not copy property '" +
+                    rSourceProp.Name +
+                    "' to the destination set (a '" );
 
                 Reference< XServiceInfo > xSI( _rxDest, UNO_QUERY );
                 if ( xSI.is() )
@@ -111,9 +111,7 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
                 Exception aBaseException;
                 if ( ( aException >>= aBaseException ) && !aBaseException.Message.isEmpty() )
                 {
-                    aBuffer.append( ", saying '" );
-                    aBuffer.append( aBaseException.Message );
-                    aBuffer.append( "'" );
+                    aBuffer.append( ", saying '" + aBaseException.Message + "'" );
                 }
                 aBuffer.append( "." );
 

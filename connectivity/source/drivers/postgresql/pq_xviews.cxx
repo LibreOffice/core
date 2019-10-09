@@ -115,9 +115,8 @@ void Views::refresh()
 
             {
                 m_values.push_back( makeAny( prop ) );
-                OUStringBuffer buf( table.getLength() + schema.getLength() + 1);
-                buf.append( schema ).append( "." ).append( table );
-                map[ buf.makeStringAndClear() ] = viewIndex;
+                OUString buf = schema + "." + table;
+                map[ buf ] = viewIndex;
                 ++viewIndex;
             }
         }
@@ -150,7 +149,7 @@ void Views::appendByDescriptor(
 
     buf.append( "CREATE VIEW ");
     bufferQuoteQualifiedIdentifier( buf, schema, name, m_pSettings );
-    buf.append(" AS " ).append( command );
+    buf.append(" AS " + command );
 
     stmt->executeUpdate( buf.makeStringAndClear() );
 
@@ -191,12 +190,11 @@ void Views::dropByIndex( sal_Int32 index )
     set->getPropertyValue( st.SCHEMA_NAME ) >>= schema;
     set->getPropertyValue( st.NAME ) >>= name;
 
-    OUStringBuffer update( 128 );
-    update.append( "DROP VIEW \"" ).append( schema ).append( "\".\"" ).append( name ).append( "\"" );
+    OUString update = "DROP VIEW \"" + schema + "\".\"" + name + "\"";
 
     Reference< XStatement > stmt = m_origin->createStatement( );
 
-    stmt->executeUpdate( update.makeStringAndClear() );
+    stmt->executeUpdate( update );
 }
 
 

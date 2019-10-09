@@ -1825,8 +1825,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
             {
                 if (bDisabled)
                 {
-                    aDisabledMsg.append(simplified);
-                    aDisabledMsg.append(" ");
+                    aDisabledMsg.append(simplified + " ");
                 }
                 else
                 {

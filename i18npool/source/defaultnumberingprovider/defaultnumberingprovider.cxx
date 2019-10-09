@@ -343,7 +343,7 @@ static OUString toRoman( sal_Int32 n )
             case 3: sTmp.append(*cRomanStr);           [[fallthrough]];
             case 2: sTmp.append(*cRomanStr);           [[fallthrough]];
             case 1: sTmp.append(*cRomanStr);           break;
-            case 4: sTmp.append(*cRomanStr).append(*(cRomanStr-nDiff)); break;
+            case 4: sTmp.append(OUStringLiteral1(*cRomanStr) + OUStringLiteral1(*(cRomanStr-nDiff))); break;
             case 5: sTmp.append(*(cRomanStr-nDiff));   break;
         }
 

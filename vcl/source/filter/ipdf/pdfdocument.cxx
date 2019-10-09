@@ -177,10 +177,9 @@ sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool b
     aSignatureEntry.SetOffset(m_aEditBuffer.Tell());
     aSignatureEntry.SetDirty(true);
     m_aXRef[nSignatureId] = aSignatureEntry;
-    OStringBuffer aSigBuffer;
-    aSigBuffer.append(nSignatureId);
-    aSigBuffer.append(" 0 obj\n");
-    aSigBuffer.append("<</Contents <");
+    OStringBuffer aSigBuffer = OString::number(nSignatureId)
+                               + " 0 obj\n"
+                                 "<</Contents <";
     rContentOffset = aSignatureEntry.GetOffset() + aSigBuffer.getLength();
     // Reserve space for the PKCS#7 object.
     OStringBuffer aContentFiller(MAX_SIGNATURE_CONTENT_LENGTH);
@@ -195,16 +194,14 @@ sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool b
     // Time of signing.
     aSigBuffer.append(" /M (");
     aSigBuffer.append(vcl::PDFWriter::GetDateTime());
-    aSigBuffer.append(")");
-
-    // Byte range: we can write offset1-length1 and offset2 right now, will
-    // write length2 later.
-    aSigBuffer.append(" /ByteRange [ 0 ");
-    // -1 and +1 is the leading "<" and the trailing ">" around the hex string.
-    aSigBuffer.append(rContentOffset - 1);
-    aSigBuffer.append(" ");
-    aSigBuffer.append(rContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1);
-    aSigBuffer.append(" ");
+    aSigBuffer.append(")"
+                      // Byte range: we can write offset1-length1 and offset2 right now, will
+                      // write length2 later.
+                      " /ByteRange [ 0 "
+                      +
+                      // -1 and +1 is the leading "<" and the trailing ">" around the hex string.
+                      OString::number(rContentOffset - 1) + " "
+                      + OString::number(rContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1) + " ");
     rLastByteRangeOffset = aSignatureEntry.GetOffset() + aSigBuffer.getLength();
     // We don't know how many bytes we need for the last ByteRange value, this
     // should be enough.
@@ -836,10 +833,8 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         = nFileEnd - (nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1);
     // Write the length to the buffer.
     m_aEditBuffer.Seek(nSignatureLastByteRangeOffset);
-    OStringBuffer aByteRangeBuffer;
-    aByteRangeBuffer.append(nLastByteRangeLength);
-    aByteRangeBuffer.append(" ]");
-    m_aEditBuffer.WriteOString(aByteRangeBuffer.toString());
+    OString aByteRangeBuffer = OString::number(nLastByteRangeLength) + " ]";
+    m_aEditBuffer.WriteOString(aByteRangeBuffer);
 
     // Create the PKCS#7 object.
     css::uno::Sequence<sal_Int8> aDerEncoded = xCertificate->getEncoded();

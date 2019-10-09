@@ -351,7 +351,6 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     sal_Int32 eShareMode = (css::embed::ElementModes::READ      | css::embed::ElementModes::NOCREATE);
     sal_Int32 eUserMode  = css::embed::ElementModes::READWRITE;
 
-    OUStringBuffer sRelPathBuf(1024);
     OUString       sRelPathShare;
     OUString       sRelPathNoLang;
     OUString       sRelPathUser;
@@ -359,10 +358,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     {
         case E_GLOBAL :
         {
-            sRelPathBuf.append("global");
-            sRelPathBuf.append("/");
-            sRelPathBuf.append(sResource);
-            sRelPathShare = sRelPathBuf.makeStringAndClear();
+            sRelPathShare = "global/" + sResource;
             sRelPathUser  = sRelPathShare;
 
             xShare = impl_openPathIgnoringErrors(sRelPathShare, eShareMode, true );
@@ -372,12 +368,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 
         case E_MODULES :
         {
-            sRelPathBuf.append("modules");
-            sRelPathBuf.append("/");
-            sRelPathBuf.append(sModule);
-            sRelPathBuf.append("/");
-            sRelPathBuf.append(sResource);
-            sRelPathShare = sRelPathBuf.makeStringAndClear();
+            sRelPathShare = "modules/" + sModule + "/" + sResource;
             sRelPathUser  = sRelPathShare;
 
             xShare = impl_openPathIgnoringErrors(sRelPathShare, eShareMode, true );
@@ -391,8 +382,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
             // It has one layer only, and this one should be opened READ_WRITE.
             // So we open the user layer here only and set the share layer equals to it .-)
 
-            sRelPathBuf.append(sResource);
-            sRelPathUser  = sRelPathBuf.makeStringAndClear();
+            sRelPathUser  = sResource;
             sRelPathShare = sRelPathUser;
 
             try

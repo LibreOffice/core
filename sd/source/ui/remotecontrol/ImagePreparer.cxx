@@ -184,10 +184,10 @@ void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
     aBuffer.append( static_cast<sal_Int32>(aSlideNumber) );
     aBuffer.append( "\n" );
 
-    aBuffer.append( "<html><body>" );
-    aBuffer.append( aNotes );
-    aBuffer.append( "</body></html>" );
-    aBuffer.append( "\n\n" );
+    aBuffer.append( "<html><body>" +
+                aNotes +
+                "</body></html>"
+                "\n\n" );
     pTransmitter->addMessage( aBuffer.makeStringAndClear(),
         Transmitter::PRIORITY_LOW );
 }

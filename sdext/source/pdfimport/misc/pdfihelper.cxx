@@ -101,10 +101,7 @@ OUString pdfi::getColorString( const rendering::ARGBColor& rCol )
 
 OUString pdfi::getPercentString(double value)
 {
-    OUStringBuffer buf(32);
-    buf.append(value);
-    buf.append("%");
-    return buf.makeStringAndClear();
+    return OUString::number(value) + "%";
 }
 
 OUString pdfi::unitMMString( double fMM )

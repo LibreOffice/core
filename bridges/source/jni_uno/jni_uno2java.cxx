@@ -773,8 +773,7 @@ void UNO_proxy_dispatch(
                             typelib_InterfaceMemberTypeDescription const * >(
                                 member_td )->pMemberName ) );
         }
-        buf.append( ": " );
-        buf.append( err.m_message );
+        buf.append( ": " + err.m_message );
         // binary identical struct
         ::com::sun::star::uno::RuntimeException exc(
             buf.makeStringAndClear(),

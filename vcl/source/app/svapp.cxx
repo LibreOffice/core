@@ -1143,11 +1143,7 @@ OUString Application::GetHWOSConfInfo()
     else
         aVersion = "-";
 
-    aDetails.append( VclResId(SV_APP_OSVERSION) );
-    aDetails.append( aVersion );
-    aDetails.append( "; " );
-
-    aDetails.append( VclResId(SV_APP_UIRENDER) );
+    aDetails.append( VclResId(SV_APP_OSVERSION) + aVersion + "; " + VclResId(SV_APP_UIRENDER) );
 #if HAVE_FEATURE_OPENGL
     if ( OpenGLWrapper::isVCLOpenGLEnabled() )
         aDetails.append( VclResId(SV_APP_GL) );

@@ -1359,13 +1359,11 @@ OUString SdrOle2Obj::TakeObjNameSingul() const
 {
     OUStringBuffer sName(SvxResId(mpImpl->mbFrame ? STR_ObjNameSingulFrame : STR_ObjNameSingulOLE2));
 
-    const OUString aName(GetName());
+    const OUString& rName(GetName());
 
-    if (!aName.isEmpty())
+    if (!rName.isEmpty())
     {
-        sName.append(" '");
-        sName.append(aName);
-        sName.append('\'');
+        sName.append(" '" + rName + "\'");
     }
 
     return sName.makeStringAndClear();

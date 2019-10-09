@@ -871,9 +871,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                                 nPos += rProp.getLength() + 1; // '='
                                 if (aExtraInfo.getLength() > 2) // != "{ "
                                     aExtraInfo.append(", ");
-                                aExtraInfo.append("\"is");
-                                aExtraInfo.append(rProp);
-                                aExtraInfo.append("\": ");
+                                aExtraInfo.append("\"is" + rProp + "\": ");
                                 aExtraInfo.append(OString::boolean(aObjectCID[nPos] == '1'));
                             }
 
@@ -886,8 +884,8 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                                 OUString sDragParameters = lcl_getDragParameterString(aValue);
                                 if (!sDragParameters.isEmpty())
                                 {
-                                    aExtraInfo.append(", \"dragInfo\": { ");
-                                    aExtraInfo.append("\"dragMethod\": \"");
+                                    aExtraInfo.append(", \"dragInfo\": { "
+                                                    "\"dragMethod\": \"");
                                     aExtraInfo.append(sDragMethod.toUtf8());
                                     aExtraInfo.append("\"");
 
@@ -961,12 +959,12 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                                                     sSVGElem += aSelection.toString();
                                                     sSVGElem += R"elem(\" preserveAspectRatio=\"xMidYMid\" xmlns=\"http://www.w3.org/2000/svg\">)elem";
 
-                                                    aExtraInfo.append(", \"svg\": \"");
-                                                    aExtraInfo.append(sSVGElem);
-                                                    aExtraInfo.append("\\n  ");
-                                                    aExtraInfo.append(sPolygonElem);
-                                                    aExtraInfo.append("\\n</svg>");
-                                                    aExtraInfo.append("\""); // svg
+                                                    aExtraInfo.append(", \"svg\": \"" +
+                                                                    sSVGElem +
+                                                                    "\\n  " +
+                                                                    sPolygonElem +
+                                                                    "\\n</svg>"
+                                                                    "\""); // svg
                                                 }
                                             }
                                         }

@@ -1054,8 +1054,8 @@ static SwMailMessage* lcl_CreateMailFromDoc(
         OString sLine;
         while ( pInStream->ReadLine( sLine ) )
         {
-            sBody.append(OStringToOUString( sLine, sMailEncoding ));
-            sBody.append("\n");
+            sBody.append(OStringToOUString( sLine, sMailEncoding ) +
+                        "\n");
         }
     }
     pMessage->setSubject( rMergeDescriptor.sSubject );

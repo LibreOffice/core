@@ -311,9 +311,7 @@ std::vector< LanguageType > LocaleDataWrapper::getInstalledLanguageTypes()
         LanguageType eLang = aLanguageTag.getLanguageType( false);
         if (areChecksEnabled() && eLang == LANGUAGE_DONTKNOW)
         {
-            OUStringBuffer aMsg("ConvertIsoNamesToLanguage: unknown MS-LCID for locale\n");
-            aMsg.append(aDebugLocale);
-            outputCheckMessage(aMsg.makeStringAndClear());
+            outputCheckMessage("ConvertIsoNamesToLanguage: unknown MS-LCID for locale\n" + aDebugLocale);
         }
 
         if ( eLang == LANGUAGE_NORWEGIAN)       // no_NO, not Bokmal (nb_NO), not Nynorsk (nn_NO)
@@ -332,9 +330,8 @@ std::vector< LanguageType > LocaleDataWrapper::getInstalledLanguageTypes()
 //                      && aDebugLocale != "es-BR"  // ?!? Brazil/es
                     )
                 {
-                    OUStringBuffer aMsg("ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n");
-                    aMsg.append(aDebugLocale);
-                    aMsg.append("  ->  0x");
+                    OUStringBuffer aMsg("ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n" +
+                        aDebugLocale + "  ->  0x");
                     aMsg.append(static_cast<sal_Int32>(static_cast<sal_uInt16>(eLang)), 16);
                     aMsg.append("  ->  ");
                     aMsg.append(aBackLanguageTag.getBcp47());
@@ -1524,14 +1521,12 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
                 aBuf.append( rCurrencySymbol );
                 break;
             case 2:
-                aBuf.append( rCurrencySymbol );
-                aBuf.append( ' ' );
+                aBuf.append( rCurrencySymbol + " " );
                 aBuf.append( aNumBuf );
                 break;
             case 3:
                 aBuf.append( aNumBuf );
-                aBuf.append( ' ' );
-                aBuf.append( rCurrencySymbol );
+                aBuf.append( " " + rCurrencySymbol );
                 break;
         }
     }
@@ -1540,19 +1535,16 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         switch( getCurrNegativeFormat() )
         {
             case 0:
-                 aBuf.append( '(' );
-                 aBuf.append( rCurrencySymbol );
+                 aBuf.append( "(" + rCurrencySymbol );
                  aBuf.append( aNumBuf );
                  aBuf.append( ')' );
                 break;
             case 1:
-                 aBuf.append( '-' );
-                 aBuf.append( rCurrencySymbol );
+                 aBuf.append( "-" + rCurrencySymbol );
                  aBuf.append( aNumBuf );
                 break;
             case 2:
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( '-' );
+                 aBuf.append( rCurrencySymbol + "-" );
                  aBuf.append( aNumBuf );
                 break;
             case 3:
@@ -1563,8 +1555,7 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
             case 4:
                  aBuf.append( '(' );
                  aBuf.append( aNumBuf );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ')' );
+                 aBuf.append( rCurrencySymbol + ")" );
                 break;
             case 5:
                  aBuf.append( '-' );
@@ -1573,63 +1564,47 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
                 break;
             case 6:
                  aBuf.append( aNumBuf );
-                 aBuf.append( '-' );
-                 aBuf.append( rCurrencySymbol );
+                 aBuf.append( "-" + rCurrencySymbol );
                 break;
             case 7:
                  aBuf.append( aNumBuf );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( '-' );
+                 aBuf.append( rCurrencySymbol + "-" );
                 break;
             case 8:
                  aBuf.append( '-' );
                  aBuf.append( aNumBuf );
-                 aBuf.append( ' ' );
-                 aBuf.append( rCurrencySymbol );
+                 aBuf.append( " " + rCurrencySymbol );
                 break;
             case 9:
-                 aBuf.append( '-' );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ' ' );
+                 aBuf.append( "-" + rCurrencySymbol + " " );
                  aBuf.append( aNumBuf );
                 break;
             case 10:
                  aBuf.append( aNumBuf );
-                 aBuf.append( ' ' );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( '-' );
+                 aBuf.append( " " + rCurrencySymbol + "-" );
                 break;
             case 11:
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ' ' );
-                 aBuf.append( '-' );
+                 aBuf.append( rCurrencySymbol + " -");
                  aBuf.append( aNumBuf );
                 break;
             case 12:
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ' ' );
+                 aBuf.append( rCurrencySymbol + " " );
                  aBuf.append( aNumBuf );
                  aBuf.append( '-' );
                 break;
             case 13:
                  aBuf.append( aNumBuf );
-                 aBuf.append( '-' );
-                 aBuf.append( ' ' );
-                 aBuf.append( rCurrencySymbol );
+                 aBuf.append( "- " + rCurrencySymbol );
                 break;
             case 14:
-                 aBuf.append( '(' );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ' ' );
+                 aBuf.append( "(" + rCurrencySymbol + " " );
                  aBuf.append( aNumBuf );
                  aBuf.append( ')' );
                 break;
             case 15:
                  aBuf.append( '(' );
                  aBuf.append( aNumBuf );
-                 aBuf.append( ' ' );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ')' );
+                 aBuf.append( " " + rCurrencySymbol + ")" );
                 break;
         }
     }
@@ -1688,14 +1663,13 @@ LanguageTag LocaleDataWrapper::getLoadedLanguageTag() const
 OUString LocaleDataWrapper::appendLocaleInfo(const OUString& rDebugMsg) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
-    OUStringBuffer aDebugMsg(rDebugMsg);
-    aDebugMsg.append('\n');
-    aDebugMsg.append(maLanguageTag.getBcp47());
-    aDebugMsg.append(" requested\n");
     LanguageTag aLoaded = getLoadedLanguageTag();
-    aDebugMsg.append(aLoaded.getBcp47());
-    aDebugMsg.append(" loaded");
-    return aDebugMsg.makeStringAndClear();
+    return rDebugMsg +
+                "\n" +
+                maLanguageTag.getBcp47() +
+                " requested\n" +
+                aLoaded.getBcp47() +
+                " loaded";
 }
 
 // static

@@ -576,11 +576,8 @@ void Connection::initialize( const Sequence< Any >& aArguments )
 
     if (isLog(&m_settings, LogLevel::Info))
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "connection to '" );
-        buf.append( url );
-        buf.append( "' successfully opened" );
-        log(&m_settings, LogLevel::Info, buf.makeStringAndClear());
+        OUString buf = "connection to '" + url + "' successfully opened";
+        log(&m_settings, LogLevel::Info, buf);
     }
 }
 

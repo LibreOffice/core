@@ -96,14 +96,12 @@ namespace ucb_impl { namespace urihelper {
 
         if ( !aParams.isEmpty() )
         {
-            aResult.append( u'?' );
-            aResult.append( aParams );
+            aResult.append( "?" + aParams );
         }
 
         if ( !aFragment.isEmpty() )
         {
-            aResult.append( u'#' );
-            aResult.append( aFragment );
+            aResult.append( "#" + aFragment );
         }
 
         return aResult.makeStringAndClear();

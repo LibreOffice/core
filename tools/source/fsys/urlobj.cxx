@@ -2420,8 +2420,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 if (*p == '.')
                     if (nOctets < 4)
                     {
-                        aTheCanonic.append( OUString::number(nNumber) );
-                        aTheCanonic.append( '.' );
+                        aTheCanonic.append( OUString::number(nNumber) + ".");
                         ++nOctets;
                         eState = STATE_IP4_DOT;
                     }
@@ -2524,9 +2523,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 }
                 else if (*p == ':')
                 {
-                    aTheCanonic.append(
-                        OUString::number(nNumber, 16));
-                    aTheCanonic.append(':');
+                    aTheCanonic.append(OUString::number(nNumber, 16) + ":");
                     eState = STATE_IP6_HEXSEQ1_COLON;
                 }
                 else if (rtl::isAsciiHexDigit(*p) && nDigits < 4)
@@ -2569,18 +2566,14 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 }
                 else if (*p == ':')
                 {
-                    aTheCanonic.append(
-                        OUString::number(nNumber, 16));
-                    aTheCanonic.append(':');
+                    aTheCanonic.append(OUString::number(nNumber, 16) + ":");
                     eState = STATE_IP6_HEXSEQ1_COLON;
                 }
                 else if (*p == '.')
                 {
                     nNumber = 100 * (nNumber >> 8) + 10 * (nNumber >> 4 & 15)
                                   + (nNumber & 15);
-                    aTheCanonic.append(
-                        OUString::number(nNumber));
-                    aTheCanonic.append('.');
+                    aTheCanonic.append(OUString::number(nNumber) + ":");
                     nOctets = 2;
                     eState = STATE_IP6_IP4_DOT;
                 }
@@ -2608,9 +2601,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 }
                 else if (*p == ':')
                 {
-                    aTheCanonic.append(
-                        OUString::number(nNumber, 16));
-                    aTheCanonic.append(':');
+                    aTheCanonic.append(OUString::number(nNumber, 16) + ":");
                     eState = STATE_IP6_HEXSEQ2_COLON;
                 }
                 else if (rtl::isAsciiHexDigit(*p) && nDigits < 4)
@@ -2648,18 +2639,14 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 }
                 else if (*p == ':')
                 {
-                    aTheCanonic.append(
-                        OUString::number(nNumber, 16));
-                    aTheCanonic.append(':');
+                    aTheCanonic.append(OUString::number(nNumber, 16) + ":");
                     eState = STATE_IP6_HEXSEQ2_COLON;
                 }
                 else if (*p == '.')
                 {
                     nNumber = 100 * (nNumber >> 8) + 10 * (nNumber >> 4 & 15)
                                   + (nNumber & 15);
-                    aTheCanonic.append(
-                        OUString::number(nNumber));
-                    aTheCanonic.append('.');
+                    aTheCanonic.append(OUString::number(nNumber) + ".");
                     nOctets = 2;
                     eState = STATE_IP6_IP4_DOT;
                 }
@@ -2691,9 +2678,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 else if (*p == '.')
                     if (nOctets < 4)
                     {
-                        aTheCanonic.append(
-                            OUString::number(nNumber));
-                        aTheCanonic.append('.');
+                        aTheCanonic.append(OUString::number(nNumber) + ".");
                         ++nOctets;
                         eState = STATE_IP6_IP4_DOT;
                     }

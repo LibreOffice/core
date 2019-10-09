@@ -1325,8 +1325,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                 {
                     NumFor[nIndex].Enlarge(nCnt);
                     pSc->CopyInfo( &(NumFor[nIndex].Info()), nCnt );
-                    sBuff.append(";");
-                    sBuff.append(aAdd);
+                    sBuff.append(";" + aAdd);
                 }
             }
         }
@@ -1343,8 +1342,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                 {
                     NumFor[nIndex].Enlarge(nCnt);
                     pSc->CopyInfo( &(NumFor[nIndex].Info()), nCnt );
-                    sBuff.append(";");
-                    sBuff.append(aAdd);
+                    sBuff.append(";" + aAdd);
                 }
             }
         }

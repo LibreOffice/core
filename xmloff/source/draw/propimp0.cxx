@@ -218,8 +218,7 @@ bool XMLTextAnimationStepPropertyHdl::exportXML(
 
         if( nVal < 0 )
         {
-            aOut.append( static_cast<sal_Int32>(-nVal) );
-            aOut.append( "px" );
+            aOut.append( OUString::number(static_cast<sal_Int32>(-nVal)) + "px" );
         }
         else
         {

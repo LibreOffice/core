@@ -1035,14 +1035,9 @@ namespace svxform
                     sMacroLocation = "document";
             }
 
-            OUStringBuffer aScriptURI;
-            aScriptURI.append( "vnd.sun.star.script:" );
-            aScriptURI.append( sScriptCode );
-            aScriptURI.append( "?language=Basic" );
-            aScriptURI.append( "&location=" );
-            aScriptURI.append( sMacroLocation );
+            const OUString sScriptURI = "vnd.sun.star.script:" +
+                sScriptCode + "?language=Basic&location=" + sMacroLocation;
 
-            const OUString sScriptURI( aScriptURI.makeStringAndClear() );
             pScript.reset( new NewStyleUNOScript( *xObjectShell, sScriptURI ) );
         }
 

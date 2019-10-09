@@ -2774,9 +2774,7 @@ OUString OQueryDesignView::getStatement()
     OUStringBuffer aSqlCmd("SELECT ");
     if(rController.isDistinct())
         aSqlCmd.append(" DISTINCT ");
-    aSqlCmd.append(aFieldListStr);
-    aSqlCmd.append(" FROM ");
-    aSqlCmd.append(aTableListStr);
+    aSqlCmd.append(aFieldListStr + " FROM " + aTableListStr);
 
     if (!aCriteriaListStr.isEmpty())
     {

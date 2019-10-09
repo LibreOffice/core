@@ -80,9 +80,9 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
             aDebStr.append("NumItem ");
             for ( sal_uInt16 nLevel = 0; nLevel < 3; nLevel++ )
             {
-                aDebStr.append("Level");
-                aDebStr.append(static_cast<sal_Int32>(nLevel));
-                aDebStr.append('=');
+                aDebStr.append("Level" +
+                        OString::number(static_cast<sal_Int32>(nLevel)) +
+                        "=");
                 const SvxNumberFormat* pFmt = static_cast<const SvxNumBulletItem&>(rItem).GetNumRule()->Get( nLevel );
                 if ( pFmt )
                 {
@@ -353,14 +353,14 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
         {
             const std::unique_ptr<EditCharAttrib>& rAttr = pPPortion->GetNode()->GetCharAttribs().GetAttribs()[z];
             OStringBuffer aCharAttribs;
-            aCharAttribs.append("\nA");
-            aCharAttribs.append(nPortion);
-            aCharAttribs.append(":  ");
-            aCharAttribs.append(static_cast<sal_Int32>(rAttr->GetItem()->Which()));
-            aCharAttribs.append('\t');
-            aCharAttribs.append(rAttr->GetStart());
-            aCharAttribs.append('\t');
-            aCharAttribs.append(rAttr->GetEnd());
+            aCharAttribs.append("\nA" +
+                OString::number(nPortion) +
+                ":  " +
+                OString::number(static_cast<sal_Int32>(rAttr->GetItem()->Which())) +
+                "\t" +
+                OString::number(rAttr->GetStart()) +
+                "\t" +
+                OString::number(rAttr->GetEnd()));
             if ( rAttr->IsEmpty() )
                 bZeroAttr = true;
             fprintf(fp, "%s => ", aCharAttribs.getStr());
@@ -372,15 +372,15 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
             fprintf( fp, "\nNULL-Attribute!" );
 
         const sal_Int32 nTextPortions = pPPortion->GetTextPortions().Count();
-        OStringBuffer aPortionStr("\nText portions: #");
-        aPortionStr.append(nTextPortions);
-        aPortionStr.append(" \nA");
-        aPortionStr.append(nPortion);
-        aPortionStr.append(": Paragraph Length = ");
-        aPortionStr.append(pPPortion->GetNode()->Len());
-        aPortionStr.append("\nA");
-        aPortionStr.append(nPortion);
-        aPortionStr.append(": ");
+        OStringBuffer aPortionStr("\nText portions: #" +
+            OString::number(nTextPortions) +
+            " \nA" +
+            OString::number(nPortion) +
+            ": Paragraph Length = " +
+            OString::number(pPPortion->GetNode()->Len()) +
+            "\nA" +
+            OString::number(nPortion) +
+            ": ");
         sal_Int32 n = 0;
         for ( sal_Int32 z = 0; z < nTextPortions; ++z )
         {
@@ -396,10 +396,10 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
             aPortionStr.append(';');
             n += rPortion.GetLen();
         }
-        aPortionStr.append("\nA");
-        aPortionStr.append(nPortion);
-        aPortionStr.append(": Total length: ");
-        aPortionStr.append(n);
+        aPortionStr.append("\nA" +
+                OString::number(nPortion) +
+                ": Total length: " +
+                OString::number(n));
         if ( pPPortion->GetNode()->Len() != n )
             aPortionStr.append(" => Error !!!");
         fprintf(fp, "%s", aPortionStr.getStr());

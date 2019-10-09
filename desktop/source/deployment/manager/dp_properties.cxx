@@ -1,4 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -104,17 +105,14 @@ OUString ExtensionProperties::getPropertyValue(css::beans::NamedValue const & v)
 void ExtensionProperties::write()
 {
     ::ucbhelper::Content contentProps(m_propFileUrl, m_xCmdEnv, m_xContext);
-    OUStringBuffer buf;
+    OUString buf;
 
     if (m_prop_suppress_license)
     {
-        buf.append(PROP_SUPPRESS_LICENSE);
-        buf.append("=");
-        buf.append(*m_prop_suppress_license);
+        buf = OUStringLiteral(PROP_SUPPRESS_LICENSE "=") + *m_prop_suppress_license;
     }
 
-    OString stamp = OUStringToOString(
-        buf.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
+    OString stamp = OUStringToOString(buf, RTL_TEXTENCODING_UTF8);
     Reference<css::io::XInputStream> xData(
         ::xmlscript::createInputStream(
                 reinterpret_cast<sal_Int8 const *>(stamp.getStr()),

@@ -322,7 +322,7 @@ const SvXMLStyleContext* OFormLayerXMLImport_Impl::getStyleElement(const OUStrin
     const SvXMLStyleContext* pControlStyle =
         m_xAutoStyles.is() ? m_xAutoStyles->FindStyleChildContext( XML_STYLE_FAMILY_TEXT_PARAGRAPH, _rStyleName ) : nullptr;
     OSL_ENSURE( pControlStyle || !m_xAutoStyles.is(),
-                OStringBuffer("OFormLayerXMLImport_Impl::getStyleElement: did not find the style named \"").append(OUStringToOString(_rStyleName, RTL_TEXTENCODING_ASCII_US)).append("\"!").getStr() );
+                OString("OFormLayerXMLImport_Impl::getStyleElement: did not find the style named \"" + OUStringToOString(_rStyleName, RTL_TEXTENCODING_ASCII_US) + "\"!").getStr() );
     return pControlStyle;
 }
 

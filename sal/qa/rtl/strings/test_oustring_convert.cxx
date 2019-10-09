@@ -66,25 +66,23 @@ void testConvertToString(TestConvertToString const & rTest)
     aPrefix.append("{");
     for (sal_Int32 i = 0; i < rTest.nLength; ++i)
     {
-        aPrefix.append("U+");
-        aPrefix.append(static_cast< sal_Int32 >(rTest.aSource[i]), 16);
+        aPrefix.append("U+" +
+            OString::number(static_cast< sal_Int32 >(rTest.aSource[i]), 16));
         if (i + 1 < rTest.nLength)
             aPrefix.append(",");
     }
-    aPrefix.append("}, ");
-    aPrefix.append(static_cast< sal_Int32 >(rTest.nEncoding));
-    aPrefix.append(", 0x");
-    aPrefix.append(static_cast< sal_Int32 >(rTest.nFlags), 16);
-    aPrefix.append(" -> ");
+    aPrefix.append("}, " +
+        OString::number(static_cast< sal_Int32 >(rTest.nEncoding)) +
+        ", 0x" +
+        OString::number(static_cast< sal_Int32 >(rTest.nFlags), 16) +
+        " -> ");
 
     if (bSuccess)
     {
         if (rTest.pStrict == nullptr || aStrict != rTest.pStrict)
         {
             OStringBuffer aMessage(aPrefix);
-            aMessage.append("strict = \"");
-            aMessage.append(aStrict);
-            aMessage.append("\"");
+            aMessage.append("strict = \"" + aStrict + "\"");
             CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), false);
         }
     }
@@ -105,10 +103,7 @@ void testConvertToString(TestConvertToString const & rTest)
     }
     if (aRelaxed != rTest.pRelaxed)
     {
-        OStringBuffer aMessage(aPrefix);
-        aMessage.append("relaxed = \"");
-        aMessage.append(aRelaxed);
-        aMessage.append("\"");
+        OString aMessage = aPrefix.toString() + "relaxed = \"" + aRelaxed + "\"";
         CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), false);
     }
 }

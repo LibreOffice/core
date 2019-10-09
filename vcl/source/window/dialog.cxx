@@ -75,8 +75,7 @@ static OString ImplGetDialogText( Dialog* pDialog )
 
     if (!sMessage.isEmpty())
     {
-        aErrorStr.append(", ");
-        aErrorStr.append(OUStringToOString(
+        aErrorStr.append(", " + OUStringToOString(
             sMessage, RTL_TEXTENCODING_UTF8));
     }
     return aErrorStr.makeStringAndClear();

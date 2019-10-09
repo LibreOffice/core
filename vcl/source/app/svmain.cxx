@@ -437,13 +437,13 @@ void DeInitVCL()
             nBadTopWindows--;
         else
         {
-            aBuf.append( "text = \"" );
-            aBuf.append( OUStringToOString( pWin->GetText(), osl_getThreadTextEncoding() ) );
-            aBuf.append( "\" type = \"" );
-            aBuf.append( typeid(*pWin).name() );
-            aBuf.append( "\", ptr = 0x" );
-            aBuf.append( sal_Int64( pWin ), 16 );
-            aBuf.append( "\n" );
+            aBuf.append( "text = \"" +
+                    OUStringToOString( pWin->GetText(), osl_getThreadTextEncoding() ) +
+                    "\" type = \"" +
+                    typeid(*pWin).name() +
+                    "\", ptr = 0x" +
+                    OString::number(sal_Int64( pWin ), 16 ) +
+                    "\n" );
         }
     }
     SAL_WARN_IF( nBadTopWindows!=0, "vcl", aBuf.getStr() );

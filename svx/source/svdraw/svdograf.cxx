@@ -620,13 +620,11 @@ OUString SdrGrafObj::TakeObjNameSingul() const
         }
     }
 
-    const OUString aName(GetName());
+    const OUString& rName(GetName());
 
-    if (!aName.isEmpty())
+    if (!rName.isEmpty())
     {
-        sName.append(" '");
-        sName.append(aName);
-        sName.append('\'' );
+        sName.append(" '" + rName + "\'" );
     }
 
     return sName.makeStringAndClear();
@@ -690,13 +688,11 @@ OUString SdrGrafObj::TakeObjNamePlural() const
         }
     }
 
-    const OUString aName(GetName());
+    const OUString rName(GetName());
 
-    if (!aName.isEmpty())
+    if (!rName.isEmpty())
     {
-        sName.append(" '");
-        sName.append(aName);
-        sName.append('\'');
+        sName.append(" '" + rName + "\'");
     }
 
     return sName.makeStringAndClear();

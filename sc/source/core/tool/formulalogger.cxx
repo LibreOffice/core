@@ -144,8 +144,7 @@ void FormulaLogger::GroupScope::addRefMessage(
     ScRange aRefRange(rRefPos);
     aRefRange.aEnd.IncRow(nLen-1);
     OUString aRangeStr = aRefRange.Format(getRefFlags(rCellPos, rRefPos), &mpImpl->mrDoc);
-    aBuf.append(aRangeStr);
-    aBuf.append(": ");
+    aBuf.append(aRangeStr + ": ");
 
     if (rArray.mpNumericArray)
     {
@@ -195,8 +194,7 @@ void FormulaLogger::GroupScope::addRefMessage(
 {
     OUStringBuffer aBuf;
     OUString aPosStr = rRefPos.Format(getRefFlags(rCellPos, rRefPos), &mpImpl->mrDoc);
-    aBuf.append(aPosStr);
-    aBuf.append(": ");
+    aBuf.append(aPosStr + ": ");
 
     switch (rToken.GetType())
     {

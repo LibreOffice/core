@@ -271,12 +271,10 @@ SvXMLNumFmtExport::~SvXMLNumFmtExport()
 static OUString lcl_CreateStyleName( sal_Int32 nKey, sal_Int32 nPart, bool bDefPart, const OUString& rPrefix )
 {
     OUStringBuffer aFmtName(10);
-    aFmtName.append( rPrefix );
-    aFmtName.append( nKey );
+    aFmtName.append( rPrefix + OUString::number(nKey) );
     if (!bDefPart)
     {
-        aFmtName.append( 'P' );
-        aFmtName.append( nPart );
+        aFmtName.append( "P" + OUString::number(nPart ) );
     }
     return aFmtName.makeStringAndClear();
 }

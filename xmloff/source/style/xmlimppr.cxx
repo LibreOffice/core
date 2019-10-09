@@ -300,8 +300,7 @@ void SvXMLImportPropertyMapper::importXML(
                         OUStringBuffer sName;
                         if( XML_NAMESPACE_NONE != nPrefix )
                         {
-                            sName.append( aPrefix );
-                            sName.append( ':' );
+                            sName.append( aPrefix + ":" );
                             aData.Namespace = aNamespace;
                         }
 

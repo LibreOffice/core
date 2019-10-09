@@ -262,10 +262,9 @@ void PreparedStatement::close(  )
 void PreparedStatement::raiseSQLException( const char * errorMsg )
 {
     OUStringBuffer buf(128);
-    buf.append( "pq_driver: ");
-    buf.append(
-        OUString( errorMsg, strlen(errorMsg) , ConnectionSettings::encoding ) );
-    buf.append( " (caused by statement '" );
+    buf.append( "pq_driver: " +
+        OUString( errorMsg, strlen(errorMsg) , ConnectionSettings::encoding ) +
+        " (caused by statement '" );
     buf.appendAscii( m_executedStatement.getStr() );
     buf.append( "')" );
     OUString error = buf.makeStringAndClear();
@@ -430,11 +429,7 @@ void PreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x )
     MutexGuard guard(m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( parameterIndex );
-    OStringBuffer buf( 20 );
-    buf.append( "'" );
-    buf.append( x );
-    buf.append( "'" );
-    m_vars[parameterIndex-1] = buf.makeStringAndClear();
+    m_vars[parameterIndex-1] = "'" + OString::number(x) + "'";
 }
 
 void PreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x )
@@ -442,11 +437,7 @@ void PreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x )
     MutexGuard guard(m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( parameterIndex );
-    OStringBuffer buf( 20 );
-    buf.append( "'" );
-    buf.append( x );
-    buf.append( "'" );
-    m_vars[parameterIndex-1] = buf.makeStringAndClear();
+    m_vars[parameterIndex-1] = "'" + OString::number(x) + "'";
 }
 
 void PreparedStatement::setFloat( sal_Int32 parameterIndex, float x )
@@ -454,11 +445,7 @@ void PreparedStatement::setFloat( sal_Int32 parameterIndex, float x )
     MutexGuard guard(m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( parameterIndex );
-    OStringBuffer buf( 20 );
-    buf.append( "'" );
-    buf.append( x );
-    buf.append( "'" );
-    m_vars[parameterIndex-1] = buf.makeStringAndClear();
+    m_vars[parameterIndex-1] = "'" + OString::number(x) + "'";
 }
 
 void PreparedStatement::setDouble( sal_Int32 parameterIndex, double x )
@@ -466,11 +453,7 @@ void PreparedStatement::setDouble( sal_Int32 parameterIndex, double x )
     MutexGuard guard(m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( parameterIndex );
-    OStringBuffer buf( 20 );
-    buf.append( "'" );
-    buf.append( x );
-    buf.append( "'" );
-    m_vars[parameterIndex-1] = buf.makeStringAndClear();
+    m_vars[parameterIndex-1] = "'" + OString::number(x) + "'";
 }
 
 void PreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x )

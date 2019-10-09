@@ -125,19 +125,16 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
 
     OStringBuffer aLine;
 
-    aLine.append("printer=");
-    aLine.append(OUStringToOString(m_aPrinterName, RTL_TEXTENCODING_UTF8));
-    aStream.WriteLine(aLine.makeStringAndClear());
+    aStream.WriteLine("printer=" + OUStringToOString(m_aPrinterName, RTL_TEXTENCODING_UTF8));
 
-    aLine.append("orientation=");
+    OString sOrientation;
     if (m_eOrientation == orientation::Landscape)
-        aLine.append("Landscape");
+        sOrientation = "Landscape";
     else
-        aLine.append("Portrait");
-    aStream.WriteLine(aLine.makeStringAndClear());
+        sOrientation = "Portrait";
+    aStream.WriteLine("orientation=" + sOrientation);
 
-    aLine.append("copies=");
-    aLine.append(static_cast<sal_Int32>(m_nCopies));
+    aLine.append("copies=" + OString::number(static_cast<sal_Int32>(m_nCopies)));
     aStream.WriteLine(aLine.makeStringAndClear());
 
     if (m_nPDFDevice > 0)
@@ -147,8 +144,8 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
         aStream.WriteLine(aLine.makeStringAndClear());
     }
 
-    aLine.append("margindajustment=");
-    aLine.append(static_cast<sal_Int32>(m_nLeftMarginAdjust));
+    aLine.append("margindajustment=" +
+            OString::number(static_cast<sal_Int32>(m_nLeftMarginAdjust)));
     aLine.append(',');
     aLine.append(static_cast<sal_Int32>(m_nRightMarginAdjust));
     aLine.append(',');
@@ -157,20 +154,20 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
     aLine.append(static_cast<sal_Int32>(m_nBottomMarginAdjust));
     aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine.append("colordepth=");
-    aLine.append(static_cast<sal_Int32>(m_nColorDepth));
+    aLine.append("colordepth=" +
+            OString::number(static_cast<sal_Int32>(m_nColorDepth)));
     aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine.append("pslevel=");
-    aLine.append(static_cast<sal_Int32>(m_nPSLevel));
+    aLine.append("pslevel=" +
+            OString::number(static_cast<sal_Int32>(m_nPSLevel)));
     aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine.append("pdfdevice=");
-    aLine.append(static_cast<sal_Int32>(m_nPDFDevice));
+    aLine.append("pdfdevice=" +
+            OString::number(static_cast<sal_Int32>(m_nPDFDevice)));
     aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine.append("colordevice=");
-    aLine.append(static_cast<sal_Int32>(m_nColorDevice));
+    aLine.append("colordevice=" +
+            OString::number(static_cast<sal_Int32>(m_nColorDevice)));
     aStream.WriteLine(aLine.makeStringAndClear());
 
     // now append the PPDContext stream buffer

@@ -197,8 +197,7 @@ void Throbber::setImageList( ::std::vector< Image > const& i_images )
         aURL.append( "-" );
         if ( i < 9 )
             aURL.append( "0" );
-        aURL.append     ( sal_Int32( i + 1 ) );
-        aURL.append( ".png" );
+        aURL.append( OUString::number(sal_Int32( i + 1 ) ) + ".png" );
 
         aImageURLs.push_back( aURL.makeStringAndClear() );
     }

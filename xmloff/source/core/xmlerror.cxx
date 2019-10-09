@@ -104,12 +104,11 @@ void XMLErrors::AddRecord(
 
     OUStringBuffer sMessage;
 
-    sMessage.append( "An error or a warning has occurred during XML import/export!\n" );
-
+    sMessage.append( "An error or a warning has occurred during XML import/export!\n"
     // ID & flags
-    sMessage.append( "Error-Id: 0x");
-    sMessage.append( nId, 16 );
-    sMessage.append( "\n    Flags: " );
+                "Error-Id: 0x" +
+            OUString::number( nId, 16 ) +
+             "\n    Flags: " );
     sal_Int32 nFlags = (nId & XMLERROR_MASK_FLAG);
     sMessage.append( nFlags >> 28, 16 );
     if( (nFlags & XMLERROR_FLAG_WARNING) != 0 )
@@ -131,39 +130,34 @@ void XMLErrors::AddRecord(
         sMessage.append( " OTHER" );
     sMessage.append( "\n    Number: " );
     sal_Int32 nNumber = (nId & XMLERROR_MASK_NUMBER);
-    sMessage.append( nNumber, 16 );
-    sMessage.append( "\n");
-
+    sMessage.append( OUString::number( nNumber, 16 ) +
+                     "\n"
     // the parameters
-    sMessage.append( "Parameters:\n" );
+                    "Parameters:\n" );
     sal_Int32 nLength = rParams.getLength();
     const OUString* pParams = rParams.getConstArray();
     for( sal_Int32 i = 0; i < nLength; i++ )
     {
-        sMessage.append( "    " );
-        sMessage.append( i );
-        sMessage.append( ": " );
-        sMessage.append( pParams[i] );
-        sMessage.append( "\n" );
+        sMessage.append( "    " +
+            OUString::number( i ) +
+            ": " + pParams[i] + "\n" );
     }
 
     // the exception message
-    sMessage.append( "Exception-Message: " );
-    sMessage.append( rExceptionMessage );
-    sMessage.append( "\n" );
+    sMessage.append( "Exception-Message: " + rExceptionMessage + "\n" );
 
     // position (if given)
     if( (nRow != -1) || (nColumn != -1) )
     {
-        sMessage.append( "Position:\n    Public Identifier: " );
-        sMessage.append( rPublicId );
-        sMessage.append( "\n    System Identifier: " );
-        sMessage.append( rSystemId );
-        sMessage.append( "\n    Row, Column: " );
-        sMessage.append( nRow );
-        sMessage.append( "," );
-        sMessage.append( nColumn );
-        sMessage.append( "\n" );
+        sMessage.append( "Position:\n    Public Identifier: " +
+                    rPublicId  +
+                    "\n    System Identifier: " +
+                    rSystemId +
+                    "\n    Row, Column: " +
+                    OUString::number( nRow ) +
+                    "," +
+                    OUString::number( nColumn ) +
+                    "\n" );
     }
 
     SAL_WARN( "xmloff", sMessage.makeStringAndClear() );

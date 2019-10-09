@@ -223,9 +223,9 @@ namespace xmloff
             for ( const auto& rCheck : m_aValues )
             {
                 OSL_ENSURE(m_xInfo->hasPropertyByName(rCheck.Name),
-                        OStringBuffer("OElementImport::implApplySpecificProperties: read a property (").
-                    append(OUStringToOString(rCheck.Name, RTL_TEXTENCODING_ASCII_US)).
-                    append(") which does not exist on the element!").getStr());
+                        OString("OElementImport::implApplySpecificProperties: read a property (" +
+                            OUStringToOString(rCheck.Name, RTL_TEXTENCODING_ASCII_US) +
+                            ") which does not exist on the element!").getStr());
             }
         }
 #endif
@@ -281,9 +281,9 @@ namespace xmloff
                 catch(const Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION("xmloff.forms");
-                    OSL_FAIL(OStringBuffer("OElementImport::implApplySpecificProperties: could not set the property \"").
-                        append(OUStringToOString(rPropValues.Name, RTL_TEXTENCODING_ASCII_US)).
-                        append("\"!").getStr());
+                    OSL_FAIL(OString("OElementImport::implApplySpecificProperties: could not set the property \"" +
+                                OUStringToOString(rPropValues.Name, RTL_TEXTENCODING_ASCII_US) +
+                                "\"!").getStr());
                 }
             }
         }
@@ -421,9 +421,9 @@ namespace xmloff
             catch(const Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("xmloff.forms");
-                OSL_FAIL(OStringBuffer("OElementImport::EndElement: could not set the property \"").
-                    append(OUStringToOString(rPropValues.Name, RTL_TEXTENCODING_ASCII_US)).
-                    append("\"!").getStr());
+                OSL_FAIL(OString("OElementImport::EndElement: could not set the property \"" +
+                            OUStringToOString(rPropValues.Name, RTL_TEXTENCODING_ASCII_US) +
+                            "\"!").getStr());
             }
         }
     }
@@ -552,7 +552,9 @@ namespace xmloff
             Reference< XComponentContext > xContext = m_rFormImport.getGlobalContext().GetComponentContext();
             Reference< XInterface > xPure = xContext->getServiceManager()->createInstanceWithContext(m_sServiceName, xContext);
             OSL_ENSURE(xPure.is(),
-                        OStringBuffer("OElementImport::createElement: service factory gave me no object (service name: ").append(OUStringToOString(m_sServiceName, RTL_TEXTENCODING_ASCII_US)).append(")!").getStr());
+                        OString("OElementImport::createElement: service factory gave me no object (service name: " +
+                            OUStringToOString(m_sServiceName, RTL_TEXTENCODING_ASCII_US) +
+                            ")!").getStr());
             xReturn.set(xPure, UNO_QUERY);
         }
         else

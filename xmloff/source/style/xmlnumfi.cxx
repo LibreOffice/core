@@ -2057,7 +2057,7 @@ void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
         if ( !bTruncate && !bHasDateTime )
         {
             //  with truncate-on-overflow = false, add "[]" to first time part
-            aFormatCode.append("[").append(sKeyword).append("]");
+            aFormatCode.append("[" + sKeyword + "]");
         }
         else
         {
@@ -2182,7 +2182,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
                     sRealCond = sRealCond.replaceAt( nPos, 1, rDecSep );
                 }
             }
-            aConditions.append("[").append(sRealCond).append("]");
+            aConditions.append("[" + sRealCond + "]");
         }
 
         const SvNumberformat* pFormat = pFormatter->GetEntry(l_nKey);

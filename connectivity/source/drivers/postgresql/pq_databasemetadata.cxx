@@ -1119,12 +1119,12 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTables(
 
     if (isLog(m_pSettings, LogLevel::Info))
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "DatabaseMetaData::getTables got called with " );
-        buf.append( schemaPattern );
-        buf.append( "." );
-        buf.append( tableNamePattern );
-        log(m_pSettings, LogLevel::Info, buf.makeStringAndClear());
+        OUString buf =
+            "DatabaseMetaData::getTables got called with " +
+            schemaPattern +
+            "." +
+            tableNamePattern;
+        log(m_pSettings, LogLevel::Info, buf);
     }
     // ignore catalog, as a single pq connection does not support multiple catalogs
 
@@ -1453,14 +1453,14 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumns(
 
     if (isLog(m_pSettings, LogLevel::Info))
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "DatabaseMetaData::getColumns got called with " );
-        buf.append( schemaPattern );
-        buf.append( "." );
-        buf.append( tableNamePattern );
-        buf.append( "." );
-        buf.append( columnNamePattern );
-        log(m_pSettings, LogLevel::Info, buf.makeStringAndClear());
+        OUString buf =
+            "DatabaseMetaData::getColumns got called with " +
+            schemaPattern +
+            "." +
+            tableNamePattern +
+            "." +
+            columnNamePattern;
+        log(m_pSettings, LogLevel::Info, buf);
     }
 
     // ignore catalog, as a single pq connection
@@ -1634,14 +1634,13 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumnPrivileges(
 
     if (isLog(m_pSettings, LogLevel::Info))
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "DatabaseMetaData::getColumnPrivileges got called with " );
-        buf.append( schema );
-        buf.append( "." );
-        buf.append( table );
-        buf.append( "." );
-        buf.append( columnNamePattern );
-        log(m_pSettings, LogLevel::Info, buf.makeStringAndClear());
+        OUString buf = "DatabaseMetaData::getColumnPrivileges got called with " +
+            schema +
+            "." +
+            table +
+            "." +
+            columnNamePattern;
+        log(m_pSettings, LogLevel::Info, buf);
     }
 
     Reference< XParameters > parameters( m_getColumnPrivs_stmt, UNO_QUERY_THROW );
@@ -1663,12 +1662,9 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTablePrivileges(
 
     if (isLog(m_pSettings, LogLevel::Info))
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "DatabaseMetaData::getTablePrivileges got called with " );
-        buf.append( schemaPattern );
-        buf.append( "." );
-        buf.append( tableNamePattern );
-        log(m_pSettings, LogLevel::Info, buf.makeStringAndClear());
+        OUString buf = "DatabaseMetaData::getTablePrivileges got called with " +
+            schemaPattern + "." + tableNamePattern;
+        log(m_pSettings, LogLevel::Info, buf);
     }
 
     Reference< XParameters > parameters( m_getTablePrivs_stmt, UNO_QUERY_THROW );
@@ -1721,12 +1717,9 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
 
     if (isLog(m_pSettings, LogLevel::Info))
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "DatabaseMetaData::getPrimaryKeys got called with " );
-        buf.append( schema );
-        buf.append( "." );
-        buf.append( table );
-        log(m_pSettings, LogLevel::Info, buf.makeStringAndClear());
+        OUString buf = "DatabaseMetaData::getPrimaryKeys got called with " +
+            schema + "." + table;
+        log(m_pSettings, LogLevel::Info, buf);
     }
 
     Reference< XPreparedStatement > statement = m_origin->prepareStatement(

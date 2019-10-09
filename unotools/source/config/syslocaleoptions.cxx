@@ -660,11 +660,7 @@ OUString SvtSysLocaleOptions::CreateCurrencyConfigString(
     OUString aIsoStr( LanguageTag::convertToBcp47( eLang ) );
     if ( !aIsoStr.isEmpty() )
     {
-        OUStringBuffer aStr( rAbbrev.getLength() + 1 + aIsoStr.getLength() );
-        aStr.append( rAbbrev );
-        aStr.append( '-' );
-        aStr.append( aIsoStr );
-        return aStr.makeStringAndClear();
+        return rAbbrev + "-" + aIsoStr;
     }
     else
         return rAbbrev;

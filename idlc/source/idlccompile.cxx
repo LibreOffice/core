@@ -250,8 +250,7 @@ sal_Int32 compileFile(const OString * pathname)
 
         if ( !filePath.isEmpty() )
         {
-            cppArgs.append("-I");
-            cppArgs.append(filePath);
+            cppArgs.append("-I" + filePath);
             lCppArgs.push_back(OStringToOUString(
                 cppArgs.makeStringAndClear().replace('\\', '/'),
                 RTL_TEXTENCODING_UTF8));

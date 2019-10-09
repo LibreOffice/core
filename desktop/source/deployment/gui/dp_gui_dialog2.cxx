@@ -656,11 +656,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
                 title2filter.emplace( title, filter ) );
             if ( ! insertion.second )
             { // already existing, append extensions:
-                OUStringBuffer buf;
-                buf.append( insertion.first->second );
-                buf.append( ';' );
-                buf.append( filter );
-                insertion.first->second = buf.makeStringAndClear();
+                insertion.first->second = insertion.first->second + ";" + filter;
             }
             if ( xPackageType->getMediaType() == "application/vnd.sun.star.package-bundle" )
                 sDefaultFilter = title;

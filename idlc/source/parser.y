@@ -75,10 +75,7 @@ static void checkIdentifier(OString const * id)
         if ( (id->pData->buffer[0] >= 97 && id->pData->buffer[0] <= 122)
              || id->pData->buffer[0] == '_') {
             if (check == 1) {
-                OStringBuffer msg(25 + id->getLength());
-                msg.append("mismatched identifier '");
-                msg.append(*id);
-                msg.append("'");
+                OString msg = "mismatched identifier '" + *id + "'";
                 ErrorHandler::syntaxError(idlc()->getParseState(),
                                          idlc()->getLineNumber(),
                                          msg.getStr());

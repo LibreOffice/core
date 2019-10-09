@@ -940,8 +940,7 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler, weld::TreeView&, void)
                                 data.unsatisfiedDependencies[i]));
                     }
                     b.append(LF);
-                    b.append("  ");
-                    b.append(m_noDependencyCurVer);
+                    b.append("  " + m_noDependencyCurVer);
                 }
                 break;
             }

@@ -157,8 +157,7 @@ bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
             {
                 if( !sValue.isEmpty() )
                 {
-                    sValue.append( ',' );
-                    sValue.append( ' ' );
+                    sValue.append( ", " );
                 }
                 sal_Int32 nLen = nLast-nFirst+1;
                 OUString sFamily( aStrFamilyName.copy( nFirst, nLen ) );

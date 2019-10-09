@@ -194,11 +194,7 @@ void GlobalEventConfig_Impl::initBindingInfo()
     Sequence< OUString > lMacros(1);
     for (const auto& rEventName : lEventNames )
     {
-        OUStringBuffer aBuffer( 32 );
-        aBuffer.append( aSetNode );
-        aBuffer.append( rEventName );
-        aBuffer.append( aCommandKey );
-        lMacros[0] = aBuffer.makeStringAndClear();
+        lMacros[0] = aSetNode + rEventName + aCommandKey;
         SAL_INFO("unotools", "reading binding for: " << lMacros[0]);
         Sequence< Any > lValues = GetProperties( lMacros );
         OUString sMacroURL;

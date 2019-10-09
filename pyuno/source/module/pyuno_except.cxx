@@ -47,15 +47,11 @@ void raisePyExceptionWithAny( const css::uno::Any &anyExc )
             css::uno::Exception e;
             anyExc >>= e;
 
-            OUStringBuffer buf;
-            buf.append( "Couldn't convert uno exception to a python exception (" );
-            buf.append(anyExc.getValueType().getTypeName());
-            buf.append( ": " );
-            buf.append(e.Message );
-            buf.append( ")" );
+            OUString buf = "Couldn't convert uno exception to a python exception (" +
+                anyExc.getValueType().getTypeName() + ": " + e.Message + ")";
             PyErr_SetString(
                 PyExc_SystemError,
-                OUStringToOString(buf.makeStringAndClear(),RTL_TEXTENCODING_ASCII_US).getStr() );
+                OUStringToOString(buf,RTL_TEXTENCODING_ASCII_US).getStr() );
         }
     }
     catch(const css::lang::IllegalArgumentException & e)

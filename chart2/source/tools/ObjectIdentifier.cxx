@@ -85,15 +85,15 @@ OUString lcl_createClassificationStringForType( ObjectType eObjectType
     {
         if( !aRet.isEmpty() )
             aRet.append(":");
-        aRet.append( m_aDragMethodEquals );
-        aRet.append( rDragMethodServiceName );
+        aRet.append( m_aDragMethodEquals +
+                rDragMethodServiceName );
 
         if( !rDragParameterString.isEmpty() )
         {
             if( !aRet.isEmpty() )
                 aRet.append(":");
-            aRet.append( m_aDragParameterEquals );
-            aRet.append( rDragParameterString );
+            aRet.append( m_aDragParameterEquals +
+                    rDragParameterString );
         }
     }
     return aRet.makeStringAndClear();
@@ -683,8 +683,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierWithParent(
         aRet.append(":");
 
     aRet.append(getStringForType( eObjectType ));
-    aRet.append("=");
-    aRet.append(rParticleID);
+    aRet.append("=" + rParticleID);
 
     return aRet.makeStringAndClear();
 }

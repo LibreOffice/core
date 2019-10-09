@@ -328,8 +328,7 @@ void CommandEnvironmentImpl::update_( Any const & Status )
         buf.append( "WARNING: " );
         deployment::DeploymentException dp_exc;
         if (Status >>= dp_exc) {
-            buf.append( dp_exc.Message );
-            buf.append( ", Cause: " );
+            buf.append( dp_exc.Message + ", Cause: " );
             buf.append( ::comphelper::anyToString(dp_exc.Cause) );
         }
         else {

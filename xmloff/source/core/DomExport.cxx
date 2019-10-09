@@ -181,8 +181,7 @@ OUString DomExport::qualifiedName( const OUString& sPrefix,
     if( !sPrefix.isEmpty() && !sURI.isEmpty() )
     {
         addNamespace( sPrefix, sURI );
-        sBuffer.append( sPrefix );
-        sBuffer.append( ':' );
+        sBuffer.append( sPrefix + ":" );
     }
     sBuffer.append( sLocalName );
     return sBuffer.makeStringAndClear();

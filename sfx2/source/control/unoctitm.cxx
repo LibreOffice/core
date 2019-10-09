@@ -535,7 +535,7 @@ void UsageInfo::save()
         OStringBuffer aUsageInfoMsg("Document Type;Command;Count");
 
         for (auto const& elem : maUsage)
-            aUsageInfoMsg.append("\n").append(elem.first.toUtf8()).append(";").append(OString::number(elem.second));
+            aUsageInfoMsg.append("\n" + elem.first.toUtf8() + ";" + OString::number(elem.second));
 
         sal_uInt64 written = 0;
         auto s = aUsageInfoMsg.makeStringAndClear();
@@ -554,8 +554,6 @@ void collectUsageInformation(const util::URL& rURL, const uno::Sequence<beans::P
     if (!bCollecting)
         return;
 
-    OUStringBuffer aBuffer;
-
     // app identification [uh, several UNO calls :-(]
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
     uno::Reference<frame::XModuleManager2> xModuleManager(frame::ModuleManager::create(xContext));
@@ -567,12 +565,10 @@ void collectUsageInformation(const util::URL& rURL, const uno::Sequence<beans::P
     if (nLastDot >= 0)
         aModule = aModule.copy(nLastDot + 1);
 
-    aBuffer.append(aModule);
-    aBuffer.append(';');
-
-    // command
-    aBuffer.append(rURL.Protocol);
-    aBuffer.append(rURL.Path);
+    OUStringBuffer aBuffer;
+    aBuffer.append(aModule + ";" +
+            // command
+            rURL.Protocol + rURL.Path);
     sal_Int32 nCount = rArgs.getLength();
 
     // parameters - only their names, not the values (could be sensitive!)
@@ -977,8 +973,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
         return;
 
     OUStringBuffer aBuffer;
-    aBuffer.append(aEvent.FeatureURL.Complete);
-    aBuffer.append(u'=');
+    aBuffer.append(aEvent.FeatureURL.Complete + "=");
 
     if (aEvent.FeatureURL.Path == "Bold" ||
         aEvent.FeatureURL.Path == "CenterPara" ||
@@ -1155,7 +1150,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
 
         if (aEvent.IsEnabled && (aEvent.State >>= aPoint))
         {
-            aBuffer.append(OUString::number(aPoint.X)).append(" / ").append(OUString::number(aPoint.Y));
+            aBuffer.append(OUString::number(aPoint.X) + " / " + OUString::number(aPoint.Y));
         }
     }
     else if (aEvent.FeatureURL.Path == "Size")
@@ -1164,7 +1159,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
 
         if (aEvent.IsEnabled && (aEvent.State >>= aSize))
         {
-            aBuffer.append(OUString::number(aSize.Width)).append(" x ").append(OUString::number(aSize.Height));
+            aBuffer.append(OUString::number(aSize.Width) + " x " + OUString::number(aSize.Height));
         }
     }
     else if (aEvent.FeatureURL.Path == "LanguageStatus")

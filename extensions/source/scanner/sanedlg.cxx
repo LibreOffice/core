@@ -1378,9 +1378,8 @@ void SaneDlg::SaveState()
                     OString aValue;
                     if( mrSane.GetOptionValue( nOption, aValue ) )
                     {
-                        OStringBuffer aString("STRING=");
-                        aString.append(aValue);
-                        aConfig.WriteKey( aOption, aString.makeStringAndClear() );
+                        OString aString = "STRING=" + aValue;
+                        aConfig.WriteKey( aOption, aString );
                     }
                 }
                 break;

@@ -86,8 +86,7 @@ static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon )
     OUStringBuffer sBuf;
     if (pResId)
     {
-        sBuf.append(SwResId(pResId));
-        sBuf.append(": ");
+        sBuf.append(SwResId(pResId) + ": ");
         sBuf.append(rRedl.GetAuthorString());
         sBuf.append(" - ");
         sBuf.append(GetAppLangDateTimeString(rRedl.GetTimeStamp()));

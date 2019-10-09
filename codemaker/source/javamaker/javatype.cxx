@@ -378,9 +378,7 @@ void MethodDescriptor::addTypeParameter(OUString const & name) {
 }
 
 OString MethodDescriptor::getDescriptor() const {
-    OStringBuffer buf(m_descriptorStart);
-    buf.append(m_descriptorEnd);
-    return buf.makeStringAndClear();
+    return m_descriptorStart.toString() + m_descriptorEnd;
 }
 
 
