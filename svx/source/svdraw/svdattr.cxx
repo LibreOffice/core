@@ -862,9 +862,7 @@ bool SdrMetricItem::GetPresentation(SfxItemPresentation ePres,
     long nValue=GetValue();
     SdrFormatter aFmt(eCoreMetric,ePresMetric);
     rText = aFmt.GetStr(nValue);
-    OUString aStr;
-    SdrFormatter::TakeUnitStr(ePresMetric,aStr);
-    rText += " " + aStr;
+    rText += " " + SdrFormatter::GetUnitStr(ePresMetric);
     if (ePres==SfxItemPresentation::Complete) {
         rText = SdrItemPool::GetItemName(Which()) + " " + rText;
     }
@@ -1263,11 +1261,8 @@ bool SdrTextAniAmountItem::GetPresentation(
     else
     {
         SdrFormatter aFmt(eCoreMetric, ePresMetric);
-        OUString aStr;
-
-        rText = aFmt.GetStr(nValue);
-        SdrFormatter::TakeUnitStr(ePresMetric, aStr);
-        rText += aStr;
+        rText = aFmt.GetStr(nValue) +
+            SdrFormatter::GetUnitStr(ePresMetric);
     }
 
     if(ePres == SfxItemPresentation::Complete)
@@ -1638,14 +1633,10 @@ sal_uInt16 SdrMeasureUnitItem::GetValueCount() const { return 14; }
 
 OUString SdrMeasureUnitItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    OUString aRetval;
-
     if(static_cast<FieldUnit>(nPos) == FieldUnit::NONE)
-        aRetval = "default";
+        return "default";
     else
-        SdrFormatter::TakeUnitStr(static_cast<FieldUnit>(nPos), aRetval);
-
-    return aRetval;
+        return SdrFormatter::GetUnitStr(static_cast<FieldUnit>(nPos));
 }
 
 bool SdrMeasureUnitItem::GetPresentation(SfxItemPresentation ePres,

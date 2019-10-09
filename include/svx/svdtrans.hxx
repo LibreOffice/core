@@ -292,9 +292,8 @@ public:
     {
     }
     OUString GetStr(long nVal) const;
-    static void TakeUnitStr(MapUnit eUnit, OUString& rStr);
-    static void TakeUnitStr(FieldUnit eUnit, OUString& rStr);
-    static OUString GetUnitStr(FieldUnit eUnit) { OUString aStr; TakeUnitStr(eUnit,aStr); return aStr; }
+    static OUString GetUnitStr(MapUnit eUnit);
+    static OUString GetUnitStr(FieldUnit eUnit);
 };
 
 
