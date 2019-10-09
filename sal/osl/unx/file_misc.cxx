@@ -623,6 +623,7 @@ oslFileError SAL_CALL osl_replaceFile(rtl_uString* ustrFileURL, rtl_uString* ust
     if (eRet == osl_File_E_None)
     {
         struct stat aFileStat;
+        // coverity[fs_check_call] - unavoidable TOCTOU
         int nRet = stat(destPath, &aFileStat);
         if (nRet == -1)
         {
