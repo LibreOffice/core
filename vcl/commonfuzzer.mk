@@ -152,6 +152,7 @@ fuzzer_writer_libraries = \
     swd \
     writerfilter \
     textfd \
+    guesslang \
 
 fuzzer_draw_libraries = \
     sdfilt \
