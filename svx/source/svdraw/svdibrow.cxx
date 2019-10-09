@@ -937,7 +937,7 @@ void SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItemS
                     }
                     nWhich0=nWhich;
                     ImpItemListRow aEntry;
-                    SdrItemPool::TakeItemName(nWhich, aEntry.aName);
+                    aEntry.aName = SdrItemPool::GetItemName(nWhich);
                     nIndent*=2;
 
                     while(nIndent > 0)

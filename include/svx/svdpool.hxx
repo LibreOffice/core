@@ -42,7 +42,7 @@ public:
                                  OUString& rText,
                                  const IntlWrapper& rIntlWrapper) const override;
 
-    static void TakeItemName(sal_uInt16 nWhich, OUString& rItemName);
+    static OUString GetItemName(sal_uInt16 nWhich);
 };
 
 #endif // INCLUDED_SVX_SVDPOOL_HXX
