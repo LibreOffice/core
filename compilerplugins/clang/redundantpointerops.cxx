@@ -15,6 +15,8 @@
 #include <set>
 
 #include <clang/AST/CXXInheritance.h>
+
+#include "check.hxx"
 #include "compat.hxx"
 #include "plugin.hxx"
 
@@ -129,13 +131,35 @@ bool RedundantPointerOps::VisitUnaryOperator(UnaryOperator const * unaryOperator
         auto methodDecl = cxxMemberCallExpr->getMethodDecl();
         if (methodDecl->getIdentifier() && methodDecl->getName() == "get")
         {
-            auto className = cxxMemberCallExpr->getRecordDecl()->getName();
-            if (className == "unique_ptr" || className == "shared_ptr" || className == "Reference" || className == "SvRef")
-                report(
-                    DiagnosticsEngine::Warning,
-                    "'*' followed by '.get()' operating on %0, just use '*'",
-                    compat::getBeginLoc(unaryOperator))
-                    << compat::getObjectType(cxxMemberCallExpr) << unaryOperator->getSourceRange();
+            auto const e = cxxMemberCallExpr->getImplicitObjectArgument();
+            // First check the object type as written, in case the get member function is
+            // declared at a base class of std::unique_ptr or std::shared_ptr:
+            auto const t = e->IgnoreImpCasts()->getType();
+            auto const tc1 = loplugin::TypeCheck(t);
+            if (!(tc1.ClassOrStruct("unique_ptr").StdNamespace()
+                  || tc1.ClassOrStruct("shared_ptr").StdNamespace()))
+            {
+                // Then check the object type coerced to the type of the get member function, in
+                // case the type-as-written is derived from one of these types (tools::SvRef is
+                // final, but the rest are not; but note that this will fail when the type-as-
+                // written is derived from std::unique_ptr or std::shared_ptr for which the get
+                // member function is declared at a base class):
+                auto const tc2 = loplugin::TypeCheck(e->getType());
+                if (!((tc2.ClassOrStruct("unique_ptr").StdNamespace()
+                       || tc2.ClassOrStruct("shared_ptr").StdNamespace()
+                       || (tc2.Class("Reference").Namespace("uno").Namespace("star")
+                           .Namespace("sun").Namespace("com").GlobalNamespace())
+                       || tc2.Class("Reference").Namespace("rtl").GlobalNamespace()
+                       || tc2.Class("SvRef").Namespace("tools").GlobalNamespace())))
+                {
+                    return true;
+                }
+            }
+            report(
+                DiagnosticsEngine::Warning,
+                "'*' followed by '.get()' operating on %0, just use '*'",
+                compat::getBeginLoc(unaryOperator))
+                << t.getLocalUnqualifiedType() << unaryOperator->getSourceRange();
 
         }
     }

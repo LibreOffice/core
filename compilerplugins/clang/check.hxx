@@ -65,6 +65,8 @@ public:
 
     inline ContextCheck Struct(llvm::StringRef id) const;
 
+    inline ContextCheck ClassOrStruct(llvm::StringRef id) const;
+
     TypeCheck Typedef() const;
 
     inline ContextCheck Typedef(llvm::StringRef id) const;
@@ -187,6 +189,15 @@ ContextCheck TypeCheck::Struct(llvm::StringRef id) const
         }
     }
     return ContextCheck();
+}
+
+ContextCheck TypeCheck::ClassOrStruct(llvm::StringRef id) const
+{
+    auto const c1 = Class(id);
+    if (c1) {
+        return c1;
+    }
+    return Struct(id);
 }
 
 ContextCheck TypeCheck::Typedef(llvm::StringRef id) const
