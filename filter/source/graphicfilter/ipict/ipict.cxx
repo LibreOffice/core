@@ -1072,7 +1072,12 @@ sal_uLong PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bCo
             if ( ( nCmpCount == 3 ) || ( nCmpCount == 4 ) )
             {
                 size_t nByteCountSize = nRowBytes > 250 ? sizeof(sal_uInt16) : sizeof(sal_uInt8);
-                if (nHeight > pPict->remainingSize() / nByteCountSize)
+                const size_t nMaxPixels = pPict->remainingSize() / nByteCountSize;
+                const size_t nMaxRows = nMaxPixels / nWidth;
+                if (nHeight > nMaxRows)
+                    return 0xffffffff;
+                const size_t nMaxCols = nMaxPixels / nHeight;
+                if (nWidth > nMaxCols)
                     return 0xffffffff;
 
                 pBitmap.reset(new vcl::bitmap::RawBitmap( Size(nWidth, nHeight), 24 ));
