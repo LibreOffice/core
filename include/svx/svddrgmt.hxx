@@ -195,7 +195,7 @@ public:
     void Hide();
     bool IsShiftPressed() const { return mbShiftPressed; }
     void SetShiftPressed(bool bShiftPressed) { mbShiftPressed = bShiftPressed; }
-    virtual void TakeSdrDragComment(OUString& rStr) const=0;
+    virtual OUString GetSdrDragComment() const=0;
     virtual bool BeginSdrDrag()=0;
     virtual void MoveSdrDrag(const Point& rPnt)=0;
     virtual bool EndSdrDrag(bool bCopy)=0;
@@ -242,7 +242,7 @@ protected:
 public:
     SdrDragMove(SdrDragView& rNewView);
 
-    virtual void TakeSdrDragComment(OUString& rStr) const override;
+    virtual OUString GetSdrDragComment() const override;
     virtual bool BeginSdrDrag() override;
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual bool EndSdrDrag(bool bCopy) override;
@@ -264,7 +264,7 @@ protected:
 public:
     SdrDragResize(SdrDragView& rNewView);
 
-    virtual void TakeSdrDragComment(OUString& rStr) const override;
+    virtual OUString GetSdrDragComment() const override;
     virtual bool BeginSdrDrag() override;
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual bool EndSdrDrag(bool bCopy) override;
@@ -293,7 +293,7 @@ public:
     SdrDragObjOwn(SdrDragView& rNewView);
     virtual ~SdrDragObjOwn() override;
 
-    virtual void TakeSdrDragComment(OUString& rStr) const override;
+    virtual OUString GetSdrDragComment() const override;
     virtual bool BeginSdrDrag() override;
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual bool EndSdrDrag(bool bCopy) override;

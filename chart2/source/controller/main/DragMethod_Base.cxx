@@ -61,9 +61,9 @@ OUString DragMethod_Base::getUndoDescription() const
                 m_eActionType,
                 ObjectNameProvider::getName( ObjectIdentifier::getObjectType( m_aObjectCID )));
 }
-void DragMethod_Base::TakeSdrDragComment(OUString& rStr) const
+OUString DragMethod_Base::GetSdrDragComment() const
 {
-    rStr = getUndoDescription();
+    return getUndoDescription();
 }
 PointerStyle DragMethod_Base::GetSdrDragPointer() const
 {

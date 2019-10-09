@@ -960,10 +960,11 @@ void SdrDragMovHdl::createSdrDragEntries()
     // but creates nothing
 }
 
-void SdrDragMovHdl::TakeSdrDragComment(OUString& rStr) const
+OUString SdrDragMovHdl::GetSdrDragComment() const
 {
-    rStr=SvxResId(STR_DragMethMovHdl);
-    if (getSdrDragView().IsDragWithCopy()) rStr+=SvxResId(STR_EditWithCopy);
+    OUString aStr=SvxResId(STR_DragMethMovHdl);
+    if (getSdrDragView().IsDragWithCopy()) aStr+=SvxResId(STR_EditWithCopy);
+    return aStr;
 }
 
 bool SdrDragMovHdl::BeginSdrDrag()
@@ -1229,13 +1230,14 @@ void SdrDragObjOwn::createSdrDragEntries()
     }
 }
 
-void SdrDragObjOwn::TakeSdrDragComment(OUString& rStr) const
+OUString SdrDragObjOwn::GetSdrDragComment() const
 {
+    OUString aStr;
     // #i103058# get info string from the clone preferred, the original will
     // not be changed. For security, use original as fallback
     if(mxClone)
     {
-        rStr = mxClone->getSpecialDragComment(DragStat());
+        aStr = mxClone->getSpecialDragComment(DragStat());
     }
     else
     {
@@ -1243,9 +1245,10 @@ void SdrDragObjOwn::TakeSdrDragComment(OUString& rStr) const
 
         if(pObj)
         {
-            rStr = pObj->getSpecialDragComment(DragStat());
+            aStr = pObj->getSpecialDragComment(DragStat());
         }
     }
+    return aStr;
 }
 
 bool SdrDragObjOwn::BeginSdrDrag()
@@ -1471,10 +1474,10 @@ SdrDragMove::SdrDragMove(SdrDragView& rNewView)
     setMoveOnly(true);
 }
 
-void SdrDragMove::TakeSdrDragComment(OUString& rStr) const
+OUString SdrDragMove::GetSdrDragComment() const
 {
-    rStr = ImpGetDescriptionStr(STR_DragMethMove);
-    rStr += " (x="
+    OUString aStr = ImpGetDescriptionStr(STR_DragMethMove)
+            + " (x="
             + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDX())
             + " y="
             + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDY())
@@ -1484,9 +1487,10 @@ void SdrDragMove::TakeSdrDragComment(OUString& rStr) const
     {
         if(!getSdrDragView().IsInsObjPoint() && !getSdrDragView().IsInsGluePoint())
         {
-            rStr += SvxResId(STR_EditWithCopy);
+            aStr += SvxResId(STR_EditWithCopy);
         }
     }
+    return aStr;
 }
 
 bool SdrDragMove::BeginSdrDrag()
@@ -1720,9 +1724,9 @@ SdrDragResize::SdrDragResize(SdrDragView& rNewView)
 {
 }
 
-void SdrDragResize::TakeSdrDragComment(OUString& rStr) const
+OUString SdrDragResize::GetSdrDragComment() const
 {
-    rStr = ImpGetDescriptionStr(STR_DragMethResize);
+    OUString aStr = ImpGetDescriptionStr(STR_DragMethResize);
     Fraction aFact1(1,1);
     Point aStart(DragStat().GetStart());
     Point aRef(DragStat().GetRef1());
@@ -1741,30 +1745,31 @@ void SdrDragResize::TakeSdrDragComment(OUString& rStr) const
 
     if(bX || bY)
     {
-        rStr += " (";
+        aStr += " (";
 
         bool bEqual(aXFact == aYFact);
         if(bX)
         {
             if(!bEqual)
-                rStr += "x=";
+                aStr += "x=";
 
-            rStr += SdrModel::GetPercentString(aXFact);
+            aStr += SdrModel::GetPercentString(aXFact);
         }
 
         if(bY && !bEqual)
         {
             if(bX)
-                rStr += " ";
+                aStr += " ";
 
-            rStr += "y=" + SdrModel::GetPercentString(aYFact);
+            aStr += "y=" + SdrModel::GetPercentString(aYFact);
         }
 
-        rStr += ")";
+        aStr += ")";
     }
 
     if(getSdrDragView().IsDragWithCopy())
-        rStr += SvxResId(STR_EditWithCopy);
+        aStr += SvxResId(STR_EditWithCopy);
+    return aStr;
 }
 
 bool SdrDragResize::BeginSdrDrag()
@@ -2056,10 +2061,10 @@ SdrDragRotate::SdrDragRotate(SdrDragView& rNewView)
 {
 }
 
-void SdrDragRotate::TakeSdrDragComment(OUString& rStr) const
+OUString SdrDragRotate::GetSdrDragComment() const
 {
-    rStr = ImpGetDescriptionStr(STR_DragMethRotate);
-    rStr += " (";
+    OUString aStr = ImpGetDescriptionStr(STR_DragMethRotate) +
+        " (";
     sal_Int32 nTmpAngle(NormAngle36000(nAngle));
 
     if(bRight && nAngle)
@@ -2067,10 +2072,11 @@ void SdrDragRotate::TakeSdrDragComment(OUString& rStr) const
         nTmpAngle -= 36000;
     }
 
-    rStr += SdrModel::GetAngleString(nTmpAngle) + ")";
+    aStr += SdrModel::GetAngleString(nTmpAngle) + ")";
 
     if(getSdrDragView().IsDragWithCopy())
-        rStr += SvxResId(STR_EditWithCopy);
+        aStr += SvxResId(STR_EditWithCopy);
+    return aStr;
 }
 
 bool SdrDragRotate::BeginSdrDrag()
@@ -2196,10 +2202,10 @@ SdrDragShear::SdrDragShear(SdrDragView& rNewView, bool bSlant1)
 {
 }
 
-void SdrDragShear::TakeSdrDragComment(OUString& rStr) const
+OUString SdrDragShear::GetSdrDragComment() const
 {
-    rStr = ImpGetDescriptionStr(STR_DragMethShear);
-    rStr += " (";
+    OUString aStr = ImpGetDescriptionStr(STR_DragMethShear) +
+        " (";
 
     sal_Int32 nTmpAngle(nAngle);
 
@@ -2208,10 +2214,11 @@ void SdrDragShear::TakeSdrDragComment(OUString& rStr) const
 
     nTmpAngle = NormAngle18000(nTmpAngle);
 
-    rStr += SdrModel::GetAngleString(nTmpAngle) + ")";
+    aStr += SdrModel::GetAngleString(nTmpAngle) + ")";
 
     if(getSdrDragView().IsDragWithCopy())
-        rStr += SvxResId(STR_EditWithCopy);
+        aStr += SvxResId(STR_EditWithCopy);
+    return aStr;
 }
 
 bool SdrDragShear::BeginSdrDrag()
@@ -2483,19 +2490,21 @@ bool SdrDragMirror::ImpCheckSide(const Point& rPnt) const
     return nAngle1<18000;
 }
 
-void SdrDragMirror::TakeSdrDragComment(OUString& rStr) const
+OUString SdrDragMirror::GetSdrDragComment() const
 {
+    OUString aStr;
     if (aDif.X()==0)
-        rStr = ImpGetDescriptionStr(STR_DragMethMirrorHori);
+        aStr = ImpGetDescriptionStr(STR_DragMethMirrorHori);
     else if (aDif.Y()==0)
-        rStr = ImpGetDescriptionStr(STR_DragMethMirrorVert);
+        aStr = ImpGetDescriptionStr(STR_DragMethMirrorVert);
     else if (std::abs(aDif.X()) == std::abs(aDif.Y()))
-        rStr = ImpGetDescriptionStr(STR_DragMethMirrorDiag);
+        aStr = ImpGetDescriptionStr(STR_DragMethMirrorDiag);
     else
-        rStr = ImpGetDescriptionStr(STR_DragMethMirrorFree);
+        aStr = ImpGetDescriptionStr(STR_DragMethMirrorFree);
 
     if (getSdrDragView().IsDragWithCopy())
-        rStr+=SvxResId(STR_EditWithCopy);
+        aStr+=SvxResId(STR_EditWithCopy);
+    return aStr;
 }
 
 bool SdrDragMirror::BeginSdrDrag()
@@ -2593,12 +2602,12 @@ SdrDragGradient::SdrDragGradient(SdrDragView& rNewView, bool bGrad)
 {
 }
 
-void SdrDragGradient::TakeSdrDragComment(OUString& rStr) const
+OUString SdrDragGradient::GetSdrDragComment() const
 {
     if(IsGradient())
-        rStr = ImpGetDescriptionStr(STR_DragMethGradient);
+        return ImpGetDescriptionStr(STR_DragMethGradient);
     else
-        rStr = ImpGetDescriptionStr(STR_DragMethTransparence);
+        return ImpGetDescriptionStr(STR_DragMethTransparence);
 }
 
 bool SdrDragGradient::BeginSdrDrag()
@@ -2767,13 +2776,13 @@ SdrDragCrook::SdrDragCrook(SdrDragView& rNewView)
 {
 }
 
-void SdrDragCrook::TakeSdrDragComment(OUString& rStr) const
+OUString SdrDragCrook::GetSdrDragComment() const
 {
-    rStr = ImpGetDescriptionStr(!bContortion ? STR_DragMethCrook : STR_DragMethCrookContortion);
+    OUString aStr = ImpGetDescriptionStr(!bContortion ? STR_DragMethCrook : STR_DragMethCrookContortion);
 
     if(bValid)
     {
-        rStr += " (";
+        aStr += " (";
 
         sal_Int32 nVal(nAngle);
 
@@ -2781,11 +2790,12 @@ void SdrDragCrook::TakeSdrDragComment(OUString& rStr) const
             nVal *= 2;
 
         nVal = std::abs(nVal);
-        rStr += SdrModel::GetAngleString(nVal) + ")";
+        aStr += SdrModel::GetAngleString(nVal) + ")";
     }
 
     if(getSdrDragView().IsDragWithCopy())
-        rStr += SvxResId(STR_EditWithCopy);
+        aStr += SvxResId(STR_EditWithCopy);
+    return aStr;
 }
 
 // These defines parametrize the created raster
@@ -3383,9 +3393,9 @@ SdrDragDistort::SdrDragDistort(SdrDragView& rNewView)
 {
 }
 
-void SdrDragDistort::TakeSdrDragComment(OUString& rStr) const
+OUString SdrDragDistort::GetSdrDragComment() const
 {
-    rStr = ImpGetDescriptionStr(STR_DragMethDistort)
+    OUString aStr = ImpGetDescriptionStr(STR_DragMethDistort)
             + " (x="
             + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDX())
             + " y="
@@ -3393,7 +3403,8 @@ void SdrDragDistort::TakeSdrDragComment(OUString& rStr) const
             + ")";
 
     if(getSdrDragView().IsDragWithCopy())
-        rStr += SvxResId(STR_EditWithCopy);
+        aStr += SvxResId(STR_EditWithCopy);
+    return aStr;
 }
 
 void SdrDragDistort::createSdrDragEntries()
@@ -3527,9 +3538,9 @@ SdrDragCrop::SdrDragCrop(SdrDragView& rNewView)
     setSolidDraggingActive(false);
 }
 
-void SdrDragCrop::TakeSdrDragComment(OUString& rStr) const
+OUString SdrDragCrop::GetSdrDragComment() const
 {
-    rStr = ImpGetDescriptionStr(STR_DragMethCrop)
+    OUString aStr = ImpGetDescriptionStr(STR_DragMethCrop)
             + " (x="
             + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDX())
             + " y="
@@ -3537,7 +3548,8 @@ void SdrDragCrop::TakeSdrDragComment(OUString& rStr) const
             + ")";
 
     if(getSdrDragView().IsDragWithCopy())
-        rStr += SvxResId(STR_EditWithCopy);
+        aStr += SvxResId(STR_EditWithCopy);
+    return aStr;
 }
 
 bool SdrDragCrop::BeginSdrDrag()

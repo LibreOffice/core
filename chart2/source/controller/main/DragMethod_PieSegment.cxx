@@ -69,10 +69,11 @@ DragMethod_PieSegment::DragMethod_PieSegment( DrawViewWrapper& rDrawViewWrapper
 DragMethod_PieSegment::~DragMethod_PieSegment()
 {
 }
-void DragMethod_PieSegment::TakeSdrDragComment(OUString& rStr) const
+OUString DragMethod_PieSegment::GetSdrDragComment() const
 {
-    rStr = SchResId(STR_STATUS_PIE_SEGMENT_EXPLODED);
-    rStr = rStr.replaceFirst( "%PERCENTVALUE", OUString::number( static_cast<sal_Int32>((m_fAdditionalOffset+m_fInitialOffset)*100.0) ));
+    OUString aStr = SchResId(STR_STATUS_PIE_SEGMENT_EXPLODED);
+    aStr = aStr.replaceFirst( "%PERCENTVALUE", OUString::number( static_cast<sal_Int32>((m_fAdditionalOffset+m_fInitialOffset)*100.0) ));
+    return aStr;
 }
 bool DragMethod_PieSegment::BeginSdrDrag()
 {
