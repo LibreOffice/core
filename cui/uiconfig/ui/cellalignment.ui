@@ -34,14 +34,15 @@
               <object class="GtkGrid" id="grid10">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
                 <property name="row_spacing">6</property>
-                <property name="column_spacing">18</property>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkGrid" id="grid3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="valign">center</property>
                     <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="labelDegrees">
                         <property name="visible">True</property>
@@ -67,7 +68,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -94,8 +95,8 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -108,22 +109,20 @@
                         <property name="wrap">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkScrolledWindow">
+                  <object class="GtkScrolledWindow" id="preview">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
                     <property name="hscrollbar_policy">never</property>
                     <property name="vscrollbar_policy">never</property>
                     <property name="shadow_type">in</property>
@@ -144,8 +143,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -188,9 +187,12 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
+                    <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
             </child>
@@ -355,7 +357,6 @@
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
                 <property name="border_width">6</property>
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
@@ -368,15 +369,15 @@
                     <property name="climb_rate">1</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="labelHorzAlign">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="cellalignment|labelHorzAlign">Hori_zontal</property>
+                    <property name="label" translatable="yes" context="cellalignment|labelHorzAlign">Hori_zontal:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">comboboxHorzAlign</property>
                     <property name="xalign">0</property>
@@ -390,9 +391,23 @@
                   <object class="GtkLabel" id="labelVertAlign">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="cellalignment|labelVertAlign">_Vertical</property>
+                    <property name="label" translatable="yes" context="cellalignment|labelVertAlign">_Vertical:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">comboboxVertAlign</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelIndent">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="cellalignment|labelIndent">I_ndent:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">spinIndentFrom</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -401,24 +416,9 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="labelIndent">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="cellalignment|labelIndent">I_ndent</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">spinIndentFrom</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkComboBoxText" id="comboboxHorzAlign">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
                     <items>
                       <item id="0" translatable="yes" context="cellalignment|liststoreHorzAlign">Default</item>
                       <item id="1" translatable="yes" context="cellalignment|liststoreHorzAlign">Left</item>
@@ -430,15 +430,14 @@
                     </items>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="comboboxVertAlign">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
                     <items>
                       <item id="0" translatable="yes" context="cellalignment|liststoreVertAlign">Default</item>
                       <item id="1" translatable="yes" context="cellalignment|liststoreVertAlign">Top</item>
@@ -449,9 +448,15 @@
                     </items>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
+                    <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
             </child>
