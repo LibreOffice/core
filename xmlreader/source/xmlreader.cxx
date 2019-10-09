@@ -182,19 +182,11 @@ Span XmlReader::getAttributeValue(bool fullyNormalize) {
 }
 
 int XmlReader::getNamespaceId(Span const & prefix) const {
-    if (auto it = cacheNSIds_.find(prefix); it != cacheNSIds_.end())
-    {
-        return it->second;
-    }
-
     auto i = std::find_if(namespaces_.crbegin(), namespaces_.crend(),
         [&prefix](const NamespaceData& rNamespaceData) { return prefix == rNamespaceData.prefix; });
 
     if (i != namespaces_.rend())
-    {
-        cacheNSIds_[i->prefix]= i->nsId;
         return i->nsId;
-    }
 
     return NAMESPACE_UNKNOWN;
 }
@@ -714,10 +706,7 @@ XmlReader::Result XmlReader::handleEndTag() {
 
 void XmlReader::handleElementEnd() {
     assert(!elements_.empty());
-    // remove keys from cache that are no longer valid
     auto end = elements_.top().inheritedNamespaces;
-    for (auto i = end; i < namespaces_.size(); ++i)
-        cacheNSIds_.erase(namespaces_[i].prefix);
     namespaces_.resize(end);
     elements_.pop();
     state_ = elements_.empty() ? State::Done : State::Content;
