@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/Event.hpp>
@@ -2236,6 +2238,7 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
 
 void CustomAnimationEffectTabPage::onSoundPreview()
 {
+#if HAVE_FEATURE_AVMEDIA
     const auto nPos = mxLBSound->get_active();
 
     if( nPos >= 2 ) try
@@ -2248,6 +2251,7 @@ void CustomAnimationEffectTabPage::onSoundPreview()
     {
         OSL_FAIL("CustomAnimationEffectTabPage::onSoundPreview(), exception caught!" );
     }
+#endif
 }
 
 class CustomAnimationDurationTabPage
