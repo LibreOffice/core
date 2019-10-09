@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_6e3c4593",
+        "filename": "xmlreader/source/xmlreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-10-09T18:50:30Z",
+      "side": 1,
+      "message": "and this comment too, please",
+      "revId": "3e6497e0513658c9dc3406e7b90255861861bf76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
