@@ -1987,7 +1987,6 @@ bool SdrMarkView::getPossibleGridOffsetForSdrObject(
         return false;
     }
 
-    basegfx::B2DVector aOffset(0.0, 0.0);
     const sdr::contact::ViewObjectContact& rVOC(pObj->GetViewContact().GetViewObjectContact(
         const_cast<sdr::contact::ObjectContact&>(rObjectContact)));
 
@@ -2027,7 +2026,6 @@ bool SdrMarkView::getPossibleGridOffsetForPosition(
         return false;
     }
 
-    basegfx::B2DVector aOffset(0.0, 0.0);
     rObjectContact.calculateGridOffsetForB2DRange(rOffset, basegfx::B2DRange(rPoint));
 
     return !rOffset.equalZero();

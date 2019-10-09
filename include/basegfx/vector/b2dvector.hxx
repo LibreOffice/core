@@ -37,7 +37,7 @@ namespace basegfx
 
         @see B2DTuple
     */
-    class BASEGFX_DLLPUBLIC B2DVector : public ::basegfx::B2DTuple
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC B2DVector : public ::basegfx::B2DTuple
     {
     public:
         /** Create a 2D Vector
