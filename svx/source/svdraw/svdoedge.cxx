@@ -1989,10 +1989,7 @@ OUString SdrEdgeObj::getSpecialDragComment(const SdrDragStat& rDrag) const
     }
     else
     {
-        OUString aStr;
-        ImpTakeDescriptionStr(STR_DragEdgeTail, aStr);
-
-        return aStr;
+        return ImpGetDescriptionStr(STR_DragEdgeTail);
     }
 }
 

@@ -173,9 +173,7 @@ bool SdrTextObj::applySpecialDrag(SdrDragStat& rDrag)
 
 OUString SdrTextObj::getSpecialDragComment(const SdrDragStat& /*rDrag*/) const
 {
-    OUString aStr;
-    ImpTakeDescriptionStr(STR_DragRectResize,aStr);
-    return aStr;
+    return ImpGetDescriptionStr(STR_DragRectResize);
 }
 
 

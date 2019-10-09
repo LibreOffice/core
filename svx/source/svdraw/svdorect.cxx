@@ -438,9 +438,7 @@ OUString SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
             if(nRad < 0)
                 nRad = 0;
 
-            OUString aStr;
-            ImpTakeDescriptionStr(STR_DragRectEckRad, aStr);
-            OUStringBuffer aBuf(aStr);
+            OUStringBuffer aBuf(ImpGetDescriptionStr(STR_DragRectEckRad));
             aBuf.append(" (");
             aBuf.append(GetMetrStr(nRad));
             aBuf.append(')');

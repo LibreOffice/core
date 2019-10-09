@@ -125,7 +125,7 @@ protected:
 protected:
     SdrUndoObj(SdrObject& rNewObj);
 
-    void ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr, bool bRepeat = false) const;
+    OUString ImpGetDescriptionStr(const char* pStrCacheID, bool bRepeat = false) const;
 
     [[nodiscard]] static OUString GetDescriptionStringForObject( const SdrObject& _rForObject, const char* pStrCacheID, bool bRepeat = false );
 
@@ -527,7 +527,7 @@ protected:
 protected:
     SdrUndoPage(SdrPage& rNewPg);
 
-    static void ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr);
+    static OUString ImpGetDescriptionStr(const char* pStrCacheID);
 };
 
 /**
