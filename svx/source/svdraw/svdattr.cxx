@@ -861,7 +861,7 @@ bool SdrMetricItem::GetPresentation(SfxItemPresentation ePres,
 {
     long nValue=GetValue();
     SdrFormatter aFmt(eCoreMetric,ePresMetric);
-    aFmt.TakeStr(nValue,rText);
+    rText = aFmt.GetStr(nValue);
     OUString aStr;
     SdrFormatter::TakeUnitStr(ePresMetric,aStr);
     rText += " " + aStr;
@@ -1265,7 +1265,7 @@ bool SdrTextAniAmountItem::GetPresentation(
         SdrFormatter aFmt(eCoreMetric, ePresMetric);
         OUString aStr;
 
-        aFmt.TakeStr(nValue, rText);
+        rText = aFmt.GetStr(nValue);
         SdrFormatter::TakeUnitStr(ePresMetric, aStr);
         rText += aStr;
     }
