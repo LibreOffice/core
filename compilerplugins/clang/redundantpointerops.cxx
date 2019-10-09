@@ -75,8 +75,10 @@ bool RedundantPointerOps::VisitMemberExpr(MemberExpr const * memberExpr)
         {
             if (unaryOp->getOpcode() == UO_AddrOf)
                 report(
-                    DiagnosticsEngine::Warning, "'&' followed by '->', rather use '.'",
+                    DiagnosticsEngine::Warning,
+                    "'&' followed by '->' operating on %0, rather use '.'",
                     compat::getBeginLoc(memberExpr))
+                    << memberExpr->getBase()->getType()->getPointeeType()
                     << memberExpr->getSourceRange();
 
         }
@@ -84,8 +86,10 @@ bool RedundantPointerOps::VisitMemberExpr(MemberExpr const * memberExpr)
         {
             if (operatorCallExpr->getOperator() == OO_Amp)
                 report(
-                    DiagnosticsEngine::Warning, "'&' followed by '->', rather use '.'",
+                    DiagnosticsEngine::Warning,
+                    "'&' followed by '->' operating on %0, rather use '.'",
                     compat::getBeginLoc(memberExpr))
+                    << memberExpr->getBase()->getType()->getPointeeType()
                     << memberExpr->getSourceRange();
 
         }
@@ -117,9 +121,9 @@ bool RedundantPointerOps::VisitUnaryOperator(UnaryOperator const * unaryOperator
     auto innerOp = dyn_cast<UnaryOperator>(subExpr);
     if (innerOp && innerOp->getOpcode() == UO_AddrOf)
         report(
-            DiagnosticsEngine::Warning, "'&' followed by '*', rather use '.'",
+            DiagnosticsEngine::Warning, "'&' followed by '*' operating on %0, rather use '.'",
             compat::getBeginLoc(unaryOperator))
-            << unaryOperator->getSourceRange();
+            << innerOp->getSubExpr()->getType() << unaryOperator->getSourceRange();
     if (auto cxxMemberCallExpr = dyn_cast<CXXMemberCallExpr>(subExpr))
     {
         auto methodDecl = cxxMemberCallExpr->getMethodDecl();
@@ -128,9 +132,10 @@ bool RedundantPointerOps::VisitUnaryOperator(UnaryOperator const * unaryOperator
             auto className = cxxMemberCallExpr->getRecordDecl()->getName();
             if (className == "unique_ptr" || className == "shared_ptr" || className == "Reference" || className == "SvRef")
                 report(
-                    DiagnosticsEngine::Warning, "'*' followed by '.get()', just use '*'",
+                    DiagnosticsEngine::Warning,
+                    "'*' followed by '.get()' operating on %0, just use '*'",
                     compat::getBeginLoc(unaryOperator))
-                    << unaryOperator->getSourceRange();
+                    << compat::getObjectType(cxxMemberCallExpr) << unaryOperator->getSourceRange();
 
         }
     }
