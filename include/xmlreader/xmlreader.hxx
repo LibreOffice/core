@@ -173,7 +173,6 @@ private:
     void * fileAddress_;
     NamespaceIris namespaceIris_;
     NamespaceList namespaces_;
-    mutable std::unordered_map<Span, int> cacheNSIds_;
     ElementStack elements_;
     char const * pos_;
     char const * end_;
