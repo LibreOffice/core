@@ -89,6 +89,7 @@ void ScreenshotTest::implSaveScreenshot(const BitmapEx& rScreenshot, const OStri
     SvFileStream aNew(pngUrl, StreamMode::WRITE | StreamMode::TRUNC);
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString("Failed to open <" + pngUrl + ">: " + OUString::number(sal_uInt32(aNew.GetErrorCode())), RTL_TEXTENCODING_UTF8).getStr(), aNew.IsOpen());
 
+    std::cout << "saving " << pngUrl << ":\n";
     vcl::PNGWriter aPNGWriter(rScreenshot);
     aPNGWriter.Write(aNew);
 }
