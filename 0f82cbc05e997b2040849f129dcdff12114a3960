@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_cb6c6b38",
+        "filename": "sw/qa/python/check_styles.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-10-09T14:02:29Z",
+      "side": 1,
+      "message": "did you try if \"for xStyle in xFamily:\" also works? i\u0027m not sure if this is implemented...",
+      "revId": "0f82cbc05e997b2040849f129dcdff12114a3960",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
