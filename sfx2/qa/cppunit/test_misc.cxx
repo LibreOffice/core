@@ -171,7 +171,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
     xStorable->store();
 
     struct stat buf;
-    // coverity[fs_check_call] - this is legitimate in the context of this text
+    // coverity[fs_check_call] - this is legitimate in the context of this test
     nRet = stat(aOld.getStr(), &buf);
     CPPUNIT_ASSERT_EQUAL(0, nRet);
     // This failed: hard link count was 1, the hard link broke on store.
