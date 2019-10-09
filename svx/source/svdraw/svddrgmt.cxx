@@ -560,7 +560,7 @@ void SdrDragMethod::createSdrDragEntries_GlueDrag()
     }
 }
 
-void SdrDragMethod::ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr) const
+OUString SdrDragMethod::ImpGetDescriptionStr(const char* pStrCacheID) const
 {
     ImpGetDescriptionOptions nOpt=ImpGetDescriptionOptions::NONE;
     if (IsDraggingPoints()) {
@@ -568,7 +568,7 @@ void SdrDragMethod::ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rSt
     } else if (IsDraggingGluePoints()) {
         nOpt=ImpGetDescriptionOptions::GLUEPOINTS;
     }
-    rStr = getSdrDragView().ImpGetDescriptionString(pStrCacheID, nOpt);
+    return getSdrDragView().ImpGetDescriptionString(pStrCacheID, nOpt);
 }
 
 SdrObject* SdrDragMethod::GetDragObj() const
@@ -1473,7 +1473,7 @@ SdrDragMove::SdrDragMove(SdrDragView& rNewView)
 
 void SdrDragMove::TakeSdrDragComment(OUString& rStr) const
 {
-    ImpTakeDescriptionStr(STR_DragMethMove, rStr);
+    rStr = ImpGetDescriptionStr(STR_DragMethMove);
     rStr += " (x="
             + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDX())
             + " y="
@@ -1722,7 +1722,7 @@ SdrDragResize::SdrDragResize(SdrDragView& rNewView)
 
 void SdrDragResize::TakeSdrDragComment(OUString& rStr) const
 {
-    ImpTakeDescriptionStr(STR_DragMethResize, rStr);
+    rStr = ImpGetDescriptionStr(STR_DragMethResize);
     Fraction aFact1(1,1);
     Point aStart(DragStat().GetStart());
     Point aRef(DragStat().GetRef1());
@@ -2058,7 +2058,7 @@ SdrDragRotate::SdrDragRotate(SdrDragView& rNewView)
 
 void SdrDragRotate::TakeSdrDragComment(OUString& rStr) const
 {
-    ImpTakeDescriptionStr(STR_DragMethRotate, rStr);
+    rStr = ImpGetDescriptionStr(STR_DragMethRotate);
     rStr += " (";
     sal_Int32 nTmpAngle(NormAngle36000(nAngle));
 
@@ -2198,7 +2198,7 @@ SdrDragShear::SdrDragShear(SdrDragView& rNewView, bool bSlant1)
 
 void SdrDragShear::TakeSdrDragComment(OUString& rStr) const
 {
-    ImpTakeDescriptionStr(STR_DragMethShear, rStr);
+    rStr = ImpGetDescriptionStr(STR_DragMethShear);
     rStr += " (";
 
     sal_Int32 nTmpAngle(nAngle);
@@ -2413,8 +2413,7 @@ bool SdrDragShear::EndSdrDrag(bool bCopy)
     {
         if (nAngle!=0 && bResize)
         {
-            OUString aStr;
-            ImpTakeDescriptionStr(STR_EditShear,aStr);
+            OUString aStr = ImpGetDescriptionStr(STR_EditShear);
 
             if (bCopy)
                 aStr += SvxResId(STR_EditWithCopy);
@@ -2487,13 +2486,13 @@ bool SdrDragMirror::ImpCheckSide(const Point& rPnt) const
 void SdrDragMirror::TakeSdrDragComment(OUString& rStr) const
 {
     if (aDif.X()==0)
-        ImpTakeDescriptionStr(STR_DragMethMirrorHori,rStr);
+        rStr = ImpGetDescriptionStr(STR_DragMethMirrorHori);
     else if (aDif.Y()==0)
-        ImpTakeDescriptionStr(STR_DragMethMirrorVert,rStr);
+        rStr = ImpGetDescriptionStr(STR_DragMethMirrorVert);
     else if (std::abs(aDif.X()) == std::abs(aDif.Y()))
-        ImpTakeDescriptionStr(STR_DragMethMirrorDiag,rStr);
+        rStr = ImpGetDescriptionStr(STR_DragMethMirrorDiag);
     else
-        ImpTakeDescriptionStr(STR_DragMethMirrorFree,rStr);
+        rStr = ImpGetDescriptionStr(STR_DragMethMirrorFree);
 
     if (getSdrDragView().IsDragWithCopy())
         rStr+=SvxResId(STR_EditWithCopy);
@@ -2597,9 +2596,9 @@ SdrDragGradient::SdrDragGradient(SdrDragView& rNewView, bool bGrad)
 void SdrDragGradient::TakeSdrDragComment(OUString& rStr) const
 {
     if(IsGradient())
-        ImpTakeDescriptionStr(STR_DragMethGradient, rStr);
+        rStr = ImpGetDescriptionStr(STR_DragMethGradient);
     else
-        ImpTakeDescriptionStr(STR_DragMethTransparence, rStr);
+        rStr = ImpGetDescriptionStr(STR_DragMethTransparence);
 }
 
 bool SdrDragGradient::BeginSdrDrag()
@@ -2770,7 +2769,7 @@ SdrDragCrook::SdrDragCrook(SdrDragView& rNewView)
 
 void SdrDragCrook::TakeSdrDragComment(OUString& rStr) const
 {
-    ImpTakeDescriptionStr(!bContortion ? STR_DragMethCrook : STR_DragMethCrookContortion, rStr);
+    rStr = ImpGetDescriptionStr(!bContortion ? STR_DragMethCrook : STR_DragMethCrookContortion);
 
     if(bValid)
     {
@@ -3307,8 +3306,7 @@ bool SdrDragCrook::EndSdrDrag(bool bCopy)
     {
         if (bResize && bUndo)
         {
-            OUString aStr;
-            ImpTakeDescriptionStr(!bContortion?STR_EditCrook:STR_EditCrookContortion,aStr);
+            OUString aStr = ImpGetDescriptionStr(!bContortion?STR_EditCrook:STR_EditCrookContortion);
 
             if (bCopy)
                 aStr += SvxResId(STR_EditWithCopy);
@@ -3387,9 +3385,8 @@ SdrDragDistort::SdrDragDistort(SdrDragView& rNewView)
 
 void SdrDragDistort::TakeSdrDragComment(OUString& rStr) const
 {
-    ImpTakeDescriptionStr(STR_DragMethDistort, rStr);
-
-    rStr += " (x="
+    rStr = ImpGetDescriptionStr(STR_DragMethDistort)
+            + " (x="
             + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDX())
             + " y="
             + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDY())
@@ -3532,9 +3529,8 @@ SdrDragCrop::SdrDragCrop(SdrDragView& rNewView)
 
 void SdrDragCrop::TakeSdrDragComment(OUString& rStr) const
 {
-    ImpTakeDescriptionStr(STR_DragMethCrop, rStr);
-
-    rStr += " (x="
+    rStr = ImpGetDescriptionStr(STR_DragMethCrop)
+            + " (x="
             + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDX())
             + " y="
             + getSdrDragView().GetModel()->GetMetricString(DragStat().GetDY())
@@ -3618,8 +3614,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
 
     if(bUndo)
     {
-        OUString aUndoStr;
-        ImpTakeDescriptionStr(STR_DragMethCrop, aUndoStr);
+        OUString aUndoStr = ImpGetDescriptionStr(STR_DragMethCrop);
 
         getSdrDragView().BegUndo( aUndoStr );
         getSdrDragView().AddUndo( getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));

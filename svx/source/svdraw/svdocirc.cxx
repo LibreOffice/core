@@ -594,9 +594,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 
     if(bCreateComment)
     {
-        OUString aStr;
-        ImpTakeDescriptionStr(STR_ViewCreateObj, aStr);
-        OUStringBuffer aBuf(aStr);
+        OUStringBuffer aBuf(ImpGetDescriptionStr(STR_ViewCreateObj));
         const sal_uInt32 nPointCount(rDrag.GetPointCount());
 
         if(SdrCircKind::Full != meCircleKind && nPointCount > 2)
@@ -629,9 +627,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
         {
             const sal_Int32 nAngle(1 == rDrag.GetHdl()->GetPointNum() ? nStartAngle : nEndAngle);
 
-            OUString aStr;
-            ImpTakeDescriptionStr(STR_DragCircAngle, aStr);
-            OUStringBuffer aBuf(aStr);
+            OUStringBuffer aBuf(ImpGetDescriptionStr(STR_DragCircAngle));
             aBuf.append(" (");
             aBuf.append(SdrModel::GetAngleString(nAngle));
             aBuf.append(')');
