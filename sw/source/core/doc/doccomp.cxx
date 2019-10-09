@@ -1856,8 +1856,8 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
 
     for (auto& a : aComparisons)
     {
-        CompareData& rD0 = *a.first.get();
-        CompareData& rD1 = *a.second.get();
+        CompareData& rD0 = *a.first;
+        CompareData& rD1 = *a.second;
         rD1.CompareLines( rD0 );
         nRet |= rD1.ShowDiffs( rD0 );
     }
@@ -1869,7 +1869,7 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
 
         for (auto& a : aComparisons)
         {
-            CompareData& rD1 = *a.second.get();
+            CompareData& rD1 = *a.second;
             rD1.SetRedlinesToDoc( !bDocWasModified );
         }
         getIDocumentState().SetModified();

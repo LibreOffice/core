@@ -776,7 +776,7 @@ namespace drawinglayer
             {
                 // decompose all buffered SdrFrameBorderData entries and try to merge them
                 // to reduce existing number of BorderLinePrimitive2D(s)
-                for(const auto& rCandidate : *getFrameBorders().get())
+                for(const auto& rCandidate : *getFrameBorders())
                 {
                     // get decomposition on one SdrFrameBorderData entry
                     Primitive2DContainer aPartial;
@@ -838,7 +838,7 @@ namespace drawinglayer
             else
             {
                 // just decompose all buffered SdrFrameBorderData entries, do not try to merge
-                for(const auto& rCandidate : *getFrameBorders().get())
+                for(const auto& rCandidate : *getFrameBorders())
                 {
                     rCandidate.create2DDecomposition(
                         aRetval,
@@ -863,7 +863,7 @@ namespace drawinglayer
             if(getFrameBorders() && doForceToSingleDiscreteUnit())
             {
                 // detect used minimal non-zero partial border width
-                for(const auto& rCandidate : *getFrameBorders().get())
+                for(const auto& rCandidate : *getFrameBorders())
                 {
                     mfMinimalNonZeroBorderWidth = getMinimalNonZeroValue(
                         mfMinimalNonZeroBorderWidth,

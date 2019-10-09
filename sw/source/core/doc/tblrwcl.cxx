@@ -1692,7 +1692,7 @@ static void lcl_CalcNewWidths(const FndLines_t& rFndLines, CpyPara& rPara)
         // selected cells
         for( size_t nLine = 0; nLine < nLineCount; ++nLine )
         {
-            std::vector< sal_uLong > &rWidth = (*rPara.pWidths.get())[ nLine ];
+            std::vector< sal_uLong > &rWidth = (*rPara.pWidths)[ nLine ];
             const FndLine_ *pFndLine = rFndLines[ nLine ].get();
             if( pFndLine && !pFndLine->GetBoxes().empty() )
             {
@@ -1743,7 +1743,7 @@ static void lcl_CalcNewWidths(const FndLines_t& rFndLines, CpyPara& rPara)
     {
         for( size_t nLine = 0; nLine < nLineCount; ++nLine )
         {
-            std::vector< sal_uLong > &rWidth = (*rPara.pWidths.get())[ nLine ];
+            std::vector< sal_uLong > &rWidth = (*rPara.pWidths)[ nLine ];
             const size_t nCount = rWidth.size();
             if( nCount > 2 )
             {
@@ -1775,10 +1775,10 @@ static void lcl_CopyBoxToDoc(FndBox_ const& rFndBox, CpyPara *const pCpyPara)
     if( pCpyPara->pTableNd->GetTable().IsNewModel() )
     {
         if( pCpyPara->nBoxIdx == 1 )
-            nDummy1 = (*pCpyPara->pWidths.get())[pCpyPara->nLnIdx][0];
-        nRealSize = (*pCpyPara->pWidths.get())[pCpyPara->nLnIdx][pCpyPara->nBoxIdx++];
-        if( pCpyPara->nBoxIdx == (*pCpyPara->pWidths.get())[pCpyPara->nLnIdx].size()-1 )
-            nDummy2 = (*pCpyPara->pWidths.get())[pCpyPara->nLnIdx][pCpyPara->nBoxIdx];
+            nDummy1 = (*pCpyPara->pWidths)[pCpyPara->nLnIdx][0];
+        nRealSize = (*pCpyPara->pWidths)[pCpyPara->nLnIdx][pCpyPara->nBoxIdx++];
+        if( pCpyPara->nBoxIdx == (*pCpyPara->pWidths)[pCpyPara->nLnIdx].size()-1 )
+            nDummy2 = (*pCpyPara->pWidths)[pCpyPara->nLnIdx][pCpyPara->nBoxIdx];
     }
     else
     {
