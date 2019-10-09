@@ -160,7 +160,7 @@ namespace
         // read rTarget
         if (osl::File::E_None == rFile->read(static_cast<void*>(aTarget.data()), nLength, nBaseRead) && nLength == nBaseRead)
         {
-            rTarget = OString(aTarget.data(), static_cast< sal_Int32 >(nLength));
+            rTarget = OString(aTarget.data(), static_cast<sal_Int32>(nBaseRead));
             return true;
         }
 
