@@ -523,9 +523,12 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
 
         ScDPSaveData* pSaveData = pDPObject->GetSaveData();
         assert(pSaveData);
+
         const ScDPSaveGroupDimension* pDim = pSaveData->GetDimensionData()->GetNamedGroupDim(aName);
         assert(pDim);
-        const size_t nBase = rCache.GetDimensionIndex(pDim->GetSourceDimName());
+
+        const SCCOL nBase = rCache.GetDimensionIndex(pDim->GetSourceDimName());
+        assert(nBase >= 0);
 
         pDefStrm->startElement(XML_cacheField, XML_name, aName.toUtf8(), XML_numFmtId,
                                OString::number(0), XML_databaseField, ToPsz10(false));
