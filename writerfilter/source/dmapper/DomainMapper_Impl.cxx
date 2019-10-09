@@ -225,6 +225,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsParaMarkerChange( false ),
         m_bParaChanged( false ),
         m_bIsFirstParaInSection( true ),
+        m_bIsFirstParaInSectionAfterRedline( true ),
         m_bDummyParaAddedForTableInSection( false ),
         m_bTextFrameInserted(false),
         m_bIsPreviousParagraphFramed( false ),
@@ -508,11 +509,16 @@ void DomainMapper_Impl::SetIsFirstParagraphInSection( bool bIsFirst )
     m_bIsFirstParaInSection = bIsFirst;
 }
 
-bool DomainMapper_Impl::GetIsFirstParagraphInSection() const
+void DomainMapper_Impl::SetIsFirstParagraphInSectionAfterRedline( bool bIsFirstAfterRedline )
+{
+    m_bIsFirstParaInSectionAfterRedline = bIsFirstAfterRedline;
+}
+
+bool DomainMapper_Impl::GetIsFirstParagraphInSection( bool bAfterRedline ) const
 {
     // Anchored objects may include multiple paragraphs,
     // and none of them should be considered the first para in section.
-    return m_bIsFirstParaInSection
+    return ( bAfterRedline ? m_bIsFirstParaInSectionAfterRedline : m_bIsFirstParaInSection )
                 && !IsInShape()
                 && !m_bIsInComments
                 && !m_bInFootOrEndnote;
@@ -1596,7 +1602,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     // Extend the redline ranges for empty paragraphs
                     if ( !m_bParaChanged && m_previousRedline.get() )
                         CreateRedline( xCur, m_previousRedline );
-                    m_previousRedline.clear();
                     CheckParaMarkerRedline( xCur );
                 }
 
@@ -1685,8 +1690,15 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     if( !IsInHeaderFooter() && !IsInShape() && (!pParaContext || !pParaContext->IsFrameMode()) )
     { // If the paragraph is in a frame, shape or header/footer, it's not a paragraph of the section itself.
         SetIsFirstParagraphInSection(false);
-        SetIsLastParagraphInSection(false);
+        // count first not deleted paragraph as first paragraph in section to avoid of
+        // its deletion later, resulting loss of the associated page break
+        if (!m_previousRedline.get())
+        {
+            SetIsFirstParagraphInSectionAfterRedline(false);
+            SetIsLastParagraphInSection(false);
+        }
     }
+    m_previousRedline.clear();
 
     if (m_bIsFirstParaInShape)
         m_bIsFirstParaInShape = false;
