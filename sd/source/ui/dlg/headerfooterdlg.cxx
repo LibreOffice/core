@@ -160,7 +160,7 @@ HeaderFooterDialog::HeaderFooterDialog(ViewShell* pViewShell, weld::Window* pPar
     , mpDoc( pDoc )
     , mpCurrentPage( pCurrentPage )
     , mpViewShell( pViewShell )
-    , mxTabCtrl(m_xBuilder->weld_notebook("tabs"))
+    , mxTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
     , mxPBApplyToAll(m_xBuilder->weld_button("apply_all"))
     , mxPBApply(m_xBuilder->weld_button("apply"))
     , mxPBCancel(m_xBuilder->weld_button("cancel"))

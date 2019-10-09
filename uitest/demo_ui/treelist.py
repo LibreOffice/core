@@ -27,7 +27,7 @@ class TreeListTest(UITestCase):
 
         xFunctionDlg = self.xUITest.getTopFocusWindow()
 
-        xTabs = xFunctionDlg.getChild("tabs")
+        xTabs = xFunctionDlg.getChild("tabcontrol")
         select_pos(xTabs, "1")
 
         xTreelist = xTabs.getChild("struct")

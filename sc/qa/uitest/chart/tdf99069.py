@@ -58,7 +58,7 @@ class tdf99069(UITestCase):
         #(7) Click on tab "Data Series".  (Actually, tab "Data Range" crashes,
         # too.  This step is just a remnant of what I was doing when I
         # stumbled over the bug.)
-        notebook = xDialog.getChild("notebook")
+        notebook = xDialog.getChild("tabcontrol")
         select_pos(notebook, "0")
         select_pos(notebook, "1")
 
