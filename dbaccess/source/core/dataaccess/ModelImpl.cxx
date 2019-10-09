@@ -511,7 +511,7 @@ namespace
     {
         bool bSomeDocHasMacros = false;
 
-        const OContentHelper_Impl& rContainerData( *_rModel.getObjectContainer( _eType ).get() );
+        const OContentHelper_Impl& rContainerData( *_rModel.getObjectContainer( _eType ) );
         const ODefinitionContainer_Impl& rObjectDefinitions = dynamic_cast< const ODefinitionContainer_Impl& >( rContainerData );
 
         try

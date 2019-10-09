@@ -93,8 +93,8 @@ protected:
     virtual ~OComponentDefinition() override;
     virtual void SAL_CALL disposing() override;
 
-    const   OComponentDefinition_Impl& getDefinition() const { return dynamic_cast< const OComponentDefinition_Impl& >( *m_pImpl.get() ); }
-            OComponentDefinition_Impl& getDefinition()       { return dynamic_cast<       OComponentDefinition_Impl& >( *m_pImpl.get() ); }
+    const   OComponentDefinition_Impl& getDefinition() const { return dynamic_cast< const OComponentDefinition_Impl& >( *m_pImpl ); }
+            OComponentDefinition_Impl& getDefinition()       { return dynamic_cast<       OComponentDefinition_Impl& >( *m_pImpl ); }
 public:
     OComponentDefinition(
         const css::uno::Reference< css::uno::XComponentContext >&,

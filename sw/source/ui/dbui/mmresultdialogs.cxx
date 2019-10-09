@@ -888,7 +888,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
 
         // SwMailConfigDlg writes mail merge email settings only to (global) config,
         // so copy them to the existing config item
-        lcl_UpdateEmailSettingsFromGlobalConfig(*xConfigItem.get());
+        lcl_UpdateEmailSettingsFromGlobalConfig(*xConfigItem);
     }
     //add the documents
     sal_uInt32 nBegin = 0;

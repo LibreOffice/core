@@ -2348,7 +2348,7 @@ void XclImpOptionButtonObj::DoProcessControl( ScfPropertySet& rPropSet ) const
                 if ( pLeader->HasCellLink() && !pTbxObj->HasCellLink() )
                 {
                     // propagate cell link info
-                    pTbxObj->mxCellLink.reset( new ScAddress( *pLeader->mxCellLink.get() ) );
+                    pTbxObj->mxCellLink.reset( new ScAddress( *pLeader->mxCellLink ) );
                     pTbxObj->ApplySheetLinkProps();
                 }
                 pTbxObj = dynamic_cast< XclImpOptionButtonObj* >( GetObjectManager().GetSheetDrawing( GetTab() ).FindDrawObj( pTbxObj->mnNextInGroup ).get() );

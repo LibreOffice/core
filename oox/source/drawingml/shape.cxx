@@ -327,16 +327,16 @@ void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
     SAL_INFO("oox.drawingml", "Shape::applyShapeReference: apply '" << rReferencedShape.msId << "' to '" << msId << "'");
 
     if ( rReferencedShape.mpTextBody.get() && bUseText )
-        mpTextBody = std::make_shared<TextBody>( *rReferencedShape.mpTextBody.get() );
+        mpTextBody = std::make_shared<TextBody>( *rReferencedShape.mpTextBody );
     else
         mpTextBody.reset();
     maShapeProperties = rReferencedShape.maShapeProperties;
     mpShapeRefLinePropPtr = std::make_shared<LineProperties>( rReferencedShape.getActualLineProperties(nullptr) );
     mpShapeRefFillPropPtr = std::make_shared<FillProperties>( rReferencedShape.getActualFillProperties(nullptr, nullptr) );
-    mpCustomShapePropertiesPtr = std::make_shared<CustomShapeProperties>( *rReferencedShape.mpCustomShapePropertiesPtr.get() );
-    mpTablePropertiesPtr = table::TablePropertiesPtr( rReferencedShape.mpTablePropertiesPtr.get() ? new table::TableProperties( *rReferencedShape.mpTablePropertiesPtr.get() ) : nullptr );
+    mpCustomShapePropertiesPtr = std::make_shared<CustomShapeProperties>( *rReferencedShape.mpCustomShapePropertiesPtr );
+    mpTablePropertiesPtr = table::TablePropertiesPtr( rReferencedShape.mpTablePropertiesPtr.get() ? new table::TableProperties( *rReferencedShape.mpTablePropertiesPtr ) : nullptr );
     mpShapeRefEffectPropPtr = std::make_shared<EffectProperties>( rReferencedShape.getActualEffectProperties(nullptr) );
-    mpMasterTextListStyle = std::make_shared<TextListStyle>( *rReferencedShape.mpMasterTextListStyle.get() );
+    mpMasterTextListStyle = std::make_shared<TextListStyle>( *rReferencedShape.mpMasterTextListStyle );
     maSize = rReferencedShape.maSize;
     maPosition = rReferencedShape.maPosition;
     mnRotation = rReferencedShape.mnRotation;

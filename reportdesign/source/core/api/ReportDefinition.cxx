@@ -1988,7 +1988,7 @@ std::shared_ptr<rptui::OReportModel> OReportDefinition::getSdrModel(const uno::R
 SdrModel& OReportDefinition::getSdrModelFromUnoModel() const
 {
     OSL_ENSURE(m_pImpl->m_pReportModel.get(), "No SdrModel in ReportDesign, should not happen");
-    return *m_pImpl->m_pReportModel.get();
+    return *m_pImpl->m_pReportModel;
 }
 
 uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstanceWithArguments( const OUString& aServiceSpecifier, const uno::Sequence< uno::Any >& _aArgs)
