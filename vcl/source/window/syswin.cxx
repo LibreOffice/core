@@ -31,6 +31,7 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/virdev.hxx>
 
 #include <rtl/strbuf.hxx>
 
@@ -67,6 +68,7 @@ SystemWindow::SystemWindow(WindowType nType)
     , mbHideBtn(false)
     , mbSysChild(false)
     , mbIsCalculatingInitialLayoutSize(false)
+    , mbPaintComplete(false)
     , mnMenuBarMode(MenuBarMode::Normal)
     , mnIcon(0)
     , mpImplData(new ImplData)
@@ -1150,6 +1152,58 @@ void SystemWindow::DoInitialLayout()
 void SystemWindow::doDeferredInit(WinBits /*nBits*/)
 {
     SAL_WARN("vcl.layout", "SystemWindow in layout without doDeferredInit impl");
+}
+
+std::vector<OString> SystemWindow::getAllPageUIXMLDescriptions() const
+{
+    // default has no pages
+    return std::vector<OString>();
+}
+
+bool SystemWindow::selectPageByUIXMLDescription(const OString& /*rUIXMLDescription*/)
+{
+    // default cannot select anything (which is okay, return true)
+    return true;
+}
+
+void SystemWindow::createScreenshot(VirtualDevice& rOutput)
+{
+    // same prerequisites as in Execute()
+    setDeferredProperties();
+    ImplAdjustNWFSizes();
+    Show();
+    ToTop();
+    ensureRepaint();
+
+    Point aPos;
+    Size aSize(GetOutputSizePixel());
+
+    rOutput.SetOutputSizePixel(aSize);
+    rOutput.DrawOutDev(aPos, aSize, aPos, aSize, *this);
+}
+
+void SystemWindow::PrePaint(vcl::RenderContext& rRenderContext)
+{
+    Window::PrePaint(rRenderContext);
+    mbPaintComplete = false;
+}
+
+void SystemWindow::PostPaint(vcl::RenderContext& rRenderContext)
+{
+    Window::PostPaint(rRenderContext);
+    mbPaintComplete = true;
+}
+
+void SystemWindow::ensureRepaint()
+{
+    // ensure repaint
+    Invalidate();
+    mbPaintComplete = false;
+
+    while (!mbPaintComplete)
+    {
+        Application::Yield();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
