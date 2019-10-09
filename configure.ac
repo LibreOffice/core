@@ -2985,10 +2985,10 @@ if test $_os = iOS; then
     older_sdk_vers="13.0 12.4 12.2"
     if test "$enable_ios_simulator" = "yes"; then
         platform=iPhoneSimulator
-        versionmin=-mios-simulator-version-min=11.0
+        versionmin=-mios-simulator-version-min=12.2
     else
         platform=iPhoneOS
-        versionmin=-miphoneos-version-min=11.0
+        versionmin=-miphoneos-version-min=12.2
     fi
     xcode_developer=`xcode-select -print-path`
 
