@@ -3223,6 +3223,126 @@ namespace
     }
 }
 
+namespace
+{
+    struct ButtonOrder
+    {
+        const char * m_aType;
+        int m_nPriority;
+    };
+
+    int getButtonPriority(const OString &rType)
+    {
+        static const size_t N_TYPES = 6;
+        static const ButtonOrder aDiscardCancelSave[N_TYPES] =
+        {
+            { "/discard", 0 },
+            { "/cancel", 1 },
+            { "/no", 2 },
+            { "/save", 3 },
+            { "/yes", 3 },
+            { "/ok", 3 }
+        };
+
+        static const ButtonOrder aSaveDiscardCancel[N_TYPES] =
+        {
+            { "/save", 0 },
+            { "/yes", 0 },
+            { "/ok", 0 },
+            { "/discard", 1 },
+            { "/no", 1 },
+            { "/cancel", 2 }
+        };
+
+        const ButtonOrder* pOrder = &aDiscardCancelSave[0];
+
+        const OUString &rEnv = Application::GetDesktopEnvironment();
+
+        if (rEnv.equalsIgnoreAsciiCase("windows") ||
+            rEnv.equalsIgnoreAsciiCase("tde") ||
+            rEnv.startsWithIgnoreAsciiCase("kde"))
+        {
+            pOrder = &aSaveDiscardCancel[0];
+        }
+
+        for (size_t i = 0; i < N_TYPES; ++i, ++pOrder)
+        {
+            if (rType.endsWith(pOrder->m_aType))
+                return pOrder->m_nPriority;
+        }
+
+        return -1;
+    }
+
+    bool sortButtons(const GtkWidget* pA, const GtkWidget* pB)
+    {
+        //order within groups according to platform rules
+        return getButtonPriority(::get_help_id(pA)) < getButtonPriority(::get_help_id(pB));
+    }
+
+    void sort_native_button_order(GtkBox* pContainer)
+    {
+        std::vector<GtkWidget*> aChildren;
+        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pContainer));
+        for (GList* pChild = g_list_first(pChildren); pChild; pChild = g_list_next(pChild))
+            aChildren.push_back(static_cast<GtkWidget*>(pChild->data));
+        g_list_free(pChildren);
+
+        //sort child order within parent so that we match the platform button order
+        std::stable_sort(aChildren.begin(), aChildren.end(), sortButtons);
+
+        for (size_t pos = 0; pos < aChildren.size(); ++pos)
+            gtk_box_reorder_child(pContainer, aChildren[pos], pos);
+    }
+
+    Point get_csd_offset(GtkWidget* pTopLevel)
+    {
+        // try and omit drawing CSD under wayland
+        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pTopLevel));
+        GList* pChild = g_list_first(pChildren);
+
+        int x, y;
+        gtk_widget_translate_coordinates(GTK_WIDGET(pChild->data),
+                                         GTK_WIDGET(pTopLevel),
+                                         0, 0, &x, &y);
+
+        int innerborder = gtk_container_get_border_width(GTK_CONTAINER(pChild->data));
+        g_list_free(pChildren);
+
+        int outerborder = gtk_container_get_border_width(GTK_CONTAINER(pTopLevel));
+        int totalborder = outerborder + innerborder;
+        x -= totalborder;
+        y -= totalborder;
+
+        return Point(x, y);
+    }
+
+    void do_collect_screenshot_data(GtkWidget* pItem, gpointer data)
+    {
+        GtkWidget* pTopLevel = gtk_widget_get_toplevel(pItem);
+
+        int x, y;
+        gtk_widget_translate_coordinates(pItem, pTopLevel, 0, 0, &x, &y);
+
+        Point aOffset = get_csd_offset(pTopLevel);
+
+        GtkAllocation alloc;
+        gtk_widget_get_allocation(pItem, &alloc);
+
+        const basegfx::B2IPoint aCurrentTopLeft(x - aOffset.X(), y - aOffset.Y());
+        const basegfx::B2IRange aCurrentRange(aCurrentTopLeft, aCurrentTopLeft + basegfx::B2IPoint(alloc.width, alloc.height));
+
+        if (!aCurrentRange.isEmpty())
+        {
+            weld::ScreenShotCollection* pCollection = static_cast<weld::ScreenShotCollection*>(data);
+            pCollection->emplace_back(::get_help_id(pItem), aCurrentRange);
+        }
+
+        if (GTK_IS_CONTAINER(pItem))
+            gtk_container_forall(GTK_CONTAINER(pItem), do_collect_screenshot_data, data);
+    }
+}
+
 class GtkInstanceWindow : public GtkInstanceContainer, public virtual weld::Window
 {
 private:
@@ -3434,6 +3554,60 @@ public:
             g_signal_handler_unblock(m_pWidget, m_nToplevelFocusChangedSignalId);
     }
 
+    virtual void draw(VirtualDevice& rOutput) override
+    {
+        // detect if we have to manually setup its size
+        bool bAlreadyRealized = gtk_widget_get_realized(GTK_WIDGET(m_pWindow));
+        // has to be visible for draw to work
+        bool bAlreadyVisible = gtk_widget_get_visible(GTK_WIDGET(m_pWindow));
+        if (!bAlreadyVisible)
+        {
+            if (GTK_IS_DIALOG(m_pWindow))
+                sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(GTK_DIALOG(m_pWindow))));
+            gtk_widget_show(GTK_WIDGET(m_pWindow));
+        }
+
+        if (!bAlreadyRealized)
+        {
+            GtkAllocation allocation;
+            gtk_widget_realize(GTK_WIDGET(m_pWindow));
+            gtk_widget_get_allocation(GTK_WIDGET(m_pWindow), &allocation);
+            gtk_widget_size_allocate(GTK_WIDGET(m_pWindow), &allocation);
+        }
+
+        rOutput.SetOutputSizePixel(get_size());
+        cairo_surface_t* pSurface = get_underlying_cairo_surface(rOutput);
+        cairo_t* cr = cairo_create(pSurface);
+
+        Point aOffset = get_csd_offset(GTK_WIDGET(m_pWindow));
+
+#if defined(GDK_WINDOWING_X11)
+        GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pWindow));
+        if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
+            assert(aOffset.X() == 0 && aOffset.Y() == 0 && "expected offset of 0 under X");
+#endif
+
+        cairo_translate(cr, -aOffset.X(), -aOffset.Y());
+
+        gtk_widget_draw(GTK_WIDGET(m_pWindow), cr);
+
+        cairo_destroy(cr);
+
+        if (!bAlreadyVisible)
+            gtk_widget_hide(GTK_WIDGET(m_pWindow));
+        if (!bAlreadyRealized)
+            gtk_widget_unrealize(GTK_WIDGET(m_pWindow));
+    }
+
+    virtual weld::ScreenShotCollection collect_screenshot_data() override
+    {
+        weld::ScreenShotCollection aRet;
+
+        gtk_container_foreach(GTK_CONTAINER(m_pWindow), do_collect_screenshot_data, &aRet);
+
+        return aRet;
+    }
+
     virtual ~GtkInstanceWindow() override
     {
         if (m_nToplevelFocusChangedSignalId)
@@ -3442,79 +3616,6 @@ public:
             m_xWindow->clear();
     }
 };
-
-namespace
-{
-    struct ButtonOrder
-    {
-        const char * m_aType;
-        int m_nPriority;
-    };
-
-    int getButtonPriority(const OString &rType)
-    {
-        static const size_t N_TYPES = 6;
-        static const ButtonOrder aDiscardCancelSave[N_TYPES] =
-        {
-            { "/discard", 0 },
-            { "/cancel", 1 },
-            { "/no", 2 },
-            { "/save", 3 },
-            { "/yes", 3 },
-            { "/ok", 3 }
-        };
-
-        static const ButtonOrder aSaveDiscardCancel[N_TYPES] =
-        {
-            { "/save", 0 },
-            { "/yes", 0 },
-            { "/ok", 0 },
-            { "/discard", 1 },
-            { "/no", 1 },
-            { "/cancel", 2 }
-        };
-
-        const ButtonOrder* pOrder = &aDiscardCancelSave[0];
-
-        const OUString &rEnv = Application::GetDesktopEnvironment();
-
-        if (rEnv.equalsIgnoreAsciiCase("windows") ||
-            rEnv.equalsIgnoreAsciiCase("tde") ||
-            rEnv.startsWithIgnoreAsciiCase("kde"))
-        {
-            pOrder = &aSaveDiscardCancel[0];
-        }
-
-        for (size_t i = 0; i < N_TYPES; ++i, ++pOrder)
-        {
-            if (rType.endsWith(pOrder->m_aType))
-                return pOrder->m_nPriority;
-        }
-
-        return -1;
-    }
-
-    bool sortButtons(const GtkWidget* pA, const GtkWidget* pB)
-    {
-        //order within groups according to platform rules
-        return getButtonPriority(::get_help_id(pA)) < getButtonPriority(::get_help_id(pB));
-    }
-
-    void sort_native_button_order(GtkBox* pContainer)
-    {
-        std::vector<GtkWidget*> aChildren;
-        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pContainer));
-        for (GList* pChild = g_list_first(pChildren); pChild; pChild = g_list_next(pChild))
-            aChildren.push_back(static_cast<GtkWidget*>(pChild->data));
-        g_list_free(pChildren);
-
-        //sort child order within parent so that we match the platform button order
-        std::stable_sort(aChildren.begin(), aChildren.end(), sortButtons);
-
-        for (size_t pos = 0; pos < aChildren.size(); ++pos)
-            gtk_box_reorder_child(pContainer, aChildren[pos], pos);
-    }
-}
 
 class GtkInstanceDialog;
 
@@ -3861,54 +3962,6 @@ private:
         return false;
     }
 
-    static Point get_csd_offset(GtkWidget* pTopLevel)
-    {
-        // try and omit drawing CSD under wayland
-        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pTopLevel));
-        GList* pChild = g_list_first(pChildren);
-
-        int x, y;
-        gtk_widget_translate_coordinates(GTK_WIDGET(pChild->data),
-                                         GTK_WIDGET(pTopLevel),
-                                         0, 0, &x, &y);
-
-        int innerborder = gtk_container_get_border_width(GTK_CONTAINER(pChild->data));
-        g_list_free(pChildren);
-
-        int outerborder = gtk_container_get_border_width(GTK_CONTAINER(pTopLevel));
-        int totalborder = outerborder + innerborder;
-        x -= totalborder;
-        y -= totalborder;
-
-        return Point(x, y);
-    }
-
-    static void do_collect_screenshot_data(GtkWidget* pItem, gpointer data)
-    {
-        GtkWidget* pTopLevel = gtk_widget_get_toplevel(pItem);
-
-        int x, y;
-        gtk_widget_translate_coordinates(pItem, pTopLevel, 0, 0, &x, &y);
-
-        Point aOffset = get_csd_offset(pTopLevel);
-
-        GtkAllocation alloc;
-        gtk_widget_get_allocation(pItem, &alloc);
-
-        const basegfx::B2IPoint aCurrentTopLeft(x - aOffset.X(), y - aOffset.Y());
-        const basegfx::B2IRange aCurrentRange(aCurrentTopLeft, aCurrentTopLeft + basegfx::B2IPoint(alloc.width, alloc.height));
-
-        if (!aCurrentRange.isEmpty())
-        {
-            weld::ScreenShotCollection* pCollection = static_cast<weld::ScreenShotCollection*>(data);
-            pCollection->emplace_back(::get_help_id(pItem), aCurrentRange);
-        }
-
-        if (GTK_IS_CONTAINER(pItem))
-            gtk_container_forall(GTK_CONTAINER(pItem), do_collect_screenshot_data, data);
-    }
-
-
 public:
     GtkInstanceDialog(GtkWindow* pDialog, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWindow(pDialog, pBuilder, bTakeOwnership)
@@ -4123,59 +4176,6 @@ public:
     virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>&) override
     {
         //not implemented for the gtk variant
-    }
-
-    virtual void draw(VirtualDevice& rOutput) override
-    {
-        // detect if we have to manually setup its size
-        bool bAlreadyRealized = gtk_widget_get_realized(GTK_WIDGET(m_pDialog));
-        // has to be visible for draw to work
-        bool bAlreadyVisible = gtk_widget_get_visible(GTK_WIDGET(m_pDialog));
-        if (!bAlreadyVisible)
-        {
-            sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(GTK_DIALOG(m_pDialog))));
-            gtk_widget_show(GTK_WIDGET(m_pDialog));
-        }
-
-        if (!bAlreadyRealized)
-        {
-            GtkAllocation allocation;
-            gtk_widget_realize(GTK_WIDGET(m_pDialog));
-            gtk_widget_get_allocation(GTK_WIDGET(m_pDialog), &allocation);
-            gtk_widget_size_allocate(GTK_WIDGET(m_pDialog), &allocation);
-        }
-
-        rOutput.SetOutputSizePixel(get_size());
-        cairo_surface_t* pSurface = get_underlying_cairo_surface(rOutput);
-        cairo_t* cr = cairo_create(pSurface);
-
-        Point aOffset = get_csd_offset(GTK_WIDGET(m_pDialog));
-
-#if defined(GDK_WINDOWING_X11)
-        GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pDialog));
-        if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
-            assert(aOffset.X() == 0 && aOffset.Y() == 0 && "expected offset of 0 under X");
-#endif
-
-        cairo_translate(cr, -aOffset.X(), -aOffset.Y());
-
-        gtk_widget_draw(GTK_WIDGET(m_pDialog), cr);
-
-        cairo_destroy(cr);
-
-        if (!bAlreadyVisible)
-            gtk_widget_hide(GTK_WIDGET(m_pDialog));
-        if (!bAlreadyRealized)
-            gtk_widget_unrealize(GTK_WIDGET(m_pDialog));
-    }
-
-    virtual weld::ScreenShotCollection collect_screenshot_data() override
-    {
-        weld::ScreenShotCollection aRet;
-
-        gtk_container_foreach(GTK_CONTAINER(m_pDialog), do_collect_screenshot_data, &aRet);
-
-        return aRet;
     }
 
     virtual ~GtkInstanceDialog() override
@@ -11748,7 +11748,6 @@ public:
         return sPageHelpId;
     }
 
-
     virtual ~GtkInstanceBuilder() override
     {
         g_slist_free(m_pObjectList);
@@ -11795,12 +11794,50 @@ public:
 
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString &id, bool bTakeOwnership) override
     {
-        GtkDialog* pDialog = GTK_DIALOG(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        GtkWindow* pDialog = GTK_WINDOW(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pDialog)
             return nullptr;
         if (m_pParentWidget)
-            gtk_window_set_transient_for(GTK_WINDOW(pDialog), GTK_WINDOW(gtk_widget_get_toplevel(m_pParentWidget)));
-        return std::make_unique<GtkInstanceDialog>(GTK_WINDOW(pDialog), this, bTakeOwnership);
+            gtk_window_set_transient_for(pDialog, GTK_WINDOW(gtk_widget_get_toplevel(m_pParentWidget)));
+        return std::make_unique<GtkInstanceDialog>(pDialog, this, bTakeOwnership);
+    }
+
+    virtual std::unique_ptr<weld::Window> create_screenshot_window() override
+    {
+        GtkWidget* pTopLevel = nullptr;
+
+        for (GSList* l = m_pObjectList; l; l = g_slist_next(l))
+        {
+            GObject* pObj = static_cast<GObject*>(l->data);
+
+            if (!GTK_IS_WIDGET(pObj) || gtk_widget_get_parent(GTK_WIDGET(pObj)))
+                continue;
+
+            if (!pTopLevel)
+                pTopLevel = GTK_WIDGET(pObj);
+            else if (GTK_IS_WINDOW(pObj))
+                pTopLevel = GTK_WIDGET(pObj);
+        }
+
+        if (!pTopLevel)
+            return nullptr;
+
+        GtkWindow* pDialog;
+        if (GTK_IS_WINDOW(pTopLevel))
+            pDialog = GTK_WINDOW(pTopLevel);
+        else
+        {
+            pDialog = GTK_WINDOW(gtk_dialog_new());
+            ::set_help_id(GTK_WIDGET(pDialog), ::get_help_id(pTopLevel));
+
+            GtkWidget* pContentArea = gtk_dialog_get_content_area(GTK_DIALOG(pDialog));
+            gtk_container_add(GTK_CONTAINER(pContentArea), pTopLevel);
+            gtk_widget_show_all(pTopLevel);
+        }
+
+        if (m_pParentWidget)
+            gtk_window_set_transient_for(pDialog, GTK_WINDOW(gtk_widget_get_toplevel(m_pParentWidget)));
+        return std::make_unique<GtkInstanceDialog>(pDialog, this, true);
     }
 
     virtual std::unique_ptr<weld::Window> weld_window(const OString &id, bool bTakeOwnership) override

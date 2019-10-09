@@ -35,6 +35,7 @@
 #include <messagedialog.hxx>
 #include <treeglue.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
+#include <unotools/configmgr.hxx>
 #include <utility>
 #include <tools/helpers.hxx>
 #include <vcl/abstdlg.hxx>
@@ -1059,6 +1060,34 @@ std::unique_ptr<weld::Container> SalInstanceWidget::weld_parent() const
     return std::make_unique<SalInstanceContainer>(pParent, m_pBuilder, false);
 }
 
+namespace
+{
+    void CollectChildren(const vcl::Window& rCurrent, const basegfx::B2IPoint& rTopLeft, weld::ScreenShotCollection& rControlDataCollection)
+    {
+        if (rCurrent.IsVisible())
+        {
+            const Point aCurrentPos(rCurrent.GetPosPixel());
+            const Size aCurrentSize(rCurrent.GetSizePixel());
+            const basegfx::B2IPoint aCurrentTopLeft(rTopLeft.getX() + aCurrentPos.X(), rTopLeft.getY() + aCurrentPos.Y());
+            const basegfx::B2IRange aCurrentRange(aCurrentTopLeft, aCurrentTopLeft + basegfx::B2IPoint(aCurrentSize.Width(), aCurrentSize.Height()));
+
+            if (!aCurrentRange.isEmpty())
+            {
+                rControlDataCollection.emplace_back(rCurrent.GetHelpId(), aCurrentRange);
+            }
+
+            for (sal_uInt16 a(0); a < rCurrent.GetChildCount(); a++)
+            {
+                vcl::Window* pChild = rCurrent.GetChild(a);
+                if (nullptr != pChild)
+                {
+                    CollectChildren(*pChild, aCurrentTopLeft, rControlDataCollection);
+                }
+            }
+        }
+    }
+}
+
 class SalInstanceWindow : public SalInstanceContainer, public virtual weld::Window
 {
 private:
@@ -1221,6 +1250,26 @@ public:
         SalInstanceContainer::HandleEventListener(rEvent);
     }
 
+    virtual void draw(VirtualDevice& rOutput) override
+    {
+        SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get());
+        assert(pSysWin);
+        pSysWin->createScreenshot(rOutput);
+    }
+
+    virtual weld::ScreenShotCollection collect_screenshot_data() override
+    {
+        weld::ScreenShotCollection aRet;
+
+        // collect all children. Choose start pos to be negative
+        // of target dialog's position to get all positions relative to (0,0)
+        const Point aParentPos(m_xWindow->GetPosPixel());
+        const basegfx::B2IPoint aTopLeft(-aParentPos.X(), -aParentPos.Y());
+        CollectChildren(*m_xWindow, aTopLeft, aRet);
+
+        return aRet;
+    }
+
     virtual ~SalInstanceWindow() override
     {
         clear_child_help(m_xWindow);
@@ -1253,34 +1302,6 @@ namespace
             else if (isContainerWindow(pChild))
             {
                 hideUnless(pChild, rVisibleWidgets, rWasVisibleWidgets);
-            }
-        }
-    }
-}
-
-namespace
-{
-    void CollectChildren(const vcl::Window& rCurrent, const basegfx::B2IPoint& rTopLeft, weld::ScreenShotCollection& rControlDataCollection)
-    {
-        if (rCurrent.IsVisible())
-        {
-            const Point aCurrentPos(rCurrent.GetPosPixel());
-            const Size aCurrentSize(rCurrent.GetSizePixel());
-            const basegfx::B2IPoint aCurrentTopLeft(rTopLeft.getX() + aCurrentPos.X(), rTopLeft.getY() + aCurrentPos.Y());
-            const basegfx::B2IRange aCurrentRange(aCurrentTopLeft, aCurrentTopLeft + basegfx::B2IPoint(aCurrentSize.Width(), aCurrentSize.Height()));
-
-            if (!aCurrentRange.isEmpty())
-            {
-                rControlDataCollection.emplace_back(rCurrent.GetHelpId(), aCurrentRange);
-            }
-
-            for (sal_uInt16 a(0); a < rCurrent.GetChildCount(); a++)
-            {
-                vcl::Window* pChild = rCurrent.GetChild(a);
-                if (nullptr != pChild)
-                {
-                    CollectChildren(*pChild, aCurrentTopLeft, rControlDataCollection);
-                }
             }
         }
     }
@@ -1474,23 +1495,6 @@ public:
         return new SalInstanceContainer(m_xDialog->get_content_area(), m_pBuilder, false);
     }
 
-    virtual void draw(VirtualDevice& rOutput) override
-    {
-        m_xDialog->createScreenshot(rOutput);
-    }
-
-    virtual weld::ScreenShotCollection collect_screenshot_data() override
-    {
-        weld::ScreenShotCollection aRet;
-
-        // collect all children. Choose start pos to be negative
-        // of target dialog's position to get all positions relative to (0,0)
-        const Point aParentPos(m_xDialog->GetPosPixel());
-        const basegfx::B2IPoint aTopLeft(-aParentPos.X(), -aParentPos.Y());
-        CollectChildren(*m_xDialog, aTopLeft, aRet);
-
-        return aRet;
-    }
 };
 
 IMPL_LINK(SalInstanceDialog, PopupScreenShotMenuHdl, const CommandEvent&, rCEvt, bool)
@@ -5759,6 +5763,34 @@ public:
         return pRet;
     }
 
+    virtual std::unique_ptr<weld::Window> create_screenshot_window() override
+    {
+        assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
+
+        vcl::Window *pRoot = m_xBuilder->get_widget_root();
+        if (SystemWindow *pWindow = dynamic_cast<SystemWindow*>(pRoot))
+        {
+            std::unique_ptr<weld::Window> xRet(new SalInstanceWindow(pWindow, this, false));
+            m_aOwnedToplevel.set(pWindow);
+            m_xBuilder->drop_ownership(pWindow);
+            return xRet;
+        }
+
+        VclPtrInstance<Dialog> xDialog(nullptr, WB_HIDE | WB_STDDIALOG | WB_SIZEABLE | WB_CLOSEABLE, Dialog::InitFlag::NoParent);
+        xDialog->SetText(utl::ConfigManager::getProductName());
+
+        auto xContentArea = VclPtr<VclVBox>::Create(xDialog, false, 12);
+        pRoot->SetParent(xContentArea);
+        assert(pRoot == xContentArea->GetWindow(GetWindowType::FirstChild));
+        xContentArea->Show();
+        pRoot->Show();
+        xDialog->SetHelpId(pRoot->GetHelpId());
+
+        m_aOwnedToplevel.set(xDialog);
+
+        return std::unique_ptr<weld::Dialog>(new SalInstanceDialog(xDialog, this, false));
+    }
+
     virtual std::unique_ptr<weld::Window> weld_window(const OString &id, bool bTakeOwnership) override
     {
         SystemWindow* pWindow = m_xBuilder->get<SystemWindow>(id);
@@ -5799,6 +5831,8 @@ public:
     virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString &id, bool bTakeOwnership) override
     {
         vcl::Window* pNotebook = m_xBuilder->get<vcl::Window>(id);
+        if (!pNotebook)
+            return nullptr;
         if (pNotebook->GetType() == WindowType::TABCONTROL)
             return std::make_unique<SalInstanceNotebook>(static_cast<TabControl*>(pNotebook), this, bTakeOwnership);
         if (pNotebook->GetType() == WindowType::VERTICALTABCONTROL)
