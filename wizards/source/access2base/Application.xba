@@ -217,15 +217,20 @@ Const cstSepar = &quot;!&quot;
 
 	Set vAllDialogs = Nothing
 
-	Set vCurrentDocument = _A2B_.CurrentDocument
+	Set vCurrentDocument = Nothing
+	If Not IsNull(_A2B_.CurrentDocument) Then
+		Set vCurrentDocument = _A2B_.CurrentDocument.Document
+	ElseIf Not IsNull(ThisComponent) Then
+		Set vCurrentDocument = ThisComponent
+	End If
 	If IsNull(vCurrentDocument) Then
 		Set oDocLibraries = Nothing
 		vDocLibraries = Array()
 	Else
-		Set oDocLibraries = _A2B_.CurrentDocument.Document.DialogLibraries	&apos;	ThisComponent.DialogLibraries
+		Set oDocLibraries = vCurrentDocument.DialogLibraries
 		vDocLibraries = oDocLibraries.getElementNames()
 	End If
-	Set oMacLibraries = DialogLibraries
+	Set oMacLibraries = GlobalScope.DialogLibraries
 	vMacLibraries = oMacLibraries.getElementNames()
 	&apos;Remove Access2Base from the list
 	If _A2B_.ExcludeA2B Then
