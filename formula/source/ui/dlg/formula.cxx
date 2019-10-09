@@ -233,7 +233,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
     , m_nSelectionEnd(-1)
     , m_pTheRefEdit(nullptr)
     , m_pTheRefButton(nullptr)
-    , m_xTabCtrl(rBuilder.weld_notebook("tabs"))
+    , m_xTabCtrl(rBuilder.weld_notebook("tabcontrol"))
     , m_xParaWinBox(rBuilder.weld_container("BOX"))
     , m_xFtHeadLine(rBuilder.weld_label("headline"))
     , m_xFtFuncName(rBuilder.weld_label("funcname"))

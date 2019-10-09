@@ -963,7 +963,7 @@ IMPL_LINK_NOARG(SvxTPFilter, RefHandle, weld::Button&, void)
 
 SvxAcceptChgCtr::SvxAcceptChgCtr(weld::Container* pParent, weld::Window* pDialog, weld::Builder* pTopLevel)
     : m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/redlinecontrol.ui"))
-    , m_xTabCtrl(m_xBuilder->weld_notebook("RedlineControl"))
+    , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
 {
     m_xTabCtrl->connect_enter_page(LINK(this, SvxAcceptChgCtr, ActivatePageHdl));
     m_xTabCtrl->connect_leave_page(LINK(this, SvxAcceptChgCtr, DeactivatePageHdl));
