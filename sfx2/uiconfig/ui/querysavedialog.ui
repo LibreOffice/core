@@ -22,7 +22,7 @@
             <property name="can_focus">False</property>
             <child>
               <object class="GtkButton" id="discard">
-                <property name="label" translatable="yes" context="querysavedialog|discard">_Don’t Save</property>
+                <property name="label" translatable="yes" context="querysavedialog|discard">Do_n’t Save</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

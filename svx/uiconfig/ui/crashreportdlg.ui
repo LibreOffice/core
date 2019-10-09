@@ -50,7 +50,7 @@ Thank you for your help in improving %PRODUCTNAME.</property>
             </child>
             <child>
               <object class="GtkButton" id="btn_cancel">
-                <property name="label" translatable="yes" context="crashreportdlg|btn_cancel">_Don’t Send</property>
+                <property name="label" translatable="yes" context="crashreportdlg|btn_cancel">Do_n’t Send</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
