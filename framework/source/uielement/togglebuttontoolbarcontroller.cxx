@@ -243,6 +243,10 @@ void ToggleButtonToolbarController::executeControlCommand( const css::frame::Con
             }
         }
     }
+    else if ( rControlCommand.Command == "createPopupMenu" )
+    {
+        createPopupWindow();
+    }
 }
 
 IMPL_LINK( ToggleButtonToolbarController, MenuSelectHdl, Menu *, pMenu, bool )
