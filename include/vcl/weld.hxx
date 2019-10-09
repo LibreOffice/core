@@ -1937,6 +1937,13 @@ public:
     virtual std::unique_ptr<Toolbar> weld_toolbar(const OString& id, bool bTakeOwnership = true)
         = 0;
     virtual std::unique_ptr<SizeGroup> create_size_group() = 0;
+    /* return a Dialog suitable to take a screenshot of containing the contents of the .ui file.
+
+       If the toplevel element is a dialog, that will be returned
+       If the toplevel is not a dialog, a dialog will be created and the contents of the .ui
+       inserted into it
+    */
+    virtual std::unique_ptr<Dialog> create_screenshot_dialog() = 0;
     virtual ~Builder() {}
 };
 

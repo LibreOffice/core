@@ -11799,6 +11799,11 @@ public:
         return std::make_unique<GtkInstanceDialog>(GTK_WINDOW(pDialog), this, bTakeOwnership);
     }
 
+    virtual std::unique_ptr<weld::Dialog> create_screenshot_dialog() override
+    {
+        return nullptr;
+    }
+
     virtual std::unique_ptr<weld::Window> weld_window(const OString &id, bool bTakeOwnership) override
     {
         GtkWindow* pWindow = GTK_WINDOW(gtk_builder_get_object(m_pBuilder, id.getStr()));

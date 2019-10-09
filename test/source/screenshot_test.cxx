@@ -20,6 +20,7 @@
 #include <vcl/pngwrite.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld.hxx>
 #include <unotools/configmgr.hxx>
 #include <tools/stream.hxx>
 
@@ -109,20 +110,17 @@ void ScreenshotTest::saveScreenshot(VclAbstractDialog const & rDialog)
     }
 }
 
-void ScreenshotTest::saveScreenshot(Dialog& rDialog)
+void ScreenshotTest::saveScreenshot(weld::Dialog& rDialog)
 {
     VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
-    rDialog.createScreenshot(*xDialogSurface);
+    rDialog.draw(*xDialogSurface);
     const BitmapEx aScreenshot(xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel()));
 
     if (!aScreenshot.IsEmpty())
     {
-        const OString aScreenshotId = rDialog.GetScreenshotId();
-
-        if (!aScreenshotId.isEmpty())
-        {
-            implSaveScreenshot(aScreenshot, aScreenshotId);
-        }
+        const OString aScreenshotId = rDialog.get_help_id();
+        assert(!aScreenshotId.isEmpty());
+        implSaveScreenshot(aScreenshot, aScreenshotId);
     }
 }
 
@@ -162,17 +160,26 @@ void ScreenshotTest::dumpDialogToPath(VclAbstractDialog& rDialog)
     }
 }
 
-void ScreenshotTest::dumpDialogToPath(Dialog& rDialog)
+void ScreenshotTest::dumpDialogToPath(weld::Builder& rBuilder)
 {
-    const std::vector<OString> aPageDescriptions(rDialog.getAllPageUIXMLDescriptions());
+    std::unique_ptr<weld::Dialog> xDialog(rBuilder.create_screenshot_dialog());
 
-    if (!aPageDescriptions.empty())
+    auto xTabCtrl = rBuilder.weld_notebook("tabcontrol");
+
+    int nPages = xTabCtrl ? xTabCtrl->get_n_pages() : 0;
+    if (nPages)
     {
-        for (size_t a(0); a < aPageDescriptions.size(); a++)
+        for (int i = 0; i < nPages; ++i)
         {
-            if (rDialog.selectPageByUIXMLDescription(aPageDescriptions[a]))
+            OString sIdent(xTabCtrl->get_page_ident(i));
+            xTabCtrl->set_current_page(sIdent);
+            if (xTabCtrl->get_current_page_ident() == sIdent)
             {
-                saveScreenshot(rDialog);
+                OString sOrigHelpId(xDialog->get_help_id());
+                weld::Container* pPage = xTabCtrl->get_page(sIdent);
+                xDialog->set_help_id(pPage->get_help_id());
+                saveScreenshot(*xDialog);
+                xDialog->set_help_id(sOrigHelpId);
             }
             else
             {
@@ -182,7 +189,7 @@ void ScreenshotTest::dumpDialogToPath(Dialog& rDialog)
     }
     else
     {
-        saveScreenshot(rDialog);
+        saveScreenshot(*xDialog);
     }
 }
 
@@ -190,41 +197,18 @@ void ScreenshotTest::dumpDialogToPath(const OString& rUIXMLDescription)
 {
     if (!rUIXMLDescription.isEmpty())
     {
-        VclPtrInstance<Dialog> pDialog(Application::GetDefDialogParent(), WB_STDDIALOG | WB_SIZEABLE, Dialog::InitFlag::NoParent);
-
-        {
-            VclPtr<vcl::Window> aOwnedToplevel;
-
-            bool bLegacy = rUIXMLDescription == "fps/ui/remotefilesdialog.ui" ||
-                           rUIXMLDescription == "modules/swriter/ui/sidebarstylepresets.ui" ||
-                           rUIXMLDescription == "modules/swriter/ui/sidebartheme.ui" ||
-                           rUIXMLDescription == "sfx/ui/startcenter.ui" ||
-                           rUIXMLDescription == "svx/ui/datanavigator.ui";
-            std::unique_ptr<VclBuilder> xBuilder(new VclBuilder(pDialog, VclBuilderContainer::getUIRootDir(), OStringToOUString(rUIXMLDescription, RTL_TEXTENCODING_UTF8), OString(), css::uno::Reference<css::frame::XFrame>(), bLegacy));
-            vcl::Window *pRoot = xBuilder->get_widget_root();
-            Dialog *pRealDialog = dynamic_cast<Dialog*>(pRoot);
-
-            if (!pRealDialog)
-            {
-                pRealDialog = pDialog;
-            }
-            else
-            {
-                aOwnedToplevel.set(pRoot);
-                xBuilder->drop_ownership(pRoot);
-            }
-
-            pRealDialog->SetText(utl::ConfigManager::getProductName());
-            pRealDialog->SetStyle(pDialog->GetStyle() | WB_CLOSEABLE);
-
-            dumpDialogToPath(*pRealDialog);
-
-            if (VclBuilderContainer* pOwnedToplevel = dynamic_cast<VclBuilderContainer*>(aOwnedToplevel.get()))
-                pOwnedToplevel->m_pUIBuilder = std::move(xBuilder);
-            aOwnedToplevel.disposeAndClear();
-        }
-
-        pDialog.disposeAndClear();
+        weld::Window* pParent = nullptr;
+        bool bLegacy = rUIXMLDescription == "fps/ui/remotefilesdialog.ui" ||
+                       rUIXMLDescription == "modules/swriter/ui/sidebarstylepresets.ui" ||
+                       rUIXMLDescription == "modules/swriter/ui/sidebartheme.ui" ||
+                       rUIXMLDescription == "sfx/ui/startcenter.ui" ||
+                       rUIXMLDescription == "svx/ui/datanavigator.ui";
+        std::unique_ptr<weld::Builder> xBuilder;
+        if (bLegacy)
+            xBuilder.reset(Application::CreateInterimBuilder(pParent, OStringToOUString(rUIXMLDescription, RTL_TEXTENCODING_UTF8)));
+        else
+            xBuilder.reset(Application::CreateBuilder(pParent, OStringToOUString(rUIXMLDescription, RTL_TEXTENCODING_UTF8)));
+        dumpDialogToPath(*xBuilder);
     }
 }
 
@@ -273,7 +257,7 @@ void ScreenshotTest::processDialogBatchFile(const OUString& rFile)
             else
             {
                 // unknown dialog, try fallback to generic created
-                // VclBuilder-generated instance. Keep in mind that Dialogs
+                // Builder-generated instance. Keep in mind that Dialogs
                 // using this mechanism will probably not be layouted well
                 // since the setup/initialization part is missing. Thus,
                 // only use for fallback when only the UI file is available.
