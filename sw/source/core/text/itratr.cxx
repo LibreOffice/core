@@ -532,7 +532,7 @@ static bool CanSkipOverRedline(
                         // store the effective items & compare all at the end
                         SfxItemSet const& rSet((pAttr->Which() == RES_TXTATR_CHARFMT)
                             ? static_cast<SfxItemSet const&>(pAttr->GetCharFormat().GetCharFormat()->GetAttrSet())
-                            : *pAttr->GetAutoFormat().GetStyleHandle().get());
+                            : *pAttr->GetAutoFormat().GetStyleHandle());
                         InsertCharAttrs(activeCharAttrsStart, rSet);
                     }
                     break;
@@ -622,7 +622,7 @@ static bool CanSkipOverRedline(
                         }
                         SfxItemSet const& rSet((pAttr->Which() == RES_TXTATR_CHARFMT)
                             ? static_cast<SfxItemSet const&>(pAttr->GetCharFormat().GetCharFormat()->GetAttrSet())
-                            : *pAttr->GetAutoFormat().GetStyleHandle().get());
+                            : *pAttr->GetAutoFormat().GetStyleHandle());
                         InsertCharAttrs(activeCharAttrsEnd, rSet);
 
                     }

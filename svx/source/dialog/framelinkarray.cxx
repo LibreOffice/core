@@ -1235,7 +1235,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
                     if (rLeft.IsUsed())
                     {
-                        HelperCreateVerticalEntry(*this, rLeft, nCol, nRow, aOrigin, aX, aY, *aData.get(), true, pForceColor);
+                        HelperCreateVerticalEntry(*this, rLeft, nCol, nRow, aOrigin, aX, aY, *aData, true, pForceColor);
                     }
                 }
             }

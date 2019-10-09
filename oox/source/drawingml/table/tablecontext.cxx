@@ -33,7 +33,7 @@ namespace oox { namespace drawingml { namespace table {
 
 TableContext::TableContext( ContextHandler2Helper const & rParent, const ShapePtr& pShapePtr )
 : ShapeContext( rParent, ShapePtr(), pShapePtr )
-, mrTableProperties( *pShapePtr->getTableProperties().get() )
+, mrTableProperties( *pShapePtr->getTableProperties() )
 {
     pShapePtr->setTableType();
 }

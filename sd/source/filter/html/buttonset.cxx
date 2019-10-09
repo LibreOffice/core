@@ -192,7 +192,7 @@ bool ButtonSetImpl::getPreview( int nSet, const std::vector< OUString >& rButton
 {
     if( (nSet >= 0) && (nSet < static_cast<int>(maButtons.size())))
     {
-        ButtonsImpl& rSet = *maButtons[nSet].get();
+        ButtonsImpl& rSet = *maButtons[nSet];
 
         std::vector< Graphic > aGraphics;
 
@@ -240,7 +240,7 @@ bool ButtonSetImpl::exportButton( int nSet, const OUString& rPath, const OUStrin
 {
     if( (nSet >= 0) && (nSet < static_cast<int>(maButtons.size())))
     {
-        ButtonsImpl& rSet = *maButtons[nSet].get();
+        ButtonsImpl& rSet = *maButtons[nSet];
 
         return rSet.copyGraphic( rName, rPath );
     }
