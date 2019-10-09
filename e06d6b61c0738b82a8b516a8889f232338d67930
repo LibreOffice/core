@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_4eddc912",
+        "filename": "include/xmlreader/span.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-09T22:08:08Z",
+      "side": 1,
+      "message": "this include can be removed again",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 21
+      },
+      "revId": "e06d6b61c0738b82a8b516a8889f232338d67930",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_6ee205d8",
+        "filename": "xmlreader/source/span.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-09T22:08:08Z",
+      "side": 1,
+      "message": "why leave an additional empty line behind",
+      "revId": "e06d6b61c0738b82a8b516a8889f232338d67930",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
