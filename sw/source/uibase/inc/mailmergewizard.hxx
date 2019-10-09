@@ -64,7 +64,7 @@ public:
     virtual ~SwMailMergeWizard() override;
 
     SwView*                     GetSwView() {return m_pSwView;}
-    SwMailMergeConfigItem&      GetConfigItem() { return *m_xConfigItem.get();}
+    SwMailMergeConfigItem&      GetConfigItem() { return *m_xConfigItem;}
 
     void                    SetReloadDocument(const OUString& rURL) {sDocumentURL = rURL;}
     const OUString&         GetReloadDocument() const {return sDocumentURL;}

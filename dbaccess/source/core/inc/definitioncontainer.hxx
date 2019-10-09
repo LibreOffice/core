@@ -144,12 +144,12 @@ protected:
 
     const ODefinitionContainer_Impl& getDefinitions() const
     {
-        return dynamic_cast< const ODefinitionContainer_Impl& >( *m_pImpl.get() );
+        return dynamic_cast< const ODefinitionContainer_Impl& >( *m_pImpl );
     }
 
     ODefinitionContainer_Impl&  getDefinitions()
     {
-        return dynamic_cast<       ODefinitionContainer_Impl& >( *m_pImpl.get() );
+        return dynamic_cast<       ODefinitionContainer_Impl& >( *m_pImpl );
     }
 public:
     /** constructs the container.

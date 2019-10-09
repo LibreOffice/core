@@ -259,7 +259,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                         if ( pObject )
                         {
                             // Clone to target SdrModel
-                            SdrObject* pNewObj(pObject->CloneSdrObject(*m_pModel.get()));
+                            SdrObject* pNewObj(pObject->CloneSdrObject(*m_pModel));
                             m_pPage->InsertObject(pNewObj, SAL_MAX_SIZE);
                             tools::Rectangle aRet(VCLPoint(rCopy->getPosition()),VCLSize(rCopy->getSize()));
                             aRet.setHeight(aRet.getHeight() + 1);
