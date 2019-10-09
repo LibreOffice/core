@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_8b3513dd",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1079,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-10-09T09:57:12Z",
+      "side": 1,
+      "message": "If we are searching in the styles for a value, then it doesn\u0027t matter if the node doesn\u0027t have any attributes. So this should probably be (!bHasAttrSet \u0026\u0026 !bSearchInParent)\n\nThis patch (along with the above modification) should have solved tdf#118812, but it hasn\u0027t.\n\nAll this to say that you might want to be cautious about backporting this one. However, I think it definitely DOES move forward, and don\u0027t think it would be regressive..., so in that sense there isn\u0027t a huge concern.\n\nExpect lots of change in this space in LO 6.4 or 6.5.",
+      "range": {
+        "startLine": 1079,
+        "startChar": 29,
+        "endLine": 1079,
+        "endChar": 41
+      },
+      "revId": "3d5497a4ab5aea9de53f52725b83da7bceea727e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
