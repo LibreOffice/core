@@ -1590,7 +1590,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     // Extend the redline ranges for empty paragraphs
                     if ( !m_bParaChanged && m_previousRedline.get() )
                         CreateRedline( xCur, m_previousRedline );
-                    m_previousRedline.clear();
                     CheckParaMarkerRedline( xCur );
                 }
 
@@ -1676,11 +1675,15 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         SetIsPreviousParagraphFramed(false);
 
     m_bParaChanged = false;
-    if( !IsInHeaderFooter() && !IsInShape() && (!pParaContext || !pParaContext->IsFrameMode()) )
+    if( !IsInHeaderFooter() && !IsInShape() && (!pParaContext || !pParaContext->IsFrameMode()) &&
+        // count first not deleted paragraph as first paragraph in section to avoid of
+        // its deletion later, resulting loss of the associated page break
+        !m_previousRedline.get())
     { // If the paragraph is in a frame, shape or header/footer, it's not a paragraph of the section itself.
         SetIsFirstParagraphInSection(false);
         SetIsLastParagraphInSection(false);
     }
+    m_previousRedline.clear();
 
     if (m_bIsFirstParaInShape)
         m_bIsFirstParaInShape = false;
