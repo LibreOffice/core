@@ -32,7 +32,7 @@ public:
         , const css::uno::Reference< css::frame::XModel >& xChartModel );
     virtual ~DragMethod_PieSegment() override;
 
-    virtual void TakeSdrDragComment(OUString& rStr) const override;
+    virtual OUString GetSdrDragComment() const override;
     virtual bool BeginSdrDrag() override;
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual bool EndSdrDrag(bool bCopy) override;

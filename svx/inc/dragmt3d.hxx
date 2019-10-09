@@ -71,7 +71,7 @@ public:
         E3dDragConstraint eConstr,
         bool bFull);
 
-    virtual void TakeSdrDragComment(OUString& rStr) const override;
+    virtual OUString GetSdrDragComment() const override;
     virtual bool BeginSdrDrag() override;
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual void CancelSdrDrag() override;

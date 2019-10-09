@@ -1161,10 +1161,8 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
 #define STR_NOTHING "nothing"
 OUString SdrView::GetStatusText()
 {
-    OUString aStr;
     OUString aName;
-
-    aStr += STR_NOTHING;
+    OUString aStr = STR_NOTHING;
 
     if (pCurrentCreate!=nullptr)
     {
@@ -1189,7 +1187,7 @@ OUString SdrView::GetStatusText()
                 SAL_INFO(
                     "svx.svdraw",
                     "(" << this << ") " << mpCurrentSdrDragMethod.get());
-                mpCurrentSdrDragMethod->TakeSdrDragComment(aStr);
+                aStr = mpCurrentSdrDragMethod->GetSdrDragComment();
             }
         }
     }

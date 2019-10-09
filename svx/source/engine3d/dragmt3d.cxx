@@ -103,8 +103,9 @@ E3dDragMethod::E3dDragMethod (
     }
 }
 
-void E3dDragMethod::TakeSdrDragComment(OUString& /*rStr*/) const
+OUString E3dDragMethod::GetSdrDragComment() const
 {
+    return OUString();
 }
 
 // Create the wireframe model for all actions
