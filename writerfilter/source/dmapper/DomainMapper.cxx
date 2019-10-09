@@ -2850,6 +2850,7 @@ void DomainMapper::lcl_startSectionGroup()
         m_pImpl->PushProperties(CONTEXT_SECTION);
     }
     m_pImpl->SetIsFirstParagraphInSection(true);
+    m_pImpl->SetIsFirstParagraphInSectionAfterRedline(true);
 }
 
 void DomainMapper::lcl_endSectionGroup()
@@ -3283,6 +3284,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             }
 
             const bool bSingleParagraph = m_pImpl->GetIsFirstParagraphInSection() && m_pImpl->GetIsLastParagraphInSection();
+            const bool bSingleParagraphAfterRedline = m_pImpl->GetIsFirstParagraphInSection(true) && m_pImpl->GetIsLastParagraphInSection();
             PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
             if (pContext && !pContext->GetFootnote().is())
             {
@@ -3320,7 +3322,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             // no runs, we should not create a paragraph for it in Writer, unless that would remove the whole section.
             SectionPropertyMap* pSectionContext = m_pImpl->GetSectionContext();
             bool bRemove = !m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr()
-                           && !bSingleParagraph
+                           && !bSingleParagraphAfterRedline
                            && !m_pImpl->GetIsDummyParaAddedForTableInSection()
                            && !( pSectionContext && pSectionContext->GetBreakType() != -1 && pContext && pContext->isSet(PROP_BREAK_TYPE) )
                            && !m_pImpl->GetIsPreviousParagraphFramed();
