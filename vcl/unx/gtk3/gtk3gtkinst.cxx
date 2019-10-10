@@ -3914,7 +3914,6 @@ public:
         : GtkInstanceWindow(pDialog, pBuilder, bTakeOwnership)
         , m_pDialog(pDialog)
         , m_aDialogRun(pDialog, this)
-        , m_nCloseSignalId(g_signal_connect(m_pDialog, "close", G_CALLBACK(signalClose), this))
         , m_nResponseSignalId(0)
         , m_nCancelSignalId(0)
         , m_nSignalDeleteId(0)
@@ -3923,6 +3922,10 @@ public:
         , m_nOldEditWidthReq(0)
         , m_nOldBorderWidth(0)
     {
+        if (GTK_IS_DIALOG(m_pDialog) || GTK_IS_ASSISTANT(m_pDialog))
+            m_nCloseSignalId = g_signal_connect(m_pDialog, "close", G_CALLBACK(signalClose), this);
+        else
+            m_nCloseSignalId = 0;
         const bool bScreenshotMode(officecfg::Office::Common::Misc::ScreenshotMode::get());
         if (bScreenshotMode)
         {
