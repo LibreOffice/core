@@ -21,7 +21,7 @@ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
 
 extern "C" void* SdCreateDialogFactory() { return nullptr; }
 
-extern "C" void* com_sun_star_comp_Draw_VisioImportFilter_get_implementation() {}
+extern "C" void* com_sun_star_comp_Draw_VisioImportFilter_get_implementation() { return nullptr; }
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
