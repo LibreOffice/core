@@ -631,11 +631,9 @@ public:
     {
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        rtl_uStringbuffer_insert_ascii(
-            &pData, &nCapacity, getLength(),
+        return appendAscii(
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
-        return *this;
     }
 
 #if defined LIBO_INTERNAL_ONLY
@@ -644,18 +642,14 @@ public:
     typename libreoffice_internal::ConstCharArrayDetector<
         T, OUStringBuffer &>::TypeUtf16
     append(T & literal) {
-        rtl_uStringbuffer_insert(
-            &pData, &nCapacity, getLength(),
+        return append(
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
-        return *this;
     }
 
     /** @overload @since LibreOffice 5.4 */
     OUStringBuffer & append(OUStringLiteral const & literal) {
-        rtl_uStringbuffer_insert_ascii(
-            &pData, &nCapacity, getLength(), literal.data, literal.size);
-        return *this;
+        return appendAscii(literal.data, literal.size);
     }
 #endif
 
@@ -1025,11 +1019,10 @@ public:
     typename libreoffice_internal::ConstCharArrayDetector<
         T, OUStringBuffer &>::TypeUtf16
     insert(sal_Int32 offset, T & literal) {
-        rtl_uStringbuffer_insert(
-            &pData, &nCapacity, offset,
+        return insert(
+            offset,
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
-        return *this;
     }
 
     /** @overload @since LibreOffice 5.4 */

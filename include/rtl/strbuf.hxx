@@ -531,11 +531,9 @@ public:
         RTL_STRING_CONST_FUNCTION
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        rtl_stringbuffer_insert(
-            &pData, &nCapacity, getLength(),
+        return append(
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
-        return *this;
     }
 
     /**
@@ -801,11 +799,10 @@ public:
         RTL_STRING_CONST_FUNCTION
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        rtl_stringbuffer_insert(
-            &pData, &nCapacity, offset,
+        return insert(
+            offset,
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
-        return *this;
     }
 
     /**
