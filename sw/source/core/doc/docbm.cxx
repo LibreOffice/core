@@ -530,6 +530,18 @@ bool IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPa
                rPaM.End()->nContent.GetIndex() == rPaM.End()->nNode.GetNode().GetTextNode()->Len() ) );
 }
 
+void IDocumentMarkAccess::DeleteFieldmarkCommand(::sw::mark::IFieldmark const& rMark)
+{
+    if (GetType(rMark) != MarkType::TEXT_FIELDMARK)
+    {
+        return; // TODO FORMDATE has no command?
+    }
+    SwPosition const sepPos(sw::mark::FindFieldSep(rMark));
+    SwPaM pam(sepPos, rMark.GetMarkStart());
+    ++pam.GetPoint()->nContent; // skip CH_TXT_ATR_FIELDSTART
+    sepPos.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(pam);
+}
+
 namespace sw { namespace mark
 {
     MarkManager::MarkManager(SwDoc& rDoc)
@@ -544,7 +556,8 @@ namespace sw { namespace mark
     ::sw::mark::IMark* MarkManager::makeMark(const SwPaM& rPaM,
         const OUString& rName,
         const IDocumentMarkAccess::MarkType eType,
-        sw::mark::InsertMode const eMode)
+        sw::mark::InsertMode const eMode,
+        SwPosition const*const pSepPos)
     {
 #if OSL_DEBUG_LEVEL > 0
         {
@@ -642,7 +655,7 @@ namespace sw { namespace mark
                 // no special array for these
                 break;
         }
-        pMark->InitDoc(m_pDoc, eMode);
+        pMark->InitDoc(m_pDoc, eMode, pSepPos);
         SAL_INFO("sw.core", "--- makeType ---");
         SAL_INFO("sw.core", "Marks");
         lcl_DebugMarks(m_vAllMarks);
@@ -657,8 +670,10 @@ namespace sw { namespace mark
     ::sw::mark::IFieldmark* MarkManager::makeFieldBookmark(
         const SwPaM& rPaM,
         const OUString& rName,
-        const OUString& rType )
+        const OUString& rType,
+        SwPosition const*const pSepPos)
     {
+
         // Disable undo, because we handle it using SwUndoInsTextFieldmark
         bool bUndoIsEnabled = m_pDoc->GetIDocumentUndoRedo().DoesUndo();
         m_pDoc->GetIDocumentUndoRedo().DoUndo(false);
@@ -668,13 +683,15 @@ namespace sw { namespace mark
         {
             pMark = makeMark(rPaM, rName,
                              IDocumentMarkAccess::MarkType::DATE_FIELDMARK,
-                              sw::mark::InsertMode::New);
+                             sw::mark::InsertMode::New,
+                             pSepPos);
         }
         else
         {
             pMark = makeMark(rPaM, rName,
                              IDocumentMarkAccess::MarkType::TEXT_FIELDMARK,
-                             sw::mark::InsertMode::New);
+                             sw::mark::InsertMode::New,
+                             pSepPos);
         }
         sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
         if (pFieldMark)
@@ -1099,6 +1116,10 @@ namespace sw { namespace mark
         }
         virtual ~LazyFieldmarkDeleter() override
         {
+            // note: because of the call chain from SwUndoDelete, the field
+            // command *cannot* be deleted here as it would create a separate
+            // SwUndoDelete that's interleaved with the SwHistory of the outer
+            // one - only delete the CH_TXT_ATR_FIELD*!
             m_pFieldmark->ReleaseDoc(m_pDoc);
         }
     };
@@ -1284,14 +1305,11 @@ namespace sw { namespace mark
 
     void MarkManager::deleteFieldmarkAt(const SwPosition& rPos)
     {
-        auto const pFieldmark = find_if(
-            m_vFieldmarks.begin(),
-            m_vFieldmarks.end(),
-            [&rPos] (const ::sw::mark::IMark* pMark) { return pMark->IsCoveringPosition(rPos); } );
-        if(pFieldmark == m_vFieldmarks.end())
+        auto const pFieldmark = dynamic_cast<Fieldmark*>(getFieldmarkAt(rPos));
+        if (!pFieldmark)
             return;
 
-        deleteMark(lcl_FindMark(m_vAllMarks, *pFieldmark));
+        deleteMark(lcl_FindMark(m_vAllMarks, pFieldmark));
     }
 
     ::sw::mark::IFieldmark* MarkManager::changeFormFieldmarkType(::sw::mark::IFieldmark* pFieldmark, const OUString& rNewType)
@@ -1339,6 +1357,7 @@ namespace sw { namespace mark
             SwPosition aPos (aPaM.GetPoint()->nNode, aPaM.GetPoint()->nContent);
             SwPaM aNewPaM(pFieldmark->GetMarkStart(), pFieldmark->GetMarkEnd());
             deleteFieldmarkAt(aPos);
+            // ??? sep pos
             return makeFieldBookmark(aNewPaM, sName, rNewType);
         }
         return nullptr;

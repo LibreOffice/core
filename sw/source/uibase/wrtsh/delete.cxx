@@ -242,6 +242,7 @@ bool SwWrtShell::DelLeft()
         sw::mark::IFieldmark* pFm = getIDocumentMarkAccess()->getFieldmarkFor(aPrevChar);
         if (pFm && pFm->GetMarkEnd() == *pCurPos)
         {
+            IDocumentMarkAccess::DeleteFieldmarkCommand(*pFm);
             getIDocumentMarkAccess()->deleteMark(pFm);
             return true;
         }
@@ -378,6 +379,7 @@ bool SwWrtShell::DelRight()
             sw::mark::IFieldmark* pFm = GetCurrentFieldmark();
             if (pFm && pFm->GetMarkStart() == *GetCursor()->GetPoint())
             {
+                IDocumentMarkAccess::DeleteFieldmarkCommand(*pFm);
                 getIDocumentMarkAccess()->deleteMark(pFm);
                 bRet = true;
                 break;

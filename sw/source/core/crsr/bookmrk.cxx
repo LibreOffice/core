@@ -68,9 +68,14 @@ namespace
         }
     }
 
-    SwPosition
-    lcl_FindFieldSep(SwPosition const& rStartPos, SwPosition const& rEndPos)
+}
+
+namespace sw { namespace mark {
+
+    SwPosition FindFieldSep(IFieldmark const& rMark)
     {
+        SwPosition const& rStartPos(rMark.GetMarkStart());
+        SwPosition const& rEndPos(rMark.GetMarkEnd());
         SwNodes const& rNodes(rStartPos.nNode.GetNodes());
         sal_uLong const nStartNode(rStartPos.nNode.GetIndex());
         sal_uLong const nEndNode(rEndPos.nNode.GetIndex());
@@ -130,6 +135,9 @@ namespace
         assert(ret); // must have found it
         return *ret;
     }
+} } // namespace sw::mark
+
+namespace {
 
     void lcl_AssertFieldMarksSet(Fieldmark const * const pField,
         const sal_Unicode aStartMark,
@@ -139,7 +147,7 @@ namespace
         {
             SwPosition const& rStart(pField->GetMarkStart());
             assert(rStart.nNode.GetNode().GetTextNode()->GetText()[rStart.nContent.GetIndex()] == aStartMark); (void) aStartMark;
-            SwPosition const sepPos(lcl_FindFieldSep(rStart, pField->GetMarkEnd()));
+            SwPosition const sepPos(sw::mark::FindFieldSep(*pField));
             assert(sepPos.nNode.GetNode().GetTextNode()->GetText()[sepPos.nContent.GetIndex()] == CH_TXT_ATR_FIELDSEP); (void) sepPos;
         }
         SwPosition const& rEnd(pField->GetMarkEnd());
@@ -149,7 +157,8 @@ namespace
     void lcl_SetFieldMarks(Fieldmark* const pField,
         SwDoc* const io_pDoc,
         const sal_Unicode aStartMark,
-        const sal_Unicode aEndMark)
+        const sal_Unicode aEndMark,
+        SwPosition const*const pSepPos)
     {
         io_pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::UI_REPLACE, nullptr);
 
@@ -164,9 +173,18 @@ namespace
             pField->SetMarkStartPos( start );
             SwPosition& rEnd = pField->GetMarkEnd(); // note: retrieve after
             // setting start, because if start==end it can go stale, see SetMarkPos()
-            *aStartPaM.GetPoint() = rEnd;
+            assert(pSepPos == nullptr || (start < *pSepPos && *pSepPos <= rEnd));
+            *aStartPaM.GetPoint() = pSepPos ? *pSepPos : rEnd;
             io_pDoc->getIDocumentContentOperations().InsertString(aStartPaM, OUString(CH_TXT_ATR_FIELDSEP));
-            ++rEnd.nContent;
+            if (!pSepPos || rEnd < *pSepPos)
+            {   // rEnd is not moved automatically if it's same as insert pos
+                ++rEnd.nContent;
+            }
+            assert(pSepPos == nullptr || (start < *pSepPos && *pSepPos <= rEnd));
+        }
+        else
+        {
+            assert(pSepPos == nullptr);
         }
 
         SwPosition& rEnd = pField->GetMarkEnd();
@@ -195,7 +213,7 @@ namespace
         {
             (void) pStartTextNode;
             // check this before start / end because of the +1 / -1 ...
-            SwPosition const sepPos(lcl_FindFieldSep(rStart, pField->GetMarkEnd()));
+            SwPosition const sepPos(sw::mark::FindFieldSep(*pField));
             io_pDoc->GetDocumentContentOperationsManager().DeleteDummyChar(rStart, aStartMark);
             io_pDoc->GetDocumentContentOperationsManager().DeleteDummyChar(sepPos, CH_TXT_ATR_FIELDSEP);
         }
@@ -359,7 +377,8 @@ namespace sw { namespace mark
         m_aName = rName;
     }
 
-    void Bookmark::InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode const)
+    void Bookmark::InitDoc(SwDoc* const io_pDoc,
+            sw::mark::InsertMode const, SwPosition const*const)
     {
         if (io_pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
@@ -481,11 +500,12 @@ namespace sw { namespace mark
             m_aName = rName;
     }
 
-    void TextFieldmark::InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode const eMode)
+    void TextFieldmark::InitDoc(SwDoc* const io_pDoc,
+            sw::mark::InsertMode const eMode, SwPosition const*const pSepPos)
     {
         if (eMode == sw::mark::InsertMode::New)
         {
-            lcl_SetFieldMarks(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
+            lcl_SetFieldMarks(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND, pSepPos);
         }
         else
         {
@@ -495,6 +515,11 @@ namespace sw { namespace mark
 
     void TextFieldmark::ReleaseDoc(SwDoc* const pDoc)
     {
+        IDocumentUndoRedo & rIDUR(pDoc->GetIDocumentUndoRedo());
+        if (rIDUR.DoesUndo())
+        {
+            rIDUR.AppendUndo(std::make_unique<SwUndoDelTextFieldmark>(*this));
+        }
         lcl_RemoveFieldMarks(this, pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
     }
 
@@ -502,11 +527,13 @@ namespace sw { namespace mark
         : Fieldmark(rPaM)
     { }
 
-    void NonTextFieldmark::InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode const eMode)
+    void NonTextFieldmark::InitDoc(SwDoc* const io_pDoc,
+            sw::mark::InsertMode const eMode, SwPosition const*const pSepPos)
     {
+        assert(pSepPos == nullptr);
         if (eMode == sw::mark::InsertMode::New)
         {
-            lcl_SetFieldMarks(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
+            lcl_SetFieldMarks(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT, pSepPos);
 
             // For some reason the end mark is moved from 1 by the Insert:
             // we don't want this for checkboxes
@@ -522,6 +549,11 @@ namespace sw { namespace mark
 
     void NonTextFieldmark::ReleaseDoc(SwDoc* const pDoc)
     {
+        IDocumentUndoRedo & rIDUR(pDoc->GetIDocumentUndoRedo());
+        if (rIDUR.DoesUndo())
+        {
+            rIDUR.AppendUndo(std::make_unique<SwUndoDelNoTextFieldmark>(*this));
+        }
         lcl_RemoveFieldMarks(this, pDoc,
                 CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
     }
@@ -621,13 +653,14 @@ namespace sw { namespace mark
     {
     }
 
-    void DateFieldmark::InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode)
+    void DateFieldmark::InitDoc(SwDoc* const io_pDoc,
+            sw::mark::InsertMode eMode, SwPosition const*const pSepPos)
     {
         m_pNumberFormatter = io_pDoc->GetNumberFormatter();
         m_pDocumentContentOperationsManager = &io_pDoc->GetDocumentContentOperationsManager();
         if (eMode == sw::mark::InsertMode::New)
         {
-            lcl_SetFieldMarks(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
+            lcl_SetFieldMarks(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND, pSepPos);
         }
         else
         {
@@ -637,6 +670,12 @@ namespace sw { namespace mark
 
     void DateFieldmark::ReleaseDoc(SwDoc* const pDoc)
     {
+        IDocumentUndoRedo & rIDUR(pDoc->GetIDocumentUndoRedo());
+        if (rIDUR.DoesUndo())
+        {
+            // TODO does this need a 3rd Undo class?
+            rIDUR.AppendUndo(std::make_unique<SwUndoDelTextFieldmark>(*this));
+        }
         lcl_RemoveFieldMarks(this, pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
     }
 
@@ -684,8 +723,8 @@ namespace sw { namespace mark
     OUString DateFieldmark::GetContent() const
     {
         const SwTextNode* const pTextNode = GetMarkEnd().nNode.GetNode().GetTextNode();
-        SwPosition const sepPos(lcl_FindFieldSep(GetMarkStart(), GetMarkEnd()));
-#if 0
+        SwPosition const sepPos(sw::mark::FindFieldSep(*this));
+#if 1
         const sal_Int32 nStart(sepPos.nContent.GetIndex());
         const sal_Int32 nEnd  (GetMarkEnd().nContent.GetIndex());
 #else
@@ -706,8 +745,8 @@ namespace sw { namespace mark
             return;
 
         const SwTextNode* const pTextNode = GetMarkEnd().nNode.GetNode().GetTextNode();
-        SwPosition const sepPos(lcl_FindFieldSep(GetMarkStart(), GetMarkEnd()));
-#if 0
+        SwPosition const sepPos(sw::mark::FindFieldSep(*this));
+#if 1
         const sal_Int32 nStart(sepPos.nContent.GetIndex());
         const sal_Int32 nEnd  (GetMarkEnd().nContent.GetIndex());
 #else
