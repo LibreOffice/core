@@ -812,16 +812,11 @@ End Function	&apos;	CurrentDb		V1.1.0
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function CurrentUser() As String
 
-Const cstWindows = 1
-Const cstUnix = 4
-	Select Case GetGuiType()
-		Case cstWindows
-			CurrentUser = Environ(&quot;USERNAME&quot;)
-		Case cstUnix
-			CurrentUser = Environ(&quot;USER&quot;)
-		Case Else
-			CurrentUser = &quot;&quot;
-	End Select
+Dim oPath As Object, sUser As String
+
+	Set oPath = CreateUnoService(&quot;com.sun.star.util.PathSubstitution&quot;)
+	sUser = oPath.getSubstituteVariableValue(&quot;$(username)&quot;)		&apos;	New since LibreOffice 5.2
+	CurrentUser = sUser
 
 End Function	&apos;	CurrentUser	V0.9.1
 
