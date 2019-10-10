@@ -1048,6 +1048,9 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
 
 int SwTransferable::Copy( bool bIsCut )
 {
+    if (m_pWrtShell->GetView().isContentExtractionLocked())
+        return 0;
+
     int nRet = PrepareForCopy( bIsCut );
     if ( nRet )
     {

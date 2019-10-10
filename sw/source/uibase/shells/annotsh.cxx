@@ -983,13 +983,13 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
         {
             case SID_CUT:
             {
-                if ( (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()==SwPostItHelper::DELETED) || !pOLV->HasSelection() )
+                if (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus() == SwPostItHelper::DELETED)
                     rSet.DisableItem( nWhich );
-                break;
+                [[fallthrough]];
             }
             case SID_COPY:
             {
-                if( !pOLV->HasSelection() )
+                if (!pOLV->HasSelection() || rView.isContentExtractionLocked())
                     rSet.DisableItem( nWhich );
                 break;
             }

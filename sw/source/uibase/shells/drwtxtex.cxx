@@ -1075,7 +1075,7 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
         {
         case SID_CUT:
         case SID_COPY:
-            if( !bCopy )
+            if( !bCopy || GetView().isContentExtractionLocked())
                 rSet.DisableItem( nWhich );
             break;
 

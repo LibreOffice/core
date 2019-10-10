@@ -1062,14 +1062,22 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
     {
         OUString sValue;
         aArgs[i].Value >>= sValue;
+        bool bValue;
 
         if (aArgs[i].Name == "SuggestedSaveAsName")
         {
+            rArg.Value >>= sValue;
             pMedium->GetItemSet()->Put(SfxStringItem(SID_SUGGESTEDSAVEASNAME, sValue));
         }
         else if (aArgs[i].Name == "SuggestedSaveAsDir")
         {
+            rArg.Value >>= sValue;
             pMedium->GetItemSet()->Put(SfxStringItem(SID_SUGGESTEDSAVEASDIR, sValue));
+        }
+        else if (rArg.Name == "LockContentExtraction")
+        {
+            rArg.Value >>= bValue;
+            pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_CONTENT_EXTRACTION, bValue));
         }
         else
         {

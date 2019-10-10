@@ -66,6 +66,9 @@ void SwEditWin::StopDDTimer(SwWrtShell *pSh, const Point &rPt)
 
 void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
 {
+    if (m_rView.isContentExtractionLocked())
+        return;
+
     SwWrtShell &rSh = m_rView.GetWrtShell();
     if( rSh.GetDrawView() )
     {
