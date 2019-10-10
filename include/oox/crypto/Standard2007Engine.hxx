@@ -41,24 +41,24 @@ public:
 
     // Decryption
 
-    sal_Bool generateEncryptionKey(const OUString & rPassword) override;
-    sal_Bool readEncryptionInfo(const css::uno::Sequence<css::beans::NamedValue>& aStreams) override;
-    sal_Bool decrypt(const css::uno::Reference<css::io::XInputStream>& rxInputStream,
+    virtual sal_Bool SAL_CALL generateEncryptionKey(const OUString & rPassword) override;
+    virtual sal_Bool SAL_CALL readEncryptionInfo(const css::uno::Sequence<css::beans::NamedValue>& aStreams) override;
+    virtual sal_Bool SAL_CALL decrypt(const css::uno::Reference<css::io::XInputStream>& rxInputStream,
                  css::uno::Reference<css::io::XOutputStream>& rxOutputStream) override;
 
 
-    sal_Bool checkDataIntegrity() override;
+    virtual sal_Bool SAL_CALL checkDataIntegrity() override;
 
     // Encryption
 
-    css::uno::Sequence<css::beans::NamedValue> writeEncryptionInfo() override;
+    virtual css::uno::Sequence<css::beans::NamedValue> SAL_CALL writeEncryptionInfo() override;
 
-    void encrypt(const css::uno::Reference<css::io::XInputStream>& rxInputStream,
+    virtual void SAL_CALL encrypt(const css::uno::Reference<css::io::XInputStream>& rxInputStream,
                  css::uno::Reference<css::io::XOutputStream>& rxOutputStream) override;
 
-    sal_Bool setupEncryption(const css::uno::Sequence<css::beans::NamedValue>& rMediaEncData) override;
+    virtual sal_Bool SAL_CALL setupEncryption(const css::uno::Sequence<css::beans::NamedValue>& rMediaEncData) override;
 
-    css::uno::Sequence<css::beans::NamedValue> createEncryptionData(const OUString& rPassword) override;
+    virtual css::uno::Sequence<css::beans::NamedValue> SAL_CALL createEncryptionData(const OUString& rPassword) override;
 };
 
 } // namespace core
