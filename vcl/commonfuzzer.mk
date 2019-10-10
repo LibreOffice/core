@@ -145,6 +145,7 @@ fuzzer_calc_libraries = \
     sc \
     for \
     forui \
+    guesslang \
 
 fuzzer_writer_libraries = \
     msword \
@@ -159,6 +160,8 @@ fuzzer_draw_libraries = \
     sd \
     sdd \
     icg \
+    guesslang \
 
 fuzzer_math_libraries = \
     sm \
+    guesslang \
