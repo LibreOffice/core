@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_d1217c4f",
+        "filename": "oox/source/drawingml/customshapeproperties.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2019-10-10T09:12:47Z",
+      "side": 1,
+      "message": "i need to save mnTextCameraZRotateAngle value to a stadalone property",
+      "revId": "a0fd981038db8c590d5b0bc5b265d6c58c320797",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
