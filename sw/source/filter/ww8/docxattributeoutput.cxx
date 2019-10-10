@@ -4083,12 +4083,18 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
     if( aGrabBagElement != aGrabBag.end() )
         sOriginalColor = OUStringToOString( aGrabBagElement->second.get<OUString>(), RTL_TEXTENCODING_UTF8 );
 
-    if ( sOriginalColor != sColor )
+    if (sOriginalColor != sColor)
+    // color changed by the user, or no grab bag: write sColor
     {
-        // color changed by the user, or no grab bag: write sColor
-        m_pSerializer->singleElementNS( XML_w, XML_shd,
-                FSNS( XML_w, XML_fill ), sColor,
-                FSNS( XML_w, XML_val ), "clear" );
+        // if the original color is empty, then background color fill was not set
+        // no background fill is default
+        // so outputting this XML tag is unnecessary
+        if ( !sOriginalColor.isEmpty() )
+        {
+            m_pSerializer->singleElementNS(XML_w, XML_shd,
+                FSNS(XML_w, XML_fill), sColor,
+                FSNS(XML_w, XML_val), "clear");
+        }
     }
     else
     {
