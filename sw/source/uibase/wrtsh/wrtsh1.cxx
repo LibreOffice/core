@@ -1915,7 +1915,7 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, SfxRequest& rReq)
 
             // A frame is selected, end frame selection.
             EnterStdMode();
-            GetView().AttrChangedNotify(this);
+            GetView().AttrChangedNotify(nullptr);
 
             // Set up text selection, so the anchor of the frame will be the anchor of the
             // comment.

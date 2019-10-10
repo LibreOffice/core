@@ -1014,7 +1014,7 @@ static SfxObjectShell* lcl_CreateWorkingDocument(
     SwView* pWorkView = static_cast< SwView* >( pWorkFrame->GetViewShell() );
     SwWrtShell* pWorkWrtShell = pWorkView->GetWrtShellPtr();
     pWorkWrtShell->GetViewOptions()->SetIdle( false );
-    pWorkView->AttrChangedNotify( pWorkWrtShell );// in order for SelectShell to be called
+    pWorkView->AttrChangedNotify(nullptr);// in order for SelectShell to be called
     SwDoc* pWorkDoc = pWorkWrtShell->GetDoc();
     pWorkDoc->GetIDocumentUndoRedo().DoUndo( false );
     pWorkDoc->ReplaceDocumentProperties( *pSourceDoc );

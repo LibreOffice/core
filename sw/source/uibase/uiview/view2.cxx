@@ -852,7 +852,7 @@ void SwView::Execute(SfxRequest &rReq)
             else if ( m_pWrtShell->IsDrawCreate() )
             {
                 GetDrawFuncPtr()->BreakCreate();
-                AttrChangedNotify(m_pWrtShell.get()); // shell change if needed
+                AttrChangedNotify(nullptr); // shell change if needed
             }
             else if ( m_pWrtShell->HasSelection() || IsDrawMode() )
             {
@@ -874,7 +874,7 @@ void SwView::Execute(SfxRequest &rReq)
                         rBind.Invalidate( SID_ATTR_SIZE );
                     }
                     m_pWrtShell->EnterStdMode();
-                    AttrChangedNotify(m_pWrtShell.get()); // shell change if necessary
+                    AttrChangedNotify(nullptr); // shell change if necessary
                 }
             }
             else if ( GetEditWin().GetApplyTemplate() )
@@ -1130,7 +1130,7 @@ void SwView::Execute(SfxRequest &rReq)
                     SwDBData aData;
                     aData = rSh.GetDBData();
                     rSh.EnterStdMode(); // force change in text shell; necessary for mixing DB fields
-                    AttrChangedNotify( &rSh );
+                    AttrChangedNotify(nullptr);
 
                     Sequence<PropertyValue> aProperties(3);
                     PropertyValue* pValues = aProperties.getArray();
@@ -2417,7 +2417,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             aData.nCommandType = sDBName.getToken(2, DB_DELIM ).toInt32();
         }
         rSh.EnterStdMode(); // force change in text shell; necessary for mixing DB fields
-        AttrChangedNotify( &rSh );
+        AttrChangedNotify(nullptr);
 
         if (pDBManager)
         {
