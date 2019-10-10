@@ -817,6 +817,14 @@ void ScEditShell::GetState( SfxItemSet& rSet )
             case SID_INSERT_FIELD_TITLE:
             case SID_INSERT_FIELD_DATE_VAR:
             break;
+            case SID_COPY:
+            case SID_CUT:
+                if (pViewData->GetViewShell()->isContentExtractionLocked())
+                {
+                    rSet.DisableItem(SID_COPY);
+                    rSet.DisableItem(SID_CUT);
+                }
+                break;
 
         }
         nWhich = aIter.NextWhich();

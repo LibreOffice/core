@@ -169,6 +169,7 @@ static char const sFailOnWarning[] = "FailOnWarning";
 static char const sDocumentService[] = "DocumentService";
 static char const sFilterProvider[] = "FilterProvider";
 static char const sImageFilter[] = "ImageFilter";
+static char const sLockContentExtraction[] = "LockContentExtraction";
 
 static bool isMediaDescriptor( sal_uInt16 nSlotId )
 {
@@ -844,6 +845,14 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 bool bOK = ((rProp.Value >>= aVal) && !aVal.isEmpty());
                 if (bOK)
                     rSet.Put(SfxStringItem(SID_FILTER_PROVIDER, aVal));
+            }
+            else if (aName == sLockContentExtraction)
+            {
+                bool bVal = false;
+                bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for LockContentExtraction" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_LOCK_CONTENT_EXTRACTION, bVal ) );
             }
 #ifdef DBG_UTIL
             else
@@ -1613,6 +1622,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         {
             pValue[nActProp].Name = sImageFilter;
             pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
+        }
+        if ( rSet.GetItemState( SID_LOCK_CONTENT_EXTRACTION, false, &pItem ) == SfxItemState::SET )
+        {
+            pValue[nActProp].Name = sLockContentExtraction;
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue() ;
         }
     }
 
