@@ -147,6 +147,12 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
         rSet.DisableItem( SID_FLIP_VERTICAL );
     }
 
+    if (pViewData->GetViewShell()->isContentExtractionLocked())
+    {
+        rSet.DisableItem(SID_COPY);
+        rSet.DisableItem(SID_CUT);
+    }
+
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     const size_t nMarkCount = rMarkList.GetMarkCount();
 

@@ -894,7 +894,8 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    if (!pOlView->GetViewByWindow(GetActiveWindow())->HasSelection())
+    if (!pOlView->GetViewByWindow(GetActiveWindow())->HasSelection()
+        || GetViewShell()->isContentExtractionLocked())
     {
         rSet.DisableItem(SID_CUT);
         rSet.DisableItem(SID_COPY);

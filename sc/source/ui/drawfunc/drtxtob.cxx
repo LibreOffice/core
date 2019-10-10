@@ -466,6 +466,12 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         if (!bCanDoThesaurus)
             rSet.DisableItem( SID_THESAURUS );
     }
+
+    if (pViewData->GetViewShell()->isContentExtractionLocked())
+    {
+        rSet.DisableItem(SID_COPY);
+        rSet.DisableItem(SID_CUT);
+    }
 }
 
 IMPL_LINK( ScDrawTextObjectBar, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
