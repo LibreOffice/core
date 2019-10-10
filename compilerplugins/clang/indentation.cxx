@@ -120,6 +120,22 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
         // these are always weirdly indented
         if (isa<LabelStmt>(stmt))
             continue;
+        // At least until Clang 9.0.0, getBeginLoc of a VarDecl DeclStmt with an UnusedAttr points
+        // after the attr (and getLocation of the attr would point at "maybe_unused", not at the
+        // leading "[["), so just ignore those at least for now:
+        if (auto const declStmt = dyn_cast<DeclStmt>(stmt))
+        {
+            if (declStmt->decl_begin() != declStmt->decl_end())
+            {
+                if (auto const decl = dyn_cast<VarDecl>(*declStmt->decl_begin()))
+                {
+                    if (decl->hasAttr<UnusedAttr>())
+                    {
+                        continue;
+                    }
+                }
+            }
+        }
 
         auto stmtLoc = compat::getBeginLoc(stmt);
 

@@ -51,7 +51,7 @@ SecurityEnvironmentGpg::SecurityEnvironmentGpg()
     // in instdir/program/python-core-x.y.z/bin, while gpgme-w32spawn.exe is in instdir/program.
     // If we can't find gpgme-w32spawn.exe in the current executable location, then try to find
     // the spawn executable, and inform gpgme about actual location using gpgme_set_global_flag.
-    static bool bSpawnPathInitialized = [] {
+    [[maybe_unused]] static bool bSpawnPathInitialized = [] {
         auto accessUrl = [](const INetURLObject& url) {
             osl::File file(url.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             return file.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None;
