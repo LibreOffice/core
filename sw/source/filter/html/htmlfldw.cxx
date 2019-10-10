@@ -288,7 +288,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name).
                 append("=\"");
-            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+            rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), aName, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             sOut.append('\"');
         }
@@ -296,7 +296,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_value).
                 append("=\"");
-            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+            rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), aValue, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             sOut.append('\"');
         }
@@ -313,7 +313,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdfixed);
         }
         sOut.append('>');
-        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
     }
 
     // output content of the field
@@ -463,7 +463,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
         // not contained in the destination encoding are lost!
         OString sTmp(OUStringToOString(rText,
             static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc));
-        rWrt.Strm().WriteCharPtr( sTmp.getStr() ).WriteChar( '>' );
+        rWrt.Strm().WriteOString( sTmp ).WriteChar( '>' );
     }
     else if( SwFieldIds::Postit == pFieldTyp->Which() )
     {
@@ -484,7 +484,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
             // characters not contained in the destination encoding are lost!
             OString sTmp(OUStringToOString(sComment,
                 static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc));
-            rWrt.Strm().WriteCharPtr( sTmp.getStr() );
+            rWrt.Strm().WriteOString( sTmp );
             bWritten = true;
         }
         else if( rComment.getLength() >= 7 &&
@@ -500,7 +500,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
                 // lost!
                 OString sTmp(OUStringToOString(sComment,
                     static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc));
-                rWrt.Strm().WriteCharPtr( sTmp.getStr() );
+                rWrt.Strm().WriteOString( sTmp );
                 bWritten = true;
             }
 
@@ -514,7 +514,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
             sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_comment)
                 .append(' ').append(OUStringToOString(sComment,
                     static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc)).append(" -->");
-            rWrt.Strm().WriteCharPtr( sOut.getStr() );
+            rWrt.Strm().WriteOStringBuffer( sOut );
         }
     }
     else if( SwFieldIds::Script == pFieldTyp->Which() )
@@ -567,7 +567,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
                 Color& rColor = SwViewOption::GetFieldShadingsColor();
                 sOut.append(GetCSS1_Color(rColor));
                 sOut.append("\">");
-                rWrt.Strm().WriteCharPtr(sOut.getStr());
+                rWrt.Strm().WriteOStringBuffer(sOut);
             }
 
             OutHTML_SwField( rWrt, pField, pTextField->GetTextNode(),

@@ -1212,7 +1212,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
                 throwInvalidColumnType( STR_INVALID_COLUMN_NAME_LENGTH, aName );
             }
 
-            m_pFileStream->WriteCharPtr( aCol.getStr() );
+            m_pFileStream->WriteOString( aCol );
             m_pFileStream->WriteBytes(aBuffer, 11 - aCol.getLength());
 
             sal_Int32 nPrecision = 0;

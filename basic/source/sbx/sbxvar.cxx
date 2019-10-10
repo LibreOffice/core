@@ -621,12 +621,12 @@ void SbxVariable::Dump( SvStream& rStrm, bool bFill )
 {
     OString aBNameStr(OUStringToOString(GetName( SbxNameType::ShortTypes ), RTL_TEXTENCODING_ASCII_US));
     rStrm.WriteCharPtr( "Variable( " )
-         .WriteCharPtr( OString::number(reinterpret_cast<sal_Int64>(this)).getStr() ).WriteCharPtr( "==" )
-         .WriteCharPtr( aBNameStr.getStr() );
+         .WriteOString( OString::number(reinterpret_cast<sal_Int64>(this)) ).WriteCharPtr( "==" )
+         .WriteOString( aBNameStr );
     OString aBParentNameStr(OUStringToOString(GetParent()->GetName(), RTL_TEXTENCODING_ASCII_US));
     if ( GetParent() )
     {
-        rStrm.WriteCharPtr( " in parent '" ).WriteCharPtr( aBParentNameStr.getStr() ).WriteCharPtr( "'" );
+        rStrm.WriteCharPtr( " in parent '" ).WriteOString( aBParentNameStr ).WriteCharPtr( "'" );
     }
     else
     {

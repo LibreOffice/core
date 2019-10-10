@@ -71,12 +71,12 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
     OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_meta).append(' ')
         .append(bHTTPEquiv ? OOO_STRING_SVTOOLS_HTML_O_httpequiv : OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
-    rStrm.WriteCharPtr( sOut.makeStringAndClear().getStr() );
+    rStrm.WriteOString( sOut.makeStringAndClear() );
 
     HTMLOutFuncs::Out_String( rStrm, rName, eDestEnc, pNonConvertableChars );
 
     sOut.append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_content).append("=\"");
-    rStrm.WriteCharPtr( sOut.makeStringAndClear().getStr() );
+    rStrm.WriteOString( sOut.makeStringAndClear() );
 
     HTMLOutFuncs::Out_String( rStrm, rContent, eDestEnc, pNonConvertableChars ).WriteCharPtr( "\"/>" );
 }
@@ -123,7 +123,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
             OStringBuffer sOut;
             sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_base).append(' ')
                 .append(OOO_STRING_SVTOOLS_HTML_O_target).append("=\"");
-            rStrm.WriteCharPtr( sOut.makeStringAndClear().getStr() );
+            rStrm.WriteOString( sOut.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rStrm, rTarget, eDestEnc, pNonConvertableChars )
                .WriteCharPtr( "\">" );
         }
@@ -252,7 +252,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
                     rBaseURL, aURL );
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_src)
                     .append("=\"");
-                rOut.WriteCharPtr( sOut.makeStringAndClear().getStr() );
+                rOut.WriteOString( sOut.makeStringAndClear() );
                 HTMLOutFuncs::Out_String( rOut, aURL, eDestEnc, pNonConvertableChars );
                 sOut.append('\"');
             }
@@ -263,7 +263,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
                 .append("=\"");
-            rOut.WriteCharPtr( sOut.makeStringAndClear().getStr() );
+            rOut.WriteOString( sOut.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rOut, aStr, eDestEnc, pNonConvertableChars );
             sOut.append('\"');
         }
@@ -307,7 +307,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
                     .append('=').append(pStr);
             }
         }
-        rOut.WriteCharPtr( sOut.getStr() );
+        rOut.WriteOStringBuffer( sOut );
     }
     catch (const uno::Exception&)
     {

@@ -1885,7 +1885,7 @@ public:
                     OString aStr = OUStringToOString(it->getString(), RTL_TEXTENCODING_UTF8);
                     sal_Int32 nStrLength = aStr.getLength();
                     mrStrm.WriteInt32(nStrLength);
-                    mrStrm.WriteCharPtr(aStr.getStr());
+                    mrStrm.WriteOString(aStr);
                 }
             }
             break;
@@ -1914,7 +1914,7 @@ public:
                     }
                     mrStrm.WriteUInt64(nGroupLength);
                     mrStrm.WriteInt32(aFormula.getLength());
-                    mrStrm.WriteCharPtr(OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr());
+                    mrStrm.WriteOString(OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8));
 
                     // incrementing the iterator
                     std::advance(it, nGroupLength);

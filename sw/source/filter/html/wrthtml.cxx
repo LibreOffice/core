@@ -439,7 +439,7 @@ ErrCode SwHTMLWriter::WriteStream()
     OutHiddenForms();
 
     if( !aStartTags.isEmpty() )
-        Strm().WriteCharPtr( aStartTags.getStr() );
+        Strm().WriteOString( aStartTags );
 
     const SfxPoolItem *pItem;
     const SfxItemSet& rPageItemSet = m_pCurrPageDesc->GetMaster().GetAttrSet();
@@ -609,19 +609,19 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     if( !rName.isEmpty() && !bContinued )
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_id "=\"");
-        rHTMLWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        rHTMLWrt.Strm().WriteOString( sOut.makeStringAndClear() );
         HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), rName, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
         sOut.append('\"');
     }
 
     SvxFrameDirection nDir = rHTMLWrt.GetHTMLDirection( rFormat.GetAttrSet() );
-    rHTMLWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+    rHTMLWrt.Strm().WriteOString( sOut.makeStringAndClear() );
     rHTMLWrt.OutDirection( nDir );
 
     if( FILE_LINK_SECTION == rSection.GetType() )
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_href "=\"");
-        rHTMLWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        rHTMLWrt.Strm().WriteOString( sOut.makeStringAndClear() );
 
         const OUString& aFName = rSection.GetLinkFileName();
         sal_Int32 nIdx{ 0 };
@@ -677,7 +677,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         }
     }
 
-    rHTMLWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+    rHTMLWrt.Strm().WriteOString( sOut.makeStringAndClear() );
     if( rHTMLWrt.IsHTMLMode( rHTMLWrt.m_bCfgOutStyles ? HTMLMODE_ON : 0 ) )
         rHTMLWrt.OutCSS1_SectionFormatOptions( rFormat, pCol );
 
@@ -911,7 +911,7 @@ static void OutBodyColor( const sal_Char* pTag, const SwFormat *pFormat,
     {
         OStringBuffer sOut;
         sOut.append(" " + OString(pTag) + "=");
-        rHWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        rHWrt.Strm().WriteOString( sOut.makeStringAndClear() );
         Color aColor( pColorItem->GetValue() );
         if( COL_AUTO == aColor )
             aColor = COL_BLACK;
@@ -1056,7 +1056,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
         // the body won't be indented, because then everything would be indented!
         OutNewLine();
         sOut.append("<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_body);
-        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        Strm().WriteOString( sOut.makeStringAndClear() );
 
         // language
         OutLanguage( m_eLang );
@@ -1107,7 +1107,7 @@ void SwHTMLWriter::OutAnchor( const OUString& rName )
     if (!mbXHTML)
     {
         sOut.append(OOO_STRING_SVTOOLS_HTML_O_name "=\"");
-        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        Strm().WriteOString( sOut.makeStringAndClear() );
         HTMLOutFuncs::Out_String( Strm(), rName, m_eDestEnc, &m_aNonConvertableCharacters ).WriteCharPtr( "\">" );
     }
     else
@@ -1115,7 +1115,7 @@ void SwHTMLWriter::OutAnchor( const OUString& rName )
         // XHTML wants 'id' instead of 'name', also the value can't contain
         // spaces.
         sOut.append(OOO_STRING_SVTOOLS_HTML_O_id "=\"");
-        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        Strm().WriteOString( sOut.makeStringAndClear() );
         HTMLOutFuncs::Out_String( Strm(), rName.replace(' ', '_'), m_eDestEnc, &m_aNonConvertableCharacters ).WriteCharPtr( "\">" );
     }
     HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor, false );
@@ -1200,7 +1200,7 @@ void SwHTMLWriter::OutPointFieldmarks( const SwPosition& rPos )
             }
 
             aOut += "/>";
-            Strm().WriteCharPtr(aOut.getStr());
+            Strm().WriteOString(aOut);
         }
     }
 
@@ -1263,7 +1263,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
     {
         OStringBuffer sOut;
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_bgcolor).append('=');
-        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        Strm().WriteOString( sOut.makeStringAndClear() );
         HTMLOutFuncs::Out_Color( Strm(), rBackColor);
     }
 
@@ -1340,7 +1340,7 @@ void SwHTMLWriter::OutLanguage( LanguageType nLang )
         else
             sOut.append(OOO_STRING_SVTOOLS_HTML_O_lang);
         sOut.append("=\"");
-        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        Strm().WriteOString( sOut.makeStringAndClear() );
         HTMLOutFuncs::Out_String( Strm(), LanguageTag::convertToBcp47(nLang),
                                   m_eDestEnc, &m_aNonConvertableCharacters ).WriteChar( '"' );
     }
@@ -1378,7 +1378,7 @@ void SwHTMLWriter::OutDirection( SvxFrameDirection nDir )
         OStringBuffer sOut;
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_dir)
             .append("=\"").append(sConverted).append('\"');
-        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        Strm().WriteOString( sOut.makeStringAndClear() );
     }
 }
 

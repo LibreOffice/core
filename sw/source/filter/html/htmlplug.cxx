@@ -1237,7 +1237,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_src)
                 .append("=\"");
-            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+            rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), aURL, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             sOut.append('\"');
         }
@@ -1248,7 +1248,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type)
                 .append("=\"");
-            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+            rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), aType, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             sOut.append('\"');
         }
@@ -1283,7 +1283,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_codebase)
                     .append("=\"");
-                rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+                rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), sCodeBase, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
                 sOut.append('\"');
             }
@@ -1295,7 +1295,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         aAny >>= aClass;
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_code)
             .append("=\"");
-        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
         HTMLOutFuncs::Out_String( rWrt.Strm(), aClass, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
         sOut.append('\"');
 
@@ -1307,7 +1307,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
                 .append("=\"");
-            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+            rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), aAppletName, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             sOut.append('\"');
         }
@@ -1326,7 +1326,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         // or the Floating-Frame specifics
 
         sOut.append(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_iframe);
-        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
 
         SfxFrameHTMLWriter::Out_FrameDescriptor( rWrt.Strm(), rWrt.GetBaseURL(),
                                         xSet,
@@ -1337,7 +1337,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
                             : HTML_FRMOPTS_IFRAME;
     }
 
-    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+    rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
 
     // ALT, WIDTH, HEIGHT, HSPACE, VSPACE, ALIGN
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
@@ -1393,11 +1393,11 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
             sBuf.append('<').append(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_param)
                 .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
                 .append("=\"");
-            rWrt.Strm().WriteCharPtr( sBuf.makeStringAndClear().getStr() );
+            rWrt.Strm().WriteOString( sBuf.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             sBuf.append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_value)
                 .append("=\"");
-            rWrt.Strm().WriteCharPtr( sBuf.makeStringAndClear().getStr() );
+            rWrt.Strm().WriteOString( sBuf.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters ).WriteCharPtr( "\">" );
         }
 
@@ -1441,7 +1441,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
     }
 
     if( !aEndTags.isEmpty() )
-        rWrt.Strm().WriteCharPtr( aEndTags.getStr() );
+        rWrt.Strm().WriteOString( aEndTags );
 
     return rWrt;
 }
@@ -1495,7 +1495,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
                 OString aData(static_cast<const char*>(aStream.GetData()), static_cast<sal_Int32>(aStream.GetSize()));
                 // Wrap output in a <span> tag to avoid 'HTML parser error: Unexpected end tag: p'
                 HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span);
-                rWrt.Strm().WriteCharPtr(aData.getStr());
+                rWrt.Strm().WriteOString(aData);
                 HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span, false);
             }
             catch ( uno::Exception& )

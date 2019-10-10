@@ -217,7 +217,7 @@ void ScHTMLExport::WriteImage( OUString& rLinkName, const Graphic& rGrf,
                     aBaseURL,
                     rLinkName ), eDestEnc ).WriteChar( '\"' );
         if ( !rImgOptions.isEmpty() )
-            rStrm.WriteCharPtr( rImgOptions.getStr() );
+            rStrm.WriteOString( rImgOptions );
         rStrm.WriteChar( '>' ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() );
     }
 }

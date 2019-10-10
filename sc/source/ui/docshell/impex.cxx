@@ -508,7 +508,7 @@ void ScImportExport::WriteUnicodeOrByteString( SvStream& rStrm, const OUString& 
     else
     {
         OString aByteStr(OUStringToOString(rString, eEnc));
-        rStrm.WriteCharPtr( aByteStr.getStr() );
+        rStrm.WriteOString( aByteStr );
         if ( bZero )
             rStrm.WriteChar( 0 );
     }

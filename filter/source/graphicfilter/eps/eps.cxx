@@ -2364,7 +2364,7 @@ void PSWriter::ImplWriteLong(sal_Int32 nNumber, sal_uLong nMode)
 {
     const OString aNumber(OString::number(nNumber));
     mnCursorPos += aNumber.getLength();
-    mpPS->WriteCharPtr( aNumber.getStr() );
+    mpPS->WriteOString( aNumber );
     ImplExecMode(nMode);
 }
 
@@ -2377,7 +2377,7 @@ void PSWriter::ImplWriteDouble( double fNumber )
         mpPS->WriteChar( '-' );
 
     const OString aNumber1(OString::number(nPTemp));
-    mpPS->WriteCharPtr( aNumber1.getStr() );
+    mpPS->WriteOString( aNumber1 );
     mnCursorPos += aNumber1.getLength();
 
     if ( nATemp )
