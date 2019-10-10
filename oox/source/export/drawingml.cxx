@@ -94,7 +94,6 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/storagehelper.hxx>
