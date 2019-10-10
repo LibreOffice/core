@@ -118,7 +118,7 @@ namespace canvas
         // the rectangle passed as argument has a valid
         // location if and only if there's no intersection
         // with existing areas.
-        SurfaceRect aBoundary(mpRenderModule->getPageSize()-basegfx::B2IVector(1,1));
+        SurfaceRect aBoundary(mpRenderModule->getPageSize());
         if( !r.inside(aBoundary) )
             return false;
 
