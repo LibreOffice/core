@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_51280c85",
+        "filename": "avmedia/source/win/player.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-10T06:40:38Z",
+      "side": 1,
+      "message": "I would check the getSystemPathFromFileURL return status, and upon failure use rURL as a best-effort fallback after all (and SAL_WARN about it)---at which point you can even drop the check for \"file:\" (but then arguably don\u0027t SAL_WARN upon EINVAL)",
+      "revId": "938ce37e2f3dc772b832670bac21ef0034389247",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
