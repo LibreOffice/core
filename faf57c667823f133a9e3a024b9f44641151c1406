@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_d1c5fc8f",
+        "filename": "vcl/source/gdi/bitmapex.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-10-10T08:24:40Z",
+      "side": 1,
+      "message": "implTransformNeedsSmooth -\u003e ImplTransformNeedsSmooth\n\n?",
+      "range": {
+        "startLine": 914,
+        "startChar": 34,
+        "endLine": 914,
+        "endChar": 35
+      },
+      "revId": "faf57c667823f133a9e3a024b9f44641151c1406",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
