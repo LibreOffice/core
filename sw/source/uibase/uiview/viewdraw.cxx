@@ -221,7 +221,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
             m_pWrtShell->EnterSelFrameMode();
         LeaveDrawCreate();
 
-        AttrChangedNotify(m_pWrtShell.get());
+        AttrChangedNotify(nullptr);
         return;
     }
 
@@ -339,7 +339,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
 
         auto pTempFuncPtr = pFuncPtr.get();
         SetDrawFuncPtr(std::move(pFuncPtr));
-        AttrChangedNotify(m_pWrtShell.get());
+        AttrChangedNotify(nullptr);
 
         pTempFuncPtr->Activate(nSlotId);
         NoRotate();
@@ -382,7 +382,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     if(bEndTextEdit && pSdrView && pSdrView->IsTextEdit())
         pSdrView->SdrEndTextEdit( true );
 
-    AttrChangedNotify(m_pWrtShell.get());
+    AttrChangedNotify(nullptr);
 }
 
 // End drawing
