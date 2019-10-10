@@ -818,7 +818,7 @@ bool SdrAngleItem::GetPresentation(
             aText.insert(0, '-');
     }
 
-    aText.insert(aText.getLength(), sal_Unicode(DEGREE_CHAR));
+    aText.append(sal_Unicode(DEGREE_CHAR));
 
     if(ePres == SfxItemPresentation::Complete)
     {

@@ -828,7 +828,7 @@ OUString SdrFormatter::GetStr(long nVal) const
     }
 
     if(aStr.isEmpty())
-        aStr.insert(aStr.getLength(), aNullCode);
+        aStr.append(aNullCode);
 
     if(bNeg && (aStr.getLength() > 1 || aStr[0] != aNullCode[0]))
     {
