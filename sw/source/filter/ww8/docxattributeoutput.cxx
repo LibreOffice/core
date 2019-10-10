@@ -4081,11 +4081,14 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
         sOriginalColor = OUStringToOString( aGrabBagElement->second.get<OUString>(), RTL_TEXTENCODING_UTF8 );
 
     if ( sOriginalColor != sColor )
+    // color changed by the user, or no grab bag: write sColor
     {
-        // color changed by the user, or no grab bag: write sColor
-        m_pSerializer->singleElementNS( XML_w, XML_shd,
+        if ( sColor != "auto" )
+        {
+            m_pSerializer->singleElementNS( XML_w, XML_shd,
                 FSNS( XML_w, XML_fill ), sColor,
                 FSNS( XML_w, XML_val ), "clear" );
+        }
     }
     else
     {
