@@ -544,6 +544,9 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                         aFieldPam, m_aFieldStack.back().GetBookmarkName(), ODF_FORMTEXT );
             OSL_ENSURE(pFieldmark!=nullptr, "hmmm; why was the bookmark not created?");
             if (pFieldmark!=nullptr) {
+                // adapt redline positions to inserted field mark start
+                // dummy char (assume not necessary for end dummy char)
+                m_xRedlineStack->MoveAttrs(*aFieldPam.Start());
                 const IFieldmark::parameter_map_t& rParametersToAdd = m_aFieldStack.back().getParameters();
                 pFieldmark->GetParameters()->insert(rParametersToAdd.begin(), rParametersToAdd.end());
             }
