@@ -15,6 +15,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
+#include <bitmapwriteaccess.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -142,9 +143,22 @@ void VclOutdevTest::testDrawTransformedBitmapEx()
     // Also create a 16x16 bitmap.
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     Bitmap aBitmap(Size(16, 16), 24);
+    {
+        // Fill the top left quarter with black.
+        BitmapScopedWriteAccess pWriteAccess(aBitmap);
+        pWriteAccess->Erase(COL_WHITE);
+        for (int i = 0; i < 8; ++i)
+        {
+            for (int j = 0; j < 8; ++j)
+            {
+                pWriteAccess->SetPixel(j, i, COL_BLACK);
+            }
+        }
+    }
     BitmapEx aBitmapEx(aBitmap);
     basegfx::B2DHomMatrix aMatrix;
     aMatrix.scale(8, 8);
+    // Rotate 90 degrees clockwise, so the black part goes to the top right.
     aMatrix.rotate(M_PI / 2);
     GDIMetaFile aMtf;
     aMtf.Record(pVDev.get());
@@ -162,6 +176,29 @@ void VclOutdevTest::testDrawTransformedBitmapEx()
     // - Actual  : 8x8
     // I.e. the bitmap before scaling was already scaled down, just because it was rotated.
     CPPUNIT_ASSERT_EQUAL(Size(16, 16), aTransformedSize);
+
+    aBitmap = rBitmapEx.GetBitmap();
+    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    for (int i = 0; i < 16; ++i)
+    {
+        for (int j = 0; j < 16; ++j)
+        {
+            BitmapColor aColor = pAccess->GetPixel(j, i);
+            Color aExpected = i >= 8 && j < 8 ? COL_BLACK : COL_WHITE;
+            std::stringstream ss;
+            ss << "Color is expected to be ";
+            ss << ((aExpected == COL_WHITE) ? "white" : "black");
+            ss << ", is " << aColor.AsRGBHexString();
+            ss << " (row " << j << ", col " << i << ")";
+            // Without the accompanying fix in place, this test would have failed with:
+            // - Expected: c[00000000]
+            // - Actual  : c[ffffff00]
+            // - Color is expected to be black, is ffffff (row 0, col 8)
+            // i.e. the top right quarter of the image was not fully black, there was a white first
+            // row.
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(ss.str(), aExpected, Color(aColor));
+        }
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);

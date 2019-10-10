@@ -1285,10 +1285,24 @@ void OutputDevice::DrawTransformedBitmapEx(
                 aFullTransform *= aTransform;
             }
 
-            aTransformed = aTransformed.getTransformed(
-                aFullTransform,
-                aVisibleRange,
-                fMaximumArea);
+            if (bSheared)
+            {
+                aTransformed = aTransformed.getTransformed(
+                    aFullTransform,
+                    aVisibleRange,
+                    fMaximumArea);
+            }
+            else
+            {
+                // Just rotation, can do that directly.
+                fFullRotate = fmod(fFullRotate * -1, F_2PI);
+                if (fFullRotate < 0)
+                {
+                    fFullRotate += F_2PI;
+                }
+                long nAngle10 = basegfx::fround(basegfx::rad2deg(fFullRotate) * 10);
+                aTransformed.Rotate(nAngle10, COL_TRANSPARENT);
+            }
             basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0);
 
             // get logic object target range
