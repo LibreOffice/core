@@ -2534,6 +2534,13 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="LockClipboard" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Enabling this will disable the clipboard so that it can't be read from other applications.
+          Internal copy/paste will still work.</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <group oor:name="OpenPGP">
         <info>
           <desc>Contains security settings regarding the GnuPG/OpenPGP backend.</desc>

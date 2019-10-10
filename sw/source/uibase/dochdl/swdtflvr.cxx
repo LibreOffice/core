@@ -72,6 +72,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #ifdef _WIN32
 #include <prewin.h>
@@ -470,6 +471,9 @@ sal_Bool SAL_CALL SwTransferable::isComplex()
 
 bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDoc )
 {
+    if (officecfg::Office::Common::Security::LockClipboard::get())
+        return false;
+
     SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
 
     // we can only fulfil the request if
