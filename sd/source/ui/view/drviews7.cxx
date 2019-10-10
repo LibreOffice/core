@@ -915,7 +915,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
         if (pOlView)
         {
-            if (pOlView->GetSelected().isEmpty())
+            if (pOlView->GetSelected().isEmpty() || GetViewShell()->isContentExtractionLocked())
             {
                 rSet.DisableItem( SID_CUT );
                 rSet.DisableItem( SID_COPY );

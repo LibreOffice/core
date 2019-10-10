@@ -1964,6 +1964,13 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     rSet.DisableItem(nWhich);
             }
             break;
+            case SID_COPY:
+            case SID_CUT:
+            {
+                if (GetShell().GetView().isContentExtractionLocked())
+                    rSet.DisableItem(nWhich);
+                break;
+            }
         }
         nWhich = aIter.NextWhich();
     }
