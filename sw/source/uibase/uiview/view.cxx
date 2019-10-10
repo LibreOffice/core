@@ -182,7 +182,7 @@ void SwView::GotFocus() const
     if ( pAsFormShell )
     {
         pAsFormShell->ForgetActiveControl();
-        const_cast< SwView* >( this )->AttrChangedNotify( m_pWrtShell.get() );
+        const_cast< SwView* >( this )->AttrChangedNotify(nullptr);
     }
     else if ( m_pPostItMgr )
     {
@@ -190,7 +190,7 @@ void SwView::GotFocus() const
         if ( pAsAnnotationShell )
         {
             m_pPostItMgr->SetActiveSidebarWin(nullptr);
-            const_cast< SwView* >( this )->AttrChangedNotify( m_pWrtShell.get() );
+            const_cast< SwView* >( this )->AttrChangedNotify(nullptr);
         }
     }
     if( GetWrtShellPtr() )
@@ -219,7 +219,7 @@ IMPL_LINK_NOARG(SwView, FormControlActivated, LinkParamNone*, void)
         if ( pSdrView && pSdrView->IsTextEdit() )
             pSdrView->SdrEndTextEdit( true );
 
-        AttrChangedNotify( m_pWrtShell.get() );
+        AttrChangedNotify(nullptr);
     }
 }
 
@@ -504,7 +504,7 @@ extern "C"
     }
 }
 
-IMPL_LINK_NOARG(SwView, AttrChangedNotify, SwCursorShell*, void)
+IMPL_LINK_NOARG(SwView, AttrChangedNotify, LinkParamNone*, void)
 {
     if ( GetEditWin().IsChainMode() )
         GetEditWin().SetChainMode( false );
@@ -1639,7 +1639,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             GetDrawFuncPtr()->Deactivate();
             SetDrawFuncPtr(nullptr);
             LeaveDrawCreate();
-            AttrChangedNotify(m_pWrtShell.get());
+            AttrChangedNotify(nullptr);
         }
     }
     else

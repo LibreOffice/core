@@ -100,7 +100,7 @@ void SwMediaShell::ExecMedia(SfxRequest const &rReq)
                     if( pSh->IsSelFrameMode() )
                         pSh->LeaveSelFrameMode();
 
-                    GetView().AttrChangedNotify( pSh );
+                    GetView().AttrChangedNotify(nullptr);
                 }
             }
             break;

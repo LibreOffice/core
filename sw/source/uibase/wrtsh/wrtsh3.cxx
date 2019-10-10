@@ -123,7 +123,7 @@ void SwWrtShell::DrawSelChanged( )
 
     bool bOldVal = g_bNoInterrupt;
     g_bNoInterrupt = true;    // Trick to run AttrChangedNotify by timer.
-    GetView().AttrChangedNotify(this);
+    GetView().AttrChangedNotify(nullptr);
     g_bNoInterrupt = bOldVal;
 }
 
