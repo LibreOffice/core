@@ -29,6 +29,7 @@ namespace sfx2 { namespace sidebar {
 
 class DeckDescriptor;
 class DeckTitleBar;
+class DeckNotifyIdle;
 
 /** This is the parent window of the panels.
     It displays the deck title.
@@ -88,6 +89,7 @@ private:
     sal_Int32 mnMinimalWidth;
     sal_Int32 mnMinimalHeight;
     SharedPanelContainer maPanels;
+    std::unique_ptr<DeckNotifyIdle> mpIdleNotify;
     VclPtr<DeckTitleBar> mpTitleBar;
     VclPtr<vcl::Window> mpScrollClipWindow;
     VclPtr<ScrollContainerWindow> mpScrollContainer;
