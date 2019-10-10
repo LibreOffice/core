@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_31bb10e3",
+        "filename": "sc/source/ui/drawfunc/drawsh2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2019-10-10T09:29:48Z",
+      "side": 1,
+      "message": "Does this allows to lock documents independently?\n\nWe can have several documents opened and some of them are ordinal documents without any permissions and some can have restricted access.\n\nDoes this approach allows this?",
+      "range": {
+        "startLine": 151,
+        "startChar": 6,
+        "endLine": 151,
+        "endChar": 7
+      },
+      "revId": "c2fb36011ecd184f09b13e294535a175cd1ec5d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
