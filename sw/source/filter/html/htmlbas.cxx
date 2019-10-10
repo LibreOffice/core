@@ -285,9 +285,9 @@ void SwHTMLWriter::OutBasic()
                     .append(OOO_STRING_SVTOOLS_HTML_META_content_script_type)
                     .append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_content)
                     .append("=\"text/x-");
-                Strm().WriteCharPtr( sOut.getStr() );
+                Strm().WriteOStringBuffer( sOut );
                 // Entities aren't welcome here
-                Strm().WriteCharPtr( OUStringToOString(sLang, m_eDestEnc).getStr() )
+                Strm().WriteOString( OUStringToOString(sLang, m_eDestEnc) )
                    .WriteCharPtr( "\">" );
             }
 

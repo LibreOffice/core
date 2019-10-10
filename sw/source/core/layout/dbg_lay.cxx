@@ -787,7 +787,7 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
         aOut.append(lcl_CellInfo(pCellFrame));
     }
 
-    pStream->WriteCharPtr( aOut.getStr() );
+    pStream->WriteOStringBuffer( aOut );
     (*pStream) << endl;  // output
     pStream->Flush();   // to the disk, so we can read it immediately
     SAL_INFO("sw.layout.debug", aOut.getStr());

@@ -220,7 +220,7 @@ OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream, sa
                 aRet.append('0');
         }
         if (pStream)
-            pStream->WriteCharPtr(sNo.getStr());
+            pStream->WriteOString(sNo);
         else
             aRet.append(sNo);
         if (++nBreak == nLimit)

@@ -415,7 +415,7 @@ void ScHTMLExport::WriteOverview()
             {
                 pDoc->GetName( nTab, aStr );
                 rStrm.WriteCharPtr( "<A HREF=\"#table" )
-                   .WriteCharPtr( OString::number(nTab).getStr() )
+                   .WriteOString( OString::number(nTab) )
                    .WriteCharPtr( "\">" );
                 OUT_STR( aStr );
                 rStrm.WriteCharPtr( "</A>" );
@@ -676,7 +676,7 @@ void ScHTMLExport::WriteTables()
 
                 // Write anchor
                 rStrm.WriteCharPtr( "<A NAME=\"table" )
-                   .WriteCharPtr( OString::number(nTab).getStr() )
+                   .WriteOString( OString::number(nTab) )
                    .WriteCharPtr( "\">" );
                 TAG_ON( OOO_STRING_SVTOOLS_HTML_head1 );
                 OUT_STR( aStrOut );

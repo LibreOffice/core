@@ -95,7 +95,7 @@ void ScRTFExport::WriteTab( SCTAB nTab )
 void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
 {
     rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRGAPH ).WriteCharPtr( "30" ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRLEFT ).WriteCharPtr( "-30" );
-    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRRH ).WriteCharPtr( OString::number(pDoc->GetRowHeight(nRow, nTab)).getStr() );
+    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRRH ).WriteOString( OString::number(pDoc->GetRowHeight(nRow, nTab)) );
     SCCOL nCol;
     SCCOL nEndCol = aRange.aEnd.Col();
     for ( nCol = aRange.aStart.Col(); nCol <= nEndCol; nCol++ )
@@ -126,7 +126,7 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
         if ( pChar )
             rStrm.WriteCharPtr( pChar );
 
-        rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELLX ).WriteCharPtr( OString::number(pCellX[nCol+1]).getStr() );
+        rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELLX ).WriteOString( OString::number(pCellX[nCol+1]) );
         if ( (nCol & 0x0F) == 0x0F )
             rStrm.WriteCharPtr( SAL_NEWLINE_STRING ); // Do not let lines get too long
     }

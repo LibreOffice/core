@@ -22,7 +22,7 @@ RtfStringBufferValue::RtfStringBufferValue(const SwFlyFrameFormat* pFlyFrameForm
 void RtfStringBufferValue::makeStringAndClear(RtfAttributeOutput* pAttributeOutput)
 {
     if (!isGraphic())
-        pAttributeOutput->m_rExport.Strm().WriteCharPtr(m_aBuffer.makeStringAndClear().getStr());
+        pAttributeOutput->m_rExport.Strm().WriteOString(m_aBuffer.makeStringAndClear());
     else
         pAttributeOutput->FlyFrameGraphic(m_pFlyFrameFormat, m_pGrfNode);
 }

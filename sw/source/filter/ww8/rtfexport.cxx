@@ -437,9 +437,9 @@ void RtfExport::WriteMainText()
         {
             Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SP "{");
             Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SN " ");
-            Strm().WriteCharPtr(rPair.first.getStr());
+            Strm().WriteOString(rPair.first);
             Strm().WriteCharPtr("}{" OOO_STRING_SVTOOLS_RTF_SV " ");
-            Strm().WriteCharPtr(rPair.second.getStr());
+            Strm().WriteOString(rPair.second);
             Strm().WriteCharPtr("}}");
         }
         Strm().WriteChar('}'); // shpinst
@@ -470,7 +470,7 @@ void RtfExport::WriteInfo()
         = OUStringToOString(utl::DocInfoHelper::GetGeneratorString(), RTL_TEXTENCODING_UTF8);
     Strm()
         .WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_IGNORE LO_STRING_SVTOOLS_RTF_GENERATOR " ")
-        .WriteCharPtr(aGenerator.getStr())
+        .WriteOString(aGenerator)
         .WriteChar('}');
     Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_INFO);
 
@@ -531,7 +531,7 @@ void RtfExport::WriteUserPropType(int nType)
 void RtfExport::WriteUserPropValue(const OUString& rValue)
 {
     Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_STATICVAL " ");
-    Strm().WriteCharPtr(msfilter::rtfutil::OutString(rValue, m_eDefaultEncoding).getStr());
+    Strm().WriteOString(msfilter::rtfutil::OutString(rValue, m_eDefaultEncoding));
     Strm().WriteChar('}');
 }
 
@@ -707,7 +707,7 @@ ErrCode RtfExport::ExportDocument_Impl()
     WriteUserProps();
     // Default TabSize
     Strm()
-        .WriteCharPtr(m_pAttrOutput->GetTabStop().makeStringAndClear().getStr())
+        .WriteOString(m_pAttrOutput->GetTabStop().makeStringAndClear())
         .WriteCharPtr(SAL_NEWLINE_STRING);
 
     // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.

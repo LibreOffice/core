@@ -24,6 +24,7 @@
 #include <tools/ref.hxx>
 #include <vcl/errcode.hxx>
 #include <rtl/string.hxx>
+#include <rtl/strbuf.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 
@@ -246,7 +247,9 @@ public:
     SvStream&       WriteUInt8( sal_uInt8 nuInt8 );
     SvStream&       WriteUnicode( sal_Unicode );
     SvStream&       WriteOString(const OString& rStr)
-                        { return WriteCharPtr(rStr.getStr()); }
+                        { WriteBytes(rStr.getStr(), rStr.getLength()); return *this; }
+    SvStream&       WriteOStringBuffer(const OStringBuffer& rStr)
+                        { WriteBytes(rStr.getStr(), rStr.getLength()); return *this; }
     SvStream&       WriteStream( SvStream& rStream );
     sal_uInt64      WriteStream( SvStream& rStream, sal_uInt64 nSize );
 

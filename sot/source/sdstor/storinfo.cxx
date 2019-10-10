@@ -80,7 +80,7 @@ void WriteClipboardFormat( SvStream & rStm, SotClipboardFormatId nFormat )
         OString aAsciiCbFmt(OUStringToOString(aCbFmt,
                                               RTL_TEXTENCODING_ASCII_US));
         rStm.WriteInt32( aAsciiCbFmt.getLength() + 1 );
-        rStm.WriteCharPtr( aAsciiCbFmt.getStr() );
+        rStm.WriteOString( aAsciiCbFmt );
         rStm.WriteUChar( 0 );
     }
     else if( nFormat != SotClipboardFormatId::NONE )

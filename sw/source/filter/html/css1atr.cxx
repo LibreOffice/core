@@ -287,7 +287,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
                     "p." sCSS2_P_CLASS_leaders " span+span{float:right;padding-left:0.33em;"
                     "background:white;position:relative;z-index:1}");
         }
-        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        Strm().WriteOString( sOut.makeStringAndClear() );
 
         IncIndentLevel();
     }
@@ -332,7 +332,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
     if( m_nCSS1OutMode & CSS1_OUTMODE_ENCODE )
     {
         // for STYLE-Option encode string
-        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        Strm().WriteOString( sOut.makeStringAndClear() );
         if( pVal )
             HTMLOutFuncs::Out_String( Strm(), OUString::createFromAscii(pVal),
                                       m_eDestEnc, &m_aNonConvertableCharacters );
@@ -349,7 +349,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
     }
 
     if (!sOut.isEmpty())
-        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        Strm().WriteOString( sOut.makeStringAndClear() );
 }
 
 static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
@@ -1723,7 +1723,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     {
         rHTMLWrt.OutNewLine();
         OString sTmp(OUStringToOString(aSelector, rHTMLWrt.m_eDestEnc));
-        rWrt.Strm().WriteCharPtr( sTmp.getStr() ).WriteCharPtr( " {" );
+        rWrt.Strm().WriteOString( sTmp ).WriteCharPtr( " {" );
         rHTMLWrt.m_bFirstCSS1Property = false;
     }
 
@@ -3712,7 +3712,7 @@ void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
             break;
         }
         if (!sOut.isEmpty())
-            Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+            Strm().WriteOString( sOut.makeStringAndClear() );
     }
 }
 
