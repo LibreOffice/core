@@ -385,7 +385,7 @@ SwXMailMerge::SwXMailMerge() :
     m_xDocSh->DoInitNew();
     SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *m_xDocSh, SFX_INTERFACE_NONE );
     SwView *pView = static_cast<SwView*>( pFrame->GetViewShell() );
-    pView->AttrChangedNotify( &pView->GetWrtShell() ); //So that SelectShell is called.
+    pView->AttrChangedNotify(nullptr); //So that SelectShell is called.
     m_xModel = m_xDocSh->GetModel();
 }
 
@@ -605,7 +605,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     // while still in Update of Sfx.
     // (GetSelection in Update is not allowed)
     if (!aCurDocumentURL.isEmpty())
-        pView->AttrChangedNotify( &pView->GetWrtShell() );//So that SelectShell is called.
+        pView->AttrChangedNotify(nullptr);//So that SelectShell is called.
 
     SharedComponent aRowSetDisposeHelper;
     if (!xCurResultSet.is())

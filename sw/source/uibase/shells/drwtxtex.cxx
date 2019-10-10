@@ -512,7 +512,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 pTmpView->SetAttributes( aAttr );
 
                 rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV, &rSh.GetView().GetEditWin());
-                rSh.GetView().AttrChangedNotify( &rSh );
+                rSh.GetView().AttrChangedNotify(nullptr);
             }
             return;
 
@@ -556,7 +556,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             }
             pTmpView->SetAttributes( aAttr );
             rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV, &rSh.GetView().GetEditWin() );
-            rSh.GetView().AttrChangedNotify( &rSh );
+            rSh.GetView().AttrChangedNotify(nullptr);
         }
         return;
 

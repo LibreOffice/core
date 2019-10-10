@@ -176,7 +176,7 @@ private:
 
     Link<const SwFlyFrameFormat*,void> m_aFlyMacroLnk;        /**< Link will be called, if the Cursor is set
                                    into a fly. A macro can then be called */
-    Link<SwCursorShell*,void> m_aChgLnk;             /**< link will be called by every attribute/
+    Link<LinkParamNone*,void> m_aChgLnk;             /**< link will be called by every attribute/
                                    format changes at cursor position.*/
     Link<SwCursorShell&,void> m_aGrfArrivedLnk;      ///< Link calls to UI if a graphic is arrived
 
@@ -477,8 +477,8 @@ public:
     const Link<const SwFlyFrameFormat*,void>& GetFlyMacroLnk() const           { return m_aFlyMacroLnk; }
 
     // Methods returning/altering link for changes of attributes/formats.
-    void        SetChgLnk( const Link<SwCursorShell*,void> &rLnk ) { m_aChgLnk = rLnk; }
-    const Link<SwCursorShell*,void>& GetChgLnk() const           { return m_aChgLnk; }
+    void        SetChgLnk( const Link<LinkParamNone*,void> &rLnk ) { m_aChgLnk = rLnk; }
+    const Link<LinkParamNone*,void>& GetChgLnk() const           { return m_aChgLnk; }
 
     // Methods returning/altering ling for "graphic completely loaded".
     void        SetGrfArrivedLnk( const Link<SwCursorShell&,void> &rLnk ) { m_aGrfArrivedLnk = rLnk; }

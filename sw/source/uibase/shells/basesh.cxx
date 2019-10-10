@@ -293,7 +293,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 
                     if( rSh.IsFrameSelected() || rSh.IsObjSelected() )
                         rSh.EnterSelFrameMode();
-                    pView->AttrChangedNotify( &rSh );
+                    pView->AttrChangedNotify(nullptr);
                 }
                 else
                     return;
@@ -324,7 +324,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         bIgnore = true;
                         if( rSh.IsFrameSelected() || rSh.IsObjSelected())
                             rSh.EnterSelFrameMode();
-                        pView->AttrChangedNotify( &rSh );
+                        pView->AttrChangedNotify(nullptr);
                     }
                 }
             }
@@ -356,7 +356,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 
                     if (rSh.IsFrameSelected() || rSh.IsObjSelected())
                         rSh.EnterSelFrameMode();
-                    pView->AttrChangedNotify( &rSh );
+                    pView->AttrChangedNotify(nullptr);
                 }
                 else
                     return;
@@ -391,7 +391,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 
                     if (rSh.IsFrameSelected() || rSh.IsObjSelected())
                         rSh.EnterSelFrameMode();
-                    pView->AttrChangedNotify( &rSh );
+                    pView->AttrChangedNotify(nullptr);
                 }
                 else
                     return;
@@ -748,7 +748,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 {
                     rSh.HideCursor();
                     rSh.EnterSelFrameMode();
-                    GetView().AttrChangedNotify( &rSh );
+                    GetView().AttrChangedNotify(nullptr);
                 }
         }
         break;

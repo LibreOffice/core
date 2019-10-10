@@ -225,7 +225,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
             m_pWrtShell->EnterSelFrameMode();
         LeaveDrawCreate();
 
-        AttrChangedNotify(m_pWrtShell);
+        AttrChangedNotify(nullptr);
         return;
     }
 
@@ -343,7 +343,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         }
 
         SetDrawFuncPtr(pFuncPtr);
-        AttrChangedNotify(m_pWrtShell);
+        AttrChangedNotify(nullptr);
 
         pFuncPtr->Activate(nSlotId);
         NoRotate();
@@ -386,7 +386,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     if(bEndTextEdit && pSdrView && pSdrView->IsTextEdit())
         pSdrView->SdrEndTextEdit( true );
 
-    AttrChangedNotify(m_pWrtShell);
+    AttrChangedNotify(nullptr);
 }
 
 // End drawing

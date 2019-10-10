@@ -161,7 +161,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     xDocSh->DoInitNew();
     pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, SFX_INTERFACE_NONE );
     pNewView = static_cast<SwView*>( pFrame->GetViewShell());
-    pNewView->AttrChangedNotify( &pNewView->GetWrtShell() ); // so that SelectShell is being called
+    pNewView->AttrChangedNotify(nullptr); // so that SelectShell is being called
     pSh = pNewView->GetWrtShellPtr();
 
     OUString aTmp( SwResId(STR_ENV_TITLE) );

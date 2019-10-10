@@ -203,7 +203,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
     SfxViewFrame* pViewFrame = SfxViewFrame::DisplayNewDocument( *xDocSh, rReq );
 
     SwView      *pNewView = static_cast<SwView*>( pViewFrame->GetViewShell());
-    pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );// So that SelectShell is being called.
+    pNewView->AttrChangedNotify(nullptr);// So that SelectShell is being called.
 
     // Set document title
     OUString aTmp;

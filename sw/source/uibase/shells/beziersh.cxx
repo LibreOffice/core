@@ -92,7 +92,7 @@ void SwBezierShell::Execute(SfxRequest const &rReq)
                         pSh->LeaveSelFrameMode();
                         pSh->NoEdit();
                     }
-                    GetView().AttrChangedNotify(pSh); // Shell change if applicable...
+                    GetView().AttrChangedNotify(nullptr); // Shell change if applicable...
                 }
             }
             break;
@@ -105,13 +105,13 @@ void SwBezierShell::Execute(SfxRequest const &rReq)
                 if ( pSh->IsDrawCreate() )
                 {
                     GetView().GetDrawFuncPtr()->BreakCreate();
-                    GetView().AttrChangedNotify(pSh); // Shell change if applicable...
+                    GetView().AttrChangedNotify(nullptr); // Shell change if applicable...
                 }
                 else if ( pSh->HasSelection() || GetView().IsDrawMode() )
                 {
                     GetView().LeaveDrawCreate();
                     pSh->EnterStdMode();
-                    GetView().AttrChangedNotify(pSh); // Shell change if applicable...
+                    GetView().AttrChangedNotify(nullptr); // Shell change if applicable...
                 }
             }
             break;

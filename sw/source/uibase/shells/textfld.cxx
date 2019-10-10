@@ -493,7 +493,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         pAnnotationWin->UpdateText(sText);
 
                         // explicit state update to get the Undo state right
-                        GetView().AttrChangedNotify(GetShellPtr());
+                        GetView().AttrChangedNotify(nullptr);
                     }
                 }
             }
@@ -540,7 +540,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if (comphelper::LibreOfficeKit::isActive() && !sCommentText.isEmpty())
                     {
                         rSh.SetRedlineComment(sCommentText);
-                        GetView().AttrChangedNotify(GetShellPtr());
+                        GetView().AttrChangedNotify(nullptr);
                         MaybeNotifyRedlineModification(const_cast<SwRangeRedline*>(pRedline), pRedline->GetDoc());
                         break;
                     }
@@ -625,7 +625,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     SwViewShell::SetCareWin(nullptr);
                     g_bNoInterrupt = false;
                     rSh.ClearMark();
-                    GetView().AttrChangedNotify(GetShellPtr());
+                    GetView().AttrChangedNotify(nullptr);
                 }
             }
             break;

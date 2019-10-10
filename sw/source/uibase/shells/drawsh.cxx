@@ -224,7 +224,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             }
             GetView().FlipDrawSelMode();
             pSdrView->SetFrameDragSingles(GetView().IsDrawSelMode());
-            GetView().AttrChangedNotify(&rSh); // Shell switch
+            GetView().AttrChangedNotify(nullptr); // Shell switch
             break;
 
         case SID_OBJECT_HELL:
@@ -556,7 +556,7 @@ void SwDrawShell::ExecFormText(SfxRequest const & rReq)
         if ( pDrView->IsTextEdit() )
         {
             pDrView->SdrEndTextEdit( true );
-            GetView().AttrChangedNotify(&rSh);
+            GetView().AttrChangedNotify(nullptr);
         }
 
         pDrView->SetAttributes(rSet);

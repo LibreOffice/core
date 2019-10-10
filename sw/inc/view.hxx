@@ -535,7 +535,7 @@ public:
     void            StateTabWin(SfxItemSet&);
 
     // attributes have changed
-    DECL_LINK( AttrChangedNotify, SwCursorShell*, void );
+    DECL_LINK( AttrChangedNotify, LinkParamNone*, void );
 
     // form control has been activated
     DECL_LINK( FormControlActivated, LinkParamNone*, void );

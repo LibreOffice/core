@@ -631,7 +631,7 @@ SfxObjectShellLock SwXTextView::BuildTmpSelectionDoc()
     rOldSh.FillPrtDoc(pTempDoc,  pPrt);
     SfxViewFrame* pDocFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, SFX_INTERFACE_NONE );
     SwView* pDocView = static_cast<SwView*>( pDocFrame->GetViewShell() );
-    pDocView->AttrChangedNotify( &pDocView->GetWrtShell() );//So that SelectShell is called.
+    pDocView->AttrChangedNotify(nullptr);//So that SelectShell is called.
     SwWrtShell* pSh = pDocView->GetWrtShellPtr();
 
     IDocumentDeviceAccess& rIDDA = pSh->getIDocumentDeviceAccess();
@@ -1732,7 +1732,7 @@ void SAL_CALL SwXTextView::insertTransferable( const uno::Reference< datatransfe
             SwTransferable::Paste( rSh, aDataHelper );
             if( rSh.IsFrameSelected() || rSh.IsObjSelected() )
                 rSh.EnterSelFrameMode();
-            GetView()->AttrChangedNotify( &rSh );
+            GetView()->AttrChangedNotify(nullptr);
         }
     }
 }
