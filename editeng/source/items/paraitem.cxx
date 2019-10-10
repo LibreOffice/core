@@ -660,7 +660,7 @@ bool SvxHyphenZoneItem::GetPresentation
 
             if ( bPageEnd )
                 pId = RID_SVXITEMS_PAGE_END_TRUE;
-            rText = rText + EditResId(pId) + cpDelimTmp +
+            rText += EditResId(pId) + cpDelimTmp +
                     OUString::number( nMinLead ) + cpDelimTmp +
                     OUString::number( nMinTrail ) + cpDelimTmp +
                     OUString::number( nMaxHyphens );
@@ -677,8 +677,7 @@ bool SvxHyphenZoneItem::GetPresentation
 
             if ( bPageEnd )
                 pId = RID_SVXITEMS_PAGE_END_TRUE;
-            rText = rText +
-                    EditResId(pId) +
+            rText += EditResId(pId) +
                     cpDelimTmp +
                     EditResId(RID_SVXITEMS_HYPHEN_MINLEAD).replaceAll("%1", OUString::number(nMinLead)) +
                     cpDelimTmp +

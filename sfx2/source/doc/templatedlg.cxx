@@ -914,7 +914,7 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(const OUString& sCategory)
             if (aTemplateList.isEmpty())
                 aTemplateList = rFile;
             else
-                aTemplateList = aTemplateList + "\n" + rFile;
+                aTemplateList += "\n" + rFile;
         }
     }
 
@@ -968,7 +968,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
                 if (aTemplateList.isEmpty())
                     aTemplateList = pItem->maTitle;
                 else
-                    aTemplateList = aTemplateList + "\n" + pItem->maTitle;
+                    aTemplateList += "\n" + pItem->maTitle;
             }
             ++i;
         }
@@ -1001,7 +1001,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
                 if (aTemplateList.isEmpty())
                     aTemplateList = pItem->maTitle;
                 else
-                    aTemplateList = aTemplateList + "\n" + pItem->maTitle;
+                    aTemplateList += "\n" + pItem->maTitle;
             }
             ++i;
         }

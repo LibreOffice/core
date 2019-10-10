@@ -189,7 +189,7 @@ OUString OAccessibleMenuItemComponent::GetAccessibleName()
         sName = OutputDevice::GetNonMnemonicString( sName );
 #if defined(_WIN32)
         if ( m_pParent->GetAccelKey( nItemId ).GetName().getLength() )
-            sName = sName + "\t" + m_pParent->GetAccelKey(nItemId).GetName();
+            sName += "\t" + m_pParent->GetAccelKey(nItemId).GetName();
 #endif
     }
 

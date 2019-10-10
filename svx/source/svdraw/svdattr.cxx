@@ -633,7 +633,7 @@ bool SdrFractionItem::GetPresentation(
 
         if(nDiv != 1)
         {
-            rText = rText + "/" + OUString::number(nDiv);
+            rText += "/" + OUString::number(nDiv);
         }
     }
     else

@@ -113,7 +113,7 @@ IXFStyleRet XFStyleContainer::AddStyle(std::unique_ptr<IXFStyle> pStyle)
             //for name conflict
             if(FindStyle( name))
             {
-                name = name + OUString::number(m_aStyles.size()+1);
+                name += OUString::number(m_aStyles.size()+1);
                 pStyle->SetStyleName(name);
             }
         }

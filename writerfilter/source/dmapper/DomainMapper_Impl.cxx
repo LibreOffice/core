@@ -5170,7 +5170,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                                 OUString titleStr;
                                 uno::Any aValue(propertyVal.Value);
                                 aValue >>= titleStr;
-                                titleStr = titleStr + rResult;
+                                titleStr += rResult;
                                 propertyVal.Value <<= titleStr;
                                 aValues[nTitleFoundIndex] = propertyVal;
                             }

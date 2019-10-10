@@ -109,12 +109,12 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         else if(pBegin->Name.equalsAscii(pUser))
         {
             pBegin->Value >>= aUID;
-            aDSN = aDSN + ";UID=" + aUID;
+            aDSN += ";UID=" + aUID;
         }
         else if(pBegin->Name.equalsAscii(pPwd))
         {
             pBegin->Value >>= aPWD;
-            aDSN = aDSN + ";PWD=" + aPWD;
+            aDSN += ";PWD=" + aPWD;
         }
         else if(pBegin->Name.equalsAscii(pUseCatalog))
         {

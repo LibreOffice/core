@@ -194,7 +194,7 @@ void prepareLink( const Reference < XSimpleRegistry > & xDest,
 
     if (pShortName)
     {
-        linkRefName = linkRefName + link.copy(pShortName - pTmpName + 1);
+        linkRefName += link.copy(pShortName - pTmpName + 1);
         linkName = link.copy(0, pShortName - pTmpName);
     }
 
@@ -515,7 +515,7 @@ void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
         OUString linkTarget = xKey->getLinkTarget(relativKey);
         OUString linkName(xKey->getKeyName().copy(xUnoKey->getKeyName().getLength()));
 
-        linkName = linkName + "/" + relativKey;
+        linkName += "/" + relativKey;
 
         if (bRegister)
         {

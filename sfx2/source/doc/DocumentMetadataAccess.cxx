@@ -150,7 +150,7 @@ uno::Reference<rdf::XURI> createBaseURI(
         assert(!pkgURI.isEmpty());
         if (!pkgURI.isEmpty() && !pkgURI.endsWith("/"))
         {
-            pkgURI = pkgURI + "/";
+            pkgURI += "/";
         }
     }
 

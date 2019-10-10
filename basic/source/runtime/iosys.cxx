@@ -535,7 +535,7 @@ ErrCode const & SbiStream::Read( char& ch )
     if (aLine.isEmpty())
     {
         Read( aLine );
-        aLine = aLine + OString('\n');
+        aLine += OString('\n');
     }
     ch = aLine[0];
     aLine = aLine.copy(1);
@@ -582,7 +582,7 @@ ErrCode SbiStream::Write( const OString& rBuf )
     }
     if( IsText() )
     {
-        aLine = aLine + rBuf;
+        aLine += rBuf;
         // Get it out, if the end is an LF, but strip CRLF before,
         // because the SvStream adds a CRLF!
         sal_Int32 nLineLen = aLine.getLength();
@@ -729,7 +729,7 @@ char SbiIoSystem::Read()
         if( aIn.isEmpty() )
         {
             ReadCon( aIn );
-            aIn = aIn + OString('\n');
+            aIn += OString('\n');
         }
         ch = aIn[0];
         aIn = aIn.copy(1);

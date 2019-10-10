@@ -429,7 +429,7 @@ static bool lcl_HFPresentation
                 aText = EditResId(RID_SVXITEMS_LRSPACE_LEFT);
                 if ( 100 != nPropLeftMargin )
                 {
-                    aText = aText + unicode::formatPercent(nPropLeftMargin,
+                    aText += unicode::formatPercent(nPropLeftMargin,
                         Application::GetSettings().GetUILanguageTag());
                 }
                 else
@@ -443,7 +443,7 @@ static bool lcl_HFPresentation
                     EditResId(RID_SVXITEMS_LRSPACE_RIGHT);
                 if ( 100 != nPropRightMargin )
                 {
-                    aText = aText + unicode::formatPercent(nPropLeftMargin,
+                    aText += unicode::formatPercent(nPropLeftMargin,
                         Application::GetSettings().GetUILanguageTag());
                 }
                 else
@@ -462,7 +462,7 @@ static bool lcl_HFPresentation
 
         if ( aText.getLength() )
         {
-            rText = rText + aText + " + ";
+            rText += aText + " + ";
         }
     }
 
@@ -559,7 +559,7 @@ bool ScDocumentPool::GetPresentation(
             if( nPercent )
             {
                 rText = ScResId(STR_SCATTR_PAGE_SCALE) + aStrSep;
-                rText = rText + unicode::formatPercent(nPercent,
+                rText += unicode::formatPercent(nPercent,
                     Application::GetSettings().GetUILanguageTag());
             }
             else

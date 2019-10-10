@@ -108,7 +108,7 @@ namespace fs
         {
             OString tmp(in);
             OUString ustrSystemPath(OStringToOUString(tmp, getThreadTextEncoding()));
-            data = data + ustrSystemPath;
+            data += ustrSystemPath;
         }
         void append(const std::string &in) { append(in.c_str()); }
     };

@@ -780,7 +780,7 @@ void Test::testSkipImages()
     for (auto const & rFilterNamePair : aFilterNames)
     {
         bool bSkipImages = !rFilterNamePair.second.isEmpty();
-        OString sFailedMessage = OString("Failed on filter: ") + rFilterNamePair.first.toUtf8();
+        OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterNamePair.first.toUtf8();
 
         if (mxComponent.is())
             mxComponent->dispose();
@@ -792,7 +792,7 @@ void Test::testSkipImages()
                     { "FilterOptions", uno::Any(rFilterNamePair.second) }
             }));
             mxComponent = loadFromDesktop(m_directories.getURLFromSrc(rFilterNamePair.first), "com.sun.star.text.TextDocument", args);
-            sFailedMessage = sFailedMessage + " - " + rFilterNamePair.second.toUtf8();
+            sFailedMessage += " - " + rFilterNamePair.second.toUtf8();
         }
         else
         {

@@ -224,13 +224,13 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
         {
             if( ! (pBegin->Value >>= aUID) )
                 SAL_WARN("connectivity.odbc", "Construct: unable to get property user");
-            aDSN = aDSN + ";UID=" + aUID;
+            aDSN += ";UID=" + aUID;
         }
         else if( pBegin->Name == "password")
         {
             if( ! (pBegin->Value >>= aPWD) )
                 SAL_WARN("connectivity.odbc", "Construct: unable to get property password");
-            aDSN = aDSN + ";PWD=" + aPWD;
+            aDSN += ";PWD=" + aPWD;
         }
         else if( pBegin->Name == "UseCatalog")
         {

@@ -546,7 +546,7 @@ bool XMLFrameProtectPropHdl_Impl::exportXML(
         }
         else
         {
-            rStrExpValue = rStrExpValue + " " + sVal;
+            rStrExpValue += " " + sVal;
         }
     }
     else if( rStrExpValue.isEmpty() )
@@ -775,7 +775,7 @@ bool XMLGrfMirrorPropHdl_Impl::exportXML(
         }
         else
         {
-            rStrExpValue = rStrExpValue + " " + sVal;
+            rStrExpValue += " " + sVal;
         }
     }
     else if( rStrExpValue.isEmpty() )

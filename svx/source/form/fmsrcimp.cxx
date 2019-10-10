@@ -805,7 +805,7 @@ void FmSearchEngine::SearchNextImpl()
                     strSearchExpression = "*" + strSearchExpression + "*";
                     break;
                 case MATCHING_BEGINNING :
-                    strSearchExpression = strSearchExpression + "*";
+                    strSearchExpression += "*";
                     break;
                 case MATCHING_END :
                     strSearchExpression = "*" + strSearchExpression;

@@ -2565,7 +2565,7 @@ void SbUserFormModule::InitObject()
             }
             catch(const Exception& ) {}
 
-            sDialogUrl = sDialogUrl + sProjectName + "." + GetName() + "?location=document";
+            sDialogUrl += sProjectName + "." + GetName() + "?location=document";
 
             uno::Reference< awt::XDialogProvider > xProvider = awt::DialogProvider::createWithModel( xContext, m_xModel  );
             m_xDialog = xProvider->createDialog( sDialogUrl );

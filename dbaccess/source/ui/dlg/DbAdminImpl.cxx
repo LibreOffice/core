@@ -124,7 +124,7 @@ namespace
 
         if ( _pPortNumber )
         {
-            sNewUrl = sNewUrl + ":" + OUString::number(_pPortNumber->GetValue());
+            sNewUrl += ":" + OUString::number(_pPortNumber->GetValue());
         }
 
         return sNewUrl;

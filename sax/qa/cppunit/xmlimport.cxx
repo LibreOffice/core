@@ -156,15 +156,15 @@ void SAL_CALL TestDocumentHandler::startElement( const OUString& aName, const Re
         OUString sAttrValue = xAttribs->getValueByIndex(i);
         OUString sAttrName = canonicalform(xAttribs->getNameByIndex(i), sAttrValue, false);
         if (!sAttrName.isEmpty())
-            sAttributes = sAttributes + sAttrName + sAttrValue;
+            sAttributes += sAttrName + sAttrValue;
     }
-    m_aStr = m_aStr + canonicalform(aName, "", true) + sAttributes;
+    m_aStr += canonicalform(aName, "", true) + sAttributes;
 }
 
 
 void SAL_CALL TestDocumentHandler::endElement( const OUString& aName )
 {
-    m_aStr = m_aStr + canonicalform(aName, "", true);
+    m_aStr += canonicalform(aName, "", true);
     sal_uInt16 nPopQty = m_aCountStack.top();
     for (sal_uInt16 i=0; i<nPopQty; i++)
         m_aNamespaceStack.pop_back();
@@ -174,19 +174,19 @@ void SAL_CALL TestDocumentHandler::endElement( const OUString& aName )
 
 void SAL_CALL TestDocumentHandler::characters( const OUString& aChars )
 {
-    m_aStr = m_aStr + aChars;
+    m_aStr += aChars;
 }
 
 
 void SAL_CALL TestDocumentHandler::ignorableWhitespace( const OUString& aWhitespaces )
 {
-    m_aStr = m_aStr + aWhitespaces;
+    m_aStr += aWhitespaces;
 }
 
 
 void SAL_CALL TestDocumentHandler::processingInstruction( const OUString& aTarget, const OUString& aData )
 {
-    m_aStr = m_aStr + aTarget + aData;
+    m_aStr += aTarget + aData;
 }
 
 

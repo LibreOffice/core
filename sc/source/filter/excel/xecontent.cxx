@@ -1255,7 +1255,7 @@ OString createHexStringFromDigit(sal_uInt8 nDigit)
 {
     OString aString = OString::number( nDigit, 16 );
     if(aString.getLength() == 1)
-        aString = aString + OString::number(0);
+        aString += OString::number(0);
     return aString;
 }
 
