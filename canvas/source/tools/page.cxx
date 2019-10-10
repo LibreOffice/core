@@ -98,13 +98,21 @@ namespace canvas
             r.maPos.setX(x+w);
             r.maPos.setY(y);
             if(isValidLocation(r))
+            {
+                r.maPos.setX(r.maSize.getX()+1);
+                r.maSize.setX(r.maSize.getX()-1);
                 return true;
+            }
 
             // probe location at bottom
             r.maPos.setX(x);
             r.maPos.setY(y+h);
             if(isValidLocation(r))
+            {
+                r.maPos.setY(r.maSize.getY()+1);
+                r.maSize.setY(r.maSize.getY()-1);
                 return true;
+            }
         }
 
         r.maPos.setX(0);
@@ -118,7 +126,7 @@ namespace canvas
         // the rectangle passed as argument has a valid
         // location if and only if there's no intersection
         // with existing areas.
-        SurfaceRect aBoundary(mpRenderModule->getPageSize()-basegfx::B2IVector(1,1));
+        SurfaceRect aBoundary(mpRenderModule->getPageSize());
         if( !r.inside(aBoundary) )
             return false;
 
