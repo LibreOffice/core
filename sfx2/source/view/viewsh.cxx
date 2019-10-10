@@ -39,11 +39,13 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <osl/file.hxx>
@@ -60,6 +62,7 @@
 #include <basic/sbuno.hxx>
 #include <framework/actiontriggerhelper.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -1731,6 +1734,15 @@ void SfxViewShell::SetController( SfxBaseController* pController )
         pImpl->xClipboardListener->DisconnectViewShell();
 
     pImpl->xClipboardListener = new SfxClipboardChangeListener( this, GetClipboardNotifier() );
+}
+
+bool SfxViewShell::isContentExtractionLocked()
+{
+    Reference<XModel> xModel = GetCurrentDocument();
+    if (!xModel.is())
+        return false;
+    comphelper::NamedValueCollection aArgs(xModel->getArgs());
+    return aArgs.getOrDefault("LockContentExtraction", false);
 }
 
 Reference < XController > SfxViewShell::GetController() const
