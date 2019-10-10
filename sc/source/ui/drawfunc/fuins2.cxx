@@ -49,6 +49,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
@@ -667,7 +669,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
         if( xChartModel.is() )
             xChartModel->unlockControllers();
     }
-    else
+    else if (!comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
     {
         //the controller will be unlocked by the dialog when the dialog is told to do so
 
