@@ -134,11 +134,12 @@ private:
         bool operator() (const value_type& rValue1, const value_type& rValue2) const;
     };
 
-    const index_type MAX_INDEX;
+    index_type MAX_INDEX;
     std::set<value_type, Comp> mData;
 
 public:
-    ScPositionHelper(bool bColumn);
+    ScPositionHelper(ScDocument *pDoc, bool bColumn);
+    void setDocument(ScDocument *pDoc, bool bColumn);
 
     void insert(index_type nIndex, long nPos);
     void removeByIndex(index_type nIndex);
@@ -245,8 +246,9 @@ private:
 
     bool            bShowGrid;                  // per sheet show grid lines option.
     bool            mbOldCursorValid;           // "virtual" Cursor position when combined
-                    ScViewDataTable();
+                    ScViewDataTable(ScDocument *pDoc = nullptr);
 
+    void            InitData(ScDocument *pDoc);
     void            WriteUserDataSequence(
                         css::uno::Sequence <css::beans::PropertyValue>& rSettings,
                         const ScViewData& rViewData ) const;
