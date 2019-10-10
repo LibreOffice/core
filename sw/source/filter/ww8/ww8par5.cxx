@@ -529,7 +529,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
         nRet = m_aFieldStack.back().mnFieldId;
         switch (nRet)
         {
-        case 70:
+        case ww::eFORMTEXT:
         if (bUseEnhFields && m_pPaM!=nullptr && m_pPaM->GetPoint()!=nullptr) {
             SwPosition aEndPos = *m_pPaM->GetPoint();
             if (!::CheckNodesRange(m_aFieldStack.back().GetPtNode(),
@@ -550,8 +550,8 @@ sal_uInt16 SwWW8ImplReader::End_Field()
         }
         break;
             // Doing corresponding status management for TOX field, index field, hyperlink field and page reference field
-            case 13://TOX
-            case 8://index
+            case ww::eTOC://TOX
+            case ww::eINDEX://index
                 if (m_bLoadingTOXCache)
                 {
                     if (m_nEmbeddedTOXLevel > 0)
@@ -582,23 +582,23 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                     }
                 }
                 break;
-            case 37: //REF
+            case ww::ePAGEREF: //REF
                 if (m_bLoadingTOXCache && !m_bLoadingTOXHyperlink)
                 {
                     m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(),RES_TXTATR_INETFMT);
                 }
                 break;
-            case 88:
+            case ww::eHYPERLINK:
                 if (m_bLoadingTOXHyperlink)
                     m_bLoadingTOXHyperlink = false;
                 m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_TXTATR_INETFMT);
                 break;
-            case 36:
-            case 68:
+            case ww::eMERGEINC:
+            case ww::eINCLUDETEXT:
                 //Move outside the section associated with this type of field
                 *m_pPaM->GetPoint() = m_aFieldStack.back().maStartPos;
                 break;
-            case 7: // IF-field
+            case ww::eIF: // IF-field
             {
                 // conditional field parameters
                 const OUString& fieldDefinition = m_aFieldStack.back().GetBookmarkCode();
@@ -704,15 +704,15 @@ static bool AcceptableNestedField(sal_uInt16 nFieldCode)
 {
     switch (nFieldCode)
     {
-        case 8:  // allow recursive field in TOC...
-        case 13: // allow recursive field in TOC...
-        case 36:
-        case 68:
-        case 79:
-        case 88:
+        case ww::eINDEX:  // allow recursive field in TOC...
+        case ww::eTOC: // allow recursive field in TOC...
+        case ww::eMERGEINC:
+        case ww::eINCLUDETEXT:
+        case ww::eAUTOTEXT:
+        case ww::eHYPERLINK:
         // Accept AutoTextList field as nested field.
         // Thus, the field result is imported as plain text.
-        case 89:
+        case ww::eAUTOTEXTLIST:
             return true;
         default:
             return false;
