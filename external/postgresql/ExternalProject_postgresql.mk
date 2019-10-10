@@ -31,7 +31,7 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 else
 
 postgresql_CPPFLAGS := $(ZLIB_CFLAGS)
-postgresql_LDFLAGS  :=
+postgresql_LDFLAGS  := $(LDFLAGS)
 
 ifeq ($(SYSTEM_ZLIB),)
 postgresql_LDFLAGS += $(ZLIB_LIBS)
