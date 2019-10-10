@@ -88,6 +88,24 @@
       "revId": "938ce37e2f3dc772b832670bac21ef0034389247",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_117054a5",
+        "filename": "avmedia/source/win/player.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-10T07:07:40Z",
+      "side": 1,
+      "message": "Oh, regarding SAL_WARN and dropping \"file:\" check: I have checked the implementation of the getSystemPathFromFileURL, and it only can return E_INVAL, nothing else. So could you please advise:\n\n1. If it makes sense to drop the \"file:\" check here (because of possible performance penalty, or because of lack of distinction of the failure reasons);\n2. If 1. is positive, then does it make sense to SAL_WARN it?",
+      "parentUuid": "7f7f9b97_51280c85",
+      "revId": "938ce37e2f3dc772b832670bac21ef0034389247",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
