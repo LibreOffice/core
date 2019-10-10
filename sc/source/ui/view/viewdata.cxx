@@ -118,10 +118,15 @@ bool ScPositionHelper::Comp::operator() (const value_type& rValue1, const value_
     }
 }
 
-ScPositionHelper::ScPositionHelper(bool bColumn)
-    : MAX_INDEX(bColumn ? MAXCOL : MAXTILEDROW)
+ScPositionHelper::ScPositionHelper(ScDocument *pDoc, bool bColumn)
+    : MAX_INDEX(bColumn ? (pDoc ? pDoc->MaxCol() : -1) : MAXTILEDROW)
 {
     mData.insert(std::make_pair(-1, 0));
+}
+
+void ScPositionHelper::setDocument(ScDocument *pDoc, bool bColumn)
+{
+    MAX_INDEX = bColumn ? pDoc->MaxCol() : MAXTILEDROW;
 }
 
 void ScPositionHelper::insert(index_type nIndex, long nPos)
@@ -250,6 +255,7 @@ long ScPositionHelper::getPosition(index_type nIndex) const
 
 long ScPositionHelper::computePosition(index_type nIndex, const std::function<long (index_type)>& getSizePx)
 {
+    assert(MAX_INDEX > 0);
     if (nIndex < 0) nIndex = 0;
     if (nIndex > MAX_INDEX) nIndex = MAX_INDEX;
 
@@ -278,7 +284,7 @@ ScBoundsProvider::ScBoundsProvider(ScDocument* pD, SCTAB nT, bool bColHeader)
     : pDoc(pD)
     , nTab(nT)
     , bColumnHeader(bColHeader)
-    , MAX_INDEX(bColHeader ? MAXCOL : MAXTILEDROW)
+    , MAX_INDEX(bColHeader ? pD->MaxCol() : MAXTILEDROW)
     , nFirstIndex(-1)
     , nSecondIndex(-1)
     , nFirstPositionPx(-1)
@@ -472,7 +478,7 @@ void ScBoundsProvider::GetIndexTowards(
     }
 }
 
-ScViewDataTable::ScViewDataTable() :
+ScViewDataTable::ScViewDataTable(ScDocument *pDoc) :
                 eZoomType( SvxZoomType::PERCENT ),
                 aZoomX( 1,1 ),
                 aZoomY( 1,1 ),
@@ -491,8 +497,8 @@ ScViewDataTable::ScViewDataTable() :
                 nOldCurY( 0 ),
                 nLOKOldCurX( 0 ),
                 nLOKOldCurY( 0 ),
-                aWidthHelper(true),
-                aHeightHelper(false),
+                aWidthHelper(pDoc, true),
+                aHeightHelper(pDoc, false),
                 nMaxTiledCol( 20 ),
                 nMaxTiledRow( 50 ),
                 bShowGrid( true ),
@@ -506,6 +512,12 @@ ScViewDataTable::ScViewDataTable() :
     nMPosY[0]=nMPosY[1]=0;
     nPixPosX[0]=nPixPosX[1]=0;
     nPixPosY[0]=nPixPosY[1]=0;
+}
+
+void ScViewDataTable::InitData(ScDocument *pDoc)
+{
+    aWidthHelper.setDocument(pDoc, true);
+    aHeightHelper.setDocument(pDoc, false);
 }
 
 void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings, const ScViewData& rViewData) const
@@ -769,7 +781,7 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
 
     aScrSize = Size( long( STD_COL_WIDTH           * PIXEL_PER_TWIPS * OLE_STD_CELLS_X ),
                      static_cast<long>( ScGlobal::nStdRowHeight * PIXEL_PER_TWIPS * OLE_STD_CELLS_Y ) );
-    maTabData.emplace_back( new ScViewDataTable );
+    maTabData.emplace_back( new ScViewDataTable(nullptr) );
     pThisTab = maTabData[nTabNo].get();
     for (sal_uInt16 j=0; j<4; j++)
     {
@@ -795,7 +807,7 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
             ++nTabNo;
             maTabData.emplace_back(nullptr);
         }
-        maTabData[nTabNo].reset( new ScViewDataTable() );
+        maTabData[nTabNo].reset( new ScViewDataTable(nullptr) );
         pThisTab = maTabData[nTabNo].get();
     }
 
@@ -803,6 +815,12 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
     {
         SCTAB nTableCount = pDoc->GetTableCount();
         EnsureTabDataSize(nTableCount);
+
+        for ( auto &it : maTabData )
+        {
+            if (it.get())
+                it->InitData( pDoc );
+        }
     }
 
     CalcPPT();
@@ -812,6 +830,11 @@ void ScViewData::InitData( ScDocument* pDocument )
 {
     pDoc = pDocument;
     *pOptions = pDoc->GetViewOptions();
+    for ( auto &it : maTabData )
+    {
+        if (it.get())
+            it->InitData( pDocument );
+    }
 }
 
 ScDocument* ScViewData::GetDocument() const
@@ -841,7 +864,7 @@ void ScViewData::UpdateCurrentTab()
             pThisTab = maTabData[--nTabNo].get();
         else
         {
-            maTabData[0].reset(new ScViewDataTable);
+            maTabData[0].reset(new ScViewDataTable(pDoc));
             pThisTab = maTabData[0].get();
         }
     }
@@ -1185,7 +1208,7 @@ bool ScViewData::SimpleColMarked()
     SCROW nEndRow;
     SCTAB nEndTab;
     if (GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab) == SC_MARK_SIMPLE)
-        if (nStartRow==0 && nEndRow==MAXROW)
+        if (nStartRow==0 && nEndRow==pDoc->MaxRow())
             return true;
 
     return false;
@@ -1200,7 +1223,7 @@ bool ScViewData::SimpleRowMarked()
     SCROW nEndRow;
     SCTAB nEndTab;
     if (GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab) == SC_MARK_SIMPLE)
-        if (nStartCol==0 && nEndCol==MAXCOL)
+        if (nStartCol==0 && nEndCol==pDoc->MaxCol())
             return true;
 
     return false;
@@ -1345,8 +1368,8 @@ void ScViewData::SetMaxTiledCol( SCCOL nNewMaxCol )
 {
     if (nNewMaxCol < 0)
         nNewMaxCol = 0;
-    if (nNewMaxCol > MAXCOL)
-        nNewMaxCol = MAXCOL;
+    if (nNewMaxCol > pDoc->MaxCol())
+        nNewMaxCol = pDoc->MaxCol();
 
     const SCTAB nTab = GetTabNo();
     ScDocument* pThisDoc = pDoc;
@@ -1962,7 +1985,7 @@ void ScViewData::CreateTabData( SCTAB nNewTab )
 
     if (!maTabData[nNewTab])
     {
-        maTabData[nNewTab].reset( new ScViewDataTable );
+        maTabData[nNewTab].reset( new ScViewDataTable(pDoc) );
 
         maTabData[nNewTab]->eZoomType  = eDefZoomType;
         maTabData[nNewTab]->aZoomX     = aDefZoomX;
@@ -2096,7 +2119,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         {
             for (SCCOL nX = nStartPosX; nX < nWhereX && (bAllowNeg || bIsTiledRendering || nScrPosX <= aScrSize.Width()); nX++)
             {
-                if ( nX > MAXCOL )
+                if ( nX > pDoc->MaxCol() )
                     nScrPosX = 0x7FFFFFFF;
                 else
                 {
@@ -2144,7 +2167,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         {
             for (SCROW nY = nStartPosY; nY < nWhereY && (bAllowNeg || bIsTiledRendering || nScrPosY <= aScrSize.Height()); nY++)
             {
-                if ( nY > MAXROW )
+                if ( nY > pDoc->MaxRow() )
                     nScrPosY = 0x7FFFFFFF;
                 else
                 {
@@ -2154,12 +2177,12 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                         long nSizeYPix = ToPixel( nTSize, nPPTY );
                         nScrPosY += nSizeYPix;
                     }
-                    else if ( nY < MAXROW )
+                    else if ( nY < pDoc->MaxRow() )
                     {
                         // skip multiple hidden rows (forward only for now)
-                        SCROW nNext = pDoc->FirstVisibleRow(nY + 1, MAXROW, nTabNo);
-                        if ( nNext > MAXROW )
-                            nY = MAXROW;
+                        SCROW nNext = pDoc->FirstVisibleRow(nY + 1, pDoc->MaxRow(), nTabNo);
+                        if ( nNext > pDoc->MaxRow() )
+                            nY = pDoc->MaxRow();
                         else
                             nY = nNext - 1;     // +=nDir advances to next visible row
                     }
@@ -2211,7 +2234,7 @@ SCCOL ScViewData::CellsAtX( SCCOL nPosX, SCCOL nDir, ScHSplitPos eWhichX, sal_uI
     for ( ; nScrPosX<=nScrSizeX && !bOut; nX = sal::static_int_cast<SCCOL>(nX + nDir) )
     {
         SCCOL  nColNo = nX;
-        if ( nColNo < 0 || nColNo > MAXCOL )
+        if ( nColNo < 0 || nColNo > pDoc->MaxCol() )
             bOut = true;
         else
         {
@@ -2249,10 +2272,9 @@ SCROW ScViewData::CellsAtY( SCROW nPosY, SCROW nDir, ScVSplitPos eWhichY, sal_uI
         // forward
         nY = nPosY;
         long nScrPosY = 0;
-        AddPixelsWhile( nScrPosY, nScrSizeY, nY, MAXROW, nPPTY, pDoc, nTabNo);
-        // Original loop ended on last evaluated +1 or if that was MAXROW even
-        // on MAXROW+2.
-        nY += (nY == MAXROW ? 2 : 1);
+        AddPixelsWhile( nScrPosY, nScrSizeY, nY, pDoc->MaxRow(), nPPTY, pDoc, nTabNo);
+        // Original loop ended on last evaluated +1 or if that was MaxRow even on MaxRow+2.
+        nY += (nY == pDoc->MaxRow() ? 2 : 1);
         nY -= nPosY;
     }
     else
@@ -2261,8 +2283,7 @@ SCROW ScViewData::CellsAtY( SCROW nPosY, SCROW nDir, ScVSplitPos eWhichY, sal_uI
         nY = nPosY-1;
         long nScrPosY = 0;
         AddPixelsWhileBackward( nScrPosY, nScrSizeY, nY, 0, nPPTY, pDoc, nTabNo);
-        // Original loop ended on last evaluated -1 or if that was 0 even on
-        // -2.
+        // Original loop ended on last evaluated -1 or if that was 0 even on -2.
         nY -= (nY == 0 ? 2 : 1);
         nY = (nPosY-1)-nY;
     }
@@ -2354,7 +2375,7 @@ void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
 
     if (nClickX > 0)
     {
-        while ( rPosX<=MAXCOL && nClickX >= nScrX )
+        while ( rPosX<=pDoc->MaxCol() && nClickX >= nScrX )
         {
             nScrX += ToPixel( pDoc->GetColWidth( rPosX, nTabNo ), nPPTX );
             ++rPosX;
@@ -2371,7 +2392,7 @@ void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
     }
 
     if (nClickY > 0)
-        AddPixelsWhile( nScrY, nClickY, rPosY, MAXROW, nPPTY, pDoc, nTabNo );
+        AddPixelsWhile( nScrY, nClickY, rPosY, pDoc->MaxRow(), nPPTY, pDoc, nTabNo );
     else
     {
         /* TODO: could need some "SubPixelsWhileBackward" method */
@@ -2399,9 +2420,9 @@ void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
     }
 
     if (rPosX<0) rPosX=0;
-    if (rPosX>MAXCOL) rPosX=MAXCOL;
+    if (rPosX>pDoc->MaxCol()) rPosX=pDoc->MaxCol();
     if (rPosY<0) rPosY=0;
-    if (rPosY>MAXROW) rPosY=MAXROW;
+    if (rPosY>pDoc->MaxRow()) rPosY=pDoc->MaxRow();
 
     if (bTestMerge)
     {
@@ -2420,12 +2441,12 @@ void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
             {
                 OSL_FAIL("merge error found");
 
-                pDoc->RemoveFlagsTab( 0,0, MAXCOL,MAXROW, nTabNo, ScMF::Hor | ScMF::Ver );
-                SCCOL nEndCol = MAXCOL;
-                SCROW nEndRow = MAXROW;
+                pDoc->RemoveFlagsTab( 0,0, pDoc->MaxCol(),pDoc->MaxRow(), nTabNo, ScMF::Hor | ScMF::Ver );
+                SCCOL nEndCol = pDoc->MaxCol();
+                SCROW nEndRow = pDoc->MaxRow();
                 pDoc->ExtendMerge( 0,0, nEndCol,nEndRow, nTabNo, true );
                 if (pDocShell)
-                    pDocShell->PostPaint( ScRange(0,0,nTabNo,MAXCOL,MAXROW,nTabNo), PaintPartFlags::Grid );
+                    pDocShell->PostPaint( ScRange(0,0,nTabNo,pDoc->MaxCol(),pDoc->MaxRow(),nTabNo), PaintPartFlags::Grid );
             }
         }
     }
@@ -2610,7 +2631,7 @@ void ScViewData::SetScreenPos( const Point& rVisAreaStart )
     while (!bEnd)
     {
         nAdd = static_cast<long>(pDoc->GetColWidth(nX1,nTabNo));
-        if (nSize+nAdd <= nTwips+1 && nX1<MAXCOL)
+        if (nSize+nAdd <= nTwips+1 && nX1<pDoc->MaxCol())
         {
             nSize += nAdd;
             ++nX1;
@@ -2626,7 +2647,7 @@ void ScViewData::SetScreenPos( const Point& rVisAreaStart )
     while (!bEnd)
     {
         nAdd = static_cast<long>(pDoc->GetRowHeight(nY1,nTabNo));
-        if (nSize+nAdd <= nTwips+1 && nY1<MAXROW)
+        if (nSize+nAdd <= nTwips+1 && nY1<pDoc->MaxRow())
         {
             nSize += nAdd;
             ++nY1;
@@ -2896,7 +2917,7 @@ void ScViewData::ReadUserData(const OUString& rData)
         aTabOpt = rData.getToken(0, ';', nMainIdx);
         EnsureTabDataSize(nPos + 1);
         if (!maTabData[nPos])
-            maTabData[nPos].reset( new ScViewDataTable );
+            maTabData[nPos].reset( new ScViewDataTable(pDoc) );
 
         sal_Unicode cTabSep = 0;
         if (comphelper::string::getTokenCount(aTabOpt, SC_OLD_TABSEP) >= 11)
@@ -3072,7 +3093,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
         if( const ScExtTabSettings* pTabSett = rDocOpt.GetTabSettings( nTab ) )
         {
             if( !maTabData[ nTab ] )
-                maTabData[ nTab ].reset( new ScViewDataTable );
+                maTabData[ nTab ].reset( new ScViewDataTable(pDoc) );
 
             const ScExtTabSettings& rTabSett = *pTabSett;
             ScViewDataTable& rViewTab = *maTabData[ nTab ];
@@ -3343,7 +3364,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                         {
                             EnsureTabDataSize(nTab + 1);
                             if (!maTabData[nTab])
-                                maTabData[nTab].reset( new ScViewDataTable );
+                                maTabData[nTab].reset( new ScViewDataTable(pDoc) );
 
                             bool bHasZoom = false;
                             maTabData[nTab]->ReadUserDataSequence(aTabSettings, *this, nTab, bHasZoom);
