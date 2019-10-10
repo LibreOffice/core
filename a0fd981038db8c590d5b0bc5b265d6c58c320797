@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_bc3b77cf",
+        "filename": "oox/source/drawingml/textbodypropertiescontext.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2019-10-10T13:58:15Z",
+      "side": 1,
+      "message": "I think, the values of \u003cscene3d\u003e as child of \u003cbodyPr\u003e should go to the text body properties, not to the shape properties.",
+      "revId": "a0fd981038db8c590d5b0bc5b265d6c58c320797",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_110e148d",
         "filename": "svx/source/sdr/contact/viewcontactofsdrobjcustomshape.cxx",
         "patchSetId": 3
