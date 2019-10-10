@@ -89,7 +89,7 @@ OString ExtractOLEClassName(const tools::SvRef<SotStorage>& xStorage)
         return aRet;
 
     pCompObj->ReadUInt32(nData); // Reserved1
-    return read_uInt8s_ToOString(*pCompObj, nData);
+    return read_uInt8s_ToOString(*pCompObj, nData - 1); // -1 because it is null-terminated
 }
 
 /// Parses the presentation stream of an OLE2 storage.
@@ -162,7 +162,7 @@ OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1, sal_uInt32& nWidth, s
     rOle1.WriteUInt32(0x00000002);
 
     // ClassName
-    rOle1.WriteUInt32(aClassName.getLength());
+    rOle1.WriteUInt32(aClassName.isEmpty() ? 0 : aClassName.getLength() + 1);
     if (!aClassName.isEmpty())
     {
         rOle1.WriteOString(aClassName);
