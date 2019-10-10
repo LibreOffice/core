@@ -52,6 +52,24 @@
       "revId": "938ce37e2f3dc772b832670bac21ef0034389247",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_315c7024",
+        "filename": "avmedia/source/win/player.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-10T06:56:47Z",
+      "side": 1,
+      "message": "It is this way in the win32 implementation ... and I read the outparam description that way:\n\n        @param[out] ustrSystemPath\n        On success it receives the system path.\n\nI suppose that this fully describes the behavior of the function regarding the param: the param is changed *iif* it succeeds. Of course, the omission of the \"else\" *could* in theory be treated as \"no guarantees\", but at least c++ standard tends to treat such descriptions as exhaustive.",
+      "parentUuid": "7f7f9b97_b132c0f0",
+      "revId": "938ce37e2f3dc772b832670bac21ef0034389247",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
