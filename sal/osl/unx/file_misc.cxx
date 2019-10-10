@@ -582,7 +582,7 @@ static oslFileError osl_unlinkFile(const sal_Char* pszPath);
 static oslFileError osl_psz_copyFile(const sal_Char* pszPath, const sal_Char* pszDestPath, bool preserveMetadata);
 static oslFileError osl_psz_moveFile(const sal_Char* pszPath, const sal_Char* pszDestPath);
 
-static oslFileError  oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, mode_t nMode, size_t nSourceSize, int DestFileExists);
+static oslFileError  oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, mode_t nMode, size_t nSourceSize, bool DestFileExists);
 static void attemptChangeMetadata(const sal_Char* pszFileName, mode_t nMode, time_t nAcTime, time_t nModTime, uid_t nUID, gid_t nGID);
 static int           oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName);
 static int           oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, size_t nSourceSize, mode_t mode);
@@ -776,7 +776,7 @@ static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* p
     struct stat aFileStat;
     oslFileError tErr=osl_File_E_invalidError;
     size_t nSourceSize=0;
-    int DestFileExists=1;
+    bool DestFileExists=true;
 
     /* mfe: does the source file really exists? */
     nRet = lstat_c(pszPath,&aFileStat);
@@ -808,11 +808,11 @@ static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* p
         // "/private/var/mobile/Library/Mobile Documents/com~apple~CloudDocs/helloodt0.odt" fails
         // with EPERM, not ENOENT.
         if (nRet == EPERM)
-            DestFileExists=0;
+            DestFileExists=false;
 #endif
 
         if (nRet == ENOENT)
-            DestFileExists=0;
+            DestFileExists=false;
     }
 
     /* mfe: the destination file must not be a directory! */
@@ -832,7 +832,7 @@ static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* p
     return tErr;
 }
 
-static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, mode_t nMode, size_t nSourceSize, int DestFileExists)
+static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, mode_t nMode, size_t nSourceSize, bool DestFileExists)
 {
     int      nRet=0;
 
@@ -849,7 +849,7 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
                      << "): " << UnixErrnoString(e));
             if (e == ENOENT)
             {
-                DestFileExists = 0;
+                DestFileExists = false;
             }
             else
             {
@@ -880,7 +880,7 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
         nRet=ENOSYS;
     }
 
-    if ( nRet > 0 && DestFileExists == 1 )
+    if ( nRet > 0 && DestFileExists )
     {
         if (unlink(pszDestFileName) != 0)
         {
@@ -905,7 +905,7 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
         return oslTranslateFileError(nRet);
     }
 
-    if ( DestFileExists == 1 )
+    if ( DestFileExists )
     {
         unlink(tmpDestFile.getStr());
     }
