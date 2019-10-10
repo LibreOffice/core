@@ -1082,6 +1082,11 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
         {
             pMedium->GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, rArg.Value));
         }
+        else if (rArg.Name == "LockContentExtraction")
+        {
+            rArg.Value >>= bValue;
+            pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_CONTENT_EXTRACTION, bValue));
+        }
         else
         {
             throw lang::IllegalArgumentException("Setting property not supported: " + rArg.Name,
