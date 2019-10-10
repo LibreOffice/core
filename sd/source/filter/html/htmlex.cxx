@@ -1153,9 +1153,8 @@ bool HtmlExport::WriteHtml( const OUString& rFileName, bool bAddExtension, const
     nErr = aFile.createStream(aFull , pStr);
     if(nErr == ERRCODE_NONE)
     {
-        OString aStr(OUStringToOString(rHtmlData,
-            RTL_TEXTENCODING_UTF8));
-        pStr->WriteCharPtr( aStr.getStr() );
+        OString aStr(OUStringToOString(rHtmlData, RTL_TEXTENCODING_UTF8));
+        pStr->WriteOString( aStr );
         aFile.close();
     }
 
@@ -2891,9 +2890,8 @@ bool HtmlExport::CopyScript( const OUString& rPath, const OUString& rSource, con
         nErr = aFile.createStream(aDest, pStr);
         if(nErr == ERRCODE_NONE)
         {
-            OString aStr(OUStringToOString(aScript,
-                RTL_TEXTENCODING_UTF8));
-            pStr->WriteCharPtr( aStr.getStr() );
+            OString aStr(OUStringToOString(aScript, RTL_TEXTENCODING_UTF8));
+            pStr->WriteOString( aStr );
             aFile.close();
         }
     }

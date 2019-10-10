@@ -354,7 +354,7 @@ bool ORTFImportExport::Write()
             m_pStream->WriteCharPtr( "\\f" );
             m_pStream->WriteInt32AsString(++nTok);
             m_pStream->WriteCharPtr( "\\fcharset0\\fnil " );
-            m_pStream->WriteCharPtr( aFonts.getToken(0, ';', nIdx).getStr() );
+            m_pStream->WriteOString( aFonts.getToken(0, ';', nIdx) );
             m_pStream->WriteChar( ';' );
         } while (nIdx>=0);
     }
@@ -522,7 +522,7 @@ void ORTFImportExport::appendRow(OString const * pHorzChar,sal_Int32 _nColumnCou
     {
         m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
         m_pStream->WriteChar( '{' );
-        m_pStream->WriteCharPtr( pHorzChar[i-1].getStr() );
+        m_pStream->WriteOString( pHorzChar[i-1] );
 
         if ( bBold )        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_B );
         if ( bItalic )      m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_I );
@@ -659,7 +659,7 @@ void OHTMLImportExport::WriteBody()
     m_pStream->WriteCharPtr( "<" ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_style ).WriteCharPtr( " " ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_type ).WriteCharPtr( "=\"text/css\">" );
 
     m_pStream->WriteCharPtr( "<!-- " ); OUT_LF();
-    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteCharPtr( " { " ).WriteCharPtr( "font-family: " ).WriteChar( '"' ).WriteCharPtr( OUStringToOString(m_aFont.Name, osl_getThreadTextEncoding()).getStr() ).WriteChar( '\"' );
+    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteCharPtr( " { " ).WriteCharPtr( "font-family: " ).WriteChar( '"' ).WriteOString( OUStringToOString(m_aFont.Name, osl_getThreadTextEncoding()) ).WriteChar( '\"' );
         // TODO : think about the encoding of the font name
     m_pStream->WriteCharPtr( "; " ).WriteCharPtr( "font-size: " );
     m_pStream->WriteInt32AsString(m_aFont.Height);
@@ -738,7 +738,7 @@ void OHTMLImportExport::WriteTables()
     TAG_ON( OOO_STRING_SVTOOLS_HTML_caption );
     TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
 
-    m_pStream->WriteCharPtr( OUStringToOString(m_sName, osl_getThreadTextEncoding()).getStr() );
+    m_pStream->WriteOString( OUStringToOString(m_sName, osl_getThreadTextEncoding()) );
         // TODO : think about the encoding of the name
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_bold );
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_caption );
@@ -941,7 +941,7 @@ void OHTMLImportExport::FontOn()
     aStrOut  = aStrOut + " ";
     aStrOut  = aStrOut + OOO_STRING_SVTOOLS_HTML_O_color;
     aStrOut  = aStrOut + "=";
-    m_pStream->WriteCharPtr( aStrOut.getStr() );
+    m_pStream->WriteOString( aStrOut );
 
     sal_Int32 nColor = 0;
     if(m_xObject.is())

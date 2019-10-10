@@ -264,12 +264,12 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
             rItemSet.Get(XATTR_FILLCOLOR).GetColorValue();
 
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_bgcolor).append("=");
-        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
         HTMLOutFuncs::Out_Color( rWrt.Strm(), rFillColor );
     }
 
     if (!sOut.isEmpty())
-        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
 
     // and now ALIGN, HSPACE and VSPACE
     HtmlFrmOpts nFrameFlags = HTML_FRMOPTS_MARQUEE;
@@ -293,7 +293,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_marquee, false );
 
     if( !aEndTags.isEmpty() )
-        rWrt.Strm().WriteCharPtr( aEndTags.getStr() );
+        rWrt.Strm().WriteOString( aEndTags );
 
     return rWrt;
 }

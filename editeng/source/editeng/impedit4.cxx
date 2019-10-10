@@ -946,12 +946,11 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
                     nProp100).getStr() ).WriteChar( '}' );
             }
             long nUpDown = nFontHeight * std::abs( nEsc ) / 100;
-            OString aUpDown = OString::number(
-                nUpDown);
             if ( nEsc < 0 )
-                rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_DN ).WriteCharPtr( aUpDown.getStr() );
+                rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_DN );
             else if ( nEsc > 0 )
-                rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UP ).WriteCharPtr( aUpDown.getStr() );
+                rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UP );
+            rOutput.WriteOString( OString::number(nUpDown) );
         }
         break;
     }

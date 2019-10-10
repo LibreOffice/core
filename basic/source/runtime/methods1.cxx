@@ -967,7 +967,7 @@ static bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
                 // without any length information! without end-identifier!
                 // What does that mean for Unicode?! Choosing conversion to ByteString...
                 OString aByteStr(OUStringToOString(rStr, osl_getThreadTextEncoding()));
-                pStrm->WriteCharPtr( aByteStr.getStr() );
+                pStrm->WriteOString( aByteStr );
             }
         }
         break;

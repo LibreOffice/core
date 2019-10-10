@@ -1274,7 +1274,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     }
 
     if( !aEndTags.isEmpty() )
-        rWrt.Strm().WriteCharPtr( aEndTags.getStr() );
+        rWrt.Strm().WriteOString( aEndTags );
 
     // Controls aren't bound to a paragraph, therefore don't output LF anymore!
     rHTMLWrt.m_bLFPossible = false;

@@ -246,7 +246,7 @@ public:
     SvStream&       WriteUInt8( sal_uInt8 nuInt8 );
     SvStream&       WriteUnicode( sal_Unicode );
     SvStream&       WriteOString(const OString& rStr)
-                        { return WriteCharPtr(rStr.getStr()); }
+                        { WriteBytes(rStr.getStr(), rStr.getLength()); return *this; }
     SvStream&       WriteStream( SvStream& rStream );
     sal_uInt64      WriteStream( SvStream& rStream, sal_uInt64 nSize );
 

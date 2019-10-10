@@ -696,17 +696,17 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
     OString aNameStr(OUStringToOString(GetName(), RTL_TEXTENCODING_ASCII_US));
     OString aClassNameStr(OUStringToOString(aClassName, RTL_TEXTENCODING_ASCII_US));
     rStrm.WriteCharPtr( "Object( " )
-         .WriteCharPtr( OString::number(reinterpret_cast<sal_Int64>(this)).getStr() ).WriteCharPtr( "=='" )
+         .WriteOString( OString::number(reinterpret_cast<sal_Int64>(this)) ).WriteCharPtr( "=='" )
          .WriteCharPtr( aNameStr.isEmpty() ?  "<unnamed>" : aNameStr.getStr()  ).WriteCharPtr( "', " )
-         .WriteCharPtr( "of class '" ).WriteCharPtr( aClassNameStr.getStr() ).WriteCharPtr( "', " )
+         .WriteCharPtr( "of class '" ).WriteOString( aClassNameStr ).WriteCharPtr( "', " )
          .WriteCharPtr( "counts " )
-         .WriteCharPtr( OString::number(GetRefCount()).getStr() )
+         .WriteOString( OString::number(GetRefCount()) )
          .WriteCharPtr( " refs, " );
     if ( GetParent() )
     {
         OString aParentNameStr(OUStringToOString(GetName(), RTL_TEXTENCODING_ASCII_US));
         rStrm.WriteCharPtr( "in parent " )
-             .WriteCharPtr( OString::number(reinterpret_cast<sal_Int64>(GetParent())).getStr() )
+             .WriteOString( OString::number(reinterpret_cast<sal_Int64>(GetParent())) )
              .WriteCharPtr( "=='" ).WriteCharPtr( aParentNameStr.isEmpty() ? "<unnamed>" : aParentNameStr.getStr()   ).WriteCharPtr( "'" );
     }
     else
@@ -715,18 +715,18 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
     }
     rStrm.WriteCharPtr( " )" ) << endl;
     OString aIndentNameStr(OUStringToOString(aIndent, RTL_TEXTENCODING_ASCII_US));
-    rStrm.WriteCharPtr( aIndentNameStr.getStr() ).WriteCharPtr( "{" ) << endl;
+    rStrm.WriteOString( aIndentNameStr ).WriteCharPtr( "{" ) << endl;
 
     // Flags
     OUString aAttrs;
     if( CollectAttrs( this, aAttrs ) )
     {
         OString aAttrStr(OUStringToOString(aAttrs, RTL_TEXTENCODING_ASCII_US));
-        rStrm.WriteCharPtr( aIndentNameStr.getStr() ).WriteCharPtr( "- Flags: " ).WriteCharPtr( aAttrStr.getStr() ) << endl;
+        rStrm.WriteOString( aIndentNameStr ).WriteCharPtr( "- Flags: " ).WriteOString( aAttrStr ) << endl;
     }
 
     // Methods
-    rStrm.WriteCharPtr( aIndentNameStr.getStr() ).WriteCharPtr( "- Methods:" ) << endl;
+    rStrm.WriteOString( aIndentNameStr ).WriteCharPtr( "- Methods:" ) << endl;
     for( sal_uInt16 i = 0; i < pMethods->Count(); i++ )
     {
         SbxVariableRef& r = pMethods->GetRef( i );
@@ -762,7 +762,7 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
     }
 
     // Properties
-    rStrm.WriteCharPtr( aIndentNameStr.getStr() ).WriteCharPtr( "- Properties:" ) << endl;
+    rStrm.WriteOString( aIndentNameStr ).WriteCharPtr( "- Properties:" ) << endl;
     {
         for( sal_uInt16 i = 0; i < pProps->Count(); i++ )
         {
@@ -800,7 +800,7 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
     }
 
     // Objects
-    rStrm.WriteCharPtr( aIndentNameStr.getStr() ).WriteCharPtr( "- Objects:" ) << endl;
+    rStrm.WriteOString( aIndentNameStr ).WriteCharPtr( "- Objects:" ) << endl;
     {
         for( sal_uInt16 i = 0; i < pObjs->Count(); i++ )
         {
@@ -808,7 +808,7 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
             SbxVariable* pVar = r.get();
             if ( pVar )
             {
-                rStrm.WriteCharPtr( aIndentNameStr.getStr() ).WriteCharPtr( "  - Sub" );
+                rStrm.WriteOString( aIndentNameStr ).WriteCharPtr( "  - Sub" );
                 if (SbxObject *pSbxObj = dynamic_cast<SbxObject*>(pVar))
                 {
                     pSbxObj->Dump(rStrm, bFill);
@@ -821,7 +821,7 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
         }
     }
 
-    rStrm.WriteCharPtr( aIndentNameStr.getStr() ).WriteCharPtr( "}" ) << endl << endl;
+    rStrm.WriteOString( aIndentNameStr ).WriteCharPtr( "}" ) << endl << endl;
     --nLevel;
 }
 

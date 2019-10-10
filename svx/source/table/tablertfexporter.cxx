@@ -132,7 +132,7 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
     xRowSet->getPropertyValue( gsSize ) >>= nRowHeight;
 
     mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRGAPH ).WriteCharPtr( "30" ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRLEFT ).WriteCharPtr( "-30" );
-    mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRRH ).WriteCharPtr( OString::number(nRowHeight).getStr() );
+    mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRRH ).WriteOString( OString::number(nRowHeight) );
 
     const sal_Int32 nColCount = mxTable->getColumnCount();
     for( sal_Int32 nCol = 0; nCol < nColCount; nCol++ )
@@ -142,7 +142,7 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
         if( !xCell.is() )
             continue;
 
-        mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELLX ).WriteCharPtr( OString::number(aColumnStart[nCol]).getStr() );
+        mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELLX ).WriteOString( OString::number(aColumnStart[nCol]) );
         if ( (nCol & 0x0F) == 0x0F )
             mrStrm.WriteCharPtr( SAL_NEWLINE_STRING );        // prevent long lines
     }
