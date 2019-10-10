@@ -77,6 +77,7 @@
 #include <vcl/unohelp2.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <tools/diagnose_ex.h>
+#include <officecfg/Office/Common.hxx>
 
 #include <cmdid.h>
 #include <doc.hxx>
@@ -1144,7 +1145,7 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
         {
         case SID_CUT:
         case SID_COPY:
-            if( !bCopy )
+            if( !bCopy || officecfg::Office::Common::Security::LockContentExtraction::get())
                 rSet.DisableItem( nWhich );
             break;
 

@@ -53,6 +53,7 @@
 #include <editeng/unolingu.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
+#include <officecfg/Office/Common.hxx>
 
 // #UndoRedo#
 #include <svtools/insdlg.hxx>
@@ -915,7 +916,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
         if (pOlView)
         {
-            if (pOlView->GetSelected().isEmpty())
+            if (pOlView->GetSelected().isEmpty()
+                || officecfg::Office::Common::Security::LockContentExtraction::get())
             {
                 rSet.DisableItem( SID_CUT );
                 rSet.DisableItem( SID_COPY );

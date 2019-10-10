@@ -31,6 +31,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <app.hrc>
 
@@ -495,6 +496,11 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem (SID_OBJECT_SHEAR);
     }
 
+    if (officecfg::Office::Common::Security::LockContentExtraction::get())
+    {
+        rSet.DisableItem(SID_COPY);
+        rSet.DisableItem(SID_CUT);
+    }
 }
 
 } // end of namespace sd

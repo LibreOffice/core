@@ -110,6 +110,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <svl/languageoptions.hxx>
 #include <svtools/langtab.hxx>
@@ -983,13 +984,14 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
         {
             case SID_CUT:
             {
-                if ( (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()==SwPostItHelper::DELETED) || !pOLV->HasSelection() )
+                if ( (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()==SwPostItHelper::DELETED) )
                     rSet.DisableItem( nWhich );
-                break;
+                [[fallthrough]];
             }
             case SID_COPY:
             {
-                if( !pOLV->HasSelection() )
+                if (!pOLV->HasSelection()
+                    || officecfg::Office::Common::Security::LockContentExtraction::get())
                     rSet.DisableItem( nWhich );
                 break;
             }

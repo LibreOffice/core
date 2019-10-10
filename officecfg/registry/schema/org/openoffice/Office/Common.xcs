@@ -2534,6 +2534,14 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="LockContentExtraction" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Setting this option will prevent copying/dragging any content anywhere.
+          The commands 'Copy' and 'Cut' will be disabled; selection clipboard won't work,
+          and dragging with mouse will also be disabled.</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <group oor:name="OpenPGP">
         <info>
           <desc>Contains security settings regarding the GnuPG/OpenPGP backend.</desc>

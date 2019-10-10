@@ -124,6 +124,7 @@
 #include <memory>
 #include <xmloff/odffields.hxx>
 #include <bookmrk.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -1964,6 +1965,15 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     rSet.DisableItem(nWhich);
             }
             break;
+            case SID_COPY:
+            case SID_CUT:
+            {
+                if (officecfg::Office::Common::Security::LockContentExtraction::get())
+                {
+                    rSet.DisableItem(nWhich);
+                }
+                break;
+            }
         }
         nWhich = aIter.NextWhich();
     }

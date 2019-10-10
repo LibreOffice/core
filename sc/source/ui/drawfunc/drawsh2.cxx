@@ -34,6 +34,7 @@
 #include <svx/sidebar/SelectionChangeHandler.hxx>
 #include <svx/sidebar/SelectionAnalyzer.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <drawsh.hxx>
 #include <drawview.hxx>
@@ -145,6 +146,12 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
         rSet.DisableItem( SID_MIRROR_VERTICAL );
         rSet.DisableItem( SID_FLIP_HORIZONTAL );
         rSet.DisableItem( SID_FLIP_VERTICAL );
+    }
+
+    if (officecfg::Office::Common::Security::LockContentExtraction::get())
+    {
+        rSet.DisableItem(SID_COPY);
+        rSet.DisableItem(SID_CUT);
     }
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();

@@ -35,6 +35,7 @@
 #include <vcl/EnumContext.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/clipfmtitem.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <cellsh.hxx>
 #include <sc.hrc>
@@ -211,6 +212,8 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 bDisable = false;
                 break;
             case SID_CUT:               // cut
+                bDisable = !bSimpleArea || officecfg::Office::Common::Security::LockContentExtraction::get();
+                break;
             case FID_INS_CELL:          // insert cells, just simple selection
                 bDisable = (!bSimpleArea);
                 break;
@@ -271,6 +274,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 //! work is to be done once more
                 if ( !(!bEditable && bOnlyNotBecauseOfMatrix) )
                     bNeedEdit = false;          // allowed when protected/ReadOnly
+                bDisable = officecfg::Office::Common::Security::LockContentExtraction::get();
                 break;
 
             case SID_AUTOFORMAT:        // Autoformat, at least 3x3 selected

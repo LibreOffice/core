@@ -53,6 +53,7 @@
 #include <vcl/transfer.hxx>
 #include <vcl/unohelp2.hxx>
 #include <svl/stritem.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <editsh.hxx>
 #include <global.hxx>
@@ -817,6 +818,14 @@ void ScEditShell::GetState( SfxItemSet& rSet )
             case SID_INSERT_FIELD_TITLE:
             case SID_INSERT_FIELD_DATE_VAR:
             break;
+            case SID_COPY:
+            case SID_CUT:
+                if (officecfg::Office::Common::Security::LockContentExtraction::get())
+                {
+                    rSet.DisableItem(SID_COPY);
+                    rSet.DisableItem(SID_CUT);
+                }
+                break;
 
         }
         nWhich = aIter.NextWhich();

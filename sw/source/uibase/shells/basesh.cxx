@@ -108,6 +108,7 @@
 #include <svx/galleryitem.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <memory>
+#include <officecfg/Office/Common.hxx>
 
 #include <svx/unobrushitemhelper.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -462,7 +463,7 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
             }
             [[fallthrough]];
         case SID_COPY:
-            if( !bCopy )
+            if( !bCopy || officecfg::Office::Common::Security::LockContentExtraction::get())
                 rSet.DisableItem( nWhich );
             break;
 

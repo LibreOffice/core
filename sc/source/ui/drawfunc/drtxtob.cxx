@@ -55,6 +55,7 @@
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/languageoptions.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <svx/svxdlg.hxx>
 #include <vcl/EnumContext.hxx>
@@ -465,6 +466,12 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             rSet.DisableItem( SID_THES );
         if (!bCanDoThesaurus)
             rSet.DisableItem( SID_THESAURUS );
+    }
+
+    if (officecfg::Office::Common::Security::LockContentExtraction::get())
+    {
+        rSet.DisableItem(SID_COPY);
+        rSet.DisableItem(SID_CUT);
     }
 }
 

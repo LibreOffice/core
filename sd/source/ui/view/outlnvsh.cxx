@@ -58,6 +58,7 @@
 #include <svtools/cliplistener.hxx>
 #include <svl/srchitem.hxx>
 #include <editeng/editobj.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <fubullet.hxx>
 
 #include <strings.hrc>
@@ -884,7 +885,8 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    if (!pOlView->GetViewByWindow(GetActiveWindow())->HasSelection())
+    if (!pOlView->GetViewByWindow(GetActiveWindow())->HasSelection()
+        || officecfg::Office::Common::Security::LockContentExtraction::get())
     {
         rSet.DisableItem(SID_CUT);
         rSet.DisableItem(SID_COPY);

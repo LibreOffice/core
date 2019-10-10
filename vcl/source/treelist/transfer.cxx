@@ -42,6 +42,7 @@
 #include <comphelper/sequence.hxx>
 #include <sot/filelist.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <comphelper/seqstream.hxx>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
@@ -930,6 +931,9 @@ void TransferableHelper::PrepareOLE( const TransferableObjectDescriptor& rObjDes
 
 void TransferableHelper::CopyToClipboard(const Reference<XClipboard>& rClipboard) const
 {
+    if (officecfg::Office::Common::Security::LockContentExtraction::get())
+        return;
+
     if( rClipboard.is() )
         mxClipboard = rClipboard;
 
@@ -952,6 +956,9 @@ void TransferableHelper::CopyToClipboard(const Reference<XClipboard>& rClipboard
 
 void TransferableHelper::CopyToClipboard( vcl::Window *pWindow ) const
 {
+    if (officecfg::Office::Common::Security::LockContentExtraction::get())
+        return;
+
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
     Reference< XClipboard > xClipboard;
 
@@ -963,6 +970,9 @@ void TransferableHelper::CopyToClipboard( vcl::Window *pWindow ) const
 
 void TransferableHelper::CopyToSelection(const Reference<XClipboard>& rSelection) const
 {
+    if (officecfg::Office::Common::Security::LockContentExtraction::get())
+        return;
+
     if( !(rSelection.is() && !mxTerminateListener.is()) )
         return;
 
@@ -982,6 +992,9 @@ void TransferableHelper::CopyToSelection(const Reference<XClipboard>& rSelection
 
 void TransferableHelper::CopyToSelection( vcl::Window *pWindow ) const
 {
+    if (officecfg::Office::Common::Security::LockContentExtraction::get())
+        return;
+
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
     Reference< XClipboard > xSelection;
 
@@ -992,8 +1005,9 @@ void TransferableHelper::CopyToSelection( vcl::Window *pWindow ) const
 }
 
 void TransferableHelper::StartDrag( vcl::Window* pWindow, sal_Int8 nDnDSourceActions )
-
 {
+    if (officecfg::Office::Common::Security::LockContentExtraction::get())
+        return;
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
     Reference< XDragSource > xDragSource( pWindow->GetDragSource() );
 
