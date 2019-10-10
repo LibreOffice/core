@@ -154,6 +154,7 @@ public:
     void testBnc910045();
     void testRowHeight();
     void testTdf93830();
+    void testTdf127129();
     void testTdf93097();
     void testTdf62255();
     void testTdf93124();
@@ -251,6 +252,7 @@ public:
     CPPUNIT_TEST(testBnc910045);
     CPPUNIT_TEST(testRowHeight);
     CPPUNIT_TEST(testTdf93830);
+    CPPUNIT_TEST(testTdf127129);
     CPPUNIT_TEST(testTdf93097);
     CPPUNIT_TEST(testTdf62255);
     CPPUNIT_TEST(testTdf93124);
@@ -1346,6 +1348,7 @@ void SdImportTest::testRowHeight()
 
     xDocShRef->DoClose();
 }
+
 void SdImportTest::testTdf93830()
 {
     // Text shape offset was ignored
@@ -1364,6 +1367,25 @@ void SdImportTest::testTdf93830()
     xDocShRef->DoClose();
 }
 
+void SdImportTest::testTdf127129()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf127129.pptx"), PPTX);
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+    uno::Reference< text::XTextRange > xParagraph( getParagraphFromShape( 0, xShape ) );
+    uno::Reference< text::XTextRange > xRun( getRunFromParagraph( 0, xParagraph ) );
+    uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
+
+    sal_Int32 nCharColor;
+    xPropSet->getPropertyValue( "CharColor" ) >>= nCharColor;
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0x000000), nCharColor );
+
+    // Without the accompanying fix in place, the highlight would be -1
+    sal_Int32 nCharBackColor;
+    xPropSet->getPropertyValue( "CharBackColor" ) >>= nCharBackColor;
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0xFF00), nCharBackColor );
+
+    xDocShRef->DoClose();
+}
 void SdImportTest::testTdf93097()
 {
     // Throwing metadata import aborted the filter, check that metadata is now imported.
