@@ -324,13 +324,13 @@ void WrapOleGraphicInRtf(SvStream& rRtf, const SwOLENode& rOLENode, const Graphi
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_WMETAFILE "8");
     Size aSize(rOLENode.GetTwipSize());
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICW);
-    rRtf.WriteCharPtr(OString::number(aSize.getWidth()).getStr());
+    rRtf.WriteOString(OString::number(aSize.getWidth()));
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICH);
-    rRtf.WriteCharPtr(OString::number(aSize.getHeight()).getStr());
+    rRtf.WriteOString(OString::number(aSize.getHeight()));
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICWGOAL);
-    rRtf.WriteCharPtr(OString::number(aSize.getWidth()).getStr());
+    rRtf.WriteOString(OString::number(aSize.getWidth()));
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICHGOAL);
-    rRtf.WriteCharPtr(OString::number(aSize.getHeight()).getStr());
+    rRtf.WriteOString(OString::number(aSize.getHeight()));
     SvMemoryStream aGraphicStream;
     if (GraphicConverter::Export(aGraphicStream, rGraphic, ConvertDataFormat::WMF) == ERRCODE_NONE)
     {
@@ -417,9 +417,9 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode)
 
     // Object size.
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_OBJW);
-    rRtf.WriteCharPtr(OString::number(nWidth).getStr());
+    rRtf.WriteOString(OString::number(nWidth));
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_OBJH);
-    rRtf.WriteCharPtr(OString::number(nHeight).getStr());
+    rRtf.WriteOString(OString::number(nHeight));
 
     // Start objdata.
     rRtf.WriteCharPtr(
