@@ -560,6 +560,14 @@ service MediaDescriptor
     /** specifies the frame containing the document. May be empty.
      */
     [optional,property] com::sun::star::frame::XFrame Frame;
+
+    /** Setting this option will prevent copying/dragging any content anywhere.
+        The commands 'Copy' and 'Cut' will be disabled; selection clipboard won't work,
+        and dragging with mouse will also be disabled.
+
+        @since LibreOffice 6.4
+     */
+    [optional,property] boolean LockContentExtraction;
 };
 
 
