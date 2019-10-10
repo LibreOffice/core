@@ -2401,9 +2401,9 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest_Lock, FmSearchContext&, rfmscCont
                         // the cursor has a field matching the control source ?
                         if (xValidFormFields->hasByName(aName))
                         {
-                            strFieldList = strFieldList + aName + ";";
+                            strFieldList += aName + ";";
 
-                            sFieldDisplayNames = sFieldDisplayNames +
+                            sFieldDisplayNames +=
                                     ::comphelper::getString(xCurrentColModel->getPropertyValue(FM_PROP_LABEL)) +
                                     ";";
 
@@ -2431,10 +2431,10 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest_Lock, FmSearchContext&, rfmscCont
                     if (IsSearchableControl(xControl))
                     {
                         // all tests passed -> take along in the list
-                        strFieldList = strFieldList + sControlSource + ";";
+                        strFieldList += sControlSource + ";";
 
                         // the label which should appear for the control :
-                        sFieldDisplayNames = sFieldDisplayNames +
+                        sFieldDisplayNames +=
                                 getLabelName(Reference< XPropertySet>(xControlModel, UNO_QUERY)) +
                                 ";";
 

@@ -916,7 +916,7 @@ OUString SAL_CALL ODatabaseMetaData::getSQLKeywords(  )
             WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(aRecordset.GetFields());
             WpADOField aField(aFields.GetItem(0));
             aField.get_Value(aValue);
-            aRet = aRet + aValue.getString() + ",";
+            aRet += aValue.getString() + ",";
             aRecordset.MoveNext();
         }
         aRecordset.Close();

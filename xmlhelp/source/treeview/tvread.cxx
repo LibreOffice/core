@@ -665,7 +665,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
         locale = "en-US";
         ret = "en";
         }
-    url = url + ret;
+    url += ret;
 
     // first of all, try do determine whether there are any *.tree files present
 

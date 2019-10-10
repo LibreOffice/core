@@ -845,7 +845,7 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleRowDescription(
             uno::Reference< XAccessibleText > xChildText( xChild, uno::UNO_QUERY );
             if ( xChildText.is() )
             {
-                sRowDesc = sRowDesc + xChildText->getText();
+                sRowDesc += xChildText->getText();
             }
         }
     }
@@ -878,7 +878,7 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleColumnDescription(
             uno::Reference< XAccessibleText > xChildText( xChild, uno::UNO_QUERY );
             if ( xChildText.is() )
             {
-                sColumnDesc = sColumnDesc + xChildText->getText();
+                sColumnDesc += xChildText->getText();
             }
         }
     }

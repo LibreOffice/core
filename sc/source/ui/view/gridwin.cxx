@@ -2282,7 +2282,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 if ( aScRange.aStart == aScRange.aEnd )
                 {
                     //  make sure there is a range selection string even for a single cell
-                    aAddr = aAddr + ":" + aAddr;
+                    aAddr += ":" + aAddr;
                 }
 
                 //! SID_MARKAREA does not exist anymore ???

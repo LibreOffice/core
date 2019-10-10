@@ -68,7 +68,7 @@ OUString collectPushFlags(PushFlags nFlags)
     aString = aStrings[0];
     for (size_t i = 1; i < aStrings.size(); ++i)
     {
-        aString = aString + ", " + aStrings[i];
+        aString += ", " + aStrings[i];
     }
     return aString;
 }
@@ -121,7 +121,7 @@ OUString convertDrawTextFlagsToString(DrawTextFlags eDrawTextFlags)
     aString = aStrings[0];
     for (size_t i = 1; i < aStrings.size(); ++i)
     {
-        aString = aString + " " + aStrings[i];
+        aString += " " + aStrings[i];
     }
     return aString;
 };

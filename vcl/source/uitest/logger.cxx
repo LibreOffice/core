@@ -256,11 +256,11 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const& xUIElement, const KeyE
         }
         if (aParentID.isEmpty())
         {
-            aContent = aContent + "Type on '" + rID + "' " + aKeyCode;
+            aContent += "Type on '" + rID + "' " + aKeyCode;
         }
         else
         {
-            aContent = aContent + "Type on '" + rID + "' " + aKeyCode + " from " + aParentID;
+            aContent += "Type on '" + rID + "' " + aKeyCode + " from " + aParentID;
         }
     }
     else if (pUIObject->get_type() == "SwEditWinUIObject" && rID == "writer_edit")

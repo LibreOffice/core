@@ -56,8 +56,7 @@ bool SfxHyphenRegionItem::GetPresentation
     const IntlWrapper&
 )   const
 {
-    rText = rText +
-            EditResId(RID_SVXITEMS_HYPHEN_MINLEAD).replaceAll("%1", OUString::number(nMinLead)) +
+    rText += EditResId(RID_SVXITEMS_HYPHEN_MINLEAD).replaceAll("%1", OUString::number(nMinLead)) +
             "," +
             EditResId(RID_SVXITEMS_HYPHEN_MINTRAIL).replaceAll("%1", OUString::number(nMinTrail));
     return true;

@@ -316,7 +316,7 @@ void PresetOOXHandleAdj::GetOOXHandleAdjRelation(
     rSecondAdjValueIndex = -1;
     if (sFullOOXShapeName.startsWith("ooxml-", &sKey))
     {
-        sKey = sKey + "_" + OUString::number(nHandleIndex);
+        sKey += "_" + OUString::number(nHandleIndex);
         HandleAdjRelHashMap::const_iterator aHashIter(s_HashMap.find(sKey));
         if (aHashIter != s_HashMap.end())
             sValue = (*aHashIter).second;

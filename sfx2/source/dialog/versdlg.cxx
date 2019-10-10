@@ -181,8 +181,8 @@ SfxVersionDialog::SfxVersionDialog(weld::Window* pParent, SfxViewFrame* pVwFrame
     m_xVersionBox->grab_focus();
 
     // set dialog title (filename or docinfo title)
-    OUString sText = m_xDialog->get_title();
-    sText = sText + " " + m_pViewFrame->GetObjectShell()->GetTitle();
+    OUString sText = m_xDialog->get_title() +
+                    " " + m_pViewFrame->GetObjectShell()->GetTitle();
     m_xDialog->set_title(sText);
 
     Init_Impl();
@@ -441,8 +441,8 @@ SfxCmisVersionsDialog::SfxCmisVersionsDialog(weld::Window* pParent, SfxViewFrame
 
     m_xVersionBox->grab_focus();
 
-    OUString sText = m_xDialog->get_title();
-    sText = sText + " " + m_pViewFrame->GetObjectShell()->GetTitle();
+    OUString sText = m_xDialog->get_title() +
+                    " " + m_pViewFrame->GetObjectShell()->GetTitle();
     m_xDialog->set_title(sText);
 
     LoadVersions();

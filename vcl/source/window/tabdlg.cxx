@@ -252,7 +252,7 @@ std::vector<OString> TabDialog::getAllPageUIXMLDescriptions() const
                         {
                             // add the PageId to be able to detect the correct tabPage in
                             // selectPageByUIXMLDescription below
-                            aNewName = aNewName + "|" + OString::number(nPageId);
+                            aNewName += "|" + OString::number(nPageId);
                         }
 
                         aRetval.push_back(aNewName);

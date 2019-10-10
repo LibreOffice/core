@@ -104,7 +104,7 @@ extern "C" __declspec(dllexport) UINT __stdcall CompleteInstallPath( MSIHANDLE h
         if ( oldVersionExists )
         {
             // Adding the new path content sOfficeDirHostname
-            sInstallLocation = sInstallLocation + sOfficeDirHostname;
+            sInstallLocation += sOfficeDirHostname;
             // Setting the new property value
             MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstallLocation.c_str());
         }
