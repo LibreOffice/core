@@ -867,6 +867,38 @@ namespace
 
         return aDestination;
     }
+
+    /// Decides if rTransformation needs smoothing or not (e.g. 180 deg rotation doesn't need it).
+    bool implTransformNeedsSmooth(const basegfx::B2DHomMatrix& rTransformation)
+    {
+        basegfx::B2DVector aScale, aTranslate;
+        double fRotate, fShearX;
+        rTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
+        if (aScale != basegfx::B2DVector(1, 1))
+        {
+            return true;
+        }
+
+        fRotate = fmod( fRotate, F_2PI );
+        if (fRotate < 0)
+        {
+            fRotate += F_2PI;
+        }
+        if (!rtl::math::approxEqual(fRotate, 0)
+            && !rtl::math::approxEqual(fRotate, F_PI2)
+            && !rtl::math::approxEqual(fRotate, F_PI)
+            && !rtl::math::approxEqual(fRotate, 3 * F_PI2))
+        {
+            return true;
+        }
+
+        if (!rtl::math::approxEqual(fShearX, 0))
+        {
+            return true;
+        }
+
+        return false;
+    }
 } // end of anonymous namespace
 
 BitmapEx BitmapEx::TransformBitmapEx(
@@ -879,14 +911,15 @@ BitmapEx BitmapEx::TransformBitmapEx(
 
     // force destination to 24 bit, we want to smooth output
     const Size aDestinationSize(basegfx::fround(fWidth), basegfx::fround(fHeight));
-    const Bitmap aDestination(impTransformBitmap(GetBitmapRef(), aDestinationSize, rTransformation, /*bSmooth*/true));
+    bool bSmooth = implTransformNeedsSmooth(rTransformation);
+    const Bitmap aDestination(impTransformBitmap(GetBitmapRef(), aDestinationSize, rTransformation, bSmooth));
 
     // create mask
     if(IsTransparent())
     {
         if(IsAlpha())
         {
-            const Bitmap aAlpha(impTransformBitmap(GetAlpha().GetBitmap(), aDestinationSize, rTransformation, /*bSmooth*/true));
+            const Bitmap aAlpha(impTransformBitmap(GetAlpha().GetBitmap(), aDestinationSize, rTransformation, bSmooth));
             return BitmapEx(aDestination, AlphaMask(aAlpha));
         }
         else

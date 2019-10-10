@@ -12,6 +12,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <vcl/bitmapex.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
@@ -22,10 +23,12 @@ class BitmapExTest : public CppUnit::TestFixture
 {
     void testGetPixelColor24_8();
     void testGetPixelColor32();
+    void testTransformBitmapEx();
 
     CPPUNIT_TEST_SUITE(BitmapExTest);
     CPPUNIT_TEST(testGetPixelColor24_8);
     CPPUNIT_TEST(testGetPixelColor32);
+    CPPUNIT_TEST(testTransformBitmapEx);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -64,6 +67,43 @@ void BitmapExTest::testGetPixelColor32()
     BitmapEx aBitmapEx(aBitmap);
 
     CPPUNIT_ASSERT_EQUAL(Color(0xAA, 0x00, 0xFF, 0x00), aBitmapEx.GetPixelColor(0, 0));
+}
+
+void BitmapExTest::testTransformBitmapEx()
+{
+    Bitmap aBitmap(Size(16, 16), 24);
+    {
+        BitmapScopedWriteAccess pWriteAccess(aBitmap);
+        pWriteAccess->Erase(COL_WHITE);
+        for (int i = 0; i < 8; ++i)
+        {
+            for (int j = 0; j < 8; ++j)
+            {
+                pWriteAccess->SetPixel(i, j, COL_BLACK);
+            }
+        }
+    }
+    BitmapEx aBitmapEx(aBitmap);
+
+    basegfx::B2DHomMatrix aMatrix;
+    aMatrix.rotate(M_PI / 2);
+    BitmapEx aTransformed = aBitmapEx.TransformBitmapEx(16, 16, aMatrix);
+    aBitmap = aTransformed.GetBitmap();
+    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    for (int i = 0; i < 16; ++i)
+    {
+        for (int j = 0; j < 16; ++j)
+        {
+            BitmapColor aColor = pAccess->GetPixel(i, j);
+            std::stringstream ss;
+            ss << "Color is expected to be white or black, is '" << aColor.AsRGBHexString() << "'";
+            // Without the accompanying fix in place, this test would have failed with:
+            // - Expression: aColor == COL_WHITE || aColor == COL_BLACK
+            // - Color is expected to be white or black, is 'bfbfbf'
+            // i.e. smoothing introduced noise for a simple 90 deg rotation.
+            CPPUNIT_ASSERT_MESSAGE(ss.str(), aColor == COL_WHITE || aColor == COL_BLACK);
+        }
+    }
 }
 
 } // namespace
