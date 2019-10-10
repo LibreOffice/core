@@ -58,13 +58,6 @@ css::uno::Sequence<OUString> XMLDrawSettingsExportOasis_getSupportedServiceNames
 css::uno::Reference<css::uno::XInterface> XMLDrawSettingsExportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
-// draw OOo export
-OUString XMLDrawSettingsExportOOO_getImplementationName() throw();
-css::uno::Sequence<OUString> XMLDrawSettingsExportOOO_getSupportedServiceNames() throw();
-/// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> XMLDrawSettingsExportOOO_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-
 // impress animation import
 OUString AnimationsImport_getImplementationName() throw();
 css::uno::Sequence<OUString> AnimationsImport_getSupportedServiceNames() throw();
