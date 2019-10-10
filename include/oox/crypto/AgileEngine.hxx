@@ -24,6 +24,8 @@ namespace oox {
     class BinaryXOutputStream;
 }
 
+namespace com::sun::star::uno { class XComponentContext; }
+
 namespace oox {
 namespace core {
 
