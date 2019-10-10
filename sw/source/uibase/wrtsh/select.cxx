@@ -356,7 +356,7 @@ long SwWrtShell::ResetSelect(const Point *,bool)
 
         // After canceling of all selections an update of Attr-Controls
         // could be necessary.
-        GetChgLnk().Call(this);
+        GetChgLnk().Call(nullptr);
     }
     Invalidate();
     SwTransferable::ClearSelection( *this );

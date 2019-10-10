@@ -286,7 +286,7 @@ void SwCursorShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
     // call ChgCall if there is still one
     if( m_bCallChgLnk && m_bChgCallFlag && m_aChgLnk.IsSet() )
     {
-        m_aChgLnk.Call( this );
+        m_aChgLnk.Call(nullptr);
         m_bChgCallFlag = false;       // reset flag
     }
 }
@@ -2486,7 +2486,7 @@ void SwCursorShell::CallChgLnk()
     else if( m_aChgLnk.IsSet() )
     {
         if( m_bCallChgLnk )
-            m_aChgLnk.Call( this );
+            m_aChgLnk.Call(nullptr);
         m_bChgCallFlag = false; // reset flag
     }
 }

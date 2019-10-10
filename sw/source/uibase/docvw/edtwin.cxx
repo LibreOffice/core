@@ -2310,7 +2310,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         {
                             rSh.UnSelectFrame();
                             rSh.LeaveSelFrameMode();
-                            m_rView.AttrChangedNotify(&rSh);
+                            m_rView.AttrChangedNotify(nullptr);
                             rSh.MoveSection( GoCurrSection, fnSectionEnd );
                         }
                         eKeyState = SwKeyState::InsChar;
@@ -2333,7 +2333,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
         {
             rSh.UnSelectFrame();
             rSh.LeaveSelFrameMode();
-            m_rView.AttrChangedNotify(&rSh);
+            m_rView.AttrChangedNotify(nullptr);
             rSh.MoveSection( GoCurrSection, fnSectionEnd );
             eKeyState = SwKeyState::End;
         }
@@ -2550,7 +2550,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         m_rView.GetDrawFuncPtr()->Deactivate();
                         m_rView.SetDrawFuncPtr(nullptr);
                         m_rView.LeaveDrawCreate();
-                        m_rView.AttrChangedNotify( &rSh );
+                        m_rView.AttrChangedNotify(nullptr);
                     }
                     rSh.HideCursor();
                     rSh.EnterSelFrameMode();
@@ -3161,7 +3161,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                         m_rView.GetDrawFuncPtr()->Deactivate();
                                         m_rView.SetDrawFuncPtr(nullptr);
                                         m_rView.LeaveDrawCreate();
-                                        m_rView.AttrChangedNotify( &rSh );
+                                        m_rView.AttrChangedNotify(nullptr);
                                     }
 
                                     rSh.EnterSelFrameMode( &aDocPos );
@@ -3206,7 +3206,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             {
                                 rSh.UnSelectFrame();
                                 rSh.LeaveSelFrameMode();
-                                m_rView.AttrChangedNotify(&rSh);
+                                m_rView.AttrChangedNotify(nullptr);
                             }
 
                             bool bSelObj = rSh.SelectObj( aDocPos, nFlag );
@@ -3219,7 +3219,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 // frame first; ShowCursor() happens in LeaveSelFrameMode()
                                 g_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
                                 rSh.LeaveSelFrameMode();
-                                m_rView.AttrChangedNotify( &rSh );
+                                m_rView.AttrChangedNotify(nullptr);
                                 bCallBase = false;
                             }
                             else
@@ -3235,7 +3235,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                     m_rView.GetDrawFuncPtr()->Deactivate();
                                     m_rView.SetDrawFuncPtr(nullptr);
                                     m_rView.LeaveDrawCreate();
-                                    m_rView.AttrChangedNotify( &rSh );
+                                    m_rView.AttrChangedNotify(nullptr);
                                 }
                                 UpdatePointer( aDocPos, rMEvt.GetModifier() );
                                 return;
@@ -3530,7 +3530,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 if (rMarkList.GetMark(0) == nullptr)
                                 {
                                     rSh.LeaveSelFrameMode();
-                                    m_rView.AttrChangedNotify(&rSh);
+                                    m_rView.AttrChangedNotify(nullptr);
                                     g_bFrameDrag = false;
                                 }
                             }
@@ -3560,7 +3560,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             {
                                 rSh.UnSelectFrame();
                                 rSh.LeaveSelFrameMode();
-                                m_rView.AttrChangedNotify(&rSh);
+                                m_rView.AttrChangedNotify(nullptr);
                                 g_bFrameDrag = false;
                             }
                             if ( !rSh.IsExtMode() )
@@ -4391,7 +4391,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 rSh.Edit();
             }
 
-            m_rView.AttrChangedNotify( &rSh );
+            m_rView.AttrChangedNotify(nullptr);
         }
         else if (rMEvt.GetButtons() == MOUSE_RIGHT && rSh.IsDrawCreate())
             m_rView.GetDrawFuncPtr()->BreakCreate();   // abort drawing
@@ -4410,7 +4410,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 if ( m_rView.GetDrawFuncPtr() && m_rView.GetDrawFuncPtr()->MouseButtonUp(rMEvt) )
                 {
                     m_rView.GetDrawFuncPtr()->Deactivate();
-                    m_rView.AttrChangedNotify( &rSh );
+                    m_rView.AttrChangedNotify(nullptr);
                     if ( rSh.IsObjSelected() )
                         rSh.EnterSelFrameMode();
                     if ( m_rView.GetDrawFuncPtr() && m_bInsFrame )
@@ -5086,7 +5086,7 @@ void SwEditWin::EnterDrawTextMode( const Point& aDocPos )
             m_rView.LeaveDrawCreate();
         }
         m_rView.NoRotate();
-        m_rView.AttrChangedNotify( &m_rView.GetWrtShell() );
+        m_rView.AttrChangedNotify(nullptr);
     }
 }
 
@@ -5104,7 +5104,7 @@ bool SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
             return true;
 
         bool bRet = m_rView.GetDrawFuncPtr()->MouseButtonDown( rMEvt );
-        m_rView.AttrChangedNotify( &rSh );
+        m_rView.AttrChangedNotify(nullptr);
         return bRet;
     }
 
@@ -5125,7 +5125,7 @@ bool SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
         }
         if( bUnLockView )
             rSh.LockView( false );
-        m_rView.AttrChangedNotify( &rSh );
+        m_rView.AttrChangedNotify(nullptr);
         return true;
     }
     return false;
@@ -5679,7 +5679,7 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
                         m_rView.GetDrawFuncPtr()->Deactivate();
                         m_rView.SetDrawFuncPtr(nullptr);
                         m_rView.LeaveDrawCreate();
-                        m_rView.AttrChangedNotify( &rSh );
+                        m_rView.AttrChangedNotify(nullptr);
                     }
 
                     rSh.EnterSelFrameMode( &aDocPos );
@@ -5705,7 +5705,7 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         {
             rSh.UnSelectFrame();
             rSh.LeaveSelFrameMode();
-            m_rView.AttrChangedNotify(&rSh);
+            m_rView.AttrChangedNotify(nullptr);
         }
 
         bool bSelObj = rSh.SelectObj( aDocPos, 0/*nFlag*/ );
@@ -5719,7 +5719,7 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
             g_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
             rSh.LeaveSelFrameMode();
             m_rView.LeaveDrawCreate();
-            m_rView.AttrChangedNotify( &rSh );
+            m_rView.AttrChangedNotify(nullptr);
         }
         else
         {
@@ -5734,7 +5734,7 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
                 m_rView.GetDrawFuncPtr()->Deactivate();
                 m_rView.SetDrawFuncPtr(nullptr);
                 m_rView.LeaveDrawCreate();
-                m_rView.AttrChangedNotify( &rSh );
+                m_rView.AttrChangedNotify(nullptr);
             }
             UpdatePointer( aDocPos );
         }

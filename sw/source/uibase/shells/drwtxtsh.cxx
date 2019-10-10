@@ -216,7 +216,7 @@ void SwDrawTextShell::ExecFormText(SfxRequest const & rReq)
             SwView& rTempView = GetView();
             pDrView->SdrEndTextEdit(true);
             //this removes the current shell from the dispatcher stack!!
-            rTempView.AttrChangedNotify(&rSh);
+            rTempView.AttrChangedNotify(nullptr);
         }
 
         pDrView->SetAttributes(rSet);

@@ -1776,8 +1776,8 @@ bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
 
     if( pStream && pRead )
     {
-        Link<SwCursorShell*,void> aOldLink( rSh.GetChgLnk() );
-        rSh.SetChgLnk( Link<SwCursorShell*,void>() );
+        Link<LinkParamNone*,void> aOldLink( rSh.GetChgLnk() );
+        rSh.SetChgLnk( Link<LinkParamNone*,void>() );
 
         const SwPosition& rInsPos = *rSh.GetCursor()->Start();
         SwReader aReader( *pStream, aEmptyOUStr, OUString(), *rSh.GetCursor() );
