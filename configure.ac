@@ -4220,6 +4220,7 @@ darwin*)
         ;;
     arm64)
         OS=iOS
+        RTL_OS=iOS
         if test "$enable_ios_simulator" = "yes"; then
             AC_MSG_ERROR([iOS simulator is only available in OSX not iOS])
         else
