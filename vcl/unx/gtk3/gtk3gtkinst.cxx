@@ -11675,7 +11675,7 @@ public:
         sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
         if (nIdx != -1)
             m_sHelpRoot = m_sHelpRoot.copy(0, nIdx);
-        m_sHelpRoot = m_sHelpRoot + OUString('/');
+        m_sHelpRoot += OUString('/');
         m_aUtf8HelpRoot = OUStringToOString(m_sHelpRoot, RTL_TEXTENCODING_UTF8);
         m_aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
         m_aUILang = Application::GetSettings().GetUILanguageTag().getBcp47();

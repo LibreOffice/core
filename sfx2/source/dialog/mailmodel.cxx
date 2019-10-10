@@ -849,7 +849,7 @@ bool CreateFromAddress_Impl( OUString& rFrom )
     {
         if ( !rFrom.isEmpty() )
             rFrom += " ";
-        rFrom = rFrom + "<" + comphelper::string::strip(aEmailName, ' ') + ">";
+        rFrom += "<" + comphelper::string::strip(aEmailName, ' ') + ">";
     }
     else
         rFrom.clear();

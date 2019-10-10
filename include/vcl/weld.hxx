@@ -1857,7 +1857,7 @@ public:
         sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
         if (nIdx != -1)
             m_sHelpRoot = m_sHelpRoot.copy(0, nIdx);
-        m_sHelpRoot = m_sHelpRoot + OString('/');
+        m_sHelpRoot += OString('/');
     }
     virtual std::unique_ptr<MessageDialog> weld_message_dialog(const OString& id,
                                                                bool bTakeOwnership = true)

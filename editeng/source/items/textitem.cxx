@@ -965,7 +965,7 @@ bool SvxTextLineItem::GetPresentation
 {
     rText = GetValueTextByPos( GetValue() );
     if( !mColor.GetTransparency() )
-        rText = rText + OUString(cpDelim) + ::GetColorString( mColor );
+        rText += OUString(cpDelim) + ::GetColorString( mColor );
     return true;
 }
 
@@ -1540,8 +1540,7 @@ bool SvxKerningItem::GetPresentation
 
             if (pId)
                 rText += EditResId(pId);
-            rText = rText +
-                    GetMetricText( static_cast<long>(GetValue()), eCoreUnit, MapUnit::MapPoint, &rIntl ) +
+            rText += GetMetricText( static_cast<long>(GetValue()), eCoreUnit, MapUnit::MapPoint, &rIntl ) +
                     " " + EditResId(GetMetricId(MapUnit::MapPoint));
             return true;
         }
@@ -1721,7 +1720,7 @@ bool SvxEscapementItem::GetPresentation
         if( DFLT_ESC_AUTO_SUPER == nEsc || DFLT_ESC_AUTO_SUB == nEsc )
             rText += EditResId(RID_SVXITEMS_ESCAPEMENT_AUTO);
         else
-            rText = rText + OUString::number( nEsc ) + "%";
+            rText += OUString::number( nEsc ) + "%";
     }
     return true;
 }

@@ -211,8 +211,7 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
             sal_Int32 nStartOfNumber = nIndex + std::strlen("Grand total of errors in submitted package: ");
             OUString aNumber = aContentOUString.copy(nStartOfNumber);
             sal_Int32 nErrors = aNumber.toInt32();
-            OString aMsg("validation error in OOXML export: Errors: ");
-            aMsg = aMsg + OString::number(nErrors);
+            OString aMsg = "validation error in OOXML export: Errors: " + OString::number(nErrors);
             if(nErrors)
             {
                 SAL_WARN("test", aContentOUString);

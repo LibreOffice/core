@@ -1592,7 +1592,7 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const
 
     ScRange aTestRange;
     if ( bColRowName || (aTestRange.Parse(rFormula) & ScRefFlags::VALID) )
-        aValue = aValue + " ...";
+        aValue += " ...";
 
     return aValue;
 }

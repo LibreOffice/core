@@ -380,14 +380,12 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf115813_OOXML_XY_handle)
                   || (abs(nDesiredX - nObservedX) == 100 && abs(nDesiredY - nObservedY) <= 1)
                   || (abs(nDesiredX - nObservedX) <= 1 && abs(nDesiredY - nObservedY) <= 1)))
             {
-                sErrors += "\n";
-                //sErrors += OUString(sal_Unicode(10));
-                sErrors
-                    = sErrors + OUString::number(i) + " " + sShapeType + ": " + OUString::number(j);
-                sErrors = sErrors + " X " + OUString::number(nDesiredX) + "|"
-                          + OUString::number(nObservedX);
-                sErrors = sErrors + " Y " + OUString::number(nDesiredY) + "|"
-                          + OUString::number(nObservedY);
+                sErrors += "\n" +
+                           //sErrors += OUString(sal_Unicode(10));
+                           OUString::number(i) + " " + sShapeType + ": " + OUString::number(j)
+                           + " X " + OUString::number(nDesiredX) + "|"
+                           + OUString::number(nObservedX) + " Y " + OUString::number(nDesiredY)
+                           + "|" + OUString::number(nObservedY);
             }
         }
     }

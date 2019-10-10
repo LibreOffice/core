@@ -610,7 +610,7 @@ bool ScPageScaleToItem::GetPresentation(
     OUString aName( ScResId( STR_SCATTR_PAGE_SCALETO ) );
     OUString aValue( ScResId( STR_SCATTR_PAGE_SCALE_WIDTH ) );
     lclAppendScalePageCount( aValue, mnWidth );
-    aValue = aValue + ", " + ScResId( STR_SCATTR_PAGE_SCALE_HEIGHT );
+    aValue += ", " + ScResId( STR_SCATTR_PAGE_SCALE_HEIGHT );
     lclAppendScalePageCount( aValue, mnHeight );
 
     switch( ePres )

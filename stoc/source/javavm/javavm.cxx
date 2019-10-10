@@ -473,8 +473,7 @@ void getJavaPropsFromSafetySettings(
             case 3: sVal = "none";
                 break;
             }
-            OUString sProperty("appletviewer.security.mode=");
-            sProperty= sProperty + sVal;
+            OUString sProperty = "appletviewer.security.mode=" + sVal;
             pjvm->pushProp(sProperty);
         }
         css::uno::Reference<css::registry::XRegistryKey> key_CheckSecurity= xRegistryRootKey->openKey(
@@ -484,9 +483,9 @@ void getJavaPropsFromSafetySettings(
             bool val = static_cast<bool>(key_CheckSecurity->getLongValue());
             OUString sProperty("stardiv.security.disableSecurity=");
             if( val)
-                sProperty= sProperty + "false";
+                sProperty += "false";
             else
-                sProperty= sProperty + "true";
+                sProperty += "true";
             pjvm->pushProp( sProperty);
         }
     }

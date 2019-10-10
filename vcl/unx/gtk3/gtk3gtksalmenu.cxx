@@ -31,9 +31,9 @@ static bool bUnityMode = false;
  */
 static gchar* GetCommandForItem(GtkSalMenu* pParentMenu, sal_uInt16 nItemId)
 {
-    OString aCommand("window-");
-    aCommand = aCommand + OString::number(reinterpret_cast<unsigned long>(pParentMenu));
-    aCommand = aCommand + "-" + OString::number(nItemId);
+    OString aCommand = "window-" +
+        OString::number(reinterpret_cast<unsigned long>(pParentMenu)) +
+        "-" + OString::number(nItemId);
     return g_strdup(aCommand.getStr());
 }
 

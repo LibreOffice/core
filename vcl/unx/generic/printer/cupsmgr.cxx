@@ -872,8 +872,8 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
                 "    option " << pOptions[n].name << "=" << pOptions[n].value);
 #if OSL_DEBUG_LEVEL > 1
         OString aCmd( "cp " );
-        aCmd = aCmd + it->second.getStr();
-        aCmd = aCmd + OString( " $HOME/cupsprint.ps" );
+        aCmd += it->second.getStr();
+        aCmd += OString( " $HOME/cupsprint.ps" );
         system( aCmd.getStr() );
 #endif
 

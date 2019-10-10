@@ -1502,9 +1502,9 @@ uno::Reference< XResultSet > ODatabaseMetaData::lcl_getKeys(const bool& bIsImpor
            "ON FOREI.RDB$INDEX_NAME = FOREIGN_INDEX.RDB$INDEX_NAME "
            "WHERE FOREI.RDB$CONSTRAINT_TYPE = 'FOREIGN KEY' ";
     if (bIsImport)
-        sSQL = sSQL + "AND FOREI.RDB$RELATION_NAME = '"+ table +"'";
+        sSQL += "AND FOREI.RDB$RELATION_NAME = '"+ table +"'";
     else
-        sSQL = sSQL + "AND PRIM.RDB$RELATION_NAME = '"+ table +"'";
+        sSQL += "AND PRIM.RDB$RELATION_NAME = '"+ table +"'";
 
     uno::Reference< XResultSet > rs = statement->executeQuery(sSQL);
     uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );

@@ -182,14 +182,14 @@ void SdCustomShowDlg::SelectHdl(void const *p)
             sal_Int32 nNum = 1;
             if( nStrPos < 0 )
             {
-                aStr = aStr + " ("  + aStrCopy + OUString::number( nNum ) + ")";
+                aStr += " ("  + aStrCopy + OUString::number( nNum ) + ")";
                 nStrPos = aStr.indexOf( aStrCopy );
             }
             nStrPos = nStrPos + aStrCopy.getLength();
             // that we do not access into the nirvana (--> endless loop)
             if( nStrPos >= aStr.getLength() )
             {
-                aStr = aStr + " " + OUString::number( nNum );
+                aStr += " " + OUString::number( nNum );
             }
 
             // check name...

@@ -559,7 +559,7 @@ void SvxRTFParser::ReadFontTable()
         {
             // All data from the font is available, so off to the table
             if (!sAltNm.isEmpty())
-                sFntNm = sFntNm + ";" + sAltNm;
+                sFntNm += ";" + sAltNm;
 
             pFont->SetFamilyName( sFntNm );
             m_FontTable.insert(std::make_pair(nInsFontNo, std::move(pFont)));

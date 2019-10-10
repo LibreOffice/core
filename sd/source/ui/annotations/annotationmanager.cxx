@@ -155,7 +155,7 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
 
         ::tools::Time aTime( aDateTime );
         if(aTime.GetTime() != 0)
-            sRet = sRet + " "  + rLocalData.getTime( aTime,false );
+            sRet += " "  + rLocalData.getTime( aTime,false );
     }
     return sRet;
 }

@@ -167,7 +167,7 @@ awt::Size lcl_createTextShapes(
                 if( i == 1 )
                     break;
 
-                aLabelString = aLabelString + aLabelSeq[i]->getString();
+                aLabelString += aLabelSeq[i]->getString();
                 // workaround for Issue #i67540#
                 if( aLabelString.isEmpty())
                     aLabelString = " ";

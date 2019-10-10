@@ -690,11 +690,11 @@ void OHTMLImportExport::WriteBody()
 
 void OHTMLImportExport::WriteTables()
 {
-    OString aStrOut  = OOO_STRING_SVTOOLS_HTML_table;
-    aStrOut = aStrOut + " ";
-    aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_frame;
-    aStrOut = aStrOut + "=";
-    aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_TF_void;
+    OString aStrOut  = OOO_STRING_SVTOOLS_HTML_table
+            " "
+            OOO_STRING_SVTOOLS_HTML_frame
+            "="
+            OOO_STRING_SVTOOLS_HTML_TF_void;
 
     Sequence< OUString> aNames;
     Reference<XNameAccess> xColumns;
@@ -714,21 +714,21 @@ void OHTMLImportExport::WriteTables()
         }
     }
 
-    aStrOut = aStrOut + " ";
-    aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_O_align;
-    aStrOut = aStrOut + "=";
-    aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_AL_left;
-    aStrOut = aStrOut + " ";
-    aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_O_cellspacing;
-    aStrOut = aStrOut + "=";
-    aStrOut = aStrOut + OString::number(nCellSpacing);
-    aStrOut = aStrOut + " ";
-    aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_O_cols;
-    aStrOut = aStrOut + "=";
-    aStrOut = aStrOut + OString::number(aNames.getLength());
-    aStrOut = aStrOut + " ";
-    aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_O_border;
-    aStrOut = aStrOut + "=1";
+    aStrOut += " "
+            OOO_STRING_SVTOOLS_HTML_O_align
+            "="
+            OOO_STRING_SVTOOLS_HTML_AL_left
+            " "
+            OOO_STRING_SVTOOLS_HTML_O_cellspacing
+            "=" +
+            OString::number(nCellSpacing) +
+            " "
+            OOO_STRING_SVTOOLS_HTML_O_cols
+            "=" +
+            OString::number(aNames.getLength()) +
+            " "
+            OOO_STRING_SVTOOLS_HTML_O_border
+            "=1";
 
     IncIndent(1);
     TAG_ON( aStrOut.getStr() );
@@ -861,20 +861,19 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal
     // despite the <TABLE COLS=n> and <COL WIDTH=x> designation necessary,
     // as Netscape is not paying attention to them.
     // column width
-    aStrTD = aStrTD + " ";
-    aStrTD = aStrTD + OOO_STRING_SVTOOLS_HTML_O_width;
-    aStrTD = aStrTD + "=";
-    aStrTD = aStrTD + OString::number(nWidthPixel);
+    aStrTD += " "
+            OOO_STRING_SVTOOLS_HTML_O_width
+            "=" +
+            OString::number(nWidthPixel) +
     // line height
-    aStrTD = aStrTD + " ";
-    aStrTD = aStrTD + OOO_STRING_SVTOOLS_HTML_O_height;
-    aStrTD = aStrTD + "=";
-    aStrTD = aStrTD + OString::number(nHeightPixel);
-
-    aStrTD = aStrTD + " ";
-    aStrTD = aStrTD + OOO_STRING_SVTOOLS_HTML_O_align;
-    aStrTD = aStrTD + "=";
-    aStrTD = aStrTD + pChar;
+            " "
+            OOO_STRING_SVTOOLS_HTML_O_height
+            "=" +
+            OString::number(nHeightPixel) +
+            " "
+            OOO_STRING_SVTOOLS_HTML_O_align
+            "=" +
+            pChar;
 
     SvNumberFormatsSupplierObj* pSupplierImpl = m_xFormatter.is() ? comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>(m_xFormatter->getNumberFormatsSupplier()) : nullptr;
     SvNumberFormatter* pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : nullptr;
@@ -929,18 +928,18 @@ void OHTMLImportExport::FontOn()
 #endif
 
     // <FONT FACE="xxx">
-    OString aStrOut  = "<";
-    aStrOut  = aStrOut + OOO_STRING_SVTOOLS_HTML_font;
-    aStrOut  = aStrOut + " ";
-    aStrOut  = aStrOut + OOO_STRING_SVTOOLS_HTML_O_face;
-    aStrOut  = aStrOut + "=";
-    aStrOut  = aStrOut + "\"";
-    aStrOut  = aStrOut + OUStringToOString(m_aFont.Name,osl_getThreadTextEncoding());
+    OString aStrOut  = "<"
+            OOO_STRING_SVTOOLS_HTML_font
+            " "
+            OOO_STRING_SVTOOLS_HTML_O_face
+            "="
+            "\"" +
+            OUStringToOString(m_aFont.Name,osl_getThreadTextEncoding()) +
         // TODO : think about the encoding of the font name
-    aStrOut  = aStrOut + "\"";
-    aStrOut  = aStrOut + " ";
-    aStrOut  = aStrOut + OOO_STRING_SVTOOLS_HTML_O_color;
-    aStrOut  = aStrOut + "=";
+            "\""
+            " "
+            OOO_STRING_SVTOOLS_HTML_O_color
+            "=";
     m_pStream->WriteOString( aStrOut );
 
     sal_Int32 nColor = 0;

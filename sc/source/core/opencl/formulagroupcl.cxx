@@ -2583,7 +2583,7 @@ public:
     {
         std::string t = "_" + mpCodeGen->BinFuncName();
         for (const auto & rSubArgument : mvSubArguments)
-            t = t + rSubArgument->DumpOpName();
+            t += rSubArgument->DumpOpName();
         return t;
     }
     virtual void DumpInlineFun( std::set<std::string>& decls,

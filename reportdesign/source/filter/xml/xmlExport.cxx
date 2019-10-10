@@ -1535,7 +1535,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                             // so we need to expand the formula of sCountName
                             sPrefix = " + 1) / " + OUString::number(xGroup->getGroupInterval());
                             sFunctionName = sFunction + "_" + sExpression;
-                            sFunction = sFunction + "(";
+                            sFunction += "(";
                             sInitialFormula = "rpt:0";
                         }
                         break;

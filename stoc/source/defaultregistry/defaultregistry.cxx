@@ -827,7 +827,7 @@ sal_Bool SAL_CALL NestedKeyImpl::createLink( const OUString& aLinkName, const OU
             throw InvalidRegistryException();
         }
 
-        resolvedName = resolvedName + aLinkName.copy(lastIndex);
+        resolvedName += aLinkName.copy(lastIndex);
     }
     else
     {
@@ -882,7 +882,7 @@ void SAL_CALL NestedKeyImpl::deleteLink( const OUString& rLinkName )
             throw InvalidRegistryException();
         }
 
-        resolvedName = resolvedName + rLinkName.copy(lastIndex);
+        resolvedName += rLinkName.copy(lastIndex);
     }
     else
     {
@@ -925,7 +925,7 @@ OUString SAL_CALL NestedKeyImpl::getLinkTarget( const OUString& rLinkName )
             throw InvalidRegistryException();
         }
 
-        resolvedName = resolvedName + rLinkName.copy(lastIndex);
+        resolvedName += rLinkName.copy(lastIndex);
     }
     else
     {
