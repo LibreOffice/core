@@ -16,6 +16,24 @@
       "revId": "938ce37e2f3dc772b832670bac21ef0034389247",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_f13838d4",
+        "filename": "avmedia/source/win/player.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-10T06:43:21Z",
+      "side": 1,
+      "message": "Well - the best effort is already ensured by initial assignment in line 148; getSystemPathFromFileURL only assigns its outparam if there\u0027s no error.\n\nBut warning on the failure is useful indeed - will do.",
+      "parentUuid": "7f7f9b97_51280c85",
+      "revId": "938ce37e2f3dc772b832670bac21ef0034389247",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
