@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_7152e815",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-10T06:51:11Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/plugins/gitiles/core/+/c874294ad9fb178df47c66875bfbdec466e39763%5E%21\u003e \"Fix detection of std::unique_ptr/shared_ptr in loplugin:redundantpointerops\"",
+      "range": {
+        "startLine": 10,
+        "startChar": 19,
+        "endLine": 10,
+        "endChar": 34
+      },
+      "revId": "7d361e96c9ea822790db21806e9fc05279423833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
