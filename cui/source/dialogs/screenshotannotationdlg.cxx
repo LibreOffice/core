@@ -104,27 +104,30 @@ namespace
     }
 }
 
-class Picture : public weld::CustomWidgetController
+namespace
 {
-private:
-    ScreenshotAnnotationDlg_Impl *m_pDialog;
-    bool m_bMouseOver;
-private:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
-    virtual bool MouseMove(const MouseEvent& rMouseEvent) override;
-    virtual bool MouseButtonUp(const MouseEvent& rMouseEvent) override;
-public:
-    Picture(ScreenshotAnnotationDlg_Impl* pDialog)
-        : m_pDialog(pDialog)
-        , m_bMouseOver(false)
+    class Picture : public weld::CustomWidgetController
     {
-    }
+    private:
+        ScreenshotAnnotationDlg_Impl *m_pDialog;
+        bool m_bMouseOver;
+    private:
+        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+        virtual bool MouseMove(const MouseEvent& rMouseEvent) override;
+        virtual bool MouseButtonUp(const MouseEvent& rMouseEvent) override;
+    public:
+        Picture(ScreenshotAnnotationDlg_Impl* pDialog)
+            : m_pDialog(pDialog)
+            , m_bMouseOver(false)
+        {
+        }
 
-    bool IsMouseOver() const
-    {
-        return m_bMouseOver;
-    }
-};
+        bool IsMouseOver() const
+        {
+            return m_bMouseOver;
+        }
+    };
+}
 
 class ScreenshotAnnotationDlg_Impl
 {
