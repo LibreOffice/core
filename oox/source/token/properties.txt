@@ -50,6 +50,7 @@ CellStyle
 CenterHorizontally
 CenterVertically
 Change
+CharBackColor
 CharCaseMap
 CharColor
 CharContoured
