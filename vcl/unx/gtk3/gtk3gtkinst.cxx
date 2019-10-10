@@ -4187,7 +4187,8 @@ public:
             m_aHiddenWidgets.clear();
         }
 
-        g_signal_handler_disconnect(m_pDialog, m_nCloseSignalId);
+        if (m_nCloseSignalId)
+            g_signal_handler_disconnect(m_pDialog, m_nCloseSignalId);
         if (m_nResponseSignalId)
             g_signal_handler_disconnect(m_pDialog, m_nResponseSignalId);
         if (m_nCancelSignalId)
