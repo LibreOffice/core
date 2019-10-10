@@ -642,6 +642,14 @@ DECLARE_OOXMLEXPORT_TEST(Test_TextEffects_InStyleXml, "TextEffects_InStyle.docx"
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(Test_no_tag_if_no_fill, "tdf112103_tablebgnofill.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:shd", 0);
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
