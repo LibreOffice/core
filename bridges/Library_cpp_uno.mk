@@ -30,7 +30,14 @@ else ifeq ($(CPUNAME),AARCH64)
 
 ifneq ($(filter ANDROID DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_aarch64
-bridge_exception_objects := abi callvirtualfunction uno2cpp
+bridge_exception_objects := abi uno2cpp
+
+$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno, \
+    bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/callvirtualfunction, \
+    $(gb_LinkTarget_EXCEPTIONFLAGS) \
+    $(call gb_LinkTarget__get_cxxflags,$(gb_CPPU_ENV)_uno) \
+    $(if $(HAVE_GCC_STACK_CLASH_PROTECTION),-fno-stack-clash-protection) \
+))
 
 $(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno, \
     bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/cpp2uno, \
