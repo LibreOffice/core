@@ -3208,6 +3208,27 @@ std::unique_ptr<weld::Container> GtkInstanceWidget::weld_parent() const
     return std::make_unique<GtkInstanceContainer>(GTK_CONTAINER(pParent), m_pBuilder, false);
 }
 
+class GtkInstanceBox : public GtkInstanceContainer, public virtual weld::Box
+{
+private:
+    GtkBox* m_pBox;
+
+public:
+    GtkInstanceBox(GtkBox* pBox, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceContainer(GTK_CONTAINER(pBox), pBuilder, bTakeOwnership)
+        , m_pBox(pBox)
+    {
+    }
+
+    virtual void reorder_child(weld::Widget* pWidget, int nNewPosition) override
+    {
+        GtkInstanceWidget* pGtkWidget = dynamic_cast<GtkInstanceWidget*>(pWidget);
+        assert(pGtkWidget);
+        GtkWidget* pChild = pGtkWidget->getWidget();
+        gtk_box_reorder_child(m_pBox, pChild, nNewPosition);
+    }
+};
+
 namespace
 {
     void set_cursor(GtkWidget* pWidget, const char *pName)
@@ -6671,6 +6692,21 @@ private:
     GtkToolbar* m_pToolbar;
 
     std::map<OString, GtkToolButton*> m_aMap;
+    std::map<OString, std::unique_ptr<GtkInstanceMenuButton>> m_aMenuButtonMap;
+
+    // at the time of writing there is no gtk_menu_tool_button_set_popover available
+    // though there will be in the future
+    // https://gitlab.gnome.org/GNOME/gtk/commit/03e30431a8af9a947a0c4ccab545f24da16bfe17?w=1
+    static void find_menu_button(GtkWidget *pWidget, gpointer user_data)
+    {
+        if (g_strcmp0(gtk_widget_get_name(pWidget), "GtkMenuButton") == 0)
+        {
+            GtkWidget **ppToggleButton = static_cast<GtkWidget**>(user_data);
+            *ppToggleButton = pWidget;
+        }
+        else if (GTK_IS_CONTAINER(pWidget))
+            gtk_container_forall(GTK_CONTAINER(pWidget), find_menu_button, user_data);
+    }
 
     static void collect(GtkWidget* pItem, gpointer widget)
     {
@@ -6678,15 +6714,22 @@ private:
         {
             GtkToolButton* pToolItem = GTK_TOOL_BUTTON(pItem);
             GtkInstanceToolbar* pThis = static_cast<GtkInstanceToolbar*>(widget);
-            pThis->add_to_map(pToolItem);
+
+            GtkMenuButton* pMenuButton = nullptr;
+            if (GTK_IS_MENU_TOOL_BUTTON(pItem))
+                find_menu_button(pItem, &pMenuButton);
+
+            pThis->add_to_map(pToolItem, pMenuButton);
         }
     }
 
-    void add_to_map(GtkToolButton* pToolItem)
+    void add_to_map(GtkToolButton* pToolItem, GtkMenuButton* pMenuButton)
     {
         const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pToolItem));
         OString id(pStr, pStr ? strlen(pStr) : 0);
         m_aMap[id] = pToolItem;
+        if (pMenuButton)
+            m_aMenuButtonMap[id] = std::make_unique<GtkInstanceMenuButton>(pMenuButton, m_pBuilder, false);
         g_signal_connect(pToolItem, "clicked", G_CALLBACK(signalItemClicked), this);
     }
 
@@ -6738,13 +6781,27 @@ public:
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
         disable_item_notify_events();
-        gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(m_aMap[rIdent]), bActive);
+
+        auto aFind = m_aMenuButtonMap.find(rIdent);
+        if (aFind != m_aMenuButtonMap.end())
+            aFind->second->set_active(bActive);
+        else
+        {
+            GtkToolButton* pToolButton = m_aMap.find(rIdent)->second;
+            gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pToolButton), bActive);
+        }
+
         enable_item_notify_events();
     }
 
     virtual bool get_item_active(const OString& rIdent) const override
     {
-        return gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(m_aMap.find(rIdent)->second));
+        auto aFind = m_aMenuButtonMap.find(rIdent);
+        if (aFind != m_aMenuButtonMap.end())
+            return aFind->second->get_active();
+
+        GtkToolButton* pToolButton = m_aMap.find(rIdent)->second;
+        return gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pToolButton));
     }
 
     virtual void insert_separator(int pos, const OUString& rId) override
@@ -6753,6 +6810,11 @@ public:
         gtk_buildable_set_name(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr());
         gtk_toolbar_insert(m_pToolbar, pItem, pos);
         gtk_widget_show(GTK_WIDGET(pItem));
+    }
+
+    virtual void set_item_popover(const OString& rIdent, weld::Widget* pPopover) override
+    {
+        m_aMenuButtonMap[rIdent]->set_popover(pPopover);
     }
 
     virtual ~GtkInstanceToolbar() override
@@ -11862,6 +11924,15 @@ public:
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pContainer));
         return std::make_unique<GtkInstanceContainer>(pContainer, this, bTakeOwnership);
+    }
+
+    virtual std::unique_ptr<weld::Box> weld_box(const OString &id, bool bTakeOwnership) override
+    {
+        GtkBox* pBox = GTK_BOX(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pBox)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pBox));
+        return std::make_unique<GtkInstanceBox>(pBox, this, bTakeOwnership);
     }
 
     virtual std::unique_ptr<weld::Frame> weld_frame(const OString &id, bool bTakeOwnership) override

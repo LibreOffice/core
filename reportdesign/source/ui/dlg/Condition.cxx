@@ -55,236 +55,175 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-ConditionField::ConditionField(Condition* pParent, Edit* pSubEdit, PushButton *pFormula)
+ConditionField::ConditionField(Condition* pParent, std::unique_ptr<weld::Entry> xSubEdit,
+                               std::unique_ptr<weld::Button> xFormula)
     : m_pParent(pParent)
-    , m_pSubEdit(pSubEdit)
-    , m_pFormula(pFormula)
+    , m_xSubEdit(std::move(xSubEdit))
+    , m_xFormula(std::move(xFormula))
 {
-    m_pSubEdit->EnableRTL( false );
-
-    m_pFormula->SetText("...");
-    m_pFormula->SetClickHdl( LINK( this, ConditionField, OnFormula ) );
+    m_xFormula->set_label("...");
+    m_xFormula->connect_clicked( LINK( this, ConditionField, OnFormula ) );
 }
 
-IMPL_LINK( ConditionField, OnFormula, Button*, _pClickedButton, void )
+IMPL_LINK_NOARG(ConditionField, OnFormula, weld::Button&, void)
 {
-    OUString sFormula(m_pSubEdit->GetText());
+    OUString sFormula(m_xSubEdit->get_text());
     const sal_Int32 nLen = sFormula.getLength();
     if ( nLen )
     {
         ReportFormula aFormula( sFormula );
         sFormula = aFormula.getCompleteFormula();
     }
-    uno::Reference< awt::XWindow> xInspectorWindow = VCLUnoHelper::GetInterface(_pClickedButton);
+    uno::Reference< awt::XWindow> xInspectorWindow = m_pParent->GetXWindow();
     uno::Reference< beans::XPropertySet> xProp(m_pParent->getController().getRowSet(),uno::UNO_QUERY);
     if ( rptui::openDialogFormula_nothrow( sFormula, m_pParent->getController().getContext(),xInspectorWindow,xProp ) )
     {
         ReportFormula aFormula( sFormula );
-        m_pSubEdit->SetText(aFormula.getUndecoratedContent());
+        m_xSubEdit->set_text(aFormula.getUndecoratedContent());
     }
 }
 
-ConditionColorWrapper::ConditionColorWrapper(Condition* pControl)
-    : mxControl(pControl)
-    , mnSlotId(0)
+ConditionColorWrapper::ConditionColorWrapper(Condition* pControl, sal_uInt16 nSlotId)
+    : mpControl(pControl)
+    , mnSlotId(nSlotId)
 {
-}
-
-void ConditionColorWrapper::dispose()
-{
-    mxControl.clear();
 }
 
 void ConditionColorWrapper::operator()(const OUString& /*rCommand*/, const NamedColor& rNamedColor)
 {
-    mxControl->ApplyCommand(mnSlotId, rNamedColor);
+    mpControl->ApplyCommand(mnSlotId, rNamedColor);
 }
 
 // = Condition
-
-
-Condition::Condition( vcl::Window* _pParent, IConditionalFormatAction& _rAction, ::rptui::OReportController& _rController )
-    : VclHBox(_pParent)
-    , m_xPaletteManager(new PaletteManager)
-    , m_aColorWrapper(this)
+Condition::Condition(weld::Container* pParent, weld::Window* pDialog, IConditionalFormatAction& _rAction, ::rptui::OReportController& _rController)
+    : m_xPaletteManager(new PaletteManager)
+    , m_aBackColorWrapper(this, SID_BACKGROUND_COLOR)
+    , m_aForeColorWrapper(this, SID_ATTR_CHAR_COLOR2)
     , m_rController(_rController)
     , m_rAction(_rAction)
     , m_nCondIndex(0)
-    , m_bInDestruction(false)
+    , m_pDialog(pDialog)
+    , m_xBuilder(Application::CreateBuilder(pParent, "modules/dbreport/ui/conditionwin.ui"))
+    , m_xContainer(m_xBuilder->weld_container("ConditionWin"))
+    , m_xHeader(m_xBuilder->weld_label("headerLabel"))
+    , m_xConditionType(m_xBuilder->weld_combo_box("typeCombobox"))
+    , m_xOperationList(m_xBuilder->weld_combo_box("opCombobox"))
+    , m_xOperandGlue(m_xBuilder->weld_label("andLabel"))
+    , m_xActions(m_xBuilder->weld_toolbar("formatToolbox"))
+    , m_xPreview(new weld::CustomWeld(*m_xBuilder, "previewDrawingarea", m_aPreview))
+    , m_xMoveUp(m_xBuilder->weld_button("upButton"))
+    , m_xMoveDown(m_xBuilder->weld_button("downButton"))
+    , m_xAddCondition(m_xBuilder->weld_button("addButton"))
+    , m_xRemoveCondition(m_xBuilder->weld_button("removeButton"))
 {
-    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), "modules/dbreport/ui/conditionwin.ui"));
+    m_xCondLHS.reset(new ConditionField(this, m_xBuilder->weld_entry("lhsEntry"), m_xBuilder->weld_button("lhsButton")));
+    m_xCondRHS.reset(new ConditionField(this, m_xBuilder->weld_entry("rhsEntry"), m_xBuilder->weld_button("rhsButton")));
 
-    get(m_pHeader, "headerLabel");
-    get(m_pConditionType, "typeCombobox");
-    get(m_pOperationList, "opCombobox");
-    m_pCondLHS.reset( new ConditionField(this, get<Edit>("lhsEntry"), get<PushButton>("lhsButton")) );
-    get(m_pOperandGlue, "andLabel");
-    m_pCondRHS.reset( new ConditionField(this, get<Edit>("rhsEntry"), get<PushButton>("rhsButton")) );
-    get(m_pActions, "formatToolbox");
-    get(m_pPreview, "previewDrawingarea");
-    get(m_pMoveUp, "upButton");
-    get(m_pMoveDown, "downButton");
-    get(m_pAddCondition, "addButton");
-    get(m_pRemoveCondition, "removeButton");
+    m_xCondLHS->grab_focus();
 
-    m_pActions->SetLineSpacing(true);
-    m_pCondLHS->GrabFocus();
+    m_xConditionType->connect_changed( LINK( this, Condition, OnTypeSelected ) );
 
-    m_pConditionType->SetSelectHdl( LINK( this, Condition, OnTypeSelected ) );
+    m_xOperationList->connect_changed( LINK( this, Condition, OnOperationSelected ) );
 
-    m_pOperationList->SetDropDownLineCount( 10 );
-    m_pOperationList->SetSelectHdl( LINK( this, Condition, OnOperationSelected ) );
+    m_xActions->connect_clicked(LINK(this, Condition, OnFormatAction));
 
-    m_pActions->SetSelectHdl(LINK(this, Condition, OnFormatAction));
-    m_pActions->SetDropdownClickHdl( LINK( this, Condition, DropdownClick ) );
-    setToolBox(m_pActions);
+    m_xMoveUp->connect_clicked( LINK( this, Condition, OnConditionAction ) );
+    m_xMoveDown->connect_clicked( LINK( this, Condition, OnConditionAction ) );
+    m_xAddCondition->connect_clicked( LINK( this, Condition, OnConditionAction ) );
+    m_xRemoveCondition->connect_clicked( LINK( this, Condition, OnConditionAction ) );
 
-    m_pMoveUp->SetClickHdl( LINK( this, Condition, OnConditionAction ) );
-    m_pMoveDown->SetClickHdl( LINK( this, Condition, OnConditionAction ) );
-    m_pAddCondition->SetClickHdl( LINK( this, Condition, OnConditionAction ) );
-    m_pRemoveCondition->SetClickHdl( LINK( this, Condition, OnConditionAction ) );
+    m_xConditionType->set_active(0);
+    m_xOperationList->set_active(0);
 
-    vcl::Font aFont( m_pAddCondition->GetFont() );
-    aFont.SetWeight( WEIGHT_BOLD );
-    m_pAddCondition->SetFont( aFont );
-    m_pRemoveCondition->SetFont( aFont );
+    SetBackgroundDropdownClick();
+    SetForegroundDropdownClick();
 
-    m_pOperandGlue->SetStyle( m_pOperandGlue->GetStyle() | WB_VCENTER );
-
-    m_pConditionType->SelectEntryPos( 0 );
-    m_pOperationList->SelectEntryPos( 0 );
-
-    m_nBoldId = m_pActions->GetItemId(".uno:Bold");
-    m_nItalicId = m_pActions->GetItemId(".uno:Italic");
-    m_nUnderLineId = m_pActions->GetItemId(".uno:Underline");
-    m_nBackgroundColorId = m_pActions->GetItemId(".uno:BackgroundColor");
-    m_nFontColorId = m_pActions->GetItemId(".uno:FontColor");
-    m_nFontDialogId = m_pActions->GetItemId(".uno:FontDialog");
-
-    m_pBtnUpdaterBackgroundColor.reset( new svx::ToolboxButtonColorUpdater(
-                                            SID_BACKGROUND_COLOR, m_nBackgroundColorId, m_pActions, false,
-                                            m_pActions->GetItemText( m_nBackgroundColorId ) ) );
-    m_pBtnUpdaterFontColor.reset( new svx::ToolboxButtonColorUpdater(
-                                      SID_ATTR_CHAR_COLOR2, m_nFontColorId, m_pActions, false,
-                                      m_pActions->GetItemText( m_nFontColorId ) ) );
-
-    Show();
+    m_xContainer->show();
 
     ConditionalExpressionFactory::getKnownConditionalExpressions( m_aConditionalExpressions );
 }
 
-sal_uInt16 Condition::mapToolbarItemToSlotId(sal_uInt16 nItemId) const
+sal_uInt16 Condition::mapToolbarItemToSlotId(const OString& rItemId)
 {
-    if (nItemId == m_nBoldId)
+    if (rItemId == "bold")
         return SID_ATTR_CHAR_WEIGHT;
-    if (nItemId == m_nItalicId)
+    if (rItemId == "italic")
         return SID_ATTR_CHAR_POSTURE;
-    if (nItemId == m_nUnderLineId)
+    if (rItemId == "underline")
         return SID_ATTR_CHAR_UNDERLINE;
-    if (nItemId == m_nBackgroundColorId)
+    if (rItemId == "background")
         return SID_BACKGROUND_COLOR;
-    if (nItemId == m_nFontColorId)
+    if (rItemId == "foreground")
         return SID_ATTR_CHAR_COLOR2;
-    if (nItemId == m_nFontDialogId)
+    if (rItemId == "fontdialog")
         return SID_CHAR_DLG;
     return 0;
 }
 
 Condition::~Condition()
 {
-    disposeOnce();
 }
 
-void Condition::dispose()
+void Condition::SetBackgroundDropdownClick()
 {
-    m_bInDestruction = true;
+    m_xBackColorFloat.reset(new ColorWindow(
+                            m_xPaletteManager,
+                            m_aColorStatus,
+                            SID_BACKGROUND_COLOR,
+                            nullptr,
+                            m_pDialog,
+                            MenuOrToolMenuButton(m_xActions.get(), "background"),
+                            /*bInterimBuilder*/false,
+                            m_aBackColorWrapper));
 
-    m_pBtnUpdaterFontColor.reset();
-    m_pCondLHS.reset();
-    m_pCondRHS.reset();
-    m_pBtnUpdaterBackgroundColor.reset();
-    m_pHeader.clear();
-    m_pConditionType.clear();
-    m_pOperationList.clear();
-    m_pOperandGlue.clear();
-    m_pActions.clear();
-    m_pPreview.clear();
-    m_pMoveUp.clear();
-    m_pMoveDown.clear();
-    m_pAddCondition.clear();
-    m_pRemoveCondition.clear();
-    m_pColorFloat.disposeAndClear();
-    m_aColorWrapper.dispose();
-    disposeBuilder();
-    VclHBox::dispose();
+    m_xActions->set_item_popover("background", m_xBackColorFloat->GetWidget());
 }
 
-IMPL_LINK(Condition, DropdownClick, ToolBox*, pToolBox, void)
+void Condition::SetForegroundDropdownClick()
 {
-    sal_uInt16 nId( m_pActions->GetCurItemId() );
-    m_pColorFloat.disposeAndClear();
-    sal_uInt16 nSlotId(mapToolbarItemToSlotId(nId));
-    m_aColorWrapper.SetSlotId(nSlotId);
-    m_pColorFloat = VclPtr<SvxColorWindow>::Create(
-                           OUString() /*m_aCommandURL*/,
-                           m_xPaletteManager,
-                           m_aColorStatus,
-                           nSlotId,
-                           nullptr,
-                           pToolBox,
-                           false,
-                           m_aColorWrapper);
+    m_xForeColorFloat.reset(new ColorWindow(
+                            m_xPaletteManager,
+                            m_aColorStatus,
+                            SID_ATTR_CHAR_COLOR2,
+                            nullptr,
+                            m_pDialog,
+                            MenuOrToolMenuButton(m_xActions.get(), "foreground"),
+                            /*bInterimBuilder*/false,
+                            m_aForeColorWrapper));
 
-    m_pColorFloat->EnableDocking();
-    vcl::Window::GetDockingManager()->StartPopupMode(pToolBox, m_pColorFloat, FloatWinPopupFlags::GrabFocus);
+    m_xActions->set_item_popover("foreground", m_xForeColorFloat->GetWidget());
 }
 
-IMPL_LINK_NOARG( Condition, OnFormatAction, ToolBox*, void )
+
+IMPL_LINK(Condition, OnFormatAction, const OString&, rIdent, void)
 {
-    ApplyCommand(mapToolbarItemToSlotId(m_pActions->GetCurItemId()),
+    ApplyCommand(mapToolbarItemToSlotId(rIdent),
                  NamedColor(COL_AUTO, "#" + COL_AUTO.AsRGBHexString()));
 }
 
-IMPL_LINK( Condition, OnConditionAction, Button*, _pClickedButton, void )
+IMPL_LINK(Condition, OnConditionAction, weld::Button&, rClickedButton, void)
 {
-    if ( _pClickedButton == m_pMoveUp )
+    if ( &rClickedButton == m_xMoveUp.get() )
         m_rAction.moveConditionUp( getConditionIndex() );
-    else if ( _pClickedButton == m_pMoveDown )
+    else if ( &rClickedButton == m_xMoveDown.get() )
         m_rAction.moveConditionDown( getConditionIndex() );
-    else if ( _pClickedButton == m_pAddCondition )
+    else if ( &rClickedButton == m_xAddCondition.get() )
         m_rAction.addCondition( getConditionIndex() );
-    else if ( _pClickedButton == m_pRemoveCondition )
+    else if ( &rClickedButton == m_xRemoveCondition.get() )
         m_rAction.deleteCondition( getConditionIndex() );
 }
 
 void Condition::ApplyCommand( sal_uInt16 _nCommandId, const NamedColor& rNamedColor )
 {
-    if ( _nCommandId == SID_ATTR_CHAR_COLOR2 )
-        m_pBtnUpdaterFontColor->Update( rNamedColor );
-    else if ( _nCommandId == SID_BACKGROUND_COLOR )
-        m_pBtnUpdaterBackgroundColor->Update( rNamedColor );
-
     m_rAction.applyCommand( m_nCondIndex, _nCommandId, rNamedColor.first );
 }
 
-void Condition::resizeControls(const Size& /*_rDiff*/)
-{
-}
-
-void Condition::GetFocus()
-{
-    VclHBox::GetFocus();
-    if ( !m_bInDestruction )
-        m_pCondLHS->GrabFocus();
-}
-
-IMPL_LINK_NOARG( Condition, OnTypeSelected, ListBox&, void )
+IMPL_LINK_NOARG( Condition, OnTypeSelected, weld::ComboBox&, void )
 {
     impl_layoutOperands();
 }
 
-
-IMPL_LINK_NOARG( Condition, OnOperationSelected, ListBox&, void )
+IMPL_LINK_NOARG( Condition, OnOperationSelected, weld::ComboBox&, void )
 {
     impl_layoutOperands();
 }
@@ -303,9 +242,9 @@ void Condition::impl_layoutOperands()
             );
 
     // the "condition type" list box
-    m_pOperationList->Show( !bIsExpression );
-    m_pOperandGlue->Show( bHaveRHS );
-    m_pCondRHS->Show( bHaveRHS );
+    m_xOperationList->set_visible( !bIsExpression );
+    m_xOperandGlue->set_visible( bHaveRHS );
+    m_xCondRHS->set_visible( bHaveRHS );
 }
 
 void Condition::impl_setCondition( const OUString& _rConditionFormula )
@@ -347,10 +286,10 @@ void Condition::impl_setCondition( const OUString& _rConditionFormula )
     }
 
     // update UI
-    m_pConditionType->SelectEntryPos( static_cast<sal_uInt16>(eType) );
-    m_pOperationList->SelectEntryPos( static_cast<sal_uInt16>(eOperation) );
-    m_pCondLHS->SetText( sLHS );
-    m_pCondRHS->SetText( sRHS );
+    m_xConditionType->set_active(static_cast<sal_uInt16>(eType));
+    m_xOperationList->set_active(static_cast<sal_uInt16>(eOperation));
+    m_xCondLHS->set_text( sLHS );
+    m_xCondRHS->set_text( sRHS );
 
     // re-layout
     impl_layoutOperands();
@@ -380,15 +319,15 @@ void Condition::setCondition( const uno::Reference< report::XFormatCondition >& 
 
 void Condition::updateToolbar(const uno::Reference< report::XReportControlFormat >& _xReportControlFormat)
 {
+    OString aItems[] = { "bold", "italic", "underline", "fontdialog" };
+
     OSL_ENSURE(_xReportControlFormat.is(),"XReportControlFormat is NULL!");
     if ( _xReportControlFormat.is() )
     {
-        ToolBox::ImplToolItems::size_type nItemCount = m_pActions->GetItemCount();
-        for (ToolBox::ImplToolItems::size_type j = 0; j< nItemCount; ++j)
+        for (size_t j = 0; j < SAL_N_ELEMENTS(aItems); ++j)
         {
-            sal_uInt16 nItemId = m_pActions->GetItemId(j);
-            m_pActions->CheckItem( nItemId, OReportController::isFormatCommandEnabled(mapToolbarItemToSlotId(nItemId),
-                _xReportControlFormat ) );
+            m_xActions->set_item_active(aItems[j], OReportController::isFormatCommandEnabled(mapToolbarItemToSlotId(aItems[j]),
+                _xReportControlFormat));
         }
 
         try
@@ -399,9 +338,9 @@ void Condition::updateToolbar(const uno::Reference< report::XReportControlFormat
             aFont.SetEmphasisMark( static_cast< FontEmphasisMark >( _xReportControlFormat->getControlTextEmphasis() ) );
             aFont.SetRelief( static_cast< FontRelief >( _xReportControlFormat->getCharRelief() ) );
             aFont.SetColor( Color(_xReportControlFormat->getCharColor()) );
-            m_pPreview->SetFont( aFont, aFont, aFont );
-            m_pPreview->SetBackColor( Color(_xReportControlFormat->getControlBackground()) );
-            m_pPreview->SetTextLineColor( Color( _xReportControlFormat->getCharUnderlineColor() ) );
+            m_aPreview.SetFont( aFont, aFont, aFont );
+            m_aPreview.SetBackColor( Color(_xReportControlFormat->getControlBackground()) );
+            m_aPreview.SetTextLineColor( Color( _xReportControlFormat->getCharUnderlineColor() ) );
         }
         catch( const Exception& )
         {
@@ -415,8 +354,8 @@ void Condition::fillFormatCondition(const uno::Reference< report::XFormatConditi
     const ConditionType eType( impl_getCurrentConditionType() );
     const ComparisonOperation eOperation( impl_getCurrentComparisonOperation() );
 
-    const OUString sLHS( m_pCondLHS->GetText() );
-    const OUString sRHS( m_pCondRHS->GetText() );
+    const OUString sLHS( m_xCondLHS->get_text() );
+    const OUString sRHS( m_xCondRHS->get_text() );
 
     OUString sUndecoratedFormula( sLHS );
 
@@ -438,19 +377,17 @@ void Condition::setConditionIndex( size_t _nCondIndex, size_t _nCondCount )
     m_nCondIndex = _nCondIndex;
     OUString sHeader( RptResId( STR_NUMBERED_CONDITION ) );
     sHeader = sHeader.replaceFirst( "$number$", OUString::number( _nCondIndex + 1) );
-    m_pHeader->SetText( sHeader );
+    m_xHeader->set_label( sHeader );
 
-    m_pMoveUp->Enable( _nCondIndex > 0 );
+    m_xMoveUp->set_sensitive(_nCondIndex > 0);
     OSL_PRECOND( _nCondCount > 0, "Condition::setConditionIndex: having no conditions at all is nonsense!" );
-    m_pMoveDown->Enable( _nCondIndex < _nCondCount - 1 );
+    m_xMoveDown->set_sensitive(_nCondIndex < _nCondCount - 1);
 }
-
 
 bool Condition::isEmpty() const
 {
-    return m_pCondLHS->GetText().isEmpty();
+    return m_xCondLHS->get_text().isEmpty();
 }
-
 
 } // rptui
 

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="rpt">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -17,7 +16,6 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
@@ -38,7 +36,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
         <property name="row_spacing">6</property>
         <property name="column_spacing">12</property>
         <child>
@@ -46,7 +43,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkComboBoxText" id="typeCombobox">
@@ -89,17 +85,18 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">center</property>
+                <property name="hexpand">True</property>
                 <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkEntry" id="lhsEntry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -112,8 +109,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -127,6 +122,7 @@
               <object class="GtkLabel" id="andLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="valign">center</property>
                 <property name="label" translatable="yes" context="conditionwin|andLabel">and</property>
               </object>
               <packing>
@@ -140,17 +136,18 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">center</property>
+                <property name="hexpand">True</property>
                 <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkEntry" id="rhsEntry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -163,8 +160,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -178,8 +173,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -193,8 +186,6 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -202,7 +193,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkToolbar" id="formatToolbox">
@@ -213,45 +203,42 @@
                 <property name="toolbar_style">icons</property>
                 <property name="show_arrow">False</property>
                 <child>
-                  <object class="GtkToolButton" id="ToolBoxItem1">
+                  <object class="GtkToggleToolButton" id="bold">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:Bold</property>
                     <property name="label" translatable="yes" context="conditionwin|ToolBoxItem1">Bold</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_bold.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="ToolBoxItem2">
+                  <object class="GtkToggleToolButton" id="italic">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:Italic</property>
                     <property name="label" translatable="yes" context="conditionwin|ToolBoxItem2">Italic</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_italic.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="ToolBoxItem3">
+                  <object class="GtkToggleToolButton" id="underline">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:Underline</property>
                     <property name="label" translatable="yes" context="conditionwin|ToolBoxItem3">Underline</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_underline.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
@@ -265,45 +252,42 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkMenuToolButton" id="ToolBoxItem4">
+                  <object class="GtkMenuToolButton" id="background">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:BackgroundColor</property>
                     <property name="label" translatable="yes" context="conditionwin|ToolBoxItem4">Background Color</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_backgroundcolor.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkMenuToolButton" id="ToolBoxItem5">
+                  <object class="GtkMenuToolButton" id="foreground">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:FontColor</property>
                     <property name="label" translatable="yes" context="conditionwin|ToolBoxItem5">Font Color</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_fontcolor.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="ToolBoxItem6">
+                  <object class="GtkToggleToolButton" id="fontdialog">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:FontDialog</property>
                     <property name="label" translatable="yes" context="conditionwin|ToolBoxItem6">Character Formatting</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_fontdialog.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
               </object>
@@ -314,10 +298,26 @@
               </packing>
             </child>
             <child>
-              <object class="svxlo-SvxFontPrevWindow" id="previewDrawingarea">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="vscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="previewDrawingarea">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -329,8 +329,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -345,8 +343,6 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
@@ -373,8 +369,6 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -389,8 +383,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
