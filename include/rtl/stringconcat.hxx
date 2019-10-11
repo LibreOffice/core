@@ -119,15 +119,7 @@ struct ToStringHelper< const char* >
     };
 
 template<>
-struct ToStringHelper< char* >
-    {
-    static int length( const char* str ) {
-        return sal::static_int_cast<int>(strlen( str ));
-    }
-    static char* addData( char* buffer, const char* str ) { return addDataCString( buffer, str ); }
-    static const bool allowOStringConcat = true;
-    static const bool allowOUStringConcat = false;
-    };
+    struct ToStringHelper< char* > : public ToStringHelper< const char* > {};
 
 template< int N >
 struct ToStringHelper< char[ N ] >
@@ -151,22 +143,51 @@ struct ToStringHelper< const char[ N ] >
     static const bool allowOUStringConcat = true;
     };
 
-template<std::size_t N> struct ToStringHelper<sal_Unicode const[N]> {
-    static int length(sal_Unicode const[N]) { return N - 1; }
+template<>
+struct ToStringHelper< const sal_Unicode* >
+    {
+    static int length( const sal_Unicode* str ) {
+        return sal::static_int_cast<int>(std::char_traits<char16_t>::length( str ));
+    }
+    static sal_Unicode* addData( sal_Unicode* buffer, const sal_Unicode* str ) { return addDataUString( buffer, str ); }
+    static const bool allowOStringConcat = false;
+    static const bool allowOUStringConcat = true;
+    };
+
+template<>
+    struct ToStringHelper< sal_Unicode* > : public ToStringHelper< const sal_Unicode* > {};
+
+template<int N>
+struct ToStringHelper<sal_Unicode[ N ]>
+    {
+    static int length( const sal_Unicode str[ N ] ) {
+        return sal::static_int_cast<int>(std::char_traits<char16_t>::length( str ));
+    }
     static sal_Unicode * addData(sal_Unicode * buffer, sal_Unicode const str[N])
     { return addDataHelper(buffer, str, N - 1); }
     static bool const allowOStringConcat = false;
     static bool const allowOUStringConcat = true;
-};
+    };
 
-template<> struct ToStringHelper<OUStringLiteral1_> {
+template<int N>
+struct ToStringHelper<sal_Unicode const[N]>
+    {
+    static int length( const sal_Unicode str[ N ] ) { (void)str; assert( std::char_traits<char16_t>::length( str ) == N - 1 ); return N - 1; }
+    static sal_Unicode * addData(sal_Unicode * buffer, sal_Unicode const str[N])
+    { return addDataHelper(buffer, str, N - 1); }
+    static bool const allowOStringConcat = false;
+    static bool const allowOUStringConcat = true;
+    };
+
+template<>
+struct ToStringHelper<OUStringLiteral1_>
+    {
     static int length(OUStringLiteral1_) { return 1; }
-    static sal_Unicode * addData(
-        sal_Unicode * buffer, OUStringLiteral1_ literal)
+    static sal_Unicode * addData(sal_Unicode * buffer, OUStringLiteral1_ literal)
     { return addDataHelper(buffer, &literal.c, 1); }
     static bool const allowOStringConcat = false;
     static bool const allowOUStringConcat = true;
-};
+    };
 
 /**
 @internal
