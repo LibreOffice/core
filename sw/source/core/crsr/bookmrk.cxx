@@ -705,13 +705,8 @@ namespace sw { namespace mark
     {
         const SwTextNode* const pTextNode = GetMarkEnd().nNode.GetNode().GetTextNode();
         SwPosition const sepPos(sw::mark::FindFieldSep(*this));
-#if 0
         const sal_Int32 nStart(sepPos.nContent.GetIndex());
         const sal_Int32 nEnd  (GetMarkEnd().nContent.GetIndex());
-#else
-        const sal_Int32 nStart(GetMarkStart().nContent.GetIndex());
-        const sal_Int32 nEnd  (sepPos.nContent.GetIndex() + 1);
-#endif
 
         OUString sContent;
         if(nStart + 1 < pTextNode->GetText().getLength() && nEnd <= pTextNode->GetText().getLength() &&
@@ -727,13 +722,8 @@ namespace sw { namespace mark
 
         const SwTextNode* const pTextNode = GetMarkEnd().nNode.GetNode().GetTextNode();
         SwPosition const sepPos(sw::mark::FindFieldSep(*this));
-#if 0
         const sal_Int32 nStart(sepPos.nContent.GetIndex());
         const sal_Int32 nEnd  (GetMarkEnd().nContent.GetIndex());
-#else
-        const sal_Int32 nStart(GetMarkStart().nContent.GetIndex());
-        const sal_Int32 nEnd  (sepPos.nContent.GetIndex() + 1);
-#endif
 
         if(nStart + 1 < pTextNode->GetText().getLength() && nEnd <= pTextNode->GetText().getLength() &&
            nEnd > nStart + 2)
