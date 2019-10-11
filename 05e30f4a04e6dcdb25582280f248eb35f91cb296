@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_b7039042",
+        "filename": "include/rtl/stringconcat.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-10-11T15:50:48Z",
+      "side": 0,
+      "message": "perhaps this line should be true, instead?\nsounds like a reasonable thing to do - adding a char[] to an OUString",
+      "revId": "05e30f4a04e6dcdb25582280f248eb35f91cb296",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
