@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_1c406b56",
+        "filename": "include/rtl/stringconcat.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-11T08:05:28Z",
+      "side": 1,
+      "message": "I understand that this follows the formatting of the surrounding code, but wow it\u0027s so unintuitive to have braces for both struct and its members on the same level!...",
+      "range": {
+        "startLine": 156,
+        "startChar": 4,
+        "endLine": 163,
+        "endChar": 6
+      },
+      "revId": "572efef6241be9141ba9aff34e466c78b3edd8dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
