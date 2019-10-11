@@ -770,7 +770,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="singlepagesheets">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|singlepagesheets">Single-page sheets</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage|singlepagesheets">Full-Sheet Previews</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
