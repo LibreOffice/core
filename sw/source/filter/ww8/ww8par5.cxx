@@ -541,7 +541,8 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             SwPaM aFieldPam( m_aFieldStack.back().GetPtNode(), m_aFieldStack.back().GetPtContent(), aEndPos.nNode, aEndPos.nContent.GetIndex());
             IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
             IFieldmark *pFieldmark = pMarksAccess->makeFieldBookmark(
-                        aFieldPam, m_aFieldStack.back().GetBookmarkName(), ODF_FORMTEXT );
+                        aFieldPam, m_aFieldStack.back().GetBookmarkName(), ODF_FORMTEXT,
+                        aFieldPam.Start() /*same pos as start!*/ );
             OSL_ENSURE(pFieldmark!=nullptr, "hmmm; why was the bookmark not created?");
             if (pFieldmark!=nullptr) {
                 // adapt redline positions to inserted field mark start
@@ -640,7 +641,8 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                     IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(
                                 aFieldPam,
                                 m_aFieldStack.back().GetBookmarkName(),
-                                ODF_UNHANDLED );
+                                ODF_UNHANDLED,
+                                aFieldPam.Start() /*same pos as start!*/ );
                     if ( pFieldmark )
                     {
                         // adapt redline positions to inserted field mark start
