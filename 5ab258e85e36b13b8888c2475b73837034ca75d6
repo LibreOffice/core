@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_dc73d3e6",
+        "filename": "include/rtl/stringconcat.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-11T07:52:54Z",
+      "side": 1,
+      "message": "why?",
+      "range": {
+        "startLine": 18,
+        "startChar": 1,
+        "endLine": 18,
+        "endChar": 17
+      },
+      "revId": "5ab258e85e36b13b8888c2475b73837034ca75d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
