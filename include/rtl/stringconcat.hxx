@@ -129,7 +129,6 @@ struct ToStringHelper< char[ N ] >
         return sal::static_int_cast<int>(strlen( str ));
     }
     static char* addData( char* buffer, const char str[ N ] ) { return addDataCString( buffer, str ); }
-    static sal_Unicode* addData( sal_Unicode* buffer, const char str[ N ] ) { return addDataLiteral( buffer, str, N - 1 ); }
     static const bool allowOStringConcat = true;
     static const bool allowOUStringConcat = false;
     };
