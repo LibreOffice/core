@@ -172,7 +172,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/misc/stringlistitem \
     dbaccess/source/ui/misc/TableCopyHelper \
     dbaccess/source/ui/misc/TokenWriter \
-    dbaccess/source/ui/misc/ToolBoxHelper \
     dbaccess/source/ui/misc/uiservices \
     dbaccess/source/ui/misc/UITools \
     dbaccess/source/ui/misc/WColumnSelect \
