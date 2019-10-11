@@ -239,10 +239,13 @@ bool SwWrtShell::DelLeft()
         const SwPosition* pCurPos = GetCursor()->GetPoint();
         SwPosition aPrevChar(*pCurPos);
         --aPrevChar.nContent;
-        sw::mark::IFieldmark* pFm = getIDocumentMarkAccess()->getFieldmarkFor(aPrevChar);
+        sw::mark::IFieldmark* pFm = getIDocumentMarkAccess()->getFieldmarkAt(aPrevChar);
         if (pFm && pFm->GetMarkEnd() == *pCurPos)
         {
+            mxDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
+            IDocumentMarkAccess::DeleteFieldmarkCommand(*pFm);
             getIDocumentMarkAccess()->deleteMark(pFm);
+            mxDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
             return true;
         }
 
@@ -375,10 +378,13 @@ bool SwWrtShell::DelRight()
 
         {
             // If we are just ahead of a fieldmark, then remove it completely
-            sw::mark::IFieldmark* pFm = GetCurrentFieldmark();
+            sw::mark::IFieldmark *const pFm = getIDocumentMarkAccess()->getFieldmarkAt(*GetCursor()->GetPoint());
             if (pFm && pFm->GetMarkStart() == *GetCursor()->GetPoint())
             {
+                mxDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
+                IDocumentMarkAccess::DeleteFieldmarkCommand(*pFm);
                 getIDocumentMarkAccess()->deleteMark(pFm);
+                mxDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
                 bRet = true;
                 break;
             }
