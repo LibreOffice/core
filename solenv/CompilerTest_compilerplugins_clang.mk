@@ -14,6 +14,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/blockblock \
     compilerplugins/clang/test/buriedassign \
     compilerplugins/clang/test/casttovoid \
+    compilerplugins/clang/test/classmemaccess \
     compilerplugins/clang/test/collapseif \
     compilerplugins/clang/test/commaoperator \
     $(if $(filter-out WNT,$(OS)),compilerplugins/clang/test/constfields) \
