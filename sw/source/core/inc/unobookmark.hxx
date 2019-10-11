@@ -66,7 +66,7 @@ protected:
     virtual void attachToRange(
             const css::uno::Reference< css::text::XTextRange > & xTextRange);
 
-    const ::sw::mark::IMark* GetBookmark() const;
+    ::sw::mark::IMark* GetBookmark() const;
 
     IDocumentMarkAccess* GetIDocumentMarkAccess();
 
