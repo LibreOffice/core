@@ -637,8 +637,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         { SID_ATTR_CHAR_CTL_POSTURE, true },
         { SID_ATTR_CHAR_CTL_WEIGHT, true }
     };
-    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
-    ::std::unique_ptr<FontList> pFontList(new FontList( pParent ));
+    ::std::unique_ptr<FontList> pFontList(new FontList(Application::GetDefaultDevice()));
     XColorListRef pColorList( XColorList::CreateStdColorList() );
     std::vector<SfxPoolItem*> pDefaults
     {

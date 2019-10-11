@@ -172,7 +172,6 @@ OAddFieldWindow::OAddFieldWindow(vcl::Window* pParent ,const uno::Reference< bea
     m_aActions->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
 
     m_aActions->SetSelectHdl(LINK(this, OAddFieldWindow, OnSortAction));
-    setToolBox(m_aActions.get());
     m_aActions->CheckItem(m_nSortUpId);
     m_aActions->EnableItem(m_nInsertId, false);
 
@@ -448,15 +447,6 @@ IMPL_LINK_NOARG( OAddFieldWindow, OnDoubleClickHdl, SvTreeListBox*, bool )
     m_aCreateLink.Call(*this);
 
     return false;
-}
-
-void OAddFieldWindow::resizeControls(const Size& _rDiff)
-{
-    // we use large images so we must change them
-    if ( _rDiff.Width() || _rDiff.Height() )
-    {
-        Invalidate();
-    }
 }
 
 IMPL_LINK_NOARG( OAddFieldWindow, OnSortAction, ToolBox*, void )
