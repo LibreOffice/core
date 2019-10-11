@@ -2194,7 +2194,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
             aFilterOptions = temp + aFilterOptions.copy(bIndex+16);
         }
 
-        bool bFullSheetPreview = sFullSheetPreview == "true" ? true : false;
+        bool bFullSheetPreview = sFullSheetPreview == "true";
 
         // 'TakeOwnership' == this is a 'real' SaveAs (that is, the document
         // gets a new name).  When this is not provided, the meaning of
@@ -2224,7 +2224,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 
         if(!watermarkText.isEmpty() || bFullSheetPreview)
         {
-            uno::Sequence< beans::PropertyValue > aFilterData( bFullSheetPreview + !watermarkText.isEmpty() );
+            uno::Sequence< beans::PropertyValue > aFilterData( static_cast<int>(bFullSheetPreview) + static_cast<int>(!watermarkText.isEmpty()) );
 
             if (!watermarkText.isEmpty())
             {
@@ -2234,7 +2234,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 
             if (bFullSheetPreview)
             {
-                int nOptIndex = !watermarkText.isEmpty();
+                int nOptIndex = static_cast<int>(!watermarkText.isEmpty());
 
                 aFilterData[ nOptIndex ].Name = "SinglePageSheets";
                 aFilterData[ nOptIndex ].Value <<= true;
