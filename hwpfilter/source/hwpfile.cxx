@@ -526,17 +526,21 @@ void HWPFile::AddParaShape(std::shared_ptr<ParaShape> const & pshape)
           }
     }
     if( nscount )
+    {
         pshape->tabs[MAXTABS-1].type = sal::static_int_cast<char>(nscount);
+        pshape->index = ++pcount;
+        pslist.push_back(pshape);
+        return;
+    }
 
     int value = compareParaShape(pshape.get());
-
-    if( value == 0 || nscount )
+    if (value == 0)
     {
         pshape->index = ++pcount;
         pslist.push_back(pshape);
+        return;
     }
-    else
-        pshape->index = value;
+    pshape->index = value;
 }
 
 void HWPFile::AddCharShape(std::shared_ptr<CharShape> const & cshape)
