@@ -414,6 +414,11 @@ struct _LibreOfficeKitDocumentClass
                                int nBefore,
                                int nAfter);
 
+    /// @see lok::Document::sendDialogEvent
+    void (*sendDialogEvent) (LibreOfficeKitDocument* pThis,
+                            unsigned nLOKWindowId,
+                            const char* pArguments);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
