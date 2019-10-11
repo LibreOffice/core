@@ -511,6 +511,12 @@ namespace sw { namespace mark
 
     void TextFieldmark::ReleaseDoc(SwDoc* const pDoc)
     {
+        IDocumentUndoRedo & rIDUR(pDoc->GetIDocumentUndoRedo());
+        if (rIDUR.DoesUndo())
+        {
+            rIDUR.AppendUndo(std::make_unique<SwUndoDelTextFieldmark>(*this));
+        }
+        ::sw::UndoGuard const ug(rIDUR); // prevent SwUndoDeletes
         lcl_RemoveFieldMarks(this, pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
     }
 
@@ -540,6 +546,12 @@ namespace sw { namespace mark
 
     void NonTextFieldmark::ReleaseDoc(SwDoc* const pDoc)
     {
+        IDocumentUndoRedo & rIDUR(pDoc->GetIDocumentUndoRedo());
+        if (rIDUR.DoesUndo())
+        {
+            rIDUR.AppendUndo(std::make_unique<SwUndoDelNoTextFieldmark>(*this));
+        }
+        ::sw::UndoGuard const ug(rIDUR); // prevent SwUndoDeletes
         lcl_RemoveFieldMarks(this, pDoc,
                 CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
     }
@@ -656,6 +668,13 @@ namespace sw { namespace mark
 
     void DateFieldmark::ReleaseDoc(SwDoc* const pDoc)
     {
+        IDocumentUndoRedo & rIDUR(pDoc->GetIDocumentUndoRedo());
+        if (rIDUR.DoesUndo())
+        {
+            // TODO does this need a 3rd Undo class?
+            rIDUR.AppendUndo(std::make_unique<SwUndoDelTextFieldmark>(*this));
+        }
+        ::sw::UndoGuard const ug(rIDUR); // prevent SwUndoDeletes
         lcl_RemoveFieldMarks(this, pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
     }
 
