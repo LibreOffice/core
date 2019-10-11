@@ -67,6 +67,7 @@ gb_CFLAGS_COMMON := \
 	-fmessage-length=0 \
 	-fno-common \
 	-pipe \
+	-fstack-protector-strong \
 
 gb_CXXFLAGS_COMMON := \
 	-Wall \
@@ -81,6 +82,7 @@ gb_CXXFLAGS_COMMON := \
 	-fmessage-length=0 \
 	-fno-common \
 	-pipe \
+	-fstack-protector-strong \
 
 gb_CXXFLAGS_DISABLE_WARNINGS = -w
 
@@ -134,11 +136,7 @@ endif
 gb_VISIBILITY_FLAGS_CXX := -fvisibility-inlines-hidden
 gb_CXXFLAGS_COMMON += $(gb_VISIBILITY_FLAGS_CXX)
 
-ifeq ($(HAVE_GCC_STACK_PROTECTOR_STRONG),TRUE)
-gb_CFLAGS_COMMON += -fstack-protector-strong
-gb_CXXFLAGS_COMMON += -fstack-protector-strong
 gb_LinkTarget_LDFLAGS += -fstack-protector-strong
-endif
 
 ifneq ($(ENABLE_PCH),)
 ifeq ($(COM_IS_CLANG),TRUE)
