@@ -616,6 +616,7 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xFontAntiAliasing(m_xBuilder->weld_check_button("aafont"))
     , m_xAAPointLimitLabel(m_xBuilder->weld_label("aafrom"))
     , m_xAAPointLimit(m_xBuilder->weld_metric_spin_button("aanf", FieldUnit::PIXEL))
+    , m_xMenuIconBox(m_xBuilder->weld_widget("menuiconsbox"))
     , m_xMenuIconsLB(m_xBuilder->weld_combo_box("menuicons"))
     , m_xContextMenuShortcutsLB(m_xBuilder->weld_combo_box("contextmenushortcuts"))
     , m_xFontShowCB(m_xBuilder->weld_check_button("showfontpreview"))
@@ -634,6 +635,7 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
         m_xForceOpenGL->hide();
         m_xOpenGLStatusEnabled->hide();
         m_xOpenGLStatusDisabled->hide();
+        m_xMenuIconBox->hide();
     }
 
 #if defined( UNX )
