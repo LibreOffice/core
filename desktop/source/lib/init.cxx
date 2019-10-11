@@ -147,6 +147,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/abstdlg.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/uitest/uiobject.hxx>
 
 #include <app.hxx>
 
@@ -795,6 +796,9 @@ static void doc_postWindowGestureEvent(LibreOfficeKitDocument* pThis,
                                       int nX,
                                       int nY,
                                       int nOffset);
+static void doc_sendDialogEvent(LibreOfficeKitDocument* pThis,
+                               unsigned nLOKWindowId,
+                               const char* pArguments);
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis,
                                const char* pCommand,
                                const char* pArguments,
@@ -942,6 +946,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->postWindowKeyEvent = doc_postWindowKeyEvent;
         m_pDocumentClass->postMouseEvent = doc_postMouseEvent;
         m_pDocumentClass->postWindowMouseEvent = doc_postWindowMouseEvent;
+        m_pDocumentClass->sendDialogEvent = doc_sendDialogEvent;
         m_pDocumentClass->postUnoCommand = doc_postUnoCommand;
         m_pDocumentClass->setTextSelection = doc_setTextSelection;
         m_pDocumentClass->getTextSelection = doc_getTextSelection;
@@ -3255,6 +3260,46 @@ public:
 
     virtual void SAL_CALL disposing(const css::lang::EventObject&) override {}
 };
+
+static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWindowId, const char* pArguments)
+{
+    SolarMutexGuard aGuard;
+
+    char* pCopy = strdup(pArguments);
+    if (!pCopy) {
+        SetLastExceptionMsg("String copying error.");
+        return;
+    }
+
+    char* pIdChar = strtok(pCopy, " ");
+
+    if (!pIdChar) {
+        SetLastExceptionMsg("Error parsing the command.");
+        return;
+    }
+
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nWindowId);
+    if (!pWindow)
+    {
+        free(pCopy);
+        SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
+        return;
+    }
+    else
+    {
+        OUString sAction("CLICK");
+        WindowUIObject aUIObject = WindowUIObject(pWindow);
+        OUString sId = OUString::createFromAscii(pIdChar);
+        std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(sId));
+        if (pUIWindow)
+            pUIWindow->execute(sAction, StringMap());
+
+        // force resend
+        pWindow->Resize();
+    }
+
+    free(pCopy);
+}
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
 {

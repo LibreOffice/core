@@ -199,6 +199,11 @@ struct _LibreOfficeKitDocumentClass
                             int nButtons,
                             int nModifier);
 
+    /// @see lok::Document::sendDialogEvent
+    void (*sendDialogEvent) (LibreOfficeKitDocument* pThis,
+                            unsigned nLOKWindowId,
+                            const char* pArguments);
+
     /// @see lok::Document::postUnoCommand
     void (*postUnoCommand) (LibreOfficeKitDocument* pThis,
                             const char* pCommand,
