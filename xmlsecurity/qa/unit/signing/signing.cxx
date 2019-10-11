@@ -1122,12 +1122,12 @@ void SigningTest::testPreserveMacroTemplateSignature12()
     // we are a template, and have a valid document and macro signature
     assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::OK, SignatureState::OK,
                    ODFVER_012_TEXT);
-    mxComponent->dispose();
 
     // create new document from template
     // we can't use createDoc / MacrosTest::loadFromDesktop, because ALWAYS_EXECUTE_NO_WARN
     // won't verify the signature for templates, so the resulting document won't be able to
     // preserve the templates signature.
+    mxComponent->dispose();
     mxComponent = mxDesktop->loadComponentFromURL(
         aURL, "_default", 0,
         comphelper::InitPropertySequence(
@@ -1141,25 +1141,79 @@ void SigningTest::testPreserveMacroTemplateSignature12()
                    SignatureState::OK, ODFVER_012_TEXT);
 
     // save as new ODT document
-    utl::TempFile aTempFileSaveAs;
-    aTempFileSaveAs.EnableKillingFile();
+    utl::TempFile aTempFileSaveAsODT;
+    aTempFileSaveAsODT.EnableKillingFile();
     try
     {
         uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
         uno::Sequence<beans::PropertyValue> descSaveAs(
             comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("writer8")) } }));
-        xDocStorable->storeAsURL(aTempFileSaveAs.GetURL(), descSaveAs);
+        xDocStorable->storeAsURL(aTempFileSaveAsODT.GetURL(), descSaveAs);
     }
     catch (...)
     {
         CPPUNIT_FAIL("Failed to save ODT document");
     }
 
-    // load saved document
-    createDoc(aTempFileSaveAs.GetURL());
+    // save as new OTT template
+    utl::TempFile aTempFileSaveAsOTT;
+    aTempFileSaveAsOTT.EnableKillingFile();
+    try
+    {
+        uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValue> descSaveAs(comphelper::InitPropertySequence(
+            { { "FilterName", uno::Any(OUString("writer8_template")) } }));
+        xDocStorable->storeAsURL(aTempFileSaveAsOTT.GetURL(), descSaveAs);
+    }
+    catch (...)
+    {
+        CPPUNIT_FAIL("Failed to save OTT template");
+    }
+
+    // load the saved OTT template as-is to validate signatures
+    mxComponent->dispose();
+    mxComponent
+        = loadFromDesktop(aTempFileSaveAsOTT.GetURL(), OUString(),
+                          comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
+                           mxComponent.is());
+
+    // the loaded document is a OTT with a valid macro signature
+    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
+                   SignatureState::OK, ODFVER_012_TEXT);
+
+    // load saved ODT document
+    createDoc(aTempFileSaveAsODT.GetURL());
 
     // the loaded document is a ODT with a macro signature
     assertDocument(CPPUNIT_SOURCELINE(), "writer8", SignatureState::NOSIGNATURES,
+                   SignatureState::OK, ODFVER_012_TEXT);
+
+    // save as new OTT template
+    utl::TempFile aTempFileSaveAsODT_OTT;
+    aTempFileSaveAsODT_OTT.EnableKillingFile();
+    try
+    {
+        uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValue> descSaveAs(comphelper::InitPropertySequence(
+            { { "FilterName", uno::Any(OUString("writer8_template")) } }));
+        xDocStorable->storeAsURL(aTempFileSaveAsODT_OTT.GetURL(), descSaveAs);
+    }
+    catch (...)
+    {
+        CPPUNIT_FAIL("Failed to save OTT template");
+    }
+
+    // load the template as-is to validate signatures
+    mxComponent->dispose();
+    mxComponent
+        = loadFromDesktop(aTempFileSaveAsODT_OTT.GetURL(), OUString(),
+                          comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
+                           mxComponent.is());
+
+    // the loaded document is a OTT with a valid macro signature
+    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
                    SignatureState::OK, ODFVER_012_TEXT);
 }
 
@@ -1175,15 +1229,15 @@ void SigningTest::testDropMacroTemplateSignature()
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
                            mxComponent.is());
 
-    // we are a template, and have a valid document and macro signature
+    // we are a template, and have a non-invalid macro signature
     assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
                    SignatureState::NOTVALIDATED, OUString());
-    mxComponent->dispose();
 
     // create new document from template
     // we can't use createDoc / MacrosTest::loadFromDesktop, because ALWAYS_EXECUTE_NO_WARN
     // won't verify the signature for templates, so the resulting document won't be able to
     // preserve the templates signature.
+    mxComponent->dispose();
     mxComponent = mxDesktop->loadComponentFromURL(
         aURL, "_default", 0,
         comphelper::InitPropertySequence(
@@ -1216,6 +1270,44 @@ void SigningTest::testDropMacroTemplateSignature()
 
     // the loaded document is a 1.2 ODT without any signatures
     assertDocument(CPPUNIT_SOURCELINE(), "writer8", SignatureState::NOSIGNATURES,
+                   SignatureState::NOSIGNATURES, ODFVER_012_TEXT);
+
+    // load the template as-is to validate signatures
+    mxComponent->dispose();
+    mxComponent = loadFromDesktop(
+        aURL, OUString(), comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
+                           mxComponent.is());
+
+    // we are a template, and have a non-invalid macro signature
+    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
+                   SignatureState::NOTVALIDATED, OUString());
+
+    // save as new OTT template
+    utl::TempFile aTempFileSaveAsOTT;
+    aTempFileSaveAsOTT.EnableKillingFile();
+    try
+    {
+        uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValue> descSaveAs(comphelper::InitPropertySequence(
+            { { "FilterName", uno::Any(OUString("writer8_template")) } }));
+        xDocStorable->storeAsURL(aTempFileSaveAsOTT.GetURL(), descSaveAs);
+    }
+    catch (...)
+    {
+        CPPUNIT_FAIL("Failed to save OTT template");
+    }
+
+    // load the template as-is to validate signatures
+    mxComponent->dispose();
+    mxComponent
+        = loadFromDesktop(aTempFileSaveAsOTT.GetURL(), OUString(),
+                          comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
+                           mxComponent.is());
+
+    // the loaded document is a 1.2 OTT without any signatures
+    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
                    SignatureState::NOSIGNATURES, ODFVER_012_TEXT);
 }
 
@@ -1267,16 +1359,15 @@ void SigningTest::testPreserveMacroTemplateSignature10()
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
                            mxComponent.is());
 
-    // we are a template, and have a valid document and macro signature
+    // we are a template, and have a non-invalid macro signature
     assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
                    SignatureState::NOTVALIDATED, OUString());
-
-    mxComponent->dispose();
 
     // create new document from template
     // we can't use createDoc / MacrosTest::loadFromDesktop, because ALWAYS_EXECUTE_NO_WARN
     // won't verify the signature for templates, so the resulting document won't be able to
     // preserve the templates signature.
+    mxComponent->dispose();
     mxComponent = mxDesktop->loadComponentFromURL(
         aURL, "_default", 0,
         comphelper::InitPropertySequence(
@@ -1290,25 +1381,79 @@ void SigningTest::testPreserveMacroTemplateSignature10()
                    SignatureState::NOTVALIDATED, OUString());
 
     // save as new ODT document
-    utl::TempFile aTempFileSaveAs;
-    aTempFileSaveAs.EnableKillingFile();
+    utl::TempFile aTempFileSaveAsODT;
+    aTempFileSaveAsODT.EnableKillingFile();
     try
     {
         uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
         uno::Sequence<beans::PropertyValue> descSaveAs(
             comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("writer8")) } }));
-        xDocStorable->storeAsURL(aTempFileSaveAs.GetURL(), descSaveAs);
+        xDocStorable->storeAsURL(aTempFileSaveAsODT.GetURL(), descSaveAs);
     }
     catch (...)
     {
         CPPUNIT_FAIL("Failed to save ODT document");
     }
 
-    // load saved document
-    createDoc(aTempFileSaveAs.GetURL());
+    // save as new OTT template
+    utl::TempFile aTempFileSaveAsOTT;
+    aTempFileSaveAsOTT.EnableKillingFile();
+    try
+    {
+        uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValue> descSaveAs(comphelper::InitPropertySequence(
+            { { "FilterName", uno::Any(OUString("writer8_template")) } }));
+        xDocStorable->storeAsURL(aTempFileSaveAsOTT.GetURL(), descSaveAs);
+    }
+    catch (...)
+    {
+        CPPUNIT_FAIL("Failed to save OTT template");
+    }
 
-    // the loaded document is a ODT with a macro signature
+    // load the saved OTT template as-is to validate signatures
+    mxComponent->dispose();
+    mxComponent
+        = loadFromDesktop(aTempFileSaveAsOTT.GetURL(), OUString(),
+                          comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
+                           mxComponent.is());
+
+    // the loaded document is a OTT with a non-invalid macro signature
+    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
+                   SignatureState::NOTVALIDATED, OUString());
+
+    // load saved ODT document
+    createDoc(aTempFileSaveAsODT.GetURL());
+
+    // the loaded document is a ODT with a non-invalid macro signature
     assertDocument(CPPUNIT_SOURCELINE(), "writer8", SignatureState::NOSIGNATURES,
+                   SignatureState::NOTVALIDATED, OUString());
+
+    // save as new OTT template
+    utl::TempFile aTempFileSaveAsODT_OTT;
+    aTempFileSaveAsODT_OTT.EnableKillingFile();
+    try
+    {
+        uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValue> descSaveAs(comphelper::InitPropertySequence(
+            { { "FilterName", uno::Any(OUString("writer8_template")) } }));
+        xDocStorable->storeAsURL(aTempFileSaveAsODT_OTT.GetURL(), descSaveAs);
+    }
+    catch (...)
+    {
+        CPPUNIT_FAIL("Failed to save OTT template");
+    }
+
+    // load the template as-is to validate signatures
+    mxComponent->dispose();
+    mxComponent
+        = loadFromDesktop(aTempFileSaveAsODT_OTT.GetURL(), OUString(),
+                          comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
+                           mxComponent.is());
+
+    // the loaded document is a OTT with a non-invalid macro signature
+    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
                    SignatureState::NOTVALIDATED, OUString());
 }
 

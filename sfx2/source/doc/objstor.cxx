@@ -1076,6 +1076,15 @@ private:
 };
 }
 
+static OUString lcl_strip_template(const OUString &aString)
+{
+    static const OUString sPostfix("_template");
+    OUString sRes(aString);
+    if (sRes.endsWith(sPostfix))
+        sRes = sRes.copy(0, sRes.getLength() - sPostfix.getLength());
+    return sRes;
+}
+
 bool SfxObjectShell::SaveTo_Impl
 (
      SfxMedium &rMedium, // Medium, in which it will be stored
@@ -1155,10 +1164,8 @@ bool SfxObjectShell::SaveTo_Impl
 
             // preserve only if the same filter has been used
             // for templates, strip the _template from the filter name for comparison
-            OUString aMediumFilter = pMedium->GetFilter()->GetFilterName();
-            if (aMediumFilter.endsWith("_template"))
-                aMediumFilter = aMediumFilter.copy(0, aMediumFilter.getLength() - 9);
-            bTryToPreserveScriptSignature = pMedium->GetFilter() && pFilter && aMediumFilter == pFilter->GetFilterName();
+            const OUString aMediumFilter = lcl_strip_template(pMedium->GetFilter()->GetFilterName());
+            bTryToPreserveScriptSignature = pMedium->GetFilter() && pFilter && aMediumFilter == lcl_strip_template(pFilter->GetFilterName());
 
             // signatures were specified in ODF 1.2 but were used since much longer.
             // LO will still correctly validate an old style signature on an ODF 1.2
