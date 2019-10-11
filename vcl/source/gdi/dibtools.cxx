@@ -466,11 +466,9 @@ bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header const & rHeader, BitmapWriteA
             {
                 nRunByte = nCountByte >> 1;
 
-                for( sal_uLong i = 0; i < nRunByte; i++ )
+                for (sal_uLong i = 0; i < nRunByte && nX < nWidth; ++i)
                 {
-                    if( nX < nWidth )
-                        rAcc.SetPixelOnData(pScanline, nX++, SanitizePaletteIndex(cTmp >> 4, rPalette, bForceToMonoWhileReading));
-
+                    rAcc.SetPixelOnData(pScanline, nX++, SanitizePaletteIndex(cTmp >> 4, rPalette, bForceToMonoWhileReading));
                     if( nX < nWidth )
                         rAcc.SetPixelOnData(pScanline, nX++, SanitizePaletteIndex(cTmp & 0x0f, rPalette, bForceToMonoWhileReading));
                 }
@@ -480,7 +478,7 @@ bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header const & rHeader, BitmapWriteA
             }
             else
             {
-                for( sal_uLong i = 0; ( i < nCountByte ) && ( nX < nWidth ); i++ )
+                for (sal_uLong i = 0; i < nCountByte && nX < nWidth; ++i)
                     rAcc.SetPixelOnData(pScanline, nX++, SanitizePaletteIndex(cTmp, rPalette, bForceToMonoWhileReading));
             }
         }
