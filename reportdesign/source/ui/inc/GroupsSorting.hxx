@@ -38,8 +38,6 @@
 
 #include <vector>
 
-#include <dbaccess/ToolBoxHelper.hxx>
-
 namespace comphelper
 {
     class OPropertyChangeMultiplexer;

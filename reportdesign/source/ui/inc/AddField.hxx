@@ -32,7 +32,6 @@
 
 #include <svx/dataaccessdescriptor.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <dbaccess/ToolBoxHelper.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
 
@@ -48,7 +47,6 @@ class  OAddFieldWindow  :public FloatingWindow
                     ,   public ::cppu::BaseMutex
                     ,   public ::comphelper::OPropertyChangeListener
                     ,   public ::comphelper::OContainerListener
-                    ,   public dbaui::OToolBoxHelper
 {
     css::uno::Reference< css::lang::XComponent>                                 m_xHoldAlive;
     css::uno::Reference< css::container::XNameAccess>                           m_xColumns;
@@ -94,10 +92,6 @@ public:
     css::uno::Reference< css::sdbc::XConnection>              getConnection() const;
 
     css::uno::Sequence< css::beans::PropertyValue > getSelectedFieldDescriptors();
-
-    /** will be called when the controls need to be resized.
-    */
-    virtual void resizeControls(const Size& _rDiff) override;
 
     /// Updates the current field list
     void Update();

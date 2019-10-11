@@ -110,6 +110,23 @@ public:
     void SetSelectedHdl( const Link<const NamedColor&, void>& rLink ) { maSelectedLink = rLink; }
 };
 
+class SVX_DLLPUBLIC MenuOrToolMenuButton
+{
+private:
+    // either
+    weld::MenuButton* m_pMenuButton;
+    // or
+    weld::Toolbar* m_pToolbar;
+    OString m_aIdent;
+public:
+    MenuOrToolMenuButton(weld::MenuButton* pMenuButton);
+    MenuOrToolMenuButton(weld::Toolbar* pToolbar, const OString& rIdent);
+
+    bool get_active() const;
+    void set_active(bool bActive) const;
+    weld::Widget* get_widget() const;
+};
+
 class SVX_DLLPUBLIC ColorWindow : public svtools::ToolbarPopupBase
 {
 private:
@@ -117,7 +134,7 @@ private:
 
     const sal_uInt16    theSlotId;
     weld::Window* const mpParentWindow;
-    weld::MenuButton* mpMenuButton;
+    MenuOrToolMenuButton maMenuButton;
     std::shared_ptr<PaletteManager> mxPaletteManager;
     ColorStatus&  mrColorStatus;
     ColorSelectFunction const maColorSelectFunction;
@@ -148,7 +165,7 @@ public:
                 ColorStatus& rColorStatus,
                 sal_uInt16 nSlotId,
                 const css::uno::Reference< css::frame::XFrame >& rFrame,
-                weld::Window* pParentWindow, weld::MenuButton* pMenuButton,
+                weld::Window* pParentWindow, const MenuOrToolMenuButton &rMenuButton,
                 bool bInterimBuilder,
                 ColorSelectFunction const& rColorSelectFunction);
     weld::Container* GetWidget() { return mxTopLevel.get(); }

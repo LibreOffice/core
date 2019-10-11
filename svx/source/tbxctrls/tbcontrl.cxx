@@ -1704,15 +1704,15 @@ ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager
                          sal_uInt16                 nSlotId,
                          const Reference< XFrame >& rFrame,
                          weld::Window*              pParentWindow,
-                         weld::MenuButton*          pMenuButton,
+                         const MenuOrToolMenuButton& rMenuButton,
                          bool                       bInterimBuilder,
                          ColorSelectFunction const & aFunction)
     : ToolbarPopupBase(rFrame)
-    , m_xBuilder(bInterimBuilder ? Application::CreateInterimBuilder(pMenuButton, "svx/ui/colorwindow.ui")
-                                 : Application::CreateBuilder(pMenuButton, "svx/ui/colorwindow.ui"))
+    , m_xBuilder(bInterimBuilder ? Application::CreateInterimBuilder(rMenuButton.get_widget(), "svx/ui/colorwindow.ui")
+                                 : Application::CreateBuilder(rMenuButton.get_widget(), "svx/ui/colorwindow.ui"))
     , theSlotId(nSlotId)
     , mpParentWindow(pParentWindow)
-    , mpMenuButton(pMenuButton)
+    , maMenuButton(rMenuButton)
     , mxPaletteManager(rPaletteManager)
     , mrColorStatus(rColorStatus)
     , maColorSelectFunction(aFunction)
@@ -1956,12 +1956,12 @@ IMPL_LINK(ColorWindow, SelectHdl, SvtValueSet*, pColorSet, void)
     if (pColorSet != mxRecentColorSet.get())
     {
          mxPaletteManager->AddRecentColor(aNamedColor.first, aNamedColor.second);
-         if (!mpMenuButton->get_active())
+         if (!maMenuButton.get_active())
             mxPaletteManager->ReloadRecentColorSet(*mxRecentColorSet);
     }
 
-    if (mpMenuButton->get_active())
-        mpMenuButton->set_active(false);
+    if (maMenuButton.get_active())
+        maMenuButton.set_active(false);
 
     maColorSelectFunction(OUString(), aNamedColor);
 }
@@ -2014,8 +2014,8 @@ IMPL_LINK(ColorWindow, AutoColorClickHdl, weld::Button&, rButton, void)
 
     mxRecentColorSet->SetNoSelection();
 
-    if (mpMenuButton->get_active())
-        mpMenuButton->set_active(false);
+    if (maMenuButton.get_active())
+        maMenuButton.set_active(false);
 
     maColorSelectFunction(OUString(), aNamedColor);
 }
@@ -2042,8 +2042,8 @@ IMPL_LINK_NOARG(SvxColorWindow, OpenPickerClickHdl, Button*, void)
 
 IMPL_LINK_NOARG(ColorWindow, OpenPickerClickHdl, weld::Button&, void)
 {
-    if (mpMenuButton->get_active())
-        mpMenuButton->set_active(false);
+    if (maMenuButton.get_active())
+        maMenuButton.set_active(false);
     mxPaletteManager->PopupColorPicker(mpParentWindow, OUString(), GetSelectEntryColor().first);
 }
 
@@ -4166,6 +4166,43 @@ void ColorListBox::ShowPreview(const NamedColor &rColor)
 
     m_xButton->set_image(xDevice.get());
     m_xButton->set_label(rColor.second);
+}
+
+MenuOrToolMenuButton::MenuOrToolMenuButton(weld::MenuButton* pMenuButton)
+    : m_pMenuButton(pMenuButton)
+    , m_pToolbar(nullptr)
+{
+}
+
+MenuOrToolMenuButton::MenuOrToolMenuButton(weld::Toolbar* pToolbar, const OString& rIdent)
+    : m_pMenuButton(nullptr)
+    , m_pToolbar(pToolbar)
+    , m_aIdent(rIdent)
+{
+}
+
+bool MenuOrToolMenuButton::get_active() const
+{
+    if (m_pMenuButton)
+        return m_pMenuButton->get_active();
+    return m_pToolbar->get_item_active(m_aIdent);
+}
+
+void MenuOrToolMenuButton::set_active(bool bActive) const
+{
+    if (m_pMenuButton)
+    {
+        m_pMenuButton->set_active(bActive);
+        return;
+    }
+    m_pToolbar->set_item_active(m_aIdent, bActive);
+}
+
+weld::Widget* MenuOrToolMenuButton::get_widget() const
+{
+    if (m_pMenuButton)
+        return m_pMenuButton;
+    return m_pToolbar;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
