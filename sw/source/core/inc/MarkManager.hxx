@@ -41,11 +41,13 @@ namespace sw {
             // IDocumentMarkAccess
             virtual ::sw::mark::IMark* makeMark(const SwPaM& rPaM,
                 const OUString& rName, IDocumentMarkAccess::MarkType eMark,
-                sw::mark::InsertMode eMode) override;
+                sw::mark::InsertMode eMode,
+                SwPosition const* pSepPos = nullptr) override;
 
             virtual sw::mark::IFieldmark* makeFieldBookmark( const SwPaM& rPaM,
                 const OUString& rName,
-                const OUString& rType) override;
+                const OUString& rType,
+                SwPosition const* pSepPos = nullptr) override;
             virtual sw::mark::IFieldmark* makeNoTextFieldBookmark( const SwPaM& rPaM,
                 const OUString& rName,
                 const OUString& rType) override;

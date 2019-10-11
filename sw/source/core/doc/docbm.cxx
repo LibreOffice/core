@@ -544,7 +544,8 @@ namespace sw { namespace mark
     ::sw::mark::IMark* MarkManager::makeMark(const SwPaM& rPaM,
         const OUString& rName,
         const IDocumentMarkAccess::MarkType eType,
-        sw::mark::InsertMode const eMode)
+        sw::mark::InsertMode const eMode,
+        SwPosition const*const pSepPos)
     {
 #if OSL_DEBUG_LEVEL > 0
         {
@@ -642,7 +643,7 @@ namespace sw { namespace mark
                 // no special array for these
                 break;
         }
-        pMark->InitDoc(m_pDoc, eMode);
+        pMark->InitDoc(m_pDoc, eMode, pSepPos);
         SAL_INFO("sw.core", "--- makeType ---");
         SAL_INFO("sw.core", "Marks");
         lcl_DebugMarks(m_vAllMarks);
@@ -657,8 +658,10 @@ namespace sw { namespace mark
     ::sw::mark::IFieldmark* MarkManager::makeFieldBookmark(
         const SwPaM& rPaM,
         const OUString& rName,
-        const OUString& rType )
+        const OUString& rType,
+        SwPosition const*const pSepPos)
     {
+
         // Disable undo, because we handle it using SwUndoInsTextFieldmark
         bool bUndoIsEnabled = m_pDoc->GetIDocumentUndoRedo().DoesUndo();
         m_pDoc->GetIDocumentUndoRedo().DoUndo(false);
@@ -668,13 +671,15 @@ namespace sw { namespace mark
         {
             pMark = makeMark(rPaM, rName,
                              IDocumentMarkAccess::MarkType::DATE_FIELDMARK,
-                              sw::mark::InsertMode::New);
+                             sw::mark::InsertMode::New,
+                             pSepPos);
         }
         else
         {
             pMark = makeMark(rPaM, rName,
                              IDocumentMarkAccess::MarkType::TEXT_FIELDMARK,
-                             sw::mark::InsertMode::New);
+                             sw::mark::InsertMode::New,
+                             pSepPos);
         }
         sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
         if (pFieldMark)

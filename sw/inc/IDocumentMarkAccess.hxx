@@ -132,11 +132,13 @@ class IDocumentMarkAccess
         */
         virtual ::sw::mark::IMark* makeMark(const SwPaM& rPaM,
             const OUString& rProposedName,
-            MarkType eMark, ::sw::mark::InsertMode eMode) = 0;
+            MarkType eMark, ::sw::mark::InsertMode eMode,
+            SwPosition const* pSepPos = nullptr) = 0;
 
         virtual sw::mark::IFieldmark* makeFieldBookmark( const SwPaM& rPaM,
             const OUString& rName,
-            const OUString& rType) = 0;
+            const OUString& rType,
+            SwPosition const* pSepPos = nullptr) = 0;
         virtual sw::mark::IFieldmark* makeNoTextFieldBookmark( const SwPaM& rPaM,
             const OUString& rName,
             const OUString& rType) = 0;
