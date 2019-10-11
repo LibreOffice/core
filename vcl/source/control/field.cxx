@@ -807,6 +807,14 @@ void NumericField::Last()
     SpinField::Last();
 }
 
+boost::property_tree::ptree NumericField::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(SpinField::DumpAsPropertyTree());
+    aTree.put("min", GetMin());
+    aTree.put("max", GetMax());
+    return aTree;
+}
+
 namespace
 {
     Size calcMinimumSize(const Edit &rSpinField, const NumericFormatter &rFormatter)
@@ -1663,6 +1671,15 @@ void MetricField::Last()
 void MetricField::CustomConvert()
 {
     maCustomConvertLink.Call( *this );
+}
+
+boost::property_tree::ptree MetricField::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(SpinField::DumpAsPropertyTree());
+    aTree.put("min", GetMin());
+    aTree.put("max", GetMax());
+    aTree.put("unit", FieldUnitToString(GetUnit()));
+    return aTree;
 }
 
 MetricBox::MetricBox(vcl::Window* pParent, WinBits nWinStyle)

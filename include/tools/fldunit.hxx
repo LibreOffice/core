@@ -20,6 +20,7 @@
 #define INCLUDED_TOOLS_FLDUNIT_HXX
 
 #include <sal/types.h>
+#include <string>
 
 // Corresponds to offapi/com/sun/star/awt/FieldUnit.idl
 enum class FieldUnit : sal_uInt16
@@ -45,6 +46,74 @@ enum class FieldUnit : sal_uInt16
     SECOND,
     MILLISECOND,
 };
+
+static std::string FieldUnitToString(FieldUnit unit)
+{
+    switch(unit)
+    {
+        case FieldUnit::NONE:
+            return "";
+
+        case FieldUnit::MM:
+            return "mm";
+
+        case FieldUnit::CM:
+            return "cm";
+
+        case FieldUnit::M:
+            return "m";
+
+        case FieldUnit::KM:
+            return "km";
+
+        case FieldUnit::TWIP:
+            return "twip";
+
+        case FieldUnit::POINT:
+            return "point";
+
+        case FieldUnit::PICA:
+            return "pica";
+
+        case FieldUnit::INCH:
+            return "inch";
+
+        case FieldUnit::FOOT:
+            return "foot";
+
+        case FieldUnit::MILE:
+            return "mile";
+
+        case FieldUnit::CHAR:
+            return "char";
+
+        case FieldUnit::LINE:
+            return "line";
+
+        case FieldUnit::CUSTOM:
+            return "custom";
+
+        case FieldUnit::PERCENT:
+            return "percent";
+
+        case FieldUnit::MM_100TH:
+            return "mm100th";
+
+        case FieldUnit::PIXEL:
+            return "pixel";
+
+        case FieldUnit::DEGREE:
+            return "degree";
+
+        case FieldUnit::SECOND:
+            return "second";
+
+        case FieldUnit::MILLISECOND:
+            return "millisecond";
+    }
+
+    return "";
+}
 
 #endif
 
