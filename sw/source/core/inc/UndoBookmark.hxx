@@ -111,6 +111,20 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
 
+/// Handling undo / redo of checkbox and drop-down form field deletion
+class SwUndoDelNoTextFieldmark : public SwUndo
+{
+private:
+    const std::unique_ptr<SwHistoryNoTextFieldmark> m_pHistoryNoTextFieldmark;
+
+public:
+    SwUndoDelNoTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark);
+    ~SwUndoDelNoTextFieldmark();
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+};
+
 /// Handling undo / redo of text form field insertion
 class SwUndoInsTextFieldmark : public SwUndo
 {
@@ -119,6 +133,20 @@ private:
 
 public:
     SwUndoInsTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark);
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+};
+
+/// Handling undo / redo of text form field deletion
+class SwUndoDelTextFieldmark : public SwUndo
+{
+private:
+    const std::unique_ptr<SwHistoryTextFieldmark> m_pHistoryTextFieldmark;
+
+public:
+    SwUndoDelTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark);
+    ~SwUndoDelTextFieldmark();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
