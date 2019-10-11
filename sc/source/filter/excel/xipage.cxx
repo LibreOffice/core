@@ -28,6 +28,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/brushitem.hxx>
+#include <unotools/configmgr.hxx>
 #include <document.hxx>
 #include <stlsheet.hxx>
 #include <attrib.hxx>
@@ -121,6 +122,9 @@ void XclImpPageSettings::ReadHeaderFooter( XclImpStream& rStrm )
         case EXC_ID_FOOTER:     maData.maFooter = aString;  break;
         default:    OSL_FAIL( "XclImpPageSettings::ReadHeaderFooter - unknown record" );
     }
+
+    if (maData.maHeader.getLength() > 10 && utl::ConfigManager::IsFuzzing())
+        maData.maHeader = maData.maHeader.copy(0, 10);
 }
 
 void XclImpPageSettings::ReadPageBreaks( XclImpStream& rStrm )
