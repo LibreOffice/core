@@ -1745,6 +1745,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf120336)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf106843)
+{
+    load(DATA_DIRECTORY, "tdf106843.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+
+    // try to turn off red-lining
+    lcl_dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+
+    // but the protection doesn't allow it
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageComment)
 {
     // Load a document with an as-char image in it.
