@@ -28,35 +28,6 @@
 class SfxItemSet;
 class FontPrevWin_Impl;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontPrevWindow : public vcl::Window
-{
-    using OutputDevice::SetFont;
-private:
-    std::unique_ptr<FontPrevWin_Impl> pImpl;
-    bool mbResetForeground : 1;
-    bool mbResetBackground : 1;
-
-    SVX_DLLPRIVATE void ResetSettings(bool bForeground, bool bBackground);
-    SVX_DLLPRIVATE void ApplySettings(vcl::RenderContext& rRenderContext) override;
-    SVX_DLLPRIVATE void Init ();
-
-public:
-                        SvxFontPrevWindow(vcl::Window* pParent, WinBits nStyle);
-    virtual             ~SvxFontPrevWindow() override;
-    virtual void        dispose() override;
-
-    virtual void        StateChanged( StateChangedType nStateChange ) override;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    void                SetFont( const SvxFont& rNormalFont, const SvxFont& rCJKFont, const SvxFont& rCTLFont );
-    void                SetBackColor( const Color& rColor );
-    void                Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
-
-    bool                IsTwoLines() const;
-
-    virtual Size GetOptimalSize() const override;
-};
-
 class SAL_WARN_UNUSED SVX_DLLPUBLIC FontPrevWindow : public weld::CustomWidgetController
 {
 private:

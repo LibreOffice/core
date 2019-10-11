@@ -92,7 +92,7 @@
           </packing>
         </child>
         <child>
-          <object class="svxlo-SvxFontPrevWindow" id="preview:border">
+          <object class="GtkDrawingArea" id="preview:border">
             <property name="can_focus">False</property>
             <property name="tooltip_text" translatable="yes" context="conditionalentrymobile|preview|tooltip_text">Example</property>
           </object>
