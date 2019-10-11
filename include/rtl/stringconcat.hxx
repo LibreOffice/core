@@ -10,6 +10,8 @@
 #ifndef INCLUDED_RTL_STRINGCONCAT_HXX
 #define INCLUDED_RTL_STRINGCONCAT_HXX
 
+// This file is only included from LIBO_INTERNAL_ONLY
+
 #include "rtl/stringutils.hxx"
 #include "rtl/string.h"
 #include "rtl/ustring.h"
@@ -19,8 +21,6 @@
 #include <utility>
 
 #include <string.h>
-
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 
 #if defined RTL_STRING_UNITTEST_CONCAT
 extern bool rtl_string_unittest_invalid_concat;
@@ -477,7 +477,5 @@ struct ToStringHelper< OUStringNumber< T > >
 
 
 } // namespace
-
-#endif
 
 #endif
