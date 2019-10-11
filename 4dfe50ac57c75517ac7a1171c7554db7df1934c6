@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_774ad855",
+        "filename": "include/rtl/stringconcat.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-11T09:07:41Z",
+      "side": 1,
+      "message": "why indent these?",
+      "revId": "4dfe50ac57c75517ac7a1171c7554db7df1934c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
