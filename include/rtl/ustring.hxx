@@ -257,11 +257,7 @@ public:
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
         pData = NULL;
-        if
-#if defined LIBO_INTERNAL_ONLY
-            constexpr
-#endif
-            (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
+        if (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
             rtl_uString_new(&pData);
         } else {
             rtl_uString_newFromLiteral(
@@ -284,7 +280,7 @@ public:
                 = libreoffice_internal::Dummy()):
         pData(nullptr)
     {
-        if constexpr (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
+        if (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
             rtl_uString_new(&pData);
         } else {
             rtl_uString_newFromStr_WithLength(
@@ -503,11 +499,7 @@ public:
     {
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        if
-#if defined LIBO_INTERNAL_ONLY
-            constexpr
-#endif
-            (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
+        if (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
             rtl_uString_new(&pData);
         } else {
             rtl_uString_newFromLiteral(
@@ -525,7 +517,7 @@ public:
     typename
         libreoffice_internal::ConstCharArrayDetector<T, OUString &>::TypeUtf16
     operator =(T & literal) {
-        if constexpr (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
+        if (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
             rtl_uString_new(&pData);
         } else {
             rtl_uString_newFromStr_WithLength(
