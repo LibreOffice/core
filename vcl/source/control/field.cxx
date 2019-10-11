@@ -46,6 +46,74 @@ using namespace ::comphelper;
 namespace
 {
 
+std::string FieldUnitToString(FieldUnit unit)
+{
+    switch(unit)
+    {
+        case FieldUnit::NONE:
+            return "";
+
+        case FieldUnit::MM:
+            return "mm";
+
+        case FieldUnit::CM:
+            return "cm";
+
+        case FieldUnit::M:
+            return "m";
+
+        case FieldUnit::KM:
+            return "km";
+
+        case FieldUnit::TWIP:
+            return "twip";
+
+        case FieldUnit::POINT:
+            return "point";
+
+        case FieldUnit::PICA:
+            return "pica";
+
+        case FieldUnit::INCH:
+            return "inch";
+
+        case FieldUnit::FOOT:
+            return "foot";
+
+        case FieldUnit::MILE:
+            return "mile";
+
+        case FieldUnit::CHAR:
+            return "char";
+
+        case FieldUnit::LINE:
+            return "line";
+
+        case FieldUnit::CUSTOM:
+            return "custom";
+
+        case FieldUnit::PERCENT:
+            return "percent";
+
+        case FieldUnit::MM_100TH:
+            return "mm100th";
+
+        case FieldUnit::PIXEL:
+            return "pixel";
+
+        case FieldUnit::DEGREE:
+            return "degree";
+
+        case FieldUnit::SECOND:
+            return "second";
+
+        case FieldUnit::MILLISECOND:
+            return "millisecond";
+    }
+
+    return "";
+}
+
 sal_Int64 ImplPower10( sal_uInt16 n )
 {
     sal_uInt16  i;
@@ -805,6 +873,14 @@ void NumericField::Last()
 {
     FieldLast();
     SpinField::Last();
+}
+
+boost::property_tree::ptree NumericField::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(SpinField::DumpAsPropertyTree());
+    aTree.put("min", GetMin());
+    aTree.put("max", GetMax());
+    return aTree;
 }
 
 namespace
@@ -1663,6 +1739,15 @@ void MetricField::Last()
 void MetricField::CustomConvert()
 {
     maCustomConvertLink.Call( *this );
+}
+
+boost::property_tree::ptree MetricField::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(SpinField::DumpAsPropertyTree());
+    aTree.put("min", GetMin());
+    aTree.put("max", GetMax());
+    aTree.put("unit", FieldUnitToString(GetUnit()));
+    return aTree;
 }
 
 MetricBox::MetricBox(vcl::Window* pParent, WinBits nWinStyle)
