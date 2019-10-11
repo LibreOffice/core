@@ -99,7 +99,7 @@ namespace sw {
                     m_pPos1.swap(m_pPos2);
             }
 
-            virtual void InitDoc(SwDoc* const, sw::mark::InsertMode)
+            virtual void InitDoc(SwDoc* const, sw::mark::InsertMode, SwPosition const*)
             {
             }
 
@@ -166,7 +166,7 @@ namespace sw {
             Bookmark(const SwPaM& rPaM,
                 const vcl::KeyCode& rCode,
                 const OUString& rName);
-            virtual void InitDoc(SwDoc* const io_Doc, sw::mark::InsertMode eMode) override;
+            virtual void InitDoc(SwDoc* const io_Doc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
 
             virtual void DeregisterFromDoc(SwDoc* const io_pDoc) override;
 
@@ -244,7 +244,7 @@ namespace sw {
         {
         public:
             TextFieldmark(const SwPaM& rPaM, const OUString& rName);
-            virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode) override;
+            virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
             virtual void ReleaseDoc(SwDoc* const pDoc) override;
         };
 
@@ -254,7 +254,7 @@ namespace sw {
         {
         public:
             NonTextFieldmark(const SwPaM& rPaM);
-            virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode) override;
+            virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
             virtual void ReleaseDoc(SwDoc* const pDoc) override;
         };
 
@@ -311,7 +311,7 @@ namespace sw {
             DateFieldmark(const SwPaM& rPaM);
             virtual ~DateFieldmark() override;
 
-            virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode) override;
+            virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
             virtual void ReleaseDoc(SwDoc* const pDoc) override;
 
             virtual void ShowButton(SwEditWin* pEditWin) override;
