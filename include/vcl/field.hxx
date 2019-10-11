@@ -454,6 +454,8 @@ public:
     virtual void            Last() override;
     virtual bool            set_property(const OString &rKey, const OUString &rValue) override;
     virtual void            dispose() override;
+
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 
@@ -515,6 +517,8 @@ public:
 
     virtual bool            set_property(const OString &rKey, const OUString &rValue) override;
     virtual void            dispose() override;
+
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 
