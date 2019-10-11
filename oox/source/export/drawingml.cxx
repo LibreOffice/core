@@ -1874,6 +1874,17 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         }
     }
 
+    if (GetProperty(rXPropSet, "CharBackColor"))
+    {
+        ::Color color(*o3tl::doAccess<sal_uInt32>(mAny));
+        if( color != COL_AUTO )
+        {
+            mpFS->startElementNS(XML_a, XML_highlight);
+            WriteColor( color );
+            mpFS->endElementNS( XML_a, XML_highlight );
+        }
+    }
+
     if (underline
         && ((bCheckDirect
              && GetPropertyAndState(rXPropSet, rXPropState, "CharUnderlineColor", eState)
