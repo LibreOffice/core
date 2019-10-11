@@ -154,7 +154,7 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
             mnInToRead -= nInToRead;
         }
         err = mbStatus ? inflate(pStream, Z_NO_FLUSH) : Z_ERRNO;
-        if ( err < 0 )
+        if (err < 0 || err == Z_NEED_DICT)
         {
             mbStatus = false;
             break;
