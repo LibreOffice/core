@@ -22,6 +22,29 @@
       "revId": "572efef6241be9141ba9aff34e466c78b3edd8dc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_3c1a077d",
+        "filename": "include/rtl/stringconcat.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-11T08:12:47Z",
+      "side": 1,
+      "message": "Can this be simplified to be\n\n    template\u003c\u003e\n    struct ToStringHelper\u003c sal_Unicode* \u003e : public ToStringHelper\u003c const sal_Unicode* \u003e {};",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 37
+      },
+      "revId": "572efef6241be9141ba9aff34e466c78b3edd8dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
