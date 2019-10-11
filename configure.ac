@@ -6127,7 +6127,17 @@ AC_CONFIG_HEADERS([config_host/config_probes.h])
 dnl ===================================================================
 dnl GCC features
 dnl ===================================================================
+HAVE_GCC_STACK_CLASH_PROTECTION=
 if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
+    AC_MSG_CHECKING([whether $CC supports -fstack-clash-protection])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -fstack-clash-protection"
+    AC_LINK_IFELSE(
+        [AC_LANG_PROGRAM(, [[return 0;]])],
+        [AC_MSG_RESULT([yes]); HAVE_GCC_STACK_CLASH_PROTECTION=TRUE],
+        [AC_MSG_RESULT([no])])
+    CFLAGS=$save_CFLAGS
+
     AC_MSG_CHECKING([whether $CC supports -mno-avx])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror -mno-avx"
@@ -6324,6 +6334,7 @@ AC_SUBST(HAVE_GCC_AVX)
 AC_SUBST(HAVE_GCC_STACK_PROTECTOR_STRONG)
 AC_SUBST(HAVE_GCC_BUILTIN_ATOMIC)
 AC_SUBST(HAVE_GCC_BUILTIN_FFS)
+AC_SUBST(HAVE_GCC_STACK_CLASH_PROTECTION)
 
 dnl ===================================================================
 dnl Identify the C++ library
