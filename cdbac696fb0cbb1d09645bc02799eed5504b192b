@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_7c4f1fbd",
+        "filename": "basic/source/runtime/iosys.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-11T06:40:24Z",
+      "side": 1,
+      "message": "I suppose that at some point, replacing O(U)String(\u0027c\u0027) with simple \"c\" would be nice.",
+      "range": {
+        "startLine": 538,
+        "startChar": 17,
+        "endLine": 538,
+        "endChar": 30
+      },
+      "revId": "cdbac696fb0cbb1d09645bc02799eed5504b192b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
