@@ -1548,8 +1548,8 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 uno::Reference< report::XFormattedField> xFormattedField(getDesignView()->getCurrentControlModel(),uno::UNO_QUERY);
                 if ( xFormattedField.is() )
                 {
-                    ScopedVclPtrInstance< ConditionalFormattingDialog > aDlg( getView(), xFormattedField.get(), *this );
-                    aDlg->Execute();
+                    ConditionalFormattingDialog aDlg(getFrameWeld(), xFormattedField.get(), *this);
+                    aDlg.run();
                 }
             }
             break;
