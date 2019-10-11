@@ -7009,7 +7009,7 @@ if test "$COM_IS_CLANG" = "TRUE"; then
         fi
         # Assume Clang is self-built, but allow overriding COMPILER_PLUGINS_CXX to the compiler Clang was built with.
         if test -z "$COMPILER_PLUGINS_CXX"; then
-            COMPILER_PLUGINS_CXX=$CXX
+            COMPILER_PLUGINS_CXX=[$(echo $CXX | sed -e 's/-fsanitize=[^ ]*//g')]
         fi
         clangbindir=$CLANGDIR/bin
         if test "$build_os" = "cygwin"; then
