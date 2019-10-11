@@ -303,6 +303,17 @@ public:
     }
 
     /**
+     * Posts a dialog event for the window with given id
+     *
+     * @param nWindowId id of the window to notify
+     * @param pArguments arguments of the event.
+     */
+    void sendDialogEvent(unsigned nWindowId, const char* pArguments = NULL)
+    {
+        mpDoc->pClass->sendDialogEvent(mpDoc, nWindowId, pArguments);
+    }
+
+    /**
      * Posts a UNO command to the document.
      *
      * Example argument string:
