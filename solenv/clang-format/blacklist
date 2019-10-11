@@ -3408,7 +3408,6 @@ dbaccess/source/ui/misc/RowSetDrop.cxx
 dbaccess/source/ui/misc/RtfReader.cxx
 dbaccess/source/ui/misc/TableCopyHelper.cxx
 dbaccess/source/ui/misc/TokenWriter.cxx
-dbaccess/source/ui/misc/ToolBoxHelper.cxx
 dbaccess/source/ui/misc/UITools.cxx
 dbaccess/source/ui/misc/UpdateHelperImpl.hxx
 dbaccess/source/ui/misc/WCPage.cxx
@@ -6045,7 +6044,6 @@ include/cppuhelper/weakref.hxx
 include/cppunittester/protectorfactory.hxx
 include/dbaccess/AsynchronousLink.hxx
 include/dbaccess/IController.hxx
-include/dbaccess/ToolBoxHelper.hxx
 include/dbaccess/controllerframe.hxx
 include/dbaccess/dataview.hxx
 include/dbaccess/dbaccessdllapi.h
