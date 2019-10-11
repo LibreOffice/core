@@ -1284,14 +1284,11 @@ namespace sw { namespace mark
 
     void MarkManager::deleteFieldmarkAt(const SwPosition& rPos)
     {
-        auto const pFieldmark = find_if(
-            m_vFieldmarks.begin(),
-            m_vFieldmarks.end(),
-            [&rPos] (const ::sw::mark::IMark* pMark) { return pMark->IsCoveringPosition(rPos); } );
-        if(pFieldmark == m_vFieldmarks.end())
+        auto const pFieldmark = dynamic_cast<Fieldmark*>(getFieldmarkAt(rPos));
+        if (!pFieldmark)
             return;
 
-        deleteMark(lcl_FindMark(m_vAllMarks, *pFieldmark));
+        deleteMark(lcl_FindMark(m_vAllMarks, pFieldmark));
     }
 
     ::sw::mark::IFieldmark* MarkManager::changeFormFieldmarkType(::sw::mark::IFieldmark* pFieldmark, const OUString& rNewType)
