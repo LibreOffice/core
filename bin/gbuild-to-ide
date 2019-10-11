@@ -1787,7 +1787,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         # create meta .pro file (lists all sub projects)
         qt_meta_pro_file = 'lo.pro'
         try:
-            subdirs = " \\\n".join(subdirs_list)
+            subdirs = " \\\n".join(sorted(subdirs_list))
             content = QtCreatorIntegrationGenerator.pro_meta_template % {'subdirs': subdirs}
             with open(qt_meta_pro_file, 'w+') as fmpro:
                 fmpro.write(content)
