@@ -136,7 +136,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_headers,$(SDKDIRNAME)/include,\
 	rtl/strbuf.hxx \
 	rtl/string.h \
 	rtl/string.hxx \
-	rtl/stringconcat.hxx \
 	rtl/stringutils.hxx \
 	rtl/tencinfo.h \
 	rtl/textcvt.h \
