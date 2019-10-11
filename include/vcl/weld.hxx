@@ -266,6 +266,13 @@ public:
     virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() = 0;
 };
 
+class VCL_DLLPUBLIC Box : virtual public Container
+{
+public:
+    // Moves child to a new position in the list of children
+    virtual void reorder_child(weld::Widget* pWidget, int position) = 0;
+};
+
 class VCL_DLLPUBLIC ScrolledWindow : virtual public Container
 {
 protected:
@@ -1830,6 +1837,7 @@ public:
     virtual bool get_item_sensitive(const OString& rIdent) const = 0;
     virtual void set_item_active(const OString& rIdent, bool bActive) = 0;
     virtual bool get_item_active(const OString& rIdent) const = 0;
+    virtual void set_item_popover(const OString& rIdent, weld::Widget* pPopover) = 0;
 
     virtual void insert_separator(int pos, const OUString& rId) = 0;
     void append_separator(const OUString& rId) { insert_separator(-1, rId); }
@@ -1873,6 +1881,7 @@ public:
     virtual std::unique_ptr<Container> weld_container(const OString& id,
                                                       bool bTakeOwnership = false)
         = 0;
+    virtual std::unique_ptr<Box> weld_box(const OString& id, bool bTakeOwnership = false) = 0;
     virtual std::unique_ptr<Button> weld_button(const OString& id, bool bTakeOwnership = false) = 0;
     virtual std::unique_ptr<MenuButton> weld_menu_button(const OString& id,
                                                          bool bTakeOwnership = false)

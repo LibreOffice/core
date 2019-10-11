@@ -953,6 +953,11 @@ public:
         return m_xToolBox->IsItemChecked(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)));
     }
 
+    virtual void set_item_popover(const OString& rIdent, weld::Widget* pPopover) override
+    {
+        assert(pPopover && "todo");
+    }
+
     virtual void insert_separator(int pos, const OUString& /*rId*/) override
     {
         auto nInsertPos = pos == -1 ? ToolBox::APPEND : pos;
@@ -994,9 +999,10 @@ public:
 
 class SalInstanceContainer : public SalInstanceWidget, public virtual weld::Container
 {
-private:
+protected:
     VclPtr<vcl::Window> m_xContainer;
 
+private:
     void implResetDefault(const vcl::Window* _pWindow)
     {
         vcl::Window* pChildLoop = _pWindow->GetWindow(GetWindowType::FirstChild);
@@ -1059,6 +1065,21 @@ std::unique_ptr<weld::Container> SalInstanceWidget::weld_parent() const
         return nullptr;
     return std::make_unique<SalInstanceContainer>(pParent, m_pBuilder, false);
 }
+
+class SalInstanceBox : public SalInstanceContainer, public virtual weld::Box
+{
+public:
+    SalInstanceBox(vcl::Window* pContainer, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceContainer(pContainer, pBuilder, bTakeOwnership)
+    {
+    }
+    virtual void reorder_child(weld::Widget* pWidget, int nNewPosition) override
+    {
+        SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
+        assert(pVclWidget);
+        pVclWidget->getWidget()->reorderWithinParent(nNewPosition);
+    }
+};
 
 namespace
 {
@@ -5807,6 +5828,12 @@ public:
     {
         vcl::Window* pContainer = m_xBuilder->get<vcl::Window>(id);
         return pContainer ? std::make_unique<SalInstanceContainer>(pContainer, this, bTakeOwnership) : nullptr;
+    }
+
+    virtual std::unique_ptr<weld::Box> weld_box(const OString &id, bool bTakeOwnership) override
+    {
+        vcl::Window* pContainer = m_xBuilder->get<vcl::Window>(id);
+        return pContainer ? std::make_unique<SalInstanceBox>(pContainer, this, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::Frame> weld_frame(const OString &id, bool bTakeOwnership) override

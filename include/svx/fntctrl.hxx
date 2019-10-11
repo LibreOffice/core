@@ -20,12 +20,10 @@
 #define INCLUDED_SVX_FNTCTRL_HXX
 
 #include <memory>
-#include <vcl/customweld.hxx>
-#include <vcl/window.hxx>
 #include <editeng/svxfont.hxx>
-#include <svx/svxdllapi.h>
-
 #include <rtl/ustring.hxx>
+#include <svx/svxdllapi.h>
+#include <vcl/customweld.hxx>
 
 class SfxItemSet;
 class FontPrevWin_Impl;

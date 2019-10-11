@@ -21,15 +21,8 @@
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_CONDFORMAT_HXX
 
 #include <com/sun/star/report/XReportControlModel.hpp>
-
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/scrbar.hxx>
-
+#include <vcl/weld.hxx>
 #include <vector>
-
 
 namespace rptui
 {
@@ -62,15 +55,10 @@ namespace rptui
     |* Conditional formatting dialog
     |*
     \************************************************************************/
-    class ConditionalFormattingDialog  :public ModalDialog
-                                        ,public IConditionalFormatAction
+    class ConditionalFormattingDialog : public weld::GenericDialogController
+                                      , public IConditionalFormatAction
     {
-        typedef ::std::vector< VclPtr<Condition> >  Conditions;
-
-        VclPtr<vcl::Window>       m_pConditionPlayground;
-        Conditions                m_aConditions;
-        VclPtr<VclScrolledWindow> m_pScrollWindow;
-        VclPtr<ScrollBar>         m_pCondScroll;
+        typedef ::std::vector< std::unique_ptr<Condition> >  Conditions;
 
         ::rptui::OReportController&                         m_rController;
         css::uno::Reference< css::report::XReportControlModel >
@@ -81,16 +69,19 @@ namespace rptui
         bool    m_bDeletingCondition;
         bool    m_bConstructed;
 
+        std::unique_ptr<weld::ScrolledWindow> m_xScrollWindow;
+        std::unique_ptr<weld::Box> m_xConditionPlayground;
+        Conditions                m_aConditions;
+
     public:
         ConditionalFormattingDialog(
-            vcl::Window* pParent,
+            weld::Window* pParent,
             const css::uno::Reference< css::report::XReportControlModel>& _xHoldAlive,
             ::rptui::OReportController& _rController
         );
         virtual ~ConditionalFormattingDialog() override;
-        virtual void dispose() override;
         // Dialog overridables
-        virtual short   Execute() override;
+        virtual short run() override;
 
         // IConditionalFormatAction overridables
         virtual void addCondition( size_t _nAddAfterIndex ) override;
@@ -100,11 +91,8 @@ namespace rptui
         virtual void moveConditionDown( size_t _nCondIndex ) override;
         virtual OUString getDataField() const override;
 
-    protected:
-        virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
-
     private:
-        DECL_LINK( OnScroll, ScrollBar*, void );
+        DECL_LINK(OnScroll, weld::ScrolledWindow&, void);
 
     private:
         /// returns the current number of conditions
@@ -124,9 +112,6 @@ namespace rptui
 
         /// does the dialog layouting
         void    impl_layoutAll();
-
-        /// does the layout for the condition windows
-        void    impl_layoutConditions();
 
         /// called when the number of conditions has changed in any way
         void    impl_conditionCountChanged();
@@ -148,9 +133,6 @@ namespace rptui
 
         /// focuses the condition with the given index, making it visible if necessary
         void    impl_focusCondition( size_t _nCondIndex );
-
-        /// updates the scrollbar range. (does not update the scrollbar visibility)
-        void    impl_updateScrollBarRange();
 
         /// scrolls the condition with the given index to the top position
         void    impl_scrollTo( size_t _nTopCondIndex );
