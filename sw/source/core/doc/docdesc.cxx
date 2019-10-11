@@ -385,7 +385,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFormatFooter &rFo
 
 void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
 {
-    OSL_ENSURE(i < m_PageDescs.size(), "PageDescs is out of range.");
+    assert(i < m_PageDescs.size() && "PageDescs is out of range.");
 
     SwPageDesc& rDesc = *m_PageDescs[i];
     SwRootFrame* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
