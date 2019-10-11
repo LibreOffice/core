@@ -2269,10 +2269,15 @@ const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES[] =
     { NC_("RID_STRLIST_FUNCTION_NAMES", "IFERROR") , SC_OPCODE_IF_ERROR },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "IFNA") , SC_OPCODE_IF_NA },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "CHOOSE") , SC_OPCODE_CHOOSE },
+    /* L10n: preserve the leading '#' hash character in translations. */
     { NC_("RID_STRLIST_FUNCTION_NAMES", "#All") , SC_OPCODE_TABLE_REF_ITEM_ALL },
+    /* L10n: preserve the leading '#' hash character in translations. */
     { NC_("RID_STRLIST_FUNCTION_NAMES", "#Headers") , SC_OPCODE_TABLE_REF_ITEM_HEADERS },
+    /* L10n: preserve the leading '#' hash character in translations. */
     { NC_("RID_STRLIST_FUNCTION_NAMES", "#Data") , SC_OPCODE_TABLE_REF_ITEM_DATA },
+    /* L10n: preserve the leading '#' hash character in translations. */
     { NC_("RID_STRLIST_FUNCTION_NAMES", "#Totals") , SC_OPCODE_TABLE_REF_ITEM_TOTALS },
+    /* L10n: preserve the leading '#' hash character in translations. */
     { NC_("RID_STRLIST_FUNCTION_NAMES", "#This Row") , SC_OPCODE_TABLE_REF_ITEM_THIS_ROW },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "AND") , SC_OPCODE_AND },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "OR") , SC_OPCODE_OR },
@@ -2634,6 +2639,7 @@ const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES[] =
     { NC_("RID_STRLIST_FUNCTION_NAMES", "NETWORKDAYS") , SC_OPCODE_NETWORKDAYS },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "NETWORKDAYS.INTL") , SC_OPCODE_NETWORKDAYS_MS },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "WORKDAY.INTL") , SC_OPCODE_WORKDAY_MS },
+    /* L10n: preserve the leading '#' hash character in translations. */
     { NC_("RID_STRLIST_FUNCTION_NAMES", "#NAME!") , SC_OPCODE_NO_NAME },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "STYLE") , SC_OPCODE_STYLE },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "DDE") , SC_OPCODE_DDE },
@@ -2659,18 +2665,25 @@ const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES[] =
     { NC_("RID_STRLIST_FUNCTION_NAMES", "BITLSHIFT") , SC_OPCODE_BITLSHIFT },
     /* BEGIN defined ERROR.TYPE() values. */
     /* ERROR.TYPE( #NULL! ) == 1 */
+    /* L10n: preserve the leading '#' hash character in translations. */
     { NC_("RID_STRLIST_FUNCTION_NAMES", "#NULL!") , SC_OPCODE_ERROR_NULL },
     /* ERROR.TYPE( #DIV/0! ) == 2 */
+    /* L10n: preserve the leading '#' hash character in translations. */
     { NC_("RID_STRLIST_FUNCTION_NAMES", "#DIV/0!") , SC_OPCODE_ERROR_DIVZERO },
     /* ERROR.TYPE( #VALUE! ) == 3 */
+    /* L10n: preserve the leading '#' hash character in translations. */
     { NC_("RID_STRLIST_FUNCTION_NAMES", "#VALUE!") , SC_OPCODE_ERROR_VALUE },
     /* ERROR.TYPE( #REF! ) == 4 */
+    /* L10n: preserve the leading '#' hash character in translations. */
     { NC_("RID_STRLIST_FUNCTION_NAMES", "#REF!") , SC_OPCODE_ERROR_REF },
     /* ERROR.TYPE( #NAME! ) == 5 */
+    /* L10n: preserve the leading '#' hash character in translations. */
     { NC_("RID_STRLIST_FUNCTION_NAMES", "#NAME?") , SC_OPCODE_ERROR_NAME },
     /* ERROR.TYPE( #NUM! ) == 6 */
+    /* L10n: preserve the leading '#' hash character in translations. */
     { NC_("RID_STRLIST_FUNCTION_NAMES", "#NUM!") , SC_OPCODE_ERROR_NUM },
     /* ERROR.TYPE( #N/A ) == 7 */
+    /* L10n: preserve the leading '#' hash character in translations. */
     { NC_("RID_STRLIST_FUNCTION_NAMES", "#N/A") , SC_OPCODE_ERROR_NA },
     /* END defined ERROR.TYPE() values. */
 
