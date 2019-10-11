@@ -46,6 +46,7 @@
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/helpers.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/gradient.hxx>
 
 #include "main.hxx"
@@ -104,9 +105,10 @@ bool CGMImpressOutAct::ImplInitPage()
     return bStatRet;
 }
 
-
 bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
 {
+    if (utl::ConfigManager::IsFuzzing())
+        return false;
     uno::Reference< uno::XInterface > xNewShape( maXMultiServiceFactory->createInstance( rType ) );
     maXShape.set( xNewShape, uno::UNO_QUERY );
     maXPropSet.set( xNewShape, uno::UNO_QUERY );
@@ -123,7 +125,6 @@ bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
     }
     return false;
 }
-
 
 void CGMImpressOutAct::ImplSetOrientation( FloatPoint const & rRefPoint, double rOrientation )
 {
