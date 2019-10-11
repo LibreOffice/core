@@ -96,67 +96,48 @@ static OUString
 data2string(void *data,
             const typelib_TypeDescriptionReference *type)
 {
-    OUStringBuffer result;
-
     switch (type->eTypeClass)
     {
     case typelib_TypeClass_VOID:
-        break;
+        return "";
     case typelib_TypeClass_BOOLEAN:
-        result.append(*static_cast<const sal_Bool*>(data) ? OUString("true") : OUString("false"));
-        break;
+        return *static_cast<const sal_Bool*>(data) ? OUString("true") : OUString("false");
     case typelib_TypeClass_BYTE:
-        result.append(OUString::number((*static_cast<const sal_Int8*>(data))));
-        break;
+        return OUString::number((*static_cast<const sal_Int8*>(data)));
     case typelib_TypeClass_SHORT:
-        result.append(OUString::number((*static_cast<const sal_Int16*>(data))));
-        break;
+        return OUString::number((*static_cast<const sal_Int16*>(data)));
     case typelib_TypeClass_LONG:
-        result.append(OUString::number((*static_cast<const sal_Int32*>(data))));
-        break;
+        return OUString::number((*static_cast<const sal_Int32*>(data)));
     case typelib_TypeClass_HYPER:
-        result.append(OUString::number((*static_cast<const sal_Int64*>(data))));
-        break;
+        return OUString::number((*static_cast<const sal_Int64*>(data)));
     case typelib_TypeClass_UNSIGNED_SHORT:
-        result.append(OUString::number((*static_cast<const sal_uInt16*>(data))));
-        break;
+        return OUString::number((*static_cast<const sal_uInt16*>(data)));
     case typelib_TypeClass_UNSIGNED_LONG:
-        result.append(OUString::number((*static_cast<const sal_uInt32*>(data)), 16));
-        break;
+        return OUString::number((*static_cast<const sal_uInt32*>(data)), 16);
     case typelib_TypeClass_UNSIGNED_HYPER:
-        result.append(OUString::number((*static_cast<const sal_uInt64*>(data)), 16));
-        break;
+        return OUString::number((*static_cast<const sal_uInt64*>(data)), 16);
     case typelib_TypeClass_FLOAT:
-        result.append(OUString::number(*static_cast<const float*>(data)));
-        break;
+        return OUString::number(*static_cast<const float*>(data));
     case typelib_TypeClass_DOUBLE:
-        result.append(OUString::number(*static_cast<const double*>(data)));
-        break;
+        return OUString::number(*static_cast<const double*>(data));
     case typelib_TypeClass_CHAR:
-        result.append("U+");
-        result.append(OUString::number((*static_cast<const sal_uInt16*>(data))));
-        break;
+        return ("U+" + OUString::number((*static_cast<const sal_uInt16*>(data))));
     case typelib_TypeClass_STRING:
-        result.append(*static_cast<OUString*>(data));
-        break;
+        return *static_cast<OUString*>(data);
     case typelib_TypeClass_TYPE:
     case typelib_TypeClass_SEQUENCE:
     case typelib_TypeClass_EXCEPTION:
     case typelib_TypeClass_INTERFACE:
-        result.append("wtf");
-        break;
+        return "wtf";
     case typelib_TypeClass_STRUCT:
-        result.append(struct2string(data, type->pType));
-        break;
+        return struct2string(data, type->pType);
     case typelib_TypeClass_ENUM:
-        result.append(OUString::number((*static_cast<const sal_Int32*>(data))));
-        break;
+        return OUString::number((*static_cast<const sal_Int32*>(data)));
     default:
         assert(false); // this cannot happen I hope
         break;
     }
-
-    return result.makeStringAndClear();
+    return "";
 }
 
 static OUString any2string(const uno::Any& any)
