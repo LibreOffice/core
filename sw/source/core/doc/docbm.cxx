@@ -530,6 +530,17 @@ bool IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPa
                rPaM.End()->nContent.GetIndex() == rPaM.End()->nNode.GetNode().GetTextNode()->Len() ) );
 }
 
+void IDocumentMarkAccess::DeleteFieldmarkCommand(::sw::mark::IFieldmark const& rMark)
+{
+    if (GetType(rMark) != MarkType::TEXT_FIELDMARK)
+    {
+        return; // TODO FORMDATE has no command?
+    }
+    SwPaM pam(sw::mark::FindFieldSep(rMark), rMark.GetMarkStart());
+    ++pam.GetPoint()->nContent; // skip CH_TXT_ATR_FIELDSTART
+    pam.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(pam);
+}
+
 namespace sw { namespace mark
 {
     MarkManager::MarkManager(SwDoc& rDoc)
@@ -1104,6 +1115,10 @@ namespace sw { namespace mark
         }
         virtual ~LazyFieldmarkDeleter() override
         {
+            // note: because of the call chain from SwUndoDelete, the field
+            // command *cannot* be deleted here as it would create a separate
+            // SwUndoDelete that's interleaved with the SwHistory of the outer
+            // one - only delete the CH_TXT_ATR_FIELD*!
             m_pFieldmark->ReleaseDoc(m_pDoc);
         }
     };
