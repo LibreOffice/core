@@ -1399,10 +1399,10 @@ void Test::testDateFormFieldCharacterFormatting()
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(11), pFieldmark->GetMarkEnd().nContent.GetIndex());
 
         // We have one date field, first half of the field has bold character weight and second part has red character color
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 2), "CharWeight"));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(COL_AUTO), getProperty<sal_Int32>(getRun(getParagraph(1), 2), "CharColor"));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::NORMAL, getProperty<float>(getRun(getParagraph(1), 3), "CharWeight"));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(0xff0000), getProperty<sal_Int32>(getRun(getParagraph(1), 3), "CharColor"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 3), "CharWeight"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(COL_AUTO), getProperty<sal_Int32>(getRun(getParagraph(1), 3), "CharColor"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::NORMAL, getProperty<float>(getRun(getParagraph(1), 4), "CharWeight"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(0xff0000), getProperty<sal_Int32>(getRun(getParagraph(1), 4), "CharColor"));
     }
 }
 

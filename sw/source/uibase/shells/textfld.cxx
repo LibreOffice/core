@@ -691,9 +691,10 @@ FIELD_INSERT:
                     if(bSuccess)
                     {
                         IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
-                        SwPaM aFieldPam(pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->nContent.GetIndex()-5,
+                        SwPaM aFieldPam(pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->nContent.GetIndex() - ODF_FORMFIELD_DEFAULT_LENGTH,
                                         pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->nContent.GetIndex());
-                        pMarksAccess->makeFieldBookmark(aFieldPam, OUString(), ODF_FORMTEXT);
+                        pMarksAccess->makeFieldBookmark(aFieldPam, OUString(), ODF_FORMTEXT,
+                                aFieldPam.Start());
                     }
                 }
 
@@ -744,9 +745,10 @@ FIELD_INSERT:
                 if(bSuccess)
                 {
                     IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
-                    SwPaM aFieldPam(pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->nContent.GetIndex()-5,
+                    SwPaM aFieldPam(pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->nContent.GetIndex() - ODF_FORMFIELD_DEFAULT_LENGTH,
                                     pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->nContent.GetIndex());
-                    sw::mark::IFieldmark* pFieldBM = pMarksAccess->makeFieldBookmark(aFieldPam, OUString(), ODF_FORMDATE);
+                    sw::mark::IFieldmark* pFieldBM = pMarksAccess->makeFieldBookmark(aFieldPam, OUString(), ODF_FORMDATE,
+                                aFieldPam.Start());
 
                     // Use a default date format and language
                     sw::mark::IFieldmark::parameter_map_t* pParameters = pFieldBM->GetParameters();

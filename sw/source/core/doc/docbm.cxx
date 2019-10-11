@@ -1341,7 +1341,10 @@ namespace sw { namespace mark
             SwPosition aPos (aPaM.GetPoint()->nNode, aPaM.GetPoint()->nContent);
             SwPaM aNewPaM(pFieldmark->GetMarkStart(), pFieldmark->GetMarkEnd());
             deleteFieldmarkAt(aPos);
-            return makeFieldBookmark(aNewPaM, sName, rNewType);
+            // HACK: hard-code the separator position here at the start because
+            // writerfilter put it in the wrong place (at the end) on attach()
+            SwPosition const sepPos(*aNewPaM.Start());
+            return makeFieldBookmark(aNewPaM, sName, rNewType, &sepPos);
         }
         return nullptr;
     }
