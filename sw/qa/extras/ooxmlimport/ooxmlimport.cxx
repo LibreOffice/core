@@ -209,6 +209,22 @@ xray ThisComponent.DrawPage(1).getByIndex(0).Anchor.PageStyleName
     CPPUNIT_ASSERT_EQUAL(OUString("First Page"), getProperty<OUString>(xTextContent->getAnchor(), "PageStyleName"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf128076, "tdf128076.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    if( !xFields->hasMoreElements() ) {
+        CPPUNIT_ASSERT(false);
+        return;
+    }
+
+    uno::Reference<text::XTextField> xEnumerationAccess(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("User Field adres = Test"), xEnumerationAccess->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("Test"), xEnumerationAccess->getPresentation(false).trim());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testfdo90720, "testfdo90720.docx")
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);

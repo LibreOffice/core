@@ -1182,11 +1182,11 @@ public:
 
     SwFieldType* GetFieldType() const
     {
-        if(!m_pDoc)
+        if(!m_pDoc && !IsDescriptor())
             throw uno::RuntimeException();
-
-        if (IsDescriptor())
+        else if (IsDescriptor())
             return m_pFieldType;
+
         return m_pFormatField->GetField()->GetTyp();
     }
     void SetFieldType(SwFieldType& rType)
