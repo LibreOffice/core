@@ -163,6 +163,7 @@ public:
     void testTdf118768();
     void testTdf118836();
     void testTdf116350TextEffects();
+    void testTdf128096();
     void testTdf120573();
     void testTdf118825();
     void testTdf119118();
@@ -261,6 +262,7 @@ public:
     CPPUNIT_TEST(testTdf118768);
     CPPUNIT_TEST(testTdf118836);
     CPPUNIT_TEST(testTdf116350TextEffects);
+    CPPUNIT_TEST(testTdf128096);
     CPPUNIT_TEST(testTdf120573);
     CPPUNIT_TEST(testTdf118825);
     CPPUNIT_TEST(testTdf119118);
@@ -2057,6 +2059,16 @@ void SdOOXMLExportTest2::testTdf116350TextEffects()
     xDocShRef->DoClose();
 }
 
+void SdOOXMLExportTest2::testTdf128096()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf128096.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:highlight/a:srgbClr", "val", "ffff00");
+}
 void SdOOXMLExportTest2::testTdf120573()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc( "sd/qa/unit/data/pptx/tdf120573.pptx" ), PPTX );
