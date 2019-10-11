@@ -343,6 +343,8 @@ class IDocumentMarkAccess
 
         static SW_DLLPUBLIC OUString GetCrossRefHeadingBookmarkNamePrefix();
         static SW_DLLPUBLIC bool IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPaM );
+        static void DeleteFieldmarkCommand(::sw::mark::IFieldmark const& rMark);
+
     protected:
         virtual ~IDocumentMarkAccess() {};
 };
