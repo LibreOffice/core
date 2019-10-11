@@ -856,16 +856,10 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
 
         if (eFMVarType != eVarType)
         {
-            OUString sNew;
+            ++nCollisionCount;
+            OUString sNew(sName + "_renamed_" + OUString::number(nCollisionCount));
 
             // FIXME! can't find if name is taken already!!!!
-
-            nCollisionCount++;
-            OUStringBuffer aBuf;
-            aBuf.append(sName);
-            aBuf.append("_renamed_");
-            aBuf.append(nCollisionCount);
-            sNew = aBuf.makeStringAndClear();
 
             rImportHelper.GetRenameMap().Add(
                 sal::static_int_cast< sal_uInt16 >(eVarType), sName, sNew);
@@ -880,17 +874,11 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
         aAny >>= xMaster;
 
         if (VarTypeUserField != eVarType) {
+            ++nCollisionCount;
             // find new name that is not taken
-            OUString sNew;
+            OUString sNew(sName + "_renamed_" + OUString::number(nCollisionCount));
 
             // FIXME! can't find if name is taken already!!!!
-
-            nCollisionCount++;
-            OUStringBuffer aBuf;
-            aBuf.append(sName);
-            aBuf.append("_renamed_");
-            aBuf.append(nCollisionCount);
-            sNew = aBuf.makeStringAndClear();
 
             rImportHelper.GetRenameMap().Add(
                 sal::static_int_cast< sal_uInt16 >(eVarType), sName, sNew);
