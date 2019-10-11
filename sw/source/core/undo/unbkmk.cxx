@@ -164,6 +164,24 @@ void SwUndoInsNoTextFieldmark::RedoImpl(::sw::UndoRedoContext & rContext)
     m_pHistoryNoTextFieldmark->SetInDoc(&rContext.GetDoc(), false);
 }
 
+SwUndoDelNoTextFieldmark::SwUndoDelNoTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark)
+    : SwUndo(SwUndoId::DELETE, rFieldmark.GetMarkPos().GetDoc())
+    , m_pHistoryNoTextFieldmark(new SwHistoryNoTextFieldmark(rFieldmark))
+{
+}
+
+SwUndoDelNoTextFieldmark::~SwUndoDelNoTextFieldmark() = default;
+
+void SwUndoDelNoTextFieldmark::UndoImpl(::sw::UndoRedoContext & rContext)
+{
+    m_pHistoryNoTextFieldmark->SetInDoc(&rContext.GetDoc(), false);
+}
+
+void SwUndoDelNoTextFieldmark::RedoImpl(::sw::UndoRedoContext & rContext)
+{
+    m_pHistoryNoTextFieldmark->ResetInDoc(&rContext.GetDoc());
+}
+
 SwUndoInsTextFieldmark::SwUndoInsTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark)
     : SwUndo(SwUndoId::INSERT, rFieldmark.GetMarkPos().GetDoc())
     , m_pHistoryTextFieldmark(new SwHistoryTextFieldmark(rFieldmark))
@@ -178,6 +196,24 @@ void SwUndoInsTextFieldmark::UndoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoInsTextFieldmark::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     m_pHistoryTextFieldmark->SetInDoc(&rContext.GetDoc(), false);
+}
+
+SwUndoDelTextFieldmark::SwUndoDelTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark)
+    : SwUndo(SwUndoId::DELETE, rFieldmark.GetMarkPos().GetDoc())
+    , m_pHistoryTextFieldmark(new SwHistoryTextFieldmark(rFieldmark))
+{
+}
+
+SwUndoDelTextFieldmark::~SwUndoDelTextFieldmark() = default;
+
+void SwUndoDelTextFieldmark::UndoImpl(::sw::UndoRedoContext & rContext)
+{
+    m_pHistoryTextFieldmark->SetInDoc(&rContext.GetDoc(), false);
+}
+
+void SwUndoDelTextFieldmark::RedoImpl(::sw::UndoRedoContext & rContext)
+{
+    m_pHistoryTextFieldmark->ResetInDoc(&rContext.GetDoc());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

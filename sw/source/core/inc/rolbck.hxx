@@ -288,8 +288,12 @@ class SwHistoryTextFieldmark : public SwHistoryHint
     private:
         const OUString m_sName;
         const OUString m_sType;
-        const sal_uLong m_nNode;
-        const sal_Int32 m_nContent;
+        const sal_uLong m_nStartNode;
+        const sal_Int32 m_nStartContent;
+        const sal_uLong m_nEndNode;
+        const sal_Int32 m_nEndContent;
+        /*const*/ sal_uLong m_nSepNode;
+        /*const*/ sal_Int32 m_nSepContent;
 };
 
 class SwHistorySetAttrSet : public SwHistoryHint
