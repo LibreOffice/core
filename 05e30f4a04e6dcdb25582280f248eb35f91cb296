@@ -16,6 +16,24 @@
       "revId": "05e30f4a04e6dcdb25582280f248eb35f91cb296",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_77fdf838",
+        "filename": "include/rtl/stringconcat.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-11T15:55:05Z",
+      "side": 0,
+      "message": "For string literals (represented as char const[N]), the assumption (though which is unchecked here) is that they only contain ASCII, so can be interpreted as sal_Unicode in an obvious way.  For a random char[] that likely isn\u0027t the case.",
+      "parentUuid": "7f7f9b97_b7039042",
+      "revId": "05e30f4a04e6dcdb25582280f248eb35f91cb296",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
