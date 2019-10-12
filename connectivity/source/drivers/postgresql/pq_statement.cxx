@@ -629,10 +629,12 @@ static void getAutoValues(
     String2StringMap & result,
     const Reference< XConnection > & connection,
     const OUString &schemaName,
-    const OUString & tableName )
+    const OUString & tableName,
+    ConnectionSettings *pConnectionSettings )
 {
+    OUString strDefaultValue = getDefaultValue(pConnectionSettings);
     Reference< XPreparedStatement > stmt = connection->prepareStatement(
-                  "SELECT   pg_attribute.attname, pg_attrdef.adsrc "
+                  "SELECT   pg_attribute.attname, " + strDefaultValue +
                   "FROM pg_class, pg_namespace, pg_attribute "
                   "LEFT JOIN pg_attrdef ON pg_attribute.attrelid = pg_attrdef.adrelid AND "
                                         "pg_attribute.attnum = pg_attrdef.adnum "
@@ -642,7 +644,7 @@ static void getAutoValues(
                   // LEM TODO: this is weird; why "LIKE" and not "="?
                   // Most probably gives problems if tableName contains '%'
                         "pg_class.relname LIKE ? AND "
-                        "pg_attrdef.adsrc != ''"
+                        + strDefaultValue + " != ''"
             );
     DisposeGuard guard( stmt );
     Reference< XParameters > paras( stmt, UNO_QUERY );
@@ -736,7 +738,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
                 {
                     if( autoValues.empty() )
                     {
-                        getAutoValues( autoValues, connection, schemaName, tableName );
+                        getAutoValues( autoValues, connection, schemaName, tableName, pConnectionSettings );
                     }
                     // this could mean, that the column is a default or auto value, check this ...
                     bool bColumnMatchAutoValue = false;
