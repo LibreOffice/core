@@ -300,17 +300,13 @@ SFErrCodes StreamToFile(TrueTypeCreator *_this, const char* fname)
  * TrueTypeTable private methods
  */
 
-#define TABLESIZE_head 54
-#define TABLESIZE_hhea 36
-#define TABLESIZE_maxp 32
-
 /*    Table         data points to
  * --------------------------------------------
  *    generic       tdata_generic struct
- *    'head'        TABLESIZE_head bytes of memory
- *    'hhea'        TABLESIZE_hhea bytes of memory
+ *    'head'        n_HEAD_Length bytes of memory
+ *    'hhea'        n_HHEA_Length bytes of memory
  *    'loca'        tdata_loca struct
- *    'maxp'        TABLESIZE_maxp bytes of memory
+ *    'maxp'        n_MAXP_Version1Length bytes of memory
  *    'glyf'        list of GlyphData structs (defined in sft.h)
  *    'name'        list of NameRecord structs (defined in sft.h)
  *    'post'        tdata_post struct
@@ -507,7 +503,7 @@ static int GetRawData_generic(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 
 
 static int GetRawData_head(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
 {
-    *len = TABLESIZE_head;
+    *len = n_HEAD_Length;
     *ptr = static_cast<sal_uInt8 *>(_this->data);
     *tag = T_head;
 
@@ -516,7 +512,7 @@ static int GetRawData_head(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
 
 static int GetRawData_hhea(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
 {
-    *len = TABLESIZE_hhea;
+    *len = n_HHEA_Length;
     *ptr = static_cast<sal_uInt8 *>(_this->data);
     *tag = T_hhea;
 
@@ -542,7 +538,7 @@ static int GetRawData_loca(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
 
 static int GetRawData_maxp(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
 {
-    *len = TABLESIZE_maxp;
+    *len = n_MAXP_Version1Length;
     *ptr = static_cast<sal_uInt8 *>(_this->data);
     *tag = T_maxp;
 
@@ -862,7 +858,7 @@ TrueTypeTable *TrueTypeTableNew_head(sal_uInt32 fontRevision,
     assert(created != nullptr);
 
     TrueTypeTable* table  = static_cast<TrueTypeTable*>(smalloc(sizeof(TrueTypeTable)));
-    sal_uInt8* ptr = ttmalloc(TABLESIZE_head);
+    sal_uInt8* ptr = ttmalloc(n_HEAD_Length);
 
     PutUInt32(0x00010000, ptr, 0);             /* version */
     PutUInt32(fontRevision, ptr, 4);
@@ -890,7 +886,7 @@ TrueTypeTable *TrueTypeTableNew_hhea(sal_Int16  ascender,
                                      sal_Int16  caretSlopeRun)
 {
     TrueTypeTable* table = static_cast<TrueTypeTable*>(smalloc(sizeof(TrueTypeTable)));
-    sal_uInt8* ptr = ttmalloc(TABLESIZE_hhea);
+    sal_uInt8* ptr = ttmalloc(n_HHEA_Length);
 
     PutUInt32(0x00010000, ptr, 0);             /* version */
     PutUInt16(ascender, ptr, 4);
@@ -929,10 +925,10 @@ TrueTypeTable *TrueTypeTableNew_loca()
 TrueTypeTable *TrueTypeTableNew_maxp( const sal_uInt8* maxp, int size)
 {
     TrueTypeTable* table = static_cast<TrueTypeTable*>(smalloc(sizeof(TrueTypeTable)));
-    table->data = ttmalloc(TABLESIZE_maxp);
+    table->data = ttmalloc(n_MAXP_Version1Length);
 
-    if (maxp && size == TABLESIZE_maxp) {
-        memcpy(table->data, maxp, TABLESIZE_maxp);
+    if (maxp && size == n_MAXP_Version1Length) {
+        memcpy(table->data, maxp, n_MAXP_Version1Length);
     }
 
     table->tag = T_maxp;
@@ -1374,20 +1370,20 @@ static void ProcessTables(TrueTypeCreator *tt)
 
     head = FindTable(tt, T_head);
     sal_uInt8* const pHeadData = static_cast<sal_uInt8*>(head->data);
-    PutInt16(xMin, pHeadData, 36);
-    PutInt16(yMin, pHeadData, 38);
-    PutInt16(xMax, pHeadData, 40);
-    PutInt16(yMax, pHeadData, 42);
-    PutInt16(indexToLocFormat, pHeadData, 50);
+    PutInt16(xMin, pHeadData, n_HEAD_xMin);
+    PutInt16(yMin, pHeadData, n_HEAD_yMin);
+    PutInt16(xMax, pHeadData, n_HEAD_xMax);
+    PutInt16(yMax, pHeadData, n_HEAD_yMax);
+    PutInt16(indexToLocFormat, pHeadData, n_HEAD_indexToLocFormat);
 
     maxp = FindTable(tt, T_maxp);
 
     sal_uInt8* const pMaxpData = static_cast<sal_uInt8*>(maxp->data);
-    PutUInt16(static_cast<sal_uInt16>(nGlyphs), pMaxpData, 4);
-    PutUInt16(maxPoints, pMaxpData, 6);
-    PutUInt16(maxContours, pMaxpData, 8);
-    PutUInt16(maxCompositePoints, pMaxpData, 10);
-    PutUInt16(maxCompositeContours, pMaxpData, 12);
+    PutUInt16(static_cast<sal_uInt16>(nGlyphs), pMaxpData, n_MAXP_numGlyphs);
+    PutUInt16(maxPoints, pMaxpData, n_MAXP_maxPoints);
+    PutUInt16(maxContours, pMaxpData, n_MAXP_maxContours);
+    PutUInt16(maxCompositePoints, pMaxpData, n_MAXP_maxCompositePoints);
+    PutUInt16(maxCompositeContours, pMaxpData, n_MAXP_maxCompositeContours);
 
     /*
      * Generate an htmx table and update hhea table

@@ -185,6 +185,222 @@ namespace vcl
 
     struct TrueTypeFont;
 
+/*
+  Some table OS/2 consts
+  quick history:
+  OpenType has been created from TrueType
+  - original TrueType had an OS/2 table with a length of 68 bytes
+  (cf https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6OS2.html)
+  - There have been 6 versions (from version 0 to 5)
+  (cf https://docs.microsoft.com/en-us/typography/opentype/otspec140/os2ver0)
+
+  For the record:
+  // From Initial TrueType version
+  TYPE       NAME                       FROM BYTE
+  uint16     version                    0
+  int16      xAvgCharWidth              2
+  uint16     usWeightClass              4
+  uint16     usWidthClass               6
+  uint16     fsType                     8
+  int16      ySubscriptXSize           10
+  int16      ySubscriptYSize           12
+  int16      ySubscriptXOffset         14
+  int16      ySubscriptYOffset         16
+  int16      ySuperscriptXSize         18
+  int16      ySuperscriptYSize         20
+  int16      ySuperscriptXOffset       22
+  int16      ySuperscriptYOffset       24
+  int16      yStrikeoutSize            26
+  int16      yStrikeoutPosition        28
+  int16      sFamilyClass              30
+  uint8      panose[10]                32
+  uint32     ulUnicodeRange1           42
+  uint32     ulUnicodeRange2           46
+  uint32     ulUnicodeRange3           50
+  uint32     ulUnicodeRange4           54
+  Tag        achVendID                 58
+  uint16     fsSelection               62
+  uint16     usFirstCharIndex          64
+  uint16     usLastCharIndex           66
+
+  // From Version 0 of OpenType
+  int16      sTypoAscender             68
+  int16      sTypoDescender            70
+  int16      sTypoLineGap              72
+  uint16     usWinAscent               74
+  uint16     usWinDescent              76
+
+  => length for OpenType version 0 = 78 bytes
+
+  // From Version 1 of OpenType
+  uint32     ulCodePageRange1          78
+  uint32     ulCodePageRange2          82
+
+  => length for OpenType version 1 = 86 bytes
+
+  // From Version 2 of OpenType
+  // (idem for Versions 3 and 4)
+  int16      sxHeight                  86
+  int16      sCapHeight                88
+  uint16     usDefaultChar             90
+  uint16     usBreakChar               92
+  uint16     usMaxContext              94
+
+  => length for OpenType version 2, 3 and 4 = 96 bytes
+
+  // From Version 5 of OpenType
+  uint16     usLowerOpticalPointSize   96
+  uint16     usUpperOpticalPointSize   98
+  END                                 100
+
+  => length for OS/2 table version 5 = 100 bytes
+
+*/
+static const int n_OS2_TrueTypeLengthOrigin = 68;
+static const int n_OS2_OpenTypeLengthV0 = 78;
+static const int n_OS2_OpenTypeLengthV1 = 86;
+
+static const int n_OS2_usWeightClass = 4;
+static const int n_OS2_usWidthClass = 6;
+static const int n_OS2_fsType = 8;
+static const int n_OS2_panose = 32;
+static const int n_OS2_panoseNbBytes = 10;
+static const int n_OS2_ulUnicodeRange1 = 42;
+static const int n_OS2_ulUnicodeRange2 = 46;
+static const int n_OS2_ulUnicodeRange3 = 50;
+static const int n_OS2_ulUnicodeRange4 = 54;
+static const int n_OS2_fsSelection = 62;
+static const int n_OS2_typoAscender = 68;
+static const int n_OS2_typoDescender = 70;
+static const int n_OS2_typoLineGap = 72;
+static const int n_OS2_winAscent = 74;
+static const int n_OS2_winDescent = 76;
+static const int n_OS2_ulCodePageRange1 = 78;
+static const int n_OS2_ulCodePageRange2 = 82;
+
+/*
+  Some table hhea consts
+  cf https://docs.microsoft.com/fr-fr/typography/opentype/spec/hhea
+  TYPE       NAME                       FROM BYTE
+  uint16     majorVersion               0
+  uint16     minorVersion               2
+  FWORD      ascender                   4
+  FWORD      descender                  6
+  FWORD      lineGap                    8
+  UFWORD     advanceWidthMax           10
+  FWORD      minLeftSideBearing        12
+  FWORD      minRightSideBearing       14
+  FWORD      xMaxExtent                16
+  int16      caretSlopeRise            18
+  int16      caretSlopeRun             20
+  int16      caretOffset               22
+  int16      (reserved)                24
+  int16      (reserved)                26
+  int16      (reserved)                28
+  int16      (reserved)                30
+  int16      metricDataFormat          32
+  uint16     numberOfHMetrics          34
+  END                                  36
+
+  => length for hhea table = 36 bytes
+
+*/
+static const int n_HHEA_Length = 36;
+
+static const int n_HHEA_ascender = 4;
+static const int n_HHEA_descender = 6;
+static const int n_HHEA_lineGap = 8;
+static const int n_HHEA_caretSlopeRise = 18;
+static const int n_HHEA_caretSlopeRun = 20;
+
+/*
+  Some table post consts
+  cf https://docs.microsoft.com/fr-fr/typography/opentype/spec/post
+  TYPE       NAME                       FROM BYTE
+  Fixed      version                    0
+  Fixed      italicAngle                4
+  FWord      underlinePosition          8
+  FWord      underlineThickness        10
+  uint32     isFixedPitch              12
+  ...
+
+*/
+static const int n_POST_italicAngle = 4;
+static const int n_POST_underlinePosition = 8;
+static const int n_POST_underlineThickness = 10;
+static const int n_POST_isFixedPitch = 12;
+
+/*
+  Some table head consts
+  cf https://docs.microsoft.com/fr-fr/typography/opentype/spec/head
+  TYPE       NAME                       FROM BYTE
+  uit16      majorVersion               0
+  uit16      minorVersion               2
+  Fixed      fontRevision               4
+  uint32     checkSumAdjustment         8
+  uint32     magicNumber               12 (= 0x5F0F3CF5)
+  uint16     flags                     16
+  uint16     unitsPerEm                18
+  LONGDATETIME created                 20
+  LONGDATETIME modified                28
+  int16      xMin                      36
+  int16      yMin                      38
+  int16      xMax                      40
+  int16      yMax                      42
+  uint16     macStyle                  44
+  uint16     lowestRecPPEM             46
+  int16      fontDirectionHint         48
+  int16      indexToLocFormat          50
+  int16      glyphDataFormat           52
+
+  END                                  54
+
+  => length head table = 54 bytes
+*/
+static const int n_HEAD_Length = 54;
+
+static const int n_HEAD_majorVersion = 0;
+static const int n_HEAD_fontRevision = 4;
+static const int n_HEAD_magicNumber = 12;
+static const int n_HEAD_flags = 16;
+static const int n_HEAD_unitsPerEm = 18;
+static const int n_HEAD_created = 20;
+static const int n_HEAD_xMin = 36;
+static const int n_HEAD_yMin = 38;
+static const int n_HEAD_xMax = 40;
+static const int n_HEAD_yMax = 42;
+static const int n_HEAD_macStyle = 44;
+static const int n_HEAD_lowestRecPPEM = 46;
+static const int n_HEAD_fontDirectionHint = 48;
+static const int n_HEAD_indexToLocFormat = 50;
+static const int n_HEAD_glyphDataFormat = 52;
+
+/*
+  Some table maxp consts
+  cf https://docs.microsoft.com/fr-fr/typography/opentype/spec/maxp
+  For 0.5 version
+  TYPE       NAME                       FROM BYTE
+  Fixed      version                    0
+  uint16     numGlyphs                  4
+
+  For 1.0 Version
+  Fixed      version                    0
+  uint16     numGlyphs                  4
+  uint16     maxPoints                  6
+  uint16     maxContours                8
+  uint16     maxCompositePoints        10
+  uint16     maxCompositeContours      12
+  ...
+
+*/
+static const int n_MAXP_Version1Length = 32;
+
+static const int n_MAXP_numGlyphs = 4;
+static const int n_MAXP_maxPoints = 6;
+static const int n_MAXP_maxContours = 8;
+static const int n_MAXP_maxCompositePoints = 10;
+static const int n_MAXP_maxCompositeContours = 12;
+
 /**
  * @defgroup sft Sun Font Tools Exported Functions
  */
