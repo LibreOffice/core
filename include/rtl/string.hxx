@@ -1879,7 +1879,7 @@ struct SAL_WARN_UNUSED OStringLiteral
 template<>
 struct ToStringHelper< OString >
     {
-    static int length( const OString& s ) { return s.getLength(); }
+    static std::size_t length( const OString& s ) { return s.getLength(); }
     static char* addData( char* buffer, const OString& s ) { return addDataHelper( buffer, s.getStr(), s.getLength()); }
     static const bool allowOStringConcat = true;
     static const bool allowOUStringConcat = false;
@@ -1891,7 +1891,7 @@ struct ToStringHelper< OString >
 template<>
 struct ToStringHelper< OStringLiteral >
     {
-    static int length( const OStringLiteral& str ) { return str.size; }
+    static std::size_t length( const OStringLiteral& str ) { return str.size; }
     static char* addData( char* buffer, const OStringLiteral& str ) { return addDataHelper( buffer, str.data, str.size ); }
     static const bool allowOStringConcat = true;
     static const bool allowOUStringConcat = false;

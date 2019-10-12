@@ -3650,7 +3650,7 @@ void operator !=(std::nullptr_t, OUString const &) = delete;
 template<>
 struct ToStringHelper< OUString >
     {
-    static int length( const OUString& s ) { return s.getLength(); }
+    static std::size_t length( const OUString& s ) { return s.getLength(); }
     static sal_Unicode* addData( sal_Unicode* buffer, const OUString& s ) { return addDataHelper( buffer, s.getStr(), s.getLength()); }
     static const bool allowOStringConcat = false;
     static const bool allowOUStringConcat = true;
@@ -3662,7 +3662,7 @@ struct ToStringHelper< OUString >
 template<>
 struct ToStringHelper< OUStringLiteral >
     {
-    static int length( const OUStringLiteral& str ) { return str.size; }
+    static std::size_t length( const OUStringLiteral& str ) { return str.size; }
     static sal_Unicode* addData( sal_Unicode* buffer, const OUStringLiteral& str ) { return addDataLiteral( buffer, str.data, str.size ); }
     static const bool allowOStringConcat = false;
     static const bool allowOUStringConcat = true;
