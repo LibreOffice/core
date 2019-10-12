@@ -1102,8 +1102,7 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
                     }
 
                     bool bSet = false;
-                    // HACK: don't check styles if numbering/bullets are turned on. Table-styles don't override numbering formatting
-                    SwFormat* pFormatColl = pNd->GetNumRule() ? nullptr : pNd->GetFormatColl();
+                    SwFormat* pFormatColl = pNd->GetFormatColl();
                     // Manually walk through the parent properties in order to avoid the default properties.
                     // Table-styles don't override paragraph-style formatting.
                     //    TODO: ?except for fontsize/justification if compat:overrideTableStyleFontSizeAndJustification?
