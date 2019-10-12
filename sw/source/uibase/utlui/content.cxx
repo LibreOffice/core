@@ -1128,12 +1128,15 @@ void SwContentTree::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 
 void SwContentTree::DragFinished( sal_Int8 nAction )
 {
-    SwWrtShell *const pShell = GetWrtShell();
-    pShell->EndUndo();
-    pShell->EndAllAction();
-    m_aActiveContentArr[ContentTypeId::OUTLINE]->Invalidate();
-    Display(true);
-    m_aDndOutlinesSelected.clear();
+    if (m_bIsRoot && m_nRootType == ContentTypeId::OUTLINE)
+    {
+        SwWrtShell *const pShell = GetWrtShell();
+        pShell->EndUndo();
+        pShell->EndAllAction();
+        m_aActiveContentArr[ContentTypeId::OUTLINE]->Invalidate();
+        Display(true);
+        m_aDndOutlinesSelected.clear();
+    }
 
     // To prevent the removing of the selected entry in external drag and drop
     // the drag action mustn't be MOVE.
