@@ -307,7 +307,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
                     .append('=').append(pStr);
             }
         }
-        rOut.WriteOStringBuffer( sOut );
+        rOut.WriteOString( sOut.makeStringAndClear() );
     }
     catch (const uno::Exception&)
     {

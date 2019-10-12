@@ -514,7 +514,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
             sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_comment)
                 .append(' ').append(OUStringToOString(sComment,
                     static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc)).append(" -->");
-            rWrt.Strm().WriteOStringBuffer( sOut );
+            rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
         }
     }
     else if( SwFieldIds::Script == pFieldTyp->Which() )
@@ -567,7 +567,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
                 Color& rColor = SwViewOption::GetFieldShadingsColor();
                 sOut.append(GetCSS1_Color(rColor));
                 sOut.append("\">");
-                rWrt.Strm().WriteOStringBuffer(sOut);
+                rWrt.Strm().WriteOString(sOut.makeStringAndClear());
             }
 
             OutHTML_SwField( rWrt, pField, pTextField->GetTextNode(),
