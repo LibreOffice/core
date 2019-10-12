@@ -19,6 +19,7 @@
 #include <cstddef>
 #include <string>
 #include <string_view>
+#include <type_traits>
 #include <utility>
 
 #include <string.h>
@@ -255,7 +256,7 @@ struct ToStringHelper< OUStringConcat< T1, T2 > >
 template< typename T1, typename T2 >
 [[nodiscard]]
 inline
-typename libreoffice_internal::Enable< OStringConcat< T1, T2 >, ToStringHelper< T1 >::allowOStringConcat && ToStringHelper< T2 >::allowOStringConcat >::Type operator+( const T1& left, const T2& right )
+typename std::enable_if_t< ToStringHelper< T1 >::allowOStringConcat && ToStringHelper< T2 >::allowOStringConcat, OStringConcat< T1, T2 > > operator+( const T1& left, const T2& right )
     {
     return OStringConcat< T1, T2 >( left, right );
     }
@@ -264,7 +265,7 @@ typename libreoffice_internal::Enable< OStringConcat< T1, T2 >, ToStringHelper< 
 template< typename T, int N >
 [[nodiscard]]
 inline
-typename libreoffice_internal::Enable< OStringConcat< T, const char[ N ] >, ToStringHelper< T >::allowOStringConcat >::Type operator+( const T& left, const char (&right)[ N ] )
+typename std::enable_if_t< ToStringHelper< T >::allowOStringConcat, OStringConcat< T, const char[ N ] > > operator+( const T& left, const char (&right)[ N ] )
     {
     return OStringConcat< T, const char[ N ] >( left, right );
     }
@@ -272,7 +273,7 @@ typename libreoffice_internal::Enable< OStringConcat< T, const char[ N ] >, ToSt
 template< typename T, int N >
 [[nodiscard]]
 inline
-typename libreoffice_internal::Enable< OStringConcat< const char[ N ], T >, ToStringHelper< T >::allowOStringConcat >::Type operator+( const char (&left)[ N ], const T& right )
+typename std::enable_if_t< ToStringHelper< T >::allowOStringConcat, OStringConcat< const char[ N ], T > > operator+( const char (&left)[ N ], const T& right )
     {
     return OStringConcat< const char[ N ], T >( left, right );
     }
@@ -280,7 +281,7 @@ typename libreoffice_internal::Enable< OStringConcat< const char[ N ], T >, ToSt
 template< typename T, int N >
 [[nodiscard]]
 inline
-typename libreoffice_internal::Enable< OStringConcat< T, char[ N ] >, ToStringHelper< T >::allowOStringConcat >::Type operator+( const T& left, char (&right)[ N ] )
+typename std::enable_if_t< ToStringHelper< T >::allowOStringConcat, OStringConcat< T, char[ N ] > > operator+( const T& left, char (&right)[ N ] )
     {
     return OStringConcat< T, char[ N ] >( left, right );
     }
@@ -288,7 +289,7 @@ typename libreoffice_internal::Enable< OStringConcat< T, char[ N ] >, ToStringHe
 template< typename T, int N >
 [[nodiscard]]
 inline
-typename libreoffice_internal::Enable< OStringConcat< char[ N ], T >, ToStringHelper< T >::allowOStringConcat >::Type operator+( char (&left)[ N ], const T& right )
+typename std::enable_if_t< ToStringHelper< T >::allowOStringConcat, OStringConcat< char[ N ], T > > operator+( char (&left)[ N ], const T& right )
     {
     return OStringConcat< char[ N ], T >( left, right );
     }
@@ -296,7 +297,7 @@ typename libreoffice_internal::Enable< OStringConcat< char[ N ], T >, ToStringHe
 template< typename T1, typename T2 >
 [[nodiscard]]
 inline
-typename libreoffice_internal::Enable< OUStringConcat< T1, T2 >, ToStringHelper< T1 >::allowOUStringConcat && ToStringHelper< T2 >::allowOUStringConcat >::Type operator+( const T1& left, const T2& right )
+typename std::enable_if_t< ToStringHelper< T1 >::allowOUStringConcat && ToStringHelper< T2 >::allowOUStringConcat, OUStringConcat< T1, T2 > > operator+( const T1& left, const T2& right )
     {
     return OUStringConcat< T1, T2 >( left, right );
     }
@@ -304,7 +305,7 @@ typename libreoffice_internal::Enable< OUStringConcat< T1, T2 >, ToStringHelper<
 template< typename T1, typename T2 >
 [[nodiscard]]
 inline
-typename libreoffice_internal::Enable< OUStringConcat< T1, T2 >, ToStringHelper< T1 >::allowOUStringConcat && ToStringHelper< T2 >::allowOUStringConcat && libreoffice_internal::ConstCharArrayDetector< T1, void >::ok >::Type operator+( T1& left, const T2& right )
+typename std::enable_if_t< ToStringHelper< T1 >::allowOUStringConcat && ToStringHelper< T2 >::allowOUStringConcat && libreoffice_internal::ConstCharArrayDetector< T1, void >::ok, OUStringConcat< T1, T2 > > operator+( T1& left, const T2& right )
     {
     return OUStringConcat< T1, T2 >( left, right );
     }
@@ -312,7 +313,7 @@ typename libreoffice_internal::Enable< OUStringConcat< T1, T2 >, ToStringHelper<
 template< typename T1, typename T2 >
 [[nodiscard]]
 inline
-typename libreoffice_internal::Enable< OUStringConcat< T1, T2 >, ToStringHelper< T1 >::allowOUStringConcat && ToStringHelper< T2 >::allowOUStringConcat && libreoffice_internal::ConstCharArrayDetector< T2, void >::ok >::Type operator+( const T1& left, T2& right )
+typename std::enable_if_t< ToStringHelper< T1 >::allowOUStringConcat && ToStringHelper< T2 >::allowOUStringConcat && libreoffice_internal::ConstCharArrayDetector< T2, void >::ok, OUStringConcat< T1, T2 > > operator+( const T1& left, T2& right )
     {
     return OUStringConcat< T1, T2 >( left, right );
     }
