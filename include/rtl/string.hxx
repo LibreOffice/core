@@ -1774,9 +1774,7 @@ public:
     static OString boolean( bool b )
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFBOOLEAN];
-        rtl_String* pNewData = NULL;
-        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfBoolean( aBuf, b ) );
-        return OString( pNewData, SAL_NO_ACQUIRE );
+        return OString(aBuf, rtl_str_valueOfBoolean(aBuf, b));
     }
 
     /**

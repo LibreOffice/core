@@ -3517,9 +3517,7 @@ public:
     static OUString boolean( bool b )
     {
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFBOOLEAN];
-        rtl_uString* pNewData = NULL;
-        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfBoolean( aBuf, b ) );
-        return OUString( pNewData, SAL_NO_ACQUIRE );
+        return OUString(aBuf, rtl_ustr_valueOfBoolean(aBuf, b));
     }
 
     /**
