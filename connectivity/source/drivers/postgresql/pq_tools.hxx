@@ -100,6 +100,8 @@ void disposeObject( const css::uno::Reference< css::uno::XInterface > & r );
 OUString extractTableFromInsert( const OUString & sql );
 OString extractSingleTableFromSelect( const std::vector< OString > &vec );
 
+OUString getColExprForDefaultSettingVal(ConnectionSettings const *settings);
+
 void tokenizeSQL( const OString & sql, std::vector< OString > &vec  );
 void splitSQL( const OString & sql, std::vector< OString > &vec  );
 std::vector< sal_Int32 > parseIntArray( const OUString & str );
