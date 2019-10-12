@@ -834,6 +834,7 @@ bool Bitmap::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
 
 bool Bitmap::HasFastScale()
 {
+// TODO SKIA
 #if HAVE_FEATURE_OPENGL
     return OpenGLHelper::isVCLOpenGLEnabled();
 #else
