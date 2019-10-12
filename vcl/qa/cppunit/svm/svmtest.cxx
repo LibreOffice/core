@@ -963,8 +963,16 @@ void SvmTest::testBitmaps()
     pVirtualDev->DrawBitmap(Point(1, 2), Size(3, 4), aBitmap2);
     pVirtualDev->DrawBitmap(Point(1, 2), Size(3, 4), Point(2, 1), Size(4, 3), aBitmap3);
 
-    checkBitmaps(writeAndReadStream(aGDIMetaFile));
-    checkBitmaps(readFile("bitmaps.svm"));
+    {
+        GDIMetaFile aReloadedGDIMetaFile = writeAndReadStream(aGDIMetaFile);
+        checkBitmaps(aReloadedGDIMetaFile);
+        checkRendering(pVirtualDev, aReloadedGDIMetaFile);
+    }
+    {
+        GDIMetaFile aFileGDIMetaFile = readFile("bitmaps.svm");
+        checkBitmaps(aFileGDIMetaFile);
+        checkRendering(pVirtualDev, aFileGDIMetaFile);
+    }
 }
 
 void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
