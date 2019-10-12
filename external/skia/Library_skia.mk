@@ -13,6 +13,8 @@ $(eval $(call gb_Library_set_warnings_disabled,skia))
 
 $(eval $(call gb_Library_use_unpacked,skia,skia))
 
+$(eval $(call gb_Library_set_precompiled_header,skia,external/skia/inc/pch/precompiled_skia))
+
 $(eval $(call gb_Library_add_defs,skia,\
     -DSK_GAMMA_SRGB \
     -DSK_GAMMA_APPLY_TO_A8 \
