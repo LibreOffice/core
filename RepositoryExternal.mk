@@ -111,6 +111,20 @@ endef
 
 endif
 
+ifneq ($(ENABLE_SKIA),)
+define gb_LinkTarget__use_skia
+$(call gb_LinkTarget_set_include,$(1),\
+       -I$(call gb_UnpackedTarball_get_dir,skia)/include/core \
+       -I$(call gb_UnpackedTarball_get_dir,skia)/include/config \
+       $$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_libraries,$(1),skia)
+endef
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
+       skia \
+))
+endif
+
 ifeq (SANE,$(filter SANE,$(BUILD_TYPE)))
 
 define gb_LinkTarget__use_sane_headers
