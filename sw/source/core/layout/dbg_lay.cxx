@@ -787,10 +787,10 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
         aOut.append(lcl_CellInfo(pCellFrame));
     }
 
-    pStream->WriteOStringBuffer( aOut );
+    SAL_INFO("sw.layout.debug", aOut.getStr());
+    pStream->WriteOString( aOut.makeStringAndClear() );
     (*pStream) << endl;  // output
     pStream->Flush();   // to the disk, so we can read it immediately
-    SAL_INFO("sw.layout.debug", aOut.getStr());
     if( ++nLineCount >= nMaxLines )     // max number of lines reached?
     {
         SAL_WARN("sw.layout.debug", "max number of lines reached");
