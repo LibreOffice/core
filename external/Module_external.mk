@@ -92,6 +92,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,REVENGE,librevenge) \
 	$(call gb_Helper_optional,RHINO,rhino) \
 	$(call gb_Helper_optional,SERF,serf) \
+	$(call gb_Helper_optional,SKIA,skia) \
 	$(call gb_Helper_optional,STAROFFICE,libstaroffice) \
 	$(if $(filter WNT,$(OS)),twain_dsm) \
 	$(call gb_Helper_optional,UCPP,ucpp) \
