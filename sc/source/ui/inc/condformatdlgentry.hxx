@@ -99,7 +99,7 @@ public:
 class ScConditionFrmtEntry : public ScCondFrmtEntry, public SfxListener
 {
     //cond format ui elements
-    FontPrevWindow maWdPreview;
+    SvxFontPrevWindow maWdPreview;
     std::unique_ptr<weld::ComboBox> mxLbCondType;
     std::unique_ptr<formula::RefEdit> mxEdVal1;
     std::unique_ptr<formula::RefEdit> mxEdVal2;
@@ -149,7 +149,7 @@ public:
 
 class ScFormulaFrmtEntry : public ScCondFrmtEntry
 {
-    FontPrevWindow maWdPreview;
+    SvxFontPrevWindow maWdPreview;
     std::unique_ptr<weld::Label> mxFtStyle;
     std::unique_ptr<weld::ComboBox> mxLbStyle;
     std::unique_ptr<weld::Widget> mxWdPreviewWin;
@@ -297,7 +297,7 @@ private:
 
     DECL_LINK( StyleSelectHdl, weld::ComboBox&, void );
 
-    FontPrevWindow maWdPreview;
+    SvxFontPrevWindow maWdPreview;
     std::unique_ptr<weld::ComboBox> mxLbDateEntry;
     std::unique_ptr<weld::Label> mxFtStyle;
     std::unique_ptr<weld::ComboBox> mxLbStyle;

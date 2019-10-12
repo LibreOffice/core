@@ -417,7 +417,7 @@ void ScConditionFrmtEntry::Notify(SfxBroadcaster&, const SfxHint& rHint)
 
 namespace {
 
-void StyleSelect(weld::Window* pDialogParent, weld::ComboBox& rLbStyle, const ScDocument* pDoc, FontPrevWindow& rWdPreview)
+void StyleSelect(weld::Window* pDialogParent, weld::ComboBox& rLbStyle, const ScDocument* pDoc, SvxFontPrevWindow& rWdPreview)
 {
     if (rLbStyle.get_active() == 0)
     {
