@@ -1554,6 +1554,25 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
             auto const nPos = static_cast<SwOutlineContent*>(pParent->GetUserData())->GetOutlinePos();
             void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
             mOutLineNodeMap[key] = true;
+            if(GetExpandChildren() && static_cast<SwContentType*>(pParent->GetUserData())->GetType() == ContentTypeId::OUTLINE)
+            {
+                bool bBool = SvTreeListBox::Expand(pParent);
+                SvTreeListEntry* pParentNextSibling = pParent->NextSibling();
+                SvTreeListEntry* pNext = Next(pParent);
+                while(pNext && pNext != pParentNextSibling && lcl_IsContent(pNext))
+                {
+                    if(pNext->HasChildren())
+                    {
+                        assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pNext->GetUserData())));
+                        auto const nPos = static_cast<SwOutlineContent*>(pNext->GetUserData())->GetOutlinePos();
+                        void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
+                        mOutLineNodeMap[key] = true;
+                        SvTreeListBox::Expand(pNext);
+                    }
+                    pNext = Next(pNext);
+                }
+                return bBool;
+            }
         }
     }
     return SvTreeListBox::Expand(pParent);
