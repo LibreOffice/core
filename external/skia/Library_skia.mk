@@ -15,37 +15,73 @@ $(eval $(call gb_Library_use_unpacked,skia,skia))
 
 $(eval $(call gb_Library_set_precompiled_header,skia,external/skia/inc/pch/precompiled_skia))
 
-$(eval $(call gb_Library_add_defs,skia,\
-    -DSK_GAMMA_SRGB \
-    -DSK_GAMMA_APPLY_TO_A8 \
-    -DSK_ALLOW_STATIC_GLOBAL_INITIALIZERS=1 \
-    -DSK_SCALAR_IS_FLOAT \
-    -DSK_CAN_USE_FLOAT \
-    -DSK_BUILD_FOR_UNIX \
-    -DSK_USE_POSIX_THREADS \
-    -DSK_RELEASE \
-    -DGR_RELEASE=1 \
-    -DNDEBUG \
-    -DSKIA_DLL \
-    -DSK_HAS_JPEG_LIBRARY=1 \
-    -DSK_HAS_PNG_LIBRARY=1 \
-))
-
-# TODO SKIA
-$(eval $(call gb_Library_add_defs,skia,\
-    -DSK_USER_CONFIG_HEADER="<$(SRCDIR)/external/skia/configs/SkUserConfig.h>" \
-))
-
 # TODO SKIA
 $(eval $(call gb_Library_add_defs,skia,\
     -DSK_SUPPORT_GPU=1 \
+    -DSKIA_DLL \
+    -DSKIA_IMPLEMENTATION=1 \
     -DSK_GL=1 \
     -DSK_VULKAN=1 \
+    -DSK_HAS_JPEG_LIBRARY=1 \
+    -DSK_HAS_PNG_LIBRARY=1 \
+    -DSK_GAMMA_APPLY_TO_A8 \
+))
+
+ifneq (,$(gb_ENABLE_DBGUTIL))
+$(eval $(call gb_Library_add_defs,skia,\
+    -DSK_DEBUG \
+    -DSK_ENABLE_DUMP_GPU \
+))
+else
+$(eval $(call gb_Library_add_defs,skia,\
+    -DSK_RELEASE \
+    -DNDEBUG \
+))
+endif
+
+ifeq ($(OS),WNT)
+# TODO SKIA
+$(eval $(call gb_Library_add_defs,skia,\
+    -DSK_BUILD_FOR_WIN \
+    -DSK_CPU_SSE_LEVEL=SK_CPU_SSE_LEVEL_SSSE3 \
+))
+
+$(eval $(call gb_Library_add_cxxflags,skia, \
+    -arch:SSE2 \
+))
+ifneq ($(gb_ENABLE_PCH),)
+$(eval $(call gb_Library_add_cxxflags,skia, \
+    -FIsrc/utils/win/SkDWriteNTDDI_VERSION.h \
+))
+endif
+
+$(eval $(call gb_Library_use_system_win32_libs,skia,\
+    fontsub \
+    ole32 \
+    oleaut32 \
+    user32 \
+    usp10 \
+    opengl32 \
+    gdi32 \
+))
+else
+$(eval $(call gb_Library_add_defs,skia,\
+    -DSK_BUILD_FOR_UNIX \
+    -DSK_R32_SHIFT=16 \
+))
+
+# TODO SKIA
+$(eval $(call gb_Library_add_cxxflags,skia, \
+    -mssse3 \
 ))
 
 $(eval $(call gb_Library_use_externals,skia,\
     freetype \
     fontconfig \
+))
+endif
+
+$(eval $(call gb_Library_use_externals,skia,\
     zlib \
     libjpeg \
     libpng \
@@ -63,15 +99,12 @@ $(eval $(call gb_Library_use_libraries,skia,\
     sal \
 ))
 
-$(eval $(call gb_Library_add_cxxflags,skia, \
-    -mssse3 \
-))
-
 $(eval $(call gb_Library_set_include,skia,\
     $$(INCLUDE) \
     -I$(call gb_UnpackedTarball_get_dir,skia) \
     -I$(call gb_UnpackedTarball_get_dir,skia)/include/third_party/skcms/ \
     -I$(call gb_UnpackedTarball_get_dir,skia)/third_party/vulkanmemoryallocator/ \
+    -I$(call gb_UnpackedTarball_get_dir,skia)/include/third_party/vulkan/ \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,skia,\
@@ -338,7 +371,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/effects/SkTrimPathEffect \
     UnpackedTarball/skia/src/effects/Sk1DPathEffect \
     UnpackedTarball/skia/src/effects/Sk2DPathEffect \
-    UnpackedTarball/skia/src/fonts/SkFontMgr_indirect \
     UnpackedTarball/skia/src/fonts/SkRemotableFontMgr \
     UnpackedTarball/skia/src/image/SkImage \
     UnpackedTarball/skia/src/image/SkImage_Lazy \
@@ -483,26 +515,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/utils/Sk3D \
     UnpackedTarball/skia/src/xps/SkXPSDevice \
     UnpackedTarball/skia/src/xps/SkXPSDocument \
-))
-
-$(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/opts/SkOpts_avx \
-    UnpackedTarball/skia/src/opts/SkOpts_crc32 \
-    UnpackedTarball/skia/src/opts/SkOpts_hsw \
-    UnpackedTarball/skia/src/opts/SkOpts_sse41 \
-    UnpackedTarball/skia/src/opts/SkOpts_sse42 \
-    UnpackedTarball/skia/src/opts/SkOpts_ssse3 \
-    UnpackedTarball/skia/src/ports/SkDebug_stdio \
-    UnpackedTarball/skia/src/ports/SkGlobalInitialization_default \
-    UnpackedTarball/skia/src/ports/SkFontHost_FreeType_common \
-    UnpackedTarball/skia/src/ports/SkFontHost_FreeType \
-    UnpackedTarball/skia/src/ports/SkFontMgr_fontconfig \
-    UnpackedTarball/skia/src/ports/SkFontMgr_fontconfig_factory \
-    UnpackedTarball/skia/src/ports/SkImageGenerator_none \
-    UnpackedTarball/skia/src/ports/SkOSFile_posix \
-    UnpackedTarball/skia/src/ports/SkOSFile_stdio \
-    UnpackedTarball/skia/src/ports/SkOSLibrary_posix \
-    UnpackedTarball/skia/src/ports/SkTLS_pthread \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
@@ -764,7 +776,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/image/SkImage_Gpu \
     UnpackedTarball/skia/src/image/SkImage_GpuYUVA \
     UnpackedTarball/skia/src/image/SkSurface_Gpu \
-    UnpackedTarball/skia/src/gpu/gl/glx/GrGLMakeNativeInterface_glx \
     UnpackedTarball/skia/src/gpu/vk/GrVkAMDMemoryAllocator \
     UnpackedTarball/skia/src/gpu/vk/GrVkBuffer \
     UnpackedTarball/skia/src/gpu/vk/GrVkBufferView \
@@ -808,6 +819,58 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/vk/GrVkVertexBuffer \
 ))
 
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/opts/SkOpts_avx \
+    UnpackedTarball/skia/src/opts/SkOpts_crc32 \
+    UnpackedTarball/skia/src/opts/SkOpts_hsw \
+    UnpackedTarball/skia/src/opts/SkOpts_sse41 \
+    UnpackedTarball/skia/src/opts/SkOpts_sse42 \
+    UnpackedTarball/skia/src/opts/SkOpts_ssse3 \
+    UnpackedTarball/skia/src/ports/SkGlobalInitialization_default \
+    UnpackedTarball/skia/src/ports/SkImageGenerator_none \
+    UnpackedTarball/skia/src/ports/SkOSFile_stdio \
+))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/gpu/gl/win/GrGLMakeNativeInterface_win \
+    UnpackedTarball/skia/src/ports/SkDebug_win \
+    UnpackedTarball/skia/src/ports/SkFontHost_win \
+    UnpackedTarball/skia/src/fonts/SkFontMgr_indirect \
+    UnpackedTarball/skia/src/ports/SkFontMgr_win_dw \
+    UnpackedTarball/skia/src/ports/SkFontMgr_win_dw_factory \
+    UnpackedTarball/skia/src/ports/SkOSFile_win \
+    UnpackedTarball/skia/src/ports/SkOSLibrary_win \
+    UnpackedTarball/skia/src/ports/SkScalerContext_win_dw \
+    UnpackedTarball/skia/src/ports/SkTLS_win \
+    UnpackedTarball/skia/src/ports/SkTypeface_win_dw \
+    UnpackedTarball/skia/src/utils/win/SkAutoCoInitialize \
+    UnpackedTarball/skia/src/utils/win/SkDWrite \
+    UnpackedTarball/skia/src/utils/win/SkDWriteFontFileStream \
+    UnpackedTarball/skia/src/utils/win/SkDWriteGeometrySink \
+    UnpackedTarball/skia/src/utils/win/SkHRESULT \
+    UnpackedTarball/skia/src/utils/win/SkIStream \
+    UnpackedTarball/skia/src/utils/win/SkWGL_win \
+))
+else
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/gpu/gl/glx/GrGLMakeNativeInterface_glx \
+    UnpackedTarball/skia/src/ports/SkDebug_stdio \
+    UnpackedTarball/skia/src/ports/SkFontConfigInterface \
+    UnpackedTarball/skia/src/ports/SkFontConfigInterface_direct \
+    UnpackedTarball/skia/src/ports/SkFontConfigInterface_direct_factory \
+    UnpackedTarball/skia/src/ports/SkFontHost_FreeType_common \
+    UnpackedTarball/skia/src/ports/SkFontHost_FreeType \
+    UnpackedTarball/skia/src/ports/SkFontMgr_FontConfigInterface \
+    UnpackedTarball/skia/src/ports/SkFontMgr_fontconfig \
+    UnpackedTarball/skia/src/ports/SkFontMgr_fontconfig_factory \
+    UnpackedTarball/skia/src/ports/SkOSFile_posix \
+    UnpackedTarball/skia/src/ports/SkOSLibrary_posix \
+    UnpackedTarball/skia/src/ports/SkTLS_pthread \
+))
+endif
+
+
 #    UnpackedTarball/skia/src/android/SkAndroidFrameworkUtils \
 #    UnpackedTarball/skia/src/android/SkAnimatedImage \
 #    UnpackedTarball/skia/src/android/SkBitmapRegionCodec \
@@ -824,16 +887,13 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 #    UnpackedTarball/skia/src/gpu/gl/glfw/GrGLMakeNativeInterface_glfw \
 #    UnpackedTarball/skia/src/gpu/gl/iOS/GrGLMakeNativeInterface_iOS \
 #    UnpackedTarball/skia/src/gpu/gl/mac/GrGLMakeNativeInterface_mac \
-#    UnpackedTarball/skia/src/gpu/gl/win/GrGLMakeNativeInterface_win \
 
 #    UnpackedTarball/skia/src/ports/SkDebug_android \
-#    UnpackedTarball/skia/src/ports/SkDebug_win \
 #    UnpackedTarball/skia/src/ports/SkDiscardableMemory_none \
 #    UnpackedTarball/skia/src/ports/SkFontConfigInterface \
 #    UnpackedTarball/skia/src/ports/SkFontConfigInterface_direct \
 #    UnpackedTarball/skia/src/ports/SkFontConfigInterface_direct_factory \
 #    UnpackedTarball/skia/src/ports/SkFontHost_mac \
-#    UnpackedTarball/skia/src/ports/SkFontHost_win \
 #    UnpackedTarball/skia/src/ports/SkFontMgr_android \
 #    UnpackedTarball/skia/src/ports/SkFontMgr_android_factory \
 #    UnpackedTarball/skia/src/ports/SkFontMgr_android_parser \
@@ -848,22 +908,15 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 #    UnpackedTarball/skia/src/ports/SkFontMgr_FontConfigInterface \
 #    UnpackedTarball/skia/src/ports/SkFontMgr_FontConfigInterface_factory \
 #    UnpackedTarball/skia/src/ports/SkFontMgr_fuchsia \
-#    UnpackedTarball/skia/src/ports/SkFontMgr_win_dw \
-#    UnpackedTarball/skia/src/ports/SkFontMgr_win_dw_factory \
 #    UnpackedTarball/skia/src/ports/SkImageEncoder_CG \
 #    UnpackedTarball/skia/src/ports/SkImageEncoder_WIC \
 #    UnpackedTarball/skia/src/ports/SkImageGeneratorCG \
-#    UnpackedTarball/skia/src/ports/SkImageGenerator_skia \
 #    UnpackedTarball/skia/src/ports/SkImageGeneratorWIC \
+#    UnpackedTarball/skia/src/ports/SkImageGenerator_skia \
 #    UnpackedTarball/skia/src/ports/SkMemory_malloc \
 #    UnpackedTarball/skia/src/ports/SkMemory_mozalloc \
-#    UnpackedTarball/skia/src/ports/SkOSFile_win \
-#    UnpackedTarball/skia/src/ports/SkOSLibrary_win \
 #    UnpackedTarball/skia/src/ports/SkRemotableFontMgr_win_dw \
-#    UnpackedTarball/skia/src/ports/SkScalerContext_win_dw \
 #    UnpackedTarball/skia/src/ports/SkTLS_none \
-#    UnpackedTarball/skia/src/ports/SkTLS_win \
-#    UnpackedTarball/skia/src/ports/SkTypeface_win_dw \
 
 #    UnpackedTarball/skia/src/utils/mac/SkCreateCGImageRef \
 #    UnpackedTarball/skia/src/utils/mac/SkStream_mac \
