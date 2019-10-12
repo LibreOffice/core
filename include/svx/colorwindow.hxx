@@ -166,7 +166,6 @@ public:
                 sal_uInt16 nSlotId,
                 const css::uno::Reference< css::frame::XFrame >& rFrame,
                 weld::Window* pParentWindow, const MenuOrToolMenuButton &rMenuButton,
-                bool bInterimBuilder,
                 ColorSelectFunction const& rColorSelectFunction);
     weld::Container* GetWidget() { return mxTopLevel.get(); }
     virtual ~ColorWindow() override;

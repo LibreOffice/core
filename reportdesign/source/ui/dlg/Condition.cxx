@@ -173,7 +173,6 @@ void Condition::SetBackgroundDropdownClick()
                             nullptr,
                             m_pDialog,
                             MenuOrToolMenuButton(m_xActions.get(), "background"),
-                            /*bInterimBuilder*/false,
                             m_aBackColorWrapper));
 
     m_xActions->set_item_popover("background", m_xBackColorFloat->GetWidget());
@@ -188,7 +187,6 @@ void Condition::SetForegroundDropdownClick()
                             nullptr,
                             m_pDialog,
                             MenuOrToolMenuButton(m_xActions.get(), "foreground"),
-                            /*bInterimBuilder*/false,
                             m_aForeColorWrapper));
 
     m_xActions->set_item_popover("foreground", m_xForeColorFloat->GetWidget());
