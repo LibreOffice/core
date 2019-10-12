@@ -119,7 +119,7 @@ struct ToStringHelper< const char* >
     };
 
 template<>
-    struct ToStringHelper< char* > : public ToStringHelper< const char* > {};
+struct ToStringHelper< char* > : public ToStringHelper< const char* > {};
 
 template< int N >
 struct ToStringHelper< char[ N ] >
@@ -155,7 +155,7 @@ struct ToStringHelper< const sal_Unicode* >
     };
 
 template<>
-    struct ToStringHelper< sal_Unicode* > : public ToStringHelper< const sal_Unicode* > {};
+struct ToStringHelper< sal_Unicode* > : public ToStringHelper< const sal_Unicode* > {};
 
 template<int N>
 struct ToStringHelper<sal_Unicode[ N ]>
