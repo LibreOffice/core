@@ -2100,6 +2100,11 @@ void SvTreeListBox::AdjustEntryHeight()
     }
 }
 
+bool SvTreeListBox::ExpandAll( SvTreeListEntry* )
+{
+    return false;
+}
+
 bool SvTreeListBox::Expand( SvTreeListEntry* pParent )
 {
     pHdlEntry = pParent;

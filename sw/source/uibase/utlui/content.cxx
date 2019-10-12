@@ -1501,6 +1501,14 @@ SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
     return pRetObj;
 }
 
+bool SwContentTree::ExpandAll(SvTreeListEntry* pParent)
+{
+    m_bExpandAll = true;
+    bool bRet = Expand(pParent);
+    m_bExpandAll = false;
+    return bRet;
+}
+
 bool  SwContentTree::Expand( SvTreeListEntry* pParent )
 {
     if (!m_bIsRoot
@@ -1534,7 +1542,7 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
                         void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
                         aCurrOutLineNodeMap.emplace( key, false );
                         std::map<void*, bool>::iterator iter = mOutLineNodeMap.find( key );
-                        if( iter != mOutLineNodeMap.end() && mOutLineNodeMap[key])
+                        if(m_bExpandAll || (iter != mOutLineNodeMap.end() && mOutLineNodeMap[key]))
                         {
                             aCurrOutLineNodeMap[key] = true;
                             SvTreeListBox::Expand(pChild);
@@ -1551,9 +1559,28 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
         {
             SwWrtShell* pShell = GetWrtShell();
             assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pParent->GetUserData())));
-            auto const nPos = static_cast<SwOutlineContent*>(pParent->GetUserData())->GetOutlinePos();
+            auto nPos = static_cast<SwOutlineContent*>(pParent->GetUserData())->GetOutlinePos();
             void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
             mOutLineNodeMap[key] = true;
+            if(m_bExpandAll && static_cast<SwContentType*>(pParent->GetUserData())->GetType() == ContentTypeId::OUTLINE)
+            {
+                bool bBool = SvTreeListBox::Expand(pParent);
+                SvTreeListEntry* pParentNextSibling = pParent->NextSibling();
+                SvTreeListEntry* pNext = Next(pParent);
+                while(pNext && pNext != pParentNextSibling && lcl_IsContent(pNext))
+                {
+                    if(pNext->HasChildren())
+                    {
+                        assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pNext->GetUserData())));
+                        nPos = static_cast<SwOutlineContent*>(pNext->GetUserData())->GetOutlinePos();
+                        key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
+                        mOutLineNodeMap[key] = true;
+                        SvTreeListBox::Expand(pNext);
+                    }
+                    pNext = Next(pNext);
+                }
+                return bBool;
+            }
         }
     }
     return SvTreeListBox::Expand(pParent);

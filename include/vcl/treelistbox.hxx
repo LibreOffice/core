@@ -679,6 +679,7 @@ public:
     void            SetDragDropMode( DragDropMode );
     void            SetSelectionMode( SelectionMode );
 
+    virtual bool    ExpandAll(SvTreeListEntry* pParent);
     virtual bool    Expand( SvTreeListEntry* pParent );
     virtual bool    Collapse( SvTreeListEntry* pParent );
     virtual bool    Select( SvTreeListEntry* pEntry, bool bSelect=true );

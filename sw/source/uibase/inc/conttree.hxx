@@ -116,6 +116,8 @@ class SwContentTree final
     bool                m_bIsKeySpace;
     tools::Rectangle           m_aOldRectangle;
 
+    bool m_bExpandAll = false;
+
     // outline root mode drag & drop
     std::vector< SvTreeListEntry* > m_aDndOutlinesSelected;
 
@@ -207,6 +209,7 @@ public:
     sal_uInt8       GetOutlineLevel()const {return m_nOutlineLevel;}
     void            SetOutlineLevel(sal_uInt8 nSet);
 
+    virtual bool    ExpandAll( SvTreeListEntry* pParent ) override;
     /** Expand - Remember the state for content types */
     virtual bool    Expand( SvTreeListEntry* pParent ) override;
     /** Collapse - Remember the state for content types. */
