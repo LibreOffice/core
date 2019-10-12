@@ -1705,11 +1705,9 @@ ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager
                          const Reference< XFrame >& rFrame,
                          weld::Window*              pParentWindow,
                          const MenuOrToolMenuButton& rMenuButton,
-                         bool                       bInterimBuilder,
                          ColorSelectFunction const & aFunction)
     : ToolbarPopupBase(rFrame)
-    , m_xBuilder(bInterimBuilder ? Application::CreateInterimBuilder(rMenuButton.get_widget(), "svx/ui/colorwindow.ui")
-                                 : Application::CreateBuilder(rMenuButton.get_widget(), "svx/ui/colorwindow.ui"))
+    , m_xBuilder(Application::CreateBuilder(rMenuButton.get_widget(), "svx/ui/colorwindow.ui"))
     , theSlotId(nSlotId)
     , mpParentWindow(pParentWindow)
     , maMenuButton(rMenuButton)
@@ -4077,7 +4075,6 @@ void ColorListBox::createColorWindow()
                             xFrame,
                             m_pTopLevel,
                             m_xButton.get(),
-                            /*bInterimBuilder*/false,
                             m_aColorWrapper));
 
     SetNoSelection();
