@@ -48,7 +48,7 @@ private:
     OUString m_sFontName;
     OUString m_sResultFontName;
 
-    FontPrevWindow m_aPreviewWindow;
+    SvxFontPrevWindow m_aPreviewWindow;
     std::unique_ptr<weld::ScrolledWindow> m_xContentWindow;
     std::unique_ptr<weld::Container> m_xContentGrid;
     std::unique_ptr<weld::CustomWeld> m_xPreviewWindow;
