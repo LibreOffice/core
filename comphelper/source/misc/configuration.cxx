@@ -55,17 +55,13 @@ OUString getDefaultLocale(
 }
 
 OUString extendLocalizedPath(OUString const & path, OUString const & locale) {
-    OUStringBuffer buf(path);
-    buf.append("/['*");
     SAL_WARN_IF(
         locale.match("*"), "comphelper",
         "Locale \"" << locale << "\" starts with \"*\"");
     assert(locale.indexOf('&') == -1);
     assert(locale.indexOf('"') == -1);
     assert(locale.indexOf('\'') == -1);
-    buf.append(locale);
-    buf.append("']");
-    return buf.makeStringAndClear();
+    return path + "/['*" + locale + "']";
 }
 
 }
