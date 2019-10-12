@@ -29,14 +29,18 @@
 #include <unx/x11/xlimits.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 #include <opengl/x11/salvd.hxx>
+#include <skia/x11/salvd.hxx>
 
 std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateX11VirtualDevice(SalGraphics const * pGraphics,
         long &nDX, long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData,
         std::unique_ptr<X11SalGraphics> pNewGraphics)
 {
     assert(pNewGraphics);
-    if (OpenGLHelper::isVCLOpenGLEnabled())
+    if (SkiaHelper::isVCLSkiaEnabled())
+        return std::unique_ptr<SalVirtualDevice>(new X11SkiaSalVirtualDevice( pGraphics, nDX, nDY, pData, std::move(pNewGraphics) ));
+    else if (OpenGLHelper::isVCLOpenGLEnabled())
         return std::unique_ptr<SalVirtualDevice>(new X11OpenGLSalVirtualDevice( pGraphics, nDX, nDY, pData, std::move(pNewGraphics) ));
     else
         return std::unique_ptr<SalVirtualDevice>(new X11SalVirtualDevice(pGraphics, nDX, nDY, eFormat, pData, std::move(pNewGraphics)));

@@ -116,6 +116,7 @@ define gb_LinkTarget__use_skia
 $(call gb_LinkTarget_set_include,$(1),\
        -I$(call gb_UnpackedTarball_get_dir,skia)/include/core \
        -I$(call gb_UnpackedTarball_get_dir,skia)/include/config \
+       -I$(call gb_UnpackedTarball_get_dir,skia) \
        $$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_libraries,$(1),skia)
