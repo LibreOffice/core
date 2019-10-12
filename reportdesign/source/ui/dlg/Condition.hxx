@@ -27,12 +27,6 @@
 #include <svx/colorwindow.hxx>
 #include <svx/fntctrl.hxx>
 
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/button.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 
