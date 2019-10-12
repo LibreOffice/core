@@ -204,6 +204,9 @@ private:
     bool                AreChildrenTransient() const { return m_bAreChildrenTransient; }
     void                SetChildrenNotTransient() { m_bAreChildrenTransient = false; }
 
+    void ExpandAll();
+    void CollapseTo(SvTreeListEntry* pParentToCollapse);
+
 protected:
     VclPtr<SvTreeListBox>   m_pView;
     VclPtr<ScrollBar>       m_aVerSBar;
