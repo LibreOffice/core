@@ -227,6 +227,8 @@ class VCL_DLLPUBLIC SvTreeListBox
     SvTreeListEntry*        pEdEntry;
     SvLBoxItem*             pEdItem;
 
+    bool mbExpandChildren = false;
+
 protected:
     std::unique_ptr<SvImpLBox>              pImpl;
     short                   nColumns;
@@ -679,6 +681,7 @@ public:
     void            SetDragDropMode( DragDropMode );
     void            SetSelectionMode( SelectionMode );
 
+    bool            GetExpandChildren() { return mbExpandChildren; }
     virtual bool    Expand( SvTreeListEntry* pParent );
     virtual bool    Collapse( SvTreeListEntry* pParent );
     virtual bool    Select( SvTreeListEntry* pEntry, bool bSelect=true );

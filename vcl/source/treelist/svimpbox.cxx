@@ -2461,6 +2461,22 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             }
             break;
 
+        case KEY_MULTIPLY:
+            if( bMod1 && m_bSubLstOpLR )
+            {
+                // only try to expand if sublist is expandable,
+                // otherwise ignore the key press
+                if( IsExpandable() && !m_pView->IsExpanded( m_pCursor ) )
+                {
+                    m_pView->mbExpandChildren = true;
+                    m_pView->Expand( m_pCursor );
+                    m_pView->mbExpandChildren = false;
+                }
+            }
+            else
+                bKeyUsed = false;
+            break;
+
         case KEY_DIVIDE :
             if( bMod1 )
                 SelAllDestrAnch( true );
