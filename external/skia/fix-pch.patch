@@ -1,0 +1,46 @@
+--- skia/src/utils/Sk3D.cpp.sav	2019-08-15 21:59:46.324369467 +0200
++++ skia/src/utils/Sk3D.cpp	2019-09-26 13:13:34.153647165 +0200
+@@ -38,6 +38,9 @@ void Sk3LookAt(SkMatrix44* dst, const Sk
+     dst->invert(dst);
+ }
+ 
++#undef far
++#undef near
++
+ bool Sk3Perspective(SkMatrix44* dst, float near, float far, float angle) {
+     SkASSERT(far > near);
+ 
+--- skia/src/gpu/vk/GrVkSemaphore.cpp.sav	2019-08-15 21:59:46.292369407 +0200
++++ skia/src/gpu/vk/GrVkSemaphore.cpp	2019-09-26 13:12:56.041647516 +0200
+@@ -10,6 +10,7 @@
+ #include "include/gpu/GrBackendSemaphore.h"
+ #include "src/gpu/vk/GrVkGpu.h"
+ #include "src/gpu/vk/GrVkUtil.h"
++#include "tools/gpu/vk/GrVulkanDefines.h"
+ 
+ #ifdef VK_USE_PLATFORM_WIN32_KHR
+ // windows wants to define this as CreateSemaphoreA or CreateSemaphoreW
+--- skia/third_party/skcms/skcms.cc.sav	2019-09-26 13:03:33.997652697 +0200
++++ skia/third_party/skcms/skcms.cc	2019-09-26 13:13:19.185647303 +0200
+@@ -1817,7 +1817,9 @@ typedef enum {
+     Op_store_hhhh,
+     Op_store_fff,
+     Op_store_ffff,
+-} Op;
++} Op_skcms;
++
++#define Op Op_skcms
+ 
+ #if defined(__clang__)
+     template <int N, typename T> using Vec = T __attribute__((ext_vector_type(N)));
+--- skia/src/utils/win/SkDWriteGeometrySink.h.sav	2019-08-15 22:00:07.552409373 +0200
++++ skia/src/utils/win/SkDWriteGeometrySink.h	2019-09-26 13:54:17.725624642 +0200
+@@ -12,6 +12,8 @@
+ 
+ class SkPath;
+ 
++#define CONST const
++
+ #include <dwrite.h>
+ #include <d2d1.h>
+ 
