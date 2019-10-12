@@ -290,17 +290,17 @@ class SwRedlineOptionsTabPage : public SfxTabPage
 {
     std::unique_ptr<weld::ComboBox> m_xInsertLB;
     std::unique_ptr<ColorListBox> m_xInsertColorLB;
-    std::unique_ptr<FontPrevWindow> m_xInsertedPreviewWN;
+    std::unique_ptr<SvxFontPrevWindow> m_xInsertedPreviewWN;
     std::unique_ptr<weld::CustomWeld> m_xInsertedPreview;
 
     std::unique_ptr<weld::ComboBox> m_xDeletedLB;
     std::unique_ptr<ColorListBox> m_xDeletedColorLB;
-    std::unique_ptr<FontPrevWindow> m_xDeletedPreviewWN;
+    std::unique_ptr<SvxFontPrevWindow> m_xDeletedPreviewWN;
     std::unique_ptr<weld::CustomWeld> m_xDeletedPreview;
 
     std::unique_ptr<weld::ComboBox> m_xChangedLB;
     std::unique_ptr<ColorListBox> m_xChangedColorLB;
-    std::unique_ptr<FontPrevWindow> m_xChangedPreviewWN;
+    std::unique_ptr<SvxFontPrevWindow> m_xChangedPreviewWN;
     std::unique_ptr<weld::CustomWeld> m_xChangedPreview;
 
     std::unique_ptr<weld::ComboBox> m_xMarkPosLB;
@@ -314,7 +314,7 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     DECL_LINK(ChangedMaskColorPrevHdl, ColorListBox&, void);
     DECL_LINK(ColorHdl, ColorListBox&, void);
 
-    static void InitFontStyle(FontPrevWindow& rExampleWin, const OUString& rText);
+    static void InitFontStyle(SvxFontPrevWindow& rExampleWin, const OUString& rText);
 
 public:
     SwRedlineOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

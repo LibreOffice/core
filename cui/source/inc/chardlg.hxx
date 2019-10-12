@@ -35,7 +35,7 @@ class FontList;
 class SvxCharBasePage : public SfxTabPage
 {
 protected:
-    FontPrevWindow   m_aPreviewWin;
+    SvxFontPrevWindow   m_aPreviewWin;
     std::unique_ptr<weld::CustomWeld> m_xPreviewWin;
 
     bool                m_bPreviewBackgroundToCharacter;
