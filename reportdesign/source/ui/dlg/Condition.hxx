@@ -89,7 +89,7 @@ namespace rptui
 
         ConditionalExpressions          m_aConditionalExpressions;
 
-        FontPrevWindow m_aPreview;
+        SvxFontPrevWindow m_aPreview;
         weld::Window* m_pDialog;
         std::unique_ptr<weld::Builder>     m_xBuilder;
         std::unique_ptr<weld::Container>   m_xContainer;

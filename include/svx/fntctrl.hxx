@@ -28,7 +28,7 @@
 class SfxItemSet;
 class FontPrevWin_Impl;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC FontPrevWindow : public weld::CustomWidgetController
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontPrevWindow : public weld::CustomWidgetController
 {
 private:
     std::unique_ptr<FontPrevWin_Impl> pImpl;
@@ -39,8 +39,8 @@ private:
     SVX_DLLPRIVATE static void SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
 
 public:
-                        FontPrevWindow();
-    virtual             ~FontPrevWindow() override;
+                        SvxFontPrevWindow();
+    virtual             ~SvxFontPrevWindow() override;
 
     SvxFont&            GetFont();
     const SvxFont&      GetFont() const;

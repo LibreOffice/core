@@ -1568,15 +1568,15 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage(weld::Container* pPage, weld::D
     : SfxTabPage(pPage, pController, "modules/swriter/ui/optredlinepage.ui", "OptRedLinePage", &rSet)
     , m_xInsertLB(m_xBuilder->weld_combo_box("insert"))
     , m_xInsertColorLB(new ColorListBox(m_xBuilder->weld_menu_button("insertcolor"), pController->getDialog()))
-    , m_xInsertedPreviewWN(new FontPrevWindow)
+    , m_xInsertedPreviewWN(new SvxFontPrevWindow)
     , m_xInsertedPreview(new weld::CustomWeld(*m_xBuilder, "insertedpreview", *m_xInsertedPreviewWN))
     , m_xDeletedLB(m_xBuilder->weld_combo_box("deleted"))
     , m_xDeletedColorLB(new ColorListBox(m_xBuilder->weld_menu_button("deletedcolor"), pController->getDialog()))
-    , m_xDeletedPreviewWN(new FontPrevWindow)
+    , m_xDeletedPreviewWN(new SvxFontPrevWindow)
     , m_xDeletedPreview(new weld::CustomWeld(*m_xBuilder, "deletedpreview", *m_xDeletedPreviewWN))
     , m_xChangedLB(m_xBuilder->weld_combo_box("changed"))
     , m_xChangedColorLB(new ColorListBox(m_xBuilder->weld_menu_button("changedcolor"), pController->getDialog()))
-    , m_xChangedPreviewWN(new FontPrevWindow)
+    , m_xChangedPreviewWN(new SvxFontPrevWindow)
     , m_xChangedPreview(new weld::CustomWeld(*m_xBuilder, "changedpreview", *m_xChangedPreviewWN))
     , m_xMarkPosLB(m_xBuilder->weld_combo_box("markpos"))
     , m_xMarkColorLB(new ColorListBox(m_xBuilder->weld_menu_button("markcolor"), pController->getDialog()))
@@ -1776,7 +1776,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
 
 IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, weld::ComboBox&, rLB, void )
 {
-    FontPrevWindow *pPrev = nullptr;
+    SvxFontPrevWindow *pPrev = nullptr;
     ColorListBox *pColorLB;
 
     if (&rLB == m_xInsertLB.get())
@@ -1880,7 +1880,7 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, weld::ComboBox&, rLB, void )
 IMPL_LINK(SwRedlineOptionsTabPage, ColorHdl, ColorListBox&, rListBox, void)
 {
     ColorListBox* pColorLB = &rListBox;
-    FontPrevWindow *pPrev = nullptr;
+    SvxFontPrevWindow *pPrev = nullptr;
     weld::ComboBox* pLB;
 
     if (pColorLB == m_xInsertColorLB.get())
@@ -1960,7 +1960,7 @@ IMPL_LINK_NOARG(SwRedlineOptionsTabPage, ChangedMaskColorPrevHdl, ColorListBox&,
     ChangedMaskPrev();
 }
 
-void SwRedlineOptionsTabPage::InitFontStyle(FontPrevWindow& rExampleWin, const OUString& rText)
+void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin, const OUString& rText)
 {
     const AllSettings&  rAllSettings = Application::GetSettings();
     LanguageType        eLangType = rAllSettings.GetUILanguageTag().getLanguageType();

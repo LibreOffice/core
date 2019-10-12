@@ -140,7 +140,7 @@ bool CleanAndCheckEmpty(OUString& rText)
 
 class FontPrevWin_Impl
 {
-    friend class FontPrevWindow;
+    friend class SvxFontPrevWindow;
 
     SvxFont maFont;
     VclPtr<Printer> mpPrinter;
@@ -502,7 +502,7 @@ static void SetPrevFontEscapement(SvxFont& rFont, sal_uInt8 nProp, sal_uInt8 nEs
     rFont.SetEscapement(nEsc);
 }
 
-void FontPrevWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+void SvxFontPrevWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
@@ -513,7 +513,7 @@ void FontPrevWindow::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetBackground(rStyleSettings.GetWindowColor());
 }
 
-void FontPrevWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+void SvxFontPrevWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     CustomWidgetController::SetDrawingArea(pDrawingArea);
     Size aPrefSize(getPreviewStripSize(pDrawingArea->get_ref_device()));
@@ -537,47 +537,47 @@ void FontPrevWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     Invalidate();
 }
 
-FontPrevWindow::FontPrevWindow()
+SvxFontPrevWindow::SvxFontPrevWindow()
 {
 }
 
-FontPrevWindow::~FontPrevWindow()
+SvxFontPrevWindow::~SvxFontPrevWindow()
 {
 }
 
-SvxFont& FontPrevWindow::GetCTLFont()
+SvxFont& SvxFontPrevWindow::GetCTLFont()
 {
     return pImpl->maCTLFont;
 }
 
-SvxFont& FontPrevWindow::GetCJKFont()
+SvxFont& SvxFontPrevWindow::GetCJKFont()
 {
     return pImpl->maCJKFont;
 }
 
-SvxFont& FontPrevWindow::GetFont()
+SvxFont& SvxFontPrevWindow::GetFont()
 {
     pImpl->Invalidate100PercentFontWidth();     // because the user might change the size
     return pImpl->maFont;
 }
 
-const SvxFont& FontPrevWindow::GetFont() const
+const SvxFont& SvxFontPrevWindow::GetFont() const
 {
     return pImpl->maFont;
 }
 
-void FontPrevWindow::SetPreviewText( const OUString& rString )
+void SvxFontPrevWindow::SetPreviewText( const OUString& rString )
 {
     pImpl->maText = rString;
     pImpl->mbTextInited = true;
 }
 
-void FontPrevWindow::SetFontNameAsPreviewText()
+void SvxFontPrevWindow::SetFontNameAsPreviewText()
 {
     pImpl->mbUseFontNameAsText = true;
 }
 
-void FontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& rCJKOutFont, const SvxFont& rCTLFont )
+void SvxFontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& rCJKOutFont, const SvxFont& rCTLFont )
 {
     setFont(rNormalOutFont, pImpl->maFont);
     setFont(rCJKOutFont, pImpl->maCJKFont);
@@ -587,37 +587,37 @@ void FontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& rCJK
     Invalidate();
 }
 
-void FontPrevWindow::SetColor(const Color &rColor)
+void SvxFontPrevWindow::SetColor(const Color &rColor)
 {
     pImpl->mpColor.reset(new Color(rColor));
     Invalidate();
 }
 
-void FontPrevWindow::ResetColor()
+void SvxFontPrevWindow::ResetColor()
 {
     pImpl->mpColor.reset();
     Invalidate();
 }
 
-void FontPrevWindow::SetBackColor(const Color &rColor)
+void SvxFontPrevWindow::SetBackColor(const Color &rColor)
 {
     pImpl->mpBackColor.reset(new Color(rColor));
     Invalidate();
 }
 
-void FontPrevWindow::SetTextLineColor(const Color &rColor)
+void SvxFontPrevWindow::SetTextLineColor(const Color &rColor)
 {
     pImpl->mpTextLineColor.reset(new Color(rColor));
     Invalidate();
 }
 
-void FontPrevWindow::SetOverlineColor(const Color &rColor)
+void SvxFontPrevWindow::SetOverlineColor(const Color &rColor)
 {
     pImpl->mpOverlineColor.reset(new Color(rColor));
     Invalidate();
 }
 
-void FontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.Push(PushFlags::ALL);
     rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
@@ -818,29 +818,29 @@ void FontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     rRenderContext.Pop();
 }
 
-bool FontPrevWindow::IsTwoLines() const
+bool SvxFontPrevWindow::IsTwoLines() const
 {
     return pImpl->mbTwoLines;
 }
 
-void FontPrevWindow::SetTwoLines(bool bSet)
+void SvxFontPrevWindow::SetTwoLines(bool bSet)
 {
     pImpl->mbTwoLines = bSet;
 }
 
-void FontPrevWindow::SetBrackets(sal_Unicode cStart, sal_Unicode cEnd)
+void SvxFontPrevWindow::SetBrackets(sal_Unicode cStart, sal_Unicode cEnd)
 {
     pImpl->mcStartBracket = cStart;
     pImpl->mcEndBracket = cEnd;
 }
 
-void FontPrevWindow::SetFontWidthScale( sal_uInt16 n )
+void SvxFontPrevWindow::SetFontWidthScale( sal_uInt16 n )
 {
     if (pImpl->SetFontWidthScale(n))
         Invalidate();
 }
 
-void FontPrevWindow::AutoCorrectFontColor()
+void SvxFontPrevWindow::AutoCorrectFontColor()
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aFontColor(rStyleSettings.GetWindowTextColor());
@@ -855,7 +855,7 @@ void FontPrevWindow::AutoCorrectFontColor()
         pImpl->maCTLFont.SetColor(aFontColor);
 }
 
-void FontPrevWindow::SetFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont )
+void SvxFontPrevWindow::SetFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont )
 {
     sal_uInt16 nWhich;
     long nH;
@@ -871,7 +871,7 @@ void FontPrevWindow::SetFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxF
     rFont.SetFontSize(Size(0, nH));
 }
 
-void FontPrevWindow::SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont)
+void SvxFontPrevWindow::SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont)
 {
     sal_uInt16 nWhich;
     LanguageType nLang;
@@ -882,7 +882,7 @@ void FontPrevWindow::SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFo
     rFont.SetLanguage(nLang);
 }
 
-void FontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBackgroundToCharacter)
+void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBackgroundToCharacter)
 {
     sal_uInt16 nWhich;
     SvxFont& rFont = GetFont();
