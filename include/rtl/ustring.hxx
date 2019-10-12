@@ -2239,9 +2239,7 @@ public:
     */
     SAL_WARN_UNUSED_RESULT OUString copy( sal_Int32 beginIndex ) const
     {
-        rtl_uString *pNew = NULL;
-        rtl_uString_newFromSubString( &pNew, pData, beginIndex, getLength() - beginIndex );
-        return OUString( pNew, SAL_NO_ACQUIRE );
+        return copy(beginIndex, getLength() - beginIndex);
     }
 
     /**
@@ -3517,9 +3515,7 @@ public:
     static OUString boolean( bool b )
     {
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFBOOLEAN];
-        rtl_uString* pNewData = NULL;
-        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfBoolean( aBuf, b ) );
-        return OUString( pNewData, SAL_NO_ACQUIRE );
+        return OUString(aBuf, rtl_ustr_valueOfBoolean(aBuf, b));
     }
 
     /**
