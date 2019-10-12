@@ -68,10 +68,10 @@
 #include <com/sun/star/office/Quickstart.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 
+#include <vcl/vclenum.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/IconThemeInfo.hxx>
-#include <vcl/toolbox.hxx>
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #endif

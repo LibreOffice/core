@@ -288,6 +288,16 @@ namespace o3tl
     template<> struct typed_flags<WizardButtonFlags> : is_typed_flags<WizardButtonFlags, 0x001f> {};
 }
 
+// small, large, size32 force an exact toolbox size for proper alignment
+// DontCare will let the toolbox decide about its size
+enum class ToolBoxButtonSize
+{
+    DontCare,
+    Small,
+    Large,
+    Size32,
+};
+
 #endif // INCLUDED_VCL_VCLENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
