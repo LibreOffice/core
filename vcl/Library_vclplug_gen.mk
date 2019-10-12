@@ -58,6 +58,7 @@ $(eval $(call gb_Library_use_externals,vclplug_gen,\
 	icuuc \
 	valgrind \
 	Xrender \
+	skia \
 ))
 
 $(eval $(call gb_Library_add_libs,vclplug_gen,\
@@ -105,6 +106,9 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
 	vcl/opengl/x11/cairotextrender \
 	vcl/opengl/x11/gdiimpl \
 	vcl/opengl/x11/salvd \
+	vcl/skia/x11/cairotextrender \
+	vcl/skia/x11/gdiimpl \
+	vcl/skia/x11/salvd \
 ))
 
 # ultimately we want to split the x11 dependencies out

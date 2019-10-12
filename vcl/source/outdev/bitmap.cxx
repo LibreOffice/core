@@ -29,6 +29,7 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
 #endif
+#include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
@@ -689,6 +690,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
 #if HAVE_FEATURE_OPENGL
         assert(!OpenGLHelper::isVCLOpenGLEnabled());
 #endif
+        assert(!SkiaHelper::isVCLSkiaEnabled());
         tools::Rectangle aBmpRect(Point(), rBmp.GetSizePixel());
         if (!aBmpRect.Intersection(tools::Rectangle(rSrcPtPixel, rSrcSizePixel)).IsEmpty())
         {

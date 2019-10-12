@@ -34,6 +34,9 @@
 #include <vclpluginapi.h>
 #include <ControlCacheKey.hxx>
 
+#include "saltype.h"
+#include "saldisp.hxx"
+
 #include <memory>
 
 /* From <X11/Intrinsic.h> */
@@ -50,6 +53,7 @@ class X11SalVirtualDevice;
 class X11SalGraphicsImpl;
 class X11OpenGLSalGraphicsImpl;
 class X11OpenGLSalVirtualDevice;
+class X11SkiaSalVirtualDevice;
 class FreetypeFont;
 class ImplLayoutArgs;
 class PhysicalFontCollection;
@@ -74,6 +78,7 @@ public:
     void                            Init( SalFrame *pFrame, Drawable aDrawable, SalX11Screen nXScreen );
     void                            Init( X11SalVirtualDevice *pVirtualDevice, SalColormap* pColormap = nullptr, bool bDeleteColormap = false );
     void                            Init( X11OpenGLSalVirtualDevice *pVirtualDevice );
+    void                            Init( X11SkiaSalVirtualDevice *pVirtualDevice );
     void                            DeInit();
 
     virtual SalGraphicsImpl*        GetImpl() const override;
@@ -312,6 +317,7 @@ protected:
     bool                            bVirDev_ : 1;       // is VirDev
     bool                            bFontGC_ : 1;       // is Font GC valid
     bool const                      m_bOpenGL : 1;
+    bool const                      m_bSkia  : 1;
 
 private:
     std::unique_ptr<SalGraphicsImpl> mxImpl;
