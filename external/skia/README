@@ -1,0 +1,14 @@
+External package containing skia.
+
+https://skia.org/
+
+How to update the tarball:
+
+git clone https://skia.googlesource.com/skia.git
+cd skia
+git checkout chrome/mXX
+rm -rf .git gitignore
+cd ..
+tar cvJf skia-mXX.tar.xz skia
+
+(where XX refers to the branch version)

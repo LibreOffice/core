@@ -1050,6 +1050,11 @@ libo_FUZZ_ARG_ENABLE(pdfium,
         [Disable building PDFium.])
 )
 
+libo_FUZZ_ARG_ENABLE(skia,
+    AS_HELP_STRING([--enable-skia],
+        [Enable building Skia.])
+)
+
 ###############################################################################
 
 dnl ---------- *** ----------
@@ -10873,6 +10878,19 @@ AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
 AC_SUBST(POPPLER_CFLAGS)
 AC_SUBST(POPPLER_LIBS)
+
+# Skia?
+AC_MSG_CHECKING([whether to build Skia])
+ENABLE_SKIA=
+if test "$enable_skia" = "yes"; then
+    AC_MSG_RESULT([yes])
+    ENABLE_SKIA=TRUE
+    AC_DEFINE(HAVE_FEATURE_SKIA)
+    BUILD_TYPE="$BUILD_TYPE SKIA"
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_SKIA)
 
 SYSTEM_GPGMEPP=
 
