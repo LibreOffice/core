@@ -1639,11 +1639,11 @@ static SFErrCodes doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
 
     table = getTable(t, O_head);
     table_size = getTableSize(t, O_head);
-    if (table_size < 52) {
+    if (table_size < HEAD_Length_offset) {
         return SFErrCodes::TtFormat;
     }
-    t->unitsPerEm = GetUInt16(table, 18);
-    int indexfmt = GetInt16(table, 50);
+    t->unitsPerEm = GetUInt16(table, HEAD_unitsPerEm_offset);
+    int indexfmt = GetInt16(table, HEAD_indexToLocFormat_offset);
 
     if( ((indexfmt != 0) && (indexfmt != 1)) || (t->unitsPerEm <= 0) ) {
         return SFErrCodes::TtFormat;
@@ -1937,7 +1937,7 @@ SFErrCodes CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
     /**                       hhea                         **/
     const sal_uInt8* p = getTable(ttf, O_hhea);
     if (p) {
-        hhea = TrueTypeTableNew_hhea(GetUInt16(p, 4), GetUInt16(p, 6), GetUInt16(p, 8), GetUInt16(p, 18), GetUInt16(p, 20));
+        hhea = TrueTypeTableNew_hhea(GetUInt16(p, HHEA_ascender_offset), GetUInt16(p, HHEA_descender_offset), GetUInt16(p, HHEA_lineGap_offset), GetUInt16(p, HHEA_caretSlopeRise_offset), GetUInt16(p, HHEA_caretSlopeRun_offset));
     } else {
         hhea = TrueTypeTableNew_hhea(0, 0, 0, 0, 0);
     }
@@ -1946,13 +1946,13 @@ SFErrCodes CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
 
     p = getTable(ttf, O_head);
     assert(p != nullptr);
-    head = TrueTypeTableNew_head(GetUInt32(p, 4),
-                                 GetUInt16(p, 16),
-                                 GetUInt16(p, 18),
-                                 p+20,
-                                 GetUInt16(p, 44),
-                                 GetUInt16(p, 46),
-                                 GetInt16(p, 48));
+    head = TrueTypeTableNew_head(GetUInt32(p, HEAD_fontRevision_offset),
+                                 GetUInt16(p, HEAD_flags_offset),
+                                 GetUInt16(p, HEAD_unitsPerEm_offset),
+                                 p+HEAD_created_offset,
+                                 GetUInt16(p, HEAD_macStyle_offset),
+                                 GetUInt16(p, HEAD_lowestRecPPEM_offset),
+                                 GetInt16(p, HEAD_fontDirectionHint_offset));
 
     /**                       glyf                          **/
 
@@ -1988,10 +1988,10 @@ SFErrCodes CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
     /**                       post                          **/
     if ((p = getTable(ttf, O_post)) != nullptr) {
         post = TrueTypeTableNew_post(0x00030000,
-                                     GetUInt32(p, 4),
-                                     GetUInt16(p, 8),
-                                     GetUInt16(p, 10),
-                                     GetUInt16(p, 12));
+                                     GetUInt32(p, POST_italicAngle_offset),
+                                     GetUInt16(p, POST_underlinePosition_offset),
+                                     GetUInt16(p, POST_underlineThickness_offset),
+                                     GetUInt16(p, POST_isFixedPitch_offset));
     } else {
         post = TrueTypeTableNew_post(0x00030000, 0, 0, 0, 0);
     }
@@ -2364,24 +2364,21 @@ void GetTTFontMetrics(const uint8_t *pHhea, size_t nHhea,
     /* There are 3 different versions of OS/2 table: original (68 bytes long),
      * Microsoft old (78 bytes long) and Microsoft new (86 bytes long,)
      * Apple's documentation recommends looking at the table length.
-     *
-     * FIXME: horribly outdated comment and horrible code that uses hard-coded
-     * offsets to read the table.
      */
-    if (nOs2 >= 76 + 2)
+    if (nOs2 >= OS2_V0_length)
     {
-        info->fsSelection   = GetUInt16(pOs2, 62);
-        info->typoAscender  = GetInt16(pOs2,  68);
-        info->typoDescender = GetInt16(pOs2,  70);
-        info->typoLineGap   = GetInt16(pOs2,  72);
-        info->winAscent     = GetUInt16(pOs2, 74);
-        info->winDescent    = GetUInt16(pOs2, 76);
+        info->fsSelection   = GetUInt16(pOs2, OS2_fsSelection_offset);
+        info->typoAscender  = GetInt16(pOs2, OS2_typoAscender_offset);
+        info->typoDescender = GetInt16(pOs2, OS2_typoDescender_offset);
+        info->typoLineGap   = GetInt16(pOs2, OS2_typoLineGap_offset);
+        info->winAscent     = GetUInt16(pOs2, OS2_winAscent_offset);
+        info->winDescent    = GetUInt16(pOs2, OS2_winDescent_offset);
     }
 
-    if (nHhea >= 8 + 2) {
-        info->ascender      = GetInt16(pHhea, 4);
-        info->descender     = GetInt16(pHhea, 6);
-        info->linegap       = GetInt16(pHhea, 8);
+    if (nHhea >= HHEA_lineGap_offset + 2) {
+        info->ascender      = GetInt16(pHhea, HHEA_ascender_offset);
+        info->descender     = GetInt16(pHhea, HHEA_descender_offset);
+        info->linegap       = GetInt16(pHhea, HHEA_lineGap_offset);
     }
 }
 
@@ -2401,50 +2398,46 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
     const sal_uInt8* table = getTable(ttf, O_OS2);
     sal_uInt32 table_size = getTableSize(ttf, O_OS2);
     if (table && table_size >= 42) {
-        info->weight = GetUInt16(table, 4);
-        info->width  = GetUInt16(table, 6);
+        info->weight = GetUInt16(table, OS2_usWeightClass_offset);
+        info->width  = GetUInt16(table, OS2_usWidthClass_offset);
 
-        /* There are 3 different versions of OS/2 table: original (68 bytes long),
-         * Microsoft old (78 bytes long) and Microsoft new (86 bytes long,)
-         * Apple's documentation recommends looking at the table length.
-         */
-        if (table_size >= 78) {
-            info->typoAscender = XUnits(UPEm,GetInt16(table, 68));
-            info->typoDescender = XUnits(UPEm, GetInt16(table, 70));
-            info->typoLineGap = XUnits(UPEm, GetInt16(table, 72));
-            info->winAscent = XUnits(UPEm, GetUInt16(table, 74));
-            info->winDescent = XUnits(UPEm, GetUInt16(table, 76));
+        if (table_size >= OS2_V0_length) {
+            info->typoAscender = XUnits(UPEm,GetInt16(table, OS2_typoAscender_offset));
+            info->typoDescender = XUnits(UPEm, GetInt16(table, OS2_typoDescender_offset));
+            info->typoLineGap = XUnits(UPEm, GetInt16(table, OS2_typoLineGap_offset));
+            info->winAscent = XUnits(UPEm, GetUInt16(table, OS2_winAscent_offset));
+            info->winDescent = XUnits(UPEm, GetUInt16(table, OS2_winDescent_offset));
             /* sanity check; some fonts treat winDescent as signed
            * violating the standard */
             if( info->winDescent > 5*UPEm )
-                info->winDescent = XUnits(UPEm, GetInt16(table, 76));
+                info->winDescent = XUnits(UPEm, GetInt16(table, OS2_winDescent_offset));
         }
-        memcpy(info->panose, table + 32, 10);
-        info->typeFlags = GetUInt16( table, 8 );
+        memcpy(info->panose, table + OS2_panose_offset, OS2_panoseNbBytes_offset);
+        info->typeFlags = GetUInt16( table, OS2_fsType_offset );
     }
 
     table = getTable(ttf, O_post);
     if (table && getTableSize(ttf, O_post) >= 12+sizeof(sal_uInt32)) {
-        info->pitch  = GetUInt32(table, 12);
-        info->italicAngle = GetInt32(table, 4);
+        info->pitch  = GetUInt32(table, POST_isFixedPitch_offset);
+        info->italicAngle = GetInt32(table, POST_italicAngle_offset);
     }
 
     table = getTable(ttf, O_head);      /* 'head' tables is always there */
     table_size = getTableSize(ttf, O_head);
     if (table_size >= 46) {
-        info->xMin = XUnits(UPEm, GetInt16(table, 36));
-        info->yMin = XUnits(UPEm, GetInt16(table, 38));
-        info->xMax = XUnits(UPEm, GetInt16(table, 40));
-        info->yMax = XUnits(UPEm, GetInt16(table, 42));
-        info->macStyle = GetInt16(table, 44);
+        info->xMin = XUnits(UPEm, GetInt16(table, HEAD_xMin_offset));
+        info->yMin = XUnits(UPEm, GetInt16(table, HEAD_yMin_offset));
+        info->xMax = XUnits(UPEm, GetInt16(table, HEAD_xMax_offset));
+        info->yMax = XUnits(UPEm, GetInt16(table, HEAD_yMax_offset));
+        info->macStyle = GetInt16(table, HEAD_macStyle_offset);
     }
 
     table = getTable(ttf, O_hhea);
     table_size = getTableSize(ttf, O_hhea);
     if (table && table_size >= 10) {
-        info->ascender  = XUnits(UPEm, GetInt16(table, 4));
-        info->descender = XUnits(UPEm, GetInt16(table, 6));
-        info->linegap   = XUnits(UPEm, GetInt16(table, 8));
+        info->ascender  = XUnits(UPEm, GetInt16(table, HHEA_ascender_offset));
+        info->descender = XUnits(UPEm, GetInt16(table, HHEA_descender_offset));
+        info->linegap   = XUnits(UPEm, GetInt16(table, HHEA_lineGap_offset));
     }
 
     table = getTable(ttf, O_vhea);
@@ -2623,19 +2616,19 @@ bool getTTCoverage(
 {
     bool bRet = false;
     // parse OS/2 header
-    if (nLength >= 58)
+    if (nLength >= OS2_Legacy_length)
     {
         rUnicodeRange = std::bitset<UnicodeCoverage::MAX_UC_ENUM>();
-        append(rUnicodeRange.get(),  0, GetUInt32(pTable, 42));
-        append(rUnicodeRange.get(), 32, GetUInt32(pTable, 46));
-        append(rUnicodeRange.get(), 64, GetUInt32(pTable, 50));
-        append(rUnicodeRange.get(), 96, GetUInt32(pTable, 54));
+        append(rUnicodeRange.get(),  0, GetUInt32(pTable, OS2_ulUnicodeRange1_offset));
+        append(rUnicodeRange.get(), 32, GetUInt32(pTable, OS2_ulUnicodeRange2_offset));
+        append(rUnicodeRange.get(), 64, GetUInt32(pTable, OS2_ulUnicodeRange3_offset));
+        append(rUnicodeRange.get(), 96, GetUInt32(pTable, OS2_ulUnicodeRange4_offset));
         bRet = true;
-        if (nLength >= 86)
+        if (nLength >= OS2_V1_length)
         {
             rCodePageRange = std::bitset<CodePageCoverage::MAX_CP_ENUM>();
-            append(rCodePageRange.get(),  0, GetUInt32(pTable, 78));
-            append(rCodePageRange.get(), 32, GetUInt32(pTable, 82));
+            append(rCodePageRange.get(),  0, GetUInt32(pTable, OS2_ulCodePageRange1_offset));
+            append(rCodePageRange.get(), 32, GetUInt32(pTable, OS2_ulCodePageRange2_offset));
         }
     }
     return bRet;
