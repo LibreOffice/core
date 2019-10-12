@@ -836,6 +836,13 @@ OString extractSingleTableFromSelect( const std::vector< OString > &vec )
 
 }
 
+OUString getDefaultValue(ConnectionSettings const *settings)
+{
+    return (PQserverVersion( settings->pConnection ) < 80000)?
+               OUString("pg_attrdef.adsrc"):
+               OUString("pg_get_expr(pg_attrdef.adbin, pg_attrdef.adrelid, true)");
+}
+
 css::uno::Sequence< sal_Int32 > string2intarray( const OUString & str )
 {
     css::uno::Sequence< sal_Int32 > ret;
