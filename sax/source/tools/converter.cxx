@@ -422,28 +422,18 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
         rBuffer.appendAscii( psUnit );
 }
 
-static OUString getTrueString()
-{
-    return "true";
-}
-
-static OUString getFalseString()
-{
-    return "false";
-}
-
 /** convert string to boolean */
 bool Converter::convertBool( bool& rBool, const OUString& rString )
 {
-    rBool = rString == getTrueString();
+    rBool = rString == "true";
 
-    return rBool || (rString == getFalseString());
+    return rBool || (rString == "false");
 }
 
 /** convert boolean to string */
 void Converter::convertBool( OUStringBuffer& rBuffer, bool bValue )
 {
-    rBuffer.append( bValue ? getTrueString() : getFalseString() );
+    rBuffer.append( bValue );
 }
 
 /** convert string to percent */
