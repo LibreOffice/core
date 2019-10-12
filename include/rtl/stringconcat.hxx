@@ -15,6 +15,7 @@
 #include "rtl/ustring.h"
 
 #include <cstddef>
+#include <string>
 #include <string_view>
 #include <utility>
 
