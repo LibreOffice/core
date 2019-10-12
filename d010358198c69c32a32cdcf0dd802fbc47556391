@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_5dd7bd4c",
+        "filename": "extensions/source/scanner/scanwin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-12T14:43:00Z",
+      "side": 1,
+      "message": "Possibly cleaner would be\n\n    STARTUPINFOW si{};\n    si.cb \u003d sizeof(STARTUPINFOW);",
+      "range": {
+        "startLine": 268,
+        "startChar": 12,
+        "endLine": 270,
+        "endChar": 41
+      },
+      "revId": "d010358198c69c32a32cdcf0dd802fbc47556391",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
