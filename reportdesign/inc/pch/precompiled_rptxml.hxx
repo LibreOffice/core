@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:57:00 using:
+ Generated on 2019-10-12 16:36:20 using:
  ./bin/update_pch reportdesign rptxml --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -29,6 +29,7 @@
 #include <new>
 #include <unordered_set>
 #include <vector>
+#include <boost/property_tree/ptree.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -89,6 +90,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <sax/tools/converter.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/link.hxx>
 #include <tools/toolsdllapi.h>
 #include <ucbhelper/content.hxx>
