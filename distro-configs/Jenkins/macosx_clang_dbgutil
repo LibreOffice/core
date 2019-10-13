@@ -1,1 +1,2 @@
 --enable-dbgutil
+--disable-dependency-tracking
