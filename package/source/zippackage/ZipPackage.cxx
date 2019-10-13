@@ -1756,7 +1756,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         if ( !( aValue >>= aKeys ) )
             throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 2 );
 
-        if ( aKeys.hasElements() )
+/*        if ( aKeys.hasElements() )
         {
             bool bHasSHA256 = false;
             bool bHasSHA1 = false;
@@ -1770,7 +1770,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
 
             if ( !bHasSHA256 && !bHasSHA1 )
                 throw IllegalArgumentException(THROW_WHERE "Expected keys are not provided!", uno::Reference< uno::XInterface >(), 2 );
-        }
+        }*/
 
         m_aStorageEncryptionKeys = aKeys;
         m_aEncryptionKey.realloc( 0 );

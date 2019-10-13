@@ -810,10 +810,21 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
 
                 bool bPreselectPassword = false;
-                const SfxUnoAnyItem* pOldEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(GetMedium()->GetItemSet(), SID_ENCRYPTIONDATA, false);
                 const SfxStringItem* pOldPasswordItem = SfxItemSet::GetItem<SfxStringItem>(GetMedium()->GetItemSet(), SID_PASSWORD, false);
-                if ( pOldEncryptionDataItem || pOldPasswordItem )
+                if (pOldPasswordItem)
+                {
                     bPreselectPassword = true;
+                }
+                else
+                {
+                    const SfxUnoAnyItem* pOldEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(GetMedium()->GetItemSet(), SID_ENCRYPTIONDATA, false);
+                    if (pOldEncryptionDataItem)
+                    {
+                        uno::Sequence< beans::NamedValue > aEncryptionData;
+                        pOldEncryptionDataItem->GetValue() >>= aEncryptionData;
+
+                    }
+                }
 
                 uno::Sequence< beans::PropertyValue > aDispatchArgs;
                 if ( rReq.GetArgs() )
