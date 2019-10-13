@@ -882,13 +882,7 @@ Reference<XStream> XmlFilterBase::implGetOutputStream( MediaDescriptor& rMediaDe
                                         MediaDescriptor::PROP_ENCRYPTIONDATA(),
                                         Sequence< NamedValue >() );
 
-    OUString aPassword;
-    auto pProp = std::find_if(aMediaEncData.begin(), aMediaEncData.end(),
-        [](const NamedValue& rProp) { return rProp.Name == "OOXPassword"; });
-    if (pProp != aMediaEncData.end())
-        pProp->Value >>= aPassword;
-
-    if (aPassword.isEmpty())
+    if (aMediaEncData.getLength() == 0)
     {
         return FilterBase::implGetOutputStream( rMediaDescriptor );
     }
