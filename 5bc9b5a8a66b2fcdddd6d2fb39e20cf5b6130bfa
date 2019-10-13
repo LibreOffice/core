@@ -22,6 +22,30 @@
       "revId": "5bc9b5a8a66b2fcdddd6d2fb39e20cf5b6130bfa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_cfc23086",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-10-13T19:04:20Z",
+      "side": 1,
+      "message": "yes, i had to do that to make some of code in\n    test/source/xmltesttools.cxx, \nwhere it uses \n    pXmlDoc-\u003ename \nhappy",
+      "parentUuid": "7f7f9b97_6fb8bc29",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 42
+      },
+      "revId": "5bc9b5a8a66b2fcdddd6d2fb39e20cf5b6130bfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
