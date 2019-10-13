@@ -175,6 +175,23 @@ SfxVoidItem Backward SID_MOREBACK
     GroupId = SfxGroupId::Modify;
 ]
 
+SfxVoidItem ObjectBackOne SID_FRAME_DOWN
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Modify;
+]
+
 SfxVoidItem BeforeObject SID_BEFORE_OBJ
 ()
 [
@@ -1442,6 +1459,23 @@ SfxVoidItem SetFillColor SID_SETFILLCOLOR
 ]
 
 SfxVoidItem Forward SID_MOREFRONT
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Modify;
+]
+
+SfxVoidItem ObjectForwardOne SID_FRAME_UP
 ()
 [
     AutoUpdate = FALSE,

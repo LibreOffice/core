@@ -554,6 +554,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_FRAME_UP // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_BEFORE_OBJ // ole : no, status : no
     [
         ExecMethod = FuTemporary ;
@@ -570,6 +575,11 @@ interface DrawView
         StateMethod = GetMenuState ;
     ]
     SID_MOREBACK // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_FRAME_DOWN // ole : no, status : play rec
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
