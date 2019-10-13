@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_4f52a015",
+        "filename": "vcl/inc/sft.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-10-13T15:28:31Z",
+      "side": 1,
+      "message": "nice work!\n\nNote that with modern C++, it is better to use\n  constexpr\nrather than\n  static const\nespeically for interger values.\n\nstatic const implies that a storage location needs to be allocated for the constant value, which is not actually what we want",
+      "revId": "3fd8f4fe7fb4e7e0c5bad26c81f7aaa1c71ba5eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
