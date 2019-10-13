@@ -59,7 +59,7 @@
     </style:style>
     <style:style style:name="P2" style:family="paragraph">
       <style:paragraph-properties fo:text-align="start"/>
-      <style:text-properties fo:font-size="36pt" fo:language="en" fo:country="US"/>
+      <style:text-properties fo:font-size="36pt" style:font-size-asian="36pt" style:font-size-complex="36pt" fo:language="en" fo:country="US"/>
     </style:style>
     <style:style style:name="P3" style:family="paragraph">
       <loext:graphic-properties draw:fill="none"/>
@@ -70,7 +70,7 @@
       <style:text-properties fo:font-size="20pt"/>
     </style:style>
     <style:style style:name="T1" style:family="text">
-      <style:text-properties fo:font-size="18pt" fo:language="en" fo:country="US"/>
+      <style:text-properties fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt" fo:language="en" fo:country="US"/>
     </style:style>
     <text:list-style style:name="L1">
       <text:list-level-style-bullet text:level="1" text:bullet-char="●">
