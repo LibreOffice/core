@@ -357,7 +357,7 @@ static const int POST_isFixedPitch_offset = 12;
 
   => length head table = 54 bytes
 */
-static const int HEAD_Length_offset = 54;
+static const int HEAD_Length = 54;
 
 static const int HEAD_majorVersion_offset = 0;
 static const int HEAD_fontRevision_offset = 4;
@@ -393,13 +393,38 @@ static const int HEAD_glyphDataFormat_offset = 52;
   ...
 
 */
-static const int MAXP_Version1Length_offset = 32;
+static const int MAXP_Version1Length = 32;
 
 static const int MAXP_numGlyphs_offset = 4;
 static const int MAXP_maxPoints_offset = 6;
 static const int MAXP_maxContours_offset = 8;
 static const int MAXP_maxCompositePoints_offset = 10;
 static const int MAXP_maxCompositeContours_offset = 12;
+
+/*
+  Some table glyf consts
+  cf https://docs.microsoft.com/fr-fr/typography/opentype/spec/glyf
+  For 0.5 version
+  TYPE       NAME                       FROM BYTE
+  int16      numberOfContours           0
+  int16      xMin                       2
+  int16      yMin                       4
+  int16      xMax                       6
+  int16      yMax                       8
+
+  END                                  10
+
+  => length glyf table = 10 bytes
+
+*/
+static const int GLYF_Length = 10;
+
+static const int GLYF_numberOfContours_offset = 0;
+static const int GLYF_xMin_offset = 2;
+static const int GLYF_yMin_offset = 4;
+static const int GLYF_xMax_offset = 6;
+static const int GLYF_yMax_offset = 8;
+
 
 /**
  * @defgroup sft Sun Font Tools Exported Functions

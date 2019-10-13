@@ -303,10 +303,10 @@ SFErrCodes StreamToFile(TrueTypeCreator *_this, const char* fname)
 /*    Table         data points to
  * --------------------------------------------
  *    generic       tdata_generic struct
- *    'head'        HEAD_Length_offset bytes of memory
+ *    'head'        HEAD_Length bytes of memory
  *    'hhea'        HHEA_Length bytes of memory
  *    'loca'        tdata_loca struct
- *    'maxp'        MAXP_Version1Length_offset bytes of memory
+ *    'maxp'        MAXP_Version1Length bytes of memory
  *    'glyf'        list of GlyphData structs (defined in sft.h)
  *    'name'        list of NameRecord structs (defined in sft.h)
  *    'post'        tdata_post struct
@@ -503,7 +503,7 @@ static int GetRawData_generic(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 
 
 static int GetRawData_head(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
 {
-    *len = HEAD_Length_offset;
+    *len = HEAD_Length;
     *ptr = static_cast<sal_uInt8 *>(_this->data);
     *tag = T_head;
 
@@ -538,7 +538,7 @@ static int GetRawData_loca(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
 
 static int GetRawData_maxp(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
 {
-    *len = MAXP_Version1Length_offset;
+    *len = MAXP_Version1Length;
     *ptr = static_cast<sal_uInt8 *>(_this->data);
     *tag = T_maxp;
 
@@ -858,7 +858,7 @@ TrueTypeTable *TrueTypeTableNew_head(sal_uInt32 fontRevision,
     assert(created != nullptr);
 
     TrueTypeTable* table  = static_cast<TrueTypeTable*>(smalloc(sizeof(TrueTypeTable)));
-    sal_uInt8* ptr = ttmalloc(HEAD_Length_offset);
+    sal_uInt8* ptr = ttmalloc(HEAD_Length);
 
     PutUInt32(0x00010000, ptr, 0);             /* version */
     PutUInt32(fontRevision, ptr, 4);
@@ -925,10 +925,10 @@ TrueTypeTable *TrueTypeTableNew_loca()
 TrueTypeTable *TrueTypeTableNew_maxp( const sal_uInt8* maxp, int size)
 {
     TrueTypeTable* table = static_cast<TrueTypeTable*>(smalloc(sizeof(TrueTypeTable)));
-    table->data = ttmalloc(MAXP_Version1Length_offset);
+    table->data = ttmalloc(MAXP_Version1Length);
 
-    if (maxp && size == MAXP_Version1Length_offset) {
-        memcpy(table->data, maxp, MAXP_Version1Length_offset);
+    if (maxp && size == MAXP_Version1Length) {
+        memcpy(table->data, maxp, MAXP_Version1Length);
     }
 
     table->tag = T_maxp;
