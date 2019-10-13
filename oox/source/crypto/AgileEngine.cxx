@@ -756,7 +756,7 @@ bool AgileEngine::setupEncryptionKey(OUString const & rPassword)
     return true;
 }
 
-css::uno::Sequence<css::beans::NamedValue> AgileEngine::writeEncryptionInfo()
+css::uno::Sequence<sal_Int8> AgileEngine::writeEncryptionInfo()
 {
     Reference<XOutputStream> aEncryptionInfoStream(
         mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.io.SequenceOutputStream", mxContext),
@@ -820,20 +820,19 @@ css::uno::Sequence<css::beans::NamedValue> AgileEngine::writeEncryptionInfo()
     rStream.close();
     aEncryptionInfoStream->flush();
 
-    // Store all streams into sequence and return back
-    comphelper::SequenceAsHashMap aStreams;
-
     Reference<XSequenceOutputStream> aEncryptionInfoSequenceStream(aEncryptionInfoStream, UNO_QUERY);
-    aStreams["EncryptionInfo"] <<= aEncryptionInfoSequenceStream->getWrittenBytes();
-    return aStreams.getAsConstNamedValueList();
+    return aEncryptionInfoSequenceStream->getWrittenBytes();
 }
 
-void AgileEngine::encrypt(const css::uno::Reference<css::io::XInputStream> &  rxInputStream,
-                          css::uno::Reference<css::io::XOutputStream> & rxOutputStream)
+css::uno::Sequence<sal_Int8> AgileEngine::writeEncryptedDocument(const css::uno::Reference<css::io::XInputStream>& rxInputStream)
 {
     CryptoHash aCryptoHash(mInfo.hmacKey, cryptoHashTypeFromString(mInfo.hashAlgorithm));
 
-    BinaryXOutputStream aBinaryOutputStream(rxOutputStream, false);
+    Reference<XOutputStream> aOutputStream(
+        mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.io.SequenceOutputStream", mxContext),
+        UNO_QUERY);
+    BinaryXOutputStream aBinaryOutputStream(aOutputStream, false);
+
     BinaryXInputStream aBinaryInputStream(rxInputStream, false);
     Reference<XSeekable> xSeekable(rxInputStream, UNO_QUERY);
     sal_uInt32 nLength = xSeekable->getLength();
@@ -890,6 +889,18 @@ void AgileEngine::encrypt(const css::uno::Reference<css::io::XInputStream> &  rx
     }
     mInfo.hmacHash = aCryptoHash.finalize();
     encryptHmacValue();
+
+    Reference<XSequenceOutputStream> aSequenceStream(aOutputStream, UNO_QUERY);
+    return aSequenceStream->getWrittenBytes();
+}
+
+
+css::uno::Sequence<css::beans::NamedValue> AgileEngine::encrypt(const css::uno::Reference<css::io::XInputStream> &  rxInputStream)
+{
+    comphelper::SequenceAsHashMap aStreams;
+    aStreams["EncryptedPackage"] <<= writeEncryptedDocument(rxInputStream);
+    aStreams["EncryptionInfo"] <<= writeEncryptionInfo();
+    return aStreams.getAsConstNamedValueList();
 }
 
 } // namespace core

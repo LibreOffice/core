@@ -52,11 +52,6 @@ interface XPackageEncryption: com::sun::star::uno::XInterface
     /**
         TODO
      */
-    sequence<com::sun::star::beans::NamedValue> writeEncryptionInfo();
-
-    /**
-        TODO
-     */
     sequence<com::sun::star::beans::NamedValue> createEncryptionData([in] string rPassword);
 
     /**
@@ -67,8 +62,7 @@ interface XPackageEncryption: com::sun::star::uno::XInterface
     /**
         TODO
      */
-    void encrypt([in] com::sun::star::io::XInputStream rxInputStream,
-                 [out] com::sun::star::io::XOutputStream rxOutputStream);
+    sequence<com::sun::star::beans::NamedValue> encrypt([in] com::sun::star::io::XInputStream rxInputStream);
 
     /**
         TODO
