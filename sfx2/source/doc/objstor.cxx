@@ -2764,11 +2764,13 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
     std::unique_ptr<SfxAllItemSet> pMergedParams(new SfxAllItemSet( *pMedium->GetItemSet() ));
 
     // in "SaveAs" title and password will be cleared ( maybe the new itemset contains new values, otherwise they will be empty )
-    pMergedParams->ClearItem( SID_ENCRYPTIONDATA );
-    pMergedParams->ClearItem( SID_PASSWORD );
     // #i119366# - As the SID_ENCRYPTIONDATA and SID_PASSWORD are using for setting password together, we need to clear them both.
     // Also, ( maybe the new itemset contains new values, otherwise they will be empty )
-    pMergedParams->ClearItem( SID_ENCRYPTIONDATA );
+    if (pMergedParams->HasItem( SID_PASSWORD ))
+    {
+        pMergedParams->ClearItem( SID_PASSWORD );
+        pMergedParams->ClearItem( SID_ENCRYPTIONDATA );
+    }
     pMergedParams->ClearItem( SID_DOCINFO_TITLE );
 
     pMergedParams->ClearItem( SID_INPUTSTREAM );
