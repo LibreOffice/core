@@ -517,7 +517,7 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 nPos,
     aStr += " \\o";
     if (aWW8Ruby.GetDirective())
     {
-        aStr += "\\a" + OUString(aWW8Ruby.GetDirective());
+        aStr += "\\a" + OUStringLiteral1(aWW8Ruby.GetDirective());
     }
     aStr += "(\\s\\up ";
 

@@ -7,8 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
+
+// ---------------------------------------------------------------
+// += tests
 
 namespace test1
 {
@@ -147,4 +152,41 @@ void g(int x, const Foo& aValidation)
 }
 }
 
+// ---------------------------------------------------------------
+// detecting OUString temporary construction in +
+
+namespace test9
+{
+OUString getByValue();
+const OUString& getByRef();
+void f1(OUString s, OUString t, int i, const char* pChar)
+{
+    // no warning expected
+    t = t + "xxx";
+    // expected-error@+1 {{avoid constructing temporary copies during + [loplugin:stringadd]}}
+    s = s + OUString("xxx");
+    // expected-error@+1 {{avoid constructing temporary copies during + [loplugin:stringadd]}}
+    s = s + OUString(getByRef());
+
+    // no warning expected
+    OUString a;
+    a = a + getByValue();
+
+    // no warning expected
+    OUString b;
+    b = b + (i == 1 ? "aaa" : "bbb");
+
+    // no warning expected
+    OUString c;
+    c = c + OUString(pChar, strlen(pChar), RTL_TEXTENCODING_UTF8);
+}
+void f2(char ch)
+{
+    OString s;
+    // expected-error@+1 {{avoid constructing temporary copies during + [loplugin:stringadd]}}
+    s = s + OString("xxx");
+    // no warning expected, no OStringLiteral1
+    s = s + OString(ch);
+}
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

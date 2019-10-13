@@ -6378,7 +6378,7 @@ void DocxAttributeOutput::FontCharset( sal_uInt8 nCharSet, rtl_TextEncoding nEnc
 
     OString aCharSet( OString::number( nCharSet, 16 ) );
     if ( aCharSet.getLength() == 1 )
-        aCharSet = OString( "0" ) + aCharSet;
+        aCharSet = "0" + aCharSet;
     pAttr->add( FSNS( XML_w, XML_val ), aCharSet.getStr());
 
     if( GetExport().GetFilter().getVersion( ) != oox::core::ECMA_DIALECT )

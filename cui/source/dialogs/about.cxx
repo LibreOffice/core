@@ -224,7 +224,7 @@ OUString AboutDialog::GetLocaleString()
     if ( pLocale && pLocale->Language )
     {
         if (pLocale->Country && rtl_uString_getLength( pLocale->Country) > 0)
-            aLocaleStr = OUString(pLocale->Language) + "_" + OUString(pLocale->Country);
+            aLocaleStr = OUString::unacquired(&pLocale->Language) + "_" + OUString::unacquired(&pLocale->Country);
         else
             aLocaleStr = OUString(pLocale->Language);
         if (pLocale->Variant && rtl_uString_getLength( pLocale->Variant) > 0)

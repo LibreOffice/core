@@ -323,7 +323,7 @@ void ScHTMLExport::WriteHeader()
         if (!xDocProps->getPrintedBy().isEmpty())
         {
             OUT_COMMENT( GLOBSTR( STR_DOC_INFO ) );
-            OUString aStrOut = ( GLOBSTR( STR_DOC_PRINTED ) ) + ": ";
+            OUString aStrOut = GLOBSTR( STR_DOC_PRINTED ) + ": ";
             lcl_AddStamp( aStrOut, xDocProps->getPrintedBy(),
                 xDocProps->getPrintDate(), *ScGlobal::pLocaleData );
             OUT_COMMENT( aStrOut );

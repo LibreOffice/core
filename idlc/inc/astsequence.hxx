@@ -25,7 +25,7 @@ class AstSequence : public AstType
 {
 public:
     AstSequence(AstType const * pMemberType, AstScope* pScope)
-        : AstType(NT_sequence, OString("[]")+pMemberType->getScopedName(), pScope)
+        : AstType(NT_sequence, OStringLiteral("[]")+pMemberType->getScopedName(), pScope)
         , m_pMemberType(pMemberType)
     {}
 

@@ -1607,7 +1607,7 @@ IMPL_LINK(ScAcceptChgDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     int nSortedCol = rTreeView.get_sort_column();
     for (sal_Int32 i = 0; i < 5; ++i)
-        m_xPopup->set_active(OString("calcsort") + OString::number(i), i == nSortedCol);
+        m_xPopup->set_active("calcsort" + OString::number(i), i == nSortedCol);
 
     m_xPopup->set_sensitive("calcedit", false);
 

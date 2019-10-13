@@ -116,7 +116,7 @@ namespace Translate
     {
         static std::unordered_map<OString, std::locale> aCache;
         OString sIdentifier = rLocale.getGlibcLocaleString(".UTF-8").toUtf8();
-        OString sUnique = sIdentifier + OString(pPrefixName);
+        OString sUnique = sIdentifier + pPrefixName;
         auto aFind = aCache.find(sUnique);
         if (aFind != aCache.end())
             return aFind->second;

@@ -837,7 +837,7 @@ void WW8AttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 /*nPos*/,
     aStr += " \\o";
     if (aWW8Ruby.GetDirective())
     {
-        aStr += "\\a" + OUString(aWW8Ruby.GetDirective());
+        aStr += OUStringLiteral("\\a") + OUStringLiteral1(aWW8Ruby.GetDirective());
     }
     aStr += "(\\s\\up ";
 
@@ -1241,7 +1241,7 @@ void AttributeOutputBase::TOXMark( const SwTextNode& rNode, const SwTOXMark& rAt
             break;
 
         case TOX_USER:
-            sText += "\" \\f \"" + OUString(static_cast<sal_Char>( 'A' + GetExport( ).GetId( *rAttr.GetTOXType() ) ));
+            sText += "\" \\f \"" + OUStringLiteral1(static_cast<sal_Char>( 'A' + GetExport( ).GetId( *rAttr.GetTOXType() ) ));
             [[fallthrough]];
         case TOX_CONTENT:
             {

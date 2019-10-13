@@ -799,7 +799,7 @@ bool SvxULSpaceItem::GetPresentation
                 rText += GetMetricText( static_cast<long>(nUpper), eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
-            rText += OUString(cpDelim) + EditResId(RID_SVXITEMS_ULSPACE_LOWER);
+            rText += cpDelim + EditResId(RID_SVXITEMS_ULSPACE_LOWER);
             if ( 100 != nPropLower )
             {
                 rText += unicode::formatPercent(nPropLower,
@@ -955,12 +955,12 @@ bool SvxProtectItem::GetPresentation
 
     if ( bCntnt )
         pId = RID_SVXITEMS_PROT_CONTENT_TRUE;
-    rText = EditResId(pId) + OUString(cpDelim);
+    rText = EditResId(pId) + cpDelim;
     pId = RID_SVXITEMS_PROT_SIZE_FALSE;
 
     if ( bSize )
         pId = RID_SVXITEMS_PROT_SIZE_TRUE;
-    rText += EditResId(pId) + OUString(cpDelim);
+    rText += EditResId(pId) + cpDelim;
     pId = RID_SVXITEMS_PROT_POS_FALSE;
 
     if ( bPos )
@@ -1166,15 +1166,15 @@ bool SvxShadowItem::GetPresentation
     {
         case SfxItemPresentation::Nameless:
         {
-            rText = ::GetColorString( aShadowColor ) + OUString(cpDelim);
+            rText = ::GetColorString( aShadowColor ) + cpDelim;
             const char* pId = RID_SVXITEMS_TRANSPARENT_FALSE;
 
             if ( aShadowColor.GetTransparency() )
                 pId = RID_SVXITEMS_TRANSPARENT_TRUE;
             rText += EditResId(pId) +
-                    OUString(cpDelim) +
+                    cpDelim +
                     GetMetricText( static_cast<long>(nWidth), eCoreUnit, ePresUnit, &rIntl ) +
-                    OUString(cpDelim) +
+                    cpDelim +
                     EditResId(RID_SVXITEMS_SHADOW[static_cast<int>(eLocation)]);
             return true;
         }
@@ -1182,16 +1182,16 @@ bool SvxShadowItem::GetPresentation
         {
             rText = EditResId(RID_SVXITEMS_SHADOW_COMPLETE) +
                     ::GetColorString( aShadowColor ) +
-                    OUString(cpDelim);
+                    cpDelim;
 
             const char* pId = RID_SVXITEMS_TRANSPARENT_FALSE;
             if ( aShadowColor.GetTransparency() )
                 pId = RID_SVXITEMS_TRANSPARENT_TRUE;
             rText += EditResId(pId) +
-                    OUString(cpDelim) +
+                    cpDelim +
                     GetMetricText( static_cast<long>(nWidth), eCoreUnit, ePresUnit, &rIntl ) +
                     " " + EditResId(GetMetricId(ePresUnit)) +
-                    OUString(cpDelim) +
+                    cpDelim +
                     EditResId(RID_SVXITEMS_SHADOW[static_cast<int>(eLocation)]);
             return true;
         }
@@ -3047,7 +3047,7 @@ bool SvxBrushItem::GetPresentation
 {
     if ( GPOS_NONE  == eGraphicPos )
     {
-        rText = ::GetColorString( aColor ) + OUString(cpDelim);
+        rText = ::GetColorString( aColor ) + cpDelim;
         const char* pId = RID_SVXITEMS_TRANSPARENT_FALSE;
 
         if ( aColor.GetTransparency() )

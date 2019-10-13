@@ -1025,7 +1025,7 @@ IMPL_LINK(SwRedlineAcceptDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (nColumn == -1)
         nColumn = 4;
     for (sal_Int32 i = 0; i < 5; ++i)
-        m_xPopup->set_active(OString("writersort") + OString::number(i), i == nColumn);
+        m_xPopup->set_active("writersort" + OString::number(i), i == nColumn);
 
     OString sCommand = m_xPopup->popup_at_rect(&rTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
 

@@ -642,7 +642,7 @@ OUString SvxBorderLine::GetValueString(MapUnit eSrcUnit,
         RID_DASH_DOT,
         RID_DASH_DOT_DOT
     };
-    OUString aStr = "(" + ::GetColorString( aColor ) + OUString(cpDelim);
+    OUString aStr = "(" + ::GetColorString( aColor ) + cpDelim;
 
     if ( static_cast<int>(m_nStyle) < int(SAL_N_ELEMENTS(aStyleIds)) )
     {

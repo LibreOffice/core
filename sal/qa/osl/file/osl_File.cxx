@@ -262,7 +262,7 @@ static void deleteTestDirectory(const OUString& dirname)
 
     nError = Directory::remove(aPathURL);
 
-    OString strError = OString("In deleteTestDirectory function: remove Directory ") +
+    OString strError = "In deleteTestDirectory function: remove Directory " +
         OUStringToOString(aPathURL, RTL_TEXTENCODING_ASCII_US);
     CPPUNIT_ASSERT_MESSAGE(strError.getStr(), (osl::FileBase::E_None == nError) || (nError == osl::FileBase::E_NOENT));
 }
@@ -370,8 +370,8 @@ static OString outputError(const OString & returnVal, const OString & rightVal, 
     if (returnVal == rightVal)
         return OString();
 
-    OString aString = OString(msg) +
-        ": the returned value is '" +
+    OString aString = msg +
+        OStringLiteral(": the returned value is '") +
         returnVal +
         "', but the value should be '" +
         rightVal +
@@ -4787,7 +4787,7 @@ namespace osl_Directory
                 osl_File_Attribute_OwnWrite |
                 osl_File_Attribute_OwnExe);
             deleteTestDirectory(aTmpDir);
-            sError = OString("test for create function: create a directory under '") +
+            sError = "test for create function: create a directory under '" +
                 OUStringToOString(aTmpDir, RTL_TEXTENCODING_ASCII_US) +
                 "' for access test.";
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sError.getStr(), osl::FileBase::E_ACCES, nError1);

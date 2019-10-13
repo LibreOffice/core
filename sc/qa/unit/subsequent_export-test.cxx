@@ -3174,7 +3174,7 @@ void ScExportTest::testSwappedOutImageExport()
         // Check whether the export code swaps in the image which was swapped out before.
         ScDocShellRef xDocSh = loadDoc("document_with_two_images.", FORMAT_ODS);
 
-        const OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter];
+        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + aFilterNames[nFilter];
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xDocSh.is());
 
         // Export the document and import again for a check
@@ -3288,7 +3288,7 @@ void ScExportTest::testLinkedGraphicRT()
     {
         // Load the original file with one image
         ScDocShellRef xDocSh = loadDoc("document_with_linked_graphic.", FORMAT_ODS);
-        const OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter];
+        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + aFilterNames[nFilter];
 
         // Export the document and import again for a check
         ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), nFilter);
@@ -3330,7 +3330,7 @@ void ScExportTest::testImageWithSpecialID()
     {
         ScDocShellRef xDocSh = loadDoc("images_with_special_IDs.", FORMAT_ODS);
 
-        const OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter];
+        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + aFilterNames[nFilter];
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xDocSh.is());
 
         // Export the document and import again for a check

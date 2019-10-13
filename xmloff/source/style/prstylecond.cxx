@@ -68,9 +68,8 @@ OUString GetParaStyleCondExternal( OUString const &internal)
     {
         if (internal.compareToAscii( g_ConditionMap[i].aInternal ) == 0)
         {
-            OUString aResult( GetXMLToken( g_ConditionMap[i].nExternal ) );
-
-            aResult += "()";
+            OUString aResult = GetXMLToken( g_ConditionMap[i].nExternal ) +
+                    "()";
             if (g_ConditionMap[i].aValue != -1)
             {
                 aResult += "=" +

@@ -213,7 +213,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                     rbi.reset();
 
                     // ;rule (only)
-                    const OString aBIMapRuleOnlyKey( OString(";") + rule);
+                    const OString aBIMapRuleOnlyKey( OStringLiteral(";") + rule);
                     aMapIt = theBIMap.find( aBIMapRuleOnlyKey);
                     bInMap = (aMapIt != theBIMap.end());
                     if (bInMap)

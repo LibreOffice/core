@@ -176,7 +176,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
             sOut += OString(pOpt);
         else
         {
-            sOut += OString(OOO_STRING_SVTOOLS_HTML_O_sdevent) +
+            sOut += OOO_STRING_SVTOOLS_HTML_O_sdevent +
                 OUStringToOString(sListener, RTL_TEXTENCODING_ASCII_US) + "-" +
                 OUStringToOString(sMethod, RTL_TEXTENCODING_ASCII_US);
         }
@@ -510,8 +510,8 @@ void SwHTMLWriter::OutForm( bool bOn,
 
         if( pStr )
         {
-            sOut += " " OOO_STRING_SVTOOLS_HTML_O_enctype "=\"" +
-                OString(pStr) + "\"";
+            sOut += OStringLiteral(" " OOO_STRING_SVTOOLS_HTML_O_enctype "=\"") +
+                pStr + "\"";
         }
     }
 
@@ -853,8 +853,8 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                     auto b = o3tl::tryAccess<bool>(aTmp2);
                     pWrapStr = (b && *b) ? OOO_STRING_SVTOOLS_HTML_WW_hard
                                          : OOO_STRING_SVTOOLS_HTML_WW_soft;
-                    sOptions += " " OOO_STRING_SVTOOLS_HTML_O_wrap "=\"" +
-                        OString(pWrapStr) + "\"";
+                    sOptions += OStringLiteral(" " OOO_STRING_SVTOOLS_HTML_O_wrap "=\"") +
+                        pWrapStr + "\"";
                 }
             }
             else
@@ -931,11 +931,11 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     if( eTag == TAG_NONE )
         return rWrt;
 
-    OString sOut = "<" + OString(TagNames[eTag]);
+    OString sOut = OStringLiteral("<") + TagNames[eTag];
     if( eType != TYPE_NONE )
     {
-        sOut += " " OOO_STRING_SVTOOLS_HTML_O_type "=\"" +
-            OString(TypeNames[eType]) + "\"";
+        sOut += OStringLiteral(" " OOO_STRING_SVTOOLS_HTML_O_type "=\"") +
+            TypeNames[eType] + "\"";
     }
 
     aTmp = xPropSet->getPropertyValue("Name");

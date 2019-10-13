@@ -100,7 +100,7 @@ VendorSettings::VendorSettings():
         if (m_xmlDocVendorSettings == nullptr)
             throw FrameworkException(
                 JFW_E_ERROR,
-                OString("[Java framework] Error while parsing file: ")
+                OStringLiteral("[Java framework] Error while parsing file: ")
                 + sSettingsPath + ".");
 
         m_xmlPathContextVendorSettings = xmlXPathNewContext(m_xmlDocVendorSettings);
@@ -130,9 +130,9 @@ boost::optional<VersionInfo> VendorSettings::getVersionInformation(const OUStrin
 
     VersionInfo aVersionInfo;
     //Get minVersion
-    OString sExpression = OString(
-        "/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
-        osVendor + OString("\"]/jf:minVersion");
+    OString sExpression =
+        "/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"" +
+        osVendor + "\"]/jf:minVersion";
 
     CXPathObjectPtr xPathObjectMin =
         xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpression.getStr()),
@@ -152,8 +152,8 @@ boost::optional<VersionInfo> VendorSettings::getVersionInformation(const OUStrin
     }
 
     //Get maxVersion
-    sExpression = OString("/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
-        osVendor + OString("\"]/jf:maxVersion");
+    sExpression = "/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"" +
+        osVendor + "\"]/jf:maxVersion";
     CXPathObjectPtr xPathObjectMax = xmlXPathEvalExpression(
         reinterpret_cast<xmlChar const *>(sExpression.getStr()),
         m_xmlPathContextVendorSettings);
@@ -172,8 +172,8 @@ boost::optional<VersionInfo> VendorSettings::getVersionInformation(const OUStrin
     }
 
     //Get excludeVersions
-    sExpression = OString("/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
-        osVendor + OString("\"]/jf:excludeVersions/jf:version");
+    sExpression = "/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"" +
+        osVendor + "\"]/jf:excludeVersions/jf:version";
     CXPathObjectPtr xPathObjectVersions =
         xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpression.getStr()),
                                m_xmlPathContextVendorSettings);
@@ -253,7 +253,7 @@ OString BootParams::getClasspath()
         if (pCp)
         {
             char szSep[] = {SAL_PATHSEPARATOR,0};
-            sClassPath += OString(szSep) + OString(pCp);
+            sClassPath += OStringLiteral(szSep) + pCp;
         }
         SAL_INFO(
             "jfw.level2",

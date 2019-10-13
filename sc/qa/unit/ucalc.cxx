@@ -4821,7 +4821,7 @@ void Test::testAutoFillSimple()
         }
         else
         {
-            OString aMsg = OString("wrong value in row: ") + OString::number(nRow);
+            OString aMsg = "wrong value in row: " + OString::number(nRow);
             double nVal = m_pDoc->GetValue(0, nRow, 0);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), 10.0, nVal);
         }

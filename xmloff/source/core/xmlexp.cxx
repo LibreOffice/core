@@ -1364,8 +1364,7 @@ ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             // office:mimetype = ... (only for stream containing the content)
             if( eClass != XML_TOKEN_INVALID )
             {
-                OUString aTmp( "application/vnd.oasis.opendocument." );
-                aTmp += GetXMLToken( eClass );
+                OUString aTmp = "application/vnd.oasis.opendocument." + GetXMLToken( eClass );
                 AddAttribute( XML_NAMESPACE_OFFICE, XML_MIMETYPE, aTmp );
             }
         }

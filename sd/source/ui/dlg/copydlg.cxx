@@ -34,7 +34,7 @@
 
 namespace sd {
 
-#define TOKEN ';'
+constexpr char TOKEN = ';';
 
 CopyDlg::CopyDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pInView)
     : SfxDialogController(pWindow, "modules/sdraw/ui/copydlg.ui", "DuplicateDialog")
@@ -71,13 +71,13 @@ CopyDlg::~CopyDlg()
 {
     SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
     OUString sStr =
-        OUString::number(m_xNumFldCopies->get_value()) + OUString(TOKEN) +
-        OUString::number(m_xMtrFldMoveX->get_value(FieldUnit::NONE)) + OUString(TOKEN) +
-        OUString::number(m_xMtrFldMoveY->get_value(FieldUnit::NONE)) + OUString(TOKEN) +
-        OUString::number(m_xMtrFldAngle->get_value(FieldUnit::NONE)) + OUString(TOKEN) +
-        OUString::number(m_xMtrFldWidth->get_value(FieldUnit::NONE)) + OUString(TOKEN) +
-        OUString::number(m_xMtrFldHeight->get_value(FieldUnit::NONE)) + OUString(TOKEN) +
-        OUString::number(static_cast<sal_uInt32>(m_xLbStartColor->GetSelectEntryColor())) + OUString(TOKEN) +
+        OUString::number(m_xNumFldCopies->get_value()) + OUStringLiteral1(TOKEN) +
+        OUString::number(m_xMtrFldMoveX->get_value(FieldUnit::NONE)) + OUStringLiteral1(TOKEN) +
+        OUString::number(m_xMtrFldMoveY->get_value(FieldUnit::NONE)) + OUStringLiteral1(TOKEN) +
+        OUString::number(m_xMtrFldAngle->get_value(FieldUnit::NONE)) + OUStringLiteral1(TOKEN) +
+        OUString::number(m_xMtrFldWidth->get_value(FieldUnit::NONE)) + OUStringLiteral1(TOKEN) +
+        OUString::number(m_xMtrFldHeight->get_value(FieldUnit::NONE)) + OUStringLiteral1(TOKEN) +
+        OUString::number(static_cast<sal_uInt32>(m_xLbStartColor->GetSelectEntryColor())) + OUStringLiteral1(TOKEN) +
         OUString::number(static_cast<sal_uInt32>(m_xLbEndColor->GetSelectEntryColor()));
     aDlgOpt.SetUserItem("UserItem", css::uno::makeAny(sStr));
 }

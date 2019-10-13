@@ -2289,7 +2289,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         if( TOX_USER == pTOX->GetType() )
                         {
                             sStr += "\""
-                                + OUString(static_cast<sal_Char>( 'A' + GetExport( ).GetId( *pTOX->GetTOXType() ) ))
+                                + OUStringLiteral1(static_cast<sal_Char>( 'A' + GetExport( ).GetId( *pTOX->GetTOXType() ) ))
                                 + sEntryEnd;
                         }
                     }

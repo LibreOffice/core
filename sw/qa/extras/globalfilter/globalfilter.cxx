@@ -111,7 +111,7 @@ void Test::testEmbeddedGraphicRoundtrip()
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
 
-        const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDraws->getCount());
 
         // First image
@@ -163,7 +163,7 @@ void Test::testLinkedGraphicRT()
             mxComponent->dispose();
         mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/document_with_linked_graphic.odt"), "com.sun.star.text.TextDocument");
 
-        const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -248,7 +248,7 @@ void Test::testImageWithSpecialID()
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
 
-        const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDraws->getCount());
 
         uno::Reference<drawing::XShape> xImage = getShape(1);
@@ -346,7 +346,7 @@ void Test::testGraphicShape()
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
 
-        const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDraws->getCount());
 
         uno::Reference<drawing::XShape> xImage = lcl_getShape(mxComponent, true);
@@ -371,7 +371,7 @@ void Test::testGraphicShape()
         // Second image is a linked one
         xImage = lcl_getShape(mxComponent, false);
         XPropSet.set(xImage, uno::UNO_QUERY);
-        const OString sFailedImageLoad = OString("Couldn't load the shape/image for ") + rFilterName.toUtf8();
+        const OString sFailedImageLoad = OStringLiteral("Couldn't load the shape/image for ") + rFilterName.toUtf8();
         CPPUNIT_ASSERT_MESSAGE(sFailedImageLoad.getStr(), xImage.is());
 
         // Check size
@@ -411,7 +411,7 @@ void Test::testCharHighlightBody()
         mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/char_highlight.docx"),
                                       "com.sun.star.text.TextDocument");
 
-        const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -599,7 +599,7 @@ void Test::testMSCharBackgroundEditing()
         mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/char_background_editing.docx"),
                                       "com.sun.star.text.TextDocument");
 
-        const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
 
         // Check whether import was done on the right way
         uno::Reference< text::XTextRange > xPara = getParagraph(1);
@@ -711,7 +711,7 @@ void Test::testCharBackgroundToHighlighting()
         mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/char_background.odt"),
                                       "com.sun.star.text.TextDocument");
 
-        OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+        OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
 
 
         SvtFilterOptions& rOpt = SvtFilterOptions::Get();
@@ -890,7 +890,7 @@ void Test::testRedlineFlags()
 
         // tdf#97103 check that redline mode is properly restored
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            OString(OString("redline mode not restored in ") + rFilterName.toUtf8()).getStr(),
+            OString(OStringLiteral("redline mode not restored in ") + rFilterName.toUtf8()).getStr(),
             static_cast<int>(nRedlineFlags), static_cast<int>(rIDRA.GetRedlineFlags()));
     }
 }
@@ -906,7 +906,7 @@ void Test::testBulletAsImage()
 
     for (OUString const & rFilterName : aFilterNames)
     {
-        OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+        OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
 
         if (mxComponent.is())
             mxComponent->dispose();
@@ -1049,7 +1049,7 @@ void Test::testTextFormField()
             mxComponent->dispose();
         mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/text_form_field.odt"), "com.sun.star.text.TextDocument");
 
-        const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -1104,7 +1104,7 @@ void Test::testCheckBoxFormField()
             mxComponent->dispose();
         mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/checkbox_form_field.odt"), "com.sun.star.text.TextDocument");
 
-        const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -1170,7 +1170,7 @@ void Test::testDropDownFormField()
             mxComponent->dispose();
         mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/dropdown_form_field.odt"), "com.sun.star.text.TextDocument");
 
-        const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -1255,7 +1255,7 @@ void Test::testDateFormField()
             mxComponent->dispose();
         mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/date_form_field.odt"), "com.sun.star.text.TextDocument");
 
-        const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -1371,7 +1371,7 @@ void Test::testDateFormFieldCharacterFormatting()
             mxComponent->dispose();
         mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/date_form_field_char_formatting.odt"), "com.sun.star.text.TextDocument");
 
-        const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);

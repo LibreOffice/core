@@ -579,7 +579,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112118_DOCX, "tdf112118.docx")
         for (const auto& side : style.sideParams)
         {
             const OUString sSide = OUString::createFromAscii(side.sideName);
-            const OString sStage = OString(style.styleName) + " " + side.sideName;
+            const OString sStage = style.styleName + OStringLiteral(" ") + side.sideName;
 
             sal_Int32 nMargin = getProperty<sal_Int32>(xStyle, sSide + "Margin");
             CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(sStage + " margin width").getStr(),

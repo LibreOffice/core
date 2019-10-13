@@ -113,9 +113,11 @@ template<>
 struct ToStringHelper< const char* >
     {
     static std::size_t length( const char* str ) {
-        return strlen( str );
+        return str ? strlen( str ) : 0;
     }
-    static char* addData( char* buffer, const char* str ) { return addDataCString( buffer, str ); }
+    static char* addData( char* buffer, const char* str ) {
+        return str ? addDataCString( buffer, str ) : buffer;
+    }
     static const bool allowOStringConcat = true;
     static const bool allowOUStringConcat = false;
     };
@@ -148,9 +150,11 @@ template<>
 struct ToStringHelper< const sal_Unicode* >
     {
     static std::size_t length( const sal_Unicode* str ) {
-        return std::char_traits<char16_t>::length( str );
+        return str ? std::char_traits<char16_t>::length( str ) : 0;
     }
-    static sal_Unicode* addData( sal_Unicode* buffer, const sal_Unicode* str ) { return addDataUString( buffer, str ); }
+    static sal_Unicode* addData( sal_Unicode* buffer, const sal_Unicode* str ) {
+        return str ? addDataUString( buffer, str ) : buffer;
+    }
     static const bool allowOStringConcat = false;
     static const bool allowOUStringConcat = true;
     };

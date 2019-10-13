@@ -1076,7 +1076,7 @@ OUString SwDocInfoField::ExpandImpl(SwRootFrame const*const) const
                     }
                     else if( aAny >>= aDuration )
                     {
-                        sVal = OUString(aDuration.Negative ? '-' : '+')
+                        sVal = OUStringLiteral1(aDuration.Negative ? '-' : '+')
                              + SwViewShell::GetShellRes()->sDurationFormat;
                         sVal = sVal.replaceFirst("%1", OUString::number( aDuration.Years  ) );
                         sVal = sVal.replaceFirst("%2", OUString::number( aDuration.Months ) );

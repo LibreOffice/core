@@ -212,7 +212,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
 
             if( pStr )
             {
-                sOut += " " OOO_STRING_SVTOOLS_HTML_O_type "=\"" + OString(pStr) + "\"";
+                sOut += OStringLiteral(" " OOO_STRING_SVTOOLS_HTML_O_type "=\"") + pStr + "\"";
             }
         }
         else if( SVX_NUM_BITMAP == eType )

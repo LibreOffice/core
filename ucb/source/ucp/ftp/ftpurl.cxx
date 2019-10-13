@@ -770,10 +770,10 @@ void FTPURL::del() const
             } catch(const curl_exception&) {
             }
         }
-        dele = OString("RMD ") + dele;
+        dele = "RMD " + dele;
     }
     else if(aDirentry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN)
-        dele = OString("DELE ") + dele;
+        dele = "DELE " + dele;
     else
         return;
 

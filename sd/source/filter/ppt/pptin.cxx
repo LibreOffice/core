@@ -487,7 +487,7 @@ bool ImplSdPPTImport::Import()
                                                     aHyperlink.aConvSubString = maSlideNameList[ nPageNumber ];
                                                 if ( aHyperlink.aConvSubString.isEmpty() )
                                                 {
-                                                    aHyperlink.aConvSubString = SdResId( STR_PAGE ) + " " + ( mpDoc->CreatePageNumValue( static_cast<sal_uInt16>(nPageNumber) + 1 ) );
+                                                    aHyperlink.aConvSubString = SdResId( STR_PAGE ) + " " + mpDoc->CreatePageNumValue( static_cast<sal_uInt16>(nPageNumber) + 1 );
                                                 }
                                             } else {
                                                 // if sub address is given but not internal, use it as it is
