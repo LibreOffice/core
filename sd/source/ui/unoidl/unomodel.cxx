@@ -562,6 +562,9 @@ void SAL_CALL SdXImpressDocument::lockControllers(  )
         throw lang::DisposedException();
 
     mpDoc->setLock(true);
+
+    mbWasUndo = mpDoc->IsUndoEnabled();
+    mpDoc->EnableUndo(false);
 }
 
 void SAL_CALL SdXImpressDocument::unlockControllers(  )
@@ -575,6 +578,8 @@ void SAL_CALL SdXImpressDocument::unlockControllers(  )
     {
         mpDoc->setLock(false);
     }
+
+    mpDoc->EnableUndo(mbWasUndo);
 }
 
 sal_Bool SAL_CALL SdXImpressDocument::hasControllersLocked(  )

@@ -97,6 +97,8 @@ private:
     const bool mbImpressDoc;
     bool mbClipBoard;
 
+    bool mbWasUndo;
+
     css::uno::WeakReference< css::drawing::XDrawPages > mxDrawPagesAccess;
     css::uno::WeakReference< css::drawing::XDrawPages > mxMasterPagesAccess;
     css::uno::WeakReference< css::container::XNameAccess > mxLayerManager;
