@@ -55,6 +55,9 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <utility>
+
+#include <com/sun/star/document/XUndoManagerSupplier.hpp>
+
 #if OSL_DEBUG_LEVEL > 1
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #endif
@@ -425,7 +428,23 @@ bool PowerPointExport::exportDocument()
     aProperty.Value <<= getFileUrl();
     aProperties.push_back(aProperty);
 
+    const Reference< document::XUndoManagerSupplier > xUndoManagerSupplier( mXModel, uno::UNO_QUERY );
+    Reference< util::XLockable > xUndoManager;
+    bool bWasUnLocked = true;
+    if (xUndoManagerSupplier.is())
+    {
+        xUndoManager = xUndoManagerSupplier->getUndoManager();
+        if (xUndoManager.is())
+        {
+            bWasUnLocked = !xUndoManager->isLocked();
+            xUndoManager->lock();
+        }
+    }
+
     exportPPT(aProperties);
+
+    if(xUndoManager.is() && bWasUnLocked)
+        xUndoManager->unlock();
 
     mPresentationFS->singleElementNS(XML_p, XML_sldSz,
                                      XML_cx, OString::number(PPTtoEMU(maDestPageSize.Width)),
