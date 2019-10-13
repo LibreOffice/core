@@ -1472,7 +1472,12 @@ private:
 
         GdkWindow *pWindow = gtk_widget_get_window(pParent);
         m_pContext = gdk_window_create_gl_context(pWindow, nullptr);
-        gdk_gl_context_realize(m_pContext, nullptr);
+        if (!m_pContext)
+            return false;
+
+        if (!gdk_gl_context_realize(m_pContext, nullptr))
+            return false;
+
         gdk_gl_context_make_current(m_pContext);
         glGenFramebuffersEXT(1, &m_nFrameBuffer);
         glGenRenderbuffersEXT(1, &m_nRenderBuffer);
