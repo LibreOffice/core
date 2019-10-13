@@ -1415,7 +1415,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
         // the password will be set in case user decide so
         rpSet->ClearItem( SID_PASSWORDINTERACTION );
         rpSet->ClearItem( SID_PASSWORD );
-        rpSet->ClearItem( SID_ENCRYPTIONDATA );
+        //rpSet->ClearItem( SID_ENCRYPTIONDATA );
         rpSet->ClearItem( SID_RECOMMENDREADONLY );
         rpSet->ClearItem( SID_MODIFYPASSWORDINFO );
 
