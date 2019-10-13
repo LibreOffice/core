@@ -25,6 +25,7 @@
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -231,17 +232,28 @@ sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDe
         Reference<css::lang::XMultiServiceFactory> aFactory(getComponentContext()->getServiceManager(), UNO_QUERY_THROW);
         Reference< XExporter > xExporter(aFactory->createInstanceWithArguments("com.sun.star.comp.Impress.oox.PowerPointExport", aArguments), UNO_QUERY);
 
-        if (xExporter.is())
+        if (Reference<XFilter> xFilter{ xExporter, UNO_QUERY })
         {
-            Reference< XComponent > xDocument( getModel(), UNO_QUERY );
-            Reference< XFilter > xFilter( xExporter, UNO_QUERY );
-
-            if (xFilter.is())
+            Reference<util::XLockable> xUndoManager;
+            bool bWasUnLocked = true;
+            if (Reference<document::XUndoManagerSupplier> xUMS{ getModel(), UNO_QUERY })
             {
-                xExporter->setSourceDocument( xDocument );
-                if( xFilter->filter( rDescriptor ) )
-                    return true;
+                xUndoManager = xUMS->getUndoManager();
+                if (xUndoManager.is())
+                {
+                    bWasUnLocked = !xUndoManager->isLocked();
+                    xUndoManager->lock();
+                }
             }
+            comphelper::ScopeGuard aGuard([xUndoManager, bWasUnLocked] {
+                if (xUndoManager && bWasUnLocked)
+                    xUndoManager->unlock();
+            });
+
+            Reference< XComponent > xDocument(getModel(), UNO_QUERY);
+            xExporter->setSourceDocument(xDocument);
+            if (xFilter->filter(rDescriptor))
+                return true;
         }
     }
 
