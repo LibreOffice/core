@@ -106,7 +106,12 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     }
 
     if ( maFillProperties.moFillType.has() )
-        rPropMap.setProperty( PROP_CharColor, maFillProperties.getBestSolidColor().getColor( rFilter.getGraphicHelper() ));
+    {
+        if( maFillProperties.moFillType.differsFrom( XML_noFill ))
+            rPropMap.setProperty( PROP_CharColor, maFillProperties.getBestSolidColor().getColor( rFilter.getGraphicHelper() ));
+        else
+            rPropMap.setProperty( PROP_CharColor, COL_WHITE);
+    }
 
     if( moLang.has() && !moLang.get().isEmpty() )
     {
