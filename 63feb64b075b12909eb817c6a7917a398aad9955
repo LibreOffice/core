@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_cf38f0d4",
+        "filename": "connectivity/source/drivers/postgresql/pq_tools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-10-13T15:26:20Z",
+      "side": 1,
+      "message": "this could do with a better name?\nSomething like\ngetColumnExpressionForDefaultSettingValue\n?",
+      "revId": "63feb64b075b12909eb817c6a7917a398aad9955",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
