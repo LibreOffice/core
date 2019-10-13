@@ -256,27 +256,27 @@ namespace vcl
   => length for OS/2 table version 5 = 100 bytes
 
 */
-static const int OS2_Legacy_length = 68;
-static const int OS2_V0_length = 78;
-static const int OS2_V1_length = 86;
+constexpr int OS2_Legacy_length = 68;
+constexpr int OS2_V0_length = 78;
+constexpr int OS2_V1_length = 86;
 
-static const int OS2_usWeightClass_offset = 4;
-static const int OS2_usWidthClass_offset = 6;
-static const int OS2_fsType_offset = 8;
-static const int OS2_panose_offset = 32;
-static const int OS2_panoseNbBytes_offset = 10;
-static const int OS2_ulUnicodeRange1_offset = 42;
-static const int OS2_ulUnicodeRange2_offset = 46;
-static const int OS2_ulUnicodeRange3_offset = 50;
-static const int OS2_ulUnicodeRange4_offset = 54;
-static const int OS2_fsSelection_offset = 62;
-static const int OS2_typoAscender_offset = 68;
-static const int OS2_typoDescender_offset = 70;
-static const int OS2_typoLineGap_offset = 72;
-static const int OS2_winAscent_offset = 74;
-static const int OS2_winDescent_offset = 76;
-static const int OS2_ulCodePageRange1_offset = 78;
-static const int OS2_ulCodePageRange2_offset = 82;
+constexpr int OS2_usWeightClass_offset = 4;
+constexpr int OS2_usWidthClass_offset = 6;
+constexpr int OS2_fsType_offset = 8;
+constexpr int OS2_panose_offset = 32;
+constexpr int OS2_panoseNbBytes_offset = 10;
+constexpr int OS2_ulUnicodeRange1_offset = 42;
+constexpr int OS2_ulUnicodeRange2_offset = 46;
+constexpr int OS2_ulUnicodeRange3_offset = 50;
+constexpr int OS2_ulUnicodeRange4_offset = 54;
+constexpr int OS2_fsSelection_offset = 62;
+constexpr int OS2_typoAscender_offset = 68;
+constexpr int OS2_typoDescender_offset = 70;
+constexpr int OS2_typoLineGap_offset = 72;
+constexpr int OS2_winAscent_offset = 74;
+constexpr int OS2_winDescent_offset = 76;
+constexpr int OS2_ulCodePageRange1_offset = 78;
+constexpr int OS2_ulCodePageRange2_offset = 82;
 
 /*
   Some table hhea consts
@@ -305,13 +305,13 @@ static const int OS2_ulCodePageRange2_offset = 82;
   => length for hhea table = 36 bytes
 
 */
-static const int HHEA_Length = 36;
+constexpr int HHEA_Length = 36;
 
-static const int HHEA_ascender_offset = 4;
-static const int HHEA_descender_offset = 6;
-static const int HHEA_lineGap_offset = 8;
-static const int HHEA_caretSlopeRise_offset = 18;
-static const int HHEA_caretSlopeRun_offset = 20;
+constexpr int HHEA_ascender_offset = 4;
+constexpr int HHEA_descender_offset = 6;
+constexpr int HHEA_lineGap_offset = 8;
+constexpr int HHEA_caretSlopeRise_offset = 18;
+constexpr int HHEA_caretSlopeRun_offset = 20;
 
 /*
   Some table post consts
@@ -325,10 +325,10 @@ static const int HHEA_caretSlopeRun_offset = 20;
   ...
 
 */
-static const int POST_italicAngle_offset = 4;
-static const int POST_underlinePosition_offset = 8;
-static const int POST_underlineThickness_offset = 10;
-static const int POST_isFixedPitch_offset = 12;
+constexpr int POST_italicAngle_offset = 4;
+constexpr int POST_underlinePosition_offset = 8;
+constexpr int POST_underlineThickness_offset = 10;
+constexpr int POST_isFixedPitch_offset = 12;
 
 /*
   Some table head consts
@@ -357,23 +357,23 @@ static const int POST_isFixedPitch_offset = 12;
 
   => length head table = 54 bytes
 */
-static const int HEAD_Length = 54;
+constexpr int HEAD_Length = 54;
 
-static const int HEAD_majorVersion_offset = 0;
-static const int HEAD_fontRevision_offset = 4;
-static const int HEAD_magicNumber_offset = 12;
-static const int HEAD_flags_offset = 16;
-static const int HEAD_unitsPerEm_offset = 18;
-static const int HEAD_created_offset = 20;
-static const int HEAD_xMin_offset = 36;
-static const int HEAD_yMin_offset = 38;
-static const int HEAD_xMax_offset = 40;
-static const int HEAD_yMax_offset = 42;
-static const int HEAD_macStyle_offset = 44;
-static const int HEAD_lowestRecPPEM_offset = 46;
-static const int HEAD_fontDirectionHint_offset = 48;
-static const int HEAD_indexToLocFormat_offset = 50;
-static const int HEAD_glyphDataFormat_offset = 52;
+constexpr int HEAD_majorVersion_offset = 0;
+constexpr int HEAD_fontRevision_offset = 4;
+constexpr int HEAD_magicNumber_offset = 12;
+constexpr int HEAD_flags_offset = 16;
+constexpr int HEAD_unitsPerEm_offset = 18;
+constexpr int HEAD_created_offset = 20;
+constexpr int HEAD_xMin_offset = 36;
+constexpr int HEAD_yMin_offset = 38;
+constexpr int HEAD_xMax_offset = 40;
+constexpr int HEAD_yMax_offset = 42;
+constexpr int HEAD_macStyle_offset = 44;
+constexpr int HEAD_lowestRecPPEM_offset = 46;
+constexpr int HEAD_fontDirectionHint_offset = 48;
+constexpr int HEAD_indexToLocFormat_offset = 50;
+constexpr int HEAD_glyphDataFormat_offset = 52;
 
 /*
   Some table maxp consts
@@ -393,13 +393,13 @@ static const int HEAD_glyphDataFormat_offset = 52;
   ...
 
 */
-static const int MAXP_Version1Length = 32;
+constexpr int MAXP_Version1Length = 32;
 
-static const int MAXP_numGlyphs_offset = 4;
-static const int MAXP_maxPoints_offset = 6;
-static const int MAXP_maxContours_offset = 8;
-static const int MAXP_maxCompositePoints_offset = 10;
-static const int MAXP_maxCompositeContours_offset = 12;
+constexpr int MAXP_numGlyphs_offset = 4;
+constexpr int MAXP_maxPoints_offset = 6;
+constexpr int MAXP_maxContours_offset = 8;
+constexpr int MAXP_maxCompositePoints_offset = 10;
+constexpr int MAXP_maxCompositeContours_offset = 12;
 
 /*
   Some table glyf consts
@@ -417,36 +417,36 @@ static const int MAXP_maxCompositeContours_offset = 12;
   => length glyf table = 10 bytes
 
 */
-static const int GLYF_Length = 10;
+constexpr int GLYF_Length = 10;
 
-static const int GLYF_numberOfContours_offset = 0;
-static const int GLYF_xMin_offset = 2;
-static const int GLYF_yMin_offset = 4;
-static const int GLYF_xMax_offset = 6;
-static const int GLYF_yMax_offset = 8;
+constexpr int GLYF_numberOfContours_offset = 0;
+constexpr int GLYF_xMin_offset = 2;
+constexpr int GLYF_yMin_offset = 4;
+constexpr int GLYF_xMax_offset = 6;
+constexpr int GLYF_yMax_offset = 8;
 
-static const sal_uInt32 T_true = 0x74727565;        /* 'true' */
-static const sal_uInt32 T_ttcf = 0x74746366;        /* 'ttcf' */
-static const sal_uInt32 T_otto = 0x4f54544f;        /* 'OTTO' */
+constexpr sal_uInt32 T_true = 0x74727565;        /* 'true' */
+constexpr sal_uInt32 T_ttcf = 0x74746366;        /* 'ttcf' */
+constexpr sal_uInt32 T_otto = 0x4f54544f;        /* 'OTTO' */
 
 // standard TrueType table tags
-static const sal_uInt32 T_maxp = 0x6D617870;
-static const sal_uInt32 T_glyf = 0x676C7966;
-static const sal_uInt32 T_head = 0x68656164;
-static const sal_uInt32 T_loca = 0x6C6F6361;
-static const sal_uInt32 T_name = 0x6E616D65;
-static const sal_uInt32 T_hhea = 0x68686561;
-static const sal_uInt32 T_hmtx = 0x686D7478;
-static const sal_uInt32 T_cmap = 0x636D6170;
-static const sal_uInt32 T_vhea = 0x76686561;
-static const sal_uInt32 T_vmtx = 0x766D7478;
-static const sal_uInt32 T_OS2  = 0x4F532F32;
-static const sal_uInt32 T_post = 0x706F7374;
-static const sal_uInt32 T_cvt  = 0x63767420;
-static const sal_uInt32 T_prep = 0x70726570;
-static const sal_uInt32 T_fpgm = 0x6670676D;
-static const sal_uInt32 T_gsub = 0x47535542;
-static const sal_uInt32 T_CFF  = 0x43464620;
+constexpr sal_uInt32 T_maxp = 0x6D617870;
+constexpr sal_uInt32 T_glyf = 0x676C7966;
+constexpr sal_uInt32 T_head = 0x68656164;
+constexpr sal_uInt32 T_loca = 0x6C6F6361;
+constexpr sal_uInt32 T_name = 0x6E616D65;
+constexpr sal_uInt32 T_hhea = 0x68686561;
+constexpr sal_uInt32 T_hmtx = 0x686D7478;
+constexpr sal_uInt32 T_cmap = 0x636D6170;
+constexpr sal_uInt32 T_vhea = 0x76686561;
+constexpr sal_uInt32 T_vmtx = 0x766D7478;
+constexpr sal_uInt32 T_OS2  = 0x4F532F32;
+constexpr sal_uInt32 T_post = 0x706F7374;
+constexpr sal_uInt32 T_cvt  = 0x63767420;
+constexpr sal_uInt32 T_prep = 0x70726570;
+constexpr sal_uInt32 T_fpgm = 0x6670676D;
+constexpr sal_uInt32 T_gsub = 0x47535542;
+constexpr sal_uInt32 T_CFF  = 0x43464620;
 
 
 /**
