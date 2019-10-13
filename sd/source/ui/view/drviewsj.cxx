@@ -93,7 +93,9 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SfxItemState::DEFAULT == rSet.GetItemState( SID_OBJECT_ALIGN_DOWN ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_FRAME_TO_TOP ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_MOREFRONT ) ||
+            SfxItemState::DEFAULT == rSet.GetItemState( SID_FRAME_UP ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_MOREBACK ) ||
+            SfxItemState::DEFAULT == rSet.GetItemState( SID_FRAME_DOWN ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_FRAME_TO_BOTTOM ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_BEFORE_OBJ ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_BEHIND_OBJ ) ||
@@ -216,7 +218,9 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 rSet.DisableItem( SID_OBJECT_ALIGN_DOWN );
                 rSet.DisableItem( SID_FRAME_TO_TOP );
                 rSet.DisableItem( SID_MOREFRONT );
+                rSet.DisableItem( SID_FRAME_UP );
                 rSet.DisableItem( SID_MOREBACK );
+                rSet.DisableItem( SID_FRAME_DOWN );
                 rSet.DisableItem( SID_FRAME_TO_BOTTOM );
                 rSet.DisableItem( SID_BEFORE_OBJ );
                 rSet.DisableItem( SID_BEHIND_OBJ );
@@ -393,7 +397,9 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 rSet.DisableItem( SID_OBJECT_ALIGN_DOWN );
                 rSet.DisableItem( SID_FRAME_TO_TOP );
                 rSet.DisableItem( SID_MOREFRONT );
+                rSet.DisableItem( SID_FRAME_UP );
                 rSet.DisableItem( SID_MOREBACK );
+                rSet.DisableItem( SID_FRAME_DOWN );
                 rSet.DisableItem( SID_FRAME_TO_BOTTOM );
                 rSet.DisableItem( SID_BEFORE_OBJ );
                 rSet.DisableItem( SID_BEHIND_OBJ );
@@ -453,7 +459,9 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
         rSet.DisableItem( SID_FRAME_TO_TOP );
         rSet.DisableItem( SID_MOREFRONT );
+        rSet.DisableItem( SID_FRAME_UP );
         rSet.DisableItem( SID_MOREBACK );
+        rSet.DisableItem( SID_FRAME_DOWN );
         rSet.DisableItem( SID_FRAME_TO_BOTTOM );
         rSet.DisableItem( SID_BEFORE_OBJ );
         rSet.DisableItem( SID_BEHIND_OBJ );
