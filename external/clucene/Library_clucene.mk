@@ -23,6 +23,8 @@ $(eval $(call gb_Library_set_include,clucene,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,clucene,external/clucene/inc/pch/precompiled_clucene))
+
 $(eval $(call gb_Library_add_defs,clucene,\
     -Dclucene_shared_EXPORTS \
     -Dclucene_core_EXPORTS \

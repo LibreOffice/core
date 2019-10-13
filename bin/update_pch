@@ -426,6 +426,16 @@ def filter_ignore(line, module):
         ignore_list += [
             'third_party/freetype/include/pstables.h',
             ]
+    if module == 'external/clucene':
+        ignore_list += [
+            '_bufferedstream.h',
+            '_condition.h',
+            '_gunichartables.h',
+            '_threads.h',
+            'error.h',
+            'CLucene/LuceneThreads.h',
+            'CLucene/config/_threads.h'
+            ]
 
     for i in ignore_list:
         if line.startswith(i):

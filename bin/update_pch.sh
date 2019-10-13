@@ -42,7 +42,7 @@ for x in $headers; do
         fi
     else
         header=$x
-        local update_msg=`echo $header | sed -e s%$root/%%`
+        update_msg=`echo $header | sed -e s%$root/%%`
         module=`readlink -f $header | sed -e s%$root/%% -e s%/.*%%`
         if [ "$module" = "pch" ]; then
             continue # PCH's in pch/inc/pch/ are handled manually

@@ -20,8 +20,11 @@ $(eval $(call gb_Library_set_warnings_disabled,wpd))
 
 $(eval $(call gb_Library_set_include,wpd,\
     -I$(call gb_UnpackedTarball_get_dir,libwpd)/inc \
+    -I$(call gb_UnpackedTarball_get_dir,libwpd)/src/lib \
     $$(INCLUDE) \
 ))
+
+$(eval $(call gb_Library_set_precompiled_header,wpd,external/libwpd/inc/pch/precompiled_wpd))
 
 $(eval $(call gb_Library_add_defs,wpd,\
 	-DBOOST_ALL_NO_LIB \
