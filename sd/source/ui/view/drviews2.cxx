@@ -2899,6 +2899,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         break;
 
         case SID_MOREFRONT:  // BASIC
+        case SID_FRAME_UP:  // BASIC
         {
             mpDrawView->MovMarkedToTop();
             Cancel();
@@ -2907,6 +2908,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         break;
 
         case SID_MOREBACK:  // BASIC
+        case SID_FRAME_DOWN:  // BASIC
         {
             mpDrawView->MovMarkedToBtm();
             Cancel();
