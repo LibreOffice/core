@@ -30,6 +30,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
@@ -475,7 +476,11 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDes
     DocumentOpenedGuard aOpenedGuard( mxImpl->maFileUrl );
     if( aOpenedGuard.isValid() || mxImpl->maFileUrl.isEmpty() )
     {
-        ControllerLockGuard aCtrlLockGuard(mxImpl->mxModel);
+        Reference<XModel> xTempModel = mxImpl->mxModel;
+        xTempModel->lockControllers();
+        comphelper::ScopeGuard const lockControllersGuard([xTempModel]() {
+            xTempModel->unlockControllers();
+        });
 
         switch( mxImpl->meDirection )
         {
