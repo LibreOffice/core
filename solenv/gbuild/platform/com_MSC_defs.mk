@@ -275,6 +275,7 @@ endef
 else
 gb_COMPILERDEPFLAGS :=
 define gb_create_deps
+| LC_ALL=C $(GBUILDDIR)/platform/filter-sourceName.awk; exit $${PIPESTATUS[0]}
 endef
 endif
 
