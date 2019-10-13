@@ -1,0 +1,11 @@
+--- src/liborcus/gnumeric_cell_context.cpp.sav	2018-05-27 18:18:56.000000000 +0200
++++ src/liborcus/gnumeric_cell_context.cpp	2019-10-13 10:43:24.587258400 +0200
+@@ -248,7 +248,7 @@
+             range.last.column = col + mp_cell_data->array_cols - 1;
+             range.last.row = row + mp_cell_data->array_rows - 1;
+ 
+-            iface::import_array_formula* af = mp_sheet->get_array_formula();
++            spreadsheet::iface::import_array_formula* af = mp_sheet->get_array_formula();
+             if (af)
+             {
+                 af->set_range(range);
