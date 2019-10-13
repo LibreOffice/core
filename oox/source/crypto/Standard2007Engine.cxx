@@ -257,7 +257,7 @@ sal_Bool Standard2007Engine::setupEncryption(const css::uno::Sequence<css::beans
     return true;
 }
 
-css::uno::Sequence<css::beans::NamedValue> Standard2007Engine::writeEncryptionInfo()
+css::uno::Sequence<sal_Int8> Standard2007Engine::writeEncryptionInfo()
 {
     Reference<XOutputStream> aEncryptionInfoStream(
         mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.io.SequenceOutputStream", mxContext),
@@ -283,21 +283,17 @@ css::uno::Sequence<css::beans::NamedValue> Standard2007Engine::writeEncryptionIn
     rStream.close();
     aEncryptionInfoStream->flush();
 
-    // Store all streams into sequence and return back
-    comphelper::SequenceAsHashMap aStreams;
-
     Reference<XSequenceOutputStream> aEncryptionInfoSequenceStream(aEncryptionInfoStream, UNO_QUERY);
-    aStreams["EncryptionInfo"] <<= aEncryptionInfoSequenceStream->getWrittenBytes();
-    return aStreams.getAsConstNamedValueList();
+    return aEncryptionInfoSequenceStream->getWrittenBytes();
 }
 
-void Standard2007Engine::encrypt(const css::uno::Reference<css::io::XInputStream> &  rxInputStream,
-                                 css::uno::Reference<css::io::XOutputStream> & rxOutputStream)
+css::uno::Sequence<sal_Int8> Standard2007Engine::writeEncryptedDocument(const css::uno::Reference<css::io::XInputStream> &  rxInputStream)
 {
-    if (mKey.empty())
-        return;
+    Reference<XOutputStream> aOutputStream(
+        mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.io.SequenceOutputStream", mxContext),
+        UNO_QUERY);
+    BinaryXOutputStream aBinaryOutputStream(aOutputStream, false);
 
-    BinaryXOutputStream aBinaryOutputStream(rxOutputStream, false);
     BinaryXInputStream aBinaryInputStream(rxInputStream, false);
     Reference<XSeekable> xSeekable(rxInputStream, UNO_QUERY);
 
@@ -321,6 +317,21 @@ void Standard2007Engine::encrypt(const css::uno::Reference<css::io::XInputStream
         outputLength = aEncryptor.update(outputBuffer, inputBuffer, inputLength);
         aBinaryOutputStream.writeMemory(outputBuffer.data(), outputLength);
     }
+
+    Reference<XSequenceOutputStream> aSequenceStream(aOutputStream, UNO_QUERY);
+    return aSequenceStream->getWrittenBytes();
+}
+
+css::uno::Sequence<css::beans::NamedValue> Standard2007Engine::encrypt(const css::uno::Reference<css::io::XInputStream> &  rxInputStream)
+{
+    if (mKey.empty())
+        return css::uno::Sequence<css::beans::NamedValue>();
+
+    comphelper::SequenceAsHashMap aStreams;
+
+    aStreams["EncryptedPackage"] <<= writeEncryptedDocument(rxInputStream);
+    aStreams["EncryptionInfo"] <<= writeEncryptionInfo();
+    return aStreams.getAsConstNamedValueList();
 }
 
 css::uno::Reference<css::io::XInputStream> Standard2007Engine::getStream(const css::uno::Sequence<css::beans::NamedValue> & rStreams, const OUString sStreamName)
