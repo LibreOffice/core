@@ -109,6 +109,23 @@ DocumentOpenedGuard::~DocumentOpenedGuard()
         rUrlPool.maUrls.erase( maUrl );
 }
 
+class ControllerLockGuard
+{
+public:
+    explicit ControllerLockGuard(const Reference< XModel > & xModel)
+        : mxModel (xModel)
+    {
+        mxModel->lockControllers();
+    }
+
+    ~ControllerLockGuard()
+    {
+        mxModel->unlockControllers();
+    }
+private:
+    const Reference< XModel > & mxModel;
+};
+
 } // namespace
 
 /** Specifies whether this filter is an import or export filter. */
@@ -158,8 +175,6 @@ struct FilterBaseImpl
 
     /// @throws IllegalArgumentException
     void                setDocumentModel( const Reference< XComponent >& rxComponent );
-
-    void                initializeFilter();
 };
 
 FilterBaseImpl::FilterBaseImpl( const Reference< XComponentContext >& rxContext ) :
@@ -181,18 +196,6 @@ void FilterBaseImpl::setDocumentModel( const Reference< XComponent >& rxComponen
     catch( Exception& )
     {
         throw IllegalArgumentException();
-    }
-}
-
-void FilterBaseImpl::initializeFilter()
-{
-    try
-    {
-        // lock the model controllers
-        mxModel->lockControllers();
-    }
-    catch( Exception& )
-    {
     }
 }
 
@@ -477,7 +480,8 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDes
     DocumentOpenedGuard aOpenedGuard( mxImpl->maFileUrl );
     if( aOpenedGuard.isValid() || mxImpl->maFileUrl.isEmpty() )
     {
-        mxImpl->initializeFilter();
+        ControllerLockGuard aCtrlLockGuard(mxImpl->mxModel);
+
         switch( mxImpl->meDirection )
         {
             case FILTERDIRECTION_UNKNOWN:
@@ -497,7 +501,6 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDes
                 }
             break;
         }
-        mxImpl->mxModel->unlockControllers();
     }
     return bRet;
 }
