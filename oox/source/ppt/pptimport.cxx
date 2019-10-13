@@ -25,6 +25,7 @@
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -238,6 +239,24 @@ sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDe
 
             if (xFilter.is())
             {
+                uno::Reference<document::XUndoManagerSupplier> xUndoManagerSupplier(getModel(),
+                                                                                    UNO_QUERY);
+                uno::Reference<util::XLockable> xUndoManager;
+                bool bWasUnLocked = true;
+                if (xUndoManagerSupplier.is())
+                {
+                    xUndoManager = xUndoManagerSupplier->getUndoManager();
+                    if (xUndoManager.is())
+                    {
+                        bWasUnLocked = !xUndoManager->isLocked();
+                        xUndoManager->lock();
+                    }
+                }
+                comphelper::ScopeGuard aGuard([xUndoManager, bWasUnLocked] {
+                    if (xUndoManager && bWasUnLocked)
+                        xUndoManager->unlock();
+                });
+
                 xExporter->setSourceDocument( xDocument );
                 if( xFilter->filter( rDescriptor ) )
                     return true;
