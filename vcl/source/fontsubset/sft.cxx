@@ -386,15 +386,15 @@ static int GetSimpleTTOutline(TrueTypeFont const *ttf, sal_uInt32 glyphID, Contr
     if( glyphID >= ttf->nglyphs )           /*- glyph is not present in the font */
         return 0;
     const sal_uInt8* ptr = table + ttf->goffsets[glyphID];
-    const sal_Int16 numberOfContours = GetInt16(ptr, 0);
+    const sal_Int16 numberOfContours = GetInt16(ptr, GLYF_numberOfContours_offset);
     if( numberOfContours <= 0 )             /*- glyph is not simple */
         return 0;
 
     if (metrics) {                                                    /*- GetCompoundTTOutline() calls this function with NULL metrics -*/
-        metrics->xMin = GetInt16(ptr, 2);
-        metrics->yMin = GetInt16(ptr, 4);
-        metrics->xMax = GetInt16(ptr, 6);
-        metrics->yMax = GetInt16(ptr, 8);
+        metrics->xMin = GetInt16(ptr, GLYF_xMin_offset);
+        metrics->yMin = GetInt16(ptr, GLYF_yMin_offset);
+        metrics->xMax = GetInt16(ptr, GLYF_xMax_offset);
+        metrics->yMax = GetInt16(ptr, GLYF_yMax_offset);
         GetMetrics(ttf, glyphID, metrics);
     }
 
@@ -516,14 +516,14 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
         return 0;
 
     const sal_uInt8* ptr = table + ttf->goffsets[glyphID];
-    if (GetInt16(ptr, 0) != -1)   /* number of contours - glyph is not compound */
+    if (GetInt16(ptr, GLYF_numberOfContours_offset) != -1)   /* number of contours - glyph is not compound */
         return 0;
 
     if (metrics) {
-        metrics->xMin = GetInt16(ptr, 2);
-        metrics->yMin = GetInt16(ptr, 4);
-        metrics->xMax = GetInt16(ptr, 6);
-        metrics->yMax = GetInt16(ptr, 8);
+        metrics->xMin = GetInt16(ptr, GLYF_xMin_offset);
+        metrics->yMin = GetInt16(ptr, GLYF_yMin_offset);
+        metrics->xMax = GetInt16(ptr, GLYF_xMax_offset);
+        metrics->yMax = GetInt16(ptr, GLYF_yMax_offset);
         GetMetrics(ttf, glyphID, metrics);
     }
 
@@ -1639,7 +1639,7 @@ static SFErrCodes doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
 
     table = getTable(t, O_head);
     table_size = getTableSize(t, O_head);
-    if (table_size < HEAD_Length_offset) {
+    if (table_size < HEAD_Length) {
         return SFErrCodes::TtFormat;
     }
     t->unitsPerEm = GetUInt16(table, HEAD_unitsPerEm_offset);
