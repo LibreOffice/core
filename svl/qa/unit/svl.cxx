@@ -1081,8 +1081,8 @@ void Test::checkDateInput( SvNumberFormatter& rFormatter, const char* pTimezone,
     sal_uInt32 nIndex = 0;
     double fVal = 0.0;
     bool bVal = rFormatter.IsNumberFormat( aDate, nIndex, fVal);
-    CPPUNIT_ASSERT_MESSAGE( OString("Date not recognized: " +
-                OString(pTimezone) + " " + OString(pIsoDate)).getStr(), bVal);
+    CPPUNIT_ASSERT_MESSAGE( OString(OStringLiteral("Date not recognized: ") +
+                pTimezone + " " + pIsoDate).getStr(), bVal);
     CPPUNIT_ASSERT_MESSAGE("Format parsed is not date.",
             (rFormatter.GetType(nIndex) & SvNumFormatType::DATE));
     OUString aOutString;
@@ -1152,7 +1152,7 @@ void checkSpecificNumberFormats( SvNumberFormatter& rFormatter,
         double fNumber = 0;
         OUString aString( OUString::fromUtf8( rVec[i].mpInput));
         const bool bIsNumber = rFormatter.IsNumberFormat( aString, nIndex, fNumber);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( OString( OString(pName) + " " + OString::number(i) +
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( OString( pName + OStringLiteral(" ") + OString::number(i) +
                     (rVec[i].mbNumber ? " not recognized: " : " should not be recognized: ") +
                     OUStringToOString( aString, RTL_TEXTENCODING_UTF8)).getStr(), rVec[i].mbNumber, bIsNumber);
         if (bIsNumber)
@@ -1161,7 +1161,7 @@ void checkSpecificNumberFormats( SvNumberFormatter& rFormatter,
                 nIndex = rVec[i].mnOutputIndex;
             Color* pColor;
             rFormatter.GetOutputString( fNumber, nIndex, aString, &pColor);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( OString( OString(pName) + " " + OString::number(i)  + " mismatch").getStr(),
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( OString( pName + OStringLiteral(" ") + OString::number(i)  + " mismatch").getStr(),
                     OUString::fromUtf8( rVec[i].mpOutput), aString);
         }
     }

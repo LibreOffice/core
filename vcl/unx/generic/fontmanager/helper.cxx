@@ -140,7 +140,7 @@ void psp::getPrinterPathList( std::vector< OUString >& rPathList, const char* pS
 
         if( pSubDir )
         {
-            aDir += OString("/") + pSubDir;
+            aDir += OStringLiteral("/") + pSubDir;
         }
         struct stat aStat;
         if( stat( aDir.getStr(), &aStat ) || ! S_ISDIR( aStat.st_mode ) )

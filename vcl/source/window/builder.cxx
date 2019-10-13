@@ -1713,7 +1713,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
 
                     //Make up a name for it
                     OString sTabPageId = get_by_window(pParent) +
-                        OString("-page") +
+                        "-page" +
                         OString::number(nNewPageCount);
                     m_aChildren.emplace_back(sTabPageId, pPage, false);
                     pPage->SetHelpId(m_sHelpRoot + sTabPageId);

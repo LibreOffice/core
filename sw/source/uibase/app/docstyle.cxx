@@ -438,7 +438,7 @@ void SwStyleSheetIterator::SwPoolFormatList::RemoveName(SfxStyleFamily eFam,
 // Add Strings to the list of templates
 void SwStyleSheetIterator::SwPoolFormatList::Append( char cChar, const OUString& rStr )
 {
-    const OUString aStr = OUString(cChar) + rStr;
+    const OUString aStr = OUStringLiteral1(cChar) + rStr;
 
     UniqueHash::const_iterator it = maUnique.find(aStr);
     if (it != maUnique.end())

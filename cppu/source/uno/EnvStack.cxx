@@ -119,7 +119,7 @@ extern "C" void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl
 
     if (pTypeName && rtl_uString_getLength(pTypeName))
     {
-        OUString envDcp = OUString(pTypeName) + currPurpose;
+        OUString envDcp = OUString::unacquired(&pTypeName) + currPurpose;
 
         uno_getEnvironment(ppEnv, envDcp.pData, nullptr);
     }

@@ -27,7 +27,7 @@ inline OString I32SHEX(sal_Int32 x)
 {
     OString aStr = OString::number(x, 16);
     while (aStr.getLength() < 6)
-        aStr = OString("0") + aStr;
+        aStr = "0" + aStr;
     return aStr;
 }
 

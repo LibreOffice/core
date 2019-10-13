@@ -3198,7 +3198,7 @@ OUString SwTokenWindow::CreateQuickHelp(const SwFormToken& rToken)
     {
         if (!rToken.sCharStyleName.isEmpty())
         {
-            sEntry += OUString(' ') + m_sCharStyle + rToken.sCharStyleName;
+            sEntry += " " + m_sCharStyle + rToken.sCharStyleName;
         }
     }
 

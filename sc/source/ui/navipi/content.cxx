@@ -636,7 +636,7 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                         else
                             aEntry += pParentWindow->aStrNotActive;
                         ++i;
-                        aDocMenu->InsertItem(i, aEntry, MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK, OString("document") + OString::number(i));
+                        aDocMenu->InsertItem(i, aEntry, MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK, "document" + OString::number(i));
                         if ( !bHiddenDoc && aName == aManualDoc )
                             nPos = i;
                     }
@@ -644,7 +644,7 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                 }
                 //  "active window"
                 ++i;
-                aDocMenu->InsertItem(i, pParentWindow->aStrActiveWin, MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK, OString("document") + OString::number(i));
+                aDocMenu->InsertItem(i, pParentWindow->aStrActiveWin, MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK, "document" + OString::number(i));
                 if (!bHiddenDoc && aManualDoc.isEmpty())
                     nPos = i;
                 //  hidden document
@@ -653,7 +653,7 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                     OUString aEntry = aHiddenTitle;
                     aEntry += pParentWindow->aStrHidden;
                     ++i;
-                    aDocMenu->InsertItem(i, aEntry, MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK, OString("document") + OString::number(i));
+                    aDocMenu->InsertItem(i, aEntry, MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK, "document" + OString::number(i));
                     if (bHiddenDoc)
                         nPos = i;
                 }

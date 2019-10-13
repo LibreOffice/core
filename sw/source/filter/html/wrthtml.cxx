@@ -910,7 +910,7 @@ static void OutBodyColor( const sal_Char* pTag, const SwFormat *pFormat,
     if( pColorItem )
     {
         OStringBuffer sOut;
-        sOut.append(" " + OString(pTag) + "=");
+        sOut.append(OStringLiteral(" ") + pTag + "=");
         rHWrt.Strm().WriteOString( sOut.makeStringAndClear() );
         Color aColor( pColorItem->GetValue() );
         if( COL_AUTO == aColor )

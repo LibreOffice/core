@@ -328,7 +328,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
         sOut.append("; ");
     }
 
-    sOut.append(OString(pProp) + ": ");
+    sOut.append(pProp + OStringLiteral(": "));
     if( m_nCSS1OutMode & CSS1_OUTMODE_ENCODE )
     {
         // for STYLE-Option encode string
@@ -2472,7 +2472,7 @@ static Writer& OutCSS1_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
         return rWrt;
 
     sal_uInt32 nHeight = static_cast<const SvxFontHeightItem&>(rHt).GetHeight();
-    OString sHeight(OString::number(nHeight/20) + OString(sCSS1_UNIT_pt));
+    OString sHeight(OString::number(nHeight/20) + sCSS1_UNIT_pt);
     rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_font_size, sHeight);
 
     return rWrt;
@@ -2533,7 +2533,7 @@ static Writer& OutCSS1_SvxKerning( Writer& rWrt, const SfxPoolItem& rHt )
         // Width as n.n pt
         nValue = (nValue + 1) / 2;  // 1/10pt
         sOut.append(OString::number(nValue  / 10) + "." + OString::number(nValue % 10) +
-                    OString(sCSS1_UNIT_pt));
+                    sCSS1_UNIT_pt);
 
         rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_letter_spacing,
             sOut.makeStringAndClear());
@@ -3332,7 +3332,7 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
 
         // width in n.nn pt
         sOut.append(OString::number(nWidth / 100) + "." + OString::number((nWidth/10) % 10) +
-                    OString::number(nWidth % 10) + OString(sCSS1_UNIT_pt));
+                    OString::number(nWidth % 10) + sCSS1_UNIT_pt);
     }
 
     // Line-Style: solid or double

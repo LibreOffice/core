@@ -161,7 +161,7 @@ static OString lcl_escapeQuotes(const OString &rStr)
 
 void SfxLokHelper::notifyOtherView(SfxViewShell* pThisView, SfxViewShell const* pOtherView, int nType, const OString& rKey, const OString& rPayload)
 {
-    OString aPayload = OString("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView(pThisView)) +
+    OString aPayload = OStringLiteral("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView(pThisView)) +
                        "\", \"part\": \"" + OString::number(pThisView->getPart()) +
                        "\", \"" + rKey + "\": \"" + lcl_escapeQuotes(rPayload) + "\" }";
 
@@ -236,7 +236,7 @@ void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, cons
         for (int i = 0; i < pDoc->getParts(); ++i)
         {
             tools::Rectangle aRectangle(0, 0, 1000000000, 1000000000);
-            OString sPayload = aRectangle.toString() + OString(", ") + OString::number(i);
+            OString sPayload = aRectangle.toString() + ", " + OString::number(i);
             pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sPayload.getStr());
         }
     }
@@ -261,7 +261,7 @@ void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisVie
     OString sPayload;
     if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
     {
-        sPayload = OString("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView()) +
+        sPayload = OStringLiteral("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView()) +
             "\", \"rectangle\": \"" + rRectangle + "\" }";
     }
     else

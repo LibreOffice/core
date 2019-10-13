@@ -150,7 +150,7 @@ protected:
         std::string sTemp;
         getline(m_aReferenceFile, sTemp);
         OString sAssertMessage =
-            OString("The reference file does not contain the right content. Maybe it needs an update:")
+            "The reference file does not contain the right content. Maybe it needs an update:"
             + OUStringToOString(m_sTestFileName, RTL_TEXTENCODING_UTF8);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sAssertMessage.getStr(), OUString("// " + sCheck), OUString(sTemp.data(), sTemp.length(), RTL_TEXTENCODING_UTF8));
         getline(m_aReferenceFile, sTemp);
@@ -172,7 +172,7 @@ protected:
         std::string sTemp;
         getline(m_aReferenceFile, sTemp);
         OString sAssertMessage =
-            OString("The reference file does not contain the right content. Maybe it needs an update:")
+            "The reference file does not contain the right content. Maybe it needs an update:"
             + OUStringToOString(m_sTestFileName, RTL_TEXTENCODING_UTF8);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sAssertMessage.getStr(), OUString("/// " + sNote), OUString(sTemp.data(), sTemp.length(), RTL_TEXTENCODING_UTF8));
     }

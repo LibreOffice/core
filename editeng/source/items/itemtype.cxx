@@ -181,8 +181,8 @@ OUString GetColorString( const Color& rCol )
     if ( sStr.isEmpty() )
     {
         sStr += "RGB(" +
-                OUString::number( rCol.GetRed() )   + OUString(cpDelim) +
-                OUString::number( rCol.GetGreen() ) + OUString(cpDelim) +
+                OUString::number( rCol.GetRed() )   + cpDelim +
+                OUString::number( rCol.GetGreen() ) + cpDelim +
                 OUString::number( rCol.GetBlue() )  + ")";
     }
     return sStr;

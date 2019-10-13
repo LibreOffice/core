@@ -792,7 +792,7 @@ sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
             rtl_uString_assign(
                 pException,
                 (OUString(
-                    "<" + OUString(pBaseUriRef)
+                    "<" + OUString::unacquired(&pBaseUriRef)
                     + "> does not start with a scheme component")
                  .pData));
             return false;

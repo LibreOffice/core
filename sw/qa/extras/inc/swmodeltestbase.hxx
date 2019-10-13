@@ -848,8 +848,8 @@ protected:
             }
             else
             {
-                OString aMessage = "validation requested, but don't know how to validate " +
-                    OString(filename) +
+                OString aMessage = OStringLiteral("validation requested, but don't know how to validate ") +
+                    filename +
                     " (" +
                     OUStringToOString(aFilterName, RTL_TEXTENCODING_UTF8) +
                     ")";

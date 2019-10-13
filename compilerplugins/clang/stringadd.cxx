@@ -68,11 +68,13 @@ public:
     }
 
     bool VisitCompoundStmt(CompoundStmt const*);
+    bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const*);
 
 private:
     const VarDecl* findAssignOrAdd(Stmt const*);
-    Expr const* ignore(Expr const*);
     void checkForCompoundAssign(Stmt const* stmt1, Stmt const* stmt2, VarDecl const* varDecl);
+
+    Expr const* ignore(Expr const*);
     std::string getSourceAsString(SourceLocation startLoc, SourceLocation endLoc);
     bool isSideEffectFree(Expr const*);
 };
@@ -175,6 +177,65 @@ void StringAdd::checkForCompoundAssign(Stmt const* stmt1, Stmt const* stmt2, Var
         << stmt2->getSourceRange();
 }
 
+// Check for generating temporaries when adding strings
+//
+bool StringAdd::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* operatorCall)
+{
+    if (ignoreLocation(operatorCall))
+        return true;
+    // TODO PlusEqual seems to generate temporaries, does not do the StringConcat optimisation
+    if (operatorCall->getOperator() != OO_Plus)
+        return true;
+    auto tc = loplugin::TypeCheck(operatorCall->getType()->getUnqualifiedDesugaredType());
+    if (!tc.Struct("OUStringConcat").Namespace("rtl").GlobalNamespace()
+        && !tc.Struct("OStringConcat").Namespace("rtl").GlobalNamespace()
+        && !tc.Class("OUString").Namespace("rtl").GlobalNamespace()
+        && !tc.Class("OString").Namespace("rtl").GlobalNamespace())
+        return true;
+
+    auto check = [operatorCall, this, &tc](const MaterializeTemporaryExpr* matTempExpr) {
+        auto tc3 = loplugin::TypeCheck(matTempExpr->getType());
+        if (!tc3.Class("OUString").Namespace("rtl").GlobalNamespace()
+            && !tc3.Class("OString").Namespace("rtl").GlobalNamespace())
+            return;
+        if (auto bindTemp
+            = dyn_cast<CXXBindTemporaryExpr>(matTempExpr->GetTemporaryExpr()->IgnoreCasts()))
+        {
+            // ignore temporaries returned from function calls
+            if (isa<CallExpr>(bindTemp->getSubExpr()))
+                return;
+            // we don't have OStringLiteral1, so char needs to generate a temporary
+            if (tc.Class("OString").Namespace("rtl").GlobalNamespace()
+                || tc.Struct("OStringConcat").Namespace("rtl").GlobalNamespace())
+                if (auto cxxConstruct = dyn_cast<CXXConstructExpr>(bindTemp->getSubExpr()))
+                    if (loplugin::TypeCheck(
+                            cxxConstruct->getConstructor()->getParamDecl(0)->getType())
+                            .Char())
+                        return;
+            // calls where we pass in an explicit character encoding
+            if (auto cxxTemp = dyn_cast<CXXTemporaryObjectExpr>(bindTemp->getSubExpr()))
+                if (cxxTemp->getNumArgs() > 1)
+                    return;
+        }
+        // conditional operators ( a ? b : c ) will result in temporaries
+        if (isa<ConditionalOperator>(
+                matTempExpr->GetTemporaryExpr()->IgnoreCasts()->IgnoreParens()))
+            return;
+        report(DiagnosticsEngine::Warning, "avoid constructing temporary copies during +",
+               compat::getBeginLoc(matTempExpr))
+            << matTempExpr->getSourceRange();
+        //        operatorCall->dump();
+        //        matTempExpr->getType()->dump();
+        //        operatorCall->getType()->getUnqualifiedDesugaredType()->dump();
+    };
+
+    if (auto matTempExpr = dyn_cast<MaterializeTemporaryExpr>(operatorCall->getArg(0)))
+        check(matTempExpr);
+    if (auto matTempExpr = dyn_cast<MaterializeTemporaryExpr>(operatorCall->getArg(1)))
+        check(matTempExpr);
+    return true;
+}
+
 Expr const* StringAdd::ignore(Expr const* expr)
 {
     return compat::IgnoreImplicit(compat::IgnoreImplicit(expr)->IgnoreParens());
@@ -183,6 +244,9 @@ Expr const* StringAdd::ignore(Expr const* expr)
 bool StringAdd::isSideEffectFree(Expr const* expr)
 {
     expr = ignore(expr);
+    // I don't think the OUStringAppend functionality can handle this efficiently
+    if (isa<ConditionalOperator>(expr))
+        return false;
     // Multiple statements have a well defined evaluation order (sequence points between them)
     // but a single expression may be evaluated in arbitrary order;
     // if there are side effects in one of the sub-expressions that have an effect on another subexpression,
@@ -204,15 +268,20 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
 
     if (auto callExpr = dyn_cast<CallExpr>(expr))
     {
-        // check for calls through OUString::number
+        // check for calls through OUString::number/OUString::unacquired
         if (auto calleeMethodDecl = dyn_cast_or_null<CXXMethodDecl>(callExpr->getCalleeDecl()))
-            if (calleeMethodDecl && calleeMethodDecl->getIdentifier()
-                && calleeMethodDecl->getName() == "number")
+            if (calleeMethodDecl && calleeMethodDecl->getIdentifier())
             {
-                auto tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
-                if (tc.Class("OUString") || tc.Class("OString"))
-                    if (isSideEffectFree(callExpr->getArg(0)))
-                        return true;
+                auto name = calleeMethodDecl->getName();
+                if (name == "number" || name == "unacquired")
+                {
+                    auto tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
+                    if (tc.Class("OUString") || tc.Class("OString"))
+                    {
+                        if (isSideEffectFree(callExpr->getArg(0)))
+                            return true;
+                    }
+                }
             }
         if (auto calleeFunctionDecl = dyn_cast_or_null<FunctionDecl>(callExpr->getCalleeDecl()))
             if (calleeFunctionDecl && calleeFunctionDecl->getIdentifier())
@@ -222,8 +291,8 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
                 if (name == "OUStringToOString" || name == "OStringToOUString")
                     if (isSideEffectFree(callExpr->getArg(0)))
                         return true;
-                // check for calls through *ResId
-                if (name.endswith("ResId"))
+                // whitelist some known-safe methods
+                if (name.endswith("ResId") || name == "GetXMLToken")
                     if (isSideEffectFree(callExpr->getArg(0)))
                         return true;
             }

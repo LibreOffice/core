@@ -841,7 +841,7 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
     {
         //TODO: better pick a temp file name instead of adding .osl-tmp:
         // use the destination file to avoid EXDEV /* Cross-device link */
-        tmpDestFile = OString(pszDestFileName) + ".osl-tmp";
+        tmpDestFile = pszDestFileName + OStringLiteral(".osl-tmp");
         if (rename(pszDestFileName, tmpDestFile.getStr()) != 0)
         {
             int e = errno;

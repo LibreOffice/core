@@ -2754,7 +2754,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                 mpFS->startElementNS(XML_a, XML_avLst);
                 for (sal_Int32 i = 0, nElems = aAdjustmentSeq.getLength(); i < nElems; ++i )
                 {
-                    OString sName = OString("adj") + (( nElems > 1 ) ? OString::number(i + 1) : OString());
+                    OString sName = "adj" + (( nElems > 1 ) ? OString::number(i + 1) : OString());
                     double fValue(0.0);
                     if (aAdjustmentSeq[i].Value.getValueTypeClass() == TypeClass_DOUBLE)
                         aAdjustmentSeq[i].Value >>= fValue;
@@ -2788,7 +2788,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                     {
                         fValue /= 0.216;
                     }
-                    OString sFmla = OString("val ") + OString::number(std::lround(fValue));
+                    OString sFmla = "val " + OString::number(std::lround(fValue));
                     mpFS->singleElementNS(XML_a, XML_gd, XML_name, sName, XML_fmla, sFmla);
                 }
                 mpFS->endElementNS( XML_a, XML_avLst );
@@ -2904,8 +2904,8 @@ void DrawingML::WritePresetShape( const char* pShape , std::vector< std::pair<sa
         mpFS->startElementNS(XML_a, XML_avLst);
         for (auto const& elem : rAvList)
         {
-            OString sName = OString("adj") + ( ( elem.first > 0 ) ? OString::number(elem.first) : OString() );
-            OString sFmla = OString("val ") + OString::number( elem.second );
+            OString sName = "adj" + ( ( elem.first > 0 ) ? OString::number(elem.first) : OString() );
+            OString sFmla = "val " + OString::number( elem.second );
 
             mpFS->singleElementNS(XML_a, XML_gd, XML_name, sName, XML_fmla, sFmla);
         }

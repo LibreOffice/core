@@ -350,7 +350,7 @@ OString XMLDocumentWrapper_XmlSecImpl::getNodeQName(const xmlNodePtr pNode)
         if (pNs->prefix != nullptr)
         {
             OString sPrefix(reinterpret_cast<const char*>(pNs->prefix));
-            sNodeName = sPrefix+OString(":")+sNodeName;
+            sNodeName = sPrefix + ":" + sNodeName;
         }
     }
 

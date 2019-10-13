@@ -62,7 +62,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtStri
             eOc = lcl_KnownAddIn( t );
 
             if( eOc == ocNoName )
-                t = OString("L123_") + t;
+                t = "L123_" + t;
         }
         else
             t = "#UNKNOWN FUNC NAME#";

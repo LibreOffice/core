@@ -152,7 +152,7 @@ namespace
 
             for (char c = 'a'; c <= 'z'; ++c, ++itBuf)
             {
-                OUString aName = OUString(c) + ".txt";
+                OUString aName = OUStringLiteral1(c) + ".txt";
 
                 uno::Reference<io::XInputStream> xStrm;
                 mxNA->getByName(aName) >>= xStrm;
@@ -174,7 +174,7 @@ namespace
 
         for (char c = 'a'; c <= 'z'; ++c, ++itBuf)
         {
-            OUString aName = OUString(c) + ".txt";
+            OUString aName = OUStringLiteral1(c) + ".txt";
 
             uno::Reference<io::XInputStream> xStrm;
             //Size of each stream is 1mb (>10000) => XBufferedThreadedStream

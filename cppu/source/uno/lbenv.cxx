@@ -933,7 +933,7 @@ void EnvironmentsData::registerEnvironment( uno_Environment ** ppEnv )
 
     OUString aKey =
         OUString::number( reinterpret_cast< sal_IntPtr >(pEnv->pContext) ) +
-        OUString(pEnv->pTypeName);
+        OUString::unacquired(&pEnv->pTypeName);
 
     // try to find registered environment
     OUString2EnvironmentMap::const_iterator const iFind(

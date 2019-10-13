@@ -643,8 +643,8 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                     IllegalArgumentException aExc(
                         "cannot coerce argument type during corereflection call:"
                         "\narg no.: " + OUString::number(nPos)
-                        + " expected: \"" + OUString(pTD->pTypeName)
-                        + "\" actual: \"" + OUString(pCppArgs[nPos].getValueTypeRef()->pTypeName)
+                        + " expected: \"" + OUString::unacquired(&pTD->pTypeName)
+                        + "\" actual: \"" + OUString::unacquired(&pCppArgs[nPos].getValueTypeRef()->pTypeName)
                         + "\"",
                         *o3tl::doAccess<Reference<XInterface>>(rObj), static_cast<sal_Int16>(nPos) );
 

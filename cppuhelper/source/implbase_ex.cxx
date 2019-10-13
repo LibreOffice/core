@@ -200,7 +200,7 @@ static void * queryDeepNoXInterface(
         }
         else
         {
-            OUString msg( "cannot get type description for type \"" + OUString(pEntries[ n ].m_type.typeRef->pTypeName) + "\"!" );
+            OUString msg( "cannot get type description for type \"" + OUString::unacquired(&pEntries[ n ].m_type.typeRef->pTypeName) + "\"!" );
             SAL_WARN( "cppuhelper", msg );
             throw RuntimeException( msg );
         }
