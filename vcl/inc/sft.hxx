@@ -713,12 +713,12 @@ constexpr sal_uInt32 T_CFF  = 0x43464620;
 #define O_vmtx 9     /* 'vmtx' */
 #define O_OS2  10    /* 'OS/2' */
 #define O_post 11    /* 'post' */
-#define O_cvt  13    /* 'cvt_' - only used in TT->TT generation */
-#define O_prep 14    /* 'prep' - only used in TT->TT generation */
-#define O_fpgm 15    /* 'fpgm' - only used in TT->TT generation */
-#define O_gsub 16    /* 'GSUB' */
-#define O_CFF  17    /* 'CFF' */
-#define NUM_TAGS 18
+#define O_cvt  12    /* 'cvt_' - only used in TT->TT generation */
+#define O_prep 13    /* 'prep' - only used in TT->TT generation */
+#define O_fpgm 14    /* 'fpgm' - only used in TT->TT generation */
+#define O_gsub 15    /* 'GSUB' */
+#define O_CFF  16    /* 'CFF' */
+#define NUM_TAGS 17
 
     struct TrueTypeFont {
         char        *fname;
