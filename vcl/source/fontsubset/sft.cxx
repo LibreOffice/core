@@ -103,29 +103,6 @@ struct GlyphOffsets {
     sal_uInt32 *offs;             /* array of nGlyphs offsets */
 };
 
-static const sal_uInt32 T_true = 0x74727565;        /* 'true' */
-static const sal_uInt32 T_ttcf = 0x74746366;        /* 'ttcf' */
-static const sal_uInt32 T_otto = 0x4f54544f;        /* 'OTTO' */
-
-/* standard TrueType table tags */
-#define T_maxp 0x6D617870
-#define T_glyf 0x676C7966
-#define T_head 0x68656164
-#define T_loca 0x6C6F6361
-#define T_name 0x6E616D65
-#define T_hhea 0x68686561
-#define T_hmtx 0x686D7478
-#define T_cmap 0x636D6170
-#define T_vhea 0x76686561
-#define T_vmtx 0x766D7478
-#define T_OS2  0x4F532F32
-#define T_post 0x706F7374
-#define T_cvt  0x63767420
-#define T_prep 0x70726570
-#define T_fpgm 0x6670676D
-#define T_gsub 0x47535542
-#define T_CFF  0x43464620
-
 static void *smalloc(size_t size)
 {
     void *res = malloc(size);
@@ -1937,7 +1914,7 @@ SFErrCodes CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
     /**                       hhea                         **/
     const sal_uInt8* p = getTable(ttf, O_hhea);
     if (p) {
-        hhea = TrueTypeTableNew_hhea(GetUInt16(p, HHEA_ascender_offset), GetUInt16(p, HHEA_descender_offset), GetUInt16(p, HHEA_lineGap_offset), GetUInt16(p, HHEA_caretSlopeRise_offset), GetUInt16(p, HHEA_caretSlopeRun_offset));
+        hhea = TrueTypeTableNew_hhea(GetInt16(p, HHEA_ascender_offset), GetInt16(p, HHEA_descender_offset), GetInt16(p, HHEA_lineGap_offset), GetInt16(p, HHEA_caretSlopeRise_offset), GetInt16(p, HHEA_caretSlopeRun_offset));
     } else {
         hhea = TrueTypeTableNew_hhea(0, 0, 0, 0, 0);
     }
@@ -1946,7 +1923,7 @@ SFErrCodes CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
 
     p = getTable(ttf, O_head);
     assert(p != nullptr);
-    head = TrueTypeTableNew_head(GetUInt32(p, HEAD_fontRevision_offset),
+    head = TrueTypeTableNew_head(GetInt32(p, HEAD_fontRevision_offset),
                                  GetUInt16(p, HEAD_flags_offset),
                                  GetUInt16(p, HEAD_unitsPerEm_offset),
                                  p+HEAD_created_offset,
@@ -1988,10 +1965,10 @@ SFErrCodes CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
     /**                       post                          **/
     if ((p = getTable(ttf, O_post)) != nullptr) {
         post = TrueTypeTableNew_post(0x00030000,
-                                     GetUInt32(p, POST_italicAngle_offset),
-                                     GetUInt16(p, POST_underlinePosition_offset),
-                                     GetUInt16(p, POST_underlineThickness_offset),
-                                     GetUInt16(p, POST_isFixedPitch_offset));
+                                     GetInt32(p, POST_italicAngle_offset),
+                                     GetInt16(p, POST_underlinePosition_offset),
+                                     GetInt16(p, POST_underlineThickness_offset),
+                                     GetUInt32(p, POST_isFixedPitch_offset));
     } else {
         post = TrueTypeTableNew_post(0x00030000, 0, 0, 0, 0);
     }
@@ -2171,7 +2148,8 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     int i;
     SFErrCodes res;
 
-    sal_uInt32 ver, rev;
+    sal_uInt16 ver;
+    sal_Int32 rev;
 
     sal_uInt8 *sfntP;
     sal_uInt32 sfntLen;
@@ -2187,14 +2165,14 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     const sal_uInt8* p = getTable(ttf, O_head);
     const sal_uInt8* headP = p;
     assert(p != nullptr);
-    head = TrueTypeTableNew_head(GetUInt32(p, 4), GetUInt16(p, 16), GetUInt16(p, 18), p+20, GetUInt16(p, 44), GetUInt16(p, 46), GetInt16(p, 48));
-    ver = GetUInt32(p, 0);
-    rev = GetUInt32(p, 4);
+    head = TrueTypeTableNew_head(GetInt32(p, HEAD_fontRevision_offset), GetUInt16(p, HEAD_flags_offset), GetUInt16(p, HEAD_unitsPerEm_offset), p+HEAD_created_offset, GetUInt16(p, HEAD_macStyle_offset), GetUInt16(p, HEAD_lowestRecPPEM_offset), GetInt16(p, HEAD_fontDirectionHint_offset));
+    ver = GetUInt16(p, HEAD_majorVersion_offset);
+    rev = GetInt32(p, HEAD_fontRevision_offset);
 
     /**                       hhea                         **/
     p = getTable(ttf, O_hhea);
     if (p) {
-        hhea = TrueTypeTableNew_hhea(GetUInt16(p, 4), GetUInt16(p, 6), GetUInt16(p, 8), GetUInt16(p, 18), GetUInt16(p, 20));
+        hhea = TrueTypeTableNew_hhea(GetInt16(p, HHEA_ascender_offset), GetInt16(p, HHEA_descender_offset), GetInt16(p, HHEA_lineGap_offset), GetInt16(p, HHEA_caretSlopeRise_offset), GetInt16(p, HHEA_caretSlopeRun_offset));
     } else {
         hhea = TrueTypeTableNew_hhea(0, 0, 0, 0, 0);
     }
@@ -2234,7 +2212,7 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
         return res;
     }
 
-    fprintf(outf, "%%!PS-TrueTypeFont-%d.%d-%d.%d\n", static_cast<int>(ver>>16), static_cast<int>(ver & 0xFFFF), static_cast<int>(rev>>16), static_cast<int>(rev & 0xFFFF));
+    fprintf(outf, "%%!PS-TrueTypeFont-%d.%d-%d.%d\n", static_cast<int>(ver), static_cast<int>(ver & 0xFF), static_cast<int>(rev>>16), static_cast<int>(rev & 0xFFFF));
     fprintf(outf, "%%%%Creator: %s %s %s\n", modname, modver, modextra);
     fprintf(outf, "%%- Font subset generated from a source font file: '%s'\n", ttf->fname);
     fprintf(outf, "%%- Original font name: %s\n", ttf->psname);
@@ -2244,7 +2222,7 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     fprintf(outf, "/FontName (%s) cvn def\n", psname);
     fprintf(outf, "/PaintType 0 def\n");
     fprintf(outf, "/FontMatrix [1 0 0 1 0 0] def\n");
-    fprintf(outf, "/FontBBox [%d %d %d %d] def\n", XUnits(UPEm, GetInt16(headP, 36)), XUnits(UPEm, GetInt16(headP, 38)), XUnits(UPEm, GetInt16(headP, 40)), XUnits(UPEm, GetInt16(headP, 42)));
+    fprintf(outf, "/FontBBox [%d %d %d %d] def\n", XUnits(UPEm, GetInt16(headP, HEAD_xMin_offset)), XUnits(UPEm, GetInt16(headP, HEAD_yMin_offset)), XUnits(UPEm, GetInt16(headP, HEAD_xMax_offset)), XUnits(UPEm, GetInt16(headP, HEAD_yMax_offset)));
     fprintf(outf, "/FontType 42 def\n");
     fprintf(outf, "/Encoding 256 array def\n");
     fprintf(outf, "    0 1 255 {Encoding exch /.notdef put} for\n");
@@ -2429,7 +2407,7 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
         info->yMin = XUnits(UPEm, GetInt16(table, HEAD_yMin_offset));
         info->xMax = XUnits(UPEm, GetInt16(table, HEAD_xMax_offset));
         info->yMax = XUnits(UPEm, GetInt16(table, HEAD_yMax_offset));
-        info->macStyle = GetInt16(table, HEAD_macStyle_offset);
+        info->macStyle = GetUInt16(table, HEAD_macStyle_offset);
     }
 
     table = getTable(ttf, O_hhea);

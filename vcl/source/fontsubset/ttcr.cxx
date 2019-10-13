@@ -39,17 +39,6 @@ namespace vcl
         list   tables;                      /**< List of table tags and pointers */
     };
 
-/* These must be #defined so that they can be used in initializers */
-#define T_maxp  0x6D617870
-#define T_glyf  0x676C7966
-#define T_head  0x68656164
-#define T_loca  0x6C6F6361
-#define T_name  0x6E616D65
-#define T_hhea  0x68686561
-#define T_hmtx  0x686D7478
-#define T_cmap  0x636D6170
-#define T_post  0x706F7374
-
 struct TableEntry {
     sal_uInt32 tag;
     sal_uInt32 length;
@@ -1016,8 +1005,8 @@ TrueTypeTable *TrueTypeTableNew_name(int n, NameRecord const *nr)
     return table;
 }
 
-TrueTypeTable *TrueTypeTableNew_post(sal_uInt32 format,
-                                     sal_uInt32 italicAngle,
+TrueTypeTable *TrueTypeTableNew_post(sal_Int32 format,
+                                     sal_Int32 italicAngle,
                                      sal_Int16 underlinePosition,
                                      sal_Int16 underlineThickness,
                                      sal_uInt32 isFixedPitch)
@@ -1459,7 +1448,7 @@ static sal_uInt32 mkTag(sal_uInt8 a, sal_uInt8 b, sal_uInt8 c, sal_uInt8 d) {
 int main()
 {
     TrueTypeCreator *ttcr;
-    sal_uInt8 *t1, *t2, *t3, *t4, *t5, *t6, *t7;
+    sal_uInt8 *t1, *t2, *t3, *t4, *t5, *t6;
 
     TrueTypeCreatorNewEmpty(mkTag('t','r','u','e'), &ttcr);
 
@@ -1469,15 +1458,13 @@ int main()
     t4 = malloc(4000); memset(t4, 'd', 4000);
     t5 = malloc(5000); memset(t5, 'e', 5000);
     t6 = malloc(6000); memset(t6, 'f', 6000);
-    t7 = malloc(7000); memset(t7, 'g', 7000);
 
-    AddTable(ttcr, TrueTypeTableNew(0x6D617870, 1000, t1));
-    AddTable(ttcr, TrueTypeTableNew(0x4F532F32, 2000, t2));
-    AddTable(ttcr, TrueTypeTableNew(0x636D6170, 3000, t3));
-    AddTable(ttcr, TrueTypeTableNew(0x6C6F6361, 4000, t4));
-    AddTable(ttcr, TrueTypeTableNew(0x68686561, 5000, t5));
-    AddTable(ttcr, TrueTypeTableNew(0x676C7966, 6000, t6));
-    AddTable(ttcr, TrueTypeTableNew(0x6B65726E, 7000, t7));
+    AddTable(ttcr, TrueTypeTableNew(T_maxp, 1000, t1));
+    AddTable(ttcr, TrueTypeTableNew(T_OS2, 2000, t2));
+    AddTable(ttcr, TrueTypeTableNew(T_cmap, 3000, t3));
+    AddTable(ttcr, TrueTypeTableNew(T_loca, 4000, t4));
+    AddTable(ttcr, TrueTypeTableNew(T_hhea, 5000, t5));
+    AddTable(ttcr, TrueTypeTableNew(T_glyf, 6000, t6));
 
     free(t1);
     free(t2);
@@ -1485,7 +1472,6 @@ int main()
     free(t4);
     free(t5);
     free(t6);
-    free(t7);
 
     StreamToFile(ttcr, "ttcrout.ttf");
 
