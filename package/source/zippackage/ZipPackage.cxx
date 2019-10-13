@@ -1748,27 +1748,9 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         // this property is only necessary to support raw passwords in storage API;
         // because of this support the storage has to operate with more than one key dependent on storage generation algorithm;
         // when this support is removed, the storage will get only one key from outside
-        uno::Sequence< beans::NamedValue > aKeys;
-        if ( !( aValue >>= aKeys ) )
+        if ( !( aValue >>= m_aStorageEncryptionKeys ) )
             throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 2 );
 
-        if ( aKeys.hasElements() )
-        {
-            bool bHasSHA256 = false;
-            bool bHasSHA1 = false;
-            for ( const auto& rKey : std::as_const(aKeys) )
-            {
-                if ( rKey.Name == PACKAGE_ENCRYPTIONDATA_SHA256UTF8 )
-                    bHasSHA256 = true;
-                if ( rKey.Name == PACKAGE_ENCRYPTIONDATA_SHA1UTF8 )
-                    bHasSHA1 = true;
-            }
-
-            if ( !bHasSHA256 && !bHasSHA1 )
-                throw IllegalArgumentException(THROW_WHERE "Expected keys are not provided!", uno::Reference< uno::XInterface >(), 2 );
-        }
-
-        m_aStorageEncryptionKeys = aKeys;
         m_aEncryptionKey.realloc( 0 );
     }
     else if ( aPropertyName == ENCRYPTION_ALGORITHMS_PROPERTY )
