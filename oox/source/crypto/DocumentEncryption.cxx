@@ -78,12 +78,7 @@ bool DocumentEncryption::encrypt()
 
     mxPackageEncryption->setupEncryption(mMediaEncData);
 
-    Reference<XOutputStream> xOutputStream(mrOleStorage.openOutputStream("EncryptedPackage"), UNO_SET_THROW);
-    mxPackageEncryption->encrypt(xInputStream, xOutputStream);
-    xOutputStream->flush();
-    xOutputStream->closeOutput();
-
-    Sequence<NamedValue> aStreams = mxPackageEncryption->writeEncryptionInfo();
+    Sequence<NamedValue> aStreams = mxPackageEncryption->encrypt(xInputStream);
 
     for (const NamedValue & aStream : aStreams)
     {
