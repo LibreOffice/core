@@ -171,8 +171,8 @@ namespace vcl
 /**
  * Creates a new 'post' table of one of the supported formats
  */
-    TrueTypeTable *TrueTypeTableNew_post(sal_uInt32 format,
-                                         sal_uInt32 italicAngle,
+    TrueTypeTable *TrueTypeTableNew_post(sal_Int32 format,
+                                         sal_Int32 italicAngle,
                                          sal_Int16 underlinePosition,
                                          sal_Int16 underlineThickness,
                                          sal_uInt32 isFixedPitch);
