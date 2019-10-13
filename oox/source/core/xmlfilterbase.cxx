@@ -881,17 +881,7 @@ Reference<XStream> XmlFilterBase::implGetOutputStream( MediaDescriptor& rMediaDe
                                         MediaDescriptor::PROP_ENCRYPTIONDATA(),
                                         Sequence< NamedValue >() );
 
-    OUString aPassword;
-    for (int i=0; i<aMediaEncData.getLength(); i++)
-    {
-        if (aMediaEncData[i].Name == "OOXPassword")
-        {
-            Any& any = aMediaEncData[i].Value;
-            any >>= aPassword;
-            break;
-        }
-    }
-    if (aPassword.isEmpty())
+    if (aMediaEncData.getLength() == 0)
     {
         return FilterBase::implGetOutputStream( rMediaDescriptor );
     }
