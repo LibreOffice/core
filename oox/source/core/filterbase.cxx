@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
@@ -158,8 +159,6 @@ struct FilterBaseImpl
 
     /// @throws IllegalArgumentException
     void                setDocumentModel( const Reference< XComponent >& rxComponent );
-
-    void                initializeFilter();
 };
 
 FilterBaseImpl::FilterBaseImpl( const Reference< XComponentContext >& rxContext ) :
@@ -181,18 +180,6 @@ void FilterBaseImpl::setDocumentModel( const Reference< XComponent >& rxComponen
     catch( Exception& )
     {
         throw IllegalArgumentException();
-    }
-}
-
-void FilterBaseImpl::initializeFilter()
-{
-    try
-    {
-        // lock the model controllers
-        mxModel->lockControllers();
-    }
-    catch( Exception& )
-    {
     }
 }
 
@@ -480,7 +467,12 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDes
     DocumentOpenedGuard aOpenedGuard( mxImpl->maFileUrl );
     if( aOpenedGuard.isValid() || mxImpl->maFileUrl.isEmpty() )
     {
-        mxImpl->initializeFilter();
+        Reference<XModel> xTempModel = mxImpl->mxModel;
+        xTempModel->lockControllers();
+        comphelper::ScopeGuard const lockControllersGuard([xTempModel]() {
+            xTempModel->unlockControllers();
+        });
+
         switch( mxImpl->meDirection )
         {
             case FILTERDIRECTION_UNKNOWN:
@@ -500,7 +492,6 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDes
                 }
             break;
         }
-        mxImpl->mxModel->unlockControllers();
     }
     return bRet;
 }
