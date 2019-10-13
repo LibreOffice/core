@@ -1,3 +1,4 @@
 --enable-dbgutil
+--disable-symbols
 --disable-64-bit
 --disable-dependency-tracking
