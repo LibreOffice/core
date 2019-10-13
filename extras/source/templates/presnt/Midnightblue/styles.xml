@@ -17,7 +17,7 @@
       <style:paragraph-properties style:text-autospace="none" style:punctuation-wrap="simple" style:line-break="strict" style:font-independent-line-spacing="false">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties style:use-window-font-color="true" style:font-name="Source Sans Pro" fo:font-size="24pt"/>
+      <style:text-properties style:use-window-font-color="true" style:font-name="Source Sans Pro" fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:default-style>
     <style:style style:name="standard" style:family="graphic">
       <style:graphic-properties draw:stroke="solid" draw:stroke-dash="Dashed_20__28_var_29__20_1" svg:stroke-width="0cm" svg:stroke-color="#3465a4" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="solid" draw:fill-color="#729fcf" draw:textarea-horizontal-align="justify" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080">
@@ -67,7 +67,7 @@
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="objectwitharrow" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.2cm" svg:stroke-color="#2c3e50" draw:marker-start="Arrow" draw:marker-start-width="0.7cm" draw:marker-start-center="true" draw:marker-end-width="0.38cm" draw:stroke-linejoin="miter" draw:fill-gradient-name="Gradient_20_2" draw:fill-hatch-name="Hatching_20_91" draw:fill-image-name="Bitmap_20_1"/>
@@ -84,7 +84,7 @@
     <style:style style:name="textbody" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-gradient-name="Gradient_20_3" draw:fill-hatch-name="Hatching_20_91" draw:fill-image-name="Bitmap_20_1"/>
       <style:paragraph-properties fo:line-height="150%"/>
-      <style:text-properties fo:font-size="16pt"/>
+      <style:text-properties fo:font-size="16pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
     </style:style>
     <style:style style:name="textbodyjustfied" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-gradient-name="Gradient_20_3" draw:fill-hatch-name="Hatching_20_91" draw:fill-image-name="Bitmap_20_1"/>
@@ -96,36 +96,36 @@
     </style:style>
     <style:style style:name="title" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-gradient-name="Gradient_20_2" draw:fill-hatch-name="Hatching_20_91" draw:fill-image-name="Bitmap_20_1"/>
-      <style:text-properties style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="44pt" fo:font-weight="900"/>
+      <style:text-properties style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="44pt" style:font-size-asian="44pt" style:font-size-complex="44pt" fo:font-weight="900" style:font-weight-asian="900" style:font-weight-complex="900"/>
     </style:style>
     <style:style style:name="title1" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#008080" draw:fill-gradient-name="Gradient_20_2" draw:fill-hatch-name="Hatching_20_91" draw:fill-image-name="Bitmap_20_1" draw:shadow="visible" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="title2" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties svg:stroke-width="0.05cm" draw:fill-color="#ffcc99" draw:fill-gradient-name="Gradient_20_2" draw:fill-hatch-name="Hatching_20_91" draw:fill-image-name="Bitmap_20_1" draw:shadow="visible" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0.2cm" fo:margin-top="0.1cm" fo:margin-bottom="0.1cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="36pt"/>
+      <style:text-properties fo:font-size="36pt" style:font-size-asian="36pt" style:font-size-complex="36pt"/>
     </style:style>
     <style:style style:name="headline" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-gradient-name="Gradient_20_2" draw:fill-hatch-name="Hatching_20_91" draw:fill-image-name="Bitmap_20_1"/>
       <style:paragraph-properties fo:margin-top="0.42cm" fo:margin-bottom="0.21cm"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="headline1" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-gradient-name="Gradient_20_2" draw:fill-hatch-name="Hatching_20_91" draw:fill-image-name="Bitmap_20_1"/>
       <style:paragraph-properties fo:margin-top="0.42cm" fo:margin-bottom="0.21cm"/>
-      <style:text-properties style:font-name="Source Sans Pro Semibold" fo:font-family="'Source Sans Pro Semibold'" style:font-style-name="Semibold" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" fo:font-weight="600"/>
+      <style:text-properties style:font-name="Source Sans Pro Semibold" fo:font-family="'Source Sans Pro Semibold'" style:font-style-name="Semibold" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt" fo:font-weight="600" style:font-weight-asian="600" style:font-weight-complex="600"/>
     </style:style>
     <style:style style:name="headline2" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-gradient-name="Gradient_20_2" draw:fill-hatch-name="Hatching_20_91" draw:fill-image-name="Bitmap_20_1"/>
       <style:paragraph-properties fo:margin-top="0.42cm" fo:margin-bottom="0.21cm"/>
-      <style:text-properties fo:font-size="14pt" fo:font-style="normal" fo:font-weight="normal"/>
+      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
     </style:style>
     <style:style style:name="measure" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="solid" svg:stroke-color="#000000" draw:marker-start="Arrow" draw:marker-start-width="0.2cm" draw:marker-end="Arrow" draw:marker-end-width="0.2cm" draw:fill="none" draw:fill-gradient-name="Gradient_20_2" draw:fill-hatch-name="Hatching_20_91" draw:fill-image-name="Bitmap_20_1" draw:show-unit="true"/>
-      <style:text-properties fo:font-size="12pt"/>
+      <style:text-properties fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
     </style:style>
     <style:style style:name="Midnightblue-background" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ecf0f1" draw:fill-image-width="0cm" draw:fill-image-height="0cm"/>
@@ -136,12 +136,12 @@
       <style:paragraph-properties style:text-autospace="none" style:punctuation-wrap="simple">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties fo:color="#ffffff" style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" fo:font-weight="900" style:letter-kerning="true"/>
+      <style:text-properties fo:color="#ffffff" style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt" fo:font-weight="900" style:font-weight-asian="900" style:font-weight-complex="900" style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Midnightblue-notes" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:paragraph-properties fo:margin-left="0.6cm" fo:margin-right="0cm" fo:text-indent="-0.6cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Midnightblue-outline1" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
@@ -189,39 +189,39 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.499cm" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#2c3e50" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Semibold" fo:font-family="'Source Sans Pro Semibold'" style:font-style-name="Semibold" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="600" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#2c3e50" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Semibold" fo:font-family="'Source Sans Pro Semibold'" style:font-style-name="Semibold" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="32pt" style:font-size-asian="32pt" style:font-size-complex="32pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="600" style:font-weight-asian="600" style:font-weight-complex="600" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Midnightblue-outline2" style:family="presentation" style:parent-style-name="Midnightblue-outline1">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.4cm" fo:text-indent="0cm"/>
-      <style:text-properties style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="28pt" fo:font-weight="normal"/>
+      <style:text-properties style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="28pt" style:font-size-asian="28pt" style:font-size-complex="28pt" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
     </style:style>
     <style:style style:name="Midnightblue-outline3" style:family="presentation" style:parent-style-name="Midnightblue-outline2">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.3cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="Midnightblue-outline4" style:family="presentation" style:parent-style-name="Midnightblue-outline3">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue-outline5" style:family="presentation" style:parent-style-name="Midnightblue-outline4">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue-outline6" style:family="presentation" style:parent-style-name="Midnightblue-outline5">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue-outline7" style:family="presentation" style:parent-style-name="Midnightblue-outline6">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue-outline8" style:family="presentation" style:parent-style-name="Midnightblue-outline7">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue-outline9" style:family="presentation" style:parent-style-name="Midnightblue-outline8">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue-subtitle" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
@@ -269,7 +269,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#2c3e50" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#2c3e50" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="32pt" style:font-size-asian="32pt" style:font-size-complex="32pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Midnightblue-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:wrap-option="wrap">
@@ -319,7 +319,7 @@
       <style:paragraph-properties fo:text-align="start" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="900" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" style:font-size-asian="36pt" style:font-size-complex="36pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="900" style:font-weight-asian="900" style:font-weight-complex="900" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Midnightblue1-background" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#2c3e50" draw:fill-hatch-solid="false" draw:fill-image-width="0cm" draw:fill-image-height="0cm"/>
@@ -330,12 +330,12 @@
       <style:paragraph-properties style:text-autospace="none" style:punctuation-wrap="simple">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties fo:color="#ffffff" style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" fo:font-weight="900" style:letter-kerning="true"/>
+      <style:text-properties fo:color="#ffffff" style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt" fo:font-weight="900" style:font-weight-asian="900" style:font-weight-complex="900" style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Midnightblue1-notes" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:paragraph-properties fo:margin-left="0.6cm" fo:margin-right="0cm" fo:text-indent="-0.6cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#2c3e50" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#2c3e50" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Midnightblue1-outline1" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
@@ -383,39 +383,39 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.309cm" fo:text-align="start" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Midnightblue1-outline2" style:family="presentation" style:parent-style-name="Midnightblue1-outline1">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.4cm" fo:text-align="start" fo:text-indent="0cm"/>
-      <style:text-properties style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" fo:font-weight="normal"/>
+      <style:text-properties style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
     </style:style>
     <style:style style:name="Midnightblue1-outline3" style:family="presentation" style:parent-style-name="Midnightblue1-outline2">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.3cm" fo:text-align="start" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue1-outline4" style:family="presentation" style:parent-style-name="Midnightblue1-outline3">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:text-align="start" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue1-outline5" style:family="presentation" style:parent-style-name="Midnightblue1-outline4">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-align="start" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue1-outline6" style:family="presentation" style:parent-style-name="Midnightblue1-outline5">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-align="start" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue1-outline7" style:family="presentation" style:parent-style-name="Midnightblue1-outline6">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-align="start" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue1-outline8" style:family="presentation" style:parent-style-name="Midnightblue1-outline7">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue1-outline9" style:family="presentation" style:parent-style-name="Midnightblue1-outline8">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue1-subtitle" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
@@ -463,7 +463,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="22pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="22pt" style:font-size-asian="22pt" style:font-size-complex="22pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Midnightblue1-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:wrap-option="wrap">
@@ -513,7 +513,7 @@
       <style:paragraph-properties fo:line-height="150%" fo:text-align="center" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="900" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" style:font-size-asian="36pt" style:font-size-complex="36pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="900" style:font-weight-asian="900" style:font-weight-complex="900" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Midnightblue2-background" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#2c3e50" draw:fill-hatch-solid="false" draw:fill-image-width="0cm" draw:fill-image-height="0cm"/>
@@ -524,12 +524,12 @@
       <style:paragraph-properties style:text-autospace="none" style:punctuation-wrap="simple">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties fo:color="#ffffff" style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" fo:font-weight="900" style:letter-kerning="true"/>
+      <style:text-properties fo:color="#ffffff" style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt" fo:font-weight="900" style:font-weight-asian="900" style:font-weight-complex="900" style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Midnightblue2-notes" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:paragraph-properties fo:margin-left="0.6cm" fo:margin-right="0cm" fo:text-indent="-0.6cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Midnightblue2-outline1" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
@@ -577,39 +577,39 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.309cm" fo:text-align="start" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Midnightblue2-outline2" style:family="presentation" style:parent-style-name="Midnightblue2-outline1">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.4cm" fo:text-align="start" fo:text-indent="0cm"/>
-      <style:text-properties style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" fo:font-weight="normal"/>
+      <style:text-properties style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
     </style:style>
     <style:style style:name="Midnightblue2-outline3" style:family="presentation" style:parent-style-name="Midnightblue2-outline2">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.3cm" fo:text-align="start" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue2-outline4" style:family="presentation" style:parent-style-name="Midnightblue2-outline3">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:text-align="start" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue2-outline5" style:family="presentation" style:parent-style-name="Midnightblue2-outline4">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-align="start" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue2-outline6" style:family="presentation" style:parent-style-name="Midnightblue2-outline5">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-align="start" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue2-outline7" style:family="presentation" style:parent-style-name="Midnightblue2-outline6">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-align="start" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue2-outline8" style:family="presentation" style:parent-style-name="Midnightblue2-outline7">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue2-outline9" style:family="presentation" style:parent-style-name="Midnightblue2-outline8">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Midnightblue2-subtitle" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
@@ -657,7 +657,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="22pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="22pt" style:font-size-asian="22pt" style:font-size-complex="22pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Midnightblue2-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:wrap-option="wrap">
@@ -707,7 +707,7 @@
       <style:paragraph-properties fo:line-height="100%" fo:text-align="center" style:text-autospace="none" style:punctuation-wrap="hanging">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#2c3e50" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="900" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#2c3e50" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" style:font-size-asian="36pt" style:font-size-complex="36pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="900" style:font-weight-asian="900" style:font-weight-complex="900" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:presentation-page-layout style:name="AL0T26">
       <presentation:placeholder presentation:object="handout" svg:x="2.058cm" svg:y="1.743cm" svg:width="10.556cm" svg:height="-0.233cm"/>
@@ -803,20 +803,20 @@
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
     </style:style>
     <style:style style:name="MP1" style:family="paragraph">
-      <style:text-properties fo:font-size="14pt"/>
+      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP2" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
-      <style:text-properties fo:font-size="14pt"/>
+      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP3" style:family="paragraph">
       <style:paragraph-properties fo:text-align="end"/>
-      <style:text-properties fo:font-size="14pt"/>
+      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP4" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
       <style:paragraph-properties fo:text-align="end"/>
-      <style:text-properties fo:font-size="14pt"/>
+      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP5" style:family="paragraph">
       <loext:graphic-properties draw:fill="solid" draw:fill-color="#2c3e50"/>
@@ -841,50 +841,50 @@
       <style:paragraph-properties fo:text-align="center"/>
     </style:style>
     <style:style style:name="MP11" style:family="paragraph">
-      <style:text-properties style:use-window-font-color="true" fo:font-size="14pt"/>
+      <style:text-properties style:use-window-font-color="true" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP12" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
-      <style:text-properties style:use-window-font-color="true" fo:font-size="14pt"/>
+      <style:text-properties style:use-window-font-color="true" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP13" style:family="paragraph">
       <style:paragraph-properties fo:text-align="end"/>
-      <style:text-properties style:use-window-font-color="true" fo:font-size="14pt"/>
+      <style:text-properties style:use-window-font-color="true" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP14" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
       <style:paragraph-properties fo:text-align="end"/>
-      <style:text-properties style:use-window-font-color="true" fo:font-size="14pt"/>
+      <style:text-properties style:use-window-font-color="true" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP15" style:family="paragraph">
-      <style:text-properties fo:color="#000000" fo:font-size="14pt"/>
+      <style:text-properties fo:color="#000000" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP16" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
-      <style:text-properties fo:color="#000000" fo:font-size="14pt"/>
+      <style:text-properties fo:color="#000000" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP17" style:family="paragraph">
       <style:paragraph-properties fo:text-align="end"/>
-      <style:text-properties fo:color="#000000" fo:font-size="14pt"/>
+      <style:text-properties fo:color="#000000" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP18" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
       <style:paragraph-properties fo:text-align="end"/>
-      <style:text-properties fo:color="#000000" fo:font-size="14pt"/>
+      <style:text-properties fo:color="#000000" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP19" style:family="paragraph">
       <loext:graphic-properties draw:fill-color="#ffffff"/>
       <style:paragraph-properties fo:text-align="center"/>
     </style:style>
     <style:style style:name="MT1" style:family="text">
-      <style:text-properties fo:font-size="14pt"/>
+      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MT2" style:family="text"/>
     <style:style style:name="MT3" style:family="text">
-      <style:text-properties style:use-window-font-color="true" fo:font-size="14pt"/>
+      <style:text-properties style:use-window-font-color="true" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MT4" style:family="text">
-      <style:text-properties fo:color="#000000" fo:font-size="14pt"/>
+      <style:text-properties fo:color="#000000" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <text:list-style style:name="ML1">
       <text:list-level-style-bullet text:level="1" text:bullet-char="●">
