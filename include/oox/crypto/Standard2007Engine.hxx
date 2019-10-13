@@ -37,6 +37,8 @@ class OOX_DLLPUBLIC Standard2007Engine final : public cppu::WeakImplHelper<css::
     bool calculateEncryptionKey(const OUString& rPassword);
 
     css::uno::Reference<css::io::XInputStream> getStream(const css::uno::Sequence<css::beans::NamedValue> & rStreams, const OUString sStreamName);
+    css::uno::Sequence<sal_Int8> writeEncryptionInfo();
+    css::uno::Sequence<sal_Int8> writeEncryptedDocument(const css::uno::Reference<css::io::XInputStream>& rxInputStream);
 
 public:
     Standard2007Engine(const css::uno::Reference<css::uno::XComponentContext>& rxContext);
@@ -53,10 +55,7 @@ public:
 
     // Encryption
 
-    virtual css::uno::Sequence<css::beans::NamedValue> SAL_CALL writeEncryptionInfo() override;
-
-    virtual void SAL_CALL encrypt(const css::uno::Reference<css::io::XInputStream>& rxInputStream,
-                 css::uno::Reference<css::io::XOutputStream>& rxOutputStream) override;
+    virtual css::uno::Sequence<css::beans::NamedValue> SAL_CALL encrypt(const css::uno::Reference<css::io::XInputStream>& rxInputStream) override;
 
     virtual sal_Bool SAL_CALL setupEncryption(const css::uno::Sequence<css::beans::NamedValue>& rMediaEncData) override;
 
