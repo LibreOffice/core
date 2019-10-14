@@ -167,18 +167,18 @@ class SwUndoInsertLabel : public SwUndo
         } NODE;
     };
 
-    OUString const sText;
+    OUString const m_sText;
     // #i39983# the separator is drawn with a character style
-    OUString const sSeparator;
-    OUString const sNumberSeparator;
-    OUString const sCharacterStyle;
+    OUString const m_sSeparator;
+    OUString const m_sNumberSeparator;
+    OUString const m_sCharacterStyle;
     // #i26791# - re-store of drawing object position no longer needed
-    sal_uInt16 const nFieldId;
-    SwLabelType const eType;
-    SdrLayerID nLayerId;              // for character objects
-    bool const bBefore        :1;
-    bool bUndoKeep      :1;
-    bool const bCpyBrd        :1;
+    sal_uInt16 const m_nFieldId;
+    SwLabelType const m_eType;
+    SdrLayerID m_nLayerId;              // for character objects
+    bool const m_bBefore        :1;
+    bool m_bUndoKeep      :1;
+    bool const m_bCopyBorder        :1;
 
 public:
     SwUndoInsertLabel( const SwLabelType eTyp, const OUString &rText,
@@ -211,9 +211,9 @@ public:
     static SwRewriter CreateRewriter(const OUString &rStr);
 
     void SetNodePos( sal_uLong nNd )
-        { if( LTYPE_OBJECT != eType ) NODE.nNode = nNd; }
+        { if( LTYPE_OBJECT != m_eType ) NODE.nNode = nNd; }
 
-    void SetUndoKeep()  { bUndoKeep = true; }
+    void SetUndoKeep()  { m_bUndoKeep = true; }
     void SetFlys( SwFrameFormat& rOldFly, SfxItemSet const & rChgSet, SwFrameFormat& rNewFly );
     void SetDrawObj( SdrLayerID nLayerId );
 };
