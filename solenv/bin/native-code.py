@@ -508,8 +508,6 @@ custom_widgets = [
     'SvxLanguageBox',
     'SvxLightCtl3D',
     'SvxRelativeField',
-    'SvxTextEncodingBox',
-    'SvxTextEncodingBox',
     'SwNavHelpToolBox',
     'TableValueSet',
     'TemplateDefaultView',
