@@ -42,12 +42,6 @@ $(eval $(call gb_CppunitTest_set_include,sw_rtfexport3,\
     $$(INCLUDE) \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_CppunitTest_add_cxxflags,sw_rtfexport3,\
-    -bigobj \
-))
-endif
-
 $(eval $(call gb_CppunitTest_use_api,sw_rtfexport3,\
 	udkapi \
 	offapi \
