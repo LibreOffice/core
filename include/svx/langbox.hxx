@@ -25,7 +25,6 @@
 #include <svx/svxdllapi.h>
 #include <vcl/image.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
@@ -173,34 +172,6 @@ public:
     OUString get_text(int nPos) const { return m_xControl->get_text(nPos); }
     int get_count() const { return m_xControl->get_count(); }
     weld::ComboBox* get_widget() { return m_xControl.get(); }
-};
-
-class SVX_DLLPUBLIC SvxLanguageComboBox : public ComboBox, public SvxLanguageBoxBase
-{
-public:
-    SvxLanguageComboBox( vcl::Window* pParent, WinBits nBits );
-
-    enum class EditedAndValid
-    {
-        No,
-        Valid,
-        Invalid
-    };
-
-private:
-    EditedAndValid  meEditedAndValid;
-
-    SVX_DLLPRIVATE virtual sal_Int32    ImplInsertImgEntry( const OUString& rEntry, sal_Int32  nPos, bool bChecked ) override;
-
-    SVX_DLLPRIVATE virtual void         ImplClear() override;
-    SVX_DLLPRIVATE virtual sal_Int32    ImplInsertEntry( const OUString& rEntry, sal_Int32 nPos ) override;
-    SVX_DLLPRIVATE virtual void         ImplSetEntryData( sal_Int32 nPos, void* pData ) override;
-    SVX_DLLPRIVATE virtual sal_Int32    ImplGetSelectedEntryPos() const override;
-    SVX_DLLPRIVATE virtual void*        ImplGetEntryData( sal_Int32 nPos ) const override;
-    SVX_DLLPRIVATE virtual void         ImplSelectEntryPos( sal_Int32 nPos, bool bSelect ) override;
-    SVX_DLLPRIVATE virtual sal_Int32    ImplGetEntryPos( const void* pData ) const override;
-
-    DECL_LINK( EditModifyHdl, Edit&, void );
 };
 
 #endif

@@ -95,6 +95,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/optionsdlg.hxx>
 #include <unotools/viewoptions.hxx>
+#include <vcl/edit.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>

@@ -27,6 +27,7 @@
 #include <svx/dbcharsethelper.hxx>
 #endif
 #include <vcl/builderfactory.hxx>
+#include <unotools/syslocale.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/tencinfo.h>
