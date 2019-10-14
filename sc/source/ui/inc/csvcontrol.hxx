@@ -26,6 +26,7 @@
 #include "csvsplits.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <vcl/customweld.hxx>
 
 class ScAccessibleCsvControl;
 namespace com { namespace sun { namespace star { namespace accessibility {
@@ -222,7 +223,7 @@ inline void ScCsvCmd::Set( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nPar
 }
 
 /** Base class for the CSV ruler and the data grid control. Implements command handling. */
-class SC_DLLPUBLIC ScCsvControl : public Control
+class SC_DLLPUBLIC ScCsvControl : public weld::CustomWidgetController
 {
 private:
     Link<ScCsvControl&,void>    maCmdHdl;           /// External command handler.
@@ -233,10 +234,8 @@ private:
     bool                        mbValidGfx;         /// Content of virtual devices valid?
 
 public:
-    explicit                    ScCsvControl( ScCsvControl& rParent );
-    explicit                    ScCsvControl( vcl::Window* pParent, const ScCsvLayoutData& rData, WinBits nBits );
+    explicit                    ScCsvControl(const ScCsvLayoutData& rData);
     virtual                     ~ScCsvControl() override;
-    virtual void                dispose() override;
 
     // event handling ---------------------------------------------------------
 

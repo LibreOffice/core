@@ -62,7 +62,7 @@ private:
 
     VclPtr<VirtualDevice>       mpBackgrDev;        /// Grid background, headers, cell texts.
     VclPtr<VirtualDevice>       mpGridDev;          /// Data grid with selection and cursor.
-    VclPtr<PopupMenu>           mpPopup;            /// Popup menu for column types.
+    std::unique_ptr<weld::Menu> mxPopup;            /// Popup menu for column types.
 
     ::svtools::ColorConfig*     mpColorConfig;      /// Application color configuration.
     Color                       maBackColor;        /// Cell background color.
@@ -76,7 +76,7 @@ private:
     Color                       maSelectColor;      /// Header color of selected columns.
 
     ScEditEnginePtr             mpEditEngine;       /// For drawing cell texts.
-    vcl::Font const             maHeaderFont;       /// Font for column and row headers.
+    vcl::Font                   maHeaderFont;       /// Font for column and row headers.
     vcl::Font                   maMonoFont;         /// Monospace font for data cells.
     Size                        maWinSize;          /// Size of the control.
     Size                        maEdEngSize;        /// Paper size for edit engine.
@@ -89,12 +89,13 @@ private:
     sal_Int32                   mnFirstImpLine;     /// First imported line (0-based).
     sal_uInt32                  mnRecentSelCol;     /// Index of most recently selected column.
     sal_uInt32                  mnMTCurrCol;        /// Current column of mouse tracking.
-    bool                        mbMTSelecting;      /// Mouse tracking: true = select, false = deselect.
+    bool                        mbTracking;         /// True if Mouse tracking
+    bool                        mbMTSelecting;      /// Mouse tracking mode: true = select, false = deselect.
 
 public:
-    explicit                    ScCsvGrid( ScCsvControl& rParent );
-    virtual                     ~ScCsvGrid() override;
-    virtual void                dispose() override;
+    explicit ScCsvGrid(const ScCsvLayoutData& rData, std::unique_ptr<weld::Menu> xPopup);
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    virtual ~ScCsvGrid() override;
 
     /** Finishes initialization. Must be called after constructing a new object. */
     void Init();
@@ -247,12 +248,15 @@ protected:
     virtual void                GetFocus() override;
     virtual void                LoseFocus() override;
 
-    virtual void                MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void                Tracking( const TrackingEvent& rTEvt ) override;
-    virtual void                KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void                Command( const CommandEvent& rCEvt ) override;
+    virtual bool                MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool                MouseMove( const MouseEvent& rMEvt ) override;
+    virtual bool                MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual bool                KeyInput( const KeyEvent& rKEvt ) override;
+    virtual bool                Command( const CommandEvent& rCEvt ) override;
 
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual tools::Rectangle    GetFocusRect() override;
+
+    virtual void                StyleUpdated() override;
 
     virtual void                ConfigurationChanged( ::utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
 
@@ -262,7 +266,7 @@ protected:
 
 public:
     /** Redraws the entire data grid. */
-    void                        ImplRedraw();
+    void                        ImplRedraw(vcl::RenderContext& rRenderContext);
     /** Returns a pointer to the used edit engine. */
     EditEngine*                 GetEditEngine();
 
@@ -301,9 +305,6 @@ private:
 
     /** Inverts the cursor bar at the specified position in maGridDev. */
     SAL_DLLPRIVATE void                        ImplInvertCursor( sal_Int32 nPos );
-
-    /** Draws directly tracking rectangle to the column with the specified index. */
-    SAL_DLLPRIVATE void                        ImplDrawTrackingRect( sal_uInt32 nColIndex );
 
     // accessibility ----------------------------------------------------------
 protected:

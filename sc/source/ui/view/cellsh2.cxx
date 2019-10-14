@@ -1016,7 +1016,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(
-                            nullptr, OUString(), &aStream, SC_TEXTTOCOLUMNS));
+                            pTabViewShell->GetFrameWeld(), OUString(), &aStream, SC_TEXTTOCOLUMNS));
 
                     if ( pDlg->Execute() == RET_OK )
                     {
