@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_0fe26804",
+        "filename": "svx/source/sdr/contact/viewcontactofsdrobjcustomshape.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2019-10-14T00:50:18Z",
+      "side": 1,
+      "message": "Where is text vertical adjust \u003d middle or \u003d bottom considered?",
+      "revId": "64bb6fcafc3e4721eaaf0cd78045d4b7ab4eb154",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_4fd86052",
+        "filename": "svx/source/sdr/contact/viewcontactofsdrobjcustomshape.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2019-10-14T00:50:18Z",
+      "side": 1,
+      "message": "If fTextCameraZRotation is the only operation to be done (nRotationAngle\u003d0, fExtraTextRotation\u003d0, nShearAngle\u003d0), then this part will not be reached.",
+      "revId": "64bb6fcafc3e4721eaaf0cd78045d4b7ab4eb154",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_efdccc47",
+        "filename": "svx/source/sdr/contact/viewcontactofsdrobjcustomshape.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2019-10-14T00:50:18Z",
+      "side": 1,
+      "message": "This would use the center of the text area as rotation center. But fTextCameraZRotation needs the center of the actual bounding rectangle of the text for its rotation.",
+      "revId": "64bb6fcafc3e4721eaaf0cd78045d4b7ab4eb154",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
