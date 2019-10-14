@@ -26,12 +26,11 @@ HRESULT LOStart(Args... args)
     std::wstring sCmdLine((quote(GetHelperExe()) + ... + (L" " + quote(args))));
     LPWSTR pCmdLine = const_cast<LPWSTR>(sCmdLine.c_str());
 
-    STARTUPINFOW si;
-    std::memset(&si, 0, sizeof si);
+    STARTUPINFOW si{};
     si.cb = sizeof si;
     si.dwFlags = STARTF_USESHOWWINDOW;
     si.wShowWindow = SW_SHOW;
-    PROCESS_INFORMATION pi = {};
+    PROCESS_INFORMATION pi{};
     if (!CreateProcessW(nullptr, pCmdLine, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi))
         return HRESULT_FROM_WIN32(GetLastError());
 

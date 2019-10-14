@@ -156,9 +156,7 @@ FileHandle_Impl::FileHandle_Impl(HANDLE hFile)
       m_buffer  (nullptr)
 {
     ::InitializeCriticalSection (&m_mutex);
-    m_buffer = static_cast<sal_uInt8 *>(malloc(m_bufsiz));
-    if (m_buffer)
-        memset (m_buffer, 0, m_bufsiz);
+    m_buffer = static_cast<sal_uInt8 *>(calloc(m_bufsiz, 1));
 }
 
 FileHandle_Impl::~FileHandle_Impl()

@@ -354,7 +354,6 @@ Picture::Picture()
     , pictype(0)
     , ishyper(false)
 {
-    memset(&picinfo, 0, sizeof(picinfo));
 }
 
 Picture::~Picture()

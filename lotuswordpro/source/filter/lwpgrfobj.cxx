@@ -93,8 +93,6 @@ LwpGraphicObject::LwpGraphicObject(LwpObjectHeader const &objHdr, LwpSvStream* p
     , m_bIsLinked(0)
     , m_bCompressed(0)
 {
-    memset(m_sDataFormat, 0, sizeof(m_sDataFormat));
-    memset(m_sServerContextFormat, 0, sizeof(m_sServerContextFormat));
 }
 
 LwpGraphicObject::~LwpGraphicObject()
