@@ -28,6 +28,8 @@ $(eval $(call gb_Library_set_componentfile,wpftdraw,writerperfect/source/draw/wp
 
 $(eval $(call gb_Library_use_sdk_api,wpftdraw))
 
+$(eval $(call gb_Library_use_common_precompiled_header,wpftdraw))
+
 $(eval $(call gb_Library_use_libraries,wpftdraw,\
 	comphelper \
 	cppu \

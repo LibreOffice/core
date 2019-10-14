@@ -13,6 +13,8 @@ $(eval $(call gb_Library_use_libraries,localedata_others,\
 	localedata_en \
 ))
 
+$(eval $(call gb_Library_use_common_precompiled_header,localedata_others))
+
 $(eval $(call gb_Library_add_generated_exception_objects,localedata_others,\
 	CustomTarget/i18npool/localedata/localedata_af_NA \
 	CustomTarget/i18npool/localedata/localedata_af_ZA \

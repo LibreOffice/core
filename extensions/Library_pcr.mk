@@ -20,6 +20,8 @@ $(eval $(call gb_Library_set_include,pcr,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_common_precompiled_header,pcr))
+
 $(eval $(call gb_Library_use_external,pcr,boost_headers))
 
 $(eval $(call gb_Library_use_libraries,pcr,\
