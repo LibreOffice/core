@@ -2668,7 +2668,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
         if (bNormalChar)
         {
             const bool bAutoTextShown
-                = pACfg->IsAutoTextTip() && ShowAutoText(rSh.GetChunkForAutoText());
+                = pACfg && pACfg->IsAutoTextTip() && ShowAutoText(rSh.GetChunkForAutoText());
             if (!bAutoTextShown && pACorr && pACorr->GetSwFlags().bAutoCompleteWords)
                 ShowAutoCorrectQuickHelp(rSh.GetPrevAutoCorrWord(*pACorr), *pACorr);
         }
