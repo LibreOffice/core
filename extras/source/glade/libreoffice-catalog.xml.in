@@ -136,10 +136,6 @@
                         generic-name="PropertyControl" parent="GtkComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>
 
-    <glade-widget-class title="Language ListBox" name="svxcorelo-SvxLanguageBox"
-                        generic-name="LanguageBox" parent="GtkComboBoxText"
-                        icon-name="widget-gtk-combobox"/>
-
     <glade-widget-class title="Fill Type ListBox" name="svxlo-SvxFillTypeBox"
                         generic-name="Fill Type ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
