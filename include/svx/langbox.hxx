@@ -89,24 +89,6 @@ protected:
     SVX_DLLPRIVATE virtual sal_Int32    ImplGetEntryPos( const void* pData ) const = 0;
 };
 
-
-class SVX_DLLPUBLIC SvxLanguageBox : public ListBox, public SvxLanguageBoxBase
-{
-public:
-    SvxLanguageBox( vcl::Window* pParent, WinBits nBits );
-
-private:
-    SVX_DLLPRIVATE virtual sal_Int32    ImplInsertImgEntry( const OUString& rEntry, sal_Int32  nPos, bool bChecked ) override;
-
-    SVX_DLLPRIVATE virtual void         ImplClear() override;
-    SVX_DLLPRIVATE virtual sal_Int32    ImplInsertEntry( const OUString& rEntry, sal_Int32 nPos ) override;
-    SVX_DLLPRIVATE virtual void         ImplSetEntryData( sal_Int32 nPos, void* pData ) override;
-    SVX_DLLPRIVATE virtual sal_Int32    ImplGetSelectedEntryPos() const override;
-    SVX_DLLPRIVATE virtual void*        ImplGetEntryData( sal_Int32 nPos ) const override;
-    SVX_DLLPRIVATE virtual void         ImplSelectEntryPos( sal_Int32 nPos, bool bSelect ) override;
-    SVX_DLLPRIVATE virtual sal_Int32    ImplGetEntryPos( const void* pData ) const override;
-};
-
 class SVX_DLLPUBLIC LanguageBox
 {
 public:
