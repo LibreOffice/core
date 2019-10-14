@@ -82,6 +82,7 @@
 #include "ww8par.hxx"
 #include "ww8scan.hxx"
 #include <oox/token/properties.hxx>
+#include <comphelper/base64.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -1035,6 +1036,7 @@ void DocxExport::WriteSettings()
     uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     bool hasProtectionProperties = false;
+    bool hasProtectionTrackChanges = false;
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
@@ -1122,7 +1124,12 @@ void DocxExport::WriteSettings()
                         };
 
                         if (sal_Int32 nToken = DocxStringGetToken(aTokens, rAttribute.Name))
-                            pAttributeList->add(FSNS(XML_w, nToken), rAttribute.Value.get<OUString>().toUtf8());
+                        {
+                            OUString sValue = rAttribute.Value.get<OUString>();
+                            pAttributeList->add(FSNS(XML_w, nToken), sValue.toUtf8());
+                            if ( nToken == XML_edit && sValue.equals("trackedChanges"))
+                                hasProtectionTrackChanges = true;
+                        }
                     }
 
                     // we have document protection from input DOCX file
@@ -1149,6 +1156,28 @@ void DocxExport::WriteSettings()
                 FSNS(XML_w, XML_edit), "forms",
                 FSNS(XML_w, XML_enforcement), "true");
         }
+    }
+
+    // Protect Change Tracking
+    if (! hasProtectionTrackChanges && xPropSetInfo->hasPropertyByName( "RedlineProtectionKey" ) )
+    {
+        uno::Sequence<sal_Int8> aKey;
+        xPropSet->getPropertyValue( "RedlineProtectionKey" ) >>= aKey;
+        OUStringBuffer aKeyBuf;
+        comphelper::Base64::encode( aKeyBuf, aKey);
+
+        // save Writer/ODT hash with dummy salt and encryption values to keep the original password during a round trip
+
+        pFS->singleElementNS(XML_w, XML_documentProtection,
+            FSNS(XML_w, XML_edit), "trackedChanges",
+            FSNS(XML_w, XML_enforcement), "1",
+            FSNS(XML_w, XML_cryptProviderType), "rsaAES",
+            FSNS(XML_w, XML_cryptAlgorithmClass), "hash",
+            FSNS(XML_w, XML_cryptAlgorithmType), "typeAny",
+            FSNS(XML_w, XML_cryptAlgorithmSid), "14",
+            FSNS(XML_w, XML_cryptSpinCount), "1",
+            FSNS(XML_w, XML_hash), aKeyBuf.makeStringAndClear().toUtf8(),
+            FSNS(XML_w, XML_salt), "RedlineProtectionKey");
     }
 
     // finish settings.xml
