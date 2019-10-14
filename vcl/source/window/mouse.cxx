@@ -19,6 +19,7 @@
 
 
 #include <config_features.h>
+#include <config_feature_desktop.h>
 
 #include <tools/time.hxx>
 

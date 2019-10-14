@@ -22,7 +22,7 @@
 #include <map>
 #include <vector>
 
-#include <config_features.h>
+#include <config_feature_desktop.h>
 
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>

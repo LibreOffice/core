@@ -1,0 +1,28 @@
+/* A feature split out from config_features.h because it affects many files.
+ */
+
+#ifndef CONFIG_FEATURE_DESKTOP_H
+#define CONFIG_FEATURE_DESKTOP_H
+
+/* DESKTOP - Whether we have a "normal" desktop UI or not.
+ *
+ * Non-DESKTOP in practice means touch-based mobile devices, Android
+ * or iOS for now. Support for those is work in progress.
+ *
+ * Non-DESKTOP implies that the OS makes sure that only one instance
+ * of each LibreOffice-based "app" at a time can be running, and thus
+ * the LibreOffice code does not need to handle such things itself.
+ *
+ * Non-DESKTOP implies no traditional inter-app drag and drop concept.
+ *
+ * Non-DESKTOP implies no traditional help mechanism, and to some
+ * extent (as noticed, and as possible without making the code too
+ * ugly) the related code is ifdeffed out.
+ *
+ * Non-DESKTOP implies no traditional desktop-style GUI elements like
+ * toolbars and scrollbars presented by the LO code.
+ */
+
+#define HAVE_FEATURE_DESKTOP 0
+
+#endif
