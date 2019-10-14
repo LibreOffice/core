@@ -11,6 +11,13 @@
 
 #include <vcl/svapp.hxx>
 
+#include <config_features.h>
+
+#if !HAVE_FEATURE_SKIA
+bool SkiaHelper::isVCLSkiaEnabled() { return false; }
+
+#else
+
 bool SkiaHelper::isVCLSkiaEnabled()
 {
     /**
@@ -68,5 +75,7 @@ bool SkiaHelper::isVCLSkiaEnabled()
 
     return bRet;
 }
+
+#endif // HAVE_FEATURE_SKIA
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

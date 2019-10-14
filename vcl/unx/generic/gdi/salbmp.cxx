@@ -42,8 +42,12 @@
 #include <o3tl/safeint.hxx>
 #include <opengl/salbmp.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
-#include <skia/salbmp.hxx>
+
+#include <config_features.h>
+#if HAVE_FEATURE_SKIA
 #include <vcl/skia/SkiaHelper.hxx>
+#include <skia/salbmp.hxx>
+#endif
 
 #if defined HAVE_VALGRIND_HEADERS
 #include <valgrind/valgrind.h>
@@ -54,9 +58,12 @@
 
 std::shared_ptr<SalBitmap> X11SalInstance::CreateSalBitmap()
 {
+#if HAVE_FEATURE_SKIA
     if (SkiaHelper::isVCLSkiaEnabled())
         return std::make_shared<SkiaSalBitmap>();
-    else if (OpenGLHelper::isVCLOpenGLEnabled())
+    else
+#endif
+    if (OpenGLHelper::isVCLOpenGLEnabled())
         return std::make_shared<OpenGLSalBitmap>();
     else
         return std::make_shared<X11SalBitmap>();
