@@ -74,18 +74,6 @@
       </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Text Encoding ListBox" name="svxlo-SvxTextEncodingBox"
-                        generic-name="TextEncodingBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox">
-      <properties>
-        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
-          <parameter-spec>
-            <type>GParamBoolean</type>
-          </parameter-spec>
-        </property>
-      </properties>
-    </glade-widget-class>
-
     <glade-widget-class title="Document Preview Window" name="sdlo-SdDocPreviewWin"
                         generic-name="Document Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
