@@ -1514,7 +1514,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumns(
     //                            allow NULL values. An empty string means
     //                            nobody knows.
     //               => pg_attribute.attnotnull
-    OUString strDefaultValue = getDefaultValue(m_pSettings);
+    OUString strDefaultValue = getColExprForDefaultSettingVal(m_pSettings);
     Reference< XPreparedStatement > statement = m_origin->prepareStatement(
             "SELECT pg_namespace.nspname, "  // 1
             "pg_class.relname, "             // 2
