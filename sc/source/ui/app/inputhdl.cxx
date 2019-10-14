@@ -1551,11 +1551,8 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const
         if ( pCalc->GetCode()->GetCodeLen() <= 1 )
         {   // ==1: Single one is as a Parameter always a Range
             // ==0: It might be one, if ...
-            OUStringBuffer aBraced;
-            aBraced.append('(');
-            aBraced.append(rFormula);
-            aBraced.append(')');
-            pCalc.reset( new ScSimpleFormulaCalculator( pDoc, rPos, aBraced.makeStringAndClear(), false ) );
+            OUString aBraced = "(" + rFormula + ")";
+            pCalc.reset( new ScSimpleFormulaCalculator( pDoc, rPos, aBraced, false ) );
         }
         else
             bColRowName = false;

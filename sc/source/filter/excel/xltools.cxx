@@ -635,13 +635,12 @@ static const char maCFStyleNamePrefix2[] = "ConditionalStyle_"; /// Prefix for c
 
 OUString XclTools::GetCondFormatStyleName( SCTAB nScTab, sal_Int32 nFormat, sal_uInt16 nCondition )
 {
-    OUStringBuffer aBuf(maCFStyleNamePrefix1);
-    aBuf.append(static_cast<sal_Int32>(nScTab+1));
-    aBuf.append('_');
-    aBuf.append(static_cast<sal_Int32>(nFormat+1));
-    aBuf.append('_');
-    aBuf.append(static_cast<sal_Int32>(nCondition+1));
-    return aBuf.makeStringAndClear();
+    return maCFStyleNamePrefix1 +
+        OUString::number(static_cast<sal_Int32>(nScTab+1)) +
+        "_" +
+        OUString::number(static_cast<sal_Int32>(nFormat+1)) +
+        "_" +
+        OUString::number(static_cast<sal_Int32>(nCondition+1));
 }
 
 bool XclTools::IsCondFormatStyleName( const OUString& rStyleName )

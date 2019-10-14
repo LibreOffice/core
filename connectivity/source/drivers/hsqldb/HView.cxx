@@ -102,18 +102,13 @@ namespace connectivity { namespace hsqldb
         try
         {
             // drop the existing view
-            OUStringBuffer aCommand;
-            aCommand.append( "DROP VIEW " );
-            aCommand.append     ( sQualifiedName );
-            xStatement->execute( aCommand.makeStringAndClear() );
+            OUString aCommand  ="DROP VIEW " + sQualifiedName;
+            xStatement->execute( aCommand );
             bDropSucceeded = true;
 
             // create a new one with the same name
-            aCommand.append( "CREATE VIEW " );
-            aCommand.append     ( sQualifiedName );
-            aCommand.append( " AS " );
-            aCommand.append     ( _rNewCommand );
-            xStatement->execute( aCommand.makeStringAndClear() );
+            aCommand = "CREATE VIEW " + sQualifiedName + " AS " + _rNewCommand;
+            xStatement->execute( aCommand );
         }
         catch( const SQLException& )
         {

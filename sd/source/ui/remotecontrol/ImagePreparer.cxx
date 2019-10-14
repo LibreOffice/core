@@ -177,18 +177,15 @@ void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
         return;
 
     // Start the writing
-    OStringBuffer aBuffer;
-
-    aBuffer.append( "slide_notes\n" );
-
-    aBuffer.append( static_cast<sal_Int32>(aSlideNumber) );
-    aBuffer.append( "\n" );
-
-    aBuffer.append( "<html><body>" );
-    aBuffer.append( aNotes );
-    aBuffer.append( "</body></html>" );
-    aBuffer.append( "\n\n" );
-    pTransmitter->addMessage( aBuffer.makeStringAndClear(),
+    OString aBuffer =
+        "slide_notes\n" +
+        OString::number( static_cast<sal_Int32>(aSlideNumber) ) +
+        "\n"
+        "<html><body>" +
+        aNotes +
+        "</body></html>"
+        "\n\n";
+    pTransmitter->addMessage( aBuffer,
         Transmitter::PRIORITY_LOW );
 }
 

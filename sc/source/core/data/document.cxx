@@ -408,10 +408,7 @@ void ScDocument::CreateValidTabName(OUString& rName) const
 
         for ( SCTAB i = static_cast<SCTAB>(maTabs.size())+1; !bOk ; i++ )
         {
-            OUStringBuffer aBuf;
-            aBuf.append(aStrTable);
-            aBuf.append(static_cast<sal_Int32>(i));
-            rName = aBuf.makeStringAndClear();
+            rName = aStrTable + OUString::number(static_cast<sal_Int32>(i));
             if (bPrefix)
                 bOk = ValidNewTabName( rName );
             else

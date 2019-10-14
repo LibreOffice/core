@@ -134,15 +134,9 @@ void SAL_CALL CLiteral::initialize(const css::uno::Sequence< css::uno::Any > & a
 OUString SAL_CALL CLiteral::getStringValue()
 {
     if (!m_Language.isEmpty()) {
-        OUStringBuffer buf(m_Value);
-        buf.append("@");
-        buf.append(m_Language);
-        return buf.makeStringAndClear();
+        return m_Value + "@" + m_Language;
     } else if (m_xDatatype.is()) {
-        OUStringBuffer buf(m_Value);
-        buf.append("^^");
-        buf.append(m_xDatatype->getStringValue());
-        return buf.makeStringAndClear();
+        return m_Value + "^^" +  m_xDatatype->getStringValue();
     } else {
         return m_Value;
     }

@@ -60,13 +60,11 @@ extern "C" rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg(
     uno_Any const * pAny, typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C()
 {
-    OUStringBuffer buf;
-    buf.append( "Cannot extract an Any(" );
-    buf.append( OUString::unacquired(&pAny->pType->pTypeName) );
-    buf.append( ") to " );
-    buf.append( OUString::unacquired(&pType->pTypeName) );
-    buf.append( '!' );
-    const OUString ret( buf.makeStringAndClear() );
+    OUString ret = "Cannot extract an Any(" +
+        OUString::unacquired(&pAny->pType->pTypeName) +
+        ") to " +
+        OUString::unacquired(&pType->pTypeName) +
+        "!";
     rtl_uString_acquire( ret.pData );
     return ret.pData;
 }

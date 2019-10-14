@@ -925,11 +925,8 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const OUString& rN
     // Header
     //TODO: Encode rName into a properly formatted Content-Disposition header
     // field as per RFC 2231:
-    OUStringBuffer aContentDisp;
-    aContentDisp.append("form-data; name=\"");
-    aContentDisp.append(rName);
-    aContentDisp.append('\"');
-    pChild->SetContentDisposition(aContentDisp.makeStringAndClear());
+    OUString aContentDisp = "form-data; name=\"" + rName + "\"";
+    pChild->SetContentDisposition(aContentDisp);
 
     rtl_TextEncoding eSystemEncoding = osl_getThreadTextEncoding();
     const sal_Char* pBestMatchingEncoding = rtl_getBestMimeCharsetFromTextEncoding( eSystemEncoding );
@@ -989,14 +986,14 @@ void ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rN
     // Header
     //TODO: Encode rName and aFileName into a properly formatted
     // Content-Disposition header field as per RFC 2231:
-    OUStringBuffer aContentDisp;
-    aContentDisp.append("form-data; name=\"");
-    aContentDisp.append(rName);
-    aContentDisp.append('\"');
-    aContentDisp.append("; filename=\"");
-    aContentDisp.append(aFileName);
-    aContentDisp.append('\"');
-    pChild->SetContentDisposition(aContentDisp.makeStringAndClear());
+    OUString aContentDisp =
+        "form-data; name=\"" +
+        rName +
+        "\""
+        "; filename=\"" +
+        aFileName +
+        "\"";
+    pChild->SetContentDisposition(aContentDisp);
     pChild->SetContentType( aContentType );
     pChild->SetContentTransferEncoding("8bit");
 

@@ -2001,10 +2001,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
         css::uno::Reference< css::container::XNameContainer >   xModify(xCheck, css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::lang::XSingleServiceFactory > xCreate(xCheck, css::uno::UNO_QUERY_THROW);
 
-        OUStringBuffer sIDBuf;
-        sIDBuf.append(RECOVERY_ITEM_BASE_IDENTIFIER);
-        sIDBuf.append(rInfo.ID);
-        OUString sID = sIDBuf.makeStringAndClear();
+        OUString sID = RECOVERY_ITEM_BASE_IDENTIFIER + OUString::number(rInfo.ID);
 
         // remove
         if (bRemoveIt)
@@ -4176,11 +4173,7 @@ void AutoRecovery::st_impl_removeLockFile()
         OUString sUserURL;
         ::utl::Bootstrap::locateUserInstallation( sUserURL );
 
-        OUStringBuffer sLockURLBuf;
-        sLockURLBuf.append     (sUserURL);
-        sLockURLBuf.append("/.lock");
-        OUString sLockURL = sLockURLBuf.makeStringAndClear();
-
+        OUString sLockURL = sUserURL + "/.lock";
         AutoRecovery::st_impl_removeFile(sLockURL);
     }
     catch(const css::uno::Exception&)

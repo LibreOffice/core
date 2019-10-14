@@ -357,11 +357,7 @@ namespace ucb { namespace ucp { namespace ext
             const sal_Int32 nLastSep = sRelativeURL.lastIndexOf( '/' );
             sRelativeURL = sRelativeURL.copy( 0, nLastSep != -1 ? nLastSep : 0 );
 
-            OUStringBuffer aComposer;
-            aComposer.append( sRootURL );
-            aComposer.append( sSeparatedExtensionId );
-            aComposer.append( sRelativeURL );
-            return aComposer.makeStringAndClear();
+            return sRootURL + sSeparatedExtensionId + sRelativeURL;
         }
 
         default:

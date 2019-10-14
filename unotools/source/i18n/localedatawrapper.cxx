@@ -311,9 +311,9 @@ std::vector< LanguageType > LocaleDataWrapper::getInstalledLanguageTypes()
         LanguageType eLang = aLanguageTag.getLanguageType( false);
         if (areChecksEnabled() && eLang == LANGUAGE_DONTKNOW)
         {
-            OUStringBuffer aMsg("ConvertIsoNamesToLanguage: unknown MS-LCID for locale\n");
-            aMsg.append(aDebugLocale);
-            outputCheckMessage(aMsg.makeStringAndClear());
+            OUString aMsg = "ConvertIsoNamesToLanguage: unknown MS-LCID for locale\n" +
+                aDebugLocale;
+            outputCheckMessage(aMsg);
         }
 
         if ( eLang == LANGUAGE_NORWEGIAN)       // no_NO, not Bokmal (nb_NO), not Nynorsk (nn_NO)

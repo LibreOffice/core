@@ -166,11 +166,8 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
         Any aAny = xPropSet->getPropertyValue(gsReferenceId);
         sal_Int32 nNumber = 0;
         aAny >>= nNumber;
-        OUStringBuffer aBuf;
-        aBuf.append("ftn");
-        aBuf.append(nNumber);
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_ID,
-                                 aBuf.makeStringAndClear());
+                                 "ftn" + OUString::number(nNumber));
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NOTE_CLASS,
                                  GetXMLToken( bIsEndnote ? XML_ENDNOTE
                                                           : XML_FOOTNOTE ) );

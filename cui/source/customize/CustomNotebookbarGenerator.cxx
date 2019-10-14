@@ -91,9 +91,7 @@ static OUString getAppNameRegistryPath()
     eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xFrame));
 
     OUString sAppName(lcl_getAppName(eApp));
-    OUStringBuffer sPath("org.openoffice.Office.UI.ToolbarMode/Applications/");
-    sPath.append(sAppName);
-    return sPath.makeStringAndClear();
+    return "org.openoffice.Office.UI.ToolbarMode/Applications/" + sAppName;
 }
 
 static OUString customizedUIPathBuffer()

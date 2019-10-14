@@ -951,9 +951,9 @@ bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
     if( ! bExternalDialog && rJob.m_nCopies > 1 )
     {
         // setup code
-        OStringBuffer aLine("/#copies ");
-        aLine.append(static_cast<sal_Int32>(rJob.m_nCopies));
-        aLine.append(" def\n");
+        OString aLine = "/#copies " +
+                OString::number(static_cast<sal_Int32>(rJob.m_nCopies)) +
+                " def\n";
         sal_uInt64 nWritten = 0;
         bSuccess = !(pFile->write(aLine.getStr(), aLine.getLength(), nWritten)
             || nWritten != static_cast<sal_uInt64>(aLine.getLength()));

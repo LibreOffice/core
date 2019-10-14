@@ -49,12 +49,11 @@ static void lcl_exportPrettyPrinting(const uno::Reference< xml::sax::XDocumentHa
 
 OUString lcl_createAttribute(const xmloff::token::XMLTokenEnum& _eNamespace,const xmloff::token::XMLTokenEnum& _eAttribute)
 {
-    OUStringBuffer sQName;
+    return
     // ...if it's in our map, make the prefix
-    sQName.append ( xmloff::token::GetXMLToken(_eNamespace) );
-    sQName.append ( ':' );
-    sQName.append ( xmloff::token::GetXMLToken(_eAttribute) );
-    return sQName.makeStringAndClear();
+        xmloff::token::GetXMLToken(_eNamespace) +
+        ":" +
+        xmloff::token::GetXMLToken(_eAttribute);
 }
 
 static void lcl_correctCellAddress(const OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & xAttribs)
