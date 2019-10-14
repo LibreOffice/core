@@ -836,10 +836,13 @@ void OGLTransitionerImpl::impl_createTexture(
                           GL_UNSIGNED_BYTE,
                           &tempBytes[0]);
 
-        //anistropic filtering (to make texturing not suck when looking at polygons from oblique angles)
-        GLfloat largest_supported_anisotropy;
-        glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &largest_supported_anisotropy);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, largest_supported_anisotropy);
+        if (epoxy_has_gl_extension("GL_EXT_texture_filter_anisotropic"))
+        {
+            //anistropic filtering (to make texturing not suck when looking at polygons from oblique angles)
+            GLfloat largest_supported_anisotropy;
+            glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &largest_supported_anisotropy);
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, largest_supported_anisotropy);
+        }
     } else {
         if( mpTransition && !mbBrokenTexturesATI && !useMipmap) {
             glTexImage2D( GL_TEXTURE_2D, 0, pFormat->nInternalFormat, maSlideSize.Width, maSlideSize.Height, 0, pFormat->eFormat, pFormat->eType, &data[0] );
@@ -848,10 +851,13 @@ void OGLTransitionerImpl::impl_createTexture(
         } else {
             buildMipmaps( pFormat->nInternalFormat, maSlideSize.Width, maSlideSize.Height, pFormat->eFormat, pFormat->eType, &data[0] );
 
-            //anistropic filtering (to make texturing not suck when looking at polygons from oblique angles)
-            GLfloat largest_supported_anisotropy;
-            glGetFloatv( GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &largest_supported_anisotropy );
-            glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, largest_supported_anisotropy );
+            if (epoxy_has_gl_extension("GL_EXT_texture_filter_anisotropic"))
+            {
+                //anistropic filtering (to make texturing not suck when looking at polygons from oblique angles)
+                GLfloat largest_supported_anisotropy;
+                glGetFloatv( GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &largest_supported_anisotropy );
+                glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, largest_supported_anisotropy );
+            }
         }
     }
     CHECK_GL_ERROR();
