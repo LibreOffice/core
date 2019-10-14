@@ -339,7 +339,7 @@
                           <object class="GtkLabel" id="headline">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
+                            <property name="hexpand">True</property>
                             <property name="wrap">True</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
@@ -356,7 +356,7 @@
                           <object class="GtkLabel" id="funcname">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
+                            <property name="hexpand">True</property>
                             <property name="wrap">True</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
@@ -370,7 +370,7 @@
                           <object class="GtkLabel" id="funcdesc">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
+                            <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="wrap">True</property>
                             <property name="xalign">0</property>
