@@ -216,7 +216,6 @@ sc/uiconfig/scalc/ui/statisticsinfopage.ui://GtkLabel[@id='nopages'] orphan-labe
 sc/uiconfig/scalc/ui/statisticsinfopage.ui://GtkLabel[@id='nocells'] orphan-label
 sc/uiconfig/scalc/ui/statisticsinfopage.ui://GtkLabel[@id='nosheets'] orphan-label
 sc/uiconfig/scalc/ui/statisticsinfopage.ui://GtkLabel[@id='noformula'] orphan-label
-sc/uiconfig/scalc/ui/textimportcsv.ui://sclo-ScCsvTableBox[@id='scrolledwindowcolumntype'] no-labelled-by
 sc/uiconfig/scalc/ui/textimportcsv.ui://GtkLabel[@id='textalttitle'] orphan-label
 sc/uiconfig/scalc/ui/texttransformationentry.ui:GtkGrid[@id='grid']/GtkBox/GtkLabel orphan-label
 sc/uiconfig/scalc/ui/validationcriteriapage.ui://GtkEntry[@id='min'] no-labelled-by

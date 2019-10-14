@@ -23,7 +23,6 @@
 #include <utility>
 
 #include <AccessibleCsvControl.hxx>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -38,6 +37,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/langitem.hxx>
+#include <csvtablebox.hxx>
 #include <csvcontrol.hxx>
 #include <csvruler.hxx>
 #include <csvgrid.hxx>
@@ -64,39 +64,27 @@ using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::beans::PropertyValue;
 using namespace ::com::sun::star::accessibility;
 
-const sal_uInt16 nRulerRole         = AccessibleRole::TEXT;
-const sal_uInt16 nGridRole          = AccessibleRole::TABLE;
-const sal_uInt16 nCellRole          = AccessibleRole::TEXT;
-
-#define RULER_IMPL_NAME             "ScAccessibleCsvRuler"
-#define GRID_IMPL_NAME              "ScAccessibleCsvGrid"
-#define CELL_IMPL_NAME              "ScAccessibleCsvCell"
-
 const sal_Unicode cRulerDot         = '.';
 const sal_Unicode cRulerLine        = '|';
 
 const sal_Int32 CSV_LINE_HEADER     = CSV_POS_INVALID;
 const sal_uInt32 CSV_COLUMN_HEADER  = CSV_COLUMN_INVALID;
 
-ScAccessibleCsvControl::ScAccessibleCsvControl(
-        const Reference< XAccessible >& rxParent,
-        ScCsvControl& rControl,
-        sal_uInt16 nRole ) :
-    ScAccessibleContextBase( rxParent, nRole ),
-    mpControl( &rControl )
+ScAccessibleCsvControl::ScAccessibleCsvControl(ScCsvControl& rControl)
+    : mpControl(&rControl)
 {
 }
 
 ScAccessibleCsvControl::~ScAccessibleCsvControl()
 {
-    implDispose();
+    ensureDisposed();
 }
 
 void SAL_CALL ScAccessibleCsvControl::disposing()
 {
     SolarMutexGuard aGuard;
     mpControl = nullptr;
-    ScAccessibleContextBase::disposing();
+    comphelper::OAccessibleComponentHelper::disposing();
 }
 
 // XAccessibleComponent -------------------------------------------------------
@@ -105,20 +93,6 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvControl::getAccessibleAtPoint( 
 {
     ensureAlive();
     return nullptr;
-}
-
-bool ScAccessibleCsvControl::isVisible()
-{
-    SolarMutexGuard aGuard;
-    ensureAlive();
-    return implGetControl().IsVisible();
-}
-
-bool ScAccessibleCsvControl::isShowing()
-{
-    SolarMutexGuard aGuard;
-    ensureAlive();
-    return implGetControl().IsReallyVisible();
 }
 
 void SAL_CALL ScAccessibleCsvControl::grabFocus()
@@ -132,10 +106,12 @@ void SAL_CALL ScAccessibleCsvControl::grabFocus()
 
 void ScAccessibleCsvControl::SendFocusEvent( bool bFocused )
 {
-    if( bFocused )
-        CommitFocusGained();
+    Any aOldAny, aNewAny;
+    if (bFocused)
+        aNewAny <<= AccessibleStateType::FOCUSED;
     else
-        CommitFocusLost();
+        aOldAny <<= AccessibleStateType::FOCUSED;
+    NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny);
 }
 
 void ScAccessibleCsvControl::SendCaretEvent()
@@ -145,18 +121,12 @@ void ScAccessibleCsvControl::SendCaretEvent()
 
 void ScAccessibleCsvControl::SendVisibleEvent()
 {
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
-    aEvent.Source = Reference< XAccessible >( this );
-    CommitChange( aEvent );
+    NotifyAccessibleEvent(AccessibleEventId::VISIBLE_DATA_CHANGED, Any(), Any());
 }
 
 void ScAccessibleCsvControl::SendSelectionEvent()
 {
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
-    aEvent.Source = Reference< XAccessible >( this );
-    CommitChange( aEvent );
+    NotifyAccessibleEvent(AccessibleEventId::SELECTION_CHANGED, Any(), Any());
 }
 
 void ScAccessibleCsvControl::SendTableUpdateEvent( sal_uInt32 /* nFirstColumn */, sal_uInt32 /* nLastColumn */, bool /* bAllRows */ )
@@ -176,24 +146,12 @@ void ScAccessibleCsvControl::SendRemoveColumnEvent( sal_uInt32 /* nFirstColumn *
 
 // helpers --------------------------------------------------------------------
 
-tools::Rectangle ScAccessibleCsvControl::GetBoundingBoxOnScreen() const
+css::awt::Rectangle ScAccessibleCsvControl::implGetBounds()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return implGetControl().GetWindowExtentsRelative( nullptr );
-}
-
-tools::Rectangle ScAccessibleCsvControl::GetBoundingBox() const
-{
-    SolarMutexGuard aGuard;
-    ensureAlive();
-    return implGetControl().GetWindowExtentsRelative( implGetControl().GetAccessibleParentWindow() );
-}
-
-void ScAccessibleCsvControl::ensureAlive() const
-{
-    if( !implIsAlive() )
-        throw DisposedException();
+    Size aOutSize(implGetControl().GetOutputSizePixel());
+    return css::awt::Rectangle(0, 0, aOutSize.Width(), aOutSize.Height());
 }
 
 ScCsvControl& ScAccessibleCsvControl::implGetControl() const
@@ -202,66 +160,24 @@ ScCsvControl& ScAccessibleCsvControl::implGetControl() const
     return *mpControl;
 }
 
-Reference< XAccessible > ScAccessibleCsvControl::implGetChildByRole(
-        const Reference< XAccessible >& rxParentObj, sal_uInt16 nRole )
-{
-    Reference< XAccessible > xAccObj;
-    if( rxParentObj.is() )
-    {
-        Reference< XAccessibleContext > xParentCtxt = rxParentObj->getAccessibleContext();
-        if( xParentCtxt.is() )
-        {
-            sal_Int32 nCount = xParentCtxt->getAccessibleChildCount();
-            sal_Int32 nIndex = 0;
-            while( !xAccObj.is() && (nIndex < nCount) )
-            {
-                Reference< XAccessible > xCurrObj = xParentCtxt->getAccessibleChild( nIndex );
-                if( xCurrObj.is() )
-                {
-                    Reference< XAccessibleContext > xCurrCtxt = xCurrObj->getAccessibleContext();
-                    if( xCurrCtxt.is() && (xCurrCtxt->getAccessibleRole() == nRole) )
-                        xAccObj = xCurrObj;
-                }
-                ++nIndex;
-            }
-        }
-    }
-    return xAccObj;
-}
-
 AccessibleStateSetHelper* ScAccessibleCsvControl::implCreateStateSet()
 {
     SolarMutexGuard aGuard;
     AccessibleStateSetHelper* pStateSet = new AccessibleStateSetHelper();
-    if( implIsAlive() )
+    if (isAlive())
     {
         const ScCsvControl& rCtrl = implGetControl();
         pStateSet->AddState( AccessibleStateType::OPAQUE );
         if( rCtrl.IsEnabled() )
             pStateSet->AddState( AccessibleStateType::ENABLED );
-        if( isShowing() )
+        if( rCtrl.IsReallyVisible() )
             pStateSet->AddState( AccessibleStateType::SHOWING );
-        if( isVisible() )
+        if( rCtrl.IsVisible() )
             pStateSet->AddState( AccessibleStateType::VISIBLE );
     }
     else
         pStateSet->AddState( AccessibleStateType::DEFUNC );
     return pStateSet;
-}
-
-void ScAccessibleCsvControl::implDispose()
-{
-    if( implIsAlive() )
-    {
-        // prevent multiple call of dtor
-        osl_atomic_increment( &m_refCount );
-        dispose();
-    }
-}
-
-Point ScAccessibleCsvControl::implGetAbsPos( const Point& rPos ) const
-{
-    return rPos + implGetControl().GetWindowExtentsRelative( nullptr ).TopLeft();
 }
 
 // Ruler ======================================================================
@@ -332,15 +248,15 @@ static void lcl_FillFontAttributes( Sequence< PropertyValue >& rSeq, const vcl::
     lcl_FillProperty( rSeq[ nIndex++ ], "CharLocale",        aLangItem,   MID_LANG_LOCALE );
 }
 
-ScAccessibleCsvRuler::ScAccessibleCsvRuler( ScCsvRuler& rRuler ) :
-    ScAccessibleCsvControl( rRuler.GetAccessibleParentWindow()->GetAccessible(), rRuler, nRulerRole )
+ScAccessibleCsvRuler::ScAccessibleCsvRuler(ScCsvRuler& rRuler)
+    : ScAccessibleCsvControl(rRuler)
 {
     constructStringBuffer();
 }
 
 ScAccessibleCsvRuler::~ScAccessibleCsvRuler()
 {
-    implDispose();
+    ensureDisposed();
 }
 
 // XAccessibleComponent -----------------------------------------------------
@@ -349,14 +265,14 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getForeground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(implGetRuler().GetSettings().GetStyleSettings().GetLabelTextColor());
+    return sal_Int32(Application::GetSettings().GetStyleSettings().GetLabelTextColor());
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvRuler::getBackground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(implGetRuler().GetSettings().GetStyleSettings().GetFaceColor());
+    return sal_Int32(Application::GetSettings().GetStyleSettings().GetFaceColor());
 }
 
 // XAccessibleContext ---------------------------------------------------------
@@ -378,13 +294,19 @@ Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvRuler::getAccessible
     SolarMutexGuard aGuard;
     ensureAlive();
     AccessibleRelationSetHelper* pRelationSet = new AccessibleRelationSetHelper();
-    Reference< XAccessible > xAccObj = implGetChildByRole( getAccessibleParent(), nGridRole );
+
+    ScCsvRuler& rRuler = implGetRuler();
+    ScCsvTableBox* pTableBox = rRuler.GetTableBox();
+    ScCsvGrid& rGrid = pTableBox->GetGrid();
+
+    css::uno::Reference<css::accessibility::XAccessible> xAccObj(static_cast<ScAccessibleCsvGrid*>(rGrid.GetAccessible()));
     if( xAccObj.is() )
     {
         Sequence< Reference< XInterface > > aSeq( 1 );
         aSeq[ 0 ] = xAccObj;
         pRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType::CONTROLLER_FOR, aSeq ) );
     }
+
     return pRelationSet;
 }
 
@@ -392,7 +314,7 @@ Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvRuler::getAccessibleSta
 {
     SolarMutexGuard aGuard;
     AccessibleStateSetHelper* pStateSet = implCreateStateSet();
-    if( implIsAlive() )
+    if( isAlive() )
     {
         pStateSet->AddState( AccessibleStateType::FOCUSABLE );
         pStateSet->AddState( AccessibleStateType::SINGLE_LINE );
@@ -437,7 +359,7 @@ Sequence< PropertyValue > SAL_CALL ScAccessibleCsvRuler::getCharacterAttributes(
     ensureAlive();
     ensureValidIndexWithEnd( nIndex );
     Sequence< PropertyValue > aSeq;
-    lcl_FillFontAttributes( aSeq, implGetRuler().GetFont() );
+    lcl_FillFontAttributes( aSeq, implGetRuler().GetDrawingArea()->get_ref_device().GetFont() );
     return aSeq;
 }
 
@@ -448,7 +370,7 @@ css::awt::Rectangle SAL_CALL ScAccessibleCsvRuler::getCharacterBounds( sal_Int32
     ensureValidIndexWithEnd( nIndex );
     ScCsvRuler& rRuler = implGetRuler();
     Point aPos( rRuler.GetX( lcl_GetRulerPos( nIndex ) ) - rRuler.GetCharWidth() / 2, 0 );
-    css::awt::Rectangle aRect( aPos.X(), aPos.Y(), rRuler.GetCharWidth(), rRuler.GetSizePixel().Height() );
+    css::awt::Rectangle aRect( aPos.X(), aPos.Y(), rRuler.GetCharWidth(), rRuler.GetOutputSizePixel().Height() );
     // do not return rectangle out of window
     sal_Int32 nWidth = rRuler.GetOutputSizePixel().Width();
     if( aRect.X >= nWidth )
@@ -706,13 +628,6 @@ void SAL_CALL ScAccessibleCsvRuler::release() throw ()
     ScAccessibleCsvControl::release();
 }
 
-// XServiceInfo ---------------------------------------------------------------
-
-OUString SAL_CALL ScAccessibleCsvRuler::getImplementationName()
-{
-    return RULER_IMPL_NAME;
-}
-
 // XTypeProvider --------------------------------------------------------------
 
 Sequence< css::uno::Type > SAL_CALL ScAccessibleCsvRuler::getTypes()
@@ -731,24 +646,22 @@ Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvRuler::getImplementationId()
 void ScAccessibleCsvRuler::SendCaretEvent()
 {
     sal_Int32 nPos = implGetRuler().GetRulerCursorPos();
-    if( nPos != CSV_POS_INVALID )
+    if (nPos != CSV_POS_INVALID)
     {
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::CARET_CHANGED;
-        aEvent.Source = Reference< XAccessible >( this );
-        aEvent.NewValue <<= nPos;
-        CommitChange( aEvent );
+        Any aOldValue, aNewValue;
+        aNewValue <<= nPos;
+        NotifyAccessibleEvent( AccessibleEventId::CARET_CHANGED, aOldValue, aNewValue );
     }
 }
 
 // helpers --------------------------------------------------------------------
 
-OUString ScAccessibleCsvRuler::createAccessibleName()
+OUString SAL_CALL ScAccessibleCsvRuler::getAccessibleName()
 {
     return ScResId( STR_ACC_CSVRULER_NAME );
 }
 
-OUString ScAccessibleCsvRuler::createAccessibleDescription()
+OUString SAL_CALL ScAccessibleCsvRuler::getAccessibleDescription()
 {
     return ScResId( STR_ACC_CSVRULER_DESCR );
 }
@@ -824,6 +737,11 @@ sal_Int32 ScAccessibleCsvRuler::implGetLastEqualFormatted( sal_Int32 nApiPos )
     return nApiPos;
 }
 
+css::uno::Reference<css::accessibility::XAccessible> SAL_CALL ScAccessibleCsvRuler::getAccessibleParent()
+{
+    return implGetControl().GetDrawingArea()->get_accessible_parent();
+}
+
 // Grid =======================================================================
 
 /** Converts a grid columnm index to an API column index. */
@@ -838,14 +756,14 @@ static sal_uInt32 lcl_GetGridColumn( sal_Int32 nApiColumn )
     return (nApiColumn > 0) ? static_cast< sal_uInt32 >( nApiColumn - 1 ) : CSV_COLUMN_HEADER;
 }
 
-ScAccessibleCsvGrid::ScAccessibleCsvGrid( ScCsvGrid& rGrid ) :
-    ScAccessibleCsvControl( rGrid.GetAccessibleParentWindow()->GetAccessible(), rGrid, nGridRole )
+ScAccessibleCsvGrid::ScAccessibleCsvGrid(ScCsvGrid& rGrid)
+    : ScAccessibleCsvControl(rGrid)
 {
 }
 
 ScAccessibleCsvGrid::~ScAccessibleCsvGrid()
 {
-    implDispose();
+    ensureDisposed();
 }
 
 void ScAccessibleCsvGrid::disposing()
@@ -882,7 +800,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getForeground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(implGetGrid().GetSettings().GetStyleSettings().GetButtonTextColor());
+    return sal_Int32(Application::GetSettings().GetStyleSettings().GetButtonTextColor());
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getBackground(  )
@@ -912,7 +830,7 @@ Reference<XAccessible> ScAccessibleCsvGrid::getAccessibleCell(sal_Int32 nRow, sa
         return Reference<XAccessible>(aI->second.get());
     }
     // key does not exist
-    rtl::Reference<ScAccessibleCsvControl> xNew = implCreateCellObj(nRow, nColumn);
+    rtl::Reference<ScAccessibleCsvCell> xNew = implCreateCellObj(nRow, nColumn);
     maAccessibleChildren.insert(aI, XAccessibleSet::value_type(nIndex, xNew));
     return Reference<XAccessible>(xNew.get());
 }
@@ -931,13 +849,22 @@ Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleR
     SolarMutexGuard aGuard;
     ensureAlive();
     AccessibleRelationSetHelper* pRelationSet = new AccessibleRelationSetHelper();
-    Reference< XAccessible > xAccObj = implGetChildByRole( getAccessibleParent(), nRulerRole );
-    if( xAccObj.is() )
+
+    ScCsvGrid& rGrid = implGetGrid();
+    ScCsvTableBox* pTableBox = rGrid.GetTableBox();
+    ScCsvRuler& rRuler = pTableBox->GetRuler();
+
+    if (rRuler.IsVisible())
     {
-        Sequence< Reference< XInterface > > aSeq( 1 );
-        aSeq[ 0 ] = xAccObj;
-        pRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType::CONTROLLED_BY, aSeq ) );
+        css::uno::Reference<css::accessibility::XAccessible> xAccObj(static_cast<ScAccessibleCsvGrid*>(rRuler.GetAccessible()));
+        if( xAccObj.is() )
+        {
+            Sequence< Reference< XInterface > > aSeq( 1 );
+            aSeq[ 0 ] = xAccObj;
+            pRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType::CONTROLLED_BY, aSeq ) );
+        }
     }
+
     return pRelationSet;
 }
 
@@ -945,7 +872,7 @@ Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleStat
 {
     SolarMutexGuard aGuard;
     AccessibleStateSetHelper* pStateSet = implCreateStateSet();
-    if( implIsAlive() )
+    if( isAlive() )
     {
         pStateSet->AddState( AccessibleStateType::FOCUSABLE );
         pStateSet->AddState( AccessibleStateType::MULTI_SELECTABLE );
@@ -1189,13 +1116,6 @@ void SAL_CALL ScAccessibleCsvGrid::release() throw ()
     ScAccessibleCsvControl::release();
 }
 
-// XServiceInfo ---------------------------------------------------------------
-
-OUString SAL_CALL ScAccessibleCsvGrid::getImplementationName()
-{
-    return GRID_IMPL_NAME;
-}
-
 // XTypeProvider --------------------------------------------------------------
 
 Sequence< css::uno::Type > SAL_CALL ScAccessibleCsvGrid::getTypes()
@@ -1216,12 +1136,10 @@ Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvGrid::getImplementationId()
 void ScAccessibleCsvGrid::SendFocusEvent( bool bFocused )
 {
     ScAccessibleCsvControl::SendFocusEvent( bFocused );
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
-    aEvent.Source = Reference< XAccessible >( this );
-    (bFocused ? aEvent.NewValue : aEvent.OldValue) <<=
+    Any aOldAny, aNewAny;
+    (bFocused ? aNewAny : aOldAny) <<=
         getAccessibleCellAt( 0, lcl_GetApiColumn( implGetGrid().GetFocusColumn() ) );
-    CommitChange( aEvent );
+    NotifyAccessibleEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny);
 }
 
 void ScAccessibleCsvGrid::SendTableUpdateEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn, bool bAllRows )
@@ -1231,11 +1149,9 @@ void ScAccessibleCsvGrid::SendTableUpdateEvent( sal_uInt32 nFirstColumn, sal_uIn
         AccessibleTableModelChange aModelChange(
             AccessibleTableModelChangeType::UPDATE, 0, bAllRows ? implGetRowCount() - 1 : 0,
             lcl_GetApiColumn( nFirstColumn ), lcl_GetApiColumn( nLastColumn ) );
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::TABLE_MODEL_CHANGED;
-        aEvent.Source = Reference< XAccessible >( this );
-        aEvent.NewValue <<= aModelChange;
-        CommitChange( aEvent );
+        Any aOldAny, aNewAny;
+        aNewAny <<= aModelChange;
+        NotifyAccessibleEvent(AccessibleEventId::TABLE_MODEL_CHANGED, aOldAny, aNewAny);
     }
 }
 
@@ -1246,11 +1162,9 @@ void ScAccessibleCsvGrid::SendInsertColumnEvent( sal_uInt32 nFirstColumn, sal_uI
         AccessibleTableModelChange aModelChange(
             AccessibleTableModelChangeType::INSERT, 0, implGetRowCount() - 1,
             lcl_GetApiColumn( nFirstColumn ), lcl_GetApiColumn( nLastColumn ) );
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::TABLE_MODEL_CHANGED;
-        aEvent.Source = Reference< XAccessible >( this );
-        aEvent.NewValue <<= aModelChange;
-        CommitChange( aEvent );
+        Any aOldAny, aNewAny;
+        aNewAny <<= aModelChange;
+        NotifyAccessibleEvent(AccessibleEventId::TABLE_MODEL_CHANGED, aOldAny, aNewAny);
     }
 }
 
@@ -1261,22 +1175,20 @@ void ScAccessibleCsvGrid::SendRemoveColumnEvent( sal_uInt32 nFirstColumn, sal_uI
         AccessibleTableModelChange aModelChange(
             AccessibleTableModelChangeType::DELETE, 0, implGetRowCount() - 1,
             lcl_GetApiColumn( nFirstColumn ), lcl_GetApiColumn( nLastColumn ) );
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::TABLE_MODEL_CHANGED;
-        aEvent.Source = Reference< XAccessible >( this );
-        aEvent.NewValue <<= aModelChange;
-        CommitChange( aEvent );
+        Any aOldAny, aNewAny;
+        aNewAny <<= aModelChange;
+        NotifyAccessibleEvent(AccessibleEventId::TABLE_MODEL_CHANGED, aOldAny, aNewAny);
     }
 }
 
 // helpers --------------------------------------------------------------------
 
-OUString ScAccessibleCsvGrid::createAccessibleName()
+OUString SAL_CALL ScAccessibleCsvGrid::getAccessibleName()
 {
     return ScResId( STR_ACC_CSVGRID_NAME );
 }
 
-OUString ScAccessibleCsvGrid::createAccessibleDescription()
+OUString SAL_CALL ScAccessibleCsvGrid::getAccessibleDescription()
 {
     return ScResId( STR_ACC_CSVGRID_DESCR );
 }
@@ -1355,16 +1267,21 @@ OUString ScAccessibleCsvGrid::implGetCellText( sal_Int32 nRow, sal_Int32 nColumn
     return aCellStr;
 }
 
-ScAccessibleCsvControl* ScAccessibleCsvGrid::implCreateCellObj( sal_Int32 nRow, sal_Int32 nColumn ) const
+ScAccessibleCsvCell* ScAccessibleCsvGrid::implCreateCellObj( sal_Int32 nRow, sal_Int32 nColumn )
 {
-    return new ScAccessibleCsvCell( implGetGrid(), implGetCellText( nRow, nColumn ), nRow, nColumn );
+    return new ScAccessibleCsvCell(implGetGrid(), implGetCellText(nRow, nColumn), nRow, nColumn);
+}
+
+css::uno::Reference<css::accessibility::XAccessible> SAL_CALL ScAccessibleCsvGrid::getAccessibleParent()
+{
+    return implGetControl().GetDrawingArea()->get_accessible_parent();
 }
 
 ScAccessibleCsvCell::ScAccessibleCsvCell(
         ScCsvGrid& rGrid,
         const OUString& rCellText,
         sal_Int32 nRow, sal_Int32 nColumn ) :
-    ScAccessibleCsvControl( rGrid.GetAccessible(), rGrid, nCellRole ),
+    ScAccessibleCsvControl( rGrid ),
     AccessibleStaticTextBase( SvxEditSourcePtr() ),
     maCellText( rCellText ),
     mnLine( nRow ? (nRow + rGrid.GetFirstVisLine() - 1) : CSV_LINE_HEADER ),
@@ -1399,7 +1316,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvCell::getForeground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(implGetGrid().GetSettings().GetStyleSettings().GetButtonTextColor());
+    return sal_Int32(Application::GetSettings().GetStyleSettings().GetButtonTextColor());
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvCell::getBackground(  )
@@ -1439,7 +1356,7 @@ Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvCell::getAccessibleStat
 {
     SolarMutexGuard aGuard;
     AccessibleStateSetHelper* pStateSet = implCreateStateSet();
-    if( implIsAlive() )
+    if( isAlive() )
     {
         const ScCsvGrid& rGrid = implGetGrid();
         pStateSet->AddState( AccessibleStateType::SINGLE_LINE );
@@ -1461,37 +1378,14 @@ IMPLEMENT_FORWARD_XINTERFACE2( ScAccessibleCsvCell, ScAccessibleCsvControl, Acce
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( ScAccessibleCsvCell, ScAccessibleCsvControl, AccessibleStaticTextBase )
 
-// XServiceInfo ---------------------------------------------------------------
-
-OUString SAL_CALL ScAccessibleCsvCell::getImplementationName()
-{
-    return CELL_IMPL_NAME;
-}
-
 // helpers --------------------------------------------------------------------
 
-tools::Rectangle ScAccessibleCsvCell::GetBoundingBoxOnScreen() const
-{
-    SolarMutexGuard aGuard;
-    ensureAlive();
-    tools::Rectangle aRect( implGetBoundingBox() );
-    aRect.SetPos( implGetAbsPos( aRect.TopLeft() ) );
-    return aRect;
-}
-
-tools::Rectangle ScAccessibleCsvCell::GetBoundingBox() const
-{
-    SolarMutexGuard aGuard;
-    ensureAlive();
-    return implGetBoundingBox();
-}
-
-OUString ScAccessibleCsvCell::createAccessibleName()
+OUString SAL_CALL ScAccessibleCsvCell::getAccessibleName()
 {
     return maCellText;
 }
 
-OUString ScAccessibleCsvCell::createAccessibleDescription()
+OUString SAL_CALL ScAccessibleCsvCell::getAccessibleDescription()
 {
     return OUString();
 }
@@ -1523,10 +1417,10 @@ Size ScAccessibleCsvCell::implGetRealSize() const
         (mnLine == CSV_LINE_HEADER) ? rGrid.GetHdrHeight() : rGrid.GetLineHeight() );
 }
 
-tools::Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
+css::awt::Rectangle ScAccessibleCsvCell::implGetBounds()
 {
     ScCsvGrid& rGrid = implGetGrid();
-    tools::Rectangle aClipRect( Point( 0, 0 ), rGrid.GetSizePixel() );
+    tools::Rectangle aClipRect( Point( 0, 0 ), rGrid.GetOutputSizePixel() );
     if( mnColumn != CSV_COLUMN_HEADER )
     {
         aClipRect.SetLeft( rGrid.GetFirstX() );
@@ -1539,15 +1433,25 @@ tools::Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
     aRect.Intersection( aClipRect );
     if( (aRect.GetWidth() <= 0) || (aRect.GetHeight() <= 0) )
         aRect.SetSize( Size( -1, -1 ) );
-    return aRect;
+
+    return css::awt::Rectangle(aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight());
 }
 
 ::std::unique_ptr< SvxEditSource > ScAccessibleCsvCell::implCreateEditSource()
 {
     ScCsvGrid& rGrid = implGetGrid();
 
-    ::std::unique_ptr< SvxEditSource > pEditSource( new ScAccessibilityEditSource( std::make_unique<ScAccessibleCsvTextData>(&rGrid, rGrid.GetEditEngine(), maCellText, implGetRealSize()) ) );
+    ::std::unique_ptr< SvxEditSource > pEditSource( new ScAccessibilityEditSource( std::make_unique<ScAccessibleCsvTextData>(&rGrid.GetDrawingArea()->get_ref_device(), rGrid.GetEditEngine(), maCellText, implGetRealSize()) ) );
     return pEditSource;
+}
+
+css::uno::Reference<css::accessibility::XAccessible> SAL_CALL ScAccessibleCsvCell::getAccessibleParent()
+{
+    ScCsvGrid& rGrid = implGetGrid();
+
+    ScAccessibleCsvGrid* pAcc = static_cast<ScAccessibleCsvGrid*>(rGrid.GetAccessible());
+
+    return pAcc;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

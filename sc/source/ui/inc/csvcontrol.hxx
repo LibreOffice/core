@@ -26,8 +26,10 @@
 #include "csvsplits.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <rtl/ref.hxx>
+#include <vcl/customweld.hxx>
+#include "AccessibleCsvControl.hxx"
 
-class ScAccessibleCsvControl;
 namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessible;
 } } } }
@@ -222,21 +224,21 @@ inline void ScCsvCmd::Set( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nPar
 }
 
 /** Base class for the CSV ruler and the data grid control. Implements command handling. */
-class SC_DLLPUBLIC ScCsvControl : public Control
+class SC_DLLPUBLIC ScCsvControl : public weld::CustomWidgetController
 {
 private:
     Link<ScCsvControl&,void>    maCmdHdl;           /// External command handler.
     ScCsvCmd                    maCmd;              /// Data of last command.
     const ScCsvLayoutData&      mrData;             /// Shared layout data.
 
-    rtl::Reference<ScAccessibleCsvControl> mxAccessible; /// Reference to the accessible implementation object.
     bool                        mbValidGfx;         /// Content of virtual devices valid?
 
+protected:
+    rtl::Reference<ScAccessibleCsvControl> mxAccessible; /// Reference to the accessible implementation object.
+
 public:
-    explicit                    ScCsvControl( ScCsvControl& rParent );
-    explicit                    ScCsvControl( vcl::Window* pParent, const ScCsvLayoutData& rData, WinBits nBits );
+    explicit                    ScCsvControl(const ScCsvLayoutData& rData);
     virtual                     ~ScCsvControl() override;
-    virtual void                dispose() override;
 
     // event handling ---------------------------------------------------------
 
@@ -257,6 +259,8 @@ public:
     void                        AccSendInsertColumnEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn );
     /** Sends a table model changed event for a removed column to the accessibility object. */
     void                        AccSendRemoveColumnEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn );
+
+    ScAccessibleCsvControl*     GetAccessible() { return mxAccessible.get(); }
 
     // repaint helpers --------------------------------------------------------
 
@@ -369,17 +373,6 @@ public:
     /** Returns direction code for the keys UP, DOWN, HOME, END, PAGE UP, PAGE DOWN.
         @param bHomeEnd  false = ignore HOME and END key. */
     static ScMoveMode           GetVertDirection( sal_uInt16 nCode, bool bHomeEnd );
-
-    // accessibility ----------------------------------------------------------
-public:
-    /** Creates and returns the accessible object of this control. Do not overwrite in
-        derived classes, use ImplCreateAccessible() instead. */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-                                CreateAccessible() override;
-
-protected:
-    /** Derived classes create a new accessible object here. */
-    virtual rtl::Reference<ScAccessibleCsvControl> ImplCreateAccessible() = 0;
 };
 
 #endif
