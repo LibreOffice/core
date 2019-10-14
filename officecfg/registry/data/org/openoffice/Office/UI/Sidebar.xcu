@@ -1576,6 +1576,29 @@
           <value>300</value>
         </prop>
       </node>
+
+      <node oor:name="ChartTypePanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Chart Type</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ChartTypePanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>ChartDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Chart, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/ChartPanelFactory/TypePanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>
