@@ -1954,6 +1954,9 @@ namespace osl_ThreadData
                     'j', aChar
                     );
 
+#ifdef _MSC_VER
+                abort();
+#endif
             }
 
         CPPUNIT_TEST_SUITE(getData);
