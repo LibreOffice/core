@@ -2028,11 +2028,7 @@ namespace {
 
 OUString createLocalRangeName(const OUString& rName, const OUString& rTableName)
 {
-    OUStringBuffer aString (rName);
-    aString.append(" (");
-    aString.append(rTableName);
-    aString.append(")");
-    return aString.makeStringAndClear();
+    return rName + " (" + rTableName + ")";
 }
 
 }

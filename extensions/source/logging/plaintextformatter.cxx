@@ -61,18 +61,17 @@ namespace logging
 
     OUString SAL_CALL PlainTextFormatter::getHead(  )
     {
-        OUStringBuffer aHeader;
-        aHeader.append( "  event no" );                 // column 1: the event number
-        aHeader.append( " " );
-        aHeader.append( "thread  " );                   // column 2: the thread ID
-        aHeader.append( " " );
-        aHeader.append( "date      " );                 // column 3: date
-        aHeader.append( " " );
-        aHeader.append( "time       " );         // column 4: time
-        aHeader.append( " " );
-        aHeader.append( "(class/method:) message" );    // column 5: class/method/message
-        aHeader.append( "\n" );
-        return aHeader.makeStringAndClear();
+        return
+            "  event no"                 // column 1: the event number
+            " "
+            "thread  "                   // column 2: the thread ID
+            " "
+            "date      "                 // column 3: date
+            " "
+            "time       "                // column 4: time
+            " "
+            "(class/method:) message"    // column 5: class/method/message
+            "\n";
     }
 
 

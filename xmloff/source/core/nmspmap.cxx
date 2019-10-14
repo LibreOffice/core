@@ -219,11 +219,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
         case XML_NAMESPACE_XML:
         {
             // this namespace is reserved, and needs not to be declared
-            OUStringBuffer sQName;
-            sQName.append ( GetXMLToken(XML_XML) );
-            sQName.append ( ':' );
-            sQName.append ( rLocalName );
-            return sQName.makeStringAndClear();
+            return GetXMLToken(XML_XML) + ":" + rLocalName;
         }
         default:
         {

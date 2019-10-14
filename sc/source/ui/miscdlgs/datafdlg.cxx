@@ -213,11 +213,11 @@ void ScDataFormDlg::FillCtrls()
 
     if (nCurrentRow <= nEndRow)
     {
-        OUStringBuffer aBuf;
-        aBuf.append(static_cast<sal_Int32>(nCurrentRow - nStartRow));
-        aBuf.append(" / ");
-        aBuf.append(static_cast<sal_Int32>(nEndRow - nStartRow));
-        m_xFixedText->set_label(aBuf.makeStringAndClear());
+        OUString sLabel =
+            OUString::number(static_cast<sal_Int32>(nCurrentRow - nStartRow)) +
+            " / " +
+            OUString::number(static_cast<sal_Int32>(nEndRow - nStartRow));
+        m_xFixedText->set_label(sLabel);
     }
     else
         m_xFixedText->set_label(sNewRecord);

@@ -2103,11 +2103,8 @@ OUString getPageApiName( SdPage const * pPage )
 
         if( aPageName.isEmpty() )
         {
-            OUStringBuffer sBuffer;
-            sBuffer.append( sEmptyPageName );
             const sal_Int32 nPageNum = ( ( pPage->GetPageNum() - 1 ) >> 1 ) + 1;
-            sBuffer.append( nPageNum );
-            aPageName = sBuffer.makeStringAndClear();
+            aPageName = sEmptyPageName + OUString::number( nPageNum );
         }
     }
 
@@ -2165,11 +2162,7 @@ OUString getUiNameFromPageApiNameImpl( const OUString& rApiName )
 
         if( nPageNumber != -1)
         {
-            OUStringBuffer sBuffer;
-            sBuffer.append( SdResId(STR_PAGE) );
-            sBuffer.append( ' ' );
-            sBuffer.append( aNumber );
-            return sBuffer.makeStringAndClear();
+            return SdResId(STR_PAGE) + " " + aNumber;
         }
     }
 

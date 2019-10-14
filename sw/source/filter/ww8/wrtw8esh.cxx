@@ -3049,10 +3049,9 @@ void SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFo
     tools::SvRef<SotStorage> xObjPool = rWW8Wrt.GetWriter().GetStorage().OpenSotStorage(SL::aObjectPool);
 
     //Create a destination storage for the microsoft control
-    OUStringBuffer sStorageName;
     sal_uInt32 nObjId = ++mnObjectId;
-    sStorageName.append('_').append( static_cast<sal_Int64>( nObjId ));
-    tools::SvRef<SotStorage> xOleStg = xObjPool->OpenSotStorage(sStorageName.makeStringAndClear());
+    OUString sStorageName = "_" + OUString::number( static_cast<sal_Int64>( nObjId ));
+    tools::SvRef<SotStorage> xOleStg = xObjPool->OpenSotStorage(sStorageName);
 
     if (!xOleStg.is())
         return;

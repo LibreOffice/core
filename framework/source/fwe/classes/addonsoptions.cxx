@@ -885,10 +885,9 @@ void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
         OUString aImagesItemNode( aAddonImagesNode + aAddonImagesNodeSeq[n] );
 
         // Create sequence for data access
-        OUStringBuffer aBuffer( aImagesItemNode );
-        aBuffer.append( m_aPathDelimiter );
-        aBuffer.append( m_aPropNames[ OFFSET_MENUITEM_URL ] );
-        aAddonImageItemNodePropNames[0] = aBuffer.makeStringAndClear();
+        aAddonImageItemNodePropNames[0] = aImagesItemNode +
+            m_aPathDelimiter +
+            m_aPropNames[ OFFSET_MENUITEM_URL ];
 
         Sequence< Any > aAddonImageItemNodeValues = GetProperties( aAddonImageItemNodePropNames );
 
@@ -898,11 +897,10 @@ void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
             !aURL.isEmpty() &&
             !HasAssociatedImages( aURL ))
         {
-            OUStringBuffer aBuf( aImagesItemNode );
-            aBuf.append( m_aPathDelimiter );
-            aBuf.append( IMAGES_NODENAME );
-            aBuf.append( m_aPathDelimiter );
-            OUString aImagesUserDefinedItemNode = aBuf.makeStringAndClear();
+            OUString aImagesUserDefinedItemNode = aImagesItemNode +
+                m_aPathDelimiter +
+                IMAGES_NODENAME +
+                m_aPathDelimiter;
 
             // Read a user-defined images data
             std::unique_ptr<ImageEntry> pImageEntry = ReadImageData( aImagesUserDefinedItemNode );
@@ -1074,10 +1072,8 @@ void AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstruction
 
 bool AddonsOptions_Impl::ReadMergeToolbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems )
 {
-    OUStringBuffer aBuffer( aMergeAddonInstructionBase );
-    aBuffer.append( m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBARITEMS ] );
-
-    OUString aMergeToolbarBaseNode = aBuffer.makeStringAndClear();
+    OUString aMergeToolbarBaseNode = aMergeAddonInstructionBase +
+        m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBARITEMS ];
 
     return ReadToolBarItemSet( aMergeToolbarBaseNode, rMergeToolbarItems );
 }
@@ -1158,10 +1154,8 @@ bool AddonsOptions_Impl::ReadMergeNotebookBarData(
     const OUString& aMergeAddonInstructionBase,
     Sequence<Sequence<PropertyValue>>& rMergeNotebookBarItems)
 {
-    OUStringBuffer aBuffer(aMergeAddonInstructionBase);
-    aBuffer.append(m_aPropMergeNotebookBarNames[OFFSET_MERGENOTEBOOKBAR_NOTEBOOKBARITEMS]);
-
-    OUString aMergeNotebookBarBaseNode = aBuffer.makeStringAndClear();
+    OUString aMergeNotebookBarBaseNode = aMergeAddonInstructionBase +
+        m_aPropMergeNotebookBarNames[OFFSET_MERGENOTEBOOKBAR_NOTEBOOKBARITEMS];
 
     return ReadNotebookBarItemSet(aMergeNotebookBarBaseNode, rMergeNotebookBarItems);
 }
@@ -1233,9 +1227,8 @@ bool AddonsOptions_Impl::ReadMergeStatusbarData(
 {
     sal_uInt32 nStatusbarItemCount = rMergeStatusbarItems.getLength();
 
-    OUStringBuffer aBuffer( aMergeAddonInstructionBase );
-    aBuffer.append( m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_STATUSBARITEMS ] );
-    OUString aMergeStatusbarBaseNode = aBuffer.makeStringAndClear();
+    OUString aMergeStatusbarBaseNode = aMergeAddonInstructionBase +
+        m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_STATUSBARITEMS ];
 
     OUString aAddonStatusbarItemSetNode( aMergeStatusbarBaseNode + m_aPathDelimiter );
     Sequence< OUString > aAddonStatusbarItemSetNodeSeq = GetNodeNames( aMergeStatusbarBaseNode );

@@ -356,12 +356,9 @@ Reference<XComponentContext> connectToOffice(
     bool verbose )
 {
     OUString pipeId( ::dp_misc::generateRandomPipeId() );
-    OUStringBuffer buf;
-    buf.append( "--accept=pipe,name=" );
-    buf.append( pipeId );
-    buf.append( ";urp;" );
+    OUString acceptArg = "--accept=pipe,name=" + pipeId + ";urp;";
 
-    Sequence<OUString> args { "--nologo", "--nodefault", buf.makeStringAndClear() };
+    Sequence<OUString> args { "--nologo", "--nodefault", acceptArg };
     OUString appURL( getExecutableDir() + "/soffice" );
 
     if (verbose)
@@ -377,13 +374,10 @@ Reference<XComponentContext> connectToOffice(
     if (verbose)
         dp_misc::writeConsole("OK.  Connecting...");
 
-    OSL_ASSERT( buf.isEmpty() );
-    buf.append( "uno:pipe,name=" );
-    buf.append( pipeId );
-    buf.append( ";urp;StarOffice.ComponentContext" );
+    OUString sUnoUrl = "uno:pipe,name=" + pipeId + ";urp;StarOffice.ComponentContext";
     Reference<XComponentContext> xRet(
         ::dp_misc::resolveUnoURL(
-            buf.makeStringAndClear(), xLocalComponentContext ),
+            sUnoUrl, xLocalComponentContext ),
         UNO_QUERY_THROW );
     if (verbose)
         dp_misc::writeConsole("OK.\n");

@@ -136,11 +136,7 @@ ObjectType OViewContainer::appendObject( const OUString& _rForName, const Refere
         OUString sCommand;
         descriptor->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
 
-        OUStringBuffer aSQL;
-        aSQL.append( "CREATE VIEW " );
-        aSQL.append     ( sComposedName );
-        aSQL.append( " AS " );
-        aSQL.append     ( sCommand );
+        OUString aSQL = "CREATE VIEW " + sComposedName + " AS " + sCommand;
 
         Reference<XConnection> xCon = m_xConnection;
         OSL_ENSURE(xCon.is(),"Connection is null!");
@@ -148,7 +144,7 @@ ObjectType OViewContainer::appendObject( const OUString& _rForName, const Refere
         {
             ::utl::SharedUNOComponent< XStatement > xStmt( xCon->createStatement() );
             if ( xStmt.is() )
-                xStmt->execute( aSQL.makeStringAndClear() );
+                xStmt->execute( aSQL );
         }
     }
 

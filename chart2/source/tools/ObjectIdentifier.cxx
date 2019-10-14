@@ -567,13 +567,10 @@ OUString ObjectIdentifier::createParticleForAxis(
             sal_Int32 nDimensionIndex
           , sal_Int32 nAxisIndex )
 {
-    OUStringBuffer aRet("Axis=");
-
-    aRet.append( OUString::number( nDimensionIndex ) );
-    aRet.append(",");
-    aRet.append( OUString::number( nAxisIndex ) );
-
-    return aRet.makeStringAndClear();
+    return "Axis=" +
+        OUString::number( nDimensionIndex ) +
+        "," +
+        OUString::number( nAxisIndex );
 }
 
 OUString ObjectIdentifier::createParticleForGrid(

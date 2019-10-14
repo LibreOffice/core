@@ -1465,14 +1465,13 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             const OUString aModulName = aMacro.getToken(0, '.', nIdx);
             const OUString aLibName   = aMacro.getToken(0, '.', nIdx);
 
-            OUStringBuffer sBuffer;
-            sBuffer.append( aLibName );
-            sBuffer.append( '.' );
-            sBuffer.append( aModulName );
-            sBuffer.append( '.' );
-            sBuffer.append( aMacroName );
+            OUString sBuffer = aLibName +
+                "."  +
+                aModulName  +
+                "."  +
+                aMacroName;
 
-            aAny <<= sBuffer.makeStringAndClear();
+            aAny <<= sBuffer;
             pProperties->Name = gaStrMacroName;
             pProperties->Handle = -1;
             pProperties->Value = aAny;

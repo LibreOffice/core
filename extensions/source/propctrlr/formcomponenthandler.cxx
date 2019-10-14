@@ -668,14 +668,10 @@ namespace pcr
                 xPSI = xSet->getPropertySetInfo();
             if ( xPSI.is() && xPSI->hasPropertyByName( PROPERTY_LABEL ) )
             {
-                OUStringBuffer aValue;
-                aValue.append( '<' );
                 OUString sLabel;
                 if( ! (xSet->getPropertyValue( PROPERTY_LABEL) >>= sLabel) )
                     SAL_WARN("extensions.propctrlr", "convertToPropertyValue: unable to get property " PROPERTY_LABEL);
-                aValue.append( sLabel );
-                aValue.append( '>' );
-                sControlValue = aValue.makeStringAndClear();
+                sControlValue = "<" + sLabel + ">";
             }
 
             aControlValue <<= sControlValue;
