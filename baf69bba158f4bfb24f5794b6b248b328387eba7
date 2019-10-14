@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_d2f5f7cc",
+        "filename": "sax/source/tools/fastserializer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-10-14T14:00:10Z",
+      "side": 1,
+      "message": "While this may be a workaround, setting bEscape\u003dfalse should certainly happen at a higher level instead of comparing on each and every write?",
+      "revId": "baf69bba158f4bfb24f5794b6b248b328387eba7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
