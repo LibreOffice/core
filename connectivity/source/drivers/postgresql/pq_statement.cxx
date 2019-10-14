@@ -632,7 +632,7 @@ static void getAutoValues(
     const OUString & tableName,
     ConnectionSettings *pConnectionSettings )
 {
-    OUString strDefaultValue = getDefaultValue(pConnectionSettings);
+    OUString strDefaultValue = getColExprForDefaultSettingVal(pConnectionSettings);
     Reference< XPreparedStatement > stmt = connection->prepareStatement(
                   "SELECT   pg_attribute.attname, " + strDefaultValue +
                   "FROM pg_class, pg_namespace, pg_attribute "
