@@ -836,7 +836,7 @@ OString extractSingleTableFromSelect( const std::vector< OString > &vec )
 
 }
 
-OUString getDefaultValue(ConnectionSettings const *settings)
+OUString getColExprForDefaultSettingVal(ConnectionSettings const *settings)
 {
     return (PQserverVersion( settings->pConnection ) < 80000)?
                OUString("pg_attrdef.adsrc"):
