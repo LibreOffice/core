@@ -35,12 +35,12 @@
 // Class that triggers flushing the backing buffer when idle.
 class SkiaFlushIdle : public Idle
 {
-    SkiaSalGraphicsImpl* graphics;
+    SkiaSalGraphicsImpl* mpGraphics;
 
 public:
-    explicit SkiaFlushIdle(SkiaSalGraphicsImpl* graphics)
+    explicit SkiaFlushIdle(SkiaSalGraphicsImpl* pGraphics)
         : Idle("skia idle swap")
-        , graphics(graphics)
+        , mpGraphics(pGraphics)
     {
         // We don't want to be swapping before we've painted.
         SetPriority(TaskPriority::POST_PAINT);
@@ -48,7 +48,7 @@ public:
 
     virtual void Invoke() override
     {
-        graphics->performFlush();
+        mpGraphics->performFlush();
         Stop();
         SetPriority(TaskPriority::HIGHEST);
     }
