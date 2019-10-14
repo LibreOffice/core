@@ -296,15 +296,21 @@ static void WriteFileInThread(void *wData)
 }
 
 static bool RenderAsBMPThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
-    Graphic &rGraphic, const OUString &rProgName, rtl_uString *pArgs[], size_t nArgs)
+                                     Graphic& rGraphic,
+                                     std::initializer_list<OUStringLiteral> aProgNames,
+                                     rtl_uString* pArgs[], size_t nArgs)
 {
-    oslProcess aProcess;
+    oslProcess aProcess = nullptr;
     oslFileHandle pIn = nullptr;
     oslFileHandle pOut = nullptr;
     oslFileHandle pErr = nullptr;
-    oslProcessError eErr = runProcessWithPathSearch(rProgName,
-            pArgs, nArgs,
-            &aProcess, &pIn, &pOut, &pErr);
+    oslProcessError eErr = osl_Process_E_Unknown;
+    for (const auto& rProgName : aProgNames)
+    {
+        eErr = runProcessWithPathSearch(rProgName, pArgs, nArgs, &aProcess, &pIn, &pOut, &pErr);
+        if (eErr == osl_Process_E_None)
+            break;
+    }
     if (eErr!=osl_Process_E_None)
         return false;
 
@@ -362,7 +368,7 @@ static bool RenderAsBMPThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRe
         arg1.pData, arg2.pData, arg3.pData, arg4.pData
     };
     return RenderAsBMPThroughHelper(pBuf, nBytesRead, rGraphic,
-        ("convert" EXESUFFIX),
+        { "convert" EXESUFFIX },
         args,
         SAL_N_ELEMENTS(args));
 }
@@ -389,9 +395,13 @@ static bool RenderAsBMPThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     };
     return RenderAsBMPThroughHelper(pBuf, nBytesRead, rGraphic,
 #ifdef _WIN32
-        "gswin32c" EXESUFFIX,
+        // Try both 32-bit and 64-bit ghostscript executable name
+        {
+            "gswin32c" EXESUFFIX,
+            "gswin64c" EXESUFFIX,
+        },
 #else
-        "gs" EXESUFFIX,
+        { "gs" EXESUFFIX },
 #endif
         args,
         SAL_N_ELEMENTS(args));
