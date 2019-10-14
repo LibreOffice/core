@@ -226,11 +226,7 @@ void SvtExpFileDlg_Impl::SetStandardDir( const OUString& _rDir )
 namespace {
     OUString lcl_DecoratedFilter( const OUString& _rOriginalFilter )
     {
-        OUStringBuffer aDecoratedFilter;
-        aDecoratedFilter.append('<');
-        aDecoratedFilter.append(_rOriginalFilter);
-        aDecoratedFilter.append('>');
-        return aDecoratedFilter.makeStringAndClear();
+        return "<" + _rOriginalFilter + ">";
     }
 }
 

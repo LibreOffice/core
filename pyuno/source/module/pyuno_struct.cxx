@@ -57,7 +57,7 @@ static void PyUNOStruct_del( PyObject* self )
 static PyObject *PyUNOStruct_str( PyObject *self )
 {
     PyUNO *me = reinterpret_cast<PyUNO*>( self );
-    OStringBuffer buf;
+    OString buf;
 
     Reference<XMaterialHolder> rHolder( me->members->xInvocation,UNO_QUERY );
     if( rHolder.is() )
@@ -65,7 +65,7 @@ static PyObject *PyUNOStruct_str( PyObject *self )
         PyThreadDetach antiguard;
         Any a = rHolder->getMaterial();
         OUString s = val2str( a.getValue(), a.getValueType().getTypeLibType() );
-        buf.append( OUStringToOString( s, RTL_TEXTENCODING_ASCII_US ) );
+        buf = OUStringToOString( s, RTL_TEXTENCODING_ASCII_US );
     }
 
     return PyStr_FromString( buf.getStr());

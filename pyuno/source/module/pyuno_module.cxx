@@ -113,13 +113,10 @@ public:
         if (initialised[key])
         {
             OUStringBuffer buf;
-            buf.append( "pyuno._createUnoStructHelper: member '");
-            buf.append(key);
-            buf.append( "'");
+            buf.append( "pyuno._createUnoStructHelper: member '" + key + "'");
             if ( pos >= 0 )
             {
-                buf.append( " at position ");
-                buf.append(pos);
+                buf.append( " at position " + OUString::number(pos));
             }
             buf.append( " initialised multiple times.");
             throw RuntimeException(buf.makeStringAndClear());
@@ -191,13 +188,12 @@ void fillStruct(
             const OUString memberName (pCompType->ppMemberNames[i]);
             if ( ! state.isInitialised( memberName ) )
             {
-                OUStringBuffer buf;
-                buf.append( "pyuno._createUnoStructHelper: member '");
-                buf.append(memberName);
-                buf.append( "' of struct type '");
-                buf.append(pCompType->aBase.pTypeName);
-                buf.append( "' not given a value.");
-                throw RuntimeException(buf.makeStringAndClear());
+                OUString buf = "pyuno._createUnoStructHelper: member '" +
+                    memberName +
+                    "' of struct type '" +
+                    OUString::unacquired(&pCompType->aBase.pTypeName) +
+                    "' not given a value.";
+                throw RuntimeException(buf);
             }
         }
     }
@@ -223,12 +219,11 @@ OUString getLibDir()
 
 void raisePySystemException( const char * exceptionType, const OUString & message )
 {
-    OStringBuffer buf;
-    buf.append( "Error during bootstrapping uno (");
-    buf.append( exceptionType );
-    buf.append( "):" );
-    buf.append( OUStringToOString( message, osl_getThreadTextEncoding() ) );
-    PyErr_SetString( PyExc_SystemError, buf.makeStringAndClear().getStr() );
+    OString buf = OStringLiteral("Error during bootstrapping uno (") +
+            exceptionType +
+            "):" +
+            OUStringToOString( message, osl_getThreadTextEncoding() );
+    PyErr_SetString( PyExc_SystemError, buf.getStr() );
 }
 
 extern "C" {
@@ -250,7 +245,6 @@ static PyObject* getComponentContext(
         }
         else
         {
-            OUString iniFile;
             if( path.isEmpty() )
             {
                 PyErr_SetString(
@@ -259,14 +253,11 @@ static PyObject* getComponentContext(
                 return nullptr;
             }
 
-            OUStringBuffer iniFileName;
-            iniFileName.append( path );
+            OUString iniFile = path +
 #ifdef MACOSX
-            iniFileName.append( "/../" LIBO_ETC_FOLDER );
+                    "/../" LIBO_ETC_FOLDER
 #endif
-            iniFileName.append( "/" );
-            iniFileName.append( SAL_CONFIGFILE( "pyuno" ) );
-            iniFile = iniFileName.makeStringAndClear();
+                    "/" SAL_CONFIGFILE( "pyuno" );
             osl::DirectoryItem item;
             if( osl::DirectoryItem::get( iniFile, item ) == osl::FileBase::E_None )
             {
@@ -395,16 +386,14 @@ PyObject * extractOneStringArg( PyObject *args, char const *funcName )
 {
     if( !PyTuple_Check( args ) || PyTuple_Size( args) != 1 )
     {
-        OStringBuffer buf;
-        buf.append( funcName ).append( ": expecting one string argument" );
+        OString buf = funcName + OStringLiteral(": expecting one string argument");
         PyErr_SetString( PyExc_RuntimeError, buf.getStr() );
         return nullptr;
     }
     PyObject *obj = PyTuple_GetItem( args, 0 );
     if (!PyStr_Check(obj) && !PyUnicode_Check(obj))
     {
-        OStringBuffer buf;
-        buf.append( funcName ).append( ": expecting one string argument" );
+        OString buf = funcName + OStringLiteral(": expecting one string argument");
         PyErr_SetString( PyExc_TypeError, buf.getStr());
         return nullptr;
     }
@@ -515,8 +504,7 @@ static PyObject *getTypeByName(
             }
             else
             {
-                OStringBuffer buf;
-                buf.append( "Type " ).append(name).append( " is unknown" );
+                OString buf = OStringLiteral("Type ") + name +  " is unknown";
                 PyErr_SetString( PyExc_RuntimeError, buf.getStr() );
             }
         }
@@ -577,8 +565,7 @@ static PyObject *checkType( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
 {
     if( !PyTuple_Check( args ) || PyTuple_Size( args) != 1 )
     {
-        OStringBuffer buf;
-        buf.append( "pyuno.checkType : expecting one uno.Type argument" );
+        OString buf = "pyuno.checkType : expecting one uno.Type argument";
         PyErr_SetString( PyExc_RuntimeError, buf.getStr() );
         return nullptr;
     }
@@ -601,8 +588,7 @@ static PyObject *checkEnum( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
 {
     if( !PyTuple_Check( args ) || PyTuple_Size( args) != 1 )
     {
-        OStringBuffer buf;
-        buf.append( "pyuno.checkType : expecting one uno.Type argument" );
+        OString buf = "pyuno.checkType : expecting one uno.Type argument";
         PyErr_SetString( PyExc_RuntimeError, buf.getStr() );
         return nullptr;
     }
@@ -684,14 +670,13 @@ static PyObject *systemPathToFileUrl(
 
     if( e != osl::FileBase::E_None )
     {
-        OUStringBuffer buf;
-        buf.append( "Couldn't convert " );
-        buf.append( sysPath );
-        buf.append( " to a file url for reason (" );
-        buf.append( static_cast<sal_Int32>(e) );
-        buf.append( ")" );
+        OUString buf = "Couldn't convert " +
+                sysPath +
+                " to a file url for reason (" +
+                OUString::number( static_cast<sal_Int32>(e) ) +
+                ")";
         raisePyExceptionWithAny(
-            makeAny( RuntimeException( buf.makeStringAndClear() )));
+            makeAny( RuntimeException( buf )));
         return nullptr;
     }
     return ustring2PyUnicode( url ).getAcquired();
@@ -710,14 +695,13 @@ static PyObject * fileUrlToSystemPath(
 
     if( e != osl::FileBase::E_None )
     {
-        OUStringBuffer buf;
-        buf.append( "Couldn't convert file url " );
-        buf.append( sysPath );
-        buf.append( " to a system path for reason (" );
-        buf.append( static_cast<sal_Int32>(e) );
-        buf.append( ")" );
+        OUString buf = "Couldn't convert file url " +
+                sysPath +
+                " to a system path for reason (" +
+                OUString::number( static_cast<sal_Int32>(e) ) +
+                ")";
         raisePyExceptionWithAny(
-            makeAny( RuntimeException( buf.makeStringAndClear() )));
+            makeAny( RuntimeException( buf )));
         return nullptr;
     }
     return ustring2PyUnicode( sysPath ).getAcquired();
@@ -733,18 +717,18 @@ static PyObject * absolutize( SAL_UNUSED_PARAMETER PyObject *, PyObject * args )
         oslFileError e = osl_getAbsoluteFileURL( ouPath.pData, ouRel.pData, &(ret.pData) );
         if( e != osl_File_E_None )
         {
-            OUStringBuffer buf;
-            buf.append( "Couldn't absolutize " );
-            buf.append( ouRel );
-            buf.append( " using root " );
-            buf.append( ouPath );
-            buf.append( " for reason (" );
-            buf.append( static_cast<sal_Int32>(e) );
-            buf.append( ")" );
+            OUString buf =
+                    "Couldn't absolutize " +
+                    ouRel +
+                    " using root " +
+                    ouPath +
+                    " for reason (" +
+                    OUString::number(static_cast<sal_Int32>(e) ) +
+                    ")";
 
             PyErr_SetString(
                 PyExc_OSError,
-                OUStringToOString(buf.makeStringAndClear(),osl_getThreadTextEncoding()).getStr());
+                OUStringToOString(buf,osl_getThreadTextEncoding()).getStr());
             return nullptr;
         }
         return ustring2PyUnicode( ret ).getAcquired();
@@ -787,9 +771,8 @@ static PyObject * invoke(SAL_UNUSED_PARAMETER PyObject *, PyObject *args)
     }
     else
     {
-        OStringBuffer buf;
-        buf.append("uno.invoke expects object, name, (arg1, arg2, ... )\n");
-        PyErr_SetString(PyExc_RuntimeError, buf.makeStringAndClear().getStr());
+        OString buf = "uno.invoke expects object, name, (arg1, arg2, ... )\n";
+        PyErr_SetString(PyExc_RuntimeError, buf.getStr());
     }
     return ret;
 }
@@ -841,10 +824,9 @@ static PyObject *setCurrentContext(
         }
         else
         {
-            OStringBuffer buf;
-            buf.append( "uno.setCurrentContext expects exactly one argument (the current Context)\n" );
+            OString buf = "uno.setCurrentContext expects exactly one argument (the current Context)\n";
             PyErr_SetString(
-                PyExc_RuntimeError, buf.makeStringAndClear().getStr() );
+                PyExc_RuntimeError, buf.getStr() );
         }
     }
     catch( const css::uno::Exception & e )

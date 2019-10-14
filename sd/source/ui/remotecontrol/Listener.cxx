@@ -43,12 +43,11 @@ void Listener::init( const css::uno::Reference< css::presentation::XSlideShowCon
 
         sal_Int32 aSlides = aController->getSlideCount();
         sal_Int32 aCurrentSlide = aController->getCurrentSlideIndex();
-        OStringBuffer aBuffer;
-        aBuffer.append( "slideshow_started\n" )
-               .append( OString::number( aSlides ) ).append("\n")
-        .append( OString::number( aCurrentSlide ) ).append( "\n\n" );
+        OString aBuffer = "slideshow_started\n" +
+            OString::number( aSlides ) + "\n" +
+            OString::number( aCurrentSlide ) + "\n\n";
 
-        pTransmitter->addMessage( aBuffer.makeStringAndClear(),
+        pTransmitter->addMessage( aBuffer,
                                   Transmitter::PRIORITY_HIGH );
 
         {
@@ -98,13 +97,13 @@ void SAL_CALL Listener::slideTransitionStarted()
 {
     sal_Int32 aSlide = mController->getCurrentSlideIndex();
 
-    OStringBuffer aBuilder( "slide_updated\n" );
-    aBuilder.append( OString::number( aSlide ) );
-    aBuilder.append( "\n\n" );
+    OString aBuilder = "slide_updated\n" +
+        OString::number( aSlide ) +
+        "\n\n";
 
     if ( pTransmitter )
     {
-        pTransmitter->addMessage( aBuilder.makeStringAndClear(),
+        pTransmitter->addMessage( aBuilder,
                                Transmitter::PRIORITY_HIGH );
     }
 }

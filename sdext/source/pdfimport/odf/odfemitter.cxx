@@ -56,9 +56,8 @@ OdfEmitter::OdfEmitter( const uno::Reference<io::XOutputStream>& xOutput ) :
     OSL_PRECOND(m_xOutput.is(), "OdfEmitter(): invalid output stream");
     m_aLineFeed[0] = '\n';
 
-    OUStringBuffer aElement;
-    aElement.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-    write(aElement.makeStringAndClear());
+    OUString aElement = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    write(aElement);
 }
 
 void OdfEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
@@ -73,12 +72,12 @@ void OdfEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
     std::vector<OUString>        aAttributes;
     for( const auto& rCurr : rProperties )
     {
-        OUStringBuffer aAttribute;
-        aAttribute.append(rCurr.first);
-        aAttribute.append("=\"");
-        aAttribute.append(rCurr.second);
-        aAttribute.append("\" ");
-        aAttributes.push_back(aAttribute.makeStringAndClear());
+        OUString aAttribute =
+            rCurr.first +
+            "=\"" +
+            rCurr.second +
+            "\" ";
+        aAttributes.push_back(aAttribute);
     }
 
     // since the hash map's sorting is undefined (and varies across

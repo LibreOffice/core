@@ -1168,14 +1168,14 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
                                   XML_showRowStripes, "0", XML_showColStripes, "0",
                                   XML_showLastColumn, "1");
 
-    OUStringBuffer aBuf("../pivotCache/pivotCacheDefinition");
-    aBuf.append(nCacheId);
-    aBuf.append(".xml");
+    OUString aBuf = "../pivotCache/pivotCacheDefinition" +
+        OUString::number(nCacheId) +
+        ".xml";
 
     rStrm.addRelation(
         pPivotStrm->getOutputStream(),
         CREATE_OFFICEDOC_RELATION_TYPE("pivotCacheDefinition"),
-        aBuf.makeStringAndClear());
+        aBuf);
 
     pPivotStrm->endElement(XML_pivotTableDefinition);
 }

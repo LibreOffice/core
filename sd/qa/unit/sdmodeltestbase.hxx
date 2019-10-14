@@ -327,11 +327,8 @@ protected:
             uno::Reference< drawing::XShapes > xShapes(xDrawPage, uno::UNO_QUERY_THROW);
             OUString aString = XShapeDumper::dump(xShapes);
 
-            OStringBuffer aFileNameBuf( OUStringToOString( rShapesDumpFileNameBase, RTL_TEXTENCODING_UTF8 ) );
-            aFileNameBuf.append(i);
-            aFileNameBuf.append(".xml");
-
-            OString aFileName = aFileNameBuf.makeStringAndClear();
+            OString aFileName = OUStringToOString( rShapesDumpFileNameBase, RTL_TEXTENCODING_UTF8 ) +
+                OString::number(i) + ".xml";
 
             if ( bCreate )
             {

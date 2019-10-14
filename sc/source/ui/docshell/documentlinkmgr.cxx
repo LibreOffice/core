@@ -193,18 +193,18 @@ bool DocumentLinkManager::updateDdeOrOleOrWebServiceLinks(weld::Window* pWin)
             const OUString& aElem = pDdeLink->GetItem();
             const OUString& aType = pDdeLink->GetAppl();
 
-            OUStringBuffer aBuf;
-            aBuf.append(ScResId(SCSTR_DDEDOC_NOT_LOADED));
-            aBuf.append("\n\n");
-            aBuf.append("Source : ");
-            aBuf.append(aFile);
-            aBuf.append("\nElement : ");
-            aBuf.append(aElem);
-            aBuf.append("\nType : ");
-            aBuf.append(aType);
+            OUString sMessage =
+                ScResId(SCSTR_DDEDOC_NOT_LOADED) +
+                "\n\n"
+                "Source : " +
+                aFile +
+                "\nElement : " +
+                aElem +
+                "\nType : " +
+                aType;
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin,
                                                       VclMessageType::Warning, VclButtonsType::Ok,
-                                                      aBuf.makeStringAndClear()));
+                                                      sMessage));
             xBox->run();
         }
     }

@@ -134,18 +134,18 @@ void SvIdlParser::ReadInclude( SvMetaModule& rModule )
     osl::FileBase::RC searchError = osl::File::searchFileURL(aFullName, rBase.GetPath(), aFullName);
     if( osl::FileBase::E_None != searchError )
     {
-        OStringBuffer aStr("cannot find file:");
-        aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
-        throw SvParseException(aStr.makeStringAndClear(), rInStm.GetToken());
+        OString aStr = "cannot find file:" +
+            OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8);
+        throw SvParseException(aStr, rInStm.GetToken());
     }
     osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
     rBase.AddDepFile( aFullName );
     SvTokenStream aTokStm( aFullName );
     if( ERRCODE_NONE != aTokStm.GetStream().GetError() )
     {
-        OStringBuffer aStr("cannot open file: ");
-        aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
-        throw SvParseException(aStr.makeStringAndClear(), rInStm.GetToken());
+        OString aStr = "cannot open file: " +
+            OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8);
+        throw SvParseException(aStr, rInStm.GetToken());
     }
     // rescue error from old file
     SvIdlError aOldErr = rBase.GetError();

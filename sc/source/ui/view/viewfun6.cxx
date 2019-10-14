@@ -180,16 +180,15 @@ void ScViewFunc::DetectiveMarkPred()
         if (pPath && ScRefTokenHelper::getRangeFromToken(aRange, p, aCurPos, true))
         {
             OUString aTabName = p->GetString().getString();
-            OUStringBuffer aBuf;
-            aBuf.append(*pPath);
-            aBuf.append('#');
-            aBuf.append(aTabName);
-            aBuf.append('.');
-
             OUString aRangeStr(aRange.Format(ScRefFlags::VALID));
-            aBuf.append(aRangeStr);
+            OUString sUrl =
+                *pPath +
+                "#" +
+                aTabName +
+                "." +
+                aRangeStr;
 
-            ScGlobal::OpenURL(aBuf.makeStringAndClear(), OUString());
+            ScGlobal::OpenURL(sUrl, OUString());
         }
         return;
     }
