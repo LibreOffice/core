@@ -19,7 +19,6 @@
 
 #include <csvcontrol.hxx>
 #include <vcl/settings.hxx>
-#include <AccessibleCsvControl.hxx>
 
 ScCsvLayoutData::ScCsvLayoutData() :
     mnPosCount( 1 ),
@@ -55,45 +54,30 @@ ScCsvDiff ScCsvLayoutData::GetDiff( const ScCsvLayoutData& rData ) const
     return nRet;
 }
 
-ScCsvControl::ScCsvControl( ScCsvControl& rParent ) :
-    VclReferenceBase(),
-    Control( &rParent, WB_TABSTOP | WB_NODIALOGCONTROL ),
-    mrData( rParent.GetLayoutData() ),
-    mbValidGfx( false )
-{
-}
-
-ScCsvControl::ScCsvControl( vcl::Window* pParent, const ScCsvLayoutData& rData, WinBits nBits ) :
-    Control( pParent, nBits ),
-    mrData( rData ),
-    mbValidGfx( false )
+ScCsvControl::ScCsvControl(const ScCsvLayoutData& rData)
+    : mrData(rData)
+    , mbValidGfx(false)
 {
 }
 
 ScCsvControl::~ScCsvControl()
 {
-    disposeOnce();
-}
-
-void ScCsvControl::dispose()
-{
     if( mxAccessible.is() )
         mxAccessible->dispose();
     mxAccessible = nullptr; // lp#1566050: prevent cyclic reference zombies
-    Control::dispose();
 }
 
 // event handling -------------------------------------------------------------
 
 void ScCsvControl::GetFocus()
 {
-    Control::GetFocus();
+    weld::CustomWidgetController::GetFocus();
     AccSendFocusEvent( true );
 }
 
 void ScCsvControl::LoseFocus()
 {
-    Control::LoseFocus();
+    weld::CustomWidgetController::LoseFocus();
     AccSendFocusEvent( false );
 }
 
@@ -293,14 +277,6 @@ ScMoveMode ScCsvControl::GetVertDirection( sal_uInt16 nCode, bool bHomeEnd )
         case KEY_END:       return MOVE_LAST;
     }
     return MOVE_NONE;
-}
-
-// accessibility --------------------------------------------------------------
-
-css::uno::Reference< css::accessibility::XAccessible > ScCsvControl::CreateAccessible()
-{
-    mxAccessible = ImplCreateAccessible().get();
-    return css::uno::Reference< css::accessibility::XAccessible >(mxAccessible.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

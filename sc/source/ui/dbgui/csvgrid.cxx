@@ -18,6 +18,7 @@
  */
 
 #include <csvgrid.hxx>
+#include <csvtablebox.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -35,6 +36,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
 #include <editeng/colritem.hxx>
@@ -63,46 +65,63 @@ struct Func_Select
         { rState.Select( mbSelect ); }
 };
 
-ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
-    ScCsvControl( rParent ),
-    mpBackgrDev( VclPtr<VirtualDevice>::Create() ),
-    mpGridDev( VclPtr<VirtualDevice>::Create() ),
-    mpPopup( VclPtr<PopupMenu>::Create() ),
-    mpColorConfig( nullptr ),
-    mpEditEngine( new ScEditEngineDefaulter( EditEngine::CreatePool(), true ) ),
-    maHeaderFont( GetFont() ),
-    maColStates( 1 ),
-    maTypeNames( 1 ),
-    mnFirstImpLine( 0 ),
-    mnRecentSelCol( CSV_COLUMN_INVALID ),
-    mnMTCurrCol( SAL_MAX_UINT32 ),
-    mbMTSelecting( false )
+ScCsvGrid::ScCsvGrid(const ScCsvLayoutData& rData, std::unique_ptr<weld::Menu> xPopup, ScCsvTableBox* pTableBox)
+    : ScCsvControl(rData)
+    , mpTableBox(pTableBox)
+    , mpBackgrDev( VclPtr<VirtualDevice>::Create() )
+    , mpGridDev( VclPtr<VirtualDevice>::Create() )
+    , mxPopup(std::move(xPopup))
+    , mpColorConfig( nullptr )
+    , mpEditEngine( new ScEditEngineDefaulter( EditEngine::CreatePool(), true ) )
+    , maColStates( 1 )
+    , maTypeNames( 1 )
+    , mnFirstImpLine( 0 )
+    , mnRecentSelCol( CSV_COLUMN_INVALID )
+    , mnMTCurrCol( SAL_MAX_UINT32 )
+    , mbTracking( false )
+    , mbMTSelecting( false )
 {
     mpEditEngine->SetRefDevice( mpBackgrDev.get() );
     mpEditEngine->SetRefMapMode( MapMode( MapUnit::MapPixel ) );
     maEdEngSize = mpEditEngine->GetPaperSize();
+}
 
-    mpPopup->SetMenuFlags( mpPopup->GetMenuFlags() | MenuFlags::NoAutoMnemonics );
+void ScCsvGrid::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    OutputDevice& rRefDevice = pDrawingArea->get_ref_device();
+    maHeaderFont = Application::GetSettings().GetStyleSettings().GetAppFont();
+
+    // expand the point size of the desired font to the equivalent pixel size
+    if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
+    {
+        pDefaultDevice->SetPointFont(rRefDevice, maHeaderFont);
+        maHeaderFont = rRefDevice.GetFont();
+    }
+
+    // Because this is an always LeftToRight layout widget the initial size of
+    // this widget needs to be smaller than the size of the parent scrolling
+    // window (ScCsvTableBox ctor) because in RTL mode the alignment is against
+    // the right edge of the parent, and if larger than the scrolling window
+    // the left edge will be lost. If this widget is smaller than the scrolling
+    // window it is stretched to fit the parent and the problem doesn't arise.
+    Size aInitialSize(10, 10);
+    ScCsvControl::SetDrawingArea(pDrawingArea);
+    pDrawingArea->set_size_request(aInitialSize.Width(), aInitialSize.Height());
+    SetOutputSizePixel(aInitialSize);
 
     EnableRTL( false ); // RTL
+
     InitFonts();
     ImplClearSplits();
 }
 
 ScCsvGrid::~ScCsvGrid()
 {
-    disposeOnce();
-}
-
-void ScCsvGrid::dispose()
-{
     OSL_ENSURE(mpColorConfig, "the object hasn't been initialized properly");
     if (mpColorConfig)
         mpColorConfig->RemoveListener(this);
-    mpPopup.disposeAndClear();
     mpBackgrDev.disposeAndClear();
     mpGridDev.disposeAndClear();
-    ScCsvControl::dispose();
 }
 
 void
@@ -119,11 +138,12 @@ ScCsvGrid::Init()
 void ScCsvGrid::UpdateLayoutData()
 {
     DisableRepaint();
-    SetFont( maMonoFont );
-    Execute( CSVCMD_SETCHARWIDTH, GetTextWidth( OUString( 'X' ) ) );
-    Execute( CSVCMD_SETLINEHEIGHT, GetTextHeight() + 1 );
-    SetFont( maHeaderFont );
-    Execute( CSVCMD_SETHDRHEIGHT, GetTextHeight() + 1 );
+    OutputDevice& rRefDevice = GetDrawingArea()->get_ref_device();
+    rRefDevice.SetFont(maMonoFont);
+    Execute(CSVCMD_SETCHARWIDTH, rRefDevice.GetTextWidth(OUString('X')));
+    Execute(CSVCMD_SETLINEHEIGHT, rRefDevice.GetTextHeight() + 1);
+    rRefDevice.SetFont(maHeaderFont);
+    Execute(CSVCMD_SETHDRHEIGHT, rRefDevice.GetTextHeight() + 1);
     UpdateOffsetX();
     EnableRepaint();
 }
@@ -134,7 +154,7 @@ void ScCsvGrid::UpdateOffsetX()
     sal_Int32 nDigits = 2;
     while( nLastLine /= 10 ) ++nDigits;
     nDigits = std::max( nDigits, sal_Int32( 3 ) );
-    Execute( CSVCMD_SETHDRWIDTH, GetTextWidth( OUString( '0' ) ) * nDigits );
+    Execute(CSVCMD_SETHDRWIDTH, GetDrawingArea()->get_approximate_digit_width() * nDigits);
 }
 
 void ScCsvGrid::ApplyLayout( const ScCsvLayoutData& rOldData )
@@ -220,7 +240,7 @@ void ScCsvGrid::InitColors()
     maAppBackColor = mpColorConfig->GetColorValue( ::svtools::APPBACKGROUND ).nColor;
     maTextColor = mpColorConfig->GetColorValue( ::svtools::FONTCOLOR ).nColor;
 
-    const StyleSettings& rSett = GetSettings().GetStyleSettings();
+    const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
     maHeaderBackColor = rSett.GetFaceColor();
     maHeaderGridColor = rSett.GetDarkShadowColor();
     maHeaderTextColor = rSett.GetButtonTextColor();
@@ -280,7 +300,7 @@ void ScCsvGrid::InitFonts()
 
 void ScCsvGrid::InitSizeData()
 {
-    maWinSize = GetSizePixel();
+    maWinSize = GetOutputSizePixel();
     mpBackgrDev->SetOutputSizePixel( maWinSize );
     mpGridDev->SetOutputSizePixel( maWinSize );
     InvalidateGfx();
@@ -510,12 +530,10 @@ void ScCsvGrid::SetTypeNames( const std::vector<OUString>& rTypeNames )
     maTypeNames = rTypeNames;
     Repaint( true );
 
-    mpPopup->Clear();
+    mxPopup->clear();
     sal_uInt32 nCount = maTypeNames.size();
-    sal_uInt32 nIx;
-    sal_uInt16 nItemId;
-    for( nIx = 0, nItemId = 1; nIx < nCount; ++nIx, ++nItemId )
-        mpPopup->InsertItem( nItemId, maTypeNames[ nIx ] );
+    for (sal_uInt32 nIx = 0; nIx < nCount; ++nIx)
+        mxPopup->append(OUString::number(nIx), maTypeNames[nIx]);
 
     ::std::for_each( maColStates.begin(), maColStates.end(), Func_SetType( CSV_TYPE_DEFAULT ) );
 }
@@ -587,9 +605,9 @@ void ScCsvGrid::ScrollVertRel( ScMoveMode eDir )
 
 void ScCsvGrid::ExecutePopup( const Point& rPos )
 {
-    sal_uInt16 nItemId = mpPopup->Execute( this, rPos );
-    if( nItemId )   // 0 = cancelled
-        Execute( CSVCMD_SETCOLUMNTYPE, mpPopup->GetItemPos( nItemId ) );
+    OString sItemId = mxPopup->popup_at_rect(GetDrawingArea(), tools::Rectangle(rPos, Size(1, 1)));
+    if (!sItemId.isEmpty())   // empty = cancelled
+        Execute(CSVCMD_SETCOLUMNTYPE, sItemId.toInt32());
 }
 
 // selection handling ---------------------------------------------------------
@@ -724,7 +742,7 @@ void ScCsvGrid::DoSelectAction( sal_uInt32 nColIndex, sal_uInt16 nModifier )
         SelectRange( mnRecentSelCol, nColIndex );
     else if( !(nModifier & KEY_MOD1) )      // no SHIFT/CTRL always selects 1 column
         Select( nColIndex );
-    else if( IsTracking() )                 // CTRL in tracking does not toggle
+    else if( mbTracking )                 // CTRL in tracking does not toggle
         Select( nColIndex, mbMTSelecting );
     else                                    // CTRL only toggles
         ToggleSelect( nColIndex );
@@ -838,6 +856,8 @@ const OUString& ScCsvGrid::GetCellText( sal_uInt32 nColIndex, sal_Int32 nLine ) 
 
 void ScCsvGrid::Resize()
 {
+    mpTableBox->InitControls();
+
     ScCsvControl::Resize();
     InitSizeData();
     Execute( CSVCMD_UPDATECELLTEXTS );
@@ -856,7 +876,7 @@ void ScCsvGrid::LoseFocus()
     Repaint();
 }
 
-void ScCsvGrid::MouseButtonDown( const MouseEvent& rMEvt )
+bool ScCsvGrid::MouseButtonDown( const MouseEvent& rMEvt )
 {
     DisableRepaint();
     if( !HasFocus() )
@@ -877,35 +897,43 @@ void ScCsvGrid::MouseButtonDown( const MouseEvent& rMEvt )
             DoSelectAction( nColIx, rMEvt.GetModifier() );
             mnMTCurrCol = nColIx;
             mbMTSelecting = IsSelected( nColIx );
-            StartTracking( StartTrackingFlags::ButtonRepeat );
+            mbTracking = true;
         }
     }
     EnableRepaint();
+    return true;
 }
 
-void ScCsvGrid::Tracking( const TrackingEvent& rTEvt )
+bool ScCsvGrid::MouseButtonUp( const MouseEvent& )
 {
-    if( rTEvt.IsTrackingEnded() || rTEvt.IsTrackingRepeat() )
-    {
-        DisableRepaint();
-        const MouseEvent& rMEvt = rTEvt.GetMouseEvent();
-
-        sal_Int32 nPos = (rMEvt.GetPosPixel().X() - GetFirstX()) / GetCharWidth() + GetFirstVisPos();
-        // on mouse tracking: keep position valid
-        nPos = std::max( std::min( nPos, GetPosCount() - sal_Int32( 1 ) ), sal_Int32( 0 ) );
-        Execute( CSVCMD_MAKEPOSVISIBLE, nPos );
-
-        sal_uInt32 nColIx = GetColumnFromPos( nPos );
-        if( mnMTCurrCol != nColIx )
-        {
-            DoSelectAction( nColIx, rMEvt.GetModifier() );
-            mnMTCurrCol = nColIx;
-        }
-        EnableRepaint();
-    }
+    mbTracking = false;
+    return true;
 }
 
-void ScCsvGrid::KeyInput( const KeyEvent& rKEvt )
+bool ScCsvGrid::MouseMove( const MouseEvent& rMEvt )
+{
+    if (!mbTracking)
+        return true;
+
+    DisableRepaint();
+
+    sal_Int32 nPos = (rMEvt.GetPosPixel().X() - GetFirstX()) / GetCharWidth() + GetFirstVisPos();
+    // on mouse tracking: keep position valid
+    nPos = std::max( std::min( nPos, GetPosCount() - sal_Int32( 1 ) ), sal_Int32( 0 ) );
+    Execute( CSVCMD_MAKEPOSVISIBLE, nPos );
+
+    sal_uInt32 nColIx = GetColumnFromPos( nPos );
+    if( mnMTCurrCol != nColIx )
+    {
+        DoSelectAction( nColIx, rMEvt.GetModifier() );
+        mnMTCurrCol = nColIx;
+    }
+    EnableRepaint();
+
+    return true;
+}
+
+bool ScCsvGrid::KeyInput( const KeyEvent& rKEvt )
 {
     const vcl::KeyCode& rKCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = rKCode.GetCode();
@@ -955,12 +983,12 @@ void ScCsvGrid::KeyInput( const KeyEvent& rKEvt )
         }
     }
 
-    if( rKCode.GetGroup() != KEYGROUP_CURSOR )
-        ScCsvControl::KeyInput( rKEvt );
+    return rKCode.GetGroup() == KEYGROUP_CURSOR;
 }
 
-void ScCsvGrid::Command( const CommandEvent& rCEvt )
+bool ScCsvGrid::Command( const CommandEvent& rCEvt )
 {
+    bool bConsumed = true;
     switch( rCEvt.GetCommand() )
     {
         case CommandEventId::ContextMenu:
@@ -985,8 +1013,8 @@ void ScCsvGrid::Command( const CommandEvent& rCEvt )
                 sal_Int32 nX2 = std::min( GetColumnX( nColIx + 1 ), GetWidth() );
                 ExecutePopup( Point( (nX1 + nX2) / 2, GetHeight() / 2 ) );
             }
+            break;
         }
-        break;
         case CommandEventId::Wheel:
         {
             tools::Rectangle aRect( Point(), maWinSize );
@@ -996,23 +1024,23 @@ void ScCsvGrid::Command( const CommandEvent& rCEvt )
                 if( pData && (pData->GetMode() == CommandWheelMode::SCROLL) && !pData->IsHorz() )
                     Execute( CSVCMD_SETLINEOFFSET, GetFirstVisLine() - pData->GetNotchDelta() );
             }
+            break;
         }
-        break;
         default:
-            ScCsvControl::Command( rCEvt );
+            bConsumed = false;
+            break;
     }
+    return bConsumed;
 }
 
-void ScCsvGrid::DataChanged( const DataChangedEvent& rDCEvt )
+void ScCsvGrid::StyleUpdated()
 {
-    if( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-    {
-        InitColors();
-        InitFonts();
-        UpdateLayoutData();
-        Execute( CSVCMD_UPDATECELLTEXTS );
-    }
-    ScCsvControl::DataChanged( rDCEvt );
+    InitColors();
+    InitFonts();
+    UpdateLayoutData();
+    Execute( CSVCMD_UPDATECELLTEXTS );
+
+    ScCsvControl::StyleUpdated();
 }
 
 void ScCsvGrid::ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints )
@@ -1023,12 +1051,12 @@ void ScCsvGrid::ConfigurationChanged( utl::ConfigurationBroadcaster*, Configurat
 
 // painting -------------------------------------------------------------------
 
-void ScCsvGrid::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& )
+void ScCsvGrid::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    Repaint();
+    ImplRedraw(rRenderContext);
 }
 
-void ScCsvGrid::ImplRedraw()
+void ScCsvGrid::ImplRedraw(vcl::RenderContext& rRenderContext)
 {
     if( IsVisible() )
     {
@@ -1038,8 +1066,7 @@ void ScCsvGrid::ImplRedraw()
             ImplDrawBackgrDev();
             ImplDrawGridDev();
         }
-        DrawOutDev( Point(), maWinSize, Point(), maWinSize, *mpGridDev );
-        ImplDrawTrackingRect( GetFocusColumn() );
+        rRenderContext.DrawOutDev( Point(), maWinSize, Point(), maWinSize, *mpGridDev );
     }
 }
 
@@ -1355,24 +1382,26 @@ void ScCsvGrid::ImplInvertCursor( sal_Int32 nPos )
     }
 }
 
-void ScCsvGrid::ImplDrawTrackingRect( sal_uInt32 nColIndex )
+tools::Rectangle ScCsvGrid::GetFocusRect()
 {
+    auto nColIndex = GetFocusColumn();
     if( HasFocus() && IsVisibleColumn( nColIndex ) )
     {
         sal_Int32 nX1 = std::max( GetColumnX( nColIndex ), GetFirstX() ) + 1;
         sal_Int32 nX2 = std::min( GetColumnX( nColIndex + 1 ) - sal_Int32( 1 ), GetLastX() );
         sal_Int32 nY2 = std::min( GetY( GetLastVisLine() + 1 ), GetHeight() ) - 1;
-        InvertTracking( tools::Rectangle( nX1, 0, nX2, nY2 ), ShowTrackFlags::Small | ShowTrackFlags::TrackWindow );
+        return tools::Rectangle( nX1, 0, nX2, nY2 );
     }
+    return weld::CustomWidgetController::GetFocusRect();
 }
 
 // accessibility ==============================================================
 
-rtl::Reference<ScAccessibleCsvControl> ScCsvGrid::ImplCreateAccessible()
+css::uno::Reference<css::accessibility::XAccessible> ScCsvGrid::CreateAccessible()
 {
-    rtl::Reference<ScAccessibleCsvControl> pControl(new ScAccessibleCsvGrid( *this ));
-    pControl->Init();
-    return pControl;
+    rtl::Reference<ScAccessibleCsvGrid> xRef(new ScAccessibleCsvGrid(*this));
+    mxAccessible.set(xRef.get());
+    return css::uno::Reference<css::accessibility::XAccessible>(xRef.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

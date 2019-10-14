@@ -25,8 +25,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 
 using namespace com::sun::star::uno;
 
@@ -89,39 +90,40 @@ static void save_FixedWidthList(const ScCsvSplits& rSplits)
     aItem.PutProperties(aNames, aValues);
 }
 
-ScCsvRuler::ScCsvRuler( ScCsvControl& rParent ) :
-    ScCsvControl( rParent ),
-    mnPosCursorLast( 1 )
+ScCsvRuler::ScCsvRuler(ScCsvLayoutData& rData, ScCsvTableBox* pTableBox)
+    : ScCsvControl(rData)
+    , mpTableBox(pTableBox)
+    , mnPosCursorLast(1)
+    , mbTracking(false)
 {
+}
+
+void ScCsvRuler::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    ScCsvControl::SetDrawingArea(pDrawingArea);
+
+    mnSplitSize = (GetCharWidth() * 3 / 5) | 1; // make an odd number
+
+    Size aSize(1, GetTextHeight() + mnSplitSize + 2);
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    SetOutputSizePixel(aSize);
+
     EnableRTL( false ); // RTL
     InitColors();
     InitSizeData();
-    maBackgrDev->SetFont( GetFont() );
-    maRulerDev->SetFont( GetFont() );
 
+    OutputDevice& rRefDevice = pDrawingArea->get_ref_device();
+    maBackgrDev->SetFont( rRefDevice.GetFont() );
+    maRulerDev->SetFont( rRefDevice.GetFont() );
     load_FixedWidthList( maSplits );
 }
 
 ScCsvRuler::~ScCsvRuler()
 {
-    disposeOnce();
-}
-
-void ScCsvRuler::dispose()
-{
     save_FixedWidthList( maSplits );
-    ScCsvControl::dispose();
 }
 
 // common ruler handling ------------------------------------------------------
-
-void ScCsvRuler::setPosSizePixel(
-        long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags )
-{
-    if( nFlags & PosSizeFlags::Height )
-        nHeight = GetTextHeight() + mnSplitSize + 2;
-    ScCsvControl::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
-}
 
 void ScCsvRuler::ApplyLayout( const ScCsvLayoutData& rOldData )
 {
@@ -148,7 +150,7 @@ void ScCsvRuler::ApplyLayout( const ScCsvLayoutData& rOldData )
 
 void ScCsvRuler::InitColors()
 {
-    const StyleSettings& rSett = GetSettings().GetStyleSettings();
+    const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
     maBackColor = rSett.GetFaceColor();
     maActiveColor = rSett.GetWindowColor();
     maTextColor = rSett.GetLabelTextColor();
@@ -158,9 +160,7 @@ void ScCsvRuler::InitColors()
 
 void ScCsvRuler::InitSizeData()
 {
-    maWinSize = GetSizePixel();
-
-    mnSplitSize = (GetCharWidth() * 3 / 5) | 1; // make an odd number
+    maWinSize = GetOutputSizePixel();
 
     sal_Int32 nActiveWidth = std::min( GetWidth() - GetHdrWidth(), GetPosCount() * GetCharWidth() );
     sal_Int32 nActiveHeight = GetTextHeight();
@@ -379,17 +379,15 @@ void ScCsvRuler::LoseFocus()
     MoveCursor( CSV_POS_INVALID );
 }
 
-void ScCsvRuler::DataChanged( const DataChangedEvent& rDCEvt )
+void ScCsvRuler::StyleUpdated()
 {
-    if( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-    {
-        InitColors();
-        Repaint();
-    }
-    ScCsvControl::DataChanged( rDCEvt );
+    InitColors();
+    Repaint();
+
+    ScCsvControl::StyleUpdated();
 }
 
-void ScCsvRuler::MouseButtonDown( const MouseEvent& rMEvt )
+bool ScCsvRuler::MouseButtonDown( const MouseEvent& rMEvt )
 {
     DisableRepaint();
     if( !HasFocus() )
@@ -402,14 +400,21 @@ void ScCsvRuler::MouseButtonDown( const MouseEvent& rMEvt )
         ImplSetMousePointer( nPos );
     }
     EnableRepaint();
+    return true;
 }
 
-void ScCsvRuler::MouseMove( const MouseEvent& rMEvt )
+bool ScCsvRuler::MouseButtonUp( const MouseEvent& )
+{
+    mbTracking = false;
+    return true;
+}
+
+bool ScCsvRuler::MouseMove( const MouseEvent& rMEvt )
 {
     if( !rMEvt.IsModifierChanged() )
     {
         sal_Int32 nPos = GetPosFromX( rMEvt.GetPosPixel().X() );
-        if( IsTracking() )
+        if( mbTracking )
         {
             // on mouse tracking: keep position valid
             nPos = std::max( std::min( nPos, GetPosCount() - sal_Int32( 1 ) ), sal_Int32( 1 ) );
@@ -425,17 +430,10 @@ void ScCsvRuler::MouseMove( const MouseEvent& rMEvt )
         }
         ImplSetMousePointer( nPos );
     }
+    return true;
 }
 
-void ScCsvRuler::Tracking( const TrackingEvent& rTEvt )
-{
-    if( rTEvt.IsTrackingEnded() || rTEvt.IsTrackingRepeat() )
-        MouseMove( rTEvt.GetMouseEvent() );
-    if( rTEvt.IsTrackingEnded() )
-        EndMouseTracking( !rTEvt.IsTrackingCanceled() );
-}
-
-void ScCsvRuler::KeyInput( const KeyEvent& rKEvt )
+bool ScCsvRuler::KeyInput( const KeyEvent& rKEvt )
 {
     const vcl::KeyCode& rKCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = rKCode.GetCode();
@@ -467,8 +465,7 @@ void ScCsvRuler::KeyInput( const KeyEvent& rKEvt )
     else if( bShift && (nCode == KEY_DELETE) )
         Execute( CSVCMD_REMOVEALLSPLITS );
 
-    if( rKCode.GetGroup() != KEYGROUP_CURSOR )
-        ScCsvControl::KeyInput( rKEvt );
+    return rKCode.GetGroup() == KEYGROUP_CURSOR;
 }
 
 void ScCsvRuler::StartMouseTracking( sal_Int32 nPos )
@@ -478,7 +475,7 @@ void ScCsvRuler::StartMouseTracking( sal_Int32 nPos )
     maOldSplits = maSplits;
     Execute( CSVCMD_INSERTSPLIT, nPos );
     if( HasSplit( nPos ) )
-        StartTracking( StartTrackingFlags::ButtonRepeat );
+        mbTracking = true;
 }
 
 void ScCsvRuler::MoveMouseTracking( sal_Int32 nPos )
@@ -520,12 +517,12 @@ void ScCsvRuler::EndMouseTracking( bool bApply )
 
 // painting -------------------------------------------------------------------
 
-void ScCsvRuler::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& )
+void ScCsvRuler::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
 {
-    Repaint();
+    ImplRedraw(rRenderContext);
 }
 
-void ScCsvRuler::ImplRedraw()
+void ScCsvRuler::ImplRedraw(vcl::RenderContext& rRenderContext)
 {
     if( IsVisible() )
     {
@@ -535,12 +532,16 @@ void ScCsvRuler::ImplRedraw()
             ImplDrawBackgrDev();
             ImplDrawRulerDev();
         }
-        DrawOutDev( Point(), maWinSize, Point(), maWinSize, *maRulerDev );
-        /* Draws directly tracking rectangle to the column with the specified index. */
-        if( HasFocus() )
-            InvertTracking( tools::Rectangle( 0, 0, GetWidth() - 1, GetHeight() - 2 ),
-                ShowTrackFlags::Small | ShowTrackFlags::TrackWindow );
+        rRenderContext.DrawOutDev( Point(), maWinSize, Point(), maWinSize, *maRulerDev );
     }
+}
+
+tools::Rectangle ScCsvRuler::GetFocusRect()
+{
+    /* Draws directly tracking rectangle to the column with the specified index. */
+    if(HasFocus())
+        return tools::Rectangle(0, 0, GetWidth() - 1, GetHeight() - 2);
+    return weld::CustomWidgetController::GetFocusRect();
 }
 
 void ScCsvRuler::ImplDrawArea( sal_Int32 nPosX, sal_Int32 nWidth )
@@ -652,9 +653,11 @@ void ScCsvRuler::ImplSetMousePointer( sal_Int32 nPos )
 
 // accessibility ==============================================================
 
-rtl::Reference<ScAccessibleCsvControl> ScCsvRuler::ImplCreateAccessible()
+css::uno::Reference<css::accessibility::XAccessible> ScCsvRuler::CreateAccessible()
 {
-    return new ScAccessibleCsvRuler( *this );
+    rtl::Reference<ScAccessibleCsvRuler> xRef(new ScAccessibleCsvRuler(*this));
+    mxAccessible.set(xRef.get());
+    return css::uno::Reference<css::accessibility::XAccessible>(xRef.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

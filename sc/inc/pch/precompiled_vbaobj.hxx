@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:16:41 using:
+ Generated on 2019-10-15 16:58:13 using:
  ./bin/update_pch sc vbaobj --cutoff=1 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,14 +26,12 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
-#include <boost/optional.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
@@ -46,34 +44,20 @@
 #include <basic/basmgr.hxx>
 #include <basic/sberrors.hxx>
 #include <basic/sbmeth.hxx>
-#include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbxobj.hxx>
-#include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
-#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XTopWindowListener.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
-#include <com/sun/star/beans/MethodConcept.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/PropertyVetoException.hpp>
-#include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
-#include <com/sun/star/beans/XProperty.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
-#include <com/sun/star/chart/ChartDataCaption.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #include <com/sun/star/chart/ChartSymbolType.hpp>
@@ -91,7 +75,6 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
-#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -106,15 +89,11 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/script/ArrayWrapper.hpp>
 #include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
@@ -130,10 +109,8 @@
 #include <com/sun/star/sheet/FilterConnection.hpp>
 #include <com/sun/star/sheet/FilterOperator2.hpp>
 #include <com/sun/star/sheet/FormulaResult.hpp>
-#include <com/sun/star/sheet/FunctionArgument.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
-#include <com/sun/star/sheet/TableFilterField.hpp>
 #include <com/sun/star/sheet/TableFilterField2.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
@@ -141,7 +118,6 @@
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <com/sun/star/sheet/XCellRangeData.hpp>
 #include <com/sun/star/sheet/XCellRangeMovement.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XCellRangesQuery.hpp>
@@ -166,11 +142,9 @@
 #include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
 #include <com/sun/star/sheet/XSheetFilterDescriptor2.hpp>
-#include <com/sun/star/sheet/XSheetFilterable.hpp>
 #include <com/sun/star/sheet/XSheetOperation.hpp>
 #include <com/sun/star/sheet/XSheetOutline.hpp>
 #include <com/sun/star/sheet/XSheetPageBreak.hpp>
-#include <com/sun/star/sheet/XSheetPastable.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
@@ -179,6 +153,8 @@
 #include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
 #include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XUsedAreaCursor.hpp>
+#include <com/sun/star/sheet/XViewFreezable.hpp>
+#include <com/sun/star/sheet/XViewSplitable.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
@@ -190,7 +166,6 @@
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/TableSortField.hpp>
 #include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/table/XCellCursor.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XTableChart.hpp>
@@ -202,6 +177,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
@@ -215,42 +191,32 @@
 #include <com/sun/star/util/TriState.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XMergeable.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
 #include <com/sun/star/util/XReplaceable.hpp>
 #include <com/sun/star/util/XSortable.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
-#include <com/sun/star/view/XControlAccess.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
+#include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
-#include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/component_context.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <editeng/eeitem.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <filter/msfilter/util.hxx>
-#include <i18nutil/paper.hxx>
 #include <o3tl/any.hxx>
 #include <ooo/vba/XCommandBarControls.hpp>
 #include <ooo/vba/XCommandBars.hpp>
 #include <ooo/vba/XControlProvider.hpp>
-#include <ooo/vba/XExecutableDialog.hpp>
 #include <ooo/vba/excel/Constants.hpp>
-#include <ooo/vba/excel/Range.hpp>
 #include <ooo/vba/excel/XApplication.hpp>
 #include <ooo/vba/excel/XApplicationOutgoing.hpp>
 #include <ooo/vba/excel/XAxis.hpp>
@@ -261,7 +227,6 @@
 #include <ooo/vba/excel/XPivotTable.hpp>
 #include <ooo/vba/excel/XRange.hpp>
 #include <ooo/vba/excel/XStyle.hpp>
-#include <ooo/vba/excel/XWorkbook.hpp>
 #include <ooo/vba/excel/XWorksheet.hpp>
 #include <ooo/vba/excel/XlAutoFillType.hpp>
 #include <ooo/vba/excel/XlAutoFilterOperator.hpp>
@@ -275,7 +240,6 @@
 #include <ooo/vba/excel/XlChartType.hpp>
 #include <ooo/vba/excel/XlColorIndex.hpp>
 #include <ooo/vba/excel/XlConsolidationFunction.hpp>
-#include <ooo/vba/excel/XlCreator.hpp>
 #include <ooo/vba/excel/XlDVAlertStyle.hpp>
 #include <ooo/vba/excel/XlDVType.hpp>
 #include <ooo/vba/excel/XlDeleteShiftDirection.hpp>
@@ -294,6 +258,7 @@
 #include <ooo/vba/excel/XlOrientation.hpp>
 #include <ooo/vba/excel/XlPageBreak.hpp>
 #include <ooo/vba/excel/XlPageOrientation.hpp>
+#include <ooo/vba/excel/XlPaperSize.hpp>
 #include <ooo/vba/excel/XlPasteSpecialOperation.hpp>
 #include <ooo/vba/excel/XlPasteType.hpp>
 #include <ooo/vba/excel/XlPattern.hpp>
@@ -310,8 +275,6 @@
 #include <ooo/vba/excel/XlSortOrder.hpp>
 #include <ooo/vba/excel/XlSortOrientation.hpp>
 #include <ooo/vba/excel/XlSpecialCellsValue.hpp>
-#include <ooo/vba/excel/XlTextParsingType.hpp>
-#include <ooo/vba/excel/XlTextQualifier.hpp>
 #include <ooo/vba/excel/XlUnderlineStyle.hpp>
 #include <ooo/vba/excel/XlVAlign.hpp>
 #include <ooo/vba/excel/XlWindowState.hpp>
@@ -329,19 +292,9 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sfxdlg.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/srchitem.hxx>
-#include <svtools/bindablecontrolhelper.hxx>
-#include <svtools/helpopt.hxx>
-#include <svx/svdobj.hxx>
-#include <svx/svdouno.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/unoshape.hxx>
-#include <svx/xtable.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
@@ -359,24 +312,21 @@
 #include <columnspanset.hxx>
 #include <compiler.hxx>
 #include <convuno.hxx>
-#include <defaultsoptions.hxx>
 #include <docoptio.hxx>
 #include <document.hxx>
 #include <docuno.hxx>
-#include <drwlayer.hxx>
 #include <global.hxx>
 #include <macromgr.hxx>
 #include <markdata.hxx>
-#include <miscuno.hxx>
 #include <nameuno.hxx>
 #include <olinetab.hxx>
 #include <patattr.hxx>
 #include <queryentry.hxx>
+#include <queryparam.hxx>
 #include <rangelst.hxx>
 #include <rangenam.hxx>
 #include <scabstdlg.hxx>
 #include <scdll.hxx>
-#include <scextopt.hxx>
 #include <scitems.hxx>
 #include <scmod.hxx>
 #include <sortparam.hxx>

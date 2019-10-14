@@ -101,9 +101,19 @@ OString Class::GetScreenshotId() const              \
 
 class AbstractScImportAsciiDlg_Impl : public AbstractScImportAsciiDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl, ScImportAsciiDlg)
+    std::unique_ptr<ScImportAsciiDlg> m_xDlg;
+public:
+    explicit AbstractScImportAsciiDlg_Impl(std::unique_ptr<ScImportAsciiDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
     virtual void                        GetOptions( ScAsciiOptions& rOpt ) override;
     virtual void                        SaveParameters() override;
+
+    // screenshotting
+    virtual BitmapEx createScreenshot() const override;
+    virtual OString GetScreenshotId() const override;
 };
 
 class AbstractScAutoFormatDlg_Impl : public AbstractScAutoFormatDlg
@@ -648,7 +658,7 @@ class ScAbstractDialogFactory_Impl : public ScAbstractDialogFactory
 public:
     virtual ~ScAbstractDialogFactory_Impl() {}
 
-    virtual VclPtr<AbstractScImportAsciiDlg> CreateScImportAsciiDlg(vcl::Window* pParent,
+    virtual VclPtr<AbstractScImportAsciiDlg> CreateScImportAsciiDlg(weld::Window* pParent,
                                                                     const OUString& aDatName,
                                                                     SvStream* pInStream,
                                                                     ScImportAsciiCall eCall) override;
