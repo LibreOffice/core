@@ -33,6 +33,7 @@
 #include <tokenarray.hxx>
 
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <formula/errorcodes.hxx>
 #include <unotools/charclass.hxx>
 
@@ -55,7 +56,6 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParen
     , mpViewData(ptrViewData)
     , mpDoc(ptrViewData->GetDocument())
     , maCursorPos(aCursorPos)
-    , mbNeedUpdate(true)
     , mbDataChanged(false)
     , mbCloseWithoutUndo(false)
 
@@ -379,7 +379,7 @@ void ScNameDlg::NameModified()
         sal_uInt16 nIndex = (aNewScope != aOldScope ? 0 : pData->GetIndex());
 
         pOldRangeName->erase(*pData);
-        mbNeedUpdate = false;
+        m_xRangeManagerTable->BlockUpdate();
         m_xRangeManagerTable->DeleteSelectedEntries();
         ScRangeData::Type nType = ScRangeData::Type::Name;
         if ( m_xBtnRowHeader->get_active() ) nType |= ScRangeData::Type::RowHeader;
@@ -395,7 +395,9 @@ void ScNameDlg::NameModified()
         aLine.aExpression = aExpr;
         aLine.aScope = aNewScope;
         m_xRangeManagerTable->addEntry(aLine, true);
-        mbNeedUpdate = true;
+        // tdf#128137 process pending async row change events while UpdatesBlocked in place
+        Application::Reschedule(true);
+        m_xRangeManagerTable->UnblockUpdate();
         mbDataChanged = true;
     }
 }
@@ -403,7 +405,7 @@ void ScNameDlg::NameModified()
 void ScNameDlg::SelectionChanged()
 {
     //don't update if we have just modified due to user input
-    if (!mbNeedUpdate)
+    if (m_xRangeManagerTable->UpdatesBlocked())
     {
         return;
     }
