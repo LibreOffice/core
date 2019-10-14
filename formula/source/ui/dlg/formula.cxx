@@ -253,19 +253,21 @@ FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
     , m_xEdRef(new RefEdit(rBuilder.weld_entry("ED_REF")))
     , m_xRefBtn(new RefButton(rBuilder.weld_button("RB_REF")))
 {
+    auto nWidth = m_xMEdit->get_approximate_digit_width() * 62;
+
     //Space for two lines of text
     m_xFtHeadLine->set_label("X\nX\n");
     auto nHeight = m_xFtHeadLine->get_preferred_size().Height();
-    m_xFtHeadLine->set_size_request(-1, nHeight);
+    m_xFtHeadLine->set_size_request(nWidth, nHeight);
     m_xFtHeadLine->set_label("");
 
     m_xFtFuncName->set_label("X\nX\n");
     nHeight = m_xFtFuncName->get_preferred_size().Height();
-    m_xFtFuncName->set_size_request(-1, nHeight);
-    m_xFtFuncDesc->set_size_request(-1, nHeight);
+    m_xFtFuncName->set_size_request(nWidth, nHeight);
+    m_xFtFuncDesc->set_size_request(nWidth, nHeight);
     m_xFtFuncName->set_label("");
 
-    m_xMEdit->set_size_request(m_xMEdit->get_approximate_digit_width() * 62,
+    m_xMEdit->set_size_request(nWidth,
                                m_xMEdit->get_height_rows(5));
 
     m_xEdRef->SetReferences(_pDlg, m_xFtEditName.get());
