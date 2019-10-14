@@ -1018,8 +1018,8 @@ enum cmapType {
     CMAP_MS_Symbol            = 10,
     CMAP_MS_Unicode           = 11,
     CMAP_MS_ShiftJIS          = 12,
-    CMAP_MS_Big5              = 13,
-    CMAP_MS_PRC               = 14,
+    CMAP_MS_PRC               = 13,
+    CMAP_MS_Big5              = 14,
     CMAP_MS_Wansung           = 15,
     CMAP_MS_Johab             = 16
 };
@@ -1219,8 +1219,8 @@ static void FindCmap(TrueTypeFont *ttf)
     sal_uInt32 ThreeZero  = 0;              /* MS Symbol            */
     sal_uInt32 ThreeOne   = 0;              /* MS UCS-2             */
     sal_uInt32 ThreeTwo   = 0;              /* MS ShiftJIS          */
-    sal_uInt32 ThreeThree = 0;              /* MS Big5              */
-    sal_uInt32 ThreeFour  = 0;              /* MS PRC               */
+    sal_uInt32 ThreeThree = 0;              /* MS PRC               */
+    sal_uInt32 ThreeFour  = 0;              /* MS Big5              */
     sal_uInt32 ThreeFive  = 0;              /* MS Wansung           */
     sal_uInt32 ThreeSix   = 0;              /* MS Johab             */
 
@@ -1284,10 +1284,10 @@ static void FindCmap(TrueTypeFont *ttf)
         ttf->cmapType = CMAP_MS_ShiftJIS;
         ttf->cmap = table + ThreeTwo;
     } else if (ThreeThree) {
-        ttf->cmapType = CMAP_MS_Big5;
+        ttf->cmapType = CMAP_MS_PRC;
         ttf->cmap = table + ThreeThree;
     } else if (ThreeFour) {
-        ttf->cmapType = CMAP_MS_PRC;
+        ttf->cmapType = CMAP_MS_Big5;
         ttf->cmap = table + ThreeFour;
     } else if (ThreeFive) {
         ttf->cmapType = CMAP_MS_Wansung;
@@ -2263,8 +2263,8 @@ sal_uInt16 MapChar(TrueTypeFont const *ttf, sal_uInt16 ch)
 
         case CMAP_MS_Unicode:   break;
         case CMAP_MS_ShiftJIS:  ch = TranslateChar12(ch); break;
-        case CMAP_MS_Big5:      ch = TranslateChar13(ch); break;
-        case CMAP_MS_PRC:       ch = TranslateChar14(ch); break;
+        case CMAP_MS_PRC:       ch = TranslateChar13(ch); break;
+        case CMAP_MS_Big5:      ch = TranslateChar14(ch); break;
         case CMAP_MS_Wansung:   ch = TranslateChar15(ch); break;
         case CMAP_MS_Johab:     ch = TranslateChar16(ch); break;
         default:                return 0;
