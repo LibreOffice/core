@@ -180,14 +180,31 @@ tools::Rectangle ScAccessibleCsvControl::GetBoundingBoxOnScreen() const
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return implGetControl().GetWindowExtentsRelative( nullptr );
+    return tools::Rectangle(implGetControl().GetDrawingArea()->get_accessible_location(),
+                            implGetControl().GetOutputSizePixel());
 }
 
 tools::Rectangle ScAccessibleCsvControl::GetBoundingBox() const
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return implGetControl().GetWindowExtentsRelative( implGetControl().GetAccessibleParentWindow() );
+
+    tools::Rectangle aBounds( GetBoundingBoxOnScreen() );
+
+    Reference< XAccessible > xParent(implGetControl().GetDrawingArea()->get_accessible_parent());
+    if ( xParent.is() )
+    {
+        Reference< XAccessibleComponent > xParentComponent( xParent->getAccessibleContext(), css::uno::UNO_QUERY );
+        if ( xParentComponent.is() )
+        {
+            Point aScreenLoc = aBounds.TopLeft();
+            css::awt::Point aParentScreenLoc = xParentComponent->getLocationOnScreen();
+            Point aPos( aScreenLoc.getX() - aParentScreenLoc.X, aScreenLoc.getY() - aParentScreenLoc.Y );
+            aBounds.SetPos( aPos );
+        }
+    }
+
+    return aBounds;
 }
 
 void ScAccessibleCsvControl::ensureAlive() const
@@ -261,7 +278,7 @@ void ScAccessibleCsvControl::implDispose()
 
 Point ScAccessibleCsvControl::implGetAbsPos( const Point& rPos ) const
 {
-    return rPos + implGetControl().GetWindowExtentsRelative( nullptr ).TopLeft();
+    return rPos + implGetControl().GetDrawingArea()->get_accessible_location();
 }
 
 // Ruler ======================================================================
@@ -333,7 +350,8 @@ static void lcl_FillFontAttributes( Sequence< PropertyValue >& rSeq, const vcl::
 }
 
 ScAccessibleCsvRuler::ScAccessibleCsvRuler( ScCsvRuler& rRuler ) :
-    ScAccessibleCsvControl( rRuler.GetAccessibleParentWindow()->GetAccessible(), rRuler, nRulerRole )
+//TODO    ScAccessibleCsvControl( rRuler.GetAccessibleParentWindow()->GetAccessible(), rRuler, nRulerRole )
+    ScAccessibleCsvControl( nullptr, rRuler, nRulerRole )
 {
     constructStringBuffer();
 }
@@ -349,14 +367,14 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getForeground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(implGetRuler().GetSettings().GetStyleSettings().GetLabelTextColor());
+    return sal_Int32(Application::GetSettings().GetStyleSettings().GetLabelTextColor());
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvRuler::getBackground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(implGetRuler().GetSettings().GetStyleSettings().GetFaceColor());
+    return sal_Int32(Application::GetSettings().GetStyleSettings().GetFaceColor());
 }
 
 // XAccessibleContext ---------------------------------------------------------
@@ -437,7 +455,7 @@ Sequence< PropertyValue > SAL_CALL ScAccessibleCsvRuler::getCharacterAttributes(
     ensureAlive();
     ensureValidIndexWithEnd( nIndex );
     Sequence< PropertyValue > aSeq;
-    lcl_FillFontAttributes( aSeq, implGetRuler().GetFont() );
+    lcl_FillFontAttributes( aSeq, implGetRuler().GetDrawingArea()->get_ref_device().GetFont() );
     return aSeq;
 }
 
@@ -448,7 +466,7 @@ css::awt::Rectangle SAL_CALL ScAccessibleCsvRuler::getCharacterBounds( sal_Int32
     ensureValidIndexWithEnd( nIndex );
     ScCsvRuler& rRuler = implGetRuler();
     Point aPos( rRuler.GetX( lcl_GetRulerPos( nIndex ) ) - rRuler.GetCharWidth() / 2, 0 );
-    css::awt::Rectangle aRect( aPos.X(), aPos.Y(), rRuler.GetCharWidth(), rRuler.GetSizePixel().Height() );
+    css::awt::Rectangle aRect( aPos.X(), aPos.Y(), rRuler.GetCharWidth(), rRuler.GetOutputSizePixel().Height() );
     // do not return rectangle out of window
     sal_Int32 nWidth = rRuler.GetOutputSizePixel().Width();
     if( aRect.X >= nWidth )
@@ -839,7 +857,8 @@ static sal_uInt32 lcl_GetGridColumn( sal_Int32 nApiColumn )
 }
 
 ScAccessibleCsvGrid::ScAccessibleCsvGrid( ScCsvGrid& rGrid ) :
-    ScAccessibleCsvControl( rGrid.GetAccessibleParentWindow()->GetAccessible(), rGrid, nGridRole )
+//TODO    ScAccessibleCsvControl( rGrid.GetAccessibleParentWindow()->GetAccessible(), rGrid, nGridRole )
+    ScAccessibleCsvControl( nullptr, rGrid, nGridRole )
 {
 }
 
@@ -882,7 +901,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getForeground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(implGetGrid().GetSettings().GetStyleSettings().GetButtonTextColor());
+    return sal_Int32(Application::GetSettings().GetStyleSettings().GetButtonTextColor());
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getBackground(  )
@@ -1355,16 +1374,18 @@ OUString ScAccessibleCsvGrid::implGetCellText( sal_Int32 nRow, sal_Int32 nColumn
     return aCellStr;
 }
 
-ScAccessibleCsvControl* ScAccessibleCsvGrid::implCreateCellObj( sal_Int32 nRow, sal_Int32 nColumn ) const
+ScAccessibleCsvControl* ScAccessibleCsvGrid::implCreateCellObj( sal_Int32 nRow, sal_Int32 nColumn )
 {
-    return new ScAccessibleCsvCell( implGetGrid(), implGetCellText( nRow, nColumn ), nRow, nColumn );
+    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> xGridA11y(this);
+    return new ScAccessibleCsvCell(xGridA11y, implGetGrid(), implGetCellText(nRow, nColumn), nRow, nColumn);
 }
 
 ScAccessibleCsvCell::ScAccessibleCsvCell(
+        css::uno::Reference<css::accessibility::XAccessible>& rGridA11y,
         ScCsvGrid& rGrid,
         const OUString& rCellText,
         sal_Int32 nRow, sal_Int32 nColumn ) :
-    ScAccessibleCsvControl( rGrid.GetAccessible(), rGrid, nCellRole ),
+    ScAccessibleCsvControl( rGridA11y, rGrid, nCellRole ),
     AccessibleStaticTextBase( SvxEditSourcePtr() ),
     maCellText( rCellText ),
     mnLine( nRow ? (nRow + rGrid.GetFirstVisLine() - 1) : CSV_LINE_HEADER ),
@@ -1399,7 +1420,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvCell::getForeground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(implGetGrid().GetSettings().GetStyleSettings().GetButtonTextColor());
+    return sal_Int32(Application::GetSettings().GetStyleSettings().GetButtonTextColor());
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvCell::getBackground(  )
@@ -1526,7 +1547,7 @@ Size ScAccessibleCsvCell::implGetRealSize() const
 tools::Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
 {
     ScCsvGrid& rGrid = implGetGrid();
-    tools::Rectangle aClipRect( Point( 0, 0 ), rGrid.GetSizePixel() );
+    tools::Rectangle aClipRect( Point( 0, 0 ), rGrid.GetOutputSizePixel() );
     if( mnColumn != CSV_COLUMN_HEADER )
     {
         aClipRect.SetLeft( rGrid.GetFirstX() );
@@ -1546,7 +1567,7 @@ tools::Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
 {
     ScCsvGrid& rGrid = implGetGrid();
 
-    ::std::unique_ptr< SvxEditSource > pEditSource( new ScAccessibilityEditSource( std::make_unique<ScAccessibleCsvTextData>(&rGrid, rGrid.GetEditEngine(), maCellText, implGetRealSize()) ) );
+    ::std::unique_ptr< SvxEditSource > pEditSource( new ScAccessibilityEditSource( std::make_unique<ScAccessibleCsvTextData>(&rGrid.GetDrawingArea()->get_ref_device(), rGrid.GetEditEngine(), maCellText, implGetRealSize()) ) );
     return pEditSource;
 }
 
