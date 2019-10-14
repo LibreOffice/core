@@ -91,7 +91,7 @@ namespace oox { namespace ppt {
                                                              RTL_TEXTENCODING_ASCII_US );
                         attr.type = attrConv->meAttribute;
                         maAttributes.push_back( attr );
-                        SAL_INFO("oox.ppt", "OOX: attrName is " << OUSTRING_TO_CSTR( msCurrentAttribute ) << " -> " << attrConv->mpAPIName );
+                        SAL_INFO("oox.ppt", "OOX: attrName is " << msCurrentAttribute << " -> " << attrConv->mpAPIName );
                         break;
                     }
                     attrConv++;

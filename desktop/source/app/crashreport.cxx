@@ -50,8 +50,8 @@ void CrashReporter::writeToFile(std::ios_base::openmode Openmode)
 
     for (auto& keyValue : maKeyValues)
     {
-        ini_file << OUStringToOString(keyValue.first, RTL_TEXTENCODING_UTF8).getStr() << "=";
-        ini_file << OUStringToOString(keyValue.second, RTL_TEXTENCODING_UTF8).getStr() << "\n";
+        ini_file << OUStringToOString(keyValue.first, RTL_TEXTENCODING_UTF8) << "=";
+        ini_file << OUStringToOString(keyValue.second, RTL_TEXTENCODING_UTF8) << "\n";
     }
 
     maKeyValues.clear();

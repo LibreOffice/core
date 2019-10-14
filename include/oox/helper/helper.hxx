@@ -41,10 +41,6 @@ namespace oox {
 #define STATIC_ARRAY_SELECT( array, index, def ) \
     ((static_cast<size_t>(index) < SAL_N_ELEMENTS(array)) ? ((array)[static_cast<size_t>(index)]) : (def))
 
-/** Convert an OUString to an ASCII C string. Use for debug purposes only. */
-#define OUSTRING_TO_CSTR( str ) \
-    OUStringToOString( str, RTL_TEXTENCODING_ASCII_US ).getStr()
-
 // Common constants ===========================================================
 
 const sal_uInt8 WINDOWS_CHARSET_ANSI        = 0;
