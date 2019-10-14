@@ -113,6 +113,8 @@
 #include <tabsh.hxx>
 #include <listsh.hxx>
 #include <cmdid.h>
+#include <sfx2/strings.hrc>
+#include <sfx2/sfxresid.hxx>
 #include <strings.hrc>
 #include <swerror.h>
 #include <globals.hrc>
@@ -595,19 +597,35 @@ void SwView::Execute(SfxRequest &rReq)
                 if( aPasswd.hasElements() )
                 {
                     OSL_ENSURE( !static_cast<const SfxBoolItem*>(pItem)->GetValue(), "SwView::Execute(): password set and redlining off doesn't match!" );
-                    // xmlsec05:    new password dialog
-                    SfxPasswordDialog aPasswdDlg(GetFrameWeld());
-                    aPasswdDlg.SetMinLen(1);
-                    //#i69751# the result of Execute() can be ignored
-                    (void)aPasswdDlg.run();
-                    OUString sNewPasswd(aPasswdDlg.GetPassword());
-                    Sequence <sal_Int8> aNewPasswd = rIDRA.GetRedlinePassword();
-                    SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
-                    if(SvPasswordHelper::CompareHashPassword(aPasswd, sNewPasswd))
-                        rIDRA.SetRedlinePassword(Sequence <sal_Int8> ());
+
+                    // dummy password from OOXML import: only confirmation dialog
+                    if (aPasswd.getLength() == 1 && aPasswd[0] == 1)
+                    {
+                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_pWrtShell->GetView().GetFrameWeld(),
+                                                   VclMessageType::Warning, VclButtonsType::YesNo,
+                                                   SfxResId(RID_SVXSTR_END_REDLINING_WARNING)));
+                        xWarn->set_default_response(RET_NO);
+                        if (xWarn->run() == RET_YES)
+                            rIDRA.SetRedlinePassword(Sequence <sal_Int8> ());
+                        else
+                            break;
+                    }
                     else
-                    {   // xmlsec05: message box for wrong password
-                        break;
+                    {
+                        // xmlsec05:    new password dialog
+                        SfxPasswordDialog aPasswdDlg(GetFrameWeld());
+                        aPasswdDlg.SetMinLen(1);
+                        //#i69751# the result of Execute() can be ignored
+                        (void)aPasswdDlg.run();
+                        OUString sNewPasswd(aPasswdDlg.GetPassword());
+                        Sequence <sal_Int8> aNewPasswd = rIDRA.GetRedlinePassword();
+                        SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
+                        if(SvPasswordHelper::CompareHashPassword(aPasswd, sNewPasswd))
+                            rIDRA.SetRedlinePassword(Sequence <sal_Int8> ());
+                        else
+                        {   // xmlsec05: message box for wrong password
+                            break;
+                        }
                     }
                 }
 
