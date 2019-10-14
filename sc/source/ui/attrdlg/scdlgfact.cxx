@@ -916,12 +916,11 @@ OString ScAbstractTabController_Impl::GetScreenshotId() const
 }
 
 // =========================Factories  for createdialog ===================
-VclPtr<AbstractScImportAsciiDlg> ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg ( vcl::Window* pParent,
+VclPtr<AbstractScImportAsciiDlg> ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg(weld::Window* pParent,
                                                     const OUString& aDatName,
-                                                    SvStream* pInStream, ScImportAsciiCall eCall )
+                                                    SvStream* pInStream, ScImportAsciiCall eCall)
 {
-    VclPtr<ScImportAsciiDlg> pDlg = VclPtr<ScImportAsciiDlg>::Create( pParent, aDatName,pInStream, eCall );
-    return VclPtr<AbstractScImportAsciiDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScImportAsciiDlg_Impl>::Create(std::make_unique<ScImportAsciiDlg>(pParent, aDatName,pInStream, eCall));
 }
 
 VclPtr<AbstractScTextImportOptionsDlg> ScAbstractDialogFactory_Impl::CreateScTextImportOptionsDlg(weld::Window* pParent)
