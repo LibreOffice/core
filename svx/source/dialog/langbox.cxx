@@ -33,7 +33,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <bitmaps.hlst>
-#include <vcl/builderfactory.hxx>
 #include <vcl/i18nhelp.hxx>
 
 using namespace ::com::sun::star::util;
@@ -65,10 +64,7 @@ OUString GetDicInfoStr( const OUString& rName, const LanguageType nLang, bool bN
     return aTmp;
 }
 
-
 //  misc local helper functions
-
-
 static std::vector< LanguageType > lcl_LocaleSeqToLangSeq( Sequence< css::lang::Locale > const &rSeq )
 {
     sal_Int32 nCount = rSeq.getLength();
@@ -83,26 +79,10 @@ static std::vector< LanguageType > lcl_LocaleSeqToLangSeq( Sequence< css::lang::
     return aLangs;
 }
 
-
 static bool lcl_SeqHasLang( const Sequence< sal_Int16 > & rLangSeq, sal_Int16 nLang )
 {
     return rLangSeq.hasElements()
         && std::find(rLangSeq.begin(), rLangSeq.end(), nLang) != rLangSeq.end();
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxLanguageBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
-                                 decltype(makeSvxLanguageBox)>);
-    WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
-    bool bDropdown = BuilderUtils::extractDropdown(rMap);
-    if (bDropdown)
-        nBits |= WB_DROPDOWN;
-    else
-        nBits |= WB_BORDER;
-    VclPtrInstance<SvxLanguageBox> pLanguageBox(pParent, nBits);
-    pLanguageBox->EnableAutoSize(true);
-    rRet = pLanguageBox;
 }
 
 SvxLanguageBoxBase::SvxLanguageBoxBase()
@@ -704,56 +684,6 @@ LanguageBox::LanguageBox(std::unique_ptr<weld::ComboBox> pControl)
 {
     m_xControl->make_sorted();
     m_xControl->connect_changed(LINK(this, LanguageBox, ChangeHdl));
-}
-
-SvxLanguageBox::SvxLanguageBox( vcl::Window* pParent, WinBits nBits )
-    : ListBox( pParent, nBits )
-    , SvxLanguageBoxBase()
-{
-    // display entries sorted
-    SetStyle( GetStyle() | WB_SORT );
-
-    ImplLanguageBoxBaseInit();
-}
-
-sal_Int32 SvxLanguageBox::ImplInsertImgEntry( const OUString& rEntry, sal_Int32 nPos, bool bChecked )
-{
-    return InsertEntry( rEntry, (bChecked ? m_aCheckedImage : m_aNotCheckedImage), nPos );
-}
-
-void SvxLanguageBox::ImplClear()
-{
-    Clear();
-}
-
-sal_Int32 SvxLanguageBox::ImplInsertEntry( const OUString& rEntry, sal_Int32 nPos )
-{
-    return InsertEntry( rEntry, nPos);
-}
-
-void SvxLanguageBox::ImplSetEntryData( sal_Int32 nPos, void* pData )
-{
-    SetEntryData( nPos, pData);
-}
-
-sal_Int32 SvxLanguageBox::ImplGetSelectedEntryPos() const
-{
-    return GetSelectedEntryPos();
-}
-
-void* SvxLanguageBox::ImplGetEntryData( sal_Int32 nPos ) const
-{
-    return GetEntryData( nPos);
-}
-
-void SvxLanguageBox::ImplSelectEntryPos( sal_Int32 nPos, bool bSelect )
-{
-    SelectEntryPos( nPos, bSelect);
-}
-
-sal_Int32 SvxLanguageBox::ImplGetEntryPos( const void* pData ) const
-{
-    return GetEntryPos( pData);
 }
 
 sal_Int32 LanguageBox::SaveEditedAsEntry()
