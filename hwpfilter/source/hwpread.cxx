@@ -745,7 +745,6 @@ MailMerge::MailMerge()
     : HBox(CH_MAIL_MERGE)
     , dummy(0)
 {
-    memset(field_name, 0, sizeof(field_name));
 }
 
 bool MailMerge::Read(HWPFile & hwpf)
@@ -823,8 +822,6 @@ IndexMark::IndexMark()
     , pgno(0)
     , dummy(0)
 {
-    memset(keyword1, 0, sizeof(keyword1));
-    memset(keyword2, 0, sizeof(keyword2));
 }
 
 bool IndexMark::Read(HWPFile & hwpf)

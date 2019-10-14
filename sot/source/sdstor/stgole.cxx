@@ -91,9 +91,8 @@ void StgInternalStream::Commit()
 
 StgCompObjStream::StgCompObjStream( BaseStorage& rStg, bool bWr )
     : StgInternalStream( rStg, "\1CompObj", bWr )
+    , m_nCbFormat(SotClipboardFormatId::NONE)
 {
-    memset( &m_aClsId, 0, sizeof( ClsId ) );
-    m_nCbFormat = SotClipboardFormatId::NONE;
 }
 
 bool StgCompObjStream::Load()
