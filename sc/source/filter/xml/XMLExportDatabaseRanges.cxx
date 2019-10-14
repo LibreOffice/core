@@ -103,10 +103,8 @@ void writeSort(ScXMLExport& mrExport, const ScSortParam& aParam, const ScRange& 
 
         if (aParam.bUserDef)
         {
-            OUStringBuffer aBuf;
-            aBuf.append(SC_USERLIST);
-            aBuf.append(static_cast<sal_Int32>(aParam.nUserIndex));
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, aBuf.makeStringAndClear());
+            OUString aBuf = SC_USERLIST + OUString::number(static_cast<sal_Int32>(aParam.nUserIndex));
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, aBuf);
         }
         else
         {
@@ -198,11 +196,10 @@ public:
             return;
 
         // name
-        OUStringBuffer aBuf;
-        aBuf.append(STR_DB_LOCAL_NONAME);
-        aBuf.append(static_cast<sal_Int32>(r.first)); // appended number equals sheet index on import.
+        OUString aBuf = STR_DB_LOCAL_NONAME +
+            OUString::number(static_cast<sal_Int32>(r.first)); // appended number equals sheet index on import.
 
-        write(aBuf.makeStringAndClear(), *r.second);
+        write(aBuf, *r.second);
     }
 
     void operator() (const ScDBData& rData)
@@ -639,10 +636,8 @@ private:
 
             if (aParam.bUserDef)
             {
-                OUStringBuffer aBuf;
-                aBuf.append(SC_USERLIST);
-                aBuf.append(static_cast<sal_Int32>(aParam.nUserIndex));
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, aBuf.makeStringAndClear());
+                OUString aBuf = SC_USERLIST + OUString::number(static_cast<sal_Int32>(aParam.nUserIndex));
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, aBuf);
             }
             SvXMLElementExport aElemSGs(mrExport, XML_NAMESPACE_TABLE, XML_SORT_GROUPS, true, true);
         }

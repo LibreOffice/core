@@ -1482,7 +1482,6 @@ namespace sw { namespace mark
         {
             return rName;
         }
-        OUStringBuffer sBuf;
         OUString sTmp;
 
         // try the name "<rName>XXX" (where XXX is a number starting from 1) unless there is
@@ -1494,7 +1493,7 @@ namespace sw { namespace mark
         if(aIter != m_aMarkBasenameMapUniqueOffset.end()) nCnt = aIter->second;
         while(nCnt < SAL_MAX_INT32)
         {
-            sTmp = sBuf.append(rName).append(nCnt).makeStringAndClear();
+            sTmp = rName + OUString::number(nCnt);
             nCnt++;
             if (lcl_FindMarkByName(sTmp, m_vAllMarks.begin(), m_vAllMarks.end()) == m_vAllMarks.end())
             {

@@ -58,12 +58,7 @@ namespace rptui
 
         case Field:
         {
-            OUStringBuffer aBuffer;
-            aBuffer.append( sFieldPrefix );
-            aBuffer.append( "[" );
-            aBuffer.append( _rFieldOrExpression );
-            aBuffer.append( "]" );
-            m_sCompleteFormula = aBuffer.makeStringAndClear();
+            m_sCompleteFormula = sFieldPrefix + OUStringLiteral("[") + _rFieldOrExpression + "]";
         }
         break;
         default:

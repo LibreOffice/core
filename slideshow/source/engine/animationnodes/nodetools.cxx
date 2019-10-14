@@ -35,11 +35,9 @@ namespace slideshow
 
         OUString debugGetNodeName( const BaseNode *pNode )
         {
-            OUStringBuffer aBuf;
-            aBuf.append(lcl_nOffset);
-            aBuf.append(" - 0x");
-            aBuf.append(reinterpret_cast<sal_Int64>(pNode), 16);
-            return aBuf.makeStringAndClear();
+            return OUString::number(lcl_nOffset) +
+                " - 0x" +
+                OUString::number(reinterpret_cast<sal_Int64>(pNode), 16);
         }
 
         void debugNodesShowTree( const BaseNode* pNode )

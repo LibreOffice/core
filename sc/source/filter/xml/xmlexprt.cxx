@@ -4884,14 +4884,12 @@ void ScXMLExport::WriteExternalRefCaches()
                     {
                         if (nRow > 1)
                         {
-                            OUStringBuffer aVal;
-                            aVal.append(nRow);
-                            AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_REPEATED, aVal.makeStringAndClear());
+                            OUString aVal = OUString::number(nRow);
+                            AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_REPEATED, aVal);
                         }
                         SvXMLElementExport aElemRow(*this, XML_NAMESPACE_TABLE, XML_TABLE_ROW, true, true);
-                        OUStringBuffer aVal;
-                        aVal.append(static_cast<sal_Int32>(nMaxColsUsed));
-                        AddAttribute(XML_NAMESPACE_TABLE,  XML_NUMBER_COLUMNS_REPEATED, aVal.makeStringAndClear());
+                        OUString aVal = OUString::number(static_cast<sal_Int32>(nMaxColsUsed));
+                        AddAttribute(XML_NAMESPACE_TABLE,  XML_NUMBER_COLUMNS_REPEATED, aVal);
                         SvXMLElementExport aElemCell(*this, XML_NAMESPACE_TABLE, XML_TABLE_CELL, true, true);
                     }
                 }
@@ -4902,14 +4900,12 @@ void ScXMLExport::WriteExternalRefCaches()
                     {
                         if (nRowGap > 2)
                         {
-                            OUStringBuffer aVal;
-                            aVal.append(static_cast<sal_Int32>(nRowGap-1));
-                            AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_REPEATED, aVal.makeStringAndClear());
+                            OUString aVal = OUString::number(static_cast<sal_Int32>(nRowGap-1));
+                            AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_REPEATED, aVal);
                         }
                         SvXMLElementExport aElemRow(*this, XML_NAMESPACE_TABLE, XML_TABLE_ROW, true, true);
-                        OUStringBuffer aVal;
-                        aVal.append(static_cast<sal_Int32>(nMaxColsUsed));
-                        AddAttribute(XML_NAMESPACE_TABLE,  XML_NUMBER_COLUMNS_REPEATED, aVal.makeStringAndClear());
+                        OUString aVal = OUString::number(static_cast<sal_Int32>(nMaxColsUsed));
+                        AddAttribute(XML_NAMESPACE_TABLE,  XML_NUMBER_COLUMNS_REPEATED, aVal);
                         SvXMLElementExport aElemCell(*this, XML_NAMESPACE_TABLE, XML_TABLE_CELL, true, true);
                     }
                 }
@@ -4927,9 +4923,8 @@ void ScXMLExport::WriteExternalRefCaches()
                         {
                             if (nCol > 1)
                             {
-                                OUStringBuffer aVal;
-                                aVal.append(static_cast<sal_Int32>(nCol));
-                                AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, aVal.makeStringAndClear());
+                                OUString aVal = OUString::number(static_cast<sal_Int32>(nCol));
+                                AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, aVal);
                             }
                             SvXMLElementExport aElemCell(*this, XML_NAMESPACE_TABLE, XML_TABLE_CELL, true, true);
                         }
@@ -4941,9 +4936,8 @@ void ScXMLExport::WriteExternalRefCaches()
                         {
                             if (nColGap > 2)
                             {
-                                OUStringBuffer aVal;
-                                aVal.append(static_cast<sal_Int32>(nColGap-1));
-                                AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, aVal.makeStringAndClear());
+                                OUString aVal = OUString::number(static_cast<sal_Int32>(nColGap-1));
+                                AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, aVal);
                             }
                             SvXMLElementExport aElemCell(*this, XML_NAMESPACE_TABLE, XML_TABLE_CELL, true, true);
                         }

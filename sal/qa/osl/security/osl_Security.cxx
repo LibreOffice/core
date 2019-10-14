@@ -129,13 +129,12 @@ namespace osl_Security
             OUString strID;
             bRes = aSec.getUserIdent( strID );
 
-            OStringBuffer aMessage;
-            aMessage.append("strUserID: ");
-            aMessage.append(OUStringToOString(strUserID, osl_getThreadTextEncoding()));
-            aMessage.append(", strID: ");
-            aMessage.append(OUStringToOString(strID, osl_getThreadTextEncoding()));
-            aMessage.append(", bRes: ");
-            aMessage.append(bRes);
+            OString aMessage = "strUserID: " +
+                OUStringToOString(strUserID, osl_getThreadTextEncoding()) +
+                ", strID: " +
+                OUStringToOString(strID, osl_getThreadTextEncoding()) +
+                ", bRes: " +
+                OString::boolean(bRes);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE( aMessage.getStr(), strUserID, strID );
             CPPUNIT_ASSERT_MESSAGE( aMessage.getStr(), bRes );

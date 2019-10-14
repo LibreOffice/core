@@ -1527,11 +1527,7 @@ OUString SAL_CALL MetadatableMixin::getLocalName()
         ensureMetadataReference(); // N.B.: side effect!
         mdref = getMetadataReference();
     }
-    OUStringBuffer buf;
-    buf.append(mdref.First);
-    buf.append('#');
-    buf.append(mdref.Second);
-    return buf.makeStringAndClear();
+    return mdref.First + "#" + mdref.Second;
 }
 
 OUString SAL_CALL MetadatableMixin::getNamespace()

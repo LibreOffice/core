@@ -843,13 +843,12 @@ void ScDocument::UpdateExternalRefLinks(weld::Window* pWin)
         INetURLObject aUrl(aFile,INetURLObject::EncodeMechanism::WasEncoded);
         aFile = aUrl.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
 
-        OUStringBuffer aBuf;
-        aBuf.append(ScResId(SCSTR_EXTDOC_NOT_LOADED));
-        aBuf.append("\n\n");
-        aBuf.append(aFile);
+        OUString sMessage = ScResId(SCSTR_EXTDOC_NOT_LOADED) +
+            "\n\n" +
+            aFile;
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin,
                                                   VclMessageType::Warning, VclButtonsType::Ok,
-                                                  aBuf.makeStringAndClear()));
+                                                  sMessage));
         xBox->run();
     }
 

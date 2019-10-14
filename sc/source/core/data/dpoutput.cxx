@@ -1507,10 +1507,7 @@ OUString lcl_GetDataFieldName( const OUString& rSourceName, sal_Int16 eFunc )
     if (!pStrId)
         return OUString();
 
-    OUStringBuffer aRet(ScResId(pStrId));
-    aRet.append(" - ");
-    aRet.append(rSourceName);
-    return aRet.makeStringAndClear();
+    return ScResId(pStrId) + " - " + rSourceName;
 }
 
 }

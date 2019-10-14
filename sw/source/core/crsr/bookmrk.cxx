@@ -215,7 +215,6 @@ namespace sw { namespace mark
         {
             static OUString sUniquePostfix;
             static sal_Int32 nCount = SAL_MAX_INT32;
-            OUStringBuffer aResult(rPrefix);
             if(nCount == SAL_MAX_INT32)
             {
                 unsigned int const n(comphelper::rng::uniform_uint_distribution(0,
@@ -224,7 +223,7 @@ namespace sw { namespace mark
                 nCount = 0;
             }
             // putting the counter in front of the random parts will speed up string comparisons
-            return aResult.append(nCount++).append(sUniquePostfix).makeStringAndClear();
+            return rPrefix + OUString::number(nCount++) + sUniquePostfix;
         }
     }
 

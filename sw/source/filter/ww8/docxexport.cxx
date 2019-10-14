@@ -992,13 +992,12 @@ void DocxExport::WriteSettings()
     SwDBData aData = m_pDoc->GetDBData();
     if ( !aData.sDataSource.isEmpty() && aData.nCommandType == css::sdb::CommandType::TABLE && !aData.sCommand.isEmpty() )
     {
-        OUStringBuffer aDataSource;
-        aDataSource.append("SELECT * FROM ");
-        aDataSource.append(aData.sDataSource); // current database
-        aDataSource.append(".dbo."); // default database owner
-        aDataSource.append(aData.sCommand); // sheet name
-        aDataSource.append("$"); // sheet identifier
-        const OUString sDataSource = aDataSource.makeStringAndClear();
+        OUString sDataSource =
+            "SELECT * FROM " +
+            aData.sDataSource + // current database
+            ".dbo." + // default database owner
+            aData.sCommand + // sheet name
+            "$"; // sheet identifier
         pFS->startElementNS( XML_w, XML_mailMerge );
         pFS->singleElementNS(XML_w, XML_mainDocumentType,
             FSNS( XML_w, XML_val ), "formLetters" );

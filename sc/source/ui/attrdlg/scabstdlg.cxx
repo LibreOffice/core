@@ -41,10 +41,9 @@ ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
 #ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
 
-    OUStringBuffer aStrBuf;
-    aStrBuf.append( SVLIBRARY("scui") );
+    OUString aStrBuf = SVLIBRARY("scui");
 
-    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, aStrBuf.makeStringAndClear(),
+    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, aStrBuf,
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = reinterpret_cast<ScAbstractDialogFactory* (SAL_CALL*)()>(
             aDialogLibrary.getFunctionSymbol( "ScCreateDialogFactory" ));

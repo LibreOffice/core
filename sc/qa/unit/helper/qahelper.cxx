@@ -117,8 +117,7 @@ void loadFile(const OUString& aFileName, std::string& aContent)
 
     std::ifstream aFile(aOFileName.getStr());
 
-    OStringBuffer aErrorMsg("Could not open csv file: ");
-    aErrorMsg.append(aOFileName);
+    OString aErrorMsg = "Could not open csv file: " + aOFileName;
     CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), aFile);
     std::ostringstream aOStream;
     aOStream << aFile.rdbuf();

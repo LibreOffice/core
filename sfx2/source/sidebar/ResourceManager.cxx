@@ -714,12 +714,10 @@ utl::OConfigurationTreeRoot ResourceManager::GetLegacyAddonRootNode (const OUStr
                                        "ooSetupFactoryWindowStateConfigRef",
                                        OUString()));
 
-        OUStringBuffer aPathComposer;
-        aPathComposer.append("org.openoffice.Office.UI.");
-        aPathComposer.append(sWindowStateRef);
-        aPathComposer.append("/UIElements/States");
+        OUString aPathComposer = "org.openoffice.Office.UI." + sWindowStateRef +
+            "/UIElements/States";
 
-        return utl::OConfigurationTreeRoot(xContext, aPathComposer.makeStringAndClear(), false);
+        return utl::OConfigurationTreeRoot(xContext, aPathComposer, false);
     }
     catch (const Exception&)
     {

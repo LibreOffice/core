@@ -1006,14 +1006,13 @@ extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
             for (sal_Int32 j = 0; j < pBase->nMembers; ++j) {
                 typelib_TypeDescriptionReference const * pDirectBaseMember
                     = pDirectBase->ppAllMembers[rEntry.directBaseMemberOffset + j];
-                OUStringBuffer aBuf(pDirectBaseMember->pTypeName);
-                aBuf.append(":@");
-                aBuf.append(rEntry.directBaseIndex);
-                aBuf.append(',');
-                aBuf.append(rEntry.memberOffset + j);
-                aBuf.append(':');
-                aBuf.append(pITD->aBase.pTypeName);
-                OUString aName(aBuf.makeStringAndClear());
+                OUString aName = OUString::unacquired(&pDirectBaseMember->pTypeName) +
+                        ":@" +
+                        OUString::number(rEntry.directBaseIndex) +
+                        "," +
+                        OUString::number(rEntry.memberOffset + j) +
+                        ":" +
+                        OUString::unacquired(&pITD->aBase.pTypeName);
                 typelib_TypeDescriptionReference * pDerivedMember = nullptr;
                 typelib_typedescriptionreference_new(
                     &pDerivedMember, pDirectBaseMember->eTypeClass,
