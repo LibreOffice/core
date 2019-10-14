@@ -39,7 +39,11 @@
 #include <outdata.hxx>
 #include <salgdiimpl.hxx>
 #include <opengl/win/gdiimpl.hxx>
+
+#include <config_features.h>
+#if HAVE_FEATURE_SKIA
 #include <skia/win/gdiimpl.hxx>
+#endif
 
 
 bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
@@ -169,7 +173,9 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
 void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
     if (dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get()) == nullptr &&
+#if HAVE_FEATURE_SKIA
         dynamic_cast<WinSkiaSalGraphicsImpl*>(mpImpl.get()) == nullptr &&
+#endif
         dynamic_cast<const WinSalBitmap*>(&rSalBitmap) == nullptr)
     {
         std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());
@@ -188,7 +194,9 @@ void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSTransparentBitmap )
 {
     if (dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get()) == nullptr &&
+#if HAVE_FEATURE_SKIA
         dynamic_cast<WinSkiaSalGraphicsImpl*>(mpImpl.get()) == nullptr &&
+#endif
         dynamic_cast<const WinSalBitmap*>(&rSSalBitmap) == nullptr)
     {
         std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());
