@@ -1524,6 +1524,14 @@
           </info>
           <value>600</value>
         </prop>
+        <prop oor:name="GraphicSwappingEnabled" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Whether graphics will be swapped to disk when `GraphicMemoryLimit`
+            is reached. Disable at your own risk.</desc>
+            <label>Graphic Swapping Enabled</label>
+          </info>
+          <value>true</value>
+        </prop>
         <prop oor:name="GraphicMemoryLimit" oor:type="xs:int" oor:nillable="false">
           <info>
             <desc>Specifies the allowed cumulated memory that the
