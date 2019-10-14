@@ -10828,7 +10828,7 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                  "rejecting setStructureAttribute( " << getAttributeTag( eAttr )
                  << ", " << getAttributeValueTag( eVal )
                  << " ) on " << getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType )
-                 << " (" << m_aStructure[ m_nCurrentStructElement ].m_aAlias.getStr()
+                 << " (" << m_aStructure[ m_nCurrentStructElement ].m_aAlias
                  << ") element");
 
     return bInsert;
@@ -10960,7 +10960,7 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
                  "rejecting setStructureAttributeNumerical( " << getAttributeTag( eAttr )
                  << ", " << static_cast<int>(nValue)
                  << " ) on " << getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType )
-                 << " (" << m_aStructure[ m_nCurrentStructElement ].m_aAlias.getStr()
+                 << " (" << m_aStructure[ m_nCurrentStructElement ].m_aAlias
                  << ") element");
 
     return bInsert;
