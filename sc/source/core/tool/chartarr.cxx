@@ -374,14 +374,11 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartMulti()
 
         if (aString.isEmpty())
         {
-            OUStringBuffer aBuf(ScResId(STR_ROW));
-            aBuf.append(' ');
             if ( pPos )
                 nPosRow = pPos->Row() + 1;
             else
                 nPosRow++;
-            aBuf.append(static_cast<sal_Int32>(nPosRow));
-            aString = aBuf.makeStringAndClear();
+            aString = ScResId(STR_ROW) + " " + OUString::number(static_cast<sal_Int32>(nPosRow));
         }
         pMemChart->SetRowText( nRow, aString);
     }

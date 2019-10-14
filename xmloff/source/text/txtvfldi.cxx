@@ -827,18 +827,17 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
     Reference<container::XNameAccess> xFieldMasterNameAccess =
         xTextFieldsSupp->getTextFieldMasters();
 
-    OUStringBuffer sBuffer;
-    sBuffer.append(sAPI_fieldmaster_prefix);
-    sBuffer.append(sAPI_set_expression);
-    sBuffer.append(".");
-    sBuffer.append(sName);
-    OUString sVarServiceName = sBuffer.makeStringAndClear();
+    OUString sVarServiceName =
+        OUStringLiteral(sAPI_fieldmaster_prefix) +
+        sAPI_set_expression +
+        "." +
+        sName;
 
-    sBuffer.append(sAPI_fieldmaster_prefix);
-    sBuffer.append(sAPI_user);
-    sBuffer.append(".");
-    sBuffer.append(sName);
-    OUString sUserServiceName = sBuffer.makeStringAndClear();
+    OUString sUserServiceName =
+        OUStringLiteral(sAPI_fieldmaster_prefix) +
+        sAPI_user +
+        "." +
+        sName;
 
     if (xFieldMasterNameAccess->hasByName(sVarServiceName)) {
         // variable field master already in document

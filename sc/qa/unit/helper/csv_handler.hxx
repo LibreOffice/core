@@ -39,13 +39,12 @@ inline OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW n
 
 inline OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
-    OStringBuffer aString("Error in Table: ");
-    aString.append(static_cast<sal_Int32>(nTab));
-    aString.append(" Column: ");
-    aString.append(static_cast<sal_Int32>(nCol));
-    aString.append(" Row: ");
-    aString.append(nRow);
-    return aString.makeStringAndClear();
+    return "Error in Table: " +
+        OString::number(static_cast<sal_Int32>(nTab)) +
+        " Column: " +
+        OString::number(static_cast<sal_Int32>(nCol)) +
+        " Row: " +
+        OString::number(nRow);
 }
 
 inline OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rExpectedString, const OUString& rString)

@@ -229,9 +229,9 @@ BackendImpl::BackendImpl(
             }
             catch (const Exception &e)
             {
-                OUStringBuffer aStr( "Exception loading legacy package database: '" );
-                aStr.append( e.Message );
-                aStr.append( "' - ignoring file, please remove it.\n" );
+                OUString aStr = "Exception loading legacy package database: '" +
+                    e.Message +
+                    "' - ignoring file, please remove it.\n";
                 dp_misc::writeConsole( aStr.getStr() );
             }
         }

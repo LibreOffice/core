@@ -263,11 +263,11 @@ static int write_addStreamArray( const char* pOutFile, PDFArray* pStreams, PDFFi
             PDFObject* pObject = pPDFFile->findObject( pStreamRef->m_nNumber, pStreamRef->m_nGeneration );
             if( pObject )
             {
-                OStringBuffer aOutStream( pOutFile );
-                aOutStream.append( "_stream_" );
-                aOutStream.append( sal_Int32(pStreamRef->m_nNumber) );
-                aOutStream.append( "_" );
-                aOutStream.append( sal_Int32(pStreamRef->m_nGeneration) );
+                OString aOutStream = pOutFile +
+                    OStringLiteral("_stream_") +
+                    OString::number( sal_Int32(pStreamRef->m_nNumber) ) +
+                    "_" +
+                    OString::number( sal_Int32(pStreamRef->m_nGeneration) );
                 FileEmitContext aContext( aOutStream.getStr(), pInFile, pPDFFile );
                 aContext.m_bDecrypt = pPDFFile->isEncrypted();
                 pObject->writeStream( aContext, pPDFFile );
@@ -406,11 +406,11 @@ static int write_objects( const char* i_pInFile, const char* i_pOutFile, PDFFile
             continue;
         }
 
-        OStringBuffer aOutStream( i_pOutFile );
-        aOutStream.append( "_stream_" );
-        aOutStream.append( nObject );
-        aOutStream.append( "_" );
-        aOutStream.append( nGeneration );
+        OString aOutStream = i_pOutFile +
+            OStringLiteral("_stream_") +
+            OString::number( nObject ) +
+            "_"  +
+            OString::number( nGeneration );
         FileEmitContext aContext( aOutStream.getStr(), i_pInFile, i_pPDFFile );
         aContext.m_bDecrypt = i_pPDFFile->isEncrypted();
         pStream->writeStream( aContext, i_pPDFFile );

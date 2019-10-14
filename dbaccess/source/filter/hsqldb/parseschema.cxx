@@ -91,11 +91,7 @@ public:
 
 OUString lcl_createAlterForeign(const OUString& sForeignPart, const OUString& sTableName)
 {
-    OUStringBuffer sBuff("ALTER TABLE ");
-    sBuff.append(sTableName);
-    sBuff.append(" ADD ");
-    sBuff.append(sForeignPart);
-    return sBuff.makeStringAndClear();
+    return "ALTER TABLE " + sTableName + " ADD " + sForeignPart;
 }
 
 } // anonymous namespace

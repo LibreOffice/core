@@ -104,10 +104,9 @@ void IndexColumns::refresh()
     {
         if (isLog(m_pSettings, LogLevel::Info))
         {
-            OStringBuffer buf;
-            buf.append( "sdbcx.IndexColumns get refreshed for index " );
-            buf.append( OUStringToOString( m_indexName, ConnectionSettings::encoding ) );
-            log( m_pSettings, LogLevel::Info, buf.makeStringAndClear().getStr() );
+            OString buf = "sdbcx.IndexColumns get refreshed for index " +
+                OUStringToOString( m_indexName, ConnectionSettings::encoding );
+            log( m_pSettings, LogLevel::Info, buf.getStr() );
         }
 
         osl::MutexGuard guard( m_xMutex->GetMutex() );

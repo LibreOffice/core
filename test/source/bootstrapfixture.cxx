@@ -43,10 +43,10 @@ using namespace ::com::sun::star;
 
 static void aBasicErrorFunc( const OUString &rErr, const OUString &rAction )
 {
-    OStringBuffer aErr( "Unexpected dialog: " );
-    aErr.append( OUStringToOString( rAction, RTL_TEXTENCODING_ASCII_US ) );
-    aErr.append( " Error: " );
-    aErr.append( OUStringToOString( rErr, RTL_TEXTENCODING_ASCII_US ) );
+    OString aErr = "Unexpected dialog: " +
+        OUStringToOString( rAction, RTL_TEXTENCODING_ASCII_US ) +
+        " Error: " +
+        OUStringToOString( rErr, RTL_TEXTENCODING_ASCII_US );
     CPPUNIT_ASSERT_MESSAGE( aErr.getStr(), false);
 }
 

@@ -1811,10 +1811,8 @@ void XMLSectionExport::ExportMasterDocHeadingDummies()
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                                       GetExport().EncodeStyleName( sStyle ) );
 
-            OUStringBuffer sTmp;
-            sTmp.append( nLevel + 1 );
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_LEVEL,
-                                        sTmp.makeStringAndClear() );
+                                        OUString::number( nLevel + 1 ) );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, XML_H,
                                         true, false );
         }
