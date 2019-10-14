@@ -70,6 +70,30 @@
       "revId": "d010358198c69c32a32cdcf0dd802fbc47556391",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_ef828cc8",
+        "filename": "extensions/source/scanner/scanwin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-14T08:48:21Z",
+      "side": 1,
+      "message": "\u003e Re:by convention - do we have some means to enforce that?\n\nWe could have a loplugin, but would it be worth the churn?  There\u0027s probably tons of files that miss it, but it\u0027s hard to think of a scenario where that actually causes a problem today:  Either the file will get it indirectly included first through its first #include being one of LO\u0027s include files.  Or, if the first #include is a system header, what sal/config.h fixes up today (but which could change in the future, though) probably doesn\u0027t impact that system header anyway.\n\nSo I have just a personal convention of adding a missing \u003csal/config.h\u003e whenever I touch the top of a file\u0027s include list, to get that minor issue cleaned up over time.",
+      "parentUuid": "7f7f9b97_0f058877",
+      "range": {
+        "startLine": 268,
+        "startChar": 12,
+        "endLine": 270,
+        "endChar": 41
+      },
+      "revId": "d010358198c69c32a32cdcf0dd802fbc47556391",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
