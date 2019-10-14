@@ -859,24 +859,24 @@ SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
                                       const bool bCpyBorder,
                                       const SwDoc* pDoc )
     : SwUndo( SwUndoId::INSERTLABEL, pDoc ),
-      sText( rText ),
-      sSeparator( rSeparator ),
-      sNumberSeparator( rNumberSeparator ),//#i61007# order of captions
-      sCharacterStyle( rCharacterStyle ),
-      nFieldId( nInitId ),
-      eType( eTyp ),
-      nLayerId( 0 ),
-      bBefore( bBef ),
-      bCpyBrd( bCpyBorder )
+      m_sText( rText ),
+      m_sSeparator( rSeparator ),
+      m_sNumberSeparator( rNumberSeparator ),//#i61007# order of captions
+      m_sCharacterStyle( rCharacterStyle ),
+      m_nFieldId( nInitId ),
+      m_eType( eTyp ),
+      m_nLayerId( 0 ),
+      m_bBefore( bBef ),
+      m_bCopyBorder( bCpyBorder )
 {
-    bUndoKeep = false;
+    m_bUndoKeep = false;
     OBJECT.pUndoFly = nullptr;
     OBJECT.pUndoAttr = nullptr;
 }
 
 SwUndoInsertLabel::~SwUndoInsertLabel()
 {
-    if( LTYPE_OBJECT == eType || LTYPE_DRAW == eType )
+    if( LTYPE_OBJECT == m_eType || LTYPE_DRAW == m_eType )
     {
         delete OBJECT.pUndoFly;
         delete OBJECT.pUndoAttr;
@@ -889,27 +889,27 @@ void SwUndoInsertLabel::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    if( LTYPE_OBJECT == eType || LTYPE_DRAW == eType )
+    if( LTYPE_OBJECT == m_eType || LTYPE_DRAW == m_eType )
     {
         OSL_ENSURE( OBJECT.pUndoAttr && OBJECT.pUndoFly, "Pointer not initialized" );
         SwFrameFormat* pFormat;
         SdrObject *pSdrObj = nullptr;
         if( OBJECT.pUndoAttr &&
             nullptr != (pFormat = static_cast<SwFrameFormat*>(OBJECT.pUndoAttr->GetFormat( rDoc ))) &&
-            ( LTYPE_DRAW != eType ||
+            ( LTYPE_DRAW != m_eType ||
               nullptr != (pSdrObj = pFormat->FindSdrObject()) ) )
         {
             OBJECT.pUndoAttr->UndoImpl(rContext);
             OBJECT.pUndoFly->UndoImpl(rContext);
-            if( LTYPE_DRAW == eType )
+            if( LTYPE_DRAW == m_eType )
             {
-                pSdrObj->SetLayer( nLayerId );
+                pSdrObj->SetLayer( m_nLayerId );
             }
         }
     }
     else if( NODE.nNode )
     {
-        if ( eType == LTYPE_TABLE && bUndoKeep )
+        if ( m_eType == LTYPE_TABLE && m_bUndoKeep )
         {
             SwTableNode *pNd = rDoc.GetNodes()[
                         rDoc.GetNodes()[NODE.nNode-1]->StartOfSectionIndex()]->GetTableNode();
@@ -928,21 +928,21 @@ void SwUndoInsertLabel::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    if( LTYPE_OBJECT == eType || LTYPE_DRAW == eType )
+    if( LTYPE_OBJECT == m_eType || LTYPE_DRAW == m_eType )
     {
         OSL_ENSURE( OBJECT.pUndoAttr && OBJECT.pUndoFly, "Pointer not initialized" );
         SwFrameFormat* pFormat;
         SdrObject *pSdrObj = nullptr;
         if( OBJECT.pUndoAttr &&
             nullptr != (pFormat = static_cast<SwFrameFormat*>(OBJECT.pUndoAttr->GetFormat( rDoc ))) &&
-            ( LTYPE_DRAW != eType ||
+            ( LTYPE_DRAW != m_eType ||
               nullptr != (pSdrObj = pFormat->FindSdrObject()) ) )
         {
             OBJECT.pUndoFly->RedoImpl(rContext);
             OBJECT.pUndoAttr->RedoImpl(rContext);
-            if( LTYPE_DRAW == eType )
+            if( LTYPE_DRAW == m_eType )
             {
-                pSdrObj->SetLayer( nLayerId );
+                pSdrObj->SetLayer( m_nLayerId );
                 if( pSdrObj->GetLayer() == rDoc.getIDocumentDrawModelAccess().GetHellId() )
                     pSdrObj->SetLayer( rDoc.getIDocumentDrawModelAccess().GetHeavenId() );
                 // OD 02.07.2003 #108784#
@@ -953,7 +953,7 @@ void SwUndoInsertLabel::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     else if( NODE.pUndoInsNd )
     {
-        if ( eType == LTYPE_TABLE && bUndoKeep )
+        if ( m_eType == LTYPE_TABLE && m_bUndoKeep )
         {
             SwTableNode *pNd = rDoc.GetNodes()[
                         rDoc.GetNodes()[NODE.nNode-1]->StartOfSectionIndex()]->GetTableNode();
@@ -975,7 +975,7 @@ void SwUndoInsertLabel::RepeatImpl(::sw::RepeatContext & rContext)
 
     SwContentNode* pCNd = rPos.nNode.GetNode().GetContentNode();
     if( pCNd )
-        switch( eType )
+        switch( m_eType )
         {
         case LTYPE_TABLE:
             {
@@ -1000,14 +1000,14 @@ void SwUndoInsertLabel::RepeatImpl(::sw::RepeatContext & rContext)
 
     if( nIdx )
     {
-        rDoc.InsertLabel( eType, sText, sSeparator, sNumberSeparator, bBefore,
-            nFieldId, nIdx, sCharacterStyle, bCpyBrd );
+        rDoc.InsertLabel( m_eType, m_sText, m_sSeparator, m_sNumberSeparator, m_bBefore,
+            m_nFieldId, nIdx, m_sCharacterStyle, m_bCopyBorder );
     }
 }
 
 SwRewriter SwUndoInsertLabel::GetRewriter() const
 {
-    return CreateRewriter(sText);
+    return CreateRewriter(m_sText);
 }
 
 SwRewriter SwUndoInsertLabel::CreateRewriter(const OUString &rStr)
@@ -1032,7 +1032,7 @@ SwRewriter SwUndoInsertLabel::CreateRewriter(const OUString &rStr)
 void SwUndoInsertLabel::SetFlys( SwFrameFormat& rOldFly, SfxItemSet const & rChgSet,
                                 SwFrameFormat& rNewFly )
 {
-    if( LTYPE_OBJECT == eType || LTYPE_DRAW == eType )
+    if( LTYPE_OBJECT == m_eType || LTYPE_DRAW == m_eType )
     {
         SwUndoFormatAttrHelper aTmp( rOldFly, false );
         rOldFly.SetFormatAttr( rChgSet );
@@ -1046,9 +1046,9 @@ void SwUndoInsertLabel::SetFlys( SwFrameFormat& rOldFly, SfxItemSet const & rChg
 
 void SwUndoInsertLabel::SetDrawObj( SdrLayerID nLId )
 {
-    if( LTYPE_DRAW == eType )
+    if( LTYPE_DRAW == m_eType )
     {
-        nLayerId = nLId;
+        m_nLayerId = nLId;
     }
 }
 
