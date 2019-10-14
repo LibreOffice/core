@@ -41,7 +41,7 @@ public:
 
 class StgCompObjStream : public StgInternalStream
 {
-    ClsId       m_aClsId;
+    ClsId       m_aClsId{};
     OUString    m_aUserName;
     SotClipboardFormatId m_nCbFormat;
 public:

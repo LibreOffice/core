@@ -33,7 +33,6 @@ using namespace ::com::sun::star;
 MnemonicGenerator::MnemonicGenerator(sal_Unicode cMnemonic)
     : m_cMnemonic(cMnemonic)
 {
-    memset( maMnemonics, 1, sizeof( maMnemonics ) );
 }
 
 sal_uInt16 MnemonicGenerator::ImplGetMnemonicIndex( sal_Unicode c )

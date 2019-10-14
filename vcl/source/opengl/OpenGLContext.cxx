@@ -391,9 +391,7 @@ void OpenGLContext::reset()
 
 SystemWindowData OpenGLContext::generateWinData(vcl::Window* /*pParent*/, bool /*bRequestLegacyContext*/)
 {
-    SystemWindowData aWinData;
-    memset(&aWinData, 0, sizeof(aWinData));
-    return aWinData;
+    return {};
 }
 
 bool OpenGLContext::isCurrent()

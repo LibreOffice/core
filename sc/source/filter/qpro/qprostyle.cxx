@@ -35,14 +35,6 @@
 #include <patattr.hxx>
 #include <document.hxx>
 
-ScQProStyle::ScQProStyle()
-{
-    memset (maAlign, 0, sizeof (maAlign));
-    memset (maFont, 0, sizeof (maFont));
-    memset (maFontRecord, 0, sizeof (maFontRecord));
-    memset (maFontHeight, 0, sizeof (maFontHeight));
-}
-
 void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, SCTAB nTab, sal_uInt16 nStyle )
 {
     if (nStyle >= maxsize)
