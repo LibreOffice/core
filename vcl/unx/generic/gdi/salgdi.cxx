@@ -45,17 +45,21 @@
 #include <salvd.hxx>
 #include "gdiimpl.hxx"
 #include <opengl/x11/gdiimpl.hxx>
-#include <skia/x11/gdiimpl.hxx>
 #include <unx/x11/x11cairotextrender.hxx>
 #include <opengl/x11/cairotextrender.hxx>
-#include <skia/x11/cairotextrender.hxx>
 
 #include <unx/x11/xrender_peer.hxx>
 #include "cairo_xlib_cairo.hxx"
 #include <cairo-xlib.h>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
+
+#include <config_features.h>
 #include <vcl/skia/SkiaHelper.hxx>
+#if HAVE_FEATURE_SKIA
+#include <skia/x11/gdiimpl.hxx>
+#include <skia/x11/cairotextrender.hxx>
+#endif
 
 X11SalGraphics::X11SalGraphics():
     m_pFrame(nullptr),
@@ -80,12 +84,15 @@ X11SalGraphics::X11SalGraphics():
     m_bOpenGL(OpenGLHelper::isVCLOpenGLEnabled()),
     m_bSkia(SkiaHelper::isVCLSkiaEnabled())
 {
+#if HAVE_FEATURE_SKIA
     if (m_bSkia)
     {
         mxImpl.reset(new X11SkiaSalGraphicsImpl(*this));
         mxTextRenderImpl.reset(new SkiaX11CairoTextRender(*this));
     }
-    else if (m_bOpenGL)
+    else
+#endif
+    if (m_bOpenGL)
     {
         mxImpl.reset(new X11OpenGLSalGraphicsImpl(*this));
         mxTextRenderImpl.reset(new OpenGLX11CairoTextRender(*this));

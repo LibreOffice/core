@@ -55,12 +55,11 @@ $(eval $(call gb_Library_use_externals,vclplug_win,\
     epoxy \
     glm_headers \
     harfbuzz \
-    skia \
+    $(if $(filter SKIA,$(BUILD_TYPE)),skia) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_win,\
     vcl/opengl/win/gdiimpl \
-    vcl/skia/win/gdiimpl \
     vcl/win/app/saldata \
     vcl/win/app/salinfo \
     vcl/win/app/salinst \
@@ -81,6 +80,8 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_win,\
     vcl/win/window/keynames \
     vcl/win/window/salmenu \
     vcl/win/window/salobj \
+    $(if $(filter SKIA,$(BUILD_TYPE)), \
+        vcl/skia/win/gdiimpl) \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,vclplug_win,\
