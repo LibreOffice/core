@@ -58,13 +58,13 @@ IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.
 
 ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable)
     : OIndex(true/*_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers()*/)
+    , m_aHeader{}
     , m_nCurNode(NODE_NOTFOUND)
     , m_nPageCount(0)
     , m_nRootPage(0)
     , m_pTable(_pTable)
     , m_bUseCollector(false)
 {
-    memset(&m_aHeader, 0, sizeof(m_aHeader));
     construct();
 }
 

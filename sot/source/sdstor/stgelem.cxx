@@ -81,10 +81,6 @@ StgHeader::StgHeader()
 , m_nMasterChain( 0 )
 , m_nMaster( 0 )
 {
-    memset( m_cSignature, 0, sizeof( m_cSignature ) );
-    memset( &m_aClsId, 0, sizeof( ClsId ) );
-    memset( m_cReserved, 0, sizeof( m_cReserved ) );
-    memset( m_nMasterFAT, 0, sizeof( m_nMasterFAT ) );
 }
 
 void StgHeader::Init()
