@@ -17,6 +17,8 @@ $(eval $(call gb_Library_add_defs,subsequenttest,\
 	-DOOO_DLLIMPLEMENTATION_TEST \
 ))
 
+$(eval $(call gb_Library_use_common_precompiled_header,subsequenttest))
+
 $(eval $(call gb_Library_use_sdk_api,subsequenttest))
 
 $(eval $(call gb_Library_use_libraries,subsequenttest,\

@@ -28,6 +28,8 @@ $(eval $(call gb_Library_set_componentfile,wpftwriter,writerperfect/source/write
 
 $(eval $(call gb_Library_use_sdk_api,wpftwriter))
 
+$(eval $(call gb_Library_use_common_precompiled_header,wpftwriter))
+
 $(eval $(call gb_Library_use_libraries,wpftwriter,\
 	comphelper \
 	cppu \

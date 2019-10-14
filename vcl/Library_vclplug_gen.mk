@@ -30,6 +30,8 @@ $(eval $(call gb_Library_use_custom_headers,vclplug_gen,\
 
 $(eval $(call gb_Library_use_sdk_api,vclplug_gen))
 
+$(eval $(call gb_Library_use_common_precompiled_header,vclplug_gen))
+
 $(eval $(call gb_Library_use_libraries,vclplug_gen,\
     vcl \
     tl \

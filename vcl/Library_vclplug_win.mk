@@ -35,6 +35,8 @@ $(eval $(call gb_Library_use_custom_headers,vclplug_win,\
 
 $(eval $(call gb_Library_use_sdk_api,vclplug_win))
 
+$(eval $(call gb_Library_use_common_precompiled_header,vclplugin_win))
+
 $(eval $(call gb_Library_use_libraries,vclplug_win,\
     $(call gb_Helper_optional,BREAKPAD, \
         crashreport) \
