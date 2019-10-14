@@ -50,22 +50,17 @@ private:
     bool                        mbPosMTMoved;       /// Tracking: Anytime moved to another position?
 
     Size                        maWinSize;          /// Size of the control.
-    tools::Rectangle                   maActiveRect;       /// The active area of the ruler.
+    tools::Rectangle            maActiveRect;       /// The active area of the ruler.
     sal_Int32                   mnSplitSize;        /// Size of a split circle.
+    bool                        mbTracking;         /// If currently mouse tracking
 
 public:
-    explicit                    ScCsvRuler( ScCsvControl& rParent );
-                                virtual ~ScCsvRuler() override;
-    virtual void                dispose() override;
+    explicit ScCsvRuler(ScCsvLayoutData& rData);
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    virtual ~ScCsvRuler() override;
 
     // common ruler handling --------------------------------------------------
 public:
-    /** Sets position and size of the ruler. The height is calculated internally. */
-    virtual void                setPosSizePixel(
-                                    long nX, long nY,
-                                    long nWidth, long nHeight,
-                                    PosSizeFlags nFlags = PosSizeFlags::All ) override;
-
     /** Apply current layout data to the ruler. */
     void                        ApplyLayout( const ScCsvLayoutData& rOldData );
 
@@ -123,13 +118,15 @@ protected:
     virtual void                Resize() override;
     virtual void                GetFocus() override;
     virtual void                LoseFocus() override;
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void                StyleUpdated() override;
 
-    virtual void                MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void                MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void                Tracking( const TrackingEvent& rTEvt ) override;
+    virtual bool                MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool                MouseMove( const MouseEvent& rMEvt ) override;
+    virtual bool                MouseButtonUp( const MouseEvent& rMEvt ) override;
 
-    virtual void                KeyInput( const KeyEvent& rKEvt ) override;
+    virtual bool                KeyInput( const KeyEvent& rKEvt ) override;
+
+    virtual tools::Rectangle    GetFocusRect() override;
 
 private:
     /** Starts tracking at the specified position. */
@@ -146,7 +143,7 @@ protected:
 
 public:
     /** Redraws the entire ruler. */
-    void                        ImplRedraw();
+    void                        ImplRedraw(vcl::RenderContext& rRenderContext);
 
 private:
     /** Returns the width of the control. */

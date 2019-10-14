@@ -41,7 +41,7 @@ namespace utl { class AccessibleStateSetHelper; }
 class ScAccessibleCsvControl : public ScAccessibleContextBase
 {
 private:
-    VclPtr<ScCsvControl>               mpControl;          /// Pointer to the VCL control.
+    ScCsvControl*               mpControl;          /// Pointer to the VCL control.
 
 public:
     explicit                    ScAccessibleCsvControl(
@@ -460,13 +460,13 @@ private:
     /** Returns the contents of the specified cell (including header). Indexes must be valid. */
     OUString implGetCellText( sal_Int32 nRow, sal_Int32 nColumn ) const;
     /** Creates a new accessible object of the specified cell. Indexes must be valid. */
-    ScAccessibleCsvControl* implCreateCellObj( sal_Int32 nRow, sal_Int32 nColumn ) const;
+    ScAccessibleCsvControl* implCreateCellObj(sal_Int32 nRow, sal_Int32 nColumn);
 
     css::uno::Reference<css::accessibility::XAccessible> getAccessibleCell(sal_Int32 nRow, sal_Int32 nColumn);
 };
 
 /** Accessible class representing a cell of the CSV grid control. */
-class ScAccessibleCsvCell : public ScAccessibleCsvControl, public accessibility::AccessibleStaticTextBase
+class ScAccessibleCsvCell : public ScAccessibleCsvControl, public ::accessibility::AccessibleStaticTextBase
 {
 protected:
     typedef ::std::unique_ptr< SvxEditSource >      SvxEditSourcePtr;
@@ -479,9 +479,10 @@ private:
 
 public:
     explicit                    ScAccessibleCsvCell(
+                                    css::uno::Reference<css::accessibility::XAccessible>& rGridA11y,
                                     ScCsvGrid& rGrid,
                                     const OUString& rCellText,
-                                    sal_Int32 nRow, sal_Int32 nColumn );
+                                    sal_Int32 nRow, sal_Int32 nColumn);
     virtual                     ~ScAccessibleCsvCell() override;
 
     using ScAccessibleCsvControl::disposing;

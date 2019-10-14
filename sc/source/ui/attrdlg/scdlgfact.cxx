@@ -70,7 +70,10 @@
 #include <sfx2/sfxdlg.hxx>
 #include <conditio.hxx>
 
-IMPL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl);
+short AbstractScImportAsciiDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractScAutoFormatDlg_Impl::Execute()
 {
@@ -273,12 +276,24 @@ short AbstractScLinkedAreaDlg_Impl::Execute()
 
 void AbstractScImportAsciiDlg_Impl::GetOptions( ScAsciiOptions& rOpt )
 {
-    pDlg->GetOptions( rOpt );
+    m_xDlg->GetOptions( rOpt );
 }
 
 void AbstractScImportAsciiDlg_Impl::SaveParameters()
 {
-    pDlg->SaveParameters();
+    m_xDlg->SaveParameters();
+}
+
+BitmapEx AbstractScImportAsciiDlg_Impl::createScreenshot() const
+{
+    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    m_xDlg->getDialog()->draw(*xDialogSurface);
+    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
+}
+
+OString AbstractScImportAsciiDlg_Impl::GetScreenshotId() const
+{
+    return m_xDlg->get_help_id();
 }
 
 sal_uInt16 AbstractScAutoFormatDlg_Impl::GetIndex() const
@@ -916,12 +931,11 @@ OString ScAbstractTabController_Impl::GetScreenshotId() const
 }
 
 // =========================Factories  for createdialog ===================
-VclPtr<AbstractScImportAsciiDlg> ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg ( vcl::Window* pParent,
+VclPtr<AbstractScImportAsciiDlg> ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg(weld::Window* pParent,
                                                     const OUString& aDatName,
-                                                    SvStream* pInStream, ScImportAsciiCall eCall )
+                                                    SvStream* pInStream, ScImportAsciiCall eCall)
 {
-    VclPtr<ScImportAsciiDlg> pDlg = VclPtr<ScImportAsciiDlg>::Create( pParent, aDatName,pInStream, eCall );
-    return VclPtr<AbstractScImportAsciiDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScImportAsciiDlg_Impl>::Create(std::make_unique<ScImportAsciiDlg>(pParent, aDatName,pInStream, eCall));
 }
 
 VclPtr<AbstractScTextImportOptionsDlg> ScAbstractDialogFactory_Impl::CreateScTextImportOptionsDlg(weld::Window* pParent)
