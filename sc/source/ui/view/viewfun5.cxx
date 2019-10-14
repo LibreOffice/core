@@ -345,7 +345,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     VclPtr<AbstractScImportAsciiDlg> pDlg(
-                        pFact->CreateScImportAsciiDlg(pParent, OUString(), pStrm.get(), SC_PASTETEXT));
+                        pFact->CreateScImportAsciiDlg(pParent ? pParent->GetFrameWeld() : nullptr, OUString(), pStrm.get(), SC_PASTETEXT));
 
                     bAllowDialogs = bAllowDialogs && !SC_MOD()->IsInExecuteDrop();
 

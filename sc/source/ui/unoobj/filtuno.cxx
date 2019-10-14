@@ -187,7 +187,8 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
         if ( xInputStream.is() )
             pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
 
-        ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(nullptr, aPrivDatName, pInStream.get(), SC_IMPORTFILE));
+        ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(Application::GetFrameWeld(xDialogParent), aPrivDatName,
+                                                                                  pInStream.get(), SC_IMPORTFILE));
         if ( pDlg->Execute() == RET_OK )
         {
             ScAsciiOptions aOptions;

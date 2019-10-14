@@ -22,13 +22,16 @@
 
 #include <vcl/scrbar.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/weld.hxx>
 #include <scdllapi.h>
 #include "csvcontrol.hxx"
 #include "csvruler.hxx"
 #include "csvgrid.hxx"
 
-class ListBox;
 class ScAsciiOptions;
+namespace weld {
+    class ComboBox;
+}
 
 /* ============================================================================
 Position: Positions between the characters (the dots in the ruler).
@@ -105,7 +108,7 @@ public:
     // column settings --------------------------------------------------------
 public:
     /** Reads UI strings for data types from the list box. */
-    void                        InitTypes( const ListBox& rListBox );
+    void                 InitTypes(const weld::ComboBox& rListBox);
     /** Returns the data type of the selected columns. */
     sal_Int32            GetSelColumnType() const { return maGrid->GetSelColumnType(); }
 

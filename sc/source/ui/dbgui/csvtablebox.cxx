@@ -219,12 +219,12 @@ void ScCsvTableBox::SetUniStrings(
 
 // column settings ------------------------------------------------------------
 
-void ScCsvTableBox::InitTypes( const ListBox& rListBox )
+void ScCsvTableBox::InitTypes(const weld::ComboBox& rListBox)
 {
-    const sal_Int32 nTypeCount = rListBox.GetEntryCount();
+    const sal_Int32 nTypeCount = rListBox.get_count();
     std::vector<OUString> aTypeNames( nTypeCount );
     for( sal_Int32 nIndex = 0; nIndex < nTypeCount; ++nIndex )
-        aTypeNames[ nIndex ] = rListBox.GetEntry( nIndex );
+        aTypeNames[ nIndex ] = rListBox.get_text( nIndex );
     maGrid->SetTypeNames( aTypeNames );
 }
 
