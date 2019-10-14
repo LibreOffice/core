@@ -1118,6 +1118,7 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
     if (TextFrameIndex(1) == rInf.GetLen()
         && CH_TXT_ATR_FIELDSTART == rInf.GetText()[sal_Int32(rInf.GetIdx())])
     {
+        assert(!"this is presumably dead code");
         TextFrameIndex const nOldIdx(rInf.GetIdx());
         TextFrameIndex const nOldLen(rInf.GetLen());
         const OUString aNewText(CH_TXT_ATR_SUBST_FIELDSTART);
@@ -1131,6 +1132,7 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
     else if (TextFrameIndex(1) == rInf.GetLen()
             && CH_TXT_ATR_FIELDEND == rInf.GetText()[sal_Int32(rInf.GetIdx())])
     {
+        assert(!"this is presumably dead code");
         TextFrameIndex const nOldIdx(rInf.GetIdx());
         TextFrameIndex const nOldLen(rInf.GetLen());
         const OUString aNewText(CH_TXT_ATR_SUBST_FIELDEND);
