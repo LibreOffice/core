@@ -1014,8 +1014,8 @@ struct WW8PLCFxSaveAll
 {
     WW8PLCFxSave1 aS[WW8PLCFMan::MAN_PLCF_COUNT];
     WW8PLCFxSaveAll()
+        : aS{}
     {
-        memset(aS, 0, sizeof(aS));
     }
 };
 

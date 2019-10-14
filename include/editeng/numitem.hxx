@@ -327,9 +327,9 @@ public:
 };
 
 SvxNodeNum::SvxNodeNum()
-    : nMyLevel( 0 )
+    : nLevelVal{}
+    , nMyLevel( 0 )
 {
-    memset( nLevelVal, 0, sizeof( nLevelVal ) );
 }
 
 inline SvxNodeNum& SvxNodeNum::operator=( const SvxNodeNum& rCpy )

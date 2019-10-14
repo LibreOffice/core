@@ -491,22 +491,7 @@ bool initOpenCLRunEnv( GPUEnv *gpuInfo )
              pName, nullptr);
 
 #if defined (_WIN32)
-// the Win32 SDK 8.1 deprecates GetVersionEx()
-# ifdef _WIN32_WINNT_WINBLUE
     const bool bIsNotWinOrIsWin8OrGreater = IsWindows8OrGreater();
-# else
-    bool bIsNotWinOrIsWin8OrGreater = true;
-    OSVERSIONINFOW aVersionInfo;
-    memset( &aVersionInfo, 0, sizeof(aVersionInfo) );
-    aVersionInfo.dwOSVersionInfoSize = sizeof( aVersionInfo );
-    if (GetVersionExW( &aVersionInfo ))
-    {
-        // Windows 7 or lower?
-        if (aVersionInfo.dwMajorVersion < 6 ||
-           (aVersionInfo.dwMajorVersion == 6 && aVersionInfo.dwMinorVersion < 2))
-            bIsNotWinOrIsWin8OrGreater = false;
-    }
-# endif
 #else
     const bool bIsNotWinOrIsWin8OrGreater = true;
 #endif

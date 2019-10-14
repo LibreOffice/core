@@ -191,8 +191,8 @@ struct SdwClosedObjStyleRec
         : nLineWidth(0)
         , nLineStyle(0)
         , nFillType(0)
+        , pFillPattern{}
     {
-        memset(pFillPattern, 0, sizeof(pFillPattern));
     }
 };
 

@@ -1060,6 +1060,7 @@ void SwTextFrame::StopAnimation( OutputDevice* pOut )
  */
 SwCombinedPortion::SwCombinedPortion( const OUString &rText )
     : SwFieldPortion( rText )
+    , aWidth{}
     , nUpPos(0)
     , nLowPos(0)
     , nProportion(55)
@@ -1083,8 +1084,6 @@ SwCombinedPortion::SwCombinedPortion( const OUString &rText )
         }
         aScrType[i] = nScr;
     }
-
-    memset( &aWidth, 0, sizeof(aWidth) );
 }
 
 void SwCombinedPortion::Paint( const SwTextPaintInfo &rInf ) const

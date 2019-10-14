@@ -67,11 +67,14 @@ SvStream& WriteClsId( SvStream& r, const ClsId& rId )
 ///////////////////////////// class StgHeader
 
 StgHeader::StgHeader()
-: m_nVersion( 0 )
+: m_cSignature{}
+, m_aClsId{}
+, m_nVersion( 0 )
 , m_nByteOrder( 0 )
 , m_nPageSize( 0 )
 , m_nDataPageSize( 0 )
 , m_bDirty( sal_uInt8(false) )
+, m_cReserved{}
 , m_nFATSize( 0 )
 , m_nTOCstrm( 0 )
 , m_nReserved( 0 )
@@ -80,11 +83,8 @@ StgHeader::StgHeader()
 , m_nDataFATSize( 0 )
 , m_nMasterChain( 0 )
 , m_nMaster( 0 )
+, m_nMasterFAT{}
 {
-    memset( m_cSignature, 0, sizeof( m_cSignature ) );
-    memset( &m_aClsId, 0, sizeof( ClsId ) );
-    memset( m_cReserved, 0, sizeof( m_cReserved ) );
-    memset( m_nMasterFAT, 0, sizeof( m_nMasterFAT ) );
 }
 
 void StgHeader::Init()

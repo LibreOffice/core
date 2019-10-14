@@ -275,12 +275,12 @@ struct FBoxStyle
         , txtflow(0)
         , xpos(0)
         , ypos(0)
+        , margin{}
         , boxnum(0)
         , boxtype(0)
         , cap_len(0)
         , cell(nullptr)
     {
-        memset(margin, 0, sizeof(margin));
     }
 };
 

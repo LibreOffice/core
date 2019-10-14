@@ -50,7 +50,6 @@
 
 CFullPropSpec::CFullPropSpec()
 {
-    memset( &_guidPropSet, 0, sizeof( _guidPropSet ) );
     _psProperty.ulKind = PRSPEC_PROPID;
     _psProperty.propid = 0;
 }

@@ -58,9 +58,9 @@ using ::com::sun::star::uno::Reference;
 
 IMapWindow::IMapWindow(const Reference< XFrame >& rxDocumentFrame, weld::Dialog* pDialog)
     : GraphCtrl(pDialog)
+    , maItemInfos{}
     , mxDocumentFrame(rxDocumentFrame)
 {
-    memset( maItemInfos, 0, sizeof( SfxItemInfo ) );
     pIMapPool = new SfxItemPool( "IMapItemPool",
                                  SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, maItemInfos );
     pIMapPool->FreezeIdRanges();

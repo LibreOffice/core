@@ -89,12 +89,12 @@
 
 LwpGraphicObject::LwpGraphicObject(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpGraphicOleObject(objHdr, pStrm)
+    , m_sDataFormat{}
+    , m_sServerContextFormat{}
     , m_nCachedBaseLine(0)
     , m_bIsLinked(0)
     , m_bCompressed(0)
 {
-    memset(m_sDataFormat, 0, sizeof(m_sDataFormat));
-    memset(m_sServerContextFormat, 0, sizeof(m_sServerContextFormat));
 }
 
 LwpGraphicObject::~LwpGraphicObject()

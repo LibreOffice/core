@@ -423,9 +423,9 @@ public:
         Set of flags describing the demanded information.
     */
     VolumeInfo( sal_uInt32 nMask )
-        : _nMask( nMask )
+        : _aInfo{}
+        , _nMask( nMask )
     {
-        memset( &_aInfo, 0, sizeof( oslVolumeInfo ));
         _aInfo.uStructSize = sizeof( oslVolumeInfo );
         _aInfo.pDeviceHandle = &_aDevice._aHandle;
     }
@@ -665,9 +665,9 @@ public:
         Set of flags describing the demanded information.
     */
     FileStatus(sal_uInt32 nMask)
-        : _nMask(nMask)
+        : _aStatus{}
+        , _nMask(nMask)
     {
-        memset(&_aStatus, 0, sizeof(_aStatus));
         _aStatus.uStructSize = sizeof(_aStatus);
     }
 

@@ -84,19 +84,19 @@ struct PaperBackInfo
     bool isset;
     PaperBackInfo()
         : type(0)
+        , reserved1{}
         , luminance(0)
         , contrast(0)
         , effect(0)
+        , reserved2{}
+        , filename{}
+        , color{}
         , flag(0)
         , range(0)
+        , reserved3{}
         , size(0)
         , isset(false)
     {
-        memset(reserved1, 0, sizeof(reserved1));
-        memset(reserved2, 0, sizeof(reserved2));
-        memset(filename, 0, sizeof(filename));
-        memset(color, 0, sizeof(color));
-        memset(reserved3, 0, sizeof(reserved3));
     }
 };
 
@@ -112,8 +112,8 @@ struct DocChainInfo
     DocChainInfo()
         : chain_page_no(0)
         , chain_footnote_no(0)
+        , chain_filename{}
     {
-        memset(chain_filename, 0, sizeof(chain_filename));
     }
 };
 

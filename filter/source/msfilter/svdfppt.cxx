@@ -369,8 +369,8 @@ void PptNotesAtom::Clear()
 }
 
 PptColorSchemeAtom::PptColorSchemeAtom()
+    : aData{}
 {
-    memset(&aData[0], 0, 32);
 }
 
 Color PptColorSchemeAtom::GetColor( sal_uInt16 nNum ) const
@@ -4530,10 +4530,10 @@ void PPTCharPropSet::SetColor( sal_uInt32 nColor )
 PPTRuler::PPTRuler()
     : nFlags(0)
     , nDefaultTab(0x240)
+    , nTextOfs{}
+    , nBulletOfs{}
     , nTabCount(0)
 {
-    memset(nTextOfs, 0, sizeof(nTextOfs));
-    memset(nBulletOfs, 0, sizeof(nBulletOfs));
 }
 
 PPTRuler::~PPTRuler()

@@ -7185,7 +7185,6 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
 
     // allocate Font Array
     std::vector<sal_uInt8> aA(nFFn);
-    memset(aA.data(), 0, nFFn);
 
     ww::WordVersion eVersion = rFib.GetFIBVersion();
 
@@ -8063,8 +8062,7 @@ void WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
     rFib.m_fcDop =  rStrm.Tell();
     rFib.m_lcbDop = nLen;
 
-    sal_uInt8 aData[ nMaxDopLen ];
-    memset( aData, 0, nMaxDopLen );
+    sal_uInt8 aData[nMaxDopLen]{};
     sal_uInt8* pData = aData;
 
     // analyse the data
@@ -8504,10 +8502,9 @@ SEPr::SEPr() :
     dxaLeft(1800), dxaRight(1800), dyaTop(1440), dyaBottom(1440), dzaGutter(0),
     dyaHdrTop(720), dyaHdrBottom(720), ccolM1(0), fEvenlySpaced(1),
     reserved3(0), fBiDi(0), fFacingCol(0), fRTLGutter(0), fRTLAlignment(0),
-    dxaColumns(720), dxaColumnWidth(0), dmOrientFirst(0), fLayout(0),
+    dxaColumns(720), rgdxaColumnWidthSpacing{}, dxaColumnWidth(0), dmOrientFirst(0), fLayout(0),
     reserved4(0)
 {
-    memset(rgdxaColumnWidthSpacing, 0, sizeof(rgdxaColumnWidthSpacing));
 }
 
 bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength)

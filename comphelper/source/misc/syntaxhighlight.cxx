@@ -588,10 +588,10 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
     return true;
 }
 
-SyntaxHighlighter::Tokenizer::Tokenizer( HighlighterLanguage aLang ): aLanguage(aLang)
+SyntaxHighlighter::Tokenizer::Tokenizer(HighlighterLanguage aLang)
+    : aCharTypeTab{}
+    , aLanguage(aLang)
 {
-    memset( aCharTypeTab, 0, sizeof( aCharTypeTab ) );
-
     // Fill character table
     sal_uInt16 i;
 

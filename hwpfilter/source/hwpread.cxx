@@ -743,9 +743,9 @@ bool PageNumCtrl::Read(HWPFile & hwpf)
 // mail merge(22)
 MailMerge::MailMerge()
     : HBox(CH_MAIL_MERGE)
+    , field_name{}
     , dummy(0)
 {
-    memset(field_name, 0, sizeof(field_name));
 }
 
 bool MailMerge::Read(HWPFile & hwpf)
@@ -820,11 +820,11 @@ bool TocMark::Read(HWPFile & hwpf)
 // index mark(26)
 IndexMark::IndexMark()
     : HBox(CH_INDEX_MARK)
+    , keyword1{}
+    , keyword2{}
     , pgno(0)
     , dummy(0)
 {
-    memset(keyword1, 0, sizeof(keyword1));
-    memset(keyword2, 0, sizeof(keyword2));
 }
 
 bool IndexMark::Read(HWPFile & hwpf)
