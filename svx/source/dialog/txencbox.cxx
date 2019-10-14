@@ -26,7 +26,6 @@
 #if HAVE_FEATURE_DBCONNECTIVITY
 #include <svx/dbcharsethelper.hxx>
 #endif
-#include <vcl/builderfactory.hxx>
 #include <unotools/syslocale.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -36,93 +35,6 @@
 #include <sal/log.hxx>
 #include <osl/nlsupport.h>
 #include <txenctab.hrc>
-
-SvxTextEncodingBox::SvxTextEncodingBox( vcl::Window* pParent, WinBits nBits )
-    : ListBox( pParent, nBits )
-{
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxTextEncodingBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
-                                 decltype(makeSvxTextEncodingBox)>);
-    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
-    bool bDropdown = BuilderUtils::extractDropdown(rMap);
-    if (bDropdown)
-        nWinBits |= WB_DROPDOWN;
-    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinBits |= WB_BORDER;
-    VclPtrInstance<SvxTextEncodingBox> pListBox(pParent, nWinBits);
-    if (bDropdown)
-        pListBox->EnableAutoSize(true);
-    rRet = pListBox;
-}
-
-SvxTextEncodingBox::~SvxTextEncodingBox()
-{
-    disposeOnce();
-}
-
-sal_Int32 SvxTextEncodingBox::EncodingToPos_Impl( rtl_TextEncoding nEnc ) const
-{
-    sal_Int32 nCount = GetEntryCount();
-    for ( sal_Int32 i=0; i<nCount; i++ )
-    {
-        if ( nEnc == rtl_TextEncoding( reinterpret_cast<sal_uIntPtr>(GetEntryData(i)) ) )
-            return i;
-    }
-    return LISTBOX_ENTRY_NOTFOUND;
-}
-
-
-void SvxTextEncodingBox::FillFromTextEncodingTable(
-        bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
-        sal_uInt32 nButIncludeInfoFlags )
-{
-    rtl_TextEncodingInfo aInfo;
-    aInfo.StructSize = sizeof(rtl_TextEncodingInfo);
-    const sal_uInt32 nCount = SAL_N_ELEMENTS(RID_SVXSTR_TEXTENCODING_TABLE);
-    for (sal_uInt32 j = 0; j < nCount; ++j)
-    {
-        bool bInsert = true;
-        rtl_TextEncoding nEnc = RID_SVXSTR_TEXTENCODING_TABLE[j].second;
-        if ( nExcludeInfoFlags )
-        {
-            if ( !rtl_getTextEncodingInfo( nEnc, &aInfo ) )
-                bInsert = false;
-            else
-            {
-                if ( (aInfo.Flags & nExcludeInfoFlags) == 0 )
-                {
-                    if ( (nExcludeInfoFlags & RTL_TEXTENCODING_INFO_UNICODE) &&
-                            ((nEnc == RTL_TEXTENCODING_UCS2) ||
-                            nEnc == RTL_TEXTENCODING_UCS4) )
-                        bInsert = false;    // InfoFlags don't work for Unicode :-(
-                }
-                else if ( (aInfo.Flags & nButIncludeInfoFlags) == 0 )
-                    bInsert = false;
-            }
-        }
-        if ( bInsert )
-        {
-            if ( bExcludeImportSubsets )
-            {
-                switch ( nEnc )
-                {
-                    // subsets of RTL_TEXTENCODING_GB_18030
-                    case RTL_TEXTENCODING_GB_2312 :
-                    case RTL_TEXTENCODING_GBK :
-                    case RTL_TEXTENCODING_MS_936 :
-                        bInsert = false;
-                    break;
-                }
-            }
-            if ( bInsert )
-                InsertTextEncoding(nEnc, SvxResId(RID_SVXSTR_TEXTENCODING_TABLE[j].first));
-        }
-    }
-}
 
 namespace
 {
@@ -202,41 +114,6 @@ void TextEncodingTreeView::FillFromDbTextEncodingMap(
     for (auto nEnc : aEncs)
         InsertTextEncoding(nEnc);
     m_xControl->thaw();
-}
-
-void SvxTextEncodingBox::FillWithMimeAndSelectBest()
-{
-    FillFromTextEncodingTable( false, 0xffffffff, RTL_TEXTENCODING_INFO_MIME );
-    rtl_TextEncoding nEnc = SvtSysLocale::GetBestMimeEncoding();
-    SelectTextEncoding( nEnc );
-}
-
-
-void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
-            const OUString& rEntry )
-{
-    sal_Int32 nAt = InsertEntry( rEntry );
-    SetEntryData( nAt, reinterpret_cast<void*>(nEnc) );
-}
-
-
-rtl_TextEncoding SvxTextEncodingBox::GetSelectTextEncoding() const
-{
-    sal_Int32 nPos = GetSelectedEntryPos();
-
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        return rtl_TextEncoding( reinterpret_cast<sal_uIntPtr>(GetEntryData(nPos)) );
-    else
-        return RTL_TEXTENCODING_DONTKNOW;
-}
-
-
-void SvxTextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc )
-{
-    sal_Int32 nAt = EncodingToPos_Impl( nEnc );
-
-    if ( nAt != LISTBOX_ENTRY_NOTFOUND )
-        SelectEntryPos( nAt );
 }
 
 TextEncodingBox::TextEncodingBox(std::unique_ptr<weld::ComboBox> pControl)
