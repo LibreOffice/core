@@ -420,9 +420,7 @@ OUString ScChartListenerCollection::getUniqueName(const OUString& rPrefix) const
 {
     for (sal_Int32 nNum = 1; nNum < 10000; ++nNum) // arbitrary limit to prevent infinite loop.
     {
-        OUStringBuffer aBuf(rPrefix);
-        aBuf.append(nNum);
-        OUString aTestName = aBuf.makeStringAndClear();
+        OUString aTestName = rPrefix + OUString::number(nNum);
         if (m_Listeners.find(aTestName) == m_Listeners.end())
             return aTestName;
     }

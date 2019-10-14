@@ -95,8 +95,8 @@ static OUString tempFileHelper(OUString const & fname)
     }
     else
     {
-        OStringBuffer aStr("invalid filename: ");
-        aStr.append(OUStringToOString(fname, RTL_TEXTENCODING_UTF8));
+        OString aStr = "invalid filename: " +
+            OUStringToOString(fname, RTL_TEXTENCODING_UTF8);
         fprintf(stderr, "%s\n", aStr.getStr());
     }
     return aTmpFile;
@@ -134,8 +134,8 @@ int main ( int argc, char ** argv)
             if( !pDataBase->WriteSfx( aOutStm ) )
             {
                 nExit = -1;
-                OStringBuffer aStr("cannot write slotmap file: ");
-                aStr.append(OUStringToOString(aCommand.aSlotMapFile, RTL_TEXTENCODING_UTF8));
+                OString aStr = "cannot write slotmap file: " +
+                    OUStringToOString(aCommand.aSlotMapFile, RTL_TEXTENCODING_UTF8);
                 fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
@@ -181,12 +181,10 @@ int main ( int argc, char ** argv)
         if( bErr )
         {
             nExit = -1;
-            OStringBuffer aStr("cannot move file from: ");
-            aStr.append(OUStringToOString(aErrFile2,
-                RTL_TEXTENCODING_UTF8));
-            aStr.append("\n              to file: ");
-            aStr.append(OUStringToOString(aErrFile,
-                RTL_TEXTENCODING_UTF8));
+            OString aStr = "cannot move file from: " +
+                OUStringToOString(aErrFile2, RTL_TEXTENCODING_UTF8) +
+                "\n              to file: " +
+                OUStringToOString(aErrFile, RTL_TEXTENCODING_UTF8);
             fprintf( stderr, "%s\n", aStr.getStr() );
         }
         else

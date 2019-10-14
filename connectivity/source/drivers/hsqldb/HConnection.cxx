@@ -316,13 +316,11 @@ namespace connectivity { namespace hsqldb
                 xProvider.set( GraphicProvider::create(m_xContext) );
 
             // assemble the image URL
-            OUStringBuffer aImageURL;
+            OUString sImageURL =
             // load the graphic from the global graphic repository
-            aImageURL.append( "private:graphicrepository/" );
+                "private:graphicrepository/"
             // the relative path within the images.zip
-            aImageURL.append( LINKED_TEXT_TABLE_IMAGE_RESOURCE );
-            // the name of the graphic to use
-            OUString sImageURL( aImageURL.makeStringAndClear() );
+                LINKED_TEXT_TABLE_IMAGE_RESOURCE;
 
             // ask the provider to obtain a graphic
             Sequence< PropertyValue > aMediaProperties( 1 );

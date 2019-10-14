@@ -108,11 +108,7 @@ namespace logging
                 ::sal::static_int_cast< sal_Int16 >( aDateTime.NanoSeconds / 10000000 ) );
             OUString sTime = OUString::createFromAscii( buffer );
 
-            OUStringBuffer aBuff;
-            aBuff.append( sDate );
-            aBuff.append( '.' );
-            aBuff.append( sTime );
-            OUString sDateTime = aBuff.makeStringAndClear();
+            OUString sDateTime = sDate + "." + sTime;
 
             oslProcessIdentifier aProcessId = 0;
             oslProcessInfo info;

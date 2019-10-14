@@ -794,11 +794,11 @@ void PDFWriterImpl::PDFPage::endStream()
     // emit stream length object
     if( ! m_pWriter->updateObject( m_nStreamLengthObject ) )
         return;
-    OStringBuffer aLine;
-    aLine.append( m_nStreamLengthObject );
-    aLine.append( " 0 obj\n" );
-    aLine.append( static_cast<sal_Int64>(nEndStreamPos-m_nBeginStreamPos) );
-    aLine.append( "\nendobj\n\n" );
+    OString aLine =
+        OString::number( m_nStreamLengthObject ) +
+        " 0 obj\n"  +
+        OString::number( static_cast<sal_Int64>(nEndStreamPos-m_nBeginStreamPos) ) +
+        "\nendobj\n\n";
     m_pWriter->writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
@@ -2044,9 +2044,9 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
                 SAL_INFO("vcl.pdfwriter", "unresolved link id " << nLink << " for Link structure");
                 if (g_bDebugDisableCompression)
                 {
-                    OStringBuffer aLine( "unresolved link id " );
-                    aLine.append( nLink );
-                    aLine.append( " for Link structure" );
+                    OString aLine = "unresolved link id " +
+                            OString::number( nLink ) +
+                            " for Link structure";
                     emitComment( aLine.getStr() );
                 }
             }

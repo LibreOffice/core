@@ -1,0 +1,75 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
+
+// ---------------------------------------------------------------
+// replaceing OUStringBuffer.append sequences to OUString+
+namespace test1
+{
+void f1()
+{
+    // expected-error@+1 {{convert this append sequence into a *String + sequence [loplugin:bufferadd]}}
+    OUStringBuffer v;
+    v.append("xxx");
+    v.append("xxx");
+}
+void f2()
+{
+    // expected-error@+1 {{convert this append sequence into a *String + sequence [loplugin:bufferadd]}}
+    OUStringBuffer v;
+    v.append("xxx").append("aaaa");
+}
+}
+
+namespace test2
+{
+void f2()
+{
+    // no warning expected
+    OUStringBuffer v;
+    v.append("xxx");
+    if (true)
+        v.append("yyyy");
+}
+void appendTo(OUStringBuffer&);
+void f3()
+{
+    // no warning expected
+    OUStringBuffer v;
+    appendTo(v);
+    v.append("xxx");
+}
+void f4()
+{
+    // no warning expected
+    OUStringBuffer v;
+    v.append("xxx");
+    v.setLength(0);
+}
+void f5()
+{
+    // no warning expected
+    OUStringBuffer v;
+    v.append("xxx");
+    v[1] = 'x';
+}
+void f6()
+{
+    // no warning expected
+    OUStringBuffer noel1("xxx");
+    while (true)
+        noel1.append("ffff").append("aaa");
+}
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

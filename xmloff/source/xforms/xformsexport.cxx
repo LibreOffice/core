@@ -269,11 +269,8 @@ void exportXFormsBinding( SvXMLExport& rExport,
         if( sName.isEmpty() )
         {
             // if we don't have a name yet, generate one on the fly
-            OUStringBuffer aBuffer;
-            aBuffer.append( "bind_" );
             sal_Int64 nId = reinterpret_cast<sal_uInt64>( xBinding.get() );
-            aBuffer.append( nId , 16 );
-            sName = aBuffer.makeStringAndClear();
+            sName = "bind_" + OUString::number( nId , 16 );
             xBinding->setPropertyValue( "BindingID", makeAny(sName));
         }
     }

@@ -1134,9 +1134,7 @@ OUString SAL_CALL ThumbnailViewItemAcc::getAccessibleName()
 
         if( aRet.isEmpty() )
         {
-            OUStringBuffer aBuffer("Item ");
-            aBuffer.append(static_cast<sal_Int32>(mpParent->mnId));
-            aRet = aBuffer.makeStringAndClear();
+            aRet = "Item " + OUString::number(static_cast<sal_Int32>(mpParent->mnId));
         }
     }
 

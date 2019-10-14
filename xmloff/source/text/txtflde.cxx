@@ -3446,10 +3446,7 @@ OUString XMLTextFieldExport::MakeFootnoteRefName(
     sal_Int16 nSeqNo)
 {
     // generate foot-/endnote ID
-    OUStringBuffer aBuf;
-    aBuf.append("ftn");
-    aBuf.append(static_cast<sal_Int32>(nSeqNo));
-    return aBuf.makeStringAndClear();
+    return "ftn" + OUString::number(static_cast<sal_Int32>(nSeqNo));
 }
 
 OUString XMLTextFieldExport::MakeSequenceRefName(
@@ -3457,11 +3454,7 @@ OUString XMLTextFieldExport::MakeSequenceRefName(
     const OUString& rSeqName)
 {
     // generate foot-/endnote ID
-    OUStringBuffer aBuf;
-    aBuf.append("ref");
-    aBuf.append(rSeqName);
-    aBuf.append(static_cast<sal_Int32>(nSeqNo));
-    return aBuf.makeStringAndClear();
+    return "ref" +rSeqName + OUString::number(static_cast<sal_Int32>(nSeqNo));
 }
 
 

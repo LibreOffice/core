@@ -93,16 +93,14 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         return "void";
 
     OUStringBuffer buf( 64 );
-    buf.append( '(' );
-    buf.append( pTypeRef->pTypeName );
-    buf.append( ')' );
+    buf.append( "(" + OUString::unacquired(&pTypeRef->pTypeName) + ")" );
 
     switch (pTypeRef->eTypeClass)
     {
     case typelib_TypeClass_INTERFACE:
     {
-        buf.append( "0x" );
-        buf.append( reinterpret_cast< sal_IntPtr >(*static_cast<void * const *>(pVal)), 16 );
+        buf.append( "0x" +
+            OUString::number( reinterpret_cast< sal_IntPtr >(*static_cast<void * const *>(pVal)), 16 ));
         if( VAL2STR_MODE_DEEP == mode )
         {
             buf.append( "{" );        Reference< XInterface > r = *static_cast<Reference< XInterface > const *>(pVal);
@@ -164,8 +162,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
 
         for ( sal_Int32 nPos = 0; nPos < nDescr; ++nPos )
         {
-            buf.append( ppMemberNames[nPos] );
-            buf.append( " = " );
+            buf.append( OUString::unacquired(&ppMemberNames[nPos]) + " = " );
             typelib_TypeDescription * pMemberType = nullptr;
             TYPELIB_DANGER_GET( &pMemberType, ppTypeRefs[nPos] );
             buf.append( val2str( static_cast<char const *>(pVal) + pMemberOffsets[nPos], pMemberType->pWeakRef, mode ) );
@@ -222,9 +219,9 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         buf.append( (*static_cast<typelib_TypeDescriptionReference * const *>(pVal))->pTypeName );
         break;
     case typelib_TypeClass_STRING:
-        buf.append( '\"' );
-        buf.append( *static_cast<rtl_uString * const *>(pVal) );
-        buf.append( '\"' );
+        buf.append( "\"" +
+            OUString::unacquired(&*static_cast<rtl_uString * const *>(pVal)) +
+            "\"" );
         break;
     case typelib_TypeClass_ENUM:
     {
@@ -264,24 +261,24 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         buf.append( *static_cast<double const *>(pVal) );
         break;
     case typelib_TypeClass_BYTE:
-        buf.append( "0x" );
-        buf.append( static_cast<sal_Int32>(*static_cast<sal_Int8 const *>(pVal)), 16 );
+        buf.append( "0x" +
+            OUString::number( static_cast<sal_Int32>(*static_cast<sal_Int8 const *>(pVal)), 16 ));
         break;
     case typelib_TypeClass_SHORT:
-        buf.append( "0x" );
-        buf.append( static_cast<sal_Int32>(*static_cast<sal_Int16 const *>(pVal)), 16 );
+        buf.append( "0x" +
+            OUString::number( static_cast<sal_Int32>(*static_cast<sal_Int16 const *>(pVal)), 16 ));
         break;
     case typelib_TypeClass_UNSIGNED_SHORT:
-        buf.append( "0x" );
-        buf.append( static_cast<sal_Int32>(*static_cast<sal_uInt16 const *>(pVal)), 16 );
+        buf.append( "0x" +
+            OUString::number( static_cast<sal_Int32>(*static_cast<sal_uInt16 const *>(pVal)), 16 ));
         break;
     case typelib_TypeClass_LONG:
-        buf.append( "0x" );
-        buf.append( *static_cast<sal_Int32 const *>(pVal), 16 );
+        buf.append( "0x" +
+            OUString::number( *static_cast<sal_Int32 const *>(pVal), 16 ));
         break;
     case typelib_TypeClass_UNSIGNED_LONG:
-        buf.append( "0x" );
-        buf.append( static_cast<sal_Int64>(*static_cast<sal_uInt32 const *>(pVal)), 16 );
+        buf.append( "0x" +
+            OUString::number( static_cast<sal_Int64>(*static_cast<sal_uInt32 const *>(pVal)), 16 ));
         break;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
@@ -464,15 +461,14 @@ PyObject *PyUNO_str( PyObject * self )
 {
     PyUNO *me = reinterpret_cast<PyUNO *>(self);
 
-    OStringBuffer buf;
+    OString buf;
 
     {
         PyThreadDetach antiguard;
-        buf.append( "pyuno object " );
 
         OUString s = val2str( me->members->wrappedObject.getValue(),
                               me->members->wrappedObject.getValueType().getTypeLibType() );
-        buf.append( OUStringToOString(s,RTL_TEXTENCODING_ASCII_US) );
+        buf = "pyuno object " + OUStringToOString(s,RTL_TEXTENCODING_ASCII_US);
     }
 
     return PyStr_FromString( buf.getStr() );

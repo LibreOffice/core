@@ -5127,10 +5127,10 @@ static void force_c_locale()
 
 static void aBasicErrorFunc(const OUString& rError, const OUString& rAction)
 {
-    OStringBuffer aBuffer("Unexpected dialog: ");
-    aBuffer.append(OUStringToOString(rAction, RTL_TEXTENCODING_ASCII_US));
-    aBuffer.append(" Error: ");
-    aBuffer.append(OUStringToOString(rError, RTL_TEXTENCODING_ASCII_US));
+    OString aBuffer = "Unexpected dialog: " +
+        OUStringToOString(rAction, RTL_TEXTENCODING_ASCII_US) +
+        " Error: " +
+        OUStringToOString(rError, RTL_TEXTENCODING_ASCII_US);
 
     fprintf(stderr, "Unexpected basic error dialog '%s'\n", aBuffer.getStr());
 }

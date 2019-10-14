@@ -1230,8 +1230,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                         continue;
                }
 
-                OStringBuffer aDbg("Unknown item detected: ");
-                aDbg.append(static_cast<sal_Int32>(nId));
+                OString aDbg = "Unknown item detected: " + OString::number(static_cast<sal_Int32>(nId));
                 DBG_ASSERT(nArg<nFormalArgs, aDbg.getStr());
             }
         }

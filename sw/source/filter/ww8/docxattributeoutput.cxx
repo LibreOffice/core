@@ -5422,11 +5422,10 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
         m_pSerializer->startElementNS(XML_w, XML_object);
     }
 
-    OStringBuffer sShapeStyle, sShapeId;
-    sShapeStyle.append( "width:" ).append( double( rSize.Width() ) / 20 )
-                        .append( "pt;height:" ).append( double( rSize.Height() ) / 20 )
-                        .append( "pt" ); //from VMLExport::AddRectangleDimensions(), it does: value/20
-    sShapeId.append( "ole_" ).append( sId );
+    OString sShapeStyle = "width:" + OString::number( double( rSize.Width() ) / 20 ) +
+                        "pt;height:" + OString::number( double( rSize.Height() ) / 20 ) +
+                        "pt"; //from VMLExport::AddRectangleDimensions(), it does: value/20
+    OString sShapeId = "ole_" + sId;
 
     // shape definition
     m_pSerializer->startElementNS( XML_v, XML_shape,

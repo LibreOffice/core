@@ -1290,10 +1290,8 @@ Reference<XInterface > ORegistryServiceManager::loadWithImplementationName(
 Sequence<OUString> ORegistryServiceManager::getFromServiceName(
     const OUString& serviceName ) const
 {
-    OUStringBuffer buf;
-    buf.append( "/SERVICES/" );
-    buf.append( serviceName );
-    return retrieveAsciiValueList( m_xRegistry, buf.makeStringAndClear() );
+    OUString buf = "/SERVICES/" + serviceName;
+    return retrieveAsciiValueList( m_xRegistry, buf );
 }
 
 /**

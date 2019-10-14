@@ -63,24 +63,20 @@ void PriorityFilterTest::testPriority()
             OUString aTypeName = xDetection->queryTypeByURL(aURL);
 
             OUString aFormatCorrect = OUString::createFromAscii(aToCheck[i].pFormat);
-            OUStringBuffer aMsg("Mis-matching formats ");
-            aMsg.append("'");
-            aMsg.append(aTypeName);
-            aMsg.append("' should be '");
-            aMsg.append(aFormatCorrect);
-            aMsg.append("'");
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(OUStringToOString(aMsg.makeStringAndClear(),
+            OUString aMsg = "Mis-matching formats "
+                "'" +
+                aTypeName +
+                "' should be '" +
+                aFormatCorrect +
+                "'";
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(OUStringToOString(aMsg,
                                                           RTL_TEXTENCODING_UTF8).getStr(),
                                    aFormatCorrect, aTypeName);
         }
         catch (const uno::Exception &e)
         {
-            OUStringBuffer aMsg("Exception querying for type: ");
-            aMsg.append("'");
-            aMsg.append(e.Message);
-            aMsg.append("'");
-            CPPUNIT_FAIL(OUStringToOString(aMsg.makeStringAndClear(),
-                                                RTL_TEXTENCODING_UTF8).getStr());
+            OUString aMsg = "Exception querying for type: '" + e.Message + "'";
+            CPPUNIT_FAIL(OUStringToOString(aMsg, RTL_TEXTENCODING_UTF8).getStr());
         }
     }
 }

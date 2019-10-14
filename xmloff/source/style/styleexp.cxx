@@ -220,11 +220,9 @@ bool XMLStyleExport::exportStyle(
             aAny >>= nOutlineLevel;
             if( nOutlineLevel > 0 )
             {
-                OUStringBuffer sTmp;
-                sTmp.append(nOutlineLevel);
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_DEFAULT_OUTLINE_LEVEL,
-                                          sTmp.makeStringAndClear() );
+                                          OUString::number(nOutlineLevel) );
             }
             else
             {

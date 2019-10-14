@@ -178,14 +178,12 @@ bool createContentProviderData(
     ContentProviderData & rInfo)
 {
     // Obtain service name.
-    OUStringBuffer aKeyBuffer (rProvider);
-    aKeyBuffer.append( "/ServiceName" );
 
     OUString aValue;
     try
     {
         if ( !( rxHierNameAccess->getByHierarchicalName(
-                    aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
+                    rProvider +  "/ServiceName" ) >>= aValue ) )
         {
             OSL_FAIL( "UniversalContentBroker::getContentProviderData - "
                         "Error getting item value!" );
@@ -199,11 +197,9 @@ bool createContentProviderData(
     rInfo.ServiceName = aValue;
 
     // Obtain URL Template.
-    aKeyBuffer.append(rProvider);
-    aKeyBuffer.append( "/URLTemplate" );
 
     if ( !( rxHierNameAccess->getByHierarchicalName(
-                aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
+                rProvider + "/URLTemplate" ) >>= aValue ) )
     {
         OSL_FAIL( "UniversalContentBroker::getContentProviderData - "
                     "Error getting item value!" );
@@ -212,11 +208,9 @@ bool createContentProviderData(
     rInfo.URLTemplate = aValue;
 
     // Obtain Arguments.
-    aKeyBuffer.append(rProvider);
-    aKeyBuffer.append( "/Arguments" );
 
     if ( !( rxHierNameAccess->getByHierarchicalName(
-                aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
+                rProvider + "/Arguments" ) >>= aValue ) )
     {
         OSL_FAIL( "UniversalContentBroker::getContentProviderData - "
                     "Error getting item value!" );

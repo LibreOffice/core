@@ -279,12 +279,11 @@ bool SfxNotebookBar::IsActive()
         return false;
 
 
-    OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarMode/Applications/");
-    aPath.append( appName );
+    OUString aPath = "org.openoffice.Office.UI.ToolbarMode/Applications/" + appName;
 
     const utl::OConfigurationTreeRoot aAppNode(
                                         ::comphelper::getProcessComponentContext(),
-                                        aPath.makeStringAndClear(),
+                                        aPath,
                                         false);
     if ( !aAppNode.isValid() )
         return false;
@@ -378,8 +377,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         {
             RemoveListeners(pSysWindow);
 
-            OUStringBuffer aBuf(rUIFile);
-            aBuf.append( sFile );
+            OUString aBuf = rUIFile + sFile;
 
             //Addons For Notebookbar
             std::vector<Image> aImageValues;
@@ -390,7 +388,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             aNotebookBarAddonsItem.aImageValues = aImageValues;
 
             // setup if necessary
-            pSysWindow->SetNotebookBar(aBuf.makeStringAndClear(), xFrame, aNotebookBarAddonsItem , bReloadNotebookbar);
+            pSysWindow->SetNotebookBar(aBuf, xFrame, aNotebookBarAddonsItem , bReloadNotebookbar);
             pNotebookBar = pSysWindow->GetNotebookBar();
             pNotebookBar->Show();
             pNotebookBar->GetParent()->Resize();

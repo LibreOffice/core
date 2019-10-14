@@ -1086,11 +1086,9 @@ void XMLTextParagraphExport::exportListChange(
                     }
                     else if (bRestartNumberingAtContinuedList)
                     {
-                        OUStringBuffer aBuffer;
-                        aBuffer.append( nRestartValueForContinuedList );
                         GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                                   XML_START_VALUE,
-                                                  aBuffer.makeStringAndClear() );
+                                                  OUString::number(nRestartValueForContinuedList) );
                         bRestartNumberingAtContinuedList = false;
                     }
                 }
@@ -1972,11 +1970,9 @@ void XMLTextParagraphExport::exportParagraph(
 
                 if( 0 < nOutlineLevel )
                 {
-                    OUStringBuffer sTmp;
-                    sTmp.append( sal_Int32( nOutlineLevel) );
                     GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                               XML_OUTLINE_LEVEL,
-                                  sTmp.makeStringAndClear() );
+                                  OUString::number( sal_Int32( nOutlineLevel) ) );
 
                     if( rPropSetHelper.hasProperty( NUMBERING_IS_NUMBER ) )
                     {
@@ -2051,15 +2047,10 @@ void XMLTextParagraphExport::exportParagraph(
                                 xPropSet->getPropertyValue("NumberingStartValue")
                                     >>= nStartValue;
 
-                                OUStringBuffer sTmpStartValue;
-
-                                sTmpStartValue.append(nStartValue);
-
                                 GetExport().
                                     AddAttribute(XML_NAMESPACE_TEXT,
                                                  XML_START_VALUE,
-                                                 sTmpStartValue.
-                                                 makeStringAndClear());
+                                                 OUString::number(nStartValue));
                             }
                         }
                     }
@@ -3543,10 +3534,8 @@ void XMLTextParagraphExport::exportCharacterData(const OUString& rText,
 
             if( nSpaceChars > 1 )
             {
-                OUStringBuffer sTmp;
-                sTmp.append( nSpaceChars );
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_C,
-                              sTmp.makeStringAndClear() );
+                              OUString::number(nSpaceChars) );
             }
 
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
@@ -3606,10 +3595,8 @@ void XMLTextParagraphExport::exportCharacterData(const OUString& rText,
     {
         if( nSpaceChars > 1 )
         {
-            OUStringBuffer sTmp;
-            sTmp.append( nSpaceChars );
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_C,
-                          sTmp.makeStringAndClear() );
+                          OUString::number(nSpaceChars) );
         }
 
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, XML_S,
