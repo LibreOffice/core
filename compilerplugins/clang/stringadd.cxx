@@ -193,7 +193,7 @@ bool StringAdd::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* operatorCall
         && !tc.Class("OString").Namespace("rtl").GlobalNamespace())
         return true;
 
-    auto check = [operatorCall, this, &tc](const MaterializeTemporaryExpr* matTempExpr) {
+    auto check = [/* operatorCall, */ this, &tc](const MaterializeTemporaryExpr* matTempExpr) {
         auto tc3 = loplugin::TypeCheck(matTempExpr->getType());
         if (!tc3.Class("OUString").Namespace("rtl").GlobalNamespace()
             && !tc3.Class("OString").Namespace("rtl").GlobalNamespace())
