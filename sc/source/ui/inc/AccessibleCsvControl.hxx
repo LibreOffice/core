@@ -21,13 +21,16 @@
 #define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLECSVCONTROL_HXX
 
 #include <memory>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <tools/gen.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
 #include <comphelper/uno3.hxx>
 #include <vcl/vclptr.hxx>
@@ -38,33 +41,19 @@ class ScCsvControl;
 namespace utl { class AccessibleStateSetHelper; }
 
 /** Accessible base class used for CSV controls. */
-class ScAccessibleCsvControl : public ScAccessibleContextBase
+class ScAccessibleCsvControl : public comphelper::OAccessibleComponentHelper
 {
 private:
-    VclPtr<ScCsvControl>               mpControl;          /// Pointer to the VCL control.
+    ScCsvControl*               mpControl;          /// Pointer to the VCL control.
 
 public:
-    explicit                    ScAccessibleCsvControl(
-                                    const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-                                    ScCsvControl& rControl,
-                                    sal_uInt16 nRole );
-    virtual                     ~ScAccessibleCsvControl() override;
+    explicit ScAccessibleCsvControl(ScCsvControl& rControl);
+    virtual ~ScAccessibleCsvControl() override;
 
-    using ScAccessibleContextBase::disposing;
-    virtual void SAL_CALL       disposing() override;
+    virtual void SAL_CALL disposing() override;
 
-    /** Returns true, if the control is visible. */
-    virtual bool isVisible() override;
-    /** Returns true, if the control is showing. */
-    virtual bool isShowing() override;
-
-    // XAccessibleComponent ---------------------------------------------------
-
-    /** Returns the child at the specified point (cell returns NULL). */
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
-
-    /** Sets the focus to this control. */
-    virtual void SAL_CALL grabFocus() override;
+    virtual void SAL_CALL grabFocus(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
 
     // events -----------------------------------------------------------------
 public:
@@ -85,38 +74,19 @@ public:
 
     // helpers ----------------------------------------------------------------
 protected:
-    /** Returns this object's current bounding box relative to the desktop. */
-    virtual tools::Rectangle GetBoundingBoxOnScreen() const override;
-    /** Returns this object's current bounding box relative to the parent object. */
-    virtual tools::Rectangle GetBoundingBox() const override;
-
-    /** Returns whether the object is alive. Must be called with locked mutex. */
-    bool implIsAlive() const { return !rBHelper.bDisposed && !rBHelper.bInDispose && mpControl; }
-    /** @throws css::lang::DisposedException if the object is disposed/disposing or any pointer
-        is missing. Should be used with locked mutex! */
-    void ensureAlive() const;
+    virtual css::awt::Rectangle implGetBounds() override;
 
     /** Returns the VCL control. Assumes a living object. */
     ScCsvControl& implGetControl() const;
 
-    /** Returns the first child of rxParentObj, which has the role nRole.
-
-        @throws css::uno::RuntimeException
-    */
-    static css::uno::Reference< css::accessibility::XAccessible > implGetChildByRole( const css::uno::Reference< css::accessibility::XAccessible >& rxParentObj, sal_uInt16 nRole );
     /** Creates a StateSetHelper and fills it with DEFUNC, OPAQUE, ENABLED, SHOWING and VISIBLE. */
     ::utl::AccessibleStateSetHelper* implCreateStateSet();
-
-    /** Disposes the object. This is a helper called from destructors only. */
-    void implDispose();
-
-    /** Converts the control-relative position to an absolute screen position. */
-    Point implGetAbsPos( const Point& rPos ) const;
 };
 
 class ScCsvRuler;
 
-typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleText > ScAccessibleCsvRulerImpl;
+typedef ::cppu::ImplHelper2<css::accessibility::XAccessible,
+                            css::accessibility::XAccessibleText> ScAccessibleCsvRulerImpl;
 
 /** Accessible class representing the CSV ruler control. */
 class ScAccessibleCsvRuler : public ScAccessibleCsvControl, public ScAccessibleCsvRulerImpl
@@ -129,6 +99,12 @@ public:
     virtual                     ~ScAccessibleCsvRuler() override;
 
     // XAccessibleComponent -----------------------------------------------------
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override { return this; }
+
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
+
+    virtual OUString SAL_CALL getAccessibleDescription(  ) override;
+    virtual OUString SAL_CALL getAccessibleName(  ) override;
 
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
 
@@ -141,6 +117,8 @@ public:
 
     /** Throws an exception (the ruler does not have children). */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 nIndex ) override;
+
+    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override { return css::accessibility::AccessibleRole::TEXT; }
 
     /** Returns the relation to the grid control. */
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet() override;
@@ -199,24 +177,11 @@ public:
 
     // XInterface -------------------------------------------------------------
 
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
-
-    virtual void SAL_CALL acquire() throw() override;
-
-    virtual void SAL_CALL release() throw() override;
-
-    // XServiceInfo -----------------------------------------------------------
-
-    /** Returns an identifier for the implementation of this object. */
-    virtual OUString SAL_CALL getImplementationName() override;
+    DECLARE_XINTERFACE()
 
     // XTypeProvider ----------------------------------------------------------
 
-    /** Returns a sequence with all supported interface types. */
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-
-    /** Returns an implementation ID. */
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    DECLARE_XTYPEPROVIDER()
 
     // events -----------------------------------------------------------------
 public:
@@ -225,10 +190,6 @@ public:
 
     // helpers ----------------------------------------------------------------
 private:
-    /** Returns this object's name. */
-    virtual OUString createAccessibleName() override;
-    /** Returns this object's description. */
-    virtual OUString createAccessibleDescription() override;
 
     /** @throws css::lang::IndexOutOfBoundsException if the specified character position is invalid (outside 0..len-1). */
     void ensureValidIndex( sal_Int32 nIndex ) const;
@@ -259,8 +220,10 @@ private:
 };
 
 class ScCsvGrid;
+class ScAccessibleCsvCell;
 
-typedef ::cppu::ImplHelper2<
+typedef ::cppu::ImplHelper3<
+        css::accessibility::XAccessible,
         css::accessibility::XAccessibleTable,
         css::accessibility::XAccessibleSelection >
     ScAccessibleCsvGridImpl;
@@ -269,7 +232,7 @@ typedef ::cppu::ImplHelper2<
 class ScAccessibleCsvGrid : public ScAccessibleCsvControl, public ScAccessibleCsvGridImpl
 {
 protected:
-    typedef std::map< sal_Int32, rtl::Reference<ScAccessibleCsvControl> > XAccessibleSet;
+    typedef std::map< sal_Int32, rtl::Reference<ScAccessibleCsvCell> > XAccessibleSet;
 
 private:
     XAccessibleSet maAccessibleChildren;
@@ -277,17 +240,24 @@ private:
 public:
     explicit                    ScAccessibleCsvGrid( ScCsvGrid& rGrid );
     virtual                     ~ScAccessibleCsvGrid() override;
-    using ScAccessibleContextBase::disposing;
     virtual void SAL_CALL       disposing() override;
 
     // XAccessibleComponent ---------------------------------------------------
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override { return this; }
+
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
 
     /** Returns the cell at the specified point. */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 
+    virtual OUString SAL_CALL getAccessibleDescription(  ) override;
+    virtual OUString SAL_CALL getAccessibleName(  ) override;
+
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
 
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
+
+    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override { return css::accessibility::AccessibleRole::TABLE; }
 
     // XAccessibleContext -----------------------------------------------------
 
@@ -395,11 +365,6 @@ public:
 
     virtual void SAL_CALL release() throw() override;
 
-    // XServiceInfo -----------------------------------------------------------
-
-    /** Returns an identifier for the implementation of this object. */
-    virtual OUString SAL_CALL getImplementationName() override;
-
     // XTypeProvider ----------------------------------------------------------
 
     /** Returns a sequence with all supported interface types. */
@@ -421,10 +386,6 @@ public:
 
     // helpers ----------------------------------------------------------------
 private:
-    /** Returns this object's name. */
-    virtual OUString createAccessibleName() override;
-    /** Returns this object's description. */
-    virtual OUString createAccessibleDescription() override;
 
     /** @throws css::lang::IndexOutOfBoundsException if nIndex is not a valid child index. */
     void ensureValidIndex( sal_Int32 nIndex ) const;
@@ -460,13 +421,17 @@ private:
     /** Returns the contents of the specified cell (including header). Indexes must be valid. */
     OUString implGetCellText( sal_Int32 nRow, sal_Int32 nColumn ) const;
     /** Creates a new accessible object of the specified cell. Indexes must be valid. */
-    ScAccessibleCsvControl* implCreateCellObj( sal_Int32 nRow, sal_Int32 nColumn ) const;
+    ScAccessibleCsvCell* implCreateCellObj(sal_Int32 nRow, sal_Int32 nColumn);
 
     css::uno::Reference<css::accessibility::XAccessible> getAccessibleCell(sal_Int32 nRow, sal_Int32 nColumn);
 };
 
+typedef ::cppu::ImplHelper1<css::accessibility::XAccessible> ScAccessibleCsvCellImpl;
+
 /** Accessible class representing a cell of the CSV grid control. */
-class ScAccessibleCsvCell : public ScAccessibleCsvControl, public accessibility::AccessibleStaticTextBase
+class ScAccessibleCsvCell : public ScAccessibleCsvControl
+                          , public ScAccessibleCsvCellImpl
+                          , public ::accessibility::AccessibleStaticTextBase
 {
 protected:
     typedef ::std::unique_ptr< SvxEditSource >      SvxEditSourcePtr;
@@ -481,16 +446,23 @@ public:
     explicit                    ScAccessibleCsvCell(
                                     ScCsvGrid& rGrid,
                                     const OUString& rCellText,
-                                    sal_Int32 nRow, sal_Int32 nColumn );
+                                    sal_Int32 nRow, sal_Int32 nColumn);
     virtual                     ~ScAccessibleCsvCell() override;
 
-    using ScAccessibleCsvControl::disposing;
     virtual void SAL_CALL       disposing() override;
 
     // XAccessibleComponent ---------------------------------------------------
 
     /** Sets the focus to the column of this cell. */
     virtual void SAL_CALL grabFocus() override;
+
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
+
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override { return this; }
+
+    virtual OUString SAL_CALL getAccessibleDescription(  ) override;
+    virtual OUString SAL_CALL getAccessibleName(  ) override;
+    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override { return css::accessibility::AccessibleRole::TEXT; }
 
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
 
@@ -521,24 +493,7 @@ public:
 
     DECLARE_XTYPEPROVIDER()
 
-    // XServiceInfo -----------------------------------------------------------
-
-    /** Returns an identifier for the implementation of this object. */
-    virtual OUString SAL_CALL getImplementationName() override;
-
-    // helpers ----------------------------------------------------------------
-protected:
-    /** Returns this object's current bounding box relative to the desktop. */
-    virtual tools::Rectangle GetBoundingBoxOnScreen() const override;
-    /** Returns this object's current bounding box relative to the parent object. */
-    virtual tools::Rectangle GetBoundingBox() const override;
-
 private:
-    /** Returns this object's name. */
-    virtual OUString createAccessibleName() override;
-    /** Returns this object's description. */
-    virtual OUString createAccessibleDescription() override;
-
     /** Returns the VCL grid control. Assumes a living object. */
     ScCsvGrid& implGetGrid() const;
     /** Returns the pixel position of the cell (rel. to parent), regardless of visibility. */
@@ -548,7 +503,7 @@ private:
     /** Returns the pixel size of the cell, regardless of visibility. */
     Size implGetRealSize() const;
     /** Returns the bounding box of the cell relative in the table. */
-    tools::Rectangle implGetBoundingBox() const;
+    virtual css::awt::Rectangle implGetBounds() override;
 
     /** Creates the edit source the text helper needs. */
     ::std::unique_ptr< SvxEditSource > implCreateEditSource();
