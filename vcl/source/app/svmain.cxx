@@ -76,6 +76,7 @@
 #include <displayconnectiondispatch.hxx>
 
 #include <config_features.h>
+#include <config_feature_opencl.h>
 
 #include <osl/process.h>
 #include <com/sun/star/lang/XComponent.hpp>

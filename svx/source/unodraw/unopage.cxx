@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_feature_desktop.h>
 
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
