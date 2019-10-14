@@ -208,6 +208,7 @@ public:
     void testTdf122899();
     void testOOXTheme();
     void testCropToShape();
+    void testTdf127964();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -304,6 +305,7 @@ public:
     CPPUNIT_TEST(testTdf122899);
     CPPUNIT_TEST(testOOXTheme);
     CPPUNIT_TEST(testCropToShape);
+    CPPUNIT_TEST(testTdf127964);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2940,6 +2942,27 @@ void SdImportTest::testCropToShape()
     css::drawing::BitmapMode bitmapmode;
     xShapeProps->getPropertyValue("FillBitmapMode") >>= bitmapmode;
     CPPUNIT_ASSERT_EQUAL(css::drawing::BitmapMode_STRETCH, bitmapmode);
+}
+
+void SdImportTest::testTdf127964()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf127964.pptx"), PPTX);
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+    const SdrObject* pObj = pPage->GetObj(0);
+    auto& rFillStyleItem
+        = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rFillStyleItem.GetValue());
+
+    auto& rFillColorItem
+        = dynamic_cast<const XFillColorItem&>(pObj->GetMergedItem(XATTR_FILLCOLOR));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4294967295
+    // - Actual  : 5210557
+    // i.e. instead of transparent (which then got rendered as white), the shape fill color was
+    // blue.
+    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, rFillColorItem.GetColorValue());
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);

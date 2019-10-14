@@ -101,7 +101,9 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
     case PPT_TOKEN( sp ):           // Shape
         {
             std::shared_ptr<PPTShape> pShape( new PPTShape( meShapeLocation, "com.sun.star.drawing.CustomShape" ) );
-            if( rAttribs.getBool( XML_useBgFill, false ) )
+            bool bUseBgFill = rAttribs.getBool(XML_useBgFill, false);
+            pShape->setUseBgFill(bUseBgFill);
+            if (bUseBgFill)
             {
                 oox::drawingml::FillPropertiesPtr pBackgroundPropertiesPtr = mpSlidePersistPtr->getBackgroundProperties();
                 if (!pBackgroundPropertiesPtr)

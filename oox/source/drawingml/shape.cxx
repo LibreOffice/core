@@ -189,6 +189,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mnZOrderOff(pSourceShape->mnZOrderOff)
 , mnDataNodeType(pSourceShape->mnDataNodeType)
 , mfAspectRatio(pSourceShape->mfAspectRatio)
+, mbUseBgFill(pSourceShape->mbUseBgFill)
 {}
 
 Shape::~Shape()
@@ -983,7 +984,10 @@ Reference< XShape > const & Shape::createAndInsert(
             }
             if( const ShapeStyleRef* pFillRef = getShapeStyleRef( XML_fillRef ) )
             {
-                nFillPhClr = pFillRef->maPhClr.getColor( rGraphicHelper );
+                if (!mbUseBgFill)
+                {
+                    nFillPhClr = pFillRef->maPhClr.getColor(rGraphicHelper);
+                }
 
                 OUString sColorScheme = pFillRef->maPhClr.getSchemeName();
                 if( !sColorScheme.isEmpty() )
