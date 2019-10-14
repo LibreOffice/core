@@ -40,9 +40,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 
-
-static_assert((LISTBOX_APPEND == COMBOBOX_APPEND) && (LISTBOX_ENTRY_NOTFOUND == COMBOBOX_ENTRY_NOTFOUND), "If these ever dispersed we'd need a solution");
-
 OUString GetDicInfoStr( const OUString& rName, const LanguageType nLang, bool bNeg )
 {
     INetURLObject aURLObj;
@@ -104,21 +101,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxLanguageBox(VclPtr<vcl::Window> & rR
     else
         nBits |= WB_BORDER;
     VclPtrInstance<SvxLanguageBox> pLanguageBox(pParent, nBits);
-    pLanguageBox->EnableAutoSize(true);
-    rRet = pLanguageBox;
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxLanguageComboBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
-                                 decltype(makeSvxLanguageComboBox)>);
-    WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
-    bool bDropdown = BuilderUtils::extractDropdown(rMap);
-    if (bDropdown)
-        nBits |= WB_DROPDOWN;
-    else
-        nBits |= WB_BORDER;
-    VclPtrInstance<SvxLanguageComboBox> pLanguageBox(pParent, nBits);
     pLanguageBox->EnableAutoSize(true);
     rRet = pLanguageBox;
 }
@@ -734,187 +716,45 @@ SvxLanguageBox::SvxLanguageBox( vcl::Window* pParent, WinBits nBits )
     ImplLanguageBoxBaseInit();
 }
 
-SvxLanguageComboBox::SvxLanguageComboBox( vcl::Window* pParent, WinBits nBits )
-    : ComboBox( pParent, nBits )
-    , SvxLanguageBoxBase()
-    , meEditedAndValid( EditedAndValid::No )
-{
-    // display entries sorted
-    SetStyle( GetStyle() | WB_SORT );
-
-    EnableMultiSelection( false );
-
-    ImplLanguageBoxBaseInit();
-
-    SetModifyHdl( LINK( this, SvxLanguageComboBox, EditModifyHdl ) );
-}
-
 sal_Int32 SvxLanguageBox::ImplInsertImgEntry( const OUString& rEntry, sal_Int32 nPos, bool bChecked )
 {
     return InsertEntry( rEntry, (bChecked ? m_aCheckedImage : m_aNotCheckedImage), nPos );
 }
-
-sal_Int32 SvxLanguageComboBox::ImplInsertImgEntry( const OUString& rEntry, sal_Int32 nPos, bool bChecked )
-{
-    return InsertEntryWithImage( rEntry, (bChecked ? m_aCheckedImage : m_aNotCheckedImage), nPos );
-}
-
 
 void SvxLanguageBox::ImplClear()
 {
     Clear();
 }
 
-void SvxLanguageComboBox::ImplClear()
-{
-    Clear();
-}
-
-
 sal_Int32 SvxLanguageBox::ImplInsertEntry( const OUString& rEntry, sal_Int32 nPos )
 {
     return InsertEntry( rEntry, nPos);
 }
-
-sal_Int32 SvxLanguageComboBox::ImplInsertEntry( const OUString& rEntry, sal_Int32 nPos )
-{
-    return InsertEntry( rEntry, nPos);
-}
-
 
 void SvxLanguageBox::ImplSetEntryData( sal_Int32 nPos, void* pData )
 {
     SetEntryData( nPos, pData);
 }
 
-void SvxLanguageComboBox::ImplSetEntryData( sal_Int32 nPos, void* pData )
-{
-    SetEntryData( nPos, pData);
-}
-
-
 sal_Int32 SvxLanguageBox::ImplGetSelectedEntryPos() const
 {
     return GetSelectedEntryPos();
 }
-
-sal_Int32 SvxLanguageComboBox::ImplGetSelectedEntryPos() const
-{
-    return GetSelectedEntryPos();
-}
-
 
 void* SvxLanguageBox::ImplGetEntryData( sal_Int32 nPos ) const
 {
     return GetEntryData( nPos);
 }
 
-void* SvxLanguageComboBox::ImplGetEntryData( sal_Int32 nPos ) const
-{
-    return GetEntryData( nPos);
-}
-
-
 void SvxLanguageBox::ImplSelectEntryPos( sal_Int32 nPos, bool bSelect )
 {
     SelectEntryPos( nPos, bSelect);
 }
 
-void SvxLanguageComboBox::ImplSelectEntryPos( sal_Int32 nPos, bool bSelect )
-{
-    SelectEntryPos( nPos, bSelect);
-}
-
-
 sal_Int32 SvxLanguageBox::ImplGetEntryPos( const void* pData ) const
 {
     return GetEntryPos( pData);
 }
-
-sal_Int32 SvxLanguageComboBox::ImplGetEntryPos( const void* pData ) const
-{
-    return GetEntryPos( pData);
-}
-
-
-IMPL_LINK_NOARG( SvxLanguageComboBox, EditModifyHdl, Edit&, void )
-{
-    EditedAndValid eOldState = meEditedAndValid;
-    OUString aStr( vcl::I18nHelper::filterFormattingChars( GetText()));
-    if (aStr.isEmpty())
-        meEditedAndValid = EditedAndValid::Invalid;
-    else
-    {
-        const sal_Int32 nPos = GetEntryPos( aStr);
-        if (nPos != COMBOBOX_ENTRY_NOTFOUND)
-        {
-            Selection aSel( GetSelection());
-
-            // Select the corresponding listbox entry if not current. This
-            // invalidates the Edit Selection thus has to happen between
-            // obtaining the Selection and setting the new Selection.
-            sal_Int32 nSelPos = ImplGetSelectedEntryPos();
-            bool bSetEditSelection;
-            if (nSelPos == nPos)
-                bSetEditSelection = false;
-            else
-            {
-                ImplSelectEntryPos( nPos, true);
-                bSetEditSelection = true;
-            }
-
-            // If typing into the Edit control led us here, advance start of a
-            // full selection by one so the next character will already
-            // continue the string instead of having to type the same character
-            // again to start a new string. The selection includes formatting
-            // characters and is reverse when obtained from the Edit control.
-            if (aSel.Max() == 1)
-            {
-                OUString aText( GetText());
-                if (aSel.Min() == aText.getLength())
-                {
-                    ++aSel.Max();
-                    bSetEditSelection = true;
-                }
-            }
-
-            if (bSetEditSelection)
-                SetSelection( aSel);
-
-            meEditedAndValid = EditedAndValid::No;
-        }
-        else
-        {
-            OUString aCanonicalized;
-            bool bValid = LanguageTag::isValidBcp47( aStr, &aCanonicalized, true);
-            meEditedAndValid = (bValid ? EditedAndValid::Valid : EditedAndValid::Invalid);
-            if (bValid && aCanonicalized != aStr)
-            {
-                SetText( aCanonicalized);
-                SetSelection( Selection( aCanonicalized.getLength()));
-            }
-        }
-    }
-    if (eOldState != meEditedAndValid)
-    {
-        if (meEditedAndValid == EditedAndValid::Invalid)
-        {
-#if 0
-            //! Gives white on white!?! instead of white on reddish.
-            SetControlBackground( ::Color( Color( 0xff, 0x65, 0x63)));
-            SetControlForeground( ::COL_WHITE);
-#else
-            SetControlForeground( ::Color( 0xf0, 0, 0) );
-#endif
-        }
-        else
-        {
-            SetControlForeground();
-            SetControlBackground();
-        }
-    }
-}
-
 
 sal_Int32 LanguageBox::SaveEditedAsEntry()
 {
