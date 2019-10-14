@@ -43,7 +43,6 @@ private:
     ScDocument*     mpDoc;
     const ScAddress maCursorPos;
 
-    bool mbNeedUpdate;
     bool mbDataChanged;
     //ugly hack to call DefineNames from ManageNames
     bool mbCloseWithoutUndo;
