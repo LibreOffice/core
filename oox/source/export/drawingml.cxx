@@ -1874,14 +1874,19 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         }
     }
 
-    if (GetProperty(rXPropSet, "CharBackColor"))
+    // tdf#128096, exporting XML_highlight to docx already works fine,
+    // so make sure this code is only run when exporting to pptx, just in case
+    if (GetDocumentType() == DOCUMENT_PPTX)
     {
-        ::Color color(*o3tl::doAccess<sal_uInt32>(mAny));
-        if( color != COL_AUTO )
+        if (GetProperty(rXPropSet, "CharBackColor"))
         {
-            mpFS->startElementNS(XML_a, XML_highlight);
-            WriteColor( color );
-            mpFS->endElementNS( XML_a, XML_highlight );
+            ::Color color(*o3tl::doAccess<sal_uInt32>(mAny));
+            if( color != COL_AUTO )
+            {
+                mpFS->startElementNS(XML_a, XML_highlight);
+                WriteColor( color );
+                mpFS->endElementNS( XML_a, XML_highlight );
+            }
         }
     }
 
