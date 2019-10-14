@@ -1954,6 +1954,9 @@ namespace osl_ThreadData
                     'j', aChar
                     );
 
+#ifdef __clang__
+                abort();
+#endif
             }
 
         CPPUNIT_TEST_SUITE(getData);
