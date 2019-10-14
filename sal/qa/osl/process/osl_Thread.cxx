@@ -1954,6 +1954,9 @@ namespace osl_ThreadData
                     'j', aChar
                     );
 
+#ifdef MACOSX
+                abort();
+#endif
             }
 
         CPPUNIT_TEST_SUITE(getData);
