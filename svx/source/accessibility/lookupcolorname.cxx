@@ -102,10 +102,7 @@ OUString ColorNameMap::lookUp(long color) const {
         return i->second;
     }
     // Did not find the given color; return its RGB tuple representation:
-    OUStringBuffer buf;
-    buf.append('#');
-    buf.append(color, 16);
-    return buf.makeStringAndClear();
+    return "#" + OUString::number(color, 16);
 }
 
 struct theColorNameMap: public rtl::Static< ColorNameMap, theColorNameMap > {};

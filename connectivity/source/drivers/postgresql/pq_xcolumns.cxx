@@ -280,12 +280,11 @@ void Columns::refresh()
     {
         if (isLog(m_pSettings, LogLevel::Info))
         {
-            OStringBuffer buf;
-            buf.append( "sdbcx.Columns get refreshed for table " );
-            buf.append( OUStringToOString( m_schemaName, ConnectionSettings::encoding ) );
-            buf.append( "." );
-            buf.append( OUStringToOString( m_tableName, ConnectionSettings::encoding ) );
-            log( m_pSettings, LogLevel::Info, buf.makeStringAndClear().getStr() );
+            OString buf = "sdbcx.Columns get refreshed for table " +
+                OUStringToOString( m_schemaName, ConnectionSettings::encoding ) +
+                "." +
+                OUStringToOString( m_tableName, ConnectionSettings::encoding );
+            log( m_pSettings, LogLevel::Info, buf.getStr() );
         }
         osl::MutexGuard guard( m_xMutex->GetMutex() );
 

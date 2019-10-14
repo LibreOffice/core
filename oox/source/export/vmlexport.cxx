@@ -1181,15 +1181,15 @@ sal_Int32 VMLExport::StartShape()
             nShapeElement = XML_shape;
             if ( !m_aShapeTypeWritten[ m_nShapeType ] )
             {
-                OStringBuffer sShapeType;
-                sShapeType.append("<v:shapetype id=\"shapetype_").append(OString::number(m_nShapeType)).
-                    append("\" coordsize=\"21600,21600\" o:spt=\"").append(OString::number(m_nShapeType)).
-                    append("\" path=\"m,l,21600l21600,21600l21600,xe\">\n").
-                    append("<v:stroke joinstyle=\"miter\"/>\n"
+                OString sShapeType =
+                    "<v:shapetype id=\"shapetype_" + OString::number(m_nShapeType) +
+                        "\" coordsize=\"21600,21600\" o:spt=\"" + OString::number(m_nShapeType) +
+                        "\" path=\"m,l,21600l21600,21600l21600,xe\">\n"
+                        "<v:stroke joinstyle=\"miter\"/>\n"
                         "<v:path shadowok=\"f\" o:extrusionok=\"f\" strokeok=\"f\" fillok=\"f\" o:connecttype=\"rect\"/>\n"
                         "<o:lock v:ext=\"edit\" shapetype=\"t\"/>\n"
-                        "</v:shapetype>");
-                m_pSerializer->write(sShapeType.makeStringAndClear());
+                    "</v:shapetype>";
+                m_pSerializer->write(sShapeType);
                 m_aShapeTypeWritten[ m_nShapeType ] = true;
             }
             break;
@@ -1202,11 +1202,11 @@ sal_Int32 VMLExport::StartShape()
             nShapeElement = XML_shape;
             if ( !m_aShapeTypeWritten[ m_nShapeType ] )
             {
-                OStringBuffer sShapeType;
-                sShapeType.append("<v:shapetype id=\"shapetype_").append(OString::number(m_nShapeType)).
-                    append("\" coordsize=\"21600,21600\" o:spt=\"").append(OString::number(m_nShapeType)).
-                    append("\" o:preferrelative=\"t\" path=\"m@4@5l@4@11@9@11@9@5xe\" filled=\"f\" stroked=\"f\">\n").
-                    append("<v:stroke joinstyle=\"miter\"/>\n"
+                OString sShapeType =
+                    "<v:shapetype id=\"shapetype_" + OString::number(m_nShapeType) +
+                        "\" coordsize=\"21600,21600\" o:spt=\"" + OString::number(m_nShapeType) +
+                        "\" o:preferrelative=\"t\" path=\"m@4@5l@4@11@9@11@9@5xe\" filled=\"f\" stroked=\"f\">\n"
+                        "<v:stroke joinstyle=\"miter\"/>\n"
                         "<v:formulas>\n"
                             "<v:f eqn=\"if lineDrawn pixelLineWidth 0\"/>\n"
                             "<v:f eqn=\"sum @0 1 0\"/>\n"
@@ -1223,8 +1223,8 @@ sal_Int32 VMLExport::StartShape()
                         "</v:formulas>\n"
                         "<v:path o:extrusionok=\"f\" gradientshapeok=\"t\" o:connecttype=\"rect\"/>\n"
                         "<o:lock v:ext=\"edit\" aspectratio=\"t\"/>\n"
-                        "</v:shapetype>");
-                m_pSerializer->write(sShapeType.makeStringAndClear());
+                        "</v:shapetype>";
+                m_pSerializer->write(sShapeType);
                 m_aShapeTypeWritten[ m_nShapeType ] = true;
             }
             break;

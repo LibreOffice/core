@@ -2323,16 +2323,14 @@ void ScInterpreter::ScCell()
             else if( aInfoType == "COORD" )
             {   // address, lotus 1-2-3 formatted: $TABLE:$COL$ROW
                 // Yes, passing tab as col is intentional!
-                OUStringBuffer aFuncResult;
-                OUString aCellStr =
-                ScAddress( static_cast<SCCOL>(aCellPos.Tab()), 0, 0 ).Format(
-                    (ScRefFlags::COL_ABS|ScRefFlags::COL_VALID), nullptr, pDok->GetAddressConvention() );
-                aFuncResult.append(aCellStr);
-                aFuncResult.append(':');
-                aCellStr = aCellPos.Format((ScRefFlags::COL_ABS|ScRefFlags::COL_VALID|ScRefFlags::ROW_ABS|ScRefFlags::ROW_VALID),
+                OUString aCellStr1 =
+                    ScAddress( static_cast<SCCOL>(aCellPos.Tab()), 0, 0 ).Format(
+                        (ScRefFlags::COL_ABS|ScRefFlags::COL_VALID), nullptr, pDok->GetAddressConvention() );
+                OUString aCellStr2 =
+                    aCellPos.Format((ScRefFlags::COL_ABS|ScRefFlags::COL_VALID|ScRefFlags::ROW_ABS|ScRefFlags::ROW_VALID),
                                  nullptr, pDok->GetAddressConvention());
-                aFuncResult.append(aCellStr);
-                PushString( aFuncResult.makeStringAndClear() );
+                OUString aFuncResult = aCellStr1 + ":" + aCellStr2;
+                PushString( aFuncResult );
             }
 
 // *** CELL PROPERTIES ***
@@ -2493,12 +2491,8 @@ void ScInterpreter::ScCellExternal()
             return;
         }
 
-        OUStringBuffer aBuf;
-        aBuf.append('\'');
-        aBuf.append(*p);
-        aBuf.append("'#$");
-        aBuf.append(aTabName);
-        PushString(aBuf.makeStringAndClear());
+        OUString aBuf = "'" + *p + "'#$" + aTabName;
+        PushString(aBuf);
     }
     else if ( aInfoType == "CONTENTS" )
     {

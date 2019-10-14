@@ -309,12 +309,9 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
         if ( pFCell->GetCode()->GetCodeLen() <= 1 )
         {   // ==1: area
             // ==0: would be an area if...
-            OUStringBuffer aBraced;
-            aBraced.append('(');
-            aBraced.append(rStrExp);
-            aBraced.append(')');
+            OUString aBraced = "(" + rStrExp + ")";
             pFCell.reset( new ScSimpleFormulaCalculator(
-                        m_pDoc, m_CursorPos, aBraced.makeStringAndClear(), bMatrixFormula));
+                        m_pDoc, m_CursorPos, aBraced, bMatrixFormula));
             pFCell->SetLimitString(true);
         }
         else

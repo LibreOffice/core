@@ -346,9 +346,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             {
                 sal_Int64 nSize = 0;
                 rValue.Value >>= nSize;
-                OUStringBuffer aBuffer;
-                aBuffer.append ( nSize );
-                pAttrList->AddAttribute ( sSizeAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+                pAttrList->AddAttribute ( sSizeAttribute, sCdataAttribute, OUString::number( nSize ) );
             }
             else if (rValue.Name == sInitialisationVectorProperty )
                 pVector = &rValue.Value;

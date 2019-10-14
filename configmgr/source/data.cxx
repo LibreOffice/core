@@ -154,10 +154,7 @@ OUString Data::fullTemplateName(
             "bad component/name pair containing colon " + component + "/" +
             name);
     }
-    OUStringBuffer buf(component);
-    buf.append(':');
-    buf.append(name);
-    return buf.makeStringAndClear();
+    return component + ":" + name;
 }
 
 bool Data::equalTemplateNames(

@@ -132,16 +132,15 @@ checkForUpdates(
         if ( !aUpdateInfoEnumeration.is() )
             return false; // something went wrong ..
 
-        OUStringBuffer aBuffer;
-        aBuffer.append("/child::inst:description[inst:os=\'");
-        aBuffer.append( rOS );
-        aBuffer.append("\' and inst:arch=\'");
-        aBuffer.append( rArch );
-        aBuffer.append("\' and inst:gitid!=\'");
-        aBuffer.append( rGitID );
-        aBuffer.append("\']");
+        OUString aXPathExpression =
+            "/child::inst:description[inst:os=\'"+
+             rOS +
+            "\' and inst:arch=\'"+
+             rArch +
+            "\' and inst:gitid!=\'"+
+             rGitID +
+            "\']";
 
-        OUString aXPathExpression = aBuffer.makeStringAndClear();
 
         while( aUpdateInfoEnumeration->hasMoreElements() )
         {

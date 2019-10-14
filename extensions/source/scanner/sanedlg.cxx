@@ -1367,9 +1367,8 @@ void SaneDlg::SaveState()
                     bool bValue;
                     if( mrSane.GetOptionValue( nOption, bValue ) )
                     {
-                        OStringBuffer aString("BOOL=");
-                        aString.append(static_cast<sal_Int32>(bValue));
-                        aConfig.WriteKey(aOption, aString.makeStringAndClear());
+                        OString aString = "BOOL=" + OString::number(static_cast<sal_Int32>(bValue));
+                        aConfig.WriteKey(aOption, aString);
                     }
                 }
                 break;
@@ -1378,9 +1377,8 @@ void SaneDlg::SaveState()
                     OString aValue;
                     if( mrSane.GetOptionValue( nOption, aValue ) )
                     {
-                        OStringBuffer aString("STRING=");
-                        aString.append(aValue);
-                        aConfig.WriteKey( aOption, aString.makeStringAndClear() );
+                        OString aString = "STRING=" + aValue;
+                        aConfig.WriteKey( aOption, aString );
                     }
                 }
                 break;

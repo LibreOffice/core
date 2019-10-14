@@ -2784,11 +2784,6 @@ void XMLDdeFieldDeclImportContext::StartElement(
     // valid data?
     if (bNameOK && bCommandApplicationOK && bCommandTopicOK && bCommandItemOK)
     {
-        // make service name
-        OUStringBuffer sBuf;
-        sBuf.append(sAPI_fieldmaster_prefix);
-        sBuf.append(sAPI_dde);
-
         // create DDE TextFieldMaster
         Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),
                                                  UNO_QUERY);
@@ -2803,7 +2798,7 @@ void XMLDdeFieldDeclImportContext::StartElement(
             try
             {
                 Reference<XInterface> xIfc =
-                    xFactory->createInstance(sBuf.makeStringAndClear());
+                    xFactory->createInstance(OUStringLiteral(sAPI_fieldmaster_prefix) + sAPI_dde);
                 if( xIfc.is() )
                 {
                     Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );

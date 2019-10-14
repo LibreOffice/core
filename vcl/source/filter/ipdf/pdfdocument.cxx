@@ -836,10 +836,8 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
         = nFileEnd - (nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1);
     // Write the length to the buffer.
     m_aEditBuffer.Seek(nSignatureLastByteRangeOffset);
-    OStringBuffer aByteRangeBuffer;
-    aByteRangeBuffer.append(nLastByteRangeLength);
-    aByteRangeBuffer.append(" ]");
-    m_aEditBuffer.WriteOString(aByteRangeBuffer.toString());
+    OString aByteRangeBuffer = OString::number(nLastByteRangeLength) + " ]";
+    m_aEditBuffer.WriteOString(aByteRangeBuffer);
 
     // Create the PKCS#7 object.
     css::uno::Sequence<sal_Int8> aDerEncoded = xCertificate->getEncoded();
