@@ -1293,13 +1293,23 @@ namespace sw { namespace mark
 
     IFieldmark* MarkManager::getFieldmarkFor(const SwPosition& rPos) const
     {
-        auto const pFieldmark = find_if(
+        auto itFieldmark = find_if(
             m_vFieldmarks.begin(),
             m_vFieldmarks.end(),
             [&rPos] (const ::sw::mark::MarkBase *const pMark) { return pMark->IsCoveringPosition(rPos); } );
-        if(pFieldmark == m_vFieldmarks.end())
+        if (itFieldmark == m_vFieldmarks.end())
             return nullptr;
-        return dynamic_cast<IFieldmark*>(*pFieldmark);
+        auto pFieldmark(*itFieldmark);
+        for ( ; itFieldmark != m_vFieldmarks.end()
+                && (**itFieldmark).IsCoveringPosition(rPos); ++itFieldmark)
+        {   // find the innermost fieldmark
+            if (pFieldmark->GetMarkStart() < (**itFieldmark).GetMarkStart()
+                || (**itFieldmark).GetMarkEnd() < pFieldmark->GetMarkEnd())
+            {
+                pFieldmark = *itFieldmark;
+            }
+        }
+        return dynamic_cast<IFieldmark*>(pFieldmark);
     }
 
     void MarkManager::deleteFieldmarkAt(const SwPosition& rPos)
