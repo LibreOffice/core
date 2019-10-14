@@ -232,6 +232,8 @@ public:
     void setVerticalShapesCount(sal_Int32 nVerticalShapesCount) { mnVerticalShapesCount = nVerticalShapesCount; }
     sal_Int32 getVerticalShapesCount() const { return mnVerticalShapesCount; }
 
+    void setUseBgFill(bool bUseBgFill) { mbUseBgFill = bUseBgFill; }
+
     /// Changes reference semantics to value semantics for fill properties.
     void cloneFillProperties();
 
@@ -372,6 +374,9 @@ private:
 
     /// Number of child shapes to be layouted vertically inside org chart in-diagram shape.
     sal_Int32 mnVerticalShapesCount = 0;
+
+    /// The shape fill should be set to that of the slide background surface.
+    bool mbUseBgFill = false;
 };
 
 } }
