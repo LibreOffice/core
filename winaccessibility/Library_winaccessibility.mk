@@ -23,6 +23,8 @@ $(eval $(call gb_Library_use_sdk_api,winaccessibility))
 
 $(eval $(call gb_Library_set_componentfile,winaccessibility,winaccessibility/source/service/winaccessibility))
 
+$(eval $(call gb_Library_use_common_precompiled_header,winaccessibility))
+
 $(eval $(call gb_Library_add_exception_objects,winaccessibility,\
 	winaccessibility/source/service/AccObject \
 	winaccessibility/source/service/ResIDGenerator \

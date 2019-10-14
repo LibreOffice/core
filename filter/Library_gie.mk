@@ -32,6 +32,8 @@ $(eval $(call gb_Library_use_custom_headers,gie,\
 	officecfg/registry \
 ))
 
+$(eval $(call gb_Library_use_common_precompiled_header,gie))
+
 $(eval $(call gb_Library_use_libraries,gie,\
     basegfx \
     comphelper \

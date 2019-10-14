@@ -23,6 +23,8 @@ $(eval $(call gb_Library_set_include,jdbc,\
 	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
+$(eval $(call gb_Library_use_common_precompiled_header,jdbc))
+
 $(eval $(call gb_Library_use_libraries,jdbc,\
 	cppu \
 	cppuhelper \
