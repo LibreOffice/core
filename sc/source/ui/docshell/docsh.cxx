@@ -19,6 +19,7 @@
 
 #include <docsh.hxx>
 
+#include <config_features.h>
 #include <scitems.hxx>
 #include <sc.hrc>
 #include <vcl/errinf.hxx>
