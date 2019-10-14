@@ -4023,7 +4023,7 @@ public:
 
     virtual bool runAsync(std::shared_ptr<weld::DialogController> rDialogController, const std::function<void(sal_Int32)>& func) override
     {
-        assert(!m_nResponseSignalId && !m_nCancelSignalId);
+        assert(!m_nResponseSignalId && !m_nCancelSignalId && !m_nSignalDeleteId);
 
         m_xDialogController = rDialogController;
         m_aFunc = func;
@@ -4042,7 +4042,7 @@ public:
     virtual bool runAsync(std::shared_ptr<Dialog> const & rxSelf, const std::function<void(sal_Int32)>& func) override
     {
         assert( rxSelf.get() == this );
-        assert(!m_nResponseSignalId && !m_nCancelSignalId);
+        assert(!m_nResponseSignalId && !m_nCancelSignalId && !m_nSignalDeleteId);
 
         // In order to store a shared_ptr to ourself, we have to have been constructed by make_shared,
         // which is that rxSelf enforces.
@@ -4223,12 +4223,7 @@ public:
 
         if (m_nCloseSignalId)
             g_signal_handler_disconnect(m_pDialog, m_nCloseSignalId);
-        if (m_nResponseSignalId)
-            g_signal_handler_disconnect(m_pDialog, m_nResponseSignalId);
-        if (m_nCancelSignalId)
-            g_signal_handler_disconnect(m_pDialog, m_nCancelSignalId);
-        if (m_nSignalDeleteId)
-            g_signal_handler_disconnect(m_pDialog, m_nSignalDeleteId);
+        assert(!m_nResponseSignalId && !m_nCancelSignalId && !m_nSignalDeleteId);
     }
 };
 
@@ -5954,6 +5949,23 @@ void GtkInstanceDialog::asyncresponse(gint ret)
         m_aDialogRun.dec_modal_count();
     hide();
     m_aFunc(GtkToVcl(ret));
+
+    if (m_nResponseSignalId)
+    {
+        g_signal_handler_disconnect(m_pDialog, m_nResponseSignalId);
+        m_nResponseSignalId = 0;
+    }
+    if (m_nCancelSignalId)
+    {
+        g_signal_handler_disconnect(m_pDialog, m_nCancelSignalId);
+        m_nCancelSignalId = 0;
+    }
+    if (m_nSignalDeleteId)
+    {
+        g_signal_handler_disconnect(m_pDialog, m_nSignalDeleteId);
+        m_nSignalDeleteId = 0;
+    }
+
     m_aFunc = nullptr;
     // move the self pointer, otherwise it might be de-allocated by time we try to reset it
     std::shared_ptr<weld::Dialog> me = std::move(m_xRunAsyncSelf);
