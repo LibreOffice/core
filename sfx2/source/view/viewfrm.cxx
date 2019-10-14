@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
+#include <config_feature_desktop.h>
 #include <osl/file.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/infobar.hxx>

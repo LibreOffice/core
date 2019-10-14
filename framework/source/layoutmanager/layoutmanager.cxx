@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include <config_features.h>
+#include <config_feature_desktop.h>
 
 #include <services/layoutmanager.hxx>
 #include "helpers.hxx"

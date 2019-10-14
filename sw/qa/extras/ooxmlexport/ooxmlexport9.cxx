@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <config_features.h>
+
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XFootnote.hpp>

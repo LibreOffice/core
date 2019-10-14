@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_FORMULAGROUP_HXX
 #define INCLUDED_SC_INC_FORMULAGROUP_HXX
 
-#include <config_features.h>
+#include <config_feature_opencl.h>
 
 #include "address.hxx"
 #include "calcconfig.hxx"

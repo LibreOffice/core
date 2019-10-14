@@ -21,6 +21,7 @@
 
 #include <config_dbus.h>
 #include <config_features.h>
+#include <config_feature_desktop.h>
 
 #include <app.hxx>
 #include "officeipcthread.hxx"

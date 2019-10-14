@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <config_features.h>
+
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>

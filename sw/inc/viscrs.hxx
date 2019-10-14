@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_VISCRS_HXX
 #define INCLUDED_SW_INC_VISCRS_HXX
 
-#include <config_features.h>
+#include <config_feature_desktop.h>
 
 #include <vcl/cursor.hxx>
 #include "swcrsr.hxx"
