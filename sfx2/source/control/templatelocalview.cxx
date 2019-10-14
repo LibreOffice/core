@@ -605,7 +605,7 @@ void SfxTemplateLocalView::createContextMenu(const bool bIsDefault)
         mxContextMenu->append("default",SfxResId(STR_RESET_DEFAULT));
 
     mxContextMenu->append_separator("separator");
-    mxContextMenu->append("rename",SfxResId(STR_RENAME));
+    mxContextMenu->append("rename",SfxResId(STR_SFX_RENAME));
     mxContextMenu->append("delete",SfxResId(STR_DELETE));
     deselectItems();
     maSelectedItem->setSelection(true);
