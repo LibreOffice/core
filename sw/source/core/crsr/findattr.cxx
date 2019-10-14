@@ -1190,9 +1190,12 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
         }
     }
 
-    // if backward search, switch point and mark
-    if( bFound && !bSrchForward )
-        rSearchPam.Exchange();
+    // in search direction, mark precedes point, because the next iteration
+    // starts at point
+    if (bFound)
+    {
+        rSearchPam.Normalize(!bSrchForward);
+    }
 
     return bFound;
 }
