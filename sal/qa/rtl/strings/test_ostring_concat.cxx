@@ -83,6 +83,8 @@ void test::ostring::StringConcat::checkConcat()
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, char* > )), typeid( OString( "foo" ) + d4 ));
     CPPUNIT_ASSERT_EQUAL( OString( "fooabc" ), OString( OString( "foo" ) + d4 ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, char* > )), typeid( OString( "foo" ) + d4 ));
+    CPPUNIT_ASSERT_EQUAL( OString( "fooabc" ), OString( rtl::OStringView( "foo" ) + d4 ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< rtl::OStringView, char* > )), typeid( rtl::OStringView( "foo" ) + d4 ));
 
     CPPUNIT_ASSERT_EQUAL( OString( "num10" ), OString( OString( "num" ) + OString::number( 10 )));
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, OStringNumber< int > > )), typeid( OString( "num" ) + OString::number( 10 )));
@@ -157,6 +159,7 @@ void test::ostring::StringConcat::checkInvalid()
     CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUString( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUStringBuffer( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUStringLiteral( "b" )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + rtl::OUStringView( u"b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + 1 ));
     rtl_String* rs = nullptr;
     rtl_uString* rus = nullptr;
