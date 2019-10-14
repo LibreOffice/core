@@ -735,7 +735,7 @@ bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
         nOfs += nPrepSize;
     }
 
-    SAL_WARN_IF( (nOfs!=nTotalSize), "vcl", "AquaSalGraphics::CreateFontSubset (nOfs!=nTotalSize)");
+    SAL_WARN_IF( (nOfs!=nTotalSize), "vcl", "AquaSalGraphics::GetRawFontData (nOfs!=nTotalSize)");
 
     return true;
 }
