@@ -46,6 +46,30 @@
       "revId": "d010358198c69c32a32cdcf0dd802fbc47556391",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_0f058877",
+        "filename": "extensions/source/scanner/scanwin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-14T08:24:25Z",
+      "side": 1,
+      "message": "Done\n\nRe:by convention - do we have some means to enforce that?",
+      "parentUuid": "7f7f9b97_6fdafc17",
+      "range": {
+        "startLine": 268,
+        "startChar": 12,
+        "endLine": 270,
+        "endChar": 41
+      },
+      "revId": "d010358198c69c32a32cdcf0dd802fbc47556391",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
