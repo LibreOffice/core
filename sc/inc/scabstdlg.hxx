@@ -393,7 +393,7 @@ class ScAbstractDialogFactory
 public:
     SC_DLLPUBLIC static ScAbstractDialogFactory*    Create();
 
-    virtual     VclPtr<AbstractScImportAsciiDlg> CreateScImportAsciiDlg(vcl::Window* pParent,
+    virtual     VclPtr<AbstractScImportAsciiDlg> CreateScImportAsciiDlg(weld::Window* pParent,
                                                                     const OUString& aDatName,
                                                                     SvStream* pInStream,
                                                                     ScImportAsciiCall eCall) = 0;

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:57:02 using:
+ Generated on 2019-10-15 16:57:59 using:
  ./bin/update_pch sc scfilt --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,8 +25,6 @@
 #include <cassert>
 #include <cstddef>
 #include <cstring>
-#include <deque>
-#include <exception>
 #include <functional>
 #include <iomanip>
 #include <limits.h>
@@ -46,11 +44,14 @@
 #include <utility>
 #include <vector>
 #include <boost/optional.hpp>
+#include <boost/property_tree/ptree.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/endian.h>
+#include <osl/file.hxx>
 #include <osl/interlck.h>
+#include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <rtl/alloc.h>
@@ -74,6 +75,7 @@
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/mathconf.h>
+#include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
@@ -82,11 +84,9 @@
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
-#include <vcl/field.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/idle.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
@@ -123,13 +123,11 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <comphelper/comphelperdllapi.h>
@@ -196,6 +194,7 @@
 #include <svl/listener.hxx>
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
+#include <svl/sharedstring.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
@@ -214,15 +213,12 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdpagv.hxx>
 #include <svx/svdtext.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/unoapi.hxx>
-#include <svx/xenum.hxx>
 #include <svx/xit.hxx>
-#include <svx/xtextit0.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
@@ -269,6 +265,7 @@
 #include <global.hxx>
 #include <patattr.hxx>
 #include <postit.hxx>
+#include <queryparam.hxx>
 #include <rangelst.hxx>
 #include <rangenam.hxx>
 #include <scdllapi.h>
