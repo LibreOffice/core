@@ -113,10 +113,6 @@ namespace dmapper
         }
 
         bool isNone()           const { return m_nEdit == NS_ooxml::LN_Value_doc_ST_DocProtect_none; };
-        // bool isReadOnly()       const { return m_nEdit == NS_ooxml::LN_Value_doc_ST_DocProtect_readOnly; };
-        // bool isComments()       const { return m_nEdit == NS_ooxml::LN_Value_doc_ST_DocProtect_comments; };
-        bool isTrackChanges()   const { return m_nEdit == NS_ooxml::LN_Value_doc_ST_DocProtect_trackedChanges; };
-        bool isForms()          const { return m_nEdit == NS_ooxml::LN_Value_doc_ST_DocProtect_forms; };
     };
 
     css::uno::Sequence<css::beans::PropertyValue> DocumentProtection_Impl::toSequence() const
@@ -254,6 +250,7 @@ struct SettingsTable_Impl
     bool                m_bDoNotExpandShiftReturn;
     bool                m_bProtectForm;
     bool                m_bRedlineProtection;
+    OUString            m_sRedlineProtectionKey;
     bool                m_bDisplayBackgroundShape;
 
     uno::Sequence<beans::PropertyValue> m_pThemeFontLangProps;
@@ -286,6 +283,7 @@ struct SettingsTable_Impl
     , m_bDoNotExpandShiftReturn(false)
     , m_bProtectForm(false)
     , m_bRedlineProtection(false)
+    , m_sRedlineProtectionKey()
     , m_bDisplayBackgroundShape(false)
     , m_pThemeFontLangProps(3)
     , m_pCurrentCompatSetting(3)
@@ -349,13 +347,30 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
         break;
     case NS_ooxml::LN_CT_DocProtect_edit: // 92037
         m_pImpl->m_DocumentProtection.m_nEdit = nIntValue;
-        m_pImpl->m_bProtectForm = m_pImpl->m_DocumentProtection.isForms();
-        m_pImpl->m_bRedlineProtection = m_pImpl->m_DocumentProtection.isTrackChanges();
+        switch (nIntValue)
+        {
+        case NS_ooxml::LN_Value_doc_ST_DocProtect_trackedChanges:
+        {
+            m_pImpl->m_bRedlineProtection = true;
+            m_pImpl->m_sRedlineProtectionKey = m_pImpl->m_DocumentProtection.m_sHash;
+            break;
+        }
+        case NS_ooxml::LN_Value_doc_ST_DocProtect_forms:
+            m_pImpl->m_bProtectForm = true;
+            break;
+        }
         break;
     case NS_ooxml::LN_CT_DocProtect_enforcement: // 92039
         m_pImpl->m_DocumentProtection.m_bEnforcement = (nIntValue != 0);
-        m_pImpl->m_bProtectForm &= static_cast<bool>(nIntValue);
-        m_pImpl->m_bRedlineProtection &= static_cast<bool>(nIntValue);
+        switch (m_pImpl->m_DocumentProtection.m_nEdit)
+        {
+        case NS_ooxml::LN_Value_doc_ST_DocProtect_trackedChanges:
+            m_pImpl->m_bRedlineProtection = (nIntValue != 0);
+            break;
+        case NS_ooxml::LN_Value_doc_ST_DocProtect_forms:
+            m_pImpl->m_bProtectForm = (nIntValue != 0);
+            break;
+        }
         break;
     case NS_ooxml::LN_CT_DocProtect_formatting: // 92038
         m_pImpl->m_DocumentProtection.m_bFormatting = (nIntValue != 0);
@@ -669,8 +684,8 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
         // Password protected Record changes
         if ( m_pImpl->m_bRecordChanges && m_pImpl->m_bRedlineProtection )
         {
-            // use dummy protection key to forbid disabling of Record changes (extending the recent GrabBag support)
-            // TODO support password verification and DOCX export of RedlineProtectionKey...
+            // use dummy protection key to forbid disabling of Record changes without a notice
+            // (extending the recent GrabBag support)    TODO support password verification...
             css::uno::Sequence<sal_Int8> aDummyKey(1);
             aDummyKey[0] = 1;
             xDocProps->setPropertyValue("RedlineProtectionKey", uno::makeAny( aDummyKey ));
