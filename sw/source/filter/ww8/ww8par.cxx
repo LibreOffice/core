@@ -5613,8 +5613,7 @@ namespace
 
                 rtl_random_destroyPool( aRandomPool );
 
-                sal_uInt16 pStd97Pass[16];
-                memset( pStd97Pass, 0, sizeof( pStd97Pass ) );
+                sal_uInt16 pStd97Pass[16] = {};
                 for( sal_Int32 nChar = 0; nChar < nLen; ++nChar )
                     pStd97Pass[nChar] = sUniPassword[nChar];
 
@@ -5644,8 +5643,7 @@ namespace
             sal_Int32 nLen = sUniPassword.getLength();
             if ( nLen <= 15 )
             {
-                sal_uInt16 pPassword[16];
-                memset( pPassword, 0, sizeof( pPassword ) );
+                sal_uInt16 pPassword[16] = {};
                 for( sal_Int32 nChar = 0; nChar < nLen; ++nChar )
                     pPassword[nChar] = sUniPassword[nChar];
 

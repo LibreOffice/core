@@ -1488,8 +1488,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
         }
     }
 
-    DOCINFOW aInfo;
-    memset( &aInfo, 0, sizeof( DOCINFOW ) );
+    DOCINFOW aInfo = {};
     aInfo.cbSize = sizeof( aInfo );
     aInfo.lpszDocName = o3tl::toW(rJobName.getStr());
     if ( pFileName || aOutFileName.getLength() )

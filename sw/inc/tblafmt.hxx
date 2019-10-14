@@ -170,7 +170,7 @@ class SW_DLLPUBLIC SwTableAutoFormat
     // Calc specific flags.
     bool m_bInclWidthHeight : 1;
 
-    SwBoxAutoFormat* m_aBoxAutoFormat[ 16 ];
+    SwBoxAutoFormat* m_aBoxAutoFormat[ 16 ] = {};
 
     // Writer-specific options
     std::shared_ptr<SvxFormatBreakItem> m_aBreak;

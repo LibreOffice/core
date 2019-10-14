@@ -773,8 +773,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
 
     CERT_ENHKEY_USAGE   enhKeyUsage ;
     CERT_USAGE_MATCH    certUsage ;
-    CERT_CHAIN_PARA     chainPara ;
-    memset(&chainPara, 0, sizeof(CERT_CHAIN_PARA));
+    CERT_CHAIN_PARA     chainPara = {};
 
     //Prepare parameter for CertGetCertificateChain
     enhKeyUsage.cUsageIdentifier = 0 ;

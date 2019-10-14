@@ -1083,8 +1083,6 @@ SwCombinedPortion::SwCombinedPortion( const OUString &rText )
         }
         aScrType[i] = nScr;
     }
-
-    memset( &aWidth, 0, sizeof(aWidth) );
 }
 
 void SwCombinedPortion::Paint( const SwTextPaintInfo &rInf ) const

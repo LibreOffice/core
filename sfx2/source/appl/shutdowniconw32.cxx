@@ -90,8 +90,7 @@ typedef struct tagMYITEM
 
 static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text, int& pos, bool bOwnerdraw, const OUString& module )
 {
-    MENUITEMINFOW mi;
-    memset( &mi, 0, sizeof( mi ) );
+    MENUITEMINFOW mi = {};
 
     mi.cbSize = sizeof( mi );
     if( id == static_cast<UINT>( -1 ) )
@@ -218,9 +217,8 @@ static void deleteSystrayMenu( HMENU hMenu )
     if( !hMenu || !IsMenu( hMenu ))
         return;
 
-    MENUITEMINFOW mi;
+    MENUITEMINFOW mi = {};
     int pos=0;
-    memset( &mi, 0, sizeof( mi ) );
     mi.cbSize = sizeof( mi );
     mi.fMask = MIIM_DATA;
 
@@ -552,8 +550,7 @@ void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis)
     HDC hdc = GetDC(hwnd);
     SIZE size;
 
-    NONCLIENTMETRICSW ncm;
-    memset(&ncm, 0, sizeof(ncm));
+    NONCLIENTMETRICSW ncm = {};
     ncm.cbSize = sizeof(ncm);
 
     SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
@@ -639,8 +636,7 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
     x += cx + 4;    // space for icon
     aRect.left = x;
 
-    NONCLIENTMETRICSW ncm;
-    memset(&ncm, 0, sizeof(ncm));
+    NONCLIENTMETRICSW ncm = {};
     ncm.cbSize = sizeof(ncm);
 
     SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);

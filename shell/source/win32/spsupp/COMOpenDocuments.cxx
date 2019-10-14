@@ -26,8 +26,7 @@ HRESULT LOStart(Args... args)
     std::wstring sCmdLine((quote(GetHelperExe()) + ... + (L" " + quote(args))));
     LPWSTR pCmdLine = const_cast<LPWSTR>(sCmdLine.c_str());
 
-    STARTUPINFOW si;
-    std::memset(&si, 0, sizeof si);
+    STARTUPINFOW si = {};
     si.cb = sizeof si;
     si.dwFlags = STARTF_USESHOWWINDOW;
     si.wShowWindow = SW_SHOW;

@@ -609,7 +609,7 @@ public:
 private:
     SvXMLImportContextRef mxTableImportContext;
     OUString msTemplateStyleName;
-    bool maTemplateStylesUsed[6];
+    bool maTemplateStylesUsed[6] = {};
 };
 
 extern SvXMLEnumMapEntry<css::drawing::Alignment> const aXML_GlueAlignment_EnumMap[];

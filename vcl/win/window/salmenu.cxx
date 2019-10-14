@@ -179,8 +179,7 @@ void WinSalMenu::RemoveItem( unsigned nPos )
     {
         WinSalMenuItem *pSalMenuItem = nullptr;
 
-        MENUITEMINFOW mi;
-        memset( &mi, 0, sizeof(mi) );
+        MENUITEMINFOW mi = {};
         mi.cbSize = sizeof( mi );
         mi.fMask = MIIM_DATA;
         if( !GetMenuItemInfoW( mhMenu, nPos, TRUE, &mi) )
@@ -206,8 +205,7 @@ static void ImplRemoveItemById( WinSalMenu *pSalMenu, unsigned nItemId )
 
     WinSalMenuItem *pSalMenuItem = nullptr;
 
-    MENUITEMINFOW mi;
-    memset( &mi, 0, sizeof(mi) );
+    MENUITEMINFOW mi = {};
     mi.cbSize = sizeof( mi );
     mi.fMask = MIIM_DATA;
     if( !GetMenuItemInfoW( pSalMenu->mhMenu, nItemId, FALSE, &mi) )

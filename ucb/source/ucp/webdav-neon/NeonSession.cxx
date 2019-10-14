@@ -2372,8 +2372,7 @@ OUString NeonSession::makeAbsoluteURL( OUString const & rURL ) const
         }
         else
         {
-            ne_uri aUri;
-            memset( &aUri, 0, sizeof( aUri ) );
+            ne_uri aUri = {};
 
             ne_fill_server_uri( m_pHttpSession, &aUri );
             aUri.path

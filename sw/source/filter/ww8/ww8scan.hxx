@@ -1012,11 +1012,8 @@ public:
 
 struct WW8PLCFxSaveAll
 {
-    WW8PLCFxSave1 aS[WW8PLCFMan::MAN_PLCF_COUNT];
-    WW8PLCFxSaveAll()
-    {
-        memset(aS, 0, sizeof(aS));
-    }
+    WW8PLCFxSave1 aS[WW8PLCFMan::MAN_PLCF_COUNT] = {};
+    WW8PLCFxSaveAll() = default;
 };
 
 class WW8ScannerBase

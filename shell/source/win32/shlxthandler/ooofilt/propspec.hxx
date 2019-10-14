@@ -74,7 +74,7 @@ public:
     inline BOOL IsPropertyName() const;
     inline BOOL IsPropertyPropid() const;
 private:
-    GUID     _guidPropSet;
+    GUID     _guidPropSet = {};
     PROPSPEC _psProperty;
 };
 // Inline methods for CFullPropSpec

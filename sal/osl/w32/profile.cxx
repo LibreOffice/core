@@ -1036,12 +1036,10 @@ static osl_TStamp getFileStamp(osl_TFile* pFile)
 static bool lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
 {
     bool     status = false;
-    OVERLAPPED  Overlapped;
+    OVERLAPPED  Overlapped = {};
 
     if (pFile->m_Handle == INVALID_HANDLE_VALUE)
         return false;
-
-    memset(&Overlapped, 0, sizeof(Overlapped));
 
     switch (eMode)
     {

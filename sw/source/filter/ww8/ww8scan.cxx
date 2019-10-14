@@ -8063,8 +8063,7 @@ void WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
     rFib.m_fcDop =  rStrm.Tell();
     rFib.m_lcbDop = nLen;
 
-    sal_uInt8 aData[ nMaxDopLen ];
-    memset( aData, 0, nMaxDopLen );
+    sal_uInt8 aData[ nMaxDopLen ] = {};
     sal_uInt8* pData = aData;
 
     // analyse the data
@@ -8507,7 +8506,6 @@ SEPr::SEPr() :
     dxaColumns(720), dxaColumnWidth(0), dmOrientFirst(0), fLayout(0),
     reserved4(0)
 {
-    memset(rgdxaColumnWidthSpacing, 0, sizeof(rgdxaColumnWidthSpacing));
 }
 
 bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength)

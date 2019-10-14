@@ -44,7 +44,7 @@ namespace treeview {
             PRODUCTNAME, PRODUCTVERSION, VENDORNAME, VENDORVERSION,
             VENDORSHORT };
         ConfigData();
-        int                    m_vAdd[5];
+        int                    m_vAdd[5] = {};
         OUString          m_vReplacement[5];
         OUString          prodName,prodVersion,vendName,vendVersion,vendShort;
 

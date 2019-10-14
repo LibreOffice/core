@@ -181,7 +181,6 @@ PageCache::PageCache (sal_uInt16 nPageSize)
 {
     static size_t const theSize = SAL_N_ELEMENTS(m_hash_table_0);
     static_assert(theSize == theTableSize, "must be equal");
-    memset(m_hash_table_0, 0, sizeof(m_hash_table_0));
 }
 
 PageCache::~PageCache()

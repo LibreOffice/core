@@ -123,7 +123,6 @@ MSCodec_Xor95::MSCodec_Xor95(int nRotateDistance) :
     mnHash( 0 ),
     mnRotateDistance( nRotateDistance )
 {
-    (void)memset( mpnKey, 0, sizeof( mpnKey ) );
 }
 
 MSCodec_Xor95::~MSCodec_Xor95()
@@ -435,10 +434,7 @@ void MSCodec_CryptoAPI::GetDigestFromSalt(const sal_uInt8* pSaltData, sal_uInt8*
 
 bool MSCodec_Std97::InitCipher(sal_uInt32 nCounter)
 {
-    sal_uInt8      pKeyData[64]; // 512-bit message block
-
-    // Initialize KeyData array.
-    (void)memset (pKeyData, 0, sizeof(pKeyData));
+    sal_uInt8      pKeyData[64] = {}; // 512-bit message block
 
     // Fill 40 bit of DigestValue into [0..4].
     (void)memcpy (pKeyData, m_aDigestValue.data(), 5);
@@ -631,18 +627,12 @@ EncryptionVerifierAES::EncryptionVerifierAES()
     : saltSize(SALT_LENGTH)
     , encryptedVerifierHashSize(SHA1_HASH_LENGTH)
 {
-    memset(salt, 0, sizeof(salt));
-    memset(encryptedVerifier, 0, sizeof(encryptedVerifier));
-    memset(encryptedVerifierHash, 0, sizeof(encryptedVerifierHash));
 }
 
 EncryptionVerifierRC4::EncryptionVerifierRC4()
     : saltSize(SALT_LENGTH)
     , encryptedVerifierHashSize(SHA1_HASH_LENGTH)
 {
-    memset(salt, 0, sizeof(salt));
-    memset(encryptedVerifier, 0, sizeof(encryptedVerifier));
-    memset(encryptedVerifierHash, 0, sizeof(encryptedVerifierHash));
 }
 
 }

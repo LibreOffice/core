@@ -161,7 +161,6 @@ ConfigData::ConfigData()
       vendVersion("%VENDORVERSION"),
       vendShort("%VENDORSHORT")
 {
-    memset(m_vAdd, 0, sizeof(m_vAdd));
 }
 
 void ConfigData::replaceName( OUString& oustring ) const

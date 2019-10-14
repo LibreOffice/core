@@ -1393,9 +1393,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         return false;
     }
 
-    CRYPT_SIGN_MESSAGE_PARA aPara;
-
-    memset(&aPara, 0, sizeof(aPara));
+    CRYPT_SIGN_MESSAGE_PARA aPara = {};
     aPara.cbSize = sizeof(aPara);
     aPara.dwMsgEncodingType = PKCS_7_ASN_ENCODING | X509_ASN_ENCODING;
     aPara.pSigningCert = pCertContext;
@@ -1423,9 +1421,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
     }
     assert(!bFreeNeeded);
 
-    CMSG_SIGNER_ENCODE_INFO aSignerInfo;
-
-    memset(&aSignerInfo, 0, sizeof(aSignerInfo));
+    CMSG_SIGNER_ENCODE_INFO aSignerInfo = {};
     aSignerInfo.cbSize = sizeof(aSignerInfo);
     aSignerInfo.pCertInfo = pCertContext->pCertInfo;
     aSignerInfo.hNCryptKey = hCryptKey;
@@ -1455,8 +1451,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
     aSignerInfo.cAuthAttr = 1;
     aSignerInfo.rgAuthAttr = &aCertificateAttribute;
 
-    CMSG_SIGNED_ENCODE_INFO aSignedInfo;
-    memset(&aSignedInfo, 0, sizeof(aSignedInfo));
+    CMSG_SIGNED_ENCODE_INFO aSignedInfo = {};
     aSignedInfo.cbSize = sizeof(aSignedInfo);
     aSignedInfo.cSigners = 1;
     aSignedInfo.rgSigners = &aSignerInfo;

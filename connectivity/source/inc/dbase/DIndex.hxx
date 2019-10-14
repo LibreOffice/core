@@ -69,7 +69,7 @@ namespace connectivity
 
         private:
             std::unique_ptr<SvStream> m_pFileStream;        // Stream to read/write the index
-            NDXHeader       m_aHeader;
+            NDXHeader       m_aHeader = {};
             std::vector<ONDXPage*>
                             m_aCollector;                   // Pool of obsolete pages
             ONDXPagePtr     m_aRoot,                        // Root of the B+ tree

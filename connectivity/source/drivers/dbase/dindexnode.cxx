@@ -698,8 +698,7 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
         }
         if (aKey.getValue().isNull())
         {
-            sal_uInt8 buf[sizeof(double)];
-            memset(&buf[0], 0, sizeof(double));
+            sal_uInt8 buf[sizeof(double)] = {};
             rStream.WriteBytes(&buf[0], sizeof(double));
         }
         else
@@ -890,8 +889,7 @@ SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& 
         rStream.SetStreamSize(nSize);
         rStream.Seek(rPage.GetPagePos() * DINDEX_PAGE_SIZE);
 
-        char aEmptyData[DINDEX_PAGE_SIZE];
-        memset(aEmptyData,0x00,DINDEX_PAGE_SIZE);
+        char aEmptyData[DINDEX_PAGE_SIZE] = {};
         rStream.WriteBytes(aEmptyData, DINDEX_PAGE_SIZE);
     }
     rStream.Seek(rPage.GetPagePos() * DINDEX_PAGE_SIZE);

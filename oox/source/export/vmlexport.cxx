@@ -402,8 +402,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
     }
 
     // properties
-    bool bAlreadyWritten[ 0xFFF ];
-    memset( bAlreadyWritten, 0, sizeof( bAlreadyWritten ) );
+    bool bAlreadyWritten[ 0xFFF ] = {};
     const EscherProperties &rOpts = rProps.GetOpts();
     for (auto const& opt : rOpts)
     {

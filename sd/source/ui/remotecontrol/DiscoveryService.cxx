@@ -104,8 +104,7 @@ void DiscoveryService::setupSockets()
         return; // would be better to throw, but unsure if caller handles that
     }
 
-    sockaddr_in aAddr;
-    memset(&aAddr, 0, sizeof(aAddr));
+    sockaddr_in aAddr = {};
     aAddr.sin_family = AF_INET;
     aAddr.sin_addr.s_addr = htonl(INADDR_ANY);
     aAddr.sin_port = htons( PORT_DISCOVERY );
@@ -155,10 +154,9 @@ void SAL_CALL DiscoveryService::run()
     setupSockets();
 
     // Kept for backward compatibility
-    char aBuffer[BUFFER_SIZE];
     while ( true )
     {
-        memset( aBuffer, 0, sizeof(char) * BUFFER_SIZE );
+        char aBuffer[BUFFER_SIZE] = {};
         sockaddr_in aAddr;
         socklen_t aLen = sizeof( aAddr );
         if(recvfrom( mSocket, aBuffer, BUFFER_SIZE, 0, reinterpret_cast<sockaddr*>(&aAddr), &aLen ) > 0)

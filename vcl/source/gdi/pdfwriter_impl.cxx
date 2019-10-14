@@ -2421,8 +2421,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
     aInfo.m_nCapHeight = 1000;
     aInfo.m_aFontBBox = tools::Rectangle( Point( -200, -200 ), Size( 1700, 1700 ) );
     aInfo.m_aPSName = pFont->GetFamilyName();
-    sal_Int32 pWidths[256];
-    memset( pWidths, 0, sizeof(pWidths) );
+    sal_Int32 pWidths[256] = {};
 
     SalGraphics *pGraphics = GetGraphics();
 
@@ -2435,13 +2434,9 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
 
     OUString aTmpName;
     osl_createTempFile( nullptr, nullptr, &aTmpName.pData );
-    sal_GlyphId aGlyphIds[ 256 ];
-    sal_uInt8 pEncoding[ 256 ];
-    sal_Int32 pDuWidths[ 256 ];
-
-    memset( aGlyphIds, 0, sizeof( aGlyphIds ) );
-    memset( pEncoding, 0, sizeof( pEncoding ) );
-    memset( pDuWidths, 0, sizeof( pDuWidths ) );
+    sal_GlyphId aGlyphIds[ 256 ] = {};
+    sal_uInt8 pEncoding[ 256 ] = {};
+    sal_Int32 pDuWidths[ 256 ] = {};
 
     for( sal_Ucs c = 32; c < 256; c++ )
     {
@@ -2761,21 +2756,17 @@ bool PDFWriterImpl::emitFonts()
     {
         for (auto & s_subset :subset.second.m_aSubsets)
         {
-            sal_GlyphId aGlyphIds[ 256 ];
+            sal_GlyphId aGlyphIds[ 256 ] = {};
             sal_Int32 pWidths[ 256 ];
-            sal_uInt8 pEncoding[ 256 ];
-            sal_Int32 pEncToUnicodeIndex[ 256 ];
-            sal_Int32 pCodeUnitsPerGlyph[ 256 ];
+            sal_uInt8 pEncoding[ 256 ] = {};
+            sal_Int32 pEncToUnicodeIndex[ 256 ] = {};
+            sal_Int32 pCodeUnitsPerGlyph[ 256 ] = {};
             std::vector<sal_Ucs> aCodeUnits;
             aCodeUnits.reserve( 256 );
             int nGlyphs = 1;
             // fill arrays and prepare encoding index map
             sal_Int32 nToUnicodeStream = 0;
 
-            memset( aGlyphIds, 0, sizeof( aGlyphIds ) );
-            memset( pEncoding, 0, sizeof( pEncoding ) );
-            memset( pCodeUnitsPerGlyph, 0, sizeof( pCodeUnitsPerGlyph ) );
-            memset( pEncToUnicodeIndex, 0, sizeof( pEncToUnicodeIndex ) );
             for (auto const& item : s_subset.m_aMapping)
             {
                 sal_uInt8 nEnc = item.second.getGlyphId();

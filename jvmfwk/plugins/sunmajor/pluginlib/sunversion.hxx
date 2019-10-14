@@ -74,7 +74,7 @@ class SunVersion final
     };
 
     //contains major,minor,micro,update
-    int m_arVersionParts[4];
+    int m_arVersionParts[4] = {};
     // The update can be followed by a char, e.g. 1.4.1_01a
     char m_nUpdateSpecial;
 

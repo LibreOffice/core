@@ -69,16 +69,16 @@ struct PaperInfo
 struct PaperBackInfo
 {
     char type;  // 0- background color, 1 - external image, 2- embedded image
-    char reserved1[8];
+    char reserved1[8] = {};
     int luminance; /* ???? ( -100 ~ 100 ) */
     int contrast; /* ???? ( -100 ~ 100 ) */
     char effect; /* 0-????????, 1-????????????, 2-???? */
-    char reserved2[8];
-    char filename[260 + 1]; // filename
-    unsigned char color[3]; //0 - red, 1 - green, 2 - blue
+    char reserved2[8] = {};
+    char filename[260 + 1] = {}; // filename
+    unsigned char color[3] = {}; //0 - red, 1 - green, 2 - blue
     unsigned short flag; /* 0 - ????????, 1 - ????????, 2 - ??????, 3 - ???????? */
     int range; /* 0-????, 1-????????, 3-??????, 4-?????? */
-    char reserved3[27];
+    char reserved3[27] = {};
     int size;
     std::vector<char> data;        // image data
     bool isset;
@@ -92,11 +92,6 @@ struct PaperBackInfo
         , size(0)
         , isset(false)
     {
-        memset(reserved1, 0, sizeof(reserved1));
-        memset(reserved2, 0, sizeof(reserved2));
-        memset(filename, 0, sizeof(filename));
-        memset(color, 0, sizeof(color));
-        memset(reserved3, 0, sizeof(reserved3));
     }
 };
 
@@ -108,12 +103,11 @@ struct DocChainInfo
 {
     unsigned char chain_page_no;
     unsigned char chain_footnote_no;
-    unsigned char chain_filename[CHAIN_MAX_PATH];
+    unsigned char chain_filename[CHAIN_MAX_PATH] = {};
     DocChainInfo()
         : chain_page_no(0)
         , chain_footnote_no(0)
     {
-        memset(chain_filename, 0, sizeof(chain_filename));
     }
 };
 
@@ -167,12 +161,12 @@ class DLLEXPORT HWPInfo
  * Sets the attribute of read-only or read/write.
  */
         short     readonly;
-        unsigned char reserved1[4];
+        unsigned char reserved1[4] = {};
 /**
  * Information about document chain
  */
         DocChainInfo  chain_info;
-        unsigned char annotation[ANNOTATION_LEN];
+        unsigned char annotation[ANNOTATION_LEN] = {};
         short     encrypted;
 // unsigned char    reserved2[6];
         short     beginpagenum;                   /* ?????????? ???? */
@@ -189,7 +183,7 @@ class DLLEXPORT HWPInfo
 /**
  * Information about page layout
  */
-        hunit     bordermargin[4];
+        hunit     bordermargin[4] = {};
         short     borderline;
 
         unsigned char empty_line_hide;

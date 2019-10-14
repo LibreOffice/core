@@ -105,7 +105,7 @@ namespace connectivity
             std::vector<sal_Int32> m_aPrecisions; // same as above
             std::vector<sal_Int32> m_aScales;
             std::vector<sal_Int32> m_aRealFieldLengths;
-            DBFHeader       m_aHeader;
+            DBFHeader       m_aHeader = {};
             DBFMemoHeader   m_aMemoHeader;
             std::unique_ptr<SvStream> m_pMemoStream;
             rtl_TextEncoding m_eEncoding;

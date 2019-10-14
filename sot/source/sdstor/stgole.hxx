@@ -41,9 +41,9 @@ public:
 
 class StgCompObjStream : public StgInternalStream
 {
-    ClsId       m_aClsId;
+    ClsId       m_aClsId = {};
     OUString    m_aUserName;
-    SotClipboardFormatId m_nCbFormat;
+    SotClipboardFormatId m_nCbFormat = SotClipboardFormatId::NONE;
 public:
     StgCompObjStream( BaseStorage&, bool );
     ClsId&     GetClsId()    { return m_aClsId;    }

@@ -509,8 +509,7 @@ static void CopyToOLEMenu(HMENU hOrig,WORD origPos,HMENU hDest,WORD destPos)
     InsertMenuW(hDest,destPos,MF_BYPOSITION | MF_POPUP,
                reinterpret_cast<UINT_PTR>(subMenu),buffer);
 
-    MENUITEMINFOW mi;
-    memset(&mi,0,sizeof(mi));
+    MENUITEMINFOW mi = {};
     mi.cbSize = sizeof(mi);
     mi.fMask = MIIM_DATA;
     if(GetMenuItemInfoW(hOrig,origPos,TRUE,&mi))
@@ -1140,8 +1139,7 @@ HRESULT DocumentHolder::GetExtent( SIZEL *pSize )
 HRESULT DocumentHolder::SetContRects(LPCRECT aRect)
 {
     if(m_xContainerWindow.is()) {
-        RECT wi;
-        memset(&wi,0,sizeof(wi));
+        RECT wi = {};
         if(m_pIOleIPFrame) {
             m_pIOleIPFrame->GetBorder(&wi);
             m_xContainerWindow->setPosSize(
@@ -1216,8 +1214,7 @@ css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWin
                 lang::SystemDependent::SYSTEM_WIN32),
             uno::UNO_QUERY);
 
-        RECT wi;
-        memset(&wi,0,sizeof(wi));
+        RECT wi = {};
         if(xWin.is() && m_pIOleIPFrame->GetBorder(&wi) == NOERROR) {
             xWin->setVisible(true);
             xWin->setPosSize(

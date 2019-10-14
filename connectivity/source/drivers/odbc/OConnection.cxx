@@ -92,11 +92,9 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTi
         return -1;
 
     SQLRETURN nSQLRETURN = 0;
-    SDB_ODBC_CHAR szConnStrOut[4096];
-    SDB_ODBC_CHAR szConnStrIn[2048];
+    SDB_ODBC_CHAR szConnStrOut[4096] = {};
+    SDB_ODBC_CHAR szConnStrIn[2048] = {};
     SQLSMALLINT cbConnStrOut;
-    memset(szConnStrOut,'\0',4096);
-    memset(szConnStrIn,'\0',2048);
     OString aConStr(OUStringToOString(aConnectStr,getTextEncoding()));
     memcpy(szConnStrIn, aConStr.getStr(), std::min<sal_Int32>(sal_Int32(2048),aConStr.getLength()));
 
