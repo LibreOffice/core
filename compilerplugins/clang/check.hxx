@@ -29,6 +29,8 @@ inline ContextCheck checkRecordDecl(
 
 }
 
+class DeclCheck;
+
 class TypeCheck {
 public:
     explicit TypeCheck(clang::QualType type): type_(type) {}
@@ -71,6 +73,8 @@ public:
 
     inline ContextCheck Typedef(llvm::StringRef id) const;
 
+    DeclCheck TemplateSpecializationClass() const;
+
     TypeCheck NotSubstTemplateTypeParmType() const;
 
 private:
@@ -80,6 +84,8 @@ private:
 };
 
 class DeclCheck {
+    friend TypeCheck;
+
 public:
     explicit DeclCheck(clang::Decl const * decl): decl_(decl) {}
 
@@ -102,7 +108,9 @@ public:
     ContextCheck MemberFunction() const;
 
 private:
-    clang::Decl const * const decl_;
+    DeclCheck() = default;
+
+    clang::Decl const * const decl_ = nullptr;
 };
 
 class ContextCheck {

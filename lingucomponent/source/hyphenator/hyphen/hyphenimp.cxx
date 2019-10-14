@@ -235,7 +235,7 @@ bool LoadDictionary(HDInfo& rDict)
     {
         SAL_WARN(
             "lingucomponent",
-            "Couldn't find file " << OU2ENC(dictpath, osl_getThreadTextEncoding()));
+            "Couldn't find file " << dictpath);
         return false;
     }
     rDict.aPtr = dict;

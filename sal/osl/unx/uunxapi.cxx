@@ -183,9 +183,9 @@ int osl::access(const OString& pstrPath, int mode)
     int result = ::access(fn.getStr(), mode);
     int saved_errno = errno;
     if (result == -1)
-        SAL_INFO("sal.file", "access(" << fn.getStr() << ",0" << std::oct << mode << std::dec << "): " << UnixErrnoString(saved_errno));
+        SAL_INFO("sal.file", "access(" << fn << ",0" << std::oct << mode << std::dec << "): " << UnixErrnoString(saved_errno));
     else
-        SAL_INFO("sal.file", "access(" << fn.getStr() << ",0" << std::oct << mode << std::dec << "): OK");
+        SAL_INFO("sal.file", "access(" << fn << ",0" << std::oct << mode << std::dec << "): OK");
 
     done_accessing_file_path(fn.getStr(), state);
 
@@ -232,9 +232,9 @@ template<typename T> bool realpath_(const T& pstrFileName, T& ppstrResolvedName)
     bool  bRet = realpath(fn.getStr(), rp);
     int   saved_errno = errno;
     if (!bRet)
-        SAL_INFO("sal.file", "realpath(" << fn.getStr() << "): " << UnixErrnoString(saved_errno));
+        SAL_INFO("sal.file", "realpath(" << fn << "): " << UnixErrnoString(saved_errno));
     else
-        SAL_INFO("sal.file", "realpath(" << fn.getStr() << "): OK");
+        SAL_INFO("sal.file", "realpath(" << fn << "): OK");
 
     done_accessing_file_path(fn.getStr(), state);
 

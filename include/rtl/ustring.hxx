@@ -3766,7 +3766,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, OUString const & rString)
 {
     return stream <<
-        OUStringToOString(rString, RTL_TEXTENCODING_UTF8).getStr();
+        OUStringToOString(rString, RTL_TEXTENCODING_UTF8);
         // best effort; potentially loses data due to conversion failures
         // (stray surrogate halves) and embedded null characters
 }

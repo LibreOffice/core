@@ -10,6 +10,7 @@
 #include <cassert>
 
 #include <clang/AST/DeclCXX.h>
+#include <clang/AST/DeclTemplate.h>
 
 #include "check.hxx"
 
@@ -129,6 +130,21 @@ TypeCheck TypeCheck::Typedef() const {
         }
     }
     return TypeCheck();
+}
+
+DeclCheck TypeCheck::TemplateSpecializationClass() const {
+    if (!type_.isNull()) {
+        if (auto const t = type_->getAs<clang::TemplateSpecializationType>()) {
+            if (!t->isTypeAlias()) {
+                if (auto const d = llvm::dyn_cast_or_null<clang::ClassTemplateDecl>(
+                        t->getTemplateName().getAsTemplateDecl()))
+                {
+                    return DeclCheck(d->getTemplatedDecl());
+                }
+            }
+        }
+    }
+    return DeclCheck();
 }
 
 TypeCheck TypeCheck::NotSubstTemplateTypeParmType() const {

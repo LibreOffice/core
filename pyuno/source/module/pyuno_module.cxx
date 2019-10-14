@@ -863,7 +863,7 @@ static PyObject *sal_debug(
 
     OUString line = pyString2ustring( PyTuple_GetItem( args, 0 ) );
 
-    SAL_DEBUG(line.toUtf8().getStr());
+    SAL_DEBUG(line);
 
     return Py_None;
 }
