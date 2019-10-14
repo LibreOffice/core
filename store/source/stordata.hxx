@@ -278,8 +278,8 @@ struct OStorePageNameBlock
     */
     G          m_aGuard;
     K          m_aKey;
-    sal_uInt32 m_nAttrib;
-    sal_Char   m_pData[STORE_MAXIMUM_NAMESIZE];
+    sal_uInt32 m_nAttrib = 0;
+    sal_Char   m_pData[STORE_MAXIMUM_NAMESIZE] = {};
 
     /** size.
     */
@@ -287,11 +287,7 @@ struct OStorePageNameBlock
 
     /** Construction.
     */
-    OStorePageNameBlock()
-        : m_aGuard(), m_aKey(), m_nAttrib (0)
-    {
-        memset (m_pData, 0, sizeof(m_pData));
-    }
+    OStorePageNameBlock() = default;
 
     /** guard (external representation).
     */

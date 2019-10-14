@@ -193,8 +193,7 @@ struct CryptoImpl
             /*
              * Initialization of IV is not needed because PK11_GetBestWrapMechanism should return ECB mode
              */
-            SECItem tmp_sec_item;
-            memset(&tmp_sec_item, 0, sizeof(tmp_sec_item));
+            SECItem tmp_sec_item = {};
             mWrapKeyContext = PK11_CreateContextBySymKey(wrap_mechanism, CKA_ENCRYPT, mWrapKey, &tmp_sec_item);
             if (!mWrapKeyContext)
                 throw css::uno::RuntimeException("PK11_CreateContextBySymKey failure", css::uno::Reference<css::uno::XInterface>());
@@ -214,8 +213,7 @@ struct CryptoImpl
             /*
              * Finally unwrap sym key
              */
-            SECItem wrapped_key;
-            memset(&tmp_sec_item, 0, sizeof(tmp_sec_item));
+            SECItem wrapped_key = {};
             wrapped_key.data = wrapped_key_data;
             wrapped_key.len = wrapped_key_len;
 

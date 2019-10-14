@@ -292,7 +292,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
 {
     oslPipe pAcceptedPipe = nullptr;
 
-    OVERLAPPED os;
+    OVERLAPPED os = {};
 
     DWORD nBytesTransfered;
     rtl_uString* path = nullptr;
@@ -304,7 +304,6 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
 
     SAL_WARN_IF(pPipe->m_File == INVALID_HANDLE_VALUE, "sal.osl.pipe", "osl_acceptPipe: invalid handle");
 
-    memset(&os, 0, sizeof(OVERLAPPED));
     os.hEvent = pPipe->m_AcceptEvent;
     ResetEvent(pPipe->m_AcceptEvent);
 
@@ -372,11 +371,10 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
                         sal_Int32 BytesToRead)
 {
     DWORD nBytes;
-    OVERLAPPED os;
+    OVERLAPPED os = {};
 
     assert(pPipe);
 
-    memset(&os, 0, sizeof(OVERLAPPED));
     os.hEvent = pPipe->m_ReadEvent;
 
     ResetEvent(pPipe->m_ReadEvent);
@@ -410,11 +408,10 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
                        sal_Int32 BytesToSend)
 {
     DWORD nBytes;
-    OVERLAPPED os;
+    OVERLAPPED os = {};
 
     assert(pPipe);
 
-    memset(&os, 0, sizeof(OVERLAPPED));
     os.hEvent = pPipe->m_WriteEvent;
     ResetEvent(pPipe->m_WriteEvent);
 

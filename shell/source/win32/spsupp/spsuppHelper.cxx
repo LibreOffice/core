@@ -124,8 +124,7 @@ DWORD LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath)
                         + OUString(o3tl::toU(sFilePath)) + "\"";
     LPWSTR pCmdLine = const_cast<LPWSTR>(o3tl::toW(sCmdLine.getStr()));
 
-    STARTUPINFOW si;
-    std::memset(&si, 0, sizeof si);
+    STARTUPINFOW si = {};
     si.cb = sizeof si;
     si.dwFlags = STARTF_USESHOWWINDOW;
     si.wShowWindow = SW_SHOW;

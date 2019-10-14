@@ -95,7 +95,7 @@ private:
     typelib_InterfaceTypeDescription * pTypeDescr;
     OUString oid;
 
-    VtableFactory::Slot * vtables[1];
+    VtableFactory::Slot * vtables[1] = {};
 
     friend void freeCppInterfaceProxy(
         uno_ExtEnvironment * pEnv, void * pInterface);

@@ -437,7 +437,6 @@ ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConne
     : ODbaseTable_BASE(_pTables,_pConnection)
 {
     // initialize the header
-    memset(&m_aHeader, 0, sizeof(m_aHeader));
     m_aHeader.type = dBaseIII;
     m_eEncoding = getConnection()->getTextEncoding();
 }
@@ -454,7 +453,6 @@ ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConne
                        SchemaName,
                        CatalogName)
 {
-    memset(&m_aHeader, 0, sizeof(m_aHeader));
     m_eEncoding = getConnection()->getTextEncoding();
 }
 
@@ -1171,8 +1169,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
         throw;
     }
 
-    char aBuffer[21];               // write buffer
-    memset(aBuffer,0,sizeof(aBuffer));
+    char aBuffer[21] = {}; // write buffer
 
     m_pFileStream->Seek(0);
     (*m_pFileStream).WriteUChar( nDbaseType );                            // dBase format

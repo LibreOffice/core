@@ -180,20 +180,14 @@ struct SdwColor
 
 struct SdwClosedObjStyleRec
 {
-    sal_uInt8 nLineWidth;
-    sal_uInt8 nLineStyle;
+    sal_uInt8 nLineWidth = 0;
+    sal_uInt8 nLineStyle = 0;
     SdwColor aPenColor;
     SdwColor aForeColor;
     SdwColor aBackColor;
-    sal_uInt16 nFillType;
-    sal_uInt8 pFillPattern[8];
-    SdwClosedObjStyleRec()
-        : nLineWidth(0)
-        , nLineStyle(0)
-        , nFillType(0)
-    {
-        memset(pFillPattern, 0, sizeof(pFillPattern));
-    }
+    sal_uInt16 nFillType = 0;
+    sal_uInt8 pFillPattern[8] = {};
+    SdwClosedObjStyleRec() = default;
 };
 
 struct SdwDrawObjHeader

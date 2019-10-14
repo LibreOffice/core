@@ -1018,13 +1018,13 @@ struct PDFFileImplData
     sal_uInt32  m_nAlgoVersion;
     sal_uInt32  m_nStandardRevision;
     sal_uInt32  m_nKeyLength;
-    sal_uInt8   m_aOEntry[32];
-    sal_uInt8   m_aUEntry[32];
+    sal_uInt8   m_aOEntry[32] = {};
+    sal_uInt8   m_aUEntry[32] = {};
     sal_uInt32  m_nPEntry;
     OString     m_aDocID;
     rtlCipher   m_aCipher;
 
-    sal_uInt8   m_aDecryptionKey[ENCRYPTION_KEY_LEN+5]; // maximum handled key length
+    sal_uInt8   m_aDecryptionKey[ENCRYPTION_KEY_LEN+5] = {}; // maximum handled key length
 
     PDFFileImplData() :
         m_bIsEncrypted( false ),
@@ -1035,9 +1035,6 @@ struct PDFFileImplData
         m_nPEntry( 0 ),
         m_aCipher( nullptr )
     {
-        memset( m_aOEntry, 0, sizeof( m_aOEntry ) );
-        memset( m_aUEntry, 0, sizeof( m_aUEntry ) );
-        memset( m_aDecryptionKey, 0, sizeof( m_aDecryptionKey ) );
     }
 
     ~PDFFileImplData()
@@ -1160,8 +1157,7 @@ static bool check_user_password( const OString& rPwd, PDFFileImplData* pData )
     memcpy( pData->m_aDecryptionKey, aKey, nKeyLen );
     if( pData->m_nStandardRevision == 2 )
     {
-        sal_uInt8 nEncryptedEntry[ENCRYPTION_BUF_LEN];
-        memset( nEncryptedEntry, 0, sizeof(nEncryptedEntry) );
+        sal_uInt8 nEncryptedEntry[ENCRYPTION_BUF_LEN] = {};
         // see PDF reference 1.4 Algorithm 3.4
         // encrypt pad string
         if (rtl_cipher_initARCFOUR( pData->m_aCipher, rtl_Cipher_DirectionEncode,
@@ -1241,8 +1237,7 @@ bool PDFFile::setupDecryptionData( const OString& rPwd ) const
         // try owner password
         // see PDF reference 1.4 Algorithm 3.7
         sal_uInt8 aKey[ENCRYPTION_KEY_LEN];
-        sal_uInt8 nPwd[ENCRYPTION_BUF_LEN];
-        memset( nPwd, 0, sizeof(nPwd) );
+        sal_uInt8 nPwd[ENCRYPTION_BUF_LEN] = {};
         sal_uInt32 nKeyLen = password_to_key( rPwd, aKey, m_pData.get(), true );
         if( m_pData->m_nStandardRevision == 2 )
         {

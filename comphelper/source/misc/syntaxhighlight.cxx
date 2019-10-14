@@ -268,7 +268,7 @@ namespace
 class SyntaxHighlighter::Tokenizer
 {
     // Character information tables
-    CharFlags aCharTypeTab[256];
+    CharFlags aCharTypeTab[256] = {};
 
     // Auxiliary function: testing of the character flags
     bool testCharFlags(sal_Unicode c, CharFlags nTestFlags) const;
@@ -590,8 +590,6 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
 
 SyntaxHighlighter::Tokenizer::Tokenizer( HighlighterLanguage aLang ): aLanguage(aLang)
 {
-    memset( aCharTypeTab, 0, sizeof( aCharTypeTab ) );
-
     // Fill character table
     sal_uInt16 i;
 

@@ -393,7 +393,7 @@ struct WW8LSTInfo   // sorted by nIdLst (in WW8 used list-Id)
 {
     std::vector<ww::bytes> maParaSprms;
     WW8aIdSty   aIdSty;          // Style Id's for each level
-    WW8aCFormat    aCharFormat;        // Character Style Pointer
+    WW8aCFormat    aCharFormat = {};   // Character Style Pointer
 
     SwNumRule*  pNumRule;        // Pointer to list-template in Writer
     sal_uInt32      nIdLst;          // WW8Id of this list
@@ -406,7 +406,6 @@ struct WW8LSTInfo   // sorted by nIdLst (in WW8 used list-Id)
         bSimpleList(aLST.bSimpleList), bUsedInDoc(false)
     {
         memcpy( aIdSty, aLST.aIdSty, sizeof( aIdSty   ));
-        memset(&aCharFormat, 0,  sizeof( aCharFormat ));
     }
 
 };
@@ -530,11 +529,10 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
 
     OUString        sPrefix;
     OUString        sPostfix;
-    WW8LVL          aLVL;
+    WW8LVL          aLVL = {};
 
     // 1. read LVLF
 
-    memset(&aLVL, 0, sizeof( aLVL ));
     rSt.ReadInt32( aLVL.nStartAt );
     rSt.ReadUChar( aLVL.nNFC );
     rSt.ReadUChar( aBits1 );
@@ -672,8 +670,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
 
     if( aLVL.nLenGrpprlChpx )
     {
-        sal_uInt8 aGrpprlChpx[ 255 ];
-        memset(&aGrpprlChpx, 0, sizeof( aGrpprlChpx ));
+        sal_uInt8 aGrpprlChpx[ 255 ] = {};
         if (aLVL.nLenGrpprlChpx != rSt.ReadBytes(&aGrpprlChpx, aLVL.nLenGrpprlChpx))
             return false;
 
@@ -1182,8 +1179,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         if (nRemainingPlcfLst < cbLSTF)
             break;
 
-        WW8LST aLST;
-        memset(&aLST, 0, sizeof( aLST ));
+        WW8LST aLST = {};
 
         // 1.1.1 read Data
 
@@ -1290,8 +1286,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     {
         bOk = false;
 
-        WW8LFO aLFO;
-        memset(&aLFO, 0, sizeof( aLFO ));
+        WW8LFO aLFO = {};
 
         rSt.ReadUInt32( aLFO.nIdLst );
         rSt.SeekRel( 8 );
@@ -1375,8 +1370,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 // 2.2.2 read all LFOLVL (and LVL) for the new NumRule
 
                 WW8aISet aItemSet;       // Character attributes from GrpprlChpx
-                WW8aCFormat aCharFormat;       // Character Style Pointer
-                memset(&aCharFormat, 0,  sizeof( aCharFormat ));
+                WW8aCFormat aCharFormat = {};  // Character Style Pointer
 
                 //2.2.2.0 skip inter-group of override header ?
                 //See #i25438# for why I moved this here, compare

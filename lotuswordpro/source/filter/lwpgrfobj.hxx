@@ -94,8 +94,8 @@ public:
     LwpGraphicObject(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpGraphicObject() override;
 private:
-    unsigned char m_sDataFormat[AFID_MAX_FILE_FORMAT_SIZE];
-    unsigned char m_sServerContextFormat[AFID_MAX_CONTEXT_FORMAT_SIZE];
+    unsigned char m_sDataFormat[AFID_MAX_FILE_FORMAT_SIZE] = {};
+    unsigned char m_sServerContextFormat[AFID_MAX_CONTEXT_FORMAT_SIZE] = {};
     sal_Int32 m_nCachedBaseLine;
     sal_Int16 m_bIsLinked;
     AFID_CACHE m_Cache;

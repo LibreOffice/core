@@ -65,9 +65,7 @@ OPreparedStatement::OPreparedStatement(OConnection* _pConnection, MYSQL_STMT* pS
     m_bindMetas.reserve(m_paramCount);
     for (unsigned i = 0; i < m_paramCount; ++i)
     {
-        MYSQL_BIND bind;
-        memset(&bind, 0, sizeof(MYSQL_BIND));
-        m_binds.push_back(bind);
+        m_binds.push_back(MYSQL_BIND{});
         m_bindMetas.push_back(BindMetaData{});
         m_binds.back().is_null = &m_bindMetas.back().is_null;
         m_binds.back().length = &m_bindMetas.back().length;
@@ -287,8 +285,7 @@ void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 parameter, const DateTi
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    MYSQL_TIME my_time;
-    memset(&my_time, 0, sizeof(MYSQL_TIME));
+    MYSQL_TIME my_time = {};
 
     my_time.hour = aVal.Hours;
     my_time.minute = aVal.Minutes;

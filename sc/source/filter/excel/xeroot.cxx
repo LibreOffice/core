@@ -317,8 +317,7 @@ uno::Sequence< beans::NamedValue > XclExpRoot::GenerateEncryptionData( const OUS
 
         rtl_random_destroyPool( aRandomPool );
 
-        sal_uInt16 pnPasswd[16];
-        memset( pnPasswd, 0, sizeof( pnPasswd ) );
+        sal_uInt16 pnPasswd[16] = {};
         for( sal_Int32 nChar = 0; nChar < aPass.getLength(); ++nChar )
             pnPasswd[nChar] = aPass[nChar];
 

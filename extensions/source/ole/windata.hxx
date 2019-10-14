@@ -146,8 +146,8 @@ class ExcepInfo : public EXCEPINFO
     ExcepInfo(const ExcepInfo &);
 public:
    ExcepInfo()
+       : EXCEPINFO{}
    {
-      memset(this, 0, sizeof(ExcepInfo));
    }
    ~ExcepInfo()
    {

@@ -862,11 +862,10 @@ static oslFileError osl_getNextFileItem(
     if ( !pDirImpl )
         return osl_File_E_INVAL;
 
-    pItemImpl = static_cast<DirectoryItem_Impl*>(malloc(sizeof(DirectoryItem_Impl)));
+    pItemImpl = static_cast<DirectoryItem_Impl*>(calloc(1, sizeof(DirectoryItem_Impl)));
     if ( !pItemImpl )
         return osl_File_E_NOMEM;
 
-    memset( pItemImpl, 0, sizeof(DirectoryItem_Impl) );
     fFound = EnumDirectory( pDirImpl->hDirectory, &pItemImpl->FindData );
 
     if ( fFound )

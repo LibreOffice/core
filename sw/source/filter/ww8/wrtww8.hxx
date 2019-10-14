@@ -301,7 +301,7 @@ class wwFont
 //In some future land the stream could be converted to a nice stream interface
 //and we could have harmony
 private:
-sal_uInt8 maWW8_FFN[6];
+    sal_uInt8 maWW8_FFN[6] = {};
     OUString msFamilyNm;
     OUString msAltNm;
     bool mbAlt;

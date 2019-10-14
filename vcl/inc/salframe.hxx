@@ -124,7 +124,7 @@ public:
                             SalFrame();
     virtual                 ~SalFrame() override;
 
-    SalFrameGeometry        maGeometry; ///< absolute, unmirrored values
+    SalFrameGeometry        maGeometry = {}; ///< absolute, unmirrored values
 
     // SalGeometryProvider
     virtual long GetWidth() const override { return maGeometry.nWidth; }

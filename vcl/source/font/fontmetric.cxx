@@ -330,8 +330,7 @@ void ImplFontMetricData::ImplCalcLineSpacing(LogicalFontInstance *pFontInstance)
     hb_blob_t* pHhea = hb_face_reference_table(pHbFace, HB_TAG('h', 'h', 'e', 'a'));
     hb_blob_t* pOS2 = hb_face_reference_table(pHbFace, HB_TAG('O', 'S', '/', '2'));
 
-    vcl::TTGlobalFontInfo rInfo;
-    memset(&rInfo, 0, sizeof(vcl::TTGlobalFontInfo));
+    vcl::TTGlobalFontInfo rInfo = {};
     GetTTFontMetrics(reinterpret_cast<const uint8_t*>(hb_blob_get_data(pHhea, nullptr)), hb_blob_get_length(pHhea),
                      reinterpret_cast<const uint8_t*>(hb_blob_get_data(pOS2, nullptr)), hb_blob_get_length(pOS2),
                      &rInfo);

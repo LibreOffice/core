@@ -58,9 +58,6 @@ HWPInfo::HWPInfo()
     , info_block_len(0)
 {
     back_info.isset = false;
-    memset(reserved1, 0, sizeof(reserved1));
-    memset(annotation, 0, sizeof(annotation));
-    memset(bordermargin, 0, sizeof(bordermargin));
 }
 
 HWPInfo::~HWPInfo()

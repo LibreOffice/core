@@ -3334,8 +3334,7 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
 
                 rtl_random_destroyPool( aRandomPool );
 
-                sal_uInt16 aPassword[16];
-                memset( aPassword, 0, sizeof( aPassword ) );
+                sal_uInt16 aPassword[16] = {};
 
                 const OUString& sPassword(pPasswordItem->GetValue());
                 for ( sal_Int32 nChar = 0; nChar < sPassword.getLength(); ++nChar )

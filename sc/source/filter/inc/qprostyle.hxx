@@ -29,14 +29,14 @@ class ScDocument;
 class ScQProStyle
 {
     enum limits { maxsize = 256 };
-    sal_uInt8  maAlign[ maxsize ];
-    sal_uInt8  maFont[ maxsize ];
-    sal_uInt16 maFontRecord[ maxsize ];
-    sal_uInt16 maFontHeight[ maxsize ];
+    sal_uInt8  maAlign[ maxsize ] = {};
+    sal_uInt8  maFont[ maxsize ] = {};
+    sal_uInt16 maFontRecord[ maxsize ] = {};
+    sal_uInt16 maFontHeight[ maxsize ] = {};
     OUString   maFontType[ maxsize ];
 
     public:
-    ScQProStyle();
+    ScQProStyle() = default;
     void SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, SCTAB nTab, sal_uInt16 nStyle );
     void setFontRecord(sal_uInt16 nIndex, sal_uInt16 nData, sal_uInt16 nPtSize)
     {

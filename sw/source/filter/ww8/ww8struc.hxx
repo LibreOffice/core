@@ -233,7 +233,7 @@ struct WW8_FFN
 
 struct WW8_BRCVer6  // BoRder Code (WW6 version)
 {
-    SVBT16 aBits1;
+    SVBT16 aBits1 = {};
 //  sal_uInt16 dxpLineWidth : 3;// 0007 When dxpLineWidth is 0, 1, 2, 3, 4, or 5, this field is the width of
                             //      a single line of border in units of 0.75 points
                             //      Must be nonzero when brcType is nonzero.
@@ -243,10 +243,7 @@ struct WW8_BRCVer6  // BoRder Code (WW6 version)
 //  sal_uInt16 ico : 5;         // 07C0 color code (see chp.ico)
 //  sal_uInt16 dxpSpace : 5;    // F800 width of space to maintain between border and text within border.
                             //      Must be 0 when BRC is a substructure of the TC.  Stored in points for Windows.
-    WW8_BRCVer6()
-    {
-        memset(aBits1, 0, sizeof(aBits1));
-    }
+    WW8_BRCVer6() = default;
 
     sal_uInt8 dxpLineWidth() const
         { return aBits1[0] & 0x07; }
@@ -263,8 +260,8 @@ struct WW8_BRCVer6  // BoRder Code (WW6 version)
 struct WW8_BRC  // BoRder Code (WW8 version)
 // Documented at http://msdn.microsoft.com/en-us/library/dd952599.aspx
 {
-    SVBT16 aBits1;
-    SVBT16 aBits2;
+    SVBT16 aBits1 = {};
+    SVBT16 aBits2 = {};
 //  sal_uInt8 dptLineWidth;
 //  sal_uInt8 brcType;
 //  sal_uInt8 ico;
@@ -272,11 +269,7 @@ struct WW8_BRC  // BoRder Code (WW8 version)
 //  bool fShadow : 1;
 //  bool fFrame : 1;
 //  bool fReserved : 1;
-    WW8_BRC()
-    {
-        memset(aBits1, 0, sizeof(aBits1));
-        memset(aBits2, 0, sizeof(aBits2));
-    }
+    WW8_BRC() = default;
 
     sal_uInt8 dptLineWidth() const // border line width (1/8pt)
         { return aBits1[0]; }
@@ -315,19 +308,15 @@ typedef WW8_BRC WW8_BRC5[5];        // 5 * Border Code
 struct WW8_BRCVer9  // BoRder Code (WW9 version)
 // Documented at http://msdn.microsoft.com/en-us/library/dd907496.aspx
 {
-    SVBT32 aBits1; // border colour (RGB)
-    SVBT32 aBits2;
+    SVBT32 aBits1 = {}; // border colour (RGB)
+    SVBT32 aBits2 = {};
 //  sal_uInt8 dptLineWidth;   // border line width (1/8pt)
 //  sal_uInt8 brcType;        // border type (eg single, double, dotted)
 //  sal_uInt8 dptSpace : 5;   // space between text & border (pt)
 //  bool fShadow : 1;         // border has shadow effect
 //  bool fFrame : 1;          // border has 3D effect
 //  sal_uInt16 fReserved : 9; // unused
-    WW8_BRCVer9()
-    {
-        memset(aBits1, 0, sizeof(aBits1));
-        memset(aBits2, 0, sizeof(aBits2));
-    }
+    WW8_BRCVer9() = default;
 
     sal_uInt32 cv() const          // colour value (BGR)
         { return SVBT32ToUInt32(aBits1); }
@@ -1076,7 +1065,7 @@ struct SEPr
     // At odd index values [1,3,5,...] the column widths are stored.
     // At even index values [2,4,6,...] the spacings to the next columns are stored.
     // Value at index 0 is initialized with 0 and used for easier iteration on the array
-    sal_Int32 rgdxaColumnWidthSpacing[MAX_NO_OF_SEP_COLUMNS*2 + 1];
+    sal_Int32 rgdxaColumnWidthSpacing[MAX_NO_OF_SEP_COLUMNS*2 + 1] = {};
 
     sal_Int32 dxaColumnWidth;
     sal_uInt8 dmOrientFirst;

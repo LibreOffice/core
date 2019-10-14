@@ -1245,8 +1245,7 @@ void SwTextNode::Update(
             const int coArrSz = RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN;
             std::vector<SwTextInputField*> aTextInputFields;
 
-            bool aDontExp[ coArrSz ];
-            memset( &aDontExp, 0, coArrSz * sizeof(bool) );
+            bool aDontExp[ coArrSz ] = {};
 
             for ( size_t n = 0; n < m_pSwpHints->Count(); ++n )
             {

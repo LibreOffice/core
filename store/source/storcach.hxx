@@ -45,7 +45,7 @@ class PageCache :
     static_assert((theTableSize & (theTableSize-1)) == 0, "table size should be a power of 2");
 
     Entry **     m_hash_table;
-    Entry *      m_hash_table_0[theTableSize];
+    Entry *      m_hash_table_0[theTableSize] = {};
     size_t       m_hash_size;
     size_t       m_hash_shift;
     size_t const m_page_shift;

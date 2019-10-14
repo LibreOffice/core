@@ -35,8 +35,8 @@ class StgHeader
 {
     static const sal_uInt8 cFATPagesInHeader = 109;
 
-    sal_uInt8   m_cSignature[ 8 ];            // 00 signature (see below)
-    ClsId       m_aClsId;                     // 08 Class ID
+    sal_uInt8   m_cSignature[ 8 ] = {};       // 00 signature (see below)
+    ClsId       m_aClsId = {};                // 08 Class ID
     sal_Int32   m_nVersion;                   // 18 version number
     sal_uInt16  m_nByteOrder;                 // 1C Unicode byte order indicator
     sal_Int16   m_nPageSize;                  // 1E 1 << nPageSize = block size
@@ -44,7 +44,7 @@ class StgHeader
     sal_uInt8   m_bDirty;                     // 22 internal dirty flag (should be
                                             //    bool, but probably required to
                                             //    be exactly one byte)
-    sal_uInt8   m_cReserved[ 9 ];             // 23
+    sal_uInt8   m_cReserved[ 9 ] = {};        // 23
     sal_Int32   m_nFATSize;                   // 2C total number of FAT pages
     sal_Int32   m_nTOCstrm;                   // 30 starting page for the TOC stream
     sal_Int32   m_nReserved;                  // 34
@@ -53,7 +53,7 @@ class StgHeader
     sal_Int32   m_nDataFATSize;               // 40 # of data fat blocks
     sal_Int32   m_nMasterChain;               // 44 chain to the next master block
     sal_Int32   m_nMaster;                    // 48 # of additional master blocks
-    sal_Int32   m_nMasterFAT[ cFATPagesInHeader ];            // 4C first [cFATPagesInHeader] master FAT pages
+    sal_Int32   m_nMasterFAT[ cFATPagesInHeader ] = {}; // 4C first [cFATPagesInHeader] master FAT pages
 public:
     StgHeader();
 

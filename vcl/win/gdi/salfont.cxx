@@ -1177,8 +1177,7 @@ bool WinSalGraphics::AddTempDevFont(PhysicalFontCollection* pFontCollection,
     aInfo.mnFontCount = pFontCollection->Count();
     const int nExpectedFontCount = aInfo.mnFontCount + nFonts;
 
-    LOGFONTW aLogFont;
-    memset(&aLogFont, 0, sizeof(aLogFont));
+    LOGFONTW aLogFont = {};
     aLogFont.lfCharSet = DEFAULT_CHARSET;
     aInfo.mpLogFont = &aLogFont;
 
@@ -1233,8 +1232,7 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
     aInfo.mbPrinter     = mbPrinter;
     aInfo.mnFontCount   = 0;
 
-    LOGFONTW aLogFont;
-    memset( &aLogFont, 0, sizeof( aLogFont ) );
+    LOGFONTW aLogFont = {};
     aLogFont.lfCharSet = DEFAULT_CHARSET;
     aInfo.mpLogFont = &aLogFont;
 

@@ -331,8 +331,7 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
     uno::Sequence< sal_Int8 > aResultKey;
     if ( !aPassword.isEmpty() && aDocId.getLength() == 16 )
     {
-        sal_uInt16 pPassData[16];
-        memset( pPassData, 0, sizeof(pPassData) );
+        sal_uInt16 pPassData[16] = {};
 
         sal_Int32 nPassLen = std::min< sal_Int32 >( aPassword.getLength(), 15 );
         memcpy( pPassData, aPassword.getStr(), nPassLen * sizeof(pPassData[0]) );
@@ -360,8 +359,7 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
     uno::Sequence< sal_Int8 > aResultKey;
     if ( pPassData[0] )
     {
-        sal_uInt8 pKeyData[64];
-        memset( pKeyData, 0, sizeof(pKeyData) );
+        sal_uInt8 pKeyData[64] = {};
 
         sal_Int32 nInd = 0;
 

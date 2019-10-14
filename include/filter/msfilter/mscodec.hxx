@@ -121,7 +121,7 @@ public:
     void                Skip( std::size_t nBytes );
 
 protected:
-    sal_uInt8           mpnKey[ 16 ];   /// Encryption key.
+    sal_uInt8           mpnKey[ 16 ] = {}; /// Encryption key.
     std::size_t         mnOffset;       /// Key offset.
 
 private:
@@ -463,10 +463,10 @@ struct MSFILTER_DLLPUBLIC EncryptionStandardHeader
 struct MSFILTER_DLLPUBLIC EncryptionVerifierAES
 {
     sal_uInt32 saltSize;                                                // must be 0x00000010
-    sal_uInt8  salt[SALT_LENGTH];                                       // random generated salt value
-    sal_uInt8  encryptedVerifier[ENCRYPTED_VERIFIER_LENGTH];            // randomly generated verifier value
+    sal_uInt8  salt[SALT_LENGTH] = {};                                  // random generated salt value
+    sal_uInt8  encryptedVerifier[ENCRYPTED_VERIFIER_LENGTH] = {};       // randomly generated verifier value
     sal_uInt32 encryptedVerifierHashSize;                               // actually written hash size - depends on algorithm
-    sal_uInt8  encryptedVerifierHash[SHA256_HASH_LENGTH];               // verifier value hash - itself also encrypted
+    sal_uInt8  encryptedVerifierHash[SHA256_HASH_LENGTH] = {};          // verifier value hash - itself also encrypted
 
     EncryptionVerifierAES();
 };
@@ -474,10 +474,10 @@ struct MSFILTER_DLLPUBLIC EncryptionVerifierAES
 struct MSFILTER_DLLPUBLIC EncryptionVerifierRC4
 {
     sal_uInt32 saltSize;                                                // must be 0x00000010
-    sal_uInt8  salt[SALT_LENGTH];                                       // random generated salt value
-    sal_uInt8  encryptedVerifier[ENCRYPTED_VERIFIER_LENGTH];            // randomly generated verifier value
+    sal_uInt8  salt[SALT_LENGTH] = {};                                  // random generated salt value
+    sal_uInt8  encryptedVerifier[ENCRYPTED_VERIFIER_LENGTH] = {};       // randomly generated verifier value
     sal_uInt32 encryptedVerifierHashSize;                               // actually written hash size - depends on algorithm
-    sal_uInt8  encryptedVerifierHash[SHA1_HASH_LENGTH];                 // verifier value hash - itself also encrypted
+    sal_uInt8  encryptedVerifierHash[SHA1_HASH_LENGTH] = {};            // verifier value hash - itself also encrypted
 
     EncryptionVerifierRC4();
 };

@@ -257,7 +257,7 @@ public:
 
 struct PptColorSchemeAtom
 {
-    sal_uInt8           aData[32];
+    sal_uInt8           aData[32] = {};
 
 public:
                         PptColorSchemeAtom();
@@ -979,8 +979,8 @@ struct PPTRuler : public salhelper::SimpleReferenceObject
 {
         sal_Int32           nFlags;
         sal_uInt16          nDefaultTab;
-        sal_uInt16          nTextOfs[nMaxPPTLevels];
-        sal_uInt16          nBulletOfs[nMaxPPTLevels];
+        sal_uInt16          nTextOfs[nMaxPPTLevels] = {};
+        sal_uInt16          nBulletOfs[nMaxPPTLevels] = {};
         std::unique_ptr<PPTTabEntry[]>
                             pTab;
         sal_uInt16          nTabCount;

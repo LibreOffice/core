@@ -388,8 +388,6 @@ SwTableAutoFormat::SwTableAutoFormat( const OUString& rName )
     m_bInclBackground = true;
     m_bInclValueFormat = true;
     m_bInclWidthHeight = true;
-
-    memset( m_aBoxAutoFormat, 0, sizeof( m_aBoxAutoFormat ) );
 }
 
 SwTableAutoFormat::SwTableAutoFormat( const SwTableAutoFormat& rNew )

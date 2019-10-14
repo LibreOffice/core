@@ -27,11 +27,6 @@
 #include <tools/globname.hxx>
 
 // ImpSvGlobalName ------------------------------------------------------------
-ImpSvGlobalName::ImpSvGlobalName()
-{
-    memset( &szData, 0, sizeof( szData ) );
-}
-
 ImpSvGlobalName::ImpSvGlobalName( const ImpSvGlobalName & rObj )
     : szData(rObj.szData)
 {
@@ -80,8 +75,7 @@ SvGlobalName::SvGlobalName( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
 SvGlobalName::SvGlobalName( const css::uno::Sequence < sal_Int8 >& aSeq )
 {
     // create SvGlobalName from a platform independent representation
-    SvGUID aResult;
-    memset( &aResult, 0, sizeof( aResult ) );
+    SvGUID aResult = {};
     if ( aSeq.getLength() == 16 )
     {
         aResult.Data1 = ( ( ( ( ( static_cast<sal_uInt8>(aSeq[0]) << 8 ) + static_cast<sal_uInt8>(aSeq[1]) ) << 8 ) + static_cast<sal_uInt8>(aSeq[2]) ) << 8 ) + static_cast<sal_uInt8>(aSeq[3]);
@@ -206,8 +200,7 @@ bool SvGlobalName::MakeId( const OUString & rIdStr )
             pStr++;
         }
 
-        sal_Int8 szRemain[ 8 ];
-        memset( szRemain, 0, sizeof( szRemain ) );
+        sal_Int8 szRemain[ 8 ] = {};
         pStr++;
         for( i = 0; i < 16; i++ )
         {

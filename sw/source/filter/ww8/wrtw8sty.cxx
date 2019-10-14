@@ -404,9 +404,8 @@ void WW8AttributeOutput::EndStyle()
 void WW8AttributeOutput::StartStyle( const OUString& rName, StyleType eType, sal_uInt16 nWwBase,
     sal_uInt16 nWwNext, sal_uInt16 nWwId, sal_uInt16 /*nId*/, bool bAutoUpdate )
 {
-    sal_uInt8 aWW8_STD[ sizeof( WW8_STD ) ];
+    sal_uInt8 aWW8_STD[ sizeof( WW8_STD ) ] = {};
     sal_uInt8* pData = aWW8_STD;
-    memset( &aWW8_STD, 0, sizeof( WW8_STD ) );
 
     sal_uInt16 nBit16 = 0x1000;         // fInvalHeight
     nBit16 |= (ww::stiNil & nWwId);
@@ -728,8 +727,6 @@ wwFont::wwFont(const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily
         //max size of szFfn in 65 chars
         mbAlt = true;
     }
-
-    memset(maWW8_FFN, 0, sizeof(maWW8_FFN));
 
     maWW8_FFN[0] = static_cast<sal_uInt8>( 6 - 1 + 0x22 + ( 2 * ( 1 + msFamilyNm.getLength() ) ));
     if (mbAlt)

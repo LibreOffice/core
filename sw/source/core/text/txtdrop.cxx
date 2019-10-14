@@ -696,23 +696,16 @@ void SwTextPainter::PaintDropPortion()
 
 class SwDropCapCache
 {
-    const void* aFontCacheId[ DROP_CACHE_SIZE ];
+    const void* aFontCacheId[ DROP_CACHE_SIZE ] = {};
     OUString aText[ DROP_CACHE_SIZE ];
     sal_uInt16 aFactor[ DROP_CACHE_SIZE ];
-    sal_uInt16 aWishedHeight[ DROP_CACHE_SIZE ];
+    sal_uInt16 aWishedHeight[ DROP_CACHE_SIZE ] = {};
     short aDescent[ DROP_CACHE_SIZE ];
-    sal_uInt16 nIndex;
+    sal_uInt16 nIndex = 0;
 public:
-    SwDropCapCache();
+    SwDropCapCache() = default;
     void CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf );
 };
-
-// SwDropCapCache Ctor / Dtor
-SwDropCapCache::SwDropCapCache() : nIndex( 0 )
-{
-    memset( &aFontCacheId, 0, sizeof(aFontCacheId) );
-    memset( &aWishedHeight, 0, sizeof(aWishedHeight) );
-}
 
 void SwDropPortion::DeleteDropCapCache()
 {
@@ -997,7 +990,7 @@ bool SwDropPortion::Format( SwTextFormatInfo &rInf )
     if( nDropHeight && pPart && nLines!=1 )
     {
         if( !pDropCapCache )
-            pDropCapCache = new SwDropCapCache();
+            pDropCapCache = new SwDropCapCache;
 
         // adjust font sizes to fit into the rectangle
         pDropCapCache->CalcFontSize( this, rInf );

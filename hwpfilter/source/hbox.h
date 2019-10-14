@@ -257,7 +257,7 @@ struct FBoxStyle
  * [0-2][] : out/in/cell margin
  * [][0-3] : left/right/top/bottom
  */
-    short     margin[3][4];                       // out : left, right, top, bottom
+    short     margin[3][4] = {};                  // out : left, right, top, bottom
 /**
  * Index of floating object
  */
@@ -280,7 +280,6 @@ struct FBoxStyle
         , cap_len(0)
         , cell(nullptr)
     {
-        memset(margin, 0, sizeof(margin));
     }
 };
 
@@ -619,7 +618,7 @@ struct Picture: public FBox
  * Ratio of magnification or reduction.
  */
     hunit     scale[2];
-    PicDef    picinfo;
+    PicDef    picinfo = {};
     char      reserved3[9];
 
     std::vector<std::unique_ptr<HWPPara>> caption;
@@ -827,7 +826,7 @@ struct PageNumCtrl: public HBox
  */
 struct MailMerge: public HBox
 {
-    unsigned char field_name[20];
+    unsigned char field_name[20] = {};
     hchar     dummy;
 
     MailMerge();
@@ -892,8 +891,8 @@ struct TocMark: public HBox
  */
 struct IndexMark: public HBox
 {
-    hchar     keyword1[60];
-    hchar     keyword2[60];
+    hchar     keyword1[60] = {};
+    hchar     keyword2[60] = {};
     unsigned short pgno;
     hchar     dummy;
 

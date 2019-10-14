@@ -900,9 +900,8 @@ bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, bool )
 {
     // check the EPS preview and the file extension
     sal_uInt32  nFirstLong = 0;
-    sal_uInt8   nFirstBytes[20];
+    sal_uInt8   nFirstBytes[20] = {};
     bool        bRet = false;
-    memset(nFirstBytes, 0, sizeof (nFirstBytes));
 
     sal_Int32 nStmPos = rStm.Tell();
     rStm.SetEndian( SvStreamEndian::BIG );
