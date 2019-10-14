@@ -24,7 +24,7 @@ class WindowContext;
 class VCL_PLUGIN_PUBLIC X11SkiaSalGraphicsImpl : public SkiaSalGraphicsImpl, public X11GraphicsImpl
 {
 private:
-    X11SalGraphics& mParent;
+    X11SalGraphics& mX11Parent;
 
 public:
     X11SkiaSalGraphicsImpl(X11SalGraphics& rParent);

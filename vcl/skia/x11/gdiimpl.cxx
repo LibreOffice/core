@@ -23,7 +23,7 @@
 
 X11SkiaSalGraphicsImpl::X11SkiaSalGraphicsImpl(X11SalGraphics& rParent)
     : SkiaSalGraphicsImpl(rParent, rParent.GetGeometryProvider())
-    , mParent(rParent)
+    , mX11Parent(rParent)
 {
 }
 
@@ -32,7 +32,7 @@ X11SkiaSalGraphicsImpl::~X11SkiaSalGraphicsImpl() {}
 void X11SkiaSalGraphicsImpl::Init()
 {
     // The m_pFrame and m_pVDev pointers are updated late in X11
-    setProvider(mParent.GetGeometryProvider());
+    setProvider(mX11Parent.GetGeometryProvider());
     SkiaSalGraphicsImpl::Init();
 }
 
@@ -48,11 +48,11 @@ void X11SkiaSalGraphicsImpl::createSurface()
     displayParams.fColorType = GET_FORMAT;
 #undef GET_FORMAT
     sk_app::window_context_factory::XlibWindowInfo winInfo;
-    winInfo.fDisplay = mParent.GetXDisplay();
-    winInfo.fWindow = mParent.GetDrawable();
+    winInfo.fDisplay = mX11Parent.GetXDisplay();
+    winInfo.fWindow = mX11Parent.GetDrawable();
     assert(winInfo.fDisplay && winInfo.fWindow != None);
     winInfo.fFBConfig = nullptr; // not used
-    winInfo.fVisualInfo = const_cast<SalVisual*>(&mParent.GetVisual());
+    winInfo.fVisualInfo = const_cast<SalVisual*>(&mX11Parent.GetVisual());
     winInfo.fWidth = GetWidth();
     winInfo.fHeight = GetHeight();
     switch (renderMethodToUse())
