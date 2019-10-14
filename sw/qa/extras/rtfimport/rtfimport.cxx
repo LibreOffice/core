@@ -10,6 +10,8 @@
 #include <memory>
 #include <swmodeltestbase.hxx>
 
+#include <config_features.h>
+
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>

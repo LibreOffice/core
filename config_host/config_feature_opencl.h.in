@@ -1,0 +1,13 @@
+/* A feature split out from config_features.h because it affects many files.
+ */
+
+#ifndef CONFIG_FEATURE_OPENCL_H
+#define CONFIG_FEATURE_OPENCL_H
+
+/*
+ * Whether OpenCL is usable on the platform and we should compile in use of OpenCL.
+ */
+
+#define HAVE_FEATURE_OPENCL 0
+
+#endif

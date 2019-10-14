@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_INC_VIEWOPT_HXX
 #define INCLUDED_SW_INC_VIEWOPT_HXX
 
-#include <config_features.h>
+#include <config_feature_desktop.h>
 
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
