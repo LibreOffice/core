@@ -35,6 +35,7 @@ private:
     std::recursive_mutex maMutex; // instead of SolarMutex because graphics can live past vcl main
     std::unordered_set<ImpGraphic*> m_pImpGraphicList;
     std::chrono::seconds mnAllowedIdleTime;
+    bool mbSwapEnabled;
     sal_Int64 mnMemoryLimit;
     sal_Int64 mnUsedSize;
     Timer maSwapOutTimer;
