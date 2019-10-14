@@ -284,45 +284,42 @@ static void lcl_SaveSeparators(
 
 static constexpr OUStringLiteral gaTextSepList(SCSTR_TEXTSEP);
 
-ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatName,
-                                    SvStream* pInStream, ScImportAsciiCall eCall ) :
-        ModalDialog (pParent, "TextImportCsvDialog",
-            "modules/scalc/ui/textimportcsv.ui"),
-        mpDatStream  ( pInStream ),
-        mnStreamPos( pInStream ? pInStream->Tell() : 0 ),
-
-        mnRowPosCount(0),
-
-        mcTextSep   ( ScAsciiOptions::cDefaultTextSep ),
-        meCall(eCall),
-        mbDetectSpaceSep(eCall != SC_TEXTTOCOLUMNS)
+ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatName,
+                                   SvStream* pInStream, ScImportAsciiCall eCall)
+    : GenericDialogController(pParent, "modules/scalc/ui/textimportcsv.ui", "TextImportCsvDialog")
+    , mpDatStream(pInStream)
+    , mnStreamPos(pInStream ? pInStream->Tell() : 0)
+    , mnRowPosCount(0)
+    , mcTextSep(ScAsciiOptions::cDefaultTextSep)
+    , meCall(eCall)
+    , mbDetectSpaceSep(eCall != SC_TEXTTOCOLUMNS)
+    , mxFtCharSet(m_xBuilder->weld_label("textcharset"))
+    , mxLbCharSet, "charset");
+    , mxFtCustomLang(m_xBuilder->weld_label("textlanguage"))
+    , mxLbCustomLang, "language");
+    , mxFtRow(m_xBuilder->weld_label("textfromrow"))
+    , mxNfRow(m_xBuilder->weld_spin_button("fromrow"))
+    , mxRbFixed(m_xBuilder->weld_radio_button("tofixedwidth"))
+    , mxRbSeparated(m_xBuilder->weld_radio_button("toseparatedby"))
+    , mxCkbTab(m_xBuilder->weld_check_button("tab"))
+    , mxCkbSemicolon(m_xBuilder->weld_check_button("semicolon"))
+    , mxCkbComma(m_xBuilder->weld_check_button("comma"))
+    , mxCkbSpace(m_xBuilder->weld_check_button("space"))
+    , mxCkbRemoveSpace(m_xBuilder->weld_check_button("removespace"))
+    , mxCkbOther(m_xBuilder->weld_check_button("other"))
+    , mxEdOther(m_xBuilder->weld_entry("inputother"))
+    , mxCkbAsOnce(m_xBuilder->weld_check_button("mergedelimiters"))
+    , mxFtTextSep(m_xBuilder->weld_label("texttextdelimiter"))
+    , mxCbTextSep(m_xBuilder->weld_check_button("textdelimiter"))
+    , mxCkbQuotedAsText(m_xBuilder->weld_check_button("quotedfieldastext"))
+    , mxCkbDetectNumber(m_xBuilder->weld_check_button("detectspecialnumbers"))
+    , mxCkbSkipEmptyCells(m_xBuilder->weld_check_button("skipemptycells"))
+    , mxFtType(m_xBuilder->weld_label("textcolumntype"))
+    , mxLbType(m_xBuilder->weld_combo_box("columntype"))
+    , mxTableBox, "scrolledwindowcolumntype");
 {
-    get(pFtCharSet, "textcharset");
-    get(pLbCharSet, "charset");
     pLbCharSet->SetStyle(pLbCharSet->GetStyle() | WB_SORT);
-    get(pFtCustomLang, "textlanguage");
-    get(pLbCustomLang, "language");
     pLbCustomLang->SetStyle(pLbCustomLang->GetStyle() | WB_SORT);
-    get(pFtRow, "textfromrow");
-    get(pNfRow, "fromrow");
-    get(pRbFixed, "tofixedwidth");
-    get(pRbSeparated, "toseparatedby");
-    get(pCkbTab, "tab");
-    get(pCkbSemicolon, "semicolon");
-    get(pCkbComma, "comma");
-    get(pCkbSpace, "space");
-    get(pCkbRemoveSpace, "removespace");
-    get(pCkbOther, "other");
-    get(pEdOther, "inputother");
-    get(pCkbAsOnce, "mergedelimiters");
-    get(pFtTextSep, "texttextdelimiter");
-    get(pCbTextSep, "textdelimiter");
-    get(pCkbQuotedAsText, "quotedfieldastext");
-    get(pCkbDetectNumber, "detectspecialnumbers");
-    get(pCkbSkipEmptyCells, "skipemptycells");
-    get(pFtType, "textcolumntype");
-    get(pLbType, "columntype");
-    get(mpTableBox, "scrolledwindowcolumntype");
 
     OUString aName = GetText();
     switch (meCall)
@@ -533,11 +530,6 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
 }
 
 ScImportAsciiDlg::~ScImportAsciiDlg()
-{
-    disposeOnce();
-}
-
-void ScImportAsciiDlg::dispose()
 {
     mpRowPosArray.reset();
     pFtCharSet.clear();

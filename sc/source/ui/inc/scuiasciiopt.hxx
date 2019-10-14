@@ -36,7 +36,7 @@ class NumericField;
 class ScCsvTableBox;
 class SvxTextEncodingBox;
 
-class ScImportAsciiDlg : public ModalDialog
+class ScImportAsciiDlg : public weld::GenericDialogController
 {
     SvStream*                   mpDatStream;
     sal_uLong                       mnStreamPos;
@@ -44,41 +44,6 @@ class ScImportAsciiDlg : public ModalDialog
     sal_uLong                       mnRowPosCount;
 
     OUString               maPreviewLine[ CSV_PREVIEW_LINES ];
-
-    VclPtr<FixedText>                  pFtCharSet;
-
-    VclPtr<SvxTextEncodingBox>         pLbCharSet;
-
-    VclPtr<FixedText>                  pFtCustomLang;
-
-    VclPtr<SvxLanguageBox>             pLbCustomLang;
-
-    VclPtr<FixedText>                  pFtRow;
-    VclPtr<NumericField>               pNfRow;
-
-    VclPtr<RadioButton>                pRbFixed;
-    VclPtr<RadioButton>                pRbSeparated;
-
-    VclPtr<CheckBox>                   pCkbTab;
-    VclPtr<CheckBox>                   pCkbSemicolon;
-    VclPtr<CheckBox>                   pCkbComma;
-    VclPtr<CheckBox>                   pCkbRemoveSpace;
-    VclPtr<CheckBox>                   pCkbSpace;
-    VclPtr<CheckBox>                   pCkbOther;
-    VclPtr<Edit>                       pEdOther;
-    VclPtr<CheckBox>                   pCkbAsOnce;
-
-    VclPtr<FixedText>                  pFtTextSep;
-    VclPtr<ComboBox>                   pCbTextSep;
-
-    VclPtr<CheckBox>                   pCkbQuotedAsText;
-    VclPtr<CheckBox>                   pCkbDetectNumber;
-    VclPtr<CheckBox>                   pCkbSkipEmptyCells;
-
-    VclPtr<FixedText>                  pFtType;
-    VclPtr<ListBox>                    pLbType;
-
-    VclPtr<ScCsvTableBox>              mpTableBox;
 
     OUString                    maFieldSeparators;  // selected field separators
     sal_Unicode                 mcTextSep;
@@ -88,12 +53,43 @@ class ScImportAsciiDlg : public ModalDialog
     ScImportAsciiCall const     meCall;             /// How the dialog is called (see asciiopt.hxx)
     bool                        mbDetectSpaceSep;   /// Whether to detect a possible space separator.
 
+    std::unique_ptr<weld::Label> mxFtCharSet;
+    std::unique_ptr<TextEncodingBox> mxLbCharSet;
+    std::unique_ptr<weld::Label> mxFtCustomLang;
+    std::unique_ptr<LanguageBox> m_XLbCustomLang;
+
+    std::unique_ptr<weld::Label> mxFtRow;
+    std::unique_ptr<weld::SpinButton> mxNfRow;
+
+    std::unique_ptr<weld::RadioButton> mxRbFixed;
+    std::unique_ptr<weld::RadioButton> mxRbSeparated;
+
+    std::unique_ptr<weld::CheckButton> mxCkbTab;
+    std::unique_ptr<weld::CheckButton> mxCkbSemicolon;
+    std::unique_ptr<weld::CheckButton> mxCkbComma;
+    std::unique_ptr<weld::CheckButton> mxCkbRemoveSpace;
+    std::unique_ptr<weld::CheckButton> mxCkbSpace;
+    std::unique_ptr<weld::CheckButton> mxCkbOther;
+    std::unique_ptr<weld::Entry> mxEdOther;
+    std::unique_ptr<weld::CheckButton> mxCkbAsOnce;
+
+    std::unique_ptr<weld::Label> mxFtTextSep;
+    std::unique_ptr<weld::ComboBox> mxCbTextSep;
+
+    std::unique_ptr<weld::CheckButton> mxCkbQuotedAsText;
+    std::unique_ptr<weld::CheckButton> mxCkbDetectNumber;
+    std::unique_ptr<weld::CheckButton> mxCkbSkipEmptyCells;
+
+    std::unique_ptr<weld::Label> mxFtType;
+    std::unique_ptr<weld::ComboBox> mxLbType;
+
+    VclPtr<ScCsvTableBox> mxTableBox;
+
 public:
                                 ScImportAsciiDlg(
-                                    vcl::Window* pParent, const OUString& aDatName,
+                                    weld::Window* pParent, const OUString& aDatName,
                                     SvStream* pInStream, ScImportAsciiCall eCall );
                                 virtual ~ScImportAsciiDlg() override;
-    virtual void                dispose() override;
 
     void                        GetOptions( ScAsciiOptions& rOpt );
     void                        SaveParameters();
