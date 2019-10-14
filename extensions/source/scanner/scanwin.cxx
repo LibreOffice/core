@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <cstring>
-
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -265,8 +263,7 @@ void Twain::ShimListenerThread::execute()
             // We need a WinAPI HANDLE of the process to be able to wait on it and detect the process
             // termination; so use WinAPI to start the process, not osl_executeProcess.
 
-            STARTUPINFOW si;
-            std::memset(&si, 0, sizeof si);
+            STARTUPINFOW si{};
             si.cb = sizeof(STARTUPINFOW);
             PROCESS_INFORMATION pi;
 
