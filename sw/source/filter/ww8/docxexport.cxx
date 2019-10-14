@@ -1034,7 +1034,16 @@ void DocxExport::WriteSettings()
     uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     bool hasProtectionProperties = false;
+    bool bHasRedlineProtectionKey = false;
+    bool bHasDummyRedlineProtectionKey = false;
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    if ( xPropSetInfo->hasPropertyByName( "RedlineProtectionKey" ) )
+    {
+        uno::Sequence<sal_Int8> aKey;
+        xPropSet->getPropertyValue( "RedlineProtectionKey" ) >>= aKey;
+        bHasRedlineProtectionKey = aKey.hasElements();
+        bHasDummyRedlineProtectionKey = aKey.getLength() == 1 && aKey[0] == 1;
+    }
     const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
     {
@@ -1103,6 +1112,7 @@ void DocxExport::WriteSettings()
                 if (rAttributeList.hasElements())
                 {
                     sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
+                    bool bIsProtectionTrackChanges = false;
                     for (const auto& rAttribute : std::as_const(rAttributeList))
                     {
                         static DocxStringTokenMap const aTokens[] =
@@ -1121,13 +1131,20 @@ void DocxExport::WriteSettings()
                         };
 
                         if (sal_Int32 nToken = DocxStringGetToken(aTokens, rAttribute.Name))
-                            pAttributeList->add(FSNS(XML_w, nToken), rAttribute.Value.get<OUString>().toUtf8());
+                        {
+                            OUString sValue = rAttribute.Value.get<OUString>();
+                            pAttributeList->add(FSNS(XML_w, nToken), sValue.toUtf8());
+                            if ( nToken == XML_edit && sValue == "trackedChanges" )
+                                bIsProtectionTrackChanges = true;
+                        }
                     }
 
                     // we have document protection from input DOCX file
+                    // and in the case of change tracking protection, we didn't modify it
 
                     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
-                    pFS->singleElementNS(XML_w, XML_documentProtection, xAttributeList);
+                    if (!bIsProtectionTrackChanges || bHasDummyRedlineProtectionKey)
+                        pFS->singleElementNS(XML_w, XML_documentProtection, xAttributeList);
 
                     hasProtectionProperties = true;
                 }
@@ -1148,6 +1165,16 @@ void DocxExport::WriteSettings()
                 FSNS(XML_w, XML_edit), "forms",
                 FSNS(XML_w, XML_enforcement), "true");
         }
+    }
+
+    // Protect Change Tracking
+    if ( bHasRedlineProtectionKey && !bHasDummyRedlineProtectionKey )
+    {
+        // we have change tracking protection from Writer or from input ODT file
+
+        pFS->singleElementNS(XML_w, XML_documentProtection,
+            FSNS(XML_w, XML_edit), "trackedChanges",
+            FSNS(XML_w, XML_enforcement), "1");
     }
 
     // finish settings.xml
