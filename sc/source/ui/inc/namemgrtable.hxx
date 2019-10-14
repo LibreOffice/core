@@ -45,6 +45,8 @@ private:
 
     int m_nId;
 
+    bool mbNeedUpdate;
+
     void GetLine(ScRangeNameLine& aLine, const weld::TreeIter& rEntry);
     void Init();
     const ScRangeData* findRangeData(const ScRangeNameLine& rLine);
@@ -70,6 +72,21 @@ public:
     void GetCurrentLine(ScRangeNameLine& rLine);
     bool IsMultiSelection() const;
     std::vector<ScRangeNameLine> GetSelectedEntries();
+
+    void BlockUpdate()
+    {
+        mbNeedUpdate = false;
+    }
+
+    bool UpdatesBlocked() const
+    {
+        return !mbNeedUpdate;
+    }
+
+    void UnblockUpdate()
+    {
+        mbNeedUpdate = true;
+    }
 };
 
 #endif
