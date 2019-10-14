@@ -156,14 +156,16 @@ void CreationWizard::enterState(WizardState nState)
         vcl::RoadmapWizardMachine::enterState(nState);
 }
 
-void CreationWizard::setInvalidPage( BuilderPage * /* pTabPage */ )
+void CreationWizard::setInvalidPage(BuilderPage* pTabPage)
 {
-    m_bCanTravel = false;
+    if (pTabPage == m_pCurTabPage)
+        m_bCanTravel = false;
 }
 
-void CreationWizard::setValidPage( BuilderPage * /* pTabPage */ )
+void CreationWizard::setValidPage(BuilderPage* pTabPage)
 {
-    m_bCanTravel = true;
+    if (pTabPage == m_pCurTabPage)
+        m_bCanTravel = true;
 }
 
 OUString CreationWizard::getStateDisplayName( WizardState nState ) const

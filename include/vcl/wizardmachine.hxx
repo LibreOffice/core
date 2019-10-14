@@ -119,9 +119,9 @@ namespace vcl
     */
     class VCL_DLLPUBLIC WizardMachine : public weld::AssistantController
     {
-    private:
+    protected:
         BuilderPage* m_pCurTabPage;
-
+    private:
         WizardTypes::WizardState m_nCurState;
         WizPageData* m_pFirstPage;
 
