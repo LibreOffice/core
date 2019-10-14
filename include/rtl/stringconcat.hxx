@@ -480,6 +480,61 @@ struct ToStringHelper< OUStringNumber< T > >
     static const bool allowOUStringConcat = true;
     };
 
+// Abstractions over null-terminated char and sal_Unicode strings that sometimes are needed in
+// concatenations of multiple such raw strings, as in
+//
+//   char const * s1, s2;
+//   OString s = OStringView(s1) + s2;
+//
+// (Providing specializations of ToStringHelper<std::string_view> and
+// ToStringHelper<std::u16string_view> would look dubious, as it would give meaning to expressions
+// like
+//
+//   std::string_view(s1) + s2
+//
+// that do not involve any user-defined types.)
+
+class OStringView {
+public:
+    explicit OStringView(char const * s): view_(s) {}
+
+    std::size_t length() const { return view_.length(); }
+
+    char const * data() const { return view_.data(); }
+
+private:
+    std::string_view view_;
+};
+
+template<>
+struct ToStringHelper< OStringView >
+    {
+    static std::size_t length( const OStringView& v ) { return v.length(); }
+    static char* addData( char* buffer, const OStringView& v ) SAL_RETURNS_NONNULL { return addDataHelper( buffer, v.data(), v.length() ); }
+    static const bool allowOStringConcat = true;
+    static const bool allowOUStringConcat = false;
+    };
+
+class OUStringView {
+public:
+    explicit OUStringView(sal_Unicode const * s): view_(s) {}
+
+    std::size_t length() const { return view_.length(); }
+
+    sal_Unicode const * data() const { return view_.data(); }
+
+private:
+    std::u16string_view view_;
+};
+
+template<>
+struct ToStringHelper< OUStringView >
+    {
+    static std::size_t length( const OUStringView& v ) { return v.length(); }
+    static sal_Unicode* addData( sal_Unicode* buffer, const OUStringView& v ) SAL_RETURNS_NONNULL { return addDataHelper( buffer, v.data(), v.length() ); }
+    static const bool allowOStringConcat = false;
+    static const bool allowOUStringConcat = true;
+    };
 
 } // namespace
 

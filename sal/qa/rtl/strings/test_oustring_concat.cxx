@@ -74,6 +74,8 @@ void test::oustring::StringConcat::checkConcat()
     const sal_Unicode* d2 = u"xyz";
     CPPUNIT_ASSERT_EQUAL( OUString( "fooxyz" ), OUString( OUString( "foo" ) + d2 ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const sal_Unicode* > )), typeid( OUString( "foo" ) + d2 ));
+    CPPUNIT_ASSERT_EQUAL( OUString( "fooxyz" ), OUString( rtl::OUStringView( u"foo" ) + d2 ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< rtl::OUStringView, const sal_Unicode* > )), typeid( rtl::OUStringView( u"foo" ) + d2 ));
 
     CPPUNIT_ASSERT_EQUAL( OUString( "num10" ), OUString( OUString( "num" ) + OUString::number( 10 )));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, OUStringNumber< int > > )), typeid( OUString( "num" ) + OUString::number( 10 )));
@@ -168,6 +170,7 @@ void test::oustring::StringConcat::checkInvalid()
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + d ));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + static_cast<char*>(d) ));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OStringLiteral( "b" )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + rtl::OStringView( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + 1 ));
     rtl_String* rs = nullptr;
     rtl_uString* rus = nullptr;
