@@ -1945,6 +1945,8 @@ namespace osl_ThreadData
                 char cData1 = aThread1.m_Char_Test;
                 char cData2 = aThread2.m_Char_Test;
 
+                abort();
+
                 CPPUNIT_ASSERT_MESSAGE(
                     "ThreadData setData: ",
                     cData1 == 'a' && cData2 == 'b'
