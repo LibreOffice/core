@@ -249,7 +249,15 @@ static sal_Int32 lcl_getMinPos( sal_Int32 pos1, sal_Int32 pos2 )
 sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
 {
     const OUString aText = rNd.GetText();
-    sal_Int32 fieldEndPos = aText.indexOf(CH_TXT_ATR_FIELDEND, nStartPos);
+    sal_Int32 fieldEndPos = aText.indexOf(CH_TXT_ATR_FIELDEND, nStartPos - 1);
+    // HACK: for (so far) mysterious reasons the sdtContent element closes
+    // too late in testDateFormField() unless an empty run is exported at
+    // the end of the fieldmark; hence find *also* the position after the
+    // CH_TXT_ATR_FIELDEND here
+    if (0 <= fieldEndPos && fieldEndPos < nStartPos)
+    {
+        ++fieldEndPos;
+    }
     sal_Int32 fieldStartPos = aText.indexOf(CH_TXT_ATR_FIELDSTART, nStartPos);
     sal_Int32 formElementPos = aText.indexOf(CH_TXT_ATR_FORMELEMENT, nStartPos);
 
@@ -1867,9 +1875,21 @@ bool MSWordExportBase::GetBookmarks( const SwTextNode& rNd, sal_Int32 nStt,
     {
         IMark* pMark = pMarkAccess->getAllMarksBegin()[i];
 
-        if ( IDocumentMarkAccess::GetType( *pMark ) == IDocumentMarkAccess::MarkType::ANNOTATIONMARK )
+        switch (IDocumentMarkAccess::GetType( *pMark ))
         {
-            continue;
+            case IDocumentMarkAccess::MarkType::UNO_BOOKMARK:
+            case IDocumentMarkAccess::MarkType::DDE_BOOKMARK:
+            case IDocumentMarkAccess::MarkType::ANNOTATIONMARK:
+            case IDocumentMarkAccess::MarkType::TEXT_FIELDMARK:
+            case IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK:
+            case IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK:
+            case IDocumentMarkAccess::MarkType::DATE_FIELDMARK:
+            case IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER:
+                continue; // ignore irrelevant marks
+            case IDocumentMarkAccess::MarkType::BOOKMARK:
+            case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
+            case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
+                break;
         }
 
         // Only keep the bookmarks starting or ending in this node
