@@ -795,7 +795,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
 
         std::unique_ptr<weld::TreeIter> xTemp = xTreeLB->make_iterator();
         bool bTemp = xTreeLB->get_iter_first(*xTemp);
-        while (!bTemp)
+        while (bTemp)
         {
             // restore only selection of a leaf
             if (xTreeLB->get_iter_depth(*xTemp) && xTreeLB->get_id(*xTemp).toInt64())
