@@ -46,10 +46,13 @@ public:
     {
         std::string fn(handler.getMainFileName());
         loplugin::normalizeDotDotInFilePath(fn);
-        if (fn == SRCDIR "/sal/qa/rtl/oustring/rtl_OUString2.cxx"
-            || fn == SRCDIR "/sal/qa/rtl/strings/test_oustring_concat.cxx"
-            || fn == SRCDIR "/sal/qa/rtl/strings/test_ostring_concat.cxx"
-            || fn == SRCDIR "/sal/qa/OStringBuffer/rtl_OStringBuffer.cxx")
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/qa/rtl/oustring/"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/qa/rtl/oustringbuffer/"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/qa/rtl/strings/"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/qa/OStringBuffer/"))
             return false;
         // there is an ifdef here, but my check is not working, not sure why
         if (fn == SRCDIR "/pyuno/source/module/pyuno_runtime.cxx")
@@ -183,7 +186,6 @@ bool StringAdd::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* operatorCall
 {
     if (ignoreLocation(operatorCall))
         return true;
-    // TODO PlusEqual seems to generate temporaries, does not do the StringConcat optimisation
     if (operatorCall->getOperator() != OO_Plus)
         return true;
     auto tc = loplugin::TypeCheck(operatorCall->getType()->getUnqualifiedDesugaredType());
@@ -261,7 +263,8 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
             if (calleeMethodDecl && calleeMethodDecl->getIdentifier())
             {
                 auto name = calleeMethodDecl->getName();
-                if (name == "number" || name == "unacquired")
+                if (callExpr->getNumArgs() > 0
+                    && (name == "number" || name == "unacquired" || "boolean"))
                 {
                     auto tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
                     if (tc.Class("OUString") || tc.Class("OString"))

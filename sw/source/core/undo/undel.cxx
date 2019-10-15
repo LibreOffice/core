@@ -696,9 +696,9 @@ static OUString lcl_DenotedPortion(const OUString& rStr, sal_Int32 nStart, sal_I
         }
         else
         {
-            aResult = SwResId(STR_START_QUOTE);
-            aResult += rStr.copy(nStart, nCount);
-            aResult += SwResId(STR_END_QUOTE);
+            aResult = SwResId(STR_START_QUOTE) +
+                rStr.copy(nStart, nCount) +
+                SwResId(STR_END_QUOTE);
         }
     }
 

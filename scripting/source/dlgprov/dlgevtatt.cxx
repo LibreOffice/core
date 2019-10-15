@@ -511,10 +511,10 @@ namespace dlgprov
             sal_Int32 nIndex = sScriptCode.indexOf( ':' );
             if ( nIndex >= 0 && nIndex < sScriptCode.getLength() )
             {
-                sScriptURL = "vnd.sun.star.script:";
-                sScriptURL += sScriptCode.copy( nIndex + 1 );
-                sScriptURL += "?language=Basic&location=";
-                sScriptURL += sScriptCode.copy( 0, nIndex );
+                sScriptURL = "vnd.sun.star.script:" +
+                    sScriptCode.copy( nIndex + 1 ) +
+                    "?language=Basic&location=" +
+                    sScriptCode.copy( 0, nIndex );
             }
             ScriptEvent aSFScriptEvent( aScriptEvent );
             aSFScriptEvent.ScriptCode = sScriptURL;
@@ -611,10 +611,10 @@ namespace dlgprov
 
             sal_Int32 nIndex = aRes.indexOf( '%' );
 
-            OUString aOUFinal;
-            aOUFinal += aRes.copy( 0, nIndex );
-            aOUFinal += aQuoteChar + aMethodName + aQuoteChar;
-            aOUFinal += aRes.copy( nIndex + 2 );
+            OUString aOUFinal =
+                aRes.copy( 0, nIndex ) +
+                aQuoteChar + aMethodName + aQuoteChar +
+                aRes.copy( nIndex + 2 );
 
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
                                                       VclMessageType::Warning, VclButtonsType::Ok, aOUFinal));

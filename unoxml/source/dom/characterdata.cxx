@@ -98,8 +98,7 @@ namespace DOM
         if ((offset+count) > tmp.getLength())
             count = tmp.getLength() - offset;
 
-        OUString tmp2 = tmp.copy(0, offset);
-        tmp2 += tmp.copy(offset+count);
+        OUString tmp2 = tmp.copy(0, offset) + tmp.copy(offset+count);
         OUString oldValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
         xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
         OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
@@ -167,9 +166,9 @@ namespace DOM
             throw e;
         }
 
-        OUString tmp2 = tmp.copy(0, offset);
-        tmp2 += arg;
-        tmp2 += tmp.copy(offset);
+        OUString tmp2 = tmp.copy(0, offset) +
+            arg +
+            tmp.copy(offset);
         OUString oldValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
         xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
         OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
@@ -204,9 +203,9 @@ namespace DOM
         if ((offset+count) > tmp.getLength())
             count = tmp.getLength() - offset;
 
-        OUString tmp2 = tmp.copy(0, offset);
-        tmp2 += arg;
-        tmp2 += tmp.copy(offset+count);
+        OUString tmp2 = tmp.copy(0, offset) +
+            arg +
+            tmp.copy(offset+count);
         OUString oldValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
         xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
         OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);

@@ -19,7 +19,7 @@ namespace test1
 {
 static const char XXX1[] = "xxx";
 static const char XXX2[] = "xxx";
-void f(OUString s1, int i, OString o)
+void f1(OUString s1, int i, OString o)
 {
     OUString s2 = s1;
     // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
@@ -41,7 +41,7 @@ void f(OUString s1, int i, OString o)
     // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
     s2 += OStringToOUString(o, RTL_TEXTENCODING_UTF8);
 }
-void g(OString s1, int i, OUString u)
+void f2(OString s1, int i, OUString u)
 {
     OString s2 = s1;
     // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
@@ -58,6 +58,12 @@ void g(OString s1, int i, OUString u)
 
     // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
     s2 += OUStringToOString(u, RTL_TEXTENCODING_ASCII_US);
+}
+void f3(OUString aStr, int nFirstContent)
+{
+    OUString aFirstStr = aStr.copy(0, nFirstContent);
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    aFirstStr += "...";
 }
 }
 

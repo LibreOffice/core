@@ -284,8 +284,7 @@ void Test::testFormulaParseReference()
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
         {
             // Use the 'Dummy' sheet for this.
-            OUString aInput("=");
-            aInput += OUString::createFromAscii(aChecks[i]);
+            OUString aInput = "=" + OUString::createFromAscii(aChecks[i]);
             m_pDoc->SetString(ScAddress(0,0,0), aInput);
             ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,0,0), aChecks[i], "Wrong formula");
         }

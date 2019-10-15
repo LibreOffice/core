@@ -508,7 +508,6 @@ static OUString lcl_CellText(const SwCellFrame* pFrame)
 {
     OUString result;
     int n = 0;
-    sal_Char sz[RTL_STR_MAX_VALUEOFINT64];
 
     const SwStartNode* pStartNode = pFrame->GetTabBox()->GetSttNd();
     const SwEndNode* pEndNode = pStartNode->EndOfSectionNode();
@@ -526,19 +525,12 @@ static OUString lcl_CellText(const SwCellFrame* pFrame)
         else if (pNode->IsTextNode())
         {
             n++;
-            result += "Para:";
-            rtl_str_valueOfInt64(sz, n, 10);
-            OUString s = OUString::createFromAscii(sz);
-            result += s + " ";
-            result += pNode->GetTextNode()->GetText();
+            result += "Para:" + OUString::number(10) + " " +
+                pNode->GetTextNode()->GetText();
         }
     }
 
-    rtl_str_valueOfInt64(sz, n, 10);
-    OUString s = OUString::createFromAscii(sz);
-    s += " para(s):" + result;
-
-    return s;
+    return OUString::number(n) + " para(s):" + result;
 }
 
 static OString lcl_CellInfo(const SwCellFrame* pFrame)

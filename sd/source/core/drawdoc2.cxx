@@ -288,8 +288,8 @@ void SdDrawDocument::UpdatePageRelativeURLs(const OUString& rOldName, const OUSt
                 {
                     if (aURL.getLength() == rOldName.getLength() + 1) // standard page name
                     {
-                        aURL = aURL.replaceAt(1, aURL.getLength() - 1, "");
-                        aURL += rNewName;
+                        aURL = aURL.replaceAt(1, aURL.getLength() - 1, "") +
+                            rNewName;
                         pURLField->SetURL(aURL);
                     }
                     else
@@ -298,8 +298,8 @@ void SdDrawDocument::UpdatePageRelativeURLs(const OUString& rOldName, const OUSt
                         if (aURL.getLength() == rOldName.getLength() + 2 + sNotes.getLength()
                             && aURL.indexOf(sNotes, rOldName.getLength() + 2) == rOldName.getLength() + 2)
                         {
-                            aURL = aURL.replaceAt(1, aURL.getLength() - 1, "");
-                            aURL += rNewName + " " + sNotes;
+                            aURL = aURL.replaceAt(1, aURL.getLength() - 1, "") +
+                                rNewName + " " + sNotes;
                             pURLField->SetURL(aURL);
                         }
                     }

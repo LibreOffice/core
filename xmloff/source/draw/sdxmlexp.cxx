@@ -1327,9 +1327,7 @@ static OUString findOrAppendImpl( std::vector< OUString >& rVector, const OUStri
 
     // create a reference string with pPrefix and the index of the
     // found or created rText
-    OUString aStr( OUString::createFromAscii( pPrefix ) );
-    aStr += OUString::number( nIndex );
-    return aStr;
+    return OUString::createFromAscii( pPrefix ) + OUString::number( nIndex );
 }
 
 static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, const OUString& rText, bool bFixed, sal_Int32 nFormat, const sal_Char* pPrefix )
@@ -1355,9 +1353,7 @@ static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, cons
 
     // create a reference string with pPrefix and the index of the
     // found or created DateTimeDeclImpl
-    OUString aStr( OUString::createFromAscii( pPrefix ) );
-    aStr += OUString::number( nIndex );
-    return aStr;
+    return OUString::createFromAscii( pPrefix ) + OUString::number( nIndex );
 }
 
 static const sal_Char gpStrHeaderTextPrefix[] = "hdr";
