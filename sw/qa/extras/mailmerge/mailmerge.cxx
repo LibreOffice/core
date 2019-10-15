@@ -1215,6 +1215,53 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf123057_file, "pagecounttest.ott", "db_pagecou
     }
 }
 
+// The document has a header with page number and total page count on page 2
+// (which uses page style "Default Style") but doesn't have a header set
+// for the first page (which uses page style "First Page").
+// Fields in the header hadn't been replaced properly.
+DECLARE_SHELL_MAILMERGE_TEST(testTdf128148, "tdf128148.odt", "4_v01.ods", "Tabelle1")
+{
+    executeMailMerge();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxMMComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // 4 documents with 2 pages each => 8 pages in total
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum());
+
+    SwDoc* pDocMM = pTextDoc->GetDocShell()->GetDoc();
+    uno::Reference<frame::XModel> xModel = pTextDoc->GetDocShell()->GetBaseModel();
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
+
+    // All odd pages have no header, all even pages should have header with text "Page 2 of 2"
+    const SwRootFrame* pLayout = pDocMM->getIDocumentLayoutAccess().GetCurrentLayout();
+    const SwPageFrame* pPageFrm = static_cast<const SwPageFrame*>(pLayout->Lower());
+    while (pPageFrm)
+    {
+        const sal_uInt16 nPageNum = pPageFrm->GetPhyPageNum();
+        const bool bIsEvenPage = ((nPageNum % 2) == 0);
+
+        const OUString& sPageStyle = pPageFrm->GetPageDesc()->GetName();
+        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(sPageStyle), uno::UNO_QUERY);
+
+        bool bHeaderIsOn = false;
+        xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
+
+        // first page for every data record shouldn't have header, second should
+        CPPUNIT_ASSERT_EQUAL(bIsEvenPage, bHeaderIsOn);
+        if (bIsEvenPage)
+        {
+            // text in header on even pages with correctly replaced fields is "Page 2 of 2"
+            uno::Reference<text::XText> xHeaderText;
+            xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
+            const OUString sHeaderText = xHeaderText->getString();
+            CPPUNIT_ASSERT_EQUAL(OUString("Page 2 of 2"), sHeaderText);
+        }
+
+        pPageFrm = static_cast<const SwPageFrame*>(pPageFrm->GetNext());
+    }
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
