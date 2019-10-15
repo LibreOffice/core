@@ -4997,18 +4997,39 @@ public:
                                        int page_size) override
     {
         disable_notify_events();
+        if (SwapForRTL())
+            value = upper - (value - lower + page_size);
         gtk_adjustment_configure(m_pHAdjustment, value, lower, upper, step_increment, page_increment, page_size);
         enable_notify_events();
     }
 
     virtual int hadjustment_get_value() const override
     {
-        return gtk_adjustment_get_value(m_pHAdjustment);
+        int value = gtk_adjustment_get_value(m_pHAdjustment);
+
+        if (SwapForRTL())
+        {
+            int upper = gtk_adjustment_get_upper(m_pHAdjustment);
+            int lower = gtk_adjustment_get_lower(m_pHAdjustment);
+            int page_size = gtk_adjustment_get_page_size(m_pHAdjustment);
+            value = lower + (upper - value - page_size);
+        }
+
+        return value;
     }
 
     virtual void hadjustment_set_value(int value) override
     {
         disable_notify_events();
+
+        if (SwapForRTL())
+        {
+            int upper = gtk_adjustment_get_upper(m_pHAdjustment);
+            int lower = gtk_adjustment_get_lower(m_pHAdjustment);
+            int page_size = gtk_adjustment_get_page_size(m_pHAdjustment);
+            value = upper - (value - lower + page_size);
+        }
+
         gtk_adjustment_set_value(m_pHAdjustment, value);
         enable_notify_events();
     }
