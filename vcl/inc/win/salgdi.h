@@ -45,10 +45,9 @@
 class FontSelectPattern;
 class WinFontInstance;
 class ImplFontAttrCache;
-class OpenGLTexture;
 class PhysicalFontCollection;
 class SalGraphicsImpl;
-class WinOpenGLSalGraphicsImpl;
+class WinSalGraphicsImplBase;
 class ImplFontMetricData;
 
 #define RGB_TO_PALRGB(nRGB)         ((nRGB)|0x02000000)
@@ -95,11 +94,12 @@ private:
 
 /** Class that creates (and destroys) a compatible Device Context.
 
-This is to be used for GDI drawing into a DIB that we later use as a texture for OpenGL drawing.
+This is to be used for GDI drawing into a DIB that we later use for a different
+drawing method, such as a texture for OpenGL drawing or surface for Skia drawing.
 */
-class OpenGLCompatibleDC
+class CompatibleDC
 {
-private:
+protected:
     /// The compatible DC that we create for our purposes.
     HDC mhCompatibleDC;
 
@@ -115,12 +115,16 @@ private:
     /// Mapping between the GDI position and OpenGL, to use for OpenGL drawing.
     SalTwoRect maRects;
 
-    /// The OpenGL-based SalGraphicsImpl where we will draw.  If null, we ignore the drawing, it means it happened directly to the DC...
-    WinOpenGLSalGraphicsImpl *mpImpl;
+    /// The SalGraphicsImpl where we will draw.  If null, we ignore the drawing, it means it happened directly to the DC...
+    WinSalGraphicsImplBase *mpImpl;
+
+    // If 'disable' is true, this class is a simple wrapper for drawing directly. Subclasses should use true.
+    CompatibleDC(SalGraphics &rGraphics, int x, int y, int width, int height, bool disable=true);
 
 public:
-    OpenGLCompatibleDC(SalGraphics &rGraphics, int x, int y, int width, int height);
-    ~OpenGLCompatibleDC();
+    static std::unique_ptr< CompatibleDC > create(SalGraphics &rGraphics, int x, int y, int width, int height);
+
+    virtual ~CompatibleDC();
 
     HDC getCompatibleHDC() { return mhCompatibleDC; }
 
@@ -131,11 +135,22 @@ public:
     /// Reset the DC with the defined color.
     void fill(sal_uInt32 color);
 
-    /// Obtain the texture; the caller must delete it after use.
-    OpenGLTexture* getTexture();
+    /// Base texture class (OpenGL and Skia will provide their implementations).
+    struct Texture;
+
+    /// Obtain the texture.
+    virtual std::unique_ptr<Texture> getTexture() { abort(); };
 
     /// Copy bitmap data to the texture. Texture must be initialized and the correct size to hold the bitmap.
-    bool copyToTexture(OpenGLTexture& aTexture);
+    virtual bool copyToTexture(Texture& /*aTexture*/) { abort(); };
+};
+
+struct CompatibleDC::Texture
+{
+    virtual ~Texture() = 0 {};
+    virtual bool isValid() const = 0;
+    virtual int GetWidth() const = 0;
+    virtual int GetHeight() const = 0;
 };
 
 class WinSalGraphics : public SalGraphics
@@ -143,7 +158,6 @@ class WinSalGraphics : public SalGraphics
     friend class WinSalGraphicsImpl;
     friend class WinOpenGLSalGraphicsImpl;
     friend class ScopedFont;
-    friend class OpenGLCompatibleDC;
 
 protected:
     std::unique_ptr<SalGraphicsImpl> mpImpl;
