@@ -5497,10 +5497,10 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 {
                     // Quick test that ICU works...
                     UConverter *cnv = ucnv_open("iso-8859-3", &icuStatus);
-                    NSLog(@"ucnv_open(iso-8859-3)-> %p, err = %s, name=%s",
-                          (void *)cnv, u_errorName(icuStatus), (!cnv)?"?":ucnv_getName(cnv,&icuStatus));
                     if (U_SUCCESS(icuStatus))
                         ucnv_close(cnv);
+                    else
+                        NSLog(@"ucnv_open() failed: %s", u_errorName(icuStatus));
                 }
             }
         }
