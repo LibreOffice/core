@@ -193,46 +193,30 @@ bool StringAdd::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* operatorCall
         && !tc.Class("OString").Namespace("rtl").GlobalNamespace())
         return true;
 
-    auto check = [/* operatorCall, */ this, &tc](const MaterializeTemporaryExpr* matTempExpr) {
-        auto tc3 = loplugin::TypeCheck(matTempExpr->getType());
+    auto check = [this, &tc](const Expr* expr) {
+        auto const e = dyn_cast<CXXFunctionalCastExpr>(expr->IgnoreParenImpCasts());
+        if (e == nullptr)
+            return;
+        auto tc3 = loplugin::TypeCheck(e->getType());
         if (!tc3.Class("OUString").Namespace("rtl").GlobalNamespace()
             && !tc3.Class("OString").Namespace("rtl").GlobalNamespace())
             return;
-        if (auto bindTemp
-            = dyn_cast<CXXBindTemporaryExpr>(matTempExpr->GetTemporaryExpr()->IgnoreCasts()))
-        {
-            // ignore temporaries returned from function calls
-            if (isa<CallExpr>(bindTemp->getSubExpr()))
-                return;
-            // we don't have OStringLiteral1, so char needs to generate a temporary
-            if (tc.Class("OString").Namespace("rtl").GlobalNamespace()
-                || tc.Struct("OStringConcat").Namespace("rtl").GlobalNamespace())
+        // we don't have OStringLiteral1, so char needs to generate a temporary
+        if (tc.Class("OString").Namespace("rtl").GlobalNamespace()
+            || tc.Struct("OStringConcat").Namespace("rtl").GlobalNamespace())
+            if (auto bindTemp = dyn_cast<CXXBindTemporaryExpr>(e->getSubExpr()))
                 if (auto cxxConstruct = dyn_cast<CXXConstructExpr>(bindTemp->getSubExpr()))
                     if (loplugin::TypeCheck(
                             cxxConstruct->getConstructor()->getParamDecl(0)->getType())
                             .Char())
                         return;
-            // calls where we pass in an explicit character encoding
-            if (auto cxxTemp = dyn_cast<CXXTemporaryObjectExpr>(bindTemp->getSubExpr()))
-                if (cxxTemp->getNumArgs() > 1)
-                    return;
-        }
-        // conditional operators ( a ? b : c ) will result in temporaries
-        if (isa<ConditionalOperator>(
-                matTempExpr->GetTemporaryExpr()->IgnoreCasts()->IgnoreParens()))
-            return;
-        report(DiagnosticsEngine::Warning, "avoid constructing temporary copies during +",
-               compat::getBeginLoc(matTempExpr))
-            << matTempExpr->getSourceRange();
-        //        operatorCall->dump();
-        //        matTempExpr->getType()->dump();
-        //        operatorCall->getType()->getUnqualifiedDesugaredType()->dump();
+        report(DiagnosticsEngine::Warning, "avoid constructing temporary object from %0 during +",
+               compat::getBeginLoc(e))
+            << e->getSubExprAsWritten()->getType() << e->getSourceRange();
     };
 
-    if (auto matTempExpr = dyn_cast<MaterializeTemporaryExpr>(operatorCall->getArg(0)))
-        check(matTempExpr);
-    if (auto matTempExpr = dyn_cast<MaterializeTemporaryExpr>(operatorCall->getArg(1)))
-        check(matTempExpr);
+    check(operatorCall->getArg(0));
+    check(operatorCall->getArg(1));
     return true;
 }
 
