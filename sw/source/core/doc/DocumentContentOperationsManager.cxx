@@ -251,7 +251,10 @@ namespace
             if ( rMarkStart >= rStt && rMarkEnd <= rEnd
                  && ( bIsNotOnBoundary
                       || aMarkType == IDocumentMarkAccess::MarkType::ANNOTATIONMARK
-                      || aMarkType == IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK ) )
+                      || aMarkType == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK
+                      || aMarkType == IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK
+                      || aMarkType == IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK
+                      || aMarkType == IDocumentMarkAccess::MarkType::DATE_FIELDMARK))
             {
                 vMarksToCopy.push_back(pMark);
             }
