@@ -1670,6 +1670,19 @@ static MouseEventModifiers ImplGetMouseMoveMode(sal_uInt16 nCode)
     return nMode;
 }
 
+namespace
+{
+    bool SwapForRTL(GtkWidget* pWidget)
+    {
+        GtkTextDirection eDir = gtk_widget_get_direction(pWidget);
+        if (eDir == GTK_TEXT_DIR_RTL)
+            return true;
+        if (eDir == GTK_TEXT_DIR_LTR)
+            return false;
+        return AllSettings::GetLayoutRTL();
+    }
+}
+
 class GtkInstanceWidget : public virtual weld::Widget
 {
 protected:
@@ -1812,6 +1825,16 @@ protected:
         return pThis->signal_popup_menu(aCEvt);
     }
 
+    bool SwapForRTL() const
+    {
+        GtkTextDirection eDir = gtk_widget_get_direction(m_pWidget);
+        if (eDir == GTK_TEXT_DIR_RTL)
+            return true;
+        if (eDir == GTK_TEXT_DIR_LTR)
+            return false;
+        return AllSettings::GetLayoutRTL();
+    }
+
 private:
     bool m_bTakeOwnership;
     bool m_bFrozen;
@@ -1922,7 +1945,8 @@ private:
         }
 
         Point aPos(pEvent->x, pEvent->y);
-        if (AllSettings::GetLayoutRTL())
+
+        if (SwapForRTL())
             aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
 
         if (gdk_event_triggers_context_menu(reinterpret_cast<GdkEvent*>(pEvent)) && pEvent->type == GDK_BUTTON_PRESS)
@@ -1962,7 +1986,7 @@ private:
             return false;
 
         Point aPos(pEvent->x, pEvent->y);
-        if (AllSettings::GetLayoutRTL())
+        if (SwapForRTL())
             aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
         sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
@@ -1985,7 +2009,7 @@ private:
             return false;
 
         Point aPos(pEvent->x, pEvent->y);
-        if (AllSettings::GetLayoutRTL())
+        if (SwapForRTL())
             aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
         sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
@@ -6575,7 +6599,7 @@ public:
         {
             GdkRectangle aRect{static_cast<int>(rRect.Left()), static_cast<int>(rRect.Top()),
                                static_cast<int>(rRect.GetWidth()), static_cast<int>(rRect.GetHeight())};
-            if (AllSettings::GetLayoutRTL())
+            if (SwapForRTL(pWidget))
                 aRect.x = gtk_widget_get_allocated_width(pWidget) - aRect.width - 1 - aRect.x;
 
             // Send a keyboard event through gtk_main_do_event to toggle any active tooltip offs
@@ -10168,7 +10192,7 @@ private:
         aGdkHelpArea.y = aHelpArea.Top();
         aGdkHelpArea.width = aHelpArea.GetWidth();
         aGdkHelpArea.height = aHelpArea.GetHeight();
-        if (AllSettings::GetLayoutRTL())
+        if (pThis->SwapForRTL())
             aGdkHelpArea.x = gtk_widget_get_allocated_width(pGtkWidget) - aGdkHelpArea.width - 1 - aGdkHelpArea.x;
         gtk_tooltip_set_tip_area(tooltip, &aGdkHelpArea);
         return true;
@@ -10181,7 +10205,7 @@ private:
     {
         SalWheelMouseEvent aEvt(GtkSalFrame::GetWheelEvent(*pEvent));
 
-        if (AllSettings::GetLayoutRTL())
+        if (SwapForRTL())
             aEvt.mnX = gtk_widget_get_allocated_width(m_pWidget) - 1 - aEvt.mnX;
 
         CommandWheelMode nMode;
