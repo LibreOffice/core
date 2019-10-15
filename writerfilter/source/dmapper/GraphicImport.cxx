@@ -1323,7 +1323,7 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                 }
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SURROUND ),
                     uno::makeAny(static_cast<sal_Int32>(m_pImpl->nWrap)));
-                if( m_pImpl->rDomainMapper.IsInTable() && m_pImpl->bLayoutInCell && m_pImpl->nWrap != text::WrapTextMode_THROUGH )
+                if( m_pImpl->rDomainMapper.IsInTable() && m_pImpl->bLayoutInCell )
                     xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_FOLLOW_TEXT_FLOW ),
                         uno::makeAny(true));
                 if( m_pImpl->rDomainMapper.IsInTable() && m_pImpl->bLayoutInCell )
