@@ -1475,6 +1475,10 @@ private:
         gtk_widget_show_all(pParent);
 
         gtk_gl_area_make_current(GTK_GL_AREA(m_pGLArea));
+
+        if (gtk_gl_area_get_error(GTK_GL_AREA(m_pGLArea)))
+            return false;
+
         gtk_gl_area_attach_buffers(GTK_GL_AREA(m_pGLArea));
         glGenFramebuffersEXT(1, &m_nAreaFrameBuffer);
 
