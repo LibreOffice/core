@@ -846,6 +846,8 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage, weld:
     , m_xSaveButton(m_xBuilder->weld_button("save"))
     , m_xResetButton(m_xBuilder->weld_button("reset"))
 {
+    m_xFunctionBox.get()->SetSlotMode(SfxSlotMode::ACCELCONFIG);
+
     Size aSize(m_xEntriesBox->get_approximate_digit_width() * 40,
                m_xEntriesBox->get_height_rows(12));
     m_xEntriesBox->set_size_request(aSize.Width(), aSize.Height());

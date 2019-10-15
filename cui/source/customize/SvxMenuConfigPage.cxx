@@ -42,6 +42,8 @@ SvxMenuConfigPage::SvxMenuConfigPage(weld::Container* pPage, weld::DialogControl
     : SvxConfigPage(pPage, pController, rSet)
     , m_bIsMenuBar(bIsMenuBar)
 {
+    m_xFunctions->SetSlotMode(SfxSlotMode::MENUCONFIG);
+
     m_xGearBtn = m_xBuilder->weld_menu_button("menugearbtn");
     m_xGearBtn->show();
     m_xContentsListBox.reset(new SvxMenuEntriesListBox(m_xBuilder->weld_tree_view("menucontents"), this));
