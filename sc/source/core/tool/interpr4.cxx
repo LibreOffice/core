@@ -223,7 +223,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
         {
             fValue = rCell.mfValue;
             nCurFmtIndex = pDok->GetNumberFormat( mrContext, rPos );
-            nCurFmtType = pFormatter->GetType( nCurFmtIndex );
+            nCurFmtType = mrContext.GetNumberFormatType( nCurFmtIndex );
             if ( bCalcAsShown && fValue != 0.0 )
                 fValue = pDok->RoundValueAsShown( fValue, nCurFmtIndex, &mrContext );
         }

@@ -18,6 +18,7 @@
  */
 
 #include <interpretercontext.hxx>
+#include <svl/zforlist.hxx>
 
 #include <document.hxx>
 #include <formula/token.hxx>
@@ -66,6 +67,24 @@ void ScInterpreterContext::ClearLookupCache()
 {
     delete mScLookupCache;
     mScLookupCache = nullptr;
+}
+
+SvNumFormatType ScInterpreterContext::GetNumberFormatType(sal_uInt32 nFIndex) const
+{
+    if (!mpDoc->IsThreadedGroupCalcInProgress())
+    {
+        return mpFormatter->GetType(nFIndex);
+    }
+
+    if (maNFTypeCache.bIsValid && maNFTypeCache.nIndex == nFIndex)
+    {
+        return maNFTypeCache.eType;
+    }
+
+    maNFTypeCache.nIndex = nFIndex;
+    maNFTypeCache.eType = mpFormatter->GetType(nFIndex);
+    maNFTypeCache.bIsValid = true;
+    return maNFTypeCache.eType;
 }
 
 /* ScInterpreterContextPool */

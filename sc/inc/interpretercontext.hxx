@@ -25,6 +25,7 @@ class ScDocument;
 class SvNumberFormatter;
 struct ScLookupCacheMap;
 class ScInterpreter;
+enum class SvNumFormatType : sal_Int16;
 
 // SetNumberFormat() is not thread-safe, so calls to it need to be delayed to the main thread.
 struct DelayedSetNumberFormat
@@ -32,6 +33,13 @@ struct DelayedSetNumberFormat
     SCROW mCol;
     SCROW mRow;
     sal_uInt32 mnNumberFormat;
+};
+
+struct NFIndexAndFmtType
+{
+    sal_uInt32 nIndex;
+    SvNumFormatType eType : 16;
+    bool bIsValid : 1;
 };
 
 class ScInterpreterContextPool;
@@ -69,6 +77,8 @@ struct ScInterpreterContext
         return mpFormatter;
     }
 
+    SvNumFormatType GetNumberFormatType(sal_uInt32 nFIndex) const;
+
 private:
     friend class ScInterpreterContextPool;
     void ResetTokens();
@@ -77,6 +87,7 @@ private:
     void ClearLookupCache();
     void initFormatTable();
     SvNumberFormatter* mpFormatter;
+    mutable NFIndexAndFmtType maNFTypeCache;
 };
 
 class ScThreadedInterpreterContextGetterGuard;
