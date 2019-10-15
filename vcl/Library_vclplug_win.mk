@@ -60,6 +60,7 @@ $(eval $(call gb_Library_use_externals,vclplug_win,\
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_win,\
     vcl/opengl/win/gdiimpl \
+    vcl/opengl/win/winlayout \
     vcl/win/app/saldata \
     vcl/win/app/salinfo \
     vcl/win/app/salinst \

@@ -283,8 +283,6 @@ public:
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override;
 
 public:
-    // implementation of X11GraphicsImpl
-
     void Init() override;
 };
 
