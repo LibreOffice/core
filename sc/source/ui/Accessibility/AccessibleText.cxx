@@ -1283,10 +1283,10 @@ SvxViewForwarder* ScAccessibleNoteTextData::GetViewForwarder()
 
 class ScCsvViewForwarder : public SvxViewForwarder
 {
-    VclPtr<vcl::Window>         mpWindow;
+    VclPtr<OutputDevice>        mpWindow;
 
 public:
-    explicit                    ScCsvViewForwarder( vcl::Window* pWindow );
+    explicit                    ScCsvViewForwarder( OutputDevice* pWindow );
 
     virtual bool                IsValid() const override;
     virtual Point               LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const override;
@@ -1295,7 +1295,7 @@ public:
     void                        SetInvalid();
 };
 
-ScCsvViewForwarder::ScCsvViewForwarder( vcl::Window* pWindow ) :
+ScCsvViewForwarder::ScCsvViewForwarder( OutputDevice* pWindow ) :
     mpWindow( pWindow )
 {
 }
@@ -1323,7 +1323,7 @@ void ScCsvViewForwarder::SetInvalid()
 }
 
 ScAccessibleCsvTextData::ScAccessibleCsvTextData(
-        vcl::Window* pWindow, EditEngine* pEditEngine,
+        OutputDevice* pWindow, EditEngine* pEditEngine,
         const OUString& rCellText, const Size& rCellSize ) :
     mpWindow( pWindow ),
     mpEditEngine( pEditEngine ),
