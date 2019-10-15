@@ -43,6 +43,10 @@ ifeq ($(OS),WNT)
 LO_CLANG_SHARED_PLUGINS=
 endif
 
+# Whether to use precompiled headers for the sources. This is actually controlled
+# by gb_ENABLE_PCH like everywhere else, but unsetting this disables PCH.
+LO_CLANG_USE_PCH=1
+
 # Whether to use precompiled headers for the analyzer too. Does not apply to compiling sources.
 LO_CLANG_USE_ANALYZER_PCH=1
 
@@ -100,6 +104,20 @@ CLANGWERROR := -Werror
 endif
 endif
 
+ifneq ($(LO_CLANG_USE_PCH),)
+# Reset and enable only if actually supported and enabled.
+LO_CLANG_USE_PCH=
+ifneq ($(gb_ENABLE_PCH),)
+ifneq ($(OS),WNT)
+# Currently only Clang PCH is supported (which should usually be the case, as Clang is usually self-built).
+ifneq ($(findstring clang,$(COMPILER_PLUGINS_CXX)),)
+LO_CLANG_USE_PCH=1
+endif
+endif
+endif
+endif
+
+
 compilerplugins: compilerplugins-build
 
 ifdef LO_CLANG_SHARED_PLUGINS
@@ -139,6 +157,7 @@ compilerplugins-clean:
         $(CLANGOBJDIR) \
         $(CLANGOUTDIR)/clang-timestamp \
         $(CLANGOUTDIR)/plugin$(CLANG_DL_EXT) \
+        $(CLANGOUTDIR)/clang.pch{,.d} \
         $(CLANGOUTDIR)/sharedvisitor/*.plugininfo \
         $(CLANGOUTDIR)/sharedvisitor/clang.pch{,.d} \
         $(CLANGOUTDIR)/sharedvisitor/sharedvisitor.{cxx,d,o} \
@@ -176,10 +195,12 @@ else
 
 # clangbuildsrc cxxfile ofile dfile
 define clangbuildsrc
-$(2): $(1) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
+$(2): $(1) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp \
+        $(if $(LO_CLANG_USE_PCH),$(CLANGOUTDIR)/clang.pch)
 	$$(call gb_Output_announce,$(subst $(SRCDIR)/,,$(subst $(BUILDDIR)/,,$(1))),$(true),CXX,3)
 	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGDEFS) $(CLANGCXXFLAGS) $(CLANGWERROR) \
 	$(CLANGINCLUDES) -I$(BUILDDIR)/config_host -I$(CLANGINDIR) $(1) \
+	$(if $(LO_CLANG_USE_PCH),-include-pch $(CLANGOUTDIR)/clang.pch -DPCH_LEVEL=$(gb_ENABLE_PCH)) \
 	-fPIC -c -o $(2) -MMD -MT $(2) -MP -MF $(3)
 
 -include $(3)
@@ -294,7 +315,25 @@ $(CLANGOUTDIR)/sources-shared.txt:
 	touch $@
 endif
 
+ifneq ($(LO_CLANG_USE_PCH),)
+# the PCH for plugin sources themselves
+
+ifeq ($(OS),WNT)
+# TODO
+else
+$(CLANGOUTDIR)/clang.pch: $(CLANGINDIR)/precompiled_clang.hxx \
+        $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
+	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),PCH,1)
+	$(QUIET)$(COMPILER_PLUGINS_CXX) -x c++-header $(CLANGDEFS) $(CLANGCXXFLAGS) $(CLANGWERROR) \
+        $(CLANGINCLUDES) -I$(BUILDDIR)/config_host -I$(CLANGINDIR) -DPCH_LEVEL=$(gb_ENABLE_PCH) \
+        -fPIC $< -o $@ -MMD -MT $@ -MP -MF $(CLANGOUTDIR)/clang.pch.d
+endif
+-include $(CLANGOUTDIR)/clang.pch.d
+
+endif
+
 ifdef LO_CLANG_USE_ANALYZER_PCH
+# the PCH for usage in sharedvisitor/analyzer
 
 # these are from the invocation in analyzer.cxx
 LO_CLANG_ANALYZER_PCH_CXXFLAGS := -I$(BUILDDIR)/config_host $(CLANGTOOLDEFS)
