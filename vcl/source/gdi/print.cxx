@@ -1564,9 +1564,6 @@ void Printer::EndJob()
 
         mbDevOutput = false;
         mpPrinter->EndJob();
-        // FIXME: Do not destroy the printer asynchronously as Win95
-        // can't handle destroying a printer object and printing
-        // at the same time
         mpPrinter.reset();
     }
 }
