@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_45d7df4c",
+        "filename": "connectivity/source/drivers/hsqldb/HConnection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-15T08:22:06Z",
+      "side": 1,
+      "message": "It looks redundant here",
+      "range": {
+        "startLine": 321,
+        "startChar": 16,
+        "endLine": 321,
+        "endChar": 31
+      },
+      "revId": "a35930bd71b43f027436aa80715a4fb056eb6659",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
