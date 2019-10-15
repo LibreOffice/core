@@ -1460,6 +1460,8 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
                 m_pImpl->m_rDMapper.GetTextFactory()->createInstance("com.sun.star.text.Defaults"),
                 uno::UNO_QUERY_THROW );
         }
+
+        // WARNING: these defaults only take effect IF there is a DocDefaults style section. Normally there is, but not always.
         if( bParaProperties && m_pImpl->m_pDefaultParaProps.get())
         {
             // tdf#87533 LO will have different defaults here, depending on the locale. Import with documented defaults
@@ -1494,6 +1496,12 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
         }
         if( !bParaProperties && m_pImpl->m_pDefaultCharProps.get())
         {
+            // tdf#108350: Earlier in DomainMapper for DOCX, Calibri/11pt was set to match MSWord 2007+,
+            // but that is valid only if DocDefaults_rPrDefault is omitted.
+            // Now that DocDefaults_rPrDefault is known, the defaults should be reset to Times New Roman/10pt.
+            if ( m_pImpl->m_rDMapper.IsOOXMLImport() )
+                m_pImpl->m_xTextDefaults->setPropertyValue( getPropertyName(PROP_CHAR_FONT_NAME), css::uno::Any(OUString("Times New Roman")) );
+
             const uno::Sequence< beans::PropertyValue > aPropValues = m_pImpl->m_pDefaultCharProps->GetPropertyValues();
             for( const auto& rPropValue : aPropValues )
             {
