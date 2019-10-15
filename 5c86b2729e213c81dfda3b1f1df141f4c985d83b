@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_65c9bb76",
+        "filename": "extensions/source/propctrlr/eventhandler.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1085,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-15T09:01:58Z",
+      "side": 1,
+      "message": "Should possibly be removed in favor of renaming string above to sCompleteName?",
+      "range": {
+        "startLine": 1085,
+        "startChar": 12,
+        "endLine": 1085,
+        "endChar": 52
+      },
+      "revId": "5c86b2729e213c81dfda3b1f1df141f4c985d83b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
