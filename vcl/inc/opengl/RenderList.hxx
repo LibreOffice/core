@@ -150,7 +150,7 @@ public:
         return maRenderEntries;
     }
 
-    void addDrawTextureWithMaskColor(OpenGLTexture const & rTexture, Color nColor, const SalTwoRect& r2Rect);
+    VCL_DLLPUBLIC void addDrawTextureWithMaskColor(OpenGLTexture const & rTexture, Color nColor, const SalTwoRect& r2Rect);
 
     void addDrawPixel(long nX, long nY, Color nColor);
 

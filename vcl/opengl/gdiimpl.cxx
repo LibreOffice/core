@@ -1324,12 +1324,6 @@ void OpenGLSalGraphicsImpl::DrawMask( OpenGLTexture& rMask, Color nMaskColor, co
     mpProgram->Clean();
 }
 
-void OpenGLSalGraphicsImpl::DeferredTextDraw(OpenGLTexture const & rTexture, Color aMaskColor, const SalTwoRect& rPosAry)
-{
-    mpRenderList->addDrawTextureWithMaskColor(rTexture, aMaskColor, rPosAry);
-    PostBatchDraw();
-}
-
 void OpenGLSalGraphicsImpl::FlushLinesOrTriangles(DrawShaderType eType, RenderParameters const & rParameters)
 {
     if (!UseProgram("combinedVertexShader", "combinedFragmentShader", "#define USE_VERTEX_COLORS"))

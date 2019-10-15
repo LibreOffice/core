@@ -32,8 +32,6 @@ protected:
     virtual rtl::Reference<OpenGLContext> CreateWinContext() override;
 
 public:
-    // implementation of X11GraphicsImpl
-
     virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) override;
 
     virtual void Init() override;
