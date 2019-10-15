@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_05a48756",
+        "filename": "compilerplugins/Makefile-clang.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-15T12:17:33Z",
+      "side": 1,
+      "message": "should also be added to compilerplugins/.gitignore",
+      "revId": "cf4db6227b501513bb81d4e3417d987ba44bc2a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
