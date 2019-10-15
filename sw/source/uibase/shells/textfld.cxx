@@ -81,6 +81,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <IMark.hxx>
+#include <officecfg/Office/Compatibility.hxx>
 
 
 using namespace nsSwDocInfoSubType;
@@ -901,6 +902,11 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                     rSet.DisableItem(nWhich);
                 }
                 else if ( rSh.CursorInsideInputField() )
+                {
+                    rSet.DisableItem(nWhich);
+                }
+                // tdf#86188 Allow disabling comment insertion on footnote/endnote for better OOXML interoperability
+                else if ( rSh.IsCursorInFootnote() && !officecfg::Office::Compatibility::View::AllowCommentsInFootnotes::get() )
                 {
                     rSet.DisableItem(nWhich);
                 }
