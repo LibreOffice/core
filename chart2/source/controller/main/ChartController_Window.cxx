@@ -82,6 +82,9 @@
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
+
 #define DRGPIX    2     // Drag MinMove in Pixel
 
 using namespace ::com::sun::star;
@@ -925,6 +928,10 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 
 void ChartController::execute_DoubleClick( const Point* pMousePixel )
 {
+    bool isMobile = comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView());
+    if (isMobile)
+        return;
+
     bool bEditText = false;
     if ( m_aSelection.hasSelection() )
     {
