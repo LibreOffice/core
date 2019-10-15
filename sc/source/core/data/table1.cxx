@@ -2485,12 +2485,13 @@ void ScTable::CalculateInColumnInThread( ScInterpreterContext& rContext,
     }
 }
 
-void ScTable::HandleStuffAfterParallelCalculation( SCCOL nColStart, SCCOL nColEnd, SCROW nRow, size_t nLen)
+void ScTable::HandleStuffAfterParallelCalculation( SCCOL nColStart, SCCOL nColEnd, SCROW nRow, size_t nLen,
+                                                   ScInterpreter* pInterpreter)
 {
     assert(ValidCol(nColStart) && ValidCol(nColEnd));
 
     for (SCCOL nCurrCol = nColStart; nCurrCol <= nColEnd; ++nCurrCol)
-        aCol[nCurrCol].HandleStuffAfterParallelCalculation( nRow, nLen );
+        aCol[nCurrCol].HandleStuffAfterParallelCalculation( nRow, nLen, pInterpreter );
 }
 
 #if DUMP_COLUMN_STORAGE

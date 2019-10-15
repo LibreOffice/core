@@ -2966,7 +2966,7 @@ void ScColumn::CalculateInThread( ScInterpreterContext& rContext, SCROW nRow, si
     }
 }
 
-void ScColumn::HandleStuffAfterParallelCalculation( SCROW nRow, size_t nLen )
+void ScColumn::HandleStuffAfterParallelCalculation( SCROW nRow, size_t nLen, ScInterpreter* pInterpreter )
 {
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
     sc::CellStoreType::iterator it = aPos.first;
@@ -2988,7 +2988,7 @@ void ScColumn::HandleStuffAfterParallelCalculation( SCROW nRow, size_t nLen )
     for (size_t i = 0; i < nLen; ++i, ++itCell)
     {
         ScFormulaCell& rCell = **itCell;
-        rCell.HandleStuffAfterParallelCalculation();
+        rCell.HandleStuffAfterParallelCalculation(pInterpreter);
     }
 }
 
