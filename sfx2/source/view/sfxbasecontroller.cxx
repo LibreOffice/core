@@ -1119,12 +1119,17 @@ uno::Sequence< sal_Int16 > SAL_CALL SfxBaseController::getSupportedCommandGroups
 
 uno::Sequence< frame::DispatchInformation > SAL_CALL SfxBaseController::getConfigurableDispatchInformation( sal_Int16 nCmdGroup )
 {
+    return getConfigurableDispatchInformationForSlotMode( nCmdGroup, sal_Int32(SfxSlotMode(SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG)) );
+}
+
+uno::Sequence< frame::DispatchInformation > SAL_CALL SfxBaseController::getConfigurableDispatchInformationForSlotMode( sal_Int16 nCmdGroup, sal_Int32 nSlotMode )
+{
     std::vector< frame::DispatchInformation > aCmdVector;
 
     SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
     {
-        const SfxSlotMode nMode( SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG );
+        const SfxSlotMode nMode = SfxSlotMode( nSlotMode );
 
         SfxViewFrame* pViewFrame( m_pData->m_pViewShell->GetFrame() );
         SfxSlotPool* pSlotPool

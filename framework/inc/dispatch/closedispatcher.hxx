@@ -23,7 +23,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
-#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
+#include <com/sun/star/frame/XDispatchInformationProvider2.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -50,7 +50,7 @@ namespace framework{
  */
 class CloseDispatcher : public  ::cppu::WeakImplHelper<
                                     css::frame::XNotifyingDispatch,             // => XDispatch
-                                    css::frame::XDispatchInformationProvider >
+                                    css::frame::XDispatchInformationProvider2 >
 {
 
     // types
@@ -143,6 +143,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
         // XDispatchInformationProvider
         virtual css::uno::Sequence< sal_Int16 >                       SAL_CALL getSupportedCommandGroups         (                         ) override;
         virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) override;
+        virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformationForSlotMode( sal_Int16 nCommandGroup, sal_Int32 ) override;
 
     // internal helper
 

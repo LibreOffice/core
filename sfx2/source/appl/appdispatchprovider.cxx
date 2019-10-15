@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/frame/XAppDispatchProvider.hpp>
+#include <com/sun/star/frame/XDispatchInformationProvider2.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
@@ -72,6 +73,7 @@ public:
     virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
 
     virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 ) override;
+    virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformationForSlotMode( sal_Int16 nCmdGroup, sal_Int32 nSlotMode ) override;
 };
 
 void SfxAppDispatchProvider::initialize(
@@ -184,12 +186,17 @@ Sequence< sal_Int16 > SAL_CALL SfxAppDispatchProvider::getSupportedCommandGroups
 
 Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfigurableDispatchInformation( sal_Int16 nCmdGroup )
 {
+    return getConfigurableDispatchInformationForSlotMode( nCmdGroup, sal_Int32(SfxSlotMode(SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG) ) );
+}
+
+Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfigurableDispatchInformationForSlotMode( sal_Int16 nCmdGroup, sal_Int32 nSlotMode )
+{
     std::vector< frame::DispatchInformation > aCmdVector;
 
     SolarMutexGuard aGuard;
     SfxSlotPool& rAppSlotPool = SfxGetpApp()->GetAppSlotPool_Impl();
 
-    const SfxSlotMode nMode( SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG );
+    const SfxSlotMode nMode = SfxSlotMode( nSlotMode );
 
     // Select group ( group 0 is internal )
     for (sal_uInt16 i=0; i< rAppSlotPool.GetGroupCount(); ++i)
