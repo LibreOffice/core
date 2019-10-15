@@ -31,6 +31,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/weld.hxx>
 
+#include <sfx2/msg.hxx>
+
 class Button;
 class SaveInData;
 class SfxMacroInfoItem;
@@ -105,6 +107,8 @@ class CuiConfigFunctionListBox
     friend class CuiConfigGroupListBox;
     SfxGroupInfoArr_Impl aArr;
 
+    SfxSlotMode aSlotMode = SfxSlotMode::NONE;
+
     std::unique_ptr<weld::TreeView> m_xTreeView;
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
 
@@ -176,6 +180,8 @@ public:
     OUString      GetHelpText( bool bConsiderParent = true );
     OUString      GetCurCommand() const;
     OUString      GetCurLabel() const;
+    void          SetSlotMode( SfxSlotMode SlotMode ) { aSlotMode = SlotMode; }
+    SfxSlotMode   GetSlotMode() { return aSlotMode; }
 
     DECL_LINK(QueryTooltip, const weld::TreeIter& rIter, OUString);
 };
