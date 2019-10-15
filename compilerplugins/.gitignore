@@ -1,6 +1,8 @@
 /clang/clang-timestamp
 /clang/plugin.dll
 /clang/plugin.so
+/clang/clang.pch
+/clang/clang.pch.d
 /clang/sharedvisitor/*.plugininfo
 /clang/sharedvisitor/analyzer
 /clang/sharedvisitor/analyzer.d
