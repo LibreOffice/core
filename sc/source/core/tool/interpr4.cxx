@@ -2660,7 +2660,7 @@ void ScInterpreter::ScExternal()
                 else
                 {
                     // enable asyncs after loading
-                    rArr.AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
+                    pArr->AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
                     // assure identical handler with identical call?
                     double nErg = 0.0;
                     ppParam[0] = &nErg;
@@ -3020,7 +3020,7 @@ void ScInterpreter::ScExternal()
 
             if ( aCall.HasVarRes() )                        // handle async functions
             {
-                rArr.AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
+                pArr->AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
                 uno::Reference<sheet::XVolatileResult> xRes = aCall.GetVarRes();
                 ScAddInListener* pLis = ScAddInListener::Get( xRes );
                 // In case there is no pMyFormulaCell, i.e. while interpreting
@@ -3767,10 +3767,10 @@ void ScInterpreter::ScTTT()
 }
 
 ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc, ScInterpreterContext& rContext,
-        const ScAddress& rPos, ScTokenArray& r )
+        const ScAddress& rPos, ScTokenArray& r, bool bForGroupThreading )
     : aCode(r)
     , aPos(rPos)
-    , rArr(r)
+    , pArr(&r)
     , mrContext(rContext)
     , pDok(pDoc)
     , mpLinkManager(pDok->GetLinkManager())
@@ -3804,7 +3804,10 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc, ScInterpre
     else
         bMatrixFormula = false;
 
-    if (!bGlobalStackInUse)
+    // Lets not use the global stack while formula-group-threading.
+    // as it complicates its life-cycle mgmt since for threading formula-groups,
+    // ScInterpreter is preallocated (in main thread) for each worker thread.
+    if (!bGlobalStackInUse && !bForGroupThreading)
     {
         bGlobalStackInUse = true;
         if (!pGlobalStack)
@@ -3824,6 +3827,28 @@ ScInterpreter::~ScInterpreter()
         bGlobalStackInUse = false;
     else
         delete pStackObj;
+}
+
+void ScInterpreter::Init( ScFormulaCell* pCell, const ScAddress& rPos, ScTokenArray& rTokArray )
+{
+    aCode.ReInit(rTokArray);
+    aPos = rPos;
+    pArr = &rTokArray;
+    xResult = nullptr;
+    pMyFormulaCell = pCell;
+    pCur = nullptr;
+    nGlobalError = FormulaError::NONE;
+    sp = 0;
+    maxsp = 0;
+    nFuncFmtIndex = 0;
+    nCurFmtIndex = 0;
+    nRetFmtIndex = 0;
+    nFuncFmtType = SvNumFormatType::ALL;
+    nCurFmtType = SvNumFormatType::ALL;
+    nRetFmtType = SvNumFormatType::ALL;
+    mnStringNoValueError = FormulaError::NoValue;
+    mnSubTotalFlags = SubtotalFlags::NONE;
+    cPar = 0;
 }
 
 ScCalcConfig& ScInterpreter::GetOrCreateGlobalConfig()
@@ -4503,7 +4528,7 @@ StackVar ScInterpreter::Interpret()
         {
             if ( !nErrorFunctionCount )
             {   // count of errorcode functions in formula
-                FormulaTokenArrayPlainIterator aIter(rArr);
+                FormulaTokenArrayPlainIterator aIter(*pArr);
                 for ( FormulaToken* t = aIter.FirstRPN(); t; t = aIter.NextRPN() )
                 {
                     if ( IsErrFunc(t->GetOpCode()) )

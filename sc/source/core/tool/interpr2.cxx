@@ -2764,7 +2764,7 @@ void ScInterpreter::ScDde()
         }
 
         // Need to reinterpret after loading (build links)
-        rArr.AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
+        pArr->AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
 
             //  while the link is not evaluated, idle must be disabled (to avoid circular references)
 

@@ -8161,10 +8161,10 @@ void ScInterpreter::ScIndirect()
                 {
                     ScCompiler aComp( pDok, aPos, pDok->GetGrammar());
                     aComp.SetRefConvention( eConv);     // must be after grammar
-                    std::unique_ptr<ScTokenArray> pArr( aComp.CompileString( sRefStr));
+                    std::unique_ptr<ScTokenArray> pTokArr( aComp.CompileString( sRefStr));
 
                     // Whatever... use only the specific case.
-                    if (!pArr->HasOpCode( ocTableRef))
+                    if (!pTokArr->HasOpCode( ocTableRef))
                         break;
 
                     aComp.CompileTokenArray();
@@ -8172,10 +8172,10 @@ void ScInterpreter::ScIndirect()
                     // A syntactically valid reference will generate exactly
                     // one RPN token, a reference or error. Discard everything
                     // else as error.
-                    if (pArr->GetCodeLen() != 1)
+                    if (pTokArr->GetCodeLen() != 1)
                         break;
 
-                    ScTokenRef xTok( pArr->FirstRPNToken());
+                    ScTokenRef xTok( pTokArr->FirstRPNToken());
                     if (!xTok)
                         break;
 
