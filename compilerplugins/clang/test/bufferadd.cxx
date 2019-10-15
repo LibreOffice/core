@@ -13,7 +13,7 @@
 #include <rtl/ustring.hxx>
 
 // ---------------------------------------------------------------
-// replaceing OUStringBuffer.append sequences to OUString+
+// replacing OUStringBuffer.append sequences to OUString+
 namespace test1
 {
 void f1()
