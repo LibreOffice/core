@@ -761,6 +761,8 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         {
             // map MSO 'washout' to our Watermark colormode
             eColorMode = ColorMode_WATERMARK;
+            nBrightness = 0;
+            nContrast = 0;
         }
         else if( nBrightness != 0 && nContrast != 0 )
         {
@@ -769,10 +771,9 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
             // contrast or brightness need to be altered, the result is the same, but if both are involved,
             // there's no way to map that, so just force a conversion of the image.
             xGraphic = applyBrightnessContrast( xGraphic, nBrightness, nContrast );
+            nBrightness = 0;
+            nContrast = 0;
         }
-
-        nBrightness = 0;
-        nContrast = 0;
 
         if(mbIsCustomShape)
         {
