@@ -701,24 +701,24 @@ constexpr sal_uInt32 T_CFF  = 0x43464620;
 /*- private definitions */
 
 /* indexes into TrueTypeFont::tables[] and TrueTypeFont::tlens[] */
-#define O_maxp 0     /* 'maxp' */
-#define O_glyf 1     /* 'glyf' */
-#define O_head 2     /* 'head' */
-#define O_loca 3     /* 'loca' */
-#define O_name 4     /* 'name' */
-#define O_hhea 5     /* 'hhea' */
-#define O_hmtx 6     /* 'hmtx' */
-#define O_cmap 7     /* 'cmap' */
-#define O_vhea 8     /* 'vhea' */
-#define O_vmtx 9     /* 'vmtx' */
-#define O_OS2  10    /* 'OS/2' */
-#define O_post 11    /* 'post' */
-#define O_cvt  12    /* 'cvt_' - only used in TT->TT generation */
-#define O_prep 13    /* 'prep' - only used in TT->TT generation */
-#define O_fpgm 14    /* 'fpgm' - only used in TT->TT generation */
-#define O_gsub 15    /* 'GSUB' */
-#define O_CFF  16    /* 'CFF' */
-#define NUM_TAGS 17
+constexpr int O_maxp = 0;
+constexpr int O_glyf = 1;    /* 'glyf' */
+constexpr int O_head = 2;    /* 'head' */
+constexpr int O_loca = 3;    /* 'loca' */
+constexpr int O_name = 4;    /* 'name' */
+constexpr int O_hhea = 5;    /* 'hhea' */
+constexpr int O_hmtx = 6;    /* 'hmtx' */
+constexpr int O_cmap = 7;    /* 'cmap' */
+constexpr int O_vhea = 8;    /* 'vhea' */
+constexpr int O_vmtx = 9;    /* 'vmtx' */
+constexpr int O_OS2  = 10;   /* 'OS/2' */
+constexpr int O_post = 11;   /* 'post' */
+constexpr int O_cvt  = 12;   /* 'cvt_' - only used in TT->TT generation */
+constexpr int O_prep = 13;   /* 'prep' - only used in TT->TT generation */
+constexpr int O_fpgm = 14;   /* 'fpgm' - only used in TT->TT generation */
+constexpr int O_gsub = 15;   /* 'GSUB' */
+constexpr int O_CFF = 16;   /* 'CFF' */
+constexpr int NUM_TAGS = 17;
 
     struct TrueTypeFont {
         char        *fname;

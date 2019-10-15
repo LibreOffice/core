@@ -114,7 +114,7 @@ bool FontSubsetInfo::CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths )
     // handle SFNT_CFF fonts
     int nCffLength = 0;
     const sal_uInt8* pCffBytes = nullptr;
-    if( GetSfntTable( mpSftTTFont, O_CFF, &pCffBytes, &nCffLength))
+    if( GetSfntTable( mpSftTTFont, vcl::O_CFF, &pCffBytes, &nCffLength))
     {
         LoadFont( FontType::CFF_FONT, pCffBytes, nCffLength);
         const bool bOK = CreateFontSubsetFromCff( pOutGlyphWidths);
