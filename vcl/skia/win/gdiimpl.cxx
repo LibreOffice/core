@@ -87,9 +87,8 @@ bool WinSkiaSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey const&
     return false; // TODO
 }
 
-// TODO OpenGLCompatibleDC?
-bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(OpenGLCompatibleDC& rWhite,
-                                                         OpenGLCompatibleDC& rBlack, int nX, int nY,
+bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, CompatibleDC& rBlack,
+                                                         int nX, int nY,
                                                          ControlCacheKey& aControlCacheKey)
 {
     (void)rWhite;

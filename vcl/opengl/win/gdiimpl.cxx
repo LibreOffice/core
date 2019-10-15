@@ -756,6 +756,37 @@ ControlCacheType & TheTextureCache::get() {
     return data->m_pTextureCache->cache;
 }
 
+OpenGLCompatibleDC::OpenGLCompatibleDC(SalGraphics &rGraphics, int x, int y, int width, int height)
+: CompatibleDC( rGraphics, x, y, width, height, false )
+{
+}
+
+OpenGLTexture* OpenGLCompatibleDC::getOpenGLTexture()
+{
+    if (!mpImpl)
+        return nullptr;
+
+    // turn what's in the mpData into a texture
+    return new OpenGLTexture(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_BGRA, GL_UNSIGNED_BYTE, mpData);
+}
+
+std::unique_ptr<CompatibleDC::Texture> OpenGLCompatibleDC::getTexture()
+{
+    auto ret = std::make_unique<OpenGLCompatibleDC::Texture>();
+    ret->texture = OpenGLTexture(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_BGRA, GL_UNSIGNED_BYTE, mpData);
+    return ret;
+}
+
+bool OpenGLCompatibleDC::copyToTexture(CompatibleDC::Texture& aTexture)
+{
+    if (!mpImpl)
+        return false;
+
+    assert(dynamic_cast<OpenGLCompatibleDC::Texture*>(&aTexture));
+    return static_cast<OpenGLCompatibleDC::Texture&>(aTexture).texture.CopyData(
+        maRects.mnSrcWidth, maRects.mnSrcHeight, GL_BGRA, GL_UNSIGNED_BYTE, reinterpret_cast<sal_uInt8*>(mpData));
+}
+
 bool WinOpenGLSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey const & rControlCacheKey, int nX, int nY)
 {
     static bool gbCacheEnabled = !getenv("SAL_WITHOUT_WIDGET_CACHE");
@@ -801,8 +832,8 @@ bool WinOpenGLSalGraphicsImpl::RenderCompatibleDC(OpenGLCompatibleDC& rWhite, Op
 
     PreDraw();
 
-    rCombo.mpTexture.reset(rWhite.getTexture());
-    rCombo.mpMask.reset(rBlack.getTexture());
+    rCombo.mpTexture.reset(rWhite.getOpenGLTexture());
+    rCombo.mpMask.reset(rBlack.getOpenGLTexture());
 
     bRet = RenderTextureCombo(rCombo, nX, nY);
 
@@ -810,12 +841,16 @@ bool WinOpenGLSalGraphicsImpl::RenderCompatibleDC(OpenGLCompatibleDC& rWhite, Op
     return bRet;
 }
 
-bool WinOpenGLSalGraphicsImpl::RenderAndCacheNativeControl(OpenGLCompatibleDC& rWhite, OpenGLCompatibleDC& rBlack,
+bool WinOpenGLSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, CompatibleDC& rBlack,
                                                            int nX, int nY , ControlCacheKey& aControlCacheKey)
 {
+    assert(dynamic_cast<OpenGLCompatibleDC*>(&rWhite));
+    assert(dynamic_cast<OpenGLCompatibleDC*>(&rBlack));
+
     std::unique_ptr<TextureCombo> pCombo(new TextureCombo);
 
-    bool bResult = RenderCompatibleDC(rWhite, rBlack, nX, nY, *pCombo);
+    bool bResult = RenderCompatibleDC(static_cast<OpenGLCompatibleDC&>(rWhite),
+        static_cast<OpenGLCompatibleDC&>(rBlack), nX, nY, *pCombo);
     if (!bResult)
         return false;
 
@@ -826,6 +861,30 @@ bool WinOpenGLSalGraphicsImpl::RenderAndCacheNativeControl(OpenGLCompatibleDC& r
     TheTextureCache::get().insert(std::move(pair));
 
     return bResult;
+}
+
+void WinOpenGLSalGraphicsImpl::PreDrawText()
+{
+    PreDraw();
+}
+
+void WinOpenGLSalGraphicsImpl::PostDrawText()
+{
+    PostDraw();
+}
+
+void WinOpenGLSalGraphicsImpl::DeferredTextDraw(const CompatibleDC::Texture* pTexture, Color aMaskColor, const SalTwoRect& rPosAry)
+{
+    assert(dynamic_cast<const OpenGLCompatibleDC::Texture*>(pTexture));
+    mpRenderList->addDrawTextureWithMaskColor(
+        static_cast<const OpenGLCompatibleDC::Texture*>(pTexture)->texture, aMaskColor, rPosAry);
+    PostBatchDraw();
+}
+
+void WinOpenGLSalGraphicsImpl::DrawMask( CompatibleDC::Texture* pTexture, Color nMaskColor, const SalTwoRect& rPosAry )
+{
+    assert(dynamic_cast<OpenGLCompatibleDC::Texture*>(pTexture));
+    DrawMask( static_cast<OpenGLCompatibleDC::Texture*>(pTexture)->texture, nMaskColor, rPosAry );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

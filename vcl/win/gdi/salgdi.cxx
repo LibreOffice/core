@@ -547,21 +547,30 @@ void ImplClearHDCCache( SalData* pData )
     }
 }
 
-OpenGLCompatibleDC::OpenGLCompatibleDC(SalGraphics &rGraphics, int x, int y, int width, int height)
+std::unique_ptr< CompatibleDC > CompatibleDC::create(SalGraphics &rGraphics, int x, int y, int width, int height)
+{
+    if (OpenGLHelper::isVCLOpenGLEnabled())
+        return std::make_unique< OpenGLCompatibleDC >( rGraphics, x, y, width, height );
+    return std::unique_ptr< CompatibleDC >( new CompatibleDC( rGraphics, x, y, width, height ));
+}
+
+CompatibleDC::CompatibleDC(SalGraphics &rGraphics, int x, int y, int width, int height, bool disable)
     : mhBitmap(nullptr)
     , mpData(nullptr)
     , maRects(0, 0, width, height, x, y, width, height)
+    , mpImpl(nullptr)
 {
     WinSalGraphics& rWinGraphics = static_cast<WinSalGraphics&>(rGraphics);
-    mpImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(rWinGraphics.mpImpl.get());
 
-    if (!mpImpl)
+    if( disable )
     {
         // we avoid the OpenGL drawing, instead we draw directly to the DC
         mhCompatibleDC = rWinGraphics.getHDC();
         return;
     }
 
+    mpImpl = dynamic_cast<WinSalGraphicsImplBase*>(rWinGraphics.GetImpl());
+    assert(mpImpl != nullptr);
     mhCompatibleDC = CreateCompatibleDC(rWinGraphics.getHDC());
 
     // move the origin so that we always paint at 0,0 - to keep the bitmap
@@ -573,7 +582,7 @@ OpenGLCompatibleDC::OpenGLCompatibleDC(SalGraphics &rGraphics, int x, int y, int
     mhOrigBitmap = static_cast<HBITMAP>(SelectObject(mhCompatibleDC, mhBitmap));
 }
 
-OpenGLCompatibleDC::~OpenGLCompatibleDC()
+CompatibleDC::~CompatibleDC()
 {
     if (mpImpl)
     {
@@ -583,7 +592,7 @@ OpenGLCompatibleDC::~OpenGLCompatibleDC()
     }
 }
 
-void OpenGLCompatibleDC::fill(sal_uInt32 color)
+void CompatibleDC::fill(sal_uInt32 color)
 {
     if (!mpData)
         return;
@@ -591,23 +600,6 @@ void OpenGLCompatibleDC::fill(sal_uInt32 color)
     sal_uInt32 *p = mpData;
     for (int i = maRects.mnSrcWidth * maRects.mnSrcHeight; i > 0; --i)
         *p++ = color;
-}
-
-OpenGLTexture* OpenGLCompatibleDC::getTexture()
-{
-    if (!mpImpl)
-        return nullptr;
-
-    // turn what's in the mpData into a texture
-    return new OpenGLTexture(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_BGRA, GL_UNSIGNED_BYTE, mpData);
-}
-
-bool OpenGLCompatibleDC::copyToTexture(OpenGLTexture& aTexture)
-{
-    if (!mpImpl)
-        return false;
-
-    return aTexture.CopyData(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_BGRA, GL_UNSIGNED_BYTE, reinterpret_cast<sal_uInt8*>(mpData));
 }
 
 WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd, SalGeometryProvider *pProvider):
