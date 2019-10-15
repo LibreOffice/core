@@ -22,6 +22,7 @@
 
 #include <salgdiimpl.hxx>
 #include <win/salgdi.h>
+#include <win/wingdiimpl.hxx>
 
 #include <vcl/gradient.hxx>
 
@@ -30,7 +31,7 @@
 
 class WinSalGraphics;
 
-class WinSalGraphicsImpl : public SalGraphicsImpl
+class WinSalGraphicsImpl : public SalGraphicsImpl, public WinSalGraphicsImplBase
 {
 private:
 
@@ -238,10 +239,11 @@ public:
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon,
             const Gradient& rGradient) override;
 
-    virtual bool TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY);
+    virtual bool TryRenderCachedNativeControl(const ControlCacheKey& rControlCacheKey,
+                        int nX, int nY) override;
 
-    virtual bool RenderAndCacheNativeControl(OpenGLCompatibleDC& rWhite, OpenGLCompatibleDC& rBlack,
-                                             int nX, int nY , ControlCacheKey& aControlCacheKey);
+    virtual bool RenderAndCacheNativeControl(CompatibleDC& rWhite, CompatibleDC& rBlack,
+                        int nX, int nY , ControlCacheKey& aControlCacheKey) override;
 };
 
 #endif // INCLUDED_VCL_WIN_GDI_GDIIMPL_HXX

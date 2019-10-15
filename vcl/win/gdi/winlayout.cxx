@@ -25,12 +25,13 @@
 #include <comphelper/windowserrorstring.hxx>
 #include <comphelper/scopeguard.hxx>
 
-#include <opengl/texture.hxx>
 #include <opengl/win/gdiimpl.hxx>
+#include <opengl/win/winlayout.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <win/salgdi.h>
 #include <win/saldata.hxx>
+#include <win/wingdiimpl.hxx>
 #include <outdev.h>
 
 #include <win/DWriteTextRenderer.hxx>
@@ -49,18 +50,18 @@
 #include <shlwapi.h>
 #include <winver.h>
 
-GlobalOpenGLGlyphCache * GlobalOpenGLGlyphCache::get()
+GlobalWinGlyphCache * GlobalWinGlyphCache::get()
 {
     SalData *data = GetSalData();
-    if (!data->m_pGlobalOpenGLGlyphCache)
-        data->m_pGlobalOpenGLGlyphCache.reset(new GlobalOpenGLGlyphCache);
-    return data->m_pGlobalOpenGLGlyphCache.get();
+    if (!data->m_pGlobalWinGlyphCache) // TODO SKIA
+        data->m_pGlobalWinGlyphCache.reset(new OpenGLGlobalWinGlyphCache);
+    return data->m_pGlobalWinGlyphCache.get();
 }
 
 bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex,
                                         SalGraphics& rGraphics, const GenericSalLayout& rLayout)
 {
-    OpenGLGlyphDrawElement aElement;
+    WinGlyphDrawElement aElement;
 
     ScopedHDC aHDC(CreateCompatibleDC(hDC));
 
@@ -142,14 +143,14 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex,
     aElement.maLocation.SetBottom(bounds.getHeight() + aElement.getExtraSpace());
     nPos = aEnds[0];
 
-    OpenGLCompatibleDC aDC(rGraphics, 0, 0, nBitmapWidth, nBitmapHeight);
+    std::unique_ptr<CompatibleDC> aDC(CompatibleDC::create(rGraphics, 0, 0, nBitmapWidth, nBitmapHeight));
 
-    SetTextColor(aDC.getCompatibleHDC(), RGB(0, 0, 0));
-    SetBkColor(aDC.getCompatibleHDC(), RGB(255, 255, 255));
+    SetTextColor(aDC->getCompatibleHDC(), RGB(0, 0, 0));
+    SetBkColor(aDC->getCompatibleHDC(), RGB(255, 255, 255));
 
-    aDC.fill(RGB(0xff, 0xff, 0xff));
+    aDC->fill(RGB(0xff, 0xff, 0xff));
 
-    pTxt->BindDC(aDC.getCompatibleHDC(), tools::Rectangle(0, 0, nBitmapWidth, nBitmapHeight));
+    pTxt->BindDC(aDC->getCompatibleHDC(), tools::Rectangle(0, 0, nBitmapWidth, nBitmapHeight));
     auto pRT = pTxt->GetRenderTarget();
 
     ID2D1SolidColorBrush* pBrush = nullptr;
@@ -191,12 +192,12 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex,
         return false;
     }
 
-    if (!OpenGLGlyphCache::ReserveTextureSpace(aElement, nBitmapWidth, nBitmapHeight))
+    if (!GlobalWinGlyphCache::get()->AllocateTexture(aElement, nBitmapWidth, nBitmapHeight))
         return false;
-    if (!aDC.copyToTexture(aElement.maTexture))
+    if (!aDC->copyToTexture(*aElement.maTexture.get()))
         return false;
 
-    maOpenGLGlyphCache.PutDrawElementInCache(aElement, nGlyphIndex);
+    maWinGlyphCache.PutDrawElementInCache(std::move(aElement), nGlyphIndex);
 
     return true;
 }
@@ -414,7 +415,7 @@ bool WinSalGraphics::CacheGlyphs(const GenericSalLayout& rLayout)
     const GlyphItem* pGlyph;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
-        if (!rFont.GetOpenGLGlyphCache().IsGlyphCached(pGlyph->glyphId()))
+        if (!rFont.GetWinGlyphCache().IsGlyphCached(pGlyph->glyphId()))
         {
             if (!rFont.CacheGlyphToAtlas(hDC, hFONT, pGlyph->glyphId(), *this, rLayout))
                 return false;
@@ -446,19 +447,19 @@ bool WinSalGraphics::DrawCachedGlyphs(const GenericSalLayout& rLayout)
     const GlyphItem* pGlyph;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
-        OpenGLGlyphDrawElement& rElement(rFont.GetOpenGLGlyphCache().GetDrawElement(pGlyph->glyphId()));
-        OpenGLTexture& rTexture = rElement.maTexture;
+        WinGlyphDrawElement& rElement(rFont.GetWinGlyphCache().GetDrawElement(pGlyph->glyphId()));
+        const CompatibleDC::Texture* texture = rElement.maTexture.get();
 
-        if (!rTexture)
+        if (!texture || !texture->isValid())
             return false;
 
         SalTwoRect a2Rects(0, 0,
-                           rTexture.GetWidth(), rTexture.GetHeight(),
+                           texture->GetWidth(), texture->GetHeight(),
                            aPos.X() - rElement.getExtraOffset() + rElement.maLeftOverhangs,
                            aPos.Y() - rElement.mnBaselineOffset - rElement.getExtraOffset(),
-                           rTexture.GetWidth(), rTexture.GetHeight());
+                           texture->GetWidth(), texture->GetHeight());
 
-        pImpl->DeferredTextDraw(rTexture, salColor, a2Rects);
+        pImpl->DeferredTextDraw(texture, salColor, a2Rects);
     }
 
     return true;
@@ -476,14 +477,14 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 
     const WinFontInstance* pWinFont = static_cast<const WinFontInstance*>(&rLayout.GetFont());
     const HFONT hLayoutFont = pWinFont->GetHFONT();
-    // TODO SKIA
-    bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter;
+    WinSalGraphicsImplBase* pImpl = dynamic_cast<WinSalGraphicsImplBase*>(mpImpl.get());
+    bool bUseClassic = !pImpl->UseTextDraw() || mbPrinter;
 
     // Our DirectWrite renderer is incomplete, skip it for vertical text where glyphs are not
     // rotated.
     bool bForceGDI = rLayout.GetFont().GetFontSelectPattern().mbVertical;
 
-    if (!bUseOpenGL)
+    if (bUseClassic)
     {
         // no OpenGL, just classic rendering
         const HFONT hOrigFont = ::SelectFont(hDC, hLayoutFont);
@@ -525,45 +526,39 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
         tools::Rectangle aRect;
         rLayout.GetBoundRect(aRect);
 
-        // TODO SKIA
-        WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
+        pImpl->PreDrawText();
 
-        if (pImpl)
-        {
-            pImpl->PreDraw();
+        std::unique_ptr<CompatibleDC> aDC(CompatibleDC::create(*this, aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight()));
 
-            OpenGLCompatibleDC aDC(*this, aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight());
+        // we are making changes to the DC, make sure we got a new one
+        assert(aDC->getCompatibleHDC() != hDC);
 
-            // we are making changes to the DC, make sure we got a new one
-            assert(aDC.getCompatibleHDC() != hDC);
+        RECT aWinRect = { aRect.Left(), aRect.Top(), aRect.Left() + aRect.GetWidth(), aRect.Top() + aRect.GetHeight() };
+        ::FillRect(aDC->getCompatibleHDC(), &aWinRect, static_cast<HBRUSH>(::GetStockObject(WHITE_BRUSH)));
 
-            RECT aWinRect = { aRect.Left(), aRect.Top(), aRect.Left() + aRect.GetWidth(), aRect.Top() + aRect.GetHeight() };
-            ::FillRect(aDC.getCompatibleHDC(), &aWinRect, static_cast<HBRUSH>(::GetStockObject(WHITE_BRUSH)));
+        // setup the hidden DC with black color and white background, we will
+        // use the result of the text drawing later as a mask only
+        const HFONT hOrigFont = ::SelectFont(aDC->getCompatibleHDC(), hLayoutFont);
 
-            // setup the hidden DC with black color and white background, we will
-            // use the result of the text drawing later as a mask only
-            const HFONT hOrigFont = ::SelectFont(aDC.getCompatibleHDC(), hLayoutFont);
+        ::SetTextColor(aDC->getCompatibleHDC(), RGB(0, 0, 0));
+        ::SetBkColor(aDC->getCompatibleHDC(), RGB(255, 255, 255));
 
-            ::SetTextColor(aDC.getCompatibleHDC(), RGB(0, 0, 0));
-            ::SetBkColor(aDC.getCompatibleHDC(), RGB(255, 255, 255));
+        UINT nTextAlign = ::GetTextAlign(hDC);
+        ::SetTextAlign(aDC->getCompatibleHDC(), nTextAlign);
 
-            UINT nTextAlign = ::GetTextAlign(hDC);
-            ::SetTextAlign(aDC.getCompatibleHDC(), nTextAlign);
+        COLORREF color = ::GetTextColor(hDC);
+        Color salColor(GetRValue(color), GetGValue(color), GetBValue(color));
 
-            COLORREF color = ::GetTextColor(hDC);
-            Color salColor(GetRValue(color), GetGValue(color), GetBValue(color));
+        // the actual drawing
+        DrawTextLayout(rLayout, aDC->getCompatibleHDC(), !bForceGDI);
 
-            // the actual drawing
-            DrawTextLayout(rLayout, aDC.getCompatibleHDC(), !bForceGDI);
+        std::unique_ptr<CompatibleDC::Texture> xTexture(aDC->getTexture());
+        if (xTexture)
+            pImpl->DrawMask(xTexture.get(), salColor, aDC->getTwoRect());
 
-            std::unique_ptr<OpenGLTexture> xTexture(aDC.getTexture());
-            if (xTexture)
-                pImpl->DrawMask(*xTexture, salColor, aDC.getTwoRect());
+        ::SelectFont(aDC->getCompatibleHDC(), hOrigFont);
 
-            ::SelectFont(aDC.getCompatibleHDC(), hOrigFont);
-
-            pImpl->PostDraw();
-        }
+        pImpl->PostDrawText();
     }
 }
 

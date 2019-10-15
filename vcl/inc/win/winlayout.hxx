@@ -26,8 +26,6 @@
 #include <svsys.h>
 #include <win/salgdi.h>
 
-#include <opengl/PackedTextureAtlas.hxx>
-
 class WinFontInstance;
 
 namespace
@@ -38,11 +36,11 @@ const int GLYPH_SPACE_RATIO = 8;
 const int GLYPH_OFFSET_RATIO = GLYPH_SPACE_RATIO * 2;
 }
 
-struct OpenGLGlyphDrawElement
+struct WinGlyphDrawElement
 {
     tools::Rectangle maLocation;
     int maLeftOverhangs;
-    OpenGLTexture maTexture;
+    std::unique_ptr<CompatibleDC::Texture> maTexture;
     int mnBaselineOffset;
     int mnHeight;
     bool mbVertical;
@@ -58,87 +56,48 @@ struct OpenGLGlyphDrawElement
     }
 };
 
-class OpenGLGlyphCache;
+class WinGlyphCache;
 
-struct GlobalOpenGLGlyphCache
+struct GlobalWinGlyphCache
 {
-    GlobalOpenGLGlyphCache()
-        : maPackedTextureAtlas(2048, 2048)
-    {}
+    std::unordered_set<WinGlyphCache*> maWinGlyphCaches;
 
-    PackedTextureAtlasManager maPackedTextureAtlas;
-    std::unordered_set<OpenGLGlyphCache*> maOpenGLGlyphCaches;
+    static GlobalWinGlyphCache * get();
 
-    static GlobalOpenGLGlyphCache * get();
+    virtual bool AllocateTexture(WinGlyphDrawElement& rElement, int nWidth, int nHeight) = 0;
 };
 
-class OpenGLGlyphCache
+class WinGlyphCache
 {
-private:
-    std::unordered_map<int, OpenGLGlyphDrawElement> maOpenGLTextureCache;
+protected:
+    std::unordered_map<int, WinGlyphDrawElement> maWinTextureCache;
 
 public:
-    OpenGLGlyphCache()
+    WinGlyphCache()
     {
-        GlobalOpenGLGlyphCache::get()->maOpenGLGlyphCaches.insert(this);
+        GlobalWinGlyphCache::get()->maWinGlyphCaches.insert(this);
     }
 
-    ~OpenGLGlyphCache()
+    virtual ~WinGlyphCache()
     {
-        GlobalOpenGLGlyphCache::get()->maOpenGLGlyphCaches.erase(this);
+        GlobalWinGlyphCache::get()->maWinGlyphCaches.erase(this);
     }
 
-    static bool ReserveTextureSpace(OpenGLGlyphDrawElement& rElement, int nWidth, int nHeight)
-    {
-        GlobalOpenGLGlyphCache* pGlobalOpenGLGlyphCache = GlobalOpenGLGlyphCache::get();
-        rElement.maTexture = pGlobalOpenGLGlyphCache->maPackedTextureAtlas.Reserve(nWidth, nHeight);
-        if (!rElement.maTexture)
-            return false;
-        std::vector<GLuint> aTextureIDs = pGlobalOpenGLGlyphCache->maPackedTextureAtlas.ReduceTextureNumber(8);
-        if (!aTextureIDs.empty())
-        {
-            for (auto& pOpenGLGlyphCache: pGlobalOpenGLGlyphCache->maOpenGLGlyphCaches)
-            {
-                pOpenGLGlyphCache->RemoveTextures(aTextureIDs);
-            }
-        }
-        return true;
-    }
-
-    void RemoveTextures(std::vector<GLuint>& rTextureIDs)
-    {
-        auto it = maOpenGLTextureCache.begin();
-
-        while (it != maOpenGLTextureCache.end())
-        {
-            GLuint nTextureID = it->second.maTexture.Id();
-
-            if (std::find(rTextureIDs.begin(), rTextureIDs.end(), nTextureID) != rTextureIDs.end())
-            {
-                it = maOpenGLTextureCache.erase(it);
-            }
-            else
-            {
-                ++it;
-            }
-        }
-    }
-
-    void PutDrawElementInCache(const OpenGLGlyphDrawElement& rElement, int nGlyphIndex)
+    void PutDrawElementInCache(WinGlyphDrawElement&& rElement, int nGlyphIndex)
     {
         assert(!IsGlyphCached(nGlyphIndex));
-        maOpenGLTextureCache[nGlyphIndex] = rElement;
+        maWinTextureCache[nGlyphIndex] = std::move( rElement );
     }
 
-    OpenGLGlyphDrawElement& GetDrawElement(int nGlyphIndex)
+    WinGlyphDrawElement& GetDrawElement(int nGlyphIndex)
     {
         assert(IsGlyphCached(nGlyphIndex));
-        return maOpenGLTextureCache[nGlyphIndex];
+        return maWinTextureCache[nGlyphIndex];
     }
 
     bool IsGlyphCached(int nGlyphIndex) const
     {
-        return maOpenGLTextureCache.find(nGlyphIndex) != maOpenGLTextureCache.end();
+        return maWinTextureCache.find(nGlyphIndex) != maWinTextureCache.end();
     }
 };
 
@@ -166,7 +125,7 @@ public:
     const WinFontFace * GetFontFace() const { return static_cast<const WinFontFace *>(LogicalFontInstance::GetFontFace()); }
 
     bool CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, SalGraphics& rGraphics, const GenericSalLayout& rLayout);
-    OpenGLGlyphCache& GetOpenGLGlyphCache() { return maOpenGLGlyphCache; }
+    WinGlyphCache& GetWinGlyphCache() { return maWinGlyphCache; }
 
     bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
 
@@ -179,7 +138,7 @@ private:
     WinSalGraphics *m_pGraphics;
     HFONT m_hFont;
     float m_fScale;
-    OpenGLGlyphCache maOpenGLGlyphCache;
+    WinGlyphCache maWinGlyphCache;
 };
 
 class TextOutRenderer
