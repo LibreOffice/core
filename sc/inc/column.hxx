@@ -595,7 +595,7 @@ public:
 
     void CalculateInThread( ScInterpreterContext& rContext, SCROW nRow, size_t nLen, size_t nOffset,
                             unsigned nThisThread, unsigned nThreadsTotal );
-    void HandleStuffAfterParallelCalculation( SCROW nRow, size_t nLen );
+    void HandleStuffAfterParallelCalculation( SCROW nRow, size_t nLen, ScInterpreter* pInterpreter );
 
     void SetNumberFormat( SCROW nRow, sal_uInt32 nNumberFormat );
 

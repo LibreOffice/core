@@ -167,7 +167,7 @@ public:
                     };
                     void InterpretTail( ScInterpreterContext&, ScInterpretTailParameter );
 
-    void            HandleStuffAfterParallelCalculation();
+    void            HandleStuffAfterParallelCalculation(ScInterpreter* pInterpreter);
 
     enum CompareState { NotEqual = 0, EqualInvariant, EqualRelativeRef };
 

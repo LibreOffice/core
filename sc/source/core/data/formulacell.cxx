@@ -2298,14 +2298,21 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
     }
 }
 
-void ScFormulaCell::HandleStuffAfterParallelCalculation()
+void ScFormulaCell::HandleStuffAfterParallelCalculation(ScInterpreter* pInterpreter)
 {
     if( pCode->GetCodeLen() && pDocument )
     {
         if ( !pCode->IsRecalcModeAlways() )
             pDocument->RemoveFromFormulaTree( this );
 
-        std::unique_ptr<ScInterpreter> pInterpreter(new ScInterpreter( this, pDocument, pDocument->GetNonThreadedContext(), aPos, *pCode ));
+        std::unique_ptr<ScInterpreter> pScopedInterpreter;
+        if (pInterpreter)
+            pInterpreter->Init(this, aPos, *pCode);
+        else
+        {
+            pScopedInterpreter.reset(new ScInterpreter( this, pDocument, pDocument->GetNonThreadedContext(), aPos, *pCode ));
+            pInterpreter = pScopedInterpreter.get();
+        }
 
         switch (pInterpreter->GetVolatileType())
         {
@@ -4843,6 +4850,7 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
             }
         }
 
+        std::vector<std::unique_ptr<ScInterpreter>> aInterpreters(nThreadCount);
         {
             assert(!pDocument->IsThreadedGroupCalcInProgress());
             pDocument->SetThreadedGroupCalcInProgress(true);
@@ -4853,7 +4861,6 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
             std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
             ScThreadedInterpreterContextGetterGuard aContextGetterGuard(nThreadCount, *pDocument, pNonThreadedFormatter);
             ScInterpreterContext* context = nullptr;
-            std::vector<std::unique_ptr<ScInterpreter>> aInterpreters(nThreadCount);
 
             for (int i = 0; i < nThreadCount; ++i)
             {
@@ -4887,7 +4894,9 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
         ScAddress aStartPos(mxGroup->mpTopCell->aPos);
         SCROW nSpanLen = nEndOffset - nStartOffset + 1;
         aStartPos.SetRow(aStartPos.Row() + nStartOffset);
-        pDocument->HandleStuffAfterParallelCalculation(nColStart, nColEnd, aStartPos.Row(), nSpanLen, aStartPos.Tab());
+        // Reuse one of the previously allocated interpreter objects here.
+        pDocument->HandleStuffAfterParallelCalculation(nColStart, nColEnd, aStartPos.Row(), nSpanLen,
+                                                       aStartPos.Tab(), aInterpreters[0].get());
 
         return true;
     }
