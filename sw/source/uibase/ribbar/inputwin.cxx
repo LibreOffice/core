@@ -494,9 +494,7 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
     const sal_uInt16 nLen = aActText.getLength();
     if( !nLen )
     {
-        OUString aStr = OUStringBuffer().
-            append(cOpen).append(aBoxes).append(cClose).
-            makeStringAndClear();
+        OUString aStr = OUStringLiteral1(cOpen) + aBoxes + OUStringLiteral1(cClose);
         SetText(aStr);
         sal_Int32 nPos = aStr.indexOf( cClose );
         OSL_ENSURE(nPos != -1, "delimiter not found");
@@ -545,9 +543,7 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
         }
         else
         {
-            OUString aTmp = OUStringBuffer().
-                append(cOpen).append(aBoxes).append(cClose).
-                makeStringAndClear();
+            OUString aTmp = OUStringLiteral1(cOpen) + aBoxes + OUStringLiteral1(cClose);
             nPos = static_cast<sal_uInt16>(aSelection.Min());
             aActText = aActText.replaceAt( nPos, 0, aTmp );
             nPos = nPos + aTmp.getLength();
