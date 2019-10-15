@@ -19,6 +19,8 @@
 
 #include <config_features.h>
 
+#include <unordered_set>
+
 #include <doc.hxx>
 #include <dcontact.hxx>
 #include <proofreadingiterator.hxx>
@@ -932,6 +934,25 @@ static OUString lcl_FindUniqueName(SwWrtShell* pTargetShell, const OUString& rSt
     while( true );
 }
 
+/** Returns whether the passed SwPageDesc& or any of its (transitive) follows
+   contains a header or footer. */
+static bool lcl_PageDescOrFollowContainsHeaderFooter(const SwPageDesc& rPageDesc)
+{
+    // remember already checked page descs to avoid cycle
+    std::unordered_set<const SwPageDesc*> aCheckedPageDescs;
+    const SwPageDesc* pCurPageDesc = &rPageDesc;
+    while (aCheckedPageDescs.count(pCurPageDesc) == 0)
+    {
+        const SwFrameFormat& rMaster = pCurPageDesc->GetMaster();
+        if (rMaster.GetHeader().IsActive() || rMaster.GetFooter().IsActive())
+            return true;
+
+        aCheckedPageDescs.insert(pCurPageDesc);
+        pCurPageDesc = pCurPageDesc->GetFollow();
+    }
+    return false;
+}
+
 static void lcl_CopyFollowPageDesc(
                             SwWrtShell& rTargetShell,
                             const SwPageDesc& rSourcePageDesc,
@@ -1031,12 +1052,10 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
             // if the source uses headers or footers the target document
             // needs inidividual page styles
             const SwWrtShell *pSourceShell = rSource.GetDocShell()->GetWrtShell();
-            const SwPageDesc *pSourcePageDesc = &pSourceShell->GetPageDesc(
+            const SwPageDesc rSourcePageDesc = pSourceShell->GetPageDesc(
                                                     pSourceShell->GetCurPageDesc());
-            const OUString sStartingPageDesc = pSourcePageDesc->GetName();
-            const SwFrameFormat& rMaster = pSourcePageDesc->GetMaster();
-            const bool bPageStylesWithHeaderFooter = rMaster.GetHeader().IsActive() ||
-                                                     rMaster.GetFooter().IsActive();
+            const OUString sStartingPageDesc = rSourcePageDesc.GetName();
+            const bool bPageStylesWithHeaderFooter = lcl_PageDescOrFollowContainsHeaderFooter(rSourcePageDesc);
             if( bPageStylesWithHeaderFooter )
             {
                 // create a new pagestyle
@@ -1046,8 +1065,8 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
                 pTargetPageDesc = MakePageDesc( sNewPageDescName );
                 if( pTargetPageDesc )
                 {
-                    CopyPageDesc( *pSourcePageDesc, *pTargetPageDesc, false );
-                    lcl_CopyFollowPageDesc( *pTargetShell, *pSourcePageDesc, *pTargetPageDesc, nDocNo );
+                    CopyPageDesc( rSourcePageDesc, *pTargetPageDesc, false );
+                    lcl_CopyFollowPageDesc( *pTargetShell, rSourcePageDesc, *pTargetPageDesc, nDocNo );
                 }
             }
             else
