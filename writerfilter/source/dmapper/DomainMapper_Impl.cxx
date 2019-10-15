@@ -5532,7 +5532,11 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
             uno::Reference< text::XTextRange > xCurrent;
             if (xTextAppend.is())
             {
-                uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursorByRange( xTextAppend->getEnd() );
+                uno::Reference<text::XTextCursor> const xCursor =
+                    xTextAppend->createTextCursorByRange(
+                        m_aTextAppendStack.top().xInsertPosition.is()
+                            ? m_aTextAppendStack.top().xInsertPosition
+                            : xTextAppend->getEnd() );
 
                 if (!xCursor)
                     return;
