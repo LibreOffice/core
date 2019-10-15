@@ -59,6 +59,7 @@ CAT=type
 OBJ_EXT=obj
 EXE_EXT=.exe
 COPY=copy
+CD=cd /d
 SHAREDLIB_EXT=dll
 SHAREDLIB_OUT=$(OUT_BIN)
 UNOPKG_PLATFORM=Windows
@@ -191,6 +192,7 @@ P2BG=&
 DEL=rm -f
 DELRECURSIVE=rm -rf
 COPY=cp
+CD=cd
 URLPREFIX=file://
 
 COMID=gcc3
@@ -334,6 +336,7 @@ P2BG=&
 DEL=rm -f
 DELRECURSIVE=rm -rf
 COPY=cp
+CD=cd
 URLPREFIX=file://
 
 SALLIB=-luno_sal
@@ -433,6 +436,7 @@ P2BG=&
 DEL=rm -f
 DELRECURSIVE=rm -rf
 COPY=cp
+CD=cd
 URLPREFIX=file://
 
 SALLIB=-luno_sal
@@ -543,6 +547,7 @@ P2BG=&
 DEL=rm -f
 DELRECURSIVE=rm -rf
 COPY=cp
+CD=cd
 URLPREFIX=file://
 
 SALLIB=-luno_sal
