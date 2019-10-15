@@ -114,13 +114,18 @@ endef
 # add the .pdb to the PCH's files and then use the .pdb also for linktargets that reuse the PCH.
 # call gb_PrecompiledHeader__create_reuse_files,linktarget,pchtarget,linktargetmakefilename
 define gb_PrecompiledHeader__create_reuse_files
-cp $(call gb_LinkTarget_get_pdbfile_in,$(1)) $(call gb_PrecompiledHeader_get_target,$(2),$(3)).pdb
+rm -f $(call gb_PrecompiledHeader_get_target,$(2),$(3)).pdb; \
+if test -f $(call gb_LinkTarget_get_pdbfile_in,$(1)); then \
+  cp $(call gb_LinkTarget_get_pdbfile_in,$(1)) $(call gb_PrecompiledHeader_get_target,$(2),$(3)).pdb; \
+fi
 endef
 
 # call gb_PrecompiledHeader__copy_reuse_files,linktarget,pchtarget,linktargetmakefilename
 define gb_PrecompiledHeader__copy_reuse_files
-rm -f $(call gb_LinkTarget_get_pdbfile_in,$(1))
-cp $(call gb_PrecompiledHeader_get_target,$(2),$(3)).pdb $(call gb_LinkTarget_get_pdbfile_in,$(1))
+rm -f $(call gb_LinkTarget_get_pdbfile_in,$(1)); \
+if test -f $(call gb_PrecompiledHeader_get_target,$(2),$(3)).pdb; then \
+  cp $(call gb_PrecompiledHeader_get_target,$(2),$(3)).pdb $(call gb_LinkTarget_get_pdbfile_in,$(1)); \
+fi
 endef
 
 # AsmObject class
