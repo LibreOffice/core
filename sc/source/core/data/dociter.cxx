@@ -273,7 +273,7 @@ void ScValueIterator::GetCurNumFmtInfo( const ScInterpreterContext& rContext, Sv
         SCROW nCurRow = GetRow();
         const ScColumn* pCol = &(pDoc->maTabs[mnTab])->aCol[mnCol];
         nNumFmtIndex = pCol->GetNumberFormat(rContext, nCurRow);
-        nNumFmtType = rContext.GetFormatTable()->GetType( nNumFmtIndex );
+        nNumFmtType = rContext.GetNumberFormatType( nNumFmtIndex );
         bNumValid = true;
     }
 
