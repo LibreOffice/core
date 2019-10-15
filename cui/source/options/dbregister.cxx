@@ -90,7 +90,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage(weld::Container* pPage, wel
     , m_xIter(m_xPathBox->make_iterator())
 {
     Size aControlSize(m_xPathBox->get_approximate_digit_width() * 60,
-                      m_xPathBox->get_height_rows(35));
+                      m_xPathBox->get_height_rows(12));
     m_xPathBox->set_size_request(aControlSize.Width(), aControlSize.Height());
 
     std::vector<int> aWidths;
