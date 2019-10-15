@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_25bc23db",
+        "filename": "oox/source/drawingml/fillproperties.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-10-15T08:56:45Z",
+      "side": 1,
+      "message": "but what if only one of nBrightness or nContrast is !\u003d 0 ? previously it would be imported in line 816 but now you overwrite it with 0",
+      "revId": "9ded691600c9168d06b2fd50e9fa6f9f30ac448c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
