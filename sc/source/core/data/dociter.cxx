@@ -82,12 +82,12 @@ static void ScAttrArray_IterGetNumberFormat( sal_uInt32& nFormat, const ScAttrAr
     if ( rpArr != pNewArr || nAttrEndRow < nRow )
     {
         SCROW nRowStart = 0;
-        SCROW nRowEnd = MAXROW;
+        SCROW nRowEnd = pDoc->MaxRow();
         const ScPatternAttr* pPattern = pNewArr->GetPatternRange( nRowStart, nRowEnd, nRow );
         if( !pPattern )
         {
             pPattern = pDoc->GetDefPattern();
-            nRowEnd = MAXROW;
+            nRowEnd = pDoc->MaxRow();
         }
 
         nFormat = pPattern->GetNumberFormat( pContext ? pContext->GetFormatTable() : pDoc->GetFormatTable() );
@@ -117,10 +117,10 @@ ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
 {
     SCTAB nDocMaxTab = pDocument->GetTableCount() - 1;
 
-    if (!ValidCol(maStartPos.Col())) maStartPos.SetCol(MAXCOL);
-    if (!ValidCol(maEndPos.Col())) maEndPos.SetCol(MAXCOL);
-    if (!ValidRow(maStartPos.Row())) maStartPos.SetRow(MAXROW);
-    if (!ValidRow(maEndPos.Row())) maEndPos.SetRow(MAXROW);
+    if (!ValidCol(maStartPos.Col())) maStartPos.SetCol(pDoc->MaxCol());
+    if (!ValidCol(maEndPos.Col())) maEndPos.SetCol(pDoc->MaxCol());
+    if (!ValidRow(maStartPos.Row())) maStartPos.SetRow(pDoc->MaxRow());
+    if (!ValidRow(maEndPos.Row())) maEndPos.SetRow(pDoc->MaxRow());
     if (!ValidTab(maStartPos.Tab()) || maStartPos.Tab() > nDocMaxTab) maStartPos.SetTab(nDocMaxTab);
     if (!ValidTab(maEndPos.Tab()) || maEndPos.Tab() > nDocMaxTab) maEndPos.SetTab(nDocMaxTab);
 }
@@ -809,7 +809,7 @@ sc::FormulaGroupEntry* ScFormulaGroupIterator::next()
         {
             mnIndex = 0;
             mnCol++;
-            if (mnCol > MAXCOL)
+            if (mnCol > mpDoc->MaxCol())
             {
                 mnCol = 0;
                 mnTab++;
@@ -878,10 +878,10 @@ void ScCellIterator::init()
 
     PutInOrder(maStartPos, maEndPos);
 
-    if (!ValidCol(maStartPos.Col())) maStartPos.SetCol(MAXCOL);
-    if (!ValidCol(maEndPos.Col())) maEndPos.SetCol(MAXCOL);
-    if (!ValidRow(maStartPos.Row())) maStartPos.SetRow(MAXROW);
-    if (!ValidRow(maEndPos.Row())) maEndPos.SetRow(MAXROW);
+    if (!ValidCol(maStartPos.Col())) maStartPos.SetCol(mpDoc->MaxCol());
+    if (!ValidCol(maEndPos.Col())) maEndPos.SetCol(mpDoc->MaxCol());
+    if (!ValidRow(maStartPos.Row())) maStartPos.SetRow(mpDoc->MaxRow());
+    if (!ValidRow(maEndPos.Row())) maEndPos.SetRow(mpDoc->MaxRow());
     if (!ValidTab(maStartPos.Tab(), nDocMaxTab)) maStartPos.SetTab(nDocMaxTab);
     if (!ValidTab(maEndPos.Tab(), nDocMaxTab)) maEndPos.SetTab(nDocMaxTab);
 
@@ -896,7 +896,7 @@ void ScCellIterator::init()
     if (!mpDoc->maTabs[maCurPos.Tab()])
     {
         OSL_FAIL("Table not found");
-        maStartPos = ScAddress(MAXCOL+1, MAXROW+1, MAXTAB+1); // -> Abort on GetFirst.
+        maStartPos = ScAddress(mpDoc->MaxCol()+1, mpDoc->MaxRow()+1, MAXTAB+1); // -> Abort on GetFirst.
         maCurPos = maStartPos;
     }
 }
@@ -1251,7 +1251,7 @@ void ScQueryCellIterator::AdvanceQueryParamEntryField()
         ScQueryEntry& rEntry = mpParam->GetEntry( j );
         if ( rEntry.bDoQuery )
         {
-            if ( rEntry.nField < MAXCOL )
+            if ( rEntry.nField < pDoc->MaxCol() )
                 rEntry.nField++;
             else
             {
@@ -1277,8 +1277,8 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
         ~BoolResetter() { mr = mb; }
     } aRangeLookupResetter( mpParam->mbRangeLookup, true);
 
-    nFoundCol = MAXCOL+1;
-    nFoundRow = MAXROW+1;
+    nFoundCol = pDoc->MaxCol()+1;
+    nFoundRow = pDoc->MaxRow()+1;
     SetStopOnMismatch( true ); // assume sorted keys
     SetTestEqualCondition( true );
     bIgnoreMismatchOnLeadingStrings = true;
@@ -1354,8 +1354,8 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
                 // Check it.
                 if (!GetThis())
                 {
-                    nFoundCol = MAXCOL+1;
-                    nFoundRow = MAXROW+1;
+                    nFoundCol = pDoc->MaxCol()+1;
+                    nFoundRow = pDoc->MaxRow()+1;
                 }
             }
         }
@@ -1446,7 +1446,7 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
             maCurPos = aPosSave;
         }
     }
-    return (nFoundCol <= MAXCOL) && (nFoundRow <= MAXROW);
+    return (nFoundCol <= pDoc->MaxCol()) && (nFoundRow <= pDoc->MaxRow());
 }
 
 namespace {
@@ -2091,7 +2091,7 @@ bool ScHorizontalCellIterator::SkipInvalidInRow()
 /// Find the next row that has some real content in one of its columns.
 SCROW ScHorizontalCellIterator::FindNextNonEmptyRow()
 {
-    size_t nNextRow = MAXROW+1;
+    size_t nNextRow = pDoc->MaxRow()+1;
 
     for (const ColParam& r : maColPositions)
     {
@@ -2160,10 +2160,10 @@ ScHorizontalValueIterator::ScHorizontalValueIterator( ScDocument* pDocument,
     PutInOrder( nStartRow, nEndRow);
     PutInOrder( nStartTab, nEndTab );
 
-    if (!ValidCol(nStartCol)) nStartCol = MAXCOL;
-    if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
-    if (!ValidRow(nStartRow)) nStartRow = MAXROW;
-    if (!ValidRow(nEndRow)) nEndRow = MAXROW;
+    if (!ValidCol(nStartCol)) nStartCol = pDoc->MaxCol();
+    if (!ValidCol(nEndCol)) nEndCol = pDoc->MaxCol();
+    if (!ValidRow(nStartRow)) nStartRow = pDoc->MaxRow();
+    if (!ValidRow(nEndRow)) nEndRow = pDoc->MaxRow();
     if (!ValidTab(nStartTab)) nStartTab = MAXTAB;
     if (!ValidTab(nEndTab)) nEndTab = MAXTAB;
 
@@ -2268,7 +2268,7 @@ ScHorizontalAttrIterator::~ScHorizontalAttrIterator()
 void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
 {
     bool bEmpty = true;
-    nMinNextEnd = MAXROW;
+    nMinNextEnd = pDoc->MaxRow();
     SCCOL nThisHead = 0;
 
     for (SCCOL i=nStartCol; i<=nEndCol; i++)
@@ -2287,14 +2287,14 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
                 else
                     nIndex = 0;
                 pIndices[nPos] = nIndex;
-                pHorizEnd[nPos] = MAXCOL+1; // only for OSL_ENSURE
+                pHorizEnd[nPos] = pDoc->MaxCol()+1; // only for OSL_ENSURE
             }
             else
                 nIndex = ++pIndices[nPos];
 
             if ( !nIndex && !pArray->Count() )
             {
-                pNextEnd[nPos] = MAXROW;
+                pNextEnd[nPos] = pDoc->MaxRow();
                 OSL_ENSURE( pNextEnd[nPos] >= nRow, "Sequence out of order" );
                 ppPatterns[nPos] = nullptr;
             }
@@ -2315,7 +2315,7 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
             else
             {
                 OSL_FAIL("AttrArray does not range to MAXROW");
-                pNextEnd[nPos] = MAXROW;
+                pNextEnd[nPos] = pDoc->MaxRow();
                 ppPatterns[nPos] = nullptr;
             }
         }
@@ -2344,7 +2344,7 @@ bool ScHorizontalAttrIterator::InitForNextAttr()
 {
     if ( !ppPatterns[nCol-nStartCol] ) // Skip default items
     {
-        OSL_ENSURE( pHorizEnd[nCol-nStartCol] < MAXCOL+1, "missing stored data" );
+        OSL_ENSURE( pHorizEnd[nCol-nStartCol] < pDoc->MaxCol()+1, "missing stored data" );
         nCol = pHorizEnd[nCol-nStartCol] + 1;
         if ( nCol > nEndCol )
             return false;
@@ -2364,7 +2364,7 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
             const ScPatternAttr* pPat = ppPatterns[nCol-nStartCol];
             rRow = nRow;
             rCol1 = nCol;
-            OSL_ENSURE( pHorizEnd[nCol-nStartCol] < MAXCOL+1, "missing stored data" );
+            OSL_ENSURE( pHorizEnd[nCol-nStartCol] < pDoc->MaxCol()+1, "missing stored data" );
             nCol = pHorizEnd[nCol-nStartCol];
             rCol2 = nCol;
             ++nCol; // Count up for next call
@@ -2614,7 +2614,7 @@ void ScDocRowHeightUpdater::updateAll()
         if (!ValidTab(nTab) || !mrDoc.maTabs[nTab])
             continue;
 
-        mrDoc.maTabs[nTab]->SetOptimalHeight(aCxt, 0, MAXROW, &aProgress, nProgressStart);
+        mrDoc.maTabs[nTab]->SetOptimalHeight(aCxt, 0, mrDoc.MaxRow(), &aProgress, nProgressStart);
         nProgressStart += mrDoc.maTabs[nTab]->GetWeightedCount();
     }
 }
