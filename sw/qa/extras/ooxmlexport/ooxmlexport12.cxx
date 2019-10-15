@@ -678,7 +678,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf79435_legacyInputFields, "tdf79435_legacyInputFi
 {
     //using .doc input file to verify cross-format compatibility.
     uno::Reference<text::XFormField> xFormField
-        = getProperty<uno::Reference<text::XFormField>>(getRun(getParagraph(5), 3), "Bookmark");
+        = getProperty<uno::Reference<text::XFormField>>(getRun(getParagraph(5), 2), "Bookmark");
     uno::Reference<container::XNameContainer> xParameters(xFormField->getParameters());
 
     OUString sTmp;

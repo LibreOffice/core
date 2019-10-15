@@ -4284,6 +4284,46 @@ void DomainMapper_Impl::handleIndex
     }
 }
 
+static auto InsertFieldmark(std::stack<TextAppendContext> & rTextAppendStack,
+        uno::Reference<text::XFormField> const& xFormField,
+        uno::Reference<text::XTextRange> const& xStartRange) -> void
+{
+    uno::Reference<text::XTextContent> const xTextContent(xFormField, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextAppend> const& xTextAppend(rTextAppendStack.top().xTextAppend);
+    uno::Reference<text::XTextCursor> const xCursor =
+        xTextAppend->createTextCursorByRange(xStartRange);
+    if (rTextAppendStack.top().xInsertPosition.is())
+    {
+        xCursor->gotoRange(rTextAppendStack.top().xInsertPosition, true);
+    }
+    else
+    {
+        xCursor->gotoEnd(true);
+    }
+    xTextAppend->insertTextContent(xCursor, xTextContent, true);
+    // problem: the fieldmark must be inserted in CloseFieldCommand(), because
+    //          attach() takes 2 positions, not 3!
+    // FAIL: AppendTextNode() ignores the content index!
+    // plan B: insert a spurious paragraph break now and join
+    //         it in PopFieldContext()!
+    xCursor->gotoRange(xTextContent->getAnchor()->getEnd(), false);
+    xCursor->goLeft(1, false); // skip CH_TXT_ATR_FIELDEND
+    xTextAppend->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
+    xCursor->goLeft(1, false); // back to previous paragraph
+    rTextAppendStack.push(TextAppendContext(xTextAppend, xCursor));
+}
+
+static auto PopFieldmark(std::stack<TextAppendContext> & rTextAppendStack,
+        uno::Reference<text::XTextCursor> const& xCursor) -> void
+{
+    xCursor->gotoRange(rTextAppendStack.top().xInsertPosition, false);
+    xCursor->goRight(1, true);
+    xCursor->setString(OUString()); // undo SplitNode from CloseFieldCommand()
+    // note: paragraph properties will be overwritten
+    // by finishParagraph() anyway so ignore here
+    rTextAppendStack.pop();
+}
+
 void DomainMapper_Impl::CloseFieldCommand()
 {
     if(m_bDiscardHeaderFooter)
@@ -4562,6 +4602,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                                         xNamed->setName(  pFFDataHandler->getName() );
                                     pContext->SetFormField( xFormField );
                                 }
+                                InsertFieldmark(m_aTextAppendStack,
+                                    xFormField, pContext->GetStartRange());
                             }
                             else
                             {
@@ -5029,30 +5071,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                 if (std::get<0>(field) != "SHAPE" && m_xTextFactory.is() && !m_aTextAppendStack.empty())
                 {
                     xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.Fieldmark");
-                    const uno::Reference<text::XTextContent> xTextContent(xFieldInterface, uno::UNO_QUERY_THROW);
-                    uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
-                    uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange(pContext->GetStartRange());
-                    if (m_aTextAppendStack.top().xInsertPosition.is())
-                    {
-                        xCrsr->gotoRange(m_aTextAppendStack.top().xInsertPosition, true);
-                    }
-                    else
-                    {
-                        xCrsr->gotoEnd(true);
-                    }
-                    xTextAppend->insertTextContent(xCrsr, xTextContent, true);
-                    // problem: the fieldmark must be inserted here, because
-                    //          attach() takes 2 positions, not 3!
-                    // FAIL: AppendTextNode() ignores the content index!
-                    // plan B: insert a spurious paragraph break now and join
-                    //         it in PopFieldContext()!
-                    xCrsr->gotoRange(xTextContent->getAnchor()->getEnd(), false);
-                    xCrsr->goLeft(1, false); // skip CH_TXT_ATR_FIELDEND
-                    xTextAppend->insertControlCharacter(xCrsr, text::ControlCharacter::PARAGRAPH_BREAK, false);
-                    xCrsr->goLeft(1, false); // back to previous paragraph
-                    m_aTextAppendStack.push(TextAppendContext(xTextAppend, xCrsr));
 
-                    uno::Reference<text::XFormField> xFormField(xTextContent, uno::UNO_QUERY);
+                    uno::Reference<text::XFormField> const xFormField(xFieldInterface, uno::UNO_QUERY);
+                    InsertFieldmark(m_aTextAppendStack, xFormField, pContext->GetStartRange());
                     xFormField->setFieldType(aCode);
                     m_bStartGenericField = true;
                     pContext->SetFormField( xFormField );
@@ -5361,8 +5382,7 @@ void DomainMapper_Impl::PopFieldContext()
                             xToInsert.set(xFormField, uno::UNO_QUERY);
                             if ( xFormField.is() && xToInsert.is() )
                             {
-                                xCrsr->gotoEnd( true );
-                                xToInsert->attach( uno::Reference< text::XTextRange >( xCrsr, uno::UNO_QUERY_THROW ));
+                                PopFieldmark(m_aTextAppendStack, xCrsr);
                                 pFormControlHelper->processField( xFormField );
                             }
                             else
@@ -5414,12 +5434,7 @@ void DomainMapper_Impl::PopFieldContext()
                         else if(m_bStartGenericField)
                         {
                             m_bStartGenericField = false;
-                            xCrsr->gotoRange(m_aTextAppendStack.top().xInsertPosition, false);
-                            xCrsr->goRight(1, true);
-                            xCrsr->setString(OUString()); // undo SplitNode from CloseFieldCommand()
-                            // note: paragraph properties will be overwritten
-                            // by finishParagraph() anyway so ignore here
-                            m_aTextAppendStack.pop();
+                            PopFieldmark(m_aTextAppendStack, xCrsr);
                             if(m_bTextInserted)
                             {
                                 m_bTextInserted = false;
