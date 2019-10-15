@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_e5b14be3",
+        "filename": "sd/source/ui/remotecontrol/Communicator.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-15T09:45:43Z",
+      "side": 0,
+      "message": "Beautiful! :-)",
+      "range": {
+        "startLine": 61,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 85
+      },
+      "revId": "c418b6fdbefa8d847723a14c25b68bf0c6ac66af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
