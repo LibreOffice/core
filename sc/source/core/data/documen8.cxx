@@ -428,7 +428,7 @@ const ScDocumentThreadSpecific& ScDocument::CalculateInColumnInThread( ScInterpr
     return maThreadSpecific;
 }
 
-void ScDocument::HandleStuffAfterParallelCalculation( SCCOL nColStart, SCCOL nColEnd, SCROW nRow, size_t nLen, SCTAB nTab )
+void ScDocument::HandleStuffAfterParallelCalculation( SCCOL nColStart, SCCOL nColEnd, SCROW nRow, size_t nLen, SCTAB nTab, ScInterpreter* pInterpreter )
 {
     assert(!IsThreadedGroupCalcInProgress());
     for( const DelayedSetNumberFormat& data : GetNonThreadedContext().maDelayedSetNumberFormat)
@@ -439,7 +439,7 @@ void ScDocument::HandleStuffAfterParallelCalculation( SCCOL nColStart, SCCOL nCo
     if (!pTab)
         return;
 
-    pTab->HandleStuffAfterParallelCalculation(nColStart, nColEnd, nRow, nLen);
+    pTab->HandleStuffAfterParallelCalculation(nColStart, nColEnd, nRow, nLen, pInterpreter);
 }
 
 void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,
