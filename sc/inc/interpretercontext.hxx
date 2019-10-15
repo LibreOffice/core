@@ -24,6 +24,7 @@ class FormulaToken;
 class ScDocument;
 class SvNumberFormatter;
 struct ScLookupCacheMap;
+class ScInterpreter;
 
 // SetNumberFormat() is not thread-safe, so calls to it need to be delayed to the main thread.
 struct DelayedSetNumberFormat
@@ -45,12 +46,14 @@ struct ScInterpreterContext
     // Allocation cache for "aConditions" array in ScInterpreter::IterateParameterIfs()
     // This is populated/used only when formula-group threading is enabled.
     std::vector<sal_uInt32> maConditions;
+    ScInterpreter* pInterpreter;
 
     ScInterpreterContext(const ScDocument& rDoc, SvNumberFormatter* pFormatter)
         : mpDoc(&rDoc)
         , mnTokenCachePos(0)
         , maTokens(TOKEN_CACHE_SIZE, nullptr)
         , mScLookupCache(nullptr)
+        , pInterpreter(nullptr)
         , mpFormatter(pFormatter)
     {
     }

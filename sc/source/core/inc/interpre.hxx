@@ -195,7 +195,7 @@ private:
     ScCalcConfig maCalcConfig;
     formula::FormulaTokenIterator aCode;
     ScAddress   aPos;
-    ScTokenArray& rArr;
+    ScTokenArray* pArr;
     ScInterpreterContext& mrContext;
     ScDocument* pDok;
     sfx2::LinkManager* mpLinkManager;
@@ -1004,8 +1004,13 @@ private:
 
 public:
     ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc, ScInterpreterContext& rContext,
-                    const ScAddress&, ScTokenArray& );
+                    const ScAddress&, ScTokenArray&, bool bForGroupThreading = false );
     ~ScInterpreter();
+
+    // Used only for threaded formula-groups.
+    // Resets the interpreter object, allowing reuse of interpreter object for each cell
+    // in the group.
+    void Init( ScFormulaCell* pCell, const ScAddress& rPos, ScTokenArray& rTokArray );
 
     formula::StackVar Interpret();
 

@@ -1886,7 +1886,19 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
 
     if( pCode->GetCodeLen() && pDocument )
     {
-        std::unique_ptr<ScInterpreter> pInterpreter(new ScInterpreter( this, pDocument, rContext, aPos, *pCode ));
+        std::unique_ptr<ScInterpreter> pScopedInterpreter;
+        ScInterpreter* pInterpreter;
+        if (rContext.pInterpreter)
+        {
+            pInterpreter = rContext.pInterpreter;
+            pInterpreter->Init(this, aPos, *pCode);
+        }
+        else
+        {
+            pScopedInterpreter.reset(new ScInterpreter( this, pDocument, rContext, aPos, *pCode ));
+            pInterpreter = pScopedInterpreter.get();
+        }
+
         FormulaError nOldErrCode = aResult.GetResultError();
         if ( nSeenInIteration == 0 )
         {   // Only the first time
@@ -4841,10 +4853,14 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
             std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
             ScThreadedInterpreterContextGetterGuard aContextGetterGuard(nThreadCount, *pDocument, pNonThreadedFormatter);
             ScInterpreterContext* context = nullptr;
+            std::vector<std::unique_ptr<ScInterpreter>> aInterpreters(nThreadCount);
 
             for (int i = 0; i < nThreadCount; ++i)
             {
                 context = aContextGetterGuard.GetInterpreterContextForThreadIdx(i);
+                assert(!context->pInterpreter);
+                aInterpreters[i].reset(new ScInterpreter(this, pDocument, *context, mxGroup->mpTopCell->aPos, *pCode, true));
+                context->pInterpreter = aInterpreters[i].get();
                 ScDocument::SetupFromNonThreadedContext(*context, i);
                 rThreadPool.pushTask(std::make_unique<Executor>(aTag, i, nThreadCount, pDocument, context, mxGroup->mpTopCell->aPos,
                                                                 nColStart, nColEnd, nStartOffset, nEndOffset));
@@ -4862,6 +4878,7 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
                 context = aContextGetterGuard.GetInterpreterContextForThreadIdx(i);
                 // This is intentionally done in this main thread in order to avoid locking.
                 pDocument->MergeBackIntoNonThreadedContext(*context, i);
+                context->pInterpreter = nullptr;
             }
 
             SAL_INFO("sc.threaded", "Done");

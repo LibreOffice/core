@@ -1634,6 +1634,12 @@ void FormulaTokenIterator::Jump( short nStart, short nNext, short nStop )
     }
 }
 
+void FormulaTokenIterator::ReInit( const FormulaTokenArray& rArr )
+{
+    maStack.clear();
+    Push( &rArr );
+}
+
 const FormulaToken* FormulaTokenIterator::GetNonEndOfPathToken( short nIdx ) const
 {
     FormulaTokenIterator::Item cur = maStack.back();

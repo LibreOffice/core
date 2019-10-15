@@ -563,6 +563,10 @@ public:
     void Push( const FormulaTokenArray* );
     void Pop();
 
+    /** Reconstruct the iterator afresh from a token array
+    */
+    void ReInit( const FormulaTokenArray& );
+
 private:
     const FormulaToken* GetNonEndOfPathToken( short nIdx ) const;
 };
