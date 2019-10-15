@@ -71,7 +71,7 @@ protected:
 public:
 
     /// @throws css::uno::RuntimeException
-    bool isShowing(  );
+    virtual bool isShowing();
 
     /// @throws css::uno::RuntimeException
     virtual bool isVisible();

@@ -114,6 +114,13 @@ bool ScAccessibleCsvControl::isVisible()
     return implGetControl().IsVisible();
 }
 
+bool ScAccessibleCsvControl::isShowing()
+{
+    SolarMutexGuard aGuard;
+    ensureAlive();
+    return implGetControl().IsReallyVisible();
+}
+
 void SAL_CALL ScAccessibleCsvControl::grabFocus()
 {
     SolarMutexGuard aGuard;

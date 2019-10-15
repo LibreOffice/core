@@ -55,6 +55,8 @@ public:
 
     /** Returns true, if the control is visible. */
     virtual bool isVisible() override;
+    /** Returns true, if the control is showing. */
+    virtual bool isShowing() override;
 
     // XAccessibleComponent ---------------------------------------------------
 
