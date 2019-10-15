@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_25dd0314",
+        "filename": "bridges/inc/cppinterfaceproxy.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-15T12:14:29Z",
+      "side": 1,
+      "message": "* why do an unrelated whitespace change here?\n\n* in general, esp. for data members, it might be more obvious and readable to use \"\u003d {}\" instead of just \"{}\"",
+      "revId": "504dfdd704fa51093bee707124c1f82e3a0e3fc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
