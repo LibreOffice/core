@@ -163,9 +163,9 @@ void f1(OUString s, OUString t, int i, const char* pChar)
 {
     // no warning expected
     t = t + "xxx";
-    // expected-error@+1 {{avoid constructing temporary object from 'const char [4]' during + [loplugin:stringadd]}}
+    // expected-error@+1 {{avoid constructing 'rtl::OUString' from 'const char [4]' on RHS of + (where LHS is of type 'rtl::OUString') [loplugin:stringadd]}}
     s = s + OUString("xxx");
-    // expected-error@+1 {{avoid constructing temporary object from 'const rtl::OUString' during + [loplugin:stringadd]}}
+    // expected-error@+1 {{avoid constructing 'rtl::OUString' from 'const rtl::OUString' on RHS of + (where LHS is of type 'rtl::OUString') [loplugin:stringadd]}}
     s = s + OUString(getByRef());
 
     // no warning expected
@@ -183,7 +183,7 @@ void f1(OUString s, OUString t, int i, const char* pChar)
 void f2(char ch)
 {
     OString s;
-    // expected-error@+1 {{avoid constructing temporary object from 'const char [4]' during + [loplugin:stringadd]}}
+    // expected-error@+1 {{avoid constructing 'rtl::OString' from 'const char [4]' on RHS of + (where LHS is of type 'rtl::OString') [loplugin:stringadd]}}
     s = s + OString("xxx");
     // no warning expected, no OStringLiteral1
     s = s + OString(ch);
