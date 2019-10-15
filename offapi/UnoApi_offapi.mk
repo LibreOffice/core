@@ -2604,7 +2604,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	XDesktopTask \
 	XDispatch \
 	XDispatchHelper \
-	XDispatchInformationProvider \
+        XDispatchInformationProvider \
+        XDispatchInformationProvider2 \
 	XDispatchProvider \
 	XDispatchProviderInterception \
 	XDispatchProviderInterceptor \
