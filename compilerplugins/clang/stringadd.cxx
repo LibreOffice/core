@@ -193,8 +193,9 @@ bool StringAdd::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* operatorCall
         && !tc.Class("OString").Namespace("rtl").GlobalNamespace())
         return true;
 
-    auto check = [this, &tc](const Expr* expr) {
-        auto const e = dyn_cast<CXXFunctionalCastExpr>(expr->IgnoreParenImpCasts());
+    auto check = [operatorCall, this, &tc](unsigned arg) {
+        auto const e
+            = dyn_cast<CXXFunctionalCastExpr>(operatorCall->getArg(arg)->IgnoreParenImpCasts());
         if (e == nullptr)
             return;
         auto tc3 = loplugin::TypeCheck(e->getType());
@@ -210,13 +211,16 @@ bool StringAdd::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* operatorCall
                             cxxConstruct->getConstructor()->getParamDecl(0)->getType())
                             .Char())
                         return;
-        report(DiagnosticsEngine::Warning, "avoid constructing temporary object from %0 during +",
+        report(DiagnosticsEngine::Warning,
+               ("avoid constructing %0 from %1 on %select{L|R}2HS of + (where %select{R|L}2HS is of"
+                " type %3)"),
                compat::getBeginLoc(e))
-            << e->getSubExprAsWritten()->getType() << e->getSourceRange();
+            << e->getType().getLocalUnqualifiedType() << e->getSubExprAsWritten()->getType() << arg
+            << operatorCall->getArg(1 - arg)->IgnoreImpCasts()->getType() << e->getSourceRange();
     };
 
-    check(operatorCall->getArg(0));
-    check(operatorCall->getArg(1));
+    check(0);
+    check(1);
     return true;
 }
 
