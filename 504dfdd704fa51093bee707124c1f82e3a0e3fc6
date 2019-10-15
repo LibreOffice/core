@@ -70,6 +70,24 @@
       "revId": "504dfdd704fa51093bee707124c1f82e3a0e3fc6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_85041719",
+        "filename": "bridges/inc/cppinterfaceproxy.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-15T12:57:12Z",
+      "side": 1,
+      "message": "Working with clang-format rules, (1) it is easier to follow one single set of rules (so muscle memory develops), and (2) the IDE helps keeping the formatting consistent to the rules. So actually additional effort is needed to keep old formatting, e.g. when you copy-paste something in the IDE, and it formats the affected lines for you, so you need to (not forget to) revert the formatting change.",
+      "parentUuid": "7f7f9b97_e5138b65",
+      "revId": "504dfdd704fa51093bee707124c1f82e3a0e3fc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
