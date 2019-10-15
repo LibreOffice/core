@@ -46,6 +46,8 @@
 SvxToolbarConfigPage::SvxToolbarConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SvxConfigPage(pPage, pController, rSet)
 {
+    m_xFunctions->SetSlotMode(SfxSlotMode::TOOLBOXCONFIG);
+
     m_xGearBtn = m_xBuilder->weld_menu_button("toolbargearbtn");
     m_xGearBtn->show();
     m_xContainer->set_help_id(HID_SVX_CONFIG_TOOLBAR);
