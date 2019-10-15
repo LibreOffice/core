@@ -88,6 +88,24 @@
       "revId": "504dfdd704fa51093bee707124c1f82e3a0e3fc6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_e82122a1",
+        "filename": "bridges/inc/cppinterfaceproxy.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-15T13:29:53Z",
+      "side": 1,
+      "message": "\u003e Working with clang-format rules, (1) it is easier to follow one\n \u003e single set of rules (so muscle memory develops)\n\n...but which is at odds with our rough consensus of no needless reformatting.\n\nBut I don\u0027t want to be picky anyway.  It just confused me that this particular modification changed nothing but unrelated whitespace---until I looked close enough.  (And which the other thing I mentioned, adding a \"\u003d\", would likely have prevented.)",
+      "parentUuid": "7f7f9b97_85041719",
+      "revId": "504dfdd704fa51093bee707124c1f82e3a0e3fc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
