@@ -57,8 +57,7 @@ static OUString getModulePath()
 
     printUString(suDirPath, "modulePath:");
     suDirPath = suDirPath.copy( 0, suDirPath.lastIndexOf('/') );
-    suDirPath = suDirPath.copy( 0, suDirPath.lastIndexOf('/') + 1);
-    suDirPath += "bin";
+    suDirPath = suDirPath.copy( 0, suDirPath.lastIndexOf('/') + 1) + "bin";
     return suDirPath;
 }
 
@@ -232,8 +231,7 @@ public:
         //we could get return value only after the process terminated
         osl_joinProcess(hProcess);
 
-        sal_Char pUUID2[33];
-        pUUID2[32] = '\0';
+        sal_Char pUUID2[33] {};
         sal_uInt64 nRead = 0;
         osl_readFile( *pChildOutputRead, pUUID2, 32, &nRead );
         printf("read buffer is %s, nRead is %" SAL_PRIdINT64 "\n", pUUID2, nRead );

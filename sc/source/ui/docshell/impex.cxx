@@ -1174,8 +1174,7 @@ static bool lcl_PutString(
                 if (nFound > 6)
                 {
                     sal_Unicode cDec = '.';
-                    OUString aT( &cDec, 1);
-                    aT += rStr.copy( nStart[6], nEnd[6]+1-nStart[6]);
+                    OUString aT = OUStringLiteral1(cDec) + rStr.copy( nStart[6], nEnd[6]+1-nStart[6]);
                     rtl_math_ConversionStatus eStatus;
                     double fV = rtl::math::stringToDouble( aT, cDec, 0, &eStatus );
                     if (eStatus == rtl_math_ConversionStatus_Ok)

@@ -134,14 +134,14 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     {
         if ( ToolBoxEntries[i].nNamespace == TB_NS_TOOLBAR )
         {
-            OUString temp = XMLNS_TOOLBAR XMLNS_FILTER_SEPARATOR;
-            temp += OUString::createFromAscii( ToolBoxEntries[i].aEntryName );
+            OUString temp = XMLNS_TOOLBAR XMLNS_FILTER_SEPARATOR +
+                OUString::createFromAscii( ToolBoxEntries[i].aEntryName );
             m_aToolBoxMap.emplace( temp, static_cast<ToolBox_XML_Entry>(i) );
         }
         else
         {
-            OUString temp = XMLNS_XLINK XMLNS_FILTER_SEPARATOR;
-            temp += OUString::createFromAscii( ToolBoxEntries[i].aEntryName );
+            OUString temp = XMLNS_XLINK XMLNS_FILTER_SEPARATOR +
+                OUString::createFromAscii( ToolBoxEntries[i].aEntryName );
             m_aToolBoxMap.emplace( temp, static_cast<ToolBox_XML_Entry>(i) );
         }
     }

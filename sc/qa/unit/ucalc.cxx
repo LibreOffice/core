@@ -1619,8 +1619,7 @@ void Test::testInsertNameList()
         ScAddress aExprPos = aPos;
         aExprPos.IncCol();
         OUString aExpr = m_pDoc->GetString(aExprPos);
-        OUString aExpected = "=";
-        aExpected += OUString::createFromAscii(aNames[i].mpExpr);
+        OUString aExpected = "=" + OUString::createFromAscii(aNames[i].mpExpr);
         CPPUNIT_ASSERT_EQUAL(aExpected, aExpr);
     }
 

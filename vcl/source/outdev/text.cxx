@@ -2006,8 +2006,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
                 {
                     if ( nFirstContent > 4 )
                         nFirstContent = 4;
-                    OUString aFirstStr = aStr.copy( 0, nFirstContent );
-                    aFirstStr += "...";
+                    OUString aFirstStr = aStr.copy( 0, nFirstContent ) + "...";
                     OUString aTempStr = aFirstStr + aLastStr;
                     if ( _rLayout.GetTextWidth( aTempStr, 0, aTempStr.getLength() ) > nMaxWidth )
                         aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );

@@ -366,21 +366,15 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
                         // Replacement for place holders
                         if ( aItemText.startsWith("($1)") )
                         {
-                            OUString aTmp(FwkResId(STR_UPDATEDOC));
-                            aTmp += " " + aItemText.copy( 4 );
-                            aItemText = aTmp;
+                            aItemText = FwkResId(STR_UPDATEDOC) + " " + aItemText.copy( 4 );
                         }
                         else if ( aItemText.startsWith("($2)") )
                         {
-                            OUString aTmp(FwkResId(STR_CLOSEDOC_ANDRETURN));
-                            aTmp += aItemText.copy( 4 );
-                            aItemText = aTmp;
+                            aItemText = FwkResId(STR_CLOSEDOC_ANDRETURN) + aItemText.copy( 4 );
                         }
                         else if ( aItemText.startsWith("($3)") )
                         {
-                            OUString aTmp(FwkResId(STR_SAVECOPYDOC));
-                            aTmp += aItemText.copy( 4 );
-                            aItemText = aTmp;
+                            aItemText = FwkResId(STR_SAVECOPYDOC) + aItemText.copy( 4 );
                         }
 
                         m_pVCLMenu->ShowItem( menuItemHandler->nItemId );

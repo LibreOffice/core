@@ -2148,8 +2148,8 @@ namespace pcr
 
                 for ( sal_Int32 i = 0; i < nKnownControlTypes; ++i )
                 {
-                    OUString sServiceName(  "com.sun.star.awt."  );
-                    sServiceName += OUString::createFromAscii( aControlModelServiceNames[ i ] );
+                    OUString sServiceName = "com.sun.star.awt."  +
+                        OUString::createFromAscii( aControlModelServiceNames[ i ] );
 
                     if ( xServiceInfo->supportsService( sServiceName ) )
                     {

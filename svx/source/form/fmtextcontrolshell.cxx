@@ -434,8 +434,7 @@ namespace svx
 
             if ( pAsciiUnoName )
             {
-                sSlotUnoName = ".uno:";
-                sSlotUnoName += OUString::createFromAscii( pAsciiUnoName );
+                sSlotUnoName = ".uno:" + OUString::createFromAscii( pAsciiUnoName );
             }
             else
             {
