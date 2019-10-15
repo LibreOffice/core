@@ -83,6 +83,8 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 // enable the following define to let the controller listen to model changes and
 // react on this by rebuilding the view
@@ -1063,13 +1065,29 @@ uno::Sequence<uno::Reference<frame::XDispatch > >
 
 // frame::XDispatch
 
+namespace
+{
+    static bool lcl_isAllowedOnMoible(const OUString& rCommand)
+    {
+        if (rCommand == "DataRanges" || rCommand == "DiagramType")
+            return false;
+
+        return true;
+    }
+}
+
 void SAL_CALL ChartController::dispatch(
     const util::URL& rURL,
     const uno::Sequence< beans::PropertyValue >& rArgs )
 {
     OUString aCommand = rURL.Path;
+    bool isMobile = comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView());
 
-    if(aCommand == "LOKSetTextSelection")
+    if(isMobile && !lcl_isAllowedOnMoible(aCommand))
+    {
+        return;
+    }
+    else if(aCommand == "LOKSetTextSelection")
     {
         if (rArgs.getLength() == 3)
         {
