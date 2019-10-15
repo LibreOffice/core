@@ -30,7 +30,7 @@ public:
     {
     }
 
-    bool VisitCallExpr(CallExpr* expr)
+    bool VisitCallExpr(CallExpr const* expr)
     {
         if (ignoreLocation(expr))
         {
