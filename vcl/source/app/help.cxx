@@ -326,7 +326,7 @@ void HelpTextWindow::SetHelpText( const OUString& rHelpText )
 {
     maHelpText = rHelpText;
     ApplySettings(*this);
-    if ( mnHelpWinStyle == HELPWINSTYLE_QUICK && maHelpText.getLength() < HELPTEXTMAXLEN)
+    if ( mnHelpWinStyle == HELPWINSTYLE_QUICK && maHelpText.getLength() < HELPTEXTMAXLEN && maHelpText.indexOf('\n') < 0)
     {
         Size aSize;
         aSize.setHeight( GetTextHeight() );
@@ -384,7 +384,7 @@ void HelpTextWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rec
     }
 
     // paint text
-    if (mnHelpWinStyle == HELPWINSTYLE_QUICK && maHelpText.getLength() < HELPTEXTMAXLEN)
+    if (mnHelpWinStyle == HELPWINSTYLE_QUICK && maHelpText.getLength() < HELPTEXTMAXLEN && maHelpText.indexOf('\n') < 0)
     {
         if ( mnStyle & QuickHelpFlags::CtrlText )
             rRenderContext.DrawCtrlText(maTextRect.TopLeft(), maHelpText);
