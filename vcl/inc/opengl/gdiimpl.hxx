@@ -141,7 +141,6 @@ public:
     void DrawLinearGradient( const Gradient& rGradient, const tools::Rectangle& rRect );
     void DrawAxialGradient( const Gradient& rGradient, const tools::Rectangle& rRect );
     void DrawRadialGradient( const Gradient& rGradient, const tools::Rectangle& rRect );
-    void DeferredTextDraw(OpenGLTexture const & rTexture, const Color nMaskColor, const SalTwoRect& rPosAry);
 
     void FlushDeferredDrawing();
     void FlushLinesOrTriangles(DrawShaderType eType, RenderParameters const & rParameters);

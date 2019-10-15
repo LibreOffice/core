@@ -15,6 +15,7 @@
 
 #include <skia/gdiimpl.hxx>
 #include <win/salgdi.h>
+#include <win/wingdiimpl.hxx>
 
 class ControlCacheKey;
 namespace sk_app
@@ -22,7 +23,7 @@ namespace sk_app
 class WindowContext;
 }
 
-class WinSkiaSalGraphicsImpl : public SkiaSalGraphicsImpl
+class WinSkiaSalGraphicsImpl : public SkiaSalGraphicsImpl, public WinSalGraphicsImplBase
 {
 private:
     WinSalGraphics& mWinParent;
@@ -36,10 +37,11 @@ public:
 
     virtual void freeResources() override;
 
-    bool TryRenderCachedNativeControl(ControlCacheKey const& rControlCacheKey, int nX, int nY);
+    virtual bool TryRenderCachedNativeControl(ControlCacheKey const& rControlCacheKey, int nX,
+                                              int nY) override;
 
-    bool RenderAndCacheNativeControl(OpenGLCompatibleDC& rWhite, OpenGLCompatibleDC& rBlack, int nX,
-                                     int nY, ControlCacheKey& aControlCacheKey);
+    virtual bool RenderAndCacheNativeControl(CompatibleDC& rWhite, CompatibleDC& rBlack, int nX,
+                                             int nY, ControlCacheKey& aControlCacheKey) override;
 
 protected:
     virtual void createSurface() override;
