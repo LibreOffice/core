@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_c5c8cf56",
+        "filename": "compilerplugins/clang/stringadd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-15T09:49:59Z",
+      "side": 1,
+      "message": "Was there a reason to check for implicit MaterializeTemporaryExpr, instead of checking for explicitly written CXXFunctionalCastExpr?  (Asking because I would like to see the casted-from type reported when I encountered some further instances of this warning in Windows-only code, and that would be easier to implement when you always have a CXXFunctionalCastExpr at hand here.)  Implementing the alternative approach and testing both on 9b5dad13b56bdde7c40970351af3da3a2c3c9350^, the only difference appears to be that the alternative doesn\u0027t flag the two (arguably bogus) cases involving redundant parentheses,\n\n  sc/source/filter/html/htmlexp.cxx:326:32: error: avoid constructing temporary copies during + [loplugin:stringadd]\n              OUString aStrOut \u003d ( GLOBSTR( STR_DOC_PRINTED ) ) + \": \";\n                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\nand\n\n  sd/source/filter/ppt/pptin.cxx:490:109: error: avoid constructing temporary copies during + [loplugin:stringadd]\n                                                      aHyperlink.aConvSubString \u003d SdResId( STR_PAGE ) + \" \" + ( mpDoc-\u003eCreatePageNumValue( static_cast\u003csal_uInt16\u003e(nPageNumber) + 1 ) );\n                                                                                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+      "revId": "9b5dad13b56bdde7c40970351af3da3a2c3c9350",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
