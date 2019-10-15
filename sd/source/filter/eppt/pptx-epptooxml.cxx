@@ -1970,10 +1970,7 @@ void PowerPointExport::embedEffectAudio(const FSHelperPtr& pFS, const OUString& 
     int nLastSlash = sUrl.lastIndexOf('/');
     sName = sUrl.copy(nLastSlash >= 0 ? nLastSlash + 1 : 0);
 
-    OUString sPath = OUStringBuffer().append("../media/")
-                                     .append(sName)
-                                     .makeStringAndClear();
-
+    OUString sPath = "../media/" + sName;
     sRelId = addRelation(pFS->getOutputStream(),
                         oox::getRelationship(Relationship::AUDIO), sPath);
 
