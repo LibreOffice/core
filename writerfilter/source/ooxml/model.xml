@@ -17650,8 +17650,7 @@
       <element name="checkBox" tokenid="ooxml:CT_FFData_checkBox"/>
       <element name="ddList" tokenid="ooxml:CT_FFData_ddList"/>
       <element name="textInput" tokenid="ooxml:CT_FFData_textInput"/>
-      <!-- TODO: This is possibly wrong and should be sendPropertiesWithId -->
-      <action name="end" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:ffdata"/>
+      <action name="end" action="sendPropertiesWithId" sendtokenid="ooxml:ffdata"/>
       <action name="end" action="clearProps"/>
     </resource>
     <resource name="CT_FFHelpText" resource="Properties">

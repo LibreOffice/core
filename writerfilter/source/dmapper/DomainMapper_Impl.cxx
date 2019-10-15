@@ -5455,7 +5455,7 @@ void DomainMapper_Impl::SetBookmarkName( const OUString& rBookmarkName )
         if ( IsOpenField() )
         {
             FFDataHandler::Pointer_t  pFFDataHandler(GetTopFieldContext()->getFFDataHandler());
-            if ( IsOpenFieldCommand() || (pFFDataHandler && pFFDataHandler->getName() == rBookmarkName) )
+            if (pFFDataHandler && pFFDataHandler->getName() == rBookmarkName)
             {
                 // HACK: At the END marker, StartOrEndBookmark will START
                 // a bookmark which will eventually be abandoned, not created.
