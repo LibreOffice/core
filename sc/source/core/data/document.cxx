@@ -3695,7 +3695,7 @@ void ScDocument::GetNumberFormatInfo( const ScInterpreterContext& rContext, SvNu
     if ( nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
         nIndex = maTabs[nTab]->GetNumberFormat( rContext, rPos );
-        nType = rContext.GetFormatTable()->GetType( nIndex );
+        nType = rContext.GetNFType( nIndex );
     }
     else
     {
