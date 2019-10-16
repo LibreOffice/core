@@ -82,7 +82,6 @@
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 
-#include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 
 #define DRGPIX    2     // Drag MinMove in Pixel
