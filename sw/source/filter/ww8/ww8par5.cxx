@@ -2483,8 +2483,8 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* /*pF*/, OUString& rSt
     {
         // Section from Source (no switch)?
         ConvertUFName(aBook);
-        aPara += OUStringLiteral1(sfx2::cTokenSeparator)
-            + OUStringLiteral1(sfx2::cTokenSeparator) + aBook;
+        aPara += OUStringChar(sfx2::cTokenSeparator)
+            + OUStringChar(sfx2::cTokenSeparator) + aBook;
     }
 
     /*
@@ -2874,7 +2874,7 @@ static void lcl_toxMatchTSwitch(SwWW8ImplReader const & rReader, SwTOXBase& rBas
 
                     OUString sStyles( rBase.GetStyleNames( nLevel ) );
                     if( !sStyles.isEmpty() )
-                        sStyles += OUStringLiteral1(TOX_STYLE_DELIMITER);
+                        sStyles += OUStringChar(TOX_STYLE_DELIMITER);
                     sStyles += sTemplate;
                     rBase.SetStyleNames( sStyles, nLevel );
                 }

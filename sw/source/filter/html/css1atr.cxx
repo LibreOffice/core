@@ -1135,10 +1135,10 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
             if( !rNames.isEmpty() )
                 rNames += ", ";
             if( cQuote && !bIsKeyword )
-                rNames += OUStringLiteral1( cQuote );
+                rNames += OUStringChar( cQuote );
             rNames += aName;
             if( cQuote && !bIsKeyword )
-                rNames += OUStringLiteral1( cQuote );
+                rNames += OUStringChar( cQuote );
         }
     }
 

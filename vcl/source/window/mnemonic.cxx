@@ -262,8 +262,8 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
                 if ( maMnemonics[nMnemonicIndex] )
                 {
                     maMnemonics[nMnemonicIndex] = 0;
-                    OUString aStr = OUStringLiteral("(") + OUStringLiteral1(m_cMnemonic) +
-                            OUStringLiteral1(sal_Unicode(rtl::toAsciiUpperCase(c))) +
+                    OUString aStr = OUStringLiteral("(") + OUStringChar(m_cMnemonic) +
+                            OUStringChar(sal_Unicode(rtl::toAsciiUpperCase(c))) +
                             ")";
                     nIndex = rKey.getLength();
                     if( nIndex >= 2 )

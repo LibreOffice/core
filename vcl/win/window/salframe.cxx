@@ -4379,7 +4379,7 @@ static LRESULT ImplMenuChar( HWND, WPARAM wParam, LPARAM lParam )
 {
     LRESULT nRet = MNC_IGNORE;
     HMENU hMenu = reinterpret_cast<HMENU>(lParam);
-    OUString aMnemonic( "&" + OUStringLiteral1(static_cast<sal_Unicode>(LOWORD(wParam))) );
+    OUString aMnemonic( "&" + OUStringChar(static_cast<sal_Unicode>(LOWORD(wParam))) );
     aMnemonic = aMnemonic.toAsciiLowerCase();   // we only have ascii mnemonics
 
     // search the mnemonic in the current menu

@@ -47,7 +47,7 @@ using namespace ::com::sun::star;
 /// replace database separator by dots for display
 static OUString lcl_DBSeparatorConvert(const OUString& aContent)
 {
-    return aContent.replaceAll(OUStringLiteral1(DB_DELIM), ".");
+    return aContent.replaceAll(OUStringChar(DB_DELIM), ".");
 }
 
 // database field type
@@ -62,9 +62,9 @@ SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const OUString& rNam, const SwDBDat
     if(!m_aDBData.sDataSource.isEmpty() || !m_aDBData.sCommand.isEmpty())
     {
         m_sName = m_aDBData.sDataSource
-            + OUStringLiteral1(DB_DELIM)
+            + OUStringChar(DB_DELIM)
             + m_aDBData.sCommand
-            + OUStringLiteral1(DB_DELIM)
+            + OUStringChar(DB_DELIM)
             + m_sName;
     }
 }
@@ -239,9 +239,9 @@ OUString SwDBField::GetFieldName() const
 
     if (sContent.getLength() > 1)
     {
-        sContent += OUStringLiteral1(DB_DELIM)
+        sContent += OUStringChar(DB_DELIM)
             + rDBName.getToken(1, DB_DELIM)
-            + OUStringLiteral1(DB_DELIM)
+            + OUStringChar(DB_DELIM)
             + rDBName.getToken(2, DB_DELIM);
     }
     return lcl_DBSeparatorConvert(sContent);
@@ -482,7 +482,7 @@ OUString SwDBNameInfField::GetFieldName() const
     {
         sStr += ":"
             + m_aDBData.sDataSource
-            + OUStringLiteral1(DB_DELIM)
+            + OUStringChar(DB_DELIM)
             + m_aDBData.sCommand;
     }
     return lcl_DBSeparatorConvert(sStr);

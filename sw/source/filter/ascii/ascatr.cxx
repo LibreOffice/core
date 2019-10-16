@@ -339,7 +339,7 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
             }
             OUString aOutStr(buf.makeStringAndClear());
             if ( !bExportSoftHyphens )
-                aOutStr = aOutStr.replaceAll(OUStringLiteral1(CHAR_SOFTHYPHEN), "");
+                aOutStr = aOutStr.replaceAll(OUStringChar(CHAR_SOFTHYPHEN), "");
 
             // all INWORD/BREAKWORD should be already removed by OutAttr
             // but the field-marks are not attributes so filter those

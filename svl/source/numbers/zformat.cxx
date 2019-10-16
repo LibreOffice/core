@@ -998,7 +998,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                     {
                         //! eSymbolType is negative
                         sal_uInt8 nNum = static_cast<sal_uInt8>(1 - (eSymbolType - BRACKET_SYMBOLTYPE_DBNUM1));
-                        sStr = "DBNum" + OUStringLiteral1('0' + nNum);
+                        sStr = "DBNum" + OUStringChar('0' + nNum);
                         NumFor[nIndex].SetNatNumNum( nNum, true );
                     }
                     break;

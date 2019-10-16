@@ -158,7 +158,7 @@ void ScRangeList::Format( OUString& rStr, ScRefFlags nFlags, const ScDocument* p
         if (bFirst)
             bFirst = false;
         else
-            aBuf.append(OUStringLiteral1(cDelimiter));
+            aBuf.append(OUStringChar(cDelimiter));
         aBuf.append(r.Format(nFlags, pDoc, eConv, bFullAddressNotation));
     }
     rStr = aBuf.makeStringAndClear();

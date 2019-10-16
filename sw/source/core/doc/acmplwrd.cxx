@@ -235,8 +235,8 @@ bool SwAutoCompleteWord::InsertWord( const OUString& rWord, SwDoc& rDoc )
             return false;
     }
 
-    OUString aNewWord = rWord.replaceAll(OUStringLiteral1(CH_TXTATR_INWORD), "")
-                             .replaceAll(OUStringLiteral1(CH_TXTATR_BREAKWORD), "");
+    OUString aNewWord = rWord.replaceAll(OUStringChar(CH_TXTATR_INWORD), "")
+                             .replaceAll(OUStringChar(CH_TXTATR_BREAKWORD), "");
 
     m_pImpl->AddDocument(rDoc);
     bool bRet = false;

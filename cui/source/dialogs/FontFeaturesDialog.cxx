@@ -207,7 +207,7 @@ OUString FontFeaturesDialog::createFontNameWithFeatures()
     sResultFontName = vcl::font::trimFontNameFeatures(m_sFontName);
     if (!sNameSuffix.isEmpty())
         sResultFontName
-            += OUStringLiteral1(vcl::font::FeaturePrefix) + sNameSuffix.makeStringAndClear();
+            += OUStringChar(vcl::font::FeaturePrefix) + sNameSuffix.makeStringAndClear();
     return sResultFontName;
 }
 

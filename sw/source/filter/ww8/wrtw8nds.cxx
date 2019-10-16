@@ -837,7 +837,7 @@ void WW8AttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 /*nPos*/,
     aStr += " \\o";
     if (aWW8Ruby.GetDirective())
     {
-        aStr += OUStringLiteral("\\a") + OUStringLiteral1(aWW8Ruby.GetDirective());
+        aStr += OUStringLiteral("\\a") + OUStringChar(aWW8Ruby.GetDirective());
     }
     aStr += "(\\s\\up ";
 
@@ -1241,7 +1241,7 @@ void AttributeOutputBase::TOXMark( const SwTextNode& rNode, const SwTOXMark& rAt
             break;
 
         case TOX_USER:
-            sText += "\" \\f \"" + OUStringLiteral1(static_cast<sal_Char>( 'A' + GetExport( ).GetId( *rAttr.GetTOXType() ) ));
+            sText += "\" \\f \"" + OUStringChar(static_cast<sal_Char>( 'A' + GetExport( ).GetId( *rAttr.GetTOXType() ) ));
             [[fallthrough]];
         case TOX_CONTENT:
             {
@@ -1725,7 +1725,7 @@ OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nCurrentPos,
             rStr, nCurrentPos, g_pBreakIt->GetLocale(nLanguage),
             i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )
         {
-            aSnippet = OUStringLiteral1(rStr[nCurrentPos]) + aSnippet.copy(1);
+            aSnippet = OUStringChar(rStr[nCurrentPos]) + aSnippet.copy(1);
         }
     }
     m_rExport.m_aCurrentCharPropStarts.pop();

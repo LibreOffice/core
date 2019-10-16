@@ -401,7 +401,7 @@ sal_uInt32 SwStyleSheetIterator::SwPoolFormatList::FindName(SfxStyleFamily eFam,
             cStyle = ' ';
             break;
         }
-        const OUString sSrch = OUStringLiteral1(cStyle) + rName;
+        const OUString sSrch = OUStringChar(cStyle) + rName;
 
         UniqueHash::const_iterator it = maUnique.find(sSrch);
         if (it != maUnique.end())
@@ -438,7 +438,7 @@ void SwStyleSheetIterator::SwPoolFormatList::RemoveName(SfxStyleFamily eFam,
 // Add Strings to the list of templates
 void SwStyleSheetIterator::SwPoolFormatList::Append( char cChar, const OUString& rStr )
 {
-    const OUString aStr = OUStringLiteral1(cChar) + rStr;
+    const OUString aStr = OUStringChar(cChar) + rStr;
 
     UniqueHash::const_iterator it = maUnique.find(aStr);
     if (it != maUnique.end())

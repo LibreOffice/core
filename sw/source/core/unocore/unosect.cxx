@@ -349,9 +349,9 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
     SwSectionData aSect(eType, pDoc->GetUniqueSectionName(&m_pImpl->m_sName));
     aSect.SetCondition(m_pImpl->m_pProps->m_sCondition);
     aSect.SetLinkFileName(m_pImpl->m_pProps->m_sLinkFileName +
-        OUStringLiteral1(sfx2::cTokenSeparator) +
+        OUStringChar(sfx2::cTokenSeparator) +
         m_pImpl->m_pProps->m_sSectionFilter +
-        OUStringLiteral1(sfx2::cTokenSeparator) +
+        OUStringChar(sfx2::cTokenSeparator) +
         m_pImpl->m_pProps->m_sSectionRegion);
 
     aSect.SetHidden(m_pImpl->m_pProps->m_bHidden);
@@ -618,7 +618,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                     if (!m_pProps->m_bDDE)
                     {
                         m_pProps->m_sLinkFileName =
-                            OUStringLiteral1(sfx2::cTokenSeparator) + OUStringLiteral1(sfx2::cTokenSeparator);
+                            OUStringChar(sfx2::cTokenSeparator) + OUStringChar(sfx2::cTokenSeparator);
                         m_pProps->m_bDDE = true;
                     }
                     m_pProps->m_sLinkFileName = comphelper::string::setToken(
@@ -630,7 +630,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                     OUString sLinkFileName(pSectionData->GetLinkFileName());
                     if (pSectionData->GetType() != DDE_LINK_SECTION)
                     {
-                        sLinkFileName = OUStringLiteral1(sfx2::cTokenSeparator) + OUStringLiteral1(sfx2::cTokenSeparator);
+                        sLinkFileName = OUStringChar(sfx2::cTokenSeparator) + OUStringChar(sfx2::cTokenSeparator);
                         pSectionData->SetType(DDE_LINK_SECTION);
                     }
                     sLinkFileName = comphelper::string::setToken(sLinkFileName,
@@ -684,8 +684,8 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                             aLink.FileURL, URIHelper::GetMaybeFileHdl())
                         : OUString());
                     const OUString sFileName(
-                        sTmp + OUStringLiteral1(sfx2::cTokenSeparator) +
-                        aLink.FilterName + OUStringLiteral1(sfx2::cTokenSeparator) +
+                        sTmp + OUStringChar(sfx2::cTokenSeparator) +
+                        aLink.FilterName + OUStringChar(sfx2::cTokenSeparator) +
                         pSectionData->GetLinkFileName().getToken(2, sfx2::cTokenSeparator));
                     pSectionData->SetLinkFileName(sFileName);
                     if (sFileName.getLength() < 3)
@@ -715,7 +715,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                     for (sal_Int32 i = comphelper::string::getTokenCount(sSectLink, sfx2::cTokenSeparator);
                          i < 3; ++i)
                     {
-                        sSectLink += OUStringLiteral1(sfx2::cTokenSeparator);
+                        sSectLink += OUStringChar(sfx2::cTokenSeparator);
                     }
                     sSectLink = comphelper::string::setToken(sSectLink, 2, sfx2::cTokenSeparator, sLink);
                     pSectionData->SetLinkFileName(sSectLink);

@@ -1620,7 +1620,7 @@ void ImpEditView::Paste( css::uno::Reference< css::datatransfer::clipboard::XCli
                 OUString aTmpText;
                 aData >>= aTmpText;
                 OUString aText(convertLineEnd(aTmpText, LINEEND_LF));
-                aText = aText.replaceAll( OUStringLiteral1(LINE_SEP), " " );
+                aText = aText.replaceAll( OUStringChar(LINE_SEP), " " );
                 aSel = pEditEngine->InsertText(aSel, aText);
             }
             catch( ... )

@@ -280,8 +280,8 @@ void SvFileObject::Edit(weld::Window* pParent, sfx2::SvBaseLink* pLink, const Li
             if( !aDlg.Execute() )
             {
                 sFile = aDlg.GetPath()
-                    + OUStringLiteral1(sfx2::cTokenSeparator)
-                    + OUStringLiteral1(sfx2::cTokenSeparator)
+                    + OUStringChar(sfx2::cTokenSeparator)
+                    + OUStringChar(sfx2::cTokenSeparator)
                     + aDlg.GetDetectedFilter();
 
                 aEndEditLink.Call( sFile );
@@ -368,8 +368,8 @@ IMPL_LINK( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, vo
         if ( _pFileDlg && _pFileDlg->GetError() == ERRCODE_NONE )
         {
             OUString sURL( _pFileDlg->GetPath() );
-            sFile = sURL + OUStringLiteral1(sfx2::cTokenSeparator)
-                + OUStringLiteral1(sfx2::cTokenSeparator)
+            sFile = sURL + OUStringChar(sfx2::cTokenSeparator)
+                + OUStringChar(sfx2::cTokenSeparator)
                 + impl_getFilter( sURL );
         }
     }

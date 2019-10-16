@@ -525,7 +525,7 @@ void SdTpOptionsMisc::SetDrawMode()
 
 OUString SdTpOptionsMisc::GetScale( sal_Int32 nX, sal_Int32 nY )
 {
-    return OUString::number(nX) + OUStringLiteral1(TOKEN) + OUString::number(nY);
+    return OUString::number(nX) + OUStringChar(TOKEN) + OUString::number(nY);
 }
 
 bool SdTpOptionsMisc::SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32& rY )

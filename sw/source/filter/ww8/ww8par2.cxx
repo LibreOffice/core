@@ -200,7 +200,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
     //There should have been a footnote char, we will replace this.
     if (pText && nPos)
     {
-        sChar += OUStringLiteral1(pText->GetText()[--nPos]);
+        sChar += OUStringChar(pText->GetText()[--nPos]);
         m_pPaM->SetMark();
         --m_pPaM->GetMark()->nContent;
         std::shared_ptr<SwUnoCursor> xLastAnchorCursor(m_pLastAnchorPos ? m_rDoc.CreateUnoCursor(*m_pLastAnchorPos) : nullptr);

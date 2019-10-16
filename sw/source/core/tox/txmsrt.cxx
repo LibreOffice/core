@@ -681,7 +681,7 @@ OUString SwTOXPara::GetURL() const
             SwFrameFormat* pFly = pNd->GetFlyFormat();
             if( pFly )
             {
-                aText = "#" + pFly->GetName() + OUStringLiteral1(cMarkSeparator);
+                aText = "#" + pFly->GetName() + OUStringChar(cMarkSeparator);
                 const sal_Char* pStr;
                 switch( eType )
                 {
@@ -697,7 +697,7 @@ OUString SwTOXPara::GetURL() const
         break;
     case SwTOXElement::Sequence:
         {
-            aText = "#" + m_sSequenceName + OUStringLiteral1(cMarkSeparator)
+            aText = "#" + m_sSequenceName + OUStringChar(cMarkSeparator)
                  + "sequence";
         }
         break;
@@ -762,7 +762,7 @@ OUString SwTOXTable::GetURL() const
     if ( sName.isEmpty() )
         return OUString();
 
-    return "#" + sName + OUStringLiteral1(cMarkSeparator) + "table";
+    return "#" + sName + OUStringChar(cMarkSeparator) + "table";
 }
 
 SwTOXAuthority::SwTOXAuthority( const SwContentNode& rNd,

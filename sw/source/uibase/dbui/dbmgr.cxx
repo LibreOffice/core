@@ -532,8 +532,8 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
         aDBNames.emplace_back();
         SwDBData aInsertData = pWorkShell->GetDBData();
         OUString sDBName = aInsertData.sDataSource
-            + OUStringLiteral1(DB_DELIM) + aInsertData.sCommand
-            + OUStringLiteral1(DB_DELIM)
+            + OUStringChar(DB_DELIM) + aInsertData.sCommand
+            + OUStringChar(DB_DELIM)
             + OUString::number(aInsertData.nCommandType);
         pWorkShell->ChangeDBFields( aDBNames, sDBName);
         SetInitDBFields(false);
@@ -666,9 +666,9 @@ void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
                     SwDBFormatData aDBFormat;
                     OUString sInsert = GetDBField( xColumnProp,   aDBFormat);
                     if( DB_SEP_SPACE == nSeparator )
-                            sInsert += OUStringLiteral1(cSpace);
+                            sInsert += OUStringChar(cSpace);
                     else if( DB_SEP_TAB == nSeparator)
-                            sInsert += OUStringLiteral1(cTab);
+                            sInsert += OUStringChar(cTab);
                     pSh->Insert(sInsert);
                     if( DB_SEP_RETURN == nSeparator)
                         pSh->SplitNode();

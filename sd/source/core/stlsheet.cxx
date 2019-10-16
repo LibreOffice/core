@@ -614,7 +614,7 @@ struct ApiNameMap
 OUString GetApiNameForHelpId(sal_uLong nId)
 {
     if ((nId >= HID_PSEUDOSHEET_OUTLINE1) && (nId <= HID_PSEUDOSHEET_OUTLINE9))
-        return "outline" + OUStringLiteral1('1' + (nId - HID_PSEUDOSHEET_OUTLINE1));
+        return "outline" + OUStringChar('1' + (nId - HID_PSEUDOSHEET_OUTLINE1));
 
     for (const auto& i : pApiNameMap)
         if (nId == i.mnHelpId)

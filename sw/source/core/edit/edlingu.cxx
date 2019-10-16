@@ -909,8 +909,8 @@ uno::Reference< XSpellAlternatives >
         if (pWrong->InWrongWord(nBegin, nLen) && !pNode->IsSymbolAt(nBegin))
         {
             const OUString aText(pNode->GetText().copy(nBegin, nLen));
-            OUString aWord = aText.replaceAll(OUStringLiteral1(CH_TXTATR_BREAKWORD), "")
-                                  .replaceAll(OUStringLiteral1(CH_TXTATR_INWORD), "");
+            OUString aWord = aText.replaceAll(OUStringChar(CH_TXTATR_BREAKWORD), "")
+                                  .replaceAll(OUStringChar(CH_TXTATR_INWORD), "");
 
             uno::Reference< XSpellChecker1 >  xSpell( ::GetSpellChecker() );
             if( xSpell.is() )

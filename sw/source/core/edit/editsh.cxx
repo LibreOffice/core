@@ -714,7 +714,7 @@ void SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
                 OUString sText( pTextNd->GetExpandText(GetLayout(),
                         rAttr.GetStart(), *rAttr.GetEnd() - rAttr.GetStart()) );
 
-                sText = sText.replaceAll(OUStringLiteral1(0x0a), "");
+                sText = sText.replaceAll(OUStringChar(0x0a), "");
                 sText = comphelper::string::strip(sText, ' ');
 
                 if( !sText.isEmpty() )

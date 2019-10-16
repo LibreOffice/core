@@ -144,8 +144,8 @@ OUString ApplyLreOrRleEmbedding( const OUString &rText )
     OUString aRes( rText );
     if (bFound)
     {
-        aRes = OUStringLiteral1(cStart) + aRes
-            + OUStringLiteral1(cPopDirectionalFormat);
+        aRes = OUStringChar(cStart) + aRes
+            + OUStringChar(cPopDirectionalFormat);
     }
 
     return aRes;

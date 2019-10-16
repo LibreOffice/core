@@ -119,7 +119,7 @@ namespace vcl
 
             if ( ( c >= 32 ) && ( c != 127 ) && !_keyEvent.GetKeyCode().IsMod2() )
             {
-                m_pData->sCurrentSearchString += OUStringLiteral1(c);
+                m_pData->sCurrentSearchString += OUStringChar(c);
                 SAL_INFO( "vcl", "QuickSelectionEngine::HandleKeyEvent: searching for " << m_pData->sCurrentSearchString );
 
                 if ( m_pData->sCurrentSearchString.getLength() == 1 )

@@ -182,7 +182,7 @@ ErrCode ScQProReader::parse( ScDocument *pDoc )
                     if( nTab < 26 )
                     {
                         OUString aName;
-                        aName += OUStringLiteral1( 'A' + nTab );
+                        aName += OUStringChar( 'A' + nTab );
                         if (!nTab)
                             pDoc->RenameTab( nTab, aName );
                         else

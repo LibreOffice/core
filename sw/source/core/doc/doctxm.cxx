@@ -1337,7 +1337,7 @@ void SwTOXBaseSection::UpdateSequence(const SwTextNode* pOwnChapterNode,
         {
             const SwSetExpField& rSeqField = dynamic_cast<const SwSetExpField&>(*(pFormatField->GetField()));
             const OUString sName = GetSequenceName()
-                + OUStringLiteral1(cSequenceMarkSeparator)
+                + OUStringChar(cSequenceMarkSeparator)
                 + OUString::number( rSeqField.GetSeqNumber() );
             std::unique_ptr<SwTOXPara> pNew(new SwTOXPara( rTextNode, SwTOXElement::Sequence, 1, sName ));
             // set indexes if the number or the reference text are to be displayed
@@ -1728,9 +1728,9 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
     // collect starts end ends of main entry character style
     std::unique_ptr< std::vector<sal_uInt16> > xCharStyleIdx(pMainEntryNums ? new std::vector<sal_uInt16> : nullptr);
 
-    OUString sSrchStr = OUStringLiteral1(C_NUM_REPL) + S_PAGE_DELI + OUStringLiteral1(C_NUM_REPL);
+    OUString sSrchStr = OUStringChar(C_NUM_REPL) + S_PAGE_DELI + OUStringChar(C_NUM_REPL);
     sal_Int32 nStartPos = pNd->GetText().indexOf(sSrchStr);
-    sSrchStr = OUStringLiteral1(C_NUM_REPL) + OUStringLiteral1(C_END_PAGE_NUM);
+    sSrchStr = OUStringChar(C_NUM_REPL) + OUStringChar(C_END_PAGE_NUM);
     sal_Int32 nEndPos = pNd->GetText().indexOf(sSrchStr);
 
     if (-1 == nEndPos || rNums.empty())

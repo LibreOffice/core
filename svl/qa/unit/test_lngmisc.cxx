@@ -42,7 +42,7 @@ namespace
     OUString str1("");
     OUString str2("a-b--c---");
 
-    OUString str3 = OUStringLiteral1(SVT_SOFT_HYPHEN) + OUStringLiteral1(SVT_HARD_HYPHEN) + OUStringLiteral1(SVT_HARD_HYPHEN);
+    OUString str3 = OUStringChar(SVT_SOFT_HYPHEN) + OUStringChar(SVT_HARD_HYPHEN) + OUStringChar(SVT_HARD_HYPHEN);
 
     OUString str4("asdf");
 

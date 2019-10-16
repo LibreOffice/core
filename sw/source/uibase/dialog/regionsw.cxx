@@ -153,8 +153,8 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 
         if(!aFile.isEmpty() || !aSub.isEmpty())
         {
-            OUString sLinkFileName = OUStringLiteral1(sfx2::cTokenSeparator)
-                + OUStringLiteral1(sfx2::cTokenSeparator);
+            OUString sLinkFileName = OUStringChar(sfx2::cTokenSeparator)
+                + OUStringChar(sfx2::cTokenSeparator);
             sLinkFileName = comphelper::string::setToken(sLinkFileName, 0, sfx2::cTokenSeparator, aFile);
 
             if(SfxItemState::SET ==

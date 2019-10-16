@@ -37,7 +37,7 @@ ScUnitConverterData::ScUnitConverterData(
 OUString ScUnitConverterData::BuildIndexString(
     const OUString& rFromUnit, const OUString& rToUnit )
 {
-    return rFromUnit + OUStringLiteral1(cDelim) + rToUnit;
+    return rFromUnit + OUStringChar(cDelim) + rToUnit;
 }
 
 // ScUnitConverter

@@ -1076,7 +1076,7 @@ OUString SwDocInfoField::ExpandImpl(SwRootFrame const*const) const
                     }
                     else if( aAny >>= aDuration )
                     {
-                        sVal = OUStringLiteral1(aDuration.Negative ? '-' : '+')
+                        sVal = OUStringChar(aDuration.Negative ? '-' : '+')
                              + SwViewShell::GetShellRes()->sDurationFormat;
                         sVal = sVal.replaceFirst("%1", OUString::number( aDuration.Years  ) );
                         sVal = sVal.replaceFirst("%2", OUString::number( aDuration.Months ) );
@@ -1532,7 +1532,7 @@ OUString SwHiddenTextField::GetDBName(const OUString& rName, SwDoc *pDoc)
     }
 
     SwDBData aData = pDoc->GetDBData();
-    return aData.sDataSource + OUStringLiteral1(DB_DELIM) + aData.sCommand;
+    return aData.sDataSource + OUStringChar(DB_DELIM) + aData.sCommand;
 }
 
 // [aFieldDefinition] value sample : " IF A == B \"TrueText\" \"FalseText\""

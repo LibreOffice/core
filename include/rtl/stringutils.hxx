@@ -35,7 +35,7 @@ namespace rtl
 #if defined LIBO_INTERNAL_ONLY
 /// @cond INTERNAL
 
-/** A simple wrapper around a sal_Unicode character literal.
+/** A simple wrapper around a single sal_Unicode character.
 
     Can be useful to pass a sal_Unicode constant into an OUString-related
     function that is optimized for UTF-16 string literal arguments.  That is,
@@ -53,23 +53,35 @@ namespace rtl
       ...
       if (s[i] == WILDCARD) ...
       ...
-      if (s.endsWith(OUStringLiteral1(WILDCARD))) ...
+      if (s.endsWith(OUStringChar(WILDCARD))) ...
 
     to avoid creating a temporary OUString instance, and instead pick the
     endsWith overload actually designed to take an argument of type
     sal_Unicode const[N].
 
-    Instances of OUStringLiteral1 need to be const, as those literal-optimized
+    (Because of the above use case,
+    instances of OUStringChar need to be const, as those literal-optimized
     functions take the literal argument by non-const lvalue reference, for
     technical reasons.
 
+    For actual arrays, it is important to distinguish string literals from other char or sal_Unicode
+    arrays, which may contain junk after the first NUL character or may be non-ASCII in the case of
+    char arrays.  This is not so much a concern for single char and sal_Unicode values, where NUL is
+    assumed to always be meant as an actual character.)
+
+    Can also be useful in string concatenation contexts, like in
+
+      sal_Unicode const * s = ...;
+      sal_Unicode c = ...;
+      OUString t = s + OUStringChar(c);
+
     @since LibreOffice 5.0
 */
-struct SAL_WARN_UNUSED OUStringLiteral1_ {
-    constexpr OUStringLiteral1_(sal_Unicode theC): c(theC) {}
+struct SAL_WARN_UNUSED OUStringChar_ {
+    constexpr OUStringChar_(sal_Unicode theC): c(theC) {}
     sal_Unicode const c;
 };
-using OUStringLiteral1 = OUStringLiteral1_ const;
+using OUStringChar = OUStringChar_ const;
 
 /// @endcond
 #endif
@@ -222,14 +234,14 @@ struct ConstCharArrayDetector<sal_Unicode const [N], T> {
     { return literal; }
 };
 template<typename T> struct ConstCharArrayDetector<
-    OUStringLiteral1,
+    OUStringChar,
     T>
 {
     using TypeUtf16 = T;
     static constexpr bool const ok = true;
     static constexpr std::size_t const length = 1;
     static constexpr sal_Unicode const * toPointer(
-        OUStringLiteral1_ const & literal)
+        OUStringChar_ const & literal)
     { return &literal.c; }
 };
 #endif
@@ -248,7 +260,7 @@ struct ExceptConstCharArrayDetector< const char[ N ] >
 template<std::size_t N>
 struct ExceptConstCharArrayDetector<sal_Unicode const[N]> {};
 template<> struct ExceptConstCharArrayDetector<
-    OUStringLiteral1
+    OUStringChar
     >
 {};
 #endif
@@ -273,7 +285,7 @@ struct ExceptCharArrayDetector< const char[ N ] >
 #if defined LIBO_INTERNAL_ONLY
 template<std::size_t N> struct ExceptCharArrayDetector<sal_Unicode[N]> {};
 template<std::size_t N> struct ExceptCharArrayDetector<sal_Unicode const[N]> {};
-template<> struct ExceptCharArrayDetector<OUStringLiteral1_> {};
+template<> struct ExceptCharArrayDetector<OUStringChar_> {};
 #endif
 
 template< typename T1, typename T2 = void >

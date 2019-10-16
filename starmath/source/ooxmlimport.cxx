@@ -317,25 +317,25 @@ OUString SmOoxmlImport::handleD()
         opening = "left lbrace ";
     if( closing == "}" )
         closing = " right rbrace";
-    if( opening == OUStringLiteral1(0x27e6) )
+    if( opening == OUStringChar(0x27e6) )
         opening = "left ldbracket ";
-    if( closing == OUStringLiteral1(0x27e7) )
+    if( closing == OUStringChar(0x27e7) )
         closing = " right rdbracket";
     if( opening == "|" )
         opening = "left lline ";
     if( closing == "|" )
         closing = " right rline";
-    if (opening == OUStringLiteral1(MS_DLINE)
-        || opening == OUStringLiteral1(MS_DVERTLINE))
+    if (opening == OUStringChar(MS_DLINE)
+        || opening == OUStringChar(MS_DVERTLINE))
         opening = "left ldline ";
-    if (closing == OUStringLiteral1(MS_DLINE)
-        || closing == OUStringLiteral1(MS_DVERTLINE))
+    if (closing == OUStringChar(MS_DLINE)
+        || closing == OUStringChar(MS_DVERTLINE))
         closing = " right rdline";
-    if (opening == OUStringLiteral1(MS_LANGLE)
-        || opening == OUStringLiteral1(MS_LMATHANGLE))
+    if (opening == OUStringChar(MS_LANGLE)
+        || opening == OUStringChar(MS_LMATHANGLE))
         opening = "left langle ";
-    if (closing == OUStringLiteral1(MS_RANGLE)
-        || closing == OUStringLiteral1(MS_RMATHANGLE))
+    if (closing == OUStringChar(MS_RANGLE)
+        || closing == OUStringChar(MS_RMATHANGLE))
         closing = " right rangle";
     // use scalable brackets (the explicit "left" or "right")
     if( opening == "(" || opening == "[" )
@@ -467,9 +467,9 @@ OUString SmOoxmlImport::handleGroupChr()
     if( pos == bot && chr == u'\x23df')
         return "{" + e + "} underbrace { }";
     if( pos == top )
-        return "{" + e + "} csup {" + OUStringLiteral1( chr ) + "}";
+        return "{" + e + "} csup {" + OUStringChar( chr ) + "}";
     else
-        return "{" + e + "} csub {" + OUStringLiteral1( chr ) + "}";
+        return "{" + e + "} csub {" + OUStringChar( chr ) + "}";
 }
 
 OUString SmOoxmlImport::handleM()

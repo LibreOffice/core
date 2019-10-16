@@ -1367,9 +1367,9 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, vo
         for (const std::unique_ptr<SfxMedium>& pMed : aMedList)
         {
             OUString sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE )
-                + OUStringLiteral1(sfx2::cTokenSeparator)
+                + OUStringChar(sfx2::cTokenSeparator)
                 + pMed->GetFilter()->GetFilterName()
-                + OUStringLiteral1(sfx2::cTokenSeparator);
+                + OUStringChar(sfx2::cTokenSeparator);
             pFileNames[nPos++] = sFileName;
         }
         InsertRegion( m_pDocContent.get(), aFileNames );

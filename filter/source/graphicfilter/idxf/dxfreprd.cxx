@@ -460,9 +460,9 @@ OUString DXFRepresentation::ToOUString(const OString& s) const
                                          | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR);
     result = result.replaceAll("%%o", "")                     // Overscore - simply remove
                    .replaceAll("%%u", "")                     // Underscore - simply remove
-                   .replaceAll("%%d", OUStringLiteral1(0x00B0)) // Degrees symbol (°)
-                   .replaceAll("%%p", OUStringLiteral1(0x00B1)) // Tolerance symbol (±)
-                   .replaceAll("%%c", OUStringLiteral1(0x2205)) // Diameter symbol
+                   .replaceAll("%%d", OUStringChar(0x00B0)) // Degrees symbol (°)
+                   .replaceAll("%%p", OUStringChar(0x00B1)) // Tolerance symbol (±)
+                   .replaceAll("%%c", OUStringChar(0x2205)) // Diameter symbol
                    .replaceAll("%%%", "%");                   // Percent symbol
 
     sal_Int32 pos = result.indexOf("%%"); // %%nnn, where nnn - 3-digit decimal ASCII code

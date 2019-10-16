@@ -141,7 +141,7 @@ OString getPluginJarPath(
             if (osl_getSystemPathFromFileURL(sName.pData, & sPath2.pData)
                 == osl_File_E_None)
             {
-                sPath = sPath1 + OUStringLiteral1(SAL_PATHSEPARATOR) + sPath2;
+                sPath = sPath1 + OUStringChar(SAL_PATHSEPARATOR) + sPath2;
             }
         }
         OSL_ASSERT(!sPath.isEmpty());

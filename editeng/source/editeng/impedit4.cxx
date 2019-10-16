@@ -1830,7 +1830,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
             if ( cNext == '.' )
             {
                 aCurSel.Max().SetIndex( aCurSel.Max().GetIndex()+1 );
-                aWord += OUStringLiteral1(cNext);
+                aWord += OUStringChar(cNext);
             }
         }
 
@@ -1880,7 +1880,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
             if ( cNext == '.' )
             {
                 aCurSel.Max().SetIndex( aCurSel.Max().GetIndex()+1 );
-                aWord += OUStringLiteral1(cNext);
+                aWord += OUStringChar(cNext);
             }
         }
 

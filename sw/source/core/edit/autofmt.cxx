@@ -788,12 +788,12 @@ SwAutoFormat::GetDigitLevel(const SwTextFrame& rFrame, TextFrameIndex& rPos,
                 }
 
                 if( pNumTypes )
-                    *pNumTypes += OUStringLiteral1('0' + SVX_NUM_ARABIC);
+                    *pNumTypes += OUStringChar('0' + SVX_NUM_ARABIC);
 
                 eScan = eScan | CHG;
             }
             else if( pNumTypes && !(eScan & DIGIT) )
-                *pNumTypes += OUStringLiteral1('0' + SVX_NUM_ARABIC);
+                *pNumTypes += OUStringChar('0' + SVX_NUM_ARABIC);
 
             eScan &= ~DELIM;        // remove Delim
             if( 0 != (eScan & ~CHG) && DIGIT != (eScan & ~CHG))
@@ -875,11 +875,11 @@ SwAutoFormat::GetDigitLevel(const SwTextFrame& rFrame, TextFrameIndex& rPos,
                 }
 
                 if( pNumTypes )
-                    *pNumTypes += OUStringLiteral1(cNumTyp);
+                    *pNumTypes += OUStringChar(cNumTyp);
                 eScan = eScan | CHG;
             }
             else if( pNumTypes && !(eScan & eTmpScan) )
-                *pNumTypes += OUStringLiteral1(cNumTyp);
+                *pNumTypes += OUStringChar(cNumTyp);
 
             eScan &= ~DELIM;        // remove Delim
 
@@ -973,9 +973,9 @@ CHECK_ROMAN_5:
                 nClosingParentheses++;
             // only if no numbers were read until here
             if( pPrefix && !( eScan & ( NO_DELIM | CHG )) )
-                *pPrefix += OUStringLiteral1(rText[nPos]);
+                *pPrefix += OUStringChar(rText[nPos]);
             else if( pPostfix )
-                *pPostfix += OUStringLiteral1(rText[nPos]);
+                *pPostfix += OUStringChar(rText[nPos]);
 
             if( NO_DELIM & eScan )
             {
@@ -1734,7 +1734,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
         {
             OUString sChgStr('\t');
             if( bChgBullet )
-                sChgStr = OUStringLiteral1( m_aFlags.cBullet ) + sChgStr;
+                sChgStr = OUStringChar( m_aFlags.cBullet ) + sChgStr;
             m_pDoc->getIDocumentContentOperations().InsertString( m_aDelPam, sChgStr );
 
             SfxItemSet aSet( m_pDoc->GetAttrPool(), aTextNodeSetRange );

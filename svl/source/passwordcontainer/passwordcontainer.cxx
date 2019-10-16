@@ -112,10 +112,10 @@ static std::vector< OUString > getInfoFromInd( const OUString& aInd )
                         return aResult;
                     }
 
-                    aNum += OUStringLiteral1( pLine[i] );
+                    aNum += OUStringChar( pLine[i] );
                 }
 
-                newItem.append( OUStringLiteral1( aNum.toUInt32( 16 ) ) );
+                newItem.append( OUStringChar( aNum.toUInt32( 16 ) ) );
                 pLine += 3;
             }
 

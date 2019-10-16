@@ -181,7 +181,7 @@ bool SwGlossaries::NewGroupDoc(OUString& rGroupName, const OUString& rTitle)
         return false;
     const OUString sNewFilePath(m_PathArr[nNewPath]);
     const OUString sNewGroup = lcl_CheckFileName(sNewFilePath, rGroupName.getToken(0, GLOS_DELIM))
-        + OUStringLiteral1(GLOS_DELIM) + sNewPath;
+        + OUStringChar(GLOS_DELIM) + sNewPath;
     std::unique_ptr<SwTextBlocks> pBlock = GetGlosDoc( sNewGroup );
     if(pBlock)
     {
@@ -228,7 +228,7 @@ bool    SwGlossaries::RenameGroupDoc(
 
     RemoveFileFromList( rOldGroup );
 
-    rNewGroup = sNewFileName + OUStringLiteral1(GLOS_DELIM) + OUString::number(nNewPath);
+    rNewGroup = sNewFileName + OUStringChar(GLOS_DELIM) + OUString::number(nNewPath);
     if (m_GlosArr.empty())
     {
         GetNameList();
@@ -252,7 +252,7 @@ bool SwGlossaries::DelGroupDoc(const OUString &rName)
         return false;
     const OUString sBaseName(rName.getToken(0, GLOS_DELIM));
     const OUString sFileURL = lcl_FullPathName(m_PathArr[nPath], sBaseName);
-    const OUString aName = sBaseName + OUStringLiteral1(GLOS_DELIM) + OUString::number(nPath);
+    const OUString aName = sBaseName + OUStringChar(GLOS_DELIM) + OUString::number(nPath);
     // Even if the file doesn't exist it has to be deleted from
     // the list of text block regions
     // no && because of CFfront
@@ -313,14 +313,14 @@ std::vector<OUString> & SwGlossaries::GetNameList()
             for (const OUString& aTitle : aFiles)
             {
                 const OUString sName( aTitle.copy( 0, aTitle.getLength() - sExt.getLength() )
-                    + OUStringLiteral1(GLOS_DELIM) + OUString::number( static_cast<sal_Int16>(i) ));
+                    + OUStringChar(GLOS_DELIM) + OUString::number( static_cast<sal_Int16>(i) ));
                 m_GlosArr.push_back(sName);
             }
         }
         if (m_GlosArr.empty())
         {
             // the standard block is inside of the path's first part
-            m_GlosArr.emplace_back(SwGlossaries::GetDefName() + OUStringLiteral1(GLOS_DELIM) + "0" );
+            m_GlosArr.emplace_back(SwGlossaries::GetDefName() + OUStringChar(GLOS_DELIM) + "0" );
         }
     }
     return m_GlosArr;

@@ -179,7 +179,7 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
         // if nValueLength not calculated then nullptr
     sal_Int32* pValueLength = nValueLength ? &nValueLength : nullptr;
     if ( m_fSign < 0.0 )
-        aTmpBuf.append( OUStringLiteral1(aMinusSign) ).append( " " );
+        aTmpBuf.append( OUStringChar(aMinusSign) ).append( " " );
     if ( bHasIntercept )
     {
         OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, fIntercept, pValueLength );
@@ -204,7 +204,7 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
         }
     }
     if ( m_fLogSlope < 0.0 )
-        aTmpBuf.append( OUStringLiteral1(aMinusSign) ).append( " " );
+        aTmpBuf.append( OUStringChar(aMinusSign) ).append( " " );
     if ( bHasLogSlope )
     {
         OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope), pValueLength );

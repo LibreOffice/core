@@ -836,7 +836,7 @@ static void lcl_WriteString( SvStream& rStrm, OUString& rString, sal_Unicode cQu
 
     if (cQuote)
     {
-        rString = OUStringLiteral1(cQuote) + rString + OUStringLiteral1(cQuote);
+        rString = OUStringChar(cQuote) + rString + OUStringChar(cQuote);
     }
 
     ScImportExport::WriteUnicodeOrByteString( rStrm, rString );
@@ -1174,7 +1174,7 @@ static bool lcl_PutString(
                 if (nFound > 6)
                 {
                     sal_Unicode cDec = '.';
-                    OUString aT = OUStringLiteral1(cDec) + rStr.copy( nStart[6], nEnd[6]+1-nStart[6]);
+                    OUString aT = OUStringChar(cDec) + rStr.copy( nStart[6], nEnd[6]+1-nStart[6]);
                     rtl_math_ConversionStatus eStatus;
                     double fV = rtl::math::stringToDouble( aT, cDec, 0, &eStatus );
                     if (eStatus == rtl_math_ConversionStatus_Ok)
@@ -1695,7 +1695,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                             }
 
                             if( mExportTextOptions.mcSeparatorConvertTo && cSep )
-                                aCellStr = aCellStr.replaceAll( OUStringLiteral1(cSep), OUStringLiteral1(mExportTextOptions.mcSeparatorConvertTo) );
+                                aCellStr = aCellStr.replaceAll( OUStringChar(cSep), OUStringChar(mExportTextOptions.mcSeparatorConvertTo) );
 
                             if( mExportTextOptions.mbAddQuotes && ( aCellStr.indexOf( cSep ) != -1 ) )
                                 lcl_WriteString( rStrm, aCellStr, cStr, cStr );
@@ -1728,7 +1728,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                         }
 
                         if( mExportTextOptions.mcSeparatorConvertTo && cSep )
-                            aCellStr = aCellStr.replaceAll( OUStringLiteral1(cSep), OUStringLiteral1(mExportTextOptions.mcSeparatorConvertTo) );
+                            aCellStr = aCellStr.replaceAll( OUStringChar(cSep), OUStringChar(mExportTextOptions.mcSeparatorConvertTo) );
 
                         if( mExportTextOptions.mbAddQuotes && hasLineBreaksOrSeps(aCellStr, cSep) )
                             lcl_WriteString( rStrm, aCellStr, cStr, cStr );

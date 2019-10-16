@@ -168,7 +168,7 @@ void SwAccessiblePortionData::Special(
         // #i111768# - apply patch from kstribley:
         // Include the control characters.
         case PortionType::ControlChar:
-            sDisplay = rText + OUStringLiteral1(m_pTextFrame->GetText()[sal_Int32(m_nViewPosition)]);
+            sDisplay = rText + OUStringChar(m_pTextFrame->GetText()[sal_Int32(m_nViewPosition)]);
             break;
         default:
             sDisplay = rText;
