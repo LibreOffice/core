@@ -6848,7 +6848,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             }
                                                             else
                                                             {
-                                                                aStr.append(OUStringLiteral1(n));
+                                                                aStr.append(OUStringChar(n));
                                                             }
                                                         }
                                                     }

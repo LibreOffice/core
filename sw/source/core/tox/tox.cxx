@@ -699,7 +699,7 @@ OUString SwFormToken::GetString() const
         case TOKEN_TAB_STOP:
             sData += OUString::number( nTabStopPosition ) + ","
                   +  OUString::number( static_cast< sal_Int32 >(eTabAlign) ) + ","
-                  +  OUStringLiteral1(cTabFillChar) + ","
+                  +  OUStringChar(cTabFillChar) + ","
                   +  OUString::number( bWithTab ? 1 : 0 );
             break;
         case TOKEN_CHAPTER_INFO:
@@ -709,9 +709,9 @@ OUString SwFormToken::GetString() const
                   +  OUString::number( nOutlineLevel );
             break;
         case TOKEN_TEXT:
-            sData += OUStringLiteral1(TOX_STYLE_DELIMITER)
-                  +  sText.replaceAll(OUStringLiteral1(TOX_STYLE_DELIMITER), "")
-                  +  OUStringLiteral1(TOX_STYLE_DELIMITER);
+            sData += OUStringChar(TOX_STYLE_DELIMITER)
+                  +  sText.replaceAll(OUStringChar(TOX_STYLE_DELIMITER), "")
+                  +  OUStringChar(TOX_STYLE_DELIMITER);
             break;
         case TOKEN_AUTHORITY:
             if (nAuthorityField<10)

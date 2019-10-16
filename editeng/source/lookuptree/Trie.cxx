@@ -99,7 +99,7 @@ void TrieNode::collectSuggestions(const OUString& sPath, vector<OUString>& rSugg
 
 void TrieNode::collectSuggestionsForCurrentNode(TrieNode* pCurrent, const OUString& sPath, vector<OUString>& rSuggestionList)
 {
-    OUString aStringPath = sPath + OUStringLiteral1(pCurrent->mCharacter);
+    OUString aStringPath = sPath + OUStringChar(pCurrent->mCharacter);
     if(pCurrent->mMarker)
     {
         rSuggestionList.push_back(aStringPath);

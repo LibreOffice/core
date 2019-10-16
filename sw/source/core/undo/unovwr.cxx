@@ -68,7 +68,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     bInsChar = true;
     if( nSttContent < nTextNdLen )     // no pure insert?
     {
-        aDelStr += OUStringLiteral1( pTextNd->GetText()[nSttContent] );
+        aDelStr += OUStringChar( pTextNd->GetText()[nSttContent] );
         if( !m_pHistory )
             m_pHistory.reset( new SwHistory );
         SwRegHistory aRHst( *pTextNd, m_pHistory.get() );
@@ -83,7 +83,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
 
     pTextNd->InsertText( OUString(cIns), rPos.nContent,
             SwInsertFlags::EMPTYEXPAND );
-    aInsStr += OUStringLiteral1( cIns );
+    aInsStr += OUStringChar( cIns );
 
     if( !bInsChar )
     {
@@ -148,7 +148,7 @@ bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     {
         if (rPos.nContent.GetIndex() < pDelTextNd->GetText().getLength())
         {
-            aDelStr += OUStringLiteral1( pDelTextNd->GetText()[rPos.nContent.GetIndex()] );
+            aDelStr += OUStringChar( pDelTextNd->GetText()[rPos.nContent.GetIndex()] );
             ++rPos.nContent;
         }
         else
@@ -162,7 +162,7 @@ bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
             SwInsertFlags::EMPTYEXPAND) );
     assert(ins.getLength() == 1); // check in SwDoc::Overwrite => cannot fail
     (void) ins;
-    aInsStr += OUStringLiteral1( cIns );
+    aInsStr += OUStringChar( cIns );
 
     if( !bInsChar )
     {

@@ -2881,7 +2881,7 @@ bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
             (c >= 'a' && c <= 'f') ||
             (c >= 'A' && c <= 'F') )
         {
-            rSeq += OUStringLiteral1(c);
+            rSeq += OUStringChar(c);
             std::vector<ExtTextInputAttr> attribs( rSeq.getLength(), ExtTextInputAttr::Underline );
 
             SalExtTextInputEvent aEv;

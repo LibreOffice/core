@@ -4049,12 +4049,12 @@ void ScExportTest::testEscapeCharInNumberFormatXLSX()
     assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", "00\\ 00\\ 00\\ 00\\ 00");
     assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[3]", "formatCode", "00\\.00\\.00\\.000\\.0");   // tdf#81939
     // "_-* #,##0\ _€_-;\-* #,##0\ _€_-;_-* "- "_€_-;_-@_-" // tdf#81222
-    OUString rFormatStrExpected ( "_-* #,##0\\ _" + OUStringLiteral1(cEuro) + "_-;\\-* #,##0\\ _" +
-            OUStringLiteral1(cEuro) + "_-;_-* \"- \"_" + OUStringLiteral1(cEuro) + "_-;_-@_-" );
+    OUString rFormatStrExpected ( "_-* #,##0\\ _" + OUStringChar(cEuro) + "_-;\\-* #,##0\\ _" +
+            OUStringChar(cEuro) + "_-;_-* \"- \"_" + OUStringChar(cEuro) + "_-;_-@_-" );
     assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[4]", "formatCode", rFormatStrExpected );
     // "_-* #,##0" €"_-;\-* #,##0" €"_-;_-* "- €"_-;_-@_-");
-    rFormatStrExpected = "_-* #,##0\" " + OUStringLiteral1(cEuro) + "\"_-;\\-* #,##0\" " +
-            OUStringLiteral1(cEuro) + "\"_-;_-* \"- " + OUStringLiteral1(cEuro) + "\"_-;_-@_-";
+    rFormatStrExpected = "_-* #,##0\" " + OUStringChar(cEuro) + "\"_-;\\-* #,##0\" " +
+            OUStringChar(cEuro) + "\"_-;_-* \"- " + OUStringChar(cEuro) + "\"_-;_-@_-";
     assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[5]", "formatCode", rFormatStrExpected );
     // remove escape char in fraction
     assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[6]", "formatCode", "# ?/?;[RED]\\-# #/#####");

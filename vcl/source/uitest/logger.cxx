@@ -225,13 +225,13 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const& xUIElement, const KeyE
             aKeyCode += "ALT+";
 
         if (aFound.isEmpty())
-            aKeyCode += OUStringLiteral1(nChar) + "\"}";
+            aKeyCode += OUStringChar(nChar) + "\"}";
         else
             aKeyCode += aFound + "\"}";
     }
     else
     {
-        aKeyCode = "{\"TEXT\": \"" + OUStringLiteral1(nChar) + "\"}";
+        aKeyCode = "{\"TEXT\": \"" + OUStringChar(nChar) + "\"}";
     }
 
     std::unique_ptr<UIObject> pUIObject = xUIElement->GetUITestFactory()(xUIElement.get());

@@ -2991,7 +2991,7 @@ static bool lcl_FindInCommand(
     OUString& rValue )
 {
     bool bRet = false;
-    OUString sSearch = "\\" + OUStringLiteral1( cSwitch );
+    OUString sSearch = "\\" + OUStringChar( cSwitch );
     sal_Int32 nIndex = rCommand.indexOf( sSearch  );
     if( nIndex >= 0 )
     {

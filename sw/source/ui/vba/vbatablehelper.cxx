@@ -104,9 +104,9 @@ OUString SwVbaTableHelper::getColumnStr( sal_Int32 nCol )
     do{
         nCalc = nCol % coDiff;
         if( nCalc >= 26 )
-            sRet = OUStringLiteral1( 'a' - 26 + nCalc ) + sRet;
+            sRet = OUStringChar( 'a' - 26 + nCalc ) + sRet;
         else
-            sRet = OUStringLiteral1( 'A' + nCalc ) + sRet;
+            sRet = OUStringChar( 'A' + nCalc ) + sRet;
 
         if( 0 == ( nCol = nCol - nCalc ) )
             break;

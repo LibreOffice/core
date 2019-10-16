@@ -1032,7 +1032,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                                 break;
                                 case SVX_NUM_NUMBER_LOWER_ZH :
                                 {
-                                    if ( sSuffix == OUStringLiteral1(0xff0e) )
+                                    if ( sSuffix == OUStringChar(0xff0e) )
                                         nMappedNumType = 0x260001;   // Japanese with double-byte period.
                                     else if ( !sSuffix.isEmpty() )
                                         nMappedNumType = 0x1B0001;   // Japanese/Korean with single-byte period.

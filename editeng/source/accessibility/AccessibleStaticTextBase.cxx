@@ -719,11 +719,11 @@ namespace accessibility
         //or at the end of the result string.
         if ( bStart )
         {
-            aRes.insert(0, OUStringLiteral1(cNewLine));
+            aRes.insert(0, OUStringChar(cNewLine));
         }
         if ( bEnd )
         {
-            aRes.append(OUStringLiteral1(cNewLine));
+            aRes.append(OUStringChar(cNewLine));
         }
         return aRes.makeStringAndClear();
     }
@@ -859,7 +859,7 @@ namespace accessibility
             mpImpl->CorrectTextSegment( aResult, aPos.nPara );
             if ( bLineBreak )
             {
-                aResult.SegmentText = OUStringLiteral1(cNewLine) + aResult.SegmentText;
+                aResult.SegmentText = OUStringChar(cNewLine) + aResult.SegmentText;
             }
        }
 

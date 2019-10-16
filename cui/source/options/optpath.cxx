@@ -292,7 +292,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
 
             OUString sTmpPath = sUser;
             if ( !sTmpPath.isEmpty() && !sWritable.isEmpty() )
-                sTmpPath += OUStringLiteral1(MULTIPATH_DELIMITER);
+                sTmpPath += OUStringChar(MULTIPATH_DELIMITER);
             sTmpPath += sWritable;
             const OUString aValue = Convert_Impl( sTmpPath );
 
@@ -364,7 +364,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl, weld::Button&, void)
                 if ( !bFound )
                 {
                     if ( !sTemp.isEmpty() )
-                        sTemp += OUStringLiteral1(MULTIPATH_DELIMITER);
+                        sTemp += OUStringChar(MULTIPATH_DELIMITER);
                     sTemp += sOnePath;
                 }
             }
@@ -487,7 +487,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, weld::Button&, void)
 
         OUString sPath( sUser );
         if ( !sPath.isEmpty() )
-            sPath += OUStringLiteral1(MULTIPATH_DELIMITER);
+            sPath += OUStringChar(MULTIPATH_DELIMITER);
         sPath += sWritable;
         pMultiDlg->SetPath( sPath );
 
@@ -514,12 +514,12 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, weld::Button&, void)
                         break;
                     }
                     if ( !sUser.isEmpty() )
-                        sUser += OUStringLiteral1(MULTIPATH_DELIMITER);
+                        sUser += OUStringChar(MULTIPATH_DELIMITER);
                     sUser += sToken;
                 }
                 sFullPath = sUser;
                 if ( !sFullPath.isEmpty() )
-                    sFullPath += OUStringLiteral1(MULTIPATH_DELIMITER);
+                    sFullPath += OUStringChar(MULTIPATH_DELIMITER);
                 sFullPath += sWritable;
             }
 

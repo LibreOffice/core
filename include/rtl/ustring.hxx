@@ -3789,7 +3789,7 @@ using ::rtl::OUStringHash;
 using ::rtl::OStringToOUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OUStringLiteral;
-using ::rtl::OUStringLiteral1;
+using ::rtl::OUStringChar;
 #endif
 
 /// @cond INTERNAL

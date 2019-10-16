@@ -172,7 +172,7 @@ void PolicyReader::assureToken( sal_Unicode token )
     sal_Unicode c = get();
     if (c == token)
         return;
-    OUString msg = "expected >" + OUStringLiteral1(c) + "<!";
+    OUString msg = "expected >" + OUStringChar(c) + "<!";
     error( msg );
 }
 

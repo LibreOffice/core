@@ -194,7 +194,7 @@ private:
 
     enum class TreatEmpty { DefaultCtor, CheckEmpty, Error };
 
-    enum class ChangeKind { Char, CharLen, SingleChar, OUStringLiteral1 };
+    enum class ChangeKind { Char, CharLen, SingleChar, OUStringChar };
 
     enum class PassThrough { No, EmptyConstantString, NonEmptyConstantString };
 
@@ -871,10 +871,10 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
             {
                 auto arg = expr->getArg(0);
                 if (loplugin::TypeCheck(arg->getType())
-                    .Class("OUStringLiteral1_").Namespace("rtl")
+                    .Class("OUStringChar_").Namespace("rtl")
                     .GlobalNamespace())
                 {
-                    kind = ChangeKind::OUStringLiteral1;
+                    kind = ChangeKind::OUStringChar;
                     pass = PassThrough::NonEmptyConstantString;
                     simplify = false;
                 } else {
@@ -1206,7 +1206,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                         DiagnosticsEngine::Warning,
                                         ("rewrite construction of %0 with %1 in"
                                          " call of '%2' as construction of"
-                                         " 'OUStringLiteral1'"),
+                                         " 'OUStringChar'"),
                                         getMemberLocation(expr))
                                         << classdecl << describeChangeKind(kind)
                                         << fdecl->getQualifiedNameAsString()
@@ -1331,8 +1331,8 @@ std::string StringConstant::describeChangeKind(ChangeKind kind) {
         return "string constant and matching length arguments";
     case ChangeKind::SingleChar:
         return "sal_Unicode argument";
-    case ChangeKind::OUStringLiteral1:
-        return "OUStringLiteral1 argument";
+    case ChangeKind::OUStringChar:
+        return "OUStringChar argument";
     }
     llvm_unreachable("unknown change kind");
 }
@@ -2000,12 +2000,12 @@ void StringConstant::handleStringCtor(
             .Typedef(stringKind == StringKind::Unicode ? "sal_Unicode" : "char").GlobalNamespace()))
     {
         // It may not be easy to rewrite OUString(c), esp. given there is no
-        // OUString ctor taking an OUStringLiteral1 arg, so don't warn there:
+        // OUString ctor taking an OUStringChar arg, so don't warn there:
         if (!explicitFunctionalCastNotation) {
             report(
                 DiagnosticsEngine::Warning,
                 ("in call of '%0', replace 'OUString' constructed from a"
-                 " 'sal_Unicode' with an 'OUStringLiteral1'"),
+                 " 'sal_Unicode' with an 'OUStringChar'"),
                 e3->getExprLoc())
                 << callee->getQualifiedNameAsString() << expr->getSourceRange();
         }

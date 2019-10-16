@@ -71,13 +71,13 @@ CopyDlg::~CopyDlg()
 {
     SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
     OUString sStr =
-        OUString::number(m_xNumFldCopies->get_value()) + OUStringLiteral1(TOKEN) +
-        OUString::number(m_xMtrFldMoveX->get_value(FieldUnit::NONE)) + OUStringLiteral1(TOKEN) +
-        OUString::number(m_xMtrFldMoveY->get_value(FieldUnit::NONE)) + OUStringLiteral1(TOKEN) +
-        OUString::number(m_xMtrFldAngle->get_value(FieldUnit::NONE)) + OUStringLiteral1(TOKEN) +
-        OUString::number(m_xMtrFldWidth->get_value(FieldUnit::NONE)) + OUStringLiteral1(TOKEN) +
-        OUString::number(m_xMtrFldHeight->get_value(FieldUnit::NONE)) + OUStringLiteral1(TOKEN) +
-        OUString::number(static_cast<sal_uInt32>(m_xLbStartColor->GetSelectEntryColor())) + OUStringLiteral1(TOKEN) +
+        OUString::number(m_xNumFldCopies->get_value()) + OUStringChar(TOKEN) +
+        OUString::number(m_xMtrFldMoveX->get_value(FieldUnit::NONE)) + OUStringChar(TOKEN) +
+        OUString::number(m_xMtrFldMoveY->get_value(FieldUnit::NONE)) + OUStringChar(TOKEN) +
+        OUString::number(m_xMtrFldAngle->get_value(FieldUnit::NONE)) + OUStringChar(TOKEN) +
+        OUString::number(m_xMtrFldWidth->get_value(FieldUnit::NONE)) + OUStringChar(TOKEN) +
+        OUString::number(m_xMtrFldHeight->get_value(FieldUnit::NONE)) + OUStringChar(TOKEN) +
+        OUString::number(static_cast<sal_uInt32>(m_xLbStartColor->GetSelectEntryColor())) + OUStringChar(TOKEN) +
         OUString::number(static_cast<sal_uInt32>(m_xLbEndColor->GetSelectEntryColor()));
     aDlgOpt.SetUserItem("UserItem", css::uno::makeAny(sStr));
 }

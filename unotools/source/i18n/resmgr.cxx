@@ -196,7 +196,7 @@ namespace Translate
         if (std::use_facet<boost::locale::info>(loc).language() == "qtz")
         {
             OString sKeyId(genKeyId(OString(pContextAndId).replace('\004', '|')));
-            return OUString::fromUtf8(sKeyId) + OUStringLiteral1(0x2016) + createFromUtf8(pId, strlen(pId));
+            return OUString::fromUtf8(sKeyId) + OUStringChar(0x2016) + createFromUtf8(pId, strlen(pId));
         }
 
         //otherwise translate it
@@ -230,7 +230,7 @@ namespace Translate
         {
             OString sKeyId(genKeyId(aContextIdId[0] + "|" + aContextIdId[1]));
             int nForm = n == 0 ? 1 : 2;
-            return OUString::fromUtf8(sKeyId) + OUStringLiteral1(0x2016) + createFromUtf8(aContextIdId[nForm].getStr(), aContextIdId[nForm].getLength());
+            return OUString::fromUtf8(sKeyId) + OUStringChar(0x2016) + createFromUtf8(aContextIdId[nForm].getStr(), aContextIdId[nForm].getLength());
         }
 
         //otherwise translate it

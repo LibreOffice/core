@@ -2611,7 +2611,7 @@ void CellStyleBuffer::finalizeImport()
         OUString aUnusedName;
         do
         {
-            aUnusedName = aStyleName + OUStringLiteral1(' ') + OUString::number( ++nIndex );
+            aUnusedName = aStyleName + OUStringChar(' ') + OUString::number( ++nIndex );
         }
         while( aCellStyles.find( aUnusedName ) != aCellStyles.end() );
         aCellStyles[ aUnusedName ] = rxStyle;

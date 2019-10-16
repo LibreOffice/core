@@ -114,7 +114,7 @@ namespace
                 return true;
             if (c < c0 || c > c9)
                 return false;
-            resInt += OUStringLiteral1(c);
+            resInt += OUStringChar(c);
         }
         if (nPos == i_str.getLength() || i_str[nPos] == sep)
             return true;
@@ -135,7 +135,7 @@ namespace
                     return false;
                 if (c < c0 || c > c9)
                     return false;
-                resFrac += OUStringLiteral1(c);
+                resFrac += OUStringChar(c);
             }
             OSL_ENSURE(nPos == i_str.getLength(), "impl_getISO8601TimeToken internal error; expected to be at end of string");
             return true;
@@ -185,7 +185,7 @@ namespace
                 const sal_Unicode c = i_str[io_index];
                 if ((c < c0 || c > c9) && c != sep)
                     return false;
-                o_strInt += OUStringLiteral1(c);
+                o_strInt += OUStringChar(c);
             }
             return true;
         }

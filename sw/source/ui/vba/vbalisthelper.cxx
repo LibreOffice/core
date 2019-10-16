@@ -149,7 +149,7 @@ void SwVbaListHelper::CreateBulletListTemplate()
         }
         case 2:
         {
-            aBulletChar = OUStringLiteral1(CHAR_EMPTY_DOT);
+            aBulletChar = OUStringChar(CHAR_EMPTY_DOT);
             break;
         }
         case 3:

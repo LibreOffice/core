@@ -78,7 +78,7 @@ OUString SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
 
     if( FieldUnit::NONE != eOutUnit )
     {
-        sMetric += OUStringLiteral1(cSep);
+        sMetric += OUStringChar(cSep);
         sal_Int64 nFract = nConvVal % 100;
 
         if ( nFract < 0 )

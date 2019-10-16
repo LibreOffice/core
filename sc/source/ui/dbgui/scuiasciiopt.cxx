@@ -679,7 +679,7 @@ void ScImportAsciiDlg::SetSeparators()
             case ' ':   pCkbSpace->Check();      break;
             default:
                 pCkbOther->Check();
-                pEdOther->SetText( pEdOther->GetText() + OUStringLiteral1(aSep[i]) );
+                pEdOther->SetText( pEdOther->GetText() + OUStringChar(aSep[i]) );
         }
     }
 }

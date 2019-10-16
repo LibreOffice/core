@@ -414,8 +414,8 @@ void SwDoc::SetInitDBFields( bool b )
 /// Get all databases that are used by fields
 static OUString lcl_DBDataToString(const SwDBData& rData)
 {
-    return rData.sDataSource + OUStringLiteral1(DB_DELIM)
-        + rData.sCommand + OUStringLiteral1(DB_DELIM)
+    return rData.sDataSource + OUStringChar(DB_DELIM)
+        + rData.sCommand + OUStringChar(DB_DELIM)
         + OUString::number(rData.nCommandType);
 }
 
@@ -510,7 +510,7 @@ void SwDoc::GetAllDBNames( std::vector<OUString>& rAllDBNames )
     const SwDSParams_t& rArr = pMgr->GetDSParamArray();
     for (const auto& pParam : rArr)
     {
-        rAllDBNames.emplace_back(pParam->sDataSource + OUStringLiteral1(DB_DELIM) + pParam->sCommand);
+        rAllDBNames.emplace_back(pParam->sDataSource + OUStringChar(DB_DELIM) + pParam->sCommand);
     }
 #endif
 }
@@ -538,7 +538,7 @@ std::vector<OUString>& SwDoc::FindUsedDBs( const std::vector<OUString>& rAllDBNa
             const sal_Int32 nEndPos = sFormula.indexOf('.', nPos);
             if( nEndPos>=0 )
             {
-                rUsedDBNames.emplace_back(sItem + OUStringLiteral1(DB_DELIM) + sFormula.copy( nPos, nEndPos - nPos ));
+                rUsedDBNames.emplace_back(sItem + OUStringChar(DB_DELIM) + sFormula.copy( nPos, nEndPos - nPos ));
             }
         }
     }
@@ -686,7 +686,7 @@ namespace
 
 OUString lcl_CutOffDBCommandType(const OUString& rName)
 {
-    return rName.replaceFirst(OUStringLiteral1(DB_DELIM), ".").getToken(0, DB_DELIM);
+    return rName.replaceFirst(OUStringChar(DB_DELIM), ".").getToken(0, DB_DELIM);
 }
 
 }

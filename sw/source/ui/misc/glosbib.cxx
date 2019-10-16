@@ -220,7 +220,7 @@ IMPL_LINK_NOARG( SwGlossaryGroupDlg, SelectHdl, weld::TreeView&, void )
 IMPL_LINK_NOARG(SwGlossaryGroupDlg, NewHdl, weld::Button&, void)
 {
     OUString sGroup = m_xNameED->get_text()
-        + OUStringLiteral1(GLOS_DELIM)
+        + OUStringChar(GLOS_DELIM)
         + OUString::number(m_xPathLB->get_active());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sGroup), "group already available!");
     m_InsertedArr.push_back(sGroup);
@@ -298,7 +298,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl, weld::Button&, void)
 
     const OUString sNewTitle(m_xNameED->get_text());
     OUString sNewName = sNewTitle
-        + OUStringLiteral1(GLOS_DELIM)
+        + OUStringChar(GLOS_DELIM)
         + OUString::number(m_xPathLB->get_active());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sNewName), "group already available!");
 
@@ -313,8 +313,8 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl, weld::Button&, void)
     }
     if(!bDone)
     {
-        sEntry += OUStringLiteral1(RENAME_TOKEN_DELIM) + sNewName
-                + OUStringLiteral1(RENAME_TOKEN_DELIM) + sNewTitle;
+        sEntry += OUStringChar(RENAME_TOKEN_DELIM) + sNewName
+                + OUStringChar(RENAME_TOKEN_DELIM) + sNewTitle;
         m_RenamedArr.push_back(sEntry);
     }
     delete pUserData;
@@ -407,7 +407,7 @@ bool SwGlossaryGroupDlg::IsDeleteAllowed(const OUString &rGroup)
 
 IMPL_STATIC_LINK(SwGlossaryGroupDlg, EditInsertTextHdl, OUString&, rText, bool)
 {
-    rText = rText.replaceAll(OUStringLiteral1(SVT_SEARCHPATH_DELIMITER), "");
+    rText = rText.replaceAll(OUStringChar(SVT_SEARCHPATH_DELIMITER), "");
     return true;
 }
 

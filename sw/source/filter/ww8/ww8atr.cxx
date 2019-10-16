@@ -2289,7 +2289,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         if( TOX_USER == pTOX->GetType() )
                         {
                             sStr += "\""
-                                + OUStringLiteral1(static_cast<sal_Char>( 'A' + GetExport( ).GetId( *pTOX->GetTOXType() ) ))
+                                + OUStringChar(static_cast<sal_Char>( 'A' + GetExport( ).GetId( *pTOX->GetTOXType() ) ))
                                 + sEntryEnd;
                         }
                     }
@@ -2799,7 +2799,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             SwDBData aData = GetExport().m_pDoc->GetDBData();
             const OUString sStr = FieldString(ww::eDATABASE)
                 + aData.sDataSource
-                + OUStringLiteral1(DB_DELIM)
+                + OUStringChar(DB_DELIM)
                 + aData.sCommand;
             GetExport().OutputField(pField, ww::eDATABASE, sStr);
         }

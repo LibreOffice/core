@@ -502,8 +502,8 @@ bool SwGrfNode::GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const
             if( sfx2::LinkManager::GetDisplayNames(
                     refLink.get(), &sApp, &sTopic, &sItem ) )
             {
-                *pFileNm = sApp + OUStringLiteral1(sfx2::cTokenSeparator)
-                         + sTopic + OUStringLiteral1(sfx2::cTokenSeparator)
+                *pFileNm = sApp + OUStringChar(sfx2::cTokenSeparator)
+                         + sTopic + OUStringChar(sfx2::cTokenSeparator)
                          + sItem;
                 *pFilterNm = "DDE";
                 bRet = true;

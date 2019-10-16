@@ -268,7 +268,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
         {
 
             if(c > 0)
-                m_sLD_LIBRARY_PATH+= OUStringLiteral1(SAL_PATHSEPARATOR);
+                m_sLD_LIBRARY_PATH+= OUStringChar(SAL_PATHSEPARATOR);
             m_sLD_LIBRARY_PATH+= usSysPath;
         }
         else

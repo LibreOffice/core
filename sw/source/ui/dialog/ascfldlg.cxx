@@ -296,7 +296,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
             if( -1 != nEnd )
                 m_sExtraData = m_sExtraData.replaceAt( nStt, nEnd - nStt + 1, "" );
         }
-        m_sExtraData += sFindNm + sData + OUStringLiteral1(cDialogExtraDataClose);
+        m_sExtraData += sFindNm + sData + OUStringChar(cDialogExtraDataClose);
     }
 }
 

@@ -709,7 +709,7 @@ void ScFiltersTest::testCachedFormulaResultsODS()
             for(SCROW nRow = 0; nRow < 2; ++nRow)
             {
                 OUString aFormula = "=ISERROR(" +
-                    OUStringLiteral1(static_cast<char>('A'+nCol)) + OUString::number(nRow) +
+                    OUStringChar(static_cast<char>('A'+nCol)) + OUString::number(nRow) +
                     ")";
                 rDoc.SetString(nCol, nRow + 2, 2, aFormula);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr(), OUString("TRUE"), rDoc.GetString(nCol, nRow +2, 2));

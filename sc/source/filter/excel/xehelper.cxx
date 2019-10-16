@@ -871,7 +871,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 
     if( !aText.isEmpty() )
     {
-        maHFString += "&" + OUStringLiteral1(cPortionCode) + aText;
+        maHFString += "&" + OUStringChar(cPortionCode) + aText;
         mnTotalHeight = ::std::max( mnTotalHeight, nHeight );
     }
 }
@@ -975,7 +975,7 @@ OUString XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, const OUString& rA
 
 OUString XclExpUrlHelper::EncodeDde( const OUString& rApplic, const OUString& rTopic )
 {
-    return rApplic + OUStringLiteral1(EXC_DDE_DELIM) + rTopic;
+    return rApplic + OUStringChar(EXC_DDE_DELIM) + rTopic;
 }
 
 // Cached Value Lists =========================================================

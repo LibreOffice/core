@@ -361,7 +361,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         OUString aMatchString = pAtom->getTokenValue();
 
         // Determine where '%' character is...
-        if( aMatchString == OUStringLiteral1(WILDCARD) )
+        if( aMatchString == OUStringChar(WILDCARD) )
         {
             // String containing only a '%' and nothing else matches everything
             pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS,
@@ -381,7 +381,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         }
         else if( aMatchString.indexOf ( WILDCARD ) == aMatchString.lastIndexOf ( WILDCARD ) )
         {   // One occurrence of '%'  matches...
-            if ( aMatchString.startsWith(OUStringLiteral1(WILDCARD)) )
+            if ( aMatchString.startsWith(OUStringChar(WILDCARD)) )
                 pResult = createTest( aColumnName, E_BOOK_QUERY_ENDS_WITH, aMatchString.copy( 1 ) );
             else if ( aMatchString.indexOf ( WILDCARD ) == aMatchString.getLength() - 1 )
                 pResult = createTest( aColumnName, E_BOOK_QUERY_BEGINS_WITH, aMatchString.copy( 0, aMatchString.getLength() - 1 ) );
@@ -389,7 +389,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
                 m_xConnection->throwGenericSQLException(STR_QUERY_LIKE_WILDCARD,*this);
         }
         else if( aMatchString.getLength() >= 3 &&
-                 aMatchString.startsWith(OUStringLiteral1(WILDCARD)) &&
+                 aMatchString.startsWith(OUStringChar(WILDCARD)) &&
                  aMatchString.indexOf ( WILDCARD, 1) == aMatchString.getLength() - 1 ) {
             // one '%' at the start and another at the end
             pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS, aMatchString.copy (1, aMatchString.getLength() - 2) );

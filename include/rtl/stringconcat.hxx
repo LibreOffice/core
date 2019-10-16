@@ -185,10 +185,10 @@ struct ToStringHelper<sal_Unicode const[N]>
     };
 
 template<>
-struct ToStringHelper<OUStringLiteral1_>
+struct ToStringHelper<OUStringChar_>
     {
-    static std::size_t length(OUStringLiteral1_) { return 1; }
-    static sal_Unicode * addData(sal_Unicode * buffer, OUStringLiteral1_ literal)
+    static std::size_t length(OUStringChar_) { return 1; }
+    static sal_Unicode * addData(sal_Unicode * buffer, OUStringChar_ literal)
     { return addDataHelper(buffer, &literal.c, 1); }
     static bool const allowOStringConcat = false;
     static bool const allowOUStringConcat = true;

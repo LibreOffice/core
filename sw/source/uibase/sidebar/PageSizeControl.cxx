@@ -114,7 +114,7 @@ PageSizeControl::PageSizeControl( sal_uInt16 nId, vcl::Window* pParent )
                 sal_Unicode c = aText[i];
                 if ( rtl::isAsciiAlpha(c) || (c == '\'') || (c == '\"') || (c == '%') )
                 {
-                    aMetricStr = OUStringLiteral1(c) + aMetricStr;
+                    aMetricStr = OUStringChar(c) + aMetricStr;
                 }
                 else
                 {

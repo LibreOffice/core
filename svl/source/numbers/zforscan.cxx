@@ -820,28 +820,28 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
             case ':':
             case '-':
                 eType = NF_SYMBOLTYPE_DEL;
-                sSymbolBuffer.append(OUStringLiteral1(cToken));
+                sSymbolBuffer.append(OUStringChar(cToken));
                 eState = SsStop;
                 break;
             case '*':
                 eType = NF_SYMBOLTYPE_STAR;
-                sSymbolBuffer.append(OUStringLiteral1(cToken));
+                sSymbolBuffer.append(OUStringChar(cToken));
                 eState = SsGetStar;
                 break;
             case '_':
                 eType = NF_SYMBOLTYPE_BLANK;
-                sSymbolBuffer.append(OUStringLiteral1(cToken));
+                sSymbolBuffer.append(OUStringChar(cToken));
                 eState = SsGetBlank;
                 break;
             case '"':
                 eType = NF_SYMBOLTYPE_STRING;
                 eState = SsGetString;
-                sSymbolBuffer.append(OUStringLiteral1(cToken));
+                sSymbolBuffer.append(OUStringChar(cToken));
                 break;
             case '\\':
                 eType = NF_SYMBOLTYPE_STRING;
                 eState = SsGetChar;
-                sSymbolBuffer.append(OUStringLiteral1(cToken));
+                sSymbolBuffer.append(OUStringChar(cToken));
                 break;
             case '$':
             case '+':
@@ -849,7 +849,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
             case ')':
                 eType = NF_SYMBOLTYPE_STRING;
                 eState = SsStop;
-                sSymbolBuffer.append(OUStringLiteral1(cToken));
+                sSymbolBuffer.append(OUStringChar(cToken));
                 break;
             default :
                 if (StringEqualsChar( pFormatter->GetNumDecimalSep(), cToken) ||
@@ -860,7 +860,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                 {
                     // Another separator than pre-known ASCII
                     eType = NF_SYMBOLTYPE_DEL;
-                    sSymbolBuffer.append(OUStringLiteral1(cToken));
+                    sSymbolBuffer.append(OUStringChar(cToken));
                     eState = SsStop;
                 }
                 else if ( pChrCls->isLetter( rStr, nPos-1 ) )
@@ -885,7 +885,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                         if ( bCurrency )
                         {
                             eState = SsGetWord;
-                            sSymbolBuffer.append(OUStringLiteral1(cToken));
+                            sSymbolBuffer.append(OUStringChar(cToken));
                         }
                         else
                         {
@@ -913,7 +913,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                                 {
                                 case '+' :
                                 case '-' :  // E+ E- combine to one symbol
-                                    sSymbolBuffer.append(OUStringLiteral1(cNext));
+                                    sSymbolBuffer.append(OUStringChar(cNext));
                                     eType = NF_KEY_E;
                                     nPos++;
                                     break;
@@ -931,20 +931,20 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                     else
                     {
                         eState = SsGetWord;
-                        sSymbolBuffer.append(OUStringLiteral1(cToken));
+                        sSymbolBuffer.append(OUStringChar(cToken));
                     }
                 }
                 else
                 {
                     eType = NF_SYMBOLTYPE_STRING;
                     eState = SsStop;
-                    sSymbolBuffer.append(OUStringLiteral1(cToken));
+                    sSymbolBuffer.append(OUStringChar(cToken));
                 }
                 break;
             }
             break;
         case SsGetChar:
-            sSymbolBuffer.append(OUStringLiteral1(cToken));
+            sSymbolBuffer.append(OUStringChar(cToken));
             eState = SsStop;
             break;
         case SsGetString:
@@ -952,7 +952,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
             {
                 eState = SsStop;
             }
-            sSymbolBuffer.append(OUStringLiteral1(cToken));
+            sSymbolBuffer.append(OUStringChar(cToken));
             break;
         case SsGetWord:
             if ( pChrCls->isLetter( rStr, nPos-1 ) )
@@ -968,7 +968,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                 }
                 else
                 {
-                    sSymbolBuffer.append(OUStringLiteral1(cToken));
+                    sSymbolBuffer.append(OUStringChar(cToken));
                 }
             }
             else
@@ -990,7 +990,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                                      (nLen == 2 && (sSymbolBuffer[1] == 'M' || sSymbolBuffer[1] == 'm')
                                       && (rStr[nPos + 1] == 'M' || rStr[nPos + 1] == 'm'))))
                             {
-                                sSymbolBuffer.append(OUStringLiteral1(cToken));
+                                sSymbolBuffer.append(OUStringChar(cToken));
                                 bDontStop = true;
                             }
                         }
@@ -1008,11 +1008,11 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
             break;
         case SsGetStar:
             eState = SsStop;
-            sSymbolBuffer.append(OUStringLiteral1(cToken));
+            sSymbolBuffer.append(OUStringChar(cToken));
             break;
         case SsGetBlank:
             eState = SsStop;
-            sSymbolBuffer.append(OUStringLiteral1(cToken));
+            sSymbolBuffer.append(OUStringChar(cToken));
             break;
         default:
             break;
@@ -3101,7 +3101,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     {
                     case '+':
                     case '-':
-                        rString += OUStringLiteral1(c);
+                        rString += OUStringChar(c);
                         break;
                     case ' ':
                     case '.':
@@ -3132,7 +3132,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         }
                         else
                         {
-                            rString += OUStringLiteral1(c);
+                            rString += OUStringChar(c);
                         }
                         break;
                     default:

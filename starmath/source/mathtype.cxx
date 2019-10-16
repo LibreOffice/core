@@ -115,56 +115,56 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
                 pC = " rightarrow ";
             else
             {
-                rRet.append(OUStringLiteral1(nChar));
+                rRet.append(OUStringChar(nChar));
                 bRet=true;
             }
             break;
         case 0x00fb:
             if ((nVersion < 3) && (nTypeFace == 0x81))
                 nChar = 0xDF;
-            rRet.append(OUStringLiteral1(nChar));
+            rRet.append(OUStringChar(nChar));
             bRet=true;
             break;
         case 'a':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3b1;
-            rRet.append(OUStringLiteral1(nChar));
+            rRet.append(OUStringChar(nChar));
             bRet=true;
             break;
         case 'b':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3b2;
-            rRet.append(OUStringLiteral1(nChar));
+            rRet.append(OUStringChar(nChar));
             bRet=true;
             break;
         case 'l':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3bb;
-            rRet.append(OUStringLiteral1(nChar));
+            rRet.append(OUStringChar(nChar));
             bRet=true;
             break;
         case 'n':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3bd;
-            rRet.append(OUStringLiteral1(nChar));
+            rRet.append(OUStringChar(nChar));
             bRet=true;
             break;
         case 'r':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3c1;
-            rRet.append(OUStringLiteral1(nChar));
+            rRet.append(OUStringChar(nChar));
             bRet=true;
             break;
         case 'D':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x394;
-            rRet.append(OUStringLiteral1(nChar));
+            rRet.append(OUStringChar(nChar));
             bRet=true;
             break;
         case 0xa9:
             if ((nVersion < 3) && (nTypeFace == 0x82))
                 nChar = '\'';
-            rRet.append(OUStringLiteral1(nChar));
+            rRet.append(OUStringChar(nChar));
             bRet=true;
             break;
         case 0x00f1:
@@ -172,7 +172,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
                 pC = " \\rangle ";
             else
             {
-                rRet.append(OUStringLiteral1(nChar));
+                rRet.append(OUStringChar(nChar));
                 bRet=true;
             }
             break;
@@ -181,7 +181,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
                 pC = " <= ";
             else
             {
-                rRet.append(OUStringLiteral1(nChar));
+                rRet.append(OUStringChar(nChar));
                 bRet=true;
             }
             break;
@@ -190,7 +190,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
                 pC = " drarrow ";
             else
             {
-                rRet.append(OUStringLiteral1(nChar));
+                rRet.append(OUStringChar(nChar));
                 bRet=true;
             }
             break;
@@ -199,7 +199,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
                 pC = " %OMEGA ";
             else
             {
-                rRet.append(OUStringLiteral1(nChar));
+                rRet.append(OUStringChar(nChar));
                 bRet=true;
             }
             break;
@@ -313,10 +313,10 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
             break;
         case 0x2208: // in
         case 0x2209: // notin
-            rRet.append(" func ").append(OUStringLiteral1(nChar)).append(" ");
+            rRet.append(" func ").append(OUStringChar(nChar)).append(" ");
             break;
         case 0x220d: // owns
-            rRet.append(" func ").append(OUStringLiteral1(0x220b)).append(" ");
+            rRet.append(" func ").append(OUStringChar(0x220b)).append(" ");
             break;
         case 0x220f:
             pC = " prod ";
@@ -429,7 +429,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
         case 0x2289: // nsupseteq
         case 0x22b2: // NORMAL SUBGROUP OF
         case 0x22b3: // CONTAINS AS NORMAL SUBGROUP
-            rRet.append(" func ").append(OUStringLiteral1(nChar)).append(" ");
+            rRet.append(" func ").append(OUStringChar(nChar)).append(" ");
             break;
         case 0x22a5:
             pC = " ortho ";
@@ -500,7 +500,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
             pC = " %OMEGA ";
             break;
         default:
-            rRet.append(OUStringLiteral1(nChar));
+            rRet.append(OUStringChar(nChar));
             bRet=true;
             break;
     }

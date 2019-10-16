@@ -461,7 +461,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
 
                         // folders should get a final slash automatically
                         if ( bIsFolder )
-                            aInput += OUStringLiteral1(aDelimiter);
+                            aInput += OUStringChar(aDelimiter);
 
                         Insert( aInput, aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), true );
                     }
@@ -759,7 +759,7 @@ void MatchContext_Impl::ReadFolder( const OUString& rURL,
 
                         // folders should get a final slash automatically
                         if ( bIsFolder )
-                            aInput += OUStringLiteral1(aDelimiter);
+                            aInput += OUStringChar(aDelimiter);
 
                         Insert( aInput, aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), true );
                     }

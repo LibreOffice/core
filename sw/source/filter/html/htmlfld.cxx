@@ -588,7 +588,7 @@ void SwHTMLParser::InsertCommentText( const sal_Char *pTag )
     m_aContents += aToken;
     if( bEmpty && pTag )
     {
-        m_aContents = OUStringLiteral("HTML: <") + OUStringLiteral1(*pTag) + ">" + m_aContents;
+        m_aContents = OUStringLiteral("HTML: <") + OUStringChar(*pTag) + ">" + m_aContents;
     }
 }
 

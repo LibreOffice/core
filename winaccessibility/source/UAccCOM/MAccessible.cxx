@@ -729,7 +729,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT 
                         sal_Unicode key;
                         if(GetMnemonicChar(ouStr, &key))
                         {
-                            wString = "Alt+" + OUStringLiteral1(key);
+                            wString = "Alt+" + OUStringChar(key);
                         }
                         else
                             return S_FALSE;

@@ -282,7 +282,7 @@ void SAL_CALL ScVbaSheetObjectBase::setPrintObject( sal_Bool /*bPrintObject*/ )
 
 void ScVbaSheetObjectBase::setDefaultProperties( sal_Int32 nIndex )
 {
-    OUString aName = implGetBaseName() + OUStringLiteral1(' ') + OUString::number( nIndex + 1 );
+    OUString aName = implGetBaseName() + OUStringChar(' ') + OUString::number( nIndex + 1 );
     setName( aName );
     implSetDefaultProperties();
 }

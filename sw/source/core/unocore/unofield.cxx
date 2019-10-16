@@ -755,8 +755,8 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
                     if (m_pImpl->m_sParam1.isEmpty())
                     {
                         m_pImpl->m_sParam1
-                            = OUStringLiteral1(sfx2::cTokenSeparator)
-                            + OUStringLiteral1(sfx2::cTokenSeparator);
+                            = OUStringChar(sfx2::cTokenSeparator)
+                            + OUStringChar(sfx2::cTokenSeparator);
                     }
                     OUString sTmp;
                     rValue >>= sTmp;
@@ -2802,7 +2802,7 @@ bool SwXTextFieldMasters::getInstanceName(
         break;
 
     case SwFieldIds::Database:
-        sField = "DataBase." + rFieldType.GetName().replaceAll(OUStringLiteral1(DB_DELIM), ".");
+        sField = "DataBase." + rFieldType.GetName().replaceAll(OUStringChar(DB_DELIM), ".");
         break;
 
     case SwFieldIds::TableOfAuthorities:

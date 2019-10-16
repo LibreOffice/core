@@ -216,7 +216,7 @@ static bool implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
 
     // #109863# sal/osl returns final slash for file URLs contradicting
     // the URL/URI RFCs.
-    if ( !aNormalizedURL.endsWith(OUStringLiteral1(cURLSeparator)) )
+    if ( !aNormalizedURL.endsWith(OUStringChar(cURLSeparator)) )
         _sURL = aNormalizedURL;
     else
         _sURL = aNormalizedURL.copy( 0, aNormalizedURL.getLength()-1 );
@@ -318,9 +318,9 @@ static PathStatus getDerivedPath(
     // do we have a base path ?
     if (!_aBaseURL.isEmpty())
     {
-        OSL_PRECOND(!_aBaseURL.endsWith(OUStringLiteral1(cURLSeparator)), "Unexpected: base URL ends in slash");
+        OSL_PRECOND(!_aBaseURL.endsWith(OUStringChar(cURLSeparator)), "Unexpected: base URL ends in slash");
 
-        sDerivedURL = _aBaseURL + OUStringLiteral1(cURLSeparator) + _sRelativeURL;
+        sDerivedURL = _aBaseURL + OUStringChar(cURLSeparator) + _sRelativeURL;
 
         // a derived (nested) URL can only exist or have a lesser status, if the parent exists
         if (aStatus == Bootstrap::PATH_EXISTS)

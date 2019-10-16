@@ -181,10 +181,10 @@ void Test::test_Uri() {
 
     // Check surrogate handling:
 
-    aText1 = OUStringLiteral1(u'\xD800') + // %ED%A0%80
-             OUStringLiteral1(u'\xD800') + // %F0%90%8F%BF
-             OUStringLiteral1(u'\xDFFF') +
-             OUStringLiteral1(u'\xDFFF') + // %ED%BF%BF
+    aText1 = OUStringChar(u'\xD800') + // %ED%A0%80
+             OUStringChar(u'\xD800') + // %F0%90%8F%BF
+             OUStringChar(u'\xDFFF') +
+             OUStringChar(u'\xDFFF') + // %ED%BF%BF
              "A"; // A
     aText2 = "%ED%A0%80" "%F0%90%8F%BF" "%ED%BF%BF" "A";
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -208,8 +208,8 @@ void Test::test_Uri() {
 
     aText1 = "%ed%a0%80" "%f0%90%8f%bf" "%ed%bf%bf" "A";
     aText2 = "%ED%A0%80" +
-              OUStringLiteral1(u'\xD800') +
-              OUStringLiteral1(u'\xDFFF') +
+              OUStringChar(u'\xD800') +
+              OUStringChar(u'\xDFFF') +
               "%ED%BF%BF"
               "A";
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -248,7 +248,7 @@ void Test::test_Uri() {
 
     aText1 = "%30%C3%BF";
     aText2 = "%30" +
-             OUStringLiteral1(u'\x00FF');
+             OUStringChar(u'\x00FF');
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 18",
         aText2,

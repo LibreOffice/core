@@ -734,7 +734,7 @@ static OUString lcl_serializeForDisplay( const Reference< XAttr >& _rxAttrNode )
         if ( sValue.indexOf( nQuote ) >= 0 )
             nQuote = '\'';
 
-        sResult = _rxAttrNode->getName() + "=" + OUStringLiteral1(nQuote) + sValue + OUStringLiteral1(nQuote) + " ";
+        sResult = _rxAttrNode->getName() + "=" + OUStringChar(nQuote) + sValue + OUStringChar(nQuote) + " ";
     }
     return sResult;
 }

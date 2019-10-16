@@ -1400,10 +1400,10 @@ void Test::testUserDefinedNumberFormats()
     {  // tdf#79399 tdf#101462 Native Number Formats
         sCode = "[NatNum5][$-0404]General\\ ";
         // Chinese upper case number characters for 120
-        sExpected = OUStringLiteral1(22777) +
-                    OUStringLiteral1(20336) +
-                    OUStringLiteral1(36019) +
-                    OUStringLiteral1(25342) +
+        sExpected = OUStringChar(22777) +
+                    OUStringChar(20336) +
+                    OUStringChar(36019) +
+                    OUStringChar(25342) +
                     " ";
         checkPreviewString(aFormatter, sCode, 120, eLang, sExpected);
         sCode = "[DBNum2][$-0404]General\\ ";

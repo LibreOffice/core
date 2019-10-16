@@ -184,7 +184,7 @@ void SwChangeDBDlg::UpdateFields()
             std::unique_ptr<weld::TreeIter> xIter(m_xUsedDBTLB->make_iterator(&rEntry));
             m_xUsedDBTLB->iter_parent(*xIter);
             OUString sTmp(m_xUsedDBTLB->get_text(*xIter) +
-                          OUStringLiteral1(DB_DELIM) + m_xUsedDBTLB->get_text(rEntry) + OUStringLiteral1(DB_DELIM) +
+                          OUStringChar(DB_DELIM) + m_xUsedDBTLB->get_text(rEntry) + OUStringChar(DB_DELIM) +
                           m_xUsedDBTLB->get_id(rEntry));
             aDBNames.push_back(sTmp);
         }
@@ -197,9 +197,9 @@ void SwChangeDBDlg::UpdateFields()
     sal_Bool bIsTable = false;
     const OUString DBName(m_xAvailDBTLB->GetDBName(sTableName, sColumnName, &bIsTable));
     const OUString sTemp = DBName
-        + OUStringLiteral1(DB_DELIM)
+        + OUStringChar(DB_DELIM)
         + sTableName
-        + OUStringLiteral1(DB_DELIM)
+        + OUStringChar(DB_DELIM)
         + OUString::number(bIsTable
                             ? CommandType::TABLE
                             : CommandType::QUERY);

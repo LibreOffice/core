@@ -968,8 +968,8 @@ DECLARE_ODFIMPORT_TEST(testTdf123968, "tdf123968.odt")
     SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCursor->Start()->nNode.GetNode());
 
     // The field is now editable like any text, thus the field content "New value" shows up for the cursor.
-    CPPUNIT_ASSERT_EQUAL(OUString("inputfield: " + OUStringLiteral1(CH_TXT_ATR_INPUTFIELDSTART)
-                                  + "New value" + OUStringLiteral1(CH_TXT_ATR_INPUTFIELDEND)),
+    CPPUNIT_ASSERT_EQUAL(OUString("inputfield: " + OUStringChar(CH_TXT_ATR_INPUTFIELDSTART)
+                                  + "New value" + OUStringChar(CH_TXT_ATR_INPUTFIELDEND)),
                          rStart.GetText());
 }
 

@@ -339,7 +339,7 @@ void ScRangeStringConverter::AssignString(
         if( !rNewStr.isEmpty() )
         {
             if( !rString.isEmpty() )
-                rString += OUStringLiteral1(cSeparator);
+                rString += OUStringChar(cSeparator);
             rString += rNewStr;
         }
     }

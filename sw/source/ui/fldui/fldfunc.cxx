@@ -550,7 +550,7 @@ bool SwFieldFuncPage::FillItemSet(SfxItemSet* )
             for (sal_Int32 i = 0, nEntryCount = m_xListItemsLB->n_children(); i < nEntryCount; ++i)
             {
                 if(i)
-                    aVal += OUStringLiteral1(DB_DELIM);
+                    aVal += OUStringChar(DB_DELIM);
                 aVal += m_xListItemsLB->get_text(i);
             }
         }

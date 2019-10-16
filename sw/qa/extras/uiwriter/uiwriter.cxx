@@ -1217,9 +1217,9 @@ void SwUiWriterTest::testTdf98512()
     pWrtShell->SetMark();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     OUString const expected1(
-        OUStringLiteral1(CH_TXT_ATR_INPUTFIELDSTART) + "foo" + OUStringLiteral1(CH_TXT_ATR_INPUTFIELDEND));
+        OUStringChar(CH_TXT_ATR_INPUTFIELDSTART) + "foo" + OUStringChar(CH_TXT_ATR_INPUTFIELDEND));
     OUString const expected2(
-        OUStringLiteral1(CH_TXT_ATR_INPUTFIELDSTART) + "baz" + OUStringLiteral1(CH_TXT_ATR_INPUTFIELDEND)
+        OUStringChar(CH_TXT_ATR_INPUTFIELDSTART) + "baz" + OUStringChar(CH_TXT_ATR_INPUTFIELDEND)
         + expected1);
     CPPUNIT_ASSERT_EQUAL(expected2, pWrtShell->getShellCursor(false)->GetText());
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
@@ -2582,10 +2582,10 @@ void SwUiWriterTest::testTdf73660()
 {
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    OUString aData1 = "First" + OUStringLiteral1(CHAR_SOFTHYPHEN) + "Word";
-    OUString aData2 = "Seco" + OUStringLiteral1(CHAR_SOFTHYPHEN) + "nd";
-    OUString aData3 = OUStringLiteral1(CHAR_SOFTHYPHEN) + "Third";
-    OUString aData4 = "Fourth" + OUStringLiteral1(CHAR_SOFTHYPHEN);
+    OUString aData1 = "First" + OUStringChar(CHAR_SOFTHYPHEN) + "Word";
+    OUString aData2 = "Seco" + OUStringChar(CHAR_SOFTHYPHEN) + "nd";
+    OUString aData3 = OUStringChar(CHAR_SOFTHYPHEN) + "Third";
+    OUString aData4 = "Fourth" + OUStringChar(CHAR_SOFTHYPHEN);
     OUString aData5 = "Fifth";
     pWrtShell->Insert("We are inserting some text in the document to check the search feature ");
     pWrtShell->Insert(aData1 + " ");
@@ -3716,7 +3716,7 @@ void SwUiWriterTest::testUndoDelAsCharTdf107512()
     // now we have "\1foo\1" with the "foo" hidden
     CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
     CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(4, RES_TXTATR_FLYCNT));
-    CPPUNIT_ASSERT_EQUAL(OUString(OUStringLiteral1(CH_TXTATR_BREAKWORD) + u"foo" + OUStringLiteral1(CH_TXTATR_BREAKWORD)), pShell->GetCursor()->GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_BREAKWORD) + u"foo" + OUStringChar(CH_TXTATR_BREAKWORD)), pShell->GetCursor()->GetNode().GetTextNode()->GetText());
     SfxPoolItem const* pItem;
     SfxItemSet query(pDoc->GetAttrPool(), svl::Items<RES_CHRATR_HIDDEN, RES_CHRATR_HIDDEN>{});
     pShell->GetCursor()->GetNode().GetTextNode()->GetParaAttr(query, 1, 4);
@@ -3738,7 +3738,7 @@ void SwUiWriterTest::testUndoDelAsCharTdf107512()
     CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(4, RES_TXTATR_FLYCNT));
     CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pShell->GetCursor()->GetNode().GetTextNode()->Len());
-    CPPUNIT_ASSERT_EQUAL(OUString(OUStringLiteral1(CH_TXTATR_BREAKWORD) + u"foo" + OUStringLiteral1(CH_TXTATR_BREAKWORD)), pShell->GetCursor()->GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_BREAKWORD) + u"foo" + OUStringChar(CH_TXTATR_BREAKWORD)), pShell->GetCursor()->GetNode().GetTextNode()->GetText());
     pShell->GetCursor()->GetNode().GetTextNode()->GetParaAttr(query, 0, 1);
     CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
     query.ClearItem(RES_CHRATR_HIDDEN);
@@ -3758,7 +3758,7 @@ void SwUiWriterTest::testUndoDelAsCharTdf107512()
     CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(4, RES_TXTATR_FLYCNT));
     CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pShell->GetCursor()->GetNode().GetTextNode()->Len());
-    CPPUNIT_ASSERT_EQUAL(OUString(OUStringLiteral1(CH_TXTATR_BREAKWORD) + u"foo" + OUStringLiteral1(CH_TXTATR_BREAKWORD)), pShell->GetCursor()->GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_BREAKWORD) + u"foo" + OUStringChar(CH_TXTATR_BREAKWORD)), pShell->GetCursor()->GetNode().GetTextNode()->GetText());
     pShell->GetCursor()->GetNode().GetTextNode()->GetParaAttr(query, 0, 1);
     CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
     query.ClearItem(RES_CHRATR_HIDDEN);
@@ -3781,7 +3781,7 @@ void SwUiWriterTest::testUndoDelAsCharTdf107512()
     CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(4, RES_TXTATR_FLYCNT));
     CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pShell->GetCursor()->GetNode().GetTextNode()->Len());
-    CPPUNIT_ASSERT_EQUAL(OUString(OUStringLiteral1(CH_TXTATR_BREAKWORD) + u"foo" + OUStringLiteral1(CH_TXTATR_BREAKWORD)), pShell->GetCursor()->GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_BREAKWORD) + u"foo" + OUStringChar(CH_TXTATR_BREAKWORD)), pShell->GetCursor()->GetNode().GetTextNode()->GetText());
     pShell->GetCursor()->GetNode().GetTextNode()->GetParaAttr(query, 4, 5);
     CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
     query.ClearItem(RES_CHRATR_HIDDEN);
@@ -3801,7 +3801,7 @@ void SwUiWriterTest::testUndoDelAsCharTdf107512()
     CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(4, RES_TXTATR_FLYCNT));
     CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pShell->GetCursor()->GetNode().GetTextNode()->Len());
-    CPPUNIT_ASSERT_EQUAL(OUString(OUStringLiteral1(CH_TXTATR_BREAKWORD) + u"foo" + OUStringLiteral1(CH_TXTATR_BREAKWORD)), pShell->GetCursor()->GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_BREAKWORD) + u"foo" + OUStringChar(CH_TXTATR_BREAKWORD)), pShell->GetCursor()->GetNode().GetTextNode()->GetText());
     pShell->GetCursor()->GetNode().GetTextNode()->GetParaAttr(query, 4, 5);
     CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
     query.ClearItem(RES_CHRATR_HIDDEN);
@@ -4570,7 +4570,7 @@ void SwUiWriterTest::testTdf96479()
 {
     // We want to verify the empty input text field in the bookmark
     static const OUString emptyInputTextField =
-        OUStringLiteral1(CH_TXT_ATR_INPUTFIELDSTART) + OUStringLiteral1(CH_TXT_ATR_INPUTFIELDEND);
+        OUStringChar(CH_TXT_ATR_INPUTFIELDSTART) + OUStringChar(CH_TXT_ATR_INPUTFIELDEND);
 
     SwDoc* pDoc = createDoc();
     SwXTextDocument *pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -6945,7 +6945,7 @@ void SwUiWriterTest::testTdf108423()
     pWrtShell->AutoCorrect(corr, cChar);
     // The word "i" should be capitalized due to autocorrect, followed by a typographical apostrophe
     sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    OUString sIApostrophe(u"I" + OUStringLiteral1(0x2019));
+    OUString sIApostrophe(u"I" + OUStringChar(0x2019));
     CPPUNIT_ASSERT_EQUAL(sIApostrophe, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     pWrtShell->Insert(" i");
     pWrtShell->AutoCorrect(corr, cChar);

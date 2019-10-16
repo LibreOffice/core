@@ -395,7 +395,7 @@ OUString firebird::escapeWith( const OUString& sText, const char aKey, const cha
     while( (aIndex = sRet.indexOf(aKey, aIndex)) > 0 &&
             aIndex < sRet.getLength())
     {
-            sRet = sRet.replaceAt(aIndex, 1, OUStringLiteral1(aEscapeChar) + OUStringLiteral1(aKey)  );
+            sRet = sRet.replaceAt(aIndex, 1, OUStringChar(aEscapeChar) + OUStringChar(aKey)  );
             aIndex+= 2;
     }
 

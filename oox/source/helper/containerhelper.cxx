@@ -86,7 +86,7 @@ OUString ContainerHelper::getUnusedName(
     OUString aNewName = rSuggestedName;
     sal_Int32 nIndex = -1;
     while( rxNameAccess->hasByName( aNewName ) )
-        aNewName = rSuggestedName + OUStringLiteral1(cSeparator) + OUString::number( nIndex++ );
+        aNewName = rSuggestedName + OUStringChar(cSeparator) + OUString::number( nIndex++ );
     return aNewName;
 }
 

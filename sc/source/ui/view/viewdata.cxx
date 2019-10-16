@@ -2835,7 +2835,7 @@ void ScViewData::WriteUserData(OUString& rData)
                  ( maTabData[i]->eVSplitMode == SC_SPLIT_FIX &&
                     maTabData[i]->nFixPosY > MAXROW_30 ) )
             {
-                cTabSep = OUStringLiteral1(SC_NEW_TABSEP); // in order to not kill a 3.1-version
+                cTabSep = OUStringChar(SC_NEW_TABSEP); // in order to not kill a 3.1-version
             }
 
             rData += OUString::number( maTabData[i]->nCurX ) + cTabSep +

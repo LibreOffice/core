@@ -288,7 +288,7 @@ IMPL_LINK(SwGlossaryDlg, GrpSelect, weld::TreeView&, rBox, void)
         pParent = xEntry.get();
     GroupUserData* pGroupData = reinterpret_cast<GroupUserData*>(rBox.get_id(*pParent).toInt64());
     ::SetCurrGlosGroup(pGroupData->sGroupName
-        + OUStringLiteral1(GLOS_DELIM)
+        + OUStringChar(GLOS_DELIM)
         + OUString::number(pGroupData->nPathIdx));
     m_pGlossaryHdl->SetCurGroup(::GetCurrGlosGroup());
     // set current text block
@@ -668,7 +668,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl, weld::Button&, void)
                     {
                         GroupUserData* pGroupData = reinterpret_cast<GroupUserData*>(m_xCategoryBox->get_id(*xEntry).toInt64());
                         const OUString sGroup = pGroupData->sGroupName
-                            + OUStringLiteral1(GLOS_DELIM)
+                            + OUStringChar(GLOS_DELIM)
                             + OUString::number(pGroupData->nPathIdx);
                         if(sGroup == sNewGroup)
                         {
@@ -863,7 +863,7 @@ OUString SwGlossaryDlg::GetCurrGrpName() const
         if (m_xCategoryBox->get_iter_depth(*xEntry))
             m_xCategoryBox->iter_parent(*xEntry);
         GroupUserData* pGroupData = reinterpret_cast<GroupUserData*>(m_xCategoryBox->get_id(*xEntry).toInt64());
-        return pGroupData->sGroupName + OUStringLiteral1(GLOS_DELIM) + OUString::number(pGroupData->nPathIdx);
+        return pGroupData->sGroupName + OUStringChar(GLOS_DELIM) + OUString::number(pGroupData->nPathIdx);
     }
     return OUString();
 }

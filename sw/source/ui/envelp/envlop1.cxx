@@ -220,7 +220,7 @@ void SwEnvPage::Init(SwEnvDlg* pDialog)
     m_xSenderBox->connect_clicked(LINK(this, SwEnvPage, SenderHdl));
 
     SwDBData aData = m_pSh->GetDBData();
-    m_sActDBName = aData.sDataSource + OUStringLiteral1(DB_DELIM) + aData.sCommand;
+    m_sActDBName = aData.sDataSource + OUStringChar(DB_DELIM) + aData.sCommand;
     InitDatabaseBox();
 }
 
@@ -236,7 +236,7 @@ IMPL_LINK( SwEnvPage, DatabaseHdl, weld::ComboBox&, rListBox, void )
     {
         m_sActDBName = rListBox.get_active_text();
         m_pSh->GetDBManager()->GetTableNames(*m_xTableLB, m_sActDBName);
-        m_sActDBName += OUStringLiteral1(DB_DELIM);
+        m_sActDBName += OUStringChar(DB_DELIM);
     }
     else
     {

@@ -155,7 +155,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, SelectHdl_Impl, weld::TreeView&, void)
     OUString sLocation = m_xJavaList->get_selected_id();
     OUString sInfo = m_sInstallText;
     // tdf#80646 insert LTR mark after label
-    sInfo += OUStringLiteral1(0x200E);
+    sInfo += OUStringChar(0x200E);
     sInfo += sLocation;
     m_xJavaPathText->set_label(sInfo);
 }

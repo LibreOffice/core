@@ -263,9 +263,9 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(weld::Window* pParent, const SfxItemSet
                 {
                     OUString sBrackets;
                     if(pFType->GetPrefix())
-                        sBrackets += OUStringLiteral1(pFType->GetPrefix());
+                        sBrackets += OUStringChar(pFType->GetPrefix());
                     if(pFType->GetSuffix())
-                        sBrackets += OUStringLiteral1(pFType->GetSuffix());
+                        sBrackets += OUStringChar(pFType->GetSuffix());
                     m_vTypeData[nArrayIndex].m_pDescription->SetAuthBrackets(sBrackets);
                     m_vTypeData[nArrayIndex].m_pDescription->SetAuthSequence(pFType->IsSequence());
                 }
@@ -377,8 +377,8 @@ SwTOXDescription& SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
                                             m_rWrtShell.GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
             if(pFType)
             {
-                m_vTypeData[nIndex].m_pDescription->SetAuthBrackets(OUStringLiteral1(pFType->GetPrefix()) +
-                                                  OUStringLiteral1(pFType->GetSuffix()));
+                m_vTypeData[nIndex].m_pDescription->SetAuthBrackets(OUStringChar(pFType->GetPrefix()) +
+                                                  OUStringChar(pFType->GetSuffix()));
                 m_vTypeData[nIndex].m_pDescription->SetAuthSequence(pFType->IsSequence());
             }
             else
@@ -654,7 +654,7 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl, weld::Button&, void)
         {
             int nLevel = nToggleColumn - 1;
             if(!pStyleArr[nLevel].isEmpty())
-                pStyleArr[nLevel] += OUStringLiteral1(TOX_STYLE_DELIMITER);
+                pStyleArr[nLevel] += OUStringChar(TOX_STYLE_DELIMITER);
             pStyleArr[nLevel] += m_xHeaderTree->get_text(i, 0);
         }
     }
@@ -3397,9 +3397,9 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
     OUString aStr( SwResId( STR_TITLE ));
     if( !m_pCurrentForm->GetTemplate( 0 ).isEmpty() )
     {
-        aStr += " " + OUStringLiteral1(aDeliStart)
+        aStr += " " + OUStringChar(aDeliStart)
               + m_pCurrentForm->GetTemplate( 0 )
-              + OUStringLiteral1(aDeliEnd);
+              + OUStringChar(aDeliEnd);
     }
     m_xLevelLB->append_text(aStr);
 
@@ -3417,9 +3417,9 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
         }
         if( !m_pCurrentForm->GetTemplate( i ).isEmpty() )
         {
-            aStr += " " + OUStringLiteral1(aDeliStart)
+            aStr += " " + OUStringChar(aDeliStart)
                   + m_pCurrentForm->GetTemplate( i )
-                  + OUStringLiteral1(aDeliEnd);
+                  + OUStringChar(aDeliEnd);
         }
         m_xLevelLB->append_text(aStr);
     }
@@ -3483,9 +3483,9 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl, weld::Button&, void)
     if (nLevPos != -1 && nTemplPos != -1)
     {
         const OUString aStr(m_xLevelLB->get_text(nLevPos).getToken(0, aDeliStart)
-            + OUStringLiteral1(aDeliStart)
+            + OUStringChar(aDeliStart)
             + m_xParaLayLB->get_selected_text()
-            + OUStringLiteral1(aDeliEnd));
+            + OUStringChar(aDeliEnd));
 
         m_pCurrentForm->SetTemplate(nLevPos, m_xParaLayLB->get_selected_text());
 

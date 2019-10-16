@@ -323,7 +323,7 @@ void SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
                 rVal >>= sToken;
             }
             sNewCmd.append((i < 2)
-                ? sToken + OUStringLiteral1(sfx2::cTokenSeparator) : sToken);
+                ? sToken + OUStringChar(sfx2::cTokenSeparator) : sToken);
         }
         SetCmd( sNewCmd.makeStringAndClear() );
     }

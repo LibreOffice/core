@@ -87,7 +87,7 @@ void XSheetAuditing::testShowErrors()
     uno::Reference<sheet::XSpreadsheet> xSheet(xAuditing, UNO_QUERY_THROW);
     uno::Reference<table::XCell> xCell = xSheet->getCellByPosition(7, 6);
     xCell->setValue(-9);
-    xCell->setFormula("=SQRT(" + OUStringLiteral1(static_cast<char>('A' + 7)) + OUString::number(7)
+    xCell->setFormula("=SQRT(" + OUStringChar(static_cast<char>('A' + 7)) + OUString::number(7)
                       + ")");
 
     uno::Reference<text::XText> xText(xCell, UNO_QUERY_THROW);

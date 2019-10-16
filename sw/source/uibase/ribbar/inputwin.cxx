@@ -384,8 +384,8 @@ IMPL_LINK( SwInputWindow, SelTableCellsNotify, SwWrtShell&, rCaller, void )
 
         aEdit->UpdateRange( sBoxNms, sTableNm );
 
-        OUString sNew = OUStringLiteral1(CH_LRE) + aEdit->GetText()
-            + OUStringLiteral1(CH_PDF);
+        OUString sNew = OUStringChar(CH_LRE) + aEdit->GetText()
+            + OUStringChar(CH_PDF);
 
         if( sNew != sOldFormula )
         {
@@ -432,8 +432,8 @@ IMPL_LINK_NOARG(SwInputWindow, ModifyHdl, Edit&, void)
     {
         pWrtShell->StartAllAction();
         DelBoxContent();
-        OUString sNew = OUStringLiteral1(CH_LRE) + aEdit->GetText()
-            + OUStringLiteral1(CH_PDF);
+        OUString sNew = OUStringChar(CH_LRE) + aEdit->GetText()
+            + OUStringChar(CH_PDF);
         pWrtShell->SwEditShell::Insert2( sNew );
         pWrtShell->EndAllAction();
         sOldFormula = sNew;
@@ -494,7 +494,7 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
     const sal_uInt16 nLen = aActText.getLength();
     if( !nLen )
     {
-        OUString aStr = OUStringLiteral1(cOpen) + aBoxes + OUStringLiteral1(cClose);
+        OUString aStr = OUStringChar(cOpen) + aBoxes + OUStringChar(cClose);
         SetText(aStr);
         sal_Int32 nPos = aStr.indexOf( cClose );
         OSL_ENSURE(nPos != -1, "delimiter not found");
@@ -543,7 +543,7 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
         }
         else
         {
-            OUString aTmp = OUStringLiteral1(cOpen) + aBoxes + OUStringLiteral1(cClose);
+            OUString aTmp = OUStringChar(cOpen) + aBoxes + OUStringChar(cClose);
             nPos = static_cast<sal_uInt16>(aSelection.Min());
             aActText = aActText.replaceAt( nPos, 0, aTmp );
             nPos = nPos + aTmp.getLength();

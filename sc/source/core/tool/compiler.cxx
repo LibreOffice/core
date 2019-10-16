@@ -530,7 +530,7 @@ static bool lcl_parseExternalName(
                         {
                             // two consecutive quotes equal a single quote in
                             // the file name.
-                            aTmpFile += OUStringLiteral1(c);
+                            aTmpFile += OUStringChar(c);
                             cPrev = 'a';
                         }
                         else
@@ -551,7 +551,7 @@ static bool lcl_parseExternalName(
                         aTmpName.append(c); // Keep the separator as part of the name.
                         break;
                     }
-                    aTmpFile += OUStringLiteral1(c);
+                    aTmpFile += OUStringChar(c);
                     cPrev = c;
                 }
 
@@ -615,7 +615,7 @@ static bool lcl_parseExternalName(
                     return false;
                 }
                 while (false);
-                aTmpFile += OUStringLiteral1(c);
+                aTmpFile += OUStringChar(c);
             }
         }
     }
@@ -662,7 +662,7 @@ static OUString lcl_makeExternalNameStr(const OUString& rFile, const OUString& r
     OUStringBuffer aBuf(aFile.getLength() + aName.getLength() + 9);
     if (bODF)
         aBuf.append( '[');
-    aBuf.append( "'" ).append( aFile ).append( "'" ).append( OUStringLiteral1(cSep) );
+    aBuf.append( "'" ).append( aFile ).append( "'" ).append( OUStringChar(cSep) );
     if (bODF)
         aBuf.append( "$$'" );
     aBuf.append( aName);
@@ -3964,7 +3964,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
         }
         else if ( c1 != cQuote && c2 == cQuote )
         {   // ..."
-            aCorrectedSymbol = OUStringLiteral1(cQuote) + aCorrectedSymbol;
+            aCorrectedSymbol = OUStringChar(cQuote) + aCorrectedSymbol;
             bCorrected = true;
         }
         else if ( nPos == 0 && (c1 == cx || c1 == cX) )
@@ -3978,13 +3978,13 @@ void ScCompiler::AutoCorrectParsedSymbol()
             if ( aCorrectedSymbol.indexOf(cx) >= 0 ) // At least two tokens separated by cx
             {   // x => *
                 sal_Unicode c = mxSymbols->getSymbolChar(ocMul);
-                aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringLiteral1(cx), OUStringLiteral1(c));
+                aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringChar(cx), OUStringChar(c));
                 bCorrected = true;
             }
             if ( aCorrectedSymbol.indexOf(cX) >= 0 ) // At least two tokens separated by cX
             {   // X => *
                 sal_Unicode c = mxSymbols->getSymbolChar(ocMul);
-                aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringLiteral1(cX), OUStringLiteral1(c));
+                aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringChar(cX), OUStringChar(c));
                 bCorrected = true;
             }
         }

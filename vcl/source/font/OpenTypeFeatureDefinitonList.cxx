@@ -145,7 +145,7 @@ OUString getNumericLowerPart(sal_uInt32 nFeatureCode)
     if (rtl::isAsciiDigit(static_cast<unsigned char>(cChar1))
         && rtl::isAsciiDigit(static_cast<unsigned char>(cChar2)))
     {
-        return OUStringLiteral1(cChar1) + OUStringLiteral1(cChar2);
+        return OUStringChar(cChar1) + OUStringChar(cChar2);
     }
     return OUString();
 }

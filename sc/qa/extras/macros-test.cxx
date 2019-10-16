@@ -278,7 +278,7 @@ void ScMacrosTest::testVba()
     OUString sTempDirURL;
     osl::FileBase:: getTempDirURL( sTempDirURL );
     osl::FileBase::getSystemPathFromFileURL( sTempDirURL, sTempDir );
-    sTempDir += OUStringLiteral1(SAL_PATHDELIMITER);
+    sTempDir += OUStringChar(SAL_PATHDELIMITER);
     OUString sTestFileName("My Test WorkBook.xls");
     Sequence< uno::Any > aParams;
     for ( size_t  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )

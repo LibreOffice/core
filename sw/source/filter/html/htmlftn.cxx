@@ -51,20 +51,20 @@ static sal_Int32 lcl_html_getNextPart( OUString& rPart, const OUString& rContent
             {
             case '\\':
                 if( bQuoted )
-                    rPart += OUStringLiteral1( c );
+                    rPart += OUStringChar( c );
                 bQuoted = !bQuoted;
                 break;
 
             case ';':
                 if( bQuoted )
-                    rPart += OUStringLiteral1( c );
+                    rPart += OUStringChar( c );
                 else
                     bDone = true;
                 bQuoted = false;
                 break;
 
             default:
-                rPart += OUStringLiteral1( c );
+                rPart += OUStringChar( c );
                 bQuoted = false;
                 break;
             }

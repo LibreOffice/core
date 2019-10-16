@@ -1788,7 +1788,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
             case KEY_7:
             case KEY_8:
             case KEY_9:
-                maCharBuffer += OUStringLiteral1( rKEvt.GetCharCode() );
+                maCharBuffer += OUStringChar( rKEvt.GetCharCode() );
                 break;
 
             case KEY_PAGEUP:
