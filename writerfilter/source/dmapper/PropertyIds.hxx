@@ -349,7 +349,6 @@ enum PropertyIds
         ,PROP_RUBY_TEXT
         ,PROP_RUBY_ADJUST
         ,PROP_RUBY_POSITION
-        ,PROP_LAYOUT_IN_CELL
         ,PROP_DATABASE_NAME
         ,PROP_COMMAND_TYPE
         ,PROP_DATATABLE_NAME
