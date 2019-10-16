@@ -312,11 +312,8 @@ void CUPSManager::initialize()
         OUString aPrinterName = OStringToOUString( pDest->name, aEncoding );
         if( pDest->instance && *pDest->instance )
         {
-            OUStringBuffer aBuf( 256 );
-            aBuf.append( aPrinterName );
-            aBuf.append( '/' );
-            aBuf.append( OStringToOUString( pDest->instance, aEncoding ) );
-            aPrinterName = aBuf.makeStringAndClear();
+            aPrinterName += "/" +
+                OStringToOUString( pDest->instance, aEncoding );
         }
 
         // initialize printer with possible configuration from psprint.conf
@@ -338,9 +335,6 @@ void CUPSManager::initialize()
                 aPrinter.m_aInfo.m_aAuthInfoRequired=OStringToOUString(pDest->options[k].value, aEncoding);
         }
 
-        OUStringBuffer aBuf( 256 );
-        aBuf.append( "CUPS:" );
-        aBuf.append( aPrinterName );
         // note: the parser that goes with the PrinterInfo
         // is created implicitly by the JobData::operator=()
         // when it detects the NULL ptr m_pParser.
@@ -357,7 +351,7 @@ void CUPSManager::initialize()
             aPrinter.m_aInfo.m_aContext = c_it->second;
         }
         aPrinter.m_aInfo.setDefaultBackend(bUsePDF);
-        aPrinter.m_aInfo.m_aDriverName = aBuf.makeStringAndClear();
+        aPrinter.m_aInfo.m_aDriverName = "CUPS:" + aPrinterName;
 
         m_aPrinters[ aPrinter.m_aInfo.m_aPrinterName ] = aPrinter;
         m_aCUPSDestMap[ aPrinter.m_aInfo.m_aPrinterName ] = nPrinter;

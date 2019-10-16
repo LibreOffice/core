@@ -180,11 +180,10 @@ void MyWin::parseList( const OString& rList )
             aElementType = OStringToOUString( aLine.copy( 13 ), RTL_TEXTENCODING_ASCII_US );
         else
         {
-            OUStringBuffer aNewElement( 64 );
-            aNewElement.append( aElementType );
-            aNewElement.append( ": " );
-            aNewElement.append( OStringToOUString( aLine, RTL_TEXTENCODING_ASCII_US ) );
-            m_aSvpBitmaps->InsertEntry( aNewElement.makeStringAndClear() );
+            OUString aNewElement =
+                aElementType + ": " +
+                OStringToOUString( aLine, RTL_TEXTENCODING_ASCII_US );
+            m_aSvpBitmaps->InsertEntry( aNewElement );
         }
     }
 }

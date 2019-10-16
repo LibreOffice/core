@@ -260,9 +260,9 @@ void CustomNotebookbarGenerator::createCustomizedUIFile()
 
 Sequence<OUString> CustomNotebookbarGenerator::getCustomizedUIItem(OUString sNotebookbarConfigType)
 {
-    OUStringBuffer aPath = getAppNameRegistryPath();
-    const utl::OConfigurationTreeRoot aAppNode(::comphelper::getProcessComponentContext(),
-                                               aPath.makeStringAndClear(), false);
+    OUString aPath = getAppNameRegistryPath();
+    const utl::OConfigurationTreeRoot aAppNode(::comphelper::getProcessComponentContext(), aPath,
+                                               false);
 
     const utl::OConfigurationNode aModesNode = aAppNode.openNode("Modes");
     const utl::OConfigurationNode aModeNode(aModesNode.openNode(sNotebookbarConfigType));
@@ -275,9 +275,9 @@ Sequence<OUString> CustomNotebookbarGenerator::getCustomizedUIItem(OUString sNot
 void CustomNotebookbarGenerator::setCustomizedUIItem(Sequence<OUString> sUIItemProperties,
                                                      OUString sNotebookbarConfigType)
 {
-    OUStringBuffer aPath = getAppNameRegistryPath();
-    const utl::OConfigurationTreeRoot aAppNode(::comphelper::getProcessComponentContext(),
-                                               aPath.makeStringAndClear(), true);
+    OUString aPath = getAppNameRegistryPath();
+    const utl::OConfigurationTreeRoot aAppNode(::comphelper::getProcessComponentContext(), aPath,
+                                               true);
     const utl::OConfigurationNode aModesNode = aAppNode.openNode("Modes");
     const utl::OConfigurationNode aModeNode(aModesNode.openNode(sNotebookbarConfigType));
 

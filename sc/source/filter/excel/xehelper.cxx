@@ -975,9 +975,7 @@ OUString XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, const OUString& rA
 
 OUString XclExpUrlHelper::EncodeDde( const OUString& rApplic, const OUString& rTopic )
 {
-    OUStringBuffer aBuf;
-    aBuf.append(rApplic).append(EXC_DDE_DELIM).append(rTopic);
-    return aBuf.makeStringAndClear();
+    return rApplic + OUStringLiteral1(EXC_DDE_DELIM) + rTopic;
 }
 
 // Cached Value Lists =========================================================

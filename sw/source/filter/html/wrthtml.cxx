@@ -410,12 +410,11 @@ ErrCode SwHTMLWriter::WriteStream()
                     pSNd->GetSection().GetSectionName(), m_eDestEnc,
                     &m_aNonConvertableCharacters );
 
-                OStringBuffer sOut;
-                sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_division)
-                    .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_id)
-                    .append("=\"").append(aName).append('\"').append('>')
-                    .append(aStartTags);
-                aStartTags = sOut.makeStringAndClear();
+                aStartTags =
+                    "<" OOO_STRING_SVTOOLS_HTML_division
+                    " " OOO_STRING_SVTOOLS_HTML_O_id
+                    "=\"" + aName + "\">" +
+                    aStartTags;
             }
             // FindSectionNode() on a SectionNode return the same!
             pSNd = pSNd->StartOfSectionNode()->FindSectionNode();
@@ -1261,9 +1260,9 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
     /// only checking, if transparency is not set.
     if( rBackColor != COL_TRANSPARENT )
     {
-        OStringBuffer sOut;
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_bgcolor).append('=');
-        Strm().WriteOString( sOut.makeStringAndClear() );
+        OString sOut =
+            " " OOO_STRING_SVTOOLS_HTML_O_bgcolor "=";
+        Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_Color( Strm(), rBackColor);
     }
 
@@ -1375,10 +1374,10 @@ void SwHTMLWriter::OutDirection( SvxFrameDirection nDir )
     OString sConverted = convertDirection(nDir);
     if (!sConverted.isEmpty())
     {
-        OStringBuffer sOut;
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_dir)
-            .append("=\"").append(sConverted).append('\"');
-        Strm().WriteOString( sOut.makeStringAndClear() );
+        OString sOut =
+            " " OOO_STRING_SVTOOLS_HTML_O_dir
+            "=\"" + sConverted + "\"";
+        Strm().WriteOString( sOut );
     }
 }
 

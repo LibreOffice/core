@@ -60,10 +60,7 @@ SaxEmitter::SaxEmitter( const uno::Reference< xml::sax::XDocumentHandler >& xDoc
         OUString aStr( OStringToOUString( pDir, RTL_TEXTENCODING_UTF8 ) );
         OUString aFileURL;
         osl_getFileURLFromSystemPath( aStr.pData, &aFileURL.pData );
-        OUStringBuffer aBuf( 256 );
-        aBuf.append( aFileURL );
-        aBuf.append( "/pdfimport.xml" );
-        pStream = new osl::File( aBuf.makeStringAndClear() );
+        pStream = new osl::File( aFileURL + "/pdfimport.xml" );
         if( pStream->open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create ) )
         {
             pStream->open( osl_File_OpenFlag_Write );
@@ -168,10 +165,7 @@ void SaxEmitter::endTag( const char* pTag )
     for( int i = 0; i < nIndent; i++ )
         pStream->write( "    ", 4, nWritten );
 
-    OStringBuffer aBuf( 1024 );
-    aBuf.append( "</" );
-    aBuf.append( pTag );
-    aBuf.append( ">\n" );
+    OString aBuf = "</" + rtl::OStringView(pTag) + ">\n";
     pStream->write( aBuf.getStr(), aBuf.getLength(), nWritten );
     nIndent--;
 #endif

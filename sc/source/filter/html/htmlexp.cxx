@@ -1064,10 +1064,9 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     if (pNote)
     {
         //create the comment indicator
-        OStringBuffer aStr(OOO_STRING_SVTOOLS_HTML_anchor);
-        aStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_class)
-           .append("=\"").append("comment-indicator").append("\"");
-        TAG_ON(aStr.makeStringAndClear().getStr());
+        OString aStr = OOO_STRING_SVTOOLS_HTML_anchor " "
+            OOO_STRING_SVTOOLS_HTML_O_class "=\"comment-indicator\"";
+        TAG_ON(aStr.getStr());
         TAG_OFF(OOO_STRING_SVTOOLS_HTML_anchor);
         OUT_LF();
 

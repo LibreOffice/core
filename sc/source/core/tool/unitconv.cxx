@@ -37,10 +37,7 @@ ScUnitConverterData::ScUnitConverterData(
 OUString ScUnitConverterData::BuildIndexString(
     const OUString& rFromUnit, const OUString& rToUnit )
 {
-    OUStringBuffer aBuf(rFromUnit);
-    aBuf.append(cDelim);
-    aBuf.append(rToUnit);
-    return aBuf.makeStringAndClear();
+    return rFromUnit + OUStringLiteral1(cDelim) + rToUnit;
 }
 
 // ScUnitConverter

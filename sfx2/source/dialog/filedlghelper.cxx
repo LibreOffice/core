@@ -1780,19 +1780,19 @@ void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
     m_nDontFlags |= nDont;
 
     // create the list of filters
-    OUStringBuffer sQuery(256);
-    sQuery.append("getSortedFilterList()");
-    sQuery.append(":module=");
-    sQuery.append(rFactory); // use long name here !
-    sQuery.append(":iflags=");
-    sQuery.append(OUString::number(static_cast<sal_Int32>(m_nMustFlags)));
-    sQuery.append(":eflags=");
-    sQuery.append(OUString::number(static_cast<sal_Int32>(m_nDontFlags)));
+    OUString sQuery =
+        "getSortedFilterList()"
+        ":module=" +
+        rFactory + // use long name here !
+        ":iflags=" +
+        OUString::number(static_cast<sal_Int32>(m_nMustFlags)) +
+        ":eflags=" +
+        OUString::number(static_cast<sal_Int32>(m_nDontFlags));
 
     uno::Reference< XEnumeration > xResult;
     try
     {
-        xResult = xFilterCont->createSubSetEnumerationByQuery(sQuery.makeStringAndClear());
+        xResult = xFilterCont->createSubSetEnumerationByQuery(sQuery);
     }
     catch( const uno::Exception& )
     {

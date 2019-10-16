@@ -29,6 +29,23 @@ void f2()
     OUStringBuffer v;
     v.append("xxx").append("aaaa");
 }
+void f3(OString class_name)
+{
+    // expected-error@+1 {{convert this append sequence into a *String + sequence [loplugin:bufferadd]}}
+    OStringBuffer sig_buf(5 + class_name.getLength());
+    sig_buf.append("(I)L");
+    //sig_buf.append( class_name.replace( '.', '/' ) );
+    sig_buf.append(';');
+    OString sig(sig_buf.makeStringAndClear());
+    (void)sig;
+}
+void f4(sal_Unicode const* pPathBegin)
+{
+    // expected-error@+1 {{convert this append sequence into a *String + sequence [loplugin:bufferadd]}}
+    OUStringBuffer v;
+    v.append(pPathBegin, 12);
+    v.append("aaaa");
+}
 }
 
 namespace test2

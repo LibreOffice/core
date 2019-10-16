@@ -581,27 +581,26 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale)
                 return xBI = listItem.xBI;
         }
 
-        sal_Unicode under = '_';
+        OUStringLiteral under("_");
 
         sal_Int32 l = rLocale.Language.getLength();
         sal_Int32 c = rLocale.Country.getLength();
         sal_Int32 v = rLocale.Variant.getLength();
-        OUStringBuffer aBuf(l+c+v+3);
 
         if ((l > 0 && c > 0 && v > 0 &&
                     // load service with name <base>_<lang>_<country>_<variant>
-                    createLocaleSpecificBreakIterator(aBuf.append(rLocale.Language).append(under).append(
-                            rLocale.Country).append(under).append(rLocale.Variant).makeStringAndClear())) ||
+                    createLocaleSpecificBreakIterator(rLocale.Language + under +
+                            rLocale.Country + under + rLocale.Variant)) ||
                 (l > 0 && c > 0 &&
                  // load service with name <base>_<lang>_<country>
-                 createLocaleSpecificBreakIterator(aBuf.append(rLocale.Language).append(under).append(
-                         rLocale.Country).makeStringAndClear())) ||
+                 createLocaleSpecificBreakIterator(rLocale.Language + under +
+                         rLocale.Country)) ||
                 (l > 0 && c > 0 && rLocale.Language == "zh" &&
                  (rLocale.Country == "HK" ||
                   rLocale.Country == "MO" ) &&
                  // if the country code is HK or MO, one more step to try TW.
-                 createLocaleSpecificBreakIterator(aBuf.append(rLocale.Language).append(under).append(
-                         "TW").makeStringAndClear())) ||
+                 createLocaleSpecificBreakIterator(rLocale.Language + under +
+                         "TW")) ||
                 (l > 0 &&
                  // load service with name <base>_<lang>
                  createLocaleSpecificBreakIterator(rLocale.Language)) ||

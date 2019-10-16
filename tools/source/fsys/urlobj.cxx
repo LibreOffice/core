@@ -4193,12 +4193,11 @@ bool INetURLObject::removeExtension(sal_Int32 nIndex, bool bIgnoreFinalSlash)
     if (!pExtension)
         return true;
 
-    OUStringBuffer aNewPath;
-    aNewPath.append(pPathBegin, pExtension - pPathBegin);
-    aNewPath.append(p, pPathEnd - p);
+    OUString aNewPath =
+        rtl::OUStringView(pPathBegin, pExtension - pPathBegin) +
+        rtl::OUStringView(p, pPathEnd - p);
 
-    return setPath(aNewPath.makeStringAndClear(), EncodeMechanism::NotCanonical,
-        RTL_TEXTENCODING_UTF8);
+    return setPath(aNewPath, EncodeMechanism::NotCanonical, RTL_TEXTENCODING_UTF8);
 }
 
 bool INetURLObject::hasFinalSlash() const
@@ -4223,12 +4222,9 @@ bool INetURLObject::setFinalSlash()
     if (pPathEnd > pPathBegin && pPathEnd[-1] == '/')
         return true;
 
-    OUStringBuffer aNewPath;
-    aNewPath.append(pPathBegin, pPathEnd - pPathBegin);
-    aNewPath.append('/');
+    OUString aNewPath = rtl::OUStringView(pPathBegin, pPathEnd - pPathBegin) + "/";
 
-    return setPath(aNewPath.makeStringAndClear(), EncodeMechanism::NotCanonical,
-        RTL_TEXTENCODING_UTF8);
+    return setPath(aNewPath, EncodeMechanism::NotCanonical, RTL_TEXTENCODING_UTF8);
 }
 
 bool INetURLObject::removeFinalSlash()

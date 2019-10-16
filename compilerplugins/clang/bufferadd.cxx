@@ -51,6 +51,8 @@ public:
             return false;
         if (loplugin::isSamePathname(fn, SRCDIR "/writerfilter/source/dmapper/GraphicImport.cxx"))
             return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/sdext/source/pdfimport/pdfparse/pdfparse.cxx"))
+            return false;
         return true;
     }
 
@@ -174,14 +176,15 @@ void BufferAdd::findBufferAssignOrAdd(const Stmt* parentStmt, Stmt const* stmt)
                         return;
                     }
                     auto tc2 = loplugin::TypeCheck(cxxConstructExpr->getArg(0)->getType());
-                    if (cxxConstructExpr->getArg(0)->getType()->isBuiltinType()
-                        || tc2.LvalueReference().Class("OUStringBuffer")
+                    if (tc2.LvalueReference().Class("OUStringBuffer")
                         || tc2.LvalueReference().Class("OStringBuffer")
                         || tc2.Class("OUStringBuffer") || tc2.Class("OStringBuffer"))
                     {
                         badMap.insert(varDeclLHS);
                         return;
                     }
+                    addToGoodMap(varDeclLHS, parentStmt);
+                    return;
                 }
                 if (!isSideEffectFree(varDeclLHS->getInit()))
                     badMap.insert(varDeclLHS);
@@ -289,32 +292,6 @@ bool BufferAdd::isMethodOkToMerge(CXXMemberCallExpr const* memberCall)
         return false;
 
     auto rhs = memberCall->getArg(0);
-
-    if (loplugin::TypeCheck(memberCall->getType())
-            .Class("OStringBuffer")
-            .Namespace("rtl")
-            .GlobalNamespace())
-    {
-        // because we have no OStringLiteral1
-        if (tc2.Char())
-            return false;
-        // Can't see how to make the call to append(sal_Unicode*pStart, sal_Unicode*pEnd) work
-        if (memberCall->getNumArgs() == 2 && loplugin::TypeCheck(rhs->getType()).Pointer())
-            return false;
-    }
-    if (loplugin::TypeCheck(memberCall->getType())
-            .Class("OUStringBuffer")
-            .Namespace("rtl")
-            .GlobalNamespace())
-    {
-        // character literals we do with OUStringBuffer, not variables of type sal_Unicode/char
-        if (tc2.Typedef("sal_Unicode").GlobalNamespace() && !isa<CharacterLiteral>(rhs))
-            return false;
-        // Can't see how to make the call to append(sal_Unicode*pStart, sal_Unicode*pEnd) work
-        if (memberCall->getNumArgs() == 2
-            && loplugin::TypeCheck(memberCall->getArg(0)->getType()).Pointer())
-            return false;
-    }
     if (!isSideEffectFree(rhs))
         return false;
     return true;
@@ -357,7 +334,8 @@ bool BufferAdd::isSideEffectFree(Expr const* expr)
             if (calleeMethodDecl && calleeMethodDecl->getIdentifier())
             {
                 auto name = calleeMethodDecl->getName();
-                if (name == "number" || name == "unacquired")
+                if (callExpr->getNumArgs() > 0
+                    && (name == "number" || name == "unacquired" || name == "boolean"))
                 {
                     auto tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
                     if (tc.Class("OUString") || tc.Class("OString"))

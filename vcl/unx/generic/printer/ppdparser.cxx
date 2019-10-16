@@ -620,10 +620,10 @@ PPDParser::PPDParser(const OUString& rFile, const std::vector<PPDKey*>& keys)
             pwg_media_t *pPWGMedia = pwgMediaForPWG(o.pData->buffer);
             if (pPWGMedia != nullptr) {
                 OUStringBuffer aBuf( 256 );
-                aBuf.append( "0 0 " );
-                aBuf.append( PWG_TO_POINTS(pPWGMedia -> width) );
-                aBuf.append( " " );
-                aBuf.append( PWG_TO_POINTS(pPWGMedia -> length) );
+                aBuf = "0 0 " +
+                    OUString::number(PWG_TO_POINTS(pPWGMedia -> width)) +
+                    " " +
+                    OUString::number(PWG_TO_POINTS(pPWGMedia -> length));
                 if ( pImageableAreaValue )
                     pImageableAreaValue->m_aValue = aBuf.makeStringAndClear();
                 aBuf.append( PWG_TO_POINTS(pPWGMedia -> width) );

@@ -389,11 +389,7 @@ void ScUnoAddInCollection::ReadConfiguration()
             ppFuncData[nFuncPos+nOld] = nullptr;
 
             // stored function name: (service name).(function)
-            OUStringBuffer aFuncNameBuffer( aServiceName.getLength()+1+pFuncNameArray[nFuncPos].getLength());
-            aFuncNameBuffer.append(aServiceName);
-            aFuncNameBuffer.append('.');
-            aFuncNameBuffer.append(pFuncNameArray[nFuncPos]);
-            OUString aFuncName = aFuncNameBuffer.makeStringAndClear();
+            OUString aFuncName = aServiceName + "." + pFuncNameArray[nFuncPos];
 
             // skip the function if already known (read from old AddIn service)
 
@@ -786,11 +782,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                             OUString aFuncU = xFunc->getName();
 
                             // stored function name: (service name).(function)
-                            OUStringBuffer aFuncNameBuffer( aServiceName.getLength()+1+aFuncU.getLength());
-                            aFuncNameBuffer.append(aServiceName);
-                            aFuncNameBuffer.append('.');
-                            aFuncNameBuffer.append(aFuncU);
-                            OUString aFuncName = aFuncNameBuffer.makeStringAndClear();
+                            OUString aFuncName = aServiceName + "." + aFuncU;
 
                             bool bValid = true;
                             long nVisibleCount = 0;
@@ -988,11 +980,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                 OUString aFuncU = xFunc->getName();
 
                 // stored function name: (service name).(function)
-                OUStringBuffer aFuncNameBuffer( rServiceName.getLength()+1+aFuncU.getLength());
-                aFuncNameBuffer.append(rServiceName);
-                aFuncNameBuffer.append('.');
-                aFuncNameBuffer.append(aFuncU);
-                OUString aFuncName = aFuncNameBuffer.makeStringAndClear();
+                OUString aFuncName = rServiceName + "." + aFuncU;
 
                 // internal names are skipped because no FuncData exists
                 ScUnoAddInFuncData* pOldData = const_cast<ScUnoAddInFuncData*>( GetFuncData( aFuncName ) );

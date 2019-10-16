@@ -1660,11 +1660,11 @@ static Writer& OutHTML_FrameFormatAsSpacer( Writer& rWrt, const SwFrameFormat& r
     if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine( true );
 
-    OStringBuffer sOut;
-    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_spacer).append(' ')
-        .append(OOO_STRING_SVTOOLS_HTML_O_type).append("=\"")
-        .append(OOO_STRING_SVTOOLS_HTML_SPTYPE_block).append("\"");
-    rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+    OString sOut =
+        "<" OOO_STRING_SVTOOLS_HTML_spacer " "
+        OOO_STRING_SVTOOLS_HTML_O_type "=\""
+        OOO_STRING_SVTOOLS_HTML_SPTYPE_block "\"";
+    rWrt.Strm().WriteOString( sOut );
 
     // ALIGN, WIDTH, HEIGHT
     OString aEndTags = rHTMLWrt.OutFrameFormatOptions(rFrameFormat, OUString(), HTML_FRMOPTS_SPACER);

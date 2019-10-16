@@ -9144,7 +9144,7 @@ void ScInterpreter::ScFindB()
         else
         {
             // create a string from sStr starting at nStart
-            OUStringBuffer aBuf( lcl_RightB( aStr, nLen - nStart + 1 ) );
+            OUString aBuf = lcl_RightB( aStr, nLen - nStart + 1 );
             // search aBuf for asStr
             sal_Int32 nPos = aBuf.indexOf( asStr, 0 );
             if ( nPos == -1 )
@@ -9152,7 +9152,7 @@ void ScInterpreter::ScFindB()
             else
             {
                 // obtain byte value of nPos
-                int nBytePos = lcl_getLengthB( aBuf.makeStringAndClear(), nPos );
+                int nBytePos = lcl_getLengthB( aBuf, nPos );
                 PushDouble( nBytePos + nStart );
             }
         }

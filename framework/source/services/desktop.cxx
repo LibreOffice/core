@@ -116,14 +116,12 @@ void Desktop::constructorInit()
     InterceptionHelper* pInterceptionHelper = new InterceptionHelper( this, xDispatchProvider );
     m_xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
 
-    OUStringBuffer sUntitledPrefix (256);
-    sUntitledPrefix.append      (FwkResId(STR_UNTITLED_DOCUMENT));
-    sUntitledPrefix.append (" ");
+    OUString sUntitledPrefix = FwkResId(STR_UNTITLED_DOCUMENT) + " ";
 
     ::comphelper::NumberedCollection* pNumbers = new ::comphelper::NumberedCollection ();
     m_xTitleNumberGenerator.set(static_cast< ::cppu::OWeakObject* >(pNumbers), css::uno::UNO_QUERY_THROW);
     pNumbers->setOwner          ( static_cast< ::cppu::OWeakObject* >(this) );
-    pNumbers->setUntitledPrefix ( sUntitledPrefix.makeStringAndClear ()     );
+    pNumbers->setUntitledPrefix ( sUntitledPrefix );
 
     // Safe impossible cases
     // We can't work without this helper!

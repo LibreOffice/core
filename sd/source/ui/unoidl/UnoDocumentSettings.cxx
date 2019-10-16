@@ -362,9 +362,9 @@ uno::Sequence<beans::PropertyValue>
                 {
                     // Such specific path construction is grim.
 
-                    OUStringBuffer aName( getNameOfType( t ) );
+                    OUString aName( getNameOfType( t ) );
                     OUString aResult;
-                    if( pList->SaveTo( xSubStorage, aName.makeStringAndClear(), &aResult ) )
+                    if( pList->SaveTo( xSubStorage, aName, &aResult ) )
                     {
                         OUString aRealPath = "Settings/" + aResult;
                         aRet[i].Value <<= aRealPath;
