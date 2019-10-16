@@ -572,7 +572,7 @@ void SkiaSalGraphicsImpl::dump(const char* file) const
     ostream.write(static_cast<const char*>(data->data()), data->size());
 }
 
-void SkiaSalGraphicsImpl::dump(const SkBitmap& bitmap, const char* file) const
+void SkiaSalGraphicsImpl::dump(const SkBitmap& bitmap, const char* file)
 {
     sk_sp<SkImage> image = SkImage::MakeFromBitmap(bitmap);
     sk_sp<SkData> data = image->encodeToData();
