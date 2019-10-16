@@ -36,6 +36,13 @@ class ToggleButtonToolbarController : public ComplexToolbarController
 
 {
     public:
+        class DropdownMenuItem
+        {
+        public:
+            OUString mLabel;
+            OUString mTipHelpText;
+        };
+
         enum class Style
         {
             DropDownButton,
@@ -64,7 +71,7 @@ class ToggleButtonToolbarController : public ComplexToolbarController
         DECL_LINK( MenuSelectHdl, Menu *, bool);
 
         OUString                m_aCurrentSelection;
-        std::vector< OUString > m_aDropdownMenuList;
+        std::vector< DropdownMenuItem > m_aDropdownMenuList;
 };
 
 }
