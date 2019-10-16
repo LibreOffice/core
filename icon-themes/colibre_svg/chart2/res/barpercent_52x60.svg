@@ -1,1 +1,42 @@
-<svg height="52" viewBox="0 0 60 52" width="60" xmlns="http://www.w3.org/2000/svg"><path d="m0 0h60v52h-60z" fill="#fff"/><path d="m34 34v-8h-27v8z" fill="#eac282"/><path d="m43 42v-8h-36v8z" fill="#4d82b8"/><path d="m31 14v-8h-24v8z" fill="#eac282"/><path d="m37 22v-8h-30v8z" fill="#4d82b8"/><path d="m3 45h52v1h-52z" fill="#808080"/><path d="m6 3h1v46h-1z" fill="#808080"/><g fill="#fff"><path d="m10 33.9999a2 2 0 0 0 -2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0 -2-2zm0 1a1 1 0 0 1 1 1 1 1 0 0 1 -1 1 1 1 0 0 1 -1-1 1 1 0 0 1 1-1z"/><path d="m14 37.9999a2 2 0 0 0 -2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0 -2-2zm0 1a1 1 0 0 1 1 1 1 1 0 0 1 -1 1 1 1 0 0 1 -1-1 1 1 0 0 1 1-1z"/><path d="m14.59961 33.7002-6 8 .80078.5996 6-8z" fill-rule="evenodd"/></g></svg>
+<svg height="52" viewBox="0 0 60 52" width="60" xmlns="http://www.w3.org/2000/svg">
+  <path
+     d="m0 0h60v52h-60z"
+     fill="#fff"
+     />
+  <path
+     d="M 26,40 V 32 H 7 v 8 z"
+     style="fill:#eac282;stroke-width:0.83887047" />
+  <path
+     d="M 55,40 V 32 H 26 v 8 z"
+     style="fill:#4d82b8;stroke-width:0.89752746" />
+  <path
+     d="M 41,23 V 15 H 7 v 8 z"
+     style="fill:#eac282;stroke-width:1.19023812" />
+  <path
+     d="M 55,23 V 15 H 41 v 8 z"
+     style="fill:#4d82b8;stroke-width:0.68313003" />
+  <path
+     d="m3 45h52v1h-52z"
+     fill="#808080"
+     />
+  <path
+     d="m6 3h1v46h-1z"
+     fill="#808080"
+     />
+  <g
+     style="fill:#808080;fill-opacity:1"
+     transform="translate(38,-30)">
+    <path
+       d="m 10,33.9999 a 2,2 0 0 0 -2,2 2,2 0 0 0 2,2 2,2 0 0 0 2,-2 2,2 0 0 0 -2,-2 z m 0,1 a 1,1 0 0 1 1,1 1,1 0 0 1 -1,1 1,1 0 0 1 -1,-1 1,1 0 0 1 1,-1 z"
+       style="fill:#808080;fill-opacity:1"
+       />
+    <path
+       d="m 14,37.9999 a 2,2 0 0 0 -2,2 2,2 0 0 0 2,2 2,2 0 0 0 2,-2 2,2 0 0 0 -2,-2 z m 0,1 a 1,1 0 0 1 1,1 1,1 0 0 1 -1,1 1,1 0 0 1 -1,-1 1,1 0 0 1 1,-1 z"
+       style="fill:#808080;fill-opacity:1"
+       />
+    <path
+       d="m 14.59961,33.7002 -6,8 0.80078,0.5996 6,-8 z"
+       style="fill:#808080;fill-opacity:1;fill-rule:evenodd"
+       />
+  </g>
+</svg>
