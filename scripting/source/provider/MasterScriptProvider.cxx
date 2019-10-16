@@ -298,10 +298,7 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
          )
     {
         Reference< provider::XScriptProvider > xScriptProvider;
-        OUStringBuffer buf( 80 );
-        buf.append( "com.sun.star.script.provider.ScriptProviderFor");
-        buf.append( language );
-        OUString serviceName = buf.makeStringAndClear();
+        OUString serviceName = "com.sun.star.script.provider.ScriptProviderFor" + language;
         if ( !providerCache() )
         {
             throw provider::ScriptFrameworkErrorException(

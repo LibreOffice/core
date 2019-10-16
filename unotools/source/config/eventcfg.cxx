@@ -26,7 +26,6 @@
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
 #include "itemholder1.hxx"
@@ -194,11 +193,7 @@ void GlobalEventConfig_Impl::initBindingInfo()
     Sequence< OUString > lMacros(1);
     for (const auto& rEventName : lEventNames )
     {
-        OUStringBuffer aBuffer( 32 );
-        aBuffer.append( aSetNode );
-        aBuffer.append( rEventName );
-        aBuffer.append( aCommandKey );
-        lMacros[0] = aBuffer.makeStringAndClear();
+        lMacros[0] = aSetNode + rEventName + aCommandKey;
         SAL_INFO("unotools", "reading binding for: " << lMacros[0]);
         Sequence< Any > lValues = GetProperties( lMacros );
         OUString sMacroURL;

@@ -56,11 +56,8 @@ public:
         return true;
     }
 
-    virtual void run() override
+    void postRun() override
     {
-        if (!preRun())
-            return;
-        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         for (auto const& pair : goodMap)
             if (!isa<ParmVarDecl>(pair.first) &&
                 // reference types have slightly weird behaviour
@@ -70,6 +67,14 @@ public:
                        "convert this append sequence into a *String + sequence",
                        compat::getBeginLoc(pair.first))
                     << pair.first->getSourceRange();
+    }
+
+    virtual void run() override
+    {
+        if (!preRun())
+            return;
+        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+        postRun();
     }
 
     bool VisitStmt(Stmt const*);

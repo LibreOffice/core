@@ -24,7 +24,6 @@
 
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
 
 #include <typelib/typedescription.h>
@@ -297,10 +296,7 @@ void SAL_CALL typelib_static_sequence_type_init(
         MutexGuard aGuard( typelib_StaticInitMutex::get() );
         if (! *ppRef)
         {
-            OUStringBuffer aBuf( 32 );
-            aBuf.append( "[]" );
-            aBuf.append( pElementType->pTypeName );
-            OUString aTypeName( aBuf.makeStringAndClear() );
+            OUString aTypeName = "[]" + OUString::unacquired(&pElementType->pTypeName);
 
             assert( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_SEQUENCE) );
             *ppRef = igetTypeByName( aTypeName.pData );

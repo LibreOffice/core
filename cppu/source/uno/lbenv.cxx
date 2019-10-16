@@ -774,11 +774,9 @@ extern "C" void SAL_CALL uno_dumpEnvironmentByName(
     }
     else
     {
-        OUStringBuffer buf( 32 );
-        buf.append( "environment \"" );
-        buf.append( pEnvDcp );
-        buf.append( "\" does not exist!" );
-        writeLine( stream, buf.makeStringAndClear(), pFilter );
+        writeLine(
+            stream, "environment \"" + OUString::unacquired(&pEnvDcp) + "\" does not exist!",
+            pFilter );
     }
 }
 

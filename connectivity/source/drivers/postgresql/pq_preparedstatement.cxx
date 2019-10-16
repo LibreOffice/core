@@ -53,6 +53,7 @@
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 
+#include <memory>
 #include <string.h>
 
 #include <connectivity/dbconversion.hxx>
@@ -430,11 +431,7 @@ void PreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x )
     MutexGuard guard(m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( parameterIndex );
-    OStringBuffer buf( 20 );
-    buf.append( "'" );
-    buf.append( x );
-    buf.append( "'" );
-    m_vars[parameterIndex-1] = buf.makeStringAndClear();
+    m_vars[parameterIndex-1] = "'" + OString::number(x) + "'";
 }
 
 void PreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x )
@@ -442,11 +439,7 @@ void PreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x )
     MutexGuard guard(m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( parameterIndex );
-    OStringBuffer buf( 20 );
-    buf.append( "'" );
-    buf.append( x );
-    buf.append( "'" );
-    m_vars[parameterIndex-1] = buf.makeStringAndClear();
+    m_vars[parameterIndex-1] = "'" + OString::number(x) + "'";
 }
 
 void PreparedStatement::setFloat( sal_Int32 parameterIndex, float x )
@@ -454,11 +447,7 @@ void PreparedStatement::setFloat( sal_Int32 parameterIndex, float x )
     MutexGuard guard(m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( parameterIndex );
-    OStringBuffer buf( 20 );
-    buf.append( "'" );
-    buf.append( x );
-    buf.append( "'" );
-    m_vars[parameterIndex-1] = buf.makeStringAndClear();
+    m_vars[parameterIndex-1] = "'" + OString::number(x) + "'";
 }
 
 void PreparedStatement::setDouble( sal_Int32 parameterIndex, double x )
@@ -466,11 +455,7 @@ void PreparedStatement::setDouble( sal_Int32 parameterIndex, double x )
     MutexGuard guard(m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( parameterIndex );
-    OStringBuffer buf( 20 );
-    buf.append( "'" );
-    buf.append( x );
-    buf.append( "'" );
-    m_vars[parameterIndex-1] = buf.makeStringAndClear();
+    m_vars[parameterIndex-1] = "'" + OString::number(x) + "'";
 }
 
 void PreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x )
@@ -496,21 +481,18 @@ void PreparedStatement::setBytes(
     MutexGuard guard(m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( parameterIndex );
-    OStringBuffer buf( 20 );
-    buf.append( "'" );
     size_t len;
-    unsigned char * escapedString =
-        PQescapeBytea( reinterpret_cast<unsigned char const *>(x.getConstArray()), x.getLength(), &len);
+    struct Free { void operator ()(void * p) const { free(p); } };
+    std::unique_ptr<unsigned char, Free> escapedString(
+        PQescapeBytea( reinterpret_cast<unsigned char const *>(x.getConstArray()), x.getLength(), &len));
     if( ! escapedString )
     {
         throw SQLException(
             "pq_preparedstatement.setBytes: Error during converting bytesequence to an SQL conform string",
             *this, OUString(), 1, Any() );
     }
-    buf.append( reinterpret_cast<char *>(escapedString), len -1 );
-    free( escapedString );
-    buf.append( "'" );
-    m_vars[parameterIndex-1] = buf.makeStringAndClear();
+    m_vars[parameterIndex-1]
+        = "'" + rtl::OStringView(reinterpret_cast<char *>(escapedString.get()), len -1) + "'";
 }
 
 
