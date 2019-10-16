@@ -17,9 +17,9 @@ of huge (1000+ datasets) combined non-PRINT merge results. A valid
 combined document has to follow constraints, which are already met by
 individual documents, as these are just modified copies.
 
-LO currently has six working combinations of mode and *bCreateSingleFile*
-The others, ''EMAIL+true'' and ''SHELL+false'', are currently not
-implemented. But the list contains implementation proposals for both.
+LO currently has five working combinations of mode and *bCreateSingleFile*
+The others, ''PRINTER+false'', ''EMAIL+true'' and ''SHELL+false'', are currently not
+implemented. But the list contains implementation proposals for them.
 
 * Mode: FILE
 ** false: Saves each merged document as an individual file. The file name can
@@ -28,9 +28,9 @@ implemented. But the list contains implementation proposals for both.
    with a new / reset page style. Depending on the page style this inserts
    hidden blank pages
 * Mode: PRINTER
-** false: Generates individual print jobs, which may be grouped on some
+** false: *not implemented*. This could generate individual print jobs, which could be grouped on some
    platforms for easier abortion (needs verification!). All print options
-   affect only the individual document! Printing starts after the first
+   affect only the individual document! Printing could start after the first
    document is generated.
 ** true: Generates a single print job. All print options affect the combined
    document! This especially effects the results of reverse and N-UP printing.
