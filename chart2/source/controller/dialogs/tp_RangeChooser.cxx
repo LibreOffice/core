@@ -20,7 +20,7 @@
 #include "tp_RangeChooser.hxx"
 #include <DataSourceHelper.hxx>
 #include <DiagramHelper.hxx>
-#include "ChartTypeTemplateProvider.hxx"
+#include <ChartTypeTemplateProvider.hxx>
 #include "DialogModel.hxx"
 #include <RangeSelectionHelper.hxx>
 #include <TabPageNotifiable.hxx>

@@ -949,10 +949,7 @@ chart2/source/controller/chartapiwrapper/WrappedSymbolProperties.hxx
 chart2/source/controller/chartapiwrapper/WrappedTextRotationProperty.cxx
 chart2/source/controller/chartapiwrapper/WrappedTextRotationProperty.hxx
 chart2/source/controller/dialogs/ChangingResource.cxx
-chart2/source/controller/dialogs/ChangingResource.hxx
 chart2/source/controller/dialogs/ChartTypeDialogController.cxx
-chart2/source/controller/dialogs/ChartTypeDialogController.hxx
-chart2/source/controller/dialogs/ChartTypeTemplateProvider.hxx
 chart2/source/controller/dialogs/DataBrowser.cxx
 chart2/source/controller/dialogs/DataBrowser.hxx
 chart2/source/controller/dialogs/DataBrowserModel.cxx
@@ -1181,9 +1178,12 @@ chart2/source/inc/AxisHelper.hxx
 chart2/source/inc/AxisIndexDefines.hxx
 chart2/source/inc/BaseGFXHelper.hxx
 chart2/source/inc/CachedDataSequence.hxx
+chart2/source/inc/ChangingResource.hxx
 chart2/source/inc/CharacterProperties.hxx
 chart2/source/inc/ChartModelHelper.hxx
+chart2/source/inc/ChartTypeDialogController.hxx
 chart2/source/inc/ChartTypeHelper.hxx
+chart2/source/inc/ChartTypeTemplateProvider.hxx
 chart2/source/inc/ChartViewHelper.hxx
 chart2/source/inc/CloneHelper.hxx
 chart2/source/inc/ColorPerPointHelper.hxx
