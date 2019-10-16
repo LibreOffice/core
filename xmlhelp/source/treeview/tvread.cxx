@@ -123,15 +123,7 @@ namespace treeview {
         {
             if( targetURL.isEmpty() )
             {
-                sal_Int32 len;
-                for ( const TVDom* p = this;; p = p->parent )
-                {
-                    len = p->application.getLength();
-                    if ( len != 0 )
-                        break;
-                }
-
-                OUStringBuffer strBuff( 22 + len + id.getLength() );
+                OUStringBuffer strBuff( 21 + id.getLength() );
                 strBuff.append(
                                     "vnd.sun.star.help://"
                                     ).append(id);
