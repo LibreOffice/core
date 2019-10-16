@@ -24,7 +24,7 @@
 
 #include <map>
 
-#include "ChangingResource.hxx"
+#include <ChangingResource.hxx>
 #include <ThreeDHelper.hxx>
 
 #include <com/sun/star/chart2/CurveStyle.hpp>

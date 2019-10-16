@@ -27,7 +27,7 @@
 #include "tp_RangeChooser.hxx"
 #include "tp_Wizard_TitlesAndObjects.hxx"
 #include "tp_DataSource.hxx"
-#include "ChartTypeTemplateProvider.hxx"
+#include <ChartTypeTemplateProvider.hxx>
 #include "DialogModel.hxx"
 
 #define CHART_WIZARD_PAGEWIDTH  250

@@ -20,7 +20,7 @@
 #include <dlg_DataSource.hxx>
 #include <strings.hrc>
 #include <ResId.hxx>
-#include "ChartTypeTemplateProvider.hxx"
+#include <ChartTypeTemplateProvider.hxx>
 #include <DiagramHelper.hxx>
 #include <ChartModel.hxx>
 #include "DialogModel.hxx"
