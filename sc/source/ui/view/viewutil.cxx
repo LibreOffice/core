@@ -148,13 +148,9 @@ bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
 
     if ( rSettings.HasComment() )
     {
-        OUStringBuffer aBuf(rAction.GetComment());
-        aBuf.append(" (");
         OUString aTmp;
         rAction.GetDescription(aTmp, &rDocument);
-        aBuf.append(aTmp);
-        aBuf.append(')');
-        OUString aComStr = aBuf.makeStringAndClear();
+        OUString aComStr = rAction.GetComment() + " (" + aTmp + ")";
 
         if(!rSettings.IsValidComment(&aComStr))
             return false;

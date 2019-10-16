@@ -925,10 +925,7 @@ void WriterXmlFinalizer::visit( TextElement& elem, const std::list< std::unique_
         aFontProps[ "style:text-outline" ]  = "true";
     }
     // size
-    OUStringBuffer aBuf( 32 );
-    aBuf.append( rFont.size*72/PDFI_OUTDEV_RESOLUTION );
-    aBuf.append( "pt" );
-    OUString aFSize = aBuf.makeStringAndClear();
+    OUString aFSize = OUString::number( rFont.size*72/PDFI_OUTDEV_RESOLUTION ) + "pt";
     aFontProps[ "fo:font-size" ]            = aFSize;
     aFontProps[ "style:font-size-asian" ]   = aFSize;
     aFontProps[ "style:font-size-complex" ] = aFSize;

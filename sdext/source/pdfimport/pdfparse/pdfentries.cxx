@@ -428,12 +428,12 @@ PDFObjectRef::~PDFObjectRef()
 
 bool PDFObjectRef::emit( EmitContext& rWriteContext ) const
 {
-    OStringBuffer aBuf( 16 );
-    aBuf.append( ' ' );
-    aBuf.append( sal_Int32( m_nNumber ) );
-    aBuf.append( ' ' );
-    aBuf.append( sal_Int32( m_nGeneration ) );
-    aBuf.append( " R" );
+    OString aBuf =
+        " " +
+        OString::number( sal_Int32( m_nNumber ) ) +
+        " " +
+        OString::number( sal_Int32( m_nGeneration ) ) +
+        " R";
     return rWriteContext.write( aBuf.getStr(), aBuf.getLength() );
 }
 
@@ -806,11 +806,11 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
     if( pEData )
         pEData->insertXref( m_nNumber, m_nGeneration, rWriteContext.getCurPos() );
 
-    OStringBuffer aBuf( 32 );
-    aBuf.append( sal_Int32( m_nNumber ) );
-    aBuf.append( ' ' );
-    aBuf.append( sal_Int32( m_nGeneration ) );
-    aBuf.append( " obj\n" );
+    OString aBuf =
+        OString::number( sal_Int32( m_nNumber ) ) +
+        " " +
+        OString::number( sal_Int32( m_nGeneration ) ) +
+        " obj\n";
     if( ! rWriteContext.write( aBuf.getStr(), aBuf.getLength() ) )
         return false;
 
@@ -1426,12 +1426,12 @@ bool PDFFile::emit( EmitContext& rWriteContext ) const
 {
     setEmitData(  rWriteContext, new EmitImplData( this ) );
 
-    OStringBuffer aBuf( 32 );
-    aBuf.append( "%PDF-" );
-    aBuf.append( sal_Int32( m_nMajor ) );
-    aBuf.append( '.' );
-    aBuf.append( sal_Int32( m_nMinor ) );
-    aBuf.append( "\n" );
+    OString aBuf =
+        "%PDF-" +
+        OString::number( sal_Int32( m_nMajor ) ) +
+        "." +
+        OString::number( sal_Int32( m_nMinor ) ) +
+        "\n";
     if( ! rWriteContext.write( aBuf.getStr(), aBuf.getLength() ) )
         return false;
     return emitSubElements( rWriteContext );

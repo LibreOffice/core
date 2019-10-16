@@ -974,11 +974,9 @@ void ToolbarLayoutManager::childWindowEvent( VclSimpleEvent const * pEvent )
                     OUString aToolbarName = retrieveToolbarNameFromHelpURL( pToolBox );
                     if ( !aToolbarName.isEmpty() )
                     {
-                        OUStringBuffer aBuf(100);
-                        aBuf.append( "private:resource/toolbar/" );
-                        aBuf.append( aToolbarName );
+                        OUString aToolbarUrl =  "private:resource/toolbar/" + aToolbarName;
 
-                        UIElement aToolbar = implts_findToolbar( aBuf.makeStringAndClear() );
+                        UIElement aToolbar = implts_findToolbar( aToolbarUrl );
                         if ( aToolbar.m_xUIElement.is() && !aToolbar.m_bFloating )
                         {
                             implts_setLayoutDirty();

@@ -195,10 +195,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                 }
 
                 status = U_ZERO_ERROR;
-                OStringBuffer aUDName(64);
-                aUDName.append(rule);
-                aUDName.append('_');
-                aUDName.append( aLanguage);
+                OString aUDName = rtl::OStringView(rule) + "_" + aLanguage;
                 UDataMemory* pUData = udata_open("OpenOffice", "brk", aUDName.getStr(), &status);
                 if( U_SUCCESS(status) )
                     rbi.reset(new OOoRuleBasedBreakIterator( pUData, status));

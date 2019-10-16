@@ -367,11 +367,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
                 if( nLastTokenIndex > 0 )
                 {
                     aDomain = aFullName.copy( 0, nLastTokenIndex-1 );
-                    OStringBuffer aBuf( aDomain.getLength() + 1 + aPartialName.getLength() );
-                    aBuf.append( aDomain );
-                    aBuf.append( '.' );
-                    aBuf.append( aPartialName );
-                    aFullName = aBuf.makeStringAndClear();
+                    aFullName = aDomain + "." + aPartialName;
                 }
                 else
                     aFullName = aPartialName;
@@ -1666,10 +1662,7 @@ void PDFWriterImpl::appendLiteralStringEncrypt( const OUString& rInString, const
 
 void PDFWriterImpl::emitComment( const char* pComment )
 {
-    OStringBuffer aLine( 64 );
-    aLine.append( "% " );
-    aLine.append( pComment );
-    aLine.append( "\n" );
+    OString aLine = "% " + rtl::OStringView(pComment) + "\n";
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
@@ -2016,23 +2009,22 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
             if( nLink >= 0 && nLink < static_cast<sal_Int32>(m_aLinks.size()) )
             {
                 // update struct parent of link
-                OStringBuffer aStructParentEntry( 32 );
-                aStructParentEntry.append( i_rEle.m_nObject );
-                aStructParentEntry.append( " 0 R" );
-                m_aStructParentTree.push_back( aStructParentEntry.makeStringAndClear() );
+                OString aStructParentEntry =
+                    OString::number( i_rEle.m_nObject ) +
+                    " 0 R";
+                m_aStructParentTree.push_back( aStructParentEntry );
                 m_aLinks[ nLink ].m_nStructParent = m_aStructParentTree.size()-1;
 
                 sal_Int32 nRefObject = createObject();
-                OStringBuffer aRef( 256 );
-                aRef.append( nRefObject );
-                aRef.append( " 0 obj\n"
-                             "<</Type/OBJR/Obj " );
-                aRef.append( m_aLinks[ nLink ].m_nObject );
-                aRef.append( " 0 R>>\n"
-                             "endobj\n\n"
-                             );
                 if (updateObject(nRefObject))
                 {
+                    OString aRef =
+                        OString::number( nRefObject ) +
+                        " 0 obj\n"
+                        "<</Type/OBJR/Obj " +
+                        OString::number( m_aLinks[ nLink ].m_nObject ) +
+                        " 0 R>>\n"
+                        "endobj\n\n";
                     writeBuffer( aRef.getStr(), aRef.getLength() );
                 }
 
@@ -3806,8 +3798,7 @@ void PDFWriterImpl::createDefaultEditAppearance( PDFWidget& rEdit, const PDFWrit
         relies on /NeedAppearances in the AcroForm dictionary set to "true"
      */
     beginRedirect( pEditStream, rEdit.m_aRect );
-    OStringBuffer aAppearance( 32 );
-    aAppearance.append( "/Tx BMC\nEMC\n" );
+    OString aAppearance = "/Tx BMC\nEMC\n";
     writeBuffer( aAppearance.getStr(), aAppearance.getLength() );
 
     endRedirect();
@@ -3830,14 +3821,13 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
     sal_Int32 nBest = getSystemFont( aFont );
 
     beginRedirect( pListBoxStream, rBox.m_aRect );
-    OStringBuffer aAppearance( 64 );
 
     setLineColor( COL_TRANSPARENT );
     setFillColor( replaceColor( rWidget.BackgroundColor, rSettings.GetFieldColor() ) );
     drawRectangle( rBox.m_aRect );
 
     // empty appearance, see createDefaultEditAppearance for reference
-    aAppearance.append( "/Tx BMC\nEMC\n" );
+    OString aAppearance = "/Tx BMC\nEMC\n";
     writeBuffer( aAppearance.getStr(), aAppearance.getLength() );
 
     endRedirect();
@@ -4940,9 +4930,7 @@ bool PDFWriterImpl::finalizeSignature()
     // 2- overwrite the value to the m_nSignatureLastByteRangeNoOffset position
     sal_uInt64 nWritten = 0;
     CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureLastByteRangeNoOffset) ) );
-    OStringBuffer aByteRangeNo( 256 );
-    aByteRangeNo.append( nLastByteRangeNo );
-    aByteRangeNo.append( " ]" );
+    OString aByteRangeNo = OString::number( nLastByteRangeNo ) + " ]";
 
     if (m_aFile.write(aByteRangeNo.getStr(), aByteRangeNo.getLength(), nWritten) != osl::File::E_None)
     {
@@ -7423,13 +7411,13 @@ void PDFWriterImpl::drawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uI
     aObjName.append( m_aTransparentObjects.back().m_nExtGStateObject );
     OString aExtName( aObjName.makeStringAndClear() );
 
-    OStringBuffer aLine( 80 );
+    OString aLine =
     // insert XObject
-    aLine.append( "q /" );
-    aLine.append( aExtName );
-    aLine.append( " gs /" );
-    aLine.append( aTrName );
-    aLine.append( " Do Q\n" );
+        "q /" +
+        aExtName +
+        " gs /" +
+        aTrName +
+        " Do Q\n";
     writeBuffer( aLine.getStr(), aLine.getLength() );
 
     pushResource( ResXObject, aTrName, m_aTransparentObjects.back().m_nObject );
@@ -7556,13 +7544,13 @@ void PDFWriterImpl::endTransparencyGroup( const tools::Rectangle& rBoundingBox, 
     aObjName.append( m_aTransparentObjects.back().m_nExtGStateObject );
     OString aExtName( aObjName.makeStringAndClear() );
 
-    OStringBuffer aLine( 80 );
+    OString aLine =
     // insert XObject
-    aLine.append( "q /" );
-    aLine.append( aExtName );
-    aLine.append( " gs /" );
-    aLine.append( aTrName );
-    aLine.append( " Do Q\n" );
+        "q /" +
+        aExtName +
+        " gs /" +
+        aTrName +
+        " Do Q\n";
     writeBuffer( aLine.getStr(), aLine.getLength() );
 
     pushResource( ResXObject, aTrName, m_aTransparentObjects.back().m_nObject );
@@ -9443,10 +9431,8 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     }
     writeBuffer( aLine.getStr(), aLine.getLength() );
 
-    OStringBuffer aObjName( 16 );
-    aObjName.append( "Im" );
-    aObjName.append(nObject);
-    pushResource( ResXObject, aObjName.makeStringAndClear(), nObject );
+    OString aObjName = "Im" + OString::number(nObject);
+    pushResource( ResXObject, aObjName, nObject );
 
 }
 
@@ -9521,11 +9507,9 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
         it = m_aBitmaps.begin();
     }
 
-    OStringBuffer aObjName( 16 );
-    aObjName.append( "Im" );
     sal_Int32 nObject = it->m_aReferenceXObject.getObject();
-    aObjName.append(nObject);
-    pushResource( ResXObject, aObjName.makeStringAndClear(), nObject );
+    OString aObjName = "Im" + OString::number(nObject);
+    pushResource( ResXObject, aObjName, nObject );
 
     return *it;
 }
@@ -9727,10 +9711,7 @@ void PDFWriterImpl::drawWallpaper( const tools::Rectangle& rRect, const Wallpape
                 tools::Rectangle aConvertRect( aBmpPos, aBmpSize );
                 m_aPages.back().convertRect( aConvertRect );
 
-                OStringBuffer aNameBuf(16);
-                aNameBuf.append( "Im" );
-                aNameBuf.append( rEmit.m_nObject );
-                OString aImageName( aNameBuf.makeStringAndClear() );
+                OString aImageName = "Im" + OString::number( rEmit.m_nObject );
 
                 // push the pattern
                 OStringBuffer aTilingStream( 32 );
@@ -10345,8 +10326,7 @@ void PDFWriterImpl::beginStructureElementMCSeq()
              ! m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq // already opened sequence
              )
     {
-        OStringBuffer aLine( 128 );
-        aLine.append( "/Artifact BMC\n" );
+        OString aLine = "/Artifact BMC\n";
         writeBuffer( aLine.getStr(), aLine.getLength() );
         // mark element MC sequence as open
         m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq = true;

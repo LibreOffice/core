@@ -497,6 +497,7 @@ struct ToStringHelper< OUStringNumber< T > >
 class OStringView {
 public:
     explicit OStringView(char const * s): view_(s) {}
+    explicit OStringView(char const * s, size_t len): view_(s, len) {}
 
     std::size_t length() const { return view_.length(); }
 
@@ -518,6 +519,7 @@ struct ToStringHelper< OStringView >
 class OUStringView {
 public:
     explicit OUStringView(sal_Unicode const * s): view_(s) {}
+    explicit OUStringView(sal_Unicode const * s, size_t len): view_(s, len) {}
 
     std::size_t length() const { return view_.length(); }
 

@@ -47,18 +47,14 @@
 
 namespace {
 
-static char const separator = static_cast< char >(
-    static_cast< unsigned char >(0xFF));
+constexpr const char separator[] = "\xff";
 
 OString oldKey(OUString const & fileName) {
     return OUStringToOString(fileName, RTL_TEXTENCODING_UTF8);
 }
 
 OString newKey(OUString const & id) {
-    OStringBuffer b;
-    b.append(separator);
-    b.append(OUStringToOString(id, RTL_TEXTENCODING_UTF8));
-    return b.makeStringAndClear();
+    return separator + OUStringToOString(id, RTL_TEXTENCODING_UTF8);
 }
 
 ::dp_manager::ActivePackages::Data decodeOldData(
@@ -168,7 +164,7 @@ ActivePackages::Entries ActivePackages::getEntries() const {
     ::dp_misc::t_string2string_map m(m_map.getEntries());
     for (auto const& elem : m)
     {
-        if (!elem.first.isEmpty() && elem.first[0] == separator) {
+        if (!elem.first.isEmpty() && elem.first[0] == separator[0]) {
             es.emplace_back(
                     OUString(
                         elem.first.getStr() + 1, elem.first.getLength() - 1,
@@ -190,18 +186,17 @@ ActivePackages::Entries ActivePackages::getEntries() const {
 
 void ActivePackages::put(OUString const & id, Data const & data) {
 #if HAVE_FEATURE_EXTENSIONS
-    OStringBuffer b;
-    b.append(
-        OUStringToOString(data.temporaryName, RTL_TEXTENCODING_UTF8));
-    b.append(separator);
-    b.append(OUStringToOString(data.fileName, RTL_TEXTENCODING_UTF8));
-    b.append(separator);
-    b.append(OUStringToOString(data.mediaType, RTL_TEXTENCODING_UTF8));
-    b.append(separator);
-    b.append(OUStringToOString(data.version, RTL_TEXTENCODING_UTF8));
-    b.append(separator);
-    b.append(OUStringToOString(data.failedPrerequisites, RTL_TEXTENCODING_UTF8));
-    m_map.put(newKey(id), b.makeStringAndClear());
+    OString b =
+        OUStringToOString(data.temporaryName, RTL_TEXTENCODING_UTF8) +
+        separator +
+        OUStringToOString(data.fileName, RTL_TEXTENCODING_UTF8) +
+        separator +
+        OUStringToOString(data.mediaType, RTL_TEXTENCODING_UTF8) +
+        separator +
+        OUStringToOString(data.version, RTL_TEXTENCODING_UTF8) +
+        separator +
+        OUStringToOString(data.failedPrerequisites, RTL_TEXTENCODING_UTF8);
+    m_map.put(newKey(id), b);
 #else
     (void) id;
     (void) data;

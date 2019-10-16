@@ -477,16 +477,13 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
 
     // create file name from screen resolution information
     OStringBuffer aStrBuf( 128 );
-    OStringBuffer aResBuf( 32 );
     aStrBuf.append( "intro_" );
     if ( !_sAppName.isEmpty() )
     {
         aStrBuf.append( OUStringToOString(_sAppName, RTL_TEXTENCODING_UTF8) );
         aStrBuf.append( "_" );
     }
-    aResBuf.append( OString::number( nWidth ));
-    aResBuf.append( "x" );
-    aResBuf.append( OString::number( nHeight ));
+    OString aResBuf = OString::number( nWidth ) + "x" + OString::number( nHeight );
 
     aStrBuf.append( aResBuf.getStr() );
     if (Application::LoadBrandBitmap (aStrBuf.makeStringAndClear().getStr(), rBitmap))
@@ -494,7 +491,7 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
 
     aStrBuf.append( "intro_" );
     aStrBuf.append( aResBuf.getStr() );
-    if (Application::LoadBrandBitmap (aResBuf.makeStringAndClear().getStr(), rBitmap))
+    if (Application::LoadBrandBitmap (aResBuf.getStr(), rBitmap))
         return;
 
     (void)Application::LoadBrandBitmap ("intro", rBitmap);

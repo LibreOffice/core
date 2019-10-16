@@ -923,9 +923,8 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
 
             if( pStr )
             {
-                OStringBuffer sOut;
-                sOut.append(' ').append(pStr).append("=\"");
-                rStrm.WriteOString( sOut.makeStringAndClear() );
+                OString sOut = " " + rtl::OStringView(pStr) + "=\"";
+                rStrm.WriteOString( sOut );
 
                 Out_String( rStrm, pMacro->GetMacName(), eDestEnc, pNonConvertableChars ).WriteChar( '\"' );
             }

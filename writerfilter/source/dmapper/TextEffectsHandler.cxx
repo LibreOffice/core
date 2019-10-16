@@ -514,7 +514,7 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
             break;
         case NS_ooxml::LN_CT_SRgbColor_val:
             {
-                OUStringBuffer aBuffer = OUString::number(aValue.getInt(), 16);
+                OUString aBuffer = OUString::number(aValue.getInt(), 16);
                 OUStringBuffer aString;
                 comphelper::string::padToLength(aString, 6 - aBuffer.getLength(), '0');
                 aString.append(aBuffer.getStr());

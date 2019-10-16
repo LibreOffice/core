@@ -916,14 +916,13 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
             space = true;
 
             // write native rc:
-            OStringBuffer buf2;
-            buf2.append("ORIGIN=");
-            buf2.append(osOrigin);
-            buf2.append(LF);
-            buf2.append( "UNO_SERVICES=?$ORIGIN/" );
-            buf2.append( OUStringToOString(
-                             sNativeRDB, RTL_TEXTENCODING_ASCII_US ) );
-            buf2.append(LF);
+            OString buf2 =
+                "ORIGIN=" +
+                osOrigin +
+                OString(LF) +
+                "UNO_SERVICES=?$ORIGIN/"  +
+                OUStringToOString( sNativeRDB, RTL_TEXTENCODING_ASCII_US ) +
+                OString(LF);
 
             const Reference<io::XInputStream> xData(
                 ::xmlscript::createInputStream(

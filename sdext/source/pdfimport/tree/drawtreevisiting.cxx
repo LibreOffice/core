@@ -813,10 +813,7 @@ void DrawXmlFinalizer::visit( HyperlinkElement&, const std::list< std::unique_pt
 
 static void SetFontsizeProperties(PropertyMap& props, double fontSize)
 {
-    OUStringBuffer aBuf(32);
-    aBuf.append(fontSize * 72 / PDFI_OUTDEV_RESOLUTION);
-    aBuf.append("pt");
-    OUString aFSize = aBuf.makeStringAndClear();
+    OUString aFSize = OUString::number(fontSize * 72 / PDFI_OUTDEV_RESOLUTION) + "pt";
     props["fo:font-size"] = aFSize;
     props["style:font-size-asian"] = aFSize;
     props["style:font-size-complex"] = aFSize;

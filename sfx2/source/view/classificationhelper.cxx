@@ -441,8 +441,7 @@ void SfxClassificationHelper::Impl::setStartValidity(SfxClassificationPolicyType
         {
             // The policy left the start date unchanged, replace it with the system time.
             util::DateTime aDateTime = DateTime(DateTime::SYSTEM).GetUNODateTime();
-            OUStringBuffer aBuffer = utl::toISO8601(aDateTime);
-            it->second = aBuffer.toString();
+            it->second = utl::toISO8601(aDateTime);
         }
     }
 }

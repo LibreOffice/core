@@ -435,11 +435,8 @@ bool RuntimePermission::implies( Permission const & perm ) const
 
 OUString RuntimePermission::toString() const
 {
-    OUStringBuffer buf( 48 );
-    buf.append( "com.sun.star.security.RuntimePermission (name=\"" );
-    buf.append( m_name );
-    buf.append( "\")" );
-    return buf.makeStringAndClear();
+    return "com.sun.star.security.RuntimePermission (name=\"" +
+        m_name + "\")";
 }
 
 

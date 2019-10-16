@@ -122,10 +122,7 @@ bool SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
 
 OUString SvxBulletItem::GetFullText() const
 {
-    OUStringBuffer aStr(aPrevText);
-    aStr.append(cSymbol);
-    aStr.append(aFollowText);
-    return aStr.makeStringAndClear();
+    return aPrevText + OUStringLiteral1(cSymbol) + aFollowText;
 }
 
 

@@ -211,18 +211,14 @@ createSpoolDir ()
 
     do
     {
-        OUStringBuffer aDir( aTmpDir.getLength() + 16 );
-        aDir.append( aTmpDir );
-        aDir.append( "/psp" );
-        aDir.append(nRand);
-        OUString aResult = aDir.makeStringAndClear();
-        if( osl::Directory::create( aResult ) == osl::FileBase::E_None )
+        OUString aDir = aTmpDir + "/psp" + OUString::number(nRand);
+        if( osl::Directory::create( aDir ) == osl::FileBase::E_None )
         {
-            osl::File::setAttributes( aResult,
+            osl::File::setAttributes( aDir,
                                         osl_File_Attribute_OwnWrite
                                       | osl_File_Attribute_OwnRead
                                       | osl_File_Attribute_OwnExe );
-            return aResult;
+            return aDir;
         }
         nRand++;
     } while( nRand );

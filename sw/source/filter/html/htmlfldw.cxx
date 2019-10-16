@@ -509,12 +509,13 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
         if( !bWritten )
         {
             OUString sComment(convertLineEnd(rComment, GetSystemLineEnd()));
-            OStringBuffer sOut;
             // TODO: ???
-            sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_comment)
-                .append(' ').append(OUStringToOString(sComment,
-                    static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc)).append(" -->");
-            rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+            OString sOut =
+                "<" OOO_STRING_SVTOOLS_HTML_comment
+                " " +
+                OUStringToOString(sComment, static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc) +
+                " -->";
+            rWrt.Strm().WriteOString( sOut );
         }
     }
     else if( SwFieldIds::Script == pFieldTyp->Which() )

@@ -156,15 +156,15 @@ void BackendDb::removeEntry(OUString const & url)
 {
     const OUString sKeyElement = getKeyElementName();
     const OUString sPrefix = getNSPrefix();
-    OUStringBuffer sExpression(500);
-    sExpression.append(sPrefix);
-    sExpression.append(":");
-    sExpression.append(sKeyElement);
-    sExpression.append("[@url = \"");
-    sExpression.append(url);
-    sExpression.append("\"]");
+    OUString sExpression =
+        sPrefix +
+        ":" +
+        sKeyElement +
+        "[@url = \"" +
+        url +
+        "\"]";
 
-    removeElement(sExpression.makeStringAndClear());
+    removeElement(sExpression);
 }
 
 void BackendDb::revokeEntry(OUString const & url)
@@ -242,18 +242,18 @@ Reference<css::xml::dom::XNode> BackendDb::getKeyElement(
     {
         const OUString sPrefix = getNSPrefix();
         const OUString sKeyElement = getKeyElementName();
-        OUStringBuffer sExpression(500);
-        sExpression.append(sPrefix);
-        sExpression.append(":");
-        sExpression.append(sKeyElement);
-        sExpression.append("[@url = \"");
-        sExpression.append(url);
-        sExpression.append("\"]");
+        OUString sExpression =
+            sPrefix +
+            ":" +
+            sKeyElement +
+            "[@url = \"" +
+            url +
+            "\"]";
 
         const Reference<css::xml::dom::XDocument> doc = getDocument();
         const Reference<css::xml::dom::XNode> root = doc->getFirstChild();
         const Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
-        return xpathApi->selectSingleNode(root, sExpression.makeStringAndClear());
+        return xpathApi->selectSingleNode(root, sExpression);
     }
     catch(const css::uno::Exception &)
     {
@@ -575,18 +575,18 @@ std::vector<OUString> BackendDb::getOneChildFromAllEntries(
         Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
         const OUString sPrefix = getNSPrefix();
         const OUString sKeyElement = getKeyElementName();
-        OUStringBuffer buf(512);
-        buf.append(sPrefix);
-        buf.append(":");
-        buf.append(sKeyElement);
-        buf.append("/");
-        buf.append(sPrefix);
-        buf.append(":");
-        buf.append(name);
-        buf.append("/text()");
+        OUString sNodeSelectExpr =
+            sPrefix +
+            ":" +
+            sKeyElement +
+            "/" +
+            sPrefix +
+            ":" +
+            name +
+            "/text()";
 
         Reference<css::xml::dom::XNodeList> nodes =
-            xpathApi->selectNodeList(root, buf.makeStringAndClear());
+            xpathApi->selectNodeList(root, sNodeSelectExpr);
         if (nodes.is())
         {
             sal_Int32 length = nodes->getLength();

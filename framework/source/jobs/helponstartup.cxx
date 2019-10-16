@@ -334,14 +334,7 @@ OUString HelpOnStartup::ist_createHelpURL(const OUString& sBaseURL,
                                                  const OUString& sLocale ,
                                                  const OUString& sSystem )
 {
-    OUStringBuffer sHelpURL(256);
-    sHelpURL.append     (sBaseURL    );
-    sHelpURL.append("?Language=");
-    sHelpURL.append     (sLocale     );
-    sHelpURL.append("&System="  );
-    sHelpURL.append     (sSystem     );
-
-    return sHelpURL.makeStringAndClear();
+    return sBaseURL + "?Language=" + sLocale + "&System=" + sSystem;
 }
 
 } // namespace framework

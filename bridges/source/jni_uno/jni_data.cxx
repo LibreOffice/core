@@ -1786,11 +1786,7 @@ void Bridge::map_to_java(
         if (in_param)
         {
             // call static <enum_class>.fromInt( int )
-            OStringBuffer sig_buf( 5 + class_name.getLength() );
-            sig_buf.append( "(I)L" );
-            sig_buf.append( class_name.replace( '.', '/' ) );
-            sig_buf.append( ';' );
-            OString sig( sig_buf.makeStringAndClear() );
+            OString sig = "(I)L" + class_name.replace( '.', '/' ) + ";";
             jmethodID method_id = jni->GetStaticMethodID(
                 static_cast<jclass>(jo_enum_class.get()), "fromInt", sig.getStr() );
             jni.ensure_no_exception();
@@ -2275,11 +2271,7 @@ void Bridge::map_to_java(
             if (0 < nElements)
             {
                 // call static <enum_class>.fromInt( int )
-                OStringBuffer sig_buf( 5 + class_name.getLength() );
-                sig_buf.append( "(I)L" );
-                sig_buf.append( class_name.replace( '.', '/' ) );
-                sig_buf.append( ';' );
-                OString sig( sig_buf.makeStringAndClear() );
+                OString sig = "(I)L" + class_name.replace( '.', '/' ) + ";";
                 jmethodID method_id = jni->GetStaticMethodID(
                     static_cast<jclass>(jo_enum_class.get()), "fromInt", sig.getStr() );
                 jni.ensure_no_exception();

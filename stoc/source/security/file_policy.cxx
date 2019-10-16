@@ -172,11 +172,8 @@ void PolicyReader::assureToken( sal_Unicode token )
     sal_Unicode c = get();
     if (c == token)
         return;
-    OUStringBuffer buf( 16 );
-    buf.append( "expected >" );
-    buf.append( c );
-    buf.append( "<!" );
-    error( buf.makeStringAndClear() );
+    OUString msg = "expected >" + OUStringLiteral1(c) + "<!";
+    error( msg );
 }
 
 OUString PolicyReader::assureQuotedToken()

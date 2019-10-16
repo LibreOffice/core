@@ -120,10 +120,9 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
             if( pIndent )
                 rStrm.WriteCharPtr( pIndent );
 
-            OStringBuffer sOut;
-            sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_base).append(' ')
-                .append(OOO_STRING_SVTOOLS_HTML_O_target).append("=\"");
-            rStrm.WriteOString( sOut.makeStringAndClear() );
+            OString sOut = "<" OOO_STRING_SVTOOLS_HTML_base " "
+                OOO_STRING_SVTOOLS_HTML_O_target "=\"";
+            rStrm.WriteOString( sOut );
             HTMLOutFuncs::Out_String( rStrm, rTarget, eDestEnc, pNonConvertableChars )
                .WriteCharPtr( "\">" );
         }
