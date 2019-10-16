@@ -75,22 +75,26 @@ protected:
 public:
     WinGlyphCache()
     {
-        GlobalWinGlyphCache::get()->maWinGlyphCaches.insert(this);
+        if(GlobalWinGlyphCache* c = GlobalWinGlyphCache::get())
+            c->maWinGlyphCaches.insert(this);
     }
 
     virtual ~WinGlyphCache()
     {
-        GlobalWinGlyphCache::get()->maWinGlyphCaches.erase(this);
+        if(GlobalWinGlyphCache* c = GlobalWinGlyphCache::get())
+            c->maWinGlyphCaches.erase(this);
     }
 
     void PutDrawElementInCache(WinGlyphDrawElement&& rElement, int nGlyphIndex)
     {
+        assert(GlobalWinGlyphCache::get());
         assert(!IsGlyphCached(nGlyphIndex));
         maWinTextureCache[nGlyphIndex] = std::move( rElement );
     }
 
     WinGlyphDrawElement& GetDrawElement(int nGlyphIndex)
     {
+        assert(GlobalWinGlyphCache::get());
         assert(IsGlyphCached(nGlyphIndex));
         return maWinTextureCache[nGlyphIndex];
     }

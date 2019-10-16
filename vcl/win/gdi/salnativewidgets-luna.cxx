@@ -1159,8 +1159,9 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
     tools::Rectangle cacheRect = rControlRegion;
     Size keySize = cacheRect.GetSize();
 
-    // TODO SKIA
-    WinOpenGLSalGraphicsImpl* pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
+    WinSalGraphicsImplBase* pImpl = dynamic_cast<WinSalGraphicsImplBase*>(mpImpl.get());
+    if( !pImpl->UseRenderNativeControl())
+        pImpl = nullptr;
 
     // tdf#95618 - A few controls render outside the region they're given.
     if (pImpl && nType == ControlType::TabItem)

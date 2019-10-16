@@ -18,6 +18,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <memory>
 #include <osl/module.h>
 #include <osl/file.h>
@@ -34,6 +36,11 @@
 #include <win/saldata.hxx>
 #include <win/wingdiimpl.hxx>
 #include <outdev.h>
+#include <vcl/opengl/OpenGLHelper.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
+#if HAVE_FEATURE_SKIA
+#include <skia/win/winlayout.hxx>
+#endif
 
 #include <win/DWriteTextRenderer.hxx>
 #include <win/scoped_gdi.hxx>
@@ -55,8 +62,16 @@
 GlobalWinGlyphCache * GlobalWinGlyphCache::get()
 {
     SalData *data = GetSalData();
-    if (!data->m_pGlobalWinGlyphCache) // TODO SKIA
-        data->m_pGlobalWinGlyphCache.reset(new OpenGLGlobalWinGlyphCache);
+    if (!data->m_pGlobalWinGlyphCache)
+    {
+#if HAVE_FEATURE_SKIA
+        if (SkiaHelper::isVCLSkiaEnabled())
+            data->m_pGlobalWinGlyphCache.reset(new SkiaGlobalWinGlyphCache);
+        else
+#endif
+        if (OpenGLHelper::isVCLOpenGLEnabled())
+            data->m_pGlobalWinGlyphCache.reset(new OpenGLGlobalWinGlyphCache);
+    }
     return data->m_pGlobalWinGlyphCache.get();
 }
 
@@ -478,9 +493,8 @@ bool WinSalGraphics::DrawCachedGlyphs(const GenericSalLayout& rLayout)
     COLORREF color = GetTextColor(hDC);
     Color salColor(GetRValue(color), GetGValue(color), GetBValue(color));
 
-    // TODO SKIA
-    WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
-    if (!pImpl)
+    WinSalGraphicsImplBase *pImpl = dynamic_cast<WinSalGraphicsImplBase*>(mpImpl.get());
+    if (!pImpl->UseTextDraw())
         return false;
 
     WinFontInstance& rFont = *static_cast<WinFontInstance*>(&rLayout.GetFont());
