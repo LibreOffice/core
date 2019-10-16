@@ -401,10 +401,10 @@ DECLARE_OOXMLIMPORT_TEST(testTdf115094, "tdf115094.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testTdf115094v2, "tdf115094v2.docx")
 {
-    // Introduce new attribute "layoutInCell"
+    // layoutInCell="1" combined with <wp:wrapNone/>
 
-    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName("Grafik 18"), "IsLayoutInCell"));
-    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName("Grafik 19"), "IsLayoutInCell"));
+    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName("Grafik 18"), "IsFollowingTextFlow"));
+    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName("Grafik 19"), "IsFollowingTextFlow"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf122224, "tdf122224.docx")
