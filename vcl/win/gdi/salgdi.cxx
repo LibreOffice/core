@@ -549,6 +549,10 @@ void ImplClearHDCCache( SalData* pData )
 
 std::unique_ptr< CompatibleDC > CompatibleDC::create(SalGraphics &rGraphics, int x, int y, int width, int height)
 {
+#if HAVE_FEATURE_SKIA
+    if (SkiaHelper::isVCLSkiaEnabled())
+        return std::make_unique< SkiaCompatibleDC >( rGraphics, x, y, width, height );
+#endif
     if (OpenGLHelper::isVCLOpenGLEnabled())
         return std::make_unique< OpenGLCompatibleDC >( rGraphics, x, y, width, height );
     return std::unique_ptr< CompatibleDC >( new CompatibleDC( rGraphics, x, y, width, height ));
