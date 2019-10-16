@@ -1999,7 +1999,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             if (pParaContext)
                 pParaContext->SetFrameMode();
 
-            m_pImpl->m_bIsActualParagraphFramed = true;
+            if (!IsInHeaderFooter())
+                m_pImpl->m_bIsActualParagraphFramed = true;
         }
         else
         {

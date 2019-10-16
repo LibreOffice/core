@@ -908,6 +908,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125894, "tdf125894.docx")
     assertXPath(pXmlDoc, "//w:ins");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128156, "tdf128156.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // import change tracking in frames
+    assertXPath(pXmlDoc, "//w:ins");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125546, "tdf125546.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
