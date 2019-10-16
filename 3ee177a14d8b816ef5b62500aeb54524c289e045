@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_033a3f35",
+        "filename": "compilerplugins/clang/stringadd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-10-16T12:21:49Z",
+      "side": 1,
+      "message": "Did you mean \u0027name \u003d\u003d \"boolean\"\u0027 here?",
+      "revId": "3ee177a14d8b816ef5b62500aeb54524c289e045",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
