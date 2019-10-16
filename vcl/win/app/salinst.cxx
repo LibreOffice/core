@@ -1067,4 +1067,14 @@ OUString WinSalInstance::getOSVersion()
     return aVer.makeStringAndClear();
 }
 
+std::shared_ptr<vcl::BackendCapabilities> WinSalInstance::GetBackendCapabilities()
+{
+    auto pBackendCapabilities = SalInstance::GetBackendCapabilities();
+#if HAVE_FEATURE_SKIA
+    if( SkiaHelper::isVCLSkiaEnabled())
+        pBackendCapabilities->mbSupportsBitmap32 = true;
+#endif
+    return pBackendCapabilities;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
