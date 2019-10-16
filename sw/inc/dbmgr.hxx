@@ -143,8 +143,8 @@ struct SwMergeDescriptor
     /**
      * Create a single or multiple results
      *
-     * This currently just affects FILE and PRINTER, as EMAIL is always
-     * multiple and SHELL is always single.
+     * This currently just affects FILE, as EMAIL is always
+     * multiple and SHELL and PRINTER are always single.
      */
     bool                                                bCreateSingleFile;
 
