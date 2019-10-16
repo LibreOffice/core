@@ -1196,12 +1196,7 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
 
     if( '\"' == cInsChar )
     {
-        if( eLang.anyOf(
-            LANGUAGE_FRENCH,
-            LANGUAGE_FRENCH_BELGIAN,
-            LANGUAGE_FRENCH_CANADIAN,
-            LANGUAGE_FRENCH_SWISS,
-            LANGUAGE_FRENCH_LUXEMBOURG))
+        if (primary(eLang) == primary(LANGUAGE_FRENCH) && eLang != LANGUAGE_FRENCH_SWISS)
         {
             OUString s( cNonBreakingSpace ); // UNICODE code for no break space
             if( rDoc.Insert( bSttQuote ? nInsPos+1 : nInsPos, s ))
@@ -1241,12 +1236,7 @@ OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc const & rDoc, sal_Int32 nInsPo
 
     if( '\"' == cInsChar )
     {
-        if( eLang.anyOf(
-             LANGUAGE_FRENCH,
-             LANGUAGE_FRENCH_BELGIAN,
-             LANGUAGE_FRENCH_CANADIAN,
-             LANGUAGE_FRENCH_SWISS,
-             LANGUAGE_FRENCH_LUXEMBOURG))
+        if (primary(eLang) == primary(LANGUAGE_FRENCH) && eLang != LANGUAGE_FRENCH_SWISS)
         {
             if( bSttQuote )
                 sRet += " ";
