@@ -171,6 +171,14 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="TransparencyModeGradient" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <!-- See tdf#108065 for rationale -->
+          <desc>The Gradient variant of Transparency is not supported for OOXML format. Using these options would cause user annoyance over wasted time after saving settings in OOXML format.</desc>
+          <label>Enable the Gradient radio button on the Transparancy tabs. Disable in OOXML-heavy environment.</label>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
   </component>
 </oor:component-schema>

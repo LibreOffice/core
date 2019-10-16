@@ -30,6 +30,7 @@
 #include <svx/xfltrit.hxx>
 #include <cuitabarea.hxx>
 #include <svl/intitem.hxx>
+#include <officecfg/Office/Compatibility.hxx>
 
 using namespace com::sun::star;
 
@@ -239,6 +240,9 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(weld::Container* pPage, weld::Dia
     m_xMtrTrgrBorder->connect_value_changed( aLink );
     m_xMtrTrgrStartValue->connect_value_changed( aLink );
     m_xMtrTrgrEndValue->connect_value_changed( aLink );
+
+    // tdf#108065 Disable ODF-specific Gradient option in OOXML-heavy environments
+    m_xRbtTransGradient->set_sensitive( officecfg::Office::Compatibility::View::TransparencyModeGradient::get() );
 
     // this page needs ExchangeSupport
     SetExchangeSupport();
