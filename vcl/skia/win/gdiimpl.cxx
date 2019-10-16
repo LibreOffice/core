@@ -99,4 +99,63 @@ bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, C
     return false; // TODO
 }
 
+void WinSkiaSalGraphicsImpl::PreDrawText() {}
+
+void WinSkiaSalGraphicsImpl::PostDrawText() { scheduleFlush(); }
+
+void WinSkiaSalGraphicsImpl::DeferredTextDraw(const CompatibleDC::Texture* pTexture,
+                                              Color aMaskColor, const SalTwoRect& rPosAry)
+{
+    assert(dynamic_cast<const SkiaCompatibleDC::Texture*>(pTexture));
+    drawMask(rPosAry, static_cast<const SkiaCompatibleDC::Texture*>(pTexture)->bitmap, aMaskColor);
+}
+
+void WinSkiaSalGraphicsImpl::DrawMask(CompatibleDC::Texture* pTexture, Color nMaskColor,
+                                      const SalTwoRect& rPosAry)
+{
+    assert(dynamic_cast<SkiaCompatibleDC::Texture*>(pTexture));
+    drawMask(rPosAry, static_cast<const SkiaCompatibleDC::Texture*>(pTexture)->bitmap, nMaskColor);
+}
+
+SkiaCompatibleDC::SkiaCompatibleDC(SalGraphics& rGraphics, int x, int y, int width, int height)
+    : CompatibleDC(rGraphics, x, y, width, height, false)
+{
+}
+
+std::unique_ptr<CompatibleDC::Texture> SkiaCompatibleDC::getTexture()
+{
+    auto ret = std::make_unique<SkiaCompatibleDC::Texture>();
+    // TODO is this correct?
+    // TODO make copy of data?
+    if (!ret->bitmap.installPixels(SkImageInfo::Make(maRects.mnSrcWidth, maRects.mnSrcHeight,
+                                                     kBGRA_8888_SkColorType, kUnpremul_SkAlphaType),
+                                   mpData, maRects.mnSrcWidth * 4))
+        abort();
+    return ret;
+}
+
+bool SkiaCompatibleDC::copyToTexture(CompatibleDC::Texture& aTexture)
+{
+    assert(mpImpl);
+    assert(dynamic_cast<SkiaCompatibleDC::Texture*>(&aTexture));
+    SkBitmap tmpBitmap;
+    if (!tmpBitmap.installPixels(SkImageInfo::Make(maRects.mnSrcWidth, maRects.mnSrcHeight,
+                                                   kBGRA_8888_SkColorType, kUnpremul_SkAlphaType),
+                                 mpData, maRects.mnSrcWidth * 4))
+        abort();
+    SkBitmap& bitmap = static_cast<SkiaCompatibleDC::Texture&>(aTexture).bitmap;
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+    SkCanvas canvas(bitmap);
+    // The data we got is upside-down.
+    SkMatrix matrix;
+    matrix.preTranslate(0, maRects.mnSrcHeight);
+    matrix.setConcat(matrix, SkMatrix::MakeScale(1, -1));
+    canvas.concat(matrix);
+    canvas.drawBitmapRect(tmpBitmap,
+                          SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight),
+                          SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight), &paint);
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

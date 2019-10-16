@@ -412,14 +412,23 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& r
                                    Color nMaskColor)
 {
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSalBitmap));
+    drawMask(rPosAry, static_cast<const SkiaSalBitmap&>(rSalBitmap).GetSkBitmap(), nMaskColor);
+}
+
+void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SkBitmap& rBitmap,
+                                   Color nMaskColor)
+{
     SkBitmap tmpBitmap;
-    if (!tmpBitmap.tryAllocN32Pixels(rSalBitmap.GetSize().Width(), rSalBitmap.GetSize().Height()))
+    if (!tmpBitmap.tryAllocN32Pixels(rBitmap.width(), rBitmap.height()))
         abort();
     SkCanvas canvas(tmpBitmap);
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc);
-    canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rSalBitmap).GetSkBitmap(), 0, 0, &paint);
-    tmpBitmap.eraseColor(toSkColor(nMaskColor));
+    canvas.drawBitmap(rBitmap, 0, 0, &paint);
+    // TODO what is this function supposed to do exactly?
+    // Text drawing on Windows doesn't work if this is uncommented.
+    //    tmpBitmap.eraseColor(toSkColor(nMaskColor));
+    (void)nMaskColor;
     mSurface->getCanvas()->drawBitmapRect(
         tmpBitmap,
         SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),

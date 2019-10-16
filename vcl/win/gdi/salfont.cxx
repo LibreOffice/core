@@ -61,6 +61,8 @@
 #include <impfontmetricdata.hxx>
 #include <impglyphitem.hxx>
 
+#include <vcl/skia/SkiaHelper.hxx>
+
 using namespace vcl;
 
 static const int MAXFONTHEIGHT = 2048;
@@ -781,8 +783,9 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     static BYTE nDefaultQuality = NONANTIALIASED_QUALITY;
     if (nDefaultQuality == NONANTIALIASED_QUALITY)
     {
-        // TODO SKIA
-        if (OpenGLWrapper::isVCLOpenGLEnabled())
+        if (SkiaHelper::isVCLSkiaEnabled())
+            nDefaultQuality = ANTIALIASED_QUALITY;
+        else if (OpenGLWrapper::isVCLOpenGLEnabled())
             nDefaultQuality = ANTIALIASED_QUALITY;
         else
             nDefaultQuality = DEFAULT_QUALITY;

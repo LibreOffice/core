@@ -21,22 +21,34 @@ class WinSalGraphicsImplBase
 public:
     virtual ~WinSalGraphicsImplBase(){};
 
-    virtual bool TryRenderCachedNativeControl(ControlCacheKey const& rControlCacheKey, int nX,
-                                              int nY)
-        = 0;
-
-    virtual bool RenderAndCacheNativeControl(CompatibleDC& rWhite, CompatibleDC& rBlack, int nX,
-                                             int nY, ControlCacheKey& aControlCacheKey)
-        = 0;
+    // If true is returned, the following functions are used for drawing controls.
+    virtual bool UseRenderNativeControl() const { return false; }
+    virtual bool TryRenderCachedNativeControl(const ControlCacheKey& /*rControlCacheKey*/,
+                                              int /*nX*/, int /*nY*/)
+    {
+        abort();
+    };
+    virtual bool RenderAndCacheNativeControl(CompatibleDC& /*rWhite*/, CompatibleDC& /*rBlack*/,
+                                             int /*nX*/, int /*nY*/,
+                                             ControlCacheKey& /*aControlCacheKey*/)
+    {
+        abort();
+    };
 
     // If true is returned, the following functions are used for text rendering.
     virtual bool UseTextDraw() const { return false; }
     virtual void PreDrawText() {}
     virtual void PostDrawText() {}
     virtual void DrawMask(CompatibleDC::Texture* /*rTexture*/, Color /*nMaskColor*/,
-                          const SalTwoRect& /*rPosAry*/){};
+                          const SalTwoRect& /*rPosAry*/)
+    {
+        abort();
+    };
     virtual void DeferredTextDraw(const CompatibleDC::Texture* /*pTexture*/, Color /*nMaskColor*/,
-                                  const SalTwoRect& /*rPosAry*/){};
+                                  const SalTwoRect& /*rPosAry*/)
+    {
+        abort();
+    };
 };
 
 #endif // INCLUDED_VCL_INC_WIN_WINGDIIMPL_HXX

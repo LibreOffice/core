@@ -72,8 +72,8 @@ public:
     using OpenGLSalGraphicsImpl::DrawMask;
     virtual void DeferredTextDraw(const CompatibleDC::Texture* pTexture, Color nMaskColor, const SalTwoRect& rPosAry) override;
 
+    virtual bool UseRenderNativeControl() const { return true; }
     virtual bool TryRenderCachedNativeControl(ControlCacheKey const & rControlCacheKey, int nX, int nY) override;
-
     virtual bool RenderAndCacheNativeControl(CompatibleDC& rWhite, CompatibleDC& rBlack,
                                      int nX, int nY , ControlCacheKey& aControlCacheKey) override;
 

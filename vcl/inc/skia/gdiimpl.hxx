@@ -218,6 +218,7 @@ protected:
         return Color(255 - SkColorGetA(color), SkColorGetR(color), SkColorGetG(color),
                      SkColorGetB(color));
     }
+    void drawMask(const SalTwoRect& rPosAry, const SkBitmap& rBitmap, Color nMaskColor);
 
     SalGraphics& mParent;
     /// Pointer to the SalFrame or SalVirtualDevice
