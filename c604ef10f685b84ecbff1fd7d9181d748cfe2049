@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_c88546af",
+        "filename": "sw/source/uibase/shells/textfld.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-10-16T06:23:17Z",
+      "side": 1,
+      "message": "Nitpick: surrounding code puts { to a new line.\nAlso, perhaps swap the two conditions? This function gets called a lot of times, and the second condition is relatively cheap, while the first invokes the whole configmgr machinery.",
+      "revId": "c604ef10f685b84ecbff1fd7d9181d748cfe2049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_6892f2f8",
+        "filename": "sw/source/uibase/shells/textfld.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-10-16T06:23:17Z",
+      "side": 1,
+      "message": "Nitpick: indentation should be 4 spaces less, see surrounding code.",
+      "revId": "c604ef10f685b84ecbff1fd7d9181d748cfe2049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
