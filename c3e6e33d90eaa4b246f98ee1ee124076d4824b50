@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_e3f2a306",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4090,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-10-16T09:36:54Z",
+      "side": 1,
+      "message": "it\u0027s better to keep the original comment for the sake of simplicity",
+      "range": {
+        "startLine": 4084,
+        "startChar": 0,
+        "endLine": 4090,
+        "endChar": 66
+      },
+      "revId": "c3e6e33d90eaa4b246f98ee1ee124076d4824b50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_83608fd0",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4091,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-10-16T09:36:54Z",
+      "side": 1,
+      "message": "it\u0027s suggested to write as\n\nsColor !\u003d \"auto\"",
+      "range": {
+        "startLine": 4091,
+        "startChar": 42,
+        "endLine": 4091,
+        "endChar": 65
+      },
+      "revId": "c3e6e33d90eaa4b246f98ee1ee124076d4824b50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_43eef722",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4091,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-10-16T09:36:54Z",
+      "side": 1,
+      "message": "We don\u0027t need this. We don\u0027t want to output the new \"auto\" values even if was there a grab-bagged different color.",
+      "range": {
+        "startLine": 4091,
+        "startChar": 13,
+        "endLine": 4091,
+        "endChar": 41
+      },
+      "revId": "c3e6e33d90eaa4b246f98ee1ee124076d4824b50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
