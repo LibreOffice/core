@@ -264,7 +264,7 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
             {
                 auto name = calleeMethodDecl->getName();
                 if (callExpr->getNumArgs() > 0
-                    && (name == "number" || name == "unacquired" || "boolean"))
+                    && (name == "number" || name == "unacquired" || name == "boolean"))
                 {
                     auto tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
                     if (tc.Class("OUString") || tc.Class("OString"))
