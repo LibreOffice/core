@@ -1802,27 +1802,32 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
     Size aInnerSize(rAllocation);
     aInnerSize.AdjustWidth(-2);
     aInnerSize.AdjustHeight(-2);
-    long nScrollBarWidth = 0, nScrollBarHeight = 0;
+
+    bool bBothVisible = m_pVScroll->IsVisible() && m_pHScroll->IsVisible();
+    auto nScrollBarWidth = getLayoutRequisition(*m_pVScroll).Width();
+    auto nScrollBarHeight = getLayoutRequisition(*m_pHScroll).Height();
 
     if (m_pVScroll->IsVisible())
     {
-        nScrollBarWidth = getLayoutRequisition(*m_pVScroll).Width();
         Point aScrollPos(rAllocation.Width() - nScrollBarWidth - 2, 1);
         Size aScrollSize(nScrollBarWidth, rAllocation.Height() - 2);
+        if (bBothVisible)
+            aScrollSize.AdjustHeight(-nScrollBarHeight);
         setLayoutAllocation(*m_pVScroll, aScrollPos, aScrollSize);
         aInnerSize.AdjustWidth( -nScrollBarWidth );
     }
 
     if (m_pHScroll->IsVisible())
     {
-        nScrollBarHeight = getLayoutRequisition(*m_pHScroll).Height();
         Point aScrollPos(1, rAllocation.Height() - nScrollBarHeight);
         Size aScrollSize(rAllocation.Width() - 2, nScrollBarHeight);
+        if (bBothVisible)
+            aScrollSize.AdjustWidth(-nScrollBarWidth);
         setLayoutAllocation(*m_pHScroll, aScrollPos, aScrollSize);
         aInnerSize.AdjustHeight( -nScrollBarHeight );
     }
 
-    if (m_pVScroll->IsVisible() && m_pHScroll->IsVisible())
+    if (bBothVisible)
     {
         Point aBoxPos(aInnerSize.Width() + 1, aInnerSize.Height() + 1);
         m_aScrollBarBox->SetPosSizePixel(aBoxPos, Size(nScrollBarWidth, nScrollBarHeight));
