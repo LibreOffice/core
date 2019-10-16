@@ -1424,6 +1424,12 @@ private:
         int allocheight = std::max(height, 1);
 
         gtk_gl_area_make_current(GTK_GL_AREA(m_pGLArea));
+        if (GError *pError = gtk_gl_area_get_error(GTK_GL_AREA(m_pGLArea)))
+        {
+            SAL_WARN("vcl.gtk", "gtk gl area error: " << pError->message);
+            return;
+        }
+
         glBindRenderbuffer(GL_RENDERBUFFER, m_nRenderBuffer);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB8, allocwidth, allocheight);
         glBindRenderbuffer(GL_RENDERBUFFER, m_nDepthBuffer);
@@ -1475,9 +1481,11 @@ private:
         gtk_widget_show_all(pParent);
 
         gtk_gl_area_make_current(GTK_GL_AREA(m_pGLArea));
-
-        if (gtk_gl_area_get_error(GTK_GL_AREA(m_pGLArea)))
+        if (GError *pError = gtk_gl_area_get_error(GTK_GL_AREA(m_pGLArea)))
+        {
+            SAL_WARN("vcl.gtk", "gtk gl area error: " << pError->message);
             return false;
+        }
 
         gtk_gl_area_attach_buffers(GTK_GL_AREA(m_pGLArea));
         glGenFramebuffersEXT(1, &m_nAreaFrameBuffer);
