@@ -238,12 +238,6 @@ public:
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon,
             const Gradient& rGradient) override;
-
-    virtual bool TryRenderCachedNativeControl(const ControlCacheKey& rControlCacheKey,
-                        int nX, int nY) override;
-
-    virtual bool RenderAndCacheNativeControl(CompatibleDC& rWhite, CompatibleDC& rBlack,
-                        int nX, int nY , ControlCacheKey& aControlCacheKey) override;
 };
 
 #endif // INCLUDED_VCL_WIN_GDI_GDIIMPL_HXX
