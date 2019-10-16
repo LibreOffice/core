@@ -465,7 +465,7 @@ void SkiaSalGraphicsImpl::invert(long nX, long nY, long nWidth, long nHeight, Sa
     (void)nWidth;
     (void)nHeight;
     (void)nFlags;
-    abort();
+    // TODO
 }
 
 void SkiaSalGraphicsImpl::invert(sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags)
