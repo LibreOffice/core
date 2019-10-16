@@ -4109,14 +4109,14 @@ void ScExportTest::testExtendedLCIDXLSX()
     xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     // Check export
-    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", "[$-107041E]DD\\-MM\\-YYYY");
-    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[3]", "formatCode", "[$-D07041E]DD\\-MM\\-YYYY");
-    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[4]", "formatCode", "[$-1030411]DD\\-MM\\-EE");
-    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[5]", "formatCode", "[$-1B030411]DD\\-MM\\-EE");
-    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[6]", "formatCode", "[$-108040D]DD\\-MM\\-YYYY");
-    //assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[7]", "formatCode", "[$-108040D]DD\\-MM\\-YYYY");
-    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[7]", "formatCode", "[$-1060401]DD\\-MM\\-YYYY");
-    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[8]", "formatCode", "[$-2060401]DD\\-MM\\-YYYY");
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", "[$-107041E]dd\\-mm\\-yyyy");
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[3]", "formatCode", "[$-D07041E]dd\\-mm\\-yyyy");
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[4]", "formatCode", "[$-1030411]dd\\-mm\\-ee");
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[5]", "formatCode", "[$-1B030411]dd\\-mm\\-ee");
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[6]", "formatCode", "[$-108040D]dd\\-mm\\-yyyy");
+    //assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[7]", "formatCode", "[$-108040D]dd\\-mm\\-yyyy");
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[7]", "formatCode", "[$-1060401]dd\\-mm\\-yyyy");
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[8]", "formatCode", "[$-2060401]dd\\-mm\\-yyyy");
 
     // Check import
     ScDocument& rDoc = xDocSh->GetDocument();

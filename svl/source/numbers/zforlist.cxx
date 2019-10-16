@@ -787,12 +787,50 @@ void SvNumberFormatter::FillKeywordTableForExcel( NfKeywordTable& rKeywords )
 
     // Replace upper case "GENERAL" with proper case "General".
     rKeywords[ NF_KEY_GENERAL ] = GetStandardName( LANGUAGE_ENGLISH_US );
+
+    // Excel or OOXML do not specify format code keywords case sensitivity,
+    // but given and writes them lower case. Using upper case even lead to an
+    // odd misrepresentation in iOS viewer and OSX Quicklook viewer that
+    // strangely use "D" and "DD" for "days since beginnning of year", which is
+    // nowhere defined. See tdf#126773
+    // Use lower case for all date and time keywords where known. See OOXML
+    // ECMA-376-1:2016 18.8.31 numFmts (Number Formats)
+    rKeywords[ NF_KEY_MI ]    = "m";
+    rKeywords[ NF_KEY_MMI ]   = "mm";
+    rKeywords[ NF_KEY_M ]     = "m";
+    rKeywords[ NF_KEY_MM ]    = "mm";
+    rKeywords[ NF_KEY_MMM ]   = "mmm";
+    rKeywords[ NF_KEY_MMMM ]  = "mmmm";
+    rKeywords[ NF_KEY_MMMMM ] = "mmmmm";
+    rKeywords[ NF_KEY_H ]     = "h";
+    rKeywords[ NF_KEY_HH ]    = "hh";
+    rKeywords[ NF_KEY_S ]     = "s";
+    rKeywords[ NF_KEY_SS ]    = "ss";
+    /* XXX: not defined in OOXML: rKeywords[ NF_KEY_Q ]     = "q"; */
+    /* XXX: not defined in OOXML: rKeywords[ NF_KEY_QQ ]    = "qq"; */
+    rKeywords[ NF_KEY_D ]     = "d";
+    rKeywords[ NF_KEY_DD ]    = "dd";
+    rKeywords[ NF_KEY_DDD ]   = "ddd";
+    rKeywords[ NF_KEY_DDDD ]  = "dddd";
+    rKeywords[ NF_KEY_YY ]    = "yy";
+    rKeywords[ NF_KEY_YYYY ]  = "yyyy";
+    /* XXX: not defined in OOXML: rKeywords[ NF_KEY_AAA ]   = "aaa"; */
+    /* XXX: not defined in OOXML: rKeywords[ NF_KEY_AAAA ]  = "aaaa"; */
+    rKeywords[ NF_KEY_EC ]    = "e";
+    rKeywords[ NF_KEY_EEC ]   = "ee";
+    rKeywords[ NF_KEY_G ]     = "g";
+    rKeywords[ NF_KEY_GG ]    = "gg";
+    rKeywords[ NF_KEY_GGG ]   = "ggg";
+    rKeywords[ NF_KEY_R ]     = "r";
+    rKeywords[ NF_KEY_RR ]    = "rr";
+    /* XXX: not defined in OOXML: rKeywords[ NF_KEY_WW ]    = "ww"; */
+
     // Remap codes unknown to Excel.
-    rKeywords[ NF_KEY_NN ] = "DDD";
-    rKeywords[ NF_KEY_NNN ] = "DDDD";
+    rKeywords[ NF_KEY_NN ] = "ddd";
+    rKeywords[ NF_KEY_NNN ] = "dddd";
     // NNNN gets a separator appended in SvNumberformat::GetMappedFormatString()
-    rKeywords[ NF_KEY_NNNN ] = "DDDD";
-    // Export the Thai T NatNum modifier.
+    rKeywords[ NF_KEY_NNNN ] = "dddd";
+    // Export the Thai T NatNum modifier. This must be uppercase for internal reasons.
     rKeywords[ NF_KEY_THAI_T ] = "T";
 }
 
