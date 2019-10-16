@@ -218,14 +218,9 @@ void Statement::close(  )
 void Statement::raiseSQLException(
     const OUString & sql, const char * errorMsg )
 {
-    OUStringBuffer buf(128);
-    buf.append( "pq_driver: ");
-    buf.append(
-        OUString( errorMsg, strlen(errorMsg), ConnectionSettings::encoding ) );
-    buf.append( " (caused by statement '" );
-    buf.append( sql );
-    buf.append( "')" );
-    OUString error = buf.makeStringAndClear();
+    OUString error = "pq_driver: "
+        + OUString( errorMsg, strlen(errorMsg), ConnectionSettings::encoding )
+        + " (caused by statement '" + sql + "')";
     log(m_pSettings, LogLevel::Error, error);
     throw SQLException( error, *this, OUString(), 1, Any() );
 }
@@ -319,11 +314,10 @@ static std::vector< OUString > lookupKeys(
                         keySupplier.clear();
                         if (isLog(pSettings, LogLevel::Info))
                         {
-                            OStringBuffer buf( 128 );
-                            buf.append( "Can't offer updateable result set because table " );
-                            buf.append( OUStringToOString(name, ConnectionSettings::encoding) );
-                            buf.append( " is duplicated, add schema to resolve ambiguity" );
-                            log(pSettings, LogLevel::Info, buf.makeStringAndClear().getStr());
+                            OString buf = "Can't offer updateable result set because table "
+                                + OUStringToOString(name, ConnectionSettings::encoding)
+                                + " is duplicated, add schema to resolve ambiguity";
+                            log(pSettings, LogLevel::Info, buf.getStr());
                         }
                         break;
                     }
@@ -336,11 +330,9 @@ static std::vector< OUString > lookupKeys(
     {
         if (isLog(pSettings, LogLevel::Info))
         {
-            OStringBuffer buf( 128 );
-            buf.append( "Can't offer updateable result set ( table " );
-            buf.append( OUStringToOString(table, ConnectionSettings::encoding) );
-            buf.append( " is unknown)" );
-            log(pSettings, LogLevel::Info, buf.makeStringAndClear().getStr());
+            OString buf = "Can't offer updateable result set ( table "
+                + OUStringToOString(table, ConnectionSettings::encoding) + " is unknown)";
+            log(pSettings, LogLevel::Info, buf.getStr());
         }
     }
 
@@ -382,11 +374,10 @@ static std::vector< OUString > lookupKeys(
         {
             if (isLog(pSettings, LogLevel::Info))
             {
-                OStringBuffer buf( 128 );
-                buf.append( "Can't offer updateable result set ( table " );
-                buf.append( OUStringToOString(table, ConnectionSettings::encoding) );
-                buf.append( " does not have a primary key)" );
-                log(pSettings, LogLevel::Info, buf.makeStringAndClear().getStr());
+                OString buf = "Can't offer updateable result set ( table "
+                    + OUStringToOString(table, ConnectionSettings::encoding)
+                    + " does not have a primary key)";
+                log(pSettings, LogLevel::Info, buf.getStr());
             }
         }
     }
@@ -496,12 +487,8 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                 }
                 else if( ! table.getLength() )
                 {
-                    OStringBuffer buf( 128 );
-                    buf.append( "can't support updateable resultset, because a single table in the "
-                                "WHERE part of the statement could not be identified (" );
-                    buf.append( cmd );
-                    buf.append( "." );
-                    aReason = buf.makeStringAndClear();
+                    aReason = "can't support updateable resultset, because a single table in the "
+                        "WHERE part of the statement could not be identified (" + cmd + ".";
                 }
                 else if( !sourceTableKeys.empty() )
                 {
@@ -518,22 +505,17 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                 else
                 {
 
-                    OStringBuffer buf( 128 );
-                    buf.append( "can't support updateable resultset for table " );
-                    buf.append( OUStringToOString( schema, ConnectionSettings::encoding ) );
-                    buf.append( "." );
-                    buf.append( OUStringToOString( table, ConnectionSettings::encoding ) );
-                    buf.append( ", because resultset table does not have a primary key " );
-                    aReason = buf.makeStringAndClear();
+                    aReason = "can't support updateable resultset for table "
+                        + OUStringToOString( schema, ConnectionSettings::encoding ) + "."
+                        + OUStringToOString( table, ConnectionSettings::encoding )
+                        + ", because resultset table does not have a primary key ";
                 }
             }
             else
             {
-                OStringBuffer buf( 128 );
-                buf.append( "can't support updateable result for selects with multiple tables (" );
-                buf.append( cmd );
-                buf.append( ")" );
-                log(pSettings, LogLevel::Sql, buf.makeStringAndClear().getStr() );
+                OString buf = "can't support updateable result for selects with multiple tables ("
+                    + cmd + ")";
+                log(pSettings, LogLevel::Sql, buf.getStr() );
             }
             if( ! (*(data->pLastResultset)).is() )
             {
@@ -568,16 +550,10 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
         ret = true;
         if (isLog(pSettings, LogLevel::Sql))
         {
-            OStringBuffer buf( 128 );
-            buf.append( "executed query '" );
-            buf.append( cmd );
-            buf.append( "' successfully" );
-            buf.append( ", duration=" );
-            buf.append( duration );
-            buf.append( "ms, returnedRows=" );
-            buf.append( returnedRows );
-            buf.append( "." );
-            log(pSettings, LogLevel::Sql, buf.makeStringAndClear().getStr());
+            OString buf = "executed query '" + cmd + "' successfully, duration="
+                + OString::number(duration) + "ms, returnedRows=" + OString::number(returnedRows)
+                + ".";
+            log(pSettings, LogLevel::Sql, buf.getStr());
         }
         break;
     }

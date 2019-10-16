@@ -274,9 +274,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs)
         if (m_options.count("-I") > 0)
         {
           // append param.
-          OStringBuffer buffer(m_options["-I"]);
-          buffer.append(' '); buffer.append(param);
-          param = buffer.makeStringAndClear();
+          param = m_options["-I"] + " " + param;
         }
         m_options["-I"] = param;
         break;
@@ -291,9 +289,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs)
         param += OString((*first).c_str(), (*first).size());
         if (m_options.count("-D") > 0)
         {
-          OStringBuffer buffer(m_options["-D"]);
-          buffer.append(' '); buffer.append(param);
-          param = buffer.makeStringAndClear();
+          param = m_options["-D"] + " " + param;
         }
         m_options["-D"] = param;
         break;

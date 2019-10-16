@@ -796,9 +796,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                         if (n100s < 0)
                             incErrorInt( "Error: Time100SecSeparator not present in FormatCode formatindex=\"%d\".\n",
                                     formatindex);
-                        OUStringBuffer a100s( pSep->getValue());
-                        a100s.append( "00");
-                        n100s = aCode.indexOf( a100s.makeStringAndClear());
+                        n100s = aCode.indexOf( pSep->getValue() + "00");
                         if (n100s < 0)
                             incErrorInt( "Error: Time100SecSeparator+00 not present in FormatCode formatindex=\"%d\".\n",
                                     formatindex);

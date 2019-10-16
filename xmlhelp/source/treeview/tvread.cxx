@@ -123,12 +123,7 @@ namespace treeview {
         {
             if( targetURL.isEmpty() )
             {
-                OUStringBuffer strBuff( 21 + id.getLength() );
-                strBuff.append(
-                                    "vnd.sun.star.help://"
-                                    ).append(id);
-
-                targetURL = strBuff.makeStringAndClear();
+                targetURL = "vnd.sun.star.help://" + id;
             }
 
             return targetURL;

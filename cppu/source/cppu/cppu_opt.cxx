@@ -22,7 +22,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <typelib/typedescription.h>
 #include <uno/any2.h>
-#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
 
 
 using namespace ::rtl;
@@ -32,11 +32,8 @@ extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
     typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C()
 {
-    OUStringBuffer buf( 64 );
-    buf.append( "unsatisfied query for interface of type " );
-    buf.append( OUString::unacquired( &pType->pTypeName ) );
-    buf.append( '!' );
-    OUString ret( buf.makeStringAndClear() );
+    OUString ret = "unsatisfied query for interface of type "
+        + OUString::unacquired( &pType->pTypeName ) + "!";
     rtl_uString_acquire( ret.pData );
     return ret.pData;
 }
@@ -46,11 +43,8 @@ extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iset_msg(
     typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C()
 {
-    OUStringBuffer buf( 64 );
-    buf.append( "invalid attempt to assign an empty interface of type " );
-    buf.append( OUString::unacquired( &pType->pTypeName ) );
-    buf.append( '!' );
-    OUString ret( buf.makeStringAndClear() );
+    OUString ret = "invalid attempt to assign an empty interface of type "
+        + OUString::unacquired( &pType->pTypeName ) + "!";
     rtl_uString_acquire( ret.pData );
     return ret.pData;
 }

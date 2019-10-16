@@ -93,11 +93,8 @@ private:
 
 void SwMacrosTest::createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
 {
-    OUString aSep("/");
-    OUStringBuffer aBuffer( m_directories.getSrcRootURL() );
-    aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
-    aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
-    rFilePath = aBuffer.makeStringAndClear();
+    rFilePath = m_directories.getSrcRootURL() + m_aBaseString + "/" + aFileExtension + "/"
+        + aFileBase + aFileExtension;
 }
 
 void SwMacrosTest::testVba()

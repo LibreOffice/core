@@ -115,9 +115,7 @@ void Views::refresh()
 
             {
                 m_values.push_back( makeAny( prop ) );
-                OUStringBuffer buf( table.getLength() + schema.getLength() + 1);
-                buf.append( schema ).append( "." ).append( table );
-                map[ buf.makeStringAndClear() ] = viewIndex;
+                map[ schema + "." + table ] = viewIndex;
                 ++viewIndex;
             }
         }
@@ -191,12 +189,9 @@ void Views::dropByIndex( sal_Int32 index )
     set->getPropertyValue( st.SCHEMA_NAME ) >>= schema;
     set->getPropertyValue( st.NAME ) >>= name;
 
-    OUStringBuffer update( 128 );
-    update.append( "DROP VIEW \"" ).append( schema ).append( "\".\"" ).append( name ).append( "\"" );
-
     Reference< XStatement > stmt = m_origin->createStatement( );
 
-    stmt->executeUpdate( update.makeStringAndClear() );
+    stmt->executeUpdate( "DROP VIEW \"" + schema + "\".\"" + name + "\"" );
 }
 
 

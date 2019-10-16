@@ -50,7 +50,6 @@
 #include "pq_xviews.hxx"
 #include "pq_xusers.hxx"
 
-#include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/uuid.h>
 #include <rtl/bootstrap.hxx>
@@ -576,11 +575,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
 
     if (isLog(&m_settings, LogLevel::Info))
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "connection to '" );
-        buf.append( url );
-        buf.append( "' successfully opened" );
-        log(&m_settings, LogLevel::Info, buf.makeStringAndClear());
+        log(&m_settings, LogLevel::Info, "connection to '" + url + "' successfully opened");
     }
 }
 
