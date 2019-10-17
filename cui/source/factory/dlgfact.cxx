@@ -1597,7 +1597,7 @@ VclPtr<SfxAbstractLinksDialog> AbstractDialogFactory_Impl::CreateLinksDialog(wel
     return VclPtr<AbstractLinksDialog_Impl>::Create(std::move(xLinkDlg));
 }
 
-VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel, const SdrObject* /*pObj*/)
+VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel)
 {
     return VclPtr<CuiAbstractTabController_Impl>::Create(std::make_unique<SvxFormatCellsDialog>(pParent, pAttr, rModel));
 }
