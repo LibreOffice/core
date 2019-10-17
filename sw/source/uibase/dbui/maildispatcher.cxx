@@ -31,43 +31,17 @@ typedef std::vector< ::rtl::Reference<IMailDispatcherListener> > MailDispatcherL
 
 namespace /* private */
 {
-    /* Generic event notifier for started,
-       stopped, and idle events which are
-       very similarly */
-    class GenericEventNotifier
-    {
-    public:
-        // pointer to virtual function typedef
-        typedef void (IMailDispatcherListener::*GenericNotificationFunc_t)(::rtl::Reference<MailDispatcher>);
-
-        GenericEventNotifier(
-            GenericNotificationFunc_t notification_function,
-            ::rtl::Reference<MailDispatcher> const & mail_dispatcher) :
-            notification_function_(notification_function),
-            mail_dispatcher_(mail_dispatcher)
-        {}
-
-        void operator() (::rtl::Reference<IMailDispatcherListener> const & listener) const
-        { (listener.get()->*notification_function_)(mail_dispatcher_); }
-
-    private:
-        GenericNotificationFunc_t notification_function_;
-        ::rtl::Reference<MailDispatcher> mail_dispatcher_;
-    };
-
     class MailDeliveryNotifier
     {
     public:
-        MailDeliveryNotifier(::rtl::Reference<MailDispatcher> const & xMailDispatcher, uno::Reference<mail::XMailMessage> const & message) :
-            mail_dispatcher_(xMailDispatcher),
+        MailDeliveryNotifier(uno::Reference<mail::XMailMessage> const & message) :
             message_(message)
         {}
 
         void operator() (::rtl::Reference<IMailDispatcherListener> const & listener) const
-        { listener->mailDelivered(mail_dispatcher_, message_); }
+        { listener->mailDelivered(message_); }
 
     private:
-        ::rtl::Reference<MailDispatcher> mail_dispatcher_;
         uno::Reference<mail::XMailMessage> message_;
     };
 
@@ -203,7 +177,7 @@ void MailDispatcher::sendMailMessageNotifyListener(uno::Reference<mail::XMailMes
         m_xMailserver->sendMailMessage( message );
         MailDispatcherListenerContainer_t aClonedListenerVector(cloneListener());
         std::for_each( aClonedListenerVector.begin(), aClonedListenerVector.end(),
-                       MailDeliveryNotifier(this, message) );
+                       MailDeliveryNotifier(message) );
     }
     catch (const mail::MailException& ex)
     {
@@ -258,8 +232,8 @@ void MailDispatcher::run()
             message_container_guard.clear();
             thread_status_guard.clear();
             MailDispatcherListenerContainer_t aListenerListcloned( cloneListener() );
-            std::for_each( aListenerListcloned.begin(), aListenerListcloned.end(),
-                           GenericEventNotifier(&IMailDispatcherListener::idle, this) );
+            for( const auto & l : aListenerListcloned)
+                l->idle();
         }
     }
 }

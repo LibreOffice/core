@@ -1078,10 +1078,9 @@ public:
     explicit MailDispatcherListener_Impl( SwDBManager &rDBManager )
         : m_rDBManager( rDBManager ) {}
 
-    virtual void idle( ::rtl::Reference<MailDispatcher> ) override {}
+    virtual void idle() override {}
 
-    virtual void mailDelivered( ::rtl::Reference<MailDispatcher>,
-                 uno::Reference< mail::XMailMessage> xMessage ) override
+    virtual void mailDelivered( uno::Reference< mail::XMailMessage> xMessage ) override
     {
         osl::MutexGuard aGuard( m_rDBManager.m_pImpl->m_aAllEmailSendMutex );
         if ( m_rDBManager.m_pImpl->m_xLastMessage == xMessage )
