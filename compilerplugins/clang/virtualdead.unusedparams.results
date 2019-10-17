@@ -310,9 +310,6 @@ svx/source/inc/fmtextcontrolshell.hxx:69
 sw/inc/calbck.hxx:144
     void SwClient::Modify(const class SfxPoolItem *const,const class SfxPoolItem *const,)
     10
-sw/inc/IDocumentLinksAdministration.hxx:55
-    _Bool IDocumentLinksAdministration::SetData(const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Any &,)
-    100
 sw/inc/swcrsr.hxx:161
     _Bool SwCursor::LeftRight(_Bool,unsigned short,unsigned short,_Bool,_Bool,_Bool,const class SwRootFrame *,)
     1100000

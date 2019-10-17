@@ -290,8 +290,7 @@ bool DocumentLinksAdministrationManager::GetData( const OUString& rItem, const O
     return false;
 }
 
-bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const OUString& ,
-                     const uno::Any &  )
+bool DocumentLinksAdministrationManager::SetData( const OUString& rItem )
 {
     // search for bookmarks and sections case sensitive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;

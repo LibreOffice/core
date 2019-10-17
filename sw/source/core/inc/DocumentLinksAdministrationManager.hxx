@@ -50,7 +50,7 @@ public:
 
     bool GetData(const OUString& rItem, const OUString& rMimeType, css::uno::Any& rValue) const override;
 
-    bool SetData(const OUString& rItem, const OUString& rMimeType, const css::uno::Any& rValue) override;
+    bool SetData(const OUString& rItem) override;
 
     ::sfx2::SvLinkSource* CreateLinkSource(const OUString& rItem) override;
 
