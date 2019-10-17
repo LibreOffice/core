@@ -194,15 +194,14 @@ do { \
 
 ConvErr QProToSc::Convert( const ScTokenArray*& pArray )
 {
-    sal_uInt8 nFmla[ nBufSize ], nArg;
+    sal_uInt8 nFmla[ nBufSize ];
     sal_uInt8 nArgArray[ nBufSize ] = {0};
     sal_Int8 nCol, nPage;
-    sal_uInt16 nInt, nIntCount = 0, nStringCount = 0, nFloatCount = 0, nDLLCount = 0, nArgCount = 0;
+    sal_uInt16 nIntCount = 0, nStringCount = 0, nFloatCount = 0, nDLLCount = 0, nArgCount = 0;
     sal_uInt16 nIntArray[ nBufSize ] = {0};
     OUString sStringArray[ nBufSize ];
-    sal_uInt16 nDummy, nDLLId;
     sal_uInt16 nDLLArray[ nBufSize ] = {0};
-    sal_uInt16 nNote, nRef, nRelBits;
+    sal_uInt16 nNote, nRelBits;
     TokenId nPush;
     ScComplexRefData aCRD;
     ScSingleRefData aSRD;
@@ -213,16 +212,19 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray )
 
     aCRD.InitFlags();
     aSRD.InitFlags();
+    sal_uInt16 nRef = 0;
     maIn.ReadUInt16( nRef );
 
     if( nRef < nBufSize )
     {
         for( sal_uInt16 i=0; i < nRef; i++)
         {
+            nFmla[i] = 0;
             maIn.ReadUChar( nFmla[i] );
 
             if( nFmla[ i ] == 0x05 )
             {
+                sal_uInt16 nInt = 0;
                 maIn.ReadUInt16( nInt );
                 nIntArray[ nIntCount ] = nInt;
                 SAFEDEC_OR_RET(nRef, 2, ConvErr::Count);
@@ -231,7 +233,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray )
 
             if( nFmla[ i ] == 0x00 )
             {
-                double nFloat;
+                double nFloat = 0;
                 maIn.ReadDouble( nFloat );
                 nFloatArray[ nFloatCount ] = nFloat;
                 SAFEDEC_OR_RET(nRef, 8, ConvErr::Count);
@@ -240,6 +242,8 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray )
 
             if( nFmla[ i ] == 0x1a )
             {
+                sal_uInt8 nArg = 0;
+                sal_uInt16 nDummy, nDLLId = 0;
                 maIn.ReadUChar( nArg ).ReadUInt16( nDummy ).ReadUInt16( nDLLId );
                 nArgArray[ nArgCount ] = nArg;
                 nDLLArray[ nDLLCount ] = nDLLId;
