@@ -1337,7 +1337,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         GetImport().GetTextImport()->SetCursor( xText->createTextCursor() );
 
         // take care of open redlines for tables
-        GetImport().GetTextImport()->RedlineAdjustStartNodeCursor(true);
+        GetImport().GetTextImport()->RedlineAdjustStartNodeCursor();
     }
     if( pXTable )
     {
@@ -1388,7 +1388,7 @@ SwXMLTableContext::~SwXMLTableContext()
     m_pRows.reset();
 
     // close redlines on table end nodes
-    GetImport().GetTextImport()->RedlineAdjustStartNodeCursor(false);
+    GetImport().GetTextImport()->RedlineAdjustStartNodeCursor();
 }
 
 SvXMLImportContextRef SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,

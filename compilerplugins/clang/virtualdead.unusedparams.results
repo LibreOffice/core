@@ -217,9 +217,6 @@ include/vcl/task.hxx:71
 include/vcl/treelist.hxx:304
     void SvListView::ModelIsMoving(class SvTreeListEntry *,class SvTreeListEntry *,unsigned long,)
     100
-include/xmloff/txtimp.hxx:677
-    void XMLTextImportHelper::RedlineAdjustStartNodeCursor(_Bool,)
-    0
 include/xmloff/xmlimp.hxx:244
     class SvXMLImportContext * SvXMLImport::CreateDocumentContext(const unsigned short,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XAttributeList> &,)
     110
