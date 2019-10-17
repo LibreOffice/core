@@ -433,9 +433,3 @@ vcl/inc/WidgetDrawInterface.hxx:63
 vcl/inc/WidgetDrawInterface.hxx:87
     _Bool vcl::WidgetDrawInterface::getNativeControlRegion(enum ControlType,enum ControlPart,const class tools::Rectangle &,enum ControlState,const class ImplControlValue &,const class rtl::OUString &,class tools::Rectangle &,class tools::Rectangle &,)
     11111011
-writerfilter/inc/dmapper/resourcemodel.hxx:173
-    void writerfilter::BinaryObj::data(const unsigned char *,unsigned long,class tools::SvRef<class writerfilter::Reference<class writerfilter::Properties> >,)
-    110
-writerfilter/inc/ooxml/OOXMLDocument.hxx:216
-    void writerfilter::ooxml::OOXMLDocument::setXNoteType(unsigned int,)
-    0

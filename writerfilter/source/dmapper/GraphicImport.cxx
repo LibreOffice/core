@@ -1412,7 +1412,7 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
 }
 
 
-void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
+void GraphicImport::data(const sal_uInt8* buf, size_t len)
 {
     beans::PropertyValues aMediaProperties( 1 );
     aMediaProperties[0].Name = getPropertyName(PROP_INPUT_STREAM);

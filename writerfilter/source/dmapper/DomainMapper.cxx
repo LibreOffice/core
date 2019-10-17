@@ -2838,8 +2838,7 @@ void DomainMapper::lcl_entry(writerfilter::Reference<Properties>::Pointer_t ref)
     ref->resolve(*this);
 }
 
-void DomainMapper::data(const sal_uInt8* /*buf*/, size_t /*len*/,
-                        writerfilter::Reference<Properties>::Pointer_t /*ref*/)
+void DomainMapper::data(const sal_uInt8* /*buf*/, size_t /*len*/)
 {
 }
 

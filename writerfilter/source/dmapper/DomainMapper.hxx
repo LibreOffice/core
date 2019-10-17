@@ -86,8 +86,7 @@ public:
     virtual void markLastSectionGroup() override;
 
     // BinaryObj
-    virtual void data(const sal_uInt8* buf, size_t len,
-                      writerfilter::Reference<Properties>::Pointer_t ref) override;
+    virtual void data(const sal_uInt8* buf, size_t len) override;
 
     void sprmWithProps( Sprm& sprm, const PropertyMapPtr& pContext );
 
