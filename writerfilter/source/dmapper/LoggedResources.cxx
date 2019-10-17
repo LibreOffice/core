@@ -289,9 +289,9 @@ void LoggedStream::info(const std::string & _info)
 #ifdef DBG_UTIL
     mHelper.startElement("info");
     LoggedResourcesHelper::attribute("text", _info);
+#else
+    (void)_info;
 #endif
-
-    lcl_info(_info);
 
 #ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();

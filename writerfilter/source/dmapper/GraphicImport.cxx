@@ -1481,10 +1481,6 @@ void GraphicImport::lcl_substream(Id /*name*/, ::writerfilter::Reference<Stream>
 {
 }
 
-void GraphicImport::lcl_info(const std::string& /*info*/)
-{
-}
-
 void GraphicImport::lcl_startShape(uno::Reference<drawing::XShape> const&)
 {
 }

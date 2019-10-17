@@ -90,7 +90,6 @@ protected:
     virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref) = 0;
     virtual void lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t ref) = 0;
     virtual void lcl_substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) = 0;
-    virtual void lcl_info(const std::string & info) = 0;
     virtual void lcl_startGlossaryEntry() { }
     virtual void lcl_endGlossaryEntry() { }
 
