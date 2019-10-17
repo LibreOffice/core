@@ -52,11 +52,6 @@ css::uno::Sequence<OUString> XMLDrawMetaExportOasis_getSupportedServiceNames() t
 /// @throws css::uno::Exception
 css::uno::Reference<css::uno::XInterface> XMLDrawMetaExportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-OUString XMLDrawSettingsExportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> XMLDrawSettingsExportOasis_getSupportedServiceNames() throw();
-/// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> XMLDrawSettingsExportOasis_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
 // impress animation import
 OUString AnimationsImport_getImplementationName() throw();
