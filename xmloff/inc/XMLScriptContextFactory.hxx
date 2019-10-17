@@ -45,9 +45,7 @@ public:
                   /// the context for the enclosing <script:events> element
                   XMLEventsImportContext * rEvents,
                   /// the event name (as understood by the API)
-                  const OUString & rApiEventName,
-                  /// the event type name (as registered)
-                  const OUString & rLanguage) override;
+                  const OUString & rApiEventName) override;
 };
 
 #endif // INCLUDED_XMLOFF_INC_XMLSCRIPTCONTEXTFACTORY_HXX

@@ -220,9 +220,6 @@ include/vcl/treelist.hxx:304
 include/xmloff/txtimp.hxx:677
     void XMLTextImportHelper::RedlineAdjustStartNodeCursor(_Bool,)
     0
-include/xmloff/xmlevent.hxx:129
-    class SvXMLImportContext * XMLEventContextFactory::CreateContext(class SvXMLImport &,unsigned short,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XAttributeList> &,class XMLEventsImportContext *,const class rtl::OUString &,const class rtl::OUString &,)
-    1111110
 include/xmloff/xmlimp.hxx:244
     class SvXMLImportContext * SvXMLImport::CreateDocumentContext(const unsigned short,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XAttributeList> &,)
     110

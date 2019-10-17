@@ -134,9 +134,7 @@ public:
         /// the context for the enclosing <script:events> element
         XMLEventsImportContext* rEvents,
         /// the event name (as understood by the API)
-        const OUString& rApiEventName,
-        /// the event type name (as registered)
-        const OUString& rApiLanguage) = 0;
+        const OUString& rApiEventName) = 0;
 };
 
 
