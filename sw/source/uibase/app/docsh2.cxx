@@ -1347,10 +1347,10 @@ bool SwDocShell::DdeGetData( const OUString& rItem, const OUString& rMimeType,
     return m_xDoc->getIDocumentLinksAdministration().GetData( rItem, rMimeType, rValue );
 }
 
-bool SwDocShell::DdeSetData( const OUString& rItem, const OUString& rMimeType,
-                             const uno::Any & rValue )
+bool SwDocShell::DdeSetData( const OUString& rItem, const OUString& /*rMimeType*/,
+                             const uno::Any & /*rValue*/ )
 {
-    return m_xDoc->getIDocumentLinksAdministration().SetData( rItem, rMimeType, rValue );
+    return m_xDoc->getIDocumentLinksAdministration().SetData( rItem );
 }
 
 #endif
