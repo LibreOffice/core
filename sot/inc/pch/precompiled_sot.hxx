@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:19:01 using:
+ Generated on 2019-10-17 16:11:32 using:
  ./bin/update_pch sot sot --cutoff=5 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,22 +27,17 @@
 #include <memory>
 #include <new>
 #include <ostream>
+#include <string_view>
 #include <utility>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
-#include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
-#include <osl/getglobalmutex.hxx>
-#include <osl/interlck.h>
 #include <osl/mutex.hxx>
-#include <osl/thread.h>
 #include <rtl/alloc.h>
-#include <rtl/digest.h>
-#include <rtl/instance.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
@@ -51,22 +46,16 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/types.h>
+#include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
-#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.h>
-#include <com/sun/star/uno/genfunc.hxx>
-#include <cppu/unotype.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <tools/lineend.hxx>
 #include <tools/ref.hxx>
-#include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
-#include <typelib/typedescription.h>
-#include <uno/data.h>
-#include <uno/sequence2.h>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4

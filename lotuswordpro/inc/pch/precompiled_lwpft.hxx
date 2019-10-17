@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:43 using:
+ Generated on 2019-10-17 15:15:06 using:
  ./bin/update_pch lotuswordpro lwpft --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -35,6 +35,7 @@
 #include <stdexcept>
 #include <stdio.h>
 #include <string.h>
+#include <string_view>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -51,6 +52,7 @@
 #include <osl/time.h>
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:41 using:
+ Generated on 2019-10-17 15:14:55 using:
  ./bin/update_pch hwpfilter hwp --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -21,10 +21,12 @@
 */
 
 #if PCH_LEVEL >= 1
+#include <algorithm>
 #include <assert.h>
 #include <cassert>
 #include <cstddef>
 #include <errno.h>
+#include <iomanip>
 #include <limits>
 #include <math.h>
 #include <memory>
@@ -32,15 +34,19 @@
 #include <ostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
+#include <string_view>
 #include <type_traits>
 #include <utility>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
+#include <rtl/alloc.h>
 #include <rtl/character.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
@@ -54,9 +60,27 @@
 #include <vcl/dllapi.h>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
+#include <com/sun/star/uno/Any.h>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Type.h>
+#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/TypeClass.hdl>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/genfunc.h>
+#include <com/sun/star/uno/genfunc.hxx>
 #include <comphelper/newarray.hxx>
+#include <cppu/cppudllapi.h>
+#include <cppu/unotype.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <tools/toolsdllapi.h>
+#include <typelib/typeclass.h>
+#include <typelib/typedescription.h>
+#include <typelib/uik.h>
+#include <uno/any2.h>
+#include <uno/data.h>
+#include <uno/sequence2.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #endif // PCH_LEVEL >= 4

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:19:18 using:
+ Generated on 2019-10-17 15:17:32 using:
  ./bin/update_pch unoxml unoxml --cutoff=1 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -69,6 +69,7 @@
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
 #include <sax/fastattribs.hxx>
+#include <tools/diagnose_ex.h>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
 #include <xmloff/xmlimp.hxx>

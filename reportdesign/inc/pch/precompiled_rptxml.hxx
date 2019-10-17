@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-12 16:36:20 using:
+ Generated on 2019-10-17 16:10:52 using:
  ./bin/update_pch reportdesign rptxml --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,6 +27,7 @@
 #include <limits>
 #include <memory>
 #include <new>
+#include <string_view>
 #include <unordered_set>
 #include <vector>
 #include <boost/property_tree/ptree.hpp>
@@ -38,6 +39,7 @@
 #include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>

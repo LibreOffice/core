@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-05 20:14:03 using:
+ Generated on 2019-10-17 15:17:13 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -29,6 +29,7 @@
 #include <deque>
 #include <float.h>
 #include <functional>
+#include <initializer_list>
 #include <limits.h>
 #include <list>
 #include <map>
@@ -39,6 +40,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
+#include <string_view>
 #include <type_traits>
 #include <unordered_map>
 #include <utility>
@@ -66,6 +68,8 @@
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
+#include <rtl/stringconcat.hxx>
+#include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>

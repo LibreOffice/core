@@ -633,6 +633,25 @@ def process_makefile(root, module, libname):
 
     return groups
 
+def is_allowed_if(line, module):
+    """ Check whether the given #if condition
+        is allowed for the given module or whether
+        its block should be ignored.
+    """
+
+    # remove trailing comments
+    line = re.sub(r'(.*) *//.*', r'\1', line)
+    line = line.strip()
+
+    # Our sources always build with LIBO_INTERNAL_ONLY.
+    if line == "#if defined LIBO_INTERNAL_ONLY" or line == "#ifdef LIBO_INTERNAL_ONLY":
+        return True
+    if module == "external/skia":
+        # We always set these.
+        if line == "#ifdef SK_VULKAN" or line == "#if SK_SUPPORT_GPU":
+            return True
+    return False
+
 def process_source(root, module, filename, maxdepth=0):
     """ Process a source file to extract
         included headers.
@@ -644,17 +663,28 @@ def process_source(root, module, filename, maxdepth=0):
     ifdepth = 0
     lastif = ''
     raw_includes = []
+    allowed_ifs = []
+    ifsallowed = 0
     with open(filename, 'r') as f:
         for line in f:
             line = line.strip()
             if line.startswith('#if'):
+                if is_allowed_if(line, module):
+                    allowed_ifs.append(True)
+                    ifsallowed += 1
+                else:
+                    allowed_ifs.append(False)
+                    lastif = line
                 ifdepth += 1
-                lastif = line
             elif line.startswith('#endif'):
                 ifdepth -= 1
-                lastif = '#if'
+                if allowed_ifs[ ifdepth ]:
+                    ifsallowed -= 1
+                else:
+                    lastif = '#if'
+                del allowed_ifs[ ifdepth ]
             elif line.startswith('#include'):
-                if ifdepth <= maxdepth:
+                if ifdepth - ifsallowed <= maxdepth:
                     line = sanitize(line)
                     if line:
                         line = get_filename(line)

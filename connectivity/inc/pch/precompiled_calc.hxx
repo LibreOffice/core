@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:34 using:
+ Generated on 2019-10-17 15:14:00 using:
  ./bin/update_pch connectivity calc --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,17 +27,21 @@
 #include <limits>
 #include <memory>
 #include <new>
+#include <string_view>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/thread.h>
 #include <rtl/alloc.h>
+#include <rtl/instance.hxx>
 #include <rtl/math.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/uuid.h>
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/saldllapi.h>
@@ -56,6 +60,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>

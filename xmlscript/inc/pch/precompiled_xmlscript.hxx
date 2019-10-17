@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:19:21 using:
+ Generated on 2019-10-17 15:17:57 using:
  ./bin/update_pch xmlscript xmlscript --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -45,8 +45,8 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/sax/SAXException.hpp>
-#include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implementationentry.hxx>
+#include <tools/diagnose_ex.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <xmlscript/xml_helper.hxx>

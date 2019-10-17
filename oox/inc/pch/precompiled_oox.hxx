@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:44 using:
+ Generated on 2019-10-17 15:15:12 using:
  ./bin/update_pch oox oox --cutoff=6 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,7 +25,6 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
-#include <exception>
 #include <functional>
 #include <iomanip>
 #include <limits.h>
@@ -36,6 +35,7 @@
 #include <ostream>
 #include <set>
 #include <string.h>
+#include <string_view>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -59,6 +59,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
@@ -71,7 +72,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/GraphicExternalLink.hxx>
-#include <vcl/GraphicObject.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/dllapi.h>
@@ -85,11 +85,11 @@
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -134,9 +134,9 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
-#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
+#include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -159,7 +159,6 @@
 #include <drawingml/lineproperties.hxx>
 #include <drawingml/misccontexts.hxx>
 #include <drawingml/shapepropertiescontext.hxx>
-#include <drawingml/shapestylecontext.hxx>
 #include <drawingml/table/tablestylepart.hxx>
 #include <drawingml/textbody.hxx>
 #include <drawingml/textbodycontext.hxx>
@@ -182,8 +181,10 @@
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/fldunit.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
