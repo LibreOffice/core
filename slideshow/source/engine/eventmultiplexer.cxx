@@ -1027,21 +1027,19 @@ void EventMultiplexer::removeHyperlinkHandler( const HyperlinkHandlerSharedPtr& 
 }
 
 void EventMultiplexer::notifyShapeListenerAdded(
-    const uno::Reference<presentation::XShapeEventListener>& xListener,
     const uno::Reference<drawing::XShape>&                   xShape )
 {
     mpImpl->maShapeListenerHandlers.applyAll(
-        [&xListener, &xShape]( const ShapeListenerEventHandlerSharedPtr& pHandler )
-        { return pHandler->listenerAdded( xListener, xShape ); } );
+        [&xShape]( const ShapeListenerEventHandlerSharedPtr& pHandler )
+        { return pHandler->listenerAdded( xShape ); } );
 }
 
 void EventMultiplexer::notifyShapeListenerRemoved(
-    const uno::Reference<presentation::XShapeEventListener>& xListener,
     const uno::Reference<drawing::XShape>&                   xShape )
 {
     mpImpl->maShapeListenerHandlers.applyAll(
-        [&xListener, &xShape]( const ShapeListenerEventHandlerSharedPtr& pHandler )
-        { return pHandler->listenerRemoved( xListener, xShape ); } );
+        [&xShape]( const ShapeListenerEventHandlerSharedPtr& pHandler )
+        { return pHandler->listenerRemoved( xShape ); } );
 }
 
 void EventMultiplexer::notifyUserPaintColor( RGBColor const& rUserColor )

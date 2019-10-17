@@ -76,7 +76,7 @@ void ShapeManagerImpl::activate()
     // clone listener map
     uno::Reference<presentation::XShapeEventListener> xDummyListener;
     for( const auto& rListener : mrGlobalListenersMap )
-        listenerAdded( xDummyListener, rListener.first );
+        listenerAdded( rListener.first );
 
     // clone cursor map
     for( const auto& rListener : mrGlobalCursorMap )
@@ -291,8 +291,7 @@ void ShapeManagerImpl::revokeSubset( const AttributableShapeSharedPtr& rOrigShap
 }
 
 bool ShapeManagerImpl::listenerAdded(
-    const uno::Reference<presentation::XShapeEventListener>& /*xListener*/,
-    const uno::Reference<drawing::XShape>&                   xShape )
+    const uno::Reference<drawing::XShape>& xShape )
 {
     ShapeEventListenerMap::const_iterator aIter;
     if( (aIter = mrGlobalListenersMap.find( xShape )) ==
@@ -313,9 +312,7 @@ bool ShapeManagerImpl::listenerAdded(
     return true;
 }
 
-bool ShapeManagerImpl::listenerRemoved(
-    const uno::Reference<presentation::XShapeEventListener>& /*xListener*/,
-    const uno::Reference<drawing::XShape>&                   xShape )
+bool ShapeManagerImpl::listenerRemoved( const uno::Reference<drawing::XShape>& xShape )
 {
     // shape really erased from map? maybe there are other listeners
     // for the same shape pending...
