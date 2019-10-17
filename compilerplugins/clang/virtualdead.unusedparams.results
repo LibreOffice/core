@@ -304,9 +304,6 @@ slideshow/source/inc/shapelistenereventhandler.hxx:54
 starmath/source/wordexportbase.hxx:37
     void SmWordExportBase::HandleText(const class SmNode *,int,)
     10
-svx/source/inc/fmtextcontrolshell.hxx:69
-    void svx::IContextRequestObserver::contextMenuRequested(const struct com::sun::star::awt::MouseEvent &,)
-    0
 sw/inc/calbck.hxx:144
     void SwClient::Modify(const class SfxPoolItem *const,const class SfxPoolItem *const,)
     10

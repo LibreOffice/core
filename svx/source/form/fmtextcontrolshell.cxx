@@ -315,7 +315,7 @@ namespace svx
         if ( _rEvent.PopupTrigger )
         {
             if ( m_pObserver )
-                m_pObserver->contextMenuRequested( _rEvent );
+                m_pObserver->contextMenuRequested();
         }
     }
 
@@ -1308,7 +1308,7 @@ namespace svx
     }
 
 
-    void FmTextControlShell::contextMenuRequested( const css::awt::MouseEvent& /*_rEvent*/ )
+    void FmTextControlShell::contextMenuRequested()
     {
         m_rBindings.GetDispatcher()->ExecutePopup( "formrichtext" );
     }
