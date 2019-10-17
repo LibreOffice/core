@@ -133,7 +133,7 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
             // delegate to factory
             pContext = aFactoryIterator->second->CreateContext(
                 rImport, nPrefix, rLocalName, xAttrList,
-                rEvents, aNameIter->second, aScriptLanguage);
+                rEvents, aNameIter->second);
         }
     }
 

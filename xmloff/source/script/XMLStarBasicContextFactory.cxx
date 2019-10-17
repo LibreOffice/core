@@ -52,8 +52,7 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList,
     XMLEventsImportContext* rEvents,
-    const OUString& rApiEventName,
-    const OUString& /*rApiLanguage*/)
+    const OUString& rApiEventName)
 {
     OUString sLibraryVal;
     OUString sMacroNameVal;
