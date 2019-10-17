@@ -220,7 +220,7 @@ XcuParser::Operation XcuParser::parseOperation(xmlreader::Span const & text) {
 }
 
 void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
-    OStringBuffer buf;
+    OStringBuffer buf(256);
     buf.append('.');
     bool hasPackage = false;
     bool hasName = false;

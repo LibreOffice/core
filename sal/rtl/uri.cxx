@@ -638,7 +638,7 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
 
     sal_Unicode const * p = pText->buffer;
     sal_Unicode const * pEnd = p + pText->length;
-    sal_Int32 nCapacity = pText->length;
+    sal_Int32 nCapacity = 256;
     rtl_uString_new_WithLength(pResult, nCapacity);
 
     while (p < pEnd)
@@ -758,9 +758,9 @@ sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
 {
     // Use the strict parser algorithm from RFC 3986, section 5.2, to turn the
     // relative URI into an absolute one:
-    OUStringBuffer aBuffer;
     Components aRelComponents;
     parseUriRef(pRelUriRef, &aRelComponents);
+    OUStringBuffer aBuffer(256);
 
     if (aRelComponents.aScheme.isPresent())
     {
