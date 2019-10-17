@@ -1,0 +1,45 @@
+/*
+
+Settings for the Skia library. We compile the Skia library with these
+settings and also LO code uses this header to ensure the settings
+are the same.
+*/
+
+#ifndef CONFIG_SKIA_H
+#define CONFIG_SKIA_H
+
+/* TODO SKIA check all these */
+
+#define SK_SUPPORT_GPU 1
+
+#define SK_GL 1
+
+#define SK_VULKAN 1
+
+#define SK_HAS_JPEG_LIBRARY 1
+
+#define SK_HAS_PNG_LIBRARY 1
+
+#define SK_GAMMA_APPLY_TO_A8
+
+#define SK_ASSUME_GL 1
+
+#define SK_ASSUME_GL_ES 0
+
+
+#ifdef DBG_UTIL
+
+#define SK_DEBUG
+
+#define SK_ENABLE_DUMP_GPU
+
+#else
+
+#define DSK_RELEASE
+
+#endif // DBG_UTIL
+
+// TODO ?
+//#define SK_R32_SHIFT 16
+
+#endif

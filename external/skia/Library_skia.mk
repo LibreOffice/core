@@ -15,39 +15,13 @@ $(eval $(call gb_Library_use_unpacked,skia,skia))
 
 $(eval $(call gb_Library_set_precompiled_header,skia,external/skia/inc/pch/precompiled_skia))
 
-# TODO SKIA
 $(eval $(call gb_Library_add_defs,skia,\
-    -DSK_SUPPORT_GPU=1 \
-    -DSKIA_DLL \
     -DSKIA_IMPLEMENTATION=1 \
-    -DSK_GL=1 \
-    -DSK_VULKAN=1 \
-    -DSK_HAS_JPEG_LIBRARY=1 \
-    -DSK_HAS_PNG_LIBRARY=1 \
-    -DSK_GAMMA_APPLY_TO_A8 \
-    -DSK_ASSUME_GL=1 \
-    -DSK_ASSUME_GL_ES=0 \
+    -DSKIA_DLL \
+    -DSK_USER_CONFIG_HEADER="<$(BUILDDIR)/config_host/config_skia.h>" \
 ))
-
-ifneq (,$(gb_ENABLE_DBGUTIL))
-$(eval $(call gb_Library_add_defs,skia,\
-    -DSK_DEBUG \
-    -DSK_ENABLE_DUMP_GPU \
-))
-else
-$(eval $(call gb_Library_add_defs,skia,\
-    -DSK_RELEASE \
-    -DNDEBUG \
-))
-endif
 
 ifeq ($(OS),WNT)
-# TODO SKIA
-$(eval $(call gb_Library_add_defs,skia,\
-    -DSK_BUILD_FOR_WIN \
-    -DSK_CPU_SSE_LEVEL=SK_CPU_SSE_LEVEL_SSSE3 \
-))
-
 $(eval $(call gb_Library_add_cxxflags,skia, \
     -arch:SSE2 \
 ))
@@ -67,11 +41,6 @@ $(eval $(call gb_Library_use_system_win32_libs,skia,\
     gdi32 \
 ))
 else
-$(eval $(call gb_Library_add_defs,skia,\
-    -DSK_BUILD_FOR_UNIX \
-    -DSK_R32_SHIFT=16 \
-))
-
 # TODO SKIA
 $(eval $(call gb_Library_add_cxxflags,skia, \
     -mssse3 \
