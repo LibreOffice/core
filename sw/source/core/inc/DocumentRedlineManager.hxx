@@ -57,8 +57,8 @@ public:
 
     virtual AppendResult AppendRedline(/*[in]*/SwRangeRedline* pPtr, /*[in]*/bool bCallDelete) override;
 
-    virtual bool AppendTableRowRedline(/*[in]*/SwTableRowRedline* pPtr, /*[in]*/bool bCallDelete) override;
-    virtual bool AppendTableCellRedline(/*[in]*/SwTableCellRedline* pPtr, /*[in]*/bool bCallDelete) override;
+    virtual bool AppendTableRowRedline(/*[in]*/SwTableRowRedline* pPtr) override;
+    virtual bool AppendTableCellRedline(/*[in]*/SwTableCellRedline* pPtr) override;
 
     virtual bool SplitRedline(/*[in]*/const SwPaM& rPam) override;
 
