@@ -139,7 +139,7 @@ public:
     virtual PointerStyle GetPointer() const override;
 
     virtual void onMouseEnter(const MouseEvent& rMEvt) override;
-    virtual void onHelpRequest(const HelpEvent& rHEvt) override;
+    virtual void onHelpRequest() override;
     virtual void onMouseLeave() override;
 
     int getHighlightId() const { return mnHighlightId; }
@@ -196,7 +196,7 @@ void ImageButtonHdl::ShowTip()
     Help::ShowQuickHelp(pWindow, aScreenRect, aHelpText);
 }
 
-void ImageButtonHdl::onHelpRequest(const HelpEvent& /*rHEvt*/)
+void ImageButtonHdl::onHelpRequest()
 {
     ShowTip();
 }
