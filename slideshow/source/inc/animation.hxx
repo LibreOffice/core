@@ -58,8 +58,7 @@ namespace slideshow
                 @param rAttrLayer
                 Attribute layer to play the animation on.
              */
-            virtual void prefetch( const AnimatableShapeSharedPtr&     rShape,
-                                   const ShapeAttributeLayerSharedPtr& rAttrLayer ) = 0;
+            virtual void prefetch( ) = 0;
 
             /** Notify that the animation is about to begin.
 

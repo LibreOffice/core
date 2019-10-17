@@ -169,8 +169,7 @@ void SlideChangeBase::renderBitmap(
     pSlideBitmap->draw( pDevicePixelCanvas );
 }
 
-void SlideChangeBase::prefetch( const AnimatableShapeSharedPtr&,
-                                const ShapeAttributeLayerSharedPtr& )
+void SlideChangeBase::prefetch()
 {
     // we're a one-shot activity, and already finished
     if( mbFinished || mbPrefetched )
@@ -186,14 +185,14 @@ void SlideChangeBase::prefetch( const AnimatableShapeSharedPtr&,
     mbPrefetched = true;
 }
 
-void SlideChangeBase::start( const AnimatableShapeSharedPtr&     rShape,
-                             const ShapeAttributeLayerSharedPtr& rLayer )
+void SlideChangeBase::start( const AnimatableShapeSharedPtr&     /*rShape*/,
+                             const ShapeAttributeLayerSharedPtr& /*rLayer*/ )
 {
     // we're a one-shot activity, and already finished
     if( mbFinished )
         return;
 
-    prefetch(rShape,rLayer); // no-op, if already done
+    prefetch(); // no-op, if already done
 
     // get the subclasses a chance to do any specific initialization before run
     for ( ViewsVecT::const_iterator aCurr( beginViews() ), aEnd( endViews() ); aCurr != aEnd; ++aCurr )

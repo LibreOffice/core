@@ -88,8 +88,7 @@ namespace slideshow
 
                 // Animation interface
 
-                virtual void prefetch( const AnimatableShapeSharedPtr&,
-                                       const ShapeAttributeLayerSharedPtr& ) override
+                virtual void prefetch() override
                 {}
 
                 virtual void start( const AnimatableShapeSharedPtr&     rShape,
@@ -242,8 +241,7 @@ namespace slideshow
 
                 // Animation interface
 
-                virtual void prefetch( const AnimatableShapeSharedPtr&,
-                                       const ShapeAttributeLayerSharedPtr& ) override
+                virtual void prefetch() override
                 {}
 
                 virtual void start( const AnimatableShapeSharedPtr&     rShape,
@@ -440,8 +438,7 @@ namespace slideshow
 
                 // Animation interface
 
-                virtual void prefetch( const AnimatableShapeSharedPtr&,
-                                       const ShapeAttributeLayerSharedPtr& )
+                virtual void prefetch()
                 {}
 
                 virtual void start( const AnimatableShapeSharedPtr&     rShape,

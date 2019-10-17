@@ -49,8 +49,7 @@ public:
             "HSLWrapper::HSLWrapper(): Invalid color animation delegate" );
     }
 
-    virtual void prefetch( const AnimatableShapeSharedPtr&,
-                           const ShapeAttributeLayerSharedPtr& ) override
+    virtual void prefetch() override
     {}
 
     virtual void start( const AnimatableShapeSharedPtr&     rShape,

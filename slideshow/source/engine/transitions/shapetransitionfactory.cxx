@@ -63,8 +63,7 @@ public:
 
     // Animation interface
 
-    virtual void prefetch( const AnimatableShapeSharedPtr&     rShape,
-                           const ShapeAttributeLayerSharedPtr& rAttrLayer ) override;
+    virtual void prefetch() override;
     virtual void start( const AnimatableShapeSharedPtr&     rShape,
                         const ShapeAttributeLayerSharedPtr& rAttrLayer ) override;
     virtual void end() override;
@@ -116,8 +115,7 @@ ClippingAnimation::~ClippingAnimation()
     }
 }
 
-void ClippingAnimation::prefetch( const AnimatableShapeSharedPtr&,
-                                  const ShapeAttributeLayerSharedPtr& )
+void ClippingAnimation::prefetch()
 {
 }
 

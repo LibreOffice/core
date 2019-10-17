@@ -852,9 +852,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     // reached final size
     maEventQueue.addEvent(
         makeEvent( [pTransition] () {
-                        pTransition->prefetch(
-                            AnimatableShapeSharedPtr(),
-                            ShapeAttributeLayerSharedPtr()); },
+                        pTransition->prefetch(); },
             "Animation::prefetch"));
 
     return ActivitySharedPtr(
