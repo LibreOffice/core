@@ -203,6 +203,8 @@ protected:
 
     bool isOffscreen() const { return mProvider == nullptr || mProvider->IsOffScreen(); }
 
+    void invert(basegfx::B2DPolygon const& rPoly, SalInvert eFlags);
+
 protected:
     // get the width of the device
     int GetWidth() const { return mProvider ? mProvider->GetWidth() : 1; }
