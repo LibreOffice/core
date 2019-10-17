@@ -1449,7 +1449,7 @@ bool SdrMarkView::RequestHelp(const HelpEvent& rHEvt)
             SdrHdl* pCurrentHdl = GetHdl(nHdl);
             if (pCurrentHdl->mbMouseOver)
             {
-                pCurrentHdl->onHelpRequest(rHEvt);
+                pCurrentHdl->onHelpRequest();
                 return true;
             }
         }

@@ -184,9 +184,6 @@ include/svx/IAccessibleParent.hxx:80
 include/svx/selectioncontroller.hxx:48
     _Bool sdr::SelectionController::onMouseButtonUp(const class MouseEvent &,class vcl::Window *,)
     10
-include/svx/svdhdl.hxx:242
-    void SdrHdl::onHelpRequest(const class HelpEvent &,)
-    0
 include/vcl/accessibletable.hxx:91
     class tools::Rectangle vcl::table::IAccessibleTable::GetFieldCharacterBounds(int,int,int,)
     001
