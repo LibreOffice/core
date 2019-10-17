@@ -18,6 +18,14 @@ bool SkiaHelper::isVCLSkiaEnabled() { return false; }
 
 #else
 
+static bool supportsVCLSkia()
+{
+    static bool bDisableSkia = !!getenv("SAL_DISABLESKIA");
+    bool bBlacklisted = false; // TODO isDeviceBlacklisted();
+
+    return !bDisableSkia && !bBlacklisted;
+}
+
 bool SkiaHelper::isVCLSkiaEnabled()
 {
     /**
@@ -50,7 +58,7 @@ bool SkiaHelper::isVCLSkiaEnabled()
         "SAL_FORCESKIA"); // TODO SKIA || officecfg::Office::Common::VCL::ForceOpenGL::get();
 
     bool bRet = false;
-    bool bSupportsVCLSkia = true; // TODO SKIA supportsVCLOpenGL();
+    bool bSupportsVCLSkia = supportsVCLSkia();
     // TODO SKIA always call supportsVCLOpenGL to de-zombie the glxtest child process on X11
     if (bForceSkia)
     {
