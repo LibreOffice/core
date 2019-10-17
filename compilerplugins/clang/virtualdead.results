@@ -10,27 +10,6 @@ basic/source/comp/codegen.cxx:526
 desktop/source/deployment/registry/inc/dp_backenddb.hxx:119
     class rtl::OUString dp_registry::backend::BackendDb::getDbNSName()
     "http://openoffi
-Gui/qaccessible.h:465
-    class QObject * QAccessibleInterface::object()const
-    0
-Gui/qaccessible.h:466
-    class QWindow * QAccessibleInterface::window()const
-    0
-Gui/qaccessible.h:478
-    int QAccessibleInterface::indexOfChild(const class QAccessibleInterface *,)const
-    0
-Gui/qaccessible.h:482
-    void QAccessibleInterface::setText(enum QAccessible::Text,const class QString &,)
-    empty
-Gui/qaccessible.h:612
-    _Bool QAccessibleTableInterface::isColumnSelected(int,)const
-    1
-Gui/qaccessible.h:613
-    _Bool QAccessibleTableInterface::isRowSelected(int,)const
-    1
-Gui/qaccessible.h:619
-    void QAccessibleTableInterface::modelChange(class QAccessibleTableModelChangeEvent *,)
-    empty
 include/basegfx/utils/unopolypolygon.hxx:97
     void basegfx::unotools::UnoPolyPolygon::modifying()const
     empty
@@ -54,9 +33,6 @@ include/canvas/base/graphicdevicebase.hxx:319
     empty
 include/connectivity/sdbcx/IRefreshable.hxx:31
     void connectivity::sdbcx::IRefreshableGroups::refreshGroups()
-    empty
-include/dbaccess/ToolBoxHelper.hxx:56
-    void dbaui::OToolBoxHelper::setImageList(short,)
     empty
 include/filter/msfilter/msdffimp.hxx:546
     _Bool SvxMSDffManager::ShapeHasText(unsigned long,unsigned long,)const
@@ -82,7 +58,7 @@ include/svtools/unoevent.hxx:199
 include/test/text/xtextcontent.hxx:29
     _Bool apitest::XTextContent::isAttachSupported()
     1
-include/ucbhelper/resultset.hxx:425
+include/ucbhelper/resultset.hxx:411
     void ucbhelper::ResultSetDataSupplier::close()
     empty
 include/unotools/desktopterminationobserver.hxx:35
@@ -91,9 +67,6 @@ include/unotools/desktopterminationobserver.hxx:35
 include/vbahelper/vbahelperinterface.hxx:77
     int InheritedHelperInterfaceImpl::getCreator()
     1400204879
-include/vcl/tabpage.hxx:51
-    void TabPage::DeactivatePage()
-    empty
 sc/source/core/opencl/formulagroupcl.cxx:1059
     void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
     empty

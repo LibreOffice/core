@@ -1,0 +1,450 @@
+basctl/source/inc/doceventnotifier.hxx:42
+    void basctl::DocumentEventListener::onDocumentCreated(const class basctl::ScriptDocument &,)
+    0
+basctl/source/inc/doceventnotifier.hxx:43
+    void basctl::DocumentEventListener::onDocumentOpened(const class basctl::ScriptDocument &,)
+    0
+basctl/source/inc/doceventnotifier.hxx:44
+    void basctl::DocumentEventListener::onDocumentSave(const class basctl::ScriptDocument &,)
+    0
+basctl/source/inc/doceventnotifier.hxx:45
+    void basctl::DocumentEventListener::onDocumentSaveDone(const class basctl::ScriptDocument &,)
+    0
+basctl/source/inc/doceventnotifier.hxx:46
+    void basctl::DocumentEventListener::onDocumentSaveAs(const class basctl::ScriptDocument &,)
+    0
+basctl/source/inc/doceventnotifier.hxx:47
+    void basctl::DocumentEventListener::onDocumentSaveAsDone(const class basctl::ScriptDocument &,)
+    0
+basctl/source/inc/doceventnotifier.hxx:49
+    void basctl::DocumentEventListener::onDocumentTitleChanged(const class basctl::ScriptDocument &,)
+    0
+basic/source/comp/codegen.cxx:464
+    void OffSetAccumulator::start(const unsigned char *,)
+    0
+basic/source/comp/codegen.cxx:465
+    void OffSetAccumulator::processOpCode0(enum SbiOpcode,)
+    0
+basic/source/comp/codegen.cxx:466
+    void OffSetAccumulator::processOpCode1(enum SbiOpcode,type-parameter-?-?,)
+    00
+basic/source/comp/codegen.cxx:467
+    void OffSetAccumulator::processOpCode2(enum SbiOpcode,type-parameter-?-?,type-parameter-?-?,)
+    000
+chart2/source/controller/dialogs/ChangingResource.hxx:30
+    void chart::ResourceChangeListener::stateChanged(class chart::ChangingResource *,)
+    0
+chart2/source/controller/dialogs/ChartTypeDialogController.hxx:105
+    void chart::ChartTypeDialogController::fillExtraControls(const class chart::ChartTypeParameter &,const class com::sun::star::uno::Reference<class com::sun::star::chart2::XChartDocument> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,)const
+    011
+dbaccess/source/core/api/CacheSet.hxx:174
+    _Bool dbaccess::OCacheSet::previous_checked(_Bool,)
+    0
+dbaccess/source/core/api/CacheSet.hxx:175
+    _Bool dbaccess::OCacheSet::absolute_checked(int,_Bool,)
+    10
+dbaccess/source/core/api/CacheSet.hxx:176
+    _Bool dbaccess::OCacheSet::last_checked(_Bool,)
+    0
+dbaccess/source/core/inc/containerapprove.hxx:53
+    void dbaccess::IContainerApprove::approveElement(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,)
+    10
+dbaccess/source/ui/inc/callbacks.hxx:53
+    _Bool dbaui::IControlActionListener::requestDrag(signed char,const class Point &,)
+    01
+dbaccess/source/ui/inc/TableDesignControl.hxx:68
+    _Bool dbaui::OTableRowView::IsPrimaryKeyAllowed(long,)
+    0
+dbaccess/source/ui/inc/TableDesignControl.hxx:70
+    _Bool dbaui::OTableRowView::IsDeleteAllowed(long,)
+    0
+desktop/source/deployment/registry/inc/dp_backend.h:84
+    void dp_registry::backend::Package::processPackage_(class osl::ResettableGuard<class osl::Mutex> &,_Bool,_Bool,const class rtl::Reference<class dp_misc::AbortChannel> &,const class com::sun::star::uno::Reference<class com::sun::star::ucb::XCommandEnvironment> &,)
+    01111
+extensions/source/bibliography/loadlisteneradapter.hxx:110
+    void bib::OLoadListener::_unloading(const struct com::sun::star::lang::EventObject &,)
+    0
+extensions/source/bibliography/loadlisteneradapter.hxx:111
+    void bib::OLoadListener::_reloading(const struct com::sun::star::lang::EventObject &,)
+    0
+forms/source/richtext/textattributelistener.hxx:32
+    void frm::ITextAttributeListener::onAttributeStateChanged(int,const struct frm::AttributeState &,)
+    10
+forms/source/richtext/textattributelistener.hxx:44
+    void frm::ITextSelectionListener::onSelectionChanged(const struct ESelection &,)
+    0
+fpicker/source/office/fpdialogbase.hxx:106
+    void SvtFileDialog_Base::setImage(short,const class com::sun::star::uno::Any &,)
+    01
+include/canvas/base/bufferedgraphicdevicebase.hxx:230
+    void canvas::BufferedGraphicDeviceBase::windowShown(const struct com::sun::star::lang::EventObject &,)
+    0
+include/canvas/base/bufferedgraphicdevicebase.hxx:237
+    void canvas::BufferedGraphicDeviceBase::windowHidden(const struct com::sun::star::lang::EventObject &,)
+    0
+include/canvas/base/graphicdevicebase.hxx:240
+    unsigned char canvas::GraphicDeviceBase::enterFullScreenMode(unsigned char,)
+    0
+include/canvas/base/graphicdevicebase.hxx:306
+    void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
+    00
+include/canvas/base/graphicdevicebase.hxx:319
+    void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
+    00
+include/canvas/base/integerbitmapbase.hxx:59
+    void canvas::IntegerBitmapBase::setData(const class com::sun::star::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerRectangle2D &,)
+    011
+include/canvas/base/integerbitmapbase.hxx:73
+    void canvas::IntegerBitmapBase::setPixel(const class com::sun::star::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
+    011
+include/cppuhelper/propshlp.hxx:326
+    void cppu::IEventNotificationHook::fireEvents(int *,int,unsigned char,_Bool,)
+    0111
+include/drawinglayer/primitive2d/textbreakuphelper.hxx:61
+    _Bool drawinglayer::primitive2d::TextBreakupHelper::allowChange(unsigned int,class basegfx::B2DHomMatrix &,unsigned int,unsigned int,)
+    0111
+include/editeng/editeng.hxx:475
+    void EditEngine::PaintingFirstLine(int,const class Point &,long,const class Point &,short,class OutputDevice *,)
+    110111
+include/editeng/editeng.hxx:478
+    void EditEngine::ParagraphConnected(int,int,)
+    01
+include/editeng/editeng.hxx:503
+    void EditEngine::FieldClicked(const class SvxFieldItem &,int,int,)
+    100
+include/editeng/svxrtf.hxx:247
+    void SvxRTFParser::UnknownAttrToken(int,class SfxItemSet *,)
+    10
+include/filter/msfilter/msdffimp.hxx:506
+    void SvxMSDffManager::ProcessClientAnchor2(class SvStream &,class DffRecordHeader &,class SvxMSDffClientData &,struct DffObjData &,)
+    1101
+include/filter/msfilter/msdffimp.hxx:546
+    _Bool SvxMSDffManager::ShapeHasText(unsigned long,unsigned long,)const
+    00
+include/oox/dump/dumperbase.hxx:473
+    void oox::dump::ConfigItemBase::implProcessConfigItemInt(class oox::TextInputStream &,long,const class rtl::OUString &,)
+    011
+include/oox/dump/dumperbase.hxx:564
+    class rtl::OUString oox::dump::NameListBase::implGetNameDbl(const class oox::dump::Config &,double,)const
+    01
+include/oox/dump/oledumper.hxx:166
+    void oox::dump::ComCtlObjectBase::implDumpCommonExtra(long,)
+    0
+include/oox/export/shapes.hxx:136
+    class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteNonVisualProperties(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,)
+    0
+include/sfx2/objsh.hxx:637
+    void SfxObjectShell::FillClass(class SvGlobalName *,enum SotClipboardFormatId *,class rtl::OUString *,class rtl::OUString *,class rtl::OUString *,int,_Bool,)const
+    1101111
+include/sfx2/sfxstatuslistener.hxx:49
+    void SfxStatusListener::StateChanged(unsigned short,enum SfxItemState,const class SfxPoolItem *,)
+    011
+include/sfx2/sidebar/ControllerItem.hxx:44
+    void sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface::NotifyItemUpdate(const unsigned short,const enum SfxItemState,const class SfxPoolItem *,const _Bool,)
+    1110
+include/sfx2/sidebar/TitleBar.hxx:61
+    void sfx2::sidebar::TitleBar::PaintDecoration(class OutputDevice &,const class tools::Rectangle &,)
+    10
+include/sfx2/stbitem.hxx:100
+    _Bool SfxStatusBarControl::MouseButtonUp(const class MouseEvent &,)
+    0
+include/sfx2/thumbnailviewitem.hxx:118
+    void ThumbnailViewItem::calculateItemsPosition(const long,const long,const long,unsigned int,const struct ThumbnailItemAttributes *,)
+    10111
+include/svl/svdde.hxx:228
+    _Bool DdeGetPutItem::Put(const class DdeData *,)
+    0
+include/svl/svdde.hxx:237
+    class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
+    0
+include/svl/svdde.hxx:238
+    _Bool DdeTopic::Put(const class DdeData *,)
+    0
+include/svl/svdde.hxx:239
+    _Bool DdeTopic::Execute(const class rtl::OUString *,)
+    0
+include/svl/svdde.hxx:241
+    _Bool DdeTopic::MakeItem(const class rtl::OUString &,)
+    0
+include/svtools/table/tablerenderer.hxx:113
+    void svt::table::ITableRenderer::PaintColumnHeader(int,_Bool,class OutputDevice &,const class tools::Rectangle &,const class StyleSettings &,)
+    10111
+include/svtools/table/tablerenderer.hxx:177
+    void svt::table::ITableRenderer::PaintRowHeader(_Bool,_Bool,class OutputDevice &,const class tools::Rectangle &,const class StyleSettings &,)
+    00111
+include/svtools/table/tablerenderer.hxx:224
+    void svt::table::ITableRenderer::HideCellCursor(class vcl::Window &,const class tools::Rectangle &,)
+    10
+include/svx/fmtools.hxx:141
+    void FmXDisposeListener::disposing(const struct com::sun::star::lang::EventObject &,short,)
+    01
+include/svx/IAccessibleParent.hxx:80
+    _Bool accessibility::IAccessibleParent::ReplaceChild(class accessibility::AccessibleShape *,const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,const long,const class accessibility::AccessibleShapeTreeInfo &,)
+    1101
+include/svx/selectioncontroller.hxx:48
+    _Bool sdr::SelectionController::onMouseButtonUp(const class MouseEvent &,class vcl::Window *,)
+    10
+include/svx/svdhdl.hxx:242
+    void SdrHdl::onHelpRequest(const class HelpEvent &,)
+    0
+include/svx/svdundo.hxx:69
+    class rtl::OUString SdrUndoAction::GetSdrRepeatComment(class SdrView &,)const
+    0
+include/svx/svxdlg.hxx:463
+    class VclPtr<class SfxAbstractTabDialog> SvxAbstractDialogFactory::CreateSvxFormatCellsDialog(class weld::Window *,const class SfxItemSet *,const class SdrModel &,const class SdrObject *,)
+    1110
+include/vcl/accessibletable.hxx:91
+    class tools::Rectangle vcl::table::IAccessibleTable::GetFieldCharacterBounds(int,int,int,)
+    001
+include/vcl/accessibletable.hxx:92
+    int vcl::table::IAccessibleTable::GetFieldIndexAtPoint(int,int,const class Point &,)
+    001
+include/vcl/accessibletable.hxx:93
+    void vcl::table::IAccessibleTable::FillAccessibleStateSetForCell(class utl::AccessibleStateSetHelper &,int,unsigned short,)const
+    110
+include/vcl/dndhelp.hxx:72
+    void vcl::unohelper::DragAndDropClient::dragExit(const struct com::sun::star::datatransfer::dnd::DropTargetEvent &,)
+    0
+include/vcl/ITiledRenderable.hxx:209
+    void vcl::ITiledRenderable::setClientZoom(int,int,int,int,)
+    1010
+include/vcl/opengl/OpenGLContext.hxx:141
+    struct SystemWindowData OpenGLContext::generateWinData(class vcl::Window *,_Bool,)
+    10
+include/vcl/task.hxx:71
+    unsigned long Task::UpdateMinPeriod(unsigned long,unsigned long,)const
+    01
+include/vcl/treelist.hxx:304
+    void SvListView::ModelIsMoving(class SvTreeListEntry *,class SvTreeListEntry *,unsigned long,)
+    100
+include/xmloff/txtimp.hxx:677
+    void XMLTextImportHelper::RedlineAdjustStartNodeCursor(_Bool,)
+    0
+include/xmloff/xmlevent.hxx:129
+    class SvXMLImportContext * XMLEventContextFactory::CreateContext(class SvXMLImport &,unsigned short,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XAttributeList> &,class XMLEventsImportContext *,const class rtl::OUString &,const class rtl::OUString &,)
+    1111110
+include/xmloff/xmlimp.hxx:244
+    class SvXMLImportContext * SvXMLImport::CreateDocumentContext(const unsigned short,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XAttributeList> &,)
+    110
+sc/inc/filter.hxx:82
+    void ScFormatFilterPlugin::ScExportHTML(class SvStream &,const class rtl::OUString &,class ScDocument *,const class ScRange &,const unsigned short,_Bool,const class rtl::OUString &,class rtl::OUString &,const class rtl::OUString &,)
+    111101111
+sc/inc/filter.hxx:84
+    void ScFormatFilterPlugin::ScExportRTF(class SvStream &,class ScDocument *,const class ScRange &,const unsigned short,)
+    1110
+sc/inc/formulagroup.hxx:145
+    class boost::intrusive_ptr<class ScMatrix> sc::FormulaGroupInterpreter::inverseMatrix(const class ScMatrix &,)
+    0
+sc/source/core/opencl/formulagroupcl.cxx:1059
+    void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
+    0
+sc/source/ui/vba/vbarange.hxx:68
+    void ValueGetter::processValue(int,int,const class com::sun::star::uno::Any &,)
+    001
+sd/source/ui/inc/View.hxx:92
+    signed char sd::View::AcceptDrop(const struct AcceptDropEvent &,class DropTargetHelper &,class sd::Window *,unsigned short,struct o3tl::strong_int<unsigned char, struct SdrLayerIDTag>,)
+    11001
+sd/source/ui/inc/ViewClipboard.hxx:64
+    unsigned short sd::ViewClipboard::DetermineInsertPosition(const class SdTransferable &,)
+    0
+sd/source/ui/inc/ViewShell.hxx:212
+    void sd::ViewShell::UpdatePreview(class SdPage *,_Bool,)
+    10
+sdext/source/pdfimport/inc/contentsink.hxx:150
+    void pdfi::ContentSink::drawMask(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)
+    10
+sdext/source/pdfimport/inc/contentsink.hxx:160
+    void pdfi::ContentSink::drawColorMaskedImage(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,)
+    10
+sdext/source/pdfimport/inc/contentsink.hxx:164
+    void pdfi::ContentSink::drawMaskedImage(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)
+    110
+sdext/source/pdfimport/inc/treevisiting.hxx:46
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::HyperlinkElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > >, class std::__debug::list<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> >, class std::allocator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > > >, struct std::bidirectional_iterator_tag> &,)
+    10
+sdext/source/pdfimport/inc/treevisiting.hxx:47
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::TextElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > >, class std::__debug::list<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> >, class std::allocator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > > >, struct std::bidirectional_iterator_tag> &,)
+    10
+sdext/source/pdfimport/inc/treevisiting.hxx:49
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::FrameElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > >, class std::__debug::list<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> >, class std::allocator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > > >, struct std::bidirectional_iterator_tag> &,)
+    10
+sdext/source/pdfimport/inc/treevisiting.hxx:51
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::ImageElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > >, class std::__debug::list<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> >, class std::allocator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > > >, struct std::bidirectional_iterator_tag> &,)
+    10
+sdext/source/pdfimport/inc/treevisiting.hxx:52
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::PageElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > >, class std::__debug::list<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> >, class std::allocator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > > >, struct std::bidirectional_iterator_tag> &,)
+    10
+sdext/source/pdfimport/inc/treevisiting.hxx:53
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::DocumentElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > >, class std::__debug::list<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> >, class std::allocator<class std::unique_ptr<struct pdfi::Element, struct std::default_delete<struct pdfi::Element> > > >, struct std::bidirectional_iterator_tag> &,)
+    10
+sdext/source/presenter/PresenterScrollBar.hxx:178
+    double sdext::presenter::PresenterScrollBar::GetDragDistance(const int,const int,)const
+    01
+sdext/source/presenter/PresenterScrollBar.hxx:180
+    double sdext::presenter::PresenterScrollBar::GetMinor(const double,const double,)const
+    10
+slideshow/source/engine/animationfactory.cxx:443
+    void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
+    00
+slideshow/source/engine/opengl/TransitionImpl.hxx:174
+    void OGLTransitionImpl::prepare(double,double,double,double,double,)
+    01100
+slideshow/source/engine/opengl/TransitionImpl.hxx:180
+    void OGLTransitionImpl::finish(double,double,double,double,double,)
+    00000
+slideshow/source/inc/animation.hxx:61
+    void slideshow::internal::Animation::prefetch(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
+    00
+slideshow/source/inc/shapelistenereventhandler.hxx:51
+    _Bool slideshow::internal::ShapeListenerEventHandler::listenerAdded(const class com::sun::star::uno::Reference<class com::sun::star::presentation::XShapeEventListener> &,const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,)
+    01
+slideshow/source/inc/shapelistenereventhandler.hxx:54
+    _Bool slideshow::internal::ShapeListenerEventHandler::listenerRemoved(const class com::sun::star::uno::Reference<class com::sun::star::presentation::XShapeEventListener> &,const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,)
+    01
+starmath/source/wordexportbase.hxx:37
+    void SmWordExportBase::HandleText(const class SmNode *,int,)
+    10
+svx/source/inc/fmtextcontrolshell.hxx:69
+    void svx::IContextRequestObserver::contextMenuRequested(const struct com::sun::star::awt::MouseEvent &,)
+    0
+sw/inc/calbck.hxx:144
+    void SwClient::Modify(const class SfxPoolItem *const,const class SfxPoolItem *const,)
+    10
+sw/inc/IDocumentLinksAdministration.hxx:55
+    _Bool IDocumentLinksAdministration::SetData(const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Any &,)
+    100
+sw/inc/IDocumentRedlineAccess.hxx:168
+    _Bool IDocumentRedlineAccess::AppendTableRowRedline(class SwTableRowRedline *,_Bool,)
+    10
+sw/inc/IDocumentRedlineAccess.hxx:169
+    _Bool IDocumentRedlineAccess::AppendTableCellRedline(class SwTableCellRedline *,_Bool,)
+    10
+sw/inc/swcrsr.hxx:161
+    _Bool SwCursor::LeftRight(_Bool,unsigned short,unsigned short,_Bool,_Bool,_Bool,const class SwRootFrame *,)
+    1100000
+sw/source/core/access/acccontext.hxx:348
+    _Bool SwAccessibleContext::SetSelectedState(_Bool,)
+    0
+sw/source/core/inc/flowfrm.hxx:145
+    _Bool SwFlowFrame::ShouldBwdMoved(class SwLayoutFrame *,_Bool,_Bool &,)
+    101
+sw/source/core/inc/swblocks.hxx:109
+    class ErrCode SwImpBlocks::Rename(unsigned short,const class rtl::OUString &,const class rtl::OUString &,)
+    110
+sw/source/core/inc/txmsrt.hxx:145
+    void SwTOXSortTabBase::FillText(class SwTextNode &,const class SwIndex &,unsigned short,const class SwRootFrame *const,)const
+    1100
+sw/source/filter/ww8/wrtww8.hxx:798
+    void MSWordExportBase::WriteHyperlinkData(const class sw::mark::IFieldmark &,)
+    0
+sw/source/filter/ww8/wrtww8.hxx:863
+    void MSWordExportBase::OutputGrfNode(const class SwGrfNode &,)
+    0
+sw/source/filter/xml/xmlexpit.hxx:84
+    void SvXMLExportItemMapper::handleElementItem(class SvXMLExport &,const struct SvXMLItemMapEntry &,const class SfxPoolItem &,const class SvXMLUnitConverter &,const class SfxItemSet &,enum SvXmlExportFlags,)const
+    011000
+sw/source/filter/xml/xmlimpit.hxx:48
+    _Bool SvXMLImportItemMapper::handleSpecialItem(const struct SvXMLItemMapEntry &,class SfxPoolItem &,class SfxItemSet &,const class rtl::OUString &,const class SvXMLUnitConverter &,const class SvXMLNamespaceMap &,)
+    111110
+sw/source/uibase/inc/imaildsplistener.hxx:44
+    void IMailDispatcherListener::idle(class rtl::Reference<class MailDispatcher>,)
+    0
+sw/source/uibase/inc/imaildsplistener.hxx:50
+    void IMailDispatcherListener::mailDelivered(class rtl::Reference<class MailDispatcher>,class com::sun::star::uno::Reference<class com::sun::star::mail::XMailMessage>,)
+    01
+vcl/inc/outdev.h:122
+    _Bool ImplGlyphFallbackFontSubstitution::FindFontSubstitute(class FontSelectPattern &,class LogicalFontInstance *,class rtl::OUString &,)const
+    101
+vcl/inc/salframe.hxx:145
+    void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
+    0
+vcl/inc/salframe.hxx:191
+    void SalFrame::Flush(const class tools::Rectangle &,)
+    0
+vcl/inc/salframe.hxx:201
+    _Bool SalFrame::MapUnicodeToKeyCode(char16_t,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,class vcl::KeyCode &,)
+    000
+vcl/inc/salframe.hxx:244
+    void SalFrame::BeginSetClipRegion(unsigned int,)
+    0
+vcl/inc/salgdiimpl.hxx:78
+    void SalGraphicsImpl::SetXORMode(_Bool,_Bool,)
+    10
+vcl/inc/salgdiimpl.hxx:115
+    _Bool SalGraphicsImpl::drawPolyLineBezier(unsigned int,const struct SalPoint *,const enum PolyFlags *,)
+    000
+vcl/inc/salgdiimpl.hxx:120
+    _Bool SalGraphicsImpl::drawPolygonBezier(unsigned int,const struct SalPoint *,const enum PolyFlags *,)
+    000
+vcl/inc/salgdiimpl.hxx:125
+    _Bool SalGraphicsImpl::drawPolyPolygonBezier(unsigned int,const unsigned int *,const struct SalPoint *const *,const enum PolyFlags *const *,)
+    0000
+vcl/inc/salgdiimpl.hxx:132
+    void SalGraphicsImpl::copyArea(long,long,long,long,long,long,_Bool,)
+    1111110
+vcl/inc/salgdiimpl.hxx:166
+    _Bool SalGraphicsImpl::drawEPS(long,long,long,long,void *,unsigned int,)
+    000000
+vcl/inc/salinst.hxx:92
+    _Bool SalInstance::SVMainHook(int *,)
+    0
+vcl/inc/salinst.hxx:125
+    void SalInstance::GetPrinterQueueState(struct SalPrinterQueueInfo *,)
+    0
+vcl/inc/salinst.hxx:185
+    void SalInstance::AddToRecentDocumentList(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,)
+    100
+vcl/inc/salmenu.hxx:71
+    void SalMenu::SetItemBits(unsigned int,enum MenuItemBits,)
+    10
+vcl/inc/salmenu.hxx:75
+    void SalMenu::SetItemImage(unsigned int,class SalMenuItem *,const class Image &,)
+    011
+vcl/inc/salmenu.hxx:76
+    void SalMenu::SetAccelerator(unsigned int,class SalMenuItem *,const class vcl::KeyCode &,const class rtl::OUString &,)
+    0101
+vcl/inc/salmenu.hxx:77
+    void SalMenu::GetSystemMenuData(struct SystemMenuData *,)
+    0
+vcl/inc/salmenu.hxx:80
+    _Bool SalMenu::AddMenuBarButton(const struct SalMenuButtonItem &,)
+    0
+vcl/inc/salmenu.hxx:81
+    void SalMenu::RemoveMenuBarButton(unsigned short,)
+    0
+vcl/inc/salmenu.hxx:93
+    class tools::Rectangle SalMenu::GetMenuBarButtonRectPixel(unsigned short,class SalFrame *,)
+    00
+vcl/inc/salobj.hxx:49
+    void SalObject::Enable(_Bool,)
+    0
+vcl/inc/salprn.hxx:83
+    void SalInfoPrinter::InitPaperFormats(const class ImplJobSetup *,)
+    0
+vcl/inc/salprn.hxx:85
+    int SalInfoPrinter::GetLandscapeAngle(const class ImplJobSetup *,)
+    0
+vcl/inc/salprn.hxx:114
+    class SalGraphics * SalPrinter::StartPage(class ImplJobSetup *,_Bool,)
+    10
+vcl/inc/WidgetDrawInterface.hxx:63
+    _Bool vcl::WidgetDrawInterface::drawNativeControl(enum ControlType,enum ControlPart,const class tools::Rectangle &,enum ControlState,const class ImplControlValue &,const class rtl::OUString &,)
+    111110
+vcl/inc/WidgetDrawInterface.hxx:87
+    _Bool vcl::WidgetDrawInterface::getNativeControlRegion(enum ControlType,enum ControlPart,const class tools::Rectangle &,enum ControlState,const class ImplControlValue &,const class rtl::OUString &,class tools::Rectangle &,class tools::Rectangle &,)
+    11111011
+writerfilter/inc/dmapper/resourcemodel.hxx:173
+    void writerfilter::BinaryObj::data(const unsigned char *,unsigned long,class tools::SvRef<class writerfilter::Reference<class writerfilter::Properties> >,)
+    110
+writerfilter/inc/ooxml/OOXMLDocument.hxx:216
+    void writerfilter::ooxml::OOXMLDocument::setXNoteType(unsigned int,)
+    0
+writerfilter/source/dmapper/LoggedResources.hxx:93
+    void writerfilter::LoggedStream::lcl_info(const class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > &,)
+    0
+writerfilter/source/dmapper/LoggedResources.hxx:129
+    void writerfilter::LoggedTable::lcl_entry(int,class tools::SvRef<class writerfilter::Reference<class writerfilter::Properties> >,)
+    01
+xmloff/inc/forms/property_handler.hxx:44
+    class rtl::OUString xmloff::PropertyHandlerBase::getAttributeValue(const class std::__debug::map<enum xmloff::PropertyId, class com::sun::star::uno::Any, struct std::less<enum xmloff::PropertyId>, class std::allocator<struct std::pair<const enum xmloff::PropertyId, class com::sun::star::uno::Any> > > &,)const
+    0
