@@ -138,7 +138,7 @@ public:
     virtual ~FmXDisposeListener();
 
     /// @throws css::uno::RuntimeException
-    virtual void disposing(const css::lang::EventObject& _rEvent, sal_Int16 _nId) = 0;
+    virtual void disposing(sal_Int16 _nId) = 0;
 
 protected:
     void setAdapter(FmXDisposeMultiplexer* pAdapter);
