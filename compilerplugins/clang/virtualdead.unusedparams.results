@@ -190,9 +190,6 @@ include/svx/svdhdl.hxx:242
 include/svx/svdundo.hxx:69
     class rtl::OUString SdrUndoAction::GetSdrRepeatComment(class SdrView &,)const
     0
-include/svx/svxdlg.hxx:463
-    class VclPtr<class SfxAbstractTabDialog> SvxAbstractDialogFactory::CreateSvxFormatCellsDialog(class weld::Window *,const class SfxItemSet *,const class SdrModel &,const class SdrObject *,)
-    1110
 include/vcl/accessibletable.hxx:91
     class tools::Rectangle vcl::table::IAccessibleTable::GetFieldCharacterBounds(int,int,int,)
     001
