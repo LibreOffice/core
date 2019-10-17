@@ -55,7 +55,7 @@ class ManifestImport final : public cppu::WeakImplHelper < css::xml::sax::XDocum
     std::vector< css::beans::NamedValue > aKeyInfoSequence;
     std::vector< css::uno::Sequence< css::beans::NamedValue > > aKeys;
     std::vector< css::beans::PropertyValue > aSequence;
-    OUStringBuffer aCurrentCharacters;
+    OUStringBuffer aCurrentCharacters{64};
     ManifestStack aStack;
     bool bIgnoreEncryptData;
     bool bPgpEncryption;

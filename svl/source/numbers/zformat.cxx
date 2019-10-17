@@ -1647,7 +1647,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
     sal_Unicode cLetter = ' '; // Preliminary result
     sal_Int32 nLen = rString.getLength();
     ScanState eState = SsStart;
-    OUStringBuffer sBuffSymbol(32);
+    OUStringBuffer sBuffSymbol(64);
 
     const NfKeywordTable & rKeywords = rScan.GetKeywords();
     while (nPos < nLen && eState != SsStop)
@@ -2426,7 +2426,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
                                      Color** ppColor)
 {
     bool bRes = false;
-    OUStringBuffer sBuff;
+    OUStringBuffer sBuff(64);
     OutString.clear();
     *ppColor = nullptr; // No color change
     if (eType & SvNumFormatType::LOGICAL)
@@ -5523,10 +5523,10 @@ void SvNumberformat::impTransliterateImpl(OUStringBuffer& rStr,
 {
     css::lang::Locale aLocale( LanguageTag( rNum.GetLang() ).getLocale() );
 
-    OUString sTemp(rStr.makeStringAndClear());
+    OUString sTemp(rStr.toString());
     sTemp = GetFormatter().GetNatNum()->getNativeNumberStringParams(
         sTemp, aLocale, rNum.GetNatNum(), rNum.GetParams());
-    rStr.append(sTemp);
+    rStr = sTemp;
 }
 
 OUString SvNumberformat::impTransliterateImpl(const OUString& rStr,

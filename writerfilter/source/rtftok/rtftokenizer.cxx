@@ -182,7 +182,7 @@ void RTFTokenizer::popGroup() { m_nGroup--; }
 RTFError RTFTokenizer::resolveKeyword()
 {
     char ch;
-    OStringBuffer aBuf;
+    OStringBuffer aBuf(32);
     bool bNeg = false;
     bool bParam = false;
     int nParam = 0;
@@ -202,6 +202,10 @@ RTFError RTFTokenizer::resolveKeyword()
     while (rtl::isAsciiAlpha(static_cast<unsigned char>(ch)))
     {
         aBuf.append(ch);
+        if (aBuf.getLength() > 32)
+            // See RTF spec v1.9.1, page 7
+            // A control word's name cannot be longer than 32 letters.
+            throw io::BufferSizeExceededException();
         Strm().ReadChar(ch);
         if (Strm().eof())
         {
@@ -209,10 +213,6 @@ RTFError RTFTokenizer::resolveKeyword()
             break;
         }
     }
-    if (aBuf.getLength() > 32)
-        // See RTF spec v1.9.1, page 7
-        // A control word's name cannot be longer than 32 letters.
-        throw io::BufferSizeExceededException();
 
     if (ch == '-')
     {

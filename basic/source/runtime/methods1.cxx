@@ -1544,7 +1544,7 @@ void SbRtl_Join(StarBASIC *, SbxArray & rPar, bool)
         {
             aDelim = " ";
         }
-        OUStringBuffer aRetStr;
+        OUStringBuffer aRetStr(32);
         short nLower, nUpper;
         pArr->GetDim( 1, nLower, nUpper );
         short aIdx[1];

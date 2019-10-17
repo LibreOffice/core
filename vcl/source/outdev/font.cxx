@@ -1320,7 +1320,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
     // get list of code units that need glyph fallback
     int nCharPos = -1;
     bool bRTL = false;
-    OUStringBuffer aMissingCodeBuf;
+    OUStringBuffer aMissingCodeBuf(512);
     while (rLayoutArgs.GetNextPos( &nCharPos, &bRTL))
         aMissingCodeBuf.append(rLayoutArgs.mrStr[nCharPos]);
     rLayoutArgs.ResetPos();

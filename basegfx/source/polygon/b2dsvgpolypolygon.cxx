@@ -722,7 +722,14 @@ namespace basegfx
             bool bOOXMLMotionPath)
         {
             const sal_uInt32 nCount(rPolyPolygon.count());
-            OUStringBuffer aResult;
+            sal_uInt32 nCombinedPointCount = 0;
+            for(sal_uInt32 i(0); i < nCount; i++)
+            {
+                const B2DPolygon& aPolygon(rPolyPolygon.getB2DPolygon(i));
+                nCombinedPointCount += aPolygon.count();
+            }
+
+            OUStringBuffer aResult(std::max<int>(nCombinedPointCount * 32,512));
             B2DPoint aCurrentSVGPosition(0.0, 0.0); // SVG assumes (0,0) as the initial current point
 
             for(sal_uInt32 i(0); i < nCount; i++)
