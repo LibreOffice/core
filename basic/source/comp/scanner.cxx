@@ -526,7 +526,7 @@ bool SbiScanner::NextSym()
                     else
                         aSym = aLine.copy( n, nCol - n - 1 );
                     // get out duplicate string delimiters
-                    OUStringBuffer aSymBuf;
+                    OUStringBuffer aSymBuf(aSym.getLength());
                     for ( sal_Int32 i = 0, len = aSym.getLength(); i < len; ++i )
                     {
                         aSymBuf.append( aSym[i] );

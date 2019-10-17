@@ -1181,7 +1181,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
         return RTFError::OK;
     }
 
-    OStringBuffer aBuf;
+    OStringBuffer aBuf(512);
 
     bool bUnicodeChecked = false;
     bool bSkipped = false;
@@ -1275,8 +1275,9 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
         return RTFError::OK;
     }
 
-    OUString aOUStr(OStringToOUString(aStr, m_aStates.top().getCurrentEncoding()));
-    SAL_INFO("writerfilter.rtf", "RTFDocumentImpl::resolveChars: collected '" << aOUStr << "'");
+    SAL_INFO("writerfilter.rtf",
+             "RTFDocumentImpl::resolveChars: collected '"
+                 << OStringToOUString(aStr, m_aStates.top().getCurrentEncoding()) << "'");
 
     if (m_aStates.top().getDestination() == Destination::COLORTABLE)
     {
@@ -2323,7 +2324,7 @@ RTFError RTFDocumentImpl::popState()
                 {
                     OUString aOrig = pValue->getString();
 
-                    OUStringBuffer aBuf;
+                    OUStringBuffer aBuf(aOrig.getLength() * 2);
                     sal_Int32 nReplaces = 1;
                     for (int i = 0; i < aOrig.getLength(); i++)
                     {
@@ -2337,7 +2338,7 @@ RTFError RTFDocumentImpl::popState()
                                                   - aState.getLevelNumbers().size()));
                         }
                         else
-                            aBuf.append(std::u16string_view(aOrig).substr(i, 1));
+                            aBuf.append(aOrig[i]);
                     }
 
                     pValue->setString(aBuf.makeStringAndClear());
@@ -3566,7 +3567,8 @@ void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
 {
     if (bUnicode && !m_aUnicodeBuffer.isEmpty())
     {
-        OUString aString = m_aUnicodeBuffer.makeStringAndClear();
+        OUString aString = m_aUnicodeBuffer.toString();
+        m_aUnicodeBuffer.setLength(0);
         text(aString);
     }
     if (bHex && !m_aHexBuffer.isEmpty())
@@ -3575,7 +3577,8 @@ void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
         if (m_aStates.top().getDestination() == Destination::FONTENTRY
             && m_aStates.top().getCurrentEncoding() == RTL_TEXTENCODING_SYMBOL)
             nEncoding = RTL_TEXTENCODING_MS_1252;
-        OUString aString = OStringToOUString(m_aHexBuffer.makeStringAndClear(), nEncoding);
+        OUString aString = OStringToOUString(m_aHexBuffer.toString(), nEncoding);
+        m_aHexBuffer.setLength(0);
         text(aString);
     }
 }

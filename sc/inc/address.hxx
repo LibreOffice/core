@@ -964,14 +964,14 @@ SC_DLLPUBLIC void ScColToAlpha( OUStringBuffer& rBuffer, SCCOL nCol);
 
 inline void ScColToAlpha( OUString& rStr, SCCOL nCol)
 {
-    OUStringBuffer aBuf(2);
+    OUStringBuffer aBuf(4);
     ScColToAlpha( aBuf, nCol);
     rStr += aBuf;
 }
 
 inline OUString ScColToAlpha( SCCOL nCol )
 {
-    OUStringBuffer aBuf(2);
+    OUStringBuffer aBuf(4);
     ScColToAlpha( aBuf, nCol);
     return aBuf.makeStringAndClear();
 }

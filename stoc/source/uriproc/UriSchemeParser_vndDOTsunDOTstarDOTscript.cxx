@@ -66,7 +66,7 @@ int parseEscaped(OUString const & part, sal_Int32 * index) {
 OUString parsePart(
     OUString const & part, bool namePart, sal_Int32 * index)
 {
-    OUStringBuffer buf;
+    OUStringBuffer buf(64);
     while (*index < part.getLength()) {
         sal_Unicode c = part[*index];
         if (namePart ? c == '?' : c == '&' || c == '=') {

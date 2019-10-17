@@ -34,7 +34,7 @@ OUString lclConvertToCanonicalName(const OUString& rFileName)
     sal_Int32 nLength = rFileName.getLength();
     const sal_Unicode* pString = rFileName.getStr();
 
-    OUStringBuffer aBuffer(nLength);
+    OUStringBuffer aBuffer(nLength*2);
 
     for (sal_Int32 i = 0; i < nLength; i++)
     {

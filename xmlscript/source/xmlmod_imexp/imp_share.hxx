@@ -71,7 +71,7 @@ class ModuleElement
 
     OUString const _aLocalName;
     css::uno::Reference< css::xml::input::XAttributes > _xAttributes;
-    OUStringBuffer _strBuffer;
+    OUStringBuffer _strBuffer{512};
 
 public:
     ModuleElement(

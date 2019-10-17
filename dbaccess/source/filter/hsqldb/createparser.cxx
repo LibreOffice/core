@@ -52,14 +52,17 @@ std::vector<OUString> lcl_splitColumnPart(const OUString& sColumnPart)
     std::vector<OUString> sParts = string::split(sColumnPart, sal_Unicode(u','));
     std::vector<OUString> sReturn;
 
-    OUStringBuffer current;
+    OUStringBuffer current(128);
     for (auto const& part : sParts)
     {
         current.append(part);
         if (current.lastIndexOf("(") > current.lastIndexOf(")"))
             current.append(","); // it was false split
         else
-            sReturn.push_back(current.makeStringAndClear());
+        {
+            sReturn.push_back(current.toString());
+            current.setLength(0);
+        }
     }
     return sReturn;
 }
