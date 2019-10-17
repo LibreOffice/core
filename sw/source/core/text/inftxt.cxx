@@ -1452,6 +1452,13 @@ bool SwTextFormatInfo::IsHyphenate() const
     if (m_bInterHyph)
         SvxSpellWrapper::CheckHyphLang( xHyph, eTmp );
 
+    if (!xHyph->hasLocale(g_pBreakIt->GetLocale(eTmp)))
+    {
+        // TODO: Add an infobar for this case, tdf#128191
+        SAL_WARN("sw", "missing hyphenation package for locale: "
+                           << g_pBreakIt->GetLocale(eTmp).Language);
+    }
+
     return xHyph->hasLocale( g_pBreakIt->GetLocale(eTmp) );
 }
 
