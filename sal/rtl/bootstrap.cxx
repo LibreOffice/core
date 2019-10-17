@@ -868,7 +868,7 @@ OUString expandMacros(
     ExpandRequestLink const * requestStack)
 {
     SAL_INFO("sal.bootstrap", "expandMacros called with: " << text);
-    OUStringBuffer buf;
+    OUStringBuffer buf(1024);
 
     for (sal_Int32 i = 0; i < text.getLength();)
     {

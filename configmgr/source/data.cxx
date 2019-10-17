@@ -207,7 +207,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
     }
     NodeMap const & components = getComponents();
     NodeMap::const_iterator i(components.find(seg));
-    OUStringBuffer canonic;
+    OUStringBuffer canonic(64);
     rtl::Reference< Node > parent;
     int finalized = NO_LAYER;
     for (rtl::Reference< Node > p(i == components.end() ? nullptr : i->second);;) {
