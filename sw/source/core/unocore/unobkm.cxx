@@ -342,7 +342,8 @@ void SAL_CALL SwXBookmark::setName(const OUString& rName)
         m_pImpl->m_pDoc->getIDocumentMarkAccess();
     if(pMarkAccess->findMark(rName) != pMarkAccess->getAllMarksEnd())
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("setName(): name already in use",
+                static_cast<::cppu::OWeakObject*>(this));
     }
 
     SwPaM aPam(m_pImpl->m_pRegisteredBookmark->GetMarkPos());
