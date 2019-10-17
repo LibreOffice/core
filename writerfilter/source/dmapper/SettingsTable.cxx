@@ -559,7 +559,7 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     }
 }
 
-void SettingsTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
+void SettingsTable::lcl_entry(writerfilter::Reference<Properties>::Pointer_t ref)
 {
     ref->resolve(*this);
 }

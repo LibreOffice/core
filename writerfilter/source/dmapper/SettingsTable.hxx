@@ -96,7 +96,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
     virtual void lcl_sprm(Sprm & sprm) override;
 
     // Table
-    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) override;
+    virtual void lcl_entry(writerfilter::Reference<Properties>::Pointer_t ref) override;
 
 };
 typedef tools::SvRef< SettingsTable >          SettingsTablePtr;
