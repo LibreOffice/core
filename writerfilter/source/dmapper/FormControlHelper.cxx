@@ -245,7 +245,7 @@ void FormControlHelper::processField(uno::Reference<text::XFormField> const& xFo
             }
             catch ( uno::Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION("writerfilter","Set Formfield name failed");
+                TOOLS_INFO_EXCEPTION("writerfilter", "Set Formfield name failed");
             }
 
             sTmp = m_pFFData->getTextType();
