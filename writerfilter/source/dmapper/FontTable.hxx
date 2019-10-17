@@ -60,7 +60,7 @@ class FontTable : public LoggedProperties, public LoggedTable
     void resolveSprm(Sprm & r_sprm);
 
     // Table
-    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) override;
+    virtual void lcl_entry(writerfilter::Reference<Properties>::Pointer_t ref) override;
 
     // Stream
     virtual void lcl_startSectionGroup() override;

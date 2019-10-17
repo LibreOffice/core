@@ -387,9 +387,11 @@ void LoggedTable::entry(int pos, writerfilter::Reference<Properties>::Pointer_t 
 #ifdef DBG_UTIL
     mHelper.startElement("entry");
     LoggedResourcesHelper::attribute("pos", pos);
+#else
+    (void)pos;
 #endif
 
-    lcl_entry(pos, ref);
+    lcl_entry(ref);
 
 #ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();

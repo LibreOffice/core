@@ -151,7 +151,7 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
 #endif
 }
 
-void ThemeTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
+void ThemeTable::lcl_entry(writerfilter::Reference<Properties>::Pointer_t ref)
 {
 #ifdef DBG_UTIL
     TagLogger::getInstance().startElement("ThemeTable.entry");

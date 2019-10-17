@@ -442,6 +442,3 @@ writerfilter/inc/ooxml/OOXMLDocument.hxx:216
 writerfilter/source/dmapper/LoggedResources.hxx:93
     void writerfilter::LoggedStream::lcl_info(const class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > &,)
     0
-writerfilter/source/dmapper/LoggedResources.hxx:129
-    void writerfilter::LoggedTable::lcl_entry(int,class tools::SvRef<class writerfilter::Reference<class writerfilter::Properties> >,)
-    01

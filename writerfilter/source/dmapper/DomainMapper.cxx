@@ -2833,8 +2833,7 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
     }
 }
 
-void DomainMapper::lcl_entry(int /*pos*/,
-                         writerfilter::Reference<Properties>::Pointer_t ref)
+void DomainMapper::lcl_entry(writerfilter::Reference<Properties>::Pointer_t ref)
 {
     ref->resolve(*this);
 }

@@ -1178,7 +1178,7 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
     }
 }
 
-void GraphicImport::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
+void GraphicImport::lcl_entry(writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
 }
 
