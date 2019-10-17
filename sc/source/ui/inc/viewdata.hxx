@@ -393,6 +393,8 @@ public:
     void            SetRefTabNo( SCTAB nNewTab )            { nRefTabNo = nNewTab; }
 
     SCTAB           GetTabNo() const                        { return nTabNo; }
+    SCCOL           MaxCol() const                          { return pDoc->MaxCol(); }
+    SCROW           MaxRow() const                          { return pDoc->MaxRow(); }
     ScSplitPos      GetActivePart() const                   { return pThisTab->eWhichActive; }
     SCCOL           GetPosX( ScHSplitPos eWhich ) const;
     SCROW           GetPosY( ScVSplitPos eWhich ) const;
