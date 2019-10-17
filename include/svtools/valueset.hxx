@@ -295,6 +295,7 @@ public:
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
     virtual void    StateChanged( StateChangedType nStateChange ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 
     virtual void    Select();
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
