@@ -56,7 +56,7 @@ void ViewClipboard::HandlePageDrop (const SdTransferable& rTransferable)
     if (pMasterPage)
         AssignMasterPage (rTransferable, pMasterPage);
     else
-        InsertSlides (rTransferable, DetermineInsertPosition (rTransferable));
+        InsertSlides (rTransferable, DetermineInsertPosition ());
 }
 
 SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
@@ -157,8 +157,7 @@ void ViewClipboard::AssignMasterPage (
         );
 }
 
-sal_uInt16 ViewClipboard::DetermineInsertPosition  (
-    const SdTransferable& )
+sal_uInt16 ViewClipboard::DetermineInsertPosition  ()
 {
     SdDrawDocument& rDoc = mrView.GetDoc();
     sal_uInt16 nPgCnt = rDoc.GetSdPageCount( PageKind::Standard );

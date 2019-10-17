@@ -61,8 +61,7 @@ protected:
     /** Return an index of a page after which the pages of the transferable
         are to be inserted into the target document.
     */
-    virtual sal_uInt16 DetermineInsertPosition (
-        const SdTransferable& rTransferable);
+    virtual sal_uInt16 DetermineInsertPosition ();
 
     /** Insert the slides in the given transferable behind the last selected
         slide or, when the selection is empty, behind the last slide.
