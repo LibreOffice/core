@@ -143,7 +143,7 @@ void VbaModule::createEmptyModule( const Reference< container::XNameContainer >&
 
 OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
 {
-    OUStringBuffer aSourceCode;
+    OUStringBuffer aSourceCode(512);
     static const char sUnmatchedRemovedTag[] = "Rem removed unmatched Sub/End: ";
     if( !maStreamName.isEmpty() && (mnOffset != SAL_MAX_UINT32) )
     {
@@ -264,7 +264,7 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
     // prepare the Basic module
     script::ModuleInfo aModuleInfo;
     aModuleInfo.ModuleType = mnType;
-    OUStringBuffer aSourceCode;
+    OUStringBuffer aSourceCode(512);
     aSourceCode.append( "Rem Attribute VBA_ModuleType=" );
     switch( mnType )
     {

@@ -1641,7 +1641,7 @@ EBulletInfo Outliner::GetBulletInfo( sal_Int32 nPara )
 OUString Outliner::GetText( Paragraph const * pParagraph, sal_Int32 nCount ) const
 {
 
-    OUStringBuffer aText;
+    OUStringBuffer aText(128);
     sal_Int32 nStartPara = pParaList->GetAbsPos( pParagraph );
     for ( sal_Int32 n = 0; n < nCount; n++ )
     {

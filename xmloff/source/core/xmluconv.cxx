@@ -185,6 +185,16 @@ void SvXMLUnitConverter::convertMeasureToXML( OUStringBuffer& rString,
                                         m_pImpl->m_eXMLMeasureUnit );
 }
 
+/** convert measure to string */
+OUString SvXMLUnitConverter::convertMeasureToXML( sal_Int32 nMeasure ) const
+{
+    OUStringBuffer s;
+    ::sax::Converter::convertMeasure( s, nMeasure,
+                                        m_pImpl->m_eCoreMeasureUnit,
+                                        m_pImpl->m_eXMLMeasureUnit );
+    return s.makeStringAndClear();
+}
+
 /** convert string to enum using given enum map, if the enum is
     not found in the map, this method will return false
 */
@@ -733,7 +743,7 @@ OUString SvXMLUnitConverter::encodeStyleName(
         *pEncoded = false;
 
     sal_Int32 nLen = rName.getLength();
-    OUStringBuffer aBuffer( nLen );
+    OUStringBuffer aBuffer( nLen*2 );
 
     for( sal_Int32 i = 0; i < nLen; i++ )
     {

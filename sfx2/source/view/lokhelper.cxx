@@ -213,7 +213,7 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
 
 void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const OString& rPayload)
 {
-    OStringBuffer aBuf;
+    OStringBuffer aBuf(32);
     aBuf.append(rPayload);
     if (comphelper::LibreOfficeKit::isPartInInvalidation())
     {

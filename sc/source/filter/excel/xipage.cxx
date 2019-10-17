@@ -224,17 +224,15 @@ void XclImpPageSettings::Finalize()
 
     // *** create page style sheet ***
 
-    OUStringBuffer aStyleName;
-    aStyleName.append("PageStyle_");
-
+    OUString aStyleName;
     OUString aTableName;
     if( GetDoc().GetName( nScTab, aTableName ) )
-        aStyleName.append(aTableName);
+        aStyleName = "PageStyle_" + aTableName;
     else
-        aStyleName.append(static_cast<sal_Int32>(nScTab+1));
+        aStyleName = "PageStyle_" + OUString::number(static_cast<sal_Int32>(nScTab+1));
 
     ScStyleSheet& rStyleSheet = ScfTools::MakePageStyleSheet(
-        GetStyleSheetPool(), aStyleName.makeStringAndClear(), false);
+        GetStyleSheetPool(), aStyleName, false);
 
     SfxItemSet& rItemSet = rStyleSheet.GetItemSet();
 
