@@ -3297,10 +3297,13 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
     else
     {
         OUString sAction("CLICK");
-        WindowUIObject aUIObject(pWindow);
-        std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(sId));
-        if (pUIWindow)
-            pUIWindow->execute(sAction, StringMap());
+        try
+        {
+            WindowUIObject aUIObject(pWindow);
+            std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(sId));
+            if (pUIWindow)
+                pUIWindow->execute(sAction, StringMap());
+        } catch(...) {}
 
         // force resend
         pWindow->Resize();
