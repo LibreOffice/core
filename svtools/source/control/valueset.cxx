@@ -1433,6 +1433,28 @@ void ValueSet::DataChanged( const DataChangedEvent& rDataChangedEvent )
     }
 }
 
+boost::property_tree::ptree ValueSet::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(Control::DumpAsPropertyTree());
+    boost::property_tree::ptree aEntries;
+
+    const size_t nSize = mItemList.size();
+
+    for ( size_t nIt = 0; nIt < nSize; ++nIt )
+    {
+        boost::property_tree::ptree aEntry;
+        ValueSetItem* pItem = mItemList[nIt].get();
+        aEntry.put("id", pItem->mnId);
+        aEntry.put("text", pItem->maText);
+        aEntry.put("image", pItem->maImage.GetStock());
+        aEntries.push_back(std::make_pair("", aEntry));
+    }
+
+    aTree.put("type", "valueset");
+    aTree.add_child("entries", aEntries);
+    return aTree;
+}
+
 void ValueSet::Select()
 {
     maSelectHdl.Call( this );
