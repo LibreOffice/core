@@ -205,10 +205,6 @@ void FontTable::lcl_substream(Id, ::writerfilter::Reference<Stream>::Pointer_t)
 {
 }
 
-void FontTable::lcl_info(const std::string& )
-{
-}
-
 void FontTable::lcl_startShape(uno::Reference<drawing::XShape> const&)
 {
 }

@@ -3454,10 +3454,6 @@ void DomainMapper::lcl_substream(Id rName, ::writerfilter::Reference<Stream>::Po
     m_pImpl->substream(rName, ref);
 }
 
-void DomainMapper::lcl_info(const std::string & /*info_*/)
-{
-}
-
 void DomainMapper::lcl_startGlossaryEntry()
 {
     uno::Reference< text::XTextRange > xTextRange =  GetCurrentTextRange();
