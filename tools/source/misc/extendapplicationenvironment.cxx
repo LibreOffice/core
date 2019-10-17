@@ -47,7 +47,7 @@ void extendApplicationEnvironment() {
 #endif
 
     // Make sure URE_BOOTSTRAP environment variable is set (failure is fatal):
-    OUStringBuffer env;
+    OUStringBuffer env(512);
     OUString envVar("URE_BOOTSTRAP");
     OUString uri;
     if (rtl::Bootstrap::get(envVar, uri))

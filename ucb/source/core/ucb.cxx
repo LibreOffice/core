@@ -786,7 +786,7 @@ bool UniversalContentBroker::getContentProviderData(
         uno::Reference< lang::XMultiServiceFactory > xConfigProv =
                 configuration::theDefaultProvider::get( m_xContext );
 
-        OUStringBuffer aFullPath;
+        OUStringBuffer aFullPath(128);
         aFullPath.append(
                 "/org.openoffice.ucb.Configuration/ContentProviders"
                 "/['" );

@@ -28,7 +28,6 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 	$(if $(filter WNT,$(OS)),CppunitTest_sal_comtools) \
 	CppunitTest_sal_osl_security \
 	CppunitTest_sal_osl \
-	CppunitTest_sal_rtl \
 	CppunitTest_sal_types \
 ))
 

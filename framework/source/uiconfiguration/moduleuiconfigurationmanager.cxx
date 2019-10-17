@@ -222,7 +222,7 @@ private:
 
 // important: The order and position of the elements must match the constant
 // definition of "css::ui::UIElementType"
-static const char* UIELEMENTTYPENAMES[] =
+static OUStringLiteral UIELEMENTTYPENAMES[] =
 {
     "",  // Dummy value for unknown!
     UIELEMENTTYPE_MENUBAR_NAME,
@@ -250,7 +250,7 @@ sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
             OUString aTypeStr( aTmpStr.copy( 0, nIndex ));
             for ( int i = 0; i < ui::UIElementType::COUNT; i++ )
             {
-                if ( aTypeStr.equalsAscii( UIELEMENTTYPENAMES[i] ))
+                if ( aTypeStr == UIELEMENTTYPENAMES[i] )
                     return sal_Int16( i );
             }
         }
@@ -358,11 +358,10 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
         Reference< XStorage > xElementTypeStorage = rElementTypeData.xStorage;
         if ( xElementTypeStorage.is() )
         {
-            OUStringBuffer aBuf( RESOURCEURL_PREFIX_SIZE );
-            aBuf.append( RESOURCEURL_PREFIX );
-            aBuf.appendAscii( UIELEMENTTYPENAMES[ nElementType ] );
-            aBuf.append( "/" );
-            OUString aResURLPrefix( aBuf.makeStringAndClear() );
+            OUString aResURLPrefix =
+                RESOURCEURL_PREFIX +
+                UIELEMENTTYPENAMES[ nElementType ] +
+                "/";
 
             UIElementDataHashMap& rHashMap = rElementTypeData.aElementsHashMap;
             Sequence< OUString > aUIElementNames = xElementTypeStorage->getElementNames();
@@ -808,7 +807,7 @@ void ModuleUIConfigurationManager::impl_Initialize()
             Reference< XStorage > xElementTypeStorage;
             try
             {
-                const OUString sName( OUString::createFromAscii( UIELEMENTTYPENAMES[i] ) );
+                const OUString sName( UIELEMENTTYPENAMES[i] );
                 if( xNameAccess->hasByName( sName ) )
                     xNameAccess->getByName( sName ) >>= xElementTypeStorage;
             }
@@ -1583,7 +1582,7 @@ void SAL_CALL ModuleUIConfigurationManager::storeToStorage( const Reference< XSt
             try
             {
                 Reference< XStorage > xElementTypeStorage( Storage->openStorageElement(
-                                                            OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), ElementModes::READWRITE ));
+                                                              UIELEMENTTYPENAMES[i], ElementModes::READWRITE ));
                 UIElementType&        rElementType = m_aUIElements[LAYER_USERDEFINED][i];
 
                 if ( rElementType.bModified && xElementTypeStorage.is() )

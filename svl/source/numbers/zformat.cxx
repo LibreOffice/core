@@ -1647,7 +1647,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
     sal_Unicode cLetter = ' '; // Preliminary result
     sal_Int32 nLen = rString.getLength();
     ScanState eState = SsStart;
-    OUStringBuffer sBuffSymbol;
+    OUStringBuffer sBuffSymbol(32);
 
     const NfKeywordTable & rKeywords = rScan.GetKeywords();
     while (nPos < nLen && eState != SsStop)
@@ -1975,7 +1975,7 @@ bool SvNumberformat::GetNewCurrencySymbol( OUString& rSymbol,
 // static
 OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr )
 {
-    OUStringBuffer aTmp;
+    OUStringBuffer aTmp(rStr.getLength());
     sal_Int32 nStartPos, nPos, nLen;
     nLen = rStr.getLength();
     nStartPos = 0;

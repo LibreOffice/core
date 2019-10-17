@@ -286,7 +286,7 @@ OUString SubstitutePathVariables::GetPathVariableValue() const
 
     if ( pEnv )
     {
-        const int PATH_EXTEND_FACTOR = 120;
+        const int PATH_EXTEND_FACTOR = 200;
         OUString       aTmp;
         OUString       aPathList( pEnv, strlen( pEnv ), osl_getThreadTextEncoding() );
         OUStringBuffer aPathStrBuffer( aPathList.getLength() * PATH_EXTEND_FACTOR / 100 );

@@ -1438,7 +1438,7 @@ struct TypeKey {
         // the chance of matches between different implementations' getTypes(),
         // but the old scheme of using getImplementationId() would have missed
         // those matches, too:
-        OUStringBuffer b;
+        OUStringBuffer b(static_cast<int>(theTypes.size() * 64));
         for (const css::uno::Type& rType : theTypes) {
             b.append(rType.getTypeName());
             b.append('*'); // arbitrary delimiter not used by type grammar

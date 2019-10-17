@@ -94,7 +94,7 @@ Factory::createVndSunStarPkgUrlReference(
             " XVndSunStarPkgUrlReferenceFactory.createVndSunStarPkgUrlReference");
     }
     if (authority->isAbsolute() && !authority->hasFragment()) {
-        OUStringBuffer buf;
+        OUStringBuffer buf(128);
         buf.append("vnd.sun.star.pkg://");
         buf.append(
             rtl::Uri::encode(
