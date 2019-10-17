@@ -184,7 +184,7 @@ ErrCode SwXMLTextBlocks::Delete( sal_uInt16 n )
     return ERRCODE_NONE;
 }
 
-ErrCode SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const OUString& rNewShort, const OUString& )
+ErrCode SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const OUString& rNewShort )
 {
     OSL_ENSURE( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())

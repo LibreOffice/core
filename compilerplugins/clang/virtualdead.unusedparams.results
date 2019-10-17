@@ -328,9 +328,6 @@ sw/source/core/access/acccontext.hxx:348
 sw/source/core/inc/flowfrm.hxx:145
     _Bool SwFlowFrame::ShouldBwdMoved(class SwLayoutFrame *,_Bool,_Bool &,)
     101
-sw/source/core/inc/swblocks.hxx:109
-    class ErrCode SwImpBlocks::Rename(unsigned short,const class rtl::OUString &,const class rtl::OUString &,)
-    110
 sw/source/core/inc/txmsrt.hxx:145
     void SwTOXSortTabBase::FillText(class SwTextNode &,const class SwIndex &,unsigned short,const class SwRootFrame *const,)const
     1100
