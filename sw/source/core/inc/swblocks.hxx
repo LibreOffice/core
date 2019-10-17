@@ -106,7 +106,7 @@ public:
     void                SetBaseURL( const OUString& rURL ) { m_sBaseURL = rURL; }
 
     virtual ErrCode Delete( sal_uInt16 ) = 0;
-    virtual ErrCode Rename( sal_uInt16, const OUString&, const OUString& ) = 0;
+    virtual ErrCode Rename( sal_uInt16, const OUString& ) = 0;
     virtual ErrCode GetDoc( sal_uInt16 ) = 0;
     virtual ErrCode BeginPutDoc( const OUString&, const OUString& ) = 0;
     virtual ErrCode PutDoc() = 0;
