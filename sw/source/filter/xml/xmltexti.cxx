@@ -1005,8 +1005,7 @@ void SwXMLTextImportHelper::RedlineSetCursor(
     // else: ignore redline (wasn't added before, else we'd have a helper)
 }
 
-void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor(
-    bool /*bStart*/)
+void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor()
 {
     OUString rId = GetOpenRedlineId();
     if ((nullptr != pRedlineHelper) && !rId.isEmpty())

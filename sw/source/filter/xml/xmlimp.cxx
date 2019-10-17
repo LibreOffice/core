@@ -903,7 +903,7 @@ void SwXMLImport::endDocument()
 
     /* Was called too early. Moved from SwXMLBodyContext_Impl::EndElement */
 
-    GetTextImport()->RedlineAdjustStartNodeCursor( false );
+    GetTextImport()->RedlineAdjustStartNodeCursor();
 
     if( (getImportFlags() & SvXMLImportFlags::CONTENT) ||
         ((getImportFlags() & SvXMLImportFlags::MASTERSTYLES) && IsStylesOnlyMode()) )

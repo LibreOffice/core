@@ -98,7 +98,7 @@ public:
         const OUString& rId,         /// ID used to RedlineAdd() call
         bool bStart,                    /// start or end Cursor
         bool bIsOutsideOfParagraph) override;
-    virtual void RedlineAdjustStartNodeCursor( bool bStart) override;
+    virtual void RedlineAdjustStartNodeCursor() override;
     virtual void SetShowChanges( bool bShowChanges ) override;
     virtual void SetRecordChanges( bool bRecordChanges ) override;
     virtual void SetChangesProtectionKey(

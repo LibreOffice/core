@@ -674,7 +674,7 @@ public:
         /// range is not within <text:p>
         bool bIsOutsideOfParagraph);
 
-    virtual void RedlineAdjustStartNodeCursor( bool bStart );
+    virtual void RedlineAdjustStartNodeCursor();
     virtual void SetShowChanges( bool bShowChanges );
     virtual void SetRecordChanges( bool bRecordChanges );
     virtual void SetChangesProtectionKey(

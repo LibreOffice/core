@@ -2842,7 +2842,7 @@ void XMLTextImportHelper::RedlineSetCursor(
     // dummy implementation: do nothing
 }
 
-void XMLTextImportHelper::RedlineAdjustStartNodeCursor(bool)
+void XMLTextImportHelper::RedlineAdjustStartNodeCursor()
 {
     // dummy implementation: do nothing
 }

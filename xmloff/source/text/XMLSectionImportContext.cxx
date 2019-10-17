@@ -212,7 +212,7 @@ void XMLSectionImportContext::StartElement(
 
                 // finally, check for redlines that should start at
                 // the section start node
-                rHelper->RedlineAdjustStartNodeCursor(true); // start ???
+                rHelper->RedlineAdjustStartNodeCursor(); // start ???
 
                 // xml:id for RDF metadata
                 GetImport().SetXmlId(xIfc, sXmlId);
@@ -322,7 +322,7 @@ void XMLSectionImportContext::EndElement()
                                      "", true);
 
     // check for redlines to our endnode
-    rHelper->RedlineAdjustStartNodeCursor(false);
+    rHelper->RedlineAdjustStartNodeCursor();
 }
 
 SvXMLImportContextRef XMLSectionImportContext::CreateChildContext(
