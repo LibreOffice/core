@@ -38,7 +38,7 @@ OfaHtmlTabPage::OfaHtmlTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xStarBasicWarningCB(m_xBuilder->weld_check_button("starbasicwarning"))
     , m_xPrintExtensionCB(m_xBuilder->weld_check_button("printextension"))
     , m_xSaveGrfLocalCB(m_xBuilder->weld_check_button("savegrflocal"))
-    , m_xCharSetLB(new TextEncodingBox(m_xBuilder->weld_combo_box("charset")))
+    , m_xCharSetLB(new SvxTextEncodingBox(m_xBuilder->weld_combo_box("charset")))
 {
     // replace placeholder with UI string from language list
     OUString aText(m_xNumbersEnglishUSCB->get_label());

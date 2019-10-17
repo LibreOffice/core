@@ -23,15 +23,15 @@
 #include <rtl/textenc.h>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC TextEncodingBox
+class SVX_DLLPUBLIC SvxTextEncodingBox
 {
 private:
     std::unique_ptr<weld::ComboBox> m_xControl;
 
 public:
-    TextEncodingBox(std::unique_ptr<weld::ComboBox> pControl);
+    SvxTextEncodingBox(std::unique_ptr<weld::ComboBox> pControl);
 
-    ~TextEncodingBox();
+    ~SvxTextEncodingBox();
 
     /** Fill with all known encodings but exclude those matching one or more
         given flags as defined in rtl/tencinfo.h
@@ -96,15 +96,15 @@ public:
     void hide() { m_xControl->hide(); }
 };
 
-class SVX_DLLPUBLIC TextEncodingTreeView
+class SVX_DLLPUBLIC SvxTextEncodingTreeView
 {
 private:
     std::unique_ptr<weld::TreeView> m_xControl;
 
 public:
-    TextEncodingTreeView(std::unique_ptr<weld::TreeView> pControl);
+    SvxTextEncodingTreeView(std::unique_ptr<weld::TreeView> pControl);
 
-    ~TextEncodingTreeView();
+    ~SvxTextEncodingTreeView();
 
     /** Fill with all known encodings but exclude those matching one or more
         given flags as defined in rtl/tencinfo.h
