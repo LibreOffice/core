@@ -27,10 +27,50 @@
 #include <SkCanvas.h>
 #include <SkPath.h>
 #include <SkRegion.h>
+#include <SkDashPathEffect.h>
+
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 #ifdef DBG_UTIL
 #include <fstream>
 #endif
+
+namespace
+{
+// Create Skia Path from B2DPolygon
+// TODO - take bezier curves into account
+// TODO - use this for all Polygon / PolyPolygon needs
+static SkPath lclPolygonToPath(const basegfx::B2DPolygon& rPolygon)
+{
+    SkPath aPath;
+
+    const sal_uInt32 nPointCount(rPolygon.count());
+
+    if (nPointCount == 0)
+        return aPath;
+
+    const bool bClosePath(rPolygon.isClosed());
+
+    bool bFirst = true;
+
+    for (sal_uInt32 nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++)
+    {
+        auto const& rPoint = rPolygon.getB2DPoint(nPointIndex);
+        if (bFirst)
+        {
+            aPath.moveTo(rPoint.getX(), rPoint.getY());
+            bFirst = false;
+        }
+        else
+        {
+            aPath.lineTo(rPoint.getX(), rPoint.getY());
+        }
+    }
+    if (bClosePath)
+        aPath.close();
+    return aPath;
+}
+}
 
 // Class that triggers flushing the backing buffer when idle.
 class SkiaFlushIdle : public Idle
@@ -458,22 +498,86 @@ Color SkiaSalGraphicsImpl::getPixel(long nX, long nY)
     return fromSkColor(bitmap.getColor(nX, nY));
 }
 
-void SkiaSalGraphicsImpl::invert(long nX, long nY, long nWidth, long nHeight, SalInvert nFlags)
+void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFlags)
 {
-    (void)nX;
-    (void)nY;
-    (void)nWidth;
-    (void)nHeight;
-    (void)nFlags;
-    // TODO
+    // TrackFrame just inverts a dashed path around the polygon
+    if (eFlags == SalInvert::TrackFrame)
+    {
+        SkPath aPath = lclPolygonToPath(rPoly);
+        SkPaint aPaint;
+        aPaint.setStrokeWidth(2);
+        float intervals[] = { 4.0f, 4.0f };
+        aPaint.setStyle(SkPaint::kStroke_Style);
+        aPaint.setPathEffect(SkDashPathEffect::Make(intervals, SK_ARRAY_COUNT(intervals), 0));
+        aPaint.setColor(SkColorSetARGB(255, 255, 255, 255));
+        aPaint.setBlendMode(SkBlendMode::kDifference);
+
+        mSurface->getCanvas()->drawPath(aPath, aPaint);
+    }
+    else
+    {
+        SkPath aPath = lclPolygonToPath(rPoly);
+        SkPaint aPaint;
+        aPaint.setColor(SkColorSetARGB(255, 255, 255, 255));
+        aPaint.setStyle(SkPaint::kFill_Style);
+        aPaint.setBlendMode(SkBlendMode::kDifference);
+
+        // N50 inverts in 4x4 checker pattern
+        if (eFlags == SalInvert::N50)
+        {
+            // This creates 4x4 checker pattern bitmap
+            // TODO Cache the bitmap
+            SkBitmap aBitmap;
+            aBitmap.allocN32Pixels(4, 4);
+            SkPMColor* scanline;
+            scanline = aBitmap.getAddr32(0, 0);
+            *scanline++ = 0xFFFFFFFF;
+            *scanline++ = 0xFFFFFFFF;
+            *scanline++ = 0xFF000000;
+            *scanline++ = 0xFF000000;
+            scanline = aBitmap.getAddr32(0, 1);
+            *scanline++ = 0xFFFFFFFF;
+            *scanline++ = 0xFFFFFFFF;
+            *scanline++ = 0xFF000000;
+            *scanline++ = 0xFF000000;
+            scanline = aBitmap.getAddr32(0, 2);
+            *scanline++ = 0xFF000000;
+            *scanline++ = 0xFF000000;
+            *scanline++ = 0xFFFFFFFF;
+            *scanline++ = 0xFFFFFFFF;
+            scanline = aBitmap.getAddr32(0, 3);
+            *scanline++ = 0xFF000000;
+            *scanline++ = 0xFF000000;
+            *scanline++ = 0xFFFFFFFF;
+            *scanline++ = 0xFFFFFFFF;
+            // The bitmap is repeated in both directions the checker pattern is as big
+            // as the polygon (usually rectangle)
+            aPaint.setShader(aBitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat));
+        }
+
+        mSurface->getCanvas()->drawPath(aPath, aPaint);
+    }
+    scheduleFlush();
 }
 
-void SkiaSalGraphicsImpl::invert(sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags)
+void SkiaSalGraphicsImpl::invert(long nX, long nY, long nWidth, long nHeight, SalInvert eFlags)
 {
-    (void)nPoints;
-    (void)pPtAry;
-    (void)nFlags;
-    abort();
+    basegfx::B2DRectangle aRectangle(nX, nY, nX + nWidth, nY + nHeight);
+    auto aRect = basegfx::utils::createPolygonFromRect(aRectangle);
+    invert(aRect, eFlags);
+}
+
+void SkiaSalGraphicsImpl::invert(sal_uInt32 nPoints, const SalPoint* pPointArray, SalInvert eFlags)
+{
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.append(basegfx::B2DPoint(pPointArray[0].mnX, pPointArray[0].mnY), nPoints);
+    for (sal_uInt32 i = 1; i < nPoints; ++i)
+    {
+        aPolygon.setB2DPoint(i, basegfx::B2DPoint(pPointArray[i].mnX, pPointArray[i].mnY));
+    }
+    aPolygon.setClosed(true);
+
+    invert(aPolygon, eFlags);
 }
 
 bool SkiaSalGraphicsImpl::drawEPS(long nX, long nY, long nWidth, long nHeight, void* pPtr,
