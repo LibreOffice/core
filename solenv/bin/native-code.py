@@ -491,7 +491,6 @@ custom_widgets = [
     'RecentDocsView',
     'RowEdit',
     'SameContentListBox',
-    'ScDataTableView',
     'SdPageObjsTLB',
     'SearchBox',
     'SearchResultsBox',
