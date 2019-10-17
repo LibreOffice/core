@@ -80,7 +80,8 @@ $(eval $(call gb_CppunitTest_use_externals,sd_uimpress,\
 ))
 
 ifneq ($(DBUS_HAVE_GLIB),)
-$(eval $(call gb_CppunitTest_add_defs,sd_uimpress,\
+$(eval $(call gb_CppunitTest_set_include,sd_uimpress,\
+	$$(INCLUDE) \
 	$(DBUS_GLIB_CFLAGS) \
 ))
 $(eval $(call gb_CppunitTest_add_libs,sd_uimpress,\
