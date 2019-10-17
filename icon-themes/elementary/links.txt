@@ -2221,9 +2221,6 @@ sw/res/sc20235.png sd/res/nv010.png
 sw/res/sc20238.png sc/res/droplink.png
 sw/res/sc20239.png cmd/sc_copy.png
 sw/res/sc20244.png sw/res/sc20234.png
-sw/res/sc20245.png cmd/sc_editdoc.png
-sw/res/sc20246.png sc/res/droplink.png
-sw/res/sc20248.png cmd/sc_save.png
 sw/res/sc20249.png cmd/sc_navigator.png
 sw/res/sc20556.png cmd/sc_dbviewfunctions.png
 sw/res/sc20557.png cmd/sc_cancel.png
