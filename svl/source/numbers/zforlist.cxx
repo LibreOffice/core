@@ -791,7 +791,7 @@ void SvNumberFormatter::FillKeywordTableForExcel( NfKeywordTable& rKeywords )
     // Excel or OOXML do not specify format code keywords case sensitivity,
     // but given and writes them lower case. Using upper case even lead to an
     // odd misrepresentation in iOS viewer and OSX Quicklook viewer that
-    // strangely use "D" and "DD" for "days since beginnning of year", which is
+    // strangely use "D" and "DD" for "days since beginning of year", which is
     // nowhere defined. See tdf#126773
     // Use lower case for all date and time keywords where known. See OOXML
     // ECMA-376-1:2016 18.8.31 numFmts (Number Formats)
