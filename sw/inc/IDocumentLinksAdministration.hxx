@@ -52,7 +52,7 @@ using rtl::OUString;
     */
     virtual bool GetData(const OUString& rItem, const OUString& rMimeType, css::uno::Any& rValue) const = 0;
 
-    virtual bool SetData(const OUString& rItem, const OUString& rMimeType, const css::uno::Any& rValue) = 0;
+    virtual bool SetData(const OUString& rItem) = 0;
 
     virtual ::sfx2::SvLinkSource* CreateLinkSource(const OUString& rItem) = 0;
 
