@@ -323,6 +323,11 @@ SAL_DLLPUBLIC_EXPORT GType lok_doc_view_get_type();
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
+#if defined __clang__
+#if __has_warning("-Wdeprecated-volatile")
+#pragma clang diagnostic ignored "-Wdeprecated-volatile"
+#endif
+#endif
 #endif
 G_DEFINE_TYPE_WITH_CODE (LOKDocView, lok_doc_view, GTK_TYPE_DRAWING_AREA,
                          G_ADD_PRIVATE (LOKDocView)

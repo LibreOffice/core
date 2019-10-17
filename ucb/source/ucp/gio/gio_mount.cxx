@@ -28,6 +28,11 @@
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
+#if defined __clang__
+#if __has_warning("-Wdeprecated-volatile")
+#pragma clang diagnostic ignored "-Wdeprecated-volatile"
+#endif
+#endif
 #endif
 G_DEFINE_TYPE (OOoMountOperation, ooo_mount_operation, G_TYPE_MOUNT_OPERATION);
 #ifdef __GNUC__
