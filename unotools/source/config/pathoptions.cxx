@@ -236,7 +236,7 @@ const OUString& SvtPathOptions_Impl::GetPath( SvtPathOptions::Paths ePath )
                  ePath == SvtPathOptions::PATH_ICONSET)
         {
             auto ctx = comphelper::getProcessComponentContext();
-            OUStringBuffer buf;
+            OUStringBuffer buf(aPathValue.getLength()*2);
             for (sal_Int32 i = 0;;)
             {
                 buf.append(
