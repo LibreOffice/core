@@ -28,7 +28,7 @@ using namespace css::beans;
 DocumentEncryption::DocumentEncryption(const Reference< XComponentContext >& rxContext,
                                        Reference<XStream> const & xDocumentStream,
                                        oox::ole::OleStorage& rOleStorage,
-                                       Sequence<NamedValue>& rMediaEncData)
+                                       const Sequence<NamedValue>& rMediaEncData)
     : mxContext(rxContext)
     , mxDocumentStream(xDocumentStream)
     , mrOleStorage(rOleStorage)
