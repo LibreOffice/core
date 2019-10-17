@@ -247,9 +247,6 @@ sd/source/ui/inc/View.hxx:92
 sd/source/ui/inc/ViewClipboard.hxx:64
     unsigned short sd::ViewClipboard::DetermineInsertPosition(const class SdTransferable &,)
     0
-sd/source/ui/inc/ViewShell.hxx:212
-    void sd::ViewShell::UpdatePreview(class SdPage *,_Bool,)
-    10
 sdext/source/pdfimport/inc/contentsink.hxx:150
     void pdfi::ContentSink::drawMask(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)
     10

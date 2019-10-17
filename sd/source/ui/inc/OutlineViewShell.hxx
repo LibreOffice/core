@@ -132,7 +132,7 @@ public:
 
     /** Update the preview to show the specified page.
     */
-    virtual void UpdatePreview (SdPage* pPage, bool bInit = false) override;
+    virtual void UpdatePreview (SdPage* pPage) override;
 
     virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController() override;
 
