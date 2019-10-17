@@ -64,20 +64,4 @@ weld::Window* ScTabViewShell::GetDialogParent()
     return pWin ? pWin->GetFrameWeld() : nullptr;
 }
 
-vcl::Window* ScTabViewShell::GetLegacyDialogParent()
-{
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
-    if ( pDocSh->IsOle() )
-    {
-        // TODO/LATER: how to GetEditWindow in embedded document?!
-        // It should be OK to return the ViewShell Window!
-        return GetWindow();
-        // SvInPlaceEnvironment* pEnv = pDocSh->GetIPEnv();
-        // if (pEnv)
-        //    return pEnv->GetEditWin();
-    }
-
-    return GetActiveWin();      // for normal views, too
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
