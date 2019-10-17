@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CSVGRID_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CSVGRID_HXX
 
-#include <vcl/menu.hxx>
 #include <vcl/virdev.hxx>
 #include <unotools/options.hxx>
 
