@@ -239,9 +239,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
 
 void SvXMLExportItemMapper::exportElementItems(
                           SvXMLExport& rExport,
-                          const SvXMLUnitConverter& rUnitConverter,
                           const SfxItemSet &rSet,
-                          SvXmlExportFlags nFlags,
                           const std::vector<sal_uInt16> &rIndexArray ) const
 {
     const size_t nCount = rIndexArray.size();
@@ -259,8 +257,7 @@ void SvXMLExportItemMapper::exportElementItems(
         if(pItem)
         {
             rExport.IgnorableWhitespace();
-            handleElementItem( rExport, rEntry, *pItem, rUnitConverter,
-                               rSet, nFlags);
+            handleElementItem( rEntry, *pItem );
             bItemsExported = true;
         }
     }
@@ -314,8 +311,7 @@ void SvXMLExportItemMapper::exportXML( SvXMLExport& rExport,
 
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, ePropToken,
                                   false, false );
-        exportElementItems( rExport, rUnitConverter,
-                            rSet, SvXmlExportFlags::IGN_WS, aIndexArray );
+        exportElementItems( rExport, rSet, aIndexArray );
     }
 }
 
@@ -334,12 +330,8 @@ void SvXMLExportItemMapper::handleSpecialItem( SvXMLAttributeList& /*rAttrList*/
 /** this method is called for every item that has the
     MID_SW_FLAG_ELEMENT_EXPORT flag set */
 void SvXMLExportItemMapper::handleElementItem(
-                        SvXMLExport& /*rExport*/,
                         const SvXMLItemMapEntry& /*rEntry*/,
-                        const SfxPoolItem& /*rItem*/,
-                        const SvXMLUnitConverter& /*rUnitConverter*/,
-                        const SfxItemSet& /*rSet*/,
-                        SvXmlExportFlags /*nFlags*/ ) const
+                        const SfxPoolItem& /*rItem*/ ) const
 {
     OSL_FAIL( "element item not handled in xml export" );
 }

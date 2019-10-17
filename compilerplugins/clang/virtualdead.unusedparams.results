@@ -340,9 +340,6 @@ sw/source/filter/ww8/wrtww8.hxx:798
 sw/source/filter/ww8/wrtww8.hxx:863
     void MSWordExportBase::OutputGrfNode(const class SwGrfNode &,)
     0
-sw/source/filter/xml/xmlexpit.hxx:84
-    void SvXMLExportItemMapper::handleElementItem(class SvXMLExport &,const struct SvXMLItemMapEntry &,const class SfxPoolItem &,const class SvXMLUnitConverter &,const class SfxItemSet &,enum SvXmlExportFlags,)const
-    011000
 vcl/inc/outdev.h:122
     _Bool ImplGlyphFallbackFontSubstitution::FindFontSubstitute(class FontSelectPattern &,class LogicalFontInstance *,class rtl::OUString &,)const
     101
