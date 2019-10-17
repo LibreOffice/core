@@ -227,11 +227,11 @@ void OGLTransitionImpl::finish()
     CHECK_GL_ERROR();
 }
 
-void OGLTransitionImpl::prepare( double, double, double, double, double )
+void OGLTransitionImpl::prepare( double, double )
 {
 }
 
-void OGLTransitionImpl::finish( double, double, double, double, double )
+void OGLTransitionImpl::cleanup()
 {
 }
 
@@ -266,7 +266,7 @@ void OGLTransitionImpl::display( double nTime, sal_Int32 glLeavingSlideTex, sal_
 
     CHECK_GL_ERROR();
     glBindVertexArray(m_nVertexArrayObject);
-    prepare( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight );
+    prepare( SlideWidth, SlideHeight );
 
     CHECK_GL_ERROR();
     displaySlides_( nTime, glLeavingSlideTex, glEnteringSlideTex, SlideWidthScale, SlideHeightScale, pContext );
@@ -1878,7 +1878,7 @@ public:
 private:
     virtual GLuint makeShader() const override;
     virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, OpenGLContext *pContext ) override;
-    virtual void prepare( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) override;
+    virtual void prepare( double SlideWidth, double SlideHeight ) override;
 
     glm::vec2 maCenter;
     GLint maSlideRatioLocation = -1;
@@ -1901,7 +1901,7 @@ void RippleTransition::prepareTransition( sal_Int32, sal_Int32, OpenGLContext* )
     CHECK_GL_ERROR();
 }
 
-void RippleTransition::prepare( double /* nTime */, double SlideWidth, double SlideHeight, double /* DispWidth */, double /* DispHeight */ )
+void RippleTransition::prepare( double SlideWidth, double SlideHeight )
 {
     if( maSlideRatioLocation != -1 )
         glUniform1f( maSlideRatioLocation, SlideWidth / SlideHeight );
@@ -1975,7 +1975,7 @@ public:
 private:
     virtual GLuint makeShader() const override;
     virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, OpenGLContext *pContext ) override;
-    virtual void finish( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) override;
+    virtual void cleanup() override;
 
     GLuint maBuffer = 0;
 };
@@ -2025,7 +2025,7 @@ void GlitterTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int3
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void GlitterTransition::finish( double, double, double, double, double )
+void GlitterTransition::cleanup()
 {
     CHECK_GL_ERROR();
     glDeleteBuffers(1, &maBuffer);

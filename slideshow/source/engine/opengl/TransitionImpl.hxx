@@ -171,13 +171,13 @@ private:
       *
       * Default implementation does nothing.
       */
-    virtual void prepare( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
+    virtual void prepare( double SlideWidth, double SlideHeight );
 
     /** This function is called in display method to prepare the slides, scene, etc.
       *
       * Default implementation does nothing.
       */
-    virtual void finish( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
+    virtual void cleanup();
 
     /** This function is called after glx context is ready to let the transition prepare GL related things, like GLSL program.
       *

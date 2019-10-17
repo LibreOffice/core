@@ -286,12 +286,6 @@ sdext/source/presenter/PresenterScrollBar.hxx:180
 slideshow/source/engine/animationfactory.cxx:443
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
     00
-slideshow/source/engine/opengl/TransitionImpl.hxx:174
-    void OGLTransitionImpl::prepare(double,double,double,double,double,)
-    01100
-slideshow/source/engine/opengl/TransitionImpl.hxx:180
-    void OGLTransitionImpl::finish(double,double,double,double,double,)
-    00000
 starmath/source/wordexportbase.hxx:37
     void SmWordExportBase::HandleText(const class SmNode *,int,)
     10
