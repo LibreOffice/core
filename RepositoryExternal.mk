@@ -114,15 +114,20 @@ endif
 ifneq ($(ENABLE_SKIA),)
 define gb_LinkTarget__use_skia
 $(call gb_LinkTarget_set_include,$(1),\
-       -I$(call gb_UnpackedTarball_get_dir,skia)/include/core \
-       -I$(call gb_UnpackedTarball_get_dir,skia)/include/config \
-       -I$(call gb_UnpackedTarball_get_dir,skia) \
-       $$(INCLUDE) \
+	-I$(call gb_UnpackedTarball_get_dir,skia)/include/core \
+	-I$(call gb_UnpackedTarball_get_dir,skia)/include/config \
+	-I$(call gb_UnpackedTarball_get_dir,skia)/include/third_party/vulkan \
+	-I$(call gb_UnpackedTarball_get_dir,skia) \
+	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_libraries,$(1),skia)
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSK_USER_CONFIG_HEADER="<$(BUILDDIR)/config_host/config_skia.h>" \
+	-DSKIA_DLL \
+)
 endef
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
-       skia \
+        skia \
 ))
 endif
 
