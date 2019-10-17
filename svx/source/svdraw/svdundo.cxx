@@ -84,7 +84,7 @@ void SdrUndoAction::Repeat(SfxRepeatTarget& rView)
 OUString SdrUndoAction::GetRepeatComment(SfxRepeatTarget& rView) const
 {
     SdrView* pV=dynamic_cast<SdrView*>( &rView );
-    if (pV!=nullptr) return GetSdrRepeatComment(*pV);
+    if (pV!=nullptr) return GetSdrRepeatComment();
     return OUString();
 }
 
@@ -97,7 +97,7 @@ void SdrUndoAction::SdrRepeat(SdrView& /*rView*/)
 {
 }
 
-OUString SdrUndoAction::GetSdrRepeatComment(SdrView& /*rView*/) const
+OUString SdrUndoAction::GetSdrRepeatComment() const
 {
     return OUString();
 }
@@ -187,7 +187,7 @@ void SdrUndoGroup::SdrRepeat(SdrView& rView)
     } // switch
 }
 
-OUString SdrUndoGroup::GetSdrRepeatComment(SdrView& /*rView*/) const
+OUString SdrUndoGroup::GetSdrRepeatComment() const
 {
     return aComment.replaceAll("%1", SvxResId(STR_ObjNameSingulPlural));
 }
@@ -492,7 +492,7 @@ OUString SdrUndoAttrObj::GetComment() const
     }
 }
 
-OUString SdrUndoAttrObj::GetSdrRepeatComment(SdrView& /*rView*/) const
+OUString SdrUndoAttrObj::GetSdrRepeatComment() const
 {
     if(bStyleSheet)
     {
@@ -538,7 +538,7 @@ bool SdrUndoMoveObj::CanSdrRepeat(SdrView& rView) const
     return rView.AreObjectsMarked();
 }
 
-OUString SdrUndoMoveObj::GetSdrRepeatComment(SdrView& /*rView*/) const
+OUString SdrUndoMoveObj::GetSdrRepeatComment() const
 {
     return ImpGetDescriptionStr(STR_EditMove,true);
 }
@@ -784,7 +784,7 @@ bool SdrUndoDelObj::CanSdrRepeat(SdrView& rView) const
     return rView.AreObjectsMarked();
 }
 
-OUString SdrUndoDelObj::GetSdrRepeatComment(SdrView& /*rView*/) const
+OUString SdrUndoDelObj::GetSdrRepeatComment() const
 {
     return ImpGetDescriptionStr(STR_EditDelete,true);
 }
@@ -1081,7 +1081,7 @@ OUString SdrUndoObjSetText::GetComment() const
     return ImpGetDescriptionStr(STR_UndoObjSetText);
 }
 
-OUString SdrUndoObjSetText::GetSdrRepeatComment(SdrView& /*rView*/) const
+OUString SdrUndoObjSetText::GetSdrRepeatComment() const
 {
     return ImpGetDescriptionStr(STR_UndoObjSetText);
 }
@@ -1417,7 +1417,7 @@ OUString SdrUndoDelPage::GetComment() const
     return ImpGetDescriptionStr(STR_UndoDelPage);
 }
 
-OUString SdrUndoDelPage::GetSdrRepeatComment(SdrView& /*rView*/) const
+OUString SdrUndoDelPage::GetSdrRepeatComment() const
 {
     return ImpGetDescriptionStr(STR_UndoDelPage);
 }
@@ -1512,7 +1512,7 @@ OUString SdrUndoCopyPage::GetComment() const
     return ImpGetDescriptionStr(STR_UndoCopPage);
 }
 
-OUString SdrUndoCopyPage::GetSdrRepeatComment(SdrView& /*rView*/) const
+OUString SdrUndoCopyPage::GetSdrRepeatComment() const
 {
     return ImpGetDescriptionStr(STR_UndoCopPage);
 }

@@ -66,7 +66,7 @@ public:
     virtual void Repeat(SfxRepeatTarget& rView) override;
 
     virtual OUString GetRepeatComment(SfxRepeatTarget& rView) const override;
-    virtual OUString GetSdrRepeatComment(SdrView& rView) const;
+    virtual OUString GetSdrRepeatComment() const;
 
     virtual bool CanSdrRepeat(SdrView& rView) const;
     virtual void SdrRepeat(SdrView& rView);
@@ -103,7 +103,7 @@ public:
     void SetComment(const OUString& rStr) { aComment=rStr; }
     void SetObjDescription(const OUString& rStr) { aObjDescription=rStr; }
     virtual OUString GetComment() const override;
-    virtual OUString GetSdrRepeatComment(SdrView& rView) const override;
+    virtual OUString GetSdrRepeatComment() const override;
 
     virtual void Undo() override;
     virtual void Redo() override;
@@ -172,7 +172,7 @@ public:
     virtual void Redo() override;
 
     virtual OUString GetComment() const override;
-    virtual OUString GetSdrRepeatComment(SdrView& rView) const override;
+    virtual OUString GetSdrRepeatComment() const override;
 };
 
 /**
@@ -192,7 +192,7 @@ public:
     virtual void Redo() override;
 
     virtual OUString GetComment() const override;
-    virtual OUString GetSdrRepeatComment(SdrView& rView) const override;
+    virtual OUString GetSdrRepeatComment() const override;
 
     virtual void SdrRepeat(SdrView& rView) override;
     virtual bool CanSdrRepeat(SdrView& rView) const override;
@@ -296,7 +296,7 @@ public:
     virtual void Redo() override;
 
     virtual OUString GetComment() const override;
-    virtual OUString GetSdrRepeatComment(SdrView& rView) const override;
+    virtual OUString GetSdrRepeatComment() const override;
 
     virtual void SdrRepeat(SdrView& rView) override;
     virtual bool CanSdrRepeat(SdrView& rView) const override;
@@ -413,7 +413,7 @@ public:
     virtual void Redo() override;
 
     virtual OUString GetComment() const override;
-    virtual OUString GetSdrRepeatComment(SdrView& rView) const override;
+    virtual OUString GetSdrRepeatComment() const override;
 
     virtual void SdrRepeat(SdrView& rView) override;
     virtual bool CanSdrRepeat(SdrView& rView) const override;
@@ -569,7 +569,7 @@ public:
     virtual void Redo() override;
 
     virtual OUString GetComment() const override;
-    virtual OUString GetSdrRepeatComment(SdrView& rView) const override;
+    virtual OUString GetSdrRepeatComment() const override;
 
     virtual void SdrRepeat(SdrView& rView) override;
     virtual bool CanSdrRepeat(SdrView& rView) const override;
@@ -607,7 +607,7 @@ public:
     SdrUndoCopyPage(SdrPage& rNewPg): SdrUndoNewPage(rNewPg) {}
 
     virtual OUString GetComment() const override;
-    virtual OUString GetSdrRepeatComment(SdrView& rView) const override;
+    virtual OUString GetSdrRepeatComment() const override;
 
     virtual void SdrRepeat(SdrView& rView) override;
     virtual bool CanSdrRepeat(SdrView& rView) const override;
