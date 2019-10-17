@@ -222,7 +222,7 @@ sal_uInt16 ImportExcel::ReadXFIndex( const ScAddress& rScPos, bool bBiff2 )
 
 void ImportExcel::ReadDimensions()
 {
-    XclRange aXclUsedArea( ScAddress::UNINITIALIZED );
+    XclRange aXclUsedArea;
     if( (maStrm.GetRecId() == EXC_ID2_DIMENSIONS) || (GetBiff() <= EXC_BIFF5) )
     {
         maStrm >> aXclUsedArea;
@@ -240,7 +240,7 @@ void ImportExcel::ReadDimensions()
     }
     else
     {
-        sal_uInt32 nXclRow1, nXclRow2;
+        sal_uInt32 nXclRow1 = 0, nXclRow2 = 0;
         nXclRow1 = maStrm.ReaduInt32();
         nXclRow2 = maStrm.ReaduInt32();
         aXclUsedArea.maFirst.mnCol = maStrm.ReaduInt16();
