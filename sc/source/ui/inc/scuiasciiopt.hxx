@@ -35,7 +35,7 @@ class RadioButton;
 class NumericField;
 
 class ScCsvTableBox;
-class TextEncodingBox;
+class SvxTextEncodingBox;
 
 class ScImportAsciiDlg : public weld::GenericDialogController
 {
@@ -55,7 +55,7 @@ class ScImportAsciiDlg : public weld::GenericDialogController
     bool                        mbDetectSpaceSep;   /// Whether to detect a possible space separator.
 
     std::unique_ptr<weld::Label> mxFtCharSet;
-    std::unique_ptr<TextEncodingBox> mxLbCharSet;
+    std::unique_ptr<SvxTextEncodingBox> mxLbCharSet;
     std::unique_ptr<weld::Label> mxFtCustomLang;
     std::unique_ptr<LanguageBox> mxLbCustomLang;
 

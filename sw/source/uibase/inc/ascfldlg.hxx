@@ -33,7 +33,7 @@ class SwAsciiFilterDlg : public SfxDialogController
     bool m_bSaveLineStatus;
     OUString m_sExtraData;
 
-    std::unique_ptr<TextEncodingBox> m_xCharSetLB;
+    std::unique_ptr<SvxTextEncodingBox> m_xCharSetLB;
     std::unique_ptr<weld::Label> m_xFontFT;
     std::unique_ptr<weld::ComboBox> m_xFontLB;
     std::unique_ptr<weld::Label> m_xLanguageFT;
