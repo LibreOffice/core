@@ -168,10 +168,8 @@ public:
 
        @param buf     pointer to buffer containing the data
        @param len     size of buffer
-       @param ref     reference to properties of binary object
      */
-    virtual void data(const sal_uInt8* buf, size_t len,
-                      writerfilter::Reference<Properties>::Pointer_t ref) = 0;
+    virtual void data(const sal_uInt8* buf, size_t len) = 0;
 
 protected:
     ~BinaryObj() {}
