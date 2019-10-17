@@ -308,7 +308,7 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
     css::uno::Sequence<sal_Int8> aSeq( GetOoxHashAsSequence( rPassword, rSaltValue, nSpinCount,
                 eIterCount, rAlgorithmName));
 
-    OUStringBuffer aBuf;
+    OUStringBuffer aBuf((aSeq.getLength()+2)/3*4);
     comphelper::Base64::encode( aBuf, aSeq);
     return aBuf.makeStringAndClear();
 }

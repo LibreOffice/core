@@ -1629,7 +1629,7 @@ OUString ContentNode::GetExpandedText(sal_Int32 nStartPos, sal_Int32 nEndPos) co
     DBG_ASSERT( nStartPos <= nEndPos, "Start and End reversed?" );
 
     sal_Int32 nIndex = nStartPos;
-    OUStringBuffer aStr;
+    OUStringBuffer aStr(256);
     const EditCharAttrib* pNextFeature = GetCharAttribs().FindFeature( nIndex );
     while ( nIndex < nEndPos )
     {

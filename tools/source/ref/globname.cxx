@@ -227,7 +227,7 @@ bool SvGlobalName::MakeId( const OUString & rIdStr )
 
 OUString SvGlobalName::GetHexName() const
 {
-    OStringBuffer aHexBuffer;
+    OStringBuffer aHexBuffer(36);
 
     sal_Char buf[ 10 ];
     sprintf( buf, "%8.8" SAL_PRIXUINT32, pImp->szData.Data1 );

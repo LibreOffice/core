@@ -238,7 +238,6 @@ sal_Int32 compileFile(const OString * pathname)
     lCppArgs.emplace_back("-C");
     lCppArgs.emplace_back("-zI");
 
-    OStringBuffer cppArgs(256);
     Options* pOptions = idlc()->getOptions();
 
     OString filePath;
@@ -250,10 +249,9 @@ sal_Int32 compileFile(const OString * pathname)
 
         if ( !filePath.isEmpty() )
         {
-            cppArgs.append("-I");
-            cppArgs.append(filePath);
+            OString cppArgs = "-I" + filePath;
             lCppArgs.push_back(OStringToOUString(
-                cppArgs.makeStringAndClear().replace('\\', '/'),
+                cppArgs.replace('\\', '/'),
                 RTL_TEXTENCODING_UTF8));
         }
     }
@@ -284,11 +282,9 @@ sal_Int32 compileFile(const OString * pathname)
 
     lCppArgs.emplace_back("-o");
 
-    cppArgs.append(preprocFile);
-    lCppArgs.push_back(OStringToOUString(cppArgs.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
+    lCppArgs.push_back(OStringToOUString(preprocFile, RTL_TEXTENCODING_UTF8));
 
-    cppArgs.append(tmpFile);
-    lCppArgs.push_back(OStringToOUString(cppArgs.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
+    lCppArgs.push_back(OStringToOUString(tmpFile, RTL_TEXTENCODING_UTF8));
 
     OUString cpp;
     OUString startDir;
