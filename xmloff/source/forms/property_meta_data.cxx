@@ -37,7 +37,7 @@ namespace xmloff { namespace metadata
     using namespace ::xmloff::token;
 
 #define FORM_SINGLE_PROPERTY( id, att ) \
-    PropertyDescription( PROPERTY_##id, XML_NAMESPACE_FORM, att, &FormHandlerFactory::getFormPropertyHandler, PID_##id, NO_GROUP )
+    PropertyDescription( PROPERTY_##id, XML_NAMESPACE_FORM, att, &FormHandlerFactory::getFormPropertyHandler, PID_##id )
 
     //= property meta data
     namespace
@@ -88,25 +88,6 @@ namespace xmloff { namespace metadata
             return s_propertyDescriptionsByName;
         }
 
-        typedef ::std::map< PropertyGroup, PropertyDescriptionList > IndexedPropertyGroups;
-
-        const IndexedPropertyGroups& lcl_getIndexedPropertyGroups()
-        {
-            DBG_TESTSOLARMUTEX();
-            static IndexedPropertyGroups s_indexedPropertyGroups;
-            if ( s_indexedPropertyGroups.empty() )
-            {
-                const PropertyDescription* desc = lcl_getPropertyMetaData();
-                while ( !desc->propertyName.isEmpty() )
-                {
-                    if ( desc->propertyGroup != NO_GROUP )
-                        s_indexedPropertyGroups[ desc->propertyGroup ].push_back( desc );
-                    ++desc;
-                }
-            }
-            return s_indexedPropertyGroups;
-        }
-
         typedef std::unordered_map< OUString, XMLTokenEnum > ReverseTokenLookup;
 
         const ReverseTokenLookup& getReverseTokenLookup()
@@ -136,25 +117,6 @@ namespace xmloff { namespace metadata
             }
         };
 
-        typedef std::unordered_multimap< AttributeDescription, PropertyGroup, AttributeHash > AttributeGroups;
-
-        const AttributeGroups& lcl_getAttributeGroups()
-        {
-            DBG_TESTSOLARMUTEX();
-            static AttributeGroups s_attributeGroups;
-            if ( s_attributeGroups.empty() )
-            {
-                const PropertyDescription* desc = lcl_getPropertyMetaData();
-                while ( !desc->propertyName.isEmpty() )
-                {
-                    if ( desc->propertyGroup != NO_GROUP )
-                        s_attributeGroups.emplace( desc->attribute, desc->propertyGroup );
-                    ++desc;
-                }
-            }
-            return s_attributeGroups;
-        }
-
         typedef std::unordered_map< AttributeDescription, PropertyGroups, AttributeHash > AttributesWithoutGroup;
 
         const AttributesWithoutGroup& lcl_getAttributesWithoutGroups()
@@ -166,13 +128,10 @@ namespace xmloff { namespace metadata
                 const PropertyDescription* desc = lcl_getPropertyMetaData();
                 while ( !desc->propertyName.isEmpty() )
                 {
-                    if ( desc->propertyGroup == NO_GROUP )
-                    {
-                        PropertyDescriptionList singleElementList;
-                        singleElementList.push_back( desc );
+                    PropertyDescriptionList singleElementList;
+                    singleElementList.push_back( desc );
 
-                        s_attributesWithoutGroup[ desc->attribute ].push_back( singleElementList );
-                    }
+                    s_attributesWithoutGroup[ desc->attribute ].push_back( singleElementList );
                     ++desc;
                 }
             }
@@ -189,48 +148,14 @@ namespace xmloff { namespace metadata
         return nullptr;
     }
 
-    void getPropertyGroup( const PropertyGroup i_propertyGroup, PropertyDescriptionList& o_propertyDescriptions )
-    {
-        OSL_ENSURE( i_propertyGroup != NO_GROUP, "xmloff::metadata::getPropertyGroup: illegal group!" );
-
-        const IndexedPropertyGroups& rPropertyGroups( lcl_getIndexedPropertyGroups() );
-        const IndexedPropertyGroups::const_iterator pos = rPropertyGroups.find( i_propertyGroup );
-        if ( pos != rPropertyGroups.end() )
-            o_propertyDescriptions = pos->second;
-    }
-
     void getPropertyGroupList( const AttributeDescription& i_attribute, PropertyGroups& o_propertyGroups )
     {
-        const AttributeGroups& rAttributeGroups = lcl_getAttributeGroups();
-
-        ::std::pair< AttributeGroups::const_iterator, AttributeGroups::const_iterator >
-            range = rAttributeGroups.equal_range( i_attribute );
-
-        if ( range.first == range.second )
-        {
-            // the attribute is not used for any non-trivial group, which means it is mapped directly to
-            // a single property
-            const AttributesWithoutGroup& attributesWithoutGroups( lcl_getAttributesWithoutGroups() );
-            const AttributesWithoutGroup::const_iterator pos = attributesWithoutGroups.find( i_attribute );
-            if ( pos != attributesWithoutGroups.end() )
-                o_propertyGroups = pos->second;
-        }
-        else
-        {
-            const IndexedPropertyGroups& rPropertyGroups = lcl_getIndexedPropertyGroups();
-            for ( AttributeGroups::const_iterator group = range.first; group != range.second; ++group )
-            {
-                const PropertyGroup propGroup = group->second;
-                const IndexedPropertyGroups::const_iterator groupPos = rPropertyGroups.find( propGroup );
-                if( groupPos == rPropertyGroups.end() )
-                {
-                    SAL_WARN( "xmloff.forms", "getPropertyGroupList: inconsistency!" );
-                    continue;
-                }
-
-                o_propertyGroups.push_back( groupPos->second );
-            }
-        }
+        // the attribute is not used for any non-trivial group, which means it is mapped directly to
+        // a single property
+        const AttributesWithoutGroup& attributesWithoutGroups( lcl_getAttributesWithoutGroups() );
+        const AttributesWithoutGroup::const_iterator pos = attributesWithoutGroups.find( i_attribute );
+        if ( pos != attributesWithoutGroups.end() )
+            o_propertyGroups = pos->second;
     }
 
     AttributeDescription getAttributeDescription( const sal_uInt16 i_namespacePrefix, const OUString& i_attributeName )
