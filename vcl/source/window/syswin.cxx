@@ -548,7 +548,7 @@ OString ImplWindowStateToStr(const WindowStateData& rData)
     if ( nValidMask == WindowStateMask::NONE )
         return OString();
 
-    OStringBuffer rStrBuf;
+    OStringBuffer rStrBuf(64);
 
     if ( nValidMask & WindowStateMask::X )
         rStrBuf.append(static_cast<sal_Int32>(rData.GetX()));

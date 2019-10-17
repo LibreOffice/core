@@ -1004,7 +1004,7 @@ OUString CppuType::resolveAllTypedefs(OUString const & name) const
             u2b(dynamic_cast<unoidl::TypedefEntity&>(*ent).getType()), &k2));
         k1 += k2; //TODO: overflow
     }
-    OUStringBuffer b;
+    OUStringBuffer b(k1*2 + n.getLength());
     for (sal_Int32 i = 0; i != k1; ++i) {
         b.append("[]");
     }
@@ -2675,7 +2675,7 @@ OUString typeToIdentifier(OUString const & name)
 {
     sal_Int32 k;
     OUString n(b2u(codemaker::UnoType::decompose(u2b(name), &k)));
-    OUStringBuffer b;
+    OUStringBuffer b(4*k + n.getLength());
     for (sal_Int32 i = 0; i != k; ++i) {
         b.append("seq_");
     }
@@ -3587,7 +3587,7 @@ void ServiceType::dumpHppFile(
                 for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter& param :
                      cons.parameters) {
                     o << ", ";
-                    OUStringBuffer buf;
+                    OUStringBuffer buf(2 + param.type.getLength());
                     if (param.rest) {
                         buf.append("[]");
                     }

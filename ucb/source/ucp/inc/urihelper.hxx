@@ -80,7 +80,7 @@ namespace ucb_impl { namespace urihelper {
                                   rtl_UriEncodeKeepEscapes, /* #i81690# */
                                   RTL_TEXTENCODING_UTF8 );
 
-        OUStringBuffer aResult;
+        OUStringBuffer aResult(256);
         sal_Int32 nIndex = 0;
         do
         {

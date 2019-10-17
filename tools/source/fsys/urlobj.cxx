@@ -231,9 +231,12 @@ inline sal_Int32 INetURLObject::SubString::clear()
 inline sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString,
                                        OUString const & rSubString)
 {
-    OUString sTemp(rString.makeStringAndClear());
-    sal_Int32 nDelta = set(sTemp, rSubString);
-    rString.append(sTemp);
+    sal_Int32 nDelta = rSubString.getLength() - m_nLength;
+
+    rString.remove(m_nBegin, m_nLength);
+    rString.insert(m_nBegin, rSubString);
+
+    m_nLength = rSubString.getLength();
     return nDelta;
 }
 
@@ -698,7 +701,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
 
     sal_uInt32 nFragmentDelimiter = '#';
 
-    OUStringBuffer aSynAbsURIRef;
+    OUStringBuffer aSynAbsURIRef(rTheAbsURIRef.getLength()*2);
 
     // Parse <scheme>:
     sal_Unicode const * p = pPos;
@@ -949,7 +952,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     return false;
                 }
                 aSynAbsURIRef.append("//");
-                OUStringBuffer aSynUser;
+                OUStringBuffer aSynUser(128);
 
                 bool bHasUser = false;
                 while (pPos < pEnd && *pPos != '@'
@@ -966,7 +969,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     bHasUser = *pPos == '@';
                 }
 
-                OUStringBuffer aSynAuthority;
+                OUStringBuffer aSynAuthority(64);
                 if ( !bHasUser )
                 {
                     aSynAuthority = aSynUser;
@@ -2875,7 +2878,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
     DBG_ASSERT(pBegin, "INetURLObject::parsePath(): Null output param");
 
     sal_Unicode const * pPos = *pBegin;
-    OUStringBuffer aTheSynPath;
+    OUStringBuffer aTheSynPath(256);
 
     switch (eScheme)
     {
@@ -3267,7 +3270,7 @@ bool INetURLObject::insertName(OUString const & rTheName,
             }
     }
 
-    OUStringBuffer aNewPath;
+    OUStringBuffer aNewPath(256);
     aNewPath.append(pPathBegin, pPrefixEnd - pPathBegin);
     aNewPath.append('/');
     aNewPath.append(encodeText(rTheName, PART_PCHAR,
@@ -3392,7 +3395,7 @@ OUString INetURLObject::decode(sal_Unicode const * pBegin,
         default:
             break;
     }
-    OUStringBuffer aResult;
+    OUStringBuffer aResult(static_cast<int>(pEnd-pBegin));
     while (pBegin < pEnd)
     {
         EscapeType eEscapeType;
@@ -3960,7 +3963,7 @@ bool INetURLObject::removeSegment(sal_Int32 nIndex, bool bIgnoreFinalSlash)
     if (!aSegment.isPresent())
         return false;
 
-    OUStringBuffer aNewPath;
+    OUStringBuffer aNewPath(m_aPath.getLength());
     aNewPath.append(m_aAbsURIRef.getStr() + m_aPath.getBegin(),
                        aSegment.getBegin() - m_aPath.getBegin());
     if (bIgnoreFinalSlash && aSegment.getEnd() == m_aPath.getEnd())
@@ -4159,7 +4162,7 @@ bool INetURLObject::setExtension(OUString const & rTheExtension,
     if (!pExtension)
         pExtension = p;
 
-    OUStringBuffer aNewPath;
+    OUStringBuffer aNewPath(128);
     aNewPath.append(pPathBegin, pExtension - pPathBegin);
     aNewPath.append('.');
     aNewPath.append(encodeText(rTheExtension, PART_PCHAR,
