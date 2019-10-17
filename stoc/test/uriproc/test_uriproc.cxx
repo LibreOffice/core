@@ -82,7 +82,7 @@ OString createTestAssertEqualMessage(
     char const * expectedExpr, char const * actualExpr, T3 const & expected,
     T4 const & actual)
 {
-    OUStringBuffer buf;
+    OUStringBuffer buf(512);
     buf.appendAscii(token1);
     buf.append('|');
     append(buf, token2);

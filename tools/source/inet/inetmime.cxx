@@ -373,7 +373,7 @@ bool parseParameters(ParameterList const & rInput,
                     = getCharsetEncoding(it->m_aCharset.getStr(),
                                                    it->m_aCharset.getStr()
                                                        + it->m_aCharset.getLength());
-            OUStringBuffer aValue;
+            OUStringBuffer aValue(64);
             bool bBadEncoding = false;
             itNext = it;
             do
@@ -715,7 +715,7 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
         else if (p != pEnd && *p == '"')
             if (pParameters)
             {
-                OStringBuffer aSink;
+                OStringBuffer aSink(256);
                 bool bInvalid = false;
                 for (++p;;)
                 {

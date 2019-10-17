@@ -254,7 +254,7 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
     }
     else if( c == '"' )
     {
-        OStringBuffer aStr;
+        OStringBuffer aStr(128);
         bool bDone = false;
         while( !bDone && !IsEof() && c )
         {
@@ -288,7 +288,7 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
     }
     else if( rtl::isAsciiAlpha (static_cast<unsigned char>(c)) || (c == '_') )
     {
-        OStringBuffer aBuf;
+        OStringBuffer aBuf(64);
         while( rtl::isAsciiAlphanumeric( static_cast<unsigned char>(c) )
                || c == '_' || c == ':')
         {

@@ -800,7 +800,7 @@ void SAL_CALL rtl_bootstrap_expandMacros(rtl_uString ** macro)
 void rtl_bootstrap_encode(rtl_uString const * value, rtl_uString ** encoded)
 {
     OSL_ASSERT(value);
-    OUStringBuffer b;
+    OUStringBuffer b(value->length+5);
     for (sal_Int32 i = 0; i < value->length; ++i)
     {
         sal_Unicode c = value->buffer[i];
@@ -868,7 +868,7 @@ OUString expandMacros(
     ExpandRequestLink const * requestStack)
 {
     SAL_INFO("sal.bootstrap", "expandMacros called with: " << text);
-    OUStringBuffer buf;
+    OUStringBuffer buf(2048);
 
     for (sal_Int32 i = 0; i < text.getLength();)
     {
@@ -975,7 +975,7 @@ OUString expandMacros(
             }
             else
             {
-                OUStringBuffer kbuf;
+                OUStringBuffer kbuf(text.getLength());
                 for (; i < text.getLength();)
                 {
                     sal_Int32 j = i;

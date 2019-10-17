@@ -197,7 +197,7 @@ private:
 
 // important: The order and position of the elements must match the constant
 // definition of "css::ui::UIElementType"
-static const char* UIELEMENTTYPENAMES[] =
+static OUStringLiteral UIELEMENTTYPENAMES[] =
 {
     "",  // Dummy value for unknown!
     UIELEMENTTYPE_MENUBAR_NAME,
@@ -225,7 +225,7 @@ sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
             OUString aTypeStr( aTmpStr.copy( 0, nIndex ));
             for ( int i = 0; i < UIElementType::COUNT; i++ )
             {
-                if ( aTypeStr.equalsAscii( UIELEMENTTYPENAMES[i] ))
+                if ( aTypeStr == UIELEMENTTYPENAMES[i] )
                     return sal_Int16( i );
             }
         }
@@ -283,11 +283,10 @@ void UIConfigurationManager::impl_preloadUIElementTypeList( sal_Int16 nElementTy
         Reference< XStorage > xElementTypeStorage = rElementTypeData.xStorage;
         if ( xElementTypeStorage.is() )
         {
-            OUStringBuffer aBuf( RESOURCEURL_PREFIX_SIZE );
-            aBuf.append( RESOURCEURL_PREFIX );
-            aBuf.appendAscii( UIELEMENTTYPENAMES[ nElementType ] );
-            aBuf.append( "/" );
-            OUString aResURLPrefix( aBuf.makeStringAndClear() );
+            OUString aResURLPrefix =
+                RESOURCEURL_PREFIX +
+                UIELEMENTTYPENAMES[ nElementType ] +
+                "/";
 
             UIElementDataHashMap& rHashMap = rElementTypeData.aElementsHashMap;
             Sequence< OUString > aUIElementNames = xElementTypeStorage->getElementNames();
@@ -637,7 +636,7 @@ void UIConfigurationManager::impl_Initialize()
             Reference< XStorage > xElementTypeStorage;
             try
             {
-                xElementTypeStorage = m_xDocConfigStorage->openStorageElement( OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), nModes );
+                xElementTypeStorage = m_xDocConfigStorage->openStorageElement( UIELEMENTTYPENAMES[i], nModes );
             }
             catch ( const css::container::NoSuchElementException& )
             {
@@ -1308,7 +1307,7 @@ void SAL_CALL UIConfigurationManager::storeToStorage( const Reference< XStorage 
             try
             {
                 Reference< XStorage > xElementTypeStorage( Storage->openStorageElement(
-                                                           OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), ElementModes::READWRITE ));
+                                                            UIELEMENTTYPENAMES[i], ElementModes::READWRITE ));
                 UIElementType& rElementType = m_aUIElements[i];
 
                 if ( rElementType.bModified && xElementTypeStorage.is() )
