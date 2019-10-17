@@ -1788,8 +1788,16 @@ public:
 
 class VCL_DLLPUBLIC Menu
 {
+protected:
+    Link<const OString&, void> m_aActivateHdl;
+
+    void signal_activate(const OString& rIdent) { m_aActivateHdl.Call(rIdent); }
+
 public:
     virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) = 0;
+
+    void connect_activate(const Link<const OString&, void>& rLink) { m_aActivateHdl = rLink; }
+
     virtual void set_sensitive(const OString& rIdent, bool bSensitive) = 0;
     virtual void set_label(const OString& rIdent, const OUString& rLabel) = 0;
     virtual void set_active(const OString& rIdent, bool bActive) = 0;

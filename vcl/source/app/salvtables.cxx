@@ -863,6 +863,7 @@ private:
     bool const m_bTakeOwnership;
     sal_uInt16 m_nLastId;
 
+    DECL_LINK(SelectMenuHdl, ::Menu*, bool);
 public:
     SalInstanceMenu(PopupMenu* pMenu, bool bTakeOwnership)
         : m_xMenu(pMenu)
@@ -870,6 +871,7 @@ public:
     {
         const auto nCount = m_xMenu->GetItemCount();
         m_nLastId = nCount ? pMenu->GetItemId(nCount-1) : 0;
+        m_xMenu->SetSelectHdl(LINK(this, SalInstanceMenu, SelectMenuHdl));
     }
     virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle &rRect) override
     {
@@ -914,10 +916,17 @@ public:
     }
     virtual ~SalInstanceMenu() override
     {
+        m_xMenu->SetSelectHdl(Link<::Menu*, bool>());
         if (m_bTakeOwnership)
             m_xMenu.disposeAndClear();
     }
 };
+
+IMPL_LINK_NOARG(SalInstanceMenu, SelectMenuHdl, ::Menu*, bool)
+{
+    signal_activate(m_xMenu->GetCurItemIdent());
+    return true;
+}
 
 class SalInstanceToolbar : public SalInstanceWidget, public virtual weld::Toolbar
 {

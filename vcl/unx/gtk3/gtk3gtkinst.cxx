@@ -6562,6 +6562,7 @@ private:
     {
         const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
         m_sActivated = OString(pStr, pStr ? strlen(pStr) : 0);
+        weld::Menu::signal_activate(m_sActivated);
     }
 
     void clear_extras()
