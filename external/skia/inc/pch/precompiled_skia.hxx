@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-09-26 11:31:14 using:
+ Generated on 2019-10-17 15:51:12 using:
  ./bin/update_pch external/skia skia --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -109,7 +109,6 @@
 #include <include/core/SkFontLCDConfig.h>
 #include <include/core/SkFontMetrics.h>
 #include <include/core/SkFontMgr.h>
-#include <include/core/SkFontStyle.h>
 #include <include/core/SkFontTypes.h>
 #include <include/core/SkGraphics.h>
 #include <include/core/SkICC.h>
@@ -227,8 +226,9 @@
 #include <include/gpu/mock/GrMockTypes.h>
 #include <include/gpu/vk/GrVkBackendContext.h>
 #include <include/gpu/vk/GrVkExtensions.h>
+#include <include/gpu/vk/GrVkMemoryAllocator.h>
 #include <include/gpu/vk/GrVkTypes.h>
-#include <include/ports/SkFontMgr_indirect.h>
+#include <include/pathops/SkPathOps.h>
 #include <include/ports/SkRemotableFontMgr.h>
 #include <include/private/GrContext_Base.h>
 #include <include/private/GrGLTypesPriv.h>
@@ -612,6 +612,7 @@
 #include <src/gpu/ccpr/GrCCPathCache.h>
 #include <src/gpu/ccpr/GrCCPathProcessor.h>
 #include <src/gpu/ccpr/GrCCPerFlushResources.h>
+#include <src/gpu/ccpr/GrCCPerOpListPaths.h>
 #include <src/gpu/ccpr/GrCCQuadraticShader.h>
 #include <src/gpu/ccpr/GrCCStrokeGeometry.h>
 #include <src/gpu/ccpr/GrCCStroker.h>
@@ -642,13 +643,23 @@
 #include <src/gpu/effects/GrXfermodeFragmentProcessor.h>
 #include <src/gpu/effects/GrYUVtoRGBEffect.h>
 #include <src/gpu/effects/generated/GrAARectEffect.h>
+#include <src/gpu/effects/generated/GrAlphaThresholdFragmentProcessor.h>
+#include <src/gpu/effects/generated/GrBlurredEdgeFragmentProcessor.h>
+#include <src/gpu/effects/generated/GrCircleBlurFragmentProcessor.h>
 #include <src/gpu/effects/generated/GrCircleEffect.h>
 #include <src/gpu/effects/generated/GrColorMatrixFragmentProcessor.h>
+#include <src/gpu/effects/generated/GrComposeLerpEffect.h>
+#include <src/gpu/effects/generated/GrComposeLerpRedEffect.h>
 #include <src/gpu/effects/generated/GrConfigConversionEffect.h>
 #include <src/gpu/effects/generated/GrConstColorProcessor.h>
 #include <src/gpu/effects/generated/GrEllipseEffect.h>
+#include <src/gpu/effects/generated/GrLumaColorFilterEffect.h>
+#include <src/gpu/effects/generated/GrMagnifierEffect.h>
+#include <src/gpu/effects/generated/GrMixerEffect.h>
 #include <src/gpu/effects/generated/GrOverrideInputFragmentProcessor.h>
 #include <src/gpu/effects/generated/GrPremulInputFragmentProcessor.h>
+#include <src/gpu/effects/generated/GrRRectBlurEffect.h>
+#include <src/gpu/effects/generated/GrRectBlurEffect.h>
 #include <src/gpu/effects/generated/GrSimpleTextureEffect.h>
 #include <src/gpu/geometry/GrPathUtils.h>
 #include <src/gpu/geometry/GrQuad.h>
@@ -852,7 +863,7 @@
 #include <src/pdf/SkPDFTypes.h>
 #include <src/pdf/SkPDFUnion.h>
 #include <src/pdf/SkPDFUtils.h>
-#include <src/ports/SkFontHost_FreeType_common.h>
+#include <src/ports/SkOSLibrary.h>
 #include <src/sfnt/SkOTTableTypes.h>
 #include <src/sfnt/SkOTTable_OS_2.h>
 #include <src/sfnt/SkOTTable_head.h>
@@ -947,7 +958,6 @@
 #include <src/sksl/ir/SkSLVariable.h>
 #include <src/sksl/ir/SkSLVariableReference.h>
 #include <src/sksl/ir/SkSLWhileStatement.h>
-#include <src/utils/SkCallableTraits.h>
 #include <src/utils/SkCanvasStack.h>
 #include <src/utils/SkCharToGlyphCache.h>
 #include <src/utils/SkDashPathPriv.h>
@@ -964,6 +974,10 @@
 #include <src/utils/SkShaperJSONWriter.h>
 #include <src/utils/SkUTF.h>
 #include <third_party/gif/SkGifImageReader.h>
+#include <tools/gpu/vk/GrVulkanDefines.h>
+#include <tools/gpu/vk/VkTestUtils.h>
+#include <tools/sk_app/GLWindowContext.h>
+#include <tools/sk_app/VulkanWindowContext.h>
 #include <vulkan/vulkan_core.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
