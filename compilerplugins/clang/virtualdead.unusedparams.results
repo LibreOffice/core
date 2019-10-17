@@ -292,9 +292,6 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:174
 slideshow/source/engine/opengl/TransitionImpl.hxx:180
     void OGLTransitionImpl::finish(double,double,double,double,double,)
     00000
-slideshow/source/inc/animation.hxx:61
-    void slideshow::internal::Animation::prefetch(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
-    00
 starmath/source/wordexportbase.hxx:37
     void SmWordExportBase::HandleText(const class SmNode *,int,)
     10

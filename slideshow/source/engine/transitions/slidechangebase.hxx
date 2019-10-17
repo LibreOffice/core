@@ -57,8 +57,7 @@ public:
     virtual double getUnderlyingValue() const override;
 
     // Animation
-    virtual void prefetch( const AnimatableShapeSharedPtr&,
-                           const ShapeAttributeLayerSharedPtr& ) override;
+    virtual void prefetch() override;
     virtual void start( const AnimatableShapeSharedPtr&,
                         const ShapeAttributeLayerSharedPtr& ) override;
     virtual void end() override;
