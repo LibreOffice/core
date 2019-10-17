@@ -346,12 +346,6 @@ sw/source/filter/xml/xmlexpit.hxx:84
 sw/source/filter/xml/xmlimpit.hxx:48
     _Bool SvXMLImportItemMapper::handleSpecialItem(const struct SvXMLItemMapEntry &,class SfxPoolItem &,class SfxItemSet &,const class rtl::OUString &,const class SvXMLUnitConverter &,const class SvXMLNamespaceMap &,)
     111110
-sw/source/uibase/inc/imaildsplistener.hxx:44
-    void IMailDispatcherListener::idle(class rtl::Reference<class MailDispatcher>,)
-    0
-sw/source/uibase/inc/imaildsplistener.hxx:50
-    void IMailDispatcherListener::mailDelivered(class rtl::Reference<class MailDispatcher>,class com::sun::star::uno::Reference<class com::sun::star::mail::XMailMessage>,)
-    01
 vcl/inc/outdev.h:122
     _Bool ImplGlyphFallbackFontSubstitution::FindFontSubstitute(class FontSelectPattern &,class LogicalFontInstance *,class rtl::OUString &,)const
     101
