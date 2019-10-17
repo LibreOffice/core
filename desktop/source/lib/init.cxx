@@ -3279,35 +3279,63 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
     }
 
     char* pIdChar = strtok(pCopy, " ");
+    char* pOptionalEventType = strtok(nullptr, " ");
+    char* pOptionalData = strtok(nullptr, " ");
 
     if (!pIdChar) {
         SetLastExceptionMsg("Error parsing the command.");
+        free(pCopy);
         return;
     }
 
     OUString sId = OUString::createFromAscii(pIdChar);
-    free(pCopy);
 
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
+        free(pCopy);
         return;
     }
     else
     {
-        OUString sAction("CLICK");
+        const OUString sClickAction("CLICK");
+        const OUString sSelectAction("SELECT");
+
         try
         {
             WindowUIObject aUIObject(pWindow);
             std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(sId));
-            if (pUIWindow)
-                pUIWindow->execute(sAction, StringMap());
+            if (pUIWindow) {
+                if (pOptionalEventType) {
+                    if (strcmp(pOptionalEventType, "selected") == 0 && pOptionalData) {
+                        char* pPos = strtok(pOptionalData, ";");
+                        char* pText = strtok(nullptr, ";");
+
+                        if (!pPos || !pText)
+                        {
+                            SetLastExceptionMsg("Error parsing the command.");
+                            free(pCopy);
+                            return;
+                        }
+
+                        StringMap aMap;
+                        aMap["POS"] = OUString::createFromAscii(pPos);
+                        aMap["TEXT"] = OUString::createFromAscii(pText);
+
+                        pUIWindow->execute(sSelectAction, aMap);
+                    }
+                } else {
+                    pUIWindow->execute(sClickAction, StringMap());
+                }
+            }
         } catch(...) {}
 
         // force resend
         pWindow->Resize();
     }
+
+    free(pCopy);
 }
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
