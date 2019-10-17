@@ -866,12 +866,12 @@ void ViewShell::SetScrollBarsVisible(bool bVisible)
 sal_Int8 ViewShell::AcceptDrop (
     const AcceptDropEvent& rEvt,
     DropTargetHelper& rTargetHelper,
-    ::sd::Window* pTargetWindow,
-    sal_uInt16 nPage,
+    ::sd::Window* /*pTargetWindow*/,
+    sal_uInt16 /*nPage*/,
     SdrLayerID nLayer)
 {
     ::sd::View* pView = GetView();
-    return( pView ? pView->AcceptDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE );
+    return( pView ? pView->AcceptDrop( rEvt, rTargetHelper, nLayer ) : DND_ACTION_NONE );
 }
 
 sal_Int8 ViewShell::ExecuteDrop (

@@ -241,9 +241,6 @@ sc/source/core/opencl/formulagroupcl.cxx:1059
 sc/source/ui/vba/vbarange.hxx:68
     void ValueGetter::processValue(int,int,const class com::sun::star::uno::Any &,)
     001
-sd/source/ui/inc/View.hxx:92
-    signed char sd::View::AcceptDrop(const struct AcceptDropEvent &,class DropTargetHelper &,class sd::Window *,unsigned short,struct o3tl::strong_int<unsigned char, struct SdrLayerIDTag>,)
-    11001
 sdext/source/pdfimport/inc/contentsink.hxx:150
     void pdfi::ContentSink::drawMask(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)
     10

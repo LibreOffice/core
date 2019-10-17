@@ -421,7 +421,7 @@ void View::DragFinished( sal_Int8 nDropAction )
 }
 
 sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                             ::sd::Window*, sal_uInt16, SdrLayerID nLayer )
+                           SdrLayerID nLayer )
 {
     OUString        aLayerName = GetActiveLayer();
     SdrPageView*    pPV = GetSdrPageView();

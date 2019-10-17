@@ -1282,7 +1282,7 @@ void DrawViewShell::ResetActualLayer()
 sal_Int8 DrawViewShell::AcceptDrop (
     const AcceptDropEvent& rEvt,
     DropTargetHelper& rTargetHelper,
-    ::sd::Window* pTargetWindow,
+    ::sd::Window* /*pTargetWindow*/,
     sal_uInt16 nPage,
     SdrLayerID nLayer )
 {
@@ -1292,7 +1292,7 @@ sal_Int8 DrawViewShell::AcceptDrop (
     if( SlideShow::IsRunning( GetViewShellBase() ) )
         return DND_ACTION_NONE;
 
-    return mpDrawView->AcceptDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer );
+    return mpDrawView->AcceptDrop( rEvt, rTargetHelper, nLayer );
 }
 
 /**
