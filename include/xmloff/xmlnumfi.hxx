@@ -132,8 +132,8 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
     bool            bAutoDec;       // set in AddNumber
     bool            bAutoInt;       // set in AddNumber
     bool            bHasExtraText;
-    OUStringBuffer aFormatCode;
-    OUStringBuffer aConditions;
+    OUStringBuffer aFormatCode{64};
+    OUStringBuffer aConditions{32};
     bool            bHasLongDoW;
     bool            bHasEra;
     bool            bHasDateTime;

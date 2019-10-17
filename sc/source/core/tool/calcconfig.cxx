@@ -193,7 +193,7 @@ bool ScCalcConfig::operator!= (const ScCalcConfig& r) const
 
 OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes)
 {
-    OUStringBuffer result;
+    OUStringBuffer result(256);
     formula::FormulaCompiler aCompiler;
     formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(aCompiler.GetOpCodeMap(css::sheet::FormulaLanguage::ENGLISH));
 

@@ -831,7 +831,7 @@ std::size_t XclImpStream::ReadUniStringExtHeader( bool& rb16Bit, sal_uInt8 nFlag
 
 OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
 {
-    OUStringBuffer aRet;
+    OUStringBuffer aRet(nChars);
     sal_uInt16 nCharsLeft = nChars;
     sal_uInt16 nReadSize;
 

@@ -1369,7 +1369,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     }
                     break;
             }
-            OUStringBuffer aSynHost;
+            OUStringBuffer aSynHost(64);
             if (!parseHostOrNetBiosName(
                     pHostPortBegin, pPort, eMechanism, eCharset,
                     bNetBiosName, &aSynHost))
@@ -1614,7 +1614,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
     enum State { STATE_AUTH, STATE_ABS_PATH, STATE_REL_PATH, STATE_FRAGMENT,
                  STATE_DONE };
 
-    OUStringBuffer aSynAbsURIRef;
+    OUStringBuffer aSynAbsURIRef(128);
     // make sure that the scheme is copied for generic schemes: getSchemeInfo().m_pScheme
     // is empty ("") in that case, so take the scheme from m_aAbsURIRef
     if (m_eScheme != INetProtocol::Generic)
@@ -2342,7 +2342,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                  STATE_IP6_HEXSEQ1_MAYBE_IP4, STATE_IP6_HEXSEQ2,
                  STATE_IP6_HEXSEQ2_COLON, STATE_IP6_HEXSEQ2_MAYBE_IP4,
                  STATE_IP6_IP4, STATE_IP6_IP4_DOT, STATE_IP6_DONE };
-    OUStringBuffer aTheCanonic;
+    OUStringBuffer aTheCanonic(32);
     sal_uInt32 nNumber = 0;
     int nDigits = 0;
     int nOctets = 0;
@@ -4320,7 +4320,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
             if (pDelimiter)
                 *pDelimiter = '\\';
 
-            OUStringBuffer aSynFSysPath;
+            OUStringBuffer aSynFSysPath(64);
             if (m_aHost.isPresent() && m_aHost.getLength() > 0)
             {
                 aSynFSysPath.append("\\\\");

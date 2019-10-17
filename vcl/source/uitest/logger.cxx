@@ -309,7 +309,8 @@ OUString StringMapToOUString(const std::map<OUString, OUString>& rParameters)
     if (rParameters.empty())
         return "";
 
-    OUStringBuffer aParameterString = " {";
+    OUStringBuffer aParameterString(static_cast<int>(rParameters.size()*32));
+    aParameterString.append(" {");
 
     for (std::map<OUString, OUString>::const_iterator itr = rParameters.begin();
          itr != rParameters.end(); ++itr)

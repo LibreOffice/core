@@ -30,7 +30,7 @@ namespace utl
 
 OUString DocInfoHelper::GetGeneratorString()
 {
-    OUStringBuffer aResult;
+    OUStringBuffer aResult(128);
 
     // First product: branded name + version
     // version is <product_versions>_<product_extension>$<platform>

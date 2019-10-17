@@ -68,7 +68,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     boost::optional<OUString> maFirstParagraph; /// unformatted first paragraph, for better performance.
 
     ScEditEngineDefaulter* mpEditEngine;
-    OUStringBuffer maParagraph;
+    OUStringBuffer maParagraph{32};
     sal_Int32 mnCurParagraph;
 
     ParaFormatsType maFormats;

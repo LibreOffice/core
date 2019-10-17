@@ -45,12 +45,10 @@ namespace {
 OUString lclGetRelationsPath( const OUString& rFragmentPath )
 {
     sal_Int32 nPathLen = ::std::max< sal_Int32 >( rFragmentPath.lastIndexOf( '/' ) + 1, 0 );
-    return
-        OUStringBuffer( rFragmentPath.copy( 0, nPathLen ) ).    // file path including slash
-        append( "_rels/" ).                                // additional '_rels/' path
-        append( std::u16string_view(rFragmentPath).substr(nPathLen) ).               // file name after path
-        append( ".rels" ).                                 // '.rels' suffix
-        makeStringAndClear();
+    return rtl::OUStringView(rFragmentPath.getStr(), nPathLen ) +    // file path including slash
+        "_rels/" +                                // additional '_rels/' path
+        rtl::OUStringView(rFragmentPath.getStr() + nPathLen) +  // file name after path
+        ".rels";                                 // '.rels' suffix
 }
 
 } // namespace

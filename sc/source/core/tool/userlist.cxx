@@ -212,7 +212,7 @@ ScUserList::ScUserList()
         xCal = rCalendar.Days;
         if ( xCal.hasElements() )
         {
-            OUStringBuffer aDayShortBuf, aDayLongBuf;
+            OUStringBuffer aDayShortBuf(32), aDayLongBuf(64);
             sal_Int32 i;
             sal_Int32 nLen = xCal.getLength();
             sal_Int16 nStart = sal::static_int_cast<sal_Int16>(nLen);
@@ -244,7 +244,7 @@ ScUserList::ScUserList()
         xCal = rCalendar.Months;
         if ( xCal.hasElements() )
         {
-            OUStringBuffer aMonthShortBuf, aMonthLongBuf;
+            OUStringBuffer aMonthShortBuf(128), aMonthLongBuf(128);
             sal_Int32 i;
             sal_Int32 nLen = xCal.getLength() - 1;
             for (i = 0; i < nLen; i++)
