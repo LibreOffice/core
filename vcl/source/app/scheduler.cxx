@@ -419,7 +419,7 @@ bool Scheduler::ProcessTaskScheduling()
             assert(pSchedulerData->mpTask);
             if (pSchedulerData->mpTask->IsActive())
             {
-                nReadyPeriod = pSchedulerData->mpTask->UpdateMinPeriod( nMinPeriod, nTime );
+                nReadyPeriod = pSchedulerData->mpTask->UpdateMinPeriod( nTime );
                 if (ImmediateTimeoutMs == nReadyPeriod)
                 {
                     if (!pMostUrgent)
@@ -523,7 +523,7 @@ bool Scheduler::ProcessTaskScheduling()
         else if (bTaskAlive)
         {
             pMostUrgent->mnUpdateTime = nTime;
-            nReadyPeriod = pMostUrgent->mpTask->UpdateMinPeriod( nMinPeriod, nTime );
+            nReadyPeriod = pMostUrgent->mpTask->UpdateMinPeriod( nTime );
             if ( nMinPeriod > nReadyPeriod )
                 nMinPeriod = nReadyPeriod;
             UpdateSystemTimer( rSchedCtx, nMinPeriod, false, nTime );

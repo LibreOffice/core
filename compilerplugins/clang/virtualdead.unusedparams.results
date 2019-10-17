@@ -211,9 +211,6 @@ include/vcl/ITiledRenderable.hxx:209
 include/vcl/opengl/OpenGLContext.hxx:141
     struct SystemWindowData OpenGLContext::generateWinData(class vcl::Window *,_Bool,)
     10
-include/vcl/task.hxx:71
-    unsigned long Task::UpdateMinPeriod(unsigned long,unsigned long,)const
-    01
 include/xmloff/xmlimp.hxx:244
     class SvXMLImportContext * SvXMLImport::CreateDocumentContext(const unsigned short,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XAttributeList> &,)
     110

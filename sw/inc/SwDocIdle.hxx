@@ -39,8 +39,7 @@ private:
     SwDoc &m_rDoc;
 
 protected:
-    virtual sal_uInt64 UpdateMinPeriod(
-        sal_uInt64 nMinPeriod, sal_uInt64 nTimeNow ) const override;
+    virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nTimeNow ) const override;
 
 public:
     SwDocIdle( SwDoc &doc );
