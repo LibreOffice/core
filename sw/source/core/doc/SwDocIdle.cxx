@@ -30,7 +30,7 @@
 namespace sw
 {
 
-sal_uInt64 SwDocIdle::UpdateMinPeriod( sal_uInt64 /* nMinPeriod */, sal_uInt64 /* nTimeNow */ ) const
+sal_uInt64 SwDocIdle::UpdateMinPeriod( sal_uInt64 /* nTimeNow */ ) const
 {
     bool bReadyForSchedule = true;
 

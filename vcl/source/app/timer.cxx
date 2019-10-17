@@ -29,7 +29,7 @@ void Timer::SetDeletionFlags()
         Task::SetDeletionFlags();
 }
 
-sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64, sal_uInt64 nTimeNow ) const
+sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nTimeNow ) const
 {
     sal_uInt64 nWakeupTime = GetSchedulerData()->mnUpdateTime + mnTimeout;
     return ( nWakeupTime <= nTimeNow )

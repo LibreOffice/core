@@ -64,11 +64,10 @@ protected:
      * need another mechanism to wake up the Scheduler or rely on other
      * Tasks to be scheduled, or simply use a polling Timer.
      *
-     * @param nMinPeriod the currently expected sleep time
      * @param nTimeNow the current time
      * @return the sleep time of the Task to become ready
      */
-    virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTimeNow ) const = 0;
+    virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nTimeNow ) const = 0;
 
 public:
     Task( const sal_Char *pDebugName );
