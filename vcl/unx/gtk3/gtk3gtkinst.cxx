@@ -7726,6 +7726,7 @@ private:
     gulong m_nPopupMenuSignalId;
     gulong m_nDragBeginSignalId;
     gulong m_nDragEndSignalId;
+    gulong m_nKeyPressSignalId;
     ImplSVEvent* m_pChangeEvent;
 
     DECL_LINK(async_signal_changed, void*, void);
@@ -8104,6 +8105,48 @@ private:
         g_DragSource = nullptr;
     }
 
+    gboolean signal_key_press(GdkEventKey* pEvent)
+    {
+        if (pEvent->keyval != GDK_KEY_Left && pEvent->keyval != GDK_KEY_Right)
+            return false;
+
+        GtkInstanceTreeIter aIter(nullptr);
+        if (!get_cursor(&aIter))
+            return false;
+
+        if (pEvent->keyval == GDK_KEY_Right)
+        {
+            if (iter_has_child(aIter) && !get_row_expanded(aIter))
+            {
+                expand_row(aIter);
+                return true;
+            }
+            return false;
+        }
+
+        if (iter_has_child(aIter) && get_row_expanded(aIter))
+        {
+            collapse_row(aIter);
+            return true;
+        }
+
+        if (iter_parent(aIter))
+        {
+            unselect_all();
+            set_cursor(aIter);
+            select(aIter);
+            return true;
+        }
+
+        return false;
+    }
+
+    static gboolean signalKeyPress(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        return pThis->signal_key_press(pEvent);
+    }
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), pBuilder, bTakeOwnership)
@@ -8121,6 +8164,7 @@ public:
         , m_nPopupMenuSignalId(g_signal_connect(pTreeView, "popup-menu", G_CALLBACK(signalPopupMenu), this))
         , m_nDragBeginSignalId(g_signal_connect(pTreeView, "drag-begin", G_CALLBACK(signalDragBegin), this))
         , m_nDragEndSignalId(g_signal_connect(pTreeView, "drag-end", G_CALLBACK(signalDragEnd), this))
+        , m_nKeyPressSignalId(g_signal_connect(pTreeView, "key-press-event", G_CALLBACK(signalKeyPress), this))
         , m_pChangeEvent(nullptr)
     {
         m_pColumns = gtk_tree_view_get_columns(m_pTreeView);
@@ -9514,6 +9558,7 @@ public:
     {
         if (m_pChangeEvent)
             Application::RemoveUserEvent(m_pChangeEvent);
+        g_signal_handler_disconnect(m_pTreeView, m_nKeyPressSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nDragEndSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nDragBeginSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nPopupMenuSignalId);
