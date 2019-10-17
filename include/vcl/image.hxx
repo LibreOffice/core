@@ -69,7 +69,7 @@ public:
     bool            operator==( const Image& rImage ) const;
     bool            operator!=( const Image& rImage ) const { return !(Image::operator==( rImage )); }
 
-    SAL_DLLPRIVATE  OUString GetStock() const;
+    OUString GetStock() const;
 
     void Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle, const Size* pSize = nullptr);
 
