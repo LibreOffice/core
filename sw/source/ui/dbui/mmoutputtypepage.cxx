@@ -121,9 +121,8 @@ class SwMailDispatcherListener_Impl : public IMailDispatcherListener
 public:
     explicit SwMailDispatcherListener_Impl(SwSendMailDialog& rParentDlg);
 
-    virtual void idle(::rtl::Reference<MailDispatcher> xMailDispatcher) override;
-    virtual void mailDelivered(::rtl::Reference<MailDispatcher> xMailDispatcher,
-                uno::Reference< mail::XMailMessage> xMailMessage) override;
+    virtual void idle() override;
+    virtual void mailDelivered(uno::Reference< mail::XMailMessage> xMailMessage) override;
     virtual void mailDeliveryError(::rtl::Reference<MailDispatcher> xMailDispatcher,
                 uno::Reference< mail::XMailMessage> xMailMessage, const OUString& sErrorMessage) override;
 
@@ -135,14 +134,13 @@ SwMailDispatcherListener_Impl::SwMailDispatcherListener_Impl(SwSendMailDialog& r
 {
 }
 
-void SwMailDispatcherListener_Impl::idle(::rtl::Reference<MailDispatcher> /*xMailDispatcher*/)
+void SwMailDispatcherListener_Impl::idle()
 {
     SolarMutexGuard aGuard;
     m_rSendMailDialog.AllMailsSent();
 }
 
 void SwMailDispatcherListener_Impl::mailDelivered(
-                        ::rtl::Reference<MailDispatcher> /*xMailDispatcher*/,
                         uno::Reference< mail::XMailMessage> xMailMessage)
 {
     SolarMutexGuard aGuard;

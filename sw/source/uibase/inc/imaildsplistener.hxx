@@ -41,13 +41,13 @@ public:
         Called when there are no more mail messages
         to deliver.
     */
-    virtual void idle(::rtl::Reference<MailDispatcher> xMailDispatcher) = 0;
+    virtual void idle() = 0;
 
     /**
         Called for every mail message that has been
         successfully delivered.
     */
-    virtual void mailDelivered(::rtl::Reference<MailDispatcher> xMailDispatcher, css::uno::Reference< css::mail::XMailMessage> xMailMessage) = 0;
+    virtual void mailDelivered(css::uno::Reference< css::mail::XMailMessage> xMailMessage) = 0;
 
     /**
         Called for every mail message whose delivery
