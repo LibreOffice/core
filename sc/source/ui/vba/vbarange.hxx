@@ -65,7 +65,7 @@ class ValueGetter : public ArrayVisitor
 {
 
 public:
-    virtual void processValue( sal_Int32 x, sal_Int32 y, const css::uno::Any& aValue ) = 0;
+    virtual void processValue( const css::uno::Any& aValue ) = 0;
     virtual const css::uno::Any& getValue() const = 0;
 };
 
