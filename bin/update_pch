@@ -439,9 +439,20 @@ def filter_ignore(line, module):
             'dirent.h', # unix-specific
             'pthread.h',
             'unistd.h',
+            'sys/stat.h',
             'ft2build.h',
             'fontconfig/fontconfig.h',
-            'GL/glx.h'
+            'GL/glx.h',
+            'src/Transform_inl.h',
+            'src/c/sk_c_from_to.h',
+            'src/c/sk_types_priv.h',
+            'src/core/SkBlitBWMaskTemplate.h',
+            'src/sfnt/SkSFNTHeader.h',
+            'src/opts/',
+            'src/core/SkCubicSolver.h',
+            'src/sksl/SkSLCPP.h',
+            'src/gpu/vk/GrVkAMDMemoryAllocator.h',
+            'src/gpu/GrUtil.h'
             ]
 
     for i in ignore_list:
