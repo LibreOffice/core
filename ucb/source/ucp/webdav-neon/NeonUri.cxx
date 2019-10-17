@@ -149,7 +149,8 @@ void NeonUri::init( const OString & rUri, const ne_uri * pUri )
 
 void NeonUri::calculateURI ()
 {
-    OUStringBuffer aBuf( mScheme );
+    OUStringBuffer aBuf( 256 );
+    aBuf.append( mScheme );
     aBuf.append( "://" );
     if ( !mUserInfo.isEmpty() )
     {

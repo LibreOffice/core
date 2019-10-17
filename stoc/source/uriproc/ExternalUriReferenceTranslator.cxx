@@ -92,7 +92,7 @@ OUString Translator::translateToInternal(
         return externalUriReference;
     }
     sal_Int32 i = RTL_CONSTASCII_LENGTH("file:");
-    OUStringBuffer buf;
+    OUStringBuffer buf(128);
     buf.append(std::u16string_view(externalUriReference).substr(0, i));
     // Some environments (e.g., Java) produce illegal file URLs without an
     // authority part; treat them as having an empty authority part:
@@ -140,7 +140,7 @@ OUString Translator::translateToExternal(
         return internalUriReference;
     }
     sal_Int32 i = RTL_CONSTASCII_LENGTH("file://");
-    OUStringBuffer buf;
+    OUStringBuffer buf(128);
     buf.append(std::u16string_view(internalUriReference).substr(0, i));
     rtl_TextEncoding encoding = osl_getThreadTextEncoding();
     for (bool path = true;;) {
