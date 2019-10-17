@@ -59,7 +59,7 @@ class SvxEditModulesDlg : public weld::GenericDialogController
     std::unique_ptr<weld::Button> m_xBackPB;
     std::unique_ptr<weld::LinkButton> m_xMoreDictsLink;
     std::unique_ptr<weld::Button> m_xClosePB;
-    std::unique_ptr<LanguageBox> m_xLanguageLB;
+    std::unique_ptr<SvxLanguageBox> m_xLanguageLB;
 
     DECL_LINK( SelectHdl_Impl, weld::TreeView&, void );
     DECL_LINK( UpDownHdl_Impl, weld::Button&, void );
@@ -68,7 +68,7 @@ class SvxEditModulesDlg : public weld::GenericDialogController
     DECL_LINK( LangSelectListBoxHdl_Impl, weld::ComboBox&, void );
     typedef std::pair<int, int> row_col;
     DECL_LINK( BoxCheckButtonHdl_Impl, const row_col&, void );
-    void LangSelectHdl_Impl(const LanguageBox* pBox);
+    void LangSelectHdl_Impl(const SvxLanguageBox* pBox);
 
 public:
     SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& rData);

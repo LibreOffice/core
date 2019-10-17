@@ -66,7 +66,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
     , m_xFontFT(m_xBuilder->weld_label("fontft"))
     , m_xFontLB(m_xBuilder->weld_combo_box("font"))
     , m_xLanguageFT(m_xBuilder->weld_label("languageft"))
-    , m_xLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box("language")))
+    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("language")))
     , m_xCRLF_RB(m_xBuilder->weld_radio_button("crlf"))
     , m_xCR_RB(m_xBuilder->weld_radio_button("cr"))
     , m_xLF_RB(m_xBuilder->weld_radio_button("lf"))

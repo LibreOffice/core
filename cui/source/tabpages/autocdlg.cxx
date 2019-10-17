@@ -55,7 +55,7 @@ using namespace ::com::sun::star;
 OfaAutoCorrDlg::OfaAutoCorrDlg(weld::Window* pParent, const SfxItemSet* _pSet )
     : SfxTabDialogController(pParent, "cui/ui/autocorrectdialog.ui", "AutoCorrectDialog", _pSet)
     , m_xLanguageBox(m_xBuilder->weld_widget("langbox"))
-    , m_xLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box("lang")))
+    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("lang")))
 {
     bool bShowSWOptions = false;
     bool bOpenSmartTagOptions = false;

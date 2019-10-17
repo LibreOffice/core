@@ -148,7 +148,7 @@ private:
     std::unique_ptr<weld::Label> m_xNoSuggestionsFT;
     std::unique_ptr<weld::Label> m_xIgnoreOnceFT;
     std::unique_ptr<weld::Label> m_xLanguageFT;
-    std::unique_ptr<LanguageBox> m_xLanguageLB;
+    std::unique_ptr<SvxLanguageBox> m_xLanguageLB;
     std::unique_ptr<weld::Label> m_xExplainFT;
     std::unique_ptr<weld::LinkButton> m_xExplainLink;
     std::unique_ptr<weld::Label> m_xNotInDictFT;

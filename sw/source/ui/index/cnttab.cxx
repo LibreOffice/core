@@ -741,7 +741,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(weld::Container* pPage, weld::DialogContr
     , m_xBracketLB(m_xBuilder->weld_combo_box("brackets"))
     , m_xAuthorityFrame(m_xBuilder->weld_widget("authframe"))
     , m_xSortFrame(m_xBuilder->weld_widget("sortframe"))
-    , m_xLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box("lang")))
+    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("lang")))
     , m_xSortAlgorithmLB(m_xBuilder->weld_combo_box("keytype"))
 {
     sAddStyleUser = m_xStylesCB->get_label();

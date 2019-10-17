@@ -109,7 +109,7 @@ SvxAsianLayoutPage::SvxAsianLayoutPage(weld::Container* pPage, weld::DialogContr
     , m_xPunctCompressionRB(m_xBuilder->weld_radio_button("punctcompression"))
     , m_xPunctKanaCompressionRB(m_xBuilder->weld_radio_button("punctkanacompression"))
     , m_xLanguageFT(m_xBuilder->weld_label("languageft"))
-    , m_xLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box("language")))
+    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("language")))
     , m_xStandardCB(m_xBuilder->weld_check_button("standard"))
     , m_xStartFT(m_xBuilder->weld_label("startft"))
     , m_xStartED(m_xBuilder->weld_entry("start"))

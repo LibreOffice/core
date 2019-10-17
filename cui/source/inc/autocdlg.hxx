@@ -36,7 +36,7 @@ namespace editeng { class SortedAutoCompleteStrings; }
 class OfaAutoCorrDlg : public SfxTabDialogController
 {
     std::unique_ptr<weld::Widget> m_xLanguageBox;
-    std::unique_ptr<LanguageBox>  m_xLanguageLB;
+    std::unique_ptr<SvxLanguageBox> m_xLanguageLB;
 
     DECL_LINK(SelectLanguageHdl, weld::ComboBox&, void);
 public:

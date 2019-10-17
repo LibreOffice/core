@@ -89,7 +89,7 @@ protected:
     SVX_DLLPRIVATE virtual sal_Int32    ImplGetEntryPos( const void* pData ) const = 0;
 };
 
-class SVX_DLLPUBLIC LanguageBox
+class SVX_DLLPUBLIC SvxLanguageBox
 {
 public:
     enum class EditedAndValid
@@ -119,7 +119,7 @@ private:
     SVX_DLLPRIVATE void ImplClear();
     DECL_LINK(ChangeHdl, weld::ComboBox&, void);
 public:
-    LanguageBox(std::unique_ptr<weld::ComboBox> pControl);
+    SvxLanguageBox(std::unique_ptr<weld::ComboBox> pControl);
     void            SetLanguageList( SvxLanguageListFlags nLangList,
                             bool bHasLangNone, bool bLangNoneIsLangAll = false,
                             bool bCheckSpellAvail = false );

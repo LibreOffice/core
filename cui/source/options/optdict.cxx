@@ -90,7 +90,7 @@ static CDE_RESULT cmpDicEntry_Impl( const OUString &rText1, const OUString &rTex
 SvxNewDictionaryDialog::SvxNewDictionaryDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/optnewdictionarydialog.ui", "OptNewDictionaryDialog")
     , m_xNameEdit(m_xBuilder->weld_entry("nameedit"))
-    , m_xLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box("language")))
+    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("language")))
     , m_xExceptBtn(m_xBuilder->weld_check_button("except"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
 {
@@ -202,7 +202,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(weld::Window* pParent, const OU
     , bDicIsReadonly(false)
     , m_xAllDictsLB(m_xBuilder->weld_combo_box("book"))
     , m_xLangFT(m_xBuilder->weld_label("lang_label"))
-    , m_xLangLB(new LanguageBox(m_xBuilder->weld_combo_box("lang")))
+    , m_xLangLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("lang")))
     , m_xWordED(m_xBuilder->weld_entry("word"))
     , m_xReplaceFT(m_xBuilder->weld_label("replace_label"))
     , m_xReplaceED(m_xBuilder->weld_entry("replace"))
