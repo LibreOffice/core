@@ -122,8 +122,8 @@ ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
     , m_xCbQuoteAll(m_xBuilder->weld_check_button("quoteall"))
     , m_xCbFixed(m_xBuilder->weld_check_button("fixedwidth"))
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
-    , m_xLbCharset(new TextEncodingBox(m_xBuilder->weld_combo_box("charsetdropdown")))
-    , m_xTvCharset(new TextEncodingTreeView(m_xBuilder->weld_tree_view("charsetlist")))
+    , m_xLbCharset(new SvxTextEncodingBox(m_xBuilder->weld_combo_box("charsetdropdown")))
+    , m_xTvCharset(new SvxTextEncodingTreeView(m_xBuilder->weld_tree_view("charsetlist")))
 {
     if (bAscii)
     {

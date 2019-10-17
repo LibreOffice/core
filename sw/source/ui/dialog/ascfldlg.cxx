@@ -62,7 +62,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
                                     SvStream* pStream )
     : SfxDialogController(pParent, "modules/swriter/ui/asciifilterdialog.ui", "AsciiFilterDialog")
     , m_bSaveLineStatus(true)
-    , m_xCharSetLB(new TextEncodingBox(m_xBuilder->weld_combo_box("charset")))
+    , m_xCharSetLB(new SvxTextEncodingBox(m_xBuilder->weld_combo_box("charset")))
     , m_xFontFT(m_xBuilder->weld_label("fontft"))
     , m_xFontLB(m_xBuilder->weld_combo_box("font"))
     , m_xLanguageFT(m_xBuilder->weld_label("languageft"))

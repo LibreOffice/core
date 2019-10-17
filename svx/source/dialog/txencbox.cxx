@@ -96,7 +96,7 @@ namespace
     }
 }
 
-void TextEncodingBox::FillFromDbTextEncodingMap(
+void SvxTextEncodingBox::FillFromDbTextEncodingMap(
         bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags )
 {
     m_xControl->freeze();
@@ -106,7 +106,7 @@ void TextEncodingBox::FillFromDbTextEncodingMap(
     m_xControl->thaw();
 }
 
-void TextEncodingTreeView::FillFromDbTextEncodingMap(
+void SvxTextEncodingTreeView::FillFromDbTextEncodingMap(
         bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags )
 {
     m_xControl->freeze();
@@ -116,23 +116,23 @@ void TextEncodingTreeView::FillFromDbTextEncodingMap(
     m_xControl->thaw();
 }
 
-TextEncodingBox::TextEncodingBox(std::unique_ptr<weld::ComboBox> pControl)
+SvxTextEncodingBox::SvxTextEncodingBox(std::unique_ptr<weld::ComboBox> pControl)
     : m_xControl(std::move(pControl))
 {
     m_xControl->make_sorted();
 }
 
-TextEncodingTreeView::TextEncodingTreeView(std::unique_ptr<weld::TreeView> pControl)
+SvxTextEncodingTreeView::SvxTextEncodingTreeView(std::unique_ptr<weld::TreeView> pControl)
     : m_xControl(std::move(pControl))
 {
     m_xControl->make_sorted();
 }
 
-TextEncodingBox::~TextEncodingBox()
+SvxTextEncodingBox::~SvxTextEncodingBox()
 {
 }
 
-TextEncodingTreeView::~TextEncodingTreeView()
+SvxTextEncodingTreeView::~SvxTextEncodingTreeView()
 {
 }
 
@@ -185,7 +185,7 @@ namespace
     }
 }
 
-void TextEncodingBox::FillFromTextEncodingTable(
+void SvxTextEncodingBox::FillFromTextEncodingTable(
         bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
         sal_uInt32 nButIncludeInfoFlags )
 {
@@ -199,7 +199,7 @@ void TextEncodingBox::FillFromTextEncodingTable(
     m_xControl->thaw();
 }
 
-void TextEncodingTreeView::FillFromTextEncodingTable(
+void SvxTextEncodingTreeView::FillFromTextEncodingTable(
         bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
         sal_uInt32 nButIncludeInfoFlags )
 {
@@ -213,44 +213,44 @@ void TextEncodingTreeView::FillFromTextEncodingTable(
     m_xControl->thaw();
 }
 
-void TextEncodingBox::FillWithMimeAndSelectBest()
+void SvxTextEncodingBox::FillWithMimeAndSelectBest()
 {
     FillFromTextEncodingTable( false, 0xffffffff, RTL_TEXTENCODING_INFO_MIME );
     rtl_TextEncoding nEnc = SvtSysLocale::GetBestMimeEncoding();
     SelectTextEncoding( nEnc );
 }
 
-void TextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
+void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
             const OUString& rEntry )
 {
     m_xControl->append(OUString::number(nEnc), rEntry);
 }
 
-void TextEncodingTreeView::InsertTextEncoding( const rtl_TextEncoding nEnc,
+void SvxTextEncodingTreeView::InsertTextEncoding( const rtl_TextEncoding nEnc,
             const OUString& rEntry )
 {
     m_xControl->append(OUString::number(nEnc), rEntry);
 }
 
-void TextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc )
+void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc )
 {
     const OUString& rEntry = SvxTextEncodingTable::GetTextString(nEnc);
     if (!rEntry.isEmpty())
         InsertTextEncoding( nEnc, rEntry );
     else
-        SAL_WARN( "svx.dialog", "TextEncodingBox::InsertTextEncoding: no resource string for text encoding: " << static_cast<sal_Int32>( nEnc ) );
+        SAL_WARN( "svx.dialog", "SvxTextEncodingBox::InsertTextEncoding: no resource string for text encoding: " << static_cast<sal_Int32>( nEnc ) );
 }
 
-void TextEncodingTreeView::InsertTextEncoding( const rtl_TextEncoding nEnc )
+void SvxTextEncodingTreeView::InsertTextEncoding( const rtl_TextEncoding nEnc )
 {
     const OUString& rEntry = SvxTextEncodingTable::GetTextString(nEnc);
     if (!rEntry.isEmpty())
         InsertTextEncoding( nEnc, rEntry );
     else
-        SAL_WARN( "svx.dialog", "TextEncodingTreeView::InsertTextEncoding: no resource string for text encoding: " << static_cast<sal_Int32>( nEnc ) );
+        SAL_WARN( "svx.dialog", "SvxTextEncodingTreeView::InsertTextEncoding: no resource string for text encoding: " << static_cast<sal_Int32>( nEnc ) );
 }
 
-rtl_TextEncoding TextEncodingBox::GetSelectTextEncoding() const
+rtl_TextEncoding SvxTextEncodingBox::GetSelectTextEncoding() const
 {
     OUString sId(m_xControl->get_active_id());
     if (!sId.isEmpty())
@@ -259,7 +259,7 @@ rtl_TextEncoding TextEncodingBox::GetSelectTextEncoding() const
         return RTL_TEXTENCODING_DONTKNOW;
 }
 
-rtl_TextEncoding TextEncodingTreeView::GetSelectTextEncoding() const
+rtl_TextEncoding SvxTextEncodingTreeView::GetSelectTextEncoding() const
 {
     OUString sId(m_xControl->get_selected_id());
     if (!sId.isEmpty())
@@ -268,12 +268,12 @@ rtl_TextEncoding TextEncodingTreeView::GetSelectTextEncoding() const
         return RTL_TEXTENCODING_DONTKNOW;
 }
 
-void TextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc )
+void SvxTextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc )
 {
     m_xControl->set_active_id(OUString::number(nEnc));
 }
 
-void TextEncodingTreeView::SelectTextEncoding( const rtl_TextEncoding nEnc )
+void SvxTextEncodingTreeView::SelectTextEncoding( const rtl_TextEncoding nEnc )
 {
     m_xControl->select_id(OUString::number(nEnc));
 }

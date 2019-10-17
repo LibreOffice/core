@@ -294,7 +294,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     , meCall(eCall)
     , mbDetectSpaceSep(eCall != SC_TEXTTOCOLUMNS)
     , mxFtCharSet(m_xBuilder->weld_label("textcharset"))
-    , mxLbCharSet(new TextEncodingBox(m_xBuilder->weld_combo_box("charset")))
+    , mxLbCharSet(new SvxTextEncodingBox(m_xBuilder->weld_combo_box("charset")))
     , mxFtCustomLang(m_xBuilder->weld_label("textlanguage"))
     , mxLbCustomLang(new LanguageBox(m_xBuilder->weld_combo_box("language")))
     , mxFtRow(m_xBuilder->weld_label("textfromrow"))

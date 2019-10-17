@@ -24,8 +24,8 @@
 
 class ScDelimiterTable;
 class ScImportOptions;
-class TextEncodingBox;
-class TextEncodingTreeView;
+class SvxTextEncodingBox;
+class SvxTextEncodingTreeView;
 
 class ScImportOptionsDlg : public weld::GenericDialogController
 {
@@ -61,8 +61,8 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbQuoteAll;
     std::unique_ptr<weld::CheckButton> m_xCbFixed;
     std::unique_ptr<weld::Button> m_xBtnOk;
-    std::unique_ptr<TextEncodingBox> m_xLbCharset;
-    std::unique_ptr<TextEncodingTreeView> m_xTvCharset;
+    std::unique_ptr<SvxTextEncodingBox> m_xLbCharset;
+    std::unique_ptr<SvxTextEncodingTreeView> m_xTvCharset;
 
 private:
     sal_uInt16 GetCodeFromCombo( const weld::ComboBox& rEd ) const;
