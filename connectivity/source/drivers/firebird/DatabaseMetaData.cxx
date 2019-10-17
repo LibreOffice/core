@@ -1566,22 +1566,18 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     SAL_INFO("connectivity.firebird", "getPrimaryKeys() with "
              "Table: " << sTable);
 
-    OUStringBuffer aQueryBuf("SELECT "
+    OUString sAppend = "WHERE constr.RDB$RELATION_NAME = '%' ";
+    OUString sQuery = "SELECT "
         "constr.RDB$RELATION_NAME, "    // 1. Table Name
         "inds.RDB$FIELD_NAME, "         // 2. Column Name
         "inds.RDB$FIELD_POSITION, "     // 3. Sequence Number
         "constr.RDB$CONSTRAINT_NAME "   // 4 Constraint name
         "FROM RDB$RELATION_CONSTRAINTS constr "
         "JOIN RDB$INDEX_SEGMENTS inds "
-        "on (constr.RDB$INDEX_NAME = inds.RDB$INDEX_NAME) ");
-
-    OUString sAppend = "WHERE constr.RDB$RELATION_NAME = '%' ";
-    aQueryBuf.append(sAppend.replaceAll("%", sTable));
-
-    aQueryBuf.append("AND constr.RDB$CONSTRAINT_TYPE = 'PRIMARY KEY' "
-                    "ORDER BY inds.RDB$FIELD_NAME");
-
-    OUString sQuery = aQueryBuf.makeStringAndClear();
+        "on (constr.RDB$INDEX_NAME = inds.RDB$INDEX_NAME) " +
+        sAppend.replaceAll("%", sTable) +
+        "AND constr.RDB$CONSTRAINT_TYPE = 'PRIMARY KEY' "
+                    "ORDER BY inds.RDB$FIELD_NAME";
 
     uno::Reference< XStatement > xStatement = m_pConnection->createStatement();
     uno::Reference< XResultSet > xRs = xStatement->executeQuery(sQuery);

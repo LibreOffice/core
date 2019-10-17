@@ -46,6 +46,24 @@ void f4(sal_Unicode const* pPathBegin)
     v.append(pPathBegin, 12);
     v.append("aaaa");
 }
+void f5(OUStringBuffer& input)
+{
+    // expected-error@+1 {{convert this append sequence into a *String + sequence [loplugin:bufferadd]}}
+    OUStringBuffer v(input);
+    v.append("aaaa");
+}
+struct Footer
+{
+    OStringBuffer m_descriptorStart;
+    OString m_descriptorEnd;
+    OString f8() const
+    {
+        // expected-error@+1 {{convert this append sequence into a *String + sequence [loplugin:bufferadd]}}
+        OStringBuffer buf(m_descriptorStart);
+        buf.append(m_descriptorEnd);
+        return buf.makeStringAndClear();
+    }
+};
 }
 
 namespace test2

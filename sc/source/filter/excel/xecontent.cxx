@@ -989,8 +989,8 @@ bool RequiresFixedFormula(ScConditionMode eMode)
 OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, const OString& rText)
 {
     OStringBuffer aBuffer;
-    OStringBuffer aPosBuffer = XclXmlUtils::ToOString(aBuffer, rAddress);
-    OString aPos = aPosBuffer.makeStringAndClear();
+    XclXmlUtils::ToOString(aBuffer, rAddress);
+    OString aPos = aBuffer.makeStringAndClear();
     switch (eMode)
     {
         case ScConditionMode::Error:
