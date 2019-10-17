@@ -73,12 +73,8 @@ public:
                                     const SfxItemSet *pSet ) const override;
 
     virtual void handleElementItem(
-            SvXMLExport& rExport,
             const SvXMLItemMapEntry& rEntry,
-            const SfxPoolItem& rItem,
-            const SvXMLUnitConverter& rUnitConverter,
-            const SfxItemSet& rSet,
-            SvXmlExportFlags nFlags ) const override;
+            const SfxPoolItem& rItem ) const override;
 
     inline void SetAbsWidth( sal_uInt32 nAbs );
 };
@@ -182,12 +178,8 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
 /** this method is called for every item that has the
     MID_SW_FLAG_ELEMENT_EXPORT flag set */
 void SwXMLTableItemMapper_Impl::handleElementItem(
-        SvXMLExport& /*rExport*/,
         const SvXMLItemMapEntry& rEntry,
-        const SfxPoolItem& rItem,
-        const SvXMLUnitConverter& /*rUnitConverter*/,
-        const SfxItemSet&,
-        SvXmlExportFlags ) const
+        const SfxPoolItem& rItem ) const
 {
     switch( rEntry.nWhichId )
     {

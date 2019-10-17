@@ -53,9 +53,7 @@ protected:
                     const SfxItemSet *pSet ) const;
 
     void exportElementItems(  SvXMLExport& rExport,
-                              const SvXMLUnitConverter& rUnitConverter,
                               const SfxItemSet &rSet,
-                              SvXmlExportFlags nFlags,
                               const std::vector<sal_uInt16> &rIndexArray ) const;
 
     static const SfxPoolItem* GetItem( const SfxItemSet &rSet,
@@ -81,12 +79,8 @@ public:
 
     /** this method is called for every item that has the
         MID_SW_FLAG_ELEMENT_EXPORT flag set */
-    virtual void handleElementItem( SvXMLExport& rExport,
-                                    const SvXMLItemMapEntry& rEntry,
-                                    const SfxPoolItem& rItem,
-                                    const SvXMLUnitConverter& rUnitConverter,
-                                    const SfxItemSet& rSet,
-                                    SvXmlExportFlags nFlags ) const;
+    virtual void handleElementItem( const SvXMLItemMapEntry& rEntry,
+                                    const SfxPoolItem& rItem ) const;
 
     inline void setMapEntries( SvXMLItemMapEntriesRef rMapEntries );
 
