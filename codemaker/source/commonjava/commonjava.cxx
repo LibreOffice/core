@@ -39,7 +39,7 @@ namespace codemaker { namespace java {
 OString translateUnoToJavaType(
     codemaker::UnoType::Sort sort, OString const & nucleus, bool referenceType)
 {
-    OStringBuffer buf;
+    OStringBuffer buf(128);
     if (sort <= codemaker::UnoType::Sort::Any) {
         OString const javaTypes[static_cast<int>(codemaker::UnoType::Sort::Any) + 1][2] = {
             { "void", "java/lang/Void" },

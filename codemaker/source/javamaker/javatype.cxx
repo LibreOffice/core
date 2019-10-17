@@ -89,7 +89,7 @@ OUString createUnoName(
     rtl::Reference< TypeManager > const & manager, OUString const & nucleus,
     sal_Int32 rank, std::vector< OUString > const & arguments)
 {
-    OUStringBuffer buf;
+    OUStringBuffer buf(256);
     appendUnoName(manager, nucleus, rank, arguments, &buf);
     return buf.makeStringAndClear();
 }
@@ -293,8 +293,8 @@ SpecialType getFieldDescriptor(
     PolymorphicUnoType * polymorphicUnoType)
 {
     assert(descriptor != nullptr);
-    OStringBuffer desc;
-    OStringBuffer sig;
+    OStringBuffer desc(64);
+    OStringBuffer sig(64);
     bool needsSig = false;
     SpecialType specialType = translateUnoTypeToDescriptor(
         manager, type, false, false, dependencies, &desc, &sig, &needsSig,
@@ -331,9 +331,9 @@ public:
 private:
     rtl::Reference< TypeManager > m_manager;
     std::set<OUString> * m_dependencies;
-    OStringBuffer m_descriptorStart;
+    OStringBuffer m_descriptorStart{16*1024};
     OString m_descriptorEnd;
-    OStringBuffer m_signatureStart;
+    OStringBuffer m_signatureStart{16*1024};
     OString m_signatureEnd;
     bool m_needsSignature;
 };
@@ -347,9 +347,9 @@ MethodDescriptor::MethodDescriptor(
     assert(dependencies != nullptr);
     m_descriptorStart.append('(');
     m_signatureStart.append('(');
-    OStringBuffer descEnd;
+    OStringBuffer descEnd(128);
     descEnd.append(')');
-    OStringBuffer sigEnd;
+    OStringBuffer sigEnd(128);
     sigEnd.append(')');
     SpecialType special = translateUnoTypeToDescriptor(
         m_manager, returnType, false, false, m_dependencies, &descEnd, &sigEnd,
@@ -896,7 +896,7 @@ sal_uInt16 addFieldInit(
                     dynamic_cast< unoidl::EnumTypeEntity * >(ent.get()));
                 assert(ent2.is());
                 code->loadLocalReference(0);
-                OStringBuffer descBuf;
+                OStringBuffer descBuf(128);
                 translateUnoTypeToDescriptor(
                     manager, sort, nucleus, 0, std::vector< OUString >(), false,
                     false, dependencies, &descBuf, nullptr, nullptr, nullptr);
@@ -917,7 +917,7 @@ sal_uInt16 addFieldInit(
                 code->instrInvokespecial(
                     codemaker::convertString(nucleus).replace('.', '/'),
                     "<init>", "()V");
-                OStringBuffer desc;
+                OStringBuffer desc(128);
                 translateUnoTypeToDescriptor(
                     manager, sort, nucleus, 0, args, false, false, dependencies,
                     &desc, nullptr, nullptr, nullptr);
@@ -947,13 +947,13 @@ sal_uInt16 addFieldInit(
                     false));
         }
     } else {
-        OStringBuffer desc;
+        OStringBuffer desc(128);
         translateUnoTypeToDescriptor(
             manager, sort, nucleus, rank - 1, std::vector< OUString >(), false,
             false, dependencies, &desc, nullptr, nullptr, nullptr);
         code->instrAnewarray(desc.makeStringAndClear());
     }
-    OStringBuffer desc;
+    OStringBuffer desc(128);
     translateUnoTypeToDescriptor(
         manager, sort, nucleus, rank, std::vector< OUString >(), false, false,
         dependencies, &desc, nullptr, nullptr, nullptr);
@@ -1440,7 +1440,8 @@ void handlePolyStructType(
     assert(entity.is());
     OString className(codemaker::convertString(name).replace('.', '/'));
     std::map< OUString, sal_Int32 > typeParameters;
-    OStringBuffer sig("<");
+    OStringBuffer sig(128);
+    sig.append("<");
     sal_Int32 index = 0;
     for (const OUString& param : entity->getTypeParameters())
     {

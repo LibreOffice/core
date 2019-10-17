@@ -49,16 +49,18 @@ public:
 
 void Base64Test::testBase64Encode()
 {
-    OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer(32);
     uno::Sequence<sal_Int8> inputSequence;
 
     inputSequence = { 0, 0, 0, 0, 0, 1, 2, 3 };
     comphelper::Base64::encode(aBuffer, inputSequence);
-    CPPUNIT_ASSERT_EQUAL(OUString("AAAAAAABAgM="), aBuffer.makeStringAndClear());
+    CPPUNIT_ASSERT_EQUAL(OUString("AAAAAAABAgM="), aBuffer.toString());
+    aBuffer.setLength(0);
 
     inputSequence = { 5, 2, 3, 0, 0, 1, 2, 3 };
     comphelper::Base64::encode(aBuffer, inputSequence);
-    CPPUNIT_ASSERT_EQUAL(OUString("BQIDAAABAgM="), aBuffer.makeStringAndClear());
+    CPPUNIT_ASSERT_EQUAL(OUString("BQIDAAABAgM="), aBuffer.toString());
+    aBuffer.setLength(0);
 
     inputSequence = { sal_Int8(sal_uInt8(200)), 31, 77, 111, 0, 1, 2, 3 };
     comphelper::Base64::encode(aBuffer, inputSequence);
@@ -84,16 +86,18 @@ void Base64Test::testBase64Decode()
 
 void Base64Test::testBase64EncodeForOStringBuffer()
 {
-    OStringBuffer aBuffer;
+    OStringBuffer aBuffer(32);
     uno::Sequence<sal_Int8> inputSequence;
 
     inputSequence = { 0, 0, 0, 0, 0, 1, 2, 3 };
     comphelper::Base64::encode(aBuffer, inputSequence);
-    CPPUNIT_ASSERT_EQUAL(OString("AAAAAAABAgM="), aBuffer.makeStringAndClear());
+    CPPUNIT_ASSERT_EQUAL(OString("AAAAAAABAgM="), aBuffer.toString());
+    aBuffer.setLength(0);
 
     inputSequence = { 5, 2, 3, 0, 0, 1, 2, 3 };
     comphelper::Base64::encode(aBuffer, inputSequence);
-    CPPUNIT_ASSERT_EQUAL(OString("BQIDAAABAgM="), aBuffer.makeStringAndClear());
+    CPPUNIT_ASSERT_EQUAL(OString("BQIDAAABAgM="), aBuffer.toString());
+    aBuffer.setLength(0);
 
     inputSequence = { sal_Int8(sal_uInt8(200)), 31, 77, 111, 0, 1, 2, 3 };
     comphelper::Base64::encode(aBuffer, inputSequence);

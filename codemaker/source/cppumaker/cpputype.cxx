@@ -2400,6 +2400,28 @@ void PolyStructType::dumpLightGetCppuType(FileStream & out)
         << "static ::typelib_TypeDescriptionReference * the_type = 0;\n"
         << indent() << "if (the_type == 0) {\n";
     inc();
+
+    out << "#ifdef LIBO_INTERNAL_ONLY\n";
+
+    out << indent() << "::rtl::OString the_buffer = \"" << name_
+        << "<\" +\n";
+    for (std::vector< OUString >::const_iterator i(
+             entity_->getTypeParameters().begin());
+         i != entity_->getTypeParameters().end();) {
+        out << indent()
+            << ("::rtl::OUStringToOString("
+                "::cppu::getTypeFavourChar(static_cast< ");
+        dumpTypeParameterName(out, *i);
+        out << " * >(0)).getTypeName(), RTL_TEXTENCODING_UTF8) +\n";
+        ++i;
+        if (i != entity_->getTypeParameters().end()) {
+            out << indent() << "\",\" +\n";
+        }
+    }
+    out << indent() << "\">\";\n";
+
+    out << "#else\n";
+
     out << indent() << "::rtl::OStringBuffer the_buffer(\"" << name_
         << "<\");\n";
     for (std::vector< OUString >::const_iterator i(
@@ -2415,9 +2437,14 @@ void PolyStructType::dumpLightGetCppuType(FileStream & out)
             out << indent() << "the_buffer.append(',');\n";
         }
     }
-    out << indent() << "the_buffer.append('>');\n" << indent()
+    out << indent() << "the_buffer.append('>');\n";
+
+    out << "#endif\n";
+
+    out << indent()
         << "::typelib_static_type_init(&the_type, " << getTypeClass(name_, true)
         << ", the_buffer.getStr());\n";
+
     dec();
     out << indent() << "}\n" << indent()
         << "return *reinterpret_cast< ::css::uno::Type * >(&the_type);\n";
@@ -2506,6 +2533,27 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out)
     out << indent() << "::css::uno::Type * operator()() const\n"
         << indent() << "{\n";
     inc();
+
+    out << "#ifdef LIBO_INTERNAL_ONLY\n";
+    out << indent()
+        << "::rtl::OUString the_name =\n";
+    out << indent() << "\"" << name_ << "<\" +\n";
+    for (std::vector< OUString >::const_iterator i(
+             entity_->getTypeParameters().begin());
+         i != entity_->getTypeParameters().end();) {
+        out << indent()
+            << "::cppu::getTypeFavourChar(static_cast< ";
+        dumpTypeParameterName(out, *i);
+        out << " * >(0)).getTypeName() +\n";
+        ++i;
+        if (i != entity_->getTypeParameters().end()) {
+            out << indent()
+                << "\",\" +\n";
+        }
+    }
+    out << indent()
+        << "\">\";\n";
+    out << "#else\n";
     out << indent() << "::rtl::OUStringBuffer the_buffer;\n" << indent()
         << "the_buffer.append(\"" << name_ << "<\");\n";
     for (std::vector< OUString >::const_iterator i(
@@ -2522,9 +2570,10 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out)
                     "static_cast< ::sal_Unicode >(','));\n");
         }
     }
-    out << indent() << "the_buffer.append(static_cast< ::sal_Unicode >('>'));\n"
-        << indent()
+    out << indent() << "the_buffer.append(static_cast< ::sal_Unicode >('>'));\n";
+    out << indent()
         << "::rtl::OUString the_name(the_buffer.makeStringAndClear());\n";
+    out << "#endif\n";
     std::map< OUString, sal_uInt32 > parameters;
     std::map< OUString, sal_uInt32 > types;
     std::vector< unoidl::PolymorphicStructTypeTemplateEntity::Member >::

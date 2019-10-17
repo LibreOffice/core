@@ -235,9 +235,9 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                 NameSpaceMap::const_iterator aIter = aNameMap.find ( nKey );
                 if ( aIter != aNameMap.end() )
                 {
-                    OUStringBuffer sQName;
                     // ...if it's in our map, make the prefix
                     const OUString & prefix( (*aIter).second->sPrefix );
+                    OUStringBuffer sQName(prefix.getLength() + 1 + rLocalName.getLength());
                     if (!prefix.isEmpty()) // not default namespace
                     {
                         sQName.append( prefix );

@@ -90,7 +90,7 @@ void doTest(util::Duration const & rid, char const*const pis,
     CPPUNIT_ASSERT_EQUAL(rid.Seconds, od.Seconds);
     CPPUNIT_ASSERT_EQUAL(rid.NanoSeconds, od.NanoSeconds);
     CPPUNIT_ASSERT_EQUAL(rid.Negative, od.Negative);
-    OUStringBuffer buf;
+    OUStringBuffer buf(64);
     Converter::convertDuration(buf, od);
     SAL_INFO("sax.cppunit","" << buf.toString());
     CPPUNIT_ASSERT(buf.makeStringAndClear().equalsAscii(pos));
@@ -159,7 +159,7 @@ void doTest(util::DateTime const & rdt, char const*const pis,
     SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << " M:" << odt.Minutes << " S:" << odt.Seconds << " nS:" << odt.NanoSeconds << " UTC: " << static_cast<bool>(odt.IsUTC));
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT(eqDateTime(rdt, odt));
-    OUStringBuffer buf;
+    OUStringBuffer buf(32);
     Converter::convertDateTime(buf, odt, nullptr, true);
     SAL_INFO("sax.cppunit","" << buf.toString());
     CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(pos),
@@ -253,7 +253,7 @@ void doTestTime(util::DateTime const & rdt, char const*const pis,
     SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << " M:" << odt.Minutes << " S:" << odt.Seconds << " nS:" << odt.NanoSeconds << " UTC: " << static_cast<bool>(odt.IsUTC));
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT(eqDateTime(rdt, odt));
-    OUStringBuffer buf;
+    OUStringBuffer buf(32);
     Converter::convertTimeOrDateTime(buf, odt);
     SAL_INFO("sax.cppunit","" << buf.toString());
     CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(pos),

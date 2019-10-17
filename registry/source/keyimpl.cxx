@@ -970,7 +970,8 @@ OStoreDirectory ORegKey::getStoreDir() const
 
 OUString ORegKey::getFullPath(OUString const & path) const {
     OSL_ASSERT(!m_name.isEmpty() && !path.isEmpty());
-    OUStringBuffer b(m_name);
+    OUStringBuffer b(32);
+    b.append(m_name);
     if (!b.isEmpty() && b[b.getLength() - 1] == '/') {
         if (path[0] == '/') {
             b.append(std::u16string_view(path).substr(1));
