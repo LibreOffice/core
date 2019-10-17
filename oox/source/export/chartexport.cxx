@@ -1213,8 +1213,17 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, const OUString
         Reference<embed::XVisualObject> xVisObject(mxChartModel, uno::UNO_QUERY);
         awt::Size aPageSize = xVisObject->getVisualAreaSize(embed::Aspects::MSOLE_CONTENT);
 
-        // awt::Size aSize = xShape->getSize();
+        awt::Size aSize = xShape->getSize();
         awt::Point aPos2 = xShape->getPosition();
+        // rotated shapes need special handling...
+        double fSin = fabs(sin(basegfx::deg2rad(nRotation*0.01)));
+        // remove part of height from X direction, if title is rotated down
+        if( nRotation*0.01 > 180.0 )
+            aPos2.X -= static_cast<sal_Int32>(fSin * aSize.Height + 0.5);
+        // remove part of width from Y direction, if title is rotated up
+        else if( nRotation*0.01 > 0.0 )
+            aPos2.Y -= static_cast<sal_Int32>(fSin * aSize.Width + 0.5);
+
         double x = static_cast<double>(aPos2.X) / static_cast<double>(aPageSize.Width);
         double y = static_cast<double>(aPos2.Y) / static_cast<double>(aPageSize.Height);
         /*

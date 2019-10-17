@@ -123,6 +123,7 @@ public:
     void testCrossBetweenXLSX();
     void testCrossBetweenODS();
     void testAxisTitleRotationXLSX();
+    void testAxisTitlePositionDOCX();
     void testAxisCrossBetweenXSLX();
     void testPieChartDataPointExplosionXLSX();
     void testCustomDataLabel();
@@ -228,6 +229,7 @@ public:
     CPPUNIT_TEST(testCrossBetweenXLSX);
     CPPUNIT_TEST(testCrossBetweenODS);
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
+    CPPUNIT_TEST(testAxisTitlePositionDOCX);
     CPPUNIT_TEST(testAxisCrossBetweenXSLX);
     CPPUNIT_TEST(testPieChartDataPointExplosionXLSX);
     CPPUNIT_TEST(testCustomDataLabel);
@@ -1930,6 +1932,29 @@ void Chart2ExportTest::testAxisTitleRotationXLSX()
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:title/c:tx/c:rich/a:bodyPr", "rot", "0");
+}
+
+void Chart2ExportTest::testAxisTitlePositionDOCX()
+{
+    load("/chart2/qa/extras/data/docx/", "testAxisTitlePosition.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // test X Axis title position
+    OUString aXVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:title/c:layout/c:manualLayout/c:x", "val");
+    double nX = aXVal.toDouble();
+    CPPUNIT_ASSERT(nX > 0.698208 && nX < 0.698209);
+    OUString aYVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:title/c:layout/c:manualLayout/c:y", "val");
+    double nY = aYVal.toDouble();
+    CPPUNIT_ASSERT(nY > 0.805152 && nY < 0.805153);
+
+    // test Y Axis title position
+    aXVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:title/c:layout/c:manualLayout/c:x", "val");
+    nX = aXVal.toDouble();
+    CPPUNIT_ASSERT(nX > 0.025395 && nX < 0.025396);
+    aYVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:title/c:layout/c:manualLayout/c:y", "val");
+    nY = aYVal.toDouble();
+    CPPUNIT_ASSERT(nY > 0.384407 && nY < 0.384408);
 }
 
 void Chart2ExportTest::testAxisCrossBetweenXSLX()

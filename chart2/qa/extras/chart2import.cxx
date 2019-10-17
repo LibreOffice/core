@@ -1539,8 +1539,7 @@ void Chart2ImportTest::testAxisTitlePositionDOCX()
 
     aPos = xAxisTitle->getPosition();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(387), static_cast<sal_Int32>(aPos.X));
-    // y coordinate is still wrong because of another older bug!
-    /*CPPUNIT_ASSERT_EQUAL(sal_Int32(1535), static_cast<sal_Int32>(aPos.Y));*/
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6378), static_cast<sal_Int32>(aPos.Y));
 }
 
 void Chart2ImportTest::testCombinedChartAttachedAxisXLSX()

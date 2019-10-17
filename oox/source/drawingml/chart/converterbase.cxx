@@ -405,18 +405,34 @@ void LayoutConverter::convertFromModel( const Reference< XShape >& rxShape, doub
             lclCalcPosition( aChartSize.Height, mrModel.mfY, mrModel.mnYMode ) );
         if( (aShapePos.X >= 0) && (aShapePos.Y >= 0) )
         {
+            bool bPropSet = false;
             // the call to XShape.getSize() may recalc the chart view
             awt::Size aShapeSize = rxShape->getSize();
             // rotated shapes need special handling...
-            double fSin = fabs( sin( basegfx::deg2rad(fRotationAngle) ) );
-            // add part of height to X direction, if title is rotated down
-            if( fRotationAngle > 180.0 )
-                aShapePos.X += static_cast< sal_Int32 >( fSin * aShapeSize.Height + 0.5 );
-            // add part of width to Y direction, if title is rotated up
-            else if( fRotationAngle > 0.0 )
-                aShapePos.Y += static_cast< sal_Int32 >( fSin * aShapeSize.Width + 0.5 );
+            if( aShapeSize.Height > 0 || aShapeSize.Width > 0 )
+            {
+                double fSin = fabs(sin(basegfx::deg2rad(fRotationAngle)));
+                // add part of height to X direction, if title is rotated down
+                if( fRotationAngle > 180.0 )
+                    aShapePos.X += static_cast<sal_Int32>(fSin * aShapeSize.Height + 0.5);
+                // add part of width to Y direction, if title is rotated up
+                else if( fRotationAngle > 0.0 )
+                    aShapePos.Y += static_cast<sal_Int32>(fSin * aShapeSize.Width + 0.5);
+            }
+            else if( fRotationAngle == 90.0 || fRotationAngle == 270.0 )
+            {
+                PropertySet aShapeProp( rxShape );
+                RelativePosition aPos(
+                    getLimitedValue< double, double >(mrModel.mfX, 0.0, 1.0),
+                    getLimitedValue< double, double >(mrModel.mfY, 0.0, 1.0),
+                    fRotationAngle == 90.0 ? Alignment_TOP_RIGHT : Alignment_BOTTOM_LEFT );
+                // set the resulting position at the shape
+                if( aShapeProp.setProperty(PROP_RelativePosition, aPos) )
+                    bPropSet = true;
+            }
             // set the resulting position at the shape
-            rxShape->setPosition( aShapePos );
+            if( !bPropSet )
+                rxShape->setPosition( aShapePos );
         }
     }
 }
