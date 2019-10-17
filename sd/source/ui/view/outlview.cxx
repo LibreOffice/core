@@ -1304,7 +1304,7 @@ void OutlineView::ResetLinks() const
     mrOutliner.SetEndPasteOrDropHdl(Link<PasteOrDropInfos*,void>());
 }
 
-sal_Int8 OutlineView::AcceptDrop( const AcceptDropEvent&, DropTargetHelper&, ::sd::Window*, sal_uInt16, SdrLayerID)
+sal_Int8 OutlineView::AcceptDrop( const AcceptDropEvent&, DropTargetHelper&, SdrLayerID)
 {
     return DND_ACTION_NONE;
 }

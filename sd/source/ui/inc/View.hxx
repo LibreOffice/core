@@ -92,8 +92,6 @@ public:
     virtual sal_Int8 AcceptDrop (
         const AcceptDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow,
-        sal_uInt16 nPage,
         SdrLayerID nLayer);
     virtual sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
