@@ -42,12 +42,6 @@ namespace xmloff
     {
     }
 
-    OUString VCLDateHandler::getAttributeValue( const PropertyValues& /*i_propertyValues*/ ) const
-    {
-        OSL_ENSURE( false, "VCLDateHandler::getAttributeValue: unexpected call!" );
-        return OUString();
-    }
-
     OUString VCLDateHandler::getAttributeValue( const Any& i_propertyValue ) const
     {
         Date aDate;

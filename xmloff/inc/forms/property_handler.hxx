@@ -38,11 +38,6 @@ namespace xmloff
     class PropertyHandlerBase : public ::salhelper::SimpleReferenceObject
     {
     public:
-        /** retrieves the XML attribute value for the given property values
-        */
-        virtual OUString
-            getAttributeValue( const PropertyValues& i_propertyValues ) const = 0;
-
         /** is a convenience method for XML attributes whose value comprises of only one UNO API property
         */
         virtual OUString

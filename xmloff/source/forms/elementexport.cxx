@@ -456,42 +456,17 @@ namespace xmloff
                     continue;
                 }
 
-                OUString attributeValue;
-                if ( propDescription->propertyGroup == NO_GROUP )
+                // that's a property which has a direct mapping to an attribute
+                if ( !shouldExportProperty( prop.Name ) )
+                    // TODO: in the future, we surely need a more sophisticated approach to this, involving the property
+                    // handler, or the property description
                 {
-                    // that's a property which has a direct mapping to an attribute
-                    if ( !shouldExportProperty( prop.Name ) )
-                        // TODO: in the future, we surely need a more sophisticated approach to this, involving the property
-                        // handler, or the property description
-                    {
-                        exportedProperty( prop.Name );
-                        continue;
-                    }
-
-                    const Any propValue = m_xProps->getPropertyValue( prop.Name );
-                    attributeValue = handler->getAttributeValue( propValue );
+                    exportedProperty( prop.Name );
+                    continue;
                 }
-                else
-                {
-                    // that's a property which is part of a group of properties, whose values, in their entity, comprise
-                    // a single attribute value
 
-                    // retrieve the descriptions of all other properties which add to the attribute value
-                    PropertyDescriptionList descriptions;
-                    metadata::getPropertyGroup( propDescription->propertyGroup, descriptions );
-
-                    // retrieve the values for all those properties
-                    PropertyValues aValues;
-                    for ( const auto& desc : descriptions )
-                    {
-                        // TODO: XMultiPropertySet?
-                        const Any propValue = m_xProps->getPropertyValue( desc->propertyName );
-                        aValues[ desc->propertyId ] = propValue;
-                    }
-
-                    // let the handler translate into an XML attribute value
-                    attributeValue = handler->getAttributeValue( aValues );
-                }
+                const Any propValue = m_xProps->getPropertyValue( prop.Name );
+                OUString attributeValue = handler->getAttributeValue( propValue );
 
                 AddAttribute(
                     propDescription->attribute.namespacePrefix,

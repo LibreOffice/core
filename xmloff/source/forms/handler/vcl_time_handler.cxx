@@ -42,12 +42,6 @@ namespace xmloff
     {
     }
 
-    OUString VCLTimeHandler::getAttributeValue( const PropertyValues& /*i_propertyValues*/ ) const
-    {
-        OSL_ENSURE( false, "VCLTimeHandler::getAttributeValue: unexpected call!" );
-        return OUString();
-    }
-
     OUString VCLTimeHandler::getAttributeValue( const Any& i_propertyValue ) const
     {
         css::util::Time aTime;

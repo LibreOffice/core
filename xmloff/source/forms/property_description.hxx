@@ -21,8 +21,6 @@
 #define INCLUDED_XMLOFF_SOURCE_FORMS_PROPERTY_DESCRIPTION_HXX
 
 #include <forms/property_handler.hxx>
-#include "property_group.hxx"
-
 #include <xmloff/xmltoken.hxx>
 
 #include <vector>
@@ -71,23 +69,12 @@ namespace xmloff
         const PropertyHandlerFactory        factory;
         /// the unique ID of the property. The property meta data table must not contain two entries with the same property ID
         const PropertyId                    propertyId;
-        /** the group which the property belongs to. Multiple properties belonging to the same group will, all together,
-            define the attribute value to be written into the ODF file.
-
-            Consequently, properties which have the same |propertyGroup| value must also have the same |attribute|
-            and the same |factory| value, with the only exception being NO_GROUP properties.
-
-            Note that the other direction is not given: It is perfectly legitimate to map the same attribute to different
-            (disjunct) property groups.
-        */
-        const PropertyGroup                 propertyGroup;
 
         PropertyDescription()
             :propertyName()
             ,attribute()
             ,factory( nullptr )
             ,propertyId( PID_INVALID )
-            ,propertyGroup( NO_GROUP )
         {
         }
 
@@ -96,14 +83,12 @@ namespace xmloff
             const sal_uInt16                    i_namespacePrefix,
             const ::xmloff::token::XMLTokenEnum i_attributeToken,
             const PropertyHandlerFactory        i_factory,
-            const PropertyId                    i_propertyId,
-            const PropertyGroup                 i_propertyGroup
+            const PropertyId                    i_propertyId
         )
             :propertyName( i_propertyName )
             ,attribute( i_namespacePrefix, i_attributeToken )
             ,factory( i_factory )
             ,propertyId( i_propertyId )
-            ,propertyGroup( i_propertyGroup )
         {
         }
     };
