@@ -175,19 +175,6 @@ void BufferAdd::findBufferAssignOrAdd(const Stmt* parentStmt, Stmt const* stmt)
                 auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(ignore(varDeclLHS->getInit()));
                 if (cxxConstructExpr)
                 {
-                    if (cxxConstructExpr->getNumArgs() == 0)
-                    {
-                        addToGoodMap(varDeclLHS, parentStmt);
-                        return;
-                    }
-                    auto tc2 = loplugin::TypeCheck(cxxConstructExpr->getArg(0)->getType());
-                    if (tc2.LvalueReference().Class("OUStringBuffer")
-                        || tc2.LvalueReference().Class("OStringBuffer")
-                        || tc2.Class("OUStringBuffer") || tc2.Class("OStringBuffer"))
-                    {
-                        badMap.insert(varDeclLHS);
-                        return;
-                    }
                     addToGoodMap(varDeclLHS, parentStmt);
                     return;
                 }
@@ -286,10 +273,6 @@ bool BufferAdd::isMethodOkToMerge(CXXMemberCallExpr const* memberCall)
     auto methodDecl = memberCall->getMethodDecl();
     if (methodDecl->getNumParams() == 0)
         return true;
-    auto tc2 = loplugin::TypeCheck(methodDecl->getParamDecl(0)->getType());
-    if (tc2.LvalueReference().Class("OUStringBuffer")
-        || tc2.LvalueReference().Class("OStringBuffer"))
-        return false;
 
     auto name = methodDecl->getName();
     if (name == "appendUninitialized" || name == "setLength" || name == "remove" || name == "insert"
@@ -338,9 +321,7 @@ bool BufferAdd::isSideEffectFree(Expr const* expr)
         if (auto calleeMethodDecl = dyn_cast_or_null<CXXMethodDecl>(callExpr->getCalleeDecl()))
             if (calleeMethodDecl && calleeMethodDecl->getIdentifier())
             {
-                auto name = calleeMethodDecl->getName();
-                if (callExpr->getNumArgs() > 0
-                    && (name == "number" || name == "unacquired" || name == "boolean"))
+                if (callExpr->getNumArgs() > 0)
                 {
                     auto tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
                     if (tc.Class("OUString") || tc.Class("OString"))

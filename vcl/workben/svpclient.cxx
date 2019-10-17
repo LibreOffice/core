@@ -254,10 +254,10 @@ IMPL_LINK_NOARG( MyWin, SelectHdl, ListBox&, void)
     if( nPos == -1 )
         return;
 
-    OStringBuffer aCommand( 64 );
-    aCommand.append( "get " );
-    aCommand.append( OUStringToOString( aEntry.copy( nPos+2 ), RTL_TEXTENCODING_ASCII_US ) );
-    OString aAnswer( processCommand( aCommand.makeStringAndClear() ) );
+    OString aCommand =
+        "get " +
+        OUStringToOString( aEntry.copy( nPos+2 ), RTL_TEXTENCODING_ASCII_US );
+    OString aAnswer( processCommand( aCommand ) );
     SvMemoryStream aStream( aAnswer.getLength() );
     aStream.WriteBytes( aAnswer.getStr(), aAnswer.getLength() );
     aStream.Seek( STREAM_SEEK_TO_BEGIN );

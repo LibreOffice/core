@@ -1171,11 +1171,10 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             GetName( nThisTab, aTabName );
             OUString aTemplate = ScResId(STR_PROGRESS_COMPARING);
             sal_Int32 nIndex = 0;
-            OUStringBuffer aProText = aTemplate.getToken( 0, '#', nIndex );
-            aProText.append(aTabName);
-            aProText.append(aTemplate.getToken( 0, '#', nIndex ));
-            ScProgress aProgress( GetDocumentShell(),
-                                        aProText.makeStringAndClear(), 3*nThisEndRow, true );  // 2x FindOrder, 1x here
+            OUString aProText = aTemplate.getToken( 0, '#', nIndex ) +
+                aTabName +
+                aTemplate.getToken( 0, '#', nIndex );
+            ScProgress aProgress( GetDocumentShell(), aProText, 3*nThisEndRow, true );  // 2x FindOrder, 1x here
             long nProgressStart = 2*nThisEndRow;                    // start for here
 
             std::unique_ptr<SCCOLROW[]> pTempRows(new SCCOLROW[nThisEndRow+1]);

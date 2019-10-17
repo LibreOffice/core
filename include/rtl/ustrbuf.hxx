@@ -1634,6 +1634,13 @@ public:
         return OUStringBuffer( pNew, count + 16 );
     }
 
+#if defined LIBO_INTERNAL_ONLY
+    operator OUStringView() const
+    {
+        return OUStringView(getStr(), getLength());
+    }
+#endif
+
 private:
     OUStringBuffer( rtl_uString * value, const sal_Int32 capacity )
     {

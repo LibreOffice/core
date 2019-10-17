@@ -284,11 +284,11 @@ void SfxLokHelper::notifyAllViews(int nType, const OString& rPayload)
 
 void SfxLokHelper::notifyContextChange(SfxViewShell const* pViewShell, const OUString& aApplication, const OUString& aContext)
 {
-    OStringBuffer aBuffer;
-    aBuffer.append(OUStringToOString(aApplication.replace(' ', '_'), RTL_TEXTENCODING_UTF8));
-    aBuffer.append(' ');
-    aBuffer.append(OUStringToOString(aContext.replace(' ', '_'), RTL_TEXTENCODING_UTF8));
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_CHANGED, aBuffer.makeStringAndClear().getStr());
+    OString aBuffer =
+        OUStringToOString(aApplication.replace(' ', '_'), RTL_TEXTENCODING_UTF8) +
+        " " +
+        OUStringToOString(aContext.replace(' ', '_'), RTL_TEXTENCODING_UTF8);
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_CHANGED, aBuffer.getStr());
 }
 
 

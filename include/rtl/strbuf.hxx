@@ -1035,6 +1035,13 @@ public:
         *pInternalCapacity = &nCapacity;
     }
 
+#if defined LIBO_INTERNAL_ONLY
+    operator OStringView() const
+    {
+        return OStringView(getStr(), getLength());
+    }
+#endif
+
 private:
     /**
         A pointer to the data structure which contains the data.
