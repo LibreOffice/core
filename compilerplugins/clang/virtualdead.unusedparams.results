@@ -238,9 +238,6 @@ sc/inc/formulagroup.hxx:145
 sc/source/core/opencl/formulagroupcl.cxx:1059
     void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
     0
-sc/source/ui/vba/vbarange.hxx:68
-    void ValueGetter::processValue(int,int,const class com::sun::star::uno::Any &,)
-    001
 sdext/source/pdfimport/inc/contentsink.hxx:150
     void pdfi::ContentSink::drawMask(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)
     10

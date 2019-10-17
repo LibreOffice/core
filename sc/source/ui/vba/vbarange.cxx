@@ -772,17 +772,17 @@ protected:
 public:
     CellValueGetter() {}
     virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) override;
-    virtual void processValue( sal_Int32 x, sal_Int32 y, const uno::Any& aValue ) override;
+    virtual void processValue( const uno::Any& aValue ) override;
     const uno::Any& getValue() const override { return maValue; }
 
 };
 
 void
-CellValueGetter::processValue(  sal_Int32 /*x*/, sal_Int32 /*y*/, const uno::Any& aValue )
+CellValueGetter::processValue(  const uno::Any& aValue )
 {
     maValue = aValue;
 }
-void CellValueGetter::visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell )
+void CellValueGetter::visitNode( sal_Int32 /*x*/, sal_Int32 /*y*/, const uno::Reference< table::XCell >& xCell )
 {
     uno::Any aValue;
     table::CellContentType eType = xCell->getType();
@@ -830,7 +830,7 @@ void CellValueGetter::visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference<
         uno::Reference< text::XTextRange > xTextRange(xCell, ::uno::UNO_QUERY_THROW);
         aValue <<= xTextRange->getString();
     }
-    processValue( x,y,aValue );
+    processValue( aValue );
 }
 
 class CellFormulaValueSetter : public CellValueSetter
@@ -889,7 +889,7 @@ private:
     formula::FormulaGrammar::Grammar const m_eGrammar;
 public:
     CellFormulaValueGetter(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram ) : CellValueGetter( ), m_pDoc( pDoc ), m_eGrammar( eGram ) {}
-    virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) override
+    virtual void visitNode( sal_Int32 /*x*/, sal_Int32 /*y*/, const uno::Reference< table::XCell >& xCell ) override
     {
         uno::Any aValue;
         aValue <<= xCell->getFormula();
@@ -911,7 +911,7 @@ public:
             aValue <<= sVal;
         }
 
-        processValue( x,y,aValue );
+        processValue( aValue );
     }
 
 };
