@@ -100,7 +100,7 @@ class SwTabFrame: public SwLayoutFrame, public SwFlowFrame
         SwAttrSetChg *pa = nullptr,
         SwAttrSetChg *pb = nullptr );
 
-    virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool bHead, bool &rReformat ) override;
+    virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat ) override;
 
     virtual void DestroyImpl() override;
     virtual ~SwTabFrame() override;

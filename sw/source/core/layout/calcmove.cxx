@@ -50,7 +50,7 @@
 // Move methods
 
 /// Return value tells whether the Frame should be moved.
-bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool & )
+bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool & )
 {
     if ( SwFlowFrame::IsMoveBwdJump() || !IsPrevObjMove() )
     {

@@ -58,7 +58,7 @@ class SwSectionFrame: public SwLayoutFrame, public SwFlowFrame
 
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
-    virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool bHead, bool &rReformat ) override;
+    virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat ) override;
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
     virtual void SwClientNotify( const SwModify&, const SfxHint& ) override;

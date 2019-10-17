@@ -2379,7 +2379,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
                 pNewUpper = nullptr;
         }
     }
-    if ( pNewUpper && !ShouldBwdMoved( pNewUpper, true, rbReformat ) )
+    if ( pNewUpper && !ShouldBwdMoved( pNewUpper, rbReformat ) )
     {
         if( !pNewUpper->Lower() )
         {
