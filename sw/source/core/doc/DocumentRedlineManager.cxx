@@ -2096,7 +2096,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
         : (bMerged ? AppendResult::MERGED : AppendResult::IGNORED);
 }
 
-bool DocumentRedlineManager::AppendTableRowRedline( SwTableRowRedline* pNewRedl, bool )
+bool DocumentRedlineManager::AppendTableRowRedline( SwTableRowRedline* pNewRedl )
 {
     // #TODO - equivalent for 'SwTableRowRedline'
     /*
@@ -2138,7 +2138,7 @@ bool DocumentRedlineManager::AppendTableRowRedline( SwTableRowRedline* pNewRedl,
     return nullptr != pNewRedl;
 }
 
-bool DocumentRedlineManager::AppendTableCellRedline( SwTableCellRedline* pNewRedl, bool )
+bool DocumentRedlineManager::AppendTableCellRedline( SwTableCellRedline* pNewRedl )
 {
     // #TODO - equivalent for 'SwTableCellRedline'
     /*

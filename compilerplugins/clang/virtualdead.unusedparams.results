@@ -313,12 +313,6 @@ sw/inc/calbck.hxx:144
 sw/inc/IDocumentLinksAdministration.hxx:55
     _Bool IDocumentLinksAdministration::SetData(const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Any &,)
     100
-sw/inc/IDocumentRedlineAccess.hxx:168
-    _Bool IDocumentRedlineAccess::AppendTableRowRedline(class SwTableRowRedline *,_Bool,)
-    10
-sw/inc/IDocumentRedlineAccess.hxx:169
-    _Bool IDocumentRedlineAccess::AppendTableCellRedline(class SwTableCellRedline *,_Bool,)
-    10
 sw/inc/swcrsr.hxx:161
     _Bool SwCursor::LeftRight(_Bool,unsigned short,unsigned short,_Bool,_Bool,_Bool,const class SwRootFrame *,)
     1100000

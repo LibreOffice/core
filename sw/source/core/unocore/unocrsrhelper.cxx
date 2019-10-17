@@ -1360,7 +1360,7 @@ void makeTableRowRedline( SwTableLine& rTableLine,
     pRedline->SetExtraData( nullptr );
 
     pRedlineAccess->SetRedlineFlags_intern(RedlineFlags::On);
-    bool bRet = pRedlineAccess->AppendTableRowRedline( pRedline, false );
+    bool bRet = pRedlineAccess->AppendTableRowRedline( pRedline );
     pRedlineAccess->SetRedlineFlags_intern( nPrevMode );
     if( !bRet )
         throw lang::IllegalArgumentException();
@@ -1409,7 +1409,7 @@ void makeTableCellRedline( SwTableBox& rTableBox,
     pRedline->SetExtraData( nullptr );
 
     pRedlineAccess->SetRedlineFlags_intern(RedlineFlags::On);
-    bool bRet = pRedlineAccess->AppendTableCellRedline( pRedline, false );
+    bool bRet = pRedlineAccess->AppendTableCellRedline( pRedline );
     pRedlineAccess->SetRedlineFlags_intern( nPrevMode );
     if( !bRet )
         throw lang::IllegalArgumentException();
