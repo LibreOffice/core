@@ -629,7 +629,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
     }
 
     OStoreDirectory rStoreDir;
-    OUStringBuffer  sFullPath(sFullKeyName.getLength());
+    OUStringBuffer  sFullPath(sFullKeyName.getLength()+16);
     OUString        token;
 
     sFullPath.append('/');

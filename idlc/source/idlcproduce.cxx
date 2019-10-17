@@ -44,7 +44,7 @@ static std::list< OString >* pCreatedDirectories = nullptr;
 static bool checkOutputPath(const OString& completeName)
 {
     OString sysPathName = convertToAbsoluteSystemPath(completeName);
-    OStringBuffer buffer(sysPathName.getLength());
+    OStringBuffer buffer(sysPathName.getLength()+16);
 
     if ( sysPathName.indexOf( SEPARATOR ) == -1 )
         return true;

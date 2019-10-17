@@ -792,10 +792,10 @@ void TestBreakIterator::testWeak()
         for (sal_Int32 i = 0; i < aWeaks.getLength(); ++i)
         {
             sal_Int16 nScript = m_xBreak->getScriptType(aWeaks, i);
-            OStringBuffer aMsg;
-            aMsg.append("Char 0x");
-            aMsg.append(static_cast<sal_Int32>(aWeaks[i]), 16);
-            aMsg.append(" should have been weak");
+            OString aMsg =
+                "Char 0x" +
+                OString::number(static_cast<sal_Int32>(aWeaks[i]), 16) +
+                " should have been weak";
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(),
                 i18n::ScriptType::WEAK, nScript);
         }
@@ -831,10 +831,10 @@ void TestBreakIterator::testAsian()
         for (sal_Int32 i = 0; i < aAsians.getLength(); ++i)
         {
             sal_Int16 nScript = m_xBreak->getScriptType(aAsians, i);
-            OStringBuffer aMsg;
-            aMsg.append("Char 0x");
-            aMsg.append(static_cast<sal_Int32>(aAsians[i]), 16);
-            aMsg.append(" should have been asian");
+            OString aMsg =
+                "Char 0x" +
+                OString::number(static_cast<sal_Int32>(aAsians[i]), 16) +
+                " should have been asian";
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(),
                 i18n::ScriptType::ASIAN, nScript);
         }
