@@ -19,7 +19,14 @@ struct GtvApplicationPrivate
     GtvRenderingArgs* m_pRenderingArgs;
 };
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-volatile"
+#endif
 G_DEFINE_TYPE_WITH_PRIVATE(GtvApplication, gtv_application, GTK_TYPE_APPLICATION);
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 static GtvApplicationPrivate*
 getPrivate(GtvApplication* app)

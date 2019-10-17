@@ -29,10 +29,18 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
 #endif
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-volatile"
+#endif
 G_DEFINE_TYPE (OOoMountOperation, ooo_mount_operation, G_TYPE_MOUNT_OPERATION);
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
+
 
 static void ooo_mount_operation_ask_password (GMountOperation   *op,
     const char *message, const char *default_user, const char *default_domain,

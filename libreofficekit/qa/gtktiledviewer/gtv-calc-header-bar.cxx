@@ -52,7 +52,14 @@ struct GtvCalcHeaderBarPrivate
     }
 };
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-volatile"
+#endif
 G_DEFINE_TYPE_WITH_PRIVATE(GtvCalcHeaderBar, gtv_calc_header_bar, GTK_TYPE_DRAWING_AREA);
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 static const int ROW_HEADER_WIDTH = 50;
 static const int COLUMN_HEADER_HEIGHT = 20;

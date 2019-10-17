@@ -66,7 +66,14 @@ struct GtvMainToolbarPrivate
     }
 };
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-volatile"
+#endif
 G_DEFINE_TYPE_WITH_PRIVATE(GtvMainToolbar, gtv_main_toolbar, GTK_TYPE_BOX);
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 static GtvMainToolbarPrivate&
 getPrivate(GtvMainToolbar* toolbar)

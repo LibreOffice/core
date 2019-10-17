@@ -54,7 +54,14 @@ struct GtvLokDialogPrivate
     guint dialogid;
 };
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-volatile"
+#endif
 G_DEFINE_TYPE_WITH_PRIVATE(GtvLokDialog, gtv_lok_dialog, GTK_TYPE_DIALOG);
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 enum
 {
