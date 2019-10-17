@@ -31,7 +31,8 @@ namespace {
 OString createName(
     AstType const * typeTemplate, DeclList const * typeArguments)
 {
-    OStringBuffer buf(typeTemplate->getScopedName());
+    OStringBuffer buf(64);
+    buf.append(typeTemplate->getScopedName());
     if (typeArguments != nullptr) {
         buf.append('<');
         for (DeclList::const_iterator i(typeArguments->begin());

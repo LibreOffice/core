@@ -79,13 +79,13 @@ namespace detail {
         }
         if( !fromAny( seq[nArg], &v ) )
         {
-            OUStringBuffer buf;
-            buf.append( "Cannot extract ANY { " );
-            buf.append( seq[nArg].getValueType().getTypeName() );
-            buf.append( " } to " );
-            buf.append( ::cppu::UnoType<T>::get().getTypeName() );
-            buf.append( u'!' );
-            return unwrapArgsError( buf.makeStringAndClear(), nArg, args... );
+            OUString msg =
+                "Cannot extract ANY { " +
+                seq[nArg].getValueType().getTypeName() +
+                " } to " +
+                ::cppu::UnoType<T>::get().getTypeName() +
+                "!";
+            return unwrapArgsError( msg, nArg, args... );
         }
         return unwrapArgs( seq, ++nArg, args... );
     }
