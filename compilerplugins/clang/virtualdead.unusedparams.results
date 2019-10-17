@@ -244,9 +244,6 @@ sc/source/ui/vba/vbarange.hxx:68
 sd/source/ui/inc/View.hxx:92
     signed char sd::View::AcceptDrop(const struct AcceptDropEvent &,class DropTargetHelper &,class sd::Window *,unsigned short,struct o3tl::strong_int<unsigned char, struct SdrLayerIDTag>,)
     11001
-sd/source/ui/inc/ViewClipboard.hxx:64
-    unsigned short sd::ViewClipboard::DetermineInsertPosition(const class SdTransferable &,)
-    0
 sdext/source/pdfimport/inc/contentsink.hxx:150
     void pdfi::ContentSink::drawMask(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)
     10

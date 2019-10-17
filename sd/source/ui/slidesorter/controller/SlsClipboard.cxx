@@ -801,7 +801,7 @@ void Clipboard::Abort()
     }
 }
 
-sal_uInt16 Clipboard::DetermineInsertPosition (const SdTransferable& )
+sal_uInt16 Clipboard::DetermineInsertPosition ()
 {
     // Tell the model to move the dragged pages behind the one with the
     // index nInsertionIndex which first has to be transformed into an index

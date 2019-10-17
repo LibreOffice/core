@@ -98,8 +98,7 @@ public:
     void Abort();
 
 protected:
-    virtual sal_uInt16 DetermineInsertPosition (
-        const SdTransferable& rTransferable) override;
+    virtual sal_uInt16 DetermineInsertPosition () override;
 
 private:
     SlideSorter& mrSlideSorter;
