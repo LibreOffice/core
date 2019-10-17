@@ -43,9 +43,19 @@ bool operator<(const MyFuncInfo& lhs, const MyFuncInfo& rhs)
 {
     return std::tie(lhs.name, lhs.returnValue) < std::tie(rhs.name, rhs.returnValue);
 }
+struct MyParamInfo
+{
+    std::string funcName;
+    std::string paramBitField;
+};
+bool operator<(const MyParamInfo& lhs, const MyParamInfo& rhs)
+{
+    return std::tie(lhs.funcName, lhs.paramBitField) < std::tie(rhs.funcName, rhs.paramBitField);
+}
 
 // try to limit the voluminous output a little
 static std::set<MyFuncInfo> definitionSet;
+static std::set<MyParamInfo> paramUsedSet;
 
 class VirtualDead : public RecursiveASTVisitor<VirtualDead>, public loplugin::Plugin
 {
@@ -64,6 +74,8 @@ public:
         std::string output;
         for (const MyFuncInfo& s : definitionSet)
             output += "virtual:\t" + s.name + "\t" + s.sourceLocation + "\t" + s.returnValue + "\n";
+        for (const MyParamInfo& s : paramUsedSet)
+            output += "param:\t" + s.funcName + "\t" + s.paramBitField + "\n";
         std::ofstream myfile;
         myfile.open(WORKDIR "/loplugin.virtualdead.log", std::ios::app | std::ios::out);
         myfile << output;
@@ -77,7 +89,8 @@ public:
 private:
     std::string getCallValue(const Expr* arg);
     std::string toString(SourceLocation loc);
-    void markSuperclassMethods(const CXXMethodDecl* methodDecl, std::string returnValue);
+    void markSuperclassMethods(const CXXMethodDecl* methodDecl, const std::string& returnValue,
+                               const std::string& paramBitField);
 };
 
 std::string niceName(const CXXMethodDecl* cxxMethodDecl)
@@ -142,18 +155,28 @@ bool VirtualDead::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
     else
         returnValue = "empty";
 
-    markSuperclassMethods(methodDecl, returnValue);
+    std::string paramBitfield;
+    for (auto it = methodDecl->param_begin(); it != methodDecl->param_end(); ++it)
+    {
+        auto param = *it;
+        paramBitfield += param->getName().empty() ? "0" : "1";
+    }
+
+    markSuperclassMethods(methodDecl, returnValue, paramBitfield);
 
     return true;
 }
 
-void VirtualDead::markSuperclassMethods(const CXXMethodDecl* methodDecl, std::string returnValue)
+void VirtualDead::markSuperclassMethods(const CXXMethodDecl* methodDecl,
+                                        const std::string& returnValue,
+                                        std::string const& paramBitField)
 {
     if (methodDecl->size_overridden_methods() == 0)
     {
         std::string aNiceName = niceName(methodDecl);
         definitionSet.insert(
             { aNiceName, toString(methodDecl->getCanonicalDecl()->getLocation()), returnValue });
+        paramUsedSet.insert({ aNiceName, paramBitField });
         return;
     }
 
@@ -161,7 +184,7 @@ void VirtualDead::markSuperclassMethods(const CXXMethodDecl* methodDecl, std::st
          iter != methodDecl->end_overridden_methods(); ++iter)
     {
         const CXXMethodDecl* overriddenMethod = *iter;
-        markSuperclassMethods(overriddenMethod, returnValue);
+        markSuperclassMethods(overriddenMethod, returnValue, paramBitField);
     }
 }
 
