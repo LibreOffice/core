@@ -499,10 +499,10 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
         if (nY2>nY1) --nY2;
     }
 
-    if (nX1 > MAXCOL) nX1 = MAXCOL;
-    if (nX2 > MAXCOL) nX2 = MAXCOL;
-    if (nY1 > MAXROW) nY1 = MAXROW;
-    if (nY2 > MAXROW) nY2 = MAXROW;
+    if (nX1 > pDoc->MaxCol()) nX1 = pDoc->MaxCol();
+    if (nX2 > pDoc->MaxCol()) nX2 = pDoc->MaxCol();
+    if (nY1 > pDoc->MaxRow()) nY1 = pDoc->MaxRow();
+    if (nY2 > pDoc->MaxRow()) nY2 = pDoc->MaxRow();
 
     long nDevSizeX = aRect.Right()-aRect.Left()+1;
     long nDevSizeY = aRect.Bottom()-aRect.Top()+1;
@@ -695,8 +695,8 @@ bool ScPrintFunc::AdjustPrintArea( bool bNew )
     else
     {
         bool bFound = true;
-        bChangeCol = ( nStartCol == 0 && nEndCol == MAXCOL );
-        bChangeRow = ( nStartRow == 0 && nEndRow == MAXROW );
+        bChangeCol = ( nStartCol == 0 && nEndCol == pDoc->MaxCol() );
+        bChangeRow = ( nStartRow == 0 && nEndRow == pDoc->MaxRow() );
         bool bForcedChangeRow = false;
 
         // #i53558# Crop entire column of old row limit to real print area with
@@ -747,10 +747,10 @@ bool ScPrintFunc::AdjustPrintArea( bool bNew )
         //  changing nEndCol
     }
 
-    if ( nEndCol < MAXCOL && pDoc->HasAttrib(
+    if ( nEndCol < pDoc->MaxCol() && pDoc->HasAttrib(
                     nEndCol,nStartRow,nPrintTab, nEndCol,nEndRow,nPrintTab, HasAttrFlags::ShadowRight ) )
         ++nEndCol;
-    if ( nEndRow < MAXROW && pDoc->HasAttrib(
+    if ( nEndRow < pDoc->MaxRow() && pDoc->HasAttrib(
                     nStartCol,nEndRow,nPrintTab, nEndCol,nEndRow,nPrintTab, HasAttrFlags::ShadowDown ) )
         ++nEndRow;
 
@@ -2422,7 +2422,7 @@ bool ScPrintFunc::UpdatePages()
 
             //  set breaks
             ResetBreaks(nTab);
-            pDocShell->PostPaint(0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid);
+            pDocShell->PostPaint(0,0,nTab,pDoc->MaxCol(),pDoc->MaxRow(),nTab, PaintPartFlags::Grid);
         }
 
     return true;
@@ -3068,9 +3068,9 @@ void PrintPageRanges::calculate(ScDocument* pDoc,
     pDoc->SetPageSize(nPrintTab, rDocSize);
 
     // #i123672# use dynamic mem to react on size changes
-    if (m_aPageEndX.size() < MAXCOL+1)
+    if (m_aPageEndX.size() < static_cast<size_t>(pDoc->MaxCol()) + 1)
     {
-        m_aPageEndX.resize(MAXCOL+1, SCCOL());
+        m_aPageEndX.resize(pDoc->MaxCol()+1, SCCOL());
     }
 
     if (bPrintArea)

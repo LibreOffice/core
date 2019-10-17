@@ -805,12 +805,12 @@ void ScHeaderFunctionSet::CreateAnchor()
     if (bColumn)
     {
         pView->InitBlockMode( static_cast<SCCOL>(nCursorPos), 0, pViewData->GetTabNo(), true, true );
-        pView->MarkCursor( static_cast<SCCOL>(nCursorPos), MAXROW, pViewData->GetTabNo() );
+        pView->MarkCursor( static_cast<SCCOL>(nCursorPos), pViewData->MaxRow(), pViewData->GetTabNo() );
     }
     else
     {
         pView->InitBlockMode( 0, nCursorPos, pViewData->GetTabNo(), true, false, true );
-        pView->MarkCursor( MAXCOL, nCursorPos, pViewData->GetTabNo() );
+        pView->MarkCursor( pViewData->MaxCol(), nCursorPos, pViewData->GetTabNo() );
     }
     bAnchor = true;
 }
