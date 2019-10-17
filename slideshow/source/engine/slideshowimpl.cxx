@@ -1830,8 +1830,7 @@ void SlideShowImpl::addShapeEventListener(
     if( aIter->second.get() )
         aIter->second->addInterface( xListener );
 
-    maEventMultiplexer.notifyShapeListenerAdded(xListener,
-                                                xShape);
+    maEventMultiplexer.notifyShapeListenerAdded(xShape);
 }
 
 void SlideShowImpl::removeShapeEventListener(
@@ -1857,8 +1856,7 @@ void SlideShowImpl::removeShapeEventListener(
         aIter->second->removeInterface( xListener );
     }
 
-    maEventMultiplexer.notifyShapeListenerRemoved(xListener,
-                                                  xShape);
+    maEventMultiplexer.notifyShapeListenerRemoved(xShape);
 }
 
 void SlideShowImpl::setShapeCursor(

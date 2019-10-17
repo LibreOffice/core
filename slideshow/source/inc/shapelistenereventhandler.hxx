@@ -48,11 +48,9 @@ namespace slideshow
         public:
             virtual ~ShapeListenerEventHandler() {}
 
-            virtual bool listenerAdded( const css::uno::Reference<css::presentation::XShapeEventListener>& xListener,
-                                        const css::uno::Reference<css::drawing::XShape>&                   xShape ) = 0;
+            virtual bool listenerAdded( const css::uno::Reference<css::drawing::XShape>& xShape ) = 0;
 
-            virtual bool listenerRemoved( const css::uno::Reference<css::presentation::XShapeEventListener>& xListener,
-                                          const css::uno::Reference<css::drawing::XShape>&                   xShape ) = 0;
+            virtual bool listenerRemoved( const css::uno::Reference<css::drawing::XShape>& xShape ) = 0;
         };
 
         typedef ::std::shared_ptr< ShapeListenerEventHandler > ShapeListenerEventHandlerSharedPtr;

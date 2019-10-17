@@ -146,11 +146,9 @@ private:
     // ShapeListenerEventHandler
 
 
-    virtual bool listenerAdded( const css::uno::Reference< css::presentation::XShapeEventListener>& xListener,
-                                const css::uno::Reference< css::drawing::XShape>&                   xShape ) override;
+    virtual bool listenerAdded( const css::uno::Reference< css::drawing::XShape>& xShape ) override;
 
-    virtual bool listenerRemoved( const css::uno::Reference< css::presentation::XShapeEventListener>& xListener,
-                                  const css::uno::Reference< css::drawing::XShape>&                   xShape ) override;
+    virtual bool listenerRemoved( const css::uno::Reference< css::drawing::XShape>& xShape ) override;
 
     void cursorChanged( const css::uno::Reference< css::drawing::XShape>&   xShape,
                               sal_Int16                                     nCursor );

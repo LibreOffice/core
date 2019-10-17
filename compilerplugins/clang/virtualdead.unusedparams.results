@@ -295,12 +295,6 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:180
 slideshow/source/inc/animation.hxx:61
     void slideshow::internal::Animation::prefetch(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
     00
-slideshow/source/inc/shapelistenereventhandler.hxx:51
-    _Bool slideshow::internal::ShapeListenerEventHandler::listenerAdded(const class com::sun::star::uno::Reference<class com::sun::star::presentation::XShapeEventListener> &,const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,)
-    01
-slideshow/source/inc/shapelistenereventhandler.hxx:54
-    _Bool slideshow::internal::ShapeListenerEventHandler::listenerRemoved(const class com::sun::star::uno::Reference<class com::sun::star::presentation::XShapeEventListener> &,const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,)
-    01
 starmath/source/wordexportbase.hxx:37
     void SmWordExportBase::HandleText(const class SmNode *,int,)
     10

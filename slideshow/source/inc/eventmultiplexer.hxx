@@ -496,16 +496,14 @@ public:
         This method announces that the given listener was added for
         the specified shape.
      */
-    void notifyShapeListenerAdded( const css::uno::Reference<css::presentation::XShapeEventListener>& xListener,
-                                   const css::uno::Reference<css::drawing::XShape>&                   xShape );
+    void notifyShapeListenerAdded( const css::uno::Reference<css::drawing::XShape>& xShape );
 
     /** A shape event listener was removed
 
         This method announces that the given listener was removed for
         the specified shape.
      */
-    void notifyShapeListenerRemoved( const css::uno::Reference<css::presentation::XShapeEventListener>& xListener,
-                                     const css::uno::Reference<css::drawing::XShape>&                   xShape );
+    void notifyShapeListenerRemoved( const css::uno::Reference<css::drawing::XShape>& xShape );
 
     /** Notify a new user paint color
 
