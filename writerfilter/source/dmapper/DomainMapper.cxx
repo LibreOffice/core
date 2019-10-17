@@ -2988,7 +2988,7 @@ void DomainMapper::lcl_endShape( )
 
         lcl_endParagraphGroup();
         m_pImpl->PopShapeContext( );
-        // A shape is always inside a shape (anchored or inline).
+        // A shape is always inside a paragraph (anchored or inline).
         m_pImpl->SetIsOutsideAParagraph(false);
     }
 }
