@@ -32,7 +32,6 @@
 #include <vcl/txtattr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/builderfactory.hxx>
 #include <tools/datetime.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/localedatawrapper.hxx>
@@ -61,8 +60,6 @@ void ODocumentInfoPreview::dispose()
     m_pEditWin.disposeAndClear();
     Window::dispose();
 }
-
-VCL_BUILDER_FACTORY_ARGS(ODocumentInfoPreview, WB_BORDER | WB_READONLY)
 
 void ODocumentInfoPreview::Resize() {
     m_pEditWin->SetPosSizePixel(Point(0, 0), GetOutputSize());
