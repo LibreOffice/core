@@ -221,7 +221,7 @@ bool SvIdlDataBase::ReadIdFile( const OString& rOFileName )
             else if( rTok.Is( SvHash_include() ) )
             {
                 rTok = aTokStm.GetToken_Next();
-                OStringBuffer aNameBuf;
+                OStringBuffer aNameBuf(128);
                 if( rTok.IsString() )
                     aNameBuf.append(rTok.GetString());
                 else if( rTok.IsChar() && rTok.GetChar() == '<' )

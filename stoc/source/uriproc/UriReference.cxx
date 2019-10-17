@@ -51,7 +51,7 @@ UriReference::~UriReference() {}
 OUString UriReference::getUriReference()
 {
     osl::MutexGuard g(m_mutex);
-    OUStringBuffer buf;
+    OUStringBuffer buf(128);
     if (!m_scheme.isEmpty()) {
         buf.append(m_scheme);
         buf.append(':');

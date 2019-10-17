@@ -171,8 +171,8 @@ bool decodeFromUtf8(std::u16string_view text, OString * result) {
     assert(result != nullptr);
     auto p = text.data();
     auto const end = p + text.size();
-    OUStringBuffer ubuf;
-    OStringBuffer bbuf;
+    OUStringBuffer ubuf(static_cast<int>(text.size()));
+    OStringBuffer bbuf(PATH_MAX);
     while (p < end) {
         rtl::uri::detail::EscapeType t;
         sal_uInt32 c = rtl::uri::detail::readUcs4(&p, end, true, RTL_TEXTENCODING_UTF8, &t);
@@ -935,15 +935,16 @@ oslFileError osl::detail::convertUrlToPathname(OUString const & url, OString * p
 
 oslFileError osl::detail::convertPathnameToUrl(OString const & pathname, OUString * url) {
     assert(url != nullptr);
-    OUStringBuffer buf("file:");
+    OUStringBuffer buf(10+pathname.getLength());
+    buf.append("file:");
     if (pathname.startsWith("/")) {
         buf.append("//");
             // so if pathname should ever start with "//" that isn't mistaken for an authority
             // component
     }
     for (sal_Size convert = pathname.getLength();;) {
-        OUStringBuffer ubuf;
         auto n = std::max(convert, sal_Size(PATH_MAX)); // approximation of required converted size
+        OUStringBuffer ubuf(static_cast<int>(n));
         auto s = ubuf.appendUninitialized(n);
         sal_uInt32 info;
         sal_Size converted;

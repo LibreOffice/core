@@ -2719,28 +2719,27 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
     const NfKeywordTable & rKeyword = pFormatScanner->GetKeywords();
     i18n::NumberFormatCode aSingleFormatCode;
-    OUStringBuffer aBuf;
     aSingleFormatCode.Usage = i18n::KNumberFormatUsage::DATE_TIME;
 
     // YYYY-MM-DD HH:MM:SS   ISO (with blank instead of 'T')
-    aBuf.append( rKeyword[NF_KEY_YYYY]).append('-').
-        append( rKeyword[NF_KEY_MM]).append('-').
-        append( rKeyword[NF_KEY_DD]).append(' ').
-        append( rKeyword[NF_KEY_HH]).append(':').
-        append( rKeyword[NF_KEY_MMI]).append(':').
-        append( rKeyword[NF_KEY_SS]);
-    aSingleFormatCode.Code = aBuf.makeStringAndClear();
+    aSingleFormatCode.Code =
+        rKeyword[NF_KEY_YYYY] + "-" +
+        rKeyword[NF_KEY_MM] + "-" +
+        rKeyword[NF_KEY_DD] + " " +
+        rKeyword[NF_KEY_HH] + ":" +
+        rKeyword[NF_KEY_MMI] + ":" +
+        rKeyword[NF_KEY_SS];
     ImpInsertFormat( aSingleFormatCode,
                      CLOffset + ZF_STANDARD_DATETIME+2 /* NF_DATETIME_ISO_YYYYMMDD_HHMMSS */ );
 
     // YYYY-MM-DD"T"HH:MM:SS   ISO
-    aBuf.append( rKeyword[NF_KEY_YYYY]).append('-').
-        append( rKeyword[NF_KEY_MM]).append('-').
-        append( rKeyword[NF_KEY_DD]).append("\"T\"").
-        append( rKeyword[NF_KEY_HH]).append(':').
-        append( rKeyword[NF_KEY_MMI]).append(':').
-        append( rKeyword[NF_KEY_SS]);
-    aSingleFormatCode.Code = aBuf.makeStringAndClear();
+    aSingleFormatCode.Code =
+        rKeyword[NF_KEY_YYYY] + "-" +
+        rKeyword[NF_KEY_MM] + "-" +
+        rKeyword[NF_KEY_DD] + "\"T\"" +
+        rKeyword[NF_KEY_HH] + ":" +
+        rKeyword[NF_KEY_MMI] + ":" +
+        rKeyword[NF_KEY_SS];
     SvNumberformat* pFormat = ImpInsertFormat( aSingleFormatCode,
                      CLOffset + ZF_STANDARD_DATETIME+3 /* NF_DATETIME_ISO_YYYYMMDDTHHMMSS */ );
     assert(pFormat);

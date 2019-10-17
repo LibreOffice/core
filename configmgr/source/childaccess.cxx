@@ -104,7 +104,7 @@ std::vector<OUString> ChildAccess::getRelativePath() {
 }
 
 OUString ChildAccess::getRelativePathRepresentation() {
-    OUStringBuffer path;
+    OUStringBuffer path(128);
     rtl::Reference< Access > parent(getParentAccess());
     if (parent.is()) {
         path.append(parent->getRelativePathRepresentation());

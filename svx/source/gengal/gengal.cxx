@@ -200,7 +200,7 @@ static std::vector<OUString> ReadResponseFile_Impl(OUString const& rInput)
     }
 
     std::vector<OUString> ret;
-    OUStringBuffer b;
+    OUStringBuffer b(256);
     char buf[1<<16];
     while (true)
     {

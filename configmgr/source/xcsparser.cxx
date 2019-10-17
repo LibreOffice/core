@@ -321,7 +321,7 @@ void XcsParser::characters(xmlreader::Span const & text) {
 
 void XcsParser::handleComponentSchema(xmlreader::XmlReader & reader) {
     //TODO: oor:version, xml:lang attributes
-    OStringBuffer buf;
+    OStringBuffer buf(256);
     buf.append('.');
     bool hasPackage = false;
     bool hasName = false;

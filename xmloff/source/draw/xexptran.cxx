@@ -77,7 +77,7 @@ static double Imp_GetDoubleChar(const OUString& rStr, sal_Int32& rPos, const sal
     const SvXMLUnitConverter& rConv, double fRetval, bool bLookForUnits = false)
 {
     sal_Unicode aChar(rStr[rPos]);
-    OUStringBuffer sNumberString;
+    OUStringBuffer sNumberString(32);
 
     if('+' == aChar || '-' == aChar)
     {
