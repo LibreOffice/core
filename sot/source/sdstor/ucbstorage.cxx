@@ -1363,22 +1363,9 @@ sal_uLong UCBStorageStream::GetSize() const
 
 UCBStorage::UCBStorage( SvStream& rStrm, bool bDirect )
 {
-    OUString aURL = GetLinkedFile( rStrm );
-    if ( !aURL.isEmpty() )
-    {
-        StreamMode nMode = StreamMode::READ;
-        if( rStrm.IsWritable() )
-            nMode = StreamMode::READ | StreamMode::WRITE;
-
-        ::ucbhelper::Content aContent( aURL, Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        pImp = new UCBStorage_Impl( aContent, aURL, nMode, this, bDirect, true );
-    }
-    else
-    {
-        // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
-        // to class UCBStorage !
-        pImp = new UCBStorage_Impl( rStrm, this, bDirect );
-    }
+    // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
+    // to class UCBStorage !
+    pImp = new UCBStorage_Impl( rStrm, this, bDirect );
 
     pImp->AddFirstRef();
     pImp->Init();
@@ -2868,29 +2855,6 @@ bool UCBStorage::IsStorageFile( SvStream* pFile )
 
     pFile->Seek( nPos );
     return bRet;
-}
-
-OUString UCBStorage::GetLinkedFile( SvStream &rStream )
-{
-    OUString aString;
-    sal_uInt64 nPos = rStream.Tell();
-    if ( !rStream.TellEnd() )
-        return aString;
-
-    rStream.Seek(0);
-    sal_uInt32 nBytes;
-    rStream.ReadUInt32( nBytes );
-    if( nBytes == 0x04034b50 )
-    {
-        OString aTmp = read_uInt16_lenPrefixed_uInt8s_ToOString(rStream);
-        if (aTmp.match("ContentURL="))
-        {
-            aString = OStringToOUString(aTmp.copy(11), RTL_TEXTENCODING_UTF8);
-        }
-    }
-
-    rStream.Seek( nPos );
-    return aString;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

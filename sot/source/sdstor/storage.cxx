@@ -318,18 +318,9 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode )
 
             if ( bIsUCBStorage )
             {
-                if ( !(UCBStorage::GetLinkedFile( *m_pStorStm ).isEmpty()) )
-                {
-                    // detect special unpacked storages
-                    m_pOwnStg = new UCBStorage( *m_pStorStm, true );
-                    m_bDelStm = true;
-                }
-                else
-                {
-                    // UCBStorage always works directly on the UCB content, so discard the stream first
-                    DELETEZ( m_pStorStm );
-                    m_pOwnStg = new UCBStorage( m_aName, nMode, true, true/*bIsRoot*/ );
-                }
+                // UCBStorage always works directly on the UCB content, so discard the stream first
+                DELETEZ( m_pStorStm );
+                m_pOwnStg = new UCBStorage( m_aName, nMode, true, true/*bIsRoot*/ );
             }
             else
             {

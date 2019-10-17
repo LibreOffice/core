@@ -246,7 +246,6 @@ protected:
                                 virtual ~UCBStorage() override;
 public:
     static bool                 IsStorageFile( SvStream* );
-    static OUString             GetLinkedFile( SvStream& );
 
                                 UCBStorage( const ::ucbhelper::Content& rContent,
                                             const OUString& rName,
