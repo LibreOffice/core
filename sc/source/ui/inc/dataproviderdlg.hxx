@@ -12,46 +12,48 @@
 
 #include <sal/config.h>
 
-#include <vcl/dialog.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/listctrl.hxx>
-#include <vcl/menu.hxx>
-
+#include <com/sun/star/awt/XWindow.hpp>
+#include <vcl/idle.hxx>
+#include <vcl/weld.hxx>
 #include "datatableview.hxx"
-
 #include <memory>
 
 class ScDocument;
 class ScDataProviderBaseControl;
+class ScDataTransformationBaseControl;
 class ScDBData;
 
-class ScDataProviderDlg : public ModalDialog
+class ScDataProviderDlg : public weld::GenericDialogController
 {
 private:
+    std::shared_ptr<ScDocument> mxDoc;
+    std::unique_ptr<weld::Menu> mxStartMenu;
+    std::unique_ptr<weld::Menu> mxColumnMenu;
+    std::unique_ptr<weld::Container> mxBox;
+    css::uno::Reference<css::awt::XWindow> m_xTableParent;
+    VclPtr<ScDataTableView> mxTable;
+    std::unique_ptr<weld::ScrolledWindow> mxScroll;
+    std::unique_ptr<weld::Container> mxList;
+    std::unique_ptr<ScDataProviderBaseControl> mxDataProviderCtrl;
+    std::unique_ptr<weld::ComboBox> mxDBRanges;
 
-    std::shared_ptr<ScDocument> mpDoc;
-    VclPtr<ScDataTableView> mpTable;
-    VclPtr<ListControl> mpList;
-    VclPtr<MenuBar> mpBar;
-    VclPtr<ScDataProviderBaseControl> mpDataProviderCtrl;
-    VclPtr<ListBox> mpDBRanges;
-    sal_uInt32 mpIndex;
+    std::vector<std::unique_ptr<ScDataTransformationBaseControl>> maControls;
+
+    Idle maIdle;
+
+    sal_uInt32 mnIndex;
     ScDBData* pDBData;
 
     void InitMenu();
 
-    DECL_LINK( StartMenuHdl, Menu*, bool );
-    DECL_LINK( ColumnMenuHdl, Menu*, bool );
-    DECL_LINK( ImportHdl, Window*, void );
+    DECL_LINK( StartMenuHdl, const OString&, void );
+    DECL_LINK( ColumnMenuHdl, const OString&, void );
+    DECL_LINK( ImportHdl, ScDataProviderBaseControl*, void );
+    DECL_LINK( ScrollToEnd, Timer*, void );
 
 public:
-
-    ScDataProviderDlg(vcl::Window* pWindow, std::shared_ptr<ScDocument> pDoc, const ScDocument* pDocument);
-
+    ScDataProviderDlg(weld::Window* pWindow, std::shared_ptr<ScDocument> pDoc, const ScDocument* pDocument);
     virtual ~ScDataProviderDlg() override;
-    virtual void dispose() override;
-
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
 
     void applyAndQuit();
     void cancelAndQuit();

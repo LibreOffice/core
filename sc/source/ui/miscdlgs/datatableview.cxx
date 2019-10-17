@@ -26,7 +26,7 @@
 #include <fillinfo.hxx>
 #include <table.hxx>
 
-#include <vcl/builderfactory.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/seleng.hxx>
 #include <sal/log.hxx>
@@ -139,9 +139,10 @@ void ScDataTableRowView::HideEntries(SCCOLROW nPos, SCCOLROW nEndPos)
     }
 }
 
-ScDataTableView::ScDataTableView(vcl::Window* pParent):
-    Control(pParent),
+ScDataTableView::ScDataTableView(const css::uno::Reference<css::awt::XWindow> &rParent) :
+    Control(VCLUnoHelper::GetWindow(rParent)),
     mpSelectionEngine(new SelectionEngine(this)),
+    mpTopLeft(VclPtr<ScrollBarBox>::Create(this, WB_SIZEABLE)),
     mpColView(VclPtr<ScDataTableColView>::Create(this, mpSelectionEngine.get())),
     mpRowView(VclPtr<ScDataTableRowView>::Create(this, mpSelectionEngine.get())),
     mpVScroll(VclPtr<ScrollBar>::Create(this, WinBits(WB_VSCROLL | WB_DRAG))),
@@ -149,6 +150,7 @@ ScDataTableView::ScDataTableView(vcl::Window* pParent):
     mnFirstVisibleRow(0),
     mnFirstVisibleCol(0)
 {
+    mpTopLeft->setPosSizePixel(0, 0, nRowHeaderWidth, nColHeaderHeight);
     mpColView->setPosSizePixel(nRowHeaderWidth, 0, nRowHeaderWidth, nColHeaderHeight);
     mpRowView->setPosSizePixel(0, nColHeaderHeight, nRowHeaderWidth, nColHeaderHeight);
 
@@ -160,6 +162,7 @@ ScDataTableView::ScDataTableView(vcl::Window* pParent):
     mpHScroll->SetRangeMax(50);
     mpHScroll->SetEndScrollHdl(LINK(this, ScDataTableView, ScrollHdl));
 
+    mpTopLeft->Show();
     mpColView->Show();
     mpRowView->Show();
     mpVScroll->Show();
@@ -173,8 +176,6 @@ void ScDataTableView::Init(std::shared_ptr<ScDocument> pDoc)
     mpRowView->Init(mpDoc.get());
 }
 
-VCL_BUILDER_FACTORY(ScDataTableView)
-
 ScDataTableView::~ScDataTableView()
 {
     disposeOnce();
@@ -182,6 +183,7 @@ ScDataTableView::~ScDataTableView()
 
 void ScDataTableView::dispose()
 {
+    mpTopLeft.disposeAndClear();
     mpColView.disposeAndClear();
     mpRowView.disposeAndClear();
     mpVScroll.disposeAndClear();
@@ -263,6 +265,7 @@ void ScDataTableView::MouseButtonUp(const MouseEvent& rMEvt)
 void ScDataTableView::Resize()
 {
     Size aSize = GetSizePixel();
+    mpTopLeft->setPosSizePixel(0, 0, nRowHeaderWidth, nColHeaderHeight);
     mpColView->setPosSizePixel(nRowHeaderWidth, 0, aSize.Width() - nScrollBarSize, nColHeaderHeight);
     mpRowView->setPosSizePixel(0, nColHeaderHeight, nRowHeaderWidth, aSize.Height());
 
@@ -292,7 +295,7 @@ void ScDataTableView::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
 
 Size ScDataTableView::GetOptimalSize() const
 {
-    return Size(600, 200);
+    return Size(600, 400);
 }
 
 void ScDataTableView::getColRange(SCCOL& rStartCol, SCCOL& rEndCol) const

@@ -20,8 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DATATABLEVIEW_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DATATABLEVIEW_HXX
 
+#include <com/sun/star/awt/XWindow.hpp>
 #include <vcl/ctrl.hxx>
-
+#include <vcl/scrbar.hxx>
 #include <scdllapi.h>
 #include <types.hxx>
 #include "hdrcont.hxx"
@@ -81,6 +82,7 @@ class SC_DLLPUBLIC ScDataTableView : public Control
 {
     std::shared_ptr<ScDocument> mpDoc;
     std::unique_ptr<SelectionEngine> mpSelectionEngine;
+    VclPtr<ScrollBarBox> mpTopLeft;
     VclPtr<ScDataTableColView> mpColView;
     VclPtr<ScDataTableRowView> mpRowView;
     VclPtr<ScrollBar> mpVScroll;
@@ -93,12 +95,8 @@ class SC_DLLPUBLIC ScDataTableView : public Control
 
     DECL_LINK( ScrollHdl, ScrollBar*, void );
 
-protected:
-
-    virtual Size GetOptimalSize() const override;
-
 public:
-    ScDataTableView(vcl::Window* pParent);
+    ScDataTableView(const css::uno::Reference<css::awt::XWindow> &rParent);
 
     void Init(std::shared_ptr<ScDocument> pDoc);
 
@@ -110,6 +108,7 @@ public:
     virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual void Resize() override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual Size GetOptimalSize() const override;
 
     void getColRange(SCCOL& rStartCol, SCCOL& rEndCol) const;
     void getRowRange(SCROW& rStartRow, SCROW& rEndRow) const;
