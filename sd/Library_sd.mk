@@ -110,7 +110,8 @@ $(eval $(call gb_Library_use_externals,sd,\
 ))
 
 ifneq ($(DBUS_HAVE_GLIB),)
-$(eval $(call gb_Library_add_defs,sd,\
+$(eval $(call gb_Library_set_include,sd,\
+	$$(INCLUDE) \
 	$(DBUS_GLIB_CFLAGS) \
 ))
 $(eval $(call gb_Library_add_libs,sd,\
