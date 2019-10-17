@@ -31,7 +31,7 @@ ScTextImportOptionsDlg::ScTextImportOptionsDlg(weld::Window* pParent)
     , m_xRbAutomatic(m_xBuilder->weld_radio_button("automatic"))
     , m_xRbCustom(m_xBuilder->weld_radio_button("custom"))
     , m_xBtnConvertDate(m_xBuilder->weld_check_button("convertdata"))
-    , m_xLbCustomLang(new LanguageBox(m_xBuilder->weld_combo_box("lang")))
+    , m_xLbCustomLang(new SvxLanguageBox(m_xBuilder->weld_combo_box("lang")))
 {
     init();
 }

@@ -124,7 +124,7 @@ private:
     std::unique_ptr<weld::Entry> mxTBDateTimeFixed;
     std::unique_ptr<weld::ComboBox> mxCBDateTimeFormat;
     std::unique_ptr<weld::Label> mxFTDateTimeLanguage;
-    std::unique_ptr<LanguageBox> mxCBDateTimeLanguage;
+    std::unique_ptr<SvxLanguageBox> mxCBDateTimeLanguage;
     std::unique_ptr<weld::CheckButton> mxCBFooter;
     std::unique_ptr<weld::Widget> mxFooterBox;
     std::unique_ptr<weld::Entry> mxTBFooter;
@@ -357,7 +357,7 @@ HeaderFooterTabPage::HeaderFooterTabPage(weld::Container* pParent, SdDrawDocumen
     , mxTBDateTimeFixed(mxBuilder->weld_entry("datetime_value"))
     , mxCBDateTimeFormat(mxBuilder->weld_combo_box("datetime_format_list"))
     , mxFTDateTimeLanguage(mxBuilder->weld_label("language_label"))
-    , mxCBDateTimeLanguage(new LanguageBox(mxBuilder->weld_combo_box("language_list")))
+    , mxCBDateTimeLanguage(new SvxLanguageBox(mxBuilder->weld_combo_box("language_list")))
     , mxCBFooter(mxBuilder->weld_check_button("footer_cb"))
     , mxFooterBox(mxBuilder->weld_widget("footer_box" ))
     , mxTBFooter(mxBuilder->weld_entry("footer_text"))

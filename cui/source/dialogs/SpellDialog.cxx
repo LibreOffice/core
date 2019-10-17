@@ -165,7 +165,7 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     , m_xResumeFT(m_xBuilder->weld_label("resumeft"))
     , m_xNoSuggestionsFT(m_xBuilder->weld_label("nosuggestionsft"))
     , m_xLanguageFT(m_xBuilder->weld_label("languageft"))
-    , m_xLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box("languagelb")))
+    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("languagelb")))
     , m_xExplainFT(m_xBuilder->weld_label("explain"))
     , m_xExplainLink(m_xBuilder->weld_link_button("explainlink"))
     , m_xNotInDictFT(m_xBuilder->weld_label("notindictft"))

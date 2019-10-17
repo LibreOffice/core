@@ -37,7 +37,7 @@ class SwAsciiFilterDlg : public SfxDialogController
     std::unique_ptr<weld::Label> m_xFontFT;
     std::unique_ptr<weld::ComboBox> m_xFontLB;
     std::unique_ptr<weld::Label> m_xLanguageFT;
-    std::unique_ptr<LanguageBox>     m_xLanguageLB;
+    std::unique_ptr<SvxLanguageBox>     m_xLanguageLB;
     std::unique_ptr<weld::RadioButton> m_xCRLF_RB;
     std::unique_ptr<weld::RadioButton> m_xCR_RB;
     std::unique_ptr<weld::RadioButton> m_xLF_RB;

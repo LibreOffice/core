@@ -23,7 +23,7 @@
 #include <vcl/weld.hxx>
 #include <i18nlangtag/lang.h>
 
-class LanguageBox;
+class SvxLanguageBox;
 
 class ScTextImportOptionsDlg : public weld::GenericDialogController
 {
@@ -42,7 +42,7 @@ private:
     std::unique_ptr<weld::RadioButton> m_xRbAutomatic;
     std::unique_ptr<weld::RadioButton> m_xRbCustom;
     std::unique_ptr<weld::CheckButton> m_xBtnConvertDate;
-    std::unique_ptr<LanguageBox> m_xLbCustomLang;
+    std::unique_ptr<SvxLanguageBox> m_xLbCustomLang;
 
     DECL_LINK(OKHdl, weld::Button&, void);
     DECL_LINK(RadioHdl, weld::ToggleButton&, void);

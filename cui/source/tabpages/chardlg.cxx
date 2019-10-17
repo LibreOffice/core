@@ -223,7 +223,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     , m_xEastFontSizeFT(m_xBuilder->weld_label("eastsizeft"))
     , m_xEastFontSizeLB(new SvtFontSizeBox(m_xBuilder->weld_combo_box("eastsizelb")))
     , m_xEastFontLanguageFT(m_xBuilder->weld_label("eastlangft"))
-    , m_xEastFontLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box("eastlanglb")))
+    , m_xEastFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("eastlanglb")))
     , m_xEastFontTypeFT(m_xBuilder->weld_label("eastfontinfo"))
     , m_xEastFontFeaturesButton(m_xBuilder->weld_button("east_features_button"))
     , m_xCTLFrame(m_xBuilder->weld_widget("ctl"))
@@ -234,7 +234,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     , m_xCTLFontSizeFT(m_xBuilder->weld_label("ctlsizeft"))
     , m_xCTLFontSizeLB(new SvtFontSizeBox(m_xBuilder->weld_combo_box("ctlsizelb")))
     , m_xCTLFontLanguageFT(m_xBuilder->weld_label("ctllangft"))
-    , m_xCTLFontLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box("ctllanglb")))
+    , m_xCTLFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("ctllanglb")))
     , m_xCTLFontTypeFT(m_xBuilder->weld_label("ctlfontinfo"))
     , m_xCTLFontFeaturesButton(m_xBuilder->weld_button("ctl_features_button"))
 {
@@ -261,7 +261,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
         m_xWestFontSizeLB.reset(new SvtFontSizeBox(m_xBuilder->weld_combo_box("westsizelb-cjk")));
 
         m_xWestFontLanguageFT = m_xBuilder->weld_label("westlangft-cjk");
-        m_xWestFontLanguageLB.reset(new LanguageBox(m_xBuilder->weld_combo_box("westlanglb-cjk")));
+        m_xWestFontLanguageLB.reset(new SvxLanguageBox(m_xBuilder->weld_combo_box("westlanglb-cjk")));
         m_xWestFontTypeFT = m_xBuilder->weld_label("westfontinfo-cjk");
 
         m_xWestFontFeaturesButton = m_xBuilder->weld_button("west_features_button-cjk");
@@ -274,7 +274,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
         m_xWestFontSizeFT = m_xBuilder->weld_label("westsizeft-nocjk");
 
         m_xWestFontLanguageFT = m_xBuilder->weld_label("westlangft-nocjk");
-        m_xWestFontLanguageLB.reset(new LanguageBox(m_xBuilder->weld_combo_box("westlanglb-nocjk")));
+        m_xWestFontLanguageLB.reset(new SvxLanguageBox(m_xBuilder->weld_combo_box("westlanglb-nocjk")));
         m_xWestFontTypeFT = m_xBuilder->weld_label("westfontinfo-nocjk");
 
         m_xWestFontFeaturesButton = m_xBuilder->weld_button("west_features_button-nocjk");
@@ -405,7 +405,7 @@ namespace
                     const weld::ComboBox* _pFontNameLB,
                     const SvtFontStyleBox* _pFontStyleLB,
                     const SvtFontSizeBox* _pFontSizeLB,
-                    const LanguageBox* _pLanguageLB,
+                    const SvxLanguageBox* _pLanguageLB,
                     const FontList* _pFontList,
                     sal_uInt16 _nFontWhich,
                     sal_uInt16 _nFontHeightWhich)
@@ -609,7 +609,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     weld::Label* pSizeLabel = nullptr;
     SvtFontSizeBox* pSizeBox = nullptr;
     weld::Label* pLangFT = nullptr;
-    LanguageBox* pLangBox = nullptr;
+    SvxLanguageBox* pLangBox = nullptr;
     sal_uInt16 nWhich = 0;
 
     switch ( eLangGrp )
@@ -837,7 +837,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     weld::ComboBox* pNameBox = nullptr;
     SvtFontStyleBox* pStyleBox = nullptr;
     SvtFontSizeBox* pSizeBox = nullptr;
-    LanguageBox* pLangBox = nullptr;
+    SvxLanguageBox* pLangBox = nullptr;
     sal_uInt16 nWhich = 0;
     sal_uInt16 nSlot = 0;
 
@@ -1078,17 +1078,17 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     {
         switch (pLangBox->GetEditedAndValid())
         {
-            case LanguageBox::EditedAndValid::No:
+            case SvxLanguageBox::EditedAndValid::No:
                 ;   // nothing to do
                 break;
-            case LanguageBox::EditedAndValid::Valid:
+            case SvxLanguageBox::EditedAndValid::Valid:
                 {
                     const int nPos = pLangBox->SaveEditedAsEntry();
                     if (nPos != -1)
                         pLangBox->set_active(nPos);
                 }
                 break;
-            case LanguageBox::EditedAndValid::Invalid:
+            case SvxLanguageBox::EditedAndValid::Invalid:
                 pLangBox->set_active_id(pLangBox->get_saved_active_id());
                 break;
         }

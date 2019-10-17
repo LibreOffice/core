@@ -184,7 +184,7 @@ class SwTOXSelectTabPage : public SfxTabPage
 
     //all
     std::unique_ptr<weld::Widget> m_xSortFrame;
-    std::unique_ptr<LanguageBox> m_xLanguageLB;
+    std::unique_ptr<SvxLanguageBox> m_xLanguageLB;
     std::unique_ptr<weld::ComboBox> m_xSortAlgorithmLB;
 
     DECL_LINK(TOXTypeHdl,   weld::ComboBox&, void );

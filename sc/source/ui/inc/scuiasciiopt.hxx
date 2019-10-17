@@ -57,7 +57,7 @@ class ScImportAsciiDlg : public weld::GenericDialogController
     std::unique_ptr<weld::Label> mxFtCharSet;
     std::unique_ptr<SvxTextEncodingBox> mxLbCharSet;
     std::unique_ptr<weld::Label> mxFtCustomLang;
-    std::unique_ptr<LanguageBox> mxLbCustomLang;
+    std::unique_ptr<SvxLanguageBox> mxLbCustomLang;
 
     std::unique_ptr<weld::Label> mxFtRow;
     std::unique_ptr<weld::SpinButton> mxNfRow;

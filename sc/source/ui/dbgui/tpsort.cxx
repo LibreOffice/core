@@ -491,7 +491,7 @@ ScTabPageSortOptions::ScTabPageSortOptions(weld::Container* pPage, weld::DialogC
     , m_xEdOutPos(m_xBuilder->weld_entry("outareaed"))
     , m_xBtnSortUser(m_xBuilder->weld_check_button("sortuser"))
     , m_xLbSortUser(m_xBuilder->weld_combo_box("sortuserlb"))
-    , m_xLbLanguage(new LanguageBox(m_xBuilder->weld_combo_box("language")))
+    , m_xLbLanguage(new SvxLanguageBox(m_xBuilder->weld_combo_box("language")))
     , m_xFtAlgorithm(m_xBuilder->weld_label("algorithmft"))
     , m_xLbAlgorithm(m_xBuilder->weld_combo_box("algorithmlb"))
     , m_xBtnTopDown(m_xBuilder->weld_radio_button("topdown"))
