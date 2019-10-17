@@ -173,8 +173,6 @@ void ScDataTableView::Init(std::shared_ptr<ScDocument> pDoc)
     mpRowView->Init(mpDoc.get());
 }
 
-VCL_BUILDER_FACTORY(ScDataTableView)
-
 ScDataTableView::~ScDataTableView()
 {
     disposeOnce();

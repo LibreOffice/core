@@ -12,29 +12,28 @@
 
 #include <sal/config.h>
 
-#include <vcl/dialog.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/listctrl.hxx>
-#include <vcl/menu.hxx>
-
+#include <vcl/weld.hxx>
 #include "datatableview.hxx"
-
 #include <memory>
 
 class ScDocument;
 class ScDataProviderBaseControl;
+class ScDataTransformationBaseControl;
 class ScDBData;
 
-class ScDataProviderDlg : public ModalDialog
+class ScDataProviderDlg : public weld::GenericDialogController
 {
 private:
+    std::shared_ptr<ScDocument> mxDoc;
+    std::unique_ptr<weld::Menu> mxStartMenu;
+    std::unique_ptr<weld::Menu> mxColumnMenu;
+    std::unique_ptr<ScDataTableView> mxTable;
+    std::unique_ptr<weld::Container> mxList;
+    std::unique_ptr<ScDataProviderBaseControl> mxDataProviderCtrl;
+    std::unique_ptr<weld::ComboBox> mxDBRanges;
 
-    std::shared_ptr<ScDocument> mpDoc;
-    VclPtr<ScDataTableView> mpTable;
-    VclPtr<ListControl> mpList;
-    VclPtr<MenuBar> mpBar;
-    VclPtr<ScDataProviderBaseControl> mpDataProviderCtrl;
-    VclPtr<ListBox> mpDBRanges;
+    std::vector<std::unique_ptr<ScDataTransformationBaseControl>> maControls;
+
     sal_uInt32 mpIndex;
     ScDBData* pDBData;
 
@@ -42,16 +41,11 @@ private:
 
     DECL_LINK( StartMenuHdl, Menu*, bool );
     DECL_LINK( ColumnMenuHdl, Menu*, bool );
-    DECL_LINK( ImportHdl, Window*, void );
+    DECL_LINK( ImportHdl, ScDataProviderBaseControl*, void );
 
 public:
-
-    ScDataProviderDlg(vcl::Window* pWindow, std::shared_ptr<ScDocument> pDoc, const ScDocument* pDocument);
-
+    ScDataProviderDlg(weld::Window* pWindow, std::shared_ptr<ScDocument> pDoc, const ScDocument* pDocument);
     virtual ~ScDataProviderDlg() override;
-    virtual void dispose() override;
-
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
 
     void applyAndQuit();
     void cancelAndQuit();
