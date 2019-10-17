@@ -209,7 +209,7 @@ public:
         model according to the content of the outline view.  This in turn
         updates the previews in the slide sorter.
     */
-    virtual void UpdatePreview (SdPage* pPage, bool bInit = false);
+    virtual void UpdatePreview (SdPage* pPage);
 
     void    DrawMarkRect(const ::tools::Rectangle& rRect) const;
 

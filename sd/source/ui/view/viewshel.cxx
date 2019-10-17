@@ -327,7 +327,7 @@ void ViewShell::Activate(bool bIsMDIActivate)
             GetCurrentFunction()->Activate();
 
         if(!GetDocSh()->IsUIActive())
-            UpdatePreview( GetActualPage(), true );
+            UpdatePreview( GetActualPage() );
     }
 
     ReadFrameViewData( mpFrameView );
@@ -1060,7 +1060,7 @@ bool ViewShell::PrepareClose (bool bUI)
     return bResult;
 }
 
-void ViewShell::UpdatePreview (SdPage*, bool )
+void ViewShell::UpdatePreview (SdPage*)
 {
     // Do nothing.  After the actual preview has been removed,
     // OutlineViewShell::UpdatePreview() is the place where something

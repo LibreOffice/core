@@ -605,12 +605,12 @@ void OutlineToImpressFinalizer::operator() (bool)
             // following UpdatePreview() call accesses the
             // correct paragraphs.
             pView->SetActualPage(pPage);
-            pOutlineShell->UpdatePreview(pPage, true);
+            pOutlineShell->UpdatePreview(pPage);
         }
         // Select the first slide.
         SdPage* pPage = mrDocument.GetSdPage(0, PageKind::Standard);
         pView->SetActualPage(pPage);
-        pOutlineShell->UpdatePreview(pPage, true);
+        pOutlineShell->UpdatePreview(pPage);
     }
 
     // Undo-Stack needs to be cleared, else the user may remove the

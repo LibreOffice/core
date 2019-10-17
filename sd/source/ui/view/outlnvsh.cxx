@@ -1545,7 +1545,7 @@ SdPage* OutlineViewShell::GetActualPage()
     return pOlView->GetActualPage();
 }
 
-void OutlineViewShell::UpdatePreview( SdPage* pPage, bool )
+void OutlineViewShell::UpdatePreview( SdPage* pPage )
 {
     const bool bNewPage = pPage != pLastPage;
     pLastPage = pPage;
