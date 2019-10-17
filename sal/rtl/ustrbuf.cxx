@@ -105,6 +105,7 @@ void SAL_CALL rtl_uStringbuffer_ensureCapacity
     assert(minimumCapacity >= 0);
     if (minimumCapacity > *capacity)
     {
+        assert(*capacity >= 512 && "buffer too small");
         rtl_uString * pTmp = *This;
         rtl_uString * pNew = nullptr;
         auto nLength = (*This)->length;

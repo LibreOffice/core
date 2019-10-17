@@ -580,7 +580,8 @@ bool StringRangeEnumerator::setRange( const OUString& i_rNewRange )
             aNumberBuf.append( *pInput++ );
         if( !aNumberBuf.isEmpty() )
         {
-            sal_Int32 nNumber = aNumberBuf.makeStringAndClear().toInt32() + mnOffset;
+            sal_Int32 nNumber = rtl_ustr_toInt32(aNumberBuf.getStr(), 10) + mnOffset;
+            aNumberBuf.setLength(0);
             aNumbers.push_back( nNumber );
             bSequence = false;
         }

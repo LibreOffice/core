@@ -261,7 +261,7 @@ void OleHelper::exportGuid( BinaryOutputStream& rOStr, const SvGlobalName& rId )
 
 OUString OleHelper::importGuid( BinaryInputStream& rInStrm )
 {
-    OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer(40);
     aBuffer.append( '{' );
     lclAppendHex( aBuffer, rInStrm.readuInt32() );
     aBuffer.append( '-' );

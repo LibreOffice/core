@@ -398,7 +398,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
 
 OString exceptionToString(const css::uno::Any & caught)
 {
-    OStringBuffer sMessage;
+    OStringBuffer sMessage(512);
     exceptionToStringImpl(sMessage, caught);
     return sMessage.makeStringAndClear();
 }

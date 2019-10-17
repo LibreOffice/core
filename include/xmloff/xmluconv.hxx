@@ -119,6 +119,9 @@ public:
     void convertMeasureToXML( OUStringBuffer& rBuffer,
                          sal_Int32 nMeasure ) const;
 
+    /** convert measure to string: from meCoreMeasureUnit to meXMLMeasureUnit */
+    OUString convertMeasureToXML( sal_Int32 nMeasure ) const;
+
     /** convert string to enum using given enum map, if the enum is
         not found in the map, this method will return false */
     template<typename EnumT>

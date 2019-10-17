@@ -259,7 +259,7 @@ void typeConvert(const css::util::DateTime& _rDateTime, DateTime& _rOut)
 
 OUString toISO8601(const css::util::DateTime& rDateTime)
 {
-    OUStringBuffer rBuffer;
+    OUStringBuffer rBuffer(32);
     rBuffer.append(static_cast<sal_Int32>(rDateTime.Year));
     rBuffer.append('-');
     if( rDateTime.Month < 10 )

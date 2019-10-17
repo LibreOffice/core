@@ -610,17 +610,20 @@ void ScXMLTableRowCellContext::PushParagraphEnd()
             mpEditEngine->SetText(*maFirstParagraph);
             maFirstParagraph.reset();
         }
-        mpEditEngine->InsertParagraph(mpEditEngine->GetParagraphCount(), maParagraph.makeStringAndClear());
+        mpEditEngine->InsertParagraph(mpEditEngine->GetParagraphCount(), maParagraph.toString());
+        maParagraph.setLength(0);
     }
     else if (mbHasFormatRuns)
     {
         mpEditEngine->Clear();
-        mpEditEngine->SetText(maParagraph.makeStringAndClear());
+        mpEditEngine->SetText(maParagraph.toString());
+        maParagraph.setLength(0);
         mbEditEngineHasText = true;
     }
     else if (mnCurParagraph == 0)
     {
-        maFirstParagraph = maParagraph.makeStringAndClear();
+        maFirstParagraph = maParagraph.toString();
+        maParagraph.setLength(0);
         mbEditEngineHasText = true;
     }
 

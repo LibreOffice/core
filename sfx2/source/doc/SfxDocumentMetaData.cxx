@@ -509,7 +509,7 @@ dateTimeToText(css::util::DateTime const& i_rdt,
                sal_Int16 const*const pTimeZone = nullptr) throw ()
 {
     if (isValidDateTime(i_rdt)) {
-        OUStringBuffer buf;
+        OUStringBuffer buf(32);
         ::sax::Converter::convertDateTime(buf, i_rdt, pTimeZone, true);
         return buf.makeStringAndClear();
     } else {

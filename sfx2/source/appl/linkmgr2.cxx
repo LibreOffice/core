@@ -452,7 +452,7 @@ void LinkManager::InsertFileLink(
     if (!(OBJECT_CLIENT_SO & rLink.GetObjType()))
         return;
 
-    OUStringBuffer aBuf;
+    OUStringBuffer aBuf(64);
     aBuf.append(rFileNm);
     aBuf.append(sfx2::cTokenSeparator);
 

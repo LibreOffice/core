@@ -1647,7 +1647,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
     sal_Unicode cLetter = ' '; // Preliminary result
     sal_Int32 nLen = rString.getLength();
     ScanState eState = SsStart;
-    OUStringBuffer sBuffSymbol(64);
+    OUStringBuffer sBuffSymbol(128);
 
     const NfKeywordTable & rKeywords = rScan.GetKeywords();
     while (nPos < nLen && eState != SsStop)

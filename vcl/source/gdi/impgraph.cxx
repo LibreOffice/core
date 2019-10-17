@@ -167,9 +167,10 @@ OString GraphicID::getIDString() const
 {
     static const char aHexData[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
-    OStringBuffer aHexStr;
     sal_Int32 nShift, nIndex = 0;
-    aHexStr.setLength(24 + (2 * BITMAP_CHECKSUM_SIZE));
+    sal_Int32 nLen = 24 + (2 * BITMAP_CHECKSUM_SIZE);
+    OStringBuffer aHexStr(nLen);
+    aHexStr.setLength(nLen);
 
     for( nShift = 28; nShift >= 0; nShift -= 4 )
         aHexStr[nIndex++] = aHexData[ ( mnID1 >> static_cast<sal_uInt32>(nShift) ) & 0xf ];

@@ -1664,8 +1664,10 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         aFormatCode.append("\"\"");    // ""
     }
 
-    aFormatCode.insert( 0, aConditions.makeStringAndClear() );
-    OUString sFormat = aFormatCode.makeStringAndClear();
+    aFormatCode.insert( 0, aConditions.getStr(), aConditions.getLength() );
+    aConditions.setLength(0);
+    OUString sFormat = aFormatCode.toString();
+    aFormatCode.setLength(0);
 
     //  test special cases
 
@@ -2007,11 +2009,10 @@ void SvXMLNumFormatContext::AddCurrency( const OUString& rContent, LanguageType 
             if ( nFirst >= 0 )
             {
                 //  remove both quotes from aFormatCode
-                OUString aOld = aFormatCode.makeStringAndClear();
                 if ( nFirst > 0 )
-                    aFormatCode.append( aOld.copy( 0, nFirst ) );
+                    aFormatCode.remove( 0, nFirst );
                 if ( nLength > nFirst + 2 )
-                    aFormatCode.append( aOld.copy( nFirst + 1, nLength - nFirst - 2 ) );
+                    aFormatCode.remove( aFormatCode.getLength() - 1, 1 );
             }
         }
     }

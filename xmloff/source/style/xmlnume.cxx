@@ -344,31 +344,26 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, eElem,
                                   true, true );
 
-        OUStringBuffer sBuffer;
         if ( ePosAndSpaceMode == PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION )
         {
             nSpaceBefore += nMinLabelWidth;
             nMinLabelWidth = -nMinLabelWidth;
             if( nSpaceBefore != 0 )
             {
-                GetExport().GetMM100UnitConverter().convertMeasureToXML(
-                        sBuffer, nSpaceBefore );
-                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_SPACE_BEFORE,
-                              sBuffer.makeStringAndClear() );
+                OUString sAttr = GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                        nSpaceBefore );
+                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_SPACE_BEFORE, sAttr );
             }
             if( nMinLabelWidth != 0 )
             {
-                GetExport().GetMM100UnitConverter().convertMeasureToXML(
-                        sBuffer, nMinLabelWidth );
-                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_MIN_LABEL_WIDTH,
-                              sBuffer.makeStringAndClear() );
+                OUString s = GetExport().GetMM100UnitConverter().convertMeasureToXML( nMinLabelWidth );
+                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_MIN_LABEL_WIDTH, s);
             }
             if( nMinLabelDist > 0 )
             {
-                GetExport().GetMM100UnitConverter().convertMeasureToXML(
-                        sBuffer, nMinLabelDist );
-                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_MIN_LABEL_DISTANCE,
-                              sBuffer.makeStringAndClear() );
+                OUString sAttr = GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                        nMinLabelDist );
+                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_MIN_LABEL_DISTANCE, sAttr);
             }
         }
         /* Check, if properties for position-and-space-mode LABEL_ALIGNMENT
@@ -443,18 +438,16 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 
             if( nImageWidth > 0 )
             {
-                GetExport().GetMM100UnitConverter().convertMeasureToXML(
-                        sBuffer, nImageWidth );
-                GetExport().AddAttribute( XML_NAMESPACE_FO, XML_WIDTH,
-                              sBuffer.makeStringAndClear() );
+                OUString sAttr = GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                        nImageWidth );
+                GetExport().AddAttribute( XML_NAMESPACE_FO, XML_WIDTH, sAttr );
             }
 
             if( nImageHeight > 0 )
             {
-                GetExport().GetMM100UnitConverter().convertMeasureToXML(
-                        sBuffer, nImageHeight );
-                GetExport().AddAttribute( XML_NAMESPACE_FO, XML_HEIGHT,
-                              sBuffer.makeStringAndClear() );
+                OUString sAttr = GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                        nImageHeight );
+                GetExport().AddAttribute( XML_NAMESPACE_FO, XML_HEIGHT, sAttr );
             }
         }
 
@@ -490,29 +483,29 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
                 if ( eLabelFollowedBy == LabelFollow::LISTTAB &&
                      nListtabStopPosition > 0 )
                 {
-                    GetExport().GetMM100UnitConverter().convertMeasureToXML(
-                            sBuffer, nListtabStopPosition );
+                    OUString sAttr = GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                            nListtabStopPosition );
                     GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                               XML_LIST_TAB_STOP_POSITION,
-                                              sBuffer.makeStringAndClear() );
+                                              sAttr );
                 }
 
                 if ( nFirstLineIndent != 0 )
                 {
-                    GetExport().GetMM100UnitConverter().convertMeasureToXML(
-                            sBuffer, nFirstLineIndent );
+                    OUString sAttr = GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                            nFirstLineIndent );
                     GetExport().AddAttribute( XML_NAMESPACE_FO,
                                               XML_TEXT_INDENT,
-                                              sBuffer.makeStringAndClear() );
+                                              sAttr );
                 }
 
                 if ( nIndentAt != 0 )
                 {
-                    GetExport().GetMM100UnitConverter().convertMeasureToXML(
-                            sBuffer, nIndentAt );
+                    OUString sAttr = GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                            nIndentAt );
                     GetExport().AddAttribute( XML_NAMESPACE_FO,
                                               XML_MARGIN_LEFT,
-                                              sBuffer.makeStringAndClear() );
+                                              sAttr );
                 }
 
                 SvXMLElementExport aLabelAlignmentElement( GetExport(), XML_NAMESPACE_STYLE,
@@ -582,6 +575,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
                 }
                 else
                 {
+                    OUStringBuffer sBuffer;
                     ::sax::Converter::convertColor( sBuffer, nColor );
                     GetExport().AddAttribute( XML_NAMESPACE_FO, XML_COLOR,
                                   sBuffer.makeStringAndClear() );

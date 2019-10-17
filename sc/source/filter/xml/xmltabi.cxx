@@ -82,7 +82,7 @@ static bool lcl_isExternalRefCache(const OUString& rName, OUString& rUrl, OUStri
     OUString aPrefix = INetURLObject::GetScheme( eProt );
     sal_Int32 nPrefLen = aPrefix.getLength();
 
-    OUStringBuffer aUrlBuf, aTabNameBuf;
+    OUStringBuffer aUrlBuf(128), aTabNameBuf;
     aUrlBuf.append( aPrefix );
     sal_Int32 n = rName.getLength();
     const sal_Unicode* p = rName.getStr();
@@ -100,8 +100,8 @@ static bool lcl_isExternalRefCache(const OUString& rName, OUString& rUrl, OUStri
                 if (cPrev != '\'')
                     return false;
 
-                rUrl = aUrlBuf.makeStringAndClear();
-                rUrl = rUrl.copy(0, rUrl.getLength()-1); // remove the trailing single-quote.
+                rUrl = OUString(aUrlBuf.getStr(), aUrlBuf.getLength() - 1); // remove the trailing single-quote.
+                aUrlBuf.setLength(0);
                 bInUrl = false;
             }
             else
