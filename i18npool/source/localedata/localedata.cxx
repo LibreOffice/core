@@ -538,8 +538,6 @@ oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
                 (bFallback && aFallback.equalsAscii(i.pLocale)))
         {
 #ifndef DISABLE_DYNLOADING
-            OUStringBuffer aBuf(sal::static_int_cast<int>(
-                        strlen(i.pLocale) + 1 + strlen(pFunction)));
             {
                 ::osl::MutexGuard aGuard( maMutex );
                 for (LocaleDataLookupTableItem & rCurrent : maLookupTable)
@@ -552,8 +550,8 @@ oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
                             (*pOutCachedItem).reset(new LocaleDataLookupTableItem( rCurrent ));
                             (*pOutCachedItem)->localeName = i.pLocale;
                             return (*pOutCachedItem)->module->getFunctionSymbol(
-                                    aBuf.appendAscii( pFunction).append( cUnder).
-                                    appendAscii( (*pOutCachedItem)->localeName).makeStringAndClear());
+                                    OString(rtl::OStringView(pFunction) + "_" +
+                                    (*pOutCachedItem)->localeName).getStr());
                         }
                         else
                             return nullptr;
@@ -562,10 +560,10 @@ oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
             }
             // Library not loaded, load it and add it to the list.
 #ifdef SAL_DLLPREFIX
-            aBuf.ensureCapacity(strlen(i.pLib) + 6);    // mostly "lib*.so"
+            OUStringBuffer aBuf(static_cast<int>(strlen(SAL_DLLPREFIX) + strlen(i.pLib) + strlen(SAL_DLLEXTENSION)));    // mostly "lib*.so"
             aBuf.append( SAL_DLLPREFIX ).appendAscii(i.pLib).append( SAL_DLLEXTENSION );
 #else
-            aBuf.ensureCapacity(strlen(i.pLib) + 4);    // mostly "*.dll"
+            OUStringBuffer(static_cast_int>(strlen(i.pLib) + 4));    // mostly "*.dll"
             aBuf.appendAscii(i.pLib).append( SAL_DLLEXTENSION );
 #endif
             std::unique_ptr<osl::Module> module(new osl::Module());
@@ -578,9 +576,10 @@ oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
                 if( pOutCachedItem )
                 {
                     pOutCachedItem->reset(new LocaleDataLookupTableItem( maLookupTable.back() ));
-                    return pTmpModule->getFunctionSymbol(
-                            aBuf.appendAscii(pFunction).append(cUnder).
-                            appendAscii((*pOutCachedItem)->localeName).makeStringAndClear());
+                    OUStringBuffer aBuf2(static_cast<int>(strlen(pFunction) + 1 + strlen((*pOutCachedItem)->localeName)));
+                    aBuf2.appendAscii(pFunction).append(cUnder).
+                            appendAscii((*pOutCachedItem)->localeName);
+                    return pTmpModule->getFunctionSymbol(aBuf2.makeStringAndClear());
                 }
                 else
                     return nullptr;
@@ -1444,12 +1443,10 @@ oslGenericFunction LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, con
 {
     lcl_LookupTableHelper & rLookupTable = lcl_LookupTableStatic::get();
 
-    OUStringBuffer aBuf(1);
     if (cachedItem.get() && cachedItem->equals(rLocale))
     {
-        aBuf.ensureCapacity(strlen(pFunction) + 1 + strlen(cachedItem->localeName));
-        return cachedItem->module->getFunctionSymbol(aBuf.appendAscii(pFunction).append(cUnder).
-                appendAscii(cachedItem->localeName).makeStringAndClear());
+        return cachedItem->module->getFunctionSymbol(OString(rtl::OStringView(pFunction) + "_" +
+                cachedItem->localeName).getStr());
     }
 
     oslGenericFunction pSymbol = nullptr;

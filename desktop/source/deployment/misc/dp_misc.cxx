@@ -243,7 +243,7 @@ namespace {
 OUString encodeForRcFile( OUString const & str )
 {
     // escape $\{} (=> rtl bootstrap files)
-    OUStringBuffer buf;
+    OUStringBuffer buf(64);
     sal_Int32 pos = 0;
     const sal_Int32 len = str.getLength();
     for ( ; pos < len; ++pos ) {
@@ -265,7 +265,7 @@ OUString encodeForRcFile( OUString const & str )
 
 OUString makeURL( OUString const & baseURL, OUString const & relPath_ )
 {
-    OUStringBuffer buf;
+    OUStringBuffer buf(128);
     if (baseURL.getLength() > 1 && baseURL[ baseURL.getLength() - 1 ] == '/')
         buf.append( std::u16string_view(baseURL).substr(0, baseURL.getLength() - 1) );
     else

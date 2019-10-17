@@ -193,15 +193,17 @@ static oslFileError osl_create_temp_file_impl_(
 
     len_base_dir = rtl_uString_getLength(pustr_base_directory);
 
-    rtl_uStringbuffer_newFromStr_WithLength(
+    rtl_uString_new_WithLength(
         &tmp_file_path,
-        rtl_uString_getStr(const_cast<rtl_uString*>(pustr_base_directory)),
-        len_base_dir);
+        (len_base_dir + 1 + RAND_NAME_LENGTH));
+    capacity = len_base_dir + 1 + RAND_NAME_LENGTH;
 
-    rtl_uStringbuffer_ensureCapacity(
+    rtl_uStringbuffer_insert(
         &tmp_file_path,
         &capacity,
-        (len_base_dir + 1 + RAND_NAME_LENGTH));
+        0,
+        rtl_uString_getStr(const_cast<rtl_uString*>(pustr_base_directory)),
+        len_base_dir);
 
     offset_file_name = len_base_dir;
 
