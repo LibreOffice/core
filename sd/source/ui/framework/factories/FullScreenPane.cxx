@@ -189,14 +189,13 @@ Reference<rendering::XCanvas> FullScreenPane::CreateCanvas()
     if (!pWindow)
         throw RuntimeException();
 
-    Sequence<Any> aArg (5);
+    Sequence<Any> aArg(4);
 
     // common: first any is VCL pointer to window (for VCL canvas)
     aArg[0] <<= reinterpret_cast<sal_Int64>(pWindow.get());
-    aArg[1] = Any();
-    aArg[2] <<= css::awt::Rectangle();
-    aArg[3] <<= false;
-    aArg[4] <<= mxWindow;
+    aArg[1] <<= css::awt::Rectangle();
+    aArg[2] <<= false;
+    aArg[3] <<= mxWindow;
 
     Reference<lang::XMultiServiceFactory> xFactory (
         mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
