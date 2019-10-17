@@ -445,6 +445,3 @@ writerfilter/source/dmapper/LoggedResources.hxx:93
 writerfilter/source/dmapper/LoggedResources.hxx:129
     void writerfilter::LoggedTable::lcl_entry(int,class tools::SvRef<class writerfilter::Reference<class writerfilter::Properties> >,)
     01
-xmloff/inc/forms/property_handler.hxx:44
-    class rtl::OUString xmloff::PropertyHandlerBase::getAttributeValue(const class std::__debug::map<enum xmloff::PropertyId, class com::sun::star::uno::Any, struct std::less<enum xmloff::PropertyId>, class std::allocator<struct std::pair<const enum xmloff::PropertyId, class com::sun::star::uno::Any> > > &,)const
-    0
