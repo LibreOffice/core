@@ -22,6 +22,30 @@
       "revId": "ca6ac15fa183f1dc0bfa95cff5a16239ac6e8cf0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_19a152aa",
+        "filename": "extras/Gallery_bpmn.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-10-17T14:33:59Z",
+      "side": 1,
+      "message": "This is just the prototype for the makefile. Andreas needs to put SVGs at the folder and add the names here in order to compile a binary gallery. See my earlier comment.",
+      "parentUuid": "7f7f9b97_3e675450",
+      "range": {
+        "startLine": 13,
+        "startChar": 28,
+        "endLine": 13,
+        "endChar": 40
+      },
+      "revId": "ca6ac15fa183f1dc0bfa95cff5a16239ac6e8cf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
