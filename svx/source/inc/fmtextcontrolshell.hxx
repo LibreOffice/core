@@ -66,7 +66,7 @@ namespace svx
     class IContextRequestObserver
     {
     public:
-        virtual void    contextMenuRequested( const css::awt::MouseEvent& _rEvent ) = 0;
+        virtual void    contextMenuRequested() = 0;
 
     protected:
         ~IContextRequestObserver() {}
@@ -142,7 +142,7 @@ namespace svx
         virtual void    focusLost( const css::awt::FocusEvent& _rEvent ) override;
 
         // IContextRequestObserver
-        virtual void    contextMenuRequested( const css::awt::MouseEvent& _rEvent ) override;
+        virtual void    contextMenuRequested() override;
 
         enum AttributeSet { eCharAttribs, eParaAttribs };
         void    executeAttributeDialog( AttributeSet _eSet, SfxRequest& _rReq );
