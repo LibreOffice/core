@@ -95,9 +95,6 @@
     <glade-widget-class title="TableValueSet" name="sdlo-TableValueSet"
                         generic-name="Set of Table Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Table Preview" name="swuilo-AutoFmtPreview"
-                        generic-name="Table Preview Window" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
 
     <glade-widget-class title="Content List Box" name="sfxlo-ContentListBox"
                         generic-name="Content List Box" parent="GtkTreeView"
