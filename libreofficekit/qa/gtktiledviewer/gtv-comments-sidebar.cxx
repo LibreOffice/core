@@ -24,6 +24,11 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
 #endif
+#if defined __clang__
+#if __has_warning("-Wdeprecated-volatile")
+#pragma clang diagnostic ignored "-Wdeprecated-volatile"
+#endif
+#endif
 G_DEFINE_TYPE(GtvCommentsSidebar, gtv_comments_sidebar, GTK_TYPE_BOX);
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
