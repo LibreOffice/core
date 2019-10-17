@@ -140,6 +140,8 @@ gb_PrecompiledHeader_ignore_flags_system := \
 -DDISABLE_CVE_TESTS \
 -DCPPUNIT_PLUGIN_EXPORT='extern "C" SAL_DLLPUBLIC_EXPORT' \
 -DOOO_DLLIMPLEMENTATION_TEST \
+-DSK_USER_CONFIG_HEADER=% \
+-DSKIA_DLL \
 -include $(SRCDIR)/pch/inc/clangfix.hxx \
 
 # Probably also update pch/inc/clangfix.hxx if you extend the list.
