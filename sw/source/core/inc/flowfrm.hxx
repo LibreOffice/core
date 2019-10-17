@@ -142,7 +142,7 @@ protected:
     bool CheckMoveFwd( bool& rbMakePage, bool bKeep, bool bIgnoreMyOwnKeepValue );
     bool MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways = false );
     bool MoveBwd( bool &rbReformat );
-    virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool bHead, bool &rReformat )=0;
+    virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat )=0;
 
 public:
     SwFlowFrame( SwFrame &rFrame );

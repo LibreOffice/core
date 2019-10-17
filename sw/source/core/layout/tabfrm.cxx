@@ -2053,7 +2053,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 {
                     SwTabFrame *pMaster = FindMaster();
                     bool bDummy;
-                    if ( ShouldBwdMoved( pMaster->GetUpper(), false, bDummy ) )
+                    if ( ShouldBwdMoved( pMaster->GetUpper(), bDummy ) )
                         pMaster->InvalidatePos();
                 }
             }
@@ -2143,7 +2143,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             if ( !bSplit && GetFollow() )
             {
                 bool bDummy;
-                if ( GetFollow()->ShouldBwdMoved( GetUpper(), false, bDummy ) )
+                if ( GetFollow()->ShouldBwdMoved( GetUpper(), bDummy ) )
                 {
                     SwFrame *pTmp = GetUpper();
                     SwTwips nDeadLine = aRectFnSet.GetPrtBottom(*pTmp);
@@ -3418,7 +3418,7 @@ SwContentFrame *SwTabFrame::FindLastContent()
 }
 
 /// Return value defines if the frm needs to be relocated
-bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool &rReformat )
+bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat )
 {
     rReformat = false;
     if ( SwFlowFrame::IsMoveBwdJump() || !IsPrevObjMove() )

@@ -853,7 +853,7 @@ void SwSectionFrame::MakeAll(vcl::RenderContext* pRenderContext)
         DelEmpty( false );
 }
 
-bool SwSectionFrame::ShouldBwdMoved( SwLayoutFrame *, bool , bool & )
+bool SwSectionFrame::ShouldBwdMoved( SwLayoutFrame *, bool & )
 {
     OSL_FAIL( "Oops, where is my tinfoil hat?" );
     return false;

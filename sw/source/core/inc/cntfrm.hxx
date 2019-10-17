@@ -49,7 +49,7 @@ class SAL_DLLPUBLIC_RTTI SwContentFrame: public SwFrame, public SwFlowFrame
     void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
 
-    virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool& ) override;
+    virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool& ) override;
 
     const SwContentFrame* ImplGetNextContentFrame( bool bFwd ) const;
 
