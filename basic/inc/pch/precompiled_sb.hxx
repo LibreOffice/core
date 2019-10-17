@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:33 using:
+ Generated on 2019-10-17 15:13:54 using:
  ./bin/update_pch basic sb --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -30,6 +30,7 @@
 #include <string.h>
 #include <vector>
 #include <boost/optional.hpp>
+#include <boost/property_tree/ptree.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/file.hxx>
@@ -55,12 +56,14 @@
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/float_int_conversion.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/debug.hxx>
@@ -68,6 +71,7 @@
 #include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
+#include <tools/wintypes.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/unotoolsdllapi.h>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:57:56 using:
+ Generated on 2019-10-17 15:17:30 using:
  ./bin/update_pch tools tl --cutoff=5 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -31,6 +31,7 @@
 #include <ostream>
 #include <stddef.h>
 #include <string.h>
+#include <string_view>
 #include <utility>
 #include <vector>
 #include <boost/rational.hpp>
@@ -44,11 +45,11 @@
 #include <osl/thread.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
-#include <rtl/crc.h>
 #include <rtl/math.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>

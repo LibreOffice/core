@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:56:46 using:
+ Generated on 2019-10-17 16:10:17 using:
  ./bin/update_pch configmgr configmgr --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,6 +26,8 @@
 #include <new>
 #include <ostream>
 #include <set>
+#include <string.h>
+#include <type_traits>
 #include <utility>
 #include <vector>
 #endif // PCH_LEVEL >= 1
@@ -58,15 +60,12 @@
 #include <sal/types.h>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
-#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/TypeClass.hdl>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>

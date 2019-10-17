@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:56:50 using:
+ Generated on 2019-10-17 15:14:23 using:
  ./bin/update_pch dbaccess dba --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -28,6 +28,7 @@
 #include <deque>
 #include <float.h>
 #include <functional>
+#include <initializer_list>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
@@ -38,6 +39,8 @@
 #include <ostream>
 #include <stddef.h>
 #include <string.h>
+#include <string>
+#include <string_view>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -65,6 +68,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
@@ -80,6 +84,7 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
@@ -88,7 +93,6 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
-#include <vcl/task.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
@@ -153,6 +157,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/CommonTools.hxx>

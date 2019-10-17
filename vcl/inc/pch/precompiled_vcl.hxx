@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:58:01 using:
+ Generated on 2019-10-17 15:17:46 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,9 +25,11 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
+#include <cstring>
 #include <deque>
 #include <float.h>
 #include <functional>
+#include <initializer_list>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
@@ -37,11 +39,10 @@
 #include <new>
 #include <ostream>
 #include <set>
-#include <stddef.h>
-#include <stdlib.h>
 #include <string.h>
+#include <string>
+#include <string_view>
 #include <type_traits>
-#include <typeinfo>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -54,16 +55,15 @@
 #if PCH_LEVEL >= 2
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
-#include <osl/diagnose.hxx>
 #include <osl/endian.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
 #include <osl/module.hxx>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
+#include <osl/process.h>
 #include <osl/signal.h>
 #include <osl/thread.h>
-#include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
@@ -73,22 +73,22 @@
 #include <rtl/instance.hxx>
 #include <rtl/math.h>
 #include <rtl/math.hxx>
-#include <rtl/process.h>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
 #include <rtl/uri.hxx>
+#include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
-#include <sal/alloca.h>
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
@@ -99,7 +99,6 @@
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
-#include <basegfx/color/bcolortools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -116,14 +115,9 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
-#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
@@ -140,8 +134,10 @@
 #include <com/sun/star/i18n/Calendar2.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -164,9 +160,9 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/fileformat.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
@@ -190,6 +186,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <salhelper/linkhelper.hxx>
 #include <salhelper/salhelperdllapi.h>
+#include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -212,6 +209,7 @@
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
+#include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
@@ -231,21 +229,18 @@
 #include <uno/sequence2.h>
 #include <unotools/configmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/resmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <PhysicalFontCollection.hxx>
 #include <PhysicalFontFace.hxx>
+#include <TypeSerializer.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <brdwin.hxx>
 #include <controldata.hxx>
-#include <dndlistenercontainer.hxx>
-#include <fontinstance.hxx>
-#include <helpwin.hxx>
+#include <fontattributes.hxx>
 #include <impglyphitem.hxx>
-#include <outdata.hxx>
 #include <outdev.h>
 #include <salbmp.hxx>
 #include <salframe.hxx>
@@ -260,19 +255,15 @@
 #include <saltimer.hxx>
 #include <salusereventlist.hxx>
 #include <salvd.hxx>
-#include <salwtype.hxx>
 #include <svdata.hxx>
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/BitmapTools.hxx>
-#include <vcl/FilterConfigItem.hxx>
-#include <vcl/ImageTree.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/button.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
@@ -293,7 +284,6 @@
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
@@ -301,22 +291,15 @@
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/lazydelete.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/metric.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/pngwrite.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/quickselectionengine.hxx>
-#include <vcl/salnativewidgets.hxx>
-#include <vcl/scheduler.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/spinfld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/syswin.hxx>
@@ -328,10 +311,13 @@
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/treelistentries.hxx>
 #include <vcl/treelistentry.hxx>
+#include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/vclenum.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/viewdataentry.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>

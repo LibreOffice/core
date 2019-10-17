@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:57:19 using:
+ Generated on 2019-10-17 15:16:24 using:
  ./bin/update_pch svl svl --cutoff=6 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <map>
 #include <memory>
 #include <new>
 #include <ostream>
@@ -37,7 +38,7 @@
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
-#include <osl/file.h>
+#include <osl/endian.h>
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
@@ -53,8 +54,10 @@
 #include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
@@ -89,14 +92,14 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/weak.hxx>
+#include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
-#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <libxml/xmlwriter.h>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <salhelper/linkhelper.hxx>
 #include <tools/debug.hxx>
-#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
@@ -112,7 +115,6 @@
 #include <svl/itemset.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
-#include <svl/zforlist.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

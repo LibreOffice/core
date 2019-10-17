@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:57:56 using:
+ Generated on 2019-10-17 15:17:31 using:
  ./bin/update_pch unotools utl --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,17 +24,11 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstring>
-#include <list>
 #include <memory>
-#include <new>
 #include <ostream>
 #include <stddef.h>
-#include <stdio.h>
-#include <string.h>
 #include <type_traits>
 #include <unordered_map>
-#include <utility>
 #include <vector>
 #include <boost/locale.hpp>
 #include <boost/locale/gnu_gettext.hpp>
@@ -45,11 +39,9 @@
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
-#include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <osl/nlsupport.h>
 #include <osl/process.h>
-#include <osl/signal.h>
 #include <osl/thread.h>
 #include <osl/thread.hxx>
 #include <osl/time.h>
@@ -61,15 +53,10 @@
 #include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.h>
-#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
-#include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
-#include <rtl/textcvt.h>
 #include <rtl/textenc.h>
-#include <rtl/unload.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
@@ -80,6 +67,7 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/errcode.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -95,15 +83,11 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
-#include <com/sun/star/ucb/InteractiveIOException.hpp>
-#include <com/sun/star/ucb/UniversalContentBroker.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -112,7 +96,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <comphelper/comphelperdllapi.h>
@@ -135,32 +118,28 @@
 #include <tools/date.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/link.hxx>
-#include <tools/solar.h>
+#include <tools/lineend.hxx>
+#include <tools/ref.hxx>
 #include <tools/stream.hxx>
 #include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
-#include <ucbhelper/interceptedinteraction.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <unotools/bootstrap.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configpaths.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/moduleoptions.hxx>
 #include <unotools/options.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
-#include <unotools/tempfile.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <unotoolsservices.hxx>

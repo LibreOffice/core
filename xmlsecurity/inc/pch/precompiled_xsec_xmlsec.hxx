@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:58:07 using:
+ Generated on 2019-10-17 15:18:01 using:
  ./bin/update_pch xmlsecurity xsec_xmlsec --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -21,15 +21,20 @@
 */
 
 #if PCH_LEVEL >= 1
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <functional>
+#include <initializer_list>
+#include <iomanip>
 #include <memory>
 #include <new>
 #include <ostream>
 #include <pk11pub.h>
 #include <stddef.h>
 #include <string.h>
+#include <string>
+#include <string_view>
 #include <type_traits>
 #include <utility>
 #endif // PCH_LEVEL >= 1
@@ -53,6 +58,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
@@ -60,6 +66,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
+#include <rtl/uuid.h>
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
@@ -71,26 +78,34 @@
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Any.h>
+#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.h>
+#include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
+#include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/csax/XCompressedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/wrapper/XXMLDocumentWrapper.hpp>
-#include <comphelper/comphelperdllapi.h>
+#include <comphelper/servicehelper.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/implbase_ex_post.hxx>

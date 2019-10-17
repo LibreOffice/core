@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-09-26 09:12:06 using:
+ Generated on 2019-10-17 15:16:08 using:
  ./bin/update_pch sd sdui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -29,6 +29,7 @@
 #include <deque>
 #include <float.h>
 #include <functional>
+#include <initializer_list>
 #include <iomanip>
 #include <iterator>
 #include <limits.h>
@@ -50,6 +51,7 @@
 #include <utility>
 #include <vector>
 #include <boost/optional.hpp>
+#include <boost/property_tree/ptree.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -69,6 +71,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
@@ -114,7 +117,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
-#include <vcl/imapobj.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/lstbox.hxx>
@@ -167,13 +169,6 @@
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/datatransfer/DataFlavor.hpp>
-#include <com/sun/star/datatransfer/XTransferable2.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
-#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
-#include <com/sun/star/datatransfer/dnd/DropTargetDragEvent.hpp>
-#include <com/sun/star/datatransfer/dnd/DropTargetDropEvent.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
@@ -181,16 +176,13 @@
 #include <com/sun/star/drawing/HatchStyle.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
-#include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
@@ -239,7 +231,6 @@
 #include <editeng/editstat.hxx>
 #include <editeng/eedata.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/flstitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/paragraphdata.hxx>
 #include <editeng/svxenum.hxx>
@@ -260,9 +251,7 @@
 #include <sfx2/linksrc.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/shell.hxx>
-#include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <sot/sotdllapi.h>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/eitem.hxx>
@@ -272,7 +261,6 @@
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
 #include <svl/lstner.hxx>
-#include <svl/macitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
@@ -315,7 +303,6 @@
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
-#include <tools/globname.hxx>
 #include <tools/helpers.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
@@ -339,7 +326,6 @@
 #include <unotools/configitem.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/options.hxx>
-#include <unotools/pathoptions.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>

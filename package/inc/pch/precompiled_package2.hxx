@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:56:58 using:
+ Generated on 2019-10-17 15:15:13 using:
  ./bin/update_pch package package2 --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstring>
+#include <initializer_list>
 #include <iomanip>
 #include <limits>
 #include <math.h>
@@ -33,10 +34,13 @@
 #include <ostream>
 #include <stddef.h>
 #include <string.h>
+#include <string>
+#include <string_view>
 #include <type_traits>
 #include <unordered_map>
 #include <utility>
 #include <vector>
+#include <zlib.h>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -62,6 +66,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
@@ -117,6 +122,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
@@ -133,6 +139,7 @@
 #include <o3tl/underlyingenumvalue.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/toolsdllapi.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
@@ -146,6 +153,7 @@
 #include <EncryptedDataHeader.hxx>
 #include <EncryptionData.hxx>
 #include <PackageConstants.hxx>
+#include <ThreadedDeflater.hxx>
 #include <ZipEntry.hxx>
 #include <ZipEnumeration.hxx>
 #include <ZipFile.hxx>

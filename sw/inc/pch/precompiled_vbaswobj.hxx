@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:16:21 using:
+ Generated on 2019-10-17 15:17:29 using:
  ./bin/update_pch sw vbaswobj --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -33,6 +33,7 @@
 #include <exception>
 #include <float.h>
 #include <functional>
+#include <initializer_list>
 #include <iomanip>
 #include <iostream>
 #include <limits.h>
@@ -47,6 +48,8 @@
 #include <stack>
 #include <stddef.h>
 #include <string.h>
+#include <string>
+#include <string_view>
 #include <type_traits>
 #include <typeinfo>
 #include <unordered_map>
@@ -58,8 +61,8 @@
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/random_access_index.hpp>
 #include <boost/multi_index_container.hpp>
-#include <boost/operators.hpp>
 #include <boost/optional.hpp>
+#include <boost/property_tree/ptree.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -83,6 +86,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
@@ -91,6 +95,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
+#include <rtl/uuid.h>
 #include <sal/config.h>
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
@@ -100,8 +105,8 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/EnumContext.hxx>
-#include <vcl/IContext.hxx>
 #include <vcl/IDialogRenderable.hxx>
+#include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
@@ -138,7 +143,6 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
 #include <vcl/wall.hxx>
-#include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
@@ -160,11 +164,10 @@
 #include <basic/basicdllapi.h>
 #include <basic/sberrors.hxx>
 #include <basic/sbxdef.hxx>
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -173,8 +176,10 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -192,6 +197,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/PositionLayoutDir.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
@@ -200,6 +206,7 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -214,11 +221,10 @@
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/genfunc.hxx>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/weak.hxx>
 #include <cppu/cppudllapi.h>
@@ -261,7 +267,6 @@
 #include <svx/svxdllapi.h>
 #include <svx/xdef.hxx>
 #include <tools/color.hxx>
-#include <tools/date.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
@@ -272,10 +277,8 @@
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
-#include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
-#include <tools/weakbase.h>
 #include <tools/wintypes.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>

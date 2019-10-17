@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-09-25 11:00:52 using:
+ Generated on 2019-10-17 15:15:01 using:
  ./bin/update_pch chart2 chartcontroller --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -41,6 +41,8 @@
 #include <set>
 #include <stddef.h>
 #include <string.h>
+#include <string>
+#include <string_view>
 #include <type_traits>
 #include <typeinfo>
 #include <unordered_map>
@@ -65,6 +67,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
@@ -84,14 +87,12 @@
 #include <vcl/GraphicObject.hxx>
 #include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/Scanline.hxx>
-#include <vcl/abstdlg.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/button.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/ctrl.hxx>
@@ -100,6 +101,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/dockwin.hxx>
+#include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>

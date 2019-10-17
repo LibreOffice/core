@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:57 using:
+ Generated on 2019-10-17 15:16:10 using:
  ./bin/update_pch sdext PresenterScreen --cutoff=2 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -35,6 +35,9 @@
 #include <ostream>
 #include <stddef.h>
 #include <string.h>
+#include <string>
+#include <string_view>
+#include <type_traits>
 #include <utility>
 #include <vector>
 #endif // PCH_LEVEL >= 1
@@ -54,6 +57,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>

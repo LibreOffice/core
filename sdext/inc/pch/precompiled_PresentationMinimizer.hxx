@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:57 using:
+ Generated on 2019-10-17 15:16:09 using:
  ./bin/update_pch sdext PresentationMinimizer --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -38,14 +38,13 @@
 #include <memory>
 #include <new>
 #include <ostream>
-#include <set>
 #include <stddef.h>
 #include <string.h>
+#include <string>
 #include <string_view>
 #include <type_traits>
 #include <utility>
 #include <vector>
-#include <boost/optional.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -65,6 +64,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
@@ -80,68 +80,32 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <vcl/EnumContext.hxx>
-#include <vcl/GestureEvent.hxx>
-#include <vcl/IContext.hxx>
-#include <vcl/IDialogRenderable.hxx>
-#include <vcl/alpha.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/button.hxx>
-#include <vcl/cairo.hxx>
-#include <vcl/checksum.hxx>
-#include <vcl/commandevent.hxx>
-#include <vcl/ctrl.hxx>
-#include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
 #include <vcl/errinf.hxx>
-#include <vcl/event.hxx>
 #include <vcl/exceptiontypes.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
-#include <vcl/help.hxx>
-#include <vcl/image.hxx>
 #include <vcl/inputtypes.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
-#include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/metaactiontypes.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/outdevmap.hxx>
-#include <vcl/outdevstate.hxx>
-#include <vcl/region.hxx>
-#include <vcl/salnativewidgets.hxx>
-#include <vcl/scopedbitmapaccess.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/split.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
-#include <vcl/wall.hxx>
-#include <vcl/window.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/numeric/ftools.hxx>
-#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/point/b2ipoint.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/basicrange.hxx>
-#include <basegfx/tuple/b2dtuple.hxx>
+#include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
-#include <basegfx/vector/b2dvector.hxx>
-#include <basegfx/vector/b2enums.hxx>
-#include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/awt/Key.hpp>
@@ -151,7 +115,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
@@ -192,6 +155,7 @@
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/factory.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/strong_int.hxx>
@@ -205,21 +169,15 @@
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
-#include <tools/mapunit.hxx>
-#include <tools/poly.hxx>
-#include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
-#include <tools/wintypes.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
-#include <unotools/fontdefs.hxx>
-#include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #endif // PCH_LEVEL >= 4

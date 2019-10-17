@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:41 using:
+ Generated on 2019-10-17 15:14:54 using:
  ./bin/update_pch framework fwl --cutoff=5 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -28,6 +28,7 @@
 #include <cstring>
 #include <float.h>
 #include <functional>
+#include <initializer_list>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
@@ -40,11 +41,13 @@
 #include <stddef.h>
 #include <string.h>
 #include <string>
+#include <string_view>
 #include <type_traits>
 #include <unordered_map>
 #include <utility>
 #include <vector>
 #include <boost/optional.hpp>
+#include <boost/property_tree/ptree.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/conditn.h>
@@ -68,6 +71,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
@@ -84,6 +88,7 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
@@ -166,6 +171,7 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -205,6 +211,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
@@ -232,6 +239,7 @@
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/mutexhelper.hxx>
 #include <tools/color.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:56:43 using:
+ Generated on 2019-10-17 15:13:07 using:
  ./bin/update_pch accessibility acc --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -30,6 +30,7 @@
 #include <deque>
 #include <float.h>
 #include <functional>
+#include <initializer_list>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
@@ -41,6 +42,8 @@
 #include <set>
 #include <stddef.h>
 #include <string.h>
+#include <string>
+#include <string_view>
 #include <type_traits>
 #include <typeinfo>
 #include <utility>
@@ -66,6 +69,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
@@ -84,6 +88,10 @@
 #include <sal/typesizes.h>
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/GestureEvent.hxx>
+#include <vcl/IContext.hxx>
+#include <vcl/NotebookBarAddonsMerger.hxx>
+#include <vcl/Scanline.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/accessibletable.hxx>
 #include <vcl/accessibletableprovider.hxx>
@@ -91,6 +99,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/button.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/combobox.hxx>
@@ -123,10 +132,12 @@
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
+#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/task.hxx>
+#include <vcl/textfilter.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/treelist.hxx>
@@ -170,7 +181,6 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
-#include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
@@ -184,6 +194,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
@@ -197,6 +208,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
@@ -222,8 +234,6 @@
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/genfunc.hxx>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/Time.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>

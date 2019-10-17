@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-09-25 10:57:13 using:
+ Generated on 2019-10-17 15:17:23 using:
  ./bin/update_pch sw swui --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -30,6 +30,7 @@
 #include <deque>
 #include <float.h>
 #include <functional>
+#include <initializer_list>
 #include <iomanip>
 #include <iostream>
 #include <iterator>
@@ -45,11 +46,14 @@
 #include <stack>
 #include <stddef.h>
 #include <string.h>
+#include <string>
+#include <string_view>
 #include <type_traits>
 #include <typeinfo>
 #include <utility>
 #include <vector>
 #include <boost/optional.hpp>
+#include <boost/property_tree/ptree.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -69,6 +73,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
@@ -93,8 +98,6 @@
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/Scanline.hxx>
-#include <vcl/abstdlg.hxx>
-#include <vcl/accel.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
@@ -133,13 +136,11 @@
 #include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/mnemonicengine.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/print.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <vcl/quickselectionengine.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
@@ -153,9 +154,6 @@
 #include <vcl/textfilter.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
-#include <vcl/treelist.hxx>
-#include <vcl/treelistbox.hxx>
-#include <vcl/treelistentries.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
@@ -416,7 +414,6 @@
 #include <svx/xdef.hxx>
 #include <svx/xtable.hxx>
 #include <tools/color.hxx>
-#include <tools/contnr.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>

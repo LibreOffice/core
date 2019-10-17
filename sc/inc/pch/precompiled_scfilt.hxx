@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-15 16:57:59 using:
+ Generated on 2019-10-17 16:10:56 using:
  ./bin/update_pch sc scfilt --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -38,6 +38,7 @@
 #include <stdexcept>
 #include <stdio.h>
 #include <string.h>
+#include <string_view>
 #include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
@@ -64,6 +65,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>

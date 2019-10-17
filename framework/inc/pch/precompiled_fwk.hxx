@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:56:54 using:
+ Generated on 2019-10-17 15:14:52 using:
  ./bin/update_pch framework fwk --cutoff=7 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,6 +27,7 @@
 #include <cstring>
 #include <float.h>
 #include <functional>
+#include <initializer_list>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
@@ -37,6 +38,8 @@
 #include <ostream>
 #include <stddef.h>
 #include <string.h>
+#include <string>
+#include <string_view>
 #include <type_traits>
 #include <unordered_map>
 #include <utility>
@@ -53,6 +56,7 @@
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
+#include <osl/security.h>
 #include <osl/security.hxx>
 #include <osl/thread.h>
 #include <osl/time.h>
@@ -67,6 +71,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
@@ -84,6 +89,7 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
@@ -114,6 +120,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/task.hxx>
+#include <vcl/textfilter.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/vclenum.hxx>
@@ -265,6 +272,7 @@
 #include <toolkit/helper/mutexhelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>

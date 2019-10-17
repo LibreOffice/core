@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:43 using:
+ Generated on 2019-10-17 15:15:04 using:
  ./bin/update_pch chart2 chartcore --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -30,8 +30,10 @@
 #include <memory>
 #include <new>
 #include <ostream>
+#include <string_view>
 #include <utility>
 #include <vector>
+#include <boost/optional.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -46,6 +48,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
@@ -56,8 +59,8 @@
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>
-#include <vcl/bitmap.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/errcode.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #endif // PCH_LEVEL >= 2
@@ -117,6 +120,7 @@
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -146,6 +150,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
@@ -158,7 +163,10 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <svl/cenumitm.hxx>
+#include <svl/cintitem.hxx>
 #include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itemset.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
@@ -169,7 +177,9 @@
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/helpers.hxx>
-#include <tools/stream.hxx>
+#include <tools/ref.hxx>
+#include <tools/toolsdllapi.h>
+#include <tools/weakbase.h>
 #include <unotools/options.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/unotoolsdllapi.h>

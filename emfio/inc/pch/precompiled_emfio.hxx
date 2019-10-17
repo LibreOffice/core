@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:56:53 using:
+ Generated on 2019-10-17 15:14:43 using:
  ./bin/update_pch emfio emfio --cutoff=8 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -43,7 +43,6 @@
 #include <sal/macros.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <vcl/bitmap.hxx>
 #include <vcl/dllapi.h>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3

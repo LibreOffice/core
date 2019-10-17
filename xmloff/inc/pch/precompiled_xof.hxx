@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:19:20 using:
+ Generated on 2019-10-17 15:17:56 using:
  ./bin/update_pch xmloff xof --cutoff=1 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -28,7 +28,6 @@
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
-#include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/config.h>
@@ -40,14 +39,12 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
-#include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <comphelper/base64.hxx>
@@ -59,7 +56,6 @@
 #include <sax/tools/converter.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <facreg.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlimp.hxx>

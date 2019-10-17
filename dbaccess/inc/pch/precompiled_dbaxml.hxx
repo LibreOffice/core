@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:56:50 using:
+ Generated on 2019-10-17 15:14:25 using:
  ./bin/update_pch dbaccess dbaxml --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -28,6 +28,7 @@
 #include <utility>
 #include <vector>
 #include <boost/optional.hpp>
+#include <boost/property_tree/ptree.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>

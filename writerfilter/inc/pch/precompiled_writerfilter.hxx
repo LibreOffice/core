@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:58:01 using:
+ Generated on 2019-10-17 15:17:48 using:
  ./bin/update_pch writerfilter writerfilter --cutoff=5 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -29,6 +29,7 @@
 #include <iostream>
 #include <memory>
 #include <ostream>
+#include <type_traits>
 #include <utility>
 #include <vector>
 #include <boost/logic/tribool.hpp>
@@ -36,6 +37,7 @@
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
+#include <osl/diagnose.hxx>
 #include <osl/doublecheckedlocking.h>
 #include <osl/file.hxx>
 #include <osl/getglobalmutex.hxx>
@@ -48,6 +50,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
@@ -64,7 +67,6 @@
 #if PCH_LEVEL >= 3
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -90,10 +92,10 @@
 #include <comphelper/sequence.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/weak.hxx>
+#include <editeng/editengdllapi.h>
 #include <filter/msfilter/util.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <oox/dllapi.h>

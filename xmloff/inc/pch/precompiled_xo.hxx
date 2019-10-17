@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:58:05 using:
+ Generated on 2019-10-17 15:17:55 using:
  ./bin/update_pch xmloff xo --cutoff=7 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <float.h>
 #include <functional>
+#include <initializer_list>
 #include <limits.h>
 #include <limits>
 #include <map>
@@ -35,6 +36,7 @@
 #include <set>
 #include <stddef.h>
 #include <string.h>
+#include <string_view>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -42,7 +44,6 @@
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
-#include <osl/diagnose.hxx>
 #include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
@@ -73,6 +74,7 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
@@ -81,15 +83,14 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
-#include <vcl/task.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/point/b2ipoint.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
@@ -98,9 +99,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -109,7 +108,6 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -117,13 +115,13 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -143,6 +141,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
+#include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Duration.hpp>
@@ -162,7 +161,6 @@
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
@@ -179,7 +177,6 @@
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
@@ -194,11 +191,9 @@
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <PropertySetMerger.hxx>
 #include <XMLStringBufferImportContext.hxx>
 #include <facreg.hxx>
 #include <xexptran.hxx>
-#include <xmloff/NamedBoolPropertyHdl.hxx>
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
@@ -216,12 +211,10 @@
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/xmlevent.hxx>
 #include <xmloff/xmlexp.hxx>
-#include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmlnume.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <xmloff/xmlprhdl.hxx>
 #include <xmloff/xmlprmap.hxx>
@@ -230,6 +223,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <xmlsdtypes.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
