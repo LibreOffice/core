@@ -41,7 +41,7 @@ SdModifyFieldDlg::SdModifyFieldDlg(weld::Window* pWindow, const SvxFieldData* pI
     , m_pField(pInField)
     , m_xRbtFix(m_xBuilder->weld_radio_button("fixedRB"))
     , m_xRbtVar(m_xBuilder->weld_radio_button("varRB"))
-    , m_xLbLanguage(new LanguageBox(m_xBuilder->weld_combo_box("languageLB")))
+    , m_xLbLanguage(new SvxLanguageBox(m_xBuilder->weld_combo_box("languageLB")))
     , m_xLbFormat(m_xBuilder->weld_combo_box("formatLB"))
 {
     m_xLbLanguage->SetLanguageList( SvxLanguageListFlags::ALL|SvxLanguageListFlags::ONLY_KNOWN, false );

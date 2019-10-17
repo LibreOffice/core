@@ -296,7 +296,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     , mxFtCharSet(m_xBuilder->weld_label("textcharset"))
     , mxLbCharSet(new SvxTextEncodingBox(m_xBuilder->weld_combo_box("charset")))
     , mxFtCustomLang(m_xBuilder->weld_label("textlanguage"))
-    , mxLbCustomLang(new LanguageBox(m_xBuilder->weld_combo_box("language")))
+    , mxLbCustomLang(new SvxLanguageBox(m_xBuilder->weld_combo_box("language")))
     , mxFtRow(m_xBuilder->weld_label("textfromrow"))
     , mxNfRow(m_xBuilder->weld_spin_button("fromrow"))
     , mxRbFixed(m_xBuilder->weld_radio_button("tofixedwidth"))

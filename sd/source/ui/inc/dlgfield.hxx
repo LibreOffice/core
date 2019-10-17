@@ -25,7 +25,7 @@
 #include <svl/itemset.hxx>
 
 class SvxFieldData;
-class LanguageBox;
+class SvxLanguageBox;
 
 /**
  * dialog to adjust field-commands
@@ -38,7 +38,7 @@ private:
 
     std::unique_ptr<weld::RadioButton> m_xRbtFix;
     std::unique_ptr<weld::RadioButton> m_xRbtVar;
-    std::unique_ptr<LanguageBox> m_xLbLanguage;
+    std::unique_ptr<SvxLanguageBox> m_xLbLanguage;
     std::unique_ptr<weld::ComboBox> m_xLbFormat;
 
     void                FillFormatList();

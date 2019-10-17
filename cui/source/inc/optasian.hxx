@@ -34,7 +34,7 @@ class SvxAsianLayoutPage : public SfxTabPage
     std::unique_ptr<weld::RadioButton> m_xPunctCompressionRB;
     std::unique_ptr<weld::RadioButton> m_xPunctKanaCompressionRB;
     std::unique_ptr<weld::Label> m_xLanguageFT;
-    std::unique_ptr<LanguageBox> m_xLanguageLB;
+    std::unique_ptr<SvxLanguageBox> m_xLanguageLB;
     std::unique_ptr<weld::CheckButton> m_xStandardCB;
     std::unique_ptr<weld::Label> m_xStartFT;
     std::unique_ptr<weld::Entry> m_xStartED;

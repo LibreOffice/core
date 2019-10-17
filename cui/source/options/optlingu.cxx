@@ -1537,7 +1537,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& r
     , m_xBackPB(m_xBuilder->weld_button("back"))
     , m_xMoreDictsLink(m_xBuilder->weld_link_button("moredictslink"))
     , m_xClosePB(m_xBuilder->weld_button("close"))
-    , m_xLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box("language")))
+    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("language")))
 {
     m_xModulesCLB->set_size_request(m_xModulesCLB->get_approximate_digit_width() * 40,
                                     m_xModulesCLB->get_height_rows(12));
@@ -1636,7 +1636,7 @@ IMPL_LINK_NOARG(SvxEditModulesDlg, LangSelectListBoxHdl_Impl, weld::ComboBox&, v
     LangSelectHdl_Impl(m_xLanguageLB.get());
 }
 
-void SvxEditModulesDlg::LangSelectHdl_Impl(const LanguageBox* pBox)
+void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
 {
     LanguageType  eCurLanguage = m_xLanguageLB->get_active_id();
     static Locale aLastLocale;

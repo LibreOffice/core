@@ -112,7 +112,7 @@ private:
     std::unique_ptr<weld::Button> m_xIbRemove;
     std::unique_ptr<weld::Label> m_xFtComment;
     std::unique_ptr<weld::Entry> m_xEdComment;
-    std::unique_ptr<LanguageBox> m_xLbLanguage;
+    std::unique_ptr<SvxLanguageBox> m_xLbLanguage;
     std::unique_ptr<weld::CustomWeld> m_xWndPreview;
 
     void    Init_Impl();

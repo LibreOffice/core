@@ -227,7 +227,7 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog(weld::Window* pParent, std::s
     , m_xDefinedFT(m_xBuilder->weld_label("defined"))
     , m_xAddedFT(m_xBuilder->weld_label("added"))
     , m_xAltTitle(m_xBuilder->weld_label("alttitle"))
-    , m_xLanguageCB(new LanguageBox(m_xBuilder->weld_combo_box("hidden")))
+    , m_xLanguageCB(new SvxLanguageBox(m_xBuilder->weld_combo_box("hidden")))
 {
     m_xLanguageLB->set_size_request(-1, m_xLanguageLB->get_height_rows(10));
     m_xCheckLangLB->set_size_request(-1, m_xCheckLangLB->get_height_rows(10));

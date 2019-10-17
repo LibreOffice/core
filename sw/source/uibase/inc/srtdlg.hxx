@@ -56,7 +56,7 @@ class SwSortDlg : public weld::GenericDialogController
     std::unique_ptr<weld::Entry> m_xDelimEdt;
     std::unique_ptr<weld::Button> m_xDelimPB;
 
-    std::unique_ptr<LanguageBox> m_xLangLB;
+    std::unique_ptr<SvxLanguageBox> m_xLangLB;
 
     std::unique_ptr<weld::CheckButton> m_xCaseCB;
 

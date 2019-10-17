@@ -216,7 +216,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::Dia
     , m_xIbRemove(m_xBuilder->weld_button("delete"))
     , m_xFtComment(m_xBuilder->weld_label("commentft"))
     , m_xEdComment(m_xBuilder->weld_entry("commented"))
-    , m_xLbLanguage(new LanguageBox(m_xBuilder->weld_combo_box("languagelb")))
+    , m_xLbLanguage(new SvxLanguageBox(m_xBuilder->weld_combo_box("languagelb")))
     , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aWndPreview))
 {
     for (size_t i = 0; i < SAL_N_ELEMENTS(NUM_CATEGORIES); ++i)

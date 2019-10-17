@@ -22,7 +22,7 @@
 
 #include <vcl/weld.hxx>
 
-class LanguageBox;
+class SvxLanguageBox;
 
 namespace basctl
 {
@@ -84,7 +84,7 @@ private:
     std::unique_ptr<weld::Label> m_xDefinedFT;
     std::unique_ptr<weld::Label> m_xAddedFT;
     std::unique_ptr<weld::Label> m_xAltTitle;
-    std::unique_ptr<::LanguageBox> m_xLanguageCB;
+    std::unique_ptr<SvxLanguageBox> m_xLanguageCB;
 
 public:
     SetDefaultLanguageDialog(weld::Window* pParent, std::shared_ptr<LocalizationMgr> const & xLMgr);
