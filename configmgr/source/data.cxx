@@ -49,7 +49,7 @@ bool decode(
     assert(
         begin >= 0 && begin <= end && end <= encoded.getLength() &&
         decoded != nullptr);
-    OUStringBuffer buf;
+    OUStringBuffer buf(end - begin);
     while (begin != end) {
         sal_Unicode c = encoded[begin++];
         if (c == '&') {
@@ -82,7 +82,8 @@ OUString Data::createSegment(
     if (templateName.isEmpty()) {
         return name;
     }
-    OUStringBuffer buf(templateName);
+    OUStringBuffer buf(128);
+    buf.append(templateName);
         //TODO: verify template name contains no bad chars?
     buf.append("['");
     for (sal_Int32 i = 0; i < name.getLength(); ++i) {
@@ -207,7 +208,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
     }
     NodeMap const & components = getComponents();
     NodeMap::const_iterator i(components.find(seg));
-    OUStringBuffer canonic;
+    OUStringBuffer canonic(128);
     rtl::Reference< Node > parent;
     int finalized = NO_LAYER;
     for (rtl::Reference< Node > p(i == components.end() ? nullptr : i->second);;) {

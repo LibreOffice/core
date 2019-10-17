@@ -223,7 +223,7 @@ void SvMetaType::WriteSfxItem(
     WriteStars( rOutStm );
     OString aVarName = " a" + rItemName + "_Impl";
 
-    OStringBuffer aAttrArray;
+    OStringBuffer aAttrArray(1024);
     sal_uLong   nAttrCount = MakeSfx( aAttrArray );
     OString aAttrCount( OString::number(nAttrCount));
     OString aTypeName = "SfxType" + aAttrCount;

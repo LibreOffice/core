@@ -356,7 +356,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
     if (n >= 0) {
         scheme = uriReference.copy(0, n);
         schemeSpecificPart = uriReference.copy(n + 1, fragment - (n + 1));
-        OUStringBuffer buf;
+        OUStringBuffer buf(128);
         buf.append("com.sun.star.uri.UriSchemeParser_");
         for (sal_Int32 i = 0; i < scheme.getLength(); ++i) {
             sal_Unicode c = scheme[i];
@@ -488,7 +488,8 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
         }
         return parse(abs.makeStringAndClear());
     } else {
-        OUStringBuffer abs(baseUriReference->getScheme());
+        OUStringBuffer abs(128);
+        abs.append(baseUriReference->getScheme());
         abs.append(':');
         if (uriReference->hasAuthority()) {
             abs.append("//");
@@ -597,7 +598,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
                    uriReference->getScheme())) {
         return clone(uriReference);
     } else {
-        OUStringBuffer rel;
+        OUStringBuffer rel(128);
         bool omitQuery = false;
         if ((baseUriReference->hasAuthority() != uriReference->hasAuthority())
             || !equalIgnoreEscapeCase(
