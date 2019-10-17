@@ -237,10 +237,6 @@ sal_Int32 OOXMLDocumentImpl::getXNoteId() const
     return mnXNoteId;
 }
 
-void OOXMLDocumentImpl::setXNoteType(Id /*nId*/)
-{
-}
-
 const OUString & OOXMLDocumentImpl::getTarget() const
 {
     return mpStream->getTarget();
@@ -262,15 +258,13 @@ OOXMLDocumentImpl::getSubStream(const OUString & rId)
 }
 
 writerfilter::Reference<Stream>::Pointer_t
-OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, Id aType,
-                                  const sal_Int32 nId)
+OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const sal_Int32 nId)
 {
     OOXMLStream::Pointer_t pStream =
         OOXMLDocumentFactory::createStream(mpStream, nType);
     // See above, no status indicator for the note stream, either.
     OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages, maMediaDescriptor);
     pDocument->setXNoteId(nId);
-    pDocument->setXNoteType(aType);
     pDocument->setModel(getModel());
     pDocument->setDrawPage(getDrawPage());
 
@@ -282,7 +276,7 @@ void OOXMLDocumentImpl::resolveFootnote(Stream & rStream,
                                         const sal_Int32 nNoteId)
 {
     writerfilter::Reference<Stream>::Pointer_t pStream =
-        getXNoteStream(OOXMLStream::FOOTNOTES, aType, nNoteId);
+        getXNoteStream(OOXMLStream::FOOTNOTES, nNoteId);
 
     Id nId;
     switch (aType)
@@ -304,7 +298,7 @@ void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,
                                        const sal_Int32 nNoteId)
 {
     writerfilter::Reference<Stream>::Pointer_t pStream =
-        getXNoteStream(OOXMLStream::ENDNOTES, aType, nNoteId);
+        getXNoteStream(OOXMLStream::ENDNOTES, nNoteId);
 
     Id nId;
     switch (aType)
@@ -325,7 +319,7 @@ void OOXMLDocumentImpl::resolveComment(Stream & rStream,
                                        const sal_Int32 nId)
 {
     writerfilter::Reference<Stream>::Pointer_t pStream =
-        getXNoteStream(OOXMLStream::COMMENTS, 0, nId);
+        getXNoteStream(OOXMLStream::COMMENTS, nId);
 
     resolveFastSubStreamWithId(rStream, pStream, NS_ooxml::LN_annotation);
 }
