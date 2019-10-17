@@ -49,8 +49,7 @@ public:
                                     SfxPoolItem& rItem,
                                     SfxItemSet& rSet,
                                     const OUString& rValue,
-                                    const SvXMLUnitConverter& rUnitConverter,
-                                    const SvXMLNamespaceMap& rNamespaceMap );
+                                    const SvXMLUnitConverter& rUnitConverter );
 
     /** this method is called for every item that has the
         MID_SW_FLAG_NO_ITEM_IMPORT flag set */

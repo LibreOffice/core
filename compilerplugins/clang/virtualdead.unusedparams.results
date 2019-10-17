@@ -343,9 +343,6 @@ sw/source/filter/ww8/wrtww8.hxx:863
 sw/source/filter/xml/xmlexpit.hxx:84
     void SvXMLExportItemMapper::handleElementItem(class SvXMLExport &,const struct SvXMLItemMapEntry &,const class SfxPoolItem &,const class SvXMLUnitConverter &,const class SfxItemSet &,enum SvXmlExportFlags,)const
     011000
-sw/source/filter/xml/xmlimpit.hxx:48
-    _Bool SvXMLImportItemMapper::handleSpecialItem(const struct SvXMLItemMapEntry &,class SfxPoolItem &,class SfxItemSet &,const class rtl::OUString &,const class SvXMLUnitConverter &,const class SvXMLNamespaceMap &,)
-    111110
 vcl/inc/outdev.h:122
     _Bool ImplGlyphFallbackFontSubstitution::FindFontSubstitute(class FontSelectPattern &,class LogicalFontInstance *,class rtl::OUString &,)const
     101

@@ -63,8 +63,7 @@ public:
                                 SfxPoolItem& rItem,
                                 SfxItemSet& rSet,
                                 const OUString& rValue,
-                                const SvXMLUnitConverter& rUnitConverter,
-                                const SvXMLNamespaceMap& rNamespaceMap ) override;
+                                const SvXMLUnitConverter& rUnitConverter ) override;
 
     virtual bool
     handleNoItem(SvXMLItemMapEntry const& rEntry,
@@ -114,8 +113,7 @@ bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
                                         SfxPoolItem& rItem,
                                         SfxItemSet& rItemSet,
                                         const OUString& rValue,
-                                        const SvXMLUnitConverter& rUnitConv,
-                                        const SvXMLNamespaceMap& )
+                                        const SvXMLUnitConverter& rUnitConv )
 {
     bool bRet = false;
     sal_uInt16 nMemberId = static_cast< sal_Int16 >(rEntry.nMemberId & MID_SW_FLAG_MASK);

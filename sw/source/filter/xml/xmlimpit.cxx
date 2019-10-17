@@ -133,8 +133,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                     else
                     {
                         bPut = handleSpecialItem( *pEntry, *pNewItem, rSet,
-                                                  rValue, rUnitConverter,
-                                                  rNamespaceMap );
+                                                  rValue, rUnitConverter );
                     }
 
                     if( bPut )
@@ -192,8 +191,7 @@ SvXMLImportItemMapper::handleSpecialItem(  const SvXMLItemMapEntry& /*rEntry*/,
                                             SfxPoolItem& /*rItem*/,
                                             SfxItemSet& /*rSet*/,
                                             const OUString& /*rValue*/,
-                                            const SvXMLUnitConverter& /*rUnitConverter*/,
-                                            const SvXMLNamespaceMap& /*rNamespaceMap*/ )
+                                            const SvXMLUnitConverter& /*rUnitConverter*/ )
 {
     OSL_FAIL( "unsupported special item in xml import" );
     return false;
