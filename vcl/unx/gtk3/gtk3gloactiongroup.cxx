@@ -41,6 +41,11 @@ typedef GObjectClass GLOActionClass;
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
+#if defined __clang__
+#if __has_warning("-Wdeprecated-volatile")
+#pragma clang diagnostic ignored "-Wdeprecated-volatile"
+#endif
+#endif
 #endif
 G_DEFINE_TYPE (GLOAction, g_lo_action, G_TYPE_OBJECT);
 #ifdef __GNUC__
@@ -107,6 +112,11 @@ static void g_lo_action_group_iface_init (GActionGroupInterface *);
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
+#if defined __clang__
+#if __has_warning("-Wdeprecated-volatile")
+#pragma clang diagnostic ignored "-Wdeprecated-volatile"
+#endif
+#endif
 #endif
 G_DEFINE_TYPE_WITH_CODE (GLOActionGroup,
     g_lo_action_group, G_TYPE_OBJECT,
