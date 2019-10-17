@@ -406,7 +406,8 @@ OString exceptionToString(const css::uno::Any & caught)
 void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunction, const char* fileAndLineNo,
         const char* area, const char* explanatory)
 {
-        OStringBuffer sMessage( "DBG_UNHANDLED_EXCEPTION in " );
+        OStringBuffer sMessage( 512 );
+        sMessage.append( "DBG_UNHANDLED_EXCEPTION in " );
         sMessage.append(currentFunction);
         if (explanatory)
         {

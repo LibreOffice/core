@@ -79,7 +79,7 @@ OUString readLockFile(const OUString& aSource)
     aFileStream.ReadBytes(pBuffer.get(), nSize);
 
     css::uno::Sequence<sal_Int8> aData(pBuffer.get(), nSize);
-    OStringBuffer aResult;
+    OStringBuffer aResult(static_cast<int>(nSize));
     for (sal_Int8 nByte : aData)
     {
         aResult.append(static_cast<sal_Char>(nByte));

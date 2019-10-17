@@ -142,12 +142,12 @@ namespace connectivity
     {
         OUString lcl_getPermittedJavaMethods_nothrow( const Reference< XComponentContext >& _rxContext )
         {
-            OUStringBuffer aConfigPath;
-            aConfigPath.append( "/org.openoffice.Office.DataAccess/DriverSettings/" );
-            aConfigPath.append     ( ODriverDelegator::getImplementationName_Static() );
-            aConfigPath.append( "/PermittedJavaMethods" );
+            OUString aConfigPath =
+                "/org.openoffice.Office.DataAccess/DriverSettings/" +
+                ODriverDelegator::getImplementationName_Static() +
+                "/PermittedJavaMethods";
             ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithComponentContext(
-                _rxContext, aConfigPath.makeStringAndClear() ) );
+                _rxContext, aConfigPath ) );
 
             OUStringBuffer aPermittedMethods;
             const Sequence< OUString > aNodeNames( aConfig.getNodeNames() );

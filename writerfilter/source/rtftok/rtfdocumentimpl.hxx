@@ -590,7 +590,7 @@ private:
     sal_uInt16 m_nMinute;
 
     /// Text from special destinations.
-    OUStringBuffer m_aDestinationText;
+    OUStringBuffer m_aDestinationText{ 512 };
     /// point to the buffer of the current destination
     OUStringBuffer* m_pCurrentDestinationText;
 
@@ -931,9 +931,9 @@ private:
     /// For the INCLUDEPICTURE field's argument.
     OUString m_aPicturePath;
     // Unicode characters are collected here so we don't have to send them one by one.
-    OUStringBuffer m_aUnicodeBuffer;
+    OUStringBuffer m_aUnicodeBuffer{ 512 };
     /// Same for hex characters.
-    OStringBuffer m_aHexBuffer;
+    OStringBuffer m_aHexBuffer{ 512 };
     /// Formula import.
     oox::formulaimport::XmlStreamBuilder m_aMathBuffer;
     /// Normal text property, that is math italic and math spacing are not applied to the current run.

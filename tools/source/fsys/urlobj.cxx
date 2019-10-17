@@ -1449,7 +1449,8 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
 }
 
 void INetURLObject::changeScheme(INetProtocol eTargetScheme) {
-    OUString aTmpStr=m_aAbsURIRef.makeStringAndClear();
+    OUString aTmpStr=m_aAbsURIRef.toString();
+    m_aAbsURIRef.setLength(0);
     int oldSchemeLen = 0;
     if (m_eScheme == INetProtocol::Generic)
         oldSchemeLen = m_aScheme.getLength();
@@ -3365,7 +3366,7 @@ OUString INetURLObject::encodeText(sal_Unicode const * pBegin,
                                     rtl_TextEncoding eCharset,
                                     bool bKeepVisibleEscapes)
 {
-    OUStringBuffer aResult;
+    OUStringBuffer aResult(256);
     while (pBegin < pEnd)
     {
         EscapeType eEscapeType;
@@ -4022,7 +4023,7 @@ bool INetURLObject::setName(OUString const& rTheName, EncodeMechanism eMechanism
     while (p != pSegEnd && *p != ';')
         ++p;
 
-    OUStringBuffer aNewPath;
+    OUStringBuffer aNewPath(256);
     aNewPath.append(pPathBegin, pSegBegin - pPathBegin);
     aNewPath.append(encodeText(rTheName, PART_PCHAR, eMechanism, eCharset, true));
     aNewPath.append(p, pPathEnd - p);

@@ -35,7 +35,6 @@ static OUString ImpCurrencyToString( sal_Int64 rVal )
     sal_Unicode const cDecimalSep = '.';
 
     OUString aAbsStr = OUString::number( absVal );
-    OUStringBuffer aBuf;
 
     sal_Int32 initialLen = aAbsStr.getLength();
 
@@ -53,6 +52,7 @@ static OUString ImpCurrencyToString( sal_Int64 rVal )
     if ( isNeg )
         ++nCapacity;
 
+    OUStringBuffer aBuf( nCapacity );
     aBuf.setLength( nCapacity );
 
 

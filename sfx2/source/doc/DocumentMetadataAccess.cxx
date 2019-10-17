@@ -184,7 +184,7 @@ uno::Reference<rdf::XURI> createBaseURI(
     if (true) {
         xBaseURI.set( xPkgURI, uno::UNO_SET_THROW );
     }
-    OUStringBuffer buf;
+    OUStringBuffer buf(64);
     if (!xBaseURI->getUriReference().endsWith("/"))
     {
         const sal_Int32 count( xBaseURI->getPathSegmentCount() );

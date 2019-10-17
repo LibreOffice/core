@@ -519,7 +519,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
         nMultipleThousandSeparators;
     bool    bPercent,bCurrency,bScientific,bGenerateThousandSeparator;
 
-    OUStringBuffer sReturnStrg;
+    OUStringBuffer sReturnStrg(32);
 
     // analyse the format-string, i. e. determine the following values:
     /*

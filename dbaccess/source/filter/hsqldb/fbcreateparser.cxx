@@ -136,7 +136,8 @@ void FbCreateStmtParser::ensureProperTableLengths() const
 OUString FbCreateStmtParser::compose() const
 {
     ensureProperTableLengths();
-    OUStringBuffer sSql("CREATE TABLE ");
+    OUStringBuffer sSql(128);
+    sSql.append("CREATE TABLE ");
     sSql.append(getTableName());
 
     lcl_appendWithSpace(sSql, "("); // column declaration

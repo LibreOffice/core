@@ -130,7 +130,7 @@ LockFileEntry LockFileCommon::ParseEntry( const uno::Sequence< sal_Int8 >& aBuff
 
 OUString LockFileCommon::ParseName( const uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& io_nCurPos )
 {
-    OStringBuffer aResult;
+    OStringBuffer aResult(128);
     bool bHaveName = false;
     bool bEscape = false;
 
@@ -168,7 +168,7 @@ OUString LockFileCommon::ParseName( const uno::Sequence< sal_Int8 >& aBuffer, sa
 
 OUString LockFileCommon::EscapeCharacters( const OUString& aSource )
 {
-    OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer(aSource.getLength()*2);
     const sal_Unicode* pStr = aSource.getStr();
     for ( sal_Int32 nInd = 0; nInd < aSource.getLength() && pStr[nInd] != 0; nInd++ )
     {

@@ -178,7 +178,7 @@ void DocumentLockFile::WriteEntryToStream( const LockFileEntry& aEntry, const un
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer(256);
 
     for ( LockFileComponent lft : o3tl::enumrange<LockFileComponent>() )
     {
