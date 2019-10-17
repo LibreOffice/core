@@ -324,9 +324,16 @@ SAL_DLLPUBLIC_EXPORT GType lok_doc_view_get_type();
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
 #endif
+#if defined __clang__ && __clang_major__ >= 10
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-volatile"
+#endif
 G_DEFINE_TYPE_WITH_CODE (LOKDocView, lok_doc_view, GTK_TYPE_DRAWING_AREA,
                          G_ADD_PRIVATE (LOKDocView)
                          G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, lok_doc_view_initable_iface_init));
+#if defined __clang__ && __clang_major__ >= 10
+#pragma clang diagnostic pop
+#endif
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
