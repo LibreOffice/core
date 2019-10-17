@@ -175,9 +175,6 @@ include/svtools/table/tablerenderer.hxx:177
 include/svtools/table/tablerenderer.hxx:224
     void svt::table::ITableRenderer::HideCellCursor(class vcl::Window &,const class tools::Rectangle &,)
     10
-include/svx/fmtools.hxx:141
-    void FmXDisposeListener::disposing(const struct com::sun::star::lang::EventObject &,short,)
-    01
 include/svx/IAccessibleParent.hxx:80
     _Bool accessibility::IAccessibleParent::ReplaceChild(class accessibility::AccessibleShape *,const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,const long,const class accessibility::AccessibleShapeTreeInfo &,)
     1101

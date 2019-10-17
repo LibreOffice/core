@@ -203,7 +203,7 @@ public:
     DisposeListenerGridBridge(  DbGridControl& _rParent, const Reference< XComponent >& _rxObject);
     virtual ~DisposeListenerGridBridge() override;
 
-    virtual void disposing(const EventObject& /*_rEvent*/, sal_Int16 _nId) override { m_rParent.disposing(_nId); }
+    virtual void disposing(sal_Int16 _nId) override { m_rParent.disposing(_nId); }
 };
 
 DisposeListenerGridBridge::DisposeListenerGridBridge(DbGridControl& _rParent, const Reference< XComponent >& _rxObject)
