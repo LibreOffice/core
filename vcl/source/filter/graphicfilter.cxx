@@ -1752,12 +1752,12 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                 nStatus = ERRCODE_GRFILTER_FILTERERROR;
             }
         }
-        else if (aFilterName == IMP_PDF)
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_PDF))
         {
-            if (!vcl::ImportPDF(rIStream, rGraphic))
-                nStatus = ERRCODE_GRFILTER_FILTERERROR;
-            else
+            if (vcl::ImportPDF(rIStream, rGraphic))
                 eLinkType = GfxLinkType::NativePdf;
+            else
+                nStatus = ERRCODE_GRFILTER_FILTERERROR;
         }
         else
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
