@@ -2230,9 +2230,7 @@ void SvTreeListBox::ModelHasInserted( SvTreeListEntry* pEntry )
     pImpl->EntryInserted( pEntry );
 }
 
-void SvTreeListBox::ModelIsMoving(SvTreeListEntry* pSource,
-                                        SvTreeListEntry* /* pTargetParent */,
-                                        sal_uLong /* nChildPos */ )
+void SvTreeListBox::ModelIsMoving(SvTreeListEntry* pSource )
 {
     pImpl->MovingEntry( pSource );
 }

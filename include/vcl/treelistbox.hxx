@@ -634,8 +634,7 @@ public:
     virtual void    ModelHasCleared() override;
     virtual void    ModelHasInserted( SvTreeListEntry* pEntry ) override;
     virtual void    ModelHasInsertedTree( SvTreeListEntry* pEntry ) override;
-    virtual void    ModelIsMoving(SvTreeListEntry* pSource,
-                        SvTreeListEntry* pTargetParent, sal_uLong nChildPos ) override;
+    virtual void    ModelIsMoving(SvTreeListEntry* pSource ) override;
     virtual void    ModelHasMoved(SvTreeListEntry* pSource ) override;
     virtual void    ModelIsRemoving( SvTreeListEntry* pEntry ) override;
     virtual void    ModelHasRemoved( SvTreeListEntry* pEntry ) override;

@@ -1157,8 +1157,7 @@ void SvListView::ModelHasInsertedTree( SvTreeListEntry* )
 {
 }
 
-void SvListView::ModelIsMoving( SvTreeListEntry* /*  pSource */ ,
-    SvTreeListEntry* /* pTargetParent */ ,  sal_uLong /* nPos */    )
+void SvListView::ModelIsMoving( SvTreeListEntry* /*  pSource */ )
 {
 }
 
@@ -1292,7 +1291,7 @@ void SvListView::Impl::ActionClear()
 }
 
 void SvListView::ModelNotification( SvListAction nActionId, SvTreeListEntry* pEntry1,
-                        SvTreeListEntry* pEntry2, sal_uLong nPos )
+                        SvTreeListEntry* /*pEntry2*/, sal_uLong /*nPos*/ )
 {
     switch( nActionId )
     {
@@ -1312,7 +1311,7 @@ void SvListView::ModelNotification( SvListAction nActionId, SvTreeListEntry* pEn
             ModelHasRemoved( pEntry1 );
             break;
         case SvListAction::MOVING:
-            ModelIsMoving( pEntry1, pEntry2, nPos );
+            ModelIsMoving( pEntry1 );
             m_pImpl->ActionMoving( pEntry1 );
             break;
         case SvListAction::MOVED:

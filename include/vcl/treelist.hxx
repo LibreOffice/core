@@ -299,11 +299,7 @@ public:
     virtual void        ModelHasCleared();
     virtual void        ModelHasInserted( SvTreeListEntry* pEntry );
     virtual void        ModelHasInsertedTree( SvTreeListEntry* pEntry );
-    virtual void        ModelIsMoving(
-                            SvTreeListEntry* pSource,
-                            SvTreeListEntry* pTargetParent,
-                            sal_uLong nPos
-                        );
+    virtual void        ModelIsMoving( SvTreeListEntry* pSource );
     virtual void        ModelHasMoved( SvTreeListEntry* pSource );
     virtual void        ModelIsRemoving( SvTreeListEntry* pEntry );
     virtual void        ModelHasRemoved( SvTreeListEntry* pEntry );
