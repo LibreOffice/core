@@ -33,14 +33,14 @@ private:
     css::uno::Reference< css::io::XStream > mxDocumentStream;
     oox::ole::OleStorage& mrOleStorage;
     css::uno::Reference< css::packages::XPackageEncryption > mxPackageEncryption;
-    css::uno::Sequence< css::beans::NamedValue >& mMediaEncData;
+    const css::uno::Sequence< css::beans::NamedValue >& mMediaEncData;
     css::uno::Reference< css::uno::XComponentContext > mxContext;
 
 public:
     DocumentEncryption(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         css::uno::Reference< css::io::XStream > const & xDocumentStream,
         oox::ole::OleStorage& rOleStorage,
-        css::uno::Sequence< css::beans::NamedValue >& rMediaEncData);
+        const css::uno::Sequence< css::beans::NamedValue >& rMediaEncData);
 
     bool encrypt();
 
