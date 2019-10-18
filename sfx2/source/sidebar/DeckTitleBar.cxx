@@ -93,7 +93,7 @@ tools::Rectangle DeckTitleBar::GetDragArea()
     );
 }
 
-void DeckTitleBar::PaintDecoration(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rTitleBarBox*/)
+void DeckTitleBar::PaintDecoration(vcl::RenderContext& rRenderContext)
 {
    Image aImage (Theme::GetImage(Theme::Image_Grip));
    const Point aTopLeft(gaLeftGripPadding,

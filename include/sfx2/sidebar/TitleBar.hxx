@@ -58,7 +58,7 @@ protected:
     OUString msTitle;
 
     virtual tools::Rectangle GetTitleArea (const tools::Rectangle& rTitleBarBox) = 0;
-    virtual void PaintDecoration (vcl::RenderContext& rRenderContext, const tools::Rectangle& rTitleBarBox) = 0;
+    virtual void PaintDecoration (vcl::RenderContext& rRenderContext) = 0;
     void PaintFocus(vcl::RenderContext& rRenderContext, const tools::Rectangle& rFocusBox);
     virtual sidebar::Paint GetBackgroundPaint() = 0;
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex);

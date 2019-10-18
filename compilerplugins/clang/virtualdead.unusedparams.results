@@ -142,9 +142,6 @@ include/sfx2/sfxstatuslistener.hxx:49
 include/sfx2/sidebar/ControllerItem.hxx:44
     void sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface::NotifyItemUpdate(const unsigned short,const enum SfxItemState,const class SfxPoolItem *,const _Bool,)
     1110
-include/sfx2/sidebar/TitleBar.hxx:61
-    void sfx2::sidebar::TitleBar::PaintDecoration(class OutputDevice &,const class tools::Rectangle &,)
-    10
 include/sfx2/stbitem.hxx:100
     _Bool SfxStatusBarControl::MouseButtonUp(const class MouseEvent &,)
     0

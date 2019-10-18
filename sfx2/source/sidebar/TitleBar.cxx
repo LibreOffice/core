@@ -82,7 +82,7 @@ void TitleBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&
     Size aWindowSize (GetSizePixel());
     tools::Rectangle aTitleBarBox(0,0, aWindowSize.Width(), aWindowSize.Height());
 
-    PaintDecoration(rRenderContext, aTitleBarBox);
+    PaintDecoration(rRenderContext);
     const tools::Rectangle aTitleBox(GetTitleArea(aTitleBarBox));
     PaintTitle(rRenderContext, aTitleBox);
     PaintFocus(rRenderContext, aTitleBox);
