@@ -50,6 +50,7 @@ static const char TOOLBARCONTROLLER_IMGBUTTON[]   = "ImageButton";
 static const char TOOLBARCONTROLLER_DROPDOWNBOX[] = "Dropdownbox";
 static const char TOOLBARCONTROLLER_DROPDOWNBTN[] = "DropdownButton";
 static const char TOOLBARCONTROLLER_TOGGLEDDBTN[] = "ToggleDropdownButton";
+static const char TOOLBARCONTROLLER_FIXEDTEXT[]   = "FixedText";
 
 static const char   TOOLBOXITEM_SEPARATOR_STR[]   = "private:separator";
 
@@ -605,6 +606,8 @@ void ToolBarMerger::RemoveItems(
     else if ( rControlType == TOOLBARCONTROLLER_DROPDOWNBTN )
         pResult = new ToggleButtonToolbarController( rxContext, xFrame, pToolbar, nId,
                                                      ToggleButtonToolbarController::Style::DropDownButton, rCommandURL );
+    else if ( rControlType == TOOLBARCONTROLLER_FIXEDTEXT )
+        pResult = new FixedTextToolbarController( rxContext, xFrame, pToolbar, nId, rCommandURL );
     else if ( rControlType == TOOLBARCONTROLLER_TOGGLEDDBTN )
         pResult = new ToggleButtonToolbarController( rxContext, xFrame, pToolbar, nId,
                                                      ToggleButtonToolbarController::Style::ToggleDropDownButton, rCommandURL );
