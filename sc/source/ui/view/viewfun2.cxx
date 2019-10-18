@@ -1645,10 +1645,14 @@ void ScViewFunc::FillTab( InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool 
 
 /** Downward fill of selected cell(s) by double-clicking cross-hair cursor
 
-    Extends a current selection down to the last non-empty cell of an adjacent
-    column when the lower-right corner of the selection is double-clicked.  It
-    uses a left-adjoining non-empty column as a guide if such is available,
-    otherwise a right-adjoining non-empty column is used.
+    Either, extends a current selection if non-empty cells exist immediately
+    below the selection, overwriting cells below the selection up to the
+    minimum row of already filled cells.
+
+    Or, extends a current selection down to the last non-empty cell of an
+    adjacent column when the lower-right corner of the selection is
+    double-clicked. It uses a left-adjoining non-empty column as a guide if
+    such is available, otherwise a right-adjoining non-empty column is used.
 
     @return No return value
 
@@ -1666,61 +1670,101 @@ void ScViewFunc::FillCrossDblClick()
     SCCOL nEndX   = aRange.aEnd.Col();
     SCROW nEndY   = aRange.aEnd.Row();
 
+    if (nEndY >= MAXROW)
+        // Nothing to fill.
+        return;
+
     ScDocument* pDoc = GetViewData().GetDocument();
 
     // Make sure the selection is not empty
     if ( pDoc->IsBlockEmpty( nTab, nStartX, nStartY, nEndX, nEndY ) )
         return;
 
-    if ( nEndY < MAXROW )
+    // If there is data in all columns immediately below the selection then
+    // switch to overwriting fill.
+    SCROW nOverWriteEndRow = MAXROW;
+    for (SCCOL nCol = nStartX; nCol <= nEndX; ++nCol)
     {
-        const bool bDataLeft = (nStartX > 0);
-        if (bDataLeft || nEndX < MAXCOL)
+        if (pDoc->HasData( nCol, nEndY + 1, nTab))
         {
-            // Check that there is
-            // 1) data immediately left (preferred) or right of start (row) of selection
-            // 2) data there below
-            // 3) no data immediately below selection
-
-            SCCOL nMovX = (bDataLeft ? nStartX - 1 : nEndX + 1);
-            SCROW nMovY = nStartY;
-            bool bDataFound = (pDoc->HasData( nMovX, nStartY, nTab) && pDoc->HasData( nMovX, nStartY + 1, nTab));
-            if (!bDataFound && bDataLeft && nEndX < MAXCOL)
+            // Determine the shortest data column to end the fill.
+            SCROW nY = nEndY + 1;
+            // FindAreaPos() returns the start row of the next data block if
+            // the current row is the the last row of a data block and an empty
+            // cell follows. Somewhat unexpected behaviour..
+            // So check beforehand if there is one non-empty cell following.
+            if (pDoc->HasData( nCol, nY + 1, nTab))
             {
-                nMovX = nEndX + 1;  // check right
-                bDataFound = (pDoc->HasData( nMovX, nStartY, nTab) && pDoc->HasData( nMovX, nStartY + 1, nTab));
+                pDoc->FindAreaPos( nCol, nY, nTab, SC_MOVE_DOWN);
+                if (nOverWriteEndRow > nY)
+                    nOverWriteEndRow = nY;
             }
-
-            if (bDataFound && pDoc->IsBlockEmpty( nTab, nStartX, nEndY + 1, nEndX, nEndY + 1, true))
+            else
             {
-                // Get end of data left or right.
-                pDoc->FindAreaPos( nMovX, nMovY, nTab, SC_MOVE_DOWN);
-                // Find minimum end row of below empty area and data right.
-                for (SCCOL nX = nStartX; nX <= nEndX; ++nX)
-                {
-                    SCROW nY = nEndY + 1;
-                    // Get next row with data in this column.
-                    pDoc->FindAreaPos( nX, nY, nTab, SC_MOVE_DOWN);
-                    if (nMovY == MAXROW && nY == MAXROW)
-                    {
-                        // FindAreaPos() returns MAXROW also if there is no
-                        // data at all from the start, so check if that
-                        // contains data if the nearby (left or right) data
-                        // ends there and increment if no data here, pretending
-                        // the next data would be thereafter so nMovY will not
-                        // be decremented.
-                        if (!pDoc->HasData( nX, nY, nTab))
-                            ++nY;
-                    }
-                    if (nMovY > nY - 1)
-                        nMovY = nY - 1;
-                }
-
-                if (nMovY > nEndY)
-                {
-                    FillAuto( FILL_TO_BOTTOM, nStartX, nStartY, nEndX, nEndY, nMovY - nEndY);
-                }
+                nOverWriteEndRow = nY;
             }
+        }
+        else
+        {
+            nOverWriteEndRow = 0;
+            break;  // for
+        }
+    }
+
+    if (nOverWriteEndRow > nEndY)
+    {
+        FillAuto( FILL_TO_BOTTOM, nStartX, nStartY, nEndX, nEndY, nOverWriteEndRow - nEndY);
+        return;
+    }
+
+    // Non-overwriting fill follows.
+
+    const bool bDataLeft = (nStartX > 0);
+    if (!bDataLeft && nEndX >= MAXCOL)
+        // Absolutely no data left or right of selection.
+        return;
+
+    // Check that there is
+    // 1) data immediately left (preferred) or right of start (row) of selection
+    // 2) data there below
+    // 3) no data immediately below selection
+
+    SCCOL nMovX = (bDataLeft ? nStartX - 1 : nEndX + 1);
+    SCROW nMovY = nStartY;
+    bool bDataFound = (pDoc->HasData( nMovX, nStartY, nTab) && pDoc->HasData( nMovX, nStartY + 1, nTab));
+    if (!bDataFound && bDataLeft && nEndX < MAXCOL)
+    {
+        nMovX = nEndX + 1;  // check right
+        bDataFound = (pDoc->HasData( nMovX, nStartY, nTab) && pDoc->HasData( nMovX, nStartY + 1, nTab));
+    }
+
+    if (bDataFound && pDoc->IsBlockEmpty( nTab, nStartX, nEndY + 1, nEndX, nEndY + 1, true))
+    {
+        // Get end of data left or right.
+        pDoc->FindAreaPos( nMovX, nMovY, nTab, SC_MOVE_DOWN);
+        // Find minimum end row of below empty area and data right.
+        for (SCCOL nX = nStartX; nX <= nEndX; ++nX)
+        {
+            SCROW nY = nEndY + 1;
+            // Get next row with data in this column.
+            pDoc->FindAreaPos( nX, nY, nTab, SC_MOVE_DOWN);
+            if (nMovY == MAXROW && nY == MAXROW)
+            {
+                // FindAreaPos() returns MAXROW also if there is no data at all
+                // from the start, so check if that contains data if the nearby
+                // (left or right) data ends there and increment if no data
+                // here, pretending the next data would be thereafter so nMovY
+                // will not be decremented.
+                if (!pDoc->HasData( nX, nY, nTab))
+                    ++nY;
+            }
+            if (nMovY > nY - 1)
+                nMovY = nY - 1;
+        }
+
+        if (nMovY > nEndY)
+        {
+            FillAuto( FILL_TO_BOTTOM, nStartX, nStartY, nEndX, nEndY, nMovY - nEndY);
         }
     }
 }
