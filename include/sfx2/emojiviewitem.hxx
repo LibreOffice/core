@@ -26,7 +26,7 @@ public:
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                         const ThumbnailItemAttributes *pAttrs) override;
 
-    virtual void calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
+    virtual void calculateItemsPosition (const long nThumbnailHeight,
                                          const long nPadding, sal_uInt32 nMaxTextLength,
                                          const ThumbnailItemAttributes *pAttrs) override;
 private:

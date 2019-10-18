@@ -354,7 +354,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
             }
 
             pItem->setDrawArea(::tools::Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
-            pItem->calculateItemsPosition(mnThumbnailHeight,mnDisplayHeight,mnItemPadding,mpItemAttrs->nMaxTextLength,mpItemAttrs.get());
+            pItem->calculateItemsPosition(mnThumbnailHeight,mnItemPadding,mpItemAttrs->nMaxTextLength,mpItemAttrs.get());
 
             if ( !((nCurCount+1) % mnCols) )
             {
@@ -1510,7 +1510,7 @@ void SfxThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
             }
 
             pItem->setDrawArea(::tools::Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
-            pItem->calculateItemsPosition(mnThumbnailHeight,mnDisplayHeight,mnItemPadding,mpItemAttrs->nMaxTextLength,mpItemAttrs.get());
+            pItem->calculateItemsPosition(mnThumbnailHeight,mnItemPadding,mpItemAttrs->nMaxTextLength,mpItemAttrs.get());
 
             if ( !((nCurCount+1) % mnCols) )
             {

@@ -120,7 +120,7 @@ void ThumbnailViewItem::setDrawArea (const ::tools::Rectangle &area)
     maDrawArea = area;
 }
 
-void ThumbnailViewItem::calculateItemsPosition (const long nThumbnailHeight, const long,
+void ThumbnailViewItem::calculateItemsPosition (const long nThumbnailHeight,
                                                 const long nPadding, sal_uInt32 nMaxTextLength,
                                                 const ThumbnailItemAttributes *pAttrs)
 {
