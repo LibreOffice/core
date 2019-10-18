@@ -374,11 +374,10 @@ void DocumentFieldsManager::RemoveFieldType(size_t nField)
         if( nWhich != SwFieldIds::Database )
         {
             OSL_ENSURE( !pTmp->HasWriterListeners(), "Dependent fields present!" );
-            // delete field type
-            delete pTmp;
         }
         else
             (*mpFieldTypes)[nField].release(); // DB fields are ref-counted and delete themselves
+
         mpFieldTypes->erase( mpFieldTypes->begin() + nField );
         m_rDoc.getIDocumentState().SetModified();
     }
