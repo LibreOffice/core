@@ -220,6 +220,11 @@ public:
             return maLocale.meSubstitute == LocaleType::Substitute::LONGDATE && maLocale.meLanguage == LANGUAGE_SYSTEM;
         }
 
+    /** If the format is a MM:SS or [MM]:SS format, or MM:[SS] (sic!) or even
+        MM:SS.00 or [MM]:SS.00 or MM:[SS].00
+     */
+    bool IsMinuteSecondFormat() const;
+
     const OUString& GetFormatstring() const   { return sFormatstring; }
 
     // Build a format string of application defined keywords
