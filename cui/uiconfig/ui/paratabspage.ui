@@ -167,7 +167,7 @@
                   <object class="GtkEntry" id="entryED_TABTYPE_DECCHAR">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="width_chars">1</property>
+                    <property name="width_chars">3</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -469,7 +469,7 @@
                   <object class="GtkEntry" id="entryED_FILLCHAR_OTHER">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="width_chars">1</property>
+                    <property name="width_chars">3</property>
                     <accessibility>
                       <relation type="labelled-by" target="radiobuttonBTN_FILLCHAR_OTHER"/>
                     </accessibility>
