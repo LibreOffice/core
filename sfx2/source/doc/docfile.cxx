@@ -1514,7 +1514,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
 }
 
 
-uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
+uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
 {
     if ( pImpl->xStorage.is() || pImpl->m_bTriedStorage )
         return pImpl->xStorage;
@@ -1525,7 +1525,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
     // to let the MediaDescriptor be filled with the streams
     GetMedium_Impl();
 
-    if ( bCreateTempIfNo )
+    if ( bCreateTempFile )
         CreateTempFile( false );
 
     GetMedium_Impl();
