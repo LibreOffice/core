@@ -105,8 +105,8 @@ bool SdPdfFilter::Import()
 
     uno::Sequence<sal_Int8> aPdfData;
     std::vector<Bitmap> aBitmaps;
-    if (vcl::ImportPDF(aFileName, aBitmaps, aPdfData, dResolutionDPI) == 0)
-        return false;
+    //if (vcl::ImportPDF(aFileName, aBitmaps, aPdfData, dResolutionDPI) == 0)
+    return false;
 
     // Prepare the link with the PDF stream.
     const size_t nGraphicContentSize = aPdfData.getLength();
@@ -127,7 +127,7 @@ bool SdPdfFilter::Import()
     {
         // Create the Graphic and link the original PDF stream.
         Graphic aGraphic(aBitmap);
-        aGraphic.setPdfData(pPdfData);
+        //aGraphic.setPdfData(pPdfData);
         aGraphic.setPageNumber(nPageNumber);
         aGraphic.SetGfxLink(pGfxLink);
 
