@@ -527,13 +527,14 @@ void PDFDict::insertValue( const OString& rName, std::unique_ptr<PDFEntry> pValu
     if( ! pValue )
         eraseValue( rName );
 
-    auto pValueTmp = pValue.get();
+    PDFEntry* pValueTmp = nullptr;
     std::unordered_map<OString,PDFEntry*>::iterator it = m_aMap.find( rName );
     if( it == m_aMap.end() )
     {
         // new name/value, pair, append it
         m_aSubElements.emplace_back(std::make_unique<PDFName>(rName));
         m_aSubElements.emplace_back( std::move(pValue) );
+        pValueTmp = m_aSubElements.back().get();
     }
     else
     {
@@ -543,10 +544,12 @@ void PDFDict::insertValue( const OString& rName, std::unique_ptr<PDFEntry> pValu
             if( m_aSubElements[i].get() == it->second )
             {
                 m_aSubElements[i] = std::move(pValue);
+                pValueTmp = m_aSubElements[i].get();
                 bFound = true;
                 break;
             }
     }
+    assert(pValueTmp);
     m_aMap[ rName ] = pValueTmp;
 }
 
