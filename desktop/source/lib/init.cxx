@@ -3332,7 +3332,8 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
         } catch(...) {}
 
         // force resend
-        pWindow->Resize();
+        pWindow->Hide();
+        pWindow->Show();
     }
 
     free(pCopy);
