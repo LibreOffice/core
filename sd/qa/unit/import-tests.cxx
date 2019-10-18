@@ -1219,7 +1219,84 @@ void SdImportTest::testBnc862510_7()
     xDocShRef->DoClose();
 }
 
-#if ENABLE_PDFIMPORT && defined(IMPORT_PDF_ELEMENTS)
+#if ENABLE_PDFIMPORT
+// These tests use the old PDF-importing logic, which imports PDF elements as
+// SD elements. This suffered many issues, and therefore wasn't ideal.
+// The old PDF importer relied on an open-source project (xpdf) with an
+// incompatible license (gpl), which has to be interfaced via an out-of-process
+// library wrapper process. The resulting imported document was inaccurate
+// and often very slow and with large memory footprint.
+// Instead, PDFium offers state-of-the-art PDF importing logic,
+// which is well-maintained and renders PDFs into images with high accuracy.
+// So, the idea is to import PDFs as images using PDFium, which has a very
+// high quality (and is much faster) than importing individual editable elements.
+// So that's the "new" way of importing.
+// The user then breaks the image to editable elements (which is not perfect,
+// but very close to the old way), only if they need editing ability.
+// PDFium should overall be better, and where it isn't, we just need to improve it.
+// So these tests aren't really useful anymore. They should be modified to do
+// import+break and then check the results. But that isn't straight-forward and
+// currently await volunteering time to implement.
+
+#if HAVE_FEATURE_PDFIUM
+void SdImportTest::testPDFImportShared()
+{
+    comphelper::LibreOfficeKit::setActive();
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pdf/multipage.pdf"), PDF);
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
+
+    // This test is to verify that we share the PDF stream linked to each
+    // Graphic instance in the imported document.
+    // Since we import PDFs as images, we support attaching the original
+    // PDF with each image to allow for advanced editing.
+    // Here we iterate over all Graphic instances embedded in the pages
+    // and verify that they all point to the same object in memory.
+    std::vector<Graphic> aGraphics;
+
+    for (int nPageIndex = 0; nPageIndex < pDoc->GetPageCount(); ++nPageIndex)
+    {
+        const SdrPage* pPage = GetPage(nPageIndex, xDocShRef);
+        if (pPage == nullptr)
+            break;
+
+        for (size_t nObjIndex = 0; nObjIndex < pPage->GetObjCount(); ++nObjIndex)
+        {
+            SdrObject* pObject = pPage->GetObj(nObjIndex);
+            if (pObject == nullptr)
+                continue;
+
+            SdrGrafObj* pSdrGrafObj = dynamic_cast<SdrGrafObj*>(pObject);
+            if (pSdrGrafObj == nullptr)
+                continue;
+
+            const GraphicObject& rGraphicObject = pSdrGrafObj->GetGraphicObject().GetGraphic();
+            const Graphic& rGraphic = rGraphicObject.GetGraphic();
+            aGraphics.push_back(rGraphic);
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected more than one page.", size_t(3), aGraphics.size());
+
+    Graphic aFirstGraphic = aGraphics[0];
+
+    for (size_t i = 1; i < aGraphics.size(); ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected all PDF streams to be identical.",
+                                     aFirstGraphic.getVectorGraphicData()->getVectorGraphicDataArray().getConstArray(),
+                                     aGraphics[i].getVectorGraphicData()->getVectorGraphicDataArray().getConstArray());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected all GfxLinks to be identical.",
+                                     aFirstGraphic.GetSharedGfxLink().get(),
+                                     aGraphics[i].GetSharedGfxLink().get());
+    }
+
+    xDocShRef->DoClose();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+#endif
+
+#if defined(IMPORT_PDF_ELEMENTS)
 
 void SdImportTest::testPDFImport()
 {
@@ -1256,6 +1333,7 @@ void SdImportTest::testPDFImportSkipImages()
     xDocShRef->DoClose();
 }
 
+#endif
 #endif
 
 void SdImportTest::testBulletSuffix()
