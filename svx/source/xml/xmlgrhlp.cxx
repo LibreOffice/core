@@ -759,28 +759,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
             std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(aStream.xStream));
             if (bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData())
             {
-                const std::shared_ptr<uno::Sequence<sal_Int8>>& rPdfData = aGraphic.getPdfData();
-                if (rPdfData && rPdfData->hasElements())
-                {
-                    // See if we have this PDF already, and avoid duplicate storage.
-                    auto aIt = maExportPdf.find(rPdfData.get());
-                    if (aIt != maExportPdf.end())
-                    {
-                        auto const& aURLAndMimePair = aIt->second;
-                        rOutSavedMimeType = aURLAndMimePair.second;
-                        return aURLAndMimePair.first;
-                    }
-
-                    // The graphic has PDF data attached to it, use that.
-                    // vcl::ImportPDF() possibly downgraded the PDF data from a
-                    // higher PDF version, while aGfxLink still contains the
-                    // original data provided by the user.
-                    pStream->WriteBytes(rPdfData->getConstArray(), rPdfData->getLength());
-                }
-                else
-                {
-                    pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
-                }
+                pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
 
                 rOutSavedMimeType = aMimeType;
                 bSuccess = (pStream->GetError() == ERRCODE_NONE);
@@ -848,8 +827,6 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
 
             // put into cache
             maExportGraphics[aGraphic] = std::make_pair(aStoragePath, rOutSavedMimeType);
-            if (aGraphic.hasPdfData())
-                maExportPdf[aGraphic.getPdfData().get()] = std::make_pair(aStoragePath, rOutSavedMimeType);
 
             return aStoragePath;
         }
