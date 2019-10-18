@@ -173,41 +173,34 @@ vcl::Window* MediaWindow::getWindow() const
 }
 
 
-void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
+FilterNameVector MediaWindow::getMediaFilters()
 {
-    static const char* pFilters[] = { "Advanced Audio Coding", "aac",
-                                      "AIF Audio", "aif;aiff",
-                                      "Advanced Systems Format", "asf;wma;wmv",
-                                      "AU Audio", "au",
-                                      "AC3 Audio", "ac3",
-                                      "AVI", "avi",
-                                      "CD Audio", "cda",
-                                      "Digital Video", "dv",
-                                      "FLAC Audio", "flac",
-                                      "Flash Video", "flv",
-                                      "Matroska Media", "mkv",
-                                      "MIDI Audio", "mid;midi",
-                                      "MPEG Audio", "mp2;mp3;mpa;m4a",
-                                      "MPEG Video", "mpg;mpeg;mpv;mp4;m4v",
-                                      "Ogg Audio", "ogg;oga;opus",
-                                      "Ogg Video", "ogv;ogx",
-                                      "Real Audio", "ra",
-                                      "Real Media", "rm",
-                                      "RMI MIDI Audio", "rmi",
-                                      "SND (SouND) Audio", "snd",
-                                      "Quicktime Video", "mov",
-                                      "Vivo Video", "viv",
-                                      "WAVE Audio", "wav",
-                                      "WebM Video", "webm",
-                                      "Windows Media Audio", "wma",
-                                      "Windows Media Video", "wmv"};
-
-    for( size_t i = 0; i < SAL_N_ELEMENTS(pFilters); i += 2 )
-    {
-        rFilterNameVector.push_back( std::make_pair< OUString, OUString >(
-                                        OUString::createFromAscii(pFilters[i]),
-                                        OUString::createFromAscii(pFilters[i+1]) ) );
-    }
+    return {{"Advanced Audio Coding", "aac"},
+            {"AIF Audio", "aif;aiff"},
+            {"Advanced Systems Format", "asf;wma;wmv"},
+            {"AU Audio", "au"},
+            {"AC3 Audio", "ac3"},
+            {"AVI", "avi"},
+            {"CD Audio", "cda"},
+            {"Digital Video", "dv"},
+            {"FLAC Audio", "flac"},
+            {"Flash Video", "flv"},
+            {"Matroska Media", "mkv"},
+            {"MIDI Audio", "mid;midi"},
+            {"MPEG Audio", "mp2;mp3;mpa;m4a"},
+            {"MPEG Video", "mpg;mpeg;mpv;mp4;m4v"},
+            {"Ogg Audio", "ogg;oga;opus"},
+            {"Ogg Video", "ogv;ogx"},
+            {"Real Audio", "ra"},
+            {"Real Media", "rm"},
+            {"RMI MIDI Audio", "rmi"},
+            {"SND (SouND) Audio", "snd"},
+            {"Quicktime Video", "mov"},
+            {"Vivo Video", "viv"},
+            {"WAVE Audio", "wav"},
+            {"WebM Video", "webm"},
+            {"Windows Media Audio", "wma"},
+            {"Windows Media Video", "wmv"}};
 }
 
 
@@ -218,14 +211,12 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
             : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             FileDialogFlags::NONE, pParent);
     static const char               aWildcard[] = "*.";
-    FilterNameVector                aFilters;
+    FilterNameVector                aFilters = getMediaFilters();
     static const char               aSeparator[] = ";";
     OUStringBuffer                  aAllTypes;
 
     aDlg.SetTitle( AvmResId( o_pbLink != nullptr
                 ? AVMEDIA_STR_INSERTMEDIA_DLG : AVMEDIA_STR_OPENMEDIA_DLG ) );
-
-    getMediaFilters( aFilters );
 
     for( FilterNameVector::size_type i = 0; i < aFilters.size(); ++i )
     {
@@ -337,10 +328,8 @@ bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bo
         }
         else
         {
-            FilterNameVector        aFilters;
+            FilterNameVector        aFilters = getMediaFilters();
             const OUString          aExt( aURL.getExtension() );
-
-            getMediaFilters( aFilters );
 
             for( FilterNameVector::size_type i = 0; i < aFilters.size(); ++i )
             {

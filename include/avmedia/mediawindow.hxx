@@ -93,7 +93,7 @@ namespace avmedia
 
     public:
 
-        static void         getMediaFilters( FilterNameVector& rFilterNameVector );
+        static FilterNameVector getMediaFilters();
         /// @param o_pbLink if not 0, this is an "insert" dialog: display link
         ///                 checkbox and store its state in *o_pbLink
         static bool         executeMediaURLDialog(weld::Window* pParent, OUString& rURL, bool *const o_pbLink);
