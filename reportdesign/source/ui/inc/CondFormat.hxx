@@ -66,7 +66,6 @@ namespace rptui
         css::uno::Reference< css::report::XReportControlModel >
                                                             m_xCopy;
 
-        bool    m_bDeletingCondition;
         bool    m_bConstructed;
 
         std::unique_ptr<weld::ScrolledWindow> m_xScrollWindow;

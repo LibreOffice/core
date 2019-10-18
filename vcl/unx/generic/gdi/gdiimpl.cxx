@@ -922,7 +922,6 @@ void X11SalGraphicsImpl::ResetClipRegion()
     if( mrParent.mpClipRegion )
     {
         mbPenGC         = false;
-        mrParent.bFontGC_ = false;
         mbBrushGC       = false;
         mbCopyGC        = false;
         mbInvertGC      = false;
@@ -985,7 +984,6 @@ bool X11SalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
 
     // done, invalidate GCs
     mbPenGC         = false;
-    mrParent.bFontGC_ = false;
     mbBrushGC       = false;
     mbCopyGC        = false;
     mbInvertGC      = false;
@@ -1103,7 +1101,6 @@ void X11SalGraphicsImpl::SetXORMode( bool bSet, bool )
     {
         mbXORMode   = bSet;
         mbPenGC     = false;
-        mrParent.bFontGC_ = false;
         mbBrushGC   = false;
         mbCopyGC        = false;
         mbInvertGC  = false;

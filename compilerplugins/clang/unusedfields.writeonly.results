@@ -230,15 +230,13 @@ dbaccess/source/filter/xml/dbloader2.cxx:227
     dbaxml::DBContentLoader m_xMySelf Reference<class com::sun::star::frame::XFrameLoader>
 dbaccess/source/ui/browser/dbloader.cxx:69
     DBContentLoader m_xListener Reference<class com::sun::star::frame::XLoadEventListener>
-dbaccess/source/ui/inc/FieldDescControl.hxx:112
-    dbaui::OFieldDescControl m_bRightAligned _Bool
 dbaccess/source/ui/inc/RelationController.hxx:33
     dbaui::ORelationController m_pWaitObject std::unique_ptr<WaitObject>
 desktop/qa/desktop_lib/test_desktop_lib.cxx:223
     DesktopLOKTest m_bModified _Bool
-desktop/source/app/app.cxx:1209
+desktop/source/app/app.cxx:1211
     desktop::ExecuteGlobals pLanguageOptions std::unique_ptr<SvtLanguageOptions>
-desktop/source/app/app.cxx:1210
+desktop/source/app/app.cxx:1212
     desktop::ExecuteGlobals pPathOptions std::unique_ptr<SvtPathOptions>
 desktop/source/deployment/gui/dp_gui_extlistbox.hxx:136
     dp_gui::ExtensionBox_Impl m_vRemovedEntries std::vector<TEntry_Impl>
@@ -270,23 +268,23 @@ drawinglayer/source/attribute/sdrsceneattribute3d.cxx:32
     drawinglayer::attribute::ImpSdrSceneAttribute mfDistance double
 drawinglayer/source/tools/emfpcustomlinecap.hxx:34
     emfplushelper::EMFPCustomLineCap mbIsFilled _Bool
-embeddedobj/source/inc/oleembobj.hxx:136
+embeddedobj/source/inc/oleembobj.hxx:132
     OleEmbeddedObject m_nTargetState sal_Int32
-embeddedobj/source/inc/oleembobj.hxx:148
+embeddedobj/source/inc/oleembobj.hxx:144
     OleEmbeddedObject m_xClosePreventer css::uno::Reference<css::util::XCloseListener>
-embeddedobj/source/inc/oleembobj.hxx:170
+embeddedobj/source/inc/oleembobj.hxx:166
     OleEmbeddedObject m_bHasSizeToSet _Bool
-embeddedobj/source/inc/oleembobj.hxx:171
+embeddedobj/source/inc/oleembobj.hxx:167
     OleEmbeddedObject m_aSizeToSet css::awt::Size
-embeddedobj/source/inc/oleembobj.hxx:172
+embeddedobj/source/inc/oleembobj.hxx:168
     OleEmbeddedObject m_nAspectToSet sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:177
+embeddedobj/source/inc/oleembobj.hxx:173
     OleEmbeddedObject m_bGotStatus _Bool
-embeddedobj/source/inc/oleembobj.hxx:178
+embeddedobj/source/inc/oleembobj.hxx:174
     OleEmbeddedObject m_nStatus sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:179
+embeddedobj/source/inc/oleembobj.hxx:175
     OleEmbeddedObject m_nStatusAspect sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:193
+embeddedobj/source/inc/oleembobj.hxx:189
     OleEmbeddedObject m_bFromClipboard _Bool
 emfio/inc/mtftools.hxx:512
     emfio::MtfTools mrclBounds tools::Rectangle
@@ -352,8 +350,6 @@ include/editeng/adjustitem.hxx:37
     SvxAdjustItem bLeft _Bool
 include/editeng/outlobj.hxx:43
     OutlinerParaObjData mbIsEditDoc _Bool
-include/editeng/splwrap.hxx:59
-    SvxSpellWrapper bHyphen _Bool
 include/editeng/unotext.hxx:415
     SvxUnoTextBase xParentText css::uno::Reference<css::text::XText>
 include/editeng/unotext.hxx:584
@@ -420,6 +416,8 @@ include/test/beans/xpropertyset.hxx:56
     apitest::XPropertySet::PropsToTest constrained std::vector<OUString>
 include/unotools/fontcfg.hxx:158
     utl::FontSubstConfiguration maSubstHash utl::FontSubstConfiguration::UniqueSubstHash
+include/vcl/menu.hxx:455
+    MenuBar::MenuBarButtonCallbackArg bHighlight _Bool
 include/vcl/NotebookBarAddonsMerger.hxx:54
     AddonNotebookBarItem sTarget class rtl::OUString
 include/vcl/NotebookBarAddonsMerger.hxx:55
@@ -436,7 +434,7 @@ include/vcl/salnativewidgets.hxx:534
     PushButtonValue mbBevelButton _Bool
 include/vcl/salnativewidgets.hxx:535
     PushButtonValue mbSingleLine _Bool
-include/vcl/sysdata.hxx:67
+include/vcl/sysdata.hxx:69
     SystemEnvData pSalFrame void *
 include/vcl/textrectinfo.hxx:32
     TextRectInfo mnLineCount sal_uInt16
@@ -482,6 +480,8 @@ registry/source/reflread.cxx:466
     ConstantPool::readDoubleConstant(sal_uInt16)::(anonymous union)::(anonymous) b2 sal_uInt32
 reportdesign/inc/RptObject.hxx:72
     rptui::OObjectBase m_xKeepShapeAlive css::uno::Reference<css::uno::XInterface>
+reportdesign/source/ui/inc/CondFormat.hxx:69
+    rptui::ConditionalFormattingDialog m_bDeletingCondition _Bool
 sal/qa/osl/file/osl_File.cxx:4154
     osl_Directory::isOpen nError1 osl::class FileBase::RC
 sal/qa/osl/file/osl_File.cxx:4154
@@ -516,7 +516,7 @@ sc/inc/compiler.hxx:257
     ScCompiler::AddInMap pEnglish const char *
 sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pUpper const char *
-sc/inc/document.hxx:2588
+sc/inc/document.hxx:2592
     ScMutationDisable mpDocument class ScDocument *
 sc/inc/pivot.hxx:75
     ScDPLabelData mnFlags sal_Int32
@@ -813,7 +813,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/disk2/libo4/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/disk2/libo7/sw/source/filter/inc/rtf.hxx:27:9)
 sw/source/uibase/inc/glossary.hxx:63
     SwGlossaryDlg m_xGroupData std::vector<std::unique_ptr<GroupUserData> >
 sw/source/uibase/inc/maildispatcher.hxx:146
@@ -946,7 +946,7 @@ vcl/inc/salwtype.hxx:243
     SalInputContext mpFont rtl::Reference<LogicalFontInstance>
 vcl/inc/salwtype.hxx:250
     SalSwipeEvent mnVelocityY double
-vcl/inc/sft.hxx:478
+vcl/inc/sft.hxx:742
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
 vcl/inc/svdata.hxx:403
     ImplSVEvent mpInstanceRef VclPtr<vcl::Window>
@@ -956,6 +956,10 @@ vcl/inc/unx/gtk/gtkframe.hxx:81
     GtkSalFrame::IMHandler::PreviousKeyPress send_event gint8
 vcl/inc/unx/gtk/gtkframe.hxx:82
     GtkSalFrame::IMHandler::PreviousKeyPress time guint32
+vcl/inc/unx/salgdi.h:307
+    X11SalGraphics nTextPixel_ Pixel
+vcl/inc/unx/salgdi.h:313
+    X11SalGraphics bFontGC_ _Bool
 vcl/inc/WidgetThemeLibrary.hxx:20
     vcl::WidgetDrawStyle nSize uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:91
@@ -976,7 +980,7 @@ vcl/source/filter/wmf/wmfwr.hxx:95
     WMFWriter aDstClipRegion vcl::Region
 vcl/source/fontsubset/sft.cxx:88
     vcl::TTGlyphMetrics lsb sal_Int16
-vcl/source/fontsubset/ttcr.cxx:356
+vcl/source/fontsubset/ttcr.cxx:341
     vcl::tdata_post ptr void *
 vcl/source/gdi/pdfwriter_impl.hxx:180
     vcl::PDFWriterImpl::BitmapID m_nChecksum BitmapChecksum
@@ -1008,7 +1012,7 @@ vcl/unx/gtk3/gtk3gloactiongroup.cxx:28
     GLOAction parent_instance GObject
 vcl/unx/gtk3/gtk3glomenu.cxx:17
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:1566
+vcl/unx/gtk3/gtk3gtkinst.cxx:1588
      in char *
 vcl/unx/gtk3/gtk3hudawareness.cxx:17
     HudAwarenessHandle connection GDBusConnection *
@@ -1018,6 +1022,8 @@ vcl/workben/vcldemo.cxx:1744
     DemoWin mxThread rtl::Reference<RenderThread>
 writerfilter/source/dmapper/PropertyMap.hxx:198
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
+writerfilter/source/dmapper/SettingsTable.cxx:253
+    writerfilter::dmapper::SettingsTable_Impl m_sRedlineProtectionKey class rtl::OUString
 xmlhelp/source/cxxhelp/provider/databases.hxx:251
     chelp::Databases m_aDatabases chelp::Databases::DatabasesTable
 xmlhelp/source/cxxhelp/provider/databases.hxx:257

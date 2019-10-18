@@ -184,34 +184,32 @@ drawinglayer/source/processor2d/vclprocessor2d.hxx:84
     drawinglayer::processor2d::VclProcessor2D maDrawinglayerOpt const class SvtOptionsDrawinglayer
 editeng/source/editeng/impedit.hxx:454
     ImpEditEngine maColorConfig svtools::ColorConfig
-embeddedobj/source/inc/commonembobj.hxx:108
+embeddedobj/source/inc/commonembobj.hxx:103
     OCommonEmbeddedObject m_aClassName class rtl::OUString
-embeddedobj/source/inc/oleembobj.hxx:128
+embeddedobj/source/inc/oleembobj.hxx:124
     OleEmbeddedObject m_pOleComponent class OleComponent *
-embeddedobj/source/inc/oleembobj.hxx:148
+embeddedobj/source/inc/oleembobj.hxx:144
     OleEmbeddedObject m_xClosePreventer css::uno::Reference<css::util::XCloseListener>
-embeddedobj/source/inc/oleembobj.hxx:170
+embeddedobj/source/inc/oleembobj.hxx:166
     OleEmbeddedObject m_bHasSizeToSet _Bool
-embeddedobj/source/inc/oleembobj.hxx:171
+embeddedobj/source/inc/oleembobj.hxx:167
     OleEmbeddedObject m_aSizeToSet css::awt::Size
-embeddedobj/source/inc/oleembobj.hxx:172
+embeddedobj/source/inc/oleembobj.hxx:168
     OleEmbeddedObject m_nAspectToSet sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:177
+embeddedobj/source/inc/oleembobj.hxx:173
     OleEmbeddedObject m_bGotStatus _Bool
-embeddedobj/source/inc/oleembobj.hxx:178
+embeddedobj/source/inc/oleembobj.hxx:174
     OleEmbeddedObject m_nStatus sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:179
+embeddedobj/source/inc/oleembobj.hxx:175
     OleEmbeddedObject m_nStatusAspect sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:187
+embeddedobj/source/inc/oleembobj.hxx:183
     OleEmbeddedObject m_aLinkURL class rtl::OUString
-embeddedobj/source/inc/oleembobj.hxx:193
+embeddedobj/source/inc/oleembobj.hxx:189
     OleEmbeddedObject m_bFromClipboard _Bool
 extensions/source/propctrlr/eformshelper.hxx:61
     pcr::EFormsHelper m_aSubmissionUINames pcr::MapStringToPropertySet
 extensions/source/propctrlr/eformshelper.hxx:63
     pcr::EFormsHelper m_aBindingUINames pcr::MapStringToPropertySet
-extensions/source/update/check/updatehdl.hxx:85
-    UpdateHandler mbStringsLoaded _Bool
 filter/source/graphicfilter/eps/eps.cxx:116
     PSWriter pVDev ScopedVclPtrInstance<class VirtualDevice>
 filter/source/graphicfilter/icgm/cgm.hxx:60
@@ -349,7 +347,7 @@ include/test/sheet/xnamedranges.hxx:49
 include/test/sheet/xspreadsheets2.hxx:46
     apitest::XSpreadsheets2 xDocument css::uno::Reference<css::sheet::XSpreadsheetDocument>
 include/unoidl/unoidl.hxx:443
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/disk2/libo4/include/unoidl/unoidl.hxx:443:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/disk2/libo7/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:445
@@ -372,16 +370,12 @@ include/unoidl/unoidl.hxx:453
     unoidl::ConstantValue::(anonymous) doubleValue double
 include/unotest/bootstrapfixturebase.hxx:52
     test::BootstrapFixtureBase m_directories class test::Directories
-include/vcl/edit.hxx:88
-    Edit maUpdateDataHdl Link<class Edit &, void>
 include/vcl/opengl/OpenGLContext.hxx:48
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
 include/vcl/opengl/OpenGLContext.hxx:167
     OpenGLContext mpLastFramebuffer class OpenGLFramebuffer *
 include/vcl/ppdparser.hxx:127
     psp::PPDParser::PPDConstraint m_pKey1 const class psp::PPDKey *
-include/vcl/vclmedit.hxx:85
-    VclMultiLineEdit aUpdateDataHdlLink Link<class Edit &, void>
 io/source/stm/odata.cxx:571
     io_stm::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n2 sal_uInt32
 io/source/stm/odata.cxx:571
@@ -410,8 +404,8 @@ registry/source/reflwrit.cxx:140
     writeDouble(sal_uInt8 *, double)::(anonymous union)::(anonymous) b1 sal_uInt32
 registry/source/reflwrit.cxx:141
     writeDouble(sal_uInt8 *, double)::(anonymous union)::(anonymous) b2 sal_uInt32
-registry/source/reflwrit.cxx:180
-    CPInfo::(anonymous) aUik struct RTUik *
+registry/source/reflwrit.cxx:181
+    (anonymous namespace)::CPInfo::(anonymous) aUik struct RTUik *
 reportdesign/source/ui/inc/ColorListener.hxx:35
     rptui::OColorListener m_aColorConfig const svtools::ColorConfig
 sal/osl/unx/process.cxx:825
@@ -435,7 +429,7 @@ sal/rtl/uuid.cxx:65
 sc/inc/compiler.hxx:126
     ScRawToken::(anonymous union)::(anonymous) eItem const class ScTableRefToken::Item
 sc/inc/compiler.hxx:127
-    ScRawToken::(anonymous) table const struct (anonymous struct at /media/disk2/libo4/sc/inc/compiler.hxx:124:9)
+    ScRawToken::(anonymous) table const struct (anonymous struct at /media/disk2/libo7/sc/inc/compiler.hxx:124:9)
 sc/inc/compiler.hxx:132
     ScRawToken::(anonymous) pMat class ScMatrix *const
 sc/inc/formulagroup.hxx:39
@@ -710,10 +704,6 @@ unotools/source/config/saveopt.cxx:76
     SvtSaveOptions_Impl bROUserAutoSave _Bool
 vcl/inc/BitmapFastScaleFilter.hxx:31
     BitmapFastScaleFilter maSize const class Size
-vcl/inc/openglgdiimpl.hxx:52
-    TextureCombo mpTexture std::unique_ptr<OpenGLTexture>
-vcl/inc/openglgdiimpl.hxx:53
-    TextureCombo mpMask std::unique_ptr<OpenGLTexture>
 vcl/inc/printerinfomanager.hxx:74
     psp::PrinterInfoManager::SystemPrintQueue m_aComment class rtl::OUString
 vcl/inc/salwtype.hxx:157
@@ -730,6 +720,8 @@ vcl/inc/toolbox.h:108
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<sal_uInt16>
 vcl/inc/unx/saldisp.hxx:282
     SalDisplay m_aInvalidScreenData const struct SalDisplay::ScreenData
+vcl/inc/unx/salgdi.h:306
+    X11SalGraphics pFontGC_ GC
 vcl/inc/WidgetThemeLibrary.hxx:21
     vcl::WidgetDrawStyle maFaceColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:22
@@ -880,12 +872,12 @@ vcl/inc/WidgetThemeLibrary.hxx:135
     vcl::WidgetThemeLibrary_t drawListHeader _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:137
     vcl::WidgetThemeLibrary_t updateSettings _Bool (*)(struct vcl::WidgetDrawStyle &)
-vcl/inc/wizdlg.hxx:78
-    vcl::RoadmapWizard maActivateHdl Link<class vcl::RoadmapWizard *, void>
 vcl/source/app/settings.cxx:184
     ImplStyleData maDialogStyle struct DialogStyle
 vcl/source/control/roadmapwizard.cxx:62
     vcl::RoadmapWizardImpl aStateDescriptors vcl::(anonymous namespace)::StateDescriptions
+vcl/source/control/tabctrl.cxx:54
+    ImplTabItem maHelpId class rtl::OString
 vcl/source/control/tabctrl.cxx:79
     ImplTabCtrlData maLayoutPageIdToLine std::unordered_map<int, int>
 vcl/source/filter/jpeg/Exif.hxx:51
@@ -908,11 +900,11 @@ vcl/source/filter/jpeg/transupp.h:148
     (anonymous) crop_xoffset_set JCROP_CODE
 vcl/source/filter/jpeg/transupp.h:150
     (anonymous) crop_yoffset_set JCROP_CODE
-vcl/source/fontsubset/sft.cxx:1061
+vcl/source/fontsubset/sft.cxx:1038
     vcl::subHeader2 firstCode const sal_uInt16
-vcl/source/fontsubset/sft.cxx:1062
+vcl/source/fontsubset/sft.cxx:1039
     vcl::subHeader2 entryCount const sal_uInt16
-vcl/source/fontsubset/sft.cxx:1063
+vcl/source/fontsubset/sft.cxx:1040
     vcl::subHeader2 idDelta const sal_uInt16
 vcl/source/gdi/dibtools.cxx:52
     (anonymous namespace)::CIEXYZ aXyzX FXPT2DOT30
@@ -964,7 +956,7 @@ vcl/unx/gtk3/gtk3gloactiongroup.cxx:28
     GLOAction parent_instance GObject
 vcl/unx/gtk3/gtk3glomenu.cxx:17
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:1566
+vcl/unx/gtk3/gtk3gtkinst.cxx:1588
      out gpointer *
 writerfilter/inc/ooxml/QNameToString.hxx:41
     writerfilter::QNameToString mMap writerfilter::QNameToString::Map
