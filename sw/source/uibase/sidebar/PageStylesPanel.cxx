@@ -325,8 +325,7 @@ OUString const & PageStylesPanel::GetPatternSetOrDefault()
 void PageStylesPanel::NotifyItemUpdate(
     const sal_uInt16 nSid,
     const SfxItemState eState,
-    const SfxPoolItem* pState,
-    const bool)
+    const SfxPoolItem* pState)
 {
     if(IsDisposed())
         return;

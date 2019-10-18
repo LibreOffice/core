@@ -265,8 +265,7 @@ void ShadowPropertyPanel::InsertAngleValues()
 void ShadowPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
-    const SfxPoolItem* pState,
-    const bool /*bIsEnabled*/)
+    const SfxPoolItem* pState)
 {
     switch(nSID)
     {

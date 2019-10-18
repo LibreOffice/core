@@ -501,8 +501,7 @@ IMPL_LINK( PosSizePropertyPanel, FlipHdl, ToolBox*, pBox, void )
 void PosSizePropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
-    const SfxPoolItem* pState,
-    const bool)
+    const SfxPoolItem* pState)
 {
     mpFtAngle->Enable();
     mpMtrAngle->Enable();

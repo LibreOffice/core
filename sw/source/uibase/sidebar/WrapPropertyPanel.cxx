@@ -280,8 +280,7 @@ void WrapPropertyPanel::UpdateEditContour()
 void WrapPropertyPanel::NotifyItemUpdate(
     const sal_uInt16 nSId,
     const SfxItemState eState,
-    const SfxPoolItem* pState,
-    const bool)
+    const SfxPoolItem* pState)
 {
     if ( eState == SfxItemState::DEFAULT &&
         dynamic_cast< const SfxBoolItem *>( pState ) !=  nullptr )
