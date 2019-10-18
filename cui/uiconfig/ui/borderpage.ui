@@ -3,36 +3,36 @@
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">0.050000000000000003</property>
+    <property name="lower">0.05</property>
     <property name="upper">9</property>
-    <property name="value">0.050000000000000003</property>
+    <property name="value">0.05</property>
     <property name="step_increment">0.25</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
     <property name="upper">50</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment3">
     <property name="lower">0.5</property>
     <property name="upper">50</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment4">
     <property name="upper">50</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment5">
     <property name="upper">50</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment6">
     <property name="upper">50</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkGrid" id="BorderPage">
@@ -40,19 +40,16 @@
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="border_width">6</property>
-    <property name="row_spacing">12</property>
-    <property name="column_spacing">6</property>
     <child>
       <object class="GtkGrid" id="grid6">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="hexpand">True</property>
+        <property name="row_spacing">12</property>
         <property name="column_spacing">12</property>
         <child>
-          <object class="GtkFrame" id="frame2">
+          <object class="GtkFrame" id="arrangement">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
@@ -67,6 +64,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkScrolledWindow" id="frameselwin">
                         <property name="visible">True</property>
@@ -182,7 +180,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkFrame" id="frame3">
+          <object class="GtkFrame" id="Line">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label_xalign">0</property>
@@ -198,6 +196,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="label15">
                         <property name="visible">True</property>
@@ -223,7 +222,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -237,7 +236,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">4</property>
+                        <property name="top_attach">2</property>
                       </packing>
                     </child>
                     <child>
@@ -253,8 +252,8 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
                       </packing>
                     </child>
                     <child>
@@ -264,11 +263,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
-                        <property name="value">0.050000000000000003</property>
+                        <property name="value">0.05</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -284,8 +283,8 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">5</property>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">2</property>
                       </packing>
                     </child>
                   </object>
@@ -309,11 +308,9 @@
           </packing>
         </child>
         <child>
-          <object class="GtkFrame" id="spacing">
+          <object class="GtkFrame" id="padding">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="hexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
@@ -472,39 +469,40 @@
             <property name="top_attach">0</property>
           </packing>
         </child>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkFrame" id="shadow">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="hexpand">True</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment5">
+          <object class="GtkFrame" id="shadow">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
             <child>
-              <object class="GtkGrid">
+              <object class="GtkAlignment" id="alignment5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="top_padding">6</property>
+                <property name="left_padding">12</property>
                 <child>
-                  <object class="GtkGrid" id="grid11">
+                  <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
+                    <child>
+                      <object class="GtkAlignment" id="align12">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="left_padding">12</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
                     <child>
                       <object class="GtkDrawingArea" id="shadows">
                         <property name="visible">True</property>
@@ -512,8 +510,8 @@
                         <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
                       </packing>
                     </child>
                     <child>
@@ -530,217 +528,182 @@
                         <property name="top_attach">0</property>
                       </packing>
                     </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkAlignment" id="align12">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkGrid" id="grid12">
+                      <object class="GtkLabel" id="distanceft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="row_spacing">6</property>
-                        <child>
-                          <object class="GtkLabel" id="distanceft">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="borderpage|distanceft">Distan_ce:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">distancemf</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSpinButton" id="distancemf">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="halign">start</property>
-                            <property name="activates_default">True</property>
-                            <property name="adjustment">adjustment3</property>
-                            <property name="value">0.5</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
+                        <property name="label" translatable="yes" context="borderpage|distanceft">Distan_ce:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">distancemf</property>
+                        <property name="xalign">0</property>
                       </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                      </packing>
                     </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkAlignment" id="align1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="hexpand">True</property>
-                    <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkGrid" id="grid10">
+                      <object class="GtkSpinButton" id="distancemf">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment3</property>
+                        <property name="value">0.5</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="shadowcolorft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">12</property>
-                        <property name="column_homogeneous">True</property>
+                        <property name="label" translatable="yes" context="borderpage|shadowcolorft">C_olor:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">shadowcolorlb</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton" id="shadowcolorlb">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="label" translatable="no"></property>
                         <child>
-                          <object class="GtkLabel" id="shadowcolorft">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="borderpage|shadowcolorft">C_olor:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">shadowcolorlb</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkMenuButton" id="shadowcolorlb">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="label" translatable="no"></property>
-                            <child>
-                              <placeholder/>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                          </packing>
+                          <placeholder/>
                         </child>
                       </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">2</property>
+                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
-                  </packing>
                 </child>
               </object>
             </child>
-          </object>
-        </child>
-        <child type="label">
-          <object class="GtkLabel" id="label11">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="borderpage|label11">Shadow Style</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkFrame" id="properties">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
-        <property name="hexpand">True</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
-        <child>
-          <object class="GtkAlignment" id="alignment6">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
-            <child>
-              <object class="GtkGrid" id="grid1">
+            <child type="label">
+              <object class="GtkLabel" id="label11">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
-                <child>
-                  <object class="GtkCheckButton" id="mergewithnext">
-                    <property name="label" translatable="yes" context="borderpage|mergewithnext">_Merge with next paragraph</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="no_show_all">True</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="mergeadjacent">
-                    <property name="label" translatable="yes" context="borderpage|mergeadjacent">_Merge adjacent line styles</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="no_show_all">True</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
+                <property name="label" translatable="yes" context="borderpage|label11">Shadow Style</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
           </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">1</property>
+          </packing>
         </child>
-        <child type="label">
-          <object class="GtkLabel" id="label12">
-            <property name="visible">True</property>
+        <child>
+          <object class="GtkFrame" id="properties">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="borderpage|label12">Properties</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
+            <property name="no_show_all">True</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <object class="GtkAlignment" id="alignment6">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="top_padding">6</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkGrid" id="grid1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
+                    <child>
+                      <object class="GtkCheckButton" id="mergewithnext">
+                        <property name="label" translatable="yes" context="borderpage|mergewithnext">_Merge with next paragraph</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="no_show_all">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="mergeadjacent">
+                        <property name="label" translatable="yes" context="borderpage|mergeadjacent">_Merge adjacent line styles</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="no_show_all">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label12">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="borderpage|label12">Properties</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
           </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">2</property>
+        <property name="top_attach">0</property>
       </packing>
     </child>
   </object>
-  <object class="GtkSizeGroup">
+  <object class="GtkSizeGroup" id="sizegroupLabel">
+    <property name="ignore_hidden">True</property>
     <widgets>
-      <widget name="grid9"/>
-      <widget name="grid11"/>
+      <widget name="label15"/>
+      <widget name="label16"/>
+      <widget name="label17"/>
+      <widget name="label22"/>
+      <widget name="distanceft"/>
+      <widget name="shadowcolorft"/>
     </widgets>
   </object>
-  <object class="GtkSizeGroup">
+  <object class="GtkSizeGroup" id="sizegroupWidgets">
+    <property name="ignore_hidden">True</property>
     <widgets>
-      <widget name="frame3"/>
-      <widget name="align12"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup">
-    <widgets>
-      <widget name="spacing"/>
-      <widget name="align1"/>
+      <widget name="linestylelb"/>
+      <widget name="linewidthmf"/>
+      <widget name="linecolorlb"/>
+      <widget name="shadows"/>
+      <widget name="distancemf"/>
+      <widget name="shadowcolorlb"/>
     </widgets>
   </object>
 </interface>
