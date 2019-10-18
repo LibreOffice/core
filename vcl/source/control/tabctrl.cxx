@@ -51,7 +51,6 @@ public:
     OUString            maText;
     OUString            maFormatText;
     OUString            maHelpText;
-    OString             maHelpId;
     OString             maTabName;
     tools::Rectangle    maRect;
     sal_uInt16          mnLine;
@@ -1461,7 +1460,7 @@ void TabControl::Command( const CommandEvent& rCEvt )
                 aMenu->InsertItem(item.id(), item.maText, MenuItemBits::CHECKABLE | MenuItemBits::RADIOCHECK);
                 if (item.id() == mnCurPageId)
                     aMenu->CheckItem(item.id());
-                aMenu->SetHelpId(item.id(), item.maHelpId);
+                aMenu->SetHelpId(item.id(), OString());
             }
 
             sal_uInt16 nId = aMenu->Execute( this, aMenuPos );
@@ -1969,15 +1968,7 @@ void TabControl::SetHelpText( sal_uInt16 nPageId, const OUString& rText )
 const OUString& TabControl::GetHelpText( sal_uInt16 nPageId ) const
 {
     ImplTabItem* pItem = ImplGetItem( nPageId );
-
     assert( pItem );
-
-    if ( pItem->maHelpText.isEmpty() && !pItem->maHelpId.isEmpty() )
-    {
-        Help* pHelp = Application::GetHelp();
-        if ( pHelp )
-            pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
-    }
     return pItem->maHelpText;
 }
 

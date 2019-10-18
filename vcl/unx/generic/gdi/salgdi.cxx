@@ -68,12 +68,10 @@ X11SalGraphics::X11SalGraphics():
     mnPenColor(SALCOLOR_NONE),
     mnFillColor(SALCOLOR_NONE),
 #endif // ENABLE_CAIRO_CANVAS
-    pFontGC_(nullptr),
     nTextPixel_(0),
     hBrush_(None),
     bWindow_(false),
     bVirDev_(false),
-    bFontGC_(false),
     m_bOpenGL(OpenGLHelper::isVCLOpenGLEnabled())
 {
     if (m_bOpenGL)
@@ -113,11 +111,6 @@ void X11SalGraphics::freeResources()
         XFreePixmap( pDisplay, hBrush_ );
         hBrush_ = None;
     }
-    if( pFontGC_ )
-    {
-        XFreeGC( pDisplay, pFontGC_ );
-        pFontGC_ = None;
-    }
     if( m_pDeleteColormap )
     {
         m_pDeleteColormap.reset();
@@ -128,8 +121,6 @@ void X11SalGraphics::freeResources()
         XRenderPeer::GetInstance().FreePicture( m_aXRenderPicture );
         m_aXRenderPicture = 0;
     }
-
-    bFontGC_ = false;
 }
 
 SalGraphicsImpl* X11SalGraphics::GetImpl() const

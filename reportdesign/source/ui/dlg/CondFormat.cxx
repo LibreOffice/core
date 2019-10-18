@@ -86,7 +86,6 @@ namespace rptui
         : GenericDialogController(_pParent, "modules/dbreport/ui/condformatdialog.ui", "CondFormat")
         , m_rController(_rController)
         , m_xFormatConditions(_rxFormatConditions)
-        , m_bDeletingCondition(false)
         , m_bConstructed(false)
         , m_xScrollWindow(m_xBuilder->weld_scrolled_window("scrolledwindow"))
         , m_xConditionPlayground(m_xBuilder->weld_box("condPlaygroundDrawingarea"))
@@ -201,13 +200,10 @@ namespace rptui
             else
             {
                 bSetNewFocus = (*pos)->has_focus();
-                m_bDeletingCondition = true;
 
                 auto xMovedCondition = std::move(*pos);
                 m_aConditions.erase(pos);
                 m_xConditionPlayground->move(xMovedCondition->get_widget(), nullptr);
-
-                m_bDeletingCondition = false;
             }
 
             if ( bSetNewFocus )

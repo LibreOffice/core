@@ -5,9 +5,9 @@ avmedia/source/vlc/wrapper/Types.hxx:44
 avmedia/source/vlc/wrapper/Types.hxx:45
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/disk2/libo7/avmedia/source/vlc/wrapper/Types.hxx:43:7)
 avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /media/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+    libvlc_event_t u union (anonymous union at /media/disk2/libo7/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
 basctl/source/inc/dlged.hxx:122
@@ -234,6 +234,8 @@ libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.hxx:28
     GtvLokDialog parent GtkDialog
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.hxx:33
     GtvLokDialogClass parentClass GtkDialogClass
+libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.cxx:265
+      const std::string &
 libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:28
     GtvMainToolbar parent GtkBox
 libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:36
@@ -308,15 +310,15 @@ sal/qa/osl/security/osl_Security.cxx:59
     osl_Security::ctors bRes1 _Bool
 sal/qa/osl/security/osl_Security.cxx:124
     osl_Security::getUserIdent bRes1 _Bool
-sal/qa/osl/security/osl_Security.cxx:155
+sal/qa/osl/security/osl_Security.cxx:154
     osl_Security::getUserName bRes1 _Bool
-sal/qa/osl/security/osl_Security.cxx:189
+sal/qa/osl/security/osl_Security.cxx:188
     osl_Security::getConfigDir bRes1 _Bool
 sc/qa/unit/ucalc_column.cxx:104
     aInputs aName const char *
-sc/source/core/data/document.cxx:1242
+sc/source/core/data/document.cxx:1239
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch const sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1243
+sc/source/core/data/document.cxx:1240
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk const class ScBulkBroadcast
 sc/source/filter/html/htmlpars.cxx:3004
     (anonymous namespace)::CSSHandler::MemStr mp const char *
@@ -384,8 +386,6 @@ svx/source/dialog/contimp.hxx:75
     SvxSuperContourDlg aContourItem class SvxContourDlgItem
 svx/source/dialog/weldeditview.cxx:300
     WeldEditSource m_rEditAcc class WeldEditAccessible &
-sw/qa/extras/uiwriter/uiwriter2.cxx:66
-      class SwUiWriterTest2 *
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
 sw/source/core/frmedt/fetab.cxx:78
@@ -408,6 +408,10 @@ unoidl/source/unoidlprovider.cxx:673
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference2_ rtl::Reference<UnoidlModuleEntity>
 vcl/inc/opengl/zone.hxx:58
     OpenGLVCLContextZone aZone const class OpenGLZone
+vcl/inc/openglgdiimpl.hxx:52
+    TextureCombo mpTexture std::unique_ptr<OpenGLTexture>
+vcl/inc/openglgdiimpl.hxx:53
+    TextureCombo mpMask std::unique_ptr<OpenGLTexture>
 vcl/inc/qt5/Qt5AccessibleEventListener.hxx:34
     Qt5AccessibleEventListener m_xAccessible css::uno::Reference<css::accessibility::XAccessible>
 vcl/inc/qt5/Qt5FilePicker.hxx:84
@@ -446,7 +450,7 @@ vcl/source/uitest/uno/uitest_uno.cxx:35
     UITestUnoObj mpUITest std::unique_ptr<UITest>
 vcl/unx/gtk3/a11y/gtk3atkhypertext.cxx:29
     HyperLink atk_hyper_link const AtkHyperlink
-vcl/unx/gtk3/gtk3gtkinst.cxx:4408
+vcl/unx/gtk3/gtk3gtkinst.cxx:4697
     CrippledViewport viewport GtkViewport
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:43
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
