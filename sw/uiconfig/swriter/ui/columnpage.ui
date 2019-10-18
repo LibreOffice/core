@@ -115,7 +115,6 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="columnft">
-                        <property name="width_request">100</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="columnpage|columnft">Column:</property>
@@ -393,7 +392,6 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="linestyleft">
-                    <property name="width_request">100</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="columnpage|linestyleft">St_yle:</property>
@@ -607,7 +605,6 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkLabel" id="label3">
-                            <property name="width_request">100</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="columnpage|label3">Columns:</property>
@@ -821,12 +818,17 @@
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="ignore_hidden">True</property>
     <widgets>
-      <widget name="applytoft"/>
-      <widget name="textdirectionft"/>
-      <widget name="label3"/>
       <widget name="columnft"/>
       <widget name="widthft"/>
       <widget name="distft"/>
+      <widget name="linestyleft"/>
+      <widget name="linewidthft"/>
+      <widget name="lineheightft"/>
+      <widget name="lineposft"/>
+      <widget name="linecolorft"/>
+      <widget name="label3"/>
+      <widget name="applytoft"/>
+      <widget name="textdirectionft"/>
     </widgets>
   </object>
 </interface>
