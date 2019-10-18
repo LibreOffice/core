@@ -2,6 +2,12 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">-56</property>
+    <property name="upper">56</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
       <!-- column-name text -->
@@ -9,12 +15,6 @@
       <!-- column-name id -->
       <column type="gchararray"/>
     </columns>
-  </object>
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">-56</property>
-    <property name="upper">56</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
   <object class="GtkBox" id="ParagraphTabsPage">
     <property name="visible">True</property>
@@ -88,8 +88,8 @@
                   <object class="GtkEntry" id="ED_TABPOS">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="activates_default">True</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -146,7 +146,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonBTN_TABTYPE_DECIMAL">
                     <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_TABTYPE_DECIMAL">Deci_mal</property>
@@ -167,7 +167,7 @@
                   <object class="GtkEntry" id="entryED_TABTYPE_DECCHAR">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="width_chars">1</property>
+                    <property name="width_chars">3</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -329,7 +329,7 @@
                         <property name="label" translatable="yes" context="paratabspage|labelFT_TABTYPE_DECCHAR">_Character</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">entryED_TABTYPE_DECCHAR</property>
-                        <property name="xalign">0</property>
+                        <property name="xalign">1</property>
                       </object>
                     </child>
                   </object>
@@ -377,7 +377,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonBTN_FILLCHAR_NO">
                     <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_FILLCHAR_NO">N_one</property>
@@ -469,7 +469,7 @@
                   <object class="GtkEntry" id="entryED_FILLCHAR_OTHER">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="width_chars">1</property>
+                    <property name="width_chars">3</property>
                     <accessibility>
                       <relation type="labelled-by" target="radiobuttonBTN_FILLCHAR_OTHER"/>
                     </accessibility>
@@ -597,6 +597,20 @@
         <property name="position">3</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <property name="mode">vertical</property>
+    <widgets>
+      <widget name="radiobuttonBTN_TABTYPE_DECIMAL"/>
+      <widget name="box3"/>
+      <widget name="box4"/>
+      <widget name="radiobuttonBTN_TABTYPE_CENTER"/>
+      <widget name="radiobuttonBTN_FILLCHAR_NO"/>
+      <widget name="radiobuttonBTN_FILLCHAR_POINTS"/>
+      <widget name="radiobuttonBTN_FILLCHAR_DASHLINE"/>
+      <widget name="radiobuttonBTN_FILLCHAR_UNDERSCORE"/>
+      <widget name="radiobuttonBTN_FILLCHAR_OTHER"/>
+    </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
     <property name="mode">vertical</property>
