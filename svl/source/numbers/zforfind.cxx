@@ -962,6 +962,11 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     {
         nHour = 0;
     }
+    else if (mpFormat && nDecPos == 0 && nCnt == 2 && mpFormat->IsMinuteSecondFormat())
+    {
+        // Input on MM:SS format, instead of doing HH:MM:00
+        nHour = 0;
+    }
     else if (nIndex - nStartIndex < nCnt)
     {
         nHour   = static_cast<sal_uInt16>(sStrArray[nNums[nIndex++]].toInt32());
