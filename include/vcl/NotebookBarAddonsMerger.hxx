@@ -30,7 +30,7 @@
 #include <vector>
 #include <map>
 
-class PopupMenu;
+class Menu;
 
 struct NotebookBarAddonsItem
 {
@@ -68,7 +68,7 @@ public:
                                        const css::uno::Reference<css::frame::XFrame>& rFrame,
                                        const NotebookBarAddonsItem& aNotebookBarAddonsItem,
                                        VclBuilder::stringmap& rVec);
-    static void MergeNotebookBarMenuAddons(PopupMenu* pPopupMenu, sal_Int16 nItemId,
+    static void MergeNotebookBarMenuAddons(Menu* pPopupMenu, sal_Int16 nItemId,
                                            const OString& sItemIdName,
                                            NotebookBarAddonsItem& aNotebookBarAddonsItem);
 };

@@ -3307,7 +3307,7 @@ std::vector<ComboBoxTextItem> VclBuilder::handleItems(xmlreader::XmlReader &read
 
 void VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString &rID)
 {
-    VclPtr<PopupMenu> pCurrentMenu = VclPtr<PopupMenu>::Create();
+    VclPtr<Menu> pCurrentMenu = VclPtr<PopupMenu>::Create();
 
     int nLevel = 1;
 
@@ -3350,7 +3350,7 @@ void VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString &rID)
     m_aMenus.emplace_back(rID, pCurrentMenu);
 }
 
-void VclBuilder::handleMenuChild(PopupMenu *pParent, xmlreader::XmlReader &reader)
+void VclBuilder::handleMenuChild(Menu *pParent, xmlreader::XmlReader &reader)
 {
     xmlreader::Span name;
     int nsId;
@@ -3382,7 +3382,7 @@ void VclBuilder::handleMenuChild(PopupMenu *pParent, xmlreader::XmlReader &reade
     }
 }
 
-void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &reader)
+void VclBuilder::handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader)
 {
     OString sClass;
     OString sID;
@@ -3435,7 +3435,7 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
                 size_t nChildMenuIdx = m_aMenus.size();
                 handleChild(nullptr, reader);
                 assert(m_aMenus.size() > nChildMenuIdx && "menu not inserted");
-                pSubMenu = m_aMenus[nChildMenuIdx].m_pMenu;
+                pSubMenu = dynamic_cast<PopupMenu*>(m_aMenus[nChildMenuIdx].m_pMenu.get());
             }
             else
             {
@@ -3540,7 +3540,7 @@ namespace
     }
 }
 
-void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const OString &rClass, const OString &rID,
+void VclBuilder::insertMenuObject(Menu *pParent, PopupMenu *pSubMenu, const OString &rClass, const OString &rID,
     stringmap &rProps, accelmap &rAccels)
 {
     sal_uInt16 nOldCount = pParent->GetItemCount();
@@ -4129,7 +4129,7 @@ PopupMenu *VclBuilder::get_menu(const OString& sID)
     for (auto const& menu : m_aMenus)
     {
         if (menu.m_sID == sID)
-            return menu.m_pMenu;
+            return dynamic_cast<PopupMenu*>(menu.m_pMenu.get());
     }
 
     return nullptr;
@@ -4547,10 +4547,10 @@ VclBuilder::ParserState::ParserState()
     , m_nLastMenuItemId(0)
 {}
 
-VclBuilder::MenuAndId::MenuAndId(const OString &rId, PopupMenu *pMenu)
-            : m_sID(rId)
-            , m_pMenu(pMenu)
-{};
+VclBuilder::MenuAndId::MenuAndId(const OString &rId, Menu *pMenu)
+    : m_sID(rId)
+    , m_pMenu(pMenu)
+{}
 
 VclBuilder::MenuAndId::~MenuAndId() {}
 

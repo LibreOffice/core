@@ -32,6 +32,7 @@ class Button;
 class ComboBox;
 class FormattedField;
 class ListBox;
+class Menu;
 class MessageDialog;
 class NumericFormatter;
 class PopupMenu;
@@ -150,8 +151,8 @@ private:
     struct MenuAndId
     {
         OString const m_sID;
-        VclPtr<PopupMenu> m_pMenu;
-        MenuAndId(const OString &rId, PopupMenu *pMenu);
+        VclPtr<Menu> m_pMenu;
+        MenuAndId(const OString &rId, Menu *pMenu);
         ~MenuAndId();
     };
     std::vector<MenuAndId> m_aMenus;
@@ -365,15 +366,15 @@ private:
     static void collectAccelerator(xmlreader::XmlReader &reader, accelmap &rMap);
 
     void        insertMenuObject(
-                   PopupMenu *pParent,
+                   Menu *pParent,
                    PopupMenu *pSubMenu,
                    const OString &rClass,
                    const OString &rID,
                    stringmap &rProps,
                    accelmap &rAccels);
 
-    void        handleMenuChild(PopupMenu *pParent, xmlreader::XmlReader &reader);
-    void        handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &reader);
+    void        handleMenuChild(Menu *pParent, xmlreader::XmlReader &reader);
+    void        handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader);
 
     void        handleListStore(xmlreader::XmlReader &reader, const OString &rID, const OString &rClass);
     void        handleRow(xmlreader::XmlReader &reader, const OString &rID);
