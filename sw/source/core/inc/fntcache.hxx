@@ -56,7 +56,6 @@ void SwClearFntCacheTextGlyphs();
 // Font cache, global variable, created/destroyed in txtinit.cxx
 extern SwFntCache *pFntCache;
 extern SwFntObj *pLastFont;
-extern sal_uInt8* mnFontCacheIdCounter;
 
 /**
  * Defines a substring on a given output device, to be used as an std::map<>

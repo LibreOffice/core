@@ -67,8 +67,6 @@ using namespace ::com::sun::star;
 SwFntCache *pFntCache = nullptr;
 // last Font set by ChgFntCache
 SwFntObj *pLastFont = nullptr;
-// "MagicNumber" used to identify Fonts
-sal_uInt8* mnFontCacheIdCounter = nullptr;
 
 static constexpr Color gWaveCol(COL_GRAY);
 
@@ -2374,8 +2372,10 @@ SwFntAccess::SwFntAccess( const void* & rnFontCacheId,
 
 SwCacheObj *SwFntAccess::NewObj( )
 {
+    // "MagicNumber" used to identify Fonts
+    static sal_uInt8* fontCacheIdCounter = nullptr;
     // a new Font, a new "MagicNumber".
-    return new SwFntObj( *static_cast<SwSubFont const *>(m_pOwner), ++mnFontCacheIdCounter, m_pShell );
+    return new SwFntObj( *static_cast<SwSubFont const *>(m_pOwner), ++fontCacheIdCounter, m_pShell );
 }
 
 TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, long nTextWidth)
