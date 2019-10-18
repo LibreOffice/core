@@ -3536,7 +3536,7 @@ bool XclImpDffConverter::SupportsOleObjects() const
 // virtual functions ----------------------------------------------------------
 
 void XclImpDffConverter::ProcessClientAnchor2( SvStream& rDffStrm,
-        DffRecordHeader& rHeader, SvxMSDffClientData& /*rClientData*/, DffObjData& rObjData )
+        DffRecordHeader& rHeader, DffObjData& rObjData )
 {
     // find the OBJ record data related to the processed shape
     XclImpDffConvData& rConvData = GetConvData();

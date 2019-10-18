@@ -483,7 +483,7 @@ public:
     virtual SdrObject*  ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPageCapsule pPage ) const;
     virtual SdrObject*  ProcessObj( SvStream& rSt, DffObjData& rData, SvxMSDffClientData& rClientData, tools::Rectangle& rTextRect, SdrObject* pObj ) override;
     virtual void        NotifyFreeObj(SvxMSDffClientData& rData, SdrObject* pObj) override;
-    virtual void        ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, SvxMSDffClientData& rData, DffObjData& rObj ) override;
+    virtual void        ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, DffObjData& rObj ) override;
     void                ImportHeaderFooterContainer( DffRecordHeader const & rHeader, HeaderFooterEntry& rEntry );
 };
 
