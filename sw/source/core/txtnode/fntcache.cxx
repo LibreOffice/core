@@ -20,6 +20,7 @@
 #include <memory>
 #include <sal/config.h>
 
+#include <cstdint>
 #include <cstdlib>
 
 #include <i18nlangtag/mslangid.hxx>
@@ -171,8 +172,8 @@ void SwFntCache::Flush( )
     SwCache::Flush( );
 }
 
-SwFntObj::SwFntObj(const SwSubFont &rFont, const void* nFontCacheId, SwViewShell const *pSh)
-    : SwCacheObj(nFontCacheId)
+SwFntObj::SwFntObj(const SwSubFont &rFont, std::uintptr_t nFontCacheId, SwViewShell const *pSh)
+    : SwCacheObj(reinterpret_cast<void *>(nFontCacheId))
     , m_aFont(rFont)
     , m_pScrFont(nullptr)
     , m_pPrtFont(&m_aFont)
@@ -2373,7 +2374,7 @@ SwFntAccess::SwFntAccess( const void* & rnFontCacheId,
 SwCacheObj *SwFntAccess::NewObj( )
 {
     // "MagicNumber" used to identify Fonts
-    static sal_uInt8* fontCacheIdCounter = nullptr;
+    static std::uintptr_t fontCacheIdCounter = 0;
     // a new Font, a new "MagicNumber".
     return new SwFntObj( *static_cast<SwSubFont const *>(m_pOwner), ++fontCacheIdCounter, m_pShell );
 }
