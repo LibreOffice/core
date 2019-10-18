@@ -1003,7 +1003,7 @@ OUString SmTextForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 
     return pEditEngine ? pEditEngine->CalcFieldValue(rField, nPara, nPos, rpTxtColor, rpFldColor) : OUString();
 }
 
-void SmTextForwarder::FieldClicked(const SvxFieldItem&, sal_Int32, sal_Int32)
+void SmTextForwarder::FieldClicked(const SvxFieldItem&)
 {
 }
 

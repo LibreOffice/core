@@ -109,9 +109,6 @@ include/editeng/editeng.hxx:475
 include/editeng/editeng.hxx:478
     void EditEngine::ParagraphConnected(int,int,)
     01
-include/editeng/editeng.hxx:503
-    void EditEngine::FieldClicked(const class SvxFieldItem &,int,int,)
-    100
 include/filter/msfilter/msdffimp.hxx:546
     _Bool SvxMSDffManager::ShapeHasText(unsigned long,unsigned long,)const
     00

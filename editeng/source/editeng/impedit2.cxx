@@ -609,9 +609,7 @@ bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView )
                                       css::system::SystemShellExecuteFlags::URIS_ONLY);
                     }
                 }
-                EditPaM aPaM( aCurSel.Max() );
-                sal_Int32 nPara = GetEditDoc().GetPos( aPaM.GetNode() );
-                GetEditEnginePtr()->FieldClicked( *pFld, nPara, aPaM.GetIndex() );
+                GetEditEnginePtr()->FieldClicked( *pFld );
             }
         }
     }

@@ -870,7 +870,7 @@ OUString ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     return ScEditUtil::GetCellFieldValue(*pFieldData, mpDoc, &rTxtColor);
 }
 
-void ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, sal_Int32, sal_Int32 )
+void ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField )
 {
     if (!bExecuteURL)
         return;

@@ -231,7 +231,7 @@ public:
     virtual OUString CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos,
                                     boost::optional<Color>& rpTxtColor,
                                     boost::optional<Color>& rpFldColor) override;
-    virtual void FieldClicked(const SvxFieldItem&, sal_Int32, sal_Int32) override;
+    virtual void FieldClicked(const SvxFieldItem&) override;
     virtual bool IsValid() const override;
 
     virtual LanguageType GetLanguage(sal_Int32, sal_Int32) const override;
@@ -900,7 +900,7 @@ OUString WeldTextForwarder::CalcFieldValue(const SvxFieldItem& rField, sal_Int32
                        : OUString();
 }
 
-void WeldTextForwarder::FieldClicked(const SvxFieldItem&, sal_Int32, sal_Int32) {}
+void WeldTextForwarder::FieldClicked(const SvxFieldItem&) {}
 
 static SfxItemState GetSvxEditEngineItemState(EditEngine const& rEditEngine, const ESelection& rSel,
                                               sal_uInt16 nWhich)

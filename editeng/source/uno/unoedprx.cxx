@@ -622,11 +622,11 @@ OUString SvxAccessibleTextAdapter::CalcFieldValue( const SvxFieldItem& rField, s
     return mpTextForwarder->CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }
 
-void SvxAccessibleTextAdapter::FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos )
+void SvxAccessibleTextAdapter::FieldClicked( const SvxFieldItem& rField )
 {
     assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");
 
-    mpTextForwarder->FieldClicked( rField, nPara, nPos );
+    mpTextForwarder->FieldClicked( rField );
 }
 
 sal_Int32 SvxAccessibleTextAdapter::CalcEditEngineIndex( sal_Int32 nPara, sal_Int32 nLogicalIndex )
