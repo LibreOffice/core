@@ -62,7 +62,7 @@ namespace accessibility
         bool bRet = false;
         if ( isValid() && ( nIndex == 0 ) )
         {
-            rTA.FieldClicked( *pFld, nPara, nRealIdx );
+            rTA.FieldClicked( *pFld );
             bRet = true;
         }
         return bRet;

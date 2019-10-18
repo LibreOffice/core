@@ -2363,7 +2363,7 @@ OUString SvxDummyTextSource::CalcFieldValue( const SvxFieldItem&, sal_Int32, sal
     return OUString();
 }
 
-void SvxDummyTextSource::FieldClicked( const SvxFieldItem&, sal_Int32, sal_Int32 )
+void SvxDummyTextSource::FieldClicked( const SvxFieldItem& )
 {
 }
 

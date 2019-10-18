@@ -55,7 +55,7 @@ public:
     virtual SfxItemPool* GetPool() const override;
 
     virtual OUString     CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rpTxtColor, boost::optional<Color>& rpFldColor ) override;
-    virtual void         FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos ) override;
+    virtual void         FieldClicked( const SvxFieldItem& rField ) override;
     virtual bool         IsValid() const override;
 
     virtual LanguageType    GetLanguage( sal_Int32, sal_Int32 ) const override;

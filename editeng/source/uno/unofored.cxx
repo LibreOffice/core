@@ -158,9 +158,9 @@ OUString SvxEditEngineForwarder::CalcFieldValue( const SvxFieldItem& rField, sal
     return rEditEngine.CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }
 
-void SvxEditEngineForwarder::FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos )
+void SvxEditEngineForwarder::FieldClicked( const SvxFieldItem& rField )
 {
-    rEditEngine.FieldClicked( rField, nPara, nPos );
+    rEditEngine.FieldClicked( rField );
 }
 
 SfxItemState GetSvxEditEngineItemState( EditEngine const & rEditEngine, const ESelection& rSel, sal_uInt16 nWhich )
