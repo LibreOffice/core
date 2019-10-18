@@ -39,9 +39,7 @@ protected:
                           sal_uInt16 nAspect ) override;
     virtual void    FillClass( SvGlobalName * pClassName,
                                SotClipboardFormatId * pFormat,
-                               OUString * pAppName,
                                OUString * pFullTypeName,
-                               OUString * pShortTypeName,
                                sal_Int32 nVersion,
                                bool bTemplate = false ) const override;
 

@@ -63,9 +63,7 @@ SwWebDocShell::~SwWebDocShell()
 
 void SwWebDocShell::FillClass( SvGlobalName * pClassName,
                                    SotClipboardFormatId * pClipFormat,
-                                   OUString * /*pAppName*/,
                                    OUString * pLongUserName,
-                                   OUString * pUserName,
                                    sal_Int32 nVersion,
                                    bool bTemplate /* = false */) const
 {
@@ -83,7 +81,6 @@ void SwWebDocShell::FillClass( SvGlobalName * pClassName,
         *pClipFormat    = SotClipboardFormatId::STARWRITERWEB_8;
         *pLongUserName = SwResId(STR_WRITER_WEBDOC_FULLTYPE);
     }
-    *pUserName = SwResId(STR_HUMAN_SWWEBDOC_NAME);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

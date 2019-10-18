@@ -229,8 +229,7 @@
 #define STR_TABLESTYLEFAMILY                    NC_("STR_TABLESTYLEFAMILY", "Table Styles")
 #define STR_ENV_TITLE                           NC_("STR_ENV_TITLE", "Envelope")
 #define STR_LAB_TITLE                           NC_("STR_LAB_TITLE", "Labels")
-// ShortName!!!
-#define STR_HUMAN_SWDOC_NAME                    NC_("STR_HUMAN_SWDOC_NAME", "Text")
+
 #define STR_WRITER_DOCUMENT_FULLTYPE            NC_("STR_WRITER_DOCUMENT_FULLTYPE", "%PRODUCTNAME %PRODUCTVERSION Text Document")
 #define STR_CANTOPEN                            NC_("STR_CANTOPEN", "Cannot open document.")
 #define STR_CANTCREATE                          NC_("STR_CANTCREATE", "Can't create document.")
@@ -1245,7 +1244,6 @@
 #define STR_SWBG_FOOTER                         NC_("STR_SWBG_FOOTER", "Footer")
 //End: strings for gallery/background
 
-#define STR_HUMAN_SWWEBDOC_NAME                 NC_("STR_HUMAN_SWWEBDOC_NAME", "HTML")
 #define STR_WRITER_WEBDOC_FULLTYPE              NC_("STR_WRITER_WEBDOC_FULLTYPE", "%PRODUCTNAME %PRODUCTVERSION HTML Document")
 
 #define STR_TITLE                               NC_("STR_TITLE", "Title")
@@ -1295,7 +1293,6 @@
 #define STR_TEXTCOLL_HEADER                     NC_("STR_TEXTCOLL_HEADER", "(Paragraph Style: ")
 #define STR_ILLEGAL_PAGENUM                     NC_("STR_ILLEGAL_PAGENUM", "Page numbers cannot be applied to the current page. Even numbers can be used on left pages, odd numbers on right pages.")
 
-#define STR_HUMAN_SWGLOBDOC_NAME                NC_("STR_HUMAN_SWGLOBDOC_NAME", "Master Document")
 #define STR_WRITER_GLOBALDOC_FULLTYPE           NC_("STR_WRITER_GLOBALDOC_FULLTYPE", "%PRODUCTNAME %PRODUCTVERSION Master Document")
 
 #define STR_QUERY_CONNECT                       NC_("STR_QUERY_CONNECT", "A file connection will delete the contents of the current section. Connect anyway?")

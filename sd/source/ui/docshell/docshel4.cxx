@@ -898,9 +898,7 @@ bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
 
 void DrawDocShell::FillClass(SvGlobalName* pClassName,
                                         SotClipboardFormatId* pFormat,
-                                        OUString* ,
                                         OUString* pFullTypeName,
-                                        OUString* pShortTypeName,
                                         sal_Int32 nFileFormat,
                                         bool bTemplate /* = false */) const
 {
@@ -934,9 +932,6 @@ void DrawDocShell::FillClass(SvGlobalName* pClassName,
             *pFullTypeName = SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_80); // HACK: method will be removed with new storage API
         }
     }
-
-    *pShortTypeName = SdResId((meDocType == DocumentType::Draw) ?
-                                     STR_GRAPHIC_DOCUMENT : STR_IMPRESS_DOCUMENT);
 }
 
 OutputDevice* DrawDocShell::GetDocumentRefDev()

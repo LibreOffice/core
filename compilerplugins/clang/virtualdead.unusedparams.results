@@ -133,9 +133,6 @@ include/oox/dump/oledumper.hxx:166
 include/oox/export/shapes.hxx:136
     class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteNonVisualProperties(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,)
     0
-include/sfx2/objsh.hxx:637
-    void SfxObjectShell::FillClass(class SvGlobalName *,enum SotClipboardFormatId *,class rtl::OUString *,class rtl::OUString *,class rtl::OUString *,int,_Bool,)const
-    1101111
 include/sfx2/stbitem.hxx:100
     _Bool SfxStatusBarControl::MouseButtonUp(const class MouseEvent &,)
     0

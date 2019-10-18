@@ -247,9 +247,7 @@ public:
 
     virtual void FillClass( SvGlobalName * pClassName,
                                    SotClipboardFormatId * pClipFormat,
-                                   OUString * pAppName,
                                    OUString * pLongUserName,
-                                   OUString * pUserName,
                                    sal_Int32 nFileFormat,
                                    bool bTemplate = false ) const override;
 
