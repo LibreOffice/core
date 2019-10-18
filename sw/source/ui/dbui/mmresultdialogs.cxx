@@ -566,22 +566,18 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
     }
     else
     {
+        const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount();
         sal_uInt32 nBegin = 0;
-        sal_uInt32 nEnd = 0;
-        sal_uInt32 documentCount = xConfigItem->GetMergedDocumentCount();
+        sal_uInt32 nEnd = nDocumentCount;
 
-        if (m_xSaveIndividualRB->get_active())
-        {
-            nBegin = 0;
-            nEnd = documentCount;
-        }
-        else
+        if (!m_xSaveIndividualRB->get_active())
         {
             nBegin  = static_cast< sal_Int32 >(m_xFromNF->get_value() - 1);
             nEnd    = static_cast< sal_Int32 >(m_xToNF->get_value());
-            if(nEnd > documentCount)
-                nEnd = documentCount;
+            if(nEnd > nDocumentCount)
+                nEnd = nDocumentCount;
         }
+
         OUString sTargetTempURL = URIHelper::SmartRel2Abs(
             INetURLObject(), utl::TempFile::CreateTempName(),
             URIHelper::GetMaybeFileHdl());
@@ -756,21 +752,16 @@ IMPL_LINK_NOARG(SwMMResultPrintDialog, PrintHdl_Impl, weld::Button&, void)
     SwView* pTargetView = xConfigItem->GetTargetView();
     assert(pTargetView);
 
+    const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount();
     sal_uInt32 nBegin = 0;
-    sal_uInt32 nEnd = 0;
-    sal_uInt32 documentCount = xConfigItem->GetMergedDocumentCount();
+    sal_uInt32 nEnd = nDocumentCount;
 
-    if (m_xPrintAllRB->get_active())
-    {
-        nBegin = 0;
-        nEnd = documentCount;
-    }
-    else
+    if (!m_xPrintAllRB->get_active())
     {
         nBegin  = m_xFromNF->get_value() - 1;
         nEnd    = m_xToNF->get_value();
-        if(nEnd > documentCount)
-            nEnd = documentCount;
+        if(nEnd > nDocumentCount)
+            nEnd = nDocumentCount;
     }
 
     // If we skip autoinserted blanks, then the page numbers used in the print range string
@@ -885,19 +876,15 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         lcl_UpdateEmailSettingsFromGlobalConfig(*xConfigItem);
     }
     //add the documents
+    const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount();
     sal_uInt32 nBegin = 0;
-    sal_uInt32 nEnd = 0;
-    if (m_xSendAllRB->get_active())
-    {
-        nBegin = 0;
-        nEnd = xConfigItem->GetMergedDocumentCount();
-    }
-    else
+    sal_uInt32 nEnd = nDocumentCount;
+    if (!m_xSendAllRB->get_active())
     {
         nBegin  = static_cast< sal_Int32 >(m_xFromNF->get_value() - 1);
         nEnd    = static_cast< sal_Int32 >(m_xToNF->get_value());
-        if(nEnd > xConfigItem->GetMergedDocumentCount())
-            nEnd = xConfigItem->GetMergedDocumentCount();
+        if(nEnd > nDocumentCount)
+            nEnd = nDocumentCount;
     }
     bool bAsBody = false;
     rtl_TextEncoding eEncoding = ::osl_getThreadTextEncoding();
