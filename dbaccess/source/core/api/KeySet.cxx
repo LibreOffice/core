@@ -1040,11 +1040,6 @@ bool OKeySet::first()
 
 bool OKeySet::last(  )
 {
-    return last_checked(true);
-}
-
-bool OKeySet::last_checked( bool /* i_bFetchRow */ )
-{
     m_bInserted = m_bUpdated = m_bDeleted = false;
     bool bFetchedRow = fillAllRows();
 
@@ -1066,11 +1061,6 @@ sal_Int32 OKeySet::getRow(  )
 }
 
 bool OKeySet::absolute( sal_Int32 row )
-{
-    return absolute_checked(row,true);
-}
-
-bool OKeySet::absolute_checked( sal_Int32 row, bool /* i_bFetchRow */ )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     OSL_ENSURE(row,"absolute(0) isn't allowed!");
@@ -1127,7 +1117,7 @@ bool OKeySet::absolute_checked( sal_Int32 row, bool /* i_bFetchRow */ )
     return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
 }
 
-bool OKeySet::previous_checked( bool /* i_bFetchRow */ )
+bool OKeySet::previous()
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     if(m_aKeyIter != m_aKeyMap.begin())
@@ -1136,11 +1126,6 @@ bool OKeySet::previous_checked( bool /* i_bFetchRow */ )
         invalidateRow();
     }
     return m_aKeyIter != m_aKeyMap.begin();
-}
-
-bool OKeySet::previous(  )
-{
-    return previous_checked(true);
 }
 
 bool OKeySet::doTryRefetch_throw()

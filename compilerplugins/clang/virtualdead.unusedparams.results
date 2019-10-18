@@ -37,15 +37,6 @@ chart2/source/controller/dialogs/ChangingResource.hxx:30
 chart2/source/controller/dialogs/ChartTypeDialogController.hxx:105
     void chart::ChartTypeDialogController::fillExtraControls(const class chart::ChartTypeParameter &,const class com::sun::star::uno::Reference<class com::sun::star::chart2::XChartDocument> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,)const
     011
-dbaccess/source/core/api/CacheSet.hxx:174
-    _Bool dbaccess::OCacheSet::previous_checked(_Bool,)
-    0
-dbaccess/source/core/api/CacheSet.hxx:175
-    _Bool dbaccess::OCacheSet::absolute_checked(int,_Bool,)
-    10
-dbaccess/source/core/api/CacheSet.hxx:176
-    _Bool dbaccess::OCacheSet::last_checked(_Bool,)
-    0
 desktop/source/deployment/registry/inc/dp_backend.h:84
     void dp_registry::backend::Package::processPackage_(class osl::ResettableGuard<class osl::Mutex> &,_Bool,_Bool,const class rtl::Reference<class dp_misc::AbortChannel> &,const class com::sun::star::uno::Reference<class com::sun::star::ucb::XCommandEnvironment> &,)
     01111

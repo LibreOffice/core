@@ -705,7 +705,7 @@ void ORowSetCache::afterLast(  )
 
         if(!m_bRowCountFinal)
         {
-            m_xCacheSet->last_checked(false);
+            m_xCacheSet->last();
             m_bRowCountFinal = true;
             m_nRowCount = m_xCacheSet->getRow();// + 1 removed
         }
@@ -757,7 +757,7 @@ bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos, sal_Int32 &_nNewEndPos)
 
             if(!m_bRowCountFinal)
             {
-                if(m_xCacheSet->previous_checked(false)) // because we stand after the last row
+                if(m_xCacheSet->previous()) // because we stand after the last row
                     m_nRowCount = m_xCacheSet->getRow(); // here we have the row count
                 if(!m_nRowCount)
                     m_nRowCount = i-1; // it can be that getRow return zero
@@ -798,7 +798,7 @@ bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos, sal_Int32 &_nNewEndPos)
     {
         if(!m_xCacheSet->next())
         {
-            if(m_xCacheSet->previous_checked(false)) // because we stand after the last row
+            if(m_xCacheSet->previous()) // because we stand after the last row
                 m_nRowCount = m_xCacheSet->getRow(); // here we have the row count
             m_bRowCountFinal = true;
         }
@@ -836,7 +836,7 @@ void ORowSetCache::moveWindow()
                 // but only when we don't know it already
                 if ( !m_bRowCountFinal )
                 {
-                    bOk = m_xCacheSet->absolute_checked( m_nPosition + 1,false );
+                    bOk = m_xCacheSet->absolute( m_nPosition + 1 );
                     if ( bOk )
                         m_nRowCount = std::max(sal_Int32(m_nPosition+1),m_nRowCount);
                 }
@@ -844,7 +844,7 @@ void ORowSetCache::moveWindow()
             if(!bOk && !m_bRowCountFinal)
             {
                 // because we stand after the last row
-                m_nRowCount = m_xCacheSet->previous_checked(false) ? m_xCacheSet->getRow() : 0;
+                m_nRowCount = m_xCacheSet->previous() ? m_xCacheSet->getRow() : 0;
                 m_bRowCountFinal = true;
             }
         }
@@ -1000,7 +1000,7 @@ void ORowSetCache::moveWindow()
                     bOk = m_xCacheSet->next();
                 if(!bOk)
                 {
-                    m_xCacheSet->previous_checked(false); // because we stand after the last row
+                    m_xCacheSet->previous(); // because we stand after the last row
                     m_nRowCount      = nPos; // here we have the row count
                     OSL_ENSURE(nPos == m_xCacheSet->getRow(),"nPos is not valid!");
                     m_bRowCountFinal = true;
@@ -1027,7 +1027,7 @@ void ORowSetCache::moveWindow()
 
                 if ( !m_bRowCountFinal )
                 {
-                    m_xCacheSet->previous_checked(false);                   // because we stand after the last row
+                    m_xCacheSet->previous();                   // because we stand after the last row
                     m_nRowCount      = std::max(m_nRowCount, nPos);    // here we have the row count
                     OSL_ENSURE(nPos == m_xCacheSet->getRow(),"nPos isn't valid!");
                     m_bRowCountFinal = true;
@@ -1040,7 +1040,7 @@ void ORowSetCache::moveWindow()
                 aIter = m_pMatrix->begin();
 
                 nPos    = m_nStartPos + 1;
-                bCheck  = m_xCacheSet->absolute_checked(nPos, true);
+                bCheck  = m_xCacheSet->absolute(nPos);
                 for(; !aIter->is() && bCheck;++aIter, ++nPos)
                 {
                     OSL_ENSURE(aIter != m_pMatrix->end(),"Invalid iterator");

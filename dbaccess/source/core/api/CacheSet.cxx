@@ -540,21 +540,6 @@ bool OCacheSet::previous(  )
     return m_xDriverSet->previous();
 }
 
-bool OCacheSet::last_checked( bool /*i_bFetchRow*/)
-{
-    return last();
-}
-
-bool OCacheSet::previous_checked( bool /*i_bFetchRow*/ )
-{
-    return previous();
-}
-
-bool OCacheSet::absolute_checked( sal_Int32 row,bool /*i_bFetchRow*/ )
-{
-    return absolute(row);
-}
-
 void OCacheSet::refreshRow(  )
 {
     m_xDriverSet->refreshRow();
