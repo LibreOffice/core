@@ -908,7 +908,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     break;  // while
 
                 // Continue with remainder. This only to have *some* valid
-                // X-values and not endlessly create new lines until DOOM..
+                // X-values and not endlessly create new lines until DOOM...
                 // Happened in the scenario of tdf#104152 where inserting a
                 // paragraph lead to a11y attempting to format the doc to
                 // obtain content when notified.

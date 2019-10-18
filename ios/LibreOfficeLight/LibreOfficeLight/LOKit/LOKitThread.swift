@@ -125,7 +125,7 @@ public class LOKitThread
  */
 public protocol LOKitUIDelegate: class
 {
-    // Nothing ATM..
+    // Nothing ATM...
 }
 
 public protocol ProgressDelegate: class
