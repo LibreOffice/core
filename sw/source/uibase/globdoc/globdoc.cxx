@@ -45,9 +45,7 @@ SwGlobalDocShell::~SwGlobalDocShell()
 
 void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
                                    SotClipboardFormatId * pClipFormat,
-                                   OUString * /*pAppName*/,
                                    OUString * pLongUserName,
-                                   OUString * pUserName,
                                    sal_Int32 nVersion,
                                    bool bTemplate /* = false */) const
 {
@@ -64,8 +62,6 @@ void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
         *pClipFormat    = bTemplate ? SotClipboardFormatId::STARWRITERGLOB_8_TEMPLATE : SotClipboardFormatId::STARWRITERGLOB_8;
         *pLongUserName = SwResId(STR_WRITER_GLOBALDOC_FULLTYPE);
     }
-
-    *pUserName = SwResId(STR_HUMAN_SWGLOBDOC_NAME);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

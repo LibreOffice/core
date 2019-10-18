@@ -175,9 +175,7 @@ SFX_IMPL_OBJECTFACTORY( ScDocShell, SvGlobalName(SO3_SC_CLASSID), "scalc" )
 
 void ScDocShell::FillClass( SvGlobalName* pClassName,
                                         SotClipboardFormatId* pFormat,
-                                        OUString* /* pAppName */,
                                         OUString* pFullTypeName,
-                                        OUString* pShortTypeName,
                                         sal_Int32 nFileFormat,
                                         bool bTemplate /* = false */) const
 {
@@ -186,14 +184,12 @@ void ScDocShell::FillClass( SvGlobalName* pClassName,
         *pClassName     = SvGlobalName( SO3_SC_CLASSID_60 );
         *pFormat        = SotClipboardFormatId::STARCALC_60;
         *pFullTypeName  = ScResId( SCSTR_LONG_SCDOC_NAME_60 );
-        *pShortTypeName = ScResId( SCSTR_SHORT_SCDOC_NAME );
     }
     else if ( nFileFormat == SOFFICE_FILEFORMAT_8 )
     {
         *pClassName     = SvGlobalName( SO3_SC_CLASSID_60 );
         *pFormat        = bTemplate ? SotClipboardFormatId::STARCALC_8_TEMPLATE : SotClipboardFormatId::STARCALC_8;
         *pFullTypeName  = ScResId( SCSTR_LONG_SCDOC_NAME_80 );
-        *pShortTypeName = ScResId(SCSTR_SHORT_SCDOC_NAME);
     }
     else
     {

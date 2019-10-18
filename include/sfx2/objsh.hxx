@@ -636,9 +636,7 @@ public:
 
     virtual void    FillClass( SvGlobalName * pClassName,
                                SotClipboardFormatId * pFormat,
-                               OUString * pAppName,
                                OUString * pFullTypeName,
-                               OUString * pShortTypeName,
                                sal_Int32 nVersion,
                                bool bTemplate = false) const = 0;
 

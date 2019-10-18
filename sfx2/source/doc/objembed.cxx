@@ -148,8 +148,7 @@ void SfxObjectShell::SetMapUnit( MapUnit nMapUnit )
 void SfxObjectShell::FillTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc ) const
 {
     SotClipboardFormatId nClipFormat;
-    OUString aAppName, aShortName;
-    FillClass( &rDesc.maClassName, &nClipFormat, &aAppName, &rDesc.maTypeName, &aShortName, SOFFICE_FILEFORMAT_CURRENT );
+    FillClass( &rDesc.maClassName, &nClipFormat, &rDesc.maTypeName, SOFFICE_FILEFORMAT_CURRENT );
 
     rDesc.mnViewAspect = ASPECT_CONTENT;
     rDesc.maSize = OutputDevice::LogicToLogic(GetVisArea().GetSize(), MapMode(GetMapUnit()), MapMode(MapUnit::Map100thMM));

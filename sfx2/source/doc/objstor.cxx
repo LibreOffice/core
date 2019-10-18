@@ -314,8 +314,8 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
     SotClipboardFormatId nClipFormat = SotClipboardFormatId::NONE;
 
     SvGlobalName aName;
-    OUString aFullTypeName, aShortTypeName, aAppName;
-    FillClass( &aName, &nClipFormat, &aAppName, &aFullTypeName, &aShortTypeName, nVersion, bTemplate );
+    OUString aFullTypeName;
+    FillClass( &aName, &nClipFormat, &aFullTypeName, nVersion, bTemplate );
 
     if ( nClipFormat == SotClipboardFormatId::NONE )
         return;

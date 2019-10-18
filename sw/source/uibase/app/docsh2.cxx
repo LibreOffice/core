@@ -1371,9 +1371,7 @@ void SwDocShell::ReconnectDdeLink(SfxObjectShell& rServer)
 
 void SwDocShell::FillClass( SvGlobalName * pClassName,
                                    SotClipboardFormatId * pClipFormat,
-                                   OUString * /*pAppName*/,
                                    OUString * pLongUserName,
-                                   OUString * pUserName,
                                    sal_Int32 nVersion,
                                    bool bTemplate /* = false */) const
 {
@@ -1395,8 +1393,6 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
     if( xVbaEventsHelper.is() )
         lcl_processCompatibleSfxHint( xVbaEventsHelper, rHint );
 #endif
-
-    *pUserName = SwResId(STR_HUMAN_SWDOC_NAME);
 }
 
 void SwDocShell::SetModified( bool bSet )

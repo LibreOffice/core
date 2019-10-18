@@ -179,9 +179,7 @@ public:
 
     virtual void    FillClass( SvGlobalName * pClassName,
                                SotClipboardFormatId * pFormat,
-                               OUString * pAppName,
                                OUString * pFullTypeName,
-                               OUString * pShortTypeName,
                                sal_Int32 nFileFormat,
                                bool bTemplate = false ) const override;
 
