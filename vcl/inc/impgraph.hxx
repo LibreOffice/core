@@ -84,10 +84,6 @@ private:
     bool                         mbDummyContext;
     VectorGraphicDataPtr         maVectorGraphicData;
 
-    /// The PDF stream from which this Graphic is rendered,
-    /// as converted (version downgraded) from the original,
-    /// which should be in GfxLink.
-    std::shared_ptr<css::uno::Sequence<sal_Int8>> mpPdfData;
     std::unique_ptr<GraphicID>   mpGraphicID;
     GraphicExternalLink          maGraphicExternalLink;
 
@@ -135,11 +131,6 @@ private:
         if (!mpGraphicID)
             mpGraphicID.reset(new GraphicID(*this));
         return mpGraphicID->getIDString();
-    }
-
-    bool hasPdfData() const
-    {
-        return mpPdfData && mpPdfData->hasElements();
     }
 
     void                ImplCreateSwapInfo();
@@ -222,10 +213,6 @@ private:
     friend void         ReadImpGraphic(SvStream& rIStm, ImpGraphic& rImpGraphic);
 
     const VectorGraphicDataPtr& getVectorGraphicData() const;
-
-    const std::shared_ptr<css::uno::Sequence<sal_Int8>>& getPdfData() const;
-
-    void setPdfData(const std::shared_ptr<css::uno::Sequence<sal_Int8>>& rPdfData);
 
     bool ensureAvailable () const;
 

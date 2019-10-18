@@ -199,7 +199,6 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , mbSwapOut(rImpGraphic.mbSwapOut)
     , mbDummyContext(rImpGraphic.mbDummyContext)
     , maVectorGraphicData(rImpGraphic.maVectorGraphicData)
-    , mpPdfData(rImpGraphic.mpPdfData)
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
     , maLastUsed (std::chrono::high_resolution_clock::now())
     , mbPrepared (rImpGraphic.mbPrepared)
@@ -225,7 +224,6 @@ ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic)
     , mbSwapOut(rImpGraphic.mbSwapOut)
     , mbDummyContext(rImpGraphic.mbDummyContext)
     , maVectorGraphicData(std::move(rImpGraphic.maVectorGraphicData))
-    , mpPdfData(std::move(rImpGraphic.mpPdfData))
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
     , maLastUsed (std::chrono::high_resolution_clock::now())
     , mbPrepared (rImpGraphic.mbPrepared)
@@ -348,7 +346,6 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         mpGfxLink = rImpGraphic.mpGfxLink;
 
         maVectorGraphicData = rImpGraphic.maVectorGraphicData;
-        mpPdfData = rImpGraphic.mpPdfData;
         maLastUsed = std::chrono::high_resolution_clock::now();
 
         vcl::graphic::Manager::get().changeExisting(this, aOldSizeBytes);
@@ -374,7 +371,6 @@ ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
     mpSwapFile = std::move(rImpGraphic.mpSwapFile);
     mpGfxLink = std::move(rImpGraphic.mpGfxLink);
     maVectorGraphicData = std::move(rImpGraphic.maVectorGraphicData);
-    mpPdfData = std::move(rImpGraphic.mpPdfData);
     maGraphicExternalLink = rImpGraphic.maGraphicExternalLink;
     mbPrepared = rImpGraphic.mbPrepared;
 
@@ -429,10 +425,6 @@ bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
                         bRet = (*maVectorGraphicData) == (*rImpGraphic.maVectorGraphicData);
                     }
                 }
-                else if (mpPdfData && mpPdfData->hasElements())
-                {
-                    bRet = (rImpGraphic.mpPdfData && *mpPdfData == *rImpGraphic.mpPdfData);
-                }
                 else if( mpAnimation )
                 {
                     if( rImpGraphic.mpAnimation && ( *rImpGraphic.mpAnimation == *mpAnimation ) )
@@ -460,20 +452,6 @@ const VectorGraphicDataPtr& ImpGraphic::getVectorGraphicData() const
     return maVectorGraphicData;
 }
 
-void ImpGraphic::setPdfData(const std::shared_ptr<uno::Sequence<sal_Int8>>& rPdfData)
-{
-    ensureAvailable();
-
-    mpPdfData = rPdfData;
-}
-
-const std::shared_ptr<uno::Sequence<sal_Int8>>& ImpGraphic::getPdfData() const
-{
-    ensureAvailable();
-
-    return mpPdfData;
-}
-
 void ImpGraphic::ImplCreateSwapInfo()
 {
     if (!ImplIsSwapOut())
@@ -495,7 +473,6 @@ void ImpGraphic::ImplClearGraphics()
     mpAnimation.reset();
     mpGfxLink.reset();
     maVectorGraphicData.reset();
-    mpPdfData.reset();
 }
 
 ImpSwapFile::~ImpSwapFile()
@@ -1698,11 +1675,6 @@ BitmapChecksum ImpGraphic::ImplGetChecksum() const
                 {
                     nRet = maEx.GetChecksum();
                 }
-
-                if (mpPdfData && mpPdfData->hasElements())
-                    // Include the PDF data in the checksum, so a metafile with
-                    // and without PDF data is considered to be different.
-                    nRet = vcl_get_checksum(nRet, mpPdfData->getConstArray(), mpPdfData->getLength());
             }
             break;
 
@@ -1850,12 +1822,13 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
             const sal_uInt32 nSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
             const sal_uInt32 nWmfMagic((sal_uInt32('w') << 24) | (sal_uInt32('m') << 16) | (sal_uInt32('f') << 8) | sal_uInt32('0'));
             const sal_uInt32 nEmfMagic((sal_uInt32('e') << 24) | (sal_uInt32('m') << 16) | (sal_uInt32('f') << 8) | sal_uInt32('0'));
+            const sal_uInt32 nPdfMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
             sal_uInt32 nMagic;
             rIStm.Seek(nStmPos1);
             rIStm.ResetError();
             rIStm.ReadUInt32( nMagic );
 
-            if (nSvgMagic == nMagic || nWmfMagic == nMagic || nEmfMagic == nMagic)
+            if (nSvgMagic == nMagic || nWmfMagic == nMagic || nEmfMagic == nMagic || nPdfMagic == nMagic)
             {
                 sal_uInt32 nVectorGraphicDataArrayLength(0);
                 rIStm.ReadUInt32(nVectorGraphicDataArrayLength);
@@ -1879,30 +1852,13 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                         {
                             aDataType = VectorGraphicDataType::Emf;
                         }
+                        else if (nPdfMagic == nMagic)
+                        {
+                            aDataType = VectorGraphicDataType::Pdf;
+                        }
 
                         VectorGraphicDataPtr aVectorGraphicDataPtr(new VectorGraphicData(aNewData, aPath, aDataType));
                         rImpGraphic = aVectorGraphicDataPtr;
-                    }
-                }
-            }
-            else if (nMagic == nPdfMagic)
-            {
-                // Stream in PDF data.
-                sal_uInt32 nPdfDataLength = 0;
-                rIStm.ReadUInt32(nPdfDataLength);
-                Bitmap aBitmap;
-
-                if (nPdfDataLength && !rIStm.GetError())
-                {
-                    if (!rImpGraphic.mpPdfData)
-                        rImpGraphic.mpPdfData.reset(new uno::Sequence<sal_Int8>());
-
-                    if (vcl::ImportPDF(rIStm, aBitmap, rImpGraphic.mnPageNumber,
-                                       *rImpGraphic.mpPdfData,
-                                       rIStm.Tell(), nPdfDataLength))
-                    {
-                        rImpGraphic.maEx = aBitmap;
-                        rImpGraphic.meType = GraphicType::Bitmap;
                     }
                 }
             }
@@ -1933,8 +1889,7 @@ void WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic)
 
     if( ( rOStm.GetVersion() >= SOFFICE_FILEFORMAT_50 ) &&
         ( rOStm.GetCompressMode() & SvStreamCompressFlags::NATIVE ) &&
-        rImpGraphic.mpGfxLink && rImpGraphic.mpGfxLink->IsNative() &&
-        !rImpGraphic.hasPdfData())
+        rImpGraphic.mpGfxLink && rImpGraphic.mpGfxLink->IsNative())
     {
         // native format
         rOStm.WriteUInt32( NATIVE_FORMAT_50 );
@@ -1981,9 +1936,15 @@ void WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic)
                             rOStm.WriteUInt32(nEmfMagic);
                             break;
                         }
-                        default: // case VectorGraphicDataType::Svg:
+                        case VectorGraphicDataType::Svg:
                         {
                             const sal_uInt32 nSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
+                            rOStm.WriteUInt32(nSvgMagic);
+                            break;
+                        }
+                        case VectorGraphicDataType::Pdf:
+                        {
+                            const sal_uInt32 nSvgMagic((sal_uInt32('p') << 24) | (sal_uInt32('d') << 16) | (sal_uInt32('f') << 8) | sal_uInt32('0'));
                             rOStm.WriteUInt32(nSvgMagic);
                             break;
                         }
@@ -1994,13 +1955,6 @@ void WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic)
                         rImpGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength());
                     rOStm.WriteUniOrByteString(rImpGraphic.getVectorGraphicData()->getPath(),
                                                rOStm.GetStreamCharSet());
-                }
-                else if (rImpGraphic.hasPdfData())
-                {
-                    // Stream out PDF data.
-                    rOStm.WriteUInt32(nPdfMagic);
-                    rOStm.WriteUInt32(rImpGraphic.mpPdfData->getLength());
-                    rOStm.WriteBytes(rImpGraphic.mpPdfData->getConstArray(), rImpGraphic.mpPdfData->getLength());
                 }
                 else if( rImpGraphic.ImplIsAnimated())
                 {
