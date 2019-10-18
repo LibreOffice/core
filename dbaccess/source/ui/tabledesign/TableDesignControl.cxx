@@ -72,7 +72,7 @@ void OTableRowView::Init()
 
 void OTableRowView::KeyInput( const KeyEvent& rEvt )
 {
-    if (IsDeleteAllowed(0))
+    if (IsDeleteAllowed())
     {
         if (rEvt.GetKeyCode().GetCode() == KEY_DELETE &&    // Delete rows
             !rEvt.GetKeyCode().IsShift() &&

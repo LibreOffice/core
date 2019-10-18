@@ -1238,7 +1238,7 @@ void OTableEditorCtrl::paste()
     }
 }
 
-bool OTableEditorCtrl::IsDeleteAllowed( long /*nRow*/ )
+bool OTableEditorCtrl::IsDeleteAllowed()
 {
 
     return GetSelectRowCount() != 0 && GetView()->getController().isDropAllowed();
@@ -1259,7 +1259,7 @@ bool OTableEditorCtrl::IsInsertNewAllowed( long nRow )
     return bInsertNewAllowed;
 }
 
-bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
+bool OTableEditorCtrl::IsPrimaryKeyAllowed()
 {
     if( !GetSelectRowCount() )
         return false;
@@ -1368,8 +1368,8 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                     aContextMenu->EnableItem(aContextMenu->GetItemId("cut"), IsCutAllowed());
                     aContextMenu->EnableItem(aContextMenu->GetItemId("copy"), IsCopyAllowed());
                     aContextMenu->EnableItem(aContextMenu->GetItemId("paste"), IsPasteAllowed());
-                    aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), IsDeleteAllowed(nRow));
-                    aContextMenu->EnableItem(aContextMenu->GetItemId("primarykey"), IsPrimaryKeyAllowed(nRow));
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), IsDeleteAllowed());
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("primarykey"), IsPrimaryKeyAllowed());
                     aContextMenu->EnableItem(aContextMenu->GetItemId("insert"), IsInsertNewAllowed(nRow));
                     aContextMenu->CheckItem("primarykey", IsRowSelected(GetCurRow()) && IsPrimaryKey());
 

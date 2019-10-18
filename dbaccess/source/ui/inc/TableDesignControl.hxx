@@ -65,9 +65,9 @@ namespace dbaui
         virtual void InsertRows( long nRow )                = 0;
         virtual void InsertNewRows( long nRow )             = 0;
 
-        virtual bool IsPrimaryKeyAllowed( long nRow )   = 0;
+        virtual bool IsPrimaryKeyAllowed()              = 0;
         virtual bool IsInsertNewAllowed( long nRow )    = 0;
-        virtual bool IsDeleteAllowed( long nRow )       = 0;
+        virtual bool IsDeleteAllowed()                  = 0;
 
         virtual RowStatus GetRowStatus(long nRow) const override;
         virtual void KeyInput(const KeyEvent& rEvt) override;
