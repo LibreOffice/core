@@ -607,8 +607,7 @@ void SdrEditView::CheckPossibilities()
                     if (pSdrGrafObj != nullptr)
                     {
                         if ((pSdrGrafObj->HasGDIMetaFile() && !pSdrGrafObj->IsEPS()) ||
-                            pSdrGrafObj->isEmbeddedVectorGraphicData() ||
-                            pSdrGrafObj->isEmbeddedPdfData())
+                            pSdrGrafObj->isEmbeddedVectorGraphicData())
                         {
                             m_bImportMtfPossible = true;
                         }
