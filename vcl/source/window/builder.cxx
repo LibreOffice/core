@@ -3596,8 +3596,6 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const
                 pParent->SetTipHelpText(nNewId, rValue);
             else if (rKey == "visible")
                 pParent->ShowItem(nNewId, toBool(rValue));
-            else if (rKey == "has-default" && toBool(rValue))
-                pParent->SetSelectedEntry(nNewId);
             else
                 SAL_INFO("vcl.layout", "unhandled property: " << rKey);
         }
