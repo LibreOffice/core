@@ -67,12 +67,6 @@ extensions/source/bibliography/loadlisteneradapter.hxx:110
 extensions/source/bibliography/loadlisteneradapter.hxx:111
     void bib::OLoadListener::_reloading(const struct com::sun::star::lang::EventObject &,)
     0
-forms/source/richtext/textattributelistener.hxx:32
-    void frm::ITextAttributeListener::onAttributeStateChanged(int,const struct frm::AttributeState &,)
-    10
-forms/source/richtext/textattributelistener.hxx:44
-    void frm::ITextSelectionListener::onSelectionChanged(const struct ESelection &,)
-    0
 include/canvas/base/bufferedgraphicdevicebase.hxx:230
     void canvas::BufferedGraphicDeviceBase::windowShown(const struct com::sun::star::lang::EventObject &,)
     0

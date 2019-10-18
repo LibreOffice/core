@@ -152,7 +152,7 @@ namespace frm
             if ( aCurrentSelection != m_aLastKnownSelection )
             {
                 m_aLastKnownSelection = aCurrentSelection;
-                m_pSelectionListener->onSelectionChanged( m_aLastKnownSelection );
+                m_pSelectionListener->onSelectionChanged();
             }
         }
     }
@@ -255,11 +255,11 @@ namespace frm
         // is there a dedicated listener for this particular attribute?
         AttributeListenerPool::const_iterator aListenerPos = m_aAttributeListeners.find( _nAttribute );
         if ( aListenerPos != m_aAttributeListeners.end( ) )
-            aListenerPos->second->onAttributeStateChanged( _nAttribute, _rState );
+            aListenerPos->second->onAttributeStateChanged( _nAttribute );
 
         // call our global listener, if there is one
         if ( m_pTextAttrListener )
-            m_pTextAttrListener->onAttributeStateChanged( _nAttribute, _rState );
+            m_pTextAttrListener->onAttributeStateChanged( _nAttribute );
     }
 
 

@@ -117,7 +117,7 @@ namespace frm
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
 
         // ITextSelectionListener
-        virtual void    onSelectionChanged( const ESelection& _rSelection ) override;
+        virtual void    onSelectionChanged() override;
 
     private:
         SingleAttributeDispatcher implCreateDispatcher( SfxSlotId _nSlotId, const css::util::URL& _rURL );

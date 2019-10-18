@@ -98,7 +98,7 @@ namespace frm
     }
 
 
-    void OAttributeDispatcher::onAttributeStateChanged( AttributeId _nAttributeId, const AttributeState& /*_rState*/ )
+    void OAttributeDispatcher::onAttributeStateChanged( AttributeId _nAttributeId )
     {
         OSL_ENSURE( _nAttributeId == m_nAttributeId, "OAttributeDispatcher::onAttributeStateChanged: wrong attribute!" );
 
