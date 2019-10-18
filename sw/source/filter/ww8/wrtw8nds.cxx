@@ -256,11 +256,12 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
     {
         ++fieldEndPos;
     }
+    sal_Int32 fieldSepPos = aText.indexOf(CH_TXT_ATR_FIELDSEP, nStartPos);
     sal_Int32 fieldStartPos = aText.indexOf(CH_TXT_ATR_FIELDSTART, nStartPos);
     sal_Int32 formElementPos = aText.indexOf(CH_TXT_ATR_FORMELEMENT, nStartPos);
 
     const sal_Int32 pos = lcl_getMinPos(
-        lcl_getMinPos( fieldEndPos, fieldStartPos ),
+        lcl_getMinPos(lcl_getMinPos(fieldEndPos, fieldSepPos), fieldStartPos),
         formElementPos );
 
     sal_Int32 nMinPos = (pos>=0) ? pos : SAL_MAX_INT32;
@@ -2326,7 +2327,12 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             if ( !bTextAtr && nLen )
             {
                 sal_Unicode ch = aStr[nCurrentPos];
-                const sal_Int32 ofs = ( ch == CH_TXT_ATR_FIELDSTART || ch == CH_TXT_ATR_FIELDEND || ch == CH_TXT_ATR_FORMELEMENT? 1 : 0 );
+
+                const sal_Int32 ofs = (ch == CH_TXT_ATR_FIELDSTART
+                                    || ch == CH_TXT_ATR_FIELDSEP
+                                    || ch == CH_TXT_ATR_FIELDEND
+                                    || ch == CH_TXT_ATR_FORMELEMENT)
+                                ? 1 : 0;
 
                 IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
                 if ( ch == CH_TXT_ATR_FIELDSTART )
@@ -2379,6 +2385,17 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                             WriteFormData( *pFieldmark );
                         else if (pFieldmark->GetFieldname() == ODF_HYPERLINK)
                             WriteHyperlinkData( *pFieldmark );
+                    }
+                }
+                else if (ch == CH_TXT_ATR_FIELDSEP)
+                {
+                    SwPosition aPosition(rNode, SwIndex(&rNode, nCurrentPos));
+                    // the innermost field is the correct one
+                    ::sw::mark::IFieldmark const*const pFieldmark = pMarkAccess->getFieldmarkFor(aPosition);
+                    assert(pFieldmark);
+                    // DateFieldmark / ODF_FORMDATE is not a field...
+                    if (pFieldmark->GetFieldname() != ODF_FORMDATE)
+                    {
                         OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), FieldFlags::CmdEnd );
 
                         if (pFieldmark->GetFieldname() == ODF_UNHANDLED)

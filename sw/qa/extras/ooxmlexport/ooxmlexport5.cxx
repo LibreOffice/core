@@ -896,7 +896,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo83048, "fdo83048.docx")
 
     // Make sure Date is inside SDT tag.
     // This will happen only if right SDT properties are exported.
-    assertXPathContent(pXmlDoc, "/w:ftr/w:sdt/w:sdtContent/w:p[1]/w:sdt/w:sdtContent/w:r[1]/w:t",
+    assertXPathContent(pXmlDoc, "/w:ftr/w:sdt/w:sdtContent/w:p[1]/w:sdt/w:sdtContent/w:r[2]/w:t",
                        "1/2/2013");
 }
 
