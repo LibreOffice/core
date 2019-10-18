@@ -58,7 +58,6 @@ private:
 
     std::unordered_map<OUString, css::uno::Reference<css::graphic::XGraphic>> maGraphicObjects;
     std::unordered_map<Graphic, std::pair<OUString, OUString>> maExportGraphics;
-    std::unordered_map<void*, std::pair<OUString, OUString>> maExportPdf;
 
     SvXMLGraphicHelperMode      meCreateMode;
     OUString                    maOutputMimeType;
