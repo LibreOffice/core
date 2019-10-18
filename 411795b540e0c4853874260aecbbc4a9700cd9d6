@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_21d170fc",
+        "filename": "sw/source/ui/dbui/mmresultdialogs.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-10-18T20:44:08Z",
+      "side": 0,
+      "message": "So this SetMerge somehow is connected to StyleInsertModeOverwrite, whatever the result is.",
+      "revId": "411795b540e0c4853874260aecbbc4a9700cd9d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
