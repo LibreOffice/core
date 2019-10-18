@@ -65,10 +65,10 @@ class LocalNameApproval : public IContainerApprove
     ::connectivity::SQLError    m_aErrors;
 
 public:
-    void approveElement( const OUString& _rName, const Reference< XInterface >& _rxElement ) override;
+    void approveElement( const OUString& _rName ) override;
 };
 
-void LocalNameApproval::approveElement( const OUString& _rName, const Reference< XInterface >& /*_rxElement*/ )
+void LocalNameApproval::approveElement( const OUString& _rName )
 {
     if ( _rName.indexOf( '/' ) != -1 )
         throw IllegalArgumentException(

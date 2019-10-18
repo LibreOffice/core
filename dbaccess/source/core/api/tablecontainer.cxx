@@ -268,7 +268,7 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
 
     Reference< XConnection > xConnection( m_xConnection.get(), UNO_QUERY );
     PContainerApprove pApprove( new ObjectNameApproval( xConnection, ObjectNameApproval::TypeTable ) );
-    pApprove->approveElement( aName, descriptor );
+    pApprove->approveElement( aName );
 
     {
         EnsureReset aReset(m_nInAppend);
