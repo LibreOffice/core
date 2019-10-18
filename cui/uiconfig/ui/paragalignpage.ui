@@ -77,6 +77,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="radioBTN_LEFTALIGN">
                         <property name="label" translatable="yes" context="paragalignpage|radioBTN_LEFTALIGN">_Left</property>
@@ -127,36 +128,19 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="radioBTN_JUSTIFYALIGN">
-                        <property name="label" translatable="yes" context="paragalignpage|radioBTN_JUSTIFYALIGN">_Justified</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">radioBTN_LEFTALIGN</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkCheckButton" id="checkCB_EXPAND">
                         <property name="label" translatable="yes" context="paragalignpage|checkCB_EXPAND">_Expand single word</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="margin_left">22</property>
                         <property name="relief">none</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">5</property>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">3</property>
                       </packing>
                     </child>
                     <child>
@@ -165,14 +149,14 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="margin_left">22</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">6</property>
+                        <property name="top_attach">4</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
@@ -181,39 +165,10 @@
                         <property name="can_focus">False</property>
                         <property name="spacing">12</property>
                         <child>
-                          <object class="GtkBox" id="box1">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="margin_left">13</property>
-                            <property name="orientation">vertical</property>
-                            <child>
-                              <object class="GtkLabel" id="labelLB_LASTLINE">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="margin_left">12</property>
-                                <property name="vexpand">True</property>
-                                <property name="label" translatable="yes" context="paragalignpage|labelLB_LASTLINE">_Last line:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">comboLB_LASTLINE</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkComboBoxText" id="comboLB_LASTLINE">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
                             <property name="active">0</property>
                             <items>
                               <item id="0" translatable="yes" context="paragalignpage|liststoreLB_LASTLINE">Start</item>
@@ -230,8 +185,8 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">4</property>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">3</property>
                       </packing>
                     </child>
                     <child>
@@ -267,8 +222,76 @@
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">7</property>
+                        <property name="top_attach">5</property>
+                        <property name="width">2</property>
                       </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="justified">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkRadioButton" id="radioBTN_JUSTIFYALIGN">
+                            <property name="label" translatable="yes" context="paragalignpage|radioBTN_JUSTIFYALIGN">_Justified</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="group">radioBTN_LEFTALIGN</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="labelLB_LASTLINE">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes" context="paragalignpage|labelLB_LASTLINE">_Last line:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">comboLB_LASTLINE</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
                 </child>
@@ -311,7 +334,6 @@
                       <object class="GtkLabel" id="labelFT_VERTALIGN">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_right">12</property>
                         <property name="label" translatable="yes" context="paragalignpage|labelFT_VERTALIGN">_Alignment:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">comboLB_VERTALIGN</property>
@@ -383,7 +405,6 @@
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_right">12</property>
                         <property name="label" translatable="yes" context="paragalignpage|label2">_Text direction:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">comboLB_TEXTDIRECTION</property>
@@ -435,9 +456,19 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
-      <widget name="box1"/>
+      <widget name="radioBTN_LEFTALIGN"/>
+      <widget name="radioBTN_RIGHTALIGN"/>
+      <widget name="radioBTN_CENTERALIGN"/>
+      <widget name="justified"/>
       <widget name="labelFT_VERTALIGN"/>
       <widget name="label2"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup2">
+    <widgets>
+      <widget name="box4"/>
+      <widget name="comboLB_VERTALIGN"/>
+      <widget name="comboLB_TEXTDIRECTION"/>
     </widgets>
   </object>
 </interface>
