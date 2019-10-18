@@ -529,15 +529,16 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
     SwView* pTargetView = xConfigItem->GetTargetView();
     assert(pTargetView);
 
+    OUString sFilter;
+    OUString sPath = SwMailMergeHelper::CallSaveAsDialog(m_xDialog.get(), sFilter);
+    if (sPath.isEmpty())
+    {
+        // just return back to the dialog
+        return;
+    }
+
     if (m_xSaveAsOneRB->get_active())
     {
-        OUString sFilter;
-        const OUString sPath = SwMailMergeHelper::CallSaveAsDialog(m_xDialog.get(), sFilter);
-        if (sPath.isEmpty())
-        {
-            // just return back to the dialog
-            return;
-        }
         uno::Sequence< beans::PropertyValue > aValues(1);
         beans::PropertyValue* pValues = aValues.getArray();
         pValues[0].Name = "FilterName";
@@ -580,13 +581,6 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
             nEnd    = static_cast< sal_Int32 >(m_xToNF->get_value());
             if(nEnd > documentCount)
                 nEnd = documentCount;
-        }
-        OUString sFilter;
-        OUString sPath = SwMailMergeHelper::CallSaveAsDialog(m_xDialog.get(), sFilter);
-        if (sPath.isEmpty())
-        {
-            // just return back to the dialog
-            return;
         }
         OUString sTargetTempURL = URIHelper::SmartRel2Abs(
             INetURLObject(), utl::TempFile::CreateTempName(),
