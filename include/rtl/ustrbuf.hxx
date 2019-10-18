@@ -1635,7 +1635,7 @@ public:
     }
 
 #if defined LIBO_INTERNAL_ONLY
-    operator OUStringView() const
+    explicit operator OUStringView() const
     {
         return OUStringView(getStr(), getLength());
     }
