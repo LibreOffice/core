@@ -979,10 +979,14 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     else if (nIndex - nStartIndex < nCnt)
     {
         nMinute = static_cast<sal_uInt16>(sStrArray[nNums[nIndex++]].toInt32());
+        if (nIndex > 1 && nMinute > 59)
+            bRet = false;   // 1:60 or 1:123 is invalid, 123:1 is valid
     }
     if (nIndex - nStartIndex < nCnt)
     {
         nSecond = static_cast<sal_uInt16>(sStrArray[nNums[nIndex++]].toInt32());
+        if (nIndex > 1 && nSecond > 59)
+            bRet = false;   // 1:60 or 1:123 or 1:1:123 is invalid, 123:1 or 123:1:1 is valid
     }
     if (nIndex - nStartIndex < nCnt)
     {
