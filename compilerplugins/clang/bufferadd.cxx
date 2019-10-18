@@ -276,7 +276,7 @@ bool BufferAdd::isMethodOkToMerge(CXXMemberCallExpr const* memberCall)
 
     auto name = methodDecl->getName();
     if (name == "appendUninitialized" || name == "setLength" || name == "remove" || name == "insert"
-        || name == "appendAscii" || name == "appendUtf32")
+        || name == "appendUtf32")
         return false;
 
     auto rhs = memberCall->getArg(0);

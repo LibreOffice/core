@@ -551,13 +551,12 @@ OUString lclGetErrorMessage( xmlParserCtxtPtr ctxt, const OUString& sSystemId, s
         pMessage = error->message;
     else
         pMessage = "unknown error";
-    OUStringBuffer aBuffer( "[" );
-    aBuffer.append( sSystemId );
-    aBuffer.append( " line " );
-    aBuffer.append( nLine );
-    aBuffer.append( "]: " );
-    aBuffer.appendAscii( pMessage );
-    return aBuffer.makeStringAndClear();
+    return "[" +
+        sSystemId +
+        " line " +
+        OUString::number(nLine) +
+        "]: " +
+        rtl::OUStringAsciiView( pMessage );
 }
 
 // throw an exception, but avoid callback if

@@ -538,6 +538,28 @@ struct ToStringHelper< OUStringView >
     static const bool allowOUStringConcat = true;
     };
 
+class OUStringAsciiView {
+public:
+    explicit OUStringAsciiView(char const * s): view_(s) {}
+    explicit OUStringAsciiView(char const * s, size_t len): view_(s, len) {}
+
+    std::size_t length() const { return view_.length(); }
+
+    char const * data() const { return view_.data(); }
+
+private:
+    std::string_view view_;
+};
+
+template<>
+struct ToStringHelper< OUStringAsciiView >
+    {
+    static std::size_t length( const OUStringAsciiView& v ) { return v.length(); }
+    static sal_Unicode* addData( sal_Unicode* buffer, const OUStringAsciiView& v ) SAL_RETURNS_NONNULL { return addDataLiteral( buffer, v.data(), v.length() ); }
+    static const bool allowOStringConcat = false;
+    static const bool allowOUStringConcat = true;
+    };
+
 } // namespace
 
 #endif

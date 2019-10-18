@@ -64,6 +64,12 @@ struct Footer
         return buf.makeStringAndClear();
     }
 };
+void f7(const char* p)
+{
+    // expected-error@+1 {{convert this append sequence into a *String + sequence [loplugin:bufferadd]}}
+    OUStringBuffer v;
+    v.appendAscii(p);
+}
 }
 
 namespace test2

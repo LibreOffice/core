@@ -167,9 +167,7 @@ public:
         {
             for (int i = 1; i < 4096; i += 8)
             {
-                OUStringBuffer aBuf(i);
-                aBuf.appendAscii(sample, (i/8) % (SAL_N_ELEMENTS(sample)-1));
-                OUString aStr = aBuf.makeStringAndClear();
+                OUString aStr = rtl::OUStringAsciiView(sample, (i/8) % (SAL_N_ELEMENTS(sample)-1)) + "";
                 aStrings.push_back(aStr);
             }
             // free some pieces to make holes

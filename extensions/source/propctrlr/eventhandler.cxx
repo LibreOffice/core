@@ -141,12 +141,11 @@ namespace pcr
         ,sUniqueBrowseId( _sUniqueBrowseId )
         ,nId( _nId )
     {
-        OUStringBuffer aQualifiedListenerClass;
-        aQualifiedListenerClass.append( "com.sun.star." );
-        aQualifiedListenerClass.appendAscii( _pListenerNamespaceAscii );
-        aQualifiedListenerClass.append( "." );
-        aQualifiedListenerClass.appendAscii( _pListenerClassAsciiName );
-        sListenerClassName = aQualifiedListenerClass.makeStringAndClear();
+        sListenerClassName =
+            "com.sun.star." +
+            rtl::OUStringAsciiView( _pListenerNamespaceAscii ) +
+            "." +
+            rtl::OUStringAsciiView( _pListenerClassAsciiName );
     }
 
     namespace

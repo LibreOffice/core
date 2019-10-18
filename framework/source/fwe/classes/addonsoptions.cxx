@@ -1603,12 +1603,12 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUS
     static const char* aExtArray[] = { "_16", "_26" };
     for ( size_t i = 0; i < SAL_N_ELEMENTS(aExtArray); i++ )
     {
-        OUStringBuffer aFileURL( aImageURL );
-        aFileURL.appendAscii( aExtArray[i] );
-        aFileURL.append( ".bmp" );
+        OUString aFileURL = aImageURL +
+            rtl::OUStringAsciiView( aExtArray[i] ) +
+            ".bmp";
 
         aImageEntry.addImage( !i ? IMGSIZE_SMALL : IMGSIZE_BIG,
-                              Image(), aFileURL.makeStringAndClear() );
+                              Image(), aFileURL );
     }
 
     m_aImageManager.emplace( aURL, aImageEntry );

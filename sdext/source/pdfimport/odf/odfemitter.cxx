@@ -105,11 +105,11 @@ void OdfEmitter::write( const OUString& rText )
 
 void OdfEmitter::endTag( const char* pTag )
 {
-    OUStringBuffer aElement;
-    aElement.append("</");
-    aElement.appendAscii(pTag);
-    aElement.append(">");
-    write(aElement.makeStringAndClear());
+    OUString aElement =
+        "</" +
+        rtl::OUStringAsciiView(pTag) +
+        ">";
+    write(aElement);
 }
 
 XmlEmitterSharedPtr createOdfEmitter( const uno::Reference<io::XOutputStream>& xOut )

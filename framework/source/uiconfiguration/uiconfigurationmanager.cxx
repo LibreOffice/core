@@ -283,11 +283,10 @@ void UIConfigurationManager::impl_preloadUIElementTypeList( sal_Int16 nElementTy
         Reference< XStorage > xElementTypeStorage = rElementTypeData.xStorage;
         if ( xElementTypeStorage.is() )
         {
-            OUStringBuffer aBuf( RESOURCEURL_PREFIX_SIZE );
-            aBuf.append( RESOURCEURL_PREFIX );
-            aBuf.appendAscii( UIELEMENTTYPENAMES[ nElementType ] );
-            aBuf.append( "/" );
-            OUString aResURLPrefix( aBuf.makeStringAndClear() );
+            OUString aResURLPrefix =
+                RESOURCEURL_PREFIX +
+                rtl::OUStringAsciiView( UIELEMENTTYPENAMES[ nElementType ] ) +
+                "/";
 
             UIElementDataHashMap& rHashMap = rElementTypeData.aElementsHashMap;
             Sequence< OUString > aUIElementNames = xElementTypeStorage->getElementNames();
