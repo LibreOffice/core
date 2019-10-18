@@ -61,7 +61,6 @@ namespace rptui
     public:
         ConditionColorWrapper(Condition* pControl, sal_uInt16 nSlotId);
         void operator()(const OUString& rCommand, const NamedColor& rColor);
-        void dispose();
     private:
         Condition* mpControl;
         sal_uInt16 mnSlotId;

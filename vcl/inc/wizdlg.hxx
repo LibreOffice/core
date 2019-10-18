@@ -303,7 +303,6 @@ namespace vcl
         DECL_LINK(OnPrevPage, Button*, void);
         DECL_LINK(OnFinish, Button*, void);
 
-        void     implResetDefault(vcl::Window const * _pWindow);
         void     implUpdateTitle();
         void     implConstruct( const WizardButtonFlags _nButtonFlags );
     };

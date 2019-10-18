@@ -1334,9 +1334,6 @@ void SvListView::ModelNotification( SvListAction nActionId, SvTreeListEntry* pEn
             break;
         case SvListAction::RESORTING:
             break;
-        case SvListAction::REVERSED:
-            m_pImpl->m_bVisPositionsValid = false;
-            break;
         default:
             OSL_FAIL("unknown ActionId");
     }
@@ -1453,13 +1450,6 @@ void SvTreeList::ResortChildren( SvTreeListEntry* pParent )
     }
 
     SetListPositions(pParent->m_Children); // correct list position in target list
-}
-
-void SvTreeList::Reverse()
-{
-    bAbsPositionsValid = false;
-    ReverseChildren(pRootItem.get());
-    Broadcast(SvListAction::REVERSED);
 }
 
 void SvTreeList::ReverseChildren( SvTreeListEntry* pParent )

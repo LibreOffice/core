@@ -704,34 +704,6 @@ namespace vcl
         OSL_FAIL( "RoadmapWizard::RemoveButton() - Button not in list" );
     }
 
-    void RoadmapWizard::implResetDefault(vcl::Window const * _pWindow)
-    {
-        vcl::Window* pChildLoop = _pWindow->GetWindow(GetWindowType::FirstChild);
-        while (pChildLoop)
-        {
-            // does the window participate in the tabbing order?
-            if (pChildLoop->GetStyle() & WB_DIALOGCONTROL)
-                implResetDefault(pChildLoop);
-
-            // is it a button?
-            WindowType eType = pChildLoop->GetType();
-            if  (   (WindowType::PUSHBUTTON == eType)
-                ||  (WindowType::OKBUTTON == eType)
-                ||  (WindowType::CANCELBUTTON == eType)
-                ||  (WindowType::HELPBUTTON == eType)
-                ||  (WindowType::IMAGEBUTTON == eType)
-                ||  (WindowType::MENUBUTTON == eType)
-                ||  (WindowType::MOREBUTTON == eType)
-                )
-            {
-                pChildLoop->SetStyle(pChildLoop->GetStyle() & ~WB_DEFBUTTON);
-            }
-
-            // the next one ...
-            pChildLoop = pChildLoop->GetWindow(GetWindowType::Next);
-        }
-    }
-
     void RoadmapWizard::enableButtons(WizardButtonFlags _nWizardButtonFlags, bool _bEnable)
     {
         if (m_pFinish && (_nWizardButtonFlags & WizardButtonFlags::FINISH))

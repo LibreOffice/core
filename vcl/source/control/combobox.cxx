@@ -946,14 +946,6 @@ sal_Int32 ComboBox::GetEntryPos( const OUString& rStr ) const
     return nPos;
 }
 
-sal_Int32 ComboBox::GetEntryPos( const void* pData ) const
-{
-    sal_Int32 nPos = m_pImpl->m_pImplLB->GetEntryList()->FindEntry( pData );
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        nPos = nPos - m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
-    return nPos;
-}
-
 OUString ComboBox::GetEntry( sal_Int32 nPos ) const
 {
     const sal_Int32 nMRUCount = m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
@@ -980,12 +972,6 @@ bool ComboBox::IsInDropDown() const
     // when the dropdown is dismissed, first mbInPopupMode is set to false, and on the next event iteration then
     // mbPopupMode is set to false
     return m_pImpl->m_pFloatWin && m_pImpl->m_pFloatWin->IsInPopupMode() && m_pImpl->m_pFloatWin->ImplIsInPrivatePopupMode();
-}
-
-void ComboBox::EnableMultiSelection( bool bMulti )
-{
-    m_pImpl->m_pImplLB->EnableMultiSelection( bMulti, false );
-    m_pImpl->m_pImplLB->SetMultiSelectionSimpleMode( true );
 }
 
 bool ComboBox::IsMultiSelectionEnabled() const

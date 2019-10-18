@@ -70,7 +70,6 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
     /// set the destination range after the move
-    void SetDestRange( const SwPaM&, const SwPosition&, bool, bool );
     void SetDestRange( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
                         const SwNodeIndex& rInsPos );
 

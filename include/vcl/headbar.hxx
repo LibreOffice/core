@@ -293,7 +293,6 @@ public:
     sal_uInt16          GetItemId( const Point& rPos ) const;
     tools::Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
     sal_uInt16          GetCurItemId() const { return mnCurItemId; }
-    long                GetDragPos() const { return mnDragPos; }
     bool                IsItemMode() const { return mbItemMode; }
 
     void                SetItemSize( sal_uInt16 nItemId, long nNewSize );
@@ -311,7 +310,6 @@ public:
     using Window::SetHelpId;
 
     void         SetStartDragHdl( const Link<HeaderBar*,void>& rLink )      { maStartDragHdl = rLink; }
-    void         SetDragHdl( const Link<HeaderBar*,void>& rLink )           { maDragHdl = rLink; }
     void         SetEndDragHdl( const Link<HeaderBar*,void>& rLink )        { maEndDragHdl = rLink; }
     void         SetSelectHdl( const Link<HeaderBar*,void>& rLink )         { maSelectHdl = rLink; }
     void         SetCreateAccessibleHdl( const Link<HeaderBar*,void>& rLink ) { maCreateAccessibleHdl = rLink; }

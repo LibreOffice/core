@@ -41,8 +41,7 @@ enum class SvListAction
     INVALIDATE_ENTRY = 8,
     RESORTING        = 9,
     RESORTED         = 10,
-    CLEARED          = 11,
-    REVERSED         = 13
+    CLEARED          = 11
 };
 
 class SvTreeListEntry;
@@ -205,7 +204,6 @@ public:
     sal_Int32           Compare(const SvTreeListEntry* pLeft, const SvTreeListEntry* pRight) const;
     void                SetCompareHdl( const Link<const SvSortData&, sal_Int32>& rLink ) { aCompareLink = rLink; }
     void                Resort();
-    void                Reverse();
 };
 
 class VCL_DLLPUBLIC SvListView

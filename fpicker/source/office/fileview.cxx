@@ -951,28 +951,6 @@ void SvtFileView::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 }
 
 
-bool SvtFileView::Initialize( const css::uno::Reference< css::ucb::XContent>& _xContent  )
-{
-    WaitObject aWaitCursor( this );
-
-    mpImpl->Clear();
-    ::ucbhelper::Content aContent(_xContent, mpImpl->mxCmdEnv, comphelper::getProcessComponentContext() );
-    FileViewResult eResult = mpImpl->GetFolderContent_Impl( FolderDescriptor( aContent ), nullptr, css::uno::Sequence< OUString >() );
-    OSL_ENSURE( eResult != eStillRunning, "SvtFileView::Initialize: this was expected to be synchronous!" );
-    if ( eResult != eSuccess )
-        return false;
-
-    mpImpl->FilterFolderContent_Impl( OUString() );
-
-    mpImpl->SortFolderContent_Impl(); // possibly not necessary!!!!!!!!!!
-    mpImpl->CreateDisplayText_Impl();
-    mpImpl->OpenFolder_Impl();
-
-    mpImpl->maOpenDoneLink.Call( this );
-    return true;
-}
-
-
 FileViewResult SvtFileView::Initialize(
     const OUString& rURL,
     const OUString& rFilter,
