@@ -271,14 +271,17 @@ public class DesktopTools
         try {
             final InputStream inputFile = new BufferedInputStream(
                     new FileInputStream(filePath));
-            final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            final byte[] byteBuffer = new byte[4096];
-            int byteBufferLength = 0;
-            while ((byteBufferLength = inputFile.read(byteBuffer)) > 0)
-                bytes.write(byteBuffer, 0, byteBufferLength);
-            inputFile.close();
-            inputStream = new ByteArrayToXInputStreamAdapter(
+            try {
+                final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                final byte[] byteBuffer = new byte[4096];
+                int byteBufferLength = 0;
+                while ((byteBufferLength = inputFile.read(byteBuffer)) > 0)
+                    bytes.write(byteBuffer, 0, byteBufferLength);
+                inputStream = new ByteArrayToXInputStreamAdapter(
                     bytes.toByteArray());
+            } finally {
+                inputFile.close();
+            }
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
