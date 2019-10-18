@@ -46,6 +46,30 @@
       "revId": "2933fba283c1a9c175f05b07e35b9bc3fb169db3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_01f9d44b",
+        "filename": "sw/source/ui/dbui/mmresultdialogs.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-10-18T23:32:56Z",
+      "side": 1,
+      "message": "Thanks for the explanation.\n\n\u003e And I suggest to rename the arguments to SourceView and TargetView.\n\nSounds reasonable, will do in the next patch set.\n\n\u003e Still there is one question: will this really load the correct styles, if a user did modifications in the merged view (or even if not)?\n\nCan users actually do modifications in the merged view? And if so, do you know how to do so via the UI?\nMy understanding so far was that a merge to a single doc/shell is done (by the call to \u0027SwDBManager::PerformMailMerge(pView)\u0027 at the beginning of \u0027SendDocumentsHdl_Impl\u0027 and \u0027SaveOutputHdl_Impl\u0027 respectively) and the targetView is then used unchanged, without even showing the merge result to the user. If that assumption doesn\u0027t hold, that might actually be problematic.\n\nI did do some testing, in particular more extensively with page styles and that seemed fine so far, but I\u0027ll do some more testing with other styles as well.",
+      "parentUuid": "7f7f9b97_212890e0",
+      "range": {
+        "startLine": 530,
+        "startChar": 4,
+        "endLine": 530,
+        "endChar": 80
+      },
+      "revId": "2933fba283c1a9c175f05b07e35b9bc3fb169db3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
