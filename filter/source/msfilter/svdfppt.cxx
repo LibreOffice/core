@@ -588,7 +588,7 @@ SdrObject* SdrEscherImport::ReadObjText( PPTTextObj* /*pTextObj*/, SdrObject* pO
     return pObj;
 }
 
-void SdrEscherImport::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, SvxMSDffClientData& /*rData*/, DffObjData& rObj )
+void SdrEscherImport::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, DffObjData& rObj )
 {
     sal_Int32 l, t, r, b;
     if ( rHd.nRecLen == 16 )

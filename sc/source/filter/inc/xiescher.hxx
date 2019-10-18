@@ -957,7 +957,6 @@ private:
     virtual void        ProcessClientAnchor2(
                             SvStream& rDffStrm,
                             DffRecordHeader& rHeader,
-                            SvxMSDffClientData& rClientData,
                             DffObjData& rObjData ) override;
     /** Processes a DFF object, reads properties from DFF stream. */
     virtual SdrObject*  ProcessObj(

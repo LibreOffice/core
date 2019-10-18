@@ -4349,7 +4349,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
     aObjData.bClientAnchor = maShapeRecords.SeekToContent( rSt, DFF_msofbtClientAnchor, SEEK_FROM_CURRENT_AND_RESTART );
     if ( aObjData.bClientAnchor )
-        ProcessClientAnchor2( rSt, *maShapeRecords.Current(), rClientData, aObjData );
+        ProcessClientAnchor2( rSt, *maShapeRecords.Current(), aObjData );
 
     if ( aObjData.bChildAnchor )
         aObjData.aBoundRect = aObjData.aChildAnchor;
@@ -6732,7 +6732,7 @@ void SvxMSDffManager::ProcessClientData(SvStream& rStData, sal_uInt32 nDatLen,
 }
 
 
-void SvxMSDffManager::ProcessClientAnchor2( SvStream& /* rSt */, DffRecordHeader& /* rHd */ , SvxMSDffClientData& /* rData */, DffObjData& /* rObj */ )
+void SvxMSDffManager::ProcessClientAnchor2( SvStream& /* rSt */, DffRecordHeader& /* rHd */ , DffObjData& /* rObj */ )
 {
     // will be overridden by SJ in Draw
 }

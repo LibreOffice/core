@@ -505,7 +505,7 @@ protected:
                                           sal_uInt32& rBuffLen );
     virtual void ProcessClientAnchor2( SvStream& rStData,
                                        DffRecordHeader& rHd,
-                                       SvxMSDffClientData& rData, DffObjData& );
+                                       DffObjData& );
     static void ProcessClientData( SvStream& rStData,
                                         sal_uInt32 nDatLen,
                                         std::unique_ptr<char[]>& rpBuff,
