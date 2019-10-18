@@ -1193,7 +1193,7 @@ void CombiColumnLineChartDialogController::setTemplateProperties( const uno::Ref
 IMPL_LINK_NOARG(CombiColumnLineChartDialogController, ChangeLineCountHdl, weld::SpinButton&, void)
 {
     if( m_pChangeListener )
-        m_pChangeListener->stateChanged(this);
+        m_pChangeListener->stateChanged();
 }
 void CombiColumnLineChartDialogController::adjustParameterToSubType( ChartTypeParameter& rParameter )
 {
