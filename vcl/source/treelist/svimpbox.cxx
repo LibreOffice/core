@@ -2473,7 +2473,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 // otherwise ignore the key press
                 if( IsExpandable() )
                 {
-                    if (!m_pView->IsExpanded(m_pCursor))
+                    if (!m_pView->IsAllExpanded(m_pCursor))
                     {
                         m_pView->Expand(m_pCursor);
                         ExpandAll();
