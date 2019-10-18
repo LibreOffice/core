@@ -22,6 +22,30 @@
       "revId": "2933fba283c1a9c175f05b07e35b9bc3fb169db3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_212890e0",
+        "filename": "sw/source/ui/dbui/mmresultdialogs.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-10-18T21:49:31Z",
+      "side": 1,
+      "message": "Style loading was in the StartAction() area in your previous patch. This is not a guard, like a mutex to prevent data races, but generally prevents updates and depending layout actions for the GUI.\n\nAnd now I just realized that this actually locks the source document, presumably for the PastePages, which - as I just read in the code - eventually modifies the source document (that\u0027s why it needs the WrtShell) and does revert these changes using Undo(). PastePages also uses StartAction() for a part of it. No idea if all this MovePage would otherwise move the cursor and the View.\n\nAnd why use StartAction and EndAction per document and not for the whole process? ok maybe some part of the GUI needs redrawing at some point, including a part of the source document currently displayed.\n\nI think loading the styles won\u0027t generate changes in the source document and neither should all these Replace* calls. Still it can\u0027t hurt.\n\nAnd I suggest to rename the arguments to SourceView and TargetView.\n\nStill there is one question: will this really load the correct styles, if a user did modifications in the merged view (or even if not)?",
+      "parentUuid": "7f7f9b97_21ddf06f",
+      "range": {
+        "startLine": 530,
+        "startChar": 4,
+        "endLine": 530,
+        "endChar": 80
+      },
+      "revId": "2933fba283c1a9c175f05b07e35b9bc3fb169db3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
