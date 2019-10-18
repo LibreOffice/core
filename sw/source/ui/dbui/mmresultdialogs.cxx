@@ -578,9 +578,6 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
                 nEnd = nDocumentCount;
         }
 
-        OUString sTargetTempURL = URIHelper::SmartRel2Abs(
-            INetURLObject(), utl::TempFile::CreateTempName(),
-            URIHelper::GetMaybeFileHdl());
         std::shared_ptr<const SfxFilter> pSfxFlt = SwIoSystem::GetFilterOfFormat(
                 FILTER_XML,
                 SwDocShell::Factory().GetFilterContainer() );
@@ -589,26 +586,6 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
         beans::PropertyValue* pValues = aValues.getArray();
         pValues[0].Name = "FilterName";
         pValues[0].Value <<= pSfxFlt->GetFilterName();
-
-        uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
-        ErrCode nErrorCode = ERRCODE_NONE;
-        try
-        {
-            xStore->storeToURL( sTargetTempURL, aValues );
-        }
-        catch (const task::ErrorCodeIOException& rErrorEx)
-        {
-            nErrorCode = ErrCode(rErrorEx.ErrCode);
-        }
-        catch (const Exception&)
-        {
-            nErrorCode = ERRCODE_IO_GENERAL;
-        }
-        if( nErrorCode != ERRCODE_NONE )
-        {
-            SfxErrorContext aEc(ERRCTX_SFX_SAVEASDOC, pTargetView->GetDocShell()->GetTitle());
-            ErrorHandler::HandleError( nErrorCode );
-        }
 
         SwView* pSourceView = xConfigItem->GetSourceView();
         std::shared_ptr<SaveMonitor> xSaveMonitor(new SaveMonitor(m_xDialog.get()));
@@ -640,14 +617,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
             SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, SFX_INTERFACE_NONE );
             SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
             pTargetView->GetWrtShell().StartAction();
-            SwgReaderOption aOpt;
-            aOpt.SetTextFormats( true );
-            aOpt.SetFrameFormats( true );
-            aOpt.SetPageDescs( true );
-            aOpt.SetNumRules( true );
-            aOpt.SetMerge( false );
-            pTempView->GetDocShell()->LoadStylesFromFile(
-                    sTargetTempURL, aOpt, true );
+            pTempView->GetDocShell()->LoadStyles_(*pTargetView->GetDocShell(), true);
             pTempView->GetDocShell()->GetDoc()->ReplaceCompatibilityOptions( *pTargetView->GetDocShell()->GetDoc());
             pTempView->GetDocShell()->GetDoc()->ReplaceDefaults( *pTargetView->GetDocShell()->GetDoc());
             pTempView->GetDocShell()->GetDoc()->ReplaceDocumentProperties( *pTargetView->GetDocShell()->GetDoc(), true );
@@ -699,7 +669,6 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
         }
         if (xSaveMonitor)
             xSaveMonitor->response(RET_OK);
-        ::osl::File::remove( sTargetTempURL );
     }
 
     m_xDialog->response(RET_OK);
@@ -1014,9 +983,6 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
     {
         sFilterOptions = "EmbedImages";
     }
-    OUString sTargetTempURL = URIHelper::SmartRel2Abs(
-        INetURLObject(), utl::TempFile::CreateTempName(),
-        URIHelper::GetMaybeFileHdl());
     std::shared_ptr<const SfxFilter> pTargetSfxFlt = SwIoSystem::GetFilterOfFormat(
             FILTER_XML,
             SwDocShell::Factory().GetFilterContainer() );
@@ -1025,9 +991,6 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
     beans::PropertyValue* pValues = aValues.getArray();
     pValues[0].Name = "FilterName";
     pValues[0].Value <<= pTargetSfxFlt->GetFilterName();
-
-    uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
-    xStore->storeToURL( sTargetTempURL, aValues   );
 
     //create the send dialog
     vcl::Window* pParent = Application::GetDefDialogParent();
@@ -1052,14 +1015,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, SFX_INTERFACE_NONE );
         SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
         pTargetView->GetWrtShell().StartAction();
-        SwgReaderOption aOpt;
-        aOpt.SetTextFormats( true );
-        aOpt.SetFrameFormats( true );
-        aOpt.SetPageDescs( true );
-        aOpt.SetNumRules( true );
-        aOpt.SetMerge( false );
-        pTempView->GetDocShell()->LoadStylesFromFile(
-                sTargetTempURL, aOpt, true );
+        pTempView->GetDocShell()->LoadStyles_(*pTargetView->GetDocShell(), true);
         pTempView->GetDocShell()->GetDoc()->ReplaceCompatibilityOptions( *pTargetView->GetDocShell()->GetDoc());
         pTempView->GetDocShell()->GetDoc()->ReplaceDefaults( *pTargetView->GetDocShell()->GetDoc());
         pTempView->GetDocShell()->GetDoc()->ReplaceDocumentProperties( *pTargetView->GetDocShell()->GetDoc(), true );
@@ -1191,7 +1147,6 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         }
     }
     xDlg->EnableDestruction();
-    ::osl::File::remove( sTargetTempURL );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
