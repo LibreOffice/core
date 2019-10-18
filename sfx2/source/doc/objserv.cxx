@@ -1608,7 +1608,7 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::GetDocum
                                                                 uno::Reference< io::XInputStream >() );
             else
             {
-                if (GetMedium()->GetStorage().is())
+                if (GetMedium()->GetStorage(false).is())
                 {
                     // Something ZIP-based.
                     // Only call into xmlsecurity if we see a signature stream,
