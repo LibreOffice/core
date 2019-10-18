@@ -950,7 +950,7 @@ void Menu::ShowItem( sal_uInt16 nItemId, bool bVisible )
     size_t          nPos;
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
 
-    SAL_WARN_IF(IsMenuBar(), "vcl", "Menu::ShowItem - ignored for menu bar entries!");
+    SAL_WARN_IF(IsMenuBar() && !bVisible , "vcl", "Menu::ShowItem - ignored for menu bar entries!");
     if (!IsMenuBar()&& pData && (pData->bVisible != bVisible))
     {
         vcl::Window* pWin = ImplGetWindow();
@@ -1463,7 +1463,6 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             // Separator
             if (!IsMenuBar()&& (pData->eType == MenuItemType::SEPARATOR))
             {
-                //Useless: SAL_WARN_IF( IsMenuBar(), "vcl", "Separator in MenuBar ?! " );
                 pData->aSz.setHeight( 4 );
             }
 
