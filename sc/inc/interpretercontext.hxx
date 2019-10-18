@@ -40,6 +40,13 @@ struct NFIndexAndFmtType
     sal_uInt32 nIndex;
     SvNumFormatType eType : 16;
     bool bIsValid : 1;
+
+    NFIndexAndFmtType()
+        : nIndex(0)
+        , eType(static_cast<SvNumFormatType>(0))
+        , bIsValid(false)
+    {
+    }
 };
 
 class ScInterpreterContextPool;
