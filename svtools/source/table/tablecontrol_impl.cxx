@@ -1195,8 +1195,7 @@ namespace svt { namespace table
                 if (_rUpdateRect.GetIntersection(aCell.getRect()).IsEmpty())
                     continue;
 
-                bool isActiveColumn = (aCell.getColumn() == getCurrentColumn());
-                pRenderer->PaintColumnHeader(aCell.getColumn(), isActiveColumn, rRenderContext, aCell.getRect(), rStyle);
+                pRenderer->PaintColumnHeader(aCell.getColumn(), rRenderContext, aCell.getRect(), rStyle);
             }
         }
         // the area occupied by the row header, if any
@@ -1248,7 +1247,7 @@ namespace svt { namespace table
             if (m_pModel->hasRowHeaders())
             {
                 const tools::Rectangle aCurrentRowHeader(aRowHeaderArea.GetIntersection(aRowIterator.getRect()));
-                pRenderer->PaintRowHeader(isControlFocused, isSelectedRow, rRenderContext, aCurrentRowHeader, rStyle);
+                pRenderer->PaintRowHeader(rRenderContext, aCurrentRowHeader, rStyle);
             }
 
             if (!colCount)
@@ -1660,7 +1659,7 @@ namespace svt { namespace table
             if ( _bShow )
                 pRenderer->ShowCellCursor( *m_pDataWindow, aCellRect );
             else
-                pRenderer->HideCellCursor( *m_pDataWindow, aCellRect );
+                pRenderer->HideCellCursor( *m_pDataWindow );
         }
     }
 
