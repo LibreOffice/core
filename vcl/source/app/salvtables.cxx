@@ -313,7 +313,7 @@ public:
 
     virtual void set_sensitive(bool sensitive) override
     {
-        m_xWidget->Enable(sensitive);
+        m_xWidget->Enable(sensitive, false);
     }
 
     virtual bool get_sensitive() const override
