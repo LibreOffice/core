@@ -635,7 +635,7 @@ namespace frm
     }
 
 
-    void ORichTextPeer::onSelectionChanged( const ESelection& /*_rSelection*/ )
+    void ORichTextPeer::onSelectionChanged()
     {
         AttributeDispatchers::iterator aDispatcherPos = m_aDispatchers.find( SID_COPY );
         if ( aDispatcherPos != m_aDispatchers.end() )

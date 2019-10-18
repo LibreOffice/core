@@ -61,7 +61,7 @@ namespace frm
         virtual void SAL_CALL dispatch( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
         // ITextAttributeListener
-        virtual void    onAttributeStateChanged( AttributeId _nAttributeId, const AttributeState& _rState ) override;
+        virtual void    onAttributeStateChanged( AttributeId _nAttributeId ) override;
 
         // ORichTextFeatureDispatcher
         virtual void    disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify ) override;
