@@ -48,10 +48,12 @@ $(eval $(call gb_Library_use_libraries,pdffilter,\
 	cppuhelper \
 	cppu \
 	sal \
+	drawinglayer \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,pdffilter,\
 	filter/source/pdf/impdialog \
+	filter/source/pdf/pdfdecomposer \
 	filter/source/pdf/pdfdialog \
 	filter/source/pdf/pdfexport \
 	filter/source/pdf/pdffilter \

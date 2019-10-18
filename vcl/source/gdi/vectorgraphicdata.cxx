@@ -22,16 +22,19 @@
 #include <vcl/vectorgraphicdata.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/graphic/PdfTools.hpp>
 #include <com/sun/star/graphic/SvgTools.hpp>
 #include <com/sun/star/graphic/EmfTools.hpp>
 #include <com/sun/star/graphic/Primitive2DTools.hpp>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/canvastools.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/pdfread.hxx>
 
 using namespace ::com::sun::star;
 
@@ -132,11 +135,35 @@ void VectorGraphicData::setWmfExternalHeader(const WmfExternal& aExtHeader)
     *mpExternalHeader = aExtHeader;
 }
 
+void VectorGraphicData::ensurePdfReplacement()
+{
+    assert(getVectorGraphicDataType() == VectorGraphicDataType::Pdf);
+
+    if (!maReplacement.IsEmpty())
+        return; // nothing to do
+
+    // use PDFium directly
+    std::vector<Bitmap> aBitmaps;
+    vcl::RenderPDFBitmaps(maVectorGraphicDataArray.getConstArray(), maVectorGraphicDataArray.getLength(), aBitmaps, 0, 1/*, fResolutionDPI*/);
+    maReplacement = aBitmaps[0];
+}
+
 void VectorGraphicData::ensureReplacement()
 {
+    if (!maReplacement.IsEmpty())
+        return; // nothing to do
+
+    // shortcut for PDF - PDFium can generate the replacement bitmap for us
+    // directly
+    if (getVectorGraphicDataType() == VectorGraphicDataType::Pdf)
+    {
+        ensurePdfReplacement();
+        return;
+    }
+
     ensureSequenceAndRange();
 
-    if(maReplacement.IsEmpty() && !maSequence.empty())
+    if (!maSequence.empty())
     {
         maReplacement = convertPrimitive2DSequenceToBitmapEx(maSequence, getRange());
     }
@@ -149,32 +176,43 @@ void VectorGraphicData::ensureSequenceAndRange()
         // import SVG to maSequence, also set maRange
         maRange.reset();
 
-        // create stream
-        const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(maVectorGraphicDataArray));
+        // create Vector Graphic Data interpreter
+        uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
 
-        if(myInputStream.is())
+        switch (getVectorGraphicDataType())
         {
-            // create Vector Graphic Data interpreter
-            uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+            case VectorGraphicDataType::Svg:
+            {
+                const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
+                const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(maVectorGraphicDataArray));
 
-            if (VectorGraphicDataType::Emf == getVectorGraphicDataType()
-                || VectorGraphicDataType::Wmf == getVectorGraphicDataType())
+                if (myInputStream.is())
+                    maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(myInputStream, maPath));
+
+                break;
+            }
+            case VectorGraphicDataType::Emf:
+            case VectorGraphicDataType::Wmf:
             {
                 const uno::Reference< graphic::XEmfParser > xEmfParser = graphic::EmfTools::create(xContext);
+                const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(maVectorGraphicDataArray));
                 uno::Sequence< ::beans::PropertyValue > aSequence;
 
                 if (mpExternalHeader)
-                {
                     aSequence = mpExternalHeader->getSequence();
-                }
 
-                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(myInputStream, maPath, aSequence));
+                if (myInputStream.is())
+                    maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(myInputStream, maPath, aSequence));
+
+                break;
             }
-            else
+            case VectorGraphicDataType::Pdf:
             {
-                const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
+                const uno::Reference<graphic::XPdfDecomposer> xPdfDecomposer = graphic::PdfTools::create(xContext);
 
-                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(myInputStream, maPath));
+                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xPdfDecomposer->getDecomposition(maVectorGraphicDataArray));
+
+                break;
             }
         }
 
