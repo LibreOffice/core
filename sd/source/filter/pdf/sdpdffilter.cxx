@@ -97,16 +97,16 @@ bool SdPdfFilter::Import()
     //FIXME: Replace with parsing the PDF elements to allow editing.
     //FIXME: For now we import as images for simplicity.
 
-    const OUString aFileName(
-        mrMedium.GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE));
+    //const OUString aFileName(
+    //    mrMedium.GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE));
 
     // Rendering resolution.
     const double dResolutionDPI = 96.;
 
     uno::Sequence<sal_Int8> aPdfData;
     std::vector<Bitmap> aBitmaps;
-    if (vcl::ImportPDF(aFileName, aBitmaps, aPdfData, dResolutionDPI) == 0)
-        return false;
+    //if (vcl::ImportPDF(aFileName, aBitmaps, aPdfData, dResolutionDPI) == 0)
+    return false;
 
     // Prepare the link with the PDF stream.
     const size_t nGraphicContentSize = aPdfData.getLength();
@@ -114,7 +114,7 @@ bool SdPdfFilter::Import()
     memcpy(pGraphicContent.get(), aPdfData.get(), nGraphicContentSize);
     std::shared_ptr<GfxLink> pGfxLink(std::make_shared<GfxLink>(
         std::move(pGraphicContent), nGraphicContentSize, GfxLinkType::NativePdf));
-    auto pPdfData = std::make_shared<uno::Sequence<sal_Int8>>(aPdfData);
+    //auto pPdfData = std::make_shared<uno::Sequence<sal_Int8>>(aPdfData);
 
     mrDocument.CreateFirstPages();
     for (size_t i = 0; i < aBitmaps.size() - 1; ++i)
@@ -127,7 +127,7 @@ bool SdPdfFilter::Import()
     {
         // Create the Graphic and link the original PDF stream.
         Graphic aGraphic(aBitmap);
-        aGraphic.setPdfData(pPdfData);
+        //aGraphic.setPdfData(pPdfData);
         aGraphic.setPageNumber(nPageNumber);
         aGraphic.SetGfxLink(pGfxLink);
 
