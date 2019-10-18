@@ -21,6 +21,14 @@ namespace
                                    rRect.Right() - nOffset, rRect.Bottom() - nOffset));
 
     }
+
+    void drawInvertOffset(OutputDevice& rDevice, tools::Rectangle const & rRect, int nOffset, InvertFlags eFlags)
+    {
+        tools::Rectangle aRectangle(rRect.Left()  + nOffset, rRect.Top() + nOffset,
+                                    rRect.Right() - nOffset, rRect.Bottom() - nOffset);
+        rDevice.Invert(aRectangle, eFlags);
+    }
+
 } // end anonymous namespace
 
 Bitmap OutputDeviceTestRect::setupFilledRectangle()
@@ -48,6 +56,56 @@ Bitmap OutputDeviceTestRect::setupRectangle(bool bEnableAA)
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
+Bitmap OutputDeviceTestRect::setupInvert_NONE()
+{
+    initialSetup(20, 20, COL_WHITE);
+
+    mpVirtualDevice->SetLineColor();
+    mpVirtualDevice->SetFillColor(COL_LIGHTRED);
+    mpVirtualDevice->DrawRect(tools::Rectangle(Point(2, 2), Size(8, 8)));
+    mpVirtualDevice->SetFillColor(COL_LIGHTGREEN);
+    mpVirtualDevice->DrawRect(tools::Rectangle(Point(10, 2), Size(8, 8)));
+    mpVirtualDevice->SetFillColor(COL_LIGHTBLUE);
+    mpVirtualDevice->DrawRect(tools::Rectangle(Point(2, 10), Size(8, 8)));
+
+    drawInvertOffset(*mpVirtualDevice, maVDRectangle, 2, InvertFlags::NONE);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+Bitmap OutputDeviceTestRect::setupInvert_N50()
+{
+    initialSetup(20, 20, COL_WHITE);
+
+    mpVirtualDevice->SetLineColor();
+    mpVirtualDevice->SetFillColor(COL_LIGHTRED);
+    mpVirtualDevice->DrawRect(tools::Rectangle(Point(2, 2), Size(8, 8)));
+    mpVirtualDevice->SetFillColor(COL_LIGHTGREEN);
+    mpVirtualDevice->DrawRect(tools::Rectangle(Point(10, 2), Size(8, 8)));
+    mpVirtualDevice->SetFillColor(COL_LIGHTBLUE);
+    mpVirtualDevice->DrawRect(tools::Rectangle(Point(2, 10), Size(8, 8)));
+
+    drawInvertOffset(*mpVirtualDevice, maVDRectangle, 2, InvertFlags::N50);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+Bitmap OutputDeviceTestRect::setupInvert_TrackFrame()
+{
+    initialSetup(20, 20, COL_WHITE);
+
+    mpVirtualDevice->SetLineColor();
+    mpVirtualDevice->SetFillColor(COL_LIGHTRED);
+    mpVirtualDevice->DrawRect(tools::Rectangle(Point(2, 2), Size(8, 8)));
+    mpVirtualDevice->SetFillColor(COL_LIGHTGREEN);
+    mpVirtualDevice->DrawRect(tools::Rectangle(Point(10, 2), Size(8, 8)));
+    mpVirtualDevice->SetFillColor(COL_LIGHTBLUE);
+    mpVirtualDevice->DrawRect(tools::Rectangle(Point(2, 10), Size(8, 8)));
+
+    drawInvertOffset(*mpVirtualDevice, maVDRectangle, 2, InvertFlags::TrackFrame);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
 
 }} // end namespace vcl::test
 
