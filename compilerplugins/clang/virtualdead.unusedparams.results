@@ -31,9 +31,6 @@ basic/source/comp/codegen.cxx:466
 basic/source/comp/codegen.cxx:467
     void OffSetAccumulator::processOpCode2(enum SbiOpcode,type-parameter-?-?,type-parameter-?-?,)
     000
-chart2/source/controller/dialogs/ChangingResource.hxx:30
-    void chart::ResourceChangeListener::stateChanged(class chart::ChangingResource *,)
-    0
 desktop/source/deployment/registry/inc/dp_backend.h:84
     void dp_registry::backend::Package::processPackage_(class osl::ResettableGuard<class osl::Mutex> &,_Bool,_Bool,const class rtl::Reference<class dp_misc::AbortChannel> &,const class com::sun::star::uno::Reference<class com::sun::star::ucb::XCommandEnvironment> &,)
     01111

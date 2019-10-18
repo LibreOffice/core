@@ -61,7 +61,7 @@ private:
     void fillAllControls( const ChartTypeParameter& rParameter, bool bAlsoResetSubTypeList=true );
     ChartTypeParameter getCurrentParamter() const;
 
-    virtual void stateChanged( ChangingResource* pResource ) override;
+    virtual void stateChanged() override;
 
     void commitToModel( const ChartTypeParameter& rParameter );
     void selectMainType();

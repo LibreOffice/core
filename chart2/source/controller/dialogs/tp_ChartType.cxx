@@ -105,13 +105,13 @@ void Dim3DLookResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 IMPL_LINK_NOARG(Dim3DLookResourceGroup, Dim3DLookCheckHdl, weld::ToggleButton&, void)
 {
     if(m_pChangeListener)
-        m_pChangeListener->stateChanged(this);
+        m_pChangeListener->stateChanged();
 }
 
 IMPL_LINK_NOARG(Dim3DLookResourceGroup, SelectSchemeHdl, weld::ComboBox&, void)
 {
     if(m_pChangeListener)
-        m_pChangeListener->stateChanged(this);
+        m_pChangeListener->stateChanged();
 }
 
 class SortByXValuesResourceGroup : public ChangingResource
@@ -156,7 +156,7 @@ void SortByXValuesResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 IMPL_LINK_NOARG(SortByXValuesResourceGroup, SortByXValuesCheckHdl, weld::ToggleButton&, void)
 {
     if(m_pChangeListener)
-        m_pChangeListener->stateChanged(this);
+        m_pChangeListener->stateChanged();
 }
 
 class StackingResourceGroup : public ChangingResource
@@ -251,13 +251,13 @@ IMPL_LINK( StackingResourceGroup, StackingChangeHdl, weld::ToggleButton&, rRadio
     //first uncheck of previous button -> ignore that call
     //the second call gives the check of the new button
     if (m_pChangeListener && rRadio.get_active())
-        m_pChangeListener->stateChanged(this);
+        m_pChangeListener->stateChanged();
 }
 
 IMPL_LINK_NOARG(StackingResourceGroup, StackingEnableHdl, weld::ToggleButton&, void)
 {
     if( m_pChangeListener )
-        m_pChangeListener->stateChanged(this);
+        m_pChangeListener->stateChanged();
 }
 
 class SplinePropertiesDialog : public weld::GenericDialogController
@@ -506,7 +506,7 @@ void SplineResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 IMPL_LINK_NOARG(SplineResourceGroup, LineTypeChangeHdl, weld::ComboBox&, void)
 {
     if( m_pChangeListener )
-        m_pChangeListener->stateChanged(this);
+        m_pChangeListener->stateChanged();
 }
 
 IMPL_LINK_NOARG(SplineResourceGroup, SplineDetailsDialogHdl, weld::Button&, void)
@@ -520,7 +520,7 @@ IMPL_LINK_NOARG(SplineResourceGroup, SplineDetailsDialogHdl, weld::Button&, void
     if (getSplinePropertiesDialog().run() == RET_OK)
     {
         if( m_pChangeListener )
-            m_pChangeListener->stateChanged(this);
+            m_pChangeListener->stateChanged();
     }
     else
     {
@@ -541,7 +541,7 @@ IMPL_LINK_NOARG(SplineResourceGroup, SteppedDetailsDialogHdl, weld::Button&, voi
     if (getSteppedPropertiesDialog().run() == RET_OK)
     {
         if( m_pChangeListener )
-            m_pChangeListener->stateChanged(this);
+            m_pChangeListener->stateChanged();
     }
     else
     {
@@ -598,7 +598,7 @@ void GeometryResourceGroup::fillParameter(ChartTypeParameter& rParameter)
 IMPL_LINK_NOARG(GeometryResourceGroup, GeometryChangeHdl, weld::TreeView&, void)
 {
     if( m_pChangeListener )
-        m_pChangeListener->stateChanged(this);
+        m_pChangeListener->stateChanged();
 }
 
 ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogController* pController, const uno::Reference< XChartDocument >& xChartModel,
@@ -725,7 +725,7 @@ void ChartTypeTabPage::commitToModel( const ChartTypeParameter& rParameter )
     m_pCurrentMainType->commitToModel( rParameter, m_xChartModel );
 }
 
-void ChartTypeTabPage::stateChanged( ChangingResource* /*pResource*/ )
+void ChartTypeTabPage::stateChanged()
 {
     if(m_nChangingCalls)
         return;
