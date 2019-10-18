@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_FNTCACHE_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_FNTCACHE_HXX
 
+#include <sal/config.h>
+
+#include <cstdint>
 #include <map>
 
 #include <vcl/font.hxx>
@@ -99,7 +102,7 @@ class SwFntObj : public SwCacheObj
     static MapMode *pPixMap;
 
 public:
-    SwFntObj( const SwSubFont &rFont, const void* nFontCacheId,
+    SwFntObj( const SwSubFont &rFont, std::uintptr_t nFontCacheId,
               SwViewShell const *pSh );
 
     virtual ~SwFntObj() override;
