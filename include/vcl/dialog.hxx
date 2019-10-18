@@ -50,7 +50,6 @@ private:
     bool            mbInSyncExecute;
     bool            mbInClose;
     bool            mbModalMode;
-    bool const      mbForceBorderWindow;
     InitFlag const  mnInitFlag; // used for deferred init
 
     VclPtr<VclButtonBox> mpActionArea;
@@ -83,7 +82,7 @@ public:
 
 protected:
     explicit        Dialog( WindowType nType );
-    explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType, InitFlag eFlag = InitFlag::Default, bool bBorder = false );
+    explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType, InitFlag eFlag = InitFlag::Default );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
     virtual void    settingOptimalLayoutSize(Window *pBox) override;
 
@@ -170,7 +169,7 @@ public:
 class VCL_DLLPUBLIC ModalDialog : public Dialog
 {
 public:
-    explicit        ModalDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, bool bBorder = false );
+    explicit        ModalDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
 
 protected:
     using Window::Show;

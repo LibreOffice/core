@@ -1741,7 +1741,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     VclPtr<vcl::Window> xWindow;
     if (name == "GtkDialog" || name == "GtkAboutDialog" || name == "GtkAssistant")
     {
-        WinBits nBits = WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
+        // WB_ALLOWMENUBAR because we don't know in advance if we will encounter
+        // a menubar, and menubars need a BorderWindow in the toplevel, and
+        // such border windows need to be in created during the dialog ctor
+        WinBits nBits = WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE|WB_ALLOWMENUBAR;
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
         Dialog::InitFlag eInit = !pParent ? Dialog::InitFlag::NoParent : Dialog::InitFlag::Default;
@@ -3305,9 +3308,13 @@ std::vector<ComboBoxTextItem> VclBuilder::handleItems(xmlreader::XmlReader &read
     return aItems;
 }
 
-void VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString &rID)
+VclPtr<Menu> VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString &rID, bool bMenuBar)
 {
-    VclPtr<Menu> pCurrentMenu = VclPtr<PopupMenu>::Create();
+    VclPtr<Menu> pCurrentMenu;
+    if (bMenuBar)
+        pCurrentMenu = VclPtr<MenuBar>::Create();
+    else
+        pCurrentMenu = VclPtr<PopupMenu>::Create();
 
     int nLevel = 1;
 
@@ -3348,6 +3355,8 @@ void VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString &rID)
     }
 
     m_aMenus.emplace_back(rID, pCurrentMenu);
+
+    return pCurrentMenu;
 }
 
 void VclBuilder::handleMenuChild(Menu *pParent, xmlreader::XmlReader &reader)
@@ -3677,7 +3686,14 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
     }
     else if (sClass == "GtkMenu")
     {
-        handleMenu(reader, sID);
+        handleMenu(reader, sID, false);
+        return nullptr;
+    }
+    else if (sClass == "GtkMenuBar")
+    {
+        VclPtr<Menu> xMenu = handleMenu(reader, sID, true);
+        if (SystemWindow* pTopLevel = pParent ? pParent->GetSystemWindow() : nullptr)
+            pTopLevel->SetMenuBar(dynamic_cast<MenuBar*>(xMenu.get()));
         return nullptr;
     }
     else if (sClass == "GtkSizeGroup")
