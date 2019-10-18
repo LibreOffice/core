@@ -171,9 +171,6 @@ namespace dbaccess
         virtual bool columnValuesUpdated(ORowSetValueVector::Vector& o_aCachedRow,const ORowSetValueVector::Vector& i_aRow);
         virtual bool updateColumnValues(const ORowSetValueVector::Vector& io_aCachedRow,ORowSetValueVector::Vector& io_aRow,const std::vector<sal_Int32>& i_aChangedColumns);
         virtual void fillMissingValues(ORowSetValueVector::Vector& io_aRow) const;
-        virtual bool previous_checked( bool i_bFetchRow );
-        virtual bool absolute_checked( sal_Int32 row,bool i_bFetchRow );
-        virtual bool last_checked( bool i_bFetchRow);
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_API_CACHESET_HXX

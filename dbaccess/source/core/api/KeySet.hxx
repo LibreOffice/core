@@ -215,11 +215,6 @@ namespace dbaccess
         virtual void updateRow(const ORowSetRow& _rInsertRow,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable   ) override;
         virtual void deleteRow(const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable   ) override;
         virtual void insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) override;
-
-
-        virtual bool previous_checked( bool i_bFetchRow ) override;
-        virtual bool absolute_checked( sal_Int32 row,bool i_bFetchRow ) override;
-        virtual bool last_checked( bool i_bFetchRow) override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_API_KEYSET_HXX
