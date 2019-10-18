@@ -74,22 +74,6 @@ enum ConvDicXMLToken : sal_Int32
     ENTRY = FastToken::NAMESPACE | XML_NAMESPACE_TCD | XML_ENTRY,
 };
 
-class ConvDicXMLTokenHandler : public
-        cppu::WeakImplHelper< css::xml::sax::XFastTokenHandler >,
-        public sax_fastparser::FastTokenHandlerBase
-{
-public:
-    explicit ConvDicXMLTokenHandler();
-    virtual ~ConvDicXMLTokenHandler() override;
-
-    //XFastTokenHandler
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 Token ) override;
-
-    // Much faster direct C++ shortcut to the method that matters
-    virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const override;
-};
-
 class ConvDicXMLImport : public SvXMLImport
 {
     ConvDic        *pDic;       // conversion dictionary to be used

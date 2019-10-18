@@ -143,10 +143,6 @@ private:
     DECL_LINK(saveButtonHandler, weld::Button&, void);
 
     // helper methods
-    void CollectChildren(
-        const vcl::Window& rCurrent,
-        const basegfx::B2IPoint& rTopLeft,
-        weld::ScreenShotCollection& rControlDataCollection);
     weld::ScreenShotEntry* CheckHit(const basegfx::B2IPoint& rPosition);
     void PaintScreenShotEntry(
         const weld::ScreenShotEntry& rEntry,
@@ -270,35 +266,6 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     if (mxSave)
     {
         mxSave->connect_clicked(LINK(this, ScreenshotAnnotationDlg_Impl, saveButtonHandler));
-    }
-}
-
-void ScreenshotAnnotationDlg_Impl::CollectChildren(
-    const vcl::Window& rCurrent,
-    const basegfx::B2IPoint& rTopLeft,
-    weld::ScreenShotCollection& rControlDataCollection)
-{
-    if (rCurrent.IsVisible())
-    {
-        const Point aCurrentPos(rCurrent.GetPosPixel());
-        const Size aCurrentSize(rCurrent.GetSizePixel());
-        const basegfx::B2IPoint aCurrentTopLeft(rTopLeft.getX() + aCurrentPos.X(), rTopLeft.getY() + aCurrentPos.Y());
-        const basegfx::B2IRange aCurrentRange(aCurrentTopLeft, aCurrentTopLeft + basegfx::B2IPoint(aCurrentSize.Width(), aCurrentSize.Height()));
-
-        if (!aCurrentRange.isEmpty())
-        {
-            rControlDataCollection.emplace_back(rCurrent.GetHelpId(), aCurrentRange);
-        }
-
-        for (sal_uInt16 a(0); a < rCurrent.GetChildCount(); a++)
-        {
-            vcl::Window* pChild = rCurrent.GetChild(a);
-
-            if (nullptr != pChild)
-            {
-                CollectChildren(*pChild, aCurrentTopLeft, rControlDataCollection);
-            }
-        }
     }
 }
 

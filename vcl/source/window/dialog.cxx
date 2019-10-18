@@ -559,16 +559,6 @@ void Dialog::doDeferredInit(WinBits nBits)
     mbIsDeferredInit = false;
 }
 
-Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription)
-    : SystemWindow(WindowType::DIALOG)
-    , mbForceBorderWindow(false)
-    , mnInitFlag(InitFlag::Default)
-{
-    ImplLOKNotifier(pParent);
-    ImplInitDialogData();
-    loadUI(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription);
-}
-
 Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType, InitFlag eFlag, bool bBorder)
     : SystemWindow(nType)
     , mbForceBorderWindow(bBorder)

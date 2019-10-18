@@ -220,12 +220,6 @@ namespace dbaui
                             vcl::Window* _pToRegister,
                             const ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*>& _rMemFunc);
 
-    /** adjustToolBoxSize checks if the size of the ToolBox is still valid. If not it will be resized.
-        @param  _pToolBox
-            The Toolbox which should be resized.
-    */
-    void adjustToolBoxSize(ToolBox* _pToolBox);
-
     void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId );
 
     /** check if SQL92 name checking is enabled

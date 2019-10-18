@@ -113,10 +113,6 @@ public:
                                 const css::uno::Sequence< OUString >& rBlackList
                             );
 
-    /** initializes the view with the content of a folder given by a UCB content
-    */
-    bool                    Initialize( const css::uno::Reference< css::ucb::XContent>& _xContent );
-
     /** reads the current content of the current folder again, and applies the given filter to it
 
         Note 1: The folder is really read a second time. This implies that any new elements (which were

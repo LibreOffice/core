@@ -48,41 +48,41 @@ include/LibreOfficeKit/LibreOfficeKit.hxx:97
     char * lok::Document::getPartPageRectangles()
 include/LibreOfficeKit/LibreOfficeKit.hxx:121
     char * lok::Document::getPartHash(int)
-include/LibreOfficeKit/LibreOfficeKit.hxx:349
+include/LibreOfficeKit/LibreOfficeKit.hxx:360
     char * lok::Document::getTextSelection(const char *,char **)
-include/LibreOfficeKit/LibreOfficeKit.hxx:359
+include/LibreOfficeKit/LibreOfficeKit.hxx:370
     int lok::Document::getSelectionType()
-include/LibreOfficeKit/LibreOfficeKit.hxx:377
+include/LibreOfficeKit/LibreOfficeKit.hxx:388
     _Bool lok::Document::getClipboard(const char **,unsigned long *,char ***,unsigned long **,char ***)
-include/LibreOfficeKit/LibreOfficeKit.hxx:396
+include/LibreOfficeKit/LibreOfficeKit.hxx:407
     _Bool lok::Document::setClipboard(const unsigned long,const char **,const unsigned long *,const char **)
-include/LibreOfficeKit/LibreOfficeKit.hxx:411
+include/LibreOfficeKit/LibreOfficeKit.hxx:422
     _Bool lok::Document::paste(const char *,const char *,unsigned long)
-include/LibreOfficeKit/LibreOfficeKit.hxx:442
+include/LibreOfficeKit/LibreOfficeKit.hxx:453
     char * lok::Document::getCommandValues(const char *)
-include/LibreOfficeKit/LibreOfficeKit.hxx:528
+include/LibreOfficeKit/LibreOfficeKit.hxx:539
     int lok::Document::getView()
-include/LibreOfficeKit/LibreOfficeKit.hxx:536
+include/LibreOfficeKit/LibreOfficeKit.hxx:547
     int lok::Document::getViewsCount()
-include/LibreOfficeKit/LibreOfficeKit.hxx:545
+include/LibreOfficeKit/LibreOfficeKit.hxx:556
     unsigned char * lok::Document::renderFont(const char *,const char *,int *,int *)
-include/LibreOfficeKit/LibreOfficeKit.hxx:584
+include/LibreOfficeKit/LibreOfficeKit.hxx:595
     _Bool lok::Document::getViewIds(int *,unsigned long)
-include/LibreOfficeKit/LibreOfficeKit.hxx:645
+include/LibreOfficeKit/LibreOfficeKit.hxx:656
     _Bool lok::Document::insertCertificate(const unsigned char *,const int,const unsigned char *,const int)
-include/LibreOfficeKit/LibreOfficeKit.hxx:659
+include/LibreOfficeKit/LibreOfficeKit.hxx:670
     _Bool lok::Document::addCertificate(const unsigned char *,const int)
-include/LibreOfficeKit/LibreOfficeKit.hxx:671
+include/LibreOfficeKit/LibreOfficeKit.hxx:682
     int lok::Document::getSignatureState()
-include/LibreOfficeKit/LibreOfficeKit.hxx:681
+include/LibreOfficeKit/LibreOfficeKit.hxx:692
     unsigned long lok::Document::renderShapeSelection(char **)
-include/LibreOfficeKit/LibreOfficeKit.hxx:834
+include/LibreOfficeKit/LibreOfficeKit.hxx:845
     char * lok::Office::getFilterTypes()
-include/LibreOfficeKit/LibreOfficeKit.hxx:888
+include/LibreOfficeKit/LibreOfficeKit.hxx:899
     char * lok::Office::getVersionInfo()
-include/LibreOfficeKit/LibreOfficeKit.hxx:902
+include/LibreOfficeKit/LibreOfficeKit.hxx:913
     _Bool lok::Office::runMacro(const char *)
-include/LibreOfficeKit/LibreOfficeKit.hxx:910
+include/LibreOfficeKit/LibreOfficeKit.hxx:921
     _Bool lok::Office::signDocument(const char *,const unsigned char *,const int,const unsigned char *,const int)
 include/oox/crypto/AgileEngine.hxx:121
     _Bool oox::core::AgileEngine::decryptHmacKey()
@@ -156,13 +156,13 @@ include/oox/ole/olehelper.hxx:179
     _Bool oox::ole::MSConvertOCXControls::importControlFromStream(class oox::BinaryInputStream &,class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &,const class rtl::OUString &)
 include/oox/ole/olehelper.hxx:190
     _Bool oox::ole::MSConvertOCXControls::ReadOCXCtlsStream(const class tools::SvRef<class SotStorageStream> &,class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &,int,int)
-include/sax/fshelper.hxx:135
-    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
 include/sax/fshelper.hxx:136
-    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
+    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
 include/sax/fshelper.hxx:137
+    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
+include/sax/fshelper.hxx:138
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(double)
-include/sax/fshelper.hxx:139
+include/sax/fshelper.hxx:140
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
 include/sfx2/linkmgr.hxx:63
     _Bool sfx2::LinkManager::InsertLink(class sfx2::SvBaseLink *,unsigned short,enum SfxLinkUpdateMode,const class rtl::OUString *)
@@ -230,11 +230,11 @@ include/vcl/menu.hxx:389
     _Bool Menu::HandleMenuDeActivateEvent(class Menu *) const
 include/vcl/texteng.hxx:276
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
-include/vcl/toolbox.hxx:515
+include/vcl/toolbox.hxx:505
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:809
+include/vcl/weld.hxx:849
     _Bool weld::TreeView::iter_nth_child(class weld::TreeIter &,int) const
-include/vcl/weld.hxx:1664
+include/vcl/weld.hxx:1705
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 include/vcl/window.hxx:1515
     _Bool vcl::Window::set_font_attribute(const class rtl::OString &,const class rtl::OUString &)
@@ -246,7 +246,7 @@ lotuswordpro/inc/lwpsvstream.hxx:77
     class LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
 lotuswordpro/inc/lwpsvstream.hxx:78
     class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
-sc/inc/document.hxx:2151
+sc/inc/document.hxx:2155
     const struct ScDocumentThreadSpecific & ScDocument::CalculateInColumnInThread(struct ScInterpreterContext &,const class ScRange &,unsigned int,unsigned int)
 sc/inc/orcusfilters.hxx:45
     _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
@@ -318,11 +318,11 @@ sw/inc/calc.hxx:114
     class SwSbxValue & SwSbxValue::MakeDouble()
 sw/inc/crsrsh.hxx:550
     _Bool SwCursorShell::GoNextPrevCursorSetSearchLabel(const _Bool)
-sw/inc/doc.hxx:1082
+sw/inc/doc.hxx:1083
     _Bool SwDoc::ReplaceNumRule(const struct SwPosition &,const class rtl::OUString &,const class rtl::OUString &)
-sw/inc/doc.hxx:1245
+sw/inc/doc.hxx:1246
     _Bool SwDoc::SetColRowWidthHeight(class SwTableBox &,enum TableChgWidthHeightType,long,long)
-sw/inc/doc.hxx:1270
+sw/inc/doc.hxx:1271
     _Bool SwDoc::SplitTable(const struct SwPosition &,enum SplitTable_HeadlineOption,_Bool)
 sw/inc/editsh.hxx:266
     _Bool SwEditShell::GetPaMParAttr(class SwPaM *,class SfxItemSet &) const
@@ -376,13 +376,13 @@ vcl/inc/unx/gtk/gtkdata.hxx:136
     int GtkSalDisplay::CaptureMouse(class SalFrame *)
 vcl/inc/unx/saldisp.hxx:308
     _Bool SalDisplay::Dispatch(union _XEvent *)
-vcl/inc/wizdlg.hxx:204
+vcl/inc/wizdlg.hxx:198
     _Bool vcl::RoadmapWizard::onFinish()
-vcl/inc/wizdlg.hxx:207
+vcl/inc/wizdlg.hxx:201
     _Bool vcl::RoadmapWizard::travelNext()
-vcl/inc/wizdlg.hxx:210
+vcl/inc/wizdlg.hxx:204
     _Bool vcl::RoadmapWizard::travelPrevious()
-vcl/inc/wizdlg.hxx:334
+vcl/inc/wizdlg.hxx:291
     class TabPage * vcl::RoadmapWizard::GetOrCreatePage(const short)
 vcl/source/gdi/pdfwriter_impl.hxx:1233
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
