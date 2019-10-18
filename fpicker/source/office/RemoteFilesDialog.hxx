@@ -108,7 +108,7 @@ public:
     virtual sal_Int32 getAvailableWidth() override;
     virtual sal_Int32 getAvailableHeight() override;
 
-    virtual void setImage( sal_Int16 aImageFormat, const css::uno::Any& rImage ) override;
+    virtual void setImage( const css::uno::Any& rImage ) override;
 
     virtual bool getShowState() override;
 

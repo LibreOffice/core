@@ -840,13 +840,13 @@ sal_Int32 SAL_CALL SvtFilePicker::getAvailableHeight()
 }
 
 
-void SAL_CALL SvtFilePicker::setImage( sal_Int16 aImageFormat, const Any& rImage )
+void SAL_CALL SvtFilePicker::setImage( sal_Int16 /*aImageFormat*/, const Any& rImage )
 {
     checkAlive();
 
     SolarMutexGuard aGuard;
     if ( getDialog() )
-        getDialog()->setImage( aImageFormat, rImage );
+        getDialog()->setImage( rImage );
 }
 
 

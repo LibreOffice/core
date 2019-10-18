@@ -73,9 +73,6 @@ forms/source/richtext/textattributelistener.hxx:32
 forms/source/richtext/textattributelistener.hxx:44
     void frm::ITextSelectionListener::onSelectionChanged(const struct ESelection &,)
     0
-fpicker/source/office/fpdialogbase.hxx:106
-    void SvtFileDialog_Base::setImage(short,const class com::sun::star::uno::Any &,)
-    01
 include/canvas/base/bufferedgraphicdevicebase.hxx:230
     void canvas::BufferedGraphicDeviceBase::windowShown(const struct com::sun::star::lang::EventObject &,)
     0
