@@ -405,20 +405,6 @@ struct ImplSVEvent
     bool                mbCall;
 };
 
-struct ControlCacheHashFunction
-{
-    std::size_t operator()(ControlCacheKey const& aCache) const
-    {
-        std::size_t seed = 0;
-        boost::hash_combine(seed, aCache.mnType);
-        boost::hash_combine(seed, aCache.mnPart);
-        boost::hash_combine(seed, aCache.mnState);
-        boost::hash_combine(seed, aCache.maSize.Width());
-        boost::hash_combine(seed, aCache.maSize.Height());
-        return seed;
-    }
-};
-
 extern int nImplSysDialog;
 
 #endif // INCLUDED_VCL_INC_SVDATA_HXX

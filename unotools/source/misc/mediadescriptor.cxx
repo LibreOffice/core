@@ -324,12 +324,6 @@ const OUString& MediaDescriptor::PROP_SUGGESTEDSAVEASNAME()
     return sProp;
 }
 
-const OUString& MediaDescriptor::PROP_LOCKCONTENTEXTRACTION()
-{
-    static const OUString sProp("LockContentExtraction");
-    return sProp;
-}
-
 MediaDescriptor::MediaDescriptor()
     : SequenceAsHashMap()
 {

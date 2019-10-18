@@ -950,25 +950,6 @@ void notifySystemWindow(vcl::Window const * _pWindow, vcl::Window* _pToRegister,
     }
 }
 
-void adjustToolBoxSize(ToolBox* _pToolBox)
-{
-    // adjust the toolbox size, otherwise large bitmaps don't fit into
-    Size aOldSize = _pToolBox->GetSizePixel();
-    Size aSize = _pToolBox->CalcWindowSizePixel();
-    if ( !aSize.Width() )
-        aSize.setWidth( aOldSize.Width() );
-    else if ( !aSize.Height() )
-        aSize.setHeight( aOldSize.Height() );
-
-    Size aTbSize = _pToolBox->GetSizePixel();
-    if ( (aSize.Width() && aSize.Width() != aTbSize.Width()) ||
-            (aSize.Height() && aSize.Height() != aTbSize.Height()) )
-    {
-        _pToolBox->SetPosSizePixel( _pToolBox->GetPosPixel(), aSize );
-        _pToolBox->Invalidate();
-    }
-}
-
 void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId )
 {
     sal_Int32 nColSize = -1;

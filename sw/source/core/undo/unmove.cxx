@@ -138,35 +138,6 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
     m_nFootnoteStart = 0;
 }
 
-void SwUndoMove::SetDestRange( const SwPaM& rRange,
-                                const SwPosition& rInsPos,
-                                bool bJoin, bool bCorrPam )
-{
-    const SwPosition *pStt = rRange.Start(),
-                    *pEnd = rRange.GetPoint() == pStt
-                        ? rRange.GetMark()
-                        : rRange.GetPoint();
-
-    m_nDestStartNode    = pStt->nNode.GetIndex();
-    m_nDestStartContent   = pStt->nContent.GetIndex();
-    m_nDestEndNode    = pEnd->nNode.GetIndex();
-    m_nDestEndContent   = pEnd->nContent.GetIndex();
-
-    m_nInsPosNode     = rInsPos.nNode.GetIndex();
-    m_nInsPosContent    = rInsPos.nContent.GetIndex();
-
-    if( bCorrPam )
-    {
-        m_nDestStartNode--;
-        m_nDestEndNode--;
-    }
-
-    m_bJoinNext = m_nDestStartNode != m_nDestEndNode &&
-                pStt->nNode.GetNode().GetTextNode() &&
-                pEnd->nNode.GetNode().GetTextNode();
-    m_bJoinPrev = bJoin;
-}
-
 void SwUndoMove::SetDestRange( const SwNodeIndex& rStt,
                                 const SwNodeIndex& rEnd,
                                 const SwNodeIndex& rInsPos )

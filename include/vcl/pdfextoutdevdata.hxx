@@ -123,7 +123,6 @@ public:
     bool    GetIsExportHiddenSlides() const { return mbExportHiddenSlides;}
     void        SetIsExportHiddenSlides( const bool bExportHiddenSlides );
 
-    bool    GetIsSinglePageSheets() const { return mbSinglePageSheets;}
     void        SetIsSinglePageSheets( const bool bSinglePageSheets );
 
     bool    GetIsExportNamedDestinations() const { return mbExportNDests;} //i56629

@@ -66,9 +66,7 @@ public:
     virtual ~SvTabListBox() override;
     virtual void dispose() override;
     void            SetTabs(sal_uInt16 nTabs, long const pTabPositions[], MapUnit = MapUnit::MapAppFont);
-    sal_uInt16      TabCount() const { return mvTabList.size(); }
     using SvTreeListBox::GetTab;
-    long            GetTab( sal_uInt16 nTab ) const;
     void            SetTab( sal_uInt16 nTab, long nValue, MapUnit = MapUnit::MapAppFont );
     long            GetLogicTab( sal_uInt16 nTab );
 
@@ -99,12 +97,6 @@ public:
 
     void             SetTabJustify( sal_uInt16 nTab, SvTabJustify );
 };
-
-inline long SvTabListBox::GetTab( sal_uInt16 nTab ) const
-{
-    DBG_ASSERT( nTab < mvTabList.size(), "GetTabPos:Invalid Tab" );
-    return mvTabList[nTab].GetPos();
-}
 
 // class SvHeaderTabListBox ---------------------------------------------------
 
@@ -151,7 +143,6 @@ public:
 
     // Accessible -------------------------------------------------------------
 
-    void     DisableTransientChildren()          { SetChildrenNotTransient(); }
     bool     IsTransientChildrenDisabled() const { return !AreChildrenTransient(); }
 
     bool            IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriState& _rState );
