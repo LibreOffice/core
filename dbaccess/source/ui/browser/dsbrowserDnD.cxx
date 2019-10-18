@@ -173,7 +173,7 @@ namespace dbaui
         return DND_ACTION_NONE;
     }
 
-    bool SbaTableQueryBrowser::requestDrag( sal_Int8 /*_nAction*/, const Point& _rPosPixel )
+    bool SbaTableQueryBrowser::requestDrag( const Point& _rPosPixel )
     {
         // get the affected list entry
         // ensure that the entry which the user clicked at is selected

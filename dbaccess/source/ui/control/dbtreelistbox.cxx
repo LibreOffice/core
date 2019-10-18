@@ -268,12 +268,12 @@ sal_Int8 DBTreeListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     return DND_ACTION_NONE;
 }
 
-void DBTreeListBox::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
+void DBTreeListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& _rPosPixel )
 {
     if ( m_pActionListener )
     {
         m_pDragedEntry = GetEntry(_rPosPixel);
-        if ( m_pDragedEntry && m_pActionListener->requestDrag( _nAction, _rPosPixel ) )
+        if ( m_pDragedEntry && m_pActionListener->requestDrag( _rPosPixel ) )
         {
             // if the (asynchronous) drag started, stop the selection timer
             implStopSelectionTimer();

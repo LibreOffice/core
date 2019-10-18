@@ -50,7 +50,7 @@ namespace dbaui
         /** handler for StartDrag requests
             @return <TRUE/> if a drag operation was started
         */
-        virtual bool    requestDrag( sal_Int8 _nAction, const Point& _rPosPixel ) = 0;
+        virtual bool    requestDrag( const Point& _rPosPixel ) = 0;
 
         /** check whether or not a drop request should be accepted
         */

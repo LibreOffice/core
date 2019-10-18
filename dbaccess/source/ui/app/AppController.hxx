@@ -484,7 +484,7 @@ namespace dbaui
 
         // IControlActionListener overridables
         virtual bool        requestQuickHelp( const SvTreeListEntry* _pEntry, OUString& _rText ) const override;
-        virtual bool        requestDrag( sal_Int8 _nAction, const Point& _rPosPixel ) override;
+        virtual bool        requestDrag( const Point& _rPosPixel ) override;
         virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors ) override;
         virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt ) override;
 
