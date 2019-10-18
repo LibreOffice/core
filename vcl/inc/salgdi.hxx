@@ -73,7 +73,7 @@ class VCL_PLUGIN_PUBLIC SalGraphics : protected vcl::WidgetDrawInterface
 {
 public:
     SalGraphics();
-    ~SalGraphics() override;
+    ~SalGraphics() COVERITY_NOEXCEPT_FALSE override;
 
     virtual SalGraphicsImpl*    GetImpl() const = 0;
 
