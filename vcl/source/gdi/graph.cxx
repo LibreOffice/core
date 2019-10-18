@@ -560,23 +560,6 @@ const VectorGraphicDataPtr& Graphic::getVectorGraphicData() const
     return mxImpGraphic->getVectorGraphicData();
 }
 
-void Graphic::setPdfData(const std::shared_ptr<std::vector<sal_Int8>>& rPdfData)
-{
-    ImplTestRefCount();
-    mxImpGraphic->setPdfData(rPdfData);
-}
-
-const std::shared_ptr<std::vector<sal_Int8>> & Graphic::getPdfData() const
-{
-    return mxImpGraphic->getPdfData();
-}
-
-bool Graphic::hasPdfData() const
-{
-    std::shared_ptr<std::vector<sal_Int8>> pPdfData(getPdfData());
-    return pPdfData && !pPdfData->empty();
-}
-
 void Graphic::setPageNumber(sal_Int32 nPageNumber)
 {
     mxImpGraphic->mnPageNumber = nPageNumber;
