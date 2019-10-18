@@ -132,6 +132,7 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uielement/controlmenucontroller \
     framework/source/uielement/dropdownboxtoolbarcontroller \
     framework/source/uielement/edittoolbarcontroller \
+    framework/source/uielement/FixedImageToolbarController \
     framework/source/uielement/FixedTextToolbarController \
     framework/source/uielement/genericstatusbarcontroller \
     framework/source/uielement/generictoolbarcontroller \
