@@ -7834,7 +7834,6 @@ include/vcl/keycodes.hxx
 include/vcl/layout.hxx
 include/vcl/lazydelete.hxx
 include/vcl/lineinfo.hxx
-include/vcl/listctrl.hxx
 include/vcl/longcurr.hxx
 include/vcl/lstbox.hxx
 include/vcl/mapmod.hxx
@@ -17725,7 +17724,6 @@ vcl/source/control/imivctl2.cxx
 vcl/source/control/imp_listbox.cxx
 vcl/source/control/ivctrl.cxx
 vcl/source/control/listbox.cxx
-vcl/source/control/listctrl.cxx
 vcl/source/control/longcurr.cxx
 vcl/source/control/menubtn.cxx
 vcl/source/control/notebookbar.cxx
