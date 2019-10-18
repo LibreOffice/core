@@ -152,7 +152,7 @@ void NotebookBarAddonsMerger::MergeNotebookBarAddons(
 }
 
 void NotebookBarAddonsMerger::MergeNotebookBarMenuAddons(
-    PopupMenu* pPopupMenu, sal_Int16 nItemId, const OString& sItemIdName,
+    Menu* pPopupMenu, sal_Int16 nItemId, const OString& sItemIdName,
     NotebookBarAddonsItem& aNotebookBarAddonsItem)
 {
     std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;
