@@ -46,7 +46,8 @@ enum class VectorGraphicDataType
 {
     Svg = 0,
     Emf = 1,
-    Wmf = 2
+    Wmf = 2,
+    Pdf = 3
 };
 
 class VCL_DLLPUBLIC VectorGraphicData
@@ -70,6 +71,7 @@ private:
     std::unique_ptr<WmfExternal> mpExternalHeader;
 
     // on demand creators
+    void ensurePdfReplacement();
     void ensureReplacement();
     void ensureSequenceAndRange();
 

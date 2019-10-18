@@ -46,20 +46,6 @@ inline double pointToPixel(const double fPoint, const double fResolutionDPI)
     return fPoint * fResolutionDPI / 72.;
 }
 
-/// Does PDF to bitmap conversion using pdfium.
-size_t generatePreview(SvStream& rStream, std::vector<Bitmap>& rBitmaps, sal_uInt64 nPos,
-                       sal_uInt64 nSize, const size_t nFirstPage = 0, int nPages = 1,
-                       const double fResolutionDPI = 96.)
-{
-    // Read input into a buffer.
-    SvMemoryStream aInBuffer;
-    rStream.Seek(nPos);
-    aInBuffer.WriteStream(rStream, nSize);
-
-    return vcl::RenderPDFBitmaps(aInBuffer.GetData(), aInBuffer.GetSize(), rBitmaps, nFirstPage,
-                                 nPages, fResolutionDPI);
-}
-
 /// Decide if PDF data is old enough to be compatible.
 bool isCompatible(SvStream& rInStream, sal_uInt64 nPos, sal_uInt64 nSize)
 {
@@ -130,12 +116,6 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream, sal_uInt64 n
     return rOutStream.good();
 }
 #else
-size_t generatePreview(SvStream&, std::vector<Bitmap>&, sal_uInt64, sal_uInt64, size_t, int,
-                       const double)
-{
-    return 0;
-}
-
 bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream, sal_uInt64 nPos,
                          sal_uInt64 nSize)
 {
@@ -144,7 +124,27 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream, sal_uInt64 n
     return rOutStream.good();
 }
 #endif // HAVE_FEATURE_PDFIUM
+
+VectorGraphicDataArray createVectorGraphicDataArray(SvStream& rStream)
+{
+    // Save the original PDF stream for later use.
+    SvMemoryStream aMemoryStream;
+    if (!getCompatibleStream(rStream, aMemoryStream, STREAM_SEEK_TO_BEGIN, STREAM_SEEK_TO_END))
+        return VectorGraphicDataArray();
+
+    const sal_uInt32 nStreamLength = aMemoryStream.TellEnd();
+
+    VectorGraphicDataArray aPdfData(nStreamLength);
+
+    aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+    aMemoryStream.ReadBytes(aPdfData.begin(), nStreamLength);
+    if (aMemoryStream.GetError())
+        return VectorGraphicDataArray();
+
+    return aPdfData;
 }
+
+} // end anonymous namespace
 
 namespace vcl
 {
@@ -221,63 +221,24 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
 #endif // HAVE_FEATURE_PDFIUM
 }
 
-bool ImportPDF(SvStream& rStream, Bitmap& rBitmap, size_t nPageIndex,
-               std::vector<sal_Int8>& rPdfData, sal_uInt64 nPos, sal_uInt64 nSize,
-               const double fResolutionDPI)
+bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
 {
-    // Get the preview of the first page.
-    std::vector<Bitmap> aBitmaps;
-    if (generatePreview(rStream, aBitmaps, nPos, nSize, nPageIndex, 1, fResolutionDPI) != 1
-        || aBitmaps.empty())
-        return false;
-
-    rBitmap = aBitmaps[0];
-
     // Save the original PDF stream for later use.
     SvMemoryStream aMemoryStream;
-    if (!getCompatibleStream(rStream, aMemoryStream, nPos, nSize))
+    if (!getCompatibleStream(rStream, aMemoryStream, STREAM_SEEK_TO_BEGIN, STREAM_SEEK_TO_END))
+        return false;
+    const sal_uInt32 nStreamLength = aMemoryStream.TellEnd();
+    VectorGraphicDataArray aPdfData(nStreamLength);
+    aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+    aMemoryStream.ReadBytes(aPdfData.begin(), nStreamLength);
+    if (aMemoryStream.GetError())
         return false;
 
-    rPdfData = std::vector<sal_Int8>(aMemoryStream.TellEnd());
-    aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
-    aMemoryStream.ReadBytes(rPdfData.data(), rPdfData.size());
+    auto aVectorGraphicDataPtr
+        = std::make_shared<VectorGraphicData>(aPdfData, OUString(), VectorGraphicDataType::Pdf);
 
+    rGraphic = Graphic(aVectorGraphicDataPtr);
     return true;
-}
-
-bool ImportPDF(SvStream& rStream, Graphic& rGraphic, const double fResolutionDPI)
-{
-    std::vector<sal_Int8> aPdfData;
-    Bitmap aBitmap;
-    const bool bRet = ImportPDF(rStream, aBitmap, 0, aPdfData, STREAM_SEEK_TO_BEGIN,
-                                STREAM_SEEK_TO_END, fResolutionDPI);
-    rGraphic = aBitmap;
-    rGraphic.setPdfData(std::make_shared<std::vector<sal_Int8>>(aPdfData));
-    rGraphic.setPageNumber(0); // We currently import only the first page.
-    return bRet;
-}
-
-size_t ImportPDF(const OUString& rURL, std::vector<Bitmap>& rBitmaps,
-                 std::vector<sal_Int8>& rPdfData, const double fResolutionDPI)
-{
-    std::unique_ptr<SvStream> xStream(
-        ::utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ | StreamMode::SHARE_DENYNONE));
-
-    if (generatePreview(*xStream, rBitmaps, STREAM_SEEK_TO_BEGIN, STREAM_SEEK_TO_END, 0, -1,
-                        fResolutionDPI)
-        == 0)
-        return 0;
-
-    // Save the original PDF stream for later use.
-    SvMemoryStream aMemoryStream;
-    if (!getCompatibleStream(*xStream, aMemoryStream, STREAM_SEEK_TO_BEGIN, STREAM_SEEK_TO_END))
-        return 0;
-
-    rPdfData = std::vector<sal_Int8>(aMemoryStream.TellEnd());
-    aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
-    aMemoryStream.ReadBytes(rPdfData.data(), rPdfData.size());
-
-    return rBitmaps.size();
 }
 
 size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Size>>& rGraphics,
@@ -288,22 +249,18 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
         ::utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ | StreamMode::SHARE_DENYNONE));
 
     // Save the original PDF stream for later use.
-    SvMemoryStream aMemoryStream;
-    if (!getCompatibleStream(*xStream, aMemoryStream, STREAM_SEEK_TO_BEGIN, STREAM_SEEK_TO_END))
+    VectorGraphicDataArray aPdfDataArray = createVectorGraphicDataArray(*xStream);
+    if (!aPdfDataArray.hasElements())
         return 0;
 
-    // Copy into PdfData
-    aMemoryStream.Seek(STREAM_SEEK_TO_END);
-    auto pPdfData = std::make_shared<std::vector<sal_Int8>>(aMemoryStream.Tell());
-    aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
-    aMemoryStream.ReadBytes(pPdfData->data(), pPdfData->size());
-
     // Prepare the link with the PDF stream.
-    const size_t nGraphicContentSize = pPdfData->size();
+    const size_t nGraphicContentSize = aPdfDataArray.getLength();
     std::unique_ptr<sal_uInt8[]> pGraphicContent(new sal_uInt8[nGraphicContentSize]);
-    memcpy(pGraphicContent.get(), pPdfData->data(), nGraphicContentSize);
-    std::shared_ptr<GfxLink> pGfxLink(std::make_shared<GfxLink>(
-        std::move(pGraphicContent), nGraphicContentSize, GfxLinkType::NativePdf));
+
+    std::copy(aPdfDataArray.begin(), aPdfDataArray.end(), pGraphicContent.get());
+
+    auto pGfxLink = std::make_shared<GfxLink>(std::move(pGraphicContent), nGraphicContentSize,
+                                              GfxLinkType::NativePdf);
 
     FPDF_LIBRARY_CONFIG aConfig;
     aConfig.version = 2;
@@ -314,16 +271,13 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
 
     // Load the buffer using pdfium.
     FPDF_DOCUMENT pPdfDocument
-        = FPDF_LoadMemDocument(pPdfData->data(), pPdfData->size(), /*password=*/nullptr);
+        = FPDF_LoadMemDocument(pGfxLink->GetData(), pGfxLink->GetDataSize(), /*password=*/nullptr);
     if (!pPdfDocument)
         return 0;
 
     const int nPageCount = FPDF_GetPageCount(pPdfDocument);
     if (nPageCount <= 0)
         return 0;
-
-    // dummy Bitmap
-    Bitmap aBitmap(Size(1, 1), 24);
 
     for (int nPageIndex = 0; nPageIndex < nPageCount; ++nPageIndex)
     {
@@ -336,11 +290,13 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
         const size_t nPageWidth = pointToPixel(fPageWidth, fResolutionDPI);
         const size_t nPageHeight = pointToPixel(fPageHeight, fResolutionDPI);
 
-        // Create the Graphic with a dummy Bitmap and link the original PDF stream.
+        auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(
+            aPdfDataArray, OUString(), VectorGraphicDataType::Pdf);
+
+        // Create the Graphic with the VectorGraphicDataPtr and link the original PDF stream.
         // We swap out this Graphic as soon as possible, and a later swap in
         // actually renders the correct Bitmap on demand.
-        Graphic aGraphic(aBitmap);
-        aGraphic.setPdfData(pPdfData);
+        Graphic aGraphic(aVectorGraphicDataPtr);
         aGraphic.setPageNumber(nPageIndex);
         aGraphic.SetGfxLink(pGfxLink);
 
