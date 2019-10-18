@@ -2184,7 +2184,7 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
     table::CellRangeAddress thisRangeAddress =  thisRange.getCellRangeAddressable()->getRangeAddress();
     uno::Reference< table::XCellRange > xSheetRange = thisRange.getCellRangeFromSheet();
     if( !bIsIndex && !bIsColumnIndex ) // .Cells
-        // #FIXE needs proper parent ( Worksheet )
+        // #FIXME needs proper parent ( Worksheet )
         return uno::Reference< excel::XRange >( new ScVbaRange( xParent, xContext, xRange ) );
 
     sal_Int32 nIndex = --nRow;
