@@ -1036,7 +1036,7 @@ public:
     }
 
 #if defined LIBO_INTERNAL_ONLY
-    operator OStringView() const
+    explicit operator OStringView() const
     {
         return OStringView(getStr(), getLength());
     }
