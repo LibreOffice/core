@@ -136,9 +136,6 @@ include/oox/export/shapes.hxx:136
 include/sfx2/objsh.hxx:637
     void SfxObjectShell::FillClass(class SvGlobalName *,enum SotClipboardFormatId *,class rtl::OUString *,class rtl::OUString *,class rtl::OUString *,int,_Bool,)const
     1101111
-include/sfx2/sfxstatuslistener.hxx:49
-    void SfxStatusListener::StateChanged(unsigned short,enum SfxItemState,const class SfxPoolItem *,)
-    011
 include/sfx2/stbitem.hxx:100
     _Bool SfxStatusBarControl::MouseButtonUp(const class MouseEvent &,)
     0
