@@ -120,7 +120,7 @@ tools::Rectangle PanelTitleBar::GetTitleArea (const tools::Rectangle& rTitleBarB
         return rTitleBarBox;
 }
 
-void PanelTitleBar::PaintDecoration (vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rTitleBarBox*/)
+void PanelTitleBar::PaintDecoration (vcl::RenderContext& rRenderContext)
 {
     if (mpPanel != nullptr)
     {
