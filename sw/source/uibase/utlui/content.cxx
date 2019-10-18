@@ -1207,6 +1207,45 @@ sal_Int8 SwContentTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 // Handler for Dragging and ContextMenu
 
+static void lcl_InsertExpandAllItem(SwContentTree* pContentTree, SvTreeListEntry* pEntry, PopupMenu* pPop)
+{
+    if(pEntry->HasChildren())
+    {
+        // Only show menu item if pEntry or any entry under pEntry is not expanded
+        bool bInsertItem = true;
+        if(pContentTree->IsExpanded(pEntry))
+        {
+            bInsertItem = false;
+            auto nLevel = -1;
+            if(lcl_IsContent(pEntry))
+            {
+                assert(pEntry->GetUserData() == nullptr || dynamic_cast<SwContent *>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
+                SwContent* pCnt = static_cast<SwContent *>(pEntry->GetUserData());
+                nLevel = static_cast<SwOutlineContent*>(pCnt)->GetOutlineLevel();
+            }
+            SvTreeListEntry* pNext = pContentTree->Next(pEntry);
+            while(pNext && lcl_IsContent(pNext))
+            {
+                assert(pNext->GetUserData() == nullptr || dynamic_cast<SwContent *>(static_cast<SwTypeNumber*>(pNext->GetUserData())));
+                SwContent* pCnt = static_cast<SwContent *>(pNext->GetUserData());
+                if(static_cast<SwOutlineContent*>(pCnt)->GetOutlineLevel() <= nLevel)
+                    break;
+                if(pNext->HasChildren() && !pContentTree->IsExpanded(pNext))
+                {
+                    bInsertItem = true;
+                    break;
+                }
+                pNext = pContentTree->Next(pNext);
+            }
+        }
+        if(bInsertItem)
+        {
+            pPop->InsertSeparator();
+            pPop->InsertItem(800, SwResId(STR_EXPANDALL));
+        }
+    }
+}
+
 VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
 {
     auto pPop = VclPtr<PopupMenu>::Create();
@@ -1348,6 +1387,8 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
                 pPop->SetPopupMenu(4, pSubPop4);
             }
         }
+        else if(ContentTypeId::OUTLINE == nContentType)
+            lcl_InsertExpandAllItem(this, pEntry, pPop);
     }
     else if( pEntry )
     {
@@ -1355,6 +1396,7 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
         SwContentType* pType = static_cast<SwContentType*>(pEntry->GetUserData());
         if(ContentTypeId::OUTLINE == pType->GetType())
         {
+            lcl_InsertExpandAllItem(this, pEntry, pPop);
             pPop->InsertSeparator();
             pPop->InsertItem(700, m_aContextStrings[IDX_STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY]);
         }
@@ -3291,6 +3333,9 @@ void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
                 m_pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_OUTLINE_TO_CLIPBOARD);
                 break;
             }
+        case 800:
+            KeyInput(KeyEvent(0, KEY_MOD1|KEY_ADD));
+            break;
         //Display
         default:
         if(nSelectedPopupEntry > 300 && nSelectedPopupEntry < 400)
