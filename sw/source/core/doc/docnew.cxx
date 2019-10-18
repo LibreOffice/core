@@ -969,7 +969,7 @@ static void lcl_CopyFollowPageDesc(
     do
     {
         const SwPageDesc* pFollowPageDesc = pCurSourcePageDesc->GetFollow();
-        OUString sFollowPageDesc = pFollowPageDesc->GetName();
+        const OUString& sFollowPageDesc = pFollowPageDesc->GetName();
         if (sFollowPageDesc == pCurSourcePageDesc->GetName())
         {
             break;
@@ -1052,9 +1052,9 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
             // if the source uses headers or footers the target document
             // needs inidividual page styles
             const SwWrtShell *pSourceShell = rSource.GetDocShell()->GetWrtShell();
-            const SwPageDesc rSourcePageDesc = pSourceShell->GetPageDesc(
+            const SwPageDesc& rSourcePageDesc = pSourceShell->GetPageDesc(
                                                     pSourceShell->GetCurPageDesc());
-            const OUString sStartingPageDesc = rSourcePageDesc.GetName();
+            const OUString& sStartingPageDesc = rSourcePageDesc.GetName();
             const bool bPageStylesWithHeaderFooter = lcl_PageDescOrFollowContainsHeaderFooter(rSourcePageDesc);
             if( bPageStylesWithHeaderFooter )
             {
@@ -1083,7 +1083,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
             bool bIsTextNode = aBreakIdx.GetNode().IsTextNode();
             if ( !bIsTextNode )
                 getIDocumentContentOperations().AppendTextNode( aBreakPos );
-            OUString name = pTargetPageDesc->GetName();
+            const OUString& name = pTargetPageDesc->GetName();
             pTargetShell->InsertPageBreak( &name, nStartPageNumber );
             if ( !bIsTextNode )
             {
