@@ -46,7 +46,6 @@
 #include <vcl/vclmedit.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/slider.hxx>
-#include <vcl/listctrl.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <svdata.hxx>
@@ -2324,11 +2323,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     {
         WinBits nBits = extractDeferredBits(rMap);
         xWindow = VclPtr<DockingWindow>::Create(pParent, nBits|WB_DOCKABLE|WB_MOVEABLE);
-    }
-    else if (name == "GtkListBox")
-    {
-        WinBits nBits = extractDeferredBits(rMap);
-        xWindow = VclPtr<ListControl>::Create(pParent, nBits);
     }
     else if (name == "GtkCalendar")
     {
