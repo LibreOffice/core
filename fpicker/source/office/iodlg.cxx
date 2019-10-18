@@ -532,7 +532,7 @@ void SvtFileDialog::dispose()
     _pPbPlay.clear();
     _pPrevWin.clear();
     m_aDisabledControls.clear();
-    ModalDialog::dispose();
+    Dialog::dispose();
 }
 
 void SvtFileDialog::Init_Impl
@@ -1585,7 +1585,7 @@ bool SvtFileDialog::EventNotify( NotifyEvent& rNEvt )
             }
         }
     }
-    return bRet || ModalDialog::EventNotify(rNEvt);
+    return bRet || Dialog::EventNotify(rNEvt);
 }
 
 namespace
@@ -1661,7 +1661,7 @@ short SvtFileDialog::Execute()
 
     // start the dialog
     _bIsInExecute = true;
-    short nResult = ModalDialog::Execute();
+    short nResult = Dialog::Execute();
     _bIsInExecute = false;
 
     SAL_WARN_IF( m_pCurrentAsyncAction.is(), "fpicker.office", "SvtFilePicker::Execute: still running an async action!" );
@@ -1691,7 +1691,7 @@ bool SvtFileDialog::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
         return false;
 
     // start of the dialog
-    return ModalDialog::StartExecuteAsync(rCtx);
+    return Dialog::StartExecuteAsync(rCtx);
 }
 
 void SvtFileDialog::onAsyncOperationStarted()
@@ -2269,7 +2269,7 @@ void SvtFileDialog::DataChanged( const DataChangedEvent& _rDCEvt )
     if ( DataChangedEventType::SETTINGS == _rDCEvt.GetType() )
         implUpdateImages( );
 
-    ModalDialog::DataChanged( _rDCEvt );
+    Dialog::DataChanged( _rDCEvt );
 }
 
 
