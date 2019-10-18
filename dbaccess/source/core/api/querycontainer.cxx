@@ -291,7 +291,7 @@ Reference< XVeto > SAL_CALL OQueryContainer::approveInsertElement( const Contain
     Reference< XVeto > xReturn;
     try
     {
-        getElementApproval()->approveElement( sName, xElement.get() );
+        getElementApproval()->approveElement( sName );
     }
     catch( const Exception& )
     {

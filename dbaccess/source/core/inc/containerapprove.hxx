@@ -44,16 +44,11 @@ namespace dbaccess
         /** approves a given element for insertion into the container
             @param  _rName
                 specifies the name under which the element is going to be inserted
-            @param  _rxElement
-                specifies the element which is going to be inserted
             @throws Exception
                 if the name or the object are invalid, or not eligible for insertion
                 into the container
         */
-        virtual void   approveElement(
-            const OUString& _rName,
-            const css::uno::Reference< css::uno::XInterface >& _rxElement
-        ) = 0;
+        virtual void   approveElement( const OUString& _rName ) = 0;
     };
 
     typedef std::shared_ptr< IContainerApprove >    PContainerApprove;

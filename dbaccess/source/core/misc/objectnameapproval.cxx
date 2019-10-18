@@ -59,7 +59,7 @@ namespace dbaccess
     {
     }
 
-    void ObjectNameApproval::approveElement( const OUString& _rName, const Reference< XInterface >& /*_rxElement*/ )
+    void ObjectNameApproval::approveElement( const OUString& _rName )
     {
         Reference< XConnection > xConnection( m_pImpl->aConnection );
         if ( !xConnection.is() )
