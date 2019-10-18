@@ -80,7 +80,7 @@ bool SalGraphics::initWidgetDrawBackends(bool bForce)
     return false;
 }
 
-SalGraphics::~SalGraphics()
+SalGraphics::~SalGraphics() COVERITY_NOEXCEPT_FALSE
 {
 }
 

@@ -89,7 +89,7 @@ X11SalGraphics::X11SalGraphics():
 
 }
 
-X11SalGraphics::~X11SalGraphics()
+X11SalGraphics::~X11SalGraphics() COVERITY_NOEXCEPT_FALSE
 {
     DeInit();
     ReleaseFonts();
