@@ -1207,6 +1207,15 @@ sal_Int8 SwContentTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 // Handler for Dragging and ContextMenu
 
+static void lcl_InsertExpandAllItem(SwContentTree* pContentTree, SvTreeListEntry* pEntry, PopupMenu* pPop)
+{
+    if(pEntry->HasChildren() || pEntry->HasChildrenOnDemand())
+    {
+        const bool bAllExpanded = pContentTree->IsAllExpanded(pEntry);
+        pPop->InsertItem(800, bAllExpanded ? SwResId(STR_COLLAPSEALL) : SwResId(STR_EXPANDALL));
+    }
+}
+
 VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
 {
     auto pPop = VclPtr<PopupMenu>::Create();
@@ -1348,6 +1357,8 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
                 pPop->SetPopupMenu(4, pSubPop4);
             }
         }
+        else if(ContentTypeId::OUTLINE == nContentType)
+            lcl_InsertExpandAllItem(this, pEntry, pPop);
     }
     else if( pEntry )
     {
@@ -1355,6 +1366,7 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
         SwContentType* pType = static_cast<SwContentType*>(pEntry->GetUserData());
         if(ContentTypeId::OUTLINE == pType->GetType())
         {
+            lcl_InsertExpandAllItem(this, pEntry, pPop);
             pPop->InsertSeparator();
             pPop->InsertItem(700, m_aContextStrings[IDX_STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY]);
         }
@@ -3291,6 +3303,9 @@ void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
                 m_pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_OUTLINE_TO_CLIPBOARD);
                 break;
             }
+        case 800:
+            KeyInput(KeyEvent(0, KEY_MOD1|KEY_MULTIPLY));
+            break;
         //Display
         default:
         if(nSelectedPopupEntry > 300 && nSelectedPopupEntry < 400)

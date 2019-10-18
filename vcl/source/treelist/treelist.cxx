@@ -1352,6 +1352,29 @@ bool SvListView::IsExpanded( SvTreeListEntry* pEntry ) const
     return itr->second->IsExpanded();
 }
 
+bool SvListView::IsAllExpanded( SvTreeListEntry* pEntry ) const
+{
+    DBG_ASSERT(pEntry,"IsAllExpanded:No Entry");
+    if (!IsExpanded(pEntry))
+        return false;
+    const SvTreeListEntries& rChildren = pEntry->GetChildEntries();
+    for (auto& rChild : rChildren)
+    {
+        SvDataTable::const_iterator itr = m_pImpl->m_DataTable.find(rChild.get());
+        DBG_ASSERT(itr != m_pImpl->m_DataTable.end(),"Entry not in Table");
+        if (itr == m_pImpl->m_DataTable.end())
+            return false;
+        if (rChild->HasChildren() || rChild->HasChildrenOnDemand())
+        {
+            if (!itr->second->IsExpanded())
+                return false;
+            if (!IsAllExpanded(rChild.get()))
+                return false;
+        }
+    }
+    return true;
+}
+
 bool SvListView::IsSelected( SvTreeListEntry* pEntry ) const
 {
     DBG_ASSERT(pEntry,"IsExpanded:No Entry");

@@ -288,6 +288,7 @@ public:
     { return pModel->IsEntryVisible(this,pEntry); }
 
     bool                IsExpanded( SvTreeListEntry* pEntry ) const;
+    bool                IsAllExpanded( SvTreeListEntry* pEntry) const;
     bool                IsSelected( SvTreeListEntry* pEntry ) const;
     void                SetEntryFocus( SvTreeListEntry* pEntry, bool bFocus );
     const SvViewDataEntry*         GetViewData( const SvTreeListEntry* pEntry ) const;
