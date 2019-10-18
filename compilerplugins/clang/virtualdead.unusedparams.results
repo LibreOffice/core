@@ -52,12 +52,6 @@ dbaccess/source/core/inc/containerapprove.hxx:53
 dbaccess/source/ui/inc/callbacks.hxx:53
     _Bool dbaui::IControlActionListener::requestDrag(signed char,const class Point &,)
     01
-dbaccess/source/ui/inc/TableDesignControl.hxx:68
-    _Bool dbaui::OTableRowView::IsPrimaryKeyAllowed(long,)
-    0
-dbaccess/source/ui/inc/TableDesignControl.hxx:70
-    _Bool dbaui::OTableRowView::IsDeleteAllowed(long,)
-    0
 desktop/source/deployment/registry/inc/dp_backend.h:84
     void dp_registry::backend::Package::processPackage_(class osl::ResettableGuard<class osl::Mutex> &,_Bool,_Bool,const class rtl::Reference<class dp_misc::AbortChannel> &,const class com::sun::star::uno::Reference<class com::sun::star::ucb::XCommandEnvironment> &,)
     01111

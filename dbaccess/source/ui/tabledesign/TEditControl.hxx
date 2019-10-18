@@ -107,9 +107,9 @@ namespace dbaui
         virtual void DeleteRows() override;
         virtual void InsertNewRows( long nRow ) override;
 
-        virtual bool IsPrimaryKeyAllowed( long nRow ) override;
+        virtual bool IsPrimaryKeyAllowed() override;
         virtual bool IsInsertNewAllowed( long nRow ) override;
-        virtual bool IsDeleteAllowed( long nRow ) override;
+        virtual bool IsDeleteAllowed() override;
 
         void ClearModified();
 
