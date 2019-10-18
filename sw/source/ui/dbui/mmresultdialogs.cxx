@@ -516,11 +516,21 @@ int documentEndPageNumber(SwMailMergeConfigItem* pConfigItem, int document, bool
     return page;
 }
 
-/** Extracts the document for one recipient, which starts at nStartPage and ends at nEndPage in the merged doc. */
-static void lcl_ExtractDocumentForOneRecipient(SwView* pExtractedView, SwView* pMergedView, int nStartPage, int nEndPage)
+/** Extracts the document for one recipient, which starts at nStartPage and ends at nEndPage
+ * in the merged doc. To do so, this takes over from the original (i.e. unmerged) and the
+ * merged document as needed. */
+static void lcl_ExtractDocumentForOneRecipient(SwView* pExtractedView, SwView* pOrigView,
+                                               SwView* pMergedView, int nStartPage, int nEndPage)
 {
+    // tdf#97318: load styles from the original document, not the merged one since the latter
+    // may contain copies of page styles with data from other records having been inserted in
+    // headers and footers (s.a. SwDoc::AppendDoc where those extra page styles are created).
+    // Such extra page styles generated only **for the current record** are implicitly
+    // copied from the merged doc in the call to SwFEShell::PastePages below.
+    pExtractedView->GetDocShell()->LoadStyles_(*pOrigView->GetDocShell(), true);
+
+    // take over from the merged doc
     pMergedView->GetWrtShell().StartAction();
-    pExtractedView->GetDocShell()->LoadStyles_(*pMergedView->GetDocShell(), true);
     pExtractedView->GetDocShell()->GetDoc()->ReplaceCompatibilityOptions(*pMergedView->GetDocShell()->GetDoc());
     pExtractedView->GetDocShell()->GetDoc()->ReplaceDefaults(*pMergedView->GetDocShell()->GetDoc());
     pExtractedView->GetDocShell()->GetDoc()->ReplaceDocumentProperties(*pMergedView->GetDocShell()->GetDoc(), true );
@@ -630,7 +640,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
             SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
             const int nStartPage = documentStartPageNumber(xConfigItem.get(), nDoc, false);
             const int nEndPage = documentEndPageNumber(xConfigItem.get(), nDoc, false);
-            lcl_ExtractDocumentForOneRecipient(pTempView, pTargetView, nStartPage, nEndPage);
+            lcl_ExtractDocumentForOneRecipient(pTempView, pView, pTargetView, nStartPage, nEndPage);
 
             //then save it
             OUString sOutPath = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
@@ -1022,7 +1032,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
         const int nStartPage = documentStartPageNumber(xConfigItem.get(), nDoc, false);
         const int nEndPage = documentEndPageNumber(xConfigItem.get(), nDoc, false);
-        lcl_ExtractDocumentForOneRecipient(pTempView, pTargetView, nStartPage, nEndPage);
+        lcl_ExtractDocumentForOneRecipient(pTempView, pView, pTargetView, nStartPage, nEndPage);
 
         //then save it
         SfxStringItem aName(SID_FILE_NAME,
