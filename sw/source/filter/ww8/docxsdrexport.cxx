@@ -991,17 +991,13 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj,
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(sdrObj)->getUnoShape(),
                                            uno::UNO_QUERY_THROW);
 
-    // Locked canvas is OK inside DML.
-    if (lcl_isLockedCanvas(xShape))
-        bDMLAndVMLDrawingOpen = false;
-
     MSO_SPT eShapeType
         = EscherPropertyContainer::GetCustomShapeType(xShape, nMirrorFlags, sShapeType);
 
     // In case we are already inside a DML block, then write the shape only as VML, turn out that's allowed to do.
     // A common service created in util to check for VML shapes which are allowed to have textbox in content
     if ((msfilter::util::HasTextBoxContent(eShapeType)) && Impl::isSupportedDMLShape(xShape)
-        && !bDMLAndVMLDrawingOpen)
+        && (!bDMLAndVMLDrawingOpen || lcl_isLockedCanvas(xShape))) // Locked canvas is OK inside DML
     {
         m_pImpl->getSerializer()->startElementNS(XML_mc, XML_AlternateContent);
 
@@ -1020,7 +1016,7 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj,
     else
         writeVMLDrawing(sdrObj, rFrameFormat);
 
-    m_pImpl->setDMLAndVMLDrawingOpen(false);
+    m_pImpl->setDMLAndVMLDrawingOpen(bDMLAndVMLDrawingOpen);
 }
 
 // Converts ARGB transparency (0..255) to drawingml alpha (opposite, and 0..100000)
