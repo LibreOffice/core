@@ -367,12 +367,12 @@ void RemoteFilesDialog::dispose()
     m_pListView_btn.clear();
     m_pAddMenu.clear();
 
-    ModalDialog::dispose();
+    Dialog::dispose();
 }
 
 void RemoteFilesDialog::Resize()
 {
-    ModalDialog::Resize();
+    Dialog::Resize();
 
     if( m_pFileView && m_pContainer )
     {
