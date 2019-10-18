@@ -440,4 +440,10 @@
       <widget name="label2"/>
     </widgets>
   </object>
+  <object class="GtkSizeGroup" id="sizegroup2">
+    <widgets>
+      <widget name="comboLB_VERTALIGN"/>
+      <widget name="comboLB_TEXTDIRECTION"/>
+    </widgets>
+  </object>
 </interface>
