@@ -149,8 +149,9 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
             const bool bIsSvg(rFilterName.equalsIgnoreAsciiCase("svg") && VectorGraphicDataType::Svg == aVectorGraphicDataPtr->getVectorGraphicDataType());
             const bool bIsWmf(rFilterName.equalsIgnoreAsciiCase("wmf") && VectorGraphicDataType::Wmf == aVectorGraphicDataPtr->getVectorGraphicDataType());
             const bool bIsEmf(rFilterName.equalsIgnoreAsciiCase("emf") && VectorGraphicDataType::Emf == aVectorGraphicDataPtr->getVectorGraphicDataType());
+            const bool bIsPdf(rFilterName.equalsIgnoreAsciiCase("pdf") && VectorGraphicDataType::Pdf == aVectorGraphicDataPtr->getVectorGraphicDataType());
 
-            if (bIsSvg || bIsWmf || bIsEmf)
+            if (bIsSvg || bIsWmf || bIsEmf || bIsPdf)
             {
                 if (!(nFlags & XOutFlags::DontAddExtension))
                 {
@@ -171,24 +172,6 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                         nErr = ERRCODE_NONE;
                     }
                 }
-            }
-        }
-
-        // Write PDF data in original form if possible.
-        if (rGraphic.hasPdfData() && rFilterName.equalsIgnoreAsciiCase("pdf"))
-        {
-            if (!(nFlags & XOutFlags::DontAddExtension))
-                aURL.setExtension(rFilterName);
-
-            rFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-            SfxMedium aMedium(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE|StreamMode::SHARE_DENYNONE|StreamMode::TRUNC);
-            if (SvStream* pOutStream = aMedium.GetOutStream())
-            {
-                const std::shared_ptr<uno::Sequence<sal_Int8>>& rPdfData = rGraphic.getPdfData();
-                pOutStream->WriteBytes(rPdfData->getConstArray(), rPdfData->getLength());
-                aMedium.Commit();
-                if (!aMedium.GetError())
-                    nErr = ERRCODE_NONE;
             }
         }
 

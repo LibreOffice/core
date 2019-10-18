@@ -2053,17 +2053,6 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
                     nInsAnz = aFilter.DoImport(aMetaFile, *pOL, nInsPos, pProgrInfo);
                 }
             }
-            else if (pGraf->isEmbeddedPdfData())
-            {
-#if HAVE_FEATURE_PDFIUM
-                aLogicRect = pGraf->GetLogicRect();
-                ImpSdrPdfImport aFilter(*mpModel, pObj->GetLayer(), aLogicRect, pGraf->getEmbeddedPdfData());
-                if (pGraf->getEmbeddedPageNumber() < aFilter.GetPageCount())
-                {
-                    nInsAnz = aFilter.DoImport(*pOL, nInsPos, pGraf->getEmbeddedPageNumber(), pProgrInfo);
-                }
-#endif // HAVE_FEATURE_PDFIUM
-            }
         }
 
         SdrOle2Obj* pOle2 = dynamic_cast<SdrOle2Obj*>(pObj);
