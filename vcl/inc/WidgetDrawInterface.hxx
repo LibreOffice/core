@@ -20,7 +20,7 @@ namespace vcl
 class VCL_PLUGIN_PUBLIC WidgetDrawInterface
 {
 public:
-    virtual ~WidgetDrawInterface() {}
+    virtual ~WidgetDrawInterface() COVERITY_NOEXCEPT_FALSE {}
 
     /**
      * Query the platform layer for native control support.

@@ -69,7 +69,7 @@ class VCLPLUG_GEN_PUBLIC X11SalGraphics : public SalGraphics
 
 public:
                                     X11SalGraphics();
-    virtual                         ~X11SalGraphics() override;
+    virtual                         ~X11SalGraphics() COVERITY_NOEXCEPT_FALSE override;
 
     void                            Init( SalFrame *pFrame, Drawable aDrawable, SalX11Screen nXScreen );
     void                            Init( X11SalVirtualDevice *pVirtualDevice, SalColormap* pColormap = nullptr, bool bDeleteColormap = false );
