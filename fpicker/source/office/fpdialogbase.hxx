@@ -62,11 +62,11 @@ namespace o3tl {
 
 // SvtFileDialog_Base
 
-class SvtFileDialog_Base : public ModalDialog, public ::svt::IFilePickerController
+class SvtFileDialog_Base : public Dialog, public ::svt::IFilePickerController
 {
 public:
     SvtFileDialog_Base( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription )
-    : ModalDialog( pParent, rID, rUIXMLDescription )
+    : Dialog( pParent, rID, rUIXMLDescription )
     {
     }
 
