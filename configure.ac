@@ -5956,7 +5956,7 @@ dnl ===================================================================
 
 if test "$_os" != "WINNT"; then
 
-if test "$_os" == "iOS"; then
+if test "$_os" = "iOS"; then
     AC_MSG_CHECKING([iOS setting sizes long, short, int, long long, double, voidp])
     ac_cv_sizeof_long=8
     ac_cv_sizeof_short=2
@@ -10788,7 +10788,7 @@ fi
 # Pdfium?
 AC_MSG_CHECKING([whether to build PDFium])
 ENABLE_PDFIUM=
-if test \( -z "$enable_pdfium" -a "$ENABLE_PDFIMPORT" == "TRUE" \) -o "$enable_pdfium" = yes; then
+if test \( -z "$enable_pdfium" -a "$ENABLE_PDFIMPORT" = "TRUE" \) -o "$enable_pdfium" = yes; then
     AC_MSG_RESULT([yes])
     ENABLE_PDFIUM=TRUE
     AC_DEFINE(HAVE_FEATURE_PDFIUM)
@@ -10803,7 +10803,7 @@ dnl Check for poppler
 dnl ===================================================================
 ENABLE_POPPLER=
 AC_MSG_CHECKING([whether to build Poppler])
-if test \( -z "$enable_poppler" -a "$ENABLE_PDFIMPORT" == "TRUE" \) -o "$enable_poppler" = yes; then
+if test \( -z "$enable_poppler" -a "$ENABLE_PDFIMPORT" = "TRUE" \) -o "$enable_poppler" = yes; then
     AC_MSG_RESULT([yes])
     ENABLE_POPPLER=TRUE
     AC_DEFINE(HAVE_FEATURE_POPPLER)
@@ -10812,15 +10812,15 @@ else
 fi
 AC_SUBST(ENABLE_POPPLER)
 
-if test "$ENABLE_PDFIMPORT" == "TRUE" -a "$ENABLE_POPPLER" != "TRUE" -a "$ENABLE_PDFIUM" != "TRUE"; then
+if test "$ENABLE_PDFIMPORT" = "TRUE" -a "$ENABLE_POPPLER" != "TRUE" -a "$ENABLE_PDFIUM" != "TRUE"; then
     AC_MSG_ERROR([Cannot import PDF without either Pdfium or Poppler; please enable either of them.])
 fi
 
-if test "$ENABLE_PDFIMPORT" != "TRUE" -a \( "$ENABLE_POPPLER" == "TRUE" -o "$ENABLE_PDFIUM" == "TRUE" \); then
+if test "$ENABLE_PDFIMPORT" != "TRUE" -a \( "$ENABLE_POPPLER" = "TRUE" -o "$ENABLE_PDFIUM" = "TRUE" \); then
     AC_MSG_ERROR([Cannot enable Pdfium or Poppler when PDF importing is disabled; please enable PDF import first.])
 fi
 
-if test "$ENABLE_PDFIMPORT" == "TRUE" -a "$ENABLE_POPPLER" == "TRUE"; then
+if test "$ENABLE_PDFIMPORT" = "TRUE" -a "$ENABLE_POPPLER" = "TRUE"; then
     dnl ===================================================================
     dnl Check for system poppler
     dnl ===================================================================
@@ -11267,7 +11267,7 @@ then
     qt5_test_library="libQt5Widgets.so"
 
     dnl Check for qmake5
-    AC_PATH_PROGS( QMAKE5, [qmake-qt5 qmake], no, [$QT5DIR/bin:$PATH] )
+    AC_PATH_PROGS( QMAKE5, [qmake-qt5 qmake], no, [$QT5DIR/bin:$PATH])
     if test "$QMAKE5" = "no"; then
         AC_MSG_ERROR([Qmake not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
     else
@@ -11327,7 +11327,7 @@ then
 
     dnl Check for Meta Object Compiler
 
-    AC_PATH_PROGS( MOC5, [moc-qt5 moc], no, [`dirname $qt5_libdir`/bin:$QT5DIR/bin:$PATH] )
+    AC_PATH_PROGS( MOC5, [moc-qt5 moc], no, [`dirname $qt5_libdir`/bin:$QT5DIR/bin:$PATH])
     if test "$MOC5" = "no"; then
         AC_MSG_ERROR([Qt Meta Object Compiler not found.  Please specify
 the root of your Qt installation by exporting QT5DIR before running "configure".])
