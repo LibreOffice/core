@@ -237,7 +237,6 @@ namespace svt { namespace table
 
     void GridTableRenderer::PaintColumnHeader(
         ColPos _nCol,
-        bool, // _bActive: no special painting for the active column at the moment
         vcl::RenderContext& rRenderContext,
         const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
     {
@@ -362,7 +361,7 @@ namespace svt { namespace table
     }
 
 
-    void GridTableRenderer::PaintRowHeader(bool /*i_hasControlFocus*/, bool /*_bSelected*/, vcl::RenderContext& rRenderContext,
+    void GridTableRenderer::PaintRowHeader(vcl::RenderContext& rRenderContext,
                                            const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
     {
         rRenderContext.Push( PushFlags::LINECOLOR | PushFlags::TEXTCOLOR );
@@ -544,7 +543,7 @@ namespace svt { namespace table
     }
 
 
-    void GridTableRenderer::HideCellCursor( vcl::Window& _rView, const tools::Rectangle&)
+    void GridTableRenderer::HideCellCursor( vcl::Window& _rView )
     {
         _rView.HideFocus();
     }

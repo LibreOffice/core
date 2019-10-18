@@ -163,15 +163,6 @@ include/svl/svdde.hxx:239
 include/svl/svdde.hxx:241
     _Bool DdeTopic::MakeItem(const class rtl::OUString &,)
     0
-include/svtools/table/tablerenderer.hxx:113
-    void svt::table::ITableRenderer::PaintColumnHeader(int,_Bool,class OutputDevice &,const class tools::Rectangle &,const class StyleSettings &,)
-    10111
-include/svtools/table/tablerenderer.hxx:177
-    void svt::table::ITableRenderer::PaintRowHeader(_Bool,_Bool,class OutputDevice &,const class tools::Rectangle &,const class StyleSettings &,)
-    00111
-include/svtools/table/tablerenderer.hxx:224
-    void svt::table::ITableRenderer::HideCellCursor(class vcl::Window &,const class tools::Rectangle &,)
-    10
 include/svx/IAccessibleParent.hxx:80
     _Bool accessibility::IAccessibleParent::ReplaceChild(class accessibility::AccessibleShape *,const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,const long,const class accessibility::AccessibleShapeTreeInfo &,)
     1101

@@ -100,9 +100,6 @@ namespace svt { namespace table
 
             @param _nCol
                 the index of the column to paint
-            @param _bActive
-                <TRUE/> if and only if the column whose column is to be painted
-                contains the active cell.
             @param _rDevice
                 denotes the device to paint onto
             @param _rArea
@@ -110,7 +107,7 @@ namespace svt { namespace table
             @param _rStyle
                 the style to be used for drawing
         */
-        virtual void    PaintColumnHeader( ColPos _nCol, bool _bActive,
+        virtual void    PaintColumnHeader( ColPos _nCol,
                             vcl::RenderContext& _rDevice, const tools::Rectangle& _rArea,
                             const StyleSettings& _rStyle ) = 0;
 
@@ -154,19 +151,6 @@ namespace svt { namespace table
             The row to be painted is denoted by the most recent call to
             ->PrepareRow.
 
-            @param i_hasControlFocus
-                <TRUE/> if and only if the table control currently has the focus
-                <br/>
-                Note that this flag is equal to the respective flag in the
-                previous ->PrepareRow call, it's passed here for convenience
-                only.
-            @param _bSelected
-                <TRUE/> if and only if the row whose header cell is to be
-                painted is selected currently.
-                <br/>
-                Note that this flag is equal to the respective flag in the
-                previous ->PrepareRow call, it's passed here for convenience
-                only.
             @param _rDevice
                 denotes the device to paint onto
             @param _rArea
@@ -174,7 +158,7 @@ namespace svt { namespace table
             @param _rStyle
                 the style to be used for drawing
         */
-        virtual void    PaintRowHeader( bool i_hasControlFocus, bool _bSelected,
+        virtual void    PaintRowHeader(
                             vcl::RenderContext& _rDevice, tools::Rectangle const & _rArea,
                             StyleSettings const & _rStyle ) = 0;
 
@@ -221,7 +205,7 @@ namespace svt { namespace table
             The cell cursor is used to indicate the active/current cell
             of a table control.
         */
-        virtual void    HideCellCursor( vcl::Window& _rView, const tools::Rectangle& _rCursorRect) = 0;
+        virtual void    HideCellCursor( vcl::Window& _rView ) = 0;
 
         /** checks whether a given cell content fits into a given target area on a given device.
 
