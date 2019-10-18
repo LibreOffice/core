@@ -148,9 +148,6 @@ include/sfx2/sidebar/TitleBar.hxx:61
 include/sfx2/stbitem.hxx:100
     _Bool SfxStatusBarControl::MouseButtonUp(const class MouseEvent &,)
     0
-include/sfx2/thumbnailviewitem.hxx:118
-    void ThumbnailViewItem::calculateItemsPosition(const long,const long,const long,unsigned int,const struct ThumbnailItemAttributes *,)
-    10111
 include/svl/svdde.hxx:228
     _Bool DdeGetPutItem::Put(const class DdeData *,)
     0

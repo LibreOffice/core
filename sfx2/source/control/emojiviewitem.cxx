@@ -37,7 +37,7 @@ EmojiViewItem::~EmojiViewItem ()
 }
 
 
-void EmojiViewItem::calculateItemsPosition (const long /*nThumbnailHeight*/, const long,
+void EmojiViewItem::calculateItemsPosition (const long /*nThumbnailHeight*/,
                                                 const long /*nPadding*/, sal_uInt32 nMaxTextLength,
                                                 const ThumbnailItemAttributes *pAttrs)
 {

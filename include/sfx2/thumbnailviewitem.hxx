@@ -115,7 +115,7 @@ public:
 
     const tools::Rectangle& getDrawArea () const { return maDrawArea; }
 
-    virtual void calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
+    virtual void calculateItemsPosition (const long nThumbnailHeight,
                                          const long nPadding, sal_uInt32 nMaxTextLength,
                                          const ThumbnailItemAttributes *pAttrs);
 
