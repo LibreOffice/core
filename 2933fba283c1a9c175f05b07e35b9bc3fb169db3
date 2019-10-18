@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_21ddf06f",
+        "filename": "sw/source/ui/dbui/mmresultdialogs.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-10-18T18:31:46Z",
+      "side": 1,
+      "message": "Maybe this would have to be guarded by \u0027pOrigView-\u003eGetWrtShell().StartAction()\u0027 and \u0027EndAction()\u0027 as well?",
+      "range": {
+        "startLine": 530,
+        "startChar": 4,
+        "endLine": 530,
+        "endChar": 80
+      },
+      "revId": "2933fba283c1a9c175f05b07e35b9bc3fb169db3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
