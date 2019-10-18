@@ -2,14 +2,6 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <object class="GtkTreeStore" id="liststore2">
-    <columns>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">50</property>
     <property name="upper">65535</property>
@@ -24,6 +16,14 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkTreeStore" id="liststore2">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkBox" id="WordCompletionPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -37,92 +37,28 @@
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
+        <property name="row_spacing">6</property>
         <property name="column_spacing">12</property>
         <child>
           <object class="GtkGrid" id="grid2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
             <property name="row_spacing">6</property>
-            <child>
-              <object class="GtkButton" id="delete">
-                <property name="label" translatable="yes" context="wordcompletionpage|delete">_Delete Entry</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="shadow_type">in</property>
-                <child>
-                  <object class="GtkTreeView" id="entries">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="model">liststore2</property>
-                    <property name="headers_visible">False</property>
-                    <property name="search_column">0</property>
-                    <property name="show_expanders">False</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                        <property name="resizable">True</property>
-                        <property name="spacing">6</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderer2"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkGrid" id="grid3">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="row_spacing">12</property>
             <child>
               <object class="GtkGrid" id="grid4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="row_spacing">6</property>
                 <child>
-                  <object class="GtkLabel" id="label1">
+                  <object class="GtkLabel" id="wordcompletion">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="wordcompletionpage|label1">_Max. entries:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">maxentries</property>
+                    <property name="label" translatable="yes" context="wordcompletionpage|wordcompletion">Word Completion</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -130,76 +66,27 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="maxentries">
+                  <object class="GtkCheckButton" id="enablewordcomplete">
+                    <property name="label" translatable="yes" context="wordcompletionpage|enablewordcomplete">Enable word _completion</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="halign">start</property>
-                    <property name="text">500</property>
-                    <property name="adjustment">adjustment1</property>
-                    <property name="value">500</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid5">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <child>
-                  <object class="GtkLabel" id="label2">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="wordcompletionpage|label2">Mi_n. word length:</property>
+                    <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">maxentries</property>
                     <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="minwordlen">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="halign">start</property>
-                    <property name="text">100</property>
-                    <property name="adjustment">adjustment2</property>
-                    <property name="value">100</property>
+                    <property name="draw_indicator">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
                   </packing>
                 </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid6">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkAlignment" id="alignment1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
+                    <property name="left_padding">18</property>
                     <child>
-                      <object class="GtkGrid" id="grid7">
+                      <object class="GtkGrid" id="grid41">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="row_spacing">6</property>
@@ -238,22 +125,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="enablewordcomplete">
-                    <property name="label" translatable="yes" context="wordcompletionpage|enablewordcomplete">Enable word _completion</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="top_attach">2</property>
                   </packing>
                 </child>
               </object>
@@ -263,43 +135,193 @@
               </packing>
             </child>
             <child>
-              <object class="GtkGrid" id="grid8">
+              <object class="GtkAlignment" id="alignment2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
+                <property name="left_padding">18</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment2">
+                  <object class="GtkGrid" id="grid7">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
+                    <property name="hexpand">True</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">6</property>
                     <child>
-                      <object class="GtkGrid" id="grid9">
+                      <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="row_spacing">6</property>
+                        <property name="label" translatable="yes" context="wordcompletionpage|label2">Mi_n. word length:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">maxentries</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="minwordlen">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="text">100</property>
+                        <property name="adjustment">adjustment2</property>
+                        <property name="value">100</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="wordcompletionpage|label1">_Max. entries:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">maxentries</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="maxentries">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="text">500</property>
+                        <property name="adjustment">adjustment1</property>
+                        <property name="value">500</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label3">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="wordcompletionpage|label3">Acc_ept with:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">acceptwith</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="acceptwith">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="grid3">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">12</property>
+            <child>
+              <object class="GtkLabel" id="collectedwords">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="acorreplacepage|collectedwords">Collected Words</property>
+                <property name="xalign">0</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="entries">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore2</property>
+                    <property name="headers_visible">False</property>
+                    <property name="search_column">0</property>
+                    <property name="show_expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
                         <child>
-                          <object class="GtkCheckButton" id="whenclosing">
-                            <property name="label" translatable="yes" context="wordcompletionpage|whenclosing">_When closing a document, remove the words collected from it from the list</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
+                          <object class="GtkCellRendererText" id="cellrenderer2"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
                         </child>
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
                 </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="whenclosing">
+                <property name="label" translatable="yes" context="wordcompletionpage|whenclosing">_When closing a document, remove the words collected from it from the list</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_underline">True</property>
+                <property name="xalign">0</property>
+                <property name="yalign">0</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <child>
                   <object class="GtkCheckButton" id="collectwords">
                     <property name="label" translatable="yes" context="wordcompletionpage|collectwords">C_ollect words</property>
@@ -311,8 +333,25 @@
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="delete">
+                    <property name="label" translatable="yes" context="wordcompletionpage|delete">_Delete</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
@@ -321,44 +360,9 @@
                 <property name="top_attach">1</property>
               </packing>
             </child>
-            <child>
-              <object class="GtkGrid" id="grid10">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <child>
-                  <object class="GtkLabel" id="label3">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="wordcompletionpage|label3">Acc_ept with:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">acceptwith</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="acceptwith">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
+            <property name="left_attach">1</property>
             <property name="top_attach">0</property>
           </packing>
         </child>
