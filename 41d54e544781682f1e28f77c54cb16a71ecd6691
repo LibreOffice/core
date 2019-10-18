@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_94e68716",
+        "filename": "sc/inc/interpretercontext.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-18T06:26:31Z",
+      "side": 1,
+      "message": "It\u0027s a pity that C++17 doesn\u0027t yet support default member initializers for bit fields (a feature of C++20); this would look cleaner like\n\n    struct NFIndexAndFmtType\n    {\n        sal_uInt32 nIndex \u003d 0;\n        SvNumFormatType eType : 16 \u003d 0;\n        bool bIsValid : 1 \u003d 0;\n    };",
+      "revId": "41d54e544781682f1e28f77c54cb16a71ecd6691",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
