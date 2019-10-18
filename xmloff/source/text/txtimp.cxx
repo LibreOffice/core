@@ -585,7 +585,7 @@ struct XMLTextImportHelper::Impl
     typedef ::std::pair< OUString, OUString> field_name_type_t;
     typedef ::std::pair< OUString, OUString > field_param_t;
     typedef ::std::vector< field_param_t > field_params_t;
-    typedef ::std::pair< field_name_type_t, field_params_t > field_stack_item_t;
+    typedef ::std::tuple<field_name_type_t, field_params_t, uno::Reference<text::XFormField>> field_stack_item_t;
     typedef ::std::stack< field_stack_item_t > field_stack_t;
 
     field_stack_t m_FieldStack;
@@ -2632,13 +2632,23 @@ OUString XMLTextImportHelper::FindActiveBookmarkName()
 void XMLTextImportHelper::pushFieldCtx( const OUString& name, const OUString& type )
 {
     m_xImpl->m_FieldStack.push(Impl::field_stack_item_t(
-        Impl::field_name_type_t(name, type), Impl::field_params_t()));
+        Impl::field_name_type_t(name, type), Impl::field_params_t(), uno::Reference<text::XFormField>{}));
 }
 
-void XMLTextImportHelper::popFieldCtx()
+uno::Reference<text::XFormField>
+XMLTextImportHelper::popFieldCtx()
 {
+    uno::Reference<text::XFormField> xRet;
     if ( !m_xImpl->m_FieldStack.empty() )
+    {
+        xRet = std::get<2>(m_xImpl->m_FieldStack.top());
         m_xImpl->m_FieldStack.pop();
+    }
+    else
+    {
+        SAL_INFO("xmloff.text", "unexpected fieldmark end");
+    }
+    return xRet;
 }
 
 void XMLTextImportHelper::addFieldParam( const OUString& name, const OUString& value )
@@ -2646,7 +2656,7 @@ void XMLTextImportHelper::addFieldParam( const OUString& name, const OUString& v
     assert(!m_xImpl->m_FieldStack.empty());
     if (!m_xImpl->m_FieldStack.empty()) {
         Impl::field_stack_item_t & FieldStackItem(m_xImpl->m_FieldStack.top());
-        FieldStackItem.second.emplace_back( name, value );
+        std::get<1>(FieldStackItem).emplace_back( name, value );
     }
 }
 
@@ -2655,7 +2665,7 @@ OUString XMLTextImportHelper::getCurrentFieldType()
     assert(!m_xImpl->m_FieldStack.empty());
     if (!m_xImpl->m_FieldStack.empty())
     {
-        return m_xImpl->m_FieldStack.top().first.second;
+        return std::get<0>(m_xImpl->m_FieldStack.top()).second;
     }
     else
     {
@@ -2673,8 +2683,9 @@ void XMLTextImportHelper::setCurrentFieldParamsTo(css::uno::Reference< css::text
     assert(!m_xImpl->m_FieldStack.empty());
     if (!m_xImpl->m_FieldStack.empty() && xFormField.is())
     {
-        FieldParamImporter(&m_xImpl->m_FieldStack.top().second,
+        FieldParamImporter(&std::get<1>(m_xImpl->m_FieldStack.top()),
             xFormField->getParameters()).Import();
+        std::get<2>(m_xImpl->m_FieldStack.top()) = xFormField;
     }
 }
 
