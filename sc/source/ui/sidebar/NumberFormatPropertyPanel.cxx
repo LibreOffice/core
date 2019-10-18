@@ -189,8 +189,7 @@ void NumberFormatPropertyPanel::HandleContextChange(
 void NumberFormatPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
-    const SfxPoolItem* pState,
-    const bool)
+    const SfxPoolItem* pState)
 {
     switch(nSID)
     {

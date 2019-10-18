@@ -999,8 +999,7 @@ void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefaultOrSet,
 void AreaPropertyPanelBase::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
-    const SfxPoolItem* pState,
-    const bool /*bIsEnabled*/)
+    const SfxPoolItem* pState)
 {
     const bool bDisabled(SfxItemState::DISABLED == eState);
     const bool bDefaultOrSet(SfxItemState::DEFAULT <= eState);

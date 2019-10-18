@@ -106,8 +106,7 @@ VclPtr<vcl::Window> LinePropertyPanel::Create (
 void LinePropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
-    const SfxPoolItem* pState,
-    const bool /*bIsEnabled*/)
+    const SfxPoolItem* pState)
 {
     const bool bDisabled(SfxItemState::DISABLED == eState);
     const bool bSetOrDefault = eState >= SfxItemState::DEFAULT;

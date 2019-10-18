@@ -406,8 +406,7 @@ void ChartSeriesPanel::HandleContextChange(
 void ChartSeriesPanel::NotifyItemUpdate(
     sal_uInt16 /*nSID*/,
     SfxItemState /*eState*/,
-    const SfxPoolItem* /*pState*/,
-    const bool )
+    const SfxPoolItem* /*pState*/ )
 {
 }
 

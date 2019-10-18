@@ -156,8 +156,7 @@ void PageFormatPanel::Initialize()
 void PageFormatPanel::NotifyItemUpdate(
     const sal_uInt16 nSId,
     const SfxItemState eState,
-    const SfxPoolItem* pState,
-    const bool)
+    const SfxPoolItem* pState)
 {
     switch(nSId)
     {

@@ -67,8 +67,7 @@ public:
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSID,
         const SfxItemState eState,
-        const SfxPoolItem* pState,
-        const bool bIsEnabled) override;
+        const SfxPoolItem* pState) override;
     virtual void HandleContextChange(
         const vcl::EnumContext& rContext) override;
 

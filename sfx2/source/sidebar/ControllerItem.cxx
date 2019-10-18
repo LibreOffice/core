@@ -64,7 +64,7 @@ void ControllerItem::StateChanged (
     SfxItemState eState,
     const SfxPoolItem* pState)
 {
-    mrItemUpdateReceiver.NotifyItemUpdate(nSID, eState, pState, IsEnabled(eState));
+    mrItemUpdateReceiver.NotifyItemUpdate(nSID, eState, pState);
 }
 
 bool ControllerItem::IsEnabled (SfxItemState eState)
@@ -88,7 +88,7 @@ void ControllerItem::RequestUpdate()
 {
     std::unique_ptr<SfxPoolItem> pState;
     const SfxItemState eState (GetBindings().QueryState(GetId(), pState));
-    mrItemUpdateReceiver.NotifyItemUpdate(GetId(), eState, pState.get(), IsEnabled(eState));
+    mrItemUpdateReceiver.NotifyItemUpdate(GetId(), eState, pState.get());
 }
 
 ControllerItem::ItemUpdateReceiverInterface::~ItemUpdateReceiverInterface()
