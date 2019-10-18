@@ -282,8 +282,7 @@ const GraphicObject* SdrGrafObj::GetReplacementGraphicObject() const
         {
             const_cast< SdrGrafObj* >(this)->mpReplacementGraphicObject.reset(new GraphicObject(rVectorGraphicDataPtr->getReplacement()));
         }
-        else if (mpGraphicObject->GetGraphic().hasPdfData() ||
-                 mpGraphicObject->GetGraphic().GetType() == GraphicType::GdiMetafile)
+        else if (mpGraphicObject->GetGraphic().GetType() == GraphicType::GdiMetafile)
         {
             // Replacement graphic for PDF and metafiles is just the bitmap.
             const_cast<SdrGrafObj*>(this)->mpReplacementGraphicObject.reset(new GraphicObject(mpGraphicObject->GetGraphic().GetBitmapEx()));
@@ -880,16 +879,6 @@ GDIMetaFile SdrGrafObj::GetMetaFile(GraphicType &rGraphicType) const
         return GetTransformedGraphic(SdrGrafObjTransformsAttrs::MIRROR).GetGDIMetaFile();
     }
     return GDIMetaFile();
-}
-
-bool SdrGrafObj::isEmbeddedPdfData() const
-{
-   return mpGraphicObject->GetGraphic().hasPdfData();
-}
-
-const std::shared_ptr<std::vector<sal_Int8>> & SdrGrafObj::getEmbeddedPdfData() const
-{
-   return mpGraphicObject->GetGraphic().getPdfData();
 }
 
 sal_Int32 SdrGrafObj::getEmbeddedPageNumber() const

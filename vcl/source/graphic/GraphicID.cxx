@@ -42,16 +42,6 @@ GraphicID::GraphicID(ImpGraphic const& rGraphic)
                 0, rVectorGraphicDataPtr->getVectorGraphicDataArray().getConstArray(),
                 rVectorGraphicDataPtr->getVectorGraphicDataArrayLength());
         }
-        else if (rGraphic.hasPdfData())
-        {
-            std::shared_ptr<std::vector<sal_Int8>> pPdfData = rGraphic.getPdfData();
-            const BitmapEx& rBmpEx = rGraphic.ImplGetBitmapExRef();
-
-            mnID1 |= (rGraphic.mnPageNumber & 0x0fffffff);
-            mnID2 = rBmpEx.GetSizePixel().Width();
-            mnID3 = rBmpEx.GetSizePixel().Height();
-            mnID4 = vcl_get_checksum(0, pPdfData->data(), pPdfData->size());
-        }
         else if (rGraphic.ImplIsAnimated())
         {
             const Animation aAnimation(rGraphic.ImplGetAnimation());
