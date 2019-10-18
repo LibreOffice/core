@@ -1690,8 +1690,8 @@ void ScViewFunc::FillCrossDblClick()
             // Determine the shortest data column to end the fill.
             SCROW nY = nEndY + 1;
             // FindAreaPos() returns the start row of the next data block if
-            // the current row is the the last row of a data block and an empty
-            // cell follows. Somewhat unexpected behaviour..
+            // the current row is the last row of a data block and an empty
+            // cell follows. Somewhat unexpected behaviour...
             // So check beforehand if there is one non-empty cell following.
             if (pDoc->HasData( nCol, nY + 1, nTab))
             {

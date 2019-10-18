@@ -80,7 +80,7 @@ public class Helper {
     }
 
     /**
-     * Returns created identifier object for given URL..
+     * Returns created identifier object for given URL...
      *
      *@return     XContent       Created identifier object for given URL
      */

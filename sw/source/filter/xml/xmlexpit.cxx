@@ -886,7 +886,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
             const SvxBrushItem& rBrush = dynamic_cast<const SvxBrushItem&>(rItem);
 
             // note: the graphic is only exported if nMemberId equals
-            //       MID_GRAPHIC..
+            //       MID_GRAPHIC...
             //       If not, only the color or transparency is exported
 
             switch( nMemberId )
