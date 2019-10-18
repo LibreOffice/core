@@ -379,7 +379,7 @@ private:
     void        handleListStore(xmlreader::XmlReader &reader, const OString &rID, const OString &rClass);
     void        handleRow(xmlreader::XmlReader &reader, const OString &rID);
     void        handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
-    void        handleMenu(xmlreader::XmlReader &reader, const OString &rID);
+    VclPtr<Menu> handleMenu(xmlreader::XmlReader &reader, const OString &rID, bool bMenuBar);
     std::vector<ComboBoxTextItem> handleItems(xmlreader::XmlReader &reader) const;
 
     void        handleSizeGroup(xmlreader::XmlReader &reader);

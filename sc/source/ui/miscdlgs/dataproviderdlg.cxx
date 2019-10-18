@@ -945,7 +945,7 @@ std::shared_ptr<sc::DataTransformation> ScDateTimeTransformation::getTransformat
 
 ScDataProviderDlg::ScDataProviderDlg(vcl::Window* pParent, std::shared_ptr<ScDocument> pDoc,
                                      const ScDocument* pDocument)
-    : ModalDialog(pParent, "dataproviderdlg", "modules/scalc/ui/dataproviderdlg.ui", true)
+    : ModalDialog(pParent, "dataproviderdlg", "modules/scalc/ui/dataproviderdlg.ui")
     , mpDoc(std::move(pDoc))
     , mpBar(VclPtr<MenuBar>::Create())
 {
