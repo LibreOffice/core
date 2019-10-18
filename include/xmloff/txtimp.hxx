@@ -566,7 +566,7 @@ public:
     OUString FindActiveBookmarkName();
 
     void pushFieldCtx( const OUString& name, const OUString& type );
-    void popFieldCtx();
+    css::uno::Reference<css::text::XFormField> popFieldCtx();
     void addFieldParam( const OUString& name, const OUString& value );
     void setCurrentFieldParamsTo(css::uno::Reference< css::text::XFormField> const &xFormField);
     OUString getCurrentFieldType();

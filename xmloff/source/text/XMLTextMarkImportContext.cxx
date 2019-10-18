@@ -158,11 +158,6 @@ void XMLTextMarkImportContext::StartElement(
         m_sBookmarkName.clear();
     }
 
-    if (IsXMLToken(GetLocalName(), XML_FIELDMARK_END))
-    {
-        m_sBookmarkName = m_rHelper.FindActiveBookmarkName();
-    }
-
     if (IsXMLToken(GetLocalName(), XML_FIELDMARK_START) || IsXMLToken(GetLocalName(), XML_FIELDMARK))
     {
         if (m_sBookmarkName.isEmpty())
@@ -180,17 +175,75 @@ void XMLTextMarkImportContext::StartElement(
     }
 }
 
+static auto InsertFieldmark(SvXMLImport & rImport,
+        XMLTextImportHelper & rHelper, OUString const& rName) -> void
+{
+    assert(rHelper.hasCurrentFieldCtx()); // was set up in StartElement()
+
+    // fdo#86795 check if it's actually a checkbox first
+    OUString const type(rHelper.getCurrentFieldType());
+    OUString const fieldmarkTypeName = lcl_getFieldmarkName(type);
+    if (fieldmarkTypeName == ODF_FORMCHECKBOX ||
+        fieldmarkTypeName == ODF_FORMDROPDOWN)
+    {   // sw can't handle checkbox with start+end
+        SAL_INFO("xmloff.text", "invalid fieldmark-start/fieldmark-end ignored");
+        return;
+    }
+
+    Reference<XTextContent> const xContent = XMLTextMarkImportContext::CreateAndInsertMark(
+            rImport, "com.sun.star.text.Fieldmark",
+            rName, rHelper.GetCursorAsRange());
+
+    if (xContent.is())
+    {
+        // setup fieldmark...
+        Reference<text::XFormField> const xFormField(xContent, UNO_QUERY);
+        assert(xFormField.is());
+        xFormField->setFieldType(fieldmarkTypeName);
+        rHelper.setCurrentFieldParamsTo(xFormField);
+        // move cursor after setFieldType as that may delete/re-insert
+        rHelper.GetCursor()->gotoRange(xContent->getAnchor()->getEnd(), false);
+        rHelper.GetCursor()->goLeft(1, false); // move before CH_TXT_ATR_FIELDEND
+    }
+}
+
+static auto PopFieldmark(XMLTextImportHelper & rHelper) -> void
+{
+    // can't verify name because it's not written as an attribute...
+    uno::Reference<text::XTextContent> const xField(rHelper.popFieldCtx(),
+            uno::UNO_QUERY);
+    if (xField.is())
+    {
+        if (rHelper.GetText() == xField->getAnchor()->getText())
+        {
+            try
+            {   // skip CH_TXT_ATR_FIELDEND
+                rHelper.GetCursor()->gotoRange(xField->getAnchor()->getEnd(), false);
+            }
+            catch (uno::Exception const&)
+            {
+                assert(false); // must succeed
+            }
+        }
+        else
+        {
+            SAL_INFO("xmloff.text", "fieldmark has invalid positions");
+            // could either dispose it or leave it to end at the end of the document?
+            xField->dispose();
+        }
+    }
+}
+
 void XMLTextMarkImportContext::EndElement()
 {
     SvXMLImportContext::EndElement();
 
     static const char sAPI_bookmark[] = "com.sun.star.text.Bookmark";
 
-    if (!m_sBookmarkName.isEmpty())
+    lcl_MarkType nTmp{};
+    if (SvXMLUnitConverter::convertEnum(nTmp, GetLocalName(), lcl_aMarkTypeMap))
     {
-        lcl_MarkType nTmp{};
-        if (SvXMLUnitConverter::convertEnum(nTmp, GetLocalName(),
-                                            lcl_aMarkTypeMap))
+        if (!m_sBookmarkName.isEmpty() || TypeFieldmarkEnd == nTmp)
         {
             switch (nTmp)
             {
@@ -249,7 +302,6 @@ void XMLTextMarkImportContext::EndElement()
                     }
                     break;
 
-                case TypeFieldmarkStart:
                 case TypeBookmarkStart:
                     // save XTextRange for later construction of bookmark
                     {
@@ -270,23 +322,20 @@ void XMLTextMarkImportContext::EndElement()
                     break;
 
                 case TypeBookmarkEnd:
+                {
+                    // tdf#94804: detect duplicate heading cross reference bookmarks
+                    if (m_sBookmarkName.startsWith("__RefHeading__"))
                     {
-                        // tdf#94804: detect duplicate heading cross reference bookmarks
-                        if (m_sBookmarkName.startsWith("__RefHeading__"))
+                        if (m_rxCrossRefHeadingBookmark.is())
                         {
-                            if (m_rxCrossRefHeadingBookmark.is())
-                            {
-                                uno::Reference<container::XNamed> const xNamed(
-                                    m_rxCrossRefHeadingBookmark, uno::UNO_QUERY);
-                                m_rHelper.AddCrossRefHeadingMapping(
-                                    m_sBookmarkName, xNamed->getName());
-                                break; // don't insert
-                            }
+                            uno::Reference<container::XNamed> const xNamed(
+                                m_rxCrossRefHeadingBookmark, uno::UNO_QUERY);
+                            m_rHelper.AddCrossRefHeadingMapping(
+                                m_sBookmarkName, xNamed->getName());
+                            break; // don't insert
                         }
                     }
-                    [[fallthrough]];
-                case TypeFieldmarkEnd:
-                {
+
                     // get old range, and construct
                     Reference<XTextRange> xStartRange;
                     std::shared_ptr< ::xmloff::ParsedRDFaAttributes >
@@ -306,7 +355,7 @@ void XMLTextMarkImportContext::EndElement()
                                 m_rHelper.GetText()->createTextCursorByRange(
                                     xEndRange);
                             try {
-                            xInsertionCursor->gotoRange(xStartRange, true);
+                                xInsertionCursor->gotoRange(xStartRange, true);
                             } catch (uno::Exception&) {
                                 OSL_ENSURE(false,
                                     "cannot go to end position of bookmark");
@@ -318,64 +367,27 @@ void XMLTextMarkImportContext::EndElement()
                             // create a file with subsequence
                             // start/end elements
 
-                            bool bImportAsField = (nTmp==TypeFieldmarkEnd && m_rHelper.hasCurrentFieldCtx());
-
-                            // fdo#86795 check if it's actually a checkbox first
-                            bool isInvalid(false);
-                            OUString fieldmarkTypeName;
-                            if (bImportAsField && m_rHelper.hasCurrentFieldCtx())
-                            {
-
-                                OUString const type(m_rHelper.getCurrentFieldType());
-                                fieldmarkTypeName = lcl_getFieldmarkName(type);
-                                if (fieldmarkTypeName == ODF_FORMCHECKBOX ||
-                                    fieldmarkTypeName == ODF_FORMDROPDOWN)
-                                {   // sw can't handle checkbox with start+end
-                                    SAL_INFO("xmloff.text", "invalid fieldmark-start/fieldmark-end ignored");
-                                    isInvalid = true;
-                                }
-                            }
-
                             Reference<XInterface> xContent;
-                            if (!isInvalid)
+                            // insert reference
+                            xContent = CreateAndInsertMark(GetImport(),
+                                    sAPI_bookmark,
+                                    m_sBookmarkName,
+                                    xInsertionCursor,
+                                    m_sXmlId);
+                            if (xRDFaAttributes)
                             {
-                                // insert reference
-                                xContent = CreateAndInsertMark(GetImport(),
-                                        (bImportAsField
-                                            ? OUString("com.sun.star.text.Fieldmark")
-                                            : sAPI_bookmark),
-                                        m_sBookmarkName,
-                                        xInsertionCursor,
-                                        m_sXmlId);
-                                if (xRDFaAttributes)
-                                {
-                                    const Reference<rdf::XMetadatable>
-                                        xMeta(xContent, UNO_QUERY);
-                                    GetImport().GetRDFaImportHelper().AddRDFa(
-                                        xMeta, xRDFaAttributes);
-                                }
-                                const Reference<XPropertySet> xPropertySet(xContent, UNO_QUERY);
-                                if (xPropertySet.is())
-                                {
-                                    xPropertySet->setPropertyValue("BookmarkHidden",    uno::Any(m_rHelper.getBookmarkHidden(m_sBookmarkName)));
-                                    xPropertySet->setPropertyValue("BookmarkCondition", uno::Any(m_rHelper.getBookmarkCondition(m_sBookmarkName)));
-                                }
+                                const Reference<rdf::XMetadatable>
+                                    xMeta(xContent, UNO_QUERY);
+                                GetImport().GetRDFaImportHelper().AddRDFa(
+                                    xMeta, xRDFaAttributes);
                             }
-
-                            if (nTmp==TypeFieldmarkEnd) {
-                                if (xContent.is() && bImportAsField) {
-                                    // setup fieldmark...
-                                    Reference< css::text::XFormField> xFormField(xContent, UNO_QUERY);
-                                    if (xFormField.is() && m_rHelper.hasCurrentFieldCtx()) {
-
-                                        xFormField->setFieldType(fieldmarkTypeName);
-                                        m_rHelper.setCurrentFieldParamsTo(xFormField);
-                                    }
-                                }
-                                m_rHelper.popFieldCtx();
+                            const Reference<XPropertySet> xPropertySet(xContent, UNO_QUERY);
+                            if (xPropertySet.is())
+                            {
+                                xPropertySet->setPropertyValue("BookmarkHidden",    uno::Any(m_rHelper.getBookmarkHidden(m_sBookmarkName)));
+                                xPropertySet->setPropertyValue("BookmarkCondition", uno::Any(m_rHelper.getBookmarkCondition(m_sBookmarkName)));
                             }
-                            if (TypeBookmarkEnd == nTmp
-                                && m_sBookmarkName.startsWith("__RefHeading__"))
+                            if (m_sBookmarkName.startsWith("__RefHeading__"))
                             {
                                 assert(xContent.is());
                                 m_rxCrossRefHeadingBookmark = xContent;
@@ -386,7 +398,16 @@ void XMLTextMarkImportContext::EndElement()
                     // else: no start found -> ignore!
                     break;
                 }
-
+                case TypeFieldmarkStart: // no separator, so insert at start
+                {
+                    InsertFieldmark(GetImport(), m_rHelper, m_sBookmarkName);
+                    break;
+                }
+                case TypeFieldmarkEnd:
+                {
+                    PopFieldmark(m_rHelper);
+                    break;
+                }
                 case TypeReferenceStart:
                 case TypeReferenceEnd:
                     OSL_FAIL("reference start/end are handled in txtparai !");
