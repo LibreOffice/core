@@ -112,9 +112,6 @@ include/editeng/editeng.hxx:478
 include/editeng/editeng.hxx:503
     void EditEngine::FieldClicked(const class SvxFieldItem &,int,int,)
     100
-include/editeng/svxrtf.hxx:247
-    void SvxRTFParser::UnknownAttrToken(int,class SfxItemSet *,)
-    10
 include/filter/msfilter/msdffimp.hxx:546
     _Bool SvxMSDffManager::ShapeHasText(unsigned long,unsigned long,)const
     00

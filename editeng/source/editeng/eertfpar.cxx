@@ -229,7 +229,7 @@ void EditRTFParser::NextToken( int nToken )
     }
 }
 
-void EditRTFParser::UnknownAttrToken( int nToken, SfxItemSet* )
+void EditRTFParser::UnknownAttrToken( int nToken )
 {
     // for Tokens which are not evaluated in ReadAttr
     // Actually, only for Calc (RTFTokenHdl), so that RTF_INTBL

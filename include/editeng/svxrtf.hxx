@@ -244,7 +244,7 @@ protected:
                                  sal_Int32& rCntPos )=0;
     virtual void SetAttrInDoc( SvxRTFItemStackType &rSet );
     // for Tokens, which are not evaluated in ReadAttr
-    virtual void UnknownAttrToken( int nToken, SfxItemSet* pSet );
+    virtual void UnknownAttrToken( int nToken );
 
     // if no-one would like to have any twips
     virtual void CalcValue();

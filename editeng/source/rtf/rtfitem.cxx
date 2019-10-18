@@ -256,7 +256,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_CS:
             case RTF_LS:
             case RTF_ILVL:
-                    UnknownAttrToken( nToken, pSet );
+                    UnknownAttrToken( nToken );
                     break;
 
             case RTF_S:
@@ -1110,7 +1110,7 @@ ATTR_SETEMPHASIS:
                         case RTF_PGDSCNO:
                         case RTF_PGBRK:
                         case RTF_SOUTLVL:
-                            UnknownAttrToken( nToken, pSet );
+                            UnknownAttrToken( nToken );
                             // overwrite the closing parenthesis
                             break;
 
@@ -1899,7 +1899,7 @@ void SvxRTFParser::CalcValue()
 }
 
 // for tokens that are not evaluated in ReadAttr
-void SvxRTFParser::UnknownAttrToken( int, SfxItemSet* )
+void SvxRTFParser::UnknownAttrToken( int )
 {
 }
 
