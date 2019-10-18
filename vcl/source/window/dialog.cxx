@@ -1517,11 +1517,6 @@ VclBuilderContainer::~VclBuilderContainer()
 {
 }
 
-ModalDialog::ModalDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription ) :
-    Dialog(pParent, rID, rUIXMLDescription, WindowType::MODALDIALOG, InitFlag::Default)
-{
-}
-
 void Dialog::Activate()
 {
     if (GetType() == WindowType::MODELESSDIALOG)

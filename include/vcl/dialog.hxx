@@ -166,21 +166,6 @@ public:
     vcl::Window*    get_widget_for_response(int nResponse);
 };
 
-class VCL_DLLPUBLIC ModalDialog : public Dialog
-{
-public:
-    explicit        ModalDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
-
-protected:
-    using Window::Show;
-    using Window::Hide;
-
-private:
-
-    SAL_DLLPRIVATE         ModalDialog (const ModalDialog &) = delete;
-    SAL_DLLPRIVATE         ModalDialog & operator= (const ModalDialog &) = delete;
-};
-
 #endif // INCLUDED_VCL_DIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
