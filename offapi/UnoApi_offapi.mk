@@ -212,6 +212,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/graphic,\
 	Primitive2DTools \
 	SvgTools \
 	EmfTools \
+	PdfTools \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/inspection,\
 	DefaultHelpProvider \
@@ -2722,6 +2723,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/graphic,\
 	XPrimitiveFactory2D \
 	XSvgParser \
 	XEmfParser \
+	XPdfDecomposer \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/i18n,\
 	AmPmValue \

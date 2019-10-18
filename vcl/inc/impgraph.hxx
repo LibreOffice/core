@@ -69,10 +69,6 @@ private:
     // cache checksum computation
     mutable BitmapChecksum       mnChecksum = 0;
 
-    /// The PDF stream from which this Graphic is rendered,
-    /// as converted (version downgraded) from the original,
-    /// which should be in GfxLink.
-    std::shared_ptr<std::vector<sal_Int8>> mpPdfData;
     std::unique_ptr<GraphicID>   mpGraphicID;
     GraphicExternalLink          maGraphicExternalLink;
 
@@ -120,11 +116,6 @@ private:
         if (!mpGraphicID)
             mpGraphicID.reset(new GraphicID(*this));
         return mpGraphicID->getIDString();
-    }
-
-    bool hasPdfData() const
-    {
-        return mpPdfData && !mpPdfData->empty();
     }
 
     void                ImplCreateSwapInfo();
@@ -208,10 +199,6 @@ private:
     friend void         ReadImpGraphic(SvStream& rIStm, ImpGraphic& rImpGraphic);
 
     const VectorGraphicDataPtr& getVectorGraphicData() const;
-
-    const std::shared_ptr<std::vector<sal_Int8>> & getPdfData() const;
-
-    void setPdfData(const std::shared_ptr<std::vector<sal_Int8>>& rPdfData);
 
     bool ensureAvailable () const;
 
