@@ -91,8 +91,9 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
 {
     WW8FormulaEditBox aFormula(*this);
 
-    if (pF->nLCode && rStr[pF->nLCode-1]==0x01) {
-        ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_EDIT);
+    sal_Int32 const nPos(rStr.indexOf(0x01));
+    if (pF->nLCode && nPos != -1 && nPos < pF->nLCode) {
+        ImportFormulaControl(aFormula, pF->nSCode + nPos, WW8_CT_EDIT);
     }
 
     /*

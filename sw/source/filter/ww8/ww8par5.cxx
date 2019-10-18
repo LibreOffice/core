@@ -895,6 +895,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     if (aF.nId == 33) aF.bCodeNest=false; // do not recurse into nested page fields
     bool bCodeNest = aF.bCodeNest;
     if ( aF.nId == 6 ) bCodeNest = false; // We can handle them and lose the inner data
+    if (aF.nId == 70) bCodeNest = false; // need to import 0x01 in FORMTEXT
 
     m_aFieldStack.emplace_back(*m_pPaM->GetPoint(), aF.nId);
 
