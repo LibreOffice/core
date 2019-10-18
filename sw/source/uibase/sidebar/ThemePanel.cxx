@@ -502,8 +502,7 @@ void ThemePanel::DoubleClickHdl()
 
 void ThemePanel::NotifyItemUpdate(const sal_uInt16 /*nSId*/,
                                          const SfxItemState /*eState*/,
-                                         const SfxPoolItem* /*pState*/,
-                                         const bool /*bIsEnabled*/)
+                                         const SfxPoolItem* /*pState*/)
 {
 }
 

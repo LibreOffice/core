@@ -257,8 +257,7 @@ void AlignmentPropertyPanel::HandleContextChange(
 void AlignmentPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
-    const SfxPoolItem* pState,
-    const bool)
+    const SfxPoolItem* pState)
 {
     switch(nSID)
     {

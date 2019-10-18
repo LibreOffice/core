@@ -754,8 +754,7 @@ void SlideBackground::DataChanged (const DataChangedEvent& /*rEvent*/)
 void SlideBackground::NotifyItemUpdate(
     const sal_uInt16 nSID,
     const SfxItemState eState,
-    const SfxPoolItem* pState,
-    const bool)
+    const SfxPoolItem* pState)
 {
     switch(nSID)
     {

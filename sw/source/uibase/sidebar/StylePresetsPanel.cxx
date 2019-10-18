@@ -218,8 +218,7 @@ IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl, ValueSet*, void)
 
 void StylePresetsPanel::NotifyItemUpdate(const sal_uInt16 /*nSId*/,
                                          const SfxItemState /*eState*/,
-                                         const SfxPoolItem* /*pState*/,
-                                         const bool /*bIsEnabled*/)
+                                         const SfxPoolItem* /*pState*/)
 {
 }
 

@@ -32,8 +32,7 @@ public:
 
     virtual void NotifyItemUpdate(const sal_uInt16 nSId,
                                   const SfxItemState eState,
-                                  const SfxPoolItem* pState,
-                                  const bool bIsEnabled) override;
+                                  const SfxPoolItem* pState) override;
 
 private:
     struct TemplateEntry

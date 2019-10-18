@@ -199,8 +199,7 @@ void CellAppearancePropertyPanel::HandleContextChange(const vcl::EnumContext& rC
 void CellAppearancePropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
-    const SfxPoolItem* pState,
-    const bool)
+    const SfxPoolItem* pState)
 {
     switch(nSID)
     {
