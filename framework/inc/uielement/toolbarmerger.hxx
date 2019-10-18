@@ -27,6 +27,7 @@
 #include <uielement/spinfieldtoolbarcontroller.hxx>
 #include <uielement/edittoolbarcontroller.hxx>
 #include <uielement/dropdownboxtoolbarcontroller.hxx>
+#include <uielement/FixedTextToolbarController.hxx>
 #include <uielement/commandinfo.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
