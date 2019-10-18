@@ -326,7 +326,7 @@ $(CLANGOUTDIR)/clang.pch: $(CLANGINDIR)/precompiled_clang.hxx \
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),PCH,1)
 	$(QUIET)$(COMPILER_PLUGINS_CXX) -x c++-header $(CLANGDEFS) $(CLANGCXXFLAGS) $(CLANGWERROR) \
         $(CLANGINCLUDES) -I$(BUILDDIR)/config_host -I$(CLANGINDIR) -DPCH_LEVEL=$(gb_ENABLE_PCH) \
-        -fPIC $< -o $@ -MMD -MT $@ -MP -MF $(CLANGOUTDIR)/clang.pch.d
+        -fPIC -c $< -o $@ -MMD -MT $@ -MP -MF $(CLANGOUTDIR)/clang.pch.d
 endif
 -include $(CLANGOUTDIR)/clang.pch.d
 
@@ -343,7 +343,7 @@ $(CLANGOUTDIR)/sharedvisitor/clang.pch: $(CLANGINDIR)/sharedvisitor/precompiled_
         | $(CLANGOUTDIR)/sharedvisitor
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),PCH,1)
 	$(QUIET)$(CLANGDIR)/bin/clang -x c++-header $(LO_CLANG_ANALYZER_PCH_CXXFLAGS) \
-        $(COMPILER_PLUGINS_TOOLING_ARGS) $< -o $@ -MMD -MT $@ -MP \
+        $(COMPILER_PLUGINS_TOOLING_ARGS) -c $< -o $@ -MMD -MT $@ -MP \
         -MF $(CLANGOUTDIR)/sharedvisitor/clang.pch.d
 
 -include $(CLANGOUTDIR)/sharedvisitor/clang.pch.d
