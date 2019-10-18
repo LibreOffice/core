@@ -303,14 +303,12 @@ protected:
     Color                           mnFillColor;
 #endif // ENABLE_CAIRO_CANVAS
 
-    GC                              pFontGC_;       // Font attributes
     Pixel                           nTextPixel_;
 
     Pixmap                          hBrush_;        // Dither
 
     bool                            bWindow_ : 1;       // is Window
     bool                            bVirDev_ : 1;       // is VirDev
-    bool                            bFontGC_ : 1;       // is Font GC valid
     bool const                      m_bOpenGL : 1;
 
 private:
