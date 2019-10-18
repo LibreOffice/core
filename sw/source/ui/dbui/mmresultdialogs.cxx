@@ -516,6 +516,18 @@ int documentEndPageNumber(SwMailMergeConfigItem* pConfigItem, int document, bool
     return page;
 }
 
+/** Extracts the document for one recipient, which starts at nStartPage and ends at nEndPage in the merged doc. */
+static void lcl_ExtractDocumentForOneRecipient(SwView* pExtractedView, SwView* pMergedView, int nStartPage, int nEndPage)
+{
+    pMergedView->GetWrtShell().StartAction();
+    pExtractedView->GetDocShell()->LoadStyles_(*pMergedView->GetDocShell(), true);
+    pExtractedView->GetDocShell()->GetDoc()->ReplaceCompatibilityOptions(*pMergedView->GetDocShell()->GetDoc());
+    pExtractedView->GetDocShell()->GetDoc()->ReplaceDefaults(*pMergedView->GetDocShell()->GetDoc());
+    pExtractedView->GetDocShell()->GetDoc()->ReplaceDocumentProperties(*pMergedView->GetDocShell()->GetDoc(), true );
+
+    pMergedView->GetWrtShell().PastePages(pExtractedView->GetWrtShell(), nStartPage, nEndPage);
+    pMergedView->GetWrtShell().EndAction();
+}
 } // anonymous namespace
 
 IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
@@ -616,16 +628,10 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
             xTempDocShell->DoInitNew();
             SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, SFX_INTERFACE_NONE );
             SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
-            pTargetView->GetWrtShell().StartAction();
-            pTempView->GetDocShell()->LoadStyles_(*pTargetView->GetDocShell(), true);
-            pTempView->GetDocShell()->GetDoc()->ReplaceCompatibilityOptions( *pTargetView->GetDocShell()->GetDoc());
-            pTempView->GetDocShell()->GetDoc()->ReplaceDefaults( *pTargetView->GetDocShell()->GetDoc());
-            pTempView->GetDocShell()->GetDoc()->ReplaceDocumentProperties( *pTargetView->GetDocShell()->GetDoc(), true );
+            const int nStartPage = documentStartPageNumber(xConfigItem.get(), nDoc, false);
+            const int nEndPage = documentEndPageNumber(xConfigItem.get(), nDoc, false);
+            lcl_ExtractDocumentForOneRecipient(pTempView, pTargetView, nStartPage, nEndPage);
 
-            pTargetView->GetWrtShell().PastePages(
-                pTempView->GetWrtShell(), documentStartPageNumber(xConfigItem.get(), nDoc, false),
-                documentEndPageNumber(xConfigItem.get(), nDoc, false));
-            pTargetView->GetWrtShell().EndAction();
             //then save it
             OUString sOutPath = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
             OUString sCounter = "_" + OUString::number(nDoc + 1);
@@ -1014,15 +1020,9 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         xTempDocShell->DoInitNew();
         SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, SFX_INTERFACE_NONE );
         SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
-        pTargetView->GetWrtShell().StartAction();
-        pTempView->GetDocShell()->LoadStyles_(*pTargetView->GetDocShell(), true);
-        pTempView->GetDocShell()->GetDoc()->ReplaceCompatibilityOptions( *pTargetView->GetDocShell()->GetDoc());
-        pTempView->GetDocShell()->GetDoc()->ReplaceDefaults( *pTargetView->GetDocShell()->GetDoc());
-        pTempView->GetDocShell()->GetDoc()->ReplaceDocumentProperties( *pTargetView->GetDocShell()->GetDoc(), true );
-        pTargetView->GetWrtShell().PastePages(
-            pTempView->GetWrtShell(), documentStartPageNumber(xConfigItem.get(), nDoc, false),
-            documentEndPageNumber(xConfigItem.get(), nDoc, false));
-        pTargetView->GetWrtShell().EndAction();
+        const int nStartPage = documentStartPageNumber(xConfigItem.get(), nDoc, false);
+        const int nEndPage = documentEndPageNumber(xConfigItem.get(), nDoc, false);
+        lcl_ExtractDocumentForOneRecipient(pTempView, pTargetView, nStartPage, nEndPage);
 
         //then save it
         SfxStringItem aName(SID_FILE_NAME,
