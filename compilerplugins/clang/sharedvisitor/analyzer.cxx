@@ -241,10 +241,8 @@ int main(int argc, char** argv)
         }
         args.push_back(argv[i] + prefixlen);
     }
-#define STRINGIFY2(a) #a
-#define STRINGIFY(a) STRINGIFY2(a)
     SmallVector< StringRef, 20 > clangflags;
-    SplitString( STRINGIFY(CLANGFLAGS), clangflags );
+    SplitString( CLANGFLAGS, clangflags );
     args.insert( args.end(), clangflags.begin(), clangflags.end());
     args.insert(
         args.end(),
