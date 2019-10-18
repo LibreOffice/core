@@ -5,9 +5,6 @@
   <object class="GtkBox" id="CharURLPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="valign">start</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
@@ -27,7 +24,6 @@
               <object class="GtkGrid" id="grid7">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
                 <child>
@@ -96,14 +92,13 @@
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">3</property>
+                    <property name="top_attach">4</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkEntry" id="urled">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">32</property>
                   </object>
@@ -165,6 +160,15 @@
                     <property name="left_attach">1</property>
                     <property name="top_attach">3</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
@@ -280,5 +284,27 @@
         <property name="position">1</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <property name="ignore_hidden">True</property>
+    <widgets>
+      <widget name="label36"/>
+      <widget name="label37"/>
+      <widget name="textft"/>
+      <widget name="label39"/>
+      <widget name="label34"/>
+      <widget name="label10"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup2">
+    <property name="ignore_hidden">True</property>
+    <widgets>
+      <widget name="urled"/>
+      <widget name="nameed"/>
+      <widget name="texted"/>
+      <widget name="targetfrmlb"/>
+      <widget name="visitedlb"/>
+      <widget name="unvisitedlb"/>
+    </widgets>
   </object>
 </interface>
