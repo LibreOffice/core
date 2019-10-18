@@ -53,7 +53,15 @@ public:
     static TestResult checkAALines(Bitmap& rBitmap);
     static TestResult checkDiamond(Bitmap& rBitmap);
 
+    static TestResult checkInvertRectangle(Bitmap& rBitmap);
+    static TestResult checkInvertN50Rectangle(Bitmap& aBitmap);
+    static TestResult checkInvertTrackFrameRectangle(Bitmap& aBitmap);
+
     static TestResult checkRectangles(Bitmap& rBitmap, std::vector<Color>& aExpectedColors);
+
+    static TestResult checkFilled(Bitmap& rBitmap, tools::Rectangle aRectangle, Color aExpectedColor);
+    static TestResult checkChecker(Bitmap& rBitmap, sal_Int32 nStartX, sal_Int32 nEndX,
+                                   sal_Int32 nStartY, sal_Int32 nEndY, std::vector<Color> const & rExpected);
 
     static void createDiamondPoints(tools::Rectangle rRect, int nOffset,
                                     Point& rPoint1, Point& rPoint2,
@@ -140,6 +148,9 @@ public:
 
     Bitmap setupRectangle(bool bEnableAA);
     Bitmap setupFilledRectangle();
+    Bitmap setupInvert_NONE();
+    Bitmap setupInvert_N50();
+    Bitmap setupInvert_TrackFrame();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolygon : public OutputDeviceTestCommon

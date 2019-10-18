@@ -247,6 +247,92 @@ TestResult OutputDeviceTestCommon::checkAALines(Bitmap& rBitmap)
     return checkHorizontalVerticalDiagonalLines(rBitmap, constLineColor, 30); // 30 color values threshold delta
 }
 
+void checkResult(TestResult eResult, TestResult & eTotal)
+{
+    if (eTotal == TestResult::Failed)
+        return;
+
+    if (eResult == TestResult::Failed)
+        eTotal = TestResult::Failed;
+
+    if (eResult == TestResult::PassedWithQuirks)
+        eTotal = TestResult::PassedWithQuirks;
+}
+
+TestResult OutputDeviceTestCommon::checkInvertRectangle(Bitmap& aBitmap)
+{
+    TestResult aReturnValue = TestResult::Passed;
+    TestResult eResult;
+
+    std::vector<Color> aExpected{ COL_WHITE, COL_WHITE };
+    eResult = checkRectangles(aBitmap, aExpected);
+    checkResult(eResult, aReturnValue);
+
+    eResult = checkFilled(aBitmap, tools::Rectangle(Point(2, 2), Size(8, 8)), COL_LIGHTCYAN);
+    checkResult(eResult, aReturnValue);
+
+    eResult = checkFilled(aBitmap, tools::Rectangle(Point(10, 2), Size(8, 8)), COL_LIGHTMAGENTA);
+    checkResult(eResult, aReturnValue);
+
+    eResult = checkFilled(aBitmap, tools::Rectangle(Point(2, 10), Size(8, 8)), COL_YELLOW);
+    checkResult(eResult, aReturnValue);
+
+    eResult = checkFilled(aBitmap, tools::Rectangle(Point(10, 10), Size(8, 8)), COL_BLACK);
+    checkResult(eResult, aReturnValue);
+
+    return aReturnValue;
+}
+
+TestResult OutputDeviceTestCommon::checkChecker(Bitmap& rBitmap, sal_Int32 nStartX, sal_Int32 nEndX, sal_Int32 nStartY, sal_Int32 nEndY, std::vector<Color> const & rExpected)
+{
+    TestResult aReturnValue = TestResult::Passed;
+
+    int choice = 0;
+    for (sal_Int32 y = nStartY; y <= nEndY; y+=2)
+    {
+        for (sal_Int32 x = nStartX; x <= nEndX; x+=2)
+        {
+            TestResult eResult = checkFilled(rBitmap, tools::Rectangle(Point(x, y), Size(2, 2)), rExpected[choice % 2]);
+            checkResult(eResult, aReturnValue);
+            choice++;
+        }
+        choice++;
+    }
+    return aReturnValue;
+}
+
+TestResult OutputDeviceTestCommon::checkInvertN50Rectangle(Bitmap& aBitmap)
+{
+    TestResult aReturnValue = TestResult::Passed;
+    TestResult eResult;
+
+    std::vector<Color> aExpected{ COL_WHITE, COL_WHITE };
+    eResult = checkRectangles(aBitmap, aExpected);
+    checkResult(eResult, aReturnValue);
+
+    eResult = checkChecker(aBitmap, 2, 8, 2, 8, { COL_LIGHTCYAN, COL_LIGHTRED });
+    checkResult(eResult, aReturnValue);
+    eResult = checkChecker(aBitmap, 2, 8, 10, 16, { COL_YELLOW, COL_LIGHTBLUE });
+    checkResult(eResult, aReturnValue);
+    eResult = checkChecker(aBitmap, 10, 16, 2, 8, { COL_LIGHTMAGENTA, COL_LIGHTGREEN });
+    checkResult(eResult, aReturnValue);
+    eResult = checkChecker(aBitmap, 10, 16, 10, 16, { COL_BLACK, COL_WHITE });
+    checkResult(eResult, aReturnValue);
+
+    return aReturnValue;
+}
+
+TestResult OutputDeviceTestCommon::checkInvertTrackFrameRectangle(Bitmap& aBitmap)
+{
+    TestResult aReturnValue = TestResult::Passed;
+
+    std::vector<Color> aExpected
+    {
+        COL_WHITE, COL_WHITE
+    };
+    return checkRectangles(aBitmap, aExpected);
+}
+
 TestResult OutputDeviceTestCommon::checkRectangle(Bitmap& aBitmap)
 {
     std::vector<Color> aExpected
@@ -277,22 +363,42 @@ TestResult OutputDeviceTestCommon::checkFilledRectangle(Bitmap& aBitmap)
     return checkRectangles(aBitmap, aExpected);
 }
 
+TestResult OutputDeviceTestCommon::checkFilled(Bitmap& rBitmap, tools::Rectangle aRectangle, Color aExpectedColor)
+{
+    BitmapScopedWriteAccess pAccess(rBitmap);
+
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    for (long y = aRectangle.Top(); y < aRectangle.Top() + aRectangle.GetHeight(); y++)
+    {
+        for (long x = aRectangle.Left(); x < aRectangle.Left() + aRectangle.GetWidth(); x++)
+        {
+            checkValue(pAccess, x, y, aExpectedColor, nNumberOfQuirks, nNumberOfErrors, false);
+        }
+    }
+
+    if (nNumberOfQuirks > 0)
+        aResult = TestResult::PassedWithQuirks;
+
+    if (nNumberOfErrors > 0)
+        aResult = TestResult::Failed;
+
+    return aResult;
+}
+
 TestResult OutputDeviceTestCommon::checkRectangles(Bitmap& aBitmap, std::vector<Color>& aExpectedColors)
 {
     TestResult aReturnValue = TestResult::Passed;
     for (size_t i = 0; i < aExpectedColors.size(); i++)
     {
-        switch(checkRect(aBitmap, i, aExpectedColors[i]))
-        {
-            case TestResult::Failed:
-                return TestResult::Failed;
-            case TestResult::PassedWithQuirks:
-                aReturnValue = TestResult::PassedWithQuirks;
-                break;
-            default:
-                break;
-        }
+        TestResult eResult = checkRect(aBitmap, i, aExpectedColors[i]);
 
+        if (eResult == TestResult::Failed)
+            aReturnValue = TestResult::Failed;
+        if (eResult == TestResult::PassedWithQuirks && aReturnValue != TestResult::Failed)
+            aReturnValue = TestResult::PassedWithQuirks;
     }
     return aReturnValue;
 }

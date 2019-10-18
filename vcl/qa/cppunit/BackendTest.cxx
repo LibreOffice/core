@@ -322,6 +322,42 @@ public:
 #endif
     }
 
+    void testDrawInvertWithRectangle()
+    {
+        vcl::test::OutputDeviceTestRect aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupInvert_NONE();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkInvertRectangle(aBitmap);
+        exportImage("05-01_invert_test-rectangle.png", aBitmap);
+        (void)eResult;
+#ifndef SKIP_TEST_ASSERTS
+        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+#endif
+    }
+
+    void testDrawInvertN50WithRectangle()
+    {
+        vcl::test::OutputDeviceTestRect aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupInvert_N50();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkInvertN50Rectangle(aBitmap);
+        exportImage("05-02_invert_N50_test-rectangle.png", aBitmap);
+        (void)eResult;
+#ifndef SKIP_TEST_ASSERTS
+        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+#endif
+    }
+
+    void testDrawInvertTrackFrameWithRectangle()
+    {
+        vcl::test::OutputDeviceTestRect aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupInvert_TrackFrame();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkInvertTrackFrameRectangle(aBitmap);
+        exportImage("05-03_invert_TrackFrame_test-rectangle.png", aBitmap);
+        (void)eResult;
+#ifndef SKIP_TEST_ASSERTS
+        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+#endif
+    }
+
 #undef SKIP_TEST_ASSERTS
 
     CPPUNIT_TEST_SUITE(BackendTest);
@@ -351,6 +387,10 @@ public:
     CPPUNIT_TEST(testDrawDiamondWithPolygon);
     CPPUNIT_TEST(testDrawDiamondWithLine);
     CPPUNIT_TEST(testDrawDiamondWithPolyline);
+
+    CPPUNIT_TEST(testDrawInvertWithRectangle);
+    CPPUNIT_TEST(testDrawInvertN50WithRectangle);
+    CPPUNIT_TEST(testDrawInvertTrackFrameWithRectangle);
 
     CPPUNIT_TEST_SUITE_END();
 };
