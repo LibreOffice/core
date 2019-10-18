@@ -1142,7 +1142,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf111964, "tdf111964.docx")
         return;
     // Unicode spaces that are not XML whitespace must not be trimmed
     const sal_Unicode sWSReference [] { 0x2002, 0x2002, 0x2002, 0x2002, 0x2002, 0 };
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:t", sWSReference);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:t", sWSReference);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark-shapetype.docx")
