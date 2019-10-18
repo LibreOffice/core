@@ -42,7 +42,7 @@ private:
     virtual void        SetEndPrevPara( EditNodeIdx*& rpNodePos,
                                         sal_Int32& rCntPos ) override;
 
-    virtual void        UnknownAttrToken( int nToken, SfxItemSet* pSet ) override;
+    virtual void        UnknownAttrToken( int nToken ) override;
     virtual void        NextToken( int nToken ) override;
     virtual void        SetAttrInDoc( SvxRTFItemStackType &rSet ) override;
     virtual bool        IsEndPara( EditNodeIdx* pNd, sal_Int32 nCnt ) const override;
