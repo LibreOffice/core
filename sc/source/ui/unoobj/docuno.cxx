@@ -2023,8 +2023,6 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     } aDrawViewKeeper;
 
     SCTAB nTab;
-    if (bSinglePageSheets)
-        nTab = nSelRenderer;
     if ( !maValidPages.empty() )
         nTab = pPrintFuncCache->GetTabForPage( maValidPages.at( nRenderer )-1 );
     else
