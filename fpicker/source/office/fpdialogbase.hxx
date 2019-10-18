@@ -103,7 +103,7 @@ public:
     virtual sal_Int32 getAvailableWidth() = 0;
     virtual sal_Int32 getAvailableHeight() = 0;
 
-    virtual void setImage( sal_Int16 aImageFormat, const css::uno::Any& rImage ) = 0;
+    virtual void setImage( const css::uno::Any& rImage ) = 0;
 
     virtual bool getShowState() = 0;
 };

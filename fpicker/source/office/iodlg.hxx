@@ -213,7 +213,7 @@ public:
     sal_Int32                   getTargetColorDepth() override;
     sal_Int32                   getAvailableWidth() override;
     sal_Int32                   getAvailableHeight() override;
-    void                        setImage( sal_Int16 aImageFormat, const css::uno::Any& rImage ) override;
+    void                        setImage( const css::uno::Any& rImage ) override;
     bool                        getShowState() override;
     bool                        isAutoExtensionEnabled() const;
 

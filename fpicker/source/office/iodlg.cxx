@@ -2583,7 +2583,7 @@ sal_Int32 SvtFileDialog::getAvailableHeight()
 }
 
 
-void SvtFileDialog::setImage( sal_Int16 /*aImageFormat*/, const Any& rImage )
+void SvtFileDialog::setImage( const Any& rImage )
 {
     if ( ! _pPrevBmp || ! _pPrevBmp->IsVisible() )
         return;

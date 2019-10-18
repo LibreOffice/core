@@ -1497,7 +1497,7 @@ sal_Int32 RemoteFilesDialog::getAvailableHeight()
     return 0;
 }
 
-void RemoteFilesDialog::setImage( sal_Int16, const css::uno::Any& )
+void RemoteFilesDialog::setImage( const css::uno::Any& )
 {
     // This dialog doesn't contain preview
 }
