@@ -5754,6 +5754,86 @@ sal_uInt16 SvNumberformat::ImpGetNumForStringElementCount( sal_uInt16 nNumFor ) 
     return nCnt;
 }
 
+bool SvNumberformat::IsMinuteSecondFormat() const
+{
+    if (GetMaskedType() != SvNumFormatType::TIME)
+        return false;
+
+    constexpr sal_uInt16 k00 = 0x00;    // Nada, Nilch
+    constexpr sal_uInt16 kLB = 0x01;    // '[' Left Bracket
+    constexpr sal_uInt16 kRB = 0x02;    // ']' Right Bracket
+    constexpr sal_uInt16 kMM = 0x04;    // M or MM
+    constexpr sal_uInt16 kTS = 0x08;    // Time Separator
+    constexpr sal_uInt16 kSS = 0x10;    // S or SS
+#define HAS_MINUTE_SECOND(state) ((state) == (kMM|kTS|kSS) || (state) == (kLB|kMM|kRB|kTS|kSS))
+    // Also (kMM|kTS|kLB|kSS|kRB) but those are the same bits.
+
+    sal_uInt16 nState = k00;
+    bool bSep = false;
+    sal_uInt16 nNumForCnt = NumFor[0].GetCount();
+    auto const & rTypeArray = NumFor[0].Info().nTypeArray;
+    for (sal_uInt16 j=0; j < nNumForCnt; ++j)
+    {
+        switch (rTypeArray[j])
+        {
+            case NF_SYMBOLTYPE_DEL:
+                {
+                    // '[' or ']' before/after MM or SS
+                    const OUString& rStr = NumFor[0].Info().sStrArray[j];
+                    if (rStr == "[")
+                    {
+                        if (nState != k00 && nState != (kMM|kTS))
+                            return false;
+                        nState |= kLB;
+                    }
+                    else if (rStr == "]")
+                    {
+                        if (nState != (kLB|kMM) && nState != (kMM|kTS|kLB|kSS))
+                            return false;
+                        nState |= kRB;
+                    }
+                    else
+                        return false;
+                }
+            break;
+            case NF_KEY_MI:
+            case NF_KEY_MMI:
+                if (nState != k00 && nState != kLB)
+                    return false;
+                nState |= kMM;
+            break;
+            case NF_SYMBOLTYPE_TIMESEP:
+                if (nState != kMM && nState != (kLB|kMM|kRB))
+                    return false;
+                nState |= kTS;
+            break;
+            case NF_KEY_S:
+            case NF_KEY_SS:
+                if (nState != (kMM|kTS) && nState != (kLB|kMM|kRB|kTS) && nState != (kMM|kTS|kLB))
+                    return false;
+                nState |= kSS;
+            break;
+            case NF_SYMBOLTYPE_TIME100SECSEP:
+                // Trailing fraction of seconds allowed.
+                if (!HAS_MINUTE_SECOND(nState))
+                    return false;
+                bSep = true;
+            break;
+            case NF_SYMBOLTYPE_DIGIT:
+                if (!bSep)
+                    return false;
+            break;
+            case NF_SYMBOLTYPE_STRING:
+                // nothing, display literal
+            break;
+            default:
+                return false;
+        }
+    }
+    return HAS_MINUTE_SECOND(nState);
+#undef HAS_MINUTE_SECOND
+}
+
 const CharClass& SvNumberformat::rChrCls() const
 {
     return rScan.GetChrCls();
