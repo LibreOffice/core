@@ -2267,7 +2267,7 @@ bool OApplicationController::requestQuickHelp( const SvTreeListEntry* /*_pEntry*
     return false;
 }
 
-bool OApplicationController::requestDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
+bool OApplicationController::requestDrag(  const Point& /*_rPosPixel*/ )
 {
     rtl::Reference<TransferableHelper> pTransfer;
     if ( getContainer() && getContainer()->getSelectionCount() )

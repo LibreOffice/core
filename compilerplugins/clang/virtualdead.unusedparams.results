@@ -49,9 +49,6 @@ dbaccess/source/core/api/CacheSet.hxx:176
 dbaccess/source/core/inc/containerapprove.hxx:53
     void dbaccess::IContainerApprove::approveElement(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,)
     10
-dbaccess/source/ui/inc/callbacks.hxx:53
-    _Bool dbaui::IControlActionListener::requestDrag(signed char,const class Point &,)
-    01
 desktop/source/deployment/registry/inc/dp_backend.h:84
     void dp_registry::backend::Package::processPackage_(class osl::ResettableGuard<class osl::Mutex> &,_Bool,_Bool,const class rtl::Reference<class dp_misc::AbortChannel> &,const class com::sun::star::uno::Reference<class com::sun::star::ucb::XCommandEnvironment> &,)
     01111
