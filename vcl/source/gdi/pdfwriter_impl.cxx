@@ -9139,20 +9139,24 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     // no pdf data.
     rEmit.m_nBitmapObject = nBitmapObject;
 
-    if (!rGraphic.hasPdfData())
+    if (!rGraphic.getVectorGraphicData().get() || rGraphic.getVectorGraphicData()->getVectorGraphicDataType() != VectorGraphicDataType::Pdf)
         return;
+
+    sal_uInt32 nLength = rGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength();
+    auto const & rArray = rGraphic.getVectorGraphicData()->getVectorGraphicDataArray();
+
+    auto pPDFData = std::make_shared<std::vector<sal_Int8>>(rArray.getConstArray(), rArray.getConstArray() + nLength);
 
     if (m_aContext.UseReferenceXObject)
     {
         // Store the original PDF data as an embedded file.
         m_aEmbeddedFiles.emplace_back();
         m_aEmbeddedFiles.back().m_nObject = createObject();
-        m_aEmbeddedFiles.back().m_pData = rGraphic.getPdfData();
-
+        m_aEmbeddedFiles.back().m_pData = pPDFData;
         rEmit.m_nEmbeddedObject = m_aEmbeddedFiles.back().m_nObject;
     }
     else
-        rEmit.m_aPDFData = *rGraphic.getPdfData();
+        rEmit.m_aPDFData = *pPDFData;
 
     rEmit.m_nFormObject = createObject();
     rEmit.m_aPixelSize = rGraphic.GetPrefSize();
@@ -9207,7 +9211,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     {
         m_aJPGs.emplace( m_aJPGs.begin() );
         JPGEmit& rEmit = m_aJPGs.front();
-        if (!rGraphic.hasPdfData() || m_aContext.UseReferenceXObject)
+        if (!rGraphic.getVectorGraphicData().get() || rGraphic.getVectorGraphicData()->getVectorGraphicDataType() != VectorGraphicDataType::Pdf || m_aContext.UseReferenceXObject)
             rEmit.m_nObject = createObject();
         rEmit.m_aID         = aID;
         rEmit.m_pStream = std::move( pStream );
@@ -9311,7 +9315,7 @@ const BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx& i_rBitmap, co
         m_aBitmaps.push_front( BitmapEmit() );
         m_aBitmaps.front().m_aID        = aID;
         m_aBitmaps.front().m_aBitmap    = aBitmap;
-        if (!rGraphic.hasPdfData() || m_aContext.UseReferenceXObject)
+        if (!rGraphic.getVectorGraphicData().get() || rGraphic.getVectorGraphicData()->getVectorGraphicDataType() != VectorGraphicDataType::Pdf || m_aContext.UseReferenceXObject)
             m_aBitmaps.front().m_nObject = createObject();
         createEmbeddedFile(rGraphic, m_aBitmaps.front().m_aReferenceXObject, m_aBitmaps.front().m_nObject);
         it = m_aBitmaps.begin();
