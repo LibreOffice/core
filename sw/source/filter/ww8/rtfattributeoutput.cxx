@@ -532,7 +532,8 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 nPos,
 
 void RtfAttributeOutput::EndRuby(const SwTextNode& rNode, sal_Int32 nPos)
 {
-    m_rExport.OutputField(nullptr, ww::eEQ, ")", FieldFlags::End | FieldFlags::Close);
+    m_rExport.OutputField(nullptr, ww::eEQ, ")",
+                          FieldFlags::CmdEnd | FieldFlags::End | FieldFlags::Close);
     EndRun(&rNode, nPos);
 }
 
@@ -1585,7 +1586,7 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
         m_rExport.Strm().WriteChar('}');
 }
 
-void RtfAttributeOutput::WriteField_Impl(const SwField* pField, ww::eField eType,
+void RtfAttributeOutput::WriteField_Impl(const SwField* const pField, ww::eField,
                                          const OUString& rFieldCmd, FieldFlags nMode)
 {
     // If there are no field instructions, don't export it as a field.
@@ -1607,21 +1608,25 @@ void RtfAttributeOutput::WriteField_Impl(const SwField* pField, ww::eField eType
         if (bHasInstructions)
             m_aRunText->append("}}");
     }
-    else if (eType == ww::eEQ)
+    else
     {
-        if (FieldFlags::Start & nMode)
+        if (nMode & FieldFlags::CmdStart)
         {
             m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_FIELD);
             m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FLDINST
-                               " ");
+                               // paragraph break closes group so open another one "inside" to
+                               " {"); // prevent leaving the field instruction
         }
         if (bHasInstructions)
             m_aRunText->append(
                 msfilter::rtfutil::OutString(rFieldCmd, m_rExport.GetCurrentEncoding()));
-        if (FieldFlags::End & nMode)
+        if (nMode & FieldFlags::CmdEnd)
         {
-            m_aRunText->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
-            m_aRunText->append("}}");
+            m_aRunText->append("}}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " {");
+        }
+        if (nMode & FieldFlags::Close)
+        {
+            m_aRunText->append("}}}");
         }
     }
 }
