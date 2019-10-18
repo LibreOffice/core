@@ -28,4 +28,7 @@
   <implementation name="com.sun.star.comp.PDF.PDFExportInteractionHandler">
     <service name="com.sun.star.filter.pdfexport.PDFExportInteractionHandler"/>
   </implementation>
+  <implementation name="com.sun.star.comp.PDF.PDFDecomposer">
+    <service name="com.sun.star.graphic.PdfTools"/>
+  </implementation>
 </component>
