@@ -453,7 +453,7 @@ void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag )
          (nSysWinMode & SystemWindowFlags::DIALOG) )
     {
         // create window with a small border ?
-        if (mbForceBorderWindow || ((nStyle & (WB_BORDER | WB_NOBORDER | WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE)) == WB_BORDER ))
+        if ((nStyle & WB_ALLOWMENUBAR) || ((nStyle & (WB_BORDER | WB_NOBORDER | WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE)) == WB_BORDER))
         {
             AddBorderWindow(pParent, nStyle);
         }
@@ -530,7 +530,6 @@ void Dialog::ImplLOKNotifier(vcl::Window* pParent)
 
 Dialog::Dialog( WindowType nType )
     : SystemWindow( nType )
-    , mbForceBorderWindow(false)
     , mnInitFlag(InitFlag::Default)
 {
     ImplInitDialogData();
@@ -561,7 +560,6 @@ void Dialog::doDeferredInit(WinBits nBits)
 
 Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription)
     : SystemWindow(WindowType::DIALOG)
-    , mbForceBorderWindow(false)
     , mnInitFlag(InitFlag::Default)
 {
     ImplLOKNotifier(pParent);
@@ -569,9 +567,8 @@ Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXML
     loadUI(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription);
 }
 
-Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType, InitFlag eFlag, bool bBorder)
+Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType, InitFlag eFlag)
     : SystemWindow(nType)
-    , mbForceBorderWindow(bBorder)
     , mnInitFlag(eFlag)
 {
     ImplLOKNotifier(pParent);
@@ -581,7 +578,6 @@ Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXML
 
 Dialog::Dialog(vcl::Window* pParent, WinBits nStyle, InitFlag eFlag)
     : SystemWindow(WindowType::DIALOG)
-    , mbForceBorderWindow(false)
     , mnInitFlag(eFlag)
 {
     ImplLOKNotifier(pParent);
@@ -1530,8 +1526,8 @@ VclBuilderContainer::~VclBuilderContainer()
 {
 }
 
-ModalDialog::ModalDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, bool bBorder ) :
-    Dialog(pParent, rID, rUIXMLDescription, WindowType::MODALDIALOG, InitFlag::Default, bBorder)
+ModalDialog::ModalDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription ) :
+    Dialog(pParent, rID, rUIXMLDescription, WindowType::MODALDIALOG, InitFlag::Default)
 {
 }
 
