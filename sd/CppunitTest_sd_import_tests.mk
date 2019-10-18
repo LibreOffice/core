@@ -81,6 +81,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests,\
     filter/source/config/cache/filterconfig1 \
 	filter/source/odfflatxml/odfflatxml \
     filter/source/svg/svgfilter \
+    filter/source/pdf/pdffilter \
     filter/source/xmlfilteradaptor/xmlfa \
 	filter/source/xmlfilterdetect/xmlfd \
 	filter/source/storagefilterdetect/storagefd \

@@ -1301,8 +1301,7 @@ void SdImportTest::testPDFImportShared()
     // PDF with each image to allow for advanced editing.
     // Here we iterate over all Graphic instances embedded in the pages
     // and verify that they all point to the same object in memory.
-    std::vector<std::shared_ptr<std::vector<sal_Int8>>> aPdfSeqSharedPtrs;
-    std::vector<std::shared_ptr<GfxLink>> aGfxLinkSharedPtrs;
+    std::vector<Graphic> aGraphics;
 
     for (int nPageIndex = 0; nPageIndex < pDoc->GetPageCount(); ++nPageIndex)
     {
@@ -1322,23 +1321,23 @@ void SdImportTest::testPDFImportShared()
 
             const GraphicObject& rGraphicObject = pSdrGrafObj->GetGraphicObject().GetGraphic();
             const Graphic& rGraphic = rGraphicObject.GetGraphic();
-            aPdfSeqSharedPtrs.push_back(rGraphic.getPdfData());
-            aGfxLinkSharedPtrs.push_back(rGraphic.GetSharedGfxLink());
+            aGraphics.push_back(rGraphic);
         }
     }
 
-    CPPUNIT_ASSERT_MESSAGE("Expected more than one page.", aPdfSeqSharedPtrs.size() > 1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected as many PDF streams as GfxLinks.",
-                                 aPdfSeqSharedPtrs.size(), aGfxLinkSharedPtrs.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected more than one page.", size_t(3), aGraphics.size());
 
-    const std::shared_ptr<std::vector<sal_Int8>> pPdfSeq = aPdfSeqSharedPtrs[0];
-    const std::shared_ptr<GfxLink> pGfxLink = aGfxLinkSharedPtrs[0];
-    for (size_t i = 0; i < aPdfSeqSharedPtrs.size(); ++i)
+    Graphic aFirstGraphic = aGraphics[0];
+
+    for (size_t i = 1; i < aGraphics.size(); ++i)
     {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected all PDF streams to be identical.",
-                                     aPdfSeqSharedPtrs[i].get(), pPdfSeq.get());
+                                     aFirstGraphic.getVectorGraphicData()->getVectorGraphicDataArray().getConstArray(),
+                                     aGraphics[i].getVectorGraphicData()->getVectorGraphicDataArray().getConstArray());
+
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected all GfxLinks to be identical.",
-                                     aGfxLinkSharedPtrs[i].get(), pGfxLink.get());
+                                     aFirstGraphic.GetSharedGfxLink().get(),
+                                     aGraphics[i].GetSharedGfxLink().get());
     }
 
     xDocShRef->DoClose();
