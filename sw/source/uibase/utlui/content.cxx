@@ -1348,6 +1348,14 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
                 pPop->SetPopupMenu(4, pSubPop4);
             }
         }
+        else if(ContentTypeId::OUTLINE == nContentType)
+        {
+            if(pEntry->HasChildren())
+            {
+                pPop->InsertSeparator();
+                pPop->InsertItem(800, SwResId(STR_EXPANDALL));
+            }
+        }
     }
     else if( pEntry )
     {
@@ -1355,6 +1363,11 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
         SwContentType* pType = static_cast<SwContentType*>(pEntry->GetUserData());
         if(ContentTypeId::OUTLINE == pType->GetType())
         {
+            if(pEntry->HasChildren())
+            {
+                pPop->InsertSeparator();
+                pPop->InsertItem(800, SwResId(STR_EXPANDALL));
+            }
             pPop->InsertSeparator();
             pPop->InsertItem(700, m_aContextStrings[IDX_STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY]);
         }
@@ -3291,6 +3304,9 @@ void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
                 m_pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_OUTLINE_TO_CLIPBOARD);
                 break;
             }
+        case 800:
+            KeyInput(KeyEvent(0, KEY_MOD1|KEY_ADD));
+            break;
         //Display
         default:
         if(nSelectedPopupEntry > 300 && nSelectedPopupEntry < 400)
