@@ -818,7 +818,7 @@ void ChartTypeTabPage::selectMainType()
 
         fillAllControls( aParameter );
         uno::Reference< beans::XPropertySet > xTemplateProps( getCurrentTemplate(), uno::UNO_QUERY );
-        m_pCurrentMainType->fillExtraControls(aParameter,m_xChartModel,xTemplateProps);
+        m_pCurrentMainType->fillExtraControls(m_xChartModel,xTemplateProps);
     }
 }
 
@@ -898,7 +898,7 @@ void ChartTypeTabPage::initializePage()
 
             fillAllControls( aParameter );
             if( m_pCurrentMainType )
-                m_pCurrentMainType->fillExtraControls(aParameter,m_xChartModel,xTemplateProps);
+                m_pCurrentMainType->fillExtraControls(m_xChartModel,xTemplateProps);
             break;
         }
         ++nM;

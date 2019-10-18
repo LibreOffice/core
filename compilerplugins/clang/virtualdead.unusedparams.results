@@ -34,9 +34,6 @@ basic/source/comp/codegen.cxx:467
 chart2/source/controller/dialogs/ChangingResource.hxx:30
     void chart::ResourceChangeListener::stateChanged(class chart::ChangingResource *,)
     0
-chart2/source/controller/dialogs/ChartTypeDialogController.hxx:105
-    void chart::ChartTypeDialogController::fillExtraControls(const class chart::ChartTypeParameter &,const class com::sun::star::uno::Reference<class com::sun::star::chart2::XChartDocument> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,)const
-    011
 desktop/source/deployment/registry/inc/dp_backend.h:84
     void dp_registry::backend::Package::processPackage_(class osl::ResettableGuard<class osl::Mutex> &,_Bool,_Bool,const class rtl::Reference<class dp_misc::AbortChannel> &,const class com::sun::star::uno::Reference<class com::sun::star::ucb::XCommandEnvironment> &,)
     01111

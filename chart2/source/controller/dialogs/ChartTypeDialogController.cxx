@@ -358,8 +358,7 @@ void ChartTypeDialogController::showExtraControls(weld::Builder* /*pBuilder*/)
 void ChartTypeDialogController::hideExtraControls() const
 {
 }
-void ChartTypeDialogController::fillExtraControls( const ChartTypeParameter& /*rParameter*/
-                                                  , const uno::Reference< XChartDocument >& /*xChartModel*/
+void ChartTypeDialogController::fillExtraControls(  const uno::Reference< XChartDocument >& /*xChartModel*/
                                                   , const uno::Reference< beans::XPropertySet >& /*xTemplateProps*/ ) const
 {
 }
@@ -1147,8 +1146,8 @@ void CombiColumnLineChartDialogController::hideExtraControls() const
         m_xMF_NumberOfLines->hide();
 }
 
-void CombiColumnLineChartDialogController::fillExtraControls( const ChartTypeParameter& /*rParameter*/
-                , const uno::Reference< XChartDocument >& xChartModel
+void CombiColumnLineChartDialogController::fillExtraControls(
+                  const uno::Reference< XChartDocument >& xChartModel
                 , const uno::Reference< beans::XPropertySet >& xTemplateProps ) const
 {
     if (!m_xMF_NumberOfLines)
