@@ -5349,7 +5349,7 @@ private:
         {
             const GtkWidget* pTabWidget = gtk_notebook_get_tab_label(pNotebook, gtk_notebook_get_nth_page(pNotebook, i));
             const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pTabWidget));
-            if (strcmp(pStr, rIdent.getStr()) == 0)
+            if (pStr && strcmp(pStr, rIdent.getStr()) == 0)
                 return i;
         }
         return -1;
