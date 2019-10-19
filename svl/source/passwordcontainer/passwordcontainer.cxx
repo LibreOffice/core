@@ -115,7 +115,7 @@ static std::vector< OUString > getInfoFromInd( const OUString& aInd )
                     aNum += OUStringChar( pLine[i] );
                 }
 
-                newItem.append( OUStringChar( aNum.toUInt32( 16 ) ) );
+                newItem.append( sal_Unicode( aNum.toUInt32( 16 ) ) );
                 pLine += 3;
             }
 
