@@ -439,7 +439,7 @@ static void FilterText(OUString & rText, LanguageType const eLang,
     // remove all special characters (replace them with blanks)
     if (!rText.isEmpty())
     {
-        rText = rText.replaceAll(OUStringChar(0xad), "");
+        rText = rText.replaceAll(u"\u00ad", "");
         OUStringBuffer aBuf(rText);
         const sal_Int32 l = aBuf.getLength();
         for (sal_Int32 i = 0; i < l; ++i)

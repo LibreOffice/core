@@ -39,14 +39,14 @@ static const char UNO_NAME_CHAR_STYLE_NAME[] = "CharStyleName";
 static const char UNO_NAME_NUMBERING_TYPE[] = "NumberingType";
 static const char UNO_NAME_BULLET_CHAR[] = "BulletChar";
 
-static const sal_Int16 CHAR_CLOSED_DOT = 8226;
-static const sal_Int16 CHAR_EMPTY_DOT = 111;
-static const sal_Int16 CHAR_SQUARE = 9632;
-static const sal_Int16 CHAR_STAR_SYMBOL = 10026;
-static const sal_Int16 CHAR_FOUR_DIAMONDS = 10070;
-static const sal_Int16 CHAR_DIAMOND = 10022;
-static const sal_Int16 CHAR_ARROW = 10146;
-static const sal_Int16 CHAR_CHECK_MARK = 10003;
+static const sal_Unicode CHAR_CLOSED_DOT[] = u"\u2022";
+static const char CHAR_EMPTY_DOT[] = "o";
+static const sal_Unicode CHAR_SQUARE[] = u"\u2540";
+static const sal_Unicode CHAR_STAR_SYMBOL[] = u"\u272A";
+static const sal_Unicode CHAR_FOUR_DIAMONDS[] = u"\u2756";
+static const sal_Unicode CHAR_DIAMOND[] = u"\u2726";
+static const sal_Unicode CHAR_ARROW[] = u"\u27A2";
+static const sal_Unicode CHAR_CHECK_MARK[] = u"\u2713";
 
 SwVbaListHelper::SwVbaListHelper( const css::uno::Reference< css::text::XTextDocument >& xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType ) : mxTextDocument( xTextDoc ), mnGalleryType( nGalleryType ), mnTemplateType( nTemplateType )
 {
@@ -144,37 +144,37 @@ void SwVbaListHelper::CreateBulletListTemplate()
     {
         case 1:
         {
-            aBulletChar = OUString( sal_Unicode( CHAR_CLOSED_DOT ) );
+            aBulletChar = CHAR_CLOSED_DOT;
             break;
         }
         case 2:
         {
-            aBulletChar = OUStringChar(CHAR_EMPTY_DOT);
+            aBulletChar = CHAR_EMPTY_DOT;
             break;
         }
         case 3:
         {
-            aBulletChar = OUString( sal_Unicode( CHAR_SQUARE ) );
+            aBulletChar = CHAR_SQUARE;
             break;
         }
         case 4:
         {
-            aBulletChar = OUString( sal_Unicode( CHAR_STAR_SYMBOL ) );
+            aBulletChar = CHAR_STAR_SYMBOL;
             break;
         }
         case 5:
         {
-            aBulletChar = OUString( sal_Unicode( CHAR_FOUR_DIAMONDS ) );
+            aBulletChar = CHAR_FOUR_DIAMONDS;
             break;
         }
         case 6:
         {
-            aBulletChar = OUString( sal_Unicode( CHAR_ARROW ) );
+            aBulletChar = CHAR_ARROW;
             break;
         }
         case 7:
         {
-            aBulletChar = OUString( sal_Unicode( CHAR_CHECK_MARK ) );
+            aBulletChar = CHAR_CHECK_MARK;
             break;
         }
         default:
@@ -411,31 +411,31 @@ void SwVbaListHelper::CreateOutlineNumberForType3()
         {
             case 0:
             {
-                aBulletChar = OUString( sal_Unicode( CHAR_FOUR_DIAMONDS ) );
+                aBulletChar = CHAR_FOUR_DIAMONDS;
                 break;
             }
             case 1:
             case 5:
             {
-                aBulletChar = OUString( sal_Unicode( CHAR_ARROW ) );
+                aBulletChar = CHAR_ARROW;
                 break;
             }
             case 2:
             case 6:
             {
-                aBulletChar = OUString( sal_Unicode( CHAR_SQUARE ) );
+                aBulletChar = CHAR_SQUARE;
                 break;
             }
             case 3:
             case 7:
             {
-                aBulletChar = OUString( sal_Unicode( CHAR_CLOSED_DOT ) );
+                aBulletChar = CHAR_CLOSED_DOT;
                 break;
             }
             case 4:
             case 8:
             {
-                aBulletChar = OUString( sal_Unicode( CHAR_DIAMOND ) );
+                aBulletChar = CHAR_DIAMOND;
                 break;
             }
         }

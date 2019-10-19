@@ -317,9 +317,9 @@ OUString SmOoxmlImport::handleD()
         opening = "left lbrace ";
     if( closing == "}" )
         closing = " right rbrace";
-    if( opening == OUStringChar(0x27e6) )
+    if( opening == u"\u27e6" )
         opening = "left ldbracket ";
-    if( closing == OUStringChar(0x27e7) )
+    if( closing == u"\u27e7" )
         closing = " right rdbracket";
     if( opening == "|" )
         opening = "left lline ";
