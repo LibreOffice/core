@@ -425,4 +425,16 @@
       </packing>
     </child>
   </object>
+  <object class="GtkSizeGroup" id="sizegroupLabels">
+    <widgets>
+      <widget name="label4"/>
+      <widget name="fitzoom"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupWidgets">
+    <widgets>
+      <widget name="page"/>
+      <widget name="zoom"/>
+    </widgets>
+  </object>
 </interface>
