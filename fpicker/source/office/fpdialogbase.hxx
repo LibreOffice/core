@@ -66,7 +66,7 @@ class SvtFileDialog_Base : public Dialog, public ::svt::IFilePickerController
 {
 public:
     SvtFileDialog_Base( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription )
-    : Dialog( pParent, rID, rUIXMLDescription, WindowType::MODALDIALOG, InitFlag::Default )
+        : Dialog(pParent, rID, rUIXMLDescription)
     {
     }
 
