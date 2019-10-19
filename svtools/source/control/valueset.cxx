@@ -25,6 +25,7 @@
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
+#include <uitest/uiobject.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -1457,6 +1458,11 @@ boost::property_tree::ptree ValueSet::DumpAsPropertyTree()
     aTree.put("type", "valueset");
     aTree.add_child("entries", aEntries);
     return aTree;
+}
+
+FactoryFunction ValueSet::GetUITestFactory() const
+{
+    return ValueSetUIObject::create;
 }
 
 void ValueSet::Select()
