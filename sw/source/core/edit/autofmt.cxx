@@ -788,12 +788,12 @@ SwAutoFormat::GetDigitLevel(const SwTextFrame& rFrame, TextFrameIndex& rPos,
                 }
 
                 if( pNumTypes )
-                    *pNumTypes += OUStringChar('0' + SVX_NUM_ARABIC);
+                    *pNumTypes += OUStringChar(sal_Unicode('0' + SVX_NUM_ARABIC));
 
                 eScan = eScan | CHG;
             }
             else if( pNumTypes && !(eScan & DIGIT) )
-                *pNumTypes += OUStringChar('0' + SVX_NUM_ARABIC);
+                *pNumTypes += OUStringChar(sal_Unicode('0' + SVX_NUM_ARABIC));
 
             eScan &= ~DELIM;        // remove Delim
             if( 0 != (eScan & ~CHG) && DIGIT != (eScan & ~CHG))

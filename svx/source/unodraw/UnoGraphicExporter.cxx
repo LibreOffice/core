@@ -346,10 +346,10 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
                 switch(mpDoc->GetPageNumType())
                 {
                     case css::style::NumberingType::CHARS_UPPER_LETTER:
-                        aPageNumValue += OUStringChar( (mnPageNumber - 1) % 26 + 'A' );
+                        aPageNumValue += OUStringChar( sal_Unicode((mnPageNumber - 1) % 26 + 'A') );
                         break;
                     case css::style::NumberingType::CHARS_LOWER_LETTER:
-                        aPageNumValue += OUStringChar( (mnPageNumber - 1) % 26 + 'a' );
+                        aPageNumValue += OUStringChar( sal_Unicode((mnPageNumber - 1) % 26 + 'a') );
                         break;
                     case css::style::NumberingType::ROMAN_UPPER:
                         bUpper = true;

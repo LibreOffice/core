@@ -373,7 +373,7 @@ static void lcl_ConvertToNumbers(OUString& rBlock, const std::vector<std::pair<O
     for (size_t i = 0; i < rHeaders.size(); ++i)
     {
         OUString sHeader = "<" + rHeaders[i].first + ">";
-        OUString sReplace = "<" + OUStringChar('0' + i) + ">";
+        OUString sReplace = "<" + OUStringChar(sal_Unicode('0' + i)) + ">";
         sBlock = sBlock.replaceAll(sHeader, sReplace);
     }
     rBlock = sBlock;
