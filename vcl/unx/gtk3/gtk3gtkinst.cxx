@@ -5370,7 +5370,21 @@ private:
 
     static void set_tab_label_text(GtkNotebook *pNotebook, guint nPage, const OUString& rText)
     {
-        gtk_notebook_set_tab_label_text(pNotebook, gtk_notebook_get_nth_page(pNotebook, nPage), rText.toUtf8().getStr());
+        OString sUtf8(rText.toUtf8());
+
+        GtkWidget* pPage = gtk_notebook_get_nth_page(pNotebook, nPage);
+
+        // tdf#128241 if there's already a label here, reuse it so the buildable
+        // name remains the same, gtk_notebook_set_tab_label_text will replace
+        // the label widget with a new one
+        GtkWidget* pTabWidget = gtk_notebook_get_tab_label(pNotebook, pPage);
+        if (pTabWidget && GTK_IS_LABEL(pTabWidget))
+        {
+            gtk_label_set_label(GTK_LABEL(pTabWidget), sUtf8.getStr());
+            return;
+        }
+
+        gtk_notebook_set_tab_label_text(pNotebook, pPage, sUtf8.getStr());
     }
 
     void append_useless_page(GtkNotebook *pNotebook)
