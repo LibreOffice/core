@@ -977,6 +977,20 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
         bRet = false;
         SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetTimeRef: bad number index");
     }
+
+    if (nAmPm && nHour > 12) // not a valid AM/PM clock time
+    {
+        bRet = false;
+    }
+    else if (nAmPm == -1 && nHour != 12) // PM
+    {
+        nHour += 12;
+    }
+    else if (nAmPm == 1 && nHour == 12) // 12 AM
+    {
+        nHour = 0;
+    }
+
     if (nDecPos == 2 && nCnt == 2) // 45.5
     {
         nMinute = 0;
@@ -990,24 +1004,12 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     if (nIndex - nStartIndex < nCnt)
     {
         nSecond = static_cast<sal_uInt16>(sStrArray[nNums[nIndex++]].toInt32());
-        if (nIndex > 1 && nSecond > 59)
-            bRet = false;   // 1:60 or 1:123 or 1:1:123 is invalid, 123:1 or 123:1:1 is valid
+        if (nIndex > 1 && nSecond > 59 && !(nHour == 23 && nMinute == 59 && nSecond == 60))
+            bRet = false;   // 1:60 or 1:123 or 1:1:123 is invalid, 123:1 or 123:1:1 is valid, or leap second
     }
     if (nIndex - nStartIndex < nCnt)
     {
         fSecond100 = StringToDouble( sStrArray[nNums[nIndex]], true );
-    }
-    if (nAmPm && nHour > 12) // not a valid AM/PM clock time
-    {
-        bRet = false;
-    }
-    else if (nAmPm == -1 && nHour != 12) // PM
-    {
-        nHour += 12;
-    }
-    else if (nAmPm == 1 && nHour == 12) // 12 AM
-    {
-        nHour = 0;
     }
     fOutNumber = (static_cast<double>(nHour)*3600 +
                   static_cast<double>(nMinute)*60 +
