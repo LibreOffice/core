@@ -66,7 +66,7 @@ void TestString::testDecimalStringToNumber()
 {
     OUString s1("1234");
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(1234), comphelper::string::decimalStringToNumber(s1));
-    s1 += OUStringChar(0x07C6);
+    s1 += u"\u07C6";
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(12346), comphelper::string::decimalStringToNumber(s1));
     // Codepoints on 2 16bits words
     sal_uInt32 utf16String[] = { 0x1D7FE /* 8 */, 0x1D7F7 /* 1 */};

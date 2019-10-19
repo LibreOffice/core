@@ -6945,7 +6945,7 @@ void SwUiWriterTest::testTdf108423()
     pWrtShell->AutoCorrect(corr, cChar);
     // The word "i" should be capitalized due to autocorrect, followed by a typographical apostrophe
     sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    OUString sIApostrophe(u"I" + OUStringChar(0x2019));
+    OUString sIApostrophe(u"I\u2019");
     CPPUNIT_ASSERT_EQUAL(sIApostrophe, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     pWrtShell->Insert(" i");
     pWrtShell->AutoCorrect(corr, cChar);

@@ -2452,7 +2452,7 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
                                         rAttr.GetStart(),
                                         *rAttr.GetEnd() - rAttr.GetStart() ) );
 
-                        sText = sText.replaceAll(OUStringChar(0x0a), "");
+                        sText = sText.replaceAll("\x0a", "");
                         sText = comphelper::string::strip(sText, ' ');
 
                         if( !sText.isEmpty() )

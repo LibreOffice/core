@@ -320,7 +320,7 @@ void TableWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 
     // #i95350# force RTL output
     if (IsRTLEnabled())
-        aText = OUStringChar(0x202D) + aText;
+        aText = u"\u202D" + aText;
 
     rRenderContext.DrawText(Point(nTextX, nTextY), aText);
 }
