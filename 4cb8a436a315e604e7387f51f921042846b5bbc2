@@ -142,6 +142,30 @@
       "revId": "4cb8a436a315e604e7387f51f921042846b5bbc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_64e776e6",
+        "filename": "i18npool/source/transliteration/transliteration_body.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-10-19T16:16:30Z",
+      "side": 1,
+      "message": "Sorry for the delay. I finally did benchmark: ran m_xSearch-\u003esearchForward(\"11 22 33\", 2, 7) from TestTextSearch::testSearches() million times. Patched code is roughly two times slower than original: 7.5s vs 3s.\n\nSorry again, but I don\u0027t understand how to use placement-new for vector. All I could find is pmr::vector: https://www.bfilipek.com/2019/03/cpp17indetail-done.html?m\u003d1#example-polymorphic-allocator-pmrmemoryresource",
+      "parentUuid": "7f7f9b97_5abcb904",
+      "range": {
+        "startLine": 104,
+        "startChar": 4,
+        "endLine": 104,
+        "endChar": 40
+      },
+      "revId": "4cb8a436a315e604e7387f51f921042846b5bbc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
