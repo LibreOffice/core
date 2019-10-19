@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_c4a44abc",
+        "filename": "starmath/source/mathtype.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-19T13:49:47Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this assert because of using char literal with non-ASCII content?",
+      "range": {
+        "startLine": 319,
+        "startChar": 24,
+        "endLine": 319,
+        "endChar": 39
+      },
+      "revId": "ac2c1fb821b45f2382a5104b4d98dc08061ae938",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
