@@ -10,6 +10,10 @@
 #include <sal/config.h>
 #include <test/screenshot_test.hxx>
 #include <vcl/abstdlg.hxx>
+#include <vcl/scheduler.hxx>
+#include <vcl/wrkwin.hxx>
+#include <uitest/uiobject.hxx>
+#include <svtools/valueset.hxx>
 
 using namespace ::com::sun::star;
 
@@ -30,9 +34,11 @@ public:
 
     // try to open a dialog
     void openAnyDialog();
+    void testValueSetControl();
 
     CPPUNIT_TEST_SUITE(SvtoolsDialogsTest);
     CPPUNIT_TEST(openAnyDialog);
+    CPPUNIT_TEST(testValueSetControl);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -54,6 +60,35 @@ void SvtoolsDialogsTest::openAnyDialog()
 {
     /// process input file containing the UXMLDescriptions of the dialogs to dump
     processDialogBatchFile("svtools/qa/unit/data/svtools-dialogs-test.txt");
+}
+
+void SvtoolsDialogsTest::testValueSetControl()
+{
+    VclPtr<WorkWindow> pWorkWindow = VclPtr<WorkWindow>::Create(nullptr, WB_APP | WB_STDWORK);
+    VclPtr<ValueSet> pValueSet = VclPtr<ValueSet>::Create(pWorkWindow, WB_ITEMBORDER);
+    pValueSet->InsertItem(100, 0);
+    pValueSet->InsertItem(200, 1);
+    pValueSet->InsertItem(300, 2);
+    pValueSet->Show();
+    pWorkWindow->Show();
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(pValueSet->IsEnabled());
+    CPPUNIT_ASSERT(pValueSet->IsReallyVisible());
+    CPPUNIT_ASSERT_EQUAL(false, pValueSet->IsItemSelected(300));
+    {
+        std::unique_ptr<UIObject> pUIObject = pValueSet->GetUITestFactory()(pValueSet.get());
+        CPPUNIT_ASSERT(pUIObject);
+
+        StringMap aMap;
+        aMap["ID"] = "300";
+
+        pUIObject->execute("SELECT", aMap);
+    }
+    CPPUNIT_ASSERT_EQUAL(true, pValueSet->IsItemSelected(300));
+
+    pValueSet->disposeOnce();
+    pWorkWindow->disposeOnce();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SvtoolsDialogsTest);

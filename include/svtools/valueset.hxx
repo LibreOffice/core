@@ -296,6 +296,7 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+    virtual FactoryFunction GetUITestFactory() const override;
 
     virtual void    Select();
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
