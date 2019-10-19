@@ -385,7 +385,7 @@ void ScAccessibleCell::FillDependents(utl::AccessibleRelationSetHelper* pRelatio
 {
     if (mpDoc)
     {
-        ScRange aRange(0, 0, maCellAddress.Tab(), MAXCOL, MAXROW, maCellAddress.Tab());
+        ScRange aRange(0, 0, maCellAddress.Tab(), mpDoc->MaxCol(), mpDoc->MaxRow(), maCellAddress.Tab());
         ScCellIterator aCellIter(mpDoc, aRange);
 
         for (bool bHasCell = aCellIter.first(); bHasCell; bHasCell = aCellIter.next())
