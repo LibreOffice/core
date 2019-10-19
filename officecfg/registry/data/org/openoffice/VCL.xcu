@@ -214,28 +214,28 @@
         <value>Noto Serif CJK JP;游明朝;ＭＳ 明朝;ＭＳ Ｐ明朝;ヒラギノ明朝 ProN;ヒラギノ明朝 Pro;IPA 明朝;IPA P明朝;Mincho;Serif</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>Noto Sans CJK JP;游ゴシック;ＭＳ ゴシック;ＭＳ Ｐゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;IPA ゴシック;IPA Pゴシック;Gothic;ＭＳ 明朝;Mincho;ＭＳ Ｐ明朝;Gothic</value>
+        <value>Noto Sans CJK JP;游ゴシック;ＭＳ ゴシック;ＭＳ Ｐゴシック;ヒラギノ角ゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;IPA ゴシック;IPA Pゴシック;Gothic;ＭＳ 明朝;Mincho;ＭＳ Ｐ明朝;Gothic</value>
       </prop>
       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>Noto Sans CJK JP;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;游ゴシック;ＭＳ Ｐゴシック;IPA Pゴシック;ＭＳ ゴシック;ＭＳ Ｐゴシック;Gothic</value>
+        <value>Noto Sans CJK JP;ヒラギノ角ゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;游ゴシック;ＭＳ Ｐゴシック;IPA Pゴシック;ＭＳ ゴシック;ＭＳ Ｐゴシック;Gothic</value>
       </prop>
       <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>Noto Sans CJK JP;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;游ゴシック;ＭＳ Ｐゴシック;IPA Pゴシック;ＭＳ ゴシック;ＭＳ Ｐゴシック;Gothic</value>
+        <value>Noto Sans CJK JP;ヒラギノ角ゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;游ゴシック;ＭＳ Ｐゴシック;IPA Pゴシック;ＭＳ ゴシック;ＭＳ Ｐゴシック;Gothic</value>
       </prop>
       <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>Noto Sans CJK JP;游ゴシック;ＭＳ Ｐゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;IPA Pゴシック;Gothic</value>
+        <value>Noto Sans CJK JP;游ゴシック;ＭＳ Ｐゴシック;ヒラギノ角ゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;IPA Pゴシック;Gothic</value>
       </prop>
       <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>Noto Sans CJK JP;游ゴシック;ＭＳ Ｐゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;IPA Pゴシック;MS Gothic;MS PGothic;Gothic</value>
+        <value>Noto Sans CJK JP;游ゴシック;ＭＳ Ｐゴシック;ヒラギノ角ゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;IPA Pゴシック;MS Gothic;MS PGothic;Gothic</value>
       </prop>
       <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>Noto Sans Mono CJK JP;Yu Gothic UI;ＭＳ ゴシック;Osaka;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;IPAゴシック;Gothic</value>
+        <value>Noto Sans Mono CJK JP;Yu Gothic UI;ＭＳ ゴシック;Osaka;ヒラギノ角ゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;IPAゴシック;Gothic</value>
       </prop>
       <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
-        <value>Noto Sans Mono CJK JP:ＭＳ ゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;IPAゴシック;Gothic</value>
+        <value>Noto Sans Mono CJK JP:ＭＳ ゴシック;ヒラギノ角ゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;IPAゴシック;Gothic</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>IPA Pゴシック;IPA P Gothic;Noto Sans CJK JP;Yu Gothic UI;Meiryo UI;ヒラギノ角ゴ ProN;Hiragino Kaku Gothic ProN;ヒラギノ角ゴ Pro;Hiragino Kaku Gothic Pro</value>
+        <value>IPA Pゴシック;IPA P Gothic;Noto Sans CJK JP;Yu Gothic UI;Meiryo UI;ヒラギノ角ゴシック;ヒラギノ角ゴ ProN;Hiragino Kaku Gothic ProN;ヒラギノ角ゴ Pro;Hiragino Kaku Gothic Pro</value>
       </prop>
       <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
         <value>cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidasanstypewriter;lucidatypewriter;monaco;monospaced</value>

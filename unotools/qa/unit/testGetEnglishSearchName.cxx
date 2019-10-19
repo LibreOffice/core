@@ -43,10 +43,18 @@ void Test::testSingleElement()
 
     //transformation
 
-    sal_Unicode const transfor[] ={ 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o','n',0};
-
-    test1 = GetEnglishSearchFontName(transfor );
-    CPPUNIT_ASSERT_EQUAL( OUString("hiraginomarugothicpron"),test1);
+    // HiraginoMincho Pro N
+    sal_Unicode const aHiraginoMinchoProN[]={0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x660E, 0x671D, 'p','r','o','n',0};
+    OUString test21 = GetEnglishSearchFontName(aHiraginoMinchoProN);
+    CPPUNIT_ASSERT_EQUAL( OUString("hiraginominchopron"),test21);
+    // HiraginoKakuGothic
+    sal_Unicode const aHiraginoKakuGothic[]={0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x89D2, 0x30B4, 0x30B7, 0x30C3, 0x30AF,0};
+    OUString test22 = GetEnglishSearchFontName(aHiraginoKakuGothic);
+    CPPUNIT_ASSERT_EQUAL( OUString("hiraginosans"),test22);
+    // HiraginoMaruGothic Pro N
+    sal_Unicode const aHiraginoMaruGothicProN[]={ 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o','n',0};
+    OUString test23 = GetEnglishSearchFontName(aHiraginoMaruGothicProN);
+    CPPUNIT_ASSERT_EQUAL( OUString("hiraginomarugothicpron"),test23);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
