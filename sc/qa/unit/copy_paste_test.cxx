@@ -280,7 +280,7 @@ void ScCopyPasteTest::testTdf124565()
 
     // Copy first row
     ScDocument aClipDoc(SCDOCMODE_CLIP);
-    ScRange aCopyRange(0, 0, 0, MAXCOL, 0, 0);
+    ScRange aCopyRange(0, 0, 0, aClipDoc.MaxCol(), 0, 0);
     pViewShell->GetViewData().GetMarkData().SetMarkArea(aCopyRange);
     pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, false, false);
 
@@ -289,7 +289,7 @@ void ScCopyPasteTest::testTdf124565()
     SCCOL nCol = 0;
     SCROW nRow = 1;
 
-    ScRange aPasteRange(nCol, nRow, nTab, MAXCOL, nRow, nTab);
+    ScRange aPasteRange(nCol, nRow, nTab, aClipDoc.MaxCol(), nRow, nTab);
     pViewShell->GetViewData().GetMarkData().SetMarkArea(aPasteRange);
     pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
 

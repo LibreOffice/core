@@ -446,7 +446,7 @@ void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, bool bJoin )
                 {
                     pE->nCol = rR.aEnd.Col() + 1;
                     SCCOL nTmp = pE->nCol + pE->nColOverlap - 1;
-                    if ( pE->nCol > MAXCOL || nTmp > MAXCOL )
+                    if ( pE->nCol > mpDoc->MaxCol() || nTmp > mpDoc->MaxCol() )
                         bBadCol = true;
                     else
                     {
