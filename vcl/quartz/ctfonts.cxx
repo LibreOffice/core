@@ -317,16 +317,13 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
 
     // get font name
 #ifdef MACOSX
-    const OUString aUILang = Application::GetSettings().GetUILanguageTag().getLanguage();
-    CFStringRef pUILang = CFStringCreateWithCharacters( kCFAllocatorDefault,
-                                                        reinterpret_cast<UniChar const *>(aUILang.getStr()), aUILang.getLength() );
     CFStringRef pLang = nullptr;
     CFStringRef pFamilyName = static_cast<CFStringRef>(
             CTFontDescriptorCopyLocalizedAttribute( pFD, kCTFontFamilyNameAttribute, &pLang ));
 
-    if ( !pLang || ( CFStringCompare( pUILang, pLang, 0 ) != kCFCompareEqualTo ))
+    if ( !pLang )
     {
-        if(pFamilyName)
+        if( pFamilyName )
         {
             CFRelease( pFamilyName );
         }

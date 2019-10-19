@@ -177,6 +177,7 @@ static sal_Unicode const aHGSeikaishotaiPRO[]       = { 'h','g', 0x6B63,0x6977,0
 static sal_Unicode const aHGMaruGothicMPRO[]        = { 'h','g', 0x4E38,0xFF7A,0xFF9E,0xFF7C,0xFF6F,0xFF78, '-','p','r','o',0};
 static sal_Unicode const aHiraginoMinchoPro[]       = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x660E, 0x671D, 'p','r','o',0};
 static sal_Unicode const aHiraginoMinchoProN[]      = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x660E, 0x671D, 'p','r','o','n',0};
+static sal_Unicode const aHiraginoKakuGothic[]      = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x89D2, 0x30B4, 0x30B7, 0x30C3, 0x30AF,0};
 static sal_Unicode const aHiraginoKakuGothicPro[]   = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x89D2, 0x30B4, 'p','r','o',0};
 static sal_Unicode const aHiraginoKakuGothicProN[]  = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x89D2, 0x30B4, 'p','r','o','n',0};
 static sal_Unicode const aHiraginoMaruGothicPro[]   = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o',0};
@@ -317,6 +318,7 @@ static const ImplLocalizedFontName aImplLocalizedNamesList[] =
 {   "hgmarugothicmpro",     aHGMaruGothicMPRO },
 {   "hiraginominchopro",    aHiraginoMinchoPro },
 {   "hiraginominchopron",   aHiraginoMinchoProN },
+{   "hiraginosans",         aHiraginoKakuGothic },
 {   "hiraginokakugothicpro", aHiraginoKakuGothicPro },
 {   "hiraginokakugothicpron", aHiraginoKakuGothicProN },
 {   "hiraginomarugothicpro", aHiraginoMaruGothicPro },
