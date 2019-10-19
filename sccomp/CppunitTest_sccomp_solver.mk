@@ -44,4 +44,8 @@ $(eval $(call gb_CppunitTest_use_rdb,sccomp_solver,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sccomp_solver))
 
+ifeq ($(ENABLE_LPSOLVE),TRUE)
+$(call gb_CppunitTest_get_target,sccomp_solver): $(call gb_ExternalPackage_get_target,lpsolve)
+endif
+
 # vim: set noet sw=4 ts=4:
