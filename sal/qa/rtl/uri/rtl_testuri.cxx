@@ -181,11 +181,10 @@ void Test::test_Uri() {
 
     // Check surrogate handling:
 
-    aText1 = OUStringChar(u'\xD800') + // %ED%A0%80
-             OUStringChar(u'\xD800') + // %F0%90%8F%BF
-             OUStringChar(u'\xDFFF') +
-             OUStringChar(u'\xDFFF') + // %ED%BF%BF
-             "A"; // A
+    aText1 = u"\xD800" // %ED%A0%80
+             u"\U000103FF" // 0xD800,0xDFFF -> %F0%90%8F%BF
+             u"\xDFFF" // %ED%BF%BF
+             u"A"; // A
     aText2 = "%ED%A0%80" "%F0%90%8F%BF" "%ED%BF%BF" "A";
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 11",
@@ -207,11 +206,7 @@ void Test::test_Uri() {
             RTL_TEXTENCODING_UTF8));
 
     aText1 = "%ed%a0%80" "%f0%90%8f%bf" "%ed%bf%bf" "A";
-    aText2 = "%ED%A0%80" +
-              OUStringChar(u'\xD800') +
-              OUStringChar(u'\xDFFF') +
-              "%ED%BF%BF"
-              "A";
+    aText2 = u"%ED%A0%80" u"\U000103FF" u"%ED%BF%BF" u"A";
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 14",
         aText2,
@@ -247,8 +242,7 @@ void Test::test_Uri() {
     // Check IURI handling:
 
     aText1 = "%30%C3%BF";
-    aText2 = "%30" +
-             OUStringChar(u'\x00FF');
+    aText2 = u"%30\u00FF";
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 18",
         aText2,
