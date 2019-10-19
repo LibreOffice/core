@@ -39,7 +39,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Type;
 
-#if defined MYSQL_VERSION_ID && (MYSQL_VERSION_ID >= 80000)
+#if defined MYSQL_VERSION_ID && (MYSQL_VERSION_ID >= 80000) && !defined MARIADB_BASE_VERSION
 using my_bool = bool;
 #else
 using my_bool = char;
