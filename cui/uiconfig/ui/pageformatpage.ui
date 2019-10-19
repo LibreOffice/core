@@ -232,7 +232,6 @@
                           <object class="GtkLabel" id="labelPaperTray">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
                             <property name="label" translatable="yes" context="pageformatpage|labelPaperTray">Paper _tray:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">comboPaperTray</property>
@@ -505,7 +504,6 @@
                       <object class="GtkLabel" id="labelPageLayout">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
                         <property name="label" translatable="yes" context="pageformatpage|labelPageLayout">_Page layout:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">comboPageLayout</property>
@@ -520,7 +518,6 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
                         <property name="label" translatable="yes" context="pageformatpage|label4">Page numbers:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">comboLayoutFormat</property>
@@ -544,52 +541,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkAlignment" id="alignment8">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="left_padding">12</property>
-                        <child>
-                          <object class="GtkBox" id="box1">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="orientation">vertical</property>
-                            <property name="spacing">6</property>
-                            <child>
-                              <object class="GtkLabel" id="labelRegisterStyle">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="label" translatable="yes" context="pageformatpage|labelRegisterStyle">Reference _Style:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">comboRegisterStyle</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="comboRegisterStyle">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
                         <property name="width">2</property>
                       </packing>
                     </child>
@@ -623,7 +574,6 @@
                       <object class="GtkLabel" id="labelTblAlign">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="hexpand">True</property>
                         <property name="label" translatable="yes" context="pageformatpage|labelTblAlign">Table alignment:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">checkbuttonHorz</property>
@@ -670,7 +620,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="hexpand">True</property>
                         <property name="relief">none</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -680,6 +629,30 @@
                         <property name="left_attach">0</property>
                         <property name="top_attach">6</property>
                         <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="labelRegisterStyle">
+                        <property name="can_focus">False</property>
+                        <property name="no_show_all">True</property>
+                        <property name="margin_left">12</property>
+                        <property name="label" translatable="yes" context="pageformatpage|labelRegisterStyle">Reference _Style:</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="comboRegisterStyle">
+                        <property name="can_focus">False</property>
+                        <property name="no_show_all">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">3</property>
                       </packing>
                     </child>
                     <child>
@@ -738,14 +711,26 @@ Do you still want to apply these settings?</property>
       <widget name="grid7"/>
     </widgets>
   </object>
+  <object class="GtkSizeGroup" id="sizegroup3">
+    <property name="ignore_hidden">True</property>
+    <widgets>
+      <widget name="comboPageFormat"/>
+      <widget name="spinWidth"/>
+      <widget name="spinHeight"/>
+      <widget name="comboTextFlowBox"/>
+      <widget name="spinMargLeft"/>
+      <widget name="spinMargRight"/>
+      <widget name="spinMargTop"/>
+      <widget name="spinMargBot"/>
+    </widgets>
+  </object>
   <object class="GtkSizeGroup" id="sizegroup4">
     <property name="ignore_hidden">True</property>
     <widgets>
       <widget name="comboPaperTray"/>
       <widget name="comboPageLayout"/>
       <widget name="comboLayoutFormat"/>
-      <widget name="checkbuttonHorz"/>
-      <widget name="checkbuttonVert"/>
+      <widget name="comboRegisterStyle"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup5">
@@ -754,6 +739,7 @@ Do you still want to apply these settings?</property>
       <widget name="labelPaperTray"/>
       <widget name="labelPageLayout"/>
       <widget name="label4"/>
+      <widget name="labelRegisterStyle"/>
       <widget name="labelTblAlign"/>
     </widgets>
   </object>
@@ -765,10 +751,10 @@ Do you still want to apply these settings?</property>
       <widget name="labelHeight"/>
       <widget name="labelOrientation"/>
       <widget name="labelTextFlow"/>
+      <widget name="box3"/>
+      <widget name="box2"/>
       <widget name="labelTopMargin"/>
       <widget name="labelBottomMargin"/>
-      <widget name="box2"/>
-      <widget name="box3"/>
     </widgets>
   </object>
 </interface>
