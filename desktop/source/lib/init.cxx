@@ -3272,70 +3272,76 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
 {
     SolarMutexGuard aGuard;
 
-    char* pCopy = strdup(pArguments);
-    if (!pCopy) {
-        SetLastExceptionMsg("String copying error.");
-        return;
-    }
-
-    char* pIdChar = strtok(pCopy, " ");
-    char* pOptionalEventType = strtok(nullptr, " ");
-    char* pOptionalData = strtok(nullptr, " ");
-
-    if (!pIdChar) {
-        SetLastExceptionMsg("Error parsing the command.");
-        free(pCopy);
-        return;
-    }
-
-    OUString sId = OUString::createFromAscii(pIdChar);
-
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
-        free(pCopy);
         return;
     }
-    else
+
+    OUString sArgs= OStringToOUString(OString(pArguments), RTL_TEXTENCODING_UTF8);
+    if (sArgs.isEmpty())
     {
-        const OUString sClickAction("CLICK");
-        const OUString sSelectAction("SELECT");
-
-        try
-        {
-            WindowUIObject aUIObject(pWindow);
-            std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(sId));
-            if (pUIWindow) {
-                if (pOptionalEventType) {
-                    if (strcmp(pOptionalEventType, "selected") == 0 && pOptionalData) {
-                        char* pPos = strtok(pOptionalData, ";");
-                        char* pText = strtok(nullptr, ";");
-
-                        if (!pPos || !pText)
-                        {
-                            SetLastExceptionMsg("Error parsing the command.");
-                            free(pCopy);
-                            return;
-                        }
-
-                        StringMap aMap;
-                        aMap["POS"] = OUString::createFromAscii(pPos);
-                        aMap["TEXT"] = OUString::createFromAscii(pText);
-
-                        pUIWindow->execute(sSelectAction, aMap);
-                    }
-                } else {
-                    pUIWindow->execute(sClickAction, StringMap());
-                }
-            }
-        } catch(...) {}
-
-        // force resend
-        pWindow->Resize();
+        SetLastExceptionMsg("String copying error.");
+        return;
     }
 
-    free(pCopy);
+    sal_Int32 nPos = 0;
+    OUString sId = sArgs.getToken(0, ' ', nPos);
+
+    if (sId.isEmpty())
+    {
+        SetLastExceptionMsg("Error parsing the command.");
+        return;
+    }
+
+    const OUString sClickAction("CLICK");
+    const OUString sSelectAction("SELECT");
+
+    try
+    {
+        WindowUIObject aUIObject(pWindow);
+        std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(sId));
+        if (pUIWindow && nPos >=0)
+        {
+            OUString sOptionalEventType = sArgs.getToken(0, ' ', nPos);
+            if (sOptionalEventType.equals("selected") && nPos >= 0)
+            {
+                OUString sOptionalData = sArgs.getToken(0, ' ', nPos);
+                nPos = sOptionalData.isEmpty()? -1 : 0;
+                if (nPos >= 0)
+                {
+                    OUString sPos = sOptionalData.getToken(0, ';', nPos);
+                    if (nPos >= 0)
+                    {
+                        OUString sText = sOptionalData.getToken(0, ';', nPos);
+                        StringMap aMap;
+                        aMap["POS"] = sPos;
+                        aMap["TEXT"] = sText;
+                        pUIWindow->execute(sSelectAction, aMap);
+                    }
+                    else
+                    {
+                        SetLastExceptionMsg("Error parsing the command.");
+                        return;
+                    }
+                }
+                else
+                {
+                    SetLastExceptionMsg("Error parsing the command.");
+                    return;
+                }
+            }
+            else
+            {
+                pUIWindow->execute(sClickAction, StringMap());
+            }
+        }
+    }
+    catch(...) {}
+
+    // force resend
+    pWindow->Resize();
 }
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
