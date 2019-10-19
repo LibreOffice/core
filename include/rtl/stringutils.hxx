@@ -12,6 +12,7 @@
 
 #include "sal/config.h"
 
+#include <cassert>
 #include <cstddef>
 
 #include "sal/types.h"
@@ -79,6 +80,8 @@ namespace rtl
 */
 struct SAL_WARN_UNUSED OUStringChar_ {
     constexpr OUStringChar_(sal_Unicode theC): c(theC) {}
+    constexpr OUStringChar_(char theC): c(theC) { assert(c <= 0x7F); }
+    template<typename T> OUStringChar_(T &&) = delete;
     sal_Unicode const c;
 };
 using OUStringChar = OUStringChar_ const;
