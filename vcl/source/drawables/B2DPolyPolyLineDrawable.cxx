@@ -46,17 +46,18 @@ bool B2DPolyPolyLineDrawable::DrawCommand(OutputDevice* pRenderContext) const
         return Draw(pRenderContext, maLinePolyPolygon);
 }
 
-bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
-                                   basegfx::B2DPolyPolygon const& rLinePolyPolygon,
-                                   LineInfo const& rLineInfo) const
+static bool CanApplyDashes(basegfx::B2DPolyPolygon const& rLinePolyPolygon,
+                           LineInfo const& rLineInfo)
 {
-    basegfx::B2DPolyPolygon aFillPolyPolygon;
-    const bool bDashUsed(LineStyle::Dash == rLineInfo.GetStyle());
-    const bool bLineWidthUsed(rLineInfo.GetWidth() > 1);
+    return (LineStyle::Dash == rLineInfo.GetStyle() && rLinePolyPolygon.count());
+}
 
+static basegfx::B2DPolyPolygon ApplyLineDashing(basegfx::B2DPolyPolygon const& rLinePolyPolygon,
+                                                LineInfo const& rLineInfo)
+{
     basegfx::B2DPolyPolygon aLinePolyPolygon(rLinePolyPolygon);
 
-    if (bDashUsed && aLinePolyPolygon.count())
+    if (CanApplyDashes(aLinePolyPolygon, rLineInfo))
     {
         ::std::vector<double> fDotDashArray;
         const double fDashLen(rLineInfo.GetDashLen());
@@ -82,7 +83,7 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
         {
             basegfx::B2DPolyPolygon aResult;
 
-            for (auto const& rPolygon : aLinePolyPolygon)
+            for (auto const& rPolygon : rLinePolyPolygon)
             {
                 basegfx::B2DPolyPolygon aLineTarget;
                 basegfx::utils::applyLineDashing(rPolygon, fDotDashArray, &aLineTarget);
@@ -93,28 +94,51 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
         }
     }
 
-    if (bLineWidthUsed && aLinePolyPolygon.count())
+    return aLinePolyPolygon;
+}
+
+static bool UseLineWidth(basegfx::B2DPolyPolygon const& rLinePolyPolygon, LineInfo const& rLineInfo)
+{
+    return (rLineInfo.GetWidth() > 1 && rLinePolyPolygon.count());
+}
+
+static basegfx::B2DPolyPolygon CreateFillPolyPolygon(basegfx::B2DPolyPolygon& rLinePolyPolygon,
+                                                     LineInfo const& rLineInfo)
+{
+    basegfx::B2DPolyPolygon aFillPolyPolygon;
+
+    if (UseLineWidth(rLinePolyPolygon, rLineInfo))
     {
         const double fHalfLineWidth((rLineInfo.GetWidth() * 0.5) + 0.5);
 
-        if (aLinePolyPolygon.areControlPointsUsed())
+        if (rLinePolyPolygon.areControlPointsUsed())
         {
             // #i110768# When area geometry has to be created, do not
             // use the fallback bezier decomposition inside createAreaGeometry,
             // but one that is at least as good as ImplSubdivideBezier was.
             // There, Polygon::AdaptiveSubdivide was used with default parameter
             // 1.0 as quality index.
-            aLinePolyPolygon = basegfx::utils::adaptiveSubdivideByDistance(aLinePolyPolygon, 1.0);
+            rLinePolyPolygon = basegfx::utils::adaptiveSubdivideByDistance(rLinePolyPolygon, 1.0);
         }
 
-        for (auto const& rPolygon : aLinePolyPolygon)
+        for (auto const& rPolygon : rLinePolyPolygon)
         {
             aFillPolyPolygon.append(basegfx::utils::createAreaGeometry(
                 rPolygon, fHalfLineWidth, rLineInfo.GetLineJoin(), rLineInfo.GetLineCap()));
         }
 
-        aLinePolyPolygon.clear();
+        rLinePolyPolygon.clear();
     }
+
+    return aFillPolyPolygon;
+}
+
+bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
+                                   basegfx::B2DPolyPolygon const& rLinePolyPolygon,
+                                   LineInfo const& rLineInfo) const
+{
+    basegfx::B2DPolyPolygon aLinePolyPolygon = ApplyLineDashing(rLinePolyPolygon, rLineInfo);
+    basegfx::B2DPolyPolygon aFillPolyPolygon = CreateFillPolyPolygon(aLinePolyPolygon, rLineInfo);
 
     GDIMetaFile* pOldMetaFile = pRenderContext->GetConnectMetaFile();
     pRenderContext->SetConnectMetaFile(nullptr);
