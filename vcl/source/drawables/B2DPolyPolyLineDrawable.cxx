@@ -150,31 +150,26 @@ private:
     VclPtr<OutputDevice> mpRenderContext;
 };
 
-bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
-                                   basegfx::B2DPolyPolygon const& rLinePolyPolygon,
-                                   LineInfo const& rLineInfo) const
+static void DrawPolyLine(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
+                         basegfx::B2DPolyPolygon const& rLinePolyPolygon)
 {
-    basegfx::B2DPolyPolygon aLinePolyPolygon = ApplyLineDashing(rLinePolyPolygon, rLineInfo);
-    basegfx::B2DPolyPolygon aFillPolyPolygon = CreateFillPolyPolygon(aLinePolyPolygon, rLineInfo);
-
-    DisableMetafileProcessing aDisableMtf(pRenderContext);
-
-    const bool bTryAA((pRenderContext->GetAntialiasing() & AntialiasingFlags::EnableB2dDraw)
-                      && mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
-                      && pRenderContext->GetRasterOp() == RasterOp::OverPaint
-                      && pRenderContext->IsLineColor());
-
-    if (aLinePolyPolygon.count())
+    if (rLinePolyPolygon.count())
     {
-        for (auto const& rB2DPolygon : aLinePolyPolygon)
+        for (auto const& rB2DPolygon : rLinePolyPolygon)
         {
             const bool bPixelSnapHairline(pRenderContext->GetAntialiasing()
                                           & AntialiasingFlags::PixelSnapHairline);
+
+            const bool bTryAA((pRenderContext->GetAntialiasing() & AntialiasingFlags::EnableB2dDraw)
+                              && pGraphics->supportsOperation(OutDevSupportType::B2DDraw)
+                              && pRenderContext->GetRasterOp() == RasterOp::OverPaint
+                              && pRenderContext->IsLineColor());
+
             bool bDone = false;
 
             if (bTryAA)
             {
-                bDone = mpGraphics->DrawPolyLine(
+                bDone = pGraphics->DrawPolyLine(
                     basegfx::B2DHomMatrix(), rB2DPolygon, 0.0, basegfx::B2DVector(1.0, 1.0),
                     basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
                     basegfx::deg2rad(
@@ -185,12 +180,29 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
             if (!bDone)
             {
                 tools::Polygon aPolygon(rB2DPolygon);
-                mpGraphics->DrawPolyLine(aPolygon.GetSize(),
-                                         reinterpret_cast<SalPoint*>(aPolygon.GetPointAry()),
-                                         pRenderContext);
+                pGraphics->DrawPolyLine(aPolygon.GetSize(),
+                                        reinterpret_cast<SalPoint*>(aPolygon.GetPointAry()),
+                                        pRenderContext);
             }
         }
     }
+}
+
+bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
+                                   basegfx::B2DPolyPolygon const& rLinePolyPolygon,
+                                   LineInfo const& rLineInfo) const
+{
+    basegfx::B2DPolyPolygon aLinePolyPolygon = ApplyLineDashing(rLinePolyPolygon, rLineInfo);
+    basegfx::B2DPolyPolygon aFillPolyPolygon = CreateFillPolyPolygon(aLinePolyPolygon, rLineInfo);
+
+    DisableMetafileProcessing aDisableMtf(pRenderContext);
+
+    DrawPolyLine(pRenderContext, mpGraphics, rLinePolyPolygon);
+
+    const bool bTryAA((pRenderContext->GetAntialiasing() & AntialiasingFlags::EnableB2dDraw)
+                      && mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
+                      && pRenderContext->GetRasterOp() == RasterOp::OverPaint
+                      && pRenderContext->IsLineColor());
 
     if (aFillPolyPolygon.count())
     {
