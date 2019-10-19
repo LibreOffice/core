@@ -354,7 +354,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(cons
             return m_xRoot;
 
         // c)
-        OUStringBuffer sParentPath;
+        OUStringBuffer sParentPath(64);
         sal_Int32       i = 0;
         for (i = 0; i < c - 1; ++i)
         {

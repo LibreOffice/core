@@ -76,7 +76,7 @@ void lcl_ParserHelper(INetURLObject& _rParser, css::util::URL& _rURL,bool _bUseI
         // Don't add last segment as it is the name!
         --nCount;
 
-        OUStringBuffer aPath;
+        OUStringBuffer aPath(128);
         for ( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
         {
             aPath.append( '/');

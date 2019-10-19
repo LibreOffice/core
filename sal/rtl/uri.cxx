@@ -638,7 +638,7 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
 
     sal_Unicode const * p = pText->buffer;
     sal_Unicode const * pEnd = p + pText->length;
-    sal_Int32 nCapacity = pText->length * 2;
+    sal_Int32 nCapacity = 256;
     rtl_uString_new_WithLength(pResult, nCapacity);
 
     while (p < pEnd)

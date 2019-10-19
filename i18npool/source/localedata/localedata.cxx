@@ -1445,10 +1445,9 @@ oslGenericFunction LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, con
 {
     lcl_LookupTableHelper & rLookupTable = lcl_LookupTableStatic::get();
 
-    OUStringBuffer aBuf(1);
     if (cachedItem.get() && cachedItem->equals(rLocale))
     {
-        aBuf.ensureCapacity(strlen(pFunction) + 1 + strlen(cachedItem->localeName));
+        OUStringBuffer aBuf(static_cast<int>(strlen(pFunction) + 1 + strlen(cachedItem->localeName)));
         return cachedItem->module->getFunctionSymbol(aBuf.appendAscii(pFunction).append(cUnder).
                 appendAscii(cachedItem->localeName).makeStringAndClear());
     }
