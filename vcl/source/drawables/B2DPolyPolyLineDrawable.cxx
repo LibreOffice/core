@@ -188,6 +188,49 @@ static void DrawPolyLine(OutputDevice* pRenderContext, SalGraphics* const pGraph
     }
 }
 
+static void FillPolyPolygon(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
+                            basegfx::B2DPolyPolygon const& rFillPolyPolygon)
+{
+    if (rFillPolyPolygon.count())
+    {
+        const Color aOldLineColor(pRenderContext->GetLineColor());
+        const Color aOldFillColor(pRenderContext->GetFillColor());
+
+        pRenderContext->SetLineColor();
+        pRenderContext->InitLineColor();
+        pRenderContext->SetFillColor(aOldLineColor);
+        pRenderContext->InitFillColor();
+
+        const bool bTryAA((pRenderContext->GetAntialiasing() & AntialiasingFlags::EnableB2dDraw)
+                          && pGraphics->supportsOperation(OutDevSupportType::B2DDraw)
+                          && pRenderContext->GetRasterOp() == RasterOp::OverPaint
+                          && pRenderContext->IsLineColor());
+
+        bool bDone = false;
+
+        if (bTryAA)
+            bDone = pGraphics->DrawPolyPolygon(basegfx::B2DHomMatrix(), rFillPolyPolygon, 0.0,
+                                               pRenderContext);
+
+        if (!bDone)
+        {
+            for (auto const& rB2DPolygon : rFillPolyPolygon)
+            {
+                tools::Polygon aPolygon(rB2DPolygon);
+
+                // need to subdivide, pGraphics->DrawPolygon ignores curves
+                aPolygon.AdaptiveSubdivide(aPolygon);
+                pGraphics->DrawPolygon(
+                    aPolygon.GetSize(),
+                    reinterpret_cast<const SalPoint*>(aPolygon.GetConstPointAry()), pRenderContext);
+            }
+        }
+
+        pRenderContext->SetFillColor(aOldFillColor);
+        pRenderContext->SetLineColor(aOldLineColor);
+    }
+}
+
 bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
                                    basegfx::B2DPolyPolygon const& rLinePolyPolygon,
                                    LineInfo const& rLineInfo) const
@@ -198,47 +241,7 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
     DisableMetafileProcessing aDisableMtf(pRenderContext);
 
     DrawPolyLine(pRenderContext, mpGraphics, rLinePolyPolygon);
-
-    const bool bTryAA((pRenderContext->GetAntialiasing() & AntialiasingFlags::EnableB2dDraw)
-                      && mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
-                      && pRenderContext->GetRasterOp() == RasterOp::OverPaint
-                      && pRenderContext->IsLineColor());
-
-    if (aFillPolyPolygon.count())
-    {
-        const Color aOldLineColor(pRenderContext->GetLineColor());
-        const Color aOldFillColor(pRenderContext->GetFillColor());
-
-        pRenderContext->SetLineColor();
-        pRenderContext->InitLineColor();
-        pRenderContext->SetFillColor(aOldLineColor);
-        pRenderContext->InitFillColor();
-
-        bool bDone = false;
-
-        if (bTryAA)
-        {
-            bDone = mpGraphics->DrawPolyPolygon(basegfx::B2DHomMatrix(), aFillPolyPolygon, 0.0,
-                                                pRenderContext);
-        }
-
-        if (!bDone)
-        {
-            for (auto const& rB2DPolygon : aFillPolyPolygon)
-            {
-                tools::Polygon aPolygon(rB2DPolygon);
-
-                // need to subdivide, mpGraphics->DrawPolygon ignores curves
-                aPolygon.AdaptiveSubdivide(aPolygon);
-                mpGraphics->DrawPolygon(
-                    aPolygon.GetSize(),
-                    reinterpret_cast<const SalPoint*>(aPolygon.GetConstPointAry()), pRenderContext);
-            }
-        }
-
-        pRenderContext->SetFillColor(aOldFillColor);
-        pRenderContext->SetLineColor(aOldLineColor);
-    }
+    FillPolyPolygon(pRenderContext, mpGraphics, aFillPolyPolygon);
 
     return true;
 }
