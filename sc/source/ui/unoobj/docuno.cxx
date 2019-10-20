@@ -1316,7 +1316,6 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, too
     // test in same order as in SID_CURRENTCELL execute
 
     ScAddress aAddress;
-    ScRangeUtil aRangeUtil;
     SCTAB nNameTab;
     sal_Int32 nNumeric = 0;
 

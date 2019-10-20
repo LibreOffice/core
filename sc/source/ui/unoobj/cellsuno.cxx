@@ -4755,7 +4755,6 @@ uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
         }
         else
         {
-            ScRangeUtil aRangeUtil;
             if ( ScRangeUtil::MakeRangeFromName( aName, &rDoc, nTab, aCellRange ) ||
                  ScRangeUtil::MakeRangeFromName( aName, &rDoc, nTab, aCellRange, RUTL_DBASE ) )
                 bFound = true;

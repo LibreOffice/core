@@ -748,7 +748,6 @@ void ScOptSolverDlg::ShowError( bool bCondition, formula::RefEdit* pFocus )
 
 bool ScOptSolverDlg::ParseRef( ScRange& rRange, const OUString& rInput, bool bAllowRange )
 {
-    ScRangeUtil aRangeUtil;
     ScAddress::Details aDetails(mrDoc.GetAddressConvention(), 0, 0);
     ScRefFlags nFlags = rRange.ParseAny( rInput, &mrDoc, aDetails );
     if ( nFlags & ScRefFlags::VALID )

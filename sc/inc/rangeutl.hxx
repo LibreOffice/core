@@ -38,7 +38,7 @@ enum RutlNameScope { RUTL_NONE=0, RUTL_NAMES, RUTL_DBASE };
 class SC_DLLPUBLIC ScRangeUtil
 {
 public:
-                ScRangeUtil()  {}
+    ScRangeUtil() = delete;
 
     static bool MakeArea        ( const OUString&   rAreaStr,
                                   ScArea&           rArea,

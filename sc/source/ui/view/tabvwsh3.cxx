@@ -352,7 +352,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 // Is it a named area (first named ranges then database ranges)?
                 else
                 {
-                    ScRangeUtil     aRangeUtil;
                     formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
                     if( ScRangeUtil::MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_NAMES, eConv ) ||
                         ScRangeUtil::MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_DBASE, eConv ) )

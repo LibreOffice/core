@@ -76,7 +76,6 @@ ScConsolidateDlg::ScConsolidateDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::W
                               GetViewData() )
     , pDoc            ( static_cast<ScTabViewShell*>(SfxViewShell::Current())->
                               GetViewData().GetDocument() )
-    , pRangeUtil      ( new ScRangeUtil )
     , nAreaDataCount  ( 0 )
     , nWhichCons      ( rArgSet.GetPool()->GetWhich( SID_CONSOLIDATE ) )
     , bDlgLostFocus   ( false )
@@ -109,7 +108,7 @@ ScConsolidateDlg::~ScConsolidateDlg()
 
 void ScConsolidateDlg::Init()
 {
-    OSL_ENSURE( pDoc && pRangeUtil, "Error in Ctor" );
+    OSL_ENSURE( pDoc, "Error in Ctor" );
 
     OUString aStr;
     sal_uInt16 i=0;
@@ -215,7 +214,7 @@ void ScConsolidateDlg::FillAreaLists()
     m_xLbDataArea->append_text( aStrUndefined );
     m_xLbDestArea->append_text( aStrUndefined );
 
-    if ( pRangeUtil && pAreaData && (nAreaDataCount > 0) )
+    if ( pAreaData && (nAreaDataCount > 0) )
     {
         for ( size_t i=0;
               (i<nAreaDataCount) && (!pAreaData[i].aStrName.isEmpty());
@@ -284,7 +283,7 @@ void ScConsolidateDlg::Deactivate()
 
 bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 {
-    if ( !pRangeUtil || !pDoc ||
+    if ( !pDoc ||
          ((pEd != m_xEdDataArea.get()) && (pEd != m_xEdDestArea.get())) )
         return false;
 
@@ -449,8 +448,7 @@ IMPL_LINK( ScConsolidateDlg, SelectCBHdl, weld::ComboBox&, rLb, void )
     formula::RefEdit* pEd = (&rLb == m_xLbDataArea.get()) ? m_xEdDataArea.get() : m_xEdDestArea.get();
     const sal_Int32 nSelPos = rLb.get_active();
 
-    if (    pRangeUtil
-        && (nSelPos > 0)
+    if (   (nSelPos > 0)
         && (nAreaDataCount > 0)
         && (pAreaData != nullptr) )
     {
