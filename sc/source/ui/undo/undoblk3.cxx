@@ -294,7 +294,7 @@ void ScUndoFillTable::DoChange( const bool bUndo )
         SetChangeTrack();
     }
 
-    pDocShell->PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Extras);
+    pDocShell->PostPaint(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Extras);
     pDocShell->PostDataChanged();
 
     //  CellContentChanged comes with the selection
@@ -806,11 +806,11 @@ void ScUndoAutoFormat::Undo()
         SCROW nEndY = aBlockRange.aEnd.Row();
         SCTAB nEndZ = aBlockRange.aEnd.Tab();
 
-        pUndoDoc->CopyToDocument( nStartX, 0, 0, nEndX, MAXROW, nTabCount-1,
+        pUndoDoc->CopyToDocument( nStartX, 0, 0, nEndX, rDoc.MaxRow(), nTabCount-1,
                                     InsertDeleteFlags::NONE, false, rDoc, &aMarkData );
-        pUndoDoc->CopyToDocument( 0, nStartY, 0, MAXCOL, nEndY, nTabCount-1,
+        pUndoDoc->CopyToDocument( 0, nStartY, 0, rDoc.MaxCol(), nEndY, nTabCount-1,
                                     InsertDeleteFlags::NONE, false, rDoc, &aMarkData );
-        pDocShell->PostPaint( 0, 0, nStartZ, MAXCOL, MAXROW, nEndZ,
+        pDocShell->PostPaint( 0, 0, nStartZ, rDoc.MaxCol(), rDoc.MaxRow(), nEndZ,
                               PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top, SC_PF_LINES );
     }
     else
@@ -891,7 +891,7 @@ void ScUndoAutoFormat::Redo()
         }
 
         pDocShell->PostPaint( 0,      0,      nStartZ,
-                              MAXCOL, MAXROW, nEndZ,
+                              rDoc.MaxCol(), rDoc.MaxRow(), nEndZ,
                               PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top, SC_PF_LINES);
     }
     else
@@ -989,7 +989,7 @@ void ScUndoReplace::Undo()
 
         InsertDeleteFlags nUndoFlags = (pSearchItem->GetPattern()) ? InsertDeleteFlags::ATTRIB : InsertDeleteFlags::CONTENTS;
         pUndoDoc->CopyToDocument( 0,      0,      0,
-                                  MAXCOL, MAXROW, MAXTAB,
+                                  rDoc.MaxCol(), rDoc.MaxRow(), MAXTAB,
                                   nUndoFlags, false, rDoc, nullptr, false );   // without row flags
         pDocShell->PostPaintGridAll();
     }
@@ -1232,7 +1232,7 @@ void ScUndoConversion::DoChange( ScDocument* pRefDoc, const ScAddress& rCursorPo
 
         bool bMulti = aMarkData.IsMultiMarked();
         pRefDoc->CopyToDocument( 0,      0,      0,
-                                 MAXCOL, MAXROW, nTabCount-1,
+                                 rDoc.MaxCol(), rDoc.MaxRow(), nTabCount-1,
                                  InsertDeleteFlags::CONTENTS, bMulti, rDoc, &aMarkData );
         pDocShell->PostPaintGridAll();
     }
@@ -1382,7 +1382,7 @@ void ScUndoRefreshLink::Undo()
     for (SCTAB nTab=0; nTab<nCount; nTab++)
         if (xUndoDoc->HasTable(nTab))
         {
-            ScRange aRange(0,0,nTab,MAXCOL,MAXROW,nTab);
+            ScRange aRange(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab);
             if (bMakeRedo)
             {
                 if (bFirst)
@@ -1427,7 +1427,7 @@ void ScUndoRefreshLink::Redo()
     for (SCTAB nTab=0; nTab<nCount; nTab++)
         if (xRedoDoc->HasTable(nTab))
         {
-            ScRange aRange(0,0,nTab,MAXCOL,MAXROW,nTab);
+            ScRange aRange(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab);
 
             rDoc.DeleteAreaTab( aRange, InsertDeleteFlags::ALL );
             xRedoDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL, false, rDoc);
@@ -1676,9 +1676,9 @@ void ScUndoUpdateAreaLink::DoChange( const bool bUndo ) const
     //  Paint
 
     if ( aNewRange.aEnd.Col() != aOldRange.aEnd.Col() )
-        aWorkRange.aEnd.SetCol(MAXCOL);
+        aWorkRange.aEnd.SetCol(rDoc.MaxCol());
     if ( aNewRange.aEnd.Row() != aOldRange.aEnd.Row() )
-        aWorkRange.aEnd.SetRow(MAXROW);
+        aWorkRange.aEnd.SetRow(rDoc.MaxRow());
 
     if ( !pDocShell->AdjustRowHeight( aWorkRange.aStart.Row(), aWorkRange.aEnd.Row(), aWorkRange.aStart.Tab() ) )
         pDocShell->PostPaint( aWorkRange, PaintPartFlags::Grid );
