@@ -452,6 +452,20 @@ void ODbTypeWizDialogSetup::SetIntroPage(OMySQLIntroPageSetup* pPage)
     m_pMySQLIntroPage->SetClickHdl(LINK( this, ODbTypeWizDialogSetup, ImplClickHdl ) );
 }
 
+void ODbTypeWizDialogSetup::SetGeneralPage(OGeneralPageWizard* pPage)
+{
+    m_pGeneralPage = pPage;
+    m_pGeneralPage->SetTypeSelectHandler(LINK(this, ODbTypeWizDialogSetup, OnTypeSelected));
+    m_pGeneralPage->SetCreationModeHandler(LINK( this, ODbTypeWizDialogSetup, OnChangeCreationMode ) );
+    m_pGeneralPage->SetDocumentSelectionHandler(LINK( this, ODbTypeWizDialogSetup, OnRecentDocumentSelected ) );
+    m_pGeneralPage->SetChooseDocumentHandler(LINK( this, ODbTypeWizDialogSetup, OnSingleDocumentChosen ) );
+}
+
+void ODbTypeWizDialogSetup::SetFinalPage(OFinalDBPageSetup* pPage)
+{
+    m_pFinalPage = pPage;
+}
+
 std::unique_ptr<BuilderPage> ODbTypeWizDialogSetup::createPage(WizardState _nState)
 {
     std::unique_ptr<OGenericAdministrationPage> xPage;
@@ -463,11 +477,6 @@ std::unique_ptr<BuilderPage> ODbTypeWizDialogSetup::createPage(WizardState _nSta
     {
         case PAGE_DBSETUPWIZARD_INTRO:
             xPage = std::make_unique<OGeneralPageWizard>(pPageContainer,this,*m_pOutSet);
-            m_pGeneralPage = static_cast<OGeneralPageWizard*>(xPage.get());
-            m_pGeneralPage->SetTypeSelectHandler(LINK(this, ODbTypeWizDialogSetup, OnTypeSelected));
-            m_pGeneralPage->SetCreationModeHandler(LINK( this, ODbTypeWizDialogSetup, OnChangeCreationMode ) );
-            m_pGeneralPage->SetDocumentSelectionHandler(LINK( this, ODbTypeWizDialogSetup, OnRecentDocumentSelected ) );
-            m_pGeneralPage->SetChooseDocumentHandler(LINK( this, ODbTypeWizDialogSetup, OnSingleDocumentChosen ) );
             break;
 
         case PAGE_DBSETUPWIZARD_DBASE:
@@ -533,7 +542,6 @@ std::unique_ptr<BuilderPage> ODbTypeWizDialogSetup::createPage(WizardState _nSta
 
         case PAGE_DBSETUPWIZARD_FINAL:
             xPage = OFinalDBPageSetup::CreateFinalDBTabPageSetup(pPageContainer, this, *m_pOutSet);
-            m_pFinalPage = static_cast<OFinalDBPageSetup*>(xPage.get());
             break;
     }
 

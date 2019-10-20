@@ -42,6 +42,7 @@
 #include <unotools/confignode.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <dbwizsetup.hxx>
 
 namespace dbaui
 {
@@ -443,7 +444,7 @@ namespace dbaui
     }
 
     // OGeneralPageWizard
-    OGeneralPageWizard::OGeneralPageWizard(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rItems)
+    OGeneralPageWizard::OGeneralPageWizard(weld::Container* pPage, ODbTypeWizDialogSetup* pController, const SfxItemSet& _rItems)
         : OGeneralPage( pPage, pController, "dbaccess/ui/generalpagewizard.ui", _rItems )
         , m_xRB_CreateDatabase(m_xBuilder->weld_radio_button("createDatabase"))
         , m_xRB_OpenExistingDatabase(m_xBuilder->weld_radio_button("openExistingDatabase"))
@@ -488,6 +489,8 @@ namespace dbaui
         m_xRB_OpenExistingDatabase->connect_clicked( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
         m_xLB_DocumentList->connect_changed( LINK( this, OGeneralPageWizard, OnDocumentSelected ) );
         m_xPB_OpenDatabase->connect_clicked( LINK( this, OGeneralPageWizard, OnOpenDocument ) );
+
+        pController->SetGeneralPage(this);
     }
 
     OGeneralPageWizard::~OGeneralPageWizard()

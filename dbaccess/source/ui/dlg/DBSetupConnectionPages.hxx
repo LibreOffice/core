@@ -245,9 +245,9 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
-        static std::unique_ptr<OGenericAdministrationPage> CreateFinalDBTabPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet);
+        static std::unique_ptr<OGenericAdministrationPage> CreateFinalDBTabPageSetup(weld::Container* pPage, ODbTypeWizDialogSetup* pController, const SfxItemSet& _rAttrSet);
 
-        OFinalDBPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs);
+        OFinalDBPageSetup(weld::Container* pPage, ODbTypeWizDialogSetup* pController, const SfxItemSet& _rCoreAttrs);
         virtual ~OFinalDBPageSetup() override;
         bool IsDatabaseDocumentToBeRegistered() const;
         bool IsDatabaseDocumentToBeOpened() const;
