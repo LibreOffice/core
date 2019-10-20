@@ -413,6 +413,25 @@ std::vector<beans::PropertyValue> desktop::jsonToPropertyValuesVector(const char
     return aArguments;
 }
 
+
+static StringMap jsonToStringMap(const char* pJSON)
+{
+    StringMap aArgs;
+    if (pJSON && pJSON[0] != '\0')
+    {
+        std::stringstream aStream(pJSON);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+
+        for (const auto& rPair : aTree)
+        {
+            aArgs[OUString::fromUtf8(rPair.first.c_str())] = OUString::fromUtf8(rPair.second.get_value<std::string>(".").c_str());
+        }
+    }
+    return aArgs;
+}
+
+
 static boost::property_tree::ptree unoAnyToPropertyTree(const uno::Any& anyItem)
 {
     boost::property_tree::ptree aTree;
@@ -3272,35 +3291,19 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
 {
     SolarMutexGuard aGuard;
 
-    char* pCopy = strdup(pArguments);
-    if (!pCopy) {
-        SetLastExceptionMsg("String copying error.");
-        return;
-    }
-
-    char* pIdChar = strtok(pCopy, " ");
-
-    if (!pIdChar) {
-        SetLastExceptionMsg("Error parsing the command.");
-        return;
-    }
-
-    OUString sId = OUString::createFromAscii(pIdChar);
-    free(pCopy);
-
+    StringMap aMap(jsonToStringMap(pArguments));
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
         return;
     }
-    else
+    else if (aMap.find("ctrl") != aMap.end() && aMap.find("cmd") != aMap.end())
     {
-        OUString sAction("CLICK");
         WindowUIObject aUIObject(pWindow);
-        std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(sId));
+        std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(aMap["ctrl"]));
         if (pUIWindow)
-            pUIWindow->execute(sAction, StringMap());
+            pUIWindow->execute(aMap["cmd"], aMap);
 
         // force resend
         pWindow->Resize();
