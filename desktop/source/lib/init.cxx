@@ -413,6 +413,25 @@ std::vector<beans::PropertyValue> desktop::jsonToPropertyValuesVector(const char
     return aArguments;
 }
 
+
+static StringMap jsonToStringMap(const char* pJSON)
+{
+    StringMap aArgs;
+    if (pJSON && pJSON[0] != '\0')
+    {
+        std::stringstream aStream(pJSON);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+
+        for (const auto& rPair : aTree)
+        {
+            aArgs[OUString::fromUtf8(rPair.first.c_str())] = OUString::fromUtf8(rPair.second.get_value<std::string>(".").c_str());
+        }
+    }
+    return aArgs;
+}
+
+
 static boost::property_tree::ptree unoAnyToPropertyTree(const uno::Any& anyItem)
 {
     boost::property_tree::ptree aTree;
@@ -3272,70 +3291,23 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
 {
     SolarMutexGuard aGuard;
 
-    char* pCopy = strdup(pArguments);
-    if (!pCopy) {
-        SetLastExceptionMsg("String copying error.");
-        return;
-    }
-
-    char* pIdChar = strtok(pCopy, " ");
-    char* pOptionalEventType = strtok(nullptr, " ");
-    char* pOptionalData = strtok(nullptr, " ");
-
-    if (!pIdChar) {
-        SetLastExceptionMsg("Error parsing the command.");
-        free(pCopy);
-        return;
-    }
-
-    OUString sId = OUString::createFromAscii(pIdChar);
-
+    StringMap aMap(jsonToStringMap(pArguments));
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
-        free(pCopy);
         return;
     }
-    else
+    else if (aMap.find("ctrl") != aMap.end() && aMap.find("cmd") != aMap.end())
     {
-        const OUString sClickAction("CLICK");
-        const OUString sSelectAction("SELECT");
-
-        try
-        {
-            WindowUIObject aUIObject(pWindow);
-            std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(sId));
-            if (pUIWindow) {
-                if (pOptionalEventType) {
-                    if (strcmp(pOptionalEventType, "selected") == 0 && pOptionalData) {
-                        char* pPos = strtok(pOptionalData, ";");
-                        char* pText = strtok(nullptr, ";");
-
-                        if (!pPos || !pText)
-                        {
-                            SetLastExceptionMsg("Error parsing the command.");
-                            free(pCopy);
-                            return;
-                        }
-
-                        StringMap aMap;
-                        aMap["POS"] = OUString::createFromAscii(pPos);
-                        aMap["TEXT"] = OUString::createFromAscii(pText);
-
-                        pUIWindow->execute(sSelectAction, aMap);
-                    }
-                } else {
-                    pUIWindow->execute(sClickAction, StringMap());
-                }
-            }
-        } catch(...) {}
+        WindowUIObject aUIObject(pWindow);
+        std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(aMap["ctrl"]));
+        if (pUIWindow)
+            pUIWindow->execute(aMap["cmd"], aMap);
 
         // force resend
         pWindow->Resize();
     }
-
-    free(pCopy);
 }
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
