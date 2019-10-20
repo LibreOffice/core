@@ -5,6 +5,7 @@
   <object class="GtkBox" id="ViewOptionsPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
@@ -12,6 +13,7 @@
       <object class="GtkGrid" id="grid2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
         <property name="row_spacing">6</property>
         <property name="column_spacing">12</property>
         <property name="column_homogeneous">True</property>
@@ -294,6 +296,7 @@
           <object class="GtkBox" id="box2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
@@ -332,7 +335,9 @@
                           <object class="GtkGrid" id="grid6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
                             <property name="row_spacing">6</property>
+                            <property name="column_spacing">12</property>
                             <child>
                               <object class="GtkCheckButton" id="vruler">
                                 <property name="label" translatable="yes" context="viewoptionspage|vruler">Verti_cal ruler</property>
@@ -352,6 +357,7 @@
                               <object class="GtkComboBoxText" id="hrulercombobox">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -362,6 +368,7 @@
                               <object class="GtkComboBoxText" id="vrulercombobox">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -447,6 +454,7 @@
                           <object class="GtkComboBoxText" id="measureunit">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -498,5 +506,12 @@
         <property name="position">0</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <widgets>
+      <widget name="vruler"/>
+      <widget name="hruler"/>
+      <widget name="measureunitlabel"/>
+    </widgets>
   </object>
 </interface>
