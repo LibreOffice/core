@@ -576,12 +576,9 @@ void OP_SheetName123(LotusContext& rContext, SvStream& rStream, sal_uInt16 nLeng
     }
 
     // B0 36 [sheet number (2 bytes?)] [sheet name (null terminated char array)]
-
-    sal_uInt16 nDummy;
-    rStream.ReadUInt16( nDummy ); // ignore the first 2 bytes (B0 36).
-    rStream.ReadUInt16( nDummy );
-    SCTAB nSheetNum = static_cast<SCTAB>(nDummy);
-    rContext.pDoc->MakeTable(nSheetNum);
+    rStream.SeekRel(2); // ignore the first 2 bytes (B0 36).
+    sal_uInt16 nSheetNum(0);
+    rStream.ReadUInt16(nSheetNum);
 
     ::std::vector<sal_Char> sSheetName;
     sSheetName.reserve(nLength-4);
@@ -592,10 +589,12 @@ void OP_SheetName123(LotusContext& rContext, SvStream& rStream, sal_uInt16 nLeng
         sSheetName.push_back(c);
     }
 
+    if (!ValidTab(nSheetNum))
+        return;
+
+    rContext.pDoc->MakeTable(nSheetNum);
     if (!sSheetName.empty())
     {
-        if (!ValidTab(nSheetNum) || nSheetNum >= rContext.pDoc->GetTableCount())
-            return;
         OUString aName(sSheetName.data(), strlen(sSheetName.data()), rContext.eCharVon);
         rContext.pDoc->RenameTab(nSheetNum, aName);
     }
