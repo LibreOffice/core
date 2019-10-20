@@ -52,8 +52,10 @@
 #include <comphelper/string.hxx>
 #include <paintfrm.hxx>
 #include <PostItMgr.hxx>
+#include <SwGrammarMarkUp.hxx>
 
 #include <cellfrm.hxx>
+#include <wrtsh.hxx>
 
 // Here static members are defined. They will get changed on alteration of the
 // MapMode. This is done so that on ShowCursor the same size does not have to be
@@ -182,7 +184,8 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
     m_aTextCursor.SetPos( aRect.Pos() );
 
     bool bPostItActive = false;
-    if (auto pView = dynamic_cast<SwView*>(m_pCursorShell->GetSfxViewShell()))
+    SwView* pView = dynamic_cast<SwView*>(m_pCursorShell->GetSfxViewShell());
+    if (pView)
     {
         if (SwPostItMgr* pPostItMgr = pView->GetPostItMgr())
             bPostItActive = pPostItMgr->GetActiveSidebarWin() != nullptr;
@@ -205,18 +208,48 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         // notify about the cursor position & size
         tools::Rectangle aSVRect(aRect.Pos().getX(), aRect.Pos().getY(), aRect.Pos().getX() + aRect.SSize().Width(), aRect.Pos().getY() + aRect.SSize().Height());
         OString sRect = aSVRect.toString();
+
+        // is cursor at a mispelled word ?
+        bool bIsWrong = false;
+        if (pView)
+        {
+            const SwViewOption* pVOpt = pView->GetWrtShell().GetViewOptions();
+            if(pVOpt && pVOpt->IsOnlineSpell())
+            {
+                SwPaM* pCursor = m_pCursorShell->GetCursor();
+                SwPosition aPos(*pCursor->GetPoint());
+                Point aPt = aRect.Pos();
+                SwCursorMoveState eTmpState(MV_SETONLYTEXT);
+                SwTextNode *pNode = nullptr;
+                if (m_pCursorShell->GetLayout()->GetCursorOfst(&aPos, aPt, &eTmpState))
+                    pNode = aPos.nNode.GetNode().GetTextNode();
+                if (pNode && !pNode->IsInProtectSect())
+                {
+                    sal_Int32 nBegin = aPos.nContent.GetIndex();
+                    sal_Int32 nLen = 1;
+
+                    SwWrongList *pWrong = nullptr;
+                    pWrong = pNode->GetWrong();
+                    if (!pWrong)
+                        pWrong = pNode->GetGrammarCheck();
+                    if (pWrong)
+                        bIsWrong = pWrong->InWrongWord(nBegin,nLen) && !pNode->IsSymbolAt(nBegin);
+                 }
+            }
+        }
+
         if (pViewShell)
         {
             if (pViewShell == m_pCursorShell->GetSfxViewShell())
             {
-                SfxLokHelper::notifyVisCursorInvalidation(pViewShell, sRect);
+                SfxLokHelper::notifyVisCursorInvalidation(pViewShell, sRect, bIsWrong);
             }
             else
                 SfxLokHelper::notifyOtherView(m_pCursorShell->GetSfxViewShell(), pViewShell, LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
         }
         else
         {
-            SfxLokHelper::notifyVisCursorInvalidation(m_pCursorShell->GetSfxViewShell(), sRect);
+            SfxLokHelper::notifyVisCursorInvalidation(m_pCursorShell->GetSfxViewShell(), sRect, bIsWrong);
             SfxLokHelper::notifyOtherViews(m_pCursorShell->GetSfxViewShell(), LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
         }
     }
