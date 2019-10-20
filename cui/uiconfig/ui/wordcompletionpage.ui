@@ -376,8 +376,9 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
-      <widget name="maxentries"/>
       <widget name="minwordlen"/>
+      <widget name="maxentries"/>
+      <widget name="acceptwith"/>
     </widgets>
   </object>
 </interface>
