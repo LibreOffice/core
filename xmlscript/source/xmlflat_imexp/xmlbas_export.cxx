@@ -19,18 +19,16 @@
 
 #include <sal/config.h>
 
-#include <unoservices.hxx>
 #include "xmlbas_export.hxx"
 #include <sal/log.hxx>
 #include <xmlscript/xmlns.h>
 #include <xmlscript/xml_helper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 

@@ -22,10 +22,8 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/types.h>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;

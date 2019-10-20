@@ -24,13 +24,6 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-
-#include <com/sun/star/awt/XControlModel.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
-
 #include <com/sun/star/xml/input/XRoot.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <rtl/ref.hxx>
