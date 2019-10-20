@@ -29,6 +29,7 @@
 #include <svl/intitem.hxx>
 #include <sal/log.hxx>
 #include <sot/storage.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <document.hxx>
 #include <formulacell.hxx>
@@ -1407,6 +1408,9 @@ void XclImpPivotTable::ReadSxAddl( XclImpStream& rStrm )
 void XclImpPivotTable::Convert()
 {
     if( !mxPCache || !mxPCache->IsValid() )
+        return;
+
+    if (utl::ConfigManager::IsFuzzing()) //just too slow
         return;
 
     ScDPSaveData aSaveData;
