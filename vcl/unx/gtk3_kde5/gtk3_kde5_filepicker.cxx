@@ -22,26 +22,18 @@
 
 #include "gtk3_kde5_filepicker.hxx"
 
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <com/sun/star/ui/dialogs/ControlActions.hpp>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
-#include <osl/mutex.hxx>
-
-#include <fpicker/strings.hrc>
+#include <sal/log.hxx>
+#include <vcl/svapp.hxx>
 
 #include "FPServiceInfo.hxx"
 
 #undef Region
-
-#include <unx/geninst.h>
 
 #include <strings.hrc>
 

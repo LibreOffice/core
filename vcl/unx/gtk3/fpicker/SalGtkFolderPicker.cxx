@@ -27,17 +27,11 @@
 
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
-#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <vcl/svapp.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include "SalGtkFolderPicker.hxx"
 #include <sal/log.hxx>
-
-#include <string.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;

@@ -22,16 +22,12 @@
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/image.hxx>
-#include <vcl/metaact.hxx>
 #include <impgraph.hxx>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <graphic/UnoGraphic.hxx>
 #include <vcl/GraphicExternalLink.hxx>
-
-#include <image.h>
 
 using namespace ::com::sun::star;
 

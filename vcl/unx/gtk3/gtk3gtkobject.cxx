@@ -23,11 +23,10 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
+#include <unx/gtk/gtkbackend.hxx>
 #include <unx/gtk/gtkobject.hxx>
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkdata.hxx>
-#include <unx/gtk/gtkinst.hxx>
-#include <unx/gtk/gtkgdi.hxx>
 
 GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
         : m_pSocket(nullptr)
