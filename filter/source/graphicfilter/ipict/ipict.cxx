@@ -1094,14 +1094,14 @@ sal_uLong PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bCo
                         nByteCount++;
                     }
                     size_t i = 0;
-                    while (i < nByteWidth)
+                    while (i < aScanline.size())
                     {
                         pPict->ReadUChar( nFlagCounterByte );
                         if ( ( nFlagCounterByte & 0x80 ) == 0)
                         {
                             nCount = static_cast<sal_uInt16>(nFlagCounterByte) + 1;
-                            if ((i + nCount) > nByteWidth)
-                                nCount = nByteWidth - i;
+                            if ((i + nCount) > aScanline.size())
+                                nCount = aScanline.size() - i;
                             if (pPict->remainingSize() < nCount)
                                 return 0xffffffff;
                             while( nCount-- )
@@ -1115,8 +1115,8 @@ sal_uLong PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bCo
                             if (pPict->remainingSize() < 1)
                                 return 0xffffffff;
                             nCount = ( 1 - sal_Int16( static_cast<sal_uInt16>(nFlagCounterByte) | 0xff00 ) );
-                            if (( i + nCount) > nByteWidth)
-                                nCount = nByteWidth - i;
+                            if (( i + nCount) > aScanline.size())
+                                nCount = aScanline.size() - i;
                             pPict->ReadUChar( nDat );
                             while( nCount-- )
                                 aScanline[ i++ ] = nDat;
