@@ -52,6 +52,28 @@ static bool CanApplyDashes(basegfx::B2DPolyPolygon const& rLinePolyPolygon,
     return (LineStyle::Dash == rLineInfo.GetStyle() && rLinePolyPolygon.count());
 }
 
+static ::std::vector<double> GenerateDotDashArray(LineInfo const& rLineInfo)
+{
+    ::std::vector<double> fDotDashArray;
+    const double fDashLen(rLineInfo.GetDashLen());
+    const double fDotLen(rLineInfo.GetDotLen());
+    const double fDistance(rLineInfo.GetDistance());
+
+    for (sal_uInt16 a(0); a < rLineInfo.GetDashCount(); a++)
+    {
+        fDotDashArray.push_back(fDashLen);
+        fDotDashArray.push_back(fDistance);
+    }
+
+    for (sal_uInt16 b(0); b < rLineInfo.GetDotCount(); b++)
+    {
+        fDotDashArray.push_back(fDotLen);
+        fDotDashArray.push_back(fDistance);
+    }
+
+    return fDotDashArray;
+}
+
 static basegfx::B2DPolyPolygon ApplyLineDashing(basegfx::B2DPolyPolygon const& rLinePolyPolygon,
                                                 LineInfo const& rLineInfo)
 {
@@ -59,22 +81,7 @@ static basegfx::B2DPolyPolygon ApplyLineDashing(basegfx::B2DPolyPolygon const& r
 
     if (CanApplyDashes(aLinePolyPolygon, rLineInfo))
     {
-        ::std::vector<double> fDotDashArray;
-        const double fDashLen(rLineInfo.GetDashLen());
-        const double fDotLen(rLineInfo.GetDotLen());
-        const double fDistance(rLineInfo.GetDistance());
-
-        for (sal_uInt16 a(0); a < rLineInfo.GetDashCount(); a++)
-        {
-            fDotDashArray.push_back(fDashLen);
-            fDotDashArray.push_back(fDistance);
-        }
-
-        for (sal_uInt16 b(0); b < rLineInfo.GetDotCount(); b++)
-        {
-            fDotDashArray.push_back(fDotLen);
-            fDotDashArray.push_back(fDistance);
-        }
+        ::std::vector<double> fDotDashArray = GenerateDotDashArray(rLineInfo);
 
         const double fAccumulated(
             ::std::accumulate(fDotDashArray.begin(), fDotDashArray.end(), 0.0));
