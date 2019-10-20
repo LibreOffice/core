@@ -100,10 +100,11 @@ void ScUndoUtil::PaintMore( ScDocShell* pDocShell,
     SCROW nRow1 = rRange.aStart.Row();
     SCCOL nCol2 = rRange.aEnd.Col();
     SCROW nRow2 = rRange.aEnd.Row();
+    ScDocument& rDoc = pDocShell->GetDocument();
     if (nCol1 > 0) --nCol1;
     if (nRow1 > 0) --nRow1;
-    if (nCol2<MAXCOL) ++nCol2;
-    if (nRow2<MAXROW) ++nRow2;
+    if (nCol2<rDoc.MaxCol()) ++nCol2;
+    if (nRow2<rDoc.MaxRow()) ++nRow2;
 
     pDocShell->PostPaint( nCol1,nRow1,rRange.aStart.Tab(),
                           nCol2,nRow2,rRange.aEnd.Tab(), PaintPartFlags::Grid );

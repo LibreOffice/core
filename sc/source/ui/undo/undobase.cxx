@@ -313,7 +313,7 @@ bool ScBlockUndo::AdjustHeight()
         rDoc.SetDrawPageSize(aBlockRange.aStart.Tab());
 
         pDocShell->PostPaint( 0,      aBlockRange.aStart.Row(), aBlockRange.aStart.Tab(),
-                              MAXCOL, MAXROW,                   aBlockRange.aEnd.Tab(),
+                              rDoc.MaxCol(), rDoc.MaxRow(),                   aBlockRange.aEnd.Tab(),
                               PaintPartFlags::Grid | PaintPartFlags::Left );
     }
     return bRet;
@@ -426,7 +426,7 @@ ScMoveUndo::~ScMoveUndo()
 void ScMoveUndo::UndoRef()
 {
     ScDocument& rDoc = pDocShell->GetDocument();
-    ScRange aRange(0,0,0, MAXCOL,MAXROW,pRefUndoDoc->GetTableCount()-1);
+    ScRange aRange(0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),pRefUndoDoc->GetTableCount()-1);
     pRefUndoDoc->CopyToDocument(aRange, InsertDeleteFlags::FORMULA, false, rDoc, nullptr, false);
     if (pRefUndoData)
         pRefUndoData->DoUndo( &rDoc, false );

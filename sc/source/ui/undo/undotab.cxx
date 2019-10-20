@@ -86,10 +86,11 @@ OUString ScUndoInsertTab::GetComment() const
 
 void ScUndoInsertTab::SetChangeTrack()
 {
-    ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
     if ( pChangeTrack )
     {
-        ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
+        ScRange aRange( 0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab );
         pChangeTrack->AppendInsert( aRange );
         nEndChangeAction = pChangeTrack->GetActionMax();
     }
@@ -175,12 +176,13 @@ OUString ScUndoInsertTables::GetComment() const
 
 void ScUndoInsertTables::SetChangeTrack()
 {
-    ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
     if ( pChangeTrack )
     {
         nStartChangeAction = pChangeTrack->GetActionMax() + 1;
         nEndChangeAction = 0;
-        ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
+        ScRange aRange( 0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab );
         for( size_t i = 0; i < aNameList.size(); i++ )
         {
             aRange.aStart.SetTab( sal::static_int_cast<SCTAB>( nTab + i ) );
@@ -264,13 +266,14 @@ OUString ScUndoDeleteTab::GetComment() const
 
 void ScUndoDeleteTab::SetChangeTrack()
 {
-    ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
     if ( pChangeTrack )
     {
         sal_uLong nTmpChangeAction;
         nStartChangeAction = pChangeTrack->GetActionMax() + 1;
         nEndChangeAction = 0;
-        ScRange aRange( 0, 0, 0, MAXCOL, MAXROW, 0 );
+        ScRange aRange( 0, 0, 0, rDoc.MaxCol(), rDoc.MaxRow(), 0 );
         for ( size_t i = 0; i < theTabs.size(); ++i )
         {
             aRange.aStart.SetTab( theTabs[i] );
@@ -308,7 +311,7 @@ void ScUndoDeleteTab::Undo()
         bDrawIsInUndo = false;
         if (bOk)
         {
-            pRefUndoDoc->CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, InsertDeleteFlags::ALL,false, rDoc);
+            pRefUndoDoc->CopyToDocument(0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab, InsertDeleteFlags::ALL,false, rDoc);
 
             OUString aOldName;
             pRefUndoDoc->GetName( nTab, aOldName );
@@ -362,7 +365,7 @@ void ScUndoDeleteTab::Undo()
     pSfxApp->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
     pSfxApp->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
 
-    pDocShell->PostPaint(0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::All );  // incl. extras
+    pDocShell->PostPaint(0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::All );  // incl. extras
 
     // not ShowTable due to SetTabNo(..., sal_True):
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -803,7 +806,7 @@ void ScUndoMakeScenario::Undo()
 
     DoSdrUndoAction( pDrawUndo.get(), &rDoc );
 
-    pDocShell->PostPaint(0,0,nDestTab,MAXCOL,MAXROW,MAXTAB, PaintPartFlags::All);
+    pDocShell->PostPaint(0,0,nDestTab,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::All);
     pDocShell->PostDataChanged();
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -887,7 +890,7 @@ void ScUndoImportTab::DoChange() const
     }
 
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );    // Navigator
-    pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB,
+    pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB,
                                 PaintPartFlags::Grid | PaintPartFlags::Top | PaintPartFlags::Left | PaintPartFlags::Extras );
 }
 
@@ -908,7 +911,7 @@ void ScUndoImportTab::Undo()
         {
             SCTAB nTabPos=nTab+i;
 
-            rDoc.CopyToDocument(0,0,nTabPos, MAXCOL,MAXROW,nTabPos, InsertDeleteFlags::ALL,false, *xRedoDoc);
+            rDoc.CopyToDocument(0,0,nTabPos, rDoc.MaxCol(),rDoc.MaxRow(),nTabPos, InsertDeleteFlags::ALL,false, *xRedoDoc);
             rDoc.GetName( nTabPos, aOldName );
             xRedoDoc->RenameTab(nTabPos, aOldName);
             xRedoDoc->SetTabBgColor(nTabPos, rDoc.GetTabBgColor(nTabPos));
@@ -965,7 +968,7 @@ void ScUndoImportTab::Redo()
     for (i=0; i<nCount; i++)                // then copy into inserted sheets
     {
         SCTAB nTabPos=nTab+i;
-        xRedoDoc->CopyToDocument(0,0,nTabPos, MAXCOL,MAXROW,nTabPos, InsertDeleteFlags::ALL,false, rDoc);
+        xRedoDoc->CopyToDocument(0,0,nTabPos, rDoc.MaxCol(),rDoc.MaxRow(),nTabPos, InsertDeleteFlags::ALL,false, rDoc);
         rDoc.SetTabBgColor(nTabPos, xRedoDoc->GetTabBgColor(nTabPos));
 
         if (xRedoDoc->IsScenario(nTabPos))
@@ -1312,7 +1315,7 @@ void ScUndoPrintRange::DoChange(bool bUndo)
 
     ScPrintFunc( pDocShell, pDocShell->GetPrinter(), nTab ).UpdatePages();
 
-    pDocShell->PostPaint( ScRange(0,0,nTab,MAXCOL,MAXROW,nTab), PaintPartFlags::Grid );
+    pDocShell->PostPaint( ScRange(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab), PaintPartFlags::Grid );
 }
 
 void ScUndoPrintRange::Undo()

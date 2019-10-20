@@ -107,17 +107,17 @@ void ScUndoWidthOrHeight::Undo()
         if (bWidth) // Width
         {
             pUndoDoc->CopyToDocument(static_cast<SCCOL>(nStart), 0, rTab,
-                                     static_cast<SCCOL>(nEnd), MAXROW, rTab, InsertDeleteFlags::NONE,
+                                     static_cast<SCCOL>(nEnd), rDoc.MaxRow(), rTab, InsertDeleteFlags::NONE,
                                      false, rDoc);
             rDoc.UpdatePageBreaks( rTab );
             pDocShell->PostPaint( static_cast<SCCOL>(nPaintStart), 0, rTab,
-                    MAXCOL, MAXROW, rTab, PaintPartFlags::Grid | PaintPartFlags::Top );
+                    rDoc.MaxCol(), rDoc.MaxRow(), rTab, PaintPartFlags::Grid | PaintPartFlags::Top );
         }
         else        // Height
         {
-            pUndoDoc->CopyToDocument(0, nStart, rTab, MAXCOL, nEnd, rTab, InsertDeleteFlags::NONE, false, rDoc);
+            pUndoDoc->CopyToDocument(0, nStart, rTab, rDoc.MaxCol(), nEnd, rTab, InsertDeleteFlags::NONE, false, rDoc);
             rDoc.UpdatePageBreaks( rTab );
-            pDocShell->PostPaint( 0, nPaintStart, rTab, MAXCOL, MAXROW, rTab, PaintPartFlags::Grid | PaintPartFlags::Left );
+            pDocShell->PostPaint( 0, nPaintStart, rTab, rDoc.MaxCol(), rDoc.MaxRow(), rTab, PaintPartFlags::Grid | PaintPartFlags::Left );
         }
     }
 
@@ -138,6 +138,8 @@ void ScUndoWidthOrHeight::Undo()
 void ScUndoWidthOrHeight::Redo()
 {
     BeginRedo();
+
+    ScDocument& rDoc = pDocShell->GetDocument();
 
     bool bPaintAll = false;
     if (eMode==SC_SIZE_OPTIMAL)
@@ -160,7 +162,7 @@ void ScUndoWidthOrHeight::Redo()
 
     // paint grid if selection was changed directly at the MarkData
     if (bPaintAll)
-        pDocShell->PostPaint( 0, 0, nStartTab, MAXCOL, MAXROW, nEndTab, PaintPartFlags::Grid );
+        pDocShell->PostPaint( 0, 0, nStartTab, rDoc.MaxCol(), rDoc.MaxRow(), nEndTab, PaintPartFlags::Grid );
 
     EndRedo();
 }
