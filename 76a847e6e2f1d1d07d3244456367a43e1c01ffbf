@@ -22,6 +22,30 @@
       "revId": "76a847e6e2f1d1d07d3244456367a43e1c01ffbf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_07efa4b0",
+        "filename": "i18npool/source/localedata/LocaleNode.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2308,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-10-20T12:36:47Z",
+      "side": 1,
+      "message": "Return from different Sequence.",
+      "parentUuid": "7f7f9b97_07d6c4f2",
+      "range": {
+        "startLine": 2308,
+        "startChar": 8,
+        "endLine": 2308,
+        "endChar": 81
+      },
+      "revId": "76a847e6e2f1d1d07d3244456367a43e1c01ffbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
