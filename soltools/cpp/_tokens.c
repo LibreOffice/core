@@ -333,7 +333,8 @@ Tokenrow *
 
     maketokenrow(len, dtr);
     movetokenrow(dtr, str);
-    dtr->lp += len;
+    if (len != 0)
+        dtr->lp += len;
     return dtr;
 }
 
