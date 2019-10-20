@@ -2750,6 +2750,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     tools::Rectangle aChangedArea = aNewVisArea.GetBoundRect();
     if (!aChangedArea.IsEmpty())
     {
+        UpdateVisibleRange();
         UpdateFormulas(aChangedArea.Left(), aChangedArea.Top(), aChangedArea.Right(), aChangedArea.Bottom());
     }
 
