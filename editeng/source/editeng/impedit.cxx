@@ -1102,7 +1102,11 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             }
             else
             {
-                SfxLokHelper::notifyVisCursorInvalidation(mpViewShell, sRect);
+                // is cursor at a mispelled word ?
+                Reference< linguistic2::XSpellChecker1 >  xSpeller( pEditEngine->pImpEditEngine->GetSpeller() );
+                bool bIsWrong = xSpeller.is() && IsWrongSpelledWord(aPaM, /*bMarkIfWrong*/ false);
+
+                SfxLokHelper::notifyVisCursorInvalidation(mpViewShell, sRect, bIsWrong);
                 mpViewShell->NotifyOtherViews(LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
             }
         }
