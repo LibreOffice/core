@@ -722,12 +722,12 @@ using namespace ::com::sun::star;
         return bChangedSomething;
     }
 
-    std::unique_ptr<OGenericAdministrationPage> OFinalDBPageSetup::CreateFinalDBTabPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
+    std::unique_ptr<OGenericAdministrationPage> OFinalDBPageSetup::CreateFinalDBTabPageSetup(weld::Container* pPage, ODbTypeWizDialogSetup* pController, const SfxItemSet& _rAttrSet)
     {
         return std::make_unique<OFinalDBPageSetup>(pPage, pController, _rAttrSet);
     }
 
-    OFinalDBPageSetup::OFinalDBPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs)
+    OFinalDBPageSetup::OFinalDBPageSetup(weld::Container* pPage, ODbTypeWizDialogSetup* pController, const SfxItemSet& _rCoreAttrs)
         : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/finalpagewizard.ui", "PageFinal", _rCoreAttrs)
         , m_xFTFinalHeader(m_xBuilder->weld_label("headerText"))
         , m_xFTFinalHelpText(m_xBuilder->weld_label("helpText"))
@@ -741,6 +741,7 @@ using namespace ::com::sun::star;
         m_xCBOpenAfterwards->connect_toggled(LINK(this, OFinalDBPageSetup, OnOpenSelected));
         m_xCBStartTableWizard->connect_toggled(LINK(this,OGenericAdministrationPage,OnControlModifiedButtonClick));
         m_xRBRegisterDataSource->set_active(true);
+        pController->SetFinalPage(this);
     }
 
     OFinalDBPageSetup::~OFinalDBPageSetup()

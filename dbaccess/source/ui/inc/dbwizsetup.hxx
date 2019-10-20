@@ -123,6 +123,8 @@ public:
     bool IsTableWizardToBeStarted() const;
 
     void SetIntroPage(OMySQLIntroPageSetup* pPage);
+    void SetGeneralPage(OGeneralPageWizard* pPage);
+    void SetFinalPage(OFinalDBPageSetup* pPage);
 
 private:
     /// to override to create new pages

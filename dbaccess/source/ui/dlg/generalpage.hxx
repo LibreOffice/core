@@ -25,6 +25,8 @@
 
 namespace dbaui
 {
+    class ODbTypeWizDialogSetup;
+
     // OGeneralPage
     class OGeneralPage : public OGenericAdministrationPage
     {
@@ -114,7 +116,7 @@ namespace dbaui
     class OGeneralPageWizard final : public OGeneralPage
     {
     public:
-        OGeneralPageWizard( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rItems );
+        OGeneralPageWizard( weld::Container* pPage, ODbTypeWizDialogSetup* pController, const SfxItemSet& _rItems );
         virtual ~OGeneralPageWizard() override;
 
         enum CreationMode
