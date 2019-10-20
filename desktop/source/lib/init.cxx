@@ -413,6 +413,25 @@ std::vector<beans::PropertyValue> desktop::jsonToPropertyValuesVector(const char
     return aArguments;
 }
 
+
+static StringMap jsonToStringMap(const char* pJSON)
+{
+    StringMap aArgs;
+    if (pJSON && pJSON[0] != '\0')
+    {
+        std::stringstream aStream(pJSON);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+
+        for (const auto& rPair : aTree)
+        {
+            aArgs[OUString::fromUtf8(rPair.first.c_str())] = OUString::fromUtf8(rPair.second.get_value<std::string>(".").c_str());
+        }
+    }
+    return aArgs;
+}
+
+
 static boost::property_tree::ptree unoAnyToPropertyTree(const uno::Any& anyItem)
 {
     boost::property_tree::ptree aTree;
@@ -3272,34 +3291,14 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
 {
     SolarMutexGuard aGuard;
 
-    char* pCopy = strdup(pArguments);
-    if (!pCopy)
-    {
-        SetLastExceptionMsg("String copying error.");
-        return;
-    }
-
-    char* pIdChar = strtok(pCopy, " ");
-    char* pOptionalEventType = strtok(nullptr, " ");
-    char* pOptionalData = strtok(nullptr, " ");
-
-    if (!pIdChar)
-    {
-        SetLastExceptionMsg("Error parsing the command.");
-        free(pCopy);
-        return;
-    }
-
-    OUString sId = OUString::createFromAscii(pIdChar);
-
+    StringMap aMap(jsonToStringMap(pArguments));
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
-        free(pCopy);
         return;
     }
-    else
+    else if (aMap.find("id") != aMap.end())
     {
         const OUString sClickAction("CLICK");
         const OUString sSelectAction("SELECT");
@@ -3311,40 +3310,29 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
         try
         {
             WindowUIObject aUIObject(pWindow);
-            std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(sId));
+            std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(aMap["id"]));
             if (pUIWindow) {
                 bool bIsClickAction = false;
-                StringMap aMap;
 
-                if (pOptionalEventType) {
-                    if (strcmp(pOptionalEventType, "selected") == 0 && pOptionalData)
+                if (aMap.find("cmd") != aMap.end()) {
+                    if (aMap["cmd"] == "selected")
                     {
-                        char* pPos = strtok(pOptionalData, ";");
-                        char* pText = strtok(nullptr, ";");
-
-                        if (!pPos || !pText)
-                        {
-                            SetLastExceptionMsg("Error parsing the command.");
-                            free(pCopy);
-                            return;
-                        }
-
-                        aMap["POS"] = OUString::createFromAscii(pPos);
-                        aMap["TEXT"] = OUString::createFromAscii(pText);
+                        aMap["POS"] = aMap["data"];
+                        aMap["TEXT"] = aMap["data"];
 
                         pUIWindow->execute(sSelectAction, aMap);
                     }
-                    else if (strcmp(pOptionalEventType, "plus") == 0)
+                    else if (aMap["cmd"] == "plus")
                     {
                         pUIWindow->execute(sUpAction, aMap);
                     }
-                    else if (strcmp(pOptionalEventType, "minus") == 0)
+                    else if (aMap["cmd"] == "minus")
                     {
                         pUIWindow->execute(sDownAction, aMap);
                     }
-                    else if (pOptionalData)
+                    else if (aMap["cmd"] == "set")
                     {
-                        aMap["TEXT"] = OUString::createFromAscii(pOptionalData);
+                        aMap["TEXT"] = aMap["data"];
 
                         pUIWindow->execute(sClearAction, aMap);
                         pUIWindow->execute(sTypeAction, aMap);
@@ -3364,8 +3352,6 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
         pWindow->Hide();
         pWindow->Show();
     }
-
-    free(pCopy);
 }
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
