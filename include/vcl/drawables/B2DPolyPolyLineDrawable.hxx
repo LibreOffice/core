@@ -28,20 +28,9 @@ namespace vcl
 class VCL_DLLPUBLIC B2DPolyPolyLineDrawable : public Drawable
 {
 public:
-    B2DPolyPolyLineDrawable(basegfx::B2DPolyPolygon aLinePolyPolygon)
-        : maLinePolyPolygon(aLinePolyPolygon)
-        , mbUsesLineInfo(false)
-    {
-    }
-
+    B2DPolyPolyLineDrawable(basegfx::B2DPolyPolygon aLinePolyPolygon);
     B2DPolyPolyLineDrawable(basegfx::B2DPolyPolygon aLinePolyPolygon, LineInfo const aLineInfo,
-                            bool bUsesScaffolding = true)
-        : Drawable(bUsesScaffolding)
-        , maLinePolyPolygon(aLinePolyPolygon)
-        , maLineInfo(aLineInfo)
-        , mbUsesLineInfo(true)
-    {
-    }
+                            bool bUsesScaffolding = true);
 
 protected:
     bool ShouldAddAction() const override { return false; }
