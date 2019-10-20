@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/drawing/captionshape.hxx>
+#include <test/drawing/xgluepointssupplier.hxx>
 #include <test/drawing/xshape.hxx>
 #include <test/drawing/xshapedescriptor.hxx>
 #include <test/text/xsimpletext.hxx>
@@ -37,6 +38,7 @@ namespace sc_apitest
 {
 class ScAnnotationShapeObj : public CalcUnoApiTest,
                              public apitest::CaptionShape,
+                             public apitest::XGluePointsSupplier,
                              public apitest::XShape,
                              public apitest::XShapeDescriptor,
                              public apitest::XSimpleText,
@@ -54,6 +56,9 @@ public:
 
     // CaptionShape
     CPPUNIT_TEST(testCaptionShapeProperties);
+
+    // XGluePointsSupplier
+    CPPUNIT_TEST(testGetGluePoints);
 
     // XShape
     CPPUNIT_TEST(testGetSetSize);
