@@ -21,7 +21,6 @@
 #include "X11_clipboard.hxx"
 #include "X11_transferable.hxx"
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 

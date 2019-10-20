@@ -28,7 +28,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <string.h>
 
 using namespace com::sun::star;
 

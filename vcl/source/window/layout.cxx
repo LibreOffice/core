@@ -22,9 +22,6 @@
 #include <vcl/vclmedit.hxx>
 #include <sal/log.hxx>
 
-#include <svdata.hxx>
-#include <strings.hrc>
-
 VclContainer::VclContainer(vcl::Window *pParent, WinBits nStyle)
     : Window(WindowType::CONTAINER)
     , m_bLayoutDirty(true)

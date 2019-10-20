@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <list>
-#include <memory>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
 

@@ -19,13 +19,7 @@
 
 #pragma once
 
-#include <cppuhelper/compbase.hxx>
-
-#include <osl/conditn.hxx>
-#include <osl/mutex.hxx>
 #include <osl/process.h>
-
-#include <rtl/ustrbuf.hxx>
 
 #include "filepicker_ipc_commands.hxx"
 

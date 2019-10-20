@@ -18,14 +18,9 @@
  */
 
 #include <unistd.h>
-#include <fcntl.h>
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <limits.h>
-#include <errno.h>
-#include <poll.h>
 #if defined(FREEBSD) || defined(NETBSD)
 #include <sys/types.h>
 #include <sys/time.h>
@@ -34,27 +29,14 @@
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkframe.hxx>
-#include <unx/gtk/gtksalmenu.hxx>
-#include <unx/salobj.h>
-#include <unx/geninst.h>
 #include <bitmaps.hlst>
 #include <cursor_hotspots.hxx>
 #include <osl/thread.h>
 #include <osl/process.h>
 
-#include <unx/i18n_im.hxx>
-#include <unx/i18n_xkb.hxx>
-#include <unx/wmadaptor.hxx>
-
 #include <vcl/svapp.hxx>
-#include <vcl/BitmapTools.hxx>
 #include <sal/log.hxx>
 
-#ifdef GDK_WINDOWING_X11
-#  include <gdk/gdkx.h>
-#endif
-
-#include <cppuhelper/exc_hlp.hxx>
 #include <chrono>
 
 

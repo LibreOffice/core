@@ -25,17 +25,41 @@ blacklist:
     vcl/qa/cppunit/outdev.cxx:
     # Needed for direct member access
     - basegfx/matrix/b2dhommatrix.hxx
+    vcl/source/app/salplug.cxx:
+    # Needed on WIN32
+    - salframe.hxx
     vcl/source/app/svdata.cxx:
     # Needed on WIN32
     - com/sun/star/accessibility/MSAAService.hpp
+    - salframe.hxx
     vcl/source/app/svmain.cxx:
     # Needed on WIN32
     - desktop/exithelper.h
+    vcl/source/components/factory.cxx:
+    # Actually these are used
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/lang/XSingleServiceFactory.hpp
+    vcl/source/filter/FilterConfigItem.cxx:
+    # Needed for direct member access
+    - com/sun/star/task/XStatusIndicator.hpp
     vcl/source/filter/ipdf/pdfdocument.cxx:
     - comphelper/scopeguard.hxx
+    # Actually these are used
+    - com/sun/star/security/XCertificate.hpp
+    - vector
     vcl/source/filter/jpeg/JpegWriter.hxx:
     # Needed for direct member access
     - vcl/bitmapaccess.hxx
+    vcl/source/filter/png/pngwrite.cxx:
+    # Actually these are used
+    - com/sun/star/beans/PropertyValue.hpp
+    - com/sun/star/uno/Sequence.hxx
+    vcl/source/filter/wmf/wmfexternal.cxx:
+    # Actually these are used
+    - com/sun/star/beans/PropertyValue.hpp
+    vcl/source/font/fontselect.cxx:
+    # Needed on WIN32
+    - PhysicalFontFace.hxx
     vcl/source/fontsubset/sft.cxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h
@@ -47,6 +71,16 @@ blacklist:
     vcl/source/gdi/salgdilayout.cxx:
     # Needed on WIN32
     - desktop/exithelper.h
+    vcl/source/helper/commandinfoprovider.cxx:
+    # Actually these are used
+    - com/sun/star/frame/XFrame.hpp
+    vcl/source/image/ImageTree.cxx:
+    # Actually these are used
+    - com/sun/star/container/XNameAccess.hpp
+    - com/sun/star/uno/Reference.hxx
+    vcl/source/treelist/headbar.cxx:
+    # Actually these are used
+    - com/sun/star/accessibility/XAccessible.hpp
     vcl/source/window/dialog.cxx:
     # comphelper::ScopeGuard is actually used
     - comphelper/scopeguard.hxx
@@ -68,6 +102,27 @@ blacklist:
     vcl/unx/generic/print/genpspgraphics.cxx:
     # Complete type needed for implicit dtor
     - vcl/fontcharmap.hxx
-    vcl/source/app/svdata.cxx:
-    # Needed on WIN32
-    - salframe.hxx
+    vcl/unx/gtk3_kde5/gtk3_kde5_filepicker.cxx:
+    # Actually these are used
+    - QUrl
+    - KFileWidget
+    vcl/unx/gtk3_kde5/kde5_filepicker.cxx:
+    # Actually these are used
+    - KWindowSystem
+    - KFileWidget
+    - QtCore/QDebug
+    - QtCore/QUrl
+    - QtWidgets/QCheckBox
+    - QtWidgets/QFileDialog
+    - QtWidgets/QGridLayout
+    - QtWidgets/QWidget
+    - QtWidgets/QApplication
+    vcl/unx/gtk3_kde5/kde5_lo_filepicker_main.cxx:
+    # Actually these are used
+    - QApplication
+    - QCommandLineParser
+    vcl/unx/gtk3_kde5/kde5_filepicker_ipc.cxx:
+    # Actually these are used
+    - QUrl
+    - QApplication
+    - QDebug

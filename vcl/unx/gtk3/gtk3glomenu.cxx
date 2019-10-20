@@ -7,9 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <string.h>
-
-#include <unx/gtk/gtksalmenu.hxx>
 #include <unx/gtk/glomenu.h>
 
 struct GLOMenu

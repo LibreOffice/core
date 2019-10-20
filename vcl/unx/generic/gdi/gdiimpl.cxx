@@ -46,7 +46,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dtrapezoid.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
-#include <ControlCacheKey.hxx>
 
 #undef SALGDI2_TESTTRANS
 

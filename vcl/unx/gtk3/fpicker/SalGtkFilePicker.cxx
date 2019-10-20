@@ -31,12 +31,10 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/SystemDependent.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <osl/diagnose.h>
-#include <osl/process.h>
 #include <rtl/process.h>
 #include <sal/log.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>

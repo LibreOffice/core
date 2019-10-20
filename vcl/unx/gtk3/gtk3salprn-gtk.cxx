@@ -23,23 +23,12 @@
 #include <gtk/gtk.h>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/view/PrintableState.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <officecfg/Office/Common.hxx>
 
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-
-#include <unotools/streamwrap.hxx>
 
 #include <cstring>
 #include <map>
