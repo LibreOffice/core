@@ -100,9 +100,7 @@ Transliteration_body::transliterateImpl(
         for (i = 0; i < nCount; i++)
         {
             // take care of TOGGLE_CASE transliteration:
-            MappingType nTmpMappingType = nMappingType;
-            if (nMappingType == (MappingType::LowerToUpper | MappingType::UpperToLower))
-                nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
+            MappingType nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
 
             const i18nutil::Mapping &map = i18nutil::casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
             nOffCount += map.nmap;
@@ -118,9 +116,7 @@ Transliteration_body::transliterateImpl(
         for (i = 0; i < nCount; i++)
         {
             // take care of TOGGLE_CASE transliteration:
-            MappingType nTmpMappingType = nMappingType;
-            if (nMappingType == (MappingType::LowerToUpper | MappingType::UpperToLower))
-                nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
+            MappingType nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
 
             const i18nutil::Mapping &map = i18nutil::casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
             for (sal_Int32 k = 0; k < map.nmap; k++)
@@ -158,9 +154,7 @@ Transliteration_body::transliterateImpl(
         for ( sal_Int32 i = 0; i < nCount; i++)
         {
             // take care of TOGGLE_CASE transliteration:
-            MappingType nTmpMappingType = nMappingType;
-            if (nMappingType == (MappingType::LowerToUpper | MappingType::UpperToLower))
-                nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
+            MappingType nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
 
             const i18nutil::Mapping &map = i18nutil::casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
             for (sal_Int32 k = 0; k < map.nmap; k++)
