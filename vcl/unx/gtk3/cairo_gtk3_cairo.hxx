@@ -12,8 +12,6 @@
 
 #include <sal/config.h>
 
-#include <sal/types.h>
-
 #include <vcl/cairo.hxx>
 
 class GtkSalGraphics;

@@ -23,8 +23,6 @@
 
 #include <vcleventlisteners.hxx>
 
-#include <com/sun/star/accessibility/XAccessible.hpp>
-
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::accessibility::XAccessible;
 

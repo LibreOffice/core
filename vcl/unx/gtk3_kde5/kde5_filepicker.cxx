@@ -26,8 +26,6 @@
 
 #include <QtCore/QDebug>
 #include <QtCore/QUrl>
-#include <QtGui/QClipboard>
-#include <QtGui/QWindow>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QGridLayout>

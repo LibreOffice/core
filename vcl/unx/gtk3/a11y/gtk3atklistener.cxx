@@ -35,7 +35,6 @@
 #include "atkwrapper.hxx"
 #include <vcl/svapp.hxx>
 
-#include <rtl/ref.hxx>
 #include <sal/log.hxx>
 
 #define DEBUG_ATK_LISTENER 0

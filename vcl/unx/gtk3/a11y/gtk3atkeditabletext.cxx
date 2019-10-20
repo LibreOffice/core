@@ -21,7 +21,6 @@
 #include "atktextattributes.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
-#include <com/sun/star/accessibility/TextSegment.hpp>
 
 #include <string.h>
 

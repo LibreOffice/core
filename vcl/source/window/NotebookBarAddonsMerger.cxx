@@ -25,9 +25,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/toolbox.hxx>
-#include <osl/module.hxx>
 #include <vcl/OptionalBox.hxx>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <vcl/IPrioritable.hxx>
 
 static const char STYLE_TEXT[] = "Text";

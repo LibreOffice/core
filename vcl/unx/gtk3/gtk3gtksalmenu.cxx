@@ -9,15 +9,12 @@
 
 #include <unx/gtk/gtksalmenu.hxx>
 
-#include <unx/gendata.hxx>
-#include <unx/saldisp.hxx>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/glomenu.h>
 #include <unx/gtk/gloactiongroup.h>
 #include <vcl/floatwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/pngwrite.hxx>
-#include <unx/gtk/gtkinst.hxx>
 
 #include <sal/log.hxx>
 #include <tools/stream.hxx>

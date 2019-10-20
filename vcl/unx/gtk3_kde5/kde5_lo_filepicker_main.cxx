@@ -21,7 +21,6 @@
 #include "kde5_filepicker_ipc.hxx"
 
 #include <QApplication>
-#include <QDebug>
 #include <QCommandLineParser>
 
 #include <config_version.h>

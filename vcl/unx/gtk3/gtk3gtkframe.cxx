@@ -25,16 +25,8 @@
 #include <unx/gtk/hudawareness.h>
 #include <vcl/event.hxx>
 #include <vcl/keycodes.hxx>
-#include <unx/wmadaptor.hxx>
-#include <unx/sm.hxx>
-#include <unx/salbmp.h>
-#include <unx/genprn.h>
 #include <unx/geninst.h>
 #include <headless/svpgdi.hxx>
-#include <o3tl/runtimetooustring.hxx>
-#include <osl/file.hxx>
-#include <rtl/bootstrap.hxx>
-#include <rtl/process.h>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/floatwin.hxx>
@@ -42,28 +34,18 @@
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
-#include <cppuhelper/exc_hlp.hxx>
-
-#include <config_gio.h>
 
 #include <gtk/gtk.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <X11/Xatom.h>
 #include <unx/gtk/gtkbackend.hxx>
 
-#include <dlfcn.h>
 #include <window.h>
-#include <strings.hrc>
-#include <bitmaps.hlst>
-#include <sal/macros.h>
 
-#include <basegfx/range/b2ibox.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 
 #include <algorithm>
-#include <glib/gprintf.h>
 
 #if OSL_DEBUG_LEVEL > 1
 #  include <cstdio>
@@ -74,12 +56,9 @@
 #include <cstdlib>
 #include <cmath>
 
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
-
-#include <config_folders.h>
 
 #define IS_WIDGET_REALIZED gtk_widget_get_realized
 #define IS_WIDGET_MAPPED   gtk_widget_get_mapped

@@ -18,9 +18,7 @@
  */
 
 #include <unx/gtk/atkbridge.hxx>
-#include <unx/gtk/gtkframe.hxx>
 
-#include "atkfactory.hxx"
 #include "atkutil.hxx"
 
 bool InitAtkBridge()

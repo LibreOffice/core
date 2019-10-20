@@ -23,7 +23,6 @@
 #include <osl/thread.hxx>
 #include <osl/module.hxx>
 
-#include <rtl/tencinfo.h>
 #include <sal/log.hxx>
 
 #include <tools/debug.hxx>

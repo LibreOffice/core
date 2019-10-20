@@ -20,16 +20,11 @@
 #include <salgdiimpl.hxx>
 
 #include <vcl/sysdata.hxx>
-#include <sal/log.hxx>
 
 #include <unx/saldisp.hxx>
-#include <unx/salbmp.h>
 #include <unx/salgdi.h>
-#include <unx/x11/x11gdiimpl.h>
 #include <unx/x11/xrender_peer.hxx>
 #include <salframe.hxx>
-
-#include <ControlCacheKey.hxx>
 
 extern "C"
 {

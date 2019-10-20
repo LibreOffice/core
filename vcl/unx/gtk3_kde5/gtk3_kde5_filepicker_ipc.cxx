@@ -21,11 +21,6 @@
 
 #undef Region
 
-#include <unx/geninst.h>
-
-#include <strings.hrc>
-
-#include <future>
 #include <system_error>
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
@@ -38,10 +33,10 @@
 #include <osl/process.h>
 
 #include <gtk/gtk.h>
-#include <gdk/gdkx.h>
-#include <unx/gtk/gtkdata.hxx>
 
 #include <boost/filesystem/path.hpp>
+
+#include <svdata.hxx>
 
 using namespace ::com::sun::star::ui::dialogs;
 

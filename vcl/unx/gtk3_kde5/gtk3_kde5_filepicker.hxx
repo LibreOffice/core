@@ -27,14 +27,9 @@
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
 
-#include <rtl/ustrbuf.hxx>
-
 #include "gtk3_kde5_filepicker_ipc.hxx"
-
-#include <functional>
 
 typedef ::cppu::WeakComponentImplHelper<css::ui::dialogs::XFilePicker3,
                                         css::ui::dialogs::XFilePickerControlAccess

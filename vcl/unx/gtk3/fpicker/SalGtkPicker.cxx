@@ -28,7 +28,6 @@
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <rtl/process.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>

@@ -19,7 +19,6 @@
 
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
-#include <tools/GenericTypeSerializer.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/wall.hxx>

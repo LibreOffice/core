@@ -35,7 +35,6 @@
 #include <vcl/vclstatuslistener.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
-#include <strings.hrc>
 #include <bitmaps.hlst>
 #include <svdata.hxx>
 #include <window.h>
