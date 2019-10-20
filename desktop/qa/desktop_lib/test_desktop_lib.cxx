@@ -147,6 +147,7 @@ public:
     void testComplexSelection();
     void testDialogPaste();
     void testShowHideDialog();
+    void testDialogInput();
     void testCalcSaveAs();
     void testABI();
 
@@ -204,6 +205,7 @@ public:
     CPPUNIT_TEST(testComplexSelection);
     CPPUNIT_TEST(testDialogPaste);
     CPPUNIT_TEST(testShowHideDialog);
+    CPPUNIT_TEST(testDialogInput);
     CPPUNIT_TEST(testCalcSaveAs);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
@@ -1709,6 +1711,36 @@ void DesktopLOKTest::testPartInInvalidation()
         // payload, so this was merged -> it was 1.
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), notifs.size());
     }
+}
+
+void DesktopLOKTest::testDialogInput()
+{
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:HyperlinkDialog", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    pViewShell->GetViewFrame()->GetBindings().Update();
+
+    VclPtr<vcl::Window> pWindow(Application::GetActiveTopWindow());
+    CPPUNIT_ASSERT(pWindow);
+
+    Control* pCtrlFocused = GetFocusControl(pWindow.get());
+    CPPUNIT_ASSERT(pCtrlFocused);
+    ComboBox* pCtrlURL = dynamic_cast<ComboBox*>(pCtrlFocused);
+    CPPUNIT_ASSERT(pCtrlURL);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pCtrlURL->GetText());
+
+    vcl::LOKWindowId nDialogId = pWindow->GetLOKWindowId();
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, nDialogId, LOK_EXT_TEXTINPUT, "wiki.");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, nDialogId, LOK_EXT_TEXTINPUT_END, "wiki.");
+    pDocument->pClass->removeTextContext(pDocument, nDialogId, 1, 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OUString("wiki"), pCtrlURL->GetText());
+
+    static_cast<SystemWindow*>(pWindow.get())->Close();
+    Scheduler::ProcessEventsToIdle();
 }
 
 void DesktopLOKTest::testInput()
