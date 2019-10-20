@@ -17,17 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "common.hxx"
 #include "exp_share.hxx"
+#include <misc.hxx>
 #include <xmlscript/xmlns.h>
 
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/form/binding/XListEntrySink.hpp>
-#include <com/sun/star/form/binding/XBindableValue.hpp>
-#include <com/sun/star/form/binding/XValueBinding.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <o3tl/any.hxx>
 

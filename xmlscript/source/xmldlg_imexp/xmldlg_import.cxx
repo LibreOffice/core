@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "common.hxx"
 #include "imp_share.hxx"
 #include <xml_import.hxx>
 #include <xmlscript/xmlns.h>
@@ -28,8 +29,6 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontType.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/awt/FontWidth.hpp>
 #include <com/sun/star/awt/ImagePosition.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
@@ -40,6 +39,7 @@
 #include <com/sun/star/util/Time.hpp>
 #include <sal/log.hxx>
 #include <tools/date.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/time.hxx>
 #include <osl/diagnose.h>
 
@@ -47,7 +47,6 @@
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 
 #include <com/sun/star/view/SelectionType.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>

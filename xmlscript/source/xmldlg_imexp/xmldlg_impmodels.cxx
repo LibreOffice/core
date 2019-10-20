@@ -18,15 +18,8 @@
  */
 
 #include "imp_share.hxx"
-#include <com/sun/star/form/binding/XBindableValue.hpp>
-#include <com/sun/star/form/binding/XValueBinding.hpp>
-#include <com/sun/star/form/binding/XListEntrySink.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/util/MalformedNumberFormatException.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>

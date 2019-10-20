@@ -26,16 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-
-#include <com/sun/star/awt/XControlModel.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
-
 #include <com/sun/star/xml/input/XRoot.hpp>
-
-#include <vector>
 
 namespace xmlscript
 {

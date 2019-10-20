@@ -22,8 +22,6 @@
 #include <unoservices.hxx>
 #include <xml_import.hxx>
 
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/container/NoSuchElementException.hpp>
@@ -32,7 +30,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sal/log.hxx>
-#include <rtl/ref.hxx>
 
 #include <memory>
 #include <unordered_map>
