@@ -125,7 +125,6 @@
 "ScAnnotationShapeObj";"com::sun::star::drawing::TextProperties";"TextAnimationStartInside"
 "ScAnnotationShapeObj";"com::sun::star::drawing::TextProperties";"TextAnimationStopInside"
 "ScAnnotationShapeObj";"com::sun::star::drawing::TextProperties";"TextWritingMode"
-"ScAnnotationShapeObj";"com::sun::star::drawing::XGluePointsSupplier#optional";"getGluePoints()"
 "ScAnnotationShapeObj";"com::sun::star::drawing::FillProperties";"FillStyle"
 "ScAnnotationShapeObj";"com::sun::star::drawing::FillProperties";"FillColor"
 "ScAnnotationShapeObj";"com::sun::star::drawing::FillProperties";"FillTransparence"
