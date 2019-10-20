@@ -596,6 +596,17 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     aFunc.UpdatePivotTable(*pDPObj, true, false);
 }
 
+namespace {
+
+template <typename T>
+inline
+T lcl_getValidValue(T value, T defvalue)
+{
+    return (value <0) ? defvalue : value;
+}
+
+} // anonymous namespace
+
 bool ScGridWindow::UpdateVisibleRange()
 {
     ScDocument const& rDoc = *pViewData->GetDocument();
@@ -606,16 +617,11 @@ bool ScGridWindow::UpdateVisibleRange()
 
     if (comphelper::LibreOfficeKit::isActive())
     {
-        // entire table in the tiled rendering case
-        SCTAB nTab = pViewData->GetTabNo();
-        SCCOL nEndCol = 0;
-        SCROW nEndRow = 0;
-
-        if (rDoc.GetPrintArea(nTab, nEndCol, nEndRow, false))
-        {
-            nXRight = nEndCol;
-            nYBottom = nEndRow;
-        }
+        ScTabViewShell* pViewShell = pViewData->GetViewShell();
+        nPosX = lcl_getValidValue(pViewShell->GetLOKStartHeaderCol(), nPosX);
+        nPosY = lcl_getValidValue(pViewShell->GetLOKStartHeaderRow(), nPosY);
+        nXRight = lcl_getValidValue(pViewShell->GetLOKEndHeaderCol(), nXRight);
+        nYBottom = lcl_getValidValue(pViewShell->GetLOKEndHeaderRow(), nYBottom);
     }
     else
     {
