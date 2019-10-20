@@ -131,7 +131,12 @@ typedef enum
     /**
      * The size and/or the position of the visible cursor changed.
      *
-     * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
+     * Old format is the same as LOK_CALLBACK_INVALIDATE_TILES.
+     * New format is a JSON with 3 elements the 'viewId' element represented by
+     * an integer value, a 'rectangle' element in the format "x, y, width, height",
+     * and a 'mispelledWord' element represented by an integer value: '1' when
+     * a mispelled word is at the cursor position, '0' when the word is
+     * not mispelled.
      */
     LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR = 1,
     /**
