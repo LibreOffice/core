@@ -213,6 +213,7 @@ private:
 
     OUString getNumberFormatCode(sal_Int32 nKey) const;
 
+
 public:
 
     ChartExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, css::uno::Reference< css::frame::XModel > const & xModel,
@@ -229,6 +230,9 @@ public:
     void InitRangeSegmentationProperties(
         const css::uno::Reference<
             css::chart2::XChartDocument > & xChartDoc );
+    void WriteGradientFill(css::awt::Gradient rGradient,
+                           const css::uno::Reference<css::beans::XPropertySet>& rXPropSet
+                           = css::uno::Reference<css::beans::XPropertySet>()) override;
 };
 
 }}

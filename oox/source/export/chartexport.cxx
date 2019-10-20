@@ -105,6 +105,7 @@
 #include <svl/numuno.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <o3tl/any.hxx>
 
 #include <set>
 #include <unordered_set>
@@ -125,6 +126,19 @@ using ::oox::core::XmlFilterBase;
 using ::sax_fastparser::FSHelperPtr;
 
 namespace cssc = css::chart;
+
+namespace
+{
+/// Extracts start or end alpha information from a transparency gradient.
+sal_Int32 GetAlphaFromTransparenceGradient(const awt::Gradient& rGradient, bool bStart)
+{
+    // Our alpha is a gray color value.
+    sal_uInt8 nRed = ::Color(bStart ? rGradient.StartColor : rGradient.EndColor).GetRed();
+    // drawingML alpha is a percentage on a 0..100000 scale.
+    return (255 - nRed) * oox::drawingml::MAX_PERCENT / 255;
+}
+}
+
 
 namespace oox { namespace drawingml {
 
@@ -1474,7 +1488,12 @@ void ChartExport::exportFill( const Reference< XPropertySet >& xPropSet )
             exportHatch(xPropSet);
         break;
         default:
-            WriteFill( xPropSet );
+            OUString sTransparenceGradientName;
+            xPropSet->getPropertyValue( "FillTransparenceGradientName" ) >>= sTransparenceGradientName;
+            if (sTransparenceGradientName.isEmpty())
+                WriteFill( xPropSet );
+            else
+                exportGradientFill(xPropSet);
     }
 }
 
@@ -1529,21 +1548,48 @@ void ChartExport::exportBitmapFill( const Reference< XPropertySet >& xPropSet )
 void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet )
 {
     if( xPropSet.is() )
-     {
+    {
         OUString sFillGradientName;
         xPropSet->getPropertyValue("FillGradientName") >>= sFillGradientName;
-
         awt::Gradient aGradient;
         uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
         try
         {
-            uno::Reference< container::XNameAccess > xGradient( xFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY );
-            uno::Any rValue = xGradient->getByName( sFillGradientName );
-            if( rValue >>= aGradient )
+            if (!sFillGradientName.isEmpty())
             {
-                mpFS->startElementNS(XML_a, XML_gradFill);
-                WriteGradientFill( aGradient );
-                mpFS->endElementNS( XML_a, XML_gradFill );
+                uno::Reference< container::XNameAccess > xGradient( xFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY );
+                uno::Any rValue = xGradient->getByName( sFillGradientName );
+                if( rValue >>= aGradient )
+                {
+                    mpFS->startElementNS(XML_a, XML_gradFill);
+                    WriteGradientFill( aGradient, xPropSet);
+                    mpFS->endElementNS( XML_a, XML_gradFill );
+                }
+            }
+            else // solid fill with transparence gradient
+            {
+                if (GetProperty(xPropSet,"FillColor"))
+                {
+                    util::Color nFillColor = mAny.get<util::Color>();
+                    if (GetProperty(xPropSet, "FillTransparenceGradientName"))
+                    {
+                        OUString sTransparenceGradientName = *o3tl::doAccess<OUString>(mAny);
+                        uno::Reference< container::XNameAccess > xTransparencyGradient( xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY );
+                        uno::Any rValue = xTransparencyGradient -> getByName(sTransparenceGradientName);
+                        awt::Gradient aTransparenceGradient;
+                        if (rValue >>= aTransparenceGradient)
+                        {
+                            aGradient = aTransparenceGradient;
+                            aGradient.StartColor = nFillColor;
+                            aGradient.StartIntensity = 100;
+                            aGradient.EndColor = nFillColor;
+                            aGradient.EndIntensity = 100;
+                            mpFS->startElementNS(XML_a, XML_gradFill);
+                            WriteGradientFill( aGradient, xPropSet);
+                            mpFS->endElementNS( XML_a, XML_gradFill );
+                        }
+                    }
+                }
             }
         }
         catch (const uno::Exception &)
@@ -1551,6 +1597,70 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
             TOOLS_INFO_EXCEPTION("oox", "ChartExport::exportGradientFill");
         }
 
+    }
+}
+
+void ChartExport::WriteGradientFill(awt::Gradient rGradient,
+                                  const uno::Reference<beans::XPropertySet>& rXPropSet)
+{
+    awt::Gradient aTransparenceGradient;
+    bool bTransparent = false;
+    if (rXPropSet.is() && GetProperty(rXPropSet, "FillTransparenceGradientName"))
+    {
+        OUString sTransparenceGradientName = *o3tl::doAccess<OUString>(mAny);
+        uno::Reference< lang::XMultiServiceFactory > xFact(getModel(), uno::UNO_QUERY);
+        if (xFact.is())
+        {
+            uno::Reference< container::XNameAccess > xTransparencyGradient( xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY );
+            uno::Any rValue = xTransparencyGradient -> getByName(sTransparenceGradientName);
+            if (rValue >>= aTransparenceGradient)
+            {
+                bTransparent = true;
+            }
+        }
+    }
+    sal_Int32 nStartAlpha = MAX_PERCENT;
+    sal_Int32 nEndAlpha = MAX_PERCENT;
+    if (bTransparent)
+    {
+        nStartAlpha = GetAlphaFromTransparenceGradient(aTransparenceGradient, true);
+        nEndAlpha = GetAlphaFromTransparenceGradient(aTransparenceGradient, false);
+    }
+
+    switch( rGradient.Style )
+    {
+        default:
+        case awt::GradientStyle_LINEAR:
+        {
+            mpFS->startElementNS(XML_a, XML_gsLst);
+            WriteGradientStop(0, ColorWithIntensity(rGradient.StartColor, rGradient.StartIntensity),
+                              nStartAlpha);
+            WriteGradientStop(100, ColorWithIntensity(rGradient.EndColor, rGradient.EndIntensity),
+                              nEndAlpha);
+            mpFS->endElementNS( XML_a, XML_gsLst );
+            mpFS->singleElementNS(
+                XML_a, XML_lin, XML_ang,
+                OString::number((((3600 - rGradient.Angle + 900) * 6000) % 21600000)));
+            break;
+        }
+
+        case awt::GradientStyle_AXIAL:
+            mpFS->startElementNS(XML_a, XML_gsLst);
+            WriteGradientStop(0, ColorWithIntensity(rGradient.EndColor, rGradient.EndIntensity), nEndAlpha);
+            WriteGradientStop(50, ColorWithIntensity(rGradient.StartColor, rGradient.StartIntensity), nStartAlpha);
+            WriteGradientStop(100, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity), nEndAlpha);
+            mpFS->endElementNS( XML_a, XML_gsLst );
+            mpFS->singleElementNS(
+                XML_a, XML_lin, XML_ang,
+                OString::number((((3600 - rGradient.Angle + 900) * 6000) % 21600000)));
+            break;
+
+        case awt::GradientStyle_RADIAL:
+        case awt::GradientStyle_ELLIPTICAL:
+        case awt::GradientStyle_RECT:
+        case awt::GradientStyle_SQUARE:
+            DrawingML::WriteGradientFill(rGradient, rXPropSet);
+            break;
     }
 }
 

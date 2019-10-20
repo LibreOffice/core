@@ -193,7 +193,7 @@ public:
     void WriteGradientFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
 
     /// In case rXPropSet is set, it may serve as a source of gradient transparency information.
-    void WriteGradientFill(css::awt::Gradient rGradient,
+    virtual void WriteGradientFill(css::awt::Gradient rGradient,
                            const css::uno::Reference<css::beans::XPropertySet>& rXPropSet
                            = css::uno::Reference<css::beans::XPropertySet>());
 
