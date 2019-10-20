@@ -780,7 +780,7 @@ bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
     return false;
 }
 
-void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget)
+void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, bool bBypassCtrlClickSecurity)
 {
     // OpenURL is always called in the GridWindow by mouse clicks in some way or another.
     // That's why pScActiveViewShell and nScClickMouseModifier are correct.
@@ -794,7 +794,7 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget)
         // ctrl+click security option was disabled, link should not open
         return;
     }
-    else if( ! bCtrlClickHappened && bCtrlClickSecOption )
+    else if( !bBypassCtrlClickSecurity && ! bCtrlClickHappened && bCtrlClickSecOption )
     {
         // ctrl+click did not happen; only click happened maybe with some
         // other key combo. and security option is set, so return
