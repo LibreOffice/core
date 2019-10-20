@@ -775,13 +775,26 @@ bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
     return false;
 }
 
-void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, bool bIgnoreSettings)
+void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, bool bBypassCtrlClickSecurity)
 {
     // OpenURL is always called in the GridWindow by mouse clicks in some way or another.
     // That's why pScActiveViewShell and nScClickMouseModifier are correct.
-
-    if (!bIgnoreSettings && !ShouldOpenURL())
+    // SvtSecurityOptions to access Libreoffice global security parameters
+    SvtSecurityOptions aSecOpt;
+    bool bCtrlClickHappened = (nScClickMouseModifier & KEY_MOD1);
+    bool bCtrlClickSecOption = aSecOpt.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
+    if( bCtrlClickHappened && ! bCtrlClickSecOption )
+    {
+        // return since ctrl+click happened when the
+        // ctrl+click security option was disabled, link should not open
         return;
+    }
+    else if( !bBypassCtrlClickSecurity && ! bCtrlClickHappened && bCtrlClickSecOption )
+    {
+        // ctrl+click did not happen; only click happened maybe with some
+        // other key combo. and security option is set, so return
+        return;
+    }
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (!pViewFrm)
