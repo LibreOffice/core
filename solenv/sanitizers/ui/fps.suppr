@@ -4,6 +4,4 @@ fpicker/uiconfig/ui/explorerfiledialog.ui://GtkComboBox[@id='shared'] no-labelle
 fpicker/uiconfig/ui/explorerfiledialog.ui://GtkCheckButton[@id='link'] button-no-label
 fpicker/uiconfig/ui/explorerfiledialog.ui://GtkCheckButton[@id='cb_preview'] button-no-label
 fpicker/uiconfig/ui/explorerfiledialog.ui://GtkDrawingArea[@id='preview'] no-labelled-by
-fpicker/uiconfig/ui/remotefilesdialog.ui://GtkLabel[@id='filterLabel'] orphan-label
 fpicker/uiconfig/ui/remotefilesdialog.ui://GtkLabel[@id='nameLabel'] orphan-label
-fpicker/uiconfig/ui/remotefilesdialog.ui://GtkComboBox[@id='filter_lb'] no-labelled-by
