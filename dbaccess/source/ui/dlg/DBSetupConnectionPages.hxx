@@ -31,8 +31,8 @@
 #include <ucbhelper/content.hxx>
 
 namespace dbaui
-
 {
+    class ODbTypeWizDialogSetup;
 
     // OSpreadSheetConnectionPageSetup
     class OSpreadSheetConnectionPageSetup final : public OConnectionTabPageSetup
@@ -197,10 +197,10 @@ namespace dbaui
             VIA_NATIVE
         };
 
-        OMySQLIntroPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs);
+        OMySQLIntroPageSetup(weld::Container* pPage, ODbTypeWizDialogSetup* pController, const SfxItemSet& rCoreAttrs);
         virtual ~OMySQLIntroPageSetup() override;
 
-        static std::unique_ptr<OMySQLIntroPageSetup> CreateMySQLIntroTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet);
+        static std::unique_ptr<OMySQLIntroPageSetup> CreateMySQLIntroTabPage(weld::Container* pPage, ODbTypeWizDialogSetup* pController, const SfxItemSet& rAttrSet);
         ConnectionType      getMySQLMode() const;
         void                SetClickHdl( const Link<OMySQLIntroPageSetup *, void>& rLink ) { maClickHdl = rLink; }
 

@@ -446,6 +446,12 @@ void ODbTypeWizDialogSetup::clearPassword()
     m_pImpl->clearPassword();
 }
 
+void ODbTypeWizDialogSetup::SetIntroPage(OMySQLIntroPageSetup* pPage)
+{
+    m_pMySQLIntroPage = pPage;
+    m_pMySQLIntroPage->SetClickHdl(LINK( this, ODbTypeWizDialogSetup, ImplClickHdl ) );
+}
+
 std::unique_ptr<BuilderPage> ODbTypeWizDialogSetup::createPage(WizardState _nState)
 {
     std::unique_ptr<OGenericAdministrationPage> xPage;
@@ -515,8 +521,6 @@ std::unique_ptr<BuilderPage> ODbTypeWizDialogSetup::createPage(WizardState _nSta
             break;
         case PAGE_DBSETUPWIZARD_MYSQL_INTRO:
             xPage = OMySQLIntroPageSetup::CreateMySQLIntroTabPage(pPageContainer, this, *m_pOutSet);
-            m_pMySQLIntroPage = static_cast<OMySQLIntroPageSetup*>(xPage.get());
-            m_pMySQLIntroPage->SetClickHdl(LINK( this, ODbTypeWizDialogSetup, ImplClickHdl ) );
             break;
 
         case PAGE_DBSETUPWIZARD_AUTHENTIFICATION:

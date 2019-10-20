@@ -53,6 +53,7 @@
 #include "finteraction.hxx"
 #include <unotools/pathoptions.hxx>
 #include <vcl/roadmapwizard.hxx>
+#include <dbwizsetup.hxx>
 #include "TextConnectionHelper.hxx"
 #include <osl/diagnose.h>
 
@@ -219,12 +220,12 @@ using namespace ::com::sun::star;
         OGenericAdministrationPage::callModifiedHdl();
     }
 
-    std::unique_ptr<OMySQLIntroPageSetup> OMySQLIntroPageSetup::CreateMySQLIntroTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet)
+    std::unique_ptr<OMySQLIntroPageSetup> OMySQLIntroPageSetup::CreateMySQLIntroTabPage(weld::Container* pPage, ODbTypeWizDialogSetup* pController, const SfxItemSet& rAttrSet)
     {
         return std::make_unique<OMySQLIntroPageSetup>(pPage, pController, rAttrSet);
     }
 
-    OMySQLIntroPageSetup::OMySQLIntroPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs)
+    OMySQLIntroPageSetup::OMySQLIntroPageSetup(weld::Container* pPage, ODbTypeWizDialogSetup* pController, const SfxItemSet& _rCoreAttrs)
         : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/dbwizmysqlintropage.ui", "DBWizMysqlIntroPage", _rCoreAttrs)
         , m_xODBCDatabase(m_xBuilder->weld_radio_button("odbc"))
         , m_xJDBCDatabase(m_xBuilder->weld_radio_button("jdbc"))
@@ -233,6 +234,7 @@ using namespace ::com::sun::star;
         m_xODBCDatabase->connect_toggled(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
         m_xJDBCDatabase->connect_toggled(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
         m_xNATIVEDatabase->connect_toggled(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
+        pController->SetIntroPage(this);
     }
 
     OMySQLIntroPageSetup::~OMySQLIntroPageSetup()
