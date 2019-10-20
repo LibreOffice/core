@@ -94,6 +94,7 @@ ScCsvRuler::ScCsvRuler(ScCsvLayoutData& rData, ScCsvTableBox* pTableBox)
     : ScCsvControl(rData)
     , mpTableBox(pTableBox)
     , mnPosCursorLast(1)
+    , mnSplitSize(0)
     , mbTracking(false)
 {
 }
