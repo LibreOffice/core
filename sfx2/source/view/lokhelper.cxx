@@ -338,7 +338,7 @@ void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc
     }
 }
 
-void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisView, const OString& rRectangle)
+void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisView, const OString& rRectangle, bool bMispelledWord)
 {
     if (DisableCallbacks::disabled())
         return;
@@ -347,7 +347,7 @@ void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisVie
     if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
     {
         sPayload = OStringLiteral("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView()) +
-            "\", \"rectangle\": \"" + rRectangle + "\" }";
+            "\", \"rectangle\": \"" + rRectangle + "\", \"mispelledWord\": \"" +  OString::number(bMispelledWord ? 1 : 0) + "\" }";
     }
     else
     {
