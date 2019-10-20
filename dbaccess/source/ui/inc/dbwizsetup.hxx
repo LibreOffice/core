@@ -122,6 +122,8 @@ public:
     */
     bool IsTableWizardToBeStarted() const;
 
+    void SetIntroPage(OMySQLIntroPageSetup* pPage);
+
 private:
     /// to override to create new pages
     virtual std::unique_ptr<BuilderPage> createPage(WizardState _nState) override;
