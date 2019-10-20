@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
 #define INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
 
-#include <svtools/autocmpledit.hxx>
+#include "autocmpledit.hxx"
 #include <svtools/place.hxx>
 #include <svtools/PlaceEditDialog.hxx>
 

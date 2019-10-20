@@ -10,20 +10,17 @@
 #ifndef INCLUDED_SVTOOLS_AUTOCMPLEDIT_HXX
 #define INCLUDED_SVTOOLS_AUTOCMPLEDIT_HXX
 
-#include <svtools/svtdllapi.h>
-
 #include <vcl/edit.hxx>
-
 #include <vector>
 
-class SVT_DLLPUBLIC AutocompleteEdit : public Edit
+class AutocompleteEdit : public Edit
 {
 private:
     std::vector< OUString > m_aEntries;
     std::vector< OUString > m_aMatching;
     std::vector< OUString >::size_type m_nCurrent;
 
-    DECL_DLLPRIVATE_LINK(AutoCompleteHdl_Impl, Edit&, void);
+    DECL_LINK(AutoCompleteHdl_Impl, Edit&, void);
     bool Match( const OUString& rText );
     bool PreNotify( NotifyEvent& rNEvt ) override;
 
