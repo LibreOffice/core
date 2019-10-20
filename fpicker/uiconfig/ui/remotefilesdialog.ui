@@ -5,12 +5,12 @@
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/galicon.png</property>
+    <property name="icon_name">svx/res/galicon.png</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/gallist.png</property>
+    <property name="icon_name">svx/res/gallist.png</property>
   </object>
   <object class="GtkMenu" id="service_edit_menu">
     <property name="visible">True</property>
@@ -45,6 +45,8 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="remotefilesdialog|RemoteFilesDialog">Remote Files</property>
     <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
@@ -146,7 +148,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBox" id="services_lb">
+              <object class="GtkComboBoxText" id="services_lb">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <accessibility>
@@ -288,6 +290,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="remotefilesdialog|filterLabel">Filter</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">filter_lb</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -308,7 +312,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBox" id="filter_lb">
+              <object class="GtkComboBoxText" id="filter_lb">
                 <property name="width_request">200</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -344,6 +348,9 @@
     </child>
     <action-widgets>
       <action-widget response="-11">help</action-widget>
+      <action-widget response="-6">cancel</action-widget>
+      <action-widget response="101">open</action-widget>
+      <action-widget response="102">save</action-widget>
     </action-widgets>
   </object>
 </interface>
