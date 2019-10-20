@@ -241,7 +241,6 @@ bool ScRangeUtil::MakeRangeFromName (
     ScAddress::Details const & rDetails )
 {
     bool bResult = false;
-    ScRangeUtil     aRangeUtil;
     SCTAB nTab = 0;
     SCCOL nColStart = 0;
     SCCOL nColEnd = 0;

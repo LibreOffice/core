@@ -2161,7 +2161,6 @@ static ScNameInputType lcl_GetInputType( const OUString& rText )
 
         ScRange aRange;
         ScAddress aAddress;
-        ScRangeUtil aRangeUtil;
         SCTAB nNameTab;
         sal_Int32 nNumeric;
 

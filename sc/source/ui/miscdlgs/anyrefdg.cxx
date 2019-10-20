@@ -144,7 +144,6 @@ bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUStr
         return true;
 
     ScAddress::Details aDetails(pDoc->GetAddressConvention(), 0, 0);
-    ScRangeUtil aRangeUtil;
 
     bool bError = false;
     sal_Int32 nIdx {0};
