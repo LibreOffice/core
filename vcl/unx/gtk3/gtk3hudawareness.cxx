@@ -9,7 +9,6 @@
 
 #include <string.h>
 
-#include <unx/gtk/gtksalmenu.hxx>
 #include <unx/gtk/hudawareness.h>
 
 struct HudAwarenessHandle

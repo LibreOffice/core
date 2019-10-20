@@ -19,17 +19,13 @@
 
 #include "kde5_filepicker_ipc.hxx"
 
-#include <QSocketNotifier>
 #include <QUrl>
-#include <QThread>
 #include <QApplication>
 #include <QDebug>
 
 #include <iostream>
 
 #include "kde5_filepicker.hxx"
-
-#include <rtl/ustring.h>
 
 void readIpcArg(std::istream& stream, QString& string)
 {

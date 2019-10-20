@@ -7,15 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <utility>
-
 #include "cairo_gtk3_cairo.hxx"
 
 #include <vcl/sysdata.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
-#include <basegfx/vector/b2isize.hxx>
 
 #include <unx/gtk/gtkgdi.hxx>
 

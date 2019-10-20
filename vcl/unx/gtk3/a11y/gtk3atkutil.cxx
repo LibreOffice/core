@@ -32,7 +32,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <rtl/ref.hxx>
 #include <sal/log.hxx>
 
 #include <vcl/svapp.hxx>
@@ -43,9 +42,6 @@
 #include <unx/gtk/gtkdata.hxx>
 #include "atkwrapper.hxx"
 #include "atkutil.hxx"
-
-#include <gtk/gtk.h>
-#include <config_version.h>
 
 #include <cassert>
 #include <set>

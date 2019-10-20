@@ -13,7 +13,6 @@
 
 #include <config_cairo_canvas.h>
 
-#include <basegfx/range/b2ibox.hxx>
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
