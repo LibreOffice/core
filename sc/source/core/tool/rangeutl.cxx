@@ -268,10 +268,11 @@ bool ScRangeUtil::MakeRangeFromName (
         //then check for local range names
         ScRangeName* pRangeNames = pDoc->GetRangeName( nTable );
         ScRangeData* pData = nullptr;
+        aName = ScGlobal::pCharClass->uppercase(aName);
         if ( pRangeNames )
-            pData = pRangeNames->findByUpperName(ScGlobal::pCharClass->uppercase(aName));
+            pData = pRangeNames->findByUpperName(aName);
         if (!pData)
-            pData = pDoc->GetRangeName()->findByUpperName(ScGlobal::pCharClass->uppercase(aName));
+            pData = pDoc->GetRangeName()->findByUpperName(aName);
         if (pData)
         {
             OUString         aStrArea;
