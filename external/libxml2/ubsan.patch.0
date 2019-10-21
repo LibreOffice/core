@@ -1,0 +1,11 @@
+--- xpath.c
++++ xpath.c
+@@ -14529,7 +14529,7 @@
+ 	}
+ 
+ 	stream = xmlPatterncompile(str, dict, XML_PATTERN_XPATH,
+-			&namespaces[0]);
++			namespaces == NULL ? NULL : &namespaces[0]);
+ 	if (namespaces != NULL) {
+ 	    xmlFree((xmlChar **)namespaces);
+ 	}
