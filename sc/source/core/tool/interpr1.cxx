@@ -777,6 +777,10 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                         }
                         else
                         {
+                            // GetMatrix() does SetErrorInterpreter() at the
+                            // matrix, do not propagate an error from
+                            // matrix->GetValue() as global error.
+                            pMat->SetErrorInterpreter(nullptr);
                             lcl_storeJumpMatResult(pMat.get(), pJumpMatrix, nC, nR);
                         }
                         lcl_AdjustJumpMatrix( pJumpMatrix, nCols, nRows );
