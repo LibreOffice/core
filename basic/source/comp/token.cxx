@@ -242,9 +242,9 @@ SbiToken SbiTokenizer::Peek()
 {
     if( ePush == NIL )
     {
-        sal_uInt16 nOldLine = nLine;
-        sal_uInt16 nOldCol1 = nCol1;
-        sal_uInt16 nOldCol2 = nCol2;
+        sal_Int32 nOldLine = nLine;
+        sal_Int32 nOldCol1 = nCol1;
+        sal_Int32 nOldCol2 = nCol2;
         ePush = Next();
         nPLine = nLine; nLine = nOldLine;
         nPCol1 = nCol1; nCol1 = nOldCol1;
@@ -434,10 +434,10 @@ special:
     {
         // from 15.3.96, special treatment for END, at Peek() the current
         // time is lost, so memorize everything and restore after
-        sal_uInt16 nOldLine = nLine;
-        sal_uInt16 nOldCol  = nCol;
-        sal_uInt16 nOldCol1 = nCol1;
-        sal_uInt16 nOldCol2 = nCol2;
+        sal_Int32 nOldLine = nLine;
+        sal_Int32 nOldCol  = nCol;
+        sal_Int32 nOldCol1 = nCol1;
+        sal_Int32 nOldCol2 = nCol2;
         OUString aOldSym = aSym;
         SaveLine();             // save pLine in the scanner
 
