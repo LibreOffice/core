@@ -23,7 +23,6 @@
 #include "fpinteraction.hxx"
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <ucbhelper/content.hxx>
 #include <rtl/ref.hxx>
 #include <memory>

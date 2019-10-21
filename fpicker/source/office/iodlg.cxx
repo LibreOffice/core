@@ -19,23 +19,21 @@
 
 #include <sal/config.h>
 
-#include <sal/macros.h>
 #include <sal/log.hxx>
 #include "fileview.hxx"
 #include "iodlg.hxx"
 #include <svtools/PlaceEditDialog.hxx>
+#include "OfficeControlAccess.hxx"
 #include "PlacesListBox.hxx"
 #include <fpsofficeResMgr.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/errinf.hxx>
+#include <vcl/event.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <unotools/ucbhelper.hxx>
-#include <svtools/ehdl.hxx>
-#include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <svtools/sfxecode.hxx>
@@ -49,24 +47,17 @@
 #include "asyncfilepicker.hxx"
 #include "iodlgimp.hxx"
 #include <svtools/inettbc.hxx>
-#include <unotools/syslocale.hxx>
 #include "QueryFolderName.hxx"
 #include <rtl/ustring.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <comphelper/interaction.hxx>
@@ -76,7 +67,6 @@
 
 #include <osl/file.hxx>
 #include <vcl/dibtools.hxx>
-#include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
 
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -87,8 +77,6 @@
 #include <officecfg/Office/Common.hxx>
 
 #include <algorithm>
-#include <functional>
-#include <vector>
 #include <memory>
 
 using namespace ::com::sun::star::beans;

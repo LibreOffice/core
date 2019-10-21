@@ -18,6 +18,7 @@
  */
 
 
+#include "OfficeControlAccess.hxx"
 #include "OfficeFilePicker.hxx"
 #include "iodlg.hxx"
 #include "RemoteFilesDialog.hxx"
@@ -30,16 +31,10 @@
 #include <com/sun/star/ui/dialogs/FilePickerEvent.hpp>
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <unotools/ucbhelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace     ::com::sun::star::container;

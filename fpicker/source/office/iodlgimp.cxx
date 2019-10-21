@@ -19,20 +19,13 @@
 
 #include "fileview.hxx"
 #include "iodlgimp.hxx"
-#include <vcl/headbar.hxx>
 #include <tools/debug.hxx>
-#include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/svapp.hxx>
-#include <svl/eitem.hxx>
-#include <unotools/viewoptions.hxx>
 #include <svtools/inettbc.hxx>
 #include "iodlg.hxx"
 #include <bitmaps.hlst>
 #include <svtools/imagemgr.hxx>
-#include <unotools/localfilehelper.hxx>
-#include <unotools/useroptions.hxx>
 #include <svl/svlresid.hxx>
 #include <svl/svl.hrc>
 

@@ -21,7 +21,6 @@
 #define INCLUDED_FPICKER_SOURCE_OFFICE_ASYNCFILEPICKER_HXX
 
 #include <tools/link.hxx>
-#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <salhelper/simplereferenceobject.hxx>

@@ -20,23 +20,20 @@
 #define INCLUDED_FPICKER_SOURCE_OFFICE_IODLG_HXX
 
 #include <memory>
-#include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/split.hxx>
+#include <vcl/treelistbox.hxx>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
-#include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #include <unotools/confignode.hxx>
-#include <svl/inettype.hxx>
 #include "asyncfilepicker.hxx"
-#include "OfficeControlAccess.hxx"
 #include "fpsmartcontent.hxx"
 #include "fpdialogbase.hxx"
 #include <o3tl/typed_flags_set.hxx>

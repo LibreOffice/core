@@ -24,8 +24,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/ui/dialogs/XControlInformation.hpp>
 #include <com/sun/star/ui/dialogs/XControlAccess.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
