@@ -2161,6 +2161,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineCharAttributes)
     CheckRedlineCharAttributesHidden();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineNumberInNumbering)
+{
+    SwDoc* pDoc = createDoc("tdf42748.fodt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Assert the yellow tracked deletion of the number of joined list item
+    assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#c69200']", 3);
+    // Assert the blue tracked insertion of the number after a split list item
+    assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#0646a2']", 3);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116830)
 {
     SwDoc* pDoc = createDoc("tdf116830.odt");
