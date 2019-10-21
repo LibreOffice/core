@@ -7136,13 +7136,26 @@ public:
     virtual void set_image(VirtualDevice* pDevice) override
     {
         if (gtk_check_version(3, 20, 0) == nullptr)
-            gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(*pDevice));
-        else
         {
-            GdkPixbuf* pixbuf = getPixbuf(*pDevice);
-            gtk_image_set_from_pixbuf(m_pImage, pixbuf);
-            g_object_unref(pixbuf);
+            if (pDevice)
+                gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(*pDevice));
+            else
+                gtk_image_set_from_surface(m_pImage, nullptr);
+            return;
         }
+
+        GdkPixbuf* pixbuf = pDevice ? getPixbuf(*pDevice) : nullptr;
+        gtk_image_set_from_pixbuf(m_pImage, pixbuf);
+        if (pixbuf)
+            g_object_unref(pixbuf);
+    }
+
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
+    {
+        GdkPixbuf* pixbuf = getPixbuf(rImage);
+        gtk_image_set_from_pixbuf(m_pImage, pixbuf);
+        if (pixbuf)
+            g_object_unref(pixbuf);
     }
 };
 

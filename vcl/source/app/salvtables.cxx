@@ -2961,6 +2961,11 @@ public:
     {
         m_xImage->SetImage(createImage(*pDevice));
     }
+
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
+    {
+        m_xImage->SetImage(::Image(rImage));
+    }
 };
 
 class SalInstanceCalendar : public SalInstanceWidget, public virtual weld::Calendar

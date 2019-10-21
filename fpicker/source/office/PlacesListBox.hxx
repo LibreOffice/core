@@ -40,10 +40,10 @@ class PlacesListBox : public Control
 {
     private:
         std::vector< PlacePtr > maPlaces;
-        VclPtr<SvtFileDialog>       mpDlg;
+        SvtFileDialog*       mpDlg;
         VclPtr<PlacesListBox_Impl>  mpImpl;
-        VclPtr<PushButton>          mpAddBtn;
-        VclPtr<PushButton>          mpDelBtn;
+        std::unique_ptr<weld::Button> mxAddBtn;
+        std::unique_ptr<weld::Button> mxDelBtn;
         sal_Int32            mnNbEditables;
         bool                 mbUpdated;
         bool                 mbSelectionChanged;
@@ -60,14 +60,14 @@ class PlacesListBox : public Control
         bool IsUpdated();
         const std::vector<PlacePtr>& GetPlaces() const { return maPlaces;}
 
-        void SetAddHdl( const Link<Button*,void>& rHdl );
-        void SetDelHdl( const Link<Button*,void>& rHdl );
+        void SetAddHdl( const Link<weld::Button&,void>& rHdl );
+        void SetDelHdl( const Link<weld::Button&,void>& rHdl );
         void SetDelEnabled( bool enabled );
         void SetSizePixel( const Size& rNewSize ) override;
         void updateView( );
 
-        const VclPtr<PushButton>& GetAddButton() const { return mpAddBtn; }
-        const VclPtr<PushButton>& GetDeleteButton() const { return mpDelBtn; }
+        const weld::Button& GetAddButton() const { return *mxAddBtn; }
+        const weld::Button& GetDeleteButton() const { return *mxDelBtn; }
         const VclPtr<PlacesListBox_Impl>& GetPlacesListBox() const { return mpImpl; }
 
         virtual bool EventNotify( NotifyEvent& rNEvt ) override;
