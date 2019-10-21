@@ -94,6 +94,13 @@
 #if __has_warning("-Wpotentially-evaluated-expression")
 #pragma GCC diagnostic ignored "-Wpotentially-evaluated-expression"
 #endif
+// Before fixing occurrences of this warning, lets see whether C++20 will still change to obsolete
+// the warning (see
+// <https://github.com/llvm/llvm-project/commit/974c8b7e2fde550fd87850d50695341101c38c2d> "[c++20]
+// Add rewriting from comparison operators to <=> / =="):
+#if __has_warning("-Wambiguous-reversed-operator")
+#pragma GCC diagnostic ignored "-Wambiguous-reversed-operator"
+#endif
 #endif
 
 #endif // INCLUDED_SAL_CONFIG_H
