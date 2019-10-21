@@ -107,6 +107,11 @@ void SbiParser::If()
         bSingleLineIf = true;
         nEndLbl = aGen.Gen( SbiOpcode::JUMPF_, 0 );
         Push( eCurTok );
+        // tdf#128263: update push positions to correctly restore in Next()
+        nPLine = nLine;
+        nPCol1 = nCol1;
+        nPCol2 = nCol2;
+
         while( !bAbort )
         {
             if( !Parse() ) break;
