@@ -50,6 +50,7 @@ public:
     // for instantiation of this class while loading (via factory)
     virtual SdrInventor GetObjInventor()     const override;
     virtual sal_uInt16  GetObjIdentifier()   const override;
+    bool IsTextBox() const override;
 };
 
 // virtual objects for Flys

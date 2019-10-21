@@ -1347,10 +1347,12 @@ void SwUiWriterTest::testShapeTextboxAutosize()
 {
     SwDoc* pDoc = createDoc("shape-textbox-autosize.odt");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    // 0-1 is the first UI-visible shape+textbox.
     SdrObject* pFirst = pPage->GetObj(0);
     CPPUNIT_ASSERT_EQUAL(OUString("1st"), pFirst->GetName());
 
-    SdrObject* pSecond = pPage->GetObj(1);
+    // 2-3 is the second UI-visible shape+textbox.
+    SdrObject* pSecond = pPage->GetObj(2);
     CPPUNIT_ASSERT_EQUAL(OUString("2nd"), pSecond->GetName());
 
     // Shape -> textbox synchronization was missing, the second shape had the
