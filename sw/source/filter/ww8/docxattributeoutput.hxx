@@ -58,9 +58,13 @@ struct FieldInfos
     const ::sw::mark::IFieldmark* pFieldmark;
     ww::eField  eType;
     bool        bOpen;
+    bool        bSep;
     bool        bClose;
     OUString    sCmd;
-    FieldInfos() : pFieldmark(nullptr), eType(ww::eUNKNOWN), bOpen(false), bClose(false){}
+    FieldInfos()
+        : pFieldmark(nullptr), eType(ww::eUNKNOWN)
+        , bOpen(false), bSep(false), bClose(false)
+    {}
 };
 
 enum DocxColBreakStatus
@@ -717,6 +721,7 @@ private:
     void StartField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun = false );
     void DoWriteCmd( const OUString& rCmd );
     void CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun );
+    void CmdEndField_Impl( const SwTextNode* pNode, sal_Int32 nPos, bool bWriteRun );
     void EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos& rInfos );
     void DoWriteFieldRunProperties( const SwTextNode* pNode, sal_Int32 nPos, bool bWriteCombChars = false );
 
