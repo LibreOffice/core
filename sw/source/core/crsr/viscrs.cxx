@@ -49,6 +49,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <boost/property_tree/json_parser.hpp>
 #include <comphelper/string.hxx>
 #include <paintfrm.hxx>
 #include <PostItMgr.hxx>
@@ -238,18 +239,31 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
             }
         }
 
+        OString sHyperlink;
+        SwContentAtPos aContentAtPos(IsAttrAtPos::InetAttr);
+        if (const_cast<SwCursorShell*>(m_pCursorShell)->GetContentAtPos(aRect.Pos(), aContentAtPos))
+        {
+            const SwFormatINetFormat* pItem = static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr);
+            boost::property_tree::ptree aTree;
+            aTree.put("text", aContentAtPos.sStr);
+            aTree.put("link", pItem->GetValue());
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aTree, false);
+            sHyperlink = OString(aStream.str().c_str()).trim();
+        }
+
         if (pViewShell)
         {
             if (pViewShell == m_pCursorShell->GetSfxViewShell())
             {
-                SfxLokHelper::notifyVisCursorInvalidation(pViewShell, sRect, bIsWrong);
+                SfxLokHelper::notifyVisCursorInvalidation(pViewShell, sRect, bIsWrong, sHyperlink);
             }
             else
                 SfxLokHelper::notifyOtherView(m_pCursorShell->GetSfxViewShell(), pViewShell, LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
         }
         else
         {
-            SfxLokHelper::notifyVisCursorInvalidation(m_pCursorShell->GetSfxViewShell(), sRect, bIsWrong);
+            SfxLokHelper::notifyVisCursorInvalidation(m_pCursorShell->GetSfxViewShell(), sRect, bIsWrong, sHyperlink);
             SfxLokHelper::notifyOtherViews(m_pCursorShell->GetSfxViewShell(), LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
         }
     }
