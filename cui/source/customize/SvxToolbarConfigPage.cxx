@@ -463,7 +463,7 @@ IMPL_LINK(SvxToolbarConfigPage, InsertHdl, const OString&, rIdent, void)
         SvxConfigEntry* pNewEntryData = new SvxConfigEntry;
         pNewEntryData->SetUserDefined();
 
-        int nPos = InsertEntry(pNewEntryData, -1);
+        int nPos = AppendEntry(pNewEntryData, -1);
         InsertEntryIntoUI(pNewEntryData, nPos, 1);
 
         static_cast<ToolbarSaveInData*>( GetSaveInData())->ApplyToolbar( pToolbar );

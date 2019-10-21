@@ -1441,7 +1441,7 @@ static Bitmap DetectEdges( const Bitmap& rBmp )
 }
 
 /** Get contours in image */
-tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect, bool bContourVert,
+tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
                                     const tools::Rectangle* pWorkRectPixel )
 {
     Bitmap aWorkBmp;
@@ -1476,88 +1476,45 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect, bool bContourVert
             const long          nStartX2 = nEndX1 - 1;
             const long          nStartY1 = aWorkRect.Top() + 1;
             const long          nEndY1 = aWorkRect.Bottom();
-            const long          nStartY2 = nEndY1 - 1;
             std::unique_ptr<Point[]> pPoints1;
             std::unique_ptr<Point[]> pPoints2;
             long                nX, nY;
             sal_uInt16              nPolyPos = 0;
             const BitmapColor   aBlack = pAcc->GetBestMatchingColor( COL_BLACK );
 
-            if( bContourVert )
+            pPoints1.reset(new Point[ nHeight ]);
+            pPoints2.reset(new Point[ nHeight ]);
+
+            for ( nY = nStartY1; nY < nEndY1; nY++ )
             {
-                pPoints1.reset(new Point[ nWidth ]);
-                pPoints2.reset(new Point[ nWidth ]);
+                nX = nStartX1;
+                Scanline pScanline = pAcc->GetScanline( nY );
 
-                for( nX = nStartX1; nX < nEndX1; nX++ )
+                // scan row from left to right
+                while( nX < nEndX1 )
                 {
-                    nY = nStartY1;
-
-                    // scan row from left to right
-                    while( nY < nEndY1 )
+                    if( aBlack == pAcc->GetPixelFromData( pScanline, nX ) )
                     {
-                        Scanline pScanline = pAcc->GetScanline( nY );
-                        if( aBlack == pAcc->GetPixelFromData( pScanline, nX ) )
+                        pPoints1[ nPolyPos ] = Point( nX, nY );
+                        nX = nStartX2;
+
+                        // this loop always breaks eventually as there is at least one pixel
+                        while( true )
                         {
-                            pPoints1[ nPolyPos ] = Point( nX, nY );
-                            nY = nStartY2;
-
-                            // this loop always breaks eventually as there is at least one pixel
-                            while( true )
+                            if( aBlack == pAcc->GetPixelFromData( pScanline, nX ) )
                             {
-                                // coverity[copy_paste_error : FALSE] - this is correct nX, not nY
-                                if( aBlack == pAcc->GetPixelFromData( pScanline, nX ) )
-                                {
-                                    pPoints2[ nPolyPos ] = Point( nX, nY );
-                                    break;
-                                }
-
-                                nY--;
+                                pPoints2[ nPolyPos ] = Point( nX, nY );
+                                break;
                             }
 
-                            nPolyPos++;
-                            break;
+                            nX--;
                         }
 
-                        nY++;
+                        nPolyPos++;
+                        break;
                     }
-                }
-            }
-            else
-            {
-                pPoints1.reset(new Point[ nHeight ]);
-                pPoints2.reset(new Point[ nHeight ]);
 
-                for ( nY = nStartY1; nY < nEndY1; nY++ )
-                {
-                    nX = nStartX1;
-                    Scanline pScanline = pAcc->GetScanline( nY );
-
-                    // scan row from left to right
-                    while( nX < nEndX1 )
-                    {
-                        if( aBlack == pAcc->GetPixelFromData( pScanline, nX ) )
-                        {
-                            pPoints1[ nPolyPos ] = Point( nX, nY );
-                            nX = nStartX2;
-
-                            // this loop always breaks eventually as there is at least one pixel
-                            while( true )
-                            {
-                                if( aBlack == pAcc->GetPixelFromData( pScanline, nX ) )
-                                {
-                                    pPoints2[ nPolyPos ] = Point( nX, nY );
-                                    break;
-                                }
-
-                                nX--;
-                            }
-
-                            nPolyPos++;
-                            break;
-                        }
-
-                        nX++;
-                    }
+                    nX++;
                 }
             }
 

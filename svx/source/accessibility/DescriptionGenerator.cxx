@@ -121,22 +121,8 @@ OUString DescriptionGenerator::operator() ()
 }
 
 
-void DescriptionGenerator::AddProperty (
-    const OUString& sPropertyName,
-    PropertyType aType,
-    const char* pLocalizedNameId)
-{
-    OUString sLocalizedName;
-    {
-        SolarMutexGuard aGuard;
-        sLocalizedName = SvxResId(pLocalizedNameId);
-    }
-    AddProperty (sPropertyName, aType, sLocalizedName);
-}
-
-
 void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
-    PropertyType aType, const OUString& sLocalizedName)
+    PropertyType aType)
 {
     uno::Reference<beans::XPropertyState> xState (mxShape, uno::UNO_QUERY);
     if (xState.is()
@@ -160,10 +146,10 @@ void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
             switch (aType)
             {
                 case PropertyType::Color:
-                    AddColor (sPropertyName, sLocalizedName);
+                    AddColor (sPropertyName, "");
                     break;
                 case PropertyType::Integer:
-                    AddInteger (sPropertyName, sLocalizedName);
+                    AddInteger (sPropertyName, "");
                     break;
             }
         }

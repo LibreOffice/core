@@ -73,7 +73,7 @@ namespace dbaui
         void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xControl->connect_changed(rLink); }
 
     private:
-        StringPair  impl_getDocumentAtIndex( sal_uInt16 _nListIndex, bool _bSystemNotation = false ) const;
+        StringPair  impl_getDocumentAtIndex( sal_uInt16 _nListIndex ) const;
 
         void    impl_init( const sal_Char* _pAsciiModuleName );
     };

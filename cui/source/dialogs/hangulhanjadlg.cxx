@@ -101,7 +101,7 @@ namespace svx
         const OUString& getSecondaryText() const { return m_sSecondaryText; }
 
     public:
-        void Paint( vcl::RenderContext& _rDevice, const ::tools::Rectangle& _rRect, DrawTextFlags _nTextStyle,
+        void Paint( vcl::RenderContext& _rDevice, const ::tools::Rectangle& _rRect,
             ::tools::Rectangle* _pPrimaryLocation, ::tools::Rectangle* _pSecondaryLocation );
     };
 
@@ -118,9 +118,14 @@ namespace svx
     }
 
 
-    void PseudoRubyText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& _rRect, DrawTextFlags _nTextStyle,
+    void PseudoRubyText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& _rRect,
                                ::tools::Rectangle* _pPrimaryLocation, ::tools::Rectangle* _pSecondaryLocation )
     {
+        // calculate the text flags for the painting
+        constexpr DrawTextFlags nTextStyle = DrawTextFlags::Mnemonic |
+                                   DrawTextFlags::Left |
+                                   DrawTextFlags::VCenter;
+
         Size aPlaygroundSize(_rRect.GetSize());
 
         // the font for the secondary text:
@@ -129,11 +134,11 @@ namespace svx
         aSmallerFont.SetFontHeight( static_cast<long>( 0.8 * aSmallerFont.GetFontHeight() ) );
 
         // let's calculate the size of our two texts
-        ::tools::Rectangle aPrimaryRect = rRenderContext.GetTextRect( _rRect, m_sPrimaryText, _nTextStyle );
+        ::tools::Rectangle aPrimaryRect = rRenderContext.GetTextRect( _rRect, m_sPrimaryText, nTextStyle );
         ::tools::Rectangle aSecondaryRect;
         {
             FontSwitch aFontRestore(rRenderContext, aSmallerFont);
-            aSecondaryRect = rRenderContext.GetTextRect(_rRect, m_sSecondaryText, _nTextStyle);
+            aSecondaryRect = rRenderContext.GetTextRect(_rRect, m_sSecondaryText, nTextStyle);
         }
 
         // position these rectangles properly
@@ -145,36 +150,15 @@ namespace svx
         aSecondaryRect.SetLeft( aPrimaryRect.Left() );
         aPrimaryRect.SetRight( _rRect.Left() + nCombinedWidth );
         aSecondaryRect.SetRight( aPrimaryRect.Right() );
-        if (DrawTextFlags::Right & _nTextStyle)
-        {
-            // move the rectangles to the right
-            aPrimaryRect.Move( aPlaygroundSize.Width() - nCombinedWidth, 0 );
-            aSecondaryRect.Move( aPlaygroundSize.Width() - nCombinedWidth, 0 );
-        }
-        else if (DrawTextFlags::Center & _nTextStyle)
-        {
-            // center the rectangles
-            aPrimaryRect.Move( ( aPlaygroundSize.Width() - nCombinedWidth ) / 2, 0 );
-            aSecondaryRect.Move( ( aPlaygroundSize.Width() - nCombinedWidth ) / 2, 0 );
-        }
 
         // y-axis:
         sal_Int32 nCombinedHeight = aPrimaryRect.GetHeight() + aSecondaryRect.GetHeight();
         // align to the top, for the moment
         aPrimaryRect.Move( 0, _rRect.Top() - aPrimaryRect.Top() );
         aSecondaryRect.Move( 0, aPrimaryRect.Top() + aPrimaryRect.GetHeight() - aSecondaryRect.Top() );
-        if (DrawTextFlags::Bottom & _nTextStyle)
-        {
-            // move the rects to the bottom
-            aPrimaryRect.Move( 0, aPlaygroundSize.Height() - nCombinedHeight );
-            aSecondaryRect.Move( 0, aPlaygroundSize.Height() - nCombinedHeight );
-        }
-        else if (DrawTextFlags::VCenter & _nTextStyle)
-        {
-            // move the rects to the bottom
-            aPrimaryRect.Move( 0, ( aPlaygroundSize.Height() - nCombinedHeight ) / 2 );
-            aSecondaryRect.Move( 0, ( aPlaygroundSize.Height() - nCombinedHeight ) / 2 );
-        }
+        // move the rects to the bottom
+        aPrimaryRect.Move( 0, ( aPlaygroundSize.Height() - nCombinedHeight ) / 2 );
+        aSecondaryRect.Move( 0, ( aPlaygroundSize.Height() - nCombinedHeight ) / 2 );
 
         // 'til here, everything we did assumes that the secondary text is painted _below_ the primary
         // text. If this isn't the case, we need to correct the rectangles
@@ -188,7 +172,7 @@ namespace svx
         // now draw the texts
         // as we already calculated the precise rectangles for the texts, we don't want to
         // use the alignment flags given - within it's rect, every text is centered
-        DrawTextFlags nDrawTextStyle( _nTextStyle );
+        DrawTextFlags nDrawTextStyle( nTextStyle );
         nDrawTextStyle &= ~DrawTextFlags( DrawTextFlags::Right | DrawTextFlags::Left | DrawTextFlags::Bottom | DrawTextFlags::Top );
         nDrawTextStyle |= DrawTextFlags::Center | DrawTextFlags::VCenter;
 
@@ -254,16 +238,11 @@ namespace svx
         aTextRect.AdjustLeft( 1 ); aTextRect.AdjustRight( -1 );
         aTextRect.AdjustTop( 1 ); aTextRect.AdjustBottom( -1 );
 
-        // calculate the text flags for the painting
-        constexpr DrawTextFlags nTextStyle = DrawTextFlags::Mnemonic |
-                                   DrawTextFlags::Left |
-                                   DrawTextFlags::VCenter;
-
         // paint the ruby text
         ::tools::Rectangle aPrimaryTextLocation;
         ::tools::Rectangle aSecondaryTextLocation;
 
-        m_aRubyText.Paint(rRenderContext, aTextRect, nTextStyle, &aPrimaryTextLocation, &aSecondaryTextLocation);
+        m_aRubyText.Paint(rRenderContext, aTextRect, &aPrimaryTextLocation, &aSecondaryTextLocation);
     }
 
     Size RubyRadioButton::GetOptimalSize() const

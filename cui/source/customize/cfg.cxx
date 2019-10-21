@@ -1446,13 +1446,12 @@ int SvxConfigPage::AddFunction(int nTarget, bool bAllowDuplicates)
         }
     }
 
-    return InsertEntry(pNewEntryData, nTarget, /*bFront*/false);
+    return AppendEntry(pNewEntryData, nTarget);
 }
 
-int SvxConfigPage::InsertEntry(
+int SvxConfigPage::AppendEntry(
     SvxConfigEntry* pNewEntryData,
-    int nTarget,
-    bool bFront)
+    int nTarget)
 {
     SvxConfigEntry* pTopLevelSelection = GetTopLevelSelection();
 
@@ -1468,13 +1467,7 @@ int SvxConfigPage::InsertEntry(
 
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pNewEntryData)));
 
-    if (bFront)
-    {
-        pEntries->insert( pEntries->begin(), pNewEntryData );
-        m_xContentsListBox->insert(0, sId);
-        nNewEntry = 0;
-    }
-    else if (nCurEntry == -1 || nCurEntry == m_xContentsListBox->n_children() - 1)
+    if (nCurEntry == -1 || nCurEntry == m_xContentsListBox->n_children() - 1)
     {
         pEntries->push_back( pNewEntryData );
         m_xContentsListBox->insert(-1, sId);

@@ -285,7 +285,7 @@ public:
     const TextCharAttrib*   FindCharAttrib( const TextPaM& rPaM, sal_uInt16 nWhich ) const;
 
     void                RemoveAttribs( sal_uInt32 nPara );
-    void                SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32 nStart, sal_Int32 nEnd, bool bIdleFormatAndUpdate = true );
+    void                SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32 nStart, sal_Int32 nEnd );
 
     TxtAlign            GetTextAlign() const { return meAlign; }
     void                SetTextAlign( TxtAlign eAlign );

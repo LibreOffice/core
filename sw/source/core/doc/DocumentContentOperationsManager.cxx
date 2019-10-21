@@ -1764,7 +1764,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
 
     if( pDoc != &m_rDoc )
     {   // ordinary copy
-        bRet = CopyImpl( rPam, rPos, true, bCopyAll, pRedlineRange );
+        bRet = CopyImpl( rPam, rPos, bCopyAll, pRedlineRange );
     }
     else if( ! ( *pStt <= rPos && rPos < *pEnd &&
             ( pStt->nNode != pEnd->nNode ||
@@ -1772,7 +1772,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
     {
         // Copy to a position outside of the area, or copy a single TextNode
         // Do an ordinary copy
-        bRet = CopyImpl( rPam, rPos, true, bCopyAll, pRedlineRange );
+        bRet = CopyImpl( rPam, rPos, bCopyAll, pRedlineRange );
     }
     else
     {
@@ -4319,7 +4319,7 @@ static void lcl_PopNumruleState(
 }
 
 bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
-        const bool bMakeNewFrames, const bool bCopyAll,
+        const bool bCopyAll,
         SwPaM *const pCpyRange ) const
 {
     SwDoc* pDoc = rPos.nNode.GetNode().GetDoc();
@@ -4653,13 +4653,13 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 SwNodeIndex aSaveIdx( aInsPos, -1 );
                 assert(pStt->nNode != pEnd->nNode);
                 pEnd->nContent = 0; // TODO why this?
-                CopyWithFlyInFly( aRg, aInsPos, &tmp, bMakeNewFrames, false );
+                CopyWithFlyInFly( aRg, aInsPos, &tmp, /*bMakeNewFrames*/true, false );
                 ++aSaveIdx;
                 pEnd->nNode = aSaveIdx;
                 pEnd->nContent.Assign( aSaveIdx.GetNode().GetTextNode(), 0 );
             }
             else
-                CopyWithFlyInFly( aRg, aInsPos, &tmp, bMakeNewFrames, false );
+                CopyWithFlyInFly( aRg, aInsPos, &tmp, /*bMakeNewFrames*/true, false );
 
             bCopyBookmarks = false;
         }

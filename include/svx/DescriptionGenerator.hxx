@@ -96,26 +96,7 @@ public:
             method to use the property name instead.
     */
     void AddProperty (const OUString& sPropertyName,
-        PropertyType aType,
-        const OUString& sLocalizedName=OUString());
-
-    /** Add the given property name and its associated value to the
-        description string.  If the property value does not differ from the
-        default value of the shape's style then the description string is
-        not modified.  This method forwards the request to its cousin but
-        first replaces the id of the localized name by the associated string
-        from the resource.
-        @param sPropertyName
-            The Name of the property to append.
-        @param aType
-            Type of the property's value.  It controls the transformation
-            into the value's string representation.
-        @param pResourceId
-            Id of the localized name of the property int the resource.
-    */
-    void AddProperty (const OUString& sPropertyName,
-        PropertyType aType,
-        const char* pResourceId);
+        PropertyType aType);
 
     /** Append the given string as is to the current description.
         @param sString

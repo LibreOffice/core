@@ -120,7 +120,7 @@ namespace {
 
 SwFormatFootnote::SwFormatFootnote( bool bEndNote )
     : SfxPoolItem( RES_TXTATR_FTN )
-    , SwModify(nullptr)
+    , SwModify()
     , m_pTextAttr(nullptr)
     , m_nNumber(0)
     , m_nNumberRLHidden(0)

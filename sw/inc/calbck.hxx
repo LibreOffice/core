@@ -187,10 +187,7 @@ class SW_DLLPUBLIC SwModify: public SwClient
     SwModify &operator =(const SwModify&) = delete;
 public:
     SwModify()
-        : SwClient(nullptr), m_pWriterListeners(nullptr), m_bModifyLocked(false), m_bLockClientList(false), m_bInCache(false), m_bInSwFntCache(false)
-    {}
-    explicit SwModify( SwModify* pToRegisterIn )
-        : SwClient(pToRegisterIn), m_pWriterListeners(nullptr), m_bModifyLocked(false), m_bLockClientList(false), m_bInCache(false), m_bInSwFntCache(false)
+        : SwClient(), m_pWriterListeners(nullptr), m_bModifyLocked(false), m_bLockClientList(false), m_bInCache(false), m_bInSwFntCache(false)
     {}
 
     // broadcasting: send notifications to all clients
