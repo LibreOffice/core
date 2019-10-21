@@ -94,6 +94,30 @@
       "revId": "ac2c1fb821b45f2382a5104b4d98dc08061ae938",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_121da4bc",
+        "filename": "starmath/source/mathtype.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-21T07:48:35Z",
+      "side": 1,
+      "message": "\u003e Ouch, good catch!  I\u0027d meant to write u\"...\"; will fix.\n\n\u003chttps://gerrit.libreoffice.org/81208/\u003e \"This should have become a UTF-16 string literal\"",
+      "parentUuid": "7f7f9b97_92ea14aa",
+      "range": {
+        "startLine": 319,
+        "startChar": 24,
+        "endLine": 319,
+        "endChar": 39
+      },
+      "revId": "ac2c1fb821b45f2382a5104b4d98dc08061ae938",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
