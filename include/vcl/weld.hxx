@@ -911,12 +911,13 @@ public:
 
     void connect_expanding(const Link<const TreeIter&, bool>& rLink) { m_aExpandingHdl = rLink; }
 
-    // return true to allow editing, false to disallow
+    // rLink returns true to allow editing, false to disallow
     virtual void connect_editing_started(const Link<const TreeIter&, bool>& rLink)
     {
         m_aEditingStartedHdl = rLink;
     }
 
+    // rLink returns true to accept the edit, false to reject
     virtual void
     connect_editing_done(const Link<const std::pair<const TreeIter&, OUString>&, bool>& rLink)
     {
@@ -1334,6 +1335,7 @@ class VCL_DLLPUBLIC Image : virtual public Widget
 public:
     virtual void set_from_icon_name(const OUString& rIconName) = 0;
     virtual void set_image(VirtualDevice* pDevice) = 0;
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) = 0;
 };
 
 class VCL_DLLPUBLIC Calendar : virtual public Widget
@@ -1846,6 +1848,7 @@ public:
     virtual bool get_item_sensitive(const OString& rIdent) const = 0;
     virtual void set_item_active(const OString& rIdent, bool bActive) = 0;
     virtual bool get_item_active(const OString& rIdent) const = 0;
+    virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) = 0;
     virtual void set_item_popover(const OString& rIdent, weld::Widget* pPopover) = 0;
 
     virtual void insert_separator(int pos, const OUString& rId) = 0;
