@@ -2755,9 +2755,10 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
                          of the new data
                         */
                         const bool bExpand = IsExpandableSprm(nSpId);
-                        const sal_uInt8* pStartData = aEntry.mpData + 2;
+                        const sal_uInt8* pStartData
+                            = aEntry.mpData == nullptr ? nullptr : aEntry.mpData + 2;
                         const sal_uInt8* pLastValidDataPos = maRawData + 512 - sizeof(sal_uInt32);
-                        if (pStartData > pLastValidDataPos)
+                        if (pStartData != nullptr && pStartData > pLastValidDataPos)
                             pStartData = nullptr;
                         if ((IsReplaceAllSprm(nSpId) || bExpand) && pStartData)
                         {
