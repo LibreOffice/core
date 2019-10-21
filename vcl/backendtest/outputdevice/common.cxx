@@ -324,8 +324,6 @@ TestResult OutputDeviceTestCommon::checkInvertN50Rectangle(Bitmap& aBitmap)
 
 TestResult OutputDeviceTestCommon::checkInvertTrackFrameRectangle(Bitmap& aBitmap)
 {
-    TestResult aReturnValue = TestResult::Passed;
-
     std::vector<Color> aExpected
     {
         COL_WHITE, COL_WHITE
