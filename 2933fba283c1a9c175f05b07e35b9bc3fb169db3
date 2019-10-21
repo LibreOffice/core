@@ -118,6 +118,30 @@
       "revId": "2933fba283c1a9c175f05b07e35b9bc3fb169db3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_58aa5dd2",
+        "filename": "sw/source/ui/dbui/mmresultdialogs.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-10-21T18:22:16Z",
+      "side": 1,
+      "message": "\u003e I thing it is / was possible. AFAIK the OSBA changes, which LHM sponsored, might have broken or removed that feature. Just found tdf#98986.\n\nYes, that basically seems to be the case. I quickly checked with some 5.0 version from the bibisect-releases repo. Editing the merged document works there, though that approach there is far from ideal as well (e.g. you can just delete the pages for single recipients, which will cause LO to crash later...).\n\n\u003e I just wanted to mention that a lot of stuff in MM is tricky, with definitely too many side effects in a much too huge function [...]\n\nI\u0027ll investigate further. One thought I had over the weekend was to check whether there are already existing unit tests (or write new ones) that define and check the expected behaviour for the different style types and then also run them (manually or semi-automatically) against the files created by using the dialogs, too.\n\nIn general, at a quick look, I\u0027m not really thrilled about the current approach the dialogs take (merging to a single file and then splitting of things again, which is quite slow) and think about analysing this a bit more, but all these dialog-related things are more of a side-project for me, so it\u0027ll probably take a while until I come up with other ideas (if at all). Any input welcome.",
+      "parentUuid": "7f7f9b97_415b4c53",
+      "range": {
+        "startLine": 530,
+        "startChar": 4,
+        "endLine": 530,
+        "endChar": 80
+      },
+      "revId": "2933fba283c1a9c175f05b07e35b9bc3fb169db3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
