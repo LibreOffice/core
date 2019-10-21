@@ -122,7 +122,7 @@ public:
         @return
             Returns <TRUE/> when both iterators point to the same object.
     */
-    bool operator== (const Iterator& rIterator);
+    bool operator== (const Iterator& rIterator) const;
     /** Test whether two iterators point to different objects.  This is just
         the negation of the result of the equality operator.
         @param rIterator
@@ -130,7 +130,7 @@ public:
         @return
             Returns <TRUE/> when both iterators point to the different objects.
     */
-    bool operator!= (const Iterator& rIterator);
+    bool operator!= (const Iterator& rIterator) const;
     /** Reverse the direction of iteration.  The position of the iterator is
         not changed.  Thus calling this method twice returns to the old state.
     */

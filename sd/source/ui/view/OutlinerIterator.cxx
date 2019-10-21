@@ -104,7 +104,7 @@ Iterator& Iterator::operator++ ()
     return *this;
 }
 
-bool Iterator::operator== (const Iterator& rIterator)
+bool Iterator::operator== (const Iterator& rIterator) const
 {
     if (!mxIterator || !rIterator.mxIterator)
         return mxIterator.get() == rIterator.mxIterator.get();
@@ -112,7 +112,7 @@ bool Iterator::operator== (const Iterator& rIterator)
         return *mxIterator == *rIterator.mxIterator;
 }
 
-bool Iterator::operator!= (const Iterator& rIterator)
+bool Iterator::operator!= (const Iterator& rIterator) const
 {
     return ! operator==(rIterator);
 }
