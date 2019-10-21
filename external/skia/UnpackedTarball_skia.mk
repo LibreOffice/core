@@ -12,7 +12,7 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,skia))
 $(eval $(call gb_UnpackedTarball_set_tarball,skia,$(SKIA_TARBALL)))
 
 # TODO
-skia_patches := lerp.patch fix-pch.patch fix-ddi.patch make-api-visible.patch.1
+skia_patches := lerp.patch fix-pch.patch fix-ddi.patch make-api-visible.patch.1 fix-shader-locale.patch.1
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
