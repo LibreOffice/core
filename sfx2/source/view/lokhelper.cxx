@@ -254,13 +254,14 @@ void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc
     }
 }
 
-void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisView, const OString& rRectangle)
+void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisView, const OString& rRectangle, const OString& rHyperlink)
 {
     OString sPayload;
     if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
     {
+        OString sHyperlink = rHyperlink.isEmpty() ? "{}" : rHyperlink;
         sPayload = OString("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView()) +
-            "\", \"rectangle\": \"" + rRectangle + "\" }";
+            "\", \"rectangle\": \"" + rRectangle + "\", \"hyperlink\": " + sHyperlink + " }";
     }
     else
     {
