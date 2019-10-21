@@ -484,11 +484,11 @@ std::pair<sal_uInt16, sal_uInt16> SwUpdFootnoteEndNtAtEnd::GetNumber(
         if( (*pArr)[ --n ] == &rNd )
         {
             nRet.first = ++((*pNum)[ n ].first);
-            nRet.second = ((*pNum)[ n ].second);
             if (!IsFootnoteDeleted(rIDRA, rTextFootnote))
             {
                 ++((*pNum)[ n ].second);
             }
+            nRet.second = ((*pNum)[ n ].second);
             break;
         }
 
