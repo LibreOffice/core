@@ -295,8 +295,8 @@ void SbStdClipboard::MethGetData( SbxArray* pPar_ )
         return;
     }
 
-    sal_uInt16 nFormat = pPar_->Get(1)->GetInteger();
-    if( !nFormat  || nFormat > 3 )
+    sal_Int16 nFormat = pPar_->Get(1)->GetInteger();
+    if( nFormat <= 0 || nFormat > 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
@@ -312,8 +312,8 @@ void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_ )
         return;
     }
 
-    sal_uInt16 nFormat = pPar_->Get(1)->GetInteger();
-    if( !nFormat  || nFormat > 3 )
+    sal_Int16 nFormat = pPar_->Get(1)->GetInteger();
+    if( nFormat <= 0 || nFormat > 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
@@ -341,8 +341,8 @@ void SbStdClipboard::MethSetData( SbxArray* pPar_ )
         return;
     }
 
-    sal_uInt16 nFormat = pPar_->Get(2)->GetInteger();
-    if( !nFormat  || nFormat > 3 )
+    sal_Int16 nFormat = pPar_->Get(2)->GetInteger();
+    if( nFormat <= 0 || nFormat > 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
