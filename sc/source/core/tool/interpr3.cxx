@@ -3642,48 +3642,50 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
 
     SCSIZE nCol = 0, nRow = 0;
     auto aArray = GetTopNumberArray(nCol, nRow);
-    auto aArraySize = aArray.size();
-    if (aArraySize == 0 || nGlobalError != FormulaError::NONE)
+    const auto nRankArraySize = aArray.size();
+    if (nRankArraySize == 0 || nGlobalError != FormulaError::NONE)
     {
         PushNoValue();
         return;
     }
-    assert(aArraySize == nCol * nRow);
-    for (double fArg : aArray)
-    {
-        double f = ::rtl::math::approxFloor(fArg);
-        if (f < 1.0)
-        {
-            PushIllegalArgument();
-            return;
-        }
-    }
+    assert(nRankArraySize == nCol * nRow);
 
     std::vector<SCSIZE> aRankArray;
-    aRankArray.reserve(aArraySize);
+    aRankArray.reserve(nRankArraySize);
     std::transform(aArray.begin(), aArray.end(), std::back_inserter(aRankArray),
-                   [](double f) { return static_cast<SCSIZE>(f); });
-
-    auto itMaxRank = std::max_element(aRankArray.begin(), aRankArray.end());
-    assert(itMaxRank != aRankArray.end());
-    SCSIZE k = *itMaxRank;
+            [](double f) {
+                f = rtl::math::approxFloor(f);
+                // Valid ranks are >= 1.
+                if (f < 1.0 || f > std::numeric_limits<SCSIZE>::max())
+                    return static_cast<SCSIZE>(0);
+                return static_cast<SCSIZE>(f);
+            });
 
     vector<double> aSortArray;
     GetNumberSequenceArray(1, aSortArray, false );
-    SCSIZE nSize = aSortArray.size();
-    if (nSize == 0 || nGlobalError != FormulaError::NONE || nSize < k)
+    const SCSIZE nSize = aSortArray.size();
+    if (nSize == 0 || nGlobalError != FormulaError::NONE)
         PushNoValue();
-    else if (aArraySize == 1)
+    else if (nRankArraySize == 1)
     {
-        vector<double>::iterator iPos = aSortArray.begin() + (bSmall ? k-1 : nSize-k);
-        ::std::nth_element( aSortArray.begin(), iPos, aSortArray.end());
-        PushDouble( *iPos);
+        const SCSIZE k = aRankArray[0];
+        if (k < 1 || nSize < k)
+            PushNoValue();
+        else
+        {
+            vector<double>::iterator iPos = aSortArray.begin() + (bSmall ? k-1 : nSize-k);
+            ::std::nth_element( aSortArray.begin(), iPos, aSortArray.end());
+            PushDouble( *iPos);
+        }
     }
     else
     {
         std::set<SCSIZE> aIndices;
         for (SCSIZE n : aRankArray)
-            aIndices.insert(bSmall ? n-1 : nSize-n);
+        {
+            if (1 <= n && n <= nSize)
+                aIndices.insert(bSmall ? n-1 : nSize-n);
+        }
         // We can spare sorting when the total number of ranks is small enough.
         // Find only the elements at given indices if, arbitrarily, the index size is
         // smaller than 1/3 of the haystack array's size; just sort it squarely, otherwise.
@@ -3702,7 +3704,12 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
 
         aArray.clear();
         for (SCSIZE n : aRankArray)
-            aArray.push_back(aSortArray[bSmall ? n-1 : nSize-n]);
+        {
+            if (1 <= n && n <= nSize)
+                aArray.push_back( aSortArray[bSmall ? n-1 : nSize-n]);
+            else
+                aArray.push_back( CreateDoubleError( FormulaError::NoValue));
+        }
         ScMatrixRef pResult = GetNewMat(nCol, nRow, aArray);
         PushMatrix(pResult);
     }
