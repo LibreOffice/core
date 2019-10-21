@@ -5636,7 +5636,7 @@ void WW8PLCFxDesc::Restore( const WW8PLCFxSave1& rSave )
             else
             {
                 nSprmsLen = nOrigSprmsLen - rSave.nPLCFxMemOfs;
-                pMemPos = aD.pMemPos + rSave.nPLCFxMemOfs;
+                pMemPos = aD.pMemPos == nullptr ? nullptr : aD.pMemPos + rSave.nPLCFxMemOfs;
             }
         }
     }
