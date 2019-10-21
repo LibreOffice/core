@@ -55,7 +55,6 @@ class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveContent
     sal_uInt16 m_nFootnoteStart; // StartPos of Footnotes in History
 
     bool m_bJoinNext : 1,
-         m_bJoinPrev : 1,
          m_bMoveRange : 1;
 
     bool m_bMoveRedlines; // use DOC_MOVEREDLINES when calling SwDoc::Move

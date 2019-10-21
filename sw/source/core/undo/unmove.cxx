@@ -39,7 +39,6 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
     , m_nInsPosContent(0)
     , m_nMoveDestContent(rMvPos.nContent.GetIndex())
     , m_bJoinNext(false)
-    , m_bJoinPrev(false)
     , m_bMoveRange(false)
     , m_bMoveRedlines(false)
 {
@@ -106,7 +105,7 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
     , m_bMoveRedlines(false)
 {
     m_bMoveRange = true;
-    m_bJoinNext = m_bJoinPrev = false;
+    m_bJoinNext = false;
 
     m_nSttContent = m_nEndContent = m_nMoveDestContent = COMPLETE_STRING;
 
@@ -216,17 +215,6 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
                         SwIndex(pTextNd, pTextNd->GetText().getLength())));
             }
             // Are there any Pams in the next TextNode?
-            pTextNd->JoinNext();
-        }
-
-        if( m_bJoinPrev && pTextNd->CanJoinPrev( &aIdx ) )
-        {
-            // Are there any Pams in the next TextNode?
-            pTextNd = aIdx.GetNode().GetTextNode();
-            {
-                RemoveIdxRel( aIdx.GetIndex() + 1, SwPosition( aIdx,
-                        SwIndex( pTextNd, pTextNd->GetText().getLength())));
-            }
             pTextNd->JoinNext();
         }
 
