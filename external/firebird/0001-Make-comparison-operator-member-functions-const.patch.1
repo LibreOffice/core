@@ -1,0 +1,49 @@
+From 15390d75ee6ca429dbbe15ea04214df8a30fbd48 Mon Sep 17 00:00:00 2001
+From: Stephan Bergmann <sbergman@redhat.com>
+Date: Mon, 21 Oct 2019 17:54:18 +0200
+Subject: [PATCH] Make comparison operator member functions const
+
+...which avoids overload resolution ambiguities in C++20, when a synthesized
+candidate of operator == for a reversed-argument rewrite conflicts with the
+actual operator ==, due to the asymmetric const-ness of the implicit object
+parameter and the RHS parameter.  (As observed with recent Clang 10 trunk with
+-std=c++2a when building firebird as part of LibreOffice:
+
+> workdir/UnpackedTarball/firebird/src/jrd/inf.cpp:1139:62: error: use of overloaded operator '!=' is ambiguous (with operand types 'RuntimeStatistics::Iterator' and 'Jrd::RuntimeStatistics::Iterator')
+>         for (RuntimeStatistics::Iterator iter = stats.begin(); iter != stats.end(); ++iter)
+>                                                                ~~~~ ^  ~~~~~~~~~~~
+> workdir/UnpackedTarball/firebird/src/jrd/../dsql/../jrd/RuntimeStatistics.h:283:8: note: candidate function
+>                 bool operator!=(const Iterator& other)
+>                      ^
+> workdir/UnpackedTarball/firebird/src/jrd/../dsql/../jrd/RuntimeStatistics.h:278:8: note: candidate function
+>                 bool operator==(const Iterator& other)
+>                      ^
+> workdir/UnpackedTarball/firebird/src/jrd/../dsql/../jrd/RuntimeStatistics.h:278:8: note: candidate function (with reversed parameter order)
+
+)
+---
+ src/jrd/RuntimeStatistics.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/jrd/RuntimeStatistics.h b/src/jrd/RuntimeStatistics.h
+index 74a03de2ad..fab286ad1a 100644
+--- a/src/jrd/RuntimeStatistics.h
++++ b/src/jrd/RuntimeStatistics.h
+@@ -290,12 +290,12 @@ public:
+ 		{}
+ 
+ 	public:
+-		bool operator==(const Iterator& other)
++		bool operator==(const Iterator& other) const
+ 		{
+ 			return (m_counts == other.m_counts);
+ 		}
+ 
+-		bool operator!=(const Iterator& other)
++		bool operator!=(const Iterator& other) const
+ 		{
+ 			return (m_counts != other.m_counts);
+ 		}
+-- 
+2.21.0
+
