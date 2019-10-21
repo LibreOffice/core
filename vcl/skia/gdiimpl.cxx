@@ -40,14 +40,12 @@ namespace
 // Create Skia Path from B2DPolygon
 // TODO - take bezier curves into account
 // TODO - use this for all Polygon / PolyPolygon needs
-static SkPath lclPolygonToPath(const basegfx::B2DPolygon& rPolygon)
+void lclPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath)
 {
-    SkPath aPath;
-
     const sal_uInt32 nPointCount(rPolygon.count());
 
     if (nPointCount == 0)
-        return aPath;
+        return;
 
     const bool bClosePath(rPolygon.isClosed());
 
@@ -58,19 +56,18 @@ static SkPath lclPolygonToPath(const basegfx::B2DPolygon& rPolygon)
         auto const& rPoint = rPolygon.getB2DPoint(nPointIndex);
         if (bFirst)
         {
-            aPath.moveTo(rPoint.getX(), rPoint.getY());
+            rPath.moveTo(rPoint.getX(), rPoint.getY());
             bFirst = false;
         }
         else
         {
-            aPath.lineTo(rPoint.getX(), rPoint.getY());
+            rPath.lineTo(rPoint.getX(), rPoint.getY());
         }
     }
     if (bClosePath)
-        aPath.close();
-    return aPath;
+        rPath.close();
 }
-}
+} // end anonymous namespace
 
 // Class that triggers flushing the backing buffer when idle.
 class SkiaFlushIdle : public Idle
@@ -503,7 +500,8 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     // TrackFrame just inverts a dashed path around the polygon
     if (eFlags == SalInvert::TrackFrame)
     {
-        SkPath aPath = lclPolygonToPath(rPoly);
+        SkPath aPath;
+        lclPolygonToPath(rPoly, aPath);
         SkPaint aPaint;
         aPaint.setStrokeWidth(2);
         float intervals[] = { 4.0f, 4.0f };
@@ -516,7 +514,8 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     }
     else
     {
-        SkPath aPath = lclPolygonToPath(rPoly);
+        SkPath aPath;
+        lclPolygonToPath(rPoly, aPath);
         SkPaint aPaint;
         aPaint.setColor(SkColorSetARGB(255, 255, 255, 255));
         aPaint.setStyle(SkPaint::kFill_Style);
