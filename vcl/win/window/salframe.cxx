@@ -2724,18 +2724,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetFloatTitleFont( aFloatTitleFont );
     aStyleSettings.SetHelpFont( aHelpFont );
     aStyleSettings.SetIconFont( aIconFont );
-    // We prefer Arial in the russian version, because MS Sans Serif
-    // is too wide for the dialogs
-    if ( rSettings.GetLanguageTag().getLanguageType() == LANGUAGE_RUSSIAN )
-    {
-        OUString aFontName = aAppFont.GetFamilyName();
-        OUString aFirstName = aFontName.getToken( 0, ';' );
-        if ( aFirstName.equalsIgnoreAsciiCase( "MS Sans Serif" ) )
-        {
-            aFontName = "Arial;" + aFontName;
-            aAppFont.SetFamilyName( aFontName );
-        }
-    }
 
     if ( aAppFont.GetWeight() > WEIGHT_NORMAL )
         aAppFont.SetWeight( WEIGHT_NORMAL );
