@@ -67,6 +67,7 @@
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <notxtfrm.hxx>
+#include <dcontact.hxx>
 
 using namespace ::com::sun::star;
 
@@ -142,6 +143,12 @@ SdrInventor SwFlyDrawObj::GetObjInventor() const
 sal_uInt16 SwFlyDrawObj::GetObjIdentifier() const
 {
     return SwFlyDrawObjIdentifier;
+}
+
+bool SwFlyDrawObj::IsTextBox() const
+{
+    const SwFrameFormat* pFrameFormat = FindFrameFormat(this);
+    return SwTextBoxHelper::isTextBox(pFrameFormat, RES_FLYFRMFMT);
 }
 
 // TODO: Need own primitive to get the FlyFrame paint working
