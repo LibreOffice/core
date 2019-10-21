@@ -22,6 +22,8 @@
 #include <memory>
 #include <com/sun/star/uno/Sequence.h>
 #include <vcl/ctrl.hxx>
+#include <vcl/errinf.hxx>
+#include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
 
 namespace com :: sun :: star :: ucb { class XContent; }
@@ -62,38 +64,39 @@ struct FileViewAsyncAction
     }
 };
 
-class SvtFileView : public Control
+class SvtFileView
 {
 private:
     std::unique_ptr<SvtFileView_Impl> mpImpl;
-    css::uno::Sequence< OUString >    mpBlackList;
+    css::uno::Sequence<OUString> maBlackList;
 
     DECL_LINK( HeaderSelect_Impl, HeaderBar*, void );
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar*, void );
 
-protected:
-    virtual void GetFocus() override;
+//protected:
+//    virtual void GetFocus() override;
 
 public:
-    SvtFileView( vcl::Window* pParent, WinBits nBits, bool bOnlyFolder, bool bMultiSelection, bool bShowType = true );
-    virtual ~SvtFileView() override;
-    virtual void dispose() override;
+    SvtFileView(weld::Window* pTopLevel, std::unique_ptr<weld::TreeView> xTreeView, bool bOnlyFolder, bool bMultiSelection, bool bShowType = true);
+    virtual ~SvtFileView();
 
-    virtual Size GetOptimalSize() const override;
+//TODO    virtual Size GetOptimalSize() const override;
 
     void                    SetViewMode( FileViewMode eMode );
 
     const OUString&         GetViewURL() const;
     static OUString         GetURL( SvTreeListEntry const * pEntry );
+    OUString                GetURL(const weld::TreeIter& rEntry) const;
     OUString                GetCurrentURL() const;
 
     bool                    GetParentURL( OUString& _rParentURL ) const;
     void                    CreatedFolder( const OUString& rUrl, const OUString& rNewFolder );
 
-    void                    SetHelpId( const OString& rHelpId );
-    const OString&          GetHelpId( ) const;
-    void                    SetSizePixel( const Size& rNewSize ) override;
-    virtual void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) override;
+    void                    set_help_id(const OString& rHelpId);
+    OString                 get_help_id() const;
+
+    void                    grab_focus();
+    bool                    has_focus() const;
 
     /** initialize the view with the content of a folder given by URL, and apply an immediate filter
 
@@ -153,13 +156,15 @@ public:
 
     void                    SetNoSelection();
 
-    void                    SetSelectHdl( const Link<SvTreeListBox*,void>& rHdl );
-    void                    SetDoubleClickHdl( const Link<SvTreeListBox*,bool>& rHdl );
+    void                    SetSelectHdl( const Link<weld::TreeView&,void>& rHdl );
+    void                    SetDoubleClickHdl( const Link<weld::TreeView&,bool>& rHdl );
     void                    SetOpenDoneHdl( const Link<SvtFileView*,void>& rHdl );
 
     sal_uLong               GetSelectionCount() const;
-    SvTreeListEntry*        FirstSelected() const;
-    SvTreeListEntry*        NextSelected( SvTreeListEntry* pEntry ) const;
+    SvtContentEntry*        FirstSelected() const;
+
+    void selected_foreach(const std::function<bool(weld::TreeIter&)>& func);
+
     void                    EnableAutoResize();
 
     void                    EnableDelete( bool bEnable );
@@ -172,8 +177,8 @@ public:
 
     ::std::vector< SvtContentEntry > GetContent();
 
-protected:
-    virtual void            StateChanged( StateChangedType nStateChange ) override;
+//protected:
+//TODO    virtual void            StateChanged( StateChangedType nStateChange ) override;
 };
 
 // struct SvtContentEntry ------------------------------------------------

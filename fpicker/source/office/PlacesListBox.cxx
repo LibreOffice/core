@@ -63,8 +63,8 @@ PlacesListBox::PlacesListBox( vcl::Window* pParent, SvtFileDialog* pFileDlg, con
     maPlaces( ),
     mpDlg( pFileDlg ),
     mpImpl( nullptr ),
-    mpAddBtn( ),
-    mpDelBtn( ),
+//    mxAddBtn(m_xBuilder->weld_button("add")),
+//    mxDelBtn(m_xBuilder->weld_button("del")),
     mnNbEditables( 0 ),
     mbUpdated( false ),
     mbSelectionChanged( false )
@@ -74,15 +74,11 @@ PlacesListBox::PlacesListBox( vcl::Window* pParent, SvtFileDialog* pFileDlg, con
     mpImpl->SetSelectHdl( LINK( this, PlacesListBox, Selection ) );
     mpImpl->SetDoubleClickHdl( LINK( this, PlacesListBox, DoubleClick ) ) ;
 
-    mpAddBtn.reset( VclPtr<ImageButton>::Create( this, 0 ) );
-    mpAddBtn->SetText( "+" );
-    mpAddBtn->SetPosSizePixel( Point( 0, 0 ), Size( 22, 22 ) );
-    mpAddBtn->Show();
+    mxAddBtn->set_label( "+" );
+    mxAddBtn->show();
 
-    mpDelBtn.reset( VclPtr<ImageButton>::Create( this, 0 ) );
-    mpDelBtn->SetText( "-" );
-    mpDelBtn->SetPosSizePixel( Point( 0, 0 ), Size( 22, 22 ) );
-    mpDelBtn->Show();
+    mxDelBtn->set_label( "-" );
+    mxDelBtn->show();
 }
 
 PlacesListBox::~PlacesListBox( )
@@ -93,9 +89,6 @@ PlacesListBox::~PlacesListBox( )
 void PlacesListBox::dispose()
 {
     mpImpl.disposeAndClear();
-    mpAddBtn.disposeAndClear();
-    mpDelBtn.disposeAndClear();
-    mpDlg.clear();
     Control::dispose();
 }
 
@@ -139,19 +132,19 @@ void PlacesListBox::RemoveSelectedPlace() {
     RemovePlace(mpImpl->GetCurrRow());
 }
 
-void PlacesListBox::SetAddHdl( const Link<Button*,void>& rHdl )
+void PlacesListBox::SetAddHdl( const Link<weld::Button&,void>& rHdl )
 {
-    mpAddBtn->SetClickHdl( rHdl );
+    mxAddBtn->connect_clicked( rHdl );
 }
 
-void PlacesListBox::SetDelHdl( const Link<Button*,void>& rHdl )
+void PlacesListBox::SetDelHdl( const Link<weld::Button&,void>& rHdl )
 {
-    mpDelBtn->SetClickHdl( rHdl );
+    mxDelBtn->connect_clicked( rHdl );
 }
 
 void PlacesListBox::SetDelEnabled( bool enabled )
 {
-    mpDelBtn->Enable( enabled );
+    mxDelBtn->set_sensitive( enabled );
 }
 
 void PlacesListBox::SetSizePixel( const Size& rNewSize )
@@ -160,10 +153,6 @@ void PlacesListBox::SetSizePixel( const Size& rNewSize )
     Size aListSize( rNewSize );
     aListSize.AdjustHeight( -(26 + 18) );
     mpImpl->SetSizePixel( aListSize );
-
-    sal_Int32 nBtnY = rNewSize.Height() - 26;
-    mpAddBtn->SetPosPixel( Point( 3, nBtnY ) );
-    mpDelBtn->SetPosPixel( Point( 6 + 24, nBtnY ) );
 }
 
 bool PlacesListBox::EventNotify( NotifyEvent& rNEvt )
@@ -185,9 +174,9 @@ bool PlacesListBox::EventNotify( NotifyEvent& rNEvt )
 
 Image PlacesListBox::getEntryIcon( const PlacePtr& pPlace )
 {
-    Image theImage = SvtFileDialog::GetButtonImage( BMP_FILEDLG_PLACE_LOCAL );
+    Image theImage = Image(StockImage::Yes, BMP_FILEDLG_PLACE_LOCAL);
     if ( !pPlace->IsLocal( ) )
-        theImage = SvtFileDialog::GetButtonImage( BMP_FILEDLG_PLACE_REMOTE );
+        theImage = Image(StockImage::Yes, BMP_FILEDLG_PLACE_REMOTE);
     return theImage;
 }
 
@@ -209,7 +198,7 @@ IMPL_LINK_NOARG( PlacesListBox, DoubleClick, SvTreeListBox*, bool )
     PlacePtr pPlace = maPlaces[nSelected];
     if ( pPlace->IsEditable() && !pPlace->IsLocal( ) )
     {
-        PlaceEditDialog aDlg(mpDlg->GetFrameWeld(), pPlace);
+        PlaceEditDialog aDlg(mpDlg->getDialog(), pPlace);
         short aRetCode = aDlg.run();
         switch(aRetCode) {
             case RET_OK :

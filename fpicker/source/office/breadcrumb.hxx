@@ -11,7 +11,7 @@
 #define INCLUDED_SVTOOLS_BREADCRUMB_HXX
 
 #include <vcl/layout.hxx>
-
+#include <vcl/weld.hxx>
 #include <vector>
 
 class FixedHyperlink;
@@ -46,13 +46,14 @@ class Breadcrumb : public VclHBox
         DECL_LINK( ClickLinkHdl, FixedHyperlink&, void );
 
     public:
-        Breadcrumb( vcl::Window* pParent );
+        Breadcrumb(weld::Container* pParent);
+        Breadcrumb(vcl::Window* pParent);
         virtual ~Breadcrumb() override;
 
         void dispose() override;
         void EnableFields( bool bEnable );
 
-        void SetClickHdl( const Link<Breadcrumb*,void>& rLink );
+        void connect_clicked( const Link<Breadcrumb*,void>& rLink );
         const OUString& GetHdlURL() const;
 
         void SetRootName( const OUString& rURL );
