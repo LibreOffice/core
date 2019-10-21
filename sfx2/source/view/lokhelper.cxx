@@ -254,13 +254,16 @@ void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc
     }
 }
 
-void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisView, const OString& rRectangle, bool bMispelledWord)
+void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisView, const OString& rRectangle, bool bMispelledWord, const OString& rHyperlink)
 {
     OString sPayload;
     if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
     {
+        OString sHyperlink = rHyperlink.isEmpty() ? "{}" : rHyperlink;
         sPayload = OString("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView()) +
-            "\", \"rectangle\": \"" + rRectangle + "\", \"mispelledWord\": \"" +  OString::number(bMispelledWord) + "\" }";
+            "\", \"rectangle\": \"" + rRectangle +
+            "\", \"mispelledWord\": \"" + OString::number(bMispelledWord) +
+            "\", \"hyperlink\": " + sHyperlink + " }";
     }
     else
     {
