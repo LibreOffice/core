@@ -213,9 +213,9 @@ namespace
             OUStringToOString(aInfo.GetDriverVersion(), RTL_TEXTENCODING_UTF8) +
             OString::number(aInfo.GetWindowsVersion());
 #else
-        return OString(reinterpret_cast<const char*>(glGetString(GL_VENDOR))) +
-            OString(reinterpret_cast<const char*>(glGetString(GL_RENDERER))) +
-            OString(reinterpret_cast<const char*>(glGetString(GL_VERSION)));
+        return rtl::OStringView(reinterpret_cast<const char*>(glGetString(GL_VENDOR))) +
+            reinterpret_cast<const char*>(glGetString(GL_RENDERER)) +
+            reinterpret_cast<const char*>(glGetString(GL_VERSION));
 #endif
     }
 
