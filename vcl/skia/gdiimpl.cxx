@@ -67,6 +67,18 @@ void lclPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath)
     if (bClosePath)
         rPath.close();
 }
+
+SkColor toSkColor(Color color)
+{
+    return SkColorSetARGB(255 - color.GetTransparency(), color.GetRed(), color.GetGreen(),
+                          color.GetBlue());
+}
+
+Color fromSkColor(SkColor color)
+{
+    return Color(255 - SkColorGetA(color), SkColorGetR(color), SkColorGetG(color),
+                 SkColorGetB(color));
+}
 } // end anonymous namespace
 
 // Class that triggers flushing the backing buffer when idle.

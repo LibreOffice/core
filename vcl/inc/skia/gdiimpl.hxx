@@ -210,16 +210,7 @@ protected:
     int GetWidth() const { return mProvider ? mProvider->GetWidth() : 1; }
     // get the height of the device
     int GetHeight() const { return mProvider ? mProvider->GetHeight() : 1; }
-    static SkColor toSkColor(Color color)
-    {
-        return SkColorSetARGB(255 - color.GetTransparency(), color.GetRed(), color.GetGreen(),
-                              color.GetBlue());
-    }
-    static Color fromSkColor(SkColor color)
-    {
-        return Color(255 - SkColorGetA(color), SkColorGetR(color), SkColorGetG(color),
-                     SkColorGetB(color));
-    }
+
     void drawMask(const SalTwoRect& rPosAry, const SkBitmap& rBitmap, Color nMaskColor);
 
     SalGraphics& mParent;
