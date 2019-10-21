@@ -331,7 +331,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl, weld::ToggleButt
     }
 
     const bool bNeedPasssword = !m_bOrigPasswordIsConfirmed
-            && m_xProtectPB->get_visible();
+            && m_xUnProtectPB->get_visible(); // tdf#128230 Require password if the Unprotect button is visible
     if (!bAlreadyDone && bNeedPasssword)
     {
         OUString aPasswordText;
