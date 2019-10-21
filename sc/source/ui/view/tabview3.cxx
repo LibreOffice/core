@@ -381,6 +381,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
         {
             if (nPosX > aViewData.GetMaxTiledCol() - 10 || nPosY > aViewData.GetMaxTiledRow() - 25)
             {
+                ScDocument* pDoc = aViewData.GetDocument();
                 ScDocShell* pDocSh = aViewData.GetDocShell();
                 ScModelObj* pModelObj = pDocSh ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocSh->GetModel() ) : nullptr;
                 Size aOldSize(0, 0);
@@ -388,7 +389,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
                     aOldSize = pModelObj->getDocumentSize();
 
                 if (nPosX > aViewData.GetMaxTiledCol() - 10)
-                    aViewData.SetMaxTiledCol(std::min<SCCOL>(std::max(nPosX, aViewData.GetMaxTiledCol()) + 10, MAXCOL));
+                    aViewData.SetMaxTiledCol(std::min<SCCOL>(std::max(nPosX, aViewData.GetMaxTiledCol()) + 10, pDoc->MaxCol()));
 
                 if (nPosY > aViewData.GetMaxTiledRow() - 25)
                     aViewData.SetMaxTiledRow(std::min<SCROW>(std::max(nPosY, aViewData.GetMaxTiledRow()) + 25,  MAXTILEDROW));
@@ -1080,23 +1081,22 @@ void ScTabView::AlignToCursor( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
                 break;
         }
 
+        ScDocument* pDoc = aViewData.GetDocument();
         if (bDoLine)
         {
             while ( nCurX >= nNewDeltaX+nSizeX )
             {
                 nNewDeltaX = nCurX-nSizeX+1;
-                ScDocument* pDoc = aViewData.GetDocument();
                 SCTAB nTab = aViewData.GetTabNo();
-                while ( nNewDeltaX < MAXCOL && !pDoc->GetColWidth( nNewDeltaX, nTab ) )
+                while ( nNewDeltaX < pDoc->MaxCol() && !pDoc->GetColWidth( nNewDeltaX, nTab ) )
                     ++nNewDeltaX;
                 nSizeX = aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
             }
             while ( nCurY >= nNewDeltaY+nSizeY )
             {
                 nNewDeltaY = nCurY-nSizeY+1;
-                ScDocument* pDoc = aViewData.GetDocument();
                 SCTAB nTab = aViewData.GetTabNo();
-                while ( nNewDeltaY < MAXROW && !pDoc->GetRowHeight( nNewDeltaY, nTab ) )
+                while ( nNewDeltaY < pDoc->MaxRow() && !pDoc->GetRowHeight( nNewDeltaY, nTab ) )
                     ++nNewDeltaY;
                 nSizeY = aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
             }
@@ -1108,15 +1108,15 @@ void ScTabView::AlignToCursor( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
 
         if ( nNewDeltaX != nDeltaX )
             nSizeX = aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
-        if (nNewDeltaX+nSizeX-1 > MAXCOL)
-            nNewDeltaX = MAXCOL-nSizeX+1;
+        if (nNewDeltaX+nSizeX-1 > pDoc->MaxCol())
+            nNewDeltaX = pDoc->MaxCol()-nSizeX+1;
         if (nNewDeltaX < 0)
             nNewDeltaX = 0;
 
         if ( nNewDeltaY != nDeltaY )
             nSizeY = aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
-        if (nNewDeltaY+nSizeY-1 > MAXROW)
-            nNewDeltaY = MAXROW-nSizeY+1;
+        if (nNewDeltaY+nSizeY-1 > pDoc->MaxRow())
+            nNewDeltaY = pDoc->MaxRow()-nSizeY+1;
         if (nNewDeltaY < 0)
             nNewDeltaY = 0;
 
@@ -1173,10 +1173,11 @@ void ScTabView::MoveCursorAbs( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
     if( aViewData.GetViewShell()->GetForceFocusOnCurCell() )
         aViewData.GetViewShell()->SetForceFocusOnCurCell( !ValidColRow(nCurX, nCurY) );
 
+    ScDocument* pDoc = aViewData.GetDocument();
     if (nCurX < 0) nCurX = 0;
     if (nCurY < 0) nCurY = 0;
-    if (nCurX > MAXCOL) nCurX = MAXCOL;
-    if (nCurY > MAXROW) nCurY = MAXROW;
+    if (nCurX > pDoc->MaxCol()) nCurX = pDoc->MaxCol();
+    if (nCurY > pDoc->MaxRow()) nCurY = pDoc->MaxRow();
 
     // FIXME: this is to limit the number of rows handled in the Online
     // to 1000; this will be removed again when the performance
@@ -1566,9 +1567,10 @@ void ScTabView::MarkColumns()
     }
 
     SCTAB nTab = aViewData.GetTabNo();
+    ScDocument* pDoc = aViewData.GetDocument();
     DoneBlockMode();
     InitBlockMode( nStartCol,0, nTab );
-    MarkCursor( nEndCol,MAXROW, nTab );
+    MarkCursor( nEndCol, pDoc->MaxRow(), nTab );
     SelectionChanged();
 }
 
@@ -1593,15 +1595,17 @@ void ScTabView::MarkRows()
     }
 
     SCTAB nTab = aViewData.GetTabNo();
+    ScDocument* pDoc = aViewData.GetDocument();
     DoneBlockMode();
     InitBlockMode( 0,nStartRow, nTab );
-    MarkCursor( MAXCOL,nEndRow, nTab );
+    MarkCursor( pDoc->MaxCol(), nEndRow, nTab );
     SelectionChanged();
 }
 
 
 void ScTabView::MarkColumns(SCCOL nCol, sal_Int16 nModifier)
 {
+    ScDocument* pDoc = aViewData.GetDocument();
     SCCOL nStartCol = nCol;
     SCTAB nTab = aViewData.GetTabNo();
 
@@ -1610,7 +1614,7 @@ void ScTabView::MarkColumns(SCCOL nCol, sal_Int16 nModifier)
 
     DoneBlockMode( nModifier != 0 );
     InitBlockMode( nStartCol, 0, nTab, true, true);
-    MarkCursor( nCol, MAXROW, nTab );
+    MarkCursor( nCol, pDoc->MaxRow(), nTab );
     bMoveIsShift = false;
     SetCursor( nCol, 0 );
     SelectionChanged();
@@ -1618,6 +1622,7 @@ void ScTabView::MarkColumns(SCCOL nCol, sal_Int16 nModifier)
 
 void ScTabView::MarkRows(SCROW nRow, sal_Int16 nModifier)
 {
+    ScDocument* pDoc = aViewData.GetDocument();
     SCROW nStartRow = nRow;
     SCTAB nTab = aViewData.GetTabNo();
 
@@ -1626,7 +1631,7 @@ void ScTabView::MarkRows(SCROW nRow, sal_Int16 nModifier)
 
     DoneBlockMode( nModifier != 0 );
     InitBlockMode( 0, nStartRow, nTab, true, false, true );
-    MarkCursor( MAXCOL, nRow, nTab );
+    MarkCursor( pDoc->MaxCol(), nRow, nTab );
     bMoveIsShift = false;
     SetCursor( 0, nRow );
     SelectionChanged();
@@ -1665,6 +1670,7 @@ void ScTabView::MarkMatrixFormula()
 
 void ScTabView::MarkRange( const ScRange& rRange, bool bSetCursor, bool bContinue )
 {
+    ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = rRange.aStart.Tab();
     SetTabNo( nTab );
 
@@ -1674,8 +1680,8 @@ void ScTabView::MarkRange( const ScRange& rRange, bool bSetCursor, bool bContinu
     {
         SCCOL nAlignX = rRange.aStart.Col();
         SCROW nAlignY = rRange.aStart.Row();
-        bool bCol = ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == MAXCOL ) && !aViewData.GetDocument()->IsInVBAMode();
-        bool bRow = ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == MAXROW );
+        bool bCol = ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == pDoc->MaxCol() ) && !aViewData.GetDocument()->IsInVBAMode();
+        bool bRow = ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == pDoc->MaxRow() );
         if ( bCol )
             nAlignX = aViewData.GetPosX(WhichH(aViewData.GetActivePart()));
         if ( bRow )
@@ -1688,7 +1694,6 @@ void ScTabView::MarkRange( const ScRange& rRange, bool bSetCursor, bool bContinu
     {
         SCCOL nPosX = rRange.aStart.Col();
         SCROW nPosY = rRange.aStart.Row();
-        ScDocument* pDoc = aViewData.GetDocument();
         pDoc->SkipOverlapped(nPosX, nPosY, nTab);
 
         aViewData.ResetOldCursor();
@@ -2288,6 +2293,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
     SCCOL nCol2;
     SCROW nRow2;
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
+    ScDocument* pDoc = aViewData.GetDocument();
 
     PutInOrder( nStartCol, nEndCol );
     PutInOrder( nStartRow, nEndRow );
@@ -2377,7 +2383,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
         aEnd.AdjustY( -1 );
 
         // #i85232# include area below cells (could be done in GetScrPos?)
-        if ( eMode == ScUpdateMode::All && nRow2 >= MAXROW && !bIsTiledRendering )
+        if ( eMode == ScUpdateMode::All && nRow2 >= pDoc->MaxRow() && !bIsTiledRendering )
             aEnd.setY( pGridWin[i]->GetOutputSizePixel().Height() );
 
         aStart.AdjustX( -nLayoutSign );      // include change marks
@@ -2433,7 +2439,7 @@ void ScTabView::PaintRangeFinderEntry (const ScRangeFindData* pData, const SCTAB
             --nCol1;
             bHiddenEdge = true;
         }
-        while ( nCol2 < MAXCOL && pDoc->ColHidden(nCol2, nTab) )
+        while ( nCol2 < pDoc->MaxCol() && pDoc->ColHidden(nCol2, nTab) )
         {
             ++nCol2;
             bHiddenEdge = true;
@@ -2446,9 +2452,9 @@ void ScTabView::PaintRangeFinderEntry (const ScRangeFindData* pData, const SCTAB
             nRow1 = nTmp;
             bHiddenEdge = true;
         }
-        nTmp = pDoc->FirstVisibleRow(nRow2, MAXROW, nTab);
+        nTmp = pDoc->FirstVisibleRow(nRow2, pDoc->MaxRow(), nTab);
         if (!ValidRow(nTmp))
-            nTmp = MAXROW;
+            nTmp = pDoc->MaxRow();
         if (nTmp > nRow2)
         {
             nRow2 = nTmp;
@@ -2620,7 +2626,8 @@ void ScTabView::PaintTopArea( SCCOL nStartCol, SCCOL nEndCol )
     if (nStartCol>0)
         --nStartCol;                //! general ?
 
-    bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
+    ScDocument* pDoc = aViewData.GetDocument();
+    bool bLayoutRTL = pDoc->IsLayoutRTL( aViewData.GetTabNo() );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     for (sal_uInt16 i = 0; i < 2; i++)
@@ -2631,7 +2638,7 @@ void ScTabView::PaintTopArea( SCCOL nStartCol, SCCOL nEndCol )
             Size aWinSize = pColBar[eWhich]->GetSizePixel();
             long nStartX = aViewData.GetScrPos( nStartCol, 0, eWhich ).X();
             long nEndX;
-            if (nEndCol >= MAXCOL)
+            if (nEndCol >= pDoc->MaxCol())
                 nEndX = bLayoutRTL ? 0 : ( aWinSize.Width()-1 );
             else
                 nEndX = aViewData.GetScrPos( nEndCol+1, 0, eWhich ).X() - nLayoutSign;
@@ -2675,6 +2682,7 @@ void ScTabView::PaintLeftArea( SCROW nStartRow, SCROW nEndRow )
     if (nStartRow>0)
         --nStartRow;
 
+    ScDocument* pDoc = aViewData.GetDocument();
     for (sal_uInt16 i = 0; i < 2; i++)
     {
         ScVSplitPos eWhich = ScVSplitPos(i);
@@ -2683,7 +2691,7 @@ void ScTabView::PaintLeftArea( SCROW nStartRow, SCROW nEndRow )
             Size aWinSize = pRowBar[eWhich]->GetSizePixel();
             long nStartY = aViewData.GetScrPos( 0, nStartRow, eWhich ).Y();
             long nEndY;
-            if (nEndRow >= MAXROW)
+            if (nEndRow >= pDoc->MaxRow())
                 nEndY = aWinSize.Height()-1;
             else
                 nEndY = aViewData.GetScrPos( 0, nEndRow+1, eWhich ).Y() - 1;

@@ -71,13 +71,13 @@ void moveCursorByProtRule(
 
     if (nMovX > 0)
     {
-        for (SCCOL i = 0; i < nMovX && rCol < MAXCOL; ++i)
+        for (SCCOL i = 0; i < nMovX && rCol < pDoc->MaxCol(); ++i)
         {
             SCCOL nNewUnhiddenCol = rCol + 1;
             SCCOL nEndCol = 0;
             while(pDoc->ColHidden(nNewUnhiddenCol, nTab, nullptr, &nEndCol))
             {
-                if(nNewUnhiddenCol >= MAXCOL)
+                if(nNewUnhiddenCol >= pDoc->MaxCol())
                     return;
 
                 i += nEndCol - nNewUnhiddenCol + 1;
@@ -112,13 +112,13 @@ void moveCursorByProtRule(
 
     if (nMovY > 0)
     {
-        for (SCROW i = 0; i < nMovY && rRow < MAXROW; ++i)
+        for (SCROW i = 0; i < nMovY && rRow < pDoc->MaxRow(); ++i)
         {
             SCROW nNewUnhiddenRow = rRow + 1;
             SCROW nEndRow = 0;
             while(pDoc->RowHidden(nNewUnhiddenRow, nTab, nullptr, &nEndRow))
             {
-                if(nNewUnhiddenRow >= MAXROW)
+                if(nNewUnhiddenRow >= pDoc->MaxRow())
                     return;
 
                 i += nEndRow - nNewUnhiddenRow + 1;
@@ -152,7 +152,7 @@ void moveCursorByProtRule(
     }
 }
 
-bool checkBoundary(SCCOL& rCol, SCROW& rRow)
+bool checkBoundary(const ScDocument* pDoc, SCCOL& rCol, SCROW& rRow)
 {
     bool bGood = true;
     if (rCol < 0)
@@ -160,9 +160,9 @@ bool checkBoundary(SCCOL& rCol, SCROW& rRow)
         rCol = 0;
         bGood = false;
     }
-    else if (rCol > MAXCOL)
+    else if (rCol > pDoc->MaxCol())
     {
-        rCol = MAXCOL;
+        rCol = pDoc->MaxCol();
         bGood = false;
     }
 
@@ -171,9 +171,9 @@ bool checkBoundary(SCCOL& rCol, SCROW& rRow)
         rRow = 0;
         bGood = false;
     }
-    else if (rRow > MAXROW)
+    else if (rRow > pDoc->MaxRow())
     {
-        rRow = MAXROW;
+        rRow = pDoc->MaxRow();
         bGood = false;
     }
     return bGood;
@@ -213,7 +213,7 @@ void moveCursorByMergedCell(
         if (bOriginMerged)
         {
             // Original cell is merged.  Push the block end outside the merged region.
-            if (nOrigX < MAXCOL && nOrigX < rCol && rCol <= nOrigX + nColSpan - 1)
+            if (nOrigX < pDoc->MaxCol() && nOrigX < rCol && rCol <= nOrigX + nColSpan - 1)
                 rCol = nOrigX + nColSpan;
         }
         else
@@ -224,7 +224,7 @@ void moveCursorByMergedCell(
         if (nOld < rCol)
         {
             // The block end has moved.  Check the protection setting and move back if needed.
-            checkBoundary(rCol, rRow);
+            checkBoundary(pDoc, rCol, rRow);
             if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
                 --rCol;
         }
@@ -246,7 +246,7 @@ void moveCursorByMergedCell(
         if (nOld > rCol)
         {
             // The block end has moved.  Check the protection setting and move back if needed.
-            checkBoundary(rCol, rRow);
+            checkBoundary(pDoc, rCol, rRow);
             if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
                 ++rCol;
         }
@@ -257,7 +257,7 @@ void moveCursorByMergedCell(
         if (bOriginMerged)
         {
             // Original cell is merged.  Push the block end outside the merged region.
-            if (nOrigY < MAXROW && nOrigY < rRow && rRow <= nOrigY + nRowSpan - 1)
+            if (nOrigY < pDoc->MaxRow() && nOrigY < rRow && rRow <= nOrigY + nRowSpan - 1)
                 rRow = nOrigY + nRowSpan;
         }
         else
@@ -268,7 +268,7 @@ void moveCursorByMergedCell(
         if (nOld < rRow)
         {
             // The block end has moved.  Check the protection setting and move back if needed.
-            checkBoundary(rCol, rRow);
+            checkBoundary(pDoc, rCol, rRow);
             if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
                 --rRow;
         }
@@ -290,7 +290,7 @@ void moveCursorByMergedCell(
         if (nOld > rRow)
         {
             // The block end has moved.  Check the protection setting and move back if needed.
-            checkBoundary(rCol, rRow);
+            checkBoundary(pDoc, rCol, rRow);
             if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
                 ++rRow;
         }
@@ -301,13 +301,14 @@ void moveCursorByMergedCell(
 
 void ScTabView::PaintMarks(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
 {
-    if (!ValidCol(nStartCol)) nStartCol = MAXCOL;
-    if (!ValidRow(nStartRow)) nStartRow = MAXROW;
-    if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
-    if (!ValidRow(nEndRow)) nEndRow = MAXROW;
+    auto pDoc = aViewData.GetDocument();
+    if (!ValidCol(nStartCol)) nStartCol = pDoc->MaxCol();
+    if (!ValidRow(nStartRow)) nStartRow = pDoc->MaxRow();
+    if (!ValidCol(nEndCol)) nEndCol = pDoc->MaxCol();
+    if (!ValidRow(nEndRow)) nEndRow = pDoc->MaxRow();
 
-    bool bLeft = (nStartCol==0 && nEndCol==MAXCOL);
-    bool bTop = (nStartRow==0 && nEndRow==MAXROW);
+    bool bLeft = (nStartCol==0 && nEndCol==pDoc->MaxCol());
+    bool bTop = (nStartRow==0 && nEndRow==pDoc->MaxRow());
 
     if (bLeft)
         PaintLeftArea( nStartRow, nEndRow );
@@ -353,8 +354,9 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 {
     if (!IsBlockMode())
     {
-        if (!ValidCol(nCurX)) nCurX = MAXCOL;
-        if (!ValidRow(nCurY)) nCurY = MAXROW;
+        auto pDoc = aViewData.GetDocument();
+        if (!ValidCol(nCurX)) nCurX = pDoc->MaxCol();
+        if (!ValidRow(nCurY)) nCurY = pDoc->MaxRow();
 
         ScMarkData& rMark = aViewData.GetMarkData();
         SCTAB nTab = aViewData.GetTabNo();
@@ -388,13 +390,13 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         if (bBlockCols)
         {
             nBlockStartY = nBlockStartYOrig = 0;
-            nBlockEndY = MAXROW;
+            nBlockEndY = pDoc->MaxRow();
         }
 
         if (bBlockRows)
         {
             nBlockStartX = nBlockStartXOrig = 0;
-            nBlockEndX = MAXCOL;
+            nBlockEndX = pDoc->MaxCol();
         }
 
         rMark.SetMarkArea( ScRange( nBlockStartX,nBlockStartY, nTab, nBlockEndX,nBlockEndY, nTab ) );
@@ -446,8 +448,9 @@ bool ScTabView::IsBlockMode() const
 void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                             bool bCols, bool bRows, bool bCellSelection )
 {
-    if (!ValidCol(nCurX)) nCurX = MAXCOL;
-    if (!ValidRow(nCurY)) nCurY = MAXROW;
+    ScDocument* pDocument = aViewData.GetDocument();
+    if (!ValidCol(nCurX)) nCurX = pDocument->MaxCol();
+    if (!ValidRow(nCurY)) nCurY = pDocument->MaxRow();
 
     if (!IsBlockMode())
     {
@@ -456,9 +459,9 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
     }
 
     if (bCols)
-        nCurY = MAXROW;
+        nCurY = pDocument->MaxRow();
     if (bRows)
-        nCurX = MAXCOL;
+        nCurX = pDocument->MaxCol();
 
     ScMarkData& rMark = aViewData.GetMarkData();
     OSL_ENSURE(rMark.IsMarked() || rMark.IsMultiMarked(), "MarkCursor, !IsMarked()");
@@ -495,7 +498,6 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
             SCROW nCurYOffset = 0;
             SCROW nBlockStartYOffset = 0;
             bool bBlockStartMerged = false;
-            ScDocument* pDocument = aViewData.GetDocument();
 
             // The following block checks whether or not the "BlockStart" (anchor)
             // cell is merged.  If it's merged, it'll then move the position of the
@@ -569,8 +571,8 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
             nBlockStartX = nBlockStartX + nBlockStartXOffset >= 0 ? nBlockStartX + nBlockStartXOffset : 0;
             nBlockStartY = nBlockStartY + nBlockStartYOffset >= 0 ? nBlockStartY + nBlockStartYOffset : 0;
-            nBlockEndX = std::min<SCCOL>(nCurX + nCurXOffset, MAXCOL);
-            nBlockEndY = std::min(nCurY + nCurYOffset, MAXROW);
+            nBlockEndX = std::min<SCCOL>(nCurX + nCurXOffset, pDocument->MaxCol());
+            nBlockEndY = std::min(nCurY + nCurYOffset, pDocument->MaxRow());
         }
         else
         {
@@ -698,9 +700,9 @@ void ScTabView::GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eM
 
     if (eMode==SC_FOLLOW_JUMP)                  // bottom right do not show too much grey
     {
-        if (nMovX != 0 && nNewX == MAXCOL)
+        if (nMovX != 0 && nNewX == pDoc->MaxCol())
             eMode = SC_FOLLOW_LINE;
-        if (nMovY != 0 && nNewY == MAXROW)
+        if (nMovY != 0 && nNewY == pDoc->MaxRow())
             eMode = SC_FOLLOW_LINE;
     }
 
@@ -747,7 +749,7 @@ void ScTabView::SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SC
 
         if (bSkipCell)
         {
-            if (rCurX <= 0 || rCurX >= MAXCOL)
+            if (rCurX <= 0 || rCurX >= pDoc->MaxCol())
             {
                 if (bHFlip)
                 {
@@ -807,7 +809,7 @@ void ScTabView::SkipCursorVertical(SCCOL& rCurX, SCROW& rCurY, SCROW nOldY, SCRO
 
         if (bSkipCell)
         {
-            if (rCurY <= 0 || rCurY >= MAXROW)
+            if (rCurY <= 0 || rCurY >= pDoc->MaxRow())
             {
                 if (bVFlip)
                 {
@@ -873,7 +875,7 @@ void ScTabView::ExpandBlock(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode)
         }
 
         moveCursorByProtRule(nNewX, nNewY, nMovX, nMovY, nRefTab, pDoc);
-        checkBoundary(nNewX, nNewY);
+        checkBoundary(pDoc, nNewX, nNewY);
 
         if (nMovX)
         {
@@ -884,7 +886,7 @@ void ScTabView::ExpandBlock(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode)
                     ++nTempX;
                 else
                     --nTempX;
-                if (!checkBoundary(nTempX, nNewY))
+                if (!checkBoundary(pDoc, nTempX, nNewY))
                     break;
             }
             if (isCellQualified(pDoc, nTempX, nNewY, nRefTab, bSelectLocked, bSelectUnlocked))
@@ -900,7 +902,7 @@ void ScTabView::ExpandBlock(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode)
                     ++nTempY;
                 else
                     --nTempY;
-                if (!checkBoundary(nNewX, nTempY))
+                if (!checkBoundary(pDoc, nNewX, nTempY))
                     break;
             }
             if (isCellQualified(pDoc, nNewX, nTempY, nRefTab, bSelectLocked, bSelectUnlocked))
@@ -912,13 +914,13 @@ void ScTabView::ExpandBlock(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode)
         SCCOL nTargetCol = nNewX;
         SCROW nTargetRow = nNewY;
         if (((aViewData.GetRefStartX() == 0) || (aViewData.GetRefStartY() == 0)) &&
-            ((nNewX != MAXCOL) || (nNewY != MAXROW)))
+            ((nNewX != pDoc->MaxCol()) || (nNewY != pDoc->MaxRow())))
         {
             // Row selection
-            if ((aViewData.GetRefStartX() == 0) && (nNewX == MAXCOL))
+            if ((aViewData.GetRefStartX() == 0) && (nNewX == pDoc->MaxCol()))
                 nTargetCol = aViewData.GetCurX();
             // Column selection
-            if ((aViewData.GetRefStartY() == 0) && (nNewY == MAXROW))
+            if ((aViewData.GetRefStartY() == 0) && (nNewY == pDoc->MaxRow()))
                 nTargetRow = aViewData.GetCurY();
         }
         AlignToCursor(nTargetCol, nTargetRow, eMode);
@@ -937,16 +939,16 @@ void ScTabView::ExpandBlock(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode)
             InitBlockMode(nOrigX, nOrigY, nTab, true);
 
         moveCursorByProtRule(nBlockEndX, nBlockEndY, nMovX, nMovY, nTab, pDoc);
-        checkBoundary(nBlockEndX, nBlockEndY);
+        checkBoundary(pDoc, nBlockEndX, nBlockEndY);
         moveCursorByMergedCell(nBlockEndX, nBlockEndY, nMovX, nMovY, nTab, pDoc, aViewData);
-        checkBoundary(nBlockEndX, nBlockEndY);
+        checkBoundary(pDoc, nBlockEndX, nBlockEndY);
 
         MarkCursor(nBlockEndX, nBlockEndY, nTab, false, false, true);
 
         // Check if the entire row(s) or column(s) are selected.
         ScSplitPos eActive = aViewData.GetActivePart();
-        bool bRowSelected = (nBlockStartX == 0 && nBlockEndX == MAXCOL);
-        bool bColSelected = (nBlockStartY == 0 && nBlockEndY == MAXROW);
+        bool bRowSelected = (nBlockStartX == 0 && nBlockEndX == pDoc->MaxCol());
+        bool bColSelected = (nBlockStartY == 0 && nBlockEndY == pDoc->MaxRow());
         SCCOL nAlignX = bRowSelected ? aViewData.GetPosX(WhichH(eActive)) : nBlockEndX;
         SCROW nAlignY = bColSelected ? aViewData.GetPosY(WhichV(eActive)) : nBlockEndY;
         AlignToCursor(nAlignX, nAlignY, eMode);
@@ -1059,6 +1061,7 @@ void ScTabView::PaintBlock( bool bReset )
 
 void ScTabView::SelectAll( bool bContinue )
 {
+    ScDocument* pDoc = aViewData.GetDocument();
     ScMarkData& rMark = aViewData.GetMarkData();
     SCTAB nTab = aViewData.GetTabNo();
 
@@ -1066,13 +1069,13 @@ void ScTabView::SelectAll( bool bContinue )
     {
         ScRange aMarkRange;
         rMark.GetMarkArea( aMarkRange );
-        if ( aMarkRange == ScRange( 0,0,nTab, MAXCOL,MAXROW,nTab ) )
+        if ( aMarkRange == ScRange( 0,0,nTab, pDoc->MaxCol(),pDoc->MaxRow(),nTab ) )
             return;
     }
 
     DoneBlockMode( bContinue );
     InitBlockMode( 0,0,nTab );
-    MarkCursor( MAXCOL,MAXROW,nTab );
+    MarkCursor( pDoc->MaxCol(),pDoc->MaxRow(),nTab );
 
     SelectionChanged();
 }

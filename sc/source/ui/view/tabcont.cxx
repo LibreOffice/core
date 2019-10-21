@@ -480,7 +480,7 @@ void ScTabControl::DoDrag()
     ScDocument& rDoc = pDocSh->GetDocument();
 
     SCTAB nTab = pViewData->GetTabNo();
-    ScRange aTabRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
+    ScRange aTabRange( 0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab );
     ScMarkData aTabMark = pViewData->GetMarkData();
     aTabMark.ResetMark();   // doesn't change marked table information
     aTabMark.SetMarkArea( aTabRange );
