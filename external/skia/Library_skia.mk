@@ -106,7 +106,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkJpegUtility \
     UnpackedTarball/skia/src/codec/SkMasks \
     UnpackedTarball/skia/src/codec/SkMaskSwizzler \
-    UnpackedTarball/skia/src/codec/SkOrientationMarker \
+    UnpackedTarball/skia/src/codec/SkParseEncodedOrigin \
     UnpackedTarball/skia/src/codec/SkPngCodec \
     UnpackedTarball/skia/src/codec/SkSampledCodec \
     UnpackedTarball/skia/src/codec/SkSampler \
@@ -128,7 +128,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkBitmapDevice \
     UnpackedTarball/skia/src/core/SkBitmapProcState \
     UnpackedTarball/skia/src/core/SkBitmapProcState_matrixProcs \
-    UnpackedTarball/skia/src/core/SkBitmapProvider \
     UnpackedTarball/skia/src/core/SkBlendMode \
     UnpackedTarball/skia/src/core/SkBlitRow_D32 \
     UnpackedTarball/skia/src/core/SkBlitter_ARGB32 \
@@ -168,6 +167,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkDraw \
     UnpackedTarball/skia/src/core/SkDrawLooper \
     UnpackedTarball/skia/src/core/SkDrawShadowInfo \
+    UnpackedTarball/skia/src/core/SkDraw_atlas \
     UnpackedTarball/skia/src/core/SkDraw_text \
     UnpackedTarball/skia/src/core/SkDraw_vertices \
     UnpackedTarball/skia/src/core/SkEdgeBuilder \
@@ -185,12 +185,14 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkGeometry \
     UnpackedTarball/skia/src/core/SkGlobalInitialization_core \
     UnpackedTarball/skia/src/core/SkGlyph \
+    UnpackedTarball/skia/src/core/SkGlyphBuffer \
     UnpackedTarball/skia/src/core/SkGlyphRun \
     UnpackedTarball/skia/src/core/SkGlyphRunPainter \
     UnpackedTarball/skia/src/core/SkGraphics \
     UnpackedTarball/skia/src/core/SkHalf \
     UnpackedTarball/skia/src/core/SkICC \
     UnpackedTarball/skia/src/core/SkImageFilterCache \
+    UnpackedTarball/skia/src/core/SkImageFilterTypes \
     UnpackedTarball/skia/src/core/SkImageFilter \
     UnpackedTarball/skia/src/core/SkImageGenerator \
     UnpackedTarball/skia/src/core/SkImageInfo \
@@ -274,6 +276,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkStream \
     UnpackedTarball/skia/src/core/SkStrikeCache \
     UnpackedTarball/skia/src/core/SkStrike \
+    UnpackedTarball/skia/src/core/SkStrikeForGPU \
     UnpackedTarball/skia/src/core/SkStrikeSpec \
     UnpackedTarball/skia/src/core/SkString \
     UnpackedTarball/skia/src/core/SkStringUtils \
@@ -297,6 +300,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkVertices \
     UnpackedTarball/skia/src/core/SkVertState \
     UnpackedTarball/skia/src/core/SkVM \
+    UnpackedTarball/skia/src/core/SkVMBlitter \
     UnpackedTarball/skia/src/core/SkWriteBuffer \
     UnpackedTarball/skia/src/core/SkWriter32 \
     UnpackedTarball/skia/src/core/SkXfermode \
@@ -315,6 +319,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/effects/imagefilters/SkComposeImageFilter \
     UnpackedTarball/skia/src/effects/imagefilters/SkDisplacementMapEffect \
     UnpackedTarball/skia/src/effects/imagefilters/SkDropShadowImageFilter \
+    UnpackedTarball/skia/src/effects/imagefilters/SkImageFilters \
     UnpackedTarball/skia/src/effects/imagefilters/SkImageSource \
     UnpackedTarball/skia/src/effects/imagefilters/SkLightingImageFilter \
     UnpackedTarball/skia/src/effects/imagefilters/SkMagnifierImageFilter \
@@ -446,13 +451,13 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/sksl/SkSLGLSLCodeGenerator \
     UnpackedTarball/skia/src/sksl/SkSLHCodeGenerator \
     UnpackedTarball/skia/src/sksl/SkSLIRGenerator \
-    UnpackedTarball/skia/src/sksl/SkSLJIT \
     UnpackedTarball/skia/src/sksl/SkSLLexer \
     UnpackedTarball/skia/src/sksl/SkSLMetalCodeGenerator \
     UnpackedTarball/skia/src/sksl/SkSLOutputStream \
     UnpackedTarball/skia/src/sksl/SkSLParser \
     UnpackedTarball/skia/src/sksl/SkSLPipelineStageCodeGenerator \
     UnpackedTarball/skia/src/sksl/SkSLSPIRVCodeGenerator \
+    UnpackedTarball/skia/src/sksl/SkSLSectionAndParameterHelper \
     UnpackedTarball/skia/src/sksl/SkSLString \
     UnpackedTarball/skia/src/sksl/SkSLUtil \
     UnpackedTarball/skia/src/utils/SkBase64 \
@@ -532,6 +537,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/effects/generated/GrPremulInputFragmentProcessor \
     UnpackedTarball/skia/src/gpu/effects/generated/GrRectBlurEffect \
     UnpackedTarball/skia/src/gpu/effects/generated/GrRRectBlurEffect \
+    UnpackedTarball/skia/src/gpu/effects/generated/GrSaturateProcessor \
     UnpackedTarball/skia/src/gpu/effects/generated/GrSimpleTextureEffect \
     UnpackedTarball/skia/src/gpu/effects/GrBezierEffect \
     UnpackedTarball/skia/src/gpu/effects/GrBicubicEffect \
@@ -568,12 +574,12 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/gl/GrGLContext \
     UnpackedTarball/skia/src/gpu/gl/GrGLExtensions \
     UnpackedTarball/skia/src/gpu/gl/GrGLGLSL \
-    UnpackedTarball/skia/src/gpu/gl/GrGLGpuCommandBuffer \
     UnpackedTarball/skia/src/gpu/gl/GrGLGpu \
     UnpackedTarball/skia/src/gpu/gl/GrGLGpuProgramCache \
     UnpackedTarball/skia/src/gpu/gl/GrGLInterfaceAutogen \
     UnpackedTarball/skia/src/gpu/gl/GrGLPath \
     UnpackedTarball/skia/src/gpu/gl/GrGLPathRendering \
+    UnpackedTarball/skia/src/gpu/gl/GrGLOpsRenderPass \
     UnpackedTarball/skia/src/gpu/gl/GrGLProgram \
     UnpackedTarball/skia/src/gpu/gl/GrGLProgramDataManager \
     UnpackedTarball/skia/src/gpu/gl/GrGLRenderTarget \
@@ -620,17 +626,18 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/GrBlurUtils \
     UnpackedTarball/skia/src/gpu/GrBufferAllocPool \
     UnpackedTarball/skia/src/gpu/GrCaps \
+    UnpackedTarball/skia/src/gpu/GrClientMappedBufferManager \
     UnpackedTarball/skia/src/gpu/GrClipStackClip \
-    UnpackedTarball/skia/src/gpu/GrColorSpaceInfo \
+    UnpackedTarball/skia/src/gpu/GrColorInfo \
     UnpackedTarball/skia/src/gpu/GrColorSpaceXform \
     UnpackedTarball/skia/src/gpu/GrContext_Base \
     UnpackedTarball/skia/src/gpu/GrContext \
     UnpackedTarball/skia/src/gpu/GrContextPriv \
     UnpackedTarball/skia/src/gpu/GrContextThreadSafeProxy \
+    UnpackedTarball/skia/src/gpu/GrCopyRenderTask \
     UnpackedTarball/skia/src/gpu/GrDataUtils \
     UnpackedTarball/skia/src/gpu/GrDDLContext \
     UnpackedTarball/skia/src/gpu/GrDefaultGeoProcFactory \
-    UnpackedTarball/skia/src/gpu/GrDeinstantiateProxyTracker \
     UnpackedTarball/skia/src/gpu/GrDistanceFieldGenFromVector \
     UnpackedTarball/skia/src/gpu/GrDrawingManager \
     UnpackedTarball/skia/src/gpu/GrDrawOpAtlas \
@@ -639,7 +646,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/GrFixedClip \
     UnpackedTarball/skia/src/gpu/GrFragmentProcessor \
     UnpackedTarball/skia/src/gpu/GrGpuBuffer \
-    UnpackedTarball/skia/src/gpu/GrGpuCommandBuffer \
     UnpackedTarball/skia/src/gpu/GrGpu \
     UnpackedTarball/skia/src/gpu/GrGpuResource \
     UnpackedTarball/skia/src/gpu/GrImageContext \
@@ -648,7 +654,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/GrMemoryPool \
     UnpackedTarball/skia/src/gpu/GrOnFlushResourceProvider \
     UnpackedTarball/skia/src/gpu/GrOpFlushState \
-    UnpackedTarball/skia/src/gpu/GrOpList \
+    UnpackedTarball/skia/src/gpu/GrOpsRenderPass \
+    UnpackedTarball/skia/src/gpu/GrOpsTask \
     UnpackedTarball/skia/src/gpu/GrPaint \
     UnpackedTarball/skia/src/gpu/GrPath \
     UnpackedTarball/skia/src/gpu/GrPathProcessor \
@@ -662,14 +669,15 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/GrProcessorSet \
     UnpackedTarball/skia/src/gpu/GrProcessorUnitTest \
     UnpackedTarball/skia/src/gpu/GrProgramDesc \
+    UnpackedTarball/skia/src/gpu/GrProgramInfo \
     UnpackedTarball/skia/src/gpu/GrProxyProvider \
     UnpackedTarball/skia/src/gpu/GrRecordingContext \
     UnpackedTarball/skia/src/gpu/GrRectanizer_pow2 \
     UnpackedTarball/skia/src/gpu/GrRectanizer_skyline \
+    UnpackedTarball/skia/src/gpu/GrRenderTask \
     UnpackedTarball/skia/src/gpu/GrReducedClip \
     UnpackedTarball/skia/src/gpu/GrRenderTargetContext \
     UnpackedTarball/skia/src/gpu/GrRenderTarget \
-    UnpackedTarball/skia/src/gpu/GrRenderTargetOpList \
     UnpackedTarball/skia/src/gpu/GrRenderTargetProxy \
     UnpackedTarball/skia/src/gpu/GrResourceAllocator \
     UnpackedTarball/skia/src/gpu/GrResourceCache \
@@ -693,12 +701,15 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/GrTextureContext \
     UnpackedTarball/skia/src/gpu/GrTexture \
     UnpackedTarball/skia/src/gpu/GrTextureMaker \
-    UnpackedTarball/skia/src/gpu/GrTextureOpList \
     UnpackedTarball/skia/src/gpu/GrTextureProducer \
     UnpackedTarball/skia/src/gpu/GrTextureProxy \
     UnpackedTarball/skia/src/gpu/GrTextureRenderTargetProxy \
+    UnpackedTarball/skia/src/gpu/GrTextureResolveRenderTask \
+    UnpackedTarball/skia/src/gpu/GrTransferFromRenderTask \
+    UnpackedTarball/skia/src/gpu/GrWaitRenderTask \
     UnpackedTarball/skia/src/gpu/GrXferProcessor \
     UnpackedTarball/skia/src/gpu/GrYUVProvider \
+    UnpackedTarball/skia/src/gpu/mock/GrMockCaps \
     UnpackedTarball/skia/src/gpu/mock/GrMockGpu \
     UnpackedTarball/skia/src/gpu/mock/GrMockTypes \
     UnpackedTarball/skia/src/gpu/ops/GrAAConvexPathRenderer \
@@ -708,7 +719,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/ops/GrAtlasTextOp \
     UnpackedTarball/skia/src/gpu/ops/GrClearOp \
     UnpackedTarball/skia/src/gpu/ops/GrClearStencilClipOp \
-    UnpackedTarball/skia/src/gpu/ops/GrCopySurfaceOp \
     UnpackedTarball/skia/src/gpu/ops/GrDashLinePathRenderer \
     UnpackedTarball/skia/src/gpu/ops/GrDashOp \
     UnpackedTarball/skia/src/gpu/ops/GrDebugMarkerOp \
@@ -725,7 +735,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/ops/GrOvalOpFactory \
     UnpackedTarball/skia/src/gpu/ops/GrQuadPerEdgeAA \
     UnpackedTarball/skia/src/gpu/ops/GrRegionOp \
-    UnpackedTarball/skia/src/gpu/ops/GrSemaphoreOp \
     UnpackedTarball/skia/src/gpu/ops/GrShadowRRectOp \
     UnpackedTarball/skia/src/gpu/ops/GrSimpleMeshDrawOpHelper \
     UnpackedTarball/skia/src/gpu/ops/GrSmallPathRenderer \
@@ -734,7 +743,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/ops/GrStrokeRectOp \
     UnpackedTarball/skia/src/gpu/ops/GrTessellatingPathRenderer \
     UnpackedTarball/skia/src/gpu/ops/GrTextureOp \
-    UnpackedTarball/skia/src/gpu/ops/GrTransferFromOp \
     UnpackedTarball/skia/src/gpu/SkGpuDevice \
     UnpackedTarball/skia/src/gpu/SkGpuDevice_drawTexture \
     UnpackedTarball/skia/src/gpu/SkGr \
@@ -761,15 +769,14 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/vk/GrVkDescriptorSetManager \
     UnpackedTarball/skia/src/gpu/vk/GrVkExtensions \
     UnpackedTarball/skia/src/gpu/vk/GrVkFramebuffer \
-    UnpackedTarball/skia/src/gpu/vk/GrVkGpuCommandBuffer \
     UnpackedTarball/skia/src/gpu/vk/GrVkGpu \
     UnpackedTarball/skia/src/gpu/vk/GrVkImage \
     UnpackedTarball/skia/src/gpu/vk/GrVkImageView \
     UnpackedTarball/skia/src/gpu/vk/GrVkIndexBuffer \
     UnpackedTarball/skia/src/gpu/vk/GrVkInterface \
     UnpackedTarball/skia/src/gpu/vk/GrVkMemory \
+    UnpackedTarball/skia/src/gpu/vk/GrVkOpsRenderPass \
     UnpackedTarball/skia/src/gpu/vk/GrVkPipeline \
-    UnpackedTarball/skia/src/gpu/vk/GrVkPipelineLayout \
     UnpackedTarball/skia/src/gpu/vk/GrVkPipelineStateBuilder \
     UnpackedTarball/skia/src/gpu/vk/GrVkPipelineStateCache \
     UnpackedTarball/skia/src/gpu/vk/GrVkPipelineState \
