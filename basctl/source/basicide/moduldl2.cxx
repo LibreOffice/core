@@ -228,8 +228,8 @@ LibPage::LibPage(weld::Container* pParent, OrganizeDialog* pDialog)
 
     m_xBasicsBox->connect_changed( LINK( this, LibPage, BasicSelectHdl ) );
 
-    m_xLibBox->connect_editing_started( LINK( this, LibPage, EditingEntryHdl ) );
-    m_xLibBox->connect_editing_done( LINK( this, LibPage, EditedEntryHdl ) );
+    m_xLibBox->connect_editing(LINK(this, LibPage, EditingEntryHdl),
+                               LINK(this, LibPage, EditedEntryHdl));
 
     FillListBox();
     m_xBasicsBox->set_active(0);

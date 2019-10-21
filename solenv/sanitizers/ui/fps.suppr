@@ -1,7 +1,6 @@
-fpicker/uiconfig/ui/explorerfiledialog.ui://svtlo-SvtURLBox[@id='current_path'] no-labelled-by
-fpicker/uiconfig/ui/explorerfiledialog.ui://GtkLabel[@id='shared_label'] orphan-label
-fpicker/uiconfig/ui/explorerfiledialog.ui://GtkComboBox[@id='shared'] no-labelled-by
+fpicker/uiconfig/ui/breadcrumb.ui://GtkLabel[@id='label'] orphan-label
 fpicker/uiconfig/ui/explorerfiledialog.ui://GtkCheckButton[@id='link'] button-no-label
 fpicker/uiconfig/ui/explorerfiledialog.ui://GtkCheckButton[@id='cb_preview'] button-no-label
-fpicker/uiconfig/ui/explorerfiledialog.ui://GtkDrawingArea[@id='preview'] no-labelled-by
-fpicker/uiconfig/ui/remotefilesdialog.ui://GtkLabel[@id='nameLabel'] orphan-label
+fpicker/uiconfig/ui/explorerfiledialog.ui://GtkButton[@id='add'] button-no-label
+fpicker/uiconfig/ui/explorerfiledialog.ui://GtkButton[@id='del'] button-no-label
+fpicker/uiconfig/ui/explorerfiledialog.ui://GtkMenuToolButton[@id='up_btn'] button-no-label

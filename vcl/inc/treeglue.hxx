@@ -17,15 +17,39 @@
 
 class LclHeaderTabListBox : public SvHeaderTabListBox
 {
+private:
+    Link<SvTreeListEntry*, bool> m_aEditingEntryHdl;
+    Link<std::pair<SvTreeListEntry*, OUString>, bool> m_aEditedEntryHdl;
+
 public:
     LclHeaderTabListBox(vcl::Window* pParent, WinBits nWinStyle)
         : SvHeaderTabListBox(pParent, nWinStyle)
     {
     }
 
+    void SetEditingEntryHdl(const Link<SvTreeListEntry*, bool>& rLink)
+    {
+        m_aEditingEntryHdl = rLink;
+    }
+
+    void SetEditedEntryHdl(const Link<std::pair<SvTreeListEntry*, OUString>, bool>& rLink)
+    {
+        m_aEditedEntryHdl = rLink;
+    }
+
     virtual DragDropMode NotifyStartDrag(TransferDataContainer&, SvTreeListEntry*) override
     {
         return GetDragDropMode();
+    }
+
+    virtual bool EditingEntry(SvTreeListEntry* pEntry, Selection&) override
+    {
+        return m_aEditingEntryHdl.Call(pEntry);
+    }
+
+    virtual bool EditedEntry(SvTreeListEntry* pEntry, const OUString& rNewText) override
+    {
+        return m_aEditedEntryHdl.Call(std::pair<SvTreeListEntry*, OUString>(pEntry, rNewText));
     }
 };
 

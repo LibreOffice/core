@@ -59,16 +59,18 @@ void SAL_CALL SvtFolderPicker::startExecuteModal( const Reference< css::ui::dial
     m_xListener = xListener;
     prepareDialog();
     prepareExecute();
-    SvtFileDialog_Base* pDialog = getDialog();
-    pDialog->EnableAutocompletion();
-    pDialog->StartExecuteAsync([this](sal_Int32 nResult){
+
+    m_xDlg->EnableAutocompletion();
+    if (!m_xDlg->PrepareExecute())
+        return;
+    weld::DialogController::runAsync(m_xDlg, [this](sal_Int32 nResult){
         DialogClosedHdl(nResult);
     });
 }
 
-VclPtr<SvtFileDialog_Base> SvtFolderPicker::implCreateDialog( vcl::Window* _pParent )
+std::unique_ptr<SvtFileDialog_Base> SvtFolderPicker::implCreateDialog( weld::Window* pParent )
 {
-    return VclPtr<SvtFileDialog>::Create( _pParent, PickerFlags::PathDialog );
+    return std::make_unique<SvtFileDialog>(pParent, PickerFlags::PathDialog);
 }
 
 sal_Int16 SvtFolderPicker::implExecutePicker( )
@@ -76,22 +78,20 @@ sal_Int16 SvtFolderPicker::implExecutePicker( )
     prepareExecute();
 
     // now we are ready to execute the dialog
-    getDialog()->EnableAutocompletion( false );
-    sal_Int16 nRet = getDialog()->Execute();
-
-    return nRet;
+    m_xDlg->EnableAutocompletion( false );
+    return m_xDlg->run();
 }
 
 void SvtFolderPicker::prepareExecute()
 {
     // set the default directory
     if ( !m_aDisplayDirectory.isEmpty() )
-        getDialog()->SetPath( m_aDisplayDirectory );
+        m_xDlg->SetPath( m_aDisplayDirectory );
     else
     {
         // set the default standard dir
         INetURLObject aStdDirObj( SvtPathOptions().GetWorkPath() );
-        getDialog()->SetPath( aStdDirObj.GetMainURL( INetURLObject::DecodeMechanism::NONE) );
+        m_xDlg->SetPath( aStdDirObj.GetMainURL( INetURLObject::DecodeMechanism::NONE) );
     }
 }
 
@@ -113,10 +113,10 @@ void SAL_CALL SvtFolderPicker::setDisplayDirectory( const OUString& aDirectory )
 
 OUString SAL_CALL SvtFolderPicker::getDisplayDirectory()
 {
-    if ( ! getDialog() )
+    if (!m_xDlg)
         return m_aDisplayDirectory;
 
-    std::vector<OUString> aPathList(getDialog()->GetPathList());
+    std::vector<OUString> aPathList(m_xDlg->GetPathList());
 
     if(!aPathList.empty())
         return aPathList[0];
@@ -126,10 +126,10 @@ OUString SAL_CALL SvtFolderPicker::getDisplayDirectory()
 
 OUString SAL_CALL SvtFolderPicker::getDirectory()
 {
-    if ( ! getDialog() )
+    if (!m_xDlg)
         return m_aDisplayDirectory;
 
-    std::vector<OUString> aPathList(getDialog()->GetPathList());
+    std::vector<OUString> aPathList(m_xDlg->GetPathList());
 
     if(!aPathList.empty())
         return aPathList[0];

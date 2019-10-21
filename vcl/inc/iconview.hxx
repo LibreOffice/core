@@ -31,8 +31,6 @@ public:
 
     virtual tools::Rectangle GetFocusRect( SvTreeListEntry*, long nEntryPos ) override;
 
-    void ClearAll();
-
     void PaintEntry( SvTreeListEntry&, long nX, long nY, vcl::RenderContext& rRenderContext);
 };
 
