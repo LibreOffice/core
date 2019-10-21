@@ -29,8 +29,11 @@ $(eval $(call gb_UnpackedTarball_add_patches,libstaroffice, \
 ))
 endif
 
+# * external/libstaroffice/0001-Fix-equality-operator-arguments.patch.1 is upstream at
+#   <https://github.com/fosnola/libstaroffice/pull/6> "Fix equality operator arguments":
 $(eval $(call gb_UnpackedTarball_add_patches,libstaroffice,\
 	external/libstaroffice/0001-add-missing-include-for-std-max.patch.1 \
+	external/libstaroffice/0001-Fix-equality-operator-arguments.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
