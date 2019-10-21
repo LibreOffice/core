@@ -11,7 +11,7 @@ dbaccess/source/ui/inc/tabletree.hxx:149
     dbaui::TableTreeListBox m_nTextColumn
     int
 desktop/source/app/main.c:29
-    /media/disk2/libo4/desktop/source/app/main.c g_Exiting
+    /media/disk2/libo7/desktop/source/app/main.c g_Exiting
     int
 editeng/source/misc/hangulhanja.cxx:79
     editeng::HangulHanjaConversion_Impl m_eConvType
@@ -74,10 +74,10 @@ sd/qa/unit/tiledrendering/tiledrendering.cxx:956
     ViewCallback m_nPart
     int
 soltools/cpp/_tokens.c:35
-    /media/disk2/libo4/soltools/cpp/_tokens.c EBCDIC_ExternTokenDetected
+    /media/disk2/libo7/soltools/cpp/_tokens.c EBCDIC_ExternTokenDetected
     int
 soltools/cpp/_tokens.c:36
-    /media/disk2/libo4/soltools/cpp/_tokens.c EBCDIC_StartTokenDetected
+    /media/disk2/libo7/soltools/cpp/_tokens.c EBCDIC_StartTokenDetected
     int
 soltools/cpp/cpp.h:121
     includelist always
@@ -100,7 +100,7 @@ sw/source/uibase/inc/tautofmt.hxx:48
 vcl/inc/unx/i18n_ic.hxx:32
     SalI18N_InputContext mbUseable
     int
-vcl/inc/unx/salframe.h:128
+vcl/inc/unx/salframe.h:127
     X11SalFrame mbInputFocus
     int
 vcl/unx/generic/app/saldata.cxx:449
@@ -110,13 +110,13 @@ vcl/unx/generic/app/saldata.cxx:502
     X11SalData::XError bOnce
     int
 vcl/unx/generic/app/sm.cxx:184
-    /media/disk2/libo4/vcl/unx/generic/app/sm.cxx nSmDel
+    /media/disk2/libo7/vcl/unx/generic/app/sm.cxx nSmDel
     int
 vcl/workben/icontest.cxx:145
     IconTestApp nRet
     int
 workdir/LexTarget/l10ntools/source/cfglex.cxx:2293
-    /media/disk2/libo4/workdir/LexTarget/l10ntools/source/cfglex.cxx bText
+    /media/disk2/libo7/workdir/LexTarget/l10ntools/source/cfglex.cxx bText
     int
 writerfilter/source/dmapper/PageBordersHandler.hxx:54
     writerfilter::dmapper::PageBordersHandler m_eOffsetFrom
