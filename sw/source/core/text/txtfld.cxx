@@ -34,6 +34,7 @@
 #include <viewimp.hxx>
 #include <txtatr.hxx>
 #include <swfont.hxx>
+#include <swmodule.hxx>
 #include <fntcache.hxx>
 #include "porfld.hxx"
 #include "porftn.hxx"
@@ -52,8 +53,13 @@
 #include <reffld.hxx>
 #include <flddat.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
+#include <redline.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/itemiter.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crossedoutitem.hxx>
 
 static bool lcl_IsInBody( SwFrame const *pFrame )
 {
@@ -477,6 +483,60 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
     }
 }
 
+static const SwRangeRedline* lcl_GetRedlineAtNodeInsertionOrDeletion( const SwTextNode& rTextNode )
+{
+    const SwDoc* pDoc = rTextNode.GetDoc();
+    SwRedlineTable::size_type nRedlPos = pDoc->getIDocumentRedlineAccess().GetRedlinePos( rTextNode, RedlineType::Any );
+
+    if( SwRedlineTable::npos != nRedlPos )
+    {
+        const sal_uLong nNdIdx = rTextNode.GetIndex();
+        for( ; nRedlPos < pDoc->getIDocumentRedlineAccess().GetRedlineTable().size() ; ++nRedlPos )
+        {
+            const SwRangeRedline* pTmp = pDoc->getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
+            if( RedlineType::Delete == pTmp->GetType() ||
+                RedlineType::Insert == pTmp->GetType() )
+            {
+                const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
+                if( pRStt->nNode < nNdIdx && pREnd->nNode >= nNdIdx )
+                    return pTmp;
+            }
+        }
+    }
+    return nullptr;
+}
+
+static void lcl_setRedlineAttr( SwTextFormatInfo &rInf, const SwTextNode& rTextNode, std::unique_ptr<SwFont>& pNumFnt )
+{
+    if ( !rInf.GetVsh()->GetLayout()->IsHideRedlines() )
+    {
+        const SwRangeRedline* pRedlineNum = lcl_GetRedlineAtNodeInsertionOrDeletion( rTextNode );
+        if (pRedlineNum)
+        {
+            std::unique_ptr<SfxItemSet> pSet;
+
+            SwAttrPool& rPool = rInf.GetVsh()->GetDoc()->GetAttrPool();
+            pSet = std::make_unique<SfxItemSet>(rPool, svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1>{});
+
+            std::size_t aAuthor = (1 < pRedlineNum->GetStackCount())
+                    ? pRedlineNum->GetAuthor( 1 )
+                    : pRedlineNum->GetAuthor();
+
+            if ( RedlineType::Delete == pRedlineNum->GetType() )
+                SW_MOD()->GetDeletedAuthorAttr(aAuthor, *pSet);
+            else
+                SW_MOD()->GetInsertAuthorAttr(aAuthor, *pSet);
+
+            const SfxPoolItem* pItem = nullptr;
+            if (SfxItemState::SET == pSet->GetItemState(RES_CHRATR_COLOR, true, &pItem))
+                pNumFnt->SetColor(static_cast<const SvxColorItem*>(pItem)->GetValue());
+            if (SfxItemState::SET == pSet->GetItemState(RES_CHRATR_UNDERLINE, true, &pItem))
+                pNumFnt->SetUnderline(static_cast<const SvxUnderlineItem*>(pItem)->GetLineStyle());
+            if (SfxItemState::SET == pSet->GetItemState(RES_CHRATR_CROSSEDOUT, true, &pItem))
+                pNumFnt->SetStrikeout( static_cast<const SvxCrossedOutItem*>(pItem)->GetStrikeout() );
+        }
+    }
+}
 
 SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) const
 {
@@ -590,6 +650,8 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                 pNumFnt->SetVertical( pNumFnt->GetOrientation(),
                                       m_pFrame->IsVertical() );
 
+                lcl_setRedlineAttr( rInf, *pTextNd, pNumFnt );
+
                 // --> OD 2008-01-23 #newlistelevelattrs#
                 pRet = new SwBulletPortion( rNumFormat.GetBulletChar(),
                                             pTextNd->GetLabelFollowedBy(),
@@ -631,6 +693,8 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                         pNumFnt->SetDiffFnt( pFormat, pIDSA );
 
                     checkApplyParagraphMarkFormatToNumbering(pNumFnt.get(), rInf, pIDSA, pFormat);
+
+                    lcl_setRedlineAttr( rInf, *pTextNd, pNumFnt );
 
                     // we do not allow a vertical font
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), m_pFrame->IsVertical() );
