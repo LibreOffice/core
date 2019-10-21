@@ -772,6 +772,12 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         }
         return true;
     }
+    if (dc.Function("append").Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+        && fdecl->getNumParams() == 1)
+    {
+        handleChar(expr, 0, fdecl, "", TreatEmpty::Error, false);
+        return true;
+    }
     if ((dc.Function("appendAscii").Class("OUStringBuffer").Namespace("rtl")
          .GlobalNamespace())
         && fdecl->getNumParams() == 1)
@@ -1847,14 +1853,16 @@ void StringConstant::handleChar(
     }
     std::string repl(replacement);
     checkEmpty(expr, callee, treatEmpty, n, &repl);
-    reportChange(
-        expr, ChangeKind::Char, callee->getQualifiedNameAsString(), repl,
-        (literal
-         ? (n == 0
-            ? PassThrough::EmptyConstantString
-            : PassThrough::NonEmptyConstantString)
-         : PassThrough::No),
-        nonArray, rewriteFrom, rewriteTo);
+    if (!repl.empty()) {
+        reportChange(
+            expr, ChangeKind::Char, callee->getQualifiedNameAsString(), repl,
+            (literal
+             ? (n == 0
+                ? PassThrough::EmptyConstantString
+                : PassThrough::NonEmptyConstantString)
+             : PassThrough::No),
+            nonArray, rewriteFrom, rewriteTo);
+    }
 }
 
 void StringConstant::handleCharLen(
