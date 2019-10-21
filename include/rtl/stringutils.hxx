@@ -133,6 +133,12 @@ struct CharPtrDetector< char*, T >
     typedef T Type;
     static const bool ok = true;
 };
+#if defined LIBO_INTERNAL_ONLY
+template<typename T> struct CharPtrDetector<sal_Unicode *, T> { using TypeUtf16 = T; };
+template<typename T> struct CharPtrDetector<sal_Unicode const *, T> { using TypeUtf16 = T; };
+template<typename T> struct CharPtrDetector<sal_Unicode[], T> { using TypeUtf16 = T; };
+template<typename T> struct CharPtrDetector<sal_Unicode const[], T> { using TypeUtf16 = T; };
+#endif
 
 template< typename T1, typename T2 >
 struct NonConstCharArrayDetector
@@ -154,6 +160,11 @@ template< typename T >
 struct NonConstCharArrayDetector< const char[], T >
 {
     typedef T Type;
+};
+#endif
+#if defined LIBO_INTERNAL_ONLY
+template<typename T, std::size_t N> struct NonConstCharArrayDetector<sal_Unicode[N], T> {
+    using TypeUtf16 = T;
 };
 #endif
 
