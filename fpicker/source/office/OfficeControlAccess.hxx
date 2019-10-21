@@ -25,7 +25,6 @@
 #include "pickercallbacks.hxx"
 #include <o3tl/typed_flags_set.hxx>
 
-
 enum class PropFlags {
     Unknown           =     -1, // used as an error sentinel
     NONE              = 0x0000,
@@ -62,66 +61,68 @@ namespace svt
     class OControlAccess
     {
         IFilePickerController*  m_pFilePickerController;
-        VclPtr<SvtFileView>     m_pFileView;
+        SvtFileView*     m_pFileView;
 
     public:
-        OControlAccess( IFilePickerController* _pController, SvtFileView* _pFileView );
+        OControlAccess( IFilePickerController* pController, SvtFileView* pFileView );
 
         // XControlAccess implementation
-        void setControlProperty( const OUString& _rControlName, const OUString& _rControlProperty, const css::uno::Any& _rValue );
-        css::uno::Any  getControlProperty( const OUString& _rControlName, const OUString& _rControlProperty );
+        void setControlProperty( const OUString& rControlName, const OUString& rControlProperty, const css::uno::Any& rValue );
+        css::uno::Any  getControlProperty( const OUString& rControlName, const OUString& rControlProperty );
 
         // XControlInformation implementation
         css::uno::Sequence< OUString >  getSupportedControls(  ) const;
-        css::uno::Sequence< OUString >  getSupportedControlProperties( const OUString& _rControlName );
-        static bool                     isControlSupported( const OUString& _rControlName );
-        bool                            isControlPropertySupported( const OUString& _rControlName, const OUString& _rControlProperty );
+        css::uno::Sequence< OUString >  getSupportedControlProperties( const OUString& rControlName );
+        static bool                     isControlSupported( const OUString& rControlName );
+        bool                            isControlPropertySupported( const OUString& rControlName, const OUString& rControlProperty );
 
         // XFilePickerControlAccess
-        void                        setValue( sal_Int16 _nId, sal_Int16 _nCtrlAction, const css::uno::Any& _rValue );
-        css::uno::Any               getValue( sal_Int16 _nId, sal_Int16 _nCtrlAction ) const;
-        void                        setLabel( sal_Int16 _nId, const OUString& _rValue );
-        OUString                    getLabel( sal_Int16 _nId ) const;
-        void                        enableControl( sal_Int16 _nId, bool _bEnable );
+        void                        setValue( sal_Int16 nId, sal_Int16 nCtrlAction, const css::uno::Any& rValue );
+        css::uno::Any               getValue( sal_Int16 nId, sal_Int16 nCtrlAction ) const;
+        void                        setLabel( sal_Int16 nId, const OUString& rValue );
+        OUString                    getLabel( sal_Int16 nId ) const;
+        void                        enableControl( sal_Int16 nId, bool bEnable );
 
-        static void             setHelpURL( vcl::Window* _pControl, const OUString& _rURL, bool _bFileView );
-        static OUString  getHelpURL( vcl::Window const * _pControl, bool _bFileView );
+        void setHelpURL(weld::Widget* pControl, const OUString& rURL);
+        OUString getHelpURL(weld::Widget const* pControl) const;
 
     private:
         /** implements the various methods for setting properties on controls
 
-            @param _nControlId
+            @param nControlId
                 the id of the control
-            @param _pControl
-                the affected control. Must be the same as referred by <arg>_nControlId</arg>, or NULL.
-            @param _nProperty
+            @param pControl
+                the affected control. Must be the same as referred by <arg>nControlId</arg>, or NULL.
+            @param nProperty
                 the property to set
                 See PropFlags::*
-            @param _rValue
+            @param rValue
                 the value to set
-            @param _bIgnoreIllegalArgument
+            @param bIgnoreIllegalArgument
                 if <FALSE/>, an exception will be thrown if the given value is of improper type
         */
         void                        implSetControlProperty(
-                                        sal_Int16 _nControlId,
-                                        Control* _pControl, PropFlags _nProperty, const css::uno::Any& _rValue,
-                                        bool _bIgnoreIllegalArgument = true );
+                                        sal_Int16 nControlId,
+                                        weld::Widget* pControl, PropFlags nProperty, const css::uno::Any& rValue,
+                                        bool bIgnoreIllegalArgument = true );
 
-        Control* implGetControl( const OUString& _rControlName, sal_Int16* _pId, PropFlags* _pPropertyMask = nullptr ) const;
+        weld::Widget* implGetControl( const OUString& rControlName, sal_Int16* pId, PropFlags* pPropertyMask = nullptr ) const;
 
         /** implements the various methods for retrieving properties from controls
 
-            @param _pControl
+            @param pControl
                 the affected control
                 @PRECOND not <NULL/>
-            @param _nProperty
+            @param nProperty
                 the property to retrieve
                 See PropFlags::*
             @return
         */
-        css::uno::Any  implGetControlProperty( Control const * _pControl, PropFlags _nProperty ) const;
+        css::uno::Any  implGetControlProperty( weld::Widget const * pControl, PropFlags nProperty ) const;
 
-        static void implDoListboxAction( ListBox* _pListbox, sal_Int16 _nCtrlAction, const css::uno::Any& _rValue );
+        bool IsFileViewWidget(weld::Widget const * pControl) const;
+
+        static void implDoListboxAction(weld::ComboBox* pListbox, sal_Int16 nCtrlAction, const css::uno::Any& rValue);
 
     };
 
