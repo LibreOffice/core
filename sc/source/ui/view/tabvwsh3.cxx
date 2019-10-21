@@ -368,7 +368,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if ( !(nResult & ScRefFlags::VALID) && comphelper::string::isdigitAsciiString(aAddress) )
                 {
                     sal_Int32 nNumeric = aAddress.toInt32();
-                    if ( nNumeric > 0 && nNumeric <= MAXROW+1 )
+                    if ( nNumeric > 0 && nNumeric <= pDoc->MaxRow()+1 )
                     {
                         // one-based row numbers
 
