@@ -2070,7 +2070,7 @@ bool SwContentTree::HasContentChanged()
             else
             {
                 SvTreeListEntry* pFirstSel;
-                if(bOutline &&
+                if(bOutline && !HasFocus() &&
                         nullptr != ( pFirstSel = FirstSelected()) &&
                             lcl_IsContent(pFirstSel))
                 {
@@ -2694,12 +2694,14 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
     if (IsDisposed())
         return;
 
+    // No update while focus is not in document.
     // No update while drag and drop.
     // Query view because the Navigator is cleared too late.
     SwView* pView = GetParentWindow()->GetCreateView();
-    if( (!HasFocus() || m_bViewHasChanged) &&
-         !bIsInDrag && !m_bIsInternalDrag && pView &&
-         pView->GetWrtShellPtr() && !pView->GetWrtShellPtr()->ActionPend() )
+
+    if(pView && pView->GetWrtShellPtr() &&
+            ((pView->GetWrtShellPtr()->GetWin() == GetFocusedWindow()) || m_bViewHasChanged) &&
+            !bIsInDrag && !m_bIsInternalDrag && !pView->GetWrtShellPtr()->ActionPend())
     {
         m_bViewHasChanged = false;
         m_bIsIdleClear = false;
