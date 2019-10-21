@@ -184,7 +184,7 @@ sal_uInt16 HeaderBar::ImplHitTest( const Point& rPos,
             {
                 nPos = i;
 
-                if ( !(pItem->mnBits & HeaderBarItemBits::FIXED) && (rPos.X() >= (nX+pItem->mnSize-HEADERBAR_SPLITOFF)) )
+                if ( rPos.X() >= (nX+pItem->mnSize-HEADERBAR_SPLITOFF) )
                 {
                     nMode = HEAD_HITTEST_DIVIDER;
                     nMouseOff = rPos.X()-(nX+pItem->mnSize);
@@ -199,7 +199,7 @@ sal_uInt16 HeaderBar::ImplHitTest( const Point& rPos,
             return nMode;
         }
 
-        bLastFixed = static_cast<bool>(pItem->mnBits & HeaderBarItemBits::FIXED);
+        bLastFixed = false;
 
         nX += pItem->mnSize;
     }
@@ -610,7 +610,7 @@ void HeaderBar::ImplStartDrag( const Point& rMousePos, bool bCommand )
     else
     {
         if ( ((pItem->mnBits & HeaderBarItemBits::CLICKABLE) && !(pItem->mnBits & HeaderBarItemBits::FLAT)) ||
-             (mbDragable && !(pItem->mnBits & HeaderBarItemBits::FIXEDPOS)) )
+             mbDragable )
         {
             mbItemMode = true;
             mbDrag = true;
@@ -670,8 +670,7 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
         bNewOutDrag = !aItemRect.IsInside( rMousePos );
 
         //  if needed switch on ItemDrag
-        if ( bNewOutDrag && mbDragable && !mbItemDrag &&
-             !(mvItemList[ nPos ]->mnBits & HeaderBarItemBits::FIXEDPOS) )
+        if ( bNewOutDrag && mbDragable && !mbItemDrag )
         {
             if ( (rMousePos.Y() >= aItemRect.Top()) && (rMousePos.Y() <= aItemRect.Bottom()) )
             {
@@ -698,20 +697,6 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
                         mnItemDragPos = 0;
                     else
                         mnItemDragPos = GetItemCount()-1;
-                }
-
-                // do not use non-movable items
-                if ( mnItemDragPos < nPos )
-                {
-                    while ( (mvItemList[ mnItemDragPos ]->mnBits & HeaderBarItemBits::FIXEDPOS) &&
-                            (mnItemDragPos < nPos) )
-                        mnItemDragPos++;
-                }
-                else if ( mnItemDragPos > nPos )
-                {
-                    while ( (mvItemList[ mnItemDragPos ]->mnBits & HeaderBarItemBits::FIXEDPOS) &&
-                            (mnItemDragPos > nPos) )
-                        mnItemDragPos--;
                 }
             }
 

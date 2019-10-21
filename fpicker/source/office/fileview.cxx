@@ -91,14 +91,13 @@ using ::svt::FolderDescriptor;
 enum class FileViewFlags
 {
     NONE               = 0x00,
-    ONLYFOLDER         = 0x01,
     MULTISELECTION     = 0x02,
     SHOW_TYPE          = 0x04,
     SHOW_NONE          = 0x20,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<FileViewFlags> : is_typed_flags<FileViewFlags, 0x27> {};
+    template<> struct typed_flags<FileViewFlags> : is_typed_flags<FileViewFlags, 0x26> {};
 }
 
 namespace
@@ -809,8 +808,6 @@ SvtFileView::SvtFileView( vcl::Window* pParent, WinBits nBits,
     Control( pParent, nBits )
 {
     FileViewFlags nFlags = FileViewFlags::NONE;
-    if ( bOnlyFolder )
-        nFlags |= FileViewFlags::ONLYFOLDER;
     if ( bMultiSelection )
         nFlags |= FileViewFlags::MULTISELECTION;
     if ( bShowType )
