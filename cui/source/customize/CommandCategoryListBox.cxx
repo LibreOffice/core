@@ -137,7 +137,7 @@ void CommandCategoryListBox::Init(
         }
 
         // Separate the "All commands"category from the actual categories
-        m_xControl->append_separator();
+        m_xControl->append_separator("");
 
         typedef std::pair<OUString, sal_Int16> str_id;
         std::vector<str_id> aCategories;
@@ -180,7 +180,7 @@ void CommandCategoryListBox::Init(
         }
 
         // Separate regular commands from styles and macros
-        m_xControl->append_separator();
+        m_xControl->append_separator("");
 
         // Add macros category
         m_aGroupInfo.push_back(

@@ -103,21 +103,10 @@
 #define STR_FURTHER_OBJECT                      NC_("STR_FURTHER_OBJECT", "Further objects")
 #define STR_UNKNOWN_SOURCE                      NC_("STR_UNKNOWN_SOURCE", "Unknown source")
 
-#define STR_SVT_FILEVIEW_COLUMN_TITLE           NC_("STR_SVT_FILEVIEW_COLUMN_TITLE", "Name")
-#define STR_SVT_FILEVIEW_COLUMN_SIZE            NC_("STR_SVT_FILEVIEW_COLUMN_SIZE", "Size")
-#define STR_SVT_FILEVIEW_COLUMN_DATE            NC_("STR_SVT_FILEVIEW_COLUMN_DATE", "Date modified")
-#define STR_SVT_FILEVIEW_COLUMN_TYPE            NC_("STR_SVT_FILEVIEW_COLUMN_TYPE", "Type")
 #define STR_SVT_BYTES                           NC_("STR_SVT_BYTES", "Bytes")
 #define STR_SVT_KB                              NC_("STR_SVT_KB", "KB")
 #define STR_SVT_MB                              NC_("STR_SVT_MB", "MB")
 #define STR_SVT_GB                              NC_("STR_SVT_GB", "GB")
-
-// descriptions of accessible objects
-#define STR_SVT_ACC_DESC_TABLISTBOX             NC_("STR_SVT_ACC_DESC_TABLISTBOX", "Row: %1, Column: %2")
-#define STR_SVT_ACC_DESC_FILEVIEW               NC_("STR_SVT_ACC_DESC_FILEVIEW", ", Type: %1, URL: %2")
-#define STR_SVT_ACC_DESC_FOLDER                 NC_("STR_SVT_ACC_DESC_FOLDER", "Folder")
-#define STR_SVT_ACC_DESC_FILE                   NC_("STR_SVT_ACC_DESC_FILE", "File")
-#define STR_SVT_ACC_EMPTY_FIELD                 NC_("STR_SVT_ACC_EMPTY_FIELD", "Empty Field")
 
 /*
  * resources for CollatorResource / CollatorResourceData resp.

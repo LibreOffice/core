@@ -12,72 +12,60 @@
 #include "iodlg.hxx"
 
 #include <svtools/place.hxx>
-#include <vcl/svtabbx.hxx>
+#include <vcl/weld.hxx>
 
 #include <memory>
 #include <vector>
 
-typedef std::shared_ptr< Place > PlacePtr;
+typedef std::shared_ptr<Place> PlacePtr;
 
 class PlacesListBox;
-class PlacesListBox_Impl : public SvHeaderTabListBox
-{
-    private:
-        VclPtr<HeaderBar>           mpHeaderBar;
-        VclPtr<PlacesListBox>       mpParent;
-
-    public:
-        PlacesListBox_Impl( PlacesListBox* pParent, const OUString& rTitle );
-        virtual ~PlacesListBox_Impl( ) override;
-        virtual void dispose() override;
-
-        virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
-};
 
 /** ListBox to handle Places.
   */
-class PlacesListBox : public Control
+class PlacesListBox
 {
-    private:
-        std::vector< PlacePtr > maPlaces;
-        VclPtr<SvtFileDialog>       mpDlg;
-        VclPtr<PlacesListBox_Impl>  mpImpl;
-        VclPtr<PushButton>          mpAddBtn;
-        VclPtr<PushButton>          mpDelBtn;
-        sal_Int32            mnNbEditables;
-        bool                 mbUpdated;
-        bool                 mbSelectionChanged;
+private:
+    std::vector<PlacePtr> maPlaces;
+    SvtFileDialog* mpDlg;
+    std::unique_ptr<weld::TreeView> mxImpl;
+    std::unique_ptr<weld::Button> mxAddBtn;
+    std::unique_ptr<weld::Button> mxDelBtn;
+    sal_Int32            mnNbEditables;
+    bool                 mbUpdated;
+    bool                 mbSelectionChanged;
 
-    public:
-        PlacesListBox( vcl::Window* pParent, SvtFileDialog* pFileDlg, const OUString& rTitle, WinBits nBits );
-        virtual ~PlacesListBox( ) override;
-        virtual void dispose() override;
+public:
+    PlacesListBox(std::unique_ptr<weld::TreeView> xTreeView,
+                  std::unique_ptr<weld::Button> xAddBtn,
+                  std::unique_ptr<weld::Button> xDelBtn,
+                  SvtFileDialog* pFileDlg);
+    ~PlacesListBox();
 
-        void AppendPlace( const PlacePtr& pPlace );
-        void RemovePlace( sal_uInt16 nPos );
-        void RemoveSelectedPlace();
-        sal_Int32 GetNbEditablePlaces() const { return mnNbEditables;}
-        bool IsUpdated();
-        const std::vector<PlacePtr>& GetPlaces() const { return maPlaces;}
+    void AppendPlace( const PlacePtr& pPlace );
+    void RemovePlace( sal_uInt16 nPos );
+    void RemoveSelectedPlace();
+    sal_Int32 GetNbEditablePlaces() const { return mnNbEditables;}
+    bool IsUpdated();
+    const std::vector<PlacePtr>& GetPlaces() const { return maPlaces;}
 
-        void SetAddHdl( const Link<Button*,void>& rHdl );
-        void SetDelHdl( const Link<Button*,void>& rHdl );
-        void SetDelEnabled( bool enabled );
-        void SetSizePixel( const Size& rNewSize ) override;
-        void updateView( );
+    void SetAddHdl( const Link<weld::Button&,void>& rHdl );
+    void SetDelHdl( const Link<weld::Button&,void>& rHdl );
+    void SetDelEnabled( bool enabled );
+    void updateView( );
 
-        const VclPtr<PushButton>& GetAddButton() const { return mpAddBtn; }
-        const VclPtr<PushButton>& GetDeleteButton() const { return mpDelBtn; }
-        const VclPtr<PlacesListBox_Impl>& GetPlacesListBox() const { return mpImpl; }
+    void set_help_id(const OString& rHelpId) { mxImpl->set_help_id(rHelpId); }
 
-        virtual bool EventNotify( NotifyEvent& rNEvt ) override;
+    const weld::Button& GetAddButton() const { return *mxAddBtn; }
+    const weld::Button& GetDeleteButton() const { return *mxDelBtn; }
+    weld::TreeView& GetPlacesListBox() { return *mxImpl; }
 
-    private:
+private:
 
-        static Image getEntryIcon( const PlacePtr& pPlace );
+    static OUString getEntryIcon(const PlacePtr& pPlace);
 
-        DECL_LINK( Selection, SvTreeListBox*, void );
-        DECL_LINK( DoubleClick, SvTreeListBox*, bool );
+    DECL_LINK( Selection, weld::TreeView&, void );
+    DECL_LINK( DoubleClick, weld::TreeView&, bool );
 };
 
 #endif

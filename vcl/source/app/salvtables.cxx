@@ -20,6 +20,7 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <officecfg/Office/Common.hxx>
+#include <iconview.hxx>
 #include <salframe.hxx>
 #include <salinst.hxx>
 #include <salvd.hxx>
@@ -914,6 +915,10 @@ public:
         auto nInsertPos = pos == -1 ? MENU_APPEND : pos;
         m_xMenu->InsertSeparator(rId.toUtf8(), nInsertPos);
     }
+    PopupMenu* getMenu() const
+    {
+        return m_xMenu.get();
+    }
     virtual ~SalInstanceMenu() override
     {
         m_xMenu->SetSelectHdl(Link<::Menu*, bool>());
@@ -933,6 +938,7 @@ class SalInstanceToolbar : public SalInstanceWidget, public virtual weld::Toolba
 private:
     VclPtr<ToolBox> m_xToolBox;
     std::map<sal_uInt16, VclPtr<vcl::Window>> m_aFloats;
+    std::map<sal_uInt16, VclPtr<PopupMenu>> m_aMenus;
 
     DECL_LINK(ClickHdl, ToolBox*, void);
     DECL_LINK(DropdownClick, ToolBox*, void);
@@ -963,12 +969,24 @@ public:
         if (m_xToolBox->GetItemBits(nItemId) & ToolBoxItemBits::DROPDOWN)
         {
             auto pFloat = m_aFloats[nItemId];
-            if (!pFloat)
-                return;
-            if (bActive)
-                vcl::Window::GetDockingManager()->StartPopupMode(m_xToolBox, pFloat, FloatWinPopupFlags::GrabFocus);
-            else
-                vcl::Window::GetDockingManager()->EndPopupMode(pFloat);
+            if (pFloat)
+            {
+                if (bActive)
+                    vcl::Window::GetDockingManager()->StartPopupMode(m_xToolBox, pFloat, FloatWinPopupFlags::GrabFocus);
+                else
+                    vcl::Window::GetDockingManager()->EndPopupMode(pFloat);
+            }
+            auto pPopup = m_aMenus[nItemId];
+            if (pPopup)
+            {
+                if (bActive)
+                {
+                    tools::Rectangle aRect = m_xToolBox->GetItemRect(nItemId);
+                    pPopup->Execute(m_xToolBox, aRect, PopupMenuFlags::ExecuteDown);
+                }
+                else
+                    pPopup->EndExecute();
+            }
         }
     }
 
@@ -985,7 +1003,20 @@ public:
         if (pFloat)
             pFloat->EnableDocking();
 
-        m_aFloats[m_xToolBox->GetItemId(OUString::fromUtf8(rIdent))] = pFloat;
+        sal_uInt16 nId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
+        m_aFloats[nId] = pFloat;
+        m_aMenus[nId] = nullptr;
+    }
+
+    virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) override
+    {
+        SalInstanceMenu* pInstanceMenu = dynamic_cast<SalInstanceMenu*>(pMenu);
+
+        PopupMenu* pPopup = pInstanceMenu? pInstanceMenu->getMenu() : nullptr;
+
+        sal_uInt16 nId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
+        m_aMenus[nId] = pPopup;
+        m_aFloats[nId] = nullptr;
     }
 
     virtual void insert_separator(int pos, const OUString& /*rId*/) override
@@ -2961,6 +2992,11 @@ public:
     {
         m_xImage->SetImage(createImage(*pDevice));
     }
+
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
+    {
+        m_xImage->SetImage(::Image(rImage));
+    }
 };
 
 class SalInstanceCalendar : public SalInstanceWidget, public virtual weld::Calendar
@@ -3330,6 +3366,8 @@ public:
                 pHeaderBar->SetEndDragHdl(LINK(this, SalInstanceTreeView, EndDragHdl));
                 pHeaderBar->SetSelectHdl(LINK(this, SalInstanceTreeView, HeaderBarClickedHdl));
             }
+            pHeaderBox->SetEditingEntryHdl(LINK(this, SalInstanceTreeView, EditingEntryHdl));
+            pHeaderBox->SetEditedEntryHdl(LINK(this, SalInstanceTreeView, EditedEntryHdl));
         }
         else
         {
@@ -3884,16 +3922,11 @@ public:
         return ::get_text_emphasis(pEntry, col);
     }
 
-    virtual void connect_editing_started(const Link<const weld::TreeIter&, bool>& rLink) override
+    virtual void connect_editing(const Link<const weld::TreeIter&, bool>& rStartLink,
+                                const Link<const std::pair<const weld::TreeIter&, OUString>&, bool>& rEndLink) override
     {
-        m_xTreeView->EnableInplaceEditing(true);
-        weld::TreeView::connect_editing_started(rLink);
-    }
-
-    virtual void connect_editing_done(const Link<const std::pair<const weld::TreeIter&, OUString>&, bool>& rLink) override
-    {
-        m_xTreeView->EnableInplaceEditing(true);
-        weld::TreeView::connect_editing_done(rLink);
+        m_xTreeView->EnableInplaceEditing(rStartLink.IsSet() || rEndLink.IsSet());
+        weld::TreeView::connect_editing(rStartLink, rEndLink);
     }
 
     virtual void start_editing(const weld::TreeIter& rIter) override
@@ -4631,6 +4664,242 @@ IMPL_LINK(SalInstanceTreeView, EditingEntryHdl, SvTreeListEntry*, pEntry, bool)
 IMPL_LINK(SalInstanceTreeView, EditedEntryHdl, IterString, rIterString, bool)
 {
     return signal_editing_done(std::pair<const weld::TreeIter&, OUString>(SalInstanceTreeIter(rIterString.first), rIterString.second));
+}
+
+class SalInstanceIconView : public SalInstanceContainer, public virtual weld::IconView
+{
+private:
+    // owner for UserData
+    std::vector<std::unique_ptr<OUString>> m_aUserData;
+    VclPtr<::IconView> m_xIconView;
+
+    DECL_LINK(SelectHdl, SvTreeListBox*, void);
+    DECL_LINK(DeSelectHdl, SvTreeListBox*, void);
+    DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
+
+public:
+    SalInstanceIconView(::IconView* pIconView, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceContainer(pIconView, pBuilder, bTakeOwnership)
+        , m_xIconView(pIconView)
+    {
+        m_xIconView->SetSelectHdl(LINK(this, SalInstanceIconView, SelectHdl));
+        m_xIconView->SetDeselectHdl(LINK(this, SalInstanceIconView, DeSelectHdl));
+        m_xIconView->SetDoubleClickHdl(LINK(this, SalInstanceIconView, DoubleClickHdl));
+    }
+
+    virtual void freeze() override
+    {
+        SalInstanceWidget::freeze();
+        m_xIconView->SetUpdateMode(false);
+    }
+
+    virtual void thaw() override
+    {
+        m_xIconView->SetUpdateMode(true);
+        SalInstanceWidget::thaw();
+    }
+
+    virtual void insert(int pos, const OUString* pStr, const OUString* pId,
+                        const OUString* pIconName, weld::TreeIter* pRet) override
+    {
+        disable_notify_events();
+        auto nInsertPos = pos == -1 ? TREELIST_APPEND : pos;
+        void* pUserData;
+        if (pId)
+        {
+            m_aUserData.emplace_back(std::make_unique<OUString>(*pId));
+            pUserData = m_aUserData.back().get();
+        }
+        else
+            pUserData = nullptr;
+
+        SvTreeListEntry* pEntry = new SvTreeListEntry;
+        if (pIconName)
+        {
+            Image aImage(createImage(*pIconName));
+            pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
+        }
+        else
+        {
+            Image aDummy;
+            pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
+        }
+        if (pStr)
+            pEntry->AddItem(std::make_unique<SvLBoxString>(*pStr));
+        pEntry->SetUserData(pUserData);
+        m_xIconView->Insert(pEntry, nullptr, nInsertPos);
+
+        if (pRet)
+        {
+            SalInstanceTreeIter* pVclRetIter = static_cast<SalInstanceTreeIter*>(pRet);
+            pVclRetIter->iter = pEntry;
+        }
+
+        enable_notify_events();
+    }
+
+    virtual OUString get_selected_id() const override
+    {
+        assert(m_xIconView->IsUpdateMode() && "don't request selection when frozen");
+        if (SvTreeListEntry* pEntry = m_xIconView->FirstSelected())
+        {
+            if (const OUString* pStr = static_cast<const OUString*>(pEntry->GetUserData()))
+                return *pStr;
+        }
+        return OUString();
+    }
+
+    virtual OUString get_selected_text() const override
+    {
+        assert(m_xIconView->IsUpdateMode() && "don't request selection when frozen");
+        if (SvTreeListEntry* pEntry = m_xIconView->FirstSelected())
+            return m_xIconView->GetEntryText(pEntry);
+        return OUString();
+    }
+
+    virtual int count_selected_items() const override
+    {
+        return m_xIconView->GetSelectionCount();
+    }
+
+    virtual void select(int pos) override
+    {
+        assert(m_xIconView->IsUpdateMode() && "don't select when frozen");
+        disable_notify_events();
+        if (pos == -1 || (pos == 0 && n_children() == 0))
+            m_xIconView->SelectAll(false);
+        else
+        {
+            SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
+            m_xIconView->Select(pEntry, true);
+            m_xIconView->MakeVisible(pEntry);
+        }
+        enable_notify_events();
+    }
+
+    virtual void unselect(int pos) override
+    {
+        assert(m_xIconView->IsUpdateMode() && "don't select when frozen");
+        disable_notify_events();
+        if (pos == -1)
+            m_xIconView->SelectAll(true);
+        else
+        {
+            SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
+            m_xIconView->Select(pEntry, false);
+        }
+        enable_notify_events();
+    }
+
+    virtual int n_children() const override
+    {
+        return m_xIconView->GetModel()->GetChildList(nullptr).size();
+    }
+
+    virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig) const override
+    {
+        return std::unique_ptr<weld::TreeIter>(new SalInstanceTreeIter(static_cast<const SalInstanceTreeIter*>(pOrig)));
+    }
+
+    virtual bool get_selected(weld::TreeIter* pIter) const override
+    {
+        SvTreeListEntry* pEntry = m_xIconView->FirstSelected();
+        auto pVclIter = static_cast<SalInstanceTreeIter*>(pIter);
+        if (pVclIter)
+            pVclIter->iter = pEntry;
+        return pEntry != nullptr;
+    }
+
+    virtual bool get_cursor(weld::TreeIter* pIter) const override
+    {
+        SvTreeListEntry* pEntry = m_xIconView->GetCurEntry();
+        auto pVclIter = static_cast<SalInstanceTreeIter*>(pIter);
+        if (pVclIter)
+            pVclIter->iter = pEntry;
+        return pEntry != nullptr;
+    }
+
+    virtual void set_cursor(const weld::TreeIter& rIter) override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        disable_notify_events();
+        m_xIconView->SetCurEntry(rVclIter.iter);
+        enable_notify_events();
+    }
+
+    virtual bool get_iter_first(weld::TreeIter& rIter) const override
+    {
+        SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+        rVclIter.iter = m_xIconView->GetEntry(0);
+        return rVclIter.iter != nullptr;
+    }
+
+    virtual void scroll_to_item(const weld::TreeIter& rIter) override
+    {
+        assert(m_xIconView->IsUpdateMode() && "don't select when frozen");
+        disable_notify_events();
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        m_xIconView->MakeVisible(rVclIter.iter);
+        enable_notify_events();
+    }
+
+    virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override
+    {
+        SalInstanceTreeIter aVclIter(m_xIconView->FirstSelected());
+        while (aVclIter.iter)
+        {
+            if (func(aVclIter))
+                return;
+            aVclIter.iter = m_xIconView->NextSelected(aVclIter.iter);
+        }
+    }
+
+    virtual OUString get_id(const weld::TreeIter& rIter) const override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        const OUString* pStr = static_cast<const OUString*>(rVclIter.iter->GetUserData());
+        if (pStr)
+            return *pStr;
+        return OUString();
+    }
+
+    virtual void clear() override
+    {
+        disable_notify_events();
+        m_xIconView->Clear();
+        m_aUserData.clear();
+        enable_notify_events();
+    }
+
+    virtual ~SalInstanceIconView() override
+    {
+        m_xIconView->SetDoubleClickHdl(Link<SvTreeListBox*, bool>());
+        m_xIconView->SetSelectHdl(Link<SvTreeListBox*, void>());
+        m_xIconView->SetDeselectHdl(Link<SvTreeListBox*, void>());
+    }
+};
+
+IMPL_LINK_NOARG(SalInstanceIconView, SelectHdl, SvTreeListBox*, void)
+{
+    if (notify_events_disabled())
+        return;
+    signal_selection_changed();
+}
+
+IMPL_LINK_NOARG(SalInstanceIconView, DeSelectHdl, SvTreeListBox*, void)
+{
+    if (notify_events_disabled())
+        return;
+    if (m_xIconView->GetSelectionMode() == SelectionMode::Single)
+        return;
+    signal_selection_changed();
+}
+
+IMPL_LINK_NOARG(SalInstanceIconView, DoubleClickHdl, SvTreeListBox*, bool)
+{
+    if (notify_events_disabled())
+        return false;
+    return !signal_item_activated();
 }
 
 class SalInstanceSpinButton : public SalInstanceEntry, public virtual weld::SpinButton
@@ -5472,7 +5741,7 @@ public:
         }
     }
 
-    virtual void insert_separator(int pos) override
+    virtual void insert_separator(int pos, const OUString& /*rId*/) override
     {
         auto nInsertPos = pos == -1 ? m_xComboBox->GetEntryCount() : pos;
         m_xComboBox->AddSeparator(nInsertPos - 1);
@@ -5588,7 +5857,7 @@ public:
         }
     }
 
-    virtual void insert_separator(int pos) override
+    virtual void insert_separator(int pos, const OUString& /*rId*/) override
     {
         auto nInsertPos = pos == -1 ? m_xComboBox->GetEntryCount() : pos;
         m_xComboBox->AddSeparator(nInsertPos - 1);
@@ -5667,7 +5936,7 @@ public:
         rEntry.AddEventListener(LINK(this, SalInstanceEntryTreeView, KeyPressListener));
     }
 
-    virtual void insert_separator(int /*pos*/) override
+    virtual void insert_separator(int /*pos*/, const OUString& /*rId*/) override
     {
         assert(false);
     }
@@ -6034,6 +6303,12 @@ public:
     {
         SvTabListBox* pTreeView = m_xBuilder->get<SvTabListBox>(id);
         return pTreeView ? std::make_unique<SalInstanceTreeView>(pTreeView, this, bTakeOwnership) : nullptr;
+    }
+
+    virtual std::unique_ptr<weld::IconView> weld_icon_view(const OString &id, bool bTakeOwnership) override
+    {
+        IconView* pIconView = m_xBuilder->get<IconView>(id);
+        return pIconView ? std::make_unique<SalInstanceIconView>(pIconView, this, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::Label> weld_label(const OString &id, bool bTakeOwnership) override
