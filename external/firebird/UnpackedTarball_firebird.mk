@@ -18,6 +18,9 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,firebird,\
 	extern/editline \
 ))
 
+# * external/firebird/0001-Make-comparison-operator-member-functions-const.patch.1 is upstream at
+#   <https://github.com/FirebirdSQL/firebird/pull/227> "Make comparison operator member functions
+#   const":
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
         external/firebird/firebird.disable-ib-util-not-found.patch.1 \
 		external/firebird/firebird-Engine12.patch \
@@ -32,6 +35,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 		external/firebird/ubsan.patch \
 		external/firebird/asan.patch \
 		external/firebird/firebird-tdf125284.patch.1 \
+		external/firebird/0001-Make-comparison-operator-member-functions-const.patch.1 \
 ))
 
 ifeq ($(OS),WNT)
