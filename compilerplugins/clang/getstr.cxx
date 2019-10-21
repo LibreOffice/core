@@ -69,9 +69,7 @@ public:
             return true;
         }
         assert(expr->getNumArgs() == 2);
-        if (!loplugin::TypeCheck(expr->getArg(0)->getType())
-                 .TemplateSpecializationClass()
-                 .ClassOrStruct("basic_ostream")
+        if (!loplugin::TypeCheck(expr->getArg(0)->getType()).ClassOrStruct("basic_ostream")
                  .StdNamespace()) //TODO: check template args
         {
             return true;
