@@ -11,11 +11,20 @@
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 
-AutocompleteEdit::AutocompleteEdit( vcl::Window* pParent )
-    : Edit( pParent )
-    , m_nCurrent( 0 )
+AutocompleteEdit::AutocompleteEdit(std::unique_ptr<weld::Entry> xEntry)
+    : m_xEntry(std::move(xEntry))
+    , m_nCurrent(0)
 {
-    SetAutocompleteHdl(LINK(this, AutocompleteEdit, AutoCompleteHdl_Impl));
+    m_xEntry->connect_changed(LINK(this, AutocompleteEdit, ChangedHdl));
+
+    m_aChangedIdle.SetInvokeHandler(LINK(this, AutocompleteEdit, TryAutoComplete));
+    m_aChangedIdle.SetDebugName("fpicker::AutocompleteEdit m_aChangedIdle");
+}
+
+IMPL_LINK_NOARG(AutocompleteEdit, ChangedHdl, weld::Entry&, void)
+{
+    m_aChangeHdl.Call(*m_xEntry);
+    m_aChangedIdle.Start(); //launch this to happen on idle after cursor position will have been set
 }
 
 void AutocompleteEdit::AddEntry( const OUString& rEntry )
@@ -29,18 +38,16 @@ void AutocompleteEdit::ClearEntries()
     m_aMatching.clear();
 }
 
-IMPL_LINK_NOARG(AutocompleteEdit, AutoCompleteHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(AutocompleteEdit, TryAutoComplete, Timer *, void)
 {
-    if( Application::AnyInput( VclInputFlags::KEYBOARD ) )
+    OUString aCurText = m_xEntry->get_text();
+
+    int nStartPos, nEndPos;
+    m_xEntry->get_selection_bounds(nStartPos, nEndPos);
+    if (std::max(nStartPos, nEndPos) != aCurText.getLength())
         return;
 
-    OUString aCurText = GetText();
-    Selection aSelection( GetSelection() );
-
-    if( aSelection.Max() != aCurText.getLength() )
-        return;
-
-    sal_uInt16 nLen = static_cast<sal_uInt16>(aSelection.Min());
+    auto nLen = std::min(nStartPos, nEndPos);
     aCurText = aCurText.copy( 0, nLen );
     if( aCurText.isEmpty() )
         return;
@@ -50,11 +57,9 @@ IMPL_LINK_NOARG(AutocompleteEdit, AutoCompleteHdl_Impl, Edit&, void)
         if( Match( aCurText ) )
         {
             m_nCurrent = 0;
-            SetText( m_aMatching[0] );
-            sal_uInt16 nNewLen = m_aMatching[0].getLength();
-
-            Selection aSel( nLen, nNewLen );
-            SetSelection( aSel );
+            m_xEntry->set_text(m_aMatching[0]);
+            auto nNewLen = m_aMatching[0].getLength();
+            m_xEntry->select_region(nLen, nNewLen);
         }
     }
 }
@@ -77,6 +82,7 @@ bool AutocompleteEdit::Match( const OUString& rText )
     return bRet;
 }
 
+#if 0
 bool AutocompleteEdit::PreNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
@@ -103,5 +109,6 @@ bool AutocompleteEdit::PreNotify( NotifyEvent& rNEvt )
 
     return Edit::PreNotify( rNEvt );
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

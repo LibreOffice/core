@@ -451,7 +451,7 @@ static void lcl_InsertVectors(weld::ComboBox& rBox,
         rBox.append_text(rItem);
     for(const auto& rItem : rNext)
         rBox.append_text(rItem);
-    rBox.append_separator();
+    rBox.append_separator("");
     //now insert all strings sorted
     const auto nStartPos = rBox.get_count();
 

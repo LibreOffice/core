@@ -14,103 +14,42 @@
 #include <vcl/event.hxx>
 #include <bitmaps.hlst>
 
-#define COLUMN_NAME     1
-
-
-PlacesListBox_Impl::PlacesListBox_Impl( PlacesListBox* pParent, const OUString& rTitle ) :
-    SvHeaderTabListBox( pParent, WB_TABSTOP | WB_NOINITIALSELECTION ),
-    mpHeaderBar( nullptr ),
-    mpParent( pParent )
+PlacesListBox::PlacesListBox(std::unique_ptr<weld::TreeView> xControl,
+                             std::unique_ptr<weld::Button> xAdd,
+                             std::unique_ptr<weld::Button> xDel,
+                             SvtFileDialog* pFileDlg)
+    : maPlaces( )
+    , mpDlg(pFileDlg)
+    , mxImpl(std::move(xControl))
+    , mxAddBtn(std::move(xAdd))
+    , mxDelBtn(std::move(xDel))
+    , mnNbEditables(0)
+    , mbUpdated( false )
+    , mbSelectionChanged( false )
 {
-    Size aBoxSize = pParent->GetSizePixel( );
-    mpHeaderBar = VclPtr<HeaderBar>::Create( pParent, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
-    mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), Size( 600, 16 ) );
+    Size aSize(mxImpl->get_approximate_digit_width() * 18,
+               mxImpl->get_height_rows(9));
+    mxImpl->set_size_request(aSize.Width(), aSize.Height());
 
-    long aTabPositions[] = { 20, 600 };
-    SetTabs( SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel );
-    mpHeaderBar->InsertItem( COLUMN_NAME, rTitle, 600, HeaderBarItemBits::LEFT );
-
-    Size aHeadSize = mpHeaderBar->GetSizePixel();
-    SetPosSizePixel( Point( 0, aHeadSize.getHeight() ),
-                  Size( aBoxSize.getWidth(), aBoxSize.getHeight() - aHeadSize.getHeight() ) );
-
-    InitHeaderBar( mpHeaderBar );
-
-    Show( );
-    mpHeaderBar->Show();
-}
-
-PlacesListBox_Impl::~PlacesListBox_Impl( )
-{
-    disposeOnce();
-}
-
-void PlacesListBox_Impl::dispose()
-{
-    mpHeaderBar.disposeAndClear();
-    mpParent.clear();
-    SvHeaderTabListBox::dispose();
-}
-
-void PlacesListBox_Impl::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    SvHeaderTabListBox::MouseButtonUp( rMEvt );
-    mpParent->updateView( );
-}
-
-PlacesListBox::PlacesListBox( vcl::Window* pParent, SvtFileDialog* pFileDlg, const OUString& rTitle, WinBits nBits ) :
-    Control( pParent, nBits ),
-    maPlaces( ),
-    mpDlg( pFileDlg ),
-    mpImpl( nullptr ),
-    mpAddBtn( ),
-    mpDelBtn( ),
-    mnNbEditables( 0 ),
-    mbUpdated( false ),
-    mbSelectionChanged( false )
-{
-    mpImpl = VclPtr<PlacesListBox_Impl>::Create( this, rTitle );
-
-    mpImpl->SetSelectHdl( LINK( this, PlacesListBox, Selection ) );
-    mpImpl->SetDoubleClickHdl( LINK( this, PlacesListBox, DoubleClick ) ) ;
-
-    mpAddBtn.reset( VclPtr<ImageButton>::Create( this, 0 ) );
-    mpAddBtn->SetText( "+" );
-    mpAddBtn->SetPosSizePixel( Point( 0, 0 ), Size( 22, 22 ) );
-    mpAddBtn->Show();
-
-    mpDelBtn.reset( VclPtr<ImageButton>::Create( this, 0 ) );
-    mpDelBtn->SetText( "-" );
-    mpDelBtn->SetPosSizePixel( Point( 0, 0 ), Size( 22, 22 ) );
-    mpDelBtn->Show();
+    mxImpl->connect_changed( LINK( this, PlacesListBox, Selection ) );
+    mxImpl->connect_row_activated( LINK( this, PlacesListBox, DoubleClick ) ) ;
 }
 
 PlacesListBox::~PlacesListBox( )
 {
-    disposeOnce();
-}
-
-void PlacesListBox::dispose()
-{
-    mpImpl.disposeAndClear();
-    mpAddBtn.disposeAndClear();
-    mpDelBtn.disposeAndClear();
-    mpDlg.clear();
-    Control::dispose();
 }
 
 void PlacesListBox::AppendPlace( const PlacePtr& pPlace )
 {
     maPlaces.push_back( pPlace );
-    mpImpl->InsertEntry( pPlace->GetName( ),
-            getEntryIcon( pPlace ), getEntryIcon( pPlace ) );
+    mxImpl->append_text(pPlace->GetName());
+    mxImpl->set_image(maPlaces.size() - 1, getEntryIcon(pPlace));
 
     if(pPlace->IsEditable()) {
         ++mnNbEditables;
         mbUpdated = true;
     }
 }
-
 
 bool PlacesListBox::IsUpdated() {
     if(mbUpdated) {
@@ -119,7 +58,6 @@ bool PlacesListBox::IsUpdated() {
     }
     return false;
 }
-
 
 void PlacesListBox::RemovePlace( sal_uInt16 nPos )
 {
@@ -130,88 +68,61 @@ void PlacesListBox::RemovePlace( sal_uInt16 nPos )
             mbUpdated = true;
         }
         maPlaces.erase( maPlaces.begin() + nPos );
-        SvTreeListEntry* pEntry = mpImpl->GetEntry( nPos );
-        mpImpl->RemoveEntry( pEntry );
+        mxImpl->remove(nPos);
     }
 }
 
 void PlacesListBox::RemoveSelectedPlace() {
-    RemovePlace(mpImpl->GetCurrRow());
+    RemovePlace(mxImpl->get_cursor_index());
 }
 
-void PlacesListBox::SetAddHdl( const Link<Button*,void>& rHdl )
+void PlacesListBox::SetAddHdl( const Link<weld::Button&,void>& rHdl )
 {
-    mpAddBtn->SetClickHdl( rHdl );
+    mxAddBtn->connect_clicked( rHdl );
 }
 
-void PlacesListBox::SetDelHdl( const Link<Button*,void>& rHdl )
+void PlacesListBox::SetDelHdl( const Link<weld::Button&,void>& rHdl )
 {
-    mpDelBtn->SetClickHdl( rHdl );
+    mxDelBtn->connect_clicked( rHdl );
 }
 
 void PlacesListBox::SetDelEnabled( bool enabled )
 {
-    mpDelBtn->Enable( enabled );
+    mxDelBtn->set_sensitive( enabled );
 }
 
-void PlacesListBox::SetSizePixel( const Size& rNewSize )
+OUString PlacesListBox::getEntryIcon( const PlacePtr& pPlace )
 {
-    Control::SetSizePixel( rNewSize );
-    Size aListSize( rNewSize );
-    aListSize.AdjustHeight( -(26 + 18) );
-    mpImpl->SetSizePixel( aListSize );
-
-    sal_Int32 nBtnY = rNewSize.Height() - 26;
-    mpAddBtn->SetPosPixel( Point( 3, nBtnY ) );
-    mpDelBtn->SetPosPixel( Point( 6 + 24, nBtnY ) );
-}
-
-bool PlacesListBox::EventNotify( NotifyEvent& rNEvt )
-{
-    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-        const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
-
-        if( rCode.GetCode() == KEY_RETURN )
-        {
-            mbSelectionChanged = true;
-            updateView();
-            return true;
-        }
-    }
-    return Control::EventNotify(rNEvt);
-}
-
-Image PlacesListBox::getEntryIcon( const PlacePtr& pPlace )
-{
-    Image theImage = SvtFileDialog::GetButtonImage( BMP_FILEDLG_PLACE_LOCAL );
+    OUString theImage = BMP_FILEDLG_PLACE_LOCAL;
     if ( !pPlace->IsLocal( ) )
-        theImage = SvtFileDialog::GetButtonImage( BMP_FILEDLG_PLACE_REMOTE );
+        theImage = BMP_FILEDLG_PLACE_REMOTE;
     return theImage;
 }
 
-IMPL_LINK_NOARG( PlacesListBox, Selection, SvTreeListBox*, void )
+IMPL_LINK_NOARG( PlacesListBox, Selection, weld::TreeView&, void )
 {
-    sal_uInt32 nSelected = mpImpl->GetCurrRow();
+    sal_uInt32 nSelected = mxImpl->get_cursor_index();
     PlacePtr pPlace = maPlaces[nSelected];
 
     mbSelectionChanged = true;
-    if(pPlace->IsEditable())
+    if (pPlace->IsEditable())
         mpDlg->RemovablePlaceSelected();
     else
         mpDlg->RemovablePlaceSelected(false);
+
+    updateView();
 }
 
-IMPL_LINK_NOARG( PlacesListBox, DoubleClick, SvTreeListBox*, bool )
+IMPL_LINK_NOARG( PlacesListBox, DoubleClick, weld::TreeView&, bool )
 {
-    sal_uInt16 nSelected = mpImpl->GetCurrRow();
+    sal_uInt16 nSelected = mxImpl->get_cursor_index();
     PlacePtr pPlace = maPlaces[nSelected];
     if ( pPlace->IsEditable() && !pPlace->IsLocal( ) )
     {
-        PlaceEditDialog aDlg(mpDlg->GetFrameWeld(), pPlace);
+        PlaceEditDialog aDlg(mpDlg->getDialog(), pPlace);
         short aRetCode = aDlg.run();
-        switch(aRetCode) {
+        switch (aRetCode)
+        {
             case RET_OK :
             {
                 pPlace->SetName ( aDlg.GetServerName() );
@@ -228,18 +139,14 @@ IMPL_LINK_NOARG( PlacesListBox, DoubleClick, SvTreeListBox*, bool )
                 break;
         };
     }
-    return false;
+    return true;
 }
 
 void PlacesListBox::updateView( )
 {
-    if ( mbSelectionChanged )
-    {
-        mbSelectionChanged = false;
-        sal_uInt32 nSelected = mpImpl->GetCurrRow();
-        PlacePtr pPlace = maPlaces[nSelected];
-        mpDlg->OpenURL_Impl( pPlace->GetUrl( ) );
-    }
+    sal_uInt32 nSelected = mxImpl->get_cursor_index();
+    PlacePtr pPlace = maPlaces[nSelected];
+    mpDlg->OpenURL_Impl( pPlace->GetUrl( ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

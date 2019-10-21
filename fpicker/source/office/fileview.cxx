@@ -17,55 +17,50 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/treelistbox.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <vcl/treelistentry.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/querydelete.hxx>
-#include <vcl/event.hxx>
-#include <vcl/headbar.hxx>
-#include <vcl/svtabbx.hxx>
 #include <svtools/strings.hrc>
 #include <bitmaps.hlst>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "contentenumeration.hxx"
-#include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <vcl/waitobj.hxx>
-#include <vcl/settings.hxx>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <algorithm>
 #include <vector>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <rtl/math.hxx>
+#include <o3tl/typed_flags_set.hxx>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 #include <salhelper/timer.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/dialog.hxx>
+#include <svtools/urlfilter.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
-#include <svtools/urlfilter.hxx>
-#include <o3tl/typed_flags_set.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/timer.hxx>
 #include <memory>
 #include "fileview.hxx"
-#include "iconview.hxx"
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -85,7 +80,6 @@ using ::svt::FolderDescriptor;
 #define COLUMN_SIZE         3
 #define COLUMN_DATE         4
 
-#define ROW_HEIGHT                17    // the height of a row has to be a little higher than the bitmap
 #define QUICK_SEARCH_TIMEOUT    1500    // time in mSec before the quicksearch string will be reset
 
 enum class FileViewFlags
@@ -120,68 +114,122 @@ namespace
 
 }
 
-
-class ViewTabListBox_Impl : public SvHeaderTabListBox
+class ViewTabListBox_Impl
 {
 private:
     Reference< XCommandEnvironment >    mxCmdEnv;
-    std::unique_ptr<VclBuilder> mxBuilder;
-    VclPtr<PopupMenu> mxMenu;
+    std::unique_ptr<weld::TreeView> mxTreeView;
+    std::unique_ptr<weld::TreeIter> mxScratchIter;
 
     ::osl::Mutex            maMutex;
-    VclPtr<HeaderBar>       mpHeaderBar;
     SvtFileView_Impl*       mpParent;
     Timer                   maResetQuickSearch;
     OUString                maQuickSearchText;
     OUString const          msAccessibleDescText;
-    OUString const          msFolder;
-    OUString const          msFile;
     sal_uInt32              mnSearchIndex;
-    bool                    mbResizeDisabled        : 1;
-    bool                    mbAutoResize            : 1;
-    bool                    mbEnableDelete          : 1;
+    bool                    mbEnableDelete;
+    bool                    mbEditing;
     bool const              mbShowHeader;
+    bool const              mbShowType;
 
     void            DeleteEntries();
     void            DoQuickSearch( sal_Unicode rChar );
     bool            Kill( const OUString& rURL );
 
-protected:
-    virtual bool     DoubleClickHdl() override;
-    virtual OUString GetAccessibleObjectDescription( ::vcl::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const override;
-
 public:
-    ViewTabListBox_Impl( vcl::Window* pParentWin, SvtFileView_Impl* pParent, FileViewFlags nFlags );
-    virtual ~ViewTabListBox_Impl() override;
-    virtual void dispose() override;
+    ViewTabListBox_Impl(std::unique_ptr<weld::TreeView> xTreeView, weld::Window* pTopLevel, SvtFileView_Impl* pParent, FileViewFlags nFlags);
+    virtual ~ViewTabListBox_Impl();
 
-    virtual void    Resize() override;
-    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;
+    std::unique_ptr<weld::TreeIter> make_iterator() const { return mxTreeView->make_iterator(); }
+    void insert(const OUString &rEntry, const OUString& rId, const OUString& rImage, weld::TreeIter& rIter)
+    {
+        mxTreeView->insert(nullptr, -1, &rEntry, &rId, nullptr, nullptr, &rImage, false, &rIter);
+    }
+    void append(const OUString& rId, const OUString& rStr, const OUString& rType, const OUString& rSize, const OUString& rDate, const OUString& rImage)
+    {
+        mxTreeView->insert(nullptr, -1, &rStr, &rId, nullptr, nullptr, &rImage, false, mxScratchIter.get());
+        int nCol = 1;
+        if (mbShowType)
+            mxTreeView->set_text(*mxScratchIter, rType, nCol++);
+        mxTreeView->set_text(*mxScratchIter, rSize, nCol++);
+        mxTreeView->set_text(*mxScratchIter, rDate, nCol++);
+    }
 
-    void            ClearAll();
-    HeaderBar*      GetHeaderBar() const { return mpHeaderBar; }
+    void scroll_to_row(const weld::TreeIter& rIter) { mxTreeView->scroll_to_row(rIter); }
+    void set_cursor(int nPos) { mxTreeView->set_cursor(nPos); }
+    void set_cursor(const weld::TreeIter& rIter) { mxTreeView->set_cursor(rIter); }
+    bool get_cursor(weld::TreeIter* pIter) const { return mxTreeView->get_cursor(pIter); }
+    bool get_iter_first(weld::TreeIter& rIter) const { return mxTreeView->get_iter_first(rIter); }
+    bool get_selected(weld::TreeIter* pIter) const { return mxTreeView->get_selected(pIter); }
 
-    void            EnableAutoResize() { mbAutoResize = true; }
+    OUString get_selected_text() const { return mxTreeView->get_selected_text(); }
+
+    void unselect_all() { mxTreeView->unselect_all(); }
+
+    OUString get_id(const weld::TreeIter& rIter) { return mxTreeView->get_id(rIter); }
+
+    void connect_row_activated(const Link<weld::TreeView&, bool>& rLink) { mxTreeView->connect_row_activated(rLink); }
+    void connect_changed(const Link<weld::TreeView&, void>& rLink) { mxTreeView->connect_changed(rLink); }
+
+    int n_children() const { return mxTreeView->n_children(); }
+
+    void freeze() { mxTreeView->freeze(); }
+    void thaw() { mxTreeView->thaw(); }
+
+    void show() { mxTreeView->show(); }
+    void hide() { mxTreeView->hide(); }
+    bool get_visible() const { return mxTreeView->get_visible(); }
+
+    int count_selected_rows() const { return mxTreeView->count_selected_rows(); }
+
+    void grab_focus() { mxTreeView->grab_focus(); }
+    bool has_focus() const { return mxTreeView->has_focus(); }
+
+    void set_help_id(const OString& rHelpId) { mxTreeView->set_help_id(rHelpId); }
+    OString get_help_id() const { return mxTreeView->get_help_id(); }
+
+    bool IsEditingActive() const { return mbEditing; }
+
+    void end_editing()
+    {
+        mxTreeView->end_editing();
+        mxTreeView->connect_editing(Link<const weld::TreeIter&, bool>(), Link<const IterString&, bool>());
+        mbEditing = false;
+    }
+
+    void selected_foreach(const std::function<bool(weld::TreeIter&)>& func)
+    {
+        mxTreeView->selected_foreach(func);
+    }
+
+    weld::TreeView* getWidget() const
+    {
+        return mxTreeView.get();
+    }
+
+    void            clear() { mxTreeView->clear(); }
+
     void            EnableDelete( bool bEnable ) { mbEnableDelete = bEnable; }
+    bool            TypeColumnVisible() const { return mbShowType; }
 
     const Reference< XCommandEnvironment >& GetCommandEnvironment() const { return mxCmdEnv; }
 
     DECL_LINK(ResetQuickSearch_Impl, Timer *, void);
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
+    DECL_LINK(EditingEntryHdl, const weld::TreeIter&, bool);
+    typedef std::pair<const weld::TreeIter&, OUString> IterString;
+    DECL_LINK(EditedEntryHdl, const IterString&, bool);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
-    virtual VclPtr<PopupMenu> CreateContextMenu() override;
-    virtual void        ExecuteContextMenuAction( sal_uInt16 nSelectedPopentry ) override;
+    void            ExecuteContextMenuAction(const OString& rSelectedPopentry);
 };
 
-
 //= SvtFileView_Impl
-
-
 class SvtFileView_Impl  :public ::svt::IEnumerationResultHandler
 {
 protected:
-    VclPtr<SvtFileView>                 mpAntiImpl;
-    Link<SvTreeListBox*,void>           m_aSelectHandler;
+    SvtFileView*                        m_pAntiImpl;
+    Link<SvtFileView*,void>             m_aSelectHandler;
 
     ::rtl::Reference< ::svt::FileViewContentEnumerator >
                                         m_xContentEnumerator;
@@ -194,12 +242,13 @@ protected:
 
 public:
 
-    ::std::vector< std::unique_ptr<SortingData_Impl> >  maContent;
+    ::std::vector<std::unique_ptr<SortingData_Impl>>  maContent;
+    ::std::vector<std::unique_ptr<SvtContentEntry>> maEntries;
     ::osl::Mutex                        maMutex;
 
-    VclPtr<SvTreeListBox>               mpCurView;
-    VclPtr<ViewTabListBox_Impl>         mpView;
-    VclPtr<IconView>                    mpIconView;
+    weld::Window*           m_pTopLevel;
+    std::unique_ptr<ViewTabListBox_Impl> mxView;
+    std::unique_ptr<weld::IconView> mxIconView;
     sal_uInt16              mnSortColumn;
     bool                    mbAscending     : 1;
     bool const              mbOnlyFolder    : 1;
@@ -210,14 +259,20 @@ public:
 
     OUString                maViewURL;
     OUString                maCurrentFilter;
-    Image const             maFolderImage;
+    OUString                maFolderImage;
     Link<SvtFileView*,void> maOpenDoneLink;
+    Link<SvtFileView*,bool> maDoubleClickHandler;
+
     Reference< XCommandEnvironment >    mxCmdEnv;
 
-    SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommandEnvironment > const & xEnv,
-                                              FileViewFlags nFlags,
-                                              bool bOnlyFolder );
-    virtual                ~SvtFileView_Impl();
+    SvtFileView_Impl(SvtFileView* pAntiImpl, weld::Window* pTopLevel,
+                     std::unique_ptr<weld::TreeView> xTreeView,
+                     std::unique_ptr<weld::IconView> xIconView,
+                     Reference < XCommandEnvironment > const & xEnv,
+                     FileViewFlags nFlags,
+                     bool bOnlyFolder);
+
+    virtual ~SvtFileView_Impl();
 
     void                    Clear();
 
@@ -234,17 +289,17 @@ public:
     void                    CancelRunningAsyncAction();
 
     void                    OpenFolder_Impl();
-    static void             ReplaceTabWithString( OUString& aValue );
+    static OUString         ReplaceTabWithString(const OUString& rValue);
     void                    CreateDisplayText_Impl();
     void                    SortFolderContent_Impl();
 
     void                    EntryRemoved( const OUString& rURL );
     void                    EntryRenamed( OUString& rURL,
                                           const OUString& rName );
-    OUString                FolderInserted( const OUString& rURL,
+    const SortingData_Impl& FolderInserted( const OUString& rURL,
                                             const OUString& rTitle );
 
-    sal_uLong               GetEntryPos( const OUString& rURL );
+    int                     GetEntryPos( const OUString& rURL );
 
     void                    SetViewMode( FileViewMode eMode );
 
@@ -255,17 +310,46 @@ public:
                                              const OUString& rTitle,
                                              bool bWrapAround );
 
-    void                    SetSelectHandler( const Link<SvTreeListBox*,void>& _rHdl );
+    void                    SetSelectHandler( const Link<SvtFileView*,void>& rHdl );
+    void                    SetDoubleClickHandler(const Link<SvtFileView*,bool>& rHdl);
 
-    void                    InitSelection();
     void                    ResetCursor();
 
-    inline void             EndEditing();
+    void EndEditing()
+    {
+        if (mxView->IsEditingActive())
+            mxView->end_editing();
+    }
 
-    void                    onTimeout();
+    void onTimeout();
+
+    void grab_focus()
+    {
+        if (mxView->get_visible())
+            mxView->grab_focus();
+        else
+            mxIconView->grab_focus();
+    }
+
+    bool has_focus() const
+    {
+        return mxView->has_focus() || mxIconView->has_focus();
+    }
+
+    int GetSortColumn() const
+    {
+        sal_uInt16 nOldSortID = mnSortColumn;
+        // skip "TYPE"
+        if (!mxView->TypeColumnVisible() && nOldSortID != COLUMN_TITLE)
+            --nOldSortID;
+        return nOldSortID - 1;
+    }
 
 protected:
-    DECL_LINK( SelectionMultiplexer, SvTreeListBox*, void );
+    DECL_LINK(ChangedHdl, weld::TreeView&, void);
+    DECL_LINK(SelectionChangedHdl, weld::IconView&, void);
+    DECL_LINK(RowActivatedHdl, weld::TreeView&, bool);
+    DECL_LINK(ItemActivatedHdl, weld::IconView&, bool);
 
     // IEnumerationResultHandler overridables
     virtual void        enumerationDone( ::svt::EnumerationResult eResult ) override;
@@ -274,13 +358,7 @@ protected:
 
 inline void SvtFileView_Impl::EnableDelete( bool bEnable )
 {
-    mpView->EnableDelete( bEnable );
-}
-
-inline void SvtFileView_Impl::EndEditing()
-{
-    if ( mpCurView->IsEditingActive() )
-        mpCurView->EndEditing();
+    mxView->EnableDelete( bEnable );
 }
 
 namespace
@@ -330,80 +408,49 @@ namespace
     }
 }
 
-ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
-                                          SvtFileView_Impl* pParent,
-                                          FileViewFlags nFlags ) :
-
-    SvHeaderTabListBox( pParentWin, WB_TABSTOP ),
-
-    mpHeaderBar         ( nullptr ),
-    mpParent            ( pParent ),
-    msAccessibleDescText( SvtResId(STR_SVT_ACC_DESC_FILEVIEW) ),
-    msFolder            ( SvtResId(STR_SVT_ACC_DESC_FOLDER) ),
-    msFile              ( SvtResId(STR_SVT_ACC_DESC_FILE) ),
-    mnSearchIndex       ( 0 ),
-    mbResizeDisabled    ( false ),
-    mbAutoResize        ( false ),
-    mbEnableDelete      ( false ),
-    mbShowHeader        ( !(nFlags & FileViewFlags::SHOW_NONE) )
+ViewTabListBox_Impl::ViewTabListBox_Impl(std::unique_ptr<weld::TreeView> xTreeView,
+                                         weld::Window* pTopLevel,
+                                         SvtFileView_Impl* pParent,
+                                         FileViewFlags nFlags)
+    : mxTreeView(std::move(xTreeView))
+    , mxScratchIter(mxTreeView->make_iterator())
+    , mpParent( pParent )
+    , mnSearchIndex( 0 )
+    , mbEnableDelete( false )
+    , mbEditing( false )
+    , mbShowHeader( !(nFlags & FileViewFlags::SHOW_NONE) )
+    , mbShowType(nFlags & FileViewFlags::SHOW_TYPE)
 {
-    Size aBoxSize = pParentWin->GetSizePixel();
-    mpHeaderBar = VclPtr<HeaderBar>::Create( pParentWin, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
-    mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), mpHeaderBar->CalcWindowSizePixel() );
-
-    HeaderBarItemBits nBits = HeaderBarItemBits::LEFT | HeaderBarItemBits::CLICKABLE;
-
-    long aTabPositions[] = { 20, 180, 320, 400, 600 };
-    SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel);
-    SetTabJustify(2, SvTabJustify::AdjustRight); // column "Size"
-
-    mpHeaderBar->InsertItem(COLUMN_TITLE, SvtResId(STR_SVT_FILEVIEW_COLUMN_TITLE), 180, nBits | HeaderBarItemBits::UPARROW);
+    std::vector<int> aWidths;
+    aWidths.push_back(180);
     if (nFlags & FileViewFlags::SHOW_TYPE)
-    {
-        mpHeaderBar->InsertItem(COLUMN_TYPE, SvtResId(STR_SVT_FILEVIEW_COLUMN_TYPE), 140, nBits);
-    }
-    mpHeaderBar->InsertItem(COLUMN_SIZE, SvtResId(STR_SVT_FILEVIEW_COLUMN_SIZE), 80, nBits);
-    mpHeaderBar->InsertItem(COLUMN_DATE, SvtResId(STR_SVT_FILEVIEW_COLUMN_DATE), 500, nBits);
+        aWidths.push_back(140);
+    aWidths.push_back(80);
+    mxTreeView->set_column_fixed_widths(aWidths);
 
-    Size aHeadSize = mpHeaderBar->GetSizePixel();
-    SetPosSizePixel( Point( 0, aHeadSize.Height() ),
-                     Size( aBoxSize.Width(), aBoxSize.Height() - aHeadSize.Height() ) );
-    InitHeaderBar( mpHeaderBar );
-    SetHighlightRange();
-    SetEntryHeight( ROW_HEIGHT );
     if (nFlags & FileViewFlags::MULTISELECTION)
-        SetSelectionMode( SelectionMode::Multiple );
-
-    Show();
-    if( mbShowHeader )
-        mpHeaderBar->Show();
+        mxTreeView->set_selection_mode(SelectionMode::Multiple);
 
     maResetQuickSearch.SetTimeout( QUICK_SEARCH_TIMEOUT );
     maResetQuickSearch.SetInvokeHandler( LINK( this, ViewTabListBox_Impl, ResetQuickSearch_Impl ) );
 
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler(
-        InteractionHandler::createWithParent(xContext, VCLUnoHelper::GetInterface(GetParentDialog())), UNO_QUERY_THROW );
+        InteractionHandler::createWithParent(xContext, pTopLevel->GetXWindow()), UNO_QUERY_THROW);
 
     mxCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
-    EnableContextMenuHandling();
+    mxTreeView->connect_popup_menu(LINK(this, ViewTabListBox_Impl, CommandHdl));
+    mxTreeView->connect_key_press(LINK(this, ViewTabListBox_Impl, KeyInputHdl));
+}
+
+IMPL_LINK_NOARG(ViewTabListBox_Impl, EditingEntryHdl, const weld::TreeIter&, bool)
+{
+    return mbEditing;
 }
 
 ViewTabListBox_Impl::~ViewTabListBox_Impl()
 {
-    disposeOnce();
-}
-
-void ViewTabListBox_Impl::dispose()
-{
-    maResetQuickSearch.Stop();
-
-    mxMenu.disposeAndClear();
-    mxBuilder.reset();
-
-    mpHeaderBar.disposeAndClear();
-    SvHeaderTabListBox::dispose();
 }
 
 IMPL_LINK_NOARG(ViewTabListBox_Impl, ResetQuickSearch_Impl, Timer *, void)
@@ -414,47 +461,17 @@ IMPL_LINK_NOARG(ViewTabListBox_Impl, ResetQuickSearch_Impl, Timer *, void)
     mnSearchIndex = 0;
 }
 
-
-void ViewTabListBox_Impl::Resize()
+IMPL_LINK(ViewTabListBox_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
-    SvTabListBox::Resize();
-    Size aBoxSize = Control::GetParent()->GetOutputSizePixel();
+    if (mbEditing)
+        return false;
 
-    if ( mbResizeDisabled || !aBoxSize.Width() )
-        return;
-
-    Size aBarSize;
-    if ( mbShowHeader )
-    {
-        aBarSize = mpHeaderBar->GetSizePixel();
-        aBarSize.setWidth( mbAutoResize ? aBoxSize.Width() : GetSizePixel().Width() );
-        mpHeaderBar->SetSizePixel( aBarSize );
-    }
-
-    if ( mbAutoResize )
-    {
-        mbResizeDisabled = true;
-        SetPosSizePixel( Point( 0, aBarSize.Height() ),
-                        Size( aBoxSize.Width(), aBoxSize.Height() - aBarSize.Height() ) );
-        mbResizeDisabled = false;
-    }
-}
-
-
-void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
-{
     bool bHandled = false;
 
     const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
     if ( 0 == rKeyCode.GetModifier() )
     {
-        if ( rKeyCode.GetCode() == KEY_RETURN )
-        {
-            ResetQuickSearch_Impl( nullptr );
-            GetDoubleClickHdl().Call( this );
-            bHandled = true;
-        }
-        else if ( ( rKeyCode.GetCode() == KEY_DELETE ) &&
+        if ( ( rKeyCode.GetCode() == KEY_DELETE ) &&
                   mbEnableDelete )
         {
             ResetQuickSearch_Impl( nullptr );
@@ -469,131 +486,125 @@ void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
         }
     }
 
-    if ( !bHandled )
-    {
+    if (!bHandled)
         ResetQuickSearch_Impl( nullptr );
-        SvHeaderTabListBox::KeyInput( rKEvt );
-    }
+    return bHandled;
 }
 
-
-VclPtr<PopupMenu> ViewTabListBox_Impl::CreateContextMenu()
+IMPL_LINK(ViewTabListBox_Impl, CommandHdl, const CommandEvent&, rCEvt, bool)
 {
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
+        return false;
+
     bool bEnableDelete = mbEnableDelete;
     bool bEnableRename = true;
 
-    if ( bEnableDelete || bEnableRename )
-    {
-        sal_Int32 nSelectedEntries = GetSelectionCount();
-        bEnableDelete &= nSelectedEntries > 0;
-        bEnableRename &= nSelectedEntries == 1;
-    }
+    int nCount = 0;
+    mxTreeView->selected_foreach([this, &nCount, &bEnableDelete, &bEnableRename](weld::TreeIter& rEntry){
+        ++nCount;
 
-    if ( bEnableDelete || bEnableRename )
-    {
-        SvTreeListEntry* pEntry = FirstSelected();
-        while ( pEntry )
+        ::ucbhelper::Content aCnt;
+        try
         {
-            ::ucbhelper::Content aCnt;
+            OUString aURL(reinterpret_cast<SvtContentEntry*>(
+                mxTreeView->get_id(rEntry).toInt64())->maURL);
+            aCnt = ::ucbhelper::Content( aURL, mxCmdEnv, comphelper::getProcessComponentContext() );
+        }
+        catch( Exception const & )
+        {
+            bEnableDelete = bEnableRename = false;
+        }
+
+        if ( bEnableDelete )
+        {
             try
             {
-                OUString aURL( static_cast< SvtContentEntry * >(
-                    pEntry->GetUserData() )->maURL );
-                aCnt = ::ucbhelper::Content( aURL, mxCmdEnv, comphelper::getProcessComponentContext() );
+                Reference< XCommandInfo > aCommands = aCnt.getCommands();
+                if ( aCommands.is() )
+                    bEnableDelete = aCommands->hasCommandByName( "delete" );
+                else
+                    bEnableDelete = false;
             }
             catch( Exception const & )
             {
-                bEnableDelete = bEnableRename = false;
+                bEnableDelete = false;
             }
+        }
 
-            if ( bEnableDelete )
+        if ( bEnableRename )
+        {
+            try
             {
-                try
+                Reference< XPropertySetInfo > aProps = aCnt.getProperties();
+                if ( aProps.is() )
                 {
-                    Reference< XCommandInfo > aCommands = aCnt.getCommands();
-                    if ( aCommands.is() )
-                        bEnableDelete = aCommands->hasCommandByName( "delete" );
-                    else
-                        bEnableDelete = false;
+                    Property aProp = aProps->getPropertyByName("Title");
+                    bEnableRename
+                        = !( aProp.Attributes & PropertyAttribute::READONLY );
                 }
-                catch( Exception const & )
-                {
-                    bEnableDelete = false;
-                }
-            }
-
-            if ( bEnableRename )
-            {
-                try
-                {
-                    Reference< XPropertySetInfo > aProps = aCnt.getProperties();
-                    if ( aProps.is() )
-                    {
-                        Property aProp = aProps->getPropertyByName("Title");
-                        bEnableRename
-                            = !( aProp.Attributes & PropertyAttribute::READONLY );
-                    }
-                    else
-                        bEnableRename = false;
-                }
-                catch( Exception const & )
-                {
+                else
                     bEnableRename = false;
-                }
             }
+            catch( Exception const & )
+            {
+                bEnableRename = false;
+            }
+        }
 
-            pEntry = ( bEnableDelete || bEnableRename )
-                ? NextSelected( pEntry )
-                : nullptr;
+        bool bStop = !bEnableDelete && !bEnableRename;
+        return bStop;
+    });
+
+    if (nCount == 0)
+        bEnableDelete = false;
+    if (nCount != 1)
+        bEnableRename = false;
+
+    if (bEnableDelete || bEnableRename)
+    {
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxTreeView.get(), "svt/ui/fileviewmenu.ui"));
+        auto xContextMenu = xBuilder->weld_menu("menu");
+        xContextMenu->set_visible("delete", bEnableDelete);
+        xContextMenu->set_visible("rename", bEnableRename);
+        OString sCommand(xContextMenu->popup_at_rect(mxTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
+        ExecuteContextMenuAction(sCommand);
+    }
+
+    return true;
+}
+
+void ViewTabListBox_Impl::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
+{
+    if (rSelectedPopupEntry == "delete")
+        DeleteEntries();
+    else if (rSelectedPopupEntry == "rename")
+    {
+        std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->make_iterator();
+        if (mxTreeView->get_selected(xEntry.get()))
+        {
+            mbEditing = true;
+
+            mxTreeView->connect_editing(LINK(this, ViewTabListBox_Impl, EditingEntryHdl),
+                                        LINK(this, ViewTabListBox_Impl, EditedEntryHdl));
+
+            mxTreeView->start_editing(*xEntry);
         }
     }
-
-    if ( bEnableDelete || bEnableRename )
-    {
-        mxMenu.disposeAndClear();
-        mxBuilder.reset(new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svt/ui/fileviewmenu.ui", ""));
-        mxMenu.set(mxBuilder->get_menu("menu"));
-        mxMenu->EnableItem(mxMenu->GetItemId("delete"), bEnableDelete);
-        mxMenu->EnableItem(mxMenu->GetItemId("rename"), bEnableRename);
-        mxMenu->RemoveDisabledEntries( true, true );
-        return mxMenu;
-    }
-
-    return nullptr;
 }
-
-void ViewTabListBox_Impl::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
-{
-    if (nSelectedPopupEntry == mxMenu->GetItemId("delete"))
-        DeleteEntries();
-    else if (nSelectedPopupEntry == mxMenu->GetItemId("rename"))
-        EditEntry( FirstSelected() );
-}
-
-void ViewTabListBox_Impl::ClearAll()
-{
-    for ( sal_uLong i = 0; i < GetEntryCount(); ++i )
-        delete static_cast<SvtContentEntry*>(GetEntry(i)->GetUserData());
-    Clear();
-}
-
 
 void ViewTabListBox_Impl::DeleteEntries()
 {
     short eResult = svtools::QUERYDELETE_YES;
-    SvTreeListEntry* pEntry = FirstSelected();
-    OUString aURL;
 
-    while ( pEntry )
-    {
-        SvTreeListEntry *pCurEntry = pEntry;
-        pEntry = NextSelected( pEntry );
-
-        if ( pCurEntry->GetUserData() )
-            aURL = static_cast<SvtContentEntry*>(pCurEntry->GetUserData())->maURL;
-
-        if ( aURL.isEmpty() )
-            continue;
+    mxTreeView->selected_foreach([this, &eResult](weld::TreeIter& rCurEntry){
+        OUString aURL;
+        if (!mxTreeView->get_id(rCurEntry).isEmpty())
+            aURL = reinterpret_cast<SvtContentEntry*>(mxTreeView->get_id(rCurEntry).toInt64())->maURL;
+        if (aURL.isEmpty())
+        {
+            mxTreeView->unselect(rCurEntry);
+            return false;
+        }
 
         bool canDelete = true;
         try
@@ -611,15 +622,18 @@ void ViewTabListBox_Impl::DeleteEntries()
         }
 
         if (!canDelete)
-            continue; // process next entry
+        {
+            mxTreeView->unselect(rCurEntry);
+            return false; // process next entry
+        }
 
         if ( eResult != svtools::QUERYDELETE_ALL )
         {
             INetURLObject aObj( aURL );
             svtools::QueryDeleteDlg_Impl aDlg(
-                GetFrameWeld(), aObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset));
+                mxTreeView.get(), aObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset));
 
-            if ( GetSelectionCount() > 1 )
+            if (mxTreeView->count_selected_rows() > 1)
                 aDlg.EnableAllButton();
 
             eResult = aDlg.run();
@@ -630,22 +644,33 @@ void ViewTabListBox_Impl::DeleteEntries()
         {
             if ( Kill( aURL ) )
             {
-                delete static_cast<SvtContentEntry*>(pCurEntry->GetUserData());
-                GetModel()->Remove( pCurEntry );
+                delete reinterpret_cast<SvtContentEntry*>(mxTreeView->get_id(rCurEntry).toInt64());
                 mpParent->EntryRemoved( aURL );
             }
         }
-    }
+
+        return false;
+    });
+
+    mxTreeView->remove_selection();
 }
 
-
-bool ViewTabListBox_Impl::EditedEntry( SvTreeListEntry* pEntry,
-                                 const OUString& rNewText )
+IMPL_LINK(ViewTabListBox_Impl, EditedEntryHdl, const IterString&, rIterString, bool)
 {
+    mbEditing = false;
+
+    mxTreeView->connect_editing(Link<const weld::TreeIter&, bool>(), Link<const IterString&, bool>());
+
+    const weld::TreeIter& rEntry = rIterString.first;
+    OUString sNewText = rIterString.second;
+
+    if (sNewText.isEmpty())
+        return false;
+
     bool bRet = false;
 
     OUString aURL;
-    SvtContentEntry* pData = static_cast<SvtContentEntry*>(pEntry->GetUserData());
+    SvtContentEntry* pData = reinterpret_cast<SvtContentEntry*>(mxTreeView->get_id(rEntry).toInt64());
 
     if ( pData )
         aURL = pData->maURL;
@@ -680,14 +705,14 @@ bool ViewTabListBox_Impl::EditedEntry( SvTreeListEntry* pEntry,
         if ( canRename )
         {
             Any aValue;
-            aValue <<= rNewText;
+            aValue <<= sNewText;
             aContent.setPropertyValue( aPropName, aValue );
-            mpParent->EntryRenamed( aURL, rNewText );
+            mpParent->EntryRenamed(aURL, sNewText);
 
             if (pData)
                 pData->maURL = aURL;
 
-            pEntry->SetUserData( pData );
+            mxTreeView->set_id(rEntry, OUString::number(reinterpret_cast<sal_Int64>(pData)));
 
             bRet = true;
         }
@@ -698,7 +723,6 @@ bool ViewTabListBox_Impl::EditedEntry( SvTreeListEntry* pEntry,
 
     return bRet;
 }
-
 
 void ViewTabListBox_Impl::DoQuickSearch( sal_Unicode rChar )
 {
@@ -721,63 +745,16 @@ void ViewTabListBox_Impl::DoQuickSearch( sal_Unicode rChar )
         bFound = mpParent->SearchNextEntry( mnSearchIndex, maQuickSearchText, true );
     }
 
-    if ( bFound )
+    if (bFound)
     {
-        SvTreeListEntry* pEntry = GetEntry( mnSearchIndex );
-        if ( pEntry )
-        {
-            SelectAll( false );
-            Select( pEntry );
-            SetCurEntry( pEntry );
-            MakeVisible( pEntry );
-        }
+        mxTreeView->unselect_all();
+        mxTreeView->select(mnSearchIndex);
+        mxTreeView->set_cursor(mnSearchIndex);
+        mxTreeView->scroll_to_row(mnSearchIndex);
     }
 
     maResetQuickSearch.Start();
 }
-
-
-bool ViewTabListBox_Impl::DoubleClickHdl()
-{
-    SvHeaderTabListBox::DoubleClickHdl();
-    return false;
-        // this means "do no additional handling". Especially this means that the SvImpLBox does not
-        // recognize that the entry at the double click position change after the handler call (which is
-        // the case if in the handler, our content was replaced)
-        // If it _would_ recognize this change, it would take this as a reason to select the entry, again
-        // - which is not what in the case of content replace
-        // (I really doubt that this behaviour of the SvImpLBox does make any sense at all, but
-        // who knows ...)
-}
-
-OUString ViewTabListBox_Impl::GetAccessibleObjectDescription( ::vcl::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
-{
-    OUString sRet = SvHeaderTabListBox::GetAccessibleObjectDescription( _eType, _nPos );
-    if ( ::vcl::BBTYPE_TABLECELL == _eType )
-    {
-        sal_Int32 nRow = -1;
-        const sal_uInt16 nColumnCount = GetColumnCount();
-        if (nColumnCount > 0)
-            nRow = _nPos / nColumnCount;
-        SvTreeListEntry* pEntry = GetEntry( nRow );
-        if ( pEntry )
-        {
-            SvtContentEntry* pData = static_cast<SvtContentEntry*>(pEntry->GetUserData());
-            if ( pData )
-            {
-                const OUString sVar1( "%1" );
-                const OUString sVar2( "%2" );
-                OUString aText( msAccessibleDescText );
-                aText = aText.replaceAll( sVar1, pData->mbIsFolder ? msFolder : msFile );
-                aText = aText.replaceAll( sVar2, pData->maURL );
-                sRet += aText;
-            }
-        }
-    }
-
-    return sRet;
-}
-
 
 bool ViewTabListBox_Impl::Kill( const OUString& rContent )
 {
@@ -802,10 +779,10 @@ bool ViewTabListBox_Impl::Kill( const OUString& rContent )
     return bRet;
 }
 
-SvtFileView::SvtFileView( vcl::Window* pParent, WinBits nBits,
-                          bool bOnlyFolder, bool bMultiSelection, bool bShowType ) :
-
-    Control( pParent, nBits )
+SvtFileView::SvtFileView(weld::Window* pTopLevel,
+                         std::unique_ptr<weld::TreeView> xTreeView,
+                         std::unique_ptr<weld::IconView> xIconView,
+                         bool bOnlyFolder, bool bMultiSelection, bool bShowType )
 {
     FileViewFlags nFlags = FileViewFlags::NONE;
     if ( bMultiSelection )
@@ -815,31 +792,27 @@ SvtFileView::SvtFileView( vcl::Window* pParent, WinBits nBits,
 
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler(
-        InteractionHandler::createWithParent(xContext, VCLUnoHelper::GetInterface(GetParentDialog())), UNO_QUERY_THROW );
+        InteractionHandler::createWithParent(xContext, pTopLevel->GetXWindow()), UNO_QUERY_THROW);
     Reference < XCommandEnvironment > xCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
-    mpImpl.reset( new SvtFileView_Impl( this, xCmdEnv, nFlags, bOnlyFolder ) );
-    mpImpl->mpView->ForbidEmptyText();
+    mpImpl.reset(new SvtFileView_Impl(this, pTopLevel, std::move(xTreeView), std::move(xIconView), xCmdEnv, nFlags, bOnlyFolder));
 
-    HeaderBar* pHeaderBar = mpImpl->mpView->GetHeaderBar();
-    pHeaderBar->SetSelectHdl( LINK( this, SvtFileView, HeaderSelect_Impl ) );
-    pHeaderBar->SetEndDragHdl( LINK( this, SvtFileView, HeaderEndDrag_Impl ) );
+    weld::TreeView* pView = mpImpl->mxView->getWidget();
+    pView->connect_column_clicked(LINK(this, SvtFileView, HeaderSelect_Impl));
+}
+
+void SvtFileView::grab_focus()
+{
+    mpImpl->grab_focus();
+}
+
+bool SvtFileView::has_focus() const
+{
+    return mpImpl->has_focus();
 }
 
 SvtFileView::~SvtFileView()
 {
-    disposeOnce();
-}
-
-void SvtFileView::dispose()
-{
-    mpImpl.reset();
-    Control::dispose();
-}
-
-Size SvtFileView::GetOptimalSize() const
-{
-    return LogicToPixel(Size(208, 50), MapMode(MapUnit::MapAppFont));
 }
 
 void SvtFileView::SetViewMode( FileViewMode eMode )
@@ -847,40 +820,54 @@ void SvtFileView::SetViewMode( FileViewMode eMode )
     mpImpl->SetViewMode( eMode );
 }
 
-OUString SvtFileView::GetURL( SvTreeListEntry const * pEntry )
+OUString SvtFileView::GetURL(const weld::TreeIter& rEntry) const
 {
-    OUString aURL;
-    if ( pEntry && pEntry->GetUserData() )
-        aURL = static_cast<SvtContentEntry*>(pEntry->GetUserData())->maURL;
-    return aURL;
+    SvtContentEntry* pEntry;
+    if (mpImpl->mxView->get_visible())
+        pEntry = reinterpret_cast<SvtContentEntry*>(mpImpl->mxView->get_id(rEntry).toInt64());
+    else
+        pEntry = reinterpret_cast<SvtContentEntry*>(mpImpl->mxIconView->get_id(rEntry).toInt64());
+    if (pEntry)
+        return pEntry->maURL;
+    return OUString();
 }
-
 
 OUString SvtFileView::GetCurrentURL() const
 {
+    SvtContentEntry* pEntry = nullptr;
     OUString aURL;
-    SvTreeListEntry* pEntry = mpImpl->mpCurView->FirstSelected();
-    if ( pEntry && pEntry->GetUserData() )
-        aURL = static_cast<SvtContentEntry*>(pEntry->GetUserData())->maURL;
+    if (mpImpl->mxView->get_visible())
+    {
+        std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxView->make_iterator();
+        if (mpImpl->mxView->get_selected(xEntry.get()))
+            pEntry = reinterpret_cast<SvtContentEntry*>(mpImpl->mxView->get_id(*xEntry).toInt64());
+    }
+    else
+    {
+        std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxIconView->make_iterator();
+        if (mpImpl->mxIconView->get_selected(xEntry.get()))
+            pEntry = reinterpret_cast<SvtContentEntry*>(mpImpl->mxIconView->get_id(*xEntry).toInt64());
+    }
+    if (pEntry)
+        aURL = pEntry->maURL;
     return aURL;
 }
 
-
 void SvtFileView::CreatedFolder( const OUString& rUrl, const OUString& rNewFolder )
 {
-    OUString sEntry = mpImpl->FolderInserted( rUrl, rNewFolder );
+    const SortingData_Impl& rEntry = mpImpl->FolderInserted( rUrl, rNewFolder );
 
-    SvTreeListEntry* pEntry = mpImpl->mpView->InsertEntry( sEntry, mpImpl->maFolderImage, mpImpl->maFolderImage );
-    SvtContentEntry* pUserData = new SvtContentEntry( rUrl, true );
-    pEntry->SetUserData( pUserData );
-    mpImpl->mpView->MakeVisible( pEntry );
+    mpImpl->maEntries.emplace_back(std::make_unique<SvtContentEntry>(rUrl, true));
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(mpImpl->maEntries.back().get())));
 
-    SvTreeListEntry* pEntry2 = mpImpl->mpIconView->InsertEntry( sEntry.getToken( 0, '\t' ), mpImpl->maFolderImage, mpImpl->maFolderImage );
-    SvtContentEntry* pUserData2 = new SvtContentEntry( rUrl, true );
-    pEntry2->SetUserData( pUserData2 );
-    mpImpl->mpIconView->MakeVisible( pEntry2 );
+    std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxView->make_iterator();
+    mpImpl->mxView->insert(rEntry.maDisplayName, sId, mpImpl->maFolderImage, *xEntry);
+    mpImpl->mxView->scroll_to_row(*xEntry);
+
+    std::unique_ptr<weld::TreeIter> xIconEntry = mpImpl->mxIconView->make_iterator();
+    mpImpl->mxIconView->insert(-1, &rEntry.maDisplayName, &sId, &mpImpl->maFolderImage, xIconEntry.get());
+    mpImpl->mxIconView->scroll_to_item(*xEntry);
 }
-
 
 FileViewResult SvtFileView::PreviousLevel( const FileViewAsyncAction* pAsyncDescriptor )
 {
@@ -888,11 +875,10 @@ FileViewResult SvtFileView::PreviousLevel( const FileViewAsyncAction* pAsyncDesc
 
     OUString sParentURL;
     if ( GetParentURL( sParentURL ) )
-        eResult = Initialize( sParentURL, mpImpl->maCurrentFilter, pAsyncDescriptor, mpBlackList );
+        eResult = Initialize( sParentURL, mpImpl->maCurrentFilter, pAsyncDescriptor, maBlackList );
 
     return eResult;
 }
-
 
 bool SvtFileView::GetParentURL( OUString& rParentURL ) const
 {
@@ -920,42 +906,31 @@ bool SvtFileView::GetParentURL( OUString& rParentURL ) const
     return bRet;
 }
 
-
-const OString& SvtFileView::GetHelpId( ) const
+OString SvtFileView::get_help_id() const
 {
-    return mpImpl->mpView->GetHelpId( );
+    return mpImpl->mxView->get_help_id();
 }
 
-
-void SvtFileView::SetHelpId( const OString& rHelpId )
+void SvtFileView::set_help_id(const OString& rHelpId)
 {
-    mpImpl->mpView->SetHelpId( rHelpId );
+    mpImpl->mxView->set_help_id(rHelpId);
 }
 
-
-void SvtFileView::SetSizePixel( const Size& rNewSize )
+OUString SvtFileView::get_selected_text() const
 {
-    Control::SetSizePixel( rNewSize );
-    mpImpl->mpView->SetSizePixel( rNewSize );
-    mpImpl->mpIconView->SetSizePixel( rNewSize );
+    if (mpImpl->mxView->get_visible())
+        return mpImpl->mxView->get_selected_text();
+    return mpImpl->mxIconView->get_selected_text();
 }
-
-
-void SvtFileView::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
-{
-    SetPosPixel( rNewPos );
-    SetSizePixel( rNewSize );
-}
-
 
 FileViewResult SvtFileView::Initialize(
     const OUString& rURL,
     const OUString& rFilter,
     const FileViewAsyncAction* pAsyncDescriptor,
-    const css::uno::Sequence< OUString >& rBlackList  )
+    const css::uno::Sequence< OUString >& rBlackList )
 {
-    WaitObject aWaitCursor( this );
-    mpBlackList = rBlackList;
+    weld::WaitObject aWaitCursor(mpImpl->m_pTopLevel);
+    maBlackList = rBlackList;
 
     OUString sPushURL( mpImpl->maViewURL );
 
@@ -984,7 +959,7 @@ FileViewResult SvtFileView::ExecuteFilter( const OUString& rFilter, const FileVi
     mpImpl->maCurrentFilter = rFilter.toAsciiLowerCase();
 
     mpImpl->Clear();
-    FileViewResult eResult = mpImpl->GetFolderContent_Impl( mpImpl->maViewURL, pAsyncDescriptor, mpBlackList );
+    FileViewResult eResult = mpImpl->GetFolderContent_Impl(mpImpl->maViewURL, pAsyncDescriptor, maBlackList);
     OSL_ENSURE( ( eResult != eStillRunning ) || pAsyncDescriptor, "SvtFileView::ExecuteFilter: we told it to read synchronously!" );
     return eResult;
 }
@@ -996,51 +971,43 @@ void SvtFileView::CancelRunningAsyncAction()
 
 void SvtFileView::SetNoSelection()
 {
-    mpImpl->mpCurView->SelectAll( false );
+    mpImpl->mxView->unselect_all();
+    mpImpl->mxIconView->unselect_all();
 }
 
-
-void SvtFileView::GetFocus()
+void SvtFileView::SetSelectHdl(const Link<SvtFileView*,void>& rHdl)
 {
-    Control::GetFocus();
-    if ( mpImpl && mpImpl->mpCurView )
-        mpImpl->mpCurView->GrabFocus();
+    mpImpl->SetSelectHandler(rHdl);
 }
 
-
-void SvtFileView::SetSelectHdl( const Link<SvTreeListBox*,void>& rHdl )
+void SvtFileView::SetDoubleClickHdl(const Link<SvtFileView*,bool>& rHdl)
 {
-    mpImpl->SetSelectHandler( rHdl );
+    mpImpl->SetDoubleClickHandler(rHdl);
 }
-
-
-void SvtFileView::SetDoubleClickHdl( const Link<SvTreeListBox*,bool>& rHdl )
-{
-    mpImpl->mpView->SetDoubleClickHdl( rHdl );
-    mpImpl->mpIconView->SetDoubleClickHdl( rHdl );
-}
-
 
 sal_uLong SvtFileView::GetSelectionCount() const
 {
-    return mpImpl->mpCurView->GetSelectionCount();
+    if (mpImpl->mxView->get_visible())
+        return mpImpl->mxView->count_selected_rows();
+    return mpImpl->mxIconView->count_selected_items();
 }
 
-
-SvTreeListEntry* SvtFileView::FirstSelected() const
+SvtContentEntry* SvtFileView::FirstSelected() const
 {
-    return mpImpl->mpCurView->FirstSelected();
-}
+    if (mpImpl->mxView->get_visible())
+    {
+        SvtContentEntry* pRet = nullptr;
+        std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxView->make_iterator();
+        if (mpImpl->mxView->get_selected(xEntry.get()))
+            pRet = reinterpret_cast<SvtContentEntry*>(mpImpl->mxView->get_id(*xEntry).toInt64());
+        return pRet;
+    }
 
-
-SvTreeListEntry* SvtFileView::NextSelected( SvTreeListEntry* pEntry ) const
-{
-    return mpImpl->mpCurView->NextSelected( pEntry );
-}
-
-void SvtFileView::EnableAutoResize()
-{
-    mpImpl->mpView->EnableAutoResize();
+    SvtContentEntry* pRet = nullptr;
+    std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxIconView->make_iterator();
+    if (mpImpl->mxIconView->get_selected(xEntry.get()))
+        pRet = reinterpret_cast<SvtContentEntry*>(mpImpl->mxIconView->get_id(*xEntry).toInt64());
+    return pRet;
 }
 
 const OUString& SvtFileView::GetViewURL() const
@@ -1063,92 +1030,53 @@ void SvtFileView::EndInplaceEditing()
     return mpImpl->EndEditing();
 }
 
-IMPL_LINK( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar, void )
+IMPL_LINK(SvtFileView, HeaderSelect_Impl, int, nColumn, void)
 {
-    DBG_ASSERT( pBar, "no headerbar" );
-    sal_uInt16 nItemID = pBar->GetCurItemId();
+    sal_uInt16 nItemID = nColumn + 1;
+    // skip "TYPE"
+    if (!mpImpl->mxView->TypeColumnVisible() && nItemID != COLUMN_TITLE)
+        ++nItemID;
 
-    HeaderBarItemBits nBits;
+    weld::TreeView* pView = mpImpl->mxView->getWidget();
+    bool bSortAtoZ = mpImpl->mbAscending;
 
-    // clear the arrow of the recently used column
-    if ( nItemID != mpImpl->mnSortColumn )
+    //set new arrow positions in headerbar
+    if (nItemID != mpImpl->mnSortColumn)
     {
-        if ( !nItemID )
-        {
-            // first call -> remove arrow from title column,
-            // because another column is the sort column
-            nItemID = mpImpl->mnSortColumn;
-            mpImpl->mnSortColumn = COLUMN_TITLE;
-        }
-        nBits = pBar->GetItemBits( mpImpl->mnSortColumn );
-        nBits &= ~HeaderBarItemBits( HeaderBarItemBits::UPARROW | HeaderBarItemBits::DOWNARROW );
-        pBar->SetItemBits( mpImpl->mnSortColumn, nBits );
-    }
-
-    nBits = pBar->GetItemBits( nItemID );
-
-    bool bUp = ( ( nBits & HeaderBarItemBits::UPARROW ) == HeaderBarItemBits::UPARROW );
-
-    if ( bUp )
-    {
-        nBits &= ~HeaderBarItemBits::UPARROW;
-        nBits |= HeaderBarItemBits::DOWNARROW;
+        // remove old indicator, new will be created in OpenFolder_Impl
+        pView->set_sort_indicator(TRISTATE_INDET, mpImpl->GetSortColumn());
     }
     else
-    {
-        nBits &= ~HeaderBarItemBits::DOWNARROW;
-        nBits |= HeaderBarItemBits::UPARROW;
-    }
+        bSortAtoZ = !bSortAtoZ;
 
-    pBar->SetItemBits( nItemID, nBits );
-    mpImpl->Resort_Impl( nItemID, !bUp );
+    mpImpl->Resort_Impl(nItemID, bSortAtoZ);
 }
-
-
-IMPL_LINK( SvtFileView, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
-{
-    if ( pBar->IsItemMode() )
-        return;
-
-    Size aSize;
-    sal_uInt16 nTabs = pBar->GetItemCount();
-    long nTmpSize = 0;
-
-    for ( sal_uInt16 i = 1; i <= nTabs; ++i )
-    {
-        long nWidth = pBar->GetItemSize(i);
-        aSize.setWidth(  nWidth + nTmpSize );
-        nTmpSize += nWidth;
-        mpImpl->mpView->SetTab( i, aSize.Width(), MapUnit::MapPixel );
-    }
-}
-
 
 OUString SvtFileView::GetConfigString() const
 {
-    OUString sRet;
-    HeaderBar* pBar = mpImpl->mpView->GetHeaderBar();
-    DBG_ASSERT( pBar, "invalid headerbar" );
-
     // sort order
-    sRet += OUString::number( mpImpl->mnSortColumn ) + ";";
-    HeaderBarItemBits nBits = pBar->GetItemBits( mpImpl->mnSortColumn );
-    bool bUp = ( ( nBits & HeaderBarItemBits::UPARROW ) == HeaderBarItemBits::UPARROW );
+    OUString sRet = OUString::number( mpImpl->mnSortColumn ) + ";";
+
+    bool bUp = mpImpl->mbAscending;
     sRet += bUp ? OUString("1") : OUString("0");
     sRet += ";";
 
-    sal_uInt16 nCount = pBar->GetItemCount();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    weld::TreeView* pView = mpImpl->mxView->getWidget();
+    sal_uInt16 nCount = mpImpl->mxView->TypeColumnVisible() ? 4 : 3;
+    for (sal_uInt16 i = 0; i < nCount; ++i)
     {
-        sal_uInt16 nId = pBar->GetItemId(i);
+        sal_uInt16 nId = i + 1;
+        // skip "TYPE"
+        if (!mpImpl->mxView->TypeColumnVisible() && nId != COLUMN_TITLE)
+            ++nId;
+
         sRet += OUString::number( nId )
                 + ";"
-                + OUString::number( pBar->GetItemSize( nId ) )
+                + OUString::number(pView->get_column_width(i))
                 + ";";
     }
 
-    sRet = comphelper::string::stripEnd(sRet, ';');
-    return sRet;
+    return comphelper::string::stripEnd(sRet, ';');
 }
 
 ::std::vector< SvtContentEntry > SvtFileView::GetContent()
@@ -1164,83 +1092,68 @@ OUString SvtFileView::GetConfigString() const
     return aContent;
 }
 
-void SvtFileView::SetConfigString( const OUString& rCfgStr )
+void SvtFileView::SetConfigString(const OUString& rCfgStr)
 {
-    HeaderBar* pBar = mpImpl->mpView->GetHeaderBar();
-    DBG_ASSERT( pBar, "invalid headerbar" );
-
     sal_Int32 nIdx = 0;
     mpImpl->mnSortColumn = static_cast<sal_uInt16>(rCfgStr.getToken( 0, ';', nIdx ).toInt32());
-    bool bUp = static_cast<bool>(static_cast<sal_uInt16>(rCfgStr.getToken( 0, ';', nIdx ).toInt32()));
-    HeaderBarItemBits nBits = pBar->GetItemBits( mpImpl->mnSortColumn );
+    mpImpl->mbAscending = static_cast<bool>(static_cast<sal_uInt16>(rCfgStr.getToken( 0, ';', nIdx ).toInt32()));
 
-    if ( bUp )
-    {
-        nBits &= ~HeaderBarItemBits::UPARROW;
-        nBits |= HeaderBarItemBits::DOWNARROW;
-    }
-    else
-    {
-        nBits &= ~HeaderBarItemBits::DOWNARROW;
-        nBits |= HeaderBarItemBits::UPARROW;
-    }
-    pBar->SetItemBits( mpImpl->mnSortColumn, nBits );
+    std::vector<int> aWidths(mpImpl->mxView->TypeColumnVisible() ? 4 : 3, -1);
 
     while ( nIdx != -1 )
     {
         sal_uInt16 nItemId = static_cast<sal_uInt16>(rCfgStr.getToken( 0, ';', nIdx ).toInt32());
-        pBar->SetItemSize( nItemId, rCfgStr.getToken( 0, ';', nIdx ).toInt32() );
+
+        int nWidth = rCfgStr.getToken( 0, ';', nIdx ).toInt32();
+
+        // skip "TYPE"
+        if (!mpImpl->mxView->TypeColumnVisible() && nItemId != COLUMN_TITLE)
+            --nItemId;
+        int nColumn = nItemId - 1;
+
+        if (nColumn >= 0 && static_cast<unsigned int>(nColumn) < aWidths.size())
+            aWidths[nColumn] = nWidth;
     }
 
-    HeaderSelect_Impl( pBar );
-    HeaderEndDrag_Impl( pBar );
+    weld::TreeView* pView = mpImpl->mxView->getWidget();
+    pView->set_column_fixed_widths(aWidths);
 }
-
-
-void SvtFileView::StateChanged( StateChangedType nStateChange )
-{
-    if ( nStateChange == StateChangedType::Enable )
-        Invalidate();
-    Control::StateChanged( nStateChange );
-}
-
 
 // class SvtFileView_Impl
-
-
-SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommandEnvironment > const & xEnv, FileViewFlags nFlags, bool bOnlyFolder )
-
-    :mpAntiImpl                 ( pAntiImpl )
-    ,m_eAsyncActionResult       ( ::svt::EnumerationResult::ERROR )
-    ,m_bRunningAsyncAction      ( false )
-    ,m_bAsyncActionCancelled    ( false )
-    ,mnSortColumn               ( COLUMN_TITLE )
-    ,mbAscending                ( true )
-    ,mbOnlyFolder               ( bOnlyFolder )
-    ,mnSuspendSelectCallback    ( 0 )
-    ,mbIsFirstResort            ( true )
-    ,aIntlWrapper               ( Application::GetSettings().GetLanguageTag() )
-    ,maFolderImage              (StockImage::Yes, RID_BMP_FOLDER)
-    ,mxCmdEnv ( xEnv )
-
+SvtFileView_Impl::SvtFileView_Impl(SvtFileView* pAntiImpl, weld::Window* pTopLevel,
+                                   std::unique_ptr<weld::TreeView> xTreeView,
+                                   std::unique_ptr<weld::IconView> xIconView,
+                                   Reference < XCommandEnvironment > const & xEnv,
+                                   FileViewFlags nFlags, bool bOnlyFolder)
+    : m_pAntiImpl                ( pAntiImpl )
+    , m_eAsyncActionResult       ( ::svt::EnumerationResult::ERROR )
+    , m_bRunningAsyncAction      ( false )
+    , m_bAsyncActionCancelled    ( false )
+    , m_pTopLevel                ( pTopLevel )
+    , mxView(new ViewTabListBox_Impl(std::move(xTreeView), pTopLevel, this, nFlags))
+    , mxIconView(std::move(xIconView))
+    , mnSortColumn               ( COLUMN_TITLE )
+    , mbAscending                ( true )
+    , mbOnlyFolder               ( bOnlyFolder )
+    , mnSuspendSelectCallback    ( 0 )
+    , mbIsFirstResort            ( true )
+    , aIntlWrapper               ( Application::GetSettings().GetLanguageTag() )
+    , maFolderImage              (RID_BMP_FOLDER)
+    , mxCmdEnv ( xEnv )
 {
-    mpView = VclPtr<ViewTabListBox_Impl>::Create( mpAntiImpl, this, nFlags );
-    mpCurView = mpView;
-    mpIconView = VclPtr<IconView>::Create( mpAntiImpl, WB_TABSTOP );
-    mpIconView->Hide();
-    mpView->EnableCellFocus();
-}
+    weld::TreeView* pWidget = mxView->getWidget();
 
+    // set the width to something small so its the parent that decides the final
+    // width
+    Size aSize(42, pWidget->get_height_rows(7));
+    pWidget->set_size_request(aSize.Width(), aSize.Height());
+    mxIconView->set_size_request(aSize.Width(), aSize.Height());
+}
 
 SvtFileView_Impl::~SvtFileView_Impl()
 {
     Clear();
-    mpView.disposeAndClear();
-    mpCurView.clear();
-    mpIconView.disposeAndClear();
-    mpAntiImpl.clear();
 }
-
 
 void SvtFileView_Impl::Clear()
 {
@@ -1248,7 +1161,6 @@ void SvtFileView_Impl::Clear()
 
     maContent.clear();
 }
-
 
 FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     const OUString& rFolder,
@@ -1265,7 +1177,6 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     return GetFolderContent_Impl( aFolder, pAsyncDescriptor, rBlackList );
 }
 
-
 FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     const FolderDescriptor& _rFolder,
     const FileViewAsyncAction* pAsyncDescriptor,
@@ -1276,7 +1187,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
 
     OSL_ENSURE( !m_xContentEnumerator.is(), "SvtFileView_Impl::GetFolderContent_Impl: still running another enumeration!" );
     m_xContentEnumerator.set(new ::svt::FileViewContentEnumerator(
-        mpView->GetCommandEnvironment(), maContent, maMutex));
+        mxView->GetCommandEnvironment(), maContent, maMutex));
         // TODO: should we cache and re-use this thread?
 
     if ( !pAsyncDescriptor )
@@ -1346,8 +1257,9 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
 
         m_aCurrentAsyncActionHandler = pAsyncDescriptor->aFinishHandler;
         DBG_ASSERT( m_aCurrentAsyncActionHandler.IsSet(), "SvtFileView_Impl::GetFolderContent_Impl: nobody interested when it's finished?" );
-        mpView->ClearAll();
-        mpIconView->ClearAll();
+        maEntries.clear();
+        mxView->clear();
+        mxIconView->clear();
         return eStillRunning;
     }
 
@@ -1364,7 +1276,6 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     SAL_WARN( "svtools.contnr", "SvtFileView_Impl::GetFolderContent_Impl: unreachable!" );
     return eFailure;
 }
-
 
 void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 {
@@ -1395,89 +1306,104 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
         maContent.end());
 }
 
-
-IMPL_LINK( SvtFileView_Impl, SelectionMultiplexer, SvTreeListBox*, _pSource, void )
+IMPL_LINK_NOARG(SvtFileView_Impl, ChangedHdl, weld::TreeView&, void)
 {
     if (!mnSuspendSelectCallback)
-        m_aSelectHandler.Call( _pSource );
+        m_aSelectHandler.Call(m_pAntiImpl);
 }
 
-
-void SvtFileView_Impl::SetSelectHandler( const Link<SvTreeListBox*,void>& _rHdl )
+IMPL_LINK_NOARG(SvtFileView_Impl, SelectionChangedHdl, weld::IconView&, void)
 {
-    m_aSelectHandler = _rHdl;
-
-    Link<SvTreeListBox*,void> aMasterHandler;
-    if ( m_aSelectHandler.IsSet() )
-        aMasterHandler = LINK( this, SvtFileView_Impl, SelectionMultiplexer );
-
-    mpView->SetSelectHdl( aMasterHandler );
-    mpIconView->SetSelectHdl( aMasterHandler );
+    if (!mnSuspendSelectCallback)
+        m_aSelectHandler.Call(m_pAntiImpl);
 }
 
-
-void SvtFileView_Impl::InitSelection()
+void SvtFileView_Impl::SetSelectHandler(const Link<SvtFileView*,void>& rHdl)
 {
-    mpCurView->SelectAll( false );
-    SvTreeListEntry* pFirst = mpCurView->First();
-    if ( pFirst )
-        mpCurView->SetCursor( pFirst, true );
+    m_aSelectHandler = rHdl;
+
+    mxView->connect_changed(LINK(this, SvtFileView_Impl, ChangedHdl));
+    mxIconView->connect_selection_changed(LINK(this, SvtFileView_Impl, SelectionChangedHdl));
 }
 
+IMPL_LINK_NOARG(SvtFileView_Impl, RowActivatedHdl, weld::TreeView&, bool)
+{
+    return maDoubleClickHandler.Call(m_pAntiImpl);
+}
+
+IMPL_LINK_NOARG(SvtFileView_Impl, ItemActivatedHdl, weld::IconView&, bool)
+{
+    return maDoubleClickHandler.Call(m_pAntiImpl);
+}
+
+void SvtFileView_Impl::SetDoubleClickHandler(const Link<SvtFileView*,bool>& rHdl)
+{
+    maDoubleClickHandler = rHdl;
+
+    mxView->connect_row_activated(LINK(this, SvtFileView_Impl, RowActivatedHdl));
+    mxIconView->connect_item_activated(LINK(this, SvtFileView_Impl, ItemActivatedHdl));
+}
 
 void SvtFileView_Impl::OpenFolder_Impl()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    mpView->SetUpdateMode( false );
-    mpIconView->SetUpdateMode( false );
-    mpView->ClearAll();
-    mpIconView->ClearAll();
+    mxView->freeze();
+    mxIconView->freeze();
+    maEntries.clear();
+    mxView->clear();
+    mxIconView->clear();
 
     for (auto const& elem : maContent)
     {
-        if ( mbOnlyFolder && ! elem->mbIsFolder )
+        if (mbOnlyFolder && !elem->mbIsFolder)
             continue;
 
         // insert entry and set user data
-        SvTreeListEntry* pEntry = mpView->InsertEntry( elem->maDisplayText,
-                                                   elem->maImage,
-                                                   elem->maImage );
-
-        SvTreeListEntry* pEntry2 = mpIconView->InsertEntry( elem->maDisplayText.getToken( 0, '\t' ),
-                                                   elem->maImage, elem->maImage );
-
-        SvtContentEntry* pUserData = new SvtContentEntry( elem->maTargetURL,
-                                                          elem->mbIsFolder );
-        SvtContentEntry* pUserData2 = new SvtContentEntry( elem->maTargetURL,
-                                                          elem->mbIsFolder );
-
-        pEntry->SetUserData( pUserData );
-        pEntry2->SetUserData( pUserData2 );
+        maEntries.emplace_back(std::make_unique<SvtContentEntry>(elem->maTargetURL, elem->mbIsFolder));
+        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(maEntries.back().get())));
+        mxView->append(sId, elem->maDisplayName, elem->maType, elem->maDisplaySize, elem->maDisplayDate, elem->maImage);
+        mxIconView->append(sId, elem->maDisplayName, elem->maImage);
     }
 
-    InitSelection();
-
     ++mnSuspendSelectCallback;
-    mpView->SetUpdateMode( true );
-    mpIconView->SetUpdateMode( true );
+    mxView->thaw();
+
+    //set sort indicator
+    weld::TreeView* pView = mxView->getWidget();
+    pView->set_sort_indicator(mbAscending ? TRISTATE_TRUE : TRISTATE_FALSE, GetSortColumn());
+
+    mxIconView->thaw();
     --mnSuspendSelectCallback;
 
     ResetCursor();
 }
 
-
 void SvtFileView_Impl::ResetCursor()
 {
-    // deselect
-    SvTreeListEntry* pEntry = mpCurView->FirstSelected();
-    if ( pEntry )
-        mpCurView->Select( pEntry, false );
-    // set cursor to the first entry
-    mpCurView->SetCursor( mpCurView->First(), true );
-    mpCurView->Update();
+    if (mxView->get_visible())
+    {
+        // deselect
+        mxView->unselect_all();
+        std::unique_ptr<weld::TreeIter> xFirst = mxView->make_iterator();
+        if (mxView->get_iter_first(*xFirst))
+        {
+            // set cursor to the first entry
+            mxView->set_cursor(*xFirst);
+        }
+    }
+    else
+    {
+        // deselect
+        mxIconView->unselect_all();
+        std::unique_ptr<weld::TreeIter> xFirst = mxIconView->make_iterator();
+        if (mxIconView->get_iter_first(*xFirst))
+        {
+            // set cursor to the first entry
+            mxIconView->set_cursor(*xFirst);
+        }
+    }
 }
-
 
 void SvtFileView_Impl::CancelRunningAsyncAction()
 {
@@ -1551,48 +1477,43 @@ void SvtFileView_Impl::implEnumerationSuccess()
     SortFolderContent_Impl();
     CreateDisplayText_Impl();
     OpenFolder_Impl();
-    maOpenDoneLink.Call( mpAntiImpl );
+    maOpenDoneLink.Call( m_pAntiImpl );
 }
 
-
-void SvtFileView_Impl::ReplaceTabWithString( OUString& aValue )
+OUString SvtFileView_Impl::ReplaceTabWithString(const OUString& rValue)
 {
     OUString const aTab( "\t" );
     OUString const aTabString( "%09" );
+
     sal_Int32 iPos;
-
+    OUString aValue(rValue);
     while ( ( iPos = aValue.indexOf( aTab ) ) >= 0 )
-       aValue = aValue.replaceAt( iPos, 1, aTabString );
+        aValue = aValue.replaceAt( iPos, 1, aTabString );
+    return aValue;
 }
-
 
 void SvtFileView_Impl::CreateDisplayText_Impl()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    OUString const aTab( "\t" );
     OUString const aDateSep( ", " );
 
     for (auto const& elem : maContent)
     {
         // title, type, size, date
-        OUString aValue = elem->GetTitle();
-        ReplaceTabWithString( aValue );
-        aValue += aTab + elem->maType + aTab;
+        elem->maDisplayName = ReplaceTabWithString(elem->GetTitle());
         // folders don't have a size
         if ( ! elem->mbIsFolder )
-            aValue += CreateExactSizeText( elem->maSize );
-        aValue += aTab;
+            elem->maDisplaySize = CreateExactSizeText( elem->maSize );
         // set the date, but volumes have no date
         if ( ! elem->mbIsFolder || ! elem->mbIsVolume )
         {
             SvtSysLocale aSysLocale;
             const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
-            aValue += rLocaleData.getDate( elem->maModDate )
-                    + aDateSep
-                    + rLocaleData.getTime( elem->maModDate, false );
+            elem->maDisplayDate = rLocaleData.getDate( elem->maModDate )
+                                  + aDateSep
+                                  + rLocaleData.getTime( elem->maModDate, false );
         }
-        elem->maDisplayText = aValue;
 
         // detect image
         if ( elem->mbIsFolder )
@@ -1600,10 +1521,10 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
             ::svtools::VolumeInfo aVolInfo( elem->mbIsVolume, elem->mbIsRemote,
                                             elem->mbIsRemoveable, elem->mbIsFloppy,
                                             elem->mbIsCompactDisc );
-            elem->maImage = SvFileInformationManager::GetFolderImage( aVolInfo );
+            elem->maImage = SvFileInformationManager::GetFolderImageId(aVolInfo);
         }
         else
-            elem->maImage = SvFileInformationManager::GetFileImage( INetURLObject( elem->maTargetURL ) );
+            elem->maImage = SvFileInformationManager::GetFileImageId(INetURLObject(elem->maTargetURL));
     }
 }
 
@@ -1617,12 +1538,14 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, bool bAscending )
          return;
 
     // reset the quick search index
-    mpView->ResetQuickSearch_Impl( nullptr );
+    mxView->ResetQuickSearch_Impl( nullptr );
+
+    std::unique_ptr<weld::TreeIter> xEntry(mxView->make_iterator());
+    bool bEntry = mxView->get_cursor(xEntry.get());
 
     OUString aEntryURL;
-    SvTreeListEntry* pEntry = mpView->GetCurEntry();
-    if ( pEntry && pEntry->GetUserData() )
-        aEntryURL = static_cast<SvtContentEntry*>(pEntry->GetUserData())->maURL;
+    if (bEntry && !mxView->get_id(*xEntry).isEmpty())
+        aEntryURL = reinterpret_cast<SvtContentEntry*>(mxView->get_id(*xEntry).toInt64())->maURL;
 
     mnSortColumn = nColumn;
     mbAscending = bAscending;
@@ -1632,20 +1555,17 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, bool bAscending )
 
     if ( !mbIsFirstResort )
     {
-        sal_uLong nPos = GetEntryPos( aEntryURL );
-        if ( nPos < mpView->GetEntryCount() )
+        int nPos = GetEntryPos( aEntryURL );
+        if (nPos != -1 && nPos < mxView->n_children())
         {
-            pEntry = mpView->GetEntry( nPos );
-
             ++mnSuspendSelectCallback;  // #i15668#
-            mpView->SetCurEntry( pEntry );
+            mxView->set_cursor(nPos);
             --mnSuspendSelectCallback;
         }
     }
     else
         mbIsFirstResort = false;
 }
-
 
 static bool                     gbAscending = true;
 static sal_Int16                gnColumn = COLUMN_TITLE;
@@ -1763,11 +1683,7 @@ void SvtFileView_Impl::EntryRenamed( OUString& rURL,
     if (aFoundElem != maContent.end())
     {
         (*aFoundElem)->SetNewTitle( rTitle );
-        OUString aDisplayText = (*aFoundElem)->maDisplayText;
-        sal_Int32 nIndex = aDisplayText.indexOf( '\t' );
-
-        if ( nIndex > 0 )
-            (*aFoundElem)->maDisplayText = aDisplayText.replaceAt( 0, nIndex, rTitle );
+        (*aFoundElem)->maDisplayName = ReplaceTabWithString(rTitle);
 
         INetURLObject aURLObj( rURL );
         aURLObj.setName( rTitle, INetURLObject::EncodeMechanism::All );
@@ -1778,8 +1694,7 @@ void SvtFileView_Impl::EntryRenamed( OUString& rURL,
     }
 }
 
-
-OUString SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& rTitle )
+const SortingData_Impl& SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& rTitle )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -1792,68 +1707,52 @@ OUString SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString&
 
     ::svtools::VolumeInfo aVolInfo;
     pData->maType = SvFileInformationManager::GetFolderDescription( aVolInfo );
-    pData->maImage = SvFileInformationManager::GetFolderImage( aVolInfo );
+    pData->maImage = SvFileInformationManager::GetFolderImageId( aVolInfo );
 
-    OUString aValue;
-    OUString const aTab( "\t" );
     OUString const aDateSep( ", " );
 
     // title, type, size, date
-    aValue = pData->GetTitle();
-    ReplaceTabWithString( aValue );
-    aValue += aTab + pData->maType + aTab +
-        // folders don't have a size
-        aTab;
+    pData->maDisplayName = ReplaceTabWithString(pData->GetTitle());
     // set the date
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
-    aValue += rLocaleData.getDate( pData->maModDate )
-            + aDateSep
-            + rLocaleData.getTime( pData->maModDate );
+    pData->maDisplayDate = rLocaleData.getDate( pData->maModDate )
+                           + aDateSep
+                           + rLocaleData.getTime( pData->maModDate );
 
-    pData->maDisplayText = aValue;
     maContent.push_back( std::move(pData) );
 
-    return aValue;
+    return *maContent.back();
 }
 
-
-sal_uLong SvtFileView_Impl::GetEntryPos( const OUString& rURL )
+int SvtFileView_Impl::GetEntryPos(const OUString& rURL)
 {
     ::osl::MutexGuard aGuard( maMutex );
 
     auto aFoundElem = std::find_if(maContent.begin(), maContent.end(),
           [&](const std::unique_ptr<SortingData_Impl> & data) { return data->maTargetURL == rURL; });
-    return aFoundElem != maContent.end()?std::distance(maContent.begin(), aFoundElem):0;
+    return aFoundElem != maContent.end() ? std::distance(maContent.begin(), aFoundElem) : -1;
 }
-
 
 void SvtFileView_Impl::SetViewMode( FileViewMode eMode )
 {
     switch ( eMode )
     {
         case eDetailedList:
-            mpCurView = mpView;
-            mpView->Show();
-            mpView->GetHeaderBar()->Show();
-            mpIconView->Hide();
+            mxView->show();
+            mxIconView->hide();
             break;
 
         case eIcon:
-            mpCurView = mpIconView;
-            mpView->Hide();
-            mpView->GetHeaderBar()->Hide();
-            mpIconView->Show();
+            mxView->hide();
+            mxIconView->show();
             break;
 
         default:
-            mpCurView = mpView;
-            mpView->Show();
-            mpView->GetHeaderBar()->Show();
-            mpIconView->Hide();
+            mxView->show();
+            mxIconView->hide();
     };
 }
-
 
 bool SvtFileView_Impl::SearchNextEntry( sal_uInt32& nIndex, const OUString& rTitle, bool bWrapAround )
 {
@@ -1892,6 +1791,19 @@ namespace {
         if ( pHandler )
             pHandler->onTimeout();
     }
+}
+
+void SvtFileView::selected_foreach(const std::function<bool(weld::TreeIter&)>& func)
+{
+    if (mpImpl->mxView->get_visible())
+        mpImpl->mxView->selected_foreach(func);
+    else
+        mpImpl->mxIconView->selected_foreach(func);
+}
+
+weld::Widget* SvtFileView::identifier() const
+{
+    return mpImpl->mxView->getWidget();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

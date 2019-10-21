@@ -11,9 +11,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/commandenvironment.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/treelistentry.hxx>
-#include <vcl/ptrstyle.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include "contentenumeration.hxx"
 #include "foldertree.hxx"
@@ -21,44 +19,51 @@
 
 using namespace ::com::sun::star::task;
 
-FolderTree::FolderTree( vcl::Window* pParent, WinBits nBits )
-    : SvTreeListBox( pParent, nBits | WB_SORT | WB_TABSTOP )
+FolderTree::FolderTree(std::unique_ptr<weld::TreeView> xTreeView, weld::Window* pTopLevel)
+    : m_xTreeView(std::move(xTreeView))
+    , m_pTopLevel(pTopLevel)
 {
+    m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 24,
+                                  m_xTreeView->get_height_rows(7));
+
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler(
-                InteractionHandler::createWithParent(xContext, VCLUnoHelper::GetInterface(GetParentDialog())), UNO_QUERY_THROW );
+                InteractionHandler::createWithParent(xContext, pTopLevel->GetXWindow()), UNO_QUERY_THROW);
     m_xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
-    Image aFolderImage(StockImage::Yes, RID_BMP_FOLDER);
-    Image aFolderExpandedImage(StockImage::Yes, RID_BMP_FOLDER_OPEN);
-    SetDefaultCollapsedEntryBmp( aFolderImage );
-    SetDefaultExpandedEntryBmp( aFolderExpandedImage );
+    m_xTreeView->connect_expanding(LINK(this, FolderTree, RequestingChildrenHdl));
 }
 
-void FolderTree::RequestingChildren( SvTreeListEntry* pEntry )
+IMPL_LINK(FolderTree, RequestingChildrenHdl, const weld::TreeIter&, rEntry, bool)
 {
-    EnableChildPointerOverwrite( true );
-    SetPointer( PointerStyle::Wait );
-    Invalidate(InvalidateFlags::Update);
+    weld::WaitObject aWait(m_pTopLevel);
 
-    FillTreeEntry( pEntry );
+    FillTreeEntry(rEntry);
 
-    SetPointer( PointerStyle::Arrow );
-    EnableChildPointerOverwrite( false );
+    return true;
 }
 
-void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
+void FolderTree::InsertRootEntry(const OUString& rId, const OUString& rRootLabel)
 {
-    if( !pEntry )
-        return;
+    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+    OUString sFolderImage(RID_BMP_FOLDER);
+    m_xTreeView->insert(nullptr, -1, &rRootLabel, &rId, nullptr, nullptr,
+                        &sFolderImage, true, xEntry.get());
+    m_xTreeView->set_cursor(*xEntry);
+}
 
-    OUString* pURL = static_cast< OUString* >( pEntry->GetUserData() );
+void FolderTree::FillTreeEntry(const weld::TreeIter& rEntry)
+{
+    OUString sURL = m_xTreeView->get_id(rEntry);
+    OUString sFolderImage(RID_BMP_FOLDER);
 
-    if( pURL && m_sLastUpdatedDir != *pURL )
+    if (m_sLastUpdatedDir != sURL)
     {
-        while (SvTreeListEntry* pChild = FirstChild(pEntry))
+        while (m_xTreeView->iter_has_child(rEntry))
         {
-            GetModel()->Remove(pChild);
+            std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(&rEntry));
+            m_xTreeView->iter_children(*xChild);
+            m_xTreeView->remove(*xChild);
         }
 
         ::std::vector< std::unique_ptr<SortingData_Impl> > aContent;
@@ -67,22 +72,19 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
             xContentEnumerator(new FileViewContentEnumerator(
             m_xEnv, aContent, m_aMutex));
 
-        FolderDescriptor aFolder( *pURL );
+        FolderDescriptor aFolder(sURL);
 
         EnumerationResult eResult =
             xContentEnumerator->enumerateFolderContentSync( aFolder, m_aBlackList );
 
-        if ( EnumerationResult::SUCCESS == eResult )
+        if (EnumerationResult::SUCCESS == eResult)
         {
             for(const auto & i : aContent)
             {
-                if( i->mbIsFolder )
-                {
-                    SvTreeListEntry* pNewEntry = InsertEntry( i->GetTitle(), pEntry, true );
-
-                    OUString* sData = new OUString( i->maTargetURL );
-                    pNewEntry->SetUserData( static_cast< void* >( sData ) );
-                }
+                if (!i->mbIsFolder)
+                    continue;
+                m_xTreeView->insert(&rEntry, -1, &i->GetTitle(), &i->maTargetURL,
+                    nullptr, nullptr, &sFolderImage, true, nullptr);
             }
         }
     }
@@ -96,27 +98,30 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
 
 void FolderTree::FillTreeEntry( const OUString & rUrl, const ::std::vector< std::pair< OUString, OUString > >& rFolders )
 {
-    SetTreePath( rUrl );
+    SetTreePath(rUrl);
 
-    SvTreeListEntry* pParent = GetCurEntry();
+    std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator());
+    bool bParent = m_xTreeView->get_cursor(xParent.get());
 
-    if( !(pParent && !IsExpanded( pParent )) )
+    if (!bParent || m_xTreeView->get_row_expanded(*xParent))
         return;
 
-    while (SvTreeListEntry* pChild = FirstChild(pParent))
+    OUString sFolderImage(RID_BMP_FOLDER);
+    while (m_xTreeView->iter_has_child(*xParent))
     {
-        GetModel()->Remove(pChild);
+        std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(xParent.get()));
+        m_xTreeView->iter_children(*xChild);
+        m_xTreeView->remove(*xChild);
     }
 
     for (auto const& folder : rFolders)
     {
-        SvTreeListEntry* pNewEntry = InsertEntry( folder.first, pParent, true  );
-        OUString* sData = new OUString( folder.second );
-        pNewEntry->SetUserData( static_cast< void* >( sData ) );
+        m_xTreeView->insert(xParent.get(), -1, &folder.first, &folder.second,
+            nullptr, nullptr, &sFolderImage, true, nullptr);
     }
 
     m_sLastUpdatedDir = rUrl;
-    Expand( pParent );
+    m_xTreeView->expand_row(*xParent);
 }
 
 void FolderTree::SetTreePath( OUString const & sUrl )
@@ -126,14 +131,15 @@ void FolderTree::SetTreePath( OUString const & sUrl )
 
     OUString sPath = aUrl.GetURLPath( INetURLObject::DecodeMechanism::WithCharset );
 
-    SvTreeListEntry* pEntry = First();
-    bool end = false;
+    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+    bool bEntry = m_xTreeView->get_iter_first(*xEntry);
+    bool bEnd = false;
 
-    while( pEntry && !end )
+    while (bEntry && !bEnd)
     {
-        if( pEntry->GetUserData() )
+        if (!m_xTreeView->get_id(*xEntry).isEmpty())
         {
-            OUString sNodeUrl = *static_cast< OUString* >( pEntry->GetUserData() );
+            OUString sNodeUrl = m_xTreeView->get_id(*xEntry);
 
             INetURLObject aUrlObj( sNodeUrl );
             aUrlObj.setFinalSlash();
@@ -142,19 +148,19 @@ void FolderTree::SetTreePath( OUString const & sUrl )
 
             if( sPath == sNodeUrl )
             {
-                Select( pEntry );
-                end = true;
+                m_xTreeView->select(*xEntry);
+                bEnd = true;
             }
             else if( sPath.startsWith( sNodeUrl ) )
             {
-                if( !IsExpanded( pEntry ) )
-                    Expand( pEntry );
+                if (!m_xTreeView->get_row_expanded(*xEntry))
+                    m_xTreeView->expand_row(*xEntry);
 
-                pEntry = FirstChild( pEntry );
+                bEntry = m_xTreeView->iter_children(*xEntry);
             }
             else
             {
-                pEntry = pEntry->NextSibling();
+                bEntry = m_xTreeView->iter_next_sibling(*xEntry);
             }
         }
         else

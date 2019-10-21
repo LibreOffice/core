@@ -557,8 +557,8 @@ ObjectPage::ObjectPage(weld::Container* pParent, const OString &rName, BrowseMod
 
     m_xDropTarget.reset(new SbTreeListBoxDropTarget(*m_xBasicBox));
 
-    m_xBasicBox->connect_editing_started( LINK( this, ObjectPage, EditingEntryHdl ) );
-    m_xBasicBox->connect_editing_done( LINK( this, ObjectPage, EditedEntryHdl ) );
+    m_xBasicBox->connect_editing(LINK(this, ObjectPage, EditingEntryHdl),
+                                 LINK(this, ObjectPage, EditedEntryHdl));
 
     m_xBasicBox->SetMode( nMode );
     m_xBasicBox->ScanAllEntries();

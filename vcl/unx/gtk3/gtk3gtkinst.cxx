@@ -1907,6 +1907,21 @@ private:
 
     bool signal_button(GdkEventButton* pEvent)
     {
+        Point aPos(pEvent->x, pEvent->y);
+        if (SwapForRTL())
+            aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
+
+        if (gdk_event_triggers_context_menu(reinterpret_cast<GdkEvent*>(pEvent)) && pEvent->type == GDK_BUTTON_PRESS)
+        {
+            //if handled for context menu, stop processing
+            CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, true);
+            if (signal_popup_menu(aCEvt))
+                return true;
+        }
+
+        if (!m_aMousePressHdl.IsSet() && !m_aMouseReleaseHdl.IsSet())
+            return false;
+
         SalEvent nEventType = SalEvent::NONE;
         switch (pEvent->type)
         {
@@ -1952,19 +1967,6 @@ private:
                 break;
             default:
                 return false;
-        }
-
-        Point aPos(pEvent->x, pEvent->y);
-
-        if (SwapForRTL())
-            aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
-
-        if (gdk_event_triggers_context_menu(reinterpret_cast<GdkEvent*>(pEvent)) && pEvent->type == GDK_BUTTON_PRESS)
-        {
-            //if handled for context menu, stop processing
-            CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, true);
-            if (signal_popup_menu(aCEvt))
-                return true;
         }
 
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
@@ -3111,6 +3113,11 @@ public:
         m_aMap.clear();
     }
 
+    GtkMenu* getMenu() const
+    {
+        return m_pMenu;
+    }
+
     virtual ~MenuHelper()
     {
         for (auto& a : m_aMap)
@@ -3305,12 +3312,13 @@ namespace
 
     int getButtonPriority(const OString &rType)
     {
-        static const size_t N_TYPES = 6;
+        static const size_t N_TYPES = 7;
         static const ButtonOrder aDiscardCancelSave[N_TYPES] =
         {
             { "/discard", 0 },
             { "/cancel", 1 },
             { "/no", 2 },
+            { "/open", 3 },
             { "/save", 3 },
             { "/yes", 3 },
             { "/ok", 3 }
@@ -3318,6 +3326,7 @@ namespace
 
         static const ButtonOrder aSaveDiscardCancel[N_TYPES] =
         {
+            { "/open", 0 },
             { "/save", 0 },
             { "/yes", 0 },
             { "/ok", 0 },
@@ -6555,6 +6564,8 @@ public:
         }
     }
 
+    void set_menu(weld::Menu* pMenu);
+
     virtual ~GtkInstanceMenuButton() override
     {
         if (m_pMenuHack)
@@ -6785,6 +6796,14 @@ public:
     }
 };
 
+void GtkInstanceMenuButton::set_menu(weld::Menu* pMenu)
+{
+    GtkInstanceMenu* pPopoverWidget = dynamic_cast<GtkInstanceMenu*>(pMenu);
+    m_pPopover = nullptr;
+    GtkWidget* pMenuWidget = GTK_WIDGET(pPopoverWidget ? pPopoverWidget->getMenu() : nullptr);
+    gtk_menu_button_set_popup(m_pMenuButton, pMenuWidget);
+}
+
 class GtkInstanceToolbar : public GtkInstanceWidget, public virtual weld::Toolbar
 {
 private:
@@ -6914,6 +6933,11 @@ public:
     virtual void set_item_popover(const OString& rIdent, weld::Widget* pPopover) override
     {
         m_aMenuButtonMap[rIdent]->set_popover(pPopover);
+    }
+
+    virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) override
+    {
+        m_aMenuButtonMap[rIdent]->set_menu(pMenu);
     }
 
     virtual ~GtkInstanceToolbar() override
@@ -7136,13 +7160,26 @@ public:
     virtual void set_image(VirtualDevice* pDevice) override
     {
         if (gtk_check_version(3, 20, 0) == nullptr)
-            gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(*pDevice));
-        else
         {
-            GdkPixbuf* pixbuf = getPixbuf(*pDevice);
-            gtk_image_set_from_pixbuf(m_pImage, pixbuf);
-            g_object_unref(pixbuf);
+            if (pDevice)
+                gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(*pDevice));
+            else
+                gtk_image_set_from_surface(m_pImage, nullptr);
+            return;
         }
+
+        GdkPixbuf* pixbuf = pDevice ? getPixbuf(*pDevice) : nullptr;
+        gtk_image_set_from_pixbuf(m_pImage, pixbuf);
+        if (pixbuf)
+            g_object_unref(pixbuf);
+    }
+
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
+    {
+        GdkPixbuf* pixbuf = getPixbuf(rImage);
+        gtk_image_set_from_pixbuf(m_pImage, pixbuf);
+        if (pixbuf)
+            g_object_unref(pixbuf);
     }
 };
 
@@ -8032,6 +8069,15 @@ private:
         pThis->signal_cell_edited(pCell, path, pNewText);
     }
 
+    static void restoreNonEditable(GObject* pCell)
+    {
+        if (g_object_get_data(pCell, "g-lo-RestoreNonEditable"))
+        {
+            g_object_set(pCell, "editable", false, "editable-set", false, nullptr);
+            g_object_set_data(pCell, "g-lo-RestoreNonEditable", reinterpret_cast<gpointer>(false));
+        }
+    }
+
     void signal_cell_edited(GtkCellRendererText* pCell, const gchar *path, const gchar* pNewText)
     {
         GtkTreePath *tree_path = gtk_tree_path_new_from_string(path);
@@ -8047,6 +8093,13 @@ private:
             void* pData = g_object_get_data(G_OBJECT(pCell), "g-lo-CellIndex");
             set(aGtkIter.iter, reinterpret_cast<sal_IntPtr>(pData), sText);
         }
+
+        restoreNonEditable(G_OBJECT(pCell));
+    }
+
+    static void signalCellEditingCanceled(GtkCellRenderer* pCell, gpointer /*widget*/)
+    {
+        restoreNonEditable(G_OBJECT(pCell));
     }
 
     void signal_column_clicked(GtkTreeViewColumn* pClickedColumn)
@@ -8202,6 +8255,7 @@ public:
                     m_aWeightMap[nIndex] = -1;
                     m_aSensitiveMap[nIndex] = -1;
                     g_signal_connect(G_OBJECT(pCellRenderer), "editing-started", G_CALLBACK(signalCellEditingStarted), this);
+                    g_signal_connect(G_OBJECT(pCellRenderer), "editing-canceled", G_CALLBACK(signalCellEditingCanceled), this);
                     g_signal_connect(G_OBJECT(pCellRenderer), "edited", G_CALLBACK(signalCellEdited), this);
                 }
                 else if (GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
@@ -9228,7 +9282,6 @@ public:
         if (!gtk_tree_view_row_expanded(m_pTreeView, path))
             gtk_tree_view_expand_to_path(m_pTreeView, path);
         gtk_tree_path_free(path);
-
     }
 
     virtual void collapse_row(const weld::TreeIter& rIter) override
@@ -9525,6 +9578,27 @@ public:
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
 
+        // allow editing of cells which are not usually editable, so we can have double click
+        // do its usual row-activate but if we explicitly want to edit (remote files dialog)
+        // we can still do that
+        GList *pRenderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(pColumn));
+        for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
+        {
+            GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
+            if (GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
+            {
+                gboolean is_editable(false);
+                g_object_get(pCellRenderer, "editable", &is_editable, nullptr);
+                if (!is_editable)
+                {
+                    g_object_set(pCellRenderer, "editable", true, "editable-set", true, nullptr);
+                    g_object_set_data(G_OBJECT(pCellRenderer), "g-lo-RestoreNonEditable", reinterpret_cast<gpointer>(true));
+                    break;
+                }
+            }
+        }
+        g_list_free(pRenderers);
+
         gtk_tree_view_set_cursor(m_pTreeView, path, pColumn, true);
 
         gtk_tree_path_free(path);
@@ -9612,6 +9686,373 @@ IMPL_LINK_NOARG(GtkInstanceTreeView, async_signal_changed, void*, void)
 IMPL_LINK_NOARG(GtkInstanceTreeView, async_stop_cell_editing, void*, void)
 {
     end_editing();
+}
+
+class GtkInstanceIconView : public GtkInstanceContainer, public virtual weld::IconView
+{
+private:
+    GtkIconView* m_pIconView;
+    GtkTreeStore* m_pTreeStore;
+    std::vector<int> m_aViewColToModelCol;
+    std::vector<int> m_aModelColToViewCol;
+    gint m_nTextCol;
+    gint m_nImageCol;
+    gint m_nIdCol;
+    gulong m_nSelectionChangedSignalId;
+    gulong m_nItemActivatedSignalId;
+    ImplSVEvent* m_pSelectionChangeEvent;
+
+    DECL_LINK(async_signal_selection_changed, void*, void);
+
+    void launch_signal_selection_changed()
+    {
+        //tdf#117991 selection change is sent before the focus change, and focus change
+        //is what will cause a spinbutton that currently has the focus to set its contents
+        //as the spin button value. So any LibreOffice callbacks on
+        //signal-change would happen before the spinbutton value-change occurs.
+        //To avoid this, send the signal-change to LibreOffice to occur after focus-change
+        //has been processed
+        if (m_pSelectionChangeEvent)
+            Application::RemoveUserEvent(m_pSelectionChangeEvent);
+        m_pSelectionChangeEvent = Application::PostUserEvent(LINK(this, GtkInstanceIconView, async_signal_selection_changed));
+    }
+
+    static void signalSelectionChanged(GtkIconView*, gpointer widget)
+    {
+        GtkInstanceIconView* pThis = static_cast<GtkInstanceIconView*>(widget);
+        pThis->launch_signal_selection_changed();
+    }
+
+    void handle_item_activated()
+    {
+        if (signal_item_activated())
+            return;
+    }
+
+    static void signalItemActivated(GtkIconView*, GtkTreePath*, gpointer widget)
+    {
+        GtkInstanceIconView* pThis = static_cast<GtkInstanceIconView*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->handle_item_activated();
+    }
+
+    void insert_item(GtkTreeIter& iter, int pos, const OUString* pId, const OUString* pText, const OUString* pIconName)
+    {
+        gtk_tree_store_insert_with_values(m_pTreeStore, &iter, nullptr, pos,
+                                          m_nTextCol, !pText ? nullptr : OUStringToOString(*pText, RTL_TEXTENCODING_UTF8).getStr(),
+                                          m_nIdCol, !pId ? nullptr : OUStringToOString(*pId, RTL_TEXTENCODING_UTF8).getStr(),
+                                          -1);
+        if (pIconName)
+        {
+            GdkPixbuf* pixbuf = getPixbuf(*pIconName);
+            gtk_tree_store_set(m_pTreeStore, &iter, m_nImageCol, pixbuf, -1);
+            if (pixbuf)
+                g_object_unref(pixbuf);
+        }
+    }
+
+    OUString get(const GtkTreeIter& iter, int col) const
+    {
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        gchar* pStr;
+        gtk_tree_model_get(pModel, const_cast<GtkTreeIter*>(&iter), col, &pStr, -1);
+        OUString sRet(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+        g_free(pStr);
+        return sRet;
+    }
+
+    bool get_selected_iterator(GtkTreeIter* pIter) const
+    {
+        assert(gtk_icon_view_get_model(m_pIconView) && "don't request selection when frozen");
+        bool bRet = false;
+        {
+            GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
+            GList* pList = gtk_icon_view_get_selected_items(m_pIconView);
+            for (GList* pItem = g_list_first(pList); pItem; pItem = g_list_next(pItem))
+            {
+                if (pIter)
+                {
+                    GtkTreePath* path = static_cast<GtkTreePath*>(pItem->data);
+                    gtk_tree_model_get_iter(pModel, pIter, path);
+                }
+                bRet = true;
+                break;
+            }
+            g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
+        }
+        return bRet;
+    }
+
+public:
+    GtkInstanceIconView(GtkIconView* pIconView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceContainer(GTK_CONTAINER(pIconView), pBuilder, bTakeOwnership)
+        , m_pIconView(pIconView)
+        , m_pTreeStore(GTK_TREE_STORE(gtk_icon_view_get_model(m_pIconView)))
+        , m_nTextCol(gtk_icon_view_get_text_column(m_pIconView))
+        , m_nImageCol(gtk_icon_view_get_pixbuf_column(m_pIconView))
+        , m_nSelectionChangedSignalId(g_signal_connect(pIconView, "selection-changed",
+                                      G_CALLBACK(signalSelectionChanged), this))
+        , m_nItemActivatedSignalId(g_signal_connect(pIconView, "item-activated", G_CALLBACK(signalItemActivated), this))
+        , m_pSelectionChangeEvent(nullptr)
+    {
+        m_nIdCol = m_nTextCol + 1;
+    }
+
+    virtual void insert(int pos, const OUString* pText, const OUString* pId, const OUString* pIconName, weld::TreeIter* pRet) override
+    {
+        disable_notify_events();
+        GtkTreeIter iter;
+        insert_item(iter, pos, pId, pText, pIconName);
+        if (pRet)
+        {
+            GtkInstanceTreeIter* pGtkRetIter = static_cast<GtkInstanceTreeIter*>(pRet);
+            pGtkRetIter->iter = iter;
+        }
+        enable_notify_events();
+    }
+
+    virtual OUString get_selected_id() const override
+    {
+        assert(gtk_icon_view_get_model(m_pIconView) && "don't request selection when frozen");
+        GtkTreeIter iter;
+        if (get_selected_iterator(&iter))
+            return get(iter, m_nIdCol);
+        return OUString();
+    }
+
+    virtual void clear() override
+    {
+        disable_notify_events();
+        gtk_tree_store_clear(m_pTreeStore);
+        enable_notify_events();
+    }
+
+    virtual void freeze() override
+    {
+        disable_notify_events();
+        g_object_ref(m_pTreeStore);
+        GtkInstanceContainer::freeze();
+        gtk_icon_view_set_model(m_pIconView, nullptr);
+        enable_notify_events();
+    }
+
+    virtual void thaw() override
+    {
+        disable_notify_events();
+        gtk_icon_view_set_model(m_pIconView, GTK_TREE_MODEL(m_pTreeStore));
+        GtkInstanceContainer::thaw();
+        g_object_unref(m_pTreeStore);
+        enable_notify_events();
+    }
+
+    virtual Size get_size_request() const override
+    {
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+        if (GTK_IS_SCROLLED_WINDOW(pParent))
+        {
+            return Size(gtk_scrolled_window_get_min_content_width(GTK_SCROLLED_WINDOW(pParent)),
+                        gtk_scrolled_window_get_min_content_height(GTK_SCROLLED_WINDOW(pParent)));
+        }
+        int nWidth, nHeight;
+        gtk_widget_get_size_request(m_pWidget, &nWidth, &nHeight);
+        return Size(nWidth, nHeight);
+    }
+
+    virtual Size get_preferred_size() const override
+    {
+        Size aRet(-1, -1);
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+        if (GTK_IS_SCROLLED_WINDOW(pParent))
+        {
+            aRet = Size(gtk_scrolled_window_get_min_content_width(GTK_SCROLLED_WINDOW(pParent)),
+                        gtk_scrolled_window_get_min_content_height(GTK_SCROLLED_WINDOW(pParent)));
+        }
+        GtkRequisition size;
+        gtk_widget_get_preferred_size(m_pWidget, nullptr, &size);
+        if (aRet.Width() == -1)
+            aRet.setWidth(size.width);
+        if (aRet.Height() == -1)
+            aRet.setHeight(size.height);
+        return aRet;
+    }
+
+    virtual void show() override
+    {
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+        if (GTK_IS_SCROLLED_WINDOW(pParent))
+            gtk_widget_show(pParent);
+        gtk_widget_show(m_pWidget);
+    }
+
+    virtual void hide() override
+    {
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+        if (GTK_IS_SCROLLED_WINDOW(pParent))
+            gtk_widget_hide(pParent);
+        gtk_widget_hide(m_pWidget);
+    }
+
+    virtual OUString get_selected_text() const override
+    {
+        assert(gtk_icon_view_get_model(m_pIconView) && "don't request selection when frozen");
+        GtkTreeIter iter;
+        if (get_selected_iterator(&iter))
+            return get(iter, m_nTextCol);
+        return OUString();
+    }
+
+    virtual int count_selected_items() const override
+    {
+        GList* pList = gtk_icon_view_get_selected_items(m_pIconView);
+        int nRet = g_list_length(pList);
+        g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
+        return nRet;
+    }
+
+    virtual void select(int pos) override
+    {
+        assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen");
+        disable_notify_events();
+        if (pos == -1 || (pos == 0 && n_children() == 0))
+        {
+            gtk_icon_view_unselect_all(m_pIconView);
+        }
+        else
+        {
+            GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
+            gtk_icon_view_select_path(m_pIconView, path);
+            gtk_icon_view_scroll_to_path(m_pIconView, path, false, 0, 0);
+            gtk_tree_path_free(path);
+        }
+        enable_notify_events();
+    }
+
+    virtual void unselect(int pos) override
+    {
+        assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen");
+        disable_notify_events();
+        if (pos == -1 || (pos == 0 && n_children() == 0))
+        {
+            gtk_icon_view_select_all(m_pIconView);
+        }
+        else
+        {
+            GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
+            gtk_icon_view_select_path(m_pIconView, path);
+            gtk_tree_path_free(path);
+        }
+        enable_notify_events();
+    }
+
+    virtual bool get_selected(weld::TreeIter* pIter) const override
+    {
+        GtkInstanceTreeIter* pGtkIter = static_cast<GtkInstanceTreeIter*>(pIter);
+        return get_selected_iterator(pGtkIter ? &pGtkIter->iter : nullptr);
+    }
+
+    virtual bool get_cursor(weld::TreeIter* pIter) const override
+    {
+        GtkInstanceTreeIter* pGtkIter = static_cast<GtkInstanceTreeIter*>(pIter);
+        GtkTreePath* path;
+        gtk_icon_view_get_cursor(m_pIconView, &path, nullptr);
+        if (pGtkIter && path)
+        {
+            GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+            gtk_tree_model_get_iter(pModel, &pGtkIter->iter, path);
+        }
+        return path != nullptr;
+    }
+
+    virtual void set_cursor(const weld::TreeIter& rIter) override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        gtk_icon_view_set_cursor(m_pIconView, path, nullptr, false);
+        gtk_tree_path_free(path);
+    }
+
+    virtual bool get_iter_first(weld::TreeIter& rIter) const override
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        return gtk_tree_model_get_iter_first(pModel, &rGtkIter.iter);
+    }
+
+    virtual void scroll_to_item(const weld::TreeIter& rIter) override
+    {
+        assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen");
+        disable_notify_events();
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        gtk_icon_view_scroll_to_path(m_pIconView, path, false, 0, 0);
+        gtk_tree_path_free(path);
+        enable_notify_events();
+    }
+
+    virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig) const override
+    {
+        return std::unique_ptr<weld::TreeIter>(new GtkInstanceTreeIter(static_cast<const GtkInstanceTreeIter*>(pOrig)));
+    }
+
+    virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override
+    {
+        GtkInstanceTreeIter aGtkIter(nullptr);
+
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GList* pList = gtk_icon_view_get_selected_items(m_pIconView);
+        for (GList* pItem = g_list_first(pList); pItem; pItem = g_list_next(pItem))
+        {
+            GtkTreePath* path = static_cast<GtkTreePath*>(pItem->data);
+            gtk_tree_model_get_iter(pModel, &aGtkIter.iter, path);
+            if (func(aGtkIter))
+                break;
+        }
+        g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
+    }
+
+    virtual int n_children() const override
+    {
+        return gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_pTreeStore), nullptr);
+    }
+
+    virtual OUString get_id(const weld::TreeIter& rIter) const override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        return get(rGtkIter.iter, m_nIdCol);
+    }
+
+    virtual void disable_notify_events() override
+    {
+        g_signal_handler_block(m_pIconView, m_nSelectionChangedSignalId);
+        g_signal_handler_block(m_pIconView, m_nItemActivatedSignalId);
+
+        GtkInstanceContainer::disable_notify_events();
+    }
+
+    virtual void enable_notify_events() override
+    {
+        GtkInstanceContainer::enable_notify_events();
+
+        g_signal_handler_unblock(m_pIconView, m_nItemActivatedSignalId);
+        g_signal_handler_unblock(m_pIconView, m_nSelectionChangedSignalId);
+    }
+
+    virtual ~GtkInstanceIconView() override
+    {
+        if (m_pSelectionChangeEvent)
+            Application::RemoveUserEvent(m_pSelectionChangeEvent);
+
+        g_signal_handler_disconnect(m_pIconView, m_nItemActivatedSignalId);
+        g_signal_handler_disconnect(m_pIconView, m_nSelectionChangedSignalId);
+    }
+};
+
+IMPL_LINK_NOARG(GtkInstanceIconView, async_signal_selection_changed, void*, void)
+{
+    m_pSelectionChangeEvent = nullptr;
+    signal_selection_changed();
 }
 
 class GtkInstanceSpinButton : public GtkInstanceEntry, public virtual weld::SpinButton
@@ -11118,7 +11559,7 @@ public:
         bodge_wayland_menu_not_appearing();
     }
 
-    virtual void insert_separator(int pos) override
+    virtual void insert_separator(int pos, const OUString& rId) override
     {
         disable_notify_events();
         GtkTreeIter iter;
@@ -11126,7 +11567,7 @@ public:
         m_aSeparatorRows.push_back(pos);
         if (!gtk_combo_box_get_row_separator_func(m_pComboBox))
             gtk_combo_box_set_row_separator_func(m_pComboBox, separatorFunction, this, nullptr);
-        insert_row(GTK_LIST_STORE(m_pTreeModel), iter, pos, nullptr, "", nullptr, nullptr);
+        insert_row(GTK_LIST_STORE(m_pTreeModel), iter, pos, &rId, "", nullptr, nullptr);
         enable_notify_events();
         bodge_wayland_menu_not_appearing();
     }
@@ -11491,7 +11932,7 @@ public:
         m_nEntryInsertTextSignalId = g_signal_connect(pWidget, "insert-text", G_CALLBACK(signalEntryInsertText), this);
     }
 
-    virtual void insert_separator(int /*pos*/) override
+    virtual void insert_separator(int /*pos*/, const OUString& /*rId*/) override
     {
         assert(false);
     }
@@ -12260,6 +12701,15 @@ public:
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pTreeView));
         return std::make_unique<GtkInstanceTreeView>(pTreeView, this, bTakeOwnership);
+    }
+
+    virtual std::unique_ptr<weld::IconView> weld_icon_view(const OString &id, bool bTakeOwnership) override
+    {
+        GtkIconView* pIconView = GTK_ICON_VIEW(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pIconView)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pIconView));
+        return std::make_unique<GtkInstanceIconView>(pIconView, this, bTakeOwnership);
     }
 
     virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& containerid, const OString& entryid, const OString& treeviewid, bool bTakeOwnership) override

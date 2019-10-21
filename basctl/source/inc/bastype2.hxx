@@ -320,13 +320,10 @@ public:
     float get_approximate_digit_width() const { return m_xControl->get_approximate_digit_width(); }
     int get_height_rows(int nRows) const { return m_xControl->get_height_rows(nRows); }
     int get_iter_index_in_parent(const weld::TreeIter& rIter) const { return m_xControl->get_iter_index_in_parent(rIter); }
-    void connect_editing_started(const Link<const weld::TreeIter&, bool>& rLink)
+    void connect_editing(const Link<const weld::TreeIter&, bool>& rStartLink,
+                         const Link<const std::pair<const weld::TreeIter&, OUString>&, bool>& rEndLink)
     {
-        m_xControl->connect_editing_started(rLink);
-    }
-    void connect_editing_done(const Link<const std::pair<const weld::TreeIter&, OUString>&, bool>& rLink)
-    {
-        m_xControl->connect_editing_done(rLink);
+        m_xControl->connect_editing(rStartLink, rEndLink);
     }
 
     void make_sorted() { m_xControl->make_sorted(); };

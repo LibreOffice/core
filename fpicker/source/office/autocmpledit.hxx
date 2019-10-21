@@ -10,22 +10,38 @@
 #ifndef INCLUDED_SVTOOLS_AUTOCMPLEDIT_HXX
 #define INCLUDED_SVTOOLS_AUTOCMPLEDIT_HXX
 
-#include <vcl/edit.hxx>
+#include <vcl/idle.hxx>
+#include <vcl/weld.hxx>
 #include <vector>
 
-class AutocompleteEdit : public Edit
+class AutocompleteEdit
 {
 private:
+    std::unique_ptr<weld::Entry> m_xEntry;
+
     std::vector< OUString > m_aEntries;
     std::vector< OUString > m_aMatching;
     std::vector< OUString >::size_type m_nCurrent;
+    Idle m_aChangedIdle;
+    Link<weld::Entry&, void> m_aChangeHdl;
 
-    DECL_LINK(AutoCompleteHdl_Impl, Edit&, void);
+    DECL_LINK(ChangedHdl, weld::Entry&, void);
+    DECL_LINK(TryAutoComplete, Timer*, void);
+
     bool Match( const OUString& rText );
-    bool PreNotify( NotifyEvent& rNEvt ) override;
 
 public:
-    AutocompleteEdit( vcl::Window* pParent );
+    AutocompleteEdit(std::unique_ptr<weld::Entry> xEntry);
+
+    void show() { m_xEntry->show(); }
+    void set_sensitive(bool bSensitive) { m_xEntry->set_sensitive(bSensitive); }
+    OUString get_text() const { return m_xEntry->get_text(); }
+    void set_text(const OUString& rText) { m_xEntry->set_text(rText); }
+    void grab_focus() { m_xEntry->grab_focus(); }
+    void select_region(int nStartPos, int nEndPos) { m_xEntry->select_region(nStartPos, nEndPos); }
+
+    void connect_changed(const Link<weld::Entry&, void>& rLink) { m_aChangeHdl = rLink; }
+    void connect_focus_in(const Link<weld::Widget&, void>& rLink) { m_xEntry->connect_focus_in(rLink); }
 
     void AddEntry( const OUString& rEntry );
     void ClearEntries();

@@ -98,9 +98,12 @@ class SVT_DLLPUBLIC URLBox
     rtl::Reference< MatchContext_Impl > pCtx;
     std::unique_ptr<SvtURLBox_Impl> pImpl;
     INetProtocol                    eSmartProtocol;
+    bool                            bOnlyDirectories    : 1;
     bool                            bHistoryDisabled    : 1;
+    bool                            bNoSelection        : 1;
 
     Link<weld::ComboBox&, void>     aChangeHdl;
+    Link<weld::Widget&, void>       aFocusInHdl;
     Link<weld::Widget&, void>       aFocusOutHdl;
 
     std::unique_ptr<weld::ComboBox> m_xWidget;
@@ -122,16 +125,21 @@ public:
     void                connect_entry_activate(const Link<weld::ComboBox&, bool>& rLink) { m_xWidget->connect_entry_activate(rLink); }
     void                connect_changed(const Link<weld::ComboBox&, void>& rLink) { aChangeHdl = rLink; }
     void                trigger_changed() { aChangeHdl.Call(*m_xWidget); }
+    void                connect_focus_in(const Link<weld::Widget&, void>& rLink) { aFocusInHdl = rLink; }
     void                connect_focus_out(const Link<weld::Widget&, void>& rLink) { aFocusOutHdl = rLink; }
     void                append_text(const OUString& rStr) { m_xWidget->append_text(rStr); }
     int                 find_text(const OUString& rStr) const { return m_xWidget->find_text(rStr); }
     OUString            get_active_text() const { return m_xWidget->get_active_text(); }
     void                grab_focus() { m_xWidget->grab_focus(); }
     void                set_sensitive(bool bSensitive) { m_xWidget->set_sensitive(bSensitive); }
-    void                EnableAutocomplete() { m_xWidget->set_entry_completion(true); }
+    void                set_help_id(const OString& rHelpId) { m_xWidget->set_help_id(rHelpId); }
+    void                select_entry_region(int nStartPos, int nEndPos) { m_xWidget->select_entry_region(nStartPos, nEndPos); }
 
+    void                EnableAutocomplete(bool bEnable = true) { m_xWidget->set_entry_completion(bEnable); }
     void                SetBaseURL( const OUString& rURL );
     const OUString&     GetBaseURL() const { return aBaseURL; }
+    void                SetOnlyDirectories( bool bDir );
+    void                SetNoURLSelection( bool bSet );
     void                SetSmartProtocol( INetProtocol eProt );
     INetProtocol        GetSmartProtocol() const { return eSmartProtocol; }
     OUString            GetURL();
