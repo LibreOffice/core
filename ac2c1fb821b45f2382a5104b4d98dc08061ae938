@@ -46,6 +46,30 @@
       "revId": "ac2c1fb821b45f2382a5104b4d98dc08061ae938",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_f2da6815",
+        "filename": "starmath/source/mathtype.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-21T07:21:11Z",
+      "side": 1,
+      "message": "Possibly something to check with a plugin?",
+      "parentUuid": "7f7f9b97_92ea14aa",
+      "range": {
+        "startLine": 319,
+        "startChar": 24,
+        "endLine": 319,
+        "endChar": 39
+      },
+      "revId": "ac2c1fb821b45f2382a5104b4d98dc08061ae938",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
