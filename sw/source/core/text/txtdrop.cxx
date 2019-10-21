@@ -559,10 +559,10 @@ void SwTextFormatter::GuessDropHeight( const sal_uInt16 nLines )
 
 SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
 {
-    if( !pDropFormat )
+    if( !m_pDropFormat )
         return nullptr;
 
-    TextFrameIndex nPorLen(pDropFormat->GetWholeWord() ? 0 : pDropFormat->GetChars());
+    TextFrameIndex nPorLen(m_pDropFormat->GetWholeWord() ? 0 : m_pDropFormat->GetChars());
     nPorLen = m_pFrame->GetDropLen( nPorLen );
     if( !nPorLen )
     {
@@ -576,17 +576,17 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
     if ( !( GetDropHeight() || IsOnceMore() ) )
     {
         if ( GetNext() )
-            CalcDropHeight( pDropFormat->GetLines() );
+            CalcDropHeight( m_pDropFormat->GetLines() );
         else
-            GuessDropHeight( pDropFormat->GetLines() );
+            GuessDropHeight( m_pDropFormat->GetLines() );
     }
 
     // the DropPortion
     if( GetDropHeight() )
         pDropPor = new SwDropPortion( GetDropLines(), GetDropHeight(),
-                                      GetDropDescent(), pDropFormat->GetDistance() );
+                                      GetDropDescent(), m_pDropFormat->GetDistance() );
     else
-       pDropPor = new SwDropPortion( 0,0,0,pDropFormat->GetDistance() );
+       pDropPor = new SwDropPortion( 0,0,0,m_pDropFormat->GetDistance() );
 
     pDropPor->SetLen( nPorLen );
 
@@ -603,7 +603,7 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
     // build DropPortionParts:
     OSL_ENSURE( ! rInf.GetIdx(), "Drop Portion not at 0 position!" );
     TextFrameIndex nNextChg(0);
-    const SwCharFormat* pFormat = pDropFormat->GetCharFormat();
+    const SwCharFormat* pFormat = m_pDropFormat->GetCharFormat();
     SwDropPortionPart* pCurrPart = nullptr;
 
     while ( nNextChg  < nPorLen )
