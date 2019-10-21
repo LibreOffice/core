@@ -23,11 +23,7 @@
 
 #include <vector>
 #include <tools/urlobj.hxx>
-#include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#include <com/sun/star/container/XSet.hpp>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <unotools/pathoptions.hxx>
 
 using namespace     ::com::sun::star::container;

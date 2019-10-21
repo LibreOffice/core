@@ -23,6 +23,7 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <vcl/button.hxx>
@@ -32,7 +33,6 @@
 #include <tools/debug.hxx>
 
 #include <algorithm>
-#include <functional>
 
 
 namespace svt

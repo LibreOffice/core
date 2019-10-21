@@ -12,33 +12,26 @@
 
 #include "autocmpledit.hxx"
 #include <svtools/place.hxx>
-#include <svtools/PlaceEditDialog.hxx>
-
-#include <vcl/errinf.hxx>
 
 #include <unotools/viewoptions.hxx>
 
 #include <vcl/button.hxx>
-#include <fpicker/strings.hrc>
 #include <vcl/menubtn.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 
-#include <officecfg/Office/Common.hxx>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/task/PasswordContainer.hpp>
 #include <com/sun/star/task/XPasswordContainer2.hpp>
 
 #include <vector>
 
+#include "asyncfilepicker.hxx"
 #include "fpdialogbase.hxx"
 #include "breadcrumb.hxx"
 #include "fileview.hxx"
 #include "foldertree.hxx"
-#include "QueryFolderName.hxx"
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
