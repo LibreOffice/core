@@ -43,7 +43,7 @@ protected:
     }
 };
 
-Breadcrumb::Breadcrumb( vcl::Window* pParent ) : VclHBox( pParent )
+Breadcrumb::Breadcrumb( weld::Container* ) : VclHBox( nullptr )
 {
     m_eMode = SvtBreadcrumbMode::ONLY_CURRENT_PATH;
     set_spacing( SPACING );
@@ -77,7 +77,7 @@ void Breadcrumb::EnableFields( bool bEnable )
     }
 }
 
-void Breadcrumb::SetClickHdl( const Link<Breadcrumb*,void>& rLink )
+void Breadcrumb::connect_clicked( const Link<Breadcrumb*,void>& rLink )
 {
     m_aClickHdl = rLink;
 }

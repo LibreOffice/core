@@ -47,7 +47,7 @@ namespace svt
         OUString    maTargetURL;
         OUString    maDisplayText;
         DateTime    maModDate;
-        Image       maImage;
+        OUString    maImage;
         sal_Int64   maSize;
         bool        mbIsFolder;
         bool        mbIsVolume;
