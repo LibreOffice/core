@@ -24,7 +24,6 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <strings.hrc>
@@ -312,10 +311,7 @@ void SAL_CALL MacabDriver::disposing( const EventObject& )
 
 OUString MacabDriver::impl_getConfigurationSettingsPath()
 {
-    OUStringBuffer aPath;
-    aPath.append( "/org.openoffice.Office.DataAccess/DriverSettings/" );
-    aPath.append( "com.sun.star.comp.sdbc.macab.Driver" );
-    return aPath.makeStringAndClear();
+    return "/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.macab.Driver";
 }
 
 Reference< XInterface > MacabDriver::Create( const Reference< XMultiServiceFactory >& _rxFactory )

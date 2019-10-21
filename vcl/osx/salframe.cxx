@@ -1026,10 +1026,7 @@ OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
             aKeyMap[ i ] = OUString( sal_Unicode( '0' + (i - KEY_0) ) );
         for( i = KEY_F1; i <= KEY_F26; i++ )
         {
-            OUStringBuffer aKey( 3 );
-            aKey.append( 'F' );
-            aKey.append( sal_Int32( i - KEY_F1 + 1 ) );
-            aKeyMap[ i ] = aKey.makeStringAndClear();
+            aKeyMap[ i ] = "F" + OUString::number(i - KEY_F1 + 1);
         }
 
         aKeyMap[ KEY_DOWN ]     = OUString( u'\x21e3' );
