@@ -188,6 +188,7 @@ class VCL_DLLPUBLIC SvTreeListBox
     friend class SvImpLBox;
     friend class IconViewImpl;
     friend class TreeControlPeer;
+    friend class SalInstanceIconView;
     friend class SalInstanceTreeView;
     friend class SalInstanceEntryTreeView;
 

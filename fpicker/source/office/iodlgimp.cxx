@@ -34,78 +34,37 @@ using namespace ::com::sun::star::lang;
 using namespace ::utl;
 
 SvtFileDialogFilter_Impl::SvtFileDialogFilter_Impl( const OUString& rName, const OUString& rType )
-    :m_aName( rName )
-    ,m_aType( rType )
+    : m_aName( rName )
+    , m_aType( rType )
 {
     m_aType = m_aType.toAsciiLowerCase();
 }
-
 
 SvtFileDialogFilter_Impl::~SvtFileDialogFilter_Impl()
 {
 }
 
-
-// SvtFileDialogFilterList_Impl
-
-
-//= SvtFileDialogURLSelector
-SvtFileDialogURLSelector::SvtFileDialogURLSelector(vcl::Window* _pParent, SvtFileDialog* _pDlg, WinBits nBits, const OUString& rButtonId)
-    :MenuButton ( _pParent, nBits )
-    ,m_pDlg     ( _pDlg )
-    ,m_pMenu    ( VclPtr<PopupMenu>::Create() )
-{
-    SetStyle( GetStyle() | WB_NOPOINTERFOCUS | WB_RECTSTYLE | WB_SMALLSTYLE );
-    SetModeImage(SvtFileDialog::GetButtonImage(rButtonId));
-    SetDelayMenu(true);
-    SetDropDown(PushButtonDropdownStyle::Toolbox);
-}
-
-
-SvtFileDialogURLSelector::~SvtFileDialogURLSelector()
-{
-    disposeOnce();
-}
-
-void SvtFileDialogURLSelector::dispose()
-{
-    m_pMenu.disposeAndClear();
-    m_pDlg.clear();
-    MenuButton::dispose();
-}
-
-
-void SvtFileDialogURLSelector::Activate()
-{
-    m_pMenu->Clear();
-
-    FillURLMenu( m_pMenu );
-
-    SetPopupMenu( m_pMenu );
-}
-
-
 //= SvtUpButton_Impl
-
-
-SvtUpButton_Impl::SvtUpButton_Impl( vcl::Window *pParent, SvtFileDialog* pDlg, WinBits nBits )
-    :SvtFileDialogURLSelector( pParent, pDlg, nBits, BMP_FILEDLG_BTN_UP )
+SvtUpButton_Impl::SvtUpButton_Impl(std::unique_ptr<weld::Toolbar> xToolbar,
+                                   std::unique_ptr<weld::Menu> xMenu,
+                                   SvtFileDialog* pDlg)
+    : m_xToolbar(std::move(xToolbar))
+    , m_xMenu(std::move(xMenu))
+    , m_pDlg(pDlg)
 {
+    m_xToolbar->set_item_menu("up_btn", m_xMenu.get());
+    m_xToolbar->connect_clicked(LINK(this, SvtUpButton_Impl, ClickHdl));
+    m_xMenu->connect_activate(LINK(this, SvtUpButton_Impl, SelectHdl));
 }
 
-
-SvtUpButton_Impl::~SvtUpButton_Impl()
+void SvtUpButton_Impl::FillURLMenu()
 {
-}
-
-
-void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
-{
-    SvtFileView* pBox = GetDialogParent()->GetView();
+    SvtFileView* pBox = m_pDlg->GetView();
 
     sal_uInt16 nItemId = 1;
 
-    _aURLs.clear();
+    aURLs.clear();
+    m_xMenu->clear();
 
     // determine parent levels
     INetURLObject aObject( pBox->GetViewURL() );
@@ -114,7 +73,7 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
     ::svtools::VolumeInfo aVolInfo( true /* volume */, false /* remote */,
                                     false /* removable */, false /* floppy */,
                                     false /* compact disk */ );
-    Image aVolumeImage( SvFileInformationManager::GetFolderImage( aVolInfo ) );
+    OUString aVolumeImage( SvFileInformationManager::GetFolderImageId( aVolInfo ) );
 
     while ( nCount >= 1 )
     {
@@ -122,98 +81,61 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
         OUString aParentURL(aObject.GetMainURL(INetURLObject::DecodeMechanism::NONE));
 
         OUString aTitle;
-        if (!GetDialogParent()->ContentGetTitle(aParentURL, aTitle) || aTitle.isEmpty())
+
+        if (nCount == 1) // adjust the title of the top level entry (the workspace)
+            aTitle = SvlResId(STR_SVT_MIMETYPE_CNT_FSYSBOX);
+        else if (!m_pDlg->ContentGetTitle(aParentURL, aTitle) || aTitle.isEmpty())
             aTitle = aObject.getName();
 
-        Image aImage = ( nCount > 1 ) // if nCount == 1 means workplace, which detects the wrong image
-            ? SvFileInformationManager::GetImage( aObject ) : aVolumeImage;
+        OUString aImage = ( nCount > 1 ) // if nCount == 1 means workplace, which detects the wrong image
+            ? SvFileInformationManager::GetImageId( aObject ) : aVolumeImage;
 
-        _pMenu->InsertItem( nItemId++, aTitle, aImage );
-        _aURLs.push_back(aParentURL);
+        m_xMenu->append(OUString::number(nItemId), aTitle, aImage);
+        aURLs.push_back(aParentURL);
 
-        if ( nCount == 1 )
-        {
-            // adjust the title of the top level entry (the workspace)
-            _pMenu->SetItemText(--nItemId, SvlResId(STR_SVT_MIMETYPE_CNT_FSYSBOX));
-        }
+        ++nItemId;
         --nCount;
     }
 }
 
-void SvtUpButton_Impl::Select()
+IMPL_LINK(SvtUpButton_Impl, SelectHdl, const OString&, rId, void)
 {
-    sal_uInt16 nId = GetCurItemId();
-
-    if ( nId )
+    sal_uInt32 nId = rId.toUInt32();
+    if (nId)
     {
         --nId;
-        assert( nId <= _aURLs.size() &&  "SvtUpButton_Impl: wrong index" );
+        assert( nId <= aURLs.size() &&  "SvtUpButton_Impl: wrong index" );
 
-        GetDialogParent()->OpenURL_Impl(_aURLs[nId]);
+        m_pDlg->OpenURL_Impl(aURLs[nId]);
     }
 }
 
-void SvtUpButton_Impl::Click()
+IMPL_LINK_NOARG(SvtUpButton_Impl, ClickHdl, const OString&, void)
 {
-    GetDialogParent()->PrevLevel_Impl();
-}
-
-Size SvtUpButton_Impl::GetOptimalSize() const
-{
-    return LogicToPixel(Size(12, 12), MapMode(MapUnit::MapAppFont));
+    m_pDlg->PrevLevel_Impl();
 }
 
 // SvtExpFileDlg_Impl
-SvtExpFileDlg_Impl::SvtExpFileDlg_Impl()   :
-
-    _pCurFilter         ( nullptr ),
-    _pFtFileName        ( nullptr ),
-    _pEdFileName        ( nullptr ),
-    _pFtFileVersion     ( nullptr ),
-    _pLbFileVersion     ( nullptr ),
-    _pFtTemplates       ( nullptr ),
-    _pLbTemplates       ( nullptr ),
-    _pFtImageTemplates  ( nullptr ),
-    _pLbImageTemplates  ( nullptr ),
-    _pFtImageAnchor     ( nullptr ),
-    _pLbImageAnchor     ( nullptr ),
-    _pFtFileType        ( nullptr ),
-    _pLbFilter          ( nullptr ),
-    _pBtnFileOpen       ( nullptr ),
-    _pBtnCancel         ( nullptr ),
-    _pBtnHelp           ( nullptr ),
-    _pBtnUp             ( nullptr ),
-    _pBtnNewFolder      ( nullptr ),
-    _pCbPassword        ( nullptr ),
-    _pCbGPGEncrypt      ( nullptr ),
-    _pEdCurrentPath     ( nullptr ),
-    _pCbAutoExtension   ( nullptr ),
-    _pCbOptions         ( nullptr ),
-    _pPlaces            ( nullptr ),
-    _pBtnConnectToServer( nullptr ),
-    _eMode              ( FILEDLG_MODE_OPEN ),
-    _eDlgType           ( FILEDLG_TYPE_FILEDLG ),
-    _nStyle             ( PickerFlags::NONE ),
-    _bDoubleClick       ( false ),
-    m_bNeedDelayedFilterExecute ( false ),
-    _bMultiSelection    ( false )
+SvtExpFileDlg_Impl::SvtExpFileDlg_Impl()
+    : m_pCurFilter( nullptr )
+    , m_eMode( FILEDLG_MODE_OPEN )
+    , m_eDlgType( FILEDLG_TYPE_FILEDLG )
+    , m_nStyle( PickerFlags::NONE )
+    , m_bDoubleClick( false )
+    , m_bNeedDelayedFilterExecute ( false )
+    , m_bMultiSelection( false )
 {
 }
-
 
 SvtExpFileDlg_Impl::~SvtExpFileDlg_Impl()
 {
-    _pBtnUp.disposeAndClear();
-    _pUserFilter.reset();
-    _pPlaces.disposeAndClear();
 }
-
 
 void SvtExpFileDlg_Impl::SetStandardDir( const OUString& _rDir )
 {
-    _aStdDir = _rDir;
-    if ( _aStdDir.isEmpty() )
-        _aStdDir = "file:///";
+    m_aStdDir = _rDir;
+    if (m_aStdDir.isEmpty())
+        m_aStdDir = "file:///";
 }
 
 namespace {
@@ -230,29 +152,25 @@ void SvtExpFileDlg_Impl::SetCurFilter( SvtFileDialogFilter_Impl const * pFilter,
             ||  ( rDisplayName == lcl_DecoratedFilter( pFilter->GetName() ) ),
             "SvtExpFileDlg_Impl::SetCurFilter: arguments are inconsistent!" );
 
-    _pCurFilter = pFilter;
+    m_pCurFilter = pFilter;
     m_sCurrentFilterDisplayName = rDisplayName;
 }
 
-
-void SvtExpFileDlg_Impl::InsertFilterListEntry( const SvtFileDialogFilter_Impl* _pFilterDesc )
+void SvtExpFileDlg_Impl::InsertFilterListEntry(const SvtFileDialogFilter_Impl* pFilterDesc)
 {
-    OUString sName = _pFilterDesc->GetName();
-    if ( _pFilterDesc->isGroupSeparator() )
-        sName = "------------------------------------------";
+    // insert and set user data
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pFilterDesc)));
+    OUString sName = pFilterDesc->GetName();
+    if (pFilterDesc->isGroupSeparator())
+        m_xLbFilter->append_separator(sId);
     else
-        sName = _pFilterDesc->GetName();
-
-    // insert an set user data
-    const sal_Int32 nPos = _pLbFilter->InsertEntry( sName );
-    _pLbFilter->SetEntryData( nPos, const_cast< void* >( static_cast< const void* >( _pFilterDesc ) ) );
+        m_xLbFilter->append(sId, sName);
 }
-
 
 void SvtExpFileDlg_Impl::InitFilterList( )
 {
     // clear the current list
-    _pLbFilter->Clear();
+    m_xLbFilter->clear();
 
     // reinit it
     sal_uInt16 nPos = m_aFilter.size();

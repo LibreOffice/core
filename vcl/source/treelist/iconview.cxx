@@ -19,12 +19,11 @@
 
 #include <vcl/treelistentry.hxx>
 #include <vcl/viewdataentry.hxx>
-#include "fileview.hxx"
-#include "iconview.hxx"
-#include "iconviewimpl.hxx"
+#include <iconview.hxx>
+#include <iconviewimpl.hxx>
 
 IconView::IconView( vcl::Window* pParent, WinBits nBits )
-: SvTreeListBox( pParent, nBits )
+    : SvTreeListBox( pParent, nBits )
 {
     nColumns = 1;
     mbCenterAndClipText = true;
@@ -72,14 +71,6 @@ tools::Rectangle IconView::GetFocusRect( SvTreeListEntry*, long nEntryPos )
     aRect.SetSize( aSize );
 
     return aRect;
-}
-
-void IconView::ClearAll()
-{
-    for ( sal_uLong i = 0; i < GetEntryCount(); ++i )
-        delete static_cast<SvtContentEntry*>(GetEntry(i)->GetUserData());
-
-    Clear();
 }
 
 void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
