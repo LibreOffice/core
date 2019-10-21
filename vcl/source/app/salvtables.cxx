@@ -914,6 +914,10 @@ public:
         auto nInsertPos = pos == -1 ? MENU_APPEND : pos;
         m_xMenu->InsertSeparator(rId.toUtf8(), nInsertPos);
     }
+    PopupMenu* getMenu() const
+    {
+        return m_xMenu.get();
+    }
     virtual ~SalInstanceMenu() override
     {
         m_xMenu->SetSelectHdl(Link<::Menu*, bool>());
@@ -933,6 +937,7 @@ class SalInstanceToolbar : public SalInstanceWidget, public virtual weld::Toolba
 private:
     VclPtr<ToolBox> m_xToolBox;
     std::map<sal_uInt16, VclPtr<vcl::Window>> m_aFloats;
+    std::map<sal_uInt16, VclPtr<PopupMenu>> m_aMenus;
 
     DECL_LINK(ClickHdl, ToolBox*, void);
     DECL_LINK(DropdownClick, ToolBox*, void);
@@ -963,12 +968,24 @@ public:
         if (m_xToolBox->GetItemBits(nItemId) & ToolBoxItemBits::DROPDOWN)
         {
             auto pFloat = m_aFloats[nItemId];
-            if (!pFloat)
-                return;
-            if (bActive)
-                vcl::Window::GetDockingManager()->StartPopupMode(m_xToolBox, pFloat, FloatWinPopupFlags::GrabFocus);
-            else
-                vcl::Window::GetDockingManager()->EndPopupMode(pFloat);
+            if (pFloat)
+            {
+                if (bActive)
+                    vcl::Window::GetDockingManager()->StartPopupMode(m_xToolBox, pFloat, FloatWinPopupFlags::GrabFocus);
+                else
+                    vcl::Window::GetDockingManager()->EndPopupMode(pFloat);
+            }
+            auto pPopup = m_aMenus[nItemId];
+            if (pPopup)
+            {
+                if (bActive)
+                {
+                    tools::Rectangle aRect = m_xToolBox->GetItemRect(nItemId);
+                    pPopup->Execute(m_xToolBox, aRect, PopupMenuFlags::ExecuteDown);
+                }
+                else
+                    pPopup->EndExecute();
+            }
         }
     }
 
@@ -985,7 +1002,20 @@ public:
         if (pFloat)
             pFloat->EnableDocking();
 
-        m_aFloats[m_xToolBox->GetItemId(OUString::fromUtf8(rIdent))] = pFloat;
+        sal_uInt16 nId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
+        m_aFloats[nId] = pFloat;
+        m_aMenus[nId] = nullptr;
+    }
+
+    virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) override
+    {
+        SalInstanceMenu* pInstanceMenu = dynamic_cast<SalInstanceMenu*>(pMenu);
+
+        PopupMenu* pPopup = pInstanceMenu? pInstanceMenu->getMenu() : nullptr;
+
+        sal_uInt16 nId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
+        m_aMenus[nId] = pPopup;
+        m_aFloats[nId] = nullptr;
     }
 
     virtual void insert_separator(int pos, const OUString& /*rId*/) override
@@ -2960,6 +2990,11 @@ public:
     virtual void set_image(VirtualDevice* pDevice) override
     {
         m_xImage->SetImage(createImage(*pDevice));
+    }
+
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
+    {
+        m_xImage->SetImage(::Image(rImage));
     }
 };
 

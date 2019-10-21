@@ -23,35 +23,29 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-class Control;
-
+namespace weld { class Widget; }
 
 namespace svt
 {
-
-
     class IFilePickerController
     {
     public:
-        virtual Control*    getControl( sal_Int16 _nControlId, bool _bLabelControl = false ) const = 0;
-        virtual void        enableControl( sal_Int16 _nControlId, bool _bEnable ) = 0;
+        virtual weld::Widget* getControl( sal_Int16 nControlId, bool bLabelControl = false ) const = 0;
+        virtual void        enableControl( sal_Int16 nControlId, bool bEnable ) = 0;
         virtual OUString    getCurFilter( ) const = 0;
 
     protected:
         ~IFilePickerController() {}
     };
 
-
     class IFilePickerListener
     {
     public:
-        virtual void    notify( sal_Int16 _nEventId, sal_Int16 _nControlId ) = 0;
+        virtual void    notify( sal_Int16 nEventId, sal_Int16 nControlId ) = 0;
 
     protected:
         ~IFilePickerListener() {}
     };
-
-
 }   // namespace svt
 
 

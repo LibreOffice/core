@@ -10,6 +10,7 @@
 $(eval $(call gb_UIConfig_UIConfig,fps))
 
 $(eval $(call gb_UIConfig_add_uifiles,fps,\
+	fpicker/uiconfig/ui/breadcrumb \
 	fpicker/uiconfig/ui/explorerfiledialog \
 	fpicker/uiconfig/ui/foldernamedialog \
 	fpicker/uiconfig/ui/remotefilesdialog \

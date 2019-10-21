@@ -1907,6 +1907,21 @@ private:
 
     bool signal_button(GdkEventButton* pEvent)
     {
+        Point aPos(pEvent->x, pEvent->y);
+        if (SwapForRTL())
+            aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
+
+        if (gdk_event_triggers_context_menu(reinterpret_cast<GdkEvent*>(pEvent)) && pEvent->type == GDK_BUTTON_PRESS)
+        {
+            //if handled for context menu, stop processing
+            CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, true);
+            if (signal_popup_menu(aCEvt))
+                return true;
+        }
+
+        if (!m_aMousePressHdl.IsSet() && !m_aMouseReleaseHdl.IsSet())
+            return false;
+
         SalEvent nEventType = SalEvent::NONE;
         switch (pEvent->type)
         {
@@ -1952,19 +1967,6 @@ private:
                 break;
             default:
                 return false;
-        }
-
-        Point aPos(pEvent->x, pEvent->y);
-
-        if (SwapForRTL())
-            aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
-
-        if (gdk_event_triggers_context_menu(reinterpret_cast<GdkEvent*>(pEvent)) && pEvent->type == GDK_BUTTON_PRESS)
-        {
-            //if handled for context menu, stop processing
-            CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, true);
-            if (signal_popup_menu(aCEvt))
-                return true;
         }
 
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
@@ -3111,6 +3113,11 @@ public:
         m_aMap.clear();
     }
 
+    GtkMenu* getMenu() const
+    {
+        return m_pMenu;
+    }
+
     virtual ~MenuHelper()
     {
         for (auto& a : m_aMap)
@@ -3305,12 +3312,13 @@ namespace
 
     int getButtonPriority(const OString &rType)
     {
-        static const size_t N_TYPES = 6;
+        static const size_t N_TYPES = 7;
         static const ButtonOrder aDiscardCancelSave[N_TYPES] =
         {
             { "/discard", 0 },
             { "/cancel", 1 },
             { "/no", 2 },
+            { "/open", 3 },
             { "/save", 3 },
             { "/yes", 3 },
             { "/ok", 3 }
@@ -3318,6 +3326,7 @@ namespace
 
         static const ButtonOrder aSaveDiscardCancel[N_TYPES] =
         {
+            { "/open", 0 },
             { "/save", 0 },
             { "/yes", 0 },
             { "/ok", 0 },
@@ -6555,6 +6564,8 @@ public:
         }
     }
 
+    void set_menu(weld::Menu* pMenu);
+
     virtual ~GtkInstanceMenuButton() override
     {
         if (m_pMenuHack)
@@ -6785,6 +6796,14 @@ public:
     }
 };
 
+void GtkInstanceMenuButton::set_menu(weld::Menu* pMenu)
+{
+    GtkInstanceMenu* pPopoverWidget = dynamic_cast<GtkInstanceMenu*>(pMenu);
+    m_pPopover = nullptr;
+    GtkWidget* pMenuWidget = GTK_WIDGET(pPopoverWidget ? pPopoverWidget->getMenu() : nullptr);
+    gtk_menu_button_set_popup(m_pMenuButton, pMenuWidget);
+}
+
 class GtkInstanceToolbar : public GtkInstanceWidget, public virtual weld::Toolbar
 {
 private:
@@ -6914,6 +6933,11 @@ public:
     virtual void set_item_popover(const OString& rIdent, weld::Widget* pPopover) override
     {
         m_aMenuButtonMap[rIdent]->set_popover(pPopover);
+    }
+
+    virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) override
+    {
+        m_aMenuButtonMap[rIdent]->set_menu(pMenu);
     }
 
     virtual ~GtkInstanceToolbar() override
@@ -7136,13 +7160,26 @@ public:
     virtual void set_image(VirtualDevice* pDevice) override
     {
         if (gtk_check_version(3, 20, 0) == nullptr)
-            gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(*pDevice));
-        else
         {
-            GdkPixbuf* pixbuf = getPixbuf(*pDevice);
-            gtk_image_set_from_pixbuf(m_pImage, pixbuf);
-            g_object_unref(pixbuf);
+            if (pDevice)
+                gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(*pDevice));
+            else
+                gtk_image_set_from_surface(m_pImage, nullptr);
+            return;
         }
+
+        GdkPixbuf* pixbuf = pDevice ? getPixbuf(*pDevice) : nullptr;
+        gtk_image_set_from_pixbuf(m_pImage, pixbuf);
+        if (pixbuf)
+            g_object_unref(pixbuf);
+    }
+
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
+    {
+        GdkPixbuf* pixbuf = getPixbuf(rImage);
+        gtk_image_set_from_pixbuf(m_pImage, pixbuf);
+        if (pixbuf)
+            g_object_unref(pixbuf);
     }
 };
 
@@ -8032,6 +8069,15 @@ private:
         pThis->signal_cell_edited(pCell, path, pNewText);
     }
 
+    static void restoreNonEditable(GObject* pCell)
+    {
+        if (g_object_get_data(pCell, "g-lo-RestoreNonEditable"))
+        {
+            g_object_set(pCell, "editable", false, "editable-set", false, nullptr);
+            g_object_set_data(pCell, "g-lo-RestoreNonEditable", reinterpret_cast<gpointer>(false));
+        }
+    }
+
     void signal_cell_edited(GtkCellRendererText* pCell, const gchar *path, const gchar* pNewText)
     {
         GtkTreePath *tree_path = gtk_tree_path_new_from_string(path);
@@ -8047,6 +8093,19 @@ private:
             void* pData = g_object_get_data(G_OBJECT(pCell), "g-lo-CellIndex");
             set(aGtkIter.iter, reinterpret_cast<sal_IntPtr>(pData), sText);
         }
+
+        restoreNonEditable(G_OBJECT(pCell));
+    }
+
+    static void signalCellEditingCanceled(GtkCellRenderer* pCell, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        pThis->signal_cell_editing_canceled(pCell);
+    }
+
+    void signal_cell_editing_canceled(GtkCellRenderer* pCell)
+    {
+        restoreNonEditable(G_OBJECT(pCell));
     }
 
     void signal_column_clicked(GtkTreeViewColumn* pClickedColumn)
@@ -8202,6 +8261,7 @@ public:
                     m_aWeightMap[nIndex] = -1;
                     m_aSensitiveMap[nIndex] = -1;
                     g_signal_connect(G_OBJECT(pCellRenderer), "editing-started", G_CALLBACK(signalCellEditingStarted), this);
+                    g_signal_connect(G_OBJECT(pCellRenderer), "editing-canceled", G_CALLBACK(signalCellEditingCanceled), this);
                     g_signal_connect(G_OBJECT(pCellRenderer), "edited", G_CALLBACK(signalCellEdited), this);
                 }
                 else if (GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
@@ -9228,7 +9288,6 @@ public:
         if (!gtk_tree_view_row_expanded(m_pTreeView, path))
             gtk_tree_view_expand_to_path(m_pTreeView, path);
         gtk_tree_path_free(path);
-
     }
 
     virtual void collapse_row(const weld::TreeIter& rIter) override
@@ -9524,6 +9583,27 @@ public:
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+
+        // allow editing of cells which are not usually editable, so we can have double click
+        // do its usual row-activate but if we explicitly want to edit (remote files dialog)
+        // we can still do that
+        GList *pRenderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(pColumn));
+        for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
+        {
+            GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
+            if (GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
+            {
+                gboolean is_editable(false);
+                g_object_get(pCellRenderer, "editable", &is_editable, nullptr);
+                if (!is_editable)
+                {
+                    g_object_set(pCellRenderer, "editable", true, "editable-set", true, nullptr);
+                    g_object_set_data(G_OBJECT(pCellRenderer), "g-lo-RestoreNonEditable", reinterpret_cast<gpointer>(true));
+                    break;
+                }
+            }
+        }
+        g_list_free(pRenderers);
 
         gtk_tree_view_set_cursor(m_pTreeView, path, pColumn, true);
 
