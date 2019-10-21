@@ -200,10 +200,9 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
 }
 
 void SvxTextEncodingTreeView::FillFromTextEncodingTable(
-        bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
-        sal_uInt32 nButIncludeInfoFlags )
+        bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags )
 {
-    std::vector<int> aRet(::FillFromTextEncodingTable(bExcludeImportSubsets, nExcludeInfoFlags, nButIncludeInfoFlags));
+    std::vector<int> aRet(::FillFromTextEncodingTable(bExcludeImportSubsets, nExcludeInfoFlags, /*nButIncludeInfoFlags*/0));
     m_xControl->freeze();
     for (auto j : aRet)
     {

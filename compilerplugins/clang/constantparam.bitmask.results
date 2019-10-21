@@ -13,20 +13,17 @@ include/basegfx/polygon/b2dpolygontools.hxx:144
 include/framework/framelistanalyzer.hxx:184
     void framework::FrameListAnalyzer::FrameListAnalyzer(const class com::sun::star::uno::Reference<class com::sun::star::frame::XFramesSupplier> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,enum FrameAnalyzerFlags)
     enum FrameAnalyzerFlags eDetectMode setBits=0x4
-include/sfx2/objsh.hxx:451
+include/sfx2/objsh.hxx:456
     void SfxObjectShell::FinishedLoading(enum SfxLoadedFlags)
     enum SfxLoadedFlags nWhich setBits=0x1
 include/svtools/brwbox.hxx:431
     void BrowseBox::InsertDataColumn(unsigned short,const class rtl::OUString &,long,enum HeaderBarItemBits,unsigned short)
     enum HeaderBarItemBits nBits setBits=0x400 clearBits=0x3ec
-include/svtools/wizardmachine.hxx:178
-    void svt::OWizardMachine::OWizardMachine(class vcl::Window *,enum WizardButtonFlags)
+include/vcl/wizardmachine.hxx:140
+    void vcl::WizardMachine::WizardMachine(class weld::Window *,enum WizardButtonFlags)
     enum WizardButtonFlags _nButtonFlags setBits=0xf
-include/vcl/gdimtf.hxx:194
-    _Bool GDIMetaFile::CreateThumbnail(class BitmapEx &,enum BmpConversion,enum BmpScaleFlag) const
-    enum BmpScaleFlag nScaleFlag setBits=0x1
 sc/inc/rangelst.hxx:48
-    void ScRangeList::Format(class rtl::OUString &,enum ScRefFlags,class ScDocument *,enum formula::FormulaGrammar::AddressConvention,char16_t,_Bool) const
+    void ScRangeList::Format(class rtl::OUString &,enum ScRefFlags,const class ScDocument *,enum formula::FormulaGrammar::AddressConvention,char16_t,_Bool) const
     enum ScRefFlags nFlags setBits=0x8000 clearBits=0x7f80
 sc/inc/rangeutl.hxx:162
     void ScRangeStringConverter::GetStringFromAddress(class rtl::OUString &,const class ScAddress &,const class ScDocument *,enum formula::FormulaGrammar::AddressConvention,char16_t,_Bool,enum ScRefFlags)
@@ -34,13 +31,13 @@ sc/inc/rangeutl.hxx:162
 sc/inc/xmlwrap.hxx:89
     _Bool ScXMLImportWrapper::Import(enum ImportFlags,class ErrCode &)
     enum ImportFlags nMode setBits=0x1
-sc/source/ui/view/cellsh1.cxx:115
+sc/source/ui/view/cellsh1.cxx:102
     enum InsertDeleteFlags FlagsFromString(const class rtl::OUString &,enum InsertDeleteFlags)
     enum InsertDeleteFlags nFlagsMask setBits=0x87f clearBits=0x700
-sc/source/ui/view/cellsh1.cxx:138
+sc/source/ui/view/cellsh1.cxx:125
     class rtl::OUString FlagsToString(enum InsertDeleteFlags,enum InsertDeleteFlags)
     enum InsertDeleteFlags nFlagsMask setBits=0x87f clearBits=0x700
-sw/source/core/view/viewsh.cxx:727
+sw/source/core/view/viewsh.cxx:728
     void lcl_InvalidateAllContent(class SwViewShell &,enum SwInvalidateFlags)
     enum SwInvalidateFlags nInv setBits=0x2
 sw/source/filter/html/swhtml.hxx:670
@@ -52,6 +49,6 @@ sw/source/filter/ww8/wrtw8esh.cxx:1557
 xmloff/inc/MetaExportComponent.hxx:32
     void XMLMetaExportComponent::XMLMetaExportComponent(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
     enum SvXMLExportFlags nFlags setBits=0x1
-xmloff/source/text/XMLAutoTextEventExport.hxx:53
+xmloff/source/text/XMLAutoTextEventExport.hxx:51
     void XMLAutoTextEventExport::XMLAutoTextEventExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
     enum SvXMLExportFlags nFlags setBits=0xdff clearBits=0x200

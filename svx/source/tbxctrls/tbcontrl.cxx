@@ -3867,12 +3867,12 @@ void ColorListBox::EnsurePaletteManager()
     }
 }
 
-void SvxColorListBox::SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton)
+void SvxColorListBox::SetSlotId(sal_uInt16 nSlotId)
 {
     m_nSlotId = nSlotId;
-    m_bShowNoneButton = bShowNoneButton;
+    m_bShowNoneButton = false;
     m_xColorWindow.disposeAndClear();
-    m_aSelectedColor = bShowNoneButton ? GetNoneColor() : GetAutoColor(m_nSlotId);
+    m_aSelectedColor = GetAutoColor(m_nSlotId);
     ShowPreview(m_aSelectedColor);
     createColorWindow();
 }

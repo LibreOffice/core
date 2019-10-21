@@ -386,7 +386,7 @@ IMPL_LINK(SvxMenuConfigPage, InsertHdl, const OString&, rIdent, void)
     {
         SvxConfigEntry* pNewEntryData = new SvxConfigEntry;
         pNewEntryData->SetUserDefined();
-        int nPos = InsertEntry(pNewEntryData, -1);
+        int nPos = AppendEntry(pNewEntryData, -1);
         InsertEntryIntoUI(pNewEntryData, nPos, 0);
     }
     else if (rIdent == "insertsubmenu")
@@ -407,7 +407,7 @@ IMPL_LINK(SvxMenuConfigPage, InsertHdl, const OString&, rIdent, void)
             pNewEntryData->SetName( aNewName );
             pNewEntryData->SetUserDefined();
 
-            int nPos = InsertEntry(pNewEntryData, -1);
+            int nPos = AppendEntry(pNewEntryData, -1);
             InsertEntryIntoUI(pNewEntryData, nPos, 0);
 
             ReloadTopLevelListBox();

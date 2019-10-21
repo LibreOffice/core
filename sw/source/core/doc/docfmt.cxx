@@ -546,7 +546,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     if( !rSet.Count() )
         return;
 
-    SwModify aCallMod( nullptr );
+    SwModify aCallMod;
     SwAttrSet aOld( GetAttrPool(), rSet.GetRanges() ),
             aNew( GetAttrPool(), rSet.GetRanges() );
     SfxItemIter aIter( rSet );

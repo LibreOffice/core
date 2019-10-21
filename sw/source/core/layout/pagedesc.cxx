@@ -43,7 +43,7 @@
 #include <hints.hxx>
 
 SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *const pDoc)
-    : SwModify(nullptr)
+    : SwModify()
     , m_StyleName( rName )
     , m_Master( pDoc->GetAttrPool(), rName, pFormat )
     , m_Left( pDoc->GetAttrPool(), rName, pFormat )
@@ -63,7 +63,7 @@ SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *con
 }
 
 SwPageDesc::SwPageDesc( const SwPageDesc &rCpy )
-    : SwModify(nullptr)
+    : SwModify()
     , BroadcasterMixin()
     , m_StyleName( rCpy.GetName() )
     , m_NumType( rCpy.GetNumType() )

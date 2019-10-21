@@ -2457,7 +2457,7 @@ void TextEngine::RemoveAttribs( sal_uInt32 nPara )
     }
 }
 
-void TextEngine::SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32 nStart, sal_Int32 nEnd, bool bIdleFormatAndUpdate )
+void TextEngine::SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32 nStart, sal_Int32 nEnd )
 {
 
     // For now do not check if Attributes overlap!
@@ -2480,10 +2480,7 @@ void TextEngine::SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32
         pTEParaPortion->MarkSelectionInvalid( nStart );
 
         mbFormatted = false;
-        if ( bIdleFormatAndUpdate )
-            IdleFormatAndUpdate( nullptr, 0xFFFF );
-        else
-            FormatAndUpdate();
+        IdleFormatAndUpdate( nullptr, 0xFFFF );
     }
 }
 

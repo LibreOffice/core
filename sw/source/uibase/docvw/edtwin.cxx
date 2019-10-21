@@ -6160,8 +6160,7 @@ bool SwEditWin::ShowAutoText(const std::vector<OUString>& rChunkCandidates)
 }
 
 void SwEditWin::ShowAutoCorrectQuickHelp(
-        const OUString& rWord, SvxAutoCorrect& rACorr,
-        bool bFromIME )
+        const OUString& rWord, SvxAutoCorrect& rACorr )
 {
     if (rWord.isEmpty())
         return;
@@ -6172,8 +6171,7 @@ void SwEditWin::ShowAutoCorrectQuickHelp(
         rACorr.GetSwFlags().bAutoCompleteWords )
     {
         m_pQuickHlpData->m_bIsAutoText = false;
-        m_pQuickHlpData->m_bIsTip = bFromIME ||
-                    rACorr.GetSwFlags().bAutoCmpltShowAsTip;
+        m_pQuickHlpData->m_bIsTip = rACorr.GetSwFlags().bAutoCmpltShowAsTip;
 
         // Get the necessary data to show help text.
         m_pQuickHlpData->FillStrArr( rSh, rWord );

@@ -186,15 +186,9 @@ namespace dbaui
         return sURL;
     }
 
-    OpenDocumentListBox::StringPair OpenDocumentListBox::impl_getDocumentAtIndex( sal_uInt16 _nListIndex, bool _bSystemNotation ) const
+    OpenDocumentListBox::StringPair OpenDocumentListBox::impl_getDocumentAtIndex( sal_uInt16 _nListIndex ) const
     {
-        StringPair aDocumentDescriptor = m_aURLs[_nListIndex];
-        if ( _bSystemNotation && !aDocumentDescriptor.first.isEmpty() )
-        {
-            ::svt::OFileNotation aNotation( aDocumentDescriptor.first );
-            aDocumentDescriptor.first = aNotation.get( ::svt::OFileNotation::N_SYSTEM );
-        }
-        return aDocumentDescriptor;
+        return m_aURLs[_nListIndex];
     }
 
 } // namespace dbaui

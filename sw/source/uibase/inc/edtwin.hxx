@@ -189,8 +189,7 @@ class SW_DLLPUBLIC SwEditWin final : public vcl::Window,
     virtual OUString GetSurroundingText() const override;
     virtual Selection GetSurroundingTextSelection() const override;
 
-    void ShowAutoCorrectQuickHelp(const OUString& rWord, SvxAutoCorrect& rACorr,
-                                  bool bFromIME = false);
+    void ShowAutoCorrectQuickHelp(const OUString& rWord, SvxAutoCorrect& rACorr);
     bool ShowAutoText(const std::vector<OUString>& rChunkCandidates);
 
     /// Returns true if in header/footer area, or in the header/footer control.

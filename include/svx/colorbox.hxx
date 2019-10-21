@@ -57,7 +57,7 @@ public:
         m_aSelectedLink = rLink;
     }
 
-    void SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton = false);
+    void SetSlotId(sal_uInt16 nSlotId);
 
     Color const & GetSelectEntryColor() const { return m_aSelectedColor.first; }
 

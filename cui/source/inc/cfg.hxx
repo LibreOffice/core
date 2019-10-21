@@ -426,9 +426,8 @@ protected:
 
     virtual void            SelectElement() = 0;
 
-    int                 InsertEntry(SvxConfigEntry* pNewEntryData,
-                                    int nTarget,
-                                    bool bFront = false);
+    int                 AppendEntry(SvxConfigEntry* pNewEntryData,
+                                    int nTarget);
 
     void                AddSubMenusToUI(    const OUString& rBaseTitle,
                                         SvxConfigEntry const * pParentData );

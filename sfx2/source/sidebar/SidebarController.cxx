@@ -74,13 +74,13 @@ namespace
     const static sal_Int32 gnWidthCloseThreshold (70);
     const static sal_Int32 gnWidthOpenThreshold (40);
 
-    std::string UnoNameFromDeckId(const OUString& rsDeckId, bool isDraw=false)
+    std::string UnoNameFromDeckId(const OUString& rsDeckId)
     {
         if (rsDeckId == "SdCustomAnimationDeck")
             return ".uno:CustomAnimation";
 
         if (rsDeckId == "PropertyDeck")
-            return isDraw ? ".uno:ModifyPage" : ".uno:Sidebar";
+            return ".uno:Sidebar";
 
         if (rsDeckId == "SdLayoutsDeck")
             return ".uno:ModifyPage";
