@@ -42,6 +42,7 @@ class SfxPoolItem;
 class SwTextFormatColl;
 class SwNode;
 class SwPageDescs;
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 /// Footnote information.
 class SW_DLLPUBLIC SwPageFootnoteInfo
@@ -273,6 +274,8 @@ public:
 
     SwPageDesc( const SwPageDesc& );
     virtual ~SwPageDesc() override;
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 namespace std {
@@ -431,6 +434,8 @@ public:
 
     bool contains( const value_type& x ) const
         { return x->m_pdList == this; }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 #endif // INCLUDED_SW_INC_PAGEDESC_HXX
