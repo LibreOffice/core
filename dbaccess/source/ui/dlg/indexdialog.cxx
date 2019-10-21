@@ -98,8 +98,8 @@ namespace dbaui
         m_xActions->connect_clicked(LINK(this, DbaIndexDialog, OnIndexAction));
 
         m_xIndexList->connect_changed(LINK(this, DbaIndexDialog, OnIndexSelected));
-        m_xIndexList->connect_editing_started(LINK(this, DbaIndexDialog, OnEntryEditing));
-        m_xIndexList->connect_editing_done(LINK(this, DbaIndexDialog, OnEntryEdited));
+        m_xIndexList->connect_editing(LINK(this, DbaIndexDialog, OnEntryEditing),
+                                      LINK(this, DbaIndexDialog, OnEntryEdited));
 
         m_xFields->SetSizePixel(Size(nWidth, 100));
         m_xFields->Init(_rFieldNames, ::dbtools::getBooleanDataSourceSetting( m_xConnection, "AddIndexAppendix" ));

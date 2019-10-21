@@ -667,7 +667,7 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     m_xIconStyleLB->append_text(entryForAuto);
 
     // separate auto and other icon themes
-    m_xIconStyleLB->append_separator();
+    m_xIconStyleLB->append_separator("");
 
     for (auto const& installIconTheme : mInstalledIconThemes)
         m_xIconStyleLB->append_text(installIconTheme.GetDisplayName());

@@ -8,76 +8,39 @@
  */
 
 #include <tools/urlobj.hxx>
-#include <vcl/fixedhyper.hxx>
+#include <vcl/svapp.hxx>
 #include "breadcrumb.hxx"
 
-class CustomLink : public FixedHyperlink
+Breadcrumb::Breadcrumb(weld::Container* pParent)
+    : m_pParent(pParent)
+    , m_nMaxWidth(m_pParent->get_preferred_size().Width())
 {
-public:
-    CustomLink( vcl::Window* pParent, WinBits nWinStyle )
-    : FixedHyperlink( pParent, nWinStyle )
-    {
-        vcl::Font aFont = GetControlFont( );
-        aFont.SetUnderline( LINESTYLE_NONE );
-        SetControlFont( aFont );
-    }
-
-protected:
-    virtual void MouseMove( const MouseEvent& rMEvt ) override
-    {
-        // changes the style if the control is enabled
-        if ( !rMEvt.IsLeaveWindow() && IsEnabled() )
-        {
-            vcl::Font aFont = GetControlFont( );
-            aFont.SetUnderline( LINESTYLE_SINGLE );
-            SetControlFont( aFont );
-        }
-        else
-        {
-            vcl::Font aFont = GetControlFont( );
-            aFont.SetUnderline( LINESTYLE_NONE );
-            SetControlFont( aFont );
-        }
-
-        FixedHyperlink::MouseMove( rMEvt );
-    }
-};
-
-Breadcrumb::Breadcrumb( vcl::Window* pParent ) : VclHBox( pParent )
-{
+    m_pParent->connect_size_allocate(LINK(this, Breadcrumb, SizeAllocHdl));
     m_eMode = SvtBreadcrumbMode::ONLY_CURRENT_PATH;
-    set_spacing( SPACING );
     appendField(); // root
+}
+
+IMPL_LINK(Breadcrumb, SizeAllocHdl, const Size&, rSize, void)
+{
+    m_nMaxWidth = rSize.Width();
 }
 
 Breadcrumb::~Breadcrumb()
 {
-    disposeOnce();
-}
-
-void Breadcrumb::dispose()
-{
-    for( std::vector<VclPtr<FixedHyperlink>>::size_type i = 0; i < m_aLinks.size(); i++ )
-    {
-        m_aSeparators[i].disposeAndClear();
-        m_aLinks[i].disposeAndClear();
-    }
-
-    VclHBox::dispose();
+    m_pParent->connect_size_allocate(Link<const Size&, void>());
 }
 
 void Breadcrumb::EnableFields( bool bEnable )
 {
-    VclHBox::Enable( bEnable );
     if( bEnable )
     {
         INetURLObject aURL( m_aCurrentURL );
         int nSegments = aURL.getSegmentCount();
-        m_aLinks[nSegments]->Enable( false );
+        m_aSegments[nSegments]->m_xLink->set_sensitive(false);
     }
 }
 
-void Breadcrumb::SetClickHdl( const Link<Breadcrumb*,void>& rLink )
+void Breadcrumb::connect_clicked( const Link<Breadcrumb*,void>& rLink )
 {
     m_aClickHdl = rLink;
 }
@@ -92,13 +55,13 @@ void Breadcrumb::SetRootName( const OUString& rURL )
     m_sRootName = rURL;
 
     // we changed root - clear all fields
-    for( std::vector<VclPtr<FixedHyperlink>>::size_type i = 1; i < m_aLinks.size(); i++ )
+    for (size_t i = 1; i < m_aSegments.size(); ++i)
     {
-        m_aLinks[i]->SetText( "" );
+        m_aSegments[i]->m_xLink->set_label("");
 
-        m_aLinks[i]->Hide();
-        m_aSeparators[i]->Hide();
-        m_aLinks[i]->Enable();
+        m_aSegments[i]->m_xLink->hide();
+        m_aSegments[i]->m_xSeparator->hide();
+        m_aSegments[i]->m_xLink->set_sensitive(true);
     }
 }
 
@@ -130,16 +93,16 @@ void Breadcrumb::SetURL( const OUString& rURL )
     bool bClear = ( m_eMode == SvtBreadcrumbMode::ONLY_CURRENT_PATH );
 
     // root field
-
-    m_aLinks[0]->SetText( m_sRootName );
-    m_aLinks[0]->Enable();
-    m_aLinks[0]->SetURL( sRootPath );
+    m_aSegments[0]->m_xLink->set_label( m_sRootName );
+    m_aSegments[0]->m_xLink->set_sensitive(true);
+    m_aSegments[0]->m_xLink->set_uri(sRootPath);
+    m_aUris[m_aSegments[0]->m_xLink.get()] = sRootPath;
 
     // fill the other fields
 
     for( unsigned int i = 1; i < static_cast<unsigned int>(nSegments) + 1; i++ )
     {
-        if( i >= m_aLinks.size() )
+        if( i >= m_aSegments.size() )
             appendField();
 
         unsigned int nEnd = sPath.indexOf( '/', nPos + 1 );
@@ -147,37 +110,33 @@ void Breadcrumb::SetURL( const OUString& rURL )
 
         if( m_eMode == SvtBreadcrumbMode::ALL_VISITED )
         {
-            if( m_aLinks[i]->GetText() != sLabel )
+            if( m_aSegments[i]->m_xLink->get_label() != sLabel )
                 bClear = true;
         }
 
-        m_aLinks[i]->SetText( sLabel );
-        m_aLinks[i]->SetURL( sRootPath + sPath.copy( 0, nEnd ) );
-        m_aLinks[i]->Hide();
-        m_aLinks[i]->Enable();
+        m_aSegments[i]->m_xLink->set_label( sLabel );
+        m_aUris[m_aSegments[i]->m_xLink.get()] = sRootPath + sPath.copy(0, nEnd);
+        m_aSegments[i]->m_xLink->hide();
+        m_aSegments[i]->m_xLink->set_sensitive(true);
 
-        m_aSeparators[i]->Hide();
+        m_aSegments[i]->m_xSeparator->hide();
 
         nPos = nEnd;
     }
 
     // clear unused fields
-
-    for( std::vector<VclPtr<FixedHyperlink>>::size_type i = nSegments + 1; i < m_aLinks.size(); i++ )
+    for (size_t i = nSegments + 1; i < m_aSegments.size(); i++ )
     {
         if( bClear )
-            m_aLinks[i]->SetText( "" );
+            m_aSegments[i]->m_xLink->set_label( "" );
 
-        m_aLinks[i]->Hide();
-        m_aSeparators[i]->Hide();
-        m_aLinks[i]->Enable();
+        m_aSegments[i]->m_xLink->hide();
+        m_aSegments[i]->m_xSeparator->hide();
+        m_aSegments[i]->m_xLink->set_sensitive(true);
     }
 
     // show fields
-
-    Resize();
-    unsigned int nMaxWidth = GetSizePixel().Width();
-    unsigned int nSeparatorWidth = m_aSeparators[0]->GetSizePixel().Width();
+    unsigned int nSeparatorWidth = m_aSegments[0]->m_xSeparator->get_preferred_size().Width();
     unsigned int nCurrentWidth = 0;
     unsigned int nLastVisible = nSegments;
 
@@ -195,9 +154,9 @@ void Breadcrumb::SetURL( const OUString& rURL )
         {
             unsigned int nIndex = nSegments - i;
 
-            if( showField( nIndex, nMaxWidth - nCurrentWidth ) )
+            if( showField( nIndex, m_nMaxWidth - nCurrentWidth ) )
             {
-                nCurrentWidth += m_aLinks[nIndex]->GetSizePixel().Width()
+                nCurrentWidth += m_aSegments[nIndex]->m_xLink->get_preferred_size().Width()
                                 + nSeparatorWidth + 2*SPACING;
             }
             else
@@ -205,27 +164,27 @@ void Breadcrumb::SetURL( const OUString& rURL )
                 // label is too long
                 if( nSegments != 0 )
                 {
-                    m_aLinks[0]->SetText( "..." );
-                    m_aLinks[0]->Enable( false );
+                    m_aSegments[0]->m_xLink->set_label("...");
+                    m_aSegments[0]->m_xLink->set_sensitive(false);
                 }
                 bLeft = false;
             }
         }
 
-        if( nSegments + i == static_cast<int>(m_aLinks.size()) )
+        if( nSegments + i == static_cast<int>(m_aSegments.size()) )
             bRight = false;
 
         if( i != 0 && bRight )
         {
             unsigned int nIndex = nSegments + i;
 
-            if( m_aLinks[nIndex]->GetText().isEmpty() )
+            if( m_aSegments[nIndex]->m_xLink->get_label().isEmpty() )
             {
                 bRight = false;
             }
-            else if( showField( nIndex, nMaxWidth - nCurrentWidth ) )
+            else if( showField( nIndex, m_nMaxWidth - nCurrentWidth ) )
             {
-                nCurrentWidth += m_aLinks[nIndex]->GetSizePixel().Width()
+                nCurrentWidth += m_aSegments[nIndex]->m_xLink->get_preferred_size().Width()
                                 + nSeparatorWidth + 3*SPACING;
                 nLastVisible = nIndex;
             }
@@ -239,10 +198,10 @@ void Breadcrumb::SetURL( const OUString& rURL )
     }
 
     // current dir should be inactive
-    m_aLinks[nSegments]->Enable( false );
+    m_aSegments[nSegments]->m_xLink->set_sensitive(false);
 
     // hide last separator
-    m_aSeparators[nLastVisible]->Hide();
+    m_aSegments[nLastVisible]->m_xSeparator->hide();
 }
 
 void Breadcrumb::SetMode( SvtBreadcrumbMode eMode )
@@ -252,30 +211,29 @@ void Breadcrumb::SetMode( SvtBreadcrumbMode eMode )
 
 void Breadcrumb::appendField()
 {
-    m_aLinks.push_back( VclPtr< CustomLink >::Create( this, WB_TABSTOP ) );
-    m_aLinks[m_aLinks.size() - 1]->Hide();
-    m_aLinks[m_aLinks.size() - 1]->SetClickHdl( LINK( this, Breadcrumb, ClickLinkHdl ) );
-
-    m_aSeparators.push_back( VclPtr< FixedText >::Create( this ) );
-    m_aSeparators[m_aLinks.size() - 1]->SetText( ">" );
-    m_aSeparators[m_aLinks.size() - 1]->Hide();
+    m_aSegments.emplace_back(std::make_unique<BreadcrumbPath>(m_pParent));
+    size_t nIndex = m_aSegments.size() - 1;
+    m_aSegments[nIndex]->m_xLink->hide();
+    m_aSegments[nIndex]->m_xLink->connect_clicked( LINK( this, Breadcrumb, ClickLinkHdl ) );
+    m_aSegments[nIndex]->m_xSeparator->set_label( ">" );
+    m_aSegments[nIndex]->m_xSeparator->hide();
 }
 
 bool Breadcrumb::showField( unsigned int nIndex, unsigned int nWidthMax )
 {
-    m_aLinks[nIndex]->Show();
-    m_aSeparators[nIndex]->Show();
+    m_aSegments[nIndex]->m_xLink->show();
+    m_aSegments[nIndex]->m_xSeparator->show();
 
-    unsigned int nSeparatorWidth = m_aSeparators[0]->GetSizePixel().Width();
-    unsigned int nWidth = m_aLinks[nIndex]->GetSizePixel().Width()
+    unsigned int nSeparatorWidth = m_aSegments[0]->m_xSeparator->get_preferred_size().Width();
+    unsigned int nWidth = m_aSegments[nIndex]->m_xLink->get_preferred_size().Width()
             + nSeparatorWidth + 3*SPACING;
 
     if( nWidth > nWidthMax )
     {
         if( nIndex != 0 )
         {
-            m_aLinks[nIndex]->Hide();
-            m_aSeparators[nIndex]->Hide();
+            m_aSegments[nIndex]->m_xLink->hide();
+            m_aSegments[nIndex]->m_xSeparator->hide();
         }
 
         return false;
@@ -284,10 +242,18 @@ bool Breadcrumb::showField( unsigned int nIndex, unsigned int nWidthMax )
     return true;
 }
 
-IMPL_LINK( Breadcrumb, ClickLinkHdl, FixedHyperlink&, rLink, void )
+IMPL_LINK( Breadcrumb, ClickLinkHdl, weld::LinkButton&, rLink, void )
 {
-    m_sClickedURL = rLink.GetURL();
+    m_sClickedURL = m_aUris[&rLink];
     m_aClickHdl.Call( this );
+}
+
+BreadcrumbPath::BreadcrumbPath(weld::Container* pContainer)
+    : m_xBuilder(Application::CreateBuilder(pContainer, "fps/ui/breadcrumb.ui"))
+    , m_xContainer(m_xBuilder->weld_container("container"))
+    , m_xLink(m_xBuilder->weld_link_button("link"))
+    , m_xSeparator(m_xBuilder->weld_label("label"))
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

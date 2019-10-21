@@ -24,7 +24,6 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <vcl/vclptr.hxx>
 
 class SvtFileView;
 class SvtFileDialog_Base;
@@ -47,8 +46,8 @@ namespace svt
 
     private:
         Action                      m_eAction;
-        VclPtr<SvtFileView>         m_pView;
-        VclPtr<SvtFileDialog_Base>  m_pDialog;
+        SvtFileView*                m_pView;
+        SvtFileDialog_Base*         m_pDialog;
         OUString                    m_sURL;
         OUString                    m_sFileName;
         bool                        m_bRunning;

@@ -4982,10 +4982,6 @@ fpicker/source/office/fileview.cxx
 fpicker/source/office/fileview.hxx
 fpicker/source/office/foldertree.cxx
 fpicker/source/office/foldertree.hxx
-fpicker/source/office/iconview.cxx
-fpicker/source/office/iconview.hxx
-fpicker/source/office/iconviewimpl.cxx
-fpicker/source/office/iconviewimpl.hxx
 fpicker/source/office/fpdialogbase.hxx
 fpicker/source/office/fpinteraction.cxx
 fpicker/source/office/fpinteraction.hxx
@@ -17253,6 +17249,8 @@ vcl/inc/headless/svpprn.hxx
 vcl/inc/headless/svpvd.hxx
 vcl/inc/helpwin.hxx
 vcl/inc/hyperlabel.hxx
+vcl/inc/iconview.hxx
+vcl/inc/iconviewimpl.hxx
 vcl/inc/image.h
 vcl/inc/impanmvw.hxx
 vcl/inc/impdel.hxx
@@ -17915,6 +17913,8 @@ vcl/source/salmain/salmain.cxx
 vcl/source/toolkit/group.cxx
 vcl/source/toolkit/morebtn.cxx
 vcl/source/treelist/headbar.cxx
+vcl/source/treelist/iconview.cxx
+vcl/source/treelist/iconviewimpl.cxx
 vcl/source/treelist/imap.cxx
 vcl/source/treelist/imap2.cxx
 vcl/source/treelist/imap3.cxx

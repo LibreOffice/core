@@ -27,6 +27,7 @@
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
+#include <assert.h>
 #include <memory>
 #include <vector>
 
@@ -599,8 +600,8 @@ public:
     {
         insert(-1, rStr, &rId, nullptr, &rImage);
     }
-    virtual void insert_separator(int pos) = 0;
-    void append_separator() { insert_separator(-1); }
+    virtual void insert_separator(int pos, const OUString& rId) = 0;
+    void append_separator(const OUString& rId) { insert_separator(-1, rId); }
 
     virtual int get_count() const = 0;
     virtual void make_sorted() = 0;
@@ -911,16 +912,15 @@ public:
 
     void connect_expanding(const Link<const TreeIter&, bool>& rLink) { m_aExpandingHdl = rLink; }
 
-    // return true to allow editing, false to disallow
-    virtual void connect_editing_started(const Link<const TreeIter&, bool>& rLink)
-    {
-        m_aEditingStartedHdl = rLink;
-    }
-
+    // rStartLink returns true to allow editing, false to disallow
+    // rEndLink returns true to accept the edit, false to reject
     virtual void
-    connect_editing_done(const Link<const std::pair<const TreeIter&, OUString>&, bool>& rLink)
+    connect_editing(const Link<const TreeIter&, bool>& rStartLink,
+                    const Link<const std::pair<const TreeIter&, OUString>&, bool>& rEndLink)
     {
-        m_aEditingDoneHdl = rLink;
+        assert(rStartLink.IsSet() == rEndLink.IsSet() && "should be both on or both off");
+        m_aEditingStartedHdl = rStartLink;
+        m_aEditingDoneHdl = rEndLink;
     }
 
     virtual void start_editing(const weld::TreeIter& rEntry) = 0;
@@ -991,6 +991,77 @@ public:
     virtual TreeView* get_drag_source() const = 0;
 
     using Widget::set_sensitive;
+};
+
+class VCL_DLLPUBLIC IconView : virtual public Container
+{
+private:
+    OUString m_sSavedValue;
+
+protected:
+    Link<IconView&, void> m_aSelectionChangeHdl;
+    Link<IconView&, bool> m_aItemActivatedHdl;
+
+    void signal_selection_changed() { m_aSelectionChangeHdl.Call(*this); }
+    bool signal_item_activated() { return m_aItemActivatedHdl.Call(*this); }
+
+public:
+    virtual void insert(int pos, const OUString* pStr, const OUString* pId,
+                        const OUString* pIconName, TreeIter* pRet)
+        = 0;
+
+    void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
+    {
+        insert(-1, &rStr, &rId, &rImage, nullptr);
+    }
+
+    void connect_selection_changed(const Link<IconView&, void>& rLink)
+    {
+        m_aSelectionChangeHdl = rLink;
+    }
+
+    /* A row is "activated" when the user double clicks a treeview row. It may
+       also be emitted when a row is selected and Space or Enter is pressed.
+
+       a return of "true" means the activation has been handled, a "false" propagates
+       the activation to the default handler which expands/collapses the row, if possible.
+    */
+    void connect_item_activated(const Link<IconView&, bool>& rLink) { m_aItemActivatedHdl = rLink; }
+
+    virtual OUString get_selected_id() const = 0;
+
+    virtual void clear() = 0;
+
+    virtual int count_selected_items() const = 0;
+
+    virtual OUString get_selected_text() const = 0;
+
+    //by index
+    virtual void select(int pos) = 0;
+    virtual void unselect(int pos) = 0;
+
+    //via iter
+    virtual std::unique_ptr<TreeIter> make_iterator(const TreeIter* pOrig = nullptr) const = 0;
+    virtual bool get_selected(TreeIter* pIter) const = 0;
+    virtual bool get_cursor(TreeIter* pIter) const = 0;
+    virtual void set_cursor(const TreeIter& rIter) = 0;
+    virtual bool get_iter_first(TreeIter& rIter) const = 0;
+    virtual OUString get_id(const TreeIter& rIter) const = 0;
+    virtual void scroll_to_item(const TreeIter& rIter) = 0;
+
+    // call func on each selected element until func returns true or we run out of elements
+    virtual void selected_foreach(const std::function<bool(TreeIter&)>& func) = 0;
+
+    //all of them
+    void select_all() { unselect(-1); }
+    void unselect_all() { select(-1); }
+
+    // return the number of toplevel nodes
+    virtual int n_children() const = 0;
+
+    void save_value() { m_sSavedValue = get_selected_text(); }
+    OUString const& get_saved_value() const { return m_sSavedValue; }
+    bool get_value_changed_from_saved() const { return m_sSavedValue != get_selected_text(); }
 };
 
 class VCL_DLLPUBLIC Button : virtual public Container
@@ -1334,6 +1405,7 @@ class VCL_DLLPUBLIC Image : virtual public Widget
 public:
     virtual void set_from_icon_name(const OUString& rIconName) = 0;
     virtual void set_image(VirtualDevice* pDevice) = 0;
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) = 0;
 };
 
 class VCL_DLLPUBLIC Calendar : virtual public Widget
@@ -1846,6 +1918,7 @@ public:
     virtual bool get_item_sensitive(const OString& rIdent) const = 0;
     virtual void set_item_active(const OString& rIdent, bool bActive) = 0;
     virtual bool get_item_active(const OString& rIdent) const = 0;
+    virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) = 0;
     virtual void set_item_popover(const OString& rIdent, weld::Widget* pPopover) = 0;
 
     virtual void insert_separator(int pos, const OUString& rId) = 0;
@@ -1926,6 +1999,8 @@ public:
     virtual std::unique_ptr<ComboBox> weld_combo_box(const OString& id, bool bTakeOwnership = false)
         = 0;
     virtual std::unique_ptr<TreeView> weld_tree_view(const OString& id, bool bTakeOwnership = false)
+        = 0;
+    virtual std::unique_ptr<IconView> weld_icon_view(const OString& id, bool bTakeOwnership = false)
         = 0;
     virtual std::unique_ptr<Label> weld_label(const OString& id, bool bTakeOwnership = false) = 0;
     virtual std::unique_ptr<TextView> weld_text_view(const OString& id, bool bTakeOwnership = false)

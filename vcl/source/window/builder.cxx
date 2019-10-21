@@ -48,6 +48,7 @@
 #include <vcl/slider.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <iconview.hxx>
 #include <svdata.hxx>
 #include <bitmaps.hlst>
 #include <messagedialog.hxx>
@@ -2039,6 +2040,29 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                 xBox->EnableAutoSize(true);
             xWindow = xBox;
         }
+    }
+    else if (name == "GtkIconView")
+    {
+        assert(rMap.find(OString("model")) != rMap.end() && "GtkIconView must have a model");
+
+        //window we want to apply the packing props for this GtkIconView to
+        VclPtr<vcl::Window> xWindowForPackingProps;
+        extractModel(id, rMap);
+        WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_HIDESELECTION;
+        //IconView manages its own scrolling,
+        vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
+        if (pRealParent != pParent)
+            nWinStyle |= WB_BORDER;
+
+        VclPtr<IconView> xBox = VclPtr<IconView>::Create(pRealParent, nWinStyle);
+        xWindowForPackingProps = xBox;
+
+        xWindow = xBox;
+        xBox->SetNoAutoCurEntry(true);
+        xBox->SetQuickSearch(true);
+
+        if (pRealParent != pParent)
+            cleanupWidgetOwnScrolling(pParent, xWindowForPackingProps, rMap);
     }
     else if (name == "GtkTreeView")
     {
