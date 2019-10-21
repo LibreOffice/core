@@ -1394,7 +1394,18 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
                 ++m_nFieldsInHyperlink;
 
             // Remove the field if no end needs to be written
-            if ( !pIt->bClose ) {
+            if (!pIt->bSep)
+            {
+                pIt = m_Fields.erase( pIt );
+                continue;
+            }
+        }
+        if (pIt->bSep && !pIt->pField)
+        {
+            CmdEndField_Impl(pNode, nPos, true);
+            // Remove the field if no end needs to be written
+            if (!pIt->bClose)
+            {
                 pIt = m_Fields.erase( pIt );
                 continue;
             }
@@ -2073,9 +2084,12 @@ void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos
             m_pSerializer->endElementNS( XML_w, XML_r );
         }
     }
+}
 
+void DocxAttributeOutput::CmdEndField_Impl(SwTextNode const*const pNode,
+        sal_Int32 const nPos, bool const bWriteRun)
+{
     // Write the Field separator
-    {
         if ( bWriteRun )
         {
             m_pSerializer->startElementNS(XML_w, XML_r);
@@ -2089,7 +2103,6 @@ void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos
         {
             m_pSerializer->endElementNS( XML_w, XML_r );
         }
-    }
 }
 
 /// Writes properties for run that is used to separate field implementation.
@@ -2190,6 +2203,7 @@ void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos
     if ( rInfos.pField )
     {
         CmdField_Impl( pNode, nPos, rInfos, true );
+        CmdEndField_Impl( pNode, nPos, true );
     }
 
     // Write the bookmark start if any
@@ -7356,6 +7370,7 @@ void DocxAttributeOutput::WriteField_Impl( const SwField* pField, ww::eField eTy
     infos.sCmd = rFieldCmd;
     infos.eType = eType;
     infos.bClose = bool(FieldFlags::Close & nMode);
+    infos.bSep = bool(FieldFlags::CmdEnd & nMode);
     infos.bOpen = bool(FieldFlags::Start & nMode);
     m_Fields.push_back( infos );
 
