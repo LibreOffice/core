@@ -937,7 +937,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         // include filtered rows until TransposeClip can skip them
         bIncludeFiltered = true;
         pClipDoc->GetClipArea( nX, nY, true );
-        if ( nY > static_cast<sal_Int32>(MAXCOL) )                      // too many lines for transpose
+        if ( nY > static_cast<sal_Int32>(pClipDoc->MaxCol()) )                      // too many lines for transpose
         {
             ErrorMessage(STR_PASTE_FULL);
             return false;
@@ -1187,7 +1187,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     nUndoEndCol = sal::static_int_cast<SCCOL>( nUndoEndCol + nEndCol );
     nUndoEndRow = sal::static_int_cast<SCROW>( nUndoEndRow + nEndRow ); // destination area, expanded for merged cells
 
-    if (nUndoEndCol>MAXCOL || nUndoEndRow>MAXROW)
+    if (nUndoEndCol>pClipDoc->MaxCol() || nUndoEndRow>pClipDoc->MaxRow())
     {
         ErrorMessage(STR_PASTE_FULL);
         return false;
@@ -1243,8 +1243,8 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
             pChangeTrack->ResetLastCut();   // no more cut-mode
     }
 
-    bool bColInfo = ( nStartRow==0 && nEndRow==MAXROW );
-    bool bRowInfo = ( nStartCol==0 && nEndCol==MAXCOL );
+    bool bColInfo = ( nStartRow==0 && nEndRow==pDoc->MaxRow() );
+    bool bRowInfo = ( nStartCol==0 && nEndCol==pDoc->MaxCol() );
 
     ScDocumentUniquePtr pUndoDoc;
     std::unique_ptr<ScDocument> pRefUndoDoc;
@@ -1401,7 +1401,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
             //      not charts?
             pUndoDoc->AddUndoTab( 0, nTabCount-1 );
             pRefUndoDoc->DeleteArea( nStartCol, nStartRow, nEndCol, nEndRow, aFilteredMark, InsertDeleteFlags::ALL );
-            pRefUndoDoc->CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1,
+            pRefUndoDoc->CopyToDocument( 0,0,0, pUndoDoc->MaxCol(), pUndoDoc->MaxRow(), nTabCount-1,
                                             InsertDeleteFlags::FORMULA, false, *pUndoDoc );
             pRefUndoDoc.reset();
         }
@@ -1437,12 +1437,12 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     if (bColInfo)
     {
         nPaint |= PaintPartFlags::Top;
-        nUndoEndCol = MAXCOL;               // just for drawing !
+        nUndoEndCol = pDoc->MaxCol();               // just for drawing !
     }
     if (bRowInfo)
     {
         nPaint |= PaintPartFlags::Left;
-        nUndoEndRow = MAXROW;               // just for drawing !
+        nUndoEndRow = pDoc->MaxRow();               // just for drawing !
     }
     pDocSh->PostPaint(
         ScRange(nStartCol, nStartRow, nStartTab, nUndoEndCol, nUndoEndRow, nEndTab),
@@ -1486,7 +1486,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
 
     if (bTranspose)
     {
-        if (static_cast<SCROW>(rCurPos.Col()) + nRowSize-1 > static_cast<SCROW>(MAXCOL))
+        if (static_cast<SCROW>(rCurPos.Col()) + nRowSize-1 > static_cast<SCROW>(pClipDoc->MaxCol()))
         {
             ErrorMessage(STR_PASTE_FULL);
             return false;
@@ -1547,7 +1547,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
             return false;
     }
 
-    bool bRowInfo = ( aMarkedRange.aStart.Col()==0 && aMarkedRange.aEnd.Col()==MAXCOL );
+    bool bRowInfo = ( aMarkedRange.aStart.Col()==0 && aMarkedRange.aEnd.Col()==pClipDoc->MaxCol() );
     ScDocumentUniquePtr pUndoDoc;
     if (pDoc->IsUndoEnabled())
     {
@@ -1593,7 +1593,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     }
 
     if (bRowInfo)
-        pDocSh->PostPaint(aMarkedRange.aStart.Col(), aMarkedRange.aStart.Row(), nTab1, MAXCOL, MAXROW, nTab1, PaintPartFlags::Grid|PaintPartFlags::Left);
+        pDocSh->PostPaint(aMarkedRange.aStart.Col(), aMarkedRange.aStart.Row(), nTab1, pClipDoc->MaxCol(), pClipDoc->MaxRow(), nTab1, PaintPartFlags::Grid|PaintPartFlags::Left);
     else
     {
         ScRange aTmp = aMarkedRange;
@@ -1761,7 +1761,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
     // Refresh the range that includes all pasted ranges.  We only need to
     // refresh the current sheet.
     PaintPartFlags nPaint = PaintPartFlags::Grid;
-    bool bRowInfo = (aSrcRange.aStart.Col()==0 &&  aSrcRange.aEnd.Col()==MAXCOL);
+    bool bRowInfo = (aSrcRange.aStart.Col()==0 &&  aSrcRange.aEnd.Col()==pClipDoc->MaxCol());
     if (bRowInfo)
         nPaint |= PaintPartFlags::Left;
     pDocSh->PostPaint(aRanges, nPaint);
@@ -1974,8 +1974,8 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
                         pChangeTrack->ResetLastCut();   // no more cut-mode
         }
         ScRange aUserRange( nStartCol, nCurrentRow, nStartTab, nEndCol, nCurrentRow, nEndTab );
-        bool bColInfo = ( nStartRow==0 && nEndRow==MAXROW );
-        bool bRowInfo = ( nStartCol==0 && nEndCol==MAXCOL );
+        bool bColInfo = ( nStartRow==0 && nEndRow==pDoc->MaxRow() );
+        bool bRowInfo = ( nStartCol==0 && nEndCol==pDoc->MaxCol() );
         SCCOL nUndoEndCol = nStartCol+aColLength-1;
         SCROW nUndoEndRow = nCurrentRow;
 
@@ -2009,12 +2009,12 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
         if (bColInfo)
         {
                 nPaint |= PaintPartFlags::Top;
-                nUndoEndCol = MAXCOL;                           // just for drawing !
+                nUndoEndCol = pDoc->MaxCol();                           // just for drawing !
         }
         if (bRowInfo)
         {
                 nPaint |= PaintPartFlags::Left;
-                nUndoEndRow = MAXROW;                           // just for drawing !
+                nUndoEndRow = pDoc->MaxRow();                           // just for drawing !
         }
 
         pDocSh->PostPaint(
