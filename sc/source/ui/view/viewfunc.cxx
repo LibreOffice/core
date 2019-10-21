@@ -779,8 +779,8 @@ void ScViewFunc::EnterMatrix( const OUString& rString, ::formula::FormulaGrammar
         SCSIZE nSizeY;
         aFormCell.GetResultDimensions( nSizeX, nSizeY );
         if ( nSizeX != 0 && nSizeY != 0 &&
-             nCol+nSizeX-1 <= sal::static_int_cast<SCSIZE>(MAXCOL) &&
-             nRow+nSizeY-1 <= sal::static_int_cast<SCSIZE>(MAXROW) )
+             nCol+nSizeX-1 <= sal::static_int_cast<SCSIZE>(pDoc->MaxCol()) &&
+             nRow+nSizeY-1 <= sal::static_int_cast<SCSIZE>(pDoc->MaxRow()) )
         {
             ScRange aResult( nCol, nRow, nTab,
                              sal::static_int_cast<SCCOL>(nCol+nSizeX-1),
@@ -1431,7 +1431,7 @@ void ScViewFunc::RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
                                 rViewData.GetZoomX(),
                                 rViewData.GetZoomY() );
 
-    pDocSh->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
+    pDocSh->PostPaint( 0,0,0, pDoc->MaxCol(), pDoc->MaxRow(), MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
     aModificator.SetDocumentModified();
 
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
@@ -1457,7 +1457,7 @@ void ScViewFunc::UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
                                 rViewData.GetZoomX(),
                                 rViewData.GetZoomY() );
 
-    pDocSh->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
+    pDocSh->PostPaint( 0,0,0, pDoc->MaxCol(), pDoc->MaxRow(), MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
     aModificator.SetDocumentModified();
 
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
@@ -1767,7 +1767,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
         if ( bRows )
         {
             nStartCol = 0;
-            nEndCol   = MAXCOL;
+            nEndCol   = rDoc.MaxCol();
             nStartRow = static_cast<SCROW>(nStart);
             nEndRow   = static_cast<SCROW>(nEnd);
         }
@@ -1776,14 +1776,14 @@ void ScViewFunc::DeleteMulti( bool bRows )
             nStartCol = static_cast<SCCOL>(nStart);
             nEndCol   = static_cast<SCCOL>(nEnd);
             nStartRow = 0;
-            nEndRow   = MAXROW;
+            nEndRow   = rDoc.MaxRow();
         }
 
         // cell protection (only needed for first range, as all following cells are moved)
         if (i == 0)
         {
             // test to the end of the sheet
-            ScEditableTester aTester( &rDoc, nTab, nStartCol, nStartRow, MAXCOL, MAXROW );
+            ScEditableTester aTester( &rDoc, nTab, nStartCol, nStartRow, rDoc.MaxCol(), rDoc.MaxRow() );
             if (!aTester.IsEditable())
                 pErrorId = aTester.GetMessageId();
         }
@@ -1833,17 +1833,17 @@ void ScViewFunc::DeleteMulti( bool bRows )
             SCCOLROW nStart = rSpan.mnStart;
             SCCOLROW nEnd = rSpan.mnEnd;
             if (bRows)
-                rDoc.CopyToDocument( 0,nStart,nTab, MAXCOL,nEnd,nTab, InsertDeleteFlags::ALL,false,*pUndoDoc );
+                rDoc.CopyToDocument( 0,nStart,nTab, rDoc.MaxCol(), nEnd,nTab, InsertDeleteFlags::ALL,false,*pUndoDoc );
             else
                 rDoc.CopyToDocument( static_cast<SCCOL>(nStart),0,nTab,
-                        static_cast<SCCOL>(nEnd),MAXROW,nTab,
+                        static_cast<SCCOL>(nEnd), rDoc.MaxRow(), nTab,
                         InsertDeleteFlags::ALL,false,*pUndoDoc );
         }
 
         //  all Formulas because of references
         SCTAB nTabCount = rDoc.GetTableCount();
         pUndoDoc->AddUndoTab( 0, nTabCount-1 );
-        rDoc.CopyToDocument( 0,0,0, MAXCOL,MAXROW,MAXTAB, InsertDeleteFlags::FORMULA,false,*pUndoDoc );
+        rDoc.CopyToDocument( 0,0,0, rDoc.MaxCol(), rDoc.MaxRow(), MAXTAB, InsertDeleteFlags::FORMULA,false,*pUndoDoc );
 
         pUndoData.reset(new ScRefUndoData( &rDoc ));
 
@@ -1859,13 +1859,13 @@ void ScViewFunc::DeleteMulti( bool bRows )
 
         if (bRows)
         {
-            rDoc.DeleteObjectsInArea(0, nStart, MAXCOL, nEnd, aFuncMark, true);
-            rDoc.DeleteRow(0, nTab, MAXCOL, nTab, nStart, static_cast<SCSIZE>(nEnd - nStart + 1));
+            rDoc.DeleteObjectsInArea(0, nStart, rDoc.MaxCol(), nEnd, aFuncMark, true);
+            rDoc.DeleteRow(0, nTab, rDoc.MaxCol(), nTab, nStart, static_cast<SCSIZE>(nEnd - nStart + 1));
         }
         else
         {
-            rDoc.DeleteObjectsInArea(nStart, 0, nEnd, MAXROW, aFuncMark, true);
-            rDoc.DeleteCol(0, nTab, MAXROW, nTab, static_cast<SCCOL>(nStart), static_cast<SCSIZE>(nEnd - nStart + 1));
+            rDoc.DeleteObjectsInArea(nStart, 0, nEnd, rDoc.MaxRow(), aFuncMark, true);
+            rDoc.DeleteCol(0, nTab, rDoc.MaxRow(), nTab, static_cast<SCCOL>(nStart), static_cast<SCSIZE>(nEnd - nStart + 1));
         }
     }
 
@@ -1874,8 +1874,8 @@ void ScViewFunc::DeleteMulti( bool bRows )
         SCCOLROW nFirstStart = aSpans[0].mnStart;
         SCCOL nStartCol = bRows ? 0 : static_cast<SCCOL>(nFirstStart);
         SCROW nStartRow = bRows ? static_cast<SCROW>(nFirstStart) : 0;
-        SCCOL nEndCol = MAXCOL;
-        SCROW nEndRow = MAXROW;
+        SCCOL nEndCol = rDoc.MaxCol();
+        SCROW nEndRow = rDoc.MaxRow();
 
         rDoc.RemoveFlagsTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, ScMF::Hor | ScMF::Ver );
         rDoc.ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, nTab, true );
@@ -1888,19 +1888,19 @@ void ScViewFunc::DeleteMulti( bool bRows )
                 pDocSh, bRows, bNeedRefresh, nTab, aSpans, std::move(pUndoDoc), std::move(pUndoData)));
     }
 
-    if (!AdjustRowHeight(0, MAXROW))
+    if (!AdjustRowHeight(0, rDoc.MaxRow()))
     {
         if (bRows)
         {
             pDocSh->PostPaint(
                 0, aSpans[0].mnStart, nTab,
-                MAXCOL, MAXROW, nTab, (PaintPartFlags::Grid | PaintPartFlags::Left));
+                rDoc.MaxCol(), rDoc.MaxRow(), nTab, (PaintPartFlags::Grid | PaintPartFlags::Left));
         }
         else
         {
             pDocSh->PostPaint(
                 static_cast<SCCOL>(aSpans[0].mnStart), 0, nTab,
-                MAXCOL, MAXROW, nTab, (PaintPartFlags::Grid | PaintPartFlags::Top));
+                rDoc.MaxCol(), rDoc.MaxRow(), nTab, (PaintPartFlags::Grid | PaintPartFlags::Top));
         }
     }
 
@@ -2039,9 +2039,9 @@ void ScViewFunc::SetWidthOrHeight(
                 bool bOnlyMatrix;
                 bool bIsBlockEditable;
                 if (bWidth)
-                    bIsBlockEditable = rDoc.IsBlockEditable(nTab, rRange.mnStart, 0, rRange.mnEnd, MAXROW, &bOnlyMatrix);
+                    bIsBlockEditable = rDoc.IsBlockEditable(nTab, rRange.mnStart, 0, rRange.mnEnd, rDoc.MaxRow(), &bOnlyMatrix);
                 else
-                    bIsBlockEditable = rDoc.IsBlockEditable(nTab, 0, rRange.mnStart, MAXCOL, rRange.mnEnd, &bOnlyMatrix);
+                    bIsBlockEditable = rDoc.IsBlockEditable(nTab, 0, rRange.mnStart, rDoc.MaxCol(), rRange.mnEnd, &bOnlyMatrix);
                 return bIsBlockEditable || bOnlyMatrix;
             });
         if (!bAllowed)
@@ -2086,7 +2086,7 @@ void ScViewFunc::SetWidthOrHeight(
                 else
                     pUndoDoc->AddUndoTab( nTab, nTab, true );
                 rDoc.CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
-                        static_cast<SCCOL>(nEnd), MAXROW, nTab, InsertDeleteFlags::NONE,
+                        static_cast<SCCOL>(nEnd), rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE,
                         false, *pUndoDoc );
             }
             else
@@ -2095,7 +2095,7 @@ void ScViewFunc::SetWidthOrHeight(
                     pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, true );
                 else
                     pUndoDoc->AddUndoTab( nTab, nTab, false, true );
-                rDoc.CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
+                rDoc.CopyToDocument( 0, nStart, nTab, rDoc.MaxCol(), nEnd, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
             }
         }
 
@@ -2262,21 +2262,21 @@ void ScViewFunc::SetWidthOrHeight(
             if (bWidth)
             {
                 if (rDoc.HasAttrib( static_cast<SCCOL>(nStart),0,nTab,
-                            static_cast<SCCOL>(nEnd),MAXROW,nTab,
+                            static_cast<SCCOL>(nEnd), rDoc.MaxRow(), nTab,
                             HasAttrFlags::Merged | HasAttrFlags::Overlapped ))
                     nStart = 0;
                 if (nStart > 0)             // go upwards because of Lines and cursor
                     --nStart;
                 pDocSh->PostPaint( static_cast<SCCOL>(nStart), 0, nTab,
-                        MAXCOL, MAXROW, nTab, PaintPartFlags::Grid | PaintPartFlags::Top );
+                        rDoc.MaxCol(), rDoc.MaxRow(), nTab, PaintPartFlags::Grid | PaintPartFlags::Top );
             }
             else
             {
-                if (rDoc.HasAttrib( 0,nStart,nTab, MAXCOL,nEnd,nTab, HasAttrFlags::Merged | HasAttrFlags::Overlapped ))
+                if (rDoc.HasAttrib( 0,nStart,nTab, rDoc.MaxCol(), nEnd,nTab, HasAttrFlags::Merged | HasAttrFlags::Overlapped ))
                     nStart = 0;
                 if (nStart != 0)
                     --nStart;
-                pDocSh->PostPaint( 0, nStart, nTab, MAXCOL, MAXROW, nTab, PaintPartFlags::Grid | PaintPartFlags::Left );
+                pDocSh->PostPaint( 0, nStart, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab, PaintPartFlags::Grid | PaintPartFlags::Left );
             }
         }
 
@@ -2350,9 +2350,9 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
 
     bool bAllowed, bOnlyMatrix;
     if ( eDir == DIR_LEFT || eDir == DIR_RIGHT )
-        bAllowed = rDoc.IsBlockEditable( nTab, nCol,0, nCol,MAXROW, &bOnlyMatrix );
+        bAllowed = rDoc.IsBlockEditable( nTab, nCol,0, nCol,rDoc.MaxRow(), &bOnlyMatrix );
     else
-        bAllowed = rDoc.IsBlockEditable( nTab, 0,nRow, MAXCOL,nRow, &bOnlyMatrix );
+        bAllowed = rDoc.IsBlockEditable( nTab, 0,nRow, rDoc.MaxCol(), nRow, &bOnlyMatrix );
     if ( !bAllowed && !bOnlyMatrix )
     {
         ErrorMessage(STR_PROTECTIONERR);

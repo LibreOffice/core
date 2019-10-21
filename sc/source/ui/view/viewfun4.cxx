@@ -110,8 +110,8 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         if (nParCnt)
         {
             SCROW nEndRow = nStartRow + static_cast<SCROW>(nParCnt) - 1;
-            if (nEndRow > MAXROW)
-                nEndRow = MAXROW;
+            if (nEndRow > rDoc.MaxRow())
+                nEndRow = rDoc.MaxRow();
 
             ScDocumentUniquePtr pUndoDoc;
             if (bRecord)
@@ -130,7 +130,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             {
                 std::unique_ptr<EditTextObject> pObject(pEngine->CreateTextObject(n));
                 EnterData(nStartCol, nRow, nTab, *pObject, true);
-                if( ++nRow > MAXROW )
+                if( ++nRow > rDoc.MaxRow() )
                     break;
             }
             rDoc.EnableUndo(bUndoEnabled);

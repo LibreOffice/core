@@ -167,7 +167,7 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
         if (bChanged)
             rDoc.SetDrawPageSize(nTab);
         if ( bPaint && bChanged )
-            pDocSh->PostPaint( 0, nPaintY, nTab, MAXCOL, MAXROW, nTab,
+            pDocSh->PostPaint( 0, nPaintY, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab,
                                                 PaintPartFlags::Grid | PaintPartFlags::Left );
     }
 
@@ -220,7 +220,7 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow )
     }
 
     if ( bChanged )
-        pDocSh->PostPaint( 0, nStartRow, nTab, MAXCOL, MAXROW, nTab,
+        pDocSh->PostPaint( 0, nStartRow, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab,
                                             PaintPartFlags::Grid | PaintPartFlags::Left );
 
     if (comphelper::LibreOfficeKit::isActive())
@@ -624,12 +624,12 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
     SCROW nInsRow = nEndRow;
     if ( bRow && !bEndRowEmpty )
     {
-        if ( nInsRow < MAXROW )
+        if ( nInsRow < pDoc->MaxRow() )
         {
             ++nInsRow;
             while ( !pDoc->IsBlockEmpty( nTab, nStartCol, nInsRow, nEndCol, nInsRow ) )
             {
-                if ( nInsRow < MAXROW )
+                if ( nInsRow < pDoc->MaxRow() )
                 {
                     ++nInsRow;
                 }
@@ -650,12 +650,12 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
     SCCOL nInsCol = nEndCol;
     if ( bCol && !bEndColEmpty )
     {
-        if ( nInsCol < MAXCOL )
+        if ( nInsCol < pDoc->MaxCol() )
         {
             ++nInsCol;
             while ( !pDoc->IsBlockEmpty( nTab, nInsCol, nStartRow, nInsCol, nEndRow ) )
             {
-                if ( nInsCol < MAXCOL )
+                if ( nInsCol < pDoc->MaxCol() )
                 {
                     ++nInsCol;
                 }
@@ -956,7 +956,7 @@ void ScViewFunc::RemoveManualBreaks()
     {
         ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
-        rDoc.CopyToDocument( 0,0,nTab, MAXCOL,MAXROW,nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
+        rDoc.CopyToDocument( 0,0,nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
         pDocSh->GetUndoManager()->AddUndoAction(
                                 std::make_unique<ScUndoRemoveBreaks>( pDocSh, nTab, std::move(pUndoDoc) ) );
     }
@@ -966,7 +966,7 @@ void ScViewFunc::RemoveManualBreaks()
 
     UpdatePageBreakData( true );
     pDocSh->SetDocumentModified();
-    pDocSh->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid );
+    pDocSh->PostPaint( 0,0,nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab, PaintPartFlags::Grid );
 }
 
 void ScViewFunc::SetPrintZoom(sal_uInt16 nScale)
@@ -1340,7 +1340,8 @@ void ScViewFunc::FillSimple( FillDir eDir )
             pDocSh->UpdateOle(&GetViewData());
             UpdateScrollBars();
 
-            bool bDoAutoSpell = pDocSh->GetDocument().GetDocOptions().IsAutoSpell();
+            auto& rDoc = pDocSh->GetDocument();
+            bool bDoAutoSpell = rDoc.GetDocOptions().IsAutoSpell();
             if ( bDoAutoSpell )
             {
                 // Copy AutoSpellData from above(left/right/below) if no selection.
@@ -1351,7 +1352,7 @@ void ScViewFunc::FillSimple( FillDir eDir )
                             aRange.aStart.IncRow(-1);
                     break;
                     case FILL_TO_TOP:
-                        if (aRange.aEnd.Row() < MAXROW && aRange.aStart.Row() == aRange.aEnd.Row())
+                        if (aRange.aEnd.Row() < rDoc.MaxRow() && aRange.aStart.Row() == aRange.aEnd.Row())
                             aRange.aEnd.IncRow(1);
                     break;
                     case FILL_TO_RIGHT:
@@ -1359,7 +1360,7 @@ void ScViewFunc::FillSimple( FillDir eDir )
                             aRange.aStart.IncCol(-1);
                     break;
                     case FILL_TO_LEFT:
-                        if (aRange.aEnd.Col() < MAXCOL && aRange.aStart.Col() == aRange.aEnd.Col())
+                        if (aRange.aEnd.Col() < rDoc.MaxCol() && aRange.aStart.Col() == aRange.aEnd.Col())
                             aRange.aEnd.IncCol(1);
                     break;
                 }
@@ -1670,11 +1671,11 @@ void ScViewFunc::FillCrossDblClick()
     SCCOL nEndX   = aRange.aEnd.Col();
     SCROW nEndY   = aRange.aEnd.Row();
 
-    if (nEndY >= MAXROW)
+    ScDocument* pDoc = GetViewData().GetDocument();
+
+    if (nEndY >= pDoc->MaxRow())
         // Nothing to fill.
         return;
-
-    ScDocument* pDoc = GetViewData().GetDocument();
 
     // Make sure the selection is not empty
     if ( pDoc->IsBlockEmpty( nTab, nStartX, nStartY, nEndX, nEndY ) )
@@ -1682,7 +1683,7 @@ void ScViewFunc::FillCrossDblClick()
 
     // If there is data in all columns immediately below the selection then
     // switch to overwriting fill.
-    SCROW nOverWriteEndRow = MAXROW;
+    SCROW nOverWriteEndRow = pDoc->MaxRow();
     for (SCCOL nCol = nStartX; nCol <= nEndX; ++nCol)
     {
         if (pDoc->HasData( nCol, nEndY + 1, nTab))
@@ -1720,7 +1721,7 @@ void ScViewFunc::FillCrossDblClick()
     // Non-overwriting fill follows.
 
     const bool bDataLeft = (nStartX > 0);
-    if (!bDataLeft && nEndX >= MAXCOL)
+    if (!bDataLeft && nEndX >= pDoc->MaxCol())
         // Absolutely no data left or right of selection.
         return;
 
@@ -1732,7 +1733,7 @@ void ScViewFunc::FillCrossDblClick()
     SCCOL nMovX = (bDataLeft ? nStartX - 1 : nEndX + 1);
     SCROW nMovY = nStartY;
     bool bDataFound = (pDoc->HasData( nMovX, nStartY, nTab) && pDoc->HasData( nMovX, nStartY + 1, nTab));
-    if (!bDataFound && bDataLeft && nEndX < MAXCOL)
+    if (!bDataFound && bDataLeft && nEndX < pDoc->MaxCol())
     {
         nMovX = nEndX + 1;  // check right
         bDataFound = (pDoc->HasData( nMovX, nStartY, nTab) && pDoc->HasData( nMovX, nStartY + 1, nTab));
@@ -1748,7 +1749,7 @@ void ScViewFunc::FillCrossDblClick()
             SCROW nY = nEndY + 1;
             // Get next row with data in this column.
             pDoc->FindAreaPos( nX, nY, nTab, SC_MOVE_DOWN);
-            if (nMovY == MAXROW && nY == MAXROW)
+            if (nMovY == pDoc->MaxRow() && nY == pDoc->MaxRow())
             {
                 // FindAreaPos() returns MAXROW also if there is no data at all
                 // from the start, so check if that contains data if the nearby
@@ -2445,7 +2446,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
             else
                 pUndoDoc->AddUndoTab( nTab,nTab, true,true );       // incl. column/fow flags
 
-            rDoc.CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, InsertDeleteFlags::ALL,false, *pUndoDoc );
+            rDoc.CopyToDocument(0,0,nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab, InsertDeleteFlags::ALL,false, *pUndoDoc );
             rDoc.GetName( nTab, aOldName );
             pUndoDoc->RenameTab( nTab, aOldName );
             if (rDoc.IsLinked(nTab))
@@ -2716,7 +2717,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
     for (i=0; i<nInsCount; i++)
         GetViewData().InsertTab(nTab);
     SetTabNo(nTab,true);
-    pDocSh->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB,
+    pDocSh->PostPaint( 0,0,0, rDoc.MaxCol(), rDoc.MaxRow(), MAXTAB,
                                 PaintPartFlags::Grid | PaintPartFlags::Top | PaintPartFlags::Left | PaintPartFlags::Extras );
 
     SfxApplication* pSfxApp = SfxGetpApp();
@@ -2853,7 +2854,7 @@ void ScViewFunc::MoveTable(
                 nErrVal = 0;        // total error
                 break;  // for
             }
-            ScRange aRange( 0, 0, TheTabs[j], MAXCOL, MAXROW, TheTabs[j] );
+            ScRange aRange( 0, 0, TheTabs[j], pDoc->MaxCol(), pDoc->MaxRow(), TheTabs[j] );
             aParam.maRanges.push_back(aRange);
         }
         pDoc->SetClipParam(aParam);
@@ -2935,7 +2936,7 @@ void ScViewFunc::MoveTable(
 
                 pDestViewSh->TabChanged();      // pages on the drawing layer
             }
-            pDestShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB,
+            pDestShell->PostPaint( 0,0,0, pDoc->MaxCol(), pDoc->MaxRow(), MAXTAB,
                                     PaintPartFlags::Grid | PaintPartFlags::Top | PaintPartFlags::Left |
                                     PaintPartFlags::Extras | PaintPartFlags::Size );
             //  PaintPartFlags::Size for outline
@@ -3116,7 +3117,7 @@ void ScViewFunc::ShowTable( const std::vector<OUString>& rNames )
         {
             pDocSh->GetUndoManager()->AddUndoAction( std::make_unique<ScUndoShowHideTab>( pDocSh, undoTabs, true ) );
         }
-        pDocSh->PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Extras);
+        pDocSh->PostPaint(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Extras);
         pDocSh->SetDocumentModified();
     }
 }
@@ -3162,7 +3163,7 @@ void ScViewFunc::HideTable( const ScMarkData& rMark )
 
         //  Update views
         SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
-        pDocSh->PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Extras);
+        pDocSh->PostPaint(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Extras);
         pDocSh->SetDocumentModified();
     }
 }

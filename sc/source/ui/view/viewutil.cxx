@@ -261,10 +261,10 @@ bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, const ScDocument * pDoc,
     // Always fit the range on its first sheet.
     OSL_ENSURE( bOneTabOnly, "ScViewUtil::ExtendToUnfilteredRows: works only on one sheet");
     SCROW nStartRow = rRange.aStart.Row();
-    SCROW nLastRow = pDoc->LastNonFilteredRow(nStartRow, MAXROW, nTab);
+    SCROW nLastRow = pDoc->LastNonFilteredRow(nStartRow, pDoc->MaxRow(), nTab);
     if (ValidRow(nLastRow))
         rRange.aEnd.SetRow(nLastRow);
-    SCROW nCount = pDoc->CountNonFilteredRows(nStartRow, MAXROW, nTab);
+    SCROW nCount = pDoc->CountNonFilteredRows(nStartRow, pDoc->MaxRow(), nTab);
     return static_cast<size_t>(nCount) == nRows && bOneTabOnly;
 }
 
