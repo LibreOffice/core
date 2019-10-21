@@ -22,7 +22,7 @@
 #include <vcl/menu.hxx>
 #include <svtools/ruler.hxx>
 #include <svl/lstner.hxx>
-#include <svx/svxdllapi.h>
+#include <svx/realsvxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
@@ -80,7 +80,7 @@ namespace o3tl
     template<> struct typed_flags<SvxRulerSupportFlags> : is_typed_flags<SvxRulerSupportFlags, 0x00ff> {};
 }
 
-class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
+class REALSVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
 {
     friend class SvxRulerItem;
 
