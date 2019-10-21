@@ -99,9 +99,9 @@ bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, C
     return false; // TODO
 }
 
-void WinSkiaSalGraphicsImpl::PreDrawText() {}
+void WinSkiaSalGraphicsImpl::PreDrawText() { preDraw(); }
 
-void WinSkiaSalGraphicsImpl::PostDrawText() { scheduleFlush(); }
+void WinSkiaSalGraphicsImpl::PostDrawText() { postDraw(); }
 
 void WinSkiaSalGraphicsImpl::DeferredTextDraw(const CompatibleDC::Texture* pTexture,
                                               Color aMaskColor, const SalTwoRect& rPosAry)
