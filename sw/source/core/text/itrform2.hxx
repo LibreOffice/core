@@ -32,16 +32,16 @@ class SwFootnotePortion;
 
 class SwTextFormatter : public SwTextPainter
 {
-    const SwFormatDrop *pDropFormat;
-    SwMultiPortion* pMulti; // during formatting a multi-portion
-    sal_uInt8 nCntEndHyph;  // Counts consecutive hyphens at the line end
-    sal_uInt8 nCntMidHyph;  // Counts consecutive hyphens before flies
-    TextFrameIndex nLeftScanIdx; // for increasing performance during
-    TextFrameIndex nRightScanIdx; // scanning for portion ends
-    bool bOnceMore : 1; // Another round?
-    bool bFlyInCntBase : 1; // Base reference that sets a character-bound frame
-    bool bTruncLines : 1; // Flag for extending the repaint rect, if needed
-    bool bUnclipped : 1; // Flag whether repaint is larger than the fixed line height
+    const SwFormatDrop *m_pDropFormat;
+    SwMultiPortion* m_pMulti; // during formatting a multi-portion
+    sal_uInt8 m_nContentEndHyph;  // Counts consecutive hyphens at the line end
+    sal_uInt8 m_nContentMidHyph;  // Counts consecutive hyphens before flies
+    TextFrameIndex m_nLeftScanIdx; // for increasing performance during
+    TextFrameIndex m_nRightScanIdx; // scanning for portion ends
+    bool m_bOnceMore : 1; // Another round?
+    bool m_bFlyInContentBase : 1; // Base reference that sets a character-bound frame
+    bool m_bTruncLines : 1; // Flag for extending the repaint rect, if needed
+    bool m_bUnclipped : 1; // Flag whether repaint is larger than the fixed line height
     std::unique_ptr<sw::MergedAttrIterByEnd> m_pByEndIter; // HACK for TryNewNoLengthPortion
     SwLinePortion* m_pFirstOfBorderMerge; // The first text portion of a joined border (during portion building)
 
@@ -152,7 +152,7 @@ public:
     void CtorInitTextFormatter( SwTextFrame *pFrame, SwTextFormatInfo *pInf );
     SwTextFormatter(SwTextFrame *pTextFrame, SwTextFormatInfo *pTextFormatInf)
         : SwTextPainter(pTextFrame->GetTextNodeFirst())
-        , bUnclipped(false)
+        , m_bUnclipped(false)
     {
         CtorInitTextFormatter( pTextFrame, pTextFormatInf );
     }
@@ -193,33 +193,33 @@ public:
 
     SwLinePortion* MakeRestPortion(const SwLineLayout* pLine, TextFrameIndex nPos);
 
-    const SwFormatDrop *GetDropFormat() const { return pDropFormat; }
-    void ClearDropFormat() { pDropFormat = nullptr; }
+    const SwFormatDrop *GetDropFormat() const { return m_pDropFormat; }
+    void ClearDropFormat() { m_pDropFormat = nullptr; }
 
-    SwMultiPortion *GetMulti() const { return pMulti; }
+    SwMultiPortion *GetMulti() const { return m_pMulti; }
 
-    bool IsOnceMore() const { return bOnceMore; }
-    void SetOnceMore( bool bNew ) { bOnceMore = bNew; }
+    bool IsOnceMore() const { return m_bOnceMore; }
+    void SetOnceMore( bool bNew ) { m_bOnceMore = bNew; }
 
-    bool HasTruncLines() const { return bTruncLines; }
-    void SetTruncLines( bool bNew ) { bTruncLines = bNew; }
+    bool HasTruncLines() const { return m_bTruncLines; }
+    void SetTruncLines( bool bNew ) { m_bTruncLines = bNew; }
 
-    bool IsUnclipped() const { return bUnclipped; }
-    void SetUnclipped( bool bNew ) { bUnclipped = bNew; }
+    bool IsUnclipped() const { return m_bUnclipped; }
+    void SetUnclipped( bool bNew ) { m_bUnclipped = bNew; }
 
-    bool IsFlyInCntBase() const { return bFlyInCntBase; }
-    void SetFlyInCntBase( bool bNew = true ) { bFlyInCntBase = bNew; }
+    bool IsFlyInCntBase() const { return m_bFlyInContentBase; }
+    void SetFlyInCntBase( bool bNew = true ) { m_bFlyInContentBase = bNew; }
 
     SwTextFormatInfo &GetInfo()
         { return static_cast<SwTextFormatInfo&>(SwTextIter::GetInfo()); }
     const SwTextFormatInfo &GetInfo() const
         { return static_cast<const SwTextFormatInfo&>(SwTextIter::GetInfo()); }
 
-    void InitCntHyph() { CntHyphens( nCntEndHyph, nCntMidHyph ); }
-    const sal_uInt8 &CntEndHyph() const { return nCntEndHyph; }
-    const sal_uInt8 &CntMidHyph() const { return nCntMidHyph; }
-    sal_uInt8 &CntEndHyph() { return nCntEndHyph; }
-    sal_uInt8 &CntMidHyph() { return nCntMidHyph; }
+    void InitCntHyph() { CntHyphens( m_nContentEndHyph, m_nContentMidHyph ); }
+    const sal_uInt8 &CntEndHyph() const { return m_nContentEndHyph; }
+    const sal_uInt8 &CntMidHyph() const { return m_nContentMidHyph; }
+    sal_uInt8 &CntEndHyph() { return m_nContentEndHyph; }
+    sal_uInt8 &CntMidHyph() { return m_nContentMidHyph; }
 
     /**
      * Merge border of the drop portion with modifying the font of

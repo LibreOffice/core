@@ -88,16 +88,16 @@ void SwTextFormatter::CtorInitTextFormatter( SwTextFrame *pNewFrame, SwTextForma
 {
     CtorInitTextPainter( pNewFrame, pNewInf );
     m_pInf = pNewInf;
-    pDropFormat = GetInfo().GetDropFormat();
-    pMulti = nullptr;
+    m_pDropFormat = GetInfo().GetDropFormat();
+    m_pMulti = nullptr;
 
-    bOnceMore = false;
-    bFlyInCntBase = false;
-    bTruncLines = false;
-    nCntEndHyph = 0;
-    nCntMidHyph = 0;
-    nLeftScanIdx = TextFrameIndex(COMPLETE_STRING);
-    nRightScanIdx = TextFrameIndex(0);
+    m_bOnceMore = false;
+    m_bFlyInContentBase = false;
+    m_bTruncLines = false;
+    m_nContentEndHyph = 0;
+    m_nContentMidHyph = 0;
+    m_nLeftScanIdx = TextFrameIndex(COMPLETE_STRING);
+    m_nRightScanIdx = TextFrameIndex(0);
     m_pByEndIter.reset();
     m_pFirstOfBorderMerge = nullptr;
 
@@ -370,7 +370,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
     SeekAndChg( rInf );
 
     // Width() is shortened in CalcFlyWidth if we have a FlyPortion
-    OSL_ENSURE( !rInf.X() || pMulti, "SwTextFormatter::BuildPortion X=0?" );
+    OSL_ENSURE( !rInf.X() || m_pMulti, "SwTextFormatter::BuildPortion X=0?" );
     CalcFlyWidth( rInf );
     SwFlyPortion *pFly = rInf.GetFly();
     if( pFly )
@@ -489,7 +489,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 }
             }
         }
-        else if ( bHasGrid && pGrid->IsSnapToChars() && ! pGridKernPortion && ! pMulti && ! pPor->InTabGrp() )
+        else if ( bHasGrid && pGrid->IsSnapToChars() && ! pGridKernPortion && ! m_pMulti && ! pPor->InTabGrp() )
         {
             // insert a grid kerning portion
             pGridKernPortion = pPor->IsKernPortion() ?
@@ -535,7 +535,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             MergeCharacterBorder(*static_cast<SwDropPortion*>(pPor));
 
         // the multi-portion has its own format function
-        if( pPor->IsMultiPortion() && ( !pMulti || pMulti->IsBidi() ) )
+        if( pPor->IsMultiPortion() && ( !m_pMulti || m_pMulti->IsBidi() ) )
             bFull = BuildMultiPortion( rInf, *static_cast<SwMultiPortion*>(pPor) );
         else
             bFull = pPor->Format( rInf );
@@ -632,7 +632,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             }
         }
 
-        if ( bHasGrid && pGrid->IsSnapToChars() && pPor != pGridKernPortion && ! pMulti && ! pPor->InTabGrp() )
+        if ( bHasGrid && pGrid->IsSnapToChars() && pPor != pGridKernPortion && ! m_pMulti && ! pPor->InTabGrp() )
         {
             TextFrameIndex const nTmp = rInf.GetIdx() + pPor->GetLen();
             const SwTwips nRestWidth = rInf.Width() - rInf.X() - pPor->Width();
@@ -721,7 +721,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
 
 void SwTextFormatter::CalcAdjustLine( SwLineLayout *pCurrent )
 {
-    if( SvxAdjust::Left != GetAdjust() && !pMulti)
+    if( SvxAdjust::Left != GetAdjust() && !m_pMulti)
     {
         pCurrent->SetFormatAdj(true);
         if( IsFlyInCntBase() )
@@ -780,7 +780,7 @@ void SwTextFormatter::CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor )
                     else
                         bChg = SeekAndChgBefore( rInf );
                 }
-                else if ( pMulti )
+                else if ( m_pMulti )
                     // do not open attributes starting at 0 in empty multi
                     // portions (rotated numbering followed by a footnote
                     // can cause trouble, because the footnote attribute
@@ -991,16 +991,16 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
     // we keep an invariant during method calls:
     // there are no portion ending characters like hard spaces
     // or tabs in [ nLeftScanIdx, nRightScanIdx ]
-    if ( nLeftScanIdx <= rInf.GetIdx() && rInf.GetIdx() <= nRightScanIdx )
+    if ( m_nLeftScanIdx <= rInf.GetIdx() && rInf.GetIdx() <= m_nRightScanIdx )
     {
-        if ( nNextChg > nRightScanIdx )
-            nNextChg = nRightScanIdx =
-                rInf.ScanPortionEnd( nRightScanIdx, nNextChg );
+        if ( nNextChg > m_nRightScanIdx )
+            nNextChg = m_nRightScanIdx =
+                rInf.ScanPortionEnd( m_nRightScanIdx, nNextChg );
     }
     else
     {
-        nLeftScanIdx = rInf.GetIdx();
-        nNextChg = nRightScanIdx =
+        m_nLeftScanIdx = rInf.GetIdx();
+        nNextChg = m_nRightScanIdx =
                 rInf.ScanPortionEnd( rInf.GetIdx(), nNextChg );
     }
 
@@ -1083,7 +1083,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
         // 5. The foot note count
         if( !rInf.IsFootnoteDone() )
         {
-            OSL_ENSURE( ( ! rInf.IsMulti() && ! pMulti ) || pMulti->HasRotation(),
+            OSL_ENSURE( ( ! rInf.IsMulti() && ! m_pMulti ) || m_pMulti->HasRotation(),
                      "Rotated number portion trouble" );
 
             const bool bFootnoteNum = m_pFrame->IsFootnoteNumFrame();
@@ -1105,7 +1105,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
         // 7. The numbering
         if( !rInf.IsNumDone() && !pPor )
         {
-            OSL_ENSURE( ( ! rInf.IsMulti() && ! pMulti ) || pMulti->HasRotation(),
+            OSL_ENSURE( ( ! rInf.IsMulti() && ! m_pMulti ) || m_pMulti->HasRotation(),
                      "Rotated number portion trouble" );
 
             // If we're in the follow, then of course not
@@ -1243,7 +1243,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
 
     if( !pPor )
     {
-        if( ( !pMulti || pMulti->IsBidi() ) &&
+        if( ( !m_pMulti || m_pMulti->IsBidi() ) &&
             // i#42734
             // No multi portion if there is a hook character waiting:
             ( !rInf.GetRest() || '\0' == rInf.GetHookChar() ) )
@@ -1251,7 +1251,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
             // We open a multiportion part, if we enter a multi-line part
             // of the paragraph.
             TextFrameIndex nEnd = rInf.GetIdx();
-            std::unique_ptr<SwMultiCreator> pCreate = rInf.GetMultiCreator( nEnd, pMulti );
+            std::unique_ptr<SwMultiCreator> pCreate = rInf.GetMultiCreator( nEnd, m_pMulti );
             if( pCreate )
             {
                 SwMultiPortion* pTmp = nullptr;
@@ -1390,7 +1390,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
     // Special portions containing numbers (footnote anchor, footnote number,
     // numbering) can be contained in a rotated portion, if the user
     // choose a rotated character attribute.
-    if (!pMulti)
+    if (!m_pMulti)
     {
         if ( pPor->IsFootnotePortion() )
         {
@@ -1877,15 +1877,15 @@ void SwTextFormatter::FormatReset( SwTextFormatInfo &rInf )
 
 bool SwTextFormatter::CalcOnceMore()
 {
-    if( pDropFormat )
+    if( m_pDropFormat )
     {
         const sal_uInt16 nOldDrop = GetDropHeight();
-        CalcDropHeight( pDropFormat->GetLines() );
-        bOnceMore = nOldDrop != GetDropHeight();
+        CalcDropHeight( m_pDropFormat->GetLines() );
+        m_bOnceMore = nOldDrop != GetDropHeight();
     }
     else
-        bOnceMore = false;
-    return bOnceMore;
+        m_bOnceMore = false;
+    return m_bOnceMore;
 }
 
 SwTwips SwTextFormatter::CalcBottomLine() const
@@ -2074,7 +2074,7 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
         if( pPos->IsMultiPortion() && static_cast<SwMultiPortion*>(pPos)->HasFlyInContent() )
         {
             OSL_ENSURE( !GetMulti(), "Too much multi" );
-            const_cast<SwTextFormatter*>(this)->pMulti = static_cast<SwMultiPortion*>(pPos);
+            const_cast<SwTextFormatter*>(this)->m_pMulti = static_cast<SwMultiPortion*>(pPos);
             SwLineLayout *pLay = &GetMulti()->GetRoot();
             Point aSt( aTmpInf.X(), aStart.Y() );
 
@@ -2103,7 +2103,7 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
                 aSt.AdjustY(pLay->Height() );
                 pLay = pLay->GetNext();
             } while ( pLay );
-            const_cast<SwTextFormatter*>(this)->pMulti = nullptr;
+            const_cast<SwTextFormatter*>(this)->m_pMulti = nullptr;
         }
         pPos->Move( aTmpInf );
         pPos = pPos->GetNextPortion();

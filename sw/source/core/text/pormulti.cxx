@@ -1955,9 +1955,9 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
     else
         nTmpX = rInf.X();
 
-    SwMultiPortion* pOldMulti = pMulti;
+    SwMultiPortion* pOldMulti = m_pMulti;
 
-    pMulti = &rMulti;
+    m_pMulti = &rMulti;
     SwLineLayout *pOldCurr = m_pCurr;
     TextFrameIndex const nOldStart = GetStart();
     SwTwips nMinWidth = nTmpX + 1;
@@ -2160,7 +2160,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
         pNextFirst = nullptr;
     } while ( true );
 
-    pMulti = pOldMulti;
+    m_pMulti = pOldMulti;
 
     m_pCurr = pOldCurr;
     m_nStart = nOldStart;
@@ -2275,7 +2275,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
         }
         // during a recursion of BuildMultiPortions we may not build
         // a new SwBidiPortion, this would cause a memory leak
-        else if( rMulti.IsBidi() && ! pMulti )
+        else if( rMulti.IsBidi() && ! m_pMulti )
         {
             if ( ! rMulti.GetLen() )
                 lcl_TruncateMultiPortion( rMulti, rInf, nStartIdx );
