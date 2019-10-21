@@ -103,6 +103,13 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108849, "tdf108849.docx")
                                  getPages());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf97038, "tdf97038.docx")
+{
+    // Without the accompanying fix in place, this test would have failed, as the importer lost the
+    // fLayoutInCell shape property for wrap-though shapes.
+    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName("Kep2"), "IsFollowingTextFlow"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf109524, "tdf109524.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
