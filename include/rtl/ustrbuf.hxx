@@ -596,7 +596,13 @@ public:
         @param   str   the characters to be appended.
         @return  this string buffer.
      */
+#if defined LIBO_INTERNAL_ONLY
+    template<typename T>
+    typename libreoffice_internal::CharPtrDetector<T, OUStringBuffer &>::TypeUtf16
+    append(T const & str)
+#else
     OUStringBuffer & append( const sal_Unicode * str )
+#endif
     {
         return append( str, rtl_ustr_getLength( str ) );
     }
@@ -637,6 +643,10 @@ public:
     }
 
 #if defined LIBO_INTERNAL_ONLY
+    template<typename T>
+    typename libreoffice_internal::NonConstCharArrayDetector<T, OUStringBuffer &>::TypeUtf16
+    append(T & value) { return append(static_cast<sal_Unicode *>(value)); }
+
     /** @overload @since LibreOffice 5.3 */
     template<typename T>
     typename libreoffice_internal::ConstCharArrayDetector<
