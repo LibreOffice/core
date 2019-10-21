@@ -316,7 +316,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
             rRet.append(" func ").append(OUStringChar(nChar)).append(" ");
             break;
         case 0x220d: // owns
-            rRet.append(" func \u220b ");
+            rRet.append(u" func \u220b ");
             break;
         case 0x220f:
             pC = " prod ";
