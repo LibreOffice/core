@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_3813e15e",
+        "filename": "tools/source/stream/stream.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-21T17:26:08Z",
+      "side": 1,
+      "message": "Nice! :)\n\nOut of curiosity, why have you chosen two different ways of expressing the same \"valid pointer\" instead of e.g.\n\n    assert(bool(m_pBufPos) \u003d\u003d bool(m_pRWBuf));",
+      "range": {
+        "startLine": 811,
+        "startChar": 11,
+        "endLine": 811,
+        "endChar": 51
+      },
+      "revId": "b25fd58a1ecba62f7967dd118194f5994fcd5c23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
