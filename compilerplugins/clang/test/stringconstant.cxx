@@ -13,6 +13,7 @@
 
 #include "com/sun/star/uno/Reference.hxx"
 #include "rtl/strbuf.hxx"
+#include "rtl/ustrbuf.hxx"
 
 extern void foo(OUString const &);
 
@@ -108,6 +109,23 @@ int main() {
     (void) OUString("\x80", 1, RTL_TEXTENCODING_UTF8); // expected-error {{suspicious 'rtl::OUString' constructor with text encoding 'RTL_TEXTENCODING_UTF8' but non-UTF-8 content [loplugin:stringconstant]}}
 
     (void) OUString("\xC2\x80", 2, RTL_TEXTENCODING_UTF8); // expected-error {{simplify construction of 'OUString' with UTF-8 content as OUString(u"\u0080") [loplugin:stringconstant]}}
+
+    OUStringBuffer ub;
+    ub.append(""); // expected-error {{call of 'rtl::OUStringBuffer::append' with suspicious empty string constant argument [loplugin:stringconstant]}}
+    ub.append("foo\0bar"); // expected-error {{call of 'rtl::OUStringBuffer::append' with string constant argument containing embedded NULLs [loplugin:stringconstant]}}
+    ub.append("foo\x80" "bar"); // expected-error {{call of 'rtl::OUStringBuffer::append' with string constant argument containing non-ASCII characters [loplugin:stringconstant]}}
+    char const sc1[] = "";
+    ub.append(sc1); // expected-error {{call of 'rtl::OUStringBuffer::append' with suspicious empty string constant argument [loplugin:stringconstant]}}
+    char const sc2[] = "foo\0bar";
+    ub.append(sc2); // expected-error {{call of 'rtl::OUStringBuffer::append' with string constant argument containing embedded NULLs [loplugin:stringconstant]}}
+    char const sc3[] = "foo\x80" "bar";
+    ub.append(sc3); // expected-error {{call of 'rtl::OUStringBuffer::append' with string constant argument containing non-ASCII characters [loplugin:stringconstant]}}
+    char const sc4[] = {'f', 'o', 'o', 'b', 'a', 'r'};
+    ub.append(sc4); // expected-error {{call of 'rtl::OUStringBuffer::append' with string constant argument lacking a terminating NULL [loplugin:stringconstant]}}
+    ub.append(static_cast<char const *>(sc1));
+    ub.append(static_cast<char const *>(sc2)); // at runtime: append "foo"
+    ub.append(static_cast<char const *>(sc3)); // at runtime: assert
+    ub.append(static_cast<char const *>(sc4)); // at runtime: UB
 }
 
 
