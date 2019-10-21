@@ -76,179 +76,151 @@ enum SvtFileDlgType
     FILEDLG_TYPE_PATHDLG
 };
 
-class SvtFileDialogURLSelector : public MenuButton
-{
-public:
-    virtual ~SvtFileDialogURLSelector() override;
-    virtual void dispose() override;
-private:
-    VclPtr<SvtFileDialog>      m_pDlg;
-    VclPtr<PopupMenu>          m_pMenu;
-
-protected:
-    SvtFileDialog*  GetDialogParent()       { return m_pDlg; }
-
-    virtual void    FillURLMenu( PopupMenu* _pMenu ) = 0;
-
-    SvtFileDialogURLSelector(vcl::Window* _pParent, SvtFileDialog* _pDlg, WinBits nBits, const OUString& rButtonId);
-
-    virtual void        Activate() override;
-};
-
-class SvtUpButton_Impl : public SvtFileDialogURLSelector
+class SvtUpButton_Impl
 {
 private:
-    std::vector<OUString> _aURLs;
+    std::unique_ptr<weld::Toolbar> m_xToolbar;
+    std::unique_ptr<weld::Menu> m_xMenu;
+    SvtFileDialog* m_pDlg;
+
+    std::vector<OUString> aURLs;
 
 public:
-    SvtUpButton_Impl( vcl::Window* pParent, SvtFileDialog* pDlg, WinBits nBits );
-    virtual ~SvtUpButton_Impl() override;
+    SvtUpButton_Impl(std::unique_ptr<weld::Toolbar> xToolbar,
+                     std::unique_ptr<weld::Menu> xMenu,
+                     SvtFileDialog* pDlg);
 
-protected:
-    virtual void        FillURLMenu( PopupMenu* _pMenu ) override;
-    virtual void        Select() override;
-    virtual void        Click() override;
-    virtual Size        GetOptimalSize() const override;
+    void set_help_id(const OString& rHelpId) { m_xToolbar->set_help_id(rHelpId); }
+    void show() { m_xToolbar->show(); }
+
+    void FillURLMenu();
+
+    weld::Widget* getWidget() { return m_xToolbar.get(); }
+
+private:
+
+    DECL_LINK(SelectHdl, const OString&, void);
+    DECL_LINK(ClickHdl, const OString&, void);
 };
 
-class SvtURLBox;
+class URLBox;
 class SvtExpFileDlg_Impl
 {
 private:
-    const SvtFileDialogFilter_Impl* _pCurFilter;
-    OUString                        m_sCurrentFilterDisplayName;    // may differ from _pCurFilter->GetName in case it is a cached entry
+    const SvtFileDialogFilter_Impl* m_pCurFilter;
+    OUString                        m_sCurrentFilterDisplayName;    // may differ from m_pCurFilter->GetName in case it is a cached entry
 
-    css::uno::Sequence< OUString > _aBlackList;
+    css::uno::Sequence< OUString > m_aBlackList;
 
 public:
     SvtFileDialogFilterList_Impl    m_aFilter;
-    std::unique_ptr<SvtFileDialogFilter_Impl> _pUserFilter;
+    std::unique_ptr<SvtFileDialogFilter_Impl> m_xUserFilter;
 
-    VclPtr<FixedText>                      _pFtFileName;
-    VclPtr<SvtURLBox>                      _pEdFileName;
+    std::unique_ptr<weld::Label> m_xFtFileName;
+    std::unique_ptr<URLBox> m_xEdFileName;
 
-    VclPtr<FixedText>                      _pFtFileVersion;
-    VclPtr<ListBox>                        _pLbFileVersion;
+    std::unique_ptr<weld::Label> m_xFtFileVersion;
+    std::unique_ptr<weld::ComboBox> m_xLbFileVersion;
 
-    VclPtr<FixedText>                      _pFtTemplates;
-    VclPtr<ListBox>                        _pLbTemplates;
+    std::unique_ptr<weld::Label> m_xFtTemplates;
+    std::unique_ptr<weld::ComboBox> m_xLbTemplates;
 
-    VclPtr<FixedText>                      _pFtImageTemplates;
-    VclPtr<ListBox>                        _pLbImageTemplates;
+    std::unique_ptr<weld::Label> m_xFtImageTemplates;
+    std::unique_ptr<weld::ComboBox> m_xLbImageTemplates;
 
-    VclPtr<FixedText>                      _pFtImageAnchor;
-    VclPtr<ListBox>                        _pLbImageAnchor;
+    std::unique_ptr<weld::Label> m_xFtImageAnchor;
+    std::unique_ptr<weld::ComboBox> m_xLbImageAnchor;
 
-    VclPtr<FixedText>                      _pFtFileType;
-    VclPtr<ListBox>                        _pLbFilter;
-    VclPtr<PushButton>                     _pBtnFileOpen;
-    VclPtr<PushButton>                     _pBtnCancel;
-    VclPtr<HelpButton>                     _pBtnHelp;
-    VclPtr<SvtUpButton_Impl>               _pBtnUp;
-    VclPtr<PushButton>                     _pBtnNewFolder;
-    VclPtr<CheckBox>                       _pCbPassword;
-    VclPtr<CheckBox>                       _pCbGPGEncrypt;
-    VclPtr<SvtURLBox>                      _pEdCurrentPath;
-    VclPtr<CheckBox>                       _pCbAutoExtension;
-    VclPtr<CheckBox>                       _pCbOptions;
+    std::unique_ptr<weld::Label> m_xFtFileType;
+    std::unique_ptr<weld::ComboBox> m_xLbFilter;
+    std::unique_ptr<weld::Button> m_xBtnFileOpen;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
+    std::unique_ptr<weld::Button> m_xBtnHelp;
+    std::unique_ptr<SvtUpButton_Impl> m_xBtnUp;
+    std::unique_ptr<weld::Button> m_xBtnNewFolder;
+    std::unique_ptr<weld::CheckButton> m_xCbPassword;
+    std::unique_ptr<weld::CheckButton> m_xCbGPGEncrypt;
+    std::unique_ptr<URLBox> m_xEdCurrentPath;
+    std::unique_ptr<weld::CheckButton> m_xCbAutoExtension;
+    std::unique_ptr<weld::CheckButton> m_xCbOptions;
 
-    VclPtr<PlacesListBox>                  _pPlaces;
-    VclPtr<PushButton>                     _pBtnConnectToServer;
+    std::unique_ptr<PlacesListBox> m_xPlaces;
+    std::unique_ptr<weld::Button> m_xBtnConnectToServer;
 
-    SvtFileDlgMode                  _eMode;
-    SvtFileDlgType                  _eDlgType;
-    PickerFlags                     _nStyle;
+    SvtFileDlgMode m_eMode;
+    SvtFileDlgType m_eDlgType;
+    PickerFlags m_nStyle;
 
-    OUString                        _aStdDir;
+    OUString m_aStdDir;
 
     // delay filter when traveling the filterbox
-    Timer                           _aFilterTimer;
+    Idle m_aFilterIdle;
 
     // shows OpenHdl_Imp() if the open was triggered by a double click
-    bool                        _bDoubleClick;
-    bool                        m_bNeedDelayedFilterExecute;
+    bool m_bDoubleClick;
+    bool m_bNeedDelayedFilterExecute;
 
     // MultiSelection?
-    bool                        _bMultiSelection;
+    bool m_bMultiSelection;
 
     // remember sizes
-    OUString                        _aIniKey;
+    OUString m_aIniKey;
 
-    explicit                SvtExpFileDlg_Impl();
-                            ~SvtExpFileDlg_Impl();
+    explicit SvtExpFileDlg_Impl();
+    ~SvtExpFileDlg_Impl();
 
+    void             SetBlackList( const css::uno::Sequence< OUString >& rBlackList ) { m_aBlackList = rBlackList; }
+    const css::uno::Sequence< OUString >& GetBlackList() const { return m_aBlackList; }
+    void                    SetStandardDir( const OUString& rDir );
+    const OUString&  GetStandardDir() const { return m_aStdDir; }
 
-    void             SetBlackList( const css::uno::Sequence< OUString >& rBlackList ) { _aBlackList = rBlackList; }
-    const css::uno::Sequence< OUString >& GetBlackList() const { return _aBlackList; }
-    void                    SetStandardDir( const OUString& _rDir );
-    const OUString&  GetStandardDir() const          { return _aStdDir; }
-    void             DisableFilterBoxAutoWidth()     { _pLbFilter->EnableDDAutoWidth( false ); }
-
-
-    // access to the filter listbox only as Control* - we want to maintain the entries/userdata ourself
-            Control*        GetFilterListControl()          { return _pLbFilter; }
-            const Control*  GetFilterListControl() const    { return _pLbFilter; }
-    inline  void            SetFilterListSelectHdl( const Link<ListBox&,void>& _rHandler );
+    // access to the filter listbox only as weld::Widget* - we want to maintain the entries/userdata ourself
+    weld::Widget* GetFilterListControl() { return m_xLbFilter.get(); }
+    const weld::Widget*  GetFilterListControl() const { return m_xLbFilter.get(); }
+    void SetFilterListSelectHdl(const Link<weld::ComboBox&, void>& rHandler)
+    {
+        m_xLbFilter->connect_changed(rHandler);
+    }
 
     // inits the listbox for the filters from the filter list (_pFilter)
             void            InitFilterList( );
-    inline  bool            HasFilterListEntry( const OUString& _rFilterName );
-    inline  void            SelectFilterListEntry( const OUString& _rFilterName );
-    inline  void            SetNoFilterListSelection( );
-            void            InsertFilterListEntry( const SvtFileDialogFilter_Impl* _pFilterDesc );
-                                // _pFilterDesc must already have been added to _pFilter
-    inline  SvtFileDialogFilter_Impl*   GetSelectedFilterEntry( OUString& /* [out] */ _rDisplayName ) const;
-    inline  bool        IsFilterListTravelSelect() const;
+    bool HasFilterListEntry( const OUString& rFilterName )
+    {
+        return m_xLbFilter->find_text(rFilterName) != -1;
+    }
 
+    void SelectFilterListEntry( const OUString& rFilterName )
+    {
+        m_xLbFilter->set_active_text(rFilterName);
+    }
 
-    // access to the current filter via methods only - need to care for consistency between _pCurFilter and m_sCurrentFilterDisplayName
-    inline      const SvtFileDialogFilter_Impl*     GetCurFilter( ) const;
-    inline      const OUString&                     GetCurFilterDisplayName() const;
-                void                                SetCurFilter( SvtFileDialogFilter_Impl const * _pFilter, const OUString& _rDisplayName );
+    void SetNoFilterListSelection( )
+    {
+        m_xLbFilter->set_active(-1);
+    }
+
+    void            InsertFilterListEntry( const SvtFileDialogFilter_Impl* _pFilterDesc );
+    // _pFilterDesc must already have been added to _pFilter
+    SvtFileDialogFilter_Impl* GetSelectedFilterEntry( OUString& rDisplayName ) const
+    {
+        rDisplayName = m_xLbFilter->get_active_text();
+        return reinterpret_cast<SvtFileDialogFilter_Impl*>(m_xLbFilter->get_active_id().toInt64());
+    }
+
+    // access to the current filter via methods only - need to care for consistency between m_pCurFilter and m_sCurrentFilterDisplayName
+    const SvtFileDialogFilter_Impl* GetCurFilter( ) const
+    {
+        return m_pCurFilter;
+    }
+
+    const OUString& GetCurFilterDisplayName() const
+    {
+        return m_sCurrentFilterDisplayName;
+    }
+
+    void SetCurFilter( SvtFileDialogFilter_Impl const * _pFilter, const OUString& rDisplayName );
 };
 
-inline void SvtExpFileDlg_Impl::SetFilterListSelectHdl( const Link<ListBox&,void>& _rHandler )
-{
-    _pLbFilter->SetSelectHdl( _rHandler );
-}
-
-inline bool SvtExpFileDlg_Impl::HasFilterListEntry( const OUString& _rFilterName )
-{
-    return ( LISTBOX_ENTRY_NOTFOUND != _pLbFilter->GetEntryPos( _rFilterName ) );
-}
-
-inline void SvtExpFileDlg_Impl::SelectFilterListEntry( const OUString& _rFilterName )
-{
-    _pLbFilter->SelectEntry( _rFilterName );
-}
-
-inline  void SvtExpFileDlg_Impl::SetNoFilterListSelection( )
-{
-    _pLbFilter->SetNoSelection( );
-}
-
-inline SvtFileDialogFilter_Impl* SvtExpFileDlg_Impl::GetSelectedFilterEntry( OUString& _rDisplayName ) const
-{
-    _rDisplayName = _pLbFilter->GetSelectedEntry();
-    return static_cast< SvtFileDialogFilter_Impl* >( _pLbFilter->GetSelectedEntryData () );
-}
-
-inline bool SvtExpFileDlg_Impl::IsFilterListTravelSelect() const
-{
-    return _pLbFilter->IsTravelSelect();
-}
-
-inline const SvtFileDialogFilter_Impl* SvtExpFileDlg_Impl::GetCurFilter( ) const
-{
-    return _pCurFilter;
-}
-
-inline const OUString& SvtExpFileDlg_Impl::GetCurFilterDisplayName() const
-{
-    return m_sCurrentFilterDisplayName;
-}
-
 #endif // INCLUDED_FPICKER_SOURCE_OFFICE_IODLGIMP_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -101,21 +101,18 @@ namespace svt
             { "VersionListLabel",       LISTBOX_VERSION_LABEL,          PROPERTY_FLAGS_COMMON | PropFlags::Text          }
         };
 
-
         static const sal_Int32 s_nControlCount = SAL_N_ELEMENTS( aDescriptions );
 
         static ControlDescIterator s_pControls = aDescriptions;
         static ControlDescIterator s_pControlsEnd = aDescriptions + s_nControlCount;
 
-
         struct ControlDescriptionLookup
         {
-            bool operator()( const ControlDescription& _rDesc1, const ControlDescription& _rDesc2 )
+            bool operator()( const ControlDescription& rDesc1, const ControlDescription& rDesc2 )
             {
-                return strcmp(_rDesc1.pControlName, _rDesc2.pControlName) < 0;
+                return strcmp(rDesc1.pControlName, rDesc2.pControlName) < 0;
             }
         };
-
 
         struct ControlProperty
         {
@@ -124,7 +121,6 @@ namespace svt
         };
 
         typedef const ControlProperty* ControlPropertyIterator;
-
 
         static const ControlProperty aProperties[] =  {
             { "Text",               PropFlags::Text              },
@@ -136,7 +132,6 @@ namespace svt
             { "SelectedItemIndex",  PropFlags::SelectedItemIndex },
             { "Checked",            PropFlags::Checked           }
         };
-
 
         static const int s_nPropertyCount = SAL_N_ELEMENTS( aProperties );
 
@@ -166,38 +161,48 @@ namespace svt
         }
     }
 
-
-    OControlAccess::OControlAccess( IFilePickerController* _pController, SvtFileView* _pFileView )
-        :m_pFilePickerController( _pController )
-        ,m_pFileView( _pFileView )
+    OControlAccess::OControlAccess(IFilePickerController* pController, SvtFileView* pFileView)
+        : m_pFilePickerController(pController)
+        , m_pFileView(pFileView)
     {
         DBG_ASSERT( m_pFilePickerController, "OControlAccess::OControlAccess: invalid control locator!" );
     }
 
+    bool OControlAccess::IsFileViewWidget(weld::Widget const * pControl) const
+    {
+        if (!pControl)
+            return false;
+        if (!m_pFileView)
+            return false;
+        return pControl == m_pFileView->identifier();
+    }
 
-    void OControlAccess::setHelpURL( vcl::Window* _pControl, const OUString& sHelpURL, bool _bFileView )
+    void OControlAccess::setHelpURL(weld::Widget* pControl, const OUString& sHelpURL)
     {
         OUString sHelpID( sHelpURL );
         INetURLObject aHID( sHelpURL );
-        if ( aHID.GetProtocol() == INetProtocol::Hid )
-              sHelpID = aHID.GetURLPath();
+        if (aHID.GetProtocol() == INetProtocol::Hid)
+            sHelpID = aHID.GetURLPath();
 
         // URLs should always be UTF8 encoded and escaped
         OString sID( OUStringToOString( sHelpID, RTL_TEXTENCODING_UTF8 ) );
-        if ( _bFileView )
+        if (IsFileViewWidget(pControl))
+        {
             // the file view "overrides" the SetHelpId
-            static_cast< SvtFileView* >( _pControl )->SetHelpId( sID );
+            m_pFileView->set_help_id(sID);
+        }
         else
-            _pControl->SetHelpId( sID );
+            pControl->set_help_id(sID);
     }
 
-
-    OUString OControlAccess::getHelpURL( vcl::Window const * _pControl, bool _bFileView )
+    OUString OControlAccess::getHelpURL(weld::Widget const * pControl) const
     {
-        OString aHelpId = _pControl->GetHelpId();
-        if ( _bFileView )
+        OString aHelpId = pControl->get_help_id();
+        if (IsFileViewWidget(pControl))
+        {
             // the file view "overrides" the SetHelpId
-            aHelpId = static_cast< SvtFileView const * >( _pControl )->GetHelpId( );
+            aHelpId = m_pFileView->get_help_id();
+        }
 
         OUString sHelpURL;
         OUString aTmp( OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ) );
@@ -208,17 +213,16 @@ namespace svt
         return sHelpURL;
     }
 
-
-    Any OControlAccess::getControlProperty( const OUString& _rControlName, const OUString& _rControlProperty )
+    Any OControlAccess::getControlProperty( const OUString& rControlName, const OUString& rControlProperty )
     {
         // look up the control
         sal_Int16 nControlId = -1;
         PropFlags nPropertyMask = PropFlags::NONE;
-        Control* pControl = implGetControl( _rControlName, &nControlId, &nPropertyMask );
+        weld::Widget* pControl = implGetControl( rControlName, &nControlId, &nPropertyMask );
             // will throw an IllegalArgumentException if the name is not valid
 
         // look up the property
-        ControlPropertyIterator aPropDesc = ::std::find_if( s_pProperties, s_pPropertiesEnd, ControlPropertyLookup( _rControlProperty ) );
+        ControlPropertyIterator aPropDesc = ::std::find_if( s_pProperties, s_pPropertiesEnd, ControlPropertyLookup( rControlProperty ) );
         if ( aPropDesc == s_pPropertiesEnd )
             // it's a completely unknown property
             lcl_throwIllegalArgumentException();
@@ -230,12 +234,11 @@ namespace svt
         return implGetControlProperty( pControl, aPropDesc->nPropertyId );
     }
 
-
-    Control* OControlAccess::implGetControl( const OUString& _rControlName, sal_Int16* _pId, PropFlags* _pPropertyMask ) const
+    weld::Widget* OControlAccess::implGetControl( const OUString& rControlName, sal_Int16* _pId, PropFlags* _pPropertyMask ) const
     {
-        Control* pControl = nullptr;
+        weld::Widget* pControl = nullptr;
         ControlDescription tmpDesc;
-        OString aControlName = OUStringToOString( _rControlName, RTL_TEXTENCODING_UTF8 );
+        OString aControlName = OUStringToOString( rControlName, RTL_TEXTENCODING_UTF8 );
         tmpDesc.pControlName = aControlName.getStr();
 
         // translate the name into an id
@@ -259,23 +262,21 @@ namespace svt
         return pControl;
     }
 
-
-    void OControlAccess::setControlProperty( const OUString& _rControlName, const OUString& _rControlProperty, const css::uno::Any& _rValue )
+    void OControlAccess::setControlProperty( const OUString& rControlName, const OUString& rControlProperty, const css::uno::Any& rValue )
     {
         // look up the control
         sal_Int16 nControlId = -1;
-        Control* pControl = implGetControl( _rControlName, &nControlId );
+        weld::Widget* pControl = implGetControl( rControlName, &nControlId );
             // will throw an IllegalArgumentException if the name is not valid
 
         // look up the property
-        ControlPropertyIterator aPropDesc = ::std::find_if( s_pProperties, s_pPropertiesEnd, ControlPropertyLookup( _rControlProperty ) );
+        ControlPropertyIterator aPropDesc = ::std::find_if( s_pProperties, s_pPropertiesEnd, ControlPropertyLookup( rControlProperty ) );
         if ( aPropDesc == s_pPropertiesEnd )
             lcl_throwIllegalArgumentException();
 
         // set the property
-        implSetControlProperty( nControlId, pControl, aPropDesc->nPropertyId, _rValue, false );
+        implSetControlProperty( nControlId, pControl, aPropDesc->nPropertyId, rValue, false );
     }
-
 
     Sequence< OUString > OControlAccess::getSupportedControls(  ) const
     {
@@ -293,12 +294,11 @@ namespace svt
         return aControls;
     }
 
-
-    Sequence< OUString > OControlAccess::getSupportedControlProperties( const OUString& _rControlName )
+    Sequence< OUString > OControlAccess::getSupportedControlProperties( const OUString& rControlName )
     {
         sal_Int16 nControlId = -1;
         PropFlags nPropertyMask = PropFlags::NONE;
-        implGetControl( _rControlName, &nControlId, &nPropertyMask );
+        implGetControl( rControlName, &nControlId, &nPropertyMask );
             // will throw an IllegalArgumentException if the name is not valid
 
         // fill in the property names
@@ -313,26 +313,24 @@ namespace svt
         return aProps;
     }
 
-
-    bool OControlAccess::isControlSupported( const OUString& _rControlName )
+    bool OControlAccess::isControlSupported( const OUString& rControlName )
     {
         ControlDescription tmpDesc;
-        OString aControlName = OUStringToOString(_rControlName, RTL_TEXTENCODING_UTF8);
+        OString aControlName = OUStringToOString(rControlName, RTL_TEXTENCODING_UTF8);
         tmpDesc.pControlName = aControlName.getStr();
         return ::std::binary_search( s_pControls, s_pControlsEnd, tmpDesc, ControlDescriptionLookup() );
     }
 
-
-    bool OControlAccess::isControlPropertySupported( const OUString& _rControlName, const OUString& _rControlProperty )
+    bool OControlAccess::isControlPropertySupported( const OUString& rControlName, const OUString& rControlProperty )
     {
         // look up the control
         sal_Int16 nControlId = -1;
         PropFlags nPropertyMask = PropFlags::NONE;
-        implGetControl( _rControlName, &nControlId, &nPropertyMask );
+        implGetControl( rControlName, &nControlId, &nPropertyMask );
             // will throw an IllegalArgumentException if the name is not valid
 
         // look up the property
-        ControlPropertyIterator aPropDesc = ::std::find_if( s_pProperties, s_pPropertiesEnd, ControlPropertyLookup( _rControlProperty ) );
+        ControlPropertyIterator aPropDesc = ::std::find_if( s_pProperties, s_pPropertiesEnd, ControlPropertyLookup( rControlProperty ) );
         if ( aPropDesc == s_pPropertiesEnd )
             // it's a property which is completely unknown
             return false;
@@ -340,21 +338,20 @@ namespace svt
         return bool( aPropDesc->nPropertyId & nPropertyMask );
     }
 
-
-    void OControlAccess::setValue( sal_Int16 _nControlId, sal_Int16 _nControlAction, const Any& _rValue )
+    void OControlAccess::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const Any& rValue )
     {
-        Control* pControl = m_pFilePickerController->getControl( _nControlId );
+        weld::Widget* pControl = m_pFilePickerController->getControl( nControlId );
         DBG_ASSERT( pControl, "OControlAccess::SetValue: don't have this control in the current mode!" );
         if ( pControl )
         {
             PropFlags nPropertyId = PropFlags::Unknown;
-            if ( ControlActions::SET_HELP_URL == _nControlAction )
+            if ( ControlActions::SET_HELP_URL == nControlAction )
             {
                 nPropertyId = PropFlags::HelpUrl;
             }
             else
             {
-                switch ( _nControlId )
+                switch ( nControlId )
                 {
                     case CHECKBOX_AUTOEXTENSION:
                     case CHECKBOX_PASSWORD:
@@ -374,41 +371,41 @@ namespace svt
                     case LISTBOX_TEMPLATE:
                     case LISTBOX_IMAGE_TEMPLATE:
                     case LISTBOX_IMAGE_ANCHOR:
-                        if ( ControlActions::SET_SELECT_ITEM == _nControlAction )
+                        if ( ControlActions::SET_SELECT_ITEM == nControlAction )
                         {
                             nPropertyId = PropFlags::SelectedItemIndex;
                         }
                         else
                         {
-                            DBG_ASSERT( WindowType::LISTBOX == pControl->GetType(), "OControlAccess::SetValue: implGetControl returned nonsense!" );
-                            implDoListboxAction( static_cast< ListBox* >( pControl ), _nControlAction, _rValue );
+                            weld::ComboBox* pComboBox = dynamic_cast<weld::ComboBox*>(pControl);
+                            assert(pComboBox && "OControlAccess::SetValue: implGetControl returned nonsense!");
+                            implDoListboxAction(pComboBox, nControlAction, rValue);
                         }
                         break;
                 }
             }
 
             if ( PropFlags::Unknown != nPropertyId )
-                implSetControlProperty( _nControlId, pControl, nPropertyId, _rValue );
+                implSetControlProperty( nControlId, pControl, nPropertyId, rValue );
         }
     }
 
-
-    Any OControlAccess::getValue( sal_Int16 _nControlId, sal_Int16 _nControlAction ) const
+    Any OControlAccess::getValue( sal_Int16 nControlId, sal_Int16 nControlAction ) const
     {
         Any aRet;
 
-        Control* pControl = m_pFilePickerController->getControl( _nControlId );
+        weld::Widget* pControl = m_pFilePickerController->getControl( nControlId );
         DBG_ASSERT( pControl, "OControlAccess::GetValue: don't have this control in the current mode!" );
         if ( pControl )
         {
             PropFlags nPropertyId = PropFlags::Unknown;
-            if ( ControlActions::SET_HELP_URL == _nControlAction )
+            if ( ControlActions::SET_HELP_URL == nControlAction )
             {
                 nPropertyId = PropFlags::HelpUrl;
             }
             else
             {
-                switch ( _nControlId )
+                switch ( nControlId )
                 {
                     case CHECKBOX_AUTOEXTENSION:
                     case CHECKBOX_PASSWORD:
@@ -422,7 +419,7 @@ namespace svt
                         break;
 
                     case LISTBOX_FILTER:
-                        if ( ControlActions::GET_SELECTED_ITEM == _nControlAction )
+                        if ( ControlActions::GET_SELECTED_ITEM == nControlAction )
                         {
                             aRet <<= m_pFilePickerController->getCurFilter();
                         }
@@ -436,7 +433,7 @@ namespace svt
                     case LISTBOX_TEMPLATE:
                     case LISTBOX_IMAGE_TEMPLATE:
                     case LISTBOX_IMAGE_ANCHOR:
-                        switch ( _nControlAction )
+                        switch ( nControlAction )
                         {
                             case ControlActions::GET_SELECTED_ITEM:
                                 nPropertyId = PropFlags::SelectedItem;
@@ -462,57 +459,47 @@ namespace svt
         return aRet;
     }
 
-
     void OControlAccess::setLabel( sal_Int16 nId, const OUString &rLabel )
     {
-        Control* pControl = m_pFilePickerController->getControl( nId, true );
-        DBG_ASSERT( pControl, "OControlAccess::GetValue: don't have this control in the current mode!" );
-        if ( pControl )
-            pControl->SetText( rLabel );
+        weld::Label* pControl = dynamic_cast<weld::Label*>(m_pFilePickerController->getControl(nId, true));
+        assert(pControl && "OControlAccess::GetValue: don't have this control in the current mode!");
+        pControl->set_label(rLabel);
     }
-
 
     OUString OControlAccess::getLabel( sal_Int16 nId ) const
     {
-        OUString sLabel;
-
-        Control* pControl = m_pFilePickerController->getControl( nId, true );
-        DBG_ASSERT( pControl, "OControlAccess::GetValue: don't have this control in the current mode!" );
-        if ( pControl )
-            sLabel = pControl->GetText();
-
-        return sLabel;
+        weld::Label* pControl = dynamic_cast<weld::Label*>(m_pFilePickerController->getControl(nId, true));
+        assert(pControl && "OControlAccess::GetValue: don't have this control in the current mode!");
+        return pControl->get_label();
     }
 
-
-    void OControlAccess::enableControl( sal_Int16 _nId, bool _bEnable )
+    void OControlAccess::enableControl(sal_Int16 nId, bool bEnable)
     {
-        m_pFilePickerController->enableControl( _nId, _bEnable );
+        m_pFilePickerController->enableControl(nId, bEnable);
     }
 
-
-    void OControlAccess::implDoListboxAction( ListBox* _pListbox, sal_Int16 _nControlAction, const Any& _rValue )
+    void OControlAccess::implDoListboxAction(weld::ComboBox* pListbox, sal_Int16 nControlAction, const Any& rValue)
     {
-        switch ( _nControlAction )
+        switch ( nControlAction )
         {
             case ControlActions::ADD_ITEM:
             {
                 OUString aEntry;
-                _rValue >>= aEntry;
+                rValue >>= aEntry;
                 if ( !aEntry.isEmpty() )
-                    _pListbox->InsertEntry( aEntry );
+                    pListbox->append_text( aEntry );
             }
             break;
 
             case ControlActions::ADD_ITEMS:
             {
                 Sequence < OUString > aTemplateList;
-                _rValue >>= aTemplateList;
+                rValue >>= aTemplateList;
 
                 if ( aTemplateList.hasElements() )
                 {
                     for ( long i=0; i < aTemplateList.getLength(); i++ )
-                        _pListbox->InsertEntry( aTemplateList[i] );
+                        pListbox->append_text( aTemplateList[i] );
                 }
             }
             break;
@@ -520,13 +507,13 @@ namespace svt
             case ControlActions::DELETE_ITEM:
             {
                 sal_Int32 nPos = 0;
-                if ( _rValue >>= nPos )
-                    _pListbox->RemoveEntry( nPos );
+                if ( rValue >>= nPos )
+                    pListbox->remove( nPos );
             }
             break;
 
             case ControlActions::DELETE_ITEMS:
-                _pListbox->Clear();
+                pListbox->clear();
                 break;
 
             default:
@@ -534,16 +521,15 @@ namespace svt
         }
     }
 
-
-    void OControlAccess::implSetControlProperty( sal_Int16 _nControlId, Control* _pControl, PropFlags _nProperty, const Any& _rValue, bool _bIgnoreIllegalArgument )
+    void OControlAccess::implSetControlProperty( sal_Int16 nControlId, weld::Widget* pControl, PropFlags _nProperty, const Any& rValue, bool _bIgnoreIllegalArgument )
     {
-        if ( !_pControl )
-            _pControl = m_pFilePickerController->getControl( _nControlId );
-        DBG_ASSERT( _pControl, "OControlAccess::implSetControlProperty: invalid argument, this will crash!" );
-        if ( !_pControl )
+        if ( !pControl )
+            pControl = m_pFilePickerController->getControl( nControlId );
+        DBG_ASSERT( pControl, "OControlAccess::implSetControlProperty: invalid argument, this will crash!" );
+        if ( !pControl )
             return;
 
-        DBG_ASSERT( _pControl == m_pFilePickerController->getControl( _nControlId ),
+        DBG_ASSERT( pControl == m_pFilePickerController->getControl( nControlId ),
             "OControlAccess::implSetControlProperty: inconsistent parameters!" );
 
         switch ( _nProperty )
@@ -551,9 +537,11 @@ namespace svt
             case PropFlags::Text:
             {
                 OUString sText;
-                if ( _rValue >>= sText )
+                if (rValue >>= sText)
                 {
-                    _pControl->SetText( sText );
+                    weld::Label* pLabel = dynamic_cast<weld::Label*>(pControl);
+                    assert(pLabel);
+                    pLabel->set_label(sText);
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
@@ -565,9 +553,9 @@ namespace svt
             case PropFlags::Enabled:
             {
                 bool bEnabled = false;
-                if ( _rValue >>= bEnabled )
+                if ( rValue >>= bEnabled )
                 {
-                    m_pFilePickerController->enableControl( _nControlId, bEnabled );
+                    m_pFilePickerController->enableControl( nControlId, bEnabled );
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
@@ -579,9 +567,9 @@ namespace svt
             case PropFlags::Visible:
             {
                 bool bVisible = false;
-                if ( _rValue >>= bVisible )
+                if ( rValue >>= bVisible )
                 {
-                    _pControl->Show( bVisible );
+                    pControl->set_visible( bVisible );
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
@@ -593,9 +581,9 @@ namespace svt
             case PropFlags::HelpUrl:
             {
                 OUString sHelpURL;
-                if ( _rValue >>= sHelpURL )
+                if ( rValue >>= sHelpURL )
                 {
-                    setHelpURL( _pControl, sHelpURL, m_pFileView == _pControl );
+                    setHelpURL(pControl, sHelpURL);
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
@@ -606,19 +594,19 @@ namespace svt
 
             case PropFlags::ListItems:
             {
-                DBG_ASSERT( WindowType::LISTBOX == _pControl->GetType(),
-                    "OControlAccess::implSetControlProperty: invalid control/property combination!" );
+                weld::ComboBox* pComboBox = dynamic_cast<weld::ComboBox*>(pControl);
+                assert(pComboBox && "OControlAccess::implSetControlProperty: invalid control/property combination!");
 
                 Sequence< OUString > aItems;
-                if ( _rValue >>= aItems )
+                if ( rValue >>= aItems )
                 {
                     // remove all previous items
-                    static_cast< ListBox* >( _pControl )->Clear();
+                    pComboBox->clear();
 
                     // add the new ones
-                    for ( auto const & item : std::as_const(aItems) )
+                    for (auto const & item : std::as_const(aItems))
                     {
-                        static_cast< ListBox* >( _pControl )->InsertEntry( item );
+                        pComboBox->append_text(item);
                     }
 
                 }
@@ -631,13 +619,13 @@ namespace svt
 
             case PropFlags::SelectedItem:
             {
-                DBG_ASSERT( WindowType::LISTBOX == _pControl->GetType(),
-                    "OControlAccess::implSetControlProperty: invalid control/property combination!" );
+                weld::ComboBox* pComboBox = dynamic_cast<weld::ComboBox*>(pControl);
+                assert(pComboBox && "OControlAccess::implSetControlProperty: invalid control/property combination!");
 
                 OUString sSelected;
-                if ( _rValue >>= sSelected )
+                if ( rValue >>= sSelected )
                 {
-                    static_cast< ListBox* >( _pControl )->SelectEntry( sSelected );
+                    pComboBox->set_active_text(sSelected);
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
@@ -648,13 +636,13 @@ namespace svt
 
             case PropFlags::SelectedItemIndex:
             {
-                DBG_ASSERT( WindowType::LISTBOX == _pControl->GetType(),
-                    "OControlAccess::implSetControlProperty: invalid control/property combination!" );
+                weld::ComboBox* pComboBox = dynamic_cast<weld::ComboBox*>(pControl);
+                assert(pComboBox && "OControlAccess::implSetControlProperty: invalid control/property combination!");
 
                 sal_Int32 nPos = 0;
-                if ( _rValue >>= nPos )
+                if ( rValue >>= nPos )
                 {
-                    static_cast< ListBox* >( _pControl )->SelectEntryPos( nPos );
+                    pComboBox->set_active(nPos);
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
@@ -665,13 +653,13 @@ namespace svt
 
             case PropFlags::Checked:
             {
-                DBG_ASSERT( WindowType::CHECKBOX == _pControl->GetType(),
-                    "OControlAccess::implSetControlProperty: invalid control/property combination!" );
+                weld::ToggleButton* pToggleButton = dynamic_cast<weld::ToggleButton*>(pControl);
+                assert(pToggleButton && "OControlAccess::implSetControlProperty: invalid control/property combination!");
 
                 bool bChecked = false;
-                if ( _rValue >>= bChecked )
+                if ( rValue >>= bChecked )
                 {
-                    static_cast< CheckBox* >( _pControl )->Check( bChecked );
+                    pToggleButton->set_active(bChecked);
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
@@ -685,76 +673,80 @@ namespace svt
         }
     }
 
-
-    Any OControlAccess::implGetControlProperty( Control const * _pControl, PropFlags _nProperty ) const
+    Any OControlAccess::implGetControlProperty( weld::Widget const * pControl, PropFlags _nProperty ) const
     {
-        DBG_ASSERT( _pControl, "OControlAccess::implGetControlProperty: invalid argument, this will crash!" );
+        assert(pControl && "OControlAccess::implGetControlProperty: invalid argument, this will crash!");
 
         Any aReturn;
         switch ( _nProperty )
         {
             case PropFlags::Text:
-                aReturn <<= _pControl->GetText();
+            {
+                const weld::Label* pLabel = dynamic_cast<const weld::Label*>(pControl);
+                assert(pLabel);
+                aReturn <<= pLabel->get_label();
                 break;
-
+            }
             case PropFlags::Enabled:
-                aReturn <<= _pControl->IsEnabled();
+                aReturn <<= pControl->get_sensitive();
                 break;
 
             case PropFlags::Visible:
-                aReturn <<= _pControl->IsVisible();
+                aReturn <<= pControl->get_visible();
                 break;
 
             case PropFlags::HelpUrl:
-                aReturn <<= getHelpURL( _pControl, m_pFileView == _pControl );
+                aReturn <<= getHelpURL(pControl);
                 break;
 
             case PropFlags::ListItems:
             {
-                DBG_ASSERT( WindowType::LISTBOX == _pControl->GetType(),
-                    "OControlAccess::implGetControlProperty: invalid control/property combination!" );
+                const weld::ComboBox* pComboBox = dynamic_cast<const weld::ComboBox*>(pControl);
+                assert(pComboBox && "OControlAccess::implGetControlProperty: invalid control/property combination!");
 
-                Sequence< OUString > aItems( static_cast< ListBox const * >( _pControl )->GetEntryCount() );
+                Sequence< OUString > aItems(pComboBox->get_count());
                 OUString* pItems = aItems.getArray();
-                for ( sal_Int32 i=0; i<static_cast< ListBox const * >( _pControl )->GetEntryCount(); ++i )
-                    *pItems++ = static_cast< ListBox const * >( _pControl )->GetEntry( i );
+                for (sal_Int32 i = 0; i < pComboBox->get_count(); ++i)
+                    *pItems++ = pComboBox->get_text(i);
 
                 aReturn <<= aItems;
+                break;
             }
-            break;
 
             case PropFlags::SelectedItem:
             {
-                DBG_ASSERT( WindowType::LISTBOX == _pControl->GetType(),
-                    "OControlAccess::implGetControlProperty: invalid control/property combination!" );
+                const weld::ComboBox* pComboBox = dynamic_cast<const weld::ComboBox*>(pControl);
+                assert(pComboBox && "OControlAccess::implGetControlProperty: invalid control/property combination!");
 
-                sal_Int32 nSelected = static_cast< ListBox const * >( _pControl )->GetSelectedEntryPos();
+                sal_Int32 nSelected = pComboBox->get_active();
                 OUString sSelected;
-                if ( LISTBOX_ENTRY_NOTFOUND != nSelected )
-                    sSelected = static_cast< ListBox const * >( _pControl )->GetSelectedEntry();
+                if (nSelected != -1)
+                    sSelected = pComboBox->get_active_text();
                 aReturn <<= sSelected;
+                break;
             }
-            break;
 
             case PropFlags::SelectedItemIndex:
             {
-                DBG_ASSERT( WindowType::LISTBOX == _pControl->GetType(),
-                    "OControlAccess::implGetControlProperty: invalid control/property combination!" );
+                const weld::ComboBox* pComboBox = dynamic_cast<const weld::ComboBox*>(pControl);
+                assert(pComboBox && "OControlAccess::implGetControlProperty: invalid control/property combination!");
 
-                sal_Int32 nSelected = static_cast< ListBox const * >( _pControl )->GetSelectedEntryPos();
-                if ( LISTBOX_ENTRY_NOTFOUND != nSelected )
-                    aReturn <<= static_cast< ListBox const * >( _pControl )->GetSelectedEntryPos();
+                sal_Int32 nSelected = pComboBox->get_active();
+                if (nSelected != -1)
+                    aReturn <<= nSelected;
                 else
                     aReturn <<= sal_Int32(-1);
+                break;
             }
-            break;
 
             case PropFlags::Checked:
-                DBG_ASSERT( WindowType::CHECKBOX == _pControl->GetType(),
-                    "OControlAccess::implGetControlProperty: invalid control/property combination!" );
+            {
+                const weld::ToggleButton* pToggleButton = dynamic_cast<const weld::ToggleButton*>(pControl);
+                assert(pToggleButton && "OControlAccess::implGetControlProperty: invalid control/property combination!");
 
-                aReturn <<= static_cast< CheckBox const * >( _pControl )->IsChecked( );
+                aReturn <<= pToggleButton->get_active();
                 break;
+            }
 
             default:
                 OSL_FAIL( "OControlAccess::implGetControlProperty: invalid property id!" );
@@ -762,8 +754,6 @@ namespace svt
         return aReturn;
     }
 
-
 }   // namespace svt
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

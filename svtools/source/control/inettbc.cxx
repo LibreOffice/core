@@ -126,6 +126,8 @@ class MatchContext_Impl: public salhelper::Thread
     svtools::AsynchronLink          aLink;
     OUString const                  aText;
     URLBox*                         pBox;
+    bool const                      bOnlyDirectories;
+    bool const                      bNoSelection;
 
     osl::Mutex mutex_;
     bool stopped_;
@@ -482,6 +484,8 @@ MatchContext_Impl::MatchContext_Impl(URLBox* pBoxP, const OUString& rText)
     , aLink( LINK( this, MatchContext_Impl, Select_Impl ) )
     , aText( rText )
     , pBox( pBoxP )
+    , bOnlyDirectories( pBoxP->bOnlyDirectories )
+    , bNoSelection( pBoxP->bNoSelection )
     , stopped_(false)
     , commandId_(0)
 {
@@ -587,7 +591,7 @@ IMPL_LINK_NOARG( MatchContext_Impl, Select_Impl, void*, void )
         pBox->append_text(completion);
     }
 
-    pBox->EnableAutocomplete();
+    pBox->EnableAutocomplete(!bNoSelection);
 
     // transfer string lists to listbox and forget them
     pBox->pImpl->aURLs = aURLs;
@@ -682,7 +686,10 @@ void MatchContext_Impl::ReadFolder( const OUString& rURL,
 
         try
         {
-            uno::Reference< XDynamicResultSet > xDynResultSet = aCnt.createDynamicCursor( aProps, INCLUDE_FOLDERS_AND_DOCUMENTS );
+            ResultSetInclude eInclude = INCLUDE_FOLDERS_AND_DOCUMENTS;
+            if ( bOnlyDirectories )
+                eInclude = INCLUDE_FOLDERS_ONLY;
+            uno::Reference< XDynamicResultSet > xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
 
             uno::Reference < XAnyCompareFactory > xCompare;
             uno::Reference < XSortedDynamicResultSetFactory > xSRSFac =
@@ -1239,6 +1246,10 @@ void MatchContext_Impl::doExecute()
             }
         }
     }
+
+    if ( bOnlyDirectories )
+        // don't scan history picklist if only directories are allowed, picklist contains only files
+        return;
 
     bool bFull = false;
 
@@ -1957,9 +1968,11 @@ IMPL_LINK_NOARG(URLBox, TryAutoComplete, Timer *, void)
     OUString aCurText = m_xWidget->get_active_text();
     int nStartPos, nEndPos;
     m_xWidget->get_entry_selection_bounds(nStartPos, nEndPos);
-    if (nEndPos != aCurText.getLength())
+    if (std::max(nStartPos, nEndPos) != aCurText.getLength())
         return;
-    aCurText = aCurText.copy(0, nStartPos);
+
+    auto nLen = std::min(nStartPos, nEndPos);
+    aCurText = aCurText.copy( 0, nLen );
     if (!aCurText.isEmpty())
     {
         if (pCtx.is())
@@ -1977,7 +1990,9 @@ IMPL_LINK_NOARG(URLBox, TryAutoComplete, Timer *, void)
 
 URLBox::URLBox(std::unique_ptr<weld::ComboBox> pWidget)
     : eSmartProtocol(INetProtocol::NotValid)
-    , bHistoryDisabled(false)
+    , bOnlyDirectories( false )
+    , bHistoryDisabled( false )
+    , bNoSelection( false )
     , m_xWidget(std::move(pWidget))
 {
     //don't grow to fix mega-long urls
@@ -2085,11 +2100,11 @@ IMPL_LINK_NOARG(URLBox, ChangedHdl, weld::ComboBox&, void)
 
 IMPL_LINK_NOARG(URLBox, FocusInHdl, weld::Widget&, void)
 {
-    (void)this; // loplugin:staticmethod
 #ifndef UNX
     // pb: don't select automatically on unix #93251#
     m_xWidget->select_entry_region(0, -1);
 #endif
+    aFocusInHdl.Call(*m_xWidget);
 }
 
 IMPL_LINK_NOARG(URLBox, FocusOutHdl, weld::Widget&, void)
@@ -2101,6 +2116,18 @@ IMPL_LINK_NOARG(URLBox, FocusOutHdl, weld::Widget&, void)
         pCtx.clear();
     }
     aFocusOutHdl.Call(*m_xWidget);
+}
+
+void URLBox::SetOnlyDirectories( bool bDir )
+{
+    bOnlyDirectories = bDir;
+    if ( bOnlyDirectories )
+        m_xWidget->clear();
+}
+
+void URLBox::SetNoURLSelection( bool bSet )
+{
+    bNoSelection = bSet;
 }
 
 OUString URLBox::GetURL()

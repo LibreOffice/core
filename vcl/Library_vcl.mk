@@ -243,6 +243,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/nativecontrols \
     vcl/source/outdev/map \
     vcl/source/treelist/headbar \
+    vcl/source/treelist/iconview \
+    vcl/source/treelist/iconviewimpl \
     vcl/source/treelist/imap \
     vcl/source/treelist/imap2 \
     vcl/source/treelist/imap3 \

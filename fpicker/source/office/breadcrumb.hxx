@@ -10,11 +10,9 @@
 #ifndef INCLUDED_SVTOOLS_BREADCRUMB_HXX
 #define INCLUDED_SVTOOLS_BREADCRUMB_HXX
 
-#include <vcl/layout.hxx>
-
+#include <vcl/weld.hxx>
+#include <map>
 #include <vector>
-
-class FixedHyperlink;
 
 #define SPACING 6
 
@@ -24,40 +22,50 @@ enum SvtBreadcrumbMode
     ALL_VISITED = 1
 };
 
-class CustomLink;
-
-class Breadcrumb : public VclHBox
+struct BreadcrumbPath
 {
-    private:
-        std::vector< VclPtr< CustomLink > > m_aLinks;
-        std::vector< VclPtr< FixedText > > m_aSeparators;
+    BreadcrumbPath(weld::Container* pParent);
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xContainer;
+    std::unique_ptr<weld::LinkButton> m_xLink;
+    std::unique_ptr<weld::Label> m_xSeparator;
+};
 
-        OUString m_sRootName;
-        OUString m_sClickedURL;
-        OUString m_aCurrentURL;
+class Breadcrumb
+{
+private:
+    weld::Container* m_pParent;
+    int m_nMaxWidth;
 
-        SvtBreadcrumbMode m_eMode;
+    std::vector<std::unique_ptr<BreadcrumbPath>> m_aSegments;
+    std::map<weld::LinkButton*, OUString> m_aUris;
 
-        Link<Breadcrumb*,void> m_aClickHdl;
+    OUString m_sRootName;
+    OUString m_sClickedURL;
+    OUString m_aCurrentURL;
 
-        void appendField();
-        bool showField( unsigned int nIndex, unsigned int nWidthMax );
+    SvtBreadcrumbMode m_eMode;
 
-        DECL_LINK( ClickLinkHdl, FixedHyperlink&, void );
+    Link<Breadcrumb*,void> m_aClickHdl;
 
-    public:
-        Breadcrumb( vcl::Window* pParent );
-        virtual ~Breadcrumb() override;
+    void appendField();
+    bool showField( unsigned int nIndex, unsigned int nWidthMax );
 
-        void dispose() override;
-        void EnableFields( bool bEnable );
+    DECL_LINK(SizeAllocHdl, const Size&, void);
+    DECL_LINK(ClickLinkHdl, weld::LinkButton&, void);
 
-        void SetClickHdl( const Link<Breadcrumb*,void>& rLink );
-        const OUString& GetHdlURL() const;
+public:
+    Breadcrumb(weld::Container* pParent);
+    ~Breadcrumb();
 
-        void SetRootName( const OUString& rURL );
-        void SetURL( const OUString& rURL );
-        void SetMode( SvtBreadcrumbMode eMode );
+    void EnableFields( bool bEnable );
+
+    void connect_clicked( const Link<Breadcrumb*,void>& rLink );
+    const OUString& GetHdlURL() const;
+
+    void SetRootName( const OUString& rURL );
+    void SetURL( const OUString& rURL );
+    void SetMode( SvtBreadcrumbMode eMode );
 };
 
 #endif

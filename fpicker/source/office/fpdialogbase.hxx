@@ -19,7 +19,7 @@
 #ifndef INCLUDED_FPICKER_SOURCE_OFFICE_FPDIALOGBASE_HXX
 #define INCLUDED_FPICKER_SOURCE_OFFICE_FPDIALOGBASE_HXX
 
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -57,13 +57,15 @@ namespace o3tl {
 
 // SvtFileDialog_Base
 
-class SvtFileDialog_Base : public Dialog, public ::svt::IFilePickerController
+class SvtFileDialog_Base : public weld::GenericDialogController, public ::svt::IFilePickerController
 {
 public:
-    SvtFileDialog_Base( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription )
-        : Dialog(pParent, rID, rUIXMLDescription)
+    SvtFileDialog_Base(weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID)
+        : weld::GenericDialogController(pParent, rUIXMLDescription, rID)
     {
     }
+
+    virtual bool PrepareExecute() { return true ; }
 
     virtual SvtFileView* GetView() = 0;
 
@@ -94,7 +96,6 @@ public:
 
     virtual void EnableAutocompletion( bool _bEnable = true ) = 0;
 
-    virtual sal_Int32 getTargetColorDepth() = 0;
     virtual sal_Int32 getAvailableWidth() = 0;
     virtual sal_Int32 getAvailableHeight() = 0;
 

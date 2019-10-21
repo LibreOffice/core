@@ -93,7 +93,7 @@ protected:
 
     // OCommonPicker overridables
 
-    virtual VclPtr<SvtFileDialog_Base> implCreateDialog( vcl::Window* _pParent ) override;
+    virtual std::unique_ptr<SvtFileDialog_Base> implCreateDialog( weld::Window* pParent ) override;
     virtual sal_Int16       implExecutePicker( ) override;
 };
 
