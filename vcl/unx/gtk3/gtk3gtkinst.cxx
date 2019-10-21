@@ -1680,6 +1680,7 @@ static MouseEventModifiers ImplGetMouseMoveMode(sal_uInt16 nCode)
 
 namespace
 {
+#if GTK_CHECK_VERSION(3,22,0)
     bool SwapForRTL(GtkWidget* pWidget)
     {
         GtkTextDirection eDir = gtk_widget_get_direction(pWidget);
@@ -1689,6 +1690,7 @@ namespace
             return false;
         return AllSettings::GetLayoutRTL();
     }
+#endif
 }
 
 class GtkInstanceWidget : public virtual weld::Widget
