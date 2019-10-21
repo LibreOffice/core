@@ -1248,31 +1248,17 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
             // SwOLENode does not have a known GraphicObject, need to
             // work with Graphic instead
             const Graphic* pGraphic = pOLENd->GetGraphic();
+            const Point aPosition(aAlignedGrfArea.Pos());
+            const Size aSize(aAlignedGrfArea.SSize());
 
             if ( pGraphic && pGraphic->GetType() != GraphicType::NONE )
             {
-                GraphicObject aTempGraphicObject(*pGraphic);
-                GraphicAttr aGrfAttr;
-                const basegfx::B2DHomMatrix aGraphicTransform(
-                    basegfx::utils::createScaleTranslateB2DHomMatrix(
-                        aAlignedGrfArea.Width(), aAlignedGrfArea.Height(),
-                        aAlignedGrfArea.Left(), aAlignedGrfArea.Top()));
-
-                paintGraphicUsingPrimitivesHelper(
-                    *pOut,
-                    aTempGraphicObject,
-                    aGrfAttr,
-                    aGraphicTransform,
-                    nullptr == pOLENd->GetFlyFormat() ? OUString() : pOLENd->GetFlyFormat()->GetName(),
-                    rNoTNd.GetTitle(),
-                    rNoTNd.GetDescription());
+                pGraphic->Draw( pOut, aPosition, aSize );
 
                 // shade the representation if the object is activated outplace
                 uno::Reference < embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
                 if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::ACTIVE )
                 {
-                    const Point aPosition(aAlignedGrfArea.Pos());
-                    const Size aSize(aAlignedGrfArea.SSize());
 
                     ::svt::EmbeddedObjectRef::DrawShading(
                         tools::Rectangle(
@@ -1283,9 +1269,6 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
             }
             else
             {
-                const Point aPosition(aAlignedGrfArea.Pos());
-                const Size aSize(aAlignedGrfArea.SSize());
-
                 ::svt::EmbeddedObjectRef::DrawPaintReplacement(
                     tools::Rectangle(aPosition, aSize),
                     pOLENd->GetOLEObj().GetCurrentPersistName(),
