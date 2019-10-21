@@ -1037,8 +1037,8 @@ libo_FUZZ_ARG_ENABLE(pdfium,
 )
 
 libo_FUZZ_ARG_ENABLE(skia,
-    AS_HELP_STRING([--enable-skia],
-        [Enable building Skia.])
+    AS_HELP_STRING([--disable-skia],
+        [Disable building Skia.])
 )
 
 ###############################################################################
@@ -10865,7 +10865,7 @@ AC_SUBST(POPPLER_LIBS)
 # Skia?
 AC_MSG_CHECKING([whether to build Skia])
 ENABLE_SKIA=
-if test "$enable_skia" = "yes"; then
+if test "$enable_skia" != "no"; then
     AC_MSG_RESULT([yes])
     ENABLE_SKIA=TRUE
     AC_DEFINE(HAVE_FEATURE_SKIA)
