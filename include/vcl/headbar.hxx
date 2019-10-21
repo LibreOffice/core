@@ -185,8 +185,6 @@ enum class HeaderBarItemBits
     RIGHT               = 0x0004,
     LEFTIMAGE           = 0x0010,
     RIGHTIMAGE          = 0x0020,
-    FIXED               = 0x0100,
-    FIXEDPOS            = 0x0200,
     CLICKABLE           = 0x0400,
     FLAT                = 0x0800,
     DOWNARROW           = 0x1000,
@@ -196,7 +194,7 @@ enum class HeaderBarItemBits
 
 namespace o3tl
 {
-    template<> struct typed_flags<HeaderBarItemBits> : is_typed_flags<HeaderBarItemBits, 0x3f37> {};
+    template<> struct typed_flags<HeaderBarItemBits> : is_typed_flags<HeaderBarItemBits, 0x3c37> {};
 }
 
 #define HEADERBAR_APPEND            (sal_uInt16(0xFFFF))

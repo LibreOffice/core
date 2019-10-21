@@ -219,13 +219,11 @@ enum class ControlState {
     PRESSED         = 0x0004,
     ROLLOVER        = 0x0008,
     DEFAULT         = 0x0020,
-    SELECTED        = 0x0040,
-    DOUBLEBUFFERING = 0x4000,  ///< Set when the control is painted using double-buffering via VirtualDevice.
-    CACHING_ALLOWED = 0x8000,  ///< Set when the control is completely visible (i.e. not clipped).
+    SELECTED        = 0x0040
 };
 namespace o3tl
 {
-    template<> struct typed_flags<ControlState> : is_typed_flags<ControlState, 0xc06f> {};
+    template<> struct typed_flags<ControlState> : is_typed_flags<ControlState, 0x006f> {};
 }
 
 /* ButtonValue:

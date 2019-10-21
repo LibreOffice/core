@@ -1,4 +1,4 @@
-cui/source/options/optfltr.cxx:39
+cui/source/options/optfltr.cxx:35
     enum MSFltrPg2_CheckBoxEntries InvalidCBEntry
 drawinglayer/source/tools/emfpimage.hxx:31
     emfplushelper::ImageDataType ImageDataTypeUnknown
@@ -52,7 +52,7 @@ include/i18nutil/transliteration.hxx:119
     enum TransliterationFlags largeToSmall_ja_JP
 include/LibreOfficeKit/LibreOfficeKitEnums.h:56
     LibreOfficeKitSelectionType LOK_SELTYPE_LARGE_TEXT
-include/LibreOfficeKit/LibreOfficeKitEnums.h:705
+include/LibreOfficeKit/LibreOfficeKitEnums.h:729
     LibreOfficeKitExtTextInputType LOK_EXT_TEXTINPUT_POS
 include/oox/ole/axfontdata.hxx:39
     enum AxFontFlags Disabled
@@ -96,22 +96,22 @@ include/vcl/keycod.hxx:33
     enum KeyFuncType PROPERTIES
 include/vcl/syswin.hxx:54
     enum WindowStateState FullScreen
-include/vcl/window.hxx:108
+include/vcl/window.hxx:110
     enum TrackingEventFlags Focus
-libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:61
-    enum (anonymous at /home/noel/libo2/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:59:1) PROP_0
-libreofficekit/source/gtk/lokdocview.cxx:289
-    enum (anonymous at /home/noel/libo2/libreofficekit/source/gtk/lokdocview.cxx:287:1) PROP_0
+libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:72
+    enum (anonymous at /media/disk2/libo7/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:70:1) PROP_0
+libreofficekit/source/gtk/lokdocview.cxx:292
+    enum (anonymous at /media/disk2/libo7/libreofficekit/source/gtk/lokdocview.cxx:290:1) PROP_0
 sc/source/filter/excel/xiescher.cxx:473
-    enum (anonymous at /home/noel/libo2/sc/source/filter/excel/xiescher.cxx:473:17) eCreateFromOffice
+    enum (anonymous at /media/disk2/libo7/sc/source/filter/excel/xiescher.cxx:473:17) eCreateFromOffice
 sc/source/filter/inc/decl.h:24
     enum WKTYP eWK4
 sc/source/ui/inc/anyrefdg.hxx:145
-    enum ScRefHdlrControllerImpl::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
+    enum ScRefHdlrControllerImpl::(anonymous at /media/disk2/libo7/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
 sc/source/ui/inc/anyrefdg.hxx:145
-    enum ScRefHdlrControllerImpl<class SfxModelessDialogController, true>::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
+    enum ScRefHdlrControllerImpl<class SfxModelessDialogController, true>::(anonymous at /media/disk2/libo7/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
 sc/source/ui/inc/anyrefdg.hxx:145
-    enum ScRefHdlrControllerImpl<class SfxTabDialogController, false>::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
+    enum ScRefHdlrControllerImpl<class SfxTabDialogController, false>::(anonymous at /media/disk2/libo7/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
 sc/source/ui/StatisticsDialogs/RegressionDialog.cxx:97
     enum (anonymous namespace)::ScRegType LINEAR
 svx/inc/sxmkitm.hxx:25
@@ -130,21 +130,21 @@ sw/inc/tblenum.hxx:34
     enum TableChgWidthHeightType InvalidPos
 sw/source/filter/ww8/ww8scan.hxx:381
     enum ePLCFT SEP
-sw/source/filter/ww8/ww8struc.hxx:946
-    enum WW8_FSPA::FSPAOrient RelText
-sw/source/filter/ww8/ww8struc.hxx:946
+sw/source/filter/ww8/ww8struc.hxx:940
     enum WW8_FSPA::FSPAOrient RelPgMargin
-sw/source/ui/fldui/fldref.cxx:722
+sw/source/filter/ww8/ww8struc.hxx:940
+    enum WW8_FSPA::FSPAOrient RelText
+sw/source/ui/fldui/fldref.cxx:721
     enum FMT_REF_IDX FMT_REF_PAGE_IDX
-sw/source/ui/fldui/fldref.cxx:723
+sw/source/ui/fldui/fldref.cxx:722
     enum FMT_REF_IDX FMT_REF_CHAPTER_IDX
-sw/source/ui/fldui/fldref.cxx:724
+sw/source/ui/fldui/fldref.cxx:723
     enum FMT_REF_IDX FMT_REF_TEXT_IDX
-sw/source/ui/fldui/fldref.cxx:725
+sw/source/ui/fldui/fldref.cxx:724
     enum FMT_REF_IDX FMT_REF_UPDOWN_IDX
-sw/source/ui/fldui/fldref.cxx:727
+sw/source/ui/fldui/fldref.cxx:726
     enum FMT_REF_IDX FMT_REF_ONLYNUMBER_IDX
-sw/source/ui/fldui/fldref.cxx:728
+sw/source/ui/fldui/fldref.cxx:727
     enum FMT_REF_IDX FMT_REF_ONLYCAPTION_IDX
 sw/source/uibase/utlui/content.cxx:825
     enum STR_CONTEXT_IDX IDX_STR_LINK_REGION
@@ -158,7 +158,7 @@ sw/source/uibase/utlui/glbltree.cxx:150
     enum GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_LINK
 sw/source/uibase/utlui/glbltree.cxx:151
     enum GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_ALL
-ucb/source/ucp/webdav-neon/DAVTypes.hxx:195
+ucb/source/ucp/webdav-neon/DAVTypes.hxx:192
     enum webdav_ucp::Depth DAVINFINITY
 ucbhelper/source/client/proxydecider.cxx:119
     enum ucbhelper::proxydecider_impl::InternetProxyDecider_Impl::ProxyType Manual
@@ -168,10 +168,10 @@ vcl/inc/unx/saldisp.hxx:62
     srv_vendor_t vendor_none
 vcl/source/gdi/CommonSalLayout.cxx:126
     enum (anonymous namespace)::VerticalOrientation Rotated
-vcl/unx/gtk3/gtk3gtkinst.cxx:3898
-    enum (anonymous at /home/noel/libo2/vcl/unx/gtk3/gtk3gtkinst.cxx:3896:1) PROP_0
-vcl/unx/gtk3/gtk3gtkinst.cxx:3903
-    enum (anonymous at /home/noel/libo2/vcl/unx/gtk3/gtk3gtkinst.cxx:3896:1) PROP_SHADOW_TYPE
+vcl/unx/gtk3/gtk3gtkinst.cxx:4713
+    enum (anonymous at /media/disk2/libo7/vcl/unx/gtk3/gtk3gtkinst.cxx:4711:1) PROP_0
+vcl/unx/gtk3/gtk3gtkinst.cxx:4718
+    enum (anonymous at /media/disk2/libo7/vcl/unx/gtk3/gtk3gtkinst.cxx:4711:1) PROP_SHADOW_TYPE
 writerfilter/source/ooxml/OOXMLFactory.hxx:36
     enum writerfilter::ooxml::ResourceType NoResource
 writerfilter/source/ooxml/OOXMLFactory.hxx:37

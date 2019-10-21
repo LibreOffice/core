@@ -74,7 +74,6 @@ protected:
     enum class FileType {
         NoFile,  // Not present
         None,    // No TB file
-        SW3,     // SW3 file
         XML      // XML Block List
     };
     static FileType GetFileType( const OUString& );
