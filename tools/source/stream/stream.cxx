@@ -19,6 +19,9 @@
 
 // TODO: Read->RefreshBuffer-> React to changes from m_nBufActualLen
 
+#include <sal/config.h>
+
+#include <cassert>
 #include <cstddef>
 #include <memory>
 
@@ -805,7 +808,11 @@ sal_uInt64 SvStream::SeekRel(sal_Int64 const nPos)
             nActualPos -= nAbsPos;
     }
 
-    m_pBufPos = m_pRWBuf.get() + nActualPos;
+    assert((m_pBufPos != nullptr) == bool(m_pRWBuf));
+    if (m_pRWBuf)
+    {
+        m_pBufPos = m_pRWBuf.get() + nActualPos;
+    }
     return Seek( nActualPos );
 }
 
