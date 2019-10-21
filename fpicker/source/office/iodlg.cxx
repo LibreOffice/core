@@ -2449,7 +2449,7 @@ void SvtFileDialog::AddControls_Impl( )
     if ( _nPickerFlags & PickerFlags::ShowPreview  )
     {
         pImpl->_aIniKey = "ImportGraphicDialog";
-        // because the "<All Formats> (*.bmp,*...)" entry is to wide,
+        // because the "<All Formats> (*.bmp,*...)" entry is too wide,
         // we need to disable the auto width feature of the filter box
         pImpl->DisableFilterBoxAutoWidth();
 
