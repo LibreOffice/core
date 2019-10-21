@@ -1,0 +1,51 @@
+diff --git a/tools/sk_app/unix/WindowContextFactory_unix.h b/tools/sk_app/unix/WindowContextFactory_unix.h
+index 47310970d5..e02e6eb5b7 100644
+--- a/tools/sk_app/unix/WindowContextFactory_unix.h
++++ b/tools/sk_app/unix/WindowContextFactory_unix.h
+@@ -36,15 +36,15 @@ struct XlibWindowInfo {
+     int          fHeight;
+ };
+ 
+-std::unique_ptr<WindowContext> MakeVulkanForXlib(const XlibWindowInfo&, const DisplayParams&);
++SK_API std::unique_ptr<WindowContext> MakeVulkanForXlib(const XlibWindowInfo&, const DisplayParams&);
+ 
+-std::unique_ptr<WindowContext> MakeGLForXlib(const XlibWindowInfo&, const DisplayParams&);
++SK_API std::unique_ptr<WindowContext> MakeGLForXlib(const XlibWindowInfo&, const DisplayParams&);
+ 
+ #ifdef SK_DAWN
+-std::unique_ptr<WindowContext> MakeDawnVulkanForXlib(const XlibWindowInfo&, const DisplayParams&);
++SK_API std::unique_ptr<WindowContext> MakeDawnVulkanForXlib(const XlibWindowInfo&, const DisplayParams&);
+ #endif
+ 
+-std::unique_ptr<WindowContext> MakeRasterForXlib(const XlibWindowInfo&, const DisplayParams&);
++SK_API std::unique_ptr<WindowContext> MakeRasterForXlib(const XlibWindowInfo&, const DisplayParams&);
+ 
+ }  // namespace window_context_factory
+ 
+diff --git a/tools/sk_app/win/WindowContextFactory_win.h b/tools/sk_app/win/WindowContextFactory_win.h
+index 33dd6d413b..647e5ff81a 100644
+--- a/tools/sk_app/win/WindowContextFactory_win.h
++++ b/tools/sk_app/win/WindowContextFactory_win.h
+@@ -20,17 +20,17 @@ struct DisplayParams;
+ 
+ namespace window_context_factory {
+ 
+-std::unique_ptr<WindowContext> MakeVulkanForWin(HWND, const DisplayParams&);
++SK_API std::unique_ptr<WindowContext> MakeVulkanForWin(HWND, const DisplayParams&);
+ 
+-std::unique_ptr<WindowContext> MakeGLForWin(HWND, const DisplayParams&);
++SK_API std::unique_ptr<WindowContext> MakeGLForWin(HWND, const DisplayParams&);
+ 
+-std::unique_ptr<WindowContext> MakeANGLEForWin(HWND, const DisplayParams&);
++SK_API std::unique_ptr<WindowContext> MakeANGLEForWin(HWND, const DisplayParams&);
+ 
+ #ifdef SK_DAWN
+-std::unique_ptr<WindowContext> MakeDawnD3D12ForWin(HWND, const DisplayParams&);
++SK_API std::unique_ptr<WindowContext> MakeDawnD3D12ForWin(HWND, const DisplayParams&);
+ #endif
+ 
+-std::unique_ptr<WindowContext> MakeRasterForWin(HWND, const DisplayParams&);
++SK_API std::unique_ptr<WindowContext> MakeRasterForWin(HWND, const DisplayParams&);
+ 
+ }  // namespace window_context_factory
+ 

@@ -57,8 +57,8 @@ void WinSkiaSalGraphicsImpl::createSurface()
         return;
     }
     sk_app::DisplayParams displayParams;
-    mWindowContext.reset(
-        sk_app::window_context_factory::NewRasterForWin(mWinParent.gethWnd(), displayParams));
+    mWindowContext
+        = sk_app::window_context_factory::MakeRasterForWin(mWinParent.gethWnd(), displayParams);
     assert(SkToBool(mWindowContext)); // TODO
     mSurface = mWindowContext->getBackbufferSurface();
     assert(mSurface.get());
