@@ -3303,6 +3303,10 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
     {
         const OUString sClickAction("CLICK");
         const OUString sSelectAction("SELECT");
+        const OUString sClearAction("CLEAR");
+        const OUString sTypeAction("TYPE");
+        const OUString sUpAction("UP");
+        const OUString sDownAction("DOWN");
 
         try
         {
@@ -3310,6 +3314,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
             std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(sId));
             if (pUIWindow) {
                 bool bIsClickAction = false;
+                StringMap aMap;
 
                 if (pOptionalEventType) {
                     if (strcmp(pOptionalEventType, "selected") == 0 && pOptionalData)
@@ -3324,11 +3329,25 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
                             return;
                         }
 
-                        StringMap aMap;
                         aMap["POS"] = OUString::createFromAscii(pPos);
                         aMap["TEXT"] = OUString::createFromAscii(pText);
 
                         pUIWindow->execute(sSelectAction, aMap);
+                    }
+                    else if (strcmp(pOptionalEventType, "plus") == 0)
+                    {
+                        pUIWindow->execute(sUpAction, aMap);
+                    }
+                    else if (strcmp(pOptionalEventType, "minus") == 0)
+                    {
+                        pUIWindow->execute(sDownAction, aMap);
+                    }
+                    else if (pOptionalData)
+                    {
+                        aMap["TEXT"] = OUString::createFromAscii(pOptionalData);
+
+                        pUIWindow->execute(sClearAction, aMap);
+                        pUIWindow->execute(sTypeAction, aMap);
                     }
                     else
                         bIsClickAction = true;
@@ -3337,7 +3356,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
                     bIsClickAction = true;
 
                 if (bIsClickAction)
-                    pUIWindow->execute(sClickAction, StringMap());
+                    pUIWindow->execute(sClickAction, aMap);
             }
         } catch(...) {}
 
