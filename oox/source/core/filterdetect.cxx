@@ -327,20 +327,23 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                 }
                 else
                 {
-                    // create temporary file for unencrypted package
-                    Reference<XStream> xTempFile( TempFile::create(mxContext), UNO_QUERY_THROW );
+                    // create MemoryStream for unencrypted package - rather not put this in a tempfile
+                    Reference<XStream> const xTempStream(
+                        mxContext->getServiceManager()->createInstanceWithContext(
+                            "com.sun.star.comp.MemoryStream", mxContext),
+                        UNO_QUERY_THROW);
 
                     // if decryption was unsuccessful (corrupted file or any other reason)
-                    if (!aDecryptor.decrypt(xTempFile))
+                    if (!aDecryptor.decrypt(xTempStream))
                     {
                         rMediaDescriptor[ MediaDescriptor::PROP_ABORTED() ] <<= true;
                     }
                     else
                     {
                         // store temp file in media descriptor to keep it alive
-                        rMediaDescriptor.setComponentDataEntry( "DecryptedPackage", Any( xTempFile ) );
+                        rMediaDescriptor.setComponentDataEntry( "DecryptedPackage", Any( xTempStream ) );
 
-                        Reference<XInputStream> xDecryptedInputStream = xTempFile->getInputStream();
+                        Reference<XInputStream> xDecryptedInputStream = xTempStream->getInputStream();
                         if( lclIsZipPackage( mxContext, xDecryptedInputStream ) )
                             return xDecryptedInputStream;
                     }
