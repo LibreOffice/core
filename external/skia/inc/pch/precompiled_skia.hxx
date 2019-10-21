@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:51:12 using:
+ Generated on 2019-10-21 16:31:00 using:
  ./bin/update_pch external/skia skia --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -155,6 +155,7 @@
 #include <include/core/SkSurfaceProps.h>
 #include <include/core/SkSwizzle.h>
 #include <include/core/SkTextBlob.h>
+#include <include/core/SkTileMode.h>
 #include <include/core/SkTime.h>
 #include <include/core/SkTraceMemoryDump.h>
 #include <include/core/SkTypeface.h>
@@ -182,6 +183,7 @@
 #include <include/effects/SkDropShadowImageFilter.h>
 #include <include/effects/SkGradientShader.h>
 #include <include/effects/SkHighContrastFilter.h>
+#include <include/effects/SkImageFilters.h>
 #include <include/effects/SkImageSource.h>
 #include <include/effects/SkLayerDrawLooper.h>
 #include <include/effects/SkLightingImageFilter.h>
@@ -207,15 +209,12 @@
 #include <include/gpu/GrBackendDrawableInfo.h>
 #include <include/gpu/GrBackendSemaphore.h>
 #include <include/gpu/GrBackendSurface.h>
-#include <include/gpu/GrBlend.h>
 #include <include/gpu/GrConfig.h>
 #include <include/gpu/GrContext.h>
 #include <include/gpu/GrContextOptions.h>
 #include <include/gpu/GrContextThreadSafeProxy.h>
 #include <include/gpu/GrDriverBugWorkarounds.h>
 #include <include/gpu/GrGpuResource.h>
-#include <include/gpu/GrRenderTarget.h>
-#include <include/gpu/GrSamplerState.h>
 #include <include/gpu/GrSurface.h>
 #include <include/gpu/GrTexture.h>
 #include <include/gpu/GrTypes.h>
@@ -300,6 +299,7 @@
 #include <src/codec/SkJpegUtility.h>
 #include <src/codec/SkMaskSwizzler.h>
 #include <src/codec/SkMasks.h>
+#include <src/codec/SkParseEncodedOrigin.h>
 #include <src/codec/SkPngCodec.h>
 #include <src/codec/SkPngPriv.h>
 #include <src/codec/SkRawCodec.h>
@@ -325,7 +325,6 @@
 #include <src/core/SkBitmapController.h>
 #include <src/core/SkBitmapDevice.h>
 #include <src/core/SkBitmapProcState.h>
-#include <src/core/SkBitmapProvider.h>
 #include <src/core/SkBlendModePriv.h>
 #include <src/core/SkBlitRow.h>
 #include <src/core/SkBlitter.h>
@@ -358,6 +357,7 @@
 #include <src/core/SkEdgeClipper.h>
 #include <src/core/SkEffectPriv.h>
 #include <src/core/SkEndian.h>
+#include <src/core/SkEnumerate.h>
 #include <src/core/SkExchange.h>
 #include <src/core/SkFDot6.h>
 #include <src/core/SkFontDescriptor.h>
@@ -367,14 +367,17 @@
 #include <src/core/SkGaussFilter.h>
 #include <src/core/SkGeometry.h>
 #include <src/core/SkGlyph.h>
+#include <src/core/SkGlyphBuffer.h>
 #include <src/core/SkGlyphRun.h>
 #include <src/core/SkGlyphRunPainter.h>
 #include <src/core/SkGpuBlurUtils.h>
 #include <src/core/SkICCPriv.h>
 #include <src/core/SkIPoint16.h>
 #include <src/core/SkImageFilterCache.h>
-#include <src/core/SkImageFilterPriv.h>
+#include <src/core/SkImageFilterTypes.h>
+#include <src/core/SkImageFilter_Base.h>
 #include <src/core/SkImagePriv.h>
+#include <src/core/SkLRUCache.h>
 #include <src/core/SkLatticeIter.h>
 #include <src/core/SkLeanWindows.h>
 #include <src/core/SkLineClipper.h>
@@ -403,6 +406,7 @@
 #include <src/core/SkOpts.h>
 #include <src/core/SkPaintDefaults.h>
 #include <src/core/SkPaintPriv.h>
+#include <src/core/SkPathMakers.h>
 #include <src/core/SkPathMeasurePriv.h>
 #include <src/core/SkPathPriv.h>
 #include <src/core/SkPictureCommon.h>
@@ -411,6 +415,7 @@
 #include <src/core/SkPicturePlayback.h>
 #include <src/core/SkPicturePriv.h>
 #include <src/core/SkPictureRecord.h>
+#include <src/core/SkPixelRefPriv.h>
 #include <src/core/SkPixmapPriv.h>
 #include <src/core/SkPointPriv.h>
 #include <src/core/SkPtrRecorder.h>
@@ -431,7 +436,6 @@
 #include <src/core/SkRectPriv.h>
 #include <src/core/SkRegionPriv.h>
 #include <src/core/SkRemoteGlyphCache.h>
-#include <src/core/SkRemoteGlyphCacheImpl.h>
 #include <src/core/SkResourceCache.h>
 #include <src/core/SkSafeMath.h>
 #include <src/core/SkSafeRange.h>
@@ -447,7 +451,7 @@
 #include <src/core/SkStreamPriv.h>
 #include <src/core/SkStrike.h>
 #include <src/core/SkStrikeCache.h>
-#include <src/core/SkStrikeInterface.h>
+#include <src/core/SkStrikeForGPU.h>
 #include <src/core/SkStrikeSpec.h>
 #include <src/core/SkStringUtils.h>
 #include <src/core/SkStroke.h>
@@ -495,23 +499,25 @@
 #include <src/gpu/GrBackendTextureImageGenerator.h>
 #include <src/gpu/GrBaseContextPriv.h>
 #include <src/gpu/GrBitmapTextureMaker.h>
+#include <src/gpu/GrBlend.h>
 #include <src/gpu/GrBlurUtils.h>
 #include <src/gpu/GrBuffer.h>
 #include <src/gpu/GrBufferAllocPool.h>
 #include <src/gpu/GrCaps.h>
+#include <src/gpu/GrClientMappedBufferManager.h>
 #include <src/gpu/GrClip.h>
 #include <src/gpu/GrClipStackClip.h>
 #include <src/gpu/GrColor.h>
-#include <src/gpu/GrColorSpaceInfo.h>
+#include <src/gpu/GrColorInfo.h>
 #include <src/gpu/GrColorSpaceXform.h>
 #include <src/gpu/GrContextPriv.h>
 #include <src/gpu/GrContextThreadSafeProxyPriv.h>
 #include <src/gpu/GrCoordTransform.h>
+#include <src/gpu/GrCopyRenderTask.h>
 #include <src/gpu/GrCpuBuffer.h>
 #include <src/gpu/GrDataUtils.h>
 #include <src/gpu/GrDefaultGeoProcFactory.h>
 #include <src/gpu/GrDeferredProxyUploader.h>
-#include <src/gpu/GrDeinstantiateProxyTracker.h>
 #include <src/gpu/GrDistanceFieldGenFromVector.h>
 #include <src/gpu/GrDrawOpAtlas.h>
 #include <src/gpu/GrDrawOpTest.h>
@@ -522,16 +528,18 @@
 #include <src/gpu/GrGlyph.h>
 #include <src/gpu/GrGpu.h>
 #include <src/gpu/GrGpuBuffer.h>
-#include <src/gpu/GrGpuCommandBuffer.h>
 #include <src/gpu/GrGpuResourceCacheAccess.h>
 #include <src/gpu/GrGpuResourcePriv.h>
 #include <src/gpu/GrImageContextPriv.h>
+#include <src/gpu/GrImageInfo.h>
 #include <src/gpu/GrImageTextureMaker.h>
 #include <src/gpu/GrMemoryPool.h>
 #include <src/gpu/GrMesh.h>
+#include <src/gpu/GrNativeRect.h>
 #include <src/gpu/GrOnFlushResourceProvider.h>
 #include <src/gpu/GrOpFlushState.h>
-#include <src/gpu/GrOpList.h>
+#include <src/gpu/GrOpsRenderPass.h>
+#include <src/gpu/GrOpsTask.h>
 #include <src/gpu/GrPaint.h>
 #include <src/gpu/GrPath.h>
 #include <src/gpu/GrPathProcessor.h>
@@ -546,24 +554,27 @@
 #include <src/gpu/GrProcessorSet.h>
 #include <src/gpu/GrProcessorUnitTest.h>
 #include <src/gpu/GrProgramDesc.h>
+#include <src/gpu/GrProgramInfo.h>
 #include <src/gpu/GrProxyProvider.h>
 #include <src/gpu/GrRecordingContextPriv.h>
 #include <src/gpu/GrRectanizer.h>
 #include <src/gpu/GrRectanizer_pow2.h>
 #include <src/gpu/GrRectanizer_skyline.h>
 #include <src/gpu/GrReducedClip.h>
+#include <src/gpu/GrRenderTarget.h>
 #include <src/gpu/GrRenderTargetContext.h>
 #include <src/gpu/GrRenderTargetContextPriv.h>
-#include <src/gpu/GrRenderTargetOpList.h>
 #include <src/gpu/GrRenderTargetPriv.h>
 #include <src/gpu/GrRenderTargetProxy.h>
 #include <src/gpu/GrRenderTargetProxyPriv.h>
+#include <src/gpu/GrRenderTask.h>
 #include <src/gpu/GrResourceAllocator.h>
 #include <src/gpu/GrResourceCache.h>
 #include <src/gpu/GrResourceProvider.h>
 #include <src/gpu/GrResourceProviderPriv.h>
 #include <src/gpu/GrSWMaskHelper.h>
 #include <src/gpu/GrSamplePatternDictionary.h>
+#include <src/gpu/GrSamplerState.h>
 #include <src/gpu/GrSemaphore.h>
 #include <src/gpu/GrShaderCaps.h>
 #include <src/gpu/GrShaderUtils.h>
@@ -585,16 +596,18 @@
 #include <src/gpu/GrTextureAdjuster.h>
 #include <src/gpu/GrTextureContext.h>
 #include <src/gpu/GrTextureMaker.h>
-#include <src/gpu/GrTextureOpList.h>
 #include <src/gpu/GrTexturePriv.h>
 #include <src/gpu/GrTextureProducer.h>
 #include <src/gpu/GrTextureProxy.h>
 #include <src/gpu/GrTextureProxyCacheAccess.h>
 #include <src/gpu/GrTextureProxyPriv.h>
 #include <src/gpu/GrTextureRenderTargetProxy.h>
+#include <src/gpu/GrTextureResolveRenderTask.h>
 #include <src/gpu/GrTracing.h>
+#include <src/gpu/GrTransferFromRenderTask.h>
 #include <src/gpu/GrUserStencilSettings.h>
 #include <src/gpu/GrVertexWriter.h>
+#include <src/gpu/GrWaitRenderTask.h>
 #include <src/gpu/GrWindowRectangles.h>
 #include <src/gpu/GrXferProcessor.h>
 #include <src/gpu/GrYUVProvider.h>
@@ -612,7 +625,7 @@
 #include <src/gpu/ccpr/GrCCPathCache.h>
 #include <src/gpu/ccpr/GrCCPathProcessor.h>
 #include <src/gpu/ccpr/GrCCPerFlushResources.h>
-#include <src/gpu/ccpr/GrCCPerOpListPaths.h>
+#include <src/gpu/ccpr/GrCCPerOpsTaskPaths.h>
 #include <src/gpu/ccpr/GrCCQuadraticShader.h>
 #include <src/gpu/ccpr/GrCCStrokeGeometry.h>
 #include <src/gpu/ccpr/GrCCStroker.h>
@@ -660,6 +673,7 @@
 #include <src/gpu/effects/generated/GrPremulInputFragmentProcessor.h>
 #include <src/gpu/effects/generated/GrRRectBlurEffect.h>
 #include <src/gpu/effects/generated/GrRectBlurEffect.h>
+#include <src/gpu/effects/generated/GrSaturateProcessor.h>
 #include <src/gpu/effects/generated/GrSimpleTextureEffect.h>
 #include <src/gpu/geometry/GrPathUtils.h>
 #include <src/gpu/geometry/GrQuad.h>
@@ -673,7 +687,7 @@
 #include <src/gpu/gl/GrGLDefines.h>
 #include <src/gpu/gl/GrGLGLSL.h>
 #include <src/gpu/gl/GrGLGpu.h>
-#include <src/gpu/gl/GrGLGpuCommandBuffer.h>
+#include <src/gpu/gl/GrGLOpsRenderPass.h>
 #include <src/gpu/gl/GrGLPath.h>
 #include <src/gpu/gl/GrGLPathRendering.h>
 #include <src/gpu/gl/GrGLProgram.h>
@@ -719,7 +733,7 @@
 #include <src/gpu/mock/GrMockBuffer.h>
 #include <src/gpu/mock/GrMockCaps.h>
 #include <src/gpu/mock/GrMockGpu.h>
-#include <src/gpu/mock/GrMockGpuCommandBuffer.h>
+#include <src/gpu/mock/GrMockOpsRenderPass.h>
 #include <src/gpu/mock/GrMockStencilAttachment.h>
 #include <src/gpu/mock/GrMockTexture.h>
 #include <src/gpu/ops/GrAAConvexPathRenderer.h>
@@ -729,7 +743,6 @@
 #include <src/gpu/ops/GrAtlasTextOp.h>
 #include <src/gpu/ops/GrClearOp.h>
 #include <src/gpu/ops/GrClearStencilClipOp.h>
-#include <src/gpu/ops/GrCopySurfaceOp.h>
 #include <src/gpu/ops/GrDashLinePathRenderer.h>
 #include <src/gpu/ops/GrDashOp.h>
 #include <src/gpu/ops/GrDebugMarkerOp.h>
@@ -747,7 +760,6 @@
 #include <src/gpu/ops/GrOvalOpFactory.h>
 #include <src/gpu/ops/GrQuadPerEdgeAA.h>
 #include <src/gpu/ops/GrRegionOp.h>
-#include <src/gpu/ops/GrSemaphoreOp.h>
 #include <src/gpu/ops/GrShadowRRectOp.h>
 #include <src/gpu/ops/GrSimpleMeshDrawOpHelper.h>
 #include <src/gpu/ops/GrSmallPathRenderer.h>
@@ -756,7 +768,6 @@
 #include <src/gpu/ops/GrStrokeRectOp.h>
 #include <src/gpu/ops/GrTessellatingPathRenderer.h>
 #include <src/gpu/ops/GrTextureOp.h>
-#include <src/gpu/ops/GrTransferFromOp.h>
 #include <src/gpu/text/GrAtlasManager.h>
 #include <src/gpu/text/GrDistanceFieldAdjustTable.h>
 #include <src/gpu/text/GrSDFMaskFilter.h>
@@ -775,15 +786,14 @@
 #include <src/gpu/vk/GrVkDescriptorSetManager.h>
 #include <src/gpu/vk/GrVkFramebuffer.h>
 #include <src/gpu/vk/GrVkGpu.h>
-#include <src/gpu/vk/GrVkGpuCommandBuffer.h>
 #include <src/gpu/vk/GrVkImage.h>
 #include <src/gpu/vk/GrVkImageLayout.h>
 #include <src/gpu/vk/GrVkImageView.h>
 #include <src/gpu/vk/GrVkIndexBuffer.h>
 #include <src/gpu/vk/GrVkInterface.h>
 #include <src/gpu/vk/GrVkMemory.h>
+#include <src/gpu/vk/GrVkOpsRenderPass.h>
 #include <src/gpu/vk/GrVkPipeline.h>
-#include <src/gpu/vk/GrVkPipelineLayout.h>
 #include <src/gpu/vk/GrVkPipelineState.h>
 #include <src/gpu/vk/GrVkPipelineStateBuilder.h>
 #include <src/gpu/vk/GrVkPipelineStateDataManager.h>
@@ -906,10 +916,10 @@
 #include <src/sksl/SkSLParser.h>
 #include <src/sksl/SkSLPipelineStageCodeGenerator.h>
 #include <src/sksl/SkSLSPIRVCodeGenerator.h>
+#include <src/sksl/SkSLSectionAndParameterHelper.h>
 #include <src/sksl/SkSLString.h>
 #include <src/sksl/SkSLStringStream.h>
 #include <src/sksl/SkSLUtil.h>
-#include <src/sksl/ir/SkSLAppendStage.h>
 #include <src/sksl/ir/SkSLBinaryExpression.h>
 #include <src/sksl/ir/SkSLBoolLiteral.h>
 #include <src/sksl/ir/SkSLBreakStatement.h>
