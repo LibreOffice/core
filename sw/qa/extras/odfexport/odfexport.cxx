@@ -40,6 +40,8 @@
 #include <unoprnms.hxx>
 #include <sortedobjs.hxx>
 #include <flyfrm.hxx>
+#include <ftnidx.hxx>
+#include <txtftn.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -931,6 +933,29 @@ DECLARE_ODFEXPORT_TEST(testProtectionKey, "protection-key.fodt")
         assertXPath(pXmlDoc, "//text:section[@text:name='Section2' and @text:protected='true' and @text:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256' and @text:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=']");
         assertXPath(pXmlDoc, "//text:section[@text:name='Section3' and @text:protected='true' and @text:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256' and @text:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=']");
     }
+}
+
+DECLARE_ODFEXPORT_TEST(testTdf128188, "footnote-collect-at-end-of-section.fodt")
+{
+    SwDoc *const pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get())->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwFootnoteIdxs const& rFootnotes(pDoc->GetFootnoteIdxs());
+    // Section1
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), rFootnotes[0]->GetFootnote().GetNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), rFootnotes[0]->GetFootnote().GetNumberRLHidden());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), rFootnotes[1]->GetFootnote().GetNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), rFootnotes[1]->GetFootnote().GetNumberRLHidden());
+    // Section2
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), rFootnotes[2]->GetFootnote().GetNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), rFootnotes[2]->GetFootnote().GetNumberRLHidden());
+    // deleted
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), rFootnotes[3]->GetFootnote().GetNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), rFootnotes[3]->GetFootnote().GetNumberRLHidden());
+    // deleted
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), rFootnotes[4]->GetFootnote().GetNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), rFootnotes[4]->GetFootnote().GetNumberRLHidden());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), rFootnotes[5]->GetFootnote().GetNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), rFootnotes[5]->GetFootnote().GetNumberRLHidden());
 }
 
 DECLARE_ODFEXPORT_TEST(testFdo43807, "fdo43807.odt")
