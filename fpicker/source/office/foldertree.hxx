@@ -11,35 +11,39 @@
 #define INCLUDED_SVTOOLS_FOLDERTREE_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <tools/wintypes.hxx>
-#include <vcl/treelistbox.hxx>
+#include <vcl/weld.hxx>
 
 namespace com :: sun :: star :: ucb { class XCommandEnvironment; }
-
-class SvTreeListEntry;
 
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace ::svt;
 
-class FolderTree : public SvTreeListBox
+class FolderTree
 {
 private:
+    std::unique_ptr<weld::TreeView> m_xTreeView;
+    weld::Window* m_pTopLevel;
     Reference< XCommandEnvironment > m_xEnv;
     ::osl::Mutex m_aMutex;
     Sequence< OUString > m_aBlackList;
 
     OUString m_sLastUpdatedDir;
 
+    DECL_LINK(RequestingChildrenHdl, const weld::TreeIter&, bool);
+
 public:
-    FolderTree( vcl::Window* pParent, WinBits nBits );
+    FolderTree(std::unique_ptr<weld::TreeView> xTreeView, weld::Window* pTopLevel);
 
-    virtual void RequestingChildren( SvTreeListEntry* pEntry ) override;
+    void clear() { m_xTreeView->clear(); }
 
-    void FillTreeEntry( SvTreeListEntry* pEntry );
-    void FillTreeEntry( const OUString & rUrl, const ::std::vector< std::pair< OUString, OUString > >& rFolders );
-    void SetTreePath( OUString const & sUrl );
-    void SetBlackList( const css::uno::Sequence< OUString >& rBlackList );
+    void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_changed(rLink); }
+
+    void InsertRootEntry(const OUString& rId, const OUString& rRootLabel);
+    void FillTreeEntry(const weld::TreeIter& rEntry);
+    void FillTreeEntry(const OUString & rUrl, const ::std::vector< std::pair< OUString, OUString > >& rFolders);
+    void SetTreePath(OUString const & sUrl);
+    void SetBlackList(const css::uno::Sequence< OUString >& rBlackList);
 };
 
 #endif

@@ -112,13 +112,6 @@
 #define STR_SVT_MB                              NC_("STR_SVT_MB", "MB")
 #define STR_SVT_GB                              NC_("STR_SVT_GB", "GB")
 
-// descriptions of accessible objects
-#define STR_SVT_ACC_DESC_TABLISTBOX             NC_("STR_SVT_ACC_DESC_TABLISTBOX", "Row: %1, Column: %2")
-#define STR_SVT_ACC_DESC_FILEVIEW               NC_("STR_SVT_ACC_DESC_FILEVIEW", ", Type: %1, URL: %2")
-#define STR_SVT_ACC_DESC_FOLDER                 NC_("STR_SVT_ACC_DESC_FOLDER", "Folder")
-#define STR_SVT_ACC_DESC_FILE                   NC_("STR_SVT_ACC_DESC_FILE", "File")
-#define STR_SVT_ACC_EMPTY_FIELD                 NC_("STR_SVT_ACC_EMPTY_FIELD", "Empty Field")
-
 /*
  * resources for CollatorResource / CollatorResourceData resp.
  */
