@@ -324,7 +324,7 @@ void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
 void SAL_CALL BasicPaneFactory::disposing (
     const lang::EventObject& rEventObject)
 {
-    if (mxConfigurationControllerWeak == rEventObject.Source)
+    if (mxConfigurationControllerWeak.get() == rEventObject.Source)
     {
         mxConfigurationControllerWeak.clear();
     }
