@@ -185,19 +185,19 @@ public:
 
     void drawBitmap(const SalTwoRect& rPosAry, const SkBitmap& bitmap);
 
-    // To be called after any drawing.
-    void scheduleFlush();
-
-    // Internal, called by SkiaFlushIdle.
-    virtual void performFlush() = 0;
-
 #ifdef DBG_UTIL
     void dump(const char* file) const;
     static void dump(const SkBitmap& bitmap, const char* file);
 #endif
 
 protected:
+    // To be called before any drawing.
+    void preDraw();
+    // To be called after any drawing.
+    void postDraw();
+
     virtual void createSurface();
+    void resetSurface();
 
     void setProvider(SalGeometryProvider* provider) { mProvider = provider; }
 
@@ -205,7 +205,10 @@ protected:
 
     void invert(basegfx::B2DPolygon const& rPoly, SalInvert eFlags);
 
-protected:
+    // Called by SkiaFlushIdle.
+    virtual void performFlush() = 0;
+    friend class SkiaFlushIdle;
+
     // get the width of the device
     int GetWidth() const { return mProvider ? mProvider->GetWidth() : 1; }
     // get the height of the device

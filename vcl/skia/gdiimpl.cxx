@@ -114,13 +114,16 @@ SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvid
 
 SkiaSalGraphicsImpl::~SkiaSalGraphicsImpl() {}
 
-void SkiaSalGraphicsImpl::Init()
+void SkiaSalGraphicsImpl::Init() { resetSurface(); }
+
+void SkiaSalGraphicsImpl::resetSurface()
 {
     createSurface();
     mSurface->getCanvas()->save(); // see SetClipRegion()
     mClipRegion = vcl::Region(tools::Rectangle(0, 0, GetWidth(), GetHeight()));
 
     // We don't want to be swapping before we've painted.
+    mFlush->Stop();
     mFlush->SetPriority(TaskPriority::POST_PAINT);
 }
 
@@ -131,6 +134,24 @@ void SkiaSalGraphicsImpl::createSurface()
 }
 
 void SkiaSalGraphicsImpl::DeInit() { mSurface.reset(); }
+
+void SkiaSalGraphicsImpl::preDraw()
+{
+    // VCL can sometimes resize us without telling us, update the surface if needed.
+    if (GetWidth() != mSurface->width() || GetHeight() != mSurface->height())
+        resetSurface();
+}
+
+void SkiaSalGraphicsImpl::postDraw()
+{
+    if (!isOffscreen())
+    {
+        if (!Application::IsInExecute())
+            performFlush(); // otherwise nothing would trigger idle rendering
+        else if (!mFlush->IsActive())
+            mFlush->Start();
+    }
+}
 
 static SkIRect toSkIRect(const tools::Rectangle& rectangle)
 {
@@ -207,37 +228,41 @@ void SkiaSalGraphicsImpl::drawPixel(long nX, long nY)
 {
     if (mLineColor == SALCOLOR_NONE)
         return;
+    preDraw();
     SkCanvas* canvas = mSurface->getCanvas();
     canvas->drawPoint(nX, nY, SkPaint());
-    scheduleFlush();
+    postDraw();
 }
 
 void SkiaSalGraphicsImpl::drawPixel(long nX, long nY, Color nColor)
 {
     if (nColor == SALCOLOR_NONE)
         return;
+    preDraw();
     SkCanvas* canvas = mSurface->getCanvas();
     SkPaint paint;
     paint.setColor(toSkColor(nColor));
     // Apparently drawPixel() is actually expected to set the pixel and not draw it.
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
     canvas->drawPoint(nX, nY, paint);
-    scheduleFlush();
+    postDraw();
 }
 
 void SkiaSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
 {
     if (mLineColor == SALCOLOR_NONE)
         return;
+    preDraw();
     SkCanvas* canvas = mSurface->getCanvas();
     SkPaint paint;
     paint.setColor(toSkColor(mLineColor));
     canvas->drawLine(nX1, nY1, nX2, nY2, paint);
-    scheduleFlush();
+    postDraw();
 }
 
 void SkiaSalGraphicsImpl::drawRect(long nX, long nY, long nWidth, long nHeight)
 {
+    preDraw();
     SkCanvas* canvas = mSurface->getCanvas();
     SkPaint paint;
     if (mFillColor != SALCOLOR_NONE)
@@ -252,13 +277,14 @@ void SkiaSalGraphicsImpl::drawRect(long nX, long nY, long nWidth, long nHeight)
         paint.setStyle(SkPaint::kStroke_Style);
         canvas->drawIRect(SkIRect::MakeXYWH(nX, nY, nWidth - 1, nHeight - 1), paint);
     }
-    scheduleFlush();
+    postDraw();
 }
 
 void SkiaSalGraphicsImpl::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
 {
     if (mLineColor == SALCOLOR_NONE)
         return;
+    preDraw();
     std::vector<SkPoint> pointVector;
     pointVector.reserve(nPoints);
     for (sal_uInt32 i = 0; i < nPoints; ++i)
@@ -267,13 +293,14 @@ void SkiaSalGraphicsImpl::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAr
     paint.setColor(toSkColor(mLineColor));
     mSurface->getCanvas()->drawPoints(SkCanvas::kLines_PointMode, nPoints, pointVector.data(),
                                       paint);
-    scheduleFlush();
+    postDraw();
 }
 
 void SkiaSalGraphicsImpl::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
 {
     if (mLineColor == SALCOLOR_NONE && mFillColor == SALCOLOR_NONE)
         return;
+    preDraw();
     std::vector<SkPoint> pointVector;
     pointVector.reserve(nPoints);
     for (sal_uInt32 i = 0; i < nPoints; ++i)
@@ -293,7 +320,7 @@ void SkiaSalGraphicsImpl::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry
         paint.setStyle(SkPaint::kStroke_Style);
         mSurface->getCanvas()->drawPath(path, paint);
     }
-    scheduleFlush();
+    postDraw();
 }
 
 void SkiaSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints,
@@ -301,6 +328,7 @@ void SkiaSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pP
 {
     if (mLineColor == SALCOLOR_NONE && mFillColor == SALCOLOR_NONE)
         return;
+    preDraw();
     std::vector<SkPoint> pointVector;
     SkPath path;
     for (sal_uInt32 poly = 0; poly < nPoly; ++poly)
@@ -328,7 +356,7 @@ void SkiaSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pP
         paint.setStyle(SkPaint::kStroke_Style);
         mSurface->getCanvas()->drawPath(path, paint);
     }
-    scheduleFlush();
+    postDraw();
 }
 
 bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
@@ -389,15 +417,17 @@ void SkiaSalGraphicsImpl::copyArea(long nDestX, long nDestY, long nSrcX, long nS
 {
     if (nDestX == nSrcX && nDestY == nSrcY)
         return;
+    preDraw();
     sk_sp<SkImage> image
         = mSurface->makeImageSnapshot(SkIRect::MakeXYWH(nSrcX, nSrcY, nSrcWidth, nSrcHeight));
     // TODO makeNonTextureImage() ?
     mSurface->getCanvas()->drawImage(image, nDestX, nDestY);
-    scheduleFlush();
+    postDraw();
 }
 
 void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics)
 {
+    preDraw();
     SkiaSalGraphicsImpl* src;
     if (pSrcGraphics)
     {
@@ -414,7 +444,7 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
                                                           rPosAry.mnDestWidth,
                                                           rPosAry.mnDestHeight),
                                          nullptr);
-    scheduleFlush();
+    postDraw();
 }
 
 bool SkiaSalGraphicsImpl::blendBitmap(const SalTwoRect&, const SalBitmap& rBitmap)
@@ -438,6 +468,7 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap&
     if (rPosAry.mnSrcWidth <= 0 || rPosAry.mnSrcHeight <= 0 || rPosAry.mnDestWidth <= 0
         || rPosAry.mnDestHeight <= 0)
         return;
+    preDraw();
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSalBitmap));
     mSurface->getCanvas()->drawBitmapRect(
         static_cast<const SkiaSalBitmap&>(rSalBitmap).GetSkBitmap(),
@@ -445,7 +476,7 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap&
         SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                          rPosAry.mnDestHeight),
         nullptr);
-    scheduleFlush();
+    postDraw();
 }
 
 void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
@@ -467,6 +498,7 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& r
 void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SkBitmap& rBitmap,
                                    Color nMaskColor)
 {
+    preDraw();
     SkBitmap tmpBitmap;
     if (!tmpBitmap.tryAllocN32Pixels(rBitmap.width(), rBitmap.height()))
         abort();
@@ -484,7 +516,7 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SkBitmap& rB
         SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                          rPosAry.mnDestHeight),
         nullptr);
-    scheduleFlush();
+    postDraw();
 }
 
 std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long nWidth,
@@ -509,6 +541,7 @@ Color SkiaSalGraphicsImpl::getPixel(long nX, long nY)
 
 void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFlags)
 {
+    preDraw();
     // TrackFrame just inverts a dashed path around the polygon
     if (eFlags == SalInvert::TrackFrame)
     {
@@ -568,7 +601,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
 
         mSurface->getCanvas()->drawPath(aPath, aPaint);
     }
-    scheduleFlush();
+    postDraw();
 }
 
 void SkiaSalGraphicsImpl::invert(long nX, long nY, long nWidth, long nHeight, SalInvert eFlags)
@@ -625,13 +658,14 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
 
 void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkBitmap& bitmap)
 {
+    preDraw();
     mSurface->getCanvas()->drawBitmapRect(
         bitmap,
         SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
         SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                          rPosAry.mnDestHeight),
         nullptr);
-    scheduleFlush();
+    postDraw();
 }
 
 bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
@@ -665,16 +699,6 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolygon,
     (void)rPolygon;
     (void)rGradient;
     return false;
-}
-
-void SkiaSalGraphicsImpl::scheduleFlush()
-{
-    if (isOffscreen())
-        return;
-    if (!Application::IsInExecute())
-        performFlush(); // otherwise nothing would trigger idle rendering
-    else if (!mFlush->IsActive())
-        mFlush->Start();
 }
 
 #ifdef DBG_UTIL
