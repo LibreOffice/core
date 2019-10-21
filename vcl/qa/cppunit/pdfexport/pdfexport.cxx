@@ -131,6 +131,7 @@ public:
     void testTdf113143();
     void testTdf115262();
     void testTdf121962();
+    void testTdf115967();
     void testTdf121615();
     void testTocLink();
 
@@ -167,6 +168,7 @@ public:
     CPPUNIT_TEST(testTdf113143);
     CPPUNIT_TEST(testTdf115262);
     CPPUNIT_TEST(testTdf121962);
+    CPPUNIT_TEST(testTdf115967);
     CPPUNIT_TEST(testTdf121615);
     CPPUNIT_TEST(testTocLink);
     CPPUNIT_TEST_SUITE_END();
@@ -1694,6 +1696,38 @@ void PdfExportTest::testTdf121962()
         OUString sText(aText.data(), nTextSize / 2 - 1);
         CPPUNIT_ASSERT(sText != "** Expression is faulty **");
     }
+
+}
+
+void PdfExportTest::testTdf115967()
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf115967.odt";
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    auto pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+
+    // Get the first page
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
+    FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage.get());
+
+    // Make sure the elements inside a formula in a RTL document are exported
+    // LTR ( m=750abc ) and not RTL ( m=057cba )
+    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    OUString sText;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
+        if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_TEXT)
+            continue;
+        unsigned long nTextSize = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 2);
+        std::vector<sal_Unicode> aText(nTextSize);
+        FPDFTextObj_GetText(pPageObject, pTextPage, aText.data(), nTextSize);
+        OUString sChar(aText.data(), nTextSize / 2 - 1);
+        sText += sChar.trim();
+    }
+    CPPUNIT_ASSERT_EQUAL(OUString("m=750abc"), sText);
 }
 
 void PdfExportTest::testTdf121615()
