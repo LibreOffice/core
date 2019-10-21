@@ -247,27 +247,50 @@ static void testTile( Document *pDocument, int max_parts,
     }
 }
 
-static bool subTileIdentical( const std::vector<unsigned char> &vBase,
-                              long nBaseRowStride,
-                              const std::vector<unsigned char> &vCompare,
-                              long nCompareRowStride,
-                              long nTilePixelHeight,
-                              long nPosX, long nPosY )
+static uint32_t fade(uint32_t col)
 {
+    uint8_t a = (col >> 24) & 0xff;
+    uint8_t b = (col >> 16) & 0xff;
+    uint8_t g = (col >>  8) & 0xff;
+    uint8_t r = (col >>  0) & 0xff;
+    uint8_t grey = (r+g+b)/6;
+    return (a<<24) + (grey<<16) + (grey<<8) + grey;
+}
+
+// Count and build a picture of any differences into rDiff
+static int diffTiles( const std::vector<unsigned char> &vBase,
+                       long nBaseRowPixelWidth,
+                       const std::vector<unsigned char> &vCompare,
+                       long nCompareRowPixelWidth,
+                       long nTilePixelHeight,
+                       long nPosX, long nPosY,
+                       std::vector<unsigned char> &rDiff )
+{
+    int nDifferent = 0;
+    const uint32_t *pBase = reinterpret_cast<const uint32_t *>(vBase.data());
+    const uint32_t *pCompare = reinterpret_cast<const uint32_t *>(vCompare.data());
+    uint32_t *pDiff = reinterpret_cast<uint32_t *>(rDiff.data());
+    long left = 0, mid = nCompareRowPixelWidth, right = nCompareRowPixelWidth*2;
     for (long y = 0; y < nTilePixelHeight; ++y)
     {
-        long nBaseOffset = nBaseRowStride * (y + nPosY) + nPosX * nCompareRowStride;
-        long nCompareOffset = nCompareRowStride * y;
-        for (long x = 0; x < nCompareRowStride; ++x)
+        long nBaseOffset = nBaseRowPixelWidth * (y + nPosY) + nPosX * nCompareRowPixelWidth;
+        long nCompareOffset = nCompareRowPixelWidth * y;
+        long nDiffRowStart = nCompareOffset * 3;
+        for (long x = 0; x < nCompareRowPixelWidth; ++x)
         {
-            if (vBase[nBaseOffset + x] != vCompare[nCompareOffset + x])
+            pDiff[nDiffRowStart + left  + x] = pBase[nBaseOffset + x];
+            pDiff[nDiffRowStart + mid   + x] = pCompare[nCompareOffset + x];
+            pDiff[nDiffRowStart + right + x] = fade(pBase[nBaseOffset + x]);
+            if (pBase[nBaseOffset + x] != pCompare[nCompareOffset + x])
             {
-                fprintf (stderr, "Mismatching pixel at %ld (bytes) into row %ld\n", x, y);
-                return false;
+                pDiff[nDiffRowStart + right + x] = 0xffff00ff;
+                if (!nDifferent)
+                    fprintf (stderr, "First mismatching pixel at %ld (pixels) into row %ld\n", x, y);
+                nDifferent++;
             }
         }
     }
-    return true;
+    return nDifferent;
 }
 
 static bool testJoinsAt( Document *pDocument, long nX, long nY,
@@ -306,21 +329,25 @@ static bool testJoinsAt( Document *pDocument, long nX, long nY,
                               initPosX + rPos.X * nTileTwipWidth,
                               initPosY + rPos.Y * nTileTwipHeight,
                               nTileTwipWidth, nTileTwipHeight );
-        if ( !subTileIdentical( vBase, nTilePixelWidth * 2 * 4,
-                                vCompare, nTilePixelWidth * 4,
-                                nTilePixelHeight,
-                                rPos.X, rPos.Y * nTilePixelHeight ) )
+        std::vector<unsigned char> vDiff( nTilePixelWidth * 3 * nTilePixelHeight * 4 );
+        int nDifferences = diffTiles( vBase, nTilePixelWidth * 2,
+                                      vCompare, nTilePixelWidth,
+                                      nTilePixelHeight,
+                                      rPos.X, rPos.Y * nTilePixelHeight,
+                                      vDiff );
+        if ( nDifferences > 0 )
         {
-            fprintf( stderr, "  sub-tile pixel mismatch at %ld, %ld at offset %ld, %ld (twips)\n",
-                     rPos.X, rPos.Y, initPosX, initPosY );
+            fprintf( stderr, "  %d differences in sub-tile pixel mismatch at %ld, %ld at offset %ld, %ld (twips)\n",
+                     nDifferences, rPos.X, rPos.Y, initPosX, initPosY );
             dumpTile("_base", nTilePixelWidth * 2, nTilePixelHeight * 2,
                      mode, vBase.data());
-            dumpTile("_sub", nTilePixelWidth, nTilePixelHeight,
+/*            dumpTile("_sub", nTilePixelWidth, nTilePixelHeight,
                      mode, vBase.data(),
                      rPos.X*nTilePixelWidth, rPos.Y*nTilePixelHeight,
                      nTilePixelWidth * 2);
             dumpTile("_compare", nTilePixelWidth, nTilePixelHeight,
-                     mode, vCompare.data());
+            mode, vCompare.data());*/
+            dumpTile("_diff", nTilePixelWidth * 3, nTilePixelHeight, mode, vDiff.data());
             return false;
         }
     }
