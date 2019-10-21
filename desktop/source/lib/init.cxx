@@ -3273,7 +3273,8 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
     SolarMutexGuard aGuard;
 
     char* pCopy = strdup(pArguments);
-    if (!pCopy) {
+    if (!pCopy)
+    {
         SetLastExceptionMsg("String copying error.");
         return;
     }
@@ -3282,7 +3283,8 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
     char* pOptionalEventType = strtok(nullptr, " ");
     char* pOptionalData = strtok(nullptr, " ");
 
-    if (!pIdChar) {
+    if (!pIdChar)
+    {
         SetLastExceptionMsg("Error parsing the command.");
         free(pCopy);
         return;
@@ -3307,8 +3309,11 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
             WindowUIObject aUIObject(pWindow);
             std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(sId));
             if (pUIWindow) {
+                bool bIsClickAction = false;
+
                 if (pOptionalEventType) {
-                    if (strcmp(pOptionalEventType, "selected") == 0 && pOptionalData) {
+                    if (strcmp(pOptionalEventType, "selected") == 0 && pOptionalData)
+                    {
                         char* pPos = strtok(pOptionalData, ";");
                         char* pText = strtok(nullptr, ";");
 
@@ -3325,9 +3330,14 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
 
                         pUIWindow->execute(sSelectAction, aMap);
                     }
-                } else {
-                    pUIWindow->execute(sClickAction, StringMap());
+                    else
+                        bIsClickAction = true;
                 }
+                else
+                    bIsClickAction = true;
+
+                if (bIsClickAction)
+                    pUIWindow->execute(sClickAction, StringMap());
             }
         } catch(...) {}
 
