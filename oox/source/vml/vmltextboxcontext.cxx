@@ -270,6 +270,9 @@ void TextBoxContext::onStartElement(const AttributeList& rAttribs)
         case W_TOKEN(jc):
             maParagraph.moParaAdjust = rAttribs.getString( W_TOKEN(val) );
         break;
+        case W_TOKEN(pStyle):
+            maParagraph.moParaStyleName = rAttribs.getString( W_TOKEN(val) );
+        break;
     }
 }
 

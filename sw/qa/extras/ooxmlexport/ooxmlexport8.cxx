@@ -1028,9 +1028,18 @@ DECLARE_OOXMLEXPORT_TEST(testFdo46361, "fdo46361.docx")
     // This was black, not green.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x008000), getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor"));
     // \n char was missing due to unhandled w:br.
-    CPPUNIT_ASSERT_EQUAL(OUString("text\ntext"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW)->getString());
+    uno::Reference<text::XText> xShapeText(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("text\ntext"), xShapeText->getString());
     // \n chars were missing, due to unhandled multiple w:p tags.
-    CPPUNIT_ASSERT_EQUAL(OUString("text\ntext\n"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(2), uno::UNO_QUERY_THROW)->getString());
+    xShapeText.set(xGroupShape->getByIndex(2), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("text\ntext\n"), xShapeText->getString());
+
+    // tdf#128153 The first and second lines are directly specified as centered. Make sure that doesn't change.
+    xParagraph.set(getParagraphOfText(2, xShapeText->getText(), "text"));
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xParagraph, "ParaAdjust")));
+    // The last paragraph should be left aligned.
+    xParagraph.set(getParagraphOfText(3, xShapeText->getText(), ""));
+    CPPUNIT_ASSERT_MESSAGE("You FIXED me!", style::ParagraphAdjust_LEFT != static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xParagraph, "ParaAdjust")));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo65632, "fdo65632.docx")

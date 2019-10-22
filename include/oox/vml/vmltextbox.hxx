@@ -43,6 +43,7 @@ struct ShapeTypeModel;
 struct TextParagraphModel
 {
     OptValue<OUString> moParaAdjust; ///< Paragraph adjust (left, center, right, etc.)
+    OptValue<OUString> moParaStyleName;
 };
 
 /** Font settings for a text portion in a textbox. */

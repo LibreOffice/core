@@ -2574,6 +2574,65 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         uno::Reference< lang::XServiceInfo > xSInfo( xShape, uno::UNO_QUERY_THROW );
         if (xSInfo->supportsService("com.sun.star.drawing.GroupShape"))
         {
+            // Textboxes in shapes do not support styles, so check saved style information and apply properties directly to the child shapes.
+            const uno::Reference<drawing::XShapes> xShapes(xShape, uno::UNO_QUERY);
+            const sal_uInt32 nShapeCount = xShapes.is() ? xShapes->getCount() : 0;
+            for ( sal_uInt32 i = 0; i < nShapeCount; ++i )
+            {
+                try
+                {
+                    uno::Reference<beans::XPropertySet> xSyncedPropertySet(xShapes->getByIndex(i), uno::UNO_QUERY_THROW);
+                    comphelper::SequenceAsHashMap aGrabBag( xSyncedPropertySet->getPropertyValue("CharInteropGrabBag") );
+
+                    // only VML import has checked for style. Don't apply default parastyle properties to other imported shapes
+                    // - except for fontsize - to maintain compatibility with previous versions of LibreOffice.
+                    const bool bOnlyApplyCharHeight = !aGrabBag["mso-pStyle"].hasValue();
+
+                    OUString sStyleName;
+                    aGrabBag["mso-pStyle"] >>= sStyleName;
+                    StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByISTD( sStyleName );
+                    if ( !pEntry )
+                    {
+                        // Use default style even in ambiguous cases (where multiple styles were defined) since MOST styles inherit
+                        // MOST of their properties from the default style. In the ambiguous case, we have to accept some kind of compromise
+                        // and the default paragraph style ought to be the safest one... (compared to DocDefaults or program defaults)
+                        pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( GetDefaultParaStyleName() );
+                    }
+                    if ( pEntry )
+                    {
+                        // The Ids here come from oox/source/vml/vmltextbox.cxx.
+                        // It probably could safely expand to all Ids that shapes support.
+                        const PropertyIds eIds[] = {
+                            PROP_CHAR_HEIGHT,
+                            PROP_CHAR_FONT_NAME,
+                            PROP_CHAR_WEIGHT,
+                            PROP_CHAR_CHAR_KERNING,
+                            PROP_CHAR_COLOR,
+                            PROP_PARA_ADJUST
+                        };
+                        const uno::Reference<beans::XPropertyState> xSyncedPropertyState(xSyncedPropertySet, uno::UNO_QUERY_THROW);
+                        for ( const auto& eId : eIds )
+                        {
+                            try
+                            {
+                                if ( bOnlyApplyCharHeight && eId != PROP_CHAR_HEIGHT )
+                                    continue;
+
+                                const OUString sPropName = getPropertyName(eId);
+                                if ( beans::PropertyState_DEFAULT_VALUE == xSyncedPropertyState->getPropertyState(sPropName) )
+                                {
+                                    const uno::Any aProp = GetPropertyFromStyleSheet(eId, pEntry, /*bDocDefaults=*/true, /*bPara=*/true);
+                                    if ( aProp.hasValue() )
+                                        xSyncedPropertySet->setPropertyValue( sPropName, aProp );
+                                }
+                            }
+                            catch (uno::Exception&) {}
+                        }
+                    }
+                }
+                catch (uno::Exception&) {}
+            }
+
             // A GroupShape doesn't implement text::XTextRange, but appending
             // an empty reference to the stacks still makes sense, because this
             // way bToRemove can be set, and we won't end up with duplicated

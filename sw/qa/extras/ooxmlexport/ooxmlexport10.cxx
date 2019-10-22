@@ -565,6 +565,14 @@ DECLARE_OOXMLEXPORT_TEST(testFdo74401, "fdo74401.docx")
     uno::Reference<drawing::XShapeDescriptor> xShape(xGroupShape->getByIndex(1), uno::UNO_QUERY);
     // The triangle (second child) was a TextShape before, so it was shown as a rectangle.
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"), xShape->getShapeType());
+
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
+    uno::Reference<text::XTextRange> xCharRun = getRun(getParagraphOfText(1, xText), 1, "Triangle ");
+
+    // tdf#128153 Paragraph Style Normal (Web) should not overwrite the 11pt directly applied fontsize.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fontsize", 11.f, getProperty<float>(xCharRun, "CharHeight"));
+    // but paragraph Style Normal (Web) should provide the font name
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Font", OUString("Times New Roman"), getProperty<OUString>(xCharRun, "CharFontName"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testGridBefore, "gridbefore.docx")
