@@ -193,10 +193,8 @@ public:
     void WriteSolidFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteGradientFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
 
-    /// In case rXPropSet is set, it may serve as a source of gradient transparency information.
-    void WriteGradientFill(css::awt::Gradient rGradient,
-                           const css::uno::Reference<css::beans::XPropertySet>& rXPropSet
-                           = css::uno::Reference<css::beans::XPropertySet>());
+    void WriteGradientFill( css::awt::Gradient rGradient, css::awt::Gradient rTransparenceGradient,
+                            const css::uno::Reference<css::beans::XPropertySet>& rXPropSet = css::uno::Reference<css::beans::XPropertySet>());
 
     void WriteGrabBagGradientFill( const css::uno::Sequence< css::beans::PropertyValue >& aGradientStops, css::awt::Gradient rGradient);
 
