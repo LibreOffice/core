@@ -62,6 +62,7 @@ void X11SkiaSalGraphicsImpl::createSurface()
     mWindowContext = sk_app::window_context_factory::MakeRasterForXlib(winInfo, displayParams);
     assert(SkToBool(mWindowContext)); // TODO
     mSurface = mWindowContext->getBackbufferSurface();
+    assert(mSurface.get());
 }
 
 void X11SkiaSalGraphicsImpl::DeInit()
