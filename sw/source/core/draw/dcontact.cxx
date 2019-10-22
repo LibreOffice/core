@@ -132,7 +132,7 @@ SwFrameFormat *FindFrameFormat( SdrObject *pObj )
     }
     else
     {
-        SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall( pObj ));
+        SwContact* pContact = GetUserCall(pObj);
         if ( pContact )
         {
             pRetval = pContact->GetFormat();
