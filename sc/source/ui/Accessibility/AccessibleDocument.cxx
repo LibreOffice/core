@@ -867,8 +867,7 @@ SdrPage* ScChildrenShapes::GetDrawPage() const
     SdrPage* pDrawPage = nullptr;
     if (mpViewShell)
     {
-        ScViewData& rViewData = mpViewShell->GetViewData();
-        ScDocument* pDoc = rViewData.GetDocument();
+        ScDocument* pDoc = mpViewShell->GetViewData().GetDocument();
         if (pDoc && pDoc->GetDrawLayer())
         {
             ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
@@ -2132,7 +2131,8 @@ bool ScAccessibleDocument::IsTableSelected() const
         //#103800#; use a copy of MarkData
         ScMarkData aMarkData(mpViewShell->GetViewData().GetMarkData());
         aMarkData.MarkToMulti();
-        if (aMarkData.IsAllMarked( ScRange( 0, 0, nTab, MAXCOL, MAXROW, nTab)))
+        ScDocument* pDoc = GetDocument();
+        if (aMarkData.IsAllMarked( ScRange( 0, 0, nTab, pDoc->MaxCol(), pDoc->MaxRow(), nTab)))
             bResult = true;
     }
     return bResult;

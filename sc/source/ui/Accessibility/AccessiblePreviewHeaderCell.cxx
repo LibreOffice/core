@@ -155,10 +155,11 @@ uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMaximumValue()
     IsObjectValid();
 
     double fValue(0.0);
+    ScDocument& rDoc = mpViewShell->GetDocument();
     if (mbColumnHeader)
-        fValue = MAXCOL;
+        fValue = rDoc.MaxCol();
     else
-        fValue = MAXROW;
+        fValue = rDoc.MaxRow();
     return uno::Any(fValue);
 }
 

@@ -166,11 +166,11 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange, bool bRef
     SCCOL nCol2 = theCurArea.aEnd.Col();
     SCROW nRow1 = theCurArea.aStart.Row();
     SCROW nRow2 = theCurArea.aEnd.Row();
-    if ( (static_cast<SCCOLROW>(nCol2 - nCol1) >= nRow2 - nRow1) || (nCol1 == 0 && nCol2 == MAXCOL) )
+    if ( (static_cast<SCCOLROW>(nCol2 - nCol1) >= nRow2 - nRow1) || (nCol1 == 0 && nCol2 == pDoc->MaxCol()) )
     {   // Column headers and the limiting case of the whole sheet
         m_xBtnColHead->set_active(true);
         m_xBtnRowHead->set_active(false);
-        if ( nRow2 == MAXROW  )
+        if ( nRow2 == pDoc->MaxRow()  )
         {
             if ( nRow1 == 0 )
                 bValid = false;     // limiting case of the whole sheet
@@ -183,14 +183,14 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange, bool bRef
         else
         {   // Header at top, data below
             theCurData.aStart.SetRow( nRow2 + 1 );
-            theCurData.aEnd.SetRow( MAXROW );
+            theCurData.aEnd.SetRow( pDoc->MaxRow() );
         }
     }
     else
     {   // Column headers
         m_xBtnRowHead->set_active(true);
         m_xBtnColHead->set_active(false);
-        if ( nCol2 == MAXCOL )
+        if ( nCol2 == pDoc->MaxCol() )
         {   // Header at the right, data to the left
             theCurData.aStart.SetCol( 0 );
             theCurData.aEnd.SetCol( nCol2 - 1 );
@@ -198,7 +198,7 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange, bool bRef
         else
         {   // Header at the left, data to the right
             theCurData.aStart.SetCol( nCol2 + 1 );
-            theCurData.aEnd.SetCol( MAXCOL );
+            theCurData.aEnd.SetCol( pDoc->MaxCol() );
         }
     }
     if ( bValid )
@@ -254,7 +254,7 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange, bool bR
             SCROW nRow1 = theCurArea.aStart.Row();
             SCROW nRow2 = theCurArea.aEnd.Row();
             if ( nRow1 > 0
-              && (theCurData.aEnd.Row() < nRow2 || nRow2 == MAXROW) )
+              && (theCurData.aEnd.Row() < nRow2 || nRow2 == pDoc->MaxRow()) )
             {   // Data above header
                 theCurData.aEnd.SetRow( nRow1 - 1 );
                 if ( theCurData.aStart.Row() > theCurData.aEnd.Row() )
@@ -277,7 +277,7 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange, bool bR
             SCCOL nCol1 = theCurArea.aStart.Col();
             SCCOL nCol2 = theCurArea.aEnd.Col();
             if ( nCol1 > 0
-              && (theCurData.aEnd.Col() < nCol2 || nCol2 == MAXCOL) )
+              && (theCurData.aEnd.Col() < nCol2 || nCol2 == pDoc->MaxCol()) )
             {   // Data left of header
                 theCurData.aEnd.SetCol( nCol1 - 1 );
                 if ( theCurData.aStart.Col() > theCurData.aEnd.Col() )
@@ -498,7 +498,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, OkBtnHdl, weld::Button&, void)
     // changed ranges need to take effect
     pDoc->CompileColRowNameFormula();
     ScDocShell* pDocShell = pViewData->GetDocShell();
-    pDocShell->PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PaintPartFlags::Grid);
+    pDocShell->PostPaint(ScRange(0, 0, 0, pDoc->MaxCol(), pDoc->MaxRow(), MAXTAB), PaintPartFlags::Grid);
     pDocShell->SetDocumentModified();
 
     response(RET_OK);
@@ -745,15 +745,15 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColClickHdl, weld::Button&, void)
 {
     if (m_xBtnColHead->get_active())
     {
-        if ( theCurArea.aStart.Row() == 0 && theCurArea.aEnd.Row() == MAXROW )
+        if ( theCurArea.aStart.Row() == 0 && theCurArea.aEnd.Row() == pDoc->MaxRow() )
         {
-            theCurArea.aEnd.SetRow( MAXROW - 1 );
+            theCurArea.aEnd.SetRow( pDoc->MaxRow() - 1 );
             OUString aStr(theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDoc, pDoc->GetAddressConvention()));
             m_xEdAssign->SetText( aStr );
         }
         ScRange aRange( theCurData );
-        aRange.aStart.SetRow( std::min( static_cast<long>(theCurArea.aEnd.Row() + 1), long(MAXROW) ) );
-        aRange.aEnd.SetRow( MAXROW );
+        aRange.aStart.SetRow( std::min( static_cast<long>(theCurArea.aEnd.Row() + 1), static_cast<long>(pDoc->MaxRow()) ) );
+        aRange.aEnd.SetRow( pDoc->MaxRow() );
         AdjustColRowData( aRange );
     }
 }
@@ -763,15 +763,15 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl, weld::Button&, void)
 {
     if (m_xBtnRowHead->get_active())
     {
-        if ( theCurArea.aStart.Col() == 0 && theCurArea.aEnd.Col() == MAXCOL )
+        if ( theCurArea.aStart.Col() == 0 && theCurArea.aEnd.Col() == pDoc->MaxCol() )
         {
-            theCurArea.aEnd.SetCol( MAXCOL - 1 );
+            theCurArea.aEnd.SetCol( pDoc->MaxCol() - 1 );
             OUString aStr(theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDoc, pDoc->GetAddressConvention()));
             m_xEdAssign->SetText( aStr );
         }
         ScRange aRange( theCurData );
-        aRange.aStart.SetCol( static_cast<SCCOL>(std::min( static_cast<long>(theCurArea.aEnd.Col() + 1), long(MAXCOL) )) );
-        aRange.aEnd.SetCol( MAXCOL );
+        aRange.aStart.SetCol( static_cast<SCCOL>(std::min( static_cast<long>(theCurArea.aEnd.Col() + 1), static_cast<long>(pDoc->MaxCol()) )) );
+        aRange.aEnd.SetCol( pDoc->MaxCol() );
         AdjustColRowData( aRange );
     }
 }
