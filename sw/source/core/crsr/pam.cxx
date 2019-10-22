@@ -1021,6 +1021,10 @@ OUString SwPaM::GetText() const
 
         if (pTextNode != nullptr)
         {
+            if (!bIsStartNode)
+            {
+                aResult.append(CH_TXTATR_NEWLINE); // use newline for para break
+            }
             const OUString& aTmpStr = pTextNode->GetText();
 
             if (bIsStartNode || bIsEndNode)
