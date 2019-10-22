@@ -1791,7 +1791,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
 #if !defined(MACOSX) // TODO: check layout differences and support all platforms, if needed
                     sal_Int32 nPos;
                     OUString sDoubleSpace("  ");
-                    if (IsRTFImport() && (nPos = rString.indexOf(sDoubleSpace)) > -1)
+                    if (IsRTFImport() && !IsOpenFieldCommand() && (nPos = rString.indexOf(sDoubleSpace)) > -1)
                     {
                         // tdf#123703 an RTF space character is longer by an extra six-em-space in a space sequence,
                         // insert them to keep RTF document layout formatted by consecutive spaces
