@@ -390,8 +390,8 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
 
                                 if (aAddress.StartRow != aAddress.EndRow) //should be a Spreadsheet
                                 {
-                                    OSL_ENSURE(aAddress.StartRow == 0 && aAddress.EndRow == MAXROW &&
-                                        aAddress.StartColumn == 0 && aAddress.EndColumn == MAXCOL, "here should be a XSpreadsheet");
+                                    OSL_ENSURE(aAddress.StartRow == 0 && aAddress.EndRow == pDoc->MaxRow() &&
+                                        aAddress.StartColumn == 0 && aAddress.EndColumn == pDoc->MaxCol(), "here should be a XSpreadsheet");
                                     ScDrawLayer::SetPageAnchored(*pObj);
                                 }
                                 else

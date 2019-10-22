@@ -148,13 +148,13 @@ static bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
     ScClipParam aClipParam(rSrcRange, false);
     pSrcDoc->CopyToClip(aClipParam, pClipDoc.get(), &aSourceMark, false, false);
 
-    if ( pClipDoc->HasAttrib( 0,0,nSrcTab, MAXCOL,MAXROW,nSrcTab,
+    if ( pClipDoc->HasAttrib( 0,0,nSrcTab, pClipDoc->MaxCol(), pClipDoc->MaxRow(),nSrcTab,
                                 HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
     {
         ScPatternAttr aPattern( pSrcDoc->GetPool() );
         aPattern.GetItemSet().Put( ScMergeAttr() );             // Defaults
         aPattern.GetItemSet().Put( ScMergeFlagAttr() );
-        pClipDoc->ApplyPatternAreaTab( 0,0, MAXCOL,MAXROW, nSrcTab, aPattern );
+        pClipDoc->ApplyPatternAreaTab( 0,0, pClipDoc->MaxCol(), pClipDoc->MaxRow(), nSrcTab, aPattern );
     }
 
     ScMarkData aDestMark;
@@ -411,7 +411,7 @@ public:
                 nMaxColCount = nColCount;
             const seq* pColArr = rRow.getConstArray();
             for (long nCol=0; nCol<nColCount; nCol++)
-                if ( nCol <= MAXCOL && mrDocRow <= MAXROW )
+                if ( nCol <= mpDoc->MaxCol() && mrDocRow <= mpDoc->MaxRow() )
                     aVisitor.visitElem( nCol, mrDocRow, pColArr[ nCol ] );
                 else
                     mbOverflow=true;
@@ -627,7 +627,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
             bArgErr = true;
         }
 
-        pDoc->DeleteAreaTab( 0, 0, MAXCOL, MAXROW, 0, InsertDeleteFlags::ALL );
+        pDoc->DeleteAreaTab( 0, 0, pDoc->MaxCol(), pDoc->MaxRow(), 0, InsertDeleteFlags::ALL );
         pDoc->DeleteAreaTab( 0, 0, 0, 0, nTempSheet, InsertDeleteFlags::ALL );
     }
 

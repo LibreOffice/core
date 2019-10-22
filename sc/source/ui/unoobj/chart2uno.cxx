@@ -540,10 +540,10 @@ void Chart2Positioner::glueState()
         ScRefTokenHelper::getDoubleRefDataFromToken(aData, rxToken);
         SCCOLROW n1 = aData.Ref1.Col();
         SCCOLROW n2 = aData.Ref2.Col();
-        if (n1 > MAXCOL)
-            n1 = MAXCOL;
-        if (n2 > MAXCOL)
-            n2 = MAXCOL;
+        if (n1 > mpDoc->MaxCol())
+            n1 = mpDoc->MaxCol();
+        if (n2 > mpDoc->MaxCol())
+            n2 = mpDoc->MaxCol();
         if (n1 < mnStartCol)
             mnStartCol = static_cast<SCCOL>(n1);
         if (n2 > nEndCol)
@@ -551,10 +551,10 @@ void Chart2Positioner::glueState()
 
         n1 = aData.Ref1.Row();
         n2 = aData.Ref2.Row();
-        if (n1 > MAXROW)
-            n1 = MAXROW;
-        if (n2 > MAXROW)
-            n2 = MAXROW;
+        if (n1 > mpDoc->MaxRow())
+            n1 = mpDoc->MaxRow();
+        if (n2 > mpDoc->MaxRow())
+            n2 = mpDoc->MaxRow();
 
         if (n1 < mnStartRow)
             mnStartRow = static_cast<SCROW>(n1);
@@ -1342,15 +1342,15 @@ public:
         if(abs((e.Col()-s.Col())*(e.Row()-s.Row())) < SHRINK_RANGE_THRESHOLD)
             return;
 
-        SCCOL nMinCol = MAXCOL, nMaxCol = 0;
-        SCROW nMinRow = MAXROW, nMaxRow = 0;
+        SCCOL nMinCol = mpDoc->MaxCol(), nMaxCol = 0;
+        SCROW nMinRow = mpDoc->MaxRow(), nMaxRow = 0;
 
         // Determine the smallest range that encompasses the data ranges of all sheets.
         SCTAB nTab1 = s.Tab(), nTab2 = e.Tab();
         for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
         {
-            SCCOL nCol1 = 0, nCol2 = MAXCOL;
-            SCROW nRow1 = 0, nRow2 = MAXROW;
+            SCCOL nCol1 = 0, nCol2 = mpDoc->MaxCol();
+            SCROW nRow1 = 0, nRow2 = mpDoc->MaxRow();
             mpDoc->ShrinkToDataArea(nTab, nCol1, nRow1, nCol2, nRow2);
             nMinCol = std::min(nMinCol, nCol1);
             nMinRow = std::min(nMinRow, nRow1);
