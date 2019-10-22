@@ -1118,7 +1118,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
         {
             case SID_DOCTEMPLATE :
             {
-                if ( !GetFactory().GetTemplateFilter() )
+                if ( !GetFactory().GetTemplateFilter() || GetViewShell()->isExportLocked())
                     rSet.DisableItem( nWhich );
                 break;
             }
@@ -1221,7 +1221,8 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
             case SID_SAVEASDOC:
             {
-                if( !( pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) )
+                if (!(pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT)
+                    || GetViewShell()->isExportLocked())
                 {
                     rSet.DisableItem( nWhich );
                     break;
@@ -1235,7 +1236,8 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
             case SID_SAVEACOPY:
             {
-                if( !( pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) )
+                if (!(pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT)
+                    || GetViewShell()->isExportLocked())
                 {
                     rSet.DisableItem( nWhich );
                     break;
@@ -1247,13 +1249,17 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 break;
             }
 
+            case SID_EXPORTDOC:
             case SID_EXPORTDOCASPDF:
             case SID_DIRECTEXPORTDOCASPDF:
             case SID_EXPORTDOCASEPUB:
             case SID_DIRECTEXPORTDOCASEPUB:
             case SID_REDACTDOC:
             case SID_AUTOREDACTDOC:
+            case SID_SAVEASREMOTE:
             {
+                if (GetViewShell()->isExportLocked())
+                    rSet.DisableItem( nWhich );
                 break;
             }
 

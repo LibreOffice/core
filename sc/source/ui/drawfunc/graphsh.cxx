@@ -145,6 +145,9 @@ void ScGraphicShell::GetExternalEditState( SfxItemSet& rSet )
             bEnable = true;
     }
 
+    if (GetViewShell()->isExportLocked())
+        bEnable = false;
+
     if( !bEnable )
         rSet.DisableItem( SID_EXTERNAL_EDIT );
 }
@@ -303,6 +306,9 @@ void ScGraphicShell::GetSaveGraphicState(SfxItemSet &rSet)
         if( dynamic_cast<const SdrGrafObj*>( pObj) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap ) )
             bEnable = true;
     }
+
+    if (GetViewShell()->isExportLocked())
+        bEnable = false;
 
     if( !bEnable )
         rSet.DisableItem( SID_SAVE_GRAPHIC );
