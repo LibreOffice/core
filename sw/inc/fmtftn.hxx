@@ -26,9 +26,10 @@
 #include "swdllapi.h"
 #include "calbck.hxx"
 
-namespace com { namespace sun { namespace star {
-    namespace text { class XFootnote; }
-} } }
+namespace com { namespace sun { namespace star { namespace text {
+    class XFootnote;
+    class XTextRange;
+} } } }
 
 class SwDoc;
 class SwTextFootnote;
@@ -90,6 +91,8 @@ public:
     /// Returns string to be displayed of footnote / endnote.
     OUString GetViewNumStr(const SwDoc& rDoc, SwRootFrame const* pLayout,
             bool bInclStrings = false) const;
+
+    css::uno::Reference<css::text::XTextRange> getAnchor(SwDoc& rDoc) const;
 
     css::uno::WeakReference<css::text::XFootnote> const& GetXFootnote() const
         { return m_wXFootnote; }
