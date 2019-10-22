@@ -779,20 +779,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                     m_pImpl->m_pCurrentEntry->pProperties->InsertProps(pProps);
 
                     m_pImpl->m_rDMapper.PopStyleSheetProperties( );
-
-                    if (m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_PARA && m_pImpl->m_pCurrentEntry->bIsDefaultStyle)
-                    {
-                        // The current style is the default paragraph style.
-                        PropertyMapPtr pProperties = m_pImpl->m_pCurrentEntry->pProperties;
-                        if (pProperties->isSet(PROP_CHAR_HEIGHT) && !m_pImpl->m_pDefaultParaProps->isSet(PROP_CHAR_HEIGHT))
-                        {
-                            // We provide a character height value, but a document-level default wasn't set.
-                            if (m_pImpl->m_xTextDefaults.is())
-                            {
-                                m_pImpl->m_xTextDefaults->setPropertyValue("CharHeight", pProperties->getProperty(PROP_CHAR_HEIGHT)->second);
-                            }
-                        }
-                    }
                 }
             }
             break;
