@@ -34,8 +34,11 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <sfx2/viewfrm.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <memory>
+
+using namespace com::sun::star;
 
 static bool bFootnote = true;
 
@@ -199,21 +202,32 @@ void SwInsFootNoteDlg::Init()
 
     if (m_rSh.GetCurFootnote(&aFootnoteNote))
     {
-        if (!aFootnoteNote.GetNumStr().isEmpty())
+        sNumStr = aFootnoteNote.GetNumStr();
+        if (!sNumStr.isEmpty())
         {
-            sNumStr = aFootnoteNote.GetNumStr();
-
-            m_rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
-            SfxItemSet aSet(m_rSh.GetAttrPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT>{});
-            m_rSh.GetCurAttr(aSet);
-            const SvxFontItem &rFont = aSet.Get( RES_CHRATR_FONT );
+            OUString aFontName;
+            const auto xAnchor = aFootnoteNote.getAnchor(*m_rSh.GetDoc());
+            uno::Reference<beans::XPropertySet> xAnchorProps(xAnchor, uno::UNO_QUERY);
+            if (xAnchorProps.is())
+            {
+                auto aAny = xAnchorProps->getPropertyValue("CharFontName");
+                if (aAny >>= m_aFontName)
+                    m_eCharSet = RTL_TEXTENCODING_SYMBOL;
+            }
+            if (m_aFontName.isEmpty())
+            {
+                m_rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
+                SfxItemSet aSet(m_rSh.GetAttrPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT>{});
+                m_rSh.GetCurAttr(aSet);
+                const SvxFontItem &rFont = aSet.Get( RES_CHRATR_FONT );
+                m_aFontName = rFont.GetFamilyName();
+                m_eCharSet = rFont.GetCharSet();
+                m_bExtCharAvailable = true;
+                m_rSh.Left( CRSR_SKIP_CHARS, false, 1, false );
+            }
             aFont = m_xNumberCharEdit->get_font();
-            m_aFontName = rFont.GetFamilyName();
-            m_eCharSet = rFont.GetCharSet();
             aFont.SetFamilyName(m_aFontName);
             aFont.SetCharSet(m_eCharSet);
-            m_bExtCharAvailable = true;
-            m_rSh.Left( CRSR_SKIP_CHARS, false, 1, false );
         }
         bFootnote = !aFootnoteNote.IsEndNote();
     }
