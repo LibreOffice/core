@@ -59,7 +59,17 @@ void X11SkiaSalGraphicsImpl::createSurface()
     winInfo.fVisualInfo = const_cast<SalVisual*>(&mParent.GetVisual());
     winInfo.fWidth = GetWidth();
     winInfo.fHeight = GetHeight();
-    mWindowContext = sk_app::window_context_factory::MakeRasterForXlib(winInfo, displayParams);
+    switch (renderMethodToUse())
+    {
+        case RenderRaster:
+            mWindowContext
+                = sk_app::window_context_factory::MakeRasterForXlib(winInfo, displayParams);
+            break;
+        case RenderVulkan:
+            mWindowContext
+                = sk_app::window_context_factory::MakeVulkanForXlib(winInfo, displayParams);
+            break;
+    }
     assert(SkToBool(mWindowContext)); // TODO
     mSurface = mWindowContext->getBackbufferSurface();
     assert(mSurface.get());
