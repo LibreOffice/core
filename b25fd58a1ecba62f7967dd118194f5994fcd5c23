@@ -22,6 +22,30 @@
       "revId": "b25fd58a1ecba62f7967dd118194f5994fcd5c23",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_98179552",
+        "filename": "tools/source/stream/stream.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-22T06:24:22Z",
+      "side": 1,
+      "message": "Heh, probably out of habit :)  My mental model of \"canonical null check for raw pointer\" is `p \u003d\u003d nullptr` (favoring explicit over implicit `p`, even in boolean contexts).  Whereas for std::unique_ptr, which doesn\u0027t have a \"is null/non-null\" function, the canonic such check is `operator bool`.",
+      "parentUuid": "7f7f9b97_3813e15e",
+      "range": {
+        "startLine": 811,
+        "startChar": 11,
+        "endLine": 811,
+        "endChar": 51
+      },
+      "revId": "b25fd58a1ecba62f7967dd118194f5994fcd5c23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
