@@ -144,6 +144,7 @@ interface XModel2 : com::sun::star::frame::XModel
                 <li>com::sun::star::document::MediaDescriptor::SuggestedSaveAsName</li>
                 <li>com::sun::star::document::MediaDescriptor::LockContentExtraction</li>
                 <li>com::sun::star::document::MediaDescriptor::LockExport</li>
+                <li>com::sun::star::document::MediaDescriptor::LockPrint</li>
             </ul>
 
         @throws com::sun::star::lang::IllegalArgumentException When trying to set an unsupported property
