@@ -54,8 +54,17 @@ void WinSkiaSalGraphicsImpl::createSurface()
     // valid here, but better check.
     assert(GetWidth() != 0 && GetHeight() != 0);
     sk_app::DisplayParams displayParams;
-    mWindowContext
-        = sk_app::window_context_factory::MakeRasterForWin(mWinParent.gethWnd(), displayParams);
+    switch (renderMethodToUse())
+    {
+        case RenderRaster:
+            mWindowContext = sk_app::window_context_factory::MakeRasterForWin(mWinParent.gethWnd(),
+                                                                              displayParams);
+            break;
+        case RenderVulkan:
+            mWindowContext = sk_app::window_context_factory::MakeVulkanForWin(mWinParent.gethWnd(),
+                                                                              displayParams);
+            break;
+    }
     assert(SkToBool(mWindowContext)); // TODO
     mSurface = mWindowContext->getBackbufferSurface();
     assert(mSurface.get());
