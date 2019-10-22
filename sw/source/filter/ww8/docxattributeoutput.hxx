@@ -750,6 +750,7 @@ private:
     std::unique_ptr<docx::FootnotesList> m_pFootnotesList;
     std::unique_ptr<docx::FootnotesList> m_pEndnotesList;
     int m_footnoteEndnoteRefTag;
+    OUString m_footnoteCustomLabel;
     std::unique_ptr< const WW8_SepInfo > m_pSectionInfo;
 
     /// Redline data to remember in the text run.

@@ -54,6 +54,9 @@
 #include <ndindex.hxx>
 #include <IDocumentSettingAccess.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/awt/CharSet.hpp>
+
 using namespace ::com::sun::star;
 
 bool SwTextFrame::IsFootnoteNumFrame_() const
@@ -902,7 +905,7 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
     rInf.SetFootnoteInside( true );
 
     return pRet;
- }
+}
 
 /**
  * The portion for the Footnote Numbering in the Footnote Area
@@ -929,7 +932,6 @@ SwNumberPortion *SwTextFormatter::NewFootnoteNumPortion( SwTextFormatInfo const 
         pInfo = &pDoc->GetEndNoteInfo();
     else
         pInfo = &pDoc->GetFootnoteInfo();
-    const SwAttrSet& rSet = pInfo->GetCharFormat(*pDoc)->GetAttrSet();
 
     const SwAttrSet* pParSet = &rInf.GetCharAttr();
     const IDocumentSettingAccess* pIDSA = &pDoc->getIDocumentSettingAccess();
@@ -950,6 +952,29 @@ SwNumberPortion *SwTextFormatter::NewFootnoteNumPortion( SwTextFormatInfo const 
     pNumFnt->SetWeight( WEIGHT_NORMAL, SwFontScript::CJK );
     pNumFnt->SetWeight( WEIGHT_NORMAL, SwFontScript::CTL );
 
+    const auto xAnchor = rFootnote.getAnchor(*pDoc);
+    uno::Reference<beans::XPropertySet> xAnchorProps(xAnchor, uno::UNO_QUERY);
+    if (xAnchorProps.is())
+    {
+        auto aAny = xAnchorProps->getPropertyValue("CharFontCharSet");
+        sal_Int16 eCharSet;
+        if ((aAny >>= eCharSet) && eCharSet == awt::CharSet::SYMBOL)
+        {
+            OUString aFontName;
+            aAny = xAnchorProps->getPropertyValue("CharFontName");
+            if (aAny  >>= aFontName)
+            {
+                pNumFnt->SetName(aFontName, SwFontScript::Latin);
+                pNumFnt->SetName(aFontName, SwFontScript::CJK);
+                pNumFnt->SetName(aFontName, SwFontScript::CTL);
+                pNumFnt->SetCharSet(RTL_TEXTENCODING_SYMBOL, SwFontScript::Latin);
+                pNumFnt->SetCharSet(RTL_TEXTENCODING_SYMBOL, SwFontScript::CJK);
+                pNumFnt->SetCharSet(RTL_TEXTENCODING_SYMBOL, SwFontScript::CTL);
+            }
+        }
+    }
+
+    const SwAttrSet& rSet = pInfo->GetCharFormat(*pDoc)->GetAttrSet();
     pNumFnt->SetDiffFnt(&rSet, pIDSA );
     pNumFnt->SetVertical( pNumFnt->GetOrientation(), m_pFrame->IsVertical() );
 
