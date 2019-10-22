@@ -22,6 +22,8 @@
 
 #include <com/sun/star/xml/crypto/XCipherContextSupplier.idl>
 #include <com/sun/star/xml/crypto/XDigestContextSupplier.idl>
+#include <com/sun/star/xml/crypto/NSSProfile.idl>
+#include <com/sun/star/xml/lang/XInitialization.idl>
 
 module com { module sun { module star { module xml { module crypto {
 
@@ -31,6 +33,32 @@ module com { module sun { module star { module xml { module crypto {
 interface XNSSInitializer {
     interface ::com::sun::star::xml::crypto::XDigestContextSupplier;
     interface ::com::sun::star::xml::crypto::XCipherContextSupplier;
+
+    /** the current path to the NSS databases
+
+        This attribute returns the current setting, based on the user selection
+        or automatic detection. This value can change until someone uses NSS
+        crypto functions, because just then LibreOffice initializes the NSS
+        library and the value stays fixed until LibreOffice is restarted!
+
+        @since LibreOffice 7.1
+     */
+    [attribute, readonly] string NSSPath;
+
+    /** the state of the NSS initialization
+
+        This attribute returns true, if the NSS library is initialized.
+
+        @see NSSPath
+        @since LibreOffice 7.1
+     */
+    [attribute, readonly] boolean IsNSSinitialized;
+
+    /** get the current profile list
+
+        @since LibreOffice 7.1
+     */
+    sequence<NSSProfile> getNSSProfiles();
 };
 
 } ; } ; } ; } ; } ;
