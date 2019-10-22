@@ -21,6 +21,7 @@
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
+#include <com/sun/star/xml/crypto/NSSInitializer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -33,6 +34,7 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/tempfile.hxx>
 #include <salhelper/singletonref.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <nss/nssinitializer.hxx>
 
@@ -144,8 +146,35 @@ void deleteRootsModule()
     }
 }
 
-OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
+#endif
+
+bool lcl_pathExists(const OUString& sPath)
 {
+    if (sPath.isEmpty())
+        return false;
+
+    ::osl::DirectoryItem aPathItem;
+    OUString sURL;
+    osl::FileBase::getFileURLFromSystemPath(sPath, sURL);
+    if (::osl::FileBase::E_None == ::osl::DirectoryItem::get(sURL, aPathItem))
+    {
+        ::osl::FileStatus aStatus = osl_FileStatus_Mask_Validate;
+        if (::osl::FileBase::E_None == aPathItem.getFileStatus(aStatus))
+            return true;
+    }
+
+    return false;
+}
+
+} // namespace
+
+OUString ONSSInitializer::getMozillaCurrentProfile(const css::uno::Reference< css::uno::XComponentContext > &rxContext, bool bSetActive)
+{
+    if (m_bIsNSSinitialized)
+         return m_sNSSPath;
+    if (bSetActive)
+        m_bIsNSSinitialized = true;
+
     // first, try to get the profile from "MOZILLA_CERTIFICATE_FOLDER"
     const char* pEnv = getenv("MOZILLA_CERTIFICATE_FOLDER");
     if (pEnv)
@@ -153,30 +182,33 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
         SAL_INFO(
             "xmlsecurity.xmlsec",
             "Using Mozilla profile from MOZILLA_CERTIFICATE_FOLDER=" << pEnv);
-        return pEnv;
+        m_sNSSPath = OStringToOUString(pEnv, osl_getThreadTextEncoding());
     }
 
     // second, try to get saved user-preference
-    try
+    if (m_sNSSPath.isEmpty())
     {
-        OUString sUserSetCertPath =
-            officecfg::Office::Common::Security::Scripting::CertDir::get().value_or(OUString());
-
-        if (!sUserSetCertPath.isEmpty())
+        try
         {
-            SAL_INFO(
-                "xmlsecurity.xmlsec",
-                "Using Mozilla profile from /org.openoffice.Office.Common/"
-                    "Security/Scripting/CertDir: " << sUserSetCertPath);
-            return OUStringToOString(sUserSetCertPath, osl_getThreadTextEncoding());
+            OUString sUserSetCertPath =
+                officecfg::Office::Common::Security::Scripting::CertDir::get().value_or(OUString());
+
+            if (lcl_pathExists(sUserSetCertPath))
+            {
+                SAL_INFO(
+                    "xmlsecurity.xmlsec",
+                    "Using Mozilla profile from /org.openoffice.Office.Common/"
+                        "Security/Scripting/CertDir: " << sUserSetCertPath);
+                m_sNSSPath = sUserSetCertPath;
+            }
+        }
+        catch (const uno::Exception &)
+        {
+            TOOLS_WARN_EXCEPTION("xmlsecurity.xmlsec", "getMozillaCurrentProfile:");
         }
     }
-    catch (const uno::Exception &)
-    {
-        TOOLS_WARN_EXCEPTION("xmlsecurity.xmlsec", "getMozillaCurrentProfile:");
-    }
 
-    // third, dig around to see if there's one available
+    // third, dig around to see if there's one default available
     mozilla::MozillaProductType productTypes[3] = {
         mozilla::MozillaProductType_Thunderbird,
         mozilla::MozillaProductType_Firefox,
@@ -196,20 +228,95 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
 
             if (!profile.isEmpty())
             {
-                OUString sProfilePath = xMozillaBootstrap->getProfilePath( productTypes[i], profile );
-                SAL_INFO(
-                    "xmlsecurity.xmlsec",
-                    "Using Mozilla profile " << sProfilePath);
-                return OUStringToOString(sProfilePath, osl_getThreadTextEncoding());
+                OUString sProfilePath = xMozillaBootstrap->getProfilePath(productTypes[i], profile);
+                if (m_sNSSPath.isEmpty())
+                {
+                    SAL_INFO("xmlsecurity.xmlsec", "Using Mozilla profile " << sProfilePath);
+                    m_sNSSPath = sProfilePath;
+                }
+                break;
             }
         }
     }
 
-    SAL_INFO("xmlsecurity.xmlsec", "No Mozilla profile found");
-    return OString();
+    SAL_INFO_IF(m_sNSSPath.isEmpty(), "xmlsecurity.xmlsec", "No Mozilla profile found");
+    return m_sNSSPath;
 }
 
-#endif
+css::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL ONSSInitializer::getNSSProfiles()
+{
+    ONSSInitializer::getMozillaCurrentProfile(m_xContext);
+
+    std::vector<xml::crypto::NSSProfile> aProfileList;
+    aProfileList.reserve(10);
+
+    mozilla::MozillaProductType productTypes[3] = {
+        mozilla::MozillaProductType_Thunderbird,
+        mozilla::MozillaProductType_Firefox,
+        mozilla::MozillaProductType_Mozilla };
+
+    uno::Reference<uno::XInterface> xInstance = m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.mozilla.MozillaBootstrap", m_xContext);
+    OSL_ENSURE(xInstance.is(), "failed to create instance" );
+
+    uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap(xInstance,uno::UNO_QUERY);
+
+    if (xMozillaBootstrap.is())
+    {
+        for (int i=0; i<int(SAL_N_ELEMENTS(productTypes)); ++i)
+        {
+            uno::Sequence<OUString> aProductProfileList;
+            xMozillaBootstrap->getProfileList(productTypes[i], aProductProfileList);
+            for (const auto& sProfile : std::as_const(aProductProfileList))
+                aProfileList.push_back({sProfile, xMozillaBootstrap->getProfilePath(productTypes[i], sProfile), productTypes[i]});
+        }
+    }
+
+    OUString sUserSelect;
+    try
+    {
+        sUserSelect = officecfg::Office::Common::Security::Scripting::CertDir::get().value_or(OUString());;
+        if (!lcl_pathExists(sUserSelect))
+            sUserSelect = OUString();
+    }
+    catch (const uno::Exception &)
+    {
+        TOOLS_WARN_EXCEPTION("xmlsecurity.xmlsec", "getMozillaCurrentProfile:");
+    }
+    aProfileList.push_back({"MANUAL", sUserSelect, mozilla::MozillaProductType_Default});
+
+    const char* pEnv = getenv("MOZILLA_CERTIFICATE_FOLDER");
+    aProfileList.push_back({"MOZILLA_CERTIFICATE_FOLDER",
+                            pEnv ? OStringToOUString(pEnv, osl_getThreadTextEncoding()) : OUString(),
+                            mozilla::MozillaProductType_Default});
+
+    return comphelper::containerToSequence(aProfileList);
+}
+
+bool ONSSInitializer::m_bIsNSSinitialized = false;
+OUString ONSSInitializer::m_sNSSPath;
+
+OUString SAL_CALL ONSSInitializer::getNSSPath()
+{
+    ONSSInitializer::getMozillaCurrentProfile(m_xContext);
+    return m_sNSSPath;
+};
+
+sal_Bool SAL_CALL ONSSInitializer::getIsNSSinitialized()
+{
+    return m_bIsNSSinitialized;
+}
+
+ONSSInitializer::ONSSInitializer(const css::uno::Reference< css::uno::XComponentContext > &rxContext)
+    : m_xContext(rxContext)
+{
+}
+
+ONSSInitializer::ONSSInitializer()
+{
+}
+
+namespace
+{
 
 //Older versions of Firefox (FF), for example FF2, and Thunderbird (TB) 2 write
 //the roots certificate module (libnssckbi.so), which they use, into the
@@ -238,7 +345,7 @@ bool nsscrypto_initialize(css::uno::Reference<css::uno::XComponentContext> const
     OString sCertDir;
 
 #ifdef XMLSEC_CRYPTO_NSS
-    sCertDir = getMozillaCurrentProfile(rxContext);
+    sCertDir = OUStringToOString(ONSSInitializer::getMozillaCurrentProfile(rxContext, true), osl_getThreadTextEncoding());
 #else
     (void) rxContext;
 #endif
@@ -402,11 +509,6 @@ extern "C" void nsscrypto_finalize()
     (*getInitNSSPrivate())->reset();
 }
 
-ONSSInitializer::ONSSInitializer(
-    const css::uno::Reference< css::uno::XComponentContext > &rxContext)
-    :m_xContext( rxContext )
-{
-}
 
 ONSSInitializer::~ONSSInitializer()
 {

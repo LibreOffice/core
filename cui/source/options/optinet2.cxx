@@ -675,11 +675,9 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl, weld::Button&, void)
 {
     if (!mpCertPathDlg)
         mpCertPathDlg.reset(new CertPathDialog(GetFrameWeld()));
+    mpCertPathDlg->Init();
 
-    OUString sOrig = mpCertPathDlg->getDirectory();
-    short nRet = mpCertPathDlg->run();
-
-    if (nRet == RET_OK && sOrig != mpCertPathDlg->getDirectory())
+    if (mpCertPathDlg->run() == RET_OK && !mpCertPathDlg->isActiveServicePath())
     {
         SolarMutexGuard aGuard;
         if (svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_ADDING_PATH))

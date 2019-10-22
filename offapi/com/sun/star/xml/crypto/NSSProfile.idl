@@ -17,28 +17,37 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xml_crypto_NSSInitializer_idl_
-#define __com_sun_star_xml_crypto_NSSInitializer_idl_
+#ifndef __com_sun_star_xml_crypto_NSSProfile_idl_
+#define __com_sun_star_xml_crypto_NSSProfile_idl_
 
-#include <com/sun/star/xml/crypto/XNSSInitializer.idl>
+#include <com/sun/star/mozilla/MozillaProductType.idl>
 
 module com { module sun { module star { module xml { module crypto {
 
 /**
-    This service has a particular lifecycle. If you create an instance,
-    the NSS backend is not initialized, until some of the crypto functions
-    are called. As a result you can effectively change the user setting to
-    the NSS path until NSS is really used.
-
-    After the first usage you have to restart LibreOffice to activate a new
-    NSS path.
-
-    @since LibreOffice 4.0
+    @since LibreOffice 7.1
  */
-service NSSInitializer : XNSSInitializer;
+struct NSSProfile {
+    /** the name of the NSS profile
+
+        Normally the name will reflect the name of the Mozilla profile. But the
+        profile list also contains the following special enties: MANUAL and
+        MOZILLA_CERTIFICATE_FOLDER.
+        These will have a product type of MozillaProductType::Default and might
+        have an empty path, if that value is not available.
+     */
+    string Name;
+
+    /** the path to the NSS databases
+     */
+    string Path;
+
+    /** the type of the NSS profile
+     */
+    ::com::sun::star::mozilla::MozillaProductType Type;
+};
 
 } ; } ; } ; } ; } ;
-
 
 #endif
 
