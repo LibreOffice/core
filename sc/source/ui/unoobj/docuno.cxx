@@ -1337,7 +1337,7 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, too
         bRangeValid = true;             // named range or database range
     }
     else if ( comphelper::string::isdigitAsciiString(rTarget) &&
-              ( nNumeric = rTarget.toInt32() ) > 0 && nNumeric <= MAXROW+1 )
+              ( nNumeric = rTarget.toInt32() ) > 0 && nNumeric <= pDoc->MaxRow()+1 )
     {
         // row number is always mapped to cell A(row) on the same sheet
         rTargetRange = ScAddress( 0, static_cast<SCROW>(nNumeric-1), nSourceTab );     // target row number is 1-based
@@ -3883,12 +3883,16 @@ void SAL_CALL ScTableColumnsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 n
 {
     SolarMutexGuard aGuard;
     bool bDone = false;
-    if ( pDocShell && nCount > 0 && nPosition >= 0 && nStartCol+nPosition <= nEndCol &&
-            nStartCol+nPosition+nCount-1 <= MAXCOL )
+    if ( pDocShell )
     {
-        ScRange aRange( static_cast<SCCOL>(nStartCol+nPosition), 0, nTab,
-                        static_cast<SCCOL>(nStartCol+nPosition+nCount-1), MAXROW, nTab );
-        bDone = pDocShell->GetDocFunc().InsertCells( aRange, nullptr, INS_INSCOLS_BEFORE, true, true );
+        const ScDocument& rDoc = pDocShell->GetDocument();
+        if ( nCount > 0 && nPosition >= 0 && nStartCol+nPosition <= nEndCol &&
+            nStartCol+nPosition+nCount-1 <= rDoc.MaxCol() )
+        {
+            ScRange aRange( static_cast<SCCOL>(nStartCol+nPosition), 0, nTab,
+                            static_cast<SCCOL>(nStartCol+nPosition+nCount-1), rDoc.MaxRow(), nTab );
+            bDone = pDocShell->GetDocFunc().InsertCells( aRange, nullptr, INS_INSCOLS_BEFORE, true, true );
+        }
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -3899,11 +3903,15 @@ void SAL_CALL ScTableColumnsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCou
     SolarMutexGuard aGuard;
     bool bDone = false;
     //  the range to be deleted has to lie within the object
-    if ( pDocShell && nCount > 0 && nIndex >= 0 && nStartCol+nIndex+nCount-1 <= nEndCol )
+    if ( pDocShell )
     {
-        ScRange aRange( static_cast<SCCOL>(nStartCol+nIndex), 0, nTab,
-                        static_cast<SCCOL>(nStartCol+nIndex+nCount-1), MAXROW, nTab );
-        bDone = pDocShell->GetDocFunc().DeleteCells( aRange, nullptr, DelCellCmd::Cols, true );
+        const ScDocument& rDoc = pDocShell->GetDocument();
+        if ( nCount > 0 && nIndex >= 0 && nStartCol+nIndex+nCount-1 <= nEndCol )
+        {
+            ScRange aRange( static_cast<SCCOL>(nStartCol+nIndex), 0, nTab,
+                            static_cast<SCCOL>(nStartCol+nIndex+nCount-1), rDoc.MaxRow(), nTab );
+            bDone = pDocShell->GetDocFunc().DeleteCells( aRange, nullptr, DelCellCmd::Cols, true );
+        }
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -4122,12 +4130,16 @@ void SAL_CALL ScTableRowsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 nCou
 {
     SolarMutexGuard aGuard;
     bool bDone = false;
-    if ( pDocShell && nCount > 0 && nPosition >= 0 && nStartRow+nPosition <= nEndRow &&
-            nStartRow+nPosition+nCount-1 <= MAXROW )
+    if ( pDocShell )
     {
-        ScRange aRange( 0, static_cast<SCROW>(nStartRow+nPosition), nTab,
-                        MAXCOL, static_cast<SCROW>(nStartRow+nPosition+nCount-1), nTab );
-        bDone = pDocShell->GetDocFunc().InsertCells( aRange, nullptr, INS_INSROWS_BEFORE, true, true );
+        const ScDocument& rDoc = pDocShell->GetDocument();
+        if ( nCount > 0 && nPosition >= 0 && nStartRow+nPosition <= nEndRow &&
+            nStartRow+nPosition+nCount-1 <= rDoc.MaxRow() )
+        {
+            ScRange aRange( 0, static_cast<SCROW>(nStartRow+nPosition), nTab,
+                            rDoc.MaxCol(), static_cast<SCROW>(nStartRow+nPosition+nCount-1), nTab );
+            bDone = pDocShell->GetDocFunc().InsertCells( aRange, nullptr, INS_INSROWS_BEFORE, true, true );
+        }
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -4140,8 +4152,9 @@ void SAL_CALL ScTableRowsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount 
     // the range to be deleted has to lie within the object
     if ( pDocShell && nCount > 0 && nIndex >= 0 && nStartRow+nIndex+nCount-1 <= nEndRow )
     {
+        const ScDocument& rDoc = pDocShell->GetDocument();
         ScRange aRange( 0, static_cast<SCROW>(nStartRow+nIndex), nTab,
-                        MAXCOL, static_cast<SCROW>(nStartRow+nIndex+nCount-1), nTab );
+                        rDoc.MaxCol(), static_cast<SCROW>(nStartRow+nIndex+nCount-1), nTab );
         bDone = pDocShell->GetDocFunc().DeleteCells( aRange, nullptr, DelCellCmd::Rows, true );
     }
     if (!bDone)
@@ -4286,7 +4299,7 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
         // Use ScCellRangeObj to set the property for all cells in the rows
         // (this means, the "row attribute" must be set before individual cell attributes).
 
-        ScRange aRange( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab );
+        ScRange aRange( 0, nStartRow, nTab, rDoc.MaxCol(), nEndRow, nTab );
         uno::Reference<beans::XPropertySet> xRangeObj = new ScCellRangeObj( pDocShell, aRange );
         xRangeObj->setPropertyValue( aPropertyName, aValue );
     }
@@ -4340,7 +4353,7 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const OUString& aPropertyNam
         // Use ScCellRangeObj to get the property from the cell range
         // (for completeness only, this is not used by the XML filter).
 
-        ScRange aRange( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab );
+        ScRange aRange( 0, nStartRow, nTab, rDoc.MaxCol(), nEndRow, nTab );
         uno::Reference<beans::XPropertySet> xRangeObj = new ScCellRangeObj( pDocShell, aRange );
         aAny = xRangeObj->getPropertyValue( aPropertyName );
     }
@@ -4469,7 +4482,7 @@ sal_Int32 SAL_CALL ScAnnotationsObj::getCount()
     if (pDocShell)
     {
         const ScDocument& rDoc = pDocShell->GetDocument();
-        for (SCCOL nCol : rDoc.GetColumnsRange(nTab, 0, MAXCOL))
+        for (SCCOL nCol : rDoc.GetColumnsRange(nTab, 0, rDoc.MaxCol()))
             nCount += rDoc.GetNoteCount(nTab, nCol);
     }
     return nCount;

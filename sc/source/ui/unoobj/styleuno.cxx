@@ -729,7 +729,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
                 double nPPTY = aLogic.Y() / 1000.0;
                 Fraction aZoom(1,1);
                 rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
-                pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
+                pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
                 pDocShell->SetDocumentModified();
 
                 pStylePool->Remove( pStyle );
@@ -1035,7 +1035,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
 
                 if (!rDoc.IsImportingXML())
                 {
-                    pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
+                    pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
                     pDocShell->SetDocumentModified();
                 }
             }
@@ -1391,7 +1391,7 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
 
             if (!rDoc.IsImportingXML())
             {
-                pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
+                pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
                 pDocShell->SetDocumentModified();
             }
         }
@@ -1738,7 +1738,7 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
 
                 if (!rDoc.IsImportingXML())
                 {
-                    pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
+                    pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
                     pDocShell->SetDocumentModified();
                 }
             }
