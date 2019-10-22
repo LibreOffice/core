@@ -371,7 +371,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
             {
                 // Search also in hidden part for page breaks
                 SCCOL nCol = nXplus1;
-                while (nCol <= MAXCOL)
+                while (nCol <= mpDoc->MaxCol())
                 {
                     nBreak = mpDoc->HasColBreak(nCol, nTab);
                     bool bHidden = mpDoc->ColHidden(nCol, nTab);
@@ -405,7 +405,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
 
             sal_uInt16 nWidthXplus2 = pRowInfo[0].pCellInfo[nXplus2].nWidth;
             bSingle = false; //! get into Fillinfo !!!!!
-            if ( nX<MAXCOL && !bSingle )
+            if ( nX<mpDoc->MaxCol() && !bSingle )
             {
                 bSingle = ( nWidthXplus2 == 0 );
                 for (nArrY=1; nArrY+1<nArrCount && !bSingle; nArrY++)
@@ -419,10 +419,10 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
 
             if (bDraw)
             {
-                if ( nX<MAXCOL && bSingle )
+                if ( nX<mpDoc->MaxCol() && bSingle )
                 {
                     SCCOL nVisX = nXplus1;
-                    while ( nVisX < MAXCOL && !mpDoc->GetColWidth(nVisX,nTab) )
+                    while ( nVisX < mpDoc->MaxCol() && !mpDoc->GetColWidth(nVisX,nTab) )
                         ++nVisX;
 
                     nPosY = nScrY;
@@ -482,7 +482,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
         {
             if ( bPage )
             {
-                for (SCROW i = nYplus1; i <= MAXROW; ++i)
+                for (SCROW i = nYplus1; i <= mpDoc->MaxRow(); ++i)
                 {
                     if (i > nHiddenEndRow)
                         bHiddenRow = mpDoc->RowHidden(i, nTab, nullptr, &nHiddenEndRow);
@@ -530,7 +530,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
 
             if (bDraw)
             {
-                if ( bSingle && nY<MAXROW )
+                if ( bSingle && nY<mpDoc->MaxRow() )
                 {
                     SCROW nVisY = pRowInfo[nArrYplus1].nRowNo;
 
@@ -723,7 +723,7 @@ static const SvxBrushItem* lcl_FindBackground( const ScDocument* pDoc, SCCOL nCo
     else if ( nDir == ScRotateDir::Left )
     {
         // text goes to the left -> take background from the right
-        while ( nCol < MAXCOL && lcl_GetRotateDir( pDoc, nCol, nRow, nTab ) == nDir &&
+        while ( nCol < pDoc->MaxCol() && lcl_GetRotateDir( pDoc, nCol, nRow, nTab ) == nDir &&
                             pBackground->GetColor().GetTransparency() != 255 )
         {
             ++nCol;
@@ -1794,8 +1794,8 @@ void ScOutputData::FindChanged()
     for (nArrY=0; nArrY<nArrCount; nArrY++)
         pRowInfo[nArrY].bChanged = false;
 
-    SCCOL nCol1 = MAXCOL, nCol2 = 0;
-    SCROW nRow1 = MAXROW, nRow2 = 0;
+    SCCOL nCol1 = mpDoc->MaxCol(), nCol2 = 0;
+    SCROW nRow1 = mpDoc->MaxRow(), nRow2 = 0;
     bool bAnyDirty = false;
     bool bAnyChanged = false;
 
@@ -2235,8 +2235,8 @@ void ScOutputData::DrawChangeTrack()
 
     SCCOL nEndX = nX2;
     SCROW nEndY = nY2;
-    if ( nEndX < MAXCOL ) ++nEndX;      // also from the next cell since the mark
-    if ( nEndY < MAXROW ) ++nEndY;      // protrudes from the preceding cell
+    if ( nEndX < mpDoc->MaxCol() ) ++nEndX;      // also from the next cell since the mark
+    if ( nEndY < mpDoc->MaxRow() ) ++nEndY;      // protrudes from the preceding cell
     ScRange aViewRange( nX1, nY1, nTab, nEndX, nEndY, nTab );
     const ScChangeAction* pAction = pTrack->GetFirst();
     while (pAction)

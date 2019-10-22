@@ -1288,7 +1288,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
         {
             //  look for empty cells into which the text can be extended
 
-            while ( nRightMissing > 0 && nRightX < MAXCOL && ( bOverwrite || IsAvailable( nRightX+1, nCellY ) ) )
+            while ( nRightMissing > 0 && nRightX < mpDoc->MaxCol() && ( bOverwrite || IsAvailable( nRightX+1, nCellY ) ) )
             {
                 ++nRightX;
                 long nAdd = static_cast<long>( mpDoc->GetColWidth( nRightX, nTab ) * mnPPTX );
@@ -1465,10 +1465,10 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
         nInitPosX += nMirrorW - 1;              // pixels
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-    SCCOL nLastContentCol = MAXCOL;
-    if ( nX2 < MAXCOL )
+    SCCOL nLastContentCol = mpDoc->MaxCol();
+    if ( nX2 < mpDoc->MaxCol() )
         nLastContentCol = sal::static_int_cast<SCCOL>(
-            nLastContentCol - mpDoc->GetEmptyLinesInBlock( nX2+1, nY1, nTab, MAXCOL, nY2, nTab, DIR_RIGHT ) );
+            nLastContentCol - mpDoc->GetEmptyLinesInBlock( nX2+1, nY1, nTab, mpDoc->MaxCol(), nY2, nTab, DIR_RIGHT ) );
     SCCOL nLoopStartX = nX1;
     if ( nX1 > 0 )
         --nLoopStartX;          // start before nX1 for rest of long text to the left
@@ -4259,10 +4259,10 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     //! store nLastContentCol as member!
-    SCCOL nLastContentCol = MAXCOL;
-    if ( nX2 < MAXCOL )
+    SCCOL nLastContentCol = mpDoc->MaxCol();
+    if ( nX2 < mpDoc->MaxCol() )
         nLastContentCol = sal::static_int_cast<SCCOL>(
-            nLastContentCol - mpDoc->GetEmptyLinesInBlock( nX2+1, nY1, nTab, MAXCOL, nY2, nTab, DIR_RIGHT ) );
+            nLastContentCol - mpDoc->GetEmptyLinesInBlock( nX2+1, nY1, nTab, mpDoc->MaxCol(), nY2, nTab, DIR_RIGHT ) );
 
     long nRowPosY = nScrY;
     for (SCSIZE nArrY=0; nArrY+1<nArrCount; nArrY++)            // 0 of the rest of the merged

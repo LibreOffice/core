@@ -425,7 +425,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                 aScrPos = Point( nScrPos, 0 );
 
             SCCOLROW    nEntryNo = nCount + nPos;
-            if ( nEntryNo >= nSize )                // MAXCOL/MAXROW
+            if ( nEntryNo >= nSize )                // rDoc.MaxCol()/rDoc.MaxRow()
                 nScrPos = nPEnd + nLayoutSign;      //  beyond nPEnd -> stop
             else
             {
@@ -579,13 +579,13 @@ bool ScHeaderControl::IsSelectionAllowed(SCCOLROW nPos) const
         {
             // row header
             SCROW nRPos = static_cast<SCROW>(nPos);
-            bCellsProtected = pDoc->HasAttrib(0, nRPos, nTab, MAXCOL, nRPos, nTab, HasAttrFlags::Protected);
+            bCellsProtected = pDoc->HasAttrib(0, nRPos, nTab, pDoc->MaxCol(), nRPos, nTab, HasAttrFlags::Protected);
         }
         else
         {
             // column header
             SCCOL nCPos = static_cast<SCCOL>(nPos);
-            bCellsProtected = pDoc->HasAttrib(nCPos, 0, nTab, nCPos, MAXROW, nTab, HasAttrFlags::Protected);
+            bCellsProtected = pDoc->HasAttrib(nCPos, 0, nTab, nCPos, pDoc->MaxRow(), nTab, HasAttrFlags::Protected);
         }
 
         bool bSelProtected   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
@@ -620,15 +620,17 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
         SCTAB nTab = pTabView->GetViewData().GetTabNo();
         if( !rMEvt.IsShift() )
             pTabView->DoneRefMode( rMEvt.IsMod1() );
+        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+        ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
         if( !bVertical )
         {
             pTabView->InitRefMode( nHitNo, 0, nTab, SC_REFTYPE_REF );
-            pTabView->UpdateRef( nHitNo, MAXROW, nTab );
+            pTabView->UpdateRef( nHitNo, pDoc->MaxRow(), nTab );
         }
         else
         {
             pTabView->InitRefMode( 0, nHitNo, nTab, SC_REFTYPE_REF );
-            pTabView->UpdateRef( MAXCOL, nHitNo, nTab );
+            pTabView->UpdateRef( pDoc->MaxCol(), nHitNo, nTab );
         }
         bInRefMode = true;
         return;
@@ -763,10 +765,12 @@ void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
         bool bTmp;
         SCCOLROW nHitNo = GetMousePos( rMEvt, bTmp );
         SCTAB nTab = pTabView->GetViewData().GetTabNo();
+        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+        ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
         if( !bVertical )
-            pTabView->UpdateRef( nHitNo, MAXROW, nTab );
+            pTabView->UpdateRef( nHitNo, pDoc->MaxRow(), nTab );
         else
-            pTabView->UpdateRef( MAXCOL, nHitNo, nTab );
+            pTabView->UpdateRef( pDoc->MaxCol(), nHitNo, nTab );
 
         return;
     }
@@ -842,13 +846,14 @@ void ScHeaderControl::Command( const CommandEvent& rCEvt )
                     return;
 
                 SCTAB nTab = rViewData.GetTabNo();
+                ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
                 ScRange aNewRange;
                 if ( bVertical )
                     aNewRange = ScRange( 0, sal::static_int_cast<SCROW>(nPos), nTab,
-                                         MAXCOL, sal::static_int_cast<SCROW>(nPos), nTab );
+                                         pDoc->MaxCol(), sal::static_int_cast<SCROW>(nPos), nTab );
                 else
                     aNewRange = ScRange( sal::static_int_cast<SCCOL>(nPos), 0, nTab,
-                                         sal::static_int_cast<SCCOL>(nPos), MAXROW, nTab );
+                                         sal::static_int_cast<SCCOL>(nPos), pDoc->MaxRow(), nTab );
 
                 // see if any part of the range is already selected
                 ScRangeList aRanges;
