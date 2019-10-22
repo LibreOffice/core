@@ -216,7 +216,6 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
             break;
         }
         case 32:
-            // TODO are these correct?
             buffer->mnFormat = mBitmap.colorType() == kRGBA_8888_SkColorType
                                    ? ScanlineFormat::N32BitTcRgba
                                    : ScanlineFormat::N32BitTcBgra;
