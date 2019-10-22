@@ -39,6 +39,30 @@
       "revId": "1b0cba8c2cd672b0d5a59a215961c5136a6e656b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_a52585ad",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3659,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-22T12:55:57Z",
+      "side": 1,
+      "message": "no, the result of that cast is either UB or \u003c\u003d max()",
+      "parentUuid": "7f7f9b97_8509692d",
+      "range": {
+        "startLine": 3659,
+        "startChar": 31,
+        "endLine": 3659,
+        "endChar": 53
+      },
+      "revId": "1b0cba8c2cd672b0d5a59a215961c5136a6e656b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
