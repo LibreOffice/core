@@ -1247,6 +1247,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 break;
             }
 
+            case SID_EXPORTDOC:
             case SID_EXPORTDOCASPDF:
             case SID_DIRECTEXPORTDOCASPDF:
             case SID_EXPORTDOCASEPUB:
@@ -1254,6 +1255,9 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             case SID_REDACTDOC:
             case SID_AUTOREDACTDOC:
             {
+                SfxViewFrame* pFrame = GetFrame();
+                if (pFrame && pFrame->GetViewShell()->isExportLocked())
+                    rSet.DisableItem( nWhich );
                 break;
             }
 

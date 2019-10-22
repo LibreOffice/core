@@ -568,6 +568,13 @@ service MediaDescriptor
         @since LibreOffice 6.4
      */
     [optional,property] boolean LockContentExtraction;
+
+    /** Setting this option will prevent exporting document content to any file.
+        The File→Export menu will be disabled, as well as individual graphic export.
+
+        @since LibreOffice 6.4
+     */
+    [optional,property] boolean LockExport;
 };
 
 

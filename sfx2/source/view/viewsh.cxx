@@ -1745,6 +1745,15 @@ bool SfxViewShell::isContentExtractionLocked()
     return aArgs.getOrDefault("LockContentExtraction", false);
 }
 
+bool SfxViewShell::isExportLocked()
+{
+    Reference<XModel> xModel = GetCurrentDocument();
+    if (!xModel.is())
+        return false;
+    comphelper::NamedValueCollection aArgs(xModel->getArgs());
+    return aArgs.getOrDefault("LockExport", false);
+}
+
 Reference < XController > SfxViewShell::GetController() const
 {
     return pImpl->m_pController.get();
