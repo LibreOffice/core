@@ -73,14 +73,8 @@ VirtualMachine::~VirtualMachine()
 {
     if (m_bDestroy)
     {
-        // Do not destroy the VM.  Under Java 1.3, the AWT event loop thread is
-        // not a daemon thread and is never terminated, so that calling
-        // DestroyJavaVM (waiting for all non-daemon threads to terminate) hangs
-        // forever.
-/*
         jint n = m_pVm->DestroyJavaVM();
         SAL_WARN_IF(n != JNI_OK, "jvmaccess", "JNI: DestroyJavaVM failed");
-*/
     }
 }
 
