@@ -142,14 +142,14 @@ static bool lcl_GetSortParam( const ScViewData* pData, const ScSortParam& rSortP
     if( rSortParam.nRow1 != rSortParam.nRow2 )
         eFillDir = DIR_TOP;
 
-    if( rSortParam.nRow2 == MAXROW )
+    if( rSortParam.nRow2 == pDoc->MaxRow() )
     {
         // Assume that user selected entire column(s), but cater for the
         // possibility that the start row is not the first row.
         SCSIZE nCount = pDoc->GetEmptyLinesInBlock( rSortParam.nCol1, rSortParam.nRow1, nTab,
                                                     rSortParam.nCol2, rSortParam.nRow2, nTab, eFillDir );
         aExternalRange = ScRange( rSortParam.nCol1,
-                ::std::min( rSortParam.nRow1 + sal::static_int_cast<SCROW>( nCount ), MAXROW), nTab,
+                ::std::min( rSortParam.nRow1 + sal::static_int_cast<SCROW>( nCount ), pDoc->MaxRow()), nTab,
                 rSortParam.nCol2, rSortParam.nRow2, nTab);
         aExternalRange.PutInOrder();
     }

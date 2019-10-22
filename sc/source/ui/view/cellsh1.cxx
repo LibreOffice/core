@@ -1410,14 +1410,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                                         //check if horizontal shift will fit
                                         if ( !pData->GetDocument()->IsBlockEmpty( nStartTab,
-                                                    MAXCOL - nRangeSizeX, nStartY,
-                                                    MAXCOL, nStartY + nRangeSizeY ) )
+                                                    pDoc->MaxCol() - nRangeSizeX, nStartY,
+                                                    pDoc->MaxCol(), nStartY + nRangeSizeY ) )
                                             nDisableShiftX = CellShiftDisabledFlags::Right;
 
                                         //check if vertical shift will fit
                                         if ( !pData->GetDocument()->IsBlockEmpty( nStartTab,
-                                                    nStartX, MAXROW - nRangeSizeY,
-                                                    nStartX + nRangeSizeX, MAXROW ) )
+                                                    nStartX, pDoc->MaxRow() - nRangeSizeY,
+                                                    nStartX + nRangeSizeX, pDoc->MaxRow() ) )
                                             nDisableShiftY = CellShiftDisabledFlags::Down;
 
                                         if ( nDisableShiftX != CellShiftDisabledFlags::NONE || nDisableShiftY != CellShiftDisabledFlags::NONE)
@@ -2352,7 +2352,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                  std::vector<sc::NoteEntry> aNotes;
 
                  for (auto const& rTab : rMark.GetSelectedTabs())
-                     aRanges.push_back(ScRange(0,0,rTab,MAXCOL,MAXROW,rTab));
+                     aRanges.push_back(ScRange(0,0,rTab,pDoc->MaxCol(),pDoc->MaxRow(),rTab));
 
                  CommentCaptionState eState = pDoc->GetAllNoteCaptionsState( aRanges );
                  pDoc->GetNotesInRange(aRanges, aNotes);
@@ -2400,12 +2400,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 ScViewData* pData  = GetViewData();
                 ScMarkData& rMark  = pData->GetMarkData();
+                ScDocument* pDoc   = pData->GetDocument();
                 ScMarkData  aNewMark;
                 ScRangeList aRangeList;
 
                 for (auto const& rTab : rMark.GetSelectedTabs())
                 {
-                    aRangeList.push_back(ScRange(0,0,rTab,MAXCOL,MAXROW,rTab));
+                    aRangeList.push_back(ScRange(0,0,rTab,pDoc->MaxCol(),pDoc->MaxRow(),rTab));
                 }
 
                 aNewMark.MarkFromRangeList( aRangeList, true );
@@ -2924,7 +2925,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                         }
 
                         //  output below source data
-                        if ( aRange.aEnd.Row()+2 <= MAXROW - 4 )
+                        if ( aRange.aEnd.Row()+2 <= pDoc->MaxRow() - 4 )
                             aDestPos = ScAddress( aRange.aStart.Col(),
                                                     aRange.aEnd.Row()+2,
                                                     aRange.aStart.Tab() );

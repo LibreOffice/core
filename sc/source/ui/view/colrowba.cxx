@@ -51,7 +51,7 @@ static OUString lcl_MetricString( long nTwips, const OUString& rText )
 ScColBar::ScColBar( vcl::Window* pParent, ScHSplitPos eWhich,
                     ScHeaderFunctionSet* pFuncSet, ScHeaderSelectionEngine* pEng,
                     ScTabView* pTab ) :
-            ScHeaderControl( pParent, pEng, MAXCOL+1, false, pTab ),
+            ScHeaderControl( pParent, pEng, pTab->GetViewData().GetDocument()->MaxCol()+1, false, pTab ),
             meWhich( eWhich ),
             mpFuncSet( pFuncSet )
 {
@@ -105,15 +105,16 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
     std::vector<sc::ColRowSpan> aRanges;
     if ( rMark.IsColumnMarked( static_cast<SCCOL>(nPos) ) )
     {
+        ScDocument* pDoc = rViewData.GetDocument();
         SCCOL nStart = 0;
-        while (nStart<=MAXCOL)
+        while (nStart<=pDoc->MaxCol())
         {
-            while (nStart<MAXCOL && !rMark.IsColumnMarked(nStart))
+            while (nStart<pDoc->MaxCol() && !rMark.IsColumnMarked(nStart))
                 ++nStart;
             if (rMark.IsColumnMarked(nStart))
             {
                 SCCOL nEnd = nStart;
-                while (nEnd<MAXCOL && rMark.IsColumnMarked(nEnd))
+                while (nEnd<pDoc->MaxCol() && rMark.IsColumnMarked(nEnd))
                     ++nEnd;
                 if (!rMark.IsColumnMarked(nEnd))
                     --nEnd;
@@ -121,7 +122,7 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
                 nStart = nEnd+1;
             }
             else
-                nStart = MAXCOL+1;
+                nStart = pDoc->MaxCol()+1;
         }
     }
     else
@@ -210,7 +211,7 @@ bool ScColBar::IsLayoutRTL() const        // override only for columns
 ScRowBar::ScRowBar( vcl::Window* pParent, ScVSplitPos eWhich,
                     ScHeaderFunctionSet* pFuncSet, ScHeaderSelectionEngine* pEng,
                     ScTabView* pTab ) :
-            ScHeaderControl( pParent, pEng, MAXROW+1, true, pTab ),
+            ScHeaderControl( pParent, pEng, pTab->GetViewData().GetDocument()->MaxRow()+1, true, pTab ),
             meWhich( eWhich ),
             mpFuncSet( pFuncSet )
 {
@@ -264,15 +265,16 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
     std::vector<sc::ColRowSpan> aRanges;
     if ( rMark.IsRowMarked( nPos ) )
     {
+        ScDocument* pDoc = rViewData.GetDocument();
         SCROW nStart = 0;
-        while (nStart<=MAXROW)
+        while (nStart<=pDoc->MaxRow())
         {
-            while (nStart<MAXROW && !rMark.IsRowMarked(nStart))
+            while (nStart<pDoc->MaxRow() && !rMark.IsRowMarked(nStart))
                 ++nStart;
             if (rMark.IsRowMarked(nStart))
             {
                 SCROW nEnd = nStart;
-                while (nEnd<MAXROW && rMark.IsRowMarked(nEnd))
+                while (nEnd<pDoc->MaxRow() && rMark.IsRowMarked(nEnd))
                     ++nEnd;
                 if (!rMark.IsRowMarked(nEnd))
                     --nEnd;
@@ -280,7 +282,7 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
                 nStart = nEnd+1;
             }
             else
-                nStart = MAXROW+1;
+                nStart = pDoc->MaxRow()+1;
         }
     }
     else

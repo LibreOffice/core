@@ -137,7 +137,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             break;
             case FID_FILL_TO_TOP:
             {
-                bDisable = (!bSimpleArea) || (nRow1 == MAXROW && nRow2 == MAXROW);
+                bDisable = (!bSimpleArea) || (nRow1 == pDoc->MaxRow() && nRow2 == pDoc->MaxRow());
                 if (!bDisable && GetViewData()->SelectionForbidsCellFill())
                     bDisable = true;
                 if ( !bDisable && bEditable )
@@ -161,7 +161,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             break;
             case FID_FILL_TO_LEFT:
             {
-                bDisable = (!bSimpleArea) || (nCol1 == MAXCOL && nCol2 == MAXCOL);
+                bDisable = (!bSimpleArea) || (nCol1 == pDoc->MaxCol() && nCol2 == pDoc->MaxCol());
                 if (!bDisable && GetViewData()->SelectionForbidsCellFill())
                     bDisable = true;
                 if ( !bDisable && bEditable )
@@ -235,7 +235,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                     eAction = sc::ColRowEditAction::InsertRowsAfter;
 
                 bDisable = (!bSimpleArea) || GetViewData()->SimpleColMarked();
-                if (!bEditable && nCol1 == 0 && nCol2 == MAXCOL)
+                if (!bEditable && nCol1 == 0 && nCol2 == pDoc->MaxCol())
                 {
                     // See if row insertions are allowed.
                     bEditable = pDoc->IsEditActionAllowed(eAction, rMark, nRow1, nRow2);
@@ -255,7 +255,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                     eAction = sc::ColRowEditAction::InsertColumnsAfter;
 
                 bDisable = (!bSimpleArea) || GetViewData()->SimpleRowMarked();
-                if (!bEditable && nRow1 == 0 && nRow2 == MAXROW)
+                if (!bEditable && nRow1 == 0 && nRow2 == pDoc->MaxRow())
                 {
                     // See if row insertions are allowed.
                     bEditable = pDoc->IsEditActionAllowed(eAction, rMark, nCol1, nCol2);
@@ -1108,7 +1108,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         if (pDoc->HasTabNotes( rTab ))
                         {
                             bHasNotes = true;
-                            aRanges.push_back(ScRange(0,0,rTab,MAXCOL,MAXROW,rTab));
+                            aRanges.push_back(ScRange(0,0,rTab,pDoc->MaxCol(),pDoc->MaxRow(),rTab));
                         }
                     }
 

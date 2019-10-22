@@ -2853,6 +2853,7 @@ ScVbaRange::getEntireColumnOrRow( bool bColumn )
     ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
     // copy the range list
     ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
+    ScDocument& rDoc = getScDocument();
 
     for ( size_t i = 0, nRanges = aCellRanges.size(); i < nRanges; ++i )
     {
@@ -2860,12 +2861,12 @@ ScVbaRange::getEntireColumnOrRow( bool bColumn )
         if ( bColumn )
         {
             rRange.aStart.SetRow( 0 );
-            rRange.aEnd.SetRow( MAXROW );
+            rRange.aEnd.SetRow( rDoc.MaxRow() );
         }
         else
         {
             rRange.aStart.SetCol( 0 );
-            rRange.aEnd.SetCol( MAXCOL );
+            rRange.aEnd.SetCol( rDoc.MaxCol() );
         }
     }
     if ( aCellRanges.size() > 1 ) // Multi-Area
@@ -3640,7 +3641,8 @@ ScVbaRange::Delete( const uno::Any& Shift )
     }
     else
     {
-        bool bFullRow = ( thisAddress.StartColumn == 0 && thisAddress.EndColumn == MAXCOL );
+        ScDocument& rDoc = getScDocument();
+        bool bFullRow = ( thisAddress.StartColumn == 0 && thisAddress.EndColumn == rDoc.MaxCol() );
         sal_Int32 nCols = thisAddress.EndColumn - thisAddress.StartColumn;
         sal_Int32 nRows = thisAddress.EndRow - thisAddress.StartRow;
         if ( mbIsRows || bFullRow || ( nCols >=  nRows ) )

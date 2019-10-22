@@ -136,8 +136,8 @@ void ScDBFunc::TestRemoveOutline( bool& rCol, bool& rRow )
             ScOutlineEntry* pEntry;
             SCCOLROW nStart;
             SCCOLROW nEnd;
-            bool bColMarked = ( nStartRow == 0 && nEndRow == MAXROW );
-            bool bRowMarked = ( nStartCol == 0 && nEndCol == MAXCOL );
+            bool bColMarked = ( nStartRow == 0 && nEndRow == pDoc->MaxRow() );
+            bool bRowMarked = ( nStartCol == 0 && nEndCol == pDoc->MaxCol() );
 
             // columns
 
@@ -193,8 +193,9 @@ void ScDBFunc::RemoveAllOutlines( bool bRecord )
 
 void ScDBFunc::AutoOutline( )
 {
+    ScDocument* pDoc = GetViewData().GetDocument();
     SCTAB nTab = GetViewData().GetTabNo();
-    ScRange aRange( 0,0,nTab, MAXCOL,MAXROW,nTab );     // the complete sheet, if nothing is marked
+    ScRange aRange( 0,0,nTab, pDoc->MaxCol(),pDoc->MaxRow(),nTab );     // the complete sheet, if nothing is marked
     ScMarkData& rMark = GetViewData().GetMarkData();
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
     {
@@ -392,7 +393,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
         return;
     }
 
-    ScEditableTester aTester( &rDoc, nTab, 0,rParam.nRow1+1, MAXCOL,MAXROW );
+    ScEditableTester aTester( &rDoc, nTab, 0,rParam.nRow1+1, rDoc.MaxCol(),rDoc.MaxRow() );
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());
@@ -449,18 +450,18 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
                 pTable->GetRowArray().GetRange( nOutStartRow, nOutEndRow );
 
                 pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
-                rDoc.CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), MAXROW, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
-                rDoc.CopyToDocument( 0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
+                rDoc.CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
+                rDoc.CopyToDocument( 0, nOutStartRow, nTab, rDoc.MaxCol(), nOutEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
             }
             else
                 pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, bOldFilter );
 
             // record data range - including filter results
-            rDoc.CopyToDocument( 0,rParam.nRow1+1,nTab, MAXCOL,rParam.nRow2,nTab,
+            rDoc.CopyToDocument( 0,rParam.nRow1+1,nTab, rDoc.MaxCol(),rParam.nRow2,nTab,
                                     InsertDeleteFlags::ALL, false, *pUndoDoc );
 
             // all formulas for reference
-            rDoc.CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1,
+            rDoc.CopyToDocument( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),nTabCount-1,
                                         InsertDeleteFlags::FORMULA, false, *pUndoDoc );
 
             // database and other ranges
@@ -536,7 +537,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
                                     aNewParam.nCol2,aNewParam.nRow2,nTab ) );
         MarkDataChanged();
 
-        pDocSh->PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab),
+        pDocSh->PostPaint(ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab),
                           PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size);
 
         aModificator.SetDocumentModified();
@@ -2122,17 +2123,17 @@ void ScDBFunc::RepeatDB( bool bRecord )
                 pTable->GetRowArray().GetRange( nOutStartRow, nOutEndRow );
 
                 pUndoDoc->InitUndo( pDoc, nTab, nTab, true, true );
-                pDoc->CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), MAXROW, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
-                pDoc->CopyToDocument( 0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
+                pDoc->CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), pDoc->MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
+                pDoc->CopyToDocument( 0, nOutStartRow, nTab, pDoc->MaxCol(), nOutEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
             }
             else
                 pUndoDoc->InitUndo( pDoc, nTab, nTab, false, true );
 
             // Record data range - including filter results
-            pDoc->CopyToDocument( 0,nStartRow,nTab, MAXCOL,nEndRow,nTab, InsertDeleteFlags::ALL, false, *pUndoDoc );
+            pDoc->CopyToDocument( 0,nStartRow,nTab, pDoc->MaxCol(),nEndRow,nTab, InsertDeleteFlags::ALL, false, *pUndoDoc );
 
             // all formulas for reference
-            pDoc->CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1, InsertDeleteFlags::FORMULA, false, *pUndoDoc );
+            pDoc->CopyToDocument( 0,0,0, pDoc->MaxCol(),pDoc->MaxRow(),nTabCount-1, InsertDeleteFlags::FORMULA, false, *pUndoDoc );
 
             // data base and other ranges
             ScRangeName* pDocRange = pDoc->GetRangeName();
@@ -2211,7 +2212,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
         }
 
         GetViewData().GetDocShell()->PostPaint(
-            ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab),
+            ScRange(0, 0, nTab, pDoc->MaxCol(), pDoc->MaxRow(), nTab),
             PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size);
     }
     else        // "no not execute any operations"
