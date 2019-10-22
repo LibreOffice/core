@@ -508,6 +508,11 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem(SID_COPY);
         rSet.DisableItem(SID_CUT);
     }
+    if(GetViewShell()->isExportLocked())
+    {
+        rSet.DisableItem(SID_SAVE_GRAPHIC);
+        rSet.DisableItem(SID_EXTERNAL_EDIT);
+    }
 }
 
 } // end of namespace sd

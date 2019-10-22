@@ -73,6 +73,9 @@ void ScChartShell::GetExportAsGraphicState( SfxItemSet& rSet )
             bEnable = true;
     }
 
+    if (GetViewShell()->isExportLocked())
+        bEnable = false;
+
     if( !bEnable )
         rSet.DisableItem( SID_EXPORT_AS_GRAPHIC );
 }

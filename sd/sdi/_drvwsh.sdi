@@ -2785,6 +2785,7 @@ interface DrawView
     SID_PRESENTATION_MINIMIZER
     [
         ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
     ]
     SID_GO_TO_NEXT_PAGE
     [

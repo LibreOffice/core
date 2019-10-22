@@ -1596,6 +1596,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.DisableItem(SID_SAVE_BACKGROUND);
     }
 
+    if (GetViewShell()->isExportLocked())
+        rSet.DisableItem(SID_PRESENTATION_MINIMIZER);
+
     GetModeSwitchingMenuState (rSet);
 }
 
