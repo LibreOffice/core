@@ -8,11 +8,11 @@
  */
 
 #include <rtl/ustring.hxx>
-// expected-note@rtl/ustring.hxx:* 2 {{the presumed corresponding negated operator is declared here [loplugin:simplifybool]}}
+// expected-note@rtl/ustring.hxx:* 2 {{the presumed corresponding negated operator for 'rtl::OUString' and 'rtl::OUString' is declared here [loplugin:simplifybool]}}
 #include <rtl/string.hxx>
-// expected-note@rtl/string.hxx:* {{the presumed corresponding negated operator is declared here [loplugin:simplifybool]}}
+// expected-note@rtl/string.hxx:* {{the presumed corresponding negated operator for 'rtl::OString' and 'rtl::OString' is declared here [loplugin:simplifybool]}}
 #include <basegfx/vector/b3dvector.hxx>
-// expected-note@basegfx/tuple/b3dtuple.hxx:* {{the presumed corresponding negated operator is declared here [loplugin:simplifybool]}}
+// expected-note@basegfx/tuple/b3dtuple.hxx:* {{the presumed corresponding negated operator for 'basegfx::B3DVector' and 'basegfx::B3DVector' is declared here [loplugin:simplifybool]}}
 
 #include <map>
 
@@ -82,7 +82,7 @@ struct Record2
 {
     bool operator==(const Record2&) const;
     bool operator!=(const Record2&) const;
-    // expected-note@-1 {{the presumed corresponding negated operator is declared here [loplugin:simplifybool]}}
+    // expected-note@-1 {{the presumed corresponding negated operator for 'group3::Record2' and 'group3::Record2' is declared here [loplugin:simplifybool]}}
 };
 
 struct Record3
@@ -91,7 +91,7 @@ struct Record3
 
 bool operator==(const Record3&, const Record3&);
 bool operator!=(const Record3&, const Record3&);
-// expected-note@-1 {{the presumed corresponding negated operator is declared here [loplugin:simplifybool]}}
+// expected-note@-1 {{the presumed corresponding negated operator for 'group3::Record3' and 'group3::Record3' is declared here [loplugin:simplifybool]}}
 
 void testRecord()
 {

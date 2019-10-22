@@ -241,7 +241,30 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
             << expr->getSourceRange();
         return true;
     }
-    if (auto binaryOp = dyn_cast<BinaryOperator>(expr->getSubExpr()->IgnoreParenImpCasts())) {
+    auto sub = expr->getSubExpr()->IgnoreParenImpCasts();
+    auto reversed = false;
+#if CLANG_VERSION >= 100000
+    if (auto const rewritten = dyn_cast<CXXRewrittenBinaryOperator>(sub)) {
+        if (rewritten->isReversed()) {
+            if (rewritten->getOperator() == BO_EQ) {
+                auto const sem = rewritten->getSemanticForm();
+                bool match;
+                if (auto const op1 = dyn_cast<BinaryOperator>(sem)) {
+                    match = op1->getOpcode() == BO_EQ;
+                } else if (auto const op2 = dyn_cast<CXXOperatorCallExpr>(sem)) {
+                    match = op2->getOperator() == OO_EqualEqual;
+                } else {
+                    match = false;
+                }
+                if (match) {
+                    sub = sem;
+                    reversed = true;
+                }
+            }
+        }
+    }
+#endif
+    if (auto binaryOp = dyn_cast<BinaryOperator>(sub)) {
         // Ignore macros, otherwise
         //    OSL_ENSURE(!b, ...);
         // triggers.
@@ -289,7 +312,7 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
                     << binaryOp->getSourceRange();
         }
     }
-    if (auto binaryOp = dyn_cast<CXXOperatorCallExpr>(expr->getSubExpr()->IgnoreParenImpCasts())) {
+    if (auto binaryOp = dyn_cast<CXXOperatorCallExpr>(sub)) {
         // Ignore macros, otherwise
         //    OSL_ENSURE(!b, ...);
         // triggers.
@@ -301,8 +324,8 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
         if (!(op == OO_EqualEqual || op == OO_ExclaimEqual))
             return true;
         BinaryOperator::Opcode negatedOpcode = BinaryOperator::negateComparisonOp(BinaryOperator::getOverloadedOpcode(op));
-        auto lhs = binaryOp->getArg(0)->IgnoreImpCasts()->getType()->getUnqualifiedDesugaredType();
-        auto rhs = binaryOp->getArg(1)->IgnoreImpCasts()->getType()->getUnqualifiedDesugaredType();
+        auto lhs = binaryOp->getArg(reversed ? 1 : 0)->IgnoreImpCasts()->getType()->getUnqualifiedDesugaredType();
+        auto rhs = binaryOp->getArg(reversed ? 0 : 1)->IgnoreImpCasts()->getType()->getUnqualifiedDesugaredType();
         auto const negOp = findOperator(compiler, negatedOpcode, lhs, rhs);
         if (!negOp)
             return true;
@@ -323,8 +346,10 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
             << expr->getSourceRange();
         if (negOp != ASSUME_OPERATOR_EXISTS)
             report(
-                DiagnosticsEngine::Note, "the presumed corresponding negated operator is declared here",
+                DiagnosticsEngine::Note, "the presumed corresponding negated operator for %0 and %1 is declared here",
                 negOp->getLocation())
+                << binaryOp->getArg(reversed ? 1 : 0)->IgnoreImpCasts()->getType()
+                << binaryOp->getArg(reversed ? 0 : 1)->IgnoreImpCasts()->getType()
                 << negOp->getSourceRange();
     }
     return true;
