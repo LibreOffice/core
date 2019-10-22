@@ -18,6 +18,7 @@
 
 #include <vcl/drawables/Drawable.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/vclptr.hxx>
 
 enum EnumScaffolding
 {

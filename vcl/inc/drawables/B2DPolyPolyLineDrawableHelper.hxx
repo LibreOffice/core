@@ -11,7 +11,10 @@
 #ifndef INCLUDED_VCL_INC_DRAWABLES_B2DPOLYPOLYLINEDRAWABLEHELPER_HXX
 #define INCLUDED_VCL_INC_DRAWABLES_B2DPOLYPOLYLINEDRAWABLEHELPER_HXX
 
+#include <vcl/gdimtf.hxx>
 #include <vcl/lineinfo.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/vclptr.hxx>
 
 #include <memory>
 
@@ -28,9 +31,9 @@ class DisableMetafileProcessing
 {
 public:
     DisableMetafileProcessing(VclPtr<OutputDevice> pRenderContext)
-        : mpMtf(pRenderContext->GetConnectMetaFile())
-        , mpRenderContext(pRenderContext)
+        : mpRenderContext(pRenderContext)
     {
+        mpMtf = pRenderContext->GetConnectMetaFile();
         pRenderContext->SetConnectMetaFile(nullptr);
     }
 

@@ -88,7 +88,7 @@ public:
     }
 
 private:
-    OutputDevice* mpRenderContext;
+    VclPtr<OutputDevice> mpRenderContext;
     bool mbMapMode;
     GDIMetaFile* mpMetaFile;
 };
