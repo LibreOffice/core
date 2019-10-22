@@ -21,8 +21,9 @@
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
-          <object class="GtkButtonBox">
+          <object class="GtkButtonBox" id="dialog-action_area">
             <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="close">
                 <property name="label">gtk-ok</property>
@@ -34,7 +35,6 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="pack_type">end</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -49,8 +49,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="pack_type">end</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -64,21 +63,24 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
                 <property name="secondary">True</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">5</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkGrid">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">12</property>
             <child>
               <object class="GtkLabel" id="label_name">
                 <property name="visible">True</property>
@@ -98,8 +100,7 @@
               <object class="GtkEntry" id="name">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="margin_left">2</property>
-                <property name="margin_bottom">2</property>
+                <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <accessibility>
                   <relation type="labelled-by" target="label_name"/>
@@ -144,8 +145,7 @@
               <object class="GtkEntry" id="content">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="margin_left">2</property>
-                <property name="margin_bottom">2</property>
+                <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <accessibility>
                   <relation type="labelled-by" target="label_content"/>
@@ -160,8 +160,7 @@
               <object class="GtkComboBoxText" id="type">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">2</property>
-                <property name="margin_bottom">2</property>
+                <property name="hexpand">True</property>
                 <property name="active">0</property>
                 <items>
                   <item id="text" translatable="yes" context="addtargetdialog|type">Text</item>
@@ -196,7 +195,7 @@
               <object class="GtkComboBoxText" id="content_predef">
                 <property name="sensitive">False</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">2</property>
+                <property name="hexpand">True</property>
                 <property name="active">0</property>
                 <items>
                   <item id="creditcard" translatable="yes" context="addtargetdialog|content_predef">Credit card numbers</item>
@@ -226,13 +225,13 @@
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="spacing">12</property>
             <child>
               <object class="GtkCheckButton" id="checkboxCaseSensitive">
                 <property name="label" translatable="yes" context="addtargetdialog|checkboxCaseSensitive">Case Sensitive</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="halign">start</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
               </object>
@@ -248,7 +247,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="halign">start</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
               </object>
