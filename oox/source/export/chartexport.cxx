@@ -1543,16 +1543,28 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
         xPropSet->getPropertyValue("FillGradientName") >>= sFillGradientName;
 
         awt::Gradient aGradient;
+        awt::Gradient aTransparenceGradient;
         uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
         try
         {
             uno::Reference< container::XNameAccess > xGradient( xFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY );
-            uno::Any rValue = xGradient->getByName( sFillGradientName );
-            if( rValue >>= aGradient )
+            uno::Any rGradientValue = xGradient->getByName( sFillGradientName );
+            if( rGradientValue >>= aGradient )
             {
                 mpFS->startElementNS(XML_a, XML_gradFill);
-                WriteGradientFill( aGradient );
-                mpFS->endElementNS( XML_a, XML_gradFill );
+                OUString sFillTransparenceGradientName;
+                if( (xPropSet->getPropertyValue("FillTransparenceGradientName") >>= sFillTransparenceGradientName) && !sFillTransparenceGradientName.isEmpty())
+                {
+                    uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY);
+                    uno::Any rTransparenceValue = xTransparenceGradient->getByName(sFillTransparenceGradientName);
+                    rTransparenceValue >>= aTransparenceGradient;;
+                    WriteGradientFill(aGradient, aTransparenceGradient);
+                }
+                else
+                {
+                    WriteGradientFill(aGradient, aTransparenceGradient, xPropSet);
+                }
+                mpFS->endElementNS(XML_a, XML_gradFill);
             }
         }
         catch (const uno::Exception &)
