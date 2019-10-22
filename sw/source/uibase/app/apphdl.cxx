@@ -155,6 +155,13 @@ void SwModule::StateOther(SfxItemSet &rSet)
                 rSet.Put( SfxBoolItem( nWhich, m_pModuleConfig->
                                             IsInsTableFormatNum( bWebView )));
             break;
+            case FN_MAILMERGE_WIZARD:
+            {
+                SwView* pView = ::GetActiveView();
+                if (pView && pView->GetViewShell()->isExportLocked())
+                    rSet.DisableItem(nWhich);
+                break;
+            }
             case FN_MAILMERGE_FIRST_ENTRY:
             case FN_MAILMERGE_PREV_ENTRY:
             case FN_MAILMERGE_NEXT_ENTRY:

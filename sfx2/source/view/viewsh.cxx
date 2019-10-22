@@ -673,16 +673,27 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
     {
         switch ( nSID )
         {
-#if HAVE_FEATURE_MACOSX_SANDBOX
+
             case SID_BLUETOOTH_SENDDOC:
             case SID_MAIL_SENDDOC:
             case SID_MAIL_SENDDOCASFORMAT:
             case SID_MAIL_SENDDOCASMS:
             case SID_MAIL_SENDDOCASOOO:
             case SID_MAIL_SENDDOCASPDF:
+            {
+#if HAVE_FEATURE_MACOSX_SANDBOX
                 rSet.DisableItem(nSID);
-                break;
 #endif
+                if (isExportLocked())
+                    rSet.DisableItem(nSID);
+                break;
+            }
+            case SID_WEBHTML:
+            {
+                if (isExportLocked())
+                    rSet.DisableItem(nSID);
+                break;
+            }
             // Printer functions
             case SID_PRINTDOC:
             case SID_PRINTDOCDIRECT:
@@ -1743,6 +1754,15 @@ bool SfxViewShell::isContentExtractionLocked()
         return false;
     comphelper::NamedValueCollection aArgs(xModel->getArgs());
     return aArgs.getOrDefault("LockContentExtraction", false);
+}
+
+bool SfxViewShell::isExportLocked()
+{
+    Reference<XModel> xModel = GetCurrentDocument();
+    if (!xModel.is())
+        return false;
+    comphelper::NamedValueCollection aArgs(xModel->getArgs());
+    return aArgs.getOrDefault("LockExport", false);
 }
 
 Reference < XController > SfxViewShell::GetController() const
