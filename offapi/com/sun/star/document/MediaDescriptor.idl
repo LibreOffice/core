@@ -576,6 +576,12 @@ service MediaDescriptor
         @since LibreOffice 6.4
      */
     [optional,property] boolean LockExport;
+
+    /** Setting this option will disable all print functions (including Printer setup)
+
+        @since LibreOffice 6.4
+     */
+    [optional,property] boolean LockPrint;
 };
 
 
