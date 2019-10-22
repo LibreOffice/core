@@ -157,11 +157,11 @@ struct ScGridWindow::MouseEventState
 
 #define SC_FILTERLISTBOX_LINES  12
 
-ScGridWindow::VisibleRange::VisibleRange()
+ScGridWindow::VisibleRange::VisibleRange(const ScDocument* pDoc)
     : mnCol1(0)
-    , mnCol2(MAXCOL)
+    , mnCol2(pDoc->MaxCol())
     , mnRow1(0)
-    , mnRow2(MAXROW)
+    , mnRow2(pDoc->MaxRow())
 {
 }
 
@@ -407,6 +407,7 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
             mpOODragRect(),
             mpOOHeader(),
             mpOOShrink(),
+            maVisibleRange(pData->GetDocument()),
             pViewData( pData ),
             eWhich( eWhichPos ),
             mpNoteMarker(),
@@ -921,6 +922,7 @@ void ScGridWindow::LaunchDPFieldMenu( SCCOL nCol, SCROW nRow )
 
 void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
 {
+    ScDocument* pDoc = pViewData->GetDocument();
     mpFilterBox.disposeAndClear();
     mpFilterFloat.disposeAndClear();
 
@@ -929,11 +931,10 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     if (nRow == 0)
     {
         nRow = rScenRange.aEnd.Row() + 1;   // Range at very the top -> Button below
-        if (nRow>MAXROW) nRow = MAXROW;
+        if (nRow>pDoc->MaxRow()) nRow = pDoc->MaxRow();
         //! Add text height (if it is stored in the View...)
     }
 
-    ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
@@ -3330,6 +3331,7 @@ void ScGridWindow::UpdateInputContext()
 
 void ScGridWindow::DropScroll( const Point& rMousePos )
 {
+    ScDocument* pDoc = pViewData->GetDocument();
     SCCOL nDx = 0;
     SCROW nDy = 0;
     Size aSize = GetOutputSizePixel();
@@ -3339,7 +3341,7 @@ void ScGridWindow::DropScroll( const Point& rMousePos )
         if ( rMousePos.X() < SCROLL_SENSITIVE && pViewData->GetPosX(WhichH(eWhich)) > 0 )
             nDx = -1;
         if ( rMousePos.X() >= aSize.Width() - SCROLL_SENSITIVE
-                && pViewData->GetPosX(WhichH(eWhich)) < MAXCOL )
+                && pViewData->GetPosX(WhichH(eWhich)) < pDoc->MaxCol() )
             nDx = 1;
     }
     if (aSize.Height() > SCROLL_SENSITIVE * 3)
@@ -3347,7 +3349,7 @@ void ScGridWindow::DropScroll( const Point& rMousePos )
         if ( rMousePos.Y() < SCROLL_SENSITIVE && pViewData->GetPosY(WhichV(eWhich)) > 0 )
             nDy = -1;
         if ( rMousePos.Y() >= aSize.Height() - SCROLL_SENSITIVE
-                && pViewData->GetPosY(WhichV(eWhich)) < MAXROW )
+                && pViewData->GetPosY(WhichV(eWhich)) < pDoc->MaxRow() )
             nDy = 1;
     }
 
@@ -3388,21 +3390,21 @@ static bool lcl_TestScenarioRedliningDrop( const ScDocument* pDoc, const ScRange
     return bReturn;
 }
 
-static ScRange lcl_MakeDropRange( SCCOL nPosX, SCROW nPosY, SCTAB nTab, const ScRange& rSource )
+static ScRange lcl_MakeDropRange( const ScDocument* pDoc, SCCOL nPosX, SCROW nPosY, SCTAB nTab, const ScRange& rSource )
 {
     SCCOL nCol1 = nPosX;
     SCCOL nCol2 = nCol1 + ( rSource.aEnd.Col() - rSource.aStart.Col() );
-    if ( nCol2 > MAXCOL )
+    if ( nCol2 > pDoc->MaxCol() )
     {
-        nCol1 -= nCol2 - MAXCOL;
-        nCol2 = MAXCOL;
+        nCol1 -= nCol2 - pDoc->MaxCol();
+        nCol2 = pDoc->MaxCol();
     }
     SCROW nRow1 = nPosY;
     SCROW nRow2 = nRow1 + ( rSource.aEnd.Row() - rSource.aStart.Row() );
-    if ( nRow2 > MAXROW )
+    if ( nRow2 > pDoc->MaxRow() )
     {
-        nRow1 -= nRow2 - MAXROW;
-        nRow2 = MAXROW;
+        nRow1 -= nRow2 - pDoc->MaxRow();
+        nRow2 = pDoc->MaxRow();
     }
 
     return ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
@@ -3476,16 +3478,16 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
 
         SCCOL nNewDragX = nPosX - rData.pCellTransfer->GetDragHandleX();
         if (nNewDragX<0) nNewDragX=0;
-        if (nNewDragX+(nSizeX-1) > MAXCOL)
-            nNewDragX = MAXCOL-(nSizeX-1);
+        if (nNewDragX+(nSizeX-1) > pThisDoc->MaxCol())
+            nNewDragX = pThisDoc->MaxCol()-(nSizeX-1);
         SCROW nNewDragY = nPosY - rData.pCellTransfer->GetDragHandleY();
         if (nNewDragY<0) nNewDragY=0;
-        if (nNewDragY+(nSizeY-1) > MAXROW)
-            nNewDragY = MAXROW-(nSizeY-1);
+        if (nNewDragY+(nSizeY-1) > pThisDoc->MaxRow())
+            nNewDragY = pThisDoc->MaxRow()-(nSizeY-1);
 
         //  don't break scenario ranges, don't drop on filtered
         SCTAB nTab = pViewData->GetTabNo();
-        ScRange aDropRange = lcl_MakeDropRange( nNewDragX, nNewDragY, nTab, aSourceRange );
+        ScRange aDropRange = lcl_MakeDropRange( pThisDoc, nNewDragX, nNewDragY, nTab, aSourceRange );
         if ( lcl_TestScenarioRedliningDrop( pThisDoc, aDropRange ) ||
              lcl_TestScenarioRedliningDrop( pSourceDoc, aSourceRange ) ||
              ScViewUtil::HasFiltered( aDropRange, pThisDoc) )
@@ -3638,13 +3640,14 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
     if ( pViewData->GetDocShell()->IsReadOnly() )
         return DND_ACTION_NONE;
 
+    ScDocument* pThisDoc = pViewData->GetDocument();
     sal_Int8 nRet = DND_ACTION_NONE;
 
     if (rData.pCellTransfer)
     {
         ScRange aSource = rData.pCellTransfer->GetRange();
-        if ( aSource.aStart.Col() != 0 || aSource.aEnd.Col() != MAXCOL ||
-             aSource.aStart.Row() != 0 || aSource.aEnd.Row() != MAXROW )
+        if ( aSource.aStart.Col() != 0 || aSource.aEnd.Col() != pThisDoc->MaxCol() ||
+             aSource.aStart.Row() != 0 || aSource.aEnd.Row() != pThisDoc->MaxRow() )
             DropScroll( rEvt.maPosPixel );
 
         nRet = AcceptPrivateDrop( rEvt );
@@ -3685,7 +3688,6 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                 if ( rEvt.mbDefault && nMyAction == DND_ACTION_MOVE )
                     nMyAction = DND_ACTION_COPY;
 
-            ScDocument* pThisDoc = pViewData->GetDocument();
             SdrObject* pHitObj = pThisDoc->GetObjectAtPoint(
                         pViewData->GetTabNo(), PixelToLogic(rEvt.maPosPixel) );
             if ( pHitObj && nMyAction == DND_ACTION_LINK )
@@ -4562,8 +4564,10 @@ void ScGridWindow::UpdateFormulas(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2)
     if (nX2 < nX1) nX2 = nX1;
     if (nY2 < nY1) nY2 = nY1;
 
-    if (nX2 > MAXCOL) nX2 = MAXCOL;
-    if (nY2 > MAXROW) nY2 = MAXROW;
+    ScDocument& rDoc = *pViewData->GetDocument();
+
+    if (nX2 > rDoc.MaxCol()) nX2 = rDoc.MaxCol();
+    if (nY2 > rDoc.MaxRow()) nY2 = rDoc.MaxRow();
 
     // Draw( nX1, nY1, nX2, nY2, SC_UPDATE_CHANGED );
 
@@ -4571,7 +4575,6 @@ void ScGridWindow::UpdateFormulas(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2)
 
     SCROW nPosY = nY1;
 
-    ScDocument& rDoc = *pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
 
     if ( !comphelper::LibreOfficeKit::isActive() )
@@ -4843,7 +4846,7 @@ static void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, sal_uI
         --nCol1;
         bHiddenEdge = true;
     }
-    while ( nCol2 < MAXCOL && rDoc.ColHidden(nCol2, nTab1) )
+    while ( nCol2 < rDoc.MaxCol() && rDoc.ColHidden(nCol2, nTab1) )
     {
         ++nCol2;
         bHiddenEdge = true;
@@ -4856,9 +4859,9 @@ static void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, sal_uI
         nRow1 = nTmp;
         bHiddenEdge = true;
     }
-    nTmp = rDoc.FirstVisibleRow(nRow2, MAXROW, nTab1);
+    nTmp = rDoc.FirstVisibleRow(nRow2, rDoc.MaxRow(), nTab1);
     if (!ValidRow(nTmp))
-        nTmp = MAXROW;
+        nTmp = rDoc.MaxRow();
     if (nTmp > nRow2)
     {
         nRow2 = nTmp;
@@ -5050,21 +5053,22 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
     }
     else
     {
+        ScDocument* pDoc = pViewData->GetDocument();
         long nStartX = nPosX - nRFAddX;
         if ( nStartX < 0 ) nStartX = 0;
         long nStartY = nPosY - nRFAddY;
         if ( nStartY < 0 ) nStartY = 0;
         long nEndX = nStartX + aOld.aEnd.Col() - aOld.aStart.Col();
-        if ( nEndX > MAXCOL )
+        if ( nEndX > pDoc->MaxCol() )
         {
-            nStartX -= ( nEndX - MAXROW );
-            nEndX = MAXCOL;
+            nStartX -= ( nEndX - pDoc->MaxRow() );
+            nEndX = pDoc->MaxCol();
         }
         long nEndY = nStartY + aOld.aEnd.Row() - aOld.aStart.Row();
-        if ( nEndY > MAXROW )
+        if ( nEndY > pDoc->MaxRow() )
         {
-            nStartY -= ( nEndY - MAXROW );
-            nEndY = MAXROW;
+            nStartY -= ( nEndY - pDoc->MaxRow() );
+            nEndY = pDoc->MaxRow();
         }
 
         aNew.aStart.SetCol(static_cast<SCCOL>(nStartX));
