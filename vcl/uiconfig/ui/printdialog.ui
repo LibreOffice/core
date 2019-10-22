@@ -42,7 +42,6 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-go-back</property>
-    <property name="icon_size">1</property>
   </object>
   <object class="GtkImage" id="imgFirst">
     <property name="visible">True</property>
@@ -53,7 +52,6 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-go-forward</property>
-    <property name="icon_size">1</property>
   </object>
   <object class="GtkImage" id="imgLast">
     <property name="visible">True</property>
