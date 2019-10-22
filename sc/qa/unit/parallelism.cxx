@@ -40,6 +40,7 @@ public:
     void testMultipleFGColumn();
     void testFormulaGroupSpanEval();
     void testFormulaGroupSpanEvalNonGroup();
+    void testArrayFormulaGroup();
 
     CPPUNIT_TEST_SUITE(ScParallelismTest);
     CPPUNIT_TEST(testSUMIFS);
@@ -53,6 +54,7 @@ public:
     CPPUNIT_TEST(testMultipleFGColumn);
     CPPUNIT_TEST(testFormulaGroupSpanEval);
     CPPUNIT_TEST(testFormulaGroupSpanEvalNonGroup);
+    CPPUNIT_TEST(testArrayFormulaGroup);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -654,6 +656,43 @@ void ScParallelismTest::testFormulaGroupSpanEvalNonGroup()
 
         aMsg = "Value at Cell A" + OString::number(nRow+1);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), nExpected, static_cast<size_t>(m_pDoc->GetValue(0, nRow, 0)));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void ScParallelismTest::testArrayFormulaGroup()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
+    m_pDoc->InsertTab(0, "1");
+
+    m_pDoc->SetValue(1, 0, 0, 2.0);  // B1 <== 2
+    m_pDoc->SetValue(2, 0, 0, 1.0);  // C1 <== 1
+    OUString aFormula;
+
+    for (size_t nRow = 1; nRow < 16; ++nRow)
+    {
+        m_pDoc->SetValue(0, nRow, 0, 1.0);  // A2:A16 <== 1
+
+        if (nRow > 10)
+            continue;
+
+        aFormula = "=SUMPRODUCT(($A" + OUString::number(1 + nRow) +
+            ":$A" + OUString::number(499 + nRow) + ")*B$1+C$1)";
+        // Formula-group in B2:B11 with first cell = "=SUMPRODUCT(($A2:$A500)*B$1+C$1)"
+        m_pDoc->SetFormula(ScAddress(1, nRow, 0), aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+
+    m_xDocShell->DoHardRecalc();
+
+    size_t nExpected = 529;
+    OString aMsg;
+    for (size_t nRow = 1; nRow < 11; ++nRow)
+    {
+        aMsg = "Value at Cell B" + OString::number(nRow+1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), nExpected, static_cast<size_t>(m_pDoc->GetValue(1, nRow, 0)));
+        nExpected -= 2;
     }
 
     m_pDoc->DeleteTab(0);
