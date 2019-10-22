@@ -62,12 +62,6 @@ public:
 
     virtual ~ControllerItem() override;
 
-    /** Returns </TRUE> when the slot/command has not been disabled.
-        Changes of this state are notified via the
-        ItemUpdateReceiverInterface::NotifyContextChang() method.
-    */
-    static bool IsEnabled (const SfxItemState eState);
-
     /** Force the controller item to call its NotifyItemUpdate
         callback with up-to-date data.
     */

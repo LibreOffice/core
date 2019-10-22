@@ -2497,11 +2497,6 @@ bool SvTreeListBox::AreChildrenTransient() const
     return pImpl->AreChildrenTransient();
 }
 
-void SvTreeListBox::SetChildrenNotTransient()
-{
-    pImpl->SetChildrenNotTransient();
-}
-
 void SvTreeListBox::EditedText( const OUString& rStr )
 
 {

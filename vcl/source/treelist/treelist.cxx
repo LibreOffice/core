@@ -1468,24 +1468,6 @@ void SvTreeList::ResortChildren( SvTreeListEntry* pParent )
     SetListPositions(pParent->m_Children); // correct list position in target list
 }
 
-void SvTreeList::ReverseChildren( SvTreeListEntry* pParent )
-{
-    DBG_ASSERT(pParent,"Parent not set");
-
-    if (pParent->m_Children.empty())
-        return;
-
-    std::reverse(pParent->m_Children.begin(), pParent->m_Children.end());
-    // Recursively sort child entries.
-    for (auto const& it : pParent->m_Children)
-    {
-        SvTreeListEntry& r = *it;
-        ReverseChildren(&r);
-    }
-
-    SetListPositions(pParent->m_Children); // correct list position in target list
-}
-
 void SvTreeList::GetInsertionPos( SvTreeListEntry const * pEntry, SvTreeListEntry* pParent,
     sal_uLong& rPos )
 {

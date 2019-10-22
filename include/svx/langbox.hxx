@@ -48,47 +48,6 @@ namespace o3tl
 // load language strings from resource
 SVX_DLLPUBLIC OUString    GetDicInfoStr( const OUString& rName, const LanguageType nLang, bool bNeg );
 
-class SVX_DLLPUBLIC SvxLanguageBoxBase
-{
-private:
-    SvxLanguageBoxBase(const SvxLanguageBoxBase&) = delete;
-    SvxLanguageBoxBase& operator=(const SvxLanguageBoxBase&) = delete;
-public:
-    explicit SvxLanguageBoxBase();
-    virtual ~SvxLanguageBoxBase();
-
-    void            SetLanguageList( SvxLanguageListFlags nLangList,
-                            bool bHasLangNone,
-                            bool bCheckSpellAvail );
-
-    void            AddLanguages( const std::vector< LanguageType >& rLanguageTypes, SvxLanguageListFlags nLangList );
-
-    sal_Int32       InsertLanguage( const LanguageType eLangType );
-    void            SelectLanguage( const LanguageType eLangType );
-    LanguageType    GetSelectedLanguage() const;
-
-protected:
-    Image                   m_aNotCheckedImage;
-    Image                   m_aCheckedImage;
-    std::unique_ptr<css::uno::Sequence< sal_Int16 >>
-                            m_pSpellUsedLang;
-    bool                    m_bWithCheckmark;
-
-    SVX_DLLPRIVATE void                 ImplLanguageBoxBaseInit();
-    SVX_DLLPRIVATE sal_Int32            ImplInsertLanguage(LanguageType, sal_Int32 nPos, sal_Int16 nType);
-    SVX_DLLPRIVATE sal_Int32            ImplTypeToPos( LanguageType eType ) const;
-
-    SVX_DLLPRIVATE virtual sal_Int32    ImplInsertImgEntry( const OUString& rEntry, sal_Int32  nPos, bool bChecked ) = 0;
-
-    SVX_DLLPRIVATE virtual void         ImplClear() = 0;
-    SVX_DLLPRIVATE virtual sal_Int32    ImplInsertEntry( const OUString& rEntry, sal_Int32 nPos ) = 0;
-    SVX_DLLPRIVATE virtual void         ImplSetEntryData( sal_Int32 nPos, void* pData ) = 0;
-    SVX_DLLPRIVATE virtual sal_Int32    ImplGetSelectedEntryPos() const = 0;
-    SVX_DLLPRIVATE virtual void*        ImplGetEntryData( sal_Int32 nPos ) const = 0;
-    SVX_DLLPRIVATE virtual void         ImplSelectEntryPos( sal_Int32 nPos, bool bSelect ) = 0;
-    SVX_DLLPRIVATE virtual sal_Int32    ImplGetEntryPos( const void* pData ) const = 0;
-};
-
 class SVX_DLLPUBLIC SvxLanguageBox
 {
 public:

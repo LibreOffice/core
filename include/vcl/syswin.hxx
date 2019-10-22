@@ -285,8 +285,6 @@ public:
     virtual        void    doDeferredInit(WinBits nBits);
 
     // Screenshot interface
-    virtual std::vector<OString> getAllPageUIXMLDescriptions() const;
-    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription);
     void createScreenshot(VirtualDevice& rOutput);
 };
 

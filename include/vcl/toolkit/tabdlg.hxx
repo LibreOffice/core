@@ -40,10 +40,6 @@ public:
     virtual void        dispose() override;
 
     virtual void        StateChanged( StateChangedType nStateChange ) override;
-
-    // Screenshot interface
-    virtual std::vector<OString> getAllPageUIXMLDescriptions() const override;
-    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override;
 };
 
 #endif // INCLUDED_VCL_TABDLG_HXX
