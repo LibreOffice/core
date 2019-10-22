@@ -3656,7 +3656,7 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
             [](double f) {
                 f = rtl::math::approxFloor(f);
                 // Valid ranks are >= 1.
-                if (f < 1.0 || f > std::numeric_limits<SCSIZE>::max())
+                if (f < 1.0 || static_cast<SCSIZE>(f) > std::numeric_limits<SCSIZE>::max())
                     return static_cast<SCSIZE>(0);
                 return static_cast<SCSIZE>(f);
             });
