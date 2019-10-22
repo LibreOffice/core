@@ -219,6 +219,14 @@ protected:
 
     void drawMask(const SalTwoRect& rPosAry, const SkBitmap& rBitmap, Color nMaskColor);
 
+    // Which Skia backend to use.
+    enum RenderMethod
+    {
+        RenderRaster,
+        RenderVulkan
+    };
+    static RenderMethod renderMethodToUse();
+
     SalGraphics& mParent;
     /// Pointer to the SalFrame or SalVirtualDevice
     SalGeometryProvider* mProvider;
