@@ -12,6 +12,7 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
+#include <officecfg/Office/Common.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <unotxdoc.hxx>
@@ -21,6 +22,7 @@
 #include <IDocumentContentOperations.hxx>
 #include <doc.hxx>
 #include <ndgrf.hxx>
+#include <ndtxt.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>
 #include <unotools/fltrcfg.hxx>
@@ -46,6 +48,7 @@ public:
 #if !defined(_WIN32)
     void testSkipImages();
 #endif
+    void testNestedFieldmark();
     void testRedlineFlags();
     void testBulletAsImage();
     void testTextFormField();
@@ -66,6 +69,7 @@ public:
 #if !defined(_WIN32)
     CPPUNIT_TEST(testSkipImages);
 #endif
+    CPPUNIT_TEST(testNestedFieldmark);
     CPPUNIT_TEST(testRedlineFlags);
     CPPUNIT_TEST(testBulletAsImage);
     CPPUNIT_TEST(testTextFormField);
@@ -842,6 +846,108 @@ void Test::testSkipImages()
     }
 }
 #endif
+
+static auto verifyNestedFieldmark(OUString const& rTestName,
+        uno::Reference<lang::XComponent> const& xComponent) -> void
+{
+    SwDoc const*const pDoc(dynamic_cast<SwXTextDocument*>(xComponent.get())->GetDocShell()->GetDoc());
+    IDocumentMarkAccess const& rIDMA(*pDoc->getIDocumentMarkAccess());
+
+    // no spurious bookmarks have been created
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(),
+            sal_Int32(0), rIDMA.getBookmarksCount());
+
+    // check inner fieldmark
+    SwNodeIndex const node1(*pDoc->GetNodes().GetEndOfContent().StartOfSectionNode(), +2);
+    SwPosition const innerPos(*node1.GetNode().GetTextNode(),
+        node1.GetNode().GetTextNode()->GetText().indexOf(CH_TXT_ATR_FIELDSTART));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(),
+            sal_Int32(1), innerPos.nContent.GetIndex());
+    ::sw::mark::IFieldmark const*const pInner(rIDMA.getFieldmarkAt(innerPos));
+    CPPUNIT_ASSERT_MESSAGE(rTestName.toUtf8().getStr(), pInner);
+    OUString const innerString(SwPaM(pInner->GetMarkPos(), pInner->GetOtherMarkPos()).GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(), OUString(
+        OUStringChar(CH_TXT_ATR_FIELDSTART) + u" QUOTE  \"foo " + OUStringChar(CH_TXTATR_NEWLINE)
+        + u" bar " + OUStringChar(CH_TXTATR_NEWLINE)
+        + u"baz\" " + OUStringChar(CH_TXT_ATR_FIELDSEP) + u"foo " + OUStringChar(CH_TXTATR_NEWLINE)
+        + u" bar " + OUStringChar(CH_TXTATR_NEWLINE)
+        + u"baz" + OUStringChar(CH_TXT_ATR_FIELDEND)), innerString);
+
+    // check outer fieldmark
+    SwNodeIndex const node2(node1, -1);
+    SwPosition const outerPos(*node2.GetNode().GetTextNode(),
+        node2.GetNode().GetTextNode()->GetText().indexOf(CH_TXT_ATR_FIELDSTART));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(),
+            sal_Int32(0), outerPos.nContent.GetIndex());
+    ::sw::mark::IFieldmark const*const pOuter(rIDMA.getFieldmarkAt(outerPos));
+    CPPUNIT_ASSERT_MESSAGE(rTestName.toUtf8().getStr(), pOuter);
+    OUString const outerString(SwPaM(pOuter->GetMarkPos(), pOuter->GetOtherMarkPos()).GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(), OUString(
+        OUStringChar(CH_TXT_ATR_FIELDSTART) + u" QUOTE  \"foo " + OUStringChar(CH_TXTATR_NEWLINE)
+        + u" " + OUStringChar(CH_TXT_ATR_FIELDSTART) + u" QUOTE  \"foo " + OUStringChar(CH_TXTATR_NEWLINE)
+        + u" bar " + OUStringChar(CH_TXTATR_NEWLINE)
+        + u"baz\" " + OUStringChar(CH_TXT_ATR_FIELDSEP) + u"foo " + OUStringChar(CH_TXTATR_NEWLINE)
+        + u" bar " + OUStringChar(CH_TXTATR_NEWLINE)
+        + u"baz" + OUStringChar(CH_TXT_ATR_FIELDEND) + OUStringChar(CH_TXTATR_NEWLINE)
+        + u"bar " + OUStringChar(CH_TXTATR_NEWLINE)
+        + u"baz\" " + OUStringChar(CH_TXT_ATR_FIELDSEP) + u"foo " + OUStringChar(CH_TXTATR_NEWLINE)
+        + u" foo " + OUStringChar(CH_TXTATR_NEWLINE)
+        + u" bar " + OUStringChar(CH_TXTATR_NEWLINE)
+        + u"baz" + OUStringChar(CH_TXTATR_NEWLINE)
+        + u"bar " + OUStringChar(CH_TXTATR_NEWLINE)
+        + u"baz" + OUStringChar(CH_TXT_ATR_FIELDEND)), outerString);
+
+    // must return innermost mark
+    CPPUNIT_ASSERT_EQUAL(sal_uIntPtr(pInner), sal_uIntPtr(rIDMA.getFieldmarkFor(innerPos)));
+}
+
+void Test::testNestedFieldmark()
+{
+    // experimental config setting
+    Resetter resetter(
+        [] () {
+            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+                    comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::set(false, pBatch);
+            return pBatch->commit();
+        });
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::set(true, pBatch);
+    pBatch->commit();
+
+    std::pair<OUString, OUString> const aFilterNames[] = {
+        {"Office Open XML Text", "fieldmark_QUOTE_nest.docx"},
+        {"Rich Text Format", "fieldmark_QUOTE_nest.rtf"},
+    };
+
+    for (auto const & rFilterName : aFilterNames)
+    {
+        if (mxComponent.is())
+        {
+            mxComponent->dispose();
+        }
+
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(
+                "/sw/qa/extras/globalfilter/data/" + rFilterName.second),
+            "com.sun.star.text.TextDocument");
+
+        verifyNestedFieldmark(rFilterName.first + ", load", mxComponent);
+
+        // Export the document and import again
+        uno::Reference<frame::XStorable> const xStorable(mxComponent, uno::UNO_QUERY);
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= rFilterName.first;
+
+        utl::TempFile aTempFile;
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        mxComponent->dispose();
+
+        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+        verifyNestedFieldmark(rFilterName.first + " exported-reload", mxComponent);
+        aTempFile.EnableKillingFile();
+    }
+}
 
 void Test::testRedlineFlags()
 {
