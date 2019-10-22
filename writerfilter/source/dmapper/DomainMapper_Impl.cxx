@@ -219,10 +219,11 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_eInHeaderFooterImport( HeaderFooterImportState::none ),
         m_bDiscardHeaderFooter( false ),
         m_bInFootOrEndnote(false),
+        m_bHasFootnoteStyle(false),
+        m_bCheckFootnoteStyle(false),
         m_bSeenFootOrEndnoteSeparator(false),
         m_bLineNumberingSet( false ),
         m_bIsInFootnoteProperties( false ),
-        m_bIsCustomFtnMark( false ),
         m_bIsParaMarkerChange( false ),
         m_bParaChanged( false ),
         m_bIsFirstParaInSection( true ),
@@ -522,7 +523,7 @@ bool DomainMapper_Impl::GetIsFirstParagraphInSection( bool bAfterRedline ) const
     return ( bAfterRedline ? m_bIsFirstParaInSectionAfterRedline : m_bIsFirstParaInSection )
                 && !IsInShape()
                 && !m_bIsInComments
-                && !m_bInFootOrEndnote;
+                && !IsInFootOrEndnote();
 }
 
 void DomainMapper_Impl::SetIsFirstParagraphInShape(bool bIsFirst)
@@ -2126,6 +2127,7 @@ void DomainMapper_Impl::PopPageHeaderFooter()
 
 void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 {
+    assert(!m_bInFootOrEndnote);
     m_bInFootOrEndnote = true;
     m_bCheckFirstFootnoteTab = true;
     m_bSaveFirstParagraphInCell = m_bFirstParagraphInCell;
@@ -2134,7 +2136,13 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         // Redlines outside the footnote should not affect footnote content
         m_aRedlines.push(std::vector< RedlineParamsPtr >());
 
+        // IMHO character styles from footnote labels should be ignored in the edit view of Writer.
+        // This adds a hack on top of the following hack to save the style name in the context.
         PropertyMapPtr pTopContext = GetTopContext();
+        OUString sFootnoteCharStyleName;
+        boost::optional< PropertyMap::Property > aProp = pTopContext->getProperty(PROP_CHAR_STYLE_NAME);
+        if (aProp)
+            aProp->second >>= sFootnoteCharStyleName;
 
         // Remove style reference, if any. This reference did appear here as a side effect of tdf#43017
         // Seems it is not required by LO, but causes side effects during editing. So remove it
@@ -2148,7 +2156,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
                 OUString( "com.sun.star.text.Footnote" ) : OUString( "com.sun.star.text.Endnote" )),
             uno::UNO_QUERY_THROW );
         uno::Reference< text::XFootnote > xFootnote( xFootnoteText, uno::UNO_QUERY_THROW );
-        pTopContext->SetFootnote( xFootnote );
+        pTopContext->SetFootnote(xFootnote, sFootnoteCharStyleName);
         uno::Sequence< beans::PropertyValue > aFontProperties = pTopContext->GetPropertyValues();
         appendTextContent( uno::Reference< text::XTextContent >( xFootnoteText, uno::UNO_QUERY_THROW ), aFontProperties );
         m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xFootnoteText, uno::UNO_QUERY_THROW ),
@@ -2160,6 +2168,11 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         CheckRedline( xFootnote->getAnchor( ) );
         m_aRedlines.push( aFootnoteRedline );
 
+        // Try scanning for custom footnote labels
+        if (!sFootnoteCharStyleName.isEmpty())
+            StartCustomFootnote(pTopContext);
+        else
+            EndCustomFootnote();
     }
     catch( const uno::Exception& )
     {
@@ -2289,6 +2302,22 @@ void DomainMapper_Impl::EndParaMarkerChange( )
     m_currentRedline.clear();
 }
 
+void DomainMapper_Impl::StartCustomFootnote(const PropertyMapPtr pContext)
+{
+    if (pContext == m_pFootnoteContext)
+        return;
+
+    assert(pContext->GetFootnote().is());
+    m_bHasFootnoteStyle = true;
+    m_bCheckFootnoteStyle = !pContext->GetFootnoteStyle().isEmpty();
+    m_pFootnoteContext = pContext;
+}
+
+void DomainMapper_Impl::EndCustomFootnote()
+{
+    m_bHasFootnoteStyle = false;
+    m_bCheckFootnoteStyle = false;
+}
 
 void DomainMapper_Impl::PushAnnotation()
 {
@@ -2330,6 +2359,7 @@ void DomainMapper_Impl::PopFootOrEndnote()
     m_aRedlines.pop();
     m_bSeenFootOrEndnoteSeparator = false;
     m_bInFootOrEndnote = false;
+    m_pFootnoteContext = nullptr;
     m_bFirstParagraphInCell = m_bSaveFirstParagraphInCell;
 }
 

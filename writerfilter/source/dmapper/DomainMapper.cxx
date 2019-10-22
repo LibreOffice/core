@@ -80,6 +80,9 @@
 #include <dmapper/GraphicZOrderHelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/font.hxx>
 
 using namespace ::com::sun::star;
 using namespace oox;
@@ -945,10 +948,11 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         }
         break;
         case NS_ooxml::LN_CT_FtnEdnRef_customMarkFollows:
-            m_pImpl->SetCustomFtnMark( true );
+            m_pImpl->StartCustomFootnote(m_pImpl->GetTopContext());
         break;
         case NS_ooxml::LN_CT_FtnEdnRef_id:
             // footnote or endnote reference id - not needed
+            m_pImpl->StartCustomFootnote(m_pImpl->GetTopContext());
         break;
         case NS_ooxml::LN_CT_Color_themeColor:
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeColor", TDefTableHandler::getThemeColorTypeString(nIntValue));
@@ -2139,6 +2143,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_EG_RPrBase_rStyle:
         {
             OUString sConvertedName( m_pImpl->GetStyleSheetTable()->ConvertStyleName( sStringValue, true ) );
+            if (m_pImpl->CheckFootnoteStyle())
+                m_pImpl->SetHasFootnoteStyle(m_pImpl->GetFootnoteContext()->GetFootnoteStyle() == sConvertedName);
+
             // First check if the style exists in the document.
             StyleSheetEntryPtr pEntry = m_pImpl->GetStyleSheetTable( )->FindStyleSheetByConvertedStyleName( sConvertedName );
             bool bExists = pEntry.get( ) && ( pEntry->nStyleTypeCode == STYLE_TYPE_CHAR );
@@ -2675,11 +2682,38 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         resolveSprmProps(*this, rSprm);
         SymbolData  aSymbolData = m_pImpl->GetSymbolData();
         uno::Any    aVal = uno::makeAny( aSymbolData.sFont );
-        if( rContext->GetFootnote().is())
+        auto xFootnote = rContext->GetFootnote();
+        if (!xFootnote.is() && m_pImpl->IsInCustomFootnote())
+            xFootnote = m_pImpl->GetFootnoteContext()->GetFootnote();
+        if (xFootnote.is())
         {
-            uno::Reference< beans::XPropertySet > xAnchorProps( rContext->GetFootnote()->getAnchor(), uno::UNO_QUERY );
-            xAnchorProps->setPropertyValue( getPropertyName( PROP_CHAR_FONT_NAME), aVal);
-            rContext->GetFootnote()->setLabel(OUString( aSymbolData.cSymbol ));
+            // DOCX can have different labels for the footnote reference and the footnote area.
+            // This skips the one from the footnote area and just uses the reference one.
+            if (!m_pImpl->IsInFootOrEndnote())
+            {
+                auto xAnchorRange = xFootnote->getAnchor();
+                auto xAnchorCursor(xAnchorRange->getText()->createTextCursorByRange(xAnchorRange));
+
+                // append a dummy character, so the following properties will be set as
+                // as SwpHints::SwTextAttr instead of the SwAttrSet of the paragraph,
+                // which would be removed by SwXText::Impl::finishOrAppendParagraph
+                xAnchorCursor->collapseToEnd();
+                uno::Reference<text::XTextRange> xHackRange(xAnchorCursor, uno::UNO_QUERY);
+                xHackRange->setString("x");
+
+                uno::Reference<beans::XPropertySet> xAnchorProps(xAnchorRange, uno::UNO_QUERY);
+                xAnchorProps->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME), aVal);
+                xAnchorProps->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME_ASIAN), aVal);
+                xAnchorProps->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME_COMPLEX), aVal);
+                xAnchorProps->setPropertyValue(getPropertyName(PROP_CHAR_FONT_CHAR_SET), uno::makeAny(awt::CharSet::SYMBOL));
+
+                // remove the dummy char
+                xHackRange->setString("");
+
+                OUString sLabel = xFootnote->getLabel();
+                sLabel += OUStringChar(aSymbolData.cSymbol);
+                xFootnote->setLabel(sLabel);
+            }
         }
         else //it's a _real_ symbol
         {
@@ -3032,6 +3066,11 @@ void DomainMapper::lcl_startCharacterGroup()
 
 void DomainMapper::lcl_endCharacterGroup()
 {
+    if (m_pImpl->CheckFootnoteStyle())
+    {
+        m_pImpl->SetCheckFootnoteStyle(m_pImpl->IsInCustomFootnote());
+        m_pImpl->SetHasFootnoteStyle(false);
+    }
     m_pImpl->PopProperties(CONTEXT_CHARACTER);
 }
 
@@ -3105,10 +3144,9 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
             m_pImpl->clearDeferredBreaks();
         }
 
-        if( pContext->GetFootnote().is() && m_pImpl->IsCustomFtnMark() )
+        if( pContext->GetFootnote().is() && m_pImpl->IsInCustomFootnote() )
         {
-            pContext->GetFootnote()->setLabel( sText );
-            m_pImpl->SetCustomFtnMark( false );
+            pContext->GetFootnote()->setLabel(sText);
             //otherwise ignore sText
         }
         else if (m_pImpl->IsOpenFieldCommand() && !m_pImpl->IsForceGenericFields())
@@ -3164,6 +3202,9 @@ void DomainMapper::lcl_positivePercentage(const OUString& rText)
 
 void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 {
+    // All these fixed values are defined as static const sal_Unicode codepoints in the fast parser,
+    // like uFtnEdnRef = 0x2, uFtnEdnSep = 0x3, ... and have a len of 1, if they aren't valid unicode.
+
     OUString sText(reinterpret_cast<const sal_Unicode *>(data_), len);
     const RubyInfo & aInfo = m_pImpl->GetRubyInfo();
     if (aInfo.nSprmId == NS_ooxml::LN_CT_Ruby_rt)
@@ -3173,6 +3214,44 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         OUString sStyle = getOrCreateCharStyle(aProps, /*bAlwaysCreate=*/false);
         m_pImpl->SetRubyText(sText,sStyle);
         return;
+    }
+
+    if (len == 1)
+    {
+        // If the footnote contains a Footnote Reference Mark, it can't be a custom footnote
+        // ******
+        // This code block is wrong, as it should also be in m_pImpl->IsInFootOrEndnote().
+        // The main problem is that
+        //
+        //  assert(len != 1 || sText[0] != 0x2)
+        //
+        // is triggered by the unit test SwLayoutWriter::testForcepoint75, so all these pseudo
+        // value handling is broken.
+        // But this is just a symptom, as I guess it's possible to generate broken DOCX documents,
+        // which might be problematic, triggering *funny* code paths left and right.
+        // ******
+        if (sText[0] == 0x2)
+        {
+            m_pImpl->EndCustomFootnote();
+            return;
+        }
+
+        if (m_pImpl->IsInCustomFootnote())
+        {
+            if (sText[0] != 0xd && sText[0] != 0x3)
+            {
+                // DOCX can have different labels for the footnote reference and the footnote area.
+                // This skips the one from the footnote area and just uses the reference one.
+                if (!m_pImpl->IsInFootOrEndnote())
+                {
+                    auto xFootnote = m_pImpl->GetFootnoteContext()->GetFootnote();
+                    xFootnote->setLabel(xFootnote->getLabel() + sText);
+                }
+                return;
+            }
+            else
+                m_pImpl->SetHasFootnoteStyle(true);
+        }
     }
 
     if (m_pImpl->isSdtEndDeferred())
