@@ -478,7 +478,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             else if( m_pLineEndList->Count() > static_cast<long>( nPos - 1 ) )
                 pItem.reset(new XLineStartItem( m_xLbStartStyle->get_active_text(), m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
             pOld = GetOldItem( *rAttrs, XATTR_LINESTART );
-            if( pItem && ( !pOld || !( *static_cast<const XLineEndItem*>(pOld) == *pItem ) ) )
+            if( pItem && ( !pOld || *pOld != *pItem ) )
             {
                 rAttrs->Put( *pItem );
                 bModified = true;
