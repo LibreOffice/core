@@ -2568,7 +2568,7 @@ namespace accessibility
                     // Translate EE Index to accessible index
                     sal_Int32 nStart = rT.CalcEditEngineIndex( nPara, nEEStart );
                     sal_Int32 nEnd = nStart + aField.aCurrentText.getLength();
-                    xRef = new AccessibleHyperlink( rT, new SvxFieldItem( *aField.pFieldItem ), nPara, nEEStart, nStart, nEnd, aField.aCurrentText );
+                    xRef = new AccessibleHyperlink( rT, new SvxFieldItem( *aField.pFieldItem ), nStart, nEnd, aField.aCurrentText );
                     break;
                 }
                 nHyperLink++;
