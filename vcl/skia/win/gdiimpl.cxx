@@ -63,8 +63,8 @@ void WinSkiaSalGraphicsImpl::createSurface()
 
 void WinSkiaSalGraphicsImpl::DeInit()
 {
-    mWindowContext.reset();
     SkiaSalGraphicsImpl::DeInit();
+    mWindowContext.reset();
 }
 
 void WinSkiaSalGraphicsImpl::freeResources() {}
