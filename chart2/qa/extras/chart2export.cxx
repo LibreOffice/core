@@ -89,6 +89,7 @@ public:
     void testChartTitlePropertiesColorFillDOCX();
     void testChartTitlePropertiesGradientFillDOCX();
     void testChartTitlePropertiesBitmapFillDOCX();
+    void testColorGradientWithTransparancyDOCX();
     void testBarChartDataPointPropDOCX();
     void testFdo83058dlblPos();
     void testAutoTitleDelXLSX();
@@ -194,6 +195,7 @@ public:
     CPPUNIT_TEST(testChartTitlePropertiesColorFillDOCX);
     CPPUNIT_TEST(testChartTitlePropertiesGradientFillDOCX);
     CPPUNIT_TEST(testChartTitlePropertiesBitmapFillDOCX);
+    CPPUNIT_TEST(testColorGradientWithTransparancyDOCX);
     CPPUNIT_TEST(testBarChartDataPointPropDOCX);
     CPPUNIT_TEST(testFdo83058dlblPos);
     CPPUNIT_TEST(testAutoTitleDelXLSX);
@@ -1215,6 +1217,18 @@ void Chart2ExportTest::testChartTitlePropertiesBitmapFillDOCX()
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:blipFill/a:blip", "embed", "rId1");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:ln/a:noFill", 1);
+}
+
+void Chart2ExportTest::testColorGradientWithTransparancyDOCX()
+{
+    // Test color gradient (two color) with transparency gradient!
+    load("/chart2/qa/extras/data/docx/", "testColorGradientWithTransparancy.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Test the transparency of the first color!
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:spPr/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val", "60000");
+    // Test the transparency of the second color!
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:spPr/a:gradFill/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "90196");
 }
 
 void Chart2ExportTest::testBarChartDataPointPropDOCX()
