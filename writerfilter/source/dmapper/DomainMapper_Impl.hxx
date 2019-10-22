@@ -484,12 +484,14 @@ private:
     }                               m_eInHeaderFooterImport;
     bool                            m_bDiscardHeaderFooter;
     bool                            m_bInFootOrEndnote;
+    PropertyMapPtr m_pFootnoteContext;
+    bool m_bHasFootnoteStyle;
+    bool m_bCheckFootnoteStyle;
     /// Did we get a <w:separator/> for this footnote already?
     bool                            m_bSeenFootOrEndnoteSeparator;
 
     bool                            m_bLineNumberingSet;
     bool                            m_bIsInFootnoteProperties;
-    bool                            m_bIsCustomFtnMark;
 
     RubyInfo                        m_aRubyInfo;
     //registered frame properties
@@ -743,6 +745,16 @@ public:
     void PushFootOrEndnote( bool bIsFootnote );
     void PopFootOrEndnote();
     bool IsInFootOrEndnote() const { return m_bInFootOrEndnote; }
+
+    void StartCustomFootnote(const PropertyMapPtr pContext);
+    void EndCustomFootnote();
+    bool IsInCustomFootnote() const { return m_bHasFootnoteStyle; }
+    bool CheckFootnoteStyle() const { return m_bCheckFootnoteStyle; }
+    void SetHasFootnoteStyle(bool bVal) { m_bHasFootnoteStyle = bVal; }
+    void SetCheckFootnoteStyle(bool bVal) { m_bCheckFootnoteStyle = bVal; }
+
+    const PropertyMapPtr& GetFootnoteContext() const { return m_pFootnoteContext; }
+    OUString StripFootnoteLabelCharacters(const OUString sAppendString);
     /// Got a <w:separator/>.
     void SeenFootOrEndnoteSeparator();
 
@@ -868,9 +880,6 @@ public:
 
     void SetInFootnoteProperties(bool bSet) { m_bIsInFootnoteProperties = bSet;}
     bool IsInFootnoteProperties() const { return m_bIsInFootnoteProperties;}
-
-    void SetCustomFtnMark(bool bSet) { m_bIsCustomFtnMark = bSet; }
-    bool IsCustomFtnMark() const { return m_bIsCustomFtnMark;  }
 
     bool IsInComments() const { return m_bIsInComments; };
 

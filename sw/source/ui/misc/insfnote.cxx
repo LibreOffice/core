@@ -34,8 +34,11 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <sfx2/viewfrm.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <memory>
+
+using namespace com::sun::star;
 
 static bool bFootnote = true;
 

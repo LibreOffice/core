@@ -27,7 +27,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <svl/listener.hxx>
 #include <osl/mutex.hxx>
-#include <vcl/svapp.hxx>
 
 #include <unomid.h>
 #include <unofootnote.hxx>
@@ -366,16 +365,7 @@ uno::Reference< text::XTextRange > SAL_CALL
 SwXFootnote::getAnchor()
 {
     SolarMutexGuard aGuard;
-
-    SwFormatFootnote const& rFormat( m_pImpl->GetFootnoteFormatOrThrow() );
-
-    SwTextFootnote const*const pTextFootnote = rFormat.GetTextFootnote();
-    SwPaM aPam( pTextFootnote->GetTextNode(), pTextFootnote->GetStart() );
-    aPam.SetMark();
-    ++aPam.GetMark()->nContent;
-    const uno::Reference< text::XTextRange > xRet =
-        SwXTextRange::CreateXTextRange(*GetDoc(), *aPam.Start(), aPam.End());
-    return xRet;
+    return m_pImpl->GetFootnoteFormatOrThrow().getAnchor(*GetDoc());
 }
 
 void SAL_CALL SwXFootnote::dispose()
