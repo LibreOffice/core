@@ -268,6 +268,10 @@ drawinglayer/source/attribute/sdrsceneattribute3d.cxx:32
     drawinglayer::attribute::ImpSdrSceneAttribute mfDistance double
 drawinglayer/source/tools/emfpcustomlinecap.hxx:34
     emfplushelper::EMFPCustomLineCap mbIsFilled _Bool
+editeng/source/accessibility/AccessibleHyperlink.hxx:46
+    accessibility::AccessibleHyperlink nPara sal_Int32
+editeng/source/accessibility/AccessibleHyperlink.hxx:47
+    accessibility::AccessibleHyperlink nRealIdx sal_uInt16
 embeddedobj/source/inc/oleembobj.hxx:132
     OleEmbeddedObject m_nTargetState sal_Int32
 embeddedobj/source/inc/oleembobj.hxx:144
@@ -400,6 +404,10 @@ include/svx/fmtools.hxx:134
     FmXDisposeListener m_pAdapter rtl::Reference<FmXDisposeMultiplexer>
 include/svx/gridctrl.hxx:255
     DbGridControl m_pCursorDisposeListener std::unique_ptr<DisposeListenerGridBridge>
+include/svx/langbox.hxx:71
+    SvxLanguageBoxBase m_aNotCheckedImage class Image
+include/svx/langbox.hxx:72
+    SvxLanguageBoxBase m_aCheckedImage class Image
 include/svx/ofaitem.hxx:44
     OfaRefItem mxRef rtl::Reference<reference_type>
 include/svx/srchdlg.hxx:162
@@ -428,6 +436,8 @@ include/vcl/NotebookBarAddonsMerger.hxx:57
     AddonNotebookBarItem nWidth sal_uInt16
 include/vcl/opengl/OpenGLContext.hxx:32
     GLWindow bMultiSampleSupported _Bool
+include/vcl/pdfextoutdevdata.hxx:83
+    vcl::PDFExtOutDevData mbSinglePageSheets _Bool
 include/vcl/salnativewidgets.hxx:469
     ToolbarValue mbIsTopDockingArea _Bool
 include/vcl/salnativewidgets.hxx:534
@@ -480,8 +490,6 @@ registry/source/reflread.cxx:466
     ConstantPool::readDoubleConstant(sal_uInt16)::(anonymous union)::(anonymous) b2 sal_uInt32
 reportdesign/inc/RptObject.hxx:72
     rptui::OObjectBase m_xKeepShapeAlive css::uno::Reference<css::uno::XInterface>
-reportdesign/source/ui/inc/CondFormat.hxx:69
-    rptui::ConditionalFormattingDialog m_bDeletingCondition _Bool
 sal/qa/osl/file/osl_File.cxx:4154
     osl_Directory::isOpen nError1 osl::class FileBase::RC
 sal/qa/osl/file/osl_File.cxx:4154
@@ -644,7 +652,7 @@ sd/source/ui/remotecontrol/Receiver.hxx:35
     sd::Receiver pTransmitter class sd::Transmitter *
 sd/source/ui/sidebar/MasterPageContainerProviders.hxx:136
     sd::sidebar::TemplatePreviewProvider msURL const class rtl::OUString
-sd/source/ui/sidebar/SlideBackground.hxx:94
+sd/source/ui/sidebar/SlideBackground.hxx:93
     sd::sidebar::SlideBackground m_pContainer VclPtr<class VclVBox>
 sd/source/ui/slideshow/slideshowimpl.hxx:333
     sd::SlideshowImpl mpPaneHider ::std::unique_ptr<PaneHider>
@@ -652,7 +660,7 @@ sd/source/ui/slideshow/SlideShowRestarter.hxx:70
     sd::SlideShowRestarter mpSelf ::std::shared_ptr<SlideShowRestarter>
 sd/source/ui/slidesorter/controller/SlsListener.hxx:147
     sd::slidesorter::controller::Listener mpModelChangeLock std::shared_ptr<SlideSorterController::ModelChangeLock>
-sd/source/ui/slidesorter/inc/controller/SlsClipboard.hxx:119
+sd/source/ui/slidesorter/inc/controller/SlsClipboard.hxx:118
     sd::slidesorter::controller::Clipboard mxUndoContext std::unique_ptr<UndoContext>
 sd/source/ui/view/ToolBarManager.cxx:315
     sd::ToolBarManager::Implementation mpAsynchronousLayouterLock ::std::unique_ptr<LayouterLock>
@@ -678,7 +686,7 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:296
     Vertex normal glm::vec3
 slideshow/source/engine/opengl/TransitionImpl.hxx:297
     Vertex texcoord glm::vec2
-slideshow/source/engine/slideshowimpl.cxx:1044
+slideshow/source/engine/slideshowimpl.cxx:1042
     (anonymous namespace)::SlideShowImpl::PrefetchPropertiesFunc mpSlideShowImpl class (anonymous namespace)::SlideShowImpl *const
 slideshow/test/testview.cxx:53
     ImplTestView maCreatedSprites std::vector<std::pair<basegfx::B2DVector, double> >
@@ -750,23 +758,23 @@ svx/source/sdr/attribute/sdrtextattribute.cxx:53
     drawinglayer::attribute::ImpSdrTextAttribute maPropertiesVersion sal_uInt32
 svx/source/sdr/attribute/sdrtextattribute.cxx:67
     drawinglayer::attribute::ImpSdrTextAttribute mbWrongSpell const _Bool
-svx/source/sidebar/line/LinePropertyPanel.hxx:97
+svx/source/sidebar/line/LinePropertyPanel.hxx:96
     svx::sidebar::LinePropertyPanel maStyleControl sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:98
+svx/source/sidebar/line/LinePropertyPanel.hxx:97
     svx::sidebar::LinePropertyPanel maDashControl sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:100
+svx/source/sidebar/line/LinePropertyPanel.hxx:99
     svx::sidebar::LinePropertyPanel maStartControl sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:101
+svx/source/sidebar/line/LinePropertyPanel.hxx:100
     svx::sidebar::LinePropertyPanel maEndControl sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:102
+svx/source/sidebar/line/LinePropertyPanel.hxx:101
     svx::sidebar::LinePropertyPanel maLineEndListControl sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:103
+svx/source/sidebar/line/LinePropertyPanel.hxx:102
     svx::sidebar::LinePropertyPanel maLineStyleListControl sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:104
+svx/source/sidebar/line/LinePropertyPanel.hxx:103
     svx::sidebar::LinePropertyPanel maTransControl sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:105
+svx/source/sidebar/line/LinePropertyPanel.hxx:104
     svx::sidebar::LinePropertyPanel maEdgeStyle sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:106
+svx/source/sidebar/line/LinePropertyPanel.hxx:105
     svx::sidebar::LinePropertyPanel maCapStyle sfx2::sidebar::ControllerItem
 svx/source/svdraw/svdibrow.cxx:95
     ImpItemListRow pType const std::type_info *
@@ -896,6 +904,10 @@ vbahelper/source/vbahelper/vbafillformat.hxx:36
     ScVbaFillFormat m_nForeColor sal_Int32
 vcl/inc/accel.h:33
     ImplAccelEntry mpAutoAccel class Accelerator *
+vcl/inc/ControlCacheKey.hxx:31
+    ControlCacheKey mnState const enum ControlState
+vcl/inc/ControlCacheKey.hxx:32
+    ControlCacheKey maSize const class Size
 vcl/inc/fontselect.hxx:61
     FontSelectPattern mfExactHeight float
 vcl/inc/opengl/RenderList.hxx:29
@@ -956,10 +968,8 @@ vcl/inc/unx/gtk/gtkframe.hxx:81
     GtkSalFrame::IMHandler::PreviousKeyPress send_event gint8
 vcl/inc/unx/gtk/gtkframe.hxx:82
     GtkSalFrame::IMHandler::PreviousKeyPress time guint32
-vcl/inc/unx/salgdi.h:307
+vcl/inc/unx/salgdi.h:306
     X11SalGraphics nTextPixel_ Pixel
-vcl/inc/unx/salgdi.h:313
-    X11SalGraphics bFontGC_ _Bool
 vcl/inc/WidgetThemeLibrary.hxx:20
     vcl::WidgetDrawStyle nSize uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:91
@@ -1012,7 +1022,7 @@ vcl/unx/gtk3/gtk3gloactiongroup.cxx:28
     GLOAction parent_instance GObject
 vcl/unx/gtk3/gtk3glomenu.cxx:17
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:1588
+vcl/unx/gtk3/gtk3gtkinst.cxx:1596
      in char *
 vcl/unx/gtk3/gtk3hudawareness.cxx:17
     HudAwarenessHandle connection GDBusConnection *

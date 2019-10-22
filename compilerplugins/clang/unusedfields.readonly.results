@@ -370,6 +370,8 @@ include/unoidl/unoidl.hxx:453
     unoidl::ConstantValue::(anonymous) doubleValue double
 include/unotest/bootstrapfixturebase.hxx:52
     test::BootstrapFixtureBase m_directories class test::Directories
+include/vcl/headbar.hxx:231
+    HeaderBar maDragHdl Link<class HeaderBar *, void>
 include/vcl/opengl/OpenGLContext.hxx:48
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
 include/vcl/opengl/OpenGLContext.hxx:167
@@ -472,9 +474,9 @@ sc/source/filter/inc/xltracer.hxx:82
     XclTracer mbEnabled _Bool
 sc/source/filter/xml/xmlcelli.hxx:96
     ScXMLTableRowCellContext mbEditEngineHasText _Bool
-sc/source/ui/inc/csvruler.hxx:36
+sc/source/ui/inc/csvruler.hxx:39
     ScCsvRuler maBackgrDev ScopedVclPtrInstance<class VirtualDevice>
-sc/source/ui/inc/csvruler.hxx:37
+sc/source/ui/inc/csvruler.hxx:40
     ScCsvRuler maRulerDev ScopedVclPtrInstance<class VirtualDevice>
 sc/source/ui/inc/tabcont.hxx:38
     ScTabControl bErrorShown _Bool
@@ -720,8 +722,6 @@ vcl/inc/toolbox.h:108
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<sal_uInt16>
 vcl/inc/unx/saldisp.hxx:282
     SalDisplay m_aInvalidScreenData const struct SalDisplay::ScreenData
-vcl/inc/unx/salgdi.h:306
-    X11SalGraphics pFontGC_ GC
 vcl/inc/WidgetThemeLibrary.hxx:21
     vcl::WidgetDrawStyle maFaceColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:22
@@ -876,9 +876,7 @@ vcl/source/app/settings.cxx:184
     ImplStyleData maDialogStyle struct DialogStyle
 vcl/source/control/roadmapwizard.cxx:62
     vcl::RoadmapWizardImpl aStateDescriptors vcl::(anonymous namespace)::StateDescriptions
-vcl/source/control/tabctrl.cxx:54
-    ImplTabItem maHelpId class rtl::OString
-vcl/source/control/tabctrl.cxx:79
+vcl/source/control/tabctrl.cxx:78
     ImplTabCtrlData maLayoutPageIdToLine std::unordered_map<int, int>
 vcl/source/filter/jpeg/Exif.hxx:51
     Exif::ExifIFD tag sal_uInt8 [2]
@@ -956,7 +954,7 @@ vcl/unx/gtk3/gtk3gloactiongroup.cxx:28
     GLOAction parent_instance GObject
 vcl/unx/gtk3/gtk3glomenu.cxx:17
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:1588
+vcl/unx/gtk3/gtk3gtkinst.cxx:1596
      out gpointer *
 writerfilter/inc/ooxml/QNameToString.hxx:41
     writerfilter::QNameToString mMap writerfilter::QNameToString::Map

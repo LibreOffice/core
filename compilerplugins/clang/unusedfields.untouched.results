@@ -147,9 +147,9 @@ include/sfx2/msg.hxx:143
 include/sfx2/msg.hxx:143
     SfxType13 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:143
-    SfxType13 nAttribs sal_uInt16
-include/sfx2/msg.hxx:143
     SfxType13 aAttrib struct SfxTypeAttrib [13]
+include/sfx2/msg.hxx:143
+    SfxType13 nAttribs sal_uInt16
 include/sfx2/msg.hxx:144
     SfxType14 pType const std::type_info *
 include/sfx2/msg.hxx:144
@@ -234,8 +234,6 @@ libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.hxx:28
     GtvLokDialog parent GtkDialog
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.hxx:33
     GtvLokDialogClass parentClass GtkDialogClass
-libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.cxx:265
-      const std::string &
 libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:28
     GtvMainToolbar parent GtkBox
 libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:36
@@ -326,7 +324,7 @@ sc/source/filter/html/htmlpars.cxx:3005
     (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/sheetdatacontext.hxx:62
     oox::xls::SheetDataContext aReleaser const class SolarMutexReleaser
-sc/source/ui/inc/docsh.hxx:455
+sc/source/ui/inc/docsh.hxx:453
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sc/source/ui/inc/PivotLayoutTreeListBase.hxx:48
     ScPivotLayoutTreeListBase maDropTargetHelper class ScPivotLayoutTreeDropTarget
@@ -386,6 +384,8 @@ svx/source/dialog/contimp.hxx:75
     SvxSuperContourDlg aContourItem class SvxContourDlgItem
 svx/source/dialog/weldeditview.cxx:300
     WeldEditSource m_rEditAcc class WeldEditAccessible &
+sw/qa/extras/uiwriter/uiwriter2.cxx:66
+      class SwUiWriterTest2 *
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
 sw/source/core/frmedt/fetab.cxx:78
@@ -450,7 +450,7 @@ vcl/source/uitest/uno/uitest_uno.cxx:35
     UITestUnoObj mpUITest std::unique_ptr<UITest>
 vcl/unx/gtk3/a11y/gtk3atkhypertext.cxx:29
     HyperLink atk_hyper_link const AtkHyperlink
-vcl/unx/gtk3/gtk3gtkinst.cxx:4697
+vcl/unx/gtk3/gtk3gtkinst.cxx:4705
     CrippledViewport viewport GtkViewport
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:43
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
