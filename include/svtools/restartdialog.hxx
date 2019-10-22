@@ -57,6 +57,9 @@ enum RestartReason {
     // For the OpenGL changes to take effect,
     // %PRODUCTNAME must be restarted:
     RESTART_REASON_OPENGL,
+    // For the Skia changes to take effect,
+    // %PRODUCTNAME must be restarted:
+    RESTART_REASON_SKIA,
     // For the OpenCL changes to take effect,
     // %PRODUCTNAME must be restarted:
     RESTART_REASON_OPENCL,
