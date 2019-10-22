@@ -115,8 +115,8 @@ ScTransferObj::ScTransferObj( ScDocumentUniquePtr pClipDoc, const TransferableOb
     m_aObjDesc( rDesc ),
     m_nDragHandleX( 0 ),
     m_nDragHandleY( 0 ),
-    m_nSourceCursorX( MAXCOL + 1 ),
-    m_nSourceCursorY( MAXROW + 1 ),
+    m_nSourceCursorX( m_pDoc->MaxCol() + 1 ),
+    m_nSourceCursorY( m_pDoc->MaxRow() + 1 ),
     m_nDragSourceFlags( ScDragSrc::Undefined ),
     m_bDragWasInternal( false ),
     m_bUsedForLink( false ),
@@ -155,7 +155,7 @@ ScTransferObj::ScTransferObj( ScDocumentUniquePtr pClipDoc, const TransferableOb
 
     //  only limit to used cells if whole sheet was marked
     //  (so empty cell areas can be copied)
-    if ( nCol2>=MAXCOL && nRow2>=MAXROW )
+    if ( nCol2>=m_pDoc->MaxCol() && nRow2>=m_pDoc->MaxRow() )
     {
         SCROW nMaxRow;
         SCCOL nMaxCol;
@@ -236,7 +236,7 @@ void ScTransferObj::AddSupportedFormats()
 
 static ScRange lcl_reduceBlock(const ScDocumentUniquePtr &pDoc, ScRange aReducedBlock, bool bIncludeVisual = false)
 {
-    if ((aReducedBlock.aEnd.Col() == MAXCOL || aReducedBlock.aEnd.Row() == MAXROW) &&
+    if ((aReducedBlock.aEnd.Col() == pDoc->MaxCol() || aReducedBlock.aEnd.Row() == pDoc->MaxRow()) &&
         aReducedBlock.aStart.Tab() == aReducedBlock.aEnd.Tab())
     {
         // Shrink the block here so we don't waste time creating huge

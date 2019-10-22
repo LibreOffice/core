@@ -223,8 +223,8 @@ void ScDBDataManager::WriteToDoc(ScDocument& rDoc)
     bool bShrunk = false;
     SCCOL nStartCol = 0;
     SCROW nStartRow = 0;
-    SCCOL nEndCol = MAXCOL;
-    SCROW nEndRow = MAXROW;
+    SCCOL nEndCol = rDoc.MaxCol();
+    SCROW nEndRow = rDoc.MaxRow();
     rDoc.ShrinkToUsedDataArea(bShrunk, 0, nStartCol, nStartRow, nEndCol, nEndRow, false, true, true);
     ScRange aClipRange(nStartCol, nStartRow, 0, nEndCol, nEndRow, 0);
     rDoc.SetClipArea(aClipRange);

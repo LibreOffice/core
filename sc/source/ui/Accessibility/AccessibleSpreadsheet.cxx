@@ -64,7 +64,8 @@ ScMyAddress ScAccessibleSpreadsheet::CalcScAddressFromRangeList(ScRangeList *pMa
     }
     else
     {
-        sal_Int32 nMinRow = MAXROW;
+        ScDocument* pDoc= GetDocument(mpViewShell);
+        sal_Int32 nMinRow = pDoc->MaxRow();
         sal_Int32 nMaxRow = 0;
         m_vecTempRange.clear();
         size_t nSize = pMarkedRanges->size();
@@ -246,7 +247,7 @@ ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
         SCTAB nTab,
         ScSplitPos eSplitPos)
     :
-    ScAccessibleTableBase( pAccDoc, GetDocument(pViewShell), ScRange( 0, 0, nTab, MAXCOL, MAXROW, nTab)),
+    ScAccessibleTableBase( pAccDoc, GetDocument(pViewShell), ScRange( 0, 0, nTab, GetDocument(pViewShell)->MaxCol(), GetDocument(pViewShell)->MaxRow(), nTab)),
     mbIsSpreadsheet( true ),
     m_bFormulaMode( false ),
     m_bFormulaLastMode( false ),
@@ -513,10 +514,11 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 ScRange aMarkRange;
                 refScMarkData.GetMarkArea(aMarkRange);
                 aEvent.OldValue.clear();
+                ScDocument* pDoc= GetDocument(mpViewShell);
                 //Mark All
                 if ( !bNewPosCellFocus &&
                     (bNewMarked || bIsMark || bIsMultMark ) &&
-                    aMarkRange == ScRange( 0,0,nTab, MAXCOL,MAXROW,nTab ) )
+                    aMarkRange == ScRange( 0,0,nTab, pDoc->MaxCol(),pDoc->MaxRow(),nTab ) )
                 {
                     aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
                     aEvent.NewValue.clear();
@@ -530,8 +532,8 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 refScMarkData.FillRangeListWithMarks(mpMarkedRanges.get(), true);
 
                 //For Whole Col Row
-                bool bWholeRow = ::labs(aMarkRange.aStart.Row() - aMarkRange.aEnd.Row()) == MAXROW ;
-                bool bWholeCol = ::abs(aMarkRange.aStart.Col() - aMarkRange.aEnd.Col()) == MAXCOL ;
+                bool bWholeRow = ::labs(aMarkRange.aStart.Row() - aMarkRange.aEnd.Row()) == pDoc->MaxRow() ;
+                bool bWholeCol = ::abs(aMarkRange.aStart.Col() - aMarkRange.aEnd.Col()) == pDoc->MaxCol() ;
                 if ((bNewMarked || bIsMark || bIsMultMark ) && (bWholeCol || bWholeRow))
                 {
                     if ( aMarkRange != m_aLastWithInMarkRange )
@@ -542,8 +544,8 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                             CommitFocusCell(aNewCell);
                         }
                         bool bLastIsWholeColRow =
-                            (::labs(m_aLastWithInMarkRange.aStart.Row() - m_aLastWithInMarkRange.aEnd.Row()) == MAXROW && bWholeRow) ||
-                            (::abs(m_aLastWithInMarkRange.aStart.Col() - m_aLastWithInMarkRange.aEnd.Col()) == MAXCOL && bWholeCol);
+                            (::labs(m_aLastWithInMarkRange.aStart.Row() - m_aLastWithInMarkRange.aEnd.Row()) == pDoc->MaxRow() && bWholeRow) ||
+                            (::abs(m_aLastWithInMarkRange.aStart.Col() - m_aLastWithInMarkRange.aEnd.Col()) == pDoc->MaxCol() && bWholeCol);
                         bool bSelSmaller=
                             bLastIsWholeColRow &&
                             !aMarkRange.In(m_aLastWithInMarkRange) &&
@@ -758,8 +760,9 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessib
         {
             SCROW nStart = pRowRange->aStart.Row();
             SCROW nEnd = pRowRange->aEnd.Row();
-            if( (0 <= nStart) && (nStart <= nEnd) && (nEnd <= MAXROW) )
-                xAccessibleTable.set( new ScAccessibleSpreadsheet( *this, ScRange( 0, nStart, mnTab, MAXCOL, nEnd, mnTab ) ) );
+            ScDocument* pDoc = GetDocument(mpViewShell);
+            if( (0 <= nStart) && (nStart <= nEnd) && (nEnd <= pDoc->MaxRow()) )
+                xAccessibleTable.set( new ScAccessibleSpreadsheet( *this, ScRange( 0, nStart, mnTab, pDoc->MaxCol(), nEnd, mnTab ) ) );
         }
     }
     return xAccessibleTable;
@@ -776,8 +779,9 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessib
         {
             SCCOL nStart = pColRange->aStart.Col();
             SCCOL nEnd = pColRange->aEnd.Col();
-            if( (0 <= nStart) && (nStart <= nEnd) && (nEnd <= MAXCOL) )
-                xAccessibleTable.set( new ScAccessibleSpreadsheet( *this, ScRange( nStart, 0, mnTab, nEnd, MAXROW, mnTab ) ) );
+            ScDocument* pDoc = GetDocument(mpViewShell);
+            if( (0 <= nStart) && (nStart <= nEnd) && (nEnd <= pDoc->MaxCol()) )
+                xAccessibleTable.set( new ScAccessibleSpreadsheet( *this, ScRange( nStart, 0, mnTab, nEnd, pDoc->MaxRow(), mnTab ) ) );
         }
     }
     return xAccessibleTable;
@@ -1073,11 +1077,12 @@ void SAL_CALL ScAccessibleSpreadsheet::selectAllAccessibleChildren(  )
     {
         if (IsFormulaMode())
         {
+            ScDocument* pDoc = GetDocument(mpViewShell);
             ScViewData& rViewData = mpViewShell->GetViewData();
             mpViewShell->InitRefMode( 0, 0, rViewData.GetTabNo(), SC_REFTYPE_REF );
             rViewData.SetRefStart(0, 0, rViewData.GetTabNo());
-            rViewData.SetRefEnd(MAXCOL, MAXROW, rViewData.GetTabNo());
-            mpViewShell->UpdateRef(MAXCOL, MAXROW, rViewData.GetTabNo());
+            rViewData.SetRefEnd(pDoc->MaxCol(), pDoc->MaxRow(), rViewData.GetTabNo());
+            mpViewShell->UpdateRef(pDoc->MaxCol(), pDoc->MaxRow(), rViewData.GetTabNo());
         }
         else
             mpViewShell->SelectAll();
@@ -1379,10 +1384,11 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectRow( sal_Int32 row )
         return false;
     }
 
+    ScDocument* pDoc = GetDocument(mpViewShell);
     mpViewShell->SetTabNo( maRange.aStart.Tab() );
     mpViewShell->DoneBlockMode( true ); // continue selecting
     mpViewShell->InitBlockMode( 0, row, maRange.aStart.Tab(), false, false, true );
-    mpViewShell->MarkCursor( MAXCOL, row, maRange.aStart.Tab(), false, true );
+    mpViewShell->MarkCursor( pDoc->MaxCol(), row, maRange.aStart.Tab(), false, true );
     mpViewShell->SelectionChanged();
     return true;
 }
@@ -1396,10 +1402,11 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectColumn( sal_Int32 column )
         return false;
     }
 
+    ScDocument* pDoc = GetDocument(mpViewShell);
     mpViewShell->SetTabNo( maRange.aStart.Tab() );
     mpViewShell->DoneBlockMode( true ); // continue selecting
     mpViewShell->InitBlockMode( static_cast<SCCOL>(column), 0, maRange.aStart.Tab(), false, true );
-    mpViewShell->MarkCursor( static_cast<SCCOL>(column), MAXROW, maRange.aStart.Tab(), true );
+    mpViewShell->MarkCursor( static_cast<SCCOL>(column), pDoc->MaxRow(), maRange.aStart.Tab(), true );
     mpViewShell->SelectionChanged();
     return true;
 }
@@ -1413,10 +1420,11 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::unselectRow( sal_Int32 row )
         return false;
     }
 
+    ScDocument* pDoc = GetDocument(mpViewShell);
     mpViewShell->SetTabNo( maRange.aStart.Tab() );
     mpViewShell->DoneBlockMode( true ); // continue selecting
     mpViewShell->InitBlockMode( 0, row, maRange.aStart.Tab(), false, false, true, true );
-    mpViewShell->MarkCursor( MAXCOL, row, maRange.aStart.Tab(), false, true );
+    mpViewShell->MarkCursor( pDoc->MaxCol(), row, maRange.aStart.Tab(), false, true );
     mpViewShell->SelectionChanged();
     mpViewShell->DoneBlockMode( true );
     return true;
@@ -1431,10 +1439,11 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::unselectColumn( sal_Int32 column )
         return false;
     }
 
+    ScDocument* pDoc = GetDocument(mpViewShell);
     mpViewShell->SetTabNo( maRange.aStart.Tab() );
     mpViewShell->DoneBlockMode( true ); // continue selecting
     mpViewShell->InitBlockMode( static_cast<SCCOL>(column), 0, maRange.aStart.Tab(), false, true, false, true );
-    mpViewShell->MarkCursor( static_cast<SCCOL>(column), MAXROW, maRange.aStart.Tab(), true );
+    mpViewShell->MarkCursor( static_cast<SCCOL>(column), pDoc->MaxRow(), maRange.aStart.Tab(), true );
     mpViewShell->SelectionChanged();
     mpViewShell->DoneBlockMode( true );
     return true;
@@ -1631,7 +1640,8 @@ bool ScAccessibleSpreadsheet::GetFormulaCurrentFocusCell(ScAddress &addr)
         nRefX=rViewData.GetRefStartX();
         nRefY=rViewData.GetRefStartY();
     }
-    if( /* Always true: nRefX >= 0 && */ nRefX <= MAXCOL && nRefY >= 0 && nRefY <= MAXROW)
+    ScDocument* pDoc = GetDocument(mpViewShell);
+    if( /* Always true: nRefX >= 0 && */ nRefX <= pDoc->MaxCol() && nRefY >= 0 && nRefY <= pDoc->MaxRow())
     {
         addr = ScAddress(nRefX,nRefY,rViewData.GetTabNo());
         return true;

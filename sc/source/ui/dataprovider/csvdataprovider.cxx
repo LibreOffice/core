@@ -43,7 +43,7 @@ public:
 
     void cell(const char* p, size_t n, bool /*transient*/)
     {
-        if (mnCol > MAXCOL)
+        if (mnCol > mpDoc->MaxCol())
             return;
 
         double mfValue = 0.0;
