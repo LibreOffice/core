@@ -2680,7 +2680,10 @@ bool DocxAttributeOutput::FootnoteEndnoteRefTag()
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }
 
-    m_pSerializer->singleElementNS(XML_w, m_footnoteEndnoteRefTag);
+    if (m_footnoteCustomLabel.isEmpty())
+        m_pSerializer->singleElementNS(XML_w, m_footnoteEndnoteRefTag);
+    else
+        RunText(m_footnoteCustomLabel);
     m_footnoteEndnoteRefTag = 0;
     return true;
 }
@@ -7582,12 +7585,12 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
     // footnotes/endnotes themselves
     for ( const auto& rpItem : rVector )
     {
+        m_footnoteEndnoteRefTag = bFootnotes ? XML_footnoteRef : XML_endnoteRef;
+        m_footnoteCustomLabel = rpItem->GetNumStr();
+
         m_pSerializer->startElementNS(XML_w, nItem, FSNS(XML_w, XML_id), OString::number(nIndex));
 
         const SwNodeIndex* pIndex = rpItem->GetTextFootnote()->GetStartNode();
-        // tag required at the start of each footnote/endnote
-        m_footnoteEndnoteRefTag = bFootnotes ? XML_footnoteRef : XML_endnoteRef;
-
         m_rExport.WriteSpecialText( pIndex->GetIndex() + 1,
                 pIndex->GetNode().EndOfSectionIndex(),
                 bFootnotes? TXT_FTN: TXT_EDN );
@@ -9093,6 +9096,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_pFootnotesList( new ::docx::FootnotesList() ),
       m_pEndnotesList( new ::docx::FootnotesList() ),
       m_footnoteEndnoteRefTag( 0 ),
+      m_footnoteCustomLabel(),
       m_pRedlineData( nullptr ),
       m_nRedlineId( 0 ),
       m_bOpenedSectPr( false ),

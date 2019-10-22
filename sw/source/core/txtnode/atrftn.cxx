@@ -37,6 +37,9 @@
 #include <section.hxx>
 #include <calbck.hxx>
 #include <hints.hxx>
+#include <pam.hxx>
+#include <vcl/svapp.hxx>
+#include <unotextrange.hxx>
 
 namespace {
     /// Get a sorted list of the used footnote reference numbers.
@@ -256,6 +259,19 @@ OUString SwFormatFootnote::GetViewNumStr(const SwDoc& rDoc,
         }
     }
     return sRet;
+}
+
+uno::Reference<text::XTextRange> SwFormatFootnote::getAnchor(SwDoc& rDoc) const
+{
+    SolarMutexGuard aGuard;
+    if (!m_pTextAttr)
+        return uno::Reference<text::XTextRange>();
+    SwPaM aPam(m_pTextAttr->GetTextNode(), m_pTextAttr->GetStart());
+    aPam.SetMark();
+    ++aPam.GetMark()->nContent;
+    const uno::Reference<text::XTextRange> xRet =
+        SwXTextRange::CreateXTextRange(rDoc, *aPam.Start(), aPam.End());
+    return xRet;
 }
 
 SwTextFootnote::SwTextFootnote( SwFormatFootnote& rAttr, sal_Int32 nStartPos )
