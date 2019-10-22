@@ -171,6 +171,7 @@ static char const sFilterProvider[] = "FilterProvider";
 static char const sImageFilter[] = "ImageFilter";
 static char const sLockContentExtraction[] = "LockContentExtraction";
 static char const sLockExport[] = "LockExport";
+static char const sLockPrint[] = "LockPrint";
 
 static bool isMediaDescriptor( sal_uInt16 nSlotId )
 {
@@ -863,6 +864,14 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 if (bOK)
                     rSet.Put( SfxBoolItem( SID_LOCK_EXPORT, bVal ) );
             }
+            else if (aName == sLockPrint)
+            {
+                bool bVal = false;
+                bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for LockPrint" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_LOCK_PRINT, bVal ) );
+            }
 #ifdef DBG_UTIL
             else
                 --nFoundArgs;
@@ -1084,6 +1093,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 nAdditional++;
             if ( rSet.GetItemState( SID_LOCK_EXPORT ) == SfxItemState::SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_LOCK_PRINT ) == SfxItemState::SET )
+                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -1244,6 +1255,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                     if ( nId == SID_LOCK_CONTENT_EXTRACTION )
                         continue;
                     if ( nId == SID_LOCK_EXPORT )
+                        continue;
+                    if ( nId == SID_LOCK_PRINT )
                         continue;
                }
 
@@ -1647,6 +1660,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         if ( rSet.GetItemState( SID_LOCK_EXPORT, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = sLockExport;
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue() ;
+        }
+        if ( rSet.GetItemState( SID_LOCK_PRINT, false, &pItem ) == SfxItemState::SET )
+        {
+            pValue[nActProp].Name = sLockPrint;
             pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue() ;
         }
     }
