@@ -171,6 +171,7 @@ static char const sFilterProvider[] = "FilterProvider";
 static char const sImageFilter[] = "ImageFilter";
 static char const sLockContentExtraction[] = "LockContentExtraction";
 static char const sLockExport[] = "LockExport";
+static char const sLockPrint[] = "LockPrint";
 
 static bool isMediaDescriptor( sal_uInt16 nSlotId )
 {
@@ -860,6 +861,14 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 DBG_ASSERT( bOK, "invalid type for LockExport" );
                 if (bOK)
                     rSet.Put( SfxBoolItem( SID_LOCK_EXPORT, bVal ) );
+            }
+            else if (aName == sLockPrint)
+            {
+                bool bVal = false;
+                bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for LockPrint" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_LOCK_PRINT, bVal ) );
             }
 #ifdef DBG_UTIL
             else
