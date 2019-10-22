@@ -4713,6 +4713,9 @@ static SCCOL lcl_probeLeftOrRightFGs(const ScFormulaCellGroupRef& xGroup, const 
         if (!xNGroup)
             break;
 
+        if (!pCell->GetCode()->IsEnabledForThreading())
+            break;
+
         if (xNGroup->mpTopCell->aPos.Row() != aAddr.Row())
             break;
 
