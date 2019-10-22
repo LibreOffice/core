@@ -700,32 +700,34 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
             case SID_SETUPPRINTER:
             case SID_PRINTER_NAME:
             {
-                bool bEnabled = !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
-                if ( bEnabled )
+                if (Application::GetSettings().GetMiscSettings().GetDisablePrinting() || isPrintLocked())
                 {
-                    SfxPrinter *pPrinter = GetPrinter();
+                    rSet.DisableItem(nSID);
+                    break;
+                }
 
-                    if ( SID_PRINTDOCDIRECT == nSID )
+                SfxPrinter *pPrinter = GetPrinter();
+
+                if ( SID_PRINTDOCDIRECT == nSID )
+                {
+                    OUString aPrinterName;
+                    if ( pPrinter != nullptr )
+                        aPrinterName = pPrinter->GetName();
+                    else
+                        aPrinterName = Printer::GetDefaultPrinterName();
+                    if ( !aPrinterName.isEmpty() )
                     {
-                        OUString aPrinterName;
-                        if ( pPrinter != nullptr )
-                            aPrinterName = pPrinter->GetName();
-                        else
-                            aPrinterName = Printer::GetDefaultPrinterName();
-                        if ( !aPrinterName.isEmpty() )
-                        {
-                            uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
+                        uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
 
-                            OUStringBuffer aBuffer( 60 );
-                            aBuffer.append( vcl::CommandInfoProvider::GetLabelForCommand(
-                                ".uno:PrintDefault",
-                                vcl::CommandInfoProvider::GetModuleIdentifier( xFrame ) ) );
-                            aBuffer.append( " (" );
-                            aBuffer.append( aPrinterName );
-                            aBuffer.append(')');
+                        OUStringBuffer aBuffer( 60 );
+                        aBuffer.append( vcl::CommandInfoProvider::GetLabelForCommand(
+                            ".uno:PrintDefault",
+                            vcl::CommandInfoProvider::GetModuleIdentifier( xFrame ) ) );
+                        aBuffer.append( " (" );
+                        aBuffer.append( aPrinterName );
+                        aBuffer.append(')');
 
-                            rSet.Put( SfxStringItem( SID_PRINTDOCDIRECT, aBuffer.makeStringAndClear() ) );
-                        }
+                        rSet.Put( SfxStringItem( SID_PRINTDOCDIRECT, aBuffer.makeStringAndClear() ) );
                     }
                 }
                 break;
@@ -1763,6 +1765,15 @@ bool SfxViewShell::isExportLocked()
         return false;
     comphelper::NamedValueCollection aArgs(xModel->getArgs());
     return aArgs.getOrDefault("LockExport", false);
+}
+
+bool SfxViewShell::isPrintLocked()
+{
+    Reference<XModel> xModel = GetCurrentDocument();
+    if (!xModel.is())
+        return false;
+    comphelper::NamedValueCollection aArgs(xModel->getArgs());
+    return aArgs.getOrDefault("LockPrint", false);
 }
 
 Reference < XController > SfxViewShell::GetController() const
