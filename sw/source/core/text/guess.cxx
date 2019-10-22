@@ -136,6 +136,14 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             bAddItalic = false;
         }
 
+        if (rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                DocumentSettingId::TAB_OVER_MARGIN))
+        {
+            // Content is allowed over the margin: in this case over-margin content caused by italic
+            // formatting is OK.
+            bAddItalic = false;
+        }
+
         nItalic = bAddItalic ? nPorHeight / 12 : 0;
 
         nLineWidth -= nItalic;
