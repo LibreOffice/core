@@ -1788,19 +1788,19 @@ OUString SwRangeRedline::GetDescr()
         bDeletePaM = true;
     }
 
-    OUString sDescr = pPaM->GetText();
+    OUString sDescr = DenoteSpecialCharacters(pPaM->GetText());
     if (const SwTextNode *pTextNode = pPaM->GetNode().GetTextNode())
     {
         if (const SwTextAttr* pTextAttr = pTextNode->GetFieldTextAttrAt(pPaM->GetPoint()->nContent.GetIndex() - 1, true ))
         {
-            sDescr = pTextAttr->GetFormatField().GetField()->GetFieldName();
+            sDescr = SwResId(STR_START_QUOTE)
+                + pTextAttr->GetFormatField().GetField()->GetFieldName()
+                + SwResId(STR_END_QUOTE);
         }
     }
 
     // replace $1 in description by description of the redlines text
-    const OUString aTmpStr = SwResId(STR_START_QUOTE)
-        + ShortenString(sDescr, nUndoStringLength, SwResId(STR_LDOTS))
-        + SwResId(STR_END_QUOTE);
+    const OUString aTmpStr = ShortenString(sDescr, nUndoStringLength, SwResId(STR_LDOTS));
 
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, aTmpStr);
