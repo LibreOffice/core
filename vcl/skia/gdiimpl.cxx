@@ -103,6 +103,20 @@ public:
     }
 };
 
+SkiaSalGraphicsImpl::RenderMethod SkiaSalGraphicsImpl::renderMethodToUse()
+{
+    static RenderMethod method = [] {
+        if (const char* env = getenv("SAL_SKIA"))
+        { // TODO switch the default later
+            if (strcmp(env, "vk") == 0 || strcmp(env, "vulkan") == 0)
+                return RenderVulkan;
+        }
+        return RenderRaster;
+    }();
+
+    return method;
+}
+
 SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvider* pProvider)
     : mParent(rParent)
     , mProvider(pProvider)
