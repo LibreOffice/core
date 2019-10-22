@@ -39,9 +39,10 @@
             <child>
               <object class="GtkButton" id="standard">
                 <property name="label" translatable="no">_Standard</property>
-                <property name="visible">True</property>
+                <property name="visible">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
