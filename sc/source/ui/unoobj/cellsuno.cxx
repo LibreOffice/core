@@ -921,13 +921,13 @@ static SCTAB lcl_FirstTab( const ScRangeList& rRanges )
     return rFirst.aStart.Tab();
 }
 
-static bool lcl_WholeSheet( const ScRangeList& rRanges )
+static bool lcl_WholeSheet( const ScDocument* pDoc, const ScRangeList& rRanges )
 {
     if ( rRanges.size() == 1 )
     {
         const ScRange & rRange = rRanges[0];
-        if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == MAXCOL &&
-             rRange.aStart.Row() == 0 && rRange.aEnd.Row() == MAXROW )
+        if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == pDoc->MaxCol() &&
+             rRange.aStart.Row() == 0 && rRange.aEnd.Row() == pDoc->MaxRow() )
             return true;
     }
     return false;
@@ -1560,8 +1560,8 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 ScRange & rR = aRanges.front();
                 rR.aStart.SetCol(0);
                 rR.aStart.SetRow(0);
-                rR.aEnd.SetCol(MAXCOL);
-                rR.aEnd.SetRow(MAXROW);
+                rR.aEnd.SetCol(rDoc.MaxCol());
+                rR.aEnd.SetRow(rDoc.MaxRow());
             }
             RefChanged();
 
@@ -2919,9 +2919,10 @@ std::unique_ptr<ScMemChart> ScCellRangesBase::CreateMemChart_Impl() const
             //  (only here - Listeners are registered for the whole area)
             //! check immediately if a ScTableSheetObj?
 
+            const ScDocument & rDoc = pDocShell->GetDocument();
             const ScRange & rRange = aRanges[0];
-            if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == MAXCOL &&
-                 rRange.aStart.Row() == 0 && rRange.aEnd.Row() == MAXROW )
+            if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == rDoc.MaxCol() &&
+                 rRange.aStart.Row() == 0 && rRange.aEnd.Row() == rDoc.MaxRow() )
             {
                 SCTAB nTab = rRange.aStart.Tab();
 
@@ -2987,9 +2988,10 @@ ScRangeListRef ScCellRangesBase::GetLimitedChartRanges_Impl( long nDataColumns, 
 {
     if ( aRanges.size() == 1 )
     {
+        const ScDocument & rDoc = pDocShell->GetDocument();
         const ScRange & rRange = aRanges[0];
-        if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == MAXCOL &&
-             rRange.aStart.Row() == 0 && rRange.aEnd.Row() == MAXROW )
+        if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == rDoc.MaxCol() &&
+             rRange.aStart.Row() == 0 && rRange.aEnd.Row() == rDoc.MaxRow() )
         {
             //  if aRanges is a complete sheet, limit to given size
 
@@ -2998,14 +3000,14 @@ ScRangeListRef ScCellRangesBase::GetLimitedChartRanges_Impl( long nDataColumns, 
             long nEndColumn = nDataColumns - 1 + ( bChartColAsHdr ? 1 : 0 );
             if ( nEndColumn < 0 )
                 nEndColumn = 0;
-            if ( nEndColumn > MAXCOL )
-                nEndColumn = MAXCOL;
+            if ( nEndColumn > rDoc.MaxCol() )
+                nEndColumn = rDoc.MaxCol();
 
             long nEndRow = nDataRows - 1 + ( bChartRowAsHdr ? 1 : 0 );
             if ( nEndRow < 0 )
                 nEndRow = 0;
-            if ( nEndRow > MAXROW )
-                nEndRow = MAXROW;
+            if ( nEndRow > rDoc.MaxRow() )
+                nEndRow = rDoc.MaxRow();
 
             ScRangeListRef xChartRanges = new ScRangeList( ScRange( 0, 0, nTab, static_cast<SCCOL>(nEndColumn), static_cast<SCROW>(nEndRow), nTab ) );
             return xChartRanges;
@@ -3341,21 +3343,21 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryVisibleC
 
         ScDocument& rDoc = pDocShell->GetDocument();
         SCCOL nCol = 0, nLastCol;
-        while (nCol <= MAXCOL)
+        while (nCol <= rDoc.MaxCol())
         {
             if (rDoc.ColHidden(nCol, nTab, nullptr, &nLastCol))
                 // hidden columns.  Deselect them.
-                aMarkData.SetMultiMarkArea(ScRange(nCol, 0, nTab, nLastCol, MAXROW, nTab), false);
+                aMarkData.SetMultiMarkArea(ScRange(nCol, 0, nTab, nLastCol, rDoc.MaxRow(), nTab), false);
 
             nCol = nLastCol + 1;
         }
 
         SCROW nRow = 0, nLastRow;
-        while (nRow <= MAXROW)
+        while (nRow <= rDoc.MaxRow())
         {
             if (rDoc.RowHidden(nRow, nTab, nullptr, &nLastRow))
                 // These rows are hidden.  Deselect them.
-                aMarkData.SetMultiMarkArea(ScRange(0, nRow, nTab, MAXCOL, nLastRow, nTab), false);
+                aMarkData.SetMultiMarkArea(ScRange(0, nRow, nTab, rDoc.MaxCol(), nLastRow, nTab), false);
 
             nRow = nLastRow + 1;
         }
@@ -3563,18 +3565,18 @@ uno::Reference<sheet::XSheetCellRanges> ScCellRangesBase::QueryDifferences_Impl(
         SCTAB nTab = lcl_FirstTab(aRanges); //! for all tables, if markings per table
         ScRange aCmpRange, aCellRange;
         if (bColumnDiff)
-            aCmpRange = ScRange( 0,nCmpPos,nTab, MAXCOL,nCmpPos,nTab );
+            aCmpRange = ScRange( 0,nCmpPos,nTab, rDoc.MaxCol(),nCmpPos,nTab );
         else
-            aCmpRange = ScRange( static_cast<SCCOL>(nCmpPos),0,nTab, static_cast<SCCOL>(nCmpPos),MAXROW,nTab );
+            aCmpRange = ScRange( static_cast<SCCOL>(nCmpPos),0,nTab, static_cast<SCCOL>(nCmpPos),rDoc.MaxRow(),nTab );
         ScCellIterator aCmpIter( &rDoc, aCmpRange );
         for (bool bHasCell = aCmpIter.first(); bHasCell; bHasCell = aCmpIter.next())
         {
             SCCOLROW nCellPos = bColumnDiff ? static_cast<SCCOLROW>(aCmpIter.GetPos().Col()) : static_cast<SCCOLROW>(aCmpIter.GetPos().Row());
             if (bColumnDiff)
                 aCellRange = ScRange( static_cast<SCCOL>(nCellPos),0,nTab,
-                        static_cast<SCCOL>(nCellPos),MAXROW,nTab );
+                        static_cast<SCCOL>(nCellPos),rDoc.MaxRow(),nTab );
             else
-                aCellRange = ScRange( 0,nCellPos,nTab, MAXCOL,nCellPos,nTab );
+                aCellRange = ScRange( 0,nCellPos,nTab, rDoc.MaxCol(),nCellPos,nTab );
 
             for (i=0; i<nRangeCount; i++)
             {
@@ -3738,7 +3740,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
 
             SCTAB nTab = lcl_FirstTab(aNewRanges);              //! all tables
 
-            ScCellIterator aCellIter( &rDoc, ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab) );
+            ScCellIterator aCellIter( &rDoc, ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab) );
             for (bool bHasCell = aCellIter.first(); bHasCell; bHasCell = aCellIter.next())
             {
                 if (aCellIter.getType() != CELLTYPE_FORMULA)
@@ -3804,7 +3806,7 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
                 ScDocument& rDoc = pDocShell->GetDocument();
                 pSearchItem->SetCommand( SvxSearchCmd::FIND_ALL );
                 //  always only within this object
-                pSearchItem->SetSelection( !lcl_WholeSheet(aRanges) );
+                pSearchItem->SetSelection( !lcl_WholeSheet(&rDoc, aRanges) );
 
                 ScMarkData aMark(*GetMarkData());
 
@@ -3842,7 +3844,7 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
                 ScDocument& rDoc = pDocShell->GetDocument();
                 pSearchItem->SetCommand( SvxSearchCmd::FIND );
                 //  only always in this object
-                pSearchItem->SetSelection( !lcl_WholeSheet(aRanges) );
+                pSearchItem->SetSelection( !lcl_WholeSheet(&rDoc, aRanges) );
 
                 ScMarkData aMark(*GetMarkData());
 
@@ -3924,7 +3926,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                 bool bUndo(rDoc.IsUndoEnabled());
                 pSearchItem->SetCommand( SvxSearchCmd::REPLACE_ALL );
                 //  only always in this object
-                pSearchItem->SetSelection( !lcl_WholeSheet(aRanges) );
+                pSearchItem->SetSelection( !lcl_WholeSheet(&rDoc, aRanges) );
 
                 ScMarkData aMark(*GetMarkData());
 
@@ -5252,7 +5254,8 @@ void SAL_CALL ScCellRangeObj::fillAuto( sheet::FillDirection nFillDirection,
             default:
                 bError = true;
         }
-        if (nCount < 0 || nCount > MAXROW)      // overflow
+        const ScDocument& rDoc = pDocSh->GetDocument();
+        if (nCount < 0 || nCount > rDoc.MaxRow())      // overflow
             bError = true;
 
         if (!bError)
@@ -6562,7 +6565,7 @@ sal_Int16 SAL_CALL ScCellObj::resetActionLocks()
 }
 
 ScTableSheetObj::ScTableSheetObj( ScDocShell* pDocSh, SCTAB nTab ) :
-    ScCellRangeObj( pDocSh, ScRange(0,0,nTab, MAXCOL,MAXROW,nTab) ),
+    ScCellRangeObj( pDocSh, ScRange(0,0,nTab, pDocSh->GetDocument().MaxCol(), pDocSh->GetDocument().MaxRow(),nTab) ),
     pSheetPropSet(lcl_GetSheetPropertySet())
 {
 }
@@ -6573,7 +6576,8 @@ ScTableSheetObj::~ScTableSheetObj()
 
 void ScTableSheetObj::InitInsertSheet(ScDocShell* pDocSh, SCTAB nTab)
 {
-    InitInsertRange( pDocSh, ScRange(0,0,nTab, MAXCOL,MAXROW,nTab) );
+    ScDocument& rDoc = pDocSh->GetDocument();
+    InitInsertRange( pDocSh, ScRange(0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab) );
 }
 
 uno::Any SAL_CALL ScTableSheetObj::queryInterface( const uno::Type& rType )
@@ -6731,8 +6735,9 @@ uno::Reference<sheet::XSheetCellCursor> SAL_CALL ScTableSheetObj::createCursor()
     if ( pDocSh )
     {
         //! single cell or whole table??????
+        const ScDocument& rDoc = pDocSh->GetDocument();
         SCTAB nTab = GetTab_Impl();
-        return new ScCellCursorObj( pDocSh, ScRange( 0,0,nTab, MAXCOL,MAXROW,nTab ) );
+        return new ScCellCursorObj( pDocSh, ScRange( 0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab ) );
     }
     return nullptr;
 }
@@ -6798,7 +6803,7 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPage
         }
 
         SCCOL nCount = 0;
-        for (SCCOL nCol : rDoc.GetColumnsRange(nTab, 0, MAXCOL))
+        for (SCCOL nCol : rDoc.GetColumnsRange(nTab, 0, rDoc.MaxCol()))
             if (rDoc.HasColBreak(nCol, nTab) != ScBreakType::NONE)
                 ++nCount;
 
@@ -6806,7 +6811,7 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPage
         uno::Sequence<sheet::TablePageBreakData> aSeq(nCount);
         sheet::TablePageBreakData* pAry = aSeq.getArray();
         sal_uInt16 nPos = 0;
-        for (SCCOL nCol : rDoc.GetColumnsRange(nTab, 0, MAXCOL))
+        for (SCCOL nCol : rDoc.GetColumnsRange(nTab, 0, rDoc.MaxCol()))
         {
             ScBreakType nBreak = rDoc.HasColBreak(nCol, nTab);
             if (nBreak != ScBreakType::NONE)
@@ -6861,7 +6866,7 @@ void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks()
         {
             ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
             pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
-            rDoc.CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
+            rDoc.CopyToDocument(0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
             pDocSh->GetUndoManager()->AddUndoAction(
                                     std::make_unique<ScUndoRemoveBreaks>( pDocSh, nTab, std::move(pUndoDoc) ) );
         }
@@ -6871,7 +6876,7 @@ void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks()
 
         //? UpdatePageBreakData( sal_True );
         pDocSh->SetDocumentModified();
-        pDocSh->PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab), PaintPartFlags::Grid);
+        pDocSh->PostPaint(ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab), PaintPartFlags::Grid);
     }
 }
 
@@ -8305,7 +8310,7 @@ uno::Sequence<OUString> SAL_CALL ScTableSheetObj::getSupportedServiceNames()
 UNO3_GETIMPLEMENTATION2_IMPL(ScTableSheetObj, ScCellRangeObj);
 
 ScTableColumnObj::ScTableColumnObj( ScDocShell* pDocSh, SCCOL nCol, SCTAB nTab ) :
-    ScCellRangeObj( pDocSh, ScRange(nCol,0,nTab, nCol,MAXROW,nTab) ),
+    ScCellRangeObj( pDocSh, ScRange(nCol,0,nTab, nCol, pDocSh->GetDocument().MaxRow(),nTab) ),
     pColPropSet(lcl_GetColumnPropertySet())
 {
 }
@@ -8489,7 +8494,7 @@ const SfxItemPropertyMap& ScTableColumnObj::GetItemPropertyMap()
 }
 
 ScTableRowObj::ScTableRowObj(ScDocShell* pDocSh, SCROW nRow, SCTAB nTab) :
-    ScCellRangeObj( pDocSh, ScRange(0,nRow,nTab, MAXCOL,nRow,nTab) ),
+    ScCellRangeObj( pDocSh, ScRange(0,nRow,nTab, pDocSh->GetDocument().MaxCol(),nRow,nTab) ),
     pRowPropSet(lcl_GetRowPropertySet())
 {
 }

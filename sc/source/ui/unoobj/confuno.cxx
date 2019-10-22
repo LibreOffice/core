@@ -417,8 +417,8 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         //  update automatic row heights and repaint
         SCTAB nTabCount = rDoc.GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-            if ( !pDocShell->AdjustRowHeight( 0, MAXROW, nTab ) )
-                pDocShell->PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab), PaintPartFlags::Grid);
+            if ( !pDocShell->AdjustRowHeight( 0, rDoc.MaxRow(), nTab ) )
+                pDocShell->PostPaint(ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab), PaintPartFlags::Grid);
         pDocShell->SetDocumentModified();
     }
 

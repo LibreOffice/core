@@ -162,7 +162,7 @@ void SAL_CALL ScCellCursorObj::expandToEntireColumns()
     ScRange aNewRange( rRanges[ 0 ] );
 
     aNewRange.aStart.SetRow( 0 );
-    aNewRange.aEnd.SetRow( MAXROW );
+    aNewRange.aEnd.SetRow( GetDocShell()->GetDocument().MaxRow() );
 
     SetNewRange( aNewRange );
 }
@@ -175,7 +175,7 @@ void SAL_CALL ScCellCursorObj::expandToEntireRows()
     ScRange aNewRange( rRanges[ 0 ] );
 
     aNewRange.aStart.SetCol( 0 );
-    aNewRange.aEnd.SetCol( MAXCOL );
+    aNewRange.aEnd.SetCol( GetDocShell()->GetDocument().MaxCol() );
 
     SetNewRange( aNewRange );
 }
@@ -196,12 +196,13 @@ void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRo
 
         aNewRange.PutInOrder();    //! really?
 
+        const auto & rDoc = GetDocShell()->GetDocument();
         long nEndX = aNewRange.aStart.Col() + nColumns - 1;
         long nEndY = aNewRange.aStart.Row() + nRows - 1;
         if ( nEndX < 0 )      nEndX = 0;
-        if ( nEndX > MAXCOL ) nEndX = MAXCOL;
+        if ( nEndX > rDoc.MaxCol() ) nEndX = rDoc.MaxCol();
         if ( nEndY < 0 )      nEndY = 0;
-        if ( nEndY > MAXROW ) nEndY = MAXROW;
+        if ( nEndY > rDoc.MaxRow() ) nEndY = rDoc.MaxRow();
         //! error/exception or so, if too big/small
 
         aNewRange.aEnd.SetCol(static_cast<SCCOL>(nEndX));
@@ -379,10 +380,11 @@ void SAL_CALL ScCellCursorObj::gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nR
     ScRange aOneRange( rRanges[ 0 ] );
     aOneRange.PutInOrder();
 
+    const auto & rDoc = GetDocShell()->GetDocument();
     if ( aOneRange.aStart.Col() + nColumnOffset >= 0 &&
-         aOneRange.aEnd.Col()   + nColumnOffset <= MAXCOL &&
+         aOneRange.aEnd.Col()   + nColumnOffset <= rDoc.MaxCol() &&
          aOneRange.aStart.Row() + nRowOffset    >= 0 &&
-         aOneRange.aEnd.Row()   + nRowOffset    <= MAXROW )
+         aOneRange.aEnd.Row()   + nRowOffset    <= rDoc.MaxRow() )
     {
         ScRange aNew( static_cast<SCCOL>(aOneRange.aStart.Col() + nColumnOffset),
                       static_cast<SCROW>(aOneRange.aStart.Row() + nRowOffset),
