@@ -1079,6 +1079,11 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
             rArg.Value >>= bValue;
             pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_CONTENT_EXTRACTION, bValue));
         }
+        else if (rArg.Name == "LockExport")
+        {
+            rArg.Value >>= bValue;
+            pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_EXPORT, bValue));
+        }
         else
         {
             throw lang::IllegalArgumentException("Setting property not supported: " + rArg.Name,

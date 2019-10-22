@@ -1977,7 +1977,7 @@ void ScDocShell::GetState( SfxItemSet &rSet )
 
             case SID_SHARE_DOC:
                 {
-                    if ( IsReadOnly() )
+                    if ( IsReadOnly() || GetBestViewShell()->isExportLocked() )
                     {
                         rSet.DisableItem( nWhich );
                     }
