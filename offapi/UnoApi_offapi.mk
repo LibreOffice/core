@@ -462,6 +462,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/xforms,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/xml/crypto,\
 	NSSInitializer \
+	NSSProfile \
 	SecurityEnvironment \
 	SEInitializer \
 	GPGSEInitializer \

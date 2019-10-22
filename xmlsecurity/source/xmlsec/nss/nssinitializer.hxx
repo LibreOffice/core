@@ -37,15 +37,22 @@ class ONSSInitializer : public cppu::WeakImplHelper
 {
 protected:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    static OUString m_sNSSPath;
+    static bool m_bIsNSSinitialized;
 
-    ONSSInitializer()
-    {}
+    ONSSInitializer();
 
 public:
     explicit ONSSInitializer(const css::uno::Reference<css::uno::XComponentContext> &rxContext);
     virtual ~ONSSInitializer() override;
 
     static bool initNSS( const css::uno::Reference< css::uno::XComponentContext > &rxContext );
+    static OUString getMozillaCurrentProfile(const css::uno::Reference< css::uno::XComponentContext > &rxContext, bool bSetActive = false);
+
+    /* XNSSInitializer */
+    virtual OUString SAL_CALL getNSSPath() override;
+    virtual sal_Bool SAL_CALL getIsNSSinitialized() override;
+    virtual css::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL getNSSProfiles() override;
 
     /* XDigestContextSupplier */
     virtual css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL getDigestContext( ::sal_Int32 nDigestID, const css::uno::Sequence< css::beans::NamedValue >& aParams ) override;
@@ -55,9 +62,7 @@ public:
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName() override;
-
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
