@@ -19,13 +19,6 @@ WinSkiaSalGraphicsImpl::WinSkiaSalGraphicsImpl(WinSalGraphics& rGraphics,
 {
 }
 
-void WinSkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics)
-{
-    (void)rPosAry;
-    (void)pSrcGraphics;
-    // TODO
-}
-
 void WinSkiaSalGraphicsImpl::Init()
 {
 #if 0 // TODO

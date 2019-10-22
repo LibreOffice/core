@@ -53,7 +53,6 @@ public:
 
     virtual void Init() override;
     virtual void DeInit() override;
-    virtual void copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics) override;
 
     virtual void freeResources() override;
 

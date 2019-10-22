@@ -18,10 +18,6 @@
 
 #include <skia/x11/gdiimpl.hxx>
 
-// TODO
-#define SK_ASSUME_GL 1
-#define SK_ASSUME_GL_ES 0
-
 #include <tools/sk_app/unix/WindowContextFactory_unix.h>
 #include <tools/sk_app/WindowContext.h>
 
