@@ -14,6 +14,7 @@
 #include <tools/diagnose_ex.h>
 #include "certpath.hxx"
 
+#include <com/sun/star/xml/crypto/NSSInitializer.hpp>
 #include <com/sun/star/mozilla/MozillaBootstrap.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
@@ -37,64 +38,56 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
 
     m_xManualButton->connect_clicked( LINK( this, CertPathDialog, ManualHdl_Impl ) );
     m_xOKButton->connect_clicked( LINK( this, CertPathDialog, OKHdl_Impl ) );
+}
+
+void CertPathDialog::Init()
+{
+    m_xCertPathList->clear();
+    m_xCertPathList->set_sensitive(true);
 
     try
     {
-        // In the reverse order of preference for the default selected profile
-        mozilla::MozillaProductType const productTypes[3] = {
-            mozilla::MozillaProductType_Thunderbird,
-            mozilla::MozillaProductType_Firefox,
-            mozilla::MozillaProductType_Mozilla };
-        const char* const productNames[3] = {
-            "thunderbird",
+        uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+        uno::Reference<xml::crypto::XNSSInitializer> xCipherContextSupplier = xml::crypto::NSSInitializer::create(xContext);
+
+        OUString sActivePath = xCipherContextSupplier->getNSSPath();
+        auto aProductList = xCipherContextSupplier->getNSSProfiles();
+
+        // these map to the integer values of mozilla::MozillaProductType
+        const char* const productNames[4] = {
+            "",
+            "mozilla",
             "firefox",
-            "mozilla" };
-        bool bSelected = false;
+            "thunderbird"
+        };
 
-        uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap = mozilla::MozillaBootstrap::create( comphelper::getProcessComponentContext() );
-
-        for (sal_Int32 i = 0; i < sal_Int32(SAL_N_ELEMENTS(productTypes)); ++i)
+        for (const auto& rNSSProfile : std::as_const(aProductList))
         {
-            sal_Int32 nProfileCount = xMozillaBootstrap->getProfileCount(productTypes[i]);
-            if (nProfileCount <= 0)
-                continue;
-            OUString sDefaultProfile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
-            uno::Sequence<OUString> aProfileList(nProfileCount);
-#ifndef NDEBUG
-            sal_Int32 nListLen =
-#endif
-                 xMozillaBootstrap->getProfileList(productTypes[i], aProfileList);
-            assert((nProfileCount == nListLen) && (nListLen == aProfileList.getLength()));
-
-            for (const auto& sProfileName : std::as_const(aProfileList))
+            if (rNSSProfile.Type == mozilla::MozillaProductType_Default)
             {
-                OUString sEntry = OUString::createFromAscii(productNames[i]) + ":" + sProfileName;
-                OUString sProfilePath = xMozillaBootstrap->getProfilePath(productTypes[i], sProfileName);
-                const bool bSelectDefaultProfile = !bSelected && sProfileName == sDefaultProfile;
-                AddCertPath(sEntry, sProfilePath, bSelectDefaultProfile);
-                if (bSelectDefaultProfile)
-                    bSelected = true;
+                if (rNSSProfile.Name == "MOZILLA_CERTIFICATE_FOLDER" && !rNSSProfile.Path.isEmpty())
+                {
+                    AddCertPath("$MOZILLA_CERTIFICATE_FOLDER", rNSSProfile.Path);
+                    m_xCertPathList->set_sensitive(false);
+                }
+                else if (rNSSProfile.Name == "MANUAL")
+                    AddManualCertPath(rNSSProfile.Path);
+            }
+            else
+            {
+                OUString sEntry = OUString::createFromAscii(
+                    productNames[static_cast<int>(rNSSProfile.Type)]) + ":" + rNSSProfile.Name;
+                AddCertPath(sEntry, rNSSProfile.Path, rNSSProfile.Path == sActivePath);
             }
         }
+
+        OUString sManualCertPath = officecfg::Office::Common::Security::Scripting::ManualCertDir::get();
+        if (!sManualCertPath.isEmpty())
+            AddManualCertPath(sManualCertPath, false);
     }
     catch (const uno::Exception&)
     {
     }
-
-    try
-    {
-        AddManualCertPath(officecfg::Office::Common::Security::Scripting::CertDir::get().value_or(OUString()));
-        if (m_sManualPath.isEmpty())
-            AddManualCertPath(officecfg::Office::Common::Security::Scripting::ManualCertDir::get(), false);
-    }
-    catch (const uno::Exception &)
-    {
-        TOOLS_WARN_EXCEPTION("cui.options", "CertPathDialog::CertPathDialog()");
-    }
-
-    const char* pEnv = getenv("MOZILLA_CERTIFICATE_FOLDER");
-    if (pEnv)
-        AddCertPath("$MOZILLA_CERTIFICATE_FOLDER", OUString(pEnv, strlen(pEnv), osl_getThreadTextEncoding()));
 }
 
 void CertPathDialog::AddManualCertPath(const OUString& sUserSetCertPath, bool bSelect)
@@ -102,7 +95,6 @@ void CertPathDialog::AddManualCertPath(const OUString& sUserSetCertPath, bool bS
     if (sUserSetCertPath.isEmpty())
         return;
 
-    // check existence
     ::osl::DirectoryItem aUserPathItem;
     OUString sUserSetCertURLPath;
     osl::FileBase::getFileURLFromSystemPath(sUserSetCertPath, sUserSetCertURLPath);
@@ -121,8 +113,9 @@ IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl, weld::Button&, void)
     {
         std::shared_ptr< comphelper::ConfigurationChanges > batch(
             comphelper::ConfigurationChanges::create());
+        const int nEntry = m_xCertPathList->get_selected_index();
         officecfg::Office::Common::Security::Scripting::CertDir::set(
-            getDirectory(), batch);
+            nEntry == -1 ? OUString() : m_xCertPathList->get_id(nEntry), batch);
         officecfg::Office::Common::Security::Scripting::ManualCertDir::set(m_sManualPath, batch);
         batch->commit();
     }
@@ -134,12 +127,25 @@ IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-OUString CertPathDialog::getDirectory() const
+bool CertPathDialog::isActiveServicePath() const
 {
     int nEntry = m_xCertPathList->get_selected_index();
     if (nEntry == -1)
-        return OUString();
-    return m_xCertPathList->get_id(nEntry);
+        return true;
+
+    try
+    {
+        uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+        uno::Reference<xml::crypto::XNSSInitializer> xCipherContextSupplier = xml::crypto::NSSInitializer::create(xContext);
+
+        if (!xCipherContextSupplier->getIsNSSinitialized())
+            return true;
+        return (xCipherContextSupplier->getNSSPath() == m_xCertPathList->get_id(nEntry));
+    }
+    catch (const uno::Exception&)
+    {
+         return false;
+    }
 }
 
 CertPathDialog::~CertPathDialog()
