@@ -197,6 +197,9 @@ protected:
     void postDraw();
 
     virtual void createSurface();
+    // Call to ensure that mSurface is valid. If mSurface is going to be modified,
+    // use preDraw() instead of this.
+    void checkSurface();
     void resetSurface();
 
     void setProvider(SalGeometryProvider* provider) { mProvider = provider; }
