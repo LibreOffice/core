@@ -43,13 +43,11 @@ namespace accessibility
 
         SvxAccessibleTextAdapter& rTA;
         std::unique_ptr<SvxFieldItem> pFld;
-        sal_Int32 nPara;  // EE values
-        sal_uInt16 nRealIdx;  // EE values
         sal_Int32 nStartIdx, nEndIdx;   // translated values
         OUString aDescription;
 
     public:
-        AccessibleHyperlink( SvxAccessibleTextAdapter& r, SvxFieldItem* p, sal_Int32 nP, sal_uInt16 nR, sal_Int32 nStt, sal_Int32 nEnd, const OUString& rD );
+        AccessibleHyperlink( SvxAccessibleTextAdapter& r, SvxFieldItem* p, sal_Int32 nStt, sal_Int32 nEnd, const OUString& rD );
         virtual ~AccessibleHyperlink() override;
 
         // XAccessibleAction
