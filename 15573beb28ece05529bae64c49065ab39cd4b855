@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_85f3a90a",
+        "filename": "jvmaccess/source/virtualmachine.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-10-22T14:00:16Z",
+      "side": 1,
+      "message": "note that I have ever used this, but I assume that calling this would be a problem if any extension created a Swing user-interface, and that extension is still running",
+      "revId": "15573beb28ece05529bae64c49065ab39cd4b855",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
