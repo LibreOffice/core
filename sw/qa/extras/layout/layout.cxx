@@ -18,6 +18,10 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/event.hxx>
 #include <vcl/scheduler.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/postitem.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtcntnt.hxx>
@@ -30,6 +34,8 @@
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
 #include <ndtxt.hxx>
+#include <frmatr.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
 
@@ -3282,6 +3288,51 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124601b)
     // was in the last-but-one column.
     CPPUNIT_ASSERT_GREATER(nLastCellLeft, nFlyRight);
     CPPUNIT_ASSERT_LESS(nLastCellRight, nFlyRight);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124770)
+{
+    // Enable content over margin.
+    SwDoc* pDoc = createDoc();
+    pDoc->getIDocumentSettingAccess().set(DocumentSettingId::TAB_OVER_MARGIN, true);
+
+    // Set page width.
+    SwPageDesc& rPageDesc = pDoc->GetPageDesc(0);
+    SwFrameFormat& rPageFormat = rPageDesc.GetMaster();
+    const SwAttrSet& rPageSet = rPageFormat.GetAttrSet();
+    SwFormatFrameSize aPageSize = rPageSet.GetFrameSize();
+    aPageSize.SetWidth(3703);
+    rPageFormat.SetFormatAttr(aPageSize);
+
+    // Set left and right margin.
+    SvxLRSpaceItem aLRSpace = rPageSet.GetLRSpace();
+    aLRSpace.SetLeft(1418);
+    aLRSpace.SetRight(1418);
+    rPageFormat.SetFormatAttr(aLRSpace);
+    pDoc->ChgPageDesc(0, rPageDesc);
+
+    // Set font to italic 20pt Liberation Serif.
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SfxItemSet aTextSet(pWrtShell->GetView().GetPool(),
+                        svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{});
+    SvxFontItem aFont(RES_CHRATR_FONT);
+    aFont.SetFamilyName("Liberation Serif");
+    aTextSet.Put(aFont);
+    SvxFontHeightItem aHeight(400, 100, RES_CHRATR_FONTSIZE);
+    aTextSet.Put(aHeight);
+    SvxPostureItem aItalic(ITALIC_NORMAL, RES_CHRATR_POSTURE);
+    aTextSet.Put(aItalic);
+    pWrtShell->SetAttrSet(aTextSet);
+
+    // Insert the text.
+    pWrtShell->Insert2("HHH");
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the italic string was broken into 2 lines, while Word kept it in a single line.
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/LineBreak", 1);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
