@@ -44,6 +44,8 @@ published interface XFilePreview: com::sun::star::uno::XInterface
 
     /** The method returns the supported color depth of the target device.
 
+        @deprecated - typically now just returns 0
+
         @returns
         The color depth in bit, e.g. 8 bit, 16 bit, 32 bit.
     */
