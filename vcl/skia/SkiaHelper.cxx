@@ -10,6 +10,8 @@
 #include <vcl/skia/SkiaHelper.hxx>
 
 #include <vcl/svapp.hxx>
+#include <desktop/crashreport.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <config_features.h>
 
@@ -54,8 +56,7 @@ bool SkiaHelper::isVCLSkiaEnabled()
      */
 
     bSet = true;
-    bForceSkia = !!getenv(
-        "SAL_FORCESKIA"); // TODO SKIA || officecfg::Office::Common::VCL::ForceOpenGL::get();
+    bForceSkia = !!getenv("SAL_FORCESKIA") || officecfg::Office::Common::VCL::ForceSkia::get();
 
     bool bRet = false;
     bool bSupportsVCLSkia = supportsVCLSkia();
@@ -70,7 +71,8 @@ bool SkiaHelper::isVCLSkiaEnabled()
 
         bEnable = bEnableSkiaEnv;
 
-        // TODO SKIA        if (officecfg::Office::Common::VCL::UseOpenGL::get())
+        if (officecfg::Office::Common::VCL::UseSkia::get())
+            bEnable = false;
 
         // Force disable in safe mode
         if (Application::IsSafeModeEnabled())
@@ -79,7 +81,7 @@ bool SkiaHelper::isVCLSkiaEnabled()
         bRet = bEnable;
     }
 
-    // TODO SKIA    CrashReporter::AddKeyValue("UseOpenGL", OUString::boolean(bRet));
+    CrashReporter::addKeyValue("UseSkia", OUString::boolean(bRet), CrashReporter::Write);
 
     return bRet;
 }

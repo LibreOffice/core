@@ -75,6 +75,7 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #endif
+#include <vcl/skia/SkiaHelper.hxx>
 #include "optgdlg.hxx"
 #include <svtools/apearcfg.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
@@ -166,6 +167,86 @@ void OpenGLCfg::setForceOpenGL(bool bOpenGL)
     if (mbForceOpenGL != bOpenGL)
     {
         mbForceOpenGL = bOpenGL;
+        mbModified = true;
+    }
+}
+
+class SkiaCfg
+{
+private:
+    bool mbUseSkia;
+    bool mbForceSkia;
+    bool mbModified;
+
+public:
+    SkiaCfg();
+    ~SkiaCfg();
+
+    bool useSkia() const;
+    bool forceSkia() const;
+
+    void setUseSkia(bool bSkia);
+    void setForceSkia(bool bSkia);
+
+    void reset();
+};
+
+SkiaCfg::SkiaCfg():
+    mbModified(false)
+{
+    reset();
+}
+
+void SkiaCfg::reset()
+{
+    mbUseSkia = officecfg::Office::Common::VCL::UseSkia::get();
+    mbForceSkia = officecfg::Office::Common::VCL::ForceSkia::get();
+    mbModified = false;
+}
+
+SkiaCfg::~SkiaCfg()
+{
+    if (mbModified)
+    {
+        try
+        {
+            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+            if (!officecfg::Office::Common::VCL::UseSkia::isReadOnly())
+                officecfg::Office::Common::VCL::UseSkia::set(mbUseSkia, batch);
+            if (!officecfg::Office::Common::VCL::ForceSkia::isReadOnly())
+                officecfg::Office::Common::VCL::ForceSkia::set(mbForceSkia, batch);
+            batch->commit();
+        }
+        catch (...)
+        {
+        }
+    }
+}
+
+bool SkiaCfg::useSkia() const
+{
+    return mbUseSkia;
+}
+
+bool SkiaCfg::forceSkia() const
+{
+    return mbForceSkia;
+}
+
+void SkiaCfg::setUseSkia(bool bSkia)
+{
+    if (bSkia != mbUseSkia)
+    {
+        mbUseSkia = bSkia;
+        mbModified = true;
+    }
+}
+
+void SkiaCfg::setForceSkia(bool bSkia)
+{
+    if (mbForceSkia != bSkia)
+    {
+        mbForceSkia = bSkia;
         mbModified = true;
     }
 }
@@ -505,6 +586,7 @@ CanvasSettings::CanvasSettings() :
 bool CanvasSettings::IsHardwareAccelerationAvailable() const
 {
 #if HAVE_FEATURE_OPENGL
+// TODO SKIA
     if (OpenGLWrapper::isVCLOpenGLEnabled() && Application::GetToolkitName() != "gtk3")
         mbHWAccelAvailable = false;
 
@@ -609,6 +691,7 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , pCanvasSettings(new CanvasSettings)
     , mpDrawinglayerOpt(new SvtOptionsDrawinglayer)
     , mpOpenGLConfig(new svt::OpenGLCfg)
+    , mpSkiaConfig(new svt::SkiaCfg)
     , m_xIconSizeLB(m_xBuilder->weld_combo_box("iconsize"))
     , m_xSidebarIconSizeLB(m_xBuilder->weld_combo_box("sidebariconsize"))
     , m_xNotebookbarIconSizeLB(m_xBuilder->weld_combo_box("notebookbariconsize"))
@@ -624,8 +707,12 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xUseAntiAliase(m_xBuilder->weld_check_button("useaa"))
     , m_xUseOpenGL(m_xBuilder->weld_check_button("useopengl"))
     , m_xForceOpenGL(m_xBuilder->weld_check_button("forceopengl"))
+    , m_xUseSkia(m_xBuilder->weld_check_button("useskia"))
+    , m_xForceSkia(m_xBuilder->weld_check_button("forceskia"))
     , m_xOpenGLStatusEnabled(m_xBuilder->weld_label("openglenabled"))
     , m_xOpenGLStatusDisabled(m_xBuilder->weld_label("opengldisabled"))
+    , m_xSkiaStatusEnabled(m_xBuilder->weld_label("skiaenabled"))
+    , m_xSkiaStatusDisabled(m_xBuilder->weld_label("skiadisabled"))
     , m_xMousePosLB(m_xBuilder->weld_combo_box("mousepos"))
     , m_xMouseMiddleLB(m_xBuilder->weld_combo_box("mousemiddle"))
 {
@@ -635,6 +722,10 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
         m_xForceOpenGL->hide();
         m_xOpenGLStatusEnabled->hide();
         m_xOpenGLStatusDisabled->hide();
+        m_xUseSkia->hide();
+        m_xForceSkia->hide();
+        m_xSkiaStatusEnabled->hide();
+        m_xSkiaStatusDisabled->hide();
         m_xMenuIconBox->hide();
     }
 
@@ -649,6 +740,7 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
 #endif
 
     m_xForceOpenGL->connect_toggled(LINK(this, OfaViewTabPage, OnForceOpenGLToggled));
+    m_xForceSkia->connect_toggled(LINK(this, OfaViewTabPage, OnForceSkiaToggled));
 
     // Set known icon themes
     OUString sAutoStr( m_xIconStyleLB->get_text( 0 ) );
@@ -679,8 +771,13 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
         m_xUseOpenGL->set_sensitive(false);
     if (officecfg::Office::Common::VCL::ForceOpenGL::isReadOnly())
         m_xForceOpenGL->set_sensitive(false);
+    if (officecfg::Office::Common::VCL::UseSkia::isReadOnly())
+        m_xUseSkia->set_sensitive(false);
+    if (officecfg::Office::Common::VCL::ForceSkia::isReadOnly())
+        m_xForceSkia->set_sensitive(false);
 
     UpdateOGLStatus();
+    UpdateSkiaStatus();
 }
 
 OfaViewTabPage::~OfaViewTabPage()
@@ -703,6 +800,15 @@ IMPL_LINK_NOARG(OfaViewTabPage, OnForceOpenGLToggled, weld::ToggleButton&, void)
     {
         // Ignoring the opengl blacklist implies that opengl is on.
         m_xUseOpenGL->set_active(true);
+    }
+}
+
+IMPL_LINK_NOARG(OfaViewTabPage, OnForceSkiaToggled, weld::ToggleButton&, void)
+{
+    if (m_xForceSkia->get_active())
+    {
+        // Ignoring the Skia blacklist implies that Skia is on.
+        m_xUseSkia->set_active(true);
     }
 }
 
@@ -880,6 +986,14 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         bModified = true;
     }
 
+    if (m_xUseSkia->get_state_changed_from_saved() ||
+        m_xForceSkia->get_state_changed_from_saved())
+    {
+        mpSkiaConfig->setUseSkia(m_xUseSkia->get_active());
+        mpSkiaConfig->setForceSkia(m_xForceSkia->get_active());
+        bModified = true;
+    }
+
     if( bMenuOptModified )
     {
         // Set changed settings to the application instance
@@ -917,6 +1031,16 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
             GetDialogController()->response(RET_OK);
     }
 
+    if (m_xUseSkia->get_state_changed_from_saved() ||
+        m_xForceSkia->get_state_changed_from_saved())
+    {
+        SolarMutexGuard aGuard;
+        if( svtools::executeRestartDialog(
+                comphelper::getProcessComponentContext(), nullptr,
+                svtools::RESTART_REASON_SKIA))
+            GetDialogController()->response(RET_OK);
+    }
+
     return bModified;
 }
 
@@ -924,6 +1048,7 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 {
     SvtMiscOptions aMiscOptions;
     mpOpenGLConfig->reset();
+    mpSkiaConfig->reset();
 
     if (aMiscOptions.GetSymbolsSize() != SFX_SYMBOLS_SIZE_AUTO)
     {
@@ -1022,6 +1147,8 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     }
     m_xUseOpenGL->set_active(mpOpenGLConfig->useOpenGL());
     m_xForceOpenGL->set_active(mpOpenGLConfig->forceOpenGL());
+    m_xUseSkia->set_active(mpSkiaConfig->useSkia());
+    m_xForceSkia->set_active(mpSkiaConfig->forceSkia());
 
 #if defined( UNX )
     m_xFontAntiAliasing->save_state();
@@ -1031,6 +1158,8 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 
     m_xUseOpenGL->save_state();
     m_xForceOpenGL->save_state();
+    m_xUseSkia->save_state();
+    m_xForceSkia->save_state();
 
 #if defined( UNX )
     OnAntialiasingToggled(*m_xFontAntiAliasing);
@@ -1049,6 +1178,16 @@ void OfaViewTabPage::UpdateOGLStatus()
 #endif
     m_xOpenGLStatusEnabled->set_visible(bEnabled);
     m_xOpenGLStatusDisabled->set_visible(!bEnabled);
+}
+
+void OfaViewTabPage::UpdateSkiaStatus()
+{
+    if (Application::GetToolkitName() == "gtk3")
+        return;
+    // Easier than a custom translation string.
+    bool bEnabled = SkiaHelper::isVCLSkiaEnabled();
+    m_xSkiaStatusEnabled->set_visible(bEnabled);
+    m_xSkiaStatusDisabled->set_visible(!bEnabled);
 }
 
 struct LanguageConfig_Impl

@@ -50,6 +50,7 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #endif
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <salinst.hxx>
 #include <salframe.hxx>
@@ -1148,12 +1149,14 @@ OUString Application::GetHWOSConfInfo()
     aDetails.append( "; " );
 
     aDetails.append( VclResId(SV_APP_UIRENDER) );
-// TODO SKIA
 #if HAVE_FEATURE_OPENGL
     if ( OpenGLWrapper::isVCLOpenGLEnabled() )
         aDetails.append( VclResId(SV_APP_GL) );
     else
 #endif
+    if ( SkiaHelper::isVCLSkiaEnabled() )
+        aDetails.append( VclResId(SV_APP_SKIA) );
+    else
         aDetails.append( VclResId(SV_APP_DEFAULT) );
     aDetails.append( "; " );
 

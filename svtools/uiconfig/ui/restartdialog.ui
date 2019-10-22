@@ -287,6 +287,21 @@
                 <property name="position">14</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkLabel" id="reason_skia">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes" context="restartdialog|reason_skia">For the Skia changes to take effect, %PRODUCTNAME must be restarted.</property>
+                <property name="wrap">True</property>
+                <property name="max_width_chars">50</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">15</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
