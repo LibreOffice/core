@@ -1154,18 +1154,6 @@ void SystemWindow::doDeferredInit(WinBits /*nBits*/)
     SAL_WARN("vcl.layout", "SystemWindow in layout without doDeferredInit impl");
 }
 
-std::vector<OString> SystemWindow::getAllPageUIXMLDescriptions() const
-{
-    // default has no pages
-    return std::vector<OString>();
-}
-
-bool SystemWindow::selectPageByUIXMLDescription(const OString& /*rUIXMLDescription*/)
-{
-    // default cannot select anything (which is okay, return true)
-    return true;
-}
-
 void SystemWindow::createScreenshot(VirtualDevice& rOutput)
 {
     // same prerequisites as in Execute()

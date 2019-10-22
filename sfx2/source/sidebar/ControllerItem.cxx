@@ -67,23 +67,6 @@ void ControllerItem::StateChanged (
     mrItemUpdateReceiver.NotifyItemUpdate(nSID, eState, pState);
 }
 
-bool ControllerItem::IsEnabled (SfxItemState eState)
-{
-    if (eState == SfxItemState::DISABLED)
-        return false;
-    else if ( ! SvtCommandOptions().HasEntries(SvtCommandOptions::CMDOPTION_DISABLED))
-    {
-        // There are no disabled commands.
-        return true;
-    }
-    else
-    {
-        // We were not given a command name at construction and can
-        // not check the state now.  Assume the best and return true.
-        return true;
-    }
-}
-
 void ControllerItem::RequestUpdate()
 {
     std::unique_ptr<SfxPoolItem> pState;

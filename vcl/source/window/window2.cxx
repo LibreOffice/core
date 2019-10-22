@@ -830,11 +830,6 @@ const OString& Window::GetHelpId() const
     return mpWindowImpl->maHelpId;
 }
 
-OString Window::GetScreenshotId() const
-{
-    return GetHelpId();
-}
-
 // --------- old inline methods ---------------
 
 vcl::Window* Window::ImplGetWindow() const
