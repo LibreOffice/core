@@ -32,7 +32,11 @@ public:
     explicit CertPathDialog(weld::Window* pParent);
     virtual ~CertPathDialog() override;
 
-    OUString getDirectory() const;
+    void Init();
+
+    // returns true, if the service currently uses the selected path or is not initialized
+    // yet and therefore has no active NSS path.
+    bool isActiveServicePath() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
