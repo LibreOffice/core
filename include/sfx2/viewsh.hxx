@@ -289,6 +289,7 @@ public:
     void                        AddRemoveClipboardListener( const css::uno::Reference < css::datatransfer::clipboard::XClipboardListener>&, bool );
     css::uno::Reference< css::datatransfer::clipboard::XClipboardNotifier > GetClipboardNotifier() const;
     bool isContentExtractionLocked();
+    bool isExportLocked();
 
     SAL_DLLPRIVATE SfxInPlaceClient* GetUIActiveIPClient_Impl() const;
     SAL_DLLPRIVATE void AddContextMenuInterceptor_Impl( const css::uno::Reference < css::ui::XContextMenuInterceptor >& xInterceptor );

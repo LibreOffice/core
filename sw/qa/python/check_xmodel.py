@@ -33,6 +33,7 @@ class TestXModel(unittest.TestCase):
         p1 = PropertyValue(Name="SuggestedSaveAsName", Value="prettyFileName")
         p2 = PropertyValue(Name="SuggestedSaveAsDir", Value="/my/dir")
         p3 = PropertyValue(Name="LockContentExtraction", Value=True)
+        p4 = PropertyValue(Name="LockExport", Value=True)
         xDoc.setArgs([p1, p2, p3])
 
         # Make sure that all properties are returned with getArgs()
@@ -40,6 +41,7 @@ class TestXModel(unittest.TestCase):
         self.assertTrue(p1 in args)
         self.assertTrue(p2 in args)
         self.assertTrue(p3 in args)
+        self.assertTrue(p4 in args)
 
         xDoc.close(True)
 
