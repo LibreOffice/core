@@ -49,13 +49,10 @@ void WinSkiaSalGraphicsImpl::createSurface()
 {
     if (isOffscreen())
         return SkiaSalGraphicsImpl::createSurface();
-    if (GetWidth() == 0 || GetHeight() == 0)
-    {
-        // When created, Init() gets called with size (0,0), which is invalid size
-        // for Skia. So fake a surface, Init() will get called later again with the correct size.
-        mSurface = SkSurface::MakeRasterN32Premul(1, 1);
-        return;
-    }
+    // When created, Init() gets called with size (0,0), which is invalid size
+    // for Skia. Creating the actual surface is delayed, so the size should be always
+    // valid here, but better check.
+    assert(GetWidth() != 0 && GetHeight() != 0);
     sk_app::DisplayParams displayParams;
     mWindowContext
         = sk_app::window_context_factory::MakeRasterForWin(mWinParent.gethWnd(), displayParams);

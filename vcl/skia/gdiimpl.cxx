@@ -114,7 +114,7 @@ SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvid
 
 SkiaSalGraphicsImpl::~SkiaSalGraphicsImpl() {}
 
-void SkiaSalGraphicsImpl::Init() { resetSurface(); }
+void SkiaSalGraphicsImpl::Init() {}
 
 void SkiaSalGraphicsImpl::resetSurface()
 {
@@ -129,18 +129,14 @@ void SkiaSalGraphicsImpl::resetSurface()
 
 void SkiaSalGraphicsImpl::createSurface()
 {
-    // TODO
+    // Create surface for offscreen graphics. Subclasses will create GPU-backed
+    // surfaces as appropriate.
     mSurface = SkSurface::MakeRasterN32Premul(GetWidth(), GetHeight());
 }
 
 void SkiaSalGraphicsImpl::DeInit() { mSurface.reset(); }
 
-void SkiaSalGraphicsImpl::preDraw()
-{
-    // VCL can sometimes resize us without telling us, update the surface if needed.
-    if (GetWidth() != mSurface->width() || GetHeight() != mSurface->height())
-        resetSurface();
-}
+void SkiaSalGraphicsImpl::preDraw() { checkSurface(); }
 
 void SkiaSalGraphicsImpl::postDraw()
 {
@@ -151,6 +147,15 @@ void SkiaSalGraphicsImpl::postDraw()
         else if (!mFlush->IsActive())
             mFlush->Start();
     }
+}
+
+// VCL can sometimes resize us without telling us, update the surface if needed.
+// Also create the surface on demand if it has not been created yet (it is a waste
+// to create it in Init() if it gets recreated later anyway).
+void SkiaSalGraphicsImpl::checkSurface()
+{
+    if (!mSurface || GetWidth() != mSurface->width() || GetHeight() != mSurface->height())
+        resetSurface();
 }
 
 static SkIRect toSkIRect(const tools::Rectangle& rectangle)
@@ -182,6 +187,7 @@ bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
     if (mClipRegion == region)
         return true;
     mClipRegion = region;
+    checkSurface();
     SkCanvas* canvas = mSurface->getCanvas();
     // SkCanvas::clipRegion() can only further reduce the clip region,
     // but we need to set the given region, which may extend it.
@@ -436,6 +442,7 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
     }
     else
         src = this;
+    src->checkSurface();
     sk_sp<SkImage> image = src->mSurface->makeImageSnapshot(
         SkIRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight));
     // TODO makeNonTextureImage() ?
@@ -522,6 +529,7 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SkBitmap& rB
 std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long nWidth,
                                                           long nHeight)
 {
+    checkSurface();
     mSurface->getCanvas()->flush();
     sk_sp<SkImage> image = mSurface->makeImageSnapshot(SkIRect::MakeXYWH(nX, nY, nWidth, nHeight));
     return std::make_shared<SkiaSalBitmap>(*image);
@@ -529,6 +537,7 @@ std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long
 
 Color SkiaSalGraphicsImpl::getPixel(long nX, long nY)
 {
+    checkSurface();
     mSurface->getCanvas()->flush();
     // TODO this is presumably slow, and possibly won't work with GPU surfaces
     SkBitmap bitmap;
@@ -704,6 +713,7 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolygon,
 #ifdef DBG_UTIL
 void SkiaSalGraphicsImpl::dump(const char* file) const
 {
+    assert(mSurface.get());
     mSurface->getCanvas()->flush();
     sk_sp<SkImage> image = mSurface->makeImageSnapshot();
     sk_sp<SkData> data = image->encodeToData();
