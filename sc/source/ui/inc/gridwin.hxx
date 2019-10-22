@@ -123,7 +123,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
         SCROW mnRow1;
         SCROW mnRow2;
 
-        VisibleRange();
+        VisibleRange(const ScDocument*);
 
         bool isInside(SCCOL nCol, SCROW nRow) const;
         bool set(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);

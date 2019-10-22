@@ -191,9 +191,9 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
         if ( nX1 > 0 ) --nX1;
         if ( nY1>=2 ) nY1 -= 2;             // Hack: Header row affects two cells
         else if ( nY1 > 0 ) --nY1;
-        if ( nX2 < MAXCOL ) ++nX2;
-        if ( nY2 < MAXROW-1 ) nY2 += 2;     // Hack: Header row affects two cells
-        else if ( nY2 < MAXROW ) ++nY2;
+        if ( nX2 < pDoc->MaxCol() ) ++nX2;
+        if ( nY2 < pDoc->MaxRow()-1 ) nY2 += 2;     // Hack: Header row affects two cells
+        else if ( nY2 < pDoc->MaxRow() ) ++nY2;
         ScRange aViewRange( nX1,nY1,nTab, nX2,nY2,nTab );
 
         //! cache the ranges in table!!!!
@@ -352,25 +352,25 @@ void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::R
     }
 
     long nScrX = ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );
-    while ( nScrX <= aMirroredPixel.Left() && nX1 < MAXCOL )
+    while ( nScrX <= aMirroredPixel.Left() && nX1 < pDoc->MaxCol() )
     {
         ++nX1;
         nScrX += ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );
     }
     SCCOL nX2 = nX1;
-    while ( nScrX <= aMirroredPixel.Right() && nX2 < MAXCOL )
+    while ( nScrX <= aMirroredPixel.Right() && nX2 < pDoc->MaxCol() )
     {
         ++nX2;
         nScrX += ScViewData::ToPixel( pDoc->GetColWidth( nX2, nTab ), nPPTX );
     }
 
     long nScrY = 0;
-    ScViewData::AddPixelsWhile( nScrY, aPixRect.Top(), nY1, MAXROW, nPPTY, pDoc, nTab);
+    ScViewData::AddPixelsWhile( nScrY, aPixRect.Top(), nY1, pDoc->MaxRow(), nPPTY, pDoc, nTab);
     SCROW nY2 = nY1;
-    if (nScrY <= aPixRect.Bottom() && nY2 < MAXROW)
+    if (nScrY <= aPixRect.Bottom() && nY2 < pDoc->MaxRow())
     {
         ++nY2;
-        ScViewData::AddPixelsWhile( nScrY, aPixRect.Bottom(), nY2, MAXROW, nPPTY, pDoc, nTab);
+        ScViewData::AddPixelsWhile( nScrY, aPixRect.Bottom(), nY2, pDoc->MaxRow(), nPPTY, pDoc, nTab);
     }
 
     Draw( nX1,nY1,nX2,nY2, ScUpdateMode::Marks ); // don't continue with painting
@@ -623,7 +623,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         tools::Rectangle aDrawingRectPixel(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
 
         // correct for border (left/right)
-        if(MAXCOL == nX2)
+        if(rDoc.MaxCol() == nX2)
         {
             if(bLayoutRTL)
             {
@@ -636,7 +636,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         }
 
         // correct for border (bottom)
-        if(MAXROW == nY2)
+        if(rDoc.MaxRow() == nY2)
         {
             aDrawingRectPixel.SetBottom( GetOutputSizePixel().getHeight() );
         }
@@ -679,7 +679,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     }
 
     // edge (area) (Pixel)
-    if ( nX2==MAXCOL || nY2==MAXROW )
+    if ( nX2==rDoc.MaxCol() || nY2==rDoc.MaxRow() )
     {
         // save MapMode and set to pixel
         MapMode aCurrentMapMode(pContentDev->GetMapMode());
@@ -688,7 +688,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         tools::Rectangle aPixRect( Point(), GetOutputSizePixel() );
         pContentDev->SetFillColor( rColorCfg.GetColorValue(svtools::APPBACKGROUND).nColor );
         pContentDev->SetLineColor();
-        if ( nX2==MAXCOL )
+        if ( nX2==rDoc.MaxCol() )
         {
             tools::Rectangle aDrawRect( aPixRect );
             if ( bLayoutRTL )
@@ -698,11 +698,11 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             if (aDrawRect.Right() >= aDrawRect.Left())
                 pContentDev->DrawRect( aDrawRect );
         }
-        if ( nY2==MAXROW )
+        if ( nY2==rDoc.MaxRow() )
         {
             tools::Rectangle aDrawRect( aPixRect );
             aDrawRect.SetTop( nScrY + aOutputData.GetScrH() );
-            if ( nX2==MAXCOL )
+            if ( nX2==rDoc.MaxCol() )
             {
                 // no double painting of the corner
                 if ( bLayoutRTL )
@@ -1185,8 +1185,8 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     nBottomRightTileCol++;
     nBottomRightTileRow++;
 
-    if (nBottomRightTileCol > MAXCOL)
-        nBottomRightTileCol = MAXCOL;
+    if (nBottomRightTileCol > pDoc->MaxCol())
+        nBottomRightTileCol = pDoc->MaxCol();
 
     if (nBottomRightTileRow > MAXTILEDROW)
         nBottomRightTileRow = MAXTILEDROW;
@@ -1748,9 +1748,9 @@ tools::Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos
     const ScMergeAttr* pMerge = pDoc->GetAttr( nCol,nRow,nTab, ATTR_MERGE );
     if ( pMerge->GetColMerge() > 1 )
         nNextCol = nCol + pMerge->GetColMerge();    // next cell after the merged area
-    while ( nNextCol <= MAXCOL && pDoc->ColHidden(nNextCol, nTab) )
+    while ( nNextCol <= pDoc->MaxCol() && pDoc->ColHidden(nNextCol, nTab) )
         ++nNextCol;
-    bool bNextCell = ( nNextCol <= MAXCOL );
+    bool bNextCell = ( nNextCol <= pDoc->MaxCol() );
     if ( bNextCell )
         nAvailable = ScViewData::ToPixel( pDoc->GetColWidth( nNextCol, nTab ), pViewData->GetPPTX() );
 
@@ -1851,12 +1851,12 @@ void ScGridWindow::GetSelectionRects( ::std::vector< tools::Rectangle >& rPixelR
     {
         // limit the selection to only what is visible on the screen
         SCCOL nXRight = nPosX + pViewData->VisibleCellsX(eHWhich);
-        if (nXRight > MAXCOL)
-            nXRight = MAXCOL;
+        if (nXRight > pDoc->MaxCol())
+            nXRight = pDoc->MaxCol();
 
         SCROW nYBottom = nPosY + pViewData->VisibleCellsY(eVWhich);
-        if (nYBottom > MAXROW)
-            nYBottom = MAXROW;
+        if (nYBottom > pDoc->MaxRow())
+            nYBottom = pDoc->MaxRow();
 
         // is the selection visible at all?
         if (nX1 > nXRight || nY1 > nYBottom)

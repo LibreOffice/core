@@ -598,16 +598,16 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
 
 bool ScGridWindow::UpdateVisibleRange()
 {
+    ScDocument const& rDoc = *pViewData->GetDocument();
     SCCOL nPosX = 0;
     SCROW nPosY = 0;
-    SCCOL nXRight = MAXCOL;
-    SCROW nYBottom = MAXROW;
+    SCCOL nXRight = rDoc.MaxCol();
+    SCROW nYBottom = rDoc.MaxRow();
 
     if (comphelper::LibreOfficeKit::isActive())
     {
         // entire table in the tiled rendering case
         SCTAB nTab = pViewData->GetTabNo();
-        ScDocument const& rDoc = *pViewData->GetDocument();
         SCCOL nEndCol = 0;
         SCROW nEndRow = 0;
 
@@ -622,11 +622,11 @@ bool ScGridWindow::UpdateVisibleRange()
         nPosX = pViewData->GetPosX(eHWhich);
         nPosY = pViewData->GetPosY(eVWhich);
         nXRight = nPosX + pViewData->VisibleCellsX(eHWhich);
-        if (nXRight > MAXCOL)
-            nXRight = MAXCOL;
+        if (nXRight > rDoc.MaxCol())
+            nXRight = rDoc.MaxCol();
         nYBottom = nPosY + pViewData->VisibleCellsY(eVWhich);
-        if (nYBottom > MAXROW)
-            nYBottom = MAXROW;
+        if (nYBottom > rDoc.MaxRow())
+            nYBottom = rDoc.MaxRow();
     }
 
     // Store the current visible range.
