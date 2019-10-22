@@ -5,7 +5,7 @@
  
  	stream = xmlPatterncompile(str, dict, XML_PATTERN_XPATH,
 -			&namespaces[0]);
-+			namespaces == NULL ? NULL : &namespaces[0]);
++			namespaces); // i.e., &namespaces[0] if namespaces != NULL
  	if (namespaces != NULL) {
  	    xmlFree((xmlChar **)namespaces);
  	}
