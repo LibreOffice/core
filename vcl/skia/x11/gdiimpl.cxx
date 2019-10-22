@@ -67,8 +67,8 @@ void X11SkiaSalGraphicsImpl::createSurface()
 
 void X11SkiaSalGraphicsImpl::DeInit()
 {
-    mWindowContext.reset();
     SkiaSalGraphicsImpl::DeInit();
+    mWindowContext.reset();
 }
 
 void X11SkiaSalGraphicsImpl::freeResources() {}
