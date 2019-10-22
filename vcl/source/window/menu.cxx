@@ -2758,12 +2758,6 @@ void PopupMenu::SelectItem(sal_uInt16 nId)
     }
 }
 
-void PopupMenu::SetSelectedEntry( sal_uInt16 nId )
-{
-    nSelectedId = nId;
-    sSelectedIdent = GetItemIdent(nId);
-}
-
 sal_uInt16 PopupMenu::Execute( vcl::Window* pExecWindow, const Point& rPopupPos )
 {
     return Execute( pExecWindow, tools::Rectangle( rPopupPos, rPopupPos ), PopupMenuFlags::ExecuteDown );

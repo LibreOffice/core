@@ -518,7 +518,6 @@ public:
     // for the TestTool
     void EndExecute();
     virtual void SelectItem(sal_uInt16 nId) override;
-    void SetSelectedEntry( sal_uInt16 nId ); // for use by native submenu only
 
     static bool IsInExecute();
     static PopupMenu* GetActivePopupMenu();

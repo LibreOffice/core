@@ -129,11 +129,6 @@ namespace svt
 
         FolderDescriptor() { }
 
-        explicit FolderDescriptor( const ::ucbhelper::Content& _rContent )
-            :aContent( _rContent )
-        {
-        }
-
         explicit FolderDescriptor( const OUString& _rURL )
             :sURL( _rURL )
         {

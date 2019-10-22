@@ -113,7 +113,6 @@ class VCL_DLLPUBLIC SvTreeList final
                         );
 
     VCL_DLLPRIVATE void ResortChildren( SvTreeListEntry* pParent );
-    VCL_DLLPRIVATE void ReverseChildren( SvTreeListEntry* pParent );
 
     SvTreeList(const SvTreeList&) = delete;
     SvTreeList& operator= (const SvTreeList&) = delete;
