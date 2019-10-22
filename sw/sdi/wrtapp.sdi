@@ -60,6 +60,7 @@ interface StarWriter
     FN_MAILMERGE_WIZARD
     [
         ExecMethod = ExecOther ;
+        StateMethod = StateOther ;
     ]
 
     FN_MAILMERGE_FIRST_ENTRY

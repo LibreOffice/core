@@ -1095,7 +1095,8 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
         {
             case SID_DOCTEMPLATE :
             {
-                if ( !GetFactory().GetTemplateFilter() )
+                SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this);
+                if ( pFrame && pFrame->GetViewShell()->isExportLocked())
                     rSet.DisableItem( nWhich );
                 break;
             }
@@ -1201,7 +1202,9 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
             case SID_SAVEASDOC:
             {
-                if( !( pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) )
+                SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this);
+                if (!(pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT)
+                    || (pFrame && pFrame->GetViewShell()->isExportLocked()))
                 {
                     rSet.DisableItem( nWhich );
                     break;
@@ -1215,7 +1218,9 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
             case SID_SAVEACOPY:
             {
-                if( !( pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) )
+                SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this);
+                if (!(pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT)
+                    || (pFrame && pFrame->GetViewShell()->isExportLocked()))
                 {
                     rSet.DisableItem( nWhich );
                     break;
@@ -1227,12 +1232,17 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 break;
             }
 
+            case SID_EXPORTDOC:
             case SID_EXPORTDOCASPDF:
             case SID_DIRECTEXPORTDOCASPDF:
             case SID_EXPORTDOCASEPUB:
             case SID_DIRECTEXPORTDOCASEPUB:
             case SID_REDACTDOC:
+            case SID_SAVEASREMOTE:
             {
+                SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this);
+                if (pFrame && pFrame->GetViewShell()->isExportLocked())
+                    rSet.DisableItem( nWhich );
                 break;
             }
 
