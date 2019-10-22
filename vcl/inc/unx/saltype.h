@@ -18,8 +18,8 @@ class SalX11Screen {
 public:
     explicit SalX11Screen(unsigned int nXScreen) : mnXScreen( nXScreen ) {}
     unsigned int getXScreen() const { return mnXScreen; }
-    bool operator==(const SalX11Screen &rOther) { return rOther.mnXScreen == mnXScreen; }
-    bool operator!=(const SalX11Screen &rOther) { return rOther.mnXScreen != mnXScreen; }
+    bool operator==(const SalX11Screen &rOther) const { return rOther.mnXScreen == mnXScreen; }
+    bool operator!=(const SalX11Screen &rOther) const { return rOther.mnXScreen != mnXScreen; }
 };
 
 #endif // INCLUDED_VCL_INC_UNX_SALTYPE_H
