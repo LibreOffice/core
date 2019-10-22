@@ -14,6 +14,7 @@
 #include <test/drawing/xshapedescriptor.hxx>
 #include <test/text/xsimpletext.hxx>
 #include <test/text/xtext.hxx>
+#include <test/text/xtextrange.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -42,7 +43,8 @@ class ScAnnotationShapeObj : public CalcUnoApiTest,
                              public apitest::XShape,
                              public apitest::XShapeDescriptor,
                              public apitest::XSimpleText,
-                             public apitest::XText
+                             public apitest::XText,
+                             public apitest::XTextRange
 {
 public:
     ScAnnotationShapeObj();
@@ -75,6 +77,12 @@ public:
 
     // XText
     CPPUNIT_TEST(testInsertRemoveTextContent);
+
+    // XTextRange
+    CPPUNIT_TEST(testGetEnd);
+    CPPUNIT_TEST(testGetSetString);
+    CPPUNIT_TEST(testGetStart);
+    CPPUNIT_TEST(testGetText);
 
     CPPUNIT_TEST_SUITE_END();
 
