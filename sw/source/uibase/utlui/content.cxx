@@ -2163,9 +2163,9 @@ bool SwContentTree::HasContentChanged()
                 else if (IsSelected(pFirstEntry))
                 {
                     SvTreeListBox::SelectListEntry(pFirstEntry, false);
+                    bInvalidate = true;
                 }
             }
-            bInvalidate = true;
 
         }
 
