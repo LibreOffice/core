@@ -3835,6 +3835,8 @@ void ScInterpreter::Init( ScFormulaCell* pCell, const ScAddress& rPos, ScTokenAr
     aPos = rPos;
     pArr = &rTokArray;
     xResult = nullptr;
+    pJumpMatrix = nullptr;
+    pTokenMatrixMap.reset();
     pMyFormulaCell = pCell;
     pCur = nullptr;
     nGlobalError = FormulaError::NONE;
