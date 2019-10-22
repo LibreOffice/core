@@ -37,6 +37,7 @@
 #include <vector>
 #include <algorithm>
 #include <comphelper/random.hxx>
+#include <o3tl/float_int_conversion.hxx>
 #include <osl/diagnose.h>
 #include <basegfx/numeric/ftools.hxx>
 
@@ -3656,7 +3657,7 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
             [](double f) {
                 f = rtl::math::approxFloor(f);
                 // Valid ranks are >= 1.
-                if (f < 1.0 || static_cast<SCSIZE>(f) > std::numeric_limits<SCSIZE>::max())
+                if (f < 1.0 || !o3tl::convertsToAtMost(f, std::numeric_limits<SCSIZE>::max()))
                     return static_cast<SCSIZE>(0);
                 return static_cast<SCSIZE>(f);
             });
