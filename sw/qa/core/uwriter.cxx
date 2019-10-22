@@ -1547,6 +1547,8 @@ void SwDocTest::testTransliterate()
 
     m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
     m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "one (two) three");
+    aPaM.SetMark();
+    aPaM.GetMark()->nContent = 0;
     CPPUNIT_ASSERT_EQUAL(OUString("One (Two) Three"),
             translitTest(*m_pDoc, aPaM,
                 TransliterationFlags::TITLE_CASE));

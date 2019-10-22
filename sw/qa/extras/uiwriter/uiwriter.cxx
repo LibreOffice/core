@@ -2456,7 +2456,7 @@ void SwUiWriterTest::testTdf72788()
         pCursor->Move(fnMoveBackward);
     }
     //Check the text selection
-    CPPUNIT_ASSERT_EQUAL(OUString("is textmore"), pCursor->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"is text" + OUStringLiteral1(CH_TXTATR_NEWLINE) + u"more"), pCursor->GetText());
     //Apply a *Bold* attribute to selection
     SvxWeightItem aWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
     rIDCO.InsertPoolItem(*pCursor, aWeightItem);
@@ -3523,7 +3523,9 @@ void SwUiWriterTest::testTdf83798()
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
     pCursor->SetMark();
     pCursor->Move(fnMoveForward, GoInNode);
+    pCursor->Move(fnMoveBackward, GoInContent);
     CPPUNIT_ASSERT_EQUAL(OUString("Table of Contents"), pCursor->GetText());
+    pCursor->Move(fnMoveForward, GoInContent);
     pCursor->DeleteMark();
     pCursor->SetMark();
     pCursor->Move(fnMoveForward, GoInContent);
