@@ -28,6 +28,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 namespace oox {
 namespace vml {
@@ -76,6 +77,9 @@ OUString TextBox::getText() const
 void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
 {
     uno::Reference<text::XTextAppend> xTextAppend(xShape, uno::UNO_QUERY);
+    OUString sParaStyle;
+    bool bAmbiguousStyle = true;
+
     for (auto const& portion : maPortions)
     {
         beans::PropertyValue aPropertyValue;
@@ -129,6 +133,25 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
             aPropertyValue.Value <<= eAdjust;
             aPropVec.push_back(aPropertyValue);
         }
+
+        // All paragraphs should be either undefined (default) or the same style,
+        // because it will only  be applied to the entire shape, and not per-paragraph.
+        if (sParaStyle.isEmpty() )
+        {
+            if ( rParagraph.moParaStyleName.has() )
+                sParaStyle = rParagraph.moParaStyleName.get();
+            if ( bAmbiguousStyle )
+                bAmbiguousStyle = false; // both empty parastyle and ambiguous can only be true at the first paragraph
+            else
+                bAmbiguousStyle = rParagraph.moParaStyleName.has(); // ambiguous if both default and specified style used.
+        }
+        else if ( !bAmbiguousStyle )
+        {
+            if ( !rParagraph.moParaStyleName.has() )
+                bAmbiguousStyle = true; // ambiguous if both specified and default style used.
+            else if ( rParagraph.moParaStyleName.get() != sParaStyle )
+                bAmbiguousStyle = true; // ambiguous if two different styles specified.
+        }
         if (rFont.moColor.has())
         {
             aPropertyValue.Name = "CharColor";
@@ -137,6 +160,17 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
         }
         xTextAppend->appendTextPortion(portion.maText, comphelper::containerToSequence(aPropVec));
     }
+
+    try
+    {
+        // Track the style in a grabBag for use later when style details are known.
+        comphelper::SequenceAsHashMap aGrabBag;
+        uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY_THROW);
+        aGrabBag.update( xPropertySet->getPropertyValue("CharInteropGrabBag") );
+        aGrabBag["mso-pStyle"] <<= sParaStyle;
+        xPropertySet->setPropertyValue("CharInteropGrabBag", uno::makeAny(aGrabBag.getAsConstPropertyValueList()));
+    }
+    catch (uno::Exception&) {}
 
     // Remove the last character of the shape text, if it would be a newline.
     uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursor();
