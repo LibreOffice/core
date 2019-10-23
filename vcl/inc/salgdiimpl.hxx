@@ -49,6 +49,8 @@ public:
 
     virtual void freeResources() = 0;
 
+    virtual OUString getRenderBackendName() const { return OUString(); }
+
     virtual bool setClipRegion( const vcl::Region& ) = 0;
     //
     // get the depth of the device
