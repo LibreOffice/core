@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_bb4cc89e",
+        "filename": "solenv/gbuild/platform/com_MSC_class.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-23T15:21:05Z",
+      "side": 1,
+      "message": "was there a reason to move -W4/-w to the end?  see \u003chttps://gerrit.libreoffice.org/81403\u003e \"-W4 must come before -Wno-missing-braces for clang-cl\" for a case where the original order was relevant",
+      "revId": "87608490f205b2fbc2b453ad8ded33050ac29b90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
