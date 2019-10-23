@@ -139,6 +139,7 @@ public:
     OutputDeviceTestPolyLineB2D() = default;
 
     Bitmap setupRectangle(bool bEnableAA);
+    Bitmap setupDiamond();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestRect : public OutputDeviceTestCommon
