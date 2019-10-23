@@ -830,7 +830,7 @@ css::uno::Sequence< css::uno::Any >
                     }
                     nIndex++;
                 }
-
+                aRet.realloc(nIndex);
                 return aRet;
             }
         }
