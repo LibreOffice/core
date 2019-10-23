@@ -1698,8 +1698,7 @@ bool checkUnoObjectType(SbUnoObject& rUnoObj, const OUString& rClass)
             }
 
             // match interface name with passed class name
-            if ( (aClassName.getLength() <= aInterfaceName.getLength()) &&
-                    aInterfaceName.endsWithIgnoreAsciiCase( aClassName ) )
+            if ( aInterfaceName.endsWithIgnoreAsciiCase( aClassName ) )
             {
                 bResult = true;
                 break;
