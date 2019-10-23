@@ -669,6 +669,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="pivottablelayoutdialog|label11">Options</property>
+                    <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -934,6 +935,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="pivottablelayoutdialog|label7">Source and Destination</property>
+                    <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
