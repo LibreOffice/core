@@ -1446,8 +1446,11 @@ boost::property_tree::ptree ValueSet::DumpAsPropertyTree()
         boost::property_tree::ptree aEntry;
         ValueSetItem* pItem = mItemList[nIt].get();
         aEntry.put("id", pItem->mnId);
-        aEntry.put("text", pItem->maText);
         aEntry.put("image", pItem->maImage.GetStock());
+        if (mnSelItemId == pItem->mnId) {
+            aEntry.put("selected", true);
+        }
+
         aEntries.push_back(std::make_pair("", aEntry));
     }
 
