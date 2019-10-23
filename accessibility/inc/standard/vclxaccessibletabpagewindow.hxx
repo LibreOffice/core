@@ -21,11 +21,9 @@
 #define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLETABPAGEWINDOW_HXX
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#include <vcl/tabctrl.hxx>
+#include <vcl/tabpage.hxx>
 #include <vcl/vclptr.hxx>
-
-
-class TabControl;
-class TabPage;
 
 
 //  class VCLXAccessibleTabPageWindow

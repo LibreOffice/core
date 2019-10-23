@@ -21,7 +21,6 @@
 #define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEDROPDOWNLISTBOX_HXX
 
 #include <standard/vclxaccessiblebox.hxx>
-#include <com/sun/star/accessibility/XAccessibleAction.hpp>
 
 /** The accessible drop down combobox has two children.  The first is the
     text field represented by an object of the

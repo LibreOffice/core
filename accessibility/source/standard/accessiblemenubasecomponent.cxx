@@ -28,8 +28,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
 #include <vcl/menu.hxx>
 
 #include <array>

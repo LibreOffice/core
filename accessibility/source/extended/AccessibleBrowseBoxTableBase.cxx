@@ -19,8 +19,8 @@
 
 #include <extended/AccessibleBrowseBoxTableBase.hxx>
 #include <vcl/accessibletableprovider.hxx>
-#include <tools/multisel.hxx>
 #include <comphelper/sequence.hxx>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 

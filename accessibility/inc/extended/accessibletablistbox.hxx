@@ -22,7 +22,6 @@
 
 #include <extended/AccessibleBrowseBox.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <vcl/accessibletableprovider.hxx>
 
 class SvHeaderTabListBox;

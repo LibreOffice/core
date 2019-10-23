@@ -20,8 +20,8 @@
 #include <standard/vclxaccessiblefixedtext.hxx>
 
 #include <unotools/accessiblestatesethelper.hxx>
+#include <vcl/window.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <vcl/fixed.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

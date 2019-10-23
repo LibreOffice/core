@@ -20,7 +20,6 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_EXTENDED_LISTBOXACCESSIBLE_HXX
 #define INCLUDED_ACCESSIBILITY_INC_EXTENDED_LISTBOXACCESSIBLE_HXX
 
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
 

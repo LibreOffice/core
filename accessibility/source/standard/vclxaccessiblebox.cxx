@@ -21,7 +21,6 @@
 #include <standard/vclxaccessibletextfield.hxx>
 #include <standard/vclxaccessibleedit.hxx>
 #include <standard/vclxaccessiblelist.hxx>
-#include <helper/listboxhelper.hxx>
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

@@ -18,10 +18,12 @@
  */
 
 #include <extended/AccessibleBrowseBoxBase.hxx>
+#include <toolkit/helper/convert.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>

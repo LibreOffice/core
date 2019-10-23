@@ -21,11 +21,13 @@
 #include <extended/AccessibleGridControlTable.hxx>
 #include <extended/AccessibleGridControlHeader.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <toolkit/helper/convert.hxx>
 #include <vcl/accessibletable.hxx>
-#include <comphelper/types.hxx>
+#include <vcl/svapp.hxx>
 
 namespace accessibility
 {

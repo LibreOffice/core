@@ -20,7 +20,9 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <extended/AccessibleGridControlTable.hxx>
 #include <extended/AccessibleGridControlTableCell.hxx>
+#include <toolkit/helper/convert.hxx>
 #include <vcl/accessibletable.hxx>
+#include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 
 using ::com::sun::star::uno::Reference;

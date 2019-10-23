@@ -20,9 +20,7 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLECOMBOBOX_HXX
 #define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLECOMBOBOX_HXX
 
-#include <map>
 #include <standard/vclxaccessiblebox.hxx>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 
 
 /** The accessible combobox has two children.  The first is the text field

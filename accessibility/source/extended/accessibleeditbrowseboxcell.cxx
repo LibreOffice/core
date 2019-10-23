@@ -21,10 +21,7 @@
 #include <strings.hrc>
 
 #include <extended/accessibleeditbrowseboxcell.hxx>
-#include <svtools/editbrowsebox.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/accessibility/XAccessibleText.hpp>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 namespace accessibility
 {
@@ -33,7 +30,6 @@ namespace accessibility
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::awt;
     using namespace ::comphelper;
-    using namespace ::svt;
 
     EditBrowseBoxTableCell::EditBrowseBoxTableCell(
                 const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,

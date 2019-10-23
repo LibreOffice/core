@@ -19,6 +19,7 @@
 
 #include <extended/AccessibleBrowseBoxCheckBoxCell.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <vcl/accessibletableprovider.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 

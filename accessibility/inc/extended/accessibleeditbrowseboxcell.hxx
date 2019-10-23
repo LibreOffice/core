@@ -20,11 +20,7 @@
 #define INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEEDITBROWSEBOXCELL_HXX
 
 #include <extended/accessiblebrowseboxcell.hxx>
-#include <com/sun/star/accessibility/XAccessibleAction.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
-#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/accessiblewrapper.hxx>
 

@@ -24,9 +24,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <vcl/status.hxx>
 #include <vcl/vclptr.hxx>
-
-class StatusBar;
 
 namespace utl {
 class AccessibleStateSetHelper;

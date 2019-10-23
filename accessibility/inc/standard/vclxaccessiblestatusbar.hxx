@@ -21,11 +21,10 @@
 #define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLESTATUSBAR_HXX
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#include <vcl/status.hxx>
 #include <vcl/vclptr.hxx>
 
 #include <vector>
-
-class StatusBar;
 
 
 //  class VCLXAccessibleStatusBar

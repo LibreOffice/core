@@ -25,7 +25,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <vcl/accessibletableprovider.hxx>
-#include <memory>
 
 namespace accessibility {
 

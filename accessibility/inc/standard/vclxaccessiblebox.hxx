@@ -20,11 +20,11 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEBOX_HXX
 #define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEBOX_HXX
 
-#include <map>
-#include <standard/vclxaccessibleedit.hxx>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
+#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <cppuhelper/implbase3.hxx>
 
 
