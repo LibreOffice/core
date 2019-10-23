@@ -620,12 +620,10 @@ bool ShutdownIcon::IsQuickstarterInstalled()
 OUString ShutdownIcon::getShortcutName()
 {
 #ifdef _WIN32
-    OUString aShortcutName(SfxResId(STR_QUICKSTART_LNKNAME));
-    aShortcutName += ".lnk";
+    OUString aShortcutName(SfxResId(STR_QUICKSTART_LNKNAME) + ".lnk");
 
     OUString aShortcut(GetAutostartFolderNameW32());
-    aShortcut += "\\";
-    aShortcut += aShortcutName;
+    aShortcut += "\\" + aShortcutName;
     return aShortcut;
 #endif // _WIN32
 }

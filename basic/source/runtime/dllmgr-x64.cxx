@@ -647,7 +647,7 @@ ErrCode getProcData(HMODULE handle, OUString const & name, ProcData * proc)
         }
         FARPROC p = GetProcAddress(handle, reinterpret_cast< LPCSTR >(n));
         if (p != nullptr) {
-            proc->name = OString("#") + OString::number(n);
+            proc->name = "#" + OString::number(n);
             proc->proc = p;
             return ERRCODE_NONE;
         }
@@ -673,14 +673,14 @@ ErrCode getProcData(HMODULE handle, OUString const & name, ProcData * proc)
                 return ERRCODE_NONE;
             }
         }
-        OString real(OString("_") + name8);
+        OString real("_" + name8);
         p = GetProcAddress(handle, real.getStr());
         if (p != nullptr) {
             proc->name = real;
             proc->proc = p;
             return ERRCODE_NONE;
         }
-        real = name8 + OString("A");
+        real = name8 + "A";
         p = GetProcAddress(handle, real.getStr());
         if (p != nullptr) {
             proc->name = real;

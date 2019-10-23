@@ -1147,15 +1147,14 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*ri
     if( ! rgdispid)
         return E_POINTER;
 
-    OUString sNames;
-    sNames += "[";
+    OUString sNames("[");
     for (unsigned int i = 0; i < cNames; ++i)
     {
         // Initialise returned rgdispid values.
         rgdispid[i] = DISPID_UNKNOWN;
         if (i > 0)
             sNames += ",";
-        sNames += "\"" + OUString(o3tl::toU(rgszNames[i])) + "\"";
+        sNames += OUStringLiteral("\"") + o3tl::toU(rgszNames[i]) + "\"";
     }
     sNames += "]";
 
@@ -2893,8 +2892,8 @@ HRESULT InterfaceOleWrapper::InvokeGeneral( DISPID dispidMember, unsigned short 
             Type type;
             if (!getType(arg.bstrVal, type))
             {
-                writeExcepinfo(pexcepinfo, "[automation bridge] A UNO type with the name " +
-                                           OUString(o3tl::toU(arg.bstrVal)) + " does not exist!");
+                writeExcepinfo(pexcepinfo, OUStringLiteral("[automation bridge] A UNO type with the name ") +
+                                           o3tl::toU(arg.bstrVal) + " does not exist!");
                 return DISP_E_EXCEPTION;
             }
 

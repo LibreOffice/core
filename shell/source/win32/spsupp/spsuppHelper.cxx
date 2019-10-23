@@ -120,8 +120,8 @@ Answer AskIfUserWantsToEdit(const wchar_t* sFilePath)
 // Returns ERROR_SUCCESS or Win32 error code
 DWORD LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath)
 {
-    OUString sCmdLine = "\"" + GetSofficeExe() + "\" " + OUString(o3tl::toU(sModeArg)) + " \""
-                        + OUString(o3tl::toU(sFilePath)) + "\"";
+    OUString sCmdLine = "\"" + GetSofficeExe() + "\" " + o3tl::toU(sModeArg) + " \""
+                        + o3tl::toU(sFilePath) + "\"";
     LPWSTR pCmdLine = const_cast<LPWSTR>(o3tl::toW(sCmdLine.getStr()));
 
     STARTUPINFOW si = {};
