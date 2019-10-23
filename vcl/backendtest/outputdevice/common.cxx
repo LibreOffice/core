@@ -442,6 +442,17 @@ void OutputDeviceTestCommon::createHorizontalVerticalDiagonalLinePoints(tools::R
     rDiagonalLinePoint2 = Point(rRect.Right() - 1, rRect.Bottom() - 1);
 }
 
+TestResult OutputDeviceTestCommon::checkBezier(Bitmap& rBitmap)
+{
+    std::vector<Color> aExpected
+    {
+        constBackgroundColor, constBackgroundColor
+    };
+    // Check the bezier doesn't go over to the margins first
+    // TODO extend the check with more exact assert
+    return checkRectangles(rBitmap, aExpected);
+}
+
 }} // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
