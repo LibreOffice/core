@@ -777,19 +777,18 @@ oslFileError SAL_CALL osl_mapFile(
          * Pagein, touching first byte of each memory page.
          * Note: volatile disables optimizing the loop away.
          */
-        BYTE * pData(static_cast<BYTE*>(*ppAddr));
+        BYTE volatile * pData(static_cast<BYTE*>(*ppAddr));
         SIZE_T nSize(nLength);
 
-        volatile BYTE c = 0;
         while (nSize > dwPageSize)
         {
-            c ^= pData[0];
+            pData[0];
             pData += dwPageSize;
             nSize -= dwPageSize;
         }
         if (nSize > 0)
         {
-            c ^= pData[0];
+            pData[0];
         }
     }
     return osl_File_E_None;
