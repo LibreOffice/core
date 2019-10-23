@@ -34,6 +34,7 @@ interface XDocuments : com::sun::star::uno::XInterface
 
     any OpenOld([in] string FileName, [in] any ConfirmConversions, [in] any ReadOnly, [in] any AddToRecentFiles, [in] any PasswordDocument, [in] any PasswordTemplate, [in] any Revert, [in] any WritePasswordDocument, [in] any WritePasswordTemplate, [in] any Format);
 
+    // Note that this method doesn't actually do anhything, see sw/source/ui/vba/vbadocuments.cxx
     void Close([in] any SaveChanges,[in] any OriginalFormat,[in] any RouteDocument);
 };
 
