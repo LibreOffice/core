@@ -27,6 +27,7 @@
 
 #include <vcl/salgtype.hxx>
 #include <vcl/region.hxx>
+#include <vcl/vclenum.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
 
@@ -200,6 +201,8 @@ public:
                     sal_uInt8 nTransparency ) = 0;
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) = 0;
+
+    virtual bool supportsOperation(OutDevSupportType eType) const = 0;
 };
 
 #endif

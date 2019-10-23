@@ -2258,4 +2258,16 @@ void OpenGLSalGraphicsImpl::doFlush()
     VCL_GL_INFO( "doFlush - end." );
 }
 
+bool OpenGLSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
+{
+    switch (eType)
+    {
+        case OutDevSupportType::B2DDraw:
+        case OutDevSupportType::TransparentRect:
+            return true;
+        default:
+            return false;
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -180,25 +180,7 @@ void X11SalGraphics::invert( long       nX,
 
 bool X11SalGraphics::supportsOperation( OutDevSupportType eType ) const
 {
-    bool bRet = false;
-    switch( eType )
-    {
-    case OutDevSupportType::TransparentRect:
-    case OutDevSupportType::B2DDraw:
-        {
-            XRenderPeer& rPeer = XRenderPeer::GetInstance();
-            const SalDisplay* pSalDisp = GetDisplay();
-            const SalVisual& rSalVis = pSalDisp->GetVisual( m_nXScreen );
-
-            Visual* pDstXVisual = rSalVis.GetVisual();
-            XRenderPictFormat* pDstVisFmt = rPeer.FindVisualFormat( pDstXVisual );
-            if( pDstVisFmt )
-                bRet = true;
-        }
-        break;
-    default: break;
-    }
-    return bRet;
+    return mxImpl->supportsOperation(eType);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
