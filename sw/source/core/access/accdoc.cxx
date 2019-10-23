@@ -24,6 +24,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <comphelper/accflowenum.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <sfx2/viewsh.hxx>
@@ -762,15 +763,13 @@ css::uno::Sequence< css::uno::Any >
 {
     SolarMutexGuard g;
 
-    const sal_Int32 FORSPELLCHECKFLOWTO = 1;
-    const sal_Int32 FORFINDREPLACEFLOWTO = 2;
     SwAccessibleMap* pAccMap = GetMap();
     if ( !pAccMap )
     {
         return uno::Sequence< uno::Any >();
     }
 
-    if ( nType == FORSPELLCHECKFLOWTO )
+    if (nType == AccessibilityFlowTo::FORSPELLCHECKFLOWTO)
     {
         uno::Reference< css::drawing::XShape > xShape;
         rAny >>= xShape;
@@ -824,7 +823,7 @@ css::uno::Sequence< css::uno::Any >
             }
         }
     }
-    else if ( nType == FORFINDREPLACEFLOWTO )
+    else if (nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_ITEM || nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_RANGE)
     {
         SwCursorShell* pCursorShell = GetCursorShell();
         if ( pCursorShell )
