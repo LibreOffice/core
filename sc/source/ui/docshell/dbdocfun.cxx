@@ -268,7 +268,7 @@ void ScDBDocFunc::ModifyAllDBData( const ScDBCollection& rNewColl, const std::ve
     rDoc.SetDBCollection( std::unique_ptr<ScDBCollection>(new ScDBCollection( rNewColl )) );
     rDoc.CompileHybridFormula();
     pOldColl = nullptr;
-    rDocShell.PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PaintPartFlags::Grid);
+    rDocShell.PostPaint(ScRange(0, 0, 0, rDoc.MaxCol(), rDoc.MaxRow(), MAXTAB), PaintPartFlags::Grid);
     aModificator.SetDocumentModified();
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
 
@@ -362,20 +362,20 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed,
 
                     pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
                     rDoc.CopyToDocument(static_cast<SCCOL>(nOutStartCol), 0,
-                                        nTab, static_cast<SCCOL>(nOutEndCol), MAXROW, nTab,
+                                        nTab, static_cast<SCCOL>(nOutEndCol), rDoc.MaxRow(), nTab,
                                         InsertDeleteFlags::NONE, false, *pUndoDoc);
                     rDoc.CopyToDocument(0, static_cast<SCROW>(nOutStartRow),
-                                        nTab, MAXCOL, static_cast<SCROW>(nOutEndRow), nTab,
+                                        nTab, rDoc.MaxCol(), static_cast<SCROW>(nOutEndRow), nTab,
                                         InsertDeleteFlags::NONE, false, *pUndoDoc);
                 }
                 else
                     pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, true );
 
                 //  secure data range - incl. filtering result
-                rDoc.CopyToDocument(0, nStartRow, nTab, MAXCOL, nEndRow, nTab, InsertDeleteFlags::ALL, false, *pUndoDoc);
+                rDoc.CopyToDocument(0, nStartRow, nTab, rDoc.MaxCol(), nEndRow, nTab, InsertDeleteFlags::ALL, false, *pUndoDoc);
 
                 //  all formulas because of references
-                rDoc.CopyToDocument(0, 0, 0, MAXCOL, MAXROW, nTabCount-1, InsertDeleteFlags::FORMULA, false, *pUndoDoc);
+                rDoc.CopyToDocument(0, 0, 0, rDoc.MaxCol(), rDoc.MaxRow(), nTabCount-1, InsertDeleteFlags::FORMULA, false, *pUndoDoc);
 
                 //  ranges of DB and other
                 ScRangeName* pDocRange = rDoc.GetRangeName();
@@ -452,7 +452,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed,
                                             pOld, pNew ) );
             }
 
-            rDocShell.PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab),
+            rDocShell.PostPaint(ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab),
                                 PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size);
             bDone = true;
         }
@@ -609,7 +609,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         {
             nPaint |= PaintPartFlags::Left;
             nStartX = 0;
-            nEndX = MAXCOL;
+            nEndX = rDoc.MaxCol();
         }
         rDocShell.PostPaint(ScRange(nStartX, nStartY, nTab, nEndX, nEndY, nTab), nPaint);
     }
@@ -714,7 +714,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                 SCCOL nTestCol = aOldDest.aEnd.Col() + 1;       // next to the range
                 SCROW nTestRow = rQueryParam.nDestRow +
                                     ( aLocalParam.bHasHeader ? 1 : 0 );
-                while ( nTestCol <= MAXCOL &&
+                while ( nTestCol <= rDoc.MaxCol() &&
                         rDoc.GetCellType(ScAddress( nTestCol, nTestRow, nTab )) == CELLTYPE_FORMULA )
                 {
                     ++nTestCol;
@@ -770,7 +770,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         else
         {
             pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, true );
-            rDoc.CopyToDocument(0, rQueryParam.nRow1, nTab, MAXCOL, rQueryParam.nRow2, nTab,
+            rDoc.CopyToDocument(0, rQueryParam.nRow1, nTab, rDoc.MaxCol(), rQueryParam.nRow2, nTab,
                                 InsertDeleteFlags::NONE, false, *pUndoDoc);
         }
 
@@ -931,7 +931,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     }
 
     // #i23299# Subtotal functions depend on cell's filtered states.
-    ScRange aDirtyRange(0 , aLocalParam.nRow1, nDestTab, MAXCOL, aLocalParam.nRow2, nDestTab);
+    ScRange aDirtyRange(0 , aLocalParam.nRow1, nDestTab, rDoc.MaxCol(), aLocalParam.nRow2, nDestTab);
     rDoc.SetSubTotalCellsDirty(aDirtyRange);
 
     if ( bRecord )
@@ -964,14 +964,14 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                 nEndY = aOldDest.aEnd.Row();
         }
         if (bDoSize)
-            nEndY = MAXROW;
+            nEndY = rDoc.MaxRow();
         rDocShell.PostPaint(
             ScRange(aLocalParam.nCol1, aLocalParam.nRow1, nDestTab, nEndX, nEndY, nDestTab),
             PaintPartFlags::Grid);
     }
     else
         rDocShell.PostPaint(
-            ScRange(0, rQueryParam.nRow1, nTab, MAXCOL, MAXROW, nTab),
+            ScRange(0, rQueryParam.nRow1, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab),
             PaintPartFlags::Grid | PaintPartFlags::Left);
     aModificator.SetDocumentModified();
 
@@ -999,7 +999,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
         return;
     }
 
-    ScEditableTester aTester( &rDoc, nTab, 0,rParam.nRow1+1, MAXCOL,MAXROW );
+    ScEditableTester aTester( &rDoc, nTab, 0,rParam.nRow1+1, rDoc.MaxCol(),rDoc.MaxRow() );
     if (!aTester.IsEditable())
     {
         if (!bApi)
@@ -1057,18 +1057,18 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                 pTable->GetRowArray().GetRange( nOutStartRow, nOutEndRow );
 
                 pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
-                rDoc.CopyToDocument(static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), MAXROW, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
-                rDoc.CopyToDocument(0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
+                rDoc.CopyToDocument(static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
+                rDoc.CopyToDocument(0, nOutStartRow, nTab, rDoc.MaxCol(), nOutEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
             }
             else
                 pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, bOldFilter );
 
             //  secure data range - incl. filtering result
-            rDoc.CopyToDocument(0, rParam.nRow1+1,nTab, MAXCOL,rParam.nRow2,nTab,
+            rDoc.CopyToDocument(0, rParam.nRow1+1,nTab, rDoc.MaxCol(),rParam.nRow2,nTab,
                                 InsertDeleteFlags::ALL, false, *pUndoDoc);
 
             //  all formulas because of references
-            rDoc.CopyToDocument(0, 0, 0, MAXCOL,MAXROW,nTabCount-1,
+            rDoc.CopyToDocument(0, 0, 0, rDoc.MaxCol(),rDoc.MaxRow(),nTabCount-1,
                                 InsertDeleteFlags::FORMULA, false, *pUndoDoc);
 
             //  ranges of DB and other
@@ -1133,7 +1133,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
         pDBData->SetArea( nTab, aNewParam.nCol1,aNewParam.nRow1, aNewParam.nCol2,aNewParam.nRow2 );
         rDoc.CompileDBFormula();
 
-        rDocShell.PostPaint(ScRange(0, 0, nTab, MAXCOL,MAXROW,nTab),
+        rDocShell.PostPaint(ScRange(0, 0, nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab),
                             PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size);
         aModificator.SetDocumentModified();
     }

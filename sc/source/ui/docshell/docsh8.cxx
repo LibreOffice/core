@@ -264,7 +264,7 @@ static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales
         ScPatternAttr aNewAttrs( rDoc.GetPool() );
         SfxItemSet& rSet = aNewAttrs.GetItemSet();
         rSet.Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nNewFormat) );
-        rDoc.ApplyPatternAreaTab(i, 0, i, MAXROW, 0, aNewAttrs);
+        rDoc.ApplyPatternAreaTab(i, 0, i, rDoc.MaxRow(), 0, aNewAttrs);
     }
 }
 
@@ -322,9 +322,9 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
         if ( xMeta.is() )
             nColCount = xMeta->getColumnCount();    // this is the number of real columns
 
-        if ( nColCount > MAXCOL+1 )
+        if ( nColCount > m_aDocument.MaxCol()+1 )
         {
-            nColCount = MAXCOL+1;
+            nColCount = m_aDocument.MaxCol()+1;
             nErr = SCWARN_IMPORT_COLUMN_OVERFLOW;    // warning
         }
 
@@ -386,7 +386,7 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
         bool bEnd = false;
         while ( !bEnd && xRowSet->next() )
         {
-            if ( nRow <= MAXROW )
+            if ( nRow <= m_aDocument.MaxRow() )
             {
                 bool bSimpleRow = true;
                 SCCOL nCol = 0;

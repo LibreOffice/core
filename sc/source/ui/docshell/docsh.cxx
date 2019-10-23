@@ -405,7 +405,7 @@ void processDataStream( ScDocShell& rShell, const sc::ImportPostProcessData& rDa
     ScRange aTopRange = r.maRange;
     aTopRange.aEnd.SetRow(aTopRange.aStart.Row());
     sal_Int32 nLimit = r.maRange.aEnd.Row() - r.maRange.aStart.Row() + 1;
-    if (r.maRange.aEnd.Row() == MAXROW)
+    if (r.maRange.aEnd.Row() == rShell.GetDocument().MaxRow())
         // Unlimited range.
         nLimit = 0;
 

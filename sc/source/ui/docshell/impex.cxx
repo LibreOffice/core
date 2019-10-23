@@ -96,7 +96,7 @@ enum class SylkVersion
 // Whole document without Undo
 ScImportExport::ScImportExport( ScDocument* p )
     : pDocSh( dynamic_cast< ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
-      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? MAXROW : SCROWS32K),
+      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? pDoc->MaxRow() : SCROWS32K),
       cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( true ), bSingle( true ), bUndo( false ),
@@ -112,7 +112,7 @@ ScImportExport::ScImportExport( ScDocument* p )
 ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
     : pDocSh( dynamic_cast< ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
       aRange( rPt ),
-      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? MAXROW : SCROWS32K),
+      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? pDoc->MaxRow() : SCROWS32K),
       cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
@@ -129,7 +129,7 @@ ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
 ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
     : pDocSh( dynamic_cast<ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
       aRange( r ),
-      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? MAXROW : SCROWS32K),
+      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? pDoc->MaxRow() : SCROWS32K),
       cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( false ), bUndo( pDocSh != nullptr ),
@@ -147,7 +147,7 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
 // If a View exists, the TabNo of the view will be used.
 ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
     : pDocSh( dynamic_cast< ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
-      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? MAXROW : SCROWS32K),
+      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? pDoc->MaxRow() : SCROWS32K),
       cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
@@ -1372,7 +1372,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
             assert(pSeps == aSeps.getStr());
 
-            if ( nRow > MAXROW )
+            if ( nRow > pDoc->MaxRow() )
             {
                 bOverflowRow = true;    // display warning on import
                 break;  // for
@@ -1385,16 +1385,16 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             bool bMultiLine = false;
             if ( bFixed ) //  Fixed line length
             {
-                // Yes, the check is nCol<=MAXCOL+1, +1 because it is only an
+                // Yes, the check is nCol<=rDoc.MaxCol()+1, +1 because it is only an
                 // overflow if there is really data following to be put behind
                 // the last column, which doesn't happen if info is
                 // SC_COL_SKIP.
-                for ( i=0; i<nInfoCount && nCol <= MAXCOL+1; i++ )
+                for ( i=0; i<nInfoCount && nCol <= pDoc->MaxCol()+1; i++ )
                 {
                     sal_uInt8 nFmt = pColFormat[i];
                     if (nFmt != SC_COL_SKIP)        // otherwise don't increment nCol either
                     {
-                        if (nCol > MAXCOL)
+                        if (nCol > pDoc->MaxCol())
                             bOverflowCol = true;    // display warning on import
                         else if (!bDetermineRange)
                         {
@@ -1419,11 +1419,11 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                 SCCOL nSourceCol = 0;
                 sal_uInt16 nInfoStart = 0;
                 const sal_Unicode* p = aLine.getStr();
-                // Yes, the check is nCol<=MAXCOL+1, +1 because it is only an
+                // Yes, the check is nCol<=rDoc.MaxCol()+1, +1 because it is only an
                 // overflow if there is really data following to be put behind
                 // the last column, which doesn't happen if info is
                 // SC_COL_SKIP.
-                while (*p && nCol <= MAXCOL+1)
+                while (*p && nCol <= pDoc->MaxCol()+1)
                 {
                     bool bIsQuoted = false;
                     p = ScImportExport::ScanNextFieldFromString( p, aCell,
@@ -1441,7 +1441,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                     }
                     if ( nFmt != SC_COL_SKIP )
                     {
-                        if (nCol > MAXCOL)
+                        if (nCol > pDoc->MaxCol())
                             bOverflowCol = true;    // display warning on import
                         else if (!bDetermineRange)
                         {
@@ -1460,7 +1460,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                 }
             }
             if (nEndCol < nCol)
-                nEndCol = nCol;     //! points to the next free or even MAXCOL+2
+                nEndCol = nCol;     //! points to the next free or even rDoc.MaxCol()+2
 
             if (!bDetermineRange)
             {
@@ -1474,7 +1474,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
         if (nRow > nStartRow)
             --nRow;
         if (nEndCol > nStartCol)
-            nEndCol = ::std::min( static_cast<SCCOL>(nEndCol - 1), MAXCOL);
+            nEndCol = ::std::min( static_cast<SCCOL>(nEndCol - 1), pDoc->MaxCol());
 
         if (bDetermineRange)
         {
@@ -1809,10 +1809,10 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         {
                             bInvalidCol = false;
                             bool bFail = o3tl::checked_add<SCCOL>(OUString(p).toInt32(), nStartCol - 1, nCol);
-                            if (bFail || nCol < 0 || MAXCOL < nCol)
+                            if (bFail || nCol < 0 || pDoc->MaxCol() < nCol)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;X invalid nCol=" << nCol);
-                                nCol = std::max<SCCOL>(0, std::min<SCCOL>(nCol, MAXCOL));
+                                nCol = std::max<SCCOL>(0, std::min<SCCOL>(nCol, pDoc->MaxCol()));
                                 bInvalidCol = bOverflowCol = true;
                             }
                             break;
@@ -1833,10 +1833,10 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         {
                             bInvalidRefCol = false;
                             bool bFail = o3tl::checked_add<SCCOL>(OUString(p).toInt32(), nStartCol - 1, nRefCol);
-                            if (bFail || nRefCol < 0 || MAXCOL < nRefCol)
+                            if (bFail || nRefCol < 0 || pDoc->MaxCol() < nRefCol)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;C invalid nRefCol=" << nRefCol);
-                                nRefCol = std::max<SCCOL>(0, std::min<SCCOL>(nRefCol, MAXCOL));
+                                nRefCol = std::max<SCCOL>(0, std::min<SCCOL>(nRefCol, pDoc->MaxCol()));
                                 bInvalidRefCol = bOverflowCol = true;
                             }
                             break;
@@ -1858,7 +1858,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             if( !bSingle &&
                                     ( nCol < nStartCol || nCol > nEndCol
                                       || nRow < nStartRow || nRow > nEndRow
-                                      || nCol > MAXCOL || nRow > nMaxImportRow
+                                      || nCol > pDoc->MaxCol() || nRow > nMaxImportRow
                                       || bInvalidCol || bInvalidRow ) )
                                 break;
                             if( !bData )
@@ -1970,10 +1970,10 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         {
                             bInvalidCol = false;
                             bool bFail = o3tl::checked_add<SCCOL>(OUString(p).toInt32(), nStartCol - 1, nCol);
-                            if (bFail || nCol < 0 || MAXCOL < nCol)
+                            if (bFail || nCol < 0 || pDoc->MaxCol() < nCol)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;X invalid nCol=" << nCol);
-                                nCol = std::max<SCCOL>(0, std::min<SCCOL>(nCol, MAXCOL));
+                                nCol = std::max<SCCOL>(0, std::min<SCCOL>(nCol, pDoc->MaxCol()));
                                 bInvalidCol = bOverflowCol = true;
                             }
                             break;

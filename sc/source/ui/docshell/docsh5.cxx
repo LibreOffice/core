@@ -415,7 +415,7 @@ bool ScDocShell::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
         // tdf#76183: recalculate objects' positions
         m_aDocument.SetDrawPageSize(nTab);
 
-        PostPaint( 0,nStartRow,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid|PaintPartFlags::Left );
+        PostPaint( 0,nStartRow,nTab, m_aDocument.MaxCol(),m_aDocument.MaxRow(),nTab, PaintPartFlags::Grid|PaintPartFlags::Left );
     }
 
     return bChange;
@@ -462,7 +462,7 @@ void ScDocShell::UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore )
     {
         if ( m_aDocument.IsPendingRowHeights( nUpdateTab ) )
         {
-            AdjustRowHeight( 0, MAXROW, nUpdateTab );
+            AdjustRowHeight( 0, m_aDocument.MaxRow(), nUpdateTab );
             m_aDocument.UpdatePageBreaks( nUpdateTab );
             m_aDocument.SetPendingRowHeights( nUpdateTab, false );
         }
@@ -581,16 +581,16 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
             pUndoDoc->InitUndo( &m_aDocument, 0, nTabCount-1, false, true );
 
             // row state
-            m_aDocument.CopyToDocument(0, 0, nDestTab, MAXCOL, MAXROW, nDestTab,
+            m_aDocument.CopyToDocument(0, 0, nDestTab, m_aDocument.MaxCol(), m_aDocument.MaxRow(), nDestTab,
                                      InsertDeleteFlags::NONE, false, *pUndoDoc);
 
             // all formulas
-            m_aDocument.CopyToDocument(0, 0, 0, MAXCOL, MAXROW, nTabCount-1,
+            m_aDocument.CopyToDocument(0, 0, 0, m_aDocument.MaxCol(), m_aDocument.MaxRow(), nTabCount-1,
                                      InsertDeleteFlags::FORMULA, false, *pUndoDoc);
 
             // complete output rows
             m_aDocument.CopyToDocument(0, aDestArea.nRowStart, nDestTab,
-                                     MAXCOL,aDestArea.nRowEnd, nDestTab,
+                                     m_aDocument.MaxCol(),aDestArea.nRowEnd, nDestTab,
                                      InsertDeleteFlags::ALL, false, *pUndoDoc);
 
             // old output range
@@ -642,8 +642,8 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
     if (rParam.bReferenceData)
     {
         nPaintStartCol = 0;
-        nPaintEndCol = MAXCOL;
-        nPaintEndRow = MAXROW;
+        nPaintEndCol = m_aDocument.MaxCol();
+        nPaintEndRow = m_aDocument.MaxRow();
         nPaintFlags |= PaintPartFlags::Left | PaintPartFlags::Size;
     }
     if (pDestData)
@@ -711,7 +711,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
                         pUndoDoc->SetActiveScenario( i, bActive );
                         //  At copy-back scenarios also contents
                         if ( nScenFlags & ScScenarioFlags::TwoWay )
-                            m_aDocument.CopyToDocument(0, 0, i, MAXCOL, MAXROW, i,
+                            m_aDocument.CopyToDocument(0, 0, i, m_aDocument.MaxCol(), m_aDocument.MaxRow(), i,
                                                      InsertDeleteFlags::ALL, false, *pUndoDoc );
                     }
 
@@ -728,7 +728,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
 
                 //  paint all, because the active scenario may be modified in other ranges;
                 //! only if there are visible frames?
-                PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid );
+                PostPaint( 0,0,nTab, m_aDocument.MaxCol(),m_aDocument.MaxRow(),nTab, PaintPartFlags::Grid );
                 aModificator.SetDocumentModified();
             }
             else
@@ -824,7 +824,7 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
 
             ScPatternAttr aProtPattern( m_aDocument.GetPool() );
             aProtPattern.GetItemSet().Put( ScProtectionAttr( true ) );
-            m_aDocument.ApplyPatternAreaTab( 0,0, MAXCOL,MAXROW, nNewTab, aProtPattern );
+            m_aDocument.ApplyPatternAreaTab( 0,0, m_aDocument.MaxCol(),m_aDocument.MaxRow(), nNewTab, aProtPattern );
 
             ScPatternAttr aPattern( m_aDocument.GetPool() );
             aPattern.GetItemSet().Put( ScMergeFlagAttr( ScMF::Scenario ) );
@@ -838,7 +838,7 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
             m_aDocument.CopyScenario( nNewTab, nTab, true );  // sal_True - don't copy anything from scenario
 
             if (nFlags & ScScenarioFlags::ShowFrame)
-                PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid );  // paint frames
+                PostPaint( 0,0,nTab, m_aDocument.MaxCol(),m_aDocument.MaxRow(),nTab, PaintPartFlags::Grid );  // paint frames
             PostPaintExtras();                                          // table tab
             aModificator.SetDocumentModified();
 
@@ -861,7 +861,7 @@ sal_uLong ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
 
     // set the transferred area to the copyparam to make adjusting formulas possible
     ScClipParam aParam;
-    ScRange aRange(0, 0, nSrcPos, MAXCOL, MAXROW, nSrcPos);
+    ScRange aRange(0, 0, nSrcPos, m_aDocument.MaxCol(), m_aDocument.MaxRow(), nSrcPos);
     aParam.maRanges.push_back(aRange);
     rSrcDoc.SetClipParam(aParam);
 

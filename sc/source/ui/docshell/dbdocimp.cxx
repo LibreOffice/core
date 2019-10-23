@@ -241,7 +241,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             if ( xMeta.is() )
                 nColCount = xMeta->getColumnCount();    // this is the number of real columns
 
-            if ( rParam.nCol1 + nColCount - 1 > MAXCOL )
+            if ( rParam.nCol1 + nColCount - 1 > rDoc.MaxCol() )
             {
                 nColCount = 0;
                 //! error message
@@ -381,7 +381,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
         SCCOL nTestCol = rParam.nCol2 + 1;      // right of the data
         SCROW nTestRow = rParam.nRow1 + 1;      // below the title row
-        while ( nTestCol <= MAXCOL &&
+        while ( nTestCol <= rDoc.MaxCol() &&
                 rDoc.GetCellType(ScAddress( nTestCol, nTestRow, nTab )) == CELLTYPE_FORMULA )
         {
             ++nTestCol;
@@ -429,7 +429,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
             SCCOL nMinEndCol = std::min( rParam.nCol2, nEndCol );    // not too much
             nMinEndCol = sal::static_int_cast<SCCOL>( nMinEndCol + nFormulaCols );  // only if column count unchanged
-            pImportDoc->DeleteAreaTab( 0,0, MAXCOL,MAXROW, nTab, InsertDeleteFlags::ATTRIB );
+            pImportDoc->DeleteAreaTab( 0,0, rDoc.MaxCol(),rDoc.MaxRow(), nTab, InsertDeleteFlags::ATTRIB );
             rDoc.CopyToDocument(rParam.nCol1, rParam.nRow1, nTab,
                                 nMinEndCol, rParam.nRow1, nTab,
                                 InsertDeleteFlags::ATTRIB, false, *pImportDoc);
@@ -453,7 +453,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         {
             ScPatternAttr aPattern(pImportDoc->GetPool());
             aPattern.GetItemSet().Put( ScProtectionAttr( false,false,false,false ) );
-            pImportDoc->ApplyPatternAreaTab( 0,0,MAXCOL,MAXROW, nTab, aPattern );
+            pImportDoc->ApplyPatternAreaTab( 0,0,rDoc.MaxCol(),rDoc.MaxRow(), nTab, aPattern );
         }
 
         //  copy old data for undo
@@ -588,7 +588,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
         sc::SetFormulaDirtyContext aCxt;
         rDoc.SetAllFormulasDirty(aCxt);
-        rDocShell.PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab), PaintPartFlags::Grid);
+        rDocShell.PostPaint(ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab), PaintPartFlags::Grid);
         aModificator.SetDocumentModified();
 
         ScDBRangeRefreshedHint aHint( rParam );

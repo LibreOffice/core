@@ -113,10 +113,10 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
         SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
         SCTAB nTab1 = rRange.aStart.Tab(), nTab2 = rRange.aEnd.Tab();
 
-        if (!ValidCol(nCol1)) nCol1 = MAXCOL;
-        if (!ValidRow(nRow1)) nRow1 = MAXROW;
-        if (!ValidCol(nCol2)) nCol2 = MAXCOL;
-        if (!ValidRow(nRow2)) nRow2 = MAXROW;
+        if (!ValidCol(nCol1)) nCol1 = m_aDocument.MaxCol();
+        if (!ValidRow(nRow1)) nRow1 = m_aDocument.MaxRow();
+        if (!ValidCol(nCol2)) nCol2 = m_aDocument.MaxCol();
+        if (!ValidRow(nRow2)) nRow2 = m_aDocument.MaxRow();
 
         if ( m_pPaintLockData )
         {
@@ -139,16 +139,16 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
         {
                                                 //! check for hidden columns/rows!
             if (nCol1>0) --nCol1;
-            if (nCol2<MAXCOL) ++nCol2;
+            if (nCol2<m_aDocument.MaxCol()) ++nCol2;
             if (nRow1>0) --nRow1;
-            if (nRow2<MAXROW) ++nRow2;
+            if (nRow2<m_aDocument.MaxRow()) ++nRow2;
         }
 
                                                 // expand for the merged ones
         if (nExtFlags & SC_PF_TESTMERGE)
             m_aDocument.ExtendMerge( nCol1, nRow1, nCol2, nRow2, nTab1 );
 
-        if ( nCol1 != 0 || nCol2 != MAXCOL )
+        if ( nCol1 != 0 || nCol2 != m_aDocument.MaxCol() )
         {
             //  Extend to whole rows if SC_PF_WHOLEROWS is set, or rotated or non-left
             //  aligned cells are contained (see UpdatePaintExt).
@@ -157,10 +157,10 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
 
             if ( ( nExtFlags & SC_PF_WHOLEROWS ) ||
                  m_aDocument.HasAttrib( nCol1,nRow1,nTab1,
-                                      MAXCOL,nRow2,nTab2, HasAttrFlags::Rotate | HasAttrFlags::RightOrCenter ) )
+                                      m_aDocument.MaxCol(),nRow2,nTab2, HasAttrFlags::Rotate | HasAttrFlags::RightOrCenter ) )
             {
                 nCol1 = 0;
-                nCol2 = MAXCOL;
+                nCol2 = m_aDocument.MaxCol();
             }
         }
         aPaintRanges.push_back(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
@@ -179,7 +179,7 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
 
 void ScDocShell::PostPaintGridAll()
 {
-    PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid );
+    PostPaint( 0,0,0, m_aDocument.MaxCol(),m_aDocument.MaxRow(),MAXTAB, PaintPartFlags::Grid );
 }
 
 void ScDocShell::PostPaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
@@ -194,7 +194,7 @@ void ScDocShell::PostPaintCell( const ScAddress& rPos )
 
 void ScDocShell::PostPaintExtras()
 {
-    PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Extras );
+    PostPaint( 0,0,0, m_aDocument.MaxCol(),m_aDocument.MaxRow(),MAXTAB, PaintPartFlags::Extras );
 }
 
 void ScDocShell::UpdatePaintExt( sal_uInt16& rExtFlags, const ScRange& rRange )
@@ -209,7 +209,7 @@ void ScDocShell::UpdatePaintExt( sal_uInt16& rExtFlags, const ScRange& rRange )
     }
 
     if ( ( rExtFlags & SC_PF_WHOLEROWS ) == 0 &&
-         ( rRange.aStart.Col() != 0 || rRange.aEnd.Col() != MAXCOL ) &&
+         ( rRange.aStart.Col() != 0 || rRange.aEnd.Col() != m_aDocument.MaxCol() ) &&
          m_aDocument.HasAttrib( rRange, HasAttrFlags::Rotate | HasAttrFlags::RightOrCenter ) )
     {
         //  If the range contains (logically) right- or center-aligned cells,
@@ -558,7 +558,7 @@ sal_uInt16 ScDocShell::SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter, SfxPr
         }
     }
 
-    PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB,PaintPartFlags::All);
+    PostPaint(0,0,0,m_aDocument.MaxCol(),m_aDocument.MaxRow(),MAXTAB,PaintPartFlags::All);
 
     return 0;
 }
