@@ -274,10 +274,13 @@ bool BufferAdd::isMethodOkToMerge(CXXMemberCallExpr const* memberCall)
     if (methodDecl->getNumParams() == 0)
         return true;
 
-    auto name = methodDecl->getName();
-    if (name == "appendUninitialized" || name == "setLength" || name == "remove" || name == "insert"
-        || name == "appendAscii" || name == "appendUtf32")
-        return false;
+    if (auto const id = methodDecl->getIdentifier())
+    {
+        auto name = id->getName();
+        if (name == "appendUninitialized" || name == "setLength" || name == "remove"
+            || name == "insert" || name == "appendAscii" || name == "appendUtf32")
+            return false;
+    }
 
     auto rhs = memberCall->getArg(0);
     if (!isSideEffectFree(rhs))
