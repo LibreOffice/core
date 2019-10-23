@@ -1091,6 +1091,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 ++nAdditional;
             if ( rSet.GetItemState( SID_CONVERT_IMAGES ) == SfxItemState::SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_LOCK_CONTENT_EXTRACTION ) == SfxItemState::SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_LOCK_EXPORT ) == SfxItemState::SET )
+                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -1247,6 +1251,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                     if ( nId == SID_SUGGESTEDSAVEASDIR )
                         continue;
                     if ( nId == SID_SUGGESTEDSAVEASNAME )
+                        continue;
+                    if ( nId == SID_LOCK_CONTENT_EXTRACTION )
+                        continue;
+                    if ( nId == SID_LOCK_EXPORT )
                         continue;
                }
 
