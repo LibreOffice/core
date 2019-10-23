@@ -30,6 +30,17 @@ void drawPolyLineOffset(OutputDevice& rDevice, tools::Rectangle const& rRect, in
     rDevice.DrawPolyLine(aPolygon, 0.0); // draw hairline
 }
 
+void addDiamondPoints(tools::Rectangle rRect, int nOffset, basegfx::B2DPolygon& rPolygon)
+{
+    double midPointX = rRect.Left() + (rRect.Right() - rRect.Left()) / 2.0;
+    double midPointY = rRect.Top() + (rRect.Bottom() - rRect.Top()) / 2.0;
+
+    rPolygon.append({ midPointX, midPointY - nOffset });
+    rPolygon.append({ midPointX + nOffset, midPointY });
+    rPolygon.append({ midPointX, midPointY + nOffset });
+    rPolygon.append({ midPointX - nOffset, midPointY });
+}
+
 } // end anonymous namespace
 
 Bitmap OutputDeviceTestPolyLineB2D::setupRectangle(bool bEnableAA)
@@ -44,6 +55,22 @@ Bitmap OutputDeviceTestPolyLineB2D::setupRectangle(bool bEnableAA)
 
     return mpVirtualDevice->GetBitmapEx(maVDRectangle.TopLeft(), maVDRectangle.GetSize())
         .GetBitmap();
+}
+
+Bitmap OutputDeviceTestPolyLineB2D::setupDiamond()
+{
+    initialSetup(11, 11, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    basegfx::B2DPolygon aPolygon;
+    addDiamondPoints(maVDRectangle, 4, aPolygon);
+    aPolygon.setClosed(true);
+
+    mpVirtualDevice->DrawPolyLine(aPolygon);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 }
 } // end namespace vcl::test

@@ -322,6 +322,18 @@ public:
 #endif
     }
 
+    void testDrawDiamondWithPolylineB2D()
+    {
+        vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupDiamond();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
+        exportImage("04-04_diamond_test-polyline_b2d.png", aBitmap);
+        (void)eResult;
+#ifndef SKIP_TEST_ASSERTS
+        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+#endif
+    }
+
     void testDrawInvertWithRectangle()
     {
         vcl::test::OutputDeviceTestRect aOutDevTest;
@@ -387,6 +399,7 @@ public:
     CPPUNIT_TEST(testDrawDiamondWithPolygon);
     CPPUNIT_TEST(testDrawDiamondWithLine);
     CPPUNIT_TEST(testDrawDiamondWithPolyline);
+    CPPUNIT_TEST(testDrawDiamondWithPolylineB2D);
 
     CPPUNIT_TEST(testDrawInvertWithRectangle);
     CPPUNIT_TEST(testDrawInvertN50WithRectangle);
