@@ -3068,8 +3068,24 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     // eg, in an edit control
     // and do not highlight when focus is in a different toolbox
     bool bDrawHotSpot = true;
-    vcl::Window *pWin = Application::GetFocusWindow();
-    if( pWin && pWin->ImplGetWindowImpl()->mbToolBox && pWin != this )
+    vcl::Window *pFocusWin = Application::GetFocusWindow();
+
+    bool bFocusWindowIsAToolBoxChild = false;
+    if (pFocusWin)
+    {
+        vcl::Window *pWin = pFocusWin->GetParent();
+        while (pWin)
+        {
+            if(pWin->ImplGetWindowImpl()->mbToolBox)
+            {
+                bFocusWindowIsAToolBoxChild = true;
+                break;
+            }
+            pWin = pWin->GetParent();
+        }
+    }
+
+    if( bFocusWindowIsAToolBoxChild || (pFocusWin && pFocusWin->ImplGetWindowImpl()->mbToolBox && pFocusWin != this) )
         bDrawHotSpot = false;
 
     if ( mbSelection && bDrawHotSpot )
@@ -3204,7 +3220,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
 
         // only clear highlight when focus is not in toolbar
         bool bMenuButtonHit = mpData->maMenubuttonItem.maRect.IsInside( aMousePos ) && ImplHasClippedItems();
-        if ( bClearHigh || bMenuButtonHit )
+        if ( !HasFocus() && (bClearHigh || bMenuButtonHit) )
         {
             if ( !bMenuButtonHit && mpData->mbMenubuttonSelected )
             {
