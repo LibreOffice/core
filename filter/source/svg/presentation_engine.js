@@ -494,7 +494,7 @@ function createInputInstance(manager) {
 
     if (inputClass) {
         Type = inputClass;
-    } else if (SUPPORT_POINTER_EVENTS) {
+    } else if (!SUPPORT_TOUCH && SUPPORT_POINTER_EVENTS) {
         Type = PointerEventInput;
     } else if (SUPPORT_ONLY_TOUCH) {
         Type = TouchInput;
@@ -823,6 +823,7 @@ inherit(MouseInput, Input, {
      * @param {Object} ev
      */
     handler: function MEhandler(ev) {
+        // console.log('==> MouseInput handler');
         var eventType = MOUSE_INPUT_MAP[ev.type];
 
         // on start we want to have the left mouse button down
@@ -897,6 +898,7 @@ inherit(PointerEventInput, Input, {
      * @param {Object} ev
      */
     handler: function PEhandler(ev) {
+        // console.log('==> PointerEventInput handler');
         var store = this.store;
         var removePointer = false;
 
@@ -966,6 +968,7 @@ function SingleTouchInput() {
 
 inherit(SingleTouchInput, Input, {
     handler: function TEhandler(ev) {
+        // console.log('==> SingleTouchInput handler');
         var type = SINGLE_TOUCH_INPUT_MAP[ev.type];
 
         // should we handle the touch events?
@@ -1033,6 +1036,7 @@ function TouchInput() {
 
 inherit(TouchInput, Input, {
     handler: function MTEhandler(ev) {
+        // console.log('==> TouchInput handler');
         var type = TOUCH_INPUT_MAP[ev.type];
         var touches = getTouches.call(this, ev, type);
         if (!touches) {
@@ -1141,6 +1145,7 @@ inherit(TouchMouseInput, Input, {
      * @param {Object} inputData
      */
     handler: function TMEhandler(manager, inputEvent, inputData) {
+        // console.log('==> TouchMouseInput handler');
         var isTouch = (inputData.pointerType == INPUT_TYPE_TOUCH),
             isMouse = (inputData.pointerType == INPUT_TYPE_MOUSE);
 
@@ -6480,26 +6485,22 @@ function init()
     theSlideIndexPage = new SlideIndexPage();
     aSlideShow.displaySlide( theMetaDoc.nStartSlideNumber, false );
 
-    // In the iOS app, allow slide switching with swipe gestures left
+    // Allow slide switching with swipe gestures left
     // and right. Swiping up or down will exit the slideshow.
-    var ua = navigator.userAgent;
-    if (ua.indexOf(' AppleWebKit/') !== -1 &&
-        ua.indexOf(' Mobile/') !== -1) {
-        var hammer = new Hammer(ROOT_NODE);
-        hammer.on('swipeleft', function() {
-            switchSlide(1, false);
-        });
-        hammer.on('swiperight', function() {
-            switchSlide(-1, false);
-        });
-        hammer.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
-        hammer.on('swipeup', function() {
-            aSlideShow.exitSlideShowInApp();
-        });
-        hammer.on('swipedown', function() {
-            aSlideShow.exitSlideShowInApp();
-        });
-    }
+    var hammer = new Hammer(ROOT_NODE);
+    hammer.on('swipeleft', function() {
+        switchSlide(1, false);
+    });
+    hammer.on('swiperight', function() {
+        switchSlide(-1, false);
+    });
+    hammer.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+    hammer.on('swipeup', function() {
+        aSlideShow.exitSlideShowInApp();
+    });
+    hammer.on('swipedown', function() {
+        aSlideShow.exitSlideShowInApp();
+    });
 }
 
 function presentationEngineStop(message)
@@ -18410,10 +18411,7 @@ SlideShow.prototype.rewindAllEffects = function()
 
 SlideShow.prototype.exitSlideShowInApp = function()
 {
-    var ua = navigator.userAgent;
-    if (ua.indexOf(' AppleWebKit/') !== -1 &&
-        ua.indexOf(' Mobile/') !== -1 &&
-        window.webkit !== undefined &&
+    if (window.webkit !== undefined &&
         window.webkit.messageHandlers !== undefined &&
         window.webkit.messageHandlers.lool !== undefined)
         window.webkit.messageHandlers.lool.postMessage('EXITSLIDESHOW', '*');
