@@ -1089,6 +1089,11 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
             rArg.Value >>= bValue;
             pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_PRINT, bValue));
         }
+        else if (rArg.Name == "LockSave")
+        {
+            rArg.Value >>= bValue;
+            pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_SAVE, bValue));
+        }
         else
         {
             throw lang::IllegalArgumentException("Setting property not supported: " + rArg.Name,
