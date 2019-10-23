@@ -96,6 +96,7 @@ public:
     void                SetOptimalSize();
 
     virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 
 protected:
     virtual void        Select() override;
@@ -125,6 +126,7 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
 {
     SetValue( 0 );
     SetText( "" );
+    set_id("fontsizecombobox");
 }
 
 void SvxFontSizeBox_Impl::ReleaseFocus_Impl()
@@ -264,6 +266,36 @@ void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     }
 
     FontSizeBox::DataChanged( rDCEvt );
+}
+
+boost::property_tree::ptree SvxFontSizeBox_Impl::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(FontSizeBox::DumpAsPropertyTree());
+
+    boost::property_tree::ptree aEntries;
+
+    for (int i = 0; i < GetEntryCount(); ++i)
+    {
+        boost::property_tree::ptree aEntry;
+        aEntry.put("", GetEntry(i));
+        aEntries.push_back(std::make_pair("", aEntry));
+    }
+
+    aTree.add_child("entries", aEntries);
+
+    boost::property_tree::ptree aSelected;
+
+    for (int i = 0; i < GetSelectedEntryCount(); ++i)
+    {
+        boost::property_tree::ptree aEntry;
+        aEntry.put("", GetSelectedEntryPos(i));
+        aSelected.push_back(std::make_pair("", aEntry));
+    }
+
+    aTree.put("selectedCount", GetSelectedEntryCount());
+    aTree.add_child("selectedEntries", aSelected);
+
+    return aTree;
 }
 
 FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )

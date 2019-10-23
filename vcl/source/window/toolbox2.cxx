@@ -1771,21 +1771,25 @@ boost::property_tree::ptree ToolBox::DumpAsPropertyTree()
     boost::property_tree::ptree aTree(DockingWindow::DumpAsPropertyTree());
     boost::property_tree::ptree aChildren;
 
-    for (unsigned long i = 0; i < GetItemCount(); ++i)
+    boost::property_tree::ptree::const_assoc_iterator found = aTree.find("children");
+    if (found == aTree.not_found())
     {
-        ToolBoxItemType type = GetItemType(i);
-        if (type == ToolBoxItemType::BUTTON)
+        for (unsigned long i = 0; i < GetItemCount(); ++i)
         {
-            boost::property_tree::ptree aEntry;
-            int nId = GetItemId(i);
-            aEntry.put("type", "toolitem");
-            aEntry.put("text", GetItemText(nId));
-            aEntry.put("command", GetItemCommand(nId));
-            aChildren.push_back(std::make_pair("", aEntry));
+            ToolBoxItemType type = GetItemType(i);
+            if (type == ToolBoxItemType::BUTTON)
+            {
+                boost::property_tree::ptree aEntry;
+                int nId = GetItemId(i);
+                aEntry.put("type", "toolitem");
+                aEntry.put("text", GetItemText(nId));
+                aEntry.put("command", GetItemCommand(nId));
+                aChildren.push_back(std::make_pair("", aEntry));
+            }
         }
-    }
 
-    aTree.add_child("children", aChildren);
+        aTree.add_child("children", aChildren);
+    }
 
     return aTree;
 }
