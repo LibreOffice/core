@@ -704,6 +704,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/sidebar/PageFooterPanel \
     sw/source/uibase/sidebar/PageStylesPanel \
     sw/source/uibase/sidebar/WrapPropertyPanel \
+    sw/source/uibase/sidebar/TableEditPanel \
     sw/source/uibase/sidebar/ThemePanel \
     sw/source/uibase/sidebar/SwPanelFactory \
     sw/source/uibase/table/chartins \
