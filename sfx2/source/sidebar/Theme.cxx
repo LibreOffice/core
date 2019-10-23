@@ -294,9 +294,15 @@ void Theme::UpdateTheme()
         setPropertyValue(
             maPropertyIdToNameMap[Image_TabBarMenu],
             Any(OUString("private:graphicrepository/sfx2/res/symphony/open_more.png")));
+#ifdef IOS
+        setPropertyValue(
+            maPropertyIdToNameMap[Image_PanelMenu],
+            Any(OUString("private:graphicrepository/sfx2/res/symphony/morebutton-large.png")));
+#else
         setPropertyValue(
             maPropertyIdToNameMap[Image_PanelMenu],
             Any(OUString("private:graphicrepository/sfx2/res/symphony/morebutton.png")));
+#endif
         setPropertyValue(
             maPropertyIdToNameMap[Image_Closer],
             Any(OUString("private:graphicrepository/sfx2/res/closedoc.png")));
