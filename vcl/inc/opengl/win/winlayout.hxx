@@ -33,12 +33,17 @@ struct OpenGLGlobalWinGlyphCache : public GlobalWinGlyphCache
     PackedTextureAtlasManager maPackedTextureAtlas;
 
     virtual bool AllocateTexture(WinGlyphDrawElement& rElement, int nWidth, int nHeight) override;
+    virtual void Prune() override;
 };
 
 class OpenGLWinGlyphCache : public WinGlyphCache
 {
 public:
     void RemoveTextures(std::vector<GLuint>& rTextureIDs);
+
+private:
+    // This class just "adds" RemoveTextures() to the base class, it's never instantiatied.
+    OpenGLWinGlyphCache() = delete;
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_WIN_WINLAYOUT_HXX
