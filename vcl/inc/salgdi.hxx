@@ -419,6 +419,8 @@ public:
                                     sal_uInt8 nTransparency,
                                     const OutputDevice *pOutDev );
 
+    virtual OUString getRenderBackendName() const;
+
     virtual SystemGraphicsData  GetGraphicsData() const = 0;
 
 #if ENABLE_CAIRO_CANVAS
