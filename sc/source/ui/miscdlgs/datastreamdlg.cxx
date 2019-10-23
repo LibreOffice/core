@@ -133,7 +133,7 @@ void DataStreamDlg::Init( const DataStream& rStrm )
     m_xEdRange->set_text(aStr);
     SCROW nRows = aRange.aEnd.Row() - aRange.aStart.Row() + 1;
 
-    if (aRange.aEnd.Row() == MAXROW)
+    if (aRange.aEnd.Row() == rDoc.MaxRow())
         m_xRBUnlimited->set_active(true);
     else
     {
