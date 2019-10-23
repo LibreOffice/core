@@ -84,6 +84,7 @@
 #include <sbintern.hxx>
 #include <runtime.hxx>
 
+#include <algorithm>
 #include <math.h>
 #include <memory>
 #include <unordered_map>
@@ -1621,6 +1622,22 @@ OUString getBasicObjectTypeName( SbxObject* pObj )
     return OUString();
 }
 
+namespace {
+
+bool matchesBasicTypeName(
+    css::uno::Reference<css::reflection::XIdlClass> const & unoType, OUString const & basicTypeName)
+{
+    if (unoType->getName().endsWithIgnoreAsciiCase(basicTypeName)) {
+        return true;
+    }
+    auto const sups = unoType->getSuperclasses();
+    return std::any_of(
+        sups.begin(), sups.end(),
+        [&basicTypeName](auto const & t) { return matchesBasicTypeName(t, basicTypeName); });
+}
+
+}
+
 bool checkUnoObjectType(SbUnoObject& rUnoObj, const OUString& rClass)
 {
     Any aToInspectObj = rUnoObj.getUnoAny();
@@ -1697,8 +1714,7 @@ bool checkUnoObjectType(SbUnoObject& rUnoObj, const OUString& rClass)
                 break; // finished checking automation object
             }
 
-            // match interface name with passed class name
-            if ( aInterfaceName.endsWithIgnoreAsciiCase( aClassName ) )
+            if ( matchesBasicTypeName(xClass, aClassName) )
             {
                 bResult = true;
                 break;
