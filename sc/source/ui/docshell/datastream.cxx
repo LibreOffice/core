@@ -356,17 +356,18 @@ void DataStream::Decode(const OUString& rURL, const ScRange& rRange,
 
     maStartRange = aRange;
     maEndRange = aRange;
+    const auto & rDoc = mpDocShell->GetDocument();
     if (nLimit == 0)
     {
         // Unlimited
-        maEndRange.aStart.SetRow(MAXROW);
+        maEndRange.aStart.SetRow(rDoc.MaxRow());
     }
     else if (nLimit > 0)
     {
         // Limited.
         maEndRange.aStart.IncRow(nLimit-1);
-        if (maEndRange.aStart.Row() > MAXROW)
-            maEndRange.aStart.SetRow(MAXROW);
+        if (maEndRange.aStart.Row() > rDoc.MaxRow())
+            maEndRange.aStart.SetRow(rDoc.MaxRow());
     }
 
     maEndRange.aEnd.SetRow(maEndRange.aStart.Row());

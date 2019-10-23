@@ -54,8 +54,8 @@ static void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
     PaintPartFlags nParts = PaintPartFlags::Grid;
     SCCOL nStartCol = 0;
     SCROW nStartRow = 0;
-    SCCOL nEndCol = MAXCOL;         // for testing if merged
-    SCROW nEndRow = MAXROW;
+    SCCOL nEndCol = rDoc.MaxCol();         // for testing if merged
+    SCROW nEndRow = rDoc.MaxRow();
     if ( bColumns )
     {
         nParts |= PaintPartFlags::Top;
@@ -74,7 +74,7 @@ static void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
         nStartCol = 0;
         nStartRow = 0;
     }
-    rDocShell.PostPaint( nStartCol,nStartRow,nTab, MAXCOL,MAXROW,nTab, nParts );
+    rDocShell.PostPaint( nStartCol,nStartRow,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab, nParts );
 }
 
 void ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi )
@@ -124,7 +124,7 @@ void ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool b
         if ( bSize )
             nParts |= PaintPartFlags::Size;
 
-        rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, nParts );
+        rDocShell.PostPaint( 0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab, nParts );
         rDocShell.SetDocumentModified();
         lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
     }
@@ -185,7 +185,7 @@ void ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, bool bColumns, bool
             if ( bSize )
                 nParts |= PaintPartFlags::Size;
 
-            rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, nParts );
+            rDocShell.PostPaint( 0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab, nParts );
             rDocShell.SetDocumentModified();
             bDone = true;
             lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
@@ -220,8 +220,8 @@ bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, bool bRecord )
 
             ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
             pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
-            rDoc.CopyToDocument(nStartCol, 0, nTab, nEndCol, MAXROW, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
-            rDoc.CopyToDocument(0, nStartRow, nTab, MAXCOL, nEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
+            rDoc.CopyToDocument(nStartCol, 0, nTab, nEndCol, rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
+            rDoc.CopyToDocument(0, nStartRow, nTab, rDoc.MaxCol(), nEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
 
             std::unique_ptr<ScOutlineTable> pUndoTab(new ScOutlineTable( *pTable ));
 
@@ -240,7 +240,7 @@ bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, bool bRecord )
 
         rDoc.SetStreamValid(nTab, false);
 
-        rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab,
+        rDocShell.PostPaint( 0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab,
                                     PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size );
         rDocShell.SetDocumentModified();
         lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
@@ -283,8 +283,8 @@ void ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
 
             pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
             pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
-            rDoc.CopyToDocument(nOutStartCol, 0, nTab, nOutEndCol, MAXROW, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
-            rDoc.CopyToDocument(0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
+            rDoc.CopyToDocument(nOutStartCol, 0, nTab, nOutEndCol, rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
+            rDoc.CopyToDocument(0, nOutStartRow, nTab, rDoc.MaxCol(), nOutEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
         }
 
         // enable
@@ -306,7 +306,7 @@ void ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
 
     rDoc.SetStreamValid(nTab, false);
 
-    rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size );
+    rDocShell.PostPaint( 0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab, PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size );
     rDocShell.SetDocumentModified();
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 }
@@ -336,13 +336,13 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
         {
             pUndoDoc->InitUndo( &rDoc, nTab, nTab, true );
             rDoc.CopyToDocument(static_cast<SCCOL>(nStart), 0, nTab,
-                                static_cast<SCCOL>(nEnd), MAXROW, nTab, InsertDeleteFlags::NONE, false,
+                                static_cast<SCCOL>(nEnd), rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false,
                                 *pUndoDoc);
         }
         else
         {
             pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, true );
-            rDoc.CopyToDocument(0, nStart, nTab, MAXCOL, nEnd, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
+            rDoc.CopyToDocument(0, nStart, nTab, rDoc.MaxCol(), nEnd, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
         }
 
         rDocShell.GetUndoManager()->AddUndoAction(
@@ -455,8 +455,8 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
             std::unique_ptr<ScOutlineTable> pUndoTab(new ScOutlineTable( *pTable ));
             ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
             pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
-            rDoc.CopyToDocument(nStartCol, 0, nTab, nEndCol, MAXROW, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
-            rDoc.CopyToDocument(0, nStartRow, nTab, MAXCOL, nEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
+            rDoc.CopyToDocument(nStartCol, 0, nTab, nEndCol, rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
+            rDoc.CopyToDocument(0, nStartRow, nTab, rDoc.MaxCol(), nEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
 
             rDocShell.GetUndoManager()->AddUndoAction(
                 std::make_unique<ScUndoOutlineBlock>( &rDocShell,
@@ -466,7 +466,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
 
         //  Columns
 
-        nMin=MAXCOL;
+        nMin=rDoc.MaxCol();
         nMax=0;
         ScOutlineArray& rColArray = pTable->GetColArray();
         ScSubOutlineIterator aColIter( &rColArray );
@@ -488,7 +488,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
 
         //  Rows
 
-        nMin=MAXROW;
+        nMin=rDoc.MaxRow();
         nMax=0;
         ScOutlineArray& rRowArray = pTable->GetRowArray();
         ScSubOutlineIterator aRowIter( &rRowArray );
@@ -527,7 +527,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
             pViewSh->OnLOKShowHideColRow(/*columns: */ false, nMinStartRow - 1);
         }
 
-        rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top );
+        rDocShell.PostPaint( 0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top );
         rDocShell.SetDocumentModified();
         bDone = true;
 
@@ -582,9 +582,9 @@ bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, bool bRecord )
             ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
             pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
             rDoc.CopyToDocument(static_cast<SCCOL>(nEffStartCol), 0, nTab,
-                                static_cast<SCCOL>(nEffEndCol), MAXROW, nTab, InsertDeleteFlags::NONE,
+                                static_cast<SCCOL>(nEffEndCol), rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE,
                                 false, *pUndoDoc);
-            rDoc.CopyToDocument(0, nEffStartRow, nTab, MAXCOL, nEffEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
+            rDoc.CopyToDocument(0, nEffStartRow, nTab, rDoc.MaxCol(), nEffEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
 
             rDocShell.GetUndoManager()->AddUndoAction(
                 std::make_unique<ScUndoOutlineBlock>( &rDocShell,
@@ -621,7 +621,7 @@ bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, bool bRecord )
         rDoc.SetDrawPageSize(nTab);
         rDoc.UpdatePageBreaks( nTab );
 
-        rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top );
+        rDocShell.PostPaint( 0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top );
 
         rDocShell.SetDocumentModified();
         bDone = true;
@@ -654,13 +654,13 @@ void ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
         {
             pUndoDoc->InitUndo( &rDoc, nTab, nTab, true );
             rDoc.CopyToDocument(static_cast<SCCOL>(nStart), 0, nTab,
-                                static_cast<SCCOL>(nEnd), MAXROW, nTab, InsertDeleteFlags::NONE, false,
+                                static_cast<SCCOL>(nEnd), rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false,
                                 *pUndoDoc);
         }
         else
         {
             pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, true );
-            rDoc.CopyToDocument(0, nStart, nTab, MAXCOL, nEnd, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
+            rDoc.CopyToDocument(0, nStart, nTab, rDoc.MaxCol(), nEnd, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
         }
 
         rDocShell.GetUndoManager()->AddUndoAction(
@@ -746,13 +746,13 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
         {
             pUndoDoc->InitUndo( &rDoc, nTab, nTab, true );
             rDoc.CopyToDocument(static_cast<SCCOL>(nStart), 0, nTab,
-                                static_cast<SCCOL>(nEnd), MAXROW, nTab, InsertDeleteFlags::NONE, false,
+                                static_cast<SCCOL>(nEnd), rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false,
                                 *pUndoDoc);
         }
         else
         {
             pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, true );
-            rDoc.CopyToDocument(0, nStart, nTab, MAXCOL, nEnd, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
+            rDoc.CopyToDocument(0, nStart, nTab, rDoc.MaxCol(), nEnd, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
         }
 
         rDocShell.GetUndoManager()->AddUndoAction(

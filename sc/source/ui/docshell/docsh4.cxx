@@ -2130,7 +2130,7 @@ long SnapHorizontal( const ScDocument& rDoc, SCTAB nTab, long nVal, SCCOL& rStar
     SCCOL nCol = 0;
     long nTwips = static_cast<long>(nVal / HMM_PER_TWIPS);
     long nSnap = 0;
-    while ( nCol<MAXCOL )
+    while ( nCol<rDoc.MaxCol() )
     {
         long nAdd = rDoc.GetColWidth(nCol, nTab);
         if ( nSnap + nAdd/2 < nTwips || nCol < rStartCol )
@@ -2154,7 +2154,7 @@ long SnapVertical( const ScDocument& rDoc, SCTAB nTab, long nVal, SCROW& rStartR
     long nSnap = 0;
 
     bool bFound = false;
-    for (SCROW i = nRow; i <= MAXROW; ++i)
+    for (SCROW i = nRow; i <= rDoc.MaxRow(); ++i)
     {
         SCROW nLastRow;
         if (rDoc.RowHidden(i, nTab, nullptr, &nLastRow))
@@ -2177,7 +2177,7 @@ long SnapVertical( const ScDocument& rDoc, SCTAB nTab, long nVal, SCROW& rStartR
         }
     }
     if (!bFound)
-        nRow = MAXROW;  // all hidden down to the bottom
+        nRow = rDoc.MaxRow();  // all hidden down to the bottom
 
     nVal = static_cast<long>( nSnap * HMM_PER_TWIPS );
     rStartRow = nRow;

@@ -342,7 +342,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
                 if ( nNewEndX != nOldEndX || nNewEndY != nOldEndY )             // range changed?
                 {
                     pUndoDoc->InitUndo( &rDoc, 0, rDoc.GetTableCount()-1 );
-                    rDoc.CopyToDocument(0, 0, 0, MAXCOL, MAXROW, MAXTAB,
+                    rDoc.CopyToDocument(0, 0, 0, rDoc.MaxCol(), rDoc.MaxRow(), MAXTAB,
                                         InsertDeleteFlags::FORMULA, false, *pUndoDoc);     // all formulas
                 }
                 else
@@ -381,7 +381,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
                 ScClipParam aClipParam(rTokenRange, false);
                 rSrcDoc.CopyToClip(aClipParam, &aClipDoc, &aSourceMark, false, false);
 
-                if ( aClipDoc.HasAttrib( 0,0,nSrcTab, MAXCOL,MAXROW,nSrcTab,
+                if ( aClipDoc.HasAttrib( 0,0,nSrcTab, rDoc.MaxCol(),rDoc.MaxRow(),nSrcTab,
                             HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
                 {
                     //! ResetAttrib at document !!!
@@ -389,7 +389,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
                     ScPatternAttr aPattern( rSrcDoc.GetPool() );
                     aPattern.GetItemSet().Put( ScMergeAttr() );             // Defaults
                     aPattern.GetItemSet().Put( ScMergeFlagAttr() );
-                    aClipDoc.ApplyPatternAreaTab( 0,0, MAXCOL,MAXROW, nSrcTab, aPattern );
+                    aClipDoc.ApplyPatternAreaTab( 0,0, rDoc.MaxCol(),rDoc.MaxRow(), nSrcTab, aPattern );
                 }
 
                 aNewTokenRange.aEnd.SetCol( aNewTokenRange.aStart.Col() + (rTokenRange.aEnd.Col() - rTokenRange.aStart.Col()) );
@@ -445,9 +445,9 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
         SCROW nPaintEndY = std::max( aOldRange.aEnd.Row(), aNewRange.aEnd.Row() );
 
         if ( aOldRange.aEnd.Col() != aNewRange.aEnd.Col() )
-            nPaintEndX = MAXCOL;
+            nPaintEndX = rDoc.MaxCol();
         if ( aOldRange.aEnd.Row() != aNewRange.aEnd.Row() )
-            nPaintEndY = MAXROW;
+            nPaintEndY = rDoc.MaxRow();
 
         if ( !m_pDocSh->AdjustRowHeight( aDestPos.Row(), nPaintEndY, nDestTab ) )
             m_pDocSh->PostPaint(

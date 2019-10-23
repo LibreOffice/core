@@ -137,7 +137,7 @@ void ScDocShell::SetVisAreaOrSize( const tools::Rectangle& rVisArea )
         ScRange aNew;
         m_aDocument.GetEmbedded( aNew);
         if (aOld != aNew)
-            PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB,PaintPartFlags::Grid);
+            PostPaint(0,0,0,m_aDocument.MaxCol(),m_aDocument.MaxRow(),MAXTAB,PaintPartFlags::Grid);
 
         //TODO/LATER: currently not implemented
         //ViewChanged( ASPECT_CONTENT );          // show in the container as well
@@ -243,7 +243,7 @@ void ScDocShell::LoadStyles( SfxObjectShell &rSource )
 
         //  Paint
 
-    PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid | PaintPartFlags::Left );
+    PostPaint( 0,0,0, m_aDocument.MaxCol(),m_aDocument.MaxRow(),MAXTAB, PaintPartFlags::Grid | PaintPartFlags::Left );
 }
 
 void ScDocShell::LoadStylesArgs( ScDocShell& rSource, bool bReplace, bool bCellStyles, bool bPageStyles )
@@ -307,7 +307,7 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, bool bReplace, bool bCellS
 
     lcl_AdjustPool( GetStyleSheetPool() );      // adjust SetItems
     UpdateAllRowHeights();
-    PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid | PaintPartFlags::Left );      // Paint
+    PostPaint( 0,0,0, m_aDocument.MaxCol(),m_aDocument.MaxRow(),MAXTAB, PaintPartFlags::Grid | PaintPartFlags::Left );      // Paint
 }
 
 void ScDocShell::ReconnectDdeLink(SfxObjectShell& rServer)
@@ -413,7 +413,7 @@ void ScDocShell::ReloadTabLinks()
     if ( bAny )
     {
         //  Paint only once
-        PostPaint( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB),
+        PostPaint( ScRange(0,0,0,m_aDocument.MaxCol(),m_aDocument.MaxRow(),MAXTAB),
                                     PaintPartFlags::Grid | PaintPartFlags::Top | PaintPartFlags::Left );
 
         SetDocumentModified();

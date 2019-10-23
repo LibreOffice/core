@@ -240,7 +240,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                 else
                     pUndoDoc->AddUndoTab( nTab, nTab, true, true );
                 bFirst = false;
-                ScRange aRange(0,0,nTab,MAXCOL,MAXROW,nTab);
+                ScRange aRange(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab);
                 rDoc.CopyToDocument(aRange, InsertDeleteFlags::ALL, false, *pUndoDoc);
                 pUndoDoc->TransferDrawPage( &rDoc, nTab, nTab );
                 pUndoDoc->SetLink( nTab, nMode, aFileName, aFilterName,
@@ -284,7 +284,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                                         (nMode == ScLinkMode::VALUE) );     // only values?
             else
             {
-                rDoc.DeleteAreaTab( 0,0,MAXCOL,MAXROW, nTab, InsertDeleteFlags::ALL );
+                rDoc.DeleteAreaTab( 0,0,rDoc.MaxCol(),rDoc.MaxRow(), nTab, InsertDeleteFlags::ALL );
 
                 bool bShowError = true;
                 if ( nMode == ScLinkMode::VALUE )
@@ -294,7 +294,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
                     ScRangeList aErrorCells;        // cells on the linked sheets that need error values
 
-                    ScCellIterator aIter(&rDoc, ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB));          // all sheets
+                    ScCellIterator aIter(&rDoc, ScRange(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB));          // all sheets
                     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
                         if (aIter.getType() != CELLTYPE_FORMULA)
@@ -386,7 +386,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
     //  Paint (may be several tables)
 
-    pImpl->m_pDocSh->PostPaint( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB),
+    pImpl->m_pDocSh->PostPaint( ScRange(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB),
                                 PaintPartFlags::Grid | PaintPartFlags::Top | PaintPartFlags::Left | PaintPartFlags::Extras );
     aModificator.SetDocumentModified();
 
