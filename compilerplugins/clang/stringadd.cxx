@@ -78,7 +78,6 @@ private:
     void checkForCompoundAssign(Stmt const* stmt1, Stmt const* stmt2, VarDecl const* varDecl);
 
     Expr const* ignore(Expr const*);
-    std::string getSourceAsString(SourceLocation startLoc, SourceLocation endLoc);
     bool isSideEffectFree(Expr const*);
 };
 
@@ -171,9 +170,8 @@ void StringAdd::checkForCompoundAssign(Stmt const* stmt1, Stmt const* stmt2, Var
     if (!isSideEffectFree(rhs))
         return;
     // if we cross a #ifdef boundary
-    auto s
-        = getSourceAsString(stmt1->getSourceRange().getBegin(), stmt2->getSourceRange().getEnd());
-    if (s.find("#if") != std::string::npos)
+    if (containsPreprocessingConditionalInclusion(
+            SourceRange(stmt1->getSourceRange().getBegin(), stmt2->getSourceRange().getEnd())))
         return;
     report(DiagnosticsEngine::Warning, "simplify by merging with the preceding assignment",
            compat::getBeginLoc(stmt2))
@@ -312,18 +310,6 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
     }
 
     return false;
-}
-
-std::string StringAdd::getSourceAsString(SourceLocation startLoc, SourceLocation endLoc)
-{
-    SourceManager& SM = compiler.getSourceManager();
-    char const* p1 = SM.getCharacterData(startLoc);
-    char const* p2 = SM.getCharacterData(endLoc);
-    p2 += Lexer::MeasureTokenLength(endLoc, SM, compiler.getLangOpts());
-    // sometimes we get weird results, probably from crossing internal LLVM buffer boundaries
-    if (p2 - p1 < 0)
-        return std::string();
-    return std::string(p1, p2 - p1);
 }
 
 loplugin::Plugin::Registration<StringAdd> stringadd("stringadd");
