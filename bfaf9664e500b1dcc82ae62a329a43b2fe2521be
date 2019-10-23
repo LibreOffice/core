@@ -52,6 +52,24 @@
       "revId": "bfaf9664e500b1dcc82ae62a329a43b2fe2521be",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_e8f35472",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 2635,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-23T09:03:03Z",
+      "side": 1,
+      "message": "for the record:\n\n\u003e Oct 23 10:39:07 \u003cjmux\u003e\tsberg: regarding https://gerrit.libreoffice.org/#/c/79979/ - I had a different comment yesterday, but somehow couldn\u0027t submit it, with the same \"forbidden\" problem.\n\u003e Oct 23 10:39:08 \u003cIZBot\u003e\tgerrit: »tdf#127909 save manually selected certificate path« by Jan-Marek Glogowski for master [NEW]\n\u003e Oct 23 10:40:23 \u003csberg\u003e\tjmux, but that doesn\u0027t help me understand what you say there :)\n\u003e Oct 23 10:41:05 \u003cjmux\u003e\tsberg: so as I understand nillable, it would explicitly allow to set a string a undefined, as I understand reading about it.\n\u003e Oct 23 10:41:54 \u003cjmux\u003e\tIn the end I just care about the string value and if that value path actually exists. Or does nillable mean something else w.r.t. LO configuration?\n\u003e Oct 23 10:41:55 \u003csberg\u003e\tjmux, yeah, a nillable prop of type T has a value set of nil + {values of T}\n\u003e Oct 23 10:43:19 \u003csberg\u003e\tjmux, so if you already use empty string to represent \"X\", and treat nil and empty string the same, there\u0027s likely no need to have the property nillable anyway\n\u003e Oct 23 10:43:39 \u003cjmux\u003e\tYup - as I found, nillable is represented by boost::optional. But from all of my understanding, for my code it really doesn\u0027t matter.\n\u003e Oct 23 10:44:44 \u003csberg\u003e\tjmux, yes, a nillable prop is represented by that simplified C++ configuration access via boost::optional (which is one reason to prefer non-nillable props, as it makes using that simplified C++ configuration access simpler)\n\u003e Oct 23 10:45:16 \u003csberg\u003e\tjmux, but I now see that the directly preceding \"CertDir\" prop is also nillable; so whatever...\n\u003e Oct 23 10:45:22 \u003cjmux\u003e\tsberg: from how I understand it, it would also be the same for the already defined CertPath option.\n\u003e Oct 23 10:45:37 \u003csberg\u003e\tjmux, yes\n\u003e Oct 23 10:45:57 \u003csberg\u003e\tjmux, and, oh, while at it, do those props store pathnames or (file) URLs?\n\u003e Oct 23 10:46:27 \u003cjmux\u003e\tsberg: system path names\n\u003e Oct 23 10:46:33 \u003csberg\u003e\tjmux, why that?\n\u003e Oct 23 10:46:49 \u003csberg\u003e\tjmux, we generally use URLs throughout\n\u003e Oct 23 10:48:10 \u003cjmux\u003e\tsberg: no specific reason I guess. I just used followed the existing code and added the 2nd option.\n\u003e Oct 23 10:48:59 \u003csberg\u003e\tjmux, ah, I now erroneously assumed you had recently added \"CertDir\" too, but that\u0027s rather old already\n\u003e Oct 23 10:49:24 \u003csberg\u003e\tjmux, so yeah, probably just model ManualCertDir the same way as the existing CertDir\n\u003e Oct 23 10:52:06 \u003cjmux\u003e\tsberg: I guess it would break something (at least in theory), if we added nillable\u003dfalse to the existing CertDir.\n\u003e Oct 23 10:53:20 \u003csberg\u003e\tjmux, not worth the trouble I\u0027d say; needlessly nilable props are only a minor nuisance (I\u0027m only on the lookout for them in freshly added code)\n\u003e Oct 23 10:55:18 \u003cjmux\u003e\tWhen reading about all the nillable stuff, I was more wondering, why LO config has a default of nillable\u003dtrue, which seems so much of a special case.\n\u003e Oct 23 11:00:02 \u003csberg\u003e\tjmux, that default is a historic mistake\n\u003e Oct 23 11:00:23 \u003csberg\u003e\t...kept for backwards compatibility",
+      "parentUuid": "7f7f9b97_6868a420",
+      "revId": "bfaf9664e500b1dcc82ae62a329a43b2fe2521be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
