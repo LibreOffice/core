@@ -22,9 +22,25 @@
 
 #include <win/winlayout.hxx>
 
+#include <vector>
+
 struct SkiaGlobalWinGlyphCache : public GlobalWinGlyphCache
 {
     virtual bool AllocateTexture(WinGlyphDrawElement& rElement, int nWidth, int nHeight) override;
+    virtual void NotifyElementUsed(WinGlyphDrawElement& rElement) override;
+    virtual void Prune() override;
+    // The least recently used SkBitmap order, identified by SkBitmap::getPixels().
+    std::vector<void*> mLRUOrder;
+};
+
+class SkiaWinGlyphCache : public WinGlyphCache
+{
+public:
+    void RemoveTextures(const std::vector<void*>& pixels);
+
+private:
+    // This class just "adds" RemoveTexture() to the base class, it's never instantiatied.
+    SkiaWinGlyphCache() = delete;
 };
 
 #endif // INCLUDED_VCL_INC_SKIA_WIN_WINLAYOUT_HXX

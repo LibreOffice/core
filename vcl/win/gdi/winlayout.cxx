@@ -479,6 +479,11 @@ bool WinSalGraphics::DrawCachedGlyphs(const GenericSalLayout& rLayout)
     return true;
 }
 
+static void PruneGlyphCache()
+{
+    GlobalWinGlyphCache::get()->Prune();
+}
+
 void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout, HDC hDC, bool bUseDWrite)
 {
     TextOutRenderer &render = TextOutRenderer::get(bUseDWrite);
@@ -506,8 +511,14 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
         ::SelectFont(hDC, hOrigFont);
     }
     // if we can't draw the cached OpenGL glyphs, try to draw a full OpenGL layout
-    else if (bForceGDI || !CacheGlyphs(rLayout) || !DrawCachedGlyphs(rLayout))
+    else if (!bForceGDI && CacheGlyphs(rLayout) && DrawCachedGlyphs(rLayout))
     {
+        PruneGlyphCache();
+    }
+    else
+    {
+        PruneGlyphCache(); // prune the cache from the failed calls above
+
         // We have to render the text to a hidden texture, and draw it.
         //
         // Note that Windows GDI does not really support the alpha correctly
