@@ -22,11 +22,10 @@
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
+#include <vcl/tabctrl.hxx>
 #include <vcl/vclptr.hxx>
 
 #include <vector>
-
-class TabControl;
 
 
 //  class VCLXAccessibleTabControl

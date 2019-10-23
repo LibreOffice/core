@@ -22,10 +22,7 @@
 #include <vcl/treelistbox.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <vcl/svlbitm.hxx>
-#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -34,16 +31,14 @@
 #include <vcl/svapp.hxx>
 #include <vcl/controllayout.hxx>
 #include <vcl/settings.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <helper/accresmgr.hxx>
 #include <strings.hrc>
-#include <com/sun/star/accessibility/XAccessibleValue.hpp>
+
 #define ACCESSIBLE_ACTION_COUNT 1
 
 namespace

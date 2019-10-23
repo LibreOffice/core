@@ -20,7 +20,6 @@
 
 #include <vcl/headbar.hxx>
 
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -30,11 +29,8 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <i18nlangtag/languagetag.hxx>
-
-#include <vector>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

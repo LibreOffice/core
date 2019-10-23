@@ -22,13 +22,9 @@
 
 #include <memory>
 #include <vector>
-#include <functional>
-#include <standard/vclxaccessibleedit.hxx>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/accessibility/XAccessibleAction.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <cppuhelper/implbase2.hxx>
+#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
 typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessible,

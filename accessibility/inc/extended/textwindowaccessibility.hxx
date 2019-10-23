@@ -25,16 +25,7 @@
 #include <vcl/textdata.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>
-#include <vcl/txtattr.hxx>
-#include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/util/Color.hpp>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
@@ -45,11 +36,9 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase7.hxx>
-#include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <rtl/ref.hxx>
 
-#include <vcl/svapp.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <queue>
 #include <memory>

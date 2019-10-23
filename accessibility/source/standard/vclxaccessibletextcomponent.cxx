@@ -18,7 +18,6 @@
  */
 
 #include <standard/vclxaccessibletextcomponent.hxx>
-#include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <helper/characterattributeshelper.hxx>
 
@@ -26,15 +25,12 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <cppuhelper/typeprovider.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
-
-#include <vector>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

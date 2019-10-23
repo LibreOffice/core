@@ -20,6 +20,11 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/i18n/Boundary.hpp>
@@ -28,6 +33,8 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/txtattr.hxx>
 #include <vcl/window.hxx>
 #include <tools/diagnose_ex.h>
 #include <toolkit/helper/convert.hxx>

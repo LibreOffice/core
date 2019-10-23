@@ -32,10 +32,8 @@
 #include <standard/vclxaccessiblefixedtext.hxx>
 #include <standard/vclxaccessibleheaderbar.hxx>
 #include <standard/vclxaccessiblelistbox.hxx>
-#include <standard/vclxaccessiblemenu.hxx>
 #include <standard/vclxaccessibleradiobutton.hxx>
 #include <standard/vclxaccessiblescrollbar.hxx>
-#include <standard/vclxaccessibletextcomponent.hxx>
 #include <standard/vclxaccessibletoolbox.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <standard/vclxaccessiblestatusbar.hxx>
@@ -54,6 +52,7 @@
 #include <extended/AccessibleBrowseBoxHeaderCell.hxx>
 #include <extended/AccessibleBrowseBoxCheckBoxCell.hxx>
 #include <extended/accessibleeditbrowseboxcell.hxx>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <extended/AccessibleGridControl.hxx>

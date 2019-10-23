@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <extended/AccessibleGridControlHeaderCell.hxx>
 #include <vcl/accessibletable.hxx>
-#include <extended/AccessibleGridControl.hxx>
+#include <vcl/svapp.hxx>
 
 namespace accessibility
 {

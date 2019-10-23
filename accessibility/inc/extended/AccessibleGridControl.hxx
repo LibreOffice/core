@@ -24,8 +24,8 @@
 #include <extended/AccessibleGridControlTable.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <rtl/ref.hxx>
 #include <vcl/accessibletable.hxx>
-#include <memory>
 
 namespace accessibility {
 

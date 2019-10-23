@@ -18,10 +18,12 @@
  */
 
 #include <extended/AccessibleGridControlTableCell.hxx>
+#include <toolkit/helper/convert.hxx>
 #include <vcl/accessibletable.hxx>
+#include <vcl/svapp.hxx>
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 namespace accessibility

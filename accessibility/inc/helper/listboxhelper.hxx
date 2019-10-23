@@ -21,9 +21,8 @@
 #define INCLUDED_ACCESSIBILITY_INC_HELPER_LISTBOXHELPER_HXX
 
 #include <helper/IComboListBoxHelper.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/combobox.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <tools/gen.hxx>
 
 
 // globals

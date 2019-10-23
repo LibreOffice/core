@@ -22,6 +22,7 @@
 #include <extended/AccessibleBrowseBoxHeaderBar.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/accessibletableprovider.hxx>
+#include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sal/types.h>
 

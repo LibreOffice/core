@@ -21,7 +21,6 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEGRIDCONTROLHEADER_HXX
 #define INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEGRIDCONTROLHEADER_HXX
 
-#include <extended/AccessibleGridControlHeaderCell.hxx>
 #include <extended/AccessibleGridControlTableBase.hxx>
 
 namespace accessibility {

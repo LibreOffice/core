@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <extended/AccessibleGridControlTableBase.hxx>
 #include <vcl/accessibletable.hxx>
-#include <tools/multisel.hxx>
+#include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>
 
 using css::uno::Reference;

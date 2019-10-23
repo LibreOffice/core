@@ -28,7 +28,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <cppuhelper/typeprovider.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/vclevent.hxx>
 #include <strings.hxx>

@@ -24,11 +24,7 @@
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#include <tools/link.hxx>
-
 #include <vcl/vclptr.hxx>
-
-#include <vector>
 
 class HeaderBar;
 class VclSimpleEvent;

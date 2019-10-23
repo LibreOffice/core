@@ -21,9 +21,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <helper/accresmgr.hxx>
 #include <strings.hrc>
-#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/awt/Size.hpp>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -37,10 +35,8 @@
 #include <vcl/unohelp2.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <strings.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
