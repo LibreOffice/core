@@ -35,8 +35,10 @@ class TestXModel(unittest.TestCase):
         p3 = PropertyValue(Name="LockContentExtraction", Value=True)
         p4 = PropertyValue(Name="LockExport", Value=True)
         p5 = PropertyValue(Name="LockPrint", Value=True)
+        p6 = PropertyValue(Name="LockSave", Value=True)
 
-        xDoc.setArgs([p1, p2, p3, p4, p5])
+
+        xDoc.setArgs([p1, p2, p3, p4, p5, p6])
 
         # Make sure that all properties are returned with getArgs()
         args = xDoc.getArgs()
@@ -45,6 +47,7 @@ class TestXModel(unittest.TestCase):
         self.assertTrue(p3 in args)
         self.assertTrue(p4 in args)
         self.assertTrue(p5 in args)
+        self.assertTrue(p6 in args)
 
         xDoc.close(True)
 
