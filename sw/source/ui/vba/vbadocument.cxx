@@ -525,6 +525,12 @@ SwVbaDocument::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, con
 }
 
 void SAL_CALL
+SwVbaDocument::Close( const uno::Any& SaveChanges, const uno::Any& /*OriginalFormat*/, const uno::Any& /*RouteDocument*/ )
+{
+    VbaDocumentBase::Close( SaveChanges, uno::Any(), uno::Any() );
+}
+
+void SAL_CALL
 SwVbaDocument::SavePreviewPngAs( const uno::Any& FileName )
 {
     OUString sFileName;
