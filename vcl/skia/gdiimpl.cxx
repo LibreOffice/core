@@ -234,7 +234,15 @@ static SkRegion toSkRegion(const vcl::Region& region)
         return SkRegion();
     if (region.IsRectangle())
         return SkRegion(toSkIRect(region.GetBoundRect()));
-    if (!region.HasPolyPolygonOrB2DPolyPolygon())
+    if (region.HasPolyPolygonOrB2DPolyPolygon())
+    {
+        SkPath path;
+        lclPolyPolygonToPath(region.GetAsB2DPolyPolygon(), path);
+        SkRegion skRegion;
+        skRegion.setPath(path, SkRegion(path.getBounds().roundOut()));
+        return skRegion;
+    }
+    else
     {
         SkRegion skRegion;
         RectangleVector rectangles;
@@ -243,7 +251,6 @@ static SkRegion toSkRegion(const vcl::Region& region)
             skRegion.op(toSkIRect(rect), SkRegion::kUnion_Op);
         return skRegion;
     }
-    abort();
 }
 
 bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
