@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <cppuhelper/queryinterface.hxx>
+#include <comphelper/accflowenum.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
@@ -741,9 +742,7 @@ css::uno::Sequence< css::uno::Any >
 {
     SolarMutexGuard g;
 
-    const sal_Int32 SPELLCHECKFLOWTO = 1;
-    const sal_Int32 FINDREPLACEFLOWTO = 2;
-    if ( nType == SPELLCHECKFLOWTO )
+    if (nType == AccessibilityFlowTo::FORSPELLCHECKFLOWTO)
     {
         uno::Reference< css::drawing::XShape > xShape;
         rAny >>= xShape;
@@ -785,7 +784,7 @@ css::uno::Sequence< css::uno::Any >
             goto Rt;
         }
     }
-    else if ( nType == FINDREPLACEFLOWTO )
+    else if (nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO)
     {
         sal_Int32 nChildCount = getSelectedAccessibleChildCount();
         if ( nChildCount )
