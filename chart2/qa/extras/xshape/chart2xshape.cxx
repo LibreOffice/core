@@ -90,7 +90,7 @@ void Chart2XShapeTest::compareAgainstReference(const OUString& rReferenceFile, b
         OString aOFile = OUStringToOString(aReference, RTL_TEXTENCODING_UTF8);
         OString aODump = OUStringToOString(aDump, RTL_TEXTENCODING_UTF8);
         std::ofstream aReferenceFile(aOFile.getStr());
-        aReferenceFile << aODump.getStr();
+        aReferenceFile << aODump;
     }
     else
     {
