@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_dbbbc4c1",
+        "filename": "offapi/com/sun/star/drawing/XShapes3.idl",
+        "patchSetId": 13
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-10-23T13:09:46Z",
+      "side": 1,
+      "message": "it says fixme here :)",
+      "revId": "f7c48b38092e8e07b9407f83746fc5a30261d328",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_5b9ed454",
+        "filename": "svx/source/svdraw/svdpage.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-10-23T13:09:46Z",
+      "side": 1,
+      "message": "special case: if sortOrder[0] is a textbox it needs to be added twice; the loop starts at 1...",
+      "revId": "f7c48b38092e8e07b9407f83746fc5a30261d328",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
