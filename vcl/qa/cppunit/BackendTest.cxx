@@ -370,6 +370,30 @@ public:
 #endif
     }
 
+    void testDrawBezierWithPolylineB2D()
+    {
+        vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupBezier();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
+        exportImage("06-01_bezier_test-polyline_b2d.png", aBitmap);
+        (void)eResult;
+#ifndef SKIP_TEST_ASSERTS
+        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+#endif
+    }
+
+    void testDrawBezierAAWithPolylineB2D()
+    {
+        vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupAABezier();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
+        exportImage("07-01_bezier_AA_test-polyline_b2d.png", aBitmap);
+        (void)eResult;
+#ifndef SKIP_TEST_ASSERTS
+        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+#endif
+    }
+
 #undef SKIP_TEST_ASSERTS
 
     CPPUNIT_TEST_SUITE(BackendTest);
@@ -404,6 +428,9 @@ public:
     CPPUNIT_TEST(testDrawInvertWithRectangle);
     CPPUNIT_TEST(testDrawInvertN50WithRectangle);
     CPPUNIT_TEST(testDrawInvertTrackFrameWithRectangle);
+
+    CPPUNIT_TEST(testDrawBezierWithPolylineB2D);
+    CPPUNIT_TEST(testDrawBezierAAWithPolylineB2D);
 
     CPPUNIT_TEST_SUITE_END();
 };

@@ -72,6 +72,58 @@ Bitmap OutputDeviceTestPolyLineB2D::setupDiamond()
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
+
+Bitmap OutputDeviceTestPolyLineB2D::setupBezier()
+{
+    initialSetup(21, 21, constBackgroundColor, false);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    basegfx::B2DPolygon aPolygon;
+    addDiamondPoints(maVDRectangle, 8, aPolygon);
+    aPolygon.setClosed(true);
+
+    double minX = maVDRectangle.Left() + 4;
+    double maxX = maVDRectangle.Right() - 4;
+    double minY = maVDRectangle.Top() + 4;
+    double maxY = maVDRectangle.Bottom() - 4;
+
+    aPolygon.setControlPoints(0, { minX, minY }, { maxX, minY });
+    aPolygon.setControlPoints(1, { maxX, minY }, { maxX, maxY });
+    aPolygon.setControlPoints(2, { maxX, maxY }, { minX, maxY });
+    aPolygon.setControlPoints(3, { minX, maxY }, { minX, minY });
+
+    mpVirtualDevice->DrawPolyLine(aPolygon);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+Bitmap OutputDeviceTestPolyLineB2D::setupAABezier()
+{
+    initialSetup(21, 21, constBackgroundColor, true);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    basegfx::B2DPolygon aPolygon;
+    addDiamondPoints(maVDRectangle, 8, aPolygon);
+    aPolygon.setClosed(true);
+
+    double minX = maVDRectangle.Left() + 4;
+    double maxX = maVDRectangle.Right() - 4;
+    double minY = maVDRectangle.Top() + 4;
+    double maxY = maVDRectangle.Bottom() - 4;
+
+    aPolygon.setControlPoints(0, { minX, minY }, { maxX, minY });
+    aPolygon.setControlPoints(1, { maxX, minY }, { maxX, maxY });
+    aPolygon.setControlPoints(2, { maxX, maxY }, { minX, maxY });
+    aPolygon.setControlPoints(3, { minX, maxY }, { minX, minY });
+
+    mpVirtualDevice->DrawPolyLine(aPolygon);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
 }
 } // end namespace vcl::test
 

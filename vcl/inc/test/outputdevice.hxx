@@ -74,6 +74,7 @@ public:
     // tools
     static tools::Rectangle alignToCenter(tools::Rectangle aRect1, tools::Rectangle aRect2);
 
+    static TestResult checkBezier(Bitmap& rBitmap);
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestBitmap : public OutputDeviceTestCommon
@@ -140,6 +141,8 @@ public:
 
     Bitmap setupRectangle(bool bEnableAA);
     Bitmap setupDiamond();
+    Bitmap setupBezier();
+    Bitmap setupAABezier();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestRect : public OutputDeviceTestCommon
