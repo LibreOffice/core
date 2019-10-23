@@ -266,7 +266,13 @@ bool SkiaSalBitmap::Replace(const Color& rSearchColor, const Color& rReplaceColo
     return false;
 }
 
-bool SkiaSalBitmap::ConvertToGreyscale() { return false; }
+bool SkiaSalBitmap::ConvertToGreyscale()
+{
+    // Skia can convert color SkBitmap to a greyscale one (draw using SkCanvas),
+    // but it uses different coefficients for the color->grey conversion than VCL.
+    // So just let VCL do it.
+    return false;
+}
 
 const SkBitmap& SkiaSalBitmap::GetSkBitmap() const
 {
