@@ -16,6 +16,24 @@
       "revId": "87608490f205b2fbc2b453ad8ded33050ac29b90",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_5b5b3453",
+        "filename": "solenv/gbuild/platform/com_MSC_class.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-10-23T15:32:59Z",
+      "side": 1,
+      "message": "I didn\u0027t know how to easily filter out conflicting flags without moving them together, but other than that, no.",
+      "parentUuid": "7f7f9b97_bb4cc89e",
+      "revId": "87608490f205b2fbc2b453ad8ded33050ac29b90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
