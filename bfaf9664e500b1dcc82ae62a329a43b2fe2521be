@@ -34,6 +34,24 @@
       "revId": "bfaf9664e500b1dcc82ae62a329a43b2fe2521be",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_6868a420",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 2635,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-23T08:36:56Z",
+      "side": 1,
+      "message": "\u003e I have no idea. The current code assumes that and empty string \n \u003e means auto-detection of the path.\n\nI cannot parse the second sentence above.  Do you mean that \"empty string means auto-detection of the path\" while a value of nil means something else?",
+      "parentUuid": "7f7f9b97_8bbf53fa",
+      "revId": "bfaf9664e500b1dcc82ae62a329a43b2fe2521be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
