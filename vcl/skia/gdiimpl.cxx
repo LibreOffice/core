@@ -850,6 +850,18 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolygon,
     return false;
 }
 
+bool SkiaSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
+{
+    switch (eType)
+    {
+        case OutDevSupportType::B2DDraw:
+        case OutDevSupportType::TransparentRect:
+            return true;
+        default:
+            return false;
+    }
+}
+
 #ifdef DBG_UTIL
 void SkiaSalGraphicsImpl::dump(const char* file) const
 {

@@ -377,6 +377,8 @@ public:
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override;
 
+    virtual bool supportsOperation(OutDevSupportType eType) const override;
+
     /// queue an idle flush of contents of the back-buffer to the screen
     void flush();
 
