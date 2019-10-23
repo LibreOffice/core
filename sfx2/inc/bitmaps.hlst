@@ -37,6 +37,7 @@
 #define GRIP                                "sfx2/res/grip.png"
 #define OPEN_MORE                           "sfx2/res/symphony/open_more.png"
 #define MOREBUTTON                          "sfx2/res/symphony/morebutton.png"
+#define MOREBUTTON_LARGE                    "sfx2/res/symphony/morebutton-large.png"
 #define SIDEBAR_3D_LARGE                    "sfx2/res/symphony/sidebar-3d-large.png"
 #define SIDEBAR_3D_SMALL                    "sfx2/res/symphony/sidebar-3d-small.png"
 #define SIDEBAR_ANIMATION_LARGE             "sfx2/res/symphony/sidebar-animation-large.png"
