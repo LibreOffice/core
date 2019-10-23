@@ -27,9 +27,9 @@ void ValueSetUIObject::execute(const OUString& rAction, const StringMap& rParame
 
     if (rAction == "SELECT")
     {
-        if (rParameters.find("ID") != rParameters.end())
+        if (rParameters.find("POS") != rParameters.end())
         {
-            auto aPos = rParameters.find("ID");
+            auto aPos = rParameters.find("POS");
             OUString aVal = aPos->second;
             sal_Int32 nPos = aVal.toInt32();
             mxValueSet->SelectItem(nPos);
