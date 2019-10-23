@@ -784,7 +784,7 @@ css::uno::Sequence< css::uno::Any >
             goto Rt;
         }
     }
-    else if (nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO)
+    else if (nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_ITEM || nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_RANGE)
     {
         sal_Int32 nChildCount = getSelectedAccessibleChildCount();
         if ( nChildCount )

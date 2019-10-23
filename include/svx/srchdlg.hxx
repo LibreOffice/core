@@ -23,6 +23,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/srchdefs.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/svxdllapi.h>
 #include <memory>
 #include <vector>
@@ -125,7 +126,7 @@ public:
 
     TransliterationFlags        GetTransliterationFlags() const;
 
-    void SetDocWin(vcl::Window* pDocWin);
+    void SetDocWin(vcl::Window* pDocWin, SvxSearchCmd eCommand);
     void SetSrchFlag( bool bSuccess ) { mbSuccess = bSuccess; }
     bool GetSrchFlag() const { return mbSuccess; }
     void            SetSaveToModule(bool b);

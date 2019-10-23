@@ -734,7 +734,7 @@ css::uno::Sequence< css::uno::Any >
         return uno::Sequence< uno::Any >();
     }
 
-    if ( nType == AccessibilityFlowTo::FORSPELLCHECKFLOWTO )
+    if (nType == AccessibilityFlowTo::FORSPELLCHECKFLOWTO)
     {
         uno::Reference< css::drawing::XShape > xShape;
         rAny >>= xShape;
@@ -788,7 +788,7 @@ css::uno::Sequence< css::uno::Any >
             }
         }
     }
-    else if ( nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO )
+    else if (nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_ITEM || nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_RANGE)
     {
         SwCursorShell* pCursorShell = GetCursorShell();
         if ( pCursorShell )
