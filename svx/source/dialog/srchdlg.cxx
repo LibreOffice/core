@@ -48,6 +48,7 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
+#include <comphelper/accflowenum.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <svl/itempool.hxx>
@@ -2304,8 +2305,7 @@ void SvxSearchDialog::SetDocWin(vcl::Window* pDocWin)
         return;
     }
 
-    const sal_Int32 FORFINDREPLACEFLOWTO = 2;
-    uno::Sequence<uno::Any> aAnySeq = xGetAccFlowTo->getAccFlowTo(Any(GetSrchFlag()),  FORFINDREPLACEFLOWTO);
+    uno::Sequence<uno::Any> aAnySeq = xGetAccFlowTo->getAccFlowTo(Any(GetSrchFlag()), AccessibilityFlowTo::FORFINDREPLACEFLOWTO);
 
     sal_Int32 nLen = aAnySeq.getLength();
     if (nLen)

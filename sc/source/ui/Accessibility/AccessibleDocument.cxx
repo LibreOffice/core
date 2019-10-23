@@ -52,6 +52,7 @@
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
 #include <svx/IAccessibleParent.hxx>
+#include <comphelper/accflowenum.hxx>
 #include <comphelper/sequence.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
@@ -2287,9 +2288,7 @@ css::uno::Sequence< css::uno::Any >
 {
     SolarMutexGuard g;
 
-    const sal_Int32 SPELLCHECKFLOWTO = 1;
-    const sal_Int32 FINDREPLACEFLOWTO = 2;
-    if ( nType == SPELLCHECKFLOWTO )
+    if (nType == AccessibilityFlowTo::FORSPELLCHECKFLOWTO)
     {
         uno::Reference< css::drawing::XShape > xShape;
         rAny >>= xShape;
@@ -2353,7 +2352,7 @@ css::uno::Sequence< css::uno::Any >
             }
         }
     }
-    else if ( nType == FINDREPLACEFLOWTO )
+    else if (nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO)
     {
         bool bSuccess(false);
         rAny >>= bSuccess;
