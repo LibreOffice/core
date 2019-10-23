@@ -3066,7 +3066,23 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     // and do not highlight when focus is in a different toolbox
     bool bDrawHotSpot = true;
     vcl::Window *pWin = Application::GetFocusWindow();
-    if( pWin && pWin->ImplGetWindowImpl()->mbToolBox && pWin != this )
+
+    bool bFocusedWindowIsAToolBoxOrToolBoxChild = false;
+    if (pWin)
+    {
+        vcl::Window *p = pWin;
+        while (p)
+        {
+            if(p->ImplGetWindowImpl()->mbToolBox)
+            {
+                bFocusedWindowIsAToolBoxOrToolBoxChild = true;
+                break;
+            }
+            p = p->GetParent();
+        }
+    }
+
+    if( bFocusedWindowIsAToolBoxOrToolBoxChild )
         bDrawHotSpot = false;
 
     if ( mbSelection && bDrawHotSpot )
