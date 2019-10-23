@@ -4433,7 +4433,7 @@ bool DocumentContentOperationsManager::CopyImpl(SwPaM& rPam, SwPosition& rPos,
 
     if (Breaks.empty())
     {
-        return CopyImplImpl(rPam, rPos, bMakeNewFrames, bCopyAll, pCopyRange);
+        return CopyImplImpl(rPam, rPos, bCopyAll, pCopyRange);
     }
 
     SwPosition const & rSelectionEnd( *rPam.End() );
@@ -4455,7 +4455,7 @@ bool DocumentContentOperationsManager::CopyImpl(SwPaM& rPam, SwPosition& rPos,
         if (rStart < rEnd) // check if part is empty
         {
             // pass in copyRange member as rPos; should work ...
-            bRet &= CopyImplImpl(aPam, *copyRange.Start(), bMakeNewFrames, bCopyAll, &copyRange);
+            bRet &= CopyImplImpl(aPam, *copyRange.Start(), bCopyAll, &copyRange);
             nOffset = iter->first - rStart.nNode.GetIndex(); // fly nodes...
             if (pCopyRange)
             {
@@ -4475,7 +4475,7 @@ bool DocumentContentOperationsManager::CopyImpl(SwPaM& rPam, SwPosition& rPos,
     rStart = *rPam.Start(); // set to original start
     if (rStart < rEnd) // check if part is empty
     {
-        bRet &= CopyImplImpl(aPam, *copyRange.Start(), bMakeNewFrames, bCopyAll, &copyRange);
+        bRet &= CopyImplImpl(aPam, *copyRange.Start(), bCopyAll, &copyRange);
         if (pCopyRange)
         {
             if (bFirst)
