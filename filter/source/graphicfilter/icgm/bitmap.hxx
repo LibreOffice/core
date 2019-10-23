@@ -30,6 +30,7 @@ class CGMBitmapDescriptor
 {
     public:
         sal_uInt8*              mpBuf;
+        sal_uInt8*              mpEndBuf;
         BitmapEx                mxBitmap;
         bool                mbStatus;
         bool                mbVMirror;
@@ -47,6 +48,7 @@ class CGMBitmapDescriptor
 
         CGMBitmapDescriptor()
             : mpBuf(nullptr)
+            , mpEndBuf(nullptr)
             , mbStatus(false)
             , mbVMirror(false)
             , mnDstBitsPerPixel(0)
