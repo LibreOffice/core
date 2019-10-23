@@ -238,6 +238,8 @@ public:
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon,
             const Gradient& rGradient) override;
+
+    virtual bool supportsOperation(OutDevSupportType eType) const override;
 };
 
 #endif // INCLUDED_VCL_WIN_GDI_GDIIMPL_HXX
