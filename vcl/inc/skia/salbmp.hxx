@@ -78,6 +78,7 @@ private:
     void verify() const {};
 #endif
 
+    // TODO use something GPU-backed, or at least cache it for when drawing it to something GPU-backed?
     SkBitmap mBitmap;
     SkBitmap mAlphaBitmap; // TODO for use as an alpha channel or mask
     BitmapPalette mPalette;

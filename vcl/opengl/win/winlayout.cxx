@@ -20,16 +20,17 @@ bool OpenGLGlobalWinGlyphCache::AllocateTexture(WinGlyphDrawElement& rElement, i
     texture->texture = maPackedTextureAtlas.Reserve(nWidth, nHeight);
     if (!texture->texture)
         return false;
+    return true;
+}
+
+void OpenGLGlobalWinGlyphCache::Prune()
+{
     std::vector<GLuint> aTextureIDs = maPackedTextureAtlas.ReduceTextureNumber(8);
     if (!aTextureIDs.empty())
     {
         for (auto& pWinGlyphCache : maWinGlyphCaches)
-        {
-            assert(dynamic_cast<OpenGLWinGlyphCache*>(pWinGlyphCache));
             static_cast<OpenGLWinGlyphCache*>(pWinGlyphCache)->RemoveTextures(aTextureIDs);
-        }
     }
-    return true;
 }
 
 void OpenGLWinGlyphCache::RemoveTextures(std::vector<GLuint>& rTextureIDs)
