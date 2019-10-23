@@ -38,40 +38,90 @@
 namespace
 {
 // Create Skia Path from B2DPolygon
-// TODO - take bezier curves into account
 // TODO - use this for all Polygon / PolyPolygon needs
 void lclPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath)
 {
     const sal_uInt32 nPointCount(rPolygon.count());
 
-    if (nPointCount == 0)
+    if (nPointCount <= 1)
         return;
 
     const bool bClosePath(rPolygon.isClosed());
+    const bool bHasCurves(rPolygon.areControlPointsUsed());
 
     bool bFirst = true;
 
-    for (sal_uInt32 nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++)
+    sal_uInt32 nCurrentIndex = 0;
+    sal_uInt32 nPreviousIndex = nPointCount - 1;
+
+    basegfx::B2DPoint aCurrentPoint;
+    basegfx::B2DPoint aPreviousPoint;
+
+    for (sal_uInt32 nIndex = 0; nIndex <= nPointCount; nIndex++)
     {
-        auto const& rPoint = rPolygon.getB2DPoint(nPointIndex);
+        nCurrentIndex = nIndex % nPointCount;
+        aCurrentPoint = rPolygon.getB2DPoint(nCurrentIndex);
+
         if (bFirst)
         {
-            rPath.moveTo(rPoint.getX(), rPoint.getY());
+            rPath.moveTo(aCurrentPoint.getX(), aCurrentPoint.getY());
             bFirst = false;
+        }
+        else if (!bHasCurves)
+        {
+            rPath.lineTo(aCurrentPoint.getX(), aCurrentPoint.getY());
         }
         else
         {
-            rPath.lineTo(rPoint.getX(), rPoint.getY());
+            basegfx::B2DPoint aPreviousControlPoint = rPolygon.getNextControlPoint(nPreviousIndex);
+            basegfx::B2DPoint aCurrentControlPoint = rPolygon.getPrevControlPoint(nCurrentIndex);
+
+            if (aPreviousControlPoint.equal(aPreviousPoint))
+            {
+                aPreviousControlPoint
+                    = aPreviousPoint + ((aPreviousControlPoint - aCurrentPoint) * 0.0005);
+            }
+
+            if (aCurrentControlPoint.equal(aCurrentPoint))
+            {
+                aCurrentControlPoint
+                    = aCurrentPoint + ((aCurrentControlPoint - aPreviousPoint) * 0.0005);
+            }
+            rPath.cubicTo(aPreviousControlPoint.getX(), aPreviousControlPoint.getY(),
+                          aCurrentControlPoint.getX(), aCurrentControlPoint.getY(),
+                          aCurrentPoint.getX(), aCurrentPoint.getY());
         }
+        aPreviousPoint = aCurrentPoint;
+        nPreviousIndex = nCurrentIndex;
     }
     if (bClosePath)
+    {
         rPath.close();
+    }
+}
+
+void lclPolyPolygonToPath(const basegfx::B2DPolyPolygon& rPolyPolygon, SkPath& rPath)
+{
+    const sal_uInt32 nPolygonCount(rPolyPolygon.count());
+
+    if (nPolygonCount == 0)
+        return;
+
+    for (const auto& rPolygon : rPolyPolygon)
+    {
+        lclPolygonToPath(rPolygon, rPath);
+    }
 }
 
 SkColor toSkColor(Color color)
 {
     return SkColorSetARGB(255 - color.GetTransparency(), color.GetRed(), color.GetGreen(),
                           color.GetBlue());
+}
+
+SkColor toSkColorWithTransparency(Color aColor, double fTransparency)
+{
+    return SkColorSetA(toSkColor(aColor), 255 * (1.0 - fTransparency));
 }
 
 Color fromSkColor(SkColor color)
@@ -302,105 +352,177 @@ void SkiaSalGraphicsImpl::drawRect(long nX, long nY, long nWidth, long nHeight)
 
 void SkiaSalGraphicsImpl::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
 {
-    if (mLineColor == SALCOLOR_NONE)
-        return;
-    preDraw();
-    std::vector<SkPoint> pointVector;
-    pointVector.reserve(nPoints);
-    for (sal_uInt32 i = 0; i < nPoints; ++i)
-        pointVector.emplace_back(SkPoint::Make(pPtAry[i].mnX, pPtAry[i].mnY));
-    SkPaint paint;
-    paint.setColor(toSkColor(mLineColor));
-    mSurface->getCanvas()->drawPoints(SkCanvas::kLines_PointMode, nPoints, pointVector.data(),
-                                      paint);
-    postDraw();
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
+    for (sal_uInt32 i = 1; i < nPoints; ++i)
+        aPolygon.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
+    aPolygon.setClosed(false);
+
+    drawPolyLine(basegfx::B2DHomMatrix(), aPolygon, 0.0, basegfx::B2DVector(1.0, 1.0),
+                 basegfx::B2DLineJoin::Miter, css::drawing::LineCap_BUTT,
+                 basegfx::deg2rad(15.0) /*default*/, false);
 }
 
 void SkiaSalGraphicsImpl::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
 {
-    if (mLineColor == SALCOLOR_NONE && mFillColor == SALCOLOR_NONE)
-        return;
-    preDraw();
-    std::vector<SkPoint> pointVector;
-    pointVector.reserve(nPoints);
-    for (sal_uInt32 i = 0; i < nPoints; ++i)
-        pointVector.emplace_back(SkPoint::Make(pPtAry[i].mnX, pPtAry[i].mnY));
-    SkPath path;
-    path.addPoly(pointVector.data(), nPoints, false);
-    SkPaint paint;
-    if (mFillColor != SALCOLOR_NONE)
-    {
-        paint.setColor(toSkColor(mFillColor));
-        paint.setStyle(SkPaint::kFill_Style);
-        mSurface->getCanvas()->drawPath(path, paint);
-    }
-    if (mLineColor != SALCOLOR_NONE)
-    {
-        paint.setColor(toSkColor(mLineColor));
-        paint.setStyle(SkPaint::kStroke_Style);
-        mSurface->getCanvas()->drawPath(path, paint);
-    }
-    postDraw();
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
+    for (sal_uInt32 i = 1; i < nPoints; ++i)
+        aPolygon.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
+
+    drawPolyPolygon(basegfx::B2DHomMatrix(), basegfx::B2DPolyPolygon(aPolygon), 0.0);
 }
 
 void SkiaSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                           PCONSTSALPOINT* pPtAry)
 {
-    if (mLineColor == SALCOLOR_NONE && mFillColor == SALCOLOR_NONE)
-        return;
-    preDraw();
-    std::vector<SkPoint> pointVector;
-    SkPath path;
-    for (sal_uInt32 poly = 0; poly < nPoly; ++poly)
+    basegfx::B2DPolyPolygon aPolyPolygon;
+    for (sal_uInt32 nPolygon = 0; nPolygon < nPoly; ++nPolygon)
     {
-        const sal_uInt32 points = pPoints[poly];
-        if (points > 1)
+        sal_uInt32 nPoints = pPoints[nPolygon];
+        if (nPoints)
         {
-            pointVector.reserve(points);
-            const SalPoint* p = pPtAry[poly];
-            for (sal_uInt32 i = 0; i < points; ++i)
-                pointVector.emplace_back(SkPoint::Make(p->mnX, p->mnY));
-            path.addPoly(pointVector.data(), points, true);
+            PCONSTSALPOINT pSalPoints = pPtAry[nPolygon];
+            basegfx::B2DPolygon aPolygon;
+            aPolygon.append(basegfx::B2DPoint(pSalPoints->mnX, pSalPoints->mnY), nPoints);
+            for (sal_uInt32 i = 1; i < nPoints; ++i)
+                aPolygon.setB2DPoint(i, basegfx::B2DPoint(pSalPoints[i].mnX, pSalPoints[i].mnY));
+
+            aPolyPolygon.append(aPolygon);
         }
     }
-    SkPaint paint;
-    if (mFillColor != SALCOLOR_NONE)
-    {
-        paint.setColor(toSkColor(mFillColor));
-        paint.setStyle(SkPaint::kFill_Style);
-        mSurface->getCanvas()->drawPath(path, paint);
-    }
-    if (mLineColor != SALCOLOR_NONE)
-    {
-        paint.setColor(toSkColor(mLineColor));
-        paint.setStyle(SkPaint::kStroke_Style);
-        mSurface->getCanvas()->drawPath(path, paint);
-    }
-    postDraw();
+
+    drawPolyPolygon(basegfx::B2DHomMatrix(), aPolyPolygon, 0.0);
 }
 
 bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
-                                          const basegfx::B2DPolyPolygon&, double fTransparency)
+                                          const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                          double fTransparency)
 {
-    if (mLineColor == SALCOLOR_NONE && mFillColor == SALCOLOR_NONE)
-        return true;
     (void)rObjectToDevice;
-    (void)fTransparency;
-    return false;
+
+    const bool bHasFill(mFillColor != SALCOLOR_NONE);
+    const bool bHasLine(mLineColor != SALCOLOR_NONE);
+
+    if (rPolyPolygon.count() == 0 || !(bHasFill || bHasLine) || fTransparency < 0.0
+        || fTransparency >= 1.0)
+        return true;
+
+    preDraw();
+
+    SkPath aPath;
+    lclPolyPolygonToPath(rPolyPolygon, aPath);
+
+    SkPaint aPaint;
+    if (mFillColor != SALCOLOR_NONE)
+    {
+        aPaint.setColor(toSkColorWithTransparency(mFillColor, fTransparency));
+        aPaint.setStyle(SkPaint::kFill_Style);
+        mSurface->getCanvas()->drawPath(aPath, aPaint);
+    }
+    if (mLineColor != SALCOLOR_NONE)
+    {
+        aPaint.setColor(toSkColorWithTransparency(mLineColor, fTransparency));
+        aPaint.setStyle(SkPaint::kStroke_Style);
+        mSurface->getCanvas()->drawPath(aPath, aPaint);
+    }
+    postDraw();
+    return true;
 }
 
+// TODO implement rObjectToDevice - need to take the matrix into account
 bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
-                                       const basegfx::B2DPolygon&, double fTransparency,
-                                       const basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin,
-                                       css::drawing::LineCap, double fMiterMinimumAngle,
+                                       const basegfx::B2DPolygon& rPolyLine, double fTransparency,
+                                       const basegfx::B2DVector& rLineWidths,
+                                       basegfx::B2DLineJoin eLineJoin,
+                                       css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
                                        bool bPixelSnapHairline)
 {
-    (void)rObjectToDevice;
-    (void)fTransparency;
-    (void)rLineWidths;
-    (void)fMiterMinimumAngle;
     (void)bPixelSnapHairline;
-    return false;
+
+    if (rPolyLine.count() == 0 || fTransparency < 0.0 || fTransparency >= 1.0
+        || mLineColor == SALCOLOR_NONE)
+        return true;
+
+    preDraw();
+
+    basegfx::B2DVector aLineWidths(rLineWidths);
+    const bool bObjectToDeviceIsIdentity(rObjectToDevice.isIdentity());
+    const basegfx::B2DVector aDeviceLineWidths(
+        bObjectToDeviceIsIdentity ? rLineWidths : rObjectToDevice * rLineWidths);
+    const bool bCorrectLineWidth(!bObjectToDeviceIsIdentity && aDeviceLineWidths.getX() < 1.0
+                                 && aLineWidths.getX() >= 1.0);
+
+    // on-demand inverse of ObjectToDevice transformation
+    basegfx::B2DHomMatrix aObjectToDeviceInv;
+
+    if (bCorrectLineWidth)
+    {
+        if (aObjectToDeviceInv.isIdentity())
+        {
+            aObjectToDeviceInv = rObjectToDevice;
+            aObjectToDeviceInv.invert();
+        }
+
+        // calculate-back logical LineWidth for a hairline
+        aLineWidths = aObjectToDeviceInv * basegfx::B2DVector(1.0, 1.0);
+    }
+
+    // Setup Line Join
+    SkPaint::Join eSkLineJoin = SkPaint::kMiter_Join;
+    switch (eLineJoin)
+    {
+        case basegfx::B2DLineJoin::Bevel:
+            eSkLineJoin = SkPaint::kBevel_Join;
+            break;
+        case basegfx::B2DLineJoin::Round:
+            eSkLineJoin = SkPaint::kRound_Join;
+            break;
+        case basegfx::B2DLineJoin::NONE:
+        case basegfx::B2DLineJoin::Miter:
+            eSkLineJoin = SkPaint::kMiter_Join;
+            break;
+    }
+
+    // convert miter minimum angle to miter limit
+    double fMiterLimit = 1.0 / std::sin(fMiterMinimumAngle / 2.0);
+
+    // Setup Line Cap
+    SkPaint::Cap eSkLineCap(SkPaint::kButt_Cap);
+
+    switch (eLineCap)
+    {
+        case css::drawing::LineCap_ROUND:
+            eSkLineCap = SkPaint::kRound_Cap;
+            break;
+        case css::drawing::LineCap_SQUARE:
+            eSkLineCap = SkPaint::kSquare_Cap;
+            break;
+        default: // css::drawing::LineCap_BUTT:
+            eSkLineCap = SkPaint::kButt_Cap;
+            break;
+    }
+
+    SkPaint aPaint;
+    aPaint.setStyle(SkPaint::kStroke_Style);
+    aPaint.setStrokeCap(eSkLineCap);
+    aPaint.setStrokeJoin(eSkLineJoin);
+    aPaint.setColor(toSkColorWithTransparency(mLineColor, fTransparency));
+    aPaint.setStrokeMiter(fMiterLimit);
+    aPaint.setStrokeWidth(aLineWidths.getX());
+    aPaint.setAntiAlias(mParent.getAntiAliasB2DDraw());
+
+    SkPath aPath;
+    lclPolygonToPath(rPolyLine, aPath);
+    SkMatrix matrix = SkMatrix::MakeTrans(0.5, 0.5);
+    {
+        SkAutoCanvasRestore autoRestore(mSurface->getCanvas(), true);
+        mSurface->getCanvas()->concat(matrix);
+        mSurface->getCanvas()->drawPath(aPath, aPaint);
+    }
+    postDraw();
+
+    return true;
 }
 
 bool SkiaSalGraphicsImpl::drawPolyLineBezier(sal_uInt32 nPoints, const SalPoint* pPtAry,
