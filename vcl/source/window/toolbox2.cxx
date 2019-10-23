@@ -1774,7 +1774,7 @@ boost::property_tree::ptree ToolBox::DumpAsPropertyTree()
     boost::property_tree::ptree::const_assoc_iterator found = aTree.find("children");
     if (found == aTree.not_found())
     {
-        for (unsigned long i = 0; i < GetItemCount(); ++i)
+        for (ToolBox::ImplToolItems::size_type i = 0; i < GetItemCount(); ++i)
         {
             ToolBoxItemType type = GetItemType(i);
             if (type == ToolBoxItemType::BUTTON)
