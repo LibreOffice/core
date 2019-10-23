@@ -48,6 +48,7 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
+#include <comphelper/accflowenum.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <svl/itempool.hxx>
@@ -2288,7 +2289,7 @@ void SvxSearchDialog::SaveToModule_Impl()
     rBindings.GetDispatcher()->Execute( SID_SEARCH_ITEM, SfxCallMode::SLOT, ppArgs );
 }
 
-void SvxSearchDialog::SetDocWin(vcl::Window* pDocWin)
+void SvxSearchDialog::SetDocWin(vcl::Window* pDocWin, SvxSearchCmd eCommand)
 {
     m_xDialog->clear_extra_accessible_relations();
 
@@ -2306,8 +2307,25 @@ void SvxSearchDialog::SetDocWin(vcl::Window* pDocWin)
         return;
     }
 
-    const sal_Int32 FORFINDREPLACEFLOWTO = 2;
-    uno::Sequence<uno::Any> aAnySeq = xGetAccFlowTo->getAccFlowTo(Any(GetSrchFlag()),  FORFINDREPLACEFLOWTO);
+    /* tdf#128313 FlowTo tries to set an a11y relation between the search dialog
+       and its results. But for "find/replace" within a calc column we don't
+       want to return the entire column as the result, we want the current cell.
+
+       But with search/all we do want the new multi-cellselection as the result.
+    */
+    AccessibilityFlowTo eFlowTo;
+    switch (eCommand)
+    {
+        case SvxSearchCmd::FIND:
+        case SvxSearchCmd::REPLACE:
+            eFlowTo = AccessibilityFlowTo::FORFINDREPLACEFLOWTO_ITEM;
+            break;
+        case SvxSearchCmd::FIND_ALL:
+        case SvxSearchCmd::REPLACE_ALL:
+            eFlowTo = AccessibilityFlowTo::FORFINDREPLACEFLOWTO_RANGE;
+            break;
+    }
+    uno::Sequence<uno::Any> aAnySeq = xGetAccFlowTo->getAccFlowTo(Any(GetSrchFlag()), eFlowTo);
 
     sal_Int32 nLen = aAnySeq.getLength();
     if (nLen)

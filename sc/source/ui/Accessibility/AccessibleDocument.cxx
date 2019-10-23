@@ -52,6 +52,7 @@
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
 #include <svx/IAccessibleParent.hxx>
+#include <comphelper/accflowenum.hxx>
 #include <comphelper/sequence.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
@@ -2284,9 +2285,7 @@ css::uno::Sequence< css::uno::Any >
 {
     SolarMutexGuard g;
 
-    const sal_Int32 SPELLCHECKFLOWTO = 1;
-    const sal_Int32 FINDREPLACEFLOWTO = 2;
-    if ( nType == SPELLCHECKFLOWTO )
+    if (nType == AccessibilityFlowTo::FORSPELLCHECKFLOWTO)
     {
         uno::Reference< css::drawing::XShape > xShape;
         rAny >>= xShape;
@@ -2350,18 +2349,22 @@ css::uno::Sequence< css::uno::Any >
             }
         }
     }
-    else if ( nType == FINDREPLACEFLOWTO )
+    else if (nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_ITEM || nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_RANGE)
     {
         bool bSuccess(false);
         rAny >>= bSuccess;
         if ( bSuccess )
         {
-            uno::Sequence< uno::Any> aSeq = GetScAccFlowToSequence();
-            if ( aSeq.hasElements() )
+            if (nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_RANGE)
             {
-                return aSeq;
+                uno::Sequence< uno::Any> aSeq = GetScAccFlowToSequence();
+                if ( aSeq.hasElements() )
+                {
+                    return aSeq;
+                }
             }
-            else if( mpAccessibleSpreadsheet.is() )
+
+            if( mpAccessibleSpreadsheet.is() )
             {
                 uno::Reference < XAccessible > xFindCellAcc = mpAccessibleSpreadsheet->GetActiveCell();
                 // add xFindCellAcc to the return the Sequence
