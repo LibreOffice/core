@@ -1802,6 +1802,15 @@ bool SfxViewShell::isPrintLocked()
     return aArgs.getOrDefault("LockPrint", false);
 }
 
+bool SfxViewShell::isSaveLocked()
+{
+    Reference<XModel> xModel = GetCurrentDocument();
+    if (!xModel.is())
+        return false;
+    comphelper::NamedValueCollection aArgs(xModel->getArgs());
+    return aArgs.getOrDefault("LockSave", true);
+}
+
 Reference < XController > SfxViewShell::GetController()
 {
     return pImpl->m_pController.get();
