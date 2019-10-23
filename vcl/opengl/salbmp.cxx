@@ -919,7 +919,7 @@ bool OpenGLSalBitmap::ConvertToGreyscale()
 
     // avoid re-converting to 8bits.
     if ( mnBits == 8 && maPalette == Bitmap::GetGreyPalette(256) )
-        return false;
+        return true;
 
     OpenGLZone aZone;
     rtl::Reference<OpenGLContext> xContext = OpenGLContext::getVCLContext();
