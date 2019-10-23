@@ -2270,6 +2270,7 @@ css::uno::Sequence< css::uno::Any > ScAccessibleDocument::GetScAccFlowToSequence
                                     }
                                 }
                             }
+                            aSequence.realloc(nParaCount);
                             return aSequence;
                         }
                     }
