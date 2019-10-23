@@ -936,4 +936,11 @@ bool SalGraphics::DrawAlphaRect( long nX, long nY, long nWidth, long nHeight,
     return drawAlphaRect( nX, nY, nWidth, nHeight, nTransparency );
 }
 
+OUString SalGraphics::getRenderBackendName() const
+{
+    if (GetImpl())
+        return GetImpl()->getRenderBackendName();
+    return OUString();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
