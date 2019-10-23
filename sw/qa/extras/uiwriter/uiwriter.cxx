@@ -2456,7 +2456,7 @@ void SwUiWriterTest::testTdf72788()
         pCursor->Move(fnMoveBackward);
     }
     //Check the text selection
-    CPPUNIT_ASSERT_EQUAL(OUString(u"is text" + OUStringLiteral1(CH_TXTATR_NEWLINE) + u"more"), pCursor->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"is text" + OUStringChar(CH_TXTATR_NEWLINE) + u"more"), pCursor->GetText());
     //Apply a *Bold* attribute to selection
     SvxWeightItem aWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
     rIDCO.InsertPoolItem(*pCursor, aWeightItem);
