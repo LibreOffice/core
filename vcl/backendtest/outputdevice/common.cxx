@@ -10,6 +10,7 @@
 
 #include <test/outputdevice.hxx>
 #include <bitmapwriteaccess.hxx>
+#include <salgdi.hxx>
 
 namespace vcl {
 namespace test {
@@ -224,6 +225,16 @@ const Color OutputDeviceTestCommon::constFillColor(COL_LIGHTBLUE);
 OutputDeviceTestCommon::OutputDeviceTestCommon()
     : mpVirtualDevice(VclPtr<VirtualDevice>::Create())
 {}
+
+OUString OutputDeviceTestCommon::getRenderBackendName() const
+{
+    if (mpVirtualDevice && mpVirtualDevice->GetGraphics())
+    {
+        SalGraphics const * pGraphics = mpVirtualDevice->GetGraphics();
+        return pGraphics->getRenderBackendName();
+    }
+    return OUString();
+}
 
 void OutputDeviceTestCommon::initialSetup(long nWidth, long nHeight, Color aColor, bool bEnableAA)
 {
