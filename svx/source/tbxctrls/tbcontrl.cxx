@@ -154,6 +154,7 @@ public:
     void            SetVisibilityListener( const Link<SvxStyleBox_Impl&,void>& aVisListener ) { aVisibilityListener = aVisListener; }
 
     void            SetDefaultStyle( const OUString& rDefault ) { sDefaultStyle = rDefault; }
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 
 protected:
     /// Calculate the optimal width of the dropdown.  Very expensive operation, triggers lots of font measurement.
@@ -696,6 +697,7 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
     EnableUserDraw( true );
     AddEventListener(LINK(this, SvxStyleBox_Impl, CalcOptimalExtraUserWidth));
     SetUserItemSize( Size( 0, ITEM_HEIGHT ) );
+    set_id("applystyle");
 }
 
 SvxStyleBox_Impl::~SvxStyleBox_Impl()
@@ -1224,6 +1226,36 @@ Color SvxStyleBox_Impl::TestColorsVisible(const Color &FontCol, const Color &Bac
     }
 
     return retCol;
+}
+
+boost::property_tree::ptree SvxStyleBox_Impl::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(ComboBox::DumpAsPropertyTree());
+
+    boost::property_tree::ptree aEntries;
+
+    for (int i = 0; i < GetEntryCount(); ++i)
+    {
+        boost::property_tree::ptree aEntry;
+        aEntry.put("", GetEntry(i));
+        aEntries.push_back(std::make_pair("", aEntry));
+    }
+
+    aTree.add_child("entries", aEntries);
+
+    boost::property_tree::ptree aSelected;
+
+    for (int i = 0; i < GetSelectedEntryCount(); ++i)
+    {
+        boost::property_tree::ptree aEntry;
+        aEntry.put("", GetSelectedEntryPos(i));
+        aSelected.push_back(std::make_pair("", aEntry));
+    }
+
+    aTree.put("selectedCount", GetSelectedEntryCount());
+    aTree.add_child("selectedEntries", aSelected);
+
+    return aTree;
 }
 
 
