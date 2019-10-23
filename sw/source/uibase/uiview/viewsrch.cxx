@@ -236,7 +236,8 @@ void SwView::ExecSearch(SfxRequest& rReq)
                     s_pSrchItem = static_cast<SvxSearchItem*>( pArgs->Get(SID_SEARCH_ITEM).Clone() );
                 }
             }
-            switch (s_pSrchItem->GetCommand())
+            SvxSearchCmd eCommand = s_pSrchItem->GetCommand();
+            switch (eCommand)
             {
             case SvxSearchCmd::FIND:
             {
@@ -253,7 +254,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                     pSrchDlg = GetSearchDialog();
                     if (pSrchDlg)
                     {
-                        pSrchDlg->SetDocWin(m_pEditWin);
+                        pSrchDlg->SetDocWin(m_pEditWin, eCommand);
                         pSrchDlg->SetSrchFlag(false);
                     }
                 }
@@ -286,7 +287,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                     pSrchDlg = GetSearchDialog();
                     if (pSrchDlg)
                     {
-                        pSrchDlg->SetDocWin(m_pEditWin);
+                        pSrchDlg->SetDocWin(m_pEditWin, eCommand);
                         pSrchDlg->SetSrchFlag(false);
                     }
                 }
@@ -344,7 +345,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                     pSrchDlg = GetSearchDialog();
                     if (pSrchDlg)
                     {
-                        pSrchDlg->SetDocWin(m_pEditWin);
+                        pSrchDlg->SetDocWin(m_pEditWin, eCommand);
                         pSrchDlg->SetSrchFlag(false);
                     }
                 }
@@ -412,7 +413,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                 pSrchDlg = GetSearchDialog();
                 if (pSrchDlg)
                 {
-                    pSrchDlg->SetDocWin(m_pEditWin);
+                    pSrchDlg->SetDocWin(m_pEditWin, eCommand);
                     pSrchDlg->SetSrchFlag(false);
                 }
 #endif
