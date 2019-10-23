@@ -582,6 +582,12 @@ service MediaDescriptor
         @since LibreOffice 6.4
      */
     [optional,property] boolean LockPrint;
+
+    /** Setting this option will disable the save function.
+     *
+        @since LibreOffice 6.4
+     */
+    [optional,property] boolean LockSave;
 };
 
 

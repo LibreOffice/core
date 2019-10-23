@@ -267,8 +267,9 @@ class SvxSearchItem;
 #define SID_REDACTION_STYLE                 (SID_SFX_START + 1734)
 #define SID_DIALOG_PARENT                   (SID_SFX_START + 1735)
 #define SID_LOCK_PRINT                      (SID_SFX_START + 1736)
+#define SID_LOCK_SAVE                       (SID_SFX_START + 1737)
 
-//      SID_SFX_free_START                  (SID_SFX_START + 1737)
+//      SID_SFX_free_START                  (SID_SFX_START + 1738)
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
 
 #define SID_OPEN_NEW_VIEW                   (SID_SFX_START + 520)
