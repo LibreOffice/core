@@ -2175,7 +2175,7 @@ static ScNameInputType lcl_GetInputType( const OUString& rText )
         else if ( ScRangeUtil::MakeRangeFromName( rText, pDoc, nTab, aRange, RUTL_DBASE, eConv ) )
             eRet = SC_NAME_INPUT_DATABASE;
         else if ( comphelper::string::isdigitAsciiString( rText ) &&
-                  ( nNumeric = rText.toInt32() ) > 0 && nNumeric <= MAXROW+1 )
+                  ( nNumeric = rText.toInt32() ) > 0 && nNumeric <= pDoc->MaxRow()+1 )
             eRet = SC_NAME_INPUT_ROW;
         else if ( pDoc->GetTable( rText, nNameTab ) )
             eRet = SC_NAME_INPUT_SHEET;

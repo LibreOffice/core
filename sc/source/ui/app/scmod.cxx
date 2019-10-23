@@ -249,7 +249,7 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, Configura
 
                 SCTAB nTabCount = pDocSh->GetDocument().GetTableCount();
                 for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-                    pDocSh->AdjustRowHeight( 0, MAXROW, nTab );
+                    pDocSh->AdjustRowHeight( 0, pDocSh->GetDocument().MaxRow(), nTab );
             }
             pObjSh = SfxObjectShell::GetNext( *pObjSh );
         }
@@ -1270,7 +1270,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
                 pOneDocSh->CalcOutputFactor();
                 SCTAB nTabCount = pOneDocSh->GetDocument().GetTableCount();
                 for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-                    pOneDocSh->AdjustRowHeight( 0, MAXROW, nTab );
+                    pOneDocSh->AdjustRowHeight( 0, pDocSh->GetDocument().MaxRow(), nTab );
             }
             pObjSh = SfxObjectShell::GetNext( *pObjSh );
         }
