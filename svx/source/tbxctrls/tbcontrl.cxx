@@ -242,6 +242,7 @@ public:
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual Reference< css::accessibility::XAccessible > CreateAccessible() override;
     void     SetOwnFontList(::std::unique_ptr<FontList> && _aOwnFontList) { m_aOwnFontList = std::move(_aOwnFontList); }
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 // SelectHdl needs the Modifiers, get them in MouseButtonUp
@@ -1311,6 +1312,7 @@ SvxFontNameBox_Impl::SvxFontNameBox_Impl( vcl::Window* pParent, const Reference<
     SetOptimalSize();
     EnableControls_Impl();
     GetSubEdit()->AddEventListener( LINK( this, SvxFontNameBox_Impl, CheckAndMarkUnknownFont ));
+    set_id("fontnamecombobox");
 }
 
 SvxFontNameBox_Impl::~SvxFontNameBox_Impl()
@@ -1583,6 +1585,36 @@ void SvxFontNameBox_Impl::Select()
                                          aArgs );
         }
     }
+}
+
+boost::property_tree::ptree SvxFontNameBox_Impl::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(FontNameBox::DumpAsPropertyTree());
+
+    boost::property_tree::ptree aEntries;
+
+    for (int i = 0; i < GetEntryCount(); ++i)
+    {
+        boost::property_tree::ptree aEntry;
+        aEntry.put("", GetEntry(i));
+        aEntries.push_back(std::make_pair("", aEntry));
+    }
+
+    aTree.add_child("entries", aEntries);
+
+    boost::property_tree::ptree aSelected;
+
+    for (int i = 0; i < GetSelectedEntryCount(); ++i)
+    {
+        boost::property_tree::ptree aEntry;
+        aEntry.put("", GetSelectedEntryPos(i));
+        aSelected.push_back(std::make_pair("", aEntry));
+    }
+
+    aTree.put("selectedCount", GetSelectedEntryCount());
+    aTree.add_child("selectedEntries", aSelected);
+
+    return aTree;
 }
 
 SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
