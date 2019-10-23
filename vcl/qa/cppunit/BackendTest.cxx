@@ -39,12 +39,10 @@ public:
     {
     }
 
-        // We need to enable tests ONE BY ONE as they fail because of backend bugs
-        // it is still important to have the test defined so we know the issues
-        // exist and we need to fix them. Consistent behaviour of our backends
-        // is of highest priority.
-
-#define SKIP_TEST_ASSERTS
+    // We need to enable tests ONE BY ONE as they fail because of backend bugs
+    // it is still important to have the test defined so we know the issues
+    // exist and we need to fix them. Consistent behaviour of our backends
+    // is of highest priority.
 
     void testDrawRectWithRectangle()
     {
@@ -52,10 +50,9 @@ public:
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
         exportImage("01-01_rectangle_test-rectangle.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawRectWithPixel()
@@ -64,10 +61,9 @@ public:
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
         exportImage("01-02_rectangle_test-pixel.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawRectWithLine()
@@ -76,10 +72,9 @@ public:
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
         exportImage("01-03_rectangle_test-line.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawRectWithPolygon()
@@ -88,10 +83,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
         exportImage("01-04_rectangle_test-polygon.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawRectWithPolyLine()
@@ -100,10 +93,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
         exportImage("01-05_rectangle_test-polyline.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawRectWithPolyLineB2D()
@@ -112,10 +103,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
         exportImage("01-06_rectangle_test-polyline_b2d.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawRectWithPolyPolygon()
@@ -124,10 +113,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
         exportImage("01-07_rectangle_test-polypolygon.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawRectWithPolyPolygonB2D()
@@ -136,10 +123,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
         exportImage("01-08_rectangle_test-polypolygon_b2d.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawRectAAWithRectangle()
@@ -148,10 +133,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
         exportImage("02-01_rectangle_AA_test-rectangle.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawRectAAWithPixel()
@@ -160,10 +143,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
         exportImage("02-02_rectangle_AA_test-pixel.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawRectAAWithLine()
@@ -172,10 +153,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
         exportImage("02-03_rectangle_AA_test-line.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawRectAAWithPolygon()
@@ -184,10 +163,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
         exportImage("02-04_rectangle_AA_test-polygon.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawRectAAWithPolyLine()
@@ -196,10 +173,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
         exportImage("02-05_rectangle_AA_test-polyline.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawRectAAWithPolyLineB2D()
@@ -208,10 +183,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
         exportImage("02-06_rectangle_AA_test-polyline_b2d.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawRectAAWithPolyPolygon()
@@ -220,10 +193,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
         exportImage("02-07_rectangle_AA_test-polypolygon.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawRectAAWithPolyPolygonB2D()
@@ -232,10 +203,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
         exportImage("02-08_rectangle_AA_test-polypolygon_b2d.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawFilledRectWithRectangle()
@@ -244,10 +213,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupFilledRectangle();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap);
         exportImage("03-01_filled_rectangle_test-rectangle.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawFilledRectWithPolygon()
@@ -256,10 +223,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupFilledRectangle();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap);
         exportImage("03-02_filled_rectangle_test-polygon.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawFilledRectWithPolyPolygon()
@@ -268,10 +233,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupFilledRectangle();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap);
         exportImage("03-03_filled_rectangle_test-polypolygon.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawFilledRectWithPolyPolygon2D()
@@ -280,10 +243,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupFilledRectangle();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap);
         exportImage("03-04_filled_rectangle_test-polypolygon_b2d.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawDiamondWithPolygon()
@@ -292,10 +253,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupDiamond();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
         exportImage("04-01_diamond_test-polygon.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawDiamondWithLine()
@@ -304,10 +263,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupDiamond();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
         exportImage("04-02_diamond_test-line.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawDiamondWithPolyline()
@@ -316,10 +273,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupDiamond();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
         exportImage("04-03_diamond_test-polyline.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawDiamondWithPolylineB2D()
@@ -328,10 +283,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupDiamond();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
         exportImage("04-04_diamond_test-polyline_b2d.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawInvertWithRectangle()
@@ -340,10 +293,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupInvert_NONE();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkInvertRectangle(aBitmap);
         exportImage("05-01_invert_test-rectangle.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawInvertN50WithRectangle()
@@ -352,10 +303,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupInvert_N50();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkInvertN50Rectangle(aBitmap);
         exportImage("05-02_invert_N50_test-rectangle.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawInvertTrackFrameWithRectangle()
@@ -364,10 +313,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupInvert_TrackFrame();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkInvertTrackFrameRectangle(aBitmap);
         exportImage("05-03_invert_TrackFrame_test-rectangle.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawBezierWithPolylineB2D()
@@ -376,10 +323,8 @@ public:
         Bitmap aBitmap = aOutDevTest.setupBezier();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
         exportImage("06-01_bezier_test-polyline_b2d.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     void testDrawBezierAAWithPolylineB2D()
@@ -388,13 +333,9 @@ public:
         Bitmap aBitmap = aOutDevTest.setupAABezier();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
         exportImage("07-01_bezier_AA_test-polyline_b2d.png", aBitmap);
-        (void)eResult;
-#ifndef SKIP_TEST_ASSERTS
-        CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
-#endif
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
-
-#undef SKIP_TEST_ASSERTS
 
     CPPUNIT_TEST_SUITE(BackendTest);
     CPPUNIT_TEST(testDrawRectWithRectangle);

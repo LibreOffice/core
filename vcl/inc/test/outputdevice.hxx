@@ -44,6 +44,8 @@ protected:
 public:
     OutputDeviceTestCommon();
 
+    OUString getRenderBackendName() const;
+
     void initialSetup(long nWidth, long nHeight, Color aColor, bool bEnableAA = false);
 
     static TestResult checkRectangle(Bitmap& rBitmap);
