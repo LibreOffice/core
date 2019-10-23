@@ -205,7 +205,7 @@ SCCOL findColFromPos(sal_uInt16 nPixelPos, const ScDocument* pDoc, SCCOL nStartC
 {
     nPixelPos -= nRowHeaderWidth;
     sal_uInt32 nPixelLength = 0;
-    for (SCCOL nCol : pDoc->GetColumnsRange(0, nStartCol, MAXCOL))
+    for (SCCOL nCol : pDoc->GetColumnsRange(0, nStartCol, pDoc->MaxCol()))
     {
         sal_uInt16 nColWidth = pDoc->GetColWidth(nCol, 0, true);
         sal_uInt32 nPixel = ScViewData::ToPixel(nColWidth, nPPTX);
@@ -225,7 +225,7 @@ SCROW findRowFromPos(sal_uInt16 nPixelPos, const ScDocument* pDoc, SCROW nStartR
 {
     nPixelPos -= nColHeaderHeight;
     sal_uInt32 nPixelLength = 0;
-    for (SCROW nRow = nStartRow; nRow <= MAXROW; ++nRow)
+    for (SCROW nRow = nStartRow; nRow <= pDoc->MaxRow(); ++nRow)
     {
         sal_uInt16 nColWidth = pDoc->GetRowHeight(nRow, SCTAB(0), true);
         sal_uInt32 nPixel = ScViewData::ToPixel(nColWidth, nPPTX);

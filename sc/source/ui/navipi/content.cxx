@@ -1396,7 +1396,7 @@ void ScContentTree::DoDrag()
                             SCTAB nTab;
                             if ( rSrcDoc.GetTable( aText, nTab ) )
                             {
-                                ScRange aRange( 0,0,nTab, MAXCOL,MAXROW,nTab );
+                                ScRange aRange( 0,0,nTab, pLocalDoc->MaxCol(), pLocalDoc->MaxRow(),nTab );
                                 lcl_DoDragCells( pSrcShell, aRange, (ScDragSrc::Navigator | ScDragSrc::Table), this );
                             }
                         }

@@ -190,20 +190,22 @@ private:
     std::unique_ptr<weld::Entry> mxColumnNums;
     std::unique_ptr<weld::Button> mxDelete;
     std::function<void(sal_uInt32&)> maDeleteTransformation;
+    const ScDocument* mpDoc;
 
 public:
-    ScDeleteColumnTransformationControl(weld::Container* pParent, sal_uInt32 aIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
+    ScDeleteColumnTransformationControl(const ScDocument* pDoc, weld::Container* pParent, sal_uInt32 aIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
 
     virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
     DECL_LINK(DeleteHdl, weld::Button&, void);
 };
 
 ScDeleteColumnTransformationControl::ScDeleteColumnTransformationControl(
-    weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation)
+    const ScDocument* pDoc, weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation)
     : ScDataTransformationBaseControl(pParent, "modules/scalc/ui/deletecolumnentry.ui", nIndex)
     , mxColumnNums(mxBuilder->weld_entry("ed_columns"))
     , mxDelete(mxBuilder->weld_button("ed_delete"))
     , maDeleteTransformation(std::move(aDeleteTransformation))
+    , mpDoc(pDoc)
 {
     mxDelete->connect_clicked(LINK(this,ScDeleteColumnTransformationControl, DeleteHdl));
 }
@@ -219,7 +221,7 @@ std::shared_ptr<sc::DataTransformation> ScDeleteColumnTransformationControl::get
         if (nCol <= 0)
             continue;
 
-        if (nCol > MAXCOL)
+        if (nCol > mpDoc->MaxCol())
             continue;
 
         // translate from 1-based column notations to internal Calc one
@@ -272,22 +274,24 @@ private:
     std::unique_ptr<weld::Entry> mxEdColumns;
     std::unique_ptr<weld::Button> mxDelete;
     std::function<void(sal_uInt32&)> maDeleteTransformation;
+    const ScDocument* mpDoc;
 
 public:
-    ScMergeColumnTransformationControl(weld::Container* pParent, SCCOL nStartCol, SCCOL nEndCol, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
+    ScMergeColumnTransformationControl(const ScDocument *pDoc, weld::Container* pParent, SCCOL nStartCol, SCCOL nEndCol, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
 
     virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
     DECL_LINK(DeleteHdl, weld::Button&, void);
 };
 
 ScMergeColumnTransformationControl::ScMergeColumnTransformationControl(
-    weld::Container* pParent, SCCOL nStartCol, SCCOL nEndCol, sal_uInt32 nIndex,
+    const ScDocument* pDoc, weld::Container* pParent, SCCOL nStartCol, SCCOL nEndCol, sal_uInt32 nIndex,
     std::function<void(sal_uInt32&)> aDeleteTransformation)
     : ScDataTransformationBaseControl(pParent, "modules/scalc/ui/mergecolumnentry.ui", nIndex)
     , mxSeparator(mxBuilder->weld_entry("ed_separator"))
     , mxEdColumns(mxBuilder->weld_entry("ed_columns"))
     , mxDelete(mxBuilder->weld_button("ed_delete"))
     , maDeleteTransformation(std::move(aDeleteTransformation))
+    , mpDoc(pDoc)
 {
     mxDelete->connect_clicked(LINK(this,ScMergeColumnTransformationControl, DeleteHdl));
 
@@ -314,7 +318,7 @@ std::shared_ptr<sc::DataTransformation> ScMergeColumnTransformationControl::getT
         if (nCol <= 0)
             continue;
 
-        if (nCol > MAXCOL)
+        if (nCol > mpDoc->MaxCol())
             continue;
 
         // translate from 1-based column notations to internal Calc one
@@ -330,21 +334,23 @@ private:
     std::unique_ptr<weld::Entry> mxEdColumns;
     std::unique_ptr<weld::Button> mxDelete;
     std::function<void(sal_uInt32&)> maDeleteTransformation;
+    const ScDocument* mpDoc;
 
 public:
-    ScSortTransformationControl(weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
+    ScSortTransformationControl(const ScDocument* pDoc, weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
 
     virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
     DECL_LINK(DeleteHdl, weld::Button&, void);
 };
 
 ScSortTransformationControl::ScSortTransformationControl(
-    weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation)
+    const ScDocument* pDoc, weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation)
     : ScDataTransformationBaseControl(pParent, "modules/scalc/ui/sorttransformationentry.ui", nIndex)
     , mxAscending(mxBuilder->weld_check_button("ed_ascending"))
     , mxEdColumns(mxBuilder->weld_entry("ed_columns"))
     , mxDelete(mxBuilder->weld_button("ed_delete"))
     , maDeleteTransformation(std::move(aDeleteTransformation))
+    , mpDoc(pDoc)
 {
     mxDelete->connect_clicked(LINK(this,ScSortTransformationControl, DeleteHdl));
 }
@@ -355,7 +361,7 @@ std::shared_ptr<sc::DataTransformation> ScSortTransformationControl::getTransfor
     bool aIsAscending = mxAscending->get_active();
     SCCOL aColumn = 0;
     sal_Int32 nCol = aColStr.toInt32();
-    if (nCol > 0 && nCol <= MAXCOL)
+    if (nCol > 0 && nCol <= mpDoc->MaxCol())
         aColumn = nCol - 1;     // translate from 1-based column notations to internal Calc one
 
     ScSortParam aSortParam;
@@ -374,21 +380,23 @@ private:
     std::unique_ptr<weld::ComboBox> mxType;
     std::unique_ptr<weld::Button> mxDelete;
     std::function<void(sal_uInt32&)> maDeleteTransformation;
+    const ScDocument* mpDoc;
 
 public:
-    ScColumnTextTransformation(weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
+    ScColumnTextTransformation(const ScDocument* pDoc, weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
 
     virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
     DECL_LINK(DeleteHdl, weld::Button&, void);
 };
 
 ScColumnTextTransformation::ScColumnTextTransformation(
-    weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation)
+    const ScDocument* pDoc, weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation)
     : ScDataTransformationBaseControl(pParent, "modules/scalc/ui/texttransformationentry.ui", nIndex)
     , mxColumnNums(mxBuilder->weld_entry("ed_columns"))
     , mxType(mxBuilder->weld_combo_box("ed_lst"))
     , mxDelete(mxBuilder->weld_button("ed_delete"))
     , maDeleteTransformation(std::move(aDeleteTransformation))
+    , mpDoc(pDoc)
 {
     mxDelete->connect_clicked(LINK(this,ScColumnTextTransformation, DeleteHdl));
 }
@@ -404,7 +412,7 @@ std::shared_ptr<sc::DataTransformation> ScColumnTextTransformation::getTransform
         if (nCol <= 0)
             continue;
 
-        if (nCol > MAXCOL)
+        if (nCol > mpDoc->MaxCol())
             continue;
 
         // translate from 1-based column notations to internal Calc one
@@ -436,21 +444,23 @@ private:
     std::unique_ptr<weld::ComboBox> mxType;
     std::unique_ptr<weld::Button> mxDelete;
     std::function<void(sal_uInt32&)> maDeleteTransformation;
+    const ScDocument* mpDoc;
 
 public:
-    ScAggregateFunction(weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
+    ScAggregateFunction(const ScDocument* pDoc, weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
 
     virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
     DECL_LINK(DeleteHdl, weld::Button&, void);
 };
 
-ScAggregateFunction::ScAggregateFunction(weld::Container* pParent, sal_uInt32 nIndex,
+ScAggregateFunction::ScAggregateFunction(const ScDocument* pDoc, weld::Container* pParent, sal_uInt32 nIndex,
                                          std::function<void(sal_uInt32&)> aDeleteTransformation)
     : ScDataTransformationBaseControl(pParent, "modules/scalc/ui/aggregatefunctionentry.ui", nIndex)
     , mxColumnNums(mxBuilder->weld_entry("ed_columns"))
     , mxType(mxBuilder->weld_combo_box("ed_lst"))
     , mxDelete(mxBuilder->weld_button("ed_delete"))
     , maDeleteTransformation(std::move(aDeleteTransformation))
+    , mpDoc(pDoc)
 {
     mxDelete->connect_clicked(LINK(this,ScAggregateFunction, DeleteHdl));
 }
@@ -467,7 +477,7 @@ std::shared_ptr<sc::DataTransformation> ScAggregateFunction::getTransformation()
         if (nCol <= 0)
             continue;
 
-        if (nCol > MAXCOL)
+        if (nCol > mpDoc->MaxCol())
             continue;
 
         // translate from 1-based column notations to internal Calc one
@@ -497,21 +507,23 @@ private:
     std::unique_ptr<weld::ComboBox> mxType;
     std::unique_ptr<weld::Button> mxDelete;
     std::function<void(sal_uInt32&)> maDeleteTransformation;
+    const ScDocument* mpDoc;
 
 public:
-    ScNumberTransformation(weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
+    ScNumberTransformation(const ScDocument *pDoc, weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
 
     virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
     DECL_LINK(DeleteHdl, weld::Button&, void);
 };
 
 ScNumberTransformation::ScNumberTransformation(
-    weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation)
+    const ScDocument *pDoc, weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation)
     : ScDataTransformationBaseControl(pParent, "modules/scalc/ui/numbertransformationentry.ui", nIndex)
     , mxColumnNums(mxBuilder->weld_entry("ed_columns"))
     , mxType(mxBuilder->weld_combo_box("ed_lst"))
     , mxDelete(mxBuilder->weld_button("ed_delete"))
     , maDeleteTransformation(std::move(aDeleteTransformation))
+    , mpDoc(pDoc)
 {
     mxDelete->connect_clicked(LINK(this,ScNumberTransformation, DeleteHdl));
 }
@@ -528,7 +540,7 @@ std::shared_ptr<sc::DataTransformation> ScNumberTransformation::getTransformatio
         if (nCol <= 0)
             continue;
 
-        if (nCol > MAXCOL)
+        if (nCol > mpDoc->MaxCol())
             continue;
 
         // translate from 1-based column notations to internal Calc one
@@ -576,21 +588,23 @@ private:
     std::unique_ptr<weld::Entry> mxReplaceString;
     std::unique_ptr<weld::Button> mxDelete;
     std::function<void(sal_uInt32&)> maDeleteTransformation;
+    const ScDocument *mpDoc;
 
 public:
 
-    ScReplaceNullTransformation(weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
+    ScReplaceNullTransformation(const ScDocument *pDoc, weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
 
     virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
     DECL_LINK(DeleteHdl, weld::Button&, void);
 };
 
-ScReplaceNullTransformation::ScReplaceNullTransformation(weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation)
+ScReplaceNullTransformation::ScReplaceNullTransformation(const ScDocument *pDoc, weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation)
     : ScDataTransformationBaseControl(pParent,"modules/scalc/ui/replacenulltransformationentry.ui", nIndex)
     , mxColumnNums(mxBuilder->weld_entry("ed_columns"))
     , mxReplaceString(mxBuilder->weld_entry("ed_str"))
     , mxDelete(mxBuilder->weld_button("ed_delete"))
     , maDeleteTransformation(aDeleteTransformation)
+    , mpDoc(pDoc)
 {
     mxDelete->connect_clicked(LINK(this,ScReplaceNullTransformation, DeleteHdl));
 }
@@ -608,7 +622,7 @@ std::shared_ptr<sc::DataTransformation> ScReplaceNullTransformation::getTransfor
         if (nCol <= 0)
             continue;
 
-        if (nCol > MAXCOL)
+        if (nCol > mpDoc->MaxCol())
             continue;
 
         // translate from 1-based column notations to internal Calc one
@@ -625,21 +639,23 @@ private:
     std::unique_ptr<weld::ComboBox> mxType;
     std::unique_ptr<weld::Button> mxDelete;
     std::function<void(sal_uInt32&)> maDeleteTransformation;
+    const ScDocument* mpDoc;
 
 public:
 
-    ScDateTimeTransformation(weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
+    ScDateTimeTransformation(const ScDocument* pDoc, weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
 
     virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
     DECL_LINK(DeleteHdl, weld::Button&, void);
 };
 
-ScDateTimeTransformation::ScDateTimeTransformation(weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation)
+ScDateTimeTransformation::ScDateTimeTransformation(const ScDocument* pDoc, weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation)
     : ScDataTransformationBaseControl(pParent,"modules/scalc/ui/datetimetransformationentry.ui", nIndex)
     , mxColumnNums(mxBuilder->weld_entry("ed_columns"))
     , mxType(mxBuilder->weld_combo_box("ed_lst"))
     , mxDelete(mxBuilder->weld_button("ed_delete"))
     , maDeleteTransformation(aDeleteTransformation)
+    , mpDoc(pDoc)
 {
     mxDelete->connect_clicked(LINK(this,ScDateTimeTransformation, DeleteHdl));
 }
@@ -656,7 +672,7 @@ std::shared_ptr<sc::DataTransformation> ScDateTimeTransformation::getTransformat
         if (nCol <= 0)
             continue;
 
-        if (nCol > MAXCOL)
+        if (nCol > mpDoc->MaxCol())
             continue;
 
         // translate from 1-based column notations to internal Calc one
@@ -736,7 +752,7 @@ ScDataProviderDlg::ScDataProviderDlg(weld::Window* pParent, std::shared_ptr<ScDo
         mxDBRanges->append_text(rNamedDB->GetName());
     }
 
-    pDBData = new ScDBData("data", 0, 0, 0, MAXCOL, MAXROW);
+    pDBData = new ScDBData("data", 0, 0, 0, mxDoc->MaxCol(), mxDoc->MaxRow());
     bool bSuccess = mxDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     SAL_WARN_IF(!bSuccess, "sc", "temporary warning");
 
@@ -818,7 +834,7 @@ void ScDataProviderDlg::cancelAndQuit()
 void ScDataProviderDlg::deleteColumn()
 {
     std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
-    maControls.emplace_back(std::make_unique<ScDeleteColumnTransformationControl>(mxList.get(), mnIndex++, adeleteTransformation));
+    maControls.emplace_back(std::make_unique<ScDeleteColumnTransformationControl>(mxDoc.get(), mxList.get(), mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::splitColumn()
@@ -836,43 +852,43 @@ void ScDataProviderDlg::mergeColumns()
     SCCOL nEndCol = -1;
     mxTable->getColRange(nStartCol, nEndCol);
     std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
-    maControls.emplace_back(std::make_unique<ScMergeColumnTransformationControl>(mxList.get(), nStartCol, nEndCol, mnIndex++, adeleteTransformation));
+    maControls.emplace_back(std::make_unique<ScMergeColumnTransformationControl>(mxDoc.get(), mxList.get(), nStartCol, nEndCol, mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::textTransformation()
 {
     std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
-    maControls.emplace_back(std::make_unique<ScColumnTextTransformation>(mxList.get(), mnIndex++, adeleteTransformation));
+    maControls.emplace_back(std::make_unique<ScColumnTextTransformation>(mxDoc.get(), mxList.get(), mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::sortTransformation()
 {
     std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
-    maControls.emplace_back(std::make_unique<ScSortTransformationControl>(mxList.get(), mnIndex++, adeleteTransformation));
+    maControls.emplace_back(std::make_unique<ScSortTransformationControl>(mxDoc.get(), mxList.get(), mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::aggregateFunction()
 {
     std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
-    maControls.emplace_back(std::make_unique<ScAggregateFunction>(mxList.get(), mnIndex++, adeleteTransformation));
+    maControls.emplace_back(std::make_unique<ScAggregateFunction>(mxDoc.get(), mxList.get(), mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::numberTransformation()
 {
     std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
-    maControls.emplace_back(std::make_unique<ScNumberTransformation>(mxList.get(), mnIndex++, adeleteTransformation));
+    maControls.emplace_back(std::make_unique<ScNumberTransformation>(mxDoc.get(), mxList.get(), mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::replaceNullTransformation()
 {
     std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
-    maControls.emplace_back(std::make_unique<ScReplaceNullTransformation>(mxList.get(), mnIndex++, adeleteTransformation));
+    maControls.emplace_back(std::make_unique<ScReplaceNullTransformation>(mxDoc.get(), mxList.get(), mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::dateTimeTransformation()
 {
     std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
-    maControls.emplace_back(std::make_unique<ScDateTimeTransformation>(mxList.get(), mnIndex++, adeleteTransformation));
+    maControls.emplace_back(std::make_unique<ScDateTimeTransformation>(mxDoc.get(), mxList.get(), mnIndex++, adeleteTransformation));
 }
 
 namespace {
