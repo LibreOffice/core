@@ -4425,8 +4425,7 @@ static LRESULT ImplMeasureItem( HWND hWnd, WPARAM wParam, LPARAM lParam )
         OUString aStr(pSalMenuItem->mText);
         if( pSalMenuItem->mAccelText.getLength() )
         {
-            aStr += " ";
-            aStr += pSalMenuItem->mAccelText;
+            aStr += " " + pSalMenuItem->mAccelText;
         }
         GetTextExtentPoint32W( hdc, o3tl::toW(aStr.getStr()),
                                 aStr.getLength(), &strSize );

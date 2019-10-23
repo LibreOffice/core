@@ -141,9 +141,9 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
 
                 //Make up full key name
                 if(aKeyName.isEmpty())
-                    aSubkeyName = aKeyName + OUString(o3tl::toU(buffKeyName));
+                    aSubkeyName = aKeyName + o3tl::toU(buffKeyName);
                 else
-                    aSubkeyName = aKeyName + "\\" + OUString(o3tl::toU(buffKeyName));
+                    aSubkeyName = aKeyName + "\\" + o3tl::toU(buffKeyName);
 
                 //Recursion, until no more subkeys are found
                 dumpWindowsRegistryKey(hKey, aSubkeyName, aFileHandle);
