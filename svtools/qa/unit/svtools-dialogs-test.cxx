@@ -81,7 +81,7 @@ void SvtoolsDialogsTest::testValueSetControl()
         CPPUNIT_ASSERT(pUIObject);
 
         StringMap aMap;
-        aMap["ID"] = "300";
+        aMap["POS"] = "300";
 
         pUIObject->execute("SELECT", aMap);
     }
