@@ -2521,6 +2521,9 @@ const OUString& SdPage::GetName() const
             sal_uInt16  nNum = (GetPageNum() + 1) / 2;
 
             aCreatedPageName = SdResId(STR_PAGE) + " ";
+            if (static_cast<SdDrawDocument&>(getSdrModelFromSdrPage()).GetDocumentType() == DocumentType::Draw )
+                 aCreatedPageName = SdResId(STR_PAGE_NAME) + " ";
+
             if( getSdrModelFromSdrPage().GetPageNumType() == css::style::NumberingType::NUMBER_NONE )
             {
                 // if the document has number none as a formatting
