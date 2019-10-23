@@ -244,7 +244,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                                 vcl::Window* pWin = pTabView->GetActiveWin();
                                 if( pWin )
                                 {
-                                    pSearchDlg->SetDocWin( pWin );
+                                    pSearchDlg->SetDocWin( pWin, pSearchItem->GetCommand() );
                                     pSearchDlg->SetSrchFlag( bSuccess );
                                 }
                             }
@@ -314,7 +314,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                                 vcl::Window* pWin = pTabView->GetActiveWin();
                                 if( pWin )
                                 {
-                                    pSearchDlg->SetDocWin( pWin );
+                                    pSearchDlg->SetDocWin( pWin, aSearchItem.GetCommand() );
                                     pSearchDlg->SetSrchFlag(false);
                                 }
                             }

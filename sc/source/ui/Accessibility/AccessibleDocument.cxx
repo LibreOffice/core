@@ -2352,18 +2352,22 @@ css::uno::Sequence< css::uno::Any >
             }
         }
     }
-    else if (nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO)
+    else if (nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_ITEM || nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_RANGE)
     {
         bool bSuccess(false);
         rAny >>= bSuccess;
         if ( bSuccess )
         {
-            uno::Sequence< uno::Any> aSeq = GetScAccFlowToSequence();
-            if ( aSeq.hasElements() )
+            if (nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_RANGE)
             {
-                return aSeq;
+                uno::Sequence< uno::Any> aSeq = GetScAccFlowToSequence();
+                if ( aSeq.hasElements() )
+                {
+                    return aSeq;
+                }
             }
-            else if( mpAccessibleSpreadsheet.is() )
+
+            if( mpAccessibleSpreadsheet.is() )
             {
                 uno::Reference < XAccessible > xFindCellAcc = mpAccessibleSpreadsheet->GetActiveCell();
                 // add xFindCellAcc to the return the Sequence
