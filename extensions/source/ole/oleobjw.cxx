@@ -18,7 +18,6 @@
  */
 
 #include "ole2uno.hxx"
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
@@ -1700,9 +1699,8 @@ Any  IUnknownWrapper::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
     //check if there are not too many arguments supplied
     if (::sal::static_int_cast< sal_uInt32, int >( nUnoArgs ) > dispparams.cArgs)
     {
-        OUStringBuffer buf(256);
-        buf.append("[automation bridge] There are too many arguments for this method");
-        throw IllegalArgumentException( buf.makeStringAndClear(),
+        throw IllegalArgumentException(
+            "[automation bridge] There are too many arguments for this method",
             Reference<XInterface>(), static_cast<sal_Int16>(dispparams.cArgs));
     }
 
@@ -1818,13 +1816,10 @@ Any  IUnknownWrapper::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
             // it's a UNO programming error.
             if (i  >= nUnoArgs && !(paramFlags & PARAMFLAG_FOPT))
             {
-                OUStringBuffer buf(256);
-                buf.append("ole automation bridge: The called function expects an argument at"
-                                "position: "); //a different number of arguments")),
-                buf.append(OUString::number(i));
-                buf.append(" (index starting at 0).");
-                throw IllegalArgumentException( buf.makeStringAndClear(),
-                                                Reference<XInterface>(), static_cast<sal_Int16>(i));
+                throw IllegalArgumentException(
+                    ("ole automation bridge: The called function expects an argument at position: "
+                     + OUString::number(i) + " (index starting at 0)."),
+                    Reference<XInterface>(), static_cast<sal_Int16>(i));
             }
 
             // Property Put arguments

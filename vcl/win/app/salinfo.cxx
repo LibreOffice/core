@@ -18,7 +18,6 @@
  */
 
 #include <svsys.h>
-#include <rtl/ustrbuf.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include <vcl/window.hxx>
@@ -133,12 +132,7 @@ bool WinSalSystem::initMonitors()
             if( aDeviceStringCount[ rDev ] > 1 )
             {
                 int nInstance = aDeviceStringCount[ rDev ] - (-- aDevCount[ rDev ] );
-                OUStringBuffer aBuf( rDev.getLength() + 8 );
-                aBuf.append( rDev );
-                aBuf.append( " (" );
-                aBuf.append( sal_Int32( nInstance ) );
-                aBuf.append( ')' );
-                m_aMonitors[ i ].m_aName = aBuf.makeStringAndClear();
+                m_aMonitors[ i ].m_aName = rDev + " (" + OUString::number( nInstance ) + ")";
             }
         }
     }
