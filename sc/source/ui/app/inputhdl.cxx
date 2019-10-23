@@ -3124,7 +3124,7 @@ void ScInputHandler::CancelHandler()
     if (pExecuteSh)
         pExecuteSh->StopEditShell();
 
-    aCursorPos.Set(MAXCOL+1,0,0); // Invalid flag
+    aCursorPos.Set(pExecuteSh->GetViewData().GetDocument()->MaxCol()+1,0,0); // Invalid flag
     mpEditEngine->SetText(OUString());
 
     if ( !pLastState && pExecuteSh )
