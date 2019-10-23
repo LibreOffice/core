@@ -58,6 +58,7 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
             "thunderbird",
             "firefox",
             "mozilla" };
+        bool bSelected = false;
 
         uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap = mozilla::MozillaBootstrap::create( comphelper::getProcessComponentContext() );
 
@@ -78,7 +79,10 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
             {
                 OUString sEntry = OUString::createFromAscii(productNames[i]) + ":" + sProfileName;
                 OUString sProfilePath = xMozillaBootstrap->getProfilePath(productTypes[i], sProfileName);
-                AddCertPath(sEntry, sProfilePath, sProfileName == sDefaultProfile);
+                const bool bSelectDefaultProfile = !bSelected && sProfileName == sDefaultProfile;
+                AddCertPath(sEntry, sProfilePath, bSelectDefaultProfile);
+                if (bSelectDefaultProfile)
+                    bSelected = true;
             }
         }
     }
