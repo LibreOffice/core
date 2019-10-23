@@ -29,7 +29,8 @@ then
             guess=${guess#* execfn: \'}
             guess=${guess%%\'*}
             if [ ! -x "$guess" ]; then guess=$EXECUTABLE; fi
-            gdb -x "$GDBCOMMANDFILE" --batch "$guess" "$COREFILE" && found=x
+            gdb -iex "add-auto-load-safe-path ${INSTDIR?}" -x "$GDBCOMMANDFILE" --batch "$guess" \
+                "$COREFILE" && found=x
             rm "$GDBCOMMANDFILE"
             echo
         fi
