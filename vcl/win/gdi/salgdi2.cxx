@@ -48,20 +48,7 @@
 
 bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
 {
-    static bool bAllowForTest(true);
-    bool bRet = false;
-
-    switch( eType )
-    {
-    case OutDevSupportType::TransparentRect:
-        bRet = mbVirDev || mbWindow;
-        break;
-    case OutDevSupportType::B2DDraw:
-        bRet = bAllowForTest;
-        break;
-    default: break;
-    }
-    return bRet;
+    return mpImpl->supportsOperation(eType);
 }
 
 void WinSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )

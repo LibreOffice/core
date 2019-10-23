@@ -187,6 +187,8 @@ public:
 
     void drawBitmap(const SalTwoRect& rPosAry, const SkBitmap& bitmap);
 
+    virtual bool supportsOperation(OutDevSupportType eType) const override;
+
 #ifdef DBG_UTIL
     void dump(const char* file) const;
     static void dump(const SkBitmap& bitmap, const char* file);
