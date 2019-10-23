@@ -1,0 +1,20 @@
+--- src/hb-ot-layout-gsubgpos.hh
++++ src/hb-ot-layout-gsubgpos.hh
+@@ -387,7 +387,7 @@
+ 	     skip == matcher_t::SKIP_NO))
+ 	{
+ 	  num_items--;
+-	  match_glyph_data++;
++	  if (match_glyph_data != nullptr) match_glyph_data++;
+ 	  return true;
+ 	}
+ 
+@@ -414,7 +414,7 @@
+ 	     skip == matcher_t::SKIP_NO))
+ 	{
+ 	  num_items--;
+-	  match_glyph_data++;
++	  if (match_glyph_data != nullptr) match_glyph_data++;
+ 	  return true;
+ 	}
+ 
