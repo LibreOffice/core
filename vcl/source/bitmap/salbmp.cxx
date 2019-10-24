@@ -166,7 +166,7 @@ std::unique_ptr< sal_uInt8[] > SalBitmap::convertDataBitCount( const sal_uInt8* 
                 while( nX-- )
                 {
                     const BitmapColor& c = pSrcFormat->ReadPixel();
-                    *pDstData++ = 0xff - c.GetBlue();
+                    *pDstData++ = c.GetBlue();
                 }
                 break;
             case BitConvert::BGR :
