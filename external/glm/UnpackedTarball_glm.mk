@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,glm, \
     external/glm/Wsign-compare.patch.0 \
     external/glm/Wunused-parameter.patch \
     external/glm/clang-cl.patch.0 \
+    external/glm/c++20.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
