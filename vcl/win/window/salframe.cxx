@@ -3823,7 +3823,15 @@ static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame )
 
     RECT aRect;
     GetWindowRect( hWnd, &aRect );
-    memset(&pFrame->maGeometry, 0, sizeof(SalFrameGeometry) );
+    pFrame->maGeometry.nX = 0;
+    pFrame->maGeometry.nY = 0;
+    pFrame->maGeometry.nWidth = 0;
+    pFrame->maGeometry.nHeight = 0;
+    pFrame->maGeometry.nLeftDecoration = 0;
+    pFrame->maGeometry.nTopDecoration = 0;
+    pFrame->maGeometry.nRightDecoration = 0;
+    pFrame->maGeometry.nBottomDecoration = 0;
+    pFrame->maGeometry.nDisplayScreenNumber = 0;
 
     if ( IsIconic( hWnd ) )
         return;
