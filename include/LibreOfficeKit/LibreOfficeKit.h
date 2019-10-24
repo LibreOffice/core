@@ -377,6 +377,14 @@ struct _LibreOfficeKitDocumentClass
     void (*resizeWindow) (LibreOfficeKitDocument* pThis, unsigned nWindowId,
                           const int width, const int height);
 
+
+    /// @see lok::Document::renderFontOrientation().
+    unsigned char* (*renderFontOrientation) (LibreOfficeKitDocument* pThis,
+                       const char* pFontName,
+                       const char* pChar,
+                       int* pFontWidth,
+                       int* pFontHeight,
+                       int pOrientation);
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
