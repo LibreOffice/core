@@ -366,6 +366,14 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::moveSelectedParts().
     void (*moveSelectedParts) (LibreOfficeKitDocument* pThis, int nPosition, bool bDuplicate);
 
+    /// @see lok::Document::renderFontOrientation().
+    unsigned char* (*renderFontOrientation) (LibreOfficeKitDocument* pThis,
+                       const char* pFontName,
+                       const char* pChar,
+                       int* pFontWidth,
+                       int* pFontHeight,
+                       int pOrientation);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

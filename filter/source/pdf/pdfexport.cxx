@@ -551,7 +551,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rFilterData[ nData ].Value >>= mnDefaultLinkAction;
                 else if ( rFilterData[ nData ].Name == "ConvertOOoTargetToPDFTarget" )
                     rFilterData[ nData ].Value >>= mbConvertOOoTargetToPDFTarget;
-                 else if ( rFilterData[ nData ].Name == "ExportBookmarksToPDFDestination" )
+                else if ( rFilterData[ nData ].Name == "ExportBookmarksToPDFDestination" )
                     rFilterData[ nData ].Value >>= mbExportBmkToDest;
                 else if ( rFilterData[ nData ].Name == "ExportBookmarks" )
                     rFilterData[ nData ].Value >>= mbExportBookmarks;
@@ -730,7 +730,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             }
             // after this point we don't need the legacy clear passwords anymore
             // however they are still inside the passed filter data sequence
-            // which is sadly out out our control
+            // which is sadly out of our control
             aPermissionPassword.clear();
             aOpenPassword.clear();
 
@@ -1147,29 +1147,16 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
 void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize )
 {
     OUString watermark = msTiledWatermark;
-    int watermarkLength = watermark.getLength();
     // Maximum number of characters in one line.
     // it is set to 21 to make it look like tiled watermaks as online in secure view
     const int lineLength = 21;
-    int lnIndex = lineLength;
-    int lnCount = watermarkLength / lineLength;
-
-    while(lnCount)
-    {
-        OUString tempstr = watermark;
-        watermark = watermark.copy(0, lnIndex);
-        watermark += OUString("\n");
-        watermark += tempstr.copy(lnIndex);
-        lnIndex += lineLength;
-        lnCount--;
-    }
-
-    vcl::Font aFont( OUString( "Liberation Sans" ), Size( 0, 40 ) );
+    vcl::Font aFont( "Liberation Sans", Size( 0, 40 ) );
     aFont.SetItalic( ITALIC_NONE );
     aFont.SetWidthType( WIDTH_NORMAL );
     aFont.SetWeight( WEIGHT_NORMAL );
     aFont.SetAlignment( ALIGN_BOTTOM );
     aFont.SetFontHeight(40);
+    aFont.SetOrientation(450);
 
     OutputDevice* pDev = rWriter.GetReferenceDevice();
     pDev->SetFont(aFont);
@@ -1204,22 +1191,21 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
     rWriter.SetMapMode( MapMode( MapUnit::MapPoint ) );
     rWriter.SetFont(aFont);
     rWriter.SetTextColor( Color(19,20,22) );
-    Point aTextPoint;
-    tools::Rectangle aTextRect;
-    //center watermarks horizontially
-    aTextPoint = Point((rPageSize.Width()/2)-(((nTextWidth*(watermarkcount))+(watermarkcount-1)*(nTextWidth/2))/2), pDev->GetTextHeight());
+    // center watermarks horizontally
+    Point aTextPoint( (rPageSize.Width()/2) - (((nTextWidth*watermarkcount)+(watermarkcount-1)*nTextWidth)/2),
+                      pDev->GetTextHeight());
 
     for( int i = 0; i < watermarkcount; i ++)
     {
-        while(aTextPoint.getY()+pDev->GetTextHeight()*2 <= rPageSize.Height())
+        while(aTextPoint.getY()+pDev->GetTextHeight()*3 <= rPageSize.Height())
         {
-            aTextRect = tools::Rectangle(aTextPoint, Size(nTextWidth,pDev->GetTextHeight()*2));
+            tools::Rectangle aTextRect(aTextPoint, Size(nTextWidth*2,pDev->GetTextHeight()*4));
 
             pDev->Push();
             rWriter.SetClipRegion();
             rWriter.BeginTransparencyGroup();
             rWriter.SetTextColor( Color(19,20,22) );
-            rWriter.DrawText(aTextRect, watermark, DrawTextFlags::MultiLine|DrawTextFlags::Center|DrawTextFlags::VCenter);
+            rWriter.DrawText(aTextRect, watermark, DrawTextFlags::MultiLine|DrawTextFlags::Center|DrawTextFlags::VCenter|DrawTextFlags::WordBreak|DrawTextFlags::Bottom);
             rWriter.EndTransparencyGroup( aTextRect, 50 );
             pDev->Pop();
 
@@ -1227,7 +1213,7 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
             rWriter.SetClipRegion();
             rWriter.BeginTransparencyGroup();
             rWriter.SetTextColor( Color(236,235,233) );
-            rWriter.DrawText(aTextRect, watermark, DrawTextFlags::MultiLine|DrawTextFlags::Center|DrawTextFlags::VCenter);
+            rWriter.DrawText(aTextRect, watermark, DrawTextFlags::MultiLine|DrawTextFlags::Center|DrawTextFlags::VCenter|DrawTextFlags::WordBreak|DrawTextFlags::Bottom);
             rWriter.EndTransparencyGroup( aTextRect, 50 );
             pDev->Pop();
 
