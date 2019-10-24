@@ -1743,6 +1743,18 @@ void ScInterpreter::ScRandom()
         SCROW nRows = 0;
         if(pMyFormulaCell)
             pMyFormulaCell->GetMatColsRows( nCols, nRows);
+
+        if (nCols == 1 && nRows == 1)
+        {
+            // For compatibility with existing
+            // com.sun.star.sheet.FunctionAccess.callFunction() calls that per
+            // default are executed in array context unless
+            // FA.setPropertyValue("IsArrayFunction",False) was set, return a
+            // scalar double instead of a 1x1 matrix object. tdf#128218
+            PushDouble( comphelper::rng::uniform_real_distribution());
+            return;
+        }
+
         // ScViewFunc::EnterMatrix() might be asking for
         // ScFormulaCell::GetResultDimensions(), which here are none so create
         // a 1x1 matrix at least which exactly is the case when EnterMatrix()
