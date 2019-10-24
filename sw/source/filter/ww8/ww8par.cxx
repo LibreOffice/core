@@ -2511,8 +2511,8 @@ bool SwWW8ImplReader::SetUpperSpacing(SwPaM &rMyPam, int nSpace)
 sal_uInt16 SwWW8ImplReader::TabRowSprm(int nLevel) const
 {
     if (m_bVer67)
-        return 25;
-    return nLevel ? 0x244C : 0x2417;
+        return NS_sprm::v6::sprmPTtp;
+    return nLevel ? NS_sprm::sprmPFInnerTtp : NS_sprm::sprmPFTtp;
 }
 
 void SwWW8ImplReader::EndSpecial()
