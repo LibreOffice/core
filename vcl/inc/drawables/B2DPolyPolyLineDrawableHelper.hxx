@@ -23,7 +23,8 @@ class OutputDevice;
 namespace basegfx
 {
 class B2DPolyPolygon;
-}
+class B2DPolygon;
+} // namespace basegfx
 
 namespace vcl
 {
@@ -93,6 +94,9 @@ public:
 
     static void DrawPolyPolyLine(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
                                  basegfx::B2DPolyPolygon const& rLinePolyPolygon);
+
+    static bool DrawPolyLine(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
+                             basegfx::B2DPolygon const& rB2DPolygon);
 
     static void FillPolyPolygon(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
                                 basegfx::B2DPolyPolygon const& rFillPolyPolygon);

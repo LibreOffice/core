@@ -106,6 +106,7 @@ bool B2DPolyPolyLineDrawableHelper::UseLineWidth(basegfx::B2DPolyPolygon const& 
     return (rLineInfo.GetWidth() > 1 && rLinePolyPolygon.count());
 }
 
+// TODO: rLinePolyPolygon is changed, probably need to prevent this somehow
 basegfx::B2DPolyPolygon
 B2DPolyPolyLineDrawableHelper::CreateFillPolyPolygon(basegfx::B2DPolyPolygon& rLinePolyPolygon,
                                                      LineInfo const& rLineInfo)
@@ -156,13 +157,7 @@ void B2DPolyPolyLineDrawableHelper::DrawPolyPolyLine(
 
     for (auto const& rB2DPolygon : rLinePolyPolygon)
     {
-        if (CanAntialiasLine(pRenderContext, pGraphics)
-            && !pGraphics->DrawPolyLine(
-                basegfx::B2DHomMatrix(), rB2DPolygon, 0.0, basegfx::B2DVector(1.0, 1.0),
-                basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
-                basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
-                bool(pRenderContext->GetAntialiasing() & AntialiasingFlags::PixelSnapHairline),
-                pRenderContext))
+        if (!DrawPolyLine(pRenderContext, pGraphics, rB2DPolygon))
         {
             tools::Polygon aPolygon(rB2DPolygon);
             pGraphics->DrawPolyLine(aPolygon.GetSize(),
@@ -170,6 +165,20 @@ void B2DPolyPolyLineDrawableHelper::DrawPolyPolyLine(
                                     pRenderContext);
         }
     }
+}
+
+bool B2DPolyPolyLineDrawableHelper::DrawPolyLine(OutputDevice* pRenderContext,
+                                                 SalGraphics* const pGraphics,
+                                                 basegfx::B2DPolygon const& rB2DPolygon)
+{
+    return CanAntialiasLine(pRenderContext, pGraphics)
+           && pGraphics->DrawPolyLine(
+                  basegfx::B2DHomMatrix(), rB2DPolygon, 0.0, basegfx::B2DVector(1.0, 1.0),
+                  basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
+                  basegfx::deg2rad(
+                      15.0), // not used with B2DLineJoin::NONE, but the correct default
+                  bool(pRenderContext->GetAntialiasing() & AntialiasingFlags::PixelSnapHairline),
+                  pRenderContext);
 }
 
 void B2DPolyPolyLineDrawableHelper::FillPolyPolygon(OutputDevice* pRenderContext,
