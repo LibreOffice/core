@@ -289,6 +289,8 @@ boost::property_tree::ptree SvxFontSizeBox_Impl::DumpAsPropertyTree()
     aTree.put("selectedCount", GetSelectedEntryCount());
     aTree.add_child("selectedEntries", aSelected);
 
+    aTree.put("command", ".uno:FontHeight");
+
     return aTree;
 }
 
