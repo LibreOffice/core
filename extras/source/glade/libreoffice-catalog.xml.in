@@ -119,10 +119,6 @@
                         generic-name="Calc Column SpinButton" parent="GtkSpinButton"
                         icon-name="widget-gtk-spinbutton"/>
 
-    <glade-widget-class title="SvtURLBox" name="svtlo-SvtURLBox"
-                        generic-name="URLBox" parent="GtkComboBoxText"
-                        icon-name="widget-gtk-comboboxtext"/>
-
     <glade-widget-class title="PropertyControl" name="sdlo-PropertyControl"
                         generic-name="PropertyControl" parent="GtkComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>
