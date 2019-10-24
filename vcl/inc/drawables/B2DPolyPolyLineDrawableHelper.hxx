@@ -63,14 +63,14 @@ public:
     static basegfx::B2DPolyPolygon CreateFillPolyPolygon(basegfx::B2DPolyPolygon& rLinePolyPolygon,
                                                          LineInfo const& rLineInfo);
 
-    static void DrawPolyLine(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
-                             basegfx::B2DPolyPolygon const& rLinePolyPolygon);
+    static void DrawPolyPolyLine(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
+                                 basegfx::B2DPolyPolygon const& rLinePolyPolygon);
 
     static void FillPolyPolygon(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
                                 basegfx::B2DPolyPolygon const& rFillPolyPolygon);
 
-    static void DrawPolygonFallback(OutputDevice* pRenderContext,
-                                    basegfx::B2DPolyPolygon const& rLinePolyPolygon);
+    static void DrawPolyPolygonFallback(OutputDevice* pRenderContext,
+                                        basegfx::B2DPolyPolygon const& rLinePolyPolygon);
 };
 
 } // namespace vcl

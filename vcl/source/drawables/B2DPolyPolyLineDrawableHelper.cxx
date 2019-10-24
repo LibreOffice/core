@@ -136,9 +136,9 @@ B2DPolyPolyLineDrawableHelper::CreateFillPolyPolygon(basegfx::B2DPolyPolygon& rL
     return aFillPolyPolygon;
 }
 
-void B2DPolyPolyLineDrawableHelper::DrawPolyLine(OutputDevice* pRenderContext,
-                                                 SalGraphics* const pGraphics,
-                                                 basegfx::B2DPolyPolygon const& rLinePolyPolygon)
+void B2DPolyPolyLineDrawableHelper::DrawPolyPolyLine(
+    OutputDevice* pRenderContext, SalGraphics* const pGraphics,
+    basegfx::B2DPolyPolygon const& rLinePolyPolygon)
 {
     assert(rLinePolyPolygon.count());
 
@@ -217,7 +217,7 @@ void B2DPolyPolyLineDrawableHelper::FillPolyPolygon(OutputDevice* pRenderContext
     }
 }
 
-void B2DPolyPolyLineDrawableHelper::DrawPolygonFallback(
+void B2DPolyPolyLineDrawableHelper::DrawPolyPolygonFallback(
     OutputDevice* pRenderContext, basegfx::B2DPolyPolygon const& rLinePolyPolygon)
 {
     const tools::PolyPolygon aToolsPolyPolygon(rLinePolyPolygon);

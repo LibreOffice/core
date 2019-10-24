@@ -77,7 +77,7 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
 
     DisableMetafileProcessing aDisableMtf(pRenderContext);
 
-    B2DPolyPolyLineDrawableHelper::DrawPolyLine(pRenderContext, mpGraphics, rLinePolyPolygon);
+    B2DPolyPolyLineDrawableHelper::DrawPolyPolyLine(pRenderContext, mpGraphics, rLinePolyPolygon);
     B2DPolyPolyLineDrawableHelper::FillPolyPolygon(pRenderContext, mpGraphics, aFillPolyPolygon);
 
     return true;
@@ -125,7 +125,7 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
         }
     }
 
-    B2DPolyPolyLineDrawableHelper::DrawPolygonFallback(pRenderContext,
+    B2DPolyPolyLineDrawableHelper::DrawPolyPolygonFallback(pRenderContext,
                                                        rLinePolyPolygon);
     return true;
 }
