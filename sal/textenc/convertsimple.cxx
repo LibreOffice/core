@@ -317,7 +317,7 @@ static ImplReplaceCharData const aImplRepCharTab[] =
   { 0xFFFD, 0x003F }    /* REPLACEMENT CHARACTER */
 };
 
-sal_uInt16 ImplGetReplaceChar( sal_Unicode c )
+SAL_PURE sal_uInt16 ImplGetReplaceChar( sal_Unicode c )
 {
     sal_uInt16                  nLow;
     sal_uInt16                  nHigh;
@@ -409,7 +409,7 @@ static ImplReplaceCharStrData const aImplRepCharStrTab[] =
   { 0x217B, { 0x0058, 0x0069, 0x0069, 0x0000, 0x0000  } }   /* SMALL ROMAN NUMERAL TWELVE */
 };
 
-const sal_uInt16* ImplGetReplaceString( sal_Unicode c )
+SAL_PURE const sal_uInt16* ImplGetReplaceString( sal_Unicode c )
 {
     sal_uInt16                      nLow;
     sal_uInt16                      nHigh;

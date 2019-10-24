@@ -113,7 +113,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_readPipe( oslPipe Pipe, void *pBuffer, sal_
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_writePipe( oslPipe Pipe, const void *pBuffer, sal_Int32 BufferSize );
 
-SAL_DLLPUBLIC oslPipeError SAL_CALL osl_getLastPipeError(oslPipe Pipe);
+SAL_DLLPUBLIC SAL_PURE oslPipeError SAL_CALL osl_getLastPipeError(oslPipe Pipe);
 
 #ifdef __cplusplus
 }

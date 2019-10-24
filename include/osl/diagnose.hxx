@@ -49,7 +49,7 @@ SAL_DLLPUBLIC bool SAL_CALL osl_detail_ObjectRegistry_storeAddresses(
         char const* pName )
     SAL_THROW_EXTERN_C();
 
-SAL_DLLPUBLIC bool SAL_CALL osl_detail_ObjectRegistry_checkObjectCount(
+SAL_DLLPUBLIC SAL_PURE bool SAL_CALL osl_detail_ObjectRegistry_checkObjectCount(
     ::osl::detail::ObjectRegistryData const& rData, ::std::size_t nExpected )
     SAL_THROW_EXTERN_C();
 

@@ -96,7 +96,7 @@ SAL_DLLPUBLIC oslSignalAction SAL_CALL osl_raiseSignal(
     @retval sal_False if previous state of error reporting was disabled
 */
 
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setErrorReporting(
+SAL_DLLPUBLIC SAL_CONST sal_Bool SAL_CALL osl_setErrorReporting(
         sal_Bool bEnable );
 
 #ifdef __cplusplus

@@ -600,7 +600,7 @@ SAL_DLLPUBLIC void SAL_CALL osl_getLastSocketErrorDescription(
     @retval osl_invalid_SocketError if an unknown (unmapped)
             error occurred, otherwise an enum describing the error.
 */
-SAL_DLLPUBLIC oslSocketError SAL_CALL osl_getLastSocketError(
+SAL_DLLPUBLIC SAL_PURE oslSocketError SAL_CALL osl_getLastSocketError(
                             oslSocket Socket);
 
 /** Type for the representation of socket sets.
@@ -645,7 +645,7 @@ SAL_DLLPUBLIC void SAL_CALL osl_removeFromSocketSet(oslSocketSet Set, oslSocket 
 
     @retval sal_True if socket is in the set.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isInSocketSet(oslSocketSet Set, oslSocket Socket);
+SAL_DLLPUBLIC SAL_PURE sal_Bool SAL_CALL osl_isInSocketSet(oslSocketSet Set, oslSocket Socket);
 
 /** Checks multiple sockets for events.
 
@@ -729,7 +729,7 @@ SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_copySocketAddr(
     @retval sal_True if both addresses denote the same socket address.
     @retval sal_False if both addresses do not denote the same socket address.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isEqualSocketAddr(
+SAL_DLLPUBLIC SAL_PURE sal_Bool SAL_CALL osl_isEqualSocketAddr(
     oslSocketAddr Addr1, oslSocketAddr Addr2);
 
 /** Uses the systems name-service interface to find an address for strHostname.
@@ -783,7 +783,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getServicePort(
     @return the family of the socket-address.
     In case of an unknown family you get osl_Socket_FamilyInvalid.
 */
-SAL_DLLPUBLIC oslAddrFamily SAL_CALL osl_getFamilyOfSocketAddr(
+SAL_DLLPUBLIC SAL_PURE oslAddrFamily SAL_CALL osl_getFamilyOfSocketAddr(
         oslSocketAddr Addr);
 
 
@@ -791,7 +791,7 @@ SAL_DLLPUBLIC oslAddrFamily SAL_CALL osl_getFamilyOfSocketAddr(
     @return the port-number of the address in host-byte order. If Addr
     is not an address of type osl_Socket_FamilyInet, it returns OSL_INVALID_PORT
 */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getInetPortOfSocketAddr(
+SAL_DLLPUBLIC SAL_PURE sal_Int32 SAL_CALL osl_getInetPortOfSocketAddr(
         oslSocketAddr Addr);
 
 
@@ -897,7 +897,7 @@ SAL_DLLPUBLIC void SAL_CALL osl_getHostnameOfHostAddr(const oslHostAddr Addr, rt
 /** Get the socket address member of Addr.
     @return The socket address or 0 upon failure.
 */
-SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_getSocketAddrOfHostAddr(const oslHostAddr Addr);
+SAL_DLLPUBLIC SAL_PURE oslSocketAddr SAL_CALL osl_getSocketAddrOfHostAddr(const oslHostAddr Addr);
 
 /** Retrieve this machines hostname.
     May not always be a fully qualified domain name (FQDN).

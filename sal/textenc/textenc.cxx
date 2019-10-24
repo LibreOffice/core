@@ -354,7 +354,7 @@ namespace {
 
 #if defined DISABLE_DYNLOADING || defined ANDROID
 
-extern "C" ImplTextEncodingData const * sal_getFullTextEncodingData(
+extern "C" SAL_CONST ImplTextEncodingData const * sal_getFullTextEncodingData(
     rtl_TextEncoding); // from tables.cxx in sal_textenc library
 
 class FullTextEncodingData {

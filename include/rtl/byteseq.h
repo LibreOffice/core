@@ -109,7 +109,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_assign(
 
     @return true, if the data within the sequences are identical; false otherwise
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_byte_sequence_equals(
+SAL_DLLPUBLIC SAL_PURE sal_Bool SAL_CALL rtl_byte_sequence_equals(
     sal_Sequence *pSequence1 , sal_Sequence *pSequence2 )
     SAL_THROW_EXTERN_C();
 
@@ -119,7 +119,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_byte_sequence_equals(
             has been called before, the pointer may be casted to a non const pointer and
             the sequence may be modified
 */
-SAL_DLLPUBLIC const sal_Int8 *SAL_CALL rtl_byte_sequence_getConstArray(
+SAL_DLLPUBLIC SAL_CONST const sal_Int8 *SAL_CALL rtl_byte_sequence_getConstArray(
     sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C();
 
@@ -128,7 +128,7 @@ SAL_DLLPUBLIC const sal_Int8 *SAL_CALL rtl_byte_sequence_getConstArray(
     @param pSequence sequence handle
     @return length of the sequence
 */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_byte_sequence_getLength(
+SAL_DLLPUBLIC SAL_PURE sal_Int32 SAL_CALL rtl_byte_sequence_getLength(
     sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C();
 

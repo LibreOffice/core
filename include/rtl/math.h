@@ -430,7 +430,7 @@ SAL_DLLPUBLIC double SAL_CALL rtl_math_approxValue(double fValue) SAL_THROW_EXTE
 
     @since LibreOffice 5.3
  */
-SAL_DLLPUBLIC bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC SAL_CONST bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C();
 
 /** Returns more accurate e^x-1 for x near 0 than calculating directly.
 
@@ -467,7 +467,7 @@ SAL_DLLPUBLIC double SAL_CALL rtl_math_atanh(double fValue) SAL_THROW_EXTERN_C()
     @param fValue
     The value x in the term erf(x).
   */
-SAL_DLLPUBLIC double SAL_CALL rtl_math_erf(double fValue) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC SAL_CONST double SAL_CALL rtl_math_erf(double fValue) SAL_THROW_EXTERN_C();
 
 /** Returns values of the complement Errorfunction erfc.
 

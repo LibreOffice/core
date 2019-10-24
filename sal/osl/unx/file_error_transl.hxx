@@ -30,7 +30,7 @@
    @returns the osl error code appropriate to the errno
 
 */
-oslFileError oslTranslateFileError(int Errno);
+SAL_CONST oslFileError oslTranslateFileError(int Errno);
 
 #endif
 

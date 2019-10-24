@@ -47,7 +47,7 @@ void osl_systemPathRemoveSeparator(rtl_String* pstrPath);
    @retval  sal_False   the given path starts with a separator
 
 */
-bool osl_systemPathIsRelativePath(
+SAL_PURE bool osl_systemPathIsRelativePath(
     const rtl_uString* pustrPath);
 
 /**

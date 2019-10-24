@@ -99,7 +99,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroy (
     @param[in] Digest digest handle.
     @return digest algorithm, or <code>rtl_Digest_AlgorithmInvalid</code> upon failure.
  */
-SAL_DLLPUBLIC rtlDigestAlgorithm SAL_CALL rtl_digest_queryAlgorithm (
+SAL_DLLPUBLIC SAL_PURE rtlDigestAlgorithm SAL_CALL rtl_digest_queryAlgorithm (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
 
@@ -108,7 +108,7 @@ SAL_DLLPUBLIC rtlDigestAlgorithm SAL_CALL rtl_digest_queryAlgorithm (
     @param[in] Digest digest handle.
     @return digest length, or 0 upon failure.
  */
-SAL_DLLPUBLIC sal_uInt32 SAL_CALL rtl_digest_queryLength (
+SAL_DLLPUBLIC SAL_PURE sal_uInt32 SAL_CALL rtl_digest_queryLength (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
 

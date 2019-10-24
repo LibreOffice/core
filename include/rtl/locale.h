@@ -78,7 +78,7 @@ SAL_DLLPUBLIC rtl_Locale * SAL_CALL rtl_locale_register(
     @deprecated  LibreOffice itself does not use this anymore, and client code
     should not have good use for it either.  It may eventually be removed.
  */
-SAL_DLLPUBLIC rtl_Locale * SAL_CALL rtl_locale_getDefault(void);
+SAL_DLLPUBLIC SAL_PURE rtl_Locale * SAL_CALL rtl_locale_getDefault(void);
 
 /**
     Sets the default.
@@ -118,12 +118,12 @@ SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_locale_getVariant( rtl_Locale * This );
 /**
     Returns the hash code of the locale This.
  */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_locale_hashCode( rtl_Locale * This );
+SAL_DLLPUBLIC SAL_PURE sal_Int32 SAL_CALL rtl_locale_hashCode( rtl_Locale * This );
 
 /**
     Returns true if the locals are equal, otherwise false.
  */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_locale_equals( rtl_Locale * This, rtl_Locale * obj  );
+SAL_DLLPUBLIC SAL_CONST sal_Int32 SAL_CALL rtl_locale_equals( rtl_Locale * This, rtl_Locale * obj  );
 
 #ifdef __cplusplus
 }

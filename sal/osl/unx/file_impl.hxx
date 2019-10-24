@@ -41,7 +41,7 @@ struct DirectoryItem_Impl
     void acquire(); /* @see osl_acquireDirectoryItem() */
     void release(); /* @see osl_releaseDirectoryItem() */
 
-    oslFileType getFileType() const;
+    SAL_PURE oslFileType getFileType() const;
 };
 
 oslFileError openFile(

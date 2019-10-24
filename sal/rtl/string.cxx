@@ -131,7 +131,7 @@ double SAL_CALL rtl_str_toDouble(sal_Char const * pStr) SAL_THROW_EXTERN_C()
 
 /* ======================================================================= */
 
-static int rtl_ImplGetFastUTF8ByteLen( const sal_Unicode* pStr, sal_Int32 nLen )
+static SAL_PURE int rtl_ImplGetFastUTF8ByteLen( const sal_Unicode* pStr, sal_Int32 nLen )
 {
     int                 n;
     sal_Unicode         c;

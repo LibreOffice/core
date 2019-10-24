@@ -38,7 +38,7 @@ extern "C" {
     @param[in] DatLen data buffer length.
     @return new CRC32 value.
  */
-SAL_DLLPUBLIC sal_uInt32 SAL_CALL rtl_crc32 (
+SAL_DLLPUBLIC SAL_PURE sal_uInt32 SAL_CALL rtl_crc32 (
     sal_uInt32  Crc,
     const void *Data, sal_uInt32 DatLen
 ) SAL_THROW_EXTERN_C();

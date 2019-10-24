@@ -29,7 +29,7 @@
 
 #define RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER 0xFFFD
 
-bool ImplIsControlOrFormat(sal_uInt32 nUtf32);
+SAL_CONST bool ImplIsControlOrFormat(sal_uInt32 nUtf32);
 
 inline bool ImplIsHighSurrogate(sal_uInt32 nUtf32)
 { return nUtf32 >= 0xD800 && nUtf32 <= 0xDBFF; }
@@ -39,9 +39,9 @@ inline bool ImplIsLowSurrogate(sal_uInt32 nUtf32)
 { return nUtf32 >= 0xDC00 && nUtf32 <= 0xDFFF; }
     // All code points that are low-surrogates, as of Unicode 3.1.1.
 
-bool ImplIsPrivateUse(sal_uInt32 nUtf32);
+SAL_CONST bool ImplIsPrivateUse(sal_uInt32 nUtf32);
 
-bool ImplIsZeroWidth(sal_uInt32 nUtf32);
+SAL_CONST bool ImplIsZeroWidth(sal_uInt32 nUtf32);
 
 inline sal_uInt32 ImplGetHighSurrogate(sal_uInt32 nUtf32)
 {

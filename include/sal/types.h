@@ -673,6 +673,21 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #endif
 /// @endcond
 
+/// @cond INTERNAL
+/** Annotate functions whose return value depends only on their parameters and the current state of global data.
+    See GCC/Clang manuals for more info.
+
+    @since LibreOffice 6.4
+*/
+#if defined LIBO_INTERNAL_ONLY
+#define SAL_CONST  __attribute__((const))
+#define SAL_PURE  __attribute__((pure))
+#else
+#define SAL_CONST
+#define SAL_PURE
+#endif
+/// @endcond
+
 #endif // INCLUDED_SAL_TYPES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

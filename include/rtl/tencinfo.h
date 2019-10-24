@@ -144,7 +144,7 @@ typedef struct _rtl_TextEncodingInfo
     True if the given encoding uses single octets as basic units of
     information, false otherwise.
  */
-SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding);
+SAL_DLLPUBLIC SAL_CONST sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding);
 
 /** Return information about a text encoding.
 
@@ -173,7 +173,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_getTextEncodingInfo(
     If nWinCharset is 255 (OEM_CHARSET), then return value is RTL_TEXTENCODING_IBM_850,
     regardless of current locale.
  */
-SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromWindowsCharset(
+SAL_DLLPUBLIC SAL_CONST rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromWindowsCharset(
         sal_uInt8 nWinCharset );
 
 /** Map from a MIME charset to a text encoding.
@@ -256,7 +256,7 @@ SAL_DLLPUBLIC const sal_Char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding(
     encoding, see rtl_isOctetTextEncoding), or RTL_TEXTENCODING_DONTKNOW if no
     mapping is applicable.
  */
-SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL
+SAL_DLLPUBLIC SAL_CONST rtl_TextEncoding SAL_CALL
 rtl_getTextEncodingFromWindowsCodePage(sal_uInt32 nCodePage);
 
 /** Map from a text encoding to a Windows code page.
@@ -268,7 +268,7 @@ rtl_getTextEncodingFromWindowsCodePage(sal_uInt32 nCodePage);
     The corresponding Windows code page number, or 0 if no mapping is
     applicable.
  */
-SAL_DLLPUBLIC sal_uInt32 SAL_CALL
+SAL_DLLPUBLIC SAL_CONST sal_uInt32 SAL_CALL
 rtl_getWindowsCodePageFromTextEncoding(rtl_TextEncoding nEncoding);
 
 #ifdef __cplusplus

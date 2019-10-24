@@ -212,7 +212,7 @@ rtl_UriDecodeMechanism;
     @return
     An array of 128 booleans, to be used in calls to rtl_uriEncode().
  */
-SAL_DLLPUBLIC sal_Bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass)
+SAL_DLLPUBLIC SAL_CONST sal_Bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass)
     SAL_THROW_EXTERN_C();
 
 /** Encode a text as (part of) a URI.
