@@ -1823,7 +1823,7 @@ public:
                     // determine Col/Row of subsequent calls
                     // (e.g. not found from the beginning, or subsequent tables)
                     // meaning of explanation in "()" was already unclear in German
-    static void     GetSearchAndReplaceStart( const SvxSearchItem& rSearchItem,
+    void            GetSearchAndReplaceStart( const SvxSearchItem& rSearchItem,
                                               SCCOL& rCol, SCROW& rRow );
 
     bool            Solver( SCCOL nFCol, SCROW nFRow, SCTAB nFTab,

@@ -107,7 +107,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         pPreviewCellStyle( nullptr ),
         nUnoObjectId( 0 ),
         nRangeOverflowType( 0 ),
-        aCurTextWidthCalcPos(MAXCOL,0,0),
+        aCurTextWidthCalcPos(MaxCol(),0,0),
         nFormulaCodeInTree(0),
         nXMLImportedFormulaCount( 0 ),
         nInterpretLevel(0),
@@ -303,7 +303,7 @@ void ScDocument::ClosingClipboardSource()
     if (!bIsClip)
         return;
 
-    ForgetNoteCaptions( ScRangeList( ScRange( 0,0,0, MAXCOL, MAXROW, GetTableCount()-1)), true);
+    ForgetNoteCaptions( ScRangeList( ScRange( 0,0,0, MaxCol(), MaxRow(), GetTableCount()-1)), true);
 }
 
 ScDocument::~ScDocument()
@@ -557,7 +557,7 @@ bool ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
         bool bAny = maTabs[nTab]->GetPrintArea( rEndCol, rEndRow, bNotes );
         if (mpDrawLayer)
         {
-            ScRange aDrawRange(0,0,nTab, MAXCOL,MAXROW,nTab);
+            ScRange aDrawRange(0,0,nTab, MaxCol(),MaxRow(),nTab);
             if (DrawGetPrintArea( aDrawRange, true, true ))
             {
                 if (aDrawRange.aEnd.Col()>rEndCol) rEndCol=aDrawRange.aEnd.Col();
@@ -581,7 +581,7 @@ bool ScDocument::GetPrintAreaHor( SCTAB nTab, SCROW nStartRow, SCROW nEndRow,
         bool bAny = maTabs[nTab]->GetPrintAreaHor( nStartRow, nEndRow, rEndCol );
         if (mpDrawLayer)
         {
-            ScRange aDrawRange(0,nStartRow,nTab, MAXCOL,nEndRow,nTab);
+            ScRange aDrawRange(0,nStartRow,nTab, MaxCol(),nEndRow,nTab);
             if (DrawGetPrintArea( aDrawRange, true, false ))
             {
                 if (aDrawRange.aEnd.Col()>rEndCol) rEndCol=aDrawRange.aEnd.Col();
@@ -603,7 +603,7 @@ bool ScDocument::GetPrintAreaVer( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol,
         bool bAny = maTabs[nTab]->GetPrintAreaVer( nStartCol, nEndCol, rEndRow, bNotes );
         if (mpDrawLayer)
         {
-            ScRange aDrawRange(nStartCol,0,nTab, nEndCol,MAXROW,nTab);
+            ScRange aDrawRange(nStartCol,0,nTab, nEndCol,MaxRow(),nTab);
             if (DrawGetPrintArea( aDrawRange, false, true ))
             {
                 if (aDrawRange.aEnd.Row()>rEndRow) rEndRow=aDrawRange.aEnd.Row();
@@ -624,7 +624,7 @@ bool ScDocument::GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow ) 
         bool bAny = maTabs[nTab]->GetDataStart( rStartCol, rStartRow );
         if (mpDrawLayer)
         {
-            ScRange aDrawRange(0,0,nTab, MAXCOL,MAXROW,nTab);
+            ScRange aDrawRange(0,0,nTab, MaxCol(),MaxRow(),nTab);
             if (DrawGetPrintArea( aDrawRange, true, true ))
             {
                 if (aDrawRange.aStart.Col()<rStartCol) rStartCol=aDrawRange.aStart.Col();
@@ -697,7 +697,7 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
             sc::RefUpdateMoveTabContext aCxt( *this, nOldPos, nNewPos);
 
             SCTAB nDz = nNewPos - nOldPos;
-            ScRange aSourceRange( 0,0,nOldPos, MAXCOL,MAXROW,nOldPos );
+            ScRange aSourceRange( 0,0,nOldPos, MaxCol(),MaxRow(),nOldPos );
             if (pRangeName)
                 pRangeName->UpdateMoveTab(aCxt);
 
@@ -709,7 +709,7 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
             if (pDetOpList)
                 pDetOpList->UpdateReference( this, URM_REORDER, aSourceRange, 0,0,nDz );
             UpdateChartRef( URM_REORDER,
-                    0,0,nOldPos, MAXCOL,MAXROW,nOldPos, 0,0,nDz );
+                    0,0,nOldPos, MaxCol(),MaxRow(),nOldPos, 0,0,nDz );
             UpdateRefAreaLinks( URM_REORDER, aSourceRange, 0,0,nDz );
             if ( pValidationList )
                 pValidationList->UpdateMoveTab(aCxt);
@@ -777,19 +777,19 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
             {
                 SetNoListening( true );
 
-                ScRange aRange( 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB );
+                ScRange aRange( 0,0,nNewPos, MaxCol(),MaxRow(),MAXTAB );
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
                 xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
                 if (pRangeName)
                     pRangeName->UpdateInsertTab(aCxt);
 
                 pDBCollection->UpdateReference(
-                                    URM_INSDEL, 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
+                                    URM_INSDEL, 0,0,nNewPos, MaxCol(),MaxRow(),MAXTAB, 0,0,1 );
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 if (pDetOpList)
                     pDetOpList->UpdateReference( this, URM_INSDEL, aRange, 0,0,1 );
-                UpdateChartRef( URM_INSDEL, 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
+                UpdateChartRef( URM_INSDEL, 0,0,nNewPos, MaxCol(),MaxRow(),MAXTAB, 0,0,1 );
                 UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,1 );
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,1 ) );
@@ -830,7 +830,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         GetRangeName()->CopyUsedNames( -1, nRealOldPos, nNewPos, *this, *this, bGlobalNamesToLocal);
 
         sc::CopyToDocContext aCopyDocCxt(*this);
-        maTabs[nOldPos]->CopyToTable(aCopyDocCxt, 0, 0, MAXCOL, MAXROW, InsertDeleteFlags::ALL,
+        maTabs[nOldPos]->CopyToTable(aCopyDocCxt, 0, 0, MaxCol(), MaxRow(), InsertDeleteFlags::ALL,
                 (pOnlyMarked != nullptr), maTabs[nNewPos].get(), pOnlyMarked,
                 false /*bAsLink*/, true /*bColRowFlags*/, bGlobalNamesToLocal, false /*bCopyCaptions*/ );
         maTabs[nNewPos]->SetTabBgColor(maTabs[nOldPos]->GetTabBgColor());
@@ -838,7 +838,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         SCTAB nDz = nNewPos - nOldPos;
         sc::RefUpdateContext aRefCxt(*this);
         aRefCxt.meMode = URM_COPY;
-        aRefCxt.maRange = ScRange(0, 0, nNewPos, MAXCOL, MAXROW, nNewPos);
+        aRefCxt.maRange = ScRange(0, 0, nNewPos, MaxCol(), MaxRow(), nNewPos);
         aRefCxt.mnTabDelta = nDz;
         maTabs[nNewPos]->UpdateReference(aRefCxt);
 
@@ -876,7 +876,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         // 1. the updated source ScColumn::nTab members if nNewPos <= nOldPos
         // 2. row heights and column widths of the destination
         // 3. RTL settings of the destination
-        maTabs[nOldPos]->CopyCaptionsToTable( 0, 0, MAXCOL, MAXROW, maTabs[nNewPos].get(), true /*bCloneCaption*/);
+        maTabs[nOldPos]->CopyCaptionsToTable( 0, 0, MaxCol(), MaxRow(), maTabs[nNewPos].get(), true /*bCloneCaption*/);
     }
 
     return bValid;
@@ -918,7 +918,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
     {
         if (ValidTab(nDestPos) && nDestPos < static_cast<SCTAB>(maTabs.size()) && maTabs[nDestPos])
         {
-            maTabs[nDestPos]->DeleteArea( 0,0, MAXCOL,MAXROW, InsertDeleteFlags::ALL );
+            maTabs[nDestPos]->DeleteArea( 0,0, MaxCol(),MaxRow(), InsertDeleteFlags::ALL );
         }
         else
             bValid = false;
@@ -951,7 +951,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                         pNames->CopyUsedNames( nSrcPos, nSrcPos, nDestPos, *pSrcDoc, *this, bGlobalNamesToLocal);
                     pSrcDoc->GetRangeName()->CopyUsedNames( -1, nSrcPos, nDestPos, *pSrcDoc, *this, bGlobalNamesToLocal);
                 }
-                pSrcDoc->maTabs[nSrcPos]->CopyToTable(aCxt, 0, 0, MAXCOL, MAXROW,
+                pSrcDoc->maTabs[nSrcPos]->CopyToTable(aCxt, 0, 0, MaxCol(), MaxRow(),
                         ( bResultsOnly ? InsertDeleteFlags::ALL & ~InsertDeleteFlags::FORMULA : InsertDeleteFlags::ALL),
                         false, maTabs[nDestPos].get(), /*pMarkData*/nullptr, /*bAsLink*/false, /*bColRowFlags*/true,
                         /*bGlobalNamesToLocal*/false, /*bCopyCaptions*/true );
@@ -964,7 +964,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         {
             sc::RefUpdateContext aRefCxt(*this);
             aRefCxt.meMode = URM_COPY;
-            aRefCxt.maRange = ScRange(0, 0, nDestPos, MAXCOL, MAXROW, nDestPos);
+            aRefCxt.maRange = ScRange(0, 0, nDestPos, MaxCol(), MaxRow(), nDestPos);
             aRefCxt.mnTabDelta = nDestPos - nSrcPos;
             maTabs[nDestPos]->UpdateReference(aRefCxt);
 
@@ -980,7 +980,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             sc::StartListeningContext aSLCxt(*this);
             maTabs[nDestPos]->StartListeners(aSLCxt, true);
         }
-        SetDirty( ScRange( 0, 0, nDestPos, MAXCOL, MAXROW, nDestPos), false);
+        SetDirty( ScRange( 0, 0, nDestPos, MaxCol(), MaxRow(), nDestPos), false);
 
         if ( bResultsOnly )
             pSrcDoc->SetAutoCalc( bOldAutoCalcSrc );

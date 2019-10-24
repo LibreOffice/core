@@ -3856,7 +3856,7 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
                 else
                 {
                     nTab = lcl_FirstTab(aRanges);   //! multiple sheets?
-                    ScDocument::GetSearchAndReplaceStart( *pSearchItem, nCol, nRow );
+                    rDoc.GetSearchAndReplaceStart( *pSearchItem, nCol, nRow );
                 }
 
                 OUString aDummyUndo;

@@ -263,8 +263,8 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
 {
     PutInOrder(nCol1, nCol2);
     PutInOrder(nRow1, nRow2);
-    nCol2 = std::min<SCCOL>(nCol2, MAXCOL);
-    nRow2 = std::min<SCROW>(nRow2, MAXROW);
+    nCol2 = std::min<SCCOL>(nCol2, MaxCol());
+    nRow2 = std::min<SCROW>(nRow2, MaxRow());
     if (!rMark.GetSelectCount())
     {
         SAL_WARN("sc", "ScDocument::InsertMatrixFormula: No table marked");
@@ -1244,20 +1244,20 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                 {
                     // gap -> deleted
                     ScRange aDelRange( nOtherCol+1, 0, nOtherTab,
-                                        nLastOtherCol-1, MAXROW, nOtherTab );
+                                        nLastOtherCol-1, MaxRow(), nOtherTab );
                     pChangeTrack->AppendDeleteRange( aDelRange, &rOtherDoc, n1, n2 );
                 }
-                if ( nOtherCol > MAXCOL )                       // inserted
+                if ( nOtherCol > MaxCol() )                       // inserted
                 {
                     //  combine
                     if ( nThisCol == nThisEndCol || ValidCol(static_cast<SCCOL>(pOtherCols[nThisCol+1])) )
                     {
                         SCCOL nFirstNew = nThisCol;
-                        while ( nFirstNew > 0 && pOtherCols[nFirstNew-1] > MAXCOL )
+                        while ( nFirstNew > 0 && pOtherCols[nFirstNew-1] > MaxCol() )
                             --nFirstNew;
                         SCCOL nDiff = nThisCol - nFirstNew;
                         ScRange aRange( nLastOtherCol, 0, nOtherTab,
-                                        nLastOtherCol+nDiff, MAXROW, nOtherTab );
+                                        nLastOtherCol+nDiff, MaxRow(), nOtherTab );
                         pChangeTrack->AppendInsert( aRange );
                     }
                 }
@@ -1267,7 +1267,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             if ( nLastOtherCol > 0 )                            // deleted at the very top
             {
                 ScRange aDelRange( 0, 0, nOtherTab,
-                                    nLastOtherCol-1, MAXROW, nOtherTab );
+                                    nLastOtherCol-1, MaxRow(), nOtherTab );
                 pChangeTrack->AppendDeleteRange( aDelRange, &rOtherDoc, n1, n2 );
             }
 
@@ -1283,20 +1283,20 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                 {
                     // gap -> deleted
                     ScRange aDelRange( 0, nOtherRow+1, nOtherTab,
-                                        MAXCOL, nLastOtherRow-1, nOtherTab );
+                                        MaxCol(), nLastOtherRow-1, nOtherTab );
                     pChangeTrack->AppendDeleteRange( aDelRange, &rOtherDoc, n1, n2 );
                 }
-                if ( nOtherRow > MAXROW )                       // inserted
+                if ( nOtherRow > MaxRow() )                       // inserted
                 {
                     //  combine
                     if ( nThisRow == nThisEndRow || ValidRow(pOtherRows[nThisRow+1]) )
                     {
                         SCROW nFirstNew = nThisRow;
-                        while ( nFirstNew > 0 && pOtherRows[nFirstNew-1] > MAXROW )
+                        while ( nFirstNew > 0 && pOtherRows[nFirstNew-1] > MaxRow() )
                             --nFirstNew;
                         SCROW nDiff = nThisRow - nFirstNew;
                         ScRange aRange( 0, nLastOtherRow, nOtherTab,
-                                        MAXCOL, nLastOtherRow+nDiff, nOtherTab );
+                                        MaxCol(), nLastOtherRow+nDiff, nOtherTab );
                         pChangeTrack->AppendInsert( aRange );
                     }
                 }
@@ -1306,7 +1306,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             if ( nLastOtherRow > 0 )                            // deleted at the very top
             {
                 ScRange aDelRange( 0, 0, nOtherTab,
-                                    MAXCOL, nLastOtherRow-1, nOtherTab );
+                                    MaxCol(), nLastOtherRow-1, nOtherTab );
                 pChangeTrack->AppendDeleteRange( aDelRange, &rOtherDoc, n1, n2 );
             }
 

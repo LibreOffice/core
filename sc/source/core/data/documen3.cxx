@@ -1200,36 +1200,36 @@ void ScDocument::GetSearchAndReplaceStart( const SvxSearchItem& rSearchItem,
         {
             if ( rSearchItem.GetPattern() )
             {
-                rCol = MAXCOL;
-                rRow = MAXROW+1;
+                rCol = MaxCol();
+                rRow = MaxRow()+1;
             }
             else if ( bReplace )
             {
-                rCol = MAXCOL;
-                rRow = MAXROW;
+                rCol = MaxCol();
+                rRow = MaxRow();
             }
             else
             {
-                rCol = MAXCOL+1;
-                rRow = MAXROW;
+                rCol = MaxCol()+1;
+                rRow = MaxRow();
             }
         }
         else
         {
             if ( rSearchItem.GetPattern() )
             {
-                rCol = MAXCOL+1;
-                rRow = MAXROW;
+                rCol = MaxCol()+1;
+                rRow = MaxRow();
             }
             else if ( bReplace )
             {
-                rCol = MAXCOL;
-                rRow = MAXROW;
+                rCol = MaxCol();
+                rRow = MaxRow();
             }
             else
             {
-                rCol = MAXCOL;
-                rRow = MAXROW+1;
+                rCol = MaxCol();
+                rRow = MaxRow()+1;
             }
         }
     }
@@ -1791,7 +1791,7 @@ ScRange ScDocument::GetRange( SCTAB nTab, const tools::Rectangle& rMMRect, bool 
     while (!bEnd)
     {
         nAdd = static_cast<long>(pTable->GetColWidth(nX1, bHiddenAsZero));
-        if (nSize+nAdd <= nTwips+1 && nX1<MAXCOL)
+        if (nSize+nAdd <= nTwips+1 && nX1<MaxCol())
         {
             nSize += nAdd;
             ++nX1;
@@ -1809,7 +1809,7 @@ ScRange ScDocument::GetRange( SCTAB nTab, const tools::Rectangle& rMMRect, bool 
         while (!bEnd)
         {
             nAdd = static_cast<long>(pTable->GetColWidth(nX2, bHiddenAsZero));
-            if (nSize+nAdd < nTwips && nX2<MAXCOL)
+            if (nSize+nAdd < nTwips && nX2<MaxCol())
             {
                 nSize += nAdd;
                 ++nX2;
@@ -1824,16 +1824,16 @@ ScRange ScDocument::GetRange( SCTAB nTab, const tools::Rectangle& rMMRect, bool 
 
     SCROW nY1 = 0;
     // Was if(nSize+nAdd<=nTwips+1) inside loop => if(nSize+nAdd<nTwips+2)
-    if (lcl_AddTwipsWhile( nSize, nTwips+2, nY1, MAXROW, pTable, bHiddenAsZero) && nY1 < MAXROW)
-        ++nY1;  // original loop ended on last matched +1 unless that was MAXROW
+    if (lcl_AddTwipsWhile( nSize, nTwips+2, nY1, MaxRow(), pTable, bHiddenAsZero) && nY1 < MaxRow())
+        ++nY1;  // original loop ended on last matched +1 unless that was rDoc.MaxRow()
 
     SCROW nY2 = nY1;
     if (!aPosRect.IsEmpty())
     {
         nTwips = static_cast<long>(aPosRect.Bottom() / HMM_PER_TWIPS);
         // Was if(nSize+nAdd<nTwips) inside loop => if(nSize+nAdd<nTwips)
-        if (lcl_AddTwipsWhile( nSize, nTwips, nY2, MAXROW, pTable, bHiddenAsZero) && nY2 < MAXROW)
-            ++nY2;  // original loop ended on last matched +1 unless that was MAXROW
+        if (lcl_AddTwipsWhile( nSize, nTwips, nY2, MaxRow(), pTable, bHiddenAsZero) && nY2 < MaxRow())
+            ++nY2;  // original loop ended on last matched +1 unless that was rDoc.MaxRow()
     }
 
     return ScRange( nX1,nY1,nTab, nX2,nY2,nTab );

@@ -305,7 +305,7 @@ void ScDocument::InvalidateTextWidth( const OUString& rStyleName )
 void ScDocument::InvalidateTextWidth( SCTAB nTab )
 {
     ScAddress aAdrFrom( 0,    0,        nTab );
-    ScAddress aAdrTo  ( MAXCOL, MAXROW, nTab );
+    ScAddress aAdrTo  ( MaxCol(), MaxRow(), nTab );
     InvalidateTextWidth( &aAdrFrom, &aAdrTo, false );
 }
 
@@ -555,7 +555,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
 
     if (aScope.Col() < 0)
     {
-        aScope.setCol(MAXCOL);
+        aScope.setCol(MaxCol());
         aScope.incTab();
     }
 
@@ -580,7 +580,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
     aScope.setCol(pTab->ClampToAllocatedColumns(aScope.Col()));
     // Start at specified cell position (nCol, nRow, nTab).
     ScColumn* pCol  = &pTab->aCol[aScope.Col()];
-    std::unique_ptr<ScColumnTextWidthIterator> pColIter(new ScColumnTextWidthIterator(*pCol, aScope.Row(), MAXROW));
+    std::unique_ptr<ScColumnTextWidthIterator> pColIter(new ScColumnTextWidthIterator(*pCol, aScope.Row(), MaxRow()));
 
     OutputDevice* pDev = nullptr;
     sal_uInt16 nRestart = 0;
@@ -633,7 +633,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
             if (aScope.Col() < 0)
             {
                 // No more column to the left.  Move to the right-most column of the next sheet.
-                aScope.setCol(MAXCOL);
+                aScope.setCol(MaxCol());
                 aScope.incTab();
                 bNewTab = true;
             }
@@ -677,7 +677,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
                 if ( nZoom > 0 )
                 {
                     pCol  = &pTab->aCol[aScope.Col()];
-                    pColIter.reset(new ScColumnTextWidthIterator(*pCol, aScope.Row(), MAXROW));
+                    pColIter.reset(new ScColumnTextWidthIterator(*pCol, aScope.Row(), MaxRow()));
                 }
                 else
                 {
