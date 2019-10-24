@@ -406,8 +406,6 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
                                           const basegfx::B2DPolyPolygon& rPolyPolygon,
                                           double fTransparency)
 {
-    (void)rObjectToDevice;
-
     const bool bHasFill(mFillColor != SALCOLOR_NONE);
     const bool bHasLine(mLineColor != SALCOLOR_NONE);
 
@@ -418,7 +416,9 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
     preDraw();
 
     SkPath aPath;
-    lclPolyPolygonToPath(rPolyPolygon, aPath);
+    basegfx::B2DPolyPolygon aPolyPolygon(rPolyPolygon);
+    aPolyPolygon.transform(rObjectToDevice);
+    lclPolyPolygonToPath(aPolyPolygon, aPath);
 
     SkPaint aPaint;
     if (mFillColor != SALCOLOR_NONE)
