@@ -337,24 +337,30 @@ void SkiaSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
     postDraw();
 }
 
-void SkiaSalGraphicsImpl::drawRect(long nX, long nY, long nWidth, long nHeight)
+void SkiaSalGraphicsImpl::privateDrawAlphaRect(long nX, long nY, long nWidth, long nHeight,
+                                               double fTransparency)
 {
     preDraw();
     SkCanvas* canvas = mSurface->getCanvas();
     SkPaint paint;
     if (mFillColor != SALCOLOR_NONE)
     {
-        paint.setColor(toSkColor(mFillColor));
+        paint.setColor(toSkColorWithTransparency(mFillColor, fTransparency));
         paint.setStyle(SkPaint::kFill_Style);
         canvas->drawIRect(SkIRect::MakeXYWH(nX, nY, nWidth, nHeight), paint);
     }
     if (mLineColor != SALCOLOR_NONE)
     {
-        paint.setColor(toSkColor(mLineColor));
+        paint.setColor(toSkColorWithTransparency(mLineColor, fTransparency));
         paint.setStyle(SkPaint::kStroke_Style);
         canvas->drawIRect(SkIRect::MakeXYWH(nX, nY, nWidth - 1, nHeight - 1), paint);
     }
     postDraw();
+}
+
+void SkiaSalGraphicsImpl::drawRect(long nX, long nY, long nWidth, long nHeight)
+{
+    privateDrawAlphaRect(nX, nY, nWidth, nHeight, 0.0);
 }
 
 void SkiaSalGraphicsImpl::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
@@ -834,12 +840,8 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
 bool SkiaSalGraphicsImpl::drawAlphaRect(long nX, long nY, long nWidth, long nHeight,
                                         sal_uInt8 nTransparency)
 {
-    (void)nX;
-    (void)nY;
-    (void)nWidth;
-    (void)nHeight;
-    (void)nTransparency;
-    return false;
+    privateDrawAlphaRect(nX, nY, nWidth, nHeight, nTransparency / 100.0);
+    return true;
 }
 
 bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolygon,
