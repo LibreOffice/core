@@ -102,25 +102,23 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
 
         if (pRenderContext->IsFillColor()
             && mpGraphics->DrawPolyPolygon(aTransform, aB2DPolyPolygon, 0.0, pRenderContext)
+            && pRenderContext->IsLineColor())
         {
-            if (pRenderContext->IsLineColor())
+            const basegfx::B2DVector aB2DLineWidth(1.0, 1.0);
+            const bool bPixelSnapHairline(pRenderContext->GetAntialiasing()
+                                          & AntialiasingFlags::PixelSnapHairline);
+
+            for (auto const& rPolygon : aB2DPolyPolygon)
             {
-                const basegfx::B2DVector aB2DLineWidth(1.0, 1.0);
-                const bool bPixelSnapHairline(pRenderContext->GetAntialiasing()
-                                              & AntialiasingFlags::PixelSnapHairline);
+                bSuccess = mpGraphics->DrawPolyLine(
+                    aTransform, rPolygon, 0.0, aB2DLineWidth, basegfx::B2DLineJoin::NONE,
+                    css::drawing::LineCap_BUTT,
+                    basegfx::deg2rad(
+                        15.0), // not used with B2DLineJoin::NONE, but the correct default
+                    bPixelSnapHairline, pRenderContext);
 
-                for (auto const& rPolygon : aB2DPolyPolygon)
-                {
-                    bSuccess = mpGraphics->DrawPolyLine(
-                        aTransform, rPolygon, 0.0, aB2DLineWidth, basegfx::B2DLineJoin::NONE,
-                        css::drawing::LineCap_BUTT,
-                        basegfx::deg2rad(
-                            15.0), // not used with B2DLineJoin::NONE, but the correct default
-                        bPixelSnapHairline, pRenderContext);
-
-                    if (!bSuccess)
-                        break;
-                }
+                if (!bSuccess)
+                    break;
             }
         }
 
