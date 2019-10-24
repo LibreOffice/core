@@ -930,6 +930,7 @@ boost::property_tree::ptree SvxStyleBox_Impl::DumpAsPropertyTree()
 
     aTree.put("selectedCount", GetSelectedEntryCount());
     aTree.add_child("selectedEntries", aSelected);
+    aTree.put("command", ".uno:StyleApply");
 
     return aTree;
 }
@@ -1320,6 +1321,7 @@ boost::property_tree::ptree SvxFontNameBox_Impl::DumpAsPropertyTree()
 
     aTree.put("selectedCount", GetSelectedEntryCount());
     aTree.add_child("selectedEntries", aSelected);
+    aTree.put("command", ".uno:CharFontName");
 
     return aTree;
 }
