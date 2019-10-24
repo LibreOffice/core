@@ -202,15 +202,6 @@ bool StringAdd::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* operatorCall
         if (!tc3.Class("OUString").Namespace("rtl").GlobalNamespace()
             && !tc3.Class("OString").Namespace("rtl").GlobalNamespace())
             return;
-        // we don't have OStringLiteral1, so char needs to generate a temporary
-        if (tc.Class("OString").Namespace("rtl").GlobalNamespace()
-            || tc.Struct("OStringConcat").Namespace("rtl").GlobalNamespace())
-            if (auto bindTemp = dyn_cast<CXXBindTemporaryExpr>(e->getSubExpr()))
-                if (auto cxxConstruct = dyn_cast<CXXConstructExpr>(bindTemp->getSubExpr()))
-                    if (loplugin::TypeCheck(
-                            cxxConstruct->getConstructor()->getParamDecl(0)->getType())
-                            .Char())
-                        return;
         report(DiagnosticsEngine::Warning,
                ("avoid constructing %0 from %1 on %select{L|R}2HS of + (where %select{R|L}2HS is of"
                 " type %3)"),

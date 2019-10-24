@@ -558,7 +558,7 @@ OString SvIdlParser::ReadString()
 void SvIdlParser::Read(char cChar)
 {
     if( !ReadIf(cChar) )
-        throw SvParseException(rInStm, "expected char '" + OString(cChar) + "'");
+        throw SvParseException(rInStm, "expected char '" + OStringChar(cChar) + "'");
 }
 
 bool SvIdlParser::ReadIf(char cChar)

@@ -1971,6 +1971,7 @@ typedef rtlunittest::OString OString;
 
 #if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST
 using ::rtl::OString;
+using ::rtl::OStringChar;
 using ::rtl::OStringHash;
 using ::rtl::OStringLiteral;
 #endif

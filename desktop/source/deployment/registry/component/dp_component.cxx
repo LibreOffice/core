@@ -919,10 +919,10 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
             OString buf2 =
                 "ORIGIN=" +
                 osOrigin +
-                OString(LF) +
+                OStringChar(LF) +
                 "UNO_SERVICES=?$ORIGIN/"  +
                 OUStringToOString( sNativeRDB, RTL_TEXTENCODING_ASCII_US ) +
-                OString(LF);
+                OStringChar(LF);
 
             const Reference<io::XInputStream> xData(
                 ::xmlscript::createInputStream(

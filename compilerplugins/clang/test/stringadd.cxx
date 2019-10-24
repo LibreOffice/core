@@ -191,7 +191,7 @@ void f2(char ch)
     OString s;
     // expected-error@+1 {{avoid constructing 'rtl::OString' from 'const char [4]' on RHS of + (where LHS is of type 'rtl::OString') [loplugin:stringadd]}}
     s = s + OString("xxx");
-    // no warning expected, no OStringLiteral1
+    // expected-error@+1 {{avoid constructing 'rtl::OString' from 'char' on RHS of + (where LHS is of type 'rtl::OString') [loplugin:stringadd]}}
     s = s + OString(ch);
 }
 }

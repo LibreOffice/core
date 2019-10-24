@@ -104,7 +104,11 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
-#define NAVI_BOOKMARK_DELIM     u'\x0001'
+namespace {
+
+constexpr char NAVI_BOOKMARK_DELIM = '\x01';
+
+}
 
 class SwContentArr
     : public o3tl::sorted_vector<std::unique_ptr<SwContent>, o3tl::less_uniqueptr_to<SwContent>,
@@ -3772,9 +3776,9 @@ void NaviContentBookmark::Copy( TransferDataContainer& rData ) const
 {
     rtl_TextEncoding eSysCSet = osl_getThreadTextEncoding();
 
-    OString sStrBuf(OUStringToOString(aUrl, eSysCSet) + OString(NAVI_BOOKMARK_DELIM) +
-                    OUStringToOString(aDescr, eSysCSet) + OString(NAVI_BOOKMARK_DELIM) +
-                    OString::number(static_cast<int>(nDefDrag)) + OString(NAVI_BOOKMARK_DELIM) +
+    OString sStrBuf(OUStringToOString(aUrl, eSysCSet) + OStringChar(NAVI_BOOKMARK_DELIM) +
+                    OUStringToOString(aDescr, eSysCSet) + OStringChar(NAVI_BOOKMARK_DELIM) +
+                    OString::number(static_cast<int>(nDefDrag)) + OStringChar(NAVI_BOOKMARK_DELIM) +
                     OString::number(nDocSh));
     rData.CopyByteString(SotClipboardFormatId::SONLK, sStrBuf);
 }

@@ -36,6 +36,18 @@ namespace rtl
 #if defined LIBO_INTERNAL_ONLY
 /// @cond INTERNAL
 
+// A simple wrapper around a single char.  Can be useful in string concatenation contexts, like in
+//
+//  OString s = ...;
+//  char c = ...;
+//  s += OStringChar(c);
+//
+struct SAL_WARN_UNUSED OStringChar {
+    constexpr OStringChar(char theC): c(theC) {}
+    template<typename T> OStringChar(T &&) = delete;
+    char const c;
+};
+
 /** A simple wrapper around a single sal_Unicode character.
 
     Can be useful to pass a sal_Unicode constant into an OUString-related

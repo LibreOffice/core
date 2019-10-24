@@ -197,7 +197,7 @@ bool SvIdlDataBase::ReadIdFile( const OString& rOFileName )
                           || rTok.GetChar() == '^'
                           || rTok.GetChar() == '~' )
                         {
-                            throw SvParseException( "unknown operator '" + OString(rTok.GetChar()) + "'in define", rTok );
+                            throw SvParseException( "unknown operator '" + OStringChar(rTok.GetChar()) + "'in define", rTok );
                         }
                         if( rTok.GetChar() != '+'
                           && rTok.GetChar() != '('
