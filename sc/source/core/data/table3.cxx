@@ -1198,7 +1198,7 @@ void ScTable::SortReorderByRowRefUpdate(
             if (!aMoveRange.Intersects(aRange))
             {
                 // Doesn't overlap with the sorted range at all.
-                aGrpListenerRanges.set(aRange, true);
+                aGrpListenerRanges.set(GetDoc(), aRange, true);
                 continue;
             }
 
@@ -1206,7 +1206,7 @@ void ScTable::SortReorderByRowRefUpdate(
             {
                 // Its column range is within the column range of the sorted range.
                 expandRowRange(aRange, aMoveRange.aStart.Row(), aMoveRange.aEnd.Row());
-                aGrpListenerRanges.set(aRange, true);
+                aGrpListenerRanges.set(GetDoc(), aRange, true);
                 continue;
             }
 
@@ -1230,8 +1230,8 @@ void ScTable::SortReorderByRowRefUpdate(
                 expandRowRange(aR1, aMoveRange.aStart.Row(), aMoveRange.aEnd.Row());
             }
 
-            aGrpListenerRanges.set(aR1, true);
-            aGrpListenerRanges.set(aR2, true);
+            aGrpListenerRanges.set(GetDoc(), aR1, true);
+            aGrpListenerRanges.set(GetDoc(), aR2, true);
         }
     }
 

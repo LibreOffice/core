@@ -646,7 +646,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
     }
     else
         // "Select" the entire column if no selection exists.
-        aMarkedSpans.emplace_back(0, MAXROW);
+        aMarkedSpans.emplace_back(0, GetDoc()->MaxRow());
 
     sal_uInt16 nWidth = static_cast<sal_uInt16>(nOldWidth*nPPTX);
     bool bFound = false;
@@ -990,7 +990,7 @@ bool ScColumn::GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& r
             nRow = rData.GetNextMarked(nCol, nRow, false);
             if (!ValidRow(nRow))
             {
-                nRow = MAXROW+1;
+                nRow = GetDoc()->MaxRow()+1;
                 bStop = true;
             }
             else
@@ -1018,7 +1018,7 @@ bool ScColumn::GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& r
         }
         else
         {
-            nRow = MAXROW+1;
+            nRow = GetDoc()->MaxRow()+1;
             bStop = true;
         }
     }
@@ -1296,15 +1296,15 @@ SCROW ScColumn::GetLastDataPos() const
 
     sc::CellStoreType::const_reverse_iterator it = maCells.rbegin();
     if (it->type != sc::element_type_empty)
-        return MAXROW;
+        return GetDoc()->MaxRow();
 
-    return MAXROW - static_cast<SCROW>(it->size);
+    return GetDoc()->MaxRow() - static_cast<SCROW>(it->size);
 }
 
 SCROW ScColumn::GetLastDataPos( SCROW nLastRow, bool bConsiderCellNotes,
                                 bool bConsiderCellDrawObjects ) const
 {
-    sc::CellStoreType::const_position_type aPos = maCells.position(std::min(nLastRow,MAXROW));
+    sc::CellStoreType::const_position_type aPos = maCells.position(std::min(nLastRow,GetDoc()->MaxRow()));
 
     if (bConsiderCellNotes && !IsNotesEmptyBlock(nLastRow, nLastRow))
         return nLastRow;
@@ -1468,14 +1468,14 @@ SCROW ScColumn::FindNextVisibleRow(SCROW nRow, bool bForward) const
         SCROW nEndRow = 0;
         bool bHidden = GetDoc()->RowHidden(nRow, nTab, nullptr, &nEndRow);
         if(bHidden)
-            return std::min<SCROW>(MAXROW, nEndRow + 1);
+            return std::min<SCROW>(GetDoc()->MaxRow(), nEndRow + 1);
         else
             return nRow;
     }
     else
     {
         nRow--;
-        SCROW nStartRow = MAXROW;
+        SCROW nStartRow = GetDoc()->MaxRow();
         bool bHidden = GetDoc()->RowHidden(nRow, nTab, &nStartRow);
         if(bHidden)
             return std::max<SCROW>(0, nStartRow - 1);
@@ -1498,15 +1498,15 @@ SCROW ScColumn::FindNextVisibleRowWithContent(
             if (bHidden)
             {
                 nRow = nEndRow + 1;
-                if(nRow >= MAXROW)
-                    return MAXROW;
+                if(nRow >= GetDoc()->MaxRow())
+                    return GetDoc()->MaxRow();
             }
 
             std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(itPos, nRow);
             itPos = aPos.first;
             if (itPos == maCells.end())
                 // Invalid row.
-                return MAXROW;
+                return GetDoc()->MaxRow();
 
             if (itPos->type != sc::element_type_empty)
                 return nRow;
@@ -1514,15 +1514,15 @@ SCROW ScColumn::FindNextVisibleRowWithContent(
             // Move to the last cell of the current empty block.
             nRow += itPos->size - aPos.second - 1;
         }
-        while (nRow < MAXROW);
+        while (nRow < GetDoc()->MaxRow());
 
-        return MAXROW;
+        return GetDoc()->MaxRow();
     }
 
     do
     {
         nRow--;
-        SCROW nStartRow = MAXROW;
+        SCROW nStartRow = GetDoc()->MaxRow();
         bool bHidden = pDocument->RowHidden(nRow, nTab, &nStartRow);
         if (bHidden)
         {
@@ -3409,7 +3409,7 @@ void ScColumn::UpdateSelectionFunction(
     // Exclude all hidden rows.
     ScFlatBoolRowSegments::RangeData aRange;
     SCROW nRow = 0;
-    while (nRow <= MAXROW)
+    while (nRow <= GetDoc()->MaxRow())
     {
         if (!rHiddenRows.getRangeData(nRow, aRange))
             break;

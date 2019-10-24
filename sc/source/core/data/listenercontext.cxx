@@ -65,7 +65,7 @@ ColumnBlockPosition* EndListeningContext::getBlockPosition(SCTAB nTab, SCCOL nCo
 
 void EndListeningContext::addEmptyBroadcasterPosition(SCTAB nTab, SCCOL nCol, SCROW nRow)
 {
-    maSet.set(nTab, nCol, nRow, true);
+    maSet.set(mrDoc, nTab, nCol, nRow, true);
 }
 
 void EndListeningContext::purgeEmptyBroadcasters()

@@ -64,7 +64,7 @@ private:
     std::vector<std::unique_ptr<TableType>> maTables;
     bool const mbInit;
 
-    ColumnType& getColumn(SCTAB nTab, SCCOL nCol);
+    ColumnType& getColumn(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol);
 
 public:
     class Action
@@ -89,11 +89,11 @@ public:
     const ColumnSpanSet& operator=(const ColumnSpanSet&) = delete;
     ~ColumnSpanSet();
 
-    void set(SCTAB nTab, SCCOL nCol, SCROW nRow, bool bVal);
-    void set(SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, bool bVal);
-    void set(const ScRange& rRange, bool bVal);
+    void set(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCROW nRow, bool bVal);
+    void set(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, bool bVal);
+    void set(const ScDocument& rDoc, const ScRange& rRange, bool bVal);
 
-    void set( SCTAB nTab, SCCOL nCol, const SingleColumnSpanSet& rSingleSet, bool bVal );
+    void set(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol, const SingleColumnSpanSet& rSingleSet, bool bVal );
 
     /**
      * Scan specified range in a specified sheet and mark all non-empty cells

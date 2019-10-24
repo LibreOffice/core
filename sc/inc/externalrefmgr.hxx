@@ -255,7 +255,7 @@ public:
      * cached data, not the cached range metadata stored separately in the
      * Table.
      */
-    void getAllCachedDataSpans( sal_uInt16 nFileId, sc::ColumnSpanSet& rSet ) const;
+    void getAllCachedDataSpans( const ScDocument& rSrcDoc, sal_uInt16 nFileId, sc::ColumnSpanSet& rSet ) const;
 
     bool getSrcDocTable( const ScDocument& rSrcDoc, const OUString& rTabName, SCTAB& rTab, sal_uInt16 nFileId ) const;
 
