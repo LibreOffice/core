@@ -1709,7 +1709,8 @@ void PdfExportTest::testTdf115967()
     CPPUNIT_ASSERT(pPdfPage.get());
     FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage.get());
 
-    // Make sure the table sum is displayed as "0", not faulty expression.
+    // Make sure the elements inside a formula in a RTL document are exported
+    // LTR ( m=750abc ) and not RTL ( m=057cba )
     int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
     OUString sText;
     for (int i = 0; i < nPageObjectCount; ++i)
@@ -1721,9 +1722,9 @@ void PdfExportTest::testTdf115967()
         std::vector<sal_Unicode> aText(nTextSize);
         FPDFTextObj_GetText(pPageObject, pTextPage, aText.data(), nTextSize);
         OUString sChar(aText.data(), nTextSize / 2 - 1);
-        sText += sChar;
+        sText += sChar.trim();
     }
-    CPPUNIT_ASSERT_EQUAL(OUString("m=750 g"), sText);
+    CPPUNIT_ASSERT_EQUAL(OUString("m=750abc"), sText);
 }
 
 void PdfExportTest::testTdf121615()
