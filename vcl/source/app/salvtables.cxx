@@ -4055,7 +4055,9 @@ public:
     virtual void set_cursor(const weld::TreeIter& rIter) override
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        disable_notify_events();
         m_xTreeView->SetCurEntry(rVclIter.iter);
+        enable_notify_events();
     }
 
     virtual bool get_iter_first(weld::TreeIter& rIter) const override
