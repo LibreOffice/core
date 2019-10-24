@@ -1782,7 +1782,7 @@ bool SfxViewShell::isSaveLocked()
     if (!xModel.is())
         return false;
     comphelper::NamedValueCollection aArgs(xModel->getArgs());
-    return aArgs.getOrDefault("LockSave", true);
+    return aArgs.getOrDefault("LockSave", false);
 }
 
 Reference < XController > SfxViewShell::GetController() const
