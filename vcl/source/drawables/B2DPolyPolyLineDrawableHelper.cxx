@@ -158,12 +158,11 @@ void B2DPolyPolyLineDrawableHelper::DrawPolyPolyLine(
     {
         if (CanAntialiasLine(pRenderContext, pGraphics)
             && !pGraphics->DrawPolyLine(
-                   basegfx::B2DHomMatrix(), rB2DPolygon, 0.0, basegfx::B2DVector(1.0, 1.0),
-                   basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
-                   basegfx::deg2rad(
-                       15.0), // not used with B2DLineJoin::NONE, but the correct default
-                   bool(pRenderContext->GetAntialiasing() & AntialiasingFlags::PixelSnapHairline),
-                   pRenderContext))
+                basegfx::B2DHomMatrix(), rB2DPolygon, 0.0, basegfx::B2DVector(1.0, 1.0),
+                basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
+                basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
+                bool(pRenderContext->GetAntialiasing() & AntialiasingFlags::PixelSnapHairline),
+                pRenderContext))
         {
             tools::Polygon aPolygon(rB2DPolygon);
             pGraphics->DrawPolyLine(aPolygon.GetSize(),
@@ -177,24 +176,23 @@ void B2DPolyPolyLineDrawableHelper::FillPolyPolygon(OutputDevice* pRenderContext
                                                     SalGraphics* const pGraphics,
                                                     basegfx::B2DPolyPolygon const& rFillPolyPolygon)
 {
-    if (rFillPolyPolygon.count())
+    assert(rFillPolyPolygon.count());
+
+    ColorFillPolyPolygon aColorFillPolyPolygon(pRenderContext);
+
+    if (CanAntialiasLine(pRenderContext, pGraphics)
+        && !pGraphics->DrawPolyPolygon(basegfx::B2DHomMatrix(), rFillPolyPolygon, 0.0,
+                                       pRenderContext))
     {
-        ColorFillPolyPolygon aColorFillPolyPolygon(pRenderContext);
-
-        if (CanAntialiasLine(pRenderContext, pGraphics)
-            && !pGraphics->DrawPolyPolygon(basegfx::B2DHomMatrix(), rFillPolyPolygon, 0.0,
-                                           pRenderContext))
+        for (auto const& rB2DPolygon : rFillPolyPolygon)
         {
-            for (auto const& rB2DPolygon : rFillPolyPolygon)
-            {
-                tools::Polygon aPolygon(rB2DPolygon);
+            tools::Polygon aPolygon(rB2DPolygon);
 
-                // need to subdivide, pGraphics->DrawPolygon ignores curves
-                aPolygon.AdaptiveSubdivide(aPolygon);
-                pGraphics->DrawPolygon(
-                    aPolygon.GetSize(),
-                    reinterpret_cast<const SalPoint*>(aPolygon.GetConstPointAry()), pRenderContext);
-            }
+            // need to subdivide, pGraphics->DrawPolygon ignores curves
+            aPolygon.AdaptiveSubdivide(aPolygon);
+            pGraphics->DrawPolygon(aPolygon.GetSize(),
+                                   reinterpret_cast<const SalPoint*>(aPolygon.GetConstPointAry()),
+                                   pRenderContext);
         }
     }
 }
