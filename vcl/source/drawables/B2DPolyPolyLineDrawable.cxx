@@ -98,8 +98,6 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
         if (!aB2DPolyPolygon.isClosed())
             aB2DPolyPolygon.setClosed(true);
 
-        bool bSuccess = true;
-
         if (pRenderContext->IsFillColor()
             && mpGraphics->DrawPolyPolygon(aTransform, aB2DPolyPolygon, 0.0, pRenderContext)
             && pRenderContext->IsLineColor())
@@ -110,15 +108,15 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
 
             for (auto const& rPolygon : aB2DPolyPolygon)
             {
-                bSuccess = mpGraphics->DrawPolyLine(
-                    aTransform, rPolygon, 0.0, aB2DLineWidth, basegfx::B2DLineJoin::NONE,
-                    css::drawing::LineCap_BUTT,
-                    basegfx::deg2rad(
-                        15.0), // not used with B2DLineJoin::NONE, but the correct default
-                    bPixelSnapHairline, pRenderContext);
-
-                if (!bSuccess)
+                if (!mpGraphics->DrawPolyLine(
+                        aTransform, rPolygon, 0.0, aB2DLineWidth, basegfx::B2DLineJoin::NONE,
+                        css::drawing::LineCap_BUTT,
+                        basegfx::deg2rad(
+                            15.0), // not used with B2DLineJoin::NONE, but the correct default
+                        bPixelSnapHairline, pRenderContext))
+                {
                     break;
+                }
             }
         }
     }
