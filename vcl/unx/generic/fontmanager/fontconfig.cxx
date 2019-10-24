@@ -766,7 +766,7 @@ namespace
 
         if (!sRegion.isEmpty())
         {
-            sLangAttrib = sLang + OString('-') + sRegion;
+            sLangAttrib = sLang + "-" + sRegion;
             if (FcStrSetMember(xLangSet.get(), reinterpret_cast<const FcChar8*>(sLangAttrib.getStr())))
             {
                 return sLangAttrib;

@@ -712,35 +712,35 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 
         parString[last++] = "Program";
         OString aPureProgramm( urlParam->getByName( "Program" ) );
-        parString[last++] = OString('\'') + aPureProgramm + OString('\'');
+        parString[last++] = "'" + aPureProgramm + "'";
         parString[last++] = "Database";
-        parString[last++] = OString('\'') + urlParam->getByName( "DatabasePar" ) + OString('\'');
+        parString[last++] = "'" + urlParam->getByName( "DatabasePar" ) + "'";
         parString[last++] = "Id";
-        parString[last++] = OString('\'') + urlParam->getByName( "Id" ) + OString('\'');
+        parString[last++] = "'" + urlParam->getByName( "Id" ) + "'";
         parString[last++] = "Path";
         OString aPath( urlParam->getByName( "Path" ) );
-        parString[last++] = OString('\'') + aPath + OString('\'');
+        parString[last++] = "'" + aPath + "'";
 
         OString aPureLanguage = urlParam->getByName( "Language" );
         parString[last++] = "Language";
-        parString[last++] = OString('\'') + aPureLanguage + OString('\'');
+        parString[last++] = "'" + aPureLanguage + "'";
         parString[last++] = "System";
-        parString[last++] = OString('\'') + urlParam->getByName( "System" ) + OString('\'');
+        parString[last++] = "'" + urlParam->getByName( "System" ) + "'";
         parString[last++] = "productname";
-        parString[last++] = OString('\'') + OString(
+        parString[last++] = "'" + OString(
             pDatabases->getProductName().getStr(),
             pDatabases->getProductName().getLength(),
-            RTL_TEXTENCODING_UTF8 ) + OString('\'');
+            RTL_TEXTENCODING_UTF8 ) + "'";
         parString[last++] = "productversion";
-        parString[last++] = OString('\'') +
+        parString[last++] = "'" +
             OString(  pDatabases->getProductVersion().getStr(),
                           pDatabases->getProductVersion().getLength(),
-                          RTL_TEXTENCODING_UTF8 ) + OString('\'');
+                          RTL_TEXTENCODING_UTF8 ) + "'";
 
         parString[last++] = "imgtheme";
-        parString[last++] = OString('\'') + pDatabases->getImageTheme() + OString('\'');
+        parString[last++] = "'" + pDatabases->getImageTheme() + "'";
         parString[last++] = "hp";
-        parString[last++] = OString('\'') + urlParam->getByName( "HelpPrefix" ) + OString('\'');
+        parString[last++] = "'" + urlParam->getByName( "HelpPrefix" ) + "'";
 
         if( !parString[last-1].isEmpty() )
         {
@@ -801,7 +801,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             OString aExpandedExtensionPath = OUStringToOString( aOUExpandedExtensionPath, osl_getThreadTextEncoding() );
 
             parString[last++] = "ExtensionPath";
-            parString[last++] = OString('\'') + aExpandedExtensionPath + OString('\'');
+            parString[last++] = "'" + aExpandedExtensionPath + "'";
 
             // ExtensionId
             OString aPureExtensionId;
@@ -810,7 +810,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
                 aPureExtensionId = aPath.copy( 0, iSlash );
 
             parString[last++] = "ExtensionId";
-            parString[last++] = OString('\'') + aPureExtensionId + OString('\'');
+            parString[last++] = "'" + aPureExtensionId + "'";
         }
 
         for( int i = 0; i < last; ++i )

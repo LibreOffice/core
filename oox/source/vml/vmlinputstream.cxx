@@ -352,7 +352,7 @@ void InputStream::updateBuffer()
         if( bHasOpeningBracket && !mxTextStrm->isEOF() )
         {
             // read the element text (add the leading opening bracket manually)
-            OString aElement = OString( '<' ) + readToElementEnd();
+            OString aElement = "<" + readToElementEnd();
             // check for CDATA part, starting with '<![CDATA['
             if( aElement.match( gaOpeningCData ) )
             {

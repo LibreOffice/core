@@ -251,7 +251,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             }
             if( cType )
             {
-                sOut += " " OOO_STRING_SVTOOLS_HTML_O_type "=\"" + OString(cType) + "\"";
+                sOut += " " OOO_STRING_SVTOOLS_HTML_O_type "=\"" + OStringChar(cType) + "\"";
             }
 
             sal_uInt16 nStartVal = rNumFormat.GetStart();

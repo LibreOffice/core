@@ -697,7 +697,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         {
             OString sAddPath = getPluginJarPath(pInfo->sVendor, pInfo->sLocation,pInfo->sVersion);
             if (!sAddPath.isEmpty())
-                opt += OString(SAL_PATHSEPARATOR) + sAddPath;
+                opt += OStringChar(SAL_PATHSEPARATOR) + sAddPath;
         }
 #endif
         if (opt == "-Xint") {

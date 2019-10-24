@@ -738,10 +738,10 @@ void ScOpenCLTest::testSystematic()
             double fExcel = rDoc.GetValue(ScAddress(j, nBVertBegin + (i - nAVertBegin), 0));
 
             const OString sFailedMessage =
-                OString(static_cast<sal_Char>('A'+j)) +
+                OStringChar(static_cast<sal_Char>('A'+j)) +
                 OString::number(i+1) +
                 "!=" +
-                OString(static_cast<sal_Char>('A'+j)) +
+                OStringChar(static_cast<sal_Char>('A'+j)) +
                 OString::number(nBVertBegin+(i-nAVertBegin)+1);
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sFailedMessage.getStr(), fExcel, fLibre, 1e-10);
         }

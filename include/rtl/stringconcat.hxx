@@ -147,6 +147,16 @@ struct ToStringHelper< const char[ N ] >
     };
 
 template<>
+struct ToStringHelper<OStringChar>
+    {
+    static std::size_t length(OStringChar) { return 1; }
+    static char* addData(char* buffer, OStringChar data)
+    { return addDataHelper(buffer, &data.c, 1); }
+    static bool const allowOStringConcat = true;
+    static bool const allowOUStringConcat = false;
+    };
+
+template<>
 struct ToStringHelper< const sal_Unicode* >
     {
     static std::size_t length( const sal_Unicode* str ) {

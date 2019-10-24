@@ -1147,7 +1147,7 @@ void Test::testSortRefUpdate4_Impl()
         {
             for (SCCOL nCol=0; nCol < 4; ++nCol)
             {
-                ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(nCol,nRow+1,0), aCheck[nRow][nCol], OString("Wrong formula in " + OString('A'+nCol) + OString::number(nRow+2) + ".").getStr());
+                ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(nCol,nRow+1,0), aCheck[nRow][nCol], OString("Wrong formula in " + OStringChar(char('A'+nCol)) + OString::number(nRow+2) + ".").getStr());
             }
         }
 
@@ -1218,7 +1218,7 @@ void Test::testSortRefUpdate4_Impl()
         {
             for (SCCOL nCol=0; nCol < 4; ++nCol)
             {
-                ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(nCol,nRow+1,0), aCheck[nRow][nCol], OString("Wrong formula in " + OString('A'+nCol) + OString::number(nRow+2) + ".").getStr());
+                ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(nCol,nRow+1,0), aCheck[nRow][nCol], OString("Wrong formula in " + OStringChar(char('A'+nCol)) + OString::number(nRow+2) + ".").getStr());
             }
         }
     }
