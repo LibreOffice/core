@@ -91,17 +91,15 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
     if (!rLinePolyPolygon.count())
         return false;
 
-    if ((pRenderContext->GetAntialiasing() & AntialiasingFlags::EnableB2dDraw)
-        && mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
-        && pRenderContext->GetRasterOp() == RasterOp::OverPaint
-        && (pRenderContext->IsLineColor() || pRenderContext->IsFillColor()))
+    if (B2DPolyPolyLineDrawableHelper::CanAntialiasFilledLine(pRenderContext, mpGraphics))
     {
-        const basegfx::B2DHomMatrix aTransform(pRenderContext->ImplGetDeviceTransformation());
         basegfx::B2DPolyPolygon aB2DPolyPolygon(rLinePolyPolygon);
 
         // ensure closed - maybe assert, hinders buffering
         if (!aB2DPolyPolygon.isClosed())
             aB2DPolyPolygon.setClosed(true);
+
+        const basegfx::B2DHomMatrix aTransform(pRenderContext->ImplGetDeviceTransformation());
 
         if (pRenderContext->IsFillColor()
             && mpGraphics->DrawPolyPolygon(aTransform, aB2DPolyPolygon, 0.0, pRenderContext)

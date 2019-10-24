@@ -149,6 +149,15 @@ bool B2DPolyPolyLineDrawableHelper::CanAntialiasLine(OutputDevice* pRenderContex
            && pRenderContext->GetRasterOp() == RasterOp::OverPaint && pRenderContext->IsLineColor();
 }
 
+bool B2DPolyPolyLineDrawableHelper::CanAntialiasFilledLine(OutputDevice* pRenderContext,
+                                                           SalGraphics* pGraphics)
+{
+    return (pRenderContext->GetAntialiasing() & AntialiasingFlags::EnableB2dDraw)
+           && pGraphics->supportsOperation(OutDevSupportType::B2DDraw)
+           && pRenderContext->GetRasterOp() == RasterOp::OverPaint
+           && (pRenderContext->IsLineColor() || pRenderContext->IsFillColor());
+}
+
 void B2DPolyPolyLineDrawableHelper::DrawPolyPolyLine(
     OutputDevice* pRenderContext, SalGraphics* const pGraphics,
     basegfx::B2DPolyPolygon const& rLinePolyPolygon)

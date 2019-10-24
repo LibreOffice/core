@@ -91,6 +91,7 @@ public:
                                                          LineInfo const& rLineInfo);
 
     static bool CanAntialiasLine(OutputDevice* pRenderContext, SalGraphics* pGraphics);
+    static bool CanAntialiasFilledLine(OutputDevice* pRenderContext, SalGraphics* pGraphics);
 
     static void DrawPolyPolyLine(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
                                  basegfx::B2DPolyPolygon const& rLinePolyPolygon);
