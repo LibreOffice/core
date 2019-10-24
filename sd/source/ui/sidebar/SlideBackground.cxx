@@ -231,6 +231,17 @@ void SlideBackground::Initialize()
     UpdateMarginBox();
 }
 
+boost::property_tree::ptree SlideBackground::DumpAsPropertyTree()
+{
+    if (mpPaperSizeBox->GetSelectedEntryCount() == 0)
+    {
+        mpBindings->Update(SID_ATTR_PAGE_SIZE);
+    }
+
+    boost::property_tree::ptree aTree(Control::DumpAsPropertyTree());
+    return aTree;
+}
+
 void SlideBackground::HandleContextChange(
     const vcl::EnumContext& rContext)
 {
