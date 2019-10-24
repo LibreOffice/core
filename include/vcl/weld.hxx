@@ -27,6 +27,7 @@
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
+#include <memory>
 #include <vector>
 
 namespace com
@@ -1964,7 +1965,7 @@ public:
     virtual ~Builder() {}
 };
 
-class VCL_DLLPUBLIC DialogController
+class VCL_DLLPUBLIC DialogController : public std::enable_shared_from_this<DialogController>
 {
 public:
     virtual Dialog* getDialog() = 0;

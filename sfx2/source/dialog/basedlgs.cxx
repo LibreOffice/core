@@ -183,6 +183,12 @@ bool SfxModelessDialogController::IsClosing() const
 
 void SfxModelessDialogController::EndDialog()
 {
+    if (m_xImpl->bClosing)
+        return;
+    // In the case of async dialogs, the call to SfxDialogController::EndDialog
+    // may delete this object, so keep myself alive for the duration of this
+    // stack frame.
+    auto aHoldSelf = shared_from_this();
     m_xImpl->bClosing = true;
     SfxDialogController::EndDialog();
     if (!m_xImpl)
