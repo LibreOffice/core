@@ -850,7 +850,8 @@ static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                           const char *pFontName,
                           const char *pChar,
                           int* pFontWidth,
-                          int* pFontHeight);
+                          int* pFontHeight,
+                          int pOrientation=0);
 static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart);
 
 static void doc_paintWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, unsigned char* pBuffer,
@@ -4654,7 +4655,8 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
                               const char* pFontName,
                               const char* pChar,
                               int* pFontWidth,
-                              int* pFontHeight)
+                              int* pFontHeight,
+                              int pOrientation)
 {
     comphelper::ProfileZone aZone("doc_renderFont");
 
@@ -4687,6 +4689,7 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
             ::tools::Rectangle aRect;
             vcl::Font aFont(rFontMetric);
             aFont.SetFontSize(Size(0, nDefaultFontSize));
+            aFont.SetOrientation(pOrientation);
             aDevice->SetFont(aFont);
             aDevice->GetTextBoundRect(aRect, aText);
             if (aRect.IsEmpty())
@@ -4734,8 +4737,9 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
                 DrawTextFlags const nStyle =
                         DrawTextFlags::Center
                         | DrawTextFlags::VCenter
+                        | DrawTextFlags::Bottom
                         | DrawTextFlags::MultiLine
-                        | DrawTextFlags::WordBreakHyphenation;// | DrawTextFlags::WordBreak ;
+                        | DrawTextFlags::WordBreak;// | DrawTextFlags::WordBreakHyphenation ;
 
                 aDevice->DrawText(aRect, aText, nStyle);
             }

@@ -260,7 +260,8 @@ struct _LibreOfficeKitDocumentClass
                        const char* pFontName,
                        const char* pChar,
                        int* pFontWidth,
-                       int* pFontHeight);
+                       int* pFontHeight,
+                       int pOrientation);
 
     /// @see lok::Document::getPartHash().
     char* (*getPartHash) (LibreOfficeKitDocument* pThis,

@@ -556,9 +556,10 @@ public:
     unsigned char* renderFont(const char *pFontName,
                           const char *pChar,
                           int *pFontWidth,
-                          int *pFontHeight)
+                          int *pFontHeight,
+                          int pOrientation=0)
     {
-        return mpDoc->pClass->renderFont(mpDoc, pFontName, pChar, pFontWidth, pFontHeight);
+        return mpDoc->pClass->renderFont(mpDoc, pFontName, pChar, pFontWidth, pFontHeight, pOrientation);
     }
 
     /**
