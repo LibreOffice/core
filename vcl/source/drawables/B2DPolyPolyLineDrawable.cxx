@@ -121,9 +121,6 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
                     break;
             }
         }
-
-        if (bSuccess)
-            return true;
     }
 
     // fallback to old polygon drawing if needed
