@@ -144,26 +144,19 @@ void B2DPolyPolyLineDrawableHelper::DrawPolyPolyLine(
 
     for (auto const& rB2DPolygon : rLinePolyPolygon)
     {
-        const bool bPixelSnapHairline(pRenderContext->GetAntialiasing()
-                                      & AntialiasingFlags::PixelSnapHairline);
-
         const bool bTryAA((pRenderContext->GetAntialiasing() & AntialiasingFlags::EnableB2dDraw)
                           && pGraphics->supportsOperation(OutDevSupportType::B2DDraw)
                           && pRenderContext->GetRasterOp() == RasterOp::OverPaint
                           && pRenderContext->IsLineColor());
 
-        bool bDone = false;
-
-        if (bTryAA)
-        {
-            bDone = pGraphics->DrawPolyLine(
-                basegfx::B2DHomMatrix(), rB2DPolygon, 0.0, basegfx::B2DVector(1.0, 1.0),
-                basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
-                basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
-                bPixelSnapHairline, pRenderContext);
-        }
-
-        if (!bDone)
+        if (bTryAA
+            && !pGraphics->DrawPolyLine(
+                   basegfx::B2DHomMatrix(), rB2DPolygon, 0.0, basegfx::B2DVector(1.0, 1.0),
+                   basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
+                   basegfx::deg2rad(
+                       15.0), // not used with B2DLineJoin::NONE, but the correct default
+                   bool(pRenderContext->GetAntialiasing() & AntialiasingFlags::PixelSnapHairline),
+                   pRenderContext))
         {
             tools::Polygon aPolygon(rB2DPolygon);
             pGraphics->DrawPolyLine(aPolygon.GetSize(),
@@ -192,13 +185,9 @@ void B2DPolyPolyLineDrawableHelper::FillPolyPolygon(OutputDevice* pRenderContext
                           && pRenderContext->GetRasterOp() == RasterOp::OverPaint
                           && pRenderContext->IsLineColor());
 
-        bool bDone = false;
-
-        if (bTryAA)
-            bDone = pGraphics->DrawPolyPolygon(basegfx::B2DHomMatrix(), rFillPolyPolygon, 0.0,
-                                               pRenderContext);
-
-        if (!bDone)
+        if (bTryAA
+            && !pGraphics->DrawPolyPolygon(basegfx::B2DHomMatrix(), rFillPolyPolygon, 0.0,
+                                           pRenderContext))
         {
             for (auto const& rB2DPolygon : rFillPolyPolygon)
             {
