@@ -1147,18 +1147,14 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*ri
     if( ! rgdispid)
         return E_POINTER;
 
-    OUString sNames("[");
+    SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::GetIDsOfNames:");
     for (unsigned int i = 0; i < cNames; ++i)
     {
         // Initialise returned rgdispid values.
         rgdispid[i] = DISPID_UNKNOWN;
-        if (i > 0)
-            sNames += ",";
-        sNames += OUStringLiteral("\"") + o3tl::toU(rgszNames[i]) + "\"";
-    }
-    sNames += "]";
 
-    SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::GetIDsOfNames(" << sNames);
+        SAL_INFO("extensions.olebridge", " " << o3tl::toU(rgszNames[i]));
+    }
 
     HRESULT ret = DISP_E_UNKNOWNNAME;
     try
