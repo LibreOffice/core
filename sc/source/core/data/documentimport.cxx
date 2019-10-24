@@ -57,9 +57,9 @@ struct ScDocumentImportImpl
         maListenCxt(rDoc),
         mnDefaultScriptNumeric(SvtScriptType::UNKNOWN) {}
 
-    static bool isValid( size_t nTab, size_t nCol )
+    bool isValid( size_t nTab, size_t nCol )
     {
-        return (nTab <= size_t(MAXTAB) && nCol <= size_t(MAXCOL));
+        return (nTab <= size_t(MAXTAB) && nCol <= size_t(mrDoc.MaxCol()));
     }
 
     ColAttr* getColAttr( size_t nTab, size_t nCol )
@@ -139,7 +139,7 @@ void ScDocumentImport::setCellStyleToSheet(SCTAB nTab, const ScStyleSheet& rStyl
     if (!pTab)
         return;
 
-    pTab->ApplyStyleArea(0, 0, MAXCOL, MAXROW, rStyle);
+    pTab->ApplyStyleArea(0, 0, getDoc().MaxCol(), getDoc().MaxRow(), rStyle);
 }
 
 SCTAB ScDocumentImport::getSheetIndex(const OUString& rName) const

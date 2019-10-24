@@ -1985,7 +1985,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 else
                     SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::End);
 
-                ScDocument::GetSearchAndReplaceStart( *pSearchItem, nCol, nRow );
+                rDoc.GetSearchAndReplaceStart( *pSearchItem, nCol, nRow );
                 if (pSearchItem->GetBackward())
                     nTab = nEndTab;
                 else

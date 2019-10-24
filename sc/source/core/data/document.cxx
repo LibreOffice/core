@@ -523,18 +523,18 @@ bool ScDocument::InsertTab(
             {
                 sc::RefUpdateInsertTabContext aCxt( *this, nPos, 1);
 
-                ScRange aRange( 0,0,nPos, MAXCOL,MAXROW,MAXTAB );
+                ScRange aRange( 0,0,nPos, MaxCol(),MaxRow(),MAXTAB );
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
                 xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
                 if (pRangeName)
                     pRangeName->UpdateInsertTab(aCxt);
                 pDBCollection->UpdateReference(
-                                    URM_INSDEL, 0,0,nPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
+                                    URM_INSDEL, 0,0,nPos, MaxCol(),MaxRow(),MAXTAB, 0,0,1 );
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 if (pDetOpList)
                     pDetOpList->UpdateReference( this, URM_INSDEL, aRange, 0,0,1 );
-                UpdateChartRef( URM_INSDEL, 0,0,nPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
+                UpdateChartRef( URM_INSDEL, 0,0,nPos, MaxCol(),MaxRow(),MAXTAB, 0,0,1 );
                 UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,1 );
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,1 ) );
@@ -610,18 +610,18 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
             if (ValidTab(nPos) && (nPos < nTabCount))
             {
                 sc::RefUpdateInsertTabContext aCxt( *this, nPos, nNewSheets);
-                ScRange aRange( 0,0,nPos, MAXCOL,MAXROW,MAXTAB );
+                ScRange aRange( 0,0,nPos, MaxCol(),MaxRow(),MAXTAB );
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,nNewSheets );
                 xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,nNewSheets );
                 if (pRangeName)
                     pRangeName->UpdateInsertTab(aCxt);
                 pDBCollection->UpdateReference(
-                                    URM_INSDEL, 0,0,nPos, MAXCOL,MAXROW,MAXTAB, 0,0,nNewSheets );
+                                    URM_INSDEL, 0,0,nPos, MaxCol(),MaxRow(),MAXTAB, 0,0,nNewSheets );
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,nNewSheets );
                 if (pDetOpList)
                     pDetOpList->UpdateReference( this, URM_INSDEL, aRange, 0,0,nNewSheets );
-                UpdateChartRef( URM_INSDEL, 0,0,nPos, MAXCOL,MAXROW,MAXTAB, 0,0,nNewSheets );
+                UpdateChartRef( URM_INSDEL, 0,0,nPos, MaxCol(),MaxRow(),MAXTAB, 0,0,nNewSheets );
                 UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0, nNewSheets );
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,nNewSheets ) );
@@ -683,7 +683,7 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                 sc::AutoCalcSwitch aACSwitch(*this, false);
                 sc::RefUpdateDeleteTabContext aCxt( *this, nTab, 1);
 
-                ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
+                ScRange aRange( 0, 0, nTab, MaxCol(), MaxRow(), nTab );
                 DelBroadcastAreasInRange( aRange );
 
                 // #i8180# remove database ranges etc. that are on the deleted tab
@@ -706,12 +706,12 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                 if (pRangeName)
                     pRangeName->UpdateDeleteTab(aCxt);
                 pDBCollection->UpdateReference(
-                                    URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1 );
+                                    URM_INSDEL, 0,0,nTab, MaxCol(),MaxRow(),MAXTAB, 0,0,-1 );
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,-1 );
                 if (pDetOpList)
                     pDetOpList->UpdateReference( this, URM_INSDEL, aRange, 0,0,-1 );
-                UpdateChartRef( URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1 );
+                UpdateChartRef( URM_INSDEL, 0,0,nTab, MaxCol(),MaxRow(),MAXTAB, 0,0,-1 );
                 UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,-1 );
                 if (pValidationList)
                 {
@@ -773,7 +773,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
 
                 for (SCTAB aTab = 0; aTab < nSheets; ++aTab)
                 {
-                    ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTab + aTab );
+                    ScRange aRange( 0, 0, nTab, MaxCol(), MaxRow(), nTab + aTab );
                     DelBroadcastAreasInRange( aRange );
 
                     // #i8180# remove database ranges etc. that are on the deleted tab
@@ -794,16 +794,16 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
 
                 // normal reference update
 
-                ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTabCount - 1 );
+                ScRange aRange( 0, 0, nTab, MaxCol(), MaxRow(), nTabCount - 1 );
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,-1*nSheets );
                 xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,-1*nSheets );
                 pDBCollection->UpdateReference(
-                                    URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1*nSheets );
+                                    URM_INSDEL, 0,0,nTab, MaxCol(),MaxRow(),MAXTAB, 0,0,-1*nSheets );
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,-1*nSheets );
                 if (pDetOpList)
                     pDetOpList->UpdateReference( this, URM_INSDEL, aRange, 0,0,-1*nSheets );
-                UpdateChartRef( URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1*nSheets );
+                UpdateChartRef( URM_INSDEL, 0,0,nTab, MaxCol(),MaxRow(),MAXTAB, 0,0,-1*nSheets );
                 UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,-1*nSheets );
                 if (pValidationList)
                 {
@@ -1128,8 +1128,8 @@ void ScDocument::LimitChartIfAll( ScRangeListRef& rRangeList )
         for ( size_t i = 0, nCount = rRangeList->size(); i < nCount; i++ )
         {
             ScRange aRange( (*rRangeList)[i] );
-            if ( ( aRange.aStart.Col() == 0 && aRange.aEnd.Col() == MAXCOL ) ||
-                 ( aRange.aStart.Row() == 0 && aRange.aEnd.Row() == MAXROW ) )
+            if ( ( aRange.aStart.Col() == 0 && aRange.aEnd.Col() == MaxCol() ) ||
+                 ( aRange.aStart.Row() == 0 && aRange.aEnd.Row() == MaxRow() ) )
             {
                 SCCOL nStartCol = aRange.aStart.Col();
                 SCROW nStartRow = aRange.aStart.Row();
@@ -1273,7 +1273,7 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
         SCTAB nTabRangeStart = nStartTab;
         SCTAB nTabRangeEnd = nEndTab;
         lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) );
-        ScRange aShiftedRange(nStartCol, nStartRow, nTabRangeStart, nEndCol, MAXROW, nTabRangeEnd);
+        ScRange aShiftedRange(nStartCol, nStartRow, nTabRangeStart, nEndCol, MaxRow(), nTabRangeEnd);
         sc::EndListeningContext aEndListenCxt(*this);
 
         std::vector<ScAddress> aGroupPos;
@@ -1320,7 +1320,7 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
         for (i=nStartTab; i<=nEndTab && i < static_cast<SCTAB>(maTabs.size()); i++)
             if (maTabs[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
                 maTabs[i]->UpdateDrawRef( URM_INSDEL,
-                            nStartCol, nStartRow, nStartTab, nEndCol, MAXROW, nEndTab,
+                            nStartCol, nStartRow, nStartTab, nEndCol, MaxRow(), nEndTab,
                             0, static_cast<SCROW>(nSize), 0 );
 
         if ( pChangeTrack && pChangeTrack->IsInDeleteUndo() )
@@ -1389,12 +1389,12 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
                 ScAddress( nEndCol, nStartRow+nSize-1, nTabRangeEnd ) ) );
             UpdateBroadcastAreas( URM_INSDEL, ScRange(
                 ScAddress( nStartCol, nStartRow+nSize, nTabRangeStart ),
-                ScAddress( nEndCol, MAXROW, nTabRangeEnd )), 0, -static_cast<SCROW>(nSize), 0 );
+                ScAddress( nEndCol, MaxRow(), nTabRangeEnd )), 0, -static_cast<SCROW>(nSize), 0 );
         }
         else
             DelBroadcastAreasInRange( ScRange(
                 ScAddress( nStartCol, nStartRow, nTabRangeStart ),
-                ScAddress( nEndCol, MAXROW, nTabRangeEnd ) ) );
+                ScAddress( nEndCol, MaxRow(), nTabRangeEnd ) ) );
     }
     while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
 
@@ -1412,7 +1412,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
         }
         else
         {
-            aCxt.maRange = ScRange( nStartCol, nStartRow+nSize, nTabRangeStart, nEndCol, MAXROW, nTabRangeEnd);
+            aCxt.maRange = ScRange( nStartCol, nStartRow+nSize, nTabRangeStart, nEndCol, MaxRow(), nTabRangeEnd);
         }
         do
         {
@@ -1519,7 +1519,7 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
         {
             UpdateBroadcastAreas( URM_INSDEL, ScRange(
                 ScAddress( nStartCol, nStartRow, nTabRangeStart ),
-                ScAddress( MAXCOL, nEndRow, nTabRangeEnd )), static_cast<SCCOL>(nSize), 0, 0 );
+                ScAddress( MaxCol(), nEndRow, nTabRangeEnd )), static_cast<SCCOL>(nSize), 0, 0 );
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
 
@@ -1527,7 +1527,7 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
 
         sc::RefUpdateContext aCxt(*this);
         aCxt.meMode = URM_INSDEL;
-        aCxt.maRange = ScRange(nStartCol, nStartRow, nTabRangeStart, MAXCOL, nEndRow, nTabRangeEnd);
+        aCxt.maRange = ScRange(nStartCol, nStartRow, nTabRangeStart, MaxCol(), nEndRow, nTabRangeEnd);
         aCxt.mnColDelta = nSize;
         do
         {
@@ -1600,12 +1600,12 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
                 ScAddress( sal::static_int_cast<SCCOL>(nStartCol+nSize-1), nEndRow, nTabRangeEnd ) ) );
             UpdateBroadcastAreas( URM_INSDEL, ScRange(
                 ScAddress( sal::static_int_cast<SCCOL>(nStartCol+nSize), nStartRow, nTabRangeStart ),
-                ScAddress( MAXCOL, nEndRow, nTabRangeEnd )), -static_cast<SCCOL>(nSize), 0, 0 );
+                ScAddress( MaxCol(), nEndRow, nTabRangeEnd )), -static_cast<SCCOL>(nSize), 0, 0 );
         }
         else
             DelBroadcastAreasInRange( ScRange(
                 ScAddress( nStartCol, nStartRow, nTabRangeStart ),
-                ScAddress( MAXCOL, nEndRow, nTabRangeEnd ) ) );
+                ScAddress( MaxCol(), nEndRow, nTabRangeEnd ) ) );
     }
     while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
 
@@ -1624,7 +1624,7 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
         else
         {
             aCxt.maRange = ScRange( sal::static_int_cast<SCCOL>(nStartCol+nSize), nStartRow, nTabRangeStart,
-                    MAXCOL, nEndRow, nTabRangeEnd);
+                    MaxCol(), nEndRow, nTabRangeEnd);
         }
         do
         {
@@ -1830,13 +1830,13 @@ bool ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )
 
     if ( bInsCol || bDelCol )
     {
-        aColRange.aEnd.SetCol(MAXCOL);
+        aColRange.aEnd.SetCol(MaxCol());
         if ( HasPartOfMerged(aColRange) )
             bOk = false;
     }
     if ( bInsRow || bDelRow )
     {
-        aRowRange.aEnd.SetRow(MAXROW);
+        aRowRange.aEnd.SetRow(MaxRow());
         if ( HasPartOfMerged(aRowRange) )
             bOk = false;
     }
@@ -2082,7 +2082,7 @@ void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         sc::AutoCalcSwitch aACSwitch(rDestDoc, false); // avoid multiple calculations
 
         if (nTab1 > 0)
-            CopyToDocument(0, 0, 0, MAXCOL, MAXROW, nTab1-1, InsertDeleteFlags::FORMULA, false, rDestDoc);
+            CopyToDocument(0, 0, 0, MaxCol(), MaxRow(), nTab1-1, InsertDeleteFlags::FORMULA, false, rDestDoc);
 
         sc::CopyToDocContext aCxt(rDestDoc);
         assert( nTab2 < static_cast<SCTAB>(maTabs.size()) && nTab2 < static_cast<SCTAB>(rDestDoc.maTabs.size()));
@@ -2094,7 +2094,7 @@ void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         }
 
         if (nTab2 < MAXTAB)
-            CopyToDocument(0, 0, nTab2+1, MAXCOL, MAXROW, MAXTAB, InsertDeleteFlags::FORMULA, false, rDestDoc);
+            CopyToDocument(0, 0, nTab2+1, MaxCol(), MaxRow(), MAXTAB, InsertDeleteFlags::FORMULA, false, rDestDoc);
     }
 }
 
@@ -2142,7 +2142,7 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
 
     sc::CopyToDocContext aCxt(rDestDoc);
     if (nTab1 > 0)
-        CopyToDocument(0, 0, 0, MAXCOL, MAXROW, nTab1-1, InsertDeleteFlags::FORMULA, false, rDestDoc);
+        CopyToDocument(0, 0, 0, MaxCol(), MaxRow(), nTab1-1, InsertDeleteFlags::FORMULA, false, rDestDoc);
 
     SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), rDestDoc.maTabs.size()));
     for (SCTAB i = nTab1; i <= nTab2 && i < nMinSizeBothTabs; i++)
@@ -2154,7 +2154,7 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
     }
 
     if (nTab2 < static_cast<SCTAB>(maTabs.size()))
-        CopyToDocument(0, 0 , nTab2+1, MAXCOL, MAXROW, maTabs.size(), InsertDeleteFlags::FORMULA, false, rDestDoc);
+        CopyToDocument(0, 0 , nTab2+1, MaxCol(), MaxRow(), maTabs.size(), InsertDeleteFlags::FORMULA, false, rDestDoc);
 }
 
 void ScDocument::CopyToClip(const ScClipParam& rClipParam,
@@ -3792,7 +3792,7 @@ bool ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
         if( pData && pData->HasSelectionList() )
             return true;
     }
-    return HasStringCells( ScRange( nCol, 0, nTab, nCol, MAXROW, nTab ) );
+    return HasStringCells( ScRange( nCol, 0, nTab, nCol, MaxRow(), nTab ) );
 }
 
 bool ScDocument::HasValidationData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
@@ -4276,7 +4276,7 @@ void ScDocument::UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkDa
     for ( SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()); nTab++ )
         if ( maTabs[nTab] && ( !pTabMark || pTabMark->GetTableSelect(nTab) ) )
         {
-            maTabs[nTab]->SetOptimalHeightOnly(rCxt, 0, MAXROW, &aProgress, nProgressStart);
+            maTabs[nTab]->SetOptimalHeightOnly(rCxt, 0, MaxRow(), &aProgress, nProgressStart);
             maTabs[nTab]->SetDrawPageSize();
             nProgressStart += maTabs[nTab]->GetWeightedCount();
         }
@@ -4585,14 +4585,14 @@ SCCOL ScDocument::GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const
     {
         CRFlags nStartFlags = maTabs[nTab]->GetColFlags(nStart);
         sal_uInt16 nStartWidth = maTabs[nTab]->GetOriginalWidth(nStart);
-        for (SCCOL nCol : maTabs[nTab]->GetColumnsRange( nStart + 1, MAXCOL))
+        for (SCCOL nCol : maTabs[nTab]->GetColumnsRange( nStart + 1, MaxCol()))
         {
             if (((nStartFlags & CRFlags::ManualBreak) != (maTabs[nTab]->GetColFlags(nCol) & CRFlags::ManualBreak)) ||
                 (nStartWidth != maTabs[nTab]->GetOriginalWidth(nCol)) ||
                 ((nStartFlags & CRFlags::Hidden) != (maTabs[nTab]->GetColFlags(nCol) & CRFlags::Hidden)) )
                 return nCol;
         }
-        return MAXCOL+1;
+        return MaxCol()+1;
     }
     return 0;
 }
@@ -4620,7 +4620,7 @@ SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart) const
     bool bStartHidden = bHidden = maTabs[nTab]->RowHidden( nStart, nullptr, &nHiddenEndRow);
     sal_uInt16 nStartHeight = nHeight = maTabs[nTab]->GetRowHeight( nStart, nullptr, &nHeightEndRow, false);
     SCROW nRow;
-    while ((nRow = std::min( nHiddenEndRow, std::min( nFlagsEndRow, nHeightEndRow)) + 1) <= MAXROW)
+    while ((nRow = std::min( nHiddenEndRow, std::min( nFlagsEndRow, nHeightEndRow)) + 1) <= MaxRow())
     {
         if (nFlagsEndRow < nRow)
             nFlags = pRowFlagsArray->GetValue( nRow, nIndex, nFlagsEndRow);
@@ -4636,7 +4636,7 @@ SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart) const
             return nRow;
     }
 
-    return MAXROW+1;
+    return MaxRow()+1;
 }
 
 void ScDocument::GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& nDefault)
@@ -5254,13 +5254,13 @@ void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
         if ( ScHasPriority( pOther, pTopLine ) )
             pTopLine = pOther;
     }
-    if ( nCol < MAXCOL )
+    if ( nCol < MaxCol() )
     {
         const SvxBorderLine* pOther = GetEffItem( nCol+1, nRow, nTab, ATTR_BORDER )->GetLeft();
         if ( ScHasPriority( pOther, pRightLine ) )
             pRightLine = pOther;
     }
-    if ( nRow < MAXROW )
+    if ( nRow < MaxRow() )
     {
         const SvxBorderLine* pOther = GetEffItem( nCol, nRow+1, nTab, ATTR_BORDER )->GetTop();
         if ( ScHasPriority( pOther, pBottomLine ) )
@@ -5492,7 +5492,7 @@ void ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                     bHorOverlapped = GetDefPattern()->GetItem(ATTR_MERGE_FLAG).IsHorOverlapped();
                 if ( bHorOverlapped )
                 {
-                    SCROW nEndRowSeg = (pAttrArray->Count()) ? pAttrArray->mvData[nIndex].nEndRow : MAXROW;
+                    SCROW nEndRowSeg = (pAttrArray->Count()) ? pAttrArray->mvData[nIndex].nEndRow : MaxRow();
                     SCROW nLoopEndRow = std::min( nEndRow, nEndRowSeg );
                     for (SCROW nAttrRow = nAttrPos; nAttrRow <= nLoopEndRow; nAttrRow++)
                     {
@@ -5510,7 +5510,7 @@ void ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                     ++nIndex;
                 }
                 else
-                    nAttrPos = MAXROW + 1;
+                    nAttrPos = MaxRow() + 1;
             }
         }
     }
@@ -6666,7 +6666,7 @@ ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
 {
     for (size_t nTab = 0; nTab < maTabs.size(); ++nTab)
     {
-        for (SCCOL nCol : GetColumnsRange(nTab, 0, MAXCOL))
+        for (SCCOL nCol : GetColumnsRange(nTab, 0, MaxCol()))
         {
             size_t nColNoteCount = GetNoteCount(nTab, nCol);
             if (!nColNoteCount)
@@ -6693,7 +6693,7 @@ ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
 
 ScAddress ScDocument::GetNotePosition( size_t nIndex, SCTAB nTab ) const
 {
-    for (SCCOL nCol : GetColumnsRange(nTab, 0, MAXCOL))
+    for (SCCOL nCol : GetColumnsRange(nTab, 0, MaxCol()))
     {
         size_t nColNoteCount = GetNoteCount(nTab, nCol);
         if (!nColNoteCount)
