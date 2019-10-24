@@ -66,6 +66,10 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
                                    basegfx::B2DPolyPolygon const& rLinePolyPolygon,
                                    LineInfo const& rLineInfo) const
 {
+    // Do not paint empty PolyPolygons
+    if (!rLinePolyPolygon.count())
+        return false;
+
     basegfx::B2DPolyPolygon aLinePolyPolygon
         = B2DPolyPolyLineDrawableHelper::ApplyLineDashing(rLinePolyPolygon, rLineInfo);
     basegfx::B2DPolyPolygon aFillPolyPolygon
