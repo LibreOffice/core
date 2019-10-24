@@ -556,9 +556,13 @@ public:
     unsigned char* renderFont(const char *pFontName,
                           const char *pChar,
                           int *pFontWidth,
-                          int *pFontHeight)
+                          int *pFontHeight,
+                          int pOrientation=0)
     {
-        return mpDoc->pClass->renderFont(mpDoc, pFontName, pChar, pFontWidth, pFontHeight);
+        if (LIBREOFFICEKIT_DOCUMENT_HAS(mpDoc, renderFontOrientation))
+            return mpDoc->pClass->renderFontOrientation(mpDoc, pFontName, pChar, pFontWidth, pFontHeight, pOrientation);
+        else
+            return mpDoc->pClass->renderFont(mpDoc, pFontName, pChar, pFontWidth, pFontHeight);
     }
 
     /**
