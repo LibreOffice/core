@@ -370,21 +370,42 @@ public:
     virtual void setAllocation(const Size &rAllocation) override;
 };
 
-class VCL_DLLPUBLIC VclVPaned : public VclContainer
+class VCL_DLLPUBLIC VclPaned : public VclContainer
 {
-private:
+protected:
     VclPtr<Splitter> m_pSplitter;
     long m_nPosition;
-    DECL_LINK(SplitHdl, Splitter*, void);
-    void arrange(const Size& rAllocation, long nFirstHeight, long nSecondHeight);
+
+    VclPaned(vcl::Window *pParent, bool bVertical);
 public:
-    VclVPaned(vcl::Window *pParent);
-    virtual ~VclVPaned() override { disposeOnce(); }
+    virtual ~VclPaned() override { disposeOnce(); }
     virtual void dispose() override;
-    virtual Size calculateRequisition() const override;
-    virtual void setAllocation(const Size &rAllocation) override;
     long get_position() const { return m_nPosition; }
     void set_position(long nPosition) { m_nPosition = nPosition; }
+};
+
+class VCL_DLLPUBLIC VclVPaned : public VclPaned
+{
+private:
+    DECL_LINK(SplitHdl, Splitter*, void);
+    void arrange(const Size& rAllocation, long nFirstHeight, long nSecondHeight);
+
+public:
+    VclVPaned(vcl::Window *pParent);
+    virtual Size calculateRequisition() const override;
+    virtual void setAllocation(const Size &rAllocation) override;
+};
+
+class VCL_DLLPUBLIC VclHPaned : public VclPaned
+{
+private:
+    DECL_LINK(SplitHdl, Splitter*, void);
+    void arrange(const Size& rAllocation, long nFirstHeight, long nSecondHeight);
+
+public:
+    VclHPaned(vcl::Window *pParent);
+    virtual Size calculateRequisition() const override;
+    virtual void setAllocation(const Size &rAllocation) override;
 };
 
 class VCL_DLLPUBLIC VclFrame : public VclBin

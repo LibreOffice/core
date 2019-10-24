@@ -1783,8 +1783,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     else if (name == "GtkPaned")
     {
         bVertical = extractOrientation(rMap);
-        assert(bVertical && "hori not implemented, shouldn't be hard though");
-        xWindow = VclPtr<VclVPaned>::Create(pParent);
+        if (bVertical)
+            xWindow = VclPtr<VclVPaned>::Create(pParent);
+        else
+            xWindow = VclPtr<VclHPaned>::Create(pParent);
     }
     else if (name == "GtkHBox")
         xWindow = VclPtr<VclHBox>::Create(pParent);
