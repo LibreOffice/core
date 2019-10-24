@@ -120,9 +120,12 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
         // these are always weirdly indented
         if (isa<LabelStmt>(stmt))
             continue;
-        // At least until Clang 9.0.0, getBeginLoc of a VarDecl DeclStmt with an UnusedAttr points
-        // after the attr (and getLocation of the attr would point at "maybe_unused", not at the
-        // leading "[["), so just ignore those at least for now:
+#if CLANG_VERSION < 100000
+        // Before
+        // <https://github.com/llvm/llvm-project/commit/dc3957ec215dd17b8d293461f18696566637a6cd>
+        // "Include leading attributes in DeclStmt's SourceRange", getBeginLoc of a VarDecl DeclStmt
+        // with an UnusedAttr pointed after the attr (and getLocation of the attr pointed at
+        // "maybe_unused", not at the leading "[["), so just ignore those in old compiler versions:
         if (auto const declStmt = dyn_cast<DeclStmt>(stmt))
         {
             if (declStmt->decl_begin() != declStmt->decl_end())
@@ -136,6 +139,7 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
                 }
             }
         }
+#endif
 
         auto stmtLoc = compat::getBeginLoc(stmt);
 
