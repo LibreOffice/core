@@ -77,6 +77,7 @@ public:
         const bool bIsEnabled) override;
     virtual void HandleContextChange(
         const vcl::EnumContext& rContext) override;
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 
 private:
 
