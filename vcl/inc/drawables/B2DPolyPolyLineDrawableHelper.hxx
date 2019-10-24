@@ -103,6 +103,9 @@ public:
 
     static void DrawPolyPolygonFallback(OutputDevice* pRenderContext,
                                         basegfx::B2DPolyPolygon const& rLinePolyPolygon);
+
+    static void DrawPolyLineFallback(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
+                                     basegfx::B2DPolygon const& rB2DPolygon);
 };
 
 } // namespace vcl

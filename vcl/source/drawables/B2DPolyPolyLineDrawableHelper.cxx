@@ -158,13 +158,17 @@ void B2DPolyPolyLineDrawableHelper::DrawPolyPolyLine(
     for (auto const& rB2DPolygon : rLinePolyPolygon)
     {
         if (!DrawPolyLine(pRenderContext, pGraphics, rB2DPolygon))
-        {
-            tools::Polygon aPolygon(rB2DPolygon);
-            pGraphics->DrawPolyLine(aPolygon.GetSize(),
-                                    reinterpret_cast<SalPoint*>(aPolygon.GetPointAry()),
-                                    pRenderContext);
-        }
+            DrawPolyLineFallback(pRenderContext, pGraphics, rB2DPolygon);
     }
+}
+
+void B2DPolyPolyLineDrawableHelper::DrawPolyLineFallback(OutputDevice* pRenderContext,
+                                                         SalGraphics* const pGraphics,
+                                                         basegfx::B2DPolygon const& rB2DPolygon)
+{
+    tools::Polygon aPolygon(rB2DPolygon);
+    pGraphics->DrawPolyLine(aPolygon.GetSize(), reinterpret_cast<SalPoint*>(aPolygon.GetPointAry()),
+                            pRenderContext);
 }
 
 bool B2DPolyPolyLineDrawableHelper::DrawPolyLine(OutputDevice* pRenderContext,
