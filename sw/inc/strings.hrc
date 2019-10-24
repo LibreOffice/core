@@ -351,7 +351,7 @@
 #define STR_EVENT_FRM_MOVE                      NC_("STR_EVENT_FRM_MOVE", "Move frame")
 #define STR_CONTENT_TYPE_OUTLINE                NC_("STR_CONTENT_TYPE_OUTLINE", "Headings")
 #define STR_CONTENT_TYPE_TABLE                  NC_("STR_CONTENT_TYPE_TABLE", "Tables")
-#define STR_CONTENT_TYPE_FRAME                  NC_("STR_CONTENT_TYPE_FRAME", "Text frames")
+#define STR_CONTENT_TYPE_FRAME                  NC_("STR_CONTENT_TYPE_FRAME", "Frames")
 #define STR_CONTENT_TYPE_GRAPHIC                NC_("STR_CONTENT_TYPE_GRAPHIC", "Images")
 #define STR_CONTENT_TYPE_OLE                    NC_("STR_CONTENT_TYPE_OLE", "OLE objects")
 #define STR_CONTENT_TYPE_BOOKMARK               NC_("STR_CONTENT_TYPE_BOOKMARK", "Bookmarks")
