@@ -206,6 +206,8 @@ protected:
     void checkSurface();
     void resetSurface();
 
+    void privateDrawAlphaRect(long nX, long nY, long nWidth, long nHeight, double nTransparency);
+
     void setProvider(SalGeometryProvider* provider) { mProvider = provider; }
 
     bool isOffscreen() const { return mProvider == nullptr || mProvider->IsOffScreen(); }
