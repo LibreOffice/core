@@ -40,24 +40,24 @@ bool B2DPolyPolyLineDrawableHelper::CanApplyDashes(basegfx::B2DPolyPolygon const
     return (rLineInfo.GetStyle() == LineStyle::Dash && rLinePolyPolygon.count());
 }
 
+static void PushDashDotElements(::std::vector<double>& fDotDashArray, sal_uInt16 nElements,
+                                double fLen, double fDistance)
+{
+    for (sal_uInt16 i(0); i < nElements; i++)
+    {
+        fDotDashArray.push_back(fLen);
+        fDotDashArray.push_back(fDistance);
+    }
+}
+
 ::std::vector<double> B2DPolyPolyLineDrawableHelper::GenerateDotDashArray(LineInfo const& rLineInfo)
 {
     ::std::vector<double> fDotDashArray;
-    const double fDashLen(rLineInfo.GetDashLen());
-    const double fDotLen(rLineInfo.GetDotLen());
-    const double fDistance(rLineInfo.GetDistance());
 
-    for (sal_uInt16 a(0); a < rLineInfo.GetDashCount(); a++)
-    {
-        fDotDashArray.push_back(fDashLen);
-        fDotDashArray.push_back(fDistance);
-    }
-
-    for (sal_uInt16 b(0); b < rLineInfo.GetDotCount(); b++)
-    {
-        fDotDashArray.push_back(fDotLen);
-        fDotDashArray.push_back(fDistance);
-    }
+    PushDashDotElements(fDotDashArray, rLineInfo.GetDashCount(), rLineInfo.GetDashLen(),
+                        rLineInfo.GetDistance());
+    PushDashDotElements(fDotDashArray, rLineInfo.GetDotCount(), rLineInfo.GetDotLen(),
+                        rLineInfo.GetDistance());
 
     return fDotDashArray;
 }
@@ -173,12 +173,11 @@ bool B2DPolyPolyLineDrawableHelper::DrawPolyLine(OutputDevice* pRenderContext,
 {
     return CanAntialiasLine(pRenderContext, pGraphics)
            && pGraphics->DrawPolyLine(
-                  basegfx::B2DHomMatrix(), rB2DPolygon, 0.0, basegfx::B2DVector(1.0, 1.0),
-                  basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
-                  basegfx::deg2rad(
-                      15.0), // not used with B2DLineJoin::NONE, but the correct default
-                  bool(pRenderContext->GetAntialiasing() & AntialiasingFlags::PixelSnapHairline),
-                  pRenderContext);
+               basegfx::B2DHomMatrix(), rB2DPolygon, 0.0, basegfx::B2DVector(1.0, 1.0),
+               basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
+               basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
+               bool(pRenderContext->GetAntialiasing() & AntialiasingFlags::PixelSnapHairline),
+               pRenderContext);
 }
 
 void B2DPolyPolyLineDrawableHelper::FillPolyPolygon(OutputDevice* pRenderContext,
