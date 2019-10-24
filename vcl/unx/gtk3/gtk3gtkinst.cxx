@@ -6850,6 +6850,13 @@ public:
         : GtkInstanceWidget(GTK_WIDGET(pToolbar), pBuilder, bTakeOwnership)
         , m_pToolbar(pToolbar)
     {
+        GtkStyleContext *pStyleContext = gtk_widget_get_style_context(GTK_WIDGET(pToolbar));
+        GtkCssProvider *pProvider = gtk_css_provider_new();
+        static const gchar data[] = "* { -GtkToolbar-button-relief: normal; }";
+        gtk_css_provider_load_from_data(pProvider, data, -1, nullptr);
+        gtk_style_context_add_provider(pStyleContext, GTK_STYLE_PROVIDER(pProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
         gtk_container_foreach(GTK_CONTAINER(pToolbar), collect, this);
     }
 
