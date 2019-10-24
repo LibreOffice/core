@@ -52,6 +52,8 @@ public:
 
     static bool DashDotArrayHasLength(::std::vector<double> const& rDotDashArray);
 
+    static ::std::vector<double> GenerateDotDashArray(LineInfo const& rLineInfo);
+
     static basegfx::B2DPolyPolygon ApplyLineDashing(basegfx::B2DPolyPolygon const& rLinePolyPolygon,
                                                     LineInfo const& rLineInfo);
 
@@ -67,7 +69,8 @@ public:
     static void FillPolyPolygon(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
                                 basegfx::B2DPolyPolygon const& rFillPolyPolygon);
 
-    static ::std::vector<double> GenerateDotDashArray(LineInfo const& rLineInfo);
+    static void DrawPolygonFallback(OutputDevice* pRenderContext,
+                                    basegfx::B2DPolyPolygon const& rLinePolyPolygon);
 };
 
 } // namespace vcl

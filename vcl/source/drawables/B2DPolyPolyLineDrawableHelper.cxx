@@ -24,6 +24,7 @@
 
 #include <vcl/lineinfo.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/drawables/PolyPolygonDrawable.hxx>
 
 #include <salgdi.hxx>
 #include <drawables/B2DPolyPolyLineDrawableHelper.hxx>
@@ -216,6 +217,16 @@ void B2DPolyPolyLineDrawableHelper::FillPolyPolygon(OutputDevice* pRenderContext
         pRenderContext->SetFillColor(aOldFillColor);
         pRenderContext->SetLineColor(aOldLineColor);
     }
+}
+
+void B2DPolyPolyLineDrawableHelper::DrawPolygonFallback(
+    OutputDevice* pRenderContext, basegfx::B2DPolyPolygon const& rLinePolyPolygon)
+{
+    const tools::PolyPolygon aToolsPolyPolygon(rLinePolyPolygon);
+    const tools::PolyPolygon aPixelPolyPolygon
+        = pRenderContext->ImplLogicToDevicePixel(aToolsPolyPolygon);
+
+    pRenderContext->Draw(PolyPolygonDrawable(aPixelPolyPolygon.Count(), aPixelPolyPolygon));
 }
 
 } // namespace vcl

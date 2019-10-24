@@ -121,12 +121,8 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
         }
     }
 
-    // fallback to old polygon drawing if needed
-    const tools::PolyPolygon aToolsPolyPolygon(rLinePolyPolygon);
-    const tools::PolyPolygon aPixelPolyPolygon
-        = pRenderContext->ImplLogicToDevicePixel(aToolsPolyPolygon);
-    pRenderContext->Draw(PolyPolygonDrawable(aPixelPolyPolygon.Count(), aPixelPolyPolygon));
-
+    B2DPolyPolyLineDrawableHelper::DrawPolygonFallback(pRenderContext,
+                                                       rLinePolyPolygon);
     return true;
 }
 
