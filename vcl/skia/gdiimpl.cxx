@@ -797,10 +797,10 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
     SkCanvas canvas(tmpBitmap);
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
+    canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rSourceBitmap).GetSkBitmap(), 0, 0, &paint);
+    paint.setBlendMode(SkBlendMode::kDstOut);
     canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rAlphaBitmap).GetAlphaSkBitmap(), 0, 0,
                       &paint);
-    paint.setBlendMode(SkBlendMode::kSrcIn);
-    canvas.drawBitmap(static_cast<const SkiaSalBitmap&>(rSourceBitmap).GetSkBitmap(), 0, 0, &paint);
     drawBitmap(rPosAry, tmpBitmap);
     return true;
 }
