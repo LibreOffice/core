@@ -1859,7 +1859,12 @@ void SwFootnoteBossFrame::CollectFootnotes_( const SwContentFrame*   _pRef,
 
         // OD 03.04.2003 #108446# - determine, if found footnote has to be collected.
         bool bCollectFoundFootnote = false;
-        if ( _pFootnote->GetRef() == _pRef && !_pFootnote->GetAttr()->GetFootnote().IsEndNote() )
+        // Ignore endnotes which are on a separate endnote page.
+        bool bEndNote = _pFootnote->GetAttr()->GetFootnote().IsEndNote();
+        const IDocumentSettingAccess& rSettings
+            = _pFootnote->GetAttrSet()->GetDoc()->getIDocumentSettingAccess();
+        bool bContinuousEndnotes = rSettings.get(DocumentSettingId::CONTINUOUS_ENDNOTES);
+        if (_pFootnote->GetRef() == _pRef && (!bEndNote || bContinuousEndnotes))
         {
             if ( _bCollectOnlyPreviousFootnotes )
             {
