@@ -43,16 +43,6 @@ bool SwFormatFollowTextFlow::PutValue(const css::uno::Any& rVal, sal_uInt8 aInt)
             }
             break;
         }
-        case MID_FTF_LAYOUT_IN_CELL :
-        {
-            bool bTheValue = bool();
-            if (rVal >>= bTheValue)
-            {
-                mbLayoutInCell = bTheValue;
-                return true;
-            }
-            break;
-        }
     }
     SAL_WARN("sw.ui", "SfxBoolItem::PutValue(): Wrong type");
     return false;
@@ -66,11 +56,6 @@ bool SwFormatFollowTextFlow::QueryValue(css::uno::Any& rVal, sal_uInt8 aInt) con
         case MID_FOLLOW_TEXT_FLOW :
         {
             rVal <<= GetValue();
-            break;
-        }
-        case MID_FTF_LAYOUT_IN_CELL :
-        {
-            rVal <<= GetLayoutInCell();
             break;
         }
     }

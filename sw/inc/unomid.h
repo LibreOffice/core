@@ -150,7 +150,6 @@
 
 // SwFormatFollowTextFlow
 #define MID_FOLLOW_TEXT_FLOW    0
-#define MID_FTF_LAYOUT_IN_CELL  1
 
 #endif
 
