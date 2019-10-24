@@ -78,7 +78,8 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
     DisableMetafileProcessing aDisableMtf(pRenderContext);
 
     B2DPolyPolyLineDrawableHelper::DrawPolyPolyLine(pRenderContext, mpGraphics, rLinePolyPolygon);
-    B2DPolyPolyLineDrawableHelper::FillPolyPolygon(pRenderContext, mpGraphics, aFillPolyPolygon);
+    if (aFillPolyPolygon.count())
+        B2DPolyPolyLineDrawableHelper::FillPolyPolygon(pRenderContext, mpGraphics, aFillPolyPolygon);
 
     return true;
 }

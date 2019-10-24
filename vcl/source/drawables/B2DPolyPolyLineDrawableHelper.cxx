@@ -74,6 +74,8 @@ basegfx::B2DPolyPolygon
 B2DPolyPolyLineDrawableHelper::ApplyLineDashing(basegfx::B2DPolyPolygon const& rLinePolyPolygon,
                                                 LineInfo const& rLineInfo)
 {
+    assert(rLinePolyPolygon.count());
+
     basegfx::B2DPolyPolygon aLinePolyPolygon(rLinePolyPolygon);
 
     if (CanApplyDashes(aLinePolyPolygon, rLineInfo))
@@ -108,6 +110,8 @@ basegfx::B2DPolyPolygon
 B2DPolyPolyLineDrawableHelper::CreateFillPolyPolygon(basegfx::B2DPolyPolygon& rLinePolyPolygon,
                                                      LineInfo const& rLineInfo)
 {
+    assert(rLinePolyPolygon.count());
+
     basegfx::B2DPolyPolygon aFillPolyPolygon;
 
     if (UseLineWidth(rLinePolyPolygon, rLineInfo))
