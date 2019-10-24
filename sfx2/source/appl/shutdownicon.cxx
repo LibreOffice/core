@@ -616,18 +616,16 @@ bool ShutdownIcon::IsQuickstarterInstalled()
 
 
 #ifdef ENABLE_QUICKSTART_APPLET
-#ifndef MACOSX
+#ifdef _WIN32
 OUString ShutdownIcon::getShortcutName()
 {
-#ifdef _WIN32
     OUString aShortcutName(SfxResId(STR_QUICKSTART_LNKNAME) + ".lnk");
 
     OUString aShortcut(GetAutostartFolderNameW32());
     aShortcut += "\\" + aShortcutName;
     return aShortcut;
-#endif // _WIN32
 }
-#endif
+#endif // _WIN32
 #endif
 
 bool ShutdownIcon::GetAutostart( )
