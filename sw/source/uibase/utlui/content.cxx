@@ -3121,6 +3121,11 @@ void SwContentTree::KeyInput(const KeyEvent& rEvent)
         }
 
     }
+    else if (m_bIsRoot && m_nRootType == ContentTypeId::OUTLINE && aCode.GetCode() == KEY_LEFT)
+    {
+        SelectAll(false);
+        SvTreeListBox::KeyInput(rEvent);
+    }
     else
         SvTreeListBox::KeyInput(rEvent);
 
