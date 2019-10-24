@@ -6370,10 +6370,7 @@ private:
         if (!m_pImage)
         {
             m_pImage = GTK_IMAGE(gtk_image_new());
-            GtkStyleContext *pContext = gtk_widget_get_style_context(GTK_WIDGET(m_pMenuButton));
-            gint nImageSpacing(0);
-            gtk_style_context_get_style(pContext, "image-spacing", &nImageSpacing, nullptr);
-            gtk_box_pack_start(m_pBox, GTK_WIDGET(m_pImage), false, false, nImageSpacing);
+            gtk_box_pack_start(m_pBox, GTK_WIDGET(m_pImage), false, false, 0);
             gtk_box_reorder_child(m_pBox, GTK_WIDGET(m_pImage), 0);
             gtk_widget_show(GTK_WIDGET(m_pImage));
         }
@@ -6395,7 +6392,10 @@ public:
         g_object_ref(m_pLabel);
         gtk_container_remove(GTK_CONTAINER(m_pMenuButton), m_pLabel);
 
-        m_pBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
+        gint nImageSpacing(2);
+        GtkStyleContext *pContext = gtk_widget_get_style_context(GTK_WIDGET(m_pMenuButton));
+        gtk_style_context_get_style(pContext, "image-spacing", &nImageSpacing, nullptr);
+        m_pBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, nImageSpacing));
 
         gtk_box_pack_start(m_pBox, m_pLabel, false, false, 0);
         g_object_unref(m_pLabel);
