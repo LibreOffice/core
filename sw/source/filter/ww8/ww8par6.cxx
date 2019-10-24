@@ -2423,7 +2423,7 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
         if (bStealAttr)
             m_xCtrlStck->StealAttr(rPam.GetPoint()->nNode);
 
-        if (m_pLastAnchorPos || m_pPreviousNode)
+        if (m_pLastAnchorPos || m_pPreviousNode || (m_xSFlyPara && m_xSFlyPara->xMainTextPos))
         {
             SwNodeIndex aToBeJoined(aPref, 1);
 
@@ -2447,6 +2447,15 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
                 SwNodeIndex aDropCharPos(*m_pPreviousNode);
                 if (aDropCharPos == aToBeJoined)
                     m_pPreviousNode = nullptr;
+            }
+
+            if (m_xSFlyPara)
+            {
+                // If an open apo pos is here, then clear it before
+                // JoinNext destroys it
+                SwNodeIndex aOpenApoPos(m_xSFlyPara->xMainTextPos->nNode);
+                if (aOpenApoPos == aToBeJoined)
+                    m_xSFlyPara->xMainTextPos.reset();
             }
         }
 
