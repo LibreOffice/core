@@ -433,7 +433,7 @@ SCROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData&
 
     if (!bFound)
         return -1;
-    else if (nTop==0 && nBottom==MAXROW)
+    else if (nTop==0 && nBottom==GetDoc()->MaxRow())
         return 0;
     else
         return nBottom;
@@ -836,7 +836,7 @@ bool ScColumn::TestInsertRow( SCROW nStartRow, SCSIZE nSize ) const
     // See if there would be any non-empty cell that gets pushed out.
 
     // Find the position of the last non-empty cell below nStartRow.
-    size_t nLastNonEmptyRow = MAXROW;
+    size_t nLastNonEmptyRow = GetDoc()->MaxRow();
     sc::CellStoreType::const_reverse_iterator it = maCells.rbegin();
     if (it->type == sc::element_type_empty)
         nLastNonEmptyRow -= it->size;
@@ -845,7 +845,7 @@ bool ScColumn::TestInsertRow( SCROW nStartRow, SCSIZE nSize ) const
         // No cells would get pushed out.
         return pAttrArray->TestInsertRow(nSize);
 
-    if (nLastNonEmptyRow + nSize > static_cast<size_t>(MAXROW))
+    if (nLastNonEmptyRow + nSize > static_cast<size_t>(GetDoc()->MaxRow()))
         // At least one cell would get pushed out. Not good.
         return false;
 
@@ -878,6 +878,7 @@ namespace {
 
 class CopyToClipHandler
 {
+    const ScDocument& mrSrcDoc;
     const ScColumn& mrSrcCol;
     ScColumn& mrDestCol;
     sc::ColumnBlockPosition maDestPos;
@@ -891,8 +892,8 @@ class CopyToClipHandler
     }
 
 public:
-    CopyToClipHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos) :
-        mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos)
+    CopyToClipHandler(const ScDocument& rSrcDoc, const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos) :
+        mrSrcDoc(rSrcDoc), mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos)
     {
         if (mpDestPos)
             maDestPos = *mpDestPos;
@@ -982,7 +983,7 @@ public:
                 maDestPos.miCellPos = aPos.first;
                 sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
                 size_t nLastRow = nTopRow + nDataSize;
-                if (nLastRow < static_cast<size_t>(MAXROW))
+                if (nLastRow < static_cast<size_t>(mrSrcDoc.MaxRow()))
                 {
                     aPos = rDestCells.position(maDestPos.miCellPos, nLastRow+1);
                     sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
@@ -1034,7 +1035,7 @@ void ScColumn::CopyToClip(
                           rCxt.isKeepScenarioFlags() ? (ScMF::All & ~ScMF::Scenario) : ScMF::All );
 
     {
-        CopyToClipHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol));
+        CopyToClipHandler aFunc(*GetDoc(), *this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol));
         sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
     }
 
@@ -1749,8 +1750,8 @@ void ScColumn::UndoToColumn(
 
     CopyToColumn(rCxt, nRow1, nRow2, nFlags, bMarked, rColumn);      //TODO: bMarked ????
 
-    if (nRow2 < MAXROW)
-        CopyToColumn(rCxt, nRow2+1, MAXROW, InsertDeleteFlags::FORMULA, false, rColumn);
+    if (nRow2 < GetDoc()->MaxRow())
+        CopyToColumn(rCxt, nRow2+1, GetDoc()->MaxRow(), InsertDeleteFlags::FORMULA, false, rColumn);
 }
 
 void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
@@ -1767,7 +1768,7 @@ void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
     sc::SingleColumnSpanSet::SpansType aRanges;
     aRangeSet.getSpans(aRanges);
 
-    CopyToClipHandler aFunc(*this, rDestCol, nullptr);
+    CopyToClipHandler aFunc(*GetDoc(), *this, rDestCol, nullptr);
     sc::CellStoreType::const_iterator itPos = maCells.begin();
     for (const auto& rRange : aRanges)
         itPos = sc::ParseBlock(itPos, maCells, aFunc, rRange.mnRow1, rRange.mnRow2);
@@ -1779,7 +1780,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
 {
     //  This is the scenario table, the data is copied into it
     ScDocument* pDocument = GetDoc();
-    ScAttrIterator aAttrIter( pAttrArray.get(), 0, MAXROW, pDocument->GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), 0, GetDoc()->MaxRow(), pDocument->GetDefPattern() );
     SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
@@ -1808,7 +1809,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
 {
     //  This is the scenario table, the data is copied to the other
     ScDocument* pDocument = GetDoc();
-    ScAttrIterator aAttrIter( pAttrArray.get(), 0, MAXROW, pDocument->GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), 0, GetDoc()->MaxRow(), pDocument->GetDefPattern() );
     SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
@@ -1833,7 +1834,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
 bool ScColumn::TestCopyScenarioTo( const ScColumn& rDestCol ) const
 {
     bool bOk = true;
-    ScAttrIterator aAttrIter( pAttrArray.get(), 0, MAXROW, GetDoc()->GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), 0, GetDoc()->MaxRow(), GetDoc()->GetDefPattern() );
     SCROW nStart = 0, nEnd = 0;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern && bOk)
@@ -1851,7 +1852,7 @@ void ScColumn::MarkScenarioIn( ScMarkData& rDestMark ) const
 {
     ScRange aRange( nCol, 0, nTab );
 
-    ScAttrIterator aAttrIter( pAttrArray.get(), 0, MAXROW, GetDoc()->GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), 0, GetDoc()->MaxRow(), GetDoc()->GetDefPattern() );
     SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
@@ -1955,8 +1956,8 @@ void ScColumn::SwapCol(ScColumn& rCol)
     std::swap( mnBlkCountFormula, rCol.mnBlkCountFormula);
 
     // notes update caption
-    UpdateNoteCaptions(0, MAXROW);
-    rCol.UpdateNoteCaptions(0, MAXROW);
+    UpdateNoteCaptions(0, GetDoc()->MaxRow());
+    rCol.UpdateNoteCaptions(0, GetDoc()->MaxRow());
 
     std::swap(pAttrArray, rCol.pAttrArray);
 
@@ -2007,7 +2008,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
 
     // move the notes to the destination column
     maCellNotes.transfer(nStartRow, nEndRow, rCol.maCellNotes, nStartRow);
-    UpdateNoteCaptions(0, MAXROW);
+    UpdateNoteCaptions(0, GetDoc()->MaxRow());
 
     // Re-group transferred formula cells.
     aPos = rCol.maCells.position(nStartRow);
@@ -2441,7 +2442,7 @@ bool ScColumn::UpdateReferenceOnCopy( sc::RefUpdateContext& rCxt, ScDocument* pU
     // The formula groups at the top and bottom boundaries are expected to
     // have been split prior to this call. Here, we only do the joining.
     sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
-    if (rCxt.maRange.aEnd.Row() < MAXROW)
+    if (rCxt.maRange.aEnd.Row() < GetDoc()->MaxRow())
     {
         aPos = maCells.position(aPos.first, rCxt.maRange.aEnd.Row()+1);
         sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
@@ -2831,7 +2832,7 @@ public:
         maValueRanges.getSpans(aSpans);
 
         for (const auto& rSpan : aSpans)
-            rBroadcastSpans.set(nTab, nCol, rSpan.mnRow1, rSpan.mnRow2, true);
+            rBroadcastSpans.set(*mrColumn.GetDoc(), nTab, nCol, rSpan.mnRow1, rSpan.mnRow2, true);
     }
 };
 

@@ -145,7 +145,7 @@ void ScColumn::Delete( SCROW nRow )
 
 void ScColumn::FreeAll()
 {
-    // Keep a logical empty range of 0-MAXROW at all times.
+    // Keep a logical empty range of 0-rDoc.MaxRow() at all times.
     maCells.clear();
     maCells.resize(MAXROWCOUNT);
     maCellTextAttrs.clear();
@@ -206,7 +206,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>*
 
     // Check if there are any cells below the end row that will get shifted.
     bool bShiftCells = false;
-    if (nEndRow < MAXROW) //only makes sense to do this if there *is* a row after the end row
+    if (nEndRow < GetDoc()->MaxRow()) //only makes sense to do this if there *is* a row after the end row
     {
         aPos = maCells.position(itCell, nEndRow+1);
         itCell = aPos.first;
@@ -229,7 +229,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>*
         // Mark all non-empty cell positions below the end row.
         sc::ColumnBlockConstPosition aBlockPos;
         aBlockPos.miCellPos = itCell;
-        aNonEmptySpans.scan(aBlockPos, *this, nEndRow+1, MAXROW);
+        aNonEmptySpans.scan(aBlockPos, *this, nEndRow+1, GetDoc()->MaxRow());
     }
 
     sc::AutoCalcSwitch aACSwitch(*GetDoc(), false);
@@ -243,7 +243,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>*
 
     // Shift the formula cell positions below the start row.
     ShiftFormulaPosHandler aShiftFormulaFunc;
-    sc::ProcessFormula(aPos.first, maCells, nStartRow, MAXROW, aShiftFormulaFunc);
+    sc::ProcessFormula(aPos.first, maCells, nStartRow, GetDoc()->MaxRow(), aShiftFormulaFunc);
 
     bool bJoined = sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
     if (bJoined && pGroupPos)
@@ -577,7 +577,7 @@ sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreTy
             sc::CellStoreType::position_type aPosBefore = maCells.position(maCells.begin(), nRow-1);
             lcl_AddFormulaGroupBoundaries(aPosBefore, rNewSharedRows);
         }
-        if (nRow < MAXROW)
+        if (nRow < GetDoc()->MaxRow())
         {
             sc::CellStoreType::position_type aPosAfter = maCells.position(maCells.begin(), nRow+1);
             lcl_AddFormulaGroupBoundaries(aPosAfter, rNewSharedRows);
@@ -996,7 +996,7 @@ void ScColumn::DeleteArea(
             sc::SingleColumnSpanSet::SpansType aSpans;
             aDeletedRows.getSpans(aSpans);
             for (const auto& rSpan : aSpans)
-                pBroadcastSpans->set(nTab, nCol, rSpan.mnRow1, rSpan.mnRow2, true);
+                pBroadcastSpans->set(*GetDoc(), nTab, nCol, rSpan.mnRow1, rSpan.mnRow2, true);
         }
     }
 

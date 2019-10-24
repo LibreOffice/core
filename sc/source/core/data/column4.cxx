@@ -161,7 +161,7 @@ void ScColumn::DeleteBeforeCopyFromClip(
         {
             sc::SingleColumnSpanSet aDeletedRows;
             DeleteCells(aBlockPos, nRow1, nRow2, nDelFlag, aDeletedRows);
-            rBroadcastSpans.set(nTab, nCol, aDeletedRows, true);
+            rBroadcastSpans.set(*GetDoc(), nTab, nCol, aDeletedRows, true);
         }
 
         if (nDelFlag & InsertDeleteFlags::NOTE)
@@ -313,7 +313,7 @@ void ScColumn::SetValues( const SCROW nRow, const std::vector<double>& rVals )
         return;
 
     SCROW nLastRow = nRow + rVals.size() - 1;
-    if (nLastRow > MAXROW)
+    if (nLastRow > GetDoc()->MaxRow())
         // Out of bound. Do nothing.
         return;
 
@@ -343,7 +343,7 @@ void ScColumn::TransferCellValuesTo( SCROW nRow, size_t nLen, sc::CellValues& rD
         return;
 
     SCROW nLastRow = nRow + nLen - 1;
-    if (nLastRow > MAXROW)
+    if (nLastRow > GetDoc()->MaxRow())
         // Out of bound. Do nothing.
         return;
 
@@ -368,7 +368,7 @@ void ScColumn::CopyCellValuesFrom( SCROW nRow, const sc::CellValues& rSrc )
         return;
 
     SCROW nLastRow = nRow + rSrc.size() - 1;
-    if (nLastRow > MAXROW)
+    if (nLastRow > GetDoc()->MaxRow())
         // Out of bound. Do nothing
         return;
 
@@ -436,7 +436,7 @@ void ScColumn::ConvertFormulaToValue(
 
     std::vector<SCROW> aBounds;
     aBounds.push_back(nRow1);
-    if (nRow2 < MAXROW-1)
+    if (nRow2 < GetDoc()->MaxRow()-1)
         aBounds.push_back(nRow2+1);
 
     // Split formula cell groups at top and bottom boundaries (if applicable).
@@ -497,7 +497,7 @@ void ScColumn::SwapNonEmpty(
     const ScRange& rRange = rValues.getRange();
     std::vector<SCROW> aBounds;
     aBounds.push_back(rRange.aStart.Row());
-    if (rRange.aEnd.Row() < MAXROW-1)
+    if (rRange.aEnd.Row() < GetDoc()->MaxRow()-1)
         aBounds.push_back(rRange.aEnd.Row()+1);
 
     // Split formula cell groups at top and bottom boundaries (if applicable).
@@ -715,7 +715,7 @@ class NoteEntryCollector
     SCROW const mnEndRow;
 public:
     NoteEntryCollector( std::vector<sc::NoteEntry>& rNotes, SCTAB nTab, SCCOL nCol,
-            SCROW nStartRow = 0, SCROW nEndRow = MAXROW) :
+            SCROW nStartRow, SCROW nEndRow) :
         mrNotes(rNotes), mnTab(nTab), mnCol(nCol),
         mnStartRow(nStartRow), mnEndRow(nEndRow) {}
 
@@ -747,7 +747,7 @@ public:
 
 void ScColumn::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const
 {
-    std::for_each(maCellNotes.begin(), maCellNotes.end(), NoteEntryCollector(rNotes, nTab, nCol));
+    std::for_each(maCellNotes.begin(), maCellNotes.end(), NoteEntryCollector(rNotes, nTab, nCol, 0, GetDoc()->MaxRow()));
 }
 
 void ScColumn::GetNotesInRange(SCROW nStartRow, SCROW nEndRow,
@@ -1187,7 +1187,7 @@ public:
 
 void ScColumn::SplitFormulaGroupByRelativeRef( const ScRange& rBoundRange )
 {
-    if (rBoundRange.aStart.Row() >= MAXROW)
+    if (rBoundRange.aStart.Row() >= GetDoc()->MaxRow())
         // Nothing to split.
         return;
 
@@ -1195,7 +1195,7 @@ void ScColumn::SplitFormulaGroupByRelativeRef( const ScRange& rBoundRange )
 
     // Cut at row boundaries first.
     aBounds.push_back(rBoundRange.aStart.Row());
-    if (rBoundRange.aEnd.Row() < MAXROW)
+    if (rBoundRange.aEnd.Row() < GetDoc()->MaxRow())
         aBounds.push_back(rBoundRange.aEnd.Row()+1);
     sc::SharedFormulaUtil::splitFormulaCellGroups(maCells, aBounds);
 
@@ -1280,7 +1280,7 @@ bool ScColumn::HasFormulaCell( SCROW nRow1, SCROW nRow2 ) const
     if (nRow2 < nRow1 || !ValidRow(nRow1) || !ValidRow(nRow2))
         return false;
 
-    if (nRow1 == 0 && nRow2 == MAXROW)
+    if (nRow1 == 0 && nRow2 == GetDoc()->MaxRow())
         return HasFormulaCell();
 
     FindAnyFormula aFunc;

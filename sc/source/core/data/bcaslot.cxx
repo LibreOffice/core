@@ -1085,7 +1085,7 @@ void ScBroadcastAreaSlotMachine::InsertBulkGroupArea( ScBroadcastArea* pArea, co
 
     sc::ColumnSpanSet *const pSet = it->second.get();
     assert(pSet);
-    pSet->set(rRange, true);
+    pSet->set(*pDoc, rRange, true);
 }
 
 bool ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas( SfxHintId nHintId )

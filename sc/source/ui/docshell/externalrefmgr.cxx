@@ -1227,7 +1227,7 @@ void ScExternalRefCache::addCacheDocToReferenced( sal_uInt16 nFileId )
     }
 }
 
-void ScExternalRefCache::getAllCachedDataSpans( sal_uInt16 nFileId, sc::ColumnSpanSet& rSet ) const
+void ScExternalRefCache::getAllCachedDataSpans( const ScDocument& rSrcDoc, sal_uInt16 nFileId, sc::ColumnSpanSet& rSet ) const
 {
     const DocItem* pDocItem = getDocItem(nFileId);
     if (!pDocItem)
@@ -1249,7 +1249,7 @@ void ScExternalRefCache::getAllCachedDataSpans( sal_uInt16 nFileId, sc::ColumnSp
             pTab->getAllCols(nRow, aCols);
             for (SCCOL nCol : aCols)
             {
-                rSet.set(nTab, nCol, nRow, true);
+                rSet.set(rSrcDoc, nTab, nCol, nRow, true);
             }
         }
     }
@@ -2886,9 +2886,6 @@ public:
 
 bool ScExternalRefManager::refreshSrcDocument(sal_uInt16 nFileId)
 {
-    sc::ColumnSpanSet aCachedArea(false);
-    maRefCache.getAllCachedDataSpans(nFileId, aCachedArea);
-
     OUString aFilter;
     SfxObjectShellRef xDocShell;
     try
@@ -2903,6 +2900,9 @@ bool ScExternalRefManager::refreshSrcDocument(sal_uInt16 nFileId)
 
     ScDocShell& rDocSh = static_cast<ScDocShell&>(*xDocShell);
     ScDocument& rSrcDoc = rDocSh.GetDocument();
+
+    sc::ColumnSpanSet aCachedArea(false);
+    maRefCache.getAllCachedDataSpans(rSrcDoc, nFileId, aCachedArea);
 
     // Clear the existing cache, and refill it.  Make sure we keep the
     // existing cache table instances here.

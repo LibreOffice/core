@@ -199,7 +199,7 @@ SvtScriptType ScDocument::GetRangeScriptType( const ScRangeList& rRanges )
         SCROW nRow1 = rRange.aStart.Row();
         SCROW nRow2 = rRange.aEnd.Row();
         for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
-            aSet.set(nTab, nCol, nRow1, nRow2, true);
+            aSet.set(*this, nTab, nCol, nRow1, nRow2, true);
     }
 
     ScriptTypeAggregator aAction(*this);
