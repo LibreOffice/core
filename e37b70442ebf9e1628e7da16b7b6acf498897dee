@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_99dd5444",
+        "filename": "sfx2/source/view/viewsh.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1785,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2019-10-24T12:02:26Z",
+      "side": 1,
+      "message": "\"false\" should be passed here as default value - by default save is not locked",
+      "range": {
+        "startLine": 1785,
+        "startChar": 42,
+        "endLine": 1785,
+        "endChar": 46
+      },
+      "revId": "e37b70442ebf9e1628e7da16b7b6acf498897dee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
