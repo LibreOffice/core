@@ -212,6 +212,8 @@ void B2DPolyPolyLineDrawableHelper::FillPolyPolygon(OutputDevice* pRenderContext
 void B2DPolyPolyLineDrawableHelper::DrawPolyPolygonFallback(
     OutputDevice* pRenderContext, basegfx::B2DPolyPolygon const& rLinePolyPolygon)
 {
+    assert(rLinePolyPolygon.count());
+
     const tools::PolyPolygon aToolsPolyPolygon(rLinePolyPolygon);
     const tools::PolyPolygon aPixelPolyPolygon
         = pRenderContext->ImplLogicToDevicePixel(aToolsPolyPolygon);
