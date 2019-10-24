@@ -96,7 +96,8 @@ public:
                                  basegfx::B2DPolyPolygon const& rLinePolyPolygon);
 
     static bool DrawPolyLine(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
-                             basegfx::B2DPolygon const& rB2DPolygon);
+                             basegfx::B2DPolygon const& rB2DPolygon,
+                             basegfx::B2DHomMatrix const aTransform = basegfx::B2DHomMatrix());
 
     static void FillPolyPolygon(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
                                 basegfx::B2DPolyPolygon const& rFillPolyPolygon);

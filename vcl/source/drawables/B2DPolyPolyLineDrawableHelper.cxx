@@ -173,15 +173,17 @@ void B2DPolyPolyLineDrawableHelper::DrawPolyLineFallback(OutputDevice* pRenderCo
 
 bool B2DPolyPolyLineDrawableHelper::DrawPolyLine(OutputDevice* pRenderContext,
                                                  SalGraphics* const pGraphics,
-                                                 basegfx::B2DPolygon const& rB2DPolygon)
+                                                 basegfx::B2DPolygon const& rB2DPolygon,
+                                                 basegfx::B2DHomMatrix const aTransform)
 {
     return CanAntialiasLine(pRenderContext, pGraphics)
            && pGraphics->DrawPolyLine(
-               basegfx::B2DHomMatrix(), rB2DPolygon, 0.0, basegfx::B2DVector(1.0, 1.0),
-               basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
-               basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
-               bool(pRenderContext->GetAntialiasing() & AntialiasingFlags::PixelSnapHairline),
-               pRenderContext);
+                  aTransform, rB2DPolygon, 0.0, basegfx::B2DVector(1.0, 1.0),
+                  basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
+                  basegfx::deg2rad(
+                      15.0), // not used with B2DLineJoin::NONE, but the correct default
+                  bool(pRenderContext->GetAntialiasing() & AntialiasingFlags::PixelSnapHairline),
+                  pRenderContext);
 }
 
 void B2DPolyPolyLineDrawableHelper::FillPolyPolygon(OutputDevice* pRenderContext,
