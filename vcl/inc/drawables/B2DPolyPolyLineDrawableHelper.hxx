@@ -63,6 +63,8 @@ public:
     static basegfx::B2DPolyPolygon CreateFillPolyPolygon(basegfx::B2DPolyPolygon& rLinePolyPolygon,
                                                          LineInfo const& rLineInfo);
 
+    static bool CanAntialiasLine(OutputDevice* pRenderContext, SalGraphics* pGraphics);
+
     static void DrawPolyPolyLine(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
                                  basegfx::B2DPolyPolygon const& rLinePolyPolygon);
 
