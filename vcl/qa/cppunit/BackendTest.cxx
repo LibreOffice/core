@@ -337,6 +337,46 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testDrawBitmap()
+    {
+        vcl::test::OutputDeviceTestBitmap aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupDrawBitmap();
+        exportImage("08-01_bitmap_test.png", aBitmap);
+        auto eResult = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawTransformedBitmap()
+    {
+        vcl::test::OutputDeviceTestBitmap aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap();
+        auto eResult = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
+        exportImage("08-02_transformed_bitmap_test.png", aBitmap);
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawBitmapExWithAlpha()
+    {
+        vcl::test::OutputDeviceTestBitmap aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha();
+        auto eResult = vcl::test::OutputDeviceTestBitmap::checkBitmapExWithAlpha(aBitmap);
+        exportImage("08-03_bitmapex_with_alpha_test.png", aBitmap);
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawMask()
+    {
+        vcl::test::OutputDeviceTestBitmap aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupDrawMask();
+        auto eResult = vcl::test::OutputDeviceTestBitmap::checkMask(aBitmap);
+        exportImage("08-04_mask_test.png", aBitmap);
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
     CPPUNIT_TEST_SUITE(BackendTest);
     CPPUNIT_TEST(testDrawRectWithRectangle);
     CPPUNIT_TEST(testDrawRectWithPixel);
@@ -372,6 +412,11 @@ public:
 
     CPPUNIT_TEST(testDrawBezierWithPolylineB2D);
     CPPUNIT_TEST(testDrawBezierAAWithPolylineB2D);
+
+    CPPUNIT_TEST(testDrawBitmap);
+    CPPUNIT_TEST(testDrawTransformedBitmap);
+    CPPUNIT_TEST(testDrawBitmapExWithAlpha);
+    CPPUNIT_TEST(testDrawMask);
 
     CPPUNIT_TEST_SUITE_END();
 };
