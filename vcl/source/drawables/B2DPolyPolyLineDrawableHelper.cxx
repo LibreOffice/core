@@ -175,13 +175,7 @@ void B2DPolyPolyLineDrawableHelper::FillPolyPolygon(OutputDevice* pRenderContext
 {
     if (rFillPolyPolygon.count())
     {
-        const Color aOldLineColor(pRenderContext->GetLineColor());
-        const Color aOldFillColor(pRenderContext->GetFillColor());
-
-        pRenderContext->SetLineColor();
-        pRenderContext->InitLineColor();
-        pRenderContext->SetFillColor(aOldLineColor);
-        pRenderContext->InitFillColor();
+        ColorFillPolyPolygon aColorFillPolyPolygon(pRenderContext);
 
         if (CanAntialiasLine(pRenderContext, pGraphics)
             && !pGraphics->DrawPolyPolygon(basegfx::B2DHomMatrix(), rFillPolyPolygon, 0.0,
@@ -198,9 +192,6 @@ void B2DPolyPolyLineDrawableHelper::FillPolyPolygon(OutputDevice* pRenderContext
                     reinterpret_cast<const SalPoint*>(aPolygon.GetConstPointAry()), pRenderContext);
             }
         }
-
-        pRenderContext->SetFillColor(aOldFillColor);
-        pRenderContext->SetLineColor(aOldLineColor);
     }
 }
 
