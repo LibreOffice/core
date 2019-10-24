@@ -143,7 +143,7 @@ void ODbAdminDialog::impl_selectDataSource(const css::uno::Any& _aDataSourceName
         case  ::dbaccess::DST_USERDEFINE10:
             {
                 OUString aTitle(DBA_RES(STR_PAGETITLE_ADVANCED));
-                AddTabPage("user" + OString(static_cast<int>(eType)), aTitle, ODriversSettings::CreateUser);
+                AddTabPage("user" + OString::number(eType - dbaccess::DST_USERDEFINE1 + 1), aTitle, ODriversSettings::CreateUser);
             }
             break;
         default:
