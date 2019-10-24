@@ -829,12 +829,54 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
                                                 const SalBitmap& rSourceBitmap,
                                                 const SalBitmap* pAlphaBitmap)
 {
-    (void)rNull;
-    (void)rX;
-    (void)rY;
-    (void)rSourceBitmap;
-    (void)pAlphaBitmap;
-    return false;
+    assert(dynamic_cast<const SkiaSalBitmap*>(&rSourceBitmap));
+    assert(!pAlphaBitmap || dynamic_cast<const SkiaSalBitmap*>(pAlphaBitmap));
+
+    const SkiaSalBitmap& rSkiaBitmap = static_cast<const SkiaSalBitmap&>(rSourceBitmap);
+    const SkiaSalBitmap* pSkiaAlphaBitmap = static_cast<const SkiaSalBitmap*>(pAlphaBitmap);
+
+    long nSourceWidth = rSourceBitmap.GetSize().Width();
+    long nSourceHeight = rSourceBitmap.GetSize().Height();
+
+    SkBitmap aTemporaryBitmap;
+    if (!aTemporaryBitmap.tryAllocN32Pixels(nSourceWidth, nSourceHeight))
+    {
+        return false;
+    }
+
+    {
+        // Combine bitmap + alpha bitmap into one temporary bitmap with alpha
+        SkCanvas aCanvas(aTemporaryBitmap);
+        SkPaint aPaint;
+        aPaint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
+        aCanvas.drawBitmap(rSkiaBitmap.GetSkBitmap(), 0, 0, &aPaint);
+        if (pSkiaAlphaBitmap != nullptr)
+        {
+            aPaint.setBlendMode(SkBlendMode::kDstOut);
+            aCanvas.drawBitmap(pSkiaAlphaBitmap->GetAlphaSkBitmap(), 0, 0, &aPaint);
+        }
+    }
+    // setup the image transformation
+    // using the rNull, rX, rY points as destinations for the (0,0), (0,Width), (Height,0) source points
+    const basegfx::B2DVector aXRel = rX - rNull;
+    const basegfx::B2DVector aYRel = rY - rNull;
+
+    const Size aSize = rSourceBitmap.GetSize();
+
+    SkMatrix aMatrix;
+    aMatrix.set(SkMatrix::kMScaleX, aXRel.getX() / aSize.Width());
+    aMatrix.set(SkMatrix::kMSkewY, aXRel.getY() / aSize.Width());
+    aMatrix.set(SkMatrix::kMSkewX, aYRel.getX() / aSize.Height());
+    aMatrix.set(SkMatrix::kMScaleY, aYRel.getY() / aSize.Height());
+    aMatrix.set(SkMatrix::kMTransX, rNull.getX());
+    aMatrix.set(SkMatrix::kMTransY, rNull.getY());
+
+    preDraw();
+    mSurface->getCanvas()->concat(aMatrix);
+    mSurface->getCanvas()->drawBitmap(aTemporaryBitmap, 0, 0);
+    postDraw();
+
+    return true;
 }
 
 bool SkiaSalGraphicsImpl::drawAlphaRect(long nX, long nY, long nWidth, long nHeight,
