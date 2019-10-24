@@ -879,6 +879,12 @@ static int doc_getView(LibreOfficeKitDocument* pThis);
 static int doc_getViewsCount(LibreOfficeKitDocument* pThis);
 static bool doc_getViewIds(LibreOfficeKitDocument* pThis, int* pArray, size_t nSize);
 static void doc_setViewLanguage(LibreOfficeKitDocument* pThis, int nId, const char* language);
+static unsigned char* doc_renderFontOrientation(LibreOfficeKitDocument* pThis,
+                          const char *pFontName,
+                          const char *pChar,
+                          int* pFontWidth,
+                          int* pFontHeight,
+                          int pOrientation);
 static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                           const char *pFontName,
                           const char *pChar,
@@ -895,7 +901,8 @@ static void doc_paintWindowDPI(LibreOfficeKitDocument* pThis, unsigned nLOKWindo
                                const int nWidth, const int nHeight,
                                const double fDPIScale);
 
-static void doc_postWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, int nAction, const char* pData);
+static void doc_postWindow(LibreOfficeKitDocument* pThis, unsigned
+ nLOKWindowId, int nAction, const char* pData);
 
 static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart);
 
@@ -1001,6 +1008,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->getViewIds = doc_getViewIds;
 
         m_pDocumentClass->renderFont = doc_renderFont;
+        m_pDocumentClass->renderFontOrientation = doc_renderFontOrientation;
         m_pDocumentClass->getPartHash = doc_getPartHash;
 
         m_pDocumentClass->paintWindow = doc_paintWindow;
@@ -4671,11 +4679,23 @@ static void doc_setViewLanguage(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
     SfxLokHelper::setViewLanguage(nId, OStringToOUString(language, RTL_TEXTENCODING_UTF8));
 }
 
-unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/,
+
+
+unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                               const char* pFontName,
                               const char* pChar,
                               int* pFontWidth,
                               int* pFontHeight)
+{
+    return doc_renderFontOrientation(pThis, pFontName, pChar, pFontWidth, pFontHeight, 0);
+}
+
+unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/,
+                              const char* pFontName,
+                              const char* pChar,
+                              int* pFontWidth,
+                              int* pFontHeight,
+                              int pOrientation)
 {
     comphelper::ProfileZone aZone("doc_renderFont");
 
@@ -4708,6 +4728,7 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
             ::tools::Rectangle aRect;
             vcl::Font aFont(rFontMetric);
             aFont.SetFontSize(Size(0, nDefaultFontSize));
+            aFont.SetOrientation(pOrientation);
             aDevice->SetFont(aFont);
             aDevice->GetTextBoundRect(aRect, aText);
             if (aRect.IsEmpty())
@@ -4721,8 +4742,8 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
 
             if (*pFontWidth > 0 && *pFontHeight > 0)
             {
-                double fScaleX = *pFontWidth / static_cast<double>(nFontWidth);
-                double fScaleY = *pFontHeight / static_cast<double>(nFontHeight);
+                double fScaleX = *pFontWidth / static_cast<double>(nFontWidth) / 1.5;
+                double fScaleY = *pFontHeight / static_cast<double>(nFontHeight) / 1.5;
 
                 double fScale = std::min(fScaleX, fScaleY);
 
@@ -4755,8 +4776,9 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
                 DrawTextFlags const nStyle =
                         DrawTextFlags::Center
                         | DrawTextFlags::VCenter
+                        | DrawTextFlags::Bottom
                         | DrawTextFlags::MultiLine
-                        | DrawTextFlags::WordBreakHyphenation;// | DrawTextFlags::WordBreak ;
+                        | DrawTextFlags::WordBreak;// | DrawTextFlags::WordBreakHyphenation ;
 
                 aDevice->DrawText(aRect, aText, nStyle);
             }
@@ -4774,6 +4796,7 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
     }
     return nullptr;
 }
+
 
 static void doc_paintWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,
                             unsigned char* pBuffer,
