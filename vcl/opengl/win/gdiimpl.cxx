@@ -770,7 +770,7 @@ OpenGLTexture* OpenGLCompatibleDC::getOpenGLTexture()
     return new OpenGLTexture(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_BGRA, GL_UNSIGNED_BYTE, mpData);
 }
 
-std::unique_ptr<CompatibleDC::Texture> OpenGLCompatibleDC::getTexture()
+std::unique_ptr<CompatibleDC::Texture> OpenGLCompatibleDC::getAsMaskTexture()
 {
     auto ret = std::make_unique<OpenGLCompatibleDC::Texture>();
     ret->texture = OpenGLTexture(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_BGRA, GL_UNSIGNED_BYTE, mpData);
@@ -881,7 +881,7 @@ void WinOpenGLSalGraphicsImpl::DeferredTextDraw(const CompatibleDC::Texture* pTe
     PostBatchDraw();
 }
 
-void WinOpenGLSalGraphicsImpl::DrawMask( CompatibleDC::Texture* pTexture, Color nMaskColor, const SalTwoRect& rPosAry )
+void WinOpenGLSalGraphicsImpl::DrawTextMask( CompatibleDC::Texture* pTexture, Color nMaskColor, const SalTwoRect& rPosAry )
 {
     assert(dynamic_cast<OpenGLCompatibleDC::Texture*>(pTexture));
     DrawMask( static_cast<OpenGLCompatibleDC::Texture*>(pTexture)->texture, nMaskColor, rPosAry );
