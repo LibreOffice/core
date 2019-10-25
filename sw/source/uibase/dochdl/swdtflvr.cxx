@@ -854,8 +854,11 @@ void SwTransferable::DeleteSelection()
     // ask for type of selection before action-bracketing
     const SelectionType nSelection = m_pWrtShell->GetSelectionType();
     m_pWrtShell->StartUndo( SwUndoId::START );
-    if( ( SelectionType::TableCell & nSelection ) && m_pWrtShell->HasWholeTabSelection() )
+    if( ( SelectionType::TableCell & nSelection ) &&
+            ( m_pWrtShell->HasWholeTabSelection() || SelectionType::TableRow & nSelection ) )
+    {
         m_pWrtShell->DeleteTable();
+    }
     else
     {
         if( ( SelectionType::Text | SelectionType::Table ) & nSelection )

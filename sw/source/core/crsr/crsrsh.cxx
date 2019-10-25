@@ -2917,7 +2917,7 @@ SwCursorShell::SwCursorShell( SwCursorShell& rShell, vcl::Window *pInitWin )
     m_pCurrentCursor->GetContentNode()->Add( this );
 
     m_bAllProtect = m_bVisPortChgd = m_bChgCallFlag = m_bInCMvVisportChgd =
-    m_bGCAttr = m_bIgnoreReadonly = m_bSelTableCells = m_bBasicHideCursor =
+    m_bGCAttr = m_bIgnoreReadonly = m_bSelTableCells = m_bSelTableRows = m_bBasicHideCursor =
     m_bOverwriteCursor = false;
     m_bCallChgLnk = m_bHasFocus = m_bAutoUpdateCells = true;
     m_bSVCursorVis = true;
@@ -2961,7 +2961,7 @@ SwCursorShell::SwCursorShell( SwDoc& rDoc, vcl::Window *pInitWin,
     pCNd->Add( this );
 
     m_bAllProtect = m_bVisPortChgd = m_bChgCallFlag = m_bInCMvVisportChgd =
-    m_bGCAttr = m_bIgnoreReadonly = m_bSelTableCells = m_bBasicHideCursor =
+    m_bGCAttr = m_bIgnoreReadonly = m_bSelTableCells = m_bSelTableRows = m_bBasicHideCursor =
     m_bOverwriteCursor = false;
     m_bCallChgLnk = m_bHasFocus = m_bAutoUpdateCells = true;
     m_bSVCursorVis = true;

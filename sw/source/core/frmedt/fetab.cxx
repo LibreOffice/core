@@ -1884,7 +1884,10 @@ bool SwFEShell::SelTableRowCol( const Point& rPt, const Point* pEnd, bool bRowDr
                 if ( pbRow[0] && pbCol[0] )
                     bRet = SwCursorShell::SelTable();
                 else if ( pbRow[0] )
+                {
+                    SetSelTableRows(true);
                     bRet = SwCursorShell::SelTableRowOrCol( true, true );
+                }
                 else if ( pbCol[0] )
                     bRet = SwCursorShell::SelTableRowOrCol( false, true );
             }
