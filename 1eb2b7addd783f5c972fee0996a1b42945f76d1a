@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_af81de4c",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2698,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-10-25T16:36:50Z",
+      "side": 1,
+      "message": "you mean SwAttrSet here",
+      "range": {
+        "startLine": 2698,
+        "startChar": 58,
+        "endLine": 2698,
+        "endChar": 69
+      },
+      "revId": "1eb2b7addd783f5c972fee0996a1b42945f76d1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
