@@ -652,23 +652,16 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SkBitmap& rB
                                    Color nMaskColor)
 {
     preDraw();
-    SkBitmap tmpBitmap;
-    if (!tmpBitmap.tryAllocN32Pixels(rBitmap.width(), rBitmap.height()))
-        abort();
-    SkCanvas canvas(tmpBitmap);
     SkPaint paint;
-    paint.setBlendMode(SkBlendMode::kSrc);
-    canvas.drawBitmap(rBitmap, 0, 0, &paint);
-    // TODO what is this function supposed to do exactly?
-    // Text drawing on Windows doesn't work if this is uncommented.
-    //    tmpBitmap.eraseColor(toSkColor(nMaskColor));
-    (void)nMaskColor;
+    // Draw the color with the given mask, and mask uses inversed alpha.
+    paint.setBlendMode(SkBlendMode::kDstOut);
+    paint.setColor(toSkColor(nMaskColor));
     mSurface->getCanvas()->drawBitmapRect(
-        tmpBitmap,
+        rBitmap,
         SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
         SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                          rPosAry.mnDestHeight),
-        nullptr);
+        &paint);
     postDraw();
 }
 
