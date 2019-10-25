@@ -295,6 +295,21 @@ static int diffTiles( const std::vector<unsigned char> &vBase,
     return nDifferent;
 }
 
+static std::vector<unsigned char> paintTile( Document *pDocument,
+                                             long nX, long nY,
+                                             long const nTilePixelWidth,
+                                             long const nTilePixelHeight,
+                                             long const nTileTwipWidth,
+                                             long const nTileTwipHeight )
+{
+//    long e = 0; // tweak if we suspect an overlap / visibility issue.
+//    pDocument->setClientVisibleArea( nX - e, nY - e, nTileTwipWidth + e, nTileTwipHeight + e );
+    std::vector<unsigned char> vData( nTilePixelWidth * nTilePixelHeight * 4 );
+    pDocument->paintTile( vData.data(), nTilePixelWidth, nTilePixelHeight,
+                          nX, nY, nTileTwipWidth, nTileTwipHeight );
+    return vData;
+}
+
 static bool testJoinsAt( Document *pDocument, long nX, long nY,
                          long const nTilePixelSize,
                          long const nTileTwipSize )
@@ -306,12 +321,26 @@ static bool testJoinsAt( Document *pDocument, long nX, long nY,
     long const nTileTwipWidth = nTileTwipSize;
     long const nTileTwipHeight = nTileTwipSize;
 
-    // Get a base image 4x the size
     long initPosX = nX * nTileTwipWidth, initPosY = nY * nTileTwipHeight;
-    std::vector<unsigned char> vBase( nTilePixelWidth * nTilePixelHeight * 4 * 4 );
 
-    pDocument->paintTile( vBase.data(), nTilePixelWidth * 2, nTilePixelHeight * 2,
-                          initPosX, initPosY, nTileTwipWidth * 2, nTileTwipHeight * 2 );
+    // Calc has to do significant work on changing zoom ...
+    pDocument->setClientZoom( nTilePixelWidth, nTilePixelHeight,
+                              nTileTwipWidth, nTileTwipHeight );
+
+    // Unfortunately without getting this nothing renders ...
+    std::stringstream aForceHeaders;
+    aForceHeaders << ".uno:ViewRowColumnHeaders?x=" << initPosX << "&y=" << initPosY <<
+        "&width=" << (nTileTwipWidth * 2) << "&height=" << (nTileTwipHeight * 2);
+    std::string cmd = aForceHeaders.str();
+    char* pJSON = pDocument->getCommandValues(cmd.c_str());
+    fprintf(stderr, "command: '%s' values '%s'\n", cmd.c_str(), pJSON);
+    free(pJSON);
+
+    // Get a base image 4x the size
+    std::vector<unsigned char> vBase(
+        paintTile(pDocument, initPosX, initPosY,
+                  nTilePixelWidth * 2, nTilePixelHeight * 2,
+                  nTileTwipWidth * 2, nTileTwipHeight * 2));
 
     const struct {
         long X;
@@ -326,11 +355,13 @@ static bool testJoinsAt( Document *pDocument, long nX, long nY,
     // Compare each of the 4x tiles with a sub-tile of the larger image
     for( auto &rPos : aCompare )
     {
-        std::vector<unsigned char> vCompare( nTilePixelWidth * nTilePixelHeight * 4 );
-        pDocument->paintTile( vCompare.data(), nTilePixelWidth, nTilePixelHeight,
-                              initPosX + rPos.X * nTileTwipWidth,
-                              initPosY + rPos.Y * nTileTwipHeight,
-                              nTileTwipWidth, nTileTwipHeight );
+        std::vector<unsigned char> vCompare(
+            paintTile(pDocument,
+                      initPosX + rPos.X * nTileTwipWidth,
+                      initPosY + rPos.Y * nTileTwipHeight,
+                      nTilePixelWidth, nTilePixelHeight,
+                      nTileTwipWidth, nTileTwipHeight));
+
         std::vector<unsigned char> vDiff( nTilePixelWidth * 3 * nTilePixelHeight * 4 );
         int nDifferences = diffTiles( vBase, nTilePixelWidth * 2,
                                       vCompare, nTilePixelWidth,
@@ -339,8 +370,9 @@ static bool testJoinsAt( Document *pDocument, long nX, long nY,
                                       vDiff );
         if ( nDifferences > 0 )
         {
-            fprintf( stderr, "  %d differences in sub-tile pixel mismatch at %ld, %ld at offset %ld, %ld (twips)\n",
-                     nDifferences, rPos.X, rPos.Y, initPosX, initPosY );
+            fprintf( stderr, "  %d differences in sub-tile pixel mismatch at %ld, %ld at offset %ld, %ld (twips) size %ld\n",
+                     nDifferences, rPos.X, rPos.Y, initPosX, initPosY,
+                     nTileTwipWidth);
             dumpTile("_base", nTilePixelWidth * 2, nTilePixelHeight * 2,
                      mode, vBase.data());
 /*            dumpTile("_sub", nTilePixelWidth, nTilePixelHeight,
@@ -367,22 +399,39 @@ static int testJoin( Document *pDocument)
 
     // Use realistic dimensions, similar to the Online client.
     long const nTilePixelSize = 256;
-    long const nTileTwipSize = 1852;
+    long const nTileTwipSize = 3840;
+    double fZooms[] = {
+        0.5,
+        0.6, 0.7, 0.85,
+        1.0,
+        1.2, 1.5, 1.75,
+        2.0
+    };
     long nFails = 0;
+    std::stringstream results;
 
-    for( long y = 0; y < 5; ++y )
+    for( auto z : fZooms )
     {
-        for( long x = 0; x < 5; ++x )
+        long nBad = 0;
+        for( long y = 0; y < 5; ++y )
         {
-            if ( !testJoinsAt( pDocument, x, y, nTilePixelSize, nTileTwipSize ) )
-                nFails++;
+            for( long x = 0; x < 5; ++x )
+            {
+                if ( !testJoinsAt( pDocument, x, y, nTilePixelSize, nTileTwipSize * z ) )
+                    nBad++;
+            }
         }
+        if (nBad > 0)
+            results << "\tZoom " << z << " bad tiles: " << nBad << "\n";
+        nFails += nBad;
     }
 
     if (nFails > 0)
         fprintf( stderr, "Failed %ld joins\n", nFails );
     else
         fprintf( stderr, "All joins compared correctly\n" );
+
+    fprintf(stderr, "%s\n", results.str().c_str());
 
     return nFails;
 }
