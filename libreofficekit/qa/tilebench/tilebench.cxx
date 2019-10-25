@@ -72,19 +72,21 @@ static void dumpTile(const char *pNameStem,
         nTotalWidth = nWidth;
 
     auto pBuffer = reinterpret_cast<const char *>(pBufferU);
+    static int counter = 0;
     std::string aName = "/tmp/dump_tile";
     aName += pNameStem;
+    aName += "_" + std::to_string(counter);
     aName += ".ppm";
 #ifndef IOS
     std::ofstream ofs(aName);
 #else
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    static int counter = 0;
-    NSString *path = [NSString stringWithFormat:@"%@/dump_tile_%d.ppm", documentsDirectory, counter++];
+    NSString *path = [NSString stringWithFormat:@"%@/dump_tile_%d.ppm", documentsDirectory, counter];
     std::ofstream ofs([path UTF8String]);
     std::cerr << "---> Dumping tile\n";
 #endif
+    counter++;
     ofs << "P6\n"
         << nWidth << " "
         << nHeight << "\n"
@@ -356,7 +358,7 @@ static bool testJoinsAt( Document *pDocument, long nX, long nY,
 }
 
 // Check that our tiles join nicely ...
-static void testJoin( Document *pDocument)
+static int testJoin( Document *pDocument)
 {
     // Ignore parts - just the first for now ...
     long nWidth = 0, nHeight = 0;
@@ -366,20 +368,23 @@ static void testJoin( Document *pDocument)
     // Use realistic dimensions, similar to the Online client.
     long const nTilePixelSize = 256;
     long const nTileTwipSize = 1852;
+    long nFails = 0;
 
     for( long y = 0; y < 5; ++y )
     {
         for( long x = 0; x < 5; ++x )
         {
             if ( !testJoinsAt( pDocument, x, y, nTilePixelSize, nTileTwipSize ) )
-            {
-                fprintf( stderr, "failed\n" );
-                return;
-            }
+                nFails++;
         }
     }
 
-    fprintf( stderr, "All joins compared correctly\n" );
+    if (nFails > 0)
+        fprintf( stderr, "Failed %ld joins\n", nFails );
+    else
+        fprintf( stderr, "All joins compared correctly\n" );
+
+    return nFails;
 }
 
 static std::atomic<bool> bDialogRendered(false);
@@ -512,7 +517,7 @@ int main( int argc, char* argv[] )
 
     aTimes.emplace_back("initialization");
     // coverity[tainted_string] - build time test tool
-    Office *pOffice = lok_cpp_init(install_path, user_profile);
+    std::unique_ptr<Office> pOffice( lok_cpp_init(install_path, user_profile) );
     if (pOffice == nullptr)
     {
         fprintf(stderr, "Failed to initialize Office from %s\n", argv[1]);
@@ -521,13 +526,13 @@ int main( int argc, char* argv[] )
     aTimes.emplace_back();
     pOffice->registerCallback(ignoreCallback, nullptr);
 
-    Document *pDocument = nullptr;
+    std::unique_ptr<Document> pDocument;
 
     pOffice->setOptionalFeatures(LOK_FEATURE_NO_TILED_ANNOTATIONS);
 
     aTimes.emplace_back("load document");
     if (doc_url != nullptr)
-        pDocument = pOffice->documentLoad(doc_url);
+        pDocument.reset(pOffice->documentLoad(doc_url));
     aTimes.emplace_back();
 
     if (pDocument)
@@ -540,11 +545,11 @@ int main( int argc, char* argv[] )
             int max_tiles = (argc > arg ? atoi(argv[arg++]) : -1);
             const bool dump = true;
 
-            testTile (pDocument, max_parts, max_tiles, dump);
+            testTile (pDocument.get(), max_parts, max_tiles, dump);
         }
         else if (!strcmp(mode, "--join"))
         {
-            testJoin (pDocument);
+            return testJoin (pDocument.get());
         }
         else if (!strcmp (mode, "--dialog"))
         {
@@ -563,16 +568,16 @@ int main( int argc, char* argv[] )
                     return help("missing argument to --dialog and no default");
                 }
             }
-            testDialog (pDocument, uno_cmd);
+            testDialog (pDocument.get(), uno_cmd);
         } else
             return help ("unknown parameter");
     }
 
     aTimes.emplace_back("destroy document");
-    delete pDocument;
+    pDocument.reset();
     aTimes.emplace_back();
 
-    delete pOffice;
+    pOffice.reset();
 
     double nTotal = 0.0;
     fprintf (stderr, "profile run:\n");
