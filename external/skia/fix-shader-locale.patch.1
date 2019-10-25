@@ -1,57 +1,40 @@
-https://bugs.chromium.org/p/skia/issues/detail?id=9550
+From b653813d58146fb41cd1852e5f24cdfc0ad9532a Mon Sep 17 00:00:00 2001
+From: Ethan Nicholas <ethannicholas@google.com>
+Date: Tue, 22 Oct 2019 16:00:18 -0400
+Subject: [PATCH 1/7] Vulkan SkSL code now works in locales which use ',' as
+ the decimal separator.
 
-diff --git a/src/core/SkString.cpp b/src/core/SkString.cpp
-index d42ee6f07e..1e3ebddf95 100644
---- a/src/core/SkString.cpp
-+++ b/src/core/SkString.cpp
-@@ -502,11 +502,15 @@ void SkString::appendf(const char format[], ...) {
- }
+Bug: skia:9550
+Change-Id: Ib844971bd1daebdf7a0f93388ad40e4977822233
+Reviewed-on: https://skia-review.googlesource.com/c/skia/+/250076
+Reviewed-by: Greg Daniel <egdaniel@google.com>
+Commit-Queue: Ethan Nicholas <ethannicholas@google.com>
+---
+ src/gpu/vk/GrVkPipelineStateBuilder.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/gpu/vk/GrVkPipelineStateBuilder.cpp b/src/gpu/vk/GrVkPipelineStateBuilder.cpp
+index 4d595e7eca..dbe16f6e7f 100644
+--- a/src/gpu/vk/GrVkPipelineStateBuilder.cpp
++++ b/src/gpu/vk/GrVkPipelineStateBuilder.cpp
+@@ -6,6 +6,7 @@
+ */
  
- void SkString::appendVAList(const char format[], va_list args) {
-+    char* oldlocale = strdup( setlocale( LC_NUMERIC, nullptr ));
-+    setlocale( LC_NUMERIC, "C" );
-     char buffer[kBufferSize];
-     int length = vsnprintf(buffer, kBufferSize, format, args);
-     SkASSERT(length >= 0 && length < SkToInt(kBufferSize));
- 
-     this->append(buffer, length);
-+    setlocale( LC_NUMERIC, oldlocale );
-+    free( oldlocale );
- }
- 
- void SkString::prependf(const char format[], ...) {
-@@ -519,11 +523,15 @@ void SkString::prependf(const char format[], ...) {
- }
- 
- void SkString::prependVAList(const char format[], va_list args) {
-+    char* oldlocale = strdup( setlocale( LC_NUMERIC, nullptr ));
-+    setlocale( LC_NUMERIC, "C" );
-     char buffer[kBufferSize];
-     int length = vsnprintf(buffer, kBufferSize, format, args);
-     SkASSERT(length >= 0 && length < SkToInt(kBufferSize));
- 
-     this->prepend(buffer, length);
-+    setlocale( LC_NUMERIC, oldlocale );
-+    free( oldlocale );
- }
- 
- 
-diff --git a/src/sksl/SkSLOutputStream.cpp b/src/sksl/SkSLOutputStream.cpp
-index f72637d4cb..6e31e8f302 100644
---- a/src/sksl/SkSLOutputStream.cpp
-+++ b/src/sksl/SkSLOutputStream.cpp
-@@ -21,10 +21,14 @@ void OutputStream::printf(const char format[], ...) {
- }
- 
- void OutputStream::appendVAList(const char format[], va_list args) {
-+    char* oldlocale = strdup( setlocale( LC_NUMERIC, nullptr ));
-+    setlocale( LC_NUMERIC, "C" );
-     char buffer[kBufferSize];
-     int length = vsnprintf(buffer, kBufferSize, format, args);
-     SkASSERT(length >= 0 && length < (int) kBufferSize);
-     this->write(buffer, length);
-+    setlocale( LC_NUMERIC, oldlocale );
-+    free( oldlocale );
- }
- 
- }
+ #include "include/gpu/GrContext.h"
++#include "src/gpu/GrAutoLocaleSetter.h"
+ #include "src/gpu/GrContextPriv.h"
+ #include "src/gpu/GrPersistentCacheUtils.h"
+ #include "src/gpu/GrShaderCaps.h"
+@@ -27,6 +28,9 @@ GrVkPipelineState* GrVkPipelineStateBuilder::CreatePipelineState(
+         GrPrimitiveType primitiveType,
+         Desc* desc,
+         VkRenderPass compatibleRenderPass) {
++    // ensure that we use "." as a decimal separator when creating SkSL code
++    GrAutoLocaleSetter als("C");
++
+     // create a builder.  This will be handed off to effects so they can use it to add
+     // uniforms, varyings, textures, etc
+     GrVkPipelineStateBuilder builder(gpu, renderTarget, programInfo, desc);
+-- 
+2.16.4
+
