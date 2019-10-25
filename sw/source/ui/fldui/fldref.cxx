@@ -484,6 +484,24 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
 
     m_xSelectionLB->freeze();
     m_xSelectionLB->clear();
+
+    if (REFFLDFLAG & nTypeId)
+    {
+        if (nTypeId == REFFLDFLAG_FOOTNOTE || nTypeId == REFFLDFLAG_ENDNOTE)
+        {
+            m_xSelectionLB->thaw();
+            m_xSelectionLB->make_unsorted();
+            m_xSelectionLB->freeze();
+        }
+        // #i83479#
+        else if (nTypeId != REFFLDFLAG_HEADING && nTypeId != REFFLDFLAG_NUMITEM)
+        {
+            m_xSelectionLB->thaw();
+            m_xSelectionLB->make_sorted();
+            m_xSelectionLB->freeze();
+        }
+    }
+
     // #i83479#
     m_xSelectionToolTipLB->freeze();
     m_xSelectionToolTipLB->clear();
@@ -494,7 +512,6 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
     {
         if (nTypeId == REFFLDFLAG_BOOKMARK)     // text marks!
         {
-            m_xSelectionLB->make_sorted();
             // get all text marks
             IDocumentMarkAccess* const pMarkAccess = pSh->getIDocumentMarkAccess();
             for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
@@ -516,7 +533,6 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
         }
         else if (nTypeId == REFFLDFLAG_FOOTNOTE)
         {
-            m_xSelectionLB->make_unsorted();
             SwSeqFieldList aArr;
             const size_t nCnt = pSh->GetSeqFootnoteList( aArr );
 
@@ -533,7 +549,6 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
         }
         else if (nTypeId == REFFLDFLAG_ENDNOTE)
         {
-            m_xSelectionLB->make_unsorted();
             SwSeqFieldList aArr;
             const size_t nCnt = pSh->GetSeqFootnoteList( aArr, true );
 
@@ -621,7 +636,6 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
         }
         else
         {
-            m_xSelectionLB->make_sorted();
             // get the fields to Seq-FieldType:
 
             SwSetExpFieldType* pType = static_cast<SwSetExpFieldType*>(pSh->GetFieldType(
