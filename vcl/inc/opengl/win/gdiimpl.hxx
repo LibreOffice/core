@@ -26,8 +26,8 @@ class OpenGLCompatibleDC : public CompatibleDC
 public:
     OpenGLCompatibleDC(SalGraphics &rGraphics, int x, int y, int width, int height);
 
-    virtual std::unique_ptr<Texture> getTexture() override;
-    // overload, caller must delete
+    virtual std::unique_ptr<Texture> getAsMaskTexture() override;
+    // caller must delete
     OpenGLTexture* getOpenGLTexture();
 
     virtual bool copyToTexture(Texture& aTexture) override;
@@ -68,7 +68,7 @@ public:
     virtual bool UseTextDraw() const override { return true; }
     virtual void PreDrawText() override;
     virtual void PostDrawText() override;
-    virtual void DrawMask( CompatibleDC::Texture* rTexture, Color nMaskColor, const SalTwoRect& rPosAry ) override;
+    virtual void DrawTextMask( CompatibleDC::Texture* rTexture, Color nMaskColor, const SalTwoRect& rPosAry ) override;
     using OpenGLSalGraphicsImpl::DrawMask;
     virtual void DeferredTextDraw(const CompatibleDC::Texture* pTexture, Color nMaskColor, const SalTwoRect& rPosAry) override;
 
