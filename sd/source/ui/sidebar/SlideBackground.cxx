@@ -59,6 +59,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <unomodel.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <boost/property_tree/ptree.hpp>
 
 using namespace ::com::sun::star;
 
