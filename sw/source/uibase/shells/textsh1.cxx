@@ -1174,9 +1174,25 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         case SID_ATTR_CHAR_COLOR2:
         {
+            Color aSet;
+            OUString sColor;
+            const SfxPoolItem* pColorStringItem = nullptr;
+            bool bHasItem = false;
+
             if(pItem)
             {
-                Color aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
+                aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
+                bHasItem = true;
+            }
+            else if(SfxItemState::SET == pArgs->GetItemState(SID_ATTR_CHAR_COLOR2_STR, false, &pColorStringItem))
+            {
+                sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
+                aSet = Color(sColor.toInt32(16));
+                bHasItem = true;
+            }
+
+            if (bHasItem)
+            {
                 SwEditWin& rEditWin = GetView().GetEditWin();
                 rEditWin.SetWaterCanTextColor(aSet);
                 SwApplyTemplate* pApply = rEditWin.GetApplyTemplate();
