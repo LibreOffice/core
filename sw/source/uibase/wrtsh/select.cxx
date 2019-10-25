@@ -359,6 +359,9 @@ long SwWrtShell::ResetSelect(const Point *,bool)
         // After canceling of all selections an update of Attr-Controls
         // could be necessary.
         GetChgLnk().Call(nullptr);
+
+        if ( GetEnhancedTableSelection() != SwTable::SEARCH_NONE )
+            UnsetEnhancedTableSelection();
     }
     Invalidate();
     SwTransferable::ClearSelection( *this );
