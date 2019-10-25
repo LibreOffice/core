@@ -3361,6 +3361,32 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testContinuousEndnotesInsertPageAtStart)
     assertXPath(pXmlDoc, "/root/page[3]/ftncont", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testContinuousEndnotesDeletePageAtStart)
+{
+    // Create a new document with CONTINUOUS_ENDNOTES enabled.
+    SwDoc* pDoc = createDoc();
+    pDoc->getIDocumentSettingAccess().set(DocumentSettingId::CONTINUOUS_ENDNOTES, true);
+
+    // Insert a second page, and an endnote on the 2nd page (both the anchor and the endnote is on
+    // the 2nd page).
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertPageBreak();
+    pWrtShell->InsertFootnote("endnote", /*bEndNote=*/true, /*bEdit=*/false);
+
+    // Remove the empty page at the start of the document.
+    pWrtShell->SttEndDoc(/*bStart=*/true);
+    pWrtShell->DelRight();
+
+    // Make sure that the endnote is moved from the 2nd page to the 1st one.
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the endnote remained on an (otherwise) empty 2nd page.
+    assertXPath(pXmlDoc, "/root/page", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

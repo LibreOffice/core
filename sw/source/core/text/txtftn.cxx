@@ -52,6 +52,7 @@
 #include <layouter.hxx>
 #include <frmtool.hxx>
 #include <ndindex.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 using namespace ::com::sun::star;
 
@@ -578,7 +579,10 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
 
     mbFootnote = true;
     mbInFootnoteConnect = true; // Just reset!
-    const bool bEnd = pFootnote->GetFootnote().IsEndNote();
+    // See if pFootnote is an endnote on a separate endnote page.
+    const IDocumentSettingAccess& rSettings = GetDoc().getIDocumentSettingAccess();
+    bool bContinuousEndnotes = rSettings.get(DocumentSettingId::CONTINUOUS_ENDNOTES);
+    const bool bEnd = pFootnote->GetFootnote().IsEndNote() && !bContinuousEndnotes;
 
     // We want to store this value, because it is needed as a fallback
     // in GetFootnoteLine(), if there is no paragraph information available
