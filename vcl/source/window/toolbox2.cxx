@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <boost/property_tree/ptree.hpp>
 
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>

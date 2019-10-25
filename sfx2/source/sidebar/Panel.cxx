@@ -40,6 +40,8 @@
 #include <com/sun/star/ui/XSidebarPanel.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 
+#include <boost/property_tree/ptree.hpp>
+
 using namespace css;
 using namespace css::uno;
 

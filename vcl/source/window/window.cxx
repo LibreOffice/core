@@ -66,6 +66,7 @@
 #include <unotools/configmgr.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
+#include <boost/property_tree/ptree.hpp>
 
 #include <cassert>
 #include <typeinfo>

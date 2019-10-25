@@ -32,6 +32,7 @@
 #include <comphelper/lok.hxx>
 
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 void ListBox::EnableQuickSelection( bool b )
 {

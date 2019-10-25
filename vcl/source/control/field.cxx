@@ -39,6 +39,7 @@
 #include <rtl/math.hxx>
 
 #include <unotools/localedatawrapper.hxx>
+#include <boost/property_tree/ptree.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
