@@ -1745,19 +1745,21 @@ void ExcelToSc::SetError( ScFormulaCell &rCell, const ConvErr eErr )
 void ExcelToSc::SetComplCol( ScComplexRefData &rCRD )
 {
     ScSingleRefData &rSRD = rCRD.Ref2;
+    ScDocument& rDoc = GetDocImport().getDoc();
     if( rSRD.IsColRel() )
-        rSRD.SetRelCol(MAXCOL - aEingPos.Col());
+        rSRD.SetRelCol(rDoc.MaxCol() - aEingPos.Col());
     else
-        rSRD.SetAbsCol(MAXCOL);
+        rSRD.SetAbsCol(rDoc.MaxCol());
 }
 
 void ExcelToSc::SetComplRow( ScComplexRefData &rCRD )
 {
     ScSingleRefData &rSRD = rCRD.Ref2;
+    ScDocument& rDoc = GetDocImport().getDoc();
     if( rSRD.IsRowRel() )
-        rSRD.SetRelRow(MAXROW - aEingPos.Row());
+        rSRD.SetRelRow(rDoc.MaxRow() - aEingPos.Row());
     else
-        rSRD.SetAbsRow(MAXROW);
+        rSRD.SetAbsRow(rDoc.MaxRow());
 }
 
 void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )

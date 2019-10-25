@@ -1466,7 +1466,7 @@ void ExcelToSc8::ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nC, ScSingleRefData
             rSRD.SetRelRow(nRelRow);
         }
         else
-            rSRD.SetAbsRow(std::min( static_cast<SCROW>(nRow), MAXROW));
+            rSRD.SetAbsRow(std::min( static_cast<SCROW>(nRow), GetDoc().MaxRow()));
     }
     else
     {

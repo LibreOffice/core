@@ -481,8 +481,8 @@ void ImportExcel::Columndefault()
 
     nColMac--;
 
-    if( nColMac > MAXCOL )
-        nColMac = static_cast<sal_uInt16>(MAXCOL);
+    if( nColMac > pD->MaxCol() )
+        nColMac = static_cast<sal_uInt16>(pD->MaxCol());
 
     for( sal_uInt16 nCol = nColMic ; nCol <= nColMac ; nCol++ )
     {
@@ -583,8 +583,8 @@ void ImportExcel::Colwidth()
     nColWidth = aIn.ReaduInt16();
 
 //TODO: add a check for the unlikely case of changed MAXCOL (-> XclImpAddressConverter)
-//   if( nColLast > MAXCOL )
-//       nColLast = static_cast<sal_uInt16>(MAXCOL);
+//   if( nColLast > pD->MaxCol() )
+//       nColLast = static_cast<sal_uInt16>(pD->MaxCol());
 
     sal_uInt16 nScWidth = XclTools::GetScColumnWidth( nColWidth, GetCharWidth() );
     pColRowBuff->SetWidthRange( nColFirst, nColLast, nScWidth );
@@ -662,11 +662,11 @@ void ImportExcel::Colinfo()
     nXF = aIn.ReaduInt16();
     nOpt = aIn.ReaduInt16();
 
-    if( nColFirst > MAXCOL )
+    if( nColFirst > pD->MaxCol() )
         return;
 
-    if( nColLast > MAXCOL )
-        nColLast = static_cast<sal_uInt16>(MAXCOL);
+    if( nColLast > pD->MaxCol() )
+        nColLast = static_cast<sal_uInt16>(pD->MaxCol());
 
     bool bHidden = ::get_flag( nOpt, EXC_COLINFO_HIDDEN );
     bool bCollapsed = ::get_flag( nOpt, EXC_COLINFO_COLLAPSED );
@@ -1131,7 +1131,7 @@ void ImportExcel::TableOp()
     else
     {
         bTabTruncated = true;
-        GetTracer().TraceInvalidRow(nLastRow, MAXROW);
+        GetTracer().TraceInvalidRow(nLastRow, pD->MaxRow());
     }
 }
 
@@ -1332,13 +1332,13 @@ void ImportExcel::PostDocLoad()
 
                 while( p )
                 {
-                    if( p->aStart.Col() == 0 && p->aEnd.Col() == MAXCOL && bRowVirgin )
+                    if( p->aStart.Col() == 0 && p->aEnd.Col() == pD->MaxCol() && bRowVirgin )
                     {
                         pD->SetRepeatRowRange( n, std::unique_ptr<ScRange>(new ScRange(*p)) );
                         bRowVirgin = false;
                     }
 
-                    if( p->aStart.Row() == 0 && p->aEnd.Row() == MAXROW && bColVirgin )
+                    if( p->aStart.Row() == 0 && p->aEnd.Row() == pD->MaxRow() && bColVirgin )
                     {
                         pD->SetRepeatColRange( n, std::unique_ptr<ScRange>(new ScRange(*p)) );
                         bColVirgin = false;

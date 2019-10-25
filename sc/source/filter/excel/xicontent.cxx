@@ -448,10 +448,10 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
     {
         const ScRange & rScRange = aRowScRanges[ i ];
         ScRange aDataRange( rScRange );
-        if( aDataRange.aEnd.Col() < MAXCOL )
+        if( aDataRange.aEnd.Col() < rDoc.MaxCol() )
         {
             aDataRange.aStart.SetCol( aDataRange.aEnd.Col() + 1 );
-            aDataRange.aEnd.SetCol( MAXCOL );
+            aDataRange.aEnd.SetCol( rDoc.MaxCol() );
         }
         else if( aDataRange.aStart.Col() > 0 )
         {
@@ -470,10 +470,10 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
     {
         const ScRange & rScRange = aColScRanges[ i ];
         ScRange aDataRange( rScRange );
-        if( aDataRange.aEnd.Row() < MAXROW )
+        if( aDataRange.aEnd.Row() < rDoc.MaxRow() )
         {
             aDataRange.aStart.SetRow( aDataRange.aEnd.Row() + 1 );
-            aDataRange.aEnd.SetRow( MAXROW );
+            aDataRange.aEnd.SetRow( rDoc.MaxRow() );
         }
         else if( aDataRange.aStart.Row() > 0 )
         {
