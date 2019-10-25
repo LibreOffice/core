@@ -30,6 +30,7 @@
 #include <fonthelper.hxx>
 #include <memory>
 #include <vector>
+#include <o3tl/sorted_vector.hxx>
 
 /* ============================================================================
 - Buffers for style records (PALETTE, FONT, FORMAT, XF, STYLE).
@@ -470,6 +471,9 @@ public:
 
     const SfxItemSet*   GetItemSet() const { return mpItemSet; }
 
+    sal_uInt32          GetScNumFmt() const { return mnScNumFmt; }
+    sal_uInt16          GetXclFont() const { return mnXclFont; }
+
 protected:
     explicit            XclExpXF( const XclExpRoot& rRoot, bool bCellXF );
 
@@ -681,8 +685,29 @@ private:
     typedef ::std::vector< XclExpCellBorder >           XclExpBorderList;
     typedef ::std::vector< XclExpCellArea >             XclExpFillList;
 
+    /** composite key for the find-map, so we can do partial key searching */
+    struct FindKey
+    {
+        bool mbCellXF; // is this a hard cell format, or a cell style
+        const SfxItemSet* mpItemSet;
+        sal_uInt32 mnScNumFmt;
+        sal_uInt16 mnXclFont;
+
+        bool operator<(const FindKey& other) const
+        {
+            if (mbCellXF != other.mbCellXF)
+                return mbCellXF < other.mbCellXF;
+            if (mpItemSet != other.mpItemSet)
+                return mpItemSet < other.mpItemSet;
+            if (mnScNumFmt != other.mnScNumFmt)
+                return mnScNumFmt < other.mnScNumFmt;
+            return mnXclFont < other.mnXclFont;
+        }
+    };
+    static FindKey ToFindKey(XclExpXF const &);
+
     XclExpXFList        maXFList;           /// List of all XF records.
-    std::unordered_map<const SfxItemSet*, std::vector<sal_uInt32>>
+    std::map<FindKey, std::vector<sal_uInt32>>
                         maXFFindMap;        /// map of itemset to vector of positions, to speed up find
     XclExpStyleList     maStyleList;        /// List of all STYLE records.
     XclExpBuiltInMap    maBuiltInMap;       /// Contained elements describe built-in XFs.
