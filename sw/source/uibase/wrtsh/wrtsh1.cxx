@@ -1463,7 +1463,14 @@ SelectionType SwWrtShell::GetSelectionType() const
         nCnt |= SelectionType::Table;
 
     if ( IsTableMode() )
+    {
         nCnt |= SelectionType::Table | SelectionType::TableCell;
+        SwTable::SearchType eTableSel = GetEnhancedTableSelection();
+        if ( eTableSel == SwTable::SEARCH_ROW )
+            nCnt |= SelectionType::TableRow;
+        else if ( eTableSel == SwTable::SEARCH_COL )
+            nCnt |= SelectionType::TableCol;
+    }
 
     // Do not pop up numbering toolbar, if the text node has a numbering of type SVX_NUM_NUMBER_NONE.
     const SwNumRule* pNumRule = GetNumRuleAtCurrCursorPos();
