@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <boost/property_tree/ptree.hpp>
 #include <com/sun/star/ui/XDeck.hpp>
 #include <com/sun/star/ui/XPanel.hpp>
 #include <com/sun/star/frame/XController2.hpp>
