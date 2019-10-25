@@ -2541,7 +2541,7 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
                     m_pPreviousNode = nullptr;
             }
 
-            if (m_xSFlyPara)
+            if (m_xSFlyPara && m_xSFlyPara->xMainTextPos)
             {
                 // If an open apo pos is here, then clear it before
                 // JoinNext destroys it
