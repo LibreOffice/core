@@ -144,10 +144,10 @@ tools::Rectangle XclObjAnchor::GetRect( const XclRoot& rRoot, SCTAB nScTab, MapU
     ScDocument& rDoc = rRoot.GetDoc();
     double fScale = lclGetTwipsScale( eMapUnit );
     tools::Rectangle aRect(
-        lclGetXFromCol(rDoc, nScTab, std::min<SCCOL>(maFirst.mnCol, MAXCOL), mnLX, fScale),
-        lclGetYFromRow(rDoc, nScTab, std::min<SCROW>(maFirst.mnRow, MAXROW), mnTY, fScale),
-        lclGetXFromCol(rDoc, nScTab, std::min<SCCOL>(maLast.mnCol, MAXCOL),  mnRX + 1, fScale),
-        lclGetYFromRow(rDoc, nScTab, std::min<SCROW>(maLast.mnRow, MAXROW),  mnBY, fScale));
+        lclGetXFromCol(rDoc, nScTab, std::min<SCCOL>(maFirst.mnCol, rDoc.MaxCol()), mnLX, fScale),
+        lclGetYFromRow(rDoc, nScTab, std::min<SCROW>(maFirst.mnRow, rDoc.MaxRow()), mnTY, fScale),
+        lclGetXFromCol(rDoc, nScTab, std::min<SCCOL>(maLast.mnCol, rDoc.MaxCol()),  mnRX + 1, fScale),
+        lclGetYFromRow(rDoc, nScTab, std::min<SCROW>(maLast.mnRow, rDoc.MaxRow()),  mnBY, fScale));
 
     // adjust coordinates in mirrored sheets
     if( rDoc.IsLayoutRTL( nScTab ) )

@@ -755,7 +755,7 @@ void XclImpPivotCache::ReadPivotCacheStream( const XclImpStream& rStrm )
                         else
                             aOrigFields.push_back( xCurrField );
                         // insert field name into generated source data, field remembers its column index
-                        if( bGenerateSource && (nFieldScCol <= MAXCOL) )
+                        if( bGenerateSource && (nFieldScCol <= rDoc.MaxCol()) )
                             xCurrField->WriteFieldNameToSource( nFieldScCol++, nScTab );
                     }
                     // do not read items into invalid/postponed fields
@@ -767,7 +767,7 @@ void XclImpPivotCache::ReadPivotCacheStream( const XclImpStream& rStrm )
 
             case EXC_ID_SXINDEXLIST:
                 // read index list and insert all items into generated source data
-                if( bGenerateSource && (nItemScRow <= MAXROW) && (++nItemScRow <= MAXROW) )
+                if( bGenerateSource && (nItemScRow <= rDoc.MaxRow()) && (++nItemScRow <= rDoc.MaxRow()) )
                 {
                     for( const auto& rxOrigField : aOrigFields )
                     {
@@ -794,12 +794,12 @@ void XclImpPivotCache::ReadPivotCacheStream( const XclImpStream& rStrm )
                     // read postponed item
                     aPostpFields[ nPostpIdx ]->ReadItem( aPCStrm );
                     // write item to source
-                    if( bGenerateSource && (nItemScRow <= MAXROW) )
+                    if( bGenerateSource && (nItemScRow <= rDoc.MaxRow()) )
                     {
                         // start new row, if there are only postponed fields
                         if( aOrigFields.empty() && (nPostpIdx == 0) )
                             ++nItemScRow;
-                        if( nItemScRow <= MAXROW )
+                        if( nItemScRow <= rDoc.MaxRow() )
                             aPostpFields[ nPostpIdx ]->WriteLastOrigItemToSource( nItemScRow, nScTab );
                     }
                     // get index of next postponed field

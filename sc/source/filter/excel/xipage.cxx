@@ -375,14 +375,14 @@ void XclImpPageSettings::Finalize()
     for( const auto& rHorPageBreak : maData.maHorPageBreaks )
     {
         SCROW nScRow = static_cast< SCROW >( rHorPageBreak );
-        if( nScRow <= MAXROW )
+        if( nScRow <= rDoc.MaxRow() )
             rDoc.SetRowBreak(nScRow, nScTab, false, true);
     }
 
     for( const auto& rVerPageBreak : maData.maVerPageBreaks )
     {
         SCCOL nScCol = static_cast< SCCOL >( rVerPageBreak );
-        if( nScCol <= MAXCOL )
+        if( nScCol <= rDoc.MaxCol() )
             rDoc.SetColBreak(nScCol, nScTab, false, true);
     }
 }
