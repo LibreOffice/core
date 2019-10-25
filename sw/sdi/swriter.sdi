@@ -1280,6 +1280,7 @@ SfxBoolItem Fields FN_VIEW_FIELDS
 ]
 
 SvxColorItem FontColor SID_ATTR_CHAR_COLOR2
+(SfxStringItem Color SID_ATTR_CHAR_COLOR2_STR, SvxColorItem FontColor SID_ATTR_CHAR_COLOR2)
 
 [
     AutoUpdate = TRUE,
