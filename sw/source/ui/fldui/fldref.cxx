@@ -372,7 +372,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, weld::TreeView&, void)
     switch (nTypeId)
     {
         case static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef):
-            if (REFFLDFLAG & m_xTypeLB->get_id(nOld).toUInt32())
+            if (nOld != -1 && REFFLDFLAG & m_xTypeLB->get_id(nOld).toUInt32())
                 // the old one stays
                 nFieldDlgFormatSel = m_xFormatLB->get_selected_index();
             bName = true;
