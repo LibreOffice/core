@@ -168,6 +168,8 @@ bool SwCursorShell::SelTableRowOrCol( bool bRow, bool bRowSimple )
 
         pStt = aBoxes[0];
         pEnd = aBoxes.back();
+
+        m_eEnhancedTableSel = eSearchType;
     }
     else
     {

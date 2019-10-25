@@ -639,6 +639,11 @@ public:
     void DeleteTable();
     bool DeleteRow(bool bCompleteTable = false);
 
+    /// insert table rows or columns instead of overwriting the existing table cells
+    SwTable::SearchType m_eTableInsertMode;
+    SwTable::SearchType GetTableInsertMode() const         { return m_eTableInsertMode; }
+    void SetTableInsertMode( SwTable::SearchType eFlag )  { m_eTableInsertMode = eFlag; }
+
     bool DeleteTableSel();        ///< Current selection, may be whole table.
 
     TableMergeErr MergeTab();          /**< Merge selected parts of table */
