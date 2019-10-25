@@ -1601,6 +1601,13 @@ bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
 #endif
         if (!bGroupInterpreted)
         {
+            // This call resulted from a dependency calculation for a multigroup-threading attempt,
+            // but found dependency among the groups.
+            if (!rRecursionHelper.AreGroupsIndependent())
+            {
+                pDocument->DecInterpretLevel();
+                return bGroupInterpreted;
+            }
             // Dependency calc inside InterpretFormulaGroup() failed due to
             // detection of a cycle and there are parent FG's in the cycle.
             // Skip InterpretTail() in such cases, only run InterpretTail for the "cycle-starting" FG
@@ -4657,6 +4664,7 @@ bool ScFormulaCell::CheckComputeDependencies(sc::FormulaLogger::GroupScope& rSco
         ScFormulaGroupDependencyComputeGuard aDepComputeGuard(rRecursionHelper);
         ScDependantsCalculator aCalculator(*pDocument, *pCode, *this, mxGroup->mpTopCell->aPos, fromFirstRow, nStartOffset, nEndOffset);
         bOKToParallelize = aCalculator.DoIt();
+
     }
 
     if (rRecursionHelper.IsInRecursionReturn())
@@ -4670,6 +4678,14 @@ bool ScFormulaCell::CheckComputeDependencies(sc::FormulaLogger::GroupScope& rSco
     {
         mxGroup->meCalcState = sc::GroupCalcDisabled;
         rScope.addMessage("found circular formula-group dependencies");
+        return false;
+    }
+
+    if (!rRecursionHelper.AreGroupsIndependent())
+    {
+        // This call resulted from a dependency calculation for a multigroup-threading attempt,
+        // but found dependency among the groups.
+        rScope.addMessage("multi-group-dependency failed");
         return false;
     }
 
