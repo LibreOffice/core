@@ -74,10 +74,12 @@ enum class SelectionType : sal_Int32
     ExtrudedCustomShape  = 0x008000, // extruded custom shape
     FontWork             = 0x010000, // fontwork
     PostIt               = 0x020000, // annotation
-    All                  = 0x03fff3,
+    TableRow             = 0x040000, // table rows are selected
+    TableCol             = 0x080000, // table columns are selected
+    All                  = 0x0ffff3,
 };
 namespace o3tl {
-    template<> struct typed_flags<SelectionType> : is_typed_flags<SelectionType, 0x03fff3> {};
+    template<> struct typed_flags<SelectionType> : is_typed_flags<SelectionType, 0x0ffff3> {};
 }
 
 /** Used by the UI to modify the document model.

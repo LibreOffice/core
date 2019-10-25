@@ -203,6 +203,7 @@ private:
      */
     sal_uInt16 m_nCursorMove;
     CursorMoveState m_eMvState;     ///< Status for Cursor-Travelling - GetCursorOfst
+    SwTable::SearchType m_eEnhancedTableSel; /// table rows or columns selected by not cell by cell
 
     OUString m_sMarkedListId;
     int m_nMarkedListLevel;
@@ -801,6 +802,9 @@ public:
 
     void SetSelTableCells( bool bFlag )           { m_bSelTableCells = bFlag; }
     bool IsSelTableCells() const                  { return m_bSelTableCells; }
+
+    void UnsetEnhancedTableSelection()            { m_eEnhancedTableSel = SwTable::SEARCH_NONE; }
+    SwTable::SearchType GetEnhancedTableSelection() const  { return m_eEnhancedTableSel; }
 
     bool IsAutoUpdateCells() const              { return m_bAutoUpdateCells; }
     void SetAutoUpdateCells( bool bFlag )       { m_bAutoUpdateCells = bFlag; }

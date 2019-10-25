@@ -852,9 +852,21 @@ void SwTransferable::DeleteSelection()
         return;
     // ask for type of selection before action-bracketing
     const SelectionType nSelection = m_pWrtShell->GetSelectionType();
+    // cut rows or columns selected by enhanced table selection and wholly selected tables
+    bool bCutMode = ( SelectionType::TableCell & nSelection ) && ( (SelectionType::TableRow | SelectionType::TableCol) & nSelection ||
+        m_pWrtShell->HasWholeTabSelection() );
+
     m_pWrtShell->StartUndo( SwUndoId::START );
-    if( ( SelectionType::TableCell & nSelection ) && m_pWrtShell->HasWholeTabSelection() )
-        m_pWrtShell->DeleteTable();
+    if( bCutMode )
+    {
+        if( !(SelectionType::TableCol & nSelection) )
+            m_pWrtShell->DeleteTable();
+        else
+        {
+            SfxDispatcher* pDispatch = m_pWrtShell->GetView().GetViewFrame()->GetDispatcher();
+            pDispatch->Execute(FN_TABLE_DELETE_COL, SfxCallMode::SYNCHRON);
+        }
+    }
     else
     {
         if( ( SelectionType::Text | SelectionType::Table ) & nSelection )
@@ -869,6 +881,9 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
     int nRet = 1;
     if(!m_pWrtShell)
         return 0;
+
+    if ( m_pWrtShell->GetTableInsertMode() != SwTable::SEARCH_NONE )
+        m_pWrtShell->SetTableInsertMode( SwTable::SEARCH_NONE );
 
     OUString sGrfNm;
     const SelectionType nSelection = m_pWrtShell->GetSelectionType();
@@ -1001,6 +1016,9 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         {
             m_eBufferType = TransferBufferType::Table | m_eBufferType;
             bDDELink = m_pWrtShell->HasWholeTabSelection();
+
+            if ( bIsCut && (SelectionType::TableRow | SelectionType::TableCol) & nSelection )
+                m_pWrtShell->SetTableInsertMode( (SelectionType::TableRow & nSelection) ? SwTable::SEARCH_ROW : SwTable::SEARCH_COL );
         }
 
 #if HAVE_FEATURE_DESKTOP
@@ -1419,6 +1437,73 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                 for(sal_uInt32 a = 0; a < (nLevel * 2); a++)
                     pDispatch->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
             }
+        }
+    }
+    // insert clipboard content as new table rows/columns before the actual row/column instead of overwriting it
+    else if ( rSh.GetTableInsertMode() != SwTable::SEARCH_NONE &&
+        rData.HasFormat( SotClipboardFormatId::HTML ) &&
+        rSh.GetDoc()->IsIdxInTable(rSh.GetCursor()->GetNode()) != nullptr )
+    {
+        OUString aExpand;
+        sal_Int32 nIdx;
+        bool bRowMode = rSh.GetTableInsertMode() == SwTable::SEARCH_ROW;
+        if( rData.GetString( SotClipboardFormatId::HTML, aExpand ) && (nIdx = aExpand.indexOf("<table")) > -1 )
+        {
+            // calculate count of selected rows or columns
+            sal_Int32 nSelectedRowsOrCols = 0;
+            const OUString sSearchRowOrCol = bRowMode ? OUString("</tr>") : OUString("<col ");
+            while((nIdx = aExpand.indexOf(sSearchRowOrCol, nIdx)) > -1)
+            {
+                // skip rows/columns of nested tables, based on HTML indentation
+                if (nIdx > 1 && (aExpand[nIdx-1] != '\t' || aExpand[nIdx-2] != '\t' ))
+                    ++nSelectedRowsOrCols;
+                ++nIdx;
+            }
+            // are we at the beginning of the cell?
+            bool bStartTableBoxNode =
+                // first paragraph of the cell?
+                rSh.GetCursor()->GetNode().GetIndex() == rSh.GetCursor()->GetNode().FindTableBoxStartNode()->GetIndex()+1 &&
+                // beginning of the paragraph?
+                !rSh.GetCursor()->GetPoint()->nContent.GetIndex();
+            SfxDispatcher* pDispatch = rSh.GetView().GetViewFrame()->GetDispatcher();
+
+            // go start of the cell
+            if (!bStartTableBoxNode)
+                pDispatch->Execute(FN_START_OF_DOCUMENT, SfxCallMode::SYNCHRON);
+
+            // store cursor position in row mode
+            ::sw::mark::IMark* pMark = !bRowMode ? nullptr : rSh.SetBookmark(
+                                    vcl::KeyCode(),
+                                    OUString(),
+                                    IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
+
+            // add a new empty row/column before the actual table row/column and go there
+            const sal_uInt16 nDispatchSlot = bRowMode ? FN_TABLE_INSERT_ROW_BEFORE : FN_TABLE_INSERT_COL_BEFORE;
+            pDispatch->Execute(nDispatchSlot, SfxCallMode::SYNCHRON);
+            pDispatch->Execute(bRowMode ? FN_LINE_UP : FN_CHAR_LEFT, SfxCallMode::SYNCHRON);
+
+            // add the other new empty rows/columns after the actual table row/column
+            if ( nSelectedRowsOrCols > 1 )
+            {
+                SfxUInt16Item aCountItem( nDispatchSlot, nSelectedRowsOrCols-1 );
+                SfxBoolItem aAfter( FN_PARAM_INSERT_AFTER, true );
+                pDispatch->ExecuteList(nDispatchSlot,
+                    SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
+                    { &aCountItem, &aAfter });
+            }
+
+            // paste rows
+            bool bResult = SwTransferable::PasteData( rData, rSh, nAction, nActionFlags, nFormat,
+                                        nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext );
+
+            // restore cursor position
+            if (pMark != nullptr)
+            {
+                rSh.GotoMark( pMark );
+                rSh.getIDocumentMarkAccess()->deleteMark( pMark );
+            }
+
+            return bResult;
         }
     }
 

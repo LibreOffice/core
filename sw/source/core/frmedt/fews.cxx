@@ -707,6 +707,7 @@ SwFEShell::SwFEShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption *pOp
     : SwEditShell( rDoc, pWindow, pOptions )
     , m_bCheckForOLEInCaption(false)
     , m_aPasteListeners(GetPasteMutex())
+    , m_eTableInsertMode(SwTable::SEARCH_NONE)
 {
 }
 
@@ -714,6 +715,7 @@ SwFEShell::SwFEShell( SwEditShell& rShell, vcl::Window *pWindow )
     : SwEditShell( rShell, pWindow )
     , m_bCheckForOLEInCaption(false)
     , m_aPasteListeners(GetPasteMutex())
+    , m_eTableInsertMode(SwTable::SEARCH_NONE)
 {
 }
 
