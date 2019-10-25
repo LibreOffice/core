@@ -1638,7 +1638,7 @@ std::unique_ptr<sc::ColumnIterator> ScColumn::GetColumnIterator( SCROW nRow1, SC
 }
 
 static bool lcl_InterpretSpan(sc::formula_block::const_iterator& rSpanIter, SCROW nStartOffset, SCROW nEndOffset,
-                              const ScFormulaCellGroupRef& mxParentGroup, bool& bAllowThreading)
+                              const ScFormulaCellGroupRef& mxParentGroup, bool& bAllowThreading, ScDocument& rDoc)
 {
     bAllowThreading = true;
     ScFormulaCell* pCellStart = nullptr;
@@ -1665,10 +1665,14 @@ static bool lcl_InterpretSpan(sc::formula_block::const_iterator& rSpanIter, SCRO
             // Found a completely dirty sub span [nSpanStart, nSpanEnd] inside the required span [nStartOffset, nEndOffset]
             bool bGroupInterpreted = pCellStart->Interpret(nSpanStart, nSpanEnd);
 
+            ScRecursionHelper& rRecursionHelper = rDoc.GetRecursionHelper();
             // child cell's Interpret could result in calling dependency calc
             // and that could detect a cycle involving mxGroup
             // and do early exit in that case.
-            if (mxParentGroup && mxParentGroup->mbPartOfCycle)
+            // OR
+            // this call resulted from a dependency calculation for a multi-formula-group-threading and
+            // if intergroup dependency is found, return early.
+            if ((mxParentGroup && mxParentGroup->mbPartOfCycle) || !rRecursionHelper.AreGroupsIndependent())
             {
                 // Set pCellStart as dirty as pCellStart may be interpreted in InterpretTail()
                 pCellStart->SetDirtyVar();
@@ -1695,6 +1699,7 @@ static void lcl_EvalDirty(sc::CellStoreType& rCells, SCROW nRow1, SCROW nRow2, S
                           const ScFormulaCellGroupRef& mxGroup, bool bThreadingDepEval, bool bSkipRunning,
                           bool& bIsDirty, bool& bAllowThreading)
 {
+    ScRecursionHelper& rRecursionHelper = rDoc.GetRecursionHelper();
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = rCells.position(nRow1);
     sc::CellStoreType::const_iterator it = aPos.first;
     size_t nOffset = aPos.second;
@@ -1734,7 +1739,6 @@ static void lcl_EvalDirty(sc::CellStoreType& rCells, SCROW nRow1, SCROW nRow2, S
                     // and return false
                     if (bThreadingDepEval && pChildTopCell->GetSeenInPath())
                     {
-                        ScRecursionHelper& rRecursionHelper = rDoc.GetRecursionHelper();
                         ScFormulaGroupCycleCheckGuard aCycleCheckGuard(rRecursionHelper, pChildTopCell);
                         bAllowThreading = false;
                         return;
@@ -1759,7 +1763,7 @@ static void lcl_EvalDirty(sc::CellStoreType& rCells, SCROW nRow1, SCROW nRow2, S
                         // The (main) span required to be evaluated is [nFGStartOffset, nFGEndOffset], but this span may contain
                         // non-dirty cells, so split this into sets of completely-dirty spans and try evaluate each of them in grouped-style.
 
-                        bool bAnyDirtyInSpan = lcl_InterpretSpan(itCell, nFGStartOffset, nFGEndOffset, mxGroup, bAllowThreading);
+                        bool bAnyDirtyInSpan = lcl_InterpretSpan(itCell, nFGStartOffset, nFGEndOffset, mxGroup, bAllowThreading, rDoc);
                         if (!bAllowThreading)
                             return;
                         // itCell will now point to cell just after the end of span [nFGStartOffset, nFGEndOffset].
@@ -1780,7 +1784,10 @@ static void lcl_EvalDirty(sc::CellStoreType& rCells, SCROW nRow1, SCROW nRow2, S
                         // child cell's Interpret could result in calling dependency calc
                         // and that could detect a cycle involving mxGroup
                         // and do early exit in that case.
-                        if (bThreadingDepEval && mxGroup && mxGroup->mbPartOfCycle)
+                        // OR
+                        // we are trying multi-formula-group-threading, but found intergroup dependency.
+                        if (bThreadingDepEval && mxGroup &&
+                            (mxGroup->mbPartOfCycle || !rRecursionHelper.AreGroupsIndependent()))
                         {
                             // Set itCell as dirty as itCell may be interpreted in InterpretTail()
                             (*itCell)->SetDirtyVar();
