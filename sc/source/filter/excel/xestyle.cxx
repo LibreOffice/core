@@ -2666,24 +2666,58 @@ void XclExpXFBuffer::SaveXFXml( XclExpXmlStream& rStrm, XclExpXF& rXF )
 sal_uInt32 XclExpXFBuffer::FindXF( const ScPatternAttr& rPattern,
         sal_uInt32 nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak ) const
 {
-    auto it = maXFFindMap.find(&rPattern.GetItemSet());
-    if (it == maXFFindMap.end())
-        return EXC_XFID_NOTFOUND;
-    for (auto const & nPos : it->second)
-        if( maXFList.GetRecord( nPos )->Equals( rPattern, nForceScNumFmt, nForceXclFont, bForceLineBreak ) )
-            return nPos;
+    if (nForceScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND && nForceXclFont == EXC_FONT_NOTFOUND)
+    {
+        FindKey key1 { /*mbCellXF*/true, &rPattern.GetItemSet(), nForceScNumFmt, 0 };
+        FindKey key2 { /*mbCellXF*/true, &rPattern.GetItemSet(), nForceScNumFmt, EXC_FONT_NOTFOUND };
+        auto it1 = maXFFindMap.lower_bound(key1);
+        if (it1 != maXFFindMap.end())
+        {
+            auto it2 = maXFFindMap.upper_bound(key2);
+            for (auto it = it1; it != it2; ++it)
+                for (auto const & nPos : it->second)
+                    if( maXFList.GetRecord( nPos )->Equals( rPattern, nForceScNumFmt, nForceXclFont, bForceLineBreak ) )
+                        return nPos;
+        }
+    }
+    else if (nForceScNumFmt == NUMBERFORMAT_ENTRY_NOT_FOUND || nForceXclFont == EXC_FONT_NOTFOUND)
+    {
+        FindKey key1 { /*mbCellXF*/true, &rPattern.GetItemSet(), 0, 0 };
+        FindKey key2 { /*mbCellXF*/true, &rPattern.GetItemSet(), NUMBERFORMAT_ENTRY_NOT_FOUND, EXC_FONT_NOTFOUND };
+        auto it1 = maXFFindMap.lower_bound(key1);
+        if (it1 != maXFFindMap.end())
+        {
+            auto it2 = maXFFindMap.upper_bound(key2);
+            for (auto it = it1; it != it2; ++it)
+                for (auto const & nPos : it->second)
+                    if( maXFList.GetRecord( nPos )->Equals( rPattern, nForceScNumFmt, nForceXclFont, bForceLineBreak ) )
+                        return nPos;
+        }
+    }
+    else
+    {
+        FindKey key { /*mbCellXF*/true, &rPattern.GetItemSet(), nForceScNumFmt, nForceXclFont };
+        auto it = maXFFindMap.find(key);
+        if (it == maXFFindMap.end())
+            return EXC_XFID_NOTFOUND;
+        for (auto const & nPos : it->second)
+            if( maXFList.GetRecord( nPos )->Equals( rPattern, nForceScNumFmt, nForceXclFont, bForceLineBreak ) )
+                return nPos;
+    }
     return EXC_XFID_NOTFOUND;
 }
 
 sal_uInt32 XclExpXFBuffer::FindXF( const SfxStyleSheetBase& rStyleSheet ) const
 {
     const SfxItemSet* pItemSet = &const_cast< SfxStyleSheetBase& >( rStyleSheet ).GetItemSet();
-    auto it = maXFFindMap.find(pItemSet);
-    if (it == maXFFindMap.end())
-        return EXC_XFID_NOTFOUND;
-    for (auto const & nPos : it->second)
-        if( maXFList.GetRecord( nPos )->Equals( rStyleSheet ) )
-            return nPos;
+    FindKey key1 { /*mbCellXF*/false, pItemSet, 0, 0 };
+    FindKey key2 { /*mbCellXF*/false, pItemSet, NUMBERFORMAT_ENTRY_NOT_FOUND, EXC_FONT_NOTFOUND };
+    auto it1 = maXFFindMap.lower_bound(key1);
+    auto it2 = maXFFindMap.upper_bound(key2);
+    for (auto it = it1; it != it2; ++it)
+        for (auto const & nPos : it->second)
+            if( maXFList.GetRecord( nPos )->Equals( rStyleSheet ) )
+                return nPos;
     return EXC_XFID_NOTFOUND;
 }
 
@@ -2696,6 +2730,11 @@ sal_uInt32 XclExpXFBuffer::FindBuiltInXF( sal_uInt8 nStyleId, sal_uInt8 nLevel )
     if (aIt != maBuiltInMap.end())
         return aIt->first;
     return EXC_XFID_NOTFOUND;
+}
+
+XclExpXFBuffer::FindKey XclExpXFBuffer::ToFindKey(XclExpXF const & rRec)
+{
+    return { rRec.IsCellXF(), rRec.GetItemSet(), rRec.GetScNumFmt(), rRec.GetXclFont() };
 }
 
 sal_uInt32 XclExpXFBuffer::InsertCellXF( const ScPatternAttr* pPattern, sal_Int16 nScript,
@@ -2715,14 +2754,14 @@ sal_uInt32 XclExpXFBuffer::InsertCellXF( const ScPatternAttr* pPattern, sal_Int1
         if( rbPredefined )
         {
             // remove old entry in find-map
-            auto & rPositions = maXFFindMap[maXFList.GetRecord(EXC_XF_DEFAULTCELL)->GetItemSet()];
+            auto & rPositions = maXFFindMap[ToFindKey(*maXFList.GetRecord(EXC_XF_DEFAULTCELL))];
             auto it = std::find(rPositions.begin(), rPositions.end(), EXC_XF_DEFAULTCELL);
             rPositions.erase(it);
             // replace default cell pattern
             XclExpXFRef xNewXF( new XclExpXF( GetRoot(), *pPattern, nScript ) );
             maXFList.ReplaceRecord( xNewXF, EXC_XF_DEFAULTCELL );
             // and add new entry in find-map
-            maXFFindMap[xNewXF->GetItemSet()].push_back(EXC_XF_DEFAULTCELL);
+            maXFFindMap[ToFindKey(*xNewXF)].push_back(EXC_XF_DEFAULTCELL);
             rbPredefined = false;
         }
         return GetDefCellXFId();
@@ -2739,7 +2778,7 @@ sal_uInt32 XclExpXFBuffer::InsertCellXF( const ScPatternAttr* pPattern, sal_Int1
             maXFList.AppendNewRecord( pNewExp );
             // do not set nXFId before the AppendNewRecord() call - it may insert 2 XFs (style+cell)
             nXFId = static_cast< sal_uInt32 >( maXFList.GetSize() - 1 );
-            maXFFindMap[pNewExp->GetItemSet()].push_back(nXFId);
+            maXFFindMap[ToFindKey(*pNewExp)].push_back(nXFId);
         }
         else
         {
@@ -2775,14 +2814,14 @@ sal_uInt32 XclExpXFBuffer::InsertStyleXF( const SfxStyleSheetBase& rStyleSheet )
             if( rbPredefined )
             {
                 // remove old entry in find-map
-                auto & rPositions = maXFFindMap[maXFList.GetRecord(nXFId)->GetItemSet()];
+                auto & rPositions = maXFFindMap[ToFindKey(*maXFList.GetRecord(nXFId))];
                 auto it = std::find(rPositions.begin(), rPositions.end(), nXFId);
                 rPositions.erase(it);
                 // replace predefined built-in style (ReplaceRecord() deletes old record)
                 auto pNewExp = std::make_shared<XclExpXF>( GetRoot(), rStyleSheet );
                 maXFList.ReplaceRecord( pNewExp, nXFId );
                 // and add new entry in find-map
-                maXFFindMap[pNewExp->GetItemSet()].push_back(nXFId);
+                maXFFindMap[ToFindKey(*pNewExp)].push_back(nXFId);
                 rbPredefined = false;
             }
         }
@@ -2812,7 +2851,7 @@ sal_uInt32 XclExpXFBuffer::InsertStyleXF( const SfxStyleSheetBase& rStyleSheet )
             // create the STYLE record
             if( !rStyleSheet.GetName().isEmpty() )
                 maStyleList.AppendNewRecord( new XclExpStyle( nXFId, rStyleSheet.GetName() ) );
-            maXFFindMap[pNewExp->GetItemSet()].push_back(nXFId);
+            maXFFindMap[ToFindKey(*pNewExp)].push_back(nXFId);
         }
         else
             // list full - fall back to default style XF
@@ -2833,7 +2872,7 @@ sal_uInt32 XclExpXFBuffer::AppendBuiltInXF( XclExpXFRef const & xXF, sal_uInt8 n
 {
     sal_uInt32 nXFId = static_cast< sal_uInt32 >( maXFList.GetSize() );
     maXFList.AppendRecord( xXF );
-    maXFFindMap[xXF->GetItemSet()].push_back(nXFId);
+    maXFFindMap[ToFindKey(*xXF)].push_back(nXFId);
     XclExpBuiltInInfo& rInfo = maBuiltInMap[ nXFId ];
     rInfo.mnStyleId = nStyleId;
     rInfo.mnLevel = nLevel;
@@ -2906,7 +2945,7 @@ void XclExpXFBuffer::InsertDefaultRecords()
 
     // index 15: default hard cell format, placeholder to be able to add more built-in styles
     maXFList.AppendNewRecord( new XclExpDefaultXF( GetRoot(), true ) );
-    maXFFindMap[maXFList.GetRecord(maXFList.GetSize()-1)->GetItemSet()].push_back(maXFList.GetSize()-1);
+    maXFFindMap[ToFindKey(*maXFList.GetRecord(maXFList.GetSize()-1))].push_back(maXFList.GetSize()-1);
     maBuiltInMap[ EXC_XF_DEFAULTCELL ].mbPredefined = true;
 
     // index 16-20: other built-in styles
