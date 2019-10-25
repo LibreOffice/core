@@ -194,6 +194,7 @@ bool StringAdd::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* operatorCall
         return true;
 
     auto check = [operatorCall, this, &tc](unsigned arg) {
+        (void)tc;
         auto const e
             = dyn_cast<CXXFunctionalCastExpr>(operatorCall->getArg(arg)->IgnoreParenImpCasts());
         if (e == nullptr)
