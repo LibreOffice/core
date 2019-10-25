@@ -26,7 +26,6 @@
 
  *************************************************************************/
 #include "webdavresultset.hxx"
-#include "DAVSession.hxx"
 
 using namespace com::sun::star;
 using namespace http_dav_ucp;

@@ -29,7 +29,6 @@
 #include "webdavdatasupplier.hxx"
 #include "webdavcontent.hxx"
 #include "ContentProperties.hxx"
-#include "DAVSession.hxx"
 #include "DAVProperties.hxx"
 #include "SerfUri.hxx"
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>

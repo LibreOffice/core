@@ -9,17 +9,6 @@
 
 #include <sal/config.h>
 
-#if defined __GNUC__ && !defined __clang__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated"
-#pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
-#endif
-#include <libcmis/libcmis.hxx>
-#if defined __GNUC__ && !defined __clang__
-#pragma GCC diagnostic pop
-#endif
-
-#include <config_oauth2.h>
 #include <rtl/uri.hxx>
 #include <tools/urlobj.hxx>
 

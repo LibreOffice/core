@@ -19,8 +19,6 @@
 
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
-#include <osl/file.hxx>
 
 #include <osl/diagnose.h>
 #include <com/sun/star/lang/NoSupportException.hpp>
@@ -28,22 +26,13 @@
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/ucb/XProgressHandler.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <com/sun/star/beans/PropertySetInfoChange.hpp>
-#include <com/sun/star/ucb/ContentAction.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <comphelper/fileurl.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/queryinterface.hxx>
-#include <ucbhelper/macros.hxx>
 #include "filglob.hxx"
 #include "filid.hxx"
 #include "filrow.hxx"

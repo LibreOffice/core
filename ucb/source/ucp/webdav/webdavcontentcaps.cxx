@@ -36,7 +36,6 @@
 #include "webdavcontent.hxx"
 #include "webdavprovider.hxx"
 #include "DAVProperties.hxx"
-#include "DAVSession.hxx"
 #include "ContentProperties.hxx"
 
 using namespace com::sun::star;

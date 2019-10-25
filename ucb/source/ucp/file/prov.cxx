@@ -20,7 +20,6 @@
 #include <osl/security.hxx>
 #include <osl/file.hxx>
 #include <osl/socket.h>
-#include <sal/log.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -28,7 +27,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/ucb/FileSystemNotation.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "filglob.hxx"

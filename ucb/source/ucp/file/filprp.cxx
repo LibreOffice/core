@@ -21,8 +21,6 @@
 #include "prov.hxx"
 #include "filprp.hxx"
 
-#include <sal/log.hxx>
-
 using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

@@ -26,14 +26,12 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <cstring>
 #include <vector>
 
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <string.h>
 #include <rtl/uri.hxx>
-#include <rtl/strbuf.hxx>
 
 #include "ftpurl.hxx"
 #include "ftpcontentprovider.hxx"

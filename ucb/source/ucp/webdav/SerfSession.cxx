@@ -19,7 +19,6 @@
 
 #include <vector>
 #include <string.h>
-#include <rtl/string.h>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -34,7 +33,6 @@
 #include "SerfRequestProcessor.hxx"
 #include "SerfCallbacks.hxx"
 #include "SerfInputStream.hxx"
-#include "UCBDeadPropertyValue.hxx"
 
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>

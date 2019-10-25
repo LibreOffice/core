@@ -20,17 +20,15 @@
 
 #include "cachedcontentresultset.hxx"
 #include <com/sun/star/sdbc/FetchDirection.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/ucb/FetchError.hpp>
-#include <com/sun/star/ucb/ResultSetException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/Converter.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <rtl/ustring.hxx>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/getcomponentcontext.hxx>

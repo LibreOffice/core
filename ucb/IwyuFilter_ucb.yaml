@@ -56,3 +56,79 @@ blacklist:
     ucb/source/ucp/webdav-neon/webdavprovider.hxx:
     # Needed for LGPL code licensing
     - config_lgpl.h
+    ucb/source/core/ucb.cxx:
+    # Needed for UnoType
+    - com/sun/star/ucb/XCommandInfo.hpp
+    ucb/source/ucp/cmis/cmis_content.cxx:
+    # Needed for UnoType
+    - com/sun/star/beans/XPropertySetInfo.hpp
+    - com/sun/star/ucb/XCommandInfo.hpp
+    ucb/source/ucp/cmis/cmis_repo_content.cxx:
+    # Needed for UnoType
+    - com/sun/star/ucb/XCommandInfo.hpp
+    - com/sun/star/beans/XPropertySetInfo.hpp
+    ucb/source/ucp/ext/ucpext_content.cxx:
+    # Needed for UnoType
+    - com/sun/star/beans/XPropertySetInfo.hpp
+    - com/sun/star/ucb/XCommandInfo.hpp
+    ucb/source/ucp/ftp/ftpcontent.cxx:
+    # Needed for UnoType
+    - com/sun/star/ucb/XCommandInfo.hpp
+    # Wrapper for external lib
+    - curl.hxx
+    ucb/source/ucp/ftp/ftploaderthread.cxx:
+    # Wrapper for external lib
+    - curl.hxx
+    ucb/source/ucp/gio/gio_content.cxx:
+    # Needed for UnoType
+    - com/sun/star/beans/PropertyValue.hpp
+    - com/sun/star/beans/XPropertySetInfo.hpp
+    - com/sun/star/ucb/XCommandInfo.hpp
+    ucb/source/ucp/hierarchy/hierarchydata.cxx:
+    # Actually in use
+    - com/sun/star/util/XOfficeInstallationDirectories.hpp
+    ucb/source/ucp/hierarchy/hierarchycontent.cxx:
+    # Needed for UnoType
+    - com/sun/star/ucb/XCommandInfo.hpp
+    ucb/source/ucp/package/pkgprovider.cxx:
+    # Actually in use
+    - com/sun/star/uno/XComponentContext.hpp
+    ucb/source/ucp/package/pkgcontent.cxx:
+    # Actually in use
+    - com/sun/star/container/XHierarchicalNameAccess.hpp
+    # Needed for UnoType
+    - com/sun/star/ucb/XCommandInfo.hpp
+    ucb/source/ucp/tdoc/tdoc_content.cxx:
+    # Needed for UnoType
+    - com/sun/star/ucb/XCommandInfo.hpp
+    ucb/source/ucp/webdav-neon/DateTimeHelper.cxx:
+    # Actually in use
+    - com/sun/star/util/DateTime.hpp
+    ucb/source/ucp/webdav-neon/LockEntrySequence.cxx:
+    # Needed for LGPL code licensing
+    - config_lgpl.h
+    ucb/source/ucp/webdav-neon/LinkSequence.cxx:
+    # Needed for LGPL code licensing
+    - config_lgpl.h
+    ucb/source/ucp/webdav-neon/LinkSequence.cxx:
+    # Needed for LGPL code licensing
+    - config_lgpl.h
+    ucb/source/ucp/webdav-neon/LockSequence.cxx:
+    # Needed for LGPL code licensing
+    - config_lgpl.h
+    ucb/source/ucp/webdav-neon/NeonSession.cxx:
+    # Needed for UnoType
+    - com/sun/star/ucb/Lock.hpp
+    - com/sun/star/beans/NamedValue.hpp
+    ucb/source/ucp/webdav-neon/UCBDeadPropertyValue.cxx:
+    # Needed for LGPL code licensing
+    - config_lgpl.h
+    ucb/source/ucp/webdav-neon/webdavcontent.cxx:
+    # Needed for UnoType
+    - com/sun/star/ucb/XCommandInfo.hpp
+    ucb/source/ucp/webdav/DateTimeHelper.cxx:
+    # Actually in use
+    - com/sun/star/util/DateTime.hpp
+    ucb/source/ucp/webdav/webdavcontent.cxx:
+    # Needed for UnoType
+    - com/sun/star/ucb/XCommandInfo.hpp

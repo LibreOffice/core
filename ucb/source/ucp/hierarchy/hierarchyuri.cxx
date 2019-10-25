@@ -24,8 +24,6 @@
 
  *************************************************************************/
 
-#include <rtl/ustrbuf.hxx>
-
 #include "hierarchyuri.hxx"
 
 using namespace hierarchy_ucp;
