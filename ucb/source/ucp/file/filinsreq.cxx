@@ -19,7 +19,6 @@
 
 #include "filinsreq.hxx"
 #include "filtask.hxx"
-#include "filglob.hxx"
 
 #include <comphelper/interaction.hxx>
 

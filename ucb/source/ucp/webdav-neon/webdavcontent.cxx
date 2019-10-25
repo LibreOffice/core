@@ -34,7 +34,6 @@
  *************************************************************************/
 
 #include <memory>
-#include <osl/diagnose.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -54,6 +53,7 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/task/PasswordContainerInteractionHandler.hpp>
 #include <com/sun/star/ucb/CommandEnvironment.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
@@ -85,8 +85,6 @@
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/ucb/ResultSetException.hpp>
 #include <ucbhelper/macros.hxx>
 
 #include "webdavcontent.hxx"

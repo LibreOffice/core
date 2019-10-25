@@ -31,7 +31,6 @@
 #include "NeonSession.hxx"
 #include "NeonUri.hxx"
 #include <osl/diagnose.h>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 using namespace webdav_ucp;
 using namespace com::sun::star;

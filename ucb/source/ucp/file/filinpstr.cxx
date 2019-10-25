@@ -18,18 +18,15 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include "filinpstr.hxx"
 #include "filerror.hxx"
-#include "filtask.hxx"
-#include "prov.hxx"
 
 using namespace fileaccess;
 using namespace com::sun::star;
-using namespace com::sun::star::ucb;
 
 #if OSL_DEBUG_LEVEL > 0
 #define THROW_WHERE SAL_WHERE

@@ -32,20 +32,17 @@
 #include "ftpcontentprovider.hxx"
 #include "ftpdirp.hxx"
 #include "ftpcontentidentifier.hxx"
-#include "ftpcfunc.hxx"
 #include "ftpintreq.hxx"
 
 #include <memory>
 #include <vector>
 #include <string.h>
 #include "curl.hxx"
-#include <curl/easy.h>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
-#include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/fd_inputstream.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/simpleauthenticationrequest.hxx>
@@ -56,14 +53,12 @@
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
@@ -73,7 +68,6 @@
 #include <com/sun/star/ucb/MissingPropertiesException.hpp>
 #include <com/sun/star/ucb/MissingInputStreamException.hpp>
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
-#include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 

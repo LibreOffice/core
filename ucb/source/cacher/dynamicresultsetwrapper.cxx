@@ -19,10 +19,8 @@
 
 
 #include "dynamicresultsetwrapper.hxx"
-#include <ucbhelper/macros.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <osl/diagnose.h>
-#include <rtl/ustring.hxx>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/ucb/ListActionType.hpp>
 #include <com/sun/star/ucb/ListenerAlreadySetException.hpp>

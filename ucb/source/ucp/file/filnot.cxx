@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/ContentAction.hpp>
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
 #include "filnot.hxx"

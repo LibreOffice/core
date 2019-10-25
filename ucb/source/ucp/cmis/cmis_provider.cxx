@@ -9,9 +9,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/contenthelper.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <ucbhelper/getcomponentcontext.hxx>
 #include <ucbhelper/macros.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>

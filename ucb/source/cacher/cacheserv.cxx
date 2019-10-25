@@ -19,7 +19,6 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include "cachedcontentresultset.hxx"
 #include "cachedcontentresultsetstub.hxx"
 #include "cacheddynamicresultset.hxx"
@@ -27,7 +26,6 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::registry;
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * cached1_component_getFactory(

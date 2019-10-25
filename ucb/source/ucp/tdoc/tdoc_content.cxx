@@ -32,12 +32,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/InvalidStorageException.hpp>
 #include <com/sun/star/embed/StorageWrappedTargetException.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/IOException.hpp>
@@ -46,7 +43,6 @@
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/task/DocumentPasswordRequest.hpp>
 #include <com/sun/star/task/XInteractionPassword.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
@@ -56,7 +52,6 @@
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #include <com/sun/star/ucb/MissingInputStreamException.hpp>
-#include <com/sun/star/ucb/MissingPropertiesException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>

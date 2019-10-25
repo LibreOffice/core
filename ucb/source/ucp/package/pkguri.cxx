@@ -24,7 +24,6 @@
 
  *************************************************************************/
 
-#include <rtl/ustrbuf.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include "../inc/urihelper.hxx"

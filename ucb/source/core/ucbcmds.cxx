@@ -22,12 +22,10 @@
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/Pipe.hpp>

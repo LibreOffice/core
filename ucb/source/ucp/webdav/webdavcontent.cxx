@@ -20,7 +20,6 @@
 #include <memory>
 
 #include <cppuhelper/queryinterface.hxx>
-#include <osl/diagnose.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
