@@ -12,6 +12,9 @@
 #include <tools/sk_app/win/WindowContextFactory_win.h>
 #include <tools/sk_app/WindowContext.h>
 
+#include <SkColorFilter.h>
+#include <SkPixelRef.h>
+
 WinSkiaSalGraphicsImpl::WinSkiaSalGraphicsImpl(WinSalGraphics& rGraphics,
                                                SalGeometryProvider* mpProvider)
     : SkiaSalGraphicsImpl(rGraphics, mpProvider)
@@ -102,18 +105,54 @@ void WinSkiaSalGraphicsImpl::PreDrawText() { preDraw(); }
 
 void WinSkiaSalGraphicsImpl::PostDrawText() { postDraw(); }
 
+SkColor toSkColor(Color color)
+{
+    return SkColorSetARGB(255 - color.GetTransparency(), color.GetRed(), color.GetGreen(),
+                          color.GetBlue());
+}
+
 void WinSkiaSalGraphicsImpl::DeferredTextDraw(const CompatibleDC::Texture* pTexture,
                                               Color aMaskColor, const SalTwoRect& rPosAry)
 {
     assert(dynamic_cast<const SkiaCompatibleDC::Texture*>(pTexture));
-    drawMask(rPosAry, static_cast<const SkiaCompatibleDC::Texture*>(pTexture)->bitmap, aMaskColor);
+    preDraw();
+    SkPaint paint;
+    // The glyph is painted as white, modulate it to be of the appropriate color.
+    // SkiaCompatibleDC::wantsTextColorWhite() ensures the glyph is white.
+    // TODO maybe other black/white in WinFontInstance::CacheGlyphToAtlas() should be swapped.
+    paint.setColorFilter(SkColorFilters::Blend(toSkColor(aMaskColor), SkBlendMode::kModulate));
+    mSurface->getCanvas()->drawBitmapRect(
+        static_cast<const SkiaCompatibleDC::Texture*>(pTexture)->bitmap,
+        SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
+        SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
+                         rPosAry.mnDestHeight),
+        &paint);
+    postDraw();
 }
 
-void WinSkiaSalGraphicsImpl::DrawMask(CompatibleDC::Texture* pTexture, Color nMaskColor,
-                                      const SalTwoRect& rPosAry)
+void WinSkiaSalGraphicsImpl::DrawTextMask(CompatibleDC::Texture* pTexture, Color nMaskColor,
+                                          const SalTwoRect& rPosAry)
 {
     assert(dynamic_cast<SkiaCompatibleDC::Texture*>(pTexture));
-    drawMask(rPosAry, static_cast<const SkiaCompatibleDC::Texture*>(pTexture)->bitmap, nMaskColor);
+    const SkBitmap& bitmap = static_cast<const SkiaCompatibleDC::Texture*>(pTexture)->bitmap;
+    preDraw();
+    SkBitmap tmpBitmap;
+    if (!tmpBitmap.tryAllocN32Pixels(bitmap.width(), bitmap.height()))
+        abort();
+    tmpBitmap.eraseColor(toSkColor(nMaskColor));
+    SkPaint paint;
+    // Draw the color with the given mask.
+    // TODO figure out the right blend mode to avoid the temporary bitmap
+    paint.setBlendMode(SkBlendMode::kDstOut);
+    SkCanvas canvas(tmpBitmap);
+    canvas.drawBitmap(bitmap, 0, 0, &paint);
+    mSurface->getCanvas()->drawBitmapRect(
+        tmpBitmap,
+        SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
+        SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
+                         rPosAry.mnDestHeight),
+        nullptr);
+    postDraw();
 }
 
 SkiaCompatibleDC::SkiaCompatibleDC(SalGraphics& rGraphics, int x, int y, int width, int height)
@@ -121,15 +160,35 @@ SkiaCompatibleDC::SkiaCompatibleDC(SalGraphics& rGraphics, int x, int y, int wid
 {
 }
 
-std::unique_ptr<CompatibleDC::Texture> SkiaCompatibleDC::getTexture()
+std::unique_ptr<CompatibleDC::Texture> SkiaCompatibleDC::getAsMaskTexture()
 {
     auto ret = std::make_unique<SkiaCompatibleDC::Texture>();
-    // TODO is this correct?
-    // TODO make copy of data?
-    if (!ret->bitmap.installPixels(SkImageInfo::Make(maRects.mnSrcWidth, maRects.mnSrcHeight,
-                                                     kBGRA_8888_SkColorType, kUnpremul_SkAlphaType),
-                                   mpData, maRects.mnSrcWidth * 4))
+    // mpData is in the BGRA format, with A unused (and set to 0), and RGB are grey,
+    // so convert it to Skia format, then to 8bit and finally use as alpha mask
+    SkBitmap tmpBitmap;
+    if (!tmpBitmap.installPixels(SkImageInfo::Make(maRects.mnSrcWidth, maRects.mnSrcHeight,
+                                                   kBGRA_8888_SkColorType, kOpaque_SkAlphaType),
+                                 mpData, maRects.mnSrcWidth * 4))
         abort();
+    SkBitmap bitmap8;
+    if (!bitmap8.tryAllocPixels(SkImageInfo::Make(maRects.mnSrcWidth, maRects.mnSrcHeight,
+                                                  kGray_8_SkColorType, kOpaque_SkAlphaType)))
+        abort();
+    SkCanvas canvas8(bitmap8);
+    SkPaint paint8;
+    paint8.setBlendMode(SkBlendMode::kSrc); // copy and convert depth
+    // The data we got is upside-down.
+    SkMatrix matrix;
+    matrix.preTranslate(0, maRects.mnSrcHeight);
+    matrix.setConcat(matrix, SkMatrix::MakeScale(1, -1));
+    canvas8.concat(matrix);
+    canvas8.drawBitmap(tmpBitmap, 0, 0, &paint8);
+    // use the 8bit data as an alpha channel
+    SkBitmap alpha;
+    alpha.setInfo(bitmap8.info().makeColorType(kAlpha_8_SkColorType), bitmap8.rowBytes());
+    alpha.setPixelRef(sk_ref_sp(bitmap8.pixelRef()), bitmap8.pixelRefOrigin().x(),
+                      bitmap8.pixelRefOrigin().y());
+    ret->bitmap = alpha;
     return ret;
 }
 

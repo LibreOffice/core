@@ -138,11 +138,14 @@ public:
     /// Base texture class (OpenGL and Skia will provide their implementations).
     struct Texture;
 
-    /// Obtain the texture.
-    virtual std::unique_ptr<Texture> getTexture() { abort(); };
+    /// Obtain the texture in format for WinSalGraphicsImplBase::DrawTextMask().
+    virtual std::unique_ptr<Texture> getAsMaskTexture() { abort(); };
 
     /// Copy bitmap data to the texture. Texture must be initialized and the correct size to hold the bitmap.
     virtual bool copyToTexture(Texture& /*aTexture*/) { abort(); };
+
+    /// Return true if text glyphs should be drawn as white instead of black.
+    virtual bool wantsTextColorWhite() const { return false; }
 };
 
 struct CompatibleDC::Texture

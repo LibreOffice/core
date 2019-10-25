@@ -28,9 +28,11 @@ class SkiaCompatibleDC : public CompatibleDC
 public:
     SkiaCompatibleDC(SalGraphics& rGraphics, int x, int y, int width, int height);
 
-    virtual std::unique_ptr<Texture> getTexture() override;
+    virtual std::unique_ptr<Texture> getAsMaskTexture() override;
 
     virtual bool copyToTexture(Texture& aTexture) override;
+
+    virtual bool wantsTextColorWhite() const override { return true; }
 
     struct Texture;
 };
@@ -65,8 +67,8 @@ public:
     virtual bool UseTextDraw() const override { return true; }
     virtual void PreDrawText() override;
     virtual void PostDrawText() override;
-    virtual void DrawMask(CompatibleDC::Texture* rTexture, Color nMaskColor,
-                          const SalTwoRect& rPosAry) override;
+    virtual void DrawTextMask(CompatibleDC::Texture* rTexture, Color nMaskColor,
+                              const SalTwoRect& rPosAry) override;
     virtual void DeferredTextDraw(const CompatibleDC::Texture* pTexture, Color nMaskColor,
                                   const SalTwoRect& rPosAry) override;
 

@@ -169,7 +169,8 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex,
     auto pRT = pTxt->GetRenderTarget();
 
     ID2D1SolidColorBrush* pBrush = nullptr;
-    if (!SUCCEEDED(pRT->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &pBrush)))
+    D2D1::ColorF textColor = aDC->wantsTextColorWhite() ? D2D1::ColorF::White : D2D1::ColorF::Black;
+    if (!SUCCEEDED(pRT->CreateSolidColorBrush(textColor, &pBrush)))
         return false;
 
     D2D1_POINT_2F baseline = {
@@ -579,9 +580,9 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
         // the actual drawing
         DrawTextLayout(rLayout, aDC->getCompatibleHDC(), !bForceGDI);
 
-        std::unique_ptr<CompatibleDC::Texture> xTexture(aDC->getTexture());
+        std::unique_ptr<CompatibleDC::Texture> xTexture(aDC->getAsMaskTexture());
         if (xTexture)
-            pImpl->DrawMask(xTexture.get(), salColor, aDC->getTwoRect());
+            pImpl->DrawTextMask(xTexture.get(), salColor, aDC->getTwoRect());
 
         ::SelectFont(aDC->getCompatibleHDC(), hOrigFont);
 
