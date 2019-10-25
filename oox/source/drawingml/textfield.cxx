@@ -67,6 +67,12 @@ void lclCreateTextFields( std::vector< Reference< XTextField > > & aFields,
         OString p( s.pData->buffer + 8 );
         try
         {
+            if(p.startsWith("'"))
+            {
+                xIface = xFactory->createInstance( "com.sun.star.text.TextField.Custom" );
+                aFields.emplace_back( xIface, UNO_QUERY );
+                return;
+            }
             bool bIsDate = true;
             int idx = p.toInt32();
             sal_uInt16 nNumFmt;
