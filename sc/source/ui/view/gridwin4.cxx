@@ -560,7 +560,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     bool bGrid = rOpts.GetOption( VOPT_GRID ) && pViewData->GetShowGrid();
     bool bGridFirst = !rOpts.GetOption( VOPT_GRID_ONTOP );
 
-    bool bPage = rOpts.GetOption( VOPT_PAGEBREAKS );
+    bool bPage = rOpts.GetOption( VOPT_PAGEBREAKS ) && !bIsTiledRendering;
     // tdf#124983, if option LibreOfficeDev Calc/View/Visual Aids/Page breaks
     // is enabled, breaks should be visible. If the document is opened the first
     // time, the breaks are not calculated yet, so this initialization is
