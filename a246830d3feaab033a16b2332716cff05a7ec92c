@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_34fe85ae",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3826,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-10-25T04:54:09Z",
+      "side": 0,
+      "message": "In this case, I suppose, more correct would be\n\n    pFrame-\u003emaGeometry \u003d {};\n\nalthough that would call default ctor... but in this case, nWidth and nHeight would be unconditionally set below. Here this manual nullifying would skip any members added later...",
+      "range": {
+        "startLine": 3826,
+        "startChar": 4,
+        "endLine": 3826,
+        "endChar": 62
+      },
+      "revId": "a246830d3feaab033a16b2332716cff05a7ec92c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
