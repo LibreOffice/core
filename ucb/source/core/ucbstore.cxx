@@ -25,7 +25,6 @@
   *************************************************************************/
 
 #include <memory>
-#include <list>
 #include <unordered_map>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -45,7 +44,6 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <ucbhelper/getcomponentcontext.hxx>
 #include <ucbhelper/macros.hxx>

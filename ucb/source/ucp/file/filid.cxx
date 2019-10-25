@@ -20,9 +20,6 @@
 #include "filid.hxx"
 #include "filtask.hxx"
 
-#include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/typeprovider.hxx>
-
 using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;

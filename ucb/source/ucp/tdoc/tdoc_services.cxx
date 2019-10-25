@@ -20,7 +20,6 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include "tdoc_provider.hxx"
 #include "tdoc_documentcontentfactory.hxx"

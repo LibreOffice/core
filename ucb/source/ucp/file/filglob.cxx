@@ -19,12 +19,9 @@
 
 #include "filglob.hxx"
 #include "filerror.hxx"
-#include "filtask.hxx"
 #include "bc.hxx"
 #include <osl/file.hxx>
-#include <vector>
 #include <ucbhelper/cancelcommandexecution.hxx>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -40,7 +37,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/diagnose.h>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

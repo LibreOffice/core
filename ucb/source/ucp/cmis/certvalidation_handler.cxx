@@ -13,7 +13,6 @@
 #include <com/sun/star/security/CertificateContainer.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/security/XCertificateContainer.hpp>
-#include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 

@@ -21,9 +21,6 @@
 
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
-#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-#include <ucbhelper/cancelcommandexecution.hxx>
-#include <string.h>
 
 #include "gio_inputstream.hxx"
 #include "gio_content.hxx"

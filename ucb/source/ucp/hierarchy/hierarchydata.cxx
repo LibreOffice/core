@@ -28,10 +28,8 @@
  *************************************************************************/
 #include "hierarchydata.hxx"
 
-#include <vector>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>

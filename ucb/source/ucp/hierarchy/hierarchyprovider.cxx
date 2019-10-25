@@ -30,7 +30,6 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/util/theOfficeInstallationDirectories.hpp>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/getcomponentcontext.hxx>

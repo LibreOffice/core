@@ -24,10 +24,6 @@
 
  *************************************************************************/
 #include "ftpcontentidentifier.hxx"
-#include "ftpcontentprovider.hxx"
-#include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/supportsservice.hxx>
 
 using namespace ftp;
 using namespace com::sun::star::uno;

@@ -11,14 +11,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
-#include <com/sun/star/ucb/XProgressHandler.hpp>
 #ifndef SYSTEM_CURL
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
-#include <com/sun/star/xml/crypto/XDigestContextSupplier.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/NSSInitializer.hpp>
 #endif
@@ -28,7 +24,6 @@
 #include <sal/log.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
-#include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/proxydecider.hxx>

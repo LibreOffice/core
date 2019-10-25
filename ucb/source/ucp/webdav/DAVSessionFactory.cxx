@@ -21,7 +21,6 @@
 #include "DAVSessionFactory.hxx"
 #include "SerfSession.hxx"
 #include "SerfUri.hxx"
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace http_dav_ucp;
 using namespace com::sun::star;

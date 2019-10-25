@@ -19,11 +19,9 @@
 
 
 #include "cacheddynamicresultset.hxx"
-#include <com/sun/star/sdbc/XResultSet.hpp>
 #include "cachedcontentresultset.hxx"
 #include <osl/diagnose.h>
 #include <cppuhelper/queryinterface.hxx>
-#include <comphelper/processfactory.hxx>
 #include <ucbhelper/getcomponentcontext.hxx>
 #include <ucbhelper/macros.hxx>
 

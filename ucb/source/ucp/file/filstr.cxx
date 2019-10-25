@@ -18,20 +18,17 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <osl/diagnose.h>
 #include "filstr.hxx"
-#include "filtask.hxx"
-#include "prov.hxx"
-#include <memory>
+#include "filerror.hxx"
 
 using namespace fileaccess;
 using namespace com::sun::star;
-using namespace css::ucb;
 
 #if OSL_DEBUG_LEVEL > 0
 #define THROW_WHERE SAL_WHERE

@@ -27,7 +27,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 
 
 namespace ftp {

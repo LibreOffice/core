@@ -20,7 +20,6 @@
 
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
-#include <cppuhelper/weak.hxx>
 
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/namedvaluecollection.hxx>

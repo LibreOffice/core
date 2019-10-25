@@ -32,7 +32,6 @@
 #include <sal/log.hxx>
 #include "NeonSession.hxx"
 #include "NeonTypes.hxx"
-#include "DAVException.hxx"
 #include "DAVProperties.hxx"
 #include "NeonPropFindRequest.hxx"
 #include "LinkSequence.hxx"

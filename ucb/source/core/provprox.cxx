@@ -20,7 +20,6 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include "provprox.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>

@@ -44,7 +44,6 @@
 #include "webdavdatasupplier.hxx"
 #include "webdavcontent.hxx"
 #include "ContentProperties.hxx"
-#include "DAVSession.hxx"
 #include "NeonUri.hxx"
 
 using namespace com::sun::star;

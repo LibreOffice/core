@@ -51,7 +51,6 @@
 #include <com/sun/star/ucb/LockEntry.hpp>
 #include "webdavcontent.hxx"
 #include "webdavprovider.hxx"
-#include "DAVSession.hxx"
 #include "ContentProperties.hxx"
 #include "PropfindCache.hxx"
 

@@ -7,16 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vector>
-
-#include <ucbhelper/contentidentifier.hxx>
-#include <ucbhelper/providerhelper.hxx>
-
 #include <com/sun/star/ucb/OpenMode.hpp>
 
 #include "cmis_datasupplier.hxx"
 #include "cmis_content.hxx"
-#include "cmis_provider.hxx"
 
 using namespace com::sun::star;
 

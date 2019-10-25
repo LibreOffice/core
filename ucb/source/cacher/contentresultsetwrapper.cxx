@@ -19,10 +19,6 @@
 
 
 #include "contentresultsetwrapper.hxx"
-#include <com/sun/star/sdbc/FetchDirection.hpp>
-#include <com/sun/star/ucb/FetchError.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>

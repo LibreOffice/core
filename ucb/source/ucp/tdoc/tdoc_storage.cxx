@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
-
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/InvalidStorageException.hpp>
@@ -26,7 +24,6 @@
 #include <com/sun/star/embed/StorageWrappedTargetException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/packages/NoEncryptionException.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 

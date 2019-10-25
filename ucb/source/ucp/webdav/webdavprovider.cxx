@@ -25,10 +25,6 @@
 
 #include <cppuhelper/queryinterface.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 
 #include <tools/urlobj.hxx>

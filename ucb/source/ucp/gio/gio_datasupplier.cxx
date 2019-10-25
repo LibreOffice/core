@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vector>
-
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/providerhelper.hxx>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
@@ -26,7 +24,6 @@
 
 #include "gio_datasupplier.hxx"
 #include "gio_content.hxx"
-#include "gio_provider.hxx"
 
 using namespace gio;
 

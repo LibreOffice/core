@@ -33,7 +33,6 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <osl/time.h>
-#include <rtl/string.h>
 #include <ne_socket.h>
 #include <ne_auth.h>
 #include <ne_redirect.h>
@@ -45,8 +44,6 @@ extern "C" {
 }
 
 #include <libxml/parser.h>
-#include <rtl/ustrbuf.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <ucbhelper/simplecertificatevalidationrequest.hxx>
 

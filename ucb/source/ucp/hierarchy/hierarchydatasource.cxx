@@ -29,7 +29,6 @@
 #include "hierarchydatasource.hxx"
 #include <osl/diagnose.h>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
