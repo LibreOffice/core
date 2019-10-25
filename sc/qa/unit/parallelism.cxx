@@ -41,6 +41,7 @@ public:
     void testFormulaGroupSpanEval();
     void testFormulaGroupSpanEvalNonGroup();
     void testArrayFormulaGroup();
+    void testDependentFormulaGroupCollection();
 
     CPPUNIT_TEST_SUITE(ScParallelismTest);
     CPPUNIT_TEST(testSUMIFS);
@@ -55,6 +56,7 @@ public:
     CPPUNIT_TEST(testFormulaGroupSpanEval);
     CPPUNIT_TEST(testFormulaGroupSpanEvalNonGroup);
     CPPUNIT_TEST(testArrayFormulaGroup);
+    CPPUNIT_TEST(testDependentFormulaGroupCollection);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -693,6 +695,59 @@ void ScParallelismTest::testArrayFormulaGroup()
         aMsg = "Value at Cell B" + OString::number(nRow+1);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), nExpected, static_cast<size_t>(m_pDoc->GetValue(1, nRow, 0)));
         nExpected -= 2;
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void ScParallelismTest::testDependentFormulaGroupCollection()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
+    m_pDoc->InsertTab(0, "1");
+
+    OUString aFormula;
+
+    for (size_t nRow = 0; nRow < 16; ++nRow)
+    {
+        m_pDoc->SetValue(0, nRow, 0, 1.0);  // A1:A16 <== 1
+
+        if (nRow > 7)
+            continue;
+
+        // Formula-group in B1:B8 with first cell = "=SUM($A1:$A1024)"
+        aFormula = "=SUM($A" + OUString::number(1 + nRow) +
+            ":$A" + OUString::number(1024 + nRow) + ")";
+        m_pDoc->SetFormula(ScAddress(1, nRow, 0), aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+
+        // Formula-group in C1:C8 with first cell = "=SUM($K1:$K1024)"
+        aFormula = "=SUM($K" + OUString::number(1 + nRow) +
+            ":$K" + OUString::number(1024 + nRow) + ")";
+        m_pDoc->SetFormula(ScAddress(2, nRow, 0), aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+
+        // Formula-group in D1:D8 with first cell = "=SUM($A1:$A1024) - $A2"
+        aFormula = "=SUM($A" + OUString::number(1 + nRow) +
+            ":$A" + OUString::number(1024 + nRow) + ") - $A" + OUString::number(2 + nRow);
+        m_pDoc->SetFormula(ScAddress(3, nRow, 0), aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+
+        // Formula-group in K1:K8 with first cell = "=SUM($B1:$B1024)"
+        aFormula = "=SUM($B" + OUString::number(1 + nRow) +
+            ":$B" + OUString::number(1024 + nRow) + ")";
+        m_pDoc->SetFormula(ScAddress(10, nRow, 0), aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+
+    m_xDocShell->DoHardRecalc();
+
+    size_t nExpected[8] = { 408, 308, 224, 155, 100, 58, 28, 9 };
+
+    OString aMsg;
+    for (size_t nRow = 0; nRow < 8; ++nRow)
+    {
+        aMsg = "Value at Cell C" + OString::number(nRow+1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), nExpected[nRow], static_cast<size_t>(m_pDoc->GetValue(2, nRow, 0)));
     }
 
     m_pDoc->DeleteTab(0);
