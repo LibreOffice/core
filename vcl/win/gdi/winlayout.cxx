@@ -550,6 +550,8 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 
         tools::Rectangle aRect;
         rLayout.GetBoundRect(aRect);
+        if( aRect.IsEmpty())
+            return;
 
         pImpl->PreDrawText();
 
