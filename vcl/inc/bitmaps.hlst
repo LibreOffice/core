@@ -142,10 +142,11 @@
 #define IMG_WARN    "dbaccess/res/exwarning.png"
 #define IMG_ERROR   "dbaccess/res/exerror.png"
 #define IMG_INFO    "dbaccess/res/exinfo.png"
+#define IMG_ADD     "extensions/res/scanner/plus.png"
+#define IMG_REMOVE  "extensions/res/scanner/minus.png"
 
 #define RID_BMP_TREENODE_COLLAPSED  "res/plus.png"
 #define RID_BMP_TREENODE_EXPANDED   "res/minus.png"
-
 
 #define RID_CURSOR_AUTOSCROLL_E      "vcl/res/autoscroll_e.png"
 #define RID_CURSOR_AUTOSCROLL_N      "vcl/res/autoscroll_n.png"

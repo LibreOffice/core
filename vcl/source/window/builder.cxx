@@ -82,6 +82,10 @@ namespace
             return IMG_APPLY;
         else if (sType == "gtk-dialog-error")
             return IMG_ERROR;
+        else if (sType == "gtk-add")
+            return IMG_ADD;
+        else if (sType == "gtk-remove")
+            return IMG_REMOVE;
         return OUString();
     }
 
