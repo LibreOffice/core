@@ -239,8 +239,7 @@ boost::property_tree::ptree SlideBackground::DumpAsPropertyTree()
         mpBindings->Update(SID_ATTR_PAGE_SIZE);
     }
 
-    boost::property_tree::ptree aTree(Control::DumpAsPropertyTree());
-    return aTree;
+    return Control::DumpAsPropertyTree();
 }
 
 void SlideBackground::HandleContextChange(
