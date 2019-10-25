@@ -2452,7 +2452,7 @@ void VclVPaned::setAllocation(const Size& rAllocation)
         nFirstHeight += nHeightDiff/2;
     else if (bFirstCanResize)
         nFirstHeight += nHeightDiff;
-    arrange(rAllocation, nFirstHeight, nSecondHeight);
+    arrange(rAllocation, nFirstHeight, rAllocation.Height() - nFirstHeight - aSplitterSize.Height());
 }
 
 Size VclVPaned::calculateRequisition() const
@@ -2473,7 +2473,7 @@ Size VclVPaned::calculateRequisition() const
 }
 
 VclHPaned::VclHPaned(vcl::Window *pParent)
-    : VclPaned(pParent, true)
+    : VclPaned(pParent, false)
 {
     m_pSplitter->SetSplitHdl(LINK(this, VclHPaned, SplitHdl));
 }
@@ -2559,7 +2559,7 @@ void VclHPaned::setAllocation(const Size& rAllocation)
         nFirstWidth += nWidthDiff/2;
     else if (bFirstCanResize)
         nFirstWidth += nWidthDiff;
-    arrange(rAllocation, nFirstWidth, nSecondWidth);
+    arrange(rAllocation, nFirstWidth, rAllocation.Width() - nFirstWidth - aSplitterSize.Width());
 }
 
 Size VclHPaned::calculateRequisition() const
