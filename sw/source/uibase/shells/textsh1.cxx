@@ -1174,22 +1174,34 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         case SID_ATTR_CHAR_COLOR2:
         {
+            Color aSet;
             if(pItem)
             {
-                Color aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
-                SwEditWin& rEditWin = GetView().GetEditWin();
-                rEditWin.SetWaterCanTextColor(aSet);
-                SwApplyTemplate* pApply = rEditWin.GetApplyTemplate();
-
-                // If there is a selection, then set the color on it
-                // otherwise, it'll be the color for the next text to be typed
-                if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_EXT)
-                {
-                    rWrtSh.SetAttrItem(SvxColorItem (aSet, RES_CHRATR_COLOR));
-                }
-
-                rReq.Done();
+                aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
             }
+            else
+            {
+                OUString sColor;
+                const SfxPoolItem* pColorStringItem = nullptr;
+
+                if(SfxItemState::SET == pArgs->GetItemState(SID_ATTR_CHAR_COLOR2_STR, false, &pColorStringItem))
+                    sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
+
+                aSet = Color(sColor.toInt32(16));
+            }
+
+            SwEditWin& rEditWin = GetView().GetEditWin();
+            rEditWin.SetWaterCanTextColor(aSet);
+            SwApplyTemplate* pApply = rEditWin.GetApplyTemplate();
+
+            // If there is a selection, then set the color on it
+            // otherwise, it'll be the color for the next text to be typed
+            if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_EXT)
+            {
+                rWrtSh.SetAttrItem(SvxColorItem (aSet, RES_CHRATR_COLOR));
+            }
+
+            rReq.Done();
         }
         break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
