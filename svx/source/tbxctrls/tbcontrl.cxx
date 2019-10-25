@@ -115,6 +115,7 @@
 #include <bitmaps.hlst>
 #include <sal/log.hxx>
 #include <unotools/collatorwrapper.hxx>
+#include <boost/property_tree/ptree.hpp>
 
 #define MAX_MRU_FONTNAME_ENTRIES    5
 

@@ -40,6 +40,7 @@
 #include <memory>
 
 #include <sfx2/sidebar/SidebarToolBox.hxx>
+#include <boost/property_tree/ptree.hpp>
 
 using namespace ::com::sun::star;
 
