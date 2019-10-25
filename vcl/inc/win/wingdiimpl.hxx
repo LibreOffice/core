@@ -39,8 +39,8 @@ public:
     virtual bool UseTextDraw() const { return false; }
     virtual void PreDrawText() {}
     virtual void PostDrawText() {}
-    virtual void DrawMask(CompatibleDC::Texture* /*rTexture*/, Color /*nMaskColor*/,
-                          const SalTwoRect& /*rPosAry*/)
+    virtual void DrawTextMask(CompatibleDC::Texture* /*rTexture*/, Color /*nMaskColor*/,
+                              const SalTwoRect& /*rPosAry*/)
     {
         abort();
     };
