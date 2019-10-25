@@ -60,6 +60,7 @@
 #include <treeglue.hxx>
 #include <tools/diagnose_ex.h>
 #include <wizdlg.hxx>
+#include <tools/svlibrary.h>
 
 #ifdef DISABLE_DYNLOADING
 #include <dlfcn.h>
