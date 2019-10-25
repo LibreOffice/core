@@ -19,6 +19,7 @@
 #include <messagedialog.hxx>
 #include <window.h>
 #include <boost/multi_array.hpp>
+#include <boost/property_tree/ptree.hpp>
 #include <vcl/vclmedit.hxx>
 #include <sal/log.hxx>
 

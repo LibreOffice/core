@@ -36,6 +36,7 @@
 #include "valueimp.hxx"
 
 #include <svtools/valueset.hxx>
+#include <boost/property_tree/ptree.hpp>
 
 using namespace css::uno;
 using namespace css::lang;

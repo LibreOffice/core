@@ -34,7 +34,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
 
-#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 
 class VirtualDevice;
 struct ImplSVEvent;

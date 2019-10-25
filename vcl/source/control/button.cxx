@@ -44,6 +44,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/lok.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <boost/property_tree/ptree.hpp>
 
 
 using namespace css;
