@@ -437,5 +437,12 @@ interface BaseTextTable
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+
+    SID_ATTR_TABLE_ROW_HEIGHT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
 }
 
