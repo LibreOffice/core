@@ -1263,22 +1263,30 @@ sal_uInt32 ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
      */
 
     const SfxPoolItem* pFormItem;
-    sal_uLong nFormat = 0;
-    if (GetItemSet().GetItemState(ATTR_VALUE_FORMAT, false, &pFormItem) == SfxItemState::SET)
-        nFormat = static_cast<const SfxUInt32Item*>(pFormItem)->GetValue();
-    else if (pCondSet->GetItemState(ATTR_VALUE_FORMAT, true, &pFormItem) == SfxItemState::SET )
-        nFormat = getNumberFormatKey(*pCondSet);
-    else
-        nFormat = getNumberFormatKey(GetItemSet());
-
+    sal_uInt32 nFormat;
     const SfxPoolItem* pLangItem;
     LanguageType eLang;
-    if (GetItemSet().GetItemState(ATTR_LANGUAGE_FORMAT, false, &pLangItem) == SfxItemState::SET)
-        eLang = static_cast<const SvxLanguageItem*>(pLangItem)->GetLanguage();
-    else if (pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT, true, &pLangItem) == SfxItemState::SET)
-        eLang = getLanguageType(*pCondSet);
+    if (GetItemSet().GetItemState(ATTR_VALUE_FORMAT, false, &pFormItem) == SfxItemState::SET)
+    {
+        nFormat = static_cast<const SfxUInt32Item*>(pFormItem)->GetValue();
+        if (GetItemSet().GetItemState(ATTR_LANGUAGE_FORMAT, false, &pLangItem) == SfxItemState::SET)
+            eLang = static_cast<const SvxLanguageItem*>(pLangItem)->GetLanguage();
+        else
+            eLang = getLanguageType(GetItemSet());
+    }
+    else if (pCondSet->GetItemState(ATTR_VALUE_FORMAT, true, &pFormItem) == SfxItemState::SET )
+    {
+        nFormat = getNumberFormatKey(*pCondSet);
+        if (pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT, true, &pLangItem) == SfxItemState::SET)
+            eLang = getLanguageType(*pCondSet);
+        else
+            eLang = getLanguageType(GetItemSet());
+    }
     else
+    {
+        nFormat = getNumberFormatKey(GetItemSet());
         eLang = getLanguageType(GetItemSet());
+    }
 
     return pFormatter->GetFormatForLanguageIfBuiltIn(nFormat, eLang);
 }
