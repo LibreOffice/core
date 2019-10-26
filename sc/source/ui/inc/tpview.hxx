@@ -29,7 +29,6 @@ class ScTpContentOptions : public SfxTabPage
 {
     std::unique_ptr<ScViewOptions> m_xLocalOptions;
 
-    std::unique_ptr<weld::ComboBox> m_xGridLB;
     std::unique_ptr<weld::Label> m_xColorFT;
     std::unique_ptr<ColorListBox> m_xColorLB;
     std::unique_ptr<weld::CheckButton> m_xBreakCB;
@@ -57,7 +56,6 @@ class ScTpContentOptions : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xSummaryCB;
 
     void    InitGridOpt();
-    DECL_LINK( GridHdl, weld::ComboBox&, void );
     DECL_LINK( SelLbObjHdl, weld::ComboBox&, void );
     DECL_LINK( CBHdl, weld::ToggleButton&, void );
 

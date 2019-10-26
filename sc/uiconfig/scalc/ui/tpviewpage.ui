@@ -344,20 +344,6 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="grid_label">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="tpviewpage|grid_label">_Grid lines:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">grid</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkLabel" id="color_label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -370,22 +356,6 @@
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="grid">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <items>
-                              <item translatable="yes" context="tpviewpage|grid">Show</item>
-                              <item translatable="yes" context="tpviewpage|grid">Show on colored cells</item>
-                              <item translatable="yes" context="tpviewpage|grid">Hide</item>
-                            </items>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
                           </packing>
                         </child>
                       </object>
