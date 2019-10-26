@@ -232,10 +232,17 @@ namespace pdfi
         virtual void eoClip(GfxState *state) override;
 
         //----- text drawing
+#if POPPLER_CHECK_VERSION(0, 82, 0)
+        virtual void drawChar(GfxState *state, double x, double y,
+                              double dx, double dy,
+                              double originX, double originY,
+                              CharCode code, int nBytes, const Unicode *u, int uLen) override;
+#else
         virtual void drawChar(GfxState *state, double x, double y,
                               double dx, double dy,
                               double originX, double originY,
                               CharCode code, int nBytes, Unicode *u, int uLen) override;
+#endif
 #if POPPLER_CHECK_VERSION(0, 64, 0)
         virtual void drawString(GfxState *state, const GooString *s) override;
 #else
@@ -250,12 +257,19 @@ namespace pdfi
                                    poppler_bool interpolate,
 #endif
                                    poppler_bool inlineImg) override;
+#if POPPLER_CHECK_VERSION(0, 82, 0)
+        virtual void drawImage(GfxState *state, Object *ref, Stream *str,
+                               int width, int height, GfxImageColorMap *colorMap,
+                               poppler_bool interpolate,
+                               const int* maskColors, poppler_bool inlineImg) override;
+#else
         virtual void drawImage(GfxState *state, Object *ref, Stream *str,
                                int width, int height, GfxImageColorMap *colorMap,
 #if POPPLER_CHECK_VERSION(0, 12, 0)
                                poppler_bool interpolate,
 #endif
                                int *maskColors, poppler_bool inlineImg) override;
+#endif
         virtual void drawMaskedImage(GfxState *state, Object *ref, Stream *str,
                                      int width, int height,
                                      GfxImageColorMap *colorMap,
