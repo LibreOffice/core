@@ -185,7 +185,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if (rsResourceURL.endsWith("/TableEditPanel"))
     {
-        VclPtr<vcl::Window> pPanel = sw::sidebar::TableEditPanel::Create(pParentWindow, xFrame);
+        VclPtr<vcl::Window> pPanel = sw::sidebar::TableEditPanel::Create(pParentWindow, xFrame, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
                         rsResourceURL, xFrame, pPanel, ui::LayoutSize(-1,-1,-1));
     }

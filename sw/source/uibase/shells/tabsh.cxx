@@ -1114,6 +1114,21 @@ void SwTableShell::Execute(SfxRequest &rReq)
             //'this' is already destroyed
             return;
         }
+        case SID_ATTR_TABLE_ROW_HEIGHT:
+        {
+            const SfxUInt32Item* pItem2 = rReq.GetArg<SfxUInt32Item>(SID_ATTR_TABLE_ROW_HEIGHT);
+            if (pItem2)
+            {
+                long nNewHeight = pItem2->GetValue();
+                std::unique_ptr<SwFormatFrameSize> pHeight = rSh.GetRowHeight();
+                if ( pHeight )
+                {
+                    pHeight->SetHeight(nNewHeight);
+                    rSh.SetRowHeight(*pHeight);
+                }
+            }
+            return;
+        }
         default:
             bMore = true;
     }
@@ -1389,6 +1404,18 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 if(rSh.HasBoxSelection())
                     rSet.DisableItem( nSlot );
                 break;
+            case SID_ATTR_TABLE_ROW_HEIGHT:
+            {
+                SfxUInt32Item aRowHeight(SID_ATTR_TABLE_ROW_HEIGHT);
+                std::unique_ptr<SwFormatFrameSize> pHeight = rSh.GetRowHeight();
+                if (pHeight)
+                {
+                    long nHeight = pHeight->GetHeight();
+                    aRowHeight.SetValue(nHeight);
+                    rSet.Put(aRowHeight);
+                }
+                break;
+            }
         }
         nSlot = aIter.NextWhich();
     }
