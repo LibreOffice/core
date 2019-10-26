@@ -863,11 +863,20 @@ void PDFOutDev::eoClip(GfxState *state)
     local offset of character (zero for horizontal writing mode). not
     taken into account for output pos updates. Used for vertical writing.
  */
+
+#if POPPLER_CHECK_VERSION(0, 82, 0)
+void PDFOutDev::drawChar(GfxState *state, double x, double y,
+                         double dx, double dy,
+                         double originX, double originY,
+                         CharCode, int /*nBytes*/, const Unicode *u, int uLen)
+{
+#else
 void PDFOutDev::drawChar(GfxState *state, double x, double y,
                          double dx, double dy,
                          double originX, double originY,
                          CharCode, int /*nBytes*/, Unicode *u, int uLen)
 {
+#endif
     assert(state);
 
     if( u == nullptr )
@@ -979,11 +988,19 @@ void PDFOutDev::drawImageMask(GfxState* pState, Object*, Stream* str,
     writeBinaryBuffer(aBuf);
 }
 
+#if POPPLER_CHECK_VERSION(0, 82, 0)
+void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
+                          int width, int height, GfxImageColorMap* colorMap,
+                          poppler_bool /*interpolate*/,
+                          const int* maskColors, poppler_bool /*inlineImg*/ )
+{
+#else
 void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
                           int width, int height, GfxImageColorMap* colorMap,
                           poppler_bool /*interpolate*/,
                           int* maskColors, poppler_bool /*inlineImg*/ )
 {
+#endif
     if (m_bSkipImages)
         return;
     OutputBuffer aBuf; initBuf(aBuf);
@@ -1004,12 +1021,12 @@ void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
         {
             GfxRGB aMinRGB;
             colorMap->getColorSpace()->getRGB(
-                reinterpret_cast<GfxColor*>(maskColors),
+                const_cast<GfxColor*>(reinterpret_cast<const GfxColor*>(maskColors)),
                 &aMinRGB );
 
             GfxRGB aMaxRGB;
             colorMap->getColorSpace()->getRGB(
-                reinterpret_cast<GfxColor*>(maskColors)+gfxColorMaxComps,
+                const_cast<GfxColor*>(reinterpret_cast<const GfxColor*>(maskColors))+gfxColorMaxComps,
                 &aMaxRGB );
 
             aMaskBuf.push_back( colToByte(aMinRGB.r) );
