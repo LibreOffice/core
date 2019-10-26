@@ -31,11 +31,6 @@ chart2/res/selectrange.png formula/res/refinp1.png
 # cmd
 # ==============================================
 
-# Label
-cmd/32/addname.png cmd/32/label.png
-cmd/lc_addname.png cmd/lc_label.png
-cmd/sc_addname.png cmd/sc_label.png
-
 # Add
 cmd/32/adddatefield.png cmd/32/datefield.png
 cmd/32/addons.png cmd/32/insertplugin.png
@@ -1055,11 +1050,6 @@ cmd/sc_bezieredge.png cmd/sc_bezierappend.png
 cmd/32/setborderstyle.png cmd/32/diagramarea.png
 cmd/lc_setborderstyle.png cmd/lc_diagramarea.png
 cmd/sc_setborderstyle.png cmd/sc_diagramarea.png
-
-# Label
-cmd/32/definename.png cmd/32/label.png
-cmd/lc_definename.png cmd/lc_label.png
-cmd/sc_definename.png cmd/sc_label.png
 
 # Rotate
 cmd/32/clickchangerotation.png cmd/32/toggleobjectrotatemode.png
@@ -2228,7 +2218,6 @@ sc/res/na06.png cmd/sc_downsearch.png
 sc/res/na07.png cmd/sc_thesaurus.png
 sc/res/na09.png cmd/sc_animationeffects.png
 sc/res/nc01.png cmd/sc_dbviewtablenames.png
-sc/res/nc02.png cmd/sc_dataranges.png
 sc/res/nc03.png cmd/sc_viewdatasourcebrowser.png
 sc/res/nc04.png cmd/sc_insertgraphic.png
 sc/res/nc05.png cmd/sc_insertobject.png
@@ -2512,9 +2501,6 @@ sw/res/sc20233.png cmd/sc_ok.png
 sw/res/sc20235.png cmd/sc_inserthyperlinkcontrol.png
 sw/res/sc20238.png cmd/sc_insertbookmark.png
 sw/res/sc20239.png cmd/sc_copy.png
-sw/res/sc20245.png sd/res/sf01.png
-sw/res/sc20246.png cmd/sc_insertbookmark.png
-sw/res/sc20248.png cmd/sc_save.png
 sw/res/sc20249.png cmd/sc_navigator.png
 sw/res/sc20556.png cmd/sc_dbviewfunctions.png
 sw/res/sc20557.png cmd/sc_cancel.png
