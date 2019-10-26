@@ -189,6 +189,7 @@
           <object class="GtkFrame" id="frame2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
@@ -202,18 +203,21 @@
                   <object class="GtkGrid" id="stylegrid">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="row_spacing">3</property>
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="shadow_type">in</property>
                         <child>
                           <object class="GtkTreeView" id="weststylelb-nocjk">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="model">liststore2</property>
                             <property name="headers_visible">False</property>
@@ -245,6 +249,7 @@
                       <object class="GtkEntry" id="weststyle-nocjk">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                       </object>
                       <packing>
@@ -273,6 +278,7 @@
           <object class="GtkFrame" id="frame3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
@@ -280,18 +286,21 @@
               <object class="GtkAlignment" id="alignment8">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="top_padding">6</property>
                 <child>
                   <object class="GtkGrid" id="sizegrid">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="row_spacing">3</property>
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="vscrollbar_policy">always</property>
                         <property name="shadow_type">in</property>
@@ -299,6 +308,7 @@
                           <object class="GtkTreeView" id="westsizelb-nocjk">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="model">liststore3</property>
                             <property name="headers_visible">False</property>
@@ -330,6 +340,7 @@
                       <object class="GtkEntry" id="westsize-nocjk">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                       </object>
                       <packing>
