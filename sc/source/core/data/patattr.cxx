@@ -1254,27 +1254,13 @@ sal_uInt32 ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
     if (!pCondSet)
         return GetNumberFormat(pFormatter);
 
-    /* In the case of a conditional format we need to overwrite a cell style
-     * but leave a hard cell formatting alone. So check first if the number
-     * format is set in the cell format, then the conditional format and
-     * finally in the style.
-     *
-     * The style is represented here if the name is empty.
-     */
+    // Conditional format takes precedence over style and even hard format.
 
     const SfxPoolItem* pFormItem;
     sal_uInt32 nFormat;
     const SfxPoolItem* pLangItem;
     LanguageType eLang;
-    if (GetItemSet().GetItemState(ATTR_VALUE_FORMAT, false, &pFormItem) == SfxItemState::SET)
-    {
-        nFormat = static_cast<const SfxUInt32Item*>(pFormItem)->GetValue();
-        if (GetItemSet().GetItemState(ATTR_LANGUAGE_FORMAT, false, &pLangItem) == SfxItemState::SET)
-            eLang = static_cast<const SvxLanguageItem*>(pLangItem)->GetLanguage();
-        else
-            eLang = getLanguageType(GetItemSet());
-    }
-    else if (pCondSet->GetItemState(ATTR_VALUE_FORMAT, true, &pFormItem) == SfxItemState::SET )
+    if (pCondSet->GetItemState(ATTR_VALUE_FORMAT, true, &pFormItem) == SfxItemState::SET )
     {
         nFormat = getNumberFormatKey(*pCondSet);
         if (pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT, true, &pLangItem) == SfxItemState::SET)
