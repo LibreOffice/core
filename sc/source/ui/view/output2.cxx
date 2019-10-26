@@ -454,15 +454,7 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
     // number format
 
     sal_uLong nOld = nValueFormat;
-    const SfxPoolItem* pFormItem;
-    if ( !pCondSet || pCondSet->GetItemState(ATTR_VALUE_FORMAT,true,&pFormItem) != SfxItemState::SET )
-        pFormItem = &pPattern->GetItem(ATTR_VALUE_FORMAT);
-    const SfxPoolItem* pLangItem;
-    if ( !pCondSet || pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT,true,&pLangItem) != SfxItemState::SET )
-        pLangItem = &pPattern->GetItem(ATTR_LANGUAGE_FORMAT);
-    nValueFormat = pOutput->mpDoc->GetFormatTable()->GetFormatForLanguageIfBuiltIn(
-                    static_cast<const SfxUInt32Item*>(pFormItem)->GetValue(),
-                    static_cast<const SvxLanguageItem*>(pLangItem)->GetLanguage() );
+    nValueFormat = pPattern->GetNumberFormat( pOutput->mpDoc->GetFormatTable(), pCondSet );
 
     if (nValueFormat != nOld)
         maLastCell.clear();           // always reformat
