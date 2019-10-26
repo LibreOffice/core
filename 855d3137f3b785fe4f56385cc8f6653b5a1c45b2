@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_cf145aa3",
+        "filename": "include/svx/svdmodel.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-10-26T07:22:58Z",
+      "side": 1,
+      "message": "we normally use Is* and Set* for accessor and setter methods on a bool",
+      "revId": "855d3137f3b785fe4f56385cc8f6653b5a1c45b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
