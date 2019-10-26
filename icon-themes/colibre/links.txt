@@ -471,9 +471,9 @@ cmd/sc_closewin.png cmd/sc_closepreview.png
 
 # Close
 cmd/lc_closedocs.png cmd/lc_closedoc.png
-cmd/lc_exitsearch.png cmd/lc_closedoc.png
+cmd/lc_exitsearch.png cmd/lc_closepreview.png
 cmd/sc_closedocs.png cmd/sc_closedoc.png
-cmd/sc_exitsearch.png cmd/sc_closedoc.png
+cmd/sc_exitsearch.png cmd/sc_closepreview.png
 
 # Cancel
 cmd/lc_no.png cmd/lc_cancel.png
@@ -1353,7 +1353,7 @@ sc/res/na09.png cmd/sc_animationeffects.png
 sc/res/na010.png sw/res/sc20234.png
 sc/res/na011.png cmd/sc_ok.png
 sc/res/nc01.png cmd/sc_dbviewtablenames.png
-sc/res/nc02.png cmd/sc_dataranges.png
+sc/res/nc02.png cmd/sc_label.png
 sc/res/nc03.png cmd/sc_viewdatasourcebrowser.png
 sc/res/nc04.png cmd/sc_insertgraphic.png
 sc/res/nc05.png cmd/sc_insertobject.png
@@ -1659,15 +1659,11 @@ sw/res/sc20233.png cmd/sc_ok.png
 sw/res/sc20235.png cmd/sc_inserthyperlinkcontrol.png
 sw/res/sc20238.png cmd/sc_insertbookmark.png
 sw/res/sc20239.png cmd/sc_copy.png
-sw/res/sc20245.png cmd/sc_insertdraw.png
-sw/res/sc20246.png cmd/sc_insertbookmark.png
-sw/res/sc20248.png cmd/sc_save.png
+sw/res/sc20247.png cmd/sc_dataimport.png
 sw/res/sc20249.png cmd/sc_navigator.png
 sw/res/sc20556.png cmd/sc_dbviewfunctions.png
 sw/res/sc20557.png cmd/sc_cancel.png
 sw/res/sc20558.png cmd/sc_ok.png
-
-sw/res/sc20247.png cmd/sc_dataimport.png
 
 sw/res/sf01.png cmd/sc_controlcodes.png
 sw/res/sf02.png cmd/sc_charfontname.png
