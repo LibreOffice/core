@@ -458,6 +458,11 @@ sub main()
             grepFile(
                 '^\s*' . $langtag . '',
                 "$SRC_ROOT", "l10ntools", "source/ulfconv/msi-encodinglist.txt", 1, ());
+
+            # 27:af:afrikaans
+            grepFile(
+                '^\d*:' . $langtag . '',
+                "$SRC_ROOT", "bin", "lo-xlate-lang", 1, ());
         }
     }
     return 0;
