@@ -548,6 +548,8 @@ void OutputDevice::InitLineColor()
 {
     DBG_TESTSOLARMUTEX();
 
+    AcquireGraphics();
+
     if( mbLineColor )
     {
         if( RasterOp::N0 == meRasterOp )
@@ -569,6 +571,8 @@ void OutputDevice::InitLineColor()
 void OutputDevice::InitFillColor()
 {
     DBG_TESTSOLARMUTEX();
+
+    AcquireGraphics();
 
     if( mbFillColor )
     {

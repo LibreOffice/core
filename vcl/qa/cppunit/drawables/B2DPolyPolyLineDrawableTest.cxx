@@ -16,27 +16,45 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawables/B2DPolyPolyLineDrawableHelper.hxx>
+#include <vcl/virdev.hxx>
 
 namespace
 {
 class B2DPolyPolyLineDrawableTest : public CppUnit::TestFixture
 {
-    void testCanApplyDashing();
-    void testGenerateDotDashArray();
+    void testCanApplyDashes();
     void testDashDotArrayHasLength();
+    void testGenerateDotDashArray();
+    void testApplyLineDashing();
+    void testUseLineWidth();
+    void testCreateFillPolyPolygon();
+    void testFillPolyPolygon();
+    void testDrawPolyPolyLine();
+    void testDrawPolyLine();
+    void testDrawPolyPolygonFallback();
+    void testDrawPolyLineFallback();
 
     CPPUNIT_TEST_SUITE(B2DPolyPolyLineDrawableTest);
-    CPPUNIT_TEST(testGenerateDotDashArray);
-    CPPUNIT_TEST(testCanApplyDashing);
+    CPPUNIT_TEST(testCanApplyDashes);
     CPPUNIT_TEST(testDashDotArrayHasLength);
+    CPPUNIT_TEST(testGenerateDotDashArray);
+    CPPUNIT_TEST(testApplyLineDashing);
+    CPPUNIT_TEST(testUseLineWidth);
+    CPPUNIT_TEST(testCreateFillPolyPolygon);
+    CPPUNIT_TEST(testDrawPolyPolyLine);
+    CPPUNIT_TEST(testDrawPolyLine);
+    CPPUNIT_TEST(testFillPolyPolygon);
+    CPPUNIT_TEST(testDrawPolyPolygonFallback);
+    CPPUNIT_TEST(testDrawPolyLineFallback);
     CPPUNIT_TEST_SUITE_END();
 };
 
-void B2DPolyPolyLineDrawableTest::testCanApplyDashing()
+void B2DPolyPolyLineDrawableTest::testCanApplyDashes()
 {
     const basegfx::B2DPolyPolygon aTestPolyPolygon(
         { basegfx::B2DPoint(0, 0), basegfx::B2DPoint(1, 1) });
     LineInfo aTestLineInfo;
+    aTestLineInfo.SetWidth(1);
     aTestLineInfo.SetStyle(LineStyle::Dash);
 
     CPPUNIT_ASSERT(
@@ -49,6 +67,26 @@ void B2DPolyPolyLineDrawableTest::testCanApplyDashing()
     aTestLineInfo.SetStyle(LineStyle::NONE);
     CPPUNIT_ASSERT(
         !vcl::B2DPolyPolyLineDrawableHelper::CanApplyDashes(aTestPolyPolygon, aTestLineInfo));
+}
+
+void B2DPolyPolyLineDrawableTest::testDashDotArrayHasLength()
+{
+    const double DASHCOUNT = 1;
+    const double DOTCOUNT = 1;
+    const double DASHLEN = 5;
+    const double DOTLEN = 10;
+
+    const basegfx::B2DPolyPolygon aTestPolyPolygon(
+        { basegfx::B2DPoint(0, 0), basegfx::B2DPoint(1, 1) });
+    LineInfo aTestLineInfo;
+    aTestLineInfo.SetStyle(LineStyle::Dash);
+    aTestLineInfo.SetDashCount(DASHCOUNT);
+    aTestLineInfo.SetDotCount(DOTCOUNT);
+    aTestLineInfo.SetDashLen(DASHLEN);
+    aTestLineInfo.SetDotLen(DOTLEN);
+
+    CPPUNIT_ASSERT(vcl::B2DPolyPolyLineDrawableHelper::DashDotArrayHasLength(
+        vcl::B2DPolyPolyLineDrawableHelper::GenerateDotDashArray(aTestLineInfo)));
 }
 
 void B2DPolyPolyLineDrawableTest::testGenerateDotDashArray()
@@ -77,24 +115,103 @@ void B2DPolyPolyLineDrawableTest::testGenerateDotDashArray()
     CPPUNIT_ASSERT_EQUAL(aDashDotArray[3], DIST);
 }
 
-void B2DPolyPolyLineDrawableTest::testDashDotArrayHasLength()
+void B2DPolyPolyLineDrawableTest::testApplyLineDashing()
 {
-    const double DASHCOUNT = 1;
-    const double DOTCOUNT = 1;
-    const double DASHLEN = 5;
-    const double DOTLEN = 10;
-
+    LineInfo aTestLineInfo;
     const basegfx::B2DPolyPolygon aTestPolyPolygon(
         { basegfx::B2DPoint(0, 0), basegfx::B2DPoint(1, 1) });
-    LineInfo aTestLineInfo;
-    aTestLineInfo.SetStyle(LineStyle::Dash);
-    aTestLineInfo.SetDashCount(DASHCOUNT);
-    aTestLineInfo.SetDotCount(DOTCOUNT);
-    aTestLineInfo.SetDashLen(DASHLEN);
-    aTestLineInfo.SetDotLen(DOTLEN);
 
-    CPPUNIT_ASSERT(vcl::B2DPolyPolyLineDrawableHelper::DashDotArrayHasLength(
-        vcl::B2DPolyPolyLineDrawableHelper::GenerateDotDashArray(aTestLineInfo)));
+    basegfx::B2DPolyPolygon aResult
+        = vcl::B2DPolyPolyLineDrawableHelper::ApplyLineDashing(aTestPolyPolygon, aTestLineInfo);
+
+    CPPUNIT_ASSERT(aResult.count());
+}
+
+void B2DPolyPolyLineDrawableTest::testUseLineWidth()
+{
+    const sal_Int32 WIDTH = 5;
+
+    LineInfo aTestLineInfo;
+    const basegfx::B2DPolyPolygon aTestPolyPolygon(
+        { basegfx::B2DPoint(0, 0), basegfx::B2DPoint(1, 1) });
+
+    CPPUNIT_ASSERT(
+        !vcl::B2DPolyPolyLineDrawableHelper::UseLineWidth(aTestPolyPolygon, aTestLineInfo));
+
+    aTestLineInfo.SetWidth(WIDTH);
+    CPPUNIT_ASSERT(
+        vcl::B2DPolyPolyLineDrawableHelper::UseLineWidth(aTestPolyPolygon, aTestLineInfo));
+}
+
+void B2DPolyPolyLineDrawableTest::testCreateFillPolyPolygon()
+{
+    const sal_Int32 WIDTH = 5;
+
+    LineInfo aTestLineInfo;
+    basegfx::B2DPolyPolygon aTestPolyPolygon(
+        { basegfx::B2DPoint(0, 0), basegfx::B2DPoint(5, 5), basegfx::B2DPoint(10, 10) });
+
+    aTestLineInfo.SetWidth(WIDTH);
+
+    basegfx::B2DPolyPolygon aResult = vcl::B2DPolyPolyLineDrawableHelper::CreateFillPolyPolygon(
+        aTestPolyPolygon, aTestLineInfo);
+
+    CPPUNIT_ASSERT(aResult.count());
+}
+
+void B2DPolyPolyLineDrawableTest::testFillPolyPolygon()
+{
+    LineInfo aTestLineInfo;
+    aTestLineInfo.SetWidth(1);
+    const basegfx::B2DPolyPolygon aTestFillPolyPolygon(
+        { basegfx::B2DPoint(0, 0), basegfx::B2DPoint(1, 1), basegfx::B2DPoint(2, 2) });
+    VclPtrInstance<VirtualDevice> pRenderContext;
+
+    vcl::B2DPolyPolyLineDrawableHelper::FillPolyPolygon(pRenderContext, aTestFillPolyPolygon);
+}
+
+void B2DPolyPolyLineDrawableTest::testDrawPolyPolyLine()
+{
+    LineInfo aTestLineInfo;
+    aTestLineInfo.SetWidth(1);
+    const basegfx::B2DPolyPolygon aTestPolyPolygon(
+        { basegfx::B2DPoint(0, 0), basegfx::B2DPoint(1, 1), basegfx::B2DPoint(2, 2) });
+    VclPtrInstance<VirtualDevice> pRenderContext;
+
+    vcl::B2DPolyPolyLineDrawableHelper::DrawPolyPolyLine(pRenderContext, aTestPolyPolygon);
+}
+
+void B2DPolyPolyLineDrawableTest::testDrawPolyLine()
+{
+    LineInfo aTestLineInfo;
+    aTestLineInfo.SetWidth(1);
+    const basegfx::B2DPolygon aTestPolygon(
+        { basegfx::B2DPoint(0, 0), basegfx::B2DPoint(1, 1), basegfx::B2DPoint(2, 2) });
+    VclPtrInstance<VirtualDevice> pRenderContext;
+
+    vcl::B2DPolyPolyLineDrawableHelper::DrawPolyLine(pRenderContext, aTestPolygon);
+}
+
+void B2DPolyPolyLineDrawableTest::testDrawPolyPolygonFallback()
+{
+    LineInfo aTestLineInfo;
+    aTestLineInfo.SetWidth(1);
+    const basegfx::B2DPolyPolygon aTestPolyPolygon(
+        { basegfx::B2DPoint(0, 0), basegfx::B2DPoint(1, 1), basegfx::B2DPoint(2, 2) });
+    VclPtrInstance<VirtualDevice> pRenderContext;
+
+    vcl::B2DPolyPolyLineDrawableHelper::DrawPolyPolygonFallback(pRenderContext, aTestPolyPolygon);
+}
+
+void B2DPolyPolyLineDrawableTest::testDrawPolyLineFallback()
+{
+    LineInfo aTestLineInfo;
+    aTestLineInfo.SetWidth(1);
+    const basegfx::B2DPolygon aTestPolygon(
+        { basegfx::B2DPoint(0, 0), basegfx::B2DPoint(1, 1), basegfx::B2DPoint(2, 2) });
+    VclPtrInstance<VirtualDevice> pRenderContext;
+
+    vcl::B2DPolyPolyLineDrawableHelper::DrawPolyLineFallback(pRenderContext, aTestPolygon);
 }
 
 } // namespace

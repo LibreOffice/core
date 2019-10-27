@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_set_include,vcl_drawable,\
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,vcl_drawable, \
+	basegfx \
 	comphelper \
 	cppu \
 	cppuhelper \
