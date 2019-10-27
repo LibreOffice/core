@@ -36,7 +36,7 @@ private:
     OUString aLink;
     void UpdateTip();
     DECL_LINK(OnNextClick, weld::Button&, void);
-    DECL_LINK(OnLinkClick, weld::LinkButton&, void);
+    DECL_LINK(OnLinkClick, weld::LinkButton&, bool);
 
 public:
     TipOfTheDayDialog(weld::Window* pWindow);

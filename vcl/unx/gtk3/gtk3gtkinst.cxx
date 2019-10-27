@@ -6953,18 +6953,18 @@ private:
     GtkLinkButton* m_pButton;
     gulong m_nSignalId;
 
-    static void signalClicked(GtkButton*, gpointer widget)
+    static bool signalActivateLink(GtkButton*, gpointer widget)
     {
         GtkInstanceLinkButton* pThis = static_cast<GtkInstanceLinkButton*>(widget);
         SolarMutexGuard aGuard;
-        pThis->signal_clicked();
+        return pThis->signal_activate_link();
     }
 
 public:
     GtkInstanceLinkButton(GtkLinkButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pButton), pBuilder, bTakeOwnership)
         , m_pButton(pButton)
-        , m_nSignalId(g_signal_connect(pButton, "clicked", G_CALLBACK(signalClicked), this))
+        , m_nSignalId(g_signal_connect(pButton, "activate-link", G_CALLBACK(signalActivateLink), this))
     {
     }
 
