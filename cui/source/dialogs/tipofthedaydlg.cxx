@@ -103,7 +103,7 @@ void TipOfTheDayDialog::UpdateTip()
 
         m_pLink->set_label(CuiResId(STR_MORE_LINK));
         m_pLink->set_visible(true);
-        m_pLink->connect_clicked(Link<weld::LinkButton&, void>());
+        m_pLink->connect_activate_link(Link<weld::LinkButton&, bool>());
     }
     else
     {
@@ -111,7 +111,7 @@ void TipOfTheDayDialog::UpdateTip()
         m_pLink->set_label(CuiResId(STR_HELP_LINK));
         m_pLink->set_visible(true);
         //converts aLink into the proper offline/online hyperlink
-        m_pLink->connect_clicked(LINK(this, TipOfTheDayDialog, OnLinkClick));
+        m_pLink->connect_activate_link(LINK(this, TipOfTheDayDialog, OnLinkClick));
     }
     // image
     OUString aURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/tipoftheday/");
@@ -132,9 +132,10 @@ void TipOfTheDayDialog::UpdateTip()
     }
 }
 
-IMPL_LINK_NOARG(TipOfTheDayDialog, OnLinkClick, weld::LinkButton&, void)
+IMPL_LINK_NOARG(TipOfTheDayDialog, OnLinkClick, weld::LinkButton&, bool)
 {
     Application::GetHelp()->Start(aLink, static_cast<weld::Widget*>(nullptr));
+    return true;
 }
 
 IMPL_LINK_NOARG(TipOfTheDayDialog, OnNextClick, weld::Button&, void)

@@ -2691,8 +2691,9 @@ public:
 
 IMPL_LINK(SalInstanceLinkButton, ClickHdl, FixedHyperlink&, rButton, void)
 {
-    m_aOrigClickHdl.Call(rButton);
-    signal_clicked();
+    bool bConsumed = signal_activate_link();
+    if (!bConsumed)
+        m_aOrigClickHdl.Call(rButton);
 }
 
 class SalInstanceRadioButton : public SalInstanceButton, public virtual weld::RadioButton
