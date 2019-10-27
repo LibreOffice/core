@@ -12,8 +12,6 @@
 "ScStyleObj";"com::sun::star::style::Style";"FollowStyle#optional"
 "ScStyleObj";"com::sun::star::style::Style";"DisplayName#optional"
 "ScStyleObj";"com::sun::star::style::Style";"IsAutoUpdate#optional"
-"ScStyleObj";"com::sun::star::container::XNamed";"getName()"
-"ScStyleObj";"com::sun::star::container::XNamed";"setName()"
 "ScStyleObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "ScStyleObj";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "ScStyleObj";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
