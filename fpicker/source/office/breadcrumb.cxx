@@ -40,7 +40,7 @@ void Breadcrumb::EnableFields( bool bEnable )
     }
 }
 
-void Breadcrumb::connect_clicked( const Link<Breadcrumb*,void>& rLink )
+void Breadcrumb::connect_clicked( const Link<Breadcrumb*,bool>& rLink )
 {
     m_aClickHdl = rLink;
 }
@@ -214,7 +214,7 @@ void Breadcrumb::appendField()
     m_aSegments.emplace_back(std::make_unique<BreadcrumbPath>(m_pParent));
     size_t nIndex = m_aSegments.size() - 1;
     m_aSegments[nIndex]->m_xLink->hide();
-    m_aSegments[nIndex]->m_xLink->connect_clicked( LINK( this, Breadcrumb, ClickLinkHdl ) );
+    m_aSegments[nIndex]->m_xLink->connect_activate_link(LINK(this, Breadcrumb, ClickLinkHdl));
     m_aSegments[nIndex]->m_xSeparator->set_label( ">" );
     m_aSegments[nIndex]->m_xSeparator->hide();
 }
@@ -242,10 +242,10 @@ bool Breadcrumb::showField( unsigned int nIndex, unsigned int nWidthMax )
     return true;
 }
 
-IMPL_LINK( Breadcrumb, ClickLinkHdl, weld::LinkButton&, rLink, void )
+IMPL_LINK(Breadcrumb, ClickLinkHdl, weld::LinkButton&, rLink, bool)
 {
     m_sClickedURL = m_aUris[&rLink];
-    m_aClickHdl.Call( this );
+    return m_aClickHdl.Call(this);
 }
 
 BreadcrumbPath::BreadcrumbPath(weld::Container* pContainer)
