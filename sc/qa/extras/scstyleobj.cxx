@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/beans/xpropertyset.hxx>
 #include <test/container/xnamed.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -30,7 +31,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScStyleObj : public CalcUnoApiTest, public apitest::XNamed
+class ScStyleObj : public CalcUnoApiTest, public apitest::XNamed, public apitest::XPropertySet
 {
 public:
     ScStyleObj();
@@ -46,6 +47,13 @@ public:
     CPPUNIT_TEST(testGetName);
     CPPUNIT_TEST(testSetName);
 
+    // XPropertySet
+    CPPUNIT_TEST(testGetPropertySetInfo);
+    CPPUNIT_TEST(testGetPropertyValue);
+    CPPUNIT_TEST(testSetPropertyValue);
+    CPPUNIT_TEST(testPropertyChangeListener);
+    CPPUNIT_TEST(testVetoableChangeListener);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -55,6 +63,15 @@ private:
 ScStyleObj::ScStyleObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XNamed("ScStyleObj")
+    , XPropertySet({
+          "BottomBorder",          "BottomBorder2",     "CellProtection", "CharLocale",
+          "CharLocaleAsian",       "CharLocaleComplex", "CharPosture",    "CharPostureAsian",
+          "CharPostureComplex",    "DiagonalBLTR",      "DiagonalBLTR2",  "DiagonalTLBR",
+          "DiagonalTLBR2",         "HoriJustify",       "LeftBorder",     "LeftBorder2",
+          "NumberFormat",          "Orientation",       "RightBorder",    "RightBorder2",
+          "ShadowFormat",          "TableBorder",       "TopBorder",      "TopBorder2",
+          "UserDefinedAttributes",
+      })
 {
 }
 
