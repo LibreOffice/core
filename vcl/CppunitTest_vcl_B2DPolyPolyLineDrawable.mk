@@ -10,7 +10,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,vcl_B2DPolyPolyLineDrawable))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,vcl_B2DPolyPolyLineDrawable, \
-    vcl/qa/cppunit/B2DPolyPolyLineDrawableTest \
+    vcl/qa/cppunit/drawables/B2DPolyPolyLineDrawableTest \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,vcl_B2DPolyPolyLineDrawable,\

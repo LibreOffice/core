@@ -10,7 +10,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,vcl_drawable))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,vcl_drawable, \
-    vcl/qa/cppunit/DrawableTest \
+    vcl/qa/cppunit/drawables/DrawableTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_drawable,\
