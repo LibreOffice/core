@@ -20,6 +20,29 @@ class SalGraphics;
 
 namespace vcl
 {
+class DisableMetafileProcessing
+{
+public:
+    DisableMetafileProcessing(VclPtr<OutputDevice> pRenderContext);
+    ~DisableMetafileProcessing();
+
+private:
+    GDIMetaFile* mpMtf;
+    VclPtr<OutputDevice> mpRenderContext;
+};
+
+class SetFillColor
+{
+public:
+    SetFillColor(VclPtr<OutputDevice> pRenderContext);
+    ~SetFillColor();
+
+private:
+    VclPtr<OutputDevice> mpRenderContext;
+    Color mpLineColor;
+    Color mpFillColor;
+};
+
 class VCL_DLLPUBLIC Drawable
 {
 public:

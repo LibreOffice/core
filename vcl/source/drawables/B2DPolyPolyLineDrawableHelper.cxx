@@ -201,7 +201,7 @@ void B2DPolyPolyLineDrawableHelper::FillPolyPolygon(OutputDevice* pRenderContext
 {
     assert(rFillPolyPolygon.count());
 
-    ColorFillPolyPolygon aColorFillPolyPolygon(pRenderContext);
+    SetFillColor aFillColor(pRenderContext);
 
     if (CanAntialiasLine(pRenderContext, pGraphics)
         && !pGraphics->DrawPolyPolygon(basegfx::B2DHomMatrix(), rFillPolyPolygon, 0.0,

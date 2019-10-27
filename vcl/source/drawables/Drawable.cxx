@@ -14,7 +14,38 @@
 
 #include <sal/log.hxx>
 
-bool vcl::Drawable::execute(OutputDevice* const pRenderContext) const
+namespace vcl
+{
+DisableMetafileProcessing::DisableMetafileProcessing(VclPtr<OutputDevice> pRenderContext)
+    : mpRenderContext(pRenderContext)
+{
+    mpMtf = pRenderContext->GetConnectMetaFile();
+    pRenderContext->SetConnectMetaFile(nullptr);
+}
+
+DisableMetafileProcessing::~DisableMetafileProcessing()
+{
+    mpRenderContext->SetConnectMetaFile(mpMtf);
+}
+
+SetFillColor::SetFillColor(VclPtr<OutputDevice> pRenderContext)
+    : mpRenderContext(pRenderContext)
+    , mpLineColor(pRenderContext->GetLineColor())
+    , mpFillColor(pRenderContext->GetFillColor())
+{
+    pRenderContext->SetLineColor();
+    pRenderContext->InitLineColor();
+    pRenderContext->SetFillColor(mpLineColor);
+    pRenderContext->InitFillColor();
+}
+
+SetFillColor::~SetFillColor()
+{
+    mpRenderContext->SetFillColor(mpFillColor);
+    mpRenderContext->SetLineColor(mpLineColor);
+}
+
+bool Drawable::execute(OutputDevice* const pRenderContext) const
 {
     assert(!pRenderContext->is_double_buffered_window());
 
@@ -61,7 +92,7 @@ bool vcl::Drawable::execute(OutputDevice* const pRenderContext) const
     return true;
 }
 
-bool vcl::Drawable::ShouldAddAction() const
+bool Drawable::ShouldAddAction() const
 {
     if (mpMetaAction)
         return true;
@@ -69,14 +100,14 @@ bool vcl::Drawable::ShouldAddAction() const
         return false;
 }
 
-void vcl::Drawable::AddAction(OutputDevice* const pRenderContext) const
+void Drawable::AddAction(OutputDevice* const pRenderContext) const
 {
     GDIMetaFile* pMetaFile = pRenderContext->GetConnectMetaFile();
     if (pMetaFile)
         pMetaFile->AddAction(mpMetaAction);
 }
 
-bool vcl::Drawable::InitClipRegion(OutputDevice* const pRenderContext) const
+bool Drawable::InitClipRegion(OutputDevice* const pRenderContext) const
 {
     if (pRenderContext->IsClipRegionInitialized())
         pRenderContext->InitClipRegion();
@@ -87,19 +118,19 @@ bool vcl::Drawable::InitClipRegion(OutputDevice* const pRenderContext) const
     return true;
 }
 
-void vcl::Drawable::InitLineColor(OutputDevice* const pRenderContext) const
+void Drawable::InitLineColor(OutputDevice* const pRenderContext) const
 {
     if (pRenderContext->IsLineColorInitialized())
         pRenderContext->InitLineColor();
 }
 
-void vcl::Drawable::InitFillColor(OutputDevice* const pRenderContext) const
+void Drawable::InitFillColor(OutputDevice* const pRenderContext) const
 {
     if (pRenderContext->IsFillColorInitialized())
         pRenderContext->InitFillColor();
 }
 
-bool vcl::Drawable::DrawAlphaVirtDev(OutputDevice* const pRenderContext) const
+bool Drawable::DrawAlphaVirtDev(OutputDevice* const pRenderContext) const
 {
     OutputDevice* pAlphaVDev = pRenderContext->GetAlphaVirtDev();
 
@@ -111,5 +142,7 @@ bool vcl::Drawable::DrawAlphaVirtDev(OutputDevice* const pRenderContext) const
 
     return false;
 }
+
+} // namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

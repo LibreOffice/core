@@ -28,49 +28,6 @@ class B2DPolygon;
 
 namespace vcl
 {
-class DisableMetafileProcessing
-{
-public:
-    DisableMetafileProcessing(VclPtr<OutputDevice> pRenderContext)
-        : mpRenderContext(pRenderContext)
-    {
-        mpMtf = pRenderContext->GetConnectMetaFile();
-        pRenderContext->SetConnectMetaFile(nullptr);
-    }
-
-    ~DisableMetafileProcessing() { mpRenderContext->SetConnectMetaFile(mpMtf); }
-
-private:
-    GDIMetaFile* mpMtf;
-    VclPtr<OutputDevice> mpRenderContext;
-};
-
-class ColorFillPolyPolygon
-{
-public:
-    ColorFillPolyPolygon(VclPtr<OutputDevice> pRenderContext)
-        : mpRenderContext(pRenderContext)
-        , mpLineColor(pRenderContext->GetLineColor())
-        , mpFillColor(pRenderContext->GetFillColor())
-    {
-        pRenderContext->SetLineColor();
-        pRenderContext->InitLineColor();
-        pRenderContext->SetFillColor(mpLineColor);
-        pRenderContext->InitFillColor();
-    }
-
-    ~ColorFillPolyPolygon()
-    {
-        mpRenderContext->SetFillColor(mpFillColor);
-        mpRenderContext->SetLineColor(mpLineColor);
-    }
-
-private:
-    VclPtr<OutputDevice> mpRenderContext;
-    Color mpLineColor;
-    Color mpFillColor;
-};
-
 class VCL_DLLPUBLIC B2DPolyPolyLineDrawableHelper
 {
 public:
