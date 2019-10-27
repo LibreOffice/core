@@ -39,8 +39,8 @@ protected:
     bool DrawCommand(OutputDevice* pRenderContext) const override;
 
 private:
-    bool Draw(OutputDevice* pRenderContext, basegfx::B2DPolyPolygon const& rLinePolyPolygon,
-              LineInfo const& rLineInfo) const;
+    static bool Draw(OutputDevice* pRenderContext, basegfx::B2DPolyPolygon const& rLinePolyPolygon,
+                     LineInfo const& rLineInfo);
 
     bool Draw(OutputDevice* pRenderContext, basegfx::B2DPolyPolygon const& rLinePolyPolygon) const;
 

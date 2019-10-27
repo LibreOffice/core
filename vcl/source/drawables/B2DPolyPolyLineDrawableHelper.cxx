@@ -141,17 +141,19 @@ B2DPolyPolyLineDrawableHelper::CreateFillPolyPolygon(basegfx::B2DPolyPolygon& rL
     return aFillPolyPolygon;
 }
 
-bool B2DPolyPolyLineDrawableHelper::CanAntialiasLine(OutputDevice* pRenderContext,
-                                                     SalGraphics* pGraphics)
+bool B2DPolyPolyLineDrawableHelper::CanAntialiasLine(OutputDevice* pRenderContext)
 {
+    SalGraphics* pGraphics = pRenderContext->GetGraphics();
+
     return (pRenderContext->GetAntialiasing() & AntialiasingFlags::EnableB2dDraw)
            && pGraphics->supportsOperation(OutDevSupportType::B2DDraw)
            && pRenderContext->GetRasterOp() == RasterOp::OverPaint && pRenderContext->IsLineColor();
 }
 
-bool B2DPolyPolyLineDrawableHelper::CanAntialiasFilledLine(OutputDevice* pRenderContext,
-                                                           SalGraphics* pGraphics)
+bool B2DPolyPolyLineDrawableHelper::CanAntialiasFilledLine(OutputDevice* pRenderContext)
 {
+    SalGraphics* pGraphics = pRenderContext->GetGraphics();
+
     return (pRenderContext->GetAntialiasing() & AntialiasingFlags::EnableB2dDraw)
            && pGraphics->supportsOperation(OutDevSupportType::B2DDraw)
            && pRenderContext->GetRasterOp() == RasterOp::OverPaint
@@ -159,51 +161,51 @@ bool B2DPolyPolyLineDrawableHelper::CanAntialiasFilledLine(OutputDevice* pRender
 }
 
 void B2DPolyPolyLineDrawableHelper::DrawPolyPolyLine(
-    OutputDevice* pRenderContext, SalGraphics* const pGraphics,
-    basegfx::B2DPolyPolygon const& rLinePolyPolygon)
+    OutputDevice* pRenderContext, basegfx::B2DPolyPolygon const& rLinePolyPolygon)
 {
     assert(rLinePolyPolygon.count());
 
     for (auto const& rB2DPolygon : rLinePolyPolygon)
     {
-        if (!DrawPolyLine(pRenderContext, pGraphics, rB2DPolygon))
-            DrawPolyLineFallback(pRenderContext, pGraphics, rB2DPolygon);
+        if (!DrawPolyLine(pRenderContext, rB2DPolygon))
+            DrawPolyLineFallback(pRenderContext, rB2DPolygon);
     }
 }
 
 void B2DPolyPolyLineDrawableHelper::DrawPolyLineFallback(OutputDevice* pRenderContext,
-                                                         SalGraphics* const pGraphics,
                                                          basegfx::B2DPolygon const& rB2DPolygon)
 {
     tools::Polygon aPolygon(rB2DPolygon);
+    SalGraphics* pGraphics = pRenderContext->GetGraphics();
     pGraphics->DrawPolyLine(aPolygon.GetSize(), reinterpret_cast<SalPoint*>(aPolygon.GetPointAry()),
                             pRenderContext);
 }
 
 bool B2DPolyPolyLineDrawableHelper::DrawPolyLine(OutputDevice* pRenderContext,
-                                                 SalGraphics* const pGraphics,
                                                  basegfx::B2DPolygon const& rB2DPolygon,
                                                  basegfx::B2DHomMatrix const aTransform)
 {
-    return CanAntialiasLine(pRenderContext, pGraphics)
+    SalGraphics* pGraphics = pRenderContext->GetGraphics();
+
+    return CanAntialiasLine(pRenderContext)
            && pGraphics->DrawPolyLine(
-                  aTransform, rB2DPolygon, 0.0, basegfx::B2DVector(1.0, 1.0),
-                  basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
-                  basegfx::deg2rad(
-                      15.0), // not used with B2DLineJoin::NONE, but the correct default
-                  bool(pRenderContext->GetAntialiasing() & AntialiasingFlags::PixelSnapHairline),
-                  pRenderContext);
+               aTransform, rB2DPolygon, 0.0, basegfx::B2DVector(1.0, 1.0),
+               basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
+               basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
+               bool(pRenderContext->GetAntialiasing() & AntialiasingFlags::PixelSnapHairline),
+               pRenderContext);
 }
 
 void B2DPolyPolyLineDrawableHelper::FillPolyPolygon(OutputDevice* pRenderContext,
-                                                    SalGraphics* const pGraphics,
                                                     basegfx::B2DPolyPolygon const& rFillPolyPolygon)
 {
     assert(rFillPolyPolygon.count());
 
     SetFillColor aFillColor(pRenderContext);
 
-    if (CanAntialiasLine(pRenderContext, pGraphics)
+    SalGraphics* pGraphics = pRenderContext->GetGraphics();
+
+    if (CanAntialiasLine(pRenderContext)
         && !pGraphics->DrawPolyPolygon(basegfx::B2DHomMatrix(), rFillPolyPolygon, 0.0,
                                        pRenderContext))
     {

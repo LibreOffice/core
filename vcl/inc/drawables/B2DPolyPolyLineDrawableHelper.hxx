@@ -11,6 +11,8 @@
 #ifndef INCLUDED_VCL_INC_DRAWABLES_B2DPOLYPOLYLINEDRAWABLEHELPER_HXX
 #define INCLUDED_VCL_INC_DRAWABLES_B2DPOLYPOLYLINEDRAWABLEHELPER_HXX
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
+
 #include <vcl/gdimtf.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/outdev.hxx>
@@ -47,23 +49,22 @@ public:
     static basegfx::B2DPolyPolygon CreateFillPolyPolygon(basegfx::B2DPolyPolygon& rLinePolyPolygon,
                                                          LineInfo const& rLineInfo);
 
-    static bool CanAntialiasLine(OutputDevice* pRenderContext, SalGraphics* pGraphics);
-    static bool CanAntialiasFilledLine(OutputDevice* pRenderContext, SalGraphics* pGraphics);
+    static bool CanAntialiasLine(OutputDevice* pRenderContext);
+    static bool CanAntialiasFilledLine(OutputDevice* pRenderContext);
 
-    static void DrawPolyPolyLine(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
+    static void DrawPolyPolyLine(OutputDevice* pRenderContext,
                                  basegfx::B2DPolyPolygon const& rLinePolyPolygon);
 
-    static bool DrawPolyLine(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
-                             basegfx::B2DPolygon const& rB2DPolygon,
+    static bool DrawPolyLine(OutputDevice* pRenderContext, basegfx::B2DPolygon const& rB2DPolygon,
                              basegfx::B2DHomMatrix const aTransform = basegfx::B2DHomMatrix());
 
-    static void FillPolyPolygon(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
+    static void FillPolyPolygon(OutputDevice* pRenderContext,
                                 basegfx::B2DPolyPolygon const& rFillPolyPolygon);
 
     static void DrawPolyPolygonFallback(OutputDevice* pRenderContext,
                                         basegfx::B2DPolyPolygon const& rLinePolyPolygon);
 
-    static void DrawPolyLineFallback(OutputDevice* pRenderContext, SalGraphics* const pGraphics,
+    static void DrawPolyLineFallback(OutputDevice* pRenderContext,
                                      basegfx::B2DPolygon const& rB2DPolygon);
 };
 

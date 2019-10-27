@@ -64,7 +64,7 @@ bool B2DPolyPolyLineDrawable::DrawCommand(OutputDevice* pRenderContext) const
 
 bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
                                    basegfx::B2DPolyPolygon const& rLinePolyPolygon,
-                                   LineInfo const& rLineInfo) const
+                                   LineInfo const& rLineInfo)
 {
     // Do not paint empty PolyPolygons
     if (!rLinePolyPolygon.count())
@@ -77,9 +77,9 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
 
     DisableMetafileProcessing aDisableMtf(pRenderContext);
 
-    B2DPolyPolyLineDrawableHelper::DrawPolyPolyLine(pRenderContext, mpGraphics, rLinePolyPolygon);
+    B2DPolyPolyLineDrawableHelper::DrawPolyPolyLine(pRenderContext, rLinePolyPolygon);
     if (aFillPolyPolygon.count())
-        B2DPolyPolyLineDrawableHelper::FillPolyPolygon(pRenderContext, mpGraphics, aFillPolyPolygon);
+        B2DPolyPolyLineDrawableHelper::FillPolyPolygon(pRenderContext, aFillPolyPolygon);
 
     return true;
 }
@@ -91,7 +91,7 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
     if (!rLinePolyPolygon.count())
         return false;
 
-    if (B2DPolyPolyLineDrawableHelper::CanAntialiasFilledLine(pRenderContext, mpGraphics))
+    if (B2DPolyPolyLineDrawableHelper::CanAntialiasFilledLine(pRenderContext))
     {
         basegfx::B2DPolyPolygon aB2DPolyPolygon(rLinePolyPolygon);
 
@@ -107,8 +107,8 @@ bool B2DPolyPolyLineDrawable::Draw(OutputDevice* pRenderContext,
         {
             for (auto const& rPolygon : aB2DPolyPolygon)
             {
-                if (!B2DPolyPolyLineDrawableHelper::DrawPolyLine(pRenderContext, mpGraphics,
-                                                                 rPolygon, aTransform))
+                if (!B2DPolyPolyLineDrawableHelper::DrawPolyLine(pRenderContext, rPolygon,
+                                                                 aTransform))
                 {
                     break;
                 }
