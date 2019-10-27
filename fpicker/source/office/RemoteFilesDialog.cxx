@@ -787,9 +787,10 @@ IMPL_LINK(RemoteFilesDialog, TreeSelectHdl, weld::TreeView&, rBox, void)
     m_xFileView->grab_focus();
 }
 
-IMPL_LINK ( RemoteFilesDialog, SelectBreadcrumbHdl, Breadcrumb*, pPtr, void )
+IMPL_LINK(RemoteFilesDialog, SelectBreadcrumbHdl, Breadcrumb*, pPtr, bool)
 {
     OpenURL( pPtr->GetHdlURL() );
+    return true;
 }
 
 IMPL_LINK_NOARG ( RemoteFilesDialog, NewFolderHdl, weld::Button&, void )

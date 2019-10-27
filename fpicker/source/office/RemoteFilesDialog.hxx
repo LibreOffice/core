@@ -181,7 +181,7 @@ private:
 
     DECL_LINK( TreeSelectHdl, weld::TreeView&, void );
 
-    DECL_LINK( SelectBreadcrumbHdl, Breadcrumb *, void );
+    DECL_LINK( SelectBreadcrumbHdl, Breadcrumb*, bool );
 
     DECL_LINK( NewFolderHdl, weld::Button&, void );
     DECL_LINK( IconViewHdl, weld::Button&, void );

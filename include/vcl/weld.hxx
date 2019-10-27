@@ -1200,9 +1200,9 @@ class VCL_DLLPUBLIC RadioButton : virtual public ToggleButton
 class VCL_DLLPUBLIC LinkButton : virtual public Container
 {
 protected:
-    Link<LinkButton&, void> m_aClickHdl;
+    Link<LinkButton&, bool> m_aActivateLinkHdl;
 
-    void signal_clicked() { m_aClickHdl.Call(*this); }
+    bool signal_activate_link() { return m_aActivateLinkHdl.Call(*this); }
 
 public:
     virtual void set_label(const OUString& rText) = 0;
@@ -1210,9 +1210,7 @@ public:
     virtual void set_uri(const OUString& rUri) = 0;
     virtual OUString get_uri() const = 0;
 
-    void clicked() { signal_clicked(); }
-
-    void connect_clicked(const Link<LinkButton&, void>& rLink) { m_aClickHdl = rLink; }
+    void connect_activate_link(const Link<LinkButton&, bool>& rLink) { m_aActivateLinkHdl = rLink; }
 };
 
 class VCL_DLLPUBLIC Scale : virtual public Widget

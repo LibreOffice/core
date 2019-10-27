@@ -46,13 +46,13 @@ private:
 
     SvtBreadcrumbMode m_eMode;
 
-    Link<Breadcrumb*,void> m_aClickHdl;
+    Link<Breadcrumb*,bool> m_aClickHdl;
 
     void appendField();
     bool showField( unsigned int nIndex, unsigned int nWidthMax );
 
     DECL_LINK(SizeAllocHdl, const Size&, void);
-    DECL_LINK(ClickLinkHdl, weld::LinkButton&, void);
+    DECL_LINK(ClickLinkHdl, weld::LinkButton&, bool);
 
 public:
     Breadcrumb(weld::Container* pParent);
@@ -60,7 +60,7 @@ public:
 
     void EnableFields( bool bEnable );
 
-    void connect_clicked( const Link<Breadcrumb*,void>& rLink );
+    void connect_clicked( const Link<Breadcrumb*,bool>& rLink );
     const OUString& GetHdlURL() const;
 
     void SetRootName( const OUString& rURL );
