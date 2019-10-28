@@ -34,7 +34,6 @@
 
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/types.hxx>
 
 #include <canvas/base/spritecanvasbase.hxx>
 #include <canvas/base/spritesurface.hxx>
