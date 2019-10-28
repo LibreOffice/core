@@ -1216,15 +1216,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
             OUString sColor;
             const SfxPoolItem* pColorStringItem = nullptr;
 
-            if (pItem)
-            {
-                aSet = pItem ? static_cast<const SvxColorItem*>(pItem)->GetValue() : COL_TRANSPARENT;
-            }
-            else if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
+            if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
             {
                 sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
                 aSet = Color(sColor.toInt32(16));
             }
+            else if (pItem)
+                aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
+            else
+                aSet = COL_TRANSPARENT;
 
             SwEditWin& rEdtWin = GetView().GetEditWin();
             if (nSlot != SID_ATTR_CHAR_COLOR_EXT)
