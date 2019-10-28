@@ -1129,6 +1129,18 @@ void SwTableShell::Execute(SfxRequest &rReq)
             }
             return;
         }
+        case SID_ATTR_TABLE_COLUMN_WIDTH:
+        {
+            const SfxUInt32Item* pItem2 = rReq.GetArg<SfxUInt32Item>(SID_ATTR_TABLE_COLUMN_WIDTH);
+            if (pItem2)
+            {
+                long nNewWidth = pItem2->GetValue();
+                SwTableFUNC aFunc( &rSh );
+                aFunc.InitTabCols();
+                aFunc.SetColWidth(aFunc.GetCurColNum(), nNewWidth);
+            }
+            return;
+        }
         default:
             bMore = true;
     }
@@ -1414,6 +1426,16 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                     aRowHeight.SetValue(nHeight);
                     rSet.Put(aRowHeight);
                 }
+                break;
+            }
+            case SID_ATTR_TABLE_COLUMN_WIDTH:
+            {
+                SfxUInt32Item aColumnWidth(SID_ATTR_TABLE_COLUMN_WIDTH);
+                SwTableFUNC aFunc( &rSh );
+                aFunc.InitTabCols();
+                SwTwips nWidth = aFunc.GetColWidth(aFunc.GetCurColNum());
+                aColumnWidth.SetValue(nWidth);
+                rSet.Put(aColumnWidth);
                 break;
             }
         }
