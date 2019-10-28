@@ -365,6 +365,28 @@ bool TxtBox::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
+namespace
+{
+    class ChangeMemGuard
+    {
+    private:
+        HIODev* m_pOldMem;
+        HIODev* m_pNewMem;
+    public:
+        ChangeMemGuard(HMemIODev* pNewMem)
+            : m_pOldMem(hmem)
+            , m_pNewMem(pNewMem)
+        {
+            hmem = m_pNewMem;
+        }
+        ~ChangeMemGuard()
+        {
+            assert(hmem == m_pNewMem);
+            hmem = m_pOldMem;
+        }
+    };
+}
+
 // picture(11)
 bool Picture::Read(HWPFile & hwpf)
 {
@@ -467,14 +489,12 @@ bool Picture::Read(HWPFile & hwpf)
 
         if (pictype == PICTYPE_DRAW)
         {
-            HIODev* pOldMem = hmem;
-            std::unique_ptr<HMemIODev> pNewMem(new HMemIODev(reinterpret_cast<char *>(follow.data()), follow_block_size));
-            hmem = pNewMem.get();
+            auto xNewMem(std::make_unique<HMemIODev>(reinterpret_cast<char*>(follow.data()), follow_block_size));
+            auto xGuard(std::make_unique<ChangeMemGuard>(xNewMem.get()));
             LoadDrawingObjectBlock(this);
             style.cell = picinfo.picdraw.hdo;
-            assert(hmem == pNewMem.get());
-            pNewMem.reset();
-            hmem = pOldMem;
+            xGuard.reset();
+            xNewMem.reset();
         }
         else if (follow_block_size >= 4)
         {
