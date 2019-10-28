@@ -10,6 +10,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/unopolypolygon.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>

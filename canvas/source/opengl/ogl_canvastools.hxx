@@ -13,6 +13,8 @@
 #include <sal/config.h>
 #include <vector>
 
+#include <epoxy/gl.h>
+
 namespace com { namespace sun { namespace star { namespace rendering {
     struct ARGBColor;
 }}}}

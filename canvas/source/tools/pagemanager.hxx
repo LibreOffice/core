@@ -22,7 +22,6 @@
 
 #include <basegfx/vector/b2isize.hxx>
 #include <canvas/rendering/irendermodule.hxx>
-#include <canvas/rendering/isurface.hxx>
 
 #include "page.hxx"
 

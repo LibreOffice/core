@@ -20,11 +20,13 @@
 #include <sal/config.h>
 
 #include <basegfx/numeric/ftools.hxx>
+#include <canvas/canvastools.hxx>
 #include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <rtl/math.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/virdev.hxx>
 
 #include "canvasfont.hxx"
 #include "textlayout.hxx"

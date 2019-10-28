@@ -17,7 +17,7 @@
 
 #include <canvas/base/integerbitmapbase.hxx>
 #include <canvas/base/basemutexhelper.hxx>
-#include <basegfx/vector/b2isize.hxx>
+#include <canvas/base/bitmapcanvasbase.hxx>
 
 #include "ogl_bitmapcanvashelper.hxx"
 #include "ogl_spritecanvas.hxx"

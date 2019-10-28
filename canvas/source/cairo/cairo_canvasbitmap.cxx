@@ -26,6 +26,7 @@
 #include <vcl/BitmapTools.hxx>
 
 #include <canvas/canvastools.hxx>
+#include <cairo.h>
 
 #include "cairo_canvasbitmap.hxx"
 

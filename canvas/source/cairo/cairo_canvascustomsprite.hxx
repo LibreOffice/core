@@ -24,14 +24,11 @@
 #include <comphelper/uno3.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XCustomSprite.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2isize.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <canvas/base/basemutexhelper.hxx>
 #include <canvas/base/canvascustomspritebase.hxx>

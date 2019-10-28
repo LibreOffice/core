@@ -22,17 +22,12 @@
 
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/types.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XCustomSprite.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 
-#include <vcl/virdev.hxx>
-
-#include <canvas/vclwrapper.hxx>
 #include <canvas/base/basemutexhelper.hxx>
 #include <canvas/base/spritesurface.hxx>
 #include <canvas/base/canvascustomspritebase.hxx>
@@ -40,9 +35,7 @@
 #include "sprite.hxx"
 #include "canvashelper.hxx"
 #include "spritehelper.hxx"
-#include "backbuffer.hxx"
 #include "impltools.hxx"
-#include "spritecanvas.hxx"
 #include "repainttarget.hxx"
 
 

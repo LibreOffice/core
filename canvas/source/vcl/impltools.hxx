@@ -28,9 +28,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 
-#include <canvas/vclwrapper.hxx>
 #include "outdevprovider.hxx"
 
 

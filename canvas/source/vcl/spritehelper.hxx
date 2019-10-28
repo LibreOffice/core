@@ -20,17 +20,13 @@
 #ifndef INCLUDED_CANVAS_SOURCE_VCL_SPRITEHELPER_HXX
 #define INCLUDED_CANVAS_SOURCE_VCL_SPRITEHELPER_HXX
 
-#include <com/sun/star/rendering/XCustomSprite.hpp>
-
-#include <vcl/virdev.hxx>
+#include <vcl/bitmapex.hxx>
 
 #include <canvas/base/canvascustomspritehelper.hxx>
 #include <canvas/base/spritesurface.hxx>
 #include <canvas/vclwrapper.hxx>
 
 #include "backbuffer.hxx"
-#include "impltools.hxx"
-#include "spritecanvas.hxx"
 
 
 namespace vclcanvas

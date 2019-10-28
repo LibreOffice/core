@@ -10,11 +10,10 @@
 #ifndef INCLUDED_CANVAS_SOURCE_OPENGL_OGL_BITMAPCANVASHELPER_HXX
 #define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_BITMAPCANVASHELPER_HXX
 
-#include <com/sun/star/rendering/XBitmapCanvas.hpp>
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
+#include <com/sun/star/geometry/IntegerPoint2D.hpp>
+#include <com/sun/star/geometry/IntegerRectangle2D.hpp>
+#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 
-#include <basegfx/vector/b2isize.hxx>
-#include <basegfx/vector/b2dsize.hxx>
 #include "ogl_canvashelper.hxx"
 
 namespace oglcanvas

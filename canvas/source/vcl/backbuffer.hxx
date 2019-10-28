@@ -22,7 +22,6 @@
 
 #include <vcl/virdev.hxx>
 
-#include <canvas/vclwrapper.hxx>
 #include "outdevprovider.hxx"
 
 #include <memory>

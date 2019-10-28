@@ -35,6 +35,8 @@
 #include "cairo_spritecanvas.hxx"
 #include "cairo_textlayout.hxx"
 
+#include <cairo.h>
+
 #if defined CAIRO_HAS_FT_FONT
 # include <cairo-ft.h>
 #else

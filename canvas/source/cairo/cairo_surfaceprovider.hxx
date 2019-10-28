@@ -23,8 +23,8 @@
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 
+#include <basegfx/vector/b2isize.hxx>
 #include <vcl/cairo.hxx>
-#include <cairo.h>
 
 class OutputDevice;
 class Bitmap;

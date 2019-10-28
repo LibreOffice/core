@@ -12,9 +12,6 @@
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 
-#include <basegfx/vector/b2isize.hxx>
-#include <basegfx/vector/b2dsize.hxx>
-
 #include <o3tl/cow_wrapper.hxx>
 #include <vector>
 

@@ -15,8 +15,6 @@
 
 #include <com/sun/star/rendering/XTextLayout.hpp>
 
-#include <basegfx/vector/b2isize.hxx>
-
 #include "ogl_canvasfont.hxx"
 
 

@@ -21,12 +21,10 @@
 #define INCLUDED_CANVAS_SOURCE_VCL_CANVASBITMAPHELPER_HXX
 
 #include "canvashelper.hxx"
-#include <canvas/vclwrapper.hxx>
 
 #include <vcl/bitmapex.hxx>
 
 #include "bitmapbackbuffer.hxx"
-#include "spritecanvas.hxx"
 
 
 namespace vclcanvas

@@ -42,6 +42,7 @@
 #include <canvas/canvastools.hxx>
 #include <config_features.h>
 
+#include "impltools.hxx"
 #include "spritehelper.hxx"
 
 using namespace ::com::sun::star;

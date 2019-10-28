@@ -24,9 +24,9 @@
 #include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/rendering/RenderState.hpp>
+#include <com/sun/star/rendering/ViewState.hpp>
 #include <com/sun/star/rendering/XTextLayout.hpp>
-
-#include <basegfx/vector/b2isize.hxx>
 
 #include <vcl/outdev.hxx>
 

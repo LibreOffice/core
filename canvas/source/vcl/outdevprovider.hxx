@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CANVAS_SOURCE_VCL_OUTDEVPROVIDER_HXX
 #define INCLUDED_CANVAS_SOURCE_VCL_OUTDEVPROVIDER_HXX
 
-#include <sal/types.h>
 #include <memory>
 
 class OutputDevice;

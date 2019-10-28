@@ -22,8 +22,6 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
@@ -39,8 +37,6 @@
 #include <canvas/base/spritesurface.hxx>
 #include <canvas/base/disambiguationhelper.hxx>
 #include <canvas/base/bufferedgraphicdevicebase.hxx>
-
-#include <basegfx/vector/b2isize.hxx>
 
 #include "cairo_spritedevicehelper.hxx"
 #include "cairo_repainttarget.hxx"

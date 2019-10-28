@@ -20,8 +20,6 @@
 #ifndef INCLUDED_CANVAS_SOURCE_VCL_REPAINTTARGET_HXX
 #define INCLUDED_CANVAS_SOURCE_VCL_REPAINTTARGET_HXX
 
-#include <rtl/ref.hxx>
-
 #include "cachedbitmap.hxx"
 
 class Point;

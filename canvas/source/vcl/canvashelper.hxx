@@ -20,13 +20,10 @@
 #ifndef INCLUDED_CANVAS_SOURCE_VCL_CANVASHELPER_HXX
 #define INCLUDED_CANVAS_SOURCE_VCL_CANVASHELPER_HXX
 
+#include <com/sun/star/geometry/IntegerPoint2D.hpp>
+#include <com/sun/star/geometry/IntegerRectangle2D.hpp>
+#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XBitmapCanvas.hpp>
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
-
-#include <vcl/outdev.hxx>
-
-#include <canvas/vclwrapper.hxx>
 
 #include "cachedbitmap.hxx"
 #include "outdevprovider.hxx"

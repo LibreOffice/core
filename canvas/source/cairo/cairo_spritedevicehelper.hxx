@@ -21,8 +21,6 @@
 #define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_SPRITEDEVICEHELPER_HXX
 
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/rendering/XGraphicDevice.hpp>
-#include <com/sun/star/rendering/XBufferController.hpp>
 
 #include <vcl/window.hxx>
 #include <vcl/cairo.hxx>

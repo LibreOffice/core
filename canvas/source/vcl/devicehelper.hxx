@@ -20,13 +20,7 @@
 #ifndef INCLUDED_CANVAS_SOURCE_VCL_DEVICEHELPER_HXX
 #define INCLUDED_CANVAS_SOURCE_VCL_DEVICEHELPER_HXX
 
-#include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
-#include <com/sun/star/rendering/XBufferController.hpp>
-
-#include <vcl/outdev.hxx>
-#include <vcl/window.hxx>
 
 #include "outdevprovider.hxx"
 

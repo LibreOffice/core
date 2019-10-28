@@ -33,8 +33,7 @@
 
 #include <canvas/vclwrapper.hxx>
 
-#include "spritecanvas.hxx"
-#include "impltools.hxx"
+#include "outdevprovider.hxx"
 
 
 /* Definition of CanvasFont class */
