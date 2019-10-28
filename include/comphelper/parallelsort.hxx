@@ -93,7 +93,7 @@ private:
 
 class ParallelRunner
 {
-    class Executor : public comphelper::ThreadTask
+    class Executor final : public comphelper::ThreadTask
     {
     public:
         Executor(const std::shared_ptr<comphelper::ThreadTaskTag>& rTag,

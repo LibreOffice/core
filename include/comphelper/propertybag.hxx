@@ -39,7 +39,7 @@ namespace comphelper
         This class can, for instance, be used for components which need to implement
         the com.sun.star.beans.PropertyBag service.
     */
-    class COMPHELPER_DLLPUBLIC PropertyBag : protected OPropertyContainerHelper
+    class COMPHELPER_DLLPUBLIC PropertyBag final : protected OPropertyContainerHelper
     {
     private:
         ::std::unique_ptr< PropertyBag_Impl > m_pImpl;

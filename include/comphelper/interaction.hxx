@@ -91,7 +91,7 @@ namespace comphelper
     /** implements an interaction request (com.sun.star.task::XInteractionRequest)<p/>
         at run time, you can freely add any interaction continuation objects
     */
-    class COMPHELPER_DLLPUBLIC OInteractionRequest : public OInteractionRequest_Base
+    class COMPHELPER_DLLPUBLIC OInteractionRequest final : public OInteractionRequest_Base
     {
         css::uno::Any const
                     m_aRequest;         /// the request we represent

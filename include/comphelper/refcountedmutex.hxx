@@ -27,7 +27,7 @@
 namespace comphelper
 {
 
-class COMPHELPER_DLLPUBLIC RefCountedMutex : public salhelper::SimpleReferenceObject
+class COMPHELPER_DLLPUBLIC RefCountedMutex final : public salhelper::SimpleReferenceObject
 {
     osl::Mutex m_aMutex;
 public:

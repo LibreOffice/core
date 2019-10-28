@@ -38,7 +38,7 @@ namespace unoidl {
     class Provider;
 }
 
-class TypeManager: public salhelper::SimpleReferenceObject {
+class TypeManager final : public salhelper::SimpleReferenceObject {
 public:
     TypeManager();
 

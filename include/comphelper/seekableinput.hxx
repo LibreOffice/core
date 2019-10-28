@@ -36,7 +36,7 @@ class SAL_DLLPUBLIC_TEMPLATE OSeekableInputWrapper_BASE
                                      css::io::XSeekable >
 {};
 
-class COMPHELPER_DLLPUBLIC OSeekableInputWrapper
+class COMPHELPER_DLLPUBLIC OSeekableInputWrapper final
     : public OSeekableInputWrapper_BASE
 {
     ::osl::Mutex    m_aMutex;

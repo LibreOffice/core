@@ -40,7 +40,7 @@ struct TagAttribute
     OUString sValue;
 };
 
-class COMPHELPER_DLLPUBLIC AttributeList :
+class COMPHELPER_DLLPUBLIC AttributeList final :
     public ::cppu::WeakImplHelper<css::xml::sax::XAttributeList, css::util::XCloneable>
 {
     std::vector<TagAttribute> mAttributes;

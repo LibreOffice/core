@@ -68,7 +68,7 @@ public:
         reset();
     }
 private:
-    class TerminateListener : public ::cppu::WeakImplHelper< css::frame::XTerminateListener,
+    class TerminateListener final : public ::cppu::WeakImplHelper< css::frame::XTerminateListener,
                                             css::lang::XServiceInfo>
     {
     private:

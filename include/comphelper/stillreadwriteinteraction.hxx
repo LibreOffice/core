@@ -29,7 +29,7 @@ namespace com::sun::star::task { class XInteractionRequest; }
 
 
 namespace comphelper{
-class COMPHELPER_DLLPUBLIC StillReadWriteInteraction : public ::ucbhelper::InterceptedInteraction
+class COMPHELPER_DLLPUBLIC StillReadWriteInteraction final : public ::ucbhelper::InterceptedInteraction
 {
 private:
     static const sal_Int32 HANDLE_INTERACTIVEIOEXCEPTION       = 0;

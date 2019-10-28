@@ -177,7 +177,7 @@ private:
 };
 
 template <typename ImplT>
-class ServiceImpl : public OwnServiceImpl< ::cppu::ImplInheritanceHelper<ImplT,css::lang::XServiceInfo> >
+class ServiceImpl final : public OwnServiceImpl< ::cppu::ImplInheritanceHelper<ImplT,css::lang::XServiceInfo> >
 {
 typedef OwnServiceImpl< ::cppu::ImplInheritanceHelper<ImplT,css::lang::XServiceInfo> > ServiceImpl_BASE;
 public:
@@ -193,7 +193,7 @@ public:
 };
 
 template <typename ImplT>
-class InheritingServiceImpl : public OwnServiceImpl< ImplT >
+class InheritingServiceImpl final : public OwnServiceImpl< ImplT >
 {
 typedef OwnServiceImpl< ImplT > ServiceImpl_BASE;
 public:

@@ -32,7 +32,7 @@ namespace comphelper
 
 // Stream to read and write data, based on File
 
-class OSLInputStreamWrapper : public ::cppu::WeakImplHelper<css::io::XInputStream>
+class OSLInputStreamWrapper final : public ::cppu::WeakImplHelper<css::io::XInputStream>
 {
 public:
     COMPHELPER_DLLPUBLIC OSLInputStreamWrapper(::osl::File& _rStream);
@@ -54,7 +54,7 @@ private:
 
 // data sink for the files
 
-class OSLOutputStreamWrapper : public ::cppu::WeakImplHelper<css::io::XOutputStream>
+class OSLOutputStreamWrapper final : public ::cppu::WeakImplHelper<css::io::XOutputStream>
 {
 public:
     COMPHELPER_DLLPUBLIC OSLOutputStreamWrapper(::osl::File& _rFile);

@@ -15,7 +15,7 @@
 
 namespace comphelper
 {
-class NoEnableJavaInteractionContext : public cppu::WeakImplHelper<css::uno::XCurrentContext>
+class NoEnableJavaInteractionContext final : public cppu::WeakImplHelper<css::uno::XCurrentContext>
 {
 public:
     explicit NoEnableJavaInteractionContext(

@@ -33,7 +33,7 @@ namespace comphelper
     // is helper class to avoid a cycle in refcount between the XEventListener
     // and the member XComponent
 
-    class COMPHELPER_DLLPUBLIC OEventListenerHelper : public ::cppu::WeakImplHelper< css::lang::XEventListener >
+    class COMPHELPER_DLLPUBLIC OEventListenerHelper final : public ::cppu::WeakImplHelper< css::lang::XEventListener >
     {
         css::uno::WeakReference< css::lang::XEventListener> m_xListener;
     public:

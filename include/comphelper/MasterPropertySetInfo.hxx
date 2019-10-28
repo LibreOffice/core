@@ -29,7 +29,7 @@ namespace comphelper
     // workaround for incremental linking bugs in MSVC2015
     class SAL_DLLPUBLIC_TEMPLATE MasterPropertySetInfo_Base : public cppu::WeakImplHelper< css::beans::XPropertySetInfo > {};
 
-    class COMPHELPER_DLLPUBLIC MasterPropertySetInfo : public MasterPropertySetInfo_Base
+    class COMPHELPER_DLLPUBLIC MasterPropertySetInfo final : public MasterPropertySetInfo_Base
     {
     public:
         MasterPropertySetInfo( PropertyInfo const * pMap );

@@ -33,7 +33,7 @@ namespace comphelper {
     It will be used for Certificate Validation dialog or authentication dialog.
     The authentication is used in Web/DAV access when the server requests credentials to be accessed.
 */
-class COMPHELPER_DLLPUBLIC SimpleFileAccessInteraction : public ::ucbhelper::InterceptedInteraction
+class COMPHELPER_DLLPUBLIC SimpleFileAccessInteraction final : public ::ucbhelper::InterceptedInteraction
 {
 
 public:

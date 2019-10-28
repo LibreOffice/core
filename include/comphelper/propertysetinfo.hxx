@@ -87,7 +87,7 @@ class SAL_DLLPUBLIC_TEMPLATE PropertySetInfo_BASE
 /** this class implements a XPropertySetInfo that is initialized with arrays of PropertyMapEntry.
     It is used by the class PropertySetHelper.
 */
-class COMPHELPER_DLLPUBLIC PropertySetInfo
+class COMPHELPER_DLLPUBLIC PropertySetInfo final
     : public PropertySetInfo_BASE
 {
 private:

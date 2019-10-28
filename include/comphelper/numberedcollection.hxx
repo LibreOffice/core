@@ -44,7 +44,7 @@ namespace comphelper{
 
     @threadsafe
  */
-class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
+class COMPHELPER_DLLPUBLIC NumberedCollection final : private ::cppu::BaseMutex
                                               , public  ::cppu::WeakImplHelper< css::frame::XUntitledNumbers >
 {
 
