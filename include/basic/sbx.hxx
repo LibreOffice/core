@@ -77,7 +77,7 @@ public:
     void                SetComment( const OUString& r )   { aComment = r; }
 };
 
-class BASIC_DLLPUBLIC SbxHint : public SfxHint
+class BASIC_DLLPUBLIC SbxHint final : public SfxHint
 {
     SbxVariable* pVar;
 public:
@@ -140,12 +140,12 @@ struct SbxDim {                 // an array-dimension:
     sal_Int32 nSize;            // Number of elements
 };
 
-class BASIC_DLLPUBLIC SbxDimArray : public SbxArray
+class BASIC_DLLPUBLIC SbxDimArray final : public SbxArray
 {
     std::vector<SbxDim> m_vDimensions;     // Dimension table
     BASIC_DLLPRIVATE void AddDimImpl32( sal_Int32, sal_Int32, bool bAllowSize0 );
     bool mbHasFixedSize;
-protected:
+
     sal_uInt16  Offset( const short* );
     sal_uInt32  Offset32( const sal_Int32* );
     sal_uInt32  Offset32( SbxArray* );

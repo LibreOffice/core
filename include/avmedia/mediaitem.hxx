@@ -61,7 +61,7 @@ enum class MediaState
 };
 
 
-class AVMEDIA_DLLPUBLIC MediaItem : public SfxPoolItem
+class AVMEDIA_DLLPUBLIC MediaItem final : public SfxPoolItem
 {
 public:
                             static SfxPoolItem* CreateDefault();

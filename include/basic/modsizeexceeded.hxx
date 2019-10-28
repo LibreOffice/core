@@ -27,7 +27,7 @@
 
 namespace com::sun::star::task { class XInteractionContinuation; }
 
-class BASIC_DLLPUBLIC ModuleSizeExceeded : public cppu::WeakImplHelper< css::task::XInteractionRequest >
+class BASIC_DLLPUBLIC ModuleSizeExceeded final : public cppu::WeakImplHelper< css::task::XInteractionRequest >
 {
 // C++ interface
 public:

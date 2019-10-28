@@ -49,7 +49,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class BASEGFX_DLLPUBLIC MinimalSystemDependentDataManager : public SystemDependentDataManager
+    class BASEGFX_DLLPUBLIC MinimalSystemDependentDataManager final : public SystemDependentDataManager
     {
     private:
         // example of a minimal SystemDependentDataManager. It *needs to hold*
