@@ -2170,16 +2170,16 @@ bool    SwTestTabPage::FillItemSet( SfxItemSet* rCoreSet )
     if ( bAttrModified )
     {
         SwTestItem aTestItem;
-        aTestItem.bTest1=m_xTest1CBox->get_active();
-        aTestItem.bTest2=m_xTest2CBox->get_active();
-        aTestItem.bTest3=m_xTest3CBox->get_active();
-        aTestItem.bTest4=m_xTest4CBox->get_active();
-        aTestItem.bTest5=m_xTest5CBox->get_active();
-        aTestItem.bTest6=m_xTest6CBox->get_active();
-        aTestItem.bTest7=m_xTest7CBox->get_active();
-        aTestItem.bTest8=m_xTest8CBox->get_active();
-        aTestItem.bTest9=m_xTest9CBox->get_active();
-        aTestItem.bTest10=m_xTest10CBox->get_active();
+        aTestItem.m_bTest1=m_xTest1CBox->get_active();
+        aTestItem.m_bTest2=m_xTest2CBox->get_active();
+        aTestItem.m_bTest3=m_xTest3CBox->get_active();
+        aTestItem.m_bTest4=m_xTest4CBox->get_active();
+        aTestItem.m_bTest5=m_xTest5CBox->get_active();
+        aTestItem.m_bTest6=m_xTest6CBox->get_active();
+        aTestItem.m_bTest7=m_xTest7CBox->get_active();
+        aTestItem.m_bTest8=m_xTest8CBox->get_active();
+        aTestItem.m_bTest9=m_xTest9CBox->get_active();
+        aTestItem.m_bTest10=m_xTest10CBox->get_active();
         rCoreSet->Put(aTestItem);
     }
     return bAttrModified;
@@ -2193,16 +2193,16 @@ void SwTestTabPage::Reset( const SfxItemSet* )
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_SWTEST , false,
                                     reinterpret_cast<const SfxPoolItem**>(&pTestAttr) ))
     {
-        m_xTest1CBox->set_active(pTestAttr->bTest1);
-        m_xTest2CBox->set_active(pTestAttr->bTest2);
-        m_xTest3CBox->set_active(pTestAttr->bTest3);
-        m_xTest4CBox->set_active(pTestAttr->bTest4);
-        m_xTest5CBox->set_active(pTestAttr->bTest5);
-        m_xTest6CBox->set_active(pTestAttr->bTest6);
-        m_xTest7CBox->set_active(pTestAttr->bTest7);
-        m_xTest8CBox->set_active(pTestAttr->bTest8);
-        m_xTest9CBox->set_active(pTestAttr->bTest9);
-        m_xTest10CBox->set_active(pTestAttr->bTest10);
+        m_xTest1CBox->set_active(pTestAttr->m_bTest1);
+        m_xTest2CBox->set_active(pTestAttr->m_bTest2);
+        m_xTest3CBox->set_active(pTestAttr->m_bTest3);
+        m_xTest4CBox->set_active(pTestAttr->m_bTest4);
+        m_xTest5CBox->set_active(pTestAttr->m_bTest5);
+        m_xTest6CBox->set_active(pTestAttr->m_bTest6);
+        m_xTest7CBox->set_active(pTestAttr->m_bTest7);
+        m_xTest8CBox->set_active(pTestAttr->m_bTest8);
+        m_xTest9CBox->set_active(pTestAttr->m_bTest9);
+        m_xTest10CBox->set_active(pTestAttr->m_bTest10);
     }
 }
 
