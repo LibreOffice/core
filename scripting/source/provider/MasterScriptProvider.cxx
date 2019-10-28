@@ -18,7 +18,7 @@
  */
 
 
-#include <comphelper/DisableInteractionHelper.hxx>
+#include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/documentinfo.hxx>
 
 #include <cppuhelper/implementationentry.hxx>
@@ -26,7 +26,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
-#include <uno/current_context.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
@@ -479,8 +478,7 @@ template <typename Proc> bool FindProviderAndApply(ProviderCache& rCache, Proc p
     // This allows us to avoid useless user interaction in case when other provider
     // (not JVM) actually handles the operation.
     {
-        css::uno::ContextLayer layer(
-            new comphelper::NoEnableJavaInteractionContext(css::uno::getCurrentContext()));
+        css::uno::ContextLayer layer(comphelper::NoEnableJavaInteractionContext());
         bSuccess = pass();
     }
     // 2. Now retry asking to enable JVM in case we didn't succeed first time
