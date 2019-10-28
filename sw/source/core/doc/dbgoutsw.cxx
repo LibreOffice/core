@@ -279,15 +279,14 @@ const char * dbg_out(const SfxItemSet & rSet)
 
 static OUString lcl_dbg_out(const SwTextAttr & rAttr)
 {
-    OUString aStr("[ ");
-
-    aStr += OUString::number(rAttr.GetStart());
-    aStr += "->";
-    aStr += OUString::number(*rAttr.End());
-    aStr += " ";
-    aStr += lcl_dbg_out(rAttr.GetAttr());
-
-    aStr += " ]";
+    OUString aStr =
+        "[ " +
+        OUString::number(rAttr.GetStart()) +
+        "->" +
+        OUString::number(*rAttr.End()) +
+        " " +
+        lcl_dbg_out(rAttr.GetAttr()) +
+        " ]";
 
     return aStr;
 }
@@ -320,16 +319,14 @@ const char * dbg_out(const SwpHints &rHints)
 
 static OUString lcl_dbg_out(const SwPosition & rPos)
 {
-    OUString aStr("( ");
-
-    aStr += OUString::number(rPos.nNode.GetIndex());
-    aStr += ", ";
-    aStr += OUString::number(rPos.nContent.GetIndex());
-    aStr += ": ";
-    aStr += OUString::number
-        (reinterpret_cast<sal_IntPtr>(rPos.nContent.GetIdxReg()), 16);
-
-    aStr += " )";
+    OUString aStr =
+        "( " +
+        OUString::number(rPos.nNode.GetIndex()) +
+        ", " +
+        OUString::number(rPos.nContent.GetIndex()) +
+        ": " +
+        OUString::number(reinterpret_cast<sal_IntPtr>(rPos.nContent.GetIdxReg()), 16) +
+        " )";
 
     return aStr;
 }
@@ -341,9 +338,9 @@ const char * dbg_out(const SwPosition & rPos)
 
 static OUString lcl_dbg_out(const SwPaM & rPam)
 {
-    OUString aStr("[ Pt: ");
-
-    aStr += lcl_dbg_out(*rPam.GetPoint());
+    OUString aStr =
+        "[ Pt: " +
+        lcl_dbg_out(*rPam.GetPoint());
 
     if (rPam.HasMark())
     {
@@ -373,17 +370,16 @@ const char * dbg_out(const SwNodeNum & rNum)
 
 static OUString lcl_dbg_out(const SwRect & rRect)
 {
-    OUString aResult("[ [");
-
-    aResult += OUString::number(rRect.Left());
-    aResult += ", ";
-    aResult += OUString::number(rRect.Top());
-    aResult += "], [";
-    aResult += OUString::number(rRect.Right());
-    aResult += ", ";
-    aResult += OUString::number(rRect.Bottom());
-
-    aResult += "] ]";
+    OUString aResult =
+        "[ [" +
+        OUString::number(rRect.Left()) +
+        ", " +
+        OUString::number(rRect.Top()) +
+        "], [" +
+        OUString::number(rRect.Right()) +
+        ", " +
+        OUString::number(rRect.Bottom()) +
+        "] ]";
 
     return aResult;
 }
@@ -857,13 +853,12 @@ const char * dbg_out(const SwFormTokens & rTokens)
 
 static OUString lcl_dbg_out(const SwNodeRange & rRange)
 {
-    OUString aStr("[");
-
-    aStr += lcl_dbg_out(SwPosition(rRange.aStart));
-    aStr += ", ";
-    aStr += lcl_dbg_out(SwPosition(rRange.aEnd));
-
-    aStr += "]";
+    OUString aStr =
+        "[" +
+        lcl_dbg_out(SwPosition(rRange.aStart)) +
+        ", " +
+        lcl_dbg_out(SwPosition(rRange.aEnd)) +
+        "]";
 
     return aStr;
 }

@@ -74,11 +74,20 @@ public:
     bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const*);
 
 private:
-    const VarDecl* findAssignOrAdd(Stmt const*);
-    void checkForCompoundAssign(Stmt const* stmt1, Stmt const* stmt2, VarDecl const* varDecl);
+    struct VarDeclAndConstant
+    {
+        const VarDecl* varDecl;
+        bool bCompileTimeConstant;
+        bool bSideEffectFree;
+    };
+
+    VarDeclAndConstant findAssignOrAdd(Stmt const*);
+    void checkForCompoundAssign(Stmt const* stmt1, Stmt const* stmt2,
+                                VarDeclAndConstant const& varDecl);
 
     Expr const* ignore(Expr const*);
     bool isSideEffectFree(Expr const*);
+    bool isCompileTimeConstant(Expr const*);
 };
 
 bool StringAdd::VisitCompoundStmt(CompoundStmt const* compoundStmt)
@@ -91,9 +100,9 @@ bool StringAdd::VisitCompoundStmt(CompoundStmt const* compoundStmt)
     {
         if (it == compoundStmt->body_end())
             break;
-        const VarDecl* foundVar = findAssignOrAdd(*it);
+        VarDeclAndConstant foundVar = findAssignOrAdd(*it);
         // reference types have slightly weird behaviour
-        if (foundVar && !foundVar->getType()->isReferenceType())
+        if (foundVar.varDecl && !foundVar.varDecl->getType()->isReferenceType())
         {
             auto stmt1 = *it;
             ++it;
@@ -109,7 +118,7 @@ bool StringAdd::VisitCompoundStmt(CompoundStmt const* compoundStmt)
     return true;
 }
 
-const VarDecl* StringAdd::findAssignOrAdd(Stmt const* stmt)
+StringAdd::VarDeclAndConstant StringAdd::findAssignOrAdd(Stmt const* stmt)
 {
     if (auto exprCleanup = dyn_cast<ExprWithCleanups>(stmt))
         stmt = exprCleanup->getSubExpr();
@@ -123,14 +132,13 @@ const VarDecl* StringAdd::findAssignOrAdd(Stmt const* stmt)
                 auto tc = loplugin::TypeCheck(varDeclLHS->getType());
                 if (!tc.Class("OUString").Namespace("rtl").GlobalNamespace()
                     && !tc.Class("OString").Namespace("rtl").GlobalNamespace())
-                    return nullptr;
+                    return {};
                 if (varDeclLHS->getStorageDuration() == SD_Static)
-                    return nullptr;
+                    return {};
                 if (!varDeclLHS->hasInit())
-                    return nullptr;
-                if (!isSideEffectFree(varDeclLHS->getInit()))
-                    return nullptr;
-                return varDeclLHS;
+                    return {};
+                return { varDeclLHS, isCompileTimeConstant(varDeclLHS->getInit()),
+                         isSideEffectFree(varDeclLHS->getInit()) };
             }
     if (auto operatorCall = dyn_cast<CXXOperatorCallExpr>(stmt))
         if (operatorCall->getOperator() == OO_Equal || operatorCall->getOperator() == OO_PlusEqual)
@@ -140,16 +148,15 @@ const VarDecl* StringAdd::findAssignOrAdd(Stmt const* stmt)
                     auto tc = loplugin::TypeCheck(varDeclLHS->getType());
                     if (!tc.Class("OUString").Namespace("rtl").GlobalNamespace()
                         && !tc.Class("OString").Namespace("rtl").GlobalNamespace())
-                        return nullptr;
+                        return {};
                     auto rhs = operatorCall->getArg(1);
-                    if (!isSideEffectFree(rhs))
-                        return nullptr;
-                    return varDeclLHS;
+                    return { varDeclLHS, isCompileTimeConstant(rhs), isSideEffectFree(rhs) };
                 }
-    return nullptr;
+    return {};
 }
 
-void StringAdd::checkForCompoundAssign(Stmt const* stmt1, Stmt const* stmt2, VarDecl const* varDecl)
+void StringAdd::checkForCompoundAssign(Stmt const* stmt1, Stmt const* stmt2,
+                                       VarDeclAndConstant const& varDecl)
 {
     // OString additions are frequently wrapped in these
     if (auto exprCleanup = dyn_cast<ExprWithCleanups>(stmt2))
@@ -164,10 +171,14 @@ void StringAdd::checkForCompoundAssign(Stmt const* stmt1, Stmt const* stmt2, Var
     auto declRefExprLHS = dyn_cast<DeclRefExpr>(ignore(operatorCall->getArg(0)));
     if (!declRefExprLHS)
         return;
-    if (declRefExprLHS->getDecl() != varDecl)
+    if (declRefExprLHS->getDecl() != varDecl.varDecl)
         return;
+    // if either side is a compile-time-constant, then we don't care about
+    // side-effects
     auto rhs = operatorCall->getArg(1);
-    if (!isSideEffectFree(rhs))
+    if (varDecl.bCompileTimeConstant || isCompileTimeConstant(rhs))
+        ; // good
+    else if (!varDecl.bSideEffectFree || !isSideEffectFree(rhs))
         return;
     // if we cross a #ifdef boundary
     if (containsPreprocessingConditionalInclusion(
@@ -301,6 +312,16 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
             return isSideEffectFree(functionalCastExpr->getSubExpr());
     }
 
+    return false;
+}
+
+bool StringAdd::isCompileTimeConstant(Expr const* expr)
+{
+    expr = compat::IgnoreImplicit(expr);
+    if (auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(expr))
+        if (cxxConstructExpr->getNumArgs() > 0
+            && isa<clang::StringLiteral>(cxxConstructExpr->getArg(0)))
+            return true;
     return false;
 }
 

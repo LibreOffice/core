@@ -231,8 +231,7 @@ void ArgInput::Show()
 
 void ArgInput::UpdateAccessibleNames()
 {
-    OUString aArgName(":");
-    aArgName += pFtArg->get_label();
+    OUString aArgName = ":" + pFtArg->get_label();
 
     OUString aName = pBtnFx->get_tooltip_text();
     aName += aArgName;

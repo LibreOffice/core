@@ -333,9 +333,7 @@ void SfxRequest_Impl::Record
 */
 
 {
-    OUString aCommand(".uno:");
-    aCommand += OUString( pSlot->GetUnoName(), strlen( pSlot->GetUnoName() ), RTL_TEXTENCODING_UTF8 );
-    OUString aCmd( aCommand );
+    OUString aCmd = ".uno:" + OUString::createFromAscii( pSlot->GetUnoName() );
     if(!xRecorder.is())
         return;
 

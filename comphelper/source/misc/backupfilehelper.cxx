@@ -1702,8 +1702,7 @@ namespace comphelper
             if (mbSafeModeDirExists)
             {
                 // adapt work URL to do all repair op's in the correct directory
-                maUserConfigWorkURL += "/";
-                maUserConfigWorkURL += getSafeModeName();
+                maUserConfigWorkURL += "/" + getSafeModeName();
             }
         }
 

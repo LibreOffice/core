@@ -99,6 +99,13 @@ void f(Bar b1, Bar& b2, Bar* b3)
     // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
     s3 += b3->m_field;
 }
+OUString side_effect();
+void f2()
+{
+    OUString sRet = "xxx";
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    sRet += side_effect();
+}
 }
 
 // no warning expected
@@ -117,17 +124,10 @@ void f()
 namespace test5
 {
 OUString side_effect();
-int side_effect2();
 void f()
 {
-    OUString sRet = "xxx";
-    sRet += side_effect();
-    sRet += OUString::number(side_effect2());
-}
-void g()
-{
     OUString sRet = side_effect();
-    sRet += "xxx";
+    sRet += side_effect();
 }
 }
 

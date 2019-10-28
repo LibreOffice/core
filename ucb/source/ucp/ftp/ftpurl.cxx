@@ -715,15 +715,13 @@ OUString FTPURL::ren(const OUString& NewTitle)
     CURL *curl = m_pFCP->handle();
 
     // post request
-    OString renamefrom("RNFR ");
     OUString OldTitle = net_title();
-    renamefrom +=
+    OString renamefrom = "RNFR " +
         OString(OldTitle.getStr(),
                      OldTitle.getLength(),
                      RTL_TEXTENCODING_UTF8);
 
-    OString renameto("RNTO ");
-    renameto +=
+    OString renameto = "RNTO " +
         OString(NewTitle.getStr(),
                      NewTitle.getLength(),
                      RTL_TEXTENCODING_UTF8);

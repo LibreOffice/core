@@ -967,11 +967,12 @@ namespace osl_FileBase
 
         bool bOk = compareFileName(aUStr, aUResultURL);
 
-        OString sError = "test for getSystemPathFromFileURL(' " +
+        OString sError =
+            "test for getSystemPathFromFileURL(' " +
             OUStringToOString(aUNormalURL, RTL_TEXTENCODING_ASCII_US) +
-            " ') function:use an absolute file URL, ";
-        sError += outputError(OUStringToOString(aUStr, RTL_TEXTENCODING_ASCII_US),
-                            OUStringToOString(aUResultURL, RTL_TEXTENCODING_ASCII_US));
+            " ') function:use an absolute file URL, " +
+            outputError(OUStringToOString(aUStr, RTL_TEXTENCODING_ASCII_US),
+                        OUStringToOString(aUResultURL, RTL_TEXTENCODING_ASCII_US));
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sError.getStr(), osl::FileBase::E_None, nError);
         CPPUNIT_ASSERT_MESSAGE(sError.getStr(), bOk);
@@ -990,11 +991,12 @@ namespace osl_FileBase
 
         bool bOk = compareFileName(aUStr, aUResultURL);
 
-        OString sError = "test for getSystemPathFromFileURL(' " +
+        OString sError =
+            "test for getSystemPathFromFileURL(' " +
             OUStringToOString(aUNormalURL, RTL_TEXTENCODING_ASCII_US) +
-                " ') function:use a CJK coded absolute URL, ";
-        sError += outputError(OUStringToOString(aUStr, RTL_TEXTENCODING_ASCII_US),
-                            OUStringToOString(aUResultURL, RTL_TEXTENCODING_ASCII_US));
+            " ') function:use a CJK coded absolute URL, " +
+            outputError(OUStringToOString(aUStr, RTL_TEXTENCODING_ASCII_US),
+                        OUStringToOString(aUResultURL, RTL_TEXTENCODING_ASCII_US));
         deleteTestDirectory(aTmpName10);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sError.getStr(), osl::FileBase::E_None, nError);

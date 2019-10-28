@@ -561,8 +561,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     }
     if( SV_EMBEDDED_OUTPLACE==nType || SV_EMBEDDED_OWN==nType )
     {
-        OUString sURL(XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE);
-        sURL += rOLEObj.GetCurrentPersistName();
+        OUString sURL = XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE + rOLEObj.GetCurrentPersistName();
         if( !(rXMLExport.getExportFlags() & SvXMLExportFlags::EMBEDDED) )
         {
             sURL = GetExport().AddEmbeddedObject( sURL );

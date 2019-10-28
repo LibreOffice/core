@@ -1480,9 +1480,8 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
     if ( m_bIsRoot )
     {
         // create the special package URL for the package content
-        OUString aTemp = "vnd.sun.star.pkg://";
-        aTemp += INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All );
-        m_aURL = aTemp;
+        m_aURL = "vnd.sun.star.pkg://" +
+            INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All );
 
         if ( m_nMode & StreamMode::WRITE )
         {
@@ -1521,9 +1520,8 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, bool 
     // UCBStorages work on a content, so a temporary file for a content must be created, even if the stream is only
     // accessed readonly
     // the root storage opens the package; create the special package URL for the package content
-    OUString aTemp = "vnd.sun.star.pkg://";
-    aTemp += INetURLObject::encode( m_pTempFile->GetURL(), INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All );
-    m_aURL = aTemp;
+    m_aURL = "vnd.sun.star.pkg://" +
+        INetURLObject::encode( m_pTempFile->GetURL(), INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All );
 
     // copy data into the temporary file
     std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), StreamMode::STD_READWRITE, true /* bFileExists */ ));

@@ -366,8 +366,7 @@ int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pRea
     }
     else
     {
-        OUString envDcp(UNO_LB_UNO);
-        envDcp += cppu::EnvDcp::getPurpose(pEnv->pTypeName);
+        OUString envDcp = UNO_LB_UNO + cppu::EnvDcp::getPurpose(pEnv->pTypeName);
 
         uno::Environment env(envDcp);
 

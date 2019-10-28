@@ -285,8 +285,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs)
         {
           return badOption("invalid", option);
         }
-        OString param("-D");
-        param += OString((*first).c_str(), (*first).size());
+        OString param = "-D" + rtl::OStringView((*first).c_str(), (*first).size());
         if (m_options.count("-D") > 0)
         {
           param = m_options["-D"] + " " + param;
@@ -393,8 +392,8 @@ OString Options::prepareHelp() const
          "    -verbose    = verbose output.\n"
          "    -w          = display warning messages.\n"
          "    -we         = treat warnings as errors.\n"
-         "    -h|-?       = print this help message and exit.\n\n";
-    help += prepareVersion();
+         "    -h|-?       = print this help message and exit.\n\n" +
+        prepareVersion();
 
     return help;
 }

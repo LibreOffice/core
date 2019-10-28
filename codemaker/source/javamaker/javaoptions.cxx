@@ -234,8 +234,8 @@ OString JavaOptions::prepareHelp()
         "    -nD        = no dependent types are generated.\n"
         "    -G         = generate only target files which does not exists.\n"
         "    -Gc        = generate only target files which content will be changed.\n"
-        "    -X<file>   = extra types which will not be taken into account for generation.\n\n";
-    help += prepareVersion();
+        "    -X<file>   = extra types which will not be taken into account for generation.\n\n" +
+        prepareVersion();
 
     return help;
 }

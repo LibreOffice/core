@@ -74,8 +74,8 @@ namespace svxform
     {
         ::utl::OConfigurationNode getLayoutSettings( DocumentType _eDocType )
         {
-            OUString sConfigName = "/org.openoffice.Office.Common/Forms/ControlLayout/";
-            sConfigName += DocumentClassification::getModuleIdentifierForDocumentType( _eDocType );
+            OUString sConfigName = "/org.openoffice.Office.Common/Forms/ControlLayout/" +
+                DocumentClassification::getModuleIdentifierForDocumentType( _eDocType );
             return OConfigurationTreeRoot::createWithComponentContext(
                 ::comphelper::getProcessComponentContext(),    // TODO
                 sConfigName );

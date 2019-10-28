@@ -7285,9 +7285,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
         // (that's not the case for e.g. Fontwork )
         // If that's not the case -> include it as graphic
         bool bValidStorage = false;
-        OUString aDstStgName(MSO_OLE_Obj);
-
-        aDstStgName += OUString::number( ++nMSOleObjCntr );
+        OUString aDstStgName = MSO_OLE_Obj + OUString::number( ++nMSOleObjCntr );
 
         {
             tools::SvRef<SotStorage> xObjStg = rSrcStorage->OpenSotStorage( rStorageName );
