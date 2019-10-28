@@ -22,7 +22,7 @@
 using namespace sal::detail::textenc;
 using namespace rtl::textenc;
 
-struct IsciiDevanagariToUnicode
+struct SAL_DLLPRIVATE IsciiDevanagariToUnicode
 {
     sal_uInt8 m_cPrevChar;
     IsciiDevanagariToUnicode()
@@ -38,7 +38,7 @@ struct IsciiDevanagariToUnicode
         sal_uInt32* pInfo, sal_Size* pSrcCvtBytes);
 };
 
-struct UnicodeToIsciiDevanagari
+struct SAL_DLLPRIVATE UnicodeToIsciiDevanagari
 {
     sal_Unicode m_cPrevChar;
     sal_Unicode m_cHighSurrogate;

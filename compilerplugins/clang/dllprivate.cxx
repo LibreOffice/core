@@ -76,7 +76,7 @@ public:
     }
 };
 
-static loplugin::Plugin::Registration<DllPrivate> dllprivate("dllprivate");
+static loplugin::Plugin::Registration<DllPrivate> dllprivate("dllprivate", false);
 
 } // namespace
 

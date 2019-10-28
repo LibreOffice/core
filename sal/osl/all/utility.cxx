@@ -27,7 +27,7 @@
 namespace osl
 {
 
-class OGlobalTimer
+class SAL_DLLPRIVATE OGlobalTimer
 {
 
 public:

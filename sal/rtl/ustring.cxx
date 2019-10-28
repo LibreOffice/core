@@ -890,7 +890,7 @@ void SAL_CALL rtl_string2UString( rtl_uString** ppThis,
 
 /* ----------------------------------------------------------------------- */
 
-enum StrLifecycle {
+enum SAL_DLLPRIVATE StrLifecycle {
     CANNOT_RETURN,
     CAN_RETURN = 1
 };

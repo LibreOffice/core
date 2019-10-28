@@ -46,7 +46,7 @@
     if ((z) < 0) (z) += 30307; \
 }
 
-struct RandomData_Impl
+struct SAL_DLLPRIVATE RandomData_Impl
 {
     sal_Int16 m_nX;
     sal_Int16 m_nY;
@@ -59,7 +59,7 @@ static double data (RandomData_Impl *pImpl);
 #define RTL_RANDOM_SIZE_DIGEST RTL_DIGEST_LENGTH_MD5
 #define RTL_RANDOM_SIZE_POOL   1023
 
-struct RandomPool_Impl
+struct SAL_DLLPRIVATE RandomPool_Impl
 {
     rtlDigest  m_hDigest;
     sal_uInt8  m_pDigest[RTL_RANDOM_SIZE_DIGEST];

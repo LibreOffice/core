@@ -91,7 +91,7 @@ static unsigned char const aImplMustShiftTab[128] =
 
 /* ----------------------------------------------------------------------- */
 
-struct ImplUTF7ToUCContextData
+struct SAL_DLLPRIVATE ImplUTF7ToUCContextData
 {
     bool                    mbShifted;
     bool                    mbFirst;
@@ -410,7 +410,7 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
 
 /* ======================================================================= */
 
-struct ImplUTF7FromUCContextData
+struct SAL_DLLPRIVATE ImplUTF7FromUCContextData
 {
     bool                    mbShifted;
     sal_uInt32              mnBitBuffer;

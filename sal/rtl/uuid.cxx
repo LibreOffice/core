@@ -55,7 +55,7 @@
                      ( (  static_cast<sal_uInt32>(p[3])) & 0xff);\
                }
 
-struct UUID
+struct SAL_DLLPRIVATE UUID
 {
       sal_uInt32          time_low;
       sal_uInt16          time_mid;

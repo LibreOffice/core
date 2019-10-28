@@ -10,7 +10,7 @@
 #include <common.hxx>
 
 //flags for handleArguments()
-enum class State {
+enum SAL_DLLPRIVATE class State {
     NONE, Input, Output, MergeSrc, Languages
 };
 
