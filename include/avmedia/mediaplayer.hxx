@@ -28,7 +28,7 @@
 namespace avmedia
 {
 
-class AVMEDIA_DLLPUBLIC MediaPlayer : public SfxChildWindow
+class AVMEDIA_DLLPUBLIC MediaPlayer final : public SfxChildWindow
 {
 public:
                         MediaPlayer( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
@@ -39,7 +39,7 @@ public:
 
 class MediaWindow;
 
-class AVMEDIA_DLLPUBLIC MediaFloater : public SfxDockingWindow
+class AVMEDIA_DLLPUBLIC MediaFloater final : public SfxDockingWindow
 {
 public:
 

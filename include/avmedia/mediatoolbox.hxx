@@ -28,7 +28,7 @@ namespace avmedia
 
 class MediaItem;
 
-class AVMEDIA_DLLPUBLIC MediaToolBoxControl : public SfxToolBoxControl
+class AVMEDIA_DLLPUBLIC MediaToolBoxControl final : public SfxToolBoxControl
 {
      friend class MediaToolBoxControl_Impl;
 

@@ -88,7 +88,7 @@ namespace basegfx
 {
     /** convert color to gray
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_gray : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_gray final : public BColorModifier
     {
     private:
     protected:
@@ -115,7 +115,7 @@ namespace basegfx
 
         returns a color where red green and blue are inverted using 1.0 - n
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_invert : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_invert final : public BColorModifier
     {
     private:
     protected:
@@ -146,7 +146,7 @@ namespace basegfx
         This derivation is used for the svg importer and does exactly what SVG
         defines for this needed case.
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_luminance_to_alpha : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_luminance_to_alpha final : public BColorModifier
     {
     private:
     protected:
@@ -175,7 +175,7 @@ namespace basegfx
         given color, replacing everything. Useful e.g. for unified shadow
         creation
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_replace : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_replace final : public BColorModifier
     {
     private:
         ::basegfx::BColor           maBColor;
@@ -211,7 +211,7 @@ namespace basegfx
 
         col * (1 - f) + aSourceColor * f
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_interpolate : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_interpolate final : public BColorModifier
     {
     private:
         ::basegfx::BColor           maBColor;
@@ -248,7 +248,7 @@ namespace basegfx
         returns black when the luminance of the given color is less than
         the given threshold value in the range [0.0 .. 1.0], else white
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_black_and_white : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_black_and_white final : public BColorModifier
     {
     private:
         double                      mfValue;
@@ -284,7 +284,7 @@ namespace basegfx
 
         col(r,g,b) = clamp(pow(col(r,g,b), 1.0 / gamma), 0.0, 1.0)
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_gamma : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_gamma final : public BColorModifier
     {
     private:
         double                      mfValue;
@@ -320,7 +320,7 @@ namespace basegfx
         - be able to cover a bigger change range utilizing the combination
         - allow execution by a small, common, precalculated table
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_RGBLuminanceContrast : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_RGBLuminanceContrast final : public BColorModifier
     {
     private:
         double                      mfRed;
