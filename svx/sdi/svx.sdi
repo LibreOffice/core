@@ -408,6 +408,7 @@ SfxVoidItem TableDesign SID_TABLEDESIGN
 ]
 
 SvxColorItem BackgroundColor SID_BACKGROUND_COLOR
+(SfxStringItem Color SID_ATTR_COLOR_STR, SvxColorItem BackgroundColor SID_BACKGROUND_COLOR)
 
 [
     AutoUpdate = TRUE,
