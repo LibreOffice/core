@@ -510,6 +510,25 @@ DECLARE_OOXMLIMPORT_TEST(testN780645, "n780645.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2135), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position); // was 1999
 }
 
+
+
+DECLARE_OOXMLIMPORT_TEST(TDF120315, "tdf120315.docx")
+{
+    // TDF120315: The problem was that the second coulumn has to be vertically merged
+    // but if the separators doesn't match in the two row, it couldn't be applied.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
+    CPPUNIT_ASSERT_EQUAL(getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                                              xTableRows->getByIndex(0), "TableColumnSeparators")[0].Position,
+                         getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                                              xTableRows->getByIndex(1), "TableColumnSeparators")[2].Position);
+}
+
+
+
 DECLARE_OOXMLIMPORT_TEST(testWordArtResizing, "WordArt.docx")
 {
     /* The Word-Arts and watermarks were getting resized automatically, It was as if they were
