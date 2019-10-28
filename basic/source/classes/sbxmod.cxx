@@ -1001,7 +1001,9 @@ void SbModule::Run( SbMethod* pMeth )
 
     static sal_uInt16 nMaxCallLevel = 0;
 
-    bool bDelInst = ( GetSbData()->pInst == nullptr );
+    SbiGlobals* pSbData = GetSbData();
+
+    bool bDelInst = pSbData->pInst == nullptr;
     bool bQuit = false;
     StarBASICRef xBasic;
     uno::Reference< frame::XModel > xModel;
@@ -1011,7 +1013,7 @@ void SbModule::Run( SbMethod* pMeth )
         // #32779: Hold Basic during the execution
         xBasic = static_cast<StarBASIC*>( GetParent() );
 
-        GetSbData()->pInst = new SbiInstance( static_cast<StarBASIC*>(GetParent()) );
+        pSbData->pInst = new SbiInstance( static_cast<StarBASIC*>(GetParent()) );
 
         /*  If a VBA script in a document is started, get the VBA compatibility
             interface from the document Basic library container, and notify all
@@ -1048,7 +1050,7 @@ void SbModule::Run( SbMethod* pMeth )
                 if( pAppSymbol )
                 {
                     pMSOMacroRuntimeLib->SetFlag( SbxFlagBits::ExtSearch );      // Could have been disabled before
-                    GetSbData()->pMSOMacroRuntimLib = pMSOMacroRuntimeLib;
+                    pSbData->pMSOMacroRuntimLib = pMSOMacroRuntimeLib;
                 }
             }
         }
@@ -1076,13 +1078,13 @@ void SbModule::Run( SbMethod* pMeth )
     }
 
     // Recursion to deep?
-    if( ++GetSbData()->pInst->nCallLvl <= nMaxCallLevel )
+    if( ++pSbData->pInst->nCallLvl <= nMaxCallLevel )
     {
         // Define a globale variable in all Mods
         GlobalRunInit( /* bBasicStart = */ bDelInst );
 
         // Appeared a compiler error? Then we don't launch
-        if( !GetSbData()->bGlobalInitErr )
+        if( !pSbData->bGlobalInitErr )
         {
             if( bDelInst )
             {
@@ -1091,20 +1093,20 @@ void SbModule::Run( SbMethod* pMeth )
                 // 1996-10-16: #31460 New concept for StepInto/Over/Out
                 // For an explanation see runtime.cxx at SbiInstance::CalcBreakCallLevel()
                 // Identify the BreakCallLevel
-                GetSbData()->pInst->CalcBreakCallLevel( pMeth->GetDebugFlags() );
+                pSbData->pInst->CalcBreakCallLevel( pMeth->GetDebugFlags() );
             }
 
-            SbModule* pOldMod = GetSbData()->pMod;
-            GetSbData()->pMod = this;
+            SbModule* pOldMod = pSbData->pMod;
+            pSbData->pMod = this;
             std::unique_ptr<SbiRuntime> pRt(new SbiRuntime( this, pMeth, pMeth->nStart ));
 
-            pRt->pNext = GetSbData()->pInst->pRun;
+            pRt->pNext = pSbData->pInst->pRun;
             if( pRt->pNext )
                 pRt->pNext->block();
-            GetSbData()->pInst->pRun = pRt.get();
+            pSbData->pInst->pRun = pRt.get();
             if ( mbVBACompat )
             {
-                GetSbData()->pInst->EnableCompatibility( true );
+                pSbData->pInst->EnableCompatibility( true );
             }
 
             while( pRt->Step() ) {}
@@ -1122,12 +1124,12 @@ void SbModule::Run( SbMethod* pMeth )
             if( bDelInst )
             {
                 // Compare here with 1 instead of 0, because before nCallLvl--
-                while( GetSbData()->pInst->nCallLvl != 1 )
+                while (pSbData->pInst->nCallLvl != 1)
                     Application::Yield();
             }
 
-            GetSbData()->pInst->pRun = pRt->pNext;
-            GetSbData()->pInst->nCallLvl--;          // Call-Level down again
+            pSbData->pInst->pRun = pRt->pNext;
+            pSbData->pInst->nCallLvl--;          // Call-Level down again
 
             // Exist an higher-ranking runtime instance?
             // Then take over BasicDebugFlags::Break, if set
@@ -1136,7 +1138,7 @@ void SbModule::Run( SbMethod* pMeth )
                 pRtNext->SetDebugFlags( BasicDebugFlags::Break );
 
             pRt.reset();
-            GetSbData()->pMod = pOldMod;
+            pSbData->pMod = pOldMod;
             if( bDelInst )
             {
                 // #57841 Clear Uno-Objects, which were helt in RTL functions,
@@ -1145,9 +1147,9 @@ void SbModule::Run( SbMethod* pMeth )
 
                 clearNativeObjectWrapperVector();
 
-                SAL_WARN_IF(GetSbData()->pInst->nCallLvl != 0,"basic","BASIC-Call-Level > 0");
-                delete GetSbData()->pInst;
-                GetSbData()->pInst = nullptr;
+                SAL_WARN_IF(pSbData->pInst->nCallLvl != 0,"basic","BASIC-Call-Level > 0");
+                delete pSbData->pInst;
+                pSbData->pInst = nullptr;
                 bDelInst = false;
 
                 // #i30690
@@ -1173,11 +1175,11 @@ void SbModule::Run( SbMethod* pMeth )
             }
         }
         else
-               GetSbData()->pInst->nCallLvl--;           // Call-Level down again
+            pSbData->pInst->nCallLvl--;           // Call-Level down again
     }
     else
     {
-        GetSbData()->pInst->nCallLvl--;          // Call-Level down again
+        pSbData->pInst->nCallLvl--;          // Call-Level down again
         StarBASIC::FatalError( ERRCODE_BASIC_STACK_OVERFLOW );
     }
 
@@ -1188,10 +1190,10 @@ void SbModule::Run( SbMethod* pMeth )
        // the end of the program, so that nothing were helt.
         ClearUnoObjectsInRTL_Impl( xBasic.get() );
 
-        delete GetSbData()->pInst;
-        GetSbData()->pInst = nullptr;
+        delete pSbData->pInst;
+        pSbData->pInst = nullptr;
     }
-    if ( pBasic && pBasic->IsDocBasic() && pBasic->IsQuitApplication() && !GetSbData()->pInst )
+    if ( pBasic && pBasic->IsDocBasic() && pBasic->IsQuitApplication() && !pSbData->pInst )
             bQuit = true;
     if ( bQuit )
     {
