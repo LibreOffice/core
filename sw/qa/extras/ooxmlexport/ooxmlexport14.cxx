@@ -39,6 +39,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108350_noFontdefaults, "tdf108350_noFontdefaults
     //CPPUNIT_ASSERT_EQUAL_MESSAGE("Font size", 10.f, getProperty<float>(xStyleProps, "CharHeight"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf125038, "tdf125038.docx")
+{
+    OUString aActual = getParagraph(1)->getString();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: phone:...
+    // - Actual  : result1result2phone:...
+    // i.e. the result if the inner MERGEFIELD fields ended up in the body text.
+    CPPUNIT_ASSERT_EQUAL(OUString("phone: \t1234567890"), aActual);
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
