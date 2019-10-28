@@ -29,6 +29,7 @@
 #include <tools/datetime.hxx>
 #include <unotools/datetime.hxx>
 #include <svl/inettype.hxx>
+#include <svl/lngmisc.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
@@ -454,8 +455,12 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                     else
                         nNextCh = 0U;
 
-                    if ( ! rtl::isUnicodeCodePoint( cChar ) )
+                    if (!rtl::isUnicodeCodePoint(cChar)
+                        || (linguistic::IsControlChar(cChar)
+                            && cChar != '\r' && cChar != '\n' && cChar != '\t'))
+                    {
                         cChar = '?';
+                    }
                 }
                 else if( rtl::isAsciiAlpha( nNextCh ) )
                 {
@@ -743,8 +748,11 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
             else
             {
                 do {
+                    if (!linguistic::IsControlChar(nNextCh))
+                    {
                     // All remaining characters make their way into the text.
-                    sTmpBuffer.appendUtf32( nNextCh );
+                        sTmpBuffer.appendUtf32( nNextCh );
+                    }
                     if( MAX_LEN == sTmpBuffer.getLength() )
                     {
                         aToken += sTmpBuffer.makeStringAndClear();
@@ -971,8 +979,11 @@ HtmlTokenId HTMLParser::GetNextRawToken()
             }
             SAL_FALLTHROUGH;
         default:
-            // all remaining characters are appended to the buffer
-            sTmpBuffer.appendUtf32( nNextCh );
+            if (!linguistic::IsControlChar(nNextCh) || nNextCh == '\t')
+            {
+                // all remaining characters are appended to the buffer
+                sTmpBuffer.appendUtf32( nNextCh );
+            }
             break;
         }
 
