@@ -14,6 +14,7 @@
 
 #include <editsh.hxx>
 #include <frmatr.hxx>
+#include <com/sun/star/text/TableColumnSeparator.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -37,6 +38,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108350_noFontdefaults, "tdf108350_noFontdefaults
     uno::Reference< beans::XPropertySet > xStyleProps(paragraphStyles->getByName("NoParent"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Times New Roman"), getProperty<OUString>(xStyleProps, "CharFontName"));
     //CPPUNIT_ASSERT_EQUAL_MESSAGE("Font size", 10.f, getProperty<float>(xStyleProps, "CharHeight"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(TDF120315, "tdf120315.docx")
+{
+    // tdf#120315 cells of the second column weren't vertically merged
+    // because their horizontal positions are different a little bit
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
+    CPPUNIT_ASSERT_EQUAL(getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                             xTableRows->getByIndex(0), "TableColumnSeparators")[0]
+                             .Position,
+                         getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                             xTableRows->getByIndex(1), "TableColumnSeparators")[2]
+                             .Position);
 }
 
 
