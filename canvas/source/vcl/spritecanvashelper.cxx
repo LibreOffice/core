@@ -34,6 +34,7 @@
 
 #include "canvascustomsprite.hxx"
 #include "spritecanvashelper.hxx"
+#include "spritecanvas.hxx"
 
 using namespace ::com::sun::star;
 

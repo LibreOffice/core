@@ -32,8 +32,7 @@
 
 #include <canvas/vclwrapper.hxx>
 
-#include "cairo_spritecanvas.hxx"
-
+#include "cairo_surfaceprovider.hxx"
 
 
 /* Definition of CanvasFont class */

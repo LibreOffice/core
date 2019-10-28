@@ -26,11 +26,8 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <canvas/rendering/irendermodule.hxx>
 #include <canvas/rendering/icolorbuffer.hxx>
-#include <canvas/rendering/isurface.hxx>
 
-#include "surfacerect.hxx"
 #include "pagemanager.hxx"
 
 namespace canvas

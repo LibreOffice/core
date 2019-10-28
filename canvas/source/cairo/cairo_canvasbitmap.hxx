@@ -28,14 +28,12 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <comphelper/uno3.hxx>
 
-#include <basegfx/vector/b2isize.hxx>
-
+#include <canvas/base/bitmapcanvasbase.hxx>
 #include <canvas/base/basemutexhelper.hxx>
 #include <canvas/base/integerbitmapbase.hxx>
 
 #include "cairo_canvashelper.hxx"
 #include "cairo_repainttarget.hxx"
-#include "cairo_spritecanvas.hxx"
 
 
 /* Definition of CanvasBitmap class */

@@ -50,6 +50,7 @@
 
 #include "canvasbitmap.hxx"
 #include "impltools.hxx"
+#include "spritecanvas.hxx"
 
 
 using namespace ::com::sun::star;
