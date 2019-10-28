@@ -133,7 +133,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".LibreOfficeMainActivity" />
         </activity>
-
+        
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+        
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
