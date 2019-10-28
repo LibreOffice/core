@@ -24,7 +24,6 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <uno/current_context.hxx>
 
 #include <strings.hrc>
 #include <bitmaps.hlst>
@@ -47,7 +46,7 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
-#include <comphelper/DisableInteractionHelper.hxx>
+#include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -255,8 +254,7 @@ SvxScriptOrgDialog::getLangNodeFromRootNode( Reference< browse::XBrowseNode > co
         };
         {
             // First try without Java interaction, to avoid warnings for non-JRE-dependent providers
-            css::uno::ContextLayer layer(
-                new comphelper::NoEnableJavaInteractionContext(css::uno::getCurrentContext()));
+            css::uno::ContextLayer layer(comphelper::NoEnableJavaInteractionContext());
             langNode = tryFind();
         }
         if (!langNode)

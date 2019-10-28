@@ -36,6 +36,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/string.hxx>
 #include <svl/srchdefs.hxx>
 #include <svtools/ehdl.hxx>
@@ -282,7 +283,11 @@ void ModulWindow::CheckCompileBasic()
 
             bool bWasModified = GetBasic()->IsModified();
 
-            bDone = m_xModule->Compile();
+            {
+                // tdf#106529: only use strict compilation mode when compiling from the IDE
+                css::uno::ContextLayer layer(comphelper::NewFlagContext("BasicStrict"));
+                bDone = m_xModule->Compile();
+            }
             if ( !bWasModified )
                 GetBasic()->SetModified(false);
 
