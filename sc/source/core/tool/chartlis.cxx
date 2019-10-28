@@ -595,7 +595,7 @@ void ScChartListenerCollection::SetRangeDirty( const ScRange& rRange )
 
 void ScChartListenerCollection::UpdateChartsContainingTab( SCTAB nTab )
 {
-    ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
+    ScRange aRange( 0, 0, nTab, pDoc->MaxCol(), pDoc->MaxRow(), nTab );
     for (auto const& it : m_Listeners)
     {
         it.second->UpdateChartIntersecting(aRange);

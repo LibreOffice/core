@@ -5165,7 +5165,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
     if (!rDoc.HasValueData( nPosX, nPosY, nTab ))
     {
         OUString aName = rDoc.GetString(nPosX, nPosY, nTab);
-        ScRangeData::MakeValidName(aName);
+        ScRangeData::MakeValidName(&rDoc, aName);
         if (!aName.isEmpty())
         {
             OUString aContent(ScRange( nX1, nY1, nTab, nX2, nY2, nTab ).Format(ScRefFlags::RANGE_ABS_3D, &rDoc));

@@ -309,7 +309,8 @@ void XclExpMergedcells::SaveXml( XclExpXmlStream& rStrm )
     for( size_t i = 0; i < nCount; ++i )
     {
         const ScRange & rRange = maMergedRanges[ i ];
-        rWorksheet->singleElement(XML_mergeCell, XML_ref, XclXmlUtils::ToOString(rRange));
+        rWorksheet->singleElement(XML_mergeCell, XML_ref,
+            XclXmlUtils::ToOString(&rStrm.GetRoot().GetDoc(), rRange));
     }
     rWorksheet->endElement( XML_mergeCells );
 }
@@ -521,7 +522,7 @@ void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
             oox::getRelationship(Relationship::HYPERLINK),
             msTarget, true ) : OUString();
     rStrm.GetCurrentStream()->singleElement( XML_hyperlink,
-            XML_ref,                XclXmlUtils::ToOString(maScPos),
+            XML_ref,                XclXmlUtils::ToOString(&rStrm.GetRoot().GetDoc(), maScPos),
             FSNS( XML_r, XML_id ),  !sId.isEmpty()
                                        ? sId.toUtf8().getStr()
                                        : nullptr,
@@ -1356,7 +1357,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
                 else if(pFormatEntry->GetType() == ScFormatEntry::Type::Date)
                     maCFList.AppendNewRecord( new XclExpDateFormat( GetRoot(), static_cast<const ScCondDateFormatEntry&>(*pFormatEntry), ++rIndex ) );
             }
-        aScRanges.Format( msSeqRef, ScRefFlags::VALID, nullptr, formula::FormulaGrammar::CONV_XL_OOX, ' ', true );
+        aScRanges.Format( msSeqRef, ScRefFlags::VALID, &GetDoc(), formula::FormulaGrammar::CONV_XL_OOX, ' ', true );
 
         if(!aExtEntries.empty() && xExtLst.get())
         {
@@ -1850,7 +1851,7 @@ void XclExpDV::SaveXml( XclExpXmlStream& rStrm )
             XML_showDropDown,       ToPsz( ::get_flag( mnFlags, EXC_DV_SUPPRESSDROPDOWN ) ),
             XML_showErrorMessage,   ToPsz( ::get_flag( mnFlags, EXC_DV_SHOWERROR ) ),
             XML_showInputMessage,   ToPsz( ::get_flag( mnFlags, EXC_DV_SHOWPROMPT ) ),
-            XML_sqref,              XclXmlUtils::ToOString(maScRanges),
+            XML_sqref,              XclXmlUtils::ToOString(&rStrm.GetRoot().GetDoc(), maScRanges),
             XML_type,               lcl_GetValidationType(mnFlags) );
     if( !msFormula1.isEmpty() )
     {

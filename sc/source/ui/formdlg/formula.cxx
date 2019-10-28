@@ -347,7 +347,7 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
         }
 
         ScRange aTestRange;
-        if ( bColRowName || (aTestRange.Parse(rStrExp) & ScRefFlags::VALID) )
+        if ( bColRowName || (aTestRange.Parse(rStrExp, m_pDoc) & ScRefFlags::VALID) )
             rStrResult += " ...";
             // area
     }

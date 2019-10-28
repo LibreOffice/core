@@ -90,14 +90,14 @@ public:
     void SetRelName( bool bVal ) { Flags.bRelName = bVal; }
     bool IsRelName() const { return Flags.bRelName; }
 
-    bool Valid() const;
-    bool ColValid() const;
-    bool RowValid() const;
+    bool Valid(const ScDocument* pDoc) const;
+    bool ColValid(const ScDocument* pDoc) const;
+    bool RowValid(const ScDocument* pDoc) const;
     bool TabValid() const;
     /** In external references nTab is -1 if the external document was not
         loaded but the sheet was cached, or >=0 if the external document was
         loaded. */
-    bool ValidExternal() const;
+    bool ValidExternal(const ScDocument* pDoc) const;
 
     ScAddress toAbs( const ScAddress& rPos ) const;
     void SetAddress( const ScAddress& rAddr, const ScAddress& rPos );
@@ -144,12 +144,12 @@ struct ScComplexRefData
     /// InitFlags and set range, relative to rPos if rRef1 and rRef2 say so.
     void InitFromRefAddresses( const ScRefAddress& rRef1, const ScRefAddress& rRef2, const ScAddress& rPos );
 
-    bool Valid() const;
+    bool Valid(const ScDocument* pDoc) const;
 
     /** In external references nTab is -1 for the start tab and -1 for the end
         tab if one sheet and the external document was not loaded but sheet was
         cached, or >=0 also if more than one sheets. */
-    bool ValidExternal() const;
+    bool ValidExternal(const ScDocument* pDoc) const;
 
     /** Whether this references entire columns, A:A */
     bool IsEntireCol() const
@@ -185,12 +185,12 @@ struct ScComplexRefData
     /** Increment or decrement end column unless or until sticky.
         @see ScRange::IncEndColSticky()
         @return TRUE if changed. */
-    bool IncEndColSticky( SCCOL nDelta, const ScAddress& rPos );
+    bool IncEndColSticky( const ScDocument* pDoc, SCCOL nDelta, const ScAddress& rPos );
 
     /** Increment or decrement end row unless or until sticky.
         @see ScRange::IncEndRowSticky()
         @return TRUE if changed. */
-    bool IncEndRowSticky( SCROW nDelta, const ScAddress& rPos );
+    bool IncEndRowSticky( const ScDocument* pDoc, SCROW nDelta, const ScAddress& rPos );
 
     bool IsDeleted() const;
 

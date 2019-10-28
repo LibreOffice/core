@@ -628,11 +628,11 @@ void ScDBData::ExtendDataArea(const ScDocument* pDoc)
     SCCOL nOldCol1 = nStartCol, nOldCol2 = nEndCol;
     SCROW nOldEndRow = nEndRow;
     pDoc->GetDataArea(nTable, nStartCol, nStartRow, nEndCol, nEndRow, false, true);
-    // nOldEndRow==MAXROW may easily happen when selecting whole columns and
+    // nOldEndRow==rDoc.MaxRow() may easily happen when selecting whole columns and
     // setting an AutoFilter (i.e. creating an anonymous database-range). We
     // certainly don't want to iterate over nearly a million empty cells, but
     // keep only an intentionally user selected range.
-    if (nOldEndRow < MAXROW && nEndRow < nOldEndRow)
+    if (nOldEndRow < pDoc->MaxRow() && nEndRow < nOldEndRow)
         nEndRow = nOldEndRow;
     if (nStartCol != nOldCol1 || nEndCol != nOldCol2)
     {

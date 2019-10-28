@@ -54,7 +54,7 @@ public:
     };
 
     explicit CachedTokenArray( ScDocument& rDoc ) :
-        maCxt(&rDoc, formula::FormulaGrammar::GRAM_OOXML) {}
+        maCxt(&rDoc, formula::FormulaGrammar::GRAM_OOXML), mpDoc(&rDoc) {}
 
     Item* get( const ScAddress& rPos, const OUString& rFormula )
     {
@@ -65,7 +65,7 @@ public:
 
         Item& rCached = *it->second;
         const ScTokenArray& rCode = *rCached.mpCell->GetCode();
-        OUString aPredicted = rCode.CreateString(maCxt, rPos);
+        OUString aPredicted = rCode.CreateString(mpDoc, maCxt, rPos);
         if (rFormula == aPredicted)
             return &rCached;
 
@@ -96,6 +96,7 @@ private:
     typedef std::unordered_map<SCCOL, std::unique_ptr<Item>> ColCacheType;
     ColCacheType maCache;
     sc::TokenStringContext maCxt;
+    const ScDocument* mpDoc;
 };
 
 void applySharedFormulas(
