@@ -27,8 +27,6 @@
 #include <com/sun/star/rendering/StringContext.hpp>
 #include <com/sun/star/rendering/XTextLayout.hpp>
 
-#include <canvas/vclwrapper.hxx>
-
 #include "canvasfont.hxx"
 #include "impltools.hxx"
 

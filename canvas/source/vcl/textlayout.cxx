@@ -26,7 +26,10 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
+#include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
+#include <com/sun/star/rendering/ViewState.hpp>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>

@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <vcl/svapp.hxx>
+
 #include "backbuffer.hxx"
 
 

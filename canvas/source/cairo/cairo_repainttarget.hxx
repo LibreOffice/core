@@ -20,7 +20,8 @@
 #ifndef INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_REPAINTTARGET_HXX
 #define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_REPAINTTARGET_HXX
 
-#include <rtl/ref.hxx>
+#include <com/sun/star/rendering/RenderState.hpp>
+#include <com/sun/star/rendering/ViewState.hpp>
 
 #include <vcl/cairo.hxx>
 
