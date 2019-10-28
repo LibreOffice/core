@@ -47,9 +47,11 @@ namespace sdr
 
         basegfx::B2DRange ViewContactOfSdrObjCustomShape::getCorrectedTextBoundRect() const
         {
-            const tools::Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
+            tools::Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
+            aObjectBound += GetCustomShapeObj().GetGridOffset();
             tools::Rectangle aTextBound(aObjectBound);
             GetCustomShapeObj().GetTextBounds(aTextBound);
+            aTextBound += GetCustomShapeObj().GetGridOffset();
             basegfx::B2DRange aTextRange = vcl::unotools::b2DRectangleFromRectangle(aTextBound);
             const basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(aObjectBound);
 
@@ -118,8 +120,18 @@ namespace sdr
             const SdrObject* pSdrObjRepresentation = GetCustomShapeObj().GetSdrObjectFromCustomShape();
             bool b3DShape(false);
 
+            Point aGridOff = GetCustomShapeObj().GetGridOffset();
+
             if(pSdrObjRepresentation)
             {
+                // Hack for calc, transform position of object according
+                // to current zoom so as objects relative position to grid
+                // appears stable
+                // TTTT: Need to check what *exactly* this is doing - in it's current
+                // form it's indeed pretty much a 'hack' as mentioned above and massively
+                // in the way for future changes...
+                const_cast< SdrObject* >( pSdrObjRepresentation )->SetGridOffset( aGridOff );
+
                 // tdf#118498 The processing of SdrObjListIter for SdrIterMode::DeepNoGroups
                 // did change for 3D-Objects, it now correctly enters and iterates the
                 // SdrObjects in the E3dScene (same as for SdrObjGroup). This is more correct
@@ -150,7 +162,9 @@ namespace sdr
                 {
                     // take unrotated snap rect as default, then get the
                     // unrotated text box. Rotation needs to be done centered
-                    const tools::Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
+                    tools::Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
+                    // hack for calc grid sync
+                    aObjectBound += GetCustomShapeObj().GetGridOffset();
                     const basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(aObjectBound);
 
                     // #i101684# get the text range unrotated and absolute to the object range

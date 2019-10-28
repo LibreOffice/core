@@ -26,6 +26,7 @@
 #include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <defines.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 
 #include <svx/scene3d.hxx>
@@ -170,9 +171,7 @@ bool DragMethod_RotateDiagram::EndSdrDrag(bool /*bCopy*/)
 
     return true;
 }
-void DragMethod_RotateDiagram::CreateOverlayGeometry(
-    sdr::overlay::OverlayManager& rOverlayManager,
-    const sdr::contact::ObjectContact& rObjectContact)
+void DragMethod_RotateDiagram::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager)
 {
     ::basegfx::B3DHomMatrix aCurrentTransform;
     aCurrentTransform.translate( -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,
@@ -212,14 +211,10 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(
         // transform to 2D view coordinates
         aPolyPolygon.transform(rVCScene.getObjectTransformation());
 
-        std::unique_ptr<sdr::overlay::OverlayPolyPolygonStripedAndFilled> pNew(
-            new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
-                aPolyPolygon));
-
-        insertNewlyCreatedOverlayObjectForSdrDragMethod(
-            std::move(pNew),
-            rObjectContact,
-            rOverlayManager);
+        std::unique_ptr<sdr::overlay::OverlayPolyPolygonStripedAndFilled> pNew(new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+            aPolyPolygon));
+        rOverlayManager.add(*pNew);
+        addToOverlayObjectList(std::move(pNew));
     }
 }
 } //namespace chart
