@@ -192,37 +192,16 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
  /*
   ******************************************************************
   * PossibleWord
-@@ -103,35 +278,35 @@
- public:
-     PossibleWord() : count(0), prefix(0), offset(-1), mark(0), current(0) {};
-     ~PossibleWord() {};
--  
-+
+@@ -282,7 +282,7 @@
+     ~PossibleWord() {}
+   
      // Fill the list of candidates if needed, select the longest, and return the number found
 -    int32_t   candidates( UText *text, DictionaryMatcher *dict, int32_t rangeEnd );
--  
 +    int32_t   candidates( UText *text, DictionaryMatcher *dict, int32_t rangeEnd, UnicodeSet const *ignoreSet = NULL, int32_t minLength = 0 );
-+
+   
      // Select the currently marked candidate, point after it in the text, and invalidate self
      int32_t   acceptMarked( UText *text );
--  
-+
-     // Back up from the current candidate to the next shorter one; return TRUE if that exists
-     // and point the text after it
-     UBool     backUp( UText *text );
--  
-+
-     // Return the longest prefix this candidate location shares with a dictionary word
-     // Return value is in code points.
-     int32_t   longestPrefix() { return prefix; };
--  
-+
-     // Mark the current candidate as the one we like
-     void      markCurrent() { mark = current; };
--    
-+
-     // Get length in code points of the marked word.
-     int32_t   markedCPLength() { return cpLengths[mark]; };
+@@ -303,12 +303,12 @@
  };
  
  
@@ -1085,32 +1064,3 @@ diff -ur icu.org/source/common/dictionarydata.h icu/source/common/dictionarydata
      virtual int32_t getType() const;
  private:
      UChar32 transform(UChar32 c) const;
-diff -ur icu.org/source/data/Makefile.in icu/source/data/Makefile.in
---- icu.org/source/data/Makefile.in	2018-10-19 14:20:11.031075856 +0200
-+++ icu/source/data/Makefile.in	2018-10-19 14:21:00.339942804 +0200
-@@ -183,7 +183,7 @@
- endif
- endif
- 
--packagedata: icupkg.inc $(PKGDATA_LIST) build-local
-+packagedata: icupkg.inc $(PKGDATA_LIST) build-local $(MAINBUILDDIR)/khmerdict.stamp
- ifneq ($(ENABLE_STATIC),)
- ifeq ($(PKGDATA_MODE),dll)
- 	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_VERSIONING) $(PKGDATA_LIST)
-@@ -567,8 +567,14 @@
- 	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1000 -c -i $(BUILDDIR) $(DICTSRCDIR)/burmesedict.txt $(BRKBLDDIR)/burmesedict.dict
- 
- # TODO: figure out why combining characters are here?
--$(BRKBLDDIR)/khmerdict.dict: $(TOOLBINDIR)/gendict$(TOOLEXEEXT) $(DAT_FILES)
--	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1780 -c -i $(BUILDDIR) $(DICTSRCDIR)/khmerdict.txt $(BRKBLDDIR)/khmerdict.dict
-+#$(BRKBLDDIR)/khmerdict.dict: $(TOOLBINDIR)/gendict$(TOOLEXEEXT) $(DAT_FILES)
-+#	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1780 -c -i $(BUILDDIR) $(DICTSRCDIR)/khmerdict.txt $(BRKBLDDIR)/khmerdict.dict
-+
-+#$(MAINBUILDDIR)/khmerdict.stamp: $(TOOLBINDIR)/gendict$(TOOLEXEEXT) $(BRKSRCDIR)/khmerdict.txt build-local
-+# 	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1780 -c -i $(BUILDDIR) $(DICTSRCDIR)/khmerdict.txt $(BRKBLDDIR)/khmerdict.dict
-+$(MAINBUILDDIR)/khmerdict.stamp: $(BRKSRCDIR)/khmerdict.dict build-local
-+	cp $< $(BRKBLDDIR)
-+	echo "timestamp" > $@
- 
- ####################################################    CFU
- # CFU FILES

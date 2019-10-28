@@ -1777,6 +1777,35 @@ void SubsetMap::InitList()
                     aAllSubsets.emplace_back( 0x10F30, 0x10F6F, SvxResId(RID_SUBSETSTR_SOGDIAN) );
                     break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 64)
+                case UBLOCK_EGYPTIAN_HIEROGLYPH_FORMAT_CONTROLS:
+                    aAllSubsets.emplace_back( 0x13430, 0x1343F, SvxResId(RID_SUBSETSTR_EGYPTIAN_HIEROGLYPH_FORMAT_CONTROLS) );
+                    break;
+                case UBLOCK_ELYMAIC:
+                    aAllSubsets.emplace_back( 0x10FE0, 0x10FFF, SvxResId(RID_SUBSETSTR_ELYMAIC) );
+                    break;
+                case UBLOCK_NANDINAGARI:
+                    aAllSubsets.emplace_back( 0x119A0, 0x119FF, SvxResId(RID_SUBSETSTR_NANDINAGARI) );
+                    break;
+                case UBLOCK_NYIAKENG_PUACHUE_HMONG:
+                    aAllSubsets.emplace_back( 0x1E100, 0x1E14F, SvxResId(RID_SUBSETSTR_NYIAKENG_PUACHUE_HMONG) );
+                    break;
+                case UBLOCK_OTTOMAN_SIYAQ_NUMBERS:
+                    aAllSubsets.emplace_back( 0x1ED00, 0x1ED4F, SvxResId(RID_SUBSETSTR_OTTOMAN_SIYAQ_NUMBERS) );
+                    break;
+                case UBLOCK_SMALL_KANA_EXTENSION:
+                    aAllSubsets.emplace_back( 0x1B130, 0x1B16F, SvxResId(RID_SUBSETSTR_SMALL_KANA_EXTENSION) );
+                    break;
+                case UBLOCK_SYMBOLS_AND_PICTOGRAPHS_EXTENDED_A:
+                    aAllSubsets.emplace_back( 0x1FA70, 0x1FAFF, SvxResId(RID_SUBSETSTR_SYMBOLS_AND_PICTOGRAPHS_EXTENDED_A) );
+                    break;
+                case UBLOCK_TAMIL_SUPPLEMENT:
+                    aAllSubsets.emplace_back( 0x11FC0, 0x11FFF, SvxResId(RID_SUBSETSTR_TAMIL_SUPPLEMENT) );
+                    break;
+                case UBLOCK_WANCHO:
+                    aAllSubsets.emplace_back( 0x1E2C0, 0x1E2FF, SvxResId(RID_SUBSETSTR_WANCHO) );
+                    break;
+#endif
 
             }
 

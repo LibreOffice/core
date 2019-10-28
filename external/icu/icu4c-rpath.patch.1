@@ -15,9 +15,9 @@ diff -ur icu.org/source/config/mh-linux icu/source/config/mh-linux
 diff -ur icu.org/source/data/pkgdataMakefile.in icu/source/data/pkgdataMakefile.in
 --- icu.org/source/data/pkgdataMakefile.in	2016-06-15 20:58:17.000000000 +0200
 +++ icu/source/data/pkgdataMakefile.in	2017-04-21 22:38:18.892927822 +0200
-@@ -17,6 +17,9 @@
- OUTPUTFILE=icupkg.inc
+@@ -18,6 +18,9 @@
  MIDDLE_SO_TARGET=
+ PKGDATA_TRAILING_SPACE=" "
  
 +# escape $ with \ when passing to echo; needed to preserve $ORIGIN
 +SHLIB.c.shell := $(subst $$,\$$,$(SHLIB.c))
