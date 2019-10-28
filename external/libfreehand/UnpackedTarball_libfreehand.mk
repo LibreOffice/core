@@ -13,4 +13,12 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libfreehand,$(FREEHAND_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libfreehand))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libfreehand,0))
+
+# icu-65-api-macros-with-semicolon.patch.1
+#   See http://site.icu-project.org/download/65  Migration Issues
+$(eval $(call gb_UnpackedTarball_add_patches,libfreehand,\
+    external/libfreehand/icu-65-api-macros-with-semicolon.patch.1 \
+))
+
 # vim: set noet sw=4 ts=4:

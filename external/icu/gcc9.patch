@@ -14,14 +14,13 @@
  
  
  #include "unicode/utypes.h"
-@@ -302,6 +309,10 @@
- U_NAMESPACE_END
+@@ -314,5 +314,9 @@
  
- #endif /* #if !UCONFIG_NO_FORMATTING */
-+
+ #endif /* U_SHOW_CPLUSPLUS_API */
+ 
 +#ifdef __GNUC__
 +#pragma GCC diagnostic pop
 +#endif
- 
++
  #endif // _FORMAT
  //eof

@@ -1,0 +1,12 @@
+diff -ur harfbuzz.org/src/hb-icu.cc harfbuzz/src/hb-icu.cc
+--- harfbuzz.org/src/hb-icu.cc	2019-06-26 22:30:55.000000000 +0200
++++ harfbuzz/src/hb-icu.cc	2019-10-28 23:21:42.198460246 +0100
+@@ -53,7 +53,7 @@
+ 
+ /* ICU doesn't do-while(0) around their statements.  Ugh!
+  * https://unicode-org.atlassian.net/browse/CLDR-13027 */
+-#define HB_ICU_STMT(S) do { S } while (0)
++#define HB_ICU_STMT(S) do { S; } while (0)
+ 
+ hb_script_t
+ hb_icu_script_to_script (UScriptCode script)
