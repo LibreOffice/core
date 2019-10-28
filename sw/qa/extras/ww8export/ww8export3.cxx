@@ -294,6 +294,15 @@ DECLARE_WW8EXPORT_TEST(testTdf126708emf, "tdf126708_containsemf.odt")
     CPPUNIT_ASSERT(abs(xSize.Width - 17000) <= 6);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf104017, "tdf104017.doc")
+{
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. the tables on the two pages were merged together to a single one on export.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
