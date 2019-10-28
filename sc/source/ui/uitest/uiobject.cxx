@@ -25,19 +25,19 @@
 
 namespace {
 
-ScAddress get_address_from_string(const OUString& rStr)
+ScAddress get_address_from_string(const ScDocument* pDoc, const OUString& rStr)
 {
     ScAddress aAddr;
     sal_Int32 nOffset = 0;
-    ScRangeStringConverter::GetAddressFromString(aAddr, rStr, nullptr, formula::FormulaGrammar::CONV_OOO, nOffset);
+    ScRangeStringConverter::GetAddressFromString(aAddr, rStr, pDoc, formula::FormulaGrammar::CONV_OOO, nOffset);
     return aAddr;
 }
 
-ScRange get_range_from_string(const OUString& rStr)
+ScRange get_range_from_string(const ScDocument* pDoc, const OUString& rStr)
 {
     ScRange aRange;
     sal_Int32 nOffset = 0;
-    ScRangeStringConverter::GetRangeFromString(aRange, rStr, nullptr, formula::FormulaGrammar::CONV_OOO, nOffset);
+    ScRangeStringConverter::GetRangeFromString(aRange, rStr, pDoc, formula::FormulaGrammar::CONV_OOO, nOffset);
 
     return aRange;
 }
@@ -113,7 +113,7 @@ void ScGridWinUIObject::execute(const OUString& rAction,
         {
             auto itr = rParameters.find("CELL");
             const OUString& rStr = itr->second;
-            ScAddress aAddr = get_address_from_string(rStr);
+            ScAddress aAddr = get_address_from_string(mxGridWindow->getViewData()->GetDocument(), rStr);
             ScDBFunc* pFunc = getDBFunc();
             pFunc->MarkRange(ScRange(aAddr), true, bExtend);
             mxGridWindow->CursorChanged();
@@ -122,7 +122,7 @@ void ScGridWinUIObject::execute(const OUString& rAction,
         {
             auto itr = rParameters.find("RANGE");
             const OUString rStr = itr->second;
-            ScRange aRange = get_range_from_string(rStr);
+            ScRange aRange = get_range_from_string(mxGridWindow->getViewData()->GetDocument(), rStr);
             ScDBFunc* pFunc = getDBFunc();
             pFunc->MarkRange(aRange, true, bExtend);
             mxGridWindow->CursorChanged();

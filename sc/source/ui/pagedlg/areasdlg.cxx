@@ -585,7 +585,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit&, rEd, void )
 
 // TODO: It might make sense to move these functions to address.?xx. -kohei
 
-static bool lcl_CheckOne_OOO( const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
+static bool lcl_CheckOne_OOO( const ScDocument* pDoc, const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
 {
     // Allowed syntax for rStr:
     // Row: [$]1-MAXTAB
@@ -617,7 +617,7 @@ static bool lcl_CheckOne_OOO( const OUString& rStr, bool bIsRow, SCCOLROW& rVal 
         else
         {
             SCCOL nCol = 0;
-            bStrOk = ::AlphaToCol( nCol, aStr);
+            bStrOk = ::AlphaToCol( pDoc, nCol, aStr);
             nNum = nCol;
         }
     }
@@ -628,10 +628,10 @@ static bool lcl_CheckOne_OOO( const OUString& rStr, bool bIsRow, SCCOLROW& rVal 
     return bStrOk;
 }
 
-static bool lcl_CheckOne_XL_A1( const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
+static bool lcl_CheckOne_XL_A1( const ScDocument* pDoc, const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
 {
     // XL A1 style is identical to OOO one for print range formats.
-    return lcl_CheckOne_OOO(rStr, bIsRow, rVal);
+    return lcl_CheckOne_OOO(pDoc, rStr, bIsRow, rVal);
 }
 
 static bool lcl_CheckOne_XL_R1C1( const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
@@ -662,14 +662,14 @@ static bool lcl_CheckOne_XL_R1C1( const OUString& rStr, bool bIsRow, SCCOLROW& r
     return true;
 }
 
-static bool lcl_CheckRepeatOne( const OUString& rStr, formula::FormulaGrammar::AddressConvention eConv, bool bIsRow, SCCOLROW& rVal )
+static bool lcl_CheckRepeatOne( const ScDocument* pDoc, const OUString& rStr, formula::FormulaGrammar::AddressConvention eConv, bool bIsRow, SCCOLROW& rVal )
 {
     switch (eConv)
     {
         case formula::FormulaGrammar::CONV_OOO:
-            return lcl_CheckOne_OOO(rStr, bIsRow, rVal);
+            return lcl_CheckOne_OOO(pDoc, rStr, bIsRow, rVal);
         case formula::FormulaGrammar::CONV_XL_A1:
-            return lcl_CheckOne_XL_A1(rStr, bIsRow, rVal);
+            return lcl_CheckOne_XL_A1(pDoc, rStr, bIsRow, rVal);
         case formula::FormulaGrammar::CONV_XL_R1C1:
             return lcl_CheckOne_XL_R1C1(rStr, bIsRow, rVal);
         default:
@@ -714,7 +714,7 @@ static bool lcl_CheckRepeatString( const OUString& rStr, const ScDocument* pDoc,
             if (aBuf.isEmpty())
                 return false;
 
-            bool bRes = lcl_CheckRepeatOne(aBuf, eConv, bIsRow, nVal);
+            bool bRes = lcl_CheckRepeatOne(pDoc, aBuf, eConv, bIsRow, nVal);
             if (!bRes)
                 return false;
 
@@ -741,7 +741,7 @@ static bool lcl_CheckRepeatString( const OUString& rStr, const ScDocument* pDoc,
 
     if (!aBuf.isEmpty())
     {
-        bool bRes = lcl_CheckRepeatOne(aBuf, eConv, bIsRow, nVal);
+        bool bRes = lcl_CheckRepeatOne(pDoc, aBuf, eConv, bIsRow, nVal);
         if (!bRes)
             return false;
 

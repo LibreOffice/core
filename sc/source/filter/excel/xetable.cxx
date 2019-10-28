@@ -1480,6 +1480,7 @@ void XclExpGuts::WriteBody( XclExpStream& rStrm )
 }
 
 XclExpDimensions::XclExpDimensions( const XclExpRoot& rRoot ) :
+    mrRoot(rRoot),
     mnFirstUsedXclRow( 0 ),
     mnFirstFreeXclRow( 0 ),
     mnFirstUsedXclCol( 0 ),
@@ -1523,7 +1524,7 @@ void XclExpDimensions::SaveXml( XclExpXmlStream& rStrm )
             // To be compatible with MS Office 2007,
             // we need full address notation format
             // e.g. "A1:AMJ177" and not partial like: "1:177".
-            XML_ref, XclXmlUtils::ToOString(aRange, true) );
+            XML_ref, XclXmlUtils::ToOString(&mrRoot.GetDoc(), aRange, true) );
 }
 
 void XclExpDimensions::WriteBody( XclExpStream& rStrm )

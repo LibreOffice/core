@@ -1503,7 +1503,7 @@ void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, long nOffset)
                     aMultiMark.MarkToMulti();
                     if (aMultiMark.IsMultiMarked())
                     {
-                        aMultiMark.ShiftCols(nStartCol, nOffset);
+                        aMultiMark.ShiftCols(pTabViewShell->GetViewData().GetDocument(), nStartCol, nOffset);
                         pTabViewShell->SetMarkData(aMultiMark);
                     }
                 }
@@ -1558,7 +1558,7 @@ void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, long nOffset)
                     aMultiMark.MarkToMulti();
                     if (aMultiMark.IsMultiMarked())
                     {
-                        aMultiMark.ShiftRows(nStartRow, nOffset);
+                        aMultiMark.ShiftRows(pTabViewShell->GetViewData().GetDocument(), nStartRow, nOffset);
                         pTabViewShell->SetMarkData(aMultiMark);
                     }
                 }

@@ -673,7 +673,9 @@ ScVbaWorksheet::Cells( const ::uno::Any &nRow, const ::uno::Any &nCol )
     // Performance optimization for often-called Cells method:
     // Use a common helper method instead of creating a new ScVbaRange object
     uno::Reference< table::XCellRange > xRange( getSheet(), uno::UNO_QUERY_THROW );
-    return ScVbaRange::CellsHelper( this, mxContext, xRange, nRow, nCol );
+    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
+    ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
+    return ScVbaRange::CellsHelper( &rDoc, this, mxContext, xRange, nRow, nCol );
 }
 
 uno::Reference< excel::XRange >

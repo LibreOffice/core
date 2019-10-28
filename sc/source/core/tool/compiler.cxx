@@ -822,7 +822,7 @@ struct ConventionOOO_A1 : public Convention_A1
         }
     }
 
-    static SingletonDisplay getSingletonDisplay( const ScAddress& rAbs1, const ScAddress& rAbs2,
+    static SingletonDisplay getSingletonDisplay( const ScDocument* pDoc, const ScAddress& rAbs1, const ScAddress& rAbs2,
             const ScComplexRefData& rRef, bool bFromRangeName )
     {
         // If any part is error, display as such.
@@ -836,7 +836,7 @@ struct ConventionOOO_A1 : public Convention_A1
 
         // Same if not in named expression and both rows of entire columns are
         // relative references.
-        if (!bFromRangeName && rAbs1.Row() == 0 && rAbs2.Row() == MAXROW &&
+        if (!bFromRangeName && rAbs1.Row() == 0 && rAbs2.Row() == pDoc->MaxRow() &&
                 rRef.Ref1.IsRowRel() && rRef.Ref2.IsRowRel())
             return SINGLETON_COL;
 
@@ -846,14 +846,16 @@ struct ConventionOOO_A1 : public Convention_A1
 
         // Same if not in named expression and both columns of entire rows are
         // relative references.
-        if (!bFromRangeName && rAbs1.Col() == 0 && rAbs2.Col() == MAXCOL &&
+        if (!bFromRangeName && rAbs1.Col() == 0 && rAbs2.Col() == pDoc->MaxCol() &&
                 rRef.Ref1.IsColRel() && rRef.Ref2.IsColRel())
             return SINGLETON_ROW;
 
         return SINGLETON_NONE;
     }
 
-    virtual void makeRefStr( OUStringBuffer&   rBuffer,
+    virtual void makeRefStr(
+                     const ScDocument* pDoc,
+                     OUStringBuffer&   rBuffer,
                      formula::FormulaGrammar::Grammar /*eGram*/,
                      const ScAddress& rPos,
                      const OUString& rErrRef, const std::vector<OUString>& rTabNames,
@@ -868,7 +870,7 @@ struct ConventionOOO_A1 : public Convention_A1
             aAbs2 = rRef.Ref2.toAbs(rPos);
 
         SingletonDisplay eSingleton = bSingleRef ? SINGLETON_NONE :
-            getSingletonDisplay( aAbs1, aAbs2, rRef, bFromRangeName);
+            getSingletonDisplay( pDoc, aAbs1, aAbs2, rRef, bFromRangeName);
         MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, rRef.Ref1, aAbs1, false, false, eSingleton);
         if (!bSingleRef)
         {
@@ -997,6 +999,7 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 
     virtual void makeExternalRefStr(
+        const ScDocument* /*pDoc*/,
         OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 /*nFileId*/, const OUString& rFileName,
         const std::vector<OUString>& rTabNames, const OUString& rTabName,
         const ScComplexRefData& rRef ) const override
@@ -1009,7 +1012,9 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
 {
     ConventionOOO_A1_ODF() : ConventionOOO_A1 (FormulaGrammar::CONV_ODF) { }
 
-    virtual void makeRefStr( OUStringBuffer&   rBuffer,
+    virtual void makeRefStr(
+                     const ScDocument* pDoc,
+                     OUStringBuffer&   rBuffer,
                      formula::FormulaGrammar::Grammar eGram,
                      const ScAddress& rPos,
                      const OUString& rErrRef, const std::vector<OUString>& rTabNames,
@@ -1035,7 +1040,7 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
         else
         {
             SingletonDisplay eSingleton = bSingleRef ? SINGLETON_NONE :
-                getSingletonDisplay( aAbs1, aAbs2, rRef, bFromRangeName);
+                getSingletonDisplay( pDoc, aAbs1, aAbs2, rRef, bFromRangeName);
             MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, rRef.Ref1, aAbs1, false, true, eSingleton);
             if (!bSingleRef)
             {
@@ -1061,6 +1066,7 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
     }
 
     virtual void makeExternalRefStr(
+        const ScDocument* /*pDoc*/,
         OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 /*nFileId*/, const OUString& rFileName,
         const std::vector<OUString>& rTabNames,
         const OUString& rTabName, const ScComplexRefData& rRef ) const override
@@ -1254,7 +1260,9 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         MakeRowStr(rBuf, rAbs.Row());
     }
 
-    virtual void makeRefStr( OUStringBuffer&   rBuf,
+    virtual void makeRefStr(
+                     const ScDocument* pDoc,
+                     OUStringBuffer&   rBuf,
                      formula::FormulaGrammar::Grammar /*eGram*/,
                      const ScAddress& rPos,
                      const OUString& rErrRef, const std::vector<OUString>& rTabNames,
@@ -1285,7 +1293,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
                 return;
             }
 
-            if (aAbs1.Col() == 0 && aAbs2.Col() >= MAXCOL)
+            if (aAbs1.Col() == 0 && aAbs2.Col() >= pDoc->MaxCol())
             {
                 if (!aRef.Ref1.IsRowRel())
                     rBuf.append( '$' );
@@ -1297,7 +1305,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
                 return;
             }
 
-            if (aAbs1.Row() == 0 && aAbs2.Row() >= MAXROW)
+            if (aAbs1.Row() == 0 && aAbs2.Row() >= pDoc->MaxRow())
             {
                 if (!aRef.Ref1.IsColRel())
                     rBuf.append( '$' );
@@ -1376,6 +1384,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
     }
 
     virtual void makeExternalRefStr(
+        const ScDocument* /*pDoc*/,
         OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 /*nFileId*/, const OUString& rFileName,
         const std::vector<OUString>& rTabNames, const OUString& rTabName,
         const ScComplexRefData& rRef ) const override
@@ -1399,7 +1408,8 @@ struct ConventionXL_OOX : public ConventionXL_A1
 {
     ConventionXL_OOX() : ConventionXL_A1( FormulaGrammar::CONV_XL_OOX ) { }
 
-    virtual void makeRefStr( OUStringBuffer&   rBuf,
+    virtual void makeRefStr( const ScDocument* pDoc,
+                     OUStringBuffer&   rBuf,
                      formula::FormulaGrammar::Grammar eGram,
                      const ScAddress& rPos,
                      const OUString& rErrRef, const std::vector<OUString>& rTabNames,
@@ -1430,7 +1440,7 @@ struct ConventionXL_OOX : public ConventionXL_A1
             return;
         }
 
-        ConventionXL_A1::makeRefStr( rBuf, eGram, aPos, rErrRef, rTabNames, rRef, bSingleRef, bFromRangeName);
+        ConventionXL_A1::makeRefStr( pDoc, rBuf, eGram, aPos, rErrRef, rTabNames, rRef, bSingleRef, bFromRangeName);
     }
 
     virtual OUString makeExternalNameStr( sal_uInt16 nFileId, const OUString& /*rFile*/,
@@ -1493,6 +1503,7 @@ struct ConventionXL_OOX : public ConventionXL_A1
     }
 
     virtual void makeExternalRefStr(
+        const ScDocument* /*pDoc*/,
         OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 nFileId, const OUString& /*rFileName*/,
         const std::vector<OUString>& rTabNames, const OUString& rTabName,
         const ScComplexRefData& rRef ) const override
@@ -1566,7 +1577,8 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 {
     ConventionXL_R1C1() : ScCompiler::Convention( FormulaGrammar::CONV_XL_R1C1 ) { }
 
-    virtual void makeRefStr( OUStringBuffer&   rBuf,
+    virtual void makeRefStr( const ScDocument* pDoc,
+                     OUStringBuffer&   rBuf,
                      formula::FormulaGrammar::Grammar /*eGram*/,
                      const ScAddress& rPos,
                      const OUString& rErrRef, const std::vector<OUString>& rTabNames,
@@ -1595,7 +1607,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
                 return;
             }
 
-            if (aAbsRef.aStart.Col() == 0 && aAbsRef.aEnd.Col() >= MAXCOL)
+            if (aAbsRef.aStart.Col() == 0 && aAbsRef.aEnd.Col() >= pDoc->MaxCol())
             {
                 r1c1_add_row(rBuf,  rRef.Ref1, aAbsRef.aStart);
                 if (aAbsRef.aStart.Row() != aAbsRef.aEnd.Row() ||
@@ -1608,7 +1620,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 
             }
 
-            if (aAbsRef.aStart.Row() == 0 && aAbsRef.aEnd.Row() >= MAXROW)
+            if (aAbsRef.aStart.Row() == 0 && aAbsRef.aEnd.Row() >= pDoc->MaxRow())
             {
                 r1c1_add_col(rBuf, rRef.Ref1, aAbsRef.aStart);
                 if (aAbsRef.aStart.Col() != aAbsRef.aEnd.Col() ||
@@ -1692,6 +1704,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
     }
 
     virtual void makeExternalRefStr(
+        const ScDocument* pDoc,
         OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 /*nFileId*/, const OUString& rFileName,
         const std::vector<OUString>& rTabNames, const OUString& rTabName,
         const ScComplexRefData& rRef ) const override
@@ -1708,7 +1721,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
             return;
         }
 
-        if (aAbsRef.aStart.Col() == 0 && aAbsRef.aEnd.Col() >= MAXCOL)
+        if (aAbsRef.aStart.Col() == 0 && aAbsRef.aEnd.Col() >= pDoc->MaxCol())
         {
             r1c1_add_row(rBuffer, rRef.Ref1, aAbsRef.aStart);
             if (aAbsRef.aStart.Row() != aAbsRef.aEnd.Row() || rRef.Ref1.IsRowRel() != rRef.Ref2.IsRowRel())
@@ -1719,7 +1732,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
             return;
         }
 
-        if (aAbsRef.aStart.Row() == 0 && aAbsRef.aEnd.Row() >= MAXROW)
+        if (aAbsRef.aStart.Row() == 0 && aAbsRef.aEnd.Row() >= pDoc->MaxRow())
         {
             r1c1_add_col(rBuffer, rRef.Ref1, aAbsRef.aStart);
             if (aAbsRef.aStart.Col() != aAbsRef.aEnd.Col() || rRef.Ref1.IsColRel() != rRef.Ref2.IsColRel())
@@ -3569,7 +3582,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
         long nMyRow = static_cast<long>(aPos.Row());
         bool bTwo = false;
         ScAddress aOne( 0, 0, aPos.Tab() );
-        ScAddress aTwo( MAXCOL, MAXROW, aPos.Tab() );
+        ScAddress aTwo( pDoc->MaxCol(), pDoc->MaxRow(), aPos.Tab() );
 
         ScAutoNameCache* pNameCache = pDoc->GetAutoNameCache();
         if ( pNameCache )
@@ -3729,7 +3742,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
             else
                 aAdr = aOne;
             aRef.InitAddress( aAdr );
-            if ( (aAdr.Row() != MAXROW && pDoc->HasStringData(
+            if ( (aAdr.Row() != pDoc->MaxRow() && pDoc->HasStringData(
                     aAdr.Col(), aAdr.Row() + 1, aAdr.Tab()))
               || (aAdr.Row() != 0 && pDoc->HasStringData(
                     aAdr.Col(), aAdr.Row() - 1, aAdr.Tab())))
@@ -4303,7 +4316,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
             // If a syntactically correct reference was recognized but invalid
             // e.g. because of non-existing sheet name => entire reference
             // ocBad to preserve input instead of #REF!.A1
-            if (!maRawToken.IsValidReference())
+            if (!maRawToken.IsValidReference(pDoc))
             {
                 aUpper = aOrg;          // ensure for ocBad
                 break;                  // do; create ocBad token or set error.
@@ -4925,9 +4938,9 @@ void ScCompiler::MoveRelWrap()
     for ( auto t: pArr->References() )
     {
         if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
-            ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
+            ScRefUpdate::MoveRelWrap( pDoc, aPos, pDoc->MaxCol(), pDoc->MaxRow(), SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
         else
-            ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, *t->GetDoubleRef() );
+            ScRefUpdate::MoveRelWrap( pDoc, aPos, pDoc->MaxCol(), pDoc->MaxRow(), *t->GetDoubleRef() );
     }
 }
 
@@ -4996,7 +5009,7 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
                     *pFileName << "' '" << t->GetString().getString() << "'");
 
             pConv->makeExternalRefStr(
-                rBuffer, GetPos(), nFileId, *pFileName, aTabNames, t->GetString().getString(),
+                pDoc, rBuffer, GetPos(), nFileId, *pFileName, aTabNames, t->GetString().getString(),
                 *t->GetDoubleRef());
         }
         break;
@@ -5098,7 +5111,7 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
         else
         {
             rBuffer.append(ScCompiler::GetNativeSymbol(ocErrName));
-            pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef,
+            pConv->makeRefStr(pDoc, rBuffer, meGrammar, aPos, aErrRef,
                               GetSetupTabNames(), aRef, true, (pArr && pArr->IsFromRangeName()));
         }
     }
@@ -5130,14 +5143,14 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
         rBuffer.append(aStr);
     }
     else
-        pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef,
+        pConv->makeRefStr(pDoc, rBuffer, meGrammar, aPos, aErrRef,
                           GetSetupTabNames(), aRef, true, (pArr && pArr->IsFromRangeName()));
 }
 
 void ScCompiler::CreateStringFromDoubleRef( OUStringBuffer& rBuffer, const FormulaToken* _pTokenP ) const
 {
     OUString aErrRef = GetCurrentOpCodeMap()->getSymbol(ocErrRef);
-    pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef, GetSetupTabNames(),
+    pConv->makeRefStr(pDoc, rBuffer, meGrammar, aPos, aErrRef, GetSetupTabNames(),
                       *_pTokenP->GetDoubleRef(), false, (pArr && pArr->IsFromRangeName()));
 }
 
@@ -5342,16 +5355,16 @@ bool ScCompiler::HandleColRowName()
             if ( bColName )
             {   // ColName
                 SCROW nStartRow = nRow + 1;
-                if ( nStartRow > MAXROW )
-                    nStartRow = MAXROW;
-                SCROW nMaxRow = MAXROW;
+                if ( nStartRow > pDoc->MaxRow() )
+                    nStartRow = pDoc->MaxRow();
+                SCROW nMaxRow = pDoc->MaxRow();
                 if ( nMyCol == nCol )
                 {   // formula cell in same column
                     if ( nMyRow == nStartRow )
                     {   // take remainder under name cell
                         nStartRow++;
-                        if ( nStartRow > MAXROW )
-                            nStartRow = MAXROW;
+                        if ( nStartRow > pDoc->MaxRow() )
+                            nStartRow = pDoc->MaxRow();
                     }
                     else if ( nMyRow > nStartRow )
                     {   // from name cell down to formula cell
@@ -5375,16 +5388,16 @@ bool ScCompiler::HandleColRowName()
             else
             {   // RowName
                 SCCOL nStartCol = nCol + 1;
-                if ( nStartCol > MAXCOL )
-                    nStartCol = MAXCOL;
-                SCCOL nMaxCol = MAXCOL;
+                if ( nStartCol > pDoc->MaxCol() )
+                    nStartCol = pDoc->MaxCol();
+                SCCOL nMaxCol = pDoc->MaxCol();
                 if ( nMyRow == nRow )
                 {   // formula cell in same row
                     if ( nMyCol == nStartCol )
                     {   // take remainder right from name cell
                         nStartCol++;
-                        if ( nStartCol > MAXCOL )
-                            nStartCol = MAXCOL;
+                        if ( nStartCol > pDoc->MaxCol() )
+                            nStartCol = pDoc->MaxCol();
                     }
                     else if ( nMyCol > nStartCol )
                     {   // from name cell right to formula cell
@@ -6172,15 +6185,15 @@ bool ScCompiler::AdjustSumRangeShape(const ScComplexRefData& rBaseRange, ScCompl
     SCCOL nXInc = nXDelta - nXDeltaSum;
     SCROW nYInc = nYDelta - nYDeltaSum;
 
-    // Don't let a valid End[Col,Row] go beyond (MAXCOL,MAXROW) to match
+    // Don't let a valid End[Col,Row] go beyond (pDoc->MaxCol(),pDoc->MaxRow()) to match
     // what happens in ScInterpreter::IterateParametersIf(), but there it also shrinks
     // the base-range by the (out-of-bound)amount clipped off the sum-range.
     // TODO: Probably we can optimize (from threading perspective) rBaseRange
     //       by shrinking it here correspondingly (?)
-    if (nEndCol + nXInc > MAXCOL)
-        nXInc = MAXCOL - nEndCol;
-    if (nEndRow + nYInc > MAXROW)
-        nYInc = MAXROW - nEndRow;
+    if (nEndCol + nXInc > pDoc->MaxCol())
+        nXInc = pDoc->MaxCol() - nEndCol;
+    if (nEndRow + nYInc > pDoc->MaxRow())
+        nYInc = pDoc->MaxRow() - nEndRow;
 
     rSumRange.Ref2.IncCol(nXInc);
     rSumRange.Ref2.IncRow(nYInc);

@@ -1005,7 +1005,7 @@ sal_uInt16 ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCo
     // over the entire document.
 
     sal_uInt16 nResult = DET_INS_EMPTY;
-    ScCellIterator aCellIter(pDoc, ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB));  // all sheets
+    ScCellIterator aCellIter(pDoc, ScRange(0,0,0,pDoc->MaxCol(),pDoc->MaxRow(),MAXTAB));  // all sheets
     for (bool bHas = aCellIter.first(); bHas; bHas = aCellIter.next())
     {
         if (aCellIter.getType() != CELLTYPE_FORMULA)
@@ -1093,7 +1093,7 @@ sal_uInt16 ScDetectiveFunc::FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2
     sal_uInt16 nResult = nLevel;
     bool bDelete = ( nDeleteLevel && nLevel == nDeleteLevel-1 );
 
-    ScCellIterator aCellIter( pDoc, ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab) );
+    ScCellIterator aCellIter( pDoc, ScRange(0, 0, nTab, pDoc->MaxCol(), pDoc->MaxRow(), nTab) );
     for (bool bHas = aCellIter.first(); bHas; bHas = aCellIter.next())
     {
         if (aCellIter.getType() != CELLTYPE_FORMULA)
@@ -1300,7 +1300,7 @@ bool ScDetectiveFunc::MarkInvalid(bool& rOverflow)
     long nInsCount = 0;
 
     //  search for valid places
-    ScDocAttrIterator aAttrIter( pDoc, nTab, 0,0,MAXCOL,MAXROW );
+    ScDocAttrIterator aAttrIter( pDoc, nTab, 0,0,pDoc->MaxCol(),pDoc->MaxRow() );
     SCCOL nCol;
     SCROW nRow1;
     SCROW nRow2;
@@ -1380,7 +1380,7 @@ void ScDetectiveFunc::GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
     aSrcRange.push_back(
         ScRefTokenHelper::createRefToken(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab)));
 
-    ScCellIterator aIter(pDoc, ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab));
+    ScCellIterator aIter(pDoc, ScRange(0, 0, nTab, pDoc->MaxCol(), pDoc->MaxRow(), nTab));
     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
     {
         if (aIter.getType() != CELLTYPE_FORMULA)

@@ -459,7 +459,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
             if (nNeeded)
             {
-                pDestDoc->InsertRow( 0,nTab, MAXCOL,nTab, nRow+nArrY, nNeeded );
+                pDestDoc->InsertRow( 0,nTab, pDestDoc->MaxCol(),nTab, nRow+nArrY, nNeeded );
 
                 for (nArrX=0; nArrX<nColCount; nArrX++)
                     if (ppUsed[nArrX][nArrY])

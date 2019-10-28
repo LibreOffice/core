@@ -347,6 +347,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
+    const XclExpRoot&   mrRoot;
     XclExpString        maAuthor;       /// Name of the author.
     OString             maNoteText;     /// Main text of the note (<=BIFF7).
     XclExpStringRef     mpNoteContents; /// Text and formatting data (OOXML)
