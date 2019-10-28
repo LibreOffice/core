@@ -1035,12 +1035,14 @@ bool OpenGLWrapper::isVCLOpenGLEnabled()
 
 void OpenGLHelper::debugMsgStream(std::ostringstream const &pStream)
 {
-    debugMsgPrint(0, "%x: %s", osl_getThreadIdentifier(nullptr), pStream.str().c_str());
+    debugMsgPrint(
+        0, "%" SAL_PRIxUINT32 ": %s", osl_getThreadIdentifier(nullptr), pStream.str().c_str());
 }
 
 void OpenGLHelper::debugMsgStreamWarn(std::ostringstream const &pStream)
 {
-    debugMsgPrint(1, "%x: %s", osl_getThreadIdentifier(nullptr), pStream.str().c_str());
+    debugMsgPrint(
+        1, "%" SAL_PRIxUINT32 ": %s", osl_getThreadIdentifier(nullptr), pStream.str().c_str());
 }
 
 void OpenGLHelper::debugMsgPrint(const int nType, const char *pFormat, ...)
