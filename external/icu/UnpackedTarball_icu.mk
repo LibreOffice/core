@@ -44,6 +44,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/CVE-2018-18928.patch.2 \
 	external/icu/clang-cl.patch \
 	external/icu/c++20-comparison.patch \
+	external/icu/ubsan.patch \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))
