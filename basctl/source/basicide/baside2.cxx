@@ -51,6 +51,7 @@
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svxids.hrc>
+#include <uno/current_context.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
@@ -262,6 +263,38 @@ void ModulWindow::Resize()
     m_aXEditorWindow->SetPosSizePixel( Point( 0, 0 ), GetOutputSizePixel() );
 }
 
+namespace
+{
+// This context is used to force failing on syntax errors that are otherwise tolerated for
+// compatibility reasons, like tdf#80731.
+class BasicStrictSyntaxCheckContext : public cppu::WeakImplHelper<css::uno::XCurrentContext>
+{
+public:
+    explicit BasicStrictSyntaxCheckContext(
+        css::uno::Reference<css::uno::XCurrentContext> const& xContext)
+        : mxContext(xContext)
+    {
+    }
+    BasicStrictSyntaxCheckContext(const BasicStrictSyntaxCheckContext&) = delete;
+    virtual ~BasicStrictSyntaxCheckContext() override = default;
+    BasicStrictSyntaxCheckContext& operator=(const BasicStrictSyntaxCheckContext&) = delete;
+
+private:
+    virtual css::uno::Any SAL_CALL getValueByName(OUString const& Name) override
+    {
+        if (Name == "BasicStrict")
+            return css::uno::Any(true);
+        else if (mxContext.is())
+            return mxContext->getValueByName(Name);
+        else
+            return css::uno::Any();
+    }
+
+    css::uno::Reference<css::uno::XCurrentContext> mxContext;
+};
+
+} // namespace
+
 void ModulWindow::CheckCompileBasic()
 {
     if ( XModule().is() )
@@ -282,7 +315,12 @@ void ModulWindow::CheckCompileBasic()
 
             bool bWasModified = GetBasic()->IsModified();
 
-            bDone = m_xModule->Compile();
+            {
+                // tdf#106529: when compiling from the IDE, use strict compilation mode
+                css::uno::ContextLayer layer(
+                    new BasicStrictSyntaxCheckContext(css::uno::getCurrentContext()));
+                bDone = m_xModule->Compile();
+            }
             if ( !bWasModified )
                 GetBasic()->SetModified(false);
 
