@@ -75,7 +75,7 @@
 #define THREADIMPL_FLAGS_ATTACHED   0x00010
 #define THREADIMPL_FLAGS_DESTROYED  0x00020
 
-typedef struct osl_thread_impl_st
+typedef struct SAL_DLLPRIVATE osl_thread_impl_st
 {
     pthread_t           m_hThread;
     oslThreadIdentifier m_Ident; /* @@@ see TODO @@@ */
@@ -86,7 +86,7 @@ typedef struct osl_thread_impl_st
     pthread_cond_t      m_Cond;
 } Thread_Impl;
 
-struct osl_thread_priority_st
+struct SAL_DLLPRIVATE osl_thread_priority_st
 {
     int m_Highest;
     int m_Above_Normal;
@@ -98,7 +98,7 @@ struct osl_thread_priority_st
 #define OSL_THREAD_PRIORITY_INITIALIZER { 127, 96, 64, 32, 0 }
 static void osl_thread_priority_init_Impl();
 
-struct osl_thread_textencoding_st
+struct SAL_DLLPRIVATE osl_thread_textencoding_st
 {
     pthread_key_t    m_key;     /* key to store thread local text encoding */
     rtl_TextEncoding m_default; /* the default text encoding */
@@ -107,7 +107,7 @@ struct osl_thread_textencoding_st
 #define OSL_THREAD_TEXTENCODING_INITIALIZER { 0, RTL_TEXTENCODING_DONTKNOW }
 static void osl_thread_textencoding_init_Impl();
 
-struct osl_thread_global_st
+struct SAL_DLLPRIVATE osl_thread_global_st
 {
     pthread_once_t                    m_once;
     struct osl_thread_priority_st     m_priority;
@@ -555,7 +555,7 @@ void SAL_CALL osl_setThreadName(char const * name)
 
 /* osl_getThreadIdentifier @@@ see TODO @@@ */
 
-struct HashEntry
+struct SAL_DLLPRIVATE HashEntry
 {
     pthread_t            Handle;
     oslThreadIdentifier  Ident;
@@ -951,7 +951,7 @@ oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread)
     return Priority;
 }
 
-struct wrapper_pthread_key
+struct SAL_DLLPRIVATE wrapper_pthread_key
 {
     pthread_key_t m_key;
     oslThreadKeyCallbackFunction pfnCallback;

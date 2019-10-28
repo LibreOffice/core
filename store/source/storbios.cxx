@@ -43,7 +43,7 @@ using namespace store;
  *======================================================================*/
 #define STORE_MAGIC_SUPERBLOCK sal_uInt32(0x484D5343)
 
-struct OStoreSuperBlock
+struct SAL_DLLPRIVATE OStoreSuperBlock
 {
     typedef OStorePageGuard      G;
     typedef OStorePageDescriptor D;

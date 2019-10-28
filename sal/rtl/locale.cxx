@@ -26,7 +26,7 @@
 #include <memory>
 #include <unordered_map>
 
-struct locale_deleter
+struct SAL_DLLPRIVATE locale_deleter
 {
     void operator() (rtl_Locale* p) noexcept
     {

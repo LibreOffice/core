@@ -60,7 +60,7 @@
 #include <android/asset_manager.h>
 #endif
 
-struct FileHandle_Impl
+struct SAL_DLLPRIVATE FileHandle_Impl
 {
     pthread_mutex_t m_mutex;
     rtl_String *    m_strFilePath; /*< holds native file path */

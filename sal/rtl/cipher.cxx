@@ -105,7 +105,7 @@ typedef rtlCipherError(cipher_update_t) (
 
 typedef void (cipher_delete_t) (rtlCipher Cipher);
 
-struct Cipher_Impl
+struct SAL_DLLPRIVATE Cipher_Impl
 {
     rtlCipherAlgorithm  m_algorithm;
     rtlCipherDirection  m_direction;
@@ -195,20 +195,20 @@ void SAL_CALL rtl_cipher_destroy(rtlCipher Cipher) SAL_THROW_EXTERN_C()
 #if !defined LIBO_CIPHER_OPENSSL_BACKEND
 #define CIPHER_ROUNDS_BF 16
 
-struct CipherKeyBF
+struct SAL_DLLPRIVATE CipherKeyBF
 {
     sal_uInt32 m_S[4][256];
     sal_uInt32 m_P[CIPHER_ROUNDS_BF + 2];
 };
 #endif
 
-struct CipherContextBF
+struct SAL_DLLPRIVATE CipherContextBF
 {
 #if defined LIBO_CIPHER_OPENSSL_BACKEND
     EVP_CIPHER_CTX * m_context;
 #else
     CipherKeyBF    m_key;
-    union
+    union SAL_DLLPRIVATE
     {
         sal_uInt32 m_long[2];
         sal_uInt8  m_byte[8];
@@ -217,7 +217,7 @@ struct CipherContextBF
 #endif
 };
 
-struct CipherBF_Impl
+struct SAL_DLLPRIVATE CipherBF_Impl
 {
     Cipher_Impl     m_cipher;
     CipherContextBF m_context;
@@ -1150,7 +1150,7 @@ void SAL_CALL rtl_cipher_destroyBF(rtlCipher Cipher) SAL_THROW_EXTERN_C()
 #define CIPHER_CBLOCK_ARCFOUR 256
 #endif
 
-struct ContextARCFOUR_Impl
+struct SAL_DLLPRIVATE ContextARCFOUR_Impl
 {
 #if defined LIBO_CIPHER_OPENSSL_BACKEND
     EVP_CIPHER_CTX * m_context;
@@ -1160,7 +1160,7 @@ struct ContextARCFOUR_Impl
 #endif
 };
 
-struct CipherARCFOUR_Impl
+struct SAL_DLLPRIVATE CipherARCFOUR_Impl
 {
     Cipher_Impl         m_cipher;
     ContextARCFOUR_Impl m_context;

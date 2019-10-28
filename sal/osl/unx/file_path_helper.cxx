@@ -160,7 +160,7 @@ bool osl_systemPathIsLocalOrParentDirectoryEntry(
 
 /** Simple iterator for a path list separated by the specified character
 */
-class path_list_iterator
+class SAL_DLLPRIVATE path_list_iterator
 {
 public:
 

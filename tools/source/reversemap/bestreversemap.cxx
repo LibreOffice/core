@@ -13,7 +13,7 @@
 #include <cstdlib>
 #include <stdio.h>
 
-struct Encoder
+struct SAL_DLLPRIVATE Encoder
 {
     rtl_UnicodeToTextConverter const m_aConverter;
     bool m_bCapable;

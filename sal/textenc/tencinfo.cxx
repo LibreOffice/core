@@ -102,13 +102,13 @@ static bool Impl_matchString( const char* pCompStr, const char* pMatchStr )
 
 /* ======================================================================= */
 
-struct ImplStrCharsetDef
+struct SAL_DLLPRIVATE ImplStrCharsetDef
 {
     const char*             mpCharsetStr;
     rtl_TextEncoding const  meTextEncoding;
 };
 
-struct ImplStrFirstPartCharsetDef
+struct SAL_DLLPRIVATE ImplStrFirstPartCharsetDef
 {
     const char*             mpCharsetStr;
     const ImplStrCharsetDef*    mpSecondPartTab;

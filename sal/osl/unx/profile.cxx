@@ -51,12 +51,12 @@
 
 typedef time_t  osl_TStamp;
 
-enum osl_TLockMode
+enum SAL_DLLPRIVATE osl_TLockMode
 {
     un_lock, read_lock, write_lock
 };
 
-struct osl_TFile
+struct SAL_DLLPRIVATE osl_TFile
 {
     int     m_Handle;
     sal_Char*   m_pReadPtr;
@@ -66,14 +66,14 @@ struct osl_TFile
     sal_uInt32  m_nWriteBufFree;
 };
 
-struct osl_TProfileEntry
+struct SAL_DLLPRIVATE osl_TProfileEntry
 {
     sal_uInt32  m_Line;
     sal_uInt32  m_Offset;
     sal_uInt32  m_Len;
 };
 
-struct osl_TProfileSection
+struct SAL_DLLPRIVATE osl_TProfileSection
 {
     sal_uInt32  m_Line;
     sal_uInt32  m_Offset;
@@ -84,7 +84,7 @@ struct osl_TProfileSection
 };
 
 /* Profile-data structure hidden behind oslProfile: */
-struct osl_TProfileImpl
+struct SAL_DLLPRIVATE osl_TProfileImpl
 {
     sal_uInt32  m_Flags;
     osl_TFile*  m_pFile;

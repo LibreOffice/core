@@ -113,7 +113,7 @@ OUString recursivelyExpandMacros(
 
 } // end namespace
 
-struct rtl_bootstrap_NameValue
+struct SAL_DLLPRIVATE rtl_bootstrap_NameValue
 {
     OUString sName;
     OUString sValue;
@@ -281,7 +281,7 @@ static void EnsureNoFinalSlash (OUString & url)
         url = url.copy(0, i - 1);
 }
 
-struct Bootstrap_Impl
+struct SAL_DLLPRIVATE Bootstrap_Impl
 {
     sal_Int32 _nRefCount;
     Bootstrap_Impl * _base_ini;

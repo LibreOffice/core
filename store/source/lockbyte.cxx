@@ -143,7 +143,7 @@ storeError ILockBytes::flush()
 namespace store
 {
 
-struct FileHandle
+struct SAL_DLLPRIVATE FileHandle
 {
     oslFileHandle m_handle;
 
@@ -274,7 +274,7 @@ struct FileHandle
     typedef CloseFile destructor_type;
 };
 
-class FileLockBytes :
+class SAL_DLLPRIVATE FileLockBytes :
     public store::OStoreObject,
     public store::ILockBytes
 {
@@ -442,7 +442,7 @@ storeError FileLockBytes::flush_Impl()
 namespace store
 {
 
-struct FileMapping
+struct SAL_DLLPRIVATE FileMapping
 {
     sal_uInt8 * m_pAddr;
     sal_uInt32  m_nSize;
@@ -497,7 +497,7 @@ struct FileMapping
     typedef UnmapFile destructor_type;
 };
 
-class MappedLockBytes :
+class SAL_DLLPRIVATE MappedLockBytes :
     public store::OStoreObject,
     public store::PageData::Allocator,
     public store::ILockBytes
@@ -641,7 +641,7 @@ storeError MappedLockBytes::flush_Impl()
 namespace store
 {
 
-class MemoryLockBytes :
+class SAL_DLLPRIVATE MemoryLockBytes :
     public store::OStoreObject,
     public store::ILockBytes
 {
@@ -804,7 +804,7 @@ storeError MemoryLockBytes::flush_Impl()
 namespace store
 {
 
-template< class T > struct ResourceHolder
+template< class T > struct SAL_DLLPRIVATE ResourceHolder
 {
     typedef typename T::destructor_type destructor_type;
 

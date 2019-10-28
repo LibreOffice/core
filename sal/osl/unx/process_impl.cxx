@@ -140,7 +140,7 @@ oslProcessError bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
 
 #endif
 
-struct CommandArgs_Impl
+struct SAL_DLLPRIVATE CommandArgs_Impl
 {
     pthread_mutex_t m_mutex;
     sal_uInt32      m_nCount;
@@ -409,7 +409,7 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir
     return result;
 }
 
-struct ProcessLocale_Impl
+struct SAL_DLLPRIVATE ProcessLocale_Impl
 {
     pthread_mutex_t m_mutex;
     rtl_Locale *    m_pLocale;
