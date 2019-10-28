@@ -391,7 +391,7 @@ sub create_package
 
             chdir $localfrom;
 
-            if ( defined($ENV{'MACOSX_CODESIGNING_IDENTITY'}) && $ENV{'MACOSX_CODESIGNING_IDENTITY'} ne "" ) {
+            if ( $ENV{'MACOSX_CODESIGNING_IDENTITY'} ) {
                 my @lp_sign = ('codesign', '--verbose', '--sign', $ENV{'MACOSX_CODESIGNING_IDENTITY'}, '--deep', $appfolder);
                 if (system(@lp_sign) == 0) {
                     $infoline = "Success: \"@lp_sign\" executed successfully!\n";
@@ -405,7 +405,7 @@ sub create_package
         {
             my $subdir = "$tempdir/$packagename/$volume_name_classic_app.app/Contents/Resources";
             if ( ! -d $subdir ) { installer::systemactions::create_directory($subdir); }
-            if ( defined($ENV{'MACOSX_CODESIGNING_IDENTITY'}) && $ENV{'MACOSX_CODESIGNING_IDENTITY'} ne "" )
+            if ( $ENV{'MACOSX_CODESIGNING_IDENTITY'} )
             {
                 $systemcall = "$ENV{'SRCDIR'}/solenv/bin/macosx-codesign-app-bundle $localtempdir/$folder/$volume_name_classic_app.app";
                 print "... $systemcall ...\n";
@@ -425,7 +425,35 @@ sub create_package
                 }
             }
         }
+        elsif ($volume_name_classic_app eq 'LibreOffice SDK' || $volume_name_classic_app eq 'LibreOfficeDev SDK')
+        {
+            if ( $ENV{'MACOSX_CODESIGNING_IDENTITY'} )
+            {
+                my $sdkbindir = "$localtempdir/$folder/$allvariables->{'PRODUCTNAME'}$allvariables->{'PRODUCTVERSION'}_SDK/bin";
+                opendir(my $dh, $sdkbindir);
+                foreach my $sdkbinary (readdir $dh) {
+                    next unless -f "$sdkbindir/$sdkbinary";
+                    $systemcall = "codesign --force --verbose --options=runtime --identifier='$ENV{MACOSX_BUNDLE_IDENTIFIER}.$sdkbinary' --sign '$ENV{MACOSX_CODESIGNING_IDENTITY}' --entitlements $ENV{SRCDIR}/hardened_runtime.xcent $sdkbindir/$sdkbinary > /tmp/codesign_losdk_$sdkbinary.log 2>&1";
+                    print "... $systemcall ...\n";
+                    my $returnvalue = system($systemcall);
+                    $infoline = "Systemcall: $systemcall\n";
+                    push( @installer::globals::logfileinfo, $infoline);
 
+                    if ($returnvalue)
+                    {
+                        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                    }
+                    else
+                    {
+                        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                        unlink "/tmp/codesign_losdk_$sdkbinary.log";
+                    }
+                }
+                closedir($dh);
+            }
+        }
         my $megabytes = 1500;
         $megabytes = 2000 if $ENV{'ENABLE_DBGUTIL'};
         $systemcall = "cd $localtempdir && hdiutil create -megabytes $megabytes -srcfolder $folder $archive -ov -fs HFS+ -volname \"$volume_name\" -format UDBZ";
@@ -695,3 +723,5 @@ sub create_simple_package
 }
 
 1;
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:
