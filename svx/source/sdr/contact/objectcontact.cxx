@@ -31,26 +31,6 @@ using namespace com::sun::star;
 
 namespace sdr { namespace contact {
 
-bool ObjectContact::supportsGridOffsets() const
-{
-    // default does not support GridOffset
-    return false;
-}
-
-void ObjectContact::calculateGridOffsetForViewOjectContact(
-    basegfx::B2DVector& /*rTarget*/,
-    const ViewObjectContact& /*rClient*/) const
-{
-    // default does not on-demand calculate GridOffset
-}
-
-void ObjectContact::calculateGridOffsetForB2DRange(
-    basegfx::B2DVector& /*rTarget*/,
-    const basegfx::B2DRange& /*rB2DRange*/) const
-{
-    // default does not on-demand calculate GridOffset
-}
-
 ObjectContact::ObjectContact()
 :   maViewObjectContactVector(),
     maPrimitiveAnimator(),
@@ -203,15 +183,23 @@ OutputDevice* ObjectContact::TryToGetOutputDevice() const
     return nullptr;
 }
 
-void ObjectContact::resetAllGridOffsets()
+void ObjectContact::resetViewPort()
 {
-    const sal_uInt32 nVOCCount(getViewObjectContactCount());
+    const drawinglayer::geometry::ViewInformation2D& rCurrentVI2D = getViewInformation2D();
 
-    for(sal_uInt32 a(0); a < nVOCCount; a++)
+    if(!rCurrentVI2D.getViewport().isEmpty())
     {
-        ViewObjectContact* pVOC(getViewObjectContact(a));
-        assert(pVOC && "ObjectContact: ViewObjectContact list Corrupt (!)");
-        pVOC->resetGridOffset();
+        const basegfx::B2DRange aEmptyRange;
+
+        drawinglayer::geometry::ViewInformation2D aNewVI2D(
+            rCurrentVI2D.getObjectTransformation(),
+            rCurrentVI2D.getViewTransformation(),
+            aEmptyRange,
+            rCurrentVI2D.getVisualizedPage(),
+            rCurrentVI2D.getViewTime(),
+            rCurrentVI2D.getExtendedInformationSequence());
+
+        updateViewInformation2D(aNewVI2D);
     }
 }
 

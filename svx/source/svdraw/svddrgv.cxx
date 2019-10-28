@@ -40,7 +40,6 @@
 #include <svx/polypolygoneditor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/sdrpagewindow.hxx>
 
 using namespace sdr;
 
@@ -221,19 +220,6 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
         }
 
         Point aPnt(rPnt);
-        basegfx::B2DVector aGridOffset(0.0, 0.0);
-
-        // Coordinate maybe affected by GridOffset, so we may need to
-        // adapt to Model-coordinates here
-        if(getPossibleGridOffsetForPosition(
-            aGridOffset,
-            basegfx::B2DPoint(aPnt.X(), aPnt.Y()),
-            GetSdrPageView()))
-        {
-            aPnt.AdjustX(basegfx::fround(-aGridOffset.getX()));
-            aPnt.AdjustY(basegfx::fround(-aGridOffset.getY()));
-        }
-
         if(pHdl == nullptr
             || pHdl->GetKind() == SdrHdlKind::Move
             || pHdl->GetKind() == SdrHdlKind::MirrorAxis
@@ -522,19 +508,6 @@ void SdrDragView::MovDragObj(const Point& rPnt)
     if (mpCurrentSdrDragMethod)
     {
         Point aPnt(rPnt);
-        basegfx::B2DVector aGridOffset(0.0, 0.0);
-
-        // Coordinate maybe affected by GridOffset, so we may need to
-        // adapt to Model-coordinates here
-        if(getPossibleGridOffsetForPosition(
-            aGridOffset,
-            basegfx::B2DPoint(aPnt.X(), aPnt.Y()),
-            GetSdrPageView()))
-        {
-            aPnt.AdjustX(basegfx::fround(-aGridOffset.getX()));
-            aPnt.AdjustY(basegfx::fround(-aGridOffset.getY()));
-        }
-
         ImpLimitToWorkArea(aPnt);
         mpCurrentSdrDragMethod->MoveSdrDrag(aPnt); // this call already makes a Hide()/Show combination
     }
@@ -807,35 +780,17 @@ void SdrDragView::ShowDragObj()
 {
     if(mpCurrentSdrDragMethod && !maDragStat.IsShown())
     {
-        // Changed for the GridOffset stuff: No longer iterate over
-        // SdrPaintWindow(s), but now over SdrPageWindow(s), so doing the
-        // same as the SdrHdl visualizations (see ::CreateB2dIAObject) do.
-        // This is needed to get access to a ObjectContact which is needed
-        // to evtl. process that GridOffset in CreateOverlayGeometry
-        SdrPageView* pPageView(GetSdrPageView());
-
-        if(nullptr != pPageView)
+        for(sal_uInt32 a(0); a < PaintWindowCount(); a++)
         {
-            for(sal_uInt32 a(0); a < pPageView->PageWindowCount(); a++)
+            SdrPaintWindow* pCandidate = GetPaintWindow(a);
+            const rtl::Reference<sdr::overlay::OverlayManager>& xOverlayManager = pCandidate->GetOverlayManager();
+
+            if (xOverlayManager.is())
             {
-                const SdrPageWindow& rPageWindow(*pPageView->GetPageWindow(a));
-                const SdrPaintWindow& rPaintWindow(rPageWindow.GetPaintWindow());
+                mpCurrentSdrDragMethod->CreateOverlayGeometry(*xOverlayManager);
 
-                if(rPaintWindow.OutputToWindow())
-                {
-                    const rtl::Reference<sdr::overlay::OverlayManager>& xOverlayManager(
-                        rPaintWindow.GetOverlayManager());
-
-                    if(xOverlayManager.is())
-                    {
-                        mpCurrentSdrDragMethod->CreateOverlayGeometry(
-                            *xOverlayManager,
-                            rPageWindow.GetObjectContact());
-
-                        // #i101679# Force changed overlay to be shown
-                        xOverlayManager->flush();
-                    }
-                }
+                // #i101679# Force changed overlay to be shown
+                xOverlayManager->flush();
             }
         }
 

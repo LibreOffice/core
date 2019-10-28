@@ -26,6 +26,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 
+#include <svx/sdr/overlay/overlaymanager.hxx>
+//#include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -46,7 +48,9 @@
 #include "CustomAnimationPane.hxx"
 #include <View.hxx>
 #include "motionpathtag.hxx"
+//#include <sdpage.hxx>
 #include <ViewShell.hxx>
+//#include <app.hrc>
 #include <Window.hxx>
 
 #include <svx/sdr/contact/viewcontact.hxx>
@@ -290,10 +294,8 @@ void SdPathHdl::CreateB2dIAObject()
                 std::unique_ptr<sdr::overlay::OverlayObject> pNew(new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence));
 
                 // OVERLAYMANAGER
-                insertNewlyCreatedOverlayObjectForSdrHdl(
-                    std::move(pNew),
-                    rPageWindow.GetObjectContact(),
-                    *xManager);
+                xManager->add(*pNew);
+                maOverlayGroup.append(std::move(pNew));
             }
         }
     }
