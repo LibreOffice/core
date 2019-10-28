@@ -714,22 +714,14 @@ void SvpSalGraphics::drawPixel( long nX, long nY )
     }
 }
 
-void SvpSalGraphics::drawPixel( long nX, long nY, Color nColor )
+void SvpSalGraphics::drawPixel( long nX, long nY, Color aColor )
 {
-    Color aOrigFillColor = m_aFillColor;
-    Color aOrigLineColor = m_aLineColor;
+    cairo_t* cr = getCairoContext(true);
+    clipRegion(cr);
 
-    basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+1, nY+1));
-    m_aLineColor = SALCOLOR_NONE;
-    m_aFillColor = nColor;
-
-    drawPolyPolygon(
-        basegfx::B2DHomMatrix(),
-        basegfx::B2DPolyPolygon(aRect),
-        0.0);
-
-    m_aFillColor = aOrigFillColor;
-    m_aLineColor = aOrigLineColor;
+    cairo_rectangle(cr, nX, nY, 1, 1);
+    applyColor(cr, aColor, 0.0);
+    cairo_fill(cr);
 }
 
 void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
