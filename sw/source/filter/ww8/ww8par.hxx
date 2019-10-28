@@ -132,9 +132,13 @@ struct WW8LFOInfo;
 
 class WW8Reader : public StgReader
 {
+    std::shared_ptr<SvStream> mDecodedStream;
     virtual ErrCode Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
     ErrCode OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uInt16& rBuffSize );
+    ErrCode DecryptDRMPackage();
 public:
+    WW8Reader() {}
+    ~WW8Reader() {}
     virtual SwReaderType GetReaderType() override;
 
     virtual bool HasGlossaries() const override;

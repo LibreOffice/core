@@ -25,12 +25,14 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/packages/XPackageEncryption.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <i18nlangtag/languagetag.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/streamwrap.hxx>
 #include <rtl/random.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -6329,6 +6331,95 @@ ErrCode WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uIn
     return nRet;
 }
 
+void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHashMap& aStreamsData, const OUString& sPrefix)
+{
+    SvStorageInfoList aElements;
+    pStorage->FillInfoList(&aElements);
+    for (const auto & aElement : aElements)
+    {
+        OUString sStreamFullName = sPrefix.getLength() ? sPrefix + "/" + aElement.GetName() : aElement.GetName();
+        if (aElement.IsStorage())
+        {
+            SotStorage * pSubStorage = pStorage->OpenSotStorage(aElement.GetName(), StreamMode::STD_READ | StreamMode::SHARE_DENYALL);
+            lcl_getListOfStreams(pSubStorage, aStreamsData, sStreamFullName);
+        }
+        else
+        {
+            // Read stream
+            tools::SvRef<SotStorageStream> rStream = pStorage->OpenSotStream(aElement.GetName(), StreamMode::READ | StreamMode::SHARE_DENYALL);
+            assert(rStream.is());
+
+            sal_Int32 nStreamSize = rStream->GetSize();
+            css::uno::Sequence< sal_Int8 > oData;
+            oData.realloc(nStreamSize);
+            sal_Int32 nReadBytes = rStream->ReadBytes(oData.getArray(), nStreamSize);
+            assert(nStreamSize == nReadBytes);
+            aStreamsData[sStreamFullName] <<= oData;
+        }
+    }
+}
+
+ErrCode WW8Reader::DecryptDRMPackage()
+{
+    // We have DRM encrypted storage. We should try to decrypt it first, if we can
+    uno::Sequence< uno::Any > aArguments;
+    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+    uno::Reference< packages::XPackageEncryption > xPackageEncryption(
+        xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            "com.sun.star.comp.oox.crypto.DRMDataSpace", aArguments, xComponentContext), uno::UNO_QUERY);
+
+    if (!xPackageEncryption.is())
+    {
+        // We do not know how to decrypt this
+        return ERRCODE_IO_ACCESSDENIED;
+    }
+
+    std::vector<OUString> aStreamsList;
+    comphelper::SequenceAsHashMap aStreamsData;
+    lcl_getListOfStreams(m_pStorage.get(), aStreamsData, OUString(""));
+
+    try {
+        uno::Sequence<beans::NamedValue> aStreams = aStreamsData.getAsConstNamedValueList();
+        if (!xPackageEncryption->readEncryptionInfo(aStreams))
+        {
+            // We failed with decryption
+            return ERRCODE_IO_ACCESSDENIED;
+        }
+
+        tools::SvRef<SotStorageStream> rContentStream = m_pStorage->OpenSotStream("\011DRMContent", StreamMode::READ | StreamMode::SHARE_DENYALL);
+        if (!rContentStream.is())
+        {
+            return ERRCODE_IO_NOTEXISTS;
+        }
+
+        mDecodedStream.reset(new SvMemoryStream());
+
+        uno::Reference<io::XInputStream > xInputStream(new utl::OSeekableInputStreamWrapper(rContentStream.get(), false));
+        uno::Reference<io::XOutputStream > xDecryptedStream(new utl::OSeekableOutputStreamWrapper(*mDecodedStream.get()));
+
+        if (!xPackageEncryption->decrypt(xInputStream, xDecryptedStream))
+        {
+            // We failed with decryption
+            return ERRCODE_IO_ACCESSDENIED;
+        }
+
+        mDecodedStream->Seek(0);
+
+        // Further reading is done from new document
+        m_pStorage = new SotStorage(*mDecodedStream);
+
+        // Set the media descriptor data
+        uno::Sequence<beans::NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData("");
+        m_pMedium->GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::makeAny(aEncryptionData)));
+    }
+    catch (const std::exception&)
+    {
+        return ERRCODE_IO_ACCESSDENIED;
+    }
+
+    return ERRCODE_NONE;
+}
+
 ErrCode WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, const OUString & /* FileName */)
 {
     sal_uInt16 nOldBuffSize = 32768;
@@ -6360,7 +6451,13 @@ ErrCode WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, cons
 
         if( m_pStorage.is() )
         {
-            nRet = OpenMainStream( refStrm, nOldBuffSize );
+            // Check if we have special encrypted content
+            tools::SvRef<SotStorageStream> rRef = m_pStorage->OpenSotStream("\006DataSpaces/DataSpaceInfo/\011DRMDataSpace", StreamMode::READ | StreamMode::SHARE_DENYALL);
+            if (rRef.is())
+            {
+                nRet = DecryptDRMPackage();
+            }
+            nRet = OpenMainStream(refStrm, nOldBuffSize);
             pIn = refStrm.get();
         }
         else
