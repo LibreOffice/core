@@ -1,0 +1,12 @@
+diff -ur libfreehand.org/src/lib/libfreehand_utils.cpp libfreehand/src/lib/libfreehand_utils.cpp
+--- libfreehand.org/src/lib/libfreehand_utils.cpp	2017-09-16 12:28:50.000000000 +0200
++++ libfreehand/src/lib/libfreehand_utils.cpp	2019-10-28 23:02:38.581354923 +0100
+@@ -162,7 +162,7 @@
+   while (j < length)
+   {
+     UChar32 c;
+-    U16_NEXT(s, j, length, c)
++    U16_NEXT(s, j, length, c);
+     unsigned char outbuf[U8_MAX_LENGTH+1];
+     int i = 0;
+     U8_APPEND_UNSAFE(&outbuf[0], i, c);
