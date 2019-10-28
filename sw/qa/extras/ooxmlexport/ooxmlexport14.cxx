@@ -14,6 +14,7 @@
 
 #include <editsh.hxx>
 #include <frmatr.hxx>
+#include <com/sun/star/text/TableColumnSeparator.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -30,6 +31,23 @@ protected:
     }
 };
 
+
+DECLARE_OOXMLEXPORT_TEST(testTdf120315, "tdf120315.docx")
+{
+    // tdf#120315 cells of the second column weren't vertically merged
+    // because their horizontal positions are different a little bit
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
+    CPPUNIT_ASSERT_EQUAL(getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                             xTableRows->getByIndex(0), "TableColumnSeparators")[0]
+                             .Position,
+                         getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                             xTableRows->getByIndex(1), "TableColumnSeparators")[2]
+                             .Position);
+}
 
 DECLARE_OOXMLEXPORT_TEST(testTdf108350_noFontdefaults, "tdf108350_noFontdefaults.docx")
 {
