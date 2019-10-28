@@ -1184,7 +1184,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
                 bHasItem = true;
             }
-            else if(SfxItemState::SET == pArgs->GetItemState(SID_ATTR_CHAR_COLOR2_STR, false, &pColorStringItem))
+            else if(SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
             {
                 sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
                 aSet = Color(sColor.toInt32(16));
@@ -1212,7 +1212,20 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT:
         case SID_ATTR_CHAR_COLOR_EXT:
         {
-            Color aSet = pItem ? static_cast<const SvxColorItem*>(pItem)->GetValue() : COL_TRANSPARENT;
+            Color aSet;
+            OUString sColor;
+            const SfxPoolItem* pColorStringItem = nullptr;
+
+            if (pItem)
+            {
+                aSet = pItem ? static_cast<const SvxColorItem*>(pItem)->GetValue() : COL_TRANSPARENT;
+            }
+            else if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
+            {
+                sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
+                aSet = Color(sColor.toInt32(16));
+            }
+
             SwEditWin& rEdtWin = GetView().GetEditWin();
             if (nSlot != SID_ATTR_CHAR_COLOR_EXT)
                 rEdtWin.SetWaterCanTextBackColor(aSet);
