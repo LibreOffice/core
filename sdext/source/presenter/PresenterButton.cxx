@@ -130,7 +130,6 @@ PresenterButton::PresenterButton (
         xPeer->setBackground(0xff000000);
 
         mxWindow->setVisible(true);
-        mxWindow->addWindowListener(this);
         mxWindow->addPaintListener(this);
         mxWindow->addMouseListener(this);
         mxWindow->addMouseMotionListener(this);
@@ -156,7 +155,6 @@ void SAL_CALL PresenterButton::disposing()
 
     if (mxWindow.is())
     {
-        mxWindow->removeWindowListener(this);
         mxWindow->removePaintListener(this);
         mxWindow->removeMouseListener(this);
         mxWindow->removeMouseMotionListener(this);
@@ -223,28 +221,6 @@ css::geometry::IntegerSize2D const & PresenterButton::GetSize()
     if (maButtonSize.Width < 0)
         CalculateButtonSize();
     return maButtonSize;
-}
-
-//----- XWindowListener -------------------------------------------------------
-
-void SAL_CALL PresenterButton::windowResized (const css::awt::WindowEvent&)
-{
-    ThrowIfDisposed();
-}
-
-void SAL_CALL PresenterButton::windowMoved (const css::awt::WindowEvent&)
-{
-    ThrowIfDisposed();
-}
-
-void SAL_CALL PresenterButton::windowShown (const css::lang::EventObject&)
-{
-    ThrowIfDisposed();
-}
-
-void SAL_CALL PresenterButton::windowHidden (const css::lang::EventObject&)
-{
-    ThrowIfDisposed();
 }
 
 //----- XPaintListener --------------------------------------------------------

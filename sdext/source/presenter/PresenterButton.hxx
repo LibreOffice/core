@@ -39,7 +39,6 @@ namespace sdext { namespace presenter {
 class PresenterController;
 
 typedef ::cppu::WeakComponentImplHelper <
-    css::awt::XWindowListener,
     css::awt::XPaintListener,
     css::awt::XMouseListener,
     css::awt::XMouseMotionListener
@@ -71,16 +70,6 @@ public:
         const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow);
     css::geometry::IntegerSize2D const & GetSize();
-
-    // XWindowListener
-
-    virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent) override;
-
-    virtual void SAL_CALL windowMoved (const css::awt::WindowEvent& rEvent) override;
-
-    virtual void SAL_CALL windowShown (const css::lang::EventObject& rEvent) override;
-
-    virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent) override;
 
     // XPaintListener
 
