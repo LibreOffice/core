@@ -204,8 +204,7 @@ bool StringAdd::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* operatorCall
         && !tc.Class("OString").Namespace("rtl").GlobalNamespace())
         return true;
 
-    auto check = [operatorCall, this, &tc](unsigned arg) {
-        (void)tc;
+    auto check = [operatorCall, this](unsigned arg) {
         auto const e
             = dyn_cast<CXXFunctionalCastExpr>(operatorCall->getArg(arg)->IgnoreParenImpCasts());
         if (e == nullptr)
