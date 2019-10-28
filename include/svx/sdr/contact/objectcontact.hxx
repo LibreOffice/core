@@ -156,15 +156,13 @@ public:
     /// access to OutputDevice. May return 0L like the default implementations do. Override as needed.
     virtual OutputDevice* TryToGetOutputDevice() const;
 
-    // interface to support GridOffset for non-linear ViewToDevice transformation (calc)
-    virtual bool supportsGridOffsets() const;
-    virtual void calculateGridOffsetForViewOjectContact(
-        basegfx::B2DVector& rTarget,
-        const ViewObjectContact& rClient) const;
-    virtual void calculateGridOffsetForB2DRange(
-        basegfx::B2DVector& rTarget,
-        const basegfx::B2DRange& rB2DRange) const;
-    void resetAllGridOffsets();
+    // reset ViewPort at internal ViewInformation2D. This is needed when the OC is used
+    // not for ProcessDisplay() but to get a VOC associated with it. When trying to get
+    // a sequence of primitives from the VOC then, the last initialized ViewPort from
+    // the last ProcessDisplay() is used for geometric visibility testing. If this is not
+    // wanted (like in such cases) this method is used. It will reuse the current
+    // ViewInformation2D, but clear the ViewPort (no ViewPort means all is visible)
+    void resetViewPort();
 };
 
 }}

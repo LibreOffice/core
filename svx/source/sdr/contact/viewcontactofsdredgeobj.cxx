@@ -40,7 +40,12 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrEdgeObj::createViewIndependentPrimitive2DSequence() const
         {
-            const basegfx::B2DPolygon aEdgeTrack(GetEdgeObj().getEdgeTrack());
+            basegfx::B2DPolygon aEdgeTrack = GetEdgeObj().getEdgeTrack();
+            Point aGridOff = GetEdgeObj().GetGridOffset();
+            // Hack for calc, transform position of object according
+            // to current zoom so as objects relative position to grid
+            // appears stable
+            aEdgeTrack.transform( basegfx::utils::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
 
             // what to do when no EdgeTrack is provided (HitTest and selectability) ?
             OSL_ENSURE(0 != aEdgeTrack.count(), "Connectors with no geometry are not allowed (!)");

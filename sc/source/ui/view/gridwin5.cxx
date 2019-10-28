@@ -205,7 +205,7 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
 
             mpNoteMarker.reset(new ScNoteMarker(pLeft, pRight, pBottom, pDiagonal,
                                                 pDoc, aCellPos, aTrackText,
-                                                aMapMode, bLeftEdge, bFast, bKeyboard));
+                                                aMapMode, bLeftEdge, bFast, bKeyboard, pViewData->GetScDrawView()));
         }
 
         bDone = true;       // something is shown (old or new)

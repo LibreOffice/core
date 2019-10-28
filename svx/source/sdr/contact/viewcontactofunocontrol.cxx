@@ -21,7 +21,7 @@
 
 #include <sdr/contact/viewcontactofunocontrol.hxx>
 #include <sdr/contact/viewobjectcontactofunocontrol.hxx>
-#include <svx/sdr/contact/objectcontactofpageview.hxx>
+#include <sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpagv.hxx>
@@ -95,7 +95,13 @@ namespace sdr { namespace contact {
         // create range. Use model data directly, not getBoundRect()/getSnapRect; these will use
         // the primitive data themselves in the long run. Use SdrUnoObj's (which is a SdrRectObj)
         // call to GetGeoRect() to access SdrTextObj::aRect directly and without executing anything
-        const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(GetSdrUnoObj().GetGeoRect());
+        tools::Rectangle aRectangle(GetSdrUnoObj().GetGeoRect());
+        // Hack for calc, transform position of object according
+        // to current zoom so as objects relative position to grid
+        // appears stable
+        Point aGridOffset = GetSdrUnoObj().GetGridOffset();
+        aRectangle += aGridOffset;
+        const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(aRectangle);
 
         // create object transform
         basegfx::B2DHomMatrix aTransform;

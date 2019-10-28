@@ -51,7 +51,6 @@
 //         SdrView         View
 
 class SvxURLField;
-namespace sdr { namespace contact { class ObjectContact; }}
 
 enum class SdrViewContext {
     Standard,
@@ -236,12 +235,6 @@ public:
     SvtAccessibilityOptions& getAccessibilityOptions() { return maAccessibilityOptions;}
 
     virtual void onAccessibilityOptionsChanged();
-
-    // Do not create ObjectContact locally, but offer a call to allow override
-    // and to create own derivations of ObjectContact
-    virtual sdr::contact::ObjectContact* createViewSpecificObjectContact(
-        SdrPageWindow& rPageWindow,
-        const sal_Char* pDebugName) const;
 };
 
 // First of all the app creates a SdrModel.

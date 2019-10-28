@@ -209,9 +209,7 @@ void E3dDragMethod::MoveSdrDrag(const Point& /*rPnt*/)
 // Draw the wire frame model
 
 // for migration from XOR to overlay
-void E3dDragMethod::CreateOverlayGeometry(
-    sdr::overlay::OverlayManager& rOverlayManager,
-    const sdr::contact::ObjectContact& rObjectContact)
+void E3dDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager)
 {
     const sal_uInt32 nCnt(maGrp.size());
     basegfx::B2DPolyPolygon aResult;
@@ -251,14 +249,10 @@ void E3dDragMethod::CreateOverlayGeometry(
 
     if(aResult.count())
     {
-        std::unique_ptr<sdr::overlay::OverlayPolyPolygonStripedAndFilled> pNew(
-            new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
-                aResult));
-
-        insertNewlyCreatedOverlayObjectForSdrDragMethod(
-            std::move(pNew),
-            rObjectContact,
-            rOverlayManager);
+        std::unique_ptr<sdr::overlay::OverlayPolyPolygonStripedAndFilled> pNew(new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+            aResult));
+        rOverlayManager.add(*pNew);
+        addToOverlayObjectList(std::move(pNew));
     }
 }
 

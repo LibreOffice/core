@@ -997,14 +997,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
             // Ok, here is more nastiness, from xml the Anchor is in terms of the LogicRect which is the
             // untransformed unrotated shape, here we swap out that initial anchor and from now on use
             // an Anchor based on the SnapRect ( which is what you see on the screen )
-            const tools::Rectangle aObjRect(pObj->GetSnapRect());
-            ScDrawLayer::GetCellAnchorFromPosition(
-                aObjRect,
-                rData,
-                *pDoc,
-                nTab1,
-                false);
-
+            ScDrawLayer::GetCellAnchorFromPosition( *pObj, rData, *pDoc, nTab1, false, false );
             // reset shape to true 'maybe affected by hidden rows/cols' size calculated previously
             pObj->SetLogicRect(rNoRotatedAnchor.getShapeRect());
         }
@@ -2037,25 +2030,13 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
     ScDrawObjData aAnchor;
     // set anchor in terms of the visual ( SnapRect )
     // object ( e.g. for when object is rotated )
-    const tools::Rectangle aObjRect(rObj.GetSnapRect());
-    GetCellAnchorFromPosition(
-        aObjRect,
-        aAnchor,
-        rDoc,
-        nTab);
-
+    GetCellAnchorFromPosition( rObj, aAnchor, rDoc, nTab, false );
     aAnchor.mbResizeWithCell = bResizeWithCell;
     SetCellAnchored( rObj, aAnchor );
     // - keep also an anchor in terms of the Logic ( untransformed ) object
     // because that's what we stored ( and still do ) to xml
     ScDrawObjData aVisAnchor;
-    const tools::Rectangle aObjRect2(rObj.GetLogicRect());
-    GetCellAnchorFromPosition(
-        aObjRect2,
-        aVisAnchor,
-        rDoc,
-        nTab);
-
+    GetCellAnchorFromPosition( rObj, aVisAnchor, rDoc, nTab );
     aVisAnchor.mbResizeWithCell = bResizeWithCell;
     SetVisualCellAnchored( rObj, aVisAnchor );
     // absolutely necessary to set flag that in order to prevent ScDrawLayer::RecalcPos
@@ -2066,38 +2047,35 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
     }
 }
 
-void ScDrawLayer::GetCellAnchorFromPosition(
-    const tools::Rectangle &rObjRect,
-    ScDrawObjData &rAnchor,
-    const ScDocument &rDoc,
-    SCTAB nTab,
-    bool bHiddenAsZero)
+void ScDrawLayer::GetCellAnchorFromPosition( const SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect, bool bHiddenAsZero )
 {
-    ScRange aRange = rDoc.GetRange( nTab, rObjRect, bHiddenAsZero );
+    tools::Rectangle aObjRect( bUseLogicRect ? rObj.GetLogicRect() : rObj.GetSnapRect() );
+    ScRange aRange = rDoc.GetRange( nTab, aObjRect, bHiddenAsZero );
 
     tools::Rectangle aCellRect;
 
     rAnchor.maStart = aRange.aStart;
     aCellRect = rDoc.GetMMRect( aRange.aStart.Col(), aRange.aStart.Row(),
       aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab(), bHiddenAsZero );
-    rAnchor.maStartOffset.setY( rObjRect.Top()-aCellRect.Top() );
+    rAnchor.maStartOffset.setY( aObjRect.Top()-aCellRect.Top() );
     if (!rDoc.IsNegativePage(nTab))
-        rAnchor.maStartOffset.setX( rObjRect.Left()-aCellRect.Left() );
+        rAnchor.maStartOffset.setX( aObjRect.Left()-aCellRect.Left() );
     else
-        rAnchor.maStartOffset.setX( aCellRect.Right()-rObjRect.Right() );
+        rAnchor.maStartOffset.setX( aCellRect.Right()-aObjRect.Right() );
 
     rAnchor.maEnd = aRange.aEnd;
     aCellRect = rDoc.GetMMRect( aRange.aEnd.Col(), aRange.aEnd.Row(),
       aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aEnd.Tab(), bHiddenAsZero );
-    if (!rObjRect.IsEmpty())
-        rAnchor.maEndOffset.setY( rObjRect.Bottom()-aCellRect.Top() );
+    if (!aObjRect.IsEmpty())
+        rAnchor.maEndOffset.setY( aObjRect.Bottom()-aCellRect.Top() );
     if (!rDoc.IsNegativePage(nTab))
     {
-        if (!rObjRect.IsEmpty())
-            rAnchor.maEndOffset.setX( rObjRect.Right()-aCellRect.Left() );
+        if (!aObjRect.IsEmpty())
+            rAnchor.maEndOffset.setX( aObjRect.Right()-aCellRect.Left() );
     }
     else
-        rAnchor.maEndOffset.setX( aCellRect.Right()-rObjRect.Left() );
+        rAnchor.maEndOffset.setX( aCellRect.Right()-aObjRect.Left() );
+
 }
 
 void ScDrawLayer::UpdateCellAnchorFromPositionEnd( const SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect )
