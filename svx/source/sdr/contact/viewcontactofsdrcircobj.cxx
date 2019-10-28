@@ -51,7 +51,12 @@ namespace sdr
                     false));
 
             // take unrotated snap rect (direct model data) for position and size
-            const basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(GetCircObj().GetGeoRect());
+            tools::Rectangle aRectangle = GetCircObj().GetGeoRect();
+            // Hack for calc, transform position of object according
+            // to current zoom so as objects relative position to grid
+            // appears stable
+            aRectangle += GetRectObj().GetGridOffset();
+            const basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(aRectangle);
             const GeoStat& rGeoStat(GetCircObj().GetGeoStat());
 
             // fill object matrix

@@ -101,7 +101,11 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrMediaObj::create
 {
     // create range using the model data directly. This is in SdrTextObj::aRect which i will access using
     // GetGeoRect() to not trigger any calculations. It's the unrotated geometry which is okay for MediaObjects ATM.
-    const tools::Rectangle aRectangle(GetSdrMediaObj().GetGeoRect());
+    tools::Rectangle aRectangle(GetSdrMediaObj().GetGeoRect());
+    // Hack for calc, transform position of object according
+    // to current zoom so as objects relative position to grid
+    // appears stable
+    aRectangle += GetSdrMediaObj().GetGridOffset();
     const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(aRectangle);
 
     // create object transform

@@ -437,7 +437,6 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
-#include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
