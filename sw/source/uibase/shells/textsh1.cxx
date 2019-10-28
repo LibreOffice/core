@@ -1212,7 +1212,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
             else if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
             {
                 sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
-                aSet = Color(sColor.toInt32(16));
+                if (sColor == "transparent")
+                    aSet = COL_TRANSPARENT;
+                else
+                    aSet = Color(sColor.toInt32(16));
             }
 
             SwEditWin& rEdtWin = GetView().GetEditWin();
