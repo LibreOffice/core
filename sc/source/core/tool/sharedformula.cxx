@@ -354,7 +354,7 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
     rCell.SetCellGroup(xNone);
 }
 
-void SharedFormulaUtil::unshareFormulaCells(CellStoreType& rCells, std::vector<SCROW>& rRows)
+void SharedFormulaUtil::unshareFormulaCells(const ScDocument* pDoc, CellStoreType& rCells, std::vector<SCROW>& rRows)
 {
     if (rRows.empty())
         return;
@@ -367,12 +367,12 @@ void SharedFormulaUtil::unshareFormulaCells(CellStoreType& rCells, std::vector<S
     std::vector<SCROW> aRows2;
     for (const auto& rRow : rRows)
     {
-        if (rRow > MAXROW)
+        if (rRow > pDoc->MaxRow())
             break;
 
         aRows2.push_back(rRow);
 
-        if (rRow < MAXROW)
+        if (rRow < pDoc->MaxRow())
             aRows2.push_back(rRow+1);
     }
 

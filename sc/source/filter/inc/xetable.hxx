@@ -655,6 +655,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
+    const XclExpRoot&   mrRoot;
     sal_uInt32          mnFirstUsedXclRow;  /// First used row.
     sal_uInt32          mnFirstFreeXclRow;  /// First unused row after used area.
     sal_uInt16          mnFirstUsedXclCol;  /// First used column.

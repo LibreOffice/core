@@ -369,7 +369,7 @@ class SAL_DLLPUBLIC_RTTI ScChangeActionIns : public ScChangeAction
 
     bool const mbEndOfList; /// whether or not a row was auto-inserted at the bottom.
 
-    ScChangeActionIns( const ScRange& rRange, bool bEndOfList = false );
+    ScChangeActionIns( const ScDocument* pDoc, const ScRange& rRange, bool bEndOfList = false );
 
     virtual void                AddContent( ScChangeActionContent* ) override {}
     virtual void                DeleteCellEntries() override {}
@@ -439,7 +439,7 @@ class ScChangeActionDel final : public ScChangeAction
     SCCOL               nDx;
     SCROW               nDy;
 
-    ScChangeActionDel( const ScRange& rRange, SCCOL nDx, SCROW nDy, ScChangeTrack* );
+    ScChangeActionDel( const ScDocument* pDoc, const ScRange& rRange, SCCOL nDx, SCROW nDy, ScChangeTrack* );
 
     virtual void                AddContent( ScChangeActionContent* ) override;
     virtual void                DeleteCellEntries() override;

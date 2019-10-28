@@ -3835,13 +3835,13 @@ void ScFiltersTest::testEmptyRowsXLSXML()
         };
 
         ScRange aDataRange;
-        aDataRange.Parse("A1:B9");
+        aDataRange.Parse("A1:B9", &rDoc);
         bool bSuccess = checkOutput(&rDoc, aDataRange, aOutputCheck, "Expected output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
     ScAddress aPos;
-    aPos.Parse("B9");
+    aPos.Parse("B9", &rDoc);
     ASSERT_FORMULA_EQUAL(rDoc, aPos, "SUM(B4:B8)", nullptr);
 
     xDocSh->DoClose();

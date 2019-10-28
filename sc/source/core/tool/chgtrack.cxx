@@ -647,15 +647,15 @@ void ScChangeAction::AddDependent( sal_uLong nActionNumber,
 }
 
 //  ScChangeActionIns
-ScChangeActionIns::ScChangeActionIns( const ScRange& rRange, bool bEndOfList ) :
+ScChangeActionIns::ScChangeActionIns( const ScDocument* pDoc, const ScRange& rRange, bool bEndOfList ) :
     ScChangeAction(SC_CAT_NONE, rRange),
     mbEndOfList(bEndOfList)
 {
-    if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == MAXCOL )
+    if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == pDoc->MaxCol() )
     {
         aBigRange.aStart.SetCol( nInt32Min );
         aBigRange.aEnd.SetCol( nInt32Max );
-        if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == MAXROW )
+        if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == pDoc->MaxRow() )
         {
             SetType( SC_CAT_INSERT_TABS );
             aBigRange.aStart.SetRow( nInt32Min );
@@ -664,7 +664,7 @@ ScChangeActionIns::ScChangeActionIns( const ScRange& rRange, bool bEndOfList ) :
         else
             SetType( SC_CAT_INSERT_ROWS );
     }
-    else if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == MAXROW )
+    else if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == pDoc->MaxRow() )
     {
         SetType( SC_CAT_INSERT_COLS );
         aBigRange.aStart.SetRow( nInt32Min );
@@ -763,7 +763,7 @@ bool ScChangeActionIns::Reject( ScDocument* pDoc )
 }
 
 //  ScChangeActionDel
-ScChangeActionDel::ScChangeActionDel( const ScRange& rRange,
+ScChangeActionDel::ScChangeActionDel( const ScDocument* pDoc, const ScRange& rRange,
             SCCOL nDxP, SCROW nDyP, ScChangeTrack* pTrackP )
         :
         ScChangeAction( SC_CAT_NONE, rRange ),
@@ -774,11 +774,11 @@ ScChangeActionDel::ScChangeActionDel( const ScRange& rRange,
         nDx( nDxP ),
         nDy( nDyP )
 {
-    if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == MAXCOL )
+    if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == pDoc->MaxCol() )
     {
         aBigRange.aStart.SetCol( nInt32Min );
         aBigRange.aEnd.SetCol( nInt32Max );
-        if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == MAXROW )
+        if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == pDoc->MaxRow() )
         {
             SetType( SC_CAT_DELETE_TABS );
             aBigRange.aStart.SetRow( nInt32Min );
@@ -787,7 +787,7 @@ ScChangeActionDel::ScChangeActionDel( const ScRange& rRange,
         else
             SetType( SC_CAT_DELETE_ROWS );
     }
-    else if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == MAXROW )
+    else if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == pDoc->MaxRow() )
     {
         SetType( SC_CAT_DELETE_COLS );
         aBigRange.aStart.SetRow( nInt32Min );
@@ -1004,7 +1004,7 @@ bool ScChangeActionDel::Reject( ScDocument* pDoc )
             switch ( GetType() )
             {
                 case SC_CAT_DELETE_COLS :
-                    if ( !(aRange.aStart.Col() == 0 && aRange.aEnd.Col() == MAXCOL) )
+                    if ( !(aRange.aStart.Col() == 0 && aRange.aEnd.Col() == pDoc->MaxCol()) )
                     {   // Only if not TabDelete
                         bOk = pDoc->CanInsertCol( aRange ) && pDoc->InsertCol( aRange );
                     }
@@ -1851,14 +1851,14 @@ void ScChangeActionContent::PutValueToDoc(
     }
 }
 
-static void lcl_InvalidateReference( formula::FormulaToken& rTok, const ScBigAddress& rPos )
+static void lcl_InvalidateReference( const ScDocument* pDoc, formula::FormulaToken& rTok, const ScBigAddress& rPos )
 {
     ScSingleRefData& rRef1 = *rTok.GetSingleRef();
-    if ( rPos.Col() < 0 || MAXCOL < rPos.Col() )
+    if ( rPos.Col() < 0 || pDoc->MaxCol() < rPos.Col() )
     {
         rRef1.SetColDeleted( true );
     }
-    if ( rPos.Row() < 0 || MAXROW < rPos.Row() )
+    if ( rPos.Row() < 0 || pDoc->MaxRow() < rPos.Row() )
     {
         rRef1.SetRowDeleted( true );
     }
@@ -1869,11 +1869,11 @@ static void lcl_InvalidateReference( formula::FormulaToken& rTok, const ScBigAdd
     if ( rTok.GetType() == formula::svDoubleRef )
     {
         ScSingleRefData& rRef2 = rTok.GetDoubleRef()->Ref2;
-        if ( rPos.Col() < 0 || MAXCOL < rPos.Col() )
+        if ( rPos.Col() < 0 || pDoc->MaxCol() < rPos.Col() )
         {
             rRef2.SetColDeleted( true );
         }
-        if ( rPos.Row() < 0 || MAXROW < rPos.Row() )
+        if ( rPos.Row() < 0 || pDoc->MaxRow() < rPos.Row() )
         {
             rRef2.SetRowDeleted( true );
         }
@@ -1989,10 +1989,10 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
                 ScTokenArray* pArr = maOldCell.mpFormula->GetCode();
                 formula::FormulaTokenArrayPlainIterator aIter(*pArr);
                 while ( ( t = aIter.GetNextReference() ) != nullptr )
-                    lcl_InvalidateReference( *t, rPos );
+                    lcl_InvalidateReference( pTrack->GetDocument(), *t, rPos );
                 aIter.Reset();
                 while ( ( t = aIter.GetNextReferenceRPN() ) != nullptr )
-                    lcl_InvalidateReference( *t, rPos );
+                    lcl_InvalidateReference( pTrack->GetDocument(), *t, rPos );
             }
             if ( bNewFormula )
             {
@@ -2000,10 +2000,10 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
                 ScTokenArray* pArr = maNewCell.mpFormula->GetCode();
                 formula::FormulaTokenArrayPlainIterator aIter(*pArr);
                 while ( ( t = aIter.GetNextReference() ) != nullptr )
-                    lcl_InvalidateReference( *t, rPos );
+                    lcl_InvalidateReference( pTrack->GetDocument(), *t, rPos );
                 aIter.Reset();
                 while ( ( t = aIter.GetNextReferenceRPN() ) != nullptr )
-                    lcl_InvalidateReference( *t, rPos );
+                    lcl_InvalidateReference( pTrack->GetDocument(), *t, rPos );
             }
         }
     }
@@ -2220,7 +2220,7 @@ void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, Config
 
             SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
             if (pDocSh)
-                pDocSh->Broadcast( ScPaintHint( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB), PaintPartFlags::Grid ) );
+                pDocSh->Broadcast( ScPaintHint( ScRange(0,0,0,pDoc->MaxCol(),pDoc->MaxRow(),MAXTAB), PaintPartFlags::Grid ) );
         }
     }
 }
@@ -2449,12 +2449,12 @@ void ScChangeTrack::AppendDeleteRange( const ScRange& rRange,
     {
         if ( !pRefDoc || nTab < pRefDoc->GetTableCount() )
         {
-            if ( nCol1 == 0 && nCol2 == MAXCOL )
+            if ( nCol1 == 0 && nCol2 == pDoc->MaxCol() )
             {   // Whole Row and/or Tables
-                if ( nRow1 == 0 && nRow2 == MAXROW )
+                if ( nRow1 == 0 && nRow2 == pDoc->MaxRow() )
                 {   // Whole Table
                     // TODO: Can't we do the whole Table as a whole?
-                    ScRange aRange( 0, 0, nTab, 0, MAXROW, nTab );
+                    ScRange aRange( 0, 0, nTab, 0, pDoc->MaxRow(), nTab );
                     for ( SCCOL nCol = nCol1; nCol <= nCol2; nCol++ )
                     {   // Column by column is less than row by row
                         aRange.aStart.SetCol( nCol );
@@ -2470,7 +2470,7 @@ void ScChangeTrack::AppendDeleteRange( const ScRange& rRange,
                 }
                 else
                 {   // Whole rows
-                    ScRange aRange( 0, 0, nTab, MAXCOL, 0, nTab );
+                    ScRange aRange( 0, 0, nTab, pDoc->MaxCol(), 0, nTab );
                     for ( SCROW nRow = nRow1; nRow <= nRow2; nRow++ )
                     {
                         aRange.aStart.SetRow( nRow );
@@ -2482,9 +2482,9 @@ void ScChangeTrack::AppendDeleteRange( const ScRange& rRange,
                     }
                 }
             }
-            else if ( nRow1 == 0 && nRow2 == MAXROW )
+            else if ( nRow1 == 0 && nRow2 == pDoc->MaxRow() )
             {   // Whole columns
-                ScRange aRange( 0, 0, nTab, 0, MAXROW, nTab );
+                ScRange aRange( 0, 0, nTab, 0, pDoc->MaxRow(), nTab );
                 for ( SCCOL nCol = nCol1; nCol <= nCol2; nCol++ )
                 {
                     aRange.aStart.SetCol( nCol );
@@ -2525,11 +2525,11 @@ void ScChangeTrack::AppendOneDeleteRange( const ScRange& rOrgRange,
         aTrackRange.aStart.IncTab( -nDz );
         aTrackRange.aEnd.IncTab( -nDz );
     }
-    ScChangeActionDel* pAct = new ScChangeActionDel( aTrackRange, nDx, nDy,
+    ScChangeActionDel* pAct = new ScChangeActionDel( pRefDoc, aTrackRange, nDx, nDy,
         this );
     // TabDelete not Contents; they are in separate columns
     if ( !(rOrgRange.aStart.Col() == 0 && rOrgRange.aStart.Row() == 0 &&
-            rOrgRange.aEnd.Col() == MAXCOL && rOrgRange.aEnd.Row() == MAXROW) )
+            rOrgRange.aEnd.Col() == pDoc->MaxCol() && rOrgRange.aEnd.Row() == pDoc->MaxRow()) )
         LookUpContents( rOrgRange, pRefDoc, -nDx, -nDy, -nDz );
     if ( nRejectingInsert )
     {
@@ -2763,7 +2763,7 @@ void ScChangeTrack::AppendContentRange( const ScRange& rRange,
 void ScChangeTrack::AppendContentsIfInRefDoc( ScDocument* pRefDoc,
             sal_uLong& nStartAction, sal_uLong& nEndAction )
 {
-    ScCellIterator aIter(pRefDoc, ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB));
+    ScCellIterator aIter(pRefDoc, ScRange(0,0,0,pDoc->MaxCol(),pDoc->MaxRow(),MAXTAB));
     if (aIter.first())
     {
         nStartAction = GetActionMax() + 1;
@@ -2798,7 +2798,7 @@ ScChangeActionContent* ScChangeTrack::AppendContentOnTheFly(
 
 void ScChangeTrack::AppendInsert( const ScRange& rRange, bool bEndOfList )
 {
-    ScChangeActionIns* pAct = new ScChangeActionIns(rRange, bEndOfList);
+    ScChangeActionIns* pAct = new ScChangeActionIns(pDoc, rRange, bEndOfList);
     Append( pAct );
 }
 
@@ -4284,7 +4284,7 @@ bool ScChangeTrack::Reject(
         if ( bOneOk || (bTabDel && bTabDelOk) )
         {
             // Delete Reject made UpdateReference Undo
-            ScChangeActionIns* pReject = new ScChangeActionIns(
+            ScChangeActionIns* pReject = new ScChangeActionIns( pDoc,
                 aDelRange.MakeRange() );
             pReject->SetRejectAction( nRejectAction );
             pReject->SetState( SC_CAS_ACCEPTED );

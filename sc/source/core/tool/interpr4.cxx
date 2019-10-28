@@ -3716,8 +3716,8 @@ void ScInterpreter::ScColRowNameAuto()
             if ( nMyRow == nStartRow )
             {   // take the rest under the name
                 nStartRow++;
-                if ( nStartRow > MAXROW )
-                    nStartRow = MAXROW;
+                if ( nStartRow > pDok->MaxRow() )
+                    nStartRow = pDok->MaxRow();
                 aAbs.aStart.SetRow(nStartRow);
             }
             else
@@ -3739,8 +3739,8 @@ void ScInterpreter::ScColRowNameAuto()
             if ( nMyCol == nStartCol )
             {    // take the rest under the name
                 nStartCol++;
-                if ( nStartCol > MAXCOL )
-                    nStartCol = MAXCOL;
+                if ( nStartCol > pDok->MaxCol() )
+                    nStartCol = pDok->MaxCol();
                 aAbs.aStart.SetCol(nStartCol);
             }
             else

@@ -128,7 +128,7 @@ public:
      * @param rCells cell storage container
      * @param rRows row positions at which to unshare formula cells.
      */
-    static void unshareFormulaCells(CellStoreType& rCells, std::vector<SCROW>& rRows);
+    static void unshareFormulaCells(const ScDocument* pDoc, CellStoreType& rCells, std::vector<SCROW>& rRows);
 
     /**
      * Have all formula cells belonging to a group start listening to their

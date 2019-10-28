@@ -333,14 +333,14 @@ void ScRawToken::SetExternal( const OUString& rStr )
     maExternalName = rStr;
 }
 
-bool ScRawToken::IsValidReference() const
+bool ScRawToken::IsValidReference(const ScDocument* pDoc) const
 {
     switch (eType)
     {
         case svSingleRef:
-            return aRef.Ref1.Valid();
+            return aRef.Ref1.Valid(pDoc);
         case svDoubleRef:
-            return aRef.Valid();
+            return aRef.Valid(pDoc);
         case svExternalSingleRef:
         case svExternalDoubleRef:
             return true;
@@ -2249,7 +2249,7 @@ void ScTokenArray::AssignXMLString( const OUString &rText, const OUString &rForm
     Assign( nTokens, aTokens );
 }
 
-bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
+bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( const ScDocument* pDoc, SCCOLROW& nExtend,
         const ScAddress& rPos, ScDirection eDir )
 {
     SCCOL nCol = 0;
@@ -2257,13 +2257,13 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
     switch ( eDir )
     {
         case DIR_BOTTOM :
-            if ( rPos.Row() < MAXROW )
+            if ( rPos.Row() < pDoc->MaxRow() )
                 nRow = (nExtend = rPos.Row()) + 1;
             else
                 return false;
         break;
         case DIR_RIGHT :
-            if ( rPos.Col() < MAXCOL )
+            if ( rPos.Col() < pDoc->MaxCol() )
                 nCol = static_cast<SCCOL>(nExtend = rPos.Col()) + 1;
             else
                 return false;
@@ -2788,7 +2788,7 @@ ShrinkResult shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, 
                 // The reference range is truncated on the left.
                 SCCOL nOffset = rDeletedRange.aStart.Col() - rRefRange.aStart.Col();
                 SCCOL nDelta = rRefRange.aStart.Col() - rDeletedRange.aEnd.Col() - 1;
-                rRefRange.IncEndColSticky(nDelta+nOffset);
+                rRefRange.IncEndColSticky(&rCxt.mrDoc, nDelta+nOffset);
                 rRefRange.aStart.IncCol(nOffset);
             }
         }
@@ -2801,7 +2801,7 @@ ShrinkResult shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, 
             // Reference is deleted in the middle. Move the last column
             // position to the left.
             SCCOL nDelta = rDeletedRange.aStart.Col() - rDeletedRange.aEnd.Col() - 1;
-            rRefRange.IncEndColSticky(nDelta);
+            rRefRange.IncEndColSticky(&rCxt.mrDoc, nDelta);
         }
         else
         {
@@ -2811,7 +2811,7 @@ ShrinkResult shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, 
 
             // The reference range is truncated on the right.
             SCCOL nDelta = rDeletedRange.aStart.Col() - rRefRange.aEnd.Col() - 1;
-            rRefRange.IncEndColSticky(nDelta);
+            rRefRange.IncEndColSticky(&rCxt.mrDoc, nDelta);
         }
         return SHRUNK;
     }
@@ -2839,7 +2839,7 @@ ShrinkResult shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, 
                 // The reference range is truncated on the top.
                 SCCOL nOffset = rDeletedRange.aStart.Row() - rRefRange.aStart.Row();
                 SCCOL nDelta = rRefRange.aStart.Row() - rDeletedRange.aEnd.Row() - 1;
-                rRefRange.IncEndRowSticky(nDelta+nOffset);
+                rRefRange.IncEndRowSticky(&rCxt.mrDoc, nDelta+nOffset);
                 rRefRange.aStart.IncRow(nOffset);
             }
         }
@@ -2852,7 +2852,7 @@ ShrinkResult shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, 
             // Reference is deleted in the middle. Move the last row
             // position upward.
             SCCOL nDelta = rDeletedRange.aStart.Row() - rDeletedRange.aEnd.Row() - 1;
-            rRefRange.IncEndRowSticky(nDelta);
+            rRefRange.IncEndRowSticky(&rCxt.mrDoc, nDelta);
         }
         else
         {
@@ -2862,7 +2862,7 @@ ShrinkResult shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, 
 
             // The reference range is truncated on the bottom.
             SCCOL nDelta = rDeletedRange.aStart.Row() - rRefRange.aEnd.Row() - 1;
-            rRefRange.IncEndRowSticky(nDelta);
+            rRefRange.IncEndRowSticky(&rCxt.mrDoc, nDelta);
         }
         return SHRUNK;
     }
@@ -2906,7 +2906,7 @@ bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
 
         // Move the last column position to the right.
         SCCOL nDelta = rSelectedRange.aEnd.Col() - rSelectedRange.aStart.Col() + 1;
-        rRefRange.IncEndColSticky(nDelta);
+        rRefRange.IncEndColSticky(&rCxt.mrDoc, nDelta);
         return true;
     }
     else if (rCxt.mnRowDelta > 0)
@@ -2939,7 +2939,7 @@ bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
 
         // Move the last row position down.
         SCROW nDelta = rSelectedRange.aEnd.Row() - rSelectedRange.aStart.Row() + 1;
-        rRefRange.IncEndRowSticky(nDelta);
+        rRefRange.IncEndRowSticky(&rCxt.mrDoc, nDelta);
         return true;
     }
     return false;
@@ -2986,7 +2986,7 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
 
         // Move the last column position to the right.
         SCCOL nDelta = rSelectedRange.aEnd.Col() - rSelectedRange.aStart.Col() + 1;
-        rRefRange.IncEndColSticky(nDelta);
+        rRefRange.IncEndColSticky(&rCxt.mrDoc, nDelta);
         return true;
     }
     else if (rCxt.mnRowDelta > 0)
@@ -3013,7 +3013,7 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
 
         // Move the last row position down.
         SCROW nDelta = rSelectedRange.aEnd.Row() - rSelectedRange.aStart.Row() + 1;
-        rRefRange.IncEndRowSticky(nDelta);
+        rRefRange.IncEndRowSticky(&rCxt.mrDoc, nDelta);
         return true;
     }
 
@@ -3202,7 +3202,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                             else
                             {
                                 ScRange aErrorRange( ScAddress::UNINITIALIZED );
-                                if (!aAbs.MoveSticky(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorRange))
+                                if (!aAbs.MoveSticky(&rCxt.mrDoc, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorRange))
                                     aAbs = aErrorRange;
                                 aRes.mbReferenceModified = true;
                             }
@@ -3555,7 +3555,7 @@ bool adjustSingleRefInName(
         {
             if (pEndOfComplex)
             {
-                if (pEndOfComplex->IncEndColSticky( rCxt.mnColDelta, rPos))
+                if (pEndOfComplex->IncEndColSticky( &rCxt.mrDoc, rCxt.mnColDelta, rPos))
                     bChanged = true;
             }
             else
@@ -3573,7 +3573,7 @@ bool adjustSingleRefInName(
         {
             if (pEndOfComplex)
             {
-                if (pEndOfComplex->IncEndRowSticky( rCxt.mnRowDelta, rPos))
+                if (pEndOfComplex->IncEndRowSticky( &rCxt.mrDoc, rCxt.mnRowDelta, rPos))
                     bChanged = true;
             }
             else
@@ -3612,7 +3612,7 @@ bool adjustDoubleRefInName(
                 {
                     // Selection intersects the referenced range. Only expand the
                     // bottom position.
-                    rRef.IncEndRowSticky(rCxt.mnRowDelta, rPos);
+                    rRef.IncEndRowSticky(&rCxt.mrDoc, rCxt.mnRowDelta, rPos);
                     return true;
                 }
             }
@@ -3629,7 +3629,7 @@ bool adjustDoubleRefInName(
                 {
                     // Selection intersects the referenced range. Only expand the
                     // right position.
-                    rRef.IncEndColSticky(rCxt.mnColDelta, rPos);
+                    rRef.IncEndColSticky(&rCxt.mrDoc, rCxt.mnColDelta, rPos);
                     return true;
                 }
             }
@@ -4812,7 +4812,7 @@ void appendString( OUStringBuffer& rBuf, const OUString& rStr )
     rBuf.append('"');
 }
 
-void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, const FormulaToken& rToken,\
+void appendTokenByType( const ScDocument* pDoc, sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, const FormulaToken& rToken,
         const ScAddress& rPos, bool bFromRangeName )
 {
     if (rToken.IsExternalRef())
@@ -4843,7 +4843,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
                     return;
 
                 rCxt.mpRefConv->makeExternalRefStr(
-                        rBuf, rPos, nFileId, aFileName, it->second, aTabName,
+                        pDoc, rBuf, rPos, nFileId, aFileName, it->second, aTabName,
                         *rToken.GetDoubleRef());
             }
             break;
@@ -4881,7 +4881,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
                 ScComplexRefData aRef;
                 aRef.Ref1 = rRef;
                 aRef.Ref2 = rRef;
-                rCxt.mpRefConv->makeRefStr(rBuf, rCxt.meGram, rPos, rCxt.maErrRef, rCxt.maTabNames, aRef, true,
+                rCxt.mpRefConv->makeRefStr(pDoc, rBuf, rCxt.meGram, rPos, rCxt.maErrRef, rCxt.maTabNames, aRef, true,
                         bFromRangeName);
             }
             else
@@ -4893,7 +4893,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
             if (rCxt.mpRefConv)
             {
                 const ScComplexRefData& rRef = *rToken.GetDoubleRef();
-                rCxt.mpRefConv->makeRefStr(rBuf, rCxt.meGram, rPos, rCxt.maErrRef, rCxt.maTabNames, rRef, false,
+                rCxt.mpRefConv->makeRefStr(pDoc, rBuf, rCxt.meGram, rPos, rCxt.maErrRef, rCxt.maTabNames, rRef, false,
                         bFromRangeName);
             }
             else
@@ -5090,7 +5090,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
 
 }
 
-OUString ScTokenArray::CreateString( sc::TokenStringContext& rCxt, const ScAddress& rPos ) const
+OUString ScTokenArray::CreateString( const ScDocument* pDoc, sc::TokenStringContext& rCxt, const ScAddress& rPos ) const
 {
     if (!nLen)
         return OUString();
@@ -5113,7 +5113,7 @@ OUString ScTokenArray::CreateString( sc::TokenStringContext& rCxt, const ScAddre
         if (eOp < rCxt.mxOpCodeMap->getSymbolCount())
             aBuf.append(rCxt.mxOpCodeMap->getSymbol(eOp));
 
-        appendTokenByType(rCxt, aBuf, *pToken, rPos, IsFromRangeName());
+        appendTokenByType(pDoc, rCxt, aBuf, *pToken, rPos, IsFromRangeName());
     }
 
     return aBuf.makeStringAndClear();

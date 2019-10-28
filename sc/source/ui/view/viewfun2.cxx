@@ -267,7 +267,7 @@ static ScAutoSum lcl_IsAutoSumData( ScDocument* pDoc, SCCOL nCol, SCROW nRow,
                     default        :
                         break;
                 }
-                if ( pCode->GetAdjacentExtendOfOuterFuncRefs( nExtend,
+                if ( pCode->GetAdjacentExtendOfOuterFuncRefs( pDoc, nExtend,
                         ScAddress( nCol, nRow, nTab ), eDir ) )
                     return val;
             }

@@ -165,7 +165,7 @@ public:
         false. Used only in ScCompiler::NextNewToken() to preserve non-existing
         sheet names in otherwise valid references.
      */
-    bool IsValidReference() const;
+    bool IsValidReference(const ScDocument* pDoc) const;
 
     formula::FormulaToken* CreateToken() const;   // create typified token
 };
@@ -189,6 +189,7 @@ public:
         virtual ~Convention();
 
         virtual void makeRefStr(
+            const ScDocument* pDoc,
             OUStringBuffer& rBuffer,
             formula::FormulaGrammar::Grammar eGram,
             const ScAddress& rPos,
@@ -219,6 +220,7 @@ public:
             const OUString& rTabName, const ScSingleRefData& rRef ) const = 0;
 
         virtual void makeExternalRefStr(
+            const ScDocument* pDoc,
             OUStringBuffer& rBuffer, const ScAddress& rPos,
             sal_uInt16 nFileId, const OUString& rFileName, const std::vector<OUString>& rTabNames,
             const OUString& rTabName, const ScComplexRefData& rRef ) const = 0;
