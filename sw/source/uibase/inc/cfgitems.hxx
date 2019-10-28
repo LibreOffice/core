@@ -135,23 +135,22 @@ public:
 
 #ifdef DBG_UTIL
 
-// OS 12.01.95
 // Item for settings dialog - test settings
 class SW_DLLPUBLIC SwTestItem : public SfxPoolItem
 {
     friend class SwModule;
     friend class SwTestTabPage;
 
-    bool    bTest1:1;
-    bool    bTest2:1;
-    bool    bTest3:1;
-    bool    bTest4:1;
-    bool    bTest5:1;
-    bool    bTest6:1;
-    bool    bTest7:1;
-    bool    bTest8:1;
-    bool    bTest9:1;
-    bool    bTest10:1;
+    bool    m_bTest1:1;
+    bool    m_bTest2:1;
+    bool    m_bTest3:1;
+    bool    m_bTest4:1;
+    bool    m_bTest5:1;
+    bool    m_bTest6:1;
+    bool    m_bTest7:1;
+    bool    m_bTest8:1;
+    bool    m_bTest9:1;
+    bool    m_bTest10:1;
 
 public:
                             SwTestItem() : SfxPoolItem(FN_PARAM_SWTEST) {};

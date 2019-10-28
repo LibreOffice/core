@@ -235,16 +235,16 @@ bool SwTestItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SwTestItem& rItem = static_cast<const SwTestItem&>( rAttr);
 
-    return ( bTest1==rItem.bTest1&&
-             bTest2==rItem.bTest2&&
-             bTest3==rItem.bTest3&&
-             bTest4==rItem.bTest4&&
-             bTest5==rItem.bTest5&&
-             bTest6==rItem.bTest6&&
-             bTest7==rItem.bTest7&&
-             bTest8==rItem.bTest8&&
-             bTest9==rItem.bTest9&&
-             bTest10==rItem.bTest10);
+    return ( m_bTest1==rItem.m_bTest1&&
+             m_bTest2==rItem.m_bTest2&&
+             m_bTest3==rItem.m_bTest3&&
+             m_bTest4==rItem.m_bTest4&&
+             m_bTest5==rItem.m_bTest5&&
+             m_bTest6==rItem.m_bTest6&&
+             m_bTest7==rItem.m_bTest7&&
+             m_bTest8==rItem.m_bTest8&&
+             m_bTest9==rItem.m_bTest9&&
+             m_bTest10==rItem.m_bTest10);
 }
 
 #endif
