@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_0cf49dce",
+        "filename": "include/vcl/opengl/OpenGLHelper.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-28T13:53:06Z",
+      "side": 1,
+      "message": "see \u003chttps://gerrit.libreoffice.org/#/c/81608/\u003e \"Blind fix for Android build (\u0027unsigned int\u0027 vs. \u0027unsigned long\u0027)\" for fallout",
+      "revId": "c4d760b9edf0399955d30a0dfbe5f7b1b1ed37cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
