@@ -45,7 +45,7 @@ run and compile LibreOffice, also used by the TDF builds:
     * Runtime: 11.4 (only support for newer i devices == 64 bit)
     * Build: Xcode 9.3 and iPhone SDK 11.4
 * Android:
-    * Build: NDK r19c
+    * Build: NDK r19c and SDK 22.6.2
 
 If you want to use Clang with the LibreOffice compiler plugins, the minimal
 version of Clang is 5.0.2. Since Xcode doesn't provide the compiler plugin
