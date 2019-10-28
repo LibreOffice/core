@@ -22,6 +22,7 @@
 #include <parser.hxx>
 #include <basic/sbx.hxx>
 #include <expr.hxx>
+#include <uno/current_context.hxx>
 
 SbiExpression::SbiExpression( SbiParser* p, SbiExprType t,
     SbiExprMode eMode, const KeywordSymbolInfo* pKeywordSymbolInfo )
@@ -1033,6 +1034,21 @@ SbiExprListPtr SbiExprList::ParseParameters( SbiParser* pParser, bool bStandalon
         {
             if( ( pExprList->bBracket && eTok == RPAREN ) || SbiTokenizer::IsEoln( eTok ) )
             {
+                // tdf#80731
+                if (SbiTokenizer::IsEoln(eTok) && pExprList->bBracket)
+                {
+                    // tdf#106529: only fail here in strict mode (i.e. when compiled from IDE), and
+                    // allow legacy code with missing closing parenthesis when started e.g. from
+                    // extensions and event handlers
+                    bool bCheckStrict = false;
+                    if (auto xContext = css::uno::getCurrentContext())
+                        xContext->getValueByName("BasicStrict") >>= bCheckStrict;
+                    if (bCheckStrict)
+                    {
+                        pParser->Error(ERRCODE_BASIC_EXPECTED, RPAREN);
+                        pExprList->bError = true;
+                    }
+                }
                 break;
             }
             pParser->Error( pExprList->bBracket ? ERRCODE_BASIC_BAD_BRACKETS : ERRCODE_BASIC_EXPECTED, COMMA );
