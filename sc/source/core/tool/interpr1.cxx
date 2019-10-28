@@ -5430,8 +5430,8 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             }
             else
             {
-                nMaxCol = MAXCOL;
-                nMaxRow = MAXROW;
+                nMaxCol = pDok->MaxCol();
+                nMaxRow = pDok->MaxRow();
             }
             if (nCol3 + nColDelta > nMaxCol)
             {
@@ -7017,7 +7017,7 @@ void ScInterpreter::ScLookup()
             if (bResVertical)
             {
                 SCROW nTempRow = static_cast<SCROW>(nResRow1 + nDelta);
-                if (nTempRow > MAXROW)
+                if (nTempRow > pDok->MaxRow())
                 {
                     PushDouble(0);
                     return;
@@ -7028,7 +7028,7 @@ void ScInterpreter::ScLookup()
             else
             {
                 SCCOL nTempCol = static_cast<SCCOL>(nResCol1 + nDelta);
-                if (nTempCol > MAXCOL)
+                if (nTempCol > pDok->MaxCol())
                 {
                     PushDouble(0);
                     return;
@@ -7115,7 +7115,7 @@ void ScInterpreter::ScLookup()
                 if (bResVertical)
                 {
                     SCROW nTempRow = static_cast<SCROW>(nResRow1 + nDelta);
-                    if (nTempRow > MAXROW)
+                    if (nTempRow > pDok->MaxRow())
                     {
                         PushDouble(0);
                         return;
@@ -7126,7 +7126,7 @@ void ScInterpreter::ScLookup()
                 else
                 {
                     SCCOL nTempCol = static_cast<SCCOL>(nResCol1 + nDelta);
-                    if (nTempCol > MAXCOL)
+                    if (nTempCol > pDok->MaxCol())
                     {
                         PushDouble(0);
                         return;
@@ -7176,7 +7176,7 @@ void ScInterpreter::ScLookup()
         if (bVertical)
         {
             SCROW nTempRow = static_cast<SCROW>(nRow1 + nDelta);
-            if (nTempRow > MAXROW)
+            if (nTempRow > pDok->MaxRow())
             {
                 PushDouble(0);
                 return;
@@ -7187,7 +7187,7 @@ void ScInterpreter::ScLookup()
         else
         {
             SCCOL nTempCol = static_cast<SCCOL>(nCol1 + nDelta);
-            if (nTempCol > MAXCOL)
+            if (nTempCol > pDok->MaxCol())
             {
                 PushDouble(0);
                 return;

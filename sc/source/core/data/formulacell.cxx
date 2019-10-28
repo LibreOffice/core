@@ -5480,7 +5480,7 @@ void ScFormulaCell::Dump() const
     }
 
     sc::TokenStringContext aCxt(pDocument, pDocument->GetGrammar());
-    cout << "  * code: " << pCode->CreateString(aCxt, aPos) << endl;
+    cout << "  * code: " << pCode->CreateString(pDocument, aCxt, aPos) << endl;
 
     FormulaError nErrCode = pCode->GetCodeError();
     cout << "  * code error: ";
