@@ -40,8 +40,7 @@ class PresenterController;
 
 typedef ::cppu::WeakComponentImplHelper <
     css::awt::XPaintListener,
-    css::awt::XMouseListener,
-    css::awt::XMouseMotionListener
+    css::awt::XMouseListener
 > PresenterButtonInterfaceBase;
 
 /** Button for the presenter screen.  It displays a text surrounded by a
@@ -84,12 +83,6 @@ public:
     virtual void SAL_CALL mouseEntered (const css::awt::MouseEvent& rEvent) override;
 
     virtual void SAL_CALL mouseExited (const css::awt::MouseEvent& rEvent) override;
-
-    // XMouseMotionListener
-
-    virtual void SAL_CALL mouseMoved (const css::awt::MouseEvent& rEvent) override;
-
-    virtual void SAL_CALL mouseDragged (const css::awt::MouseEvent& rEvent) override;
 
     // lang::XEventListener
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent) override;

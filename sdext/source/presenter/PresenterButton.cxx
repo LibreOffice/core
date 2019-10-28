@@ -132,7 +132,6 @@ PresenterButton::PresenterButton (
         mxWindow->setVisible(true);
         mxWindow->addPaintListener(this);
         mxWindow->addMouseListener(this);
-        mxWindow->addMouseMotionListener(this);
     }
     catch (RuntimeException&)
     {
@@ -157,7 +156,6 @@ void SAL_CALL PresenterButton::disposing()
     {
         mxWindow->removePaintListener(this);
         mxWindow->removeMouseListener(this);
-        mxWindow->removeMouseMotionListener(this);
         Reference<lang::XComponent> xComponent = mxWindow;
         mxWindow = nullptr;
         if (xComponent.is())
@@ -289,18 +287,6 @@ void SAL_CALL PresenterButton::mouseExited (const css::awt::MouseEvent&)
     ThrowIfDisposed();
     meState = PresenterBitmapDescriptor::Normal;
     Invalidate();
-}
-
-//----- XMouseMotionListener --------------------------------------------------
-
-void SAL_CALL PresenterButton::mouseMoved (const css::awt::MouseEvent&)
-{
-    ThrowIfDisposed();
-}
-
-void SAL_CALL PresenterButton::mouseDragged (const css::awt::MouseEvent&)
-{
-    ThrowIfDisposed();
 }
 
 //----- lang::XEventListener --------------------------------------------------
