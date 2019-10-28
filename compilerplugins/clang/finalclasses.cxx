@@ -15,9 +15,14 @@
 #include <fstream>
 
 /**
-Look for classes that are final i.e. nothing extends them, and have protected fields or members.
+Look for classes that are final i.e. nothing extends them, and have either
+(a) protected fields or members.
+or
+(b) virtual members
 
-These can be made private.
+In the case of (a), those members/fields can be made private.
+In the case of (b), making the class final means the compiler can devirtualise
+some method class.
 
 The process goes something like this:
   $ make check
@@ -88,6 +93,8 @@ bool FinalClasses::VisitCXXRecordDecl(const CXXRecordDecl* decl)
     decl = decl->getCanonicalDecl();
     if (!decl->hasDefinition())
         return true;
+    if (decl->hasAttr<FinalAttr>())
+        return true;
 
     for (auto it = decl->bases_begin(); it != decl->bases_end(); ++it)
     {
@@ -100,15 +107,16 @@ bool FinalClasses::VisitCXXRecordDecl(const CXXRecordDecl* decl)
         checkBase(spec.getType());
     }
 
+    bool bFoundVirtual = false;
     bool bFoundProtected = false;
     for (auto it = decl->method_begin(); it != decl->method_end(); ++it) {
         auto i = *it;
         // ignore methods that are overriding base-class methods, making them private
         // isn't useful
-        if ( !i->hasAttr<OverrideAttr>() && i->getAccess() == AS_protected ) {
+        if ( !i->hasAttr<OverrideAttr>() && i->getAccess() == AS_protected )
             bFoundProtected = true;
-            break;
-        }
+        if ( i->isVirtual() )
+            bFoundVirtual = true;
     }
     if (!bFoundProtected)
     {
@@ -120,7 +128,7 @@ bool FinalClasses::VisitCXXRecordDecl(const CXXRecordDecl* decl)
             }
         }
     }
-    if (!bFoundProtected)
+    if (!bFoundProtected && !bFoundVirtual)
         return true;
 
     std::string s = decl->getQualifiedNameAsString();
