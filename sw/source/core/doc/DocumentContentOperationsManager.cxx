@@ -575,7 +575,7 @@ namespace
         }
         while (!startedFields.empty())
         {
-            auto const& pField(startedFields.top());
+            auto const pField(startedFields.top());
             startedFields.pop();
             SwPosition const& rStart(pField->GetMarkStart());
             std::pair<sal_uLong, sal_Int32> const pos(
