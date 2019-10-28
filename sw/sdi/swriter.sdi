@@ -7808,3 +7808,21 @@ SfxUInt32Item TableRowHeight SID_ATTR_TABLE_ROW_HEIGHT
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Table;
 ]
+
+SfxUInt32Item TableColumWidth SID_ATTR_TABLE_COLUMN_WIDTH
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Table;
+]

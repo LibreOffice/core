@@ -52,17 +52,39 @@ void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState 
                 if (pItem)
                 {
                     long nNewHeight = pItem->GetValue();
-                    nNewHeight = m_pHeightEdit->Normalize(nNewHeight);
-                    m_pHeightEdit->SetValue(nNewHeight, FieldUnit::TWIP);
+                    nNewHeight = m_pRowHeightEdit->Normalize(nNewHeight);
+                    m_pRowHeightEdit->SetValue(nNewHeight, FieldUnit::TWIP);
                 }
             }
             else if (eState == SfxItemState::DISABLED)
             {
-                m_pHeightEdit->Disable();
+                m_pRowHeightEdit->Disable();
             }
             else
             {
-                m_pHeightEdit->SetEmptyFieldValue();
+                m_pRowHeightEdit->SetEmptyFieldValue();
+            }
+            break;
+        }
+        case SID_ATTR_TABLE_COLUMN_WIDTH:
+        {
+            if (pState && eState >= SfxItemState::DEFAULT)
+            {
+                const SfxUInt32Item* pItem = static_cast<const SfxUInt32Item*>(pState);
+                if (pItem)
+                {
+                    long nNewWidth = pItem->GetValue();
+                    nNewWidth = m_pColumnWidthEdit->Normalize(nNewWidth);
+                    m_pColumnWidthEdit->SetValue(nNewWidth, FieldUnit::TWIP);
+                }
+            }
+            else if (eState == SfxItemState::DISABLED)
+            {
+                m_pColumnWidthEdit->Disable();
+            }
+            else
+            {
+                m_pColumnWidthEdit->SetEmptyFieldValue();
             }
             break;
         }
@@ -75,9 +97,13 @@ TableEditPanel::TableEditPanel(vcl::Window* pParent,
     : PanelLayout(pParent, "TableEditPanel", "modules/swriter/ui/sidebartableedit.ui", rxFrame)
     , m_pBindings(pBindings)
     , m_aRowHeightController(SID_ATTR_TABLE_ROW_HEIGHT, *pBindings, *this)
+    , m_aColumnWidthController(SID_ATTR_TABLE_COLUMN_WIDTH, *pBindings, *this)
 {
-    get(m_pHeightEdit, "rowheight");
+    get(m_pRowHeightEdit, "rowheight");
+    get(m_pColumnWidthEdit, "columnwidth");
+
     InitRowHeightToolitem();
+    InitColumnWidthToolitem();
 }
 
 TableEditPanel::~TableEditPanel() { disposeOnce(); }
@@ -85,19 +111,33 @@ TableEditPanel::~TableEditPanel() { disposeOnce(); }
 void TableEditPanel::InitRowHeightToolitem()
 {
     Link<Edit&, void> aLink = LINK(this, TableEditPanel, RowHeightMofiyHdl);
-    m_pHeightEdit->SetModifyHdl(aLink);
+    m_pRowHeightEdit->SetModifyHdl(aLink);
 
     FieldUnit eFieldUnit = SW_MOD()->GetUsrPref(false)->GetMetric();
-    SetFieldUnit(*m_pHeightEdit, eFieldUnit);
+    SetFieldUnit(*m_pRowHeightEdit, eFieldUnit);
 
-    m_pHeightEdit->SetMin(MINLAY, FieldUnit::TWIP);
-    m_pHeightEdit->SetMax(SAL_MAX_INT32, FieldUnit::TWIP);
+    m_pRowHeightEdit->SetMin(MINLAY, FieldUnit::TWIP);
+    m_pRowHeightEdit->SetMax(SAL_MAX_INT32, FieldUnit::TWIP);
+}
+
+void TableEditPanel::InitColumnWidthToolitem()
+{
+    Link<Edit&, void> aLink = LINK(this, TableEditPanel, ColumnWidthMofiyHdl);
+    m_pColumnWidthEdit->SetModifyHdl(aLink);
+
+    FieldUnit eFieldUnit = SW_MOD()->GetUsrPref(false)->GetMetric();
+    SetFieldUnit(*m_pColumnWidthEdit, eFieldUnit);
+
+    m_pColumnWidthEdit->SetMin(MINLAY, FieldUnit::TWIP);
+    m_pColumnWidthEdit->SetMax(SAL_MAX_INT32, FieldUnit::TWIP);
 }
 
 void TableEditPanel::dispose()
 {
-    m_pHeightEdit.clear();
+    m_pRowHeightEdit.clear();
+    m_pColumnWidthEdit.clear();
     m_aRowHeightController.dispose();
+    m_aColumnWidthController.dispose();
 
     PanelLayout::dispose();
 }
@@ -105,12 +145,23 @@ void TableEditPanel::dispose()
 IMPL_LINK_NOARG(TableEditPanel, RowHeightMofiyHdl, Edit&, void)
 {
     SwTwips nNewHeight = static_cast<SwTwips>(
-        m_pHeightEdit->Denormalize(m_pHeightEdit->GetValue(FieldUnit::TWIP)));
+        m_pRowHeightEdit->Denormalize(m_pRowHeightEdit->GetValue(FieldUnit::TWIP)));
     SfxUInt32Item aRowHeight(SID_ATTR_TABLE_ROW_HEIGHT);
     aRowHeight.SetValue(nNewHeight);
 
     m_pBindings->GetDispatcher()->ExecuteList(SID_ATTR_TABLE_ROW_HEIGHT, SfxCallMode::RECORD,
                                               { &aRowHeight });
+}
+
+IMPL_LINK_NOARG(TableEditPanel, ColumnWidthMofiyHdl, Edit&, void)
+{
+    SwTwips nNewWidth = static_cast<SwTwips>(
+        m_pColumnWidthEdit->Denormalize(m_pColumnWidthEdit->GetValue(FieldUnit::TWIP)));
+    SfxUInt32Item aColumnWidth(SID_ATTR_TABLE_COLUMN_WIDTH);
+    aColumnWidth.SetValue(nNewWidth);
+
+    m_pBindings->GetDispatcher()->ExecuteList(SID_ATTR_TABLE_COLUMN_WIDTH, SfxCallMode::RECORD,
+                                              { &aColumnWidth });
 }
 }
 } // end of namespace ::sw::sidebar

@@ -40,13 +40,17 @@ private:
     virtual void dispose() override;
 
     void InitRowHeightToolitem();
+    void InitColumnWidthToolitem();
 
     SfxBindings* m_pBindings;
 
-    VclPtr<SvxRelativeField> m_pHeightEdit;
+    VclPtr<SvxRelativeField> m_pRowHeightEdit;
+    VclPtr<SvxRelativeField> m_pColumnWidthEdit;
     ::sfx2::sidebar::ControllerItem m_aRowHeightController;
+    ::sfx2::sidebar::ControllerItem m_aColumnWidthController;
 
     DECL_LINK(RowHeightMofiyHdl, Edit&, void);
+    DECL_LINK(ColumnWidthMofiyHdl, Edit&, void);
 };
 }
 } // end of namespace sw::sidebar
