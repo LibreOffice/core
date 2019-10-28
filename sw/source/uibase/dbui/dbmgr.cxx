@@ -272,8 +272,8 @@ void SAL_CALL SwDataSourceRemovedListener::revokedDatabaseLocation(const sdb::Da
         return;
 
     OUString aOwnURL = pDocShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
-    OUString sTmpName = "vnd.sun.star.pkg://";
-    sTmpName += INetURLObject::encode(aOwnURL, INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All);
+    OUString sTmpName = "vnd.sun.star.pkg://" +
+        INetURLObject::encode(aOwnURL, INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All);
     sTmpName += "/" + m_pDBManager->getEmbeddedName();
 
     if (sTmpName != rEvent.OldLocation)
@@ -2625,15 +2625,15 @@ uno::Any GetDBunoURI(const INetURLObject &rURL, DBConnURIType& rType)
         break;
     case DBConnURIType::CALC:
     {
-        OUString sDBURL("sdbc:calc:");
-        sDBURL += rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        OUString sDBURL = "sdbc:calc:" +
+            rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         aURLAny <<= sDBURL;
     }
     break;
     case DBConnURIType::WRITER:
     {
-        OUString sDBURL("sdbc:writer:");
-        sDBURL += rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        OUString sDBURL = "sdbc:writer:" +
+            rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         aURLAny <<= sDBURL;
     }
     break;
@@ -2642,8 +2642,8 @@ uno::Any GetDBunoURI(const INetURLObject &rURL, DBConnURIType& rType)
         INetURLObject aUrlTmp(rURL);
         aUrlTmp.removeSegment();
         aUrlTmp.removeFinalSlash();
-        OUString sDBURL("sdbc:dbase:");
-        sDBURL += aUrlTmp.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        OUString sDBURL = "sdbc:dbase:" +
+            aUrlTmp.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         aURLAny <<= sDBURL;
     }
     break;
@@ -2652,9 +2652,9 @@ uno::Any GetDBunoURI(const INetURLObject &rURL, DBConnURIType& rType)
         INetURLObject aUrlTmp(rURL);
         aUrlTmp.removeSegment();
         aUrlTmp.removeFinalSlash();
-        OUString sDBURL("sdbc:flat:");
-        //only the 'path' has to be added
-        sDBURL += aUrlTmp.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        OUString sDBURL = "sdbc:flat:" +
+            //only the 'path' has to be added
+            aUrlTmp.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         aURLAny <<= sDBURL;
     }
     break;

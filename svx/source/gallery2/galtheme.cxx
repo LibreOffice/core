@@ -303,9 +303,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ConvertDat
         }
         else
         {
-            OUString aFileName( "dd" );
-
-            aFileName += OUString::number( ++nNextNumber % 999999 );
+            OUString aFileName = "dd" + OUString::number( ++nNextNumber % 999999 );
 
             if (pExt)
                 aFileName += OUString( pExt, strlen(pExt), RTL_TEXTENCODING_ASCII_US );

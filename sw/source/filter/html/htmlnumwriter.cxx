@@ -186,8 +186,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         rWrt.OutNewLine(); // <OL>/<UL> in a new row
 
         rWrt.m_aBulletGrfs[i].clear();
-        OString sOut = "<";
-        sOut += rWrt.GetNamespace();
+        OString sOut = "<" + rWrt.GetNamespace();
         const SwNumFormat& rNumFormat = rInfo.GetNumRule()->Get( i );
         sal_Int16 eType = rNumFormat.GetNumberingType();
         if( SVX_NUM_CHAR_SPECIAL == eType )

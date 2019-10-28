@@ -819,11 +819,11 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 
         OUString xslURL = pDatabases->getInstallPathAsURL();
 
-        OString xslURLascii(
-            xslURL.getStr(),
-            xslURL.getLength(),
-            RTL_TEXTENCODING_UTF8);
-        xslURLascii += "main_transform.xsl";
+        OString xslURLascii = OString(
+                xslURL.getStr(),
+                xslURL.getLength(),
+                RTL_TEXTENCODING_UTF8) +
+            "main_transform.xsl";
 
         ugblData = &userData;
 

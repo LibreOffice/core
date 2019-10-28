@@ -284,8 +284,7 @@ OUString OLEHandler::copyOLEOStream(
         //hack to work with the ImportEmbeddedObjectResolver
         static sal_Int32 nObjectCount = 100;
         uno::Reference< container::XNameAccess > xNA( xEmbeddedResolver, uno::UNO_QUERY_THROW );
-        OUString aURL("Obj");
-        aURL += OUString::number( nObjectCount++ );
+        OUString aURL = "Obj" + OUString::number( nObjectCount++ );
         uno::Reference < io::XOutputStream > xOLEStream;
         if( (xNA->getByName( aURL ) >>= xOLEStream) && xOLEStream.is() )
         {

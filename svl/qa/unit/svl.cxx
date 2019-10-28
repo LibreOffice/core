@@ -415,8 +415,8 @@ void Test::checkPreviewString(SvNumberFormatter& aFormatter,
             "\", " +
             OString::number( fPreviewNumber ) +
             ", sStr, ppColor, ";
-        aMessage += OString::number( static_cast<sal_uInt16>(eLang) );
-        aMessage += " ) failed";
+        aMessage += OString::number( static_cast<sal_uInt16>(eLang) ) +
+            " ) failed";
         CPPUNIT_FAIL( aMessage.getStr() );
     }
     CPPUNIT_ASSERT_EQUAL(sExpected, sStr);

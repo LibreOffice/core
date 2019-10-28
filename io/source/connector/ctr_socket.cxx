@@ -129,8 +129,8 @@ namespace stoc_connector {
 
             if(i != nBytesToRead && m_socket.getError() != osl_Socket_E_None)
             {
-                OUString message("ctr_socket.cxx:SocketConnection::read: error - ");
-                message += m_socket.getErrorAsString();
+                OUString message = "ctr_socket.cxx:SocketConnection::read: error - " +
+                    m_socket.getErrorAsString();
 
                 IOException ioException(message, static_cast<XConnection *>(this));
 
@@ -163,8 +163,8 @@ namespace stoc_connector {
         {
             if( m_socket.write( seq.getConstArray() , seq.getLength() ) != seq.getLength() )
             {
-                OUString message("ctr_socket.cxx:SocketConnection::write: error - ");
-                message += m_socket.getErrorAsString();
+                OUString message = "ctr_socket.cxx:SocketConnection::write: error - "+
+                    m_socket.getErrorAsString();
 
                 IOException ioException(message, static_cast<XConnection *>(this));
 

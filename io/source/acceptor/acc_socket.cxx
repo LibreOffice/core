@@ -168,8 +168,8 @@ namespace io_acceptor {
 
             if(i != nBytesToRead)
             {
-                OUString message("acc_socket.cxx:SocketConnection::read: error - ");
-                message +=  m_socket.getErrorAsString();
+                OUString message = "acc_socket.cxx:SocketConnection::read: error - " +
+                    m_socket.getErrorAsString();
 
                 IOException ioException(message, static_cast<XConnection *>(this));
 
@@ -202,8 +202,8 @@ namespace io_acceptor {
         {
             if( m_socket.write( seq.getConstArray() , seq.getLength() ) != seq.getLength() )
             {
-                OUString message("acc_socket.cxx:SocketConnection::write: error - ");
-                message += m_socket.getErrorAsString();
+                OUString message = "acc_socket.cxx:SocketConnection::write: error - " +
+                    m_socket.getErrorAsString();
 
                 IOException ioException(message, static_cast<XConnection *>(this));
 

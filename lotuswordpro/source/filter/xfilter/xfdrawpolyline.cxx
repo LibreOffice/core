@@ -71,9 +71,9 @@ void XFDrawPolyline::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
     //view-box:
     XFRect  rect = CalcViewBox();
-    OUString strViewBox = "0 0 ";
-    strViewBox += OUString::number(rect.GetWidth()*1000) + " ";
-    strViewBox += OUString::number(rect.GetHeight()*1000);
+    OUString strViewBox = "0 0 " +
+        OUString::number(rect.GetWidth()*1000) + " " +
+        OUString::number(rect.GetHeight()*1000);
     pAttrList->AddAttribute( "svg:viewBox", strViewBox);
 
     //points

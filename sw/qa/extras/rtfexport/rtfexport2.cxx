@@ -746,8 +746,7 @@ DECLARE_RTFEXPORT_TEST(testFdo52989, "fdo52989.rtf")
 {
     // Same as n#192129, but for JPEG files.
     uno::Reference<drawing::XShape> xShape = getShape(1);
-    OString aMessage("xShape->getSize().Width() = ");
-    aMessage += OString::number(xShape->getSize().Width);
+    OString aMessage = "xShape->getSize().Width() = " + OString::number(xShape->getSize().Width);
 
     // This was 2, should be 423 (or 369?).
     CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), xShape->getSize().Width >= 273);
