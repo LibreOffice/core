@@ -650,7 +650,7 @@ void DomainMapperTableManager::endOfRowAction()
         }
         uno::Sequence< text::TableColumnSeparator > aSeparators( m_nCell.back( ) - 1 );
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
-        sal_Int16 nLastRelPos = 0;
+        double nLastRelPos = 0.0;
         sal_uInt32 nBorderGridIndex = m_nGridBefore;
 
         size_t nWidthsBound =  m_nCell.back( ) - 1;
@@ -666,10 +666,9 @@ void DomainMapperTableManager::endOfRowAction()
                 for ( sal_Int32 nGridCount = *aSpansIter; nGridCount > 0; --nGridCount )
                     fGridWidth += (*pTableGrid)[nBorderGridIndex++];
 
-                sal_Int16 nRelPos =
-                    sal::static_int_cast< sal_Int16 >((fGridWidth * 10000) / nFullWidthRelative);
+                double nRelPos = static_cast<double>((fGridWidth * 10000) / nFullWidthRelative);
 
-                pSeparators[nBorder].Position =  nRelPos + nLastRelPos;
+                pSeparators[nBorder].Position = sal::static_int_cast< sal_Int16 >( nRelPos + nLastRelPos );
                 pSeparators[nBorder].IsVisible = true;
                 nLastRelPos = nLastRelPos + nRelPos;
                 ++aSpansIter;
