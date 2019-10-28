@@ -668,7 +668,7 @@ uno::Reference< text::XTextAppend > const &  DomainMapper_Impl::GetTopTextAppend
 FieldContextPtr const &  DomainMapper_Impl::GetTopFieldContext()
 {
     SAL_WARN_IF(m_aFieldStack.empty(), "writerfilter.dmapper", "Field stack is empty");
-    return m_aFieldStack.top();
+    return m_aFieldStack.back();
 }
 
 void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabStop >& rInitTabStops )
@@ -3355,14 +3355,14 @@ void DomainMapper_Impl::PushFieldContext()
     uno::Reference< text::XTextRange > xStart;
     if (xCrsr.is())
         xStart = xCrsr->getStart();
-    m_aFieldStack.push( new FieldContext( xStart ) );
+    m_aFieldStack.push_back(new FieldContext(xStart));
 }
 /*-------------------------------------------------------------------------
 //the current field context waits for the completion of the command
   -----------------------------------------------------------------------*/
 bool DomainMapper_Impl::IsOpenFieldCommand() const
 {
-    return !m_aFieldStack.empty() && !m_aFieldStack.top()->IsCommandCompleted();
+    return !m_aFieldStack.empty() && !m_aFieldStack.back()->IsCommandCompleted();
 }
 /*-------------------------------------------------------------------------
 //the current field context waits for the completion of the command
@@ -3376,7 +3376,7 @@ bool DomainMapper_Impl::IsOpenField() const
 void DomainMapper_Impl::SetFieldLocked()
 {
     if (IsOpenField())
-        m_aFieldStack.top()->SetFieldLocked();
+        m_aFieldStack.back()->SetFieldLocked();
 }
 
 HeaderFooterContext::HeaderFooterContext(bool bTextInserted)
@@ -3470,7 +3470,7 @@ void DomainMapper_Impl::AppendFieldCommand(OUString const & rPartOfCommand)
     TagLogger::getInstance().endElement();
 #endif
 
-    FieldContextPtr pContext = m_aFieldStack.top();
+    FieldContextPtr pContext = m_aFieldStack.back();
     OSL_ENSURE( pContext.get(), "no field context available");
     if( pContext.get() )
     {
@@ -4388,7 +4388,7 @@ void DomainMapper_Impl::CloseFieldCommand()
 
     FieldContextPtr pContext;
     if(!m_aFieldStack.empty())
-        pContext = m_aFieldStack.top();
+        pContext = m_aFieldStack.back();
     OSL_ENSURE( pContext.get(), "no field context available");
     if( pContext.get() )
     {
@@ -5064,7 +5064,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                         }
                         uno::Reference< text::XTextContent > xToInsert( xTC, uno::UNO_QUERY );
 
-                        uno::Sequence<beans::PropertyValue> aValues = m_aFieldStack.top()->getProperties()->GetPropertyValues();
+                        uno::Sequence<beans::PropertyValue> aValues
+                            = m_aFieldStack.back()->getProperties()->GetPropertyValues();
                         appendTextContent(xToInsert, aValues);
                         m_bSetCitation = true;
                     }
@@ -5152,7 +5153,7 @@ bool DomainMapper_Impl::IsFieldResultAsString()
 {
     bool bRet = false;
     OSL_ENSURE( !m_aFieldStack.empty(), "field stack empty?");
-    FieldContextPtr pContext = m_aFieldStack.top();
+    FieldContextPtr pContext = m_aFieldStack.back();
     OSL_ENSURE( pContext.get(), "no field context available");
     if( pContext.get() )
     {
@@ -5164,7 +5165,7 @@ bool DomainMapper_Impl::IsFieldResultAsString()
 void DomainMapper_Impl::AppendFieldResult(OUString const& rString)
 {
     assert(!m_aFieldStack.empty());
-    FieldContextPtr pContext = m_aFieldStack.top();
+    FieldContextPtr pContext = m_aFieldStack.back();
     SAL_WARN_IF(!pContext.get(), "writerfilter.dmapper", "no field context");
     if (pContext.get())
     {
@@ -5202,8 +5203,24 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
     TagLogger::getInstance().chars(rResult);
 #endif
 
-    FieldContextPtr pContext = m_aFieldStack.top();
+    FieldContextPtr pContext = m_aFieldStack.back();
     OSL_ENSURE( pContext.get(), "no field context available");
+
+    if (m_aFieldStack.size() > 1)
+    {
+        // This is a nested field. See if the parent supports nesting on the Writer side.
+        FieldContextPtr pParentContext = m_aFieldStack[m_aFieldStack.size() - 2];
+        if (pParentContext)
+        {
+            std::vector<OUString> aParentParts = pParentContext->GetCommandParts();
+            // Conditional text fields don't support nesting in Writer.
+            if (!aParentParts.empty() && aParentParts[0] == "IF")
+            {
+                return;
+            }
+        }
+    }
+
     if( pContext.get() )
     {
         uno::Reference<text::XTextField> xTextField = pContext->GetTextField();
@@ -5324,7 +5341,7 @@ void DomainMapper_Impl::SetFieldFFData(const FFDataHandler::Pointer_t& pFFDataHa
 
     if (!m_aFieldStack.empty())
     {
-        FieldContextPtr pContext = m_aFieldStack.top();
+        FieldContextPtr pContext = m_aFieldStack.back();
         if (pContext.get())
         {
             pContext->setFFDataHandler(pFFDataHandler);
@@ -5347,7 +5364,7 @@ void DomainMapper_Impl::PopFieldContext()
     if (m_aFieldStack.empty())
         return;
 
-    FieldContextPtr pContext = m_aFieldStack.top();
+    FieldContextPtr pContext = m_aFieldStack.back();
     OSL_ENSURE( pContext.get(), "no field context available");
     if( pContext.get() )
     {
@@ -5423,7 +5440,7 @@ void DomainMapper_Impl::PopFieldContext()
                         // e.g. SdtEndBefore.
                         if (m_pLastCharacterContext.get())
                             aMap.InsertProps(m_pLastCharacterContext);
-                        aMap.InsertProps(m_aFieldStack.top()->getProperties());
+                        aMap.InsertProps(m_aFieldStack.back()->getProperties());
                         appendTextContent(xToInsert, aMap.GetPropertyValues());
                         CheckRedline( xToInsert->getAnchor( ) );
                     }
@@ -5511,7 +5528,7 @@ void DomainMapper_Impl::PopFieldContext()
 
     }
     //remove the field context
-    m_aFieldStack.pop();
+    m_aFieldStack.pop_back();
 }
 
 

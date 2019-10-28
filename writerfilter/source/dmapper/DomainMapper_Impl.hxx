@@ -417,7 +417,7 @@ private:
     std::stack<TextAppendContext>                                                   m_aTextAppendStack;
     std::stack<AnchoredContext>                                                     m_aAnchoredStack;
     std::stack<HeaderFooterContext>                                                 m_aHeaderFooterStack;
-    std::stack<FieldContextPtr>                                                     m_aFieldStack;
+    std::deque<FieldContextPtr> m_aFieldStack;
     bool m_bForceGenericFields;
     bool                                                                            m_bSetUserFieldContent;
     bool                                                                            m_bSetCitation;
