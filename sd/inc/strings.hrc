@@ -74,6 +74,7 @@
 #define STR_TITLE_NAMEGROUP                             NC_("STR_TITLE_NAMEGROUP", "Name Object")
 #define STR_DESC_NAMEGROUP                              NC_("STR_DESC_NAMEGROUP", "Name")
 #define STR_WARN_PAGE_EXISTS                            NC_("STR_WARN_PAGE_EXISTS", "The slide name already exists or is invalid. Please enter another name.")
+#define STR_WARN_PAGE_EXISTS_DRAW                       NC_("STR_WARN_PAGE_EXISTS_DRAW", "The page name already exists or is invalid. Please enter another name.")
 #define STR_SNAPDLG_SETLINE                             NC_("STR_SNAPDLG_SETLINE", "Edit Snap Line")
 #define STR_SNAPDLG_SETPOINT                            NC_("STR_SNAPDLG_SETPOINT", "Edit Snap Point")
 #define STR_POPUP_EDIT_SNAPLINE                         NC_("STR_POPUP_EDIT_SNAPLINE", "Edit Snap Line...")
@@ -311,6 +312,7 @@
 #define STR_LAYOUT_DEFAULT_TITLE_NAME                   NC_("STR_LAYOUT_DEFAULT_TITLE_NAME", "Title" )
 #define STR_STANDARD_STYLESHEET_NAME                    NC_("STR_STANDARD_STYLESHEET_NAME", "Default" )
 #define STR_UNDO_MOVEPAGES                              NC_("STR_UNDO_MOVEPAGES", "Move slides" )
+#define STR_INSERT_PAGES                                NC_("STR_INSERT_PAGES", "Insert Pages" )
 
 #define STR_POOLSHEET_OBJWITHOUTFILL                    NC_("STR_POOLSHEET_OBJWITHOUTFILL", "Object without fill" )
 #define STR_POOLSHEET_OBJNOLINENOFILL                   NC_("STR_POOLSHEET_OBJNOLINENOFILL", "Object with no fill and no line" )
