@@ -49,6 +49,8 @@ SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
     // insert text
     if (!m_pMedium)
         m_xDialog->set_title(SdResId(STR_INSERT_TEXT));
+    else if (m_pDoc && m_pDoc->GetDocumentType() == DocumentType::Draw)
+        m_xDialog->set_title(SdResId(STR_INSERT_PAGES));
 
     Reset();
 }

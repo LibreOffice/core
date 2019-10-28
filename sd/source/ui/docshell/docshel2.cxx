@@ -279,8 +279,13 @@ bool DrawDocShell::CheckPageName(weld::Window* pWin, OUString& rName)
 
     if( ! bIsNameValid )
     {
-        OUString aDesc( SdResId( STR_WARN_PAGE_EXISTS ) );
+        OUString aDesc;
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+
+        if (GetDocumentType() == DocumentType::Draw)
+            aDesc = SdResId( STR_WARN_PAGE_EXISTS_DRAW );
+        else
+            aDesc = SdResId( STR_WARN_PAGE_EXISTS );
 
         ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(pWin, aStrForDlg, aDesc));
         aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
