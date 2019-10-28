@@ -96,10 +96,9 @@ ScFormulaDlg::ScFormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
 
     ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl(m_pViewShell);
 
-    OSL_ENSURE( pInputHdl, "Missing input handler :-/" );
+    assert(pInputHdl && "Missing input handler :-/");
 
-    if ( pInputHdl )
-        pInputHdl->NotifyChange( nullptr );
+    pInputHdl->NotifyChange( nullptr );
 
     ScFormulaReferenceHelper::enableInput( true );
     ScFormulaReferenceHelper::EnableSpreadsheets();
