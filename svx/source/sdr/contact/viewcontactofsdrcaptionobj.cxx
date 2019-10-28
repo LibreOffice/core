@@ -66,8 +66,14 @@ namespace sdr
                     false));
 
             // take unrotated snap rect (direct model data) for position and size
-            const tools::Rectangle aRectangle(rCaptionObj.GetGeoRect());
-            const ::basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(aRectangle);
+            tools::Rectangle rRectangle = rCaptionObj.GetGeoRect();
+            // Hack for calc, transform position of object according
+            // to current zoom so as objects relative position to grid
+            // appears stable
+            Point aGridOff = rCaptionObj.GetGridOffset();
+            rRectangle += aGridOff;
+
+            const ::basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(rRectangle);
             const GeoStat& rGeoStat(rCaptionObj.GetGeoStat());
 
             // fill object matrix
@@ -82,8 +88,11 @@ namespace sdr
             double fCornerRadiusY;
             drawinglayer::primitive2d::calculateRelativeCornerRadius(
                 rCaptionObj.GetEckenradius(), aObjectRange, fCornerRadiusX, fCornerRadiusY);
-            const basegfx::B2DPolygon aTail(rCaptionObj.getTailPolygon());
-
+            ::basegfx::B2DPolygon aTail = rCaptionObj.getTailPolygon();
+            // Hack for calc, transform position of tail according
+            // to current zoom so as objects relative position to grid
+            // appears stable
+            aTail.transform( basegfx::utils::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
             // create primitive. Always create one (even if invisible) to let the decomposition
             // of SdrCaptionPrimitive2D create needed invisible elements for HitTest and BoundRect
             const drawinglayer::primitive2d::Primitive2DReference xReference(

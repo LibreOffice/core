@@ -52,7 +52,6 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
-#include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <sal/log.hxx>
 #include <vcl/ptrstyle.hxx>
 
@@ -1468,12 +1467,5 @@ void SdrView::SetMasterPagePaintCaching(bool bOn)
     }
 }
 
-// Default ObjectContact is ObjectContactOfPageView
-sdr::contact::ObjectContact* SdrView::createViewSpecificObjectContact(
-    SdrPageWindow& rPageWindow,
-    const sal_Char* pDebugName) const
-{
-    return new sdr::contact::ObjectContactOfPageView(rPageWindow, pDebugName);
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,6 +30,7 @@
 namespace vcl { class Window; }
 
 class SdrModel;
+class ScDrawView;
 class SdrCaptionObj;
 
 class ScNoteMarker
@@ -49,6 +50,7 @@ private:
     bool const        m_bByKeyboard;
 
     tools::Rectangle       m_aRect;
+    ScDrawView*     m_pDrawView;
     std::unique_ptr<SdrModel>           m_pModel;
     ScCaptionPtr    m_xObject;
     bool            m_bVisible;
@@ -57,7 +59,7 @@ private:
 public:
                 ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window* pBottom, vcl::Window* pDiagonal,
                                 ScDocument* pD, const ScAddress& aPos, const OUString& rUser,
-                                const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard);
+                                const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard, ScDrawView * pDrawView);
                 ~ScNoteMarker();
 
     void        Draw();

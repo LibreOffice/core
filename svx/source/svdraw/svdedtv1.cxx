@@ -1275,6 +1275,8 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
     {
         SfxItemSet aMarkAttr(GetAttrFromMarked(false)); // because of AutoGrowHeight and corner radius
         tools::Rectangle aRect(GetMarkedObjRect());
+        // restore position to that before calc hack
+        aRect -= GetGridOffset();
 
         if(GetSdrPageView())
         {

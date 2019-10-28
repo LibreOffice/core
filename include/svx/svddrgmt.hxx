@@ -66,12 +66,11 @@ class SdrDragEntrySdrObject : public SdrDragEntry
 private:
     const SdrObject&                                maOriginal;
     SdrObject*                                      mpClone;
+    sdr::contact::ObjectContact&                    mrObjectContact;
     bool const                                      mbModify;
 
 public:
-    SdrDragEntrySdrObject(
-        const SdrObject& rOriginal,
-        bool bModify);
+    SdrDragEntrySdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify);
     virtual ~SdrDragEntrySdrObject() override;
 
     // #i54102# Split createPrimitive2DSequenceInCurrentState in prepareCurrentState and processing,
@@ -128,19 +127,10 @@ protected:
     void clearSdrDragEntries();
     void addSdrDragEntry(std::unique_ptr<SdrDragEntry> pNew);
     virtual void createSdrDragEntries();
-    virtual void createSdrDragEntryForSdrObject(const SdrObject& rOriginal);
+    virtual void createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact);
 
-    // Helper to support inserting a new OverlayObject. It will do all
-    // necessary stuff involved with that:
-    // - add GridOffset for non-linear ViewToDevice transformation (calc)
-    // - add to OverlayManager
-    // - add to local OverlayObjectList - ownership change (!)
-    // It is centralized here (and protected) to avoid that new usages/
-    // implementations forget one of these needed steps.
-    void insertNewlyCreatedOverlayObjectForSdrDragMethod(
-        std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject,
-        const sdr::contact::ObjectContact& rObjectContact,
-        sdr::overlay::OverlayManager& rOverlayManager);
+    // access for derivated classes to maOverlayObjectList (passes ownership)
+    void addToOverlayObjectList(std::unique_ptr<sdr::overlay::OverlayObject> pNew) { maOverlayObjectList.append(std::move(pNew)); }
 
     // access for derivated classes to mrSdrDragView
     SdrDragView& getSdrDragView() { return mrSdrDragView; }
@@ -202,9 +192,7 @@ public:
     virtual void CancelSdrDrag();
     virtual PointerStyle GetSdrDragPointer() const=0;
 
-    virtual void CreateOverlayGeometry(
-        sdr::overlay::OverlayManager& rOverlayManager,
-        const sdr::contact::ObjectContact& rObjectContact);
+    virtual void CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager);
     void destroyOverlayGeometry();
 
     virtual basegfx::B2DHomMatrix getCurrentTransformation();
@@ -237,7 +225,7 @@ private:
     void ImpCheckSnap(const Point& rPt);
 
 protected:
-    virtual void createSdrDragEntryForSdrObject(const SdrObject& rOriginal) override;
+    virtual void createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact) override;
 
 public:
     SdrDragMove(SdrDragView& rNewView);

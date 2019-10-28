@@ -333,6 +333,10 @@ void ScGridWindow::UpdateStatusPosSize()
         pDrView->TakeActionRect( aRect );
         if ( !aRect.IsEmpty() )
         {
+            // mouse position will have been adjusted for offset
+            // at current position and zoom, restore that adjustment here
+            // so status shows correct value
+            aRect -= pDrView->GetGridOffset();
             pPV->LogicToPagePos(aRect);
             aSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
             aSet.Put( SvxSizeItem( SID_ATTR_SIZE,
@@ -345,6 +349,10 @@ void ScGridWindow::UpdateStatusPosSize()
         if ( pDrView->AreObjectsMarked() ) // selected objects
         {
             tools::Rectangle aRect = pDrView->GetAllMarkedRect();
+            // mouse position will have been adjusted for offset
+            // at current position and zoom, restore that adjustment here
+            // so status shows correct value
+            aRect -=  pDrView->GetGridOffset();
             pPV->LogicToPagePos(aRect);
             aSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
             aSet.Put( SvxSizeItem( SID_ATTR_SIZE,
