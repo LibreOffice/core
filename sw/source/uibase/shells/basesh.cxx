@@ -2339,16 +2339,44 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         case SID_BACKGROUND_COLOR:
         case SID_TABLE_CELL_BACKGROUND_COLOR:
         {
+            const SfxPoolItem* pColorStringItem = nullptr;
+            bool bIsTransparent = false;
+
             aBrushItem->SetGraphicPos(GPOS_NONE);
 
-            if(pArgs)
+            sal_uInt16 nSlotId = SID_BACKGROUND_COLOR ? SID_BACKGROUND_COLOR : SID_TABLE_CELL_BACKGROUND_COLOR;
+            if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
             {
-                const SvxColorItem& rNewColorItem = pArgs->Get(nSlot == SID_BACKGROUND_COLOR ? SID_BACKGROUND_COLOR : SID_TABLE_CELL_BACKGROUND_COLOR );
+                OUString sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
+                if (sColor == "transparent")
+                {
+                    bIsTransparent = true;
+                }
+                else
+                {
+                    Color aColor(sColor.toInt32(16));
+
+                    aBrushItem->SetColor(aColor);
+
+                    SvxColorItem aNewColorItem(nSlotId);
+                    aNewColorItem.SetValue(aColor);
+
+                    GetView().GetViewFrame()->GetBindings().SetState(aNewColorItem);
+                }
+            }
+            else if(pArgs)
+            {
+                const SvxColorItem& rNewColorItem = static_cast<const SvxColorItem&>(pArgs->Get(nSlotId));
                 const Color& rNewColor = rNewColorItem.GetValue();
                 aBrushItem->SetColor(rNewColor);
                 GetView().GetViewFrame()->GetBindings().SetState(rNewColorItem);
             }
             else
+            {
+                bIsTransparent = true;
+            }
+
+            if (bIsTransparent)
             {
                 aBrushItem->SetColor(COL_TRANSPARENT);
                 rReq.AppendItem(SvxColorItem(COL_TRANSPARENT,nSlot));
