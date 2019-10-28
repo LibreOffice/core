@@ -40,7 +40,7 @@
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <sfx2/minfitem.hxx>
-#include <comphelper/DisableInteractionHelper.hxx>
+#include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -52,7 +52,6 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
-#include <uno/current_context.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -487,8 +486,7 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
         if ( xRootNode->hasChildNodes() )
         {
             // tdf#120362: Don't ask to enable disabled Java when filling script list
-            css::uno::ContextLayer layer(
-                new comphelper::NoEnableJavaInteractionContext(css::uno::getCurrentContext()));
+            css::uno::ContextLayer layer(comphelper::NoEnableJavaInteractionContext());
 
             Sequence< Reference< browse::XBrowseNode > > children =
                 xRootNode->getChildNodes();
