@@ -1183,6 +1183,8 @@ public:
     void                                SaveBackground(VirtualDevice& rSaveDevice,
                                                        const Point& rPos, const Size& rSize, const Size&) const override;
 
+    bool                                ProtectWindow();
+
     virtual const SystemEnvData*        GetSystemData() const;
 
     // API to set/query the component interfaces

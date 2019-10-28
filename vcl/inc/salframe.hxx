@@ -297,6 +297,8 @@ public:
     // (e.g. input methods, printer update handlers).
     bool                    CallCallback( SalEvent nEvent, const void* pEvent ) const
         { return m_pProc && m_pProc( m_pWindow, nEvent, pEvent ); }
+
+    virtual bool ProtectWindow() = 0;
 };
 
 #ifdef _WIN32

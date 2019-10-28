@@ -73,6 +73,11 @@ void Window::ImplRefreshFontData(bool bNewFontLists)
         pChild->ImplRefreshFontData(bNewFontLists);
 }
 
+bool Window::ProtectWindow()
+{
+    return ImplGetFrame()->ProtectWindow();
+}
+
 } /* namespace vcl */
 
 

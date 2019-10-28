@@ -1078,6 +1078,7 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
         {
             rArg.Value >>= bValue;
             pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_CONTENT_EXTRACTION, bValue));
+            //GetVCLWindow()->ProtectWindow();
         }
         else if (rArg.Name == "LockExport")
         {

@@ -2941,6 +2941,11 @@ void WinSalFrame::EndSetClipRegion()
     }
 }
 
+bool WinSalFrame::ProtectWindow()
+{
+    return SetWindowDisplayAffinity(mhWnd, WDA_MONITOR);
+}
+
 static bool ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
                                 WPARAM wParam, LPARAM lParam )
 {
