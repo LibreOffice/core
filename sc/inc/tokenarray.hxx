@@ -90,7 +90,9 @@ public:
                             /** Determines the extent of direct adjacent
                                 references. Only use with real functions, e.g.
                                 GetOuterFuncOpCode() == ocSum ! */
-    bool                    GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
+    bool                    GetAdjacentExtendOfOuterFuncRefs(
+                                const ScDocument* pDoc,
+                                SCCOLROW& nExtend,
                                 const ScAddress& rPos, ScDirection );
 
     formula::FormulaToken* AddRawToken( const ScRawToken& );
@@ -251,7 +253,7 @@ public:
      * Create a string representation of formula token array without modifying
      * the internal state of the token array.
      */
-    OUString CreateString( sc::TokenStringContext& rCxt, const ScAddress& rPos ) const;
+    OUString CreateString( const ScDocument* pDoc, sc::TokenStringContext& rCxt, const ScAddress& rPos ) const;
 
     void WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow );
     bool NeedsWrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow ) const;

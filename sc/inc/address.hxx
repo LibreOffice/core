@@ -550,9 +550,11 @@ public:
 
     SC_DLLPUBLIC ScRefFlags ParseAny( const OUString&, const ScDocument*,
                                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    SC_DLLPUBLIC ScRefFlags ParseCols( const OUString&,
+    SC_DLLPUBLIC ScRefFlags ParseCols( const ScDocument* pDoc,
+                                       const OUString&,
                                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    SC_DLLPUBLIC void ParseRows( const OUString&,
+    SC_DLLPUBLIC void ParseRows( const ScDocument* pDoc,
+                                       const OUString&,
                                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
 
     /** Parse an Excel style reference up to and including the sheet name
@@ -623,11 +625,11 @@ public:
             ScRange& rErrorRange, const ScDocument* pDocument = nullptr );
 
     /** Same as Move() but with sticky end col/row anchors. */
-    [[nodiscard]] SC_DLLPUBLIC bool MoveSticky( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
+    [[nodiscard]] SC_DLLPUBLIC bool MoveSticky( const ScDocument* pDoc, SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
             ScRange& rErrorRange );
 
-    SC_DLLPUBLIC void IncColIfNotLessThan(SCCOL nStartCol, SCCOL nOffset);
-    SC_DLLPUBLIC void IncRowIfNotLessThan(SCROW nStartRow, SCROW nOffset);
+    SC_DLLPUBLIC void IncColIfNotLessThan(const ScDocument* pDoc, SCCOL nStartCol, SCCOL nOffset);
+    SC_DLLPUBLIC void IncRowIfNotLessThan(const ScDocument* pDoc, SCROW nStartRow, SCROW nOffset);
 
     SC_DLLPUBLIC void ExtendTo( const ScRange& rRange );
     SC_DLLPUBLIC bool Intersects( const ScRange& rRange ) const;    // do two ranges intersect?
@@ -642,12 +644,12 @@ public:
     /** Increment or decrement end column unless sticky or until it becomes
         sticky. Checks if the range encompasses at least two columns so should
         be called before adjusting the start column. */
-    void IncEndColSticky( SCCOL nDelta );
+    void IncEndColSticky( const ScDocument* pDoc, SCCOL nDelta );
 
     /** Increment or decrement end row unless sticky or until it becomes
         sticky. Checks if the range encompasses at least two rows so should
         be called before adjusting the start row. */
-    void IncEndRowSticky( SCROW nDelta );
+    void IncEndRowSticky( const ScDocument* pDoc, SCROW nDelta );
 
     inline bool operator==( const ScRange& rRange ) const;
     inline bool operator!=( const ScRange& rRange ) const;
@@ -977,7 +979,7 @@ inline OUString ScColToAlpha( SCCOL nCol )
 }
 
 /// get column number of A..IV... string
-bool AlphaToCol( SCCOL& rCol, const OUString& rStr);
+bool AlphaToCol( const ScDocument* pDoc, SCCOL& rCol, const OUString& rStr);
 
 #endif // INCLUDED_SC_INC_ADDRESS_HXX
 

@@ -1338,7 +1338,7 @@ void ExcEScenarioCell::SaveXml( XclExpXmlStream& rStrm ) const
     rStrm.GetCurrentStream()->singleElement( XML_inputCells,
             // OOXTODO: XML_deleted,
             // OOXTODO: XML_numFmtId,
-            XML_r,      XclXmlUtils::ToOString( ScAddress( nCol, nRow, 0 ) ),
+            XML_r,      XclXmlUtils::ToOString( &rStrm.GetRoot().GetDoc(), ScAddress( nCol, nRow, 0 ) ),
             // OOXTODO: XML_undone,
             XML_val,    XclXmlUtils::ToOString( sText ) );
 }

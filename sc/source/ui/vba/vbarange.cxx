@@ -2121,12 +2121,13 @@ ScVbaRange::Cells( const uno::Any &nRowIndex, const uno::Any &nColumnIndex )
 
     // Performance: Use a common helper method for ScVbaRange::Cells and ScVbaWorksheet::Cells,
     // instead of creating a new ScVbaRange object in often-called ScVbaWorksheet::Cells
-    return CellsHelper( mxParent, mxContext, mxRange, nRowIndex, nColumnIndex );
+    return CellsHelper( &getScDocument(), mxParent, mxContext, mxRange, nRowIndex, nColumnIndex );
 }
 
 // static
 uno::Reference< excel::XRange >
-ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
+ScVbaRange::CellsHelper( const ScDocument* pDoc,
+                         const uno::Reference< ov::XHelperInterface >& xParent,
                          const uno::Reference< uno::XComponentContext >& xContext,
                          const uno::Reference< css::table::XCellRange >& xRange,
                          const uno::Any &nRowIndex, const uno::Any &nColumnIndex )
@@ -2160,7 +2161,7 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
         {
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
-            ScRefFlags flags = tmpRange.ParseCols( sCol, dDetails );
+            ScRefFlags flags = tmpRange.ParseCols( pDoc, sCol, dDetails );
             if ( (flags & ScRefFlags::COL_VALID) == ScRefFlags::ZERO )
                throw uno::RuntimeException();
             nColumn = tmpRange.aStart.Col() + 1;
@@ -2335,7 +2336,7 @@ ScVbaRange::Rows(const uno::Any& aIndex )
         {
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
-            tmpRange.ParseRows( sAddress, dDetails );
+            tmpRange.ParseRows( &getScDocument(), sAddress, dDetails );
             SCROW nStartRow = tmpRange.aStart.Row();
             SCROW nEndRow = tmpRange.aEnd.Row();
 
@@ -2379,7 +2380,7 @@ ScVbaRange::Columns(const uno::Any& aIndex )
         {
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
-            tmpRange.ParseCols( sAddress, dDetails );
+            tmpRange.ParseCols( &getScDocument(), sAddress, dDetails );
             SCCOL nStartCol = tmpRange.aStart.Col();
             SCCOL nEndCol = tmpRange.aEnd.Col();
 

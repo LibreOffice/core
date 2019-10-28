@@ -1146,6 +1146,7 @@ const css::uno::Reference<css::chart::XChartDocument>& XclExpChartObj::GetChartD
 XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
         const ScPostIt* pScNote, const OUString& rAddText)
     : XclExpRecord(EXC_ID_NOTE)
+    , mrRoot(rRoot)
     , maScPos(rScPos)
     , mnObjId(EXC_OBJ_INVALID_ID)
     , mbVisible(pScNote && pScNote->IsCaptionShown())
@@ -1284,7 +1285,7 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr rComments = rStrm.GetCurrentStream();
 
     rComments->startElement( XML_comment,
-            XML_ref,        XclXmlUtils::ToOString(maScPos),
+            XML_ref,        XclXmlUtils::ToOString(&mrRoot.GetDoc(), maScPos),
             XML_authorId,   OString::number(nAuthorId)
             // OOXTODO: XML_guid
     );

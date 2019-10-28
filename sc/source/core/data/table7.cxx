@@ -277,7 +277,7 @@ void ScTable::UnshareFormulaCells( SCCOL nCol, std::vector<SCROW>& rRows )
     if (!IsColValid(nCol))
         return;
 
-    sc::SharedFormulaUtil::unshareFormulaCells(aCol[nCol].maCells, rRows);
+    sc::SharedFormulaUtil::unshareFormulaCells(pDocument, aCol[nCol].maCells, rRows);
 }
 
 void ScTable::RegroupFormulaCells( SCCOL nCol )
