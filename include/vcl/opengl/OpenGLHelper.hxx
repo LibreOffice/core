@@ -92,6 +92,9 @@ public:
      * Insert a glDebugMessage into the queue - helpful for debugging
      * with apitrace to annotate the output and correlate it with code.
      */
+#if defined __GNUC__
+    __attribute__ ((format (printf, 2, 3)))
+#endif
     static void debugMsgPrint(const int nType, const char *pFormat, ...);
     static void debugMsgStream(std::ostringstream const &pStream);
     static void debugMsgStreamWarn(std::ostringstream const &pStream);

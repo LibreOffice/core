@@ -654,6 +654,9 @@ void redirect(char *makefile)
         fatalerr("cannot open \"%s\"\n", makefile ? makefile : "<NULL>");
 }
 
+#if defined __GNUC__
+__attribute__ ((format (printf, 1, 2)))
+#endif
 void fatalerr(char *msg, ...)
 {
     va_list args;
@@ -664,6 +667,9 @@ void fatalerr(char *msg, ...)
     exit (1);
 }
 
+#if defined __GNUC__
+__attribute__ ((format (printf, 1, 2)))
+#endif
 void warning(char const *msg, ...)
 {
 #ifdef DEBUG_MKDEPEND
@@ -677,6 +683,9 @@ void warning(char const *msg, ...)
 #endif /* DEBUG_MKDEPEND */
 }
 
+#if defined __GNUC__
+__attribute__ ((format (printf, 1, 2)))
+#endif
 void warning1(char const *msg, ...)
 {
 #ifdef DEBUG_MKDEPEND

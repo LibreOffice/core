@@ -261,6 +261,9 @@ namespace XPath
 
     extern "C" {
 
+#if defined __GNUC__
+        __attribute__ ((format (printf, 2, 3)))
+#endif
         static void generic_error_func(void *, const char *format, ...)
         {
             char str[1000];
