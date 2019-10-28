@@ -35,8 +35,8 @@ namespace comphelper
 // stream for reading data from a sequence of bytes
 
 
-class COMPHELPER_DLLPUBLIC SequenceInputStream
-: public ::cppu::WeakImplHelper< css::io::XInputStream, css::io::XSeekable >
+class COMPHELPER_DLLPUBLIC SequenceInputStream final
+    : public ::cppu::WeakImplHelper< css::io::XInputStream, css::io::XSeekable >
 {
     ::osl::Mutex    m_aMutex;
     css::uno::Sequence<sal_Int8> const m_aData;

@@ -153,7 +153,7 @@ namespace comphelper
             the event type to notify, e.g. css::lang::EventObject
     */
     template< class LISTENER, class EVENT >
-    class OSimpleListenerContainer : protected OListenerContainer
+    class OSimpleListenerContainer final : protected OListenerContainer
     {
     public:
         typedef LISTENER    ListenerClass;
@@ -189,7 +189,7 @@ namespace comphelper
         /// typed notification
         inline void    notify( const EventClass& _rEvent, NotificationMethod _pNotify );
 
-    protected:
+    private:
         virtual bool    implNotify(
                             const css::uno::Reference< css::lang::XEventListener >& _rxListener,
                             const css::lang::EventObject& _rEvent

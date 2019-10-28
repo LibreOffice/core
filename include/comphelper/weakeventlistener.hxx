@@ -132,7 +132,7 @@ namespace comphelper
                                     >   OWeakEventListenerAdapter_Base;
     /** the most simple listener adapter: for XEventListeners at XComponents
     */
-    class COMPHELPER_DLLPUBLIC OWeakEventListenerAdapter : public OWeakEventListenerAdapter_Base
+    class COMPHELPER_DLLPUBLIC OWeakEventListenerAdapter final : public OWeakEventListenerAdapter_Base
     {
     public:
         OWeakEventListenerAdapter(
@@ -143,7 +143,7 @@ namespace comphelper
         // nothing to do except an own ctor - the forwarding of the "disposing" is already done
         // in the base class
 
-    protected:
+    private:
         using OWeakEventListenerAdapter_Base::disposing;
         virtual void SAL_CALL disposing( ) override;
     };
