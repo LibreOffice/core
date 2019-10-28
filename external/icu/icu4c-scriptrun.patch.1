@@ -39,8 +39,8 @@ diff -ur icu.org/source/extra/scrptrun/scrptrun.h icu/source/extra/scrptrun/scrp
  #include "unicode/uscript.h"
 +#include <vector>
  
- struct ScriptRecord
- {
+ U_NAMESPACE_BEGIN
+ 
 @@ -81,7 +82,7 @@
      int32_t scriptEnd;
      UScriptCode scriptCode;
