@@ -20,17 +20,16 @@
 #ifndef INCLUDED_CANVAS_SOURCE_VCL_SPRITECANVASHELPER_HXX
 #define INCLUDED_CANVAS_SOURCE_VCL_SPRITECANVASHELPER_HXX
 
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
+#include <com/sun/star/rendering/XAnimatedSprite.hpp>
+#include <com/sun/star/rendering/XAnimation.hpp>
+#include <com/sun/star/rendering/XCustomSprite.hpp>
 
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 
 #include <canvas/spriteredrawmanager.hxx>
 #include <canvas/elapsedtime.hxx>
-#include <canvas/vclwrapper.hxx>
 #include "canvashelper.hxx"
-#include "impltools.hxx"
 
 
 namespace vclcanvas

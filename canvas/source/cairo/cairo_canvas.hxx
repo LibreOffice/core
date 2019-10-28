@@ -20,33 +20,26 @@
 #ifndef INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_CANVAS_HXX
 #define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_CANVAS_HXX
 
-#include <rtl/ref.hxx>
-
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
-#include <com/sun/star/rendering/XBufferController.hpp>
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 
-#include <canvas/base/spritecanvasbase.hxx>
 #include <canvas/base/basemutexhelper.hxx>
-#include <canvas/base/bufferedgraphicdevicebase.hxx>
+#include <canvas/base/bitmapcanvasbase.hxx>
+#include <canvas/base/graphicdevicebase.hxx>
+#include <canvas/base/integerbitmapbase.hxx>
 
-#include <basegfx/vector/b2isize.hxx>
-
+#include "cairo_canvashelper.hxx"
 #include "cairo_devicehelper.hxx"
 #include "cairo_repainttarget.hxx"
 #include "cairo_surfaceprovider.hxx"
-#include "cairo_spritecanvashelper.hxx"
 
 #define CANVAS_SERVICE_NAME        "com.sun.star.rendering.Canvas.Cairo"
 #define CANVAS_IMPLEMENTATION_NAME "com.sun.star.comp.rendering.Canvas.Cairo"

@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/rendering/TextDirection.hpp>
+
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/utils/canvastools.hxx>
@@ -28,6 +30,8 @@
 #include <vcl/virdev.hxx>
 
 #include <canvas/canvastools.hxx>
+#include <canvas/verifyinput.hxx>
+#include <cairo.h>
 
 #include "cairo_canvasfont.hxx"
 #include "cairo_canvashelper.hxx"

@@ -55,6 +55,7 @@
 
 #include <canvas/canvastools.hxx>
 #include <canvas/parametricpolypolygon.hxx>
+#include <cairo.h>
 
 #include "cairo_cachedbitmap.hxx"
 #include "cairo_canvasbitmap.hxx"

@@ -29,6 +29,8 @@
 
 #include <canvas/canvastools.hxx>
 
+#include <cairo.h>
+
 #include "cairo_canvasbitmap.hxx"
 #include "cairo_devicehelper.hxx"
 #include "cairo_spritecanvas.hxx"

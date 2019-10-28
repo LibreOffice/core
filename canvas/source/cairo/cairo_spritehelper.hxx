@@ -20,13 +20,9 @@
 #ifndef INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_SPRITEHELPER_HXX
 #define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_SPRITEHELPER_HXX
 
-#include <com/sun/star/rendering/XCustomSprite.hpp>
-
 #include <canvas/base/canvascustomspritehelper.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2isize.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include "cairo_spritecanvas.hxx"
 

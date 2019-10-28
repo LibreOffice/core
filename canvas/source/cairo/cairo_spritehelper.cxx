@@ -32,6 +32,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <canvas/canvastools.hxx>
+#include <cairo.h>
 
 #include "cairo_canvascustomsprite.hxx"
 #include "cairo_spritehelper.hxx"
