@@ -52,7 +52,7 @@ typedef rtlDigestError (Digest_update_t) (
 typedef rtlDigestError (Digest_get_t) (
     void *ctx, sal_uInt8 *Buffer, sal_uInt32 BufLen);
 
-struct Digest_Impl
+struct SAL_DLLPRIVATE Digest_Impl
 {
     rtlDigestAlgorithm  m_algorithm;
     sal_uInt32          m_length;
@@ -175,7 +175,7 @@ void SAL_CALL rtl_digest_destroy(rtlDigest Digest) SAL_THROW_EXTERN_C()
 #define DIGEST_CBLOCK_MD2 16
 #define DIGEST_LBLOCK_MD2 16
 
-struct DigestContextMD2
+struct SAL_DLLPRIVATE DigestContextMD2
 {
     sal_uInt32 m_nDatLen;
     sal_uInt8  m_pData[DIGEST_CBLOCK_MD2];
@@ -183,7 +183,7 @@ struct DigestContextMD2
     sal_uInt32 m_chksum[DIGEST_LBLOCK_MD2];
 };
 
-struct DigestMD2_Impl
+struct SAL_DLLPRIVATE DigestMD2_Impl
 {
     Digest_Impl      m_digest;
     DigestContextMD2 m_context;
@@ -437,7 +437,7 @@ void SAL_CALL rtl_digest_destroyMD2(rtlDigest Digest) SAL_THROW_EXTERN_C()
 #define DIGEST_CBLOCK_MD5 64
 #define DIGEST_LBLOCK_MD5 16
 
-struct DigestContextMD5
+struct SAL_DLLPRIVATE DigestContextMD5
 {
     sal_uInt32 m_nDatLen;
     sal_uInt32 m_pData[DIGEST_LBLOCK_MD5];
@@ -445,7 +445,7 @@ struct DigestContextMD5
     sal_uInt32 m_nL, m_nH;
 };
 
-struct DigestMD5_Impl
+struct SAL_DLLPRIVATE DigestMD5_Impl
 {
     Digest_Impl      m_digest;
     DigestContextMD5 m_context;
@@ -824,7 +824,7 @@ typedef sal_uInt32 DigestSHA_update_t(sal_uInt32 x);
 static sal_uInt32 updateSHA_0(sal_uInt32 x);
 static sal_uInt32 updateSHA_1(sal_uInt32 x);
 
-struct DigestContextSHA
+struct SAL_DLLPRIVATE DigestContextSHA
 {
     DigestSHA_update_t *m_update;
     sal_uInt32          m_nDatLen;
@@ -833,7 +833,7 @@ struct DigestContextSHA
     sal_uInt32          m_nL, m_nH;
 };
 
-struct DigestSHA_Impl
+struct SAL_DLLPRIVATE DigestSHA_Impl
 {
     Digest_Impl      m_digest;
     DigestContextSHA m_context;
@@ -1390,13 +1390,13 @@ void SAL_CALL rtl_digest_destroySHA1(rtlDigest Digest) SAL_THROW_EXTERN_C()
 
 #define DIGEST_CBLOCK_HMAC_MD5 64
 
-struct ContextHMAC_MD5
+struct SAL_DLLPRIVATE ContextHMAC_MD5
 {
     DigestMD5_Impl m_hash;
     sal_uInt8      m_opad[DIGEST_CBLOCK_HMAC_MD5];
 };
 
-struct DigestHMAC_MD5_Impl
+struct SAL_DLLPRIVATE DigestHMAC_MD5_Impl
 {
     Digest_Impl     m_digest;
     ContextHMAC_MD5 m_context;
@@ -1586,13 +1586,13 @@ void SAL_CALL rtl_digest_destroyHMAC_MD5(rtlDigest Digest) SAL_THROW_EXTERN_C()
 
 #define DIGEST_CBLOCK_HMAC_SHA1 64
 
-struct ContextHMAC_SHA1
+struct SAL_DLLPRIVATE ContextHMAC_SHA1
 {
     DigestSHA_Impl m_hash;
     sal_uInt8      m_opad[DIGEST_CBLOCK_HMAC_SHA1];
 };
 
-struct DigestHMAC_SHA1_Impl
+struct SAL_DLLPRIVATE DigestHMAC_SHA1_Impl
 {
     Digest_Impl      m_digest;
     ContextHMAC_SHA1 m_context;

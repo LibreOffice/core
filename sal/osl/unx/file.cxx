@@ -60,13 +60,13 @@
 #include <android/asset_manager.h>
 #endif
 
-struct FileHandle_Impl
+struct SAL_DLLPRIVATE FileHandle_Impl
 {
     pthread_mutex_t m_mutex;
     rtl_String *    m_strFilePath; /*< holds native file path */
     int             m_fd;
 
-    enum Kind
+    enum SAL_DLLPRIVATE Kind
     {
         KIND_FD = 1,
         KIND_MEM = 2
@@ -74,7 +74,7 @@ struct FileHandle_Impl
     int const    m_kind;
     /** State
      */
-    enum StateBits
+    enum SAL_DLLPRIVATE StateBits
     {
         STATE_SEEKABLE  = 1, /*< default */
         STATE_READABLE  = 2, /*< default */
@@ -145,7 +145,7 @@ struct FileHandle_Impl
 
     oslFileError syncFile();
 
-    class Guard
+    class SAL_DLLPRIVATE Guard
     {
         pthread_mutex_t * const m_mutex;
 

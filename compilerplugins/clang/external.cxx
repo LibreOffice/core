@@ -44,11 +44,11 @@ public:
 
     bool VisitTagDecl(TagDecl const* decl)
     {
-        /*TODO:*/
-        return true; // in general, moving classes or enumerations into an unnamed namespace can break ADL
+        // in general, moving classes or enumerations into an unnamed namespace can break ADL
+        bool bNeedToUseVisibilityAttr = false;
         if (isa<ClassTemplateSpecializationDecl>(decl))
         {
-            return true;
+            bNeedToUseVisibilityAttr = true;
         }
         if (!decl->isThisDeclarationADefinition())
         {
@@ -56,17 +56,20 @@ public:
         }
         if (isa<CXXRecordDecl>(decl->getDeclContext()))
         {
-            return true;
+            bNeedToUseVisibilityAttr = true;
         }
         if (!compiler.getLangOpts().CPlusPlus)
         {
             return true;
         }
+        if (auto const attr = decl->getAttr<VisibilityAttr>())
+            if (attr->getVisibility() == VisibilityAttr::Hidden)
+                return true;
         if (auto const d = dyn_cast<CXXRecordDecl>(decl))
         {
             if (d->getDescribedClassTemplate() != nullptr)
             {
-                return true;
+                bNeedToUseVisibilityAttr = true;
             }
             if (auto const attr = d->getAttr<VisibilityAttr>())
             {
@@ -86,18 +89,19 @@ public:
                 return true;
             }
         }
-        return handleDeclaration(decl);
+        return handleDeclaration(decl, bNeedToUseVisibilityAttr);
     }
 
     bool VisitFunctionDecl(FunctionDecl const* decl)
     {
+        bool bNeedToUseVisibilityAttr = false;
         if (isa<CXXMethodDecl>(decl))
         {
             return true;
         }
         if (decl->getTemplatedKind() != FunctionDecl::TK_NonTemplate)
         {
-            return true;
+            bNeedToUseVisibilityAttr = true;
         }
         if (!decl->isThisDeclarationADefinition())
         {
@@ -146,7 +150,7 @@ public:
             //  #pragma GCC diagnostic ignored "-Wunused-function"
             return true;
         }
-        return handleDeclaration(decl);
+        return handleDeclaration(decl, bNeedToUseVisibilityAttr);
     }
 
     bool VisitVarDecl(VarDecl const* decl)
@@ -167,22 +171,22 @@ public:
         {
             return true;
         }
-        return handleDeclaration(decl);
+        return handleDeclaration(decl, /*bNeedToUseVisibilityAttr*/ false);
     }
 
     bool VisitClassTemplateDecl(ClassTemplateDecl const* decl)
     {
-        /*TODO:*/
-        return true; // in general, moving classes or enumerations into an unnamed namespace can break ADL
+        // in general, moving classes or enumerations into an unnamed namespace can break ADL
+        bool bNeedToUseVisiblityAttr = false;
         if (!decl->isThisDeclarationADefinition())
         {
             return true;
         }
         if (isa<CXXRecordDecl>(decl->getDeclContext()))
         {
-            return true;
+            bNeedToUseVisiblityAttr = true;
         }
-        return handleDeclaration(decl);
+        return handleDeclaration(decl, bNeedToUseVisiblityAttr);
     }
 
     bool VisitFunctionTemplateDecl(FunctionTemplateDecl const* decl)
@@ -195,7 +199,7 @@ public:
         {
             return true;
         }
-        return handleDeclaration(decl);
+        return handleDeclaration(decl, /*bNeedToUseVisibilityAttr*/ false);
     }
 
     bool VisitVarTemplateDecl(VarTemplateDecl const* decl)
@@ -204,7 +208,7 @@ public:
         {
             return true;
         }
-        return handleDeclaration(decl);
+        return handleDeclaration(decl, /*bNeedToUseVisibilityAttr*/ false);
     }
 
 private:
@@ -222,7 +226,7 @@ private:
         }
     }
 
-    bool handleDeclaration(NamedDecl const* decl)
+    bool handleDeclaration(NamedDecl const* decl, bool bNeedToUseVisibilityAttr)
     {
         if (ignoreLocation(decl))
         {
@@ -285,16 +289,28 @@ private:
         auto const canUnnamed = compiler.getLangOpts().CPlusPlus
                                 && !(isa<FunctionDecl>(decl) || isa<FunctionTemplateDecl>(decl));
         // in general, moving functions into an unnamed namespace can break ADL
-        assert(canStatic || canUnnamed);
+        assert(canStatic || canUnnamed || bNeedToUseVisibilityAttr);
+        std::string fix;
+        if (bNeedToUseVisibilityAttr)
+            fix = "mark it with SAL_DLLPRIVATE";
+        else
+        {
+            if (canStatic)
+                fix += "make it static";
+            if (canStatic && canUnnamed)
+                fix += " or ";
+            if (canUnnamed)
+                fix += "put it in an unnamed namespace";
+        }
         report(
             DiagnosticsEngine::Warning,
             ("externally available%select{| typedef'ed}0 entity %1 is not previously declared in an"
              " included file (if it is only used in this translation unit,"
-             " %select{|make it static}2%select{| or }3%select{|put it in an unnamed namespace}4;"
+             " %2;"
              " otherwise, provide a declaration of it in an included file)"),
             decl->getLocation())
-            << (typedefed != nullptr) << (typedefed == nullptr ? decl : typedefed) << canStatic
-            << (canStatic && canUnnamed) << canUnnamed << decl->getSourceRange();
+            << (typedefed != nullptr) << (typedefed == nullptr ? decl : typedefed) << fix
+            << decl->getSourceRange();
         for (auto d = decl->getPreviousDecl(); d != nullptr; d = d->getPreviousDecl())
         {
             report(DiagnosticsEngine::Note, "previous declaration is here", d->getLocation())

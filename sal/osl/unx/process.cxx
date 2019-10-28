@@ -788,7 +788,7 @@ void SAL_CALL osl_freeProcessHandle(oslProcess Process)
 }
 
 #if defined(LINUX)
-struct osl_procStat
+struct SAL_DLLPRIVATE osl_procStat
 {
    /* from 'stat' */
     pid_t pid;                /* pid */

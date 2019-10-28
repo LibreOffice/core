@@ -26,7 +26,7 @@
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 
-struct StringHashTableImpl {
+struct SAL_DLLPRIVATE StringHashTableImpl {
     sal_uInt32    nEntries;
     sal_uInt32    nSize;
     rtl_uString **pData;

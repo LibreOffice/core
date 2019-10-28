@@ -29,7 +29,7 @@
 #include <osl/conditn.h>
 #include <osl/time.h>
 
-struct oslConditionImpl
+struct SAL_DLLPRIVATE oslConditionImpl
 {
     pthread_cond_t  m_Condition;
     pthread_mutex_t m_Lock;
