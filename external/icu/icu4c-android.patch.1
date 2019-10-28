@@ -1,8 +1,8 @@
 diff -ur icu.org/source/common/unicode/platform.h icu/source/common/unicode/platform.h
---- icu.org/source/common/unicode/platform.h	2018-10-02 00:39:56.000000000 +0200
-+++ icu/source/common/unicode/platform.h	2018-10-20 00:36:24.598886605 +0200
-@@ -789,7 +789,7 @@
- #elif defined(_MSC_VER) || (__has_declspec_attribute(dllexport) && __has_declspec_attribute(dllimport))
+--- icu.org/source/common/unicode/platform.h	2019-10-03 13:16:41.000000000 +0200
++++ icu/source/common/unicode/platform.h	2019-10-29 22:58:26.881221287 +0100
+@@ -818,7 +818,7 @@
+                             UPRV_HAS_DECLSPEC_ATTRIBUTE(dllimport))
  #   define U_EXPORT __declspec(dllexport)
  #elif defined(__GNUC__)
 -#   define U_EXPORT __attribute__((visibility("default")))

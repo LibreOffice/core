@@ -25,7 +25,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			INSTALL=`cygpath -m /usr/bin/install` \
 			./runConfigureICU \
 			$(if $(MSVC_USE_DEBUG_RUNTIME),--enable-debug --disable-release) \
-			Cygwin/MSVC \
+			Cygwin/MSVC --disable-extras \
 		&& $(MAKE) \
 	,source)
 
