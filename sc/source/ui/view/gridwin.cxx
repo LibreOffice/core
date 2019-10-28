@@ -5675,7 +5675,7 @@ OString ScGridWindow::getCellCursor( int nOutputWidth, int nOutputHeight,
     return getCellCursor(zoomX, zoomY);
 }
 
-OString ScGridWindow::getCellCursor(const Fraction& /*rZoomX*/, const Fraction& /*rZoomY*/) const
+OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoomY) const
 {
     // GridWindow stores a shown cell cursor in mpOOCursors, hence
     // we can use that to determine whether we would want to be showing
@@ -5691,10 +5691,7 @@ OString ScGridWindow::getCellCursor(const Fraction& /*rZoomX*/, const Fraction& 
     Fraction defaultZoomX = pViewData->GetZoomX();
     Fraction defaultZoomY = pViewData->GetZoomY();
 
-    // hardcode to what we mean as 100% (256px tiles meaning 3840 twips)
-    Fraction aFracX(long(256 * TWIPS_PER_PIXEL), 3840);
-    Fraction aFracY(long(256 * TWIPS_PER_PIXEL), 3840);
-    pViewData->SetZoom(aFracX, aFracY, true);
+    pViewData->SetZoom(rZoomX, rZoomY, true);
 
     Point aScrPos = pViewData->GetScrPos( nX, nY, eWhich, true );
     long nSizeXPix;
