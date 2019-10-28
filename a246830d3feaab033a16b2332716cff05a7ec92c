@@ -22,6 +22,30 @@
       "revId": "a246830d3feaab033a16b2332716cff05a7ec92c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_2a037c11",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3826,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-28T10:29:06Z",
+      "side": 0,
+      "message": "\u003e In this case, I suppose, more correct would be\n \u003e \n \u003e pFrame-\u003emaGeometry \u003d {};\n \u003e \n \u003e although that would call default ctor... but in this case, nWidth\n \u003e and nHeight would be unconditionally set below.\n\n...unless\n\n  IsIconic( hWnd )\n\nis true, so I tried to stay as faithful to the original code as possible, just in case any of that stuff is relevant",
+      "parentUuid": "7f7f9b97_34fe85ae",
+      "range": {
+        "startLine": 3826,
+        "startChar": 4,
+        "endLine": 3826,
+        "endChar": 62
+      },
+      "revId": "a246830d3feaab033a16b2332716cff05a7ec92c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
