@@ -25,6 +25,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/packages/XPAckageEncryption.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <i18nlangtag/languagetag.hxx>
@@ -6333,7 +6334,29 @@ ErrCode WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, cons
 
         if( m_pStorage.is() )
         {
-            nRet = OpenMainStream( refStrm, nOldBuffSize );
+            // Check if we have special encrypted content
+            tools::SvRef<SotStorageStream> rRef = m_pStorage->OpenSotStream("\006DataSpaces/TransformInfo/\011DRMTransform", StreamMode::READ | StreamMode::SHARE_DENYALL);
+            if (rRef.is())
+            {
+                // We have DRM ecrypted storage. We should try to decrypt it first, if we can
+                uno::Sequence< uno::Any > aArguments;
+                uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+                css::uno::Reference< css::packages::XPackageEncryption > xPackageEncryption(
+                    xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                        "com.sun.star.comp.oox.crypto.\011DRMTransform", aArguments, xComponentContext), css::uno::UNO_QUERY);
+
+                if (xPackageEncryption.is())
+                {
+                    // TODO
+                }
+                else
+                {
+                    nRet = ERRCODE_IO_ACCESSDENIED;
+                }
+            }
+            else {
+                nRet = OpenMainStream(refStrm, nOldBuffSize);
+            }
             pIn = refStrm.get();
         }
         else
