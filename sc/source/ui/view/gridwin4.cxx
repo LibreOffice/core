@@ -910,6 +910,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         }
     }
 
+#warning "FIXME - other views' stuff needs translating into our co-ordinate space - not theirs [!]"
+
     // paint in-place editing on other views
     if (bIsTiledRendering)
     {
