@@ -1062,7 +1062,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         case FN_OUTLINE_TO_IMPRESS:
             {
                 SvtModuleOptions aMOpt;
-                if ( !aMOpt.IsImpress() || GetViewShell()->isExportLocked() )
+                if (!aMOpt.IsImpress() || (GetViewShell() && GetViewShell()->isExportLocked()))
                     rSet.DisableItem( nWhich );
             }
             [[fallthrough]];
@@ -1084,12 +1084,14 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             break;
 
         case FN_NEW_GLOBAL_DOC:
-            if ( dynamic_cast< const SwGlobalDocShell *>( this ) !=  nullptr || GetViewShell()->isExportLocked() )
+            if (dynamic_cast<const SwGlobalDocShell*>(this) != nullptr
+                || (GetViewShell() && GetViewShell()->isExportLocked()))
                 rSet.DisableItem( nWhich );
             break;
 
         case FN_NEW_HTML_DOC:
-            if( dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr || GetViewShell()->isExportLocked()  )
+            if (dynamic_cast<const SwWebDocShell*>(this) != nullptr
+                || (GetViewShell() && GetViewShell()->isExportLocked()))
                 rSet.DisableItem( nWhich );
             break;
 
