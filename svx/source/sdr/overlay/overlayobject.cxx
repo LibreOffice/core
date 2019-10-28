@@ -26,9 +26,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 namespace sdr
 {
@@ -38,8 +36,7 @@ namespace sdr
         {
             const basegfx::B2DRange aPreviousRange(maBaseRange);
             maBaseRange.reset();
-            resetPrimitive2DSequence();
-//            setPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DContainer());
+            setPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DContainer());
 
             if(getOverlayManager() && !aPreviousRange.isEmpty())
             {
@@ -93,8 +90,6 @@ namespace sdr
         OverlayObject::OverlayObject(Color aBaseColor)
         :   Event(),
             mpOverlayManager(nullptr),
-            maPrimitive2DSequence(),
-            maOffset(0.0, 0.0),
             maBaseColor(aBaseColor),
             mbIsVisible(true),
             mbIsHittable(true),
@@ -113,21 +108,8 @@ namespace sdr
             if(getPrimitive2DSequence().empty())
             {
                 // no existing sequence; create one
-                const_cast< OverlayObject* >(this)->maPrimitive2DSequence = const_cast< OverlayObject* >(this)->createOverlayObjectPrimitive2DSequence();
-
-                if(!getOffset().equalZero())
-                {
-                    // embed to offset transformation
-                    const basegfx::B2DHomMatrix aTranslateGridOffset(
-                        basegfx::utils::createTranslateB2DHomMatrix(
-                            getOffset()));
-                    const drawinglayer::primitive2d::Primitive2DReference aEmbed(
-                        new drawinglayer::primitive2d::TransformPrimitive2D(
-                            aTranslateGridOffset,
-                            maPrimitive2DSequence));
-
-                    const_cast< OverlayObject* >(this)->maPrimitive2DSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
-                }
+                const_cast< OverlayObject* >(this)->setPrimitive2DSequence(
+                    const_cast< OverlayObject* >(this)->createOverlayObjectPrimitive2DSequence());
             }
 
             return getPrimitive2DSequence();
@@ -181,18 +163,6 @@ namespace sdr
             {
                 // remember new value
                 maBaseColor = aNew;
-
-                // register change (after change)
-                objectChange();
-            }
-        }
-
-        void OverlayObject::setOffset(const basegfx::B2DVector& rOffset)
-        {
-            if(rOffset != maOffset)
-            {
-                // remember new value
-                maOffset = rOffset;
 
                 // register change (after change)
                 objectChange();

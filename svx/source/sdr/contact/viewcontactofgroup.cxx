@@ -73,7 +73,12 @@ namespace sdr
             else
             {
                 // append an invisible outline for the cases where no visible content exists
-                const basegfx::B2DRange aCurrentRange = vcl::unotools::b2DRectangleFromRectangle(GetSdrObjGroup().GetLastBoundRect());
+                tools::Rectangle aCurrentBoundRect(GetSdrObjGroup().GetLastBoundRect());
+                // Hack for calc, transform position of object according
+                // to current zoom so as objects relative position to grid
+                // appears stable
+                aCurrentBoundRect += GetSdrObjGroup().GetGridOffset();
+                const basegfx::B2DRange aCurrentRange = vcl::unotools::b2DRectangleFromRectangle(aCurrentBoundRect);
 
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
