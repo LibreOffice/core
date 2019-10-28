@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_2c7e396b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-28T11:56:04Z",
+      "side": 1,
+      "message": "...except in pathological cases like\n\n  OUString pathological_side_effect(OUString);\n  void f3()\n  {\n    OUString sRet \u003d \"xxx\";\n    sRet +\u003d pathological_side_effect(sRet);\n  }",
+      "revId": "bc539bd3c04964471af6b5ca54264215c8995696",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
