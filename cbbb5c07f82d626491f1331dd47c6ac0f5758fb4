@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_2c8399ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-10-28T17:46:55Z",
+      "side": 1,
+      "message": "mentioning at least one of them would be good then to create the link :)",
+      "revId": "cbbb5c07f82d626491f1331dd47c6ac0f5758fb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
