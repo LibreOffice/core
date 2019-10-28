@@ -2720,15 +2720,9 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     // would do - because that one is trying to fit the lines between cells to integer multiples of
     // pixels.
     comphelper::ScopeGuard dpiScaleGuard([]() { comphelper::LibreOfficeKit::setDPIScale(1.0); });
-    double fDPIScaleX = 1.0;
-    if (doc_getDocumentType(pThis) == LOK_DOCTYPE_SPREADSHEET)
-    {
-        fDPIScaleX = (nCanvasWidth * 3840.0) / (256.0 * nTileWidth);
-        assert(fabs(fDPIScaleX - ((nCanvasHeight * 3840.0) / (256.0 * nTileHeight))) < 0.0001);
-        comphelper::LibreOfficeKit::setDPIScale(fDPIScaleX);
-    }
 
 #if defined(IOS)
+    double fDPIScaleX = 1.0;
     paintTileIOS(pThis, pBuffer, nCanvasWidth, nCanvasHeight, fDPIScaleX, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 #else
     ScopedVclPtrInstance< VirtualDevice > pDevice(DeviceFormat::DEFAULT);

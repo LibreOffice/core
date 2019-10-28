@@ -40,7 +40,7 @@ static Compat g_eCompatFlags(Compat::none);
 
 static LanguageTag g_aLanguageTag("en-US", true);
 
-/// Scaling of the cairo or CoreGraphics canvas painting for HiDPI or zooming in Calc.
+/// Scaling of the cairo canvas painting for hi-dpi
 static double g_fDPIScale(1.0);
 
 /// List of <viewid, bMobile> pairs

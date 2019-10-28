@@ -888,12 +888,12 @@ bool ScModelObj::isMimeTypeSupported()
     return EditEngine::HasValidData(aDataHelper.GetTransferable());
 }
 
-void ScModelObj::setClientZoom(int /*nTilePixelWidth_*/, int /*nTilePixelHeight_*/, int /*nTileTwipWidth_*/, int /*nTileTwipHeight_*/)
+void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int nTileTwipWidth_, int nTileTwipHeight_)
 {
-    mnTilePixelWidth = 256;
-    mnTilePixelHeight = 256;
-    mnTileTwipWidth = mnTilePixelWidth * TWIPS_PER_PIXEL;
-    mnTileTwipHeight = mnTilePixelHeight * TWIPS_PER_PIXEL;
+    mnTilePixelWidth = nTilePixelWidth_;
+    mnTilePixelHeight = nTilePixelHeight_;
+    mnTileTwipWidth = nTileTwipWidth_;
+    mnTileTwipHeight = nTileTwipHeight_;
 }
 
 OUString ScModelObj::getRowColumnHeaders(const tools::Rectangle& rRectangle)
