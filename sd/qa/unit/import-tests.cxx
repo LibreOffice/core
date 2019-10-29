@@ -185,6 +185,7 @@ public:
     void testTdf116899();
     void testTdf77747();
     void testTdf116266();
+    void testTdf126324();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -269,6 +270,7 @@ public:
     CPPUNIT_TEST(testTdf114913);
     CPPUNIT_TEST(testTdf114821);
     CPPUNIT_TEST(testTdf115394);
+    CPPUNIT_TEST(testTdf126324);
     CPPUNIT_TEST(testTdf115394PPT);
     CPPUNIT_TEST(testTdf51340);
     CPPUNIT_TEST(testTdf116899);
@@ -2648,6 +2650,132 @@ void SdImportTest::testTdf120028b()
     // This was 0x1f497d, not white: text list style from placeholder shape
     // from slide layout was ignored.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), nCharColor);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf126324()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf126324.pptx"), PPTX);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDoc.is());
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPage.is());
+    uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
+    CPPUNIT_ASSERT(xShape.is());
+    uno::Reference< text::XText > xText = uno::Reference< text::XTextRange>( xShape, uno::UNO_QUERY_THROW )->getText();
+    CPPUNIT_ASSERT_EQUAL(OUString{"17"}, xText->getString());
+}
+
+void SdImportTest::testDescriptionImport()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/altdescription.pptx"), PPTX);
+
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getShapeFromPage(/*nShape=*/2, /*nPage=*/0, xDocShRef));
+    OUString sDesc;
+
+    xPropertySet->getPropertyValue("Description") >>= sDesc;
+
+    CPPUNIT_ASSERT_EQUAL(OUString("We Can Do It!"), sDesc);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf83247()
+{
+    auto GetPause = [this](const OUString& sSrc, sal_Int32 nFormat) {
+        sd::DrawDocShellRef xDocShRef
+            = loadURL(m_directories.getURLFromSrc(sSrc), nFormat);
+        uno::Reference<presentation::XPresentationSupplier> xPresentationSupplier(
+            xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPresentationProps(
+            xPresentationSupplier->getPresentation(), uno::UNO_QUERY_THROW);
+
+        auto retVal = xPresentationProps->getPropertyValue("Pause");
+        xDocShRef->DoClose();
+        return retVal.get<sal_Int32>();
+    };
+
+    // 1. Check that presentation:pause attribute is imported correctly
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), GetPause("/sd/qa/unit/data/odp/loopPause10.odp", ODP));
+
+    // 2. ODF compliance: if presentation:pause attribute is absent, it must be treated as 0
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), GetPause("/sd/qa/unit/data/odp/loopNoPause.odp", ODP));
+
+    // 3. Import PPT: pause should be 0
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), GetPause("/sd/qa/unit/data/ppt/loopNoPause.ppt", PPT));
+}
+
+void SdImportTest::testTdf47365()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/loopNoPause.pptx"), PPTX);
+    uno::Reference<presentation::XPresentationSupplier> xPresentationSupplier(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPresentationProps(xPresentationSupplier->getPresentation(),
+                                                           uno::UNO_QUERY_THROW);
+
+    const bool bEndlessVal = xPresentationProps->getPropertyValue("IsEndless").get<bool>();
+    const sal_Int32 nPauseVal = xPresentationProps->getPropertyValue("Pause").get<sal_Int32>();
+
+    // Check that we import "loop" attribute of the presentation, and don't introduce any pauses
+    CPPUNIT_ASSERT(bEndlessVal);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nPauseVal);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf122899()
+{
+    // tdf122899 FILEOPEN: ppt: old kind arc from MS Office 97 is broken
+    // Error was, that the path coordinates of a mso_sptArc shape were read as sal_Int16
+    // although they are unsigned 16 bit. This leads to wrong positions of start and end
+    // point and results to a huge shape width in the test document.
+    OUString aSrc="sd/qa/unit/data/ppt/tdf122899_Arc_90_to_91_clockwise.ppt";
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(aSrc), PPT);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("Could not get XDrawPagesSupplier", xDrawPagesSupplier.is());
+    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("Could not get xDrawPage", xDrawPage.is());
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get xShape", xShape.is());
+    awt::Rectangle aFrameRect;
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRect;
+    // original width is 9cm, add some tolerance
+    CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(9020), aFrameRect.Width);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testOOXTheme()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/ooxtheme.pptx"), PPTX);
+
+    uno::Reference<beans::XPropertySet> xPropSet(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aGrabBag;
+    xPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+
+    bool bTheme = false;
+    for (int i = 0; i < aGrabBag.getLength(); i++)
+    {
+        if (aGrabBag[i].Name == "OOXTheme")
+        {
+            bTheme = true;
+            uno::Reference<xml::dom::XDocument> aThemeDom;
+            CPPUNIT_ASSERT(aGrabBag[i].Value >>= aThemeDom); // PropertyValue of proper type
+            CPPUNIT_ASSERT(aThemeDom.get()); // Reference not empty
+        }
+    }
+    CPPUNIT_ASSERT(bTheme); // Grab Bag has all the expected elements
 
     xDocShRef->DoClose();
 }
