@@ -581,6 +581,18 @@ namespace sw { namespace mark
             return nullptr;
         }
 
+        if ((eType == MarkType::CHECKBOX_FIELDMARK || eType == MarkType::DROPDOWN_FIELDMARK)
+            && (eMode == InsertMode::New
+                ? *rPaM.GetPoint() != *rPaM.GetMark()
+                // CopyText: pam covers CH_TXT_ATR_FORMELEMENT
+                : (rPaM.GetPoint()->nNode != rPaM.GetMark()->nNode
+                    || rPaM.Start()->nContent.GetIndex() + 1 != rPaM.End()->nContent.GetIndex())))
+        {
+            SAL_WARN("sw.core", "MarkManager::makeMark(..)"
+                " - invalid range on point fieldmark");
+            return nullptr;
+        }
+
         // create mark
         std::unique_ptr<::sw::mark::MarkBase> pMark;
         switch(eType)
