@@ -304,9 +304,9 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     SfxItemPool* pOutlinerPool = rOutliner.GetEditTextObjectPool();
     if ( pOutlinerPool )
     {
-         pItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));           // 12Pt
-         pItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT_CJK ));           // 12Pt
-         pItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT_CTL ));           // 12Pt
+         m_pItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));           // 12Pt
+         m_pItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT_CJK ));           // 12Pt
+         m_pItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT_CTL ));           // 12Pt
     }
     SfxItemPool* pHitOutlinerPool = rHitOutliner.GetEditTextObjectPool();
     if ( pHitOutlinerPool )

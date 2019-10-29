@@ -163,8 +163,8 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     SetScaleFraction(Fraction(1, 1));
     SetDefaultFontHeight(847);     // 24p
 
-    pItemPool->SetDefaultMetric(MapUnit::Map100thMM);
-    pItemPool->FreezeIdRanges();
+    m_pItemPool->SetDefaultMetric(MapUnit::Map100thMM);
+    m_pItemPool->FreezeIdRanges();
     SetTextDefaults();
 
     // DrawingEngine has to know where it is...
@@ -260,28 +260,28 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     // Set the StyleSheetPool for HitTestOutliner.
     // The link to the StyleRequest handler of the document is set later, in
     // NewOrLoadCompleted, because only then do all the templates exist.
-    pHitTestOutliner->SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()) );
+    m_pHitTestOutliner->SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()) );
 
-    SetCalcFieldValueHdl( pHitTestOutliner.get() );
+    SetCalcFieldValueHdl( m_pHitTestOutliner.get() );
 
     try
     {
         Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
         if ( xSpellChecker.is() )
-            pHitTestOutliner->SetSpeller( xSpellChecker );
+            m_pHitTestOutliner->SetSpeller( xSpellChecker );
 
         Reference< XHyphenator > xHyphenator( LinguMgr::GetHyphenator() );
         if( xHyphenator.is() )
-            pHitTestOutliner->SetHyphenator( xHyphenator );
+            m_pHitTestOutliner->SetHyphenator( xHyphenator );
     }
     catch(...)
     {
         OSL_FAIL("Can't get SpellChecker");
     }
 
-    pHitTestOutliner->SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
+    m_pHitTestOutliner->SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
 
-    EEControlBits nCntrl2 = pHitTestOutliner->GetControlWord();
+    EEControlBits nCntrl2 = m_pHitTestOutliner->GetControlWord();
     nCntrl2 |= EEControlBits::ALLOWBIGOBJS;
     nCntrl2 &= ~EEControlBits::ONLINESPELLING;
 
@@ -289,7 +289,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     if ( pOptions->IsSummationOfParagraphs() )
         nCntrl2 |= EEControlBits::ULSPACESUMMATION;
 
-    pHitTestOutliner->SetControlWord( nCntrl2 );
+    m_pHitTestOutliner->SetControlWord( nCntrl2 );
 
     /** Create layers
       *
@@ -348,16 +348,16 @@ SdDrawDocument::~SdDrawDocument()
 
     ClearModel(true);
 
-    if (pLinkManager)
+    if (m_pLinkManager)
     {
         // Release BaseLinks
-        if ( !pLinkManager->GetLinks().empty() )
+        if ( !m_pLinkManager->GetLinks().empty() )
         {
-            pLinkManager->Remove( 0, pLinkManager->GetLinks().size() );
+            m_pLinkManager->Remove( 0, m_pLinkManager->GetLinks().size() );
         }
 
-        delete pLinkManager;
-        pLinkManager = nullptr;
+        delete m_pLinkManager;
+        m_pLinkManager = nullptr;
     }
 
     maFrameViewList.clear();
@@ -759,7 +759,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     // Initialize HitTestOutliner and DocumentOutliner, but don't initialize the
     // global outliner, as it is not document specific like StyleSheetPool and
     // StyleRequestHandler are.
-    pHitTestOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
+    m_pHitTestOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
 
     if(mpOutliner)
     {
@@ -809,7 +809,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 /** updates all links, only links in this document should by resolved */
 void SdDrawDocument::UpdateAllLinks()
 {
-    if (s_pDocLockedInsertingLinks || !pLinkManager || pLinkManager->GetLinks().empty())
+    if (s_pDocLockedInsertingLinks || !m_pLinkManager || m_pLinkManager->GetLinks().empty())
         return;
 
     s_pDocLockedInsertingLinks = this; // lock inserting links. only links in this document should by resolved
@@ -820,7 +820,7 @@ void SdDrawDocument::UpdateAllLinks()
         rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
     }
 
-    pLinkManager->UpdateAllLinks(true, false, nullptr);  // query box: update all links?
+    m_pLinkManager->UpdateAllLinks(true, false, nullptr);  // query box: update all links?
 
     if (s_pDocLockedInsertingLinks == this)
         s_pDocLockedInsertingLinks = nullptr;  // unlock inserting links
@@ -914,7 +914,7 @@ SdOutliner* SdDrawDocument::GetOutliner(bool bCreateOutliner)
         if (mpDocSh)
             mpOutliner->SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
 
-        mpOutliner->SetDefTab( nDefaultTabulator );
+        mpOutliner->SetDefTab( m_nDefaultTabulator );
         mpOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
     }
 
@@ -938,7 +938,7 @@ SdOutliner* SdDrawDocument::GetInternalOutliner(bool bCreateOutliner)
         if (mpDocSh)
             mpInternalOutliner->SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
 
-        mpInternalOutliner->SetDefTab( nDefaultTabulator );
+        mpInternalOutliner->SetDefTab( m_nDefaultTabulator );
         mpInternalOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
     }
 

@@ -133,7 +133,7 @@ class SD_DLLPUBLIC SdDrawDocument : public FmFormModel
 public:
     SAL_DLLPRIVATE void setDocAccTitle( const OUString& rTitle ) { msDocAccTitle = rTitle; }
     SAL_DLLPRIVATE const OUString& getDocAccTitle() const { return msDocAccTitle; }
-    SAL_DLLPRIVATE bool getDocReadOnly() const { return bReadOnly; }
+    SAL_DLLPRIVATE bool getDocReadOnly() const { return m_bReadOnly; }
 private:
     OUString            msDocAccTitle;
     std::unique_ptr<SdOutliner>
@@ -245,7 +245,7 @@ public:
     SAL_DLLPRIVATE virtual bool        IsReadOnly() const override;
     SAL_DLLPRIVATE virtual void        SetChanged(bool bFlag = true) override;
 
-    SAL_DLLPRIVATE SfxItemPool&        GetPool() { return( *pItemPool ); }
+    SAL_DLLPRIVATE SfxItemPool&        GetPool() { return( *m_pItemPool ); }
 
     SAL_DLLPRIVATE SdOutliner* GetOutliner(bool bCreateOutliner=true);
     SdOutliner* GetInternalOutliner(bool bCreateOutliner=true);
