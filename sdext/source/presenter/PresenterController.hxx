@@ -170,12 +170,6 @@ public:
 
     virtual void SAL_CALL mouseExited (const css::awt::MouseEvent& rEvent) override;
 
-    // XMouseMotionListener
-
-    virtual void SAL_CALL mouseMoved (const css::awt::MouseEvent& rEvent) override;
-
-    virtual void SAL_CALL mouseDragged (const css::awt::MouseEvent& rEvent) override;
-
 private:
     typedef ::std::map<css::uno::Reference<css::frame::XFrame>,rtl::Reference<PresenterController> > InstanceContainer;
     static InstanceContainer maInstances;
