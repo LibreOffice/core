@@ -71,7 +71,6 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>
-#include <vcl/longcurr.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>

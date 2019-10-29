@@ -43,7 +43,6 @@
 #include <svx/srchdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
-#include <vcl/layout.hxx>
 #include <editeng/unolingu.hxx>
 #include <edtwin.hxx>
 #include <swmodule.hxx>

@@ -19,7 +19,6 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/spinfld.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/treelistbox.hxx>
 
@@ -29,6 +28,7 @@
 
 class Edit;
 class SpinButton;
+class SpinField;
 
 typedef std::map<const OUString, OUString> StringMap;
 

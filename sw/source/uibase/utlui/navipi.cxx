@@ -23,7 +23,6 @@
 #include <svl/stritem.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/layout.hxx>
 #include <svl/urihelper.hxx>
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>

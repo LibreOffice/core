@@ -22,7 +22,6 @@
 #include "WTabPage.hxx"
 
 #include "QEnumTypes.hxx"
-#include <vcl/fixed.hxx>
 
 namespace dbaui
 {

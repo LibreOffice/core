@@ -28,7 +28,6 @@
 #include <com/sun/star/inspection/XHyperlinkControl.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/field.hxx>
-#include <vcl/longcurr.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>

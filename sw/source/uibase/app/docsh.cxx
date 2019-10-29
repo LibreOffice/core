@@ -20,7 +20,6 @@
 #include <config_features.h>
 
 #include <hintids.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
