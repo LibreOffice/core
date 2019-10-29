@@ -22,7 +22,7 @@ This re-uses the (extremely generic) UNO APIs that are also used by
 macro scripting in StarBasic.
 
 The best way to add a generally useful feature to LibreOffice
-is to work on the code base however. Overall this way makes it easier
+is to work on the code base however, Overall this way makes it easier
 to compile and build your code, it avoids any arbitrary limitations of
 our scripting APIs, and in general is far more simple and intuitive -
 if you are a reasonably able C++ programmer.
