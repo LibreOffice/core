@@ -23,7 +23,7 @@
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SdrTextAniAmountItem: public SfxInt16Item {
+class SVX_DLLPUBLIC SdrTextAniAmountItem final : public SfxInt16Item {
 public:
     SdrTextAniAmountItem(sal_Int16 nVal=0): SfxInt16Item(SDRATTR_TEXT_ANIAMOUNT,nVal) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;

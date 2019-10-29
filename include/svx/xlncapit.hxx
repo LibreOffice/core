@@ -28,7 +28,7 @@
 // class XLineCapItem
 
 
-class SVX_DLLPUBLIC XLineCapItem : public SfxEnumItem<css::drawing::LineCap>
+class SVX_DLLPUBLIC XLineCapItem final : public SfxEnumItem<css::drawing::LineCap>
 {
 public:
     static SfxPoolItem* CreateDefault();

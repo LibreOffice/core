@@ -28,7 +28,7 @@
 
 class GraphCtrl;
 
-class GraphCtrlUserCall : public SdrObjUserCall
+class GraphCtrlUserCall final : public SdrObjUserCall
 {
     GraphCtrl& rWin;
 

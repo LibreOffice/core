@@ -28,7 +28,7 @@
 class SfxItemSet;
 class FontPrevWin_Impl;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontPrevWindow : public weld::CustomWidgetController
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontPrevWindow final : public weld::CustomWidgetController
 {
 private:
     std::unique_ptr<FontPrevWin_Impl> pImpl;

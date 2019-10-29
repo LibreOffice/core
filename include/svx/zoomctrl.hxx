@@ -44,7 +44,7 @@ private:
     void ImplUpdateItemText();
 };
 
-class SVX_DLLPUBLIC SvxZoomPageStatusBarControl : public SfxStatusBarControl
+class SVX_DLLPUBLIC SvxZoomPageStatusBarControl final : public SfxStatusBarControl
 {
 private:
     Image const maImage;

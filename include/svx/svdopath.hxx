@@ -29,7 +29,7 @@ class ImpPathForDragAndCreate;
 // Helper class SdrPathObjGeoData
 // used for undo/redo
 
-class SdrPathObjGeoData : public SdrTextObjGeoData
+class SdrPathObjGeoData final : public SdrTextObjGeoData
 {
 public:
     basegfx::B2DPolyPolygon maPathPolygon;

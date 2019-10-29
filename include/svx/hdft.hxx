@@ -92,7 +92,7 @@ private:
     SVX_DLLPRIVATE void         ResetBackground_Impl( const SfxItemSet& rSet );
 };
 
-class SVX_DLLPUBLIC SvxHeaderPage : public SvxHFPage
+class SVX_DLLPUBLIC SvxHeaderPage final : public SvxHFPage
 {
 public:
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
@@ -101,7 +101,7 @@ public:
     SVX_DLLPRIVATE SvxHeaderPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
 };
 
-class SVX_DLLPUBLIC SvxFooterPage : public SvxHFPage
+class SVX_DLLPUBLIC SvxFooterPage final : public SvxHFPage
 {
 public:
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
@@ -109,7 +109,7 @@ public:
     SVX_DLLPRIVATE SvxFooterPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
 };
 
-class SVX_DLLPUBLIC DeleteHeaderDialog : public weld::MessageDialogController
+class SVX_DLLPUBLIC DeleteHeaderDialog final : public weld::MessageDialogController
 {
 public:
     DeleteHeaderDialog(weld::Widget* pParent)
@@ -119,7 +119,7 @@ public:
     }
 };
 
-class SVX_DLLPUBLIC DeleteFooterDialog : public weld::MessageDialogController
+class SVX_DLLPUBLIC DeleteFooterDialog final : public weld::MessageDialogController
 {
 public:
     DeleteFooterDialog(weld::Widget* pParent)

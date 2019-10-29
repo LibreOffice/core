@@ -102,7 +102,7 @@ public:
 //   helper class ImpSdrObjTextLinkUserData
 
 
-class ImpSdrObjTextLinkUserData : public SdrObjUserData
+class ImpSdrObjTextLinkUserData final : public SdrObjUserData
 {
     friend class                SdrTextObj;
     friend class                ImpSdrObjTextLink;

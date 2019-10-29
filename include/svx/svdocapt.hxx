@@ -32,14 +32,14 @@ namespace sdr { namespace properties {
 }}
 
 //   Helper Class SdrCaptObjGeoData
-class SdrCaptObjGeoData : public SdrTextObjGeoData
+class SdrCaptObjGeoData final : public SdrTextObjGeoData
 {
 public:
     tools::Polygon aTailPoly;
 };
 
 //   SdrCaptionObj
-class SVX_DLLPUBLIC SdrCaptionObj : public SdrRectObj
+class SVX_DLLPUBLIC SdrCaptionObj final : public SdrRectObj
 {
 private:
     // to allow sdr::properties::CaptionProperties access to ImpRecalcTail()
@@ -53,11 +53,9 @@ private:
         mbSuppressGetBitmap = bNew;
     }
 
-protected:
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
-private:
     tools::Polygon  aTailPoly;              // the whole tail polygon
     bool            mbSpecialTextBoxShadow; // for calc special shadow, default FALSE
     bool            mbFixedTail;            // for calc note box fixed tail, default FALSE
@@ -71,7 +69,6 @@ private:
     SVX_DLLPRIVATE static void ImpCalcTail (const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle const & rRect);
     SVX_DLLPRIVATE void ImpRecalcTail();
 
-protected:
     // protected destructor
     virtual ~SdrCaptionObj() override;
 
@@ -134,7 +131,7 @@ public:
     virtual sal_uInt32 GetSnapPointCount() const override;
     virtual Point GetSnapPoint(sal_uInt32 i) const override;
 
-protected:
+private:
     virtual SdrObjGeoData* NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;

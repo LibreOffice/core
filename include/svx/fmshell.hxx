@@ -59,7 +59,7 @@ namespace svx
 }
 
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC FmDesignModeChangedHint : public SfxHint
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FmDesignModeChangedHint final : public SfxHint
 {
     bool const m_bDesignMode;
 
@@ -70,7 +70,7 @@ public:
     bool GetDesignMode() const { return m_bDesignMode; }
 };
 
-class SVX_DLLPUBLIC FmFormShell : public SfxShell
+class SVX_DLLPUBLIC FmFormShell final : public SfxShell
 {
     friend class FmFormView;
     friend class FmXFormShell;
@@ -158,7 +158,7 @@ public:
     virtual bool IsDesignMode() const override { return m_bDesignMode; }
     void         SetDesignMode( bool _bDesignMode );
 
-protected:
+private:
     void GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich);
 
     // is there a form on the current page?

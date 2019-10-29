@@ -25,7 +25,7 @@
 /** The author shorthand symbol of a note
  */
 
-class SVX_DLLPUBLIC SvxPostItAuthorItem: public SfxStringItem
+class SVX_DLLPUBLIC SvxPostItAuthorItem final : public SfxStringItem
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -45,7 +45,7 @@ public:
 /** The date of a note
  */
 
-class SVX_DLLPUBLIC SvxPostItDateItem: public SfxStringItem
+class SVX_DLLPUBLIC SvxPostItDateItem final : public SfxStringItem
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -64,7 +64,7 @@ public:
 /** The text of a note
  */
 
-class SVX_DLLPUBLIC SvxPostItTextItem: public SfxStringItem
+class SVX_DLLPUBLIC SvxPostItTextItem final : public SfxStringItem
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -85,7 +85,7 @@ public:
 /** The internal id of a note
  */
 
-class SVX_DLLPUBLIC SvxPostItIdItem: public SfxStringItem
+class SVX_DLLPUBLIC SvxPostItIdItem final : public SfxStringItem
 {
 public:
     static SfxPoolItem* CreateDefault();

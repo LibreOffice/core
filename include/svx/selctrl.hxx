@@ -24,7 +24,7 @@
 #include <svx/svxdllapi.h>
 
 /// Status bar control that indicates or changes the selection mode (standard / block / etc.)
-class SVX_DLLPUBLIC SvxSelectionModeControl : public SfxStatusBarControl
+class SVX_DLLPUBLIC SvxSelectionModeControl final : public SfxStatusBarControl
 {
 public:
     SFX_DECL_STATUSBAR_CONTROL();

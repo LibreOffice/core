@@ -24,7 +24,7 @@
 
 namespace svx {
 
-class SVX_DLLPUBLIC ParaLineSpacingPopup : public SfxToolBoxControl
+class SVX_DLLPUBLIC ParaLineSpacingPopup final : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();

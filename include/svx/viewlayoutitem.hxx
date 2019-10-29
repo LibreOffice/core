@@ -24,7 +24,7 @@
 #include <svx/svxdllapi.h>
 
 
-class SVX_DLLPUBLIC SvxViewLayoutItem: public SfxUInt16Item
+class SVX_DLLPUBLIC SvxViewLayoutItem final : public SfxUInt16Item
 {
     bool                    mbBookMode;
 

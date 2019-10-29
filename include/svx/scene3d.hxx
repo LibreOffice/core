@@ -38,7 +38,7 @@ namespace sdr { namespace properties {
 |*
 \************************************************************************/
 
-class E3DSceneGeoData : public E3DObjGeoData
+class E3DSceneGeoData final : public E3DObjGeoData
 {
 public:
     Camera3D                    aCamera;

@@ -33,7 +33,7 @@ class SdrModel;
 namespace svx
 {
 
-class SAL_WARN_UNUSED FontworkCharacterSpacingDialog : public weld::GenericDialogController
+class SAL_WARN_UNUSED FontworkCharacterSpacingDialog final : public weld::GenericDialogController
 {
     std::unique_ptr<weld::MetricSpinButton> m_xMtrScale;
 
@@ -44,7 +44,7 @@ public:
     sal_Int32 getScale() const;
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC FontWorkGalleryDialog : public weld::GenericDialogController
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FontWorkGalleryDialog final : public weld::GenericDialogController
 {
     sal_uInt16          mnThemeId;
     SdrView&            mrSdrView;

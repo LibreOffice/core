@@ -39,7 +39,7 @@ class SfxModule;
 
 class Graphic;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxContourDlgChildWindow : public SfxChildWindow
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxContourDlgChildWindow final : public SfxChildWindow
 {
 public:
     SvxContourDlgChildWindow( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo const * );
@@ -49,7 +49,7 @@ public:
 
 class SvxSuperContourDlg;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxContourDlg : public SfxModelessDialogController
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxContourDlg final : public SfxModelessDialogController
 {
     std::unique_ptr<SvxSuperContourDlg> m_xImpl;
 

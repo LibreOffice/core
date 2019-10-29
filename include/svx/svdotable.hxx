@@ -91,12 +91,11 @@ struct SVX_DLLPUBLIC TableStyleSettings
 /// SdrTableObj
 class SdrTableObjImpl;
 
-class SVX_DLLPUBLIC SdrTableObj : public ::SdrTextObj
+class SVX_DLLPUBLIC SdrTableObj final : public ::SdrTextObj
 {
     friend class Cell;
     friend class SdrTableObjImpl;
 
-protected:
     // protected destructor
     virtual ~SdrTableObj() override;
 
@@ -268,7 +267,6 @@ public:
 private:
     void init( sal_Int32 nColumns, sal_Int32 nRows );
 
-protected:
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
@@ -276,17 +274,14 @@ protected:
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
 
-private:
     SdrOutliner* GetCellTextEditOutliner( const sdr::table::Cell& rCell ) const;
 
-private:
     // For the ViewContactOfTableObj to build the primitive representation, it is necessary to access the
     // TableLayouter for position and attribute information
     friend class sdr::contact::ViewContactOfTableObj;
     const TableLayouter& getTableLayouter() const;
 
     tools::Rectangle   maLogicRect;
-private:
     rtl::Reference<SdrTableObjImpl>    mpImpl;
 };
 

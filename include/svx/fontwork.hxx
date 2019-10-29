@@ -47,11 +47,10 @@ class XFormTextShadowYValItem;
 
 class SvxFontWorkDialog;
 
-class SvxFontWorkControllerItem : public SfxControllerItem
+class SvxFontWorkControllerItem final : public SfxControllerItem
 {
     SvxFontWorkDialog  &rFontWorkDlg;
 
-protected:
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) override;
 
@@ -62,7 +61,7 @@ public:
 /** Derived from SfxChildWindow as "container" for fontwork dialog
  */
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontWorkChildWindow : public SfxChildWindow
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontWorkChildWindow final : public SfxChildWindow
 {
  public:
     SvxFontWorkChildWindow(vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);

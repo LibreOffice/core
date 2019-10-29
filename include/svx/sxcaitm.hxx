@@ -32,7 +32,7 @@
 // only if Type2, Type3 and Type4
 // and only if SdrCaptionIsFixedAngleItem=TRUE
 
-class SdrCaptionAngleItem: public SdrAngleItem {
+class SdrCaptionAngleItem final : public SdrAngleItem {
 public:
     SdrCaptionAngleItem(long nAngle=0): SdrAngleItem(SDRATTR_CAPTIONANGLE,nAngle) {}
     virtual SfxPoolItem* Clone(SfxItemPool*) const override

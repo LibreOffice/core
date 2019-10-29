@@ -19,7 +19,7 @@
 
 namespace svx {
 
-class ClassificationEditEngine : public EditEngine
+class ClassificationEditEngine final : public EditEngine
 {
 public:
     ClassificationEditEngine(SfxItemPool* pItemPool);
@@ -27,7 +27,7 @@ public:
     virtual OUString CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rTxtColor, boost::optional<Color>& rFldColor) override;
 };
 
-class SVX_DLLPUBLIC ClassificationEditView : public WeldEditView
+class SVX_DLLPUBLIC ClassificationEditView final : public WeldEditView
 {
 public:
     ClassificationEditView();

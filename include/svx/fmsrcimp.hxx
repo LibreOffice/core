@@ -68,7 +68,7 @@ struct FmSearchProgress
  * class FmRecordCountListener - utility class for FmSearchEngine, listens at a certain cursor and provides
  *                               the differences in RecordCount
  */
-class SAL_WARN_UNUSED FmRecordCountListener : public cppu::WeakImplHelper< css::beans::XPropertyChangeListener >
+class SAL_WARN_UNUSED FmRecordCountListener final : public cppu::WeakImplHelper< css::beans::XPropertyChangeListener >
 {
 // attribute
     Link<sal_Int32,void>     m_lnkWhoWantsToKnow;
@@ -121,7 +121,7 @@ namespace svxform {
         virtual OUString getCurrentText() const = 0;
     };
 
-    class SAL_WARN_UNUSED SimpleTextWrapper : public ControlTextWrapper
+    class SAL_WARN_UNUSED SimpleTextWrapper final : public ControlTextWrapper
     {
         css::uno::Reference< css::awt::XTextComponent >  m_xText;
     public:
@@ -129,7 +129,7 @@ namespace svxform {
         virtual OUString getCurrentText() const override;
     };
 
-    class SAL_WARN_UNUSED ListBoxWrapper : public ControlTextWrapper
+    class SAL_WARN_UNUSED ListBoxWrapper final : public ControlTextWrapper
     {
         css::uno::Reference< css::awt::XListBox >  m_xBox;
     public:
@@ -137,7 +137,7 @@ namespace svxform {
         virtual OUString getCurrentText() const override;
     };
 
-    class SAL_WARN_UNUSED CheckBoxWrapper : public ControlTextWrapper
+    class SAL_WARN_UNUSED CheckBoxWrapper final : public ControlTextWrapper
     {
         css::uno::Reference< css::awt::XCheckBox >  m_xBox;
     public:

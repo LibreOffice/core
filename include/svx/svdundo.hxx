@@ -353,7 +353,7 @@ public:
  * Create Action before inserting into the ObjList.
  */
 
-class SdrUndoCopyObj : public SdrUndoNewObj
+class SdrUndoCopyObj final : public SdrUndoNewObj
 {
 public:
     SdrUndoCopyObj(SdrObject& rNewObj, bool bOrdNumDirect)
@@ -477,7 +477,7 @@ protected:
  * Create Action after Insertion.
  */
 
-class SdrUndoNewLayer : public SdrUndoLayer
+class SdrUndoNewLayer final : public SdrUndoLayer
 {
 public:
     SdrUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
@@ -494,7 +494,7 @@ public:
  * Create Action before the Remove.
  */
 
-class SdrUndoDelLayer : public SdrUndoLayer
+class SdrUndoDelLayer final : public SdrUndoLayer
 {
 public:
     SdrUndoDelLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
@@ -553,7 +553,7 @@ protected:
  * Create Action before removing from the List.
  */
 
-class SVX_DLLPUBLIC SdrUndoDelPage : public SdrUndoPageList
+class SVX_DLLPUBLIC SdrUndoDelPage final : public SdrUndoPageList
 {
     // When deleting a MasterPage, we remember all relations of the
     // Character Page with the MasterPage in this UndoGroup.
@@ -601,7 +601,7 @@ public:
  * Create Action after inserting into the List.
  */
 
-class SdrUndoCopyPage : public SdrUndoNewPage
+class SdrUndoCopyPage final : public SdrUndoNewPage
 {
 public:
     SdrUndoCopyPage(SdrPage& rNewPg): SdrUndoNewPage(rNewPg) {}
@@ -662,7 +662,7 @@ public:
  * Create Action before removing the MasterPageDescriptor.
  */
 
-class SdrUndoPageRemoveMasterPage : public SdrUndoPageMasterPage
+class SdrUndoPageRemoveMasterPage final : public SdrUndoPageMasterPage
 {
 public:
     SdrUndoPageRemoveMasterPage(SdrPage& rChangedPage);

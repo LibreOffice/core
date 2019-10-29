@@ -22,7 +22,7 @@ class SfxStyleSheetBase;
 namespace svx
 {
 
-class SVX_DLLPUBLIC CommonStyleManager : public sfx2::StyleManager
+class SVX_DLLPUBLIC CommonStyleManager final : public sfx2::StyleManager
 {
 public:
     CommonStyleManager(SfxObjectShell& rShell)

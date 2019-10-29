@@ -37,7 +37,7 @@ namespace weld { class ScrolledWindow; }
 
 class Subset;
 
-class SVX_DLLPUBLIC SvxSearchCharSet : public SvxShowCharSet
+class SVX_DLLPUBLIC SvxSearchCharSet final : public SvxShowCharSet
 {
 public:
     SvxSearchCharSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow, const VclPtr<VirtualDevice> &rDevice);

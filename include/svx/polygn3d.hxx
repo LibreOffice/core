@@ -25,7 +25,6 @@
 
 class SVX_DLLPUBLIC E3dPolygonObj : public E3dCompoundObject
 {
-private:
     // parameters
     basegfx::B3DPolyPolygon aPolyPoly3D;
     basegfx::B3DPolyPolygon aPolyNormals3D;

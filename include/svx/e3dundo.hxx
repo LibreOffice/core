@@ -52,7 +52,7 @@ class SAL_WARN_UNUSED E3dUndoAction : public SdrUndoAction
 |* Undo for 3D rotation through the rotation matrices
 |*
 \************************************************************************/
-class SAL_WARN_UNUSED E3dRotateUndoAction : public E3dUndoAction
+class SAL_WARN_UNUSED E3dRotateUndoAction final : public E3dUndoAction
 {
 private:
     basegfx::B3DHomMatrix const   maMyOldRotation;
@@ -80,7 +80,7 @@ public:
 |* Undo for 3D attributes (implemented using Set3DAttributes())
 |*
 \************************************************************************/
-class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dAttributesUndoAction : public SdrUndoAction
+class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dAttributesUndoAction final : public SdrUndoAction
 {
 private:
     using SdrUndoAction::Repeat;

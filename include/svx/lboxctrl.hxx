@@ -29,7 +29,7 @@ class ToolBox;
 class SvxPopupWindowListBox;
 
 
-class SVX_DLLPUBLIC SvxUndoRedoControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxUndoRedoControl final : public SfxToolBoxControl
 {
     OUString                aActionStr;
     VclPtr<SvxPopupWindowListBox> pPopupWin;

@@ -36,7 +36,7 @@ namespace sdr
 
 namespace sdr
 {
-    class MasterPageDescriptor : public sdr::PageUser
+    class MasterPageDescriptor final : public sdr::PageUser
     {
     private:
         SdrPage&                                        maOwnerPage;

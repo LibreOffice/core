@@ -59,7 +59,7 @@ namespace o3tl
     template<> struct typed_flags<SdrGrafObjTransformsAttrs> : is_typed_flags<SdrGrafObjTransformsAttrs, 0x03> {};
 }
 
-class SdrGrafObjGeoData : public SdrTextObjGeoData
+class SdrGrafObjGeoData final : public SdrTextObjGeoData
 {
 public:
     bool                    bMirrored;

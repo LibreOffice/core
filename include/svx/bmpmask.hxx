@@ -49,12 +49,10 @@ class ToolBox;
 \************************************************************************/
 class SvxBmpMask;
 
-class SvxBmpMaskSelectItem : public SfxControllerItem
+class SvxBmpMaskSelectItem final : public SfxControllerItem
 {
-private:
     SvxBmpMask  &rBmpMask;
 
-protected:
     virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                const SfxPoolItem* pState ) override;
 
@@ -69,7 +67,7 @@ public:
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMaskChildWindow : public SfxChildWindow
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMaskChildWindow final : public SfxChildWindow
 {
  public:
                             SvxBmpMaskChildWindow( vcl::Window*,

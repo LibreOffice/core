@@ -32,7 +32,7 @@ namespace svx { namespace sidebar {
 class AreaTransparencyGradientControl;
 class AreaPropertyPanelBase;
 
-class AreaTransparencyGradientPopup : public FloatingWindow
+class AreaTransparencyGradientPopup final : public FloatingWindow
 {
 private:
     AreaPropertyPanelBase& mrAreaPropertyPanel;

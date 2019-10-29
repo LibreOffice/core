@@ -24,12 +24,10 @@
 #include <svx/svxdllapi.h>
 #include <vector>
 
-class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxLongLRSpaceItem final : public SfxPoolItem
 {
     long    mlLeft;         // nLeft or the negative first-line indentation
     long    mlRight;        // the unproblematic right edge
-
-  protected:
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -42,7 +40,6 @@ class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
 
-private:
     const SvxLongLRSpaceItem& operator=(const SvxLongLRSpaceItem &) = delete;
 
 public:
@@ -56,12 +53,10 @@ public:
     void SetRight(long lArgRight);
 };
 
-class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxLongULSpaceItem final : public SfxPoolItem
 {
     long    mlLeft;         // nLeft or the negative first-line indentation
     long    mlRight;        // the unproblematic right edge
-
-  protected:
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -74,7 +69,6 @@ class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
 
-private:
     const SvxLongULSpaceItem& operator=(const SvxLongULSpaceItem &) = delete;
 
 public:
@@ -146,7 +140,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
 }
 
 
-class SVX_DLLPUBLIC SvxColumnItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxColumnItem final : public SfxPoolItem
 {
     std::vector<SvxColumnDescription>  aColumns; // Column array
 
@@ -157,7 +151,6 @@ class SVX_DLLPUBLIC SvxColumnItem : public SfxPoolItem
     bool       bTable;      // table?
     bool       bOrtho;      // evenly spread columns
 
-protected:
     virtual bool operator==( const SfxPoolItem& ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -197,16 +190,14 @@ public:
     bool        IsConsistent() const;
 };
 
-class SVX_DLLPUBLIC SvxObjectItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxObjectItem final : public SfxPoolItem
 {
-private:
     long nStartX;   /* Start in x direction */
     long nEndX;     /* End in x direction */
     long nStartY;   /* Start in y direction */
     long nEndY;     /* End in y direction */
     bool bLimits;   /* boundary limit control by the application */
 
-protected:
     virtual bool             operator==( const SfxPoolItem& ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -218,7 +209,6 @@ protected:
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-private:
     const SvxObjectItem &operator=(const SvxObjectItem &) = delete;
 
 public:

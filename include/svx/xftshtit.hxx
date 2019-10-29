@@ -28,7 +28,7 @@
 |*
 \************************************************************************/
 
-class XFormTextShadowTranspItem: public SfxUInt16Item
+class XFormTextShadowTranspItem final : public SfxUInt16Item
 {
 public:
                             XFormTextShadowTranspItem(sal_uInt16 nShdwTransparence = 0);

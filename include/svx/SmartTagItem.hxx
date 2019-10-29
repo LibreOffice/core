@@ -37,7 +37,7 @@ namespace com { namespace sun { namespace star { namespace frame {
     class XController;
 } } } }
 
-class SVX_DLLPUBLIC SvxSmartTagItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxSmartTagItem final : public SfxPoolItem
 {
     const css::uno::Sequence < css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > > maActionComponentsSequence;
     const css::uno::Sequence < css::uno::Sequence< sal_Int32 > > maActionIndicesSequence;

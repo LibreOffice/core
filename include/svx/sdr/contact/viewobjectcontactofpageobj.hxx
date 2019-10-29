@@ -29,13 +29,12 @@ namespace sdr { namespace contact {
 
 class PagePrimitiveExtractor;
 
-class SVX_DLLPUBLIC ViewObjectContactOfPageObj : public ViewObjectContactOfSdrObj
+class SVX_DLLPUBLIC ViewObjectContactOfPageObj final : public ViewObjectContactOfSdrObj
 {
 private:
     // the page painter helper
     std::unique_ptr<PagePrimitiveExtractor> mpExtractor;
 
-protected:
     // This method is responsible for creating the graphical visualisation data which is
     // stored/cached in the local primitive.
     // This method will not handle included hierarchies and not check geometric visibility.

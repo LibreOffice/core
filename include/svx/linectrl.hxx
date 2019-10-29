@@ -31,7 +31,7 @@ class XLineDashItem;
 // SvxLineStyleController:
 
 
-class SVX_DLLPUBLIC SvxLineStyleToolBoxControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxLineStyleToolBoxControl final : public SfxToolBoxControl
 {
 private:
     std::unique_ptr<XLineStyleItem>  pStyleItem;
@@ -55,7 +55,7 @@ public:
 // SvxLineWidthController:
 
 
-class SVX_DLLPUBLIC SvxLineWidthToolBoxControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxLineWidthToolBoxControl final : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();

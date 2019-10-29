@@ -29,7 +29,7 @@ namespace sdr { namespace properties {
 
 // Helper class SdrCircObjGeoData
 
-class SdrCircObjGeoData : public SdrTextObjGeoData
+class SdrCircObjGeoData final : public SdrTextObjGeoData
 {
 public:
     long                        nStartAngle;

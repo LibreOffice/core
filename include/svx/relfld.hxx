@@ -25,7 +25,7 @@
 #include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SvxRelativeField : public MetricField
+class SVX_DLLPUBLIC SvxRelativeField final : public MetricField
 {
 public:
     SvxRelativeField(vcl::Window* pParent, WinBits nBits, FieldUnit eUnit);

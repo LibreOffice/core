@@ -72,7 +72,7 @@ public:
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SvxColorDockingWindow : public SfxDockingWindow, public SfxListener
+class SAL_WARN_UNUSED SvxColorDockingWindow final : public SfxDockingWindow, public SfxListener
 {
 friend class SvxColorChildWindow;
 
@@ -94,7 +94,6 @@ private:
     */
     virtual void GetFocus() override;
 
-protected:
     virtual bool    Close() override;
     virtual void    Resize() override;
     virtual void    Resizing( Size& rSize ) override;

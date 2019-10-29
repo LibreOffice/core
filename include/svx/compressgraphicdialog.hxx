@@ -30,7 +30,7 @@ class SdrGrafObj;
 class SfxBindings;
 class SvStream;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC CompressGraphicsDialog : public weld::GenericDialogController
+class SAL_WARN_UNUSED SVX_DLLPUBLIC CompressGraphicsDialog final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::Label>        m_xLabelGraphicType;

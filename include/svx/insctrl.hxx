@@ -23,7 +23,7 @@
 #include <sfx2/stbitem.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SvxInsertStatusBarControl : public SfxStatusBarControl
+class SVX_DLLPUBLIC SvxInsertStatusBarControl final : public SfxStatusBarControl
 {
 public:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,

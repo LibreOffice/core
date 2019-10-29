@@ -22,7 +22,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SvxPasswordDialog : public SfxDialogController
+class SVX_DLLPUBLIC SvxPasswordDialog final : public SfxDialogController
 {
 private:
     OUString const m_aOldPasswdErrStr;

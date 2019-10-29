@@ -25,7 +25,7 @@
 
 #include <vcl/graph.hxx>
 
-class SVX_DLLPUBLIC SvxGraphicItem: public SfxPoolItem
+class SVX_DLLPUBLIC SvxGraphicItem final : public SfxPoolItem
 {
     Graphic const         aGraphic;
 

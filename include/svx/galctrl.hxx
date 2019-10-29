@@ -32,7 +32,7 @@ class GalleryTheme;
 class GalleryBrowser2;
 class INetURLObject;
 
-class SVX_DLLPUBLIC GalleryPreview : public vcl::Window, public DropTargetHelper, public DragSourceHelper
+class SVX_DLLPUBLIC GalleryPreview final : public vcl::Window, public DropTargetHelper, public DragSourceHelper
 {
 private:
 
@@ -69,7 +69,7 @@ public:
     static void         PreviewMedia( const INetURLObject& rURL );
 };
 
-class SVX_DLLPUBLIC SvxGalleryPreview : public weld::CustomWidgetController
+class SVX_DLLPUBLIC SvxGalleryPreview final : public weld::CustomWidgetController
 {
 private:
     GraphicObject aGraphicObj;
@@ -88,7 +88,7 @@ public:
     bool                SetGraphic( const INetURLObject& );
 };
 
-class GalleryIconView : public ValueSet, public DropTargetHelper, public DragSourceHelper
+class GalleryIconView final : public ValueSet, public DropTargetHelper, public DragSourceHelper
 {
     using ValueSet::StartDrag;
 
@@ -119,7 +119,7 @@ public:
                         GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme );
 };
 
-class GalleryListView : public BrowseBox
+class GalleryListView final : public BrowseBox
 {
     using BrowseBox::AcceptDrop;
     using BrowseBox::ExecuteDrop;

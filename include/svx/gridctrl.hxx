@@ -61,7 +61,7 @@ enum class GridRowStatus
 // DbGridRow, description of rows
 
 
-class SAL_DLLPUBLIC_RTTI DbGridRow : public SvRefBase
+class SAL_DLLPUBLIC_RTTI DbGridRow final : public SvRefBase
 {
     css::uno::Any  m_aBookmark;        // Bookmark of the row, can be set
     ::std::vector< std::unique_ptr<::svxform::DataColumn> >
@@ -170,7 +170,7 @@ public:
 
     // NavigationBar
 
-    class NavigationBar: public Control
+    class NavigationBar final : public Control
     {
         class AbsolutePos : public NumericField
         {
@@ -210,12 +210,11 @@ public:
         bool GetState(DbGridControlNavigationBarState nWhich) const;
         sal_uInt16 ArrangeControls();
 
-    protected:
+    private:
         virtual void Resize() override;
         virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
         virtual void StateChanged( StateChangedType nType ) override;
 
-    private:
         DECL_LINK(OnClick, Button*, void);
 
         void PositionDataSource(sal_Int32 nRecord);

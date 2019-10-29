@@ -25,7 +25,7 @@
 /**
  * Child of SfxChildWindow as a "container" for Controller
  */
-class SVX_DLLPUBLIC SvxColorChildWindow : public SfxChildWindow
+class SVX_DLLPUBLIC SvxColorChildWindow final : public SfxChildWindow
 {
  public:
     SvxColorChildWindow( vcl::Window*, sal_uInt16, SfxBindings*,

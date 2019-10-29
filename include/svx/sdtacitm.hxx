@@ -23,7 +23,7 @@
 #include <svx/svddef.hxx>
 
 // Number of loops. 0=infinite.
-class SdrTextAniCountItem: public SfxUInt16Item {
+class SdrTextAniCountItem final : public SfxUInt16Item {
 public:
     SdrTextAniCountItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT,nVal) {}
 

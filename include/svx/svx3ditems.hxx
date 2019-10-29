@@ -116,7 +116,7 @@ inline SfxUInt16Item makeSvx3DMaterialSpecularIntensityItem(sal_uInt16 nVal) {
     return SfxUInt16Item(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY, nVal);
 }
 
-class SVX_DLLPUBLIC Svx3DTextureKindItem : public SfxUInt16Item {
+class SVX_DLLPUBLIC Svx3DTextureKindItem final : public SfxUInt16Item {
 public:
     Svx3DTextureKindItem(sal_uInt16 nVal = 3);
 
@@ -126,7 +126,7 @@ public:
     SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
-class SVX_DLLPUBLIC Svx3DTextureModeItem : public SfxUInt16Item {
+class SVX_DLLPUBLIC Svx3DTextureModeItem final : public SfxUInt16Item {
 public:
     Svx3DTextureModeItem(sal_uInt16 nVal = 2);
 

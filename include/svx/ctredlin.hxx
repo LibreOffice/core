@@ -229,7 +229,7 @@ public:
 };
 
 /// Tabpage with the redlining entries.
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPView : public SvxTPage
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPView final : public SvxTPage
 {
 private:
 
