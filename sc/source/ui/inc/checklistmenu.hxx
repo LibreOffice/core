@@ -335,7 +335,7 @@ public:
         Config();
     };
 
-    explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc);
+    explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc, int nWidth = -1);
     virtual ~ScCheckListMenuWindow() override;
     virtual void dispose() override;
 
