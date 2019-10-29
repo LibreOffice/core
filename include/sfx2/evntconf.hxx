@@ -63,7 +63,7 @@ public:
     void push_back( SfxEventName Item ) { aEventNamesList.push_back( std::move(Item) ); }
 };
 
-class SFX2_DLLPUBLIC SfxEventNamesItem : public SfxPoolItem
+class SFX2_DLLPUBLIC SfxEventNamesItem final : public SfxPoolItem
 {
     SfxEventNamesList aEventsList;
 

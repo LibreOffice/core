@@ -38,7 +38,7 @@ class SidebarController;
 
 /** The tab bar is the container for the individual tabs.
 */
-class SFX2_DLLPUBLIC TabBar
+class SFX2_DLLPUBLIC TabBar final
     : public vcl::Window
 {
 public:

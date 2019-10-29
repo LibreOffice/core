@@ -46,7 +46,7 @@ class Paint;
 /** Simple collection of colors, gradients, fonts that define the
     look of the sidebar and its controls.
 */
-class SFX2_DLLPUBLIC Theme
+class SFX2_DLLPUBLIC Theme final
     : private ::cppu::BaseMutex,
       public ThemeInterfaceBase
 {

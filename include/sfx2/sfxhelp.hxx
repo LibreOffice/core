@@ -25,7 +25,7 @@
 #include <sal/types.h>
 #include <vcl/help.hxx>
 
-class SFX2_DLLPUBLIC SfxHelp : public Help
+class SFX2_DLLPUBLIC SfxHelp final : public Help
 {
     bool            bIsDebug;
 

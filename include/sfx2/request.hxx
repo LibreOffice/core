@@ -41,7 +41,7 @@ namespace com::sun::star::uno { template <class E> class Sequence; }
 namespace vcl { class Window; }
 namespace weld { class Window; }
 
-class SFX2_DLLPUBLIC SfxRequest: public SfxHint
+class SFX2_DLLPUBLIC SfxRequest final : public SfxHint
 {
 friend struct SfxRequest_Impl;
 

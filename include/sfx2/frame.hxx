@@ -72,7 +72,7 @@ typedef ::std::vector<OUString> TargetList;
 // from their parent frames.
 
 
-class SFX2_DLLPUBLIC SfxFrame : public SvCompatWeakBase<SfxFrame>
+class SFX2_DLLPUBLIC SfxFrame final : public SvCompatWeakBase<SfxFrame>
 {
     friend class SfxFrameIterator;
     friend class SfxFrameWindow_Impl;
@@ -81,7 +81,6 @@ private:
     std::unique_ptr< SfxFrame_Impl >     pImpl;
     VclPtr<vcl::Window> pWindow;
 
-protected:
     void                Close();
     virtual             ~SfxFrame();
 
@@ -157,7 +156,7 @@ private:
 
 typedef SvCompatWeakRef<SfxFrame> SfxFrameWeakRef;
 
-class SFX2_DLLPUBLIC SfxFrameItem: public SfxPoolItem
+class SFX2_DLLPUBLIC SfxFrameItem final : public SfxPoolItem
 {
     SfxFrame*               pFrame;
     SfxFrameWeakRef         wFrame;
@@ -177,7 +176,7 @@ public:
     SfxFrame*               GetFrame() const { return wFrame; }
 };
 
-class SFX2_DLLPUBLIC SfxUnoAnyItem : public SfxPoolItem
+class SFX2_DLLPUBLIC SfxUnoAnyItem final : public SfxPoolItem
 {
     css::uno::Any  aValue;
 public:
@@ -192,7 +191,7 @@ public:
     virtual bool                PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
-class SFX2_DLLPUBLIC SfxUnoFrameItem : public SfxPoolItem
+class SFX2_DLLPUBLIC SfxUnoFrameItem final : public SfxPoolItem
 {
     css::uno::Reference< css::frame::XFrame >
                                 m_xFrame;

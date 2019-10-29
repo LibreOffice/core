@@ -31,7 +31,7 @@ class SfxItemSet;
 
 
 struct SfxPrintOptDlg_Impl;
-class SfxPrintOptionsDialog : public weld::GenericDialogController
+class SfxPrintOptionsDialog final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<SfxPrintOptDlg_Impl>   pDlgImpl;

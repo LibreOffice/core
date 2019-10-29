@@ -12,7 +12,7 @@
 
 #include <sfx2/thumbnailviewitem.hxx>
 
-class EmojiViewItem : public ThumbnailViewItem
+class EmojiViewItem final : public ThumbnailViewItem
 {
 public:
     EmojiViewItem (ThumbnailViewBase &rView, sal_uInt16 nId);

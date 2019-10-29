@@ -27,7 +27,7 @@ namespace sfx2 { namespace sidebar { class SidebarController; } }
 
 /** get the Panel
 */
-class SfxUnoPanel : public cppu::WeakImplHelper<css::ui::XPanel>
+class SfxUnoPanel final : public cppu::WeakImplHelper<css::ui::XPanel>
 {
 
 public:

@@ -70,7 +70,7 @@ class SAX_DLLPUBLIC FastTokenHandlerBase
                          const char *pStr, size_t nLength );
 };
 
-class SAX_DLLPUBLIC FastAttributeList : public cppu::WeakImplHelper< css::xml::sax::XFastAttributeList >
+class SAX_DLLPUBLIC FastAttributeList final : public cppu::WeakImplHelper< css::xml::sax::XFastAttributeList >
 {
 public:
     FastAttributeList( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& xTokenHandler,

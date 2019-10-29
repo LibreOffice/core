@@ -110,7 +110,7 @@ public:
     SAL_DLLPRIVATE void ReleaseChildWindow_Impl();
 };
 
-class SfxDockingWrapper : public SfxChildWindow
+class SfxDockingWrapper final : public SfxChildWindow
 {
     public:
         SfxDockingWrapper( vcl::Window* pParent ,

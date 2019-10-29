@@ -11,7 +11,7 @@
 
 #include <vcl/weld.hxx>
 
-class SfxCheckinDialog : public weld::GenericDialogController
+class SfxCheckinDialog final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::TextView> m_xCommentED;

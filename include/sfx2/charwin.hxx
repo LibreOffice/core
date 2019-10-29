@@ -26,7 +26,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 
-class SFX2_DLLPUBLIC SvxCharView : public weld::CustomWidgetController
+class SFX2_DLLPUBLIC SvxCharView final : public weld::CustomWidgetController
 {
 private:
     VclPtr<VirtualDevice> mxVirDev;
@@ -71,7 +71,7 @@ public:
     void ContextMenuSelect(const OString& rIdent);
 };
 
-class SFX2_DLLPUBLIC SvxCharViewControl : public Control
+class SFX2_DLLPUBLIC SvxCharViewControl final : public Control
 {
 public:
     SvxCharViewControl(vcl::Window* pParent);
@@ -88,14 +88,13 @@ public:
 
     void setMouseClickHdl(const Link<SvxCharViewControl*,void> &rLink);
 
-protected:
+private:
     virtual void    Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&) override;
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
-private:
     long            mnY;
     Point           maPosition;
     vcl::Font       maFont;

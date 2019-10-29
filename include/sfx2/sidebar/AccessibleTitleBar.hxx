@@ -27,16 +27,15 @@ namespace sfx2 { namespace sidebar {
 
 class TitleBar;
 
-class AccessibleTitleBar
+class AccessibleTitleBar final
     : public VCLXAccessibleComponent
 {
 public:
     static css::uno::Reference<css::accessibility::XAccessible> Create (TitleBar& rTitleBar);
 
-protected:
+private:
     virtual void FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet) override;
 
-private:
     explicit AccessibleTitleBar (VCLXWindow* pWindow);
     virtual ~AccessibleTitleBar() override;
 };
