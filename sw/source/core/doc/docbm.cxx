@@ -642,6 +642,9 @@ namespace sw { namespace mark
         if ( eType != IDocumentMarkAccess::MarkType::UNO_BOOKMARK )
             pMark->SetName( getUniqueMarkName( pMark->GetName() ) );
 
+        // insert any dummy chars before inserting into sorted vectors
+        pMark->InitDoc(m_pDoc, eMode, pSepPos);
+
         // register mark
         lcl_InsertMarkSorted(m_vAllMarks, pMark.get());
         switch(eType)
@@ -666,7 +669,6 @@ namespace sw { namespace mark
                 // no special array for these
                 break;
         }
-        pMark->InitDoc(m_pDoc, eMode, pSepPos);
         SAL_INFO("sw.core", "--- makeType ---");
         SAL_INFO("sw.core", "Marks");
         lcl_DebugMarks(m_vAllMarks);
