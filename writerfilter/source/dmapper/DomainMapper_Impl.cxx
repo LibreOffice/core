@@ -4343,7 +4343,8 @@ void DomainMapper_Impl::handleIndex
 
 static auto InsertFieldmark(std::stack<TextAppendContext> & rTextAppendStack,
         uno::Reference<text::XFormField> const& xFormField,
-        uno::Reference<text::XTextRange> const& xStartRange) -> void
+        uno::Reference<text::XTextRange> const& xStartRange,
+        boost::optional<FieldId> const oFieldId) -> void
 {
     uno::Reference<text::XTextContent> const xTextContent(xFormField, uno::UNO_QUERY_THROW);
     uno::Reference<text::XTextAppend> const& xTextAppend(rTextAppendStack.top().xTextAppend);
@@ -4358,6 +4359,11 @@ static auto InsertFieldmark(std::stack<TextAppendContext> & rTextAppendStack,
         xCursor->gotoEnd(true);
     }
     xTextAppend->insertTextContent(xCursor, xTextContent, true);
+    if (oFieldId
+        && (oFieldId == FIELD_FORMCHECKBOX || oFieldId == FIELD_FORMDROPDOWN))
+    {
+        return; // only a single CH_TXT_ATR_FORMELEMENT!
+    }
     // problem: the fieldmark must be inserted in CloseFieldCommand(), because
     //          attach() takes 2 positions, not 3!
     // FAIL: AppendTextNode() ignores the content index!
@@ -4371,8 +4377,14 @@ static auto InsertFieldmark(std::stack<TextAppendContext> & rTextAppendStack,
 }
 
 static auto PopFieldmark(std::stack<TextAppendContext> & rTextAppendStack,
-        uno::Reference<text::XTextCursor> const& xCursor) -> void
+        uno::Reference<text::XTextCursor> const& xCursor,
+        boost::optional<FieldId> const oFieldId) -> void
 {
+    if (oFieldId
+        && (oFieldId == FIELD_FORMCHECKBOX || oFieldId == FIELD_FORMDROPDOWN))
+    {
+        return; // only a single CH_TXT_ATR_FORMELEMENT!
+    }
     xCursor->gotoRange(rTextAppendStack.top().xInsertPosition, false);
     xCursor->goRight(1, true);
     xCursor->setString(OUString()); // undo SplitNode from CloseFieldCommand()
@@ -4660,7 +4672,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                                     pContext->SetFormField( xFormField );
                                 }
                                 InsertFieldmark(m_aTextAppendStack,
-                                    xFormField, pContext->GetStartRange());
+                                    xFormField, pContext->GetStartRange(),
+                                    pContext->GetFieldId());
                             }
                             else
                             {
@@ -5131,7 +5144,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                     xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.Fieldmark");
 
                     uno::Reference<text::XFormField> const xFormField(xFieldInterface, uno::UNO_QUERY);
-                    InsertFieldmark(m_aTextAppendStack, xFormField, pContext->GetStartRange());
+                    InsertFieldmark(m_aTextAppendStack, xFormField, pContext->GetStartRange(),
+                            pContext->GetFieldId());
                     xFormField->setFieldType(aCode);
                     m_bStartGenericField = true;
                     pContext->SetFormField( xFormField );
@@ -5450,18 +5464,29 @@ void DomainMapper_Impl::PopFieldContext()
                     else
                     {
                         FormControlHelper::Pointer_t pFormControlHelper(pContext->getFormControlHelper());
-                        if (pFormControlHelper.get() != nullptr && pFormControlHelper->hasFFDataHandler() && xCrsr.is())
+                        if (pFormControlHelper.get() != nullptr)
                         {
                             uno::Reference< text::XFormField > xFormField( pContext->GetFormField() );
-                            xToInsert.set(xFormField, uno::UNO_QUERY);
-                            if ( xFormField.is() && xToInsert.is() )
+                            assert(xCrsr.is());
+                            if (pFormControlHelper->hasFFDataHandler())
                             {
-                                PopFieldmark(m_aTextAppendStack, xCrsr);
-                                pFormControlHelper->processField( xFormField );
+                                xToInsert.set(xFormField, uno::UNO_QUERY);
+                                if (xFormField.is() && xToInsert.is())
+                                {
+                                    PopFieldmark(m_aTextAppendStack, xCrsr,
+                                        pContext->GetFieldId());
+                                    pFormControlHelper->processField( xFormField );
+                                }
+                                else
+                                {
+                                    pFormControlHelper->insertControl(xCrsr);
+                                }
                             }
                             else
                             {
-                                pFormControlHelper->insertControl(xCrsr);
+                                PopFieldmark(m_aTextAppendStack, xCrsr,
+                                        pContext->GetFieldId());
+                                uno::Reference<lang::XComponent>(xFormField, uno::UNO_QUERY_THROW)->dispose(); // presumably invalid?
                             }
                         }
                         else if (!pContext->GetHyperlinkURL().isEmpty() && xCrsr.is())
@@ -5508,7 +5533,7 @@ void DomainMapper_Impl::PopFieldContext()
                         else if(m_bStartGenericField)
                         {
                             m_bStartGenericField = false;
-                            PopFieldmark(m_aTextAppendStack, xCrsr);
+                            PopFieldmark(m_aTextAppendStack, xCrsr, pContext->GetFieldId());
                             if(m_bTextInserted)
                             {
                                 m_bTextInserted = false;
