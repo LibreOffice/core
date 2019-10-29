@@ -109,37 +109,37 @@ void SdrModel::ImpCtor(
     mpImpl->mpUndoFactory=nullptr;
     mpImpl->mbAnchoredTextOverflowLegacy = false;
     mbInDestruction = false;
-    aObjUnit=SdrEngineDefaults::GetMapFraction();
-    eObjUnit=SdrEngineDefaults::GetMapUnit();
-    eUIUnit=FieldUnit::MM;
-    aUIScale=Fraction(1,1);
-    nUIUnitDecimalMark=0;
-    pLayerAdmin=nullptr;
-    pItemPool=pPool;
-    bMyPool=false;
+    m_aObjUnit=SdrEngineDefaults::GetMapFraction();
+    m_eObjUnit=SdrEngineDefaults::GetMapUnit();
+    m_eUIUnit=FieldUnit::MM;
+    m_aUIScale=Fraction(1,1);
+    m_nUIUnitDecimalMark=0;
+    m_pLayerAdmin=nullptr;
+    m_pItemPool=pPool;
+    m_bMyPool=false;
     m_pEmbeddedHelper=_pEmbeddedHelper;
-    pDrawOutliner=nullptr;
-    pHitTestOutliner=nullptr;
-    pRefOutDev=nullptr;
-    pDefaultStyleSheet=nullptr;
+    m_pDrawOutliner=nullptr;
+    m_pHitTestOutliner=nullptr;
+    m_pRefOutDev=nullptr;
+    m_pDefaultStyleSheet=nullptr;
     mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj = nullptr;
-    pLinkManager=nullptr;
-    pUndoStack=nullptr;
-    pRedoStack=nullptr;
-    nMaxUndoCount=16;
-    pCurrentUndoGroup=nullptr;
-    nUndoLevel=0;
+    m_pLinkManager=nullptr;
+    m_pUndoStack=nullptr;
+    m_pRedoStack=nullptr;
+    m_nMaxUndoCount=16;
+    m_pCurrentUndoGroup=nullptr;
+    m_nUndoLevel=0;
     mbUndoEnabled=true;
     mbChanged = false;
-    bPagNumsDirty=false;
-    bMPgNumsDirty=false;
-    bTransportContainer = false;
-    bSwapGraphics=false;
-    bPasteResize=false;
-    bReadOnly=false;
-    nDefaultTabulator=0;
-    bTransparentTextFrames=false;
-    bStarDrawPreviewMode = false;
+    m_bPagNumsDirty=false;
+    m_bMPgNumsDirty=false;
+    m_bTransportContainer = false;
+    m_bSwapGraphics=false;
+    m_bPasteResize=false;
+    m_bReadOnly=false;
+    m_nDefaultTabulator=0;
+    m_bTransparentTextFrames=false;
+    m_bStarDrawPreviewMode = false;
     mpForbiddenCharactersTable = nullptr;
     mbModelLocked = false;
     mpOutlinerCache = nullptr;
@@ -157,45 +157,45 @@ void SdrModel::ImpCtor(
 
     if ( pPool == nullptr )
     {
-        pItemPool=new SdrItemPool(nullptr);
+        m_pItemPool=new SdrItemPool(nullptr);
         // Outliner doesn't have its own Pool, so use the EditEngine's
         SfxItemPool* pOutlPool=EditEngine::CreatePool();
         // OutlinerPool as SecondaryPool of SdrPool
-        pItemPool->SetSecondaryPool(pOutlPool);
+        m_pItemPool->SetSecondaryPool(pOutlPool);
         // remember that I created both pools myself
-        bMyPool=true;
+        m_bMyPool=true;
     }
-    pItemPool->SetDefaultMetric(eObjUnit);
+    m_pItemPool->SetDefaultMetric(m_eObjUnit);
 
 // using static SdrEngineDefaults only if default SvxFontHeight item is not available
-    const SfxPoolItem* pPoolItem = pItemPool->GetPoolDefaultItem( EE_CHAR_FONTHEIGHT );
+    const SfxPoolItem* pPoolItem = m_pItemPool->GetPoolDefaultItem( EE_CHAR_FONTHEIGHT );
     if ( pPoolItem )
         mnDefTextHgt = static_cast<const SvxFontHeightItem*>(pPoolItem)->GetHeight();
     else
         mnDefTextHgt = SdrEngineDefaults::GetFontHeight();
 
-    pItemPool->SetPoolDefaultItem( makeSdrTextWordWrapItem( false ) );
+    m_pItemPool->SetPoolDefaultItem( makeSdrTextWordWrapItem( false ) );
 
     SetTextDefaults();
-    pLayerAdmin.reset(new SdrLayerAdmin);
-    pLayerAdmin->SetModel(this);
+    m_pLayerAdmin.reset(new SdrLayerAdmin);
+    m_pLayerAdmin->SetModel(this);
     ImpSetUIUnit();
 
     // can't create DrawOutliner OnDemand, because I can't get the Pool,
     // then (only from 302 onwards!)
-    pDrawOutliner = SdrMakeOutliner(OutlinerMode::TextObject, *this);
-    ImpSetOutlinerDefaults(pDrawOutliner.get(), true);
+    m_pDrawOutliner = SdrMakeOutliner(OutlinerMode::TextObject, *this);
+    ImpSetOutlinerDefaults(m_pDrawOutliner.get(), true);
 
-    pHitTestOutliner = SdrMakeOutliner(OutlinerMode::TextObject, *this);
-    ImpSetOutlinerDefaults(pHitTestOutliner.get(), true);
+    m_pHitTestOutliner = SdrMakeOutliner(OutlinerMode::TextObject, *this);
+    ImpSetOutlinerDefaults(m_pHitTestOutliner.get(), true);
 
     /* Start Text Chaining related code */
     // Initialize Chaining Outliner
-    pChainingOutliner = SdrMakeOutliner( OutlinerMode::TextObject, *this );
-    ImpSetOutlinerDefaults(pChainingOutliner.get(), true);
+    m_pChainingOutliner = SdrMakeOutliner( OutlinerMode::TextObject, *this );
+    ImpSetOutlinerDefaults(m_pChainingOutliner.get(), true);
 
     // Make a TextChain
-    pTextChain.reset(new TextChain);
+    m_pTextChain.reset(new TextChain);
     /* End Text Chaining related code */
 
     ImpCreateTables(bDisablePropertyFiles || utl::ConfigManager::IsFuzzing());
@@ -227,10 +227,10 @@ SdrModel::~SdrModel()
 
     ClearUndoBuffer();
 #ifdef DBG_UTIL
-    SAL_WARN_IF(pCurrentUndoGroup, "svx", "In the Dtor of the SdrModel there is an open Undo left: \""
-                    << pCurrentUndoGroup->GetComment() << '\"');
+    SAL_WARN_IF(m_pCurrentUndoGroup, "svx", "In the Dtor of the SdrModel there is an open Undo left: \""
+                    << m_pCurrentUndoGroup->GetComment() << '\"');
 #endif
-    pCurrentUndoGroup.reset();
+    m_pCurrentUndoGroup.reset();
 
     ClearModel(true);
 
@@ -249,14 +249,14 @@ SdrModel::~SdrModel()
     }
 #endif
 
-    pLayerAdmin.reset();
+    m_pLayerAdmin.reset();
 
-    pTextChain.reset();
+    m_pTextChain.reset();
     // Delete DrawOutliner only after deleting ItemPool, because ItemPool
     // references Items of the DrawOutliner!
-    pChainingOutliner.reset();
-    pHitTestOutliner.reset();
-    pDrawOutliner.reset();
+    m_pChainingOutliner.reset();
+    m_pHitTestOutliner.reset();
+    m_pDrawOutliner.reset();
 
     // delete StyleSheetPool, derived classes should not do this since
     // the DrawingEngine may need it in its destructor
@@ -273,11 +273,11 @@ SdrModel::~SdrModel()
         mxStyleSheetPool.clear();
     }
 
-    if (bMyPool)
+    if (m_bMyPool)
     {
         // delete Pools if they're mine
-        SfxItemPool* pOutlPool=pItemPool->GetSecondaryPool();
-        SfxItemPool::Free(pItemPool);
+        SfxItemPool* pOutlPool=m_pItemPool->GetSecondaryPool();
+        SfxItemPool::Free(m_pItemPool);
         // OutlinerPool has to be deleted after deleting ItemPool, because
         // ItemPool contains SetItems that themselves reference Items from OutlinerPool.
         SfxItemPool::Free(pOutlPool);
@@ -290,45 +290,45 @@ SdrModel::~SdrModel()
 
 void SdrModel::SetSwapGraphics()
 {
-    bSwapGraphics = true;
+    m_bSwapGraphics = true;
 }
 
 bool SdrModel::IsReadOnly() const
 {
-    return bReadOnly;
+    return m_bReadOnly;
 }
 
 void SdrModel::SetReadOnly(bool bYes)
 {
-    bReadOnly=bYes;
+    m_bReadOnly=bYes;
 }
 
 
 void SdrModel::SetMaxUndoActionCount(sal_uInt32 nCount)
 {
     if (nCount<1) nCount=1;
-    nMaxUndoCount=nCount;
-    if (pUndoStack) {
-        while (pUndoStack->size()>nMaxUndoCount) {
-            pUndoStack->pop_back();
+    m_nMaxUndoCount=nCount;
+    if (m_pUndoStack) {
+        while (m_pUndoStack->size()>m_nMaxUndoCount) {
+            m_pUndoStack->pop_back();
         }
     }
 }
 
 void SdrModel::ClearUndoBuffer()
 {
-    pUndoStack.reset();
-    pRedoStack.reset();
+    m_pUndoStack.reset();
+    m_pRedoStack.reset();
 }
 
 bool SdrModel::HasUndoActions() const
 {
-    return pUndoStack && !pUndoStack->empty();
+    return m_pUndoStack && !m_pUndoStack->empty();
 }
 
 bool SdrModel::HasRedoActions() const
 {
-    return pRedoStack && !pRedoStack->empty();
+    return m_pRedoStack && !m_pRedoStack->empty();
 }
 
 void SdrModel::Undo()
@@ -341,15 +341,15 @@ void SdrModel::Undo()
     {
         if(HasUndoActions())
         {
-            SfxUndoAction* pDo = pUndoStack->front().get();
+            SfxUndoAction* pDo = m_pUndoStack->front().get();
             const bool bWasUndoEnabled = mbUndoEnabled;
             mbUndoEnabled = false;
             pDo->Undo();
-            if(!pRedoStack)
-                pRedoStack.reset(new std::deque<std::unique_ptr<SfxUndoAction>>);
-            std::unique_ptr<SfxUndoAction> p = std::move(pUndoStack->front());
-            pUndoStack->pop_front();
-            pRedoStack->emplace_front(std::move(p));
+            if(!m_pRedoStack)
+                m_pRedoStack.reset(new std::deque<std::unique_ptr<SfxUndoAction>>);
+            std::unique_ptr<SfxUndoAction> p = std::move(m_pUndoStack->front());
+            m_pUndoStack->pop_front();
+            m_pRedoStack->emplace_front(std::move(p));
             mbUndoEnabled = bWasUndoEnabled;
         }
     }
@@ -365,15 +365,15 @@ void SdrModel::Redo()
     {
         if(HasRedoActions())
         {
-            SfxUndoAction* pDo = pRedoStack->front().get();
+            SfxUndoAction* pDo = m_pRedoStack->front().get();
             const bool bWasUndoEnabled = mbUndoEnabled;
             mbUndoEnabled = false;
             pDo->Redo();
-            if(!pUndoStack)
-                pUndoStack.reset(new std::deque<std::unique_ptr<SfxUndoAction>>);
-            std::unique_ptr<SfxUndoAction> p = std::move(pRedoStack->front());
-            pRedoStack->pop_front();
-            pUndoStack->emplace_front(std::move(p));
+            if(!m_pUndoStack)
+                m_pUndoStack.reset(new std::deque<std::unique_ptr<SfxUndoAction>>);
+            std::unique_ptr<SfxUndoAction> p = std::move(m_pRedoStack->front());
+            m_pRedoStack->pop_front();
+            m_pUndoStack->emplace_front(std::move(p));
             mbUndoEnabled = bWasUndoEnabled;
         }
     }
@@ -389,7 +389,7 @@ void SdrModel::Repeat(SfxRepeatTarget& rView)
     {
         if(HasUndoActions())
         {
-            SfxUndoAction* pDo =  pUndoStack->front().get();
+            SfxUndoAction* pDo =  m_pUndoStack->front().get();
             if(pDo->CanRepeat(rView))
             {
                 pDo->Repeat(rView);
@@ -403,21 +403,21 @@ void SdrModel::ImpPostUndoAction(std::unique_ptr<SdrUndoAction> pUndo)
     DBG_ASSERT( mpImpl->mpUndoManager == nullptr, "svx::SdrModel::ImpPostUndoAction(), method not supported with application undo manager!" );
     if( IsUndoEnabled() )
     {
-        if (aUndoLink)
+        if (m_aUndoLink)
         {
-            aUndoLink(std::move(pUndo));
+            m_aUndoLink(std::move(pUndo));
         }
         else
         {
-            if (!pUndoStack)
-                pUndoStack.reset(new std::deque<std::unique_ptr<SfxUndoAction>>);
-            pUndoStack->emplace_front(std::move(pUndo));
-            while (pUndoStack->size()>nMaxUndoCount)
+            if (!m_pUndoStack)
+                m_pUndoStack.reset(new std::deque<std::unique_ptr<SfxUndoAction>>);
+            m_pUndoStack->emplace_front(std::move(pUndo));
+            while (m_pUndoStack->size()>m_nMaxUndoCount)
             {
-                pUndoStack->pop_back();
+                m_pUndoStack->pop_back();
             }
-            if (pRedoStack!=nullptr)
-                pRedoStack->clear();
+            if (m_pRedoStack!=nullptr)
+                m_pRedoStack->clear();
         }
     }
 }
@@ -430,18 +430,18 @@ void SdrModel::BegUndo()
         if (SfxViewShell* pViewShell = SfxViewShell::Current())
             nViewShellId = pViewShell->GetViewShellId();
         mpImpl->mpUndoManager->EnterListAction("","",0,nViewShellId);
-        nUndoLevel++;
+        m_nUndoLevel++;
     }
     else if( IsUndoEnabled() )
     {
-        if(!pCurrentUndoGroup)
+        if(!m_pCurrentUndoGroup)
         {
-            pCurrentUndoGroup.reset(new SdrUndoGroup(*this));
-            nUndoLevel=1;
+            m_pCurrentUndoGroup.reset(new SdrUndoGroup(*this));
+            m_nUndoLevel=1;
         }
         else
         {
-            nUndoLevel++;
+            m_nUndoLevel++;
         }
     }
 }
@@ -454,14 +454,14 @@ void SdrModel::BegUndo(const OUString& rComment)
         if (SfxViewShell* pViewShell = SfxViewShell::Current())
             nViewShellId = pViewShell->GetViewShellId();
         mpImpl->mpUndoManager->EnterListAction( rComment, "", 0, nViewShellId );
-        nUndoLevel++;
+        m_nUndoLevel++;
     }
     else if( IsUndoEnabled() )
     {
         BegUndo();
-        if (nUndoLevel==1)
+        if (m_nUndoLevel==1)
         {
-            pCurrentUndoGroup->SetComment(rComment);
+            m_pCurrentUndoGroup->SetComment(rComment);
         }
     }
 }
@@ -479,46 +479,46 @@ void SdrModel::BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrR
         if (SfxViewShell* pViewShell = SfxViewShell::Current())
             nViewShellId = pViewShell->GetViewShellId();
         mpImpl->mpUndoManager->EnterListAction( aComment,"",0,nViewShellId );
-        nUndoLevel++;
+        m_nUndoLevel++;
     }
     else if( IsUndoEnabled() )
     {
         BegUndo();
-        if (nUndoLevel==1)
+        if (m_nUndoLevel==1)
         {
-            pCurrentUndoGroup->SetComment(rComment);
-            pCurrentUndoGroup->SetObjDescription(rObjDescr);
-            pCurrentUndoGroup->SetRepeatFunction(eFunc);
+            m_pCurrentUndoGroup->SetComment(rComment);
+            m_pCurrentUndoGroup->SetObjDescription(rObjDescr);
+            m_pCurrentUndoGroup->SetRepeatFunction(eFunc);
         }
     }
 }
 
 void SdrModel::EndUndo()
 {
-    DBG_ASSERT(nUndoLevel!=0,"SdrModel::EndUndo(): UndoLevel is already 0!");
+    DBG_ASSERT(m_nUndoLevel!=0,"SdrModel::EndUndo(): UndoLevel is already 0!");
     if( mpImpl->mpUndoManager )
     {
-        if( nUndoLevel )
+        if( m_nUndoLevel )
         {
-            nUndoLevel--;
+            m_nUndoLevel--;
             mpImpl->mpUndoManager->LeaveListAction();
         }
     }
     else
     {
-        if(pCurrentUndoGroup!=nullptr && IsUndoEnabled())
+        if(m_pCurrentUndoGroup!=nullptr && IsUndoEnabled())
         {
-            nUndoLevel--;
-            if(nUndoLevel==0)
+            m_nUndoLevel--;
+            if(m_nUndoLevel==0)
             {
-                if(pCurrentUndoGroup->GetActionCount()!=0)
+                if(m_pCurrentUndoGroup->GetActionCount()!=0)
                 {
-                    ImpPostUndoAction(std::move(pCurrentUndoGroup));
+                    ImpPostUndoAction(std::move(m_pCurrentUndoGroup));
                 }
                 else
                 {
                     // was empty
-                    pCurrentUndoGroup.reset();
+                    m_pCurrentUndoGroup.reset();
                 }
             }
         }
@@ -527,31 +527,31 @@ void SdrModel::EndUndo()
 
 void SdrModel::SetUndoComment(const OUString& rComment)
 {
-    DBG_ASSERT(nUndoLevel!=0,"SdrModel::SetUndoComment(): UndoLevel is already 0!");
+    DBG_ASSERT(m_nUndoLevel!=0,"SdrModel::SetUndoComment(): UndoLevel is already 0!");
 
     if( mpImpl->mpUndoManager )
     {
         OSL_FAIL("svx::SdrModel::SetUndoComment(), method not supported with application undo manager!" );
     }
-    else if( IsUndoEnabled() && nUndoLevel==1)
+    else if( IsUndoEnabled() && m_nUndoLevel==1)
     {
-        pCurrentUndoGroup->SetComment(rComment);
+        m_pCurrentUndoGroup->SetComment(rComment);
     }
 }
 
 void SdrModel::SetUndoComment(const OUString& rComment, const OUString& rObjDescr)
 {
-    DBG_ASSERT(nUndoLevel!=0,"SdrModel::SetUndoComment(): UndoLevel is already 0!");
+    DBG_ASSERT(m_nUndoLevel!=0,"SdrModel::SetUndoComment(): UndoLevel is already 0!");
     if( mpImpl->mpUndoManager )
     {
         OSL_FAIL("svx::SdrModel::SetUndoComment(), method not supported with application undo manager!" );
     }
     else
     {
-        if (nUndoLevel==1)
+        if (m_nUndoLevel==1)
         {
-            pCurrentUndoGroup->SetComment(rComment);
-            pCurrentUndoGroup->SetObjDescription(rObjDescr);
+            m_pCurrentUndoGroup->SetComment(rComment);
+            m_pCurrentUndoGroup->SetObjDescription(rObjDescr);
         }
     }
 }
@@ -564,9 +564,9 @@ void SdrModel::AddUndo(std::unique_ptr<SdrUndoAction> pUndo)
     }
     else if( IsUndoEnabled() )
     {
-        if (pCurrentUndoGroup)
+        if (m_pCurrentUndoGroup)
         {
-            pCurrentUndoGroup->AddAction(std::move(pUndo));
+            m_pCurrentUndoGroup->AddAction(std::move(pUndo));
         }
         else
         {
@@ -636,13 +636,13 @@ void SdrModel::ClearModel(bool bCalledFromDestructor)
     maMaPag.clear();
     MasterPageListChanged();
 
-    pLayerAdmin->ClearLayers();
+    m_pLayerAdmin->ClearLayers();
 }
 
 SdrModel* SdrModel::AllocModel() const
 {
     SdrModel* pModel=new SdrModel();
-    pModel->SetScaleUnit(eObjUnit,aObjUnit);
+    pModel->SetScaleUnit(m_eObjUnit,m_aObjUnit);
     return pModel;
 }
 
@@ -653,7 +653,7 @@ SdrPage* SdrModel::AllocPage(bool bMasterPage)
 
 void SdrModel::SetTextDefaults() const
 {
-    SetTextDefaults( pItemPool, mnDefTextHgt );
+    SetTextDefaults( m_pItemPool, mnDefTextHgt );
 }
 
 void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_Int32 nDefTextHgt )
@@ -706,20 +706,20 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_Int32 nDefTextHgt )
 
 SdrOutliner& SdrModel::GetDrawOutliner(const SdrTextObj* pObj) const
 {
-    pDrawOutliner->SetTextObj(pObj);
-    return *pDrawOutliner;
+    m_pDrawOutliner->SetTextObj(pObj);
+    return *m_pDrawOutliner;
 }
 
 SdrOutliner& SdrModel::GetChainingOutliner(const SdrTextObj* pObj) const
 {
-    pChainingOutliner->SetTextObj(pObj);
-    return *pChainingOutliner;
+    m_pChainingOutliner->SetTextObj(pObj);
+    return *m_pChainingOutliner;
 }
 
 const SdrTextObj* SdrModel::GetFormattingTextObj() const
 {
-    if (pDrawOutliner!=nullptr) {
-        return pDrawOutliner->GetTextObj();
+    if (m_pDrawOutliner!=nullptr) {
+        return m_pDrawOutliner->GetTextObj();
     }
     return nullptr;
 }
@@ -731,8 +731,8 @@ void SdrModel::ImpSetOutlinerDefaults( SdrOutliner* pOutliner, bool bInit )
     {
         pOutliner->EraseVirtualDevice();
         pOutliner->SetUpdateMode(false);
-        pOutliner->SetEditTextObjectPool(pItemPool);
-        pOutliner->SetDefTab(nDefaultTabulator);
+        pOutliner->SetEditTextObjectPool(m_pItemPool);
+        pOutliner->SetDefTab(m_nDefaultTabulator);
     }
 
     pOutliner->SetRefDevice(GetRefDevice());
@@ -743,16 +743,16 @@ void SdrModel::ImpSetOutlinerDefaults( SdrOutliner* pOutliner, bool bInit )
 
     if ( !GetRefDevice() )
     {
-        MapMode aMapMode(eObjUnit, Point(0,0), aObjUnit, aObjUnit);
+        MapMode aMapMode(m_eObjUnit, Point(0,0), m_aObjUnit, m_aObjUnit);
         pOutliner->SetRefMapMode(aMapMode);
     }
 }
 
 void SdrModel::SetRefDevice(OutputDevice* pDev)
 {
-    pRefOutDev=pDev;
-    ImpSetOutlinerDefaults( pDrawOutliner.get() );
-    ImpSetOutlinerDefaults( pHitTestOutliner.get() );
+    m_pRefOutDev=pDev;
+    ImpSetOutlinerDefaults( m_pDrawOutliner.get() );
+    ImpSetOutlinerDefaults( m_pHitTestOutliner.get() );
     RefDeviceChanged();
 }
 
@@ -863,8 +863,8 @@ void SdrModel::SetDefaultFontHeight(sal_Int32 nVal)
 
 void SdrModel::SetDefaultTabulator(sal_uInt16 nVal)
 {
-    if (nDefaultTabulator!=nVal) {
-        nDefaultTabulator=nVal;
+    if (m_nDefaultTabulator!=nVal) {
+        m_nDefaultTabulator=nVal;
         Outliner& rOutliner=GetDrawOutliner();
         rOutliner.SetDefTab(nVal);
         Broadcast(SdrHint(SdrHintKind::DefaultTabChange));
@@ -874,29 +874,29 @@ void SdrModel::SetDefaultTabulator(sal_uInt16 nVal)
 
 void SdrModel::ImpSetUIUnit()
 {
-    if(0 == aUIScale.GetNumerator() || 0 == aUIScale.GetDenominator())
+    if(0 == m_aUIScale.GetNumerator() || 0 == m_aUIScale.GetDenominator())
     {
-        aUIScale = Fraction(1,1);
+        m_aUIScale = Fraction(1,1);
     }
 
     // set start values
-    nUIUnitDecimalMark = 0;
+    m_nUIUnitDecimalMark = 0;
     sal_Int64 nMul(1);
     sal_Int64 nDiv(1);
 
     // normalize on meters resp. inch
-    switch (eObjUnit)
+    switch (m_eObjUnit)
     {
-        case MapUnit::Map100thMM   : nUIUnitDecimalMark+=5; break;
-        case MapUnit::Map10thMM    : nUIUnitDecimalMark+=4; break;
-        case MapUnit::MapMM         : nUIUnitDecimalMark+=3; break;
-        case MapUnit::MapCM         : nUIUnitDecimalMark+=2; break;
-        case MapUnit::Map1000thInch: nUIUnitDecimalMark+=3; break;
-        case MapUnit::Map100thInch : nUIUnitDecimalMark+=2; break;
-        case MapUnit::Map10thInch  : nUIUnitDecimalMark+=1; break;
-        case MapUnit::MapInch       : nUIUnitDecimalMark+=0; break;
+        case MapUnit::Map100thMM   : m_nUIUnitDecimalMark+=5; break;
+        case MapUnit::Map10thMM    : m_nUIUnitDecimalMark+=4; break;
+        case MapUnit::MapMM         : m_nUIUnitDecimalMark+=3; break;
+        case MapUnit::MapCM         : m_nUIUnitDecimalMark+=2; break;
+        case MapUnit::Map1000thInch: m_nUIUnitDecimalMark+=3; break;
+        case MapUnit::Map100thInch : m_nUIUnitDecimalMark+=2; break;
+        case MapUnit::Map10thInch  : m_nUIUnitDecimalMark+=1; break;
+        case MapUnit::MapInch       : m_nUIUnitDecimalMark+=0; break;
         case MapUnit::MapPoint      : nDiv=72;     break;          // 1Pt   = 1/72"
-        case MapUnit::MapTwip       : nDiv=144; nUIUnitDecimalMark++; break; // 1Twip = 1/1440"
+        case MapUnit::MapTwip       : nDiv=144; m_nUIUnitDecimalMark++; break; // 1Twip = 1/1440"
         case MapUnit::MapPixel      : break;
         case MapUnit::MapSysFont    : break;
         case MapUnit::MapAppFont    : break;
@@ -910,25 +910,25 @@ void SdrModel::ImpSetUIUnit()
     // 1 pole    =  5 1/2 yd  =    198" =     5.029,2mm
     // 1 yd      =  3 ft      =     36" =       914,4mm
     // 1 ft      = 12 "       =      1" =       304,8mm
-    switch (eUIUnit)
+    switch (m_eUIUnit)
     {
         case FieldUnit::NONE   : break;
         // metric
-        case FieldUnit::MM_100TH: nUIUnitDecimalMark-=5; break;
-        case FieldUnit::MM     : nUIUnitDecimalMark-=3; break;
-        case FieldUnit::CM     : nUIUnitDecimalMark-=2; break;
-        case FieldUnit::M      : nUIUnitDecimalMark+=0; break;
-        case FieldUnit::KM     : nUIUnitDecimalMark+=3; break;
+        case FieldUnit::MM_100TH: m_nUIUnitDecimalMark-=5; break;
+        case FieldUnit::MM     : m_nUIUnitDecimalMark-=3; break;
+        case FieldUnit::CM     : m_nUIUnitDecimalMark-=2; break;
+        case FieldUnit::M      : m_nUIUnitDecimalMark+=0; break;
+        case FieldUnit::KM     : m_nUIUnitDecimalMark+=3; break;
         // Inch
-        case FieldUnit::TWIP   : nMul=144; nUIUnitDecimalMark--;  break;  // 1Twip = 1/1440"
+        case FieldUnit::TWIP   : nMul=144; m_nUIUnitDecimalMark--;  break;  // 1Twip = 1/1440"
         case FieldUnit::POINT  : nMul=72;     break;            // 1Pt   = 1/72"
         case FieldUnit::PICA   : nMul=6;      break;            // 1Pica = 1/6"
         case FieldUnit::INCH   : break;                         // 1"    = 1"
         case FieldUnit::FOOT   : nDiv*=12;    break;            // 1Ft   = 12"
-        case FieldUnit::MILE   : nDiv*=6336; nUIUnitDecimalMark++; break; // 1mile = 63360"
+        case FieldUnit::MILE   : nDiv*=6336; m_nUIUnitDecimalMark++; break; // 1mile = 63360"
         // other
         case FieldUnit::CUSTOM : break;
-        case FieldUnit::PERCENT: nUIUnitDecimalMark+=2; break;
+        case FieldUnit::PERCENT: m_nUIUnitDecimalMark+=2; break;
         // TODO: Add code to handle the following if needed (added to remove warning)
         case FieldUnit::CHAR   : break;
         case FieldUnit::LINE   : break;
@@ -939,22 +939,22 @@ void SdrModel::ImpSetUIUnit()
     } // switch
 
     // check if mapping is from metric to inch and adapt
-    const bool bMapInch(IsInch(eObjUnit));
-    const bool bUIMetr(IsMetric(eUIUnit));
+    const bool bMapInch(IsInch(m_eObjUnit));
+    const bool bUIMetr(IsMetric(m_eUIUnit));
 
     if (bMapInch && bUIMetr)
     {
-        nUIUnitDecimalMark += 4;
+        m_nUIUnitDecimalMark += 4;
         nMul *= 254;
     }
 
     // check if mapping is from inch to metric and adapt
-    const bool bMapMetr(IsMetric(eObjUnit));
-    const bool bUIInch(IsInch(eUIUnit));
+    const bool bMapMetr(IsMetric(m_eObjUnit));
+    const bool bUIInch(IsInch(m_eUIUnit));
 
     if (bMapMetr && bUIInch)
     {
-        nUIUnitDecimalMark -= 4;
+        m_nUIUnitDecimalMark -= 4;
         nDiv *= 254;
     }
 
@@ -968,72 +968,72 @@ void SdrModel::ImpSetUIUnit()
     }
 
     // #i89872# take Unit of Measurement into account
-    if(1 != aUIScale.GetDenominator() || 1 != aUIScale.GetNumerator())
+    if(1 != m_aUIScale.GetDenominator() || 1 != m_aUIScale.GetNumerator())
     {
         // divide by UIScale
-        nMul *= aUIScale.GetDenominator();
-        nDiv *= aUIScale.GetNumerator();
+        nMul *= m_aUIScale.GetDenominator();
+        nDiv *= m_aUIScale.GetNumerator();
     }
 
     // shorten trailing zeros for dividend
     while(0 == (nMul % 10))
     {
-        nUIUnitDecimalMark--;
+        m_nUIUnitDecimalMark--;
         nMul /= 10;
     }
 
     // shorten trailing zeros for divisor
     while(0 == (nDiv % 10))
     {
-        nUIUnitDecimalMark++;
+        m_nUIUnitDecimalMark++;
         nDiv /= 10;
     }
 
     // end preparations, set member values
-    aUIUnitFact = Fraction(sal_Int32(nMul), sal_Int32(nDiv));
-    aUIUnitStr = GetUnitString(eUIUnit);
+    m_aUIUnitFact = Fraction(sal_Int32(nMul), sal_Int32(nDiv));
+    m_aUIUnitStr = GetUnitString(m_eUIUnit);
 }
 
 void SdrModel::SetScaleUnit(MapUnit eMap, const Fraction& rFrac)
 {
-    if (eObjUnit!=eMap || aObjUnit!=rFrac) {
-        eObjUnit=eMap;
-        aObjUnit=rFrac;
-        pItemPool->SetDefaultMetric(eObjUnit);
+    if (m_eObjUnit!=eMap || m_aObjUnit!=rFrac) {
+        m_eObjUnit=eMap;
+        m_aObjUnit=rFrac;
+        m_pItemPool->SetDefaultMetric(m_eObjUnit);
         ImpSetUIUnit();
-        ImpSetOutlinerDefaults( pDrawOutliner.get() );
-        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
+        ImpSetOutlinerDefaults( m_pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( m_pHitTestOutliner.get() );
         ImpReformatAllTextObjects();
     }
 }
 
 void SdrModel::SetScaleUnit(MapUnit eMap)
 {
-    if (eObjUnit!=eMap) {
-        eObjUnit=eMap;
-        pItemPool->SetDefaultMetric(eObjUnit);
+    if (m_eObjUnit!=eMap) {
+        m_eObjUnit=eMap;
+        m_pItemPool->SetDefaultMetric(m_eObjUnit);
         ImpSetUIUnit();
-        ImpSetOutlinerDefaults( pDrawOutliner.get() );
-        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
+        ImpSetOutlinerDefaults( m_pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( m_pHitTestOutliner.get() );
         ImpReformatAllTextObjects();
     }
 }
 
 void SdrModel::SetScaleFraction(const Fraction& rFrac)
 {
-    if (aObjUnit!=rFrac) {
-        aObjUnit=rFrac;
+    if (m_aObjUnit!=rFrac) {
+        m_aObjUnit=rFrac;
         ImpSetUIUnit();
-        ImpSetOutlinerDefaults( pDrawOutliner.get() );
-        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
+        ImpSetOutlinerDefaults( m_pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( m_pHitTestOutliner.get() );
         ImpReformatAllTextObjects();
     }
 }
 
 void SdrModel::SetUIUnit(FieldUnit eUnit)
 {
-    if (eUIUnit!=eUnit) {
-        eUIUnit=eUnit;
+    if (m_eUIUnit!=eUnit) {
+        m_eUIUnit=eUnit;
         ImpSetUIUnit();
         ImpReformatAllTextObjects();
     }
@@ -1041,8 +1041,8 @@ void SdrModel::SetUIUnit(FieldUnit eUnit)
 
 void SdrModel::SetUIScale(const Fraction& rScale)
 {
-    if (aUIScale!=rScale) {
-        aUIScale=rScale;
+    if (m_aUIScale!=rScale) {
+        m_aUIScale=rScale;
         ImpSetUIUnit();
         ImpReformatAllTextObjects();
     }
@@ -1050,9 +1050,9 @@ void SdrModel::SetUIScale(const Fraction& rScale)
 
 void SdrModel::SetUIUnit(FieldUnit eUnit, const Fraction& rScale)
 {
-    if (eUIUnit!=eUnit || aUIScale!=rScale) {
-        eUIUnit=eUnit;
-        aUIScale=rScale;
+    if (m_eUIUnit!=eUnit || m_aUIScale!=rScale) {
+        m_eUIUnit=eUnit;
+        m_aUIScale=rScale;
         ImpSetUIUnit();
         ImpReformatAllTextObjects();
     }
@@ -1100,7 +1100,7 @@ OUString SdrModel::GetMetricString(long nVal, bool bNoUnitChars, sal_Int32 nNumD
     const bool bNegative(nVal < 0);
     SvtSysLocale aSysLoc;
     const LocaleDataWrapper& rLoc(aSysLoc.GetLocaleData());
-    double fLocalValue(double(nVal) * double(aUIUnitFact));
+    double fLocalValue(double(nVal) * double(m_aUIUnitFact));
 
     if(bNegative)
     {
@@ -1112,7 +1112,7 @@ OUString SdrModel::GetMetricString(long nVal, bool bNoUnitChars, sal_Int32 nNumD
         nNumDigits = LocaleDataWrapper::getNumDigits();
     }
 
-    sal_Int32 nDecimalMark(nUIUnitDecimalMark);
+    sal_Int32 nDecimalMark(m_nUIUnitDecimalMark);
 
     if(nDecimalMark > nNumDigits)
     {
@@ -1210,7 +1210,7 @@ OUString SdrModel::GetMetricString(long nVal, bool bNoUnitChars, sal_Int32 nNumD
     }
 
     if(!bNoUnitChars)
-        aBuf.append(aUIUnitStr);
+        aBuf.append(m_aUIUnitStr);
 
     return aBuf.makeStringAndClear();
 }
@@ -1286,7 +1286,7 @@ void SdrModel::RecalcPageNums(bool bMaster)
             SdrPage* pPg=maMaPag[i];
             pPg->SetPageNum(i);
         }
-        bMPgNumsDirty=false;
+        m_bMPgNumsDirty=false;
     }
     else
     {
@@ -1296,7 +1296,7 @@ void SdrModel::RecalcPageNums(bool bMaster)
             SdrPage* pPg=maPages[i];
             pPg->SetPageNum(i);
         }
-        bPagNumsDirty=false;
+        m_bPagNumsDirty=false;
     }
 }
 
@@ -1312,7 +1312,7 @@ void SdrModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     if (mbMakePageObjectsNamesUnique)
         pPage->MakePageObjectsNamesUnique();
 
-    if (nPos<nCount) bPagNumsDirty=true;
+    if (nPos<nCount) m_bPagNumsDirty=true;
     SetChanged();
     SdrHint aHint(SdrHintKind::PageOrderChange, pPage);
     Broadcast(aHint);
@@ -1332,7 +1332,7 @@ SdrPage* SdrModel::RemovePage(sal_uInt16 nPgNum)
     if (pPg!=nullptr) {
         pPg->SetInserted(false);
     }
-    bPagNumsDirty=true;
+    m_bPagNumsDirty=true;
     SetChanged();
     SdrHint aHint(SdrHintKind::PageOrderChange, pPg);
     Broadcast(aHint);
@@ -1362,7 +1362,7 @@ void SdrModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
     pPage->SetPageNum(nPos);
 
     if (nPos<nCount) {
-        bMPgNumsDirty=true;
+        m_bMPgNumsDirty=true;
     }
 
     SetChanged();
@@ -1395,7 +1395,7 @@ SdrPage* SdrModel::RemoveMasterPage(sal_uInt16 nPgNum)
         pRetPg->SetInserted(false);
     }
 
-    bMPgNumsDirty=true;
+    m_bMPgNumsDirty=true;
     SetChanged();
     SdrHint aHint(SdrHintKind::PageOrderChange, pRetPg);
     Broadcast(aHint);
@@ -1412,7 +1412,7 @@ void SdrModel::MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
         maMaPag.insert(maMaPag.begin()+nNewPos,pPg);
         MasterPageListChanged();
     }
-    bMPgNumsDirty=true;
+    m_bMPgNumsDirty=true;
     SetChanged();
     SdrHint aHint(SdrHintKind::PageOrderChange, pPg);
     Broadcast(aHint);
@@ -1588,7 +1588,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                     maMaPag.insert(maMaPag.begin()+nDstMasterPageCnt, pPg);
                     MasterPageListChanged();
                     pPg->SetInserted();
-                    bMPgNumsDirty=true;
+                    m_bMPgNumsDirty=true;
                     if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pPg));
                 } else {
                     OSL_FAIL("SdrModel::Merge(): MasterPage not found in SourceModel.");
@@ -1671,8 +1671,8 @@ void SdrModel::Merge(SdrModel& rSourceModel,
     pMasterMap.reset();
     pMasterNeed.reset();
 
-    bMPgNumsDirty=true;
-    bPagNumsDirty=true;
+    m_bMPgNumsDirty=true;
+    m_bPagNumsDirty=true;
 
     SetChanged();
     // TODO: Missing: merging and mapping of layers
@@ -1682,14 +1682,14 @@ void SdrModel::Merge(SdrModel& rSourceModel,
 
 void SdrModel::SetStarDrawPreviewMode(bool bPreview)
 {
-    if (!bPreview && bStarDrawPreviewMode && GetPageCount())
+    if (!bPreview && m_bStarDrawPreviewMode && GetPageCount())
     {
         // Resetting is not allowed, because the Model might not be loaded completely
         SAL_WARN("svx", "SdrModel::SetStarDrawPreviewMode(): Resetting not allowed, because Model might not be complete.");
     }
     else
     {
-        bStarDrawPreviewMode = bPreview;
+        m_bStarDrawPreviewMode = bPreview;
     }
 }
 
@@ -1800,8 +1800,8 @@ void SdrModel::SetForbiddenCharsTable(const std::shared_ptr<SvxForbiddenCharacte
 {
     mpForbiddenCharactersTable = xForbiddenChars;
 
-    ImpSetOutlinerDefaults( pDrawOutliner.get() );
-    ImpSetOutlinerDefaults( pHitTestOutliner.get() );
+    ImpSetOutlinerDefaults( m_pDrawOutliner.get() );
+    ImpSetOutlinerDefaults( m_pHitTestOutliner.get() );
 }
 
 
@@ -1810,8 +1810,8 @@ void SdrModel::SetCharCompressType( CharCompressType nType )
     if( nType != mnCharCompressType )
     {
         mnCharCompressType = nType;
-        ImpSetOutlinerDefaults( pDrawOutliner.get() );
-        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
+        ImpSetOutlinerDefaults( m_pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( m_pHitTestOutliner.get() );
     }
 }
 
@@ -1820,8 +1820,8 @@ void SdrModel::SetKernAsianPunctuation( bool bEnabled )
     if( mbKernAsianPunctuation != bEnabled )
     {
         mbKernAsianPunctuation = bEnabled;
-        ImpSetOutlinerDefaults( pDrawOutliner.get() );
-        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
+        ImpSetOutlinerDefaults( m_pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( m_pHitTestOutliner.get() );
     }
 }
 
@@ -1830,8 +1830,8 @@ void SdrModel::SetAddExtLeading( bool bEnabled )
     if( mbAddExtLeading != bEnabled )
     {
         mbAddExtLeading = bEnabled;
-        ImpSetOutlinerDefaults( pDrawOutliner.get() );
-        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
+        ImpSetOutlinerDefaults( m_pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( m_pHitTestOutliner.get() );
     }
 }
 
@@ -1861,8 +1861,8 @@ std::unique_ptr<SdrOutliner> SdrModel::createOutliner( OutlinerMode nOutlinerMod
 std::vector<SdrOutliner*> SdrModel::GetActiveOutliners() const
 {
     std::vector< SdrOutliner* > aRet(mpOutlinerCache ? mpOutlinerCache->GetActiveOutliners() : std::vector< SdrOutliner* >());
-    aRet.push_back(pDrawOutliner.get());
-    aRet.push_back(pHitTestOutliner.get());
+    aRet.push_back(m_pDrawOutliner.get());
+    aRet.push_back(m_pHitTestOutliner.get());
 
     return aRet;
 }
@@ -1937,7 +1937,7 @@ void SdrModel::PageListChanged()
 
 TextChain *SdrModel::GetTextChain() const
 {
-    return pTextChain.get();
+    return m_pTextChain.get();
 }
 
 const SdrPage* SdrModel::GetMasterPage(sal_uInt16 nPgNum) const

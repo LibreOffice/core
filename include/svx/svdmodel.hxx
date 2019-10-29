@@ -164,49 +164,49 @@ private:
 protected:
     std::vector<SdrPage*> maMaPag;     // master pages
     std::vector<SdrPage*> maPages;
-    std::function<void(std::unique_ptr<SdrUndoAction>)> aUndoLink;  // link to a NotifyUndo-Handler
-    Size           aMaxObjSize; // e.g. for auto-growing text
-    Fraction       aObjUnit;   // description of the coordinate units for ClipBoard, Drag&Drop, ...
-    MapUnit        eObjUnit;   // see above
-    FieldUnit      eUIUnit;      // unit, scale (e.g. 1/1000) for the UI (status bar) is set by ImpSetUIUnit()
-    Fraction       aUIScale;     // see above
-    OUString       aUIUnitStr;   // see above
-    Fraction       aUIUnitFact;  // see above
-    int            nUIUnitDecimalMark; // see above
+    std::function<void(std::unique_ptr<SdrUndoAction>)> m_aUndoLink;  // link to a NotifyUndo-Handler
+    Size           m_aMaxObjSize; // e.g. for auto-growing text
+    Fraction       m_aObjUnit;   // description of the coordinate units for ClipBoard, Drag&Drop, ...
+    MapUnit        m_eObjUnit;   // see above
+    FieldUnit      m_eUIUnit;      // unit, scale (e.g. 1/1000) for the UI (status bar) is set by ImpSetUIUnit()
+    Fraction       m_aUIScale;     // see above
+    OUString       m_aUIUnitStr;   // see above
+    Fraction       m_aUIUnitFact;  // see above
+    int            m_nUIUnitDecimalMark; // see above
 
-    std::unique_ptr<SdrLayerAdmin> pLayerAdmin;
-    SfxItemPool*    pItemPool;
+    std::unique_ptr<SdrLayerAdmin> m_pLayerAdmin;
+    SfxItemPool*    m_pItemPool;
     comphelper::IEmbeddedHelper*
                     m_pEmbeddedHelper; // helper for embedded objects to get rid of the SfxObjectShell
-    std::unique_ptr<SdrOutliner> pDrawOutliner;  // an Outliner for outputting text
-    std::unique_ptr<SdrOutliner> pHitTestOutliner;// an Outliner for the HitTest
-    std::unique_ptr<SdrOutliner> pChainingOutliner; // an Outliner for chaining overflowing text
+    std::unique_ptr<SdrOutliner> m_pDrawOutliner;  // an Outliner for outputting text
+    std::unique_ptr<SdrOutliner> m_pHitTestOutliner;// an Outliner for the HitTest
+    std::unique_ptr<SdrOutliner> m_pChainingOutliner; // an Outliner for chaining overflowing text
     sal_Int32       mnDefTextHgt;    // Default text height in logical units
-    VclPtr<OutputDevice>  pRefOutDev;     // ReferenceDevice for the EditEngine
+    VclPtr<OutputDevice>  m_pRefOutDev;     // ReferenceDevice for the EditEngine
     rtl::Reference< SfxStyleSheetBasePool > mxStyleSheetPool;
-    SfxStyleSheet*  pDefaultStyleSheet;
+    SfxStyleSheet*  m_pDefaultStyleSheet;
     SfxStyleSheet* mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj; // #i119287#
-    sfx2::LinkManager* pLinkManager;   // LinkManager
-    std::unique_ptr<std::deque<std::unique_ptr<SfxUndoAction>>> pUndoStack;
-    std::unique_ptr<std::deque<std::unique_ptr<SfxUndoAction>>> pRedoStack;
-    std::unique_ptr<SdrUndoGroup> pCurrentUndoGroup;  // For multi-level
-    sal_uInt16          nUndoLevel;                   // undo nesting
-    bool                bMyPool:1;        // to clean up pMyPool from 303a
+    sfx2::LinkManager* m_pLinkManager;   // LinkManager
+    std::unique_ptr<std::deque<std::unique_ptr<SfxUndoAction>>> m_pUndoStack;
+    std::unique_ptr<std::deque<std::unique_ptr<SfxUndoAction>>> m_pRedoStack;
+    std::unique_ptr<SdrUndoGroup> m_pCurrentUndoGroup;  // For multi-level
+    sal_uInt16          m_nUndoLevel;                   // undo nesting
+    bool                m_bMyPool:1;        // to clean up pMyPool from 303a
     bool                mbUndoEnabled:1;  // If false no undo is recorded or we are during the execution of an undo action
     bool                mbChanged:1;
-    bool                bPagNumsDirty:1;
-    bool                bMPgNumsDirty:1;
-    bool                bTransportContainer:1;  // doc is temporary object container, no display (e.g. clipboard)
-    bool                bReadOnly:1;
-    bool                bTransparentTextFrames:1;
-    bool                bSwapGraphics:1;
-    bool                bPasteResize:1; // Objects are being resized due to Paste with different MapMode
-    bool                bStarDrawPreviewMode:1;
+    bool                m_bPagNumsDirty:1;
+    bool                m_bMPgNumsDirty:1;
+    bool                m_bTransportContainer:1;  // doc is temporary object container, no display (e.g. clipboard)
+    bool                m_bReadOnly:1;
+    bool                m_bTransparentTextFrames:1;
+    bool                m_bSwapGraphics:1;
+    bool                m_bPasteResize:1; // Objects are being resized due to Paste with different MapMode
+    bool                m_bStarDrawPreviewMode:1;
     bool                mbDisableTextEditUsesCommonUndoManager:1;
-    sal_uInt16          nDefaultTabulator;
-    sal_uInt32          nMaxUndoCount;
+    sal_uInt16          m_nDefaultTabulator;
+    sal_uInt32          m_nMaxUndoCount;
 
-    std::unique_ptr<TextChain> pTextChain;
+    std::unique_ptr<TextChain> m_pTextChain;
 
 
 public:
@@ -265,9 +265,9 @@ private:
 
 public:
     SVX_DLLPRIVATE virtual bool IsCreatingDataObj() const { return false; }
-    bool     IsTransportContainer() const { return bTransportContainer; }
-    bool     IsPasteResize() const        { return bPasteResize; }
-    void     SetPasteResize(bool bOn) { bPasteResize=bOn; }
+    bool     IsTransportContainer() const { return m_bTransportContainer; }
+    bool     IsPasteResize() const        { return m_bPasteResize; }
+    void     SetPasteResize(bool bOn) { m_bPasteResize=bOn; }
     // If a custom Pool is put here, the class will call methods
     // on it (Put(), Remove()). On disposal of SdrModel the pool
     // will be deleted with   delete.
@@ -308,15 +308,15 @@ public:
     virtual SdrModel* AllocModel() const;
 
     // Changes on the layers set the modified flag and broadcast on the model!
-    const SdrLayerAdmin& GetLayerAdmin() const                  { return *pLayerAdmin; }
-    SdrLayerAdmin&       GetLayerAdmin()                        { return *pLayerAdmin; }
+    const SdrLayerAdmin& GetLayerAdmin() const                  { return *m_pLayerAdmin; }
+    SdrLayerAdmin&       GetLayerAdmin()                        { return *m_pLayerAdmin; }
 
-    const SfxItemPool&   GetItemPool() const                    { return *pItemPool; }
-    SfxItemPool&         GetItemPool()                          { return *pItemPool; }
+    const SfxItemPool&   GetItemPool() const                    { return *m_pItemPool; }
+    SfxItemPool&         GetItemPool()                          { return *m_pItemPool; }
 
     SdrOutliner&         GetDrawOutliner(const SdrTextObj* pObj=nullptr) const;
 
-    SdrOutliner&         GetHitTestOutliner() const { return *pHitTestOutliner; }
+    SdrOutliner&         GetHitTestOutliner() const { return *m_pHitTestOutliner; }
     const SdrTextObj*    GetFormattingTextObj() const;
     // put the TextDefaults (Font,Height,Color) in a Set
     void                 SetTextDefaults() const;
@@ -327,26 +327,26 @@ public:
 
     // ReferenceDevice for the EditEngine
     void                 SetRefDevice(OutputDevice* pDev);
-    OutputDevice*        GetRefDevice() const                   { return pRefOutDev.get(); }
+    OutputDevice*        GetRefDevice() const                   { return m_pRefOutDev.get(); }
     // If a new MapMode is set on the RefDevice (or similar)
     void                 RefDeviceChanged(); // not yet implemented
     // default font height in logical units
     void                 SetDefaultFontHeight(sal_Int32 nVal);
     // default tabulator width for the EditEngine
     void                 SetDefaultTabulator(sal_uInt16 nVal);
-    sal_uInt16           GetDefaultTabulator() const            { return nDefaultTabulator; }
+    sal_uInt16           GetDefaultTabulator() const            { return m_nDefaultTabulator; }
 
     // The DefaultStyleSheet will be used in every symbol object which is inserted
     // in this model and does not have a StyleSheet set.
-    SfxStyleSheet*       GetDefaultStyleSheet() const             { return pDefaultStyleSheet; }
-    void                 SetDefaultStyleSheet(SfxStyleSheet* pDefSS) { pDefaultStyleSheet = pDefSS; }
+    SfxStyleSheet*       GetDefaultStyleSheet() const             { return m_pDefaultStyleSheet; }
+    void                 SetDefaultStyleSheet(SfxStyleSheet* pDefSS) { m_pDefaultStyleSheet = pDefSS; }
 
     // #i119287# default StyleSheet for SdrGrafObj and SdrOle2Obj
     SfxStyleSheet* GetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj() const { return mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj; }
     void SetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj(SfxStyleSheet* pDefSS) { mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj = pDefSS; }
 
-    sfx2::LinkManager*   GetLinkManager()                         { return pLinkManager; }
-    void                 SetLinkManager( sfx2::LinkManager* pLinkMgr ) { pLinkManager = pLinkMgr; }
+    sfx2::LinkManager*   GetLinkManager()                         { return m_pLinkManager; }
+    void                 SetLinkManager( sfx2::LinkManager* pLinkMgr ) { m_pLinkManager = pLinkMgr; }
 
     ::comphelper::IEmbeddedHelper*     GetPersist() const               { return m_pEmbeddedHelper; }
     void                 SetPersist( ::comphelper::IEmbeddedHelper *p ) { m_pEmbeddedHelper = p; }
@@ -364,23 +364,23 @@ public:
     // (FWIW: you cannot represent light years).
     // The scaling unit is needed for the Engine to serve the Clipboard
     // with the correct sizes.
-    MapUnit          GetScaleUnit() const                       { return eObjUnit; }
+    MapUnit          GetScaleUnit() const                       { return m_eObjUnit; }
     void             SetScaleUnit(MapUnit eMap);
-    const Fraction&  GetScaleFraction() const                   { return aObjUnit; }
+    const Fraction&  GetScaleFraction() const                   { return m_aObjUnit; }
     void             SetScaleFraction(const Fraction& rFrac);
     // Setting both simultaneously performs a little better
     void             SetScaleUnit(MapUnit eMap, const Fraction& rFrac);
 
     // maximal size e.g. for auto growing texts
-    const Size&      GetMaxObjSize() const                      { return aMaxObjSize; }
-    void             SetMaxObjSize(const Size& rSiz)            { aMaxObjSize=rSiz; }
+    const Size&      GetMaxObjSize() const                      { return m_aMaxObjSize; }
+    void             SetMaxObjSize(const Size& rSiz)            { m_aMaxObjSize=rSiz; }
 
     // For the View! to display sane numbers in the status bar: Default is mm.
     void             SetUIUnit(FieldUnit eUnit);
-    FieldUnit        GetUIUnit() const                          { return eUIUnit; }
+    FieldUnit        GetUIUnit() const                          { return m_eUIUnit; }
     // The scale of the drawing. Default 1/1.
     void             SetUIScale(const Fraction& rScale);
-    const Fraction&  GetUIScale() const                         { return aUIScale; }
+    const Fraction&  GetUIScale() const                         { return m_aUIScale; }
     // Setting both simultaneously performs a little better
     void             SetUIUnit(FieldUnit eUnit, const Fraction& rScale);
 
@@ -390,8 +390,8 @@ public:
     static OUString  GetPercentString(const Fraction& rVal);
 
     // RecalcPageNums is ordinarily only called by the Page.
-    bool             IsPagNumsDirty() const                     { return bPagNumsDirty; };
-    bool             IsMPgNumsDirty() const                     { return bMPgNumsDirty; };
+    bool             IsPagNumsDirty() const                     { return m_bPagNumsDirty; };
+    bool             IsMPgNumsDirty() const                     { return m_bMPgNumsDirty; };
     void             RecalcPageNums(bool bMaster);
     // After the Insert the Page belongs to the SdrModel.
     virtual void     InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
@@ -426,14 +426,14 @@ public:
     // - be pruned from memory if they are not needed.
     // For that to work, override the virtual method GetDocumentStream().
     // Default=FALSE. Flag is not persistent.
-    bool            IsSwapGraphics() const { return bSwapGraphics; }
+    bool            IsSwapGraphics() const { return m_bSwapGraphics; }
     void            SetSwapGraphics();
 
     // Text frames without filling can be select with a mouse click by default (sal_False).
     // With this flag set to true you can hit them only in the area in which text is to be
     // found.
-    bool            IsPickThroughTransparentTextFrames() const  { return bTransparentTextFrames; }
-    void            SetPickThroughTransparentTextFrames(bool bOn) { bTransparentTextFrames=bOn; }
+    bool            IsPickThroughTransparentTextFrames() const  { return m_bTransparentTextFrames; }
+    void            SetPickThroughTransparentTextFrames(bool bOn) { m_bTransparentTextFrames=bOn; }
 
     // Can the model be changed at all?
     // Is only evaluated by the possibility methods of the View.
@@ -482,7 +482,7 @@ public:
     void BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc); // open Undo group
     void EndUndo();                       // close Undo group
     void AddUndo(std::unique_ptr<SdrUndoAction> pUndo);
-    sal_uInt16 GetUndoBracketLevel() const                       { return nUndoLevel; }
+    sal_uInt16 GetUndoBracketLevel() const                       { return m_nUndoLevel; }
     // only after the first BegUndo or before the last EndUndo:
     void SetUndoComment(const OUString& rComment);
     void SetUndoComment(const OUString& rComment, const OUString& rObjDescr);
@@ -503,7 +503,7 @@ public:
     //   void NotifyUndoActionHdl(SfxUndoAction* pUndoAction);
     // When calling the handler ownership is transferred;
     // The UndoAction belongs to the Handler, not the SdrModel.
-    void        SetNotifyUndoActionHdl(const std::function<void(std::unique_ptr<SdrUndoAction>)>& rLink)  { aUndoLink=rLink; }
+    void        SetNotifyUndoActionHdl(const std::function<void(std::unique_ptr<SdrUndoAction>)>& rLink)  { m_aUndoLink=rLink; }
 
     /** application can set its own undo manager, BegUndo, EndUndo and AddUndoAction
         calls are routed to this interface if given */
@@ -539,7 +539,7 @@ public:
     void SetStyleSheetPool(SfxStyleSheetBasePool* pPool)     { mxStyleSheetPool=pPool; }
 
     void    SetStarDrawPreviewMode(bool bPreview);
-    bool    IsStarDrawPreviewMode() const { return bStarDrawPreviewMode; }
+    bool    IsStarDrawPreviewMode() const { return m_bStarDrawPreviewMode; }
 
     bool GetDisableTextEditUsesCommonUndoManager() const { return mbDisableTextEditUsesCommonUndoManager; }
     void SetDisableTextEditUsesCommonUndoManager(bool bNew) { mbDisableTextEditUsesCommonUndoManager = bNew; }
@@ -573,7 +573,7 @@ public:
     std::unique_ptr<SdrOutliner> createOutliner( OutlinerMode nOutlinerMode );
     void disposeOutliner( std::unique_ptr<SdrOutliner> pOutliner );
 
-    bool IsWriter() const { return !bMyPool; }
+    bool IsWriter() const { return !m_bMyPool; }
 
     // Used as a fallback in *::ReadUserDataSequence() to process common properties
     void ReadUserDataSequenceValue(const css::beans::PropertyValue *pValue);
