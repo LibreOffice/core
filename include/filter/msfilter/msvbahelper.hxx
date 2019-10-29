@@ -69,7 +69,7 @@ typedef ::cppu::WeakImplHelper<
     css::lang::XInitialization,
     css::script::vba::XVBAMacroResolver > VBAMacroResolverBase;
 
-class VBAMacroResolver : public VBAMacroResolverBase
+class VBAMacroResolver final : public VBAMacroResolverBase
 {
 public:
     explicit            VBAMacroResolver();

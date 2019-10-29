@@ -110,7 +110,7 @@ public:
 };
 
 
-class MSFILTER_DLLPUBLIC WString : public TBBase
+class MSFILTER_DLLPUBLIC WString final : public TBBase
 {
     OUString sString;
 
@@ -120,7 +120,7 @@ public:
     const OUString& getString() const { return sString; }
 };
 
-class MSFILTER_DLLPUBLIC TBCExtraInfo : public TBBase
+class MSFILTER_DLLPUBLIC TBCExtraInfo final : public TBBase
 {
     WString wstrHelpFile;
     sal_Int32 idHelpContext;
@@ -141,7 +141,7 @@ public:
     OUString const & getOnAction() const;
 };
 
-class MSFILTER_DLLPUBLIC TBCGeneralInfo  : public TBBase
+class MSFILTER_DLLPUBLIC TBCGeneralInfo final : public TBBase
 {
     sal_uInt8 bFlags;
     WString customText;
@@ -156,7 +156,7 @@ public:
     OUString const & CustomText() { return customText.getString(); }
 };
 
-class MSFILTER_DLLPUBLIC TBCBitMap : public TBBase
+class MSFILTER_DLLPUBLIC TBCBitMap final : public TBBase
 {
 friend class TBCBSpecific; // #FIXME hacky access, need to fix
     sal_Int32 cbDIB;
@@ -172,7 +172,7 @@ public:
     BitmapEx& getBitMap() { return mBitMap;}
 };
 
-class MSFILTER_DLLPUBLIC TBCMenuSpecific : public TBBase
+class MSFILTER_DLLPUBLIC TBCMenuSpecific final : public TBBase
 {
     sal_Int32 tbid;
     std::shared_ptr< WString > name; //exist only if tbid equals 0x00000001
@@ -182,7 +182,7 @@ public:
     OUString Name();
 };
 
-class MSFILTER_DLLPUBLIC TBCCDData : public TBBase
+class MSFILTER_DLLPUBLIC TBCCDData final : public TBBase
 {
     sal_Int16 cwstrItems; //Signed integer that specifies the number of items in wstrList. MUST be positive.
     std::vector< WString > wstrList;  // Zero-based index array of WString structures. Number of elements MUST be equal to cwstrItems.
@@ -198,7 +198,7 @@ public:
     bool Read(SvStream &rS) override;
 };
 
-class TBCComboDropdownSpecific : public TBBase
+class TBCComboDropdownSpecific final : public TBBase
 {
     std::shared_ptr< TBCCDData > data;
 public:
@@ -276,7 +276,7 @@ public:
     sal_uInt32 getTbct() const { return tbct; };
 };
 
-class MSFILTER_DLLPUBLIC TBCData : public TBBase
+class MSFILTER_DLLPUBLIC TBCData final : public TBBase
 {
     TBCHeader rHeader;
     TBCGeneralInfo controlGeneralInfo;
@@ -294,7 +294,7 @@ public:
     TBCMenuSpecific* getMenuSpecific();
 };
 
-class MSFILTER_DLLPUBLIC TB : public TBBase
+class MSFILTER_DLLPUBLIC TB final : public TBBase
 {
     sal_uInt8 bSignature;// Signed integer that specifies the toolbar signature number. MUST be 0x02.
     sal_uInt8 bVersion; // Signed integer that specifies the toolbar version number. MUST be 0x01.
@@ -316,7 +316,7 @@ public:
     bool IsMenuToolbar() const { return ( ( ltbtr & 0x2000000 ) == 0x2000000 ); }
 };
 
-class MSFILTER_DLLPUBLIC SRECT : public TBBase
+class MSFILTER_DLLPUBLIC SRECT final : public TBBase
 {
 public:
     SRECT() : left(0), top(0), right(0), bottom(0) {}
@@ -331,7 +331,7 @@ public:
 };
 
 
-class MSFILTER_DLLPUBLIC TBVisualData : public TBBase
+class MSFILTER_DLLPUBLIC TBVisualData final : public TBBase
 {
     sal_Int8 tbds;
     sal_Int8 tbv;

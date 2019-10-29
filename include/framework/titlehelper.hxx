@@ -50,7 +50,7 @@ namespace framework{
 
     @threadsafe
  */
-class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
+class FWE_DLLPUBLIC TitleHelper final : private ::cppu::BaseMutex
                   , public  ::cppu::WeakImplHelper< css::frame::XTitle                 ,
                                                      css::frame::XTitleChangeBroadcaster,
                                                      css::frame::XTitleChangeListener   ,

@@ -529,7 +529,7 @@ struct MSFILTER_DLLPUBLIC HeaderFooterEntry
                         explicit HeaderFooterEntry( const PptSlidePersistEntry* pMaster = nullptr );
 };
 
-struct MSFILTER_DLLPUBLIC ProcessData : public SvxMSDffClientData
+struct MSFILTER_DLLPUBLIC ProcessData final : public SvxMSDffClientData
 {
     PptSlidePersistEntry&       rPersistEntry;
     SdPageCapsule               pPage;
@@ -865,7 +865,7 @@ struct PPTStyleSheet : public PPTNumberFormatCreator
                         ~PPTStyleSheet();
 };
 
-struct ImplPPTParaPropSet : public salhelper::SimpleReferenceObject
+struct ImplPPTParaPropSet final : public salhelper::SimpleReferenceObject
 {
     sal_uInt16  mnDepth;
     sal_uInt32  mnAttrSet;
@@ -975,7 +975,7 @@ struct PPTTabEntry
     sal_uInt16  nStyle;
 };
 
-struct PPTRuler : public salhelper::SimpleReferenceObject
+struct PPTRuler final : public salhelper::SimpleReferenceObject
 {
         sal_Int32           nFlags;
         sal_uInt16          nDefaultTab;
@@ -1192,7 +1192,7 @@ public:
 #define PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK     8
 #define PPT_TEXTOBJ_FLAGS_VERTICAL                      16
 
-struct ImplPPTTextObj : public salhelper::SimpleReferenceObject
+struct ImplPPTTextObj final : public salhelper::SimpleReferenceObject
 {
     sal_uInt32                  mnShapeId;
     sal_uInt32                  mnShapeMaster;
@@ -1267,7 +1267,7 @@ public:
     PPTTextObj&             operator=( PPTTextObj& rTextObj );
 };
 
-class PPTConvertOCXControls : public SvxMSConvertOCXControls
+class PPTConvertOCXControls final : public SvxMSConvertOCXControls
 {
     virtual void GetDrawPage() override;
     PptPageKind     ePageKind;

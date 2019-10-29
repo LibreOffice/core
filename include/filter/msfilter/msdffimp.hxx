@@ -271,7 +271,7 @@ private:
 
 /** block of parameters for import/export for a single call of
     ImportObjAtCurrentStreamPos() */
-class MSFILTER_DLLPUBLIC SvxMSDffImportData : public SvxMSDffClientData
+class MSFILTER_DLLPUBLIC SvxMSDffImportData final : public SvxMSDffClientData
 {
 private:
     /** list of all SvxMSDffImportRec instances of/for a group */

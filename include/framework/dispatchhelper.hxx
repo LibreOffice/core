@@ -52,7 +52,7 @@ namespace framework
                     - dispatching of the URL
                 All these steps are done inside one method call here.
 */
-class FWE_DLLPUBLIC DispatchHelper
+class FWE_DLLPUBLIC DispatchHelper final
     : public ::cppu::WeakImplHelper<css::lang::XServiceInfo, css::frame::XDispatchHelper,
                                     css::frame::XDispatchResultListener>
 {

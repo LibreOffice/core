@@ -59,7 +59,7 @@ struct FORMULA_DLLPUBLIC VectorRefArray
  * This token represents a single cell reference in a vectorized formula
  * calculation context.
  */
-class FORMULA_DLLPUBLIC SingleVectorRefToken : public FormulaToken
+class FORMULA_DLLPUBLIC SingleVectorRefToken final : public FormulaToken
 {
     VectorRefArray maArray;
     size_t mnArrayLength;
@@ -77,7 +77,7 @@ public:
  * This token represents a range reference in a vectorized formula
  * calculation context.
  */
-class FORMULA_DLLPUBLIC DoubleVectorRefToken : public FormulaToken
+class FORMULA_DLLPUBLIC DoubleVectorRefToken final : public FormulaToken
 {
     std::vector<VectorRefArray> maArrays;
 
