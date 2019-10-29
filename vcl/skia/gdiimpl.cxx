@@ -180,8 +180,9 @@ SkiaSalGraphicsImpl::~SkiaSalGraphicsImpl() {}
 
 void SkiaSalGraphicsImpl::Init() {}
 
-void SkiaSalGraphicsImpl::resetSurface()
+void SkiaSalGraphicsImpl::recreateSurface()
 {
+    destroySurface();
     createSurface();
     mSurface->getCanvas()->save(); // see SetClipRegion()
     mClipRegion = vcl::Region(tools::Rectangle(0, 0, GetWidth(), GetHeight()));
@@ -198,7 +199,21 @@ void SkiaSalGraphicsImpl::createSurface()
     mSurface = SkSurface::MakeRasterN32Premul(GetWidth(), GetHeight());
 }
 
-void SkiaSalGraphicsImpl::DeInit() { mSurface.reset(); }
+void SkiaSalGraphicsImpl::destroySurface()
+{
+    // If we use e.g. Vulkan, we must destroy the surface before the context,
+    // otherwise destroying the surface will reference the context. This is
+    // handled by calling destroySurface() before destroying the context.
+    // However we also need to flush the surface before destroying it,
+    // otherwise when destroing the context later there still could be queued
+    // commands referring to the surface data. This is probably a Skia bug,
+    // but work around it here.
+    if (mSurface)
+        mSurface->flush();
+    mSurface.reset();
+}
+
+void SkiaSalGraphicsImpl::DeInit() { destroySurface(); }
 
 void SkiaSalGraphicsImpl::preDraw() { checkSurface(); }
 
@@ -219,7 +234,7 @@ void SkiaSalGraphicsImpl::postDraw()
 void SkiaSalGraphicsImpl::checkSurface()
 {
     if (!mSurface || GetWidth() != mSurface->width() || GetHeight() != mSurface->height())
-        resetSurface();
+        recreateSurface();
 }
 
 static SkIRect toSkIRect(const tools::Rectangle& rectangle)

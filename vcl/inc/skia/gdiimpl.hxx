@@ -204,7 +204,8 @@ protected:
     // Call to ensure that mSurface is valid. If mSurface is going to be modified,
     // use preDraw() instead of this.
     void checkSurface();
-    void resetSurface();
+    void recreateSurface();
+    void destroySurface();
 
     void privateDrawAlphaRect(long nX, long nY, long nWidth, long nHeight, double nTransparency);
 
