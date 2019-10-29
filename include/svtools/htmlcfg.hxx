@@ -35,7 +35,7 @@
 
 struct HtmlOptions_Impl;
 
-class SVT_DLLPUBLIC SvxHtmlOptions : public utl::ConfigItem
+class SVT_DLLPUBLIC SvxHtmlOptions final : public utl::ConfigItem
 {
     std::unique_ptr<HtmlOptions_Impl>   pImpl;
     static const css::uno::Sequence<OUString>& GetPropertyNames();

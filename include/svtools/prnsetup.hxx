@@ -28,7 +28,7 @@
 class Printer;
 class QueueInfo;
 
-class SVT_DLLPUBLIC PrinterSetupDialog : public weld::GenericDialogController
+class SVT_DLLPUBLIC PrinterSetupDialog final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::ComboBox>        m_xLbName;

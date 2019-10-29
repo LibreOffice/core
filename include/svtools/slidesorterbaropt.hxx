@@ -38,7 +38,7 @@ class SvtSlideSorterBarOptions_Impl;
 
     \attention This class is partially threadsafe.
 */
-class SVT_DLLPUBLIC SvtSlideSorterBarOptions: public utl::detail::Options
+class SVT_DLLPUBLIC SvtSlideSorterBarOptions final : public utl::detail::Options
 {
     public:
         SvtSlideSorterBarOptions();

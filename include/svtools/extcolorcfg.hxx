@@ -57,7 +57,7 @@ public:
     void            setColor(Color _nColor) { m_nColor = _nColor; }
 };
 
-class SVT_DLLPUBLIC ExtendedColorConfig : public SfxBroadcaster, public SfxListener
+class SVT_DLLPUBLIC ExtendedColorConfig final : public SfxBroadcaster, public SfxListener
 {
     friend class ExtendedColorConfig_Impl;
 private:

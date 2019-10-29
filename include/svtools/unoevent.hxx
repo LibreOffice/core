@@ -244,7 +244,7 @@ protected:
 
 };
 
-class SVT_DLLPUBLIC SvMacroTableEventDescriptor : public SvDetachedEventDescriptor
+class SVT_DLLPUBLIC SvMacroTableEventDescriptor final : public SvDetachedEventDescriptor
 {
 public:
 

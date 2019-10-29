@@ -94,7 +94,7 @@ struct ColorConfigValue
         { return nColor != rCmp.nColor || bIsVisible != rCmp.bIsVisible;}
 };
 
-class SVT_DLLPUBLIC ColorConfig:
+class SVT_DLLPUBLIC ColorConfig final :
     public utl::detail::Options
 {
     friend class ColorConfig_Impl;

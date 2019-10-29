@@ -35,7 +35,7 @@ namespace svt
 //generated class. This conflicts with other libraries if they use the same inline
 //class.
 
-class SVT_DLLPUBLIC JavaInteractionHandler:
+class SVT_DLLPUBLIC JavaInteractionHandler final :
         public css::task::XInteractionHandler
 {
 public:

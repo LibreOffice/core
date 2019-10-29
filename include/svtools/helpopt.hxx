@@ -27,7 +27,7 @@
 
 class SvtHelpOptions_Impl;
 
-class SVT_DLLPUBLIC SvtHelpOptions: public utl::detail::Options
+class SVT_DLLPUBLIC SvtHelpOptions final : public utl::detail::Options
 {
     std::shared_ptr<SvtHelpOptions_Impl>    pImpl;
 

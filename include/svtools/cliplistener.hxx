@@ -29,7 +29,7 @@ namespace vcl { class Window; }
 
 class TransferableDataHelper;
 
-class SVT_DLLPUBLIC TransferableClipboardListener : public cppu::WeakImplHelper<
+class SVT_DLLPUBLIC TransferableClipboardListener final : public cppu::WeakImplHelper<
                             css::datatransfer::clipboard::XClipboardListener >
 {
     Link<TransferableDataHelper*,void>  aLink;

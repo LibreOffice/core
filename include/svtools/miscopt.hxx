@@ -46,7 +46,7 @@ enum class ToolBoxButtonSize;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
+class SVT_DLLPUBLIC SvtMiscOptions final : public utl::detail::Options
 {
     public:
          SvtMiscOptions();

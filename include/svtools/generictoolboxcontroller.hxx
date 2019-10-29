@@ -27,7 +27,7 @@
 namespace svt
 {
 
-class SVT_DLLPUBLIC GenericToolboxController : public svt::ToolboxController
+class SVT_DLLPUBLIC GenericToolboxController final : public svt::ToolboxController
 {
     public:
         GenericToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,

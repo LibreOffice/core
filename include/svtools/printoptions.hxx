@@ -79,7 +79,7 @@ public:
 };
 
 
-class SVT_DLLPUBLIC SvtPrinterOptions : public SvtBasePrintOptions
+class SVT_DLLPUBLIC SvtPrinterOptions final : public SvtBasePrintOptions
 {
 private:
 
@@ -93,7 +93,7 @@ public:
 };
 
 
-class SVT_DLLPUBLIC SvtPrintFileOptions : public SvtBasePrintOptions
+class SVT_DLLPUBLIC SvtPrintFileOptions final : public SvtBasePrintOptions
 {
 private:
 

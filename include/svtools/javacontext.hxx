@@ -32,7 +32,7 @@ namespace svt
 // We cannot derive from  cppu::WeakImplHelper because we would export the inline
 //generated class. This conflicts with other libraries if they use the same inline
 //class.
-    class SVT_DLLPUBLIC JavaContext :
+    class SVT_DLLPUBLIC JavaContext final :
         public css::uno::XCurrentContext
     {
 

@@ -34,7 +34,7 @@ enum QueryDeleteResult_Impl
     QUERYDELETE_ALL = 101
 };
 
-class SVT_DLLPUBLIC QueryDeleteDlg_Impl : public weld::MessageDialogController
+class SVT_DLLPUBLIC QueryDeleteDlg_Impl final : public weld::MessageDialogController
 {
 private:
     std::unique_ptr<weld::Button> m_xAllButton;

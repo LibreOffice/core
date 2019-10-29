@@ -187,7 +187,7 @@ namespace svt
 
     /** a multi line edit which can be used in a cell of an EditBrowseBox
     */
-    class SVT_DLLPUBLIC MultiLineTextCell : public MultiLineEdit
+    class SVT_DLLPUBLIC MultiLineTextCell final : public MultiLineEdit
     {
     public:
         MultiLineTextCell( vcl::Window* _pParent, WinBits _nStyle )
@@ -195,14 +195,13 @@ namespace svt
         {
         }
 
-    protected:
+    private:
         // Window overridables
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
 
         // MultiLineEdit overridables
         virtual void Modify() override;
 
-    private:
         bool         dispatchKeyEvent( const KeyEvent& _rEvent );
     };
 
@@ -212,7 +211,7 @@ namespace svt
     typedef GenericEditImplementation< Edit >             EditImplementation;
 
     typedef GenericEditImplementation< MultiLineTextCell >  MultiLineEditImplementation_Base;
-    class SVT_DLLPUBLIC MultiLineEditImplementation : public MultiLineEditImplementation_Base
+    class SVT_DLLPUBLIC MultiLineEditImplementation final : public MultiLineEditImplementation_Base
     {
     public:
         MultiLineEditImplementation( MultiLineTextCell& _rEdit ) : MultiLineEditImplementation_Base( _rEdit )
@@ -252,7 +251,7 @@ namespace svt
 
     //= SpinCellController
 
-    class SVT_DLLPUBLIC SpinCellController : public CellController
+    class SVT_DLLPUBLIC SpinCellController final : public CellController
     {
     public:
         SpinCellController(SpinField* pSpinField);
@@ -263,16 +262,15 @@ namespace svt
         virtual bool IsModified() const override;
         virtual void ClearModified() override;
 
-    protected:
-        virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
     private:
+        virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
         DECL_LINK(ModifyHdl, Edit&, void);
     };
 
 
     //= CheckBoxControl
 
-    class SVT_DLLPUBLIC CheckBoxControl : public Control
+    class SVT_DLLPUBLIC CheckBoxControl final : public Control
     {
         VclPtr<CheckBox>             pBox;
         Link<VclPtr<CheckBox>,void>  m_aClickLink;
@@ -304,7 +302,7 @@ namespace svt
 
     //= CheckBoxCellController
 
-    class SVT_DLLPUBLIC CheckBoxCellController : public CellController
+    class SVT_DLLPUBLIC CheckBoxCellController final : public CellController
     {
     public:
 
@@ -314,23 +312,22 @@ namespace svt
         virtual bool IsModified() const override;
         virtual void ClearModified() override;
 
-    protected:
-        virtual bool WantMouseEvent() const override;
     private:
+        virtual bool WantMouseEvent() const override;
         DECL_LINK(ModifyHdl, LinkParamNone*, void);
     };
 
 
     //= ComboBoxControl
 
-    class SVT_DLLPUBLIC ComboBoxControl : public ComboBox
+    class SVT_DLLPUBLIC ComboBoxControl final : public ComboBox
     {
         friend class ComboBoxCellController;
 
     public:
         ComboBoxControl(vcl::Window* pParent);
 
-    protected:
+    private:
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
     };
 
@@ -356,14 +353,14 @@ namespace svt
 
     //= ListBoxControl
 
-    class SVT_DLLPUBLIC ListBoxControl : public ListBox
+    class SVT_DLLPUBLIC ListBoxControl final : public ListBox
     {
         friend class ListBoxCellController;
 
     public:
         ListBoxControl(vcl::Window* pParent);
 
-    protected:
+    private:
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
     };
 
@@ -390,7 +387,7 @@ namespace svt
 
     //= FormattedFieldCellController
 
-    class SVT_DLLPUBLIC FormattedFieldCellController : public EditCellController
+    class SVT_DLLPUBLIC FormattedFieldCellController final : public EditCellController
     {
     public:
         FormattedFieldCellController( FormattedField* _pFormatted );

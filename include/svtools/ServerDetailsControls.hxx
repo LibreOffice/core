@@ -85,7 +85,7 @@ class HostDetailsContainer : public DetailsContainer
         virtual bool verifyScheme( const OUString& rScheme );
 };
 
-class DavDetailsContainer : public HostDetailsContainer
+class DavDetailsContainer final : public HostDetailsContainer
 {
     public:
         DavDetailsContainer(PlaceEditDialog* pDialog);
@@ -93,14 +93,13 @@ class DavDetailsContainer : public HostDetailsContainer
         virtual void set_visible( bool bShow ) override;
         virtual bool enableUserCredentials( ) override { return false; };
 
-    protected:
+    private:
         virtual bool verifyScheme( const OUString& rScheme ) override;
 
-    private:
         DECL_LINK(ToggledDavsHdl, weld::ToggleButton&, void);
 };
 
-class SmbDetailsContainer : public DetailsContainer
+class SmbDetailsContainer final : public DetailsContainer
 {
     private:
         OUString m_sHost;
@@ -113,7 +112,7 @@ class SmbDetailsContainer : public DetailsContainer
         virtual void set_visible( bool bShow ) override;
 };
 
-class CmisDetailsContainer : public DetailsContainer
+class CmisDetailsContainer final : public DetailsContainer
 {
     private:
         OUString m_sUsername;

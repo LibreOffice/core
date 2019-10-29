@@ -24,7 +24,7 @@
 
 class TextAttrib;
 
-class SVT_DLLPUBLIC ExtMultiLineEdit : public MultiLineEdit
+class SVT_DLLPUBLIC ExtMultiLineEdit final : public MultiLineEdit
 {
 public:
                     ExtMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle );

@@ -30,7 +30,7 @@ namespace svt
 
     //= FileURLBox
 
-    class SVT_DLLPUBLIC FileURLBox : public SvtURLBox
+    class SVT_DLLPUBLIC FileURLBox final : public SvtURLBox
     {
     private:
         OUString      m_sPreservedText;
@@ -38,7 +38,7 @@ namespace svt
     public:
         FileURLBox( vcl::Window* _pParent, WinBits _nStyle );
 
-    protected:
+    private:
         virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
         virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
 

@@ -68,7 +68,7 @@ struct TMutexInit
             Of course this queue will be stopped if the environment
             will be destructed...
  */
-class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
+class SVT_DLLPUBLIC AcceleratorExecute final : private TMutexInit
 {
     // member
     private:

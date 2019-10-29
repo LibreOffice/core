@@ -27,7 +27,7 @@
 namespace com :: sun :: star :: embed { class XEmbeddedObject; }
 
 class Graphic;
-class SVT_DLLPUBLIC SvEmbedTransferHelper : public TransferableHelper
+class SVT_DLLPUBLIC SvEmbedTransferHelper final : public TransferableHelper
 {
 private:
 
@@ -36,8 +36,6 @@ private:
     sal_Int64 const m_nAspect;
 
     OUString maParentShellID;
-
-protected:
 
     virtual void        AddSupportedFormats() override;
     virtual bool        GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;

@@ -30,7 +30,7 @@ SVT_DLLPUBLIC extern const ErrMsgCode RID_ERRCTX[];
 
 namespace weld { class Window; }
 
-class SVT_DLLPUBLIC SfxErrorContext : private ErrorContext
+class SVT_DLLPUBLIC SfxErrorContext final : private ErrorContext
 {
 public:
     SfxErrorContext(

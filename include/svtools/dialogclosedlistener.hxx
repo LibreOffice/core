@@ -35,7 +35,7 @@ namespace svt
     /**
         C++ class to implement a css::ui::dialogs::XDialogClosedListener
     */
-    class SVT_DLLPUBLIC DialogClosedListener :
+    class SVT_DLLPUBLIC DialogClosedListener final :
         public cppu::WeakImplHelper< css::ui::dialogs::XDialogClosedListener >
     {
     private:
