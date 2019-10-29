@@ -18,84 +18,57 @@
           <object class="GtkBox" id="box5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="spacing">20</property>
             <child>
-              <object class="GtkBox" id="box6">
+              <object class="sfxlo-SidebarToolBox" id="insert">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkLabel" id="insertlabel">
+                  <object class="GtkToolButton" id="insertrowsbefore">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="sidebatableedit|insertlabel">Insert:</property>
+                    <property name="action_name">.uno:InsertRowsBefore</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">insert</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-SidebarToolBox" id="insert">
+                  <object class="GtkToolButton" id="insertrowsafter">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkToolButton" id="insertrowsbefore">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="action_name">.uno:InsertRowsBefore</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolButton" id="insertrowsafter">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="action_name">.uno:InsertRowsAfter</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolButton" id="insertcolumnsbefore">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="action_name">.uno:InsertColumnsBefore</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolButton" id="insertcolumnsafter">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="action_name">.uno:InsertColumnsAfter</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
-                      </packing>
-                    </child>
+                    <property name="action_name">.uno:InsertRowsAfter</property>
+                    <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="insertcolumnsbefore">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="action_name">.uno:InsertColumnsBefore</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="insertcolumnsafter">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="action_name">.uno:InsertColumnsAfter</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
               </object>
@@ -106,79 +79,73 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box7">
+              <object class="sfxlo-SidebarToolBox" id="delete">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkLabel" id="deletelabel">
+                  <object class="GtkToolButton" id="deleterows">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="sidebatableedit|deletelabel">Delete:</property>
+                    <property name="action_name">.uno:DeleteRows</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">delete</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-SidebarToolBox" id="delete">
+                  <object class="GtkToolButton" id="deletecolumns">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkToolButton" id="deleterows">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="action_name">.uno:DeleteRows</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolButton" id="deletecolumns">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="action_name">.uno:DeleteColumns</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolButton" id="deletetable">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="action_name">.uno:DeleteTable</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
-                      </packing>
-                    </child>
+                    <property name="action_name">.uno:DeleteColumns</property>
+                    <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="deletetable">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="action_name">.uno:DeleteTable</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="pack_type">end</property>
                 <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="sfxlo-SidebarToolBox" id="merge">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkToolButton" id="mergecells">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="action_name">.uno:MergeCells</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>
@@ -192,7 +159,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="label" translatable="yes" context="sidebatableedit|deletelabel">Size:</property>
+            <property name="label" translatable="yes" context="sidebatableedit|sizelabel">Size:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">box3</property>
             <property name="xalign">0</property>
@@ -235,7 +202,7 @@
                     <property name="text">0</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="rowheight-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebatableedit|rowheight-atkobject">Row Height</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="rowheight-atkobject">Row Height</property>
                       </object>
                     </child>
                   </object>
@@ -281,7 +248,7 @@
                     <property name="text">0</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="columnwidth-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebatableedit|columnwidth-atkobject">Column Width</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="columnwidth-atkobject">Column Width</property>
                       </object>
                     </child>
                   </object>
@@ -409,43 +376,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="layoutlabel">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="label" translatable="yes" context="sidebatableedit|deletelabel">Layout:</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">layouting</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="sfxlo-SidebarToolBox" id="layouting">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolButton" id="mergecells">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="action_name">.uno:MergeCells</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">5</property>
           </packing>
         </child>
       </object>
