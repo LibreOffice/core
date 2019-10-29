@@ -50,6 +50,7 @@ void WinSkiaSalGraphicsImpl::createSurface()
     // valid here, but better check.
     assert(GetWidth() != 0 && GetHeight() != 0);
     sk_app::DisplayParams displayParams;
+    destroySurface();
     switch (renderMethodToUse())
     {
         case RenderRaster:
