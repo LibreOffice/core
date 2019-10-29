@@ -279,11 +279,6 @@ ScDocument& XclRoot::GetDoc() const
     return mrData.mrDoc;
 }
 
-ScDocument& XclRoot::GetDocRef() const
-{
-    return mrData.mrDoc;
-}
-
 SfxObjectShell* XclRoot::GetDocShell() const
 {
     return GetDoc().GetDocumentShell();

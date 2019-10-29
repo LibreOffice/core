@@ -197,7 +197,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     //added for exporting OCX control
     sal_Int16 nMsCtlType = 0;
     if ( !pObj )
-        pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDocRef() );  // just what is it?!?
+        pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDoc() );  // just what is it?!?
     else
     {
         pCurrXclObj = nullptr;
@@ -215,17 +215,17 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
                     SvGlobalName aObjClsId( xObj->getClassID() );
                     if ( SotExchange::IsChart( aObjClsId ) )
                     {   // yes, it's a chart diagram
-                        mrObjMgr.AddObj( std::make_unique<XclExpChartObj>( mrObjMgr, rxShape, pChildAnchor, &GetDocRef() ) );
+                        mrObjMgr.AddObj( std::make_unique<XclExpChartObj>( mrObjMgr, rxShape, pChildAnchor, &GetDoc() ) );
                         pCurrXclObj = nullptr;     // no metafile or whatsoever
                     }
                     else    // metafile and OLE object
                         pCurrXclObj = new XclObjOle( mrObjMgr, *pObj );
                 }
                 else    // just a metafile
-                    pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDocRef() );
+                    pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDoc() );
             }
             else
-                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDocRef() );
+                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDoc() );
         }
         else if( nObjType == OBJ_UNO )
         {
@@ -246,13 +246,13 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             else  //TBX Form Control
                 pCurrXclObj = CreateTBXCtrlObj( rxShape, pChildAnchor ).release();
             if( !pCurrXclObj )
-                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDocRef() );   // just a metafile
+                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDoc() );   // just a metafile
         }
         else if( !ScDrawLayer::IsNoteCaption( pObj ) )
         {
             // ignore permanent note shapes
             // #i12190# do not ignore callouts (do not filter by object type ID)
-            pCurrXclObj = ShapeInteractionHelper::CreateShapeObj( mrObjMgr, rxShape, &GetDocRef() );
+            pCurrXclObj = ShapeInteractionHelper::CreateShapeObj( mrObjMgr, rxShape, &GetDoc() );
             ShapeInteractionHelper::PopulateShapeInteractionInfo( mrObjMgr, rxShape, *pCurrAppData );
         }
     }

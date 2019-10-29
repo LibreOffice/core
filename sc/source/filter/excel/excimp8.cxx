@@ -738,7 +738,7 @@ void XclImpAutoFilterData::Apply()
     // or if we need to create the Advanced Filter.
     if( bActive || bCriteria)
     {
-        ScDocument& rDoc = pExcRoot->pIR->GetDocRef();
+        ScDocument& rDoc = pExcRoot->pIR->GetDoc();
         pCurrDBData = new ScDBData(STR_DB_LOCAL_NONAME, Tab(),
                                 StartCol(),StartRow(), EndCol(),EndRow() );
         if(bCriteria)

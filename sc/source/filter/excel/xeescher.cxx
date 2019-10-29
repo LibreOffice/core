@@ -151,12 +151,12 @@ void lcl_GetFromTo( const XclExpRoot& rRoot, const tools::Rectangle &aRect, sal_
     sal_Int32 nCol = 0, nRow = 0;
     sal_Int32 nColOff = 0, nRowOff= 0;
 
-    const bool bRTL = rRoot.GetDocRef().IsNegativePage( nTab );
+    const bool bRTL = rRoot.GetDoc().IsNegativePage( nTab );
     if (!bRTL)
     {
         while(true)
         {
-            tools::Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
+            tools::Rectangle r = rRoot.GetDoc().GetMMRect( nCol,nRow,nCol,nRow,nTab );
             if( r.Left() <= aRect.Left() )
             {
                 nCol++;
@@ -179,7 +179,7 @@ void lcl_GetFromTo( const XclExpRoot& rRoot, const tools::Rectangle &aRect, sal_
     {
         while(true)
         {
-            tools::Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
+            tools::Rectangle r = rRoot.GetDoc().GetMMRect( nCol,nRow,nCol,nRow,nTab );
             if( r.Left() >= aRect.Left() )
             {
                 nCol++;
@@ -202,7 +202,7 @@ void lcl_GetFromTo( const XclExpRoot& rRoot, const tools::Rectangle &aRect, sal_
     {
         while(true)
         {
-            tools::Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
+            tools::Rectangle r = rRoot.GetDoc().GetMMRect( nCol,nRow,nCol,nRow,nTab );
             if( r.Right() < aRect.Right() )
                 nCol++;
             if( r.Bottom() < aRect.Bottom() )
@@ -219,7 +219,7 @@ void lcl_GetFromTo( const XclExpRoot& rRoot, const tools::Rectangle &aRect, sal_
     {
         while(true)
         {
-            tools::Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
+            tools::Rectangle r = rRoot.GetDoc().GetMMRect( nCol,nRow,nCol,nRow,nTab );
             if( r.Right() >= aRect.Right() )
                 nCol++;
             if( r.Bottom() < aRect.Bottom() )

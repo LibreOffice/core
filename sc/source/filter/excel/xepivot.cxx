@@ -521,7 +521,7 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
         if (!pCache)
             return;
 
-        ScSheetDPData aDPData(&GetDocRef(), *pSrcDesc, *pCache);
+        ScSheetDPData aDPData(&GetDoc(), *pSrcDesc, *pCache);
         long nDim = GetFieldIndex();
         // get the string collection with generated grouping elements
         ScDPNumGroupDimension aTmpDim( rNumInfo );

@@ -194,10 +194,8 @@ public:
     /** Tries to open a new stream in the root storage for reading or writing. */
     tools::SvRef<SotStorageStream> OpenStream( const OUString& rStrmName ) const;
 
-    /** Returns the destination document (import) or source document (export). */
+    /** Returns reference to the destination document (import) or source document (export). */
     ScDocument& GetDoc() const;
-    /** Returns pointer to the destination document (import) or source document (export). */
-    ScDocument& GetDocRef() const;
 
     /** Returns the object shell of the Calc document. May be 0 (i.e. import from clipboard). */
     SfxObjectShell*     GetDocShell() const;
