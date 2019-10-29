@@ -205,7 +205,6 @@ void PresenterController::disposing()
     if (mxMainWindow.is())
     {
         mxMainWindow->removeKeyListener(this);
-        mxMainWindow->removeFocusListener(this);
         mxMainWindow->removeMouseListener(this);
         mxMainWindow->removeMouseMotionListener(this);
         mxMainWindow = nullptr;
@@ -1032,12 +1031,6 @@ void PresenterController::HandleNumericKeyPress (
     }
 }
 
-//----- XFocusListener --------------------------------------------------------
-
-void SAL_CALL PresenterController::focusGained (const css::awt::FocusEvent&) {}
-
-void SAL_CALL PresenterController::focusLost (const css::awt::FocusEvent&) {}
-
 //----- XMouseListener --------------------------------------------------------
 
 void SAL_CALL PresenterController::mousePressed (const css::awt::MouseEvent&)
@@ -1084,7 +1077,6 @@ void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
     if (mxMainWindow.is())
     {
         mxMainWindow->addKeyListener(this);
-        mxMainWindow->addFocusListener(this);
         mxMainWindow->addMouseListener(this);
         mxMainWindow->addMouseMotionListener(this);
     }
