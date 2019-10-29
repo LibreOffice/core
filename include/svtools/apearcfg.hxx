@@ -38,7 +38,7 @@ enum class DragMode {
 };
 
 
-class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
+class SVT_DLLPUBLIC SvtTabAppearanceCfg final : public utl::ConfigItem
 {
     DragMode        nDragMode           ;
     SnapType        nSnapMode           ;

@@ -71,7 +71,7 @@ method in CalendarField and create an own calendar there ourselves.
 *************************************************************************/
 
 
-class SVT_DLLPUBLIC CalendarField : public DateField
+class SVT_DLLPUBLIC CalendarField final : public DateField
 {
 private:
     VclPtr<ImplCFieldFloatWin> mpFloatWin;
@@ -96,7 +96,7 @@ public:
     void                EnableToday() { mbToday = true; }
     void                EnableNone() { mbNone = true; }
 
-protected:
+private:
     virtual void    StateChanged( StateChangedType nStateChange ) override;
 };
 

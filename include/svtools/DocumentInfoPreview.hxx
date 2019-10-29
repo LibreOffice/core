@@ -37,7 +37,7 @@ namespace com { namespace sun { namespace star {
 
 namespace svtools {
 
-class SVT_DLLPUBLIC ODocumentInfoPreview: public vcl::Window {
+class SVT_DLLPUBLIC ODocumentInfoPreview final : public vcl::Window {
 public:
     ODocumentInfoPreview(vcl::Window * pParent, WinBits nBits);
 

@@ -19,7 +19,7 @@
 class Place;
 class DetailsContainer;
 
-class SVT_DLLPUBLIC PlaceEditDialog : public weld::GenericDialogController
+class SVT_DLLPUBLIC PlaceEditDialog final : public weld::GenericDialogController
 {
 private:
     std::shared_ptr< DetailsContainer > m_xCurrentDetails;

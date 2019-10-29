@@ -34,7 +34,7 @@ struct SubstitutionStruct
     bool        bReplaceOnScreenOnly;
 };
 
-class SVT_DLLPUBLIC SvtFontSubstConfig : public utl::ConfigItem
+class SVT_DLLPUBLIC SvtFontSubstConfig final : public utl::ConfigItem
 {
 private:
     bool                        bIsEnabled;

@@ -25,7 +25,7 @@
 
 class SvtAccessibilityOptions_Impl;
 
-class SVT_DLLPUBLIC SvtAccessibilityOptions:
+class SVT_DLLPUBLIC SvtAccessibilityOptions final :
     public utl::detail::Options, private SfxListener
 {
 private:
