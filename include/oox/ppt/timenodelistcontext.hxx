@@ -51,7 +51,7 @@ namespace oox { namespace ppt {
 
 
 /** FastParser context for XML_tnLst, XML_subTnLst and XML_childTnLst */
-class TimeNodeListContext : public ::oox::core::FragmentHandler2
+class TimeNodeListContext final : public ::oox::core::FragmentHandler2
 {
 public:
     TimeNodeListContext( ::oox::core::FragmentHandler2 const & rParent, TimeNodePtrList & aList ) throw();

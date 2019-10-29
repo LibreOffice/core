@@ -32,7 +32,7 @@ namespace oox {
 
 namespace oox { namespace ppt {
 
-    class SlideTransitionContext : public ::oox::core::FragmentHandler2
+    class SlideTransitionContext final : public ::oox::core::FragmentHandler2
     {
     public:
         SlideTransitionContext( ::oox::core::FragmentHandler2 const & rParent,

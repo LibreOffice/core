@@ -74,7 +74,7 @@ enum class AgileEncryptionPreset
     AES_256_SHA512,
 };
 
-class OOX_DLLPUBLIC AgileEngine : public CryptoEngine
+class OOX_DLLPUBLIC AgileEngine final : public CryptoEngine
 {
 private:
     AgileEncryptionInfo mInfo;

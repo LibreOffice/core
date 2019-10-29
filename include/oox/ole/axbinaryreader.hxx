@@ -44,7 +44,7 @@ namespace ole {
     possible to construct this wrapper with an unseekable input stream without
     losing any functionality.
  */
-class AxAlignedInputStream : public BinaryInputStream
+class AxAlignedInputStream final : public BinaryInputStream
 {
 public:
     explicit            AxAlignedInputStream( BinaryInputStream& rInStrm );

@@ -29,7 +29,7 @@ namespace oox { class AttributeList; }
 
 namespace oox { namespace ppt {
 
-class SlideTimingContext : public ::oox::core::FragmentHandler2
+class SlideTimingContext final : public ::oox::core::FragmentHandler2
 {
 public:
     SlideTimingContext( ::oox::core::FragmentHandler2 const & rParent, TimeNodePtrList & aTimeNodeList ) throw();

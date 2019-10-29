@@ -42,7 +42,7 @@ public:
 };
 
 
-class OOX_DLLPUBLIC GraphicalObjectFrameContext : public ShapeContext
+class OOX_DLLPUBLIC GraphicalObjectFrameContext final : public ShapeContext
 {
 public:
     GraphicalObjectFrameContext( ::oox::core::ContextHandler2Helper& rParent, const ShapePtr& pMasterShapePtr, const ShapePtr& pShapePtr, bool bEmbedShapesInChart );
@@ -56,7 +56,7 @@ private:
 };
 
 
-class OleObjectGraphicDataContext : public ShapeContext
+class OleObjectGraphicDataContext final : public ShapeContext
 {
 public:
     OleObjectGraphicDataContext( ::oox::core::ContextHandler2Helper const & rParent, const ShapePtr& pShapePtr );
@@ -68,7 +68,7 @@ private:
 };
 
 
-class DiagramGraphicDataContext
+class DiagramGraphicDataContext final
     : public ShapeContext
 {
 public:
@@ -86,7 +86,7 @@ private:
 
 struct ChartShapeInfo;
 
-class ChartGraphicDataContext : public ShapeContext
+class ChartGraphicDataContext final : public ShapeContext
 {
 public:
     explicit            ChartGraphicDataContext(

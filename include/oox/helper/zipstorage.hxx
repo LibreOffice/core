@@ -38,7 +38,7 @@ namespace oox {
 
 
 /** Implements stream access for ZIP storages containing XML streams. */
-class ZipStorage : public StorageBase
+class ZipStorage final : public StorageBase
 {
 public:
     explicit            ZipStorage(

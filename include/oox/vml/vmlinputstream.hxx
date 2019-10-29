@@ -54,7 +54,7 @@ namespace vml {
     3)  Line breaks represented by a single <br> element (without matching
         </br> element) are replaced by a literal LF character.
  */
-class InputStream : public ::cppu::WeakImplHelper< css::io::XInputStream >
+class InputStream final : public ::cppu::WeakImplHelper< css::io::XInputStream >
 {
 public:
     explicit            InputStream(

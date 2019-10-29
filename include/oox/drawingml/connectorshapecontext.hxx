@@ -31,7 +31,7 @@ namespace oox { namespace core { class ContextHandler2Helper; } }
 
 namespace oox { namespace drawingml {
 
-class OOX_DLLPUBLIC ConnectorShapeContext : public ShapeContext
+class OOX_DLLPUBLIC ConnectorShapeContext final : public ShapeContext
 {
 public:
     ConnectorShapeContext( ::oox::core::ContextHandler2Helper const & rParent, const ShapePtr& pMasterShapePtr, const ShapePtr& pGroupShapePtr );
