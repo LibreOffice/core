@@ -651,7 +651,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         if( pTokArr )
         {
             xTokArr1 = std::move( pTokArr );
-            GetDocRef().CheckLinkFormulaNeedingCheck( *xTokArr1);
+            GetDoc().CheckLinkFormulaNeedingCheck( *xTokArr1);
         }
     }
 
@@ -665,7 +665,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         if( pTokArr )
         {
             xTokArr2 = std::move( pTokArr );
-            GetDocRef().CheckLinkFormulaNeedingCheck( *xTokArr2);
+            GetDoc().CheckLinkFormulaNeedingCheck( *xTokArr2);
         }
     }
 
@@ -675,13 +675,13 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 
     if( !mxScCondFmt.get() )
     {
-        mxScCondFmt.reset( new ScConditionalFormat( 0/*nKey*/, &GetDocRef() ) );
+        mxScCondFmt.reset( new ScConditionalFormat( 0/*nKey*/, &GetDoc() ) );
         if(maRanges.size() > 1)
             maRanges.Join(maRanges[0], true);
         mxScCondFmt->SetRange(maRanges);
     }
 
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry(eMode, xTokArr1.get(), xTokArr2.get(), &GetDocRef(), aPos, aStyleName);
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(eMode, xTokArr1.get(), xTokArr2.get(), &GetDoc(), aPos, aStyleName);
     mxScCondFmt->AddEntry( pEntry );
     ++mnCondIndex;
 }

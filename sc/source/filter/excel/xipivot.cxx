@@ -1459,7 +1459,7 @@ void XclImpPivotTable::Convert()
     // *** insert into Calc document ***
 
     // create source descriptor
-    ScSheetSourceDesc aDesc(&GetDocRef());
+    ScSheetSourceDesc aDesc(&GetDoc());
     const OUString& rSrcName = mxPCache->GetSourceRangeName();
     if (!rSrcName.isEmpty())
         // Range name is the data source.
@@ -1477,7 +1477,7 @@ void XclImpPivotTable::Convert()
     }
 
     // create the DataPilot
-    std::unique_ptr<ScDPObject> pDPObj(new ScDPObject( &GetDocRef() ));
+    std::unique_ptr<ScDPObject> pDPObj(new ScDPObject( &GetDoc() ));
     pDPObj->SetName( maPTInfo.maTableName );
     if (!maPTInfo.maDataName.isEmpty())
         aSaveData.GetDataLayoutDimension()->SetLayoutName(maPTInfo.maDataName);

@@ -304,10 +304,10 @@ OUString XclExpName::GetWithDefaultRangeSeparator( const OUString& rSymbol ) con
         // convert with validation
         ScRange aRange;
         ScAddress::Details detailsXL( ::formula::FormulaGrammar::CONV_XL_A1 );
-        ScRefFlags nRes = aRange.Parse( rSymbol.copy(0, nPos), &GetDocRef(), detailsXL );
+        ScRefFlags nRes = aRange.Parse( rSymbol.copy(0, nPos), &GetDoc(), detailsXL );
         if ( nRes & ScRefFlags::VALID )
         {
-            nRes = aRange.Parse( rSymbol.copy(nPos+1), &GetDocRef(), detailsXL );
+            nRes = aRange.Parse( rSymbol.copy(nPos+1), &GetDoc(), detailsXL );
             if ( nRes & ScRefFlags::VALID )
             {
                 return rSymbol.replaceFirst(";", ",");
@@ -446,7 +446,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, const
     XclExpNameRef xName( new XclExpName( GetRoot(), cBuiltIn ) );
     xName->SetTokenArray( xTokArr );
     xName->SetLocalTab( aRange.aStart.Tab() );
-    OUString sSymbol(aRange.Format(ScRefFlags::RANGE_ABS_3D, &GetDocRef(), ScAddress::Details( ::formula::FormulaGrammar::CONV_XL_A1)));
+    OUString sSymbol(aRange.Format(ScRefFlags::RANGE_ABS_3D, &GetDoc(), ScAddress::Details( ::formula::FormulaGrammar::CONV_XL_A1)));
     xName->SetSymbol( sSymbol );
     return Append( xName );
 }
@@ -457,7 +457,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, const
     xName->SetTokenArray( xTokArr );
     xName->SetLocalTab( nScTab );
     OUString sSymbol;
-    rRangeList.Format( sSymbol, ScRefFlags::RANGE_ABS_3D, &GetDocRef(), ::formula::FormulaGrammar::CONV_XL_A1 );
+    rRangeList.Format( sSymbol, ScRefFlags::RANGE_ABS_3D, &GetDoc(), ::formula::FormulaGrammar::CONV_XL_A1 );
     xName->SetSymbol( sSymbol );
     return Append( xName );
 }
@@ -636,7 +636,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
             xTokArr = GetFormulaCompiler().CreateFormula(EXC_FMLATYPE_NAME, *pTokenCopy);
             if ( GetOutput() != EXC_OUTPUT_BINARY )
             {
-                ScCompiler aComp(&GetDocRef(), rRangeData.GetPos(), *pTokenCopy,
+                ScCompiler aComp(&GetDoc(), rRangeData.GetPos(), *pTokenCopy,
                                  formula::FormulaGrammar::GRAM_OOXML);
                 aComp.CreateStringFromTokenArray( sSymbol );
             }
