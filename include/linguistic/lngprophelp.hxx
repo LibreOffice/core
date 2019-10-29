@@ -131,7 +131,7 @@ public:
 };
 
 
-class PropertyHelper_Thes :
+class PropertyHelper_Thes final :
     public PropertyChgHelper
 {
     PropertyHelper_Thes( const PropertyHelper_Thes & ) = delete;
@@ -167,7 +167,7 @@ public:
 };
 
 
-class LNG_DLLPUBLIC PropertyHelper_Spell :
+class LNG_DLLPUBLIC PropertyHelper_Spell final :
     public PropertyChgHelper
 {
     // default values
@@ -183,7 +183,6 @@ class LNG_DLLPUBLIC PropertyHelper_Spell :
     PropertyHelper_Spell( const PropertyHelper_Spell & ) = delete;
     PropertyHelper_Spell & operator = ( const PropertyHelper_Spell & ) = delete;
 
-protected:
     // PropertyChgHelper
     virtual void    SetDefaultValues() override;
     virtual void    GetCurrentValues() override;
@@ -237,7 +236,7 @@ public:
 };
 
 
-class PropertyHelper_Hyphen :
+class PropertyHelper_Hyphen final :
     public PropertyChgHelper
 {
     // default values
@@ -253,7 +252,6 @@ class PropertyHelper_Hyphen :
     PropertyHelper_Hyphen( const PropertyHelper_Hyphen & ) = delete;
     PropertyHelper_Hyphen & operator = ( const PropertyHelper_Hyphen & ) = delete;
 
-protected:
     // PropertyChgHelper
     virtual void    SetDefaultValues() override;
     virtual void    GetCurrentValues() override;
