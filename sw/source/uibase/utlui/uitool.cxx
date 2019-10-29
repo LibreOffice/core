@@ -42,7 +42,6 @@
 #include <svx/svxids.hrc>
 #include <editeng/lrspitem.hxx>
 #include <svl/style.hxx>
-#include <vcl/lstbox.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

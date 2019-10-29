@@ -21,7 +21,6 @@
 #include "iodlgimp.hxx"
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/menu.hxx>
 #include <svtools/inettbc.hxx>
 #include "iodlg.hxx"
 #include <bitmaps.hlst>

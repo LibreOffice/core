@@ -21,7 +21,6 @@
 
 #include <hintids.hxx>
 #include <swerror.h>
-#include <vcl/wrkwin.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/accessibilityoptions.hxx>

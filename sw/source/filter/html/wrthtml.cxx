@@ -22,7 +22,6 @@
 #include <comphelper/string.hxx>
 #include <svl/urihelper.hxx>
 #include <rtl/tencinfo.h>
-#include <vcl/wrkwin.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docfile.hxx>
 

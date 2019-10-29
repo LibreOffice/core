@@ -47,6 +47,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <vcl/edit.hxx>
+#include <vcl/svapp.hxx>
 
 #include <sfx2/unoctitm.hxx>
 #include <appdata.hxx>

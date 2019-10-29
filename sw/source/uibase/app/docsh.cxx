@@ -23,7 +23,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
+#include <vcl/syswin.hxx>
 #include <vcl/jobset.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>

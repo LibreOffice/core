@@ -21,7 +21,6 @@
 
 #include <svl/urihelper.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/formatbreakitem.hxx>

@@ -770,9 +770,8 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     css::uno::Reference< css::awt::XWindow > xParentWindow = xFrame->getContainerWindow();
 
                     SolarMutexGuard aGuard;
-                    VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
 
-                    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pParentWindow ? pParentWindow->GetFrameWeld() : nullptr, "sfx/ui/errorfindemaildialog.ui"));
+                    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(Application::GetFrameWeld(xParentWindow), "sfx/ui/errorfindemaildialog.ui"));
                     std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("ErrorFindEmailDialog"));
                     xBox->run();
                     eResult = SEND_MAIL_CANCELLED;

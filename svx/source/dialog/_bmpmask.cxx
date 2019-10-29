@@ -18,7 +18,6 @@
  */
 
 #include <vcl/event.hxx>
-#include <vcl/wrkwin.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/field.hxx>
 #include <vcl/settings.hxx>

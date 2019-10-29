@@ -37,8 +37,8 @@
 #include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 #include <svl/eitem.hxx>
 #include <svl/lstner.hxx>
 #include <sfx2/sfxhelp.hxx>

@@ -26,7 +26,6 @@
 #include <vcl/errinf.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/print.hxx>
-#include <vcl/wrkwin.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/svapp.hxx>

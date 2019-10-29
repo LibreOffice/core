@@ -19,7 +19,6 @@
 
 #include <sal/macros.h>
 #include <osl/diagnose.h>
-#include <vcl/wrkwin.hxx>
 #include <vcl/timer.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/itemiter.hxx>

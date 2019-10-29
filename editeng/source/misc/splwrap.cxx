@@ -21,7 +21,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/wrkwin.hxx>
+#include <vcl/window.hxx>
 #include <svtools/langtab.hxx>
 
 #include <vcl/errinf.hxx>

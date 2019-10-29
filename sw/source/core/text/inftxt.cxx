@@ -45,7 +45,6 @@
 #include <fmtinfmt.hxx>
 #include <swmodule.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <viewsh.hxx>
 #include <viewopt.hxx>
 #include <frmtool.hxx>

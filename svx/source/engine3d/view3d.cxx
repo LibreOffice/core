@@ -18,7 +18,6 @@
  */
 
 
-#include <vcl/wrkwin.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svditer.hxx>

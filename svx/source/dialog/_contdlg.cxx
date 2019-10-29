@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <vcl/wrkwin.hxx>
 #include <tools/helpers.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/ctrlitem.hxx>

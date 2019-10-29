@@ -49,6 +49,7 @@
 #include <svl/imageitm.hxx>
 #include <svl/visitem.hxx>
 #include <svl/urlbmk.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <unotools/moduleoptions.hxx>
 

@@ -82,33 +82,4 @@ bool AutocompleteEdit::Match( const OUString& rText )
     return bRet;
 }
 
-#if 0
-bool AutocompleteEdit::PreNotify( NotifyEvent& rNEvt )
-{
-    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        const KeyEvent& rEvent = *rNEvt.GetKeyEvent();
-        const vcl::KeyCode& rKey = rEvent.GetKeyCode();
-        vcl::KeyCode aCode( rKey.GetCode() );
-
-        if( ( aCode == KEY_UP || aCode == KEY_DOWN ) && !rKey.IsMod2() )
-        {
-            Selection aSelection( GetSelection() );
-            sal_uInt16 nLen = static_cast<sal_uInt16>(aSelection.Min());
-
-            if( !m_aMatching.empty() &&
-                ( ( aCode == KEY_DOWN && m_nCurrent + 1 < m_aMatching.size() )
-                || ( aCode == KEY_UP && m_nCurrent > 0 ) ) )
-            {
-                SetText( m_aMatching[ aCode == KEY_DOWN ? ++m_nCurrent : --m_nCurrent ] );
-                SetSelection( Selection( nLen, GetText().getLength() ) );
-                return true;
-            }
-        }
-    }
-
-    return Edit::PreNotify( rNEvt );
-}
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

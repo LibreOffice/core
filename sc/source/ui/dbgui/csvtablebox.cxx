@@ -18,9 +18,7 @@
  */
 
 #include <csvtablebox.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/event.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
 #include <AccessibleCsvControl.hxx>
 

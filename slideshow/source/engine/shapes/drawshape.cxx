@@ -30,7 +30,6 @@
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/wrkwin.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 

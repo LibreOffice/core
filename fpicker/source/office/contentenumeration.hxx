@@ -25,8 +25,6 @@
 #include <ucbhelper/content.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/datetime.hxx>
-#include <vcl/image.hxx>
-
 
 namespace svt
 {

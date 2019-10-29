@@ -39,6 +39,7 @@
 #include <basic/sbxobj.hxx>
 #include <basic/sbxmeth.hxx>
 #include <basic/sbxcore.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>

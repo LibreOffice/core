@@ -15,10 +15,6 @@
 
 #include <unotools/viewoptions.hxx>
 
-#include <vcl/button.hxx>
-#include <vcl/menubtn.hxx>
-#include <vcl/vclptr.hxx>
-#include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/beans/StringPair.hpp>
@@ -174,8 +170,6 @@ private:
 
     DECL_LINK( FileNameGetFocusHdl, weld::Widget&, void );
     DECL_LINK( FileNameModifyHdl, weld::Entry&, void );
-
-    DECL_LINK( SplitHdl, Splitter*, void );
 
     DECL_LINK( SelectFilterHdl, weld::ComboBox&, void );
 

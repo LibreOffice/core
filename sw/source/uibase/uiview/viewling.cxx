@@ -61,7 +61,6 @@
 #include <edtwin.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
-#include <vcl/lstbox.hxx>
 #include <cmdid.h>
 #include <globals.hrc>
 #include <strings.hrc>

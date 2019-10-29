@@ -42,7 +42,6 @@
 #include <osl/endian.h>
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/wrkwin.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>

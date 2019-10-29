@@ -23,11 +23,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <svx/svxdllapi.h>
-#include <vcl/image.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>
-
 
 enum class SvxLanguageListFlags
 {

@@ -23,7 +23,6 @@
 #include <comphelper/string.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>

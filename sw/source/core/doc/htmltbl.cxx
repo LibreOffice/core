@@ -24,7 +24,6 @@
 #include <memory>
 #include <hintids.hxx>
 
-#include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 #include <sot/storage.hxx>
 #include <fmtornt.hxx>

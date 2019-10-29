@@ -28,6 +28,7 @@
 #include <svl/stritem.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>

@@ -20,10 +20,7 @@
 #define INCLUDED_SFX2_SOURCE_INC_SFXTYPES_HXX
 
 #include <sal/config.h>
-
 #include <sal/log.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 
 #if defined(DBG_UTIL)
 

@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include <vcl/svapp.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/wrkwin.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/settings.hxx>
 #include <basic/sbxvar.hxx>

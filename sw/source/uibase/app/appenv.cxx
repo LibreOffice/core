@@ -26,7 +26,6 @@
 #include <svx/svxids.hrc>
 
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/printer.hxx>

@@ -25,6 +25,7 @@
 
 #include <sal/log.hxx>
 #include <svl/itempool.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/prnsetup.hxx>
 #include <svl/flagitem.hxx>

@@ -50,8 +50,6 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/visitem.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/wrkwin.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <sal/log.hxx>
@@ -65,6 +63,8 @@
 #include <svtools/asynclink.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/propertyvalue.hxx>

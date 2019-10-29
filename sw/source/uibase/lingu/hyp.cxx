@@ -24,7 +24,6 @@
 #include <globals.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/wrkwin.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <swwait.hxx>

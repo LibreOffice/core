@@ -31,6 +31,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/status.hxx>
+#include <vcl/svapp.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/stbitem.hxx>

@@ -48,7 +48,6 @@
 #include <svx/fmshell.hxx>
 #include <svx/fmtools.hxx>
 #include <svx/svxids.hrc>
-#include <vcl/wrkwin.hxx>
 #include <vcl/settings.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/commandevent.hxx>

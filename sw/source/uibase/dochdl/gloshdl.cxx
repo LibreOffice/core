@@ -417,11 +417,11 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
                     pDlg->InsertGlos(i.sTitle, i.sLongName);
                 }
                 pDlg->SelectEntryPos(0);
-                const sal_Int32 nRet = RET_OK == pDlg->Execute()?
-                                        pDlg->GetSelectedIdx():
-                                        LISTBOX_ENTRY_NOTFOUND;
+                const sal_Int32 nRet = RET_OK == pDlg->Execute() ?
+                                        pDlg->GetSelectedIdx() :
+                                        -1;
                 pDlg.disposeAndClear();
-                if (LISTBOX_ENTRY_NOTFOUND != nRet)
+                if (nRet != -1)
                 {
                     TextBlockInfo_Impl& rData = aFoundArr[nRet];
                     pGlossary = pGlossaries->GetGroupDoc(rData.sGroupName);

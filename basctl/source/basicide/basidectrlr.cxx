@@ -18,12 +18,8 @@
  */
 
 #include <basidectrlr.hxx>
-
 #include <basidesh.hxx>
-
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-
-#include <vcl/syswin.hxx>
 
 namespace basctl
 {

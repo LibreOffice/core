@@ -26,7 +26,6 @@
 #include <tools/poly.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/wrkwin.hxx>
 #include <svl/solar.hrc>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
