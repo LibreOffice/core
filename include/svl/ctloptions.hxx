@@ -27,7 +27,7 @@ class SvtCTLOptions_Impl;
 
 // class SvtCTLOptions --------------------------------------------------------
 
-class SVL_DLLPUBLIC SvtCTLOptions : public utl::detail::Options
+class SVL_DLLPUBLIC SvtCTLOptions final : public utl::detail::Options
 {
 private:
     std::shared_ptr<SvtCTLOptions_Impl>    m_pImpl;

@@ -26,7 +26,7 @@
 class SfxItemSet;
 
 
-class SVL_DLLPUBLIC SfxItemSetHint: public SfxHint
+class SVL_DLLPUBLIC SfxItemSetHint final : public SfxHint
 {
     std::unique_ptr<SfxItemSet> _pItemSet;
 

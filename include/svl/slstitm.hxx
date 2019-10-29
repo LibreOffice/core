@@ -27,7 +27,7 @@
 
 namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
 
-class SVL_DLLPUBLIC SfxStringListItem : public SfxPoolItem
+class SVL_DLLPUBLIC SfxStringListItem final : public SfxPoolItem
 {
     std::shared_ptr<std::vector<OUString>> mpList;
 

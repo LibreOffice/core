@@ -23,7 +23,7 @@
 #include <tools/globname.hxx>
 #include <svl/poolitem.hxx>
 
-class SVL_DLLPUBLIC SfxGlobalNameItem: public SfxPoolItem
+class SVL_DLLPUBLIC SfxGlobalNameItem final : public SfxPoolItem
 {
     SvGlobalName            m_aName;
 

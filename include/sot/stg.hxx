@@ -122,11 +122,11 @@ protected:
     static bool     ValidateMode_Impl( StreamMode, StgDirEntry const * p = nullptr );
 };
 
-class StorageStream : public BaseStorageStream, public OLEStorageBase
+class StorageStream final : public BaseStorageStream, public OLEStorageBase
 {
 //friend class Storage;
     sal_uLong           nPos;                             // current position
-protected:
+
                         virtual ~StorageStream() override;
 public:
                         StorageStream( StgIo*, StgDirEntry*, StreamMode );
@@ -146,13 +146,12 @@ public:
 
 class UCBStorageStream;
 
-class SOT_DLLPUBLIC Storage : public BaseStorage, public OLEStorageBase
+class SOT_DLLPUBLIC Storage final : public BaseStorage, public OLEStorageBase
 {
     OUString                    aName;
     bool                        bIsRoot;
     void                        Init( bool bCreate );
                                 Storage( StgIo*, StgDirEntry*, StreamMode );
-protected:
                                 virtual ~Storage() override;
 public:
                                 Storage( const OUString &, StreamMode, bool bDirect );

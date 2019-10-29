@@ -26,7 +26,7 @@
 class SvStream;
 
 
-class SVL_DLLPUBLIC SfxRangeItem : public SfxPoolItem
+class SVL_DLLPUBLIC SfxRangeItem final : public SfxPoolItem
 {
 private:
     sal_uInt16                  nFrom;

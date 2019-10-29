@@ -25,7 +25,7 @@
 #include <memory>
 
 struct SfxImageItem_Impl;
-class SVL_DLLPUBLIC SfxImageItem : public SfxInt16Item
+class SVL_DLLPUBLIC SfxImageItem final : public SfxInt16Item
 {
     std::unique_ptr<SfxImageItem_Impl>      pImpl;
 public:

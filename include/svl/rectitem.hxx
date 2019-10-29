@@ -25,7 +25,7 @@
 
 class SvStream;
 
-class SVL_DLLPUBLIC SfxRectangleItem: public SfxPoolItem
+class SVL_DLLPUBLIC SfxRectangleItem final : public SfxPoolItem
 {
     tools::Rectangle                aVal;
 

@@ -26,7 +26,7 @@
 #include <memory>
 #include <vector>
 
-class SVL_DLLPUBLIC SfxAllEnumItem: public SfxPoolItem
+class SVL_DLLPUBLIC SfxAllEnumItem final : public SfxPoolItem
 {
     std::vector<OUString>   m_Values;
 

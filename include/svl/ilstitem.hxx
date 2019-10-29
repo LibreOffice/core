@@ -26,7 +26,7 @@
 
 namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
 
-class SVL_DLLPUBLIC SfxIntegerListItem : public SfxPoolItem
+class SVL_DLLPUBLIC SfxIntegerListItem final : public SfxPoolItem
 {
     std::vector < sal_Int32 > m_aList;
 

@@ -13,7 +13,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
 
-class SVL_DLLPUBLIC SfxInt64Item : public SfxPoolItem
+class SVL_DLLPUBLIC SfxInt64Item final : public SfxPoolItem
 {
     sal_Int64 mnValue;
 

@@ -108,7 +108,7 @@ public:
 This item describes a Macro table.
 */
 
-class SVL_DLLPUBLIC SvxMacroItem: public SfxPoolItem
+class SVL_DLLPUBLIC SvxMacroItem final : public SfxPoolItem
 {
 public:
     explicit inline SvxMacroItem ( const sal_uInt16 nId );

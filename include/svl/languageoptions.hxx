@@ -47,7 +47,7 @@ namespace o3tl
 class SvtCJKOptions;
 class SvtCTLOptions;
 
-class SVL_DLLPUBLIC SvtLanguageOptions : public ::utl::detail::Options
+class SVL_DLLPUBLIC SvtLanguageOptions final : public ::utl::detail::Options
 {
 private:
     std::unique_ptr<SvtCJKOptions>  m_pCJKOptions;
@@ -112,7 +112,7 @@ public:
 
 /** #i42730# Gives access to the Windows 16bit system locale
  */
-class SVL_DLLPUBLIC SvtSystemLanguageOptions : public utl::ConfigItem
+class SVL_DLLPUBLIC SvtSystemLanguageOptions final : public utl::ConfigItem
 {
 private:
     OUString m_sWin16SystemLocale;

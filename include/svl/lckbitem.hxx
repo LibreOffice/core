@@ -23,7 +23,7 @@
 #include <svl/svldllapi.h>
 #include <tools/stream.hxx>
 
-class SVL_DLLPUBLIC SfxLockBytesItem : public SfxPoolItem
+class SVL_DLLPUBLIC SfxLockBytesItem final : public SfxPoolItem
 {
     SvLockBytesRef          _xVal;
 

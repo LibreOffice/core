@@ -301,7 +301,7 @@ public:
                             { return *pSet; }
 };
 
-class SVL_DLLPUBLIC SfxPoolItemHint: public SfxHint
+class SVL_DLLPUBLIC SfxPoolItemHint final : public SfxHint
 {
     SfxPoolItem* pObj;
 public:

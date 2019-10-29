@@ -112,7 +112,7 @@ struct SVL_DLLPUBLIC SfxUndoArray
 
 /** do not make use of these implementation details, unless you
     really really have to! */
-class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArray
+class SVL_DLLPUBLIC SfxListUndoAction final : public SfxUndoAction, public SfxUndoArray
 
 /*  [Explanation]
 

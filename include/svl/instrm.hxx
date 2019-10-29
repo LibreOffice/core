@@ -33,7 +33,7 @@ namespace com { namespace sun { namespace star { namespace io {
 class SvDataPipe_Impl;
 
 
-class SVL_DLLPUBLIC SvInputStream: public SvStream
+class SVL_DLLPUBLIC SvInputStream final : public SvStream
 {
     css::uno::Reference< css::io::XInputStream >   m_xStream;
     css::uno::Reference< css::io::XSeekable >      m_xSeekable;

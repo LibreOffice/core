@@ -33,7 +33,7 @@ namespace com { namespace sun { namespace star { namespace io { class XTruncate;
 
 namespace svt {
 
-class SVL_DLLPUBLIC ShareControlFile : public LockFileCommon
+class SVL_DLLPUBLIC ShareControlFile final : public LockFileCommon
 {
     css::uno::Reference< css::io::XStream >       m_xStream;
     css::uno::Reference< css::io::XInputStream >  m_xInputStream;

@@ -20,7 +20,7 @@
 namespace svt
 {
 /// Class implementing reading and writing MSO lockfiles.
-class SVL_DLLPUBLIC MSODocumentLockFile : public GenDocumentLockFile
+class SVL_DLLPUBLIC MSODocumentLockFile final : public GenDocumentLockFile
 {
 private:
     enum class AppType
@@ -32,7 +32,6 @@ private:
     static AppType getAppType(const OUString& sOrigURL);
     AppType m_eAppType;
 
-protected:
     virtual void
     WriteEntryToStream(const LockFileEntry& aEntry,
                        const css::uno::Reference<css::io::XOutputStream>& xStream) override;
