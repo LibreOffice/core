@@ -290,7 +290,7 @@ bool DocumentLinksAdministrationManager::GetData( const OUString& rItem, const O
     return false;
 }
 
-bool DocumentLinksAdministrationManager::SetData( const OUString& rItem )
+void DocumentLinksAdministrationManager::SetData( const OUString& rItem )
 {
     // search for bookmarks and sections case sensitive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;
@@ -299,7 +299,7 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem )
         ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*m_rDoc.getIDocumentMarkAccess(), rItem, bCaseSensitive);
         if(pBkmk)
         {
-            return false;
+            return;
         }
 
         // Do we already have the Item?
@@ -313,7 +313,7 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem )
         if( aPara.pSectNd )
         {
             // found, so get the data
-            return false;
+            return;
         }
         if( !bCaseSensitive )
             break;
@@ -327,8 +327,6 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem )
         if (!(lcl_FindTable(pFormat, &aPara)))
             break;
     }
-
-    return false;
 }
 
 ::sfx2::SvLinkSource* DocumentLinksAdministrationManager::CreateLinkSource(const OUString& rItem)
