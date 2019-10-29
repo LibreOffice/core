@@ -60,8 +60,7 @@ typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener,
     css::frame::XFrameActionListener,
     css::awt::XKeyListener,
-    css::awt::XMouseListener,
-    css::awt::XMouseMotionListener
+    css::awt::XMouseListener
 > PresenterControllerInterfaceBase;
 
 /// Represents an element in the toolbar that shows the time elapsed since the presentation started.
@@ -169,12 +168,6 @@ public:
     virtual void SAL_CALL mouseEntered (const css::awt::MouseEvent& rEvent) override;
 
     virtual void SAL_CALL mouseExited (const css::awt::MouseEvent& rEvent) override;
-
-    // XMouseMotionListener
-
-    virtual void SAL_CALL mouseMoved (const css::awt::MouseEvent& rEvent) override;
-
-    virtual void SAL_CALL mouseDragged (const css::awt::MouseEvent& rEvent) override;
 
 private:
     typedef ::std::map<css::uno::Reference<css::frame::XFrame>,rtl::Reference<PresenterController> > InstanceContainer;

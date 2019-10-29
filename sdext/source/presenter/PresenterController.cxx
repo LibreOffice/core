@@ -206,7 +206,6 @@ void PresenterController::disposing()
     {
         mxMainWindow->removeKeyListener(this);
         mxMainWindow->removeMouseListener(this);
-        mxMainWindow->removeMouseMotionListener(this);
         mxMainWindow = nullptr;
     }
     if (mxConfigurationController.is())
@@ -1045,13 +1044,6 @@ void SAL_CALL PresenterController::mouseEntered (const css::awt::MouseEvent&) {}
 
 void SAL_CALL PresenterController::mouseExited (const css::awt::MouseEvent&) {}
 
-//----- XMouseMotionListener --------------------------------------------------
-
-void SAL_CALL PresenterController::mouseMoved (const css::awt::MouseEvent&) {}
-
-void SAL_CALL PresenterController::mouseDragged (const css::awt::MouseEvent&) {}
-
-
 void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
 {
     if ( ! rxPane.is())
@@ -1078,7 +1070,6 @@ void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
     {
         mxMainWindow->addKeyListener(this);
         mxMainWindow->addMouseListener(this);
-        mxMainWindow->addMouseMotionListener(this);
     }
     Reference<XPane2> xPane2 (rxPane, UNO_QUERY);
     if (xPane2.is())
