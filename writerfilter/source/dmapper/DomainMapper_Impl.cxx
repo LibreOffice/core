@@ -4352,6 +4352,14 @@ static auto InsertFieldmark(std::stack<TextAppendContext> & rTextAppendStack,
         xTextAppend->createTextCursorByRange(xStartRange);
     if (rTextAppendStack.top().xInsertPosition.is())
     {
+        uno::Reference<text::XTextRangeCompare> const xCompare(
+                rTextAppendStack.top().xTextAppend,
+                uno::UNO_QUERY);
+        if (xCompare->compareRegionStarts(xStartRange, rTextAppendStack.top().xInsertPosition) < 0)
+        {
+            SAL_WARN("writerfilter.dmapper", "invalid field mark positions");
+            assert(false);
+        }
         xCursor->gotoRange(rTextAppendStack.top().xInsertPosition, true);
     }
     else
