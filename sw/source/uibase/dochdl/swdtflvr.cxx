@@ -874,6 +874,9 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
     if(!m_pWrtShell)
         return 0;
 
+    if (m_pWrtShell->IsTableRowInsertMode())
+        m_pWrtShell->SetTableRowInsertMode(false);
+
     OUString sGrfNm;
     const SelectionType nSelection = m_pWrtShell->GetSelectionType();
     if( nSelection == SelectionType::Graphic )
@@ -1005,6 +1008,9 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         {
             m_eBufferType = TransferBufferType::Table | m_eBufferType;
             bDDELink = m_pWrtShell->HasWholeTabSelection();
+
+            if ( SelectionType::TableRow & nSelection )
+                m_pWrtShell->SetTableRowInsertMode(true);
         }
 
 #if HAVE_FEATURE_DESKTOP
@@ -1423,6 +1429,71 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                 for(sal_uInt32 a = 0; a < (nLevel * 2); a++)
                     pDispatch->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
             }
+        }
+    }
+    // insert clipboard content as new table rows above the actual row instead of overwriting the existing table rows
+    else if ( rSh.IsTableRowInsertMode() &&
+        rData.HasFormat( SotClipboardFormatId::HTML ) &&
+        rSh.GetDoc()->IsIdxInTable(rSh.GetCursor()->GetNode()) != nullptr )
+    {
+        OUString aExpand;
+        sal_Int32 nIdx;
+        if( rData.GetString( SotClipboardFormatId::HTML, aExpand ) && (nIdx = aExpand.indexOf("<table")) > -1 )
+        {
+            // calculate row count
+            sal_Int32 nRows = 0;
+            while((nIdx = aExpand.indexOf("</tr>", nIdx)) > -1)
+            {
+                // skip rows of nested tables, based on HTML indentation
+                if (nIdx > 1 && (aExpand[nIdx-1] != '\t' || aExpand[nIdx-2] != '\t' ))
+                    ++nRows;
+                ++nIdx;
+            }
+            // are we at the beginning of the cell?
+            bool bStartTableBoxNode =
+                // first paragraph of the cell?
+                rSh.GetCursor()->GetNode().GetIndex() == rSh.GetCursor()->GetNode().FindTableBoxStartNode()->GetIndex()+1 &&
+                // beginning of the paragraph?
+                !rSh.GetCursor()->GetPoint()->nContent.GetIndex();
+            SfxDispatcher* pDispatch = rSh.GetView().GetViewFrame()->GetDispatcher();
+
+            // go start of the cell
+            if (!bStartTableBoxNode)
+                pDispatch->Execute(FN_START_OF_DOCUMENT, SfxCallMode::SYNCHRON);
+
+            // store cursor position
+            ::sw::mark::IMark* pMark = rSh.SetBookmark(
+                                    vcl::KeyCode(),
+                                    OUString(),
+                                    IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
+
+            // add a new empty row before the actual table row and go there
+            pDispatch->Execute(FN_TABLE_INSERT_ROW_BEFORE, SfxCallMode::SYNCHRON);
+            pDispatch->Execute(FN_LINE_UP, SfxCallMode::SYNCHRON);
+
+            // add the other new empty rows after the actual table row
+            if ( nRows > 1 )
+            {
+                const sal_uInt16 nDispatchSlot = FN_TABLE_INSERT_ROW_BEFORE;
+                SfxUInt16Item aCountItem( nDispatchSlot, nRows-1 );
+                SfxBoolItem aAfter( FN_PARAM_INSERT_AFTER, true );
+                pDispatch->ExecuteList(nDispatchSlot,
+                    SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
+                    { &aCountItem, &aAfter });
+            }
+
+            // paste rows
+            bool bResult = SwTransferable::PasteData( rData, rSh, nAction, nActionFlags, nFormat,
+                                        nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext );
+
+            // restore cursor position
+            if (pMark != nullptr)
+            {
+                rSh.GotoMark( pMark );
+                rSh.getIDocumentMarkAccess()->deleteMark( pMark );
+            }
+
+            return bResult;
         }
     }
 

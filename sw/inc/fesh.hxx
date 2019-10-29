@@ -639,6 +639,11 @@ public:
     void DeleteTable();
     bool DeleteRow(bool bCompleteTable = false);
 
+    /// insert table rows instead of overwriting the existing one with enhanced table row selection
+    bool m_bTableRowInsertMode;
+    bool IsTableRowInsertMode() const         { return m_bTableRowInsertMode; }
+    void SetTableRowInsertMode( bool bFlag )  { m_bTableRowInsertMode = bFlag; }
+
     bool DeleteTableSel();        ///< Current selection, may be whole table.
 
     TableMergeErr MergeTab();          /**< Merge selected parts of table */
