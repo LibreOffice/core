@@ -3096,6 +3096,14 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
         SfxItemSet aSet( pDoc->GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{} );
         aSet.SetParent(&pFormat->GetAttrSet());
         SwFormatAnchor aAnchor = aSet.Get(RES_ANCHOR);
+
+        if (aAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+        {
+            throw lang::IllegalArgumentException(
+                    "SwXFrame::attach(): re-anchoring AS_CHAR not supported",
+                    *this, 0);
+        }
+
         aAnchor.SetAnchor( aIntPam.Start() );
         aSet.Put(aAnchor);
         pDoc->SetFlyFrameAttr( *pFormat, aSet );
