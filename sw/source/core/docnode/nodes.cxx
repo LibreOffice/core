@@ -20,6 +20,7 @@
 #include <stdlib.h>
 
 #include <libxml/xmlwriter.h>
+#include <osl/diagnose.h>
 
 #include <node.hxx>
 #include <doc.hxx>
@@ -29,16 +30,13 @@
 #include <pam.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
-#include <hints.hxx>
 #include <numrule.hxx>
 #include <ndtxt.hxx>
 #include <ndnotxt.hxx>
 #include <swtable.hxx>
-#include <tblsel.hxx>
 #include <section.hxx>
 #include <ddefld.hxx>
 #include <swddetbl.hxx>
-#include <frame.hxx>
 #include <txtatr.hxx>
 #include <tox.hxx>
 #include <fmtrfmrk.hxx>

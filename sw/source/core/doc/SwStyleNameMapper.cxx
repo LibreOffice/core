@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <numeric>
-#include <tuple>
-
 #include <SwStyleNameMapper.hxx>
 #include <poolfmt.hxx>
 #include <strings.hrc>

@@ -17,13 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <unotools/linguprops.hxx>
-#include <unotools/lingucfg.hxx>
 #include <hintids.hxx>
 #include <sot/exchange.hxx>
-#include <sfx2/progress.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -32,14 +27,12 @@
 #include <editeng/shaditem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/opaqitem.hxx>
-#include <editeng/prntitem.hxx>
-#include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/fmpage.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <swmodule.hxx>
 #include <modcfg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <SwStyleNameMapper.hxx>
 #include <drawdoc.hxx>
 #include <fchrfmt.hxx>
@@ -52,10 +45,7 @@
 #include <fmtfsize.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtflcnt.hxx>
-#include <fmtcnct.hxx>
 #include <frmfmt.hxx>
-#include <txtflcnt.hxx>
-#include <docfld.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <ndnotxt.hxx>
@@ -65,7 +55,6 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-#include <DocumentContentOperationsManager.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -76,8 +65,6 @@
 #include <txtfrm.hxx>
 #include <notxtfrm.hxx>
 #include <flyfrm.hxx>
-#include <fesh.hxx>
-#include <docsh.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
 #include <swundo.hxx>
@@ -88,17 +75,12 @@
 #include <docary.hxx>
 #include <swtable.hxx>
 #include <tblsel.hxx>
-#include <viewopt.hxx>
-#include <fldupde.hxx>
 #include <txtftn.hxx>
 #include <ftnidx.hxx>
 #include <ftninfo.hxx>
 #include <pagedesc.hxx>
-#include <PostItMgr.hxx>
 #include <strings.hrc>
 #include <tools/datetimeutils.hxx>
-
-#include <unoframe.hxx>
 
 #include <sortedobjs.hxx>
 

@@ -20,13 +20,8 @@
 #include <tools/urlobj.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
-#include <unotools/transliterationwrapper.hxx>
 #include <acmplwrd.hxx>
 #include <doc.hxx>
-#include <ndindex.hxx>
-#include <docary.hxx>
-#include <ndtxt.hxx>
-#include <pam.hxx>
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 #include <calbck.hxx>

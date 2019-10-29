@@ -18,7 +18,6 @@
  */
 
 #include <swthreadjoiner.hxx>
-#include <finalthreadmanager.hxx>
 #include <com/sun/star/util/JobManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>

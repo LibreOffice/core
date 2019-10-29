@@ -21,7 +21,6 @@
 #include <fesh.hxx>
 #include <hintids.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/formatbreakitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <svl/stritem.hxx>
@@ -33,7 +32,6 @@
 #include <fmtanchr.hxx>
 #include <fmtlsplt.hxx>
 #include <frmatr.hxx>
-#include <charatr.hxx>
 #include <cellfrm.hxx>
 #include <pagefrm.hxx>
 #include <tabcol.hxx>
@@ -50,11 +48,9 @@
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <swcrsr.hxx>
-#include <viscrs.hxx>
 #include <swtable.hxx>
 #include <swundo.hxx>
 #include <tblsel.hxx>
-#include <fldbas.hxx>
 #include <poolfmt.hxx>
 #include <tabfrm.hxx>
 #include <UndoCore.hxx>
@@ -64,8 +60,6 @@
 #include <UndoTable.hxx>
 #include <hints.hxx>
 #include <tblafmt.hxx>
-#include <swcache.hxx>
-#include <ddefld.hxx>
 #include <frminf.hxx>
 #include <cellatr.hxx>
 #include <swtblfmt.hxx>
@@ -77,7 +71,6 @@
 #include <tblrwcl.hxx>
 #include <editsh.hxx>
 #include <txtfrm.hxx>
-#include <ftnfrm.hxx>
 #include <section.hxx>
 #include <frmtool.hxx>
 #include <node2lay.hxx>

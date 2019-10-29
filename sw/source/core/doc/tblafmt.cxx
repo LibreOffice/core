@@ -19,14 +19,11 @@
 
 #include <comphelper/fileformat.h>
 #include <tools/stream.hxx>
-#include <vcl/svapp.hxx>
 #include <sfx2/docfile.hxx>
-#include <svl/urihelper.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/pathoptions.hxx>
-#include <sfx2/app.hxx>
 #include <swtable.hxx>
 #include <swtblfmt.hxx>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -43,8 +40,8 @@
 #include <fmtrowsplt.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <osl/thread.h>
 
-#include <svl/legacyitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -61,7 +58,6 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <svx/algitem.hxx>
-#include <svx/legacyitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <legacyitem.hxx>
 

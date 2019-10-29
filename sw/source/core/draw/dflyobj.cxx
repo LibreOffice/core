@@ -20,11 +20,12 @@
 #include <hintids.hxx>
 #include <comphelper/lok.hxx>
 #include <tools/mapunit.hxx>
+#include <svx/svdhdl.hxx>
 #include <svx/svdtrans.hxx>
 #include <editeng/protitem.hxx>
-#include <editeng/opaqitem.hxx>
 #include <svx/svdpage.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/ptrstyle.hxx>
 
@@ -33,12 +34,9 @@
 #include <fmtfsize.hxx>
 #include <fmturl.hxx>
 #include <viewsh.hxx>
-#include <viewimp.hxx>
-#include <cntfrm.hxx>
 #include <frmatr.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <dview.hxx>
 #include <dflyobj.hxx>
 #include <flyfrm.hxx>
 #include <frmfmt.hxx>
@@ -67,7 +65,6 @@
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <notxtfrm.hxx>
-#include <dcontact.hxx>
 
 using namespace ::com::sun::star;
 

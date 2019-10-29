@@ -28,9 +28,7 @@
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <swtypes.hxx>
-#include <ndtxt.hxx>
 #include <svl/hint.hxx>
-#include <svx/svdundo.hxx>
 #include <viewsh.hxx>
 #include <view.hxx>
 #include <drawdoc.hxx>
@@ -38,7 +36,6 @@
 #include <fmtanchr.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpage.hxx>
@@ -46,7 +43,6 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdview.hxx>
 #include <svl/srchitem.hxx>
-#include <tools/link.hxx>
 #include <unotools/configmgr.hxx>
 #include <sal/log.hxx>
 
