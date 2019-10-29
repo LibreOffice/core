@@ -58,7 +58,7 @@ public:
     }
 };
 
-class SVX_DLLPUBLIC ClassificationField : public SvxFieldData
+class SVX_DLLPUBLIC ClassificationField final : public SvxFieldData
 {
 public:
     ClassificationType const meType;

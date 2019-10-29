@@ -43,7 +43,7 @@ public:
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 };
 
-class SVX_DLLPUBLIC SvxRubyChildWindow : public SfxChildWindow
+class SVX_DLLPUBLIC SvxRubyChildWindow final : public SfxChildWindow
 {
 public:
     SvxRubyChildWindow( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo const * );

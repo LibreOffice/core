@@ -27,7 +27,7 @@
 
 class Timer;
 
-class SVX_DLLPUBLIC SvxModifyControl : public SfxStatusBarControl
+class SVX_DLLPUBLIC SvxModifyControl final : public SfxStatusBarControl
 {
 public:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,

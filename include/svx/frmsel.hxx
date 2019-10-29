@@ -79,7 +79,7 @@ namespace a11y
     class AccFrameSelector;
 }
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC FrameSelector : public weld::CustomWidgetController
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FrameSelector final : public weld::CustomWidgetController
 {
 public:
     FrameSelector();
@@ -172,7 +172,7 @@ public:
     /** Returns the bounding rectangle of the specified frame border (if enabled). */
     tools::Rectangle           GetClickBoundRect( FrameBorderType eBorder ) const;
 
-protected:
+private:
     virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual bool        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual bool        KeyInput( const KeyEvent& rKEvt ) override;
@@ -181,7 +181,6 @@ protected:
     virtual void        StyleUpdated() override;
     virtual void        Resize() override;
 
-private:
     rtl::Reference<a11y::AccFrameSelector> mxAccess;   /// Pointer to accessibility object of the control.
     std::unique_ptr< FrameSelectorImpl > mxImpl;
 };

@@ -50,7 +50,7 @@ typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunct
 
 #define COL_NONE_COLOR    ::Color(0x80, 0xFF, 0xFF, 0xFF)
 
-class SVX_DLLPUBLIC SvxColorWindow : public svtools::ToolbarPopup
+class SVX_DLLPUBLIC SvxColorWindow final : public svtools::ToolbarPopup
 {
 private:
     const sal_uInt16    theSlotId;
@@ -127,7 +127,7 @@ public:
     weld::Widget* get_widget() const;
 };
 
-class SVX_DLLPUBLIC ColorWindow : public svtools::ToolbarPopupBase
+class SVX_DLLPUBLIC ColorWindow final : public svtools::ToolbarPopupBase
 {
 private:
     std::unique_ptr<weld::Builder> m_xBuilder;

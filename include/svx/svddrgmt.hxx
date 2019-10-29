@@ -48,7 +48,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SdrDragEntryPolyPolygon : public SdrDragEntry
+class SVX_DLLPUBLIC SdrDragEntryPolyPolygon final : public SdrDragEntry
 {
 private:
     basegfx::B2DPolyPolygon const        maOriginalPolyPolygon;
@@ -61,7 +61,7 @@ public:
 };
 
 
-class SdrDragEntrySdrObject : public SdrDragEntry
+class SdrDragEntrySdrObject final : public SdrDragEntry
 {
 private:
     const SdrObject&                                maOriginal;
@@ -84,7 +84,7 @@ public:
 };
 
 
-class SdrDragEntryPrimitive2DSequence : public SdrDragEntry
+class SdrDragEntryPrimitive2DSequence final : public SdrDragEntry
 {
 private:
     drawinglayer::primitive2d::Primitive2DContainer const  maPrimitive2DSequence;
@@ -98,7 +98,7 @@ public:
 };
 
 
-class SdrDragEntryPointGlueDrag : public SdrDragEntry
+class SdrDragEntryPointGlueDrag final : public SdrDragEntry
 {
 private:
     std::vector< basegfx::B2DPoint > const                maPositions;

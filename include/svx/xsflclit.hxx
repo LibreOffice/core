@@ -25,7 +25,7 @@
 
 // class XSecondaryFillColorItem
 
-class SVX_DLLPUBLIC XSecondaryFillColorItem : public XColorItem
+class SVX_DLLPUBLIC XSecondaryFillColorItem final : public XColorItem
 {
 public:
     XSecondaryFillColorItem(const OUString& rName, const Color& rTheColor);

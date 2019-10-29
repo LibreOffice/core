@@ -29,7 +29,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC XFormTextMirrorItem : public SfxBoolItem
+class SVX_DLLPUBLIC XFormTextMirrorItem final : public SfxBoolItem
 {
 public:
                             static SfxPoolItem* CreateDefault();

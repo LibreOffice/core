@@ -29,7 +29,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC XFillTransparenceItem: public SfxUInt16Item
+class SVX_DLLPUBLIC XFillTransparenceItem final : public SfxUInt16Item
 {
 public:
                             XFillTransparenceItem(sal_uInt16 nFillTransparence = 0);

@@ -252,7 +252,7 @@ public:
 #define SDR_HANDLE_COLOR_SIZE_NORMAL            Size(13, 13)
 #define SDR_HANDLE_COLOR_SIZE_SELECTED          Size(17, 17)
 
-class SVX_DLLPUBLIC SdrHdlColor : public SdrHdl
+class SVX_DLLPUBLIC SdrHdlColor final : public SdrHdl
 {
     // size of colr markers
     Size                        aMarkerSize;
@@ -288,7 +288,7 @@ public:
 };
 
 
-class SdrHdlGradient : public SdrHdl
+class SdrHdlGradient final : public SdrHdl
 {
 private:
     // pointer to used color handles
@@ -370,7 +370,7 @@ private:
 };
 
 
-class E3dVolumeMarker : public SdrHdl
+class E3dVolumeMarker final : public SdrHdl
 {
     basegfx::B2DPolyPolygon             aWireframePoly;
 
@@ -400,7 +400,7 @@ public:
 };
 
 
-class ImpMeasureHdl: public SdrHdl
+class ImpMeasureHdl final : public SdrHdl
 {
     // create marker for this kind
     virtual void CreateB2dIAObject() override;
@@ -413,7 +413,7 @@ public:
 };
 
 
-class ImpTextframeHdl: public SdrHdl
+class ImpTextframeHdl final : public SdrHdl
 {
     const tools::Rectangle maRect;
 
@@ -507,7 +507,7 @@ private:
 };
 
 
-class SVX_DLLPUBLIC SdrCropViewHdl : public SdrHdl
+class SVX_DLLPUBLIC SdrCropViewHdl final : public SdrHdl
 {
 private:
     basegfx::B2DHomMatrix const       maObjectTransform;
@@ -526,7 +526,7 @@ public:
         double fCropRight,
         double fCropBottom);
 
-protected:
+private:
     // create marker for this kind
     virtual void CreateB2dIAObject() override;
 };

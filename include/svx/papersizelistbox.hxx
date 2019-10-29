@@ -31,7 +31,7 @@ enum class PaperSizeApp
     Draw
 };
 
-class SVX_DLLPUBLIC PaperSizeListBox : public ListBox
+class SVX_DLLPUBLIC PaperSizeListBox final : public ListBox
 {
 public:
     PaperSizeListBox( vcl::Window* pParent );

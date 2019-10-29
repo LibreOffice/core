@@ -132,7 +132,7 @@ public:
     virtual OUString      GetName() const = 0;
 };
 
-class AbstractSvxHlinkDlgMarkWnd :public VclAbstractDialog
+class AbstractSvxHlinkDlgMarkWnd : public VclAbstractDialog
 {
 protected:
     virtual ~AbstractSvxHlinkDlgMarkWnd() override = default;
@@ -216,7 +216,7 @@ public:
     virtual bool IsSlideScope() = 0;
 };
 
-class AbstractSvxMessDialog :public VclAbstractDialog
+class AbstractSvxMessDialog : public VclAbstractDialog
 {
 protected:
     virtual ~AbstractSvxMessDialog() override = default;

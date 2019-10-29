@@ -38,7 +38,7 @@ typedef cppu::WeakComponentImplHelper<
     css::view::XSelectionChangeListener
     > SelectionChangeHandlerInterfaceBase;
 
-class SVX_DLLPUBLIC SelectionChangeHandler
+class SVX_DLLPUBLIC SelectionChangeHandler final
     : private ::cppu::BaseMutex,
       public SelectionChangeHandlerInterfaceBase
 {

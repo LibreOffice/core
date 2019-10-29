@@ -36,7 +36,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SvxGrafRedToolBoxControl : public SvxGrafToolBoxControl
+class SVX_DLLPUBLIC SvxGrafRedToolBoxControl final : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
@@ -44,7 +44,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SvxGrafGreenToolBoxControl : public SvxGrafToolBoxControl
+class SVX_DLLPUBLIC SvxGrafGreenToolBoxControl final : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
@@ -52,7 +52,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SvxGrafBlueToolBoxControl : public SvxGrafToolBoxControl
+class SVX_DLLPUBLIC SvxGrafBlueToolBoxControl final : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
@@ -60,7 +60,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SvxGrafLuminanceToolBoxControl : public SvxGrafToolBoxControl
+class SVX_DLLPUBLIC SvxGrafLuminanceToolBoxControl final : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
@@ -68,7 +68,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SvxGrafContrastToolBoxControl : public SvxGrafToolBoxControl
+class SVX_DLLPUBLIC SvxGrafContrastToolBoxControl final : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
@@ -76,7 +76,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SvxGrafGammaToolBoxControl : public SvxGrafToolBoxControl
+class SVX_DLLPUBLIC SvxGrafGammaToolBoxControl final : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
@@ -84,7 +84,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SvxGrafTransparenceToolBoxControl : public SvxGrafToolBoxControl
+class SVX_DLLPUBLIC SvxGrafTransparenceToolBoxControl final : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
@@ -92,7 +92,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SvxGrafModeToolBoxControl : public SfxToolBoxControl, public SfxListener
+class SVX_DLLPUBLIC SvxGrafModeToolBoxControl final : public SfxToolBoxControl, public SfxListener
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();

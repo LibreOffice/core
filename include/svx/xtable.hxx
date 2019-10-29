@@ -39,7 +39,7 @@
 #include <limits>
 #include <memory>
 
-class SVX_DLLPUBLIC XColorEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XColorEntry final : public XPropertyEntry
 {
 private:
     Color   aColor;
@@ -53,7 +53,7 @@ public:
     }
 };
 
-class SVX_DLLPUBLIC XLineEndEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XLineEndEntry final : public XPropertyEntry
 {
 private:
     basegfx::B2DPolyPolygon const aB2DPolyPolygon;
@@ -68,7 +68,7 @@ public:
     }
 };
 
-class SVX_DLLPUBLIC XDashEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XDashEntry final : public XPropertyEntry
 {
 private:
     XDash const   aDash;
@@ -83,7 +83,7 @@ public:
     }
 };
 
-class SVX_DLLPUBLIC XHatchEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XHatchEntry final : public XPropertyEntry
 {
 private:
     XHatch const  aHatch;
@@ -98,7 +98,7 @@ public:
     }
 };
 
-class SVX_DLLPUBLIC XGradientEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XGradientEntry final : public XPropertyEntry
 {
 private:
     XGradient const  aGradient;
@@ -113,7 +113,7 @@ public:
     }
 };
 
-class SVX_DLLPUBLIC XBitmapEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XBitmapEntry final : public XPropertyEntry
 {
 private:
     GraphicObject const   maGraphicObject;

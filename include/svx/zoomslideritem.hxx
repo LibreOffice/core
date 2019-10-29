@@ -25,7 +25,7 @@
 #include <svx/svxdllapi.h>
 
 
-class SVX_DLLPUBLIC SvxZoomSliderItem: public SfxUInt16Item
+class SVX_DLLPUBLIC SvxZoomSliderItem final : public SfxUInt16Item
 {
     css::uno::Sequence < sal_Int32 > maValues;
     sal_uInt16 mnMinZoom;

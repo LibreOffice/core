@@ -108,7 +108,7 @@ public:
 
 
 /// Utility class SdrEdgeObjGeoData
-class SdrEdgeObjGeoData : public SdrTextObjGeoData
+class SdrEdgeObjGeoData final : public SdrTextObjGeoData
 {
 public:
     SdrObjConnection            aCon1;  // connection status of the beginning of the line

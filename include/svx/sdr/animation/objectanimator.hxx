@@ -27,7 +27,7 @@ namespace sdr
 {
     namespace animation
     {
-        class primitiveAnimator : public Scheduler
+        class primitiveAnimator final : public Scheduler
         {
         public:
             // basic constructor and destructor

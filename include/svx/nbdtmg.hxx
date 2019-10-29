@@ -146,7 +146,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
 };
 
 
-class SVX_DLLPUBLIC BulletsTypeMgr: public NBOTypeMgrBase
+class SVX_DLLPUBLIC BulletsTypeMgr final : public NBOTypeMgrBase
 {
     friend class OutlineTypeMgr;
     friend class NumberingTypeMgr;

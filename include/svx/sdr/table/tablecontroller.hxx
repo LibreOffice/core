@@ -39,7 +39,7 @@ namespace sdr { namespace table {
 
 class TableModel;
 
-class SVX_DLLPUBLIC SvxTableController : public sdr::SelectionController
+class SVX_DLLPUBLIC SvxTableController final : public sdr::SelectionController
 {
 public:
     SVX_DLLPRIVATE SvxTableController(

@@ -38,14 +38,14 @@ public:
                                               const SfxPoolItem* pState ) override;
 };
 
-class SVX_DLLPUBLIC SvxCTLTextTbxCtrl : public SvxVertCTLTextTbxCtrl
+class SVX_DLLPUBLIC SvxCTLTextTbxCtrl final : public SvxVertCTLTextTbxCtrl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxCTLTextTbxCtrl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
-class SVX_DLLPUBLIC SvxVertTextTbxCtrl : public SvxVertCTLTextTbxCtrl
+class SVX_DLLPUBLIC SvxVertTextTbxCtrl final : public SvxVertCTLTextTbxCtrl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();

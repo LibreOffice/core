@@ -29,7 +29,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC XGradientStepCountItem: public SfxUInt16Item
+class SVX_DLLPUBLIC XGradientStepCountItem final : public SfxUInt16Item
 {
 public:
                             XGradientStepCountItem( sal_uInt16 nStepCount = 0 );

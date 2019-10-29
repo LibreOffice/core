@@ -25,7 +25,7 @@
 
 struct SvxPosSizeStatusBarControl_Impl;
 
-class SVX_DLLPUBLIC SvxPosSizeStatusBarControl : public SfxStatusBarControl
+class SVX_DLLPUBLIC SvxPosSizeStatusBarControl final : public SfxStatusBarControl
 {
 private:
     std::unique_ptr<SvxPosSizeStatusBarControl_Impl>    pImpl;

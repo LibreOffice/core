@@ -93,7 +93,7 @@ bool                CopyFile(  const INetURLObject& rSrcURL, const INetURLObject
 bool                KillFile( const INetURLObject& rURL );
 BitmapEx            GalleryResGetBitmapEx(const OUString& rId);
 
-class SgaIMapInfo : public SdrObjUserData, public SfxListener
+class SgaIMapInfo final : public SdrObjUserData, public SfxListener
 {
     ImageMap                aImageMap;
 
@@ -168,7 +168,7 @@ enum class GalleryHintType
     CLOSE_OBJECT
 };
 
-class GalleryHint : public SfxHint
+class GalleryHint final : public SfxHint
 {
 private:
 

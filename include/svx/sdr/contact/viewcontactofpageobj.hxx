@@ -28,9 +28,8 @@ class SdrPage;
 
 namespace sdr { namespace contact {
 
-class SVX_DLLPUBLIC ViewContactOfPageObj : public ViewContactOfSdrObj
+class SVX_DLLPUBLIC ViewContactOfPageObj final : public ViewContactOfSdrObj
 {
-protected:
     // Create an Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something.
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;

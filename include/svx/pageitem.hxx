@@ -49,7 +49,7 @@ This item describes a page attribute (name of the template, enumeration,
 portrait or landscape, layout)
 */
 
-class SVX_DLLPUBLIC SvxPageItem: public SfxPoolItem
+class SVX_DLLPUBLIC SvxPageItem final : public SfxPoolItem
 {
 private:
     OUString            aDescName;          // name of the template
@@ -96,7 +96,7 @@ public:
   container for header/footer attributes
  --------------------------------------------------------------------*/
 
-class SVX_DLLPUBLIC SvxSetItem: public SfxSetItem
+class SVX_DLLPUBLIC SvxSetItem final : public SfxSetItem
 {
 public:
     SvxSetItem( const sal_uInt16 nId, const SfxItemSet& rSet );

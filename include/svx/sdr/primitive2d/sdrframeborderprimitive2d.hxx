@@ -88,7 +88,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SVX_DLLPUBLIC SdrFrameBorderPrimitive2D : public BufferedDecompositionPrimitive2D
+        class SVX_DLLPUBLIC SdrFrameBorderPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             std::shared_ptr<SdrFrameBorderDataVector>   maFrameBorders;
@@ -97,7 +97,6 @@ namespace drawinglayer
             bool                                        mbMergeResult;
             bool                                        mbForceToSingleDiscreteUnit;
 
-        protected:
             // local decomposition.
             virtual void create2DDecomposition(
                 Primitive2DContainer& rContainer,

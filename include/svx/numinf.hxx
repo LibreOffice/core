@@ -26,7 +26,7 @@
 /** This item is used as a transport medium for a number formatter
  */
 
-class SVX_DLLPUBLIC SvxNumberInfoItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxNumberInfoItem final : public SfxPoolItem
 {
 public:
 

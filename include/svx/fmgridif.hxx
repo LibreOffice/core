@@ -71,7 +71,7 @@ public:
 
 // FmXModifyMultiplexer
 
-class SAL_WARN_UNUSED FmXModifyMultiplexer  :public OWeakSubObject
+class SAL_WARN_UNUSED FmXModifyMultiplexer final : public OWeakSubObject
                             ,public ::comphelper::OInterfaceContainerHelper2
                             ,public css::util::XModifyListener
 {
@@ -94,7 +94,7 @@ public:
 
 // FmXUpdateMultiplexer
 
-class SAL_WARN_UNUSED FmXUpdateMultiplexer : public OWeakSubObject,
+class SAL_WARN_UNUSED FmXUpdateMultiplexer final : public OWeakSubObject,
                              public ::comphelper::OInterfaceContainerHelper2,
                              public css::form::XUpdateListener
 {
@@ -119,7 +119,7 @@ public:
 
 // FmXSelectionMultiplexer
 
-class SAL_WARN_UNUSED FmXSelectionMultiplexer   :public OWeakSubObject
+class SAL_WARN_UNUSED FmXSelectionMultiplexer final : public OWeakSubObject
                                 ,public ::comphelper::OInterfaceContainerHelper2
                                 ,public css::view::XSelectionChangeListener
 {
@@ -143,7 +143,7 @@ public:
 
 // FmXGridControlMultiplexer
 
-class SAL_WARN_UNUSED FmXGridControlMultiplexer :public OWeakSubObject
+class SAL_WARN_UNUSED FmXGridControlMultiplexer final : public OWeakSubObject
                                 ,public ::comphelper::OInterfaceContainerHelper2
                                 ,public css::form::XGridControlListener
 {
@@ -167,7 +167,7 @@ public:
 
 // FmXContainerMultiplexer
 
-class SAL_WARN_UNUSED FmXContainerMultiplexer : public OWeakSubObject,
+class SAL_WARN_UNUSED FmXContainerMultiplexer final : public OWeakSubObject,
                                 public ::comphelper::OInterfaceContainerHelper2,
                                 public css::container::XContainerListener
 {
