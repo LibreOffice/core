@@ -93,8 +93,6 @@ bool FinalClasses::VisitCXXRecordDecl(const CXXRecordDecl* decl)
     decl = decl->getCanonicalDecl();
     if (!decl->hasDefinition())
         return true;
-    if (decl->hasAttr<FinalAttr>())
-        return true;
 
     for (auto it = decl->bases_begin(); it != decl->bases_end(); ++it)
     {
@@ -107,6 +105,8 @@ bool FinalClasses::VisitCXXRecordDecl(const CXXRecordDecl* decl)
         checkBase(spec.getType());
     }
 
+    if (decl->hasAttr<FinalAttr>())
+        return true;
     bool bFoundVirtual = false;
     bool bFoundProtected = false;
     for (auto it = decl->method_begin(); it != decl->method_end(); ++it) {
