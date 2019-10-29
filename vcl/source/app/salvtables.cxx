@@ -33,6 +33,7 @@
 #include <salmenu.hxx>
 #include <strings.hrc>
 #include <svdata.hxx>
+#include <svimpbox.hxx>
 #include <messagedialog.hxx>
 #include <treeglue.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
@@ -56,7 +57,6 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/slider.hxx>
 #include <vcl/sysdata.hxx>
-#include <vcl/svimpbox.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/svtabbx.hxx>
 #include <vcl/tabctrl.hxx>

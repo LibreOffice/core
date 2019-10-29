@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/svimpbox.hxx>
 #include <vcl/svtabbx.hxx>
+#include "svimpbox.hxx"
 
 //the default NotifyStartDrag is weird to me, and defaults to enabling all
 //possibilities when drag starts, while restricting it to some subset of

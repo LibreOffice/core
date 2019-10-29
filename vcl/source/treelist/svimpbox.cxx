@@ -29,9 +29,9 @@
 
 #include <vcl/treelistbox.hxx>
 #include <vcl/svlbitm.hxx>
-#include <vcl/svimpbox.hxx>
 #include <tools/wintypes.hxx>
 #include <bitmaps.hlst>
+#include <svimpbox.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <i18nlangtag/languagetag.hxx>

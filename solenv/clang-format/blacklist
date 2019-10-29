@@ -7882,7 +7882,6 @@ include/vcl/status.hxx
 include/vcl/stdtext.hxx
 include/vcl/strhelper.hxx
 include/vcl/svapp.hxx
-include/vcl/svimpbox.hxx
 include/vcl/svlbitm.hxx
 include/vcl/svmain.hxx
 include/vcl/svtabbx.hxx
@@ -17351,6 +17350,7 @@ vcl/inc/sft.hxx
 vcl/inc/spin.hxx
 vcl/inc/strings.hxx
 vcl/inc/svdata.hxx
+vcl/inc/svimpbox.hxx
 vcl/inc/svmconverter.hxx
 vcl/inc/svsys.h
 vcl/inc/test/outputdevice.hxx
