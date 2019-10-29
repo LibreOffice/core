@@ -1349,7 +1349,8 @@ bool SwDocShell::DdeGetData( const OUString& rItem, const OUString& rMimeType,
 bool SwDocShell::DdeSetData( const OUString& rItem, const OUString& /*rMimeType*/,
                              const uno::Any & /*rValue*/ )
 {
-    return m_xDoc->getIDocumentLinksAdministration().SetData( rItem );
+    m_xDoc->getIDocumentLinksAdministration().SetData( rItem );
+    return false;
 }
 
 #endif
