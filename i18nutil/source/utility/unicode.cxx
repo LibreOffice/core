@@ -749,6 +749,20 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "sog";
             break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 64)
+        case USCRIPT_ELYMAIC:
+            sRet = "arc-Elym";
+            break;
+        case USCRIPT_NYIAKENG_PUACHUE_HMONG:
+            sRet = "hmn-Hmnp";  // macrolanguage code
+            break;
+        case USCRIPT_NANDINAGARI:
+            sRet = "sa-Nand";
+            break;
+        case USCRIPT_WANCHO:
+            sRet = "nnp-Wcho";
+            break;
+#endif
     }
     return sRet;
 }
