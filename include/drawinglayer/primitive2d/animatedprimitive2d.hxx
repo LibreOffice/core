@@ -116,9 +116,8 @@ namespace drawinglayer
             decomposition is specialized in delivering the children in the
             range [0.0.. 0.5] and an empty sequence else
          */
-        class DRAWINGLAYER_DLLPUBLIC AnimatedBlinkPrimitive2D : public AnimatedSwitchPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC AnimatedBlinkPrimitive2D final : public AnimatedSwitchPrimitive2D
         {
-        protected:
         public:
             /// constructor
             AnimatedBlinkPrimitive2D(
@@ -146,13 +145,12 @@ namespace drawinglayer
             will be linearly combined from the decomposed values and the animation value
             to allow a smooth animation.
          */
-        class DRAWINGLAYER_DLLPUBLIC AnimatedInterpolatePrimitive2D : public AnimatedSwitchPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC AnimatedInterpolatePrimitive2D final : public AnimatedSwitchPrimitive2D
         {
         private:
             /// the transformations
             std::vector< basegfx::utils::B2DHomMatrixBufferedDecompose >        maMatrixStack;
 
-        protected:
         public:
             /// constructor
             AnimatedInterpolatePrimitive2D(

@@ -39,7 +39,7 @@ namespace drawinglayer
             painted in 1:1 pixel resolution. It will never be sheared, rotated
             or scaled with the view.
          */
-        class DRAWINGLAYER_DLLPUBLIC DiscreteBitmapPrimitive2D : public ObjectAndViewTransformationDependentPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC DiscreteBitmapPrimitive2D final : public ObjectAndViewTransformationDependentPrimitive2D
         {
         private:
             /// the RGBA Bitmap-data
@@ -48,7 +48,6 @@ namespace drawinglayer
             /** the top-left object position */
             basegfx::B2DPoint                           maTopLeft;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

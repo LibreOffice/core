@@ -39,13 +39,12 @@ namespace drawinglayer
             The decomposition will include all needed 3D data for visualisation,
             including FatLines and fill styles.
          */
-        class DRAWINGLAYER_DLLPUBLIC SdrPolyPolygonPrimitive3D : public SdrPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC SdrPolyPolygonPrimitive3D final : public SdrPrimitive3D
         {
         private:
             /// the planar polyPolygon evtl with normals and texture coordinates
             basegfx::B3DPolyPolygon                 maPolyPolygon3D;
 
-        protected:
             /// local decomposition.
             virtual Primitive3DContainer create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
 

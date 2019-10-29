@@ -35,9 +35,8 @@ namespace drawinglayer
             The cube is implicitly in unit coordinates and the given transformation
             defines its geometry in space.
          */
-        class DRAWINGLAYER_DLLPUBLIC SdrCubePrimitive3D : public SdrPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC SdrCubePrimitive3D final : public SdrPrimitive3D
         {
-        protected:
             /// local decomposition.
             virtual Primitive3DContainer create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
 

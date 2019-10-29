@@ -45,7 +45,7 @@ namespace drawinglayer
             decomposition, but on pixel outputs the areas where the tiled pieces are
             aligned tend to show up (one overlapping or empty pixel)
          */
-        class DRAWINGLAYER_DLLPUBLIC FillGraphicPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC FillGraphicPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the geometric definition
@@ -54,7 +54,6 @@ namespace drawinglayer
             /// the fill attributes
             attribute::FillGraphicAttribute             maFillGraphic;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

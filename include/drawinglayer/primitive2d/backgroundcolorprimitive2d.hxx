@@ -43,7 +43,7 @@ namespace drawinglayer
             It will try to buffer its last decomposition using maLastViewport
             to detect changes in the get2DDecomposition call.
          */
-        class DRAWINGLAYER_DLLPUBLIC BackgroundColorPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC BackgroundColorPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the fill color to use
@@ -53,7 +53,6 @@ namespace drawinglayer
             /// the last used viewInformation, used from getDecomposition for buffering
             basegfx::B2DRange                           maLastViewport;
 
-        protected:
             /// create local decomposition
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

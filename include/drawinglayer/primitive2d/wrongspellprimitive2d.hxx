@@ -47,7 +47,7 @@ namespace drawinglayer
             The geometric definition defines a line on the X-Axis (no Y-coordinates)
             which will when transformed by Transformation, create the coordinate data.
          */
-        class DRAWINGLAYER_DLLPUBLIC WrongSpellPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC WrongSpellPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// geometry definition
@@ -58,7 +58,6 @@ namespace drawinglayer
             /// color (usually red)
             basegfx::BColor                                 maColor;
 
-        protected:
             /// create local decomposition
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

@@ -45,7 +45,7 @@ namespace drawinglayer
             This is one of the non-decomposable primitives, so a renderer
             should process it.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolygonHairlinePrimitive2D : public BasePrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolygonHairlinePrimitive2D final : public BasePrimitive2D
         {
         private:
             /// the hairline geometry
@@ -92,7 +92,7 @@ namespace drawinglayer
             It will be decomposed to the needed PolygonHairlinePrimitive2D if
             not handled directly by a renderer.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolygonMarkerPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolygonMarkerPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the marker hairline geometry
@@ -108,7 +108,6 @@ namespace drawinglayer
             /// decomposition is view-dependent, remember last InverseObjectToViewTransformation
             basegfx::B2DHomMatrix                   maLastInverseObjectToViewTransformation;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
@@ -211,14 +210,13 @@ namespace drawinglayer
             This primitive defines a waveline based on a PolygonStrokePrimitive2D
             where the wave is defined by wave width and wave length.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolygonWavePrimitive2D : public PolygonStrokePrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolygonWavePrimitive2D final : public PolygonStrokePrimitive2D
         {
         private:
             /// wave definition
             double                                  mfWaveWidth;
             double                                  mfWaveHeight;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
@@ -267,14 +265,13 @@ namespace drawinglayer
             possibly extended by start and end definitions, which are
             normally used for arrows.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolygonStrokeArrowPrimitive2D : public PolygonStrokePrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolygonStrokeArrowPrimitive2D final : public PolygonStrokePrimitive2D
         {
         private:
             /// geometric definitions for line start and end
             attribute::LineStartEndAttribute                maStart;
             attribute::LineStartEndAttribute                maEnd;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

@@ -39,7 +39,7 @@ namespace drawinglayer
 
             It is assumed here that the PolyPolgon is a single plane in 3D.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonMaterialPrimitive3D : public BasePrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonMaterialPrimitive3D final : public BasePrimitive3D
         {
         private:
             /// the tools::PolyPolygon geometry

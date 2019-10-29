@@ -45,7 +45,7 @@ namespace drawinglayer
             just for convenience. The definition is not different from the single
                 defined PolygonHairlinePrimitive2Ds.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonHairlinePrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonHairlinePrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the hairline geometry
@@ -54,7 +54,6 @@ namespace drawinglayer
             /// the hairline color
             basegfx::BColor                         maBColor;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
@@ -91,7 +90,7 @@ namespace drawinglayer
             just for convenience. The definition is not different from the single
             defined PolygonMarkerPrimitive2Ds.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonMarkerPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonMarkerPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the marker hairline geometry
@@ -104,7 +103,6 @@ namespace drawinglayer
             /// the dash distance in 'pixels'
             double                                  mfDiscreteDashLength;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
@@ -147,7 +145,7 @@ namespace drawinglayer
             just for convenience. The definition is not different from the single
             defined PolygonStrokePrimitive2Ds.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonStrokePrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonStrokePrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the line geometry
@@ -159,7 +157,6 @@ namespace drawinglayer
             /// the line stroking (if used)
             attribute::StrokeAttribute              maStrokeAttribute;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
@@ -204,7 +201,7 @@ namespace drawinglayer
             This is one of the non-decomposable primitives, so a renderer
             should process it.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonColorPrimitive2D : public BasePrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonColorPrimitive2D final : public BasePrimitive2D
         {
         private:
             /// the tools::PolyPolygon geometry
@@ -248,7 +245,7 @@ namespace drawinglayer
             decomosition will create a MaskPrimitive2D containing a
             FillGradientPrimitive2D.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonGradientPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonGradientPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the tools::PolyPolygon geometry
@@ -260,7 +257,6 @@ namespace drawinglayer
             /// the gradient definition
             attribute::FillGradientAttribute            maFillGradient;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
@@ -301,7 +297,7 @@ namespace drawinglayer
             decomosition will create a MaskPrimitive2D containing a
             FillHatchPrimitive2D.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonHatchPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonHatchPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the tools::PolyPolygon geometry
@@ -316,7 +312,6 @@ namespace drawinglayer
             /// the hatch definition
             attribute::FillHatchAttribute               maFillHatch;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
@@ -360,7 +355,7 @@ namespace drawinglayer
             (including transparence). The decomosition will create a MaskPrimitive2D
             containing a FillGraphicPrimitive2D.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonGraphicPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonGraphicPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the tools::PolyPolygon geometry
@@ -372,7 +367,6 @@ namespace drawinglayer
             /// the bitmap fill definition (may include tiling)
             attribute::FillGraphicAttribute             maFillGraphic;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
@@ -409,7 +403,7 @@ namespace drawinglayer
             and a defined transparence, but also gets extended ('grown') by the given
             discrete size (thus being a view-dependent primitive)
          */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonSelectionPrimitive2D : public DiscreteMetricDependentPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonSelectionPrimitive2D final : public DiscreteMetricDependentPrimitive2D
         {
         private:
             /// the tools::PolyPolygon geometry
@@ -427,7 +421,6 @@ namespace drawinglayer
             /// draw polygons filled when fill is set
             bool                                    mbFill : 1;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

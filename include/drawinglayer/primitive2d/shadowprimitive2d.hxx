@@ -45,7 +45,7 @@ namespace drawinglayer
             are needed for the shadow itself; all the local decompositions of the
             original geometry can be reused from the renderer for shadow visualisation.
         */
-        class DRAWINGLAYER_DLLPUBLIC ShadowPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC ShadowPrimitive2D final : public GroupPrimitive2D
         {
         private:
             /// the shadow transformation, normally just an offset

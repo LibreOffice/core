@@ -35,14 +35,13 @@ namespace drawinglayer
             The sphere is implicitly in unit coordinates and the given transformation
             defines its geometry in space.
          */
-        class DRAWINGLAYER_DLLPUBLIC SdrSpherePrimitive3D : public SdrPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC SdrSpherePrimitive3D final : public SdrPrimitive3D
         {
         private:
             /// additional geometry definitions
             sal_uInt32                                  mnHorizontalSegments;
             sal_uInt32                                  mnVerticalSegments;
 
-        protected:
             /// local decomposition.
             virtual Primitive3DContainer create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
 

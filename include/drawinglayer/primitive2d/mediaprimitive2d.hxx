@@ -41,7 +41,7 @@ namespace drawinglayer
             background and the decomposition will try to create a graphic representation
             if the content (defined by the URL), e.g. a still frame for animated stuff.
          */
-        class DRAWINGLAYER_DLLPUBLIC MediaPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC MediaPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the geometry definition
@@ -58,7 +58,6 @@ namespace drawinglayer
 
             const Graphic                               maSnapshot;
 
-        protected:
             /// local decomposition
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

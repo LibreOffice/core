@@ -83,7 +83,7 @@ namespace drawinglayer
             and stroke attributes. It will be decomposed dependent on the definition
             to the needed primitives, e.g. filled Tubes for fat lines.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolygonStrokePrimitive3D : public BufferedDecompositionPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC PolygonStrokePrimitive3D final : public BufferedDecompositionPrimitive3D
         {
         private:
             /// the line geometry
@@ -95,7 +95,6 @@ namespace drawinglayer
             /// the line stroking (if used)
             attribute::StrokeAttribute              maStrokeAttribute;
 
-        protected:
             /// local decomposition.
             virtual Primitive3DContainer create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
 

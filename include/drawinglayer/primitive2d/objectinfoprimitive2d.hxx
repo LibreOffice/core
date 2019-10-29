@@ -35,7 +35,7 @@ namespace drawinglayer
             to its content, so all direct renderers may ignore it. May e.g.
             be used when re-creating graphical content from a sequence of primitives
          */
-        class DRAWINGLAYER_DLLPUBLIC ObjectInfoPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC ObjectInfoPrimitive2D final : public GroupPrimitive2D
         {
         private:
             OUString                           maName;

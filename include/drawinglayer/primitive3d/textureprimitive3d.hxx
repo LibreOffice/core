@@ -80,7 +80,7 @@ namespace drawinglayer
             transparence texture definition. All 3D primitives
             embedded here will be shown with the given transparency.
          */
-        class DRAWINGLAYER_DLLPUBLIC UnifiedTransparenceTexturePrimitive3D : public TexturePrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC UnifiedTransparenceTexturePrimitive3D final : public TexturePrimitive3D
         {
         private:
             /// transparency definition
@@ -159,7 +159,7 @@ namespace drawinglayer
             definition. All 3D primitives embedded here will be shown with the
             defined bitmap (maybe tiled if defined).
          */
-        class DRAWINGLAYER_DLLPUBLIC BitmapTexturePrimitive3D : public TexturePrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC BitmapTexturePrimitive3D final : public TexturePrimitive3D
         {
         private:
             /// bitmap fill attribute
@@ -198,7 +198,7 @@ namespace drawinglayer
             that gradient will be interpreted as luminance Transparence-Values. All 3D
             primitives embedded here will be shown with the defined transparence.
          */
-        class DRAWINGLAYER_DLLPUBLIC TransparenceTexturePrimitive3D : public GradientTexturePrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC TransparenceTexturePrimitive3D final : public GradientTexturePrimitive3D
         {
         public:
             /// constructor

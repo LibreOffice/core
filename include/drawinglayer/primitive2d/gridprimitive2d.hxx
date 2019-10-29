@@ -43,7 +43,7 @@ namespace drawinglayer
             makes this primitive highly view-dependent and it dynamically buffers
             the last decomposition dependent from the Viewport used.
          */
-        class DRAWINGLAYER_DLLPUBLIC GridPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC GridPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// The geometry definition for the grid area
@@ -69,7 +69,6 @@ namespace drawinglayer
             basegfx::B2DHomMatrix                           maLastObjectToViewTransformation;
             basegfx::B2DRange                               maLastViewport;
 
-        protected:
             /// create local decomposition
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

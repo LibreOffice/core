@@ -46,7 +46,7 @@ namespace drawinglayer
             rendering, not the transparent one. The transparent one should/will be clipped
             accordingly.
          */
-        class DRAWINGLAYER_DLLPUBLIC TransparencePrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TransparencePrimitive2D final : public GroupPrimitive2D
         {
         private:
             /// The transparence-Mask who's RGB-Values are interpreted as Luminance

@@ -40,7 +40,7 @@ namespace drawinglayer
             those primitives to be visualized correctly, Your renderer needs to locally correct its
             ViewInformation2D to reference the new XDrawPage.
          */
-        class DRAWINGLAYER_DLLPUBLIC PagePreviewPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PagePreviewPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /** the XDrawPage visualized by this primitive. When we go forward with primitives
@@ -59,7 +59,6 @@ namespace drawinglayer
             double                                      mfContentWidth;
             double                                      mfContentHeight;
 
-        protected:
             /// local decomposition. Implementation will just return children
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

@@ -94,7 +94,7 @@ namespace drawinglayer
         The LineStart/End overlap is defined in the BorderLines definitions (see
         class BorderLine above).
         */
-        class DRAWINGLAYER_DLLPUBLIC BorderLinePrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC BorderLinePrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the line definition

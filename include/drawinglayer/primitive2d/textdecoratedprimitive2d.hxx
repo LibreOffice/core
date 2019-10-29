@@ -40,7 +40,7 @@ namespace drawinglayer
             a TextSimplePortionPrimitive2D and all the contained decorations (if used)
             as geometry.
          */
-        class DRAWINGLAYER_DLLPUBLIC TextDecoratedPortionPrimitive2D : public TextSimplePortionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TextDecoratedPortionPrimitive2D final : public TextSimplePortionPrimitive2D
         {
         private:
             /// decoration definitions
@@ -68,7 +68,6 @@ namespace drawinglayer
                 const ::std::vector< double >& rDXArray,
                 const attribute::FontAttribute& rFontAttribute) const;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

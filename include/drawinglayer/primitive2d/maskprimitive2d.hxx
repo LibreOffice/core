@@ -44,7 +44,7 @@ namespace drawinglayer
             The geometry range of this primitive is completely defined by the Mask
             tools::PolyPolygon since by definition nothing outside of the mask is visible.
          */
-        class DRAWINGLAYER_DLLPUBLIC MaskPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC MaskPrimitive2D final : public GroupPrimitive2D
         {
         private:
             /// the mask PolyPolygon

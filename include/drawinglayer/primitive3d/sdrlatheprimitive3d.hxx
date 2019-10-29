@@ -42,7 +42,7 @@ namespace drawinglayer
 
             The decomposition will create all necessary 3D planes for visualisation.
          */
-        class DRAWINGLAYER_DLLPUBLIC SdrLathePrimitive3D : public SdrPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC SdrLathePrimitive3D final : public SdrPrimitive3D
         {
         private:
             /// geometry helper for slices
@@ -72,7 +72,6 @@ namespace drawinglayer
             /// get (evtl. create) slices
             const Slice3DVector& getSlices() const;
 
-        protected:
             /// local decomposition.
             virtual Primitive3DContainer create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
 

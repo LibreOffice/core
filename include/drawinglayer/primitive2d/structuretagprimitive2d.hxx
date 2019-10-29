@@ -42,7 +42,7 @@ namespace drawinglayer
             If a renderer ignores this, it just decomposes to its child
             content.
          */
-        class DRAWINGLAYER_DLLPUBLIC StructureTagPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC StructureTagPrimitive2D final : public GroupPrimitive2D
         {
         private:
             /// the PDF structure element this grouping represents

@@ -48,7 +48,7 @@ namespace drawinglayer
             If a renderer does not handle this primitive, the content will
             be visualized unchanged.
          */
-        class DRAWINGLAYER_DLLPUBLIC ModifiedColorPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC ModifiedColorPrimitive2D final : public GroupPrimitive2D
         {
         private:
             /// The ColorModifier to use

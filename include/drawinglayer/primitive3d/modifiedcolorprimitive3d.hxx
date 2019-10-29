@@ -37,7 +37,7 @@ namespace drawinglayer
             visualisation. Please see the ModifiedColorPrimitive2D
             description for more info.
          */
-        class DRAWINGLAYER_DLLPUBLIC ModifiedColorPrimitive3D : public GroupPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC ModifiedColorPrimitive3D final : public GroupPrimitive3D
         {
         private:
             /// The ColorModifier to use

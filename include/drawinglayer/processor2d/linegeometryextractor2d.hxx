@@ -36,7 +36,7 @@ namespace drawinglayer
             This processor can extract the line geometry from feeded primitives. The
             hairlines and the fill geometry from fat lines are separated.
          */
-        class DRAWINGLAYER_DLLPUBLIC LineGeometryExtractor2D : public BaseProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC LineGeometryExtractor2D final : public BaseProcessor2D
         {
         private:
             basegfx::B2DPolygonVector               maExtractedHairlines;

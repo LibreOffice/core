@@ -65,7 +65,7 @@ namespace drawinglayer
 
             This processor extracts text in the feeded primitives to filled polygons
          */
-        class DRAWINGLAYER_DLLPUBLIC TextAsPolygonExtractor2D : public BaseProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC TextAsPolygonExtractor2D final : public BaseProcessor2D
         {
         private:
             // extraction target

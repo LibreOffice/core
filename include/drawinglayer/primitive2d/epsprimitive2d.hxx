@@ -32,7 +32,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         /** EpsPrimitive2D class */
-        class DRAWINGLAYER_DLLPUBLIC EpsPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC EpsPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the geometry definition
@@ -44,7 +44,6 @@ namespace drawinglayer
             /// the replacement content definition
             GDIMetaFile                                 maMetaFile;
 
-        protected:
             /// create local decomposition
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

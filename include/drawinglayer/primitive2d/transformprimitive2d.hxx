@@ -49,7 +49,7 @@ namespace drawinglayer
             different, transformed states without the need to create those
             thousand primitive contents.
          */
-        class DRAWINGLAYER_DLLPUBLIC TransformPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TransformPrimitive2D final : public GroupPrimitive2D
         {
         private:
             // the transformation to apply to the child geometry

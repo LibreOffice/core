@@ -39,7 +39,7 @@ namespace drawinglayer
             Please see the description for TransformPrimitive2D since these
             primitives are pretty similar.
          */
-        class DRAWINGLAYER_DLLPUBLIC TransformPrimitive3D : public GroupPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC TransformPrimitive3D final : public GroupPrimitive3D
         {
         private:
             // the 3D transformation to apply

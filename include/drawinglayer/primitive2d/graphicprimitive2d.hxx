@@ -46,7 +46,7 @@ namespace drawinglayer
 
             The primitive geometry area is defined by Transform.
          */
-        class DRAWINGLAYER_DLLPUBLIC GraphicPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC GraphicPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the geometric definition
@@ -58,7 +58,6 @@ namespace drawinglayer
             /// The GraphicAttr with all its modification possibilities
             GraphicAttr                                 maGraphicAttr;
 
-        protected:
             /// local decomposition
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

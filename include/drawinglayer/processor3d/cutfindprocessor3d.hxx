@@ -34,7 +34,7 @@ namespace drawinglayer
             This processor extracts all cuts of 3D plane geometries in the feeded primitives
             with the given cut vector, based on the ViewInformation3D given.
          */
-        class DRAWINGLAYER_DLLPUBLIC CutFindProcessor : public BaseProcessor3D
+        class DRAWINGLAYER_DLLPUBLIC CutFindProcessor final : public BaseProcessor3D
         {
         private:
             /// the start and stop point for the cut vector

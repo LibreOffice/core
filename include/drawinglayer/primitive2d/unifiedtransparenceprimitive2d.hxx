@@ -38,7 +38,7 @@ namespace drawinglayer
             regions of combined transparency, but be all rendered with the
             defined, single transparency.
          */
-        class DRAWINGLAYER_DLLPUBLIC UnifiedTransparencePrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC UnifiedTransparencePrimitive2D final : public GroupPrimitive2D
         {
         private:
             /// the unified transparence
