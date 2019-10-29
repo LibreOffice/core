@@ -878,7 +878,7 @@ void ScCheckListMenuWindow::CancelButton::Click()
     ::CancelButton::Click();
 }
 
-ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc) :
+ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc, int nWidth) :
     ScMenuFloatingWindow(pParent, pDoc),
     maEdSearch(VclPtr<ScSearchEdit>::Create(this)),
     maChecks(VclPtr<ScCheckListBox>::Create(this)),
@@ -893,7 +893,8 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* p
 {
     float fScaleFactor = GetDPIScaleFactor();
 
-    maWndSize = Size(200 * fScaleFactor, 330 * fScaleFactor);
+    nWidth = std::max<int>(nWidth, 200 * fScaleFactor);
+    maWndSize = Size(nWidth, 330 * fScaleFactor);
 
     maTabStops.AddTabStop( this );
     maTabStops.AddTabStop( maEdSearch.get() );
