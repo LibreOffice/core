@@ -72,7 +72,7 @@ createBaseURI(
 
 struct DocumentMetadataAccess_Impl;
 
-class SFX2_DLLPUBLIC DocumentMetadataAccess :
+class SFX2_DLLPUBLIC DocumentMetadataAccess final :
     public cppu::WeakImplHelper<css::rdf::XDocumentMetadataAccess>
 {
     DocumentMetadataAccess(const DocumentMetadataAccess&) = delete;

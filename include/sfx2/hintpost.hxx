@@ -38,14 +38,13 @@ class SfxRequest;
     event has arrived.  If the target dies before delivery,
     the connection must be severed with SetEventHdl(Link()).
 */
-class SfxHintPoster : public SvRefBase
+class SfxHintPoster final : public SvRefBase
 {
 private:
     std::function<void (std::unique_ptr<SfxRequest>)> m_Link;
 
                     DECL_LINK( DoEvent_Impl, void*, void );
 
-protected:
     virtual         ~SfxHintPoster() override;
 
 public:

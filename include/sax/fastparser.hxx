@@ -41,7 +41,7 @@ namespace sax_fastparser {
 class FastSaxParserImpl;
 
 // This class implements the external Parser interface
-class FASTSAX_DLLPUBLIC FastSaxParser
+class FASTSAX_DLLPUBLIC FastSaxParser final
     : public ::cppu::WeakImplHelper<
                 css::lang::XInitialization,
                 css::xml::sax::XFastParser,

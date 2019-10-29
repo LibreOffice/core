@@ -27,7 +27,7 @@ namespace sfx2 { namespace sidebar {
 
 /** A single button in the tab bar.
 */
-class TabItem
+class TabItem final
     : public ImageRadioButton
 {
 public:

@@ -23,7 +23,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/dllapi.h>
 
-class SFX2_DLLPUBLIC CharmapPopup : public SfxToolBoxControl
+class SFX2_DLLPUBLIC CharmapPopup final : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();

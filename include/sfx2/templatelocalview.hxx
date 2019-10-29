@@ -136,7 +136,7 @@ protected:
     std::vector<TemplateItemProperties > maAllTemplates;
 };
 
-class SFX2_DLLPUBLIC SfxTemplateLocalView : public SfxThumbnailView
+class SFX2_DLLPUBLIC SfxTemplateLocalView final : public SfxThumbnailView
 {
     typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
 
@@ -229,10 +229,9 @@ public:
 
     static bool IsDefaultTemplate(const OUString& rPath);
 
-protected:
+private:
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
 
-protected:
     sal_uInt16 mnCurRegionId;
 
     TemplateViewItem *maSelectedItem;

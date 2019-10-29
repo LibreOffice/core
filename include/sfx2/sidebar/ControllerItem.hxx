@@ -34,7 +34,7 @@ namespace sfx2 { namespace sidebar {
 
     It also gives access to the label and icon of a slot/command.
 */
-class SFX2_DLLPUBLIC ControllerItem
+class SFX2_DLLPUBLIC ControllerItem final
     : public SfxControllerItem
 {
 public:
@@ -67,11 +67,10 @@ public:
     */
     void RequestUpdate();
 
-protected:
+private:
 
     virtual void StateChanged (sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState) override;
 
-private:
     ItemUpdateReceiverInterface& mrItemUpdateReceiver;
     css::uno::Reference<css::lang::XComponent> mxFrameActionListener;
 };

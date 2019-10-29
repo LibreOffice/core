@@ -28,7 +28,7 @@ class SfxItemSet;
 
 // class SfxPrinter ------------------------------------------------------
 
-class SFX2_DLLPUBLIC SfxPrinter : public Printer
+class SFX2_DLLPUBLIC SfxPrinter final : public Printer
 {
 private:
     std::unique_ptr<SfxItemSet> pOptions;

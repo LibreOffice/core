@@ -22,7 +22,7 @@ namespace sfx2 { namespace sidebar { class SidebarController; } }
 
 /** get the sidebar for a given frame
 */
-class SfxUnoSidebar : public cppu::WeakImplHelper<css::ui::XSidebarProvider>
+class SfxUnoSidebar final : public cppu::WeakImplHelper<css::ui::XSidebarProvider>
 {
 
 private:

@@ -80,7 +80,7 @@ enum class SfxToolsModule
     LAST = Basic
 };
 
-class SFX2_DLLPUBLIC SfxLinkItem : public SfxPoolItem
+class SFX2_DLLPUBLIC SfxLinkItem final : public SfxPoolItem
 {
     Link<SfxPoolItem const *, void> aLink;
 public:
@@ -97,7 +97,7 @@ public:
 
 // This is a singleton class. Sad that there apparently is no other
 // way than a comment like this to indicate that to the code reader.
-class SFX2_DLLPUBLIC SfxApplication: public SfxShell
+class SFX2_DLLPUBLIC SfxApplication final : public SfxShell
 {
     std::unique_ptr<SfxAppData_Impl>            pImpl;
 

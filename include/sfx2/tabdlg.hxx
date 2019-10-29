@@ -40,7 +40,7 @@ struct TabDlg_Impl;
 #define RET_USER        100
 #define RET_USER_CANCEL 101
 
-class SFX2_DLLPUBLIC SfxTabDialogItem: public SfxSetItem
+class SFX2_DLLPUBLIC SfxTabDialogItem final : public SfxSetItem
 {
 public:
                             SfxTabDialogItem( sal_uInt16 nId, const SfxItemSet& rItemSet );

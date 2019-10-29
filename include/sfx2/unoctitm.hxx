@@ -66,7 +66,7 @@ public:
 
 class SfxSlotServer;
 class SfxDispatchController_Impl;
-class SfxOfficeDispatch : public cppu::ImplInheritanceHelper<SfxStatusDispatcher, css::lang::XUnoTunnel>
+class SfxOfficeDispatch final : public cppu::ImplInheritanceHelper<SfxStatusDispatcher, css::lang::XUnoTunnel>
 {
 friend class SfxDispatchController_Impl;
     std::unique_ptr<SfxDispatchController_Impl>  pImpl;

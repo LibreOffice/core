@@ -25,7 +25,7 @@
 #include <svl/flagitem.hxx>
 #include <svl/style.hxx>
 
-class SFX2_DLLPUBLIC SfxTemplateItem: public SfxFlagItem
+class SFX2_DLLPUBLIC SfxTemplateItem final : public SfxFlagItem
 {
     OUString aStyle;
 public:

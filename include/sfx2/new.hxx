@@ -59,7 +59,7 @@ namespace o3tl
 
 #define RET_TEMPLATE_LOAD       100
 
-class SFX2_DLLPUBLIC SfxNewFileDialog : public SfxDialogController
+class SFX2_DLLPUBLIC SfxNewFileDialog final : public SfxDialogController
 {
 private:
     Idle m_aPrevIdle;

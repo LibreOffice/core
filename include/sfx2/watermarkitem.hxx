@@ -13,7 +13,7 @@
 #include <svl/poolitem.hxx>
 #include <tools/color.hxx>
 
-class SFX2_DLLPUBLIC SfxWatermarkItem: public SfxPoolItem
+class SFX2_DLLPUBLIC SfxWatermarkItem final : public SfxPoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();

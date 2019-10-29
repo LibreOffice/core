@@ -37,7 +37,7 @@ namespace sfx2 { namespace sidebar {
     Its getAccessibleContext() method returns a context object given
     to its constructor.
 */
-class Accessible
+class Accessible final
     : private ::cppu::BaseMutex,
       public AccessibleInterfaceBase
 {

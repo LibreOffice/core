@@ -36,7 +36,7 @@ class PanelDescriptor;
 class PanelTitleBar;
 class Context;
 
-class SFX2_DLLPUBLIC Panel : public vcl::Window
+class SFX2_DLLPUBLIC Panel final : public vcl::Window
 {
 public:
     Panel(const PanelDescriptor& rPanelDescriptor, vcl::Window* pParentWindow,

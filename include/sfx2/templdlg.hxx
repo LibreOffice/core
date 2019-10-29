@@ -27,7 +27,7 @@
 class SfxBindings;
 class SfxTemplateDialog_Impl;
 
-class SFX2_DLLPUBLIC SfxTemplatePanelControl : public vcl::Window
+class SFX2_DLLPUBLIC SfxTemplatePanelControl final : public vcl::Window
 {
 public:
     SfxTemplatePanelControl(SfxBindings* pBindings, vcl::Window* pParentWindow);
