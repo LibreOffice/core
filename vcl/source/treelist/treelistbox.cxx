@@ -28,7 +28,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/accel.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/uitest/uiobject.hxx>
@@ -388,8 +387,6 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
 
     SetSublistOpenWithLeftRight();
 }
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(SvTreeListBox, WB_TABSTOP)
 
 void SvTreeListBox::Clear()
 {
