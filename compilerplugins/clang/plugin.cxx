@@ -285,6 +285,8 @@ bool Plugin::isUnitTestMode()
 
 bool Plugin::containsPreprocessingConditionalInclusion(SourceRange range)
 {
+    // Preprocessing directives (other than _Pragma, which is not relevant here) cannot appear in
+    // macro expansions, so it is safe to just consider the range of expansion locations:
     auto const begin = compiler.getSourceManager().getExpansionLoc(
         range.getBegin());
     auto const end = compiler.getSourceManager().getExpansionLoc(
@@ -294,8 +296,15 @@ bool Plugin::containsPreprocessingConditionalInclusion(SourceRange range)
           || compiler.getSourceManager().isBeforeInTranslationUnit(
               begin, end)))
     {
-        // Conservatively assume "yes" if lexing fails (e.g., due to
-        // macros):
+        if (isDebugMode()) {
+            report(
+                DiagnosticsEngine::Fatal,
+                ("unexpected broken range for Plugin::containsPreprocessingConditionalInclusion,"
+                 " case 1"),
+                range.getBegin())
+                << range;
+        }
+        // Conservatively assume "yes" if lexing fails:
         return true;
     }
     auto hash = false;
@@ -305,8 +314,15 @@ bool Plugin::containsPreprocessingConditionalInclusion(SourceRange range)
                 loc, tok, compiler.getSourceManager(),
                 compiler.getLangOpts(), true))
         {
-            // Conservatively assume "yes" if lexing fails (e.g., due to
-            // macros):
+            if (isDebugMode()) {
+                report(
+                    DiagnosticsEngine::Fatal,
+                    ("unexpected broken range for"
+                     " Plugin::containsPreprocessingConditionalInclusion, case 2"),
+                    loc)
+                    << range;
+            }
+            // Conservatively assume "yes" if lexing fails:
             return true;
         }
         if (hash && tok.is(tok::raw_identifier)) {
@@ -317,7 +333,7 @@ bool Plugin::containsPreprocessingConditionalInclusion(SourceRange range)
                 return true;
             }
         }
-        if (loc == range.getEnd()) {
+        if (loc == end) {
             break;
         }
         hash = tok.is(tok::hash) && tok.isAtStartOfLine();
