@@ -22,7 +22,6 @@
 #include <sal/log.hxx>
 #include <svl/style.hxx>
 #include <vcl/help.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>

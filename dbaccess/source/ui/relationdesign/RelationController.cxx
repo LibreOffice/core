@@ -56,7 +56,6 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <sqlmessage.hxx>
 #include <RelationController.hxx>
-#include <vcl/layout.hxx>
 #include <TableWindowData.hxx>
 #include <UITools.hxx>
 #include <RTableConnectionData.hxx>

@@ -36,7 +36,6 @@
 #include <splargs.hxx>
 #include <txtfrm.hxx>
 #include <breakit.hxx>
-#include <vcl/layout.hxx>
 #include <editsh.hxx>
 #include <fmtfld.hxx>
 #include <docufld.hxx>

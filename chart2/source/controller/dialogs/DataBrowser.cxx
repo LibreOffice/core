@@ -31,8 +31,6 @@
 #include <bitmaps.hlst>
 #include <helpids.h>
 
-#include <vcl/fixed.hxx>
-#include <vcl/image.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

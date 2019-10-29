@@ -21,7 +21,6 @@
 #include <tabletree.hxx>
 #include <imageprovider.hxx>
 #include <strings.hrc>
-#include <vcl/layout.hxx>
 #include <vcl/menu.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
