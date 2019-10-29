@@ -33,7 +33,6 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <vcl/builderfactory.hxx>
 #include <vcl/event.hxx>
 
 #include <initializer_list>
@@ -166,8 +165,6 @@ TreeListBox::TreeListBox (vcl::Window* pParent, WinBits nStyle)
     SetNodeDefaultImages();
     SetSelectionMode( SelectionMode::Single );
 }
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(TreeListBox, WB_TABSTOP)
 
 TreeListBox::~TreeListBox ()
 {
