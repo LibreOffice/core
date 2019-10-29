@@ -13,7 +13,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/spin.hxx>
+#include <vcl/toolkit/spin.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>

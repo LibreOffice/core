@@ -15,7 +15,6 @@
 #include <memory>
 
 #include <vcl/window.hxx>
-#include <vcl/spin.hxx>
 #include <vcl/button.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/lstbox.hxx>
@@ -29,6 +28,7 @@
 #include <set>
 
 class Edit;
+class SpinButton;
 
 typedef std::map<const OUString, OUString> StringMap;
 

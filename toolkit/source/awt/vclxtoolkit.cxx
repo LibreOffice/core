@@ -96,7 +96,6 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/scrbar.hxx>
-#include <vcl/spin.hxx>
 #include <vcl/split.hxx>
 #include <vcl/splitwin.hxx>
 #include <vcl/status.hxx>
@@ -111,6 +110,7 @@
 #include <vcl/toolkit/group.hxx>
 #include <vcl/toolkit/morebtn.hxx>
 #include <vcl/toolkit/roadmap.hxx>
+#include <vcl/toolkit/spin.hxx>
 #include <vcl/toolkit/tabdlg.hxx>
 #include <vcl/toolkit/throbber.hxx>
 #if HAVE_FEATURE_OPENGL

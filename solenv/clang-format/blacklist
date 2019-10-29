@@ -7874,7 +7874,6 @@ include/vcl/seleng.hxx
 include/vcl/settings.hxx
 include/vcl/slider.hxx
 include/vcl/sound.hxx
-include/vcl/spin.hxx
 include/vcl/spinfld.hxx
 include/vcl/split.hxx
 include/vcl/splitwin.hxx
@@ -7903,6 +7902,7 @@ include/vcl/toolbox.hxx
 include/vcl/toolkit/group.hxx
 include/vcl/toolkit/morebtn.hxx
 include/vcl/toolkit/roadmap.hxx
+include/vcl/toolkit/spin.hxx
 include/vcl/toolkit/tabdlg.hxx
 include/vcl/toolkit/throbber.hxx
 include/vcl/toolkit/unowrap.hxx
