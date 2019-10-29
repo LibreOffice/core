@@ -21,10 +21,9 @@
 
 #include <memory>
 #include <com/sun/star/uno/Sequence.h>
-#include <vcl/ctrl.hxx>
-#include <vcl/errinf.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/solar.h>
 
 namespace com :: sun :: star :: ucb { class XContent; }
 

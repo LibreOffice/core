@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>

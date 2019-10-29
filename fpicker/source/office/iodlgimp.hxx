@@ -21,10 +21,7 @@
 
 #include "PlacesListBox.hxx"
 
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/menubtn.hxx>
-#include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 
 #include <deque>
 #include <memory>

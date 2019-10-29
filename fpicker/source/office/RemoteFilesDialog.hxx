@@ -15,9 +15,6 @@
 
 #include <unotools/viewoptions.hxx>
 
-#include <vcl/button.hxx>
-#include <vcl/menubtn.hxx>
-#include <vcl/vclptr.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 
