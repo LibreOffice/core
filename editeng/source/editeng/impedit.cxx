@@ -43,6 +43,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <boost/property_tree/json_parser.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1106,7 +1107,21 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 Reference< linguistic2::XSpellChecker1 >  xSpeller( pEditEngine->pImpEditEngine->GetSpeller() );
                 bool bIsWrong = xSpeller.is() && IsWrongSpelledWord(aPaM, /*bMarkIfWrong*/ false);
 
-                SfxLokHelper::notifyVisCursorInvalidation(mpViewShell, sRect, bIsWrong);
+                OString sHyperlink;
+                if (const SvxFieldItem* pFld = GetField(aPos, nullptr, nullptr))
+                {
+                    if (auto pUrlField = dynamic_cast<const SvxURLField*>(pFld->GetField()))
+                    {
+                        boost::property_tree::ptree aTree;
+                        aTree.put("text", pUrlField->GetRepresentation());
+                        aTree.put("link", pUrlField->GetURL());
+                        std::stringstream aStream;
+                        boost::property_tree::write_json(aStream, aTree, false);
+                        sHyperlink = OString(aStream.str().c_str()).trim();
+                    }
+                }
+
+                SfxLokHelper::notifyVisCursorInvalidation(mpViewShell, sRect, bIsWrong, sHyperlink);
                 mpViewShell->NotifyOtherViews(LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
             }
         }
