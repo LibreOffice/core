@@ -45,4 +45,10 @@
 #undef LIBO_URE_MISC_FOLDER
 #undef LIBO_URE_SHARE_JAVA_FOLDER
 
+/* the source root directory of the build */
+#undef SRC_ROOT
+
+/* the build directory of the build */
+#undef BUILDDIR
+
 #endif
