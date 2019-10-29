@@ -226,7 +226,8 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
                     aStrValue = aTmp;
                 }
                 m_pToolbar->SetItemText( m_nID, aStrValue );
-                m_pToolbar->SetQuickHelpText( m_nID, aStrValue );
+                // tdf#124267 strip mnemonic from tooltip
+                m_pToolbar->SetQuickHelpText(m_nID, aStrValue.replaceFirst("~", ""));
             }
 
             if ( m_bMadeInvisible )
