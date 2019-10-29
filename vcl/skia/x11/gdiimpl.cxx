@@ -55,6 +55,7 @@ void X11SkiaSalGraphicsImpl::createSurface()
     winInfo.fVisualInfo = const_cast<SalVisual*>(&mX11Parent.GetVisual());
     winInfo.fWidth = GetWidth();
     winInfo.fHeight = GetHeight();
+    destroySurface();
     switch (renderMethodToUse())
     {
         case RenderRaster:
