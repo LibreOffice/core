@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/imgctrl.hxx>
+#include <vcl/toolkit/imgctrl.hxx>
 
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <osl/diagnose.h>

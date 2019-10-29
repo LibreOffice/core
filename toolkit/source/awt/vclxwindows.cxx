@@ -47,7 +47,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixedhyper.hxx>
 #include <vcl/longcurr.hxx>
-#include <vcl/imgctrl.hxx>
+#include <vcl/toolkit/imgctrl.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>

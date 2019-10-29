@@ -21,7 +21,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
-#include <vcl/imgctrl.hxx>
+#include <vcl/toolkit/imgctrl.hxx>
 #include <memory>
 
 class Bitmap;

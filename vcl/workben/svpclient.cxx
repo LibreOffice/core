@@ -32,7 +32,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/imgctrl.hxx>
+#include <vcl/toolkit/imgctrl.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/graph.hxx>
