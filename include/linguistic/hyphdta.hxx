@@ -29,7 +29,7 @@
 namespace linguistic
 {
 
-class HyphenatedWord :
+class HyphenatedWord final :
     public cppu::WeakImplHelper< css::linguistic2::XHyphenatedWord >
 {
     OUString     aWord;
@@ -67,7 +67,7 @@ public:
 };
 
 
-class PossibleHyphens :
+class PossibleHyphens final :
     public cppu::WeakImplHelper
     <
         css::linguistic2::XPossibleHyphens

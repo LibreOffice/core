@@ -48,7 +48,7 @@ void SearchSimilarText( const OUString &rText, LanguageType nLanguage,
         std::vector< OUString > & rDicListProps );
 
 
-class SpellAlternatives
+class SpellAlternatives final
     : public cppu::WeakImplHelper
     <
         css::linguistic2::XSpellAlternatives,
