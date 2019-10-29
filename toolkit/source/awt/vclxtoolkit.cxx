@@ -90,7 +90,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/scheduler.hxx>
-#include <vcl/imgctrl.hxx>
 #include <vcl/longcurr.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
@@ -108,6 +107,7 @@
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/toolkit/group.hxx>
+#include <vcl/toolkit/imgctrl.hxx>
 #include <vcl/toolkit/morebtn.hxx>
 #include <vcl/toolkit/roadmap.hxx>
 #include <vcl/toolkit/spin.hxx>

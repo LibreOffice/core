@@ -7818,7 +7818,6 @@ include/vcl/imapcirc.hxx
 include/vcl/imapobj.hxx
 include/vcl/imappoly.hxx
 include/vcl/imaprect.hxx
-include/vcl/imgctrl.hxx
 include/vcl/inetimg.hxx
 include/vcl/inputctx.hxx
 include/vcl/inputtypes.hxx
@@ -7900,6 +7899,7 @@ include/vcl/threadex.hxx
 include/vcl/timer.hxx
 include/vcl/toolbox.hxx
 include/vcl/toolkit/group.hxx
+include/vcl/toolkit/imgctrl.hxx
 include/vcl/toolkit/morebtn.hxx
 include/vcl/toolkit/roadmap.hxx
 include/vcl/toolkit/spin.hxx
