@@ -3386,6 +3386,33 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testContinuousEndnotesDeletePageAtStart)
     assertXPath(pXmlDoc, "/root/page[1]/ftncont", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128399)
+{
+    SwDoc* pDoc = createDoc("tdf128399.docx");
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPage = pLayout->GetLower();
+    SwFrame* pBody = pPage->GetLower();
+    SwFrame* pTable = pBody->GetLower();
+    SwFrame* pRow1 = pTable->GetLower();
+    SwFrame* pRow2 = pRow1->GetNext();
+    const SwRect& rRow2Rect = pRow2->getFrameArea();
+    Point aPoint = rRow2Rect.Center();
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwPosition aPosition = *pWrtShell->GetCursor()->Start();
+    SwPosition aFirstRow(aPosition);
+    SwCursorMoveState aState(MV_NONE);
+    pLayout->GetCursorOfst(&aPosition, aPoint, &aState);
+    // Second row is +3: end node, start node and the first text node in the 2nd row.
+    sal_uLong nExpected = aFirstRow.nNode.GetIndex() + 3;
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 14
+    // - Actual  : 11
+    // i.e. clicking on the center of the 2nd row placed the cursor in the 1st row.
+    CPPUNIT_ASSERT_EQUAL(nExpected, aPosition.nNode.GetIndex());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
