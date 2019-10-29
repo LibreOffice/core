@@ -25,12 +25,12 @@
 #include <osl/diagnose.h>
 
 #include <doc.hxx>
+#include <IDocumentContentOperations.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <shellio.hxx>
 #include <pam.hxx>
 #include <swundo.hxx>
-#include <ndtxt.hxx>
 #include <acorrect.hxx>
 #include <crsrsh.hxx>
 #include <docsh.hxx>

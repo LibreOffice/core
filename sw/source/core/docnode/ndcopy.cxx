@@ -27,7 +27,6 @@
 #include <docary.hxx>
 #include <ddefld.hxx>
 #include <swddetbl.hxx>
-#include <vcl/fmtfield.hxx>
 #include <ndindex.hxx>
 #include <vector>
 #include <osl/diagnose.h>

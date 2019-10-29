@@ -56,7 +56,6 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/charrotateitem.hxx>
-#include <editeng/frmdiritem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
 #include <svx/strings.hrc>
@@ -65,7 +64,6 @@
 #include <osl/diagnose.h>
 #include <strings.hrc>
 #include <frmatr.hxx>
-#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>

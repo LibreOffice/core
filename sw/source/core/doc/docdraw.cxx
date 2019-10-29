@@ -17,39 +17,26 @@
  */
 
 #include <hintids.hxx>
-#include <vcl/outdev.hxx>
-#include <sfx2/printer.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/editeng.hxx>
-#include <svx/svdoutl.hxx>
 #include <editeng/colritem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdogrp.hxx>
-#include <editeng/langitem.hxx>
-#include <editeng/unolingu.hxx>
 #include <editeng/measfld.hxx>
-#include <svx/svdpool.hxx>
 #include <sal/log.hxx>
 #include <fmtanchr.hxx>
 #include <charatr.hxx>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
 #include <viewimp.hxx>
-#include <svl/hint.hxx>
 #include <doc.hxx>
 #include <docfunc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <DocumentSettingManager.hxx>
-#include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include <docsh.hxx>
-#include <rootfrm.hxx>
 #include <poolfmt.hxx>
-#include <viewsh.hxx>
 #include <drawdoc.hxx>
 #include <UndoDraw.hxx>
 #include <swundo.hxx>
@@ -58,16 +45,12 @@
 #include <mvsave.hxx>
 #include <flyfrm.hxx>
 #include <dflyobj.hxx>
-#include <svx/svdetc.hxx>
-#include <editeng/fhgtitem.hxx>
-#include <svx/svdpagv.hxx>
 #include <txtfrm.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <fmtornt.hxx>
 #include <svx/svditer.hxx>
 
 #include <vector>
-#include <calbck.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;

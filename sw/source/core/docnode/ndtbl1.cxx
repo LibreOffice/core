@@ -18,14 +18,12 @@
  */
 
 #include <hintids.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <fesh.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
-#include <fmtlsplt.hxx>
 #include <fmtrowsplt.hxx>
 #include <tabcol.hxx>
 #include <frmatr.hxx>
@@ -45,7 +43,6 @@
 #include <htmltbl.hxx>
 #include <tblsel.hxx>
 #include <swtblfmt.hxx>
-#include <docary.hxx>
 #include <ndindex.hxx>
 #include <undobj.hxx>
 #include <calbck.hxx>

@@ -21,7 +21,6 @@
 #include <DocumentStatisticsManager.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentLayoutManager.hxx>
-#include <docstat.hxx>
 #include <acorrect.hxx>
 
 namespace sw

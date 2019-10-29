@@ -18,7 +18,6 @@
  */
 #include <DocumentStatisticsManager.hxx>
 #include <doc.hxx>
-#include <editsh.hxx>
 #include <fldbas.hxx>
 #include <docsh.hxx>
 #include <IDocumentFieldsAccess.hxx>
@@ -31,11 +30,7 @@
 #include <rootfrm.hxx>
 #include <docufld.hxx>
 #include <docstat.hxx>
-#include <vector>
-#include <viewsh.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <wrtsh.hxx>
-#include <viewopt.hxx>
 
 using namespace ::com::sun::star;
 

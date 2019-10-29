@@ -441,6 +441,18 @@ blacklist:
     - osl/endian.h
     sw/qa/extras/layout/layout.cxx:
     - comphelper/scopeguard.hxx
+    sw/source/core/doc/DocumentFieldsManager.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx
+    sw/source/core/doc/docbm.cxx:
+    # Needed for implicit dtor SwHistoryTextFieldmark
+    - rolbck.hxx
+    sw/source/core/doc/docredln.cxx:
+    # Needed for linker visibility of sw_DebugRedline
+    - docredln.hxx
+    sw/source/core/docnode/threadmanager.cxx:
+    # Actually used
+    - com/sun/star/util/XJobManager.hpp
     sw/source/filter/html/htmlreqifreader.cxx:
     - comphelper/scopeguard.hxx
     sw/source/uibase/sidebar/PageMarginUtils.hxx:
@@ -449,3 +461,6 @@ blacklist:
     sw/source/core/crsr/paminit.cxx:
     # Needed for linker visibility of extern functions
     - cshtyp.hxx
+    sw/source/core/undo/untbl.cxx:
+    # Needed for linker visibility of sw_DebugRedline
+    - docredln.hxx

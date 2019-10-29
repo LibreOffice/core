@@ -22,9 +22,8 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <editeng/langitem.hxx>
-#include <editeng/scripttypeitem.hxx>
-
-#include <vcl/keycodes.hxx>
+#include <osl/diagnose.h>
+#include <svl/languageoptions.hxx>
 #include <vcl/commandevent.hxx>
 
 #include <hintids.hxx>
@@ -33,7 +32,6 @@
 #include <IDocumentUndoRedo.hxx>
 #include <index.hxx>
 #include <ndtxt.hxx>
-#include <txtfrm.hxx>
 #include <swundo.hxx>
 
 using namespace ::com::sun::star;

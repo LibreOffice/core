@@ -34,7 +34,6 @@
 #include <txtflcnt.hxx>
 #include <fmtflcnt.hxx>
 #include <ndtxt.hxx>
-#include <dcontact.hxx>
 #include <unoframe.hxx>
 #include <docary.hxx>
 #include <textboxhelper.hxx>

@@ -21,7 +21,6 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
-#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <redline.hxx>
 #include <rootfrm.hxx>

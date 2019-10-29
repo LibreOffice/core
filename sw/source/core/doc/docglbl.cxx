@@ -18,12 +18,9 @@
  */
 
 #include <osl/diagnose.h>
-#include <hintids.hxx>
 #include <unotools/tempfile.hxx>
-#include <svl/urihelper.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -31,6 +28,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
+#include <tools/datetime.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtanchr.hxx>
 #include <doc.hxx>
@@ -43,12 +41,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <docsh.hxx>
-#include <globdoc.hxx>
-#include <shellio.hxx>
-#include <swundo.hxx>
 #include <section.hxx>
-#include <doctxm.hxx>
-#include <poolfmt.hxx>
 #include <calbck.hxx>
 #include <iodetect.hxx>
 #include <memory>
