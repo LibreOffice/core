@@ -27,13 +27,10 @@
 
 class SfxFrameDescriptor;
 
-class SFX2_DLLPUBLIC SfxFrameHTMLParser : public SfxHTMLParser
+namespace SfxFrameHTMLParser
 {
-   SfxFrameHTMLParser() = delete;
-
-public:
     // These methods can also be used by other parsers.
-    static void ParseFrameOptions(SfxFrameDescriptor*, const HTMLOptions&, const OUString& );
+    SFX2_DLLPUBLIC void ParseFrameOptions(SfxFrameDescriptor*, const HTMLOptions&, const OUString& );
 
 };
 

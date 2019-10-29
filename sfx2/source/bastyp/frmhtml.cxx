@@ -42,7 +42,9 @@ static HTMLOptionEnum<ScrollingMode> const aScrollingTable[] =
     { nullptr,          ScrollingMode(0) }
 };
 
-void SfxFrameHTMLParser::ParseFrameOptions(
+namespace SfxFrameHTMLParser
+{
+void ParseFrameOptions(
     SfxFrameDescriptor *pFrame, const HTMLOptions& rOptions, const OUString& rBaseURL )
 {
     // Get and set the options
@@ -100,6 +102,7 @@ void SfxFrameHTMLParser::ParseFrameOptions(
     }
 
     pFrame->SetMargin( aMargin );
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
