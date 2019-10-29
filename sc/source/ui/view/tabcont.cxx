@@ -23,7 +23,6 @@
 #include <tools/urlobj.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/tabctrl.hxx>
 #include <tabcont.hxx>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
@@ -199,7 +198,7 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
     if( nMouseClickPageId != GetPageId(aPos))
         nMouseClickPageId = TabBar::PAGE_NOT_FOUND;
 
-    if ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() && nMouseClickPageId != 0 && nMouseClickPageId != TAB_PAGE_NOTFOUND )
+    if ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() && nMouseClickPageId != 0 && nMouseClickPageId != TabBar::PAGE_NOT_FOUND )
     {
         SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame()->GetDispatcher();
         pDispatcher->Execute( FID_TAB_MENU_RENAME, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
