@@ -31,7 +31,7 @@ namespace oox { namespace core { class XmlFilterBase; } }
 
 namespace oox { namespace ppt {
 
-class LayoutFragmentHandler : public SlideFragmentHandler
+class LayoutFragmentHandler final : public SlideFragmentHandler
 {
 public:
     LayoutFragmentHandler(::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath,

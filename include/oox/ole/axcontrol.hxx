@@ -428,7 +428,7 @@ private:
 
 
 /** Model for a ComCtl scroll bar. */
-class ComCtlScrollBarModel : public ComCtlModelBase
+class ComCtlScrollBarModel final : public ComCtlModelBase
 {
 public:
     explicit            ComCtlScrollBarModel( sal_uInt16 nVersion );
@@ -436,10 +436,9 @@ public:
     virtual ApiControlType getControlType() const override;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
 
-protected:
+private:
     virtual void        importControlData( BinaryInputStream& rInStrm ) override;
 
-private:
     sal_uInt32          mnScrollBarFlags;   ///< Special flags for scroll bar model.
     sal_Int32           mnLargeChange;      ///< Increment step size (thumb).
     sal_Int32           mnSmallChange;      ///< Increment step size (buttons).
@@ -450,7 +449,7 @@ private:
 
 
 /** Model for a ComCtl progress bar. */
-class ComCtlProgressBarModel : public ComCtlModelBase
+class ComCtlProgressBarModel final : public ComCtlModelBase
 {
 public:
     explicit            ComCtlProgressBarModel( sal_uInt16 nVersion );
@@ -458,10 +457,9 @@ public:
     virtual ApiControlType getControlType() const override;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
 
-protected:
+private:
     virtual void        importControlData( BinaryInputStream& rInStrm ) override;
 
-private:
     float               mfMin;              ///< Minimum of the value range.
     float               mfMax;              ///< Maximum of the value range.
     sal_uInt16          mnVertical;         ///< 0 = horizontal, 1 = vertical.
@@ -503,7 +501,7 @@ private:
 
 
 /** Model for a Forms 2.0 command button. */
-class OOX_DLLPUBLIC AxCommandButtonModel : public AxFontDataModel
+class OOX_DLLPUBLIC AxCommandButtonModel final : public AxFontDataModel
 {
 public:
     explicit            AxCommandButtonModel();
@@ -531,7 +529,7 @@ public: // direct access needed for legacy VML drawing controls
 
 
 /** Model for a Forms 2.0 label. */
-class OOX_DLLPUBLIC AxLabelModel : public AxFontDataModel
+class OOX_DLLPUBLIC AxLabelModel final : public AxFontDataModel
 {
 public:
     explicit            AxLabelModel();
@@ -558,7 +556,7 @@ public: // direct access needed for legacy VML drawing controls
 
 
 /** Model for a Forms 2.0 image. */
-class OOX_DLLPUBLIC AxImageModel : public AxControlModelBase
+class OOX_DLLPUBLIC AxImageModel final : public AxControlModelBase
 {
 public:
     explicit            AxImageModel();
@@ -584,7 +582,7 @@ private:
     bool                mbPicTiling;        ///< True = picture is repeated.
 };
 
-class OOX_DLLPUBLIC AxTabStripModel : public AxFontDataModel
+class OOX_DLLPUBLIC AxTabStripModel final : public AxFontDataModel
 {
 public:
     explicit            AxTabStripModel();
@@ -641,7 +639,7 @@ public: // direct access needed for legacy VML drawing controls
 
 
 /** Model for a Forms 2.0 toggle button. */
-class OOX_DLLPUBLIC AxToggleButtonModel : public AxMorphDataModelBase
+class OOX_DLLPUBLIC AxToggleButtonModel final : public AxMorphDataModelBase
 {
 public:
     explicit            AxToggleButtonModel();
@@ -654,7 +652,7 @@ public:
 
 
 /** Model for a Forms 2.0 check box. */
-class OOX_DLLPUBLIC AxCheckBoxModel : public AxMorphDataModelBase
+class OOX_DLLPUBLIC AxCheckBoxModel final : public AxMorphDataModelBase
 {
 public:
     explicit            AxCheckBoxModel();
@@ -667,7 +665,7 @@ public:
 
 
 /** Model for a Forms 2.0 option button. */
-class OOX_DLLPUBLIC AxOptionButtonModel : public AxMorphDataModelBase
+class OOX_DLLPUBLIC AxOptionButtonModel final : public AxMorphDataModelBase
 {
 public:
     explicit            AxOptionButtonModel();
@@ -696,7 +694,7 @@ public:
 
 
 /** Model for a numeric field (legacy drawing controls only). */
-class OOX_DLLPUBLIC AxNumericFieldModel : public AxMorphDataModelBase
+class OOX_DLLPUBLIC AxNumericFieldModel final : public AxMorphDataModelBase
 {
 public:
     explicit            AxNumericFieldModel();
@@ -722,7 +720,7 @@ public:
 
 
 /** Model for a Forms 2.0 combo box. */
-class OOX_DLLPUBLIC AxComboBoxModel : public AxMorphDataModelBase
+class OOX_DLLPUBLIC AxComboBoxModel final : public AxMorphDataModelBase
 {
 public:
     explicit            AxComboBoxModel();
@@ -735,7 +733,7 @@ public:
 
 
 /** Model for a Forms 2.0 spin button. */
-class OOX_DLLPUBLIC AxSpinButtonModel : public AxControlModelBase
+class OOX_DLLPUBLIC AxSpinButtonModel final : public AxControlModelBase
 {
 public:
     explicit            AxSpinButtonModel();
@@ -763,7 +761,7 @@ public: // direct access needed for legacy VML drawing controls
 
 
 /** Model for a Forms 2.0 scroll bar. */
-class OOX_DLLPUBLIC AxScrollBarModel : public AxControlModelBase
+class OOX_DLLPUBLIC AxScrollBarModel final : public AxControlModelBase
 {
 public:
     explicit            AxScrollBarModel();
@@ -833,7 +831,7 @@ public: // direct access needed for legacy VML drawing controls
 
 
 /** Model for a Forms 2.0 frame control. */
-class OOX_DLLPUBLIC AxFrameModel : public AxContainerModelBase
+class OOX_DLLPUBLIC AxFrameModel final : public AxContainerModelBase
 {
 public:
     explicit            AxFrameModel();
@@ -842,7 +840,7 @@ public:
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
 };
 
-class OOX_DLLPUBLIC AxPageModel : public AxContainerModelBase
+class OOX_DLLPUBLIC AxPageModel final : public AxContainerModelBase
 {
 public:
     explicit            AxPageModel();
@@ -851,7 +849,7 @@ public:
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
 };
 
-class OOX_DLLPUBLIC AxMultiPageModel : public AxContainerModelBase
+class OOX_DLLPUBLIC AxMultiPageModel final : public AxContainerModelBase
 {
 public:
     explicit            AxMultiPageModel();
@@ -866,7 +864,7 @@ public:
 
 
 /** Model for a Forms 2.0 user form. */
-class OOX_DLLPUBLIC AxUserFormModel : public AxContainerModelBase
+class OOX_DLLPUBLIC AxUserFormModel final : public AxContainerModelBase
 {
 public:
     explicit            AxUserFormModel();
@@ -875,7 +873,7 @@ public:
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
 };
 
-class HtmlSelectModel : public AxListBoxModel
+class HtmlSelectModel final : public AxListBoxModel
 {
     css::uno::Sequence< OUString > msListData;
     css::uno::Sequence< sal_Int16 > msIndices;
@@ -885,7 +883,7 @@ public:
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
 };
 
-class HtmlTextBoxModel : public AxTextBoxModel
+class HtmlTextBoxModel final : public AxTextBoxModel
 {
 public:
     explicit            HtmlTextBoxModel();

@@ -45,7 +45,7 @@ class RectangleShape;
 class ShapeContainer;
 
 
-class ShapeLayoutContext : public ::oox::core::ContextHandler2
+class ShapeLayoutContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit            ShapeLayoutContext(
@@ -60,7 +60,7 @@ private:
 };
 
 
-class ClientDataContext : public ::oox::core::ContextHandler2
+class ClientDataContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit            ClientDataContext(
@@ -147,7 +147,7 @@ private:
 };
 
 
-class GroupShapeContext : public ShapeContext
+class GroupShapeContext final : public ShapeContext
 {
 public:
     explicit GroupShapeContext(::oox::core::ContextHandler2Helper const& rParent,
@@ -162,7 +162,7 @@ private:
 };
 
 
-class RectangleShapeContext : public ShapeContext
+class RectangleShapeContext final : public ShapeContext
 {
 public:
     explicit RectangleShapeContext(::oox::core::ContextHandler2Helper const& rParent,
@@ -173,7 +173,7 @@ public:
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
 
-class ControlShapeContext : public ShapeContextBase
+class ControlShapeContext final : public ShapeContextBase
 {
 public:
     explicit            ControlShapeContext(

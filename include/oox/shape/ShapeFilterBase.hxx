@@ -36,7 +36,7 @@ typedef std::shared_ptr< TableStyleList > TableStyleListPtr;
 namespace oox {
 namespace shape {
 
-class OOX_DLLPUBLIC ShapeFilterBase : public core::XmlFilterBase
+class OOX_DLLPUBLIC ShapeFilterBase final : public core::XmlFilterBase
 {
 public:
     typedef std::shared_ptr<ShapeFilterBase> Pointer_t;

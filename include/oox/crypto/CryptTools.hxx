@@ -75,7 +75,7 @@ public:
     virtual ~Crypto();
 };
 
-class OOX_DLLPUBLIC Decrypt : public Crypto
+class OOX_DLLPUBLIC Decrypt final : public Crypto
 {
 public:
     Decrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type);
@@ -93,7 +93,7 @@ public:
 
 };
 
-class OOX_DLLPUBLIC Encrypt : public Crypto
+class OOX_DLLPUBLIC Encrypt final : public Crypto
 {
 public:
     Encrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type);
@@ -104,7 +104,7 @@ public:
                     sal_uInt32 inputLength = 0);
 };
 
-class OOX_DLLPUBLIC CryptoHash : public Crypto
+class OOX_DLLPUBLIC CryptoHash final : public Crypto
 {
     sal_Int32 const mnHashSize;
 public:

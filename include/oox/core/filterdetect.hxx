@@ -55,7 +55,7 @@ namespace core {
     It takes a reference to the filter string object via its constructor, and
     puts the name of the detected filter to it, if it successfully finds one.
  */
-class FilterDetectDocHandler : public ::cppu::WeakImplHelper< css::xml::sax::XFastDocumentHandler >
+class FilterDetectDocHandler final : public ::cppu::WeakImplHelper< css::xml::sax::XFastDocumentHandler >
 {
 public:
     explicit            FilterDetectDocHandler( const css::uno::Reference< css::uno::XComponentContext >& rxContext, OUString& rFilter, const OUString& rFileName );
@@ -94,7 +94,7 @@ private:
 };
 
 
-class OOX_DLLPUBLIC FilterDetect : public ::cppu::WeakImplHelper<css::document::XExtendedFilterDetection, css::lang::XServiceInfo>
+class OOX_DLLPUBLIC FilterDetect final : public ::cppu::WeakImplHelper<css::document::XExtendedFilterDetection, css::lang::XServiceInfo>
 {
 public:
     /// @throws css::uno::RuntimeException

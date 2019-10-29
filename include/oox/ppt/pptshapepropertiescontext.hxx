@@ -32,7 +32,7 @@ namespace oox {
 
 namespace oox { namespace ppt {
 
-class PPTShapePropertiesContext : public ::oox::drawingml::ShapePropertiesContext
+class PPTShapePropertiesContext final : public ::oox::drawingml::ShapePropertiesContext
 {
 public:
     PPTShapePropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, ::oox::drawingml::Shape& rShape );

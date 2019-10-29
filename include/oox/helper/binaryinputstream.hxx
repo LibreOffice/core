@@ -281,7 +281,7 @@ private:
 
     The binary data in the stream is assumed to be in little-endian format.
  */
-class OOX_DLLPUBLIC SequenceInputStream : public SequenceSeekableStream, public BinaryInputStream
+class OOX_DLLPUBLIC SequenceInputStream final : public SequenceSeekableStream, public BinaryInputStream
 {
 public:
     /** Constructs the wrapper object for the passed data sequence.
@@ -324,7 +324,7 @@ private:
     The stream MUST NOT be changed from outside as long as this stream wrapper
     is used to read from it.
  */
-class RelativeInputStream : public BinaryInputStream
+class RelativeInputStream final : public BinaryInputStream
 {
 public:
     /** Constructs the wrapper object for the passed stream.

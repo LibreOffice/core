@@ -184,7 +184,7 @@ private:
 };
 
 
-class VbaUserForm : public VbaFormControl
+class VbaUserForm final : public VbaFormControl
 {
 public:
     explicit            VbaUserForm(

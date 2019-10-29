@@ -35,7 +35,7 @@ namespace core {
 
 class XmlFilterBase;
 
-class RelationsFragment : public FragmentHandler
+class RelationsFragment final : public FragmentHandler
 {
 public:
     explicit            RelationsFragment(

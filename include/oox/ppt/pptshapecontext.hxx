@@ -31,7 +31,7 @@ namespace oox { namespace core { class ContextHandler2Helper; } }
 
 namespace oox { namespace ppt {
 
-class PPTShapeContext : public ::oox::drawingml::ShapeContext
+class PPTShapeContext final : public ::oox::drawingml::ShapeContext
 {
     SlidePersistPtr     mpSlidePersistPtr;
 

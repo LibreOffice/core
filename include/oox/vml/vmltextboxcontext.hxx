@@ -35,7 +35,7 @@ namespace oox {
 namespace vml {
 
 
-class TextPortionContext : public ::oox::core::ContextHandler2
+class TextPortionContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit            TextPortionContext(
@@ -60,7 +60,7 @@ private:
 };
 
 
-class TextBoxContext : public ::oox::core::ContextHandler2
+class TextBoxContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit            TextBoxContext(

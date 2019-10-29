@@ -79,7 +79,7 @@ public:
 
 /** A simple progress bar.
  */
-class OOX_DLLPUBLIC ProgressBar : public IProgressBar
+class OOX_DLLPUBLIC ProgressBar final : public IProgressBar
 {
 public:
     explicit            ProgressBar(
@@ -102,7 +102,7 @@ private:
 
 /** A progress bar containing several independent segments.
  */
-class OOX_DLLPUBLIC SegmentProgressBar : public ISegmentProgressBar
+class OOX_DLLPUBLIC SegmentProgressBar final : public ISegmentProgressBar
 {
 public:
     explicit            SegmentProgressBar(
