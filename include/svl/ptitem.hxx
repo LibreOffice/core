@@ -26,7 +26,7 @@
 
 class SvStream;
 
-class SVL_DLLPUBLIC SfxPointItem: public SfxPoolItem
+class SVL_DLLPUBLIC SfxPointItem final : public SfxPoolItem
 {
     Point                    aVal;
 

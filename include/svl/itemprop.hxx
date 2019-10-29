@@ -186,7 +186,7 @@ public:
 // workaround for incremental linking bugs in MSVC2015
 class SAL_DLLPUBLIC_TEMPLATE SfxItemPropertySetInfo_Base : public cppu::WeakImplHelper< css::beans::XPropertySetInfo > {};
 
-class SVL_DLLPUBLIC SfxItemPropertySetInfo : public SfxItemPropertySetInfo_Base
+class SVL_DLLPUBLIC SfxItemPropertySetInfo final : public SfxItemPropertySetInfo_Base
 {
     SfxItemPropertyMap m_aOwnMap;
 
@@ -209,7 +209,7 @@ public:
 // workaround for incremental linking bugs in MSVC2015
 class SAL_DLLPUBLIC_TEMPLATE SfxExtItemPropertySetInfo_Base : public cppu::WeakImplHelper< css::beans::XPropertySetInfo > {};
 
-class SVL_DLLPUBLIC SfxExtItemPropertySetInfo: public SfxExtItemPropertySetInfo_Base
+class SVL_DLLPUBLIC SfxExtItemPropertySetInfo final : public SfxExtItemPropertySetInfo_Base
 {
     SfxItemPropertyMap aExtMap;
 public:

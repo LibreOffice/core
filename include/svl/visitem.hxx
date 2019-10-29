@@ -24,7 +24,7 @@
 #include <svl/poolitem.hxx>
 #include <com/sun/star/frame/status/Visibility.hpp>
 
-class SVL_DLLPUBLIC SfxVisibilityItem: public SfxPoolItem
+class SVL_DLLPUBLIC SfxVisibilityItem final : public SfxPoolItem
 {
     css::frame::status::Visibility m_nValue;
 

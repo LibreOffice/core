@@ -35,11 +35,11 @@ enum class SotClipboardFormatId : sal_uInt32;
 
 class BaseStorageStream;
 
-class SOT_DLLPUBLIC SotStorageStream : virtual public SotObject, public SvStream
+class SOT_DLLPUBLIC SotStorageStream final : virtual public SotObject, public SvStream
 {
 friend class SotStorage;
     BaseStorageStream * pOwnStm; // pointer to the own stream
-protected:
+
     virtual std::size_t GetData(void* pData, std::size_t nSize) override;
     virtual std::size_t PutData(const void* pData, std::size_t nSize) override;
     virtual sal_uInt64 SeekPos(sal_uInt64 nPos) override;

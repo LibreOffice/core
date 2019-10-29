@@ -16,7 +16,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 /// Grab bag item provides a string-any map for keys with untyped values.
-class SVL_DLLPUBLIC SfxGrabBagItem : public SfxPoolItem
+class SVL_DLLPUBLIC SfxGrabBagItem final : public SfxPoolItem
 {
 private:
     std::map<OUString, css::uno::Any> m_aMap;

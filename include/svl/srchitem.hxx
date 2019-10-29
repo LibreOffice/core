@@ -57,7 +57,7 @@ enum class SvxSearchApp
 
 // class SvxSearchItem ---------------------------------------------------
 
-class SVL_DLLPUBLIC SvxSearchItem :
+class SVL_DLLPUBLIC SvxSearchItem final :
         public SfxPoolItem,
         public utl::ConfigItem
 {

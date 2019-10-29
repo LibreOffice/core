@@ -29,7 +29,7 @@ namespace com { namespace sun { namespace star { namespace io {
 } } } }
 
 
-class SVL_DLLPUBLIC SvOutputStream: public SvStream
+class SVL_DLLPUBLIC SvOutputStream final : public SvStream
 {
     css::uno::Reference< css::io::XOutputStream > m_xStream;
 

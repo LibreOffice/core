@@ -51,9 +51,8 @@ protected:
 };
 
 /// Class implementing reading and writing LO lockfiles.
-class SVL_DLLPUBLIC DocumentLockFile : public GenDocumentLockFile
+class SVL_DLLPUBLIC DocumentLockFile final : public GenDocumentLockFile
 {
-protected:
     virtual void WriteEntryToStream( const LockFileEntry& aEntry, const css::uno::Reference< css::io::XOutputStream >& xStream ) override;
 
 public:

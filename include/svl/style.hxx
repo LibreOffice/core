@@ -322,7 +322,7 @@ public:
 };
 
 
-class SVL_DLLPUBLIC SfxStyleSheetPoolHint : public SfxHint
+class SVL_DLLPUBLIC SfxStyleSheetPoolHint final : public SfxHint
 {
 public:
                          SfxStyleSheetPoolHint() {}
@@ -338,7 +338,7 @@ public:
                         { return pStyleSh; }
 };
 
-class SVL_DLLPUBLIC SfxStyleSheetModifiedHint: public SfxStyleSheetHint
+class SVL_DLLPUBLIC SfxStyleSheetModifiedHint final : public SfxStyleSheetHint
 {
     OUString            aName;
 

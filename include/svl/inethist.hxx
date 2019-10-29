@@ -26,7 +26,7 @@
 #include <memory>
 
 class INetURLHistory_Impl;
-class SVL_DLLPUBLIC INetURLHistory : public SfxBroadcaster
+class SVL_DLLPUBLIC INetURLHistory final : public SfxBroadcaster
 {
     struct SAL_DLLPRIVATE StaticInstance
     {
@@ -100,7 +100,7 @@ public:
 };
 
 // broadcasted from PutUrl().
-class SVL_DLLPUBLIC INetURLHistoryHint: public SfxHint
+class SVL_DLLPUBLIC INetURLHistoryHint final : public SfxHint
 {
     const INetURLObject* pObj;
 public:
