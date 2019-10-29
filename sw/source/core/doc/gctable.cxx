@@ -19,7 +19,6 @@
 
 #include <hintids.hxx>
 #include <tblrwcl.hxx>
-#include <swtblfmt.hxx>
 #include <algorithm>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>

@@ -19,18 +19,15 @@
 
 #include <hintids.hxx>
 #include <tools/poly.hxx>
-#include <tools/fract.hxx>
 #include <svl/stritem.hxx>
 #include <svx/contdlg.hxx>
 #include <vcl/svapp.hxx>
-#include <docary.hxx>
 #include <doc.hxx>
 #include <fmtcol.hxx>
 #include <ndnotxt.hxx>
 #include <ndgrf.hxx>
 #include <ndole.hxx>
 #include <ndindex.hxx>
-#include <hints.hxx>
 #include <istyleaccess.hxx>
 #include <SwStyleNameMapper.hxx>
 

@@ -34,7 +34,6 @@
 #include <rootfrm.hxx>
 #include <breakit.hxx>
 #include <docary.hxx>
-#include <SwUndoFmt.hxx>
 
 /* IDocumentSettingAccess */
 

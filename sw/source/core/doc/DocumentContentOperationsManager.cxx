@@ -20,7 +20,6 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentMarkAccess.hxx>
-#include <DocumentRedlineManager.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
@@ -34,7 +33,6 @@
 #include <ndgrf.hxx>
 #include <ndnotxt.hxx>
 #include <ndole.hxx>
-#include <fmtcol.hxx>
 #include <breakit.hxx>
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
@@ -65,7 +63,6 @@
 #include <ftnidx.hxx>
 #include <txtftn.hxx>
 #include <hints.hxx>
-#include <crsrsh.hxx>
 #include <fmtflcnt.hxx>
 #include <docedt.hxx>
 #include <sal/log.hxx>
@@ -80,6 +77,7 @@
 #include <tools/globname.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <com/sun/star/i18n/Boundary.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <memory>

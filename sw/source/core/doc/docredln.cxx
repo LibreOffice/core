@@ -24,10 +24,6 @@
 #include <tools/datetimeutils.hxx>
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
-#include <sfx2/app.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/udlnitem.hxx>
-#include <editeng/crossedoutitem.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -45,9 +41,7 @@
 #include <docary.hxx>
 #include <ndtxt.hxx>
 #include <redline.hxx>
-#include <swundo.hxx>
 #include <UndoCore.hxx>
-#include <UndoRedline.hxx>
 #include <hints.hxx>
 #include <pamtyp.hxx>
 #include <poolfmt.hxx>
@@ -56,7 +50,6 @@
 #include <viscrs.hxx>
 #include <rootfrm.hxx>
 #include <strings.hrc>
-#include <unoport.hxx>
 #include <wrtsh.hxx>
 #include <txtfld.hxx>
 

@@ -17,35 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <basic/basmgr.hxx>
 #include <editeng/flditem.hxx>
 #include <vcl/imapobj.hxx>
 #include <svl/urihelper.hxx>
 #include <sfx2/sfxhelp.hxx>
-#include <unotools/securityoptions.hxx>
 #include <vcl/help.hxx>
-#include <vcl/svapp.hxx>
 #include <svx/svdview.hxx>
 #include <fmturl.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <shellres.hxx>
 #include <viewimp.hxx>
 #include <pagefrm.hxx>
-#include <cntfrm.hxx>
 #include <rootfrm.hxx>
-#include <frmatr.hxx>
 #include <viewsh.hxx>
 #include <drawdoc.hxx>
 #include <dpage.hxx>
 #include <dcontact.hxx>
 #include <dflyobj.hxx>
 #include <docsh.hxx>
-#include <usrfld.hxx>
 #include <flyfrm.hxx>
-#include <ndnotxt.hxx>
-#include <grfatr.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
 using namespace ::com::sun::star::uno;

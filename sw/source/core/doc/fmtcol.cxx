@@ -30,7 +30,6 @@
 #include <fmtcol.hxx>
 #include <fmtcolfunc.hxx>
 #include <hints.hxx>
-#include <calc.hxx>
 #include <node.hxx>
 #include <numrule.hxx>
 #include <paratr.hxx>
