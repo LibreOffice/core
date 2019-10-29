@@ -1968,13 +1968,28 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             // ATTR_BACKGROUND (=SID_ATTR_BRUSH) has to be set to two IDs:
             case SID_BACKGROUND_COLOR:
                 {
-                    const SvxColorItem&  rNewColorItem = pNewAttrs->Get( SID_BACKGROUND_COLOR );
+                    const SfxPoolItem* pColorStringItem = nullptr;
+                    Color aColor;
+
+                    if ( SfxItemState::SET == pNewAttrs->GetItemState( SID_ATTR_COLOR_STR, false, &pColorStringItem ) )
+                    {
+                        OUString sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
+                        if ( sColor == "transparent" )
+                            aColor = COL_TRANSPARENT;
+                        else
+                            aColor = Color( sColor.toInt32( 16 ) );
+                    }
+                    else
+                    {
+                        const SvxColorItem&  rNewColorItem = pNewAttrs->Get( SID_BACKGROUND_COLOR );
+                        aColor = rNewColorItem.GetValue();
+                    }
 
                     SvxBrushItem        aBrushItem(
                                             pTabViewShell->GetSelectionPattern()->
                                                 GetItem( ATTR_BACKGROUND ) );
 
-                    aBrushItem.SetColor( rNewColorItem.GetValue() );
+                    aBrushItem.SetColor( aColor );
 
                     pTabViewShell->ApplyAttr( aBrushItem, false );
                 }
