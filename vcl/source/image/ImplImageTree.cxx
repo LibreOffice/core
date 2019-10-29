@@ -464,14 +464,10 @@ void ImplImageTree::createStyle()
 
     if (isVclDemo())
     {
-        static OUString s_workingDir;
-        if (!s_workingDir.getLength())
-            osl_getProcessWorkingDir( &s_workingDir.pData );
-
         if (maCurrentStyle == "default")
-            sThemeUrl = s_workingDir + "/icon-themes/colibre-svg";
+            sThemeUrl = "file://" SRC_ROOT "/icon-themes/colibre-svg";
         else
-            sThemeUrl = s_workingDir + "/icon-themes/" + maCurrentStyle;
+            sThemeUrl = "file://" SRC_ROOT "/icon-themes/" + maCurrentStyle;
     }
     else if (maCurrentStyle != "default")
     {
