@@ -19,7 +19,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEDESIGNHELPBAR_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEDESIGNHELPBAR_HXX
 
-#include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include "IClipBoardTest.hxx"
 

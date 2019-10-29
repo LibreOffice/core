@@ -52,7 +52,6 @@
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/xtextedt.hxx>
-#include <vcl/tabctrl.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -1156,7 +1155,7 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
         if ( bUpdateTabBar )
         {
             sal_uInt16 nKey = GetWindowId( pCurWin );
-            if ( pCurWin && ( pTabBar->GetPagePos( nKey ) == TAB_PAGE_NOTFOUND ) )
+            if ( pCurWin && ( pTabBar->GetPagePos( nKey ) == TabBar::PAGE_NOT_FOUND ) )
                 pTabBar->InsertPage( nKey, pCurWin->GetTitle() );   // has just been faded in
             pTabBar->SetCurPageId( nKey );
         }
