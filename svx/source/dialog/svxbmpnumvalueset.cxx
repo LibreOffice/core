@@ -34,7 +34,6 @@
 #include <vcl/event.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/virdev.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/dlgutil.hxx>
@@ -381,8 +380,6 @@ SvxNumValueSet::SvxNumValueSet(vcl::Window* pParent, WinBits nWinBits)
     , pVDev(nullptr)
 {
 }
-
-VCL_BUILDER_FACTORY_ARGS(SvxNumValueSet, WB_TABSTOP)
 
 static const char* RID_SVXSTR_BULLET_DESCRIPTIONS[] =
 {
