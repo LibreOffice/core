@@ -629,7 +629,8 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     ScDocument* pDoc = pViewData->GetDocument();
 
     mpAutoFilterPopup.disposeAndClear();
-    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc));
+    int nColWidth = ScViewData::ToPixel(pDoc->GetColWidth(nCol, nTab), pViewData->GetPPTX());
+    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc, nColWidth));
 
     // Avoid flicker when hovering over the menu items.
     if (!IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
