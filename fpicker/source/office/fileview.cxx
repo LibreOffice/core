@@ -125,11 +125,9 @@ private:
     SvtFileView_Impl*       mpParent;
     Timer                   maResetQuickSearch;
     OUString                maQuickSearchText;
-    OUString const          msAccessibleDescText;
     sal_uInt32              mnSearchIndex;
     bool                    mbEnableDelete;
     bool                    mbEditing;
-    bool const              mbShowHeader;
     bool const              mbShowType;
 
     void            DeleteEntries();
@@ -418,7 +416,6 @@ ViewTabListBox_Impl::ViewTabListBox_Impl(std::unique_ptr<weld::TreeView> xTreeVi
     , mnSearchIndex( 0 )
     , mbEnableDelete( false )
     , mbEditing( false )
-    , mbShowHeader( !(nFlags & FileViewFlags::SHOW_NONE) )
     , mbShowType(nFlags & FileViewFlags::SHOW_TYPE)
 {
     std::vector<int> aWidths;
