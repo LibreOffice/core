@@ -136,11 +136,11 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="lbText">
-                    <property name="width_request">350</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="vexpand">True</property>
                     <property name="wrap">True</property>
+                    <property name="width_chars">50</property>
                     <property name="max_width_chars">50</property>
                   </object>
                   <packing>
