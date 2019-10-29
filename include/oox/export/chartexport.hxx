@@ -90,7 +90,7 @@ struct AxisIdPair{
     {}
 };
 
-class OOX_DLLPUBLIC ChartExport : public DrawingML {
+class OOX_DLLPUBLIC ChartExport final : public DrawingML {
 
 public:
     // first: data sequence for label, second: data sequence for values.

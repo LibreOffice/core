@@ -49,7 +49,7 @@ namespace oox {
 namespace oox { namespace ppt {
 
 
-class PowerPointImport : public oox::core::XmlFilterBase
+class PowerPointImport final : public oox::core::XmlFilterBase
 {
 public:
     /// @throws css::uno::RuntimeException

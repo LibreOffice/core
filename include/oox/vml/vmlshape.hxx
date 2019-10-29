@@ -317,11 +317,11 @@ private:
 
 
 /** A rectangular shape object. */
-class RectangleShape : public SimpleShape
+class RectangleShape final : public SimpleShape
 {
 public:
     explicit            RectangleShape( Drawing& rDrawing );
-protected:
+private:
     /** Creates the corresponding XShape and inserts it into the passed container. */
     virtual css::uno::Reference<css::drawing::XShape>
                         implConvertAndInsert(
@@ -331,7 +331,7 @@ protected:
 
 
 /** An oval shape object. */
-class EllipseShape : public SimpleShape
+class EllipseShape final : public SimpleShape
 {
 public:
     explicit            EllipseShape( Drawing& rDrawing );
@@ -339,12 +339,12 @@ public:
 
 
 /** A polygon shape object. */
-class PolyLineShape : public SimpleShape
+class PolyLineShape final : public SimpleShape
 {
 public:
     explicit            PolyLineShape( Drawing& rDrawing );
 
-protected:
+private:
     /** Creates the corresponding XShape and inserts it into the passed container. */
     virtual css::uno::Reference< css::drawing::XShape >
                         implConvertAndInsert(
@@ -353,12 +353,12 @@ protected:
 };
 
 /** A Line shape object. */
-class LineShape : public SimpleShape
+class LineShape final : public SimpleShape
 {
 public:
     explicit            LineShape( Drawing& rDrawing );
 
-protected:
+private:
     /** Returns the absolute shape rectangle. */
     virtual css::awt::Rectangle getAbsRectangle() const override;
     /** Returns the rectangle relative to the parent coordinate system. */
@@ -367,12 +367,12 @@ protected:
 
 /** Bezier shape object that supports to, from, control1 and control2
     attribute or path attribute specification */
-class BezierShape : public SimpleShape
+class BezierShape final : public SimpleShape
 {
 public:
     explicit             BezierShape( Drawing& rDrawing );
 
-protected:
+private:
     /** Creates the corresponding XShape and inserts it into the passed container. */
     virtual css::uno::Reference< css::drawing::XShape >
                         implConvertAndInsert(
@@ -398,12 +398,12 @@ protected:
 
 /** A complex shape object. This can be a picture shape, a custom shape, an OLE
     object, or an ActiveX form control. */
-class ComplexShape : public CustomShape
+class ComplexShape final : public CustomShape
 {
 public:
     explicit            ComplexShape( Drawing& rDrawing );
 
-protected:
+private:
     /** Creates the corresponding XShape and inserts it into the passed container. */
     virtual css::uno::Reference< css::drawing::XShape >
                         implConvertAndInsert(
@@ -413,7 +413,7 @@ protected:
 
 
 /** A group shape that extends the basic shape by a container of child shapes. */
-class GroupShape : public ShapeBase
+class GroupShape final : public ShapeBase
 {
 public:
     explicit            GroupShape( Drawing& rDrawing );
@@ -432,7 +432,7 @@ public:
     /** Returns the shape with the passed identifier from the child shapes. */
     virtual const ShapeBase* getChildById( const OUString& rShapeId ) const override;
 
-protected:
+private:
     /** Creates the corresponding XShape and inserts it into the passed container. */
     virtual css::uno::Reference< css::drawing::XShape >
                         implConvertAndInsert(

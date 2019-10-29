@@ -32,7 +32,7 @@ namespace ole {
 
 
 /** A non-seekable input stream that implements run-length decompression. */
-class VbaInputStream : public BinaryInputStream
+class VbaInputStream final : public BinaryInputStream
 {
 public:
     explicit            VbaInputStream( BinaryInputStream& rInStrm );

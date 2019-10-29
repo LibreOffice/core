@@ -37,7 +37,7 @@ class EmbeddedControl;
 
 
 /** Context handler for ActiveX form control model properties. */
-class AxControlPropertyContext : public ::oox::core::ContextHandler2
+class AxControlPropertyContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit            AxControlPropertyContext(
@@ -54,7 +54,7 @@ private:
 
 
 /** Fragment handler for an embedded ActiveX form control fragment. */
-class AxControlFragment : public ::oox::core::FragmentHandler2
+class AxControlFragment final : public ::oox::core::FragmentHandler2
 {
 public:
     explicit            AxControlFragment(

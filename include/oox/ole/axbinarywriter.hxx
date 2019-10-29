@@ -31,7 +31,7 @@ namespace ole {
     Unlike it's reader class counterpart it is NOT possible to construct this
     wrapper with an unseekable output stream.
  */
-class AxAlignedOutputStream : public BinaryOutputStream
+class AxAlignedOutputStream final : public BinaryOutputStream
 {
 public:
     explicit            AxAlignedOutputStream( BinaryOutputStream& rOutStrm );

@@ -34,7 +34,7 @@ namespace oox {
 
 namespace oox { namespace ppt {
 
-class PPTShapeGroupContext : public ::oox::drawingml::ShapeGroupContext
+class PPTShapeGroupContext final : public ::oox::drawingml::ShapeGroupContext
 {
     SlidePersistPtr const mpSlidePersistPtr;
     ShapeLocation const meShapeLocation;

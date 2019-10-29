@@ -40,7 +40,7 @@ namespace oox { namespace ppt {
     };
 
     /** CT_ */
-    class CustomShowListContext : public ::oox::core::FragmentHandler2
+    class CustomShowListContext final : public ::oox::core::FragmentHandler2
     {
         std::vector< CustomShow >& mrCustomShowList;
 

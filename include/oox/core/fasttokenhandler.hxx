@@ -39,7 +39,7 @@ namespace core {
 /** Wrapper implementing the com.sun.star.xml.sax.XFastTokenHandler API interface
     that provides access to the tokens generated from the internal token name list.
  */
-class OOX_DLLPUBLIC FastTokenHandler :
+class OOX_DLLPUBLIC FastTokenHandler final :
     public ::cppu::WeakImplHelper< css::lang::XServiceInfo,
                                    css::xml::sax::XFastTokenHandler >,
     public sax_fastparser::FastTokenHandlerBase

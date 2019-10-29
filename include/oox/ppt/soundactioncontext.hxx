@@ -33,7 +33,7 @@ namespace oox {
 
 namespace oox { namespace ppt {
 
-class SoundActionContext : public ::oox::core::FragmentHandler2
+class SoundActionContext final : public ::oox::core::FragmentHandler2
 {
 public:
     SoundActionContext( ::oox::core::FragmentHandler2 const & rParent, PropertyMap & aProperties ) throw();

@@ -25,7 +25,7 @@ namespace oox {
 namespace oox {
 namespace core {
 
-class OOX_DLLPUBLIC Standard2007Engine : public CryptoEngine
+class OOX_DLLPUBLIC Standard2007Engine final : public CryptoEngine
 {
     msfilter::StandardEncryptionInfo mInfo;
 
