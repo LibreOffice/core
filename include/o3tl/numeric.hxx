@@ -14,7 +14,7 @@
 
 namespace o3tl
 {
-    struct divide_by_zero : public std::runtime_error
+    struct divide_by_zero final : public std::runtime_error
     {
         explicit divide_by_zero()
             : std::runtime_error("divide by zero")

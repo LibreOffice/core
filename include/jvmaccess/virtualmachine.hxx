@@ -30,7 +30,7 @@ namespace jvmaccess {
 
 /** An encapsulating wrapper around a Java virtual machine.
  */
-class JVMACCESS_DLLPUBLIC VirtualMachine: public salhelper::SimpleReferenceObject
+class JVMACCESS_DLLPUBLIC VirtualMachine final : public salhelper::SimpleReferenceObject
 {
 public:
     /** A helper to attach a thread to a Java virtual machine.
