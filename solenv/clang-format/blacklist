@@ -17249,7 +17249,6 @@ vcl/inc/headless/svpvd.hxx
 vcl/inc/helpwin.hxx
 vcl/inc/hyperlabel.hxx
 vcl/inc/iconview.hxx
-vcl/inc/iconviewimpl.hxx
 vcl/inc/image.h
 vcl/inc/impanmvw.hxx
 vcl/inc/impdel.hxx
@@ -17915,6 +17914,7 @@ vcl/source/toolkit/morebtn.cxx
 vcl/source/treelist/headbar.cxx
 vcl/source/treelist/iconview.cxx
 vcl/source/treelist/iconviewimpl.cxx
+vcl/source/treelist/iconviewimpl.hxx
 vcl/source/treelist/imap.cxx
 vcl/source/treelist/imap2.cxx
 vcl/source/treelist/imap3.cxx
