@@ -26,7 +26,7 @@
 
 class SfxStyleSheetBasePool;
 
-class SFX2_DLLPUBLIC SfxNewStyleDlg : public weld::GenericDialogController
+class SFX2_DLLPUBLIC SfxNewStyleDlg final : public weld::GenericDialogController
 {
 private:
     SfxStyleSheetBasePool&  m_rPool;

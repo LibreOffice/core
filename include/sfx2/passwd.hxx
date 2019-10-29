@@ -42,7 +42,7 @@ namespace o3tl
 
 // class SfxPasswordDialog -----------------------------------------------
 
-class SFX2_DLLPUBLIC SfxPasswordDialog : public weld::GenericDialogController
+class SFX2_DLLPUBLIC SfxPasswordDialog final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::Frame> m_xPassword1Box;

@@ -20,7 +20,7 @@ namespace sfx2 { namespace sidebar { class SidebarController; } }
 
 /** get the decks
 */
-class SfxUnoPanels : public cppu::WeakImplHelper<css::ui::XPanels>
+class SfxUnoPanels final : public cppu::WeakImplHelper<css::ui::XPanels>
 {
 
 public:

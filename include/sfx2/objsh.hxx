@@ -843,7 +843,7 @@ inline SfxObjectShellLock & SfxObjectShellLock::operator=( SfxObjectShell * pObj
     return *this = SfxObjectShellLock( pObjP );
 }
 
-class SFX2_DLLPUBLIC SfxObjectShellItem: public SfxPoolItem
+class SFX2_DLLPUBLIC SfxObjectShellItem final : public SfxPoolItem
 {
     SfxObjectShell*         pObjSh;
 

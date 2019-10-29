@@ -23,7 +23,7 @@
 
 namespace sfx2 { namespace sidebar {
 
-class DeckTitleBar : public TitleBar
+class DeckTitleBar final : public TitleBar
 {
 public:
     DeckTitleBar(const OUString& rsTitle,
@@ -36,14 +36,13 @@ public:
     virtual void DataChanged(const DataChangedEvent& rEvent) override;
     virtual void MouseMove(const MouseEvent& rMouseEvent) override;
 
-protected:
+private:
     virtual tools::Rectangle GetTitleArea(const tools::Rectangle& rTitleBarBox) override;
     virtual void PaintDecoration(vcl::RenderContext& rRenderContext) override;
     virtual sidebar::Paint GetBackgroundPaint() override;
     virtual void HandleToolBoxItemClick(const sal_uInt16 nItemIndex) override;
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
-private:
     static const sal_uInt16 mnCloserItemIndex = 1;
     const std::function<void()> maCloserAction;
     bool mbIsCloserVisible;

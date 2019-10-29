@@ -26,7 +26,7 @@
 
 class BasicManager;
 
-class SFX2_DLLPUBLIC SfxMacroInfoItem: public SfxPoolItem
+class SFX2_DLLPUBLIC SfxMacroInfoItem final : public SfxPoolItem
 {
     const BasicManager*     pBasicManager;
     OUString                aLibName;

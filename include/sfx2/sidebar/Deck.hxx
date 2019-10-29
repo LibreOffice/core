@@ -34,7 +34,7 @@ class DeckNotifyIdle;
 /** This is the parent window of the panels.
     It displays the deck title.
 */
-class Deck : public vcl::Window
+class Deck final : public vcl::Window
 {
 public:
     Deck(const DeckDescriptor& rDeckDescriptor,
@@ -71,7 +71,7 @@ public:
 
     sal_Int32 GetMinimalWidth() const { return mnMinimalWidth; }
 
-    class ScrollContainerWindow : public vcl::Window
+    class ScrollContainerWindow final : public vcl::Window
     {
     public:
         ScrollContainerWindow(vcl::Window* pParentWindow);

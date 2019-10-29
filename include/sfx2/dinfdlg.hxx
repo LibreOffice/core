@@ -51,7 +51,7 @@ struct CustomProperty;
 
 // class SfxDocumentInfoItem ---------------------------------------------
 
-class SFX2_DLLPUBLIC SfxDocumentInfoItem : public SfxStringItem
+class SFX2_DLLPUBLIC SfxDocumentInfoItem final : public SfxStringItem
 {
 private:
     sal_Int32                    m_AutoloadDelay;
@@ -161,7 +161,7 @@ public:
 
 // class SfxDocumentPage -------------------------------------------------
 
-class SfxDocumentPage : public SfxTabPage
+class SfxDocumentPage final : public SfxTabPage
 {
 private:
     OUString                    m_aUnknownSize;
@@ -199,7 +199,6 @@ private:
     void                ImplUpdateSignatures();
     void                ImplCheckPasswordState();
 
-protected:
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
 
@@ -213,7 +212,7 @@ public:
 
 // class SfxDocumentDescPage ---------------------------------------------
 
-class SfxDocumentDescPage : public SfxTabPage
+class SfxDocumentDescPage final : public SfxTabPage
 {
 private:
     SfxDocumentInfoItem* m_pInfoItem;
@@ -222,7 +221,6 @@ private:
     std::unique_ptr<weld::Entry> m_xKeywordsEd;
     std::unique_ptr<weld::TextView> m_xCommentEd;
 
-protected:
     virtual bool            FillItemSet( SfxItemSet* ) override;
     virtual void            Reset( const SfxItemSet* ) override;
 
@@ -234,9 +232,8 @@ public:
 
 // class SfxDocumentInfoDialog -------------------------------------------
 
-class SFX2_DLLPUBLIC SfxDocumentInfoDialog : public SfxTabDialogController
+class SFX2_DLLPUBLIC SfxDocumentInfoDialog final : public SfxTabDialogController
 {
-protected:
     virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
 
 public:
@@ -440,7 +437,7 @@ public:
 
 // class SfxCustomPropertiesPage -----------------------------------------
 
-class SfxCustomPropertiesPage : public SfxTabPage
+class SfxCustomPropertiesPage final : public SfxTabPage
 {
 private:
     DECL_LINK(AddHdl, weld::Button&, void);
@@ -448,7 +445,6 @@ private:
     std::unique_ptr<CustomPropertiesControl> m_xPropertiesCtrl;
     std::unique_ptr<weld::Button> m_xAdd;
 
-protected:
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
@@ -559,12 +555,11 @@ public:
 
 // class SfxCmisPropertiesPage -------------------------------------------------
 
-class SfxCmisPropertiesPage : public SfxTabPage
+class SfxCmisPropertiesPage final : public SfxTabPage
 {
 private:
     std::unique_ptr<CmisPropertiesControl> m_xPropertiesCtrl;
 
-protected:
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;

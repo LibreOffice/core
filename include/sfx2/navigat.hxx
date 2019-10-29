@@ -23,7 +23,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/dockwin.hxx>
 
-class SfxNavigatorWrapper : public SfxChildWindow
+class SfxNavigatorWrapper final : public SfxChildWindow
 {
 
 public:
@@ -35,7 +35,7 @@ public:
                         SFX_DECL_CHILDWINDOW(SfxNavigatorWrapper);
 };
 
-class SFX2_DLLPUBLIC SfxNavigator : public SfxDockingWindow
+class SFX2_DLLPUBLIC SfxNavigator final : public SfxDockingWindow
 {
     SfxChildWindow*     pWrapper;
 

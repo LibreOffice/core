@@ -33,7 +33,7 @@ class SidebarChildWindow;
 
 class SidebarController;
 
-class SidebarDockingWindow : public SfxDockingWindow
+class SidebarDockingWindow final : public SfxDockingWindow
 {
 public:
     SidebarDockingWindow(SfxBindings* pBindings, SidebarChildWindow& rChildWindow,
@@ -50,7 +50,7 @@ public:
 
     using SfxDockingWindow::Close;
 
-protected:
+private:
     // Window overridables
     virtual void GetFocus() override;
     virtual void Resize() override;
@@ -59,7 +59,6 @@ protected:
         SfxChildAlignment eCurrentAlignment,
         SfxChildAlignment eRequestedAlignment) override;
 
-private:
     ::rtl::Reference<sfx2::sidebar::SidebarController> mpSidebarController;
     bool mbIsReadyToDrag;
     std::unique_ptr<svt::AcceleratorExecute> mpAccel;

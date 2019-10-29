@@ -13,7 +13,7 @@
 #include <sfx2/dllapi.h>
 #include <vcl/weld.hxx>
 
-class SFX2_DLLPUBLIC InputDialog : public weld::GenericDialogController
+class SFX2_DLLPUBLIC InputDialog final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::Entry> m_xEntry;

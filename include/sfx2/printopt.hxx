@@ -27,7 +27,7 @@
 #include <vcl/print.hxx>
 
 
-class SFX2_DLLPUBLIC SfxCommonPrintOptionsTabPage : public SfxTabPage
+class SFX2_DLLPUBLIC SfxCommonPrintOptionsTabPage final : public SfxTabPage
 {
 private:
 
@@ -69,8 +69,6 @@ private:
 
     SAL_DLLPRIVATE void ImplUpdateControls( const PrinterOptions* pCurrentOptions );
     SAL_DLLPRIVATE void ImplSaveControls( PrinterOptions* pCurrentOptions );
-
-protected:
 
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 

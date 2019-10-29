@@ -55,7 +55,7 @@ namespace weld
     class Window;
 }
 
-class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
+class SFX2_DLLPUBLIC SfxMedium final : public SvRefBase
 {
     std::unique_ptr< SfxMedium_Impl > pImpl;
 

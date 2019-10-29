@@ -231,7 +231,7 @@ public:
                         { return xViewController; }
 };
 
-class SfxPrintingHint : public SfxViewEventHint
+class SfxPrintingHint final : public SfxViewEventHint
 {
     css::view::PrintableState const mnPrintableState;
     css::uno::Sequence < css::beans::PropertyValue > const aOpts;

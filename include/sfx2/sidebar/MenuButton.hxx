@@ -23,7 +23,7 @@
 
 namespace sfx2 { namespace sidebar {
 
-class MenuButton
+class MenuButton final
     : public CheckBox
 {
 public:

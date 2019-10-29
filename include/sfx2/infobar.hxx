@@ -27,7 +27,7 @@ enum class InfoBarType {
 
 /** SfxChildWindow for positioning the InfoBar in the view.
   */
-class SFX2_DLLPUBLIC SfxInfoBarContainerChild : public SfxChildWindow
+class SFX2_DLLPUBLIC SfxInfoBarContainerChild final : public SfxChildWindow
 {
     private:
         SfxBindings* const m_pBindings;
@@ -46,7 +46,7 @@ class SFX2_DLLPUBLIC SfxInfoBarContainerChild : public SfxChildWindow
 
 /** Class representing a single InfoBar to be added in a SfxInfoBarContainerWindow.
   */
-class SFX2_DLLPUBLIC SfxInfoBarWindow : public vcl::Window
+class SFX2_DLLPUBLIC SfxInfoBarWindow final : public vcl::Window
 {
     private:
         OUString const            m_sId;
@@ -83,7 +83,7 @@ class SFX2_DLLPUBLIC SfxInfoBarWindow : public vcl::Window
         DECL_LINK( CloseHandler, Button*, void );
 };
 
-class SfxInfoBarContainerWindow : public vcl::Window
+class SfxInfoBarContainerWindow final : public vcl::Window
 {
     private:
         SfxInfoBarContainerChild*               m_pChildWin;
