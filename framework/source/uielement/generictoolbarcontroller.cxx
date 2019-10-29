@@ -220,7 +220,8 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
                     aStrValue = FwkResId(STR_SAVECOPYDOC) + aStrValue.copy( 4 );
                 }
                 m_pToolbar->SetItemText( m_nID, aStrValue );
-                m_pToolbar->SetQuickHelpText( m_nID, aStrValue );
+                // tdf#124267 strip mnemonic from tooltip
+                m_pToolbar->SetQuickHelpText(m_nID, aStrValue.replaceFirst("~", ""));
             }
 
             if ( m_bMadeInvisible )
