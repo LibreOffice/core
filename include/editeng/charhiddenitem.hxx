@@ -29,7 +29,7 @@
     This item marks text as hidden
 */
 
-class EDITENG_DLLPUBLIC SvxCharHiddenItem : public SfxBoolItem
+class EDITENG_DLLPUBLIC SvxCharHiddenItem final : public SfxBoolItem
 {
 public:
     SvxCharHiddenItem( const bool bHidden /*= false*/, const sal_uInt16 nId );

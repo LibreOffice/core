@@ -32,7 +32,7 @@ This item describes the row orientation.
 */
 #define ADJUST_LASTBLOCK_VERSION        (sal_uInt16(0x0001))
 
-class EDITENG_DLLPUBLIC SvxAdjustItem : public SfxEnumItemInterface
+class EDITENG_DLLPUBLIC SvxAdjustItem final : public SfxEnumItemInterface
 {
     bool    bLeft      : 1;
     bool    bRight     : 1;

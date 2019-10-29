@@ -35,7 +35,7 @@ class FontList;
     not copied and not deleted!
 */
 
-class EDITENG_DLLPUBLIC SvxFontListItem : public SfxPoolItem
+class EDITENG_DLLPUBLIC SvxFontListItem final : public SfxPoolItem
 {
 private:
     const FontList*                 pFontList;

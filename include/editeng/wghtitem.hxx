@@ -30,7 +30,7 @@
     This item describes the font weight.
 */
 
-class EDITENG_DLLPUBLIC SvxWeightItem : public SfxEnumItem<FontWeight>
+class EDITENG_DLLPUBLIC SvxWeightItem final : public SfxEnumItem<FontWeight>
 {
 public:
     static SfxPoolItem* CreateDefault();

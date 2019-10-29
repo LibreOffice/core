@@ -25,7 +25,7 @@
 
 // class SvxWritingModeItem ----------------------------------------------
 
-class EDITENG_DLLPUBLIC SvxWritingModeItem : public SfxUInt16Item
+class EDITENG_DLLPUBLIC SvxWritingModeItem final : public SfxUInt16Item
 {
 public:
     SvxWritingModeItem( css::text::WritingMode eValue /*= css::text::WritingMode_LR_TB*/,

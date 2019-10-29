@@ -29,7 +29,7 @@ class Outliner;
 
 //  SvxOutlinerForwarder - SvxTextForwarder for Outliner
 
-class EDITENG_DLLPUBLIC SvxOutlinerForwarder : public SvxTextForwarder
+class EDITENG_DLLPUBLIC SvxOutlinerForwarder final : public SvxTextForwarder
 {
 private:
     Outliner&           rOutliner;

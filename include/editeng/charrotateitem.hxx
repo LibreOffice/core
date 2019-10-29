@@ -69,7 +69,7 @@ public:
 
 */
 
-class EDITENG_DLLPUBLIC SvxCharRotateItem : public SvxTextRotateItem
+class EDITENG_DLLPUBLIC SvxCharRotateItem final : public SvxTextRotateItem
 {
     bool bFitToLine;
 public:

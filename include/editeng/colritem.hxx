@@ -61,7 +61,7 @@ public:
 };
 
 // XXX: to be moved in a separate header.
-class EDITENG_DLLPUBLIC SvxBackgroundColorItem : public SvxColorItem
+class EDITENG_DLLPUBLIC SvxBackgroundColorItem final : public SvxColorItem
 {
     public:
         static SfxPoolItem* CreateDefault();

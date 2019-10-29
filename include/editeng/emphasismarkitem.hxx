@@ -30,7 +30,7 @@
     This item describes the Font emphasis.
 */
 
-class EDITENG_DLLPUBLIC SvxEmphasisMarkItem : public SfxUInt16Item
+class EDITENG_DLLPUBLIC SvxEmphasisMarkItem final : public SfxUInt16Item
 {
 public:
     static SfxPoolItem* CreateDefault();

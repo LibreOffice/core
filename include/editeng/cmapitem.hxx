@@ -30,7 +30,7 @@
     This item describe the font type (uppercase, small caps ,...).
 */
 
-class EDITENG_DLLPUBLIC SvxCaseMapItem : public SfxEnumItem<SvxCaseMap>
+class EDITENG_DLLPUBLIC SvxCaseMapItem final : public SfxEnumItem<SvxCaseMap>
 {
 public:
     static SfxPoolItem* CreateDefault();

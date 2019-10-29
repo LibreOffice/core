@@ -29,7 +29,7 @@
     This item describes, whether and how it is striked out.
 */
 
-class EDITENG_DLLPUBLIC SvxCrossedOutItem : public SfxEnumItem<FontStrikeout>
+class EDITENG_DLLPUBLIC SvxCrossedOutItem final : public SfxEnumItem<FontStrikeout>
 {
 public:
     static SfxPoolItem* CreateDefault();

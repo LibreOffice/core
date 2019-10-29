@@ -26,7 +26,7 @@
 class OutlinerView;
 
 /// Specialization for Draw/Impress
-class EDITENG_DLLPUBLIC SvxDrawOutlinerViewForwarder : public SvxEditViewForwarder
+class EDITENG_DLLPUBLIC SvxDrawOutlinerViewForwarder final : public SvxEditViewForwarder
 {
 private:
     OutlinerView&       mrOutlinerView;

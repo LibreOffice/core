@@ -28,7 +28,7 @@
     This item describes, if contour is employed.
 */
 
-class EDITENG_DLLPUBLIC SvxContourItem : public SfxBoolItem
+class EDITENG_DLLPUBLIC SvxContourItem final : public SfxBoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();

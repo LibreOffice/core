@@ -35,7 +35,7 @@
 */
 enum class SvxShadowItemSide { TOP, BOTTOM, LEFT, RIGHT };
 
-class EDITENG_DLLPUBLIC SvxShadowItem : public SfxEnumItemInterface
+class EDITENG_DLLPUBLIC SvxShadowItem final : public SfxEnumItemInterface
 {
     Color               aShadowColor;
     sal_uInt16              nWidth;

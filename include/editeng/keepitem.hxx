@@ -30,7 +30,7 @@
     This item describes a logical variable "keep paragraphs together?".
 */
 
-class EDITENG_DLLPUBLIC SvxFormatKeepItem : public SfxBoolItem
+class EDITENG_DLLPUBLIC SvxFormatKeepItem final : public SfxBoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();

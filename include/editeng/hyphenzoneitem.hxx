@@ -30,7 +30,7 @@
     characters at the end of the line and start).
 */
 
-class EDITENG_DLLPUBLIC SvxHyphenZoneItem : public SfxPoolItem
+class EDITENG_DLLPUBLIC SvxHyphenZoneItem final : public SfxPoolItem
 {
     bool      bHyphen  : 1;
     bool      bPageEnd : 1;

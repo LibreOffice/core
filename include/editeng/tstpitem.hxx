@@ -89,7 +89,7 @@ typedef o3tl::sorted_vector<SvxTabStop> SvxTabStopArr;
     This item describes a list of TabStops.
 */
 
-class EDITENG_DLLPUBLIC SvxTabStopItem : public SfxPoolItem
+class EDITENG_DLLPUBLIC SvxTabStopItem final : public SfxPoolItem
 {
     SvxTabStopArr maTabStops;
 

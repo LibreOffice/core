@@ -43,7 +43,7 @@ enum class SvxBulletStyle
 
 // class SvxBulletItem ---------------------------------------------------
 
-class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
+class EDITENG_DLLPUBLIC SvxBulletItem final : public SfxPoolItem
 {
     vcl::Font       aFont;
     std::unique_ptr<GraphicObject>

@@ -38,7 +38,7 @@ EDITENG_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreate
 const SvxNumRule& SvxGetNumRule( css::uno::Reference< css::container::XIndexReplace > const & xRule );
 EDITENG_DLLPUBLIC css::uno::Reference< css::ucb::XAnyCompare > SvxCreateNumRuleCompare() throw();
 
-class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper5< css::container::XIndexReplace, css::ucb::XAnyCompare,
+class SvxUnoNumberingRules final : public ::cppu::WeakAggImplHelper5< css::container::XIndexReplace, css::ucb::XAnyCompare,
     css::lang::XUnoTunnel, css::util::XCloneable, css::lang::XServiceInfo >
 {
 private:

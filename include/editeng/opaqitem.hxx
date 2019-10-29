@@ -30,7 +30,7 @@
     This item describes a logical variable "Opaque yes or no."
 */
 
-class EDITENG_DLLPUBLIC SvxOpaqueItem : public SfxBoolItem
+class EDITENG_DLLPUBLIC SvxOpaqueItem final : public SfxBoolItem
 {
 public:
     explicit SvxOpaqueItem( const sal_uInt16 nId , const bool bOpa = true );

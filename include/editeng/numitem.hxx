@@ -291,7 +291,7 @@ public:
     void                    UnLinkGraphics();
 };
 
-class EDITENG_DLLPUBLIC SvxNumBulletItem : public SfxPoolItem
+class EDITENG_DLLPUBLIC SvxNumBulletItem final : public SfxPoolItem
 {
     std::unique_ptr<SvxNumRule> pNumRule;
 public:

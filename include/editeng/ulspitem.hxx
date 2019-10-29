@@ -32,7 +32,7 @@
 
 #define ULSPACE_16_VERSION  (sal_uInt16(0x0001))
 
-class EDITENG_DLLPUBLIC SvxULSpaceItem : public SfxPoolItem
+class EDITENG_DLLPUBLIC SvxULSpaceItem final : public SfxPoolItem
 {
     sal_uInt16 nUpper;  // Upper space
     sal_uInt16 nLower;  // Lower space

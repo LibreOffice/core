@@ -41,7 +41,7 @@ enum SvxGraphicPosition
     GPOS_AREA, GPOS_TILED
 };
 
-class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
+class EDITENG_DLLPUBLIC SvxBrushItem final : public SfxPoolItem
 {
     Color               aColor;
     sal_Int32           nShadingValue;
