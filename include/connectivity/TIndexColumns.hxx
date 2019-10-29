@@ -26,10 +26,9 @@
 namespace connectivity
 {
     class OIndexHelper;
-    class OOO_DLLPUBLIC_DBTOOLS OIndexColumns : public sdbcx::OCollection
+    class OOO_DLLPUBLIC_DBTOOLS OIndexColumns final : public sdbcx::OCollection
     {
         OIndexHelper* m_pIndex;
-    protected:
         virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
         virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
         virtual void impl_refresh() override;

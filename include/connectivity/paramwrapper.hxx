@@ -50,7 +50,7 @@ namespace param
     /** wraps a parameter column as got from an SQLQueryComposer, so that it has an additional
         property "Value", which is forwarded to an XParameters interface
     */
-    class OOO_DLLPUBLIC_DBTOOLS ParameterWrapper  :public ::cppu::OWeakObject
+    class OOO_DLLPUBLIC_DBTOOLS ParameterWrapper final : public ::cppu::OWeakObject
                             ,public css::lang::XTypeProvider
                             ,public ::comphelper::OMutexAndBroadcastHelper
                             ,public ::cppu::OPropertySetHelper
@@ -107,13 +107,12 @@ namespace param
         // pseudo-XComponent
         void dispose();
 
-    protected:
+    private:
         virtual ~ParameterWrapper() override;
 
         // disambiguations
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
-    private:
         OUString impl_getPseudoAggregatePropertyName( sal_Int32 _nHandle ) const;
     };
 
@@ -130,14 +129,13 @@ namespace param
                                                >   ParameterWrapperContainer_Base;
 
     /// class for the parameter event @see approveParameter
-    class OOO_DLLPUBLIC_DBTOOLS ParameterWrapperContainer :
+    class OOO_DLLPUBLIC_DBTOOLS ParameterWrapperContainer final :
         public ParameterWrapperContainer_Base
     {
     private:
         ::osl::Mutex    m_aMutex;
         Parameters      m_aParameters;
 
-    protected:
         virtual ~ParameterWrapperContainer() override;
 
     public:
@@ -178,11 +176,10 @@ namespace param
 
         size_t  size() const { return m_aParameters.size(); }
 
-    protected:
+    private:
         // XComponent
         virtual void SAL_CALL disposing() override;
 
-    private:
         void    impl_checkDisposed_throw();
     };
 

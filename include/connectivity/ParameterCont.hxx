@@ -28,7 +28,7 @@ namespace dbtools
 
     //= OParameterContinuation
 
-    class OOO_DLLPUBLIC_DBTOOLS OParameterContinuation : public comphelper::OInteraction< css::sdb::XInteractionSupplyParameters >
+    class OOO_DLLPUBLIC_DBTOOLS OParameterContinuation final : public comphelper::OInteraction< css::sdb::XInteractionSupplyParameters >
     {
         css::uno::Sequence< css::beans::PropertyValue >       m_aValues;
 
@@ -40,9 +40,8 @@ namespace dbtools
         // XInteractionSupplyParameters
         virtual void SAL_CALL setParameters( const css::uno::Sequence< css::beans::PropertyValue >& _rValues ) override;
 
-    protected:
-        virtual ~OParameterContinuation() override { }
     private:
+        virtual ~OParameterContinuation() override { }
         OParameterContinuation(const OParameterContinuation&) = delete;
         void operator =(const OParameterContinuation&) = delete;
     };

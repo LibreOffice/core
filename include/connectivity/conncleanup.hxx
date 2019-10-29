@@ -40,7 +40,7 @@ namespace dbtools
                                        css::sdbc::XRowSetListener
                                    >   OAutoConnectionDisposer_Base;
 
-    class OOO_DLLPUBLIC_DBTOOLS OAutoConnectionDisposer : public OAutoConnectionDisposer_Base
+    class OOO_DLLPUBLIC_DBTOOLS OAutoConnectionDisposer final : public OAutoConnectionDisposer_Base
     {
         css::uno::Reference< css::sdbc::XConnection >
                     m_xOriginalConnection;
@@ -59,7 +59,7 @@ namespace dbtools
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
             );
 
-    protected:
+    private:
         // XPropertyChangeListener
         virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& _rEvent ) override;
 
@@ -71,7 +71,6 @@ namespace dbtools
         virtual void SAL_CALL rowChanged( const css::lang::EventObject& event ) override;
         virtual void SAL_CALL rowSetChanged( const css::lang::EventObject& event ) override;
 
-    private:
         void clearConnection();
 
         void        startRowSetListening();

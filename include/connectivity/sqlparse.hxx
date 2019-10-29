@@ -58,7 +58,7 @@ namespace connectivity
 
     //= OParseContext
 
-    class OOO_DLLPUBLIC_DBTOOLS OParseContext : public IParseContext
+    class OOO_DLLPUBLIC_DBTOOLS OParseContext final : public IParseContext
     {
     public:
         OParseContext();
