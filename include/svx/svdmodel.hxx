@@ -106,7 +106,7 @@ enum class SdrHintKind
     EndEdit                // Is called after the object has left text edit mode
 };
 
-class SVX_DLLPUBLIC SdrHint: public SfxHint
+class SVX_DLLPUBLIC SdrHint final : public SfxHint
 {
 private:
     SdrHintKind const                       meHint;

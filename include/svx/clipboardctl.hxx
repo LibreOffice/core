@@ -31,7 +31,7 @@ class PopupMenu;
 class SfxModule;
 class ToolBox;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxClipBoardControl : public SfxToolBoxControl
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxClipBoardControl final : public SfxToolBoxControl
 {
     std::unique_ptr<SfxPoolItem>
                             pClipboardFmtItem;

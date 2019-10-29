@@ -26,7 +26,7 @@
  * class SdrCaptionGapItem
  * Distance of the line start from the Rect
  */
-class SdrCaptionGapItem: public SdrMetricItem {
+class SdrCaptionGapItem final : public SdrMetricItem {
 public:
     SdrCaptionGapItem(long nGap=0)  : SdrMetricItem(SDRATTR_CAPTIONGAP,nGap) {}
     virtual SfxPoolItem* Clone(SfxItemPool*) const override

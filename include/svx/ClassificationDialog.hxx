@@ -22,7 +22,7 @@ namespace weld { class CustomWeld; }
 
 namespace svx {
 
-class SVX_DLLPUBLIC ClassificationDialog : public weld::GenericDialogController
+class SVX_DLLPUBLIC ClassificationDialog final : public weld::GenericDialogController
 {
 private:
     SfxClassificationHelper maHelper;

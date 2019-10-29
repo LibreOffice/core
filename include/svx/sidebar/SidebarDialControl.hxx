@@ -25,7 +25,7 @@ namespace svx { namespace sidebar {
 
 /** Provide some improvements over the standard DialControl.
 */
-class SVX_DLLPUBLIC SidebarDialControl : public svx::DialControl
+class SVX_DLLPUBLIC SidebarDialControl final : public svx::DialControl
 {
 public:
     SidebarDialControl (vcl::Window* pParent, WinBits nBits);
@@ -33,7 +33,7 @@ public:
     virtual Size GetOptimalSize() const override;
     virtual void MouseButtonDown (const MouseEvent& rMEvt) override;
 
-protected:
+private:
     virtual void HandleMouseEvent (const Point& rPos, bool bInitial) override;
 };
 

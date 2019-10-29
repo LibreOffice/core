@@ -29,7 +29,7 @@
 class IntlWrapper;
 class SfxItemPool;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxOrientationItem: public SfxEnumItem<SvxCellOrientation>
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxOrientationItem final : public SfxEnumItem<SvxCellOrientation>
 {
 public:
     SvxOrientationItem(
@@ -58,7 +58,7 @@ public:
     sal_Int32               GetRotation( sal_Int32 nStdAngle ) const;
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxMarginItem: public SfxPoolItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxMarginItem final : public SfxPoolItem
 {
     sal_Int16       nLeftMargin;
     sal_Int16       nTopMargin;

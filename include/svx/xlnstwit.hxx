@@ -28,7 +28,7 @@
 
 // class XLineStartWidthItem
 
-class SVX_DLLPUBLIC XLineStartWidthItem : public SfxMetricItem
+class SVX_DLLPUBLIC XLineStartWidthItem final : public SfxMetricItem
 {
 public:
             XLineStartWidthItem(long nWidth = LINE_START_WIDTH_DEFAULT);

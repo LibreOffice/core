@@ -35,7 +35,7 @@ class SdrPage;
 |* SvxXConnectionPreview
 |*
 \************************************************************************/
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXConnectionPreview : public weld::CustomWidgetController
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXConnectionPreview final : public weld::CustomWidgetController
 {
  friend class SvxConnectionPage;
 

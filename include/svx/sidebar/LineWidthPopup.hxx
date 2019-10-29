@@ -32,7 +32,7 @@ namespace svx { namespace sidebar {
 class LinePropertyPanelBase;
 class LineWidthValueSet;
 
-class LineWidthPopup : public FloatingWindow
+class LineWidthPopup final : public FloatingWindow
 {
 public:
     LineWidthPopup(LinePropertyPanelBase& rParent);

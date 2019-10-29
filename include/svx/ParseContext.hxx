@@ -31,7 +31,7 @@ namespace svxform
 
     //= OSystemParseContext
 
-    class SVX_DLLPUBLIC OSystemParseContext : public ::connectivity::IParseContext
+    class SVX_DLLPUBLIC OSystemParseContext final : public ::connectivity::IParseContext
     {
     private:
 

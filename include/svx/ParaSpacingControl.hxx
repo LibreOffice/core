@@ -42,7 +42,7 @@ public:
     virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override = 0;
 };
 
-class SVX_DLLPUBLIC ParaAboveSpacingControl : public ParaULSpacingControl
+class SVX_DLLPUBLIC ParaAboveSpacingControl final : public ParaULSpacingControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -51,7 +51,7 @@ public:
     virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
 };
 
-class SVX_DLLPUBLIC ParaBelowSpacingControl : public ParaULSpacingControl
+class SVX_DLLPUBLIC ParaBelowSpacingControl final : public ParaULSpacingControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -90,7 +90,7 @@ private:
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> m_xMultiplexer;
 };
 
-class SVX_DLLPUBLIC ParaLeftSpacingControl : public ParaLRSpacingControl
+class SVX_DLLPUBLIC ParaLeftSpacingControl final : public ParaLRSpacingControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -99,7 +99,7 @@ public:
     virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
 };
 
-class SVX_DLLPUBLIC ParaRightSpacingControl : public ParaLRSpacingControl
+class SVX_DLLPUBLIC ParaRightSpacingControl final : public ParaLRSpacingControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -108,7 +108,7 @@ public:
     virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
 };
 
-class SVX_DLLPUBLIC ParaFirstLineSpacingControl : public ParaLRSpacingControl
+class SVX_DLLPUBLIC ParaFirstLineSpacingControl final : public ParaLRSpacingControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();

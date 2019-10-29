@@ -47,7 +47,7 @@
 #define ERRCTX_SVX_BACKGROUND                   5
 #define ERRCTX_SVX_IMPORT_GRAPHIC               6
 
-class SVX_DLLPUBLIC SvxErrorHandler : private SfxErrorHandler
+class SVX_DLLPUBLIC SvxErrorHandler final : private SfxErrorHandler
 {
 public:
     SvxErrorHandler();

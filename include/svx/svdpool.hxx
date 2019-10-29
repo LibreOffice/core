@@ -27,12 +27,12 @@ class XLineAttrSetItem;
 class XFillAttrSetItem;
 
 
-class SVX_DLLPUBLIC SdrItemPool : public XOutdevItemPool
+class SVX_DLLPUBLIC SdrItemPool final : public XOutdevItemPool
 {
 public:
     SdrItemPool(SfxItemPool* pMaster = nullptr);
     SdrItemPool(const SdrItemPool& rPool);
-protected:
+private:
     virtual ~SdrItemPool() override;
 public:
 

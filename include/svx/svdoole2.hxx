@@ -185,7 +185,7 @@ public:
     virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 };
 
-class SVX_DLLPUBLIC SdrEmbedObjectLink : public sfx2::SvBaseLink
+class SVX_DLLPUBLIC SdrEmbedObjectLink final : public sfx2::SvBaseLink
 {
     SdrOle2Obj*         pObj;
 

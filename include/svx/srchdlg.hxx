@@ -81,7 +81,7 @@ enum class SearchLabel
 };
 
 class SvxSearchDialog;
-class SVX_DLLPUBLIC SvxSearchDialogWrapper : public SfxChildWindow
+class SVX_DLLPUBLIC SvxSearchDialogWrapper final : public SfxChildWindow
 {
     std::shared_ptr<SvxSearchDialog> dialog;
 public:

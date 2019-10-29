@@ -139,7 +139,7 @@ private:
     void LinkedFieldModifyHdl();
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxDialControl : public weld::CustomWidgetController
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxDialControl final : public weld::CustomWidgetController
 {
 public:
     virtual void        SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
@@ -182,7 +182,7 @@ public:
     const OUString&     GetText() const { return mpImpl->maText; }
     void                SetText(const OUString& rText) { mpImpl->maText = rText; }
 
-protected:
+private:
     struct DialControl_Impl
     {
         ScopedVclPtr<DialControlBmp> mxBmpEnabled;
@@ -212,7 +212,6 @@ protected:
     void                Init( const Size& rWinSize, const vcl::Font& rWinFont );
     void                Init( const Size& rWinSize );
 
-private:
     void                InvalidateControl();
 
     DECL_LINK(LinkedFieldModifyHdl, weld::SpinButton&, void);

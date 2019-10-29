@@ -24,7 +24,7 @@
 
 namespace svx {
 
-class SVX_DLLPUBLIC TextCharacterSpacingPopup : public SfxToolBoxControl
+class SVX_DLLPUBLIC TextCharacterSpacingPopup final : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();

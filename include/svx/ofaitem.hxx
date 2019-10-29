@@ -23,7 +23,7 @@
 #include <rtl/ref.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC OfaPtrItem : public SfxPoolItem
+class SVX_DLLPUBLIC OfaPtrItem final : public SfxPoolItem
 {
 private:
     void* const pPtr;
@@ -38,7 +38,7 @@ public:
 };
 
 template <class reference_type>
-class OfaRefItem : public SfxPoolItem
+class OfaRefItem final : public SfxPoolItem
 {
  private:
     rtl::Reference<reference_type> mxRef;

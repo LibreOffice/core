@@ -41,7 +41,7 @@ class OutputDevice;
 class SvxTextEditSourceImpl;
 class SdrText;
 
-class SVX_DLLPUBLIC SvxTextEditSource : public SvxEditSource, public SvxViewForwarder
+class SVX_DLLPUBLIC SvxTextEditSource final : public SvxEditSource, public SvxViewForwarder
 {
 public:
     SvxTextEditSource( SdrObject* pObj, SdrText* pText );

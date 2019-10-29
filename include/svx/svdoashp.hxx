@@ -38,7 +38,7 @@ namespace sdr
     }
 }
 
-class SdrAShapeObjGeoData : public SdrTextObjGeoData
+class SdrAShapeObjGeoData final : public SdrTextObjGeoData
 {
 public:
     bool        bMirroredX;

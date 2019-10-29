@@ -48,7 +48,7 @@ class SvxColorListBox;
 
 struct Svx3DWinImpl;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DWin : public SfxDockingWindow
+class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DWin final : public SfxDockingWindow
 {
     friend class        Svx3DChildWindow;
     friend class        Svx3DCtrlItem;
@@ -202,7 +202,6 @@ private:
     SVX_DLLPRIVATE bool         GetUILightState( const PushButton& rBtn ) const;
     SVX_DLLPRIVATE void         SetUILightState( PushButton& aBtn, bool bState );
 
-protected:
     virtual void    Resize() override;
 
 public:

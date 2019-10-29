@@ -24,7 +24,7 @@
 #include <vcl/lstbox.hxx>
 
 /// Custom Widget ListBox to hold entries for SameContent setting of Header/Footer
-class SVX_DLLPUBLIC SameContentListBox : public ListBox
+class SVX_DLLPUBLIC SameContentListBox final : public ListBox
 {
 public:
     SameContentListBox( vcl::Window* pParent );

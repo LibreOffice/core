@@ -23,7 +23,7 @@
 #include <svl/eitem.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC XFillBmpSizeLogItem : public SfxBoolItem
+class SVX_DLLPUBLIC XFillBmpSizeLogItem final : public SfxBoolItem
 {
 public:
                             XFillBmpSizeLogItem( bool bLog = true );

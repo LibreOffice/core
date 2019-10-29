@@ -30,7 +30,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC XFormTextAdjustItem : public SfxEnumItem<XFormTextAdjust>
+class SVX_DLLPUBLIC XFormTextAdjustItem final : public SfxEnumItem<XFormTextAdjust>
 {
 public:
                             static SfxPoolItem* CreateDefault();

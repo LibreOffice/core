@@ -28,7 +28,7 @@ class SfxItemSet;
 class SdrMeasureObj;
 class SdrModel;
 
-class SVX_DLLPUBLIC SvxXMeasurePreview : public weld::CustomWidgetController
+class SVX_DLLPUBLIC SvxXMeasurePreview final : public weld::CustomWidgetController
 {
  friend class SvxMeasurePage;
 

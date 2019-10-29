@@ -29,7 +29,7 @@ class SdrModel;
 
 // class XLineStartItem
 
-class SVX_DLLPUBLIC XLineStartItem : public NameOrIndex
+class SVX_DLLPUBLIC XLineStartItem final : public NameOrIndex
 {
     basegfx::B2DPolyPolygon     maPolyPolygon;
 

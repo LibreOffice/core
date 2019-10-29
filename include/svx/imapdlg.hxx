@@ -49,7 +49,7 @@ class URLBox;
 class Graphic;
 typedef ::std::vector< OUString > TargetList;
 
-class SVX_DLLPUBLIC SvxIMapDlgChildWindow : public SfxChildWindow
+class SVX_DLLPUBLIC SvxIMapDlgChildWindow final : public SfxChildWindow
 {
  public:
 
@@ -64,12 +64,9 @@ class SVX_DLLPUBLIC SvxIMapDlgChildWindow : public SfxChildWindow
 
 class SvxIMapDlg;
 
-class SvxIMapDlgItem : public SfxControllerItem
+class SvxIMapDlgItem final : public SfxControllerItem
 {
     SvxIMapDlg& rIMap;
-
-
-protected:
 
     virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                const SfxPoolItem* pState ) override;

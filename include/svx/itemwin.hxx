@@ -27,7 +27,7 @@
 class XLineWidthItem;
 class SfxObjectShell;
 
-class SvxLineBox : public ListBox
+class SvxLineBox final : public ListBox
 {
     sal_uInt16      nCurPos;
     Timer           aDelayTimer;
@@ -48,7 +48,7 @@ public:
 
     void Fill(const XDashListRef &pList);
 
-protected:
+private:
     virtual void    Select() override;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
@@ -84,25 +84,24 @@ public:
     void            RefreshDlgUnit();
 };
 
-class SVX_DLLPUBLIC SvxFillTypeBox : public FillTypeLB
+class SVX_DLLPUBLIC SvxFillTypeBox final : public FillTypeLB
 {
 public:
     SvxFillTypeBox( vcl::Window* pParent );
 
     void            Selected() { bSelect = true; }
 
-protected:
+private:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
-private:
     sal_uInt16      nCurPos;
     bool            bSelect;
 
     static void     ReleaseFocus_Impl();
 };
 
-class SVX_DLLPUBLIC SvxFillAttrBox : public ListBox
+class SVX_DLLPUBLIC SvxFillAttrBox final : public ListBox
 {
 public:
     SvxFillAttrBox( vcl::Window* pParent );
@@ -111,11 +110,11 @@ public:
     void Fill( const XGradientListRef &pList );
     void Fill( const XBitmapListRef   &pList );
     void Fill( const XPatternListRef  &pList );
-protected:
+
+private:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
-private:
     sal_uInt16      nCurPos;
     BitmapEx        maBitmapEx;
 

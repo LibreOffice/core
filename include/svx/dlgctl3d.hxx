@@ -94,7 +94,7 @@ public:
 };
 
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DLightControl : public Svx3DPreviewControl
+class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DLightControl final : public Svx3DPreviewControl
 {
     // Callback for interactive changes
     Link<Svx3DLightControl*,void>  maChangeCallback;
@@ -164,7 +164,7 @@ public:
     basegfx::B3DVector GetLightDirection(sal_uInt32 nNum) const;
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC LightControl3D : public PreviewControl3D
+class SAL_WARN_UNUSED SVX_DLLPUBLIC LightControl3D final : public PreviewControl3D
 {
     // Callback for interactive changes
     Link<LightControl3D*,void>  maChangeCallback;

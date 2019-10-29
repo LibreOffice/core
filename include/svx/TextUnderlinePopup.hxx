@@ -24,7 +24,7 @@
 
 namespace svx {
 
-class SVX_DLLPUBLIC TextUnderlinePopup : public SfxToolBoxControl
+class SVX_DLLPUBLIC TextUnderlinePopup final : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();

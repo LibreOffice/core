@@ -24,7 +24,7 @@
 #include <svx/sdrpageuser.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SdrPageObj : public SdrObject, public sdr::PageUser
+class SVX_DLLPUBLIC SdrPageObj final : public SdrObject, public sdr::PageUser
 {
 public:
     // this method is called from the destructor of the referenced page.
@@ -36,7 +36,6 @@ private:
     // To make things more safe, remember the page, not a number
     SdrPage*                                mpShownPage;
 
-protected:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 

@@ -32,7 +32,7 @@ namespace sdr { namespace properties {
     class MeasureProperties;
 }}
 
-class SdrMeasureObjGeoData : public SdrTextObjGeoData
+class SdrMeasureObjGeoData final : public SdrTextObjGeoData
 {
 public:
     Point                       aPt1;

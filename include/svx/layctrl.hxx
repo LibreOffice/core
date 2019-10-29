@@ -22,7 +22,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SvxTableToolBoxControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxTableToolBoxControl final : public SfxToolBoxControl
 {
 private:
     bool    bEnabled;
@@ -39,7 +39,7 @@ public:
     virtual ~SvxTableToolBoxControl() override;
 };
 
-class SVX_DLLPUBLIC SvxColumnsToolBoxControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxColumnsToolBoxControl final : public SfxToolBoxControl
 {
     bool    bEnabled;
 public:

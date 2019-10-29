@@ -26,7 +26,7 @@
 
 class  SvxSizeItem;
 
-class SVX_DLLPUBLIC XmlSecStatusBarControl : public SfxStatusBarControl
+class SVX_DLLPUBLIC XmlSecStatusBarControl final : public SfxStatusBarControl
 {
 private:
     struct XmlSecStatusBarControl_Impl;

@@ -24,7 +24,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 
-class SVX_DLLPUBLIC PageNumberListBox : public ListBox
+class SVX_DLLPUBLIC PageNumberListBox final : public ListBox
 {
 public:
     PageNumberListBox( vcl::Window* pParent );

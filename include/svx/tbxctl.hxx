@@ -28,7 +28,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SvxTbxCtlDraw : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxTbxCtlDraw final : public SfxToolBoxControl
 {
 private:
     OUString     m_sToolboxName;

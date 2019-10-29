@@ -29,7 +29,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC XLineTransparenceItem: public SfxUInt16Item
+class SVX_DLLPUBLIC XLineTransparenceItem final : public SfxUInt16Item
 {
 public:
                             XLineTransparenceItem(sal_uInt16 nLineTransparence = 0);

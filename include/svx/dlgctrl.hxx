@@ -344,7 +344,7 @@ public:
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXLinePreview : public SvxPreviewBase
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXLinePreview final : public SvxPreviewBase
 {
 private:
     SdrPathObj*                                     mpLineObjA;
@@ -370,7 +370,7 @@ public:
     virtual void Resize() override;
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXRectPreview : public SvxPreviewBase
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXRectPreview final : public SvxPreviewBase
 {
 private:
     SdrObject* mpRectangleObject;
@@ -392,7 +392,7 @@ public:
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXShadowPreview : public SvxPreviewBase
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXShadowPreview final : public SvxPreviewBase
 {
 private:
     Point maShadowOffset;

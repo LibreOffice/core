@@ -29,7 +29,7 @@
 // class XFillStyleItem
 
 
-class SVX_DLLPUBLIC XFillStyleItem : public SfxEnumItem<css::drawing::FillStyle>
+class SVX_DLLPUBLIC XFillStyleItem final : public SfxEnumItem<css::drawing::FillStyle>
 {
 public:
                             static SfxPoolItem* CreateDefault();

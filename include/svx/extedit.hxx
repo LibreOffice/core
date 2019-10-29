@@ -42,7 +42,7 @@ public:
 class FmFormView;
 class SdrObject;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SdrExternalToolEdit
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SdrExternalToolEdit final
 :   public ExternalToolEdit
     ,public SfxListener
 {
