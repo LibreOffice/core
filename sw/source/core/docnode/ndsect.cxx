@@ -22,9 +22,7 @@
 #include <svl/itemiter.hxx>
 #include <sal/log.hxx>
 #include <fmtcntnt.hxx>
-#include <fmtanchr.hxx>
 #include <txtftn.hxx>
-#include <fmtclds.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentLinksAdministration.hxx>
@@ -47,7 +45,6 @@
 #include <docary.hxx>
 #include <redline.hxx>
 #include <sectfrm.hxx>
-#include <pagefrm.hxx>
 #include <cntfrm.hxx>
 #include <node2lay.hxx>
 #include <doctxm.hxx>

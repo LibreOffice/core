@@ -42,32 +42,19 @@
 #include <UndoManager.hxx>
 #include <dbmgr.hxx>
 #include <hintids.hxx>
-#include <tools/globname.hxx>
-#include <svx/svxids.hrc>
 
 #include <comphelper/random.hxx>
-#include <tools/urlobj.hxx>
-#include <tools/poly.hxx>
 #include <tools/multisel.hxx>
 #include <rtl/ustring.hxx>
-#include <vcl/virdev.hxx>
-#include <svl/itemiter.hxx>
 #include <svl/poolitem.hxx>
 #include <unotools/syslocale.hxx>
-#include <sfx2/printer.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/formatbreakitem.hxx>
-#include <sfx2/linkmgr.hxx>
-#include <svx/svdmodel.hxx>
 #include <editeng/pbinitem.hxx>
-#include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <vcl/timer.hxx>
 
 #include <swatrset.hxx>
 #include <swmodule.hxx>
-#include <fmtpdsc.hxx>
-#include <fmtanchr.hxx>
 #include <fmtrfmrk.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtfld.hxx>
@@ -78,49 +65,28 @@
 #include <frmatr.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
-#include <swtable.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <swundo.hxx>
 #include <UndoCore.hxx>
-#include <UndoInsert.hxx>
-#include <UndoSplitMove.hxx>
 #include <UndoTable.hxx>
 #include <pagedesc.hxx>
-#include <ndole.hxx>
-#include <ndgrf.hxx>
-#include <rolbck.hxx>
 #include <doctxm.hxx>
-#include <grfatr.hxx>
 #include <poolfmt.hxx>
-#include <mvsave.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <scriptinfo.hxx>
-#include <acorrect.hxx>
 #include <mdiexp.hxx>
-#include <docstat.hxx>
 #include <docary.hxx>
-#include <redline.hxx>
-#include <fldupde.hxx>
-#include <swbaslnk.hxx>
 #include <printdata.hxx>
-#include <cmdid.h>
 #include <strings.hrc>
 #include <SwUndoTOXChange.hxx>
 #include <unocrsr.hxx>
-#include <docsh.hxx>
-#include <viewopt.hxx>
 #include <docfld.hxx>
 #include <docufld.hxx>
 #include <viewsh.hxx>
 #include <shellres.hxx>
 #include <txtfrm.hxx>
 #include <attrhint.hxx>
-#include <view.hxx>
-
-#include <wdocsh.hxx>
-#include <prtopt.hxx>
-#include <wrtsh.hxx>
 
 #include <vector>
 #include <map>
@@ -128,11 +94,12 @@
 #include <osl/interlck.h>
 #include <vbahelper/vbaaccesshelper.hxx>
 #include <calbck.hxx>
+#include <crsrsh.hxx>
 
 /* @@@MAINTAINABILITY-HORROR@@@
    Probably unwanted dependency on SwDocShell
 */
-#include <layouter.hxx>
+#include <docsh.hxx>
 
 using namespace ::com::sun::star;
 

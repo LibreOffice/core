@@ -22,7 +22,6 @@
 #include <memory>
 #include <utility>
 
-#include <IDocumentDeviceAccess.hxx>
 #include <doc.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDrawModelAccess.hxx>
@@ -35,8 +34,6 @@
 #include <printdata.hxx>
 #include <vcl/mapmod.hxx>
 #include <svl/itemset.hxx>
-#include <svx/svdmodel.hxx>
-#include <sal/log.hxx>
 #include <cmdid.h>
 #include <drawdoc.hxx>
 #include <wdocsh.hxx>

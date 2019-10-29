@@ -37,11 +37,6 @@
 #include <authfld.hxx>
 #include <strings.hrc>
 #include <swmodule.hxx>
-#include <editsh.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
-#include <svl/intitem.hxx>
-#include <sal/log.hxx>
 
 using namespace com::sun::star;
 

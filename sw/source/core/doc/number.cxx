@@ -22,18 +22,13 @@
 
 #include <vcl/font.hxx>
 #include <editeng/brushitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>
 #include <svl/grabbagitem.hxx>
 #include <fmtornt.hxx>
 #include <doc.hxx>
-#include <pam.hxx>
 #include <charfmt.hxx>
-#include <paratr.hxx>
-#include <frmfmt.hxx>
 #include <ndtxt.hxx>
 #include <docary.hxx>
-#include <docsh.hxx>
 #include <SwStyleNameMapper.hxx>
 
 // Needed to load default bullet list configuration

@@ -19,14 +19,12 @@
 
 #include <cmdid.h>
 #include <init.hxx>
-#include <svx/svdmodel.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/printer.hxx>
 #include <tools/globname.hxx>
 #include <sal/log.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -43,18 +41,13 @@
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <docary.hxx>
 #include <rootfrm.hxx>
-#include <frmtool.hxx>
 #include <poolfmt.hxx>
 #include <docsh.hxx>
 #include <ftnidx.hxx>
 #include <fmtftn.hxx>
 #include <txtftn.hxx>
-#include <fntcache.hxx>
-#include <viewopt.hxx>
 #include <fldbas.hxx>
-#include <swwait.hxx>
 #include <GetMetricVal.hxx>
 #include <strings.hrc>
 #include <hints.hxx>

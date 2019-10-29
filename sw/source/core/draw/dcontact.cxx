@@ -19,22 +19,16 @@
 
 #include <memory>
 #include <hintids.hxx>
-#include <editeng/protitem.hxx>
-#include <editeng/opaqitem.hxx>
-#include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
-#include <svx/fmglob.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/svdpagv.hxx>
 #include <svx/svdviter.hxx>
 #include <svx/svdview.hxx>
-#include <svx/shapepropertynotifier.hxx>
-#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include <svx/sdr/contact/objectcontact.hxx>
 #include <drawdoc.hxx>
 #include <fmtornt.hxx>
 #include <viewimp.hxx>
@@ -43,6 +37,7 @@
 #include <node.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtfsize.hxx>
+#include <pam.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <frmtool.hxx>
@@ -58,14 +53,13 @@
 #include <doc.hxx>
 #include <hints.hxx>
 #include <txtfrm.hxx>
-#include <editsh.hxx>
 #include <docary.hxx>
-#include <flyfrms.hxx>
 #include <sortedobjs.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <calbck.hxx>

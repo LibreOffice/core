@@ -25,7 +25,6 @@
 #include <charfmt.hxx>
 #include <poolfmt.hxx>
 #include <rootfrm.hxx>
-#include <viewsh.hxx>
 #include <set>
 
 void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )

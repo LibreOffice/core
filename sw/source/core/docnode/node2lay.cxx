@@ -23,7 +23,6 @@
 #include <swtable.hxx>
 #include <ftnfrm.hxx>
 #include <sectfrm.hxx>
-#include <frmfmt.hxx>
 #include <cntfrm.hxx>
 #include <tabfrm.hxx>
 #include <frmtool.hxx>

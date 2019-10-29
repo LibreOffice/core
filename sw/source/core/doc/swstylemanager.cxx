@@ -19,10 +19,6 @@
 
 #include "swstylemanager.hxx"
 #include <svl/stylepool.hxx>
-#include <doc.hxx>
-#include <charfmt.hxx>
-#include <docary.hxx>
-#include <swtypes.hxx>
 #include <istyleaccess.hxx>
 #include <unordered_map>
 #include <osl/diagnose.h>

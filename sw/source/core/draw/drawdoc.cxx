@@ -18,24 +18,14 @@
  */
 
 #include <svx/svxids.hrc>
-#include <tools/stream.hxx>
-#include <unotools/configmgr.hxx>
-#include <sot/storage.hxx>
-#include <svl/intitem.hxx>
-#include <editeng/forbiddencharacterstable.hxx>
 
-#include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
-#include <viewsh.hxx>
 #include <doc.hxx>
-#include <rootfrm.hxx>
 #include <drawdoc.hxx>
 #include <dpage.hxx>
 #include <docsh.hxx>
-#include <shellio.hxx>
 #include <hintids.hxx>
 #include <DocumentSettingManager.hxx>
-#include <IDocumentDrawModelAccess.hxx>
 
 using namespace com::sun::star;
 

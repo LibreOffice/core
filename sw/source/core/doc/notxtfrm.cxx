@@ -19,20 +19,14 @@
 
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/print.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/imapobj.hxx>
 #include <vcl/imap.hxx>
 #include <svl/urihelper.hxx>
-#include <svtools/soerr.hxx>
 #include <sfx2/progress.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/boxitem.hxx>
-#include <svx/xoutbmp.hxx>
 #include <fmturl.hxx>
 #include <fmtsrnd.hxx>
 #include <frmfmt.hxx>
@@ -56,14 +50,12 @@
 #include <notxtfrm.hxx>
 #include <grfatr.hxx>
 #include <charatr.hxx>
-#include <fmtornt.hxx>
 #include <ndnotxt.hxx>
 #include <ndgrf.hxx>
 #include <ndole.hxx>
 #include <swregion.hxx>
 #include <poolfmt.hxx>
 #include <mdiexp.hxx>
-#include <swwait.hxx>
 #include <strings.hrc>
 #include <accessibilityoptions.hxx>
 #include <com/sun/star/embed/EmbedMisc.hpp>
@@ -78,8 +70,6 @@
 #include <basegfx/utils/b2dclipstate.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <txtfly.hxx>
-#include <vcl/graphicfilter.hxx>
-#include <vcl/pdfextoutdevdata.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>

@@ -30,8 +30,6 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentContentOperations.hxx>
-#include <docary.hxx>
-#include <mvsave.hxx>
 #include <ndtxt.hxx>
 #include <txatbase.hxx>
 #include <rubylist.hxx>

@@ -18,12 +18,10 @@
  */
 
 #include <hintids.hxx>
-#include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <editeng/unolingu.hxx>
 #include <docary.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
@@ -45,7 +43,6 @@
 #include <cellatr.hxx>
 #include <redline.hxx>
 #include <node2lay.hxx>
-#include <unochart.hxx>
 
 #include <set>
 #include <utility>

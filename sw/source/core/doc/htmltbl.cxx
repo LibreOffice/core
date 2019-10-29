@@ -22,27 +22,21 @@
 
 #include <algorithm>
 #include <memory>
-#include <hintids.hxx>
 
-#include <vcl/svapp.hxx>
-#include <sot/storage.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <frmfmt.hxx>
-#include <docary.hxx>
 #include <ndtxt.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <swtable.hxx>
 #include <rootfrm.hxx>
-#include <docsh.hxx>
 #include <flyfrm.hxx>
 #include <poolfmt.hxx>
 #include <viewsh.hxx>
 #include <tabfrm.hxx>
 #include <viewopt.hxx>
 #include <htmltbl.hxx>
-#include <ndindex.hxx>
 #include <calbck.hxx>
 #include <o3tl/numeric.hxx>
 #ifdef DBG_UTIL

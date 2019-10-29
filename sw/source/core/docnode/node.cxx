@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <editeng/frmdiritem.hxx>
 #include <editeng/protitem.hxx>
 #include <tools/gen.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
@@ -69,7 +68,6 @@
 #include <memory>
 #include <swcrsr.hxx>
 #include <hints.hxx>
-#include <svl/itemiter.hxx>
 
 using namespace ::com::sun::star::i18n;
 

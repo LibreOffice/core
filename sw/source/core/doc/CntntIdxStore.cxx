@@ -22,23 +22,17 @@
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <MarkManager.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <functional>
 #include <mvsave.hxx>
-#include <ndtxt.hxx>
 #include <node.hxx>
 #include <pam.hxx>
 #include <redline.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <sal/types.h>
 #include <unocrsr.hxx>
-#include <edimp.hxx>
 #include <txtfrm.hxx>
 #include <memory>
 
@@ -80,6 +74,7 @@ namespace
         bool m_bOther;
         sal_Int32 m_nContent;
 #if 0
+#include <sal/log.hxx>
         void Dump()
         {
             SAL_INFO("sw.core", "Index: " << m_nIdx << "\tOther: " << m_bOther << "\tContent: " << m_nContent);

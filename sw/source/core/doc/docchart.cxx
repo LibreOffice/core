@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <float.h>
-#include <hintids.hxx>
 #include <doc.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentState.hxx>
@@ -26,16 +24,10 @@
 #include <docary.hxx>
 #include <ndindex.hxx>
 #include <swtable.hxx>
-#include <ndtxt.hxx>
-#include <calc.hxx>
-#include <cellfml.hxx>
 #include <viewsh.hxx>
 #include <ndole.hxx>
-#include <calbck.hxx>
-#include <cntfrm.hxx>
 #include <swtblfmt.hxx>
 #include <tblsel.hxx>
-#include <cellatr.hxx>
 
 #include <unochart.hxx>
 
