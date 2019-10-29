@@ -22,41 +22,30 @@
 
 #include <MarkManager.hxx>
 #include <bookmrk.hxx>
-#include <cntfrm.hxx>
 #include <crossrefbookmark.hxx>
+#include <crsrsh.hxx>
 #include <annotationmark.hxx>
-#include <dcontact.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <xmloff/odffields.hxx>
-#include <editsh.hxx>
-#include <fmtanchr.hxx>
-#include <frmfmt.hxx>
-#include <functional>
-#include <hintids.hxx>
 #include <mvsave.hxx>
 #include <ndtxt.hxx>
 #include <node.hxx>
 #include <pam.hxx>
 #include <redline.hxx>
 #include <rolbck.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <sal/log.hxx>
-#include <sortedobjs.hxx>
-#include <sfx2/linkmgr.hxx>
-#include <swserv.hxx>
-#include <swundo.hxx>
 #include <UndoBookmark.hxx>
-#include <unocrsr.hxx>
-#include <viscrs.hxx>
-#include <edimp.hxx>
 #include <tools/datetimeutils.hxx>
 #include <view.hxx>
+
+#include <libxml/xmlstring.h>
+#include <libxml/xmlwriter.h>
 
 using namespace ::sw::mark;
 

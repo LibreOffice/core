@@ -23,17 +23,14 @@
 #include <DocumentSettingManager.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
-#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/frame.hxx>
 #include <dialoghelp.hxx>
 #include <linkenum.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <swtypes.hxx>
-#include <viewsh.hxx>
 #include <docsh.hxx>
 #include <bookmrk.hxx>
 #include <swserv.hxx>

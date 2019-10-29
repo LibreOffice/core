@@ -20,18 +20,12 @@
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <node.hxx>
-#include <rootfrm.hxx>
 #include <editsh.hxx>
 #include <viscrs.hxx>
-#include <IMark.hxx>
-#include <bookmrk.hxx>
 #include <redline.hxx>
 #include <mvsave.hxx>
 #include <docary.hxx>
 #include <unocrsr.hxx>
-#include <swundo.hxx>
-#include <hints.hxx>
-#include <edimp.hxx>
 
 namespace
 {

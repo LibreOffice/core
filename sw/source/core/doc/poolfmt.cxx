@@ -17,59 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
 #include <hintids.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <editeng/paperinf.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/fhgtitem.hxx>
-#include <editeng/tstpitem.hxx>
-#include <editeng/lrspitem.hxx>
-#include <editeng/ulspitem.hxx>
-#include <editeng/lspcitem.hxx>
-#include <editeng/adjustitem.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/keepitem.hxx>
-#include <editeng/opaqitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/cmapitem.hxx>
-#include <editeng/udlnitem.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/protitem.hxx>
-#include <editeng/escapementitem.hxx>
-#include <editeng/langitem.hxx>
-#include <editeng/charrotateitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <editeng/emphasismarkitem.hxx>
-#include <editeng/scriptspaceitem.hxx>
-#include <viewopt.hxx>
+#include <osl/diagnose.h>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
-#include <DocumentSettingManager.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include <fmtanchr.hxx>
-#include <fmtornt.hxx>
-#include <fmtsrnd.hxx>
-#include <fmtfsize.hxx>
 #include <poolfmt.hxx>
-#include <paratr.hxx>
 #include <pagedesc.hxx>
-#include <frmtool.hxx>
-#include <charfmt.hxx>
-#include <docary.hxx>
 #include <fmtcol.hxx>
-#include <ndtxt.hxx>
-#include <fmtline.hxx>
-#include <GetMetricVal.hxx>
 #include <numrule.hxx>
 #include <swtable.hxx>
 #include <tblafmt.hxx>
 #include <hints.hxx>
-#include <svx/xdef.hxx>
-#include <svx/xfillit0.hxx>
 
 using namespace ::editeng;
 using namespace ::com::sun::star;

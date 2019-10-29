@@ -22,27 +22,17 @@
 #include <unordered_set>
 
 #include <doc.hxx>
-#include <dcontact.hxx>
 #include <proofreadingiterator.hxx>
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/virdev.hxx>
-#include <sfx2/printer.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
 #include <sal/log.hxx>
 
-#include <svl/macitem.hxx>
-#include <svx/svxids.hrc>
-#include <svx/svdogrp.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svl/zforlist.hxx>
@@ -55,17 +45,12 @@
 #include <fmtpdsc.hxx>
 #include <pvprtdat.hxx>
 #include <rootfrm.hxx>
-#include <layouter.hxx>
 #include <pagedesc.hxx>
 #include <ndtxt.hxx>
-#include <printdata.hxx>
-#include <docfld.hxx>
 #include <ftninfo.hxx>
 #include <ftnidx.hxx>
-#include <docstat.hxx>
 #include <charfmt.hxx>
 #include <frmfmt.hxx>
-#include <rolbck.hxx>
 #include <poolfmt.hxx>
 #include <dbmgr.hxx>
 #include <docsh.hxx>
@@ -74,20 +59,16 @@
 #include <docary.hxx>
 #include <lineinfo.hxx>
 #include <drawdoc.hxx>
-#include <linkenum.hxx>
-#include <fldupde.hxx>
 #include <extinput.hxx>
 #include <viewsh.hxx>
 #include <doctxm.hxx>
 #include <shellres.hxx>
-#include <breakit.hxx>
 #include <laycache.hxx>
 #include <mvsave.hxx>
 #include <istyleaccess.hxx>
 #include "swstylemanager.hxx"
 #include <IGrammarContact.hxx>
 #include <tblafmt.hxx>
-#include <tblsel.hxx>
 #include <MarkManager.hxx>
 #include <UndoManager.hxx>
 #include <DocumentDeviceManager.hxx>
@@ -107,17 +88,11 @@
 #include <DocumentLayoutManager.hxx>
 #include <DocumentStylePoolManager.hxx>
 #include <DocumentExternalDataManager.hxx>
-#include <unochart.hxx>
-#include <fldbas.hxx>
 #include <wrtsh.hxx>
 #include <unocrsr.hxx>
 #include <fmthdft.hxx>
 
-#include <cmdid.h>
-
-#include <pausethreadstarting.hxx>
 #include <numrule.hxx>
-#include <list.hxx>
 
 #include <sfx2/Metadatable.hxx>
 #include <fmtmeta.hxx>

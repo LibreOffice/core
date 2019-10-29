@@ -20,10 +20,8 @@
 #include <node.hxx>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
-#include <pam.hxx>
 #include <ndtxt.hxx>
 #include <fldbas.hxx>
-#include <docary.hxx>
 #include <osl/diagnose.h>
 
 bool CompareSwOutlineNodes::operator()( SwNode* const& lhs, SwNode* const& rhs) const

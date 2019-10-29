@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 
+#include <osl/diagnose.h>
 #include <svl/zforlist.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
@@ -28,13 +29,10 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include <cntfrm.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
-#include <fldbas.hxx>
 #include <tblsel.hxx>
-#include <tabfrm.hxx>
 #include <poolfmt.hxx>
 #include <cellatr.hxx>
 #include <mvsave.hxx>
@@ -42,7 +40,6 @@
 #include <fmtanchr.hxx>
 #include <hints.hxx>
 #include <UndoTable.hxx>
-#include <redline.hxx>
 #include <fmtfsize.hxx>
 #include <deque>
 #include <memory>

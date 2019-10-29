@@ -18,7 +18,7 @@
  */
 
 #include <hintids.hxx>
-#include <editeng/protitem.hxx>
+#include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/fmmodel.hxx>
 #include <sot/exchange.hxx>
@@ -28,7 +28,6 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
-#include <swtypes.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
@@ -38,17 +37,14 @@
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
 #include <textboxhelper.hxx>
-#include <frmatr.hxx>
 #include <viewsh.hxx>
 #include <viewimp.hxx>
 #include <dview.hxx>
-#include <dpage.hxx>
 #include <doc.hxx>
 #include <mdiexp.hxx>
 #include <ndole.hxx>
 #include <ndgrf.hxx>
 #include <fmtanchr.hxx>
-#include <shellres.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -58,7 +54,6 @@
 #include <vector>
 
 #include <sortedobjs.hxx>
-#include <flyfrms.hxx>
 #include <UndoManager.hxx>
 
 using namespace com::sun::star;

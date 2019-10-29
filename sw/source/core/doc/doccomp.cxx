@@ -18,14 +18,7 @@
  */
 
 #include <osl/diagnose.h>
-#include <hintids.hxx>
 #include <rtl/character.hxx>
-#include <vcl/vclenum.hxx>
-#include <editeng/crossedoutitem.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/boxitem.hxx>
-#include <editeng/svxenum.hxx>
-#include <editeng/udlnitem.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>

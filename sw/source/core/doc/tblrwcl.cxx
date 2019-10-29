@@ -21,9 +21,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <hintids.hxx>
 
-#include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/protitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <tools/fract.hxx>
 #include <fmtfsize.hxx>
@@ -35,7 +33,6 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
-#include <cntfrm.hxx>
 #include <docsh.hxx>
 #include <fesh.hxx>
 #include <tabfrm.hxx>
@@ -43,11 +40,8 @@
 #include <frmtool.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
-#include <ndtxt.hxx>
-#include <tblafmt.hxx>
 #include <tblsel.hxx>
 #include <fldbas.hxx>
-#include <swundo.hxx>
 #include <rowfrm.hxx>
 #include <ddefld.hxx>
 #include <hints.hxx>

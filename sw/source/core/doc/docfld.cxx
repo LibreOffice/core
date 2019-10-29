@@ -21,15 +21,9 @@
 
 #include <hintids.hxx>
 
-#include <string.h>
-#include <float.h>
 #include <comphelper/string.hxx>
-#include <tools/datetime.hxx>
-#include <vcl/svapp.hxx>
 #include <unotools/charclass.hxx>
-#include <unotools/transliterationwrapper.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -42,27 +36,20 @@
 #include <calc.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
-#include <tox.hxx>
 #include <txttxmrk.hxx>
 #include <docfld.hxx>
 #include <docufld.hxx>
-#include <ddefld.hxx>
 #include <usrfld.hxx>
 #include <expfld.hxx>
 #include <dbfld.hxx>
-#include <flddat.hxx>
-#include <chpfld.hxx>
 #include <reffld.hxx>
-#include <flddropdown.hxx>
 #include <dbmgr.hxx>
 #include <section.hxx>
-#include <cellatr.hxx>
 #include <docary.hxx>
 #include <authfld.hxx>
 #include <txtinet.hxx>
 #include <fmtcntnt.hxx>
 
-#include <SwUndoField.hxx>
 #include <calbck.hxx>
 
 using namespace ::com::sun::star::uno;

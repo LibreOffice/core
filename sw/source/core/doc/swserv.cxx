@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sot/storage.hxx>
 #include <sot/exchange.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <doc.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <swtypes.hxx>
 #include <swserv.hxx>
 #include <swbaslnk.hxx>
 #include <mvsave.hxx>
@@ -32,7 +30,6 @@
 #include <bookmrk.hxx>
 #include <pam.hxx>
 #include <shellio.hxx>
-#include <swerror.h>
 
 using namespace ::com::sun::star;
 

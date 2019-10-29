@@ -26,7 +26,7 @@
 #include <com/sun/star/xforms/XFormsUIHelper1.hpp>
 #include <com/sun/star/xforms/XForms.hpp>
 #include <comphelper/processfactory.hxx>
-#include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <com/sun/star/container/XIndexAccess.hpp>
 
 using namespace ::com::sun::star;

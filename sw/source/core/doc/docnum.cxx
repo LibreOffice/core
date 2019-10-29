@@ -24,14 +24,11 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentListsAccess.hxx>
-#include <DocumentRedlineManager.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <pam.hxx>
-#include <unocrsr.hxx>
 #include <ndtxt.hxx>
-#include <doctxm.hxx>
 #include <poolfmt.hxx>
 #include <UndoCore.hxx>
 #include <UndoRedline.hxx>
@@ -44,13 +41,8 @@
 #include <mvsave.hxx>
 #include <txtfrm.hxx>
 #include <rootfrm.hxx>
-#include <pamtyp.hxx>
 #include <redline.hxx>
 #include <strings.hrc>
-#include <editeng/adjustitem.hxx>
-#include <editeng/frmdiritem.hxx>
-#include <frmatr.hxx>
-#include <SwStyleNameMapper.hxx>
 #include <SwNodeNum.hxx>
 #include <list.hxx>
 #include <calbck.hxx>
@@ -58,7 +50,6 @@
 #include <comphelper/random.hxx>
 #include <tools/datetimeutils.hxx>
 
-#include <cstdlib>
 #include <map>
 #include <stdlib.h>
 

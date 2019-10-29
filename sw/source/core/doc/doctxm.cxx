@@ -19,18 +19,12 @@
 
 #include <limits.h>
 #include <hintids.hxx>
-#include <editeng/langitem.hxx>
 #include <editeng/formatbreakitem.hxx>
-#include <editeng/tstpitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <comphelper/classids.hxx>
 #include <docsh.hxx>
 #include <ndole.hxx>
 #include <txttxmrk.hxx>
-#include <fmtinfmt.hxx>
 #include <fmtpdsc.hxx>
-#include <frmfmt.hxx>
-#include <fmtfsize.hxx>
 #include <frmatr.hxx>
 #include <pagedesc.hxx>
 #include <doc.hxx>
@@ -61,12 +55,10 @@
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <expfld.hxx>
-#include <chpfld.hxx>
 #include <mvsave.hxx>
 #include <node2lay.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <breakit.hxx>
-#include <editsh.hxx>
 #include <scriptinfo.hxx>
 #include <calbck.hxx>
 #include <ToxTextGenerator.hxx>
