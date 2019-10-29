@@ -3296,7 +3296,10 @@ void DomainMapper_Impl::PushFieldContext()
     {
         uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
         if (xTextAppend.is())
-            xCrsr = xTextAppend->createTextCursorByRange(xTextAppend->getEnd());
+            xCrsr = xTextAppend->createTextCursorByRange(
+                        m_aTextAppendStack.top().xInsertPosition.is()
+                            ? m_aTextAppendStack.top().xInsertPosition
+                            : xTextAppend->getEnd());
     }
 
     uno::Reference< text::XTextRange > xStart;
