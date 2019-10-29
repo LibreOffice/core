@@ -1,0 +1,24 @@
+This is code for using the Skia library as a drawing library in VCL backends.
+See external/skia for info on the library itself.
+
+Environment variables:
+======================
+
+SAL_DISABLESKIA=1 - force disabled Skia
+SAL_ENABLESKIA=1 - enable Skia, unless blacklisted (and if the VCL backend supports Skia)
+SAL_FORCESKIA=1 - force using Skia, even if blacklisted
+SAL_SKIA=raster|vulkan - select Skia's drawing method, by default Vulkan is used
+
+There also also GUI options for controlling whether Skia is enabled.
+
+Note that many backends do not use Skia. E.g. on Linux it is necessary to also use
+SAL_USE_VCLPLUGIN=gen .
+
+Skia drawing methods:
+=====================
+
+Skia supports several methods to draw:
+- Raster - CPU-based drawing (here primarily used for debugging)
+- Vulkan - Vulkan-based GPU drawing, this is the default
+
+There are more (OpenGL, Metal on Mac, etc.), but (as of now) they are not supported by VCL.
