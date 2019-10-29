@@ -196,12 +196,11 @@ sal_Int16 TheExtensionManager::execute()
     return nRet;
 }
 
-
 bool TheExtensionManager::isVisible()
 {
-    return getDialog()->get_visible();
+    weld::Window* pDialog = getDialog();
+    return pDialog && pDialog->get_visible();
 }
-
 
 void TheExtensionManager::checkUpdates()
 {
