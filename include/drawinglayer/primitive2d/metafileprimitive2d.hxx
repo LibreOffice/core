@@ -54,7 +54,7 @@ namespace drawinglayer
             have many advantages; Metafile would no longer have to be rendered by
             sub-systems and a standard way for converting Metafiles would exist.
          */
-        class DRAWINGLAYER_DLLPUBLIC MetafilePrimitive2D : public BufferedDecompositionPrimitive2D, public MetafileAccessor
+        class DRAWINGLAYER_DLLPUBLIC MetafilePrimitive2D final : public BufferedDecompositionPrimitive2D, public MetafileAccessor
         {
         private:
             /// the geometry definition
@@ -63,7 +63,6 @@ namespace drawinglayer
             /// the content definition
             GDIMetaFile                                 maMetaFile;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
         public:

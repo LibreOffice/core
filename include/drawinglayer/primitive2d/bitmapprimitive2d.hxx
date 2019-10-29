@@ -40,7 +40,7 @@ namespace drawinglayer
             This may change in the future to any other, maybe more general base
             class providing 24bit RGBA.
          */
-        class DRAWINGLAYER_DLLPUBLIC BitmapPrimitive2D : public BasePrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC BitmapPrimitive2D final : public BasePrimitive2D
         {
         private:
             /// the RGBA Bitmap-data

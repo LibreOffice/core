@@ -44,14 +44,13 @@ namespace drawinglayer
             layouting which is dependent from WallpaperStyle; thus it does not need
             to be handled anywhere else in the future.
          */
-        class DRAWINGLAYER_DLLPUBLIC WallpaperBitmapPrimitive2D : public ViewTransformationDependentPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC WallpaperBitmapPrimitive2D final : public ViewTransformationDependentPrimitive2D
         {
         private:
             basegfx::B2DRange                   maObjectRange;
             BitmapEx                            maBitmapEx;
             WallpaperStyle                      meWallpaperStyle;
 
-        protected:
             /// create local decomposition
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

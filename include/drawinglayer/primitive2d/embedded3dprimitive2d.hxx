@@ -44,7 +44,7 @@ namespace drawinglayer
             This primitive will not be visualized and decomposes to a yellow
             2D rectangle to visualize that this should never be visualized
          */
-        class DRAWINGLAYER_DLLPUBLIC Embedded3DPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC Embedded3DPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the sequence of 3d primitives
@@ -80,7 +80,6 @@ namespace drawinglayer
             /// private helpers
             bool impGetShadow3D() const;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

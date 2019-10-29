@@ -51,7 +51,7 @@ namespace drawinglayer
             This is the class a renderer may process directly when he wants to implement
             an own (e.g. system-specific) 3D renderer.
          */
-        class DRAWINGLAYER_DLLPUBLIC ScenePrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC ScenePrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the 3D geometry definition
@@ -95,7 +95,6 @@ namespace drawinglayer
                 basegfx::B2DRange& rVisibleDiscreteRange,
                 basegfx::B2DRange& rUnitVisibleRange) const;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

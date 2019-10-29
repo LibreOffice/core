@@ -79,7 +79,7 @@ namespace drawinglayer
         /** DiscreteShadowPrimitive2D class
 
          */
-        class DRAWINGLAYER_DLLPUBLIC DiscreteShadowPrimitive2D : public DiscreteMetricDependentPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC DiscreteShadowPrimitive2D final : public DiscreteMetricDependentPrimitive2D
         {
         private:
             // the object transformation of the rectangular object
@@ -88,7 +88,6 @@ namespace drawinglayer
             // the bitmap shadow data
             DiscreteShadow              maDiscreteShadow;
 
-        protected:
             /// create local decomposition
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

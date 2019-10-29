@@ -180,13 +180,12 @@ namespace drawinglayer
     namespace primitive2d
     {
         /// the basic linear gradient primitive
-        class DRAWINGLAYER_DLLPUBLIC SvgLinearGradientPrimitive2D : public BufferedDecompositionPrimitive2D, public SvgGradientHelper
+        class DRAWINGLAYER_DLLPUBLIC SvgLinearGradientPrimitive2D final : public BufferedDecompositionPrimitive2D, public SvgGradientHelper
         {
         private:
             /// the end point for linear gradient
             basegfx::B2DPoint                       maEnd;
 
-        protected:
             /// local helpers
             virtual void createAtom(
                 Primitive2DContainer& rTargetColor,
@@ -234,7 +233,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         /// the basic radial gradient primitive
-        class DRAWINGLAYER_DLLPUBLIC SvgRadialGradientPrimitive2D : public BufferedDecompositionPrimitive2D, public SvgGradientHelper
+        class DRAWINGLAYER_DLLPUBLIC SvgRadialGradientPrimitive2D final : public BufferedDecompositionPrimitive2D, public SvgGradientHelper
         {
         private:
             /// the geometric definition
@@ -254,7 +253,6 @@ namespace drawinglayer
             const SvgGradientEntryVector& getMirroredGradientEntries() const;
             void createMirroredGradientEntries();
 
-        protected:
             /// local helpers
             virtual void createAtom(
                 Primitive2DContainer& rTargetColor,
@@ -308,7 +306,7 @@ namespace drawinglayer
             It's derived from DiscreteMetricDependentPrimitive2D to allow view-dependent
             decompositions allowing reduced color steps
          **/
-        class DRAWINGLAYER_DLLPUBLIC SvgLinearAtomPrimitive2D : public DiscreteMetricDependentPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC SvgLinearAtomPrimitive2D final : public DiscreteMetricDependentPrimitive2D
         {
         private:
             /// the geometric definition in unit coordinates
@@ -316,8 +314,6 @@ namespace drawinglayer
             basegfx::BColor             maColorB;
             double                      mfOffsetA;
             double                      mfOffsetB;
-
-        protected:
 
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
@@ -354,7 +350,7 @@ namespace drawinglayer
             It's derived from DiscreteMetricDependentPrimitive2D to allow view-dependent
             decompositions allowing reduced color steps
          **/
-        class DRAWINGLAYER_DLLPUBLIC SvgRadialAtomPrimitive2D : public DiscreteMetricDependentPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC SvgRadialAtomPrimitive2D final : public DiscreteMetricDependentPrimitive2D
         {
         private:
             /// the geometric definition in unit coordinates
@@ -378,8 +374,6 @@ namespace drawinglayer
 
             /// Only used when focal is set
             std::unique_ptr<VectorPair> mpTranslate;
-
-        protected:
 
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;

@@ -39,7 +39,7 @@ namespace drawinglayer
             systems. XOR painting needs read access to the target, so modern
             graphic systems tend to not support it anymore.
          */
-        class DRAWINGLAYER_DLLPUBLIC InvertPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC InvertPrimitive2D final : public GroupPrimitive2D
         {
         public:
             /// constructor

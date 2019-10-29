@@ -33,7 +33,7 @@ namespace drawinglayer
             A processor to find the first incarnation of ObjectInfoPrimitive2D
             in a given hierarchy
          */
-        class DRAWINGLAYER_DLLPUBLIC ObjectInfoPrimitiveExtractor2D : public BaseProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC ObjectInfoPrimitiveExtractor2D final : public BaseProcessor2D
         {
         private:
             /// the target

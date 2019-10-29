@@ -54,7 +54,7 @@ namespace drawinglayer
             The visualisation uses the two given colors to create a dashed line with
             the given dash length.
          */
-        class DRAWINGLAYER_DLLPUBLIC HelplinePrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC HelplinePrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// Helpline geometry definition
@@ -73,7 +73,6 @@ namespace drawinglayer
             basegfx::B2DHomMatrix                           maLastObjectToViewTransformation;
             basegfx::B2DRange                               maLastViewport;
 
-        protected:
             /// create local decomposition
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

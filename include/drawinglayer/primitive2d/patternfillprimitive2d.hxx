@@ -37,7 +37,7 @@ namespace drawinglayer
             area relative to the tools::PolyPolygon (in unit coordinates) which is virtually
             infinitely repeated.
          */
-        class DRAWINGLAYER_DLLPUBLIC PatternFillPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PatternFillPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             const basegfx::B2DPolyPolygon       maMask;
@@ -59,7 +59,6 @@ namespace drawinglayer
             /// creates buffered content to speed up rendering
             Primitive2DContainer createContent(const geometry::ViewInformation2D& rViewInformation) const;
 
-        protected:
             /// create local decomposition
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

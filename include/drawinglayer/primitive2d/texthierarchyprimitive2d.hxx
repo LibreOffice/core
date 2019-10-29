@@ -39,7 +39,7 @@ namespace drawinglayer
 
             This primitive encapsulates text lines.
          */
-        class DRAWINGLAYER_DLLPUBLIC TextHierarchyLinePrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TextHierarchyLinePrimitive2D final : public GroupPrimitive2D
         {
         private:
         public:
@@ -61,7 +61,7 @@ namespace drawinglayer
 
             This primitive encapsulates text bullets.
          */
-        class DRAWINGLAYER_DLLPUBLIC TextHierarchyBulletPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TextHierarchyBulletPrimitive2D final : public GroupPrimitive2D
         {
         private:
         public:
@@ -83,7 +83,7 @@ namespace drawinglayer
 
             This primitive encapsulates text paragraphs.
          */
-        class DRAWINGLAYER_DLLPUBLIC TextHierarchyParagraphPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TextHierarchyParagraphPrimitive2D final : public GroupPrimitive2D
         {
         private:
             // outline level of the encapsulated paragraph data.
@@ -117,7 +117,7 @@ namespace drawinglayer
 
             This primitive encapsulates text blocks.
          */
-        class DRAWINGLAYER_DLLPUBLIC TextHierarchyBlockPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TextHierarchyBlockPrimitive2D final : public GroupPrimitive2D
         {
         private:
         public:
@@ -157,7 +157,7 @@ namespace drawinglayer
             type. Also added is a String which is type-dependent. E.g. for URL
             fields, it contains the URL.
          */
-        class DRAWINGLAYER_DLLPUBLIC TextHierarchyFieldPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TextHierarchyFieldPrimitive2D final : public GroupPrimitive2D
         {
         private:
             /// field type definition
@@ -202,7 +202,7 @@ namespace drawinglayer
             content. To suppress, this primitive needs to be parsed by
             the renderer without taking any action.
          */
-        class DRAWINGLAYER_DLLPUBLIC TextHierarchyEditPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TextHierarchyEditPrimitive2D final : public GroupPrimitive2D
         {
         private:
         public:

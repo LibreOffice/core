@@ -37,7 +37,7 @@ namespace drawinglayer
             This processor implements a HitTest with the feeded primitives,
             given tolerance and extras
          */
-        class DRAWINGLAYER_DLLPUBLIC HitTestProcessor2D : public BaseProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC HitTestProcessor2D final : public BaseProcessor2D
         {
         private:
             /// discrete HitTest position

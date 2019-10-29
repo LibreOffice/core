@@ -48,7 +48,7 @@ namespace drawinglayer
 
             The decomposition will deliver the hatch lines.
          */
-        class DRAWINGLAYER_DLLPUBLIC FillHatchPrimitive2D : public DiscreteMetricDependentPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC FillHatchPrimitive2D final : public DiscreteMetricDependentPrimitive2D
         {
         private:
             /// the geometrically visible area
@@ -64,7 +64,6 @@ namespace drawinglayer
             /// hatch background color (if used)
             basegfx::BColor                         maBColor;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

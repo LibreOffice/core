@@ -45,7 +45,7 @@ namespace drawinglayer
             It decomposes to the needed number of BitmapPrimitive2D's, so it would
             be efficient to handle it directly in a renderer.
          */
-        class DRAWINGLAYER_DLLPUBLIC MarkerArrayPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC MarkerArrayPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the positions for the marker
@@ -54,7 +54,6 @@ namespace drawinglayer
             /// the marker definition to visualize
             BitmapEx                                        maMarker;
 
-        protected:
             /// create local decomposition
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

@@ -33,7 +33,7 @@ namespace drawinglayer
 
             This primitive encapsulates text lines.
          */
-        class DRAWINGLAYER_DLLPUBLIC PageHierarchyPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PageHierarchyPrimitive2D final : public GroupPrimitive2D
         {
         private:
         public:

@@ -41,7 +41,7 @@ struct SvxShowCharSetItem;
 }
 
 /// Provides the show characters or texts in a drawing area with special sizes and fonts.
-class CUI_DLLPUBLIC SvxShowText : public weld::CustomWidgetController
+class CUI_DLLPUBLIC SvxShowText final : public weld::CustomWidgetController
 {
 private:
     ScopedVclPtr<VirtualDevice> m_xVirDev;
@@ -68,7 +68,7 @@ public:
 
 /** The main purpose of this dialog is to enable the use of characters
     that are not easily accessible from the keyboard. */
-class CUI_DLLPUBLIC SvxCharacterMap : public SfxDialogController
+class CUI_DLLPUBLIC SvxCharacterMap final : public SfxDialogController
 {
 private:
     void init();

@@ -67,14 +67,13 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class DRAWINGLAYER_DLLPUBLIC TextCharacterStrikeoutPrimitive2D : public BaseTextStrikeoutPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TextCharacterStrikeoutPrimitive2D final : public BaseTextStrikeoutPrimitive2D
         {
         private:
             sal_Unicode                             maStrikeoutChar;
             attribute::FontAttribute                maFontAttribute;
             css::lang::Locale                       maLocale;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
@@ -107,14 +106,13 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class DRAWINGLAYER_DLLPUBLIC TextGeometryStrikeoutPrimitive2D : public BaseTextStrikeoutPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TextGeometryStrikeoutPrimitive2D final : public BaseTextStrikeoutPrimitive2D
         {
         private:
             double                                  mfHeight;
             double                                  mfOffset;
             TextStrikeout                           meTextStrikeout;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

@@ -162,7 +162,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientRadial : public GeoTexSvxGradient
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientRadial final : public GeoTexSvxGradient
         {
         public:
             GeoTexSvxGradientRadial(
@@ -188,7 +188,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientElliptical : public GeoTexSvxGradient
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientElliptical final : public GeoTexSvxGradient
         {
         public:
             GeoTexSvxGradientElliptical(
@@ -215,7 +215,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientSquare : public GeoTexSvxGradient
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientSquare final : public GeoTexSvxGradient
         {
         public:
             GeoTexSvxGradientSquare(
@@ -242,7 +242,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientRect : public GeoTexSvxGradient
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientRect final : public GeoTexSvxGradient
         {
         public:
             GeoTexSvxGradientRect(

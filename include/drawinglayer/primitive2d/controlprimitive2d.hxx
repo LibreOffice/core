@@ -40,7 +40,7 @@ namespace drawinglayer
             representation is limited to a quadratic pixel maximum defined
             in the application settings.
          */
-        class DRAWINGLAYER_DLLPUBLIC ControlPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC ControlPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// object's base data
@@ -62,7 +62,6 @@ namespace drawinglayer
             Primitive2DReference createBitmapDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
             Primitive2DReference createPlaceholderDecomposition() const;
 
-        protected:
             /// local decomposition
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

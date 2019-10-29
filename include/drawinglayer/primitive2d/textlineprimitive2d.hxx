@@ -32,7 +32,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class DRAWINGLAYER_DLLPUBLIC TextLinePrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TextLinePrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             /// geometric definitions
@@ -45,7 +45,6 @@ namespace drawinglayer
             TextLine                                    meTextLine;
             basegfx::BColor                             maLineColor;
 
-        protected:
             /// local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 

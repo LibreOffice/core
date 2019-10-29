@@ -48,7 +48,7 @@ namespace drawinglayer
             raster bitmap using a Z-Buffer based approach. It is able to supersample and to handle
             transparent content.
          */
-        class ZBufferProcessor3D : public DefaultProcessor3D
+        class ZBufferProcessor3D final : public DefaultProcessor3D
         {
         private:
             /// inverse of EyeToView for rasterconversion with evtl. Phong shading
