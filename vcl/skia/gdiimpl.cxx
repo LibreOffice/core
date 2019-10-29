@@ -283,7 +283,19 @@ bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
     assert(canvas->getSaveCount() == 2); // = there is just one save()
     canvas->restore();
     canvas->save();
-    canvas->clipRegion(toSkRegion(region));
+#if 1
+    // TODO
+    // SkCanvas::clipRegion() is buggy with Vulkan, use SkCanvas::clipPath().
+    // https://bugs.chromium.org/p/skia/issues/detail?id=9580
+    if (!region.IsEmpty() && !region.IsRectangle())
+    {
+        SkPath path;
+        lclPolyPolygonToPath(region.GetAsB2DPolyPolygon(), path);
+        canvas->clipPath(path);
+    }
+    else
+#endif
+        canvas->clipRegion(toSkRegion(region));
     return true;
 }
 
