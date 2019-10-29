@@ -585,6 +585,7 @@ SwRect SwFrame::GetPaintArea() const
     SwRect aRect = IsRowFrame() ? GetUpper()->getFrameArea() : getFrameArea();
     const bool bVert = IsVertical();
     SwRectFn fnRect = bVert ? ( IsVertLR() ? (IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
+    SwRectFnSet aRectFnSet(this);
     long nRight = (aRect.*fnRect->fnGetRight)();
     long nLeft  = (aRect.*fnRect->fnGetLeft)();
     const SwFrame* pTmp = this;
@@ -613,9 +614,9 @@ SwRect SwFrame::GetPaintArea() const
             pTmp->IsCellFrame() || pTmp->IsRowFrame() || //nobody leaves a table!
             pTmp->IsRootFrame() )
         {
-            if( bLeft || nLeft < nTmpLeft )
+            if( bLeft || aRectFnSet.XDiff(nTmpLeft, nLeft) > 0 )
                 nLeft = nTmpLeft;
-            if( bRight || nTmpRight < nRight )
+            if( bRight || aRectFnSet.XDiff(nRight, nTmpRight) > 0 )
                 nRight = nTmpRight;
             if( pTmp->IsPageFrame() || pTmp->IsFlyFrame() || pTmp->IsRootFrame() )
                 break;
@@ -628,14 +629,14 @@ SwRect SwFrame::GetPaintArea() const
             // the first column has _no_ influence to the left range
             if( bR2L ? pTmp->GetNext() : pTmp->GetPrev() )
             {
-                if( bLeft || nLeft < nTmpLeft )
+                if( bLeft || aRectFnSet.XDiff(nTmpLeft, nLeft) > 0 )
                     nLeft = nTmpLeft;
                 bLeft = false;
             }
              // the last column has _no_ influence to the right range
             if( bR2L ? pTmp->GetPrev() : pTmp->GetNext() )
             {
-                if( bRight || nTmpRight < nRight )
+                if( bRight || aRectFnSet.XDiff(nRight, nTmpRight) > 0 )
                     nRight = nTmpRight;
                 bRight = false;
             }
@@ -648,14 +649,14 @@ SwRect SwFrame::GetPaintArea() const
             // the next frame of a body frame may be a footnotecontainer or
             // a footer. The footnotecontainer has the same direction like
             // the body frame.
-            if( pTmp->GetPrev() && ( bLeft || nLeft < nTmpLeft ) )
+            if( pTmp->GetPrev() && ( bLeft || aRectFnSet.XDiff(nTmpLeft, nLeft) > 0 ) )
             {
                 nLeft = nTmpLeft;
                 bLeft = false;
             }
             if( pTmp->GetNext() &&
                 ( pTmp->GetNext()->IsFooterFrame() || pTmp->GetNext()->GetNext() )
-                && ( bRight || nTmpRight < nRight ) )
+                && ( bRight || aRectFnSet.XDiff(nRight, nTmpRight) > 0 ) )
             {
                 nRight = nTmpRight;
                 bRight = false;
