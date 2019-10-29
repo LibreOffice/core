@@ -4423,10 +4423,14 @@ void DomainMapper_Impl::CloseFieldCommand()
 
             FieldConversionMap_t::const_iterator const aIt =
                 aFieldConversionMap.find(std::get<0>(field));
-            if (aIt != aFieldConversionMap.end() && !m_bForceGenericFields)
+            if (aIt != aFieldConversionMap.end()
+                && (!m_bForceGenericFields
+                    // these need to convert ffData to properties...
+                        || (aIt->second.eFieldId == FIELD_FORMCHECKBOX)
+                        || (aIt->second.eFieldId == FIELD_FORMDROPDOWN)
+                        || (aIt->second.eFieldId == FIELD_FORMTEXT)))
             {
                 pContext->SetFieldId(aIt->second.eFieldId);
-
                 bool bCreateEnhancedField = false;
                 uno::Reference< beans::XPropertySet > xFieldProperties;
                 bool bCreateField = true;
