@@ -27,7 +27,6 @@
 #include <sfx2/frmhtml.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/frmdescr.hxx>
-#include <vcl/wrkwin.hxx>
 #include <sot/storage.hxx>
 #include <svx/xoutbmp.hxx>
 #include <editeng/ulspitem.hxx>

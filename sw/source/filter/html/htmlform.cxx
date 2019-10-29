@@ -21,7 +21,6 @@
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 
 #include <vcl/unohelp.hxx>
 #include <svtools/htmlkywd.hxx>

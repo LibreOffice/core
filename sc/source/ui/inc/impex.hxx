@@ -53,7 +53,7 @@ class SC_DLLPUBLIC ScImportExport
     OUString    aStreamPath;
     OUString    aNonConvertibleChars;
     OUString    maFilterOptions;
-    sal_uLong   nSizeLimit;
+    sal_uInt32  nSizeLimit;
     SCROW const nMaxImportRow;
     sal_Unicode cSep;                   // Separator
     sal_Unicode cStr;                   // String Delimiter

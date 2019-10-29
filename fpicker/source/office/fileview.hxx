@@ -21,7 +21,6 @@
 
 #include <memory>
 #include <com/sun/star/uno/Sequence.h>
-#include <vcl/ctrl.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
@@ -157,7 +156,7 @@ public:
     void                    SetDoubleClickHdl( const Link<SvtFileView*,bool>& rHdl );
     void                    SetOpenDoneHdl( const Link<SvtFileView*,void>& rHdl );
 
-    sal_uLong               GetSelectionCount() const;
+    sal_uInt32              GetSelectionCount() const;
     SvtContentEntry*        FirstSelected() const;
 
     void selected_foreach(const std::function<bool(weld::TreeIter&)>& func);

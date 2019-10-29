@@ -11,7 +11,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/commandenvironment.hxx>
-#include <vcl/treelistentry.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include "contentenumeration.hxx"
 #include "foldertree.hxx"

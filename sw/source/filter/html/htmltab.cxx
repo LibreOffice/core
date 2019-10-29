@@ -21,7 +21,6 @@
 #include <hintids.hxx>
 #include <comphelper/flagguard.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/adjustitem.hxx>

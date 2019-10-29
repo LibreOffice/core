@@ -26,7 +26,6 @@
 #include <tools/fract.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <sfx2/event.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>

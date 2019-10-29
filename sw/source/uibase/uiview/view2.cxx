@@ -51,7 +51,6 @@
 #include <svx/linkwarn.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>

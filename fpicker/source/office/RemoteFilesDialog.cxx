@@ -23,10 +23,7 @@
 #include <tools/debug.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <vcl/errinf.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/treelistentry.hxx>
 #include <bitmaps.hlst>
-#include <vcl/ptrstyle.hxx>
 #include <officecfg/Office/Common.hxx>
 
 RemoteFilesDialog::RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits )

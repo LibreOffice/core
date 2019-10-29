@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

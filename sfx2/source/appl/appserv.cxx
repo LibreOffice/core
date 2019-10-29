@@ -62,6 +62,7 @@
 #include <tools/svlibrary.h>
 #include <tools/diagnose_ex.h>
 #include <vcl/sysdata.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>

@@ -34,7 +34,6 @@
 #include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/wrkwin.hxx>
 #include <svl/lckbitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/macitem.hxx>

@@ -27,7 +27,6 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <numrule.hxx>

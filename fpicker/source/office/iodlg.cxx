@@ -26,19 +26,16 @@
 #include "OfficeControlAccess.hxx"
 #include "PlacesListBox.hxx"
 #include <fpsofficeResMgr.hxx>
+#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <svtools/sfxecode.hxx>
-#include <vcl/svtabbx.hxx>
-#include <vcl/treelistentry.hxx>
 
 #include <fpicker/strings.hrc>
 #include <svtools/helpids.h>

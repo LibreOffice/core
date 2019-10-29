@@ -32,6 +32,7 @@
 #include <svl/eitem.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/pngwrite.hxx>
+#include <vcl/svapp.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <unotools/localfilehelper.hxx>

@@ -45,7 +45,6 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>

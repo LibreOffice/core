@@ -23,7 +23,6 @@
 #include <svl/stritem.hxx>
 
 #include <vcl/menu.hxx>
-#include <vcl/wrkwin.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <sfx2/viewfrm.hxx>

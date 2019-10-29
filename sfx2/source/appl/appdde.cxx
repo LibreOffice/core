@@ -23,7 +23,6 @@
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <sot/exchange.hxx>
-#include <vcl/wrkwin.hxx>
 #include <svl/rectitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

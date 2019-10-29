@@ -53,7 +53,6 @@
 #include <svtools/svparser.hxx>
 #include <swtypes.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 

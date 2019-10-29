@@ -20,7 +20,6 @@
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <svl/whiter.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/ulspitem.hxx>

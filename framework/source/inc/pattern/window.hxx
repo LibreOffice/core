@@ -27,8 +27,6 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
-#include <vcl/syswin.hxx>
-#include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustring.hxx>
 

@@ -20,7 +20,6 @@
 #define INCLUDED_SVX_SOURCE_INC_TABWIN_HXX
 
 #include <vcl/treelistbox.hxx>
-#include <vcl/floatwin.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>

@@ -48,7 +48,6 @@
 #include <sfx2/objitem.hxx>
 #include <sfx2/request.hxx>
 
-#include <vcl/wrkwin.hxx>
 #include <svx/fmshell.hxx>
 #include <fmshimp.hxx>
 #include <svx/fmpage.hxx>

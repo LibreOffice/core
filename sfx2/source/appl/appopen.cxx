@@ -48,7 +48,6 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/synchronousdispatch.hxx>
 
-#include <vcl/wrkwin.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>

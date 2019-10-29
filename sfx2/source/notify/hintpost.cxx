@@ -22,6 +22,7 @@
 #include <arrdecl.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
+#include <vcl/svapp.hxx>
 #include <sfxtypes.hxx>
 
 

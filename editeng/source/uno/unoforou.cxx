@@ -30,7 +30,6 @@
 #include <editeng/outliner.hxx>
 #include <editeng/unoedhlp.hxx>
 #include <svl/poolitem.hxx>
-#include <vcl/wrkwin.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <editeng/unoforou.hxx>

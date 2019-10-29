@@ -20,13 +20,6 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <svx/txencbox.hxx>
-#include <vcl/button.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/ptrstyle.hxx>
 
 #include <global.hxx>
 #include <scresid.hxx>

@@ -22,7 +22,6 @@
 #include <comphelper/string.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <svx/svxids.hrc>
 #include <i18nlangtag/languagetag.hxx>
 #include <svl/stritem.hxx>

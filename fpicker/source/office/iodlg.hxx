@@ -20,13 +20,6 @@
 #define INCLUDED_FPICKER_SOURCE_OFFICE_IODLG_HXX
 
 #include <memory>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/split.hxx>
-#include <vcl/treelistbox.hxx>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -37,11 +30,11 @@
 #include "fpsmartcontent.hxx"
 #include "fpdialogbase.hxx"
 #include <o3tl/typed_flags_set.hxx>
+#include <vcl/timer.hxx>
 
 #include <set>
 
 
-class SvTabListBox;
 class SvtFileView;
 class SvtFileDialogFilter_Impl;
 class SvtExpFileDlg_Impl;

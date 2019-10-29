@@ -36,6 +36,7 @@
 #include <officecfg/Setup.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/splitwin.hxx>
+#include <vcl/wrkwin.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svl/intitem.hxx>
 #include <svl/visitem.hxx>

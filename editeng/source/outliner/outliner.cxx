@@ -28,7 +28,6 @@
 
 #include <math.h>
 #include <svl/style.hxx>
-#include <vcl/wrkwin.hxx>
 #include <editeng/outliner.hxx>
 #include "paralist.hxx"
 #include <editeng/outlobj.hxx>
@@ -47,6 +46,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/window.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <editeng/svxfont.hxx>
 #include <editeng/brushitem.hxx>

@@ -32,7 +32,6 @@
 #include <hintids.hxx>
 #include <o3tl/any.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <svl/macitem.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmltokn.h>

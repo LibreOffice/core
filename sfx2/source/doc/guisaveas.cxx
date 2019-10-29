@@ -70,6 +70,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/lok.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/awt/vclxwindow.hxx>

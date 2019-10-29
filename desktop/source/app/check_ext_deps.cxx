@@ -27,7 +27,6 @@
 #include <sal/log.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <vcl/wrkwin.hxx>
 #include <vcl/timer.hxx>
 
 #include <unotools/configmgr.hxx>

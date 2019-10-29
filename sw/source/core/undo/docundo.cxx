@@ -19,7 +19,6 @@
 
 #include <UndoManager.hxx>
 
-#include <vcl/wrkwin.hxx>
 #include <svx/svdmodel.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>

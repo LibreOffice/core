@@ -23,7 +23,6 @@
 
 #include <string>
 
-#include <vcl/wrkwin.hxx>
 #include <unotools/viewoptions.hxx>
 #include <sal/log.hxx>
 

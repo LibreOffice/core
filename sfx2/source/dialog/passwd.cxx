@@ -21,6 +21,7 @@
 #include <sfxtypes.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
 IMPL_LINK_NOARG(SfxPasswordDialog, EditModifyHdl, weld::Entry&, void)

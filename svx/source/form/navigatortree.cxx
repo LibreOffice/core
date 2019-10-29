@@ -35,7 +35,6 @@
 #include <fmprop.hxx>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>

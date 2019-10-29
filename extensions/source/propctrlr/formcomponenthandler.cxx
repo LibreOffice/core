@@ -100,7 +100,6 @@
 #include <vcl/unohelp.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/stdtext.hxx>
-#include <vcl/wrkwin.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
 

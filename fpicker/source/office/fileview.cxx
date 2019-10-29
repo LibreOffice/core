@@ -985,7 +985,7 @@ void SvtFileView::SetDoubleClickHdl(const Link<SvtFileView*,bool>& rHdl)
     mpImpl->SetDoubleClickHandler(rHdl);
 }
 
-sal_uLong SvtFileView::GetSelectionCount() const
+sal_uInt32 SvtFileView::GetSelectionCount() const
 {
     if (mpImpl->mxView->get_visible())
         return mpImpl->mxView->count_selected_rows();
