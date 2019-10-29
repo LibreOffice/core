@@ -25,7 +25,7 @@
 
 namespace connectivity
 {
-    class OOO_DLLPUBLIC_DBTOOLS BlobHelper : public ::cppu::WeakImplHelper< css::sdbc::XBlob >
+    class OOO_DLLPUBLIC_DBTOOLS BlobHelper final : public ::cppu::WeakImplHelper< css::sdbc::XBlob >
     {
         css::uno::Sequence< sal_Int8 > m_aValue;
     public:

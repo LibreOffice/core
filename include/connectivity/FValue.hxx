@@ -439,7 +439,7 @@ namespace connectivity
     };
 
     /// ORowSetValueDecorator decorates an ORowSetValue so the value is "refcounted"
-    class OOO_DLLPUBLIC_DBTOOLS ORowSetValueDecorator : public ::salhelper::SimpleReferenceObject
+    class OOO_DLLPUBLIC_DBTOOLS ORowSetValueDecorator final : public ::salhelper::SimpleReferenceObject
     {
         ORowSetValue    m_aValue;   // my own value
     public:
@@ -509,7 +509,7 @@ namespace connectivity
     };
 
 #define SQL_NO_PARAMETER (SAL_MAX_UINT32)
-    class OAssignValues : public OValueRefVector
+    class OAssignValues final : public OValueRefVector
     {
         ::std::vector<sal_Int32> m_nParameterIndexes;
     public:

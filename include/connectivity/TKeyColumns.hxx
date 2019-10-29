@@ -26,10 +26,9 @@
 namespace connectivity
 {
     class OTableKeyHelper;
-    class OOO_DLLPUBLIC_DBTOOLS OKeyColumnsHelper : public connectivity::sdbcx::OCollection
+    class OOO_DLLPUBLIC_DBTOOLS OKeyColumnsHelper final : public connectivity::sdbcx::OCollection
     {
         OTableKeyHelper* m_pKey;
-    protected:
         virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
         virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
         virtual void impl_refresh() override;
