@@ -142,7 +142,6 @@ private:
     Link<weld::Widget&,bool> maActivateHdl;
     Link<RefButton&,void> maClickHdl;
 
-protected:
     DECL_LINK(Click, weld::Button&, void);
     DECL_LINK(KeyInput, const KeyEvent&, bool);
     DECL_LINK(GetFocus, weld::Widget&, void);

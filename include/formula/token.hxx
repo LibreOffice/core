@@ -259,7 +259,7 @@ public:
 
 // A special token for the FormulaAutoPilot only. Keeps a reference pointer of
 // the token of which it was created for comparison.
-class FORMULA_DLLPUBLIC FormulaFAPToken : public FormulaByteToken
+class FORMULA_DLLPUBLIC FormulaFAPToken final : public FormulaByteToken
 {
 private:
             FormulaTokenRef     pOrigToken;
@@ -292,7 +292,7 @@ public:
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 
-class FORMULA_DLLPUBLIC FormulaTypedDoubleToken : public FormulaDoubleToken
+class FORMULA_DLLPUBLIC FormulaTypedDoubleToken final : public FormulaDoubleToken
 {
 private:
             sal_Int16           mnType;     /**< Can hold, for example, a value
@@ -312,7 +312,7 @@ public:
 };
 
 
-class FORMULA_DLLPUBLIC FormulaStringToken : public FormulaToken
+class FORMULA_DLLPUBLIC FormulaStringToken final : public FormulaToken
 {
     svl::SharedString maString;
 public:
@@ -328,7 +328,7 @@ public:
 
 /** Identical to FormulaStringToken, but with explicit OpCode instead of implicit
     ocPush, and an optional sal_uInt8 for ocBad tokens. */
-class FORMULA_DLLPUBLIC FormulaStringOpToken : public FormulaByteToken
+class FORMULA_DLLPUBLIC FormulaStringOpToken final : public FormulaByteToken
 {
     svl::SharedString maString;
 public:
@@ -341,7 +341,7 @@ public:
     virtual bool operator==( const FormulaToken& rToken ) const override;
 };
 
-class FORMULA_DLLPUBLIC FormulaIndexToken : public FormulaToken
+class FORMULA_DLLPUBLIC FormulaIndexToken final : public FormulaToken
 {
 private:
             sal_uInt16          nIndex;
@@ -361,7 +361,7 @@ public:
 };
 
 
-class FORMULA_DLLPUBLIC FormulaExternalToken : public FormulaToken
+class FORMULA_DLLPUBLIC FormulaExternalToken final : public FormulaToken
 {
 private:
             OUString              aExternal;
@@ -385,7 +385,7 @@ public:
 };
 
 
-class FORMULA_DLLPUBLIC FormulaMissingToken : public FormulaToken
+class FORMULA_DLLPUBLIC FormulaMissingToken final : public FormulaToken
 {
 public:
                                 FormulaMissingToken() :
@@ -399,7 +399,7 @@ public:
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 
-class FORMULA_DLLPUBLIC FormulaJumpToken : public FormulaToken
+class FORMULA_DLLPUBLIC FormulaJumpToken final : public FormulaToken
 {
 private:
             std::unique_ptr<short[]>
@@ -429,7 +429,7 @@ public:
 };
 
 
-class FORMULA_DLLPUBLIC FormulaUnknownToken : public FormulaToken
+class FORMULA_DLLPUBLIC FormulaUnknownToken final : public FormulaToken
 {
 public:
                                 FormulaUnknownToken( OpCode e ) :
@@ -442,7 +442,7 @@ public:
 };
 
 
-class FORMULA_DLLPUBLIC FormulaErrorToken : public FormulaToken
+class FORMULA_DLLPUBLIC FormulaErrorToken final : public FormulaToken
 {
          FormulaError          nError;
 public:

@@ -522,11 +522,8 @@ struct EscherPersistEntry
 
 class EscherBlibEntry
 {
-
     friend class EscherGraphicProvider;
     friend class EscherEx;
-
-protected:
 
     sal_uInt32      mnIdentifier[ 4 ];
     sal_uInt32      mnPictureOffset;        // offset to the graphic in PictureStreams

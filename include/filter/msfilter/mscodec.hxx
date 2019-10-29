@@ -135,7 +135,7 @@ private:
 
 /** Encodes and decodes data from protected MSO XLS 95- documents.
  */
-class MSFILTER_DLLPUBLIC MSCodec_XorXLS95 : public MSCodec_Xor95
+class MSFILTER_DLLPUBLIC MSCodec_XorXLS95 final : public MSCodec_Xor95
 {
 public:
     explicit            MSCodec_XorXLS95() : MSCodec_Xor95(2) {}
@@ -156,7 +156,7 @@ public:
 
 /** Encodes and decodes data from protected MSO Word 95- documents.
  */
-class MSFILTER_DLLPUBLIC MSCodec_XorWord95 : public MSCodec_Xor95
+class MSFILTER_DLLPUBLIC MSCodec_XorWord95 final : public MSCodec_Xor95
 {
 public:
     explicit            MSCodec_XorWord95() : MSCodec_Xor95(7) {}
@@ -330,7 +330,7 @@ protected:
     Implementation is based on the wvDecrypt package by Caolan McNamara:
     http://www.csn.ul.ie/~caolan/docs/wvDecrypt.html
  */
-class MSFILTER_DLLPUBLIC MSCodec_Std97 :  public MSCodec97
+class MSFILTER_DLLPUBLIC MSCodec_Std97 final : public MSCodec97
 {
 public:
     MSCodec_Std97();
@@ -395,7 +395,7 @@ private:
     rtlDigest           m_hDigest;
 };
 
-class MSFILTER_DLLPUBLIC MSCodec_CryptoAPI :  public MSCodec97
+class MSFILTER_DLLPUBLIC MSCodec_CryptoAPI final : public MSCodec97
 {
 private:
     css::uno::Sequence<sal_Int8> m_aStd97Key;
