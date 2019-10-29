@@ -1838,9 +1838,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     else if (!rSh.IsCursorInParagraphMetadataField())
                     {
-                        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui"));
-                        std::unique_ptr<weld::MessageDialog> xInfo(xBuilder->weld_message_dialog("InfoReadonlyDialog"));
-                        xInfo->run();
+                        auto xDialog = std::make_shared<weld::GenericDialogController>(
+                            GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui", "InfoReadonlyDialog");
+                        weld::DialogController::runAsync(xDialog, [=](int){});
                         eKeyState = SwKeyState::End;
                     }
                     break;
