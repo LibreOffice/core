@@ -60,7 +60,6 @@ typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener,
     css::frame::XFrameActionListener,
     css::awt::XKeyListener,
-    css::awt::XFocusListener,
     css::awt::XMouseListener,
     css::awt::XMouseMotionListener
 > PresenterControllerInterfaceBase;
@@ -160,11 +159,6 @@ public:
 
     virtual void SAL_CALL keyPressed (const css::awt::KeyEvent& rEvent) override;
     virtual void SAL_CALL keyReleased (const css::awt::KeyEvent& rEvent) override;
-
-    // XFocusListener
-
-    virtual void SAL_CALL focusGained (const css::awt::FocusEvent& rEvent) override;
-    virtual void SAL_CALL focusLost (const css::awt::FocusEvent& rEvent) override;
 
     // XMouseListener
 
