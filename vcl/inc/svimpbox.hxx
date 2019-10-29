@@ -85,7 +85,7 @@ namespace o3tl
 #define NODE_BMP_TABDIST_NOTVALID   -2000000
 #define FIRST_ENTRY_TAB             1
 
-class VCL_DLLPUBLIC SvImpLBox
+class SvImpLBox
 {
 friend class ImpLBSelEng;
 friend class SvTreeListBox;

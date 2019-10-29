@@ -42,7 +42,7 @@
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/viewdataentry.hxx>
-#include <vcl/svimpbox.hxx>
+#include <svimpbox.hxx>
 
 #include <set>
 #include <string.h>
