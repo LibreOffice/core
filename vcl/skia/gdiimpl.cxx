@@ -201,6 +201,13 @@ void SkiaSalGraphicsImpl::createSurface()
 
 void SkiaSalGraphicsImpl::destroySurface()
 {
+    if (mSurface)
+    {
+        // check setClipRegion() invariant
+        assert(mSurface->getCanvas()->getSaveCount() == 2);
+        // if this fails, something forgot to use SkAutoCanvasRestore
+        assert(mSurface->getCanvas()->getTotalMatrix().isIdentity());
+    }
     // If we use e.g. Vulkan, we must destroy the surface before the context,
     // otherwise destroying the surface will reference the context. This is
     // handled by calling destroySurface() before destroying the context.
@@ -892,8 +899,11 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
     aMatrix.set(SkMatrix::kMTransY, rNull.getY());
 
     preDraw();
-    mSurface->getCanvas()->concat(aMatrix);
-    mSurface->getCanvas()->drawBitmap(aTemporaryBitmap, 0, 0);
+    {
+        SkAutoCanvasRestore autoRestore(mSurface->getCanvas(), true);
+        mSurface->getCanvas()->concat(aMatrix);
+        mSurface->getCanvas()->drawBitmap(aTemporaryBitmap, 0, 0);
+    }
     postDraw();
 
     return true;
