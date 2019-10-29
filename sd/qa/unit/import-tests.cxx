@@ -194,6 +194,7 @@ public:
     void testTdf116899();
     void testTdf77747();
     void testTdf116266();
+    void testTdf126324();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -289,6 +290,7 @@ public:
     CPPUNIT_TEST(testTdf114913);
     CPPUNIT_TEST(testTdf114821);
     CPPUNIT_TEST(testTdf115394);
+    CPPUNIT_TEST(testTdf126324);
     CPPUNIT_TEST(testTdf115394PPT);
     CPPUNIT_TEST(testTdf51340);
     CPPUNIT_TEST(testTdf116899);
@@ -2809,6 +2811,21 @@ void SdImportTest::testTdf120028b()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), nCharColor);
 
     xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf126324()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf126324.pptx"), PPTX);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDoc.is());
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPage.is());
+    uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
+    CPPUNIT_ASSERT(xShape.is());
+    uno::Reference< text::XText > xText = uno::Reference< text::XTextRange>( xShape, uno::UNO_QUERY_THROW )->getText();
+    CPPUNIT_ASSERT_EQUAL(OUString{"17"}, xText->getString());
 }
 
 void SdImportTest::testDescriptionImport()
