@@ -209,8 +209,7 @@ void Desktop::CheckOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
     }
 
     // Append our app version as well.
-    aSelectedCLDeviceVersionID += "--";
-    aSelectedCLDeviceVersionID += LIBO_VERSION_DOTTED;
+    aSelectedCLDeviceVersionID += "--" LIBO_VERSION_DOTTED;
 
     // Append timestamp of the file.
     OUString aURL("$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/opencl/cl-test.ods");

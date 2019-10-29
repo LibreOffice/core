@@ -57,8 +57,7 @@ namespace frm
 
         OUString getLabelString(const char* pResId)
         {
-            OUString sLabel( " " );
-            sLabel += FRM_RES_STRING(pResId);
+            OUString sLabel( " " + FRM_RES_STRING(pResId) );
             sLabel += " ";
             return sLabel;
         }
