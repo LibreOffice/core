@@ -53,6 +53,10 @@ void X11SkiaSalGraphicsImpl::createSurface()
     assert(winInfo.fDisplay && winInfo.fWindow != None);
     winInfo.fFBConfig = nullptr; // not used
     winInfo.fVisualInfo = const_cast<SalVisual*>(&mX11Parent.GetVisual());
+    // TODO Vulkan does not use these dimensions, instead it uses dimensions of the actual
+    // drawable, which may lead to repeated createSurface() calls from checkSurface()
+    // if the window is being resized and VCL already knows the new size but Vulkan doesn't.
+    // Avoid this somehow.
     winInfo.fWidth = GetWidth();
     winInfo.fHeight = GetHeight();
     destroySurface();
