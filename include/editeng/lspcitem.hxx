@@ -31,7 +31,7 @@
 */
 
 #define LINE_SPACE_DEFAULT_HEIGHT 200
-class EDITENG_DLLPUBLIC SvxLineSpacingItem : public SfxEnumItemInterface
+class EDITENG_DLLPUBLIC SvxLineSpacingItem final : public SfxEnumItemInterface
 {
     short                 nInterLineSpace;
     sal_uInt16            nLineHeight;

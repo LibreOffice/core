@@ -37,7 +37,7 @@
     This item describes the writing position.
 */
 
-class EDITENG_DLLPUBLIC SvxEscapementItem : public SfxEnumItemInterface
+class EDITENG_DLLPUBLIC SvxEscapementItem final : public SfxEnumItemInterface
 {
     short nEsc;
     sal_uInt8  nProp;

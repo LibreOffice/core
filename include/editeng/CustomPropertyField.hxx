@@ -23,7 +23,7 @@ namespace com::sun::star::document { class XDocumentProperties; }
 namespace editeng
 {
 
-class EDITENG_DLLPUBLIC CustomPropertyField : public SvxFieldData
+class EDITENG_DLLPUBLIC CustomPropertyField final : public SvxFieldData
 {
 private:
     OUString msName;

@@ -69,7 +69,7 @@ public:
  * belongs to the item.  The field itself is determined by a derivation from
  * SvxFieldData (RTTI)
  */
-class EDITENG_DLLPUBLIC SvxFieldItem : public SfxPoolItem
+class EDITENG_DLLPUBLIC SvxFieldItem final : public SfxPoolItem
 {
     std::unique_ptr<SvxFieldData>  mpField;
 public:
@@ -102,7 +102,7 @@ enum class SvxDateFormat {
     F               // Tuesday, 13.February 1996
 };
 
-class EDITENG_DLLPUBLIC SvxDateField : public SvxFieldData
+class EDITENG_DLLPUBLIC SvxDateField final : public SvxFieldData
 {
     sal_Int32               nFixDate;
     SvxDateType             eType;
@@ -144,7 +144,7 @@ enum class SvxURLFormat {
     Repr            // Constitute representation
 };
 
-class EDITENG_DLLPUBLIC SvxURLField : public SvxFieldData
+class EDITENG_DLLPUBLIC SvxURLField final : public SvxFieldData
 {
 private:
     SvxURLFormat            eFormat;
@@ -273,7 +273,7 @@ enum class SvxTimeFormat {
     HH12_MM_SS_00_AMPM // 01:49:38.78 PM
 };
 
-class EDITENG_DLLPUBLIC SvxExtTimeField : public SvxFieldData
+class EDITENG_DLLPUBLIC SvxExtTimeField final : public SvxFieldData
 {
 private:
     sal_Int64               m_nFixTime;
@@ -321,7 +321,7 @@ enum class SvxFileFormat {
 };
 
 
-class EDITENG_DLLPUBLIC SvxExtFileField : public SvxFieldData
+class EDITENG_DLLPUBLIC SvxExtFileField final : public SvxFieldData
 {
 private:
     OUString           aFile;
@@ -362,7 +362,7 @@ enum class SvxAuthorFormat {
     ShortName   // Initials
 };
 
-class EDITENG_DLLPUBLIC SvxAuthorField : public SvxFieldData
+class EDITENG_DLLPUBLIC SvxAuthorField final : public SvxFieldData
 {
 private:
     OUString   aName;

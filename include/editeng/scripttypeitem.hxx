@@ -23,7 +23,7 @@
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
 
-class EDITENG_DLLPUBLIC SvxScriptSetItem : public SfxSetItem
+class EDITENG_DLLPUBLIC SvxScriptSetItem final : public SfxSetItem
 {
 public:
     SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool );

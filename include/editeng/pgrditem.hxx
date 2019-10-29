@@ -30,7 +30,7 @@
     Paragraph snap to grid
 */
 
-class EDITENG_DLLPUBLIC SvxParaGridItem : public SfxBoolItem
+class EDITENG_DLLPUBLIC SvxParaGridItem final : public SfxBoolItem
 {
 public:
     SvxParaGridItem( const bool bSnapToGrid /*= true*/,

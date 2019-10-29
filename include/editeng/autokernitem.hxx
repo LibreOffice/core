@@ -29,7 +29,7 @@
     Attribute for Pair-Kerning.
 */
 
-class EDITENG_DLLPUBLIC SvxAutoKernItem : public SfxBoolItem
+class EDITENG_DLLPUBLIC SvxAutoKernItem final : public SfxBoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();

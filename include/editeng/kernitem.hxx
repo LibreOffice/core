@@ -32,7 +32,7 @@
     This item describes the kerning.
 */
 
-class EDITENG_DLLPUBLIC SvxKerningItem : public SfxInt16Item
+class EDITENG_DLLPUBLIC SvxKerningItem final : public SfxInt16Item
 {
 public:
     static SfxPoolItem* CreateDefault();

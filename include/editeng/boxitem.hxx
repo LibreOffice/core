@@ -52,7 +52,7 @@ serializing to stream.
 */
 #define BOX_BORDER_STYLE_VERSION (sal_uInt16(2))
 
-class EDITENG_DLLPUBLIC SvxBoxItem : public SfxPoolItem
+class EDITENG_DLLPUBLIC SvxBoxItem final : public SfxPoolItem
 {
     std::unique_ptr<editeng::SvxBorderLine>
                     pTop,
@@ -155,7 +155,7 @@ namespace o3tl
     template<> struct typed_flags<SvxBoxInfoItemValidFlags> : is_typed_flags<SvxBoxInfoItemValidFlags, 0xff> {};
 }
 
-class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
+class EDITENG_DLLPUBLIC SvxBoxInfoItem final : public SfxPoolItem
 {
     std::unique_ptr<editeng::SvxBorderLine> pHori;   //inner horizontal Line
     std::unique_ptr<editeng::SvxBorderLine> pVert;   //inner vertical Line

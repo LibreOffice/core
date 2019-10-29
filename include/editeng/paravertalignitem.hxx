@@ -31,7 +31,7 @@
 
 */
 
-class EDITENG_DLLPUBLIC SvxParaVertAlignItem : public SfxUInt16Item
+class EDITENG_DLLPUBLIC SvxParaVertAlignItem final : public SfxUInt16Item
 {
 public:
     enum class Align { Automatic, Baseline, Top, Center, Bottom };

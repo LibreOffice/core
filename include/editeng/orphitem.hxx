@@ -29,7 +29,7 @@
     This item describes the number of lines for the orphans system.
 */
 
-class EDITENG_DLLPUBLIC SvxOrphansItem: public SfxByteItem
+class EDITENG_DLLPUBLIC SvxOrphansItem final : public SfxByteItem
 {
 public:
     static SfxPoolItem* CreateDefault();

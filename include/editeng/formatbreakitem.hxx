@@ -33,7 +33,7 @@
 */
 #define FMTBREAK_NOAUTO (sal_uInt16(0x0001))
 
-class EDITENG_DLLPUBLIC SvxFormatBreakItem : public SfxEnumItem<SvxBreak>
+class EDITENG_DLLPUBLIC SvxFormatBreakItem final : public SfxEnumItem<SvxBreak>
 {
 public:
     static SfxPoolItem* CreateDefault();

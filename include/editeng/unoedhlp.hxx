@@ -49,7 +49,7 @@ public:
     sal_Int32   GetStartValue() const { return mnStart;}
     sal_Int32   GetEndValue() const { return mnEnd;}
 };
-class SvxEditSourceHintEndPara :public SvxEditSourceHint
+class SvxEditSourceHintEndPara final : public SvxEditSourceHint
 {
 public:
     SvxEditSourceHintEndPara() : SvxEditSourceHint(SfxHintId::EditSourceSelectionChanged) {}

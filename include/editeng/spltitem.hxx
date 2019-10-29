@@ -29,7 +29,7 @@
     This item describes a logical variable "split paragraph yes or no".
 */
 
-class EDITENG_DLLPUBLIC SvxFormatSplitItem : public SfxBoolItem
+class EDITENG_DLLPUBLIC SvxFormatSplitItem final : public SfxBoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();

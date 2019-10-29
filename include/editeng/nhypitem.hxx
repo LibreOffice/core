@@ -23,7 +23,7 @@
 #include <editeng/editengdllapi.h>
 
 // class SvxNoHyphenItem -------------------------------------------------
-class EDITENG_DLLPUBLIC SvxNoHyphenItem : public SfxBoolItem
+class EDITENG_DLLPUBLIC SvxNoHyphenItem final : public SfxBoolItem
 {
 public:
     SvxNoHyphenItem( const sal_uInt16 nId  );

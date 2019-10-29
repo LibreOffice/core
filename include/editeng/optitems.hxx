@@ -25,7 +25,7 @@
 
 // class SfxHyphenRegionItem ---------------------------------------------
 
-class EDITENG_DLLPUBLIC SfxHyphenRegionItem: public SfxPoolItem
+class EDITENG_DLLPUBLIC SfxHyphenRegionItem final : public SfxPoolItem
 {
     sal_uInt8 nMinLead;
     sal_uInt8 nMinTrail;

@@ -158,7 +158,7 @@ EDITENG_DLLPUBLIC void CheckSelection( struct ESelection& rSel, SvxTextForwarder
 // nothing otherwise
 
 
-class SvxDummyTextSource : public SvxEditSource, public SvxTextForwarder
+class SvxDummyTextSource final : public SvxEditSource, public SvxTextForwarder
 {
 public:
 
@@ -375,7 +375,7 @@ public:
 
 
 class SvxUnoTextBase;
-class EDITENG_DLLPUBLIC SvxUnoTextRange : public SvxUnoTextRangeBase,
+class EDITENG_DLLPUBLIC SvxUnoTextRange final : public SvxUnoTextRangeBase,
                         public css::lang::XTypeProvider,
                         public ::cppu::OWeakAggObject
 {
@@ -504,7 +504,7 @@ public:
 };
 
 
-class SvxUnoTextContent : public SvxUnoTextRangeBase,
+class SvxUnoTextContent final : public SvxUnoTextRangeBase,
                           public css::text::XTextContent,
                           public css::container::XEnumerationAccess,
                           public css::lang::XTypeProvider,

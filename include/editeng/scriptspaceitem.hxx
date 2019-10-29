@@ -30,7 +30,7 @@
     used for the user interface.
 */
 
-class EDITENG_DLLPUBLIC SvxScriptSpaceItem : public SfxBoolItem
+class EDITENG_DLLPUBLIC SvxScriptSpaceItem final : public SfxBoolItem
 {
 public:
     SvxScriptSpaceItem( bool bOn /*= false*/,

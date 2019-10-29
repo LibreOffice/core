@@ -69,7 +69,7 @@ public:
 
 /* Value container for underline font effects */
 
-class EDITENG_DLLPUBLIC SvxUnderlineItem : public SvxTextLineItem
+class EDITENG_DLLPUBLIC SvxUnderlineItem final : public SvxTextLineItem
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -85,7 +85,7 @@ public:
 
 /* Value container for overline font effects */
 
-class EDITENG_DLLPUBLIC SvxOverlineItem : public SvxTextLineItem
+class EDITENG_DLLPUBLIC SvxOverlineItem final : public SvxTextLineItem
 {
 public:
     static SfxPoolItem* CreateDefault();

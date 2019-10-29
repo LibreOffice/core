@@ -38,7 +38,7 @@ protected:
     {}
 };
 
-class EDITENG_DLLPUBLIC SvxLanguageItem : public SvxLanguageItem_Base
+class EDITENG_DLLPUBLIC SvxLanguageItem final : public SvxLanguageItem_Base
 {
 public:
     static SfxPoolItem* CreateDefault();

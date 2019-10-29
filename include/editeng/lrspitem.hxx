@@ -46,7 +46,7 @@
 #define LRSPACE_TXTLEFT_VERSION (sal_uInt16(0x0002))
 #define LRSPACE_NEGATIVE_VERSION (sal_uInt16(0x0004))
 
-class EDITENG_DLLPUBLIC SvxLRSpaceItem : public SfxPoolItem
+class EDITENG_DLLPUBLIC SvxLRSpaceItem final : public SfxPoolItem
 {
     long    nTxtLeft;           // We spend a sal_uInt16
     long    nLeftMargin;        // nLeft or the negative first-line indent

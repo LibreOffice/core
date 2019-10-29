@@ -36,7 +36,7 @@ namespace editeng {
     class SvxBorderLine;
 }
 
-class EDITENG_DLLPUBLIC SvxLineItem : public SfxPoolItem
+class EDITENG_DLLPUBLIC SvxLineItem final : public SfxPoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();

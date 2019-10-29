@@ -29,7 +29,7 @@
     This item describes, whether and how it is shaded.
 */
 
-class EDITENG_DLLPUBLIC SvxShadowedItem : public SfxBoolItem
+class EDITENG_DLLPUBLIC SvxShadowedItem final : public SfxBoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();

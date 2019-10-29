@@ -29,7 +29,7 @@
     This item contains a name of a page template.
 */
 
-class EDITENG_DLLPUBLIC SvxPageModelItem : public SfxStringItem
+class EDITENG_DLLPUBLIC SvxPageModelItem final : public SfxStringItem
 {
 private:
     bool bAuto;

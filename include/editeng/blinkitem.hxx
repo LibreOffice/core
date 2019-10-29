@@ -30,7 +30,7 @@
     This item describes, whether to flash.
 */
 
-class EDITENG_DLLPUBLIC SvxBlinkItem : public SfxBoolItem
+class EDITENG_DLLPUBLIC SvxBlinkItem final : public SfxBoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();

@@ -36,7 +36,7 @@
 #define FONTHEIGHT_16_VERSION   (sal_uInt16(0x0001))
 #define FONTHEIGHT_UNIT_VERSION (sal_uInt16(0x0002))
 
-class EDITENG_DLLPUBLIC SvxFontHeightItem : public SfxPoolItem
+class EDITENG_DLLPUBLIC SvxFontHeightItem final : public SfxPoolItem
 {
     sal_uInt32  nHeight;
     sal_uInt16  nProp;       // default 100%

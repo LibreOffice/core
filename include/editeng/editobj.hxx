@@ -54,7 +54,7 @@ class SharedStringPool;
 
 class EditTextObjectImpl;
 
-class EDITENG_DLLPUBLIC EditTextObject : public SfxItemPoolUser
+class EDITENG_DLLPUBLIC EditTextObject final : public SfxItemPoolUser
 {
     friend class EditTextObjectImpl;
     friend class editeng::FieldUpdaterImpl;

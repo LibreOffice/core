@@ -27,7 +27,7 @@
 
 class SvXMLAttrContainerData;
 
-class EDITENG_DLLPUBLIC SvXMLAttrContainerItem: public SfxPoolItem
+class EDITENG_DLLPUBLIC SvXMLAttrContainerItem final : public SfxPoolItem
 {
     std::unique_ptr<SvXMLAttrContainerData> pImpl;
 

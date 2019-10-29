@@ -30,7 +30,7 @@
     This item describes the font setting (Italic)
 */
 
-class EDITENG_DLLPUBLIC SvxPostureItem : public SfxEnumItem<FontItalic>
+class EDITENG_DLLPUBLIC SvxPostureItem final : public SfxEnumItem<FontItalic>
 {
 public:
     static SfxPoolItem* CreateDefault();

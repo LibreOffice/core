@@ -26,7 +26,7 @@
 
 //  SvxEditEngineForwarder - SvxTextForwarder for EditEngine
 
-class EDITENG_DLLPUBLIC SvxEditEngineForwarder : public SvxTextForwarder
+class EDITENG_DLLPUBLIC SvxEditEngineForwarder final : public SvxTextForwarder
 {
 private:
     EditEngine&         rEditEngine;

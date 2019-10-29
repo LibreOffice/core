@@ -29,7 +29,7 @@
     This item describe how to handle the last character of a line.
 */
 
-class EDITENG_DLLPUBLIC SvxHangingPunctuationItem : public SfxBoolItem
+class EDITENG_DLLPUBLIC SvxHangingPunctuationItem final : public SfxBoolItem
 {
 public:
     SvxHangingPunctuationItem( bool bOn /*= false*/, const sal_uInt16 nId  );

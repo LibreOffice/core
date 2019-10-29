@@ -44,7 +44,7 @@ namespace accessibility
 
     /** This class implements the image bullets for the EditEngine/Outliner UAA
      */
-    class AccessibleImageBullet : public AccessibleImageBulletInterfaceBase
+    class AccessibleImageBullet final : public AccessibleImageBulletInterfaceBase
     {
 
     public:

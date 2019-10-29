@@ -26,7 +26,7 @@
 
 enum class SdrMeasureFieldKind { Value, Unit, Rotate90Blanks };
 
-class EDITENG_DLLPUBLIC SdrMeasureField: public SvxFieldData {
+class EDITENG_DLLPUBLIC SdrMeasureField final : public SvxFieldData {
     SdrMeasureFieldKind eMeasureFieldKind;
 public:
     virtual sal_Int32  GetClassId() const override { return css::text::textfield::Type::MEASURE; }

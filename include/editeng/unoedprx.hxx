@@ -27,7 +27,7 @@
 #include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
 
-class SvxAccessibleTextAdapter : public SvxTextForwarder
+class SvxAccessibleTextAdapter final : public SvxTextForwarder
 {
 public:
     SvxAccessibleTextAdapter();
@@ -107,7 +107,7 @@ private:
     SvxTextForwarder* mpTextForwarder;
 };
 
-class SvxAccessibleTextEditViewAdapter : public SvxEditViewForwarder
+class SvxAccessibleTextEditViewAdapter final : public SvxEditViewForwarder
 {
 public:
 
@@ -133,7 +133,7 @@ private:
     SvxAccessibleTextAdapter*   mpTextForwarder;
 };
 
-class EDITENG_DLLPUBLIC SvxEditSourceAdapter : public SvxEditSource
+class EDITENG_DLLPUBLIC SvxEditSourceAdapter final : public SvxEditSource
 {
 public:
     SvxEditSourceAdapter();

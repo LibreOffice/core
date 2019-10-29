@@ -29,7 +29,7 @@
     This item describes the number of lines for the widows control.
 */
 
-class EDITENG_DLLPUBLIC SvxWidowsItem: public SfxByteItem
+class EDITENG_DLLPUBLIC SvxWidowsItem final : public SfxByteItem
 {
 public:
     static SfxPoolItem* CreateDefault();

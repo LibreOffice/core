@@ -32,7 +32,7 @@
 
 */
 
-class EDITENG_DLLPUBLIC SvxCharScaleWidthItem : public SfxUInt16Item
+class EDITENG_DLLPUBLIC SvxCharScaleWidthItem final : public SfxUInt16Item
 {
 public:
     static SfxPoolItem* CreateDefault();

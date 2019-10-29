@@ -26,7 +26,7 @@
 
 /** This item describes a Font.
 */
-class EDITENG_DLLPUBLIC SvxFontItem : public SfxPoolItem
+class EDITENG_DLLPUBLIC SvxFontItem final : public SfxPoolItem
 {
     OUString aFamilyName;
     OUString  aStyleName;

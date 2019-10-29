@@ -28,7 +28,7 @@
     layout text for Western, CJK and CTL languages.
 */
 
-class EDITENG_DLLPUBLIC SvxFrameDirectionItem : public SfxEnumItem<SvxFrameDirection>
+class EDITENG_DLLPUBLIC SvxFrameDirectionItem final : public SfxEnumItem<SvxFrameDirection>
 {
 public:
     SvxFrameDirectionItem( SvxFrameDirection nValue, sal_uInt16 nWhich  );

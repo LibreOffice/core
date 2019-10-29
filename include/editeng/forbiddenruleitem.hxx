@@ -29,7 +29,7 @@
     This item describe how to handle the last character of a line.
 */
 
-class EDITENG_DLLPUBLIC SvxForbiddenRuleItem : public SfxBoolItem
+class EDITENG_DLLPUBLIC SvxForbiddenRuleItem final : public SfxBoolItem
 {
 public:
     SvxForbiddenRuleItem( bool bOn /*= false*/,

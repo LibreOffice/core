@@ -33,7 +33,7 @@
     This item describes selecting a paper tray of the printer.
 */
 
-class EDITENG_DLLPUBLIC SvxPaperBinItem : public SfxByteItem
+class EDITENG_DLLPUBLIC SvxPaperBinItem final : public SfxByteItem
 {
 public:
     static SfxPoolItem* CreateDefault();

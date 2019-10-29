@@ -31,7 +31,7 @@
     emboss, relief.
 */
 
-class EDITENG_DLLPUBLIC SvxCharReliefItem : public SfxEnumItem<FontRelief>
+class EDITENG_DLLPUBLIC SvxCharReliefItem final : public SfxEnumItem<FontRelief>
 {
 public:
     static SfxPoolItem* CreateDefault();

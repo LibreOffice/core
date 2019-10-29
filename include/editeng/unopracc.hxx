@@ -31,7 +31,7 @@ class SvxEditSource;
     XMultiPropertySet interfaces. Just set the selection to the
     required text range and return a reference to a XPropertySet.
  */
-class SvxAccessibleTextPropertySet : public SvxUnoTextRangeBase,
+class SvxAccessibleTextPropertySet final : public SvxUnoTextRangeBase,
                                      public css::lang::XTypeProvider,
                                      public ::cppu::OWeakObject
 {

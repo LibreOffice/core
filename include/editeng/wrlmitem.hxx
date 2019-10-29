@@ -30,7 +30,7 @@
     to word boundaries.
 */
 
-class EDITENG_DLLPUBLIC SvxWordLineModeItem : public SfxBoolItem
+class EDITENG_DLLPUBLIC SvxWordLineModeItem final : public SfxBoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();

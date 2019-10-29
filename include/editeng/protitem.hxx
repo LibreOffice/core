@@ -30,7 +30,7 @@
     This item describes, if content, size or position should be protected.
 */
 
-class EDITENG_DLLPUBLIC SvxProtectItem : public SfxPoolItem
+class EDITENG_DLLPUBLIC SvxProtectItem final : public SfxPoolItem
 {
     bool bCntnt :1;     // Content protected
     bool bSize  :1;     // Size protected
