@@ -105,14 +105,13 @@ typedef cppu::ImplInheritanceHelper< VCLXGraphicControl,
                                      css::awt::XButton,
                                      css::awt::XToggleButton
                                    > VCLXButton_Base;
-class VCLXButton :public VCLXButton_Base
+class VCLXButton final : public VCLXButton_Base
 {
 private:
     OUString             maActionCommand;
     ActionListenerMultiplexer   maActionListeners;
     ItemListenerMultiplexer     maItemListeners;
 
-protected:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 
@@ -150,7 +149,7 @@ public:
 
 //  class VCLXImageControl
 
-class VCLXImageControl : public VCLXGraphicControl
+class VCLXImageControl final : public VCLXGraphicControl
 {
 public:
                     VCLXImageControl();
@@ -168,14 +167,14 @@ public:
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 
-protected:
+private:
     virtual void    ImplSetNewImage() override;
 };
 
 
 //  class VCLXCheckBox
 
-class SAL_DLLPUBLIC_RTTI VCLXCheckBox :    public css::awt::XCheckBox,
+class TOOLKIT_DLLPUBLIC VCLXCheckBox final : public css::awt::XCheckBox,
                         public css::awt::XButton,
                         public VCLXGraphicControl
 {
@@ -184,7 +183,6 @@ private:
     OUString             maActionCommand;
     ItemListenerMultiplexer     maItemListeners;
 
-protected:
     void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 
@@ -233,7 +231,7 @@ public:
 
 //  class VCLXRadioButton
 
-class SAL_DLLPUBLIC_RTTI VCLXRadioButton : public css::awt::XRadioButton,
+class TOOLKIT_DLLPUBLIC VCLXRadioButton final : public css::awt::XRadioButton,
                         public css::awt::XButton,
                         public VCLXGraphicControl
 {
@@ -242,7 +240,6 @@ private:
     ActionListenerMultiplexer   maActionListeners;
     OUString             maActionCommand;
 
-protected:
     void            ImplClickedOrToggled( bool bToggled );
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
@@ -291,7 +288,7 @@ public:
 
 //  class VCLXMessageBox
 
-class VCLXMessageBox :  public css::awt::XMessageBox,
+class VCLXMessageBox final : public css::awt::XMessageBox,
                         public VCLXTopWindow
 {
 public:
@@ -324,9 +321,8 @@ public:
 
 //  class VCLXFrame
 
-class VCLXFrame :   public VCLXContainer
+class VCLXFrame final : public VCLXContainer
 {
-protected:
     void                        ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
 
 public:
@@ -353,7 +349,7 @@ public:
 
 //  class VCLXDialog
 
-class TOOLKIT_DLLPUBLIC VCLXDialog :    public css::awt::XDialog2,
+class TOOLKIT_DLLPUBLIC VCLXDialog final : public css::awt::XDialog2,
                     public VCLXTopWindow
 {
 public:
@@ -395,7 +391,7 @@ public:
 
 //  class VCLXTabPage
 
-class VCLXTabPage : public VCLXContainer
+class VCLXTabPage final : public VCLXContainer
 {
 public:
                         VCLXTabPage();
@@ -420,11 +416,11 @@ public:
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
-class VCLXMultiPage : public css::awt::XSimpleTabController, public VCLXContainer
+class VCLXMultiPage final : public css::awt::XSimpleTabController, public VCLXContainer
 {
     TabListenerMultiplexer maTabListeners;
     sal_Int32 mTabId;
-protected:
+
     void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
 public:
     VCLXMultiPage();
@@ -470,14 +466,13 @@ public:
 
 //  class VCLXFixedHyperlink
 
-class TOOLKIT_DLLPUBLIC VCLXFixedHyperlink :
+class TOOLKIT_DLLPUBLIC VCLXFixedHyperlink final :
     public css::awt::XFixedHyperlink,
     public VCLXWindow
 {
 private:
     ActionListenerMultiplexer   maActionListeners;
 
-protected:
     void                        ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
 
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
@@ -525,10 +520,9 @@ public:
 
 //  class VCLXFixedText
 
-class VCLXFixedText :   public css::awt::XFixedText,
+class VCLXFixedText final : public css::awt::XFixedText,
                         public VCLXWindow
 {
-protected:
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 
 public:
@@ -562,13 +556,12 @@ public:
 
 //  class VCLXScrollBar
 
-class SAL_DLLPUBLIC_RTTI VCLXScrollBar :   public css::awt::XScrollBar,
+class TOOLKIT_DLLPUBLIC VCLXScrollBar final : public css::awt::XScrollBar,
                         public VCLXWindow
 {
 private:
     AdjustmentListenerMultiplexer maAdjustmentListeners;
 
-protected:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 
@@ -699,13 +692,12 @@ typedef cppu::ImplInheritanceHelper< VCLXWindow,
                                      css::awt::XTextLayoutConstrains,
                                      css::awt::XItemListListener
                                    > VCLXListBox_Base;
-class VCLXListBox  : public VCLXListBox_Base
+class VCLXListBox final : public VCLXListBox_Base
 {
 private:
     ActionListenerMultiplexer   maActionListeners;
     ItemListenerMultiplexer     maItemListeners;
 
-protected:
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
                     CreateAccessibleContext() override;
@@ -775,13 +767,12 @@ typedef cppu::ImplInheritanceHelper< VCLXEdit,
                                      css::awt::XComboBox,
                                      css::awt::XItemListListener
                                    > VCLXComboBox_Base;
-class VCLXComboBox :    public VCLXComboBox_Base
+class VCLXComboBox final : public VCLXComboBox_Base
 {
 private:
     ActionListenerMultiplexer   maActionListeners;
     ItemListenerMultiplexer     maItemListeners;
 
-protected:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 
@@ -950,10 +941,9 @@ public:
 
 //  class VCLXTimeField
 
-class VCLXTimeField :   public css::awt::XTimeField,
+class VCLXTimeField final : public css::awt::XTimeField,
                         public VCLXFormattedSpinField
 {
-protected:
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 public:
                     VCLXTimeField();
@@ -995,7 +985,7 @@ public:
 
 //  class VCLXNumericField
 
-class VCLXNumericField :    public css::awt::XNumericField,
+class VCLXNumericField final : public css::awt::XNumericField,
                             public VCLXFormattedSpinField
 {
 public:
@@ -1042,7 +1032,7 @@ public:
 
 class MetricFormatter;
 class MetricField;
-class VCLXMetricField : public css::awt::XMetricField,
+class VCLXMetricField final : public css::awt::XMetricField,
                         public VCLXFormattedSpinField
 {
     /// @throws css::uno::RuntimeException
@@ -1094,7 +1084,7 @@ public:
 
 //  class VCLXCurrencyField
 
-class VCLXCurrencyField :   public css::awt::XCurrencyField,
+class VCLXCurrencyField final : public css::awt::XCurrencyField,
                             public VCLXFormattedSpinField
 {
 public:
@@ -1140,7 +1130,7 @@ public:
 
 //  class VCLXPatternField
 
-class VCLXPatternField :    public css::awt::XPatternField,
+class VCLXPatternField final :  public css::awt::XPatternField,
                             public VCLXFormattedSpinField
 {
 public:
@@ -1176,11 +1166,8 @@ public:
 
 //  class VCLXToolBox
 
-class VCLXToolBox : public VCLXWindow
+class VCLXToolBox final : public VCLXWindow
 {
-private:
-
-protected:
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
                         CreateAccessibleContext() override;
 
@@ -1189,7 +1176,7 @@ public:
                         virtual ~VCLXToolBox() override;
 };
 
-class VCLXHeaderBar :  public VCLXWindow
+class VCLXHeaderBar final : public VCLXWindow
 {
 public:
     VCLXHeaderBar();

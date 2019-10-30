@@ -106,7 +106,7 @@ public:
 typedef ::cppu::ImplInheritanceHelper  <   VCLXPrinterPropertySet
                                         ,   css::awt::XPrinter
                                         >   VCLXPrinter_Base;
-class VCLXPrinter:  public VCLXPrinter_Base
+class VCLXPrinter final : public VCLXPrinter_Base
 {
     std::shared_ptr<vcl::OldStylePrintAdaptor>    mxListener;
     JobSetup                                      maInitJobSetup;
@@ -145,7 +145,7 @@ public:
 typedef ::cppu::ImplInheritanceHelper  <   VCLXPrinterPropertySet
                                         ,   css::awt::XInfoPrinter
                                         >   VCLXInfoPrinter_Base;
-class VCLXInfoPrinter:  public VCLXInfoPrinter_Base
+class VCLXInfoPrinter final : public VCLXInfoPrinter_Base
 {
 public:
                         VCLXInfoPrinter( const OUString& rPrinterName );
@@ -178,7 +178,7 @@ public:
 typedef ::cppu::WeakImplHelper <   css::awt::XPrinterServer2,
                                    css::lang::XServiceInfo
                                 >   VCLXPrinterServer_Base;
-class VCLXPrinterServer : public VCLXPrinterServer_Base
+class VCLXPrinterServer final : public VCLXPrinterServer_Base
 {
 public:
     // css::awt::XPrinterServer2
