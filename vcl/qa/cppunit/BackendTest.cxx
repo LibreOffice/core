@@ -379,7 +379,7 @@ public:
 
     CPPUNIT_TEST_SUITE(BackendTest);
     CPPUNIT_TEST(testDrawRectWithRectangle);
-    //    CPPUNIT_TEST(testDrawRectWithPixel); TODO SKIA
+    CPPUNIT_TEST(testDrawRectWithPixel);
     CPPUNIT_TEST(testDrawRectWithLine);
     CPPUNIT_TEST(testDrawRectWithPolygon);
     CPPUNIT_TEST(testDrawRectWithPolyLine);
@@ -388,7 +388,7 @@ public:
     CPPUNIT_TEST(testDrawRectWithPolyPolygonB2D);
 
     CPPUNIT_TEST(testDrawRectAAWithRectangle);
-    //    CPPUNIT_TEST(testDrawRectAAWithPixel); TODO SKIA
+    CPPUNIT_TEST(testDrawRectAAWithPixel);
     CPPUNIT_TEST(testDrawRectAAWithLine);
     CPPUNIT_TEST(testDrawRectAAWithPolygon);
     CPPUNIT_TEST(testDrawRectAAWithPolyLine);
