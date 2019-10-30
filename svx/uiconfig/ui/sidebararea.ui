@@ -338,7 +338,6 @@
                 <property name="max_length">100</property>
                 <property name="secondary_icon_activatable">False</property>
                 <property name="adjustment">adjustment1</property>
-                <property name="climb_rate">5</property>
                 <property name="numeric">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="settransparency:0%-atkobject">
