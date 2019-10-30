@@ -37,7 +37,7 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-namespace vcl { class Window; }
+namespace weld { class Window; }
 class ModelData_Impl;
 
 class SfxStoringHelper
@@ -79,7 +79,7 @@ public:
                                     bool rDefaultIsAlien );
 
     static css::uno::Reference<css::awt::XWindow> GetModelXWindow(const css::uno::Reference<css::frame::XModel>& rModel);
-    static vcl::Window* GetModelWindow( const css::uno::Reference< css::frame::XModel >& xModel );
+    static weld::Window* GetModelWindow( const css::uno::Reference< css::frame::XModel >& xModel );
 
 };
 

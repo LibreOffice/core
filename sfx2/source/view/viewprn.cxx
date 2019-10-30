@@ -350,8 +350,7 @@ void SfxPrinterController::jobFinished( css::view::PrintableState nState )
             OUString aMsg( SfxResId(STR_NOSTARTPRINTER) );
             if ( !m_bApi )
             {
-                vcl::Window* pWindow = mpViewShell->GetWindow();
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(mpViewShell->GetFrameWeld(),
                                                                          VclMessageType::Warning, VclButtonsType::Ok,
                                                                          aMsg));
                 xBox->run();
