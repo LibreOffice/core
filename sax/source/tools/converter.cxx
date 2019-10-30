@@ -514,12 +514,12 @@ void Converter::convertColor( OUStringBuffer& rBuffer, sal_Int32 nColor )
 
 /** convert string to number with optional min and max values */
 bool Converter::convertNumber(  sal_Int32& rValue,
-                                const OUString& rString,
+                                std::u16string_view aString,
                                 sal_Int32 nMin, sal_Int32 nMax )
 {
     rValue = 0;
     sal_Int64 nNumber = 0;
-    bool bRet = convertNumber64(nNumber,rString,nMin,nMax);
+    bool bRet = convertNumber64(nNumber,aString,nMin,nMax);
     if ( bRet )
         rValue = static_cast<sal_Int32>(nNumber);
     return bRet;
@@ -527,32 +527,32 @@ bool Converter::convertNumber(  sal_Int32& rValue,
 
 /** convert string to 64-bit number with optional min and max values */
 bool Converter::convertNumber64( sal_Int64& rValue,
-                                 const OUString& rString,
+                                 std::u16string_view aString,
                                  sal_Int64 nMin, sal_Int64 nMax )
 {
     sal_Int32 nPos = 0;
-    sal_Int32 const nLen = rString.getLength();
+    sal_Int32 const nLen = aString.size();
 
     // skip white space
-    while( (nPos < nLen) && (rString[nPos] <= ' ') )
+    while( (nPos < nLen) && (aString[nPos] <= ' ') )
         nPos++;
 
-    OUStringBuffer sNumber;
+    sal_Int32 nNumberStartPos = nPos;
 
-    if( nPos < nLen && '-' == rString[nPos] )
+    if( nPos < nLen && '-' == aString[nPos] )
     {
-        sNumber.append(rString[nPos++]);
+        nPos++;
     }
 
     // get number
     while( nPos < nLen &&
-           '0' <= rString[nPos] &&
-           '9' >= rString[nPos] )
+           '0' <= aString[nPos] &&
+           '9' >= aString[nPos] )
     {
-        sNumber.append(rString[nPos++]);
+        nPos++;
     }
 
-    rValue = sNumber.toString().toInt64();
+    rValue = rtl_ustr_toInt64_WithLength(aString.data() + nNumberStartPos, 10, nPos - nNumberStartPos);
 
     if( rValue < nMin )
         rValue = nMin;
@@ -952,18 +952,11 @@ readUnsignedNumber(const OUString & rString,
 {
     sal_Int32 nPos(io_rnPos);
 
-    OUStringBuffer aNumber;
     while (nPos < rString.getLength())
     {
         const sal_Unicode c = rString[nPos];
-        if (('0' <= c) && (c <= '9'))
-        {
-            aNumber.append(c);
-        }
-        else
-        {
+        if (!(('0' <= c) && (c <= '9')))
             break;
-        }
         ++nPos;
     }
 
@@ -973,7 +966,8 @@ readUnsignedNumber(const OUString & rString,
         return R_NOTHING;
     }
 
-    const sal_Int64 nTemp = aNumber.toString().toInt64();
+    const sal_Int64 nTemp = rtl_ustr_toInt64_WithLength(rString.getStr() + io_rnPos, 10, nPos - io_rnPos);
+
     const bool bOverflow = (nTemp >= SAL_MAX_INT32);
 
     io_rnPos = nPos;

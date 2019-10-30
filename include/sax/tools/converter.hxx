@@ -112,13 +112,13 @@ public:
 
     /** convert string to number with optional min and max values */
     static bool convertNumber( sal_Int32& rValue,
-                               const OUString& rString,
+                               std::u16string_view aString,
                                sal_Int32 nMin = SAL_MIN_INT32,
                                sal_Int32 nMax = SAL_MAX_INT32 );
 
     /** convert string to number with optional min and max values */
     static bool convertNumber64(sal_Int64& rValue,
-                                const OUString& rString,
+                                std::u16string_view aString,
                                 sal_Int64 nMin = SAL_MIN_INT64,
                                 sal_Int64 nMax = SAL_MAX_INT64);
 
