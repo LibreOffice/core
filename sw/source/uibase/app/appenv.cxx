@@ -49,6 +49,7 @@
 #include <swundo.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <dbmgr.hxx>
+#include <dialoghelp.hxx>
 #include <fmtcol.hxx>
 #include <frmmgr.hxx>
 #include <fldmgr.hxx>
@@ -202,7 +203,6 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
     }
 
-    vcl::Window *pParent = pOldSh ? pOldSh->GetWin() : nullptr;
     ScopedVclPtr<SfxAbstractTabDialog> pDlg;
     short nMode = ENV_INSERT;
 
@@ -210,7 +210,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     if ( !pItem )
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        pDlg.disposeAndReset(pFact->CreateSwEnvDlg(pParent ? pParent->GetFrameWeld() : nullptr, aSet, pOldSh, pTempPrinter, !bEnvChange));
+        pDlg.disposeAndReset(pFact->CreateSwEnvDlg(GetFrameWeld(pMyDocSh), aSet, pOldSh, pTempPrinter, !bEnvChange));
         nMode = pDlg->Execute();
     }
     else
