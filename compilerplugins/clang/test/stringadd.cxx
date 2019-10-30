@@ -65,6 +65,17 @@ void f3(OUString aStr, int nFirstContent)
     // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
     aFirstStr += "...";
 }
+void f4(int i)
+{
+    OUString s("xxx");
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s += "xxx";
+    ++i;
+    // any other kind of statement breaks the chain (at least for now)
+    s += "xxx";
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s += "xxx";
+}
 }
 
 namespace test2
