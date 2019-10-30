@@ -61,7 +61,7 @@ class SvtDynamicMenuOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtDynamicMenuOptions : public utl::detail::Options
+class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtDynamicMenuOptions final : public utl::detail::Options
 {
     public:
          SvtDynamicMenuOptions();

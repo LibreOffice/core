@@ -59,7 +59,7 @@ enum class GlobalEventId
 
 class GlobalEventConfig_Impl;
 
-class UNOTOOLS_DLLPUBLIC GlobalEventConfig:
+class UNOTOOLS_DLLPUBLIC GlobalEventConfig final :
         public cppu::WeakImplHelper< css::document::XEventsSupplier, css::container::XNameReplace >
 {
     public:

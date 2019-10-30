@@ -31,7 +31,7 @@ class SvtSysLocaleOptions_Impl;
 class LinkParamNone;
 template <typename Arg, typename Ret> class Link;
 
-class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSysLocaleOptions : public utl::detail::Options
+class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSysLocaleOptions final : public utl::detail::Options
 {
     std::shared_ptr<SvtSysLocaleOptions_Impl>  pImpl;
 

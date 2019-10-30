@@ -31,7 +31,7 @@ class SvtPathOptions_Impl;
 
   All path functions return URLs!
 */
-class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtPathOptions : public utl::detail::Options
+class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtPathOptions final : public utl::detail::Options
 {
 private:
     std::shared_ptr<SvtPathOptions_Impl>    pImpl;

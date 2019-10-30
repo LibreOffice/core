@@ -26,7 +26,7 @@
 namespace utl
 {
 class SfxMiscCfg;
-class UNOTOOLS_DLLPUBLIC MiscCfg : public detail::Options
+class UNOTOOLS_DLLPUBLIC MiscCfg final : public detail::Options
 {
 private:
     std::shared_ptr<SfxMiscCfg> m_pImpl;

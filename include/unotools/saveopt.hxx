@@ -23,7 +23,7 @@
 #include <unotools/options.hxx>
 
 struct SvtLoadSaveOptions_Impl;
-class UNOTOOLS_DLLPUBLIC SvtSaveOptions: public utl::detail::Options
+class UNOTOOLS_DLLPUBLIC SvtSaveOptions final : public utl::detail::Options
 {
     SvtLoadSaveOptions_Impl*    pImp;
 

@@ -38,7 +38,7 @@ namespace utl
         This base class provides an implementation of the
         <code>AccessibleStateSet</code> service.
 */
-class UNOTOOLS_DLLPUBLIC AccessibleStateSetHelper
+class UNOTOOLS_DLLPUBLIC AccessibleStateSetHelper final
     :   public cppu::WeakImplHelper< css::accessibility::XAccessibleStateSet >
 {
 public:

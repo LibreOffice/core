@@ -50,7 +50,7 @@ class SvtCommandOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtCommandOptions : public utl::detail::Options
+class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtCommandOptions final : public utl::detail::Options
 {
     friend class SvtCommandOptions_Impl;
 

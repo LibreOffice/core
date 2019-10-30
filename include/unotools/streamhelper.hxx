@@ -33,7 +33,7 @@ namespace utl
 /**
  * The helper implementation for a using input streams based on SvLockBytes.
  */
-class UNOTOOLS_DLLPUBLIC OInputStreamHelper : public cppu::WeakImplHelper<css::io::XInputStream, css::io::XSeekable>
+class UNOTOOLS_DLLPUBLIC OInputStreamHelper final : public cppu::WeakImplHelper<css::io::XInputStream, css::io::XSeekable>
 {
     ::osl::Mutex    m_aMutex;
     SvLockBytesRef  m_xLockBytes;

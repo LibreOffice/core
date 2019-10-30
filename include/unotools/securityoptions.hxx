@@ -56,7 +56,7 @@ enum EBasicSecurityMode
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSecurityOptions : public utl::detail::Options
+class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSecurityOptions final : public utl::detail::Options
 {
     public:
 

@@ -122,7 +122,7 @@ typedef ::cppu::ImplHelper1 <   css::io::XSeekable
 /** helper class for wrapping an SvStream into a com.sun.star.io::XOutputStream
     which is seekable (i.e. supports the com.sun.star.io::XSeekable interface).
 */
-class UNOTOOLS_DLLPUBLIC OSeekableOutputStreamWrapper
+class UNOTOOLS_DLLPUBLIC OSeekableOutputStreamWrapper final
                 :public OOutputStreamWrapper
                 ,public OSeekableOutputStreamWrapper_Base
 {
@@ -143,13 +143,12 @@ private:
     virtual sal_Int64 SAL_CALL getLength(  ) override;
 };
 
-class UNOTOOLS_DLLPUBLIC OStreamWrapper
+class UNOTOOLS_DLLPUBLIC OStreamWrapper final
         : public cppu::ImplInheritanceHelper<OSeekableInputStreamWrapper,
                                              css::io::XStream,
                                              css::io::XOutputStream,
                                              css::io::XTruncate>
 {
-protected:
     ~OStreamWrapper() override;
 
 public:
