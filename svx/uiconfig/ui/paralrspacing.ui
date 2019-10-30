@@ -36,7 +36,6 @@
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="paralrspacing|beforetextindent|tooltip_text">Before Text Indent</property>
                 <property name="text">0</property>
-                <property name="progress_fraction">0.10000000000000001</property>
               </object>
               <packing>
                 <property name="expand">False</property>

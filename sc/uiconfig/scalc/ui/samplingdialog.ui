@@ -236,7 +236,6 @@
                         <property name="activates_default">True</property>
                         <property name="text">1</property>
                         <property name="adjustment">sample-size-adjustment</property>
-                        <property name="update_policy">if-valid</property>
                         <property name="value">1</property>
                       </object>
                       <packing>
@@ -304,7 +303,6 @@
                         <property name="activates_default">True</property>
                         <property name="text">1</property>
                         <property name="adjustment">period-adjustment</property>
-                        <property name="update_policy">if-valid</property>
                         <property name="value">1</property>
                       </object>
                       <packing>
