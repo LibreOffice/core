@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_20e718e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-30T12:18:56Z",
+      "side": 1,
+      "message": "might be useful to document here what the hot path was, xmloff/source/draw/propimp0.cxx or xmloff/source/draw/propimp0.cxx",
+      "revId": "70bfcf7006b7a807d372b89e04e790593bb75e9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_40b574cc",
+        "filename": "include/rtl/string.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-30T12:18:56Z",
+      "side": 1,
+      "message": "\"as the above\" isn\u0027t very useful in the doxygen-generated help",
+      "range": {
+        "startLine": 787,
+        "startChar": 7,
+        "endLine": 787,
+        "endChar": 19
+      },
+      "revId": "70bfcf7006b7a807d372b89e04e790593bb75e9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_00c77c47",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-30T12:18:56Z",
+      "side": 1,
+      "message": "do we still need to handle NUL specially here (and also elsewhere below)?",
+      "range": {
+        "startLine": 1008,
+        "startChar": 16,
+        "endLine": 1008,
+        "endChar": 21
+      },
+      "revId": "70bfcf7006b7a807d372b89e04e790593bb75e9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_80e06cce",
+        "filename": "sal/util/sal.map",
+        "patchSetId": 4
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-30T12:18:56Z",
+      "side": 1,
+      "message": "I would sort these lexicographically",
+      "revId": "70bfcf7006b7a807d372b89e04e790593bb75e9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
