@@ -33,6 +33,8 @@ class SidebarChildWindow;
 
 class SidebarController;
 
+class SidebarNotifyIdle;
+
 class SidebarDockingWindow : public SfxDockingWindow
 {
 public:
@@ -68,6 +70,7 @@ private:
 
     const bool mbSidebarVisibleInLOK;
     const SfxViewShell* mpOldViewShell;
+    std::unique_ptr<SidebarNotifyIdle> mpIdleNotify;
 };
 
 } } // end of namespace sfx2::sidebar
