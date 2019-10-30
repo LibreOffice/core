@@ -611,12 +611,14 @@
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="ignore_hidden">True</property>
     <widgets>
-      <widget name="fontcolorft"/>
+      <widget name="effectsft"/>
+      <widget name="reliefft"/>
+      <widget name="positionft"/>
+      <widget name="emphasisft"/>
       <widget name="label3"/>
       <widget name="label4"/>
       <widget name="label5"/>
-      <widget name="effectsft"/>
-      <widget name="reliefft"/>
+      <widget name="fontcolorft"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
