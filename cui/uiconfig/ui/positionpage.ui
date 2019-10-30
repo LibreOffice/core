@@ -551,6 +551,7 @@
     <widgets>
       <widget name="box3"/>
       <widget name="rotationcontainer"/>
+      <widget name="label7"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
