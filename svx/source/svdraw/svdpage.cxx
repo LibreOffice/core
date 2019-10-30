@@ -627,29 +627,25 @@ void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
         // example aShapesWithTextbox [0 2]
     }
 
-    aIncrements.push_back(0);
-    aDuplicates.push_back(sortOrder[0]);
-
-    // corner case: 1st shape is a textbox, add it twice
-    // otherwise sortOrder loop below will skip it
-    if (aShapesWithTextbox.count(sortOrder[0]) > 0)
-        aDuplicates.push_back(sortOrder[0]);
-
-    for (size_t i = 1; i< sortOrder.size(); ++i)
+    for (size_t i = 0; i< sortOrder.size(); ++i)
     {
-         aDuplicates.push_back(sortOrder[i]);
 
          if (aShapesWithTextbox.count(sortOrder[i]) > 0)
-         {
-             aIncrements.push_back(aIncrements[i-1] + 1 );
              aDuplicates.push_back(sortOrder[i]);
-         }
-         else
-         {
-             aIncrements.push_back(aIncrements[i-1]);
-         }
+
+         aDuplicates.push_back(sortOrder[i]);
 
          // example aDuplicates [2 2 0 0 1]
+    }
+
+    aIncrements.push_back(0);
+    for (size_t i = 1; i< sortOrder.size(); ++i)
+    {
+         if (aShapesWithTextbox.count(i))
+             aIncrements.push_back(aIncrements[i-1] + 1 );
+         else
+             aIncrements.push_back(aIncrements[i-1]);
+
          // example aIncrements [0 1 1]
     }
 
