@@ -743,7 +743,7 @@ bool QueryDelModule( const OUString& rName, weld::Widget* pParent )
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMODULE ), pParent );
 }
 
-bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer, const OUString& rLibName, OUString& rPassword, bool bRepeat, bool bNewTitle )
+bool QueryPassword(weld::Widget* pDialogParent, const Reference< script::XLibraryContainer >& xLibContainer, const OUString& rLibName, OUString& rPassword, bool bRepeat, bool bNewTitle)
 {
     bool bOK = false;
     sal_uInt16 nRet = 0;
@@ -751,8 +751,7 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
     do
     {
         // password dialog
-        vcl::Window* pWin = Application::GetDefDialogParent();
-        SfxPasswordDialog aDlg(pWin ? pWin->GetFrameWeld() : nullptr);
+        SfxPasswordDialog aDlg(pDialogParent);
         aDlg.SetMinLen(1);
 
         // set new title
@@ -779,8 +778,7 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
 
                     if ( !bOK )
                     {
-                        vcl::Window* pParent = Application::GetDefDialogParent();
-                        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+                        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pDialogParent,
                                                                        VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_WRONGPASSWORD)));
                         xErrorBox->run();
                     }

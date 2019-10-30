@@ -272,7 +272,7 @@ IMPL_LINK(LibPage, EditingEntryHdl, const weld::TreeIter&, rIter, bool)
         if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
         {
             OUString aPassword;
-            bOK = QueryPassword( xModLibContainer, aLibName, aPassword );
+            bOK = QueryPassword(m_pDialog->getDialog(), xModLibContainer, aLibName, aPassword);
         }
         if ( !bOK )
             return false;
@@ -740,7 +740,7 @@ void LibPage::InsertLib()
                         Reference< script::XLibraryContainerPassword > xPasswd( xModLibContImport, UNO_QUERY );
                         if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) && !bReference )
                         {
-                            bOK = QueryPassword( xModLibContImport, aLibName, aPassword, true, true );
+                            bOK = QueryPassword(m_pDialog->getDialog(), xModLibContImport, aLibName, aPassword, true, true);
 
                             if ( !bOK )
                             {
@@ -922,7 +922,7 @@ void LibPage::Export()
         if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
         {
             OUString aPassword;
-            bOK = QueryPassword( xModLibContainer, aLibName, aPassword );
+            bOK = QueryPassword(m_pDialog->getDialog(), xModLibContainer, aLibName, aPassword);
         }
         if ( !bOK )
             return;
