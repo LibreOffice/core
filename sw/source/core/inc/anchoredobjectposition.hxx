@@ -55,7 +55,6 @@ namespace objectpositioning
         const SwFrameFormat* mpFrameFormat;
         // #i62875#
         bool mbFollowTextFlow;
-        bool mbLayoutInCell = false;
         // #i62875#
         // for compatibility option <DoNotCaptureDrawObjsOnPage>
         bool mbDoNotCaptureAnchoredObj;
@@ -108,10 +107,6 @@ namespace objectpositioning
         bool DoesObjFollowsTextFlow() const
         {
             return mbFollowTextFlow;
-        }
-        bool DoesObjLayoutInCell() const
-        {
-            return mbLayoutInCell;
         }
 
         // virtual methods providing data for to character anchored objects.

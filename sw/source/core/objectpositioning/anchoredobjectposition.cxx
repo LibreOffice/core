@@ -113,7 +113,6 @@ void SwAnchoredObjectPosition::GetInfoAboutObj()
     // #i62875# - determine attribute value of <Follow-Text-Flow>
     {
         mbFollowTextFlow = mpFrameFormat->GetFollowTextFlow().GetValue();
-        mbLayoutInCell = mpFrameFormat->GetFollowTextFlow().GetLayoutInCell();
     }
 
     // determine, if anchored object has not to be captured on the page.
