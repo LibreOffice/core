@@ -683,23 +683,29 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& r
                                    Color nMaskColor)
 {
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSalBitmap));
-    drawMask(rPosAry, static_cast<const SkiaSalBitmap&>(rSalBitmap).GetSkBitmap(), nMaskColor);
+    drawMask(rPosAry, static_cast<const SkiaSalBitmap&>(rSalBitmap).GetAlphaSkBitmap(), nMaskColor);
 }
 
 void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SkBitmap& rBitmap,
                                    Color nMaskColor)
 {
     preDraw();
+    SkBitmap tmpBitmap;
+    if (!tmpBitmap.tryAllocN32Pixels(rBitmap.width(), rBitmap.height()))
+        abort();
+    tmpBitmap.eraseColor(toSkColor(nMaskColor));
     SkPaint paint;
-    // Draw the color with the given mask, and mask uses inversed alpha.
+    // Draw the color with the given mask.
+    // TODO figure out the right blend mode to avoid the temporary bitmap
     paint.setBlendMode(SkBlendMode::kDstOut);
-    paint.setColor(toSkColor(nMaskColor));
+    SkCanvas canvas(tmpBitmap);
+    canvas.drawBitmap(rBitmap, 0, 0, &paint);
     mSurface->getCanvas()->drawBitmapRect(
-        rBitmap,
+        tmpBitmap,
         SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
         SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                          rPosAry.mnDestHeight),
-        &paint);
+        nullptr);
     postDraw();
 }
 
