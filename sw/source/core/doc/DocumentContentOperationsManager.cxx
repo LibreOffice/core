@@ -148,7 +148,7 @@ namespace
     }
 
     /*
-        The lcl_CopyBookmarks function has to copy bookmarks from the source to the destination nodes
+        The CopyBookmarks function has to copy bookmarks from the source to the destination nodes
         array. It is called after a call of the CopyNodes(..) function. But this function does not copy
         every node (at least at the moment: 2/08/2006 ), section start and end nodes will not be copied
         if the corresponding end/start node is outside the copied pam.
@@ -218,10 +218,12 @@ namespace
         rChgPos.nContent.Assign( rChgPos.nNode.GetNode().GetContentNode(), nContentPos );
     }
 
+}
+
+namespace sw
+{
     // TODO: use SaveBookmark (from DelBookmarks)
-    void lcl_CopyBookmarks(
-        const SwPaM& rPam,
-        SwPaM& rCpyPam )
+    void CopyBookmarks(const SwPaM& rPam, SwPosition& rCpyPam)
     {
         const SwDoc* pSrcDoc = rPam.GetDoc();
         SwDoc* pDestDoc =  rCpyPam.GetDoc();
@@ -229,7 +231,7 @@ namespace
         ::sw::UndoGuard const undoGuard(pDestDoc->GetIDocumentUndoRedo());
 
         const SwPosition &rStt = *rPam.Start(), &rEnd = *rPam.End();
-        SwPosition* pCpyStt = rCpyPam.Start();
+        SwPosition const*const pCpyStt = &rCpyPam;
 
         typedef std::vector< const ::sw::mark::IMark* > mark_vector_t;
         mark_vector_t vMarksToCopy;
@@ -319,7 +321,10 @@ namespace
             }
         }
     }
+} // namespace sw
 
+namespace
+{
     void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
     {
         const SwDoc* pSrcDoc = rPam.GetDoc();
@@ -3398,7 +3403,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
             *aCpyPaM.GetPoint() = pCopiedPaM->second;
         }
 
-        lcl_CopyBookmarks(pCopiedPaM ? pCopiedPaM->first : aRgTmp, aCpyPaM);
+        sw::CopyBookmarks(pCopiedPaM ? pCopiedPaM->first : aRgTmp, *aCpyPaM.Start());
     }
 
     if( bDelRedlines && ( RedlineFlags::DeleteRedlines & pDest->getIDocumentRedlineAccess().GetRedlineFlags() ))
@@ -4919,7 +4924,9 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
 
     // Also copy all bookmarks
     if( bCopyBookmarks && m_rDoc.getIDocumentMarkAccess()->getAllMarksCount() )
-        lcl_CopyBookmarks( rPam, *pCopyPam );
+    {
+        sw::CopyBookmarks(rPam, *pCopyPam->Start());
+    }
 
     if( RedlineFlags::DeleteRedlines & eOld )
     {
