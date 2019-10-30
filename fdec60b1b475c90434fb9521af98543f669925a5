@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_2022b8a5",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-10-30T09:09:37Z",
+      "side": 1,
+      "message": "remove unnecessary empty lines, please (sometimes it causes warnings in gerrit), please!",
+      "range": {
+        "startLine": 513,
+        "startChar": 0,
+        "endLine": 514,
+        "endChar": 0
+      },
+      "revId": "fdec60b1b475c90434fb9521af98543f669925a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_e03b60ce",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-10-30T09:09:37Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 517,
+        "startChar": 52,
+        "endLine": 517,
+        "endChar": 53
+      },
+      "revId": "fdec60b1b475c90434fb9521af98543f669925a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_a04a4852",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-10-30T09:09:37Z",
+      "side": 1,
+      "message": "// tdf#120315 cells of the second column weren\u0027t vertically merged\n// because their horizontal positions are different a little bit",
+      "range": {
+        "startLine": 517,
+        "startChar": 4,
+        "endLine": 518,
+        "endChar": 82
+      },
+      "revId": "fdec60b1b475c90434fb9521af98543f669925a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_402574aa",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-10-30T09:09:37Z",
+      "side": 1,
+      "message": "the same",
+      "range": {
+        "startLine": 529,
+        "startChar": 0,
+        "endLine": 530,
+        "endChar": 0
+      },
+      "revId": "fdec60b1b475c90434fb9521af98543f669925a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
