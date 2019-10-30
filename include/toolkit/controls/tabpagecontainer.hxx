@@ -38,12 +38,12 @@ namespace com { namespace sun { namespace star { namespace awt { namespace tab {
 typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlModel
                                             ,   css::awt::tab::XTabPageContainerModel
                                             >   UnoControlTabPageContainerModel_Base;
-class UnoControlTabPageContainerModel : public UnoControlTabPageContainerModel_Base
+class UnoControlTabPageContainerModel final : public UnoControlTabPageContainerModel_Base
 {
 private:
     std::vector< css::uno::Reference< css::awt::tab::XTabPageModel > > m_aTabPageVector;
     ContainerListenerMultiplexer        maContainerListeners;
-protected:
+
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
     // css::beans::XMultiPropertySet
@@ -91,7 +91,7 @@ public:
 typedef ::cppu::AggImplInheritanceHelper1   <   ControlContainerBase
                                             ,   css::awt::tab::XTabPageContainer
                                             >   UnoControlTabPageContainer_Base;
-class UnoControlTabPageContainer : public UnoControlTabPageContainer_Base
+class UnoControlTabPageContainer final : public UnoControlTabPageContainer_Base
 {
 public:
     UnoControlTabPageContainer( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -118,9 +118,8 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlTabPageContainer, UnoControlBase, "com.sun.star.awt.tab.UnoControlTabPageContainer" )
 
 //  using UnoControl::getPeer;
-protected:
-    virtual void        updateFromModel() override;
 private:
+    virtual void        updateFromModel() override;
     TabPageListenerMultiplexer  m_aTabPageListeners;
 };
 

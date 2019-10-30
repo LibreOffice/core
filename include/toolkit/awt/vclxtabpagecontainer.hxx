@@ -31,7 +31,7 @@ typedef cppu::ImplInheritanceHelper< VCLXContainer,
                                      css::awt::tab::XTabPageContainer,
                                      css::container::XContainerListener
                                    > VCLXTabPageContainer_Base;
-class VCLXTabPageContainer : public VCLXTabPageContainer_Base
+class VCLXTabPageContainer final : public VCLXTabPageContainer_Base
 {
 public:
     VCLXTabPageContainer();
@@ -59,9 +59,9 @@ public:
 
     // css::awt::XVclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
-protected:
-    virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
 private:
+    virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
+
     TabPageListenerMultiplexer m_aTabPageListeners;
     ::std::vector< css::uno::Reference< css::awt::tab::XTabPage > > m_aTabPages;
 };

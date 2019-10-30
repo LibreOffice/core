@@ -65,7 +65,7 @@ namespace toolkit
 
     // = UnoControlRoadmapModel
 
-    class UnoControlRoadmapModel : public UnoControlRoadmapModel_Base,
+    class UnoControlRoadmapModel final : public UnoControlRoadmapModel_Base,
                                    public UnoControlRoadmapModel_IBase
 
     {
@@ -83,8 +83,6 @@ namespace toolkit
         static sal_Int16                    GetCurrentItemID( const css::uno::Reference< css::beans::XPropertySet >& xPropertySet );
         sal_Int32                           GetUniqueID();
 
-
-    protected:
         css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
         ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
@@ -141,7 +139,7 @@ namespace toolkit
 
     // = UnoRoadmapControl
 
-    class UnoRoadmapControl : public UnoControlRoadmap_Base,
+    class UnoRoadmapControl final : public UnoControlRoadmap_Base,
                               public UnoControlRoadmap_IBase
     {
     private:

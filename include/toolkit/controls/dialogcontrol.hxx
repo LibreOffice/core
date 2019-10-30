@@ -32,7 +32,7 @@ typedef ::cppu::AggImplInheritanceHelper2   <   ControlContainerBase
                                             ,   css::awt::XUnoControlDialog
                                             ,   css::awt::XWindowListener
                                             >   UnoDialogControl_Base;
-class UnoDialogControl : public UnoDialogControl_Base
+class UnoDialogControl final : public UnoDialogControl_Base
 {
 private:
     css::uno::Reference< css::awt::XMenuBar >         mxMenuBar;
@@ -152,13 +152,12 @@ public:
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-protected:
+private:
     virtual void PrepareWindowDescriptor( css::awt::WindowDescriptor& rDesc ) override;
     virtual void ImplModelPropertiesChanged( const css::uno::Sequence< css::beans::PropertyChangeEvent >& rEvents ) override;
-protected:
 };
 
-class UnoMultiPageModel : public ControlModelContainerBase
+class UnoMultiPageModel final : public ControlModelContainerBase
 {
 public:
     UnoMultiPageModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -180,13 +179,13 @@ public:
 
     // Override the method of parent class
     virtual sal_Bool SAL_CALL getGroupControl(  ) override;
-protected:
+private:
     virtual css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper() override;
 
 };
 
-class UnoMultiPageControl :  public ControlContainerBase
+class UnoMultiPageControl final : public ControlContainerBase
                             ,public css::awt::XSimpleTabController
                             ,public css::awt::XTabListener
 {
@@ -229,7 +228,7 @@ public:
     // XComponent
     void SAL_CALL dispose(  ) override;
 
-protected:
+private:
     virtual void    impl_createControlPeerIfNecessary(
         const css::uno::Reference< css::awt::XControl >& _rxControl
     ) override;
@@ -237,7 +236,7 @@ protected:
 };
 
 
-class UnoPageModel : public ControlModelContainerBase
+class UnoPageModel final : public ControlModelContainerBase
 {
 public:
     UnoPageModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -257,13 +256,13 @@ public:
 
     // Override the method of parent class
     virtual sal_Bool SAL_CALL getGroupControl(  ) override;
-protected:
+private:
     virtual css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper() override;
 
 };
 
-class UnoPageControl :  public ControlContainerBase
+class UnoPageControl final : public ControlContainerBase
 {
 public:
     UnoPageControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -275,7 +274,7 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED( UnoPageControl, ControlContainerBase, "com.sun.star.awt.UnoControlPage" )
 };
 
-class UnoFrameModel : public ControlModelContainerBase
+class UnoFrameModel final : public ControlModelContainerBase
 {
 public:
     UnoFrameModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -293,14 +292,13 @@ public:
     virtual OUString SAL_CALL getServiceName() override;
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
-protected:
+private:
     virtual css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper() override;
 };
 
-class UnoFrameControl :  public ControlContainerBase
+class UnoFrameControl final : public ControlContainerBase
 {
-protected:
     virtual void        ImplSetPosSize( css::uno::Reference< css::awt::XControl >& rxCtrl ) override;
 public:
     UnoFrameControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
