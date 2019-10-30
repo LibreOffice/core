@@ -1347,8 +1347,7 @@ void ChartController::executeDispatch_SourceData()
 
         SolarMutexGuard aSolarGuard;
 
-        VclPtr<ChartWindow> xChartWindow(GetChartWindow());
-        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(xChartWindow ? xChartWindow->GetFrameWeld() : nullptr,
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetChartFrame(),
                                                        VclMessageType::Question, VclButtonsType::YesNo, SchResId(STR_DLG_REMOVE_DATA_TABLE)));
         // If "No" then just return
         if (xQueryBox->run() == RET_NO)

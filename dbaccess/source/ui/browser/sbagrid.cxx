@@ -1390,7 +1390,7 @@ IMPL_LINK_NOARG(SbaGridControl, AsynchDropEvent, void*, void)
         if ( !bCountFinal )
             setDataSource(nullptr); // detach from grid control
         Reference< XResultSetUpdate > xResultSetUpdate(xDataSource,UNO_QUERY);
-        rtl::Reference<ODatabaseImportExport> pImExport = new ORowSetImportExport(this,xResultSetUpdate,m_aDataDescriptor, getContext());
+        rtl::Reference<ODatabaseImportExport> pImExport = new ORowSetImportExport(GetFrameWeld(),xResultSetUpdate,m_aDataDescriptor, getContext());
         Hide();
         try
         {
