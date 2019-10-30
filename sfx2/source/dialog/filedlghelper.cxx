@@ -2683,8 +2683,7 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
         {
             break;
         }
-        vcl::Window* pWin = Application::GetDefDialogParent();
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr, VclMessageType::Warning,
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(Application::GetFrameWeld(rParent), VclMessageType::Warning,
             VclButtonsType::Ok, SfxResId(STR_PASSWORD_LEN)));
         xBox->set_secondary_text(SfxResId(STR_PASSWORD_WARNING));
         xBox->run();
