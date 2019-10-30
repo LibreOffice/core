@@ -45,10 +45,6 @@
 #include <map>
 #include <memory>
 
-#define WAIT_ON() if(pWin != nullptr) { pWin->EnterWait(); }
-
-#define WAIT_OFF() if(pWin != nullptr) { pWin->LeaveWait(); }
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -139,7 +135,7 @@ SvxSpellWrapper::~SvxSpellWrapper()
  *
  --------------------------------------------------------------------*/
 
-SvxSpellWrapper::SvxSpellWrapper( vcl::Window* pWn,
+SvxSpellWrapper::SvxSpellWrapper( weld::Window* pWn,
     const bool bStart, const bool bIsAllRight ) :
 
     pWin        ( pWn ),
@@ -156,7 +152,7 @@ SvxSpellWrapper::SvxSpellWrapper( vcl::Window* pWn,
 }
 
 
-SvxSpellWrapper::SvxSpellWrapper( vcl::Window* pWn,
+SvxSpellWrapper::SvxSpellWrapper( weld::Window* pWn,
         Reference< XHyphenator > const &xHyphenator,
         const bool bStart, const bool bOther ) :
     pWin        ( pWn ),
@@ -275,7 +271,7 @@ void SvxSpellWrapper::SpellDocument( )
         {
             EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
             ScopedVclPtr<AbstractHyphenWordDialog> pDlg(pFact->CreateHyphenWordDialog(
-                            pWin ? pWin->GetFrameWeld() : nullptr,
+                            pWin,
                             xHyphWord->getWord(),
                             LanguageTag( xHyphWord->getLocale() ).getLanguageType(),
                             xHyph, this ));
@@ -347,16 +343,16 @@ bool SvxSpellWrapper::SpellNext( )
     else
     {
         // a BODY_area done, ask for the other BODY_area
-        WAIT_OFF();
+        xWait.reset();
 
         const char* pResId = bReverse ? RID_SVXSTR_QUERY_BW_CONTINUE : RID_SVXSTR_QUERY_CONTINUE;
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin,
                                                                  VclMessageType::Question, VclButtonsType::YesNo,
                                                                  EditResId(pResId)));
         if (xBox->run() != RET_YES)
         {
             // sacrifice the other area if necessary ask for special area
-            WAIT_ON();
+            xWait.reset(new weld::WaitObject(pWin));
             bStartDone = bEndDone = true;
             return SpellNext();
         }
@@ -366,7 +362,7 @@ bool SvxSpellWrapper::SpellNext( )
             SpellStart( bStartChk ? SvxSpellArea::BodyStart : SvxSpellArea::BodyEnd );
             bGoOn = true;
         }
-        WAIT_ON();
+        xWait.reset(new weld::WaitObject(pWin));
     }
     return bGoOn;
 }
@@ -419,7 +415,7 @@ bool SvxSpellWrapper::FindSpellError()
 {
     ShowLanguageErrors();
 
-    WAIT_ON();
+    xWait.reset(new weld::WaitObject(pWin));
     bool bSpell = true;
 
     Reference< XDictionary >  xAllRightDic;
@@ -465,7 +461,7 @@ bool SvxSpellWrapper::FindSpellError()
             bSpell = SpellNext();
         }
     }
-    WAIT_OFF();
+    xWait.reset();
     return GetLast().is();
 }
 
