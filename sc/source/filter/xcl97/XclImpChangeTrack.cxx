@@ -29,6 +29,7 @@
 #include <xilink.hxx>
 #include <externalrefmgr.hxx>
 #include <document.hxx>
+#include <documentimport.hxx>
 #include <excdefs.hxx>
 
 // class XclImpChangeTrack
@@ -303,9 +304,9 @@ void XclImpChangeTrack::ReadChTrInsert()
         Read2DRange( aRange );
 
         if( aRecHeader.nOpCode & EXC_CHTR_OP_COLFLAG )
-            aRange.aEnd.SetRow( MAXROW );
+            aRange.aEnd.SetRow( GetDocImport().getDoc().MaxRow() );
         else
-            aRange.aEnd.SetCol( MAXCOL );
+            aRange.aEnd.SetCol( GetDocImport().getDoc().MaxCol() );
 
         bool bValid = pStrm->IsValid();
         if( FoundNestedMode() )
@@ -429,7 +430,7 @@ void XclImpChangeTrack::ReadChTrInsertTab()
         if( pStrm->IsValid() )
         {
             nTabIdCount++;
-            DoInsertRange(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab), false);
+            DoInsertRange(ScRange(0, 0, nTab, GetDocImport().getDoc().MaxCol(), GetDocImport().getDoc().MaxRow(), nTab), false);
         }
     }
 }

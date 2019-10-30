@@ -300,10 +300,10 @@ void ScXMLTableRowCellContext::LockSolarMutex()
 
 namespace {
 
-bool cellExists( const ScAddress& rCellPos )
+bool cellExists( const ScDocument& rDoc, const ScAddress& rCellPos )
 {
     return( rCellPos.Col() >= 0 && rCellPos.Row() >= 0 &&
-            rCellPos.Col() <= MAXCOL && rCellPos.Row() <= MAXROW );
+            rCellPos.Col() <= rDoc.MaxCol() && rCellPos.Row() <= rDoc.MaxRow() );
 }
 
 }
@@ -661,10 +661,11 @@ SvXMLImportContextRef ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 n
         uno::Reference<drawing::XShapes> xShapes (rXMLImport.GetTables().GetCurrentXShapes());
         if (xShapes.is())
         {
-            if (aCellPos.Col() > MAXCOL)
-                aCellPos.SetCol(MAXCOL);
-            if (aCellPos.Row() > MAXROW)
-                aCellPos.SetRow(MAXROW);
+            ScDocument* pDoc = rXMLImport.GetDocument();
+            if (aCellPos.Col() > pDoc->MaxCol())
+                aCellPos.SetCol(pDoc->MaxCol());
+            if (aCellPos.Row() > pDoc->MaxRow())
+                aCellPos.SetRow(pDoc->MaxRow());
             XMLTableShapeImportHelper* pTableShapeImport =
                     static_cast< XMLTableShapeImportHelper* >( rXMLImport.GetShapeImport().get() );
             pTableShapeImport->SetOnTable(false);
@@ -738,11 +739,12 @@ void ScXMLTableRowCellContext::DoMerge( const ScAddress& rScAddress, const SCCOL
 {
     SCCOL mergeToCol = rScAddress.Col() + nCols;
     SCROW mergeToRow = rScAddress.Row() + nRows;
-    bool bInBounds = rScAddress.Col() <= MAXCOL && rScAddress.Row() <= MAXROW &&
-                       mergeToCol <= MAXCOL && mergeToRow <= MAXROW;
+    ScDocument* pDoc = rXMLImport.GetDocument();
+    bool bInBounds = rScAddress.Col() <= pDoc->MaxCol() && rScAddress.Row() <= pDoc->MaxRow() &&
+                       mergeToCol <= pDoc->MaxCol() && mergeToRow <= pDoc->MaxRow();
     if( bInBounds )
     {
-        rXMLImport.GetDocument()->DoMerge( rScAddress.Tab(),
+        pDoc->DoMerge( rScAddress.Tab(),
             rScAddress.Col(), rScAddress.Row(), mergeToCol, mergeToRow );
     }
 }
@@ -950,10 +952,11 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
 // core implementation
 void ScXMLTableRowCellContext::SetDetectiveObj( const ScAddress& rPosition )
 {
-    if( cellExists(rPosition) && pDetectiveObjVec && !pDetectiveObjVec->empty() )
+    ScDocument* pDoc = rXMLImport.GetDocument();
+    if( pDoc && cellExists(*pDoc, rPosition) && pDetectiveObjVec && !pDetectiveObjVec->empty() )
     {
         LockSolarMutex();
-        ScDetectiveFunc aDetFunc( rXMLImport.GetDocument(), rPosition.Tab() );
+        ScDetectiveFunc aDetFunc( pDoc, rPosition.Tab() );
         uno::Reference<container::XIndexAccess> xShapesIndex = rXMLImport.GetTables().GetCurrentXShapes(); // make draw page
         for(const auto& rDetectiveObj : *pDetectiveObjVec)
         {
@@ -971,23 +974,20 @@ void ScXMLTableRowCellContext::SetDetectiveObj( const ScAddress& rPosition )
 // core implementation
 void ScXMLTableRowCellContext::SetCellRangeSource( const ScAddress& rPosition )
 {
-    if( cellExists(rPosition) && pCellRangeSource  && !pCellRangeSource->sSourceStr.isEmpty() &&
+    ScDocument* pDoc = rXMLImport.GetDocument();
+    if( pDoc && cellExists(*pDoc, rPosition) && pCellRangeSource  && !pCellRangeSource->sSourceStr.isEmpty() &&
         !pCellRangeSource->sFilterName.isEmpty() && !pCellRangeSource->sURL.isEmpty() )
     {
-        ScDocument* pDoc = rXMLImport.GetDocument();
-        if (pDoc)
-        {
-            LockSolarMutex();
-            ScRange aDestRange( rPosition.Col(), rPosition.Row(), rPosition.Tab(),
-                rPosition.Col() + static_cast<SCCOL>(pCellRangeSource->nColumns - 1),
-                rPosition.Row() + static_cast<SCROW>(pCellRangeSource->nRows - 1), rPosition.Tab() );
-            OUString sFilterName( pCellRangeSource->sFilterName );
-            OUString sSourceStr( pCellRangeSource->sSourceStr );
-            ScAreaLink* pLink = new ScAreaLink( pDoc->GetDocumentShell(), pCellRangeSource->sURL,
-                sFilterName, pCellRangeSource->sFilterOptions, sSourceStr, aDestRange, pCellRangeSource->nRefresh );
-            sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
-            pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, pCellRangeSource->sURL, &sFilterName, &sSourceStr );
-        }
+        LockSolarMutex();
+        ScRange aDestRange( rPosition.Col(), rPosition.Row(), rPosition.Tab(),
+            rPosition.Col() + static_cast<SCCOL>(pCellRangeSource->nColumns - 1),
+            rPosition.Row() + static_cast<SCROW>(pCellRangeSource->nRows - 1), rPosition.Tab() );
+        OUString sFilterName( pCellRangeSource->sFilterName );
+        OUString sSourceStr( pCellRangeSource->sSourceStr );
+        ScAreaLink* pLink = new ScAreaLink( pDoc->GetDocumentShell(), pCellRangeSource->sURL,
+            sFilterName, pCellRangeSource->sFilterOptions, sSourceStr, aDestRange, pCellRangeSource->nRefresh );
+        sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
+        pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, pCellRangeSource->sURL, &sFilterName, &sSourceStr );
     }
 }
 
@@ -1036,12 +1036,13 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
 void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
         const SCCOL nCurrentCol, const ::boost::optional< OUString >& pOUText )
 {
+    ScDocument* pDoc = rXMLImport.GetDocument();
     bool bDoIncrement = true;
     //matrix reference cells that contain text formula results;
     //cell was already put in document, just need to set text here.
-    if( rXMLImport.GetTables().IsPartOfMatrix(rCurrentPos) )
+    if( pDoc && rXMLImport.GetTables().IsPartOfMatrix(rCurrentPos) )
     {
-        ScRefCellValue aCell(*rXMLImport.GetDocument(), rCurrentPos);
+        ScRefCellValue aCell(*pDoc, rCurrentPos);
         bDoIncrement = aCell.meType == CELLTYPE_FORMULA;
         if ( bDoIncrement )
         {
@@ -1063,7 +1064,6 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
             {
                 if (bDoIncrement && !IsPossibleErrorString() && pFCell)
                 {
-                    ScDocument* pDoc = rXMLImport.GetDocument();
                     pFCell->SetHybridString(pDoc->GetSharedStringPool().intern(aCellString));
                     pFCell->ResetDirty();
                 }
@@ -1072,7 +1072,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                     ScAddress aTopLeftMatrixCell;
                     if (pFCell && pFCell->GetMatrixOrigin(aTopLeftMatrixCell))
                     {
-                        ScFormulaCell* pMatrixCell = rXMLImport.GetDocument()->GetFormulaCell(aTopLeftMatrixCell);
+                        ScFormulaCell* pMatrixCell = pDoc->GetFormulaCell(aTopLeftMatrixCell);
                         if (pMatrixCell)
                             pMatrixCell->SetDirty();
                     }
@@ -1175,6 +1175,7 @@ bool isEmptyOrNote( const ScDocument* pDoc, const ScAddress& rCurrentPos )
 void ScXMLTableRowCellContext::AddTextAndValueCell( const ScAddress& rCellPos,
         const ::boost::optional< OUString >& pOUText, ScAddress& rCurrentPos )
 {
+    ScDocument* pDoc = rXMLImport.GetDocument();
     ScMyTables& rTables = rXMLImport.GetTables();
     bool bWasEmpty = bIsEmpty;
     for (SCCOL i = 0; i < nColsRepeated; ++i)
@@ -1183,7 +1184,7 @@ void ScXMLTableRowCellContext::AddTextAndValueCell( const ScAddress& rCellPos,
 
         // it makes no sense to import data after the last supported column
         // fdo#58539 & gnome#627150
-        if(rCurrentPos.Col() > MAXCOL)
+        if(rCurrentPos.Col() > pDoc->MaxCol())
             break;
 
         if (i > 0)
@@ -1196,7 +1197,7 @@ void ScXMLTableRowCellContext::AddTextAndValueCell( const ScAddress& rCellPos,
 
                 // it makes no sense to import data after last supported row
                 // fdo#58539 & gnome#627150
-                if(rCurrentPos.Row() > MAXROW)
+                if(rCurrentPos.Row() > pDoc->MaxRow())
                     break;
 
                 if( (rCurrentPos.Col() == 0) && (j > 0) )
@@ -1204,9 +1205,9 @@ void ScXMLTableRowCellContext::AddTextAndValueCell( const ScAddress& rCellPos,
                     rTables.AddRow();
                     rTables.AddColumn(false);
                 }
-                if( cellExists(rCurrentPos) )
+                if( cellExists(*pDoc, rCurrentPos) )
                 {
-                    if(  !bIsCovered || isEmptyOrNote(rXMLImport.GetDocument(), rCurrentPos)  )
+                    if(  !bIsCovered || isEmptyOrNote(pDoc, rCurrentPos)  )
                     {
                         switch (nCellType)
                         {
@@ -1241,7 +1242,7 @@ void ScXMLTableRowCellContext::AddTextAndValueCell( const ScAddress& rCellPos,
                 {
                     if (!bWasEmpty || mxAnnotationData.get())
                     {
-                        if (rCurrentPos.Row() > MAXROW)
+                        if (rCurrentPos.Row() > pDoc->MaxRow())
                             rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_ROW_OVERFLOW);
                         else
                             rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_COLUMN_OVERFLOW);
@@ -1310,10 +1311,11 @@ void ScXMLTableRowCellContext::AddNonFormulaCell( const ScAddress& rCellPos )
 {
     ::boost::optional< OUString > pOUText;
 
+    ScDocument* pDoc = rXMLImport.GetDocument();
     if( nCellType == util::NumberFormat::TEXT )
     {
-        if( !bIsEmpty && !maStringValue && !mbEditEngineHasText && cellExists(rCellPos) && CellsAreRepeated() )
-            pOUText = getOutputString(rXMLImport.GetDocument(), rCellPos);
+        if( !bIsEmpty && !maStringValue && !mbEditEngineHasText && cellExists(*pDoc, rCellPos) && CellsAreRepeated() )
+            pOUText = getOutputString(pDoc, rCellPos);
 
         if (!mbEditEngineHasText && !pOUText && !maStringValue)
             bIsEmpty = true;
@@ -1327,15 +1329,15 @@ void ScXMLTableRowCellContext::AddNonFormulaCell( const ScAddress& rCellPos )
 
     if( CellsAreRepeated() )
     {
-        SCCOL nStartCol( std::min(rCellPos.Col(), MAXCOL) );
-        SCROW nStartRow( std::min(rCellPos.Row(), MAXROW) );
-        SCCOL nEndCol( std::min<SCCOL>(rCellPos.Col() + nColsRepeated - 1, MAXCOL) );
-        SCROW nEndRow( std::min(rCellPos.Row() + nRepeatedRows - 1, MAXROW) );
+        SCCOL nStartCol( std::min(rCellPos.Col(), pDoc->MaxCol()) );
+        SCROW nStartRow( std::min(rCellPos.Row(), pDoc->MaxRow()) );
+        SCCOL nEndCol( std::min<SCCOL>(rCellPos.Col() + nColsRepeated - 1, pDoc->MaxCol()) );
+        SCROW nEndRow( std::min(rCellPos.Row() + nRepeatedRows - 1, pDoc->MaxRow()) );
         ScRange aScRange( nStartCol, nStartRow, rCellPos.Tab(), nEndCol, nEndRow, rCellPos.Tab() );
         SetContentValidation( aScRange );
         rXMLImport.GetStylesImportHelper()->AddRange( aScRange );
     }
-    else if( cellExists(rCellPos) )
+    else if( cellExists(*pDoc, rCellPos) )
     {
         rXMLImport.GetStylesImportHelper()->AddCell(rCellPos);
         SetContentValidation( rCellPos );
@@ -1345,7 +1347,7 @@ void ScXMLTableRowCellContext::AddNonFormulaCell( const ScAddress& rCellPos )
 void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
 {
     ScDocument* pDoc = rXMLImport.GetDocument();
-    ScDocumentImport& rDoc = rXMLImport.GetDoc();
+    ScDocumentImport& rDocImport = rXMLImport.GetDoc();
 
     OUString aText = maFormula->first;
 
@@ -1380,19 +1382,20 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
                 if( eGrammar != formula::FormulaGrammar::GRAM_EXTERNAL )
                     aFormulaNmsp.clear();
                 pCode->AssignXMLString( aText, aFormulaNmsp );
-                rDoc.getDoc().IncXMLImportedFormulaCount( aText.getLength() );
+                rDocImport.getDoc().IncXMLImportedFormulaCount( aText.getLength() );
             }
         }
 
         ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, std::move(pCode), eGrammar, ScMatrixMode::NONE);
         SetFormulaCell(pNewCell);
-        rDoc.setFormulaCell(rCellPos, pNewCell);
+        rDocImport.setFormulaCell(rCellPos, pNewCell);
     }
 }
 
 void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
 {
-    if( cellExists(rCellPos) )
+    ScDocument* pDoc = rXMLImport.GetDocument();
+    if( cellExists(*pDoc, rCellPos) )
     {
         SetContentValidation( rCellPos );
         SAL_WARN_IF((nColsRepeated != 1) || (nRepeatedRows != 1), "sc", "repeated cells with formula not possible now");
@@ -1407,14 +1410,14 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                 //value/text of each matrix cell later
                 rXMLImport.GetTables().AddMatrixRange(
                         rCellPos.Col(), rCellPos.Row(),
-                        std::min<SCCOL>(rCellPos.Col() + nMatrixCols - 1, MAXCOL),
-                        std::min<SCROW>(rCellPos.Row() + nMatrixRows - 1, MAXROW),
+                        std::min<SCCOL>(rCellPos.Col() + nMatrixCols - 1, pDoc->MaxCol()),
+                        std::min<SCROW>(rCellPos.Row() + nMatrixRows - 1, pDoc->MaxRow()),
                         maFormula->first, maFormula->second, eGrammar);
 
                 // Set the value/text of the top-left matrix position in its
                 // cached result.  For import, we only need to set the correct
                 // matrix geometry and the value type of the top-left element.
-                ScFormulaCell* pFCell = rXMLImport.GetDocument()->GetFormulaCell(rCellPos);
+                ScFormulaCell* pFCell = pDoc->GetFormulaCell(rCellPos);
                 if (pFCell)
                 {
                     ScMatrixRef pMat(new ScMatrix(nMatrixCols, nMatrixRows));
@@ -1424,7 +1427,7 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                         {
                             pFCell->SetResultMatrix(
                                     nMatrixCols, nMatrixRows, pMat, new formula::FormulaStringToken(
-                                        rXMLImport.GetDocument()->GetSharedStringPool().intern( *maStringValue)));
+                                        pDoc->GetSharedStringPool().intern( *maStringValue)));
                             pFCell->ResetDirty();
                         }
                     }
@@ -1447,7 +1450,7 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
     }
     else
     {
-        if (rCellPos.Row() > MAXROW)
+        if (rCellPos.Row() > pDoc->MaxRow())
             rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_ROW_OVERFLOW);
         else
             rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_COLUMN_OVERFLOW);

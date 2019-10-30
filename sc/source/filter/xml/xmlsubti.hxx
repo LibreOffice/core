@@ -83,7 +83,7 @@ public:
     ScXMLTabProtectionData&             GetCurrentProtectionData() { return maProtectionData; }
     const OUString&                     GetCurrentSheetName() const { return sCurrentSheetName; }
     SCTAB                               GetCurrentSheet() const { return (maCurrentCellPos.Tab() >= 0) ? maCurrentCellPos.Tab() : 0; }
-    SCCOL                               GetCurrentColCount() const { return std::min<sal_Int32>(nCurrentColCount, MAXCOL); }
+    SCCOL                               GetCurrentColCount() const;
     SCROW                               GetCurrentRow() const { return (maCurrentCellPos.Row() >= 0) ? maCurrentCellPos.Row() : 0; }
     const css::uno::Reference< css::sheet::XSpreadsheet >&
                                         GetCurrentXSheet() const { return xCurrentSheet; }

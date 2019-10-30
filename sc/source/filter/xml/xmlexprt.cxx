@@ -1574,6 +1574,7 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
             {
                 pCellStyles->GetFormatRanges(0, pSharedData->GetLastColumn(nSheet), nStartRow + nRows, nSheet, pRowFormatRanges.get());
                 sal_Int32 nMaxRows = pRowFormatRanges->GetMaxRows();
+                OSL_ENSURE(nMaxRows, "something went wrong");
                 if (nMaxRows >= nTotalRows - nRows)
                 {
                     OpenRow(nSheet, nStartRow + nRows, nTotalRows - nRows, aRowAttr);
@@ -2260,7 +2261,7 @@ void ScXMLExport::collectAutoStyles()
             SCTAB nTabCount = pDoc->GetTableCount();
             for (SCTAB nTab=0; nTab<nTabCount; ++nTab)
                 if (pDoc->IsStreamValid(nTab))
-                    pDoc->InterpretDirtyCells(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab));
+                    pDoc->InterpretDirtyCells(ScRange(0, 0, nTab, pDoc->MaxCol(), pDoc->MaxRow(), nTab));
 
             // stored cell styles
             const std::vector<ScCellStyleEntry>& rCellEntries = pSheetData->GetCellStyles();
@@ -2558,7 +2559,7 @@ void ScXMLExport::collectAutoStyles()
                     else
                         pColumnStyles->AddNewTable(nTable, nColumns);
                     sal_Int32 nColumn = 0;
-                    while (nColumn <= MAXCOL)
+                    while (nColumn <= pDoc->MaxCol())
                     {
                         sal_Int32 nIndex(-1);
                         bool bIsVisible(true);
@@ -2587,9 +2588,9 @@ void ScXMLExport::collectAutoStyles()
                     sal_Int32 nRows(pDoc->GetLastChangedRow(sal::static_int_cast<SCTAB>(nTable)));
                     pSharedData->SetLastRow(nTable, nRows);
 
-                    pRowStyles->AddNewTable(nTable, MAXROW);
+                    pRowStyles->AddNewTable(nTable, pDoc->MaxRow());
                     sal_Int32 nRow = 0;
-                    while (nRow <= MAXROW)
+                    while (nRow <= pDoc->MaxRow())
                     {
                         sal_Int32 nIndex = 0;
                         uno::Reference <beans::XPropertySet> xRowProperties(xTableRows->getByIndex(nRow), uno::UNO_QUERY);

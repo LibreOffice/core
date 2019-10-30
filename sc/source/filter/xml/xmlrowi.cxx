@@ -136,6 +136,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
 {
     ScXMLImport& rXMLImport(GetScImport());
+    ScDocument* pDoc(rXMLImport.GetDocument());
     if (!bHasCell && nRepeatedRows > 1)
     {
         for (sal_Int32 i = 0; i < nRepeatedRows - 1; ++i) //one row is always added
@@ -148,10 +149,10 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
     if(xSheet.is())
     {
         sal_Int32 nFirstRow(nCurrentRow - nRepeatedRows + 1);
-        if (nFirstRow > MAXROW)
-            nFirstRow = MAXROW;
-        if (nCurrentRow > MAXROW)
-            nCurrentRow = MAXROW;
+        if (nFirstRow > pDoc->MaxRow())
+            nFirstRow = pDoc->MaxRow();
+        if (nCurrentRow > pDoc->MaxRow())
+            nCurrentRow = pDoc->MaxRow();
         uno::Reference <table::XCellRange> xCellRange(xSheet->getCellRangeByPosition(0, nFirstRow, 0, nCurrentRow));
         if (xCellRange.is())
         {

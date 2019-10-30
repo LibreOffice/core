@@ -46,7 +46,7 @@ void ScFormatFilterPluginImpl::ScExportRTF( SvStream& rStrm, ScDocument* pDoc,
 ScRTFExport::ScRTFExport( SvStream& rStrmP, ScDocument* pDocP, const ScRange& rRangeP )
             :
             ScExportBase( rStrmP, pDocP, rRangeP ),
-            pCellX( new sal_uLong[ MAXCOL+2 ] )
+            pCellX( new sal_uLong[ pDoc->MaxCol()+2 ] )
 {
 }
 
@@ -75,7 +75,7 @@ void ScRTFExport::WriteTab( SCTAB nTab )
     rStrm.WriteChar( '{' ).WriteCharPtr( SAL_NEWLINE_STRING );
     if ( pDoc->HasTable( nTab ) )
     {
-        memset( &pCellX[0], 0, (MAXCOL+2) * sizeof(sal_uLong) );
+        memset( &pCellX[0], 0, (pDoc->MaxCol()+2) * sizeof(sal_uLong) );
         SCCOL nCol;
         SCCOL nEndCol = aRange.aEnd.Col();
         for ( nCol = aRange.aStart.Col(); nCol <= nEndCol; nCol++ )
