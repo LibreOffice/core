@@ -345,7 +345,6 @@ const SkBitmap& SkiaSalBitmap::GetAlphaSkBitmap() const
             // so we first need to convert to 8bit to be able to convert that to 8bit alpha.
             SkBitmap* convertedBitmap = nullptr;
             const SkBitmap* bitmap8 = &mBitmap;
-            dump("/tmp/a1.png");
             if (mBitmap.colorType() != kGray_8_SkColorType)
             {
                 convertedBitmap = new SkBitmap;
