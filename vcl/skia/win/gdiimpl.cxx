@@ -135,25 +135,7 @@ void WinSkiaSalGraphicsImpl::DrawTextMask(CompatibleDC::Texture* pTexture, Color
                                           const SalTwoRect& rPosAry)
 {
     assert(dynamic_cast<SkiaCompatibleDC::Texture*>(pTexture));
-    const SkBitmap& bitmap = static_cast<const SkiaCompatibleDC::Texture*>(pTexture)->bitmap;
-    preDraw();
-    SkBitmap tmpBitmap;
-    if (!tmpBitmap.tryAllocN32Pixels(bitmap.width(), bitmap.height()))
-        abort();
-    tmpBitmap.eraseColor(toSkColor(nMaskColor));
-    SkPaint paint;
-    // Draw the color with the given mask.
-    // TODO figure out the right blend mode to avoid the temporary bitmap
-    paint.setBlendMode(SkBlendMode::kDstOut);
-    SkCanvas canvas(tmpBitmap);
-    canvas.drawBitmap(bitmap, 0, 0, &paint);
-    mSurface->getCanvas()->drawBitmapRect(
-        tmpBitmap,
-        SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
-        SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
-                         rPosAry.mnDestHeight),
-        nullptr);
-    postDraw();
+    drawMask(rPosAry, static_cast<const SkiaCompatibleDC::Texture*>(pTexture)->bitmap, nMaskColor);
 }
 
 SkiaCompatibleDC::SkiaCompatibleDC(SalGraphics& rGraphics, int x, int y, int width, int height)

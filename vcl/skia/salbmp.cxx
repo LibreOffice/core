@@ -321,10 +321,9 @@ const SkBitmap& SkiaSalBitmap::GetSkBitmap() const
 
 const SkBitmap& SkiaSalBitmap::GetAlphaSkBitmap() const
 {
-    assert(mBitCount <= 8);
     if (mAlphaBitmap.drawsNothing())
     {
-        if (mBuffer)
+        if (mBuffer && mBitCount <= 8)
         {
             assert(mBuffer.get());
             verify();
@@ -341,17 +340,35 @@ const SkBitmap& SkiaSalBitmap::GetAlphaSkBitmap() const
         }
         else
         {
-            assert(mBitmap.colorType() == kGray_8_SkColorType);
+            GetSkBitmap(); // make sure we have mBitmap, in case (mBuffer && mBitCount > 8)
+            // To make things more interesting, some LO code creates masks as 24bpp,
+            // so we first need to convert to 8bit to be able to convert that to 8bit alpha.
+            SkBitmap* convertedBitmap = nullptr;
+            const SkBitmap* bitmap8 = &mBitmap;
+            dump("/tmp/a1.png");
+            if (mBitmap.colorType() != kGray_8_SkColorType)
+            {
+                convertedBitmap = new SkBitmap;
+                if (!convertedBitmap->tryAllocPixels(SkImageInfo::Make(
+                        mSize.Width(), mSize.Height(), kGray_8_SkColorType, kOpaque_SkAlphaType)))
+                    abort();
+                SkCanvas canvas(*convertedBitmap);
+                SkPaint paint;
+                paint.setBlendMode(SkBlendMode::kSrc); // copy and convert depth
+                canvas.drawBitmap(mBitmap, 0, 0, &paint);
+                bitmap8 = convertedBitmap;
+            }
             // Skia uses a bitmap as an alpha channel only if it's set as kAlpha_8_SkColorType.
             // But in SalBitmap::Create() it's not quite clear if the 8-bit image will be used
-            // as a mask or as a real bitmap. So mBitmap is always kGray_8_SkColorType
+            // as a mask or as a real bitmap. So mBitmap is always kGray_8_SkColorType for 8bpp
             // and mAlphaBitmap is kAlpha_8_SkColorType that can be used as a mask.
             // Make mAlphaBitmap share mBitmap's data.
             const_cast<SkBitmap&>(mAlphaBitmap)
-                .setInfo(mBitmap.info().makeColorType(kAlpha_8_SkColorType), mBitmap.rowBytes());
+                .setInfo(bitmap8->info().makeColorType(kAlpha_8_SkColorType), bitmap8->rowBytes());
             const_cast<SkBitmap&>(mAlphaBitmap)
-                .setPixelRef(sk_ref_sp(mBitmap.pixelRef()), mBitmap.pixelRefOrigin().x(),
-                             mBitmap.pixelRefOrigin().y());
+                .setPixelRef(sk_ref_sp(bitmap8->pixelRef()), bitmap8->pixelRefOrigin().x(),
+                             bitmap8->pixelRefOrigin().y());
+            delete convertedBitmap;
             return mAlphaBitmap;
         }
     }
