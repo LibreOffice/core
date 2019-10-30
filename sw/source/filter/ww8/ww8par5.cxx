@@ -32,6 +32,7 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <svl/lngmisc.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -1212,7 +1213,35 @@ OUString SwWW8ImplReader::GetFieldResult( WW8FieldDesc const * pF )
     m_pStrm->Seek( nOldPos );
 
     //replace both CR 0x0D and VT 0x0B with LF 0x0A
-    return sRes.replace(0x0D, 0x0A).replace(0x0B, 0x0A);
+    // at least in the cases where the result is added to an SwInputField
+    // there must not be control characters in it
+    OUStringBuffer buf(sRes.getLength());
+    for (sal_Int32 i = 0; i < sRes.getLength(); ++i)
+    {
+        sal_Unicode const ch(sRes[i]);
+        if (!linguistic::IsControlChar(ch))
+        {
+            buf.append(ch);
+        }
+        else
+        {
+            switch (ch)
+            {
+                case 0x0B:
+                case '\r':
+                    buf.append('\n');
+                    break;
+                case '\n':
+                case '\t':
+                    buf.append(ch);
+                    break;
+                default:
+                    SAL_INFO("sw.ww8", "GetFieldResult(): filtering control character");
+                    break;
+            }
+        }
+    }
+    return buf.makeStringAndClear();
 }
 
 /*
