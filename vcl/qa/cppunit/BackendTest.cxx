@@ -416,7 +416,7 @@ public:
     CPPUNIT_TEST(testDrawBitmap);
     CPPUNIT_TEST(testDrawTransformedBitmap);
     CPPUNIT_TEST(testDrawBitmapExWithAlpha);
-    //    CPPUNIT_TEST(testDrawMask); TODO SKIA
+    CPPUNIT_TEST(testDrawMask);
 
     CPPUNIT_TEST_SUITE_END();
 };
