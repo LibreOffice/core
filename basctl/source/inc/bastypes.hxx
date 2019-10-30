@@ -294,7 +294,7 @@ bool QueryDelMacro( const OUString& rName, weld::Widget* pParent );
 bool QueryDelDialog( const OUString& rName, weld::Widget* pParent );
 bool QueryDelModule( const OUString& rName, weld::Widget* pParent );
 bool QueryDelLib( const OUString& rName, bool bRef, weld::Widget* pParent );
-bool QueryPassword( const css::uno::Reference< css::script::XLibraryContainer >& xLibContainer, const OUString& rLibName, OUString& rPassword, bool bRepeat = false, bool bNewTitle = false );
+bool QueryPassword(weld::Widget* pDialogParent, const css::uno::Reference< css::script::XLibraryContainer >& xLibContainer, const OUString& rLibName, OUString& rPassword, bool bRepeat = false, bool bNewTitle = false);
 
 class ModuleInfoHelper
 {
