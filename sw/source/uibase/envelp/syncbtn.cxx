@@ -28,57 +28,58 @@
 #include <syncbtn.hxx>
 #include <swtypes.hxx>
 
-SFX_IMPL_FLOATINGWINDOW( SwSyncChildWin, FN_SYNC_LABELS )
+SFX_IMPL_MODELESSDIALOGCONTOLLER(SwSyncChildWin, FN_SYNC_LABELS)
 
-SwSyncChildWin::SwSyncChildWin( vcl::Window* _pParent,
-                                sal_uInt16 nId,
-                                SfxBindings* pBindings,
-                                SfxChildWinInfo* pInfo ) :
-                                SfxChildWindow( _pParent, nId )
+SwSyncChildWin::SwSyncChildWin(vcl::Window* _pParent,
+                               sal_uInt16 nId,
+                               SfxBindings* pBindings,
+                               SfxChildWinInfo* pInfo)
+    : SfxChildWindow(_pParent, nId)
 {
-    SetWindow(VclPtr<SwSyncBtnDlg>::Create( pBindings, this, _pParent));
+    SetController(std::make_shared<SwSyncBtnDlg>(pBindings, this, _pParent->GetFrameWeld()));
+    SwSyncBtnDlg* pBtnDlg = static_cast<SwSyncBtnDlg*>(GetController().get());
 
     if (!pInfo->aSize.Width() || !pInfo->aSize.Height())
     {
+        weld::Dialog* pDlg = pBtnDlg->getDialog();
+        Point aPos;
+
         SwView* pActiveView = ::GetActiveView();
-        if(pActiveView)
+        if (pActiveView)
         {
             const SwEditWin &rEditWin = pActiveView->GetEditWin();
-            GetWindow()->SetPosPixel(rEditWin.OutputToScreenPixel(Point(0, 0)));
+            aPos = rEditWin.OutputToScreenPixel(Point(0, 0));
         }
         else
-            GetWindow()->SetPosPixel(_pParent->OutputToScreenPixel(Point(0, 0)));
-        pInfo->aPos = GetWindow()->GetPosPixel();
-        pInfo->aSize = GetWindow()->GetSizePixel();
+            aPos = _pParent->OutputToScreenPixel(Point(0, 0));
+
+        WindowStateData aState;
+        aState.SetMask(WindowStateMask::Pos);
+        aState.SetX(aPos.X());
+        aState.SetY(aPos.Y());
+        pDlg->set_window_state(aState.ToStr());
+
+        pInfo->aPos = pDlg->get_position();
+        pInfo->aSize = pDlg->get_size();
     }
 
-    static_cast<SwSyncBtnDlg *>(GetWindow())->Initialize(pInfo);
-
-    GetWindow()->Show();
+    pBtnDlg->Initialize(pInfo);
 }
 
-SwSyncBtnDlg::SwSyncBtnDlg( SfxBindings* _pBindings,
-                            SfxChildWindow* pChild,
-                            vcl::Window *pParent)
-    : SfxFloatingWindow(_pBindings, pChild, pParent, "FloatingSync", "modules/swriter/ui/floatingsync.ui")
+SwSyncBtnDlg::SwSyncBtnDlg(SfxBindings* pBindings,
+                           SfxChildWindow* pChild,
+                           weld::Window *pParent)
+    : SfxModelessDialogController(pBindings, pChild, pParent, "modules/swriter/ui/floatingsync.ui", "FloatingSync")
+    , m_xSyncBtn(m_xBuilder->weld_button("sync"))
 {
-    get(m_pSyncBtn, "sync");
-    m_pSyncBtn->SetClickHdl(LINK(this, SwSyncBtnDlg, BtnHdl));
-    Show();
+    m_xSyncBtn->connect_clicked(LINK(this, SwSyncBtnDlg, BtnHdl));
 }
 
 SwSyncBtnDlg::~SwSyncBtnDlg()
 {
-    disposeOnce();
 }
 
-void SwSyncBtnDlg::dispose()
-{
-    m_pSyncBtn.clear();
-    SfxFloatingWindow::dispose();
-}
-
-IMPL_STATIC_LINK_NOARG(SwSyncBtnDlg, BtnHdl, Button*, void)
+IMPL_STATIC_LINK_NOARG(SwSyncBtnDlg, BtnHdl, weld::Button&, void)
 {
     SfxViewFrame::Current()->GetDispatcher()->Execute(FN_UPDATE_ALL_LINKS, SfxCallMode::ASYNCHRON);
 }
