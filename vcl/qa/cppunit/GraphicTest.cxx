@@ -28,25 +28,40 @@ class GraphicTest : public CppUnit::TestFixture
     void testUnloadedGraphic();
     void testUnloadedGraphicLoading();
     void testUnloadedGraphicWmf();
+    void testUnloadedGraphicAlpha();
 
     CPPUNIT_TEST_SUITE(GraphicTest);
     CPPUNIT_TEST(testUnloadedGraphic);
     CPPUNIT_TEST(testUnloadedGraphicLoading);
     CPPUNIT_TEST(testUnloadedGraphicWmf);
+    CPPUNIT_TEST(testUnloadedGraphicAlpha);
     CPPUNIT_TEST_SUITE_END();
 };
 
-BitmapEx createBitmap()
+BitmapEx createBitmap(bool alpha = false)
 {
-    Bitmap aBitmap(Size(100, 100), 24);
+    Bitmap aBitmap(Size(120, 100), 24);
     aBitmap.Erase(COL_LIGHTRED);
 
-    return BitmapEx(aBitmap);
+    aBitmap.SetPrefSize(Size(6000, 5000));
+    aBitmap.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+
+    if (alpha)
+    {
+        sal_uInt8 uAlphaValue = 0x80;
+        AlphaMask aAlphaMask(Size(120, 100), &uAlphaValue);
+
+        return BitmapEx(aBitmap, aAlphaMask);
+    }
+    else
+    {
+        return BitmapEx(aBitmap);
+    }
 }
 
-void createBitmapAndExportForType(SvStream& rStream, OUString const& sType)
+void createBitmapAndExportForType(SvStream& rStream, OUString const& sType, bool alpha)
 {
-    BitmapEx aBitmapEx = createBitmap();
+    BitmapEx aBitmapEx = createBitmap(alpha);
 
     uno::Sequence<beans::PropertyValue> aFilterData;
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
@@ -56,11 +71,11 @@ void createBitmapAndExportForType(SvStream& rStream, OUString const& sType)
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
 }
 
-Graphic makeUnloadedGraphic(OUString const& sType)
+Graphic makeUnloadedGraphic(OUString const& sType, bool alpha = false)
 {
     SvMemoryStream aStream;
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
-    createBitmapAndExportForType(aStream, sType);
+    createBitmapAndExportForType(aStream, sType, alpha);
     return rGraphicFilter.ImportUnloadedGraphic(aStream);
 }
 
@@ -81,8 +96,13 @@ void GraphicTest::testUnloadedGraphic()
     // check GetSizePixel doesn't load graphic
     aGraphic = makeUnloadedGraphic("png");
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
-    CPPUNIT_ASSERT_EQUAL(100L, aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(120L, aGraphic.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(100L, aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+
+    // check GetPrefSize doesn't load graphic
+    CPPUNIT_ASSERT_EQUAL(6000L, aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(5000L, aGraphic.GetPrefSize().Height());
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
 
     // check GetSizeBytes loads graphic
@@ -101,7 +121,7 @@ void GraphicTest::testUnloadedGraphicLoading()
 
         // check available
         CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
-        CPPUNIT_ASSERT_EQUAL(100L, aGraphic.GetSizePixel().Width());
+        CPPUNIT_ASSERT_EQUAL(120L, aGraphic.GetSizePixel().Width());
         CPPUNIT_ASSERT_EQUAL(100L, aGraphic.GetSizePixel().Height());
         CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
         CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > 0);
@@ -155,6 +175,23 @@ void GraphicTest::testUnloadedGraphicWmf()
     // - Actual  : 99x99
     // i.e. the custom preferred size was lost after lazy-load.
     CPPUNIT_ASSERT_EQUAL(Size(42, 42), aGraphic.GetPrefSize());
+}
+
+void GraphicTest::testUnloadedGraphicAlpha()
+{
+    // make unloaded test graphic with alpha
+    Graphic aGraphic = makeUnloadedGraphic("png", true);
+
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.IsAlpha());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.IsTransparent());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+
+    // make unloaded test graphic without alpha
+    aGraphic = makeUnloadedGraphic("png", false);
+
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.IsAlpha());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.IsTransparent());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
 }
 
 } // namespace
