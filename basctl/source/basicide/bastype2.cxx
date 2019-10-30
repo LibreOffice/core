@@ -601,7 +601,7 @@ bool TreeListBox::ExpandingHdl()
                     if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
                     {
                         OUString aPassword;
-                        bOK = QueryPassword( xModLibContainer, aLibName, aPassword );
+                        bOK = QueryPassword(GetFrameWeld(), xModLibContainer, aLibName, aPassword);
                     }
                 }
             }

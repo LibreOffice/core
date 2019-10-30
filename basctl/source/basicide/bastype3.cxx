@@ -68,7 +68,7 @@ void TreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
             if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
             {
                 OUString aPassword;
-                bOK = QueryPassword( xModLibContainer, aOULibName, aPassword );
+                bOK = QueryPassword(GetFrameWeld(), xModLibContainer, aOULibName, aPassword);
             }
         }
 
@@ -157,7 +157,7 @@ IMPL_LINK(SbTreeListBox, RequestingChildrenHdl, const weld::TreeIter&, rEntry, b
             if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
             {
                 OUString aPassword;
-                bOK = QueryPassword( xModLibContainer, aOULibName, aPassword );
+                bOK = QueryPassword(m_pTopLevel, xModLibContainer, aOULibName, aPassword);
             }
         }
 
