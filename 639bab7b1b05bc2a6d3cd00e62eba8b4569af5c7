@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_0009bc2f",
+        "filename": "svx/source/svdraw/svdpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-10-30T14:51:34Z",
+      "side": 1,
+      "message": "hmm this could be moved into the loop now, but that\u0027s a code cleanup not a bugfix...",
+      "range": {
+        "startLine": 633,
+        "startChar": 4,
+        "endLine": 634,
+        "endChar": 50
+      },
+      "revId": "639bab7b1b05bc2a6d3cd00e62eba8b4569af5c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
