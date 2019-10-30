@@ -137,10 +137,11 @@ XMLTextColumnContext_Impl::XMLTextColumnContext_Impl(
                 sal_Int32 nPos = rValue.indexOf( '*' );
                 if( nPos != -1 && nPos+1 == rValue.getLength() )
                 {
-                    OUString sTmp( rValue.copy( 0, nPos ) );
                     if (::sax::Converter::convertNumber(
-                                nVal, sTmp, 0, USHRT_MAX))
-                    aColumn.Width = nVal;
+                                nVal,
+                                std::u16string_view(rValue).substr(0, nPos),
+                                0, USHRT_MAX))
+                        aColumn.Width = nVal;
                 }
             }
             break;

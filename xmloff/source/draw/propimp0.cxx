@@ -186,7 +186,7 @@ bool XMLTextAnimationStepPropertyHdl::importXML(
     sal_Int32 nPos = rStrImpValue.indexOf( aPX );
     if( nPos != -1 )
     {
-        if (::sax::Converter::convertNumber(nValue, rStrImpValue.copy(0, nPos)))
+        if (::sax::Converter::convertNumber(nValue, std::u16string_view(rStrImpValue).substr(0, nPos)))
         {
             rValue <<= sal_Int16( -nValue );
             bRet = true;
