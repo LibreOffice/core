@@ -298,6 +298,22 @@ enum class ToolBoxButtonSize
     Size32,
 };
 
+enum class WindowStateState {
+    NONE           = 0x0000,
+    Normal         = 0x0001,
+    Minimized      = 0x0002,
+    Maximized      = 0x0004,
+    Rollup         = 0x0008,
+    MaximizedHorz  = 0x0010,
+    MaximizedVert  = 0x0020,
+    FullScreen     = 0x0040,
+    SystemMask     = 0xffff
+};
+namespace o3tl
+{
+    template<> struct typed_flags<WindowStateState> : is_typed_flags<WindowStateState, 0xffff> {};
+}
+
 #endif // INCLUDED_VCL_VCLENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
