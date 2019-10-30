@@ -26,9 +26,8 @@
 
 //  class css::awt::UnoControlContainerModel
 
-class UnoControlContainerModel : public UnoControlModel
+class UnoControlContainerModel final : public UnoControlModel
 {
-protected:
     css::uno::Any                                                      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&                                                   SAL_CALL getInfoHelper() override;
 

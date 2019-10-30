@@ -31,9 +31,8 @@ namespace toolkit
 
     //= UnoControlScrollBarModel
 
-    class UnoControlScrollBarModel : public UnoControlModel
+    class UnoControlScrollBarModel final : public UnoControlModel
     {
-    protected:
         css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
         ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
 
@@ -58,7 +57,7 @@ namespace toolkit
 
     //= UnoControlScrollBarModel
 
-    class UnoScrollBarControl : public UnoControlBase,
+    class UnoScrollBarControl final : public UnoControlBase,
                                 public css::awt::XAdjustmentListener,
                                 public css::awt::XScrollBar
     {

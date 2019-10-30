@@ -143,14 +143,14 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-class TOOLKIT_DLLPUBLIC VCLXMenuBar : public VCLXMenu
+class TOOLKIT_DLLPUBLIC VCLXMenuBar final : public VCLXMenu
 {
 public:
     VCLXMenuBar();
     VCLXMenuBar( MenuBar* pMenuBar );
 };
 
-class TOOLKIT_DLLPUBLIC VCLXPopupMenu : public VCLXMenu
+class TOOLKIT_DLLPUBLIC VCLXPopupMenu final : public VCLXMenu
 {
 public:
     VCLXPopupMenu();

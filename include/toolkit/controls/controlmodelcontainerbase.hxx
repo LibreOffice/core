@@ -184,7 +184,7 @@ protected:
     void implUpdateGroupStructure();
 };
 
-class ResourceListener  :public css::util::XModifyListener,
+class ResourceListener final : public css::util::XModifyListener,
                          public ::cppu::OWeakObject,
                          public ::cppu::BaseMutex
 {
