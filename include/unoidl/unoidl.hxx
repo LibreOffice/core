@@ -145,7 +145,7 @@ private:
     std::vector< OUString > const annotations_;
 };
 
-class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL EnumTypeEntity: public PublishableEntity {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL EnumTypeEntity final : public PublishableEntity {
 public:
     struct Member {
         Member(
@@ -176,7 +176,7 @@ private:
     std::vector< Member > const members_;
 };
 
-class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL PlainStructTypeEntity: public PublishableEntity {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL PlainStructTypeEntity final : public PublishableEntity {
 public:
     struct Member {
         Member(OUString const & theName, OUString const & theType,
@@ -211,7 +211,7 @@ private:
     std::vector< Member > const directMembers_;
 };
 
-class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL PolymorphicStructTypeTemplateEntity:
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL PolymorphicStructTypeTemplateEntity final :
     public PublishableEntity
 {
 public:
@@ -254,7 +254,7 @@ private:
     std::vector< Member > const members_;
 };
 
-class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL ExceptionTypeEntity: public PublishableEntity {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL ExceptionTypeEntity final : public PublishableEntity {
 public:
     struct Member {
         Member(
@@ -290,7 +290,7 @@ private:
     std::vector< Member > const directMembers_;
 };
 
-class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL InterfaceTypeEntity: public PublishableEntity {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL InterfaceTypeEntity final : public PublishableEntity {
 public:
     struct Attribute {
         Attribute(
@@ -390,7 +390,7 @@ private:
     std::vector< Method > const directMethods_;
 };
 
-class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL TypedefEntity: public PublishableEntity {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL TypedefEntity final : public PublishableEntity {
 public:
     SAL_DLLPRIVATE TypedefEntity(
         bool published, OUString const & type,
@@ -454,7 +454,7 @@ struct SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL ConstantValue {
     };
 };
 
-class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL ConstantGroupEntity: public PublishableEntity {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL ConstantGroupEntity final : public PublishableEntity {
 public:
     struct Member {
         Member(
@@ -485,7 +485,7 @@ private:
     std::vector< Member > const members_;
 };
 
-class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL SingleInterfaceBasedServiceEntity:
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL SingleInterfaceBasedServiceEntity final :
     public PublishableEntity
 {
 public:
@@ -548,7 +548,7 @@ private:
     std::vector< Constructor > const constructors_;
 };
 
-class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL AccumulationBasedServiceEntity:
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL AccumulationBasedServiceEntity final :
     public PublishableEntity
 {
 public:
@@ -628,7 +628,7 @@ private:
     std::vector< Property > const directProperties_;
 };
 
-class LO_DLLPUBLIC_UNOIDL InterfaceBasedSingletonEntity:
+class LO_DLLPUBLIC_UNOIDL InterfaceBasedSingletonEntity final :
     public PublishableEntity
 {
 public:
@@ -648,7 +648,7 @@ private:
     OUString const base_;
 };
 
-class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL ServiceBasedSingletonEntity: public PublishableEntity
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL ServiceBasedSingletonEntity final : public PublishableEntity
 {
 public:
     SAL_DLLPRIVATE ServiceBasedSingletonEntity(
@@ -681,7 +681,7 @@ protected:
     virtual SAL_DLLPRIVATE ~Provider() throw () override;
 };
 
-class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL Manager: public salhelper::SimpleReferenceObject {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL Manager final : public salhelper::SimpleReferenceObject {
 public:
     Manager() {}
 
