@@ -542,45 +542,45 @@ void ImplWindowStateFromStr(WindowStateData& rData,
     rData.SetMask( nValidMask );
 }
 
-OString ImplWindowStateToStr(const WindowStateData& rData)
+OString WindowStateData::ToStr() const
 {
-    const WindowStateMask nValidMask = rData.GetMask();
+    const WindowStateMask nValidMask = GetMask();
     if ( nValidMask == WindowStateMask::NONE )
         return OString();
 
     OStringBuffer rStrBuf(64);
 
     if ( nValidMask & WindowStateMask::X )
-        rStrBuf.append(static_cast<sal_Int32>(rData.GetX()));
+        rStrBuf.append(static_cast<sal_Int32>(GetX()));
     rStrBuf.append(',');
     if ( nValidMask & WindowStateMask::Y )
-        rStrBuf.append(static_cast<sal_Int32>(rData.GetY()));
+        rStrBuf.append(static_cast<sal_Int32>(GetY()));
     rStrBuf.append(',');
     if ( nValidMask & WindowStateMask::Width )
-        rStrBuf.append(static_cast<sal_Int32>(rData.GetWidth()));
+        rStrBuf.append(static_cast<sal_Int32>(GetWidth()));
     rStrBuf.append(',');
     if ( nValidMask & WindowStateMask::Height )
-        rStrBuf.append(static_cast<sal_Int32>(rData.GetHeight()));
+        rStrBuf.append(static_cast<sal_Int32>(GetHeight()));
     rStrBuf.append( ';' );
     if ( nValidMask & WindowStateMask::State )
     {
         // #94144# allow Minimize again, should be masked out when read from configuration
         // 91625 - ignore Minimize
-        WindowStateState nState = rData.GetState();
+        WindowStateState nState = GetState();
         rStrBuf.append(static_cast<sal_Int32>(nState));
     }
     rStrBuf.append(';');
     if ( nValidMask & WindowStateMask::MaximizedX )
-        rStrBuf.append(static_cast<sal_Int32>(rData.GetMaximizedX()));
+        rStrBuf.append(static_cast<sal_Int32>(GetMaximizedX()));
     rStrBuf.append(',');
     if ( nValidMask & WindowStateMask::MaximizedY )
-        rStrBuf.append(static_cast<sal_Int32>(rData.GetMaximizedY()));
+        rStrBuf.append(static_cast<sal_Int32>(GetMaximizedY()));
     rStrBuf.append( ',' );
     if ( nValidMask & WindowStateMask::MaximizedWidth )
-        rStrBuf.append(static_cast<sal_Int32>(rData.GetMaximizedWidth()));
+        rStrBuf.append(static_cast<sal_Int32>(GetMaximizedWidth()));
     rStrBuf.append(',');
     if ( nValidMask & WindowStateMask::MaximizedHeight )
-        rStrBuf.append(static_cast<sal_Int32>(rData.GetMaximizedHeight()));
+        rStrBuf.append(static_cast<sal_Int32>(GetMaximizedHeight()));
     rStrBuf.append(';');
 
     return rStrBuf.makeStringAndClear();
@@ -895,7 +895,7 @@ OString SystemWindow::GetWindowState( WindowStateMask nMask ) const
     aData.SetMask( nMask );
     GetWindowStateData( aData );
 
-    return ImplWindowStateToStr(aData);
+    return aData.ToStr();
 }
 
 void SystemWindow::SetMenuBar(MenuBar* pMenuBar)

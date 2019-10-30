@@ -25,6 +25,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/window.hxx>
+#include <vcl/windowstate.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 #include <vcl/NotebookBarAddonsMerger.hxx>
@@ -42,59 +43,6 @@ class TaskPaneList;
 #define ICON_DATABASE_DOCUMENT          12
 #define ICON_MATH_DOCUMENT              13
 #define ICON_MACROLIBRARY               1
-
-class VCL_PLUGIN_PUBLIC WindowStateData
-{
-private:
-    WindowStateMask     mnValidMask;
-    int                 mnX;
-    int                 mnY;
-    unsigned int        mnWidth;
-    unsigned int        mnHeight;
-    int                 mnMaximizedX;
-    int                 mnMaximizedY;
-    unsigned int        mnMaximizedWidth;
-    unsigned int        mnMaximizedHeight;
-    WindowStateState    mnState;
-
-public:
-    WindowStateData()
-        : mnValidMask(WindowStateMask::NONE)
-        , mnX(0)
-        , mnY(0)
-        , mnWidth(0)
-        , mnHeight(0)
-        , mnMaximizedX(0)
-        , mnMaximizedY(0)
-        , mnMaximizedWidth(0)
-        , mnMaximizedHeight(0)
-        , mnState(WindowStateState::NONE)
-    {
-    }
-
-    void        SetMask( WindowStateMask nValidMask ) { mnValidMask = nValidMask; }
-    WindowStateMask GetMask() const { return mnValidMask; }
-
-    void         SetX( int nX ) { mnX = nX; }
-    int          GetX() const { return mnX; }
-    void         SetY( int nY ) { mnY = nY; }
-    int          GetY() const { return mnY; }
-    void         SetWidth( unsigned int nWidth ) { mnWidth = nWidth; }
-    unsigned int GetWidth() const { return mnWidth; }
-    void         SetHeight( unsigned int nHeight ) { mnHeight = nHeight; }
-    unsigned int GetHeight() const { return mnHeight; }
-    void         SetState( WindowStateState nState ) { mnState = nState; }
-    WindowStateState GetState() const { return mnState; }
-    void         SetMaximizedX( int nRX ) { mnMaximizedX = nRX; }
-    int          GetMaximizedX() const { return mnMaximizedX; }
-    void         SetMaximizedY( int nRY ) { mnMaximizedY = nRY; }
-    int          GetMaximizedY() const { return mnMaximizedY; }
-    void         SetMaximizedWidth( unsigned int nRWidth ) { mnMaximizedWidth = nRWidth; }
-    unsigned int GetMaximizedWidth() const { return mnMaximizedWidth; }
-    void         SetMaximizedHeight( unsigned int nRHeight ) { mnMaximizedHeight = nRHeight; }
-    unsigned int GetMaximizedHeight() const { return mnMaximizedHeight; }
-};
-
 
 enum class MenuBarMode
 {
