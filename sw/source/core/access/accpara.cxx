@@ -1287,8 +1287,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                 break;
             case SwFieldIds::Author:
                 {
-                    strTypeName += "-";
-                    strTypeName += aMgr.GetFormatStr(pField->GetTypeId(), pField->GetFormat() & 0xff);
+                    strTypeName += "-" + aMgr.GetFormatStr(pField->GetTypeId(), pField->GetFormat() & 0xff);
                 }
                 break;
             default: break;

@@ -75,8 +75,7 @@ void Breadcrumb::SetURL( const OUString& rURL )
 
     if( aURL.HasPort() )
     {
-        sHostPort += ":";
-        sHostPort += OUString::number( aURL.GetPort() );
+        sHostPort += ":" + OUString::number( aURL.GetPort() );
     }
 
     OUString sUser = aURL.GetUser( INetURLObject::DecodeMechanism::NONE );

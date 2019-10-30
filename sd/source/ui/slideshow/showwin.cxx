@@ -506,9 +506,7 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
             SvtSysLocale                aSysLocale;
             const LocaleDataWrapper&    aLocaleData = aSysLocale.GetLocaleData();
 
-            aText += " ( ";
-            aText += aLocaleData.getDuration( ::tools::Time( 0, 0, mnPauseTimeout ) );
-            aText += " )";
+            aText += " ( " + aLocaleData.getDuration( ::tools::Time( 0, 0, mnPauseTimeout ) ) + " )";
             pVDev->DrawText( Point( aOffset.Width(), 0 ), aText );
             DrawOutDev( Point( aOutOrg.X(), aOffset.Height() ), aVDevSize, Point(), aVDevSize, *pVDev );
             bDrawn = true;

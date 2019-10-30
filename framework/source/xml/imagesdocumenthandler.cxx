@@ -133,8 +133,7 @@ void SAL_CALL OReadImagesDocumentHandler::endDocument()
 
     if (m_bImageContainerStartFound != m_bImageContainerEndFound)
     {
-        OUString aErrorMessage = getErrorLineString();
-        aErrorMessage += "No matching start or end element 'image:imagecontainer' found!";
+        OUString aErrorMessage = getErrorLineString() + "No matching start or end element 'image:imagecontainer' found!";
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
@@ -154,8 +153,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 // image:imagecontainer element (container element for all further image elements)
                 if ( m_bImageContainerStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'image:imagecontainer' cannot be embedded into 'image:imagecontainer'!";
+                    OUString aErrorMessage = getErrorLineString() + "Element 'image:imagecontainer' cannot be embedded into 'image:imagecontainer'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -167,15 +165,13 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
             {
                 if ( !m_bImageContainerStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'image:images' must be embedded into element 'image:imagecontainer'!";
+                    OUString aErrorMessage = getErrorLineString() + "Element 'image:images' must be embedded into element 'image:imagecontainer'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
                 if ( m_bImagesStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'image:images' cannot be embedded into 'image:images'!";
+                    OUString aErrorMessage = getErrorLineString() + "Element 'image:images' cannot be embedded into 'image:images'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -188,8 +184,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 // Check that image:entry is embedded into image:images!
                 if ( !m_bImagesStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'image:entry' must be embedded into element 'image:images'!";
+                    OUString aErrorMessage = getErrorLineString() + "Element 'image:entry' must be embedded into element 'image:images'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -219,8 +214,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 // Check required attribute "command"
                 if ( aItem.aCommandURL.isEmpty() )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Required attribute 'image:command' must have a value!";
+                    OUString aErrorMessage = getErrorLineString() + "Required attribute 'image:command' must have a value!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 

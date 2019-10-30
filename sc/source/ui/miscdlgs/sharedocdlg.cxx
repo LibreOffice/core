@@ -196,8 +196,7 @@ void ScShareDocumentDlg::UpdateView()
         util::DateTime uDT(xDocProps->getModificationDate());
         DateTime aDateTime(uDT);
 
-        OUString aString = formatTime(aDateTime, *ScGlobal::pLocaleData);
-        aString += " ";
+        OUString aString = formatTime(aDateTime, *ScGlobal::pLocaleData) + " ";
         aString += ScGlobal::pLocaleData->getTime( aDateTime, false );
 
         m_xLbUsers->append_text(aUser);

@@ -361,8 +361,7 @@ void XMLFilterTestDialog::onExportBrowse()
                                         {
                                             if( n > 0 )
                                                 aExtension += ";";
-                                            aExtension += "*.";
-                                            aExtension += *pExtensions++;
+                                            aExtension += "*." + *pExtensions++;
                                         }
                                     }
                                 }

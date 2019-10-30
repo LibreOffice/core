@@ -637,8 +637,7 @@ void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, weld::Wind
     OUString aAuthor = pAction->GetUser();
 
     DateTime aDT = pAction->GetDateTime();
-    OUString aDate = ScGlobal::pLocaleData->getDate( aDT );
-    aDate += " ";
+    OUString aDate = ScGlobal::pLocaleData->getDate( aDT ) + " ";
     aDate += ScGlobal::pLocaleData->getTime( aDT, false );
 
     SfxItemSet aSet(

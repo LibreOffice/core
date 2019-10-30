@@ -675,8 +675,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             OUString aCreatedByEntry( m_xFtCreatedBy->get_label() + " " + aUserOpt.GetFirstName() + " " + aUserOpt.GetLastName());
             m_xWndLeft->GetEditEngine()->SetText(aCreatedByEntry);
             m_xWndCenter->InsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SvxDateType::Var), EE_FEATURE_FIELD) );
-            OUString aPageEntry( m_xFtPage->get_label() );
-            aPageEntry += " ";
+            OUString aPageEntry( m_xFtPage->get_label() + " " );
             m_xWndRight->GetEditEngine()->SetText(aPageEntry);
             m_xWndRight->InsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD) );
             if(!bTravelling)

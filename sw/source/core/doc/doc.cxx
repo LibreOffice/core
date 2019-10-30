@@ -611,8 +611,7 @@ static void lcl_FormatPostIt(
     }
     aStr += SwViewShell::GetShellRes()->aPostItAuthor;
     aStr += sTmp;
-    aStr += pField->GetPar1();
-    aStr += " ";
+    aStr += pField->GetPar1() + " ";
     SvtSysLocale aSysLocale;
     aStr += /*(LocaleDataWrapper&)*/aSysLocale.GetLocaleData().getDate( pField->GetDate() );
     if(pField->GetResolved())

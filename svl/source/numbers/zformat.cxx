@@ -5203,9 +5203,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             {
                 if ( rKey[j] == rColorName )
                 {
-                    aPrefix += "[";
-                    aPrefix += rKeywords[j];
-                    aPrefix += "]";
+                    aPrefix += "[" + rKeywords[j] + "]";
                     break;  // for
                 }
             }
@@ -5219,9 +5217,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                 aNatNum.SetLang( nOriginalLang );
             if ( aNatNum.GetDBNum() > 0 )
             {
-                aPrefix += "[DBNum";
-                aPrefix += OUString::number( aNatNum.GetDBNum() );
-                aPrefix += "]";
+                aPrefix += "[DBNum" + OUString::number( aNatNum.GetDBNum() ) + "]";
                 bDBNumInserted = true;
             }
         }

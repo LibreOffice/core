@@ -73,8 +73,7 @@ SvXMLImportContextRef XMLScriptChildContext::CreateChildContext(
 
     if ( m_xDocumentScripts.is() )
     {   // document supports embedding scripts/macros
-        OUString aBasic( GetImport().GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) );
-        aBasic += ":Basic";
+        OUString aBasic( GetImport().GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) + ":Basic" );
 
         if ( m_aLanguage == aBasic && nPrefix == XML_NAMESPACE_OOO && IsXMLToken( rLocalName, XML_LIBRARIES ) )
             xContext = new XMLBasicImportContext( GetImport(), nPrefix, rLocalName, m_xModel );
@@ -118,8 +117,7 @@ SvXMLImportContextRef XMLScriptContext::CreateChildContext(
         }
         else if ( IsXMLToken( rLName, XML_SCRIPT ) )
         {
-            OUString aAttrName( GetImport().GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_SCRIPT ) );
-            aAttrName += ":language";
+            OUString aAttrName( GetImport().GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_SCRIPT ) + ":language" );
             if ( xAttrList.is() )
             {
                 OUString aLanguage = xAttrList->getValueByName( aAttrName );

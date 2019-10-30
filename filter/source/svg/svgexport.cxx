@@ -2489,9 +2489,7 @@ void SVGExport::writeMtf( const GDIMetaFile& rMtf )
     aAttr = OUString::number( aSize.Height() ) + "mm";
     AddAttribute( XML_NAMESPACE_NONE, "height", aAttr );
 
-    aAttr = "0 0 ";
-    aAttr += OUString::number( aSize.Width() * 100L );
-    aAttr += " ";
+    aAttr = "0 0 " + OUString::number( aSize.Width() * 100L ) + " ";
     aAttr += OUString::number( aSize.Height() * 100L );
     AddAttribute( XML_NAMESPACE_NONE, "viewBox", aAttr );
 

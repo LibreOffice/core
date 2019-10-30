@@ -407,8 +407,7 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
         pDev->DrawImage( aPnt, pImpl->aPosImage );
         aPnt.AdjustX(pImpl->aPosImage.GetSizePixel().Width() );
         aPnt.AdjustX(PAINT_OFFSET );
-        OUString aStr = GetMetricStr_Impl( pImpl->aPos.X());
-        aStr += " / ";
+        OUString aStr = GetMetricStr_Impl( pImpl->aPos.X()) + " / ";
         aStr += GetMetricStr_Impl( pImpl->aPos.Y());
         tools::Rectangle aRect(aPnt, Point(nSizePosX, rRect.Bottom()));
         pDev->DrawRect(aRect);
@@ -426,8 +425,7 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
             aPnt.AdjustX(pImpl->aSizeImage.GetSizePixel().Width() );
             Point aDrwPnt = aPnt;
             aPnt.AdjustX(PAINT_OFFSET );
-            aStr = GetMetricStr_Impl( pImpl->aSize.Width() );
-            aStr += " x ";
+            aStr = GetMetricStr_Impl( pImpl->aSize.Width() ) + " x ";
             aStr += GetMetricStr_Impl( pImpl->aSize.Height() );
             aRect = tools::Rectangle(aDrwPnt, rRect.BottomRight());
             pDev->DrawRect(aRect);
@@ -465,16 +463,13 @@ void SvxPosSizeStatusBarControl::ImplUpdateItemText()
     int nCharsWidth = -1;
     if ( pImpl->bPos || pImpl->bSize )
     {
-        aText = GetMetricStr_Impl( pImpl->aPos.X());
-        aText += " / ";
+        aText = GetMetricStr_Impl( pImpl->aPos.X()) + " / ";
         aText += GetMetricStr_Impl( pImpl->aPos.Y());
         // widest X/Y string looks like "-999,99"
         nCharsWidth = 1 + 6 + 3 + 6; // icon + x + slash + y
         if ( pImpl->bSize )
         {
-            aText += " ";
-            aText += GetMetricStr_Impl( pImpl->aSize.Width() );
-            aText += " x ";
+            aText += " " + GetMetricStr_Impl( pImpl->aSize.Width() ) + " x ";
             aText += GetMetricStr_Impl( pImpl->aSize.Height() );
             nCharsWidth += 1 + 1 + 4 + 3 + 4; // icon + space + w + x + h
         }

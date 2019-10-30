@@ -129,10 +129,8 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
         // calculate correct file name
         if( !( nFlags & XOutFlags::DontExpandFilename ) )
         {
-            OUString aName( aURL.getBase() );
-            aName += "_";
-            aName += aURL.getExtension();
-            aName += "_";
+            OUString aName( aURL.getBase() + "_" );
+            aName += aURL.getExtension() + "_";
             OUString aStr( OUString::number( rGraphic.GetChecksum(), 16 ) );
             if ( aStr[0] == '-' )
                 aStr = "m" + aStr.copy(1);

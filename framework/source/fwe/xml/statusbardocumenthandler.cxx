@@ -187,8 +187,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::endDocument()
 
     if ( m_bStatusBarStartFound )
     {
-        OUString aErrorMessage = getErrorLineString();
-        aErrorMessage += "No matching start or end element 'statusbar' found!";
+        OUString aErrorMessage = getErrorLineString() + "No matching start or end element 'statusbar' found!";
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
@@ -207,8 +206,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
             {
                 if ( m_bStatusBarStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'statusbar:statusbar' cannot be embedded into 'statusbar:statusbar'!";
+                    OUString aErrorMessage = getErrorLineString() + "Element 'statusbar:statusbar' cannot be embedded into 'statusbar:statusbar'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -220,15 +218,13 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
             {
                 if ( !m_bStatusBarStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'statusbar:statusbaritem' must be embedded into element 'statusbar:statusbar'!";
+                    OUString aErrorMessage = getErrorLineString() + "Element 'statusbar:statusbaritem' must be embedded into element 'statusbar:statusbar'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
                 if ( m_bStatusBarItemStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element statusbar:statusbaritem is not a container!";
+                    OUString aErrorMessage = getErrorLineString() + "Element statusbar:statusbaritem is not a container!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -272,8 +268,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
                                 }
                                 else
                                 {
-                                    OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += "Attribute statusbar:align must have one value of 'left','right' or 'center'!";
+                                    OUString aErrorMessage = getErrorLineString() + "Attribute statusbar:align must have one value of 'left','right' or 'center'!";
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -297,8 +292,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
                                 }
                                 else
                                 {
-                                    OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += "Attribute statusbar:autosize must have value 'true' or 'false'!";
+                                    OUString aErrorMessage = getErrorLineString() + "Attribute statusbar:autosize must have value 'true' or 'false'!";
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -312,8 +306,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
                                     nItemBits &= ~ItemStyle::AUTO_SIZE;
                                 else
                                 {
-                                    OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += "Attribute statusbar:autosize must have value 'true' or 'false'!";
+                                    OUString aErrorMessage = getErrorLineString() + "Attribute statusbar:autosize must have value 'true' or 'false'!";
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -327,8 +320,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
                                     nItemBits &= ~ItemStyle::OWNER_DRAW;
                                 else
                                 {
-                                    OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += "Attribute statusbar:ownerdraw must have value 'true' or 'false'!";
+                                    OUString aErrorMessage = getErrorLineString() + "Attribute statusbar:ownerdraw must have value 'true' or 'false'!";
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -360,8 +352,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
                                     nItemBits &= ~ItemStyle::MANDATORY;
                                 else
                                 {
-                                    OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += "Attribute statusbar:mandatory must have value 'true' or 'false'!";
+                                    OUString aErrorMessage = getErrorLineString() + "Attribute statusbar:mandatory must have value 'true' or 'false'!";
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -375,8 +366,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
 
                 if ( !bCommandURL )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Required attribute statusbar:url must have a value!";
+                    OUString aErrorMessage = getErrorLineString() + "Required attribute statusbar:url must have a value!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
                 else
@@ -420,8 +410,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::endElement(const OUString& aName)
             {
                 if ( !m_bStatusBarStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "End element 'statusbar' found, but no start element 'statusbar'";
+                    OUString aErrorMessage = getErrorLineString() + "End element 'statusbar' found, but no start element 'statusbar'";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -433,8 +422,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::endElement(const OUString& aName)
             {
                 if ( !m_bStatusBarItemStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "End element 'statusbar:statusbaritem' found, but no start element 'statusbar:statusbaritem'";
+                    OUString aErrorMessage = getErrorLineString() + "End element 'statusbar:statusbaritem' found, but no start element 'statusbar:statusbaritem'";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 

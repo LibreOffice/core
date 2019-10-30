@@ -1914,8 +1914,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, bool bDoPrint, ScPreviewLocationData
                     {
                         pEditEngine->Draw( pDev, Point( nPosX, nPosY ) );
 
-                        OUString aMarkStr(rPos.Format(ScRefFlags::VALID, pDoc, pDoc->GetAddressConvention()));
-                        aMarkStr += ":";
+                        OUString aMarkStr(rPos.Format(ScRefFlags::VALID, pDoc, pDoc->GetAddressConvention()) + ":");
 
                         //  cell position also via EditEngine, for correct positioning
                         pEditEngine->SetText(aMarkStr);

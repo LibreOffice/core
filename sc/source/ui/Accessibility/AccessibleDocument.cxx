@@ -2228,8 +2228,7 @@ uno::Any SAL_CALL ScAccessibleDocument::getExtendedAttributes()
     sValue += sName + OUString::number(sheetIndex+1) ;
     sName = ";total-pages:";
     sValue += sName;
-    sValue += OUString::number(GetDocument()->GetTableCount());
-    sValue += ";";
+    sValue += OUString::number(GetDocument()->GetTableCount()) + ";";
     anyAtrribute <<= sValue;
     return anyAtrribute;
 }

@@ -407,8 +407,8 @@ IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl, weld::Button&, void  )
         sEncodedUsername = rtl::Uri::encode(m_sUsername,
                                             rtl_UriCharClassUserinfo,
                                             rtl_UriEncodeKeepEscapes,
-                                            RTL_TEXTENCODING_UTF8 );
-        sEncodedUsername += "@";
+                                            RTL_TEXTENCODING_UTF8 )
+            + "@";
     }
 
     // Clean the listbox

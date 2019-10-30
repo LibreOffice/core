@@ -495,8 +495,7 @@ uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
         strFor = ReplaceFourChar(strFor);
         strFor = "Formula:" + strFor +
             ";Note:";
-        strFor += ReplaceFourChar(GetAllDisplayNote());
-        strFor += ";";
+        strFor += ReplaceFourChar(GetAllDisplayNote()) + ";";
         strFor += getShadowAttrs();//the string returned contains the spliter ";"
         strFor += getBorderAttrs();//the string returned contains the spliter ";"
         //end of cell attributes

@@ -696,9 +696,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
                 SdrLayer* pLayer = rLayerAdmin.GetLayerPerID( nLayer );
                 if( pLayer )
                 {
-                    aOUString += " (" ;
-                    aOUString += LayerTabBar::convertToLocalizedName(pLayer->GetName());
-                    aOUString += ")";
+                    aOUString += " (" + LayerTabBar::convertToLocalizedName(pLayer->GetName()) + ")";
                 }
             }
         }

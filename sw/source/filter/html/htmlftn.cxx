@@ -322,13 +322,11 @@ void SwHTMLWriter::OutFootEndNotes()
         OUString sFootnoteName;
         if( m_pFormatFootnote->IsEndNote() )
         {
-            sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdendnote;
-            sFootnoteName += OUString::number(static_cast<sal_Int32>(++m_nEndNote));
+            sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdendnote + OUString::number(static_cast<sal_Int32>(++m_nEndNote));
         }
         else
         {
-            sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdfootnote;
-            sFootnoteName += OUString::number(static_cast<sal_Int32>(++m_nFootNote));
+            sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdfootnote + OUString::number(static_cast<sal_Int32>(++m_nFootNote));
         }
 
         if( m_bLFPossible )

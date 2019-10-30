@@ -1395,9 +1395,7 @@ int Desktop::Main()
 
 #ifdef DBG_UTIL
         //include buildid in non product builds
-        aTitle += " [";
-        aTitle += utl::Bootstrap::getBuildIdData("development");
-        aTitle += "]";
+        aTitle += " [" + utl::Bootstrap::getBuildIdData("development") + "]";
 #endif
 
         SetDisplayName( aTitle );

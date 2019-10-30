@@ -314,8 +314,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
 
         tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
 
-        destFolder = dp_misc::makeURL( sTempDir, tempEntry );
-        destFolder += "_";
+        destFolder = dp_misc::makeURL( sTempDir, tempEntry ) + "_";
         m_sDownloadFolder = destFolder;
         try
         {
@@ -565,8 +564,7 @@ bool UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
     }
     tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
 
-    destFolder = dp_misc::makeURL( m_sDownloadFolder, tempEntry );
-    destFolder += "_";
+    destFolder = dp_misc::makeURL( m_sDownloadFolder, tempEntry ) + "_";
 
     ::ucbhelper::Content destFolderContent;
     dp_misc::create_folder( &destFolderContent, destFolder, m_updateCmdEnv.get() );

@@ -818,8 +818,7 @@ void SfxDocumentPage::ImplUpdateSignatures()
     else if ( aInfos.getLength() == 1 )
     {
         const security::DocumentSignatureInformation& rInfo = aInfos[ 0 ];
-        s = utl::GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime );
-        s += ", ";
+        s = utl::GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime ) + ", ";
         s += comphelper::xmlsec::GetContentPart(rInfo.Signer->getSubjectName());
     }
     m_xSignedValFt->set_label(s);

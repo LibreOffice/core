@@ -155,8 +155,7 @@ ToxTextGenerator::GenerateTextForChapterToken(const SwFormToken& chapterToken, c
         retval += aField.GetNumber(pLayout); // get the string number without pre/postfix
     }
     else if (CF_NUMBER_NOPREPST == chapterToken.nChapterFormat || CF_NUM_TITLE == chapterToken.nChapterFormat) {
-        retval += aField.GetNumber(pLayout);
-        retval += " ";
+        retval += aField.GetNumber(pLayout) + " ";
         retval += aField.GetTitle(pLayout);
     } else if (CF_TITLE == chapterToken.nChapterFormat) {
         retval += aField.GetTitle(pLayout);
