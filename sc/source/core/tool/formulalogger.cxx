@@ -345,8 +345,7 @@ FormulaLogger::GroupScope FormulaLogger::enterGroup(
 
     OUString aGroupPrefix = aName +
         ": formula-group: ";
-    aGroupPrefix += rCell.aPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDoc, rDoc.GetAddressConvention());
-    aGroupPrefix += ": ";
+    aGroupPrefix += rCell.aPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDoc, rDoc.GetAddressConvention()) + ": ";
 
     bool bOutputEnabled = mpLastGroup != rCell.GetCellGroup().get();
     mpLastGroup = rCell.GetCellGroup().get();

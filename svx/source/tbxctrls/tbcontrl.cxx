@@ -3812,8 +3812,7 @@ void SvxCurrencyToolBoxControl::GetCurrencySymbols( std::vector<OUString>& rList
 
     sal_uInt16 nStart = 1;
 
-    OUString aString( ApplyLreOrRleEmbedding( rCurrencyTable[0].GetSymbol() ) );
-    aString += " ";
+    OUString aString( ApplyLreOrRleEmbedding( rCurrencyTable[0].GetSymbol() ) + " " );
     aString += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString(
                                        rCurrencyTable[0].GetLanguage() ) );
 

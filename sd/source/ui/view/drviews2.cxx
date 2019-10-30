@@ -1359,8 +1359,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     {
                         SdrGrafObj* pNewObject = dialog.GetCompressedSdrGrafObj();
                         SdrPageView* pPageView = mpDrawView->GetSdrPageView();
-                        OUString aUndoString = mpDrawView->GetDescriptionOfMarkedObjects();
-                        aUndoString += " Compress";
+                        OUString aUndoString = mpDrawView->GetDescriptionOfMarkedObjects() + " Compress";
                         mpDrawView->BegUndo( aUndoString );
                         mpDrawView->ReplaceObjectAtView( pObj, *pPageView, pNewObject );
                         mpDrawView->EndUndo();

@@ -832,26 +832,16 @@ const SfxPoolItem& SwWW8AttrIter::GetItem(sal_uInt16 nWhich) const
 void WW8AttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 /*nPos*/, const SwFormatRuby& rRuby )
 {
     WW8Ruby aWW8Ruby(rNode, rRuby, GetExport());
-    OUString aStr( FieldString( ww::eEQ ) );
-    aStr += "\\* jc";
-    aStr += OUString::number(aWW8Ruby.GetJC());
-
-
-    aStr += " \\* \"Font:";
-    aStr += aWW8Ruby.GetFontFamily();
-    aStr += "\" \\* hps";
-    aStr += OUString::number((aWW8Ruby.GetRubyHeight() + 5) / 10);
-    aStr += " \\o";
+    OUString aStr( FieldString( ww::eEQ ) + "\\* jc" );
+    aStr += OUString::number(aWW8Ruby.GetJC()) + " \\* \"Font:";
+    aStr += aWW8Ruby.GetFontFamily() + "\" \\* hps";
+    aStr += OUString::number((aWW8Ruby.GetRubyHeight() + 5) / 10) + " \\o";
     if (aWW8Ruby.GetDirective())
     {
         aStr += OUStringLiteral("\\a") + OUStringChar(aWW8Ruby.GetDirective());
     }
-    aStr += "(\\s\\up ";
-
-    aStr += OUString::number((aWW8Ruby.GetBaseHeight() + 10) / 20 - 1);
-    aStr += "(";
-    aStr += rRuby.GetText();
-    aStr += ")";
+    aStr += "(\\s\\up " + OUString::number((aWW8Ruby.GetBaseHeight() + 10) / 20 - 1) + "(";
+    aStr += rRuby.GetText() + ")";
 
     // The parameter separator depends on the FIB.lid
     if ( m_rWW8Export.pFib->getNumDecimalSep() == '.' )

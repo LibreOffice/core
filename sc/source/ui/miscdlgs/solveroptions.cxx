@@ -245,8 +245,7 @@ void ScSolverOptionsDialog::EditOption()
         {
             pStringItem->SetDoubleValue( aValDialog.GetValue() );
 
-            OUString sTxt(pStringItem->GetText());
-            sTxt += ": ";
+            OUString sTxt(pStringItem->GetText() + ": ");
             sTxt += rtl::math::doubleToUString(pStringItem->GetDoubleValue(),
                 rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
                 ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true );
@@ -263,8 +262,7 @@ void ScSolverOptionsDialog::EditOption()
         {
             pStringItem->SetIntValue(aIntDialog.GetValue());
 
-            OUString sTxt(pStringItem->GetText());
-            sTxt += ": ";
+            OUString sTxt(pStringItem->GetText() + ": ");
             sTxt += OUString::number(pStringItem->GetIntValue());
 
             m_xLbSettings->set_text(nEntry, sTxt, 1);

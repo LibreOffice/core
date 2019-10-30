@@ -187,13 +187,11 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP(weld::Container* pParent,
 
     DateTime aDateTime( DateTime::EMPTY );
     utl::typeConvert( xCert->getNotValidBefore(), aDateTime );
-    aLBEntry = Application::GetSettings().GetUILocaleDataWrapper().getDate(Date(aDateTime.GetDate()));
-    aLBEntry += " ";
+    aLBEntry = Application::GetSettings().GetUILocaleDataWrapper().getDate(Date(aDateTime.GetDate())) + " ";
     aLBEntry += Application::GetSettings().GetUILocaleDataWrapper().getTime(tools::Time(aDateTime.GetTime()));
     InsertElement( XsResId( STR_VALIDFROM ), aLBEntry, aLBEntry  );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTime );
-    aLBEntry = Application::GetSettings().GetUILocaleDataWrapper().getDate(Date(aDateTime.GetDate()) );
-    aLBEntry += " ";
+    aLBEntry = Application::GetSettings().GetUILocaleDataWrapper().getDate(Date(aDateTime.GetDate()) ) + " ";
     aLBEntry += Application::GetSettings().GetUILocaleDataWrapper().getTime(tools::Time(aDateTime.GetTime()));
     InsertElement( XsResId( STR_VALIDTO ), aLBEntry, aLBEntry );
 

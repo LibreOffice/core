@@ -344,8 +344,7 @@ static OUString lcl_dbg_out(const SwPaM & rPam)
 
     if (rPam.HasMark())
     {
-        aStr += ", Mk: ";
-        aStr += lcl_dbg_out(*rPam.GetMark());
+        aStr += ", Mk: " + lcl_dbg_out(*rPam.GetMark());
     }
 
     aStr += " ]";
@@ -397,15 +396,12 @@ static OUString lcl_dbg_out(const SwFrameFormat & rFrameFormat)
     OUString aResult = "[ " +
         OUString(sBuffer, strlen(sBuffer), RTL_TEXTENCODING_ASCII_US) +
         "(";
-    aResult += rFrameFormat.GetName();
-    aResult += ")";
+    aResult += rFrameFormat.GetName() + ")";
 
     if (rFrameFormat.IsAuto())
         aResult += "*";
 
-    aResult += " ,";
-    aResult += lcl_dbg_out(rFrameFormat.FindLayoutRect());
-    aResult += " ]";
+    aResult += " ," + lcl_dbg_out(rFrameFormat.FindLayoutRect()) + " ]";
 
     return aResult;
 }
@@ -515,16 +511,12 @@ static OUString lcl_dbg_out(const SwNode & rNode)
     {
         const SfxItemSet * pAttrSet = pTextNode->GetpSwAttrSet();
 
-        aTmpStr += "<txt>";
-        aTmpStr += pTextNode->GetText().getLength() > 10 ? pTextNode->GetText().copy(0, 10) : pTextNode->GetText();
-        aTmpStr += "</txt>";
+        aTmpStr += "<txt>" + (pTextNode->GetText().getLength() > 10 ? pTextNode->GetText().copy(0, 10) : pTextNode->GetText()) + "</txt>";
 
         if (rNode.IsTableNode())
             aTmpStr += "<tbl/>";
 
-        aTmpStr += "<outlinelevel>";
-        aTmpStr += OUString::number(pTextNode->GetAttrOutlineLevel()-1);
-        aTmpStr += "</outlinelevel>";
+        aTmpStr += "<outlinelevel>" + OUString::number(pTextNode->GetAttrOutlineLevel()-1) + "</outlinelevel>";
 
         const SwNumRule * pNumRule = pTextNode->GetNumRule();
 
@@ -535,9 +527,7 @@ static OUString lcl_dbg_out(const SwNode & rNode)
             {
                 aTmpStr += lcl_dbg_out(*(pTextNode->GetNum()));
             }
-            aTmpStr += "</number>";
-
-            aTmpStr += "<rule>" +
+            aTmpStr += "</number><rule>" +
                 pNumRule->GetName();
 
             const SfxPoolItem * pItem = nullptr;
@@ -545,10 +535,8 @@ static OUString lcl_dbg_out(const SwNode & rNode)
             if (pAttrSet && SfxItemState::SET ==
                 pAttrSet->GetItemState(RES_PARATR_NUMRULE, false, &pItem))
             {
-                aTmpStr += "(";
-                aTmpStr +=
-                    static_cast<const SwNumRuleItem *>(pItem)->GetValue();
-                aTmpStr += ")*";
+                aTmpStr += "(" +
+                    static_cast<const SwNumRuleItem *>(pItem)->GetValue() + ")*";
             }
 
             const SwNumFormat * pNumFormat = nullptr;
@@ -559,10 +547,8 @@ static OUString lcl_dbg_out(const SwNode & rNode)
 
             if (pNumFormat)
             {
-                aTmpStr += "<numformat>";
-                aTmpStr +=
-                    lcl_dbg_out_NumType(pNumFormat->GetNumberingType());
-                aTmpStr += "</numformat>";
+                aTmpStr += "<numformat>" +
+                    lcl_dbg_out_NumType(pNumFormat->GetNumberingType()) + "</numformat>";
             }
         }
 
@@ -573,10 +559,7 @@ static OUString lcl_dbg_out(const SwNode & rNode)
 
         if (pColl)
         {
-            aTmpStr += "<coll>";
-            aTmpStr += pColl->GetName();
-
-            aTmpStr += "(";
+            aTmpStr += "<coll>" + pColl->GetName() + "(";
 
             SwTextFormatColl *pTextColl = static_cast<SwTextFormatColl*>(pColl);
             if (pTextColl->IsAssignedToListLevelOfOutlineStyle())
@@ -604,20 +587,14 @@ static OUString lcl_dbg_out(const SwNode & rNode)
 
         if (pCColl)
         {
-            aTmpStr += "<ccoll>";
-            aTmpStr += pCColl->GetName();
-            aTmpStr += "</ccoll>";
+            aTmpStr += "<ccoll>" + pCColl->GetName() + "</ccoll>";
         }
 
-        aTmpStr += "<frms>";
-        aTmpStr += lcl_AnchoredFrames(rNode);
-        aTmpStr += "</frms>";
+        aTmpStr += "<frms>" + lcl_AnchoredFrames(rNode) + "</frms>";
 
         if (bDbgOutPrintAttrSet)
         {
-            aTmpStr += "<attrs>";
-            aTmpStr += lcl_dbg_out(pTextNode->GetSwAttrSet());
-            aTmpStr += "</attrs>";
+            aTmpStr += "<attrs>" + lcl_dbg_out(pTextNode->GetSwAttrSet()) + "</attrs>";
         }
     }
     else if (rNode.IsStartNode())
@@ -733,11 +710,9 @@ const char * dbg_out(const SwNumRule & rRule)
 
 static OUString lcl_dbg_out(const SwTextFormatColl & rFormat)
 {
-    OUString aResult(rFormat.GetName());
+    OUString aResult(rFormat.GetName() + "(");
 
-    aResult += "(";
-    aResult += OUString::number(rFormat.GetAttrOutlineLevel());
-    aResult += ")";
+    aResult += OUString::number(rFormat.GetAttrOutlineLevel()) + ")";
 
     return aResult;
 }

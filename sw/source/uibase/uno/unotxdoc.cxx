@@ -4056,8 +4056,7 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames()
         const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
         for (size_t i = 0; i < nOutlineCount; ++i)
         {
-            OUString sEntry = lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule);
-            sEntry += "|outline";
+            OUString sEntry = lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule) + "|outline";
             pResArr[i] = sEntry;
         }
     }

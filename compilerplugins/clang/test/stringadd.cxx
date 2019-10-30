@@ -65,16 +65,21 @@ void f3(OUString aStr, int nFirstContent)
     // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
     aFirstStr += "...";
 }
+OUString side_effect();
 void f4(int i)
 {
-    OUString s("xxx");
+    OUString s1;
+    OUString s2("xxx");
     // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
-    s += "xxx";
+    s2 += "xxx";
     ++i;
     // any other kind of statement breaks the chain (at least for now)
-    s += "xxx";
+    s2 += "xxx";
     // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
-    s += "xxx";
+    s2 += side_effect();
+    s1 += "yyy";
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s1 += "yyy";
 }
 }
 
@@ -111,23 +116,37 @@ void f(Bar b1, Bar& b2, Bar* b3)
     s3 += b3->m_field;
 }
 OUString side_effect();
-void f2()
+void f2(OUString s)
 {
     OUString sRet = "xxx";
     // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
     sRet += side_effect();
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    sRet += "xxx";
+    sRet += side_effect();
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    sRet += "xxx";
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    sRet += "xxx";
+    sRet += s;
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    sRet += "xxx";
 }
 }
 
 // no warning expected
 namespace test4
 {
+OUString side_effect();
 void f()
 {
     OUString sRet = "xxx";
 #if OSL_DEBUG_LEVEL > 0
     sRet += ";";
 #endif
+    sRet += " ";
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    sRet += side_effect();
 }
 }
 

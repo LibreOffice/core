@@ -1241,8 +1241,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
                         }
                     }
 
-                    aNew += "=";
-                    aNew += pSField->GetFormula();
+                    aNew += "=" + pSField->GetFormula();
 
                     SwSbxValue aValue = aCalc.Calculate( aNew );
                     if (!aCalc.IsCalcError())

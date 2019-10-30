@@ -1554,8 +1554,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 if( rShell.IsCursorInTable() )
                 {
                     // table name + cell coordinate
-                    sStr = rShell.GetTableFormat()->GetName();
-                    sStr += ":";
+                    sStr = rShell.GetTableFormat()->GetName() + ":";
                     sStr += rShell.GetBoxNms();
                 }
                 else

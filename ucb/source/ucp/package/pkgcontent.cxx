@@ -647,8 +647,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
                 getContentType( m_aUri.getScheme(), false ) ) )
             return uno::Reference< ucb::XContent >();
 
-        OUString aURL = m_aUri.getUri();
-        aURL += "/";
+        OUString aURL = m_aUri.getUri() + "/";
 
         if ( Info.Type.equalsIgnoreAsciiCase(
                 getContentType( m_aUri.getScheme(), true ) ) )
@@ -1256,8 +1255,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         uno::Reference< ucb::XContentIdentifier > xOldId = m_xIdentifier;
 
         // Assemble new content identifier...
-        OUString aNewURL = m_aUri.getParentUri();
-        aNewURL += "/";
+        OUString aNewURL = m_aUri.getParentUri() + "/";
         aNewURL += ::ucb_impl::urihelper::encodeSegment( aNewTitle );
         uno::Reference< ucb::XContentIdentifier > xNewId
             = new ::ucbhelper::ContentIdentifier( aNewURL );
@@ -1536,8 +1534,7 @@ void Content::insert(
 
                 do
                 {
-                    OUString aNew = aNewUri.getUri();
-                    aNew += "_";
+                    OUString aNew = aNewUri.getUri() + "_";
                     aNew += OUString::number( ++nTry );
                     aNewUri.setUri( aNew );
                 }
@@ -1692,8 +1689,7 @@ void Content::transfer(
     }
 
     // Is source not a parent of me / not me?
-    OUString aId = m_aUri.getParentUri();
-    aId += "/";
+    OUString aId = m_aUri.getParentUri() + "/";
 
     if ( rInfo.SourceURL.getLength() <= aId.getLength() )
     {

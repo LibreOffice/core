@@ -217,8 +217,7 @@ IMPL_LINK_NOARG( DlgQryJoin, LBChangeHdl, weld::ComboBox&, void )
     }
     if ( bAddHint )
     {
-        sHelpText += "\n";
-        sHelpText += DBA_RES( STR_JOIN_TYPE_HINT );
+        sHelpText += "\n" + DBA_RES( STR_JOIN_TYPE_HINT );
     }
 
     m_xML_HelpText->set_label( sHelpText );

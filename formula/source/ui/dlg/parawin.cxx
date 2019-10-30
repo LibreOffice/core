@@ -119,8 +119,7 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
         {
             sal_uInt16 nRealArg = (nArg < aVisibleArgMapping.size()) ? aVisibleArgMapping[nArg] : nArg;
             aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
-            aArgName  = pFuncDesc->getParameterName(nRealArg);
-            aArgName += " ";
+            aArgName  = pFuncDesc->getParameterName(nRealArg) + " ";
             aArgName += (pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired ;
         }
         else if ( nArgs < PAIRED_VAR_ARGS )
@@ -134,9 +133,7 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
             sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
             if ( nArg >= nVarArgsStart )
                 aArgName += OUString::number( nArg-nVarArgsStart+1 );
-            aArgName += " ";
-
-            aArgName += (nArg > nFix || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired ;
+            aArgName += " " + ((nArg > nFix || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired) ;
         }
         else
         {
@@ -153,9 +150,7 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
             sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
             if ( nArg >= nVarArgsStart )
                 aArgName += OUString::number( (nArg-nVarArgsStart)/2 + 1 );
-            aArgName += " ";
-
-            aArgName += (nArg > (nFix+1) || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired ;
+            aArgName += " " + ((nArg > (nFix+1) || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired) ;
         }
 
         SetArgumentDesc(aArgDesc);

@@ -149,8 +149,7 @@ IMPL_LINK_NOARG(SvxPostItDialog, Stamp, weld::Button&, void)
     tools::Time aTime( tools::Time::SYSTEM );
     OUString aTmp( SvtUserOptions().GetID() );
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
-    OUString aStr( m_xEditED->get_text() );
-    aStr += "\n---- ";
+    OUString aStr( m_xEditED->get_text() + "\n---- " );
 
     if ( !aTmp.isEmpty() )
     {

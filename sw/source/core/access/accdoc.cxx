@@ -542,8 +542,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
             ";page-number:" +
             OUString::number( nPage ) +
             ";total-pages:";
-        sValue += OUString::number( pCursorShell->GetPageCnt() ) ;
-        sValue += ";";
+        sValue += OUString::number( pCursorShell->GetPageCnt() ) + ";";
 
         SwContentFrame* pCurrFrame = pCursorShell->GetCurrFrame();
         SwPageFrame* pCurrPage=static_cast<SwFrame*>(pCurrFrame)->FindPageFrame();

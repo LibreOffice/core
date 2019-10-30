@@ -1121,8 +1121,7 @@ void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext const & rMas
     try
     {
         uno::Reference< container::XNameAccess > xMasterPageStyles( rStyleFamilies->getByName(rMaster.GetDisplayName()), UNO_QUERY_THROW );
-        OUString sPrefix(rMaster.GetDisplayName());
-        sPrefix += "-";
+        OUString sPrefix(rMaster.GetDisplayName() + "-");
         ImpSetGraphicStyles(xMasterPageStyles, XML_STYLE_FAMILY_SD_PRESENTATION_ID, sPrefix);
     }
     catch (const uno::Exception&)

@@ -231,8 +231,7 @@ namespace sdr
 
             if (aDraftText.isEmpty())
             {
-                aDraftText = GetGrafObject().GetName();
-                aDraftText += " ...";
+                aDraftText = GetGrafObject().GetName() + " ...";
             }
 
             if (!aDraftText.isEmpty())

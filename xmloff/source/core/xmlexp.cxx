@@ -1470,8 +1470,7 @@ void SvXMLExport::ExportScripts_()
     // export Basic macros (only for FlatXML)
     if ( mnExportFlags & SvXMLExportFlags::EMBEDDED )
     {
-        OUString aValue( GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) );
-        aValue += ":Basic";
+        OUString aValue( GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) + ":Basic" );
         AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE, aValue );
 
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SCRIPT, true, true );

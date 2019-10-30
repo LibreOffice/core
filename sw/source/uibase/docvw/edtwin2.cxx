@@ -151,8 +151,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             switch( aContentAtPos.eContentAtPos )
             {
             case IsAttrAtPos::TableBoxFml:
-                sText = "= ";
-                sText += static_cast<const SwTableBoxFormula*>(aContentAtPos.aFnd.pAttr)->GetFormula();
+                sText = "= " + static_cast<const SwTableBoxFormula*>(aContentAtPos.aFnd.pAttr)->GetFormula();
                 break;
 #ifdef DBG_UTIL
             case IsAttrAtPos::TableBoxValue:

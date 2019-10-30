@@ -500,10 +500,8 @@ bool SdrItemBrowserControl::BeginChangeEntry(std::size_t nPos)
         OUString aNewName = aWNameMemorized + " ";
         aNewName += pEntry->GetItemTypeStr();
         if (pEntry->bCanNum) {
-            aNewName += ": ";
-            aNewName += OUString::number(pEntry->nMin);
-            aNewName += "..";
-            aNewName += OUString::number(pEntry->nMax);
+            aNewName += ": " + OUString::number(pEntry->nMin);
+            aNewName += ".." + OUString::number(pEntry->nMax);
         }
         aNewName += " - Type 'del' to reset to default.";
         pParent->SetText(aNewName);

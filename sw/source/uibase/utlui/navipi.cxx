@@ -964,8 +964,7 @@ void SwNavigationPI::UpdateListBox()
         // #i53333# don't show help pages here
         if ( !pDoc->IsHelpDocument() )
         {
-            OUString sEntry = pDoc->GetTitle();
-            sEntry += " (";
+            OUString sEntry = pDoc->GetTitle() + " (";
             if (pView == pActView)
             {
                 nAct = nCount;

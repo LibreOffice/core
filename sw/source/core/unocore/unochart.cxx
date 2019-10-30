@@ -244,8 +244,7 @@ static OUString GetCellRangeName( SwFrameFormat &rTableFormat, SwUnoCursor &rTab
         if (!pStartBox)
             return aRes;
 
-        aRes = pStartBox->GetName();
-        aRes += ":";
+        aRes = pStartBox->GetName() + ":";
         if (pEndBox)
             aRes += pEndBox->GetName();
         else
@@ -1732,8 +1731,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXML
         // does cell range consist of more than a single cell?
         if (!aCellRange.aLowerRight.bIsEmpty)
         {
-            aTmp += ":";
-            aTmp += sw_GetCellName( aCellRange.aLowerRight.nColumn,
+            aTmp += ":" + sw_GetCellName( aCellRange.aLowerRight.nColumn,
                                      aCellRange.aLowerRight.nRow );
         }
 

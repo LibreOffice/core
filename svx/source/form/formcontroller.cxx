@@ -3096,11 +3096,9 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         // do we already have the control ?
                         if (aRow.find(rFieldInfo.xText) != aRow.end())
                         {
-                            OUString aCompText = aRow[rFieldInfo.xText];
-                            aCompText += " ";
+                            OUString aCompText = aRow[rFieldInfo.xText] + " ";
                             OString aVal = m_pParser->getContext().getIntlKeywordAscii(IParseContext::InternationalKeyCode::And);
-                            aCompText += OUString(aVal.getStr(),aVal.getLength(),RTL_TEXTENCODING_ASCII_US);
-                            aCompText += " ";
+                            aCompText += OUString(aVal.getStr(),aVal.getLength(),RTL_TEXTENCODING_ASCII_US) + " ";
                             aCompText += ::comphelper::getString(rRefValue.Value);
                             aRow[rFieldInfo.xText] = aCompText;
                         }

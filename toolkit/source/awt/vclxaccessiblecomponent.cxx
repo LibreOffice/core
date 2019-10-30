@@ -611,9 +611,7 @@ OUString VCLXAccessibleComponent::getAccessibleName(  )
     {
         aName = GetWindow()->GetAccessibleName();
 #if OSL_DEBUG_LEVEL > 0
-        aName += " (Type = ";
-        aName += OUString::number(static_cast<sal_Int32>(GetWindow()->GetType()));
-        aName += ")";
+        aName += " (Type = " + OUString::number(static_cast<sal_Int32>(GetWindow()->GetType())) + ")";
 #endif
     }
     return aName;

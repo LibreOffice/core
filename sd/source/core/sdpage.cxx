@@ -1936,8 +1936,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
                         }
                         else if (pObj == GetPresObj(PRESOBJ_OUTLINE, 0))
                         {
-                            OUString aName(GetLayoutName());
-                            aName += " ";
+                            OUString aName(GetLayoutName() + " ");
 
                             for (sal_Int32 i=1; i<=9; i++)
                             {

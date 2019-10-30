@@ -526,8 +526,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
 
                 if (!aName.isEmpty())
                 {
-                    aName += " ";
-                    aName += mrOptimizerDialog.getString(STR_FILENAME_SUFFIX);
+                    aName += " " + mrOptimizerDialog.getString(STR_FILENAME_SUFFIX);
                     aFileOpenDialog.setDefaultName(aName);
                 }
 

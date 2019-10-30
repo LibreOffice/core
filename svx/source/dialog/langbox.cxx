@@ -44,8 +44,7 @@ OUString GetDicInfoStr( const OUString& rName, const LanguageType nLang, bool bN
     INetURLObject aURLObj;
     aURLObj.SetSmartProtocol( INetProtocol::File );
     aURLObj.SetSmartURL( rName, INetURLObject::EncodeMechanism::All );
-    OUString aTmp( aURLObj.GetBase() );
-    aTmp += " ";
+    OUString aTmp( aURLObj.GetBase() + " " );
 
     if ( bNeg )
     {
@@ -56,9 +55,7 @@ OUString GetDicInfoStr( const OUString& rName, const LanguageType nLang, bool bN
         aTmp += SvxResId(RID_SVXSTR_LANGUAGE_ALL);
     else
     {
-        aTmp += "[";
-        aTmp += SvtLanguageTable::GetLanguageString( nLang );
-        aTmp += "]";
+        aTmp += "[" + SvtLanguageTable::GetLanguageString( nLang ) + "]";
     }
 
     return aTmp;
@@ -340,14 +337,12 @@ weld::ComboBoxEntry SvxLanguageBox::BuildEntry(const LanguageType nLangType, sal
     if (nRealLang == LANGUAGE_SYSTEM)
     {
         nRealLang = MsLangId::resolveSystemLanguageByScriptType(nRealLang, nType);
-        aStrEntry += " - ";
-        aStrEntry += SvtLanguageTable::GetLanguageString( nRealLang );
+        aStrEntry += " - " + SvtLanguageTable::GetLanguageString( nRealLang );
     }
     else if (nRealLang == LANGUAGE_USER_SYSTEM_CONFIG)
     {
         nRealLang = MsLangId::getSystemLanguage();
-        aStrEntry += " - ";
-        aStrEntry += SvtLanguageTable::GetLanguageString( nRealLang );
+        aStrEntry += " - " + SvtLanguageTable::GetLanguageString( nRealLang );
     }
 
     if (m_bWithCheckmark)

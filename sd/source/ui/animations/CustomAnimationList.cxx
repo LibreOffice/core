@@ -151,8 +151,7 @@ OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText 
 
     if (bAppendIndex)
     {
-        aDescription += " ";
-        aDescription += OUString::number(getShapeIndex(xShape));
+        aDescription += " " + OUString::number(getShapeIndex(xShape));
     }
 
     if( bWithText )

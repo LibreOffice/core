@@ -1591,9 +1591,8 @@ void SdXMLExport::ImpWritePresentationStyles()
                     rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(*this, GetAutoStylePool().get()));
                     const rtl::Reference< SvXMLExportPropertyMapper > aMapperRef( GetPropertySetMapper() );
 
-                    OUString aPrefix( xNamed->getName() );
+                    OUString aPrefix( xNamed->getName() + "-" );
 
-                    aPrefix += "-";
                     aStEx->exportStyleFamily(xNamed->getName(),
                         OUString(XML_STYLE_FAMILY_SD_PRESENTATION_NAME),
                         aMapperRef, false,

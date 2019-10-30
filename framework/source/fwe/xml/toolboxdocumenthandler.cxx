@@ -178,8 +178,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::endDocument()
 
     if ( m_bToolBarStartFound )
     {
-        OUString aErrorMessage = getErrorLineString();
-        aErrorMessage += "No matching start or end element 'toolbar' found!";
+        OUString aErrorMessage = getErrorLineString() + "No matching start or end element 'toolbar' found!";
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
@@ -198,8 +197,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
             {
                 if ( m_bToolBarStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'toolbar:toolbar' cannot be embedded into 'toolbar:toolbar'!";
+                    OUString aErrorMessage = getErrorLineString() + "Element 'toolbar:toolbar' cannot be embedded into 'toolbar:toolbar'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
                 else
@@ -246,8 +244,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
             {
                 if ( !m_bToolBarStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'toolbar:toolbaritem' must be embedded into element 'toolbar:toolbar'!";
+                    OUString aErrorMessage = getErrorLineString() + "Element 'toolbar:toolbaritem' must be embedded into element 'toolbar:toolbar'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -256,8 +253,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                      m_bToolBarSpaceStartFound ||
                      m_bToolBarItemStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element toolbar:toolbaritem is not a container!";
+                    OUString aErrorMessage = getErrorLineString() + "Element toolbar:toolbaritem is not a container!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -297,8 +293,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                                     bVisible = false;
                                 else
                                 {
-                                    OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += "Attribute toolbar:visible must have value 'true' or 'false'!";
+                                    OUString aErrorMessage = getErrorLineString() + "Attribute toolbar:visible must have value 'true' or 'false'!";
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -346,8 +341,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
 
                 if ( !bAttributeURL )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Required attribute toolbar:url must have a value!";
+                    OUString aErrorMessage = getErrorLineString() + "Required attribute toolbar:url must have a value!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -390,8 +384,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                      m_bToolBarSpaceStartFound ||
                      m_bToolBarItemStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element toolbar:toolbarspace is not a container!";
+                    OUString aErrorMessage = getErrorLineString() + "Element toolbar:toolbarspace is not a container!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -415,8 +408,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                      m_bToolBarSpaceStartFound ||
                      m_bToolBarItemStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element toolbar:toolbarbreak is not a container!";
+                    OUString aErrorMessage = getErrorLineString() + "Element toolbar:toolbarbreak is not a container!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -440,8 +432,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                      m_bToolBarSpaceStartFound ||
                      m_bToolBarItemStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element toolbar:toolbarseparator is not a container!";
+                    OUString aErrorMessage = getErrorLineString() + "Element toolbar:toolbarseparator is not a container!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -477,8 +468,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::endElement(const OUString& aName)
             {
                 if ( !m_bToolBarStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "End element 'toolbar' found, but no start element 'toolbar'";
+                    OUString aErrorMessage = getErrorLineString() + "End element 'toolbar' found, but no start element 'toolbar'";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -490,8 +480,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::endElement(const OUString& aName)
             {
                 if ( !m_bToolBarItemStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "End element 'toolbar:toolbaritem' found, but no start element 'toolbar:toolbaritem'";
+                    OUString aErrorMessage = getErrorLineString() + "End element 'toolbar:toolbaritem' found, but no start element 'toolbar:toolbaritem'";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -503,8 +492,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::endElement(const OUString& aName)
             {
                 if ( !m_bToolBarBreakStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "End element 'toolbar:toolbarbreak' found, but no start element 'toolbar:toolbarbreak'";
+                    OUString aErrorMessage = getErrorLineString() + "End element 'toolbar:toolbarbreak' found, but no start element 'toolbar:toolbarbreak'";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -516,8 +504,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::endElement(const OUString& aName)
             {
                 if ( !m_bToolBarSpaceStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "End element 'toolbar:toolbarspace' found, but no start element 'toolbar:toolbarspace'";
+                    OUString aErrorMessage = getErrorLineString() + "End element 'toolbar:toolbarspace' found, but no start element 'toolbar:toolbarspace'";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -529,8 +516,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::endElement(const OUString& aName)
             {
                 if ( !m_bToolBarSeparatorStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "End element 'toolbar:toolbarseparator' found, but no start element 'toolbar:toolbarseparator'";
+                    OUString aErrorMessage = getErrorLineString() + "End element 'toolbar:toolbarseparator' found, but no start element 'toolbar:toolbarseparator'";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 

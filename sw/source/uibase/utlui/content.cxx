@@ -1932,8 +1932,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                          nLevel++ )
                     {
                         const SwNumberTree::tSwNumTreeNumber nVal = aNumVector[nLevel] + 1;
-                        sEntry += OUString::number( nVal - pOutlRule->Get(nLevel).GetStart() );
-                        sEntry += ".";
+                        sEntry += OUString::number( nVal - pOutlRule->Get(nLevel).GetStart() ) + ".";
                     }
                 }
                 sEntry += pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(nPos, pWrtShell->GetLayout(), false);

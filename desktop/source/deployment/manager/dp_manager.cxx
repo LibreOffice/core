@@ -622,8 +622,7 @@ OUString PackageManagerImpl::insertToActivationLayer(
     ::utl::TempFile aTemp(&baseDir, false);
     OUString tempEntry = aTemp.GetURL();
     tempEntry = tempEntry.copy(tempEntry.lastIndexOf('/') + 1);
-    OUString destFolder = makeURL( m_activePackages, tempEntry);
-    destFolder += "_";
+    OUString destFolder = makeURL( m_activePackages, tempEntry) + "_";
 
     // prepare activation folder:
     ::ucbhelper::Content destFolderContent;
