@@ -537,11 +537,11 @@ bool Converter::convertNumber64( sal_Int64& rValue,
     while( (nPos < nLen) && (rString[nPos] <= ' ') )
         nPos++;
 
-    OUStringBuffer sNumber;
+    sal_Int32 nNumberStartPos = nPos;
 
     if( nPos < nLen && '-' == rString[nPos] )
     {
-        sNumber.append(rString[nPos++]);
+        nPos++;
     }
 
     // get number
@@ -549,10 +549,10 @@ bool Converter::convertNumber64( sal_Int64& rValue,
            '0' <= rString[nPos] &&
            '9' >= rString[nPos] )
     {
-        sNumber.append(rString[nPos++]);
+        nPos++;
     }
 
-    rValue = sNumber.toString().toInt64();
+    rValue = rtl_ustr_toInt64_WithLength(rString.getStr() + nNumberStartPos, 10, nPos - nNumberStartPos);
 
     if( rValue < nMin )
         rValue = nMin;
@@ -952,18 +952,11 @@ readUnsignedNumber(const OUString & rString,
 {
     sal_Int32 nPos(io_rnPos);
 
-    OUStringBuffer aNumber;
     while (nPos < rString.getLength())
     {
         const sal_Unicode c = rString[nPos];
-        if (('0' <= c) && (c <= '9'))
-        {
-            aNumber.append(c);
-        }
-        else
-        {
+        if (!(('0' <= c) && (c <= '9')))
             break;
-        }
         ++nPos;
     }
 
@@ -973,7 +966,8 @@ readUnsignedNumber(const OUString & rString,
         return R_NOTHING;
     }
 
-    const sal_Int64 nTemp = aNumber.toString().toInt64();
+    const sal_Int64 nTemp = rtl_ustr_toInt64_WithLength(rString.getStr() + io_rnPos, 10, nPos - io_rnPos);
+
     const bool bOverflow = (nTemp >= SAL_MAX_INT32);
 
     io_rnPos = nPos;

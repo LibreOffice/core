@@ -783,6 +783,15 @@ SAL_DLLPUBLIC sal_uInt32 SAL_CALL rtl_str_toUInt32(
 SAL_DLLPUBLIC sal_Int64 SAL_CALL rtl_str_toInt64(
         const sal_Char * str, sal_Int16 radix ) SAL_THROW_EXTERN_C();
 
+/**
+  Same as the above, but taking a string length parameter.
+
+  @internal
+  @since LibreOffice 6.4
+*/
+SAL_DLLPUBLIC sal_Int64 SAL_CALL rtl_str_toInt64_WithLength(
+        const sal_Char * str, sal_Int16 radix, sal_Int32 nStrLength ) SAL_THROW_EXTERN_C();
+
 /** Interpret a string as an unsigned long integer.
 
     This function cannot be used for language-specific conversion.  The string

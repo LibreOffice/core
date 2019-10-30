@@ -1060,6 +1060,81 @@ namespace {
         else
             return static_cast<T>(n);
     }
+
+    template<typename T, typename U> T IMPL_RTL_STRNAME( toInt_WithLength )( const IMPL_RTL_STRCODE* pStr,
+                                                                  sal_Int16 nRadix,
+                                                                  sal_Int32 nStrLength )
+    {
+        static_assert(std::numeric_limits<T>::is_signed, "is signed");
+        assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
+        assert( nStrLength >= 0 );
+        bool    bNeg;
+        sal_Int16   nDigit;
+        U           n = 0;
+        const IMPL_RTL_STRCODE* pEnd = pStr + nStrLength;
+
+        if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
+            nRadix = 10;
+
+        /* Skip whitespaces */
+        while ( pStr != pEnd && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
+            pStr++;
+
+        if ( *pStr == '-' )
+        {
+            bNeg = true;
+            pStr++;
+        }
+        else
+        {
+            if ( *pStr == '+' )
+                pStr++;
+            bNeg = false;
+        }
+
+        T nDiv;
+        sal_Int16 nMod;
+        if ( bNeg )
+        {
+            nDiv = std::numeric_limits<T>::min() / nRadix;
+            nMod = std::numeric_limits<T>::min() % nRadix;
+            // Cater for C++03 implementations that round the quotient down
+            // instead of truncating towards zero as mandated by C++11:
+            if ( nMod > 0 )
+            {
+                --nDiv;
+                nMod -= nRadix;
+            }
+            nDiv = -nDiv;
+            nMod = -nMod;
+        }
+        else
+        {
+            nDiv = std::numeric_limits<T>::max() / nRadix;
+            nMod = std::numeric_limits<T>::max() % nRadix;
+        }
+
+        while ( pStr != pEnd )
+        {
+            nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
+            if ( nDigit < 0 )
+                break;
+            assert(nDiv > 0);
+            if( static_cast<U>( nMod < nDigit ? nDiv-1 : nDiv ) < n )
+                return 0;
+
+            n *= nRadix;
+            n += nDigit;
+
+            pStr++;
+        }
+
+        if ( bNeg )
+            return n == static_cast<U>(std::numeric_limits<T>::min())
+                ? std::numeric_limits<T>::min() : -static_cast<T>(n);
+        else
+            return static_cast<T>(n);
+    }
 }
 
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( toInt32 )( const IMPL_RTL_STRCODE* pStr,
@@ -1076,6 +1151,15 @@ sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
 {
     assert(pStr);
     return IMPL_RTL_STRNAME( toInt )<sal_Int64, sal_uInt64>(pStr, nRadix);
+}
+
+sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64_WithLength )( const IMPL_RTL_STRCODE* pStr,
+                                                sal_Int16 nRadix,
+                                                sal_Int32 nStrLength)
+    SAL_THROW_EXTERN_C()
+{
+    assert(pStr);
+    return IMPL_RTL_STRNAME( toInt_WithLength )<sal_Int64, sal_uInt64>(pStr, nRadix, nStrLength);
 }
 
 /* ----------------------------------------------------------------------- */
