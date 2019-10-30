@@ -337,15 +337,7 @@ void SkiaSalGraphicsImpl::SetROPLineColor(SalROPColor nROPColor) { (void)nROPCol
 
 void SkiaSalGraphicsImpl::SetROPFillColor(SalROPColor nROPColor) { (void)nROPColor; }
 
-void SkiaSalGraphicsImpl::drawPixel(long nX, long nY)
-{
-    if (mLineColor == SALCOLOR_NONE)
-        return;
-    preDraw();
-    SkCanvas* canvas = mSurface->getCanvas();
-    canvas->drawPoint(nX, nY, SkPaint());
-    postDraw();
-}
+void SkiaSalGraphicsImpl::drawPixel(long nX, long nY) { drawPixel(nX, nY, mLineColor); }
 
 void SkiaSalGraphicsImpl::drawPixel(long nX, long nY, Color nColor)
 {
