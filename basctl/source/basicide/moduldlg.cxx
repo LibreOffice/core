@@ -729,7 +729,7 @@ bool ObjectPage::GetSelection( ScriptDocument& rDocument, OUString& rLibName )
         if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
         {
             OUString aPassword;
-            bOK = QueryPassword( xModLibContainer, rLibName, aPassword );
+            bOK = QueryPassword(m_pDialog->getDialog(), xModLibContainer, rLibName, aPassword);
         }
 
         // load library

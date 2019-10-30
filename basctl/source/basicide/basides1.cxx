@@ -517,7 +517,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                     if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
                     {
                         OUString aPassword;
-                        bOK = QueryPassword( xModLibContainer, aLibName, aPassword );
+                        bOK = QueryPassword(rReq.GetFrameWeld(), xModLibContainer, aLibName, aPassword);
                     }
                 }
 
