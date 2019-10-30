@@ -3611,7 +3611,7 @@ public:
             aData.SetHeight(aSize.Height());
         }
 
-        return ImplWindowStateToStr(aData);
+        return aData.ToStr();
     }
 
     virtual void connect_toplevel_focus_changed(const Link<weld::Widget&, void>& rLink) override
