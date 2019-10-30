@@ -43,12 +43,12 @@ namespace toolkit
                                          css::util::XModifyListener
                                        > AnimatedImagesPeer_Base;
 
-    class AnimatedImagesPeer    :public AnimatedImagesPeer_Base
+    class AnimatedImagesPeer final : public AnimatedImagesPeer_Base
     {
     public:
         AnimatedImagesPeer();
 
-    protected:
+    private:
         virtual ~AnimatedImagesPeer() override;
 
     public:
@@ -75,15 +75,13 @@ namespace toolkit
         // XComponent
         void SAL_CALL dispose(  ) override;
 
-    protected:
+    private:
         void ProcessWindowEvent( const VclWindowEvent& i_windowEvent ) override;
 
-    private:
         /** updates our images with the ones from the given XAnimatedImages component
         */
         void    impl_updateImages_nolck( const css::uno::Reference< css::uno::XInterface >& i_animatedImages );
 
-    private:
         AnimatedImagesPeer(const AnimatedImagesPeer&) = delete;
         AnimatedImagesPeer& operator=(const AnimatedImagesPeer&) = delete;
 

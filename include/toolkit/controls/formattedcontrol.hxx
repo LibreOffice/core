@@ -101,7 +101,7 @@ namespace toolkit
 
     // = UnoFormattedFieldControl
 
-    class UnoFormattedFieldControl : public UnoSpinFieldControl
+    class UnoFormattedFieldControl final : public UnoSpinFieldControl
     {
     public:
                             UnoFormattedFieldControl();

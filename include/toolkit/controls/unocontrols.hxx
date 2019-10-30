@@ -74,9 +74,8 @@ public:
 
 //  class UnoControlEditModel
 
-class UnoControlEditModel : public UnoControlModel
+class UnoControlEditModel final : public UnoControlModel
 {
-protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
 
@@ -180,9 +179,8 @@ public:
 
 //  class UnoControlFileControlModel
 
-class UnoControlFileControlModel : public UnoControlModel
+class UnoControlFileControlModel final : public UnoControlModel
 {
-protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
@@ -207,7 +205,7 @@ public:
 
 //  class UnoFileControl
 
-class UnoFileControl : public UnoEditControl
+class UnoFileControl final : public UnoEditControl
 {
 public:
                         UnoFileControl();
@@ -250,9 +248,8 @@ private:
 
 //  class UnoControlButtonModel
 
-class UnoControlButtonModel : public GraphicControlModel
+class UnoControlButtonModel final : public GraphicControlModel
 {
-protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
@@ -283,7 +280,7 @@ typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
                                             ,   css::awt::XLayoutConstrains
                                             ,   css::awt::XItemListener
                                             >   UnoButtonControl_Base;
-class UnoButtonControl :    public UnoButtonControl_Base
+class UnoButtonControl final : public UnoButtonControl_Base
 {
 private:
     ActionListenerMultiplexer   maActionListeners;
@@ -329,12 +326,11 @@ public:
 
 //  class UnoControlImageControlModel
 
-class UnoControlImageControlModel : public GraphicControlModel
+class UnoControlImageControlModel final : public GraphicControlModel
 {
 private:
     bool    mbAdjustingImageScaleMode;
 
-protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
@@ -365,7 +361,7 @@ public:
 typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlBase
                                             ,   css::awt::XLayoutConstrains
                                             >   UnoImageControlControl_Base;
-class UnoImageControlControl : public UnoImageControlControl_Base
+class UnoImageControlControl final : public UnoImageControlControl_Base
 {
 private:
     ActionListenerMultiplexer   maActionListeners;
@@ -394,10 +390,8 @@ public:
 
 //  class UnoControlRadioButtonModel
 
-class UnoControlRadioButtonModel :  public GraphicControlModel
-
+class UnoControlRadioButtonModel final : public GraphicControlModel
 {
-protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
 
@@ -428,7 +422,7 @@ typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
                                             ,   css::awt::XItemListener
                                             ,   css::awt::XLayoutConstrains
                                             >   UnoRadioButtonControl_Base;
-class UnoRadioButtonControl : public UnoRadioButtonControl_Base
+class UnoRadioButtonControl final : public UnoRadioButtonControl_Base
 {
 private:
     ItemListenerMultiplexer     maItemListeners;
@@ -476,9 +470,8 @@ public:
 
 //  class UnoControlCheckBoxModel
 
-class UnoControlCheckBoxModel : public GraphicControlModel
+class UnoControlCheckBoxModel final : public GraphicControlModel
 {
-protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
 
@@ -509,7 +502,7 @@ typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
                                             ,   css::awt::XItemListener
                                             ,   css::awt::XLayoutConstrains
                                             >   UnoCheckBoxControl_Base;
-class UnoCheckBoxControl : public UnoCheckBoxControl_Base
+class UnoCheckBoxControl final : public UnoCheckBoxControl_Base
 {
 private:
     ItemListenerMultiplexer     maItemListeners;
@@ -559,9 +552,8 @@ public:
 
 //  class UnoControlFixedTextModel
 
-class UnoControlFixedHyperlinkModel : public UnoControlModel
+class UnoControlFixedHyperlinkModel final : public UnoControlModel
 {
-protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
 
@@ -584,7 +576,7 @@ public:
 
 //  class UnoFixedHyperlinkControl
 
-class UnoFixedHyperlinkControl : public UnoControlBase,
+class UnoFixedHyperlinkControl final : public UnoControlBase,
                                  public css::awt::XFixedHyperlink,
                                  public css::awt::XLayoutConstrains
 {
@@ -633,9 +625,8 @@ public:
 
 //  class UnoControlFixedTextModel
 
-class UnoControlFixedTextModel : public UnoControlModel
+class UnoControlFixedTextModel final : public UnoControlModel
 {
-protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
 
@@ -660,7 +651,7 @@ public:
 
 //  class UnoFixedTextControl
 
-class UnoFixedTextControl : public UnoControlBase,
+class UnoFixedTextControl final : public UnoControlBase,
                             public css::awt::XFixedText,
                             public css::awt::XLayoutConstrains
 {
@@ -700,9 +691,8 @@ public:
 
 //  class UnoControlGroupBoxModel
 
-class UnoControlGroupBoxModel : public UnoControlModel
+class UnoControlGroupBoxModel final : public UnoControlModel
 {
-protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
 
@@ -727,7 +717,7 @@ public:
 
 //  class UnoGroupBoxControl
 
-class UnoGroupBoxControl :  public UnoControlBase
+class UnoGroupBoxControl final : public UnoControlBase
 {
 public:
                         UnoGroupBoxControl();
@@ -927,9 +917,8 @@ private:
 
 //  class UnoControlComboBoxModel
 
-class UnoControlComboBoxModel : public UnoControlListBoxModel
+class UnoControlComboBoxModel final : public UnoControlListBoxModel
 {
-protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
 
@@ -956,7 +945,7 @@ public:
 
 //  class UnoComboBoxControl
 
-class UnoComboBoxControl :  public UnoEditControl
+class UnoComboBoxControl final :  public UnoEditControl
                         ,   public css::awt::XComboBox
                         ,   public css::awt::XItemListener
                         ,   public css::awt::XItemListListener
@@ -1014,7 +1003,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-protected:
+private:
     virtual void        ImplSetPeerProperty( const OUString& rPropName, const css::uno::Any& rVal ) override;
     virtual void        updateFromModel() override;
 
@@ -1061,9 +1050,8 @@ public:
 
 //  class UnoControlDateFieldModel
 
-class UnoControlDateFieldModel : public UnoControlModel
+class UnoControlDateFieldModel final : public UnoControlModel
 {
-protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
 
@@ -1088,7 +1076,7 @@ public:
 
 //  class UnoDateFieldControl
 
-class UnoDateFieldControl : public UnoSpinFieldControl,
+class UnoDateFieldControl final : public UnoSpinFieldControl,
                             public css::awt::XDateField
 {
 private:
@@ -1140,9 +1128,8 @@ public:
 
 //  class UnoControlTimeFieldModel
 
-class UnoControlTimeFieldModel : public UnoControlModel
+class UnoControlTimeFieldModel final : public UnoControlModel
 {
-protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
 
@@ -1167,7 +1154,7 @@ public:
 
 //  class UnoTimeFieldControl
 
-class UnoTimeFieldControl : public UnoSpinFieldControl,
+class UnoTimeFieldControl final : public UnoSpinFieldControl,
                             public css::awt::XTimeField
 {
 private:
@@ -1217,9 +1204,8 @@ public:
 
 //  class UnoControlNumericFieldModel
 
-class UnoControlNumericFieldModel : public UnoControlModel
+class UnoControlNumericFieldModel final : public UnoControlModel
 {
-protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
 
@@ -1244,7 +1230,7 @@ public:
 
 //  class UnoNumericFieldControl
 
-class UnoNumericFieldControl :  public UnoSpinFieldControl,
+class UnoNumericFieldControl final : public UnoSpinFieldControl,
                                 public css::awt::XNumericField
 {
 private:
@@ -1296,9 +1282,8 @@ public:
 
 //  class UnoControlCurrencyFieldModel
 
-class UnoControlCurrencyFieldModel : public UnoControlModel
+class UnoControlCurrencyFieldModel final : public UnoControlModel
 {
-protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
 
@@ -1323,7 +1308,7 @@ public:
 
 //  class UnoCurrencyFieldControl
 
-class UnoCurrencyFieldControl : public UnoSpinFieldControl,
+class UnoCurrencyFieldControl final : public UnoSpinFieldControl,
                                 public css::awt::XCurrencyField
 {
 private:
@@ -1375,9 +1360,8 @@ public:
 
 //  class UnoControlPatternFieldModel
 
-class UnoControlPatternFieldModel : public UnoControlModel
+class UnoControlPatternFieldModel final : public UnoControlModel
 {
-protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
 
@@ -1402,10 +1386,9 @@ public:
 
 //  class UnoPatternFieldControl
 
-class UnoPatternFieldControl :  public UnoSpinFieldControl,
+class UnoPatternFieldControl final : public UnoSpinFieldControl,
                                 public css::awt::XPatternField
 {
-protected:
     void            ImplSetPeerProperty( const OUString& rPropName, const css::uno::Any& rVal ) override;
 
 public:
@@ -1438,9 +1421,8 @@ public:
 
 //  class UnoControlProgressBarModel
 
-class UnoControlProgressBarModel :  public UnoControlModel
+class UnoControlProgressBarModel final : public UnoControlModel
 {
-protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
 
@@ -1465,7 +1447,7 @@ public:
 
 //  class UnoProgressBarControl
 
-class UnoProgressBarControl :   public UnoControlBase,
+class UnoProgressBarControl final : public UnoControlBase,
                                 public css::awt::XProgressBar
 {
 public:
@@ -1497,9 +1479,8 @@ public:
 
 //  class UnoControlFixedLineModel
 
-class UnoControlFixedLineModel : public UnoControlModel
+class UnoControlFixedLineModel final : public UnoControlModel
 {
-protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
 
@@ -1524,7 +1505,7 @@ public:
 
 //  class UnoFixedLineControl
 
-class UnoFixedLineControl : public UnoControlBase
+class UnoFixedLineControl final : public UnoControlBase
 {
 public:
                         UnoFixedLineControl();

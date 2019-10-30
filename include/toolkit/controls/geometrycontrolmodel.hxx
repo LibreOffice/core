@@ -169,7 +169,7 @@ namespace com { namespace sun { namespace star {
             Reference< XAggregation > xIFace = new ::toolkit::OGeometryControlModel< UnoControlButtonModel > ();
     */
     template <class CONTROLMODEL>
-    class OGeometryControlModel
+    class OGeometryControlModel final
         :public OGeometryControlModel_Base
         ,public ::comphelper::OAggregationArrayUsageHelper< OTemplateInstanceDisambiguation< CONTROLMODEL > >
     {
@@ -179,7 +179,6 @@ namespace com { namespace sun { namespace star {
     private:
         OGeometryControlModel(css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance);
 
-    protected:
         // OAggregationArrayUsageHelper overridables
         virtual void fillProperties(
             css::uno::Sequence< css::beans::Property >& _rProps,
@@ -203,7 +202,7 @@ namespace com { namespace sun { namespace star {
     /** allows to extend an arbitrary com.sun.star.awt::UnoControlModel with geometry
         information.
     */
-    class OCommonGeometryControlModel
+    class OCommonGeometryControlModel final
         :public OGeometryControlModel_Base
         ,public ::comphelper::OIdPropertyArrayUsageHelper< OCommonGeometryControlModel >
     {

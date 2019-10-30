@@ -31,7 +31,7 @@
 namespace toolkit
 {
 
-class ScriptEventContainer : public ::cppu::WeakImplHelper<
+class ScriptEventContainer final : public ::cppu::WeakImplHelper<
                                         css::container::XNameContainer,
                                         css::container::XContainer >
 {

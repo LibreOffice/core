@@ -24,9 +24,8 @@
 #include <com/sun/star/awt/tab/XTabPage.hpp>
 #include <cppuhelper/implbase2.hxx>
 
-class UnoControlTabPageModel :  public ControlModelContainerBase
+class UnoControlTabPageModel final : public ControlModelContainerBase
 {
-protected:
     css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper() override;
 public:
@@ -53,7 +52,7 @@ typedef ::cppu::AggImplInheritanceHelper2   <   ControlContainerBase
                                             ,   css::awt::tab::XTabPage
                                             ,   css::awt::XWindowListener
                                             >   UnoControlTabPage_Base;
-class UnoControlTabPage : public UnoControlTabPage_Base
+class UnoControlTabPage final : public UnoControlTabPage_Base
 {
 private:
     bool            m_bWindowListener;

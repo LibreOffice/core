@@ -35,7 +35,7 @@ namespace toolkit
     typedef ::cppu::ImplHelper1 <   css::awt::XSpinValue
                                 >   VCLXSpinButton_Base;
 
-    class VCLXSpinButton :public VCLXWindow
+    class VCLXSpinButton final : public VCLXWindow
                          ,public VCLXSpinButton_Base
     {
     private:
@@ -44,7 +44,7 @@ namespace toolkit
     public:
         VCLXSpinButton();
 
-    protected:
+    private:
         virtual ~VCLXSpinButton( ) override;
 
         // XInterface
@@ -78,7 +78,6 @@ namespace toolkit
         // VCLXWindow
         void ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent ) override;
 
-    private:
         VCLXSpinButton( const VCLXSpinButton& ) = delete;
         VCLXSpinButton& operator=( const VCLXSpinButton& ) = delete;
     };

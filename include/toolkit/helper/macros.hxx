@@ -32,7 +32,7 @@ css::uno::Sequence< sal_Int8 > ClassName::getImplementationId() \
 
 
 #define DECL_LISTENERMULTIPLEXER_START( ClassName, InterfaceName ) \
-class ClassName : public ListenerMultiplexerBase, public InterfaceName \
+class ClassName final : public ListenerMultiplexerBase, public InterfaceName \
 { \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
@@ -43,7 +43,7 @@ public: \
 
 
 #define DECL_LISTENERMULTIPLEXER_START_DLLPUB( ClassName, InterfaceName ) \
-class TOOLKIT_DLLPUBLIC ClassName : public ListenerMultiplexerBase, public InterfaceName \
+class TOOLKIT_DLLPUBLIC ClassName final : public ListenerMultiplexerBase, public InterfaceName \
 { \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \

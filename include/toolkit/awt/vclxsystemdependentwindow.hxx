@@ -26,7 +26,7 @@
 
 #include <toolkit/awt/vclxwindow.hxx>
 
-class TOOLKIT_DLLPUBLIC VCLXSystemDependentWindow : public css::awt::XSystemDependentWindowPeer,
+class TOOLKIT_DLLPUBLIC VCLXSystemDependentWindow final : public css::awt::XSystemDependentWindowPeer,
                                                     public VCLXWindow
 {
 public:
