@@ -377,7 +377,7 @@ void ShapeController::executeDispatch_TransformDialog()
                 SfxItemSet aGeoAttr( pDrawViewWrapper->GetGeoAttrFromMarked() );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 ScopedVclPtr< SfxAbstractTabDialog > pDlg(
-                    pFact->CreateSvxTransformTabDialog(pChartWindow ? pChartWindow->GetFrameWeld() : nullptr, &aGeoAttr, pDrawViewWrapper));
+                    pFact->CreateSvxTransformTabDialog(pChartWindow->GetFrameWeld(), &aGeoAttr, pDrawViewWrapper));
                 if ( pDlg->Execute() == RET_OK )
                 {
                     const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
