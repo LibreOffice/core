@@ -190,8 +190,6 @@
                             <property name="max_length">10</property>
                             <property name="activates_default">True</property>
                             <property name="width_chars">4</property>
-                            <property name="progress_fraction">0.0099999997764825821</property>
-                            <property name="progress_pulse_step">0.090000003576278687</property>
                             <accessibility>
                               <relation type="labelled-by" target="character"/>
                             </accessibility>

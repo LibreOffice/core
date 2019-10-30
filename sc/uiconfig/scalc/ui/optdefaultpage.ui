@@ -79,8 +79,6 @@
                     <property name="halign">start</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
-                    <property name="climb_rate">1</property>
-                    <property name="update_policy">if-valid</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>

@@ -143,7 +143,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
-                        <property name="climb_rate">0.01</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>

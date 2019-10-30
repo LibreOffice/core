@@ -129,7 +129,6 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">columns_value</property>
-                <property name="climb_rate">1</property>
                 <property name="snap_to_ticks">True</property>
                 <property name="numeric">True</property>
               </object>

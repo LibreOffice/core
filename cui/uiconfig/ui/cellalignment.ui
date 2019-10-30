@@ -104,7 +104,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
-                        <property name="progress_pulse_step">1</property>
                         <property name="adjustment">adjustmentSpinDegrees</property>
                         <property name="wrap">True</property>
                       </object>
@@ -366,7 +365,6 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentIndent</property>
-                    <property name="climb_rate">1</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
