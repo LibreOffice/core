@@ -49,6 +49,23 @@ DECLARE_OOXMLIMPORT_TEST(testTdf125038, "tdf125038.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("phone: \t1234567890"), aActual);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf125038b, "tdf125038b.docx")
+{
+    // Load a document with an IF field, where the IF field command contains a paragraph break.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraphAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphAccess->createEnumeration();
+    CPPUNIT_ASSERT(xParagraphs->hasMoreElements());
+    xParagraphs->nextElement();
+    CPPUNIT_ASSERT(xParagraphs->hasMoreElements());
+    xParagraphs->nextElement();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expression: !xParagraphs->hasMoreElements()
+    // i.e. the document had 3 paragraphs, while only 2 was expected.
+    CPPUNIT_ASSERT(!xParagraphs->hasMoreElements());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

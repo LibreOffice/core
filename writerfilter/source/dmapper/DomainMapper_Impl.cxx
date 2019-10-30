@@ -1250,6 +1250,21 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 {
     if (m_bDiscardHeaderFooter)
         return;
+
+    if (!m_aFieldStack.empty())
+    {
+        FieldContextPtr pFieldContext = m_aFieldStack.back();
+        if (pFieldContext && !pFieldContext->IsCommandCompleted())
+        {
+            std::vector<OUString> aCommandParts = pFieldContext->GetCommandParts();
+            if (!aCommandParts.empty() && aCommandParts[0] == "IF")
+            {
+                // Conditional text field conditions don't support linebreaks in Writer.
+                return;
+            }
+        }
+    }
+
 #ifdef DBG_UTIL
     TagLogger::getInstance().startElement("finishParagraph");
 #endif
