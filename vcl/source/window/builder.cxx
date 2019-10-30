@@ -1748,9 +1748,11 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         // WB_ALLOWMENUBAR because we don't know in advance if we will encounter
         // a menubar, and menubars need a BorderWindow in the toplevel, and
         // such border windows need to be in created during the dialog ctor
-        WinBits nBits = WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE|WB_ALLOWMENUBAR;
+        WinBits nBits = WB_MOVEABLE|WB_3DLOOK|WB_ALLOWMENUBAR;
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
+        if (extractCloseable(rMap))
+            nBits |= WB_CLOSEABLE;
         Dialog::InitFlag eInit = !pParent ? Dialog::InitFlag::NoParent : Dialog::InitFlag::Default;
         if (name == "GtkAssistant")
             xWindow = VclPtr<vcl::RoadmapWizard>::Create(pParent, nBits, eInit);
