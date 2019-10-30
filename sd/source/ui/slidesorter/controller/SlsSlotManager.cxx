@@ -886,6 +886,8 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
     OUString aTitle;
     if( rRequest.GetSlot() == SID_RENAME_MASTER_PAGE )
         aTitle = SdResId( STR_TITLE_RENAMEMASTER );
+    else if (pDrView && pDrView->GetDoc().GetDocumentType() == DocumentType::Draw)
+        aTitle = SdResId( STR_TITLE_RENAMEPAGE );
     else
         aTitle = SdResId( STR_TITLE_RENAMESLIDE );
 
@@ -897,7 +899,7 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
        OUString aName = rRequest.GetArgs()->GetItem<const SfxStringItem>(SID_RENAMEPAGE)->GetValue();
 
        bool bResult =  RenameSlideFromDrawViewShell(pSelectedPage->GetPageNum()/2, aName );
-       DBG_ASSERT( bResult, "Couldn't rename slide" );
+       DBG_ASSERT( bResult, "Couldn't rename slide or page" );
     }
     else
     {
@@ -921,7 +923,7 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
                 bool bResult =
                         RenameSlideFromDrawViewShell(
                           pSelectedPage->GetPageNum()/2, aNewName );
-                DBG_ASSERT( bResult, "Couldn't rename slide" );
+                DBG_ASSERT( bResult, "Couldn't rename slide or page" );
             }
         }
         OUString aNewName;
