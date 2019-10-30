@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_4081f449",
+        "filename": "oox/source/vml/vmlinputstream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-10-30T09:54:31Z",
+      "side": 1,
+      "message": "looks like this is only adding the \"?\" at the end of the PI and i\u0027m thinking this means that lclProcessAttribs is called with a string like \"? foo\u003d\u0027bar\u0027\" which doesn\u0027t look ideal and if it works then only by accident - maybe just skip the lclProcessAttribs in this case?",
+      "revId": "5538d623a3535df5a9682228ee66c145661eca31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
