@@ -650,8 +650,7 @@ sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
           && GetMediaDescr().find( OUString("VersionComment") ) == GetMediaDescr().end() )
         {
             // notify the user that SaveAs is going to be done
-            vcl::Window* pWin = SfxStoringHelper::GetModelWindow(m_xModel);
-            std::unique_ptr<weld::MessageDialog> xMessageBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+            std::unique_ptr<weld::MessageDialog> xMessageBox(Application::CreateMessageDialog(SfxStoringHelper::GetModelWindow(m_xModel),
                                                              VclMessageType::Question, VclButtonsType::OkCancel, SfxResId(STR_NEW_FILENAME_SAVE)));
             if (xMessageBox->run() == RET_OK)
                 nResult = STATUS_SAVEAS;
@@ -848,8 +847,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
 
     SfxFilterFlags nMust = getMustFlags( nStoreMode );
     SfxFilterFlags nDont = getDontFlags( nStoreMode );
-    vcl::Window* pWin = SfxStoringHelper::GetModelWindow( m_xModel );
-    weld::Window* pFrameWin = pWin ? pWin->GetFrameWeld() : nullptr;
+    weld::Window* pFrameWin = SfxStoringHelper::GetModelWindow(m_xModel);
     if ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
         if ( ( nStoreMode & PDFEXPORT_REQUESTED ) && !aPreselectedFilterPropsHM.empty() )
@@ -1390,8 +1388,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
            || SignatureState::NOTVALIDATED == nDocumentSignatureState
            || SignatureState::PARTIAL_OK == nDocumentSignatureState)
         {
-            vcl::Window* pWin = SfxStoringHelper::GetModelWindow( xModel );
-            std::unique_ptr<weld::MessageDialog> xMessageBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+            std::unique_ptr<weld::MessageDialog> xMessageBox(Application::CreateMessageDialog(SfxStoringHelper::GetModelWindow(xModel),
                                                              VclMessageType::Question, VclButtonsType::YesNo, SfxResId(RID_SVXSTR_XMLSEC_QUERY_LOSINGSIGNATURE)));
             if (xMessageBox->run() != RET_YES)
             {
@@ -1796,8 +1793,8 @@ bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XMod
     if ( !SvtSaveOptions().IsWarnAlienFormat() )
         return true;
 
-    vcl::Window* pWin = SfxStoringHelper::GetModelWindow( xModel );
-    SfxAlienWarningDialog aDlg(pWin ? pWin->GetFrameWeld() : nullptr, aOldUIName, aDefExtension, bDefIsAlien);
+    weld::Window* pWin = SfxStoringHelper::GetModelWindow(xModel);
+    SfxAlienWarningDialog aDlg(pWin, aOldUIName, aDefExtension, bDefIsAlien);
 
     return aDlg.run() == RET_OK;
 }
@@ -1825,20 +1822,15 @@ uno::Reference<awt::XWindow> SfxStoringHelper::GetModelXWindow(const uno::Refere
     return uno::Reference<awt::XWindow>();
 }
 
-vcl::Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XModel >& xModel )
+weld::Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XModel >& xModel )
 {
-    VclPtr<vcl::Window> pWin;
+    weld::Window* pWin = nullptr;
 
-    try {
-        uno::Reference<awt::XWindow> xWindow = GetModelXWindow(xModel);
-        if ( xWindow.is() )
-        {
-            VCLXWindow* pVCLWindow = comphelper::getUnoTunnelImplementation<VCLXWindow>( xWindow );
-            if ( pVCLWindow )
-                pWin = pVCLWindow->GetWindow();
-        }
+    try
+    {
+        pWin = Application::GetFrameWeld(GetModelXWindow(xModel));
     }
-    catch ( const uno::Exception& )
+    catch (const uno::Exception&)
     {
     }
 

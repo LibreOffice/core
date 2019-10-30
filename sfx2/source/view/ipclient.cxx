@@ -878,8 +878,7 @@ sal_Int64 SfxInPlaceClient::GetAspect() const
 
 ErrCode SfxInPlaceClient::DoVerb( long nVerb )
 {
-    vcl::Window* pWin = m_pViewSh->GetWindow();
-    SfxErrorContext aEc(ERRCTX_SO_DOVERB, pWin ? pWin->GetFrameWeld() : nullptr, RID_SO_ERRCTX);
+    SfxErrorContext aEc(ERRCTX_SO_DOVERB, m_pViewSh->GetFrameWeld(), RID_SO_ERRCTX);
     ErrCode nError = ERRCODE_NONE;
 
     if ( m_xImp->m_xObject.is() )
