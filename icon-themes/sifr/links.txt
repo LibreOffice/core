@@ -1659,7 +1659,7 @@ sw/res/sr20007.png cmd/sc_insertsection.png
 sw/res/sr20008.png cmd/sc_insertbookmark.png
 sw/res/sr20009.png cmd/sc_insertgraphic.png
 sw/res/sr20010.png cmd/sc_objectmenue.png
-sw/res/sr20011.png cmd/sc_editheaderandfooter.png
+sw/res/sr20011.png sw/res/nc20000.png
 sw/res/sr20013.png cmd/sc_insertfootnote.png
 sw/res/sr20014.png sw/res/sc20183.png
 sw/res/sr20015.png cmd/sc_shownote.png
