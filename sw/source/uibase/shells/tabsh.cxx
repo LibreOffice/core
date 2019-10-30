@@ -1123,6 +1123,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 std::unique_ptr<SwFormatFrameSize> pHeight = rSh.GetRowHeight();
                 if ( pHeight )
                 {
+                    if (pHeight->GetHeightSizeType() == ATT_VAR_SIZE)
+                        pHeight->SetHeightSizeType(ATT_MIN_SIZE);
                     pHeight->SetHeight(nNewHeight);
                     rSh.SetRowHeight(*pHeight);
                 }
