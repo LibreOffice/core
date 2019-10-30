@@ -492,7 +492,6 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment6</property>
-                    <property name="climb_rate">1</property>
                     <property name="numeric">True</property>
                     <accessibility>
                       <relation type="labelled-by" target="checkWidow"/>

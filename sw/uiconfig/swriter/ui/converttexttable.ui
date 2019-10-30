@@ -341,9 +341,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
                                 <property name="shadow_type">out</property>
-                                <property name="progress_pulse_step">1</property>
                                 <property name="adjustment">adjustment1</property>
-                                <property name="update_policy">if-valid</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
