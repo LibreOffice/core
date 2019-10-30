@@ -278,8 +278,12 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     // 2. Create a new page or duplicate an existing one.
     View* pDrView = GetView();
     const bool bUndo = pDrView && pDrView->IsUndoEnabled();
-    if( bUndo )
+    if( bUndo && GetDoc()->GetDocumentType() == DocumentType::Draw)
+        pDrView->BegUndo(SdResId(STR_INSERT_PAGE_DRAW));
+    else if (bUndo)
         pDrView->BegUndo(SdResId(STR_INSERTPAGE));
+
+
 
     sal_uInt16 nNewPageIndex = 0xffff;
     switch (nSId)
