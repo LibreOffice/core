@@ -177,6 +177,9 @@ private:
     DocumentContentOperationsManager& operator=(DocumentContentOperationsManager const&) = delete;
 };
 
+
+void CopyBookmarks(const SwPaM& rPam, SwPosition& rTarget);
+
 }
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTCONTENTOPERATIONSMANAGER_HXX
