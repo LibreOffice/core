@@ -145,6 +145,8 @@ class VCL_DLLPUBLIC GraphicDescriptor final
     GraphicFileFormat   nFormat;
     bool const          bOwnStream;
     sal_uInt8 mnNumberOfImageComponents;
+    bool                bIsTransparent;
+    bool                bIsAlpha;
 
     void                ImpConstruct();
 
@@ -213,6 +215,12 @@ public:
 
     /** @return number of color channels */
     sal_uInt8 GetNumberOfImageComponents() const { return mnNumberOfImageComponents; }
+
+    /** @return whether image supports transparency */
+    bool IsTransparent() const { return bIsTransparent; }
+
+    /** @return whether image supports alpha values for translucent colours */
+    bool IsAlpha() const { return bIsAlpha; }
 
     /** @return filter number that is needed by the GraphFilter to read this format */
     static OUString GetImportFormatShortName( GraphicFileFormat nFormat );

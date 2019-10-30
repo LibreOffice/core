@@ -99,6 +99,8 @@ void GraphicDescriptor::ImpConstruct()
     nBitsPerPixel = 0;
     nPlanes = 0;
     mnNumberOfImageComponents = 0;
+    bIsTransparent = false;
+    bIsAlpha = false;
 }
 
 bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
@@ -548,6 +550,11 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
                 rStm.ReadUChar( cByte );
                 nBitsPerPixel = cByte;
 
+                // Colour type - check whether it supports alpha values
+                sal_uInt8 cColType = 0;
+                rStm.ReadUChar( cColType );
+                bIsAlpha = bIsTransparent = ( cColType == 4 || cColType == 6 );
+
                 // Planes always 1;
                 // compression always
                 nPlanes = 1;
@@ -555,46 +562,53 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
                 sal_uInt32  nLen32 = 0;
                 nTemp32 = 0;
 
-                rStm.SeekRel( 8 );
+                rStm.SeekRel( 7 );
 
-                // read up to the pHYs-Chunk or the start of the image
+                // read up to the start of the image
                 rStm.ReadUInt32( nLen32 );
                 rStm.ReadUInt32( nTemp32 );
-                while( ( nTemp32 != 0x70485973 ) && ( nTemp32 != 0x49444154 )
-                       && rStm.good() )
+                while( ( nTemp32 != 0x49444154 ) && rStm.good() )
                 {
+                    if ( nTemp32 == 0x70485973 ) // physical pixel dimensions
+                    {
+                        sal_uLong   nXRes;
+                        sal_uLong   nYRes;
+
+                        // horizontal resolution
+                        nTemp32 = 0;
+                        rStm.ReadUInt32( nTemp32 );
+                        nXRes = nTemp32;
+
+                        // vertical resolution
+                        nTemp32 = 0;
+                        rStm.ReadUInt32( nTemp32 );
+                        nYRes = nTemp32;
+
+                        // unit
+                        cByte = 0;
+                        rStm.ReadUChar( cByte );
+
+                        if ( cByte )
+                        {
+                            if ( nXRes )
+                                aLogSize.setWidth( (aPixSize.Width() * 100000) / nXRes );
+
+                            if ( nYRes )
+                                aLogSize.setHeight( (aPixSize.Height() * 100000) / nYRes );
+                        }
+
+                        nLen32 -= 9;
+                    }
+                    else if ( nTemp32 == 0x74524e53 ) // transparency
+                    {
+                        bIsTransparent = true;
+                        bIsAlpha = ( cColType != 0 && cColType != 2 );
+                    }
+
+                    // skip forward to next chunk
                     rStm.SeekRel( 4 + nLen32 );
                     rStm.ReadUInt32( nLen32 );
                     rStm.ReadUInt32( nTemp32 );
-                }
-
-                if (nTemp32 == 0x70485973 && rStm.good())
-                {
-                    sal_uLong   nXRes;
-                    sal_uLong   nYRes;
-
-                    // horizontal resolution
-                    nTemp32 = 0;
-                    rStm.ReadUInt32( nTemp32 );
-                    nXRes = nTemp32;
-
-                    // vertical resolution
-                    nTemp32 = 0;
-                    rStm.ReadUInt32( nTemp32 );
-                    nYRes = nTemp32;
-
-                    // unit
-                    cByte = 0;
-                    rStm.ReadUChar( cByte );
-
-                    if ( cByte )
-                    {
-                        if ( nXRes )
-                            aLogSize.setWidth( (aPixSize.Width() * 100000) / nXRes );
-
-                        if ( nYRes )
-                            aLogSize.setHeight( (aPixSize.Height() * 100000) / nYRes );
-                    }
                 }
             }
         }
