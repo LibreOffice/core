@@ -109,6 +109,7 @@ private:
     // layout settings
     std::unique_ptr<weld::Label> m_xPageText;
     std::unique_ptr<weld::ComboBox> m_xLayoutBox;
+    std::unique_ptr<weld::Label> m_xNumberFormatText;
     std::unique_ptr<SvxPageNumberListBox> m_xNumberFormatBox;
     //Extras Calc
     std::unique_ptr<weld::Label> m_xTblAlignFT;

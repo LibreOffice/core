@@ -26,6 +26,8 @@
 #include <sfx2/sfxdlg.hxx>
 
 #include <dlgpage.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
 
 #include <svl/aeitem.hxx>
 #include <svx/flagsdef.hxx>
@@ -33,10 +35,12 @@
 /**
  * Constructor of tab dialog: appends pages to the dialog
  */
-SdPageDlg::SdPageDlg(SfxObjectShell const * pDocSh, weld::Window* pParent, const SfxItemSet* pAttr, bool bAreaPage)
+SdPageDlg::SdPageDlg(SfxObjectShell const * pDocSh, weld::Window* pParent, const SfxItemSet* pAttr, bool bAreaPage, bool bIsImpressDoc)
     : SfxTabDialogController(pParent, "modules/sdraw/ui/drawpagedialog.ui", "DrawPageDialog", pAttr)
     , mpDocShell(pDocSh)
+    , mbIsImpressDoc(bIsImpressDoc)
 {
+
     SvxColorListItem const * pColorListItem = mpDocShell->GetItem( SID_COLOR_TABLE );
     SvxGradientListItem const * pGradientListItem = mpDocShell->GetItem( SID_GRADIENT_LIST );
     SvxBitmapListItem const * pBitmapListItem = mpDocShell->GetItem( SID_BITMAP_LIST );
@@ -60,6 +64,12 @@ SdPageDlg::SdPageDlg(SfxObjectShell const * pDocSh, weld::Window* pParent, const
         RemoveTabPage("RID_SVXPAGE_AREA");
         RemoveTabPage("RID_SVXPAGE_TRANSPARENCE");
     }
+
+    if (mbIsImpressDoc)
+    {
+        set_title(SdResId(STR_SLIDE_SETUP_TITLE));
+        m_xTabCtrl->set_tab_label_text("RID_SVXPAGE_PAGE", SdResId(STR_SLIDE_NAME));
+    }
 }
 
 void SdPageDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
@@ -70,6 +80,10 @@ void SdPageDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
         aSet.Put (SfxUInt16Item(sal_uInt16(SID_ENUM_PAGE_MODE), SVX_PAGE_MODE_PRESENTATION));
         aSet.Put (SfxUInt16Item(SID_PAPER_START, PAPER_A0));
         aSet.Put (SfxUInt16Item(SID_PAPER_END, PAPER_E));
+
+        if (mbIsImpressDoc)
+            aSet.Put(SfxBoolItem(SID_IMPRESS_DOC, true));
+
         rPage.PageCreated(aSet);
     }
     else if (rId == "RID_SVXPAGE_AREA")

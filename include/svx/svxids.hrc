@@ -987,8 +987,10 @@ class SvxSetItem;
 #define SID_EDIT_QRCODE                                 ( SID_SVX_START + 1192 )
 #define SID_COPY_HYPERLINK_LOCATION                     ( SID_SVX_START + 1193 )
 
+#define SID_IMPRESS_DOC                                 TypedWhichId<SfxBoolItem>( SID_SVX_START + 1194 )
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1193 + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1194 + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END
