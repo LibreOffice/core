@@ -43,7 +43,7 @@ namespace ucbhelper {
   * @see InteractionApproved
   * @see InteractionRetry
   */
-class UCBHELPER_DLLPUBLIC SimpleCertificateValidationRequest : public ucbhelper::InteractionRequest
+class UCBHELPER_DLLPUBLIC SimpleCertificateValidationRequest final : public ucbhelper::InteractionRequest
 {
 public:
     /**

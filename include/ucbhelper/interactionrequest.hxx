@@ -155,7 +155,7 @@ public:
   * along with an interaction request to indicate the possibility to abort
   * the operation that caused the request.
   */
-class UCBHELPER_DLLPUBLIC InteractionAbort : public InteractionContinuation,
+class UCBHELPER_DLLPUBLIC InteractionAbort final : public InteractionContinuation,
                          public css::lang::XTypeProvider,
                          public css::task::XInteractionAbort
 {
@@ -188,7 +188,7 @@ public:
   * along with an interaction request to indicate the possibility to retry
   * the operation that caused the request.
   */
-class UCBHELPER_DLLPUBLIC InteractionRetry : public InteractionContinuation,
+class UCBHELPER_DLLPUBLIC InteractionRetry final : public InteractionContinuation,
                          public css::lang::XTypeProvider,
                          public css::task::XInteractionRetry
 {
@@ -221,7 +221,7 @@ public:
   * along with an interaction request to indicate the possibility to approve
   * the request.
   */
-class UCBHELPER_DLLPUBLIC InteractionApprove : public InteractionContinuation,
+class UCBHELPER_DLLPUBLIC InteractionApprove final : public InteractionContinuation,
                            public css::lang::XTypeProvider,
                            public css::task::XInteractionApprove
 {
@@ -254,7 +254,7 @@ public:
   * along with an interaction request to indicate the possibility to disapprove
   * the request.
   */
-class UCBHELPER_DLLPUBLIC InteractionDisapprove : public InteractionContinuation,
+class UCBHELPER_DLLPUBLIC InteractionDisapprove final : public InteractionContinuation,
                               public css::lang::XTypeProvider,
                               public css::task::XInteractionDisapprove
 {
@@ -287,7 +287,7 @@ public:
   * passed along with an authentication interaction request to enable the
   * interaction handler to supply the missing authentication data.
   */
-class UCBHELPER_DLLPUBLIC InteractionSupplyAuthentication :
+class UCBHELPER_DLLPUBLIC InteractionSupplyAuthentication final :
                   public InteractionContinuation,
                   public css::lang::XTypeProvider,
                   public css::ucb::XInteractionSupplyAuthentication2
@@ -482,7 +482,7 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
   * passed along with an interaction request to indicate the possibility to
   * replace existing data.
   */
-class InteractionReplaceExistingData :
+class InteractionReplaceExistingData final :
                   public InteractionContinuation,
                   public css::lang::XTypeProvider,
                   public css::ucb::XInteractionReplaceExistingData
@@ -509,7 +509,7 @@ public:
     virtual void SAL_CALL select() override;
 };
 
-class UCBHELPER_DLLPUBLIC InteractionAuthFallback:
+class UCBHELPER_DLLPUBLIC InteractionAuthFallback final :
                   public InteractionContinuation,
                   public css::ucb::XInteractionAuthFallback
 {

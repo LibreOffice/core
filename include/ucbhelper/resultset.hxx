@@ -57,7 +57,7 @@ struct ResultSet_Impl;
  *
  * @see ResultSetDataSupplier
  */
-class UCBHELPER_DLLPUBLIC ResultSet :
+class UCBHELPER_DLLPUBLIC ResultSet final :
                 public cppu::WeakImplHelper<
                     css::lang::XServiceInfo,
                     css::lang::XComponent,

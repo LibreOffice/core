@@ -38,7 +38,7 @@ namespace ucbhelper {
   * @see css::ucb::InteractiveIOException
   * @see InteractionAbort
   */
-class SimpleIOErrorRequest : public ucbhelper::InteractionRequest
+class SimpleIOErrorRequest final : public ucbhelper::InteractionRequest
 {
 public:
     /**

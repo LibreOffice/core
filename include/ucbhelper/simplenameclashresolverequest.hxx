@@ -39,7 +39,7 @@ class InteractionSupplyName;
   * @see InteractionAbort
   * @see InteractioneplaceExistingData
   */
-class UCBHELPER_DLLPUBLIC SimpleNameClashResolveRequest : public ucbhelper::InteractionRequest
+class UCBHELPER_DLLPUBLIC SimpleNameClashResolveRequest final : public ucbhelper::InteractionRequest
 {
     rtl::Reference< InteractionSupplyName > m_xNameSupplier;
 
