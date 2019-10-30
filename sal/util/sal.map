@@ -743,6 +743,12 @@ PRIVATE_1.5 { # LibreOffice 6.1
         rtl_alloc_preInit;
 } PRIVATE_1.4;
 
+PRIVATE_1.6 { # LibreOffice 6.4
+    global:
+        rtl_str_toInt64_WithLength;
+        rtl_ustr_toInt64_WithLength;
+} PRIVATE_1.5;
+
 PRIVATE_textenc.1 { # LibreOffice 3.6
     global:
         _ZN3sal6detail7textenc20convertCharToUnicode*;

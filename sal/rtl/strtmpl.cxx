@@ -989,20 +989,23 @@ sal_Bool SAL_CALL IMPL_RTL_STRNAME( toBoolean )( const IMPL_RTL_STRCODE* pStr )
 
 /* ----------------------------------------------------------------------- */
 namespace {
-    template<typename T, typename U> T IMPL_RTL_STRNAME( toInt )( const IMPL_RTL_STRCODE* pStr,
-                                                                     sal_Int16 nRadix )
+    template<typename T, typename U> T IMPL_RTL_STRNAME( toInt_WithLength )( const IMPL_RTL_STRCODE* pStr,
+                                                                  sal_Int16 nRadix,
+                                                                  sal_Int32 nStrLength )
     {
         static_assert(std::numeric_limits<T>::is_signed, "is signed");
         assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
+        assert( nStrLength >= 0 );
         bool    bNeg;
         sal_Int16   nDigit;
         U           n = 0;
+        const IMPL_RTL_STRCODE* pEnd = pStr + nStrLength;
 
         if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
             nRadix = 10;
 
         /* Skip whitespaces */
-        while ( *pStr && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
+        while ( pStr != pEnd && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
             pStr++;
 
         if ( *pStr == '-' )
@@ -1039,7 +1042,7 @@ namespace {
             nMod = std::numeric_limits<T>::max() % nRadix;
         }
 
-        while ( *pStr )
+        while ( pStr != pEnd )
         {
             nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
             if ( nDigit < 0 )
@@ -1067,7 +1070,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( toInt32 )( const IMPL_RTL_STRCODE* pStr,
     SAL_THROW_EXTERN_C()
 {
     assert(pStr);
-    return IMPL_RTL_STRNAME( toInt )<sal_Int32, sal_uInt32>(pStr, nRadix);
+    return IMPL_RTL_STRNAME( toInt_WithLength )<sal_Int32, sal_uInt32>(pStr, nRadix, IMPL_RTL_STRNAME( getLength )(pStr));
 }
 
 sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
@@ -1075,7 +1078,16 @@ sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
     SAL_THROW_EXTERN_C()
 {
     assert(pStr);
-    return IMPL_RTL_STRNAME( toInt )<sal_Int64, sal_uInt64>(pStr, nRadix);
+    return IMPL_RTL_STRNAME( toInt_WithLength )<sal_Int64, sal_uInt64>(pStr, nRadix, IMPL_RTL_STRNAME( getLength )(pStr));
+}
+
+sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64_WithLength )( const IMPL_RTL_STRCODE* pStr,
+                                                sal_Int16 nRadix,
+                                                sal_Int32 nStrLength)
+    SAL_THROW_EXTERN_C()
+{
+    assert(pStr);
+    return IMPL_RTL_STRNAME( toInt_WithLength )<sal_Int64, sal_uInt64>(pStr, nRadix, nStrLength);
 }
 
 /* ----------------------------------------------------------------------- */
