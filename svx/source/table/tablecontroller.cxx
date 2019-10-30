@@ -464,11 +464,11 @@ void SvxTableController::GetState( SfxItemSet& rSet )
                     break;
                 }
             case SID_TABLE_DELETE_ROW:
-                if( !mxTable.is() || !hasSelectedCells() || (mxTable->getRowCount() <= 1) )
+                if( !mxTable.is() || !hasSelectedCells() || (!comphelper::LibreOfficeKit::isActive() && mxTable->getRowCount() <= 1) )
                     rSet.DisableItem(SID_TABLE_DELETE_ROW);
                 break;
             case SID_TABLE_DELETE_COL:
-                if( !mxTable.is() || !hasSelectedCells() || (mxTable->getColumnCount() <= 1) )
+                if( !mxTable.is() || !hasSelectedCells() || (!comphelper::LibreOfficeKit::isActive() && mxTable->getColumnCount() <= 1) )
                     rSet.DisableItem(SID_TABLE_DELETE_COL);
                 break;
             case SID_TABLE_MERGE_CELLS:
