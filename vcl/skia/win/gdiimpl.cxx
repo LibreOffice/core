@@ -125,7 +125,7 @@ void WinSkiaSalGraphicsImpl::PreDrawText() { preDraw(); }
 
 void WinSkiaSalGraphicsImpl::PostDrawText() { postDraw(); }
 
-SkColor toSkColor(Color color)
+static SkColor toSkColor(Color color)
 {
     return SkColorSetARGB(255 - color.GetTransparency(), color.GetRed(), color.GetGreen(),
                           color.GetBlue());
