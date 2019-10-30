@@ -174,7 +174,7 @@ class SvCompatWeakBase;
 /** SvCompatWeakHdl acts as an intermediary between SvCompatWeakRef<T> and T.
 */
 template<typename T>
-class SvCompatWeakHdl : public SvRefBase
+class SvCompatWeakHdl final : public SvRefBase
 {
     friend class SvCompatWeakBase<T>;
     T* _pObj;

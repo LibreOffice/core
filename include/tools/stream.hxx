@@ -568,7 +568,7 @@ inline std::size_t write_uInt16_lenPrefixed_uInt8s_FromOUString(SvStream& rStrm,
 
 // FileStream
 
-class TOOLS_DLLPUBLIC SvFileStream : public SvStream
+class TOOLS_DLLPUBLIC SvFileStream final : public SvStream
 {
 private:
     std::unique_ptr<StreamData>
@@ -587,7 +587,6 @@ private:
     bool LockFile();
     void UnlockFile();
 
-protected:
     virtual std::size_t GetData( void* pData, std::size_t nSize ) override;
     virtual std::size_t PutData( const void* pData, std::size_t nSize ) override;
     virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) override;
