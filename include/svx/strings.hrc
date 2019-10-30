@@ -1388,6 +1388,9 @@
 
 #define STR_COLORTABLE                                      NC_("STR_COLORTABLE", "Color Palette")
 
+// Used in the Slide Setup dialog of Impress
+#define STR_SLIDE_NUMBERS                                   NC_("STR_SLIDE_NUMBERS", "Slide numbers:")
+
 // String for saving modified image (instead of original)
 #define RID_SVXSTR_SAVE_MODIFIED_IMAGE                      NC_("RID_SVXSTR_SAVE_MODIFIED_IMAGE", "The image has been modified. By default the original image will be saved.\nDo you want to save the modified version instead?")
 

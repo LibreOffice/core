@@ -164,6 +164,7 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
     , m_xBottomMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargBot", FieldUnit::CM))
     , m_xPageText(m_xBuilder->weld_label("labelPageLayout"))
     , m_xLayoutBox(m_xBuilder->weld_combo_box("comboPageLayout"))
+    , m_xNumberFormatText(m_xBuilder->weld_label("labelPageNumbers"))
     , m_xNumberFormatBox(new SvxPageNumberListBox(m_xBuilder->weld_combo_box("comboLayoutFormat")))
     , m_xTblAlignFT(m_xBuilder->weld_label("labelTblAlign"))
     , m_xHorzBox(m_xBuilder->weld_check_button("checkbuttonHorz"))
@@ -1524,6 +1525,7 @@ void SvxPageDescPage::PageCreated(const SfxAllItemSet& aSet)
     const SfxUInt16Item* pPaperEndItem = aSet.GetItem(SID_PAPER_END, false);
     const SfxStringListItem* pCollectListItem = aSet.GetItem<SfxStringListItem>(SID_COLLECT_LIST, false);
     const SfxBoolItem* pSupportDrawingLayerFillStyleItem = aSet.GetItem<SfxBoolItem>(SID_DRAWINGLAYER_FILLSTYLES, false);
+    const SfxBoolItem* pIsImpressDoc = aSet.GetItem<SfxBoolItem>(SID_IMPRESS_DOC, false);
 
     if (pModeItem)
     {
@@ -1546,6 +1548,9 @@ void SvxPageDescPage::PageCreated(const SfxAllItemSet& aSet)
 
         mbEnableDrawingLayerFillStyles = bNew;
     }
+
+    if (pIsImpressDoc)
+        m_xNumberFormatText->set_label(SvxResId(STR_SLIDE_NUMBERS));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

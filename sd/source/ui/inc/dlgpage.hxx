@@ -33,6 +33,7 @@ class SdPageDlg : public SfxTabDialogController
 {
 private:
     const SfxObjectShell* mpDocShell;
+    bool mbIsImpressDoc;
 
     XColorListRef         mpColorList;
     XGradientListRef      mpGradientList;
@@ -41,7 +42,7 @@ private:
     XPatternListRef       mpPatternList;
 public:
 
-    SdPageDlg(SfxObjectShell const * pDocSh, weld::Window* pParent, const SfxItemSet* pAttr, bool bAreaPage);
+    SdPageDlg(SfxObjectShell const * pDocSh, weld::Window* pParent, const SfxItemSet* pAttr, bool bAreaPage, bool bIsImpressDoc);
 
     virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
 };
