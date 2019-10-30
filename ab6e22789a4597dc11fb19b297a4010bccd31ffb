@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7f7f9b97_5549b888",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-10-30T08:37:00Z",
+      "side": 1,
+      "message": "Yes, I introduced that one because I needed it and SRCDIR is the natural name for me, I didn\u0027t know the LO name used all over the code was SRC_ROOT (or maybe I didn\u0027t care at that point). So technically the proper solution should probably be make clangplugins use SRC_ROOT as well, but I decided to just keep it simple.",
+      "parentUuid": "7f7f9b97_f5f9e47f",
+      "revId": "ab6e22789a4597dc11fb19b297a4010bccd31ffb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f7f9b97_15f58083",
         "filename": "vcl/source/image/ImplImageTree.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-10-30T04:54:55Z",
       "side": 1,
       "message": "Is this going to work when LO is installed?",
+      "revId": "ab6e22789a4597dc11fb19b297a4010bccd31ffb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_35467c7e",
+        "filename": "vcl/source/image/ImplImageTree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-10-30T08:37:00Z",
+      "side": 1,
+      "message": "It\u0027s for vcldemo. I don\u0027t think we install vcldemo. Moreover if we did, $PWD presumably wouldn\u0027t work either.",
+      "parentUuid": "7f7f9b97_15f58083",
       "revId": "ab6e22789a4597dc11fb19b297a4010bccd31ffb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
