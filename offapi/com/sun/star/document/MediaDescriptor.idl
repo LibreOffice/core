@@ -159,6 +159,8 @@ service MediaDescriptor
         invalid names are ignored. If a name is specified on loading,
         it still will be verified by a filter detection, but in case of doubt
         it will be preferred.
+
+        See this page for a list of internal filter names: https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html
         </p>
      */
     [optional,property] string FilterName;
