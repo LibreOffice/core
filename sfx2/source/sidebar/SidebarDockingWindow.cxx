@@ -31,11 +31,60 @@
 #include <tools/gen.hxx>
 #include <vcl/event.hxx>
 #include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
+#include <boost/property_tree/json_parser.hpp>
 
 using namespace css;
 using namespace css::uno;
 
 namespace sfx2 { namespace sidebar {
+
+class SidebarNotifyIdle : public Idle
+{
+    SidebarDockingWindow &mrSidebarDockingWin;
+
+public:
+    SidebarNotifyIdle(SidebarDockingWindow &rSidebarDockingWin) :
+        Idle("Sidebar notify"),
+        mrSidebarDockingWin(rSidebarDockingWin)
+    {
+        SetPriority(TaskPriority::POST_PAINT);
+    }
+
+    void Invoke() override
+    {
+        auto pNotifier = mrSidebarDockingWin.GetLOKNotifier();
+        if (!pNotifier || !comphelper::LibreOfficeKit::isActive())
+            return;
+
+        try
+        {
+            if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+            {
+                // Mobile.
+                std::stringstream aStream;
+                boost::property_tree::write_json(aStream, mrSidebarDockingWin.DumpAsPropertyTree());
+                pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aStream.str().c_str());
+            }
+            else
+            {
+                // On desktop use the classic notifications.
+                std::vector<vcl::LOKPayloadItem> aItems;
+                aItems.emplace_back("type", "deck");
+                const Point pos = Point(mrSidebarDockingWin.GetOutOffXPixel(),
+                                        mrSidebarDockingWin.GetOutOffYPixel());
+                aItems.emplace_back("position", pos.toString());
+                aItems.emplace_back("size", mrSidebarDockingWin.GetSizePixel().toString());
+                pNotifier->notifyWindow(mrSidebarDockingWin.GetLOKWindowId(), "created", aItems);
+            }
+        }
+        catch (boost::property_tree::json_parser::json_parser_error& rError)
+        {
+            SAL_WARN("sfx.sidebar", rError.message());
+        }
+    }
+};
 
 SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChildWindow& rChildWindow,
                                            vcl::Window* pParentWindow, WinBits nBits)
@@ -43,6 +92,8 @@ SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChi
     , mpSidebarController()
     , mbIsReadyToDrag(false)
     , mbSidebarVisibleInLOK(rChildWindow.IsSidebarVisibleInLOK())
+    , mpOldViewShell(SfxViewShell::Current())
+    , mpIdleNotify(new SidebarNotifyIdle(*this))
 {
     // Get the XFrame from the bindings.
     if (pSfxBindings==nullptr || pSfxBindings->GetDispatcher()==nullptr)
@@ -130,13 +181,9 @@ void SidebarDockingWindow::NotifyResize()
         if (mpSidebarController.is() && !GetLOKNotifier())
             SetLOKNotifier(SfxViewShell::Current());
 
-        if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        if (GetLOKNotifier())
         {
-            std::vector<vcl::LOKPayloadItem> aItems;
-            aItems.emplace_back("type", "deck");
-            aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
-            aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
-            pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
+            mpIdleNotify->Start();
         }
     }
 }
