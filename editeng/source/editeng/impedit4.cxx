@@ -1447,7 +1447,8 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, bool bMultipleDoc )
     else if ( CreateEPaM( aEditDoc.GetStartPaM() ) == pSpellInfo->aSpellStart )
         bIsStart = true;
 
-    std::unique_ptr<EditSpellWrapper> pWrp(new EditSpellWrapper( Application::GetDefDialogParent(),
+    vcl::Window* pParent = Application::GetDefDialogParent();
+    std::unique_ptr<EditSpellWrapper> pWrp(new EditSpellWrapper(pParent ? pParent->GetFrameWeld() : nullptr,
             bIsStart, pEditView ));
     pWrp->SpellDocument();
     pWrp.reset();
