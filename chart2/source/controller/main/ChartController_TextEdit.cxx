@@ -167,8 +167,7 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
     vcl::Font aCurFont = m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont();
     aSet.Put( SvxFontItem( aCurFont.GetFamilyType(), aCurFont.GetFamilyName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );
 
-    vcl::Window* pWin = GetChartWindow();
-    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(pWin ? pWin->GetFrameWeld() : nullptr, aSet, nullptr));
+    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(GetChartFrame(), aSet, nullptr));
     if( pDlg->Execute() == RET_OK )
     {
         const SfxItemSet* pSet = pDlg->GetOutputItemSet();
