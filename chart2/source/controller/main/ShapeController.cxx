@@ -239,7 +239,7 @@ void ShapeController::executeDispatch_FormatLine()
     SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
-        VclPtr<ChartWindow> pChartWindow( m_pChartController->GetChartWindow() );
+        weld::Window* pChartWindow(m_pChartController->GetChartFrame());
         DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pChartWindow && pDrawModelWrapper && pDrawViewWrapper )
@@ -253,7 +253,7 @@ void ShapeController::executeDispatch_FormatLine()
             }
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             ScopedVclPtr< SfxAbstractTabDialog > pDlg(
-                pFact->CreateSvxLineTabDialog(pChartWindow->GetFrameWeld(), &aAttr, &pDrawModelWrapper->getSdrModel(),
+                pFact->CreateSvxLineTabDialog(pChartWindow, &aAttr, &pDrawModelWrapper->getSdrModel(),
                     pSelectedObj, bHasMarked));
             if ( pDlg->Execute() == RET_OK )
             {
@@ -276,7 +276,7 @@ void ShapeController::executeDispatch_FormatArea()
     SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
-        VclPtr<ChartWindow> pChartWindow( m_pChartController->GetChartWindow() );
+        weld::Window* pChartWindow(m_pChartController->GetChartFrame());
         DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pChartWindow && pDrawModelWrapper && pDrawViewWrapper )
@@ -289,7 +289,7 @@ void ShapeController::executeDispatch_FormatArea()
             }
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             ScopedVclPtr< AbstractSvxAreaTabDialog > pDlg(
-                    pFact->CreateSvxAreaTabDialog(pChartWindow->GetFrameWeld(), &aAttr, &pDrawModelWrapper->getSdrModel(), true));
+                    pFact->CreateSvxAreaTabDialog(pChartWindow, &aAttr, &pDrawModelWrapper->getSdrModel(), true));
             if ( pDlg->Execute() == RET_OK )
             {
                 const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
@@ -311,7 +311,7 @@ void ShapeController::executeDispatch_TextAttributes()
     SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
-        VclPtr<ChartWindow> pChartWindow( m_pChartController->GetChartWindow() );
+        weld::Window* pChartWindow(m_pChartController->GetChartFrame());
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pChartWindow && pDrawViewWrapper )
         {
@@ -323,7 +323,7 @@ void ShapeController::executeDispatch_TextAttributes()
             }
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             ScopedVclPtr< SfxAbstractTabDialog > pDlg(
-                pFact->CreateTextTabDialog(pChartWindow->GetFrameWeld(), &aAttr, pDrawViewWrapper));
+                pFact->CreateTextTabDialog(pChartWindow, &aAttr, pDrawViewWrapper));
             if ( pDlg->Execute() == RET_OK )
             {
                 const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
@@ -345,7 +345,7 @@ void ShapeController::executeDispatch_TransformDialog()
     SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
-        VclPtr<ChartWindow> pChartWindow( m_pChartController->GetChartWindow() );
+        weld::Window* pChartWindow(m_pChartController->GetChartFrame());
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pChartWindow && pDrawViewWrapper )
         {
@@ -359,7 +359,7 @@ void ShapeController::executeDispatch_TransformDialog()
                 SfxItemSet aGeoAttr( pDrawViewWrapper->GetGeoAttrFromMarked() );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 ScopedVclPtr< SfxAbstractTabDialog > pDlg(
-                    pFact->CreateCaptionDialog(pChartWindow->GetFrameWeld(), pDrawViewWrapper));
+                    pFact->CreateCaptionDialog(pChartWindow, pDrawViewWrapper));
                 const sal_uInt16* pRange = pDlg->GetInputRanges( *aAttr.GetPool() );
                 SfxItemSet aCombAttr( *aAttr.GetPool(), pRange );
                 aCombAttr.Put( aAttr );
@@ -377,7 +377,7 @@ void ShapeController::executeDispatch_TransformDialog()
                 SfxItemSet aGeoAttr( pDrawViewWrapper->GetGeoAttrFromMarked() );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 ScopedVclPtr< SfxAbstractTabDialog > pDlg(
-                    pFact->CreateSvxTransformTabDialog(pChartWindow->GetFrameWeld(), &aGeoAttr, pDrawViewWrapper));
+                    pFact->CreateSvxTransformTabDialog(pChartWindow, &aGeoAttr, pDrawViewWrapper));
                 if ( pDlg->Execute() == RET_OK )
                 {
                     const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
@@ -402,9 +402,9 @@ void ShapeController::executeDispatch_ObjectTitleDescription()
                 OUString aTitle( pSelectedObj->GetTitle() );
                 OUString aDescription( pSelectedObj->GetDescription() );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                VclPtr<ChartWindow> pChartWindow( m_pChartController->GetChartWindow() );
+                weld::Window* pChartWindow(m_pChartController->GetChartFrame());
                 ScopedVclPtr< AbstractSvxObjectTitleDescDialog > pDlg(
-                    pFact->CreateSvxObjectTitleDescDialog(pChartWindow ? pChartWindow->GetFrameWeld() : nullptr, aTitle, aDescription ) );
+                    pFact->CreateSvxObjectTitleDescDialog(pChartWindow, aTitle, aDescription));
                 if ( pDlg->Execute() == RET_OK )
                 {
                     pDlg->GetTitle( aTitle );
@@ -430,9 +430,9 @@ void ShapeController::executeDispatch_RenameObject()
             {
                 OUString aName = pSelectedObj->GetName();
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                VclPtr<ChartWindow> pChartWindow( m_pChartController->GetChartWindow() );
+                weld::Window* pChartWindow(m_pChartController->GetChartFrame());
                 ScopedVclPtr< AbstractSvxObjectNameDialog > pDlg(
-                    pFact->CreateSvxObjectNameDialog(pChartWindow ? pChartWindow->GetFrameWeld() : nullptr, aName));
+                    pFact->CreateSvxObjectNameDialog(pChartWindow, aName));
                 pDlg->SetCheckNameHdl( LINK( this, ShapeController, CheckNameHdl ) );
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -501,7 +501,7 @@ void ShapeController::executeDispatch_FontDialog()
     SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
-        VclPtr<ChartWindow> pChartWindow( m_pChartController->GetChartWindow() );
+        weld::Window* pChartWindow(m_pChartController->GetChartFrame());
         DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pChartWindow && pDrawModelWrapper && pDrawViewWrapper )
@@ -509,7 +509,7 @@ void ShapeController::executeDispatch_FontDialog()
             SfxItemSet aAttr( pDrawViewWrapper->GetModel()->GetItemPool() );
             pDrawViewWrapper->GetAttributes( aAttr );
             ViewElementListProvider aViewElementListProvider( pDrawModelWrapper );
-            ShapeFontDialog aDlg(pChartWindow->GetFrameWeld(), &aAttr, &aViewElementListProvider);
+            ShapeFontDialog aDlg(pChartWindow, &aAttr, &aViewElementListProvider);
             if (aDlg.run() == RET_OK)
             {
                 const SfxItemSet* pOutAttr = aDlg.GetOutputItemSet();
@@ -524,7 +524,7 @@ void ShapeController::executeDispatch_ParagraphDialog()
     SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
-        VclPtr<ChartWindow> pChartWindow( m_pChartController->GetChartWindow() );
+        weld::Window* pChartWindow(m_pChartController->GetChartFrame());
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pChartWindow && pDrawViewWrapper )
         {
@@ -544,7 +544,7 @@ void ShapeController::executeDispatch_ParagraphDialog()
             aNewAttr.Put( SvxWidowsItem( 0, SID_ATTR_PARA_WIDOWS) );
             aNewAttr.Put( SvxOrphansItem( 0, SID_ATTR_PARA_ORPHANS) );
 
-            ShapeParagraphDialog aDlg(pChartWindow->GetFrameWeld(), &aNewAttr);
+            ShapeParagraphDialog aDlg(pChartWindow, &aNewAttr);
             if (aDlg.run() == RET_OK)
             {
                 const SfxItemSet* pOutAttr = aDlg.GetOutputItemSet();
