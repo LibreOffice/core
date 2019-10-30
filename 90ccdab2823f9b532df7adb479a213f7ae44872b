@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_7531540b",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1376,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-10-30T08:42:00Z",
+      "side": 1,
+      "message": "Could you please improve this on master, so it uses PER_DEGREE from include/oox/drawingml/drawingmltypes.hxx?",
+      "revId": "90ccdab2823f9b532df7adb479a213f7ae44872b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_553e98da",
+        "filename": "svx/source/svdraw/svdoashp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-10-30T08:42:00Z",
+      "side": 1,
+      "message": "Did you consider documenting this new TextCameraZRotateAngle property under offapi/ on master?",
+      "revId": "90ccdab2823f9b532df7adb479a213f7ae44872b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
