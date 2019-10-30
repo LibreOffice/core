@@ -40,18 +40,17 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::lang;
 
 // export data
-ORowSetImportExport::ORowSetImportExport(   vcl::Window* _pParent,
-                                            const Reference< XResultSetUpdate >& _xResultSetUpdate,
-                                            const svx::ODataAccessDescriptor& _aDataDescriptor,
-                                            const Reference< XComponentContext >& _rM
-                                            )
-                                            : ODatabaseImportExport(_aDataDescriptor,_rM,nullptr)
-                                            ,m_xTargetResultSetUpdate(_xResultSetUpdate)
-                                            ,m_xTargetRowUpdate(_xResultSetUpdate,UNO_QUERY)
-                                            ,m_pParent(_pParent)
+ORowSetImportExport::ORowSetImportExport(weld::Window* pParent,
+                                         const Reference< XResultSetUpdate >& xResultSetUpdate,
+                                         const svx::ODataAccessDescriptor& aDataDescriptor,
+                                         const Reference< XComponentContext >& rM)
+                                            : ODatabaseImportExport(aDataDescriptor,rM,nullptr)
+                                            ,m_xTargetResultSetUpdate(xResultSetUpdate)
+                                            ,m_xTargetRowUpdate(xResultSetUpdate,UNO_QUERY)
+                                            ,m_pParent(pParent)
                                             ,m_bAlreadyAsked(false)
 {
-    OSL_ENSURE(_pParent,"Window can't be null!");
+    OSL_ENSURE(pParent,"Window can't be null!");
 }
 
 void ORowSetImportExport::initialize()
@@ -235,7 +234,7 @@ bool ORowSetImportExport::insertNewRow()
         if(!m_bAlreadyAsked)
         {
             OUString sAskIfContinue = DBA_RES(STR_ERROR_OCCURRED_WHILE_COPYING);
-            OSQLWarningBox aDlg(m_pParent ? m_pParent->GetFrameWeld() : nullptr, sAskIfContinue, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes);
+            OSQLWarningBox aDlg(m_pParent, sAskIfContinue, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes);
             if (aDlg.run() == RET_YES)
                 m_bAlreadyAsked = true;
             else
