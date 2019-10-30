@@ -54,6 +54,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
+#include <dialoghelp.hxx>
 #include <frmfmt.hxx>
 #include <fmtftn.hxx>
 #include <fmthdft.hxx>
@@ -414,8 +415,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                     const SfxSlot* pSlot = pSlotPool->GetSlot(nSlotId);
                     OString aCmd = OStringLiteral(".uno:") + pSlot->GetUnoName();
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    vcl::Window* pWin = GetWin();
-                    ScopedVclPtr<SfxAbstractInsertObjectDialog> pDlg(pFact->CreateInsertObjectDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                    ScopedVclPtr<SfxAbstractInsertObjectDialog> pDlg(pFact->CreateInsertObjectDialog(GetFrameWeld(mxDoc->GetDocShell()),
                                 OUString::fromUtf8( aCmd ), xStor, &aServerList));
                     if (pDlg)
                     {
