@@ -107,10 +107,15 @@ void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
     if (pDrawView)
         pDrawView->BlockPageOrderChangedHint(true);
 
+    // Proper naming for the undo action
+    OUString sUndoComment(SdResId(STR_UNDO_DELETEPAGES));
+    if (mrSlideSorter.GetView().GetDoc().GetDocumentType() == DocumentType::Draw)
+        sUndoComment = SdResId(STR_UNDO_DELETEPAGES_DRAW);
+
     // The actual deletion of the selected pages is done in one of two
     // helper functions.  They are specialized for normal respectively for
     // master pages.
-    mrSlideSorter.GetView().BegUndo (SdResId(STR_UNDO_DELETEPAGES));
+    mrSlideSorter.GetView().BegUndo (sUndoComment);
     if (mrSlideSorter.GetModel().GetEditMode() == EditMode::Page)
         DeleteSelectedNormalPages(aSelectedPages);
     else
