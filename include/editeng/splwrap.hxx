@@ -24,7 +24,7 @@
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <vcl/vclptr.hxx>
+#include <vcl/weld.hxx>
 
 // forward ---------------------------------------------------------------
 
@@ -33,8 +33,6 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XSpellChecker1;
     class XHyphenator;
 }}}}
-
-namespace vcl { class Window; }
 
 // misc functions ---------------------------------------------------------------
 
@@ -50,7 +48,8 @@ private:
     friend class SvxHyphenWordDialog;
     friend struct SvxHyphenWordDialog_Impl;
 
-    VclPtr<vcl::Window>     pWin;
+    weld::Window* pWin;
+    std::unique_ptr<weld::WaitObject> xWait;
     css::uno::Reference<
         css::uno::XInterface >             xLast;  // result of last spelling/hyphenation attempt
     css::uno::Reference<
@@ -71,9 +70,9 @@ private:
     void operator =(SvxSpellWrapper const &) = delete;
 
 public:
-    SvxSpellWrapper( vcl::Window* pWn,
+    SvxSpellWrapper( weld::Window* pWn,
                      const bool bStart, const bool bIsAllRight );
-    SvxSpellWrapper( vcl::Window* pWn,
+    SvxSpellWrapper( weld::Window* pWn,
                      css::uno::Reference< css::linguistic2::XHyphenator > const &xHyphenator,
                      const bool bStart, const bool bOther );
 
