@@ -260,6 +260,7 @@ static SkRegion toSkRegion(const vcl::Region& region)
     {
         SkPath path;
         lclPolyPolygonToPath(region.GetAsB2DPolyPolygon(), path);
+        path.setFillType(SkPath::kEvenOdd_FillType);
         SkRegion skRegion;
         skRegion.setPath(path, SkRegion(path.getBounds().roundOut()));
         return skRegion;
@@ -298,6 +299,7 @@ bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
     {
         SkPath path;
         lclPolyPolygonToPath(region.GetAsB2DPolyPolygon(), path);
+        path.setFillType(SkPath::kEvenOdd_FillType);
         canvas->clipPath(path);
     }
     else
@@ -459,6 +461,7 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
     basegfx::B2DPolyPolygon aPolyPolygon(rPolyPolygon);
     aPolyPolygon.transform(rObjectToDevice);
     lclPolyPolygonToPath(aPolyPolygon, aPath);
+    aPath.setFillType(SkPath::kEvenOdd_FillType);
 
     SkPaint aPaint;
     if (mFillColor != SALCOLOR_NONE)
@@ -561,6 +564,7 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
 
     SkPath aPath;
     lclPolygonToPath(rPolyLine, aPath);
+    aPath.setFillType(SkPath::kEvenOdd_FillType);
     SkMatrix matrix = SkMatrix::MakeTrans(0.5, 0.5);
     {
         SkAutoCanvasRestore autoRestore(mSurface->getCanvas(), true);
@@ -729,6 +733,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     {
         SkPath aPath;
         lclPolygonToPath(rPoly, aPath);
+        aPath.setFillType(SkPath::kEvenOdd_FillType);
         SkPaint aPaint;
         aPaint.setStrokeWidth(2);
         float intervals[] = { 4.0f, 4.0f };
@@ -743,6 +748,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     {
         SkPath aPath;
         lclPolygonToPath(rPoly, aPath);
+        aPath.setFillType(SkPath::kEvenOdd_FillType);
         SkPaint aPaint;
         aPaint.setColor(SkColorSetARGB(255, 255, 255, 255));
         aPaint.setStyle(SkPaint::kFill_Style);
