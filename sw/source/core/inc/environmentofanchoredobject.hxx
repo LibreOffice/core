@@ -29,7 +29,6 @@ namespace objectpositioning
     {
     private:
         const bool mbFollowTextFlow;
-        const bool mbLayoutInCell = false;
 
     public:
         /** constructor
@@ -41,8 +40,7 @@ namespace objectpositioning
             input parameter - indicates, if the anchored object should be
             laid out within a (table) cell
         */
-        SwEnvironmentOfAnchoredObject( const bool _bFollowTextFlow,
-                                       const bool _bLayoutInCell = false );
+        SwEnvironmentOfAnchoredObject( const bool _bFollowTextFlow );
 
         /** destructor
         */
