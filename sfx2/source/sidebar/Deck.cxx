@@ -182,10 +182,7 @@ void Deck::Resize()
 {
     Window::Resize();
 
-    const vcl::ILibreOfficeKitNotifier *pNotifier;
-    if (comphelper::LibreOfficeKit::isActive() &&
-        comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()) &&
-        (pNotifier = GetLOKNotifier()))
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
     {
         try
         {
