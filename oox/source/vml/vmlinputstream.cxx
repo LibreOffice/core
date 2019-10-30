@@ -180,8 +180,9 @@ void lclProcessElement( OStringBuffer& rBuffer, const OString& rElement )
     {
         // find positions of text content inside brackets, exclude '/' in '<simpleelement/>'
         const sal_Char* pcContentBeg = pcOpen + 1;
-        bool bIsEmptyElement = pcClose[ -1 ] == '/';
-        const sal_Char* pcContentEnd = bIsEmptyElement ? (pcClose - 1) : pcClose;
+        const bool bIsEmptyElement = pcClose[ -1 ] == '/';
+        const bool bIsProcessingInstruction = pcClose[ -1 ] == '?';
+        const sal_Char* pcContentEnd = bIsEmptyElement || bIsProcessingInstruction ? (pcClose - 1) : pcClose;
         // append opening bracket and element name to buffer
         const sal_Char* pcWhiteSpace = lclFindWhiteSpace( pcContentBeg, pcContentEnd );
         lclAppendToBuffer( rBuffer, pcOpen, pcWhiteSpace );
@@ -192,6 +193,8 @@ void lclProcessElement( OStringBuffer& rBuffer, const OString& rElement )
         // close the element
         if( bIsEmptyElement )
             rBuffer.append( '/' );
+        else if ( bIsProcessingInstruction )
+            rBuffer.append( '?' );
         rBuffer.append( '>' );
     }
 
