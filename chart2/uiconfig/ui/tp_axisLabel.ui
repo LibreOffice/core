@@ -259,7 +259,6 @@
                         <property name="can_focus">True</property>
                         <property name="margin_top">40</property>
                         <property name="activates_default">True</property>
-                        <property name="progress_pulse_step">1</property>
                         <property name="adjustment">adjustmentSpinDegrees</property>
                         <property name="wrap">True</property>
                       </object>

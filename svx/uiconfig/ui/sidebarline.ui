@@ -220,7 +220,6 @@
                     <property name="tooltip_text" translatable="yes" context="sidebarline|linetransparency|tooltip_text">Specify the transparency of the line.</property>
                     <property name="halign">start</property>
                     <property name="adjustment">adjustment1</property>
-                    <property name="climb_rate">5</property>
                     <accessibility>
                       <relation type="labelled-by" target="translabel"/>
                     </accessibility>

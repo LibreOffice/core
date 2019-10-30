@@ -179,10 +179,7 @@
                             <property name="halign">start</property>
                             <property name="valign">center</property>
                             <property name="activates_default">True</property>
-                            <property name="progress_fraction">0.040000000000000001</property>
-                            <property name="progress_pulse_step">1</property>
                             <property name="adjustment">adjustment2</property>
-                            <property name="climb_rate">1</property>
                             <property name="numeric">True</property>
                             <accessibility>
                               <relation type="labelled-by" target="RB_PAGE_START"/>

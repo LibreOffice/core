@@ -134,7 +134,6 @@
         <property name="activates_default">True</property>
         <property name="input_purpose">alpha</property>
         <property name="adjustment">adjustmentROTATION3</property>
-        <property name="update_policy">if-valid</property>
       </object>
       <packing>
         <property name="left_attach">1</property>

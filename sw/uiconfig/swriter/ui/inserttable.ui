@@ -177,9 +177,7 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="shadow_type">none</property>
-                            <property name="progress_pulse_step">1</property>
                             <property name="adjustment">adjustment1</property>
-                            <property name="climb_rate">1</property>
                             <property name="value">2</property>
                           </object>
                           <packing>
@@ -207,9 +205,7 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="shadow_type">out</property>
-                            <property name="progress_pulse_step">1</property>
                             <property name="adjustment">adjustment2</property>
-                            <property name="climb_rate">1</property>
                             <property name="value">2</property>
                           </object>
                           <packing>
@@ -321,10 +317,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
-                                <property name="progress_pulse_step">1</property>
                                 <property name="adjustment">adjustment3</property>
-                                <property name="climb_rate">1</property>
-                                <property name="update_policy">if-valid</property>
                                 <property name="value">1</property>
                               </object>
                               <packing>

@@ -60,7 +60,6 @@
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebargraphic|setbrightness|tooltip_text">Specify the luminance of the graphic.</property>
                 <property name="adjustment">plusminus100adjustment</property>
-                <property name="climb_rate">1</property>
                 <accessibility>
                   <relation type="labelled-by" target="brightnesslabel"/>
                 </accessibility>
@@ -96,7 +95,6 @@
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebargraphic|setcontrast|tooltip_text">Specify the degree of difference between the lightest and darkest parts of the graphic.</property>
                 <property name="adjustment">plusminus100adjustment</property>
-                <property name="climb_rate">1</property>
                 <accessibility>
                   <relation type="labelled-by" target="contrastlabel"/>
                 </accessibility>
@@ -164,7 +162,6 @@
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebargraphic|settransparency|tooltip_text">Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.</property>
                 <property name="adjustment">0to100adjustment</property>
-                <property name="climb_rate">1</property>
                 <accessibility>
                   <relation type="labelled-by" target="transparencylabel"/>
                 </accessibility>
@@ -205,7 +202,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebargraphic|setred|tooltip_text">Red</property>
                     <property name="adjustment">plusminus100adjustment</property>
-                    <property name="climb_rate">1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="setred:%-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setred-atkobject">Red</property>
@@ -250,7 +246,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebargraphic|setgreen|tooltip_text">Green</property>
                     <property name="adjustment">plusminus100adjustment</property>
-                    <property name="climb_rate">1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="setgreen:%-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setgreen-atkobject">Green</property>
@@ -296,7 +291,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebargraphic|setblue|tooltip_text">Blue</property>
                     <property name="adjustment">plusminus100adjustment</property>
-                    <property name="climb_rate">1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="setblue:%-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setblue-atkobject">Blue</property>
@@ -341,7 +335,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebargraphic|setgamma|tooltip_text">Specify the gamma value that affects the brightness of the midtone values.</property>
                     <property name="adjustment">gammaadjustment</property>
-                    <property name="climb_rate">0.10000000000000001</property>
                     <property name="digits">2</property>
                     <accessibility>
                         <relation target="image4"/>

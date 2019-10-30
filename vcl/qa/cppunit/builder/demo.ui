@@ -486,9 +486,6 @@
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
-                                <property name="progress_fraction">0.040000000000000001</property>
-                                <property name="progress_pulse_step">1</property>
-                                <property name="climb_rate">1</property>
                                 <property name="numeric">True</property>
                                 <accessibility>
                                   <relation type="labelled-by" target="RB_PAGE_START"/>
