@@ -21,29 +21,27 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
-#include <vcl/button.hxx>
 
-class SwSyncBtnDlg : public SfxFloatingWindow
+class SwSyncBtnDlg : public SfxModelessDialogController
 {
-    VclPtr<PushButton> m_pSyncBtn;
+    std::unique_ptr<weld::Button> m_xSyncBtn;
 
-    DECL_STATIC_LINK( SwSyncBtnDlg, BtnHdl, Button*, void );
+    DECL_STATIC_LINK( SwSyncBtnDlg, BtnHdl, weld::Button&, void );
 
 public:
-    SwSyncBtnDlg(SfxBindings*, SfxChildWindow*, vcl::Window *pParent);
+    SwSyncBtnDlg(SfxBindings*, SfxChildWindow*, weld::Window *pParent);
     virtual ~SwSyncBtnDlg() override;
-    virtual void dispose() override;
 };
 
 class SwSyncChildWin : public SfxChildWindow
 {
 public:
-    SwSyncChildWin( vcl::Window* ,
-                    sal_uInt16 nId,
-                    SfxBindings*,
-                    SfxChildWinInfo*  );
+    SwSyncChildWin(vcl::Window*,
+                   sal_uInt16 nId,
+                   SfxBindings*,
+                   SfxChildWinInfo*);
 
-    SFX_DECL_CHILDWINDOW( SwSyncChildWin );
+    SFX_DECL_CHILDWINDOW(SwSyncChildWin);
 };
 
 #endif
