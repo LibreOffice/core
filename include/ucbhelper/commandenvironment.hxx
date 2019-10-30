@@ -37,7 +37,7 @@ class SAL_DLLPUBLIC_TEMPLATE CommandEnvironment_Base : public cppu::WeakImplHelp
   * css::ucb::XCommandEnvironment. Instances of this class can
   * be used to supply environments to commands executed by UCB contents.
   */
-class UCBHELPER_DLLPUBLIC CommandEnvironment : public CommandEnvironment_Base
+class UCBHELPER_DLLPUBLIC CommandEnvironment final : public CommandEnvironment_Base
 {
     std::unique_ptr<CommandEnvironment_Impl> m_pImpl;
 

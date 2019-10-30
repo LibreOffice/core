@@ -35,7 +35,7 @@ class SAL_DLLPUBLIC_TEMPLATE ActiveDataSink_Base : public cppu::WeakImplHelper< 
   * Instances of this class can be passed with the parameters of an
   * "open" command.
   */
-class UCBHELPER_DLLPUBLIC ActiveDataSink : public ActiveDataSink_Base
+class UCBHELPER_DLLPUBLIC ActiveDataSink final : public ActiveDataSink_Base
 {
     css::uno::Reference< css::io::XInputStream > m_xStream;
 

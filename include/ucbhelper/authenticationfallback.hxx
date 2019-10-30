@@ -24,7 +24,7 @@ namespace ucbhelper {
   * Read-only values : instructions, url
   * Read-write values: code
   */
-class UCBHELPER_DLLPUBLIC AuthenticationFallbackRequest : public ucbhelper::InteractionRequest
+class UCBHELPER_DLLPUBLIC AuthenticationFallbackRequest final : public ucbhelper::InteractionRequest
 {
 private:
     rtl::Reference< ucbhelper::InteractionAuthFallback > m_xAuthFallback;

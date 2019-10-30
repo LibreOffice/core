@@ -37,7 +37,7 @@ namespace ucbhelper
     /** Implements a seekable InputStream
      *  working on a buffer.
      */
-    class UCBHELPER_DLLPUBLIC FdInputStream
+    class UCBHELPER_DLLPUBLIC FdInputStream final
         : protected cppu::BaseMutex,
           public FdInputStream_Base
     {

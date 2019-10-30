@@ -49,7 +49,7 @@ namespace ucbhelper {
   * @see InteractionRetry
   * @see InteractionSupplyAuthentication
   */
-class UCBHELPER_DLLPUBLIC SimpleAuthenticationRequest : public ucbhelper::InteractionRequest
+class UCBHELPER_DLLPUBLIC SimpleAuthenticationRequest final : public ucbhelper::InteractionRequest
 {
     rtl::Reference<
         ucbhelper::InteractionSupplyAuthentication > m_xAuthSupplier;

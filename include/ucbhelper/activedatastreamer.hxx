@@ -33,7 +33,7 @@ namespace ucbhelper
   * "open" command.
   */
 
-class ActiveDataStreamer :
+class ActiveDataStreamer final :
         public cppu::WeakImplHelper< css::io::XActiveDataStreamer >
 {
     css::uno::Reference< css::io::XStream > m_xStream;

@@ -62,7 +62,7 @@ namespace ucbhelper {
   * @see InteractionApprove
   * @see InteractionDisapprove
   */
-class UCBHELPER_DLLPUBLIC SimpleInteractionRequest : public ucbhelper::InteractionRequest
+class UCBHELPER_DLLPUBLIC SimpleInteractionRequest final : public ucbhelper::InteractionRequest
 {
 public:
     /**

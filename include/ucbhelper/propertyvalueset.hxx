@@ -55,7 +55,7 @@ class PropertyValues;
   * values to return can easily appended to a valueset object. That object can
   * directly be returned by the implementation of the command.
   */
-class UCBHELPER_DLLPUBLIC PropertyValueSet :
+class UCBHELPER_DLLPUBLIC PropertyValueSet final :
                 public cppu::WeakImplHelper<
                     css::sdbc::XRow,
                     css::sdbc::XColumnLocate>

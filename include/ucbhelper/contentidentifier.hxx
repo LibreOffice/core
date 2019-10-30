@@ -39,7 +39,7 @@ struct ContentIdentifier_Impl;
   * The only difference is that the URL scheme will be lower cased. This can
   * be done, because URL schemes are never case sensitive.
   */
-class UCBHELPER_DLLPUBLIC ContentIdentifier :
+class UCBHELPER_DLLPUBLIC ContentIdentifier final :
                 public cppu::WeakImplHelper<css::ucb::XContentIdentifier>
 {
 public:
