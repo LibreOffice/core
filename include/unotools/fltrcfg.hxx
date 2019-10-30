@@ -25,7 +25,7 @@
 #include <memory>
 
 struct SvtFilterOptions_Impl;
-class UNOTOOLS_DLLPUBLIC SvtFilterOptions : public utl::ConfigItem
+class UNOTOOLS_DLLPUBLIC SvtFilterOptions final : public utl::ConfigItem
 {
 private:
     std::unique_ptr<SvtFilterOptions_Impl, o3tl::default_delete<SvtFilterOptions_Impl>> pImpl;

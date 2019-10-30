@@ -39,7 +39,7 @@ namespace utl
         This base class provides an implementation of the
         <code>AccessibleRelationSet</code> service.
 */
-class UNOTOOLS_DLLPUBLIC AccessibleRelationSetHelper
+class UNOTOOLS_DLLPUBLIC AccessibleRelationSetHelper final
     :   public cppu::WeakImplHelper< css::accessibility::XAccessibleRelationSet >
 {
 public:

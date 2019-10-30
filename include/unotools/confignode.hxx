@@ -179,11 +179,10 @@ namespace utl
         Only this class is able to commit any changes made any any OConfigurationNode
         objects.
     */
-    class UNOTOOLS_DLLPUBLIC OConfigurationTreeRoot : public OConfigurationNode
+    class UNOTOOLS_DLLPUBLIC OConfigurationTreeRoot final : public OConfigurationNode
     {
         css::uno::Reference< css::util::XChangesBatch >
                                 m_xCommitter;
-    protected:
         /** ctor for a readonly node
         */
         OConfigurationTreeRoot(

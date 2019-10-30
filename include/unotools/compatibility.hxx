@@ -181,7 +181,7 @@ class SvtCompatibilityOptions_Impl;
     @descr          Make it possible to configure dynamic menu structures of menus like "new" or "wizard".
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
-class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
+class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions final : public utl::detail::Options
 {
     public:
         SvtCompatibilityOptions();

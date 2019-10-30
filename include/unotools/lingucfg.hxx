@@ -135,7 +135,7 @@ struct UNOTOOLS_DLLPUBLIC SvtLinguConfigDictionaryEntry
     css::uno::Sequence< OUString >  aLocaleNames;
 };
 
-class UNOTOOLS_DLLPUBLIC SvtLinguConfig: public utl::detail::Options
+class UNOTOOLS_DLLPUBLIC SvtLinguConfig final : public utl::detail::Options
 {
     // returns static object
     UNOTOOLS_DLLPRIVATE static SvtLinguConfigItem & GetConfigItem();

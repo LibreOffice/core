@@ -29,7 +29,7 @@ namespace com::sun::star::task { class XStatusIndicator; }
 namespace utl
 {
 
-class UNOTOOLS_DLLPUBLIC ProgressHandlerWrap : public ::cppu::WeakImplHelper< css::ucb::XProgressHandler >
+class UNOTOOLS_DLLPUBLIC ProgressHandlerWrap final : public ::cppu::WeakImplHelper< css::ucb::XProgressHandler >
 {
     css::uno::Reference< css::task::XStatusIndicator > m_xStatusIndicator;
 

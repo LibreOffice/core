@@ -23,7 +23,7 @@ class SvtCompatibilityViewOptions_Impl;
 /// Compatibility settings which affects the GUI. These are not document level settings
 /// (like SvtCompatibilityOptions), but global options affecting the application's
 /// behavior in general.
-class UNOTOOLS_DLLPUBLIC SvtCompatibilityViewOptions : public utl::detail::Options
+class UNOTOOLS_DLLPUBLIC SvtCompatibilityViewOptions final : public utl::detail::Options
 {
 public:
     SvtCompatibilityViewOptions();

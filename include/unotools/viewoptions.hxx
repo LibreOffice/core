@@ -94,7 +94,7 @@ enum class EViewType
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions : public utl::detail::Options
+class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions final : public utl::detail::Options
 {
 
     //  public methods

@@ -41,7 +41,7 @@ class SvtPrintWarningOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtPrintWarningOptions : public utl::detail::Options
+class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtPrintWarningOptions final : public utl::detail::Options
 {
     public:
          SvtPrintWarningOptions();
