@@ -51,6 +51,7 @@
 #include <swddetbl.hxx>
 #include <ndtxt.hxx>
 #include <calc.hxx>
+#include <dialoghelp.hxx>
 #include <tabcol.hxx>
 #include <tblafmt.hxx>
 #include <cellatr.hxx>
@@ -177,8 +178,7 @@ void SwFEShell::InsertRow( sal_uInt16 nCnt, bool bBehind )
 
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
-        vcl::Window* pWin = GetWin();
-        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
+        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, GetFrameWeld(GetDoc()->GetDocShell()),
                         DialogMask::MessageInfo | DialogMask::ButtonsOk );
         return;
     }
@@ -217,8 +217,7 @@ void SwFEShell::InsertCol( sal_uInt16 nCnt, bool bBehind )
 
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
-        vcl::Window* pWin = GetWin();
-        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
+        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, GetFrameWeld(GetDoc()->GetDocShell()),
                         DialogMask::MessageInfo | DialogMask::ButtonsOk );
         return;
     }
@@ -227,8 +226,7 @@ void SwFEShell::InsertCol( sal_uInt16 nCnt, bool bBehind )
 
     if( !CheckSplitCells( *this, nCnt + 1, SwTableSearchType::Col ) )
     {
-        vcl::Window* pWin = GetWin();
-        ErrorHandler::HandleError( ERR_TBLINSCOL_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
+        ErrorHandler::HandleError( ERR_TBLINSCOL_ERROR, GetFrameWeld(GetDoc()->GetDocShell()),
                         DialogMask::MessageInfo | DialogMask::ButtonsOk );
         return;
     }
@@ -272,8 +270,7 @@ bool SwFEShell::DeleteCol()
 
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
-        vcl::Window* pWin = GetWin();
-        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
+        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, GetFrameWeld(GetDoc()->GetDocShell()),
                         DialogMask::MessageInfo | DialogMask::ButtonsOk );
         return false;
     }
@@ -324,8 +321,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
 
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
-        vcl::Window* pWin = GetWin();
-        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
+        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, GetFrameWeld(GetDoc()->GetDocShell()),
                         DialogMask::MessageInfo | DialogMask::ButtonsOk );
         return false;
     }
@@ -446,8 +442,7 @@ TableMergeErr SwFEShell::MergeTab()
         const SwTableNode* pTableNd = pTableCursor->GetNode().FindTableNode();
         if( dynamic_cast< const SwDDETable* >(&pTableNd->GetTable()) != nullptr )
         {
-            vcl::Window* pWin = GetWin();
-            ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
+            ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, GetFrameWeld(GetDoc()->GetDocShell()),
                             DialogMask::MessageInfo | DialogMask::ButtonsOk );
         }
         else
@@ -478,8 +473,7 @@ void SwFEShell::SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight )
 
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr  )
     {
-        vcl::Window* pWin = GetWin();
-        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
+        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, GetFrameWeld(GetDoc()->GetDocShell()),
                         DialogMask::MessageInfo | DialogMask::ButtonsOk );
         return;
     }
@@ -488,8 +482,7 @@ void SwFEShell::SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight )
 
     if( bVert && !CheckSplitCells( *this, nCnt + 1, SwTableSearchType::NONE ) )
     {
-        vcl::Window* pWin = GetWin();
-        ErrorHandler::HandleError( ERR_TBLSPLIT_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
+        ErrorHandler::HandleError( ERR_TBLSPLIT_ERROR, GetFrameWeld(GetDoc()->GetDocShell()),
                         DialogMask::MessageInfo | DialogMask::ButtonsOk );
         return;
     }
@@ -1289,8 +1282,7 @@ bool SwFEShell::DeleteTableSel()
 
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
-        vcl::Window* pWin = GetWin();
-        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
+        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, GetFrameWeld(GetDoc()->GetDocShell()),
                         DialogMask::MessageInfo | DialogMask::ButtonsOk );
         return false;
     }
