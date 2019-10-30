@@ -72,7 +72,10 @@ ModifyPageUndoAction::ModifyPageUndoAction(
         mbOldBckgrndObjsVisible = false;
     }
 
-    SetComment( SdResId(STR_UNDO_MODIFY_PAGE) );
+    if (pTheDoc && pTheDoc->GetDocumentType() == DocumentType::Draw)
+        SetComment( SdResId(STR_UNDO_MODIFY_PAGE_DRAW) );
+    else
+        SetComment( SdResId(STR_UNDO_MODIFY_PAGE) );
 }
 
 void ModifyPageUndoAction::Undo()
