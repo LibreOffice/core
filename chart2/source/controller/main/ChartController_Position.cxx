@@ -141,9 +141,8 @@ void ChartController::executeDispatch_PositionAndSize(const ::css::uno::Sequence
 
             SolarMutexGuard aGuard;
             SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
-            vcl::Window* pWin = GetChartWindow();
             ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSchTransformTabDialog(
-               pWin ? pWin->GetFrameWeld() : nullptr, &aItemSet, pSdrView, bResizePossible));
+               GetChartFrame(), &aItemSet, pSdrView, bResizePossible));
 
             if( pDlg->Execute() == RET_OK )
             {

@@ -184,8 +184,8 @@ namespace dbaui
         css::uno::Reference< css::sdbc::XResultSetUpdate >    m_xTargetResultSetUpdate;
         css::uno::Reference< css::sdbc::XRowUpdate >          m_xTargetRowUpdate;
         css::uno::Reference< css::sdbc::XResultSetMetaData >  m_xTargetResultSetMetaData;
-        VclPtr<vcl::Window>         m_pParent;
-        bool                        m_bAlreadyAsked;
+        weld::Window*             m_pParent;
+        bool                      m_bAlreadyAsked;
 
         bool insertNewRow();
     protected:
@@ -193,10 +193,10 @@ namespace dbaui
 
     public:
         // export data
-        ORowSetImportExport(vcl::Window* _pParent,
-                            const css::uno::Reference< css::sdbc::XResultSetUpdate >& _xResultSetUpdate,
-                            const svx::ODataAccessDescriptor& _aDataDescriptor,
-                            const css::uno::Reference< css::uno::XComponentContext >& _rM);
+        ORowSetImportExport(weld::Window* pParent,
+                            const css::uno::Reference< css::sdbc::XResultSetUpdate >& xResultSetUpdate,
+                            const svx::ODataAccessDescriptor& aDataDescriptor,
+                            const css::uno::Reference< css::uno::XComponentContext >& rM);
 
         virtual bool Write() override;
         virtual bool Read() override;
