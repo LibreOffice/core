@@ -50,10 +50,7 @@ protected:
     virtual bool            SpellMore() override;
 
 public:
-    EditSpellWrapper( vcl::Window* pWin,
-            bool bIsStart,
-            EditView* pView );
-
+    EditSpellWrapper(weld::Window* pWin, bool bIsStart, EditView* pView);
 };
 
 /**

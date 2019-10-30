@@ -45,7 +45,7 @@ using namespace ::com::sun::star;
 SwHyphWrapper::SwHyphWrapper( SwView* pVw,
             uno::Reference< linguistic2::XHyphenator > const &rxHyph,
             bool bStart, bool bOther, bool bSelect ) :
-    SvxSpellWrapper( &pVw->GetEditWin(), rxHyph, bStart, bOther ),
+    SvxSpellWrapper( pVw->GetEditWin().GetFrameWeld(), rxHyph, bStart, bOther ),
     pView( pVw ),
     nPageCount( 0 ),
     nPageStart( 0 ),
