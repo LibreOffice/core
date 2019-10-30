@@ -243,7 +243,7 @@ void LotAttrTable::SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const S
 void LotAttrTable::Apply(LOTUS_ROOT* pLotusRoot, const SCTAB nTabNum)
 {
     SCCOL nColCnt;
-    for( nColCnt = 0 ; nColCnt <= MAXCOL ; nColCnt++ )
+    for( nColCnt = 0 ; nColCnt <= aAttrCache.mpLotusRoot->pDoc->MaxCol() ; nColCnt++ )
         pCols[ nColCnt ].Apply(pLotusRoot, nColCnt, nTabNum);     // does a Clear() at end
 }
 

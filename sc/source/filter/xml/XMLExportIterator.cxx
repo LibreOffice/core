@@ -678,7 +678,8 @@ void ScMyNotEmptyCellsIterator::SkipTable(SCTAB nSkip)
 
 bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles)
 {
-    ScAddress  aAddress( MAXCOL + 1, MAXROW + 1, nCurrentTable );
+    ScDocument* pDoc = rExport.GetDocument();
+    ScAddress  aAddress( pDoc->MaxCol() + 1, pDoc->MaxRow() + 1, nCurrentTable );
 
     UpdateAddress( aAddress );
 
@@ -697,7 +698,7 @@ bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pC
     if( pDetectiveOp )
         pDetectiveOp->UpdateAddress( aAddress );
 
-    bool bFoundCell( ( aAddress.Col() <= MAXCOL ) && ( aAddress.Row() <= MAXROW ) );
+    bool bFoundCell( ( aAddress.Col() <= pDoc->MaxCol() ) && ( aAddress.Row() <= pDoc->MaxRow() + 1 ) );
     if( bFoundCell )
     {
         SetCellData( aCell, aAddress );

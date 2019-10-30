@@ -284,4 +284,9 @@ bool ScMyTables::IsPartOfMatrix(const ScAddress& rScAddress) const
     return false;
 }
 
+SCCOL ScMyTables::GetCurrentColCount() const
+{
+    return std::min<sal_Int32>(nCurrentColCount, rImport.GetDocument()->MaxCol());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

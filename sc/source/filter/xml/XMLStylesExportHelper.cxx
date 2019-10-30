@@ -633,13 +633,12 @@ bool ScRowFormatRanges::GetNext(ScMyRowFormatRange& aFormatRange)
 
 sal_Int32 ScRowFormatRanges::GetMaxRows() const
 {
-    sal_Int32 nMaxRows = MAXROW + 1;
+    sal_Int32 nMaxRows(0);
     if (!aRowFormatRanges.empty())
     {
         auto aItr = std::min_element(aRowFormatRanges.begin(), aRowFormatRanges.end(),
             [](const ScMyRowFormatRange& a, const ScMyRowFormatRange& b) { return a.nRepeatRows < b.nRepeatRows; });
-        if ((*aItr).nRepeatRows < nMaxRows)
-            nMaxRows = (*aItr).nRepeatRows;
+        nMaxRows = (*aItr).nRepeatRows;
     }
     else
     {

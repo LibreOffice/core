@@ -420,7 +420,7 @@ void RevisionLogFragment::importRrc( const AttributeList& rAttribs )
     {
         case XML_insertRow:
             mpImpl->meType = REV_INSERTROW;
-            mpImpl->maRange.aEnd.SetCol(MAXCOL);
+            mpImpl->maRange.aEnd.SetCol(getScDocument().MaxCol());
             mpImpl->maRange.aStart.SetTab(mpImpl->mnSheetIndex-1);
             mpImpl->maRange.aEnd.SetTab(mpImpl->mnSheetIndex-1);
         break;

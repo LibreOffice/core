@@ -88,16 +88,17 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableColContext::c
 void SAL_CALL ScXMLTableColContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScXMLImport& rXMLImport = GetScImport();
+    ScDocument* pDoc = rXMLImport.GetDocument();
     SCTAB nSheet = rXMLImport.GetTables().GetCurrentSheet();
     sal_Int32 nCurrentColumn = rXMLImport.GetTables().GetCurrentColCount();
     uno::Reference<sheet::XSpreadsheet> xSheet(rXMLImport.GetTables().GetCurrentXSheet());
     if(xSheet.is())
     {
         sal_Int32 nLastColumn(nCurrentColumn + nColCount - 1);
-        if (nLastColumn > MAXCOL)
-            nLastColumn = MAXCOL;
-        if (nCurrentColumn > MAXCOL)
-            nCurrentColumn = MAXCOL;
+        if (nLastColumn > pDoc->MaxCol())
+            nLastColumn = pDoc->MaxCol();
+        if (nCurrentColumn > pDoc->MaxCol())
+            nCurrentColumn = pDoc->MaxCol();
         uno::Reference<table::XColumnRowRange> xColumnRowRange (xSheet->getCellRangeByPosition(nCurrentColumn, 0, nLastColumn, 0), uno::UNO_QUERY);
         if (xColumnRowRange.is())
         {

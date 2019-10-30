@@ -323,7 +323,7 @@ void OP_Window1(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     const bool bFuzzing = utl::ConfigManager::IsFuzzing();
 
     // instead of default, set all Cols in SC by hand
-    for (SCCOL nCol = 0 ; nCol <= MAXCOL ; nCol++)
+    for (SCCOL nCol = 0 ; nCol <= rContext.pDoc->MaxCol() ; nCol++)
     {
         rContext.pDoc->SetColWidth( nCol, 0, nDefWidth );
         if (bFuzzing)

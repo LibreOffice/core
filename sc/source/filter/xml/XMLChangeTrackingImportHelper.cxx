@@ -657,8 +657,8 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pActio
         {
             sal_Int32 nCol, nRow, nTab, nCol2, nRow2, nTab2;
             pAction->aBigRange.GetVars(nCol, nRow, nTab, nCol2, nRow2, nTab2);
-            if ((nCol >= 0) && (nCol <= MAXCOL) &&
-                (nRow >= 0) && (nRow <= MAXROW) &&
+            if ((nCol >= 0) && (nCol <= pDoc->MaxCol()) &&
+                (nRow >= 0) && (nRow <= pDoc->MaxRow()) &&
                 (nTab >= 0) && (nTab <= MAXTAB))
             {
                 ScAddress aAddress (static_cast<SCCOL>(nCol),

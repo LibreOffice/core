@@ -81,16 +81,16 @@ ErrCode ScEEImport::Read( SvStream& rStream, const OUString& rBaseURL )
     if ( nEndCol != 0 )
     {
         nEndCol += maRange.aStart.Col() - 1;
-        if ( nEndCol > MAXCOL )
-            nEndCol = MAXCOL;
+        if ( nEndCol > mpDoc->MaxCol() )
+            nEndCol = mpDoc->MaxCol();
     }
     else
         nEndCol = maRange.aStart.Col();
     if ( nEndRow != 0 )
     {
         nEndRow += maRange.aStart.Row() - 1;
-        if ( nEndRow > MAXROW )
-            nEndRow = MAXROW;
+        if ( nEndRow > mpDoc->MaxRow() )
+            nEndRow = mpDoc->MaxRow();
     }
     else
         nEndRow = maRange.aStart.Row();
@@ -151,7 +151,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
         // Pure ColMerge and ColMerge of the first MergeRow already done during parsing
         if (nRow <= nOverlapRowMax && ValidCol(nCol))
         {
-            while ( nCol <= MAXCOL && mpDoc->HasAttrib( nCol, nRow, nTab,
+            while ( nCol <= mpDoc->MaxCol() && mpDoc->HasAttrib( nCol, nRow, nTab,
                 nCol, nRow, nTab, HasAttrFlags::Overlapped ) )
             {
                 nCol++;

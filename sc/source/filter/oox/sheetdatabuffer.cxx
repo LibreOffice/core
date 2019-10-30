@@ -440,7 +440,8 @@ void SheetDataBuffer::finalizeImport()
         }
     }
 
-    ScDocumentImport& rDoc = getDocImport();
+    ScDocumentImport& rDocImport = getDocImport();
+    ScDocument& rDoc = rDocImport.getDoc();
     StylesBuffer& rStyles = getStyles();
     for ( const auto& [rCol, rRowStyles] : maStylesPerColumn )
     {
@@ -450,9 +451,9 @@ void SheetDataBuffer::finalizeImport()
         const ScPatternAttr* pDefPattern = nullptr;
         bool bAutoFilter = true;
         SCROW nScRow = 0;
-        while ( bAutoFilter && nScRow < MAXROW )
+        while ( bAutoFilter && nScRow < rDoc.MaxRow() )
         {
-            pDefPattern = rDoc.getDoc().GetPattern( nScCol, nScRow, getSheetIndex() );
+            pDefPattern = rDoc.GetPattern( nScCol, nScRow, getSheetIndex() );
             if ( pDefPattern )
             {
                 const ScMergeFlagAttr* pAttr = pDefPattern->GetItemSet().GetItem( ATTR_MERGE_FLAG );
@@ -462,8 +463,8 @@ void SheetDataBuffer::finalizeImport()
                 break;
             nScRow++;
         }
-        if ( !pDefPattern || nScRow == MAXROW )
-            pDefPattern = rDoc.getDoc().GetDefPattern();
+        if ( !pDefPattern || nScRow == rDoc.MaxRow() )
+            pDefPattern = rDoc.GetDefPattern();
 
         Xf::AttrList aAttrs(pDefPattern);
         for ( const auto& rRowStyle : rRowStyles )
@@ -473,15 +474,15 @@ void SheetDataBuffer::finalizeImport()
              if ( pXf )
                  pXf->applyPatternToAttrList( aAttrs,  rRowStyle.mnStartRow,  rRowStyle.mnEndRow,  rRowStyle.mnNumFmt.second );
         }
-        if (aAttrs.maAttrs.empty() || aAttrs.maAttrs.back().nEndRow != MAXROW)
+        if (aAttrs.maAttrs.empty() || aAttrs.maAttrs.back().nEndRow != rDoc.MaxRow())
         {
             ScAttrEntry aEntry;
-            aEntry.nEndRow = MAXROW;
+            aEntry.nEndRow = rDoc.MaxRow();
             aEntry.pPattern = pDefPattern;
-            rDoc.getDoc().GetPool()->Put(*aEntry.pPattern);
+            rDoc.GetPool()->Put(*aEntry.pPattern);
             aAttrs.maAttrs.push_back(aEntry);
 
-            if (!sc::NumFmtUtil::isLatinScript(*aEntry.pPattern, rDoc.getDoc()))
+            if (!sc::NumFmtUtil::isLatinScript(*aEntry.pPattern, rDoc))
                 aAttrs.mbLatinNumFmtOnly = false;
         }
 
@@ -489,7 +490,7 @@ void SheetDataBuffer::finalizeImport()
         aAttrParam.mvData.swap(aAttrs.maAttrs);
         aAttrParam.mbLatinNumFmtOnly = aAttrs.mbLatinNumFmtOnly;
 
-        rDoc.setAttrEntries(getSheetIndex(), nScCol, std::move(aAttrParam));
+        rDocImport.setAttrEntries(getSheetIndex(), nScCol, std::move(aAttrParam));
     }
 
     // merge all cached merged ranges and update right/bottom cell borders
