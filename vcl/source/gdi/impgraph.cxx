@@ -535,10 +535,11 @@ void ImpGraphic::ImplSetPrepared(bool bAnimated, Size* pSizeHint)
         maSwapInfo.maPrefSize = *pSizeHint;
         maSwapInfo.maPrefMapMode = MapMode(MapUnit::Map100thMM);
     }
-    else
+
+    GraphicDescriptor aDescriptor(aMemoryStream, nullptr);
+    if (aDescriptor.Detect(true))
     {
-        GraphicDescriptor aDescriptor(aMemoryStream, nullptr);
-        if (aDescriptor.Detect(true))
+        if (!pSizeHint)
         {
             // If we have logic size, work with that, as later pixel -> logic
             // conversion will work with the output device DPI, not the graphic
@@ -554,14 +555,18 @@ void ImpGraphic::ImplSetPrepared(bool bAnimated, Size* pSizeHint)
                 maSwapInfo.maPrefSize = aDescriptor.GetSizePixel();
                 maSwapInfo.maPrefMapMode = MapMode(MapUnit::MapPixel);
             }
-
-            maSwapInfo.maSizePixel = aDescriptor.GetSizePixel();
         }
+
+        maSwapInfo.maSizePixel = aDescriptor.GetSizePixel();
+        maSwapInfo.mbIsTransparent = aDescriptor.IsTransparent();
+        maSwapInfo.mbIsAlpha = aDescriptor.IsAlpha();
+    } else {
+        maSwapInfo.mbIsTransparent = false;
+        maSwapInfo.mbIsAlpha = false;
     }
+
     maSwapInfo.mnAnimationLoopCount = 0;
     maSwapInfo.mbIsEPS = false;
-    maSwapInfo.mbIsTransparent = false;
-    maSwapInfo.mbIsAlpha = false;
     maSwapInfo.mbIsAnimated = bAnimated;
 }
 
