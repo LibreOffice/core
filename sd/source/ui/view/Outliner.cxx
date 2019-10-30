@@ -495,8 +495,8 @@ bool SdOutliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
             pSearchDlg->SetSrchFlag(false);
         }
     }
-    else
-        mpDrawDocument->GetDocSh()->SetWaitCursor( false );
+
+    mpDrawDocument->GetDocSh()->SetWaitCursor( false );
 
     return bEndOfSearch;
 }
