@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_c0bae408",
+        "filename": "include/svx/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1663,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-10-30T10:08:13Z",
+      "side": 1,
+      "message": "uh... can we really have this string show up possibly untranslated in English everywhere :)",
+      "range": {
+        "startLine": 1663,
+        "startChar": 82,
+        "endLine": 1663,
+        "endChar": 104
+      },
+      "revId": "2667ca901e8a95f41794cd1f326364a390b3e685",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
