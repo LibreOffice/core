@@ -169,6 +169,12 @@ void lclProcessElement( OStringBuffer& rBuffer, const OString& rElement )
         // do nothing
     }
 
+    // just append any xml prolog (text directive) or processing instructions: <?...?>
+    else if( (nElementLen >= 4) && (pcOpen[ 1 ] == '?') && (pcClose[ -1 ] == '?') )
+    {
+        rBuffer.append( rElement );
+    }
+
     // replace '<br>' element with newline
     else if( (nElementLen >= 4) && (pcOpen[ 1 ] == 'b') && (pcOpen[ 2 ] == 'r') && (lclFindNonWhiteSpace( pcOpen + 3, pcClose ) == pcClose) )
     {
