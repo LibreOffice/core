@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_screenshots, \
     sfx \
     svl \
     svt \
+    svx \
     svxcore \
     sc \
     scui \
