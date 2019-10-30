@@ -164,7 +164,6 @@ public:
     virtual void calculateGridOffsetForB2DRange(
         basegfx::B2DVector& rTarget,
         const basegfx::B2DRange& rB2DRange) const;
-    void resetAllGridOffsets();
 };
 
 }}

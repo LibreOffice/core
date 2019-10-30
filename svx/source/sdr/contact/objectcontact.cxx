@@ -203,18 +203,6 @@ OutputDevice* ObjectContact::TryToGetOutputDevice() const
     return nullptr;
 }
 
-void ObjectContact::resetAllGridOffsets()
-{
-    const sal_uInt32 nVOCCount(getViewObjectContactCount());
-
-    for(sal_uInt32 a(0); a < nVOCCount; a++)
-    {
-        ViewObjectContact* pVOC(getViewObjectContact(a));
-        assert(pVOC && "ObjectContact: ViewObjectContact list Corrupt (!)");
-        pVOC->resetGridOffset();
-    }
-}
-
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -328,9 +328,6 @@ void ScDrawView::RecalcScale()
         pDoc, nTab, 0, 0, nEndCol, nEndRow, pDev, aZoomX, aZoomY, nPPTX, nPPTY,
         aScaleX, aScaleY);
 
-    // clear all evtl existing GridOffset vectors
-    resetGridOffsetsForAllSdrPageViews();
-
     SdrPageView* pPV = GetSdrPageView();
     if ( pViewData && pPV )
     {
@@ -966,30 +963,6 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
         // fdo#63878 Fix the X position for RTL Sheet
         if( pDoc->IsNegativePage( GetTab() ) )
             aGridOff.setX( aCurPosHmm.getX() + aOldPos.getX() );
-    }
-}
-
-void ScDrawView::resetGridOffsetsForAllSdrPageViews()
-{
-    SdrPageView* pPageView(GetSdrPageView());
-
-    if(nullptr != pPageView)
-    {
-        for(sal_uInt32 a(0); a < pPageView->PageWindowCount(); a++)
-        {
-            SdrPageWindow* pPageWindow(pPageView->GetPageWindow(a));
-            assert(pPageWindow && "SdrView::SetMasterPagePaintCaching: Corrupt SdrPageWindow list (!)");
-
-            if(nullptr != pPageWindow)
-            {
-                sdr::contact::ObjectContact& rObjectContact(pPageWindow->GetObjectContact());
-
-                if(rObjectContact.supportsGridOffsets())
-                {
-                    rObjectContact.resetAllGridOffsets();
-                }
-            }
-        }
     }
 }
 
