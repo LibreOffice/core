@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_f5f9e47f",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-10-30T04:54:55Z",
+      "side": 1,
+      "message": "we already have SRCDIR? we already use it inthe compilerplugins/",
+      "revId": "ab6e22789a4597dc11fb19b297a4010bccd31ffb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f7f9b97_15f58083",
+        "filename": "vcl/source/image/ImplImageTree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-10-30T04:54:55Z",
+      "side": 1,
+      "message": "Is this going to work when LO is installed?",
+      "revId": "ab6e22789a4597dc11fb19b297a4010bccd31ffb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
