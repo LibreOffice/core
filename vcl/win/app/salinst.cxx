@@ -51,6 +51,7 @@
 #include <vcl/skia/SkiaHelper.hxx>
 #if HAVE_FEATURE_SKIA
 #include <skia/salbmp.hxx>
+#include <skia/win/gdiimpl.hxx>
 #endif
 
 #include <salsys.hxx>

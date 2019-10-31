@@ -16,6 +16,9 @@
 #include <skia/gdiimpl.hxx>
 #include <win/salgdi.h>
 #include <win/wingdiimpl.hxx>
+#include <o3tl/lru_map.hxx>
+#include <ControlCacheKey.hxx>
+#include <svdata.hxx>
 
 class ControlCacheKey;
 namespace sk_app
@@ -33,6 +36,9 @@ public:
     virtual bool copyToTexture(Texture& aTexture) override;
 
     virtual bool wantsTextColorWhite() const override { return true; }
+
+    SkBitmap getAsBitmap();
+    SkBitmap getAsMaskBitmap();
 
     struct Texture;
 };
@@ -78,6 +84,19 @@ protected:
 
 private:
     std::unique_ptr<sk_app::WindowContext> mWindowContext;
+};
+
+typedef std::pair<ControlCacheKey, SkBitmap> SkiaControlCachePair;
+typedef o3tl::lru_map<ControlCacheKey, SkBitmap, ControlCacheHashFunction> SkiaControlCacheType;
+
+class SkiaControlsCache
+{
+    SkiaControlCacheType cache;
+
+    SkiaControlsCache();
+
+public:
+    static SkiaControlCacheType& get();
 };
 
 #endif
