@@ -131,7 +131,7 @@ inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT,
     return stream;
 }
 
-struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamTable
+struct SC_DLLPUBLIC ScQueryParam final : public ScQueryParamBase, public ScQueryParamTable
 {
     bool            bDestPers;          // not saved
     SCTAB           nDestTab;
@@ -193,7 +193,7 @@ struct ScDBQueryParamInternal : public ScDBQueryParamBase, public ScQueryParamTa
     virtual bool IsValidFieldIndex() const override;
 };
 
-struct ScDBQueryParamMatrix : public ScDBQueryParamBase
+struct ScDBQueryParamMatrix final : public ScDBQueryParamBase
 {
     ScMatrixRef mpMatrix;
 

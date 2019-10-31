@@ -46,7 +46,7 @@ public:
     Type getType() const;
 };
 
-class RefColReorderHint : public RefHint
+class RefColReorderHint final : public RefHint
 {
     const sc::ColRowReorderMapType& mrColMap;
     SCTAB const mnTab;
@@ -92,14 +92,14 @@ public:
     SCCOL getEndColumn() const;
 };
 
-class RefStartListeningHint : public RefHint
+class RefStartListeningHint final : public RefHint
 {
 public:
     RefStartListeningHint();
     virtual ~RefStartListeningHint() override;
 };
 
-class RefStopListeningHint : public RefHint
+class RefStopListeningHint final : public RefHint
 {
 public:
     RefStopListeningHint();

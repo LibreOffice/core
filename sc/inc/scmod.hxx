@@ -78,7 +78,7 @@ class ScMarkData;
 struct ScDragData;
 class SfxDialogController;
 
-class SAL_DLLPUBLIC_RTTI ScModule: public SfxModule, public SfxListener, public utl::ConfigurationListener
+class SAL_DLLPUBLIC_RTTI ScModule final : public SfxModule, public SfxListener, public utl::ConfigurationListener
 {
     Timer               m_aIdleTimer;
     Idle                m_aSpellIdle;

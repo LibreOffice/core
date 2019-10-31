@@ -38,10 +38,10 @@ class Timer;
 class ScDocument;
 class ScChartUnoData;
 
-class SC_DLLPUBLIC ScChartListener : public SvtListener
+class SC_DLLPUBLIC ScChartListener final : public SvtListener
 {
 public:
-    class ExternalRefListener : public ScExternalRefManager::LinkListener
+    class ExternalRefListener final : public ScExternalRefManager::LinkListener
     {
     public:
         ExternalRefListener(ScChartListener& rParent, ScDocument* pDoc);

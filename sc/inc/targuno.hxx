@@ -43,7 +43,7 @@ class ScDocShell;
 
 //! Graphic / OleObject (need separate collections!)
 
-class ScLinkTargetTypesObj : public ::cppu::WeakImplHelper<
+class ScLinkTargetTypesObj final : public ::cppu::WeakImplHelper<
                                 css::container::XNameAccess,
                                 css::lang::XServiceInfo >,
                             public SfxListener
@@ -73,7 +73,7 @@ public:
     virtual css::uno::Sequence< OUString> SAL_CALL      getSupportedServiceNames() override;
 };
 
-class ScLinkTargetTypeObj : public ::cppu::WeakImplHelper<
+class ScLinkTargetTypeObj final : public ::cppu::WeakImplHelper<
                                 css::beans::XPropertySet,
                                 css::document::XLinkTargetSupplier,
                                 css::lang::XServiceInfo >,
@@ -115,7 +115,7 @@ public:
     virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScLinkTargetsObj : public ::cppu::WeakImplHelper<
+class ScLinkTargetsObj final : public ::cppu::WeakImplHelper<
                             css::container::XNameAccess,
                             css::lang::XServiceInfo >
 {

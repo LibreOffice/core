@@ -39,7 +39,7 @@
 class ScDocShell;
 class ScChartObj;
 
-class ScChartsObj : public cppu::WeakImplHelper<
+class ScChartsObj final : public cppu::WeakImplHelper<
                             css::table::XTableCharts,
                             css::container::XEnumerationAccess,
                             css::container::XIndexAccess,

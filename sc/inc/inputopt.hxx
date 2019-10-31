@@ -72,7 +72,7 @@ public:
 
 // CfgItem for input options
 
-class ScInputCfg : public ScInputOptions,
+class ScInputCfg final : public ScInputOptions,
                   public utl::ConfigItem
 {
     static css::uno::Sequence<OUString> GetPropertyNames();

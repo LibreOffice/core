@@ -25,7 +25,7 @@
 #include <tools/solar.h>
 #include <svl/hint.hxx>
 
-class SC_DLLPUBLIC ScPaintHint : public SfxHint
+class SC_DLLPUBLIC ScPaintHint final : public SfxHint
 {
     ScRange const         aRange;
     PaintPartFlags const  nParts;
@@ -47,7 +47,7 @@ public:
     bool            GetPrintFlag() const    { return bPrint; }
 };
 
-class ScUpdateRefHint : public SfxHint
+class ScUpdateRefHint final : public SfxHint
 {
     UpdateRefMode const   eUpdateRefMode;
     ScRange const         aRange;
@@ -72,7 +72,7 @@ enum class ScLinkRefType {
     NONE, SHEET, AREA, DDE
 };
 
-class ScLinkRefreshedHint : public SfxHint
+class ScLinkRefreshedHint final : public SfxHint
 {
     ScLinkRefType nLinkType;
     OUString    aUrl;       // used for sheet links
@@ -100,7 +100,7 @@ public:
 
 //! move ScAutoStyleHint to a different file?
 
-class ScAutoStyleHint : public SfxHint
+class ScAutoStyleHint final : public SfxHint
 {
     ScRange const     aRange;
     OUString const    aStyle1;
@@ -118,7 +118,7 @@ public:
     const OUString& GetStyle2() const   { return aStyle2; }
 };
 
-class ScDBRangeRefreshedHint : public SfxHint
+class ScDBRangeRefreshedHint final : public SfxHint
 {
     ScImportParam const   aParam;
 
@@ -129,7 +129,7 @@ public:
     const ScImportParam&  GetImportParam() const    { return aParam; }
 };
 
-class ScDataPilotModifiedHint : public SfxHint
+class ScDataPilotModifiedHint final : public SfxHint
 {
     OUString const        maName;
 

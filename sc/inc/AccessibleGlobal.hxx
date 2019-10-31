@@ -26,7 +26,7 @@
 #include <set>
 
 /// Generic XAccessibleStateSet implementation.
-class ScAccessibleStateSet : public ::cppu::WeakImplHelper< css::accessibility::XAccessibleStateSet >
+class ScAccessibleStateSet final : public ::cppu::WeakImplHelper< css::accessibility::XAccessibleStateSet >
 {
 public:
     ScAccessibleStateSet();

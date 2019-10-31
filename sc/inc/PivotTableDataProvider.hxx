@@ -44,7 +44,7 @@ typedef cppu::WeakImplHelper<css::chart2::data::XDataProvider,
                              css::util::XModifyBroadcaster>
             PivotTableDataProvider_Base;
 
-class PivotTableDataProvider : public PivotTableDataProvider_Base, public SfxListener
+class PivotTableDataProvider final : public PivotTableDataProvider_Base, public SfxListener
 {
 public:
 

@@ -31,7 +31,7 @@ class ScMenuFloatingWindow;
 typedef ::cppu::ImplHelper1<
     css::accessibility::XAccessibleAction > ScAccessibleFilterMenuItem_BASE;
 
-class ScAccessibleFilterMenuItem :
+class ScAccessibleFilterMenuItem final :
     public ScAccessibleContextBase,
     public ScAccessibleFilterMenuItem_BASE
 {
@@ -75,17 +75,15 @@ public:
 
     /// Non-UNO Methods
 
-protected:
+private:
 
     virtual tools::Rectangle GetBoundingBoxOnScreen() const override;
 
     virtual tools::Rectangle GetBoundingBox() const override;
 
-private:
     bool isSelected() const;
     void updateStateSet();
 
-private:
     css::uno::Reference< css::accessibility::XAccessibleStateSet > mxStateSet;
 
     VclPtr<ScMenuFloatingWindow> mpWindow;

@@ -48,7 +48,7 @@ public:
 
 // item for the dialog / options page
 
-class SC_DLLPUBLIC ScTpPrintItem : public SfxPoolItem
+class SC_DLLPUBLIC ScTpPrintItem final : public SfxPoolItem
 {
 public:
                 ScTpPrintItem( const ScPrintOptions& rOpt );
@@ -70,7 +70,7 @@ private:
 
 // config item
 
-class ScPrintCfg : public ScPrintOptions, public utl::ConfigItem
+class ScPrintCfg final : public ScPrintOptions, public utl::ConfigItem
 {
 private:
     static css::uno::Sequence<OUString> GetPropertyNames();
