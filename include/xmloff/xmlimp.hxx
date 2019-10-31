@@ -90,6 +90,9 @@ enum class SvXMLErrorFlags;
 namespace xmloff {
     class RDFaImportHelper;
 }
+namespace xmloff::token {
+    class FastTokenHandler;
+}
 
 enum class SvXMLImportFlags {
     NONE            = 0x0000,
@@ -219,7 +222,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
     rtl::Reference < comphelper::AttributeList > maAttrList;
     rtl::Reference < comphelper::AttributeList > maNamespaceAttrList;
     css::uno::Reference< css::xml::sax::XFastDocumentHandler > mxFastDocumentHandler;
-    static css::uno::Reference< css::xml::sax::XFastTokenHandler > xTokenHandler;
+    static rtl::Reference< xmloff::token::FastTokenHandler > xTokenHandler;
     static std::unordered_map< sal_Int32, std::pair< OUString, OUString > > aNamespaceMap;
     static std::unordered_map< OUString, OUString > aNamespaceURIPrefixMap;
     static bool bIsNSMapsInitialized;
@@ -377,7 +380,7 @@ public:
     // get import helper for events
     XMLEventImportHelper& GetEventImport();
 
-    static OUString getNameFromToken( sal_Int32 nToken );
+    static const OUString & getNameFromToken( sal_Int32 nToken );
     static OUString getNamespacePrefixFromToken(sal_Int32 nToken, const SvXMLNamespaceMap* pMap);
     static OUString getNamespaceURIFromToken( sal_Int32 nToken );
     static OUString getNamespacePrefixFromURI( const OUString& rURI );

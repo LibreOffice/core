@@ -82,7 +82,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::xmloff::token;
 
-css::uno::Reference< css::xml::sax::XFastTokenHandler > SvXMLImport::xTokenHandler( new FastTokenHandler() );
+rtl::Reference< FastTokenHandler > SvXMLImport::xTokenHandler( new FastTokenHandler() );
 std::unordered_map< sal_Int32, std::pair< OUString, OUString > > SvXMLImport::aNamespaceMap;
 std::unordered_map< OUString, OUString > SvXMLImport::aNamespaceURIPrefixMap;
 const OUString SvXMLImport::aDefaultNamespace = OUString("");
@@ -406,7 +406,7 @@ SvXMLImport::SvXMLImport(
     InitCtor_();
     mxParser = xml::sax::FastParser::create( xContext );
     setNamespaceHandler( maNamespaceHandler.get() );
-    setTokenHandler( xTokenHandler  );
+    setTokenHandler( xTokenHandler.get()  );
     if ( !bIsNSMapsInitialized )
     {
         initializeNamespaceMaps();
@@ -2013,11 +2013,9 @@ bool SvXMLImport::embeddedFontAlreadyProcessed( const OUString& url )
     return false;
 }
 
-OUString SvXMLImport::getNameFromToken( sal_Int32 nToken )
+const OUString & SvXMLImport::getNameFromToken( sal_Int32 nToken )
 {
-    uno::Sequence< sal_Int8 > aSeq = xTokenHandler->getUTF8Identifier( nToken & TOKEN_MASK );
-    return OUString( reinterpret_cast< const char* >(
-                    aSeq.getConstArray() ), aSeq.getLength(), RTL_TEXTENCODING_UTF8 );
+    return xTokenHandler->getIdentifier( nToken & TOKEN_MASK );
 }
 
 OUString SvXMLImport::getNamespacePrefixFromToken(sal_Int32 nToken, const SvXMLNamespaceMap* pMap)

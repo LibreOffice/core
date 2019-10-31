@@ -32,8 +32,16 @@ public:
     {
         SAL_WARN_IF(nToken < 0 || nToken >= XML_TOKEN_COUNT, "xmloff", "Wrong nToken parameter");
         if( 0 <= nToken && nToken < XML_TOKEN_COUNT )
-            return maTokenNames[ nToken ];
+            return maTokenNamesUtf8[ nToken ];
         return EMPTY_BYTE_SEQ;
+    }
+
+    const OUString& getTokenName( sal_Int32 nToken ) const
+    {
+        SAL_WARN_IF(nToken < 0 || nToken >= XML_TOKEN_COUNT, "xmloff", "Wrong nToken parameter");
+        if( 0 <= nToken && nToken < XML_TOKEN_COUNT )
+            return maTokenNames[ nToken ];
+        return EMPTY_STRING;
     }
 
     /** Returns the token identifier for the passed UTF-8 token name. */
@@ -52,9 +60,11 @@ public:
 private:
     static sal_Int32 getTokenPerfectHash( const char *pToken, sal_Int32 nLength );
 
-    std::vector< css::uno::Sequence< sal_Int8 > > maTokenNames;
+    std::vector< css::uno::Sequence< sal_Int8 > > maTokenNamesUtf8;
+    std::vector< OUString > maTokenNames;
 
     static const css::uno::Sequence< sal_Int8 > EMPTY_BYTE_SEQ;
+    static const OUString EMPTY_STRING;
 };
 
 struct StaticTokenMap : public rtl::Static< TokenMap, StaticTokenMap > {};
@@ -70,6 +80,8 @@ public:
     // XFastTokenHandler
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) override;
     virtual sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier ) override;
+
+    const OUString & getIdentifier( sal_Int32 nToken ) const;
 
     // Much faster direct C++ shortcut to the method that matters
     virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const override;

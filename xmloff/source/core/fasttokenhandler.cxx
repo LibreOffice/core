@@ -33,8 +33,10 @@ namespace token {
 using namespace css;
 
 const css::uno::Sequence< sal_Int8 > TokenMap::EMPTY_BYTE_SEQ;
+const OUString TokenMap::EMPTY_STRING;
 
 TokenMap::TokenMap() :
+    maTokenNamesUtf8( static_cast< size_t >( XML_TOKEN_COUNT ) ),
     maTokenNames( static_cast< size_t >( XML_TOKEN_COUNT ) )
 {
     static const sal_Char* sppcTokenNames[] =
@@ -44,11 +46,13 @@ TokenMap::TokenMap() :
     };
 
     const sal_Char* const* ppcTokenName = sppcTokenNames;
-    for( auto& rTokenName : maTokenNames )
+    int i = 0;
+    for( auto& rTokenName : maTokenNamesUtf8 )
     {
         OString aUtf8Token( *ppcTokenName );
         rTokenName = uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >(
                     aUtf8Token.getStr() ), aUtf8Token.getLength() );
+        maTokenNames[i++] = OUString( aUtf8Token.getStr(), aUtf8Token.getLength(), RTL_TEXTENCODING_UTF8 );
         ++ppcTokenName;
     }
 }
@@ -76,6 +80,11 @@ FastTokenHandler::~FastTokenHandler()
 uno::Sequence< sal_Int8 > FastTokenHandler::getUTF8Identifier( sal_Int32 nToken )
 {
     return mrTokenMap.getUtf8TokenName( nToken );
+}
+
+const OUString& FastTokenHandler::getIdentifier( sal_Int32 nToken ) const
+{
+    return mrTokenMap.getTokenName( nToken );
 }
 
 sal_Int32 FastTokenHandler::getTokenFromUTF8( const uno::Sequence< sal_Int8 >& rIdentifier )
