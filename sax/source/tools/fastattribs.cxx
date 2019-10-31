@@ -234,7 +234,10 @@ OUString FastAttributeList::getOptionalValue( ::sal_Int32 Token )
 }
 Sequence< Attribute > FastAttributeList::getUnknownAttributes(  )
 {
-    Sequence< Attribute > aSeq( maUnknownAttributes.size() );
+    auto nSize = maUnknownAttributes.size();
+    if (nSize == 0)
+        return {};
+    Sequence< Attribute > aSeq( nSize );
     Attribute* pAttr = aSeq.getArray();
     for( const auto& rAttr : maUnknownAttributes )
         rAttr.FillAttribute( pAttr++ );
