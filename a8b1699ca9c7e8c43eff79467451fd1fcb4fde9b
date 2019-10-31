@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_a16d6a99",
+        "filename": "svx/source/svdraw/svdpage.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-10-31T13:39:51Z",
+      "side": 1,
+      "message": "should this be aNewSortOrder instead of sortOrder here?",
+      "revId": "a8b1699ca9c7e8c43eff79467451fd1fcb4fde9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
