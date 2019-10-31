@@ -58,7 +58,7 @@ protected:
     ScRangeList maDirtyTableColumnNames;
 };
 
-class SAL_DLLPUBLIC_RTTI ScDBData : public SvtListener, public ScRefreshTimer
+class SAL_DLLPUBLIC_RTTI ScDBData final : public SvtListener, public ScRefreshTimer
 {
 private:
     std::unique_ptr<ScSortParam> mpSortParam;
@@ -232,7 +232,7 @@ public:
     /**
      * Stores global named database ranges.
      */
-    class SC_DLLPUBLIC NamedDBs : public ScDBDataContainerBase
+    class SC_DLLPUBLIC NamedDBs final : public ScDBDataContainerBase
     {
         friend class ScDBCollection;
 

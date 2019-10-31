@@ -117,7 +117,7 @@ public:
 
 //  proxy implementation of ScDPTableData to add grouped items
 
-class ScDPGroupTableData : public ScDPTableData
+class ScDPGroupTableData final : public ScDPTableData
 {
     std::shared_ptr<ScDPTableData> pSourceData;
     long                    nSourceCount;

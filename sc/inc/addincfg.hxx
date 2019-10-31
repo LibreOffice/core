@@ -22,7 +22,7 @@
 
 #include <unotools/configitem.hxx>
 
-class ScAddInCfg : public utl::ConfigItem
+class ScAddInCfg final : public utl::ConfigItem
 {
 private:
     virtual void    ImplCommit() override;

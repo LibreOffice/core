@@ -112,7 +112,7 @@ public:
 
 //  ScViewPaneObj for direct use (including OWeakObject)
 
-class ScViewPaneObj : public ScViewPaneBase, public cppu::OWeakObject
+class ScViewPaneObj final : public ScViewPaneBase, public cppu::OWeakObject
 {
 public:
                             ScViewPaneObj(ScTabViewShell* pViewSh, sal_uInt16 nP);
@@ -125,7 +125,7 @@ public:
 
 //  OWeakObject is base of SfxBaseController -> use ScViewPaneBase
 
-class ScTabViewObj : public ScViewPaneBase,
+class ScTabViewObj final : public ScViewPaneBase,
                      public SfxBaseController,
                      public css::sheet::XSpreadsheetView,
                      public css::sheet::XEnhancedMouseClickBroadcaster,
@@ -285,7 +285,7 @@ public:
     virtual css::uno::Sequence<sal_Int32> SAL_CALL getSelectedSheets() override;
 };
 
-class ScPreviewObj : public SfxBaseController,
+class ScPreviewObj final : public SfxBaseController,
                      public SfxListener,
                      public css::sheet::XSelectedSheetsSupplier
 {

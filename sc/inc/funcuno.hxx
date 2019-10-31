@@ -53,7 +53,7 @@ public:
     void        Clear();
 };
 
-class ScFunctionAccess : public cppu::WeakImplHelper<
+class ScFunctionAccess final : public cppu::WeakImplHelper<
                                         css::sheet::XFunctionAccess,
                                         css::beans::XPropertySet,
                                         css::lang::XServiceInfo>,

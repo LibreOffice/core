@@ -25,7 +25,7 @@
 
 // filter options
 
-class SC_DLLPUBLIC ScFilterOptions : public utl::ConfigItem
+class SC_DLLPUBLIC ScFilterOptions final : public utl::ConfigItem
 {
 private:
     bool        bWK3Flag;

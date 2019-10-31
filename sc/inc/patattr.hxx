@@ -49,7 +49,7 @@ enum ScAutoFontColorMode
     SC_AUTOCOL_IGNOREALL    ///< like DISPLAY, but ignore stored font and background colors
 };
 
-class SC_DLLPUBLIC ScPatternAttr: public SfxSetItem
+class SC_DLLPUBLIC ScPatternAttr final : public SfxSetItem
 {
     boost::optional<OUString>  pName;
     ScStyleSheet*              pStyle;

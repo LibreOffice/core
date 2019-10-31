@@ -111,7 +111,7 @@ private:
 
 // Item for the options dialog - View
 
-class SC_DLLPUBLIC ScTpViewItem : public SfxPoolItem
+class SC_DLLPUBLIC ScTpViewItem final : public SfxPoolItem
 {
 public:
                 ScTpViewItem( const ScViewOptions& rOpt );

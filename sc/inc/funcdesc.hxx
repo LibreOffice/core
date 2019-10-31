@@ -38,7 +38,7 @@
   Stores and generates human readable descriptions for spreadsheet-functions,
   e.g.\ functions used in formulas in calc
 */
-class ScFuncDesc : public formula::IFunctionDescription
+class ScFuncDesc final : public formula::IFunctionDescription
 {
 public:
     ScFuncDesc();
@@ -257,7 +257,7 @@ private:
   Contains the name, index and function manager of a category,
   as well as a list of functions in the category
 */
-class ScFunctionCategory : public formula::IFunctionCategory
+class ScFunctionCategory final : public formula::IFunctionCategory
 {
 public:
     ScFunctionCategory(::std::vector<const ScFuncDesc*>* _pCategory,sal_uInt32 _nCategory)
@@ -295,7 +295,7 @@ private:
 /**
   Stores spreadsheet functions in categories, including a cumulative ('All') category and makes them accessible.
 */
-class ScFunctionMgr : public formula::IFunctionManager
+class ScFunctionMgr final : public formula::IFunctionManager
 {
 public:
     /**

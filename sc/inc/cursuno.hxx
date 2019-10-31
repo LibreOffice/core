@@ -25,7 +25,7 @@
 #include <com/sun/star/sheet/XSheetCellCursor.hpp>
 #include <com/sun/star/sheet/XUsedAreaCursor.hpp>
 
-class ScCellCursorObj : public ScCellRangeObj,
+class ScCellCursorObj final : public ScCellRangeObj,
                         public css::sheet::XSheetCellCursor,
                         public css::sheet::XUsedAreaCursor,
                         public css::table::XCellCursor

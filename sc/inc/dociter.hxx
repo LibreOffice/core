@@ -127,7 +127,7 @@ private:
         virtual bool getNext(Value& rValue) = 0;
     };
 
-    class DataAccessInternal : public DataAccess
+    class DataAccessInternal final : public DataAccess
     {
         typedef std::pair<sc::CellStoreType::const_iterator,size_t> PositionType;
     public:
@@ -157,7 +157,7 @@ private:
         bool const          bCalcAsShown;
     };
 
-    class DataAccessMatrix : public DataAccess
+    class DataAccessMatrix final : public DataAccess
     {
     public:
         DataAccessMatrix(ScDBQueryParamMatrix* pParam);

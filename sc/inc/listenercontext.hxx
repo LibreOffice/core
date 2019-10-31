@@ -66,7 +66,7 @@ public:
     void purgeEmptyBroadcasters();
 };
 
-class PurgeListenerAction : public ColumnSpanSet::Action
+class PurgeListenerAction final : public ColumnSpanSet::Action
 {
     ScDocument& mrDoc;
     std::unique_ptr<ColumnBlockPosition> mpBlockPos;

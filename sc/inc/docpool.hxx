@@ -27,14 +27,14 @@
 class ScStyleSheet;
 class ScDocument;
 
-class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
+class SC_DLLPUBLIC ScDocumentPool final : public SfxItemPool
 {
     std::vector<SfxPoolItem*> mvPoolDefaults;
     sal_uInt64 mnCurrentMaxKey;
 
 public:
             ScDocumentPool();
-protected:
+private:
             virtual ~ScDocumentPool() override;
 public:
 
@@ -47,7 +47,7 @@ public:
                                   MapUnit          ePresentationMetric,
                                   OUString&           rText,
                                   const IntlWrapper& rIntl ) const override;
-protected:
+private:
     virtual const SfxPoolItem&  PutImpl( const SfxPoolItem&, sal_uInt16 nWhich = 0, bool bPassingOwnership = false ) override;
 };
 

@@ -24,7 +24,7 @@
 
 class ScDrawLayer;
 
-class ScDrawPage : public FmFormPage
+class ScDrawPage final : public FmFormPage
 {
     ScDrawPage& operator=(const ScDrawPage&) = delete;
     ScDrawPage(const ScDrawPage&) = delete;
