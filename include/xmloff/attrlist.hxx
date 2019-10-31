@@ -32,7 +32,7 @@
 
 struct SvXMLAttributeList_Impl;
 
-class XMLOFF_DLLPUBLIC SvXMLAttributeList : public ::cppu::WeakImplHelper<
+class XMLOFF_DLLPUBLIC SvXMLAttributeList final : public ::cppu::WeakImplHelper<
         css::xml::sax::XAttributeList,
         css::util::XCloneable,
         css::lang::XUnoTunnel>

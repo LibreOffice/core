@@ -48,13 +48,12 @@ namespace xmloff
 
     /** provides functionality for exporting a complete form layer.
     */
-    class XMLOFF_DLLPUBLIC OFormLayerXMLExport
+    class XMLOFF_DLLPUBLIC OFormLayerXMLExport final
                 :public ::salhelper::SimpleReferenceObject
     {
         // impl class
         std::unique_ptr<OFormLayerXMLExport_Impl> m_pImpl;
 
-    protected:
         virtual ~OFormLayerXMLExport() override;
 
     public:

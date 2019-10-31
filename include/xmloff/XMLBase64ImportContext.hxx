@@ -29,7 +29,7 @@ namespace com { namespace sun { namespace star { namespace xml { namespace sax {
 namespace com { namespace sun { namespace star { namespace io {
     class XOutputStream; } } } }
 
-class XMLOFF_DLLPUBLIC XMLBase64ImportContext : public SvXMLImportContext
+class XMLOFF_DLLPUBLIC XMLBase64ImportContext final : public SvXMLImportContext
 {
     css::uno::Reference< css::io::XOutputStream > xOut;
     OUString sBase64CharsLeft;

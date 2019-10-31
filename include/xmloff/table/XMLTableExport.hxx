@@ -52,7 +52,7 @@ struct XMLTableInfo
     std::vector< OUString > maDefaultRowCellStyles;
 };
 
-class XMLOFF_DLLPUBLIC XMLTableExport : public salhelper::SimpleReferenceObject
+class XMLOFF_DLLPUBLIC XMLTableExport final : public salhelper::SimpleReferenceObject
 {
 public:
     XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExportPropertyMapper >& xCellExportPropertySetMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef );
