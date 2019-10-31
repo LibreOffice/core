@@ -1597,12 +1597,12 @@ void SvtLineListBox::SelectEntry(SvxBorderLineStyle nStyle)
     if (nStyle == SvxBorderLineStyle::NONE)
     {
         m_xLineSet->SetNoSelection();
-        m_xNoneButton->set_has_default(true);
+        m_xNoneButton->grab_focus();
     }
     else
     {
         m_xLineSet->SelectItem(static_cast<sal_Int16>(nStyle) + 1);
-        m_xNoneButton->set_has_default(false);
+        m_xLineSet->GrabFocus();
     }
     UpdatePreview();
 }

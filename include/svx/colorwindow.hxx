@@ -149,6 +149,7 @@ private:
     std::unique_ptr<weld::Widget> mxAutomaticSeparator;
     std::unique_ptr<weld::CustomWeld> mxColorSetWin;
     std::unique_ptr<weld::CustomWeld> mxRecentColorSetWin;
+    weld::Button* mpDefaultButton;
 
     DECL_LINK(SelectHdl, SvtValueSet*, void);
     DECL_LINK(SelectPaletteHdl, weld::ComboBox&, void);
