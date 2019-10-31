@@ -1,0 +1,26 @@
+---
+assumeFilename: sfx2/source/appl/app.cxx
+blacklist:
+    sfx2/source/appl/appdde.cxx:
+    # Needed on WIN32
+    - config_features.h
+    - rtl/character.hxx
+    - rtl/malformeduriexception.hxx
+    - rtl/uri.hxx
+    - sot/exchange.hxx
+    - svl/eitem.hxx
+    - basic/sbstar.hxx
+    - svl/stritem.hxx
+    - sfx2/lnkbase.hxx
+    - sfx2/linkmgr.hxx
+    - tools/debug.hxx
+    - tools/urlobj.hxx
+    - tools/diagnose_ex.h
+    - unotools/pathoptions.hxx
+    - vcl/svapp.hxx
+    - sfx2/viewfrm.hxx
+    - sfx2/dispatch.hxx
+    - sfx2/sfxsids.hrc
+    - sfx2/docfile.hxx
+    - ucbhelper/content.hxx
+    - comphelper/processfactory.hxx
