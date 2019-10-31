@@ -37,6 +37,7 @@
 #include <svx/xlnclit.hxx>
 #include <svx/chrtitem.hxx>
 #include <svx/xlnwtit.hxx>
+#include <svx/xflclit.hxx>
 
 void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 {
@@ -203,7 +204,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
 namespace
 {
-    void lcl_convertStringArguments(std::unique_ptr<SfxItemSet>& pArgs)
+    void lcl_convertStringArguments(sal_uInt16 nSlot, std::unique_ptr<SfxItemSet>& pArgs)
     {
         Color aColor;
         OUString sColor;
@@ -218,8 +219,22 @@ namespace
             else
                 aColor = Color(sColor.toInt32(16));
 
-            XLineColorItem aLineColorItem(OUString(), aColor);
-            pArgs->Put(aLineColorItem);
+            switch (nSlot)
+            {
+                case SID_ATTR_LINE_COLOR:
+                {
+                    XLineColorItem aLineColorItem(OUString(), aColor);
+                    pArgs->Put(aLineColorItem);
+                    break;
+                }
+
+                case SID_ATTR_FILL_COLOR:
+                {
+                    XFillColorItem aFillColorItem(OUString(), aColor);
+                    pArgs->Put(aFillColorItem);
+                    break;
+                }
+            }
         }
         else if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_LINE_WIDTH_ARG, false, &pItem))
         {
@@ -249,7 +264,7 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest const & rReq)
         if(pView->AreObjectsMarked())
         {
             std::unique_ptr<SfxItemSet> pNewArgs = pArgs->Clone();
-            lcl_convertStringArguments(pNewArgs);
+            lcl_convertStringArguments(rReq.GetSlot(), pNewArgs);
             pView->SetAttrToMarked(*pNewArgs, false);
         }
         else
