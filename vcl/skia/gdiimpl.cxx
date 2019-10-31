@@ -133,6 +133,14 @@ Color fromSkColor(SkColor color)
     return Color(255 - SkColorGetA(color), SkColorGetR(color), SkColorGetG(color),
                  SkColorGetB(color));
 }
+
+// returns true if the source or destination rectangles are invalid
+bool checkInvalidSourceOrDestination(SalTwoRect const& rPosAry)
+{
+    return rPosAry.mnSrcWidth <= 0 || rPosAry.mnSrcHeight <= 0 || rPosAry.mnDestWidth <= 0
+           || rPosAry.mnDestHeight <= 0;
+}
+
 } // end anonymous namespace
 
 // Class that triggers flushing the backing buffer when idle.
@@ -642,11 +650,8 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
 
 bool SkiaSalGraphicsImpl::blendBitmap(const SalTwoRect& rPosAry, const SalBitmap& rBitmap)
 {
-    if (rPosAry.mnSrcWidth <= 0 || rPosAry.mnSrcHeight <= 0 || rPosAry.mnDestWidth <= 0
-        || rPosAry.mnDestHeight <= 0)
-    {
+    if (checkInvalidSourceOrDestination(rPosAry))
         return false;
-    }
 
     assert(dynamic_cast<const SkiaSalBitmap*>(&rBitmap));
 
@@ -661,11 +666,8 @@ bool SkiaSalGraphicsImpl::blendAlphaBitmap(const SalTwoRect& rPosAry,
                                            const SalBitmap& rMaskBitmap,
                                            const SalBitmap& rAlphaBitmap)
 {
-    if (rPosAry.mnSrcWidth <= 0 || rPosAry.mnSrcHeight <= 0 || rPosAry.mnDestWidth <= 0
-        || rPosAry.mnDestHeight <= 0)
-    {
+    if (checkInvalidSourceOrDestination(rPosAry))
         return false;
-    }
 
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSrcBitmap));
     assert(dynamic_cast<const SkiaSalBitmap*>(&rMaskBitmap));
@@ -701,11 +703,8 @@ bool SkiaSalGraphicsImpl::blendAlphaBitmap(const SalTwoRect& rPosAry,
 
 void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
-    if (rPosAry.mnSrcWidth <= 0 || rPosAry.mnSrcHeight <= 0 || rPosAry.mnDestWidth <= 0
-        || rPosAry.mnDestHeight <= 0)
-    {
+    if (checkInvalidSourceOrDestination(rPosAry))
         return;
-    }
 
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSalBitmap));
     const SkiaSalBitmap& rSkiaSourceBitmap = static_cast<const SkiaSalBitmap&>(rSalBitmap);
