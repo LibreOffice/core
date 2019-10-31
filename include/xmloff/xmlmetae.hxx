@@ -47,7 +47,7 @@ class SvXMLExport;
     office:meta must <em>not</em> be written.
     </p>
  */
-class XMLOFF_DLLPUBLIC SvXMLMetaExport : public cppu::WeakImplHelper<
+class XMLOFF_DLLPUBLIC SvXMLMetaExport final : public cppu::WeakImplHelper<
                 css::xml::sax::XDocumentHandler >
 {
 private:

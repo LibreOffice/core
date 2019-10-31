@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 
-class XMLEmbeddedObjectExportFilter : public cppu::WeakImplHelper<
+class XMLEmbeddedObjectExportFilter final : public cppu::WeakImplHelper<
              css::xml::sax::XExtendedDocumentHandler,
              css::lang::XServiceInfo,
              css::lang::XInitialization>

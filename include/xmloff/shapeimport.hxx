@@ -131,7 +131,7 @@ enum SdXML3DLightAttrTokenMap
 
 // dr3d:3dlight context
 
-class SdXML3DLightContext: public SvXMLImportContext
+class SdXML3DLightContext final : public SvXMLImportContext
 {
     // local parameters which need to be read
     sal_Int32                   maDiffuseColor;

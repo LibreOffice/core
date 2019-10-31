@@ -28,7 +28,7 @@
 
 struct XMLDocumentSettingsContext_Data;
 
-class XMLOFF_DLLPUBLIC XMLDocumentSettingsContext : public SvXMLImportContext
+class XMLOFF_DLLPUBLIC XMLDocumentSettingsContext final : public SvXMLImportContext
 {
     ::std::unique_ptr< XMLDocumentSettingsContext_Data >  m_pData;
 

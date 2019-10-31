@@ -30,7 +30,7 @@ class AnimExpImpl;
 class SvXMLExport;
 class XMLShapeExport;
 
-class XMLAnimationsExporter : public salhelper::SimpleReferenceObject
+class XMLAnimationsExporter final : public salhelper::SimpleReferenceObject
 {
     std::unique_ptr<AnimExpImpl> mpImpl;
 

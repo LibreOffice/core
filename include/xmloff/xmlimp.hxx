@@ -112,7 +112,7 @@ namespace o3tl
     template<> struct typed_flags<SvXMLImportFlags> : is_typed_flags<SvXMLImportFlags, 0xffff> {};
 }
 
-class SvXMLImportFastNamespaceHandler : public ::cppu::WeakImplHelper< css::xml::sax::XFastNamespaceHandler >
+class SvXMLImportFastNamespaceHandler final : public ::cppu::WeakImplHelper< css::xml::sax::XFastNamespaceHandler >
 {
 private:
     struct NamespaceDefine
@@ -133,7 +133,7 @@ public:
     virtual OUString SAL_CALL getNamespaceURI( const OUString& rNamespacePrefix ) override;
 };
 
-class XMLOFF_DLLPUBLIC SvXMLLegacyToFastDocHandler : public ::cppu::WeakImplHelper<
+class XMLOFF_DLLPUBLIC SvXMLLegacyToFastDocHandler final : public ::cppu::WeakImplHelper<
              css::xml::sax::XDocumentHandler,
              css::document::XImporter >
 {

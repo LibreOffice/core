@@ -36,7 +36,7 @@ namespace xmloff
 {
 class AnimationsExporterImpl;
 
-class XMLOFF_DLLPUBLIC AnimationsExporter : public salhelper::SimpleReferenceObject
+class XMLOFF_DLLPUBLIC AnimationsExporter final : public salhelper::SimpleReferenceObject
 {
     std::unique_ptr<AnimationsExporterImpl>  mpImpl;
 

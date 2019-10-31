@@ -23,7 +23,7 @@
 #include <xmloff/xmlimppr.hxx>
 #include <memory>
 
-class XMLOFF_DLLPUBLIC XMLTextImportPropertyMapper : public SvXMLImportPropertyMapper
+class XMLOFF_DLLPUBLIC XMLTextImportPropertyMapper final : public SvXMLImportPropertyMapper
 {
     sal_Int32 nSizeTypeIndex;
     sal_Int32 nWidthTypeIndex;
@@ -46,7 +46,6 @@ class XMLOFF_DLLPUBLIC XMLTextImportPropertyMapper : public SvXMLImportPropertyM
                 std::unique_ptr<XMLPropertyState>* ppNewFontPitch,
                 std::unique_ptr<XMLPropertyState>* ppNewFontCharSet ) const;
 
-protected:
     virtual bool handleSpecialItem(
             XMLPropertyState& rProperty,
             ::std::vector< XMLPropertyState >& rProperties,

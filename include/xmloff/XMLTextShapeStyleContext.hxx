@@ -23,13 +23,11 @@
 #include <xmloff/dllapi.h>
 #include <xmloff/XMLShapeStyleContext.hxx>
 
-class XMLOFF_DLLPUBLIC XMLTextShapeStyleContext : public XMLShapeStyleContext
+class XMLOFF_DLLPUBLIC XMLTextShapeStyleContext final : public XMLShapeStyleContext
 {
     bool                  bAutoUpdate : 1;
 
     SvXMLImportContextRef xEventContext;
-
-protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,
