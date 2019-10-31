@@ -66,6 +66,16 @@ DECLARE_OOXMLIMPORT_TEST(testTdf125038b, "tdf125038b.docx")
     CPPUNIT_ASSERT(!xParagraphs->hasMoreElements());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf125038c, "tdf125038c.docx")
+{
+    OUString aActual = getParagraph(1)->getString();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: email: test@test.test
+    // - Actual  : email:
+    // I.e. the result of the MERGEFIELD field inside an IF field was lost.
+    CPPUNIT_ASSERT_EQUAL(OUString("email: test@test.test"), aActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

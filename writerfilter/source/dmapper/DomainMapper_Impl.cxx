@@ -174,6 +174,52 @@ struct FieldConversion
 
 typedef std::unordered_map<OUString, FieldConversion> FieldConversionMap_t;
 
+/// Gives access to the parent field contenxt of the topmost one, if there is any.
+static FieldContextPtr GetParentFieldContext(const std::deque<FieldContextPtr>& rFieldStack)
+{
+    if (rFieldStack.size() < 2)
+    {
+        return nullptr;
+    }
+
+    return rFieldStack[rFieldStack.size() - 2];
+}
+
+/// Decides if the pInner field inside pOuter is allowed in Writer core, depending on their type.
+static bool IsFieldNestingAllowed(const FieldContextPtr& pOuter, const FieldContextPtr& pInner)
+{
+    if (!pOuter->GetFieldId())
+    {
+        return true;
+    }
+
+    if (!pInner->GetFieldId())
+    {
+        return true;
+    }
+
+    switch (pOuter->GetFieldId().get())
+    {
+        case FIELD_IF:
+        {
+            switch (pInner->GetFieldId().get())
+            {
+                case FIELD_MERGEFIELD:
+                {
+                    return false;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+
+    return true;
+}
+
 uno::Any FloatingTableInfo::getPropertyValue(const OUString &propertyName)
 {
     for( beans::PropertyValue const & propVal : m_aFrameProperties )
@@ -4490,7 +4536,19 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                 }
                 default:
+                {
+                    FieldContextPtr pOuter = GetParentFieldContext(m_aFieldStack);
+                    if (pOuter)
+                    {
+                        if (!IsFieldNestingAllowed(pOuter, m_aFieldStack.back()))
+                        {
+                            // Parent field can't host this child field: don't create a child field
+                            // in this case.
+                            bCreateField = false;
+                        }
+                    }
                     break;
+                }
                 }
                 if (m_bStartTOC && (aIt->second.eFieldId == FIELD_PAGEREF) )
                 {
@@ -5202,6 +5260,19 @@ bool DomainMapper_Impl::IsFieldResultAsString()
     {
         bRet = pContext->GetTextField().is() || pContext->GetFieldId() == FIELD_FORMDROPDOWN;
     }
+
+    if (!bRet)
+    {
+        FieldContextPtr pOuter = GetParentFieldContext(m_aFieldStack);
+        if (pOuter)
+        {
+            if (!IsFieldNestingAllowed(pOuter, m_aFieldStack.back()))
+            {
+                // Child field has no backing SwField, but the parent has: append is still possible.
+                bRet = pOuter->GetTextField().is();
+            }
+        }
+    }
     return bRet;
 }
 
@@ -5212,6 +5283,17 @@ void DomainMapper_Impl::AppendFieldResult(OUString const& rString)
     SAL_WARN_IF(!pContext.get(), "writerfilter.dmapper", "no field context");
     if (pContext.get())
     {
+        FieldContextPtr pOuter = GetParentFieldContext(m_aFieldStack);
+        if (pOuter)
+        {
+            if (!IsFieldNestingAllowed(pOuter, pContext))
+            {
+                // Child can't host the field result, forward to parent.
+                pOuter->AppendResult(rString);
+                return;
+            }
+        }
+
         pContext->AppendResult(rString);
     }
 }
