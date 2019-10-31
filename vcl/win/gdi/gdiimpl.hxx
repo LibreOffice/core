@@ -70,6 +70,8 @@ public:
 
     virtual void freeResources() override;
 
+    virtual OUString getRenderBackendName() const override { return "gdi"; }
+
     virtual bool setClipRegion( const vcl::Region& ) override;
     //
     // get the depth of the device

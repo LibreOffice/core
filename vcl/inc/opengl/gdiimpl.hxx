@@ -198,6 +198,8 @@ public:
 
     virtual void freeResources() override;
 
+    virtual OUString getRenderBackendName() const override { return "opengl"; }
+
     const vcl::Region& getClipRegion() const;
     virtual bool setClipRegion( const vcl::Region& ) override;
 

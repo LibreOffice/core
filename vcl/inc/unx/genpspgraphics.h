@@ -195,6 +195,8 @@ public:
 
     virtual SystemGraphicsData GetGraphicsData() const override;
 
+    virtual OUString getRenderBackendName() const override { return "genpsp"; }
+
 #if ENABLE_CAIRO_CANVAS
     virtual bool            SupportsCairo() const override;
     virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
