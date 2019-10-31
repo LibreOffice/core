@@ -59,6 +59,10 @@ void lclPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath)
 
     for (sal_uInt32 nIndex = 0; nIndex <= nPointCount; nIndex++)
     {
+        if (nIndex == nPointCount && !bClosePath)
+            continue;
+
+        // Make sure we loop the last point to first point
         nCurrentIndex = nIndex % nPointCount;
         aCurrentPoint = rPolygon.getB2DPoint(nCurrentIndex);
 
