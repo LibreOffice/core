@@ -104,9 +104,14 @@ public:
         Device format of the generated virtual device. Use DeviceFormat::DEFAULT here, to
         indicate: take default screen depth. Only DeviceFormat::BITMASK
         is the other possibility to denote a binary mask.
+
+        @param eAlphaFormat
+        Device format of the generated virtual device. Use DeviceFormat::DEFAULT here, to
+        indicate: take default screen depth. Only DeviceFormat::BITMASK
+        is the other possibility to denote a binary mask.
      */
-    explicit VirtualDevice(DeviceFormat eFormat = DeviceFormat::DEFAULT)
-        : VirtualDevice(nullptr, eFormat, DeviceFormat::NONE, OUTDEV_VIRDEV) {}
+    explicit VirtualDevice(DeviceFormat eFormat = DeviceFormat::DEFAULT, DeviceFormat eAlphaFormat = DeviceFormat::NONE)
+        : VirtualDevice(nullptr, eFormat, eAlphaFormat, OUTDEV_VIRDEV) {}
 
     /** Create a virtual device of size 1x1
 
