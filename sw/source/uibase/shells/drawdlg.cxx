@@ -39,6 +39,7 @@
 #include <svx/xflclit.hxx>
 #include <svx/chrtitem.hxx>
 #include <svx/xlnwtit.hxx>
+#include <svx/xflclit.hxx>
 
 void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 {
