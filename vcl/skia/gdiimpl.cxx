@@ -361,16 +361,18 @@ void SkiaSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
     SkCanvas* canvas = mSurface->getCanvas();
     SkPaint paint;
     paint.setColor(toSkColor(mLineColor));
+    paint.setAntiAlias(mParent.getAntiAliasB2DDraw());
     canvas->drawLine(nX1, nY1, nX2, nY2, paint);
     postDraw();
 }
 
 void SkiaSalGraphicsImpl::privateDrawAlphaRect(long nX, long nY, long nWidth, long nHeight,
-                                               double fTransparency)
+                                               double fTransparency, bool blockAA)
 {
     preDraw();
     SkCanvas* canvas = mSurface->getCanvas();
     SkPaint paint;
+    paint.setAntiAlias(!blockAA && mParent.getAntiAliasB2DDraw());
     if (mFillColor != SALCOLOR_NONE)
     {
         paint.setColor(toSkColorWithTransparency(mFillColor, fTransparency));
@@ -388,7 +390,7 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(long nX, long nY, long nWidth, lo
 
 void SkiaSalGraphicsImpl::drawRect(long nX, long nY, long nWidth, long nHeight)
 {
-    privateDrawAlphaRect(nX, nY, nWidth, nHeight, 0.0);
+    privateDrawAlphaRect(nX, nY, nWidth, nHeight, 0.0, true);
 }
 
 void SkiaSalGraphicsImpl::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
@@ -456,6 +458,7 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
     aPath.setFillType(SkPath::kEvenOdd_FillType);
 
     SkPaint aPaint;
+    aPaint.setAntiAlias(mParent.getAntiAliasB2DDraw());
     if (mFillColor != SALCOLOR_NONE)
     {
         aPaint.setColor(toSkColorWithTransparency(mFillColor, fTransparency));

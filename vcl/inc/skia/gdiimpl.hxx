@@ -207,7 +207,8 @@ protected:
     void recreateSurface();
     void destroySurface();
 
-    void privateDrawAlphaRect(long nX, long nY, long nWidth, long nHeight, double nTransparency);
+    void privateDrawAlphaRect(long nX, long nY, long nWidth, long nHeight, double nTransparency,
+                              bool blockAA = false);
 
     void setProvider(SalGeometryProvider* provider) { mProvider = provider; }
 
