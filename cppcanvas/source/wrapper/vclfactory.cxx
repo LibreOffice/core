@@ -17,23 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/instance.hxx>
-#include <osl/getglobalmutex.hxx>
 #include <osl/diagnose.h>
-#include <com/sun/star/rendering/InterpolationMode.hpp>
 #include <vcl/window.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/canvastools.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <cppcanvas/vclfactory.hxx>
 
 #include "implbitmapcanvas.hxx"
 #include "implspritecanvas.hxx"
-#include "implpolypolygon.hxx"
 #include "implbitmap.hxx"
 #include <implrenderer.hxx>
-#include "implsprite.hxx"
 
 using namespace ::com::sun::star;
 

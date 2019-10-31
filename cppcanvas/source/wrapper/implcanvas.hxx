@@ -25,6 +25,7 @@
 #include <cppcanvas/canvas.hxx>
 
 #include <boost/optional.hpp>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 
 namespace basegfx

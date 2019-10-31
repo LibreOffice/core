@@ -19,9 +19,7 @@
 
 
 #include <tools/diagnose_ex.h>
-#include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -29,14 +27,10 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <canvas/canvastools.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
-#include <tools/poly.hxx>
 #include "mtftools.hxx"
 #include <outdevstate.hxx>
-#include "polypolyaction.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 

@@ -22,7 +22,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
 
 #include <cppcanvas/polypolygon.hxx>

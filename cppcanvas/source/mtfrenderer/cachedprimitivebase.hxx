@@ -21,8 +21,9 @@
 #define INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_CACHEDPRIMITIVEBASE_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XCachedPrimitive.hpp>
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <cppcanvas/canvas.hxx>
 
 #include <action.hxx>

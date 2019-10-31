@@ -18,9 +18,6 @@
  */
 
 
-#include <com/sun/star/rendering/XSprite.hpp>
-#include <com/sun/star/rendering/XAnimatedSprite.hpp>
-
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <canvas/canvastools.hxx>

@@ -23,16 +23,15 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <com/sun/star/rendering/StringContext.hpp>
-#include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <tools/fontenum.hxx>
+#include <tools/gen.hxx>
 #include <vcl/fntstyle.hxx>
-#include <vcl/vclenum.hxx>
-#include <vcl/outdev.hxx>
+#include <vcl/outdevstate.hxx>
 
 
 namespace cppcanvas

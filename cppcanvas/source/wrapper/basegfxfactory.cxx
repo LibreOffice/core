@@ -18,24 +18,14 @@
  */
 
 
-#include <rtl/instance.hxx>
-#include <osl/getglobalmutex.hxx>
 #include <osl/diagnose.h>
 
-#include <com/sun/star/rendering/InterpolationMode.hpp>
-
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/utils/canvastools.hxx>
 
 #include <cppcanvas/basegfxfactory.hxx>
 
-#include <com/sun/star/rendering/RenderState.hpp>
-#include <com/sun/star/rendering/StringContext.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XCanvasFont.hpp>
-
-#include <canvasgraphichelper.hxx>
 
 #include "implpolypolygon.hxx"
 #include "implbitmap.hxx"

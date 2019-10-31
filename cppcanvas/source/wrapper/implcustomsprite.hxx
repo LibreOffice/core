@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLCUSTOMSPRITE_HXX
 #define INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLCUSTOMSPRITE_HXX
 
-#include <sal/types.h>
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/customsprite.hxx>
 #include "implsprite.hxx"

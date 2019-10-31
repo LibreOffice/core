@@ -20,16 +20,11 @@
 
 #include <canvasgraphichelper.hxx>
 
-#include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 
 #include <canvas/canvastools.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-
-#include <cppcanvas/polypolygon.hxx>
-#include <tools.hxx>
 
 
 using namespace ::com::sun::star;

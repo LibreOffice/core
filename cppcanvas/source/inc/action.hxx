@@ -21,7 +21,6 @@
 #define INCLUDED_CPPCANVAS_SOURCE_INC_ACTION_HXX
 
 #include <sal/types.h>
-#include <memory>
 
 namespace basegfx
 {

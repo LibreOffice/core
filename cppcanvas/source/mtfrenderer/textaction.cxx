@@ -25,7 +25,6 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
 
-#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/vector/b2dsize.hxx>

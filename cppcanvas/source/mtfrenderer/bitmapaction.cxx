@@ -19,17 +19,15 @@
 
 
 #include <com/sun/star/rendering/XBitmap.hpp>
-#include <com/sun/star/rendering/RepaintResult.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XCachedPrimitive.hpp>
 #include <vcl/bitmapex.hxx>
 #include <tools/gen.hxx>
 #include <vcl/canvastools.hxx>
 #include <canvas/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <basegfx/utils/canvastools.hxx>
 #include <sal/log.hxx>
 #include "cachedprimitivebase.hxx"
 #include "bitmapaction.hxx"

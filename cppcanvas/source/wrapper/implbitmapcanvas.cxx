@@ -19,10 +19,7 @@
 
 
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <osl/diagnose.h>
 

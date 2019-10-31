@@ -9,7 +9,7 @@
 
 #ifndef INCLUDED_CPPCANVAS_SOURCE_UNO_UNO_MTFRENDERER_HXX
 #define INCLUDED_CPPCANVAS_SOURCE_UNO_UNO_MTFRENDERER_HXX
-#include <com/sun/star/rendering/MtfRenderer.hpp>
+#include <com/sun/star/rendering/XMtfRenderer.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
