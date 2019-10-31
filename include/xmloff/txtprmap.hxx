@@ -218,7 +218,7 @@ enum class TextPropMap {
     CELL = 11
 };
 
-class XMLOFF_DLLPUBLIC XMLTextPropertySetMapper : public XMLPropertySetMapper
+class XMLOFF_DLLPUBLIC XMLTextPropertySetMapper final : public XMLPropertySetMapper
 {
 public:
     XMLTextPropertySetMapper( TextPropMap nType, bool bForExport );

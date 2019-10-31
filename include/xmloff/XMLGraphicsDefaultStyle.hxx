@@ -24,7 +24,7 @@
 #include <xmloff/dllapi.h>
 #include <xmloff/prstylei.hxx>
 
-class XMLOFF_DLLPUBLIC XMLGraphicsDefaultStyle : public XMLPropStyleContext
+class XMLOFF_DLLPUBLIC XMLGraphicsDefaultStyle final : public XMLPropStyleContext
 {
 public:
 

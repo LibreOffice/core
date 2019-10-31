@@ -36,7 +36,7 @@
 
 extern css::uno::Reference< css::uno::XInterface >  SvUnoAttributeContainer_CreateInstance();
 
-class XMLOFF_DLLPUBLIC SvUnoAttributeContainer:
+class XMLOFF_DLLPUBLIC SvUnoAttributeContainer final :
     public ::cppu::WeakAggImplHelper3<
         css::lang::XServiceInfo,
         css::lang::XUnoTunnel,
