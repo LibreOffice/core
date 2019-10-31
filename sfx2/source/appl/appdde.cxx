@@ -21,35 +21,29 @@
 #include <rtl/character.hxx>
 #include <rtl/malformeduriexception.hxx>
 #include <rtl/uri.hxx>
-#include <sal/log.hxx>
 #include <sot/exchange.hxx>
-#include <svl/rectitem.hxx>
 #include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
 #include <basic/sbstar.hxx>
 #include <svl/stritem.hxx>
 #include <svl/svdde.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/linkmgr.hxx>
 
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/pathoptions.hxx>
+#include <vcl/svapp.hxx>
 
 #include <sfx2/app.hxx>
 #include <appdata.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <helper.hxx>
 #include <sfx2/docfile.hxx>
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
-#include <com/sun/star/ucb/ContentCreationException.hpp>
 
 #if defined(_WIN32)
 
