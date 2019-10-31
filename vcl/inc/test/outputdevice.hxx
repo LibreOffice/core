@@ -34,7 +34,7 @@ class VCL_DLLPUBLIC OutputDeviceTestCommon
 {
 protected:
 
-    ScopedVclPtr<VirtualDevice> mpVirtualDevice;
+    VclPtr<VirtualDevice> mpVirtualDevice;
     tools::Rectangle maVDRectangle;
 
     static const Color constBackgroundColor;
@@ -46,7 +46,7 @@ public:
 
     OUString getRenderBackendName() const;
 
-    void initialSetup(long nWidth, long nHeight, Color aColor, bool bEnableAA = false);
+    void initialSetup(long nWidth, long nHeight, Color aColor, bool bEnableAA = false, bool bAlphaVirtualDevice = false);
 
     static TestResult checkRectangle(Bitmap& rBitmap);
     static TestResult checkRectangleAA(Bitmap& rBitmap);
