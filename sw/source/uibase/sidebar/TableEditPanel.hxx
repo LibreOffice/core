@@ -48,6 +48,20 @@ private:
     VclPtr<SvxRelativeField> m_pColumnWidthEdit;
     ::sfx2::sidebar::ControllerItem m_aRowHeightController;
     ::sfx2::sidebar::ControllerItem m_aColumnWidthController;
+    ::sfx2::sidebar::ControllerItem m_aInsertRowsBeforeController;
+    ::sfx2::sidebar::ControllerItem m_aInsertRowsAfterController;
+    ::sfx2::sidebar::ControllerItem m_aInsertColumnsBeforeController;
+    ::sfx2::sidebar::ControllerItem m_aInsertColumnsAfterController;
+    ::sfx2::sidebar::ControllerItem m_aDeleteRowsController;
+    ::sfx2::sidebar::ControllerItem m_aDeleteColumnsController;
+    ::sfx2::sidebar::ControllerItem m_aDeleteTableController;
+    ::sfx2::sidebar::ControllerItem m_aSetMinimalRowHeightController;
+    ::sfx2::sidebar::ControllerItem m_aSetOptimalRowHeightController;
+    ::sfx2::sidebar::ControllerItem m_aDistributeRowsController;
+    ::sfx2::sidebar::ControllerItem m_aSetMinimalColumnWidthController;
+    ::sfx2::sidebar::ControllerItem m_aSetOptimalColumnWidthController;
+    ::sfx2::sidebar::ControllerItem m_aDistributeColumnsController;
+    ::sfx2::sidebar::ControllerItem m_aMergeCellsController;
 
     DECL_LINK(RowHeightMofiyHdl, Edit&, void);
     DECL_LINK(ColumnWidthMofiyHdl, Edit&, void);
