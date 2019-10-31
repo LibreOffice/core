@@ -2611,7 +2611,7 @@ XFillBitmapItem FillPageBitmap SID_ATTR_PAGE_BITMAP
 ]
 
 XFillColorItem FillColor SID_ATTR_FILL_COLOR
-
+(SfxStringItem Color SID_ATTR_COLOR_STR, XFillColorItem FillColor SID_ATTR_FILL_COLOR)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
