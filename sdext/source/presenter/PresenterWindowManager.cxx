@@ -273,7 +273,8 @@ void SAL_CALL PresenterWindowManager::windowPaint (const awt::PaintEvent& rEvent
 
 void SAL_CALL PresenterWindowManager::mousePressed (const css::awt::MouseEvent&)
 {
-    mbIsMouseClickPending = true;
+    if (!mbIsSlideSorterActive) // tdf#127921
+        mbIsMouseClickPending = true;
 }
 
 void SAL_CALL PresenterWindowManager::mouseReleased (const css::awt::MouseEvent& rEvent)
