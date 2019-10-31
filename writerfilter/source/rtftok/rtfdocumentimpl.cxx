@@ -2857,20 +2857,25 @@ RTFError RTFDocumentImpl::popState()
             OUString aName;
             uno::Reference<embed::XEmbeddedObject> xObject
                 = aContainer.CreateEmbeddedObject(aGlobalName.GetByteSequence(), aName);
-            uno::Reference<util::XCloseable> xComponent(xObject->getComponent(),
-                                                        uno::UNO_SET_THROW);
-            // gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
-            // so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
-            // to RTLD_GLOBAL, so most probably a gcc bug.
-            auto& rImport
-                = dynamic_cast<oox::FormulaImportBase&>(dynamic_cast<SfxBaseModel&>(*xComponent));
-            rImport.readFormulaOoxml(m_aMathBuffer);
-            auto pValue = new RTFValue(xObject);
-            RTFSprms aMathAttributes;
-            aMathAttributes.set(NS_ooxml::LN_starmath, pValue);
-            writerfilter::Reference<Properties>::Pointer_t pProperties
-                = new RTFReferenceProperties(aMathAttributes);
-            Mapper().props(pProperties);
+            if (xObject) // rhbz#1766990 starmath might not be available
+            {
+                uno::Reference<util::XCloseable> xComponent(xObject->getComponent(),
+                                                            uno::UNO_SET_THROW);
+                // gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
+                // so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
+                // to RTLD_GLOBAL, so most probably a gcc bug.
+                auto& rImport = dynamic_cast<oox::FormulaImportBase&>(
+                    dynamic_cast<SfxBaseModel&>(*xComponent));
+                rImport.readFormulaOoxml(m_aMathBuffer);
+
+                auto pValue = new RTFValue(xObject);
+                RTFSprms aMathAttributes;
+                aMathAttributes.set(NS_ooxml::LN_starmath, pValue);
+                writerfilter::Reference<Properties>::Pointer_t pProperties
+                    = new RTFReferenceProperties(aMathAttributes);
+                Mapper().props(pProperties);
+            }
+
             m_aMathBuffer = oox::formulaimport::XmlStreamBuilder();
         }
         break;
