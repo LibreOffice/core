@@ -119,8 +119,10 @@ SvxBitmapTabPage::SvxBitmapTabPage(TabPageParent pParent, const SfxItemSet& rInA
         m_xBtnImport->hide();
 
     // Calculate size of display boxes
+    Size aBitmapLBSize = getPagePropertiesOptimalSize(this);
+    m_xBitmapLB->set_size_request(aBitmapLBSize.Width(), aBitmapLBSize.Height());
+
     Size aSize = getDrawPreviewOptimalSize(this);
-    m_xBitmapLB->set_size_request(aSize.Width(), aSize.Height());
     m_xCtlBitmapPreview->set_size_request(aSize.Width(), aSize.Height());
 
     SfxItemPool* pPool = m_rXFSet.GetPool();

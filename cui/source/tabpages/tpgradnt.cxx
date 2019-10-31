@@ -77,8 +77,10 @@ SvxGradientTabPage::SvxGradientTabPage(TabPageParent pParent, const SfxItemSet& 
     , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, "previewctl", m_aCtlPreview))
     , m_xGradientLBWin(new weld::CustomWeld(*m_xBuilder, "gradientpresetlist", *m_xGradientLB))
 {
-    Size aSize = getDrawPreviewOptimalSize(this);
+    Size aSize = getPagePropertiesOptimalSize(this);
     m_xGradientLB->set_size_request(aSize.Width(), aSize.Height());
+
+    aSize = getDrawPreviewOptimalSize(this);
     m_xCtlPreview->set_size_request(aSize.Width(), aSize.Height());
     // this page needs ExchangeSupport
     SetExchangeSupport();

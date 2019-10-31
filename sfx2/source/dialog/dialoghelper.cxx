@@ -34,6 +34,12 @@ Size getPreviewOptionsSize(const vcl::Window *pReference)
     return pReference->LogicToPixel(Size(70 , 27), MapMode(MapUnit::MapAppFont));
 }
 
+Size getPagePropertiesOptimalSize(const vcl::Window *pReference)
+{
+    return pReference->LogicToPixel(Size(88, 120), MapMode(MapUnit::MapAppFont));
+}
+
+
 OUString getWidestTime(const LocaleDataWrapper& rWrapper)
 {
     Date aDate(22, 12, 2000);

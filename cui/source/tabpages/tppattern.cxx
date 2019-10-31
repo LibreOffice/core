@@ -101,8 +101,10 @@ SvxPatternTabPage::SvxPatternTabPage(TabPageParent pParent, const SfxItemSet& rI
     , m_xPatternLBWin(new weld::CustomWeld(*m_xBuilder, "patternpresetlist", *m_xPatternLB))
 {
     // size of the bitmap display
-    Size aSize = getDrawPreviewOptimalSize(this);
+    Size aSize = getPagePropertiesOptimalSize(this);
     m_xPatternLB->set_size_request(aSize.Width(), aSize.Height());
+
+    aSize = getDrawPreviewOptimalSize(this);
     m_xCtlPreview->set_size_request(aSize.Width(), aSize.Height());
 
     m_xBitmapCtl.reset(new SvxBitmapCtl);
