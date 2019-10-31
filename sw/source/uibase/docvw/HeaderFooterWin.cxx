@@ -439,6 +439,20 @@ void SwHeaderFooterWin::ExecuteCommand(const OString& rIdent)
         // the Area TabPage can access them
         rSh.GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->PutAreaListItems( aSet );
 
+        aSet.MergeRange(SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER);
+        // Create a box info item... needed by the dialog
+        std::shared_ptr<SvxBoxInfoItem> aBoxInfo(std::make_shared<SvxBoxInfoItem>(SID_ATTR_BORDER_INNER));
+        const SfxPoolItem *pBoxInfo;
+        if (SfxItemState::SET == pHFFormat->GetAttrSet().GetItemState(SID_ATTR_BORDER_INNER, true, &pBoxInfo))
+            aBoxInfo.reset(static_cast<SvxBoxInfoItem*>(pBoxInfo->Clone()));
+
+        aBoxInfo->SetTable(false);
+        aBoxInfo->SetDist(true);
+        aBoxInfo->SetMinDist(false);
+        aBoxInfo->SetDefDist(MIN_BORDER_DIST);
+        aBoxInfo->SetValid(SvxBoxInfoItemValidFlags::DISABLE);
+        aSet.Put(*aBoxInfo);
+
         if (svx::ShowBorderBackgroundDlg( GetFrameWeld(), &aSet ) )
         {
             pHFFormat->SetFormatAttr( aSet );
