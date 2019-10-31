@@ -42,9 +42,9 @@ using namespace xmloff::token;
 class ScXMLChangeInfoContext : public ScXMLImportContext
 {
     ScMyActionInfo                      aInfo;
-    OUStringBuffer               sAuthorBuffer;
-    OUStringBuffer               sDateTimeBuffer;
-    OUStringBuffer               sCommentBuffer;
+    OUStringBuffer                      sAuthorBuffer{32};
+    OUStringBuffer                      sDateTimeBuffer{32};
+    OUStringBuffer                      sCommentBuffer{64};
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     sal_uInt32                          nParagraphCount;
 
