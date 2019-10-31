@@ -28,7 +28,7 @@ typedef cppu::WeakImplHelper<css::table::XTablePivotCharts,
                              css::lang::XServiceInfo>
         TablePivotCharts_Base;
 
-class TablePivotCharts : public TablePivotCharts_Base, public SfxListener
+class TablePivotCharts final : public TablePivotCharts_Base, public SfxListener
 {
 private:
     ScDocShell* m_pDocShell;

@@ -190,7 +190,7 @@ public:
 };
 
 // 1/100 mm
-class SC_DLLPUBLIC ScTabEditEngine : public ScFieldEditEngine
+class SC_DLLPUBLIC ScTabEditEngine final : public ScFieldEditEngine
 {
 private:
     void    Init(const ScPatternAttr& rPattern);
@@ -216,7 +216,7 @@ struct ScHeaderFieldData
 };
 
 // for headers/footers with fields
-class SC_DLLPUBLIC ScHeaderEditEngine : public ScEditEngineDefaulter
+class SC_DLLPUBLIC ScHeaderEditEngine final : public ScEditEngineDefaulter
 {
 private:
     ScHeaderFieldData   aData;
@@ -230,7 +230,7 @@ public:
 };
 
 // for Note text objects.
-class ScNoteEditEngine : public ScEditEngineDefaulter
+class ScNoteEditEngine final : public ScEditEngineDefaulter
 {
 
 public:

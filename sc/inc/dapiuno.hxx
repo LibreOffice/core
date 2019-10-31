@@ -76,7 +76,7 @@ public:
 };
 
 /** DataPilotTables collection per sheet. */
-class ScDataPilotTablesObj : public cppu::WeakImplHelper<
+class ScDataPilotTablesObj final : public cppu::WeakImplHelper<
                                         css::sheet::XDataPilotTables,
                                         css::container::XEnumerationAccess,
                                         css::container::XIndexAccess,
@@ -202,7 +202,7 @@ public:
                             // XServiceInfo is in derived classes
 };
 
-class ScDataPilotDescriptor : public ScDataPilotDescriptorBase
+class ScDataPilotDescriptor final : public ScDataPilotDescriptorBase
 {
 private:
     std::unique_ptr<ScDPObject>  mpDPObject;
@@ -339,7 +339,7 @@ typedef ::cppu::WeakImplHelper
 ScDataPilotFieldsObjImpl;
 
 /** Collection of all DataPilot fields, or of all fields from a specific dimension. */
-class ScDataPilotFieldsObj : public ScDataPilotChildObjBase, public ScDataPilotFieldsObjImpl
+class ScDataPilotFieldsObj final : public ScDataPilotChildObjBase, public ScDataPilotFieldsObjImpl
 {
 public:
     explicit            ScDataPilotFieldsObj(
@@ -498,7 +498,7 @@ ScDataPilotFieldGroupsObjImpl;
     field. Grouping info has to be written back with the GroupInfo property of
     the DataPilot field after modifying this object.
  */
-class ScDataPilotFieldGroupsObj : public ScDataPilotFieldGroupsObjImpl
+class ScDataPilotFieldGroupsObj final : public ScDataPilotFieldGroupsObjImpl
 {
 public:
     explicit            ScDataPilotFieldGroupsObj( const ScFieldGroups& rGroups );
@@ -558,7 +558,7 @@ typedef ::cppu::WeakImplHelper
 >
 ScDataPilotFieldGroupObjImpl;
 
-class ScDataPilotFieldGroupObj : public ScDataPilotFieldGroupObjImpl
+class ScDataPilotFieldGroupObj final : public ScDataPilotFieldGroupObjImpl
 {
 public:
     explicit            ScDataPilotFieldGroupObj( ScDataPilotFieldGroupsObj& rParent, const OUString& rGroupName );
@@ -611,7 +611,7 @@ typedef ::cppu::WeakImplHelper
 >
 ScDataPilotFieldGroupItemObjImpl;
 
-class ScDataPilotFieldGroupItemObj : public ScDataPilotFieldGroupItemObjImpl
+class ScDataPilotFieldGroupItemObj final : public ScDataPilotFieldGroupItemObjImpl
 {
 public:
     explicit            ScDataPilotFieldGroupItemObj( ScDataPilotFieldGroupObj& rParent, const OUString& rName );
@@ -640,7 +640,7 @@ typedef ::cppu::WeakImplHelper
 >
 ScDataPilotItemsObjImpl;
 
-class ScDataPilotItemsObj : public ScDataPilotChildObjBase, public ScDataPilotItemsObjImpl
+class ScDataPilotItemsObj final : public ScDataPilotChildObjBase, public ScDataPilotItemsObjImpl
 {
 public:
     explicit            ScDataPilotItemsObj( ScDataPilotDescriptorBase& rParent, const ScFieldIdentifier& rFieldId );

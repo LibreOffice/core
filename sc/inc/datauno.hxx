@@ -172,7 +172,7 @@ public:
 
 //  ScSubTotalDescriptor - dummy container to use with XImportTarget
 
-class ScSubTotalDescriptor : public ScSubTotalDescriptorBase
+class ScSubTotalDescriptor final : public ScSubTotalDescriptorBase
 {
 private:
     ScSubTotalParam         aStoredParam;
@@ -191,7 +191,7 @@ public:
 
 //  ScRangeSubTotalDescriptor - SubTotalDescriptor of a data base area
 
-class ScRangeSubTotalDescriptor : public ScSubTotalDescriptorBase
+class ScRangeSubTotalDescriptor final : public ScSubTotalDescriptorBase
 {
 private:
     rtl::Reference<ScDatabaseRangeObj>  mxParent;
@@ -231,7 +231,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScConsolidationDescriptor : public cppu::WeakImplHelper<
+class ScConsolidationDescriptor final : public cppu::WeakImplHelper<
                                         css::sheet::XConsolidationDescriptor,
                                         css::lang::XServiceInfo >
 {
@@ -341,7 +341,7 @@ public:
 
 //  ScFilterDescriptor - dummy container to use with XFilterable
 
-class ScFilterDescriptor : public ScFilterDescriptorBase
+class ScFilterDescriptor final : public ScFilterDescriptorBase
 {
 private:
     ScQueryParam            aStoredParam;       // nField[] here within the area
@@ -361,7 +361,7 @@ public:
 
 //  ScRangeFilterDescriptor - FilterDescriptor of a data base area
 
-class ScRangeFilterDescriptor : public ScFilterDescriptorBase
+class ScRangeFilterDescriptor final : public ScFilterDescriptorBase
 {
 private:
     rtl::Reference<ScDatabaseRangeObj>  mxParent;
@@ -377,7 +377,7 @@ public:
 
 //  ScDataPilotFilterDescriptor - FilterDescriptor of a DataPilotDescriptors
 
-class ScDataPilotFilterDescriptor : public ScFilterDescriptorBase
+class ScDataPilotFilterDescriptor final : public ScFilterDescriptorBase
 {
 private:
     rtl::Reference<ScDataPilotDescriptorBase>  mxParent;
@@ -479,7 +479,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScDatabaseRangesObj : public cppu::WeakImplHelper<
+class ScDatabaseRangesObj final : public cppu::WeakImplHelper<
                                 css::sheet::XDatabaseRanges,
                                 css::container::XEnumerationAccess,
                                 css::container::XIndexAccess,
@@ -526,7 +526,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScUnnamedDatabaseRangesObj : public cppu::WeakImplHelper<
+class ScUnnamedDatabaseRangesObj final : public cppu::WeakImplHelper<
                                 css::sheet::XUnnamedDatabaseRanges>,
                             public SfxListener
 {

@@ -38,7 +38,7 @@ class ScAutoFormatObj;
 
 #define SC_AFMTOBJ_INVALID  USHRT_MAX
 
-class ScAutoFormatsObj : public ::cppu::WeakImplHelper<
+class ScAutoFormatsObj final : public ::cppu::WeakImplHelper<
                             css::container::XNameContainer,
                             css::container::XEnumerationAccess,
                             css::container::XIndexAccess,

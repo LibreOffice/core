@@ -23,7 +23,7 @@ namespace sc {
  * Used to collect positions of formula cells that belong to a formula
  * group.
  */
-class RefQueryFormulaGroup : public SvtListener::QueryBase
+class RefQueryFormulaGroup final : public SvtListener::QueryBase
 {
 public:
     typedef std::vector<SCROW> ColType;
@@ -47,7 +47,7 @@ private:
     TabsType maTabs;
 };
 
-class QueryRange : public SvtListener::QueryBase
+class QueryRange final : public SvtListener::QueryBase
 {
     ScRangeList maRanges;
 

@@ -37,7 +37,7 @@ struct ScQueryEntry;
     same query.
  */
 
-class ScLookupCache : public SvtListener
+class ScLookupCache final : public SvtListener
 {
 public:
 

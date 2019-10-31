@@ -250,7 +250,7 @@ private:
 
 typedef std::vector<std::unique_ptr<ScColorScaleEntry>> ScColorScaleEntries;
 
-class SC_DLLPUBLIC ScColorScaleFormat : public ScColorFormat
+class SC_DLLPUBLIC ScColorScaleFormat final : public ScColorFormat
 {
 private:
     ScColorScaleEntries maColorScales;
@@ -294,7 +294,7 @@ public:
     void EnsureSize();
 };
 
-class SC_DLLPUBLIC ScDataBarFormat : public ScColorFormat
+class SC_DLLPUBLIC ScDataBarFormat final : public ScColorFormat
 {
 public:
     ScDataBarFormat(ScDocument* pDoc);
@@ -355,7 +355,7 @@ struct ScIconSetFormatData
     ScIconSetFormatData& operator=(ScIconSetFormatData const&) = delete; //TODO?
 };
 
-class SC_DLLPUBLIC ScIconSetFormat : public ScColorFormat
+class SC_DLLPUBLIC ScIconSetFormat final : public ScColorFormat
 {
 public:
     ScIconSetFormat(ScDocument* pDoc);

@@ -57,7 +57,7 @@ typedef ::cppu::ImplHelper1     <   css::text::XText
                                 >   ScShapeObj_TextBase;
 typedef ::cppu::ImplHelper1     <   css::container::XChild
                                 >   ScShapeObj_ChildBase;
-class ScShapeObj    :public ScShapeObj_Base
+class ScShapeObj final : public ScShapeObj_Base
                     ,public ScShapeObj_TextBase
                     ,public ScShapeObj_ChildBase
 {

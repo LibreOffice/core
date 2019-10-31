@@ -24,7 +24,7 @@
 
 //  SvxFmDrawPage subclass to create ScShapeObj for shapes
 
-class ScPageObj : public SvxFmDrawPage
+class ScPageObj final : public SvxFmDrawPage
 {
 public:
     ScPageObj(SdrPage* pPage);

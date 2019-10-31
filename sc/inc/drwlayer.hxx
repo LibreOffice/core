@@ -30,7 +30,7 @@ class ScDrawObjData;
 class ScMacroInfo;
 class ScMarkData;
 
-class ScTabDeletedHint : public SfxHint
+class ScTabDeletedHint final : public SfxHint
 {
 private:
     SCTAB const   nTab;
@@ -41,7 +41,7 @@ public:
     SCTAB   GetTab() const { return nTab; }
 };
 
-class ScTabSizeChangedHint : public SfxHint
+class ScTabSizeChangedHint final : public SfxHint
 {
 private:
     SCTAB const   nTab;
@@ -55,7 +55,7 @@ public:
 //  Adjusting of detective UserData and draw undo's both have to be in SdrUndoGroup;
 //  therefore derived from SdrUndoAction
 
-class ScUndoObjData : public SdrUndoObj
+class ScUndoObjData final : public SdrUndoObj
 {
 private:
     ScAddress const   aOldStt;
@@ -71,7 +71,7 @@ public:
     virtual void     Redo() override;
 };
 
-class ScUndoAnchorData : public SdrUndoObj
+class ScUndoAnchorData final : public SdrUndoObj
 {
 private:
     bool                    mbWasCellAnchored;
@@ -86,7 +86,7 @@ public:
     virtual void     Redo() override;
 };
 
-class SC_DLLPUBLIC ScDrawLayer : public FmFormModel
+class SC_DLLPUBLIC ScDrawLayer final : public FmFormModel
 {
 private:
     OUString const  aName;
@@ -212,7 +212,7 @@ private:
     static SfxObjectShell* pGlobalDrawPersist;          // for AllocModel
 public:
     static void     SetGlobalDrawPersist(SfxObjectShell* pPersist);
-protected:
+private:
     virtual css::uno::Reference< css::uno::XInterface > createUnoModel() override;
 };
 

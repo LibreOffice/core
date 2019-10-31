@@ -163,7 +163,7 @@ const D& ScCompressedArray<A,D>::GetNextValue( size_t& nIndex, A& nEnd ) const
 /** The data type represents bits, manageable by bitwise operations.
  */
 
-template< typename A, typename D > class ScBitMaskCompressedArray : public ScCompressedArray<A,D>
+template< typename A, typename D > class ScBitMaskCompressedArray final : public ScCompressedArray<A,D>
 {
 public:
                                 ScBitMaskCompressedArray( A nMaxAccessP,

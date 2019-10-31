@@ -79,7 +79,7 @@ typedef cppu::WeakImplHelper<css::chart2::data::XDataSequence,
                              css::lang::XServiceInfo>
         PivotTableDataSequence_Base;
 
-class PivotTableDataSequence : public PivotTableDataSequence_Base, public SfxListener
+class PivotTableDataSequence final : public PivotTableDataSequence_Base, public SfxListener
 {
 public:
     explicit PivotTableDataSequence(ScDocument* pDocument, OUString const & sPivotTableName,

@@ -60,7 +60,7 @@ public:
     };
 
     /** ordinary single-item filter. */
-    class SingleFilter : public FilterBase
+    class SingleFilter final : public FilterBase
     {
     public:
         explicit SingleFilter(const ScDPItemData &rItem);
@@ -73,7 +73,7 @@ public:
     };
 
     /** multi-item (group) filter. */
-    class GroupFilter : public FilterBase
+    class GroupFilter final : public FilterBase
     {
     public:
         GroupFilter();

@@ -48,7 +48,7 @@ public:
                         const ScTokenArray& rTokenArray );
 };
 
-class ScFormulaParserObj : public ::cppu::WeakImplHelper<
+class ScFormulaParserObj final : public ::cppu::WeakImplHelper<
                             css::sheet::XFormulaParser,
                             css::beans::XPropertySet,
                             css::lang::XServiceInfo >,
@@ -100,7 +100,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScFormulaOpCodeMapperObj : public formula::FormulaOpCodeMapperObj
+class ScFormulaOpCodeMapperObj final : public formula::FormulaOpCodeMapperObj
 {
 public:
     ScFormulaOpCodeMapperObj(::std::unique_ptr<formula::FormulaCompiler> && _pCompiler);

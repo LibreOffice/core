@@ -83,7 +83,7 @@ private:
 /**
  * Implementation of ScDPTableData with sheet data.
  */
-class SC_DLLPUBLIC ScSheetDPData : public ScDPTableData
+class SC_DLLPUBLIC ScSheetDPData final : public ScDPTableData
 {
 private:
     ScQueryParam    aQuery;

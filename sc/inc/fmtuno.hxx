@@ -65,7 +65,7 @@ struct ScCondFormatEntryItem
     ScCondFormatEntryItem();
 };
 
-class ScTableConditionalFormat : public cppu::WeakImplHelper<
+class ScTableConditionalFormat final : public cppu::WeakImplHelper<
                             css::sheet::XSheetConditionalEntries,
                             css::container::XNameAccess,
                             css::container::XEnumerationAccess,
@@ -154,7 +154,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScTableValidationObj : public cppu::WeakImplHelper<
+class ScTableValidationObj final : public cppu::WeakImplHelper<
                             css::sheet::XSheetCondition2,
                             css::sheet::XMultiFormulaTokens,
                             css::beans::XPropertySet,
