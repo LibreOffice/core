@@ -1252,8 +1252,6 @@ void ToolBox::EnableItem( sal_uInt16 nItemId, bool bEnable )
     if ( nPos != ITEM_NOTFOUND )
     {
         ImplToolItem* pItem = &mpData->m_aItems[nPos];
-        if ( bEnable )
-            bEnable = true;
         if ( pItem->mbEnabled != bEnable )
         {
             pItem->mbEnabled = bEnable;
