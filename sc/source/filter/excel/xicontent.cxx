@@ -337,8 +337,9 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
                     // '#SheetName.A1' if possible.
                     if (nSepPos < xTextMark->getLength() - 1)
                     {
+                        ScDocument& rDoc = rRoot.GetDoc();
                         ScRange aRange;
-                        if ((aRange.ParseAny( xTextMark->copy( nSepPos + 1 ), nullptr, formula::FormulaGrammar::CONV_XL_R1C1)
+                        if ((aRange.ParseAny( xTextMark->copy( nSepPos + 1 ), &rDoc, formula::FormulaGrammar::CONV_XL_R1C1)
                                         & ScRefFlags::VALID) == ScRefFlags::ZERO)
                             xTextMark.reset( new OUString( xTextMark->replaceAt( nSepPos, 1, OUString( '.' ))));
                     }
