@@ -61,7 +61,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf125038b, "tdf125038b.docx")
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: phone: 1234
     // - Actual  :
-    // i.e. the the first paragraph was empty and the second paragraph had the content.
+    // i.e. the first paragraph was empty and the second paragraph had the content.
     CPPUNIT_ASSERT_EQUAL(OUString("phone: 1234"), xParagraph->getString());
     CPPUNIT_ASSERT(xParagraphs->hasMoreElements());
     xParagraphs->nextElement();
