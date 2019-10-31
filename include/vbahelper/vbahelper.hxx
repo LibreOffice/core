@@ -191,7 +191,7 @@ public:
     void setTop(double _fTop);
 };
 
-class VBAHELPER_DLLPUBLIC ConcreteXShapeGeometryAttributes : public AbstractGeometryAttributes
+class VBAHELPER_DLLPUBLIC ConcreteXShapeGeometryAttributes final : public AbstractGeometryAttributes
 {
     std::unique_ptr< ShapeHelper > m_pShapeHelper;
 public:
@@ -209,7 +209,8 @@ public:
 
 #define VBA_LEFT "PositionX"
 #define VBA_TOP "PositionY"
-class VBAHELPER_DLLPUBLIC UserFormGeometryHelper : public AbstractGeometryAttributes
+
+class VBAHELPER_DLLPUBLIC UserFormGeometryHelper final : public AbstractGeometryAttributes
 {
 public:
     UserFormGeometryHelper(

@@ -66,7 +66,7 @@ typedef ::cppu::WeakImplHelper< css::container::XEnumeration > EnumerationHelper
     used to provide an enumeration from an index container with other objects
     (e.g. UNO objects) where construction of the VBA objects is needed first.
  */
-class VBAHELPER_DLLPUBLIC SimpleIndexAccessToEnumeration : public EnumerationHelper_BASE
+class VBAHELPER_DLLPUBLIC SimpleIndexAccessToEnumeration final : public EnumerationHelper_BASE
 {
 public:
     /// @throws css::uno::RuntimeException
@@ -144,7 +144,7 @@ public:
 
 
 template< typename OneIfc >
-class XNamedObjectCollectionHelper : public ::cppu::WeakImplHelper< css::container::XNameAccess,
+class XNamedObjectCollectionHelper final : public ::cppu::WeakImplHelper< css::container::XNameAccess,
                                                                     css::container::XIndexAccess,
                                                                     css::container::XEnumerationAccess >
 {

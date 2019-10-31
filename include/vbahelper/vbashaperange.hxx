@@ -51,7 +51,7 @@ namespace ooo { namespace vba {
 
 typedef CollTestImplHelper< ov::msforms::XShapeRange > ScVbaShapeRange_BASE;
 
-class VBAHELPER_DLLPUBLIC ScVbaShapeRange : public ScVbaShapeRange_BASE
+class VBAHELPER_DLLPUBLIC ScVbaShapeRange final : public ScVbaShapeRange_BASE
 {
 private:
     css::uno::Reference< css::drawing::XDrawPage > m_xDrawPage;
