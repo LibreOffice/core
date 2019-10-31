@@ -33,7 +33,7 @@ namespace com { namespace sun { namespace star { namespace container { class XIn
 class SvxXMLListLevelStyleContext_Impl;
 typedef std::vector<rtl::Reference<SvxXMLListLevelStyleContext_Impl>> SvxXMLListStyle_Impl;
 
-class XMLOFF_DLLPUBLIC SvxXMLListStyleContext
+class XMLOFF_DLLPUBLIC SvxXMLListStyleContext final
     : public SvXMLStyleContext
 {
     css::uno::Reference< css::container::XIndexReplace > xNumRules;
@@ -42,8 +42,6 @@ class XMLOFF_DLLPUBLIC SvxXMLListStyleContext
 
     bool                        bConsecutive : 1;
     bool const                  bOutline : 1;
-
-protected:
 
     SAL_DLLPRIVATE virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,

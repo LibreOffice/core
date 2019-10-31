@@ -38,7 +38,7 @@ const sal_uInt16 XML_NAMESPACE_NONE          = USHRT_MAX-1;
 const sal_uInt16 XML_NAMESPACE_UNKNOWN       = USHRT_MAX;
 const sal_uInt16 XML_NAMESPACE_UNKNOWN_FLAG  = 0x8000;
 
-class NameSpaceEntry : public salhelper::SimpleReferenceObject
+class NameSpaceEntry final : public salhelper::SimpleReferenceObject
 {
 public:
     // sName refers to the full namespace name

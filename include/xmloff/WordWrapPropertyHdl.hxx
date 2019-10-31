@@ -26,7 +26,7 @@
     PropertyHandler for a named xml bool type:
 */
 class SvXMLImport;
-class XMLWordWrapPropertyHdl : public XMLPropertyHandler
+class XMLWordWrapPropertyHdl final : public XMLPropertyHandler
 {
 private:
     SvXMLImport* const mpImport;

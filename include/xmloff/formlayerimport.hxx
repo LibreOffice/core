@@ -44,7 +44,7 @@ namespace xmloff
     class OFormLayerXMLImport_Impl;
     /** allows you to import a &lt;form:form&gt; element
     */
-    class XMLOFF_DLLPUBLIC OFormLayerXMLImport
+    class XMLOFF_DLLPUBLIC OFormLayerXMLImport final
                 :public ::salhelper::SimpleReferenceObject
     {
         std::unique_ptr<OFormLayerXMLImport_Impl>   m_pImpl;

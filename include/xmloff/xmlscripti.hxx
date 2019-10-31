@@ -28,7 +28,7 @@ namespace com { namespace sun { namespace star { namespace frame {
     class XModel;
 }}}}
 
-class XMLOFF_DLLPUBLIC XMLScriptContext : public SvXMLImportContext
+class XMLOFF_DLLPUBLIC XMLScriptContext final : public SvXMLImportContext
 {
 private:
     css::uno::Reference< css::frame::XModel > m_xModel;

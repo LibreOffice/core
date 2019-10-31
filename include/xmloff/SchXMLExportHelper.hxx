@@ -35,7 +35,7 @@ class SchXMLExportHelper_Impl;
     the latter case you have to provide a table address mapper if the
     cell addressing set at the document is not in XML format.
  */
-class XMLOFF_DLLPUBLIC SchXMLExportHelper : public salhelper::SimpleReferenceObject
+class XMLOFF_DLLPUBLIC SchXMLExportHelper final : public salhelper::SimpleReferenceObject
 {
 public:
     SchXMLExportHelper( SvXMLExport& rExport,

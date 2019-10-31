@@ -54,7 +54,7 @@ class SvXMLImport;
     converts table addresses in XML format to the appropriate application
     format.
  */
-class SchXMLImportHelper : public salhelper::SimpleReferenceObject
+class SchXMLImportHelper final : public salhelper::SimpleReferenceObject
 {
 private:
     css::uno::Reference< css::chart::XChartDocument > mxChartDoc;
