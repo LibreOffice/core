@@ -18,6 +18,7 @@
 #include <svtools/unitconv.hxx>
 #include <swmodule.hxx>
 #include <usrpref.hxx>
+#include <svx/svxids.hrc>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -98,6 +99,20 @@ TableEditPanel::TableEditPanel(vcl::Window* pParent,
     , m_pBindings(pBindings)
     , m_aRowHeightController(SID_ATTR_TABLE_ROW_HEIGHT, *pBindings, *this)
     , m_aColumnWidthController(SID_ATTR_TABLE_COLUMN_WIDTH, *pBindings, *this)
+    , m_aInsertRowsBeforeController(FN_TABLE_INSERT_ROW_BEFORE, *pBindings, *this)
+    , m_aInsertRowsAfterController(FN_TABLE_INSERT_ROW_AFTER, *pBindings, *this)
+    , m_aInsertColumnsBeforeController(FN_TABLE_INSERT_COL_BEFORE, *pBindings, *this)
+    , m_aInsertColumnsAfterController(FN_TABLE_INSERT_COL_AFTER, *pBindings, *this)
+    , m_aDeleteRowsController(FN_TABLE_DELETE_ROW, *pBindings, *this)
+    , m_aDeleteColumnsController(FN_TABLE_DELETE_COL, *pBindings, *this)
+    , m_aDeleteTableController(FN_TABLE_DELETE_TABLE, *pBindings, *this)
+    , m_aSetMinimalRowHeightController(SID_TABLE_MINIMAL_ROW_HEIGHT, *pBindings, *this)
+    , m_aSetOptimalRowHeightController(FN_TABLE_OPTIMAL_HEIGHT, *pBindings, *this)
+    , m_aDistributeRowsController(FN_TABLE_BALANCE_ROWS, *pBindings, *this)
+    , m_aSetMinimalColumnWidthController(SID_TABLE_MINIMAL_COLUMN_WIDTH, *pBindings, *this)
+    , m_aSetOptimalColumnWidthController(FN_TABLE_ADJUST_CELLS, *pBindings, *this)
+    , m_aDistributeColumnsController(FN_TABLE_BALANCE_CELLS, *pBindings, *this)
+    , m_aMergeCellsController(FN_TABLE_MERGE_CELLS, *pBindings, *this)
 {
     get(m_pRowHeightEdit, "rowheight");
     get(m_pColumnWidthEdit, "columnwidth");
@@ -138,6 +153,20 @@ void TableEditPanel::dispose()
     m_pColumnWidthEdit.clear();
     m_aRowHeightController.dispose();
     m_aColumnWidthController.dispose();
+    m_aInsertRowsBeforeController.dispose();
+    m_aInsertRowsAfterController.dispose();
+    m_aInsertColumnsBeforeController.dispose();
+    m_aInsertColumnsAfterController.dispose();
+    m_aDeleteRowsController.dispose();
+    m_aDeleteColumnsController.dispose();
+    m_aDeleteTableController.dispose();
+    m_aSetMinimalRowHeightController.dispose();
+    m_aSetOptimalRowHeightController.dispose();
+    m_aDistributeRowsController.dispose();
+    m_aSetMinimalColumnWidthController.dispose();
+    m_aSetOptimalColumnWidthController.dispose();
+    m_aDistributeColumnsController.dispose();
+    m_aMergeCellsController.dispose();
 
     PanelLayout::dispose();
 }
