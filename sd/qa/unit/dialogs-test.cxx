@@ -306,14 +306,14 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         }
         case 5:
         {
-            // CreateSdTabPageDialog(const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage = true) override;
+            // CreateSdTabPageDialog(const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage = true, bool bIsImpressDoc) override;
             // needs a special SfxItemSet with merged content from page and other stuff, crashes without that (2nd page)
             // needs a 'SfxObjectShell* pDocShell', crashes without. Also sufficient: FillStyleItemSet with XFILL_NONE set
             pRetval = getSdAbstractDialogFactory()->CreateSdTabPageDialog(
                 getViewShell()->GetFrameWeld(),
                 &getEmptyFillStyleSfxItemSet(),
                 getDocShell(),
-                true);
+                true, false);
             break;
         }
         case 6:
