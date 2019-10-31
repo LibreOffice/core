@@ -1791,6 +1791,7 @@ ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager
     , mxAutomaticSeparator(m_xBuilder->weld_widget("separator4"))
     , mxColorSetWin(new weld::CustomWeld(*m_xBuilder, "colorset", *mxColorSet))
     , mxRecentColorSetWin(new weld::CustomWeld(*m_xBuilder, "recent_colorset", *mxRecentColorSet))
+    , mpDefaultButton(nullptr)
 {
     mxColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_TABSTOP) );
     mxRecentColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_TABSTOP) );
@@ -1988,7 +1989,7 @@ NamedColor ColorWindow::GetSelectEntryColor() const
         return GetSelectEntryColor(mxColorSet.get());
     if (!mxRecentColorSet->IsNoSelection())
         return GetSelectEntryColor(mxRecentColorSet.get());
-    if (mxButtonNoneColor->get_has_default())
+    if (mxButtonNoneColor.get() == mpDefaultButton)
         return GetNoneColor();
     return GetAutoColor();
 }
@@ -2130,8 +2131,7 @@ void ColorWindow::SetNoSelection()
 {
     mxColorSet->SetNoSelection();
     mxRecentColorSet->SetNoSelection();
-    mxButtonAutoColor->set_has_default(false);
-    mxButtonNoneColor->set_has_default(false);
+    mpDefaultButton = nullptr;
 }
 
 bool SvxColorWindow::IsNoSelection() const
@@ -2259,15 +2259,17 @@ void ColorWindow::SelectEntry(const NamedColor& rNamedColor)
 
     const Color &rColor = rNamedColor.first;
 
-    if (mxButtonNoneColor->get_visible() && (rColor == COL_TRANSPARENT || rColor == COL_AUTO))
+    if (mxButtonAutoColor->get_visible() && (rColor == COL_TRANSPARENT || rColor == COL_AUTO))
     {
-        mxButtonAutoColor->set_has_default(true);
+        mpDefaultButton = mxButtonAutoColor.get();
+        mxButtonAutoColor->grab_focus();
         return;
     }
 
     if (mxButtonNoneColor->get_visible() && rColor == COL_NONE_COLOR)
     {
-        mxButtonNoneColor->set_has_default(true);
+        mpDefaultButton = mxButtonNoneColor.get();
+        mxButtonNoneColor->grab_focus();
         return;
     }
 
