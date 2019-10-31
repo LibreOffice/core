@@ -22,6 +22,17 @@ class BackendTest : public test::BootstrapFixture
     // "xdg-open ./workdir/CppunitTest/vcl_backend_test.test.core/"
     static constexpr const bool mbExportBitmap = false;
 
+    void exportImage(OUString const& rsFilename, BitmapEx const& rBitmapEx)
+    {
+        if (mbExportBitmap)
+        {
+            BitmapEx aBitmapEx(rBitmapEx);
+            aBitmapEx.Scale(Size(128, 128), BmpScaleFlag::Fast);
+            SvFileStream aStream(rsFilename, StreamMode::WRITE | StreamMode::TRUNC);
+            GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream);
+        }
+    }
+
     void exportImage(OUString const& rsFilename, Bitmap const& rBitmap)
     {
         if (mbExportBitmap)
@@ -377,6 +388,16 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testDrawBlend()
+    {
+        vcl::test::OutputDeviceTestBitmap aOutDevTest;
+        BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend();
+        auto eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
+        exportImage("08-05_blend_test.png", aBitmapEx);
+        if (aOutDevTest.getRenderBackendName() == "skia")
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
     CPPUNIT_TEST_SUITE(BackendTest);
     CPPUNIT_TEST(testDrawRectWithRectangle);
     CPPUNIT_TEST(testDrawRectWithPixel);
@@ -417,6 +438,7 @@ public:
     CPPUNIT_TEST(testDrawTransformedBitmap);
     CPPUNIT_TEST(testDrawBitmapExWithAlpha);
     CPPUNIT_TEST(testDrawMask);
+    CPPUNIT_TEST(testDrawBlend);
 
     CPPUNIT_TEST_SUITE_END();
 };

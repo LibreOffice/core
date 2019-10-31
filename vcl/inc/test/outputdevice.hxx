@@ -88,10 +88,12 @@ public:
     Bitmap setupDrawBitmap();
     Bitmap setupDrawBitmapExWithAlpha();
     Bitmap setupDrawMask();
+    BitmapEx setupDrawBlend();
 
     static TestResult checkTransformedBitmap(Bitmap& rBitmap);
     static TestResult checkBitmapExWithAlpha(Bitmap& rBitmap);
     static TestResult checkMask(Bitmap& rBitmap);
+    static TestResult checkBlend(BitmapEx& rBitmap);
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestAnotherOutDev : public OutputDeviceTestCommon
