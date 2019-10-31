@@ -105,7 +105,7 @@ void XclImpChangeTrack::DoInsertRange( const ScRange& rRange, bool bEndOfList )
 void XclImpChangeTrack::DoDeleteRange( const ScRange& rRange )
 {
     sal_uLong nFirst, nLast;
-    pChangeTrack->AppendDeleteRange( rRange, nullptr, nFirst, nLast );
+    pChangeTrack->AppendDeleteRange( rRange,  &GetDoc() , nFirst, nLast );
     DoAcceptRejectAction( nFirst, nLast );
 }
 
