@@ -223,7 +223,6 @@ const Color OutputDeviceTestCommon::constLineColor(COL_LIGHTBLUE);
 const Color OutputDeviceTestCommon::constFillColor(COL_LIGHTBLUE);
 
 OutputDeviceTestCommon::OutputDeviceTestCommon()
-    : mpVirtualDevice(VclPtr<VirtualDevice>::Create())
 {}
 
 OUString OutputDeviceTestCommon::getRenderBackendName() const
@@ -236,8 +235,13 @@ OUString OutputDeviceTestCommon::getRenderBackendName() const
     return OUString();
 }
 
-void OutputDeviceTestCommon::initialSetup(long nWidth, long nHeight, Color aColor, bool bEnableAA)
+void OutputDeviceTestCommon::initialSetup(long nWidth, long nHeight, Color aColor, bool bEnableAA, bool bAlphaVirtualDevice)
 {
+    if (bAlphaVirtualDevice)
+        mpVirtualDevice = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+    else
+        mpVirtualDevice = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+
     maVDRectangle = tools::Rectangle(Point(), Size (nWidth, nHeight));
     mpVirtualDevice->SetOutputSizePixel(maVDRectangle.GetSize());
     if (bEnableAA)
