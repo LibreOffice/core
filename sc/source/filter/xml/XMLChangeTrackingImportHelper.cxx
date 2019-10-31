@@ -201,9 +201,8 @@ sal_uInt32 ScXMLChangeTrackingImportHelper::GetIDFromString(const OUString& sID)
     {
         if (sID.startsWith(SC_CHANGE_ID_PREFIX))
         {
-            OUString sValue(sID.copy(strlen(SC_CHANGE_ID_PREFIX)));
             sal_Int32 nValue;
-            ::sax::Converter::convertNumber(nValue, sValue);
+            ::sax::Converter::convertNumber(nValue, std::u16string_view(sID).substr(strlen(SC_CHANGE_ID_PREFIX)));
             OSL_ENSURE(nValue > 0, "wrong change action ID");
             nResult = nValue;
         }
