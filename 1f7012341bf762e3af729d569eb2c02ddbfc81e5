@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7f9b97_b3794194",
+        "filename": "oox/source/core/filterbase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-10-31T23:32:23Z",
+      "side": 1,
+      "message": "As this is used only once, perhaps comphelper::ScopeGuard is the better choice?\n\nSample code: canvas/source/tools/surface.cxx:285",
+      "revId": "1f7012341bf762e3af729d569eb2c02ddbfc81e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
